@@ -115,6 +115,108 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testSigma)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTdf96343)
+{
+    {
+        // From upper case
+        OUString sTest(u"ꙊꙌꙖ");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ꙋꙍꙗ"), sLowerCase);
+        OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+
+    {
+        // From lower case
+        OUString sTest(u"ꙋꙍꙗ");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ꙋꙍꙗ"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ꙊꙌꙖ"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sUpperCase, 0, sUpperCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sTest, sLowerCase);
+    }
+
+    {
+        // From title case
+        OUString sTest(u"Ꙋꙍꙗ");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ꙋꙍꙗ"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ꙊꙌꙖ"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ꙋꙍꙗ"), sLowerCase);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTdf134766)
+{
+    {
+        // From upper case
+        OUString sTest(u"QꞋORBꞋAL");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"qꞌorbꞌal"), sLowerCase);
+        OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+
+    {
+        // From lower case
+        OUString sTest(u"qꞌorbꞌal");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Qꞌorbꞌal"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"QꞋORBꞋAL"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sUpperCase, 0, sUpperCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sTest, sLowerCase);
+    }
+
+    {
+        // From title case
+        OUString sTest(u"Qꞌorbꞌal");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Qꞌorbꞌal"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"QꞋORBꞋAL"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"qꞌorbꞌal"), sLowerCase);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTdf97152)
+{
+    {
+        // From upper case
+        OUString sTest(u"ͲͰϽϾϿͿϏϹ");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ͳͱͻͼͽϳϗϲ"), sLowerCase);
+        //OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        //CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+
+    {
+        // From lower case
+        OUString sTest(u"ͳͱͻͼͽϳϗϲ");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ͳͱͻͼͽϳϗϲ"), sTitleCase);
+        //OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        //CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ͲͰϽϾϿͿϏϹ"), sUpperCase);
+        //OUString sLowerCase = m_xCC->toLower(sUpperCase, 0, sUpperCase.getLength(), {});
+        //CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sTest, sLowerCase);
+    }
+
+    {
+        // From title case
+        OUString sTest(u"Ͳͱͻͼͽϳϗϲ");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ͳͱͻͼͽϳϗϲ"), sTitleCase);
+        //OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        //CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ͲͰϽϾϿͿϏϹ"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ͳͱͻͼͽϳϗϲ"), sLowerCase);
+    }
+}
+
 void TestCharacterClassification::setUp()
 {
     BootstrapFixtureBase::setUp();

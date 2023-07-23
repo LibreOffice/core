@@ -26,6 +26,8 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/character.hxx>
 
+#include <unicode/uchar.h>
+
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
@@ -125,10 +127,45 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
                     // Should not come here
                     throw RuntimeException();
                 }
-            } else
+            }
+            else
+            {
                 dummy.map[0] = CaseMappingValue[address].value;
+                return dummy;
+            }
         }
     }
+
+    // If the code point is not supported by our case mapping tables,
+    // fallback to ICU functions.
+    // TODO: this does not handle special case mapping as these require
+    // using ustring.h APIs, which work on the whole string not character
+    // by character.
+    // TODO: what is the difference between ToLower and UpperToLower etc.?
+    sal_uInt32 value = 0;
+    switch (nMappingType)
+    {
+        case MappingType::ToLower:
+        case MappingType::UpperToLower:
+            value = u_tolower(c);
+            break;
+        case MappingType::ToUpper:
+        case MappingType::LowerToUpper:
+            value = u_toupper(c);
+            break;
+        case MappingType::ToTitle:
+            value = u_totitle(c);
+            break;
+        case MappingType::SimpleFolding:
+        case MappingType::FullFolding:
+            value = u_foldCase(c, U_FOLD_CASE_DEFAULT);
+            break;
+        default: break;
+    }
+
+    if (value && value != c)
+        dummy.nmap = rtl::splitSurrogates(value, dummy.map);
+
     return dummy;
 }
 
