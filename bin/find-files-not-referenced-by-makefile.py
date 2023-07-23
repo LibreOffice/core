@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 # Look for CXX files that are not referenced by any makefile
 
@@ -7,7 +7,7 @@ import sys
 
 sourceFiles = set()
 
-a = subprocess.Popen("git ls-files", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen("git ls-files", stdout=subprocess.PIPE, shell=True, encoding='utf8')
 with a.stdout as txt:
     for filename in txt:
         if filename.find(".cxx") != -1 \
@@ -23,7 +23,7 @@ with a.stdout as txt:
             and not filename.startswith("cli_ure/"):
             sourceFiles.add(filename.strip())
 
-a = subprocess.Popen("git ls-files */*.mk", stdout=subprocess.PIPE, shell=True)
+a = subprocess.Popen("git ls-files */*.mk", stdout=subprocess.PIPE, shell=True, encoding='utf8')
 with a.stdout as txt:
     for makefilename in txt:
         makefilename = makefilename.strip()
@@ -47,7 +47,7 @@ with a.stdout as txt:
 
 
 
-print "files not listed in makefile"
-print "----------------------------"
+print("files not listed in makefile")
+print("----------------------------")
 for x in sorted(sourceFiles):
-    print x
+    print(x)
