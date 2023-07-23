@@ -841,7 +841,7 @@ bool QtMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& r
     assert(pFrame);
     const tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
     const QRect aRect = toQRect(aFloatRect, 1 / pFrame->devicePixelRatioF());
-    mpQMenu->exec(aRect.topLeft());
+    mpQMenu->exec(aRect.bottomLeft());
 
     return true;
 }
