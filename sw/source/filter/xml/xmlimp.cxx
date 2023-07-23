@@ -1843,9 +1843,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
 
     if (ret)
     {
-        utl::MediaDescriptor aMediaDescriptor;
-        aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
-
         utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
 
@@ -1857,9 +1854,15 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
         uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
 
+        // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
+        // to export thousands of pages from minimal input size
+        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+            { "PageRange", uno::Any(OUString("1-100")) }
+        }));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence({
             { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
-            { "OutputStream", uno::Any(xOutputStream) }
+            { "OutputStream", uno::Any(xOutputStream) },
+            { "FilterData", uno::Any(aFilterData) }
         }));
         xPDFFilter->filter(aDescriptor);
         aOutputStream.Close();
