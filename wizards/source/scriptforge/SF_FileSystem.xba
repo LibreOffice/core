@@ -967,7 +967,7 @@ Public Function GetFileLen(Optional ByVal FileName As Variant) As Currency
 &apos;&apos;&apos;		File size if FileName exists
 &apos;&apos;&apos;		0 when FileName belongs to a document&apos;s internal file systems.
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
+&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist or is a folder
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Print SF_FileSystem.GetFileLen(&quot;C:\pagefile.sys&quot;)
 
@@ -1018,7 +1018,7 @@ Public Function GetFileModified(Optional ByVal FileName As Variant) As Variant
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The modification date and time as a Basic Date
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
+&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist or is a folder
 &apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim a As Date
@@ -1248,7 +1248,7 @@ Public Function HashFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		The requested checksum as a string. Hexadecimal digits are lower-cased
 &apos;&apos;&apos;		A zero-length string when an error occurred
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist of is a folder
+&apos;&apos;&apos;		UNKNOWNFILEERROR	The file does not exist or is a folder
 &apos;&apos;&apos;		FILESYSTEMERROR		The method is not applicable on document&apos;s file systems
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Print SF_FileSystem.HashFile(&quot;C:\pagefile.sys&quot;, &quot;MD5&quot;)
