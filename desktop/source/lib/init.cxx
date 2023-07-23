@@ -7,7 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "sal/types.h"
 #include "sfx2/lokhelper.hxx"
+#include "svx/sdr/contact/viewcontact.hxx"
+#include "svx/svdpage.hxx"
+#include "svx/svdpagv.hxx"
 #include <config_buildconfig.h>
 #include <config_cairo_rgba.h>
 #include <config_features.h>
@@ -3151,6 +3155,37 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
 {
     vcl::lok::trimMemory(nTarget);
+
+    if (nTarget > 2000)
+    {
+        SolarMutexGuard aGuard;
+
+        // Flush all buffered VOC primitives from the pages.
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+        if (pViewShell)
+        {
+            const SdrView* pView = pViewShell->GetDrawView();
+            if (pView)
+            {
+                SdrPageView* pPageView = pView->GetSdrPageView();
+                if (pPageView)
+                {
+                    SdrPage* pCurPage = pPageView->GetPage();
+                    if (pCurPage)
+                    {
+                        SdrModel& sdrModel = pCurPage->getSdrModelFromSdrPage();
+                        for (sal_uInt16 i = 0; i < sdrModel.GetPageCount(); ++i)
+                        {
+                            SdrPage* pPage = sdrModel.GetPage(i);
+                            if (pPage)
+                                pPage->GetViewContact().flushViewObjectContacts();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     if (nTarget > 1000)
     {
 #ifdef HAVE_MALLOC_TRIM

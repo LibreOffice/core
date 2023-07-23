@@ -58,6 +58,8 @@ void ViewContact::deleteAllVOCs()
 
     // assert when there were new entries added during deletion
     DBG_ASSERT(maViewObjectContactVector.empty(), "Corrupted ViewObjectContactList in VC (!)");
+
+    mxViewIndependentPrimitive2DSequence = drawinglayer::primitive2d::Primitive2DContainer();
 }
 
 // get an Object-specific ViewObjectContact for a specific

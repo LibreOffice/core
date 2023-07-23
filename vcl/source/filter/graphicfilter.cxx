@@ -716,12 +716,14 @@ void GraphicFilter::MakeGraphicsAvailableThreaded(std::vector<Graphic*>& graphic
     if( toLoad.empty())
         return;
     std::vector< std::unique_ptr<SvStream>> streams;
+    streams.reserve(toLoad.size());
     for( auto graphic : toLoad )
     {
         streams.push_back( std::make_unique<SvMemoryStream>( const_cast<sal_uInt8*>(graphic->GetSharedGfxLink()->GetData()),
             graphic->GetSharedGfxLink()->GetDataSize(), StreamMode::READ | StreamMode::WRITE));
     }
     std::vector< std::shared_ptr<Graphic>> loadedGraphics;
+    loadedGraphics.reserve(streams.size());
     ImportGraphics(loadedGraphics, std::move(streams));
     assert(loadedGraphics.size() == toLoad.size());
     for( size_t i = 0; i < toLoad.size(); ++i )
