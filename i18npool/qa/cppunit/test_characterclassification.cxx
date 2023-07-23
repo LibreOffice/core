@@ -19,21 +19,14 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
-    void testTitleCase();
-    void testStringType();
-
-    CPPUNIT_TEST_SUITE(TestCharacterClassification);
-    CPPUNIT_TEST(testTitleCase);
-    CPPUNIT_TEST(testStringType);
-    CPPUNIT_TEST_SUITE_END();
-private:
+protected:
     uno::Reference<i18n::XCharacterClassification> m_xCC;
 };
 
 //A test to ensure that our Title Case functionality is working
 //http://lists.freedesktop.org/archives/libreoffice/2012-June/032767.html
 //https://bz.apache.org/ooo/show_bug.cgi?id=30863
-void TestCharacterClassification::testTitleCase()
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTitleCase)
 {
     lang::Locale aLocale;
     aLocale.Language = "en";
@@ -66,7 +59,7 @@ void TestCharacterClassification::testTitleCase()
 }
 
 //https://bugs.libreoffice.org/show_bug.cgi?id=69641
-void TestCharacterClassification::testStringType()
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testStringType)
 {
     lang::Locale aLocale;
     aLocale.Language = "en";
@@ -99,8 +92,6 @@ void TestCharacterClassification::tearDown()
     BootstrapFixtureBase::tearDown();
     m_xCC.clear();
 }
-
-CPPUNIT_TEST_SUITE_REGISTRATION(TestCharacterClassification);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
