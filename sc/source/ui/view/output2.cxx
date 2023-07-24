@@ -1893,20 +1893,25 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
 
                             if ( eOutHorJust == SvxCellHorJustify::Left )
                             {
-                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
+                                if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
+                                    pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
                                 bAnyClipped = true;
                                 aAreaParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
                             }
                             else if ( eOutHorJust == SvxCellHorJustify::Right )
                             {
-                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
+                                if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
+                                    pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
                                 bAnyClipped = true;
                                 aAreaParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign);
                             }
                             else
                             {
-                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
-                                pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
+                                if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
+                                {
+                                    pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Right;
+                                    pRowInfo[nArrY].cellInfo(nCellX).nClipMark |= ScClipMark::Left;
+                                }
                                 bAnyClipped = true;
                                 aAreaParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
                                 aAreaParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign);
