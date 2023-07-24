@@ -156,6 +156,9 @@ private:
     mutable std::unique_ptr<vcl::MenuLayoutData> mpLayoutData;
     std::unique_ptr<SalMenu> mpSalMenu;
 
+    // Stores the help ID of the menu
+    OUString m_sMenuHelpId;
+
 protected:
     SAL_DLLPRIVATE Menu* ImplGetStartMenu();
     SAL_DLLPRIVATE Menu* ImplFindSelectMenu();
@@ -313,6 +316,9 @@ public:
 
     void SetHelpId( sal_uInt16 nItemId, const OUString& rHelpId );
     OUString GetHelpId( sal_uInt16 nItemId ) const;
+
+    void SetHelpId( const OUString& rHelpId ) { m_sMenuHelpId = rHelpId; }
+    OUString GetHelpId() const { return m_sMenuHelpId; }
 
     void SetActivateHdl( const Link<Menu *, bool>& rLink )
     {

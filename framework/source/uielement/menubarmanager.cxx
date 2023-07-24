@@ -1342,6 +1342,8 @@ void MenuBarManager::FillMenu(
                     {
                         VclPtr<PopupMenu> pNewPopupMenu = VclPtr<PopupMenu>::Create();
                         pMenu->SetPopupMenu( nId, pNewPopupMenu );
+                        // Use the command URL as the Help ID for the sub menu
+                        pNewPopupMenu->SetHelpId(aCommandURL);
 
                         if ( xDispatchProvider.is() )
                         {

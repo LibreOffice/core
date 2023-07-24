@@ -91,17 +91,24 @@ bool MenuWindow::ImplHandleHelpEvent(vcl::Window* pMenuWindow, Menu const * pMen
         Help* pHelp = Application::GetHelp();
         if ( pHelp )
         {
-            // is an id available, then call help with the id, otherwise
-            // use help-index
+            // Check if there is a Help ID available, or else use
+            // the command URL
             OUString aCommand = pMenu->GetItemCommand( nId );
-            OUString aHelpId(  pMenu->GetHelpId( nId ) );
+            OUString aHelpId;
+
+            // If no entry is selected, use the general menu Help ID
+            if (nId <= 0)
+                aHelpId = pMenu->GetHelpId();
+            else
+                aHelpId = pMenu->GetHelpId(nId);
+
             if( aHelpId.isEmpty() )
                 aHelpId = OOO_HELP_INDEX;
 
-            if ( !aCommand.isEmpty() )
-                pHelp->Start(aCommand);
-            else
+            if ( !aHelpId.isEmpty() )
                 pHelp->Start(aHelpId);
+            else
+                pHelp->Start(aCommand);
         }
         bDone = true;
     }
