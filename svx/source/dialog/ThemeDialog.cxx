@@ -86,7 +86,8 @@ IMPL_LINK_NOARG(ThemeDialog, SelectItem, ValueSet*, void)
 void ThemeDialog::runThemeColorEditDialog()
 {
     auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
-    weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
+    std::shared_ptr<DialogController> xKeepAlive(shared_from_this());
+    weld::DialogController::runAsync(pDialog, [this, xKeepAlive, pDialog](sal_uInt32 nResult) {
         if (nResult != RET_OK)
             return;
         auto aColorSet = pDialog->getColorSet();
