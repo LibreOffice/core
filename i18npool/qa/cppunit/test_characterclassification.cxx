@@ -81,6 +81,40 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testStringType)
 
 }
 
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testSigma)
+{
+    {
+        // From upper case
+        OUString sTest(u"ὈΔΥΣΣΕΎΣ");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ὀδυσσεύς"), sLowerCase);
+        OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+
+    {
+        // From lower case
+        OUString sTest(u"ὀδυσσεύς");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ὀδυσσεύς"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ὈΔΥΣΣΕΎΣ"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sUpperCase, 0, sUpperCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sTest, sLowerCase);
+    }
+
+    {
+        // From title case
+        OUString sTest(u"Ὀδυσσεύς");
+        OUString sTitleCase = m_xCC->toTitle(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", OUString(u"Ὀδυσσεύς"), sTitleCase);
+        OUString sUpperCase = m_xCC->toUpper(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", OUString(u"ὈΔΥΣΣΕΎΣ"), sUpperCase);
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"ὀδυσσεύς"), sLowerCase);
+    }
+}
+
 void TestCharacterClassification::setUp()
 {
     BootstrapFixtureBase::setUp();
