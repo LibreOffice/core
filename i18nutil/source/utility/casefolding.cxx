@@ -94,18 +94,20 @@ const Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int3
 
 Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale const & aLocale, MappingType nMappingType)
 {
+    if (pos > 0 && rtl::isHighSurrogate(str[pos-1]) && rtl::isLowSurrogate(str[pos]))
+        return { 0, 0, { 0, 0, 0 } };
+
     Mapping dummy = { 0, 1, { str[pos], 0, 0 } };
 
     sal_uInt32 c;
-    if (pos > 0 && rtl::isHighSurrogate(str[pos-1]) && rtl::isLowSurrogate(str[pos])) {
-        c = rtl::combineSurrogates(str[pos-1], str[pos]);
-        if (c >= SAL_N_ELEMENTS(CaseMappingIndex) * 256)
-            return dummy;
-    } else {
+    if (pos + 1 < len && rtl::isHighSurrogate(str[pos]) && rtl::isLowSurrogate(str[pos + 1]))
+        c = rtl::combineSurrogates(str[pos], str[pos + 1]);
+    else
         c = str[pos];
-    }
 
-    sal_Int16 address = CaseMappingIndex[c >> 8];
+    sal_Int16 address = -1;
+    if (c < SAL_N_ELEMENTS(CaseMappingIndex) * 256)
+        address = CaseMappingIndex[c >> 8];
 
     if (address >= 0) {
         address = (address << 8) + (c & 0xFF);
@@ -142,7 +144,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
     // using ustring.h APIs, which work on the whole string not character
     // by character.
     // TODO: what is the difference between ToLower and UpperToLower etc.?
-    sal_uInt32 value = 0;
+    sal_uInt32 value = c;
     switch (nMappingType)
     {
         case MappingType::ToLower:
@@ -163,8 +165,7 @@ Mapping casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 l
         default: break;
     }
 
-    if (value && value != c)
-        dummy.nmap = rtl::splitSurrogates(value, dummy.map);
+    dummy.nmap = rtl::splitSurrogates(value, dummy.map);
 
     return dummy;
 }
