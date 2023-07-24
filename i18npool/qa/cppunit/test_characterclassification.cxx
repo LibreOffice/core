@@ -217,6 +217,61 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTdf97152)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testSurrogatePairs)
+{
+    {
+        // No case mapping
+        OUString sTest(u"\U0001F600");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"\U0001F600"), sLowerCase);
+        OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+
+    {
+        // Case mapping
+        OUString sTest(u"\U00010400");
+        OUString sLowerCase = m_xCC->toLower(sTest, 0, sTest.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", OUString(u"\U00010428"), sLowerCase);
+        OUString sUpperCase = m_xCC->toUpper(sLowerCase, 0, sLowerCase.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sTest, sUpperCase);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testAdlam)
+{
+    OUString sUpper(u"𞤀𞤁𞤂𞤃𞤄𞤅𞤆𞤇𞤈𞤉𞤊𞤋𞤌𞤍𞤎𞤏𞤐𞤑𞤒𞤓𞤔𞤕𞤖𞤗𞤘𞤙𞤚𞤛𞤜𞤝𞤞𞤟𞤠𞤡");
+    OUString sLower(u"𞤢𞤣𞤤𞤥𞤦𞤧𞤨𞤩𞤪𞤫𞤬𞤭𞤮𞤯𞤰𞤱𞤲𞤳𞤴𞤵𞤶𞤷𞤸𞤹𞤺𞤻𞤼𞤽𞤾𞤿𞥀𞥁𞥂𞥃");
+    OUString sTitle = sLower; // Adlam doesn’t have title case?
+    {
+        // From upper case
+        OUString sLowerRes = m_xCC->toLower(sUpper, 0, sUpper.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sLower, sLowerRes);
+        OUString sUpperRes = m_xCC->toUpper(sLowerRes, 0, sLower.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sUpper, sUpperRes);
+    }
+
+    {
+        // From lower case
+        OUString sTitleRes = m_xCC->toTitle(sLower, 0, sLower.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", sTitle, sTitleRes);
+        OUString sUpperRes = m_xCC->toUpper(sLower, 0, sLower.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sUpper, sUpperRes);
+        OUString sLowerRes = m_xCC->toLower(sUpperRes, 0, sUpperRes.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sLower, sLowerRes);
+    }
+
+    {
+        // From title case
+        OUString sTitleRes = m_xCC->toTitle(sTitle, 0, sTitle.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", sTitle, sTitleRes);
+        OUString sUpperRes = m_xCC->toUpper(sTitle, 0, sTitle.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be upper", sUpper, sUpperRes);
+        OUString sLowerRes = m_xCC->toLower(sTitle, 0, sTitle.getLength(), {});
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be lower", sLower, sLowerRes);
+    }
+}
+
 void TestCharacterClassification::setUp()
 {
     BootstrapFixtureBase::setUp();
