@@ -74,11 +74,100 @@ unicode::getUnicodeType( const sal_Unicode ch ) {
     if (ch == c) return r;
     else c = ch;
 
-    sal_Int16 address = UnicodeTypeIndex[ch >> 8];
-    r = static_cast<sal_Int16>(
-            (address < UnicodeTypeNumberBlock)
-            ? UnicodeTypeBlockValue[address]
-            : UnicodeTypeValue[((address - UnicodeTypeNumberBlock) << 8) + (ch & 0xff)]);
+    switch (u_charType(ch))
+    {
+        case U_UNASSIGNED:
+            r = css::i18n::UnicodeType::UNASSIGNED;
+            break;
+        case U_UPPERCASE_LETTER:
+            r = css::i18n::UnicodeType::UPPERCASE_LETTER;
+            break;
+        case U_LOWERCASE_LETTER:
+            r = css::i18n::UnicodeType::LOWERCASE_LETTER;
+            break;
+        case U_TITLECASE_LETTER:
+            r = css::i18n::UnicodeType::TITLECASE_LETTER;
+            break;
+        case U_MODIFIER_LETTER:
+            r = css::i18n::UnicodeType::MODIFIER_LETTER;
+            break;
+        case U_OTHER_LETTER:
+            r = css::i18n::UnicodeType::OTHER_LETTER;
+            break;
+        case U_NON_SPACING_MARK:
+            r = css::i18n::UnicodeType::NON_SPACING_MARK;
+            break;
+        case U_ENCLOSING_MARK:
+            r = css::i18n::UnicodeType::ENCLOSING_MARK;
+            break;
+        case U_COMBINING_SPACING_MARK:
+            r = css::i18n::UnicodeType::COMBINING_SPACING_MARK;
+            break;
+        case U_DECIMAL_DIGIT_NUMBER:
+            r = css::i18n::UnicodeType::DECIMAL_DIGIT_NUMBER;
+            break;
+        case U_LETTER_NUMBER:
+            r = css::i18n::UnicodeType::LETTER_NUMBER;
+            break;
+        case U_OTHER_NUMBER:
+            r = css::i18n::UnicodeType::OTHER_NUMBER;
+            break;
+        case U_SPACE_SEPARATOR:
+            r = css::i18n::UnicodeType::SPACE_SEPARATOR;
+            break;
+        case U_LINE_SEPARATOR:
+            r = css::i18n::UnicodeType::LINE_SEPARATOR;
+            break;
+        case U_PARAGRAPH_SEPARATOR:
+            r = css::i18n::UnicodeType::PARAGRAPH_SEPARATOR;
+            break;
+        case U_CONTROL_CHAR:
+            r = css::i18n::UnicodeType::CONTROL;
+            break;
+        case U_FORMAT_CHAR:
+            r = css::i18n::UnicodeType::FORMAT;
+            break;
+        case U_PRIVATE_USE_CHAR:
+            r = css::i18n::UnicodeType::PRIVATE_USE;
+            break;
+        case U_SURROGATE:
+            r = css::i18n::UnicodeType::SURROGATE;
+            break;
+        case U_DASH_PUNCTUATION:
+            r = css::i18n::UnicodeType::DASH_PUNCTUATION;
+            break;
+        case U_INITIAL_PUNCTUATION:
+            r = css::i18n::UnicodeType::INITIAL_PUNCTUATION;
+            break;
+        case U_FINAL_PUNCTUATION:
+            r = css::i18n::UnicodeType::FINAL_PUNCTUATION;
+            break;
+        case U_CONNECTOR_PUNCTUATION:
+            r = css::i18n::UnicodeType::CONNECTOR_PUNCTUATION;
+            break;
+        case U_OTHER_PUNCTUATION:
+            r = css::i18n::UnicodeType::OTHER_PUNCTUATION;
+            break;
+        case U_MATH_SYMBOL:
+            r = css::i18n::UnicodeType::MATH_SYMBOL;
+            break;
+        case U_CURRENCY_SYMBOL:
+            r = css::i18n::UnicodeType::CURRENCY_SYMBOL;
+            break;
+        case U_MODIFIER_SYMBOL:
+            r = css::i18n::UnicodeType::MODIFIER_SYMBOL;
+            break;
+        case U_OTHER_SYMBOL:
+            r = css::i18n::UnicodeType::OTHER_SYMBOL;
+            break;
+        case U_START_PUNCTUATION:
+            r = css::i18n::UnicodeType::START_PUNCTUATION;
+            break;
+        case U_END_PUNCTUATION:
+            r = css::i18n::UnicodeType::END_PUNCTUATION;
+            break;
+    }
+
     return r;
 }
 
