@@ -346,8 +346,8 @@ public:
         page, or preserve the old name
      */
 
-    SAL_DLLPRIVATE bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
-                                  std::vector<OUString> *pExchangeList,
+    bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
+                              std::vector<OUString> *pExchangeList,
                               bool bLink, bool bReplace, sal_uInt16 nPgPos,
                               bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                               bool bCopy, bool bMergeMasterPages,

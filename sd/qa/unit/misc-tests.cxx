@@ -82,6 +82,7 @@ public:
     void testTdf131033();
     void testTdf129898LayerDrawnInSlideshow();
     void testTdf136956();
+    void testTdf39519();
     void testEncodedTableStyles();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testTdf131033);
     CPPUNIT_TEST(testTdf129898LayerDrawnInSlideshow);
     CPPUNIT_TEST(testTdf136956);
+    CPPUNIT_TEST(testTdf39519);
     CPPUNIT_TEST(testEncodedTableStyles);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -884,6 +886,28 @@ void SdMiscTest::testTdf136956()
     // 4x3 Table after undo. Undo crashed before.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable->getColumnCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getRowCount());
+}
+
+void SdMiscTest::testTdf39519()
+{
+    createSdImpressDoc();
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+
+    // Change the name of the first page in the newly created document
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdPage* pPage = static_cast<SdPage*>(pDoc->GetPage(1));
+    pPage->SetName("Test");
+
+    // Insert a bookmark as a new page using the same name
+    std::vector<OUString> aBookmarkList = { "Test" };
+    pDoc->InsertBookmarkAsPage(aBookmarkList, nullptr, false, false, 2, true, pDoc->GetDocSh(),
+                               true, false, false);
+
+    // Check if the copied page has a different name
+    SdPage* pCopiedPage = static_cast<SdPage*>(pDoc->GetPage(2));
+    // Without the fix in place, the names of the pages would not be different
+    CPPUNIT_ASSERT(pCopiedPage->GetName() != pPage->GetName());
 }
 
 void SdMiscTest::testEncodedTableStyles()

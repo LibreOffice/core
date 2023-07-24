@@ -696,7 +696,9 @@ bool SdDrawDocument::InsertBookmarkAsPage(
                     }
                 }
 
-                if( bMustRename )
+                // tdf#39519 - rename page if its name is not unique, e.g., if a slide is copied by
+                // ctrl + drag and drop (DND_ACTION_COPY)
+                if (bMustRename || !mpDocSh->IsPageNameUnique(aPgName))
                 {
                     // Page name already in use -> use default name for default and
                     // notes page
