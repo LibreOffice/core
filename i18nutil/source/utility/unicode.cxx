@@ -67,9 +67,10 @@ unicode::getUnicodeScriptEnd( UnicodeScript type) {
 }
 
 sal_Int16
-unicode::getUnicodeType( const sal_Unicode ch ) {
-    static sal_Unicode c = 0x00;
-    static sal_Int16 r = 0x00;
+unicode::getUnicodeType(const sal_uInt32 ch)
+{
+    static sal_uInt32 c = 0x00;
+    static sal_uInt32 r = 0x00;
 
     if (ch == c) return r;
     else c = ch;
@@ -213,7 +214,7 @@ sal_uInt32 unicode::GetMirroredChar(sal_uInt32 nChar) {
             bit(UnicodeType::PARAGRAPH_SEPARATOR)
 
 #define IsType(func, mask)  \
-bool func( const sal_Unicode ch) {\
+bool func( const sal_uInt32 ch) {\
     return (bit(getUnicodeType(ch)) & (mask)) != 0;\
 }
 
@@ -224,7 +225,8 @@ IsType(unicode::isSpace, SPACEMASK)
 #define CONTROLSPACE    bit(0x09)|bit(0x0a)|bit(0x0b)|bit(0x0c)|bit(0x0d)|\
             bit(0x1c)|bit(0x1d)|bit(0x1e)|bit(0x1f)
 
-bool unicode::isWhiteSpace( const sal_Unicode ch) {
+bool unicode::isWhiteSpace(const sal_uInt32 ch)
+{
     return (ch != 0xa0 && isSpace(ch)) || (ch <= 0x1F && (bit(ch) & (CONTROLSPACE)));
 }
 

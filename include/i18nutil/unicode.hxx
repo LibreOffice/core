@@ -38,17 +38,17 @@ struct ScriptTypeList
 class I18NUTIL_DLLPUBLIC unicode
 {
 public:
-    static sal_Int16 getUnicodeType(const sal_Unicode ch);
+    static sal_Int16 getUnicodeType(const sal_uInt32 ch);
     static sal_Int16 getUnicodeScriptType(const sal_Unicode ch, const ScriptTypeList* typeList,
                                           sal_Int16 unknownType = 0);
     static sal_Unicode getUnicodeScriptStart(css::i18n::UnicodeScript type);
     static sal_Unicode getUnicodeScriptEnd(css::i18n::UnicodeScript type);
     static sal_uInt8 getUnicodeDirection(const sal_Unicode ch);
     static sal_uInt32 GetMirroredChar(sal_uInt32);
-    static bool isControl(const sal_Unicode ch);
-    static bool isAlpha(const sal_Unicode ch);
-    static bool isSpace(const sal_Unicode ch);
-    static bool isWhiteSpace(const sal_Unicode ch);
+    static bool isControl(const sal_uInt32 ch);
+    static bool isAlpha(const sal_uInt32 ch);
+    static bool isSpace(const sal_uInt32 ch);
+    static bool isWhiteSpace(const sal_uInt32 ch);
 
     /** Check for Unicode variation sequence selectors
 
