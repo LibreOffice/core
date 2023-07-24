@@ -3024,11 +3024,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             // Make sure that the separators are hidden
             rSh.SetShowHeaderFooterSeparator( FrameControlType::Header, false );
             rSh.SetShowHeaderFooterSeparator( FrameControlType::Footer, false );
-
-            // Repaint everything
-            // FIXME fdo#67358 for unknown reasons this causes painting
-            // problems when resizing table columns, so disable it
-//            rSh.GetWin()->Invalidate();
         }
 
         // Toggle Hide-Whitespace if between pages.
