@@ -263,10 +263,19 @@ static int cpp2uno_call(bridges::cpp_uno::shared::CppInterfaceProxy* pThis,
         }
         switch (returnKind)
         {
+            case loongarch64::ReturnKind::RegistersIntFloat:
+                memcpy(pRegisterReturn + 1, static_cast<char*>(pUnoReturn) + 4, 4);
+                [[fallthrough]];
             case loongarch64::ReturnKind::RegistersIntFp:
                 return 0;
+            case loongarch64::ReturnKind::RegistersFloatInt:
+                memcpy(pRegisterReturn + 1, static_cast<char*>(pUnoReturn) + 4, 4);
+                [[fallthrough]];
             case loongarch64::ReturnKind::RegistersFpInt:
                 return 1;
+            case loongarch64::ReturnKind::RegistersTwoFloat:
+                memcpy(pRegisterReturn + 1, static_cast<char*>(pUnoReturn) + 4, 4);
+                [[fallthrough]];
             default:
                 return -1;
         }
@@ -386,6 +395,7 @@ int cpp_vtable_call(sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset, void** gp
                         TYPELIB_DANGER_RELEASE(pTD);
                     }
                 } // else perform queryInterface()
+                    [[fallthrough]];
                 default:
                     typelib_InterfaceMethodTypeDescription* pMethodTD
                         = reinterpret_cast<typelib_InterfaceMethodTypeDescription*>(
