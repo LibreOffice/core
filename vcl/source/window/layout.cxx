@@ -3097,6 +3097,9 @@ void VclDrawingArea::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     pDevice->SetOutputSize(aRenderSize);
     tools::Rectangle aRect(Point(0,0), aRenderSize);
 
+    // Dark mode support
+    pDevice->DrawWallpaper(aRect, pRefDevice->GetBackground());
+
     Paint(*pDevice, aRect);
 
     BitmapEx aImage = pDevice->GetBitmapEx(Point(0,0), aRenderSize);
