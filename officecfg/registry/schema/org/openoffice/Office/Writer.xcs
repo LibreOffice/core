@@ -1144,7 +1144,7 @@
             <desc>Specifies whether optional hyphens are shown on the screen.</desc>
             <label>Optional hyphens</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Space" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
@@ -1160,7 +1160,7 @@
             <desc>Specifies whether protected spaces are shown on the screen.</desc>
             <label>Protected Spaces</label>
           </info>
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="Tab" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options - Text document  Contents - [Section] Non-printing Characters -->
