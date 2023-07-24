@@ -2751,13 +2751,6 @@ cmd/sc_openhyperlinkoncursor.png cmd/sc_inserthyperlink.png
 cmd/sc_rotateflipmenu.png cmd/sc_rotateleft.png
 
 # writer
-cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
-cmd/32/numberingmenu.png cmd/32/outlinebullet.png
-cmd/32/objectmenu.png cmd/32/insertobject.png
-cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
-cmd/32/shapesmenu.png cmd/32/basicshapes.pentagon.png
-cmd/32/tracechangemode.png cmd/32/trackchanges.png
-cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 cmd/32/addtextbox.png cmd/32/insertfixedtext.png
 cmd/32/editcommentsmenu.png cmd/32/editannotation.png
 cmd/32/scrollbarmenu.png cmd/32/scrollbar.png
@@ -2774,7 +2767,14 @@ cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 # menubar icons
 cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/focustofindbar.png cmd/32/recsearch.png
+cmd/32/linenumberdialog.png cmd/32/linenumberingdialog.png
 cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
+cmd/32/numberingmenu.png cmd/32/outlinebullet.png
+cmd/32/objectmenu.png cmd/32/insertobject.png
+cmd/32/paragraphmenu.png cmd/32/paragraphdialog.png
+cmd/32/shapesmenu.png cmd/32/basicshapes.pentagon.png
+cmd/32/tracechangemode.png cmd/32/trackchanges.png
+cmd/32/viewtrackchanges.png cmd/32/showtrackedchanges.png
 
 cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_focustofindbar.png cmd/lc_recsearch.png
