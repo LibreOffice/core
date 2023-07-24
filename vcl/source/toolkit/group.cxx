@@ -60,9 +60,9 @@ void GroupBox::ImplInitSettings( bool bBackground )
     if ( bBackground )
     {
         vcl::Window* pParent = GetParent();
-        if ( (pParent->IsChildTransparentModeEnabled() ||
-              !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
-             !IsControlBackground() )
+        if (pParent->IsChildTransparentModeEnabled() ||
+            !(pParent->GetStyle() & WB_CLIPCHILDREN) ||
+            !IsControlBackground())
         {
             EnableChildTransparentMode();
             SetParentClipMode( ParentClipMode::NoClip );
