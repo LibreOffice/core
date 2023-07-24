@@ -1732,10 +1732,10 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         {
             if ( _xBI->getScriptType( aText, nPos - 1 ) == i18n::ScriptType::WEAK )
             {
-                switch ( u_charType(aText.iterateCodePoints(&nPos, 0) ) ) {
-                case U_NON_SPACING_MARK:
-                case U_ENCLOSING_MARK:
-                case U_COMBINING_SPACING_MARK:
+                switch (unicode::getUnicodeType(aText.iterateCodePoints(&nPos, 0))) {
+                case css::i18n::UnicodeType::NON_SPACING_MARK:
+                case css::i18n::UnicodeType::ENCLOSING_MARK:
+                case css::i18n::UnicodeType::COMBINING_SPACING_MARK:
                     --nPos;
                     rTypes.back().nEndPos--;
                     break;
@@ -2761,7 +2761,9 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                 sal_Int32 nPos = nMaxNewChars;
                 while (nPos-- > 0 && (nMaxNewChars - nPos) <= 84)
                 {
-                    switch (unicode::getUnicodeType(aLine[nPos]))
+                    auto nNextPos = nPos;
+                    const auto c = aLine.iterateCodePoints(&nNextPos);
+                    switch (unicode::getUnicodeType(c))
                     {
                         case css::i18n::UnicodeType::UPPERCASE_LETTER:
                         case css::i18n::UnicodeType::LOWERCASE_LETTER:
@@ -2775,24 +2777,24 @@ EditPaM ImpEditEngine::ImpInsertText(const EditSelection& aCurSel, const OUStrin
                         break;
                         default:
                             {
-                                const sal_Unicode c = aLine[nPos];
                                 // Ignore NO-BREAK spaces, NBSP, NNBSP, ZWNBSP.
                                 if (c == 0x00A0 || c == 0x202F || c == 0xFEFF)
                                     break;
-                                if (c == '-' && nPos + 1 < nMaxNewChars)
+                                const auto n = aLine.iterateCodePoints(&nNextPos, 0);
+                                if (c == '-' && nNextPos < nMaxNewChars)
                                 {
                                     // Keep HYPHEN-MINUS with a number to the right.
-                                    const sal_Int16 t = unicode::getUnicodeType(aLine[nPos+1]);
+                                    const sal_Int16 t = unicode::getUnicodeType(n);
                                     if (    t == css::i18n::UnicodeType::DECIMAL_DIGIT_NUMBER ||
                                             t == css::i18n::UnicodeType::LETTER_NUMBER ||
                                             t == css::i18n::UnicodeType::OTHER_NUMBER)
                                         nMaxNewChars = nPos;        // line break before
                                     else
-                                        nMaxNewChars = nPos + 1;    // line break after
+                                        nMaxNewChars = nNextPos;    // line break after
                                 }
                                 else
                                 {
-                                    nMaxNewChars = nPos + 1;        // line break after
+                                    nMaxNewChars = nNextPos;        // line break after
                                 }
                                 nPos = 0;   // will break loop
                             }
