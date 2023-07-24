@@ -11667,7 +11667,12 @@ public:
 
     virtual void set_item_help_id(const OUString& rIdent, const OUString& rHelpId) override
     {
+#if !GTK_CHECK_VERSION(4, 0, 0)
         ::set_help_id(GTK_WIDGET(m_aMap[rIdent]), rHelpId);
+#else
+        (void)rIdent;
+        (void)rHelpId;
+#endif
     }
 
     void remove(const OUString& rIdent) override
