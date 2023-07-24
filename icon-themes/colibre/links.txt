@@ -1383,21 +1383,21 @@ cmd/sc_insertobjectchartfromfile.png cmd/sc_open.png
 
 # Shapes
 cmd/32/basicshapes.ellipse.png cmd/32/ellipse.png
-cmd/32/basicshapes.png cmd/32/basicshapes.diamond.png
+cmd/32/basicshapes.png cmd/32/graphic.png
 cmd/32/basicshapes.rectangle.png cmd/32/rect.png
 cmd/32/ellipsetoolbox.png cmd/32/ellipse.png
 cmd/32/linetoolbox.png cmd/32/freeline_unfilled.png
 cmd/32/rectangletoolbox.png cmd/32/rect.png
 
 cmd/lc_basicshapes.ellipse.png cmd/lc_ellipse.png
-cmd/lc_basicshapes.png cmd/lc_basicshapes.diamond.png
+cmd/lc_basicshapes.png cmd/lc_graphic.png
 cmd/lc_basicshapes.rectangle.png cmd/lc_rect.png
 cmd/lc_ellipsetoolbox.png cmd/lc_ellipse.png
 cmd/lc_linetoolbox.png cmd/lc_freeline_unfilled.png
 cmd/lc_rectangletoolbox.png cmd/lc_rect.png
 
 cmd/sc_basicshapes.ellipse.png cmd/sc_ellipse.png
-cmd/sc_basicshapes.png cmd/sc_basicshapes.diamond.png
+cmd/sc_basicshapes.png cmd/sc_graphic.png
 cmd/sc_basicshapes.rectangle.png cmd/sc_rect.png
 cmd/sc_ellipsetoolbox.png cmd/sc_ellipse.png
 cmd/sc_linetoolbox.png cmd/sc_freeline_unfilled.png

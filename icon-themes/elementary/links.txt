@@ -2511,7 +2511,7 @@ cmd/32/insertheaderfootermenu.png cmd/32/editheaderandfooter.png
 cmd/32/insertpagefooter.png cmd/32/insertfooter.png
 cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
-cmd/32/shapesmenu.png cmd/32/basicshapes.round-quadrat.png
+cmd/32/shapesmenu.png cmd/32/basicshapes.basicshapes.diamond.png
 
 cmd/lc_fieldmenu.png cmd/lc_insertfield.png
 cmd/lc_graphicmenu.png cmd/lc_avmediaplayer.png
@@ -2521,7 +2521,7 @@ cmd/lc_insertheaderfootermenu.png cmd/lc_editheaderandfooter.png
 cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
 cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
-cmd/lc_shapesmenu.png cmd/lc_basicshapes.round-quadrat.png
+cmd/lc_shapesmenu.png cmd/lc_basicshapes.diamond.png
 
 cmd/sc_fieldmenu.png cmd/sc_insertfield.png
 cmd/sc_graphicmenu.png cmd/sc_avmediaplayer.png
@@ -2531,7 +2531,7 @@ cmd/sc_insertheaderfootermenu.png cmd/sc_editheaderandfooter.png
 cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
 cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
-cmd/sc_shapesmenu.png cmd/sc_basicshapes.round-quadrat.png
+cmd/sc_shapesmenu.png cmd/sc_basicshapes.diamond.png
 
 # Tools menu
 # ===============================================

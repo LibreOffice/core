@@ -453,7 +453,7 @@ cmd/32/setoptimalcolumnwidthdirect.png cmd/32/setoptimalcolumnwidth.png
 cmd/32/setrowheight.png cmd/32/rowheight.png
 cmd/32/settabbgcolor.png cmd/32/formatarea.png
 cmd/32/shapeslinemenu.png cmd/32/line.png
-cmd/32/shapesmenu.png cmd/32/basicshapes.rectangle.png
+cmd/32/shapesmenu.png cmd/32/basicshapes.diamond.png
 cmd/32/sheetcommentmenu.png cmd/32/insertannotation.png
 cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
 cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
@@ -1082,7 +1082,7 @@ cmd/lc_setoptimalcolumnwidthdirect.png cmd/lc_setoptimalcolumnwidth.png
 cmd/lc_setrowheight.png cmd/lc_rowheight.png
 cmd/lc_settabbgcolor.png cmd/lc_formatarea.png
 cmd/lc_shapeslinemenu.png cmd/lc_line.png
-cmd/lc_shapesmenu.png cmd/lc_basicshapes.rectangle.png
+cmd/lc_shapesmenu.png cmd/lc_basicshapes.diamond.png
 cmd/lc_sheetcommentmenu.png cmd/lc_insertannotation.png
 cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
 cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
@@ -1467,7 +1467,7 @@ cmd/sc_printrangesmenu.png cmd/sc_defineprintarea.png
 cmd/sc_questionanswers.png cmd/sc_webhtml.png
 cmd/sc_rect.png cmd/sc_basicshapes.rectangle.png
 cmd/sc_rect_rounded.png cmd/sc_basicshapes.round-rectangle.png
-cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.rectangle.png
+cmd/sc_rectangletoolbox.png cmd/sc_basicshapes.diamond.png
 cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_rejecttracedchange.png cmd/sc_rejecttrackedchange.png
@@ -1501,7 +1501,7 @@ cmd/sc_setoptimalcolumnwidthdirect.png cmd/sc_setoptimalcolumnwidth.png
 cmd/sc_setrowheight.png cmd/sc_rowheight.png
 cmd/sc_settabbgcolor.png cmd/sc_formatarea.png
 cmd/sc_shapeslinemenu.png cmd/sc_line.png
-cmd/sc_shapesmenu.png cmd/sc_basicshapes.rectangle.png
+cmd/sc_shapesmenu.png cmd/sc_basicshapes.diamond.png
 cmd/sc_sheetcommentmenu.png cmd/sc_insertannotation.png
 cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
