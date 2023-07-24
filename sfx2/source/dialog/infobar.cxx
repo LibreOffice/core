@@ -114,12 +114,13 @@ void SfxInfoBarWindow::SetCloseButtonImage()
 
     drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
-    //  background
+    // Draw backround. The right and bottom need to be extended by 1 or
+    // there will be a white line on both edges when Skia is enabled.
     B2DPolygon aPolygon;
     aPolygon.append(B2DPoint(aRect.Left(), aRect.Top()));
-    aPolygon.append(B2DPoint(aRect.Right(), aRect.Top()));
-    aPolygon.append(B2DPoint(aRect.Right(), aRect.Bottom()));
-    aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom()));
+    aPolygon.append(B2DPoint(aRect.Right() + 1, aRect.Top()));
+    aPolygon.append(B2DPoint(aRect.Right() + 1, aRect.Bottom() + 1));
+    aPolygon.append(B2DPoint(aRect.Left(), aRect.Bottom() + 1));
     aPolygon.setClosed(true);
 
     aSeq[0] = new PolyPolygonColorPrimitive2D(B2DPolyPolygon(aPolygon), m_aBackgroundColor);
