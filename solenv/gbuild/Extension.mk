@@ -89,17 +89,20 @@ $(call gb_Extension_get_workdir,%)/description.xml : $(gb_Extension_XRMEXDEPS) $
 			-o $@ \
 			-m $${MERGEINPUT} \
 			-l all) && \
-	rm -rf $${MERGEINPUT}
+	rm -f $${MERGEINPUT}
 	$(call gb_Trace_EndRange,$*/description.xml,XRM)
 
 endif
 
 # rule to create oxt package in workdir
 # --filesync makes sure that all files in the oxt package will be removed that no longer are in $(FILES)
+# TODO: kinda pointless/ineffective to copy from one point in workdir to another, also makes the command
+# very long when building with all languages (nlpsolver extension for example), hence read list via pipe
 $(call gb_Extension_get_target,%) : \
 		$(call gb_Extension_get_workdir,%)/description.xml
 	$(call gb_Output_announce,$*,$(true),OXT,3)
 	$(call gb_Trace_StartRange,$*,OXT)
+	RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(subst $(WHITESPACE),$(NEWLINE),$(sort $(FILES)))) && \
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(call gb_Extension_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_Extension_get_rootdir,$*)/registration) && \
@@ -108,10 +111,8 @@ $(call gb_Extension_get_target,%) : \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_Extension_get_rootdir,$*)/registration &&) \
 		$(if $(and $(gb_Extension_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_Extension_TRANS_LANGS),$(call gb_Extension_get_workdir,$*)/description-$(lang).txt) $(call gb_Extension_get_rootdir,$*) &&) \
 		cd $(call gb_Extension_get_rootdir,$*) && \
-		ZIPFILES=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(sort $(FILES))) && \
-		$(gb_Extension_ZIPCOMMAND) -rX --filesync --must-match \
-			$(call gb_Extension_get_target,$*) \
-			`cat $${ZIPFILES} | tr -d '\r'` && rm $${ZIPFILES})
+		cat $$RESPONSEFILE | $(gb_Extension_ZIPCOMMAND) -rX --filesync --must-match \
+			$(call gb_Extension_get_target,$*) --names-stdin) && rm -f $$RESPONSEFILE
 	$(call gb_Trace_EndRange,$*,OXT)
 
 # set file list and location of manifest and description files
