@@ -450,6 +450,7 @@ void unoInterfaceProxyDispatch(uno_Interface* pUnoI, const typelib_TypeDescripti
                         TYPELIB_DANGER_RELEASE(pTD);
                     }
                 } // else perform queryInterface()
+                    [[fallthrough]];
                 default:
                     // dependent dispatch
                     cpp_call(

@@ -56,6 +56,8 @@ int loongarch64::flatten_struct(typelib_TypeDescription* pTypeDescr, Registers& 
                     regs.priorInt = true;
                 break;
             case typelib_TypeClass_FLOAT:
+                regs.complex_float = true;
+                [[fallthrough]];
             case typelib_TypeClass_DOUBLE:
                 regs.nr_fp++;
                 if (!regs.priorInt && !regs.priorFp)
@@ -88,22 +90,34 @@ loongarch64::ReturnKind loongarch64::getReturnKind(typelib_TypeDescriptionRefere
             return ReturnKind::RegistersFp;
         case typelib_TypeClass_STRUCT:
         {
-            Registers regs = { 0, 0, false, false };
+            Registers regs = { false, false, false, 0, 0 };
             typelib_TypeDescription* pTypeDescr = nullptr;
             TYPELIB_DANGER_GET(&pTypeDescr, pTypeRef);
             int sum = flatten_struct(pTypeDescr, regs);
             TYPELIB_DANGER_RELEASE(pTypeDescr);
             if ((sum == 1 || sum == 2) && sum == regs.nr_fp)
+            {
+                if (regs.complex_float && pTypeRef->pType->nSize == 8)
+                    return ReturnKind::RegistersTwoFloat;
                 return ReturnKind::RegistersFp;
+            }
             if (sum == 2 && regs.nr_fp == regs.nr_int)
             {
                 if (regs.priorInt)
+                {
+                    if (regs.complex_float && pTypeRef->pType->nSize == 8)
+                        return ReturnKind::RegistersIntFloat;
                     return ReturnKind::RegistersIntFp;
+                }
                 if (regs.priorFp)
+                {
+                    if (regs.complex_float && pTypeRef->pType->nSize == 8)
+                        return ReturnKind::RegistersFloatInt;
                     return ReturnKind::RegistersFpInt;
+                }
             }
-            return ReturnKind::RegistersInt;
         }
+            [[fallthrough]];
         default:
             return ReturnKind::RegistersInt;
     }
@@ -119,13 +133,25 @@ void loongarch64::fillReturn(typelib_TypeDescriptionReference* pTypeRef, sal_Int
             reinterpret_cast<double*>(pRegisterReturn)[0] = fret[0];
             reinterpret_cast<double*>(pRegisterReturn)[1] = fret[1];
             break;
+        case ReturnKind::RegistersTwoFloat:
+            memcpy(reinterpret_cast<char*>(pRegisterReturn), &(fret[0]), 4);
+            memcpy(reinterpret_cast<char*>(pRegisterReturn) + 4, &(fret[1]), 4);
+            break;
         case ReturnKind::RegistersFpInt:
             reinterpret_cast<double*>(pRegisterReturn)[0] = fret[0];
             reinterpret_cast<sal_Int64*>(pRegisterReturn)[1] = gret[0];
             break;
+        case ReturnKind::RegistersFloatInt:
+            memcpy(reinterpret_cast<char*>(pRegisterReturn), fret, 4);
+            memcpy(reinterpret_cast<char*>(pRegisterReturn) + 4, gret, 4);
+            break;
         case ReturnKind::RegistersIntFp:
             reinterpret_cast<sal_Int64*>(pRegisterReturn)[0] = gret[0];
             reinterpret_cast<double*>(pRegisterReturn)[1] = fret[0];
+            break;
+        case ReturnKind::RegistersIntFloat:
+            memcpy(reinterpret_cast<char*>(pRegisterReturn), gret, 4);
+            memcpy(reinterpret_cast<char*>(pRegisterReturn) + 4, fret, 4);
             break;
         default:
             reinterpret_cast<sal_Int64*>(pRegisterReturn)[0] = gret[0];

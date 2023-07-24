@@ -30,11 +30,15 @@ enum class ReturnKind
 {
     RegistersInt,
     RegistersFp,
+    RegistersTwoFloat,
     RegistersFpInt,
-    RegistersIntFp
+    RegistersFloatInt,
+    RegistersIntFp,
+    RegistersIntFloat
 };
 typedef struct Registers
 {
+    bool complex_float;
     bool priorInt;
     bool priorFp;
     int nr_fp;
