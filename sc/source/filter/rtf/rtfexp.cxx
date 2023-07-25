@@ -22,6 +22,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/rtfkeywd.hxx>
@@ -145,6 +146,22 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         }
     }
     m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ROW ).WriteOString( SAL_NEWLINE_STRING );
+}
+
+int ScRTFExport::AddFont(const SvxFontItem& rFontItem)
+{
+    auto nRet = m_pFontTable.size();
+    auto itFont(m_pFontTable.find(rFontItem.GetFamilyName()));
+    if (itFont == m_pFontTable.end())
+    {
+        m_pFontTable[rFontItem.GetFamilyName()] = nRet;
+    }
+    else
+    {
+        nRet = itFont->second;
+    }
+
+    return nRet;
 }
 
 void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
