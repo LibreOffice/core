@@ -19,6 +19,9 @@
 
 #include <scitems.hxx>
 
+#include <rtl/tencinfo.h>
+#include <osl/thread.h>
+
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
@@ -60,6 +63,8 @@ void ScRTFExport::Write()
     rStrm.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RTF );
     rStrm.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_ANSI ).WriteCharPtr( SAL_NEWLINE_STRING );
 
+    m_aFontStrm.WriteChar( '{' ).WriteOString( OOO_STRING_SVTOOLS_RTF_FONTTBL );
+
     // Data
     for ( SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab(); nTab++ )
     {
@@ -68,6 +73,9 @@ void ScRTFExport::Write()
         WriteTab( nTab );
     }
 
+    m_aFontStrm.WriteChar( '}' );
+    m_aFontStrm.Seek(0);
+    rStrm.WriteStream(m_aFontStrm);
     m_aDocStrm.Seek(0);
     rStrm.WriteStream(m_aDocStrm);
     rStrm.WriteChar( '}' ).WriteOString( SAL_NEWLINE_STRING );
@@ -148,6 +156,51 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
     m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_ROW ).WriteOString( SAL_NEWLINE_STRING );
 }
 
+void ScRTFExport::WriteFontTable(const SvxFontItem& rFontItem, int nIndex)
+{
+    m_aFontStrm.WriteChar( '{' );
+    m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_F );
+    m_aFontStrm.WriteOString( OString::number(nIndex) );
+
+    FontFamily eFamily = rFontItem.GetFamily();
+    if (eFamily == FAMILY_DONTKNOW)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FNIL );
+    else if (eFamily == FAMILY_DECORATIVE)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FDECOR );
+    else if (eFamily == FAMILY_MODERN)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FMODERN );
+    else if (eFamily == FAMILY_ROMAN)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FROMAN );
+    else if (eFamily == FAMILY_SCRIPT)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FSCRIPT );
+    else if (eFamily == FAMILY_SWISS)
+        m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FSWISS );
+
+    m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FPRQ );
+
+    sal_uInt16 nVal = 0;
+    FontPitch ePitch = rFontItem.GetPitch();
+    if ( ePitch == PITCH_FIXED )
+        nVal = 1;
+    else if ( ePitch == PITCH_VARIABLE )
+        nVal = 2;
+    m_aFontStrm.WriteOString( OString::number(nVal) );
+
+    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
+    rtl_TextEncoding eChrSet = rFontItem.GetCharSet();
+    if (IsOpenSymbol(rFontItem.GetFamilyName()))
+        eChrSet = RTL_TEXTENCODING_UTF8;
+    else if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
+        eChrSet = osl_getThreadTextEncoding();
+
+    m_aFontStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_FCHARSET );
+    m_aFontStrm.WriteOString( OString::number(rtl_getBestWindowsCharsetFromTextEncoding( eChrSet )) );
+
+    m_aFontStrm.WriteChar( ' ' );
+    RTFOutFuncs::Out_String( m_aFontStrm, rFontItem.GetFamilyName(), eDestEnc );
+    m_aFontStrm.WriteOString( ";}" );
+}
+
 int ScRTFExport::AddFont(const SvxFontItem& rFontItem)
 {
     auto nRet = m_pFontTable.size();
@@ -155,6 +208,7 @@ int ScRTFExport::AddFont(const SvxFontItem& rFontItem)
     if (itFont == m_pFontTable.end())
     {
         m_pFontTable[rFontItem.GetFamilyName()] = nRet;
+        WriteFontTable(rFontItem, nRet);
     }
     else
     {
@@ -204,10 +258,14 @@ void ScRTFExport::WriteCell( SCTAB nTab, SCROW nRow, SCCOL nCol )
 
     bool bResetAttr(false);
 
+    const SvxFontItem&          rFontItem       = pAttr->GetItem( ATTR_FONT );
     const SvxHorJustifyItem&    rHorJustifyItem = pAttr->GetItem( ATTR_HOR_JUSTIFY );
     const SvxWeightItem&        rWeightItem     = pAttr->GetItem( ATTR_FONT_WEIGHT );
     const SvxPostureItem&       rPostureItem    = pAttr->GetItem( ATTR_FONT_POSTURE );
     const SvxUnderlineItem&     rUnderlineItem  = pAttr->GetItem( ATTR_FONT_UNDERLINE );
+
+    m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_F )
+        .WriteOString( OString::number(AddFont(rFontItem)) );
 
     const char* pChar;
 
