@@ -500,14 +500,13 @@ void Control::LogicInvalidate(const tools::Rectangle* pRectangle)
     if (!pRectangle)
     {
         // we have to invalidate the whole control area not the whole document
-        aResultRectangle = tools::Rectangle(GetPosPixel(), GetSizePixel());
+        aResultRectangle = PixelToLogic(tools::Rectangle(GetPosPixel(), GetSizePixel()), MapMode(MapUnit::MapTwip));
     }
     else
     {
-        aResultRectangle = *pRectangle;
+        aResultRectangle = OutputDevice::LogicToLogic(*pRectangle, GetMapMode(), MapMode(MapUnit::MapTwip));
     }
 
-    aResultRectangle = PixelToLogic(aResultRectangle, MapMode(MapUnit::MapTwip));
     pParent->GetLOKNotifier()->notifyInvalidation(&aResultRectangle);
 }
 
