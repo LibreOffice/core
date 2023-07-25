@@ -1054,7 +1054,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     aView.m_aInvalidations.clear();
     dispatchCommand(mxComponent, ".uno:InsertRows", aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 51240, 32212230, 63990), aView.m_aInvalidations[0]);
 
     // move on the right
@@ -1070,7 +1070,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testInvalidateOnInserRowCol)
     aView.m_aInvalidations.clear();
     dispatchCommand(mxComponent, ".uno:InsertColumns", aArgs);
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
-    CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aView.m_aInvalidations.size());
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(254925, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
