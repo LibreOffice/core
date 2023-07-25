@@ -24,7 +24,9 @@
 #include <o3tl/string_view.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <dialmgr.hxx>
 #include "optsave.hxx"
+#include <strings.hrc>
 #include <treeopt.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
@@ -99,6 +101,7 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xODFWarningFT(m_xBuilder->weld_label("odfwarning_label"))
 {
     m_xAutoSaveEdit->set_max_length(2);
+    m_xBackupIntoDocumentFolderCB->set_accessible_description(CuiResId(RID_CUISTR_A11Y_DESC_BACKUP));
 
     m_xODFVersionLB->set_id(0, OUString::number(SvtSaveOptions::ODFVER_011)); // 1.0/1.1
     m_xODFVersionLB->set_id(1, OUString::number(SvtSaveOptions::ODFVER_012)); // 1.2

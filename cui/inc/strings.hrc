@@ -398,6 +398,8 @@
 #define RID_LANGUAGETOOL_LEAVE_EMPTY                NC_("RID_LANGUAGETOOL_LEAVE_EMPTY", "Leave this field empty to use the free version")
 #define RID_LANGUAGETOOL_REST_LEAVE_EMPTY           NC_("RID_LANGUAGETOOL_REST_LEAVE_EMPTY", "Leave this field empty to use LanguageTool protocol")
 
+#define RID_CUISTR_A11Y_DESC_BACKUP                 NC_("RID_CUISTR_A11Y_DESC_BACKUP", "Specifies if the backup copy should be stored in the same folder as the original document. If not selected, the backup copy is stored in the folder specified in Tools - Options - %PRODUCTNAME - Paths - Backups.")
+
 // Translatable names of color schemes
 #define RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC      NC_("RID_COLOR_SCHEME_LIBREOFFICE_AUTOMATIC", "Automatic")
 
