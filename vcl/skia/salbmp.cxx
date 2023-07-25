@@ -646,7 +646,7 @@ bool SkiaSalBitmap::Invert()
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kDifference);
         // Drawing the image does not work so create a shader from the image
-        paint.setShader(GetSkShader(SkSamplingOptions(SkSamplingOptions())));
+        paint.setShader(GetSkShader(SkSamplingOptions()));
         surface->getCanvas()->drawRect(SkRect::MakeXYWH(0, 0, mSize.Width(), mSize.Height()),
                                        paint);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
