@@ -534,8 +534,9 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
             nTime = GtkSalFrame::GetLastInputEventTime();
         }
 
-        // do the same strange semantics as vcl popup windows to arrive at a frame geometry
-        // in mirrored UI case; best done by actually executing the same code
+        // Do the same strange semantics as vcl popup windows to arrive at a frame geometry
+        // in mirrored UI case; best done by actually executing the same code.
+        // (see code in FloatingWindow::StartPopupMode)
         sal_uInt16 nArrangeIndex;
         Point aPos = FloatingWindow::ImplCalcPos(pWin, rRect, nFlags, nArrangeIndex);
         aPos = FloatingWindow::ImplConvertToAbsPos(xParent, aPos);
