@@ -28,12 +28,14 @@ class ScRTFExport : public ScExportBase
 {
     std::unique_ptr<sal_uLong[]>  m_pCellX;     // cumulative range in a table
     std::map<OUString, sal_Int32> m_pFontTable;
+    SvMemoryStream m_aFontStrm;
     SvMemoryStream m_aDocStrm;
 
     int                 AddFont( const SvxFontItem& rFontItem );
     void                WriteTab( SCTAB nTab );
     void                WriteRow( SCTAB nTab, SCROW nRow );
     void                WriteCell( SCTAB nTab,  SCROW nRow, SCCOL nCol );
+    void                WriteFontTable(const SvxFontItem& rFontItem, int nIndex);
 
 public:
 
