@@ -27,7 +27,7 @@ enum class IssueObject
     TABLE,
     TEXT,
     DOCUMENT_TITLE,
-    FOOTNOTE,
+    FOOTENDNOTE,
     TEXTFRAME,
 };
 
