@@ -233,8 +233,12 @@ void DocumentHolder::CloseFrame()
 
 void DocumentHolder::FreeOffice()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
-    xDesktop->removeTerminateListener( this );
+    try {
+        uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
+        xDesktop->removeTerminateListener( this );
+    } catch (const css::uno::DeploymentException&) {
+        // if this happens, the desktop is already gone
+    }
 
     // the following code is commented out since for now there is still no completely correct way to detect
     // whether the office can be terminated, so it is better to have unnecessary process running than
