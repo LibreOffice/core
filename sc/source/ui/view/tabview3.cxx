@@ -1334,11 +1334,11 @@ void ScTabView::MoveCursorPage( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bo
     MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel )
+void ScTabView::MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift, bool bKeepSel, bool bInteractiveByUser )
 {
     SCCOL nNewX;
     SCROW nNewY;
-    GetAreaMoveEndPosition(nMovX, nMovY, eMode, nNewX, nNewY, eMode);
+    GetAreaMoveEndPosition(nMovX, nMovY, eMode, nNewX, nNewY, eMode, bInteractiveByUser);
     MoveCursorRel(nNewX, nNewY, eMode, bShift, bKeepSel);
 }
 

@@ -241,7 +241,8 @@ private:
     static tools::Long     GetScrollBarPos( const ScrollAdaptor& rScroll );
 
     void            GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
-                                           SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode);
+                                           SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode,
+                                           bool bInteractiveByUser = false);
 
     void            SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SCCOL nMovX);
     void            SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCROW nMovY);
@@ -435,7 +436,8 @@ public:
     void            MoveCursorPage( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                     bool bShift, bool bKeepSel = false );
     void            MoveCursorArea( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
-                                    bool bShift, bool bKeepSel = false );
+                                    bool bShift, bool bKeepSel = false,
+                                    bool bInteractiveByUser = false );
     void            MoveCursorEnd( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
                                    bool bShift, bool bKeepSel = false );
     void            MoveCursorScreen( SCCOL nMovX, SCROW nMovY, ScFollowMode eMode, bool bShift );
