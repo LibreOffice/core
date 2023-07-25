@@ -47,12 +47,14 @@ private:
     std::unique_ptr<weld::TreeView> xFuncList;
     std::unique_ptr<weld::Button> xInsertButton;
     std::unique_ptr<weld::TextView> xFiFuncDesc;
+    std::unique_ptr<weld::Entry> m_xSearchString;
 
     rtl::Reference<comphelper::ConfigurationListener> xConfigListener;
     std::unique_ptr<EnglishFunctionNameChange> xConfigChange;
     const ScFuncDesc*   pFuncDesc;
     sal_uInt16          nArgs;
-    OUString m_aHelpId;
+    OUString m_aListHelpId;
+    OUString m_aSearchHelpId;
 
     ::std::vector< const formula::IFunctionDescription*> aLRUList;
 
@@ -64,6 +66,8 @@ private:
                     DECL_LINK( SetSelectionClickHdl, weld::Button&, void );
                     DECL_LINK( SelComboHdl, weld::ComboBox&, void );
                     DECL_LINK( SelTreeHdl, weld::TreeView&, void );
+                    DECL_LINK( ModifyHdl, weld::Entry&, void );
+                    DECL_LINK( KeyInputHdl, const KeyEvent&, bool);
 
 public:
     ScFunctionWin(weld::Widget* pParent);
@@ -71,7 +75,7 @@ public:
     virtual ~ScFunctionWin() override;
 
     void            InitLRUList();
-    void            UpdateFunctionList();
+    void            UpdateFunctionList(const OUString&);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

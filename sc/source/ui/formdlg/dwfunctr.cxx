@@ -21,6 +21,7 @@
 #include <editeng/editview.hxx>
 #include <sfx2/viewsh.hxx>
 #include <formula/funcvarargs.h>
+#include <unotools/charclass.hxx>
 
 #include <global.hxx>
 #include <scmod.hxx>
@@ -29,6 +30,8 @@
 #include <funcdesc.hxx>
 
 #include <dwfunctr.hxx>
+#include <scresid.hxx>
+#include <strings.hrc>
 
 /*************************************************************************
 #*  Member:     ScFunctionWin
@@ -50,6 +53,7 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     , xFuncList(m_xBuilder->weld_tree_view("funclist"))
     , xInsertButton(m_xBuilder->weld_button("insert"))
     , xFiFuncDesc(m_xBuilder->weld_text_view("funcdesc"))
+    , m_xSearchString(m_xBuilder->weld_entry("search"))
     , xConfigListener(new comphelper::ConfigurationListener("/org.openoffice.Office.Calc/Formula/Syntax"))
     , xConfigChange(std::make_unique<EnglishFunctionNameChange>(xConfigListener, this))
     , pFuncDesc(nullptr)
@@ -57,10 +61,14 @@ ScFunctionWin::ScFunctionWin(weld::Widget* pParent)
     InitLRUList();
 
     nArgs=0;
-    m_aHelpId = xFuncList->get_help_id();
+    m_aListHelpId = xFuncList->get_help_id();
+    m_aSearchHelpId = m_xSearchString->get_help_id();
 
     // Description box has a height of 8 lines of text
     xFiFuncDesc->set_size_request(-1, 8 * xFiFuncDesc->get_text_height());
+
+    m_xSearchString->connect_changed(LINK(this, ScFunctionWin, ModifyHdl));
+    m_xSearchString->connect_key_press(LINK(this, ScFunctionWin, KeyInputHdl));
 
     xCatBox->connect_changed(LINK( this, ScFunctionWin, SelComboHdl));
     xFuncList->connect_changed(LINK( this, ScFunctionWin, SelTreeHdl));
@@ -100,7 +108,7 @@ ScFunctionWin::~ScFunctionWin()
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList
+#*  Member:     InitLRUList
 #*------------------------------------------------------------------------
 #*
 #*  Class:      ScFunctionWin
@@ -121,11 +129,11 @@ void ScFunctionWin::InitLRUList()
     sal_Int32 nSelPos  = xCatBox->get_active();
 
     if (nSelPos == 0)
-        UpdateFunctionList();
+        UpdateFunctionList("");
 }
 
 /*************************************************************************
-#*  Member:     UpdateFunctionList
+#*  Member:     UpdateLRUList
 #*------------------------------------------------------------------------
 #*
 #*  Class:      ScFunctionWin
@@ -183,7 +191,7 @@ void ScFunctionWin::SetDescription()
         if (!sHelpId.isEmpty())
             xFuncList->set_help_id(pDesc->getHelpId());
         else
-            xFuncList->set_help_id(m_aHelpId);
+            xFuncList->set_help_id(m_aListHelpId);
     }
 }
 
@@ -195,13 +203,13 @@ void ScFunctionWin::SetDescription()
 #*
 #*  Function:   Updates the list of functions depending on the set category
 #*
-#*  Input:      ---
+#*  Input:      Search string used to filter the list of functions
 #*
 #*  Output:     ---
 #*
 #************************************************************************/
 
-void ScFunctionWin::UpdateFunctionList()
+void ScFunctionWin::UpdateFunctionList(const OUString& rSearchString)
 {
     sal_Int32  nSelPos   = xCatBox->get_active();
     sal_Int32  nCategory = ( -1 != nSelPos )
@@ -214,11 +222,31 @@ void ScFunctionWin::UpdateFunctionList()
     {
         ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
 
+        SvtSysLocale aSysLocale;
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+        const OUString aSearchStr(rCharClass.uppercase(rSearchString));
+
+        // First add the functions that start with the search string
         const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
-            xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
+            if (rSearchString.isEmpty()
+                || (rCharClass.uppercase(pDesc->getFunctionName()).startsWith(aSearchStr)))
+                xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
             pDesc = pFuncMgr->Next();
+        }
+
+        // Now add the functions that have the search string in the middle of the function name
+        // Note that this will only be necessary if the search string is not empty
+        if (!rSearchString.isEmpty())
+        {
+            pDesc = pFuncMgr->First( nCategory );
+            while ( pDesc )
+            {
+                if (rCharClass.uppercase(pDesc->getFunctionName()).indexOf(aSearchStr) > 0)
+                    xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
+                pDesc = pFuncMgr->Next();
+            }
         }
     }
     else // LRU list
@@ -359,7 +387,90 @@ void ScFunctionWin::DoEnter()
 }
 
 /*************************************************************************
-#*  Handle:     SelHdl
+#*  Handle:     ModifyHdl
+#*------------------------------------------------------------------------
+#*
+#*  Class:      ScFunctionWin
+#*
+#*  Function:   Handles changes in the search text
+#*
+#************************************************************************/
+
+IMPL_LINK_NOARG(ScFunctionWin, ModifyHdl, weld::Entry&, void)
+{
+    // Switch to the "All" category when searching a function
+    xCatBox->set_active(1);
+    OUString searchStr = m_xSearchString->get_text();
+    UpdateFunctionList(searchStr);
+    SetDescription();
+}
+
+/*************************************************************************
+#*  Handle:     KeyInputHdl
+#*------------------------------------------------------------------------
+#*
+#*  Class:      ScFunctionWin
+#*
+#*  Function:   Processes key inputs when the serch entry has focus
+#*
+#************************************************************************/
+
+IMPL_LINK(ScFunctionWin, KeyInputHdl, const KeyEvent&, rEvent, bool)
+{
+    bool bHandled = false;
+
+    switch (rEvent.GetKeyCode().GetCode())
+    {
+    case KEY_RETURN:
+        {
+            DoEnter();
+            bHandled = true;
+        }
+        break;
+    case KEY_DOWN:
+        {
+            int nNewIndex = std::min(xFuncList->get_selected_index() + 1, xFuncList->n_children() - 1);
+            xFuncList->select(nNewIndex);
+            SetDescription();
+            bHandled = true;
+        }
+        break;
+    case KEY_UP:
+        {
+            int nNewIndex = std::max(xFuncList->get_selected_index() - 1, 0);
+            xFuncList->select(nNewIndex);
+            SetDescription();
+            bHandled = true;
+        }
+        break;
+    case KEY_ESCAPE:
+        {
+            m_xSearchString->set_text("");
+            UpdateFunctionList("");
+            bHandled = true;
+        }
+        break;
+    case KEY_F1:
+        {
+            const ScFuncDesc* pDesc = weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id());
+            OUString sHelpId;
+            if (pDesc)
+                sHelpId = pDesc->getHelpId();
+
+            if (!sHelpId.isEmpty())
+                m_xSearchString->set_help_id(sHelpId);
+            else
+                m_xSearchString->set_help_id(m_aSearchHelpId);
+            bHandled = false;
+        }
+        break;
+    }
+
+    return bHandled;
+}
+
+/*************************************************************************
+#*  Handle:     SelComboHdl
 #*------------------------------------------------------------------------
 #*
 #*  Class:      ScFunctionWin
@@ -374,8 +485,10 @@ void ScFunctionWin::DoEnter()
 
 IMPL_LINK_NOARG(ScFunctionWin, SelComboHdl, weld::ComboBox&, void)
 {
-    UpdateFunctionList();
+    UpdateFunctionList("");
     SetDescription();
+    m_xSearchString->set_text("");
+    m_xSearchString->grab_focus();
 }
 
 IMPL_LINK_NOARG(ScFunctionWin, SelTreeHdl, weld::TreeView&, void)
@@ -384,7 +497,7 @@ IMPL_LINK_NOARG(ScFunctionWin, SelTreeHdl, weld::TreeView&, void)
 }
 
 /*************************************************************************
-#*  Handle:     SelHdl
+#*  Handle:     SetSelectionClickHdl
 #*------------------------------------------------------------------------
 #*
 #*  Class:      ScFunctionWin
@@ -412,7 +525,7 @@ void EnglishFunctionNameChange::setProperty(const css::uno::Any &rProperty)
 {
     ConfigurationListenerProperty::setProperty(rProperty);
     m_pFunctionWin->InitLRUList();
-    m_pFunctionWin->UpdateFunctionList();
+    m_pFunctionWin->UpdateFunctionList("");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
