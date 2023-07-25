@@ -1349,6 +1349,8 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
         rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
 }
 
+bool QtFrame::GetUseReducedAnimation() const { return GetQtInstance()->GetUseReducedAnimation(); }
+
 // Drag'n'drop foo
 
 void QtFrame::registerDragSource(QtDragSource* pDragSource)

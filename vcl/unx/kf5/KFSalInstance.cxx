@@ -21,6 +21,8 @@
 
 #include <utility>
 
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 #include <QtWidgets/QApplication>
 
 #include <sal/log.hxx>
@@ -38,6 +40,27 @@ KFSalInstance::KFSalInstance(std::unique_ptr<QApplication>& pQApp)
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = u"kf" + OUString::number(QT_VERSION_MAJOR);
     pSVData->maAppData.mxToolkitName = constructToolkitID(sToolkit);
+}
+
+bool KFSalInstance::GetUseReducedAnimation()
+{
+    // since Qt doesn not have a standard way to disable animations for the toolkit
+    // use the animation speed setting when on KDE Plasma, in accordance with how kde-gtk-config
+    // sets the Gtk setting based on that:
+    // https://invent.kde.org/plasma/kde-gtk-config/-/blob/881ae01ad361a03396f7f327365f225ef87688e8/kded/configvalueprovider.cpp#L239
+    // (ideally, this should probably be done in the desktop backend rather than directly
+    // in the VCL plugin)
+    const OUString sDesktop = Application::GetDesktopEnvironment();
+    if (sDesktop == "PLASMA5" || sDesktop == "PLASMA6")
+    {
+        KSharedConfigPtr pSharedConfig = KSharedConfig::openConfig();
+        KConfigGroup aGeneralConfig = pSharedConfig->group(QStringLiteral("KDE"));
+        const qreal fAnimationSpeedModifier
+            = qMax(0.0, aGeneralConfig.readEntry("AnimationDurationFactor", 1.0));
+        return qFuzzyIsNull(fAnimationSpeedModifier);
+    }
+
+    return QtInstance::GetUseReducedAnimation();
 }
 
 bool KFSalInstance::hasNativeFileSelection() const

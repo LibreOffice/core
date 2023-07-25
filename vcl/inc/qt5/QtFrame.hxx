@@ -214,6 +214,7 @@ public:
     virtual void SetScreenNumber(unsigned int) override;
     virtual void SetApplicationID(const OUString&) override;
     virtual void ResolveWindowHandle(SystemEnvData& rData) const override;
+    virtual bool GetUseReducedAnimation() const override;
 
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;
 

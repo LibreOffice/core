@@ -174,6 +174,8 @@ public:
     virtual css::uno::Reference<css::uno::XInterface>
     ImplCreateDropTarget(const SystemEnvData*) override;
 
+    // whether to reduce animations; KFSalInstance overrides this to read Plasma settings
+    virtual bool GetUseReducedAnimation() { return false; }
     void UpdateStyle(bool bFontsChanged);
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;

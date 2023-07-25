@@ -28,6 +28,8 @@ class KFSalInstance final : public QtInstance
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode) override;
 
+    virtual bool GetUseReducedAnimation() override;
+
 public:
     explicit KFSalInstance(std::unique_ptr<QApplication>& pQApp);
 };
