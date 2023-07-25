@@ -1344,14 +1344,14 @@ SCCOL ScTable::FindNextVisibleColWithContent( SCCOL nCol, bool bRight, SCROW nRo
     }
     else
     {
-        // If nCol is in the unallocated range [nLastCol+1, rDocument.MaxCol()], then move it directly to nLastCol
+        if(nCol == 0)
+            return 0;
+
+        // If nCol is in the unallocated range [nLastCol+1, rDocument.MaxCol()], then move it directly after nLastCol
         // as there is no data in the unallocated range. This also makes the search faster and avoids
         // the need for more range checks in the loop below.
         if ( nCol > nLastCol )
-            nCol = nLastCol;
-
-        if(nCol == 0)
-            return 0;
+            nCol = nLastCol + 1;
 
         do
         {
