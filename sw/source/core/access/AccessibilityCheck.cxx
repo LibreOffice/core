@@ -1358,17 +1358,12 @@ public:
         for (SwTextFootnote* pTextFootnote : pDoc->GetFootnoteIdxs())
         {
             SwFormatFootnote const& rFootnote = pTextFootnote->GetFootnote();
-            if (rFootnote.IsEndNote())
-            {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_ENDNOTES));
-            }
-            else
-            {
-                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_FOOTNOTES));
-                pIssue->setDoc(*pDoc);
-                pIssue->setIssueObject(IssueObject::FOOTNOTE);
-                pIssue->setTextFootnote(pTextFootnote);
-            }
+            auto pIssue = lclAddIssue(m_rIssueCollection, rFootnote.IsEndNote()
+                                                              ? SwResId(STR_AVOID_ENDNOTES)
+                                                              : SwResId(STR_AVOID_FOOTNOTES));
+            pIssue->setDoc(*pDoc);
+            pIssue->setIssueObject(IssueObject::FOOTENDNOTE);
+            pIssue->setTextFootnote(pTextFootnote);
         }
     }
 };

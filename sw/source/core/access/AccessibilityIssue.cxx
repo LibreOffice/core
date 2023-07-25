@@ -120,7 +120,7 @@ void AccessibilityIssue::gotoIssue() const
                 pWrtShell->ShowCursor();
         }
         break;
-        case IssueObject::FOOTNOTE:
+        case IssueObject::FOOTENDNOTE:
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
             if (m_pTextFootnote)
