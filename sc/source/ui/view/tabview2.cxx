@@ -37,6 +37,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <scmod.hxx>
+#include <table.hxx>
 #include <tabprotection.hxx>
 #include <markdata.hxx>
 #include <inputopt.hxx>
@@ -697,7 +698,8 @@ void ScTabView::GetPageMoveEndPosition(SCCOL nMovX, SCROW nMovY, SCCOL& rPageX, 
 }
 
 void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eMode,
-                                       SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode)
+                                       SCCOL& rAreaX, SCROW& rAreaY, ScFollowMode& rMode,
+                                       bool bInteractiveByUser)
 {
     SCCOL nNewX = -1;
     SCROW nNewY = -1;
@@ -705,6 +707,10 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     // current cursor position.
     SCCOL nCurX = aViewData.GetCurX();
     SCROW nCurY = aViewData.GetCurY();
+
+    ScModule* pScModule = SC_MOD();
+    bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
+    bool bIncrementallyExpandToDocLimits(false);
 
     if (aViewData.IsRefMode())
     {
@@ -723,14 +729,17 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     {
         nNewX = nCurX;
         nNewY = nCurY;
+        // cool#6931 on ctrl+[right/down] don't immediately leap to the far limits of the document when no more data,
+        // instead jump a generous block of emptiness. Limit to direct interaction by user and the simple
+        // case.
+        bIncrementallyExpandToDocLimits = bInteractiveByUser && (nMovX == 1 || nMovY == 1) &&
+                                          !bLegacyCellSelection && comphelper::LibreOfficeKit::isActive();
     }
 
     ScDocument& rDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
 
     // FindAreaPos knows only -1 or 1 as direction
-    ScModule* pScModule = SC_MOD();
-    bool bLegacyCellSelection = pScModule->GetInputOptions().GetLegacyCellSelection();
     SCCOL nVirtualX = bLegacyCellSelection ? nNewX : nCurX;
     SCROW nVirtualY = bLegacyCellSelection ? nNewY : nCurY;
 
@@ -751,9 +760,41 @@ void ScTabView::GetAreaMoveEndPosition(SCCOL nMovX, SCROW nMovY, ScFollowMode eM
     if (eMode==SC_FOLLOW_JUMP)                  // bottom right do not show too much grey
     {
         if (nMovX != 0 && nNewX == rDoc.MaxCol())
+        {
             eMode = SC_FOLLOW_LINE;
+            if (bIncrementallyExpandToDocLimits)
+            {
+                if (const ScTable* pTab = rDoc.FetchTable(nTab))
+                {
+                    if (!pTab->HasData(nNewX, nCurY))
+                    {
+                        SCCOL nLastUsedCol(0);
+                        SCROW nLastUsedRow(0);
+                        rDoc.GetPrintArea(nTab, nLastUsedCol, nLastUsedRow);
+                        SCCOL nJumpFrom = std::max(nCurX, nLastUsedCol);
+                        nNewX = ((nJumpFrom / 13) + 2) * 13 - 1;
+                    }
+                }
+            }
+        }
         if (nMovY != 0 && nNewY == rDoc.MaxRow())
+        {
             eMode = SC_FOLLOW_LINE;
+            if (bIncrementallyExpandToDocLimits)
+            {
+                if (const ScTable* pTab = rDoc.FetchTable(nTab))
+                {
+                    if (!pTab->HasData(nCurX, nNewY))
+                    {
+                        SCCOL nLastUsedCol(0);
+                        SCROW nLastUsedRow(0);
+                        rDoc.GetPrintArea(nTab, nLastUsedCol, nLastUsedRow);
+                        SCROW nJumpFrom = std::max(nCurY, nLastUsedRow);
+                        nNewY = ((nJumpFrom / 500) + 2) * 500 - 1;
+                    }
+                }
+            }
+        }
     }
 
     if (aViewData.IsRefMode())

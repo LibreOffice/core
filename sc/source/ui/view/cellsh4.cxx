@@ -141,7 +141,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORBLKDOWN:
-            pTabViewShell->MoveCursorArea( 0, nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( 0, nRepeat, SC_FOLLOW_JUMP, bSel, bKeep, !rReq.IsAPI() );
             break;
 
         case SID_CURSORUP:
@@ -152,7 +152,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORBLKUP:
-            pTabViewShell->MoveCursorArea( 0, -nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( 0, -nRepeat, SC_FOLLOW_JUMP, bSel, bKeep, !rReq.IsAPI() );
             break;
 
         case SID_CURSORLEFT:
@@ -163,7 +163,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORBLKLEFT:
-            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep, !rReq.IsAPI() );
             break;
 
         case SID_CURSORRIGHT:
@@ -174,7 +174,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORBLKRIGHT:
-            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep, !rReq.IsAPI() );
             break;
 
         case SID_CURSORPAGEDOWN:
