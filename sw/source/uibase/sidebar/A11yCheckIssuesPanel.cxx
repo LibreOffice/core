@@ -43,6 +43,16 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     if (m_pAccessibilityIssue->canGotoIssue())
     {
         m_xGotoButton->set_label(m_pAccessibilityIssue->m_aIssueText);
+
+        // int nPrefWidth(m_xGotoButton->get_preferred_size().Width());
+        int nMaxWidth = m_xGotoButton->get_approximate_digit_width() * 10;
+        // if (nPrefWidth > nMaxWidth)
+        {
+            // tdf#156137 allow LinkButton label to wrap
+            m_xGotoButton->set_label_wrap(true);
+            m_xGotoButton->set_size_request(nMaxWidth, -1);
+        }
+
         m_xGotoButton->connect_activate_link(
             LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
         m_xLabel->set_visible(false);

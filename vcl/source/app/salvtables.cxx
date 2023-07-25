@@ -2884,14 +2884,14 @@ void SalInstanceButton::set_from_icon_name(const OUString& rIconName)
     m_xButton->SetModeImage(Image(StockImage::Yes, rIconName));
 }
 
-void SalInstanceButton::set_label_wrap(bool wrap)
+static void set_label_wrap(Control& rWidget, bool wrap)
 {
-    WinBits nBits = m_xButton->GetStyle();
+    WinBits nBits = rWidget.GetStyle();
     nBits &= ~WB_WORDBREAK;
     if (wrap)
         nBits |= WB_WORDBREAK;
-    m_xButton->SetStyle(nBits);
-    m_xButton->queue_resize();
+    rWidget.SetStyle(nBits);
+    rWidget.queue_resize();
 }
 
 void SalInstanceButton::set_font(const vcl::Font& rFont)
@@ -3103,6 +3103,8 @@ IMPL_LINK(SalInstanceLinkButton, ClickHdl, FixedHyperlink&, rButton, void)
         m_aOrigClickHdl.Call(rButton);
 }
 
+void SalInstanceLinkButton::set_label_wrap(bool bWrap) { ::set_label_wrap(*m_xButton, bWrap); }
+
 SalInstanceRadioButton::SalInstanceRadioButton(::RadioButton* pButton, SalInstanceBuilder* pBuilder,
                                                bool bTakeOwnership)
     : SalInstanceButton(pButton, pBuilder, bTakeOwnership)
@@ -3146,6 +3148,11 @@ void SalInstanceRadioButton::set_inconsistent(bool /*inconsistent*/)
 }
 
 bool SalInstanceRadioButton::get_inconsistent() const { return false; }
+
+void SalInstanceRadioButton::set_label_wrap(bool bWrap)
+{
+    ::set_label_wrap(*m_xRadioButton, bWrap);
+}
 
 SalInstanceRadioButton::~SalInstanceRadioButton()
 {
@@ -3196,6 +3203,11 @@ void SalInstanceCheckButton::set_inconsistent(bool inconsistent)
 bool SalInstanceCheckButton::get_inconsistent() const
 {
     return m_xCheckButton->GetState() == TRISTATE_INDET;
+}
+
+void SalInstanceCheckButton::set_label_wrap(bool bWrap)
+{
+    ::set_label_wrap(*m_xCheckButton, bWrap);
 }
 
 SalInstanceCheckButton::~SalInstanceCheckButton()

@@ -1673,6 +1673,7 @@ protected:
 public:
     virtual void set_label(const OUString& rText) = 0;
     virtual OUString get_label() const = 0;
+    virtual void set_label_wrap(bool wrap) = 0;
     virtual void set_uri(const OUString& rUri) = 0;
     virtual OUString get_uri() const = 0;
 

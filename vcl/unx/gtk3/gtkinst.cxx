@@ -12573,6 +12573,13 @@ public:
         gtk_link_button_set_uri(m_pButton, OUStringToOString(rText, RTL_TEXTENCODING_UTF8).getStr());
     }
 
+    virtual void set_label_wrap(bool bWrap) override
+    {
+        GtkLabel* pChild = ::get_label_widget(GTK_WIDGET(m_pButton));
+        ::set_label_wrap(pChild, bWrap);
+        gtk_label_set_max_width_chars(pChild, 1);
+    }
+
     virtual OUString get_uri() const override
     {
         const gchar* pStr = gtk_link_button_get_uri(m_pButton);
