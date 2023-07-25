@@ -3126,6 +3126,13 @@ bool WinSalFrame::GetUseDarkMode() const
     return UseDarkMode();
 }
 
+bool WinSalFrame::GetUseReducedAnimation() const
+{
+    BOOL bEnableAnimation = FALSE;
+    SystemParametersInfoW(SPI_GETCLIENTAREAANIMATION, 0, &bEnableAnimation, 0);
+    return !bEnableAnimation;
+}
+
 static bool ImplHandleMouseMsg( HWND hWnd, UINT nMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
