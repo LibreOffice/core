@@ -79,6 +79,10 @@ bool FontSubsetInfo::CreateFontSubset(
     mpReqEncodedIds = pReqEncodedIds;
     mnReqGlyphCount = nReqGlyphCount;
 
+    OString aPSName = m_aPSName.toUtf8();
+    if (!mpReqFontName)
+        mpReqFontName = aPSName.getStr();
+
     // TODO: move the glyphid/encid/notdef reshuffling from the callers to here
 
     // dispatch to underlying subsetters
