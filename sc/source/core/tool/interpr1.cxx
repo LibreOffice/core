@@ -4457,20 +4457,29 @@ void ScInterpreter::ScColumn()
             SCROW nRows = 0;
             if (pMyFormulaCell)
                 pMyFormulaCell->GetMatColsRows( nCols, nRows);
+            bool bMayBeScalar;
             if (nCols == 0)
             {
                 // Happens if called via ScViewFunc::EnterMatrix()
                 // ScFormulaCell::GetResultDimensions() as of course a
                 // matrix result is not available yet.
                 nCols = 1;
+                bMayBeScalar = false;
             }
-            ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1, /*bEmpty*/true );
-            if (pResMat)
+            else
             {
-                for (SCCOL i=0; i < nCols; ++i)
-                    pResMat->PutDouble( nVal + i, static_cast<SCSIZE>(i), 0);
-                PushMatrix( pResMat);
-                return;
+                bMayBeScalar = true;
+            }
+            if (!bMayBeScalar || nCols != 1 || nRows != 1)
+            {
+                ScMatrixRef pResMat = GetNewMat( static_cast<SCSIZE>(nCols), 1, /*bEmpty*/true );
+                if (pResMat)
+                {
+                    for (SCCOL i=0; i < nCols; ++i)
+                        pResMat->PutDouble( nVal + i, static_cast<SCSIZE>(i), 0);
+                    PushMatrix( pResMat);
+                    return;
+                }
             }
         }
     }
@@ -4561,20 +4570,29 @@ void ScInterpreter::ScRow()
             SCROW nRows = 0;
             if (pMyFormulaCell)
                 pMyFormulaCell->GetMatColsRows( nCols, nRows);
+            bool bMayBeScalar;
             if (nRows == 0)
             {
                 // Happens if called via ScViewFunc::EnterMatrix()
                 // ScFormulaCell::GetResultDimensions() as of course a
                 // matrix result is not available yet.
                 nRows = 1;
+                bMayBeScalar = false;
             }
-            ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows), /*bEmpty*/true);
-            if (pResMat)
+            else
             {
-                for (SCROW i=0; i < nRows; i++)
-                    pResMat->PutDouble( nVal + i, 0, static_cast<SCSIZE>(i));
-                PushMatrix( pResMat);
-                return;
+                bMayBeScalar = true;
+            }
+            if (!bMayBeScalar || nCols != 1 || nRows != 1)
+            {
+                ScMatrixRef pResMat = GetNewMat( 1, static_cast<SCSIZE>(nRows), /*bEmpty*/true);
+                if (pResMat)
+                {
+                    for (SCROW i=0; i < nRows; i++)
+                        pResMat->PutDouble( nVal + i, 0, static_cast<SCSIZE>(i));
+                    PushMatrix( pResMat);
+                    return;
+                }
             }
         }
     }
