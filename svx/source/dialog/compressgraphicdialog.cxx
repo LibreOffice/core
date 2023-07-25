@@ -135,8 +135,8 @@ void CompressGraphicsDialog::Initialize()
 
     m_xInterpolationCombo->connect_changed(LINK(this, CompressGraphicsDialog, NewInterpolationModifiedHdl));
 
-    m_xMFNewWidth->connect_changed( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
-    m_xMFNewHeight->connect_changed( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
+    m_xMFNewWidth->connect_value_changed( LINK( this, CompressGraphicsDialog, NewWidthModifiedHdl ));
+    m_xMFNewHeight->connect_value_changed( LINK( this, CompressGraphicsDialog, NewHeightModifiedHdl ));
 
     m_xResolutionLB->connect_changed( LINK( this, CompressGraphicsDialog, ResolutionModifiedHdl ));
     m_xBtnCalculate->connect_clicked(  LINK( this, CompressGraphicsDialog, CalculateClickHdl ) );
@@ -148,8 +148,8 @@ void CompressGraphicsDialog::Initialize()
 
     m_xQualitySlider->connect_value_changed( LINK( this, CompressGraphicsDialog, SlideHdl ));
     m_xCompressionSlider->connect_value_changed( LINK( this, CompressGraphicsDialog, SlideHdl ));
-    m_xQualityMF->connect_changed( LINK( this, CompressGraphicsDialog, NewQualityModifiedHdl ));
-    m_xCompressionMF->connect_changed( LINK( this, CompressGraphicsDialog, NewCompressionModifiedHdl ));
+    m_xQualityMF->connect_value_changed( LINK( this, CompressGraphicsDialog, NewQualityModifiedHdl ));
+    m_xCompressionMF->connect_value_changed( LINK( this, CompressGraphicsDialog, NewCompressionModifiedHdl ));
 
     m_xJpegCompRB->set_active(true);
     m_xReduceResolutionCB->set_active(true);
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, OkayClickHdl, weld::Button&, void )
     CompressGraphicsDialog::response(RET_OK);
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl, weld::Entry&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl, weld::SpinButton&, void )
 {
     m_dResolution =  m_xMFNewWidth->get_value() / GetViewWidthInch();
 
@@ -311,19 +311,19 @@ IMPL_LINK_NOARG( CompressGraphicsDialog, NewInterpolationModifiedHdl, weld::Comb
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewQualityModifiedHdl, weld::Entry&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewQualityModifiedHdl, weld::SpinButton&, void )
 {
     m_xQualitySlider->set_value(m_xQualityMF->get_value());
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewCompressionModifiedHdl, weld::Entry&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewCompressionModifiedHdl, weld::SpinButton&, void )
 {
     m_xCompressionSlider->set_value(m_xCompressionMF->get_value());
     Update();
 }
 
-IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl, weld::Entry&, void )
+IMPL_LINK_NOARG( CompressGraphicsDialog, NewHeightModifiedHdl, weld::SpinButton&, void )
 {
     m_dResolution =  m_xMFNewHeight->get_value() / GetViewHeightInch();
 
