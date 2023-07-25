@@ -1577,6 +1577,8 @@ static void lcl_placeWatermarkInHeader(const SfxWatermarkItem& rWatermark,
     xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
     xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION, uno::Any(text::RelOrientation::PAGE_PRINT_AREA));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME, uno::Any(sFont));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_ASIAN, uno::Any(sFont));
+    xPropertySet->setPropertyValue(UNO_NAME_CHAR_FONT_NAME_COMPLEX, uno::Any(sFont));
     xPropertySet->setPropertyValue(UNO_NAME_CHAR_HEIGHT, uno::Any(WATERMARK_AUTO_SIZE));
     xPropertySet->setPropertyValue("Transformation", uno::Any(aMatrix));
 
