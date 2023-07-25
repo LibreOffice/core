@@ -618,6 +618,7 @@ public:
     virtual weld::Window*       GetFrameWeld() const override;
     virtual void                UpdateDarkMode() override;
     virtual bool                GetUseDarkMode() const override;
+    virtual bool                GetUseReducedAnimation() const override;
 
     static GtkSalFrame         *getFromWindow( GtkWidget *pWindow );
 

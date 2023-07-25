@@ -1399,6 +1399,16 @@ bool GtkSalFrame::GetUseDarkMode() const
     return bDarkIconTheme;
 }
 
+bool GtkSalFrame::GetUseReducedAnimation() const
+{
+    if (!m_pWindow)
+        return false;
+    GtkSettings* pSettings = gtk_widget_get_settings(m_pWindow);
+    gboolean bAnimations;
+    g_object_get(pSettings, "gtk-enable-animations", &bAnimations, nullptr);
+    return !bAnimations;
+}
+
 static void settings_portal_changed_cb(GDBusProxy*, const char*, const char* signal_name,
                                        GVariant* parameters, gpointer frame)
 {
