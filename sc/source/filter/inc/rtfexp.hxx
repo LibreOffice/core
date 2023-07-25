@@ -25,7 +25,7 @@
 
 class ScRTFExport : public ScExportBase
 {
-    std::unique_ptr<sal_uLong[]>  pCellX;     // cumulative range in a table
+    std::unique_ptr<sal_uLong[]>  m_pCellX;     // cumulative range in a table
     SvMemoryStream m_aDocStrm;
 
     void                WriteTab( SCTAB nTab );

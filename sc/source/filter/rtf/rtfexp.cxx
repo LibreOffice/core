@@ -46,7 +46,7 @@ void ScFormatFilterPluginImpl::ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
 ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rRangeP )
             :
             ScExportBase( rStrmP, pDocP, rRangeP ),
-            pCellX( new sal_uLong[ pDoc->MaxCol()+2 ] )
+            m_pCellX( new sal_uLong[ pDoc->MaxCol()+2 ] )
 {
 }
 
@@ -77,12 +77,12 @@ void ScRTFExport::WriteTab( SCTAB nTab )
     m_aDocStrm.WriteChar( '{' ).WriteOString( SAL_NEWLINE_STRING );
     if ( pDoc->HasTable( nTab ) )
     {
-        memset( &pCellX[0], 0, (pDoc->MaxCol()+2) * sizeof(sal_uLong) );
+        memset( &m_pCellX[0], 0, (pDoc->MaxCol()+2) * sizeof(sal_uLong) );
         SCCOL nCol;
         SCCOL nEndCol = aRange.aEnd.Col();
         for ( nCol = aRange.aStart.Col(); nCol <= nEndCol; nCol++ )
         {
-            pCellX[nCol+1] = pCellX[nCol] + pDoc->GetColWidth( nCol, nTab );
+            m_pCellX[nCol+1] = m_pCellX[nCol] + pDoc->GetColWidth( nCol, nTab );
         }
 
         SCROW nEndRow = aRange.aEnd.Row();
@@ -128,7 +128,7 @@ void ScRTFExport::WriteRow( SCTAB nTab, SCROW nRow )
         if ( pChar )
             m_aDocStrm.WriteOString( pChar );
 
-        m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(pCellX[nCol+1]) );
+        m_aDocStrm.WriteOString( OOO_STRING_SVTOOLS_RTF_CELLX ).WriteOString( OString::number(m_pCellX[nCol+1]) );
         if ( (nCol & 0x0F) == 0x0F )
             m_aDocStrm.WriteOString( SAL_NEWLINE_STRING ); // Do not let lines get too long
     }
