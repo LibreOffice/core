@@ -67,10 +67,10 @@ private:
 
     DECL_DLLPRIVATE_LINK( SlideHdl, weld::Scale&, void );
     DECL_DLLPRIVATE_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
-    DECL_DLLPRIVATE_LINK( NewQualityModifiedHdl, weld::Entry&, void );
-    DECL_DLLPRIVATE_LINK( NewCompressionModifiedHdl, weld::Entry&, void );
-    DECL_DLLPRIVATE_LINK( NewWidthModifiedHdl, weld::Entry&, void );
-    DECL_DLLPRIVATE_LINK( NewHeightModifiedHdl, weld::Entry&, void );
+    DECL_DLLPRIVATE_LINK( NewQualityModifiedHdl, weld::SpinButton&, void );
+    DECL_DLLPRIVATE_LINK( NewCompressionModifiedHdl, weld::SpinButton&, void );
+    DECL_DLLPRIVATE_LINK( NewWidthModifiedHdl, weld::SpinButton&, void );
+    DECL_DLLPRIVATE_LINK( NewHeightModifiedHdl, weld::SpinButton&, void );
     DECL_DLLPRIVATE_LINK( ResolutionModifiedHdl, weld::ComboBox&, void );
     DECL_DLLPRIVATE_LINK( ToggleCompressionRB, weld::Toggleable&, void );
     DECL_DLLPRIVATE_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
