@@ -1080,9 +1080,6 @@ private:
 
     DECL_LINK(ClickHdl, ::Button*, void);
 
-protected:
-    void set_label_wrap(bool bWrap);
-
 public:
     SalInstanceButton(::Button* pButton, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
 
@@ -1242,6 +1239,8 @@ public:
 
     virtual OUString get_uri() const override { return m_xButton->GetURL(); }
 
+    virtual void set_label_wrap(bool wrap) override;
+
     virtual ~SalInstanceLinkButton() override { m_xButton->SetClickHdl(m_aOrigClickHdl); }
 };
 
@@ -1267,7 +1266,7 @@ public:
 
     virtual OUString get_label() const override { return SalInstanceButton::get_label(); }
 
-    virtual void set_label_wrap(bool wrap) override { SalInstanceButton::set_label_wrap(wrap); }
+    virtual void set_label_wrap(bool wrap) override;
 
     virtual ~SalInstanceCheckButton() override;
 };
@@ -2013,7 +2012,7 @@ public:
 
     virtual OUString get_label() const override { return SalInstanceButton::get_label(); }
 
-    virtual void set_label_wrap(bool wrap) override { SalInstanceButton::set_label_wrap(wrap); }
+    virtual void set_label_wrap(bool wrap) override;
 
     virtual ~SalInstanceRadioButton() override;
 };
