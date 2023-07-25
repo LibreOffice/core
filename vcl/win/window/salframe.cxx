@@ -3606,6 +3606,9 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
             return true;    // ...but this will only avoid calling the defwindowproc
         }
 
+        if (!rtl::isUnicodeCodePoint(wParam))
+            return false;
+
         SalKeyEvent aKeyEvt;
         aKeyEvt.mnCode     = nModCode; // Or should it be 0? - as this is always a character returned
         aKeyEvt.mnRepeat   = 0;
@@ -3613,12 +3616,12 @@ static bool ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
         if( wParam >= Uni_SupplementaryPlanesStart )
         {
             // character is supplementary char in UTF-32 format - must be converted to UTF-16 supplementary pair
-            // sal_Unicode ch = (sal_Unicode) Uni_UTF32ToSurrogate1(wParam);
-             nLastChar = 0;
-             nLastVKChar = 0;
-             pFrame->CallCallback( SalEvent::KeyInput, &aKeyEvt );
-             pFrame->CallCallback( SalEvent::KeyUp, &aKeyEvt );
-             wParam = rtl::getLowSurrogate( wParam );
+            aKeyEvt.mnCharCode = rtl::getHighSurrogate(wParam);
+            nLastChar = 0;
+            nLastVKChar = 0;
+            pFrame->CallCallback(SalEvent::KeyInput, &aKeyEvt);
+            pFrame->CallCallback(SalEvent::KeyUp, &aKeyEvt);
+            wParam = rtl::getLowSurrogate(wParam);
         }
 
         aKeyEvt.mnCharCode = static_cast<sal_Unicode>(wParam);
