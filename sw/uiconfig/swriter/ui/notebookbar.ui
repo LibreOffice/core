@@ -6299,7 +6299,7 @@
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="vexpand">True</property>
-                         <child>
+                        <child>
                           <object class="GtkBox" id="GroupB33">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>

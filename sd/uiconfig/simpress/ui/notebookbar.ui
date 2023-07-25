@@ -14881,27 +14881,27 @@
                           </packing>
                         </child>
                         <child>
-                            <object class="sfxlo-NotebookbarToolBox" id="SectionBottom138">
+                          <object class="sfxlo-NotebookbarToolBox" id="SectionBottom138">
                             <property name="width_request">148</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="show_arrow">False</property>
                             <child>
-                                <object class="GtkToolButton" id="Media-AVMediaToolBox">
+                              <object class="GtkToolButton" id="Media-AVMediaToolBox">
                                 <property name="visible">True</property>
                                 <property name="action_name">.uno:AVMediaToolBox</property>
-                                </object>
-                                <packing>
+                              </object>
+                              <packing>
                                 <property name="expand">False</property>
                                 <property name="homogeneous">True</property>
-                                </packing>
+                              </packing>
                             </child>
-                            </object>
-                            <packing>
+                          </object>
+                          <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
-                            </packing>
+                          </packing>
                         </child>
                       </object>
                       <packing>
