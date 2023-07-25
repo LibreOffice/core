@@ -109,6 +109,7 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
 void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sal_uInt16 nExtFlags )
 {
     ScRangeList aPaintRanges;
+    std::set<SCTAB> aTabsInvalidated;
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange& rRange = rRanges[i];
@@ -167,6 +168,7 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
             }
         }
         aPaintRanges.push_back(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        aTabsInvalidated.insert(nTab1);
     }
 
     Broadcast(ScPaintHint(aPaintRanges.Combine(), nPart));
@@ -176,7 +178,8 @@ void ScDocShell::PostPaint( const ScRangeList& rRanges, PaintPartFlags nPart, sa
     if ((nPart & (PaintPartFlags::Top | PaintPartFlags::Left)) && comphelper::LibreOfficeKit::isActive())
     {
         ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetModel());
-        SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
+        for (auto nTab : aTabsInvalidated)
+            SfxLokHelper::notifyPartSizeChangedAllViews(pModel, nTab);
     }
 }
 
