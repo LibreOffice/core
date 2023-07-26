@@ -1685,7 +1685,7 @@ bool ScTextWnd::CanFocus() const
     return SC_MOD()->IsEditMode();
 }
 
-bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTextWnd::UpdateFocus()
 {
     if (!HasFocus())
     {
@@ -1693,6 +1693,11 @@ bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
         if (CanFocus())
             TextGrabFocus();
     }
+}
+
+bool ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
+{
+    UpdateFocus();
 
     bool bClickOnSelection = false;
     if (m_xEditView)
@@ -1808,6 +1813,7 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                 }
                 if (IsMouseCaptured())
                     ReleaseMouse();
+                UpdateFocus();
                 pViewFrm->GetDispatcher()->ExecutePopup("formulabar", &mrGroupBar.GetVclParent(), &aPos);
             }
         }
