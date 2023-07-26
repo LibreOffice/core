@@ -396,7 +396,7 @@ public:
     virtual void completeFunction(const OUString& rFunctionName) override;
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    OString getViewRenderState() override;
+    OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
 private:
     Size getDocumentSize(SCCOL& rnTiledRenderingAreaEndCol, SCROW& rnTiledRenderingAreaEndRow );
