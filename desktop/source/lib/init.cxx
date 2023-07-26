@@ -4156,6 +4156,8 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nViewId = nOrigViewId;
         int nLastNonEditorView = -1;
         int nViewMatchingMode = -1;
+        SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+
         if (!isText)
         {
             // Check if just switching to another view is enough, that has
@@ -4167,11 +4169,16 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 {
                     bool bIsInEdit = pViewShell->GetDrawView() &&
                         pViewShell->GetDrawView()->GetTextEditOutliner();
-                    if (!bIsInEdit)
+
+                    OString sCurrentViewRenderState = pDoc->getViewRenderState(pCurrentViewShell);
+                    OString sNewRenderState = pDoc->getViewRenderState(pViewShell);
+
+                    if (sCurrentViewRenderState == sNewRenderState && !bIsInEdit)
                         nLastNonEditorView = pViewShell->GetViewShellId().get();
 
                     if (pViewShell->getPart() == nPart &&
                         pViewShell->getEditMode() == nMode &&
+                        sCurrentViewRenderState == sNewRenderState &&
                         !bIsInEdit)
                     {
                         nViewId = pViewShell->GetViewShellId().get();
@@ -4180,7 +4187,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                         doc_setView(pThis, nViewId);
                         break;
                     }
-                    else if (pViewShell->getEditMode() == nMode && !bIsInEdit)
+                    else if (pViewShell->getEditMode() == nMode && sCurrentViewRenderState == sNewRenderState && !bIsInEdit)
                     {
                         nViewMatchingMode = pViewShell->GetViewShellId().get();
                     }
@@ -4192,7 +4199,6 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
             // if not found view with correct part
             // - at least avoid rendering active textbox, This is for Impress.
             // - prefer view with the same mode
-            SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
             if (nViewMatchingMode >= 0 && nViewMatchingMode != nViewId)
             {
                 nViewId = nViewMatchingMode;
