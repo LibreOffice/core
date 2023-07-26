@@ -644,7 +644,7 @@ void CPDManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner,
             }
         }
     }
-    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
+    if( rJob.m_nCopies > 1 )
     {
         OString aVal( OString::number( rJob.m_nCopies ) );
         g_variant_builder_add(builder, "(ss)", "copies", aVal.getStr());

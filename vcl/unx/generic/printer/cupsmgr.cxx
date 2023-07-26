@@ -685,7 +685,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
         }
     }
 
-    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
+    if( rJob.m_nCopies > 1 )
     {
         OString aVal( OString::number( rJob.m_nCopies ) );
         rNumOptions = cupsAddOption( "copies", aVal.getStr(), rNumOptions, reinterpret_cast<cups_option_t**>(rOptions) );

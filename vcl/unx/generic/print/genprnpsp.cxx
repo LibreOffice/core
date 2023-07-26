@@ -771,26 +771,11 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
             }
 
         case PrinterCapType::PDF:
-            if( PrinterInfoManager::get().checkFeatureToken( pJobSetup->GetPrinterName(), "pdf" ) )
-                return 1;
-            else
-            {
-                // see if the PPD contains a value to set PDF device
-                JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->GetPrinterName() );
-                if( pJobSetup->GetDriverData() )
-                    JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
-                return aData.m_nPDFDevice > 0 ? 1 : 0;
-            }
+            return 1;
         case PrinterCapType::ExternalDialog:
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->GetPrinterName(), "external_dialog" ) ? 1 : 0;
         case PrinterCapType::UsePullModel:
-        {
-            // see if the PPD contains a value to set PDF device
-            JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->GetPrinterName() );
-            if( pJobSetup->GetDriverData() )
-                JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(), pJobSetup->GetDriverDataLen(), aData );
-            return aData.m_nPDFDevice > 0 ? 1 : 0;
-        }
+            return 1;
         default: break;
     }
     return 0;
@@ -971,9 +956,6 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     // update job data
     if( i_pSetupData )
         JobData::constructFromStreamBuffer( i_pSetupData->GetDriverData(), i_pSetupData->GetDriverDataLen(), m_aJobData );
-
-    OSL_ASSERT( m_aJobData.m_nPDFDevice > 0 );
-    m_aJobData.m_nPDFDevice = 1;
 
     // possibly create one job for collated output
     int nCopies = i_rController.getPrinter()->GetCopyCount();

@@ -46,7 +46,6 @@ JobData& JobData::operator=(const JobData& rRight)
     m_pParser               = rRight.m_pParser;
     m_aContext              = rRight.m_aContext;
     m_nPSLevel              = rRight.m_nPSLevel;
-    m_nPDFDevice            = rRight.m_nPDFDevice;
     m_nColorDevice          = rRight.m_nColorDevice;
 
     if( !m_pParser && !m_aPrinterName.isEmpty() )
@@ -59,29 +58,8 @@ JobData& JobData::operator=(const JobData& rRight)
 
 void JobData::setCollate( bool bCollate )
 {
-    if (m_nPDFDevice > 0)
-    {
-        m_bCollate = bCollate;
-        return;
-    }
-    const PPDParser* pParser = m_aContext.getParser();
-    if( !pParser )
-        return;
-
-    const PPDKey* pKey = pParser->getKey( "Collate" );
-    if( !pKey )
-        return;
-
-    const PPDValue* pVal = nullptr;
-    if( bCollate )
-        pVal = pKey->getValue( "True" );
-    else
-    {
-        pVal = pKey->getValue( "False" );
-        if( ! pVal )
-            pVal = pKey->getValue( "None" );
-    }
-    m_aContext.setValue( pKey, pVal );
+    m_bCollate = bCollate;
+    return;
 }
 
 void JobData::setPaper( int i_nWidth, int i_nHeight )
@@ -138,11 +116,7 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aLine.setLength(0);
 
     aStream.WriteLine(Concat2View("copies=" + OString::number(static_cast<sal_Int32>(m_nCopies))));
-
-    if (m_nPDFDevice > 0)
-    {
-        aStream.WriteLine(Concat2View("collate=" + OString::boolean(m_bCollate)));
-    }
+    aStream.WriteLine(Concat2View("collate=" + OString::boolean(m_bCollate)));
 
     aStream.WriteLine(Concat2View(
         "marginadjustment="
@@ -157,8 +131,6 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
     aStream.WriteLine(Concat2View("colordepth=" + OString::number(static_cast<sal_Int32>(m_nColorDepth))));
 
     aStream.WriteLine(Concat2View("pslevel=" + OString::number(static_cast<sal_Int32>(m_nPSLevel))));
-
-    aStream.WriteLine(Concat2View("pdfdevice=" + OString::number(static_cast<sal_Int32>(m_nPDFDevice))));
 
     aStream.WriteLine(Concat2View("colordevice=" + OString::number(static_cast<sal_Int32>(m_nColorDevice))));
 
@@ -190,7 +162,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     bool bColorDepth    = false;
     bool bColorDevice   = false;
     bool bPSLevel       = false;
-    bool bPDFDevice     = false;
 
     const char printerEquals[] = "printer=";
     const char orientatationEquals[] = "orientation=";
@@ -200,7 +171,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     const char colordepthEquals[] = "colordepth=";
     const char colordeviceEquals[] = "colordevice=";
     const char pslevelEquals[] = "pslevel=";
-    const char pdfdeviceEquals[] = "pdfdevice=";
 
     while( ! aStream.eof() )
     {
@@ -250,11 +220,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
             bPSLevel = true;
             rJobData.m_nPSLevel = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pslevelEquals)));
         }
-        else if (aLine.startsWith(pdfdeviceEquals))
-        {
-            bPDFDevice = true;
-            rJobData.m_nPDFDevice = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)));
-        }
         else if (aLine == "PPDContextData" && bPrinter)
         {
             PrinterInfoManager& rManager = PrinterInfoManager::get();
@@ -277,7 +242,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         }
     }
 
-    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
+    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
