@@ -22,7 +22,6 @@
 
 #include <jobdata.hxx>
 #include <unx/printergfx.hxx>
-#include <unx/printerjob.hxx>
 #include <salprn.hxx>
 
 class GenPspGraphics;
@@ -59,8 +58,6 @@ public:
     OUString                  m_aFileName;
     OUString                  m_aTmpFile;
     SalInfoPrinter*         m_pInfoPrinter;
-    std::unique_ptr<GenPspGraphics> m_xGraphics;
-    psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
     sal_uInt32              m_nCopies;
