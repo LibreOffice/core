@@ -3024,12 +3024,8 @@
             <value>false</value>
           </prop>
           <prop oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean" oor:nillable="false">
-            <!-- UIHints: Tools  Options - General  Print  [Section]
-                 PrintFileOptions -->
             <info>
-              <desc>Indicates whether PDF should be the Standard Print Job
-              format</desc>
-              <label>(PrinterOptions) PDFAsStandardPrintJobFormat</label>
+              <deprecated>Not used anymore</deprecated>
             </info>
             <value>true</value>
           </prop>
@@ -3142,12 +3138,8 @@
             <value>false</value>
           </prop>
           <prop oor:name="PDFAsStandardPrintJobFormat" oor:type="xs:boolean" oor:nillable="false">
-            <!-- UIHints: Tools  Options - General  Print  [Section]
-                 PrintFileOptions -->
             <info>
-              <desc>Indicates whether PDF should be the Standard Print Job
-              format</desc>
-              <label>(PrintFileOptions) PDFAsStandardPrintJobFormat</label>
+              <deprecated>Not used anymore</deprecated>
             </info>
             <value>true</value>
           </prop>

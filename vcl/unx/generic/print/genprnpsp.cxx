@@ -520,7 +520,6 @@ bool PspSalInfoPrinter::Setup( weld::Window* pFrame, ImplJobSetup* pJobSetup )
 
     if (SetupPrinterDriver(pFrame, aInfo))
     {
-        aInfo.resolveDefaultBackend();
         std::free( const_cast<sal_uInt8*>(pJobSetup->GetDriverData()) );
         pJobSetup->SetDriverData( nullptr );
 

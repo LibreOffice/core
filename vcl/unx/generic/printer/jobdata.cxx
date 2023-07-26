@@ -280,16 +280,4 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
 }
 
-void JobData::resolveDefaultBackend()
-{
-    if (m_nPSLevel == 0 && m_nPDFDevice == 0)
-        setDefaultBackend(officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get());
-}
-
-void JobData::setDefaultBackend(bool bUsePDF)
-{
-    if (bUsePDF && m_nPSLevel == 0 && m_nPDFDevice == 0)
-        m_nPDFDevice = 1;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

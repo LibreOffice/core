@@ -87,8 +87,6 @@ void Options::ReadFromConfig(bool i_bFile)
                         SetReducedBitmapIncludesTransparency(bValue);
                     if (xSet->getPropertyValue("ConvertToGreyscales") >>= bValue)
                         SetConvertToGreyscales(bValue);
-                    if (xSet->getPropertyValue("PDFAsStandardPrintJobFormat") >>= bValue)
-                        SetPDFAsStandardPrintJobFormat(bValue);
 
                     bSuccess = true;
                 }

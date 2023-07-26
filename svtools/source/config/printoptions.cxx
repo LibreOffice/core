@@ -52,7 +52,6 @@ void GetPrinterOptions( vcl::printer::Options& rOptions, bool bFile )
         rOptions.SetReducedBitmapIncludesTransparency(
                 officecfg::Office::Common::Print::Option::File::ReducedBitmapIncludesTransparency::get() );
         rOptions.SetConvertToGreyscales( officecfg::Office::Common::Print::Option::File::ConvertToGreyscales::get() );
-        rOptions.SetPDFAsStandardPrintJobFormat( officecfg::Office::Common::Print::Option::File::PDFAsStandardPrintJobFormat::get() );
     }
     else
     {
@@ -71,7 +70,6 @@ void GetPrinterOptions( vcl::printer::Options& rOptions, bool bFile )
         rOptions.SetReducedBitmapIncludesTransparency(
                 officecfg::Office::Common::Print::Option::Printer::ReducedBitmapIncludesTransparency::get() );
         rOptions.SetConvertToGreyscales( officecfg::Office::Common::Print::Option::Printer::ConvertToGreyscales::get() );
-        rOptions.SetPDFAsStandardPrintJobFormat( officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get() );
     }
 }
 
@@ -98,8 +96,6 @@ void SetPrinterOptions( const vcl::printer::Options& rOptions, bool bFile )
                 rOptions.IsReducedBitmapIncludesTransparency(), batch );
         officecfg::Office::Common::Print::Option::File::ConvertToGreyscales::set(
                 rOptions.IsConvertToGreyscales(), batch );
-        officecfg::Office::Common::Print::Option::File::PDFAsStandardPrintJobFormat::set(
-                rOptions.IsPDFAsStandardPrintJobFormat(), batch );
 
         const sal_uInt16 nDPI = rOptions.GetReducedBitmapResolution();
 
@@ -138,8 +134,6 @@ void SetPrinterOptions( const vcl::printer::Options& rOptions, bool bFile )
                 rOptions.IsReducedBitmapIncludesTransparency(), batch );
         officecfg::Office::Common::Print::Option::Printer::ConvertToGreyscales::set(
                 rOptions.IsConvertToGreyscales(), batch );
-        officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::set(
-                rOptions.IsPDFAsStandardPrintJobFormat(), batch );
 
         const sal_uInt16 nDPI = rOptions.GetReducedBitmapResolution();
 

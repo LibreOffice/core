@@ -58,7 +58,7 @@ struct VCL_DLLPUBLIC JobData
             m_nColorDepth( 24 ),
             m_nPSLevel( 0 ),
             m_nColorDevice( 0 ),
-            m_nPDFDevice( 0 ),
+            m_nPDFDevice( 1 ),
             m_eOrientation( orientation::Portrait ),
             m_bPapersizeFromSetup( false ),
             m_pParser( nullptr ) {}
@@ -70,8 +70,6 @@ struct VCL_DLLPUBLIC JobData
     void setCollate( bool bCollate );
     void setPaper( int nWidth, int nHeight ); // dimensions in pt
     void setPaperBin( int nPaperBin );
-    void resolveDefaultBackend();
-    void setDefaultBackend(bool bUsePDF);
 
     // creates a new buffer using new
     // it is up to the user to delete it again

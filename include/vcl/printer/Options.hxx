@@ -61,7 +61,6 @@ private:
     sal_uInt16 mnReducedBitmapResolution = 200;
     bool mbReducedBitmapsIncludeTransparency = true;
     bool mbConvertToGreyscales = false;
-    bool mbPDFAsStandardPrintJobFormat = false;
 
 public:
     Options() = default;
@@ -104,9 +103,6 @@ public:
 
     bool IsConvertToGreyscales() const { return mbConvertToGreyscales; }
     void SetConvertToGreyscales(bool bSet) { mbConvertToGreyscales = bSet; }
-
-    bool IsPDFAsStandardPrintJobFormat() const { return mbPDFAsStandardPrintJobFormat; }
-    void SetPDFAsStandardPrintJobFormat(bool bSet) { mbPDFAsStandardPrintJobFormat = bSet; }
 
     /** Read printer options from configuration
 

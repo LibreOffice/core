@@ -225,7 +225,6 @@ void CPDManager::addNewPrinter(const OUString& aPrinterName, const OUString& aUn
         aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
         aPrinter.m_aInfo.m_aContext = c_it->second;
     }
-    aPrinter.m_aInfo.setDefaultBackend(true);
     aPrinter.m_aInfo.m_aDriverName = "CPD:" + aUniqueName;
     m_aPrinters[ aUniqueName ] = aPrinter;
 }

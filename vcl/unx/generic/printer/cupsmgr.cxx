@@ -325,18 +325,12 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
-    bool bUsePDF = false;
     cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests);
     const char* pOpt = cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
     if( pOpt )
-    {
         m_bUseIncludeFeature = true;
-        bUsePDF = officecfg::Office::Common::Print::Option::Printer::PDFAsStandardPrintJobFormat::get();
-    }
-
-    m_aGlobalDefaults.setDefaultBackend(bUsePDF);
 
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknown which versions of CUPS insert JobPatches
@@ -386,7 +380,6 @@ void CUPSManager::initialize()
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
-        aPrinter.m_aInfo.setDefaultBackend(bUsePDF);
         aPrinter.m_aInfo.m_aDriverName = "CUPS:" + aPrinterName;
 
         for( int k = 0; k < pDest->num_options; k++ )

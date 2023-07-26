@@ -21091,9 +21091,7 @@ prod_xA
 prod_xA2
 psp::JobData::constructFromStreamBuffer(void const*, unsigned int, psp::JobData&)
 psp::JobData::getStreamBuffer(void*&, unsigned int&)
-psp::JobData::resolveDefaultBackend()
 psp::JobData::setCollate(bool)
-psp::JobData::setDefaultBackend(bool)
 psp::JobData::setPaper(int, int)
 psp::JobData::setPaperBin(int)
 psp::PrintFontManager::PrintFontManager()

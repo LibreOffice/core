@@ -453,9 +453,6 @@ void PrinterInfoManager::initialize()
 
                 setDefaultPaper( aPrinter.m_aInfo.m_aContext );
 
-                // if it's a "Generic Printer", apply defaults from config...
-                aPrinter.m_aInfo.resolveDefaultBackend();
-
                 // finally insert printer
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 std::unordered_map< OUString, Printer >::const_iterator find_it =
