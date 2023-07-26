@@ -106,7 +106,7 @@ void applySharedFormulas(
     SvNumberFormatter& rFormatter,
     std::vector<FormulaBuffer::SharedFormulaEntry>& rSharedFormulas,
     std::vector<FormulaBuffer::SharedFormulaDesc>& rCells,
-    bool bGeneratorKnownGood)
+    WorkbookHelper& rWorkbookHelper)
 {
     sc::SharedFormulaGroups aGroups;
     {
@@ -130,6 +130,8 @@ void applySharedFormulas(
 
     {
         svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
+        const bool bGeneratorKnownGood = rWorkbookHelper.isGeneratorKnownGood();
+        bool bHasCalculatedFormulaCells = rWorkbookHelper.hasCalculatedFormulaCells();
         // Process formulas that use shared formulas.
         for (const FormulaBuffer::SharedFormulaDesc& rDesc : rCells)
         {
@@ -192,12 +194,20 @@ void applySharedFormulas(
                 break;
                 case XML_n:
                     // numeric value.
-                    pCell->SetResultDouble(rDesc.maCellValue.toDouble());
-                    /* TODO: is it on purpose that we never reset dirty here
-                     * and thus recalculate anyway if cell was dirty? Or is it
-                     * never dirty and therefore set dirty below otherwise? This
-                     * is different from the non-shared case in
-                     * applyCellFormulaValues(). */
+                    {
+                        const double fVal = rDesc.maCellValue.toDouble();
+                        if (!bHasCalculatedFormulaCells && fVal != 0.0)
+                        {
+                            rWorkbookHelper.setCalculatedFormulaCells();
+                            bHasCalculatedFormulaCells = true;
+                        }
+                        pCell->SetResultDouble(fVal);
+                        /* TODO: is it on purpose that we never reset dirty here
+                         * and thus recalculate anyway if cell was dirty? Or is it
+                         * never dirty and therefore set dirty below otherwise? This
+                         * is different from the non-shared case in
+                         * applyCellFormulaValues(). */
+                    }
                 break;
                 case XML_str:
                     if (bGeneratorKnownGood)
@@ -301,9 +311,11 @@ void applyArrayFormulas(
 }
 
 void applyCellFormulaValues(
-    ScDocumentImport& rDoc, const std::vector<FormulaBuffer::FormulaValue>& rVector, bool bGeneratorKnownGood )
+    ScDocumentImport& rDoc, const std::vector<FormulaBuffer::FormulaValue>& rVector, WorkbookHelper& rWorkbookHelper )
 {
     svl::SharedStringPool& rStrPool = rDoc.getDoc().GetSharedStringPool();
+    const bool bGeneratorKnownGood = rWorkbookHelper.isGeneratorKnownGood();
+    bool bHasCalculatedFormulaCells = rWorkbookHelper.hasCalculatedFormulaCells();
 
     for (const FormulaBuffer::FormulaValue& rValue : rVector)
     {
@@ -317,7 +329,13 @@ void applyCellFormulaValues(
         {
             case XML_n:
             {
-                pCell->SetResultDouble(rValueStr.toDouble());
+                const double fVal = rValueStr.toDouble();
+                if (!bHasCalculatedFormulaCells && fVal != 0.0)
+                {
+                    rWorkbookHelper.setCalculatedFormulaCells();
+                    bHasCalculatedFormulaCells = true;
+                }
+                pCell->SetResultDouble(fVal);
                 pCell->ResetDirty();
                 pCell->SetChanged(false);
             }
@@ -349,11 +367,11 @@ void applyCellFormulaValues(
 
 void processSheetFormulaCells(
     ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter,
-    const Sequence<ExternalLinkInfo>& rExternalLinks, bool bGeneratorKnownGood )
+    const Sequence<ExternalLinkInfo>& rExternalLinks, WorkbookHelper& rWorkbookHelper )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
         applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries,
-                            *rItem.mpSharedFormulaIDs, bGeneratorKnownGood);
+                            *rItem.mpSharedFormulaIDs, rWorkbookHelper);
 
     if (rItem.mpCellFormulas)
     {
@@ -365,7 +383,7 @@ void processSheetFormulaCells(
         applyArrayFormulas(rDoc, rFormatter, rExternalLinks, *rItem.mpArrayFormulas);
 
     if (rItem.mpCellFormulaValues)
-        applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues, bGeneratorKnownGood);
+        applyCellFormulaValues(rDoc, *rItem.mpCellFormulaValues, rWorkbookHelper);
 }
 
 }
@@ -418,7 +436,7 @@ void FormulaBuffer::finalizeImport()
 
     for (SheetItem& rItem : aSheetItems)
         processSheetFormulaCells(rDoc, rItem, *rDoc.getDoc().GetFormatTable(), getExternalLinks().getLinkInfos(),
-                isGeneratorKnownGood());
+                *this);
 
     // With formula results being set and not recalculated we need to
     // force-trigger adding all linked external files to the LinkManager.
