@@ -445,6 +445,8 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     rArrangeIndex = nArrangeIndex;
 
+    aPos = pW->AbsoluteScreenToOutputPixel( aPos );
+
     // store a cliprect that can be used to clip the common edge of the itemrect and the floating window
     if( pFloatingWindow && pFloatingWindow->mpImplData->mpBox )
     {
@@ -454,8 +456,6 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
 
     if (bLOKActive && pLOKTwipsPos)
     {
-        Point aPosOut = pW->AbsoluteScreenToOutputPixel( aPos );
-
         if (pW->IsMapModeEnabled() || pW->GetMapMode().GetMapUnit() == MapUnit::MapPixel)
         {
             // if we use pW->LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip)),
@@ -466,16 +466,16 @@ Point FloatingWindow::ImplCalcPos(vcl::Window* pWindow,
             // and anyway the following is what we already do in
             // ScGridWindow::LogicInvalidate when map mode is not enabled.
 
-            *pLOKTwipsPos = pW->PixelToLogic(aPosOut, MapMode(MapUnit::MapTwip));
+            *pLOKTwipsPos = pW->PixelToLogic(aPos, MapMode(MapUnit::MapTwip));
         }
         else
         {
-            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPosOut, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
+            *pLOKTwipsPos = OutputDevice::LogicToLogic(aPos, pW->GetMapMode(), MapMode(MapUnit::MapTwip));
         }
     }
 
     // caller expects coordinates relative to top-level win
-    return aPos;
+    return pW->OutputToScreenPixel( aPos );
 }
 
 Point FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, const Point& rPos)
