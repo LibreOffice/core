@@ -105,6 +105,22 @@ class HyperlinkDialog(UITestCase):
                 # i.e. the last used tab in the hyperlink dialog was not remembered
                 self.assertEqual("1", get_state_as_dict(xTab)["CurrPagePos"])
 
+    def test_tdf146576_propose_clipboard_content(self):
+        with self.ui_test.create_doc_in_start_center("writer"):
+            # Insert a sample URL
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+            xWriterEdit.executeAction("TYPE", mkPropertyValues({"TEXT": "www.libreoffice.org"}))
+
+            # Copy URL and open the hyperlink dialog
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Copy")
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                xTab = xDialog.getChild("tabcontrol")
+                select_pos(xTab, "0")
+                # Check if the content of the clipboard is proposed as URL in the hyperlink dialog
+                xTarget = xDialog.getChild("target")
+                self.assertEqual(get_state_as_dict(xTarget)["Text"].lower(), "http://www.libreoffice.org/")
 
     def test_tdf141166(self):
         # Skip this test for --with-help=html and --with-help=online, as that would fail with a

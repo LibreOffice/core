@@ -450,14 +450,39 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 
     if ( pHyperlinkItem )
     {
+        // tdf#146576 - propose clipboard content when inserting a hyperlink
+        OUString aStrURL(pHyperlinkItem->GetURL());
+        // Store initial URL
+        maStrInitURL = aStrURL;
+        if (aStrURL.isEmpty())
+        {
+            if (auto xClipboard = GetSystemClipboard())
+            {
+                if (auto xTransferable = xClipboard->getContents())
+                {
+                    css::datatransfer::DataFlavor aFlavor;
+                    SotExchange::GetFormatDataFlavor(SotClipboardFormatId::STRING, aFlavor);
+                    if (xTransferable->isDataFlavorSupported(aFlavor))
+                    {
+                        OUString aClipBoardConentent;
+                        if (xTransferable->getTransferData(aFlavor) >>= aClipBoardConentent)
+                        {
+                            INetURLObject aURL;
+                            aURL.SetSmartURL(aClipBoardConentent);
+                            if (!aURL.HasError())
+                                aStrURL
+                                    = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+                        }
+                    }
+                }
+            }
+        }
+
         // set dialog-fields
         FillStandardDlgFields (pHyperlinkItem);
 
         // set all other fields
-        FillDlgFields ( pHyperlinkItem->GetURL() );
-
-        // Store initial URL
-        maStrInitURL = pHyperlinkItem->GetURL();
+        FillDlgFields(aStrURL);
     }
 }
 
