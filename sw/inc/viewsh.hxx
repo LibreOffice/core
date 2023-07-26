@@ -191,6 +191,8 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 
     SAL_DLLPRIVATE void InvalidateAll(std::vector<LockPaintReason>& rReasons);
 
+    SAL_DLLPRIVATE void InvalidatePageAndHFSubsidiaryLines();
+
 protected:
     static ShellResource*      spShellRes;      ///< Resources for the Shell.
     static vcl::DeleteOnDeinit< std::shared_ptr<weld::Window> > spCareDialog;    ///< Avoid this window.

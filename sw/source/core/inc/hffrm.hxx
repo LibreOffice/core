@@ -22,8 +22,13 @@
 
 #include "layfrm.hxx"
 
+class SwViewShell;
+
 class SwHeadFootFrame : public SwLayoutFrame
 {
+private:
+    std::vector<basegfx::B2DPolygon> GetSubsidiaryLinesPolygons(const SwViewShell& rViewShell) const;
+
 protected:
     void FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs);
     void FormatPrt(SwTwips & nUL, const SwBorderAttrs * pAttrs);
@@ -37,6 +42,7 @@ public:
     virtual SwTwips ShrinkFrame( SwTwips,
                                bool bTst = false, bool bInfo = false ) override;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
+    void AddSubsidiaryLinesBounds(const SwViewShell& rViewShell, RectangleVector& rRects) const;
 };
 
 /// Header in the document layout, inside a page.

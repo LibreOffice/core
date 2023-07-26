@@ -125,8 +125,22 @@ void SwViewShell::ToggleHeaderFooterEdit()
         mbHeaderFooterEdit = false;
     }
 
-    // Repaint everything
-    GetWin()->Invalidate();
+    InvalidatePageAndHFSubsidiaryLines();
+}
+
+// Invalidate Subsidiary Lines around headers/footers and page frames to repaint
+void SwViewShell::InvalidatePageAndHFSubsidiaryLines()
+{
+    RectangleVector aInvalidRects;
+    SwPageFrame *pPg = static_cast<SwPageFrame*>(GetLayout()->Lower());
+    while (pPg)
+    {
+        pPg->AddSubsidiaryLinesBounds(*this, aInvalidRects);
+        pPg = static_cast<SwPageFrame*>(pPg->GetNext());
+    }
+
+    for (const auto &rRect : aInvalidRects)
+        GetWin()->Invalidate(rRect);
 }
 
 void SwViewShell::setOutputToWindow(bool bOutputToWindow)
