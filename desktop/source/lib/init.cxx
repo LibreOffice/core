@@ -3842,7 +3842,8 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertDropdownContentControl"),
         OUString(".uno:InsertPlainTextContentControl"),
         OUString(".uno:InsertPictureContentControl"),
-        OUString(".uno:DataFilterAutoFilter")
+        OUString(".uno:DataFilterAutoFilter"),
+        OUString(".uno:CellProtection")
     };
 
     util::URL aCommandURL;
