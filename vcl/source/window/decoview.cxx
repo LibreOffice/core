@@ -867,13 +867,9 @@ void DecorationView::DrawHighlightFrame( const tools::Rectangle& rRect,
 
 tools::Rectangle DecorationView::DrawFrame( const tools::Rectangle& rRect, DrawFrameStyle nStyle, DrawFrameFlags nFlags )
 {
-    tools::Rectangle   aRect = rRect;
-    bool        bOldMap = mpOutDev->IsMapModeEnabled();
-    if ( bOldMap )
-    {
-        aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( false );
-    }
+    tools::Rectangle aRect = mpOutDev->LogicToPixel( rRect );
+    bool bOldMap = mpOutDev->IsMapModeEnabled();
+    mpOutDev->EnableMapMode( false );
 
     if ( !rRect.IsEmpty() )
     {
@@ -889,11 +885,8 @@ tools::Rectangle DecorationView::DrawFrame( const tools::Rectangle& rRect, DrawF
         }
     }
 
-    if ( bOldMap )
-    {
-        mpOutDev->EnableMapMode( bOldMap );
-        aRect = mpOutDev->PixelToLogic( aRect );
-    }
+    mpOutDev->EnableMapMode( bOldMap );
+    aRect = mpOutDev->PixelToLogic( aRect );
 
     return aRect;
 }
@@ -905,14 +898,9 @@ tools::Rectangle DecorationView::DrawButton( const tools::Rectangle& rRect, Draw
         return rRect;
     }
 
-    tools::Rectangle aRect = rRect;
+    tools::Rectangle aRect = mpOutDev->LogicToPixel( rRect );
     const bool bOldMap = mpOutDev->IsMapModeEnabled();
-
-    if ( bOldMap )
-    {
-        aRect = mpOutDev->LogicToPixel( aRect );
-        mpOutDev->EnableMapMode( false );
-    }
+    mpOutDev->EnableMapMode( false );
 
     const Color aOldLineColor = mpOutDev->GetLineColor();
     const Color aOldFillColor = mpOutDev->GetFillColor();
@@ -968,11 +956,8 @@ tools::Rectangle DecorationView::DrawButton( const tools::Rectangle& rRect, Draw
         aRect.AdjustBottom( -3 );
     }
 
-    if ( bOldMap )
-    {
-        mpOutDev->EnableMapMode( bOldMap );
-        aRect = mpOutDev->PixelToLogic( aRect );
-    }
+    mpOutDev->EnableMapMode( bOldMap );
+    aRect = mpOutDev->PixelToLogic( aRect );
 
     return aRect;
 }
