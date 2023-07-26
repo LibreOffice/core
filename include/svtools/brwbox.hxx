@@ -208,11 +208,9 @@ public:
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    void            Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    using Control::Invalidate;
 
 private:
+    virtual void    ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags ) override;
     void            StartRowDividerDrag( const Point& _rStartPos );
     bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent ) const;
 };

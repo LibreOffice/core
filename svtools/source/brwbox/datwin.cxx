@@ -628,28 +628,25 @@ void BrowserDataWin::SetUpdateMode( bool bMode )
 void BrowserDataWin::DoOutstandingInvalidations()
 {
     for (const auto& rRect : aInvalidRegion)
-        Control::Invalidate( rRect );
+    {
+        vcl::Region aRegion(rRect);
+        Control::ImplInvalidate( &aRegion, InvalidateFlags::NONE );
+    }
     aInvalidRegion.clear();
 }
 
-void BrowserDataWin::Invalidate( InvalidateFlags nFlags )
+void BrowserDataWin::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags )
 {
     if ( !GetUpdateMode() )
     {
         aInvalidRegion.clear();
-        aInvalidRegion.emplace_back( Point( 0, 0 ), GetOutputSizePixel() );
+        if (!pRegion)
+            aInvalidRegion.emplace_back( Point( 0, 0 ), GetOutputSizePixel() );
+        else
+            aInvalidRegion.emplace_back( pRegion->GetBoundRect() );
     }
     else
-        Window::Invalidate( nFlags );
-}
-
-
-void BrowserDataWin::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags )
-{
-    if ( !GetUpdateMode() )
-        aInvalidRegion.emplace_back( rRect );
-    else
-        Window::Invalidate( rRect, nFlags );
+        Window::ImplInvalidate( pRegion, nFlags );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

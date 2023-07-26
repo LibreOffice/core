@@ -54,9 +54,7 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt ) override;
 
     void ForceInvalidate();
-    virtual void Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    virtual void Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
-    virtual void Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags ) override;
     /// Notify the LOK client about an invalidated area.
     virtual void LogicInvalidate( const tools::Rectangle* pRectangle ) override;
 

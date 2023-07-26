@@ -91,8 +91,6 @@ private:
 
     DECL_LINK( SyntaxTimerHdl, Timer *, void );
 
-    using Window::Invalidate;
-
     virtual void    Resize() override;
     virtual void    DataChanged( const DataChangedEvent& ) override;
     virtual void    GetFocus() override;
@@ -123,7 +121,7 @@ public:
 
     TextViewOutWin* GetOutWin() {return m_pOutWin;}
 
-    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void    ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags ) override;
 
     void            ClearModifyFlag()
                         { m_pTextEngine->SetModified(false); }

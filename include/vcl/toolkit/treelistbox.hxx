@@ -637,9 +637,7 @@ public:
     void SetCurEntry( SvTreeListEntry* _pEntry );
     SvTreeListEntry* GetCurEntry() const;
 
-    using Window::Invalidate;
-    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE) override;
-    virtual void    Invalidate( const tools::Rectangle&, InvalidateFlags nFlags = InvalidateFlags::NONE ) override;
+    virtual void    ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags ) override;
 
     void            SetHighlightRange(sal_uInt16 nFirstTab=0, sal_uInt16 nLastTab=0xffff);
 

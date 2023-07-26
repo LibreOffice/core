@@ -737,10 +737,10 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
 }
 
-void SwSrcEditWindow::Invalidate(InvalidateFlags )
+void SwSrcEditWindow::ImplInvalidate(const vcl::Region* pRegion, InvalidateFlags nFlags)
 {
     m_pOutWin->Invalidate();
-    Window::Invalidate();
+    Window::ImplInvalidate(pRegion, nFlags);
 }
 
 void SwSrcEditWindow::Command( const CommandEvent& rCEvt )

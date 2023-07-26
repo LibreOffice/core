@@ -3193,7 +3193,7 @@ void SvTreeListBox::NotifyScrolled()
     aScrolledHdl.Call( this );
 }
 
-void SvTreeListBox::Invalidate( InvalidateFlags nInvalidateFlags )
+void SvTreeListBox::ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nInvalidateFlags )
 {
     if (!pImpl)
         return;
@@ -3201,19 +3201,9 @@ void SvTreeListBox::Invalidate( InvalidateFlags nInvalidateFlags )
         // to make sure that the control doesn't show the wrong focus rectangle
         // after painting
         pImpl->RecalcFocusRect();
-    Control::Invalidate( nInvalidateFlags );
+    Control::ImplInvalidate( pRegion, nInvalidateFlags );
     pImpl->Invalidate();
 }
-
-void SvTreeListBox::Invalidate( const tools::Rectangle& rRect, InvalidateFlags nInvalidateFlags )
-{
-    if( nFocusWidth == -1 )
-        // to make sure that the control doesn't show the wrong focus rectangle
-        // after painting
-        pImpl->RecalcFocusRect();
-    Control::Invalidate( rRect, nInvalidateFlags );
-}
-
 
 void SvTreeListBox::SetHighlightRange( sal_uInt16 nStart, sal_uInt16 nEnd)
 {

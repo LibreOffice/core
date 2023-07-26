@@ -577,7 +577,7 @@ protected:
 
     SAL_DLLPRIVATE vcl::Window*         ImplGetBorderWindow() const;
 
-    SAL_DLLPRIVATE void                 ImplInvalidate( const vcl::Region* rRegion, InvalidateFlags nFlags );
+    virtual void                        ImplInvalidate( const vcl::Region* pRegion, InvalidateFlags nFlags );
 
     virtual WindowHitTest               ImplHitTest( const Point& rFramePos );
 
@@ -955,9 +955,9 @@ public:
                                                 ScrollFlags nFlags = ScrollFlags::NONE );
     void                                Scroll( tools::Long nHorzScroll, tools::Long nVertScroll,
                                                 const tools::Rectangle& rRect, ScrollFlags nFlags = ScrollFlags::NONE );
-    virtual void                        Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
-    virtual void                        Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
-    virtual void                        Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    void                                Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE );
+    void                                Invalidate( const tools::Rectangle& rRect, InvalidateFlags nFlags = InvalidateFlags::NONE );
+    void                                Invalidate( const vcl::Region& rRegion, InvalidateFlags nFlags = InvalidateFlags::NONE );
     /**
      * Notification about some rectangle of the output device got invalidated.Used for the main
      * document window.
