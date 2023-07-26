@@ -579,6 +579,24 @@ sal_uInt16 Menu::GetItemCount() const
     return static_cast<sal_uInt16>(pItemList->size());
 }
 
+bool Menu::HasValidEntries(bool bCheckPopups) const
+{
+    bool bValidEntries = false;
+    sal_uInt16 nCount = GetItemCount();
+    for (sal_uInt16 n = 0; !bValidEntries && (n < nCount); n++)
+    {
+        MenuItemData* pItem = pItemList->GetDataFromPos(n);
+        if (pItem->bEnabled && (pItem->eType != MenuItemType::SEPARATOR))
+        {
+            if (bCheckPopups && pItem->pSubMenu)
+                bValidEntries = pItem->pSubMenu->HasValidEntries(true);
+            else
+                bValidEntries = true;
+        }
+    }
+    return bValidEntries;
+}
+
 sal_uInt16 Menu::ImplGetVisibleItemCount() const
 {
     sal_uInt16 nItems = 0;

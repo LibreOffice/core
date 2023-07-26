@@ -515,7 +515,7 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source )
 static void lcl_CheckForChildren(Menu* pMenu, sal_uInt16 nItemId)
 {
     if (PopupMenu* pThisPopup = pMenu->GetPopupMenu( nItemId ))
-        pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() != 0 );
+        pMenu->EnableItem( nItemId, pThisPopup->GetItemCount() != 0 && pThisPopup->HasValidEntries(true));
 }
 
 // vcl handler
@@ -672,6 +672,15 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                 {
                     if( xMenuItemDispatch.is() || menuItemHandler->aMenuItemURL != ".uno:RecentFileList" )
                         bPopupMenu = CreatePopupMenuController(menuItemHandler.get(), m_xDispatchProvider, m_aModuleIdentifier);
+
+                    if (bPopupMenu && menuItemHandler->xPopupMenuController.is())
+                    {
+                        if (PopupMenu* pThisPopup = pMenu->GetPopupMenu(menuItemHandler->nItemId))
+                        {
+                            pThisPopup->Activate();
+                            pThisPopup->Deactivate();
+                        }
+                    }
                 }
                 else if ( menuItemHandler->xPopupMenuController.is() )
                 {
@@ -679,7 +688,10 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                     menuItemHandler->xPopupMenuController->updatePopupMenu();
                     bPopupMenu = true;
                     if (PopupMenu*  pThisPopup = pMenu->GetPopupMenu( menuItemHandler->nItemId ))
-                        pMenu->EnableItem( menuItemHandler->nItemId, pThisPopup->GetItemCount() != 0 );
+                    {
+                        pThisPopup->Activate();
+                        pThisPopup->Deactivate();
+                    }
                 }
                 lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
 
@@ -703,6 +715,11 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
             {
                 // Force update of popup menu
                 menuItemHandler->xPopupMenuController->updatePopupMenu();
+                if (PopupMenu* pThisPopup = pMenu->GetPopupMenu(menuItemHandler->nItemId))
+                {
+                    pThisPopup->Activate();
+                    pThisPopup->Deactivate();
+                }
                 lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
             }
             else if ( menuItemHandler->xMenuItemDispatch.is() )
@@ -722,8 +739,16 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
                 {
                 }
             }
-            else if ( menuItemHandler->xSubMenuManager.is() )
+            else if (menuItemHandler->xSubMenuManager.is())
+            {
+                MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(menuItemHandler->xSubMenuManager.get());
+                if (pMenuBarManager)
+                {
+                    pMenuBarManager->Activate(pMenuBarManager->GetMenuBar());
+                    pMenuBarManager->Deactivate(pMenuBarManager->GetMenuBar());
+                }
                 lcl_CheckForChildren(pMenu, menuItemHandler->nItemId);
+            }
         }
     }
 
