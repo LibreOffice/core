@@ -135,6 +135,8 @@ private:
 
     void InitEditEngine();
 
+    void UpdateFocus();
+
     rtl::Reference<svt::OStringTransferable> m_xHelper;
 
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
