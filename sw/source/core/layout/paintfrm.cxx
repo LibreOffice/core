@@ -18,6 +18,7 @@
  */
 
 #include <utility>
+#include <vcl/canvastools.hxx>
 #include <vcl/lazydelete.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
@@ -6969,12 +6970,10 @@ static void lcl_RefreshLine( const SwLayoutFrame *pLay,
     }
 }
 
-static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimiterPrimitives(
-        const SwRect& rRect )
+static std::vector<basegfx::B2DPolygon> lcl_CreatePageAreaDelimiterPolygons(const SwRect& rRect)
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 4 );
+    std::vector<basegfx::B2DPolygon> aPolygons;
 
-    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
     double nLineLength = 200.0; // in Twips
 
     Point aPoints[] = { rRect.TopLeft(), rRect.TopRight(), rRect.BottomRight(), rRect.BottomLeft() };
@@ -6994,30 +6993,39 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreatePageAreaDelimit
         aPolygon.append( aBPoint );
         aPolygon.append( aBPoint + aVertVector * nLineLength );
 
-        aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                    std::move(aPolygon), aLineColor );
+        aPolygons.emplace_back(aPolygon);
     }
 
+    return aPolygons;
+}
+
+static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateDelimiterPrimitives(
+    const std::vector<basegfx::B2DPolygon>& rPolygons)
+{
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(rPolygons.size());
+
+    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
+    for (size_t i = 0; i < rPolygons.size(); ++i)
+        aSeq[i] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(rPolygons[i], aLineColor);
+
     return aSeq;
+}
+
+static std::vector<basegfx::B2DPolygon> lcl_CreateRectangleDelimiterPolygons(const SwRect& rRect)
+{
+    std::vector<basegfx::B2DPolygon> aRet(1);
+    aRet[0].append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
+    aRet[0].append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
+    aRet[0].append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
+    aRet[0].append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
+    aRet[0].setClosed( true );
+    return aRet;
 }
 
 static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateRectangleDelimiterPrimitives (
         const SwRect& rRect )
 {
-    drawinglayer::primitive2d::Primitive2DContainer aSeq( 1 );
-    basegfx::BColor aLineColor = SwViewOption::GetCurrentViewOptions().GetDocBoundariesColor().getBColor();
-
-    basegfx::B2DPolygon aPolygon;
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Top() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Right(), rRect.Bottom() ) );
-    aPolygon.append( basegfx::B2DPoint( rRect.Left(), rRect.Bottom() ) );
-    aPolygon.setClosed( true );
-
-    aSeq[0] = new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
-                std::move(aPolygon), aLineColor );
-
-    return aSeq;
+    return lcl_CreateDelimiterPrimitives(lcl_CreateRectangleDelimiterPolygons(rRect));
 }
 
 static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelimiterPrimitives(
@@ -7052,14 +7060,12 @@ static drawinglayer::primitive2d::Primitive2DContainer lcl_CreateColumnAreaDelim
     return aSeq;
 }
 
-void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
-                                        const SwRect & ) const
+std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const SwViewShell& rViewShell) const
 {
-    if (!gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries())
-        return;
+    std::vector<basegfx::B2DPolygon> aPolygons;
 
-    if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
-        return;
+    if (!rViewShell.GetViewOptions()->IsDocBoundaries())
+        return aPolygons;
 
     const SwFrame* pLay = Lower();
     const SwFrame* pFootnoteCont = nullptr;
@@ -7079,10 +7085,64 @@ void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
     if ( pFootnoteCont )
         aArea.AddBottom( pFootnoteCont->getFrameArea().Bottom() - aArea.Bottom() );
 
-    if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
-        ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
+    if (aArea.IsEmpty())
+        return aPolygons;
+
+    if (!rViewShell.GetViewOptions()->IsViewMetaChars())
+        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea);
     else
-        ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
+        aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);
+
+    return aPolygons;
+}
+
+void SwPageFrame::PaintSubsidiaryLines(const SwPageFrame*, const SwRect&) const
+{
+    if (gProp.pSGlobalShell->IsHeaderFooterEdit())
+        return;
+
+    std::vector<basegfx::B2DPolygon> aPolygons = GetSubsidiaryLinesPolygons(*gProp.pSGlobalShell);
+    if (aPolygons.empty())
+        return;
+
+    ProcessPrimitives(lcl_CreateDelimiterPrimitives(aPolygons));
+}
+
+static void lclAddSubsidiaryLinesBounds(const std::vector<basegfx::B2DPolygon>& rPolygons, RectangleVector& rRects)
+{
+    for (const auto& rPolygon : rPolygons)
+    {
+        tools::Rectangle aRect(vcl::unotools::rectangleFromB2DRectangle(rPolygon.getB2DRange()));
+        aRect.expand(1);
+        if (basegfx::utils::isRectangle(rPolygon) && aRect.GetWidth() > 4 && aRect.GetHeight() > 4)
+        {
+            // turn hairline rectangle into four non-overlapping blocks that cover the borders
+            rRects.emplace_back(tools::Rectangle(Point(aRect.Left(), aRect.Top()), Size(aRect.GetWidth(), 2)));
+            rRects.emplace_back(tools::Rectangle(Point(aRect.Left(), aRect.Top() + 2), Size(2, aRect.GetHeight() - 4)));
+            rRects.emplace_back(tools::Rectangle(Point(aRect.Right() - 2, aRect.Top() + 2), Size(2, aRect.GetHeight() - 4)));
+            rRects.emplace_back(tools::Rectangle(Point(aRect.Left(), aRect.Top() + aRect.GetHeight() - 2), Size(aRect.GetWidth(), 2)));
+        }
+        else
+            rRects.emplace_back(aRect);
+    }
+}
+
+void SwPageFrame::AddSubsidiaryLinesBounds(const SwViewShell& rViewShell, RectangleVector& rRects) const
+{
+    lclAddSubsidiaryLinesBounds(GetSubsidiaryLinesPolygons(rViewShell), rRects);
+
+    const SwFrame *pLow = Lower();
+    while (pLow)
+    {
+        if (pLow->getFrameArea().HasArea())
+        {
+            if (pLow->IsHeaderFrame() || pLow->IsFooterFrame())
+            {
+                static_cast<const SwHeadFootFrame*>(pLow)->AddSubsidiaryLinesBounds(rViewShell, rRects);
+            }
+        }
+        pLow = pLow->GetNext();
+    }
 }
 
 void SwColumnFrame::PaintSubsidiaryLines( const SwPageFrame *,
@@ -7148,20 +7208,38 @@ void SwBodyFrame::PaintSubsidiaryLines( const SwPageFrame *,
 {
 }
 
-void SwHeadFootFrame::PaintSubsidiaryLines( const SwPageFrame *, const SwRect & ) const
+std::vector<basegfx::B2DPolygon> SwHeadFootFrame::GetSubsidiaryLinesPolygons(const SwViewShell& rViewShell) const
 {
-    if (!gProp.pSGlobalShell->GetViewOptions()->IsDocBoundaries())
+    std::vector<basegfx::B2DPolygon> aPolygons;
+
+    if (!rViewShell.GetViewOptions()->IsDocBoundaries())
+        return aPolygons;
+
+    SwRect aArea( getFramePrintArea() );
+    aArea.Pos() += getFrameArea().Pos();
+    if (!rViewShell.GetViewOptions()->IsViewMetaChars( ))
+        aPolygons = lcl_CreatePageAreaDelimiterPolygons(aArea);
+    else
+        aPolygons = lcl_CreateRectangleDelimiterPolygons(aArea);
+
+    return aPolygons;
+}
+
+void SwHeadFootFrame::PaintSubsidiaryLines(const SwPageFrame*, const SwRect&) const
+{
+    if (!gProp.pSGlobalShell->IsHeaderFooterEdit())
         return;
 
-    if ( gProp.pSGlobalShell->IsHeaderFooterEdit() )
-    {
-        SwRect aArea( getFramePrintArea() );
-        aArea.Pos() += getFrameArea().Pos();
-        if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
-            ProcessPrimitives( lcl_CreatePageAreaDelimiterPrimitives( aArea ) );
-        else
-            ProcessPrimitives( lcl_CreateRectangleDelimiterPrimitives( aArea ) );
-    }
+    std::vector<basegfx::B2DPolygon> aPolygons = GetSubsidiaryLinesPolygons(*gProp.pSGlobalShell);
+    if (aPolygons.empty())
+        return;
+
+    ProcessPrimitives(lcl_CreateDelimiterPrimitives(aPolygons));
+}
+
+void SwHeadFootFrame::AddSubsidiaryLinesBounds(const SwViewShell& rViewShell, RectangleVector& rRects) const
+{
+    lclAddSubsidiaryLinesBounds(GetSubsidiaryLinesPolygons(rViewShell), rRects);
 }
 
 /**

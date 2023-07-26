@@ -123,6 +123,8 @@ class SW_DLLPUBLIC SwPageFrame final: public SwFootnoteBossFrame
     /// Calculate the content height of a page (without columns).
     size_t GetContentHeight(const tools::Long nTop, const tools::Long nBottom) const;
 
+    std::vector<basegfx::B2DPolygon> GetSubsidiaryLinesPolygons(const SwViewShell& rViewShell) const;
+
 public:
     SwPageFrame( SwFrameFormat*, SwFrame*, SwPageDesc* );
 
@@ -189,6 +191,7 @@ public:
 
     void PaintDecorators( ) const;
     virtual void PaintSubsidiaryLines( const SwPageFrame*, const SwRect& ) const override;
+    void AddSubsidiaryLinesBounds(const SwViewShell& rShell, RectangleVector& rRects) const;
     virtual void PaintBreak() const override;
 
     /// Paint line number etc.
