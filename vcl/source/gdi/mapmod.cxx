@@ -39,6 +39,7 @@ struct MapMode::ImplMapMode
     bool            mbSimple;
 
     ImplMapMode();
+    ImplMapMode(MapUnit eMapUnit);
     ImplMapMode(const ImplMapMode& rImpMapMode);
 
     bool operator==( const ImplMapMode& rImpMapMode ) const;
@@ -50,6 +51,15 @@ MapMode::ImplMapMode::ImplMapMode() :
     maScaleY( 1, 1 )
 {
     meUnit   = MapUnit::MapPixel;
+    mbSimple = true;
+}
+
+MapMode::ImplMapMode::ImplMapMode(MapUnit eMapUnit) :
+    maOrigin( 0, 0 ),
+    maScaleX( 1, 1 ),
+    maScaleY( 1, 1 )
+{
+    meUnit   = eMapUnit;
     mbSimple = true;
 }
 
@@ -65,10 +75,36 @@ bool MapMode::ImplMapMode::operator==( const ImplMapMode& rImpMapMode ) const
 
 namespace
 {
+
     MapMode::ImplType& GetGlobalDefault()
     {
         static MapMode::ImplType gDefault;
         return gDefault;
+    }
+    MapMode::ImplType GetUnitDefault(MapUnit mapUnit)
+    {
+        static MapMode::ImplType defaults[]
+        {
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map100thMM) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map10thMM) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapMM) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapCM) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map1000thInch) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map100thInch) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::Map10thInch) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapInch) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapPoint) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapTwip) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapPixel) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapSysFont) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapAppFont) ),
+            MapMode::ImplType( MapMode::ImplMapMode(MapUnit::MapRelative) ),
+        };
+        if (mapUnit <= MapUnit::MapRelative) {
+            return MapMode::ImplType(defaults[static_cast<int>(mapUnit)]); // [-loplugin:redundantfcast] false positive
+        }
+        // sometimes the SvmReader stuff will generate a bogus mapunit value
+        return MapMode::ImplType(MapMode::ImplMapMode(mapUnit));
     }
 }
 
@@ -78,9 +114,8 @@ MapMode::MapMode() : mpImplMapMode(GetGlobalDefault())
 
 MapMode::MapMode( const MapMode& ) = default;
 
-MapMode::MapMode( MapUnit eUnit )
+MapMode::MapMode( MapUnit eUnit ) : mpImplMapMode(GetUnitDefault(eUnit))
 {
-    mpImplMapMode->meUnit = eUnit;
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
