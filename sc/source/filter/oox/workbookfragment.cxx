@@ -600,6 +600,13 @@ void WorkbookFragment::recalcFormulaCells()
     }
     else if (nRecalcMode == RECALC_ALWAYS)
         bHardRecalc = true;
+    else if (!hasCalculatedFormulaCells())
+    {
+        // Did not encounter any other formula result than 0.0 (or none / no
+        // formula cells at all, in which case recalculation is almost a no-op)
+        // in a non-known-good-generator document.
+        bHardRecalc = true;
+    }
 
     if (bHardRecalc)
         rDocSh.DoHardRecalc();
