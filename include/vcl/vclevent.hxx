@@ -77,6 +77,7 @@ enum class VclEventId
     MenuHighlight,
     MenuInsertItem,
     MenuItemChecked,
+    MenuItemRoleChanged,
     MenuItemTextChanged,
     MenuItemUnchecked,
     MenuRemoveItem,

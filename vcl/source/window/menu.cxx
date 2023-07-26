@@ -675,11 +675,18 @@ void Menu::SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits )
 
     if (pData && (pData->nBits != nBits))
     {
+        // these two menu item bits are relevant for (accessible) role
+        const MenuItemBits nRoleMask = MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK;
+        const bool bRoleBitsChanged = (pData->nBits & nRoleMask) != (nBits & nRoleMask);
+
         pData->nBits = nBits;
 
         // update native menu
         if (ImplGetSalMenu())
             ImplGetSalMenu()->SetItemBits(nPos, nBits);
+
+        if (bRoleBitsChanged)
+            ImplCallEventListeners(VclEventId::MenuItemRoleChanged, nPos);
     }
 }
 

@@ -73,6 +73,7 @@ protected:
     void                    UpdateSelected( sal_Int32 i, bool bSelected );
     void                    UpdateChecked( sal_Int32 i, bool bChecked );
     void                    UpdateAccessibleName( sal_Int32 i );
+    void                    UpdateItemRole(sal_Int32 i);
     void                    UpdateItemText( sal_Int32 i );
 
     sal_Int64               GetChildCount() const;

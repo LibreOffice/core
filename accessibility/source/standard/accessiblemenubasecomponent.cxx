@@ -285,6 +285,19 @@ void OAccessibleMenuBaseComponent::UpdateAccessibleName( sal_Int32 i )
     }
 }
 
+void OAccessibleMenuBaseComponent::UpdateItemRole(sal_Int32 i)
+{
+    if (i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size())
+        return;
+
+    Reference<XAccessible> xChild(m_aAccessibleChildren[i]);
+    if (!xChild.is())
+        return;
+
+    OAccessibleMenuItemComponent* pComp = static_cast<OAccessibleMenuItemComponent*>(xChild.get());
+    assert(pComp);
+    pComp->NotifyAccessibleEvent(AccessibleEventId::ROLE_CHANGED, Any(), Any());
+}
 
 void OAccessibleMenuBaseComponent::UpdateItemText( sal_Int32 i )
 {
@@ -584,6 +597,11 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
         case VclEventId::MenuAccessibleNameChanged:
         {
             UpdateAccessibleName( nItemPos );
+        }
+        break;
+        case VclEventId::MenuItemRoleChanged:
+        {
+            UpdateItemRole(nItemPos);
         }
         break;
         case VclEventId::MenuItemTextChanged:

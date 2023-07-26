@@ -152,6 +152,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
         case VclEventId::MenuSubmenuChanged:
         case VclEventId::MenuDehighlight:
         case VclEventId::MenuDisable:
+        case VclEventId::MenuItemRoleChanged:
         case VclEventId::MenuItemTextChanged:
         case VclEventId::MenuItemChecked:
         case VclEventId::MenuItemUnchecked:
