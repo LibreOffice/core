@@ -57,12 +57,12 @@ namespace accessibility
 
     ::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBox()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, false, false );
+        return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/false );
     }
 
     ::tools::Rectangle AccessibleBrowseBoxCell::implGetBoundingBoxOnScreen()
     {
-        return mpBrowseBox->GetFieldRectPixelAbs( m_nRowPos, m_nColPos, false );
+        return mpBrowseBox->GetFieldRectPixel( m_nRowPos, m_nColPos, false, /*bOnScreen*/true );
     }
 }   // namespace accessibility
 

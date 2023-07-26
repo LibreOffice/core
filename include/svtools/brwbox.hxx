@@ -703,7 +703,7 @@ public:
         @return
             the Rectangle
     */
-    virtual tools::Rectangle GetFieldRectPixelAbs(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen = true) override;
+    virtual tools::Rectangle GetFieldRectPixel(sal_Int32 _nRowId, sal_uInt16 _nColId, bool _bIsHeader, bool _bOnScreen) override;
 
     /// return <TRUE/> if and only if the accessible object for this instance has been created and is alive
     bool isAccessibleAlive( ) const;

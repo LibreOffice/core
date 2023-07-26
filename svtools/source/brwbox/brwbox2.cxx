@@ -1990,7 +1990,7 @@ tools::Rectangle BrowseBox::calcTableRect(bool _bOnScreen)
     return tools::Rectangle(aRowBar.TopRight(), Size(aSize.Width() - nX, aSize.Height() - nY - GetBarHeight()) );
 }
 
-tools::Rectangle BrowseBox::GetFieldRectPixelAbs( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
+tools::Rectangle BrowseBox::GetFieldRectPixel( sal_Int32 _nRowId, sal_uInt16 _nColId, bool /*_bIsHeader*/, bool _bOnScreen )
 {
     vcl::Window* pParent = nullptr;
     if ( !_bOnScreen )

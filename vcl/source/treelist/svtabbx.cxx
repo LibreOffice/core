@@ -781,7 +781,7 @@ tools::Rectangle SvHeaderTabListBox::calcTableRect( bool _bOnScreen )
         return GetWindowExtentsRelative( *GetAccessibleParentWindow() );
 }
 
-tools::Rectangle SvHeaderTabListBox::GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
+tools::Rectangle SvHeaderTabListBox::GetFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen )
 {
     DBG_ASSERT( !_bIsHeader || 0 == _nRow, "invalid parameters" );
     tools::Rectangle aRect;

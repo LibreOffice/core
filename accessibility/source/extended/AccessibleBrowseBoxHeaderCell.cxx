@@ -123,7 +123,7 @@ namespace
             nCol = 0;
         }
 
-        tools::Rectangle aRet(_pBrowseBox->GetFieldRectPixelAbs( nRow , nCol, true, _bOnScreen));
+        tools::Rectangle aRet(_pBrowseBox->GetFieldRectPixel( nRow , nCol, true, _bOnScreen));
         return tools::Rectangle(aRet.TopLeft() - Point(0,aRet.GetHeight()),aRet.GetSize());
     }
 }

@@ -166,7 +166,7 @@ public:
 
     virtual tools::Rectangle               calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) override;
     virtual tools::Rectangle               calcTableRect( bool _bOnScreen = true ) override;
-    virtual tools::Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen = true ) override;
+    virtual tools::Rectangle               GetFieldRectPixel( sal_Int32 _nRow, sal_uInt16 _nColumn, bool _bIsHeader, bool _bOnScreen ) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) override;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleRowHeader( sal_Int32 _nRow ) override;
