@@ -285,7 +285,7 @@ public:
     virtual void setPaintTextEdit(bool bPaint) override { mbPaintTextEdit = bPaint; }
 
     /// @see vcl::ITiledRenderable::getViewRenderState().
-    OString getViewRenderState() override;
+    OString getViewRenderState(SfxViewShell* pViewShell = nullptr) override;
 
     // XComponent
 

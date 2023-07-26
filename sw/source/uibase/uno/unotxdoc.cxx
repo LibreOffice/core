@@ -3435,10 +3435,10 @@ SwXTextDocument::getSearchResultRectangles(const char* pPayload)
     return std::vector<basegfx::B2DRange>();
 }
 
-OString SwXTextDocument::getViewRenderState()
+OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
 {
     OStringBuffer aState;
-    SwView* pView = m_pDocShell->GetView();
+    SwView* pView = pViewShell ? dynamic_cast<SwView*>(pViewShell) : m_pDocShell->GetView();
     if (pView && pView->GetWrtShellPtr())
     {
         const SwViewOption* pVOpt = pView->GetWrtShell().GetViewOptions();

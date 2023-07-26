@@ -1254,10 +1254,21 @@ void ScModelObj::completeFunction(const OUString& rFunctionName)
     }
 }
 
-OString ScModelObj::getViewRenderState()
+OString ScModelObj::getViewRenderState(SfxViewShell* pViewShell)
 {
     OStringBuffer aState;
-    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScViewData* pViewData = nullptr;
+
+    if (pViewShell)
+    {
+        ScTabViewShell* pTabViewShell = dynamic_cast< ScTabViewShell*>(pViewShell);
+        if (pTabViewShell)
+            pViewData = &pTabViewShell->GetViewData();
+    }
+    else
+    {
+        pViewData = ScDocShell::GetViewData();
+    }
 
     if (pViewData)
     {

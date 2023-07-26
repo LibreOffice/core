@@ -2325,10 +2325,21 @@ void SdXImpressDocument::paintTile( VirtualDevice& rDevice,
     comphelper::LibreOfficeKit::setTiledPainting(false);
 }
 
-OString SdXImpressDocument::getViewRenderState()
+OString SdXImpressDocument::getViewRenderState(SfxViewShell* pViewShell)
 {
     OStringBuffer aState;
-    DrawViewShell* pView = GetViewShell();
+    DrawViewShell* pView = nullptr;
+
+    if (pViewShell)
+    {
+        ViewShellBase* pShellBase = dynamic_cast<ViewShellBase*>(pViewShell);
+        pView = dynamic_cast<DrawViewShell*>(pShellBase->GetMainViewShell().get());
+    }
+    else
+    {
+        pView = GetViewShell();
+    }
+
     if (pView)
     {
         const SdViewOptions& pVOpt = pView->GetViewOptions();
