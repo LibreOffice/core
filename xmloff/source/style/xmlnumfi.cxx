@@ -90,7 +90,8 @@ struct SvXMLNumberInfo
     sal_Int32   nDecimals           = -1;
     sal_Int32   nInteger            = -1;       /// Total min number of digits in integer part ('0' + '?')
     sal_Int32   nBlankInteger       = -1;       /// Number of '?' in integer part
-    sal_Int32   nExpDigits          = -1;
+    sal_Int32   nExpDigits          = -1;       /// Number of '0' and '?' in exponent
+    sal_Int32   nBlankExp           = -1;       /// Number of '?' in exponent
     sal_Int32   nExpInterval        = -1;
     sal_Int32   nMinNumerDigits     = -1;
     sal_Int32   nMinDenomDigits     = -1;
@@ -713,6 +714,11 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
                     aNumInfo.nExpDigits = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
                 break;
+            case XML_ELEMENT(NUMBER, XML_BLANK_EXPONENT_DIGITS):
+            case XML_ELEMENT(LO_EXT, XML_BLANK_EXPONENT_DIGITS):
+                if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
+                    aNumInfo.nBlankExp = std::min<sal_Int32>(nAttrVal, NF_MAX_FORMAT_SYMBOLS);
+                break;
             case XML_ELEMENT(NUMBER, XML_EXPONENT_INTERVAL):
             case XML_ELEMENT(LO_EXT, XML_EXPONENT_INTERVAL):
                 if (::sax::Converter::convertNumber( nAttrVal, aIter.toView(), 0 ))
@@ -808,6 +814,9 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
         else
             aNumInfo.nMinDecimalDigits = aNumInfo.nDecimals;
     }
+    if ( aNumInfo.nExpDigits > 0 && aNumInfo.nBlankExp >= aNumInfo.nExpDigits )
+        aNumInfo.nBlankExp = aNumInfo.nExpDigits - 1; // at least one '0' in exponent
+
     if ( aNumInfo.nZerosDenomDigits > 0 )
     {   // nMin = count of '0' and '?'
         if ( aNumInfo.nMinDenomDigits < aNumInfo.nZerosDenomDigits )
@@ -1878,7 +1887,10 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
         }
         for (sal_Int32 i=0; i<rInfo.nExpDigits; i++)
         {
-            aNumStr.append( '0' );
+            if ( i < rInfo.nBlankExp )
+                aNumStr.append( '?' );
+            else
+                aNumStr.append( '0' );
         }
     }
 

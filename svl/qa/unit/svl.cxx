@@ -1743,6 +1743,14 @@ void Test::testUserDefinedNumberFormats()
         sExpected = "271433.605";
         checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
     }
+    {   // tdf#156449 Use '?' in exponent of scientific number
+        sCode =     "0.00E+?0";
+        sExpected = "3.14E+ 0"; // before change it was "3.14E+00"
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+        // There should be at least one '0' in exponent
+        sCode =     "0.00E+??";
+        checkPreviewString(aFormatter, sCode, M_PI, eLang, sExpected);
+    }
     {   // tdf#33689 use English NfKeywords in non-English language
         eLang = LANGUAGE_DUTCH;
         sExpected = "Dutch: 1900/01/02 03:23:53";

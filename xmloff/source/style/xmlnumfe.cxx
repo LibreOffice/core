@@ -695,7 +695,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nMinDecimals, sal_Int32 nInteger, sal_Int32 nBlankInteger,
-                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign, bool bExponentLowercase,
+                            bool bGrouping, sal_Int32 nExp, sal_Int32 nExpInterval, bool bExpSign, bool bExponentLowercase, sal_Int32 nBlankExp,
                             const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
@@ -759,6 +759,12 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     {
         if (bExponentLowercase)
             m_rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_LOWERCASE, XML_TRUE );
+        if (nBlankExp > 0)
+        {
+            if (nBlankExp >= nExp)
+                nBlankExp = nExp - 1; // preserve at least one '0' in exponent
+            m_rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_BLANK_EXPONENT_DIGITS, OUString::number( nBlankExp ) );
+        }
     }
 
     SvXMLElementExport aElem( m_rExport,
@@ -1360,7 +1366,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         bool bExpSign = true;
         bool bExponentLowercase = false;        // 'e' or 'E' for scientific notation
         bool bDecAlign   = false;               // decimal alignment with "?"
-        sal_Int32 nExpDigits = 0;
+        sal_Int32 nExpDigits = 0;               // '0' and '?' in exponent
+        sal_Int32 nBlankExp = 0;                // only '?' in exponent
         sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         sal_Int32 nTrailingThousands = 0;       // thousands-separators after all digits
         sal_Int32 nMinDecimals = nPrecision;
@@ -1383,7 +1390,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_DIGIT:
                     if ( bExpFound && pElemStr )
+                    {
                         nExpDigits += pElemStr->getLength();
+                        for ( sal_Int32 i = pElemStr->getLength()-1; i >= 0 ; i-- )
+                        {
+                            if ( (*pElemStr)[i] == '?' )
+                                nBlankExp ++;
+                        }
+                    }
                     else if ( !bDecDashes && pElemStr && (*pElemStr)[0] == '-' )
                     {
                         bDecDashes = true;
@@ -1682,7 +1696,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // nIntegerSymbols represents exponent interval (for engineering notation)
                                 WriteScientificElement_Impl( nPrecision, nMinDecimals, nLeading, nBlankInteger, bThousand, nExpDigits, nIntegerSymbols, bExpSign,
-                                    bExponentLowercase, aEmbeddedEntries );
+                                    bExponentLowercase, nBlankExp, aEmbeddedEntries );
                                 bAnyContent = true;
                                 break;
                             case SvNumFormatType::FRACTION:

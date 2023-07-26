@@ -1468,6 +1468,37 @@ void lcl_TestNumberFormat(ScDocument& rDoc, const OUString& rFormatStrOK)
 
     CPPUNIT_ASSERT_EQUAL(rFormatStrOK, rFormatStr);
 }
+
+void lcl_SetNumberFormat(ScDocument& rDoc, const OUString& rFormat)
+{
+    sal_Int32 nCheckPos;
+    SvNumFormatType nType;
+    sal_uInt32 nFormat;
+    OUString aNewFormat = rFormat;
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    if (pFormatter)
+    {
+        pFormatter->PutEntry(aNewFormat, nCheckPos, nType, nFormat);
+        rDoc.SetNumberFormat(ScAddress(0, 0, 0), nFormat);
+    }
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testBlankInExponent)
+{
+    createScDoc("ods/tdf156449-Blank-In-Exponent.ods");
+
+    // save to ODS and reload
+    saveAndReload("calc8");
+    lcl_TestNumberFormat(*getScDoc(), "0.00E+?0");
+    lcl_SetNumberFormat(*getScDoc(), "0.00E+??");
+    // at least one '0' in exponent
+    saveAndReload("calc8");
+    lcl_TestNumberFormat(*getScDoc(), "0.00E+?0");
+
+    // save to XLSX and reload
+    saveAndReload("Calc Office Open XML");
+    lcl_TestNumberFormat(*getScDoc(), "0.00E+?0");
 }
 
 CPPUNIT_TEST_FIXTURE(ScExportTest4, testSecondsWithoutTruncateAndDecimals)

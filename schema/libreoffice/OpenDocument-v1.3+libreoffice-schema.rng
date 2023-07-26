@@ -2854,6 +2854,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO no proposal,  -->
+  <rng:define name="number-scientific-number-attlist" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:blank-exponent-digits">
+        <rng:ref name="positiveInteger"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="table-data-pilot-level-attlist" combine="interleave">
     <rng:optional>

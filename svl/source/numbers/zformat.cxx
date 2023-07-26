@@ -2752,11 +2752,10 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     }
 
     sal_uInt16 j = nCnt-1;  // Last symbol
-    sal_Int32 k;  // Position in ExpStr
+    sal_Int32 k = ExpStr.getLength() - 1;  // Position in ExpStr
     sal_Int32 nZeros = 0; // Erase leading zeros
 
-    bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
-
+    // erase all leading zeros except last one
     while (nZeros < k && ExpStr[nZeros] == '0')
     {
         ++nZeros;
@@ -2765,6 +2764,9 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     {
         ExpStr.remove( 0, nZeros);
     }
+
+    // restore leading zeros or blanks according to format '0' or '?' tdf#156449
+    bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
 
     bool bCont = true;
 

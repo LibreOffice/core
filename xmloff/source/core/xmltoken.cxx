@@ -3474,6 +3474,7 @@ namespace xmloff::token {
         TOKEN( "exponent-interval",               XML_EXPONENT_INTERVAL ),
         TOKEN( "exponent-lowercase",              XML_EXPONENT_LOWERCASE ),
         TOKEN( "forced-exponent-sign",            XML_FORCED_EXPONENT_SIGN ),
+        TOKEN( "blank-exponent-digits",           XML_BLANK_EXPONENT_DIGITS ),
         TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
         TOKEN( "max-denominator-value",           XML_MAX_DENOMINATOR_VALUE ),
         TOKEN( "max-numerator-digits",            XML_MAX_NUMERATOR_DIGITS ),

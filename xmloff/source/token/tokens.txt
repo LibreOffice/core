@@ -3230,6 +3230,7 @@ external-data
 exponent-interval
 exponent-lowercase
 forced-exponent-sign
+blank-exponent-digits
 min-decimal-places
 max-denominator-value
 max-numerator-digits
