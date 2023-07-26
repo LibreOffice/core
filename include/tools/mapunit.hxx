@@ -16,11 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-#ifndef INCLUDED_TOOLS_MAPUNIT_HXX
-#define INCLUDED_TOOLS_MAPUNIT_HXX
+#include <sal/types.h>
 
-enum class MapUnit
+enum class MapUnit : sal_uInt8
 {
     Map100thMM, Map10thMM, MapMM, MapCM,
     Map1000thInch, Map100thInch, Map10thInch, MapInch,
@@ -31,7 +31,5 @@ enum class MapUnit
     LAST = MapRelative,
     LASTENUMDUMMY // used as an error return
 };
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -28,15 +28,15 @@
 
 struct MapMode::ImplMapMode
 {
-    Point           maOrigin;
     MapUnit         meUnit;
+    bool            mbSimple;
+    Point           maOrigin;
     // NOTE: these Fraction must NOT have more than 32 bits precision
     // because ReadFraction / WriteFraction do only 32 bits, so more than
     // that cannot be stored in MetaFiles!
     // => call ReduceInaccurate whenever setting these
     Fraction        maScaleX;
     Fraction        maScaleY;
-    bool            mbSimple;
 
     ImplMapMode();
     ImplMapMode(MapUnit eMapUnit);
