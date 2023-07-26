@@ -10847,6 +10847,8 @@ void PDFWriterImpl::beginStructureElement(sal_Int32 const id)
     if( ! m_aContext.Tagged )
         return;
 
+    assert(id != -1 && "cid#1538888 doesn't consider above m_aContext.Tagged");
+
     // close eventual current MC sequence
     endStructureElementMCSeq(EndMode::OnlyStruct);
 
