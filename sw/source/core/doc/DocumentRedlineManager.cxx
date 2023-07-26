@@ -517,8 +517,7 @@ namespace
         const SvxPrintItem *pHasBoxTextChangesOnlyProp =
                 pBox->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
         // table cell property "HasTextChangesOnly" is set and its value is false
-        if ( bRejectDeletion && pHasBoxTextChangesOnlyProp &&
-                !pHasBoxTextChangesOnlyProp->GetValue() )
+        if ( pHasBoxTextChangesOnlyProp && !pHasBoxTextChangesOnlyProp->GetValue() )
         {
             SvxPrintItem aUnsetTracking(RES_PRINT, true);
             SwCursor aCursor( *pPos, nullptr );

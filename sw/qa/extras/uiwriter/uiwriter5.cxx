@@ -2556,6 +2556,55 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testRedlineTableColumnDeletion)
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156474)
+{
+    // load a table, and insert a column with change tracking
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    // there is a table in the text with two columns
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTextTable->getColumns()->getCount());
+
+    // insert table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+
+    // 3 columns
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
+
+    // accept tracked changes: remove HasTextChangesOnly = false of the inserted cells
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    // still 3 columns
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
+
+    // delete the text content (dummy character of the previous text change) of the newly
+    // inserted cell, and accept tracked changes
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:SwBackspace", {});
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+
+    // This was 2 columns (not removed HasTextChangesOnly = false resulted column deletion
+    // instead of deleting only content of the cell)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155747)
 {
     // load a table, and delete the first column with enabled change tracking:
