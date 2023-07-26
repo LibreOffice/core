@@ -124,46 +124,33 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
     }
     else
     {
-        auto nXNumerator = aScaleX.GetNumerator();
-        auto nYNumerator = aScaleY.GetNumerator();
-        assert(nXNumerator != 0 && nYNumerator != 0);
+        auto funcCalcOffset = [](const Fraction& rScale, tools::Long& rnMapOffset, tools::Long nOrigin)
+        {
+            auto nNumerator = rScale.GetNumerator();
+            assert(nNumerator != 0);
 
-        BigInt aX( rMapRes.mnMapOfsX );
-        aX *= BigInt( aScaleX.GetDenominator() );
-        if ( rMapRes.mnMapOfsX >= 0 )
-        {
-            if (nXNumerator >= 0)
-                aX += BigInt(nXNumerator / 2);
+            BigInt aX( rnMapOffset );
+            aX *= BigInt( rScale.GetDenominator() );
+            if ( rnMapOffset >= 0 )
+            {
+                if (nNumerator >= 0)
+                    aX += BigInt(nNumerator / 2);
+                else
+                    aX -= BigInt((nNumerator + 1) / 2);
+            }
             else
-                aX -= BigInt((nXNumerator + 1) / 2);
-        }
-        else
-        {
-            if (nXNumerator >= 0 )
-                aX -= BigInt((nXNumerator - 1) / 2);
-            else
-                aX += BigInt(nXNumerator / 2);
-        }
-        aX /= BigInt(nXNumerator);
-        rMapRes.mnMapOfsX = static_cast<tools::Long>(aX) + aOrigin.X();
-        BigInt aY( rMapRes.mnMapOfsY );
-        aY *= BigInt( aScaleY.GetDenominator() );
-        if( rMapRes.mnMapOfsY >= 0 )
-        {
-            if (nYNumerator >= 0)
-                aY += BigInt(nYNumerator / 2);
-            else
-                aY -= BigInt((nYNumerator + 1) / 2);
-        }
-        else
-        {
-            if (nYNumerator >= 0)
-                aY -= BigInt((nYNumerator - 1) / 2);
-            else
-                aY += BigInt(nYNumerator / 2);
-        }
-        aY /= BigInt(nYNumerator);
-        rMapRes.mnMapOfsY = static_cast<tools::Long>(aY) + aOrigin.Y();
+            {
+                if (nNumerator >= 0 )
+                    aX -= BigInt((nNumerator - 1) / 2);
+                else
+                    aX += BigInt(nNumerator / 2);
+            }
+            aX /= BigInt(nNumerator);
+            rnMapOffset = static_cast<tools::Long>(aX) + nOrigin;
+        };
+
+        funcCalcOffset(aScaleX, rMapRes.mnMapOfsX, aOrigin.X());
+        funcCalcOffset(aScaleY, rMapRes.mnMapOfsY, aOrigin.Y());
     }
 
     // calculate scaling factor according to MapMode
