@@ -523,6 +523,10 @@ void Desktop::Init()
     else if ( aStatus == RequestHandler::IPC_STATUS_2ND_OFFICE )
     {
         // 2nd office startup should terminate after sending cmdlineargs through pipe
+        if (rCmdLineArgs.IsTextCat() || rCmdLineArgs.IsScriptCat())
+        {
+            HandleBootstrapErrors( BE_2NDOFFICE_WITHCAT, OUString() );
+        }
         SetBootstrapStatus(BS_TERMINATE);
     }
     else if ( !rCmdLineArgs.GetUnknown().isEmpty()
@@ -878,6 +882,11 @@ void Desktop::HandleBootstrapErrors(
             aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_NOACCESSRIGHTS);
         aDiagnosticMessage += aUserInstallationPath;
 
+        FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
+    }
+    else if ( aBootstrapError == BE_2NDOFFICE_WITHCAT )
+    {
+        OUString aDiagnosticMessage = DpResId(STR_BOOTSTRAP_ERR_2NDOFFICE_WITHCAT);
         FatalError(MakeStartupErrorMessage(aDiagnosticMessage));
     }
 }

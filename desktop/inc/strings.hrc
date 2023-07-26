@@ -163,6 +163,7 @@
 #define STR_BOOTSTRAP_ERR_LANGUAGE_MISSING                  NC_("STR_BOOTSTRAP_ERR_LANGUAGE_MISSING", "The user interface language cannot be determined.")
 #define STR_BOOTSTRAP_ERR_USERINSTALL_FAILED                NC_("STR_BOOTSTRAP_ERR_USERINSTALL_FAILED", "User installation could not be completed. ")
 #define STR_BOOTSTRAP_ERR_NO_CFG_SERVICE                    NC_("STR_BOOTSTRAP_ERR_NO_CFG_SERVICE", "The configuration service is not available.")
+#define STR_BOOTSTRAP_ERR_2NDOFFICE_WITHCAT                 NC_("STR_BOOTSTRAP_ERR_2NDOFFICE_WITHCAT", "There is already another %PRODUCTNAME instance running.  Please close all %PRODUCTNAME processes before running with the '--cat' or '--script-cat' option.")
 #define STR_ASK_START_SETUP_MANUALLY                        NC_("STR_ASK_START_SETUP_MANUALLY", "Start the setup application to repair the installation from the CD or the folder containing the installation packages.")
 #define STR_CONFIG_ERR_ACCESS_GENERAL                       NC_("STR_CONFIG_ERR_ACCESS_GENERAL", "A general error occurred while accessing your central configuration. ")
 #define STR_LO_MUST_BE_RESTARTED                            NC_("STR_LO_MUST_BE_RESTARTED", "%PRODUCTNAME must unfortunately be manually restarted once after installation or update." )
