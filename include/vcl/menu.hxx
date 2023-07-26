@@ -257,6 +257,7 @@ public:
     void SetMenuFlags( MenuFlags nFlags ) { nMenuFlags = nFlags; }
     MenuFlags GetMenuFlags() const { return nMenuFlags; }
 
+    bool HasValidEntries(bool bCheckPopups) const;
     sal_uInt16 GetItemCount() const;
     sal_uInt16 GetItemId(sal_uInt16 nPos) const;
     sal_uInt16 GetItemId(const OString &rIdent) const;
