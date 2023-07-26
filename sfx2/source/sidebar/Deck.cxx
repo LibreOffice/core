@@ -55,7 +55,8 @@ Deck::Deck(const DeckDescriptor& rDeckDescriptor, SidebarDockingWindow* pParentW
     , mnMinimalHeight(0)
     , maPanels()
     , mxParentWindow(pParentWindow)
-    , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *m_xBuilder, rCloserAction))
+    , mxTitleBar(new DeckTitleBar(rDeckDescriptor.msTitle, *m_xBuilder,
+                 rDeckDescriptor.msHelpId, rCloserAction))
     , mxVerticalScrollBar(m_xBuilder->weld_scrolled_window("scrolledwindow"))
     , mxContents(m_xBuilder->weld_box("contents"))
 {

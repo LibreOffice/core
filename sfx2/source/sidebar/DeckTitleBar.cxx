@@ -61,11 +61,13 @@ public:
 
 DeckTitleBar::DeckTitleBar (const OUString& rsTitle,
                             weld::Builder& rBuilder,
+                            const OUString& rsHelpId,
                             std::function<void()> aCloserAction)
     : TitleBar(rBuilder, Theme::Color_DeckTitleBarBackground)
     , mxGripWidget(new GripWidget)
     , mxGripWeld(new weld::CustomWeld(rBuilder, "grip", *mxGripWidget))
     , mxLabel(rBuilder.weld_label("label"))
+    , msHelpId(rsHelpId)
     , maCloserAction(std::move(aCloserAction))
     , mbIsCloserVisible(false)
 {
@@ -110,8 +112,18 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 
 void DeckTitleBar::HandleToolBoxItemClick()
 {
-    if (maCloserAction)
-        maCloserAction();
+    if (msToolBoxRId == "btn_help")
+    {
+        // Help toolbox button was clicked
+        DeckTitleBar::ShowHelp(msHelpId);
+    }
+    else if ((msToolBoxRId.isEmpty()) || (msToolBoxRId == "btn_close"))
+    {
+        if (maCloserAction)
+            maCloserAction();
+    }
+    // Reset the toolbox response id
+    msToolBoxRId = "";
 }
 
 void DeckTitleBar::DataChanged()

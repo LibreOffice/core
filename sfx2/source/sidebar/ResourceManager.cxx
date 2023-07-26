@@ -278,6 +278,7 @@ void ResourceManager::ReadDeckList()
         rDeckDescriptor.msTitleBarIconURL = getString(aDeckNode, "TitleBarIconURL");
         rDeckDescriptor.msHighContrastTitleBarIconURL = getString(aDeckNode, "HighContrastTitleBarIconURL");
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
+        rDeckDescriptor.msHelpId = "SIDEBAR_" + rDeckDescriptor.msId.toAsciiUpperCase();
         rDeckDescriptor.mnOrderIndex = getInt32(aDeckNode, "OrderIndex");
         rDeckDescriptor.mbExperimental = getBool(aDeckNode, "IsExperimental");
 

@@ -18,6 +18,8 @@
  */
 
 #include <sidebar/TitleBar.hxx>
+#include <vcl/help.hxx>
+#include <vcl/svapp.hxx>
 
 namespace sfx2::sidebar {
 
@@ -27,6 +29,7 @@ TitleBar::TitleBar(weld::Builder& rBuilder, Theme::ThemeItem eThemeItem)
     , mxAddonImage(rBuilder.weld_image("addonimage"))
     , mxToolBox(rBuilder.weld_toolbar("toolbar"))
     , meThemeItem(eThemeItem)
+    , msToolBoxRId("")
 {
     SetBackground();
 
@@ -70,8 +73,16 @@ void TitleBar::SetIcon(const css::uno::Reference<css::graphic::XGraphic>& rIcon)
     mxAddonImage->set_visible(rIcon.is());
 }
 
-IMPL_LINK_NOARG(TitleBar, SelectionHandler, const OUString&, void)
+void TitleBar::ShowHelp(const OUString& rHelpId)
 {
+    Help* pHelp = Application::GetHelp();
+    if (pHelp)
+        pHelp->Start(rHelpId);
+}
+
+IMPL_LINK(TitleBar, SelectionHandler, const OUString&, rId, void)
+{
+    msToolBoxRId = rId;
     HandleToolBoxItemClick();
 }
 

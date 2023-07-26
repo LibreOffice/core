@@ -29,7 +29,7 @@ class GripWidget;
 class DeckTitleBar final : public TitleBar
 {
 public:
-    DeckTitleBar(const OUString& rsTitle, weld::Builder& rBuilder,
+    DeckTitleBar(const OUString& rsTitle, weld::Builder& rBuilder, const OUString& rsHelpId,
                  std::function<void()> aCloserAction);
     virtual ~DeckTitleBar() override;
 
@@ -48,6 +48,7 @@ private:
     std::unique_ptr<weld::CustomWeld> mxGripWeld;
     std::unique_ptr<weld::Label> mxLabel;
 
+    OUString msHelpId;
     const std::function<void()> maCloserAction;
     bool mbIsCloserVisible;
 };

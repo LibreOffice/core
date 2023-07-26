@@ -25,7 +25,7 @@ class tdf152921(UITestCase):
 
             # make sure only the tabbar is visible, no deck
             xDeckTitleToolBar = xWriterEdit.getChild('toolbar')
-            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
             # tabbar is visible, deck is not
             # without the patch this assert would fail, a tab would be highlighted
             self.assertFalse(len(get_state_as_dict(xTabBar)['HighlightedTabsIds']))
@@ -37,7 +37,7 @@ class tdf152921(UITestCase):
             self.assertEqual(len(get_state_as_dict(xTabBar)['HighlightedTabsIds'].split(",")), 1)
 
             # click on the 'Close Sidebar Deck' button in the deck title tool bar
-            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
             # without the patch this assert would fail, a tab would be highlighted
             self.assertFalse(len(get_state_as_dict(xTabBar)['HighlightedTabsIds']))
 
@@ -63,7 +63,7 @@ class tdf152921(UITestCase):
             self.assertEqual(len(get_state_as_dict(xTabBar)['HighlightedTabsIds'].split(",")), 1)
 
             # click on the 'Close Sidebar Deck' button
-            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+            xDeckTitleToolBar.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
             # without the patch this assert would fail, a tab would be highlighted
             self.assertFalse(len(get_state_as_dict(xTabBar)['HighlightedTabsIds']))
 

@@ -34,6 +34,7 @@ public:
     OUString msTitleBarIconURL;
     OUString msHighContrastTitleBarIconURL;
     OUString msHelpText;
+    OUString msHelpId;
     ContextList maContextList;
     bool mbIsEnabled;
     sal_Int32 mnOrderIndex;

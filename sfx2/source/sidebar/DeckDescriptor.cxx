@@ -36,6 +36,7 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       msTitleBarIconURL(rOther.msTitleBarIconURL),
       msHighContrastTitleBarIconURL(rOther.msHighContrastTitleBarIconURL),
       msHelpText(rOther.msHelpText),
+      msHelpId(rOther.msHelpId),
       maContextList(rOther.maContextList),
       mbIsEnabled(rOther.mbIsEnabled),
       mnOrderIndex(rOther.mnOrderIndex),

@@ -56,10 +56,12 @@ protected:
     std::unique_ptr<weld::Image> mxAddonImage;
     std::unique_ptr<weld::Toolbar> mxToolBox;
     Theme::ThemeItem meThemeItem;
+    OUString msToolBoxRId;
 
     virtual void HandleToolBoxItemClick() = 0;
 
     DECL_LINK(SelectionHandler, const OUString&, void);
+    static void ShowHelp(const OUString& rHelpId);
 
 private:
     void SetBackground();

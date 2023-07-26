@@ -222,7 +222,10 @@ void FocusManager::FocusPanel (
         rPanel.SetExpanded(true);
         pTitleBar->GetExpander().grab_focus();
     }
-    else if (bFallbackToDeckTitle)
+    // Fallback to deck title should only be applicable when there is more than one panel,
+    // or else it will never be possible to enter the panel contents when there's a single panel
+    // withouth a titlebar and expander
+    else if (bFallbackToDeckTitle && maPanels.size() > 1)
     {
         // The panel title is not visible, fall back to the deck
         // title.
@@ -348,11 +351,6 @@ bool FocusManager::HandleKeyEvent(
         case KEY_RETURN:
             switch (aLocation.meComponent)
             {
-                case PC_DeckToolBox:
-                    FocusButton(0);
-                    bConsumed = true;
-                    break;
-
                 case PC_PanelTitle:
                     // Enter the panel.
                     FocusPanelContent(aLocation.mnIndex);
@@ -381,19 +379,25 @@ bool FocusManager::HandleKeyEvent(
                     break;
 
                 case PC_DeckToolBox:
-                    bConsumed = MoveFocusInsideDeckTitle(aLocation, nDirection);
+                    {
+                        // Moves to the first deck activation button that is visible
+                        sal_Int32 nIndex(1);
+                        while(!maButtons[nIndex]->get_visible() && ++nIndex > 0);
+                        FocusButton(nIndex);
+                        bConsumed = true;
+                    }
                     break;
 
                 case PC_TabBar:
                     if (rKeyCode.IsShift())
-                        FocusPanel(maPanels.size()-1, true);
-                    else
                     {
                         if (IsDeckTitleVisible())
                             FocusDeckTitle();
                         else
                             FocusPanel(0, true);
                     }
+                    else
+                        FocusPanel(0, true);
                     bConsumed = true;
                     break;
 
@@ -424,27 +428,22 @@ bool FocusManager::HandleKeyEvent(
                     bConsumed = true;
                     break;
 
-                case PC_DeckToolBox:
-                {
-                    // Focus the last button.
-                    sal_Int32 nIndex(maButtons.size()-1);
-                    while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
-                    FocusButton(nIndex);
-                    bConsumed = true;
-                    break;
-                }
-
                 case PC_TabBar:
-                    // Go to previous tab bar item.
-                    if (aLocation.mnIndex == 0)
-                        FocusPanel(maPanels.size()-1, true);
-                    else
                     {
-                        sal_Int32 nIndex((aLocation.mnIndex + maButtons.size() - 1) % maButtons.size());
+                        if (rKeyCode.GetCode() == KEY_LEFT)
+                            break;
+
+                        sal_Int32 nIndex;
+                        if (aLocation.mnIndex <= 0)
+                            nIndex = maButtons.size() - 1;
+                        else
+                            nIndex = aLocation.mnIndex - 1;
+
+                        // Finds the previous visible button
                         while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
                         FocusButton(nIndex);
+                        bConsumed = true;
                     }
-                    bConsumed = true;
                     break;
 
                 default:
@@ -466,33 +465,22 @@ bool FocusManager::HandleKeyEvent(
                     bConsumed = true;
                     break;
 
-                case PC_DeckToolBox:
-                    // Focus the first panel.
-                    if (IsPanelTitleVisible(0))
-                        FocusPanel(0, false);
-                    else
-                        FocusButton(0);
-                    bConsumed = true;
-                    break;
-
                 case PC_TabBar:
-                    // Go to next tab bar item.
-                    if (aLocation.mnIndex < static_cast<sal_Int32>(maButtons.size())-1)
                     {
-                        sal_Int32 nIndex(aLocation.mnIndex + 1);
-                        while(!maButtons[nIndex]->get_visible() && ++nIndex < static_cast<sal_Int32>(maButtons.size()));
-                        if (nIndex < static_cast<sal_Int32>(maButtons.size()))
-                        {
-                            FocusButton(nIndex);
-                            bConsumed = true;
+                        if (rKeyCode.GetCode() == KEY_RIGHT)
                             break;
-                        }
+
+                        sal_Int32 nIndex;
+                        if (o3tl::make_unsigned(aLocation.mnIndex) >= maButtons.size() - 1)
+                            nIndex = 0;
+                        else
+                            nIndex = aLocation.mnIndex + 1;
+
+                        // Finds the next visible button
+                        while(!maButtons[nIndex]->get_visible() && ++nIndex > 0);
+                        FocusButton(nIndex);
+                        bConsumed = true;
                     }
-                    if (IsDeckTitleVisible())
-                        FocusDeckTitle();
-                    else
-                        FocusPanel(0, true);
-                    bConsumed = true;
                     break;
 
                 default:
