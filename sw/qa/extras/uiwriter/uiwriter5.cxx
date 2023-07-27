@@ -2605,6 +2605,69 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156474)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTextTable->getColumns()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, tdf156475)
+{
+    // load a table, and insert a row without change tracking,
+    // and delete the first column with the empty cell in the second row with change tracking
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn off red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // insert table row
+    dispatchCommand(mxComponent, ".uno:InsertRowsAfter", {});
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 2);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row[1]/cell", 2);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row[2]/cell", 2);
+
+    // turn on red-lining
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // delete table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    // go down to the empty cell
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+
+    // Without the fix in place, this couldn't work
+    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 2);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row[1]/cell", 1);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row[2]/cell", 1);
+
+    // test Undo/Redo
+    for (sal_Int32 i = 0; i < 4; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+
+    for (sal_Int32 i = 0; i < 4; ++i)
+    {
+        dispatchCommand(mxComponent, ".uno:Redo", {});
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155747)
 {
     // load a table, and delete the first column with enabled change tracking:
