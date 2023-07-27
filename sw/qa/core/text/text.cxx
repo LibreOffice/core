@@ -1480,6 +1480,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testScriptinfosurrogatePairs)
                 u"\u25CC\U00010EFD");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
+{
+    createSwDoc("tdf112594.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Test that a NNBSP is grouped with the Mongolian characters after it
+    //
+    // Without the fix it fails with:
+    // - Expected: 11
+    // - Actual  : 11\u202F
+    // (U+020F is a space, so might not be visible)
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
+                u"\u202F\u1824");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
