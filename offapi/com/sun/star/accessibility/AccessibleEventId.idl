@@ -434,6 +434,11 @@ constants AccessibleEventId
     /** Constant used to indicate that the role of an accessible object has
         changed.
 
+        <p>AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue are empty.
+        The new role can be retrieved via
+        XAccessibleContext::getAccessibleRole.</p>
+
         @since LibreOffice 4.3
     */
     const short ROLE_CHANGED =41;
