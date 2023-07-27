@@ -1607,7 +1607,16 @@ bool ScInterpreter::ConvertMatrixParameters()
             xNew = (*aMapIter).second;
         else
         {
-            auto pJumpMat = std::make_shared<ScJumpMatrix>( pCur->GetOpCode(), nJumpCols, nJumpRows);
+            std::shared_ptr<ScJumpMatrix> pJumpMat;
+            try
+            {
+                pJumpMat = std::make_shared<ScJumpMatrix>( pCur->GetOpCode(), nJumpCols, nJumpRows);
+            }
+            catch (const std::bad_alloc&)
+            {
+                SAL_WARN("sc.core", "std::bad_alloc in ScJumpMatrix ctor with " << nJumpCols << " columns and " << nJumpRows << " rows");
+                return false;
+            }
             pJumpMat->SetAllJumps( 1.0, nStart, nNext, nStop);
             // pop parameters and store in ScJumpMatrix, push in JumpMatrix()
             ScTokenVec aParams(nParams);
