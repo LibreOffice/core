@@ -55,21 +55,25 @@ static constexpr bool isOutOfRange(sal_Int64 nNum)
             || nNum > std::numeric_limits<sal_Int32>::max();
 }
 
-// Initialized by setting nNum as nominator and nDen as denominator
-// Negative values in the denominator are invalid and cause the
-// inversion of both nominator and denominator signs
-// in order to return the correct value.
 Fraction::Fraction( sal_Int64 nNum, sal_Int64 nDen ) : mnNumerator(nNum), mnDenominator(nDen)
 {
     if ( isOutOfRange(nNum) || isOutOfRange(nDen) )
     {
         // tdf#143200
-        SAL_WARN("tools.fraction", "values outside of range we can represent, doing reduction, which will reduce precision");
-        do
+        if (const auto gcd = std::gcd(nNum, nDen); gcd > 1)
         {
-            mnNumerator /= 2;
-            mnDenominator /= 2;
-        } while (isOutOfRange(mnNumerator) || isOutOfRange(mnDenominator));
+            nNum /= gcd;
+            nDen /= gcd;
+        }
+        SAL_WARN_IF(isOutOfRange(nNum) || isOutOfRange(nDen),
+                    "tools.fraction", "values outside of range we can represent, doing reduction, which will reduce precision");
+        while (isOutOfRange(nNum) || isOutOfRange(nDen))
+        {
+            nNum /= 2;
+            nDen /= 2;
+        }
+        mnNumerator = nNum;
+        mnDenominator = nDen;
     }
     if ( mnDenominator == 0 )
     {
