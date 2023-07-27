@@ -327,7 +327,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 chkEditLock = std::unique_lock<std::recursive_mutex>(*pChkEditMutex);
             pMed->CancelCheckEditableEntry();
 
-            const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
+            const SfxBoolItem* pItem = pMed->GetItemSet().GetItem(SID_VIEWONLY, false);
             if ( pItem && pItem->GetValue() )
             {
                 SfxApplication* pApp = SfxGetpApp();
@@ -335,17 +335,17 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetURLObject().GetMainURL(INetURLObject::DecodeMechanism::NONE) ) );
                 aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
                 aSet.Put( SfxStringItem( SID_TARGETNAME, "_blank" ) );
-                const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
+                const SfxStringItem* pReferer = pMed->GetItemSet().GetItem(SID_REFERER, false);
                 if ( pReferer )
                     aSet.Put( *pReferer );
-                const SfxInt16Item* pVersionItem = SfxItemSet::GetItem<SfxInt16Item>(pSh->GetMedium()->GetItemSet(), SID_VERSION, false);
+                const SfxInt16Item* pVersionItem = pMed->GetItemSet().GetItem(SID_VERSION, false);
                 if ( pVersionItem )
                     aSet.Put( *pVersionItem );
 
                 if( pMed->GetFilter() )
                 {
                     aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                    const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
+                    const SfxStringItem* pOptions = pMed->GetItemSet().GetItem(SID_FILE_FILTEROPTIONS, false);
                     if ( pOptions )
                         aSet.Put( *pOptions );
                 }
@@ -423,7 +423,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             OUString sTemp;
             osl::FileBase::getFileURLFromSystemPath( pMed->GetPhysicalName(), sTemp );
             INetURLObject aPhysObj( sTemp );
-            const SfxInt16Item* pVersionItem = SfxItemSet::GetItem<SfxInt16Item>(pSh->GetMedium()->GetItemSet(), SID_VERSION, false);
+            const SfxInt16Item* pVersionItem = pMed->GetItemSet().GetItem(SID_VERSION, false);
 
             INetURLObject aMedObj( pMed->GetName() );
 
@@ -460,7 +460,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 std::optional<bool> aOrigROVal;
                 if (!pVersionItem)
                 {
-                    auto pRO = pMed->GetItemSet()->GetItem<SfxBoolItem>(SID_DOC_READONLY, false);
+                    auto pRO = pMed->GetItemSet().GetItem<SfxBoolItem>(SID_DOC_READONLY, false);
                     if (pRO)
                         aOrigROVal = pRO->GetValue();
                 }
@@ -492,9 +492,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         // after call to SfxMedium::GetMedium_Impl. This mimics what happens
                         // when the file is opened initially, when filter detection code also
                         // calls MediaDescriptor::impl_openStreamWithURL without the item set.
-                        pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
+                        pMed->GetItemSet().ClearItem(SID_DOC_READONLY);
                         pMed->CompleteReOpen();
-                        pMed->GetItemSet()->Put(
+                        pMed->GetItemSet().Put(
                             SfxBoolItem(SID_DOC_READONLY, !(nOpenMode & StreamMode::WRITE)));
                         if ( nOpenMode & StreamMode::WRITE )
                         {
@@ -505,7 +505,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         }
 
                         // LockOrigFileOnDemand might set the readonly flag itself, it should be set back
-                        pMed->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
+                        pMed->GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, !( nOpenMode & StreamMode::WRITE ) ) );
 
                         if ( !pMed->GetErrorCode() )
                             bOK = true;
@@ -542,9 +542,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->ResetError();
                         pMed->SetOpenMode( SFX_STREAM_READONLY );
                         if (aOrigROVal)
-                            pMed->GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, *aOrigROVal));
+                            pMed->GetItemSet().Put(SfxBoolItem(SID_DOC_READONLY, *aOrigROVal));
                         else
-                            pMed->GetItemSet()->ClearItem(SID_DOC_READONLY);
+                            pMed->GetItemSet().ClearItem(SID_DOC_READONLY);
                         pMed->ReOpen();
                         pSh->DoSaveCompleted( pMed );
                     }
@@ -559,7 +559,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMed->GetName() ) );
-                            const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_REFERER, false);
+                            const SfxStringItem* pReferer = pMed->GetItemSet().GetItem(SID_REFERER, false);
                             if ( pReferer )
                                 aSet.Put( *pReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, true ) );
@@ -569,7 +569,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             if( pMed->GetFilter() )
                             {
                                 aSet.Put( SfxStringItem( SID_FILTER_NAME, pMed->GetFilter()->GetFilterName() ) );
-                                const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pMed->GetItemSet(), SID_FILE_FILTEROPTIONS, false);
+                                const SfxStringItem* pOptions = pMed->GetItemSet().GetItem(SID_FILE_FILTEROPTIONS, false);
                                 if ( pOptions )
                                     aSet.Put( *pOptions );
                             }
@@ -700,11 +700,11 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     SfxFilterMatcher().GuessFilter( aMedium, pFilter );
                     if ( pFilter )
                         pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
-                    pNewSet->Put( *aMedium.GetItemSet() );
+                    pNewSet->Put( aMedium.GetItemSet() );
                 }
                 else
                 {
-                    pNewSet.emplace( *pMedium->GetItemSet() );
+                    pNewSet.emplace( pMedium->GetItemSet() );
                     pNewSet->ClearItem( SID_VIEW_ID );
                     pNewSet->ClearItem( SID_STREAM );
                     pNewSet->ClearItem( SID_INPUTSTREAM );
@@ -832,9 +832,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     }
 #endif
                     // the Reload and Silent items were only temporary, remove them
-                    xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
-                    xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_SILENT );
-                    TransformItems( SID_OPENDOC, *xNewObj->GetMedium()->GetItemSet(), aLoadArgs );
+                    xNewObj->GetMedium()->GetItemSet().ClearItem( SID_RELOAD );
+                    xNewObj->GetMedium()->GetItemSet().ClearItem( SID_SILENT );
+                    TransformItems( SID_OPENDOC, xNewObj->GetMedium()->GetItemSet(), aLoadArgs );
 
                     UpdateDocument_Impl();
 
@@ -940,7 +940,7 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(pSh->GetMedium()->GetItemSet(), SID_EDITDOC, false);
+                    const SfxBoolItem* pItem = pSh->GetMedium()->GetItemSet().GetItem(SID_EDITDOC, false);
                     if ( pItem && !pItem->GetValue() )
                         rSet.DisableItem( nWhich );
                     else
@@ -2138,7 +2138,7 @@ void SfxViewFrame::Show()
     // IsVisible() == true (:#)
     if ( m_xObjSh.is() )
     {
-        m_xObjSh->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+        m_xObjSh->GetMedium()->GetItemSet().ClearItem( SID_HIDDEN );
         if ( !m_pImpl->bObjLocked )
             LockObjectShell_Impl();
 
@@ -2614,7 +2614,7 @@ void SfxViewFrame::ExecView_Impl
             SfxMedium* pMed = GetObjectShell()->GetMedium();
 
             // do not open the new window hidden
-            pMed->GetItemSet()->ClearItem( SID_HIDDEN );
+            pMed->GetItemSet().ClearItem( SID_HIDDEN );
 
             // the view ID (optional arg. TODO: this is currently not supported in the slot definition ...)
             const SfxUInt16Item* pViewIdItem = rReq.GetArg<SfxUInt16Item>(SID_VIEW_ID);

@@ -211,17 +211,13 @@ ErrCode SwASCWriter::WriteStream()
 
 void SwASCWriter::SetupFilterOptions(SfxMedium& rMedium)
 {
-    const SfxItemSet* pSet = rMedium.GetItemSet();
-    if( nullptr != pSet )
+    if( const SfxStringItem* pItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
     {
-        if( const SfxStringItem* pItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
-        {
-            SwAsciiOptions aOpt;
-            OUString sItemOpt;
-            sItemOpt = pItem->GetValue();
-            aOpt.ReadUserData(sItemOpt);
-            SetAsciiOptions(aOpt);
-        }
+        SwAsciiOptions aOpt;
+        OUString sItemOpt;
+        sItemOpt = pItem->GetValue();
+        aOpt.ReadUserData(sItemOpt);
+        SetAsciiOptions(aOpt);
     }
 }
 

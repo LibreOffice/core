@@ -467,7 +467,7 @@ ErrCode SwXMLWriter::WriteStorage()
 
 ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
-    return Write_(aTargetMedium.GetItemSet());
+    return Write_(&aTargetMedium.GetItemSet());
 }
 
 ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,

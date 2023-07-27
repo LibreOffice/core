@@ -820,15 +820,12 @@ static bool lcl_SaveDoc(
 
     SfxMedium* pDstMed = new SfxMedium( url, StreamMode::STD_READWRITE );
     pDstMed->SetFilter( pStoreToFilter );
-    if( pDstMed->GetItemSet() )
-    {
-        if( pStoreToFilterOptions )
-            pDstMed->GetItemSet()->Put( SfxStringItem(SID_FILE_FILTEROPTIONS,
-                                        *pStoreToFilterOptions));
-        if( pSaveToFilterData->hasElements() )
-            pDstMed->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA,
-                                        uno::Any(*pSaveToFilterData)));
-    }
+    if( pStoreToFilterOptions )
+        pDstMed->GetItemSet().Put( SfxStringItem(SID_FILE_FILTEROPTIONS,
+                                   *pStoreToFilterOptions));
+    if( pSaveToFilterData->hasElements() )
+        pDstMed->GetItemSet().Put( SfxUnoAnyItem(SID_FILTER_DATA,
+                                   uno::Any(*pSaveToFilterData)));
 
     // convert fields to text if we are exporting to PDF.
     // this prevents a second merge while updating the fields

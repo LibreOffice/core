@@ -122,7 +122,7 @@ public:
     const std::shared_ptr<const SfxFilter>& GetFilter() const;
     const OUString&     GetOrigURL() const;
 
-    SfxItemSet  *       GetItemSet() const;
+    SfxItemSet&         GetItemSet() const;
     void SetArgs(const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
     const css::uno::Sequence<css::beans::PropertyValue> & GetArgs() const;
     void                Close(bool bInDestruction = false);

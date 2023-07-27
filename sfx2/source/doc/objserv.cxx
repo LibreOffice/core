@@ -949,7 +949,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE )
                 {
                     // in case of plugin mode the SaveAs operation means SaveTo
-                    const SfxBoolItem* pViewOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(GetMedium()->GetItemSet(), SID_VIEWONLY, false);
+                    const SfxBoolItem* pViewOnlyItem = GetMedium()->GetItemSet().GetItem(SID_VIEWONLY, false);
                     if ( pViewOnlyItem && pViewOnlyItem->GetValue() )
                         rReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );
                 }
@@ -980,7 +980,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         {
                             // in case of saving it is not possible to transport the parameters from here
                             // but it is not clear here whether the saving will be done or saveAs operation
-                            GetMedium()->GetItemSet()->Put( aStatIndItem );
+                            GetMedium()->GetItemSet().Put( aStatIndItem );
                         }
 
                         rReq.AppendItem( aStatIndItem );
@@ -990,7 +990,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     // in case of saving it is not possible to transport the parameters from here
                     // but it is not clear here whether the saving will be done or saveAs operation
-                    GetMedium()->GetItemSet()->Put( *pStatusIndicatorItem );
+                    GetMedium()->GetItemSet().Put( *pStatusIndicatorItem );
                 }
 
                 // Introduce an interaction handler for GUI operation
@@ -1012,7 +1012,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     {
                         // in case of saving it is not possible to transport the parameters from here
                         // but it is not clear here whether the saving will be done or saveAs operation
-                        GetMedium()->GetItemSet()->Put( aInteractionItem );
+                        GetMedium()->GetItemSet().Put( aInteractionItem );
                     }
 
                     rReq.AppendItem( aInteractionItem );
@@ -1021,12 +1021,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     // in case of saving it is not possible to transport the parameters from here
                     // but it is not clear here whether the saving will be done or saveAs operation
-                    GetMedium()->GetItemSet()->Put( *pInteractionHandlerItem );
+                    GetMedium()->GetItemSet().Put( *pInteractionHandlerItem );
                 }
 
 
-                const SfxStringItem* pOldPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
-                const SfxUnoAnyItem* pOldEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+                const SfxStringItem* pOldPasswordItem = GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
+                const SfxUnoAnyItem* pOldEncryptionDataItem = GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
                 const bool bPreselectPassword
                     = pOldPasswordItem || pOldEncryptionDataItem
                       || (IsLoadReadonly()

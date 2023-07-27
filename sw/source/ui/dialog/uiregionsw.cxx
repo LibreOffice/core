@@ -1308,7 +1308,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             sFilterName = pMedium->GetFilter()->GetFilterName();
-            if ( const SfxStringItem* pItem = pMedium->GetItemSet()->GetItemIfSet( SID_PASSWORD, false ) )
+            if ( const SfxStringItem* pItem = pMedium->GetItemSet().GetItemIfSet( SID_PASSWORD, false ) )
                 sPassword = pItem->GetValue();
             ::lcl_ReadSections(*pMedium, *m_xSubRegionED);
         }
@@ -1770,7 +1770,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         {
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::NONE );
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
-            if ( const SfxStringItem* pItem = pMedium->GetItemSet()->GetItemIfSet( SID_PASSWORD, false ) )
+            if ( const SfxStringItem* pItem = pMedium->GetItemSet().GetItemIfSet( SID_PASSWORD, false ) )
                 m_sFilePasswd = pItem->GetValue();
             m_xFileNameED->set_text( INetURLObject::decode(
                 m_sFileName, INetURLObject::DecodeMechanism::Unambiguous ) );

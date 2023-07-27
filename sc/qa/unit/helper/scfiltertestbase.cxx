@@ -34,8 +34,7 @@ ScDocShellRef ScFilterTestBase::loadDoc(const OUString& rURL, const OUString& rF
     SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ);
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
-    SfxItemSet* pSet = pSrcMed->GetItemSet();
-    pSet->Put(
+    pSrcMed->GetItemSet().Put(
         SfxUInt16Item(SID_MACROEXECMODE, css::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN));
     SAL_INFO("sc.qa", "about to load " << rURL);
     if (!xDocShRef->DoLoad(pSrcMed))

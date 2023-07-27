@@ -932,7 +932,7 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             aSet.ClearItem( SID_FILE_NAME );
             aSet.ClearItem( SID_FILLFRAME );
 
-            pMedium->GetItemSet()->Put( aSet );
+            pMedium->GetItemSet().Put( aSet );
             const SfxStringItem* pItem = aSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
             if ( pItem )
                 pMedium->SetFilter(
@@ -995,7 +995,7 @@ Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs2(const Sequence<
         // hopefully it is a temporary solution, I guess nonconvertable properties
         // should not be supported so then there will be only ItemSet from medium
 
-        TransformItems( SID_OPENDOC, *(m_pData->m_pObjectShell->GetMedium()->GetItemSet()), seqArgsNew );
+        TransformItems( SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), seqArgsNew );
         TransformParameters( SID_OPENDOC, m_pData->m_seqArguments, aSet );
         TransformItems( SID_OPENDOC, aSet, seqArgsOld );
 
@@ -1108,7 +1108,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= sValue)
             {
-                pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
+                pMedium->GetItemSet().Put(SfxStringItem(SID_SUGGESTEDSAVEASNAME, sValue));
                 ok = true;
             }
         }
@@ -1116,7 +1116,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= sValue)
             {
-                pMedium->GetItemSet()->Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
+                pMedium->GetItemSet().Put(SfxStringItem(SID_SUGGESTEDSAVEASDIR, sValue));
                 ok = true;
             }
         }
@@ -1124,7 +1124,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_LOCK_CONTENT_EXTRACTION, bValue));
                 ok = true;
             }
         }
@@ -1132,7 +1132,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_LOCK_EXPORT, bValue));
                 ok = true;
             }
         }
@@ -1140,7 +1140,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_LOCK_PRINT, bValue));
                 ok = true;
             }
         }
@@ -1148,7 +1148,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_LOCK_SAVE, bValue));
                 ok = true;
             }
         }
@@ -1156,7 +1156,7 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_LOCK_EDITDOC, bValue));
                 ok = true;
             }
         }
@@ -1164,13 +1164,13 @@ void SAL_CALL SfxBaseModel::setArgs(const Sequence<beans::PropertyValue>& aArgs)
         {
             if (rArg.Value >>= bValue)
             {
-                pMedium->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bValue));
+                pMedium->GetItemSet().Put(SfxBoolItem(SID_REPLACEABLE, bValue));
                 ok = true;
             }
         }
         else if (rArg.Name == "EncryptionData")
         {
-            pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
+            pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, rArg.Value));
             ok = true;
         }
         if (!ok)
@@ -1754,13 +1754,13 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUString&                   rURL
     }
 
     Sequence< beans::PropertyValue > aSequence ;
-    TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
+    TransformItems( SID_OPENDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
     attachResource( rURL, aSequence );
 
     loadCmisProperties( );
 
 #if OSL_DEBUG_LEVEL > 0
-    const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(m_pData->m_pObjectShell->GetMedium()->GetItemSet(), SID_PASSWORD, false);
+    const SfxStringItem* pPasswdItem = m_pData->m_pObjectShell->GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
     OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
 }
@@ -1908,7 +1908,7 @@ void setUpdatePickList( SfxMedium* pMedium )
         return;
 
     bool bHidden = false;
-    const SfxBoolItem* pHidItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_HIDDEN, false);
+    const SfxBoolItem* pHidItem = pMedium->GetItemSet().GetItem(SID_HIDDEN, false);
     if (pHidItem)
         bHidden = pHidItem->GetValue();
 
@@ -1947,7 +1947,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     }
 
     OUString aFilterName;
-    const SfxStringItem* pFilterNameItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILTER_NAME, false);
+    const SfxStringItem* pFilterNameItem = pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false);
     if( pFilterNameItem )
         aFilterName = pFilterNameItem->GetValue();
     if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
@@ -1957,7 +1957,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         throw frame::IllegalArgumentIOException();
     }
 
-    const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_DOC_SALVAGE, false);
+    const SfxStringItem* pSalvageItem = pMedium->GetItemSet().GetItem(SID_DOC_SALVAGE, false);
     bool bSalvage = pSalvageItem != nullptr;
 
     // load document
@@ -1972,7 +1972,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
         if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
         {
             const OUString aDocName( pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset ) );
-            const SfxBoolItem* pRepairItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_REPAIRPACKAGE, false);
+            const SfxBoolItem* pRepairItem = pMedium->GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
             if ( !pRepairItem || !pRepairItem->GetValue() )
             {
                 RequestPackageReparation aRequest( aDocName );
@@ -1980,9 +1980,9 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
                 if( aRequest.isApproved() )
                 {
                     // broken package: try second loading and allow repair
-                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, true ) );
-                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, true ) );
-                    pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
+                    pMedium->GetItemSet().Put( SfxBoolItem( SID_REPAIRPACKAGE, true ) );
+                    pMedium->GetItemSet().Put( SfxBoolItem( SID_TEMPLATE, true ) );
+                    pMedium->GetItemSet().Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
 
                     // the error must be reset and the storage must be reopened in new mode
                     pMedium->ResetError();
@@ -2011,7 +2011,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     if( bSalvage )
     {
         // file recovery: restore original filter
-        const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILTER_NAME, false);
+        const SfxStringItem* pFilterItem = pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false);
         SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
         std::shared_ptr<const SfxFilter> pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
         pMedium->SetFilter( pSetFilter );
@@ -2021,7 +2021,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     // TODO/LATER: maybe the mode should be retrieved from outside and the preused filter should not be set
     if ( m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
     {
-        const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_FILTER_NAME, false);
+        const SfxStringItem* pFilterItem = pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false);
         if ( pFilterItem )
             m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
     }
@@ -2036,7 +2036,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     setUpdatePickList(pMedium);
 
 #if OSL_DEBUG_LEVEL > 0
-    const SfxStringItem* pPasswdItem = SfxItemSet::GetItem<SfxStringItem>(pMedium->GetItemSet(), SID_PASSWORD, false);
+    const SfxStringItem* pPasswdItem = pMedium->GetItemSet().GetItem(SID_PASSWORD, false);
     OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
 }
@@ -2605,7 +2605,7 @@ void SAL_CALL SfxBaseModel::checkOut(  )
         m_pData->m_pObjectShell->GetMedium( )->GetMedium_Impl( );
         m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
         Sequence< beans::PropertyValue > aSequence ;
-        TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+        TransformItems( SID_OPENDOC, pMedium->GetItemSet(), aSequence );
         attachResource( sURL, aSequence );
 
         // Reload the CMIS properties
@@ -2671,7 +2671,7 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
         {
             m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
             Sequence< beans::PropertyValue > aSequence ;
-            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+            TransformItems( SID_OPENDOC, pMedium->GetItemSet(), aSequence );
             attachResource( sNewName, aSequence );
 
             // Reload the CMIS properties
@@ -2799,7 +2799,7 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
     }
 
     bool bSilent = false;
-    const SfxBoolItem* pSilentItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_SILENT, false);
+    const SfxBoolItem* pSilentItem = pMedium->GetItemSet().GetItem(SID_SILENT, false);
     if( pSilentItem )
         bSilent = pSilentItem->GetValue();
 
@@ -2915,9 +2915,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
         {
             m_pData->m_sURL = m_pData->m_pObjectShell->GetMedium()->GetName();
 
-            SfxItemSet *pSet = m_pData->m_pObjectShell->GetMedium()->GetItemSet();
             Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_SAVEASDOC, *pSet, aArgs );
+            TransformItems( SID_SAVEASDOC, m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aArgs );
             addTitle_Impl( aArgs, m_pData->m_pObjectShell->GetTitle() );
             attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
         }
@@ -3068,7 +3067,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                     bool bFormerPassword = false;
                     {
                         uno::Sequence< beans::NamedValue > aOldEncryptionData;
-                        if (GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData ))
+                        if (GetEncryptionData_Impl( &pMedium->GetItemSet(), aOldEncryptionData ))
                         {
                             bFormerPassword = true;
                         }
@@ -3099,7 +3098,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 }
 
                                 uno::Sequence< beans::NamedValue > aOldEncryptionData;
-                                (void)GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+                                (void)GetEncryptionData_Impl( &pMedium->GetItemSet(), aOldEncryptionData );
 
                                 if ( !aOldEncryptionData.hasElements() && !aNewEncryptionData.hasElements() )
                                     throw;
@@ -3798,7 +3797,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     // the BaseURL is part of the ItemSet
     SfxMedium* pMedium = new SfxMedium( xStorage, OUString() );
     TransformParameters( SID_OPENDOC, aMediaDescriptor, aSet );
-    pMedium->GetItemSet()->Put( aSet );
+    pMedium->GetItemSet().Put( aSet );
 
     // allow to use an interactionhandler (if there is one)
     pMedium->UseInteractionHandler( true );
@@ -4030,7 +4029,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
             catch (const ucb::CommandAbortedException &)
             {
             }
-            const SfxBoolItem* pRepairedDocItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_REPAIRPACKAGE, false);
+            const SfxBoolItem* pRepairedDocItem = pMedium->GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
             if ( pRepairedDocItem && pRepairedDocItem->GetValue() )
                 aResult += SfxResId(STR_REPAIREDDOCUMENT);
         }

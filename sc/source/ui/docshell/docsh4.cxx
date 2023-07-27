@@ -119,8 +119,7 @@ void ScDocShell::SetInitialLinkUpdate( const SfxMedium* pMed )
 {
     if (pMed)
     {
-        const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>( pMed->GetItemSet(),
-                SID_UPDATEDOCMODE, false);
+        const SfxUInt16Item* pUpdateDocItem = pMed->GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
         m_nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : css::document::UpdateDocMode::NO_UPDATE;
     }
 
@@ -2696,8 +2695,7 @@ IMPL_LINK( ScDocShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void
             }
             const SfxPoolItem* pItem = nullptr;
             const SfxInt16Item* pInt16Item(nullptr);
-            SfxItemSet* pSet = pMed->GetItemSet();
-            if (pSet && pSet->GetItemState(SID_VERSION, true, &pItem) == SfxItemState::SET)
+            if (pMed->GetItemSet().GetItemState(SID_VERSION, true, &pItem) == SfxItemState::SET)
             {
                 pInt16Item = dynamic_cast<const SfxInt16Item*>(pItem);
             }
@@ -2758,7 +2756,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
 
         if ( GetMedium() )
         {
-            const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
+            const SfxStringItem* pPasswordItem = GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
             {
                 aArgs.realloc( 2 );
@@ -2766,7 +2764,7 @@ uno::Reference< frame::XModel > ScDocShell::LoadSharedDocument()
                 pArgs[1].Name = "Password";
                 pArgs[1].Value <<= pPasswordItem->GetValue();
             }
-            const SfxUnoAnyItem* pEncryptionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+            const SfxUnoAnyItem* pEncryptionItem = GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
             if (pEncryptionItem)
             {
                 aArgs.realloc(aArgs.getLength() + 1);

@@ -132,7 +132,7 @@ static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const t
 
         // Set the media descriptor data
         Sequence<NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
+        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {
@@ -216,7 +216,7 @@ bool SdPPTFilter::Export()
 
         Sequence< NamedValue > aEncryptionData;
         Reference< css::packages::XPackageEncryption > xPackageEncryption;
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mrMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = mrMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         std::shared_ptr<SvStream> pMediaStrm;
         if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
         {
@@ -239,7 +239,7 @@ bool SdPPTFilter::Export()
                     pOutputStrm = pMediaStrm.get();
 
                     // Temp removal of EncryptionData to avoid password protection triggering
-                    mrMedium.GetItemSet()->ClearItem(SID_ENCRYPTIONDATA);
+                    mrMedium.GetItemSet().ClearItem(SID_ENCRYPTIONDATA);
                 }
             }
         }
@@ -309,7 +309,7 @@ bool SdPPTFilter::Export()
                 xEncryptedRootStrg->Commit();
 
                 // Restore encryption data
-                mrMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
+                mrMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
             }
         }
     }

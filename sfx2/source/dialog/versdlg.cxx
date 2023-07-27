@@ -265,7 +265,7 @@ void SfxVersionDialog::Open_Impl()
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    if ( GetEncryptionData_Impl( pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
+    if ( GetEncryptionData_Impl( &pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
         // there is a password, it should be used during the opening
         SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) );
@@ -355,9 +355,9 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
         aSet.Put(SfxInt16Item(SID_VERSION, nEntry + 1));
         aSet.Put(SfxStringItem(SID_FILE_NAME, pObjShell->GetMedium()->GetName()));
 
-        SfxItemSet* pSet = pObjShell->GetMedium()->GetItemSet();
-        const SfxStringItem* pFilterItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FILTER_NAME, false);
-        const SfxStringItem* pFilterOptItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FILE_FILTEROPTIONS, false);
+        SfxItemSet& rSet = pObjShell->GetMedium()->GetItemSet();
+        const SfxStringItem* pFilterItem = rSet.GetItem(SID_FILTER_NAME, false);
+        const SfxStringItem* pFilterOptItem = rSet.GetItem(SID_FILE_FILTEROPTIONS, false);
         if ( pFilterItem )
             aSet.Put( *pFilterItem );
         if ( pFilterOptItem )

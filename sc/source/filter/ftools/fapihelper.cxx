@@ -103,12 +103,12 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+    const SfxUnoAnyItem* pEncryptionDataItem = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
     if ( pEncryptionDataItem )
         pEncryptionDataItem->GetValue() >>= aEncryptionData;
 
     OUString aPassword;
-    const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(rMedium.GetItemSet(), SID_PASSWORD, false);
+    const SfxStringItem* pPasswordItem = rMedium.GetItemSet().GetItem(SID_PASSWORD, false);
     if ( pPasswordItem )
         aPassword = pPasswordItem->GetValue();
 
@@ -117,11 +117,11 @@ uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( S
         rVerifier, aEncryptionData, aPassword, rMedium.GetInteractionHandler(), rMedium.GetOrigURL(),
         ::comphelper::DocPasswordRequestType::MS, pDefaultPasswords, &bIsDefaultPassword );
 
-    rMedium.GetItemSet()->ClearItem( SID_PASSWORD );
-    rMedium.GetItemSet()->ClearItem( SID_ENCRYPTIONDATA );
+    rMedium.GetItemSet().ClearItem( SID_PASSWORD );
+    rMedium.GetItemSet().ClearItem( SID_ENCRYPTIONDATA );
 
     if( !bIsDefaultPassword && aEncryptionData.hasElements() )
-        rMedium.GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+        rMedium.GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
 
     return aEncryptionData;
 }

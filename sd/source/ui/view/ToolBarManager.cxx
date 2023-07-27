@@ -873,7 +873,7 @@ bool ToolBarManager::Implementation::CheckPlugInMode (std::u16string_view rsName
         if (pMedium == nullptr)
             break;
 
-        const SfxBoolItem* pViewOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_VIEWONLY, false);
+        const SfxBoolItem* pViewOnlyItem = pMedium->GetItemSet().GetItem(SID_VIEWONLY, false);
         if (pViewOnlyItem == nullptr)
             break;
 

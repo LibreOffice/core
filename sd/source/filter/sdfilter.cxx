@@ -54,7 +54,7 @@ void SdFilter::CreateStatusIndicator()
 {
     // The status indicator must be retrieved from the provided medium arguments
     const SfxUnoAnyItem* pStatusBarItem =
-            mrMedium.GetItemSet()->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+            mrMedium.GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
 
     if ( pStatusBarItem )
         pStatusBarItem->GetValue() >>= mxStatusIndicator;

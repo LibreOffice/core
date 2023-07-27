@@ -117,13 +117,9 @@ OUString SwBasicEscherEx::GetBasePath() const
     SfxMedium * pMedium = mrWrt.GetWriter().GetMedia();
     if (pMedium)
     {
-        const SfxItemSet* pPItemSet = pMedium->GetItemSet();
-        if( pPItemSet )
-        {
-            const SfxStringItem* pPItem = pPItemSet->GetItem( SID_FILE_NAME );
-            if ( pPItem )
-                sDocUrl = pPItem->GetValue();
-        }
+        const SfxStringItem* pPItem = pMedium->GetItemSet().GetItem( SID_FILE_NAME );
+        if ( pPItem )
+            sDocUrl = pPItem->GetValue();
     }
 
     return sDocUrl.copy(0, sDocUrl.lastIndexOf('/') + 1);

@@ -641,7 +641,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
             return OUString();
     }
 
-    if (const SfxStringItem* pBaseURLItem = GetItemSet()->GetItem<SfxStringItem>(SID_DOC_BASEURL))
+    if (const SfxStringItem* pBaseURLItem = GetItemSet().GetItem<SfxStringItem>(SID_DOC_BASEURL))
         return pBaseURLItem->GetValue();
 
     OUString aBaseURL;
@@ -664,7 +664,7 @@ OUString SfxMedium::GetBaseURL( bool bForSaving )
 
 bool SfxMedium::IsSkipImages() const
 {
-    const SfxStringItem* pSkipImagesItem = GetItemSet()->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
+    const SfxStringItem* pSkipImagesItem = GetItemSet().GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
     return pSkipImagesItem && pSkipImagesItem->GetValue() == "SkipImages";
 }
 
@@ -896,12 +896,12 @@ bool SfxMedium::IsStorage()
 bool SfxMedium::IsPreview_Impl() const
 {
     bool bPreview = false;
-    const SfxBoolItem* pPreview = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_PREVIEW, false);
+    const SfxBoolItem* pPreview = GetItemSet().GetItem(SID_PREVIEW, false);
     if ( pPreview )
         bPreview = pPreview->GetValue();
     else
     {
-        const SfxStringItem* pFlags = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_OPTIONS, false);
+        const SfxStringItem* pFlags = GetItemSet().GetItem(SID_OPTIONS, false);
         if ( pFlags )
         {
             OUString aFileFlags = pFlags->GetValue();
@@ -1138,7 +1138,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             if ( !bOwnLock ) // bIsLoading implied from outermost condition
             {
                 // means that a copy of the document should be opened
-                GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, true ) );
+                GetItemSet().Put( SfxBoolItem( SID_TEMPLATE, true ) );
             }
             else
                 nResult = ShowLockResult::Succeeded;
@@ -1167,7 +1167,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             // TODO/LATER: alien lock on saving, user has selected to retry saving
 
             if (bIsLoading)
-                GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+                GetItemSet().Put(SfxBoolItem(SID_DOC_READONLY, true));
             else
                 nResult = ShowLockResult::Try;
         }
@@ -1179,7 +1179,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
             // if no interaction handler is provided the default answer is open readonly
             // that usually happens in case the document is loaded per API
             // so the document must be opened readonly for backward compatibility
-            GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+            GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
         else
             SetError(ERRCODE_IO_ACCESSDENIED);
@@ -1232,7 +1232,7 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         }
 
         if (bReadOnly)
-            GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+            GetItemSet().Put(SfxBoolItem(SID_DOC_READONLY, true));
 
         return bReadOnly;
     }
@@ -1320,7 +1320,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             if ( !bResult )
             {
                 // no read-write access is necessary on loading if the document is explicitly opened as copy
-                const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_TEMPLATE, false);
+                const SfxBoolItem* pTemplateItem = GetItemSet().GetItem(SID_TEMPLATE, false);
                 bIsTemplate = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
             }
 
@@ -1429,7 +1429,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                 if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                     SetError(ERRCODE_IO_ACCESSDENIED);
                 else
-                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+                    GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             }
 
             // when the file is locked, get the current file date
@@ -1462,7 +1462,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         if ( !bResult )
         {
             // no read-write access is necessary on loading if the document is explicitly opened as copy
-            const SfxBoolItem* pTemplateItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_TEMPLATE, false);
+            const SfxBoolItem* pTemplateItem = GetItemSet().GetItem(SID_TEMPLATE, false);
             bResult = ( bLoading && pTemplateItem && pTemplateItem->GetValue() );
         }
 
@@ -1680,7 +1680,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             if ( !bLoading || (pReadOnlyItem && !pReadOnlyItem->GetValue()) )
                 SetError(ERRCODE_IO_ACCESSDENIED);
             else
-                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+                GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
 
         // when the file is locked, get the current file date
@@ -1720,7 +1720,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
     if ( GetError() )
         return pImpl->xStorage;
 
-    const SfxBoolItem* pRepairItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_REPAIRPACKAGE, false);
+    const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
     if ( pRepairItem && pRepairItem->GetValue() )
     {
         // the storage should be created for repairing mode
@@ -1730,7 +1730,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         Reference< css::ucb::XProgressHandler > xProgressHandler;
         Reference< css::task::XStatusIndicator > xStatusIndicator;
 
-        const SfxUnoAnyItem* pxProgressItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
+        const SfxUnoAnyItem* pxProgressItem = GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL, false);
         if( pxProgressItem && ( pxProgressItem->GetValue() >>= xStatusIndicator ) )
             xProgressHandler.set( new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
@@ -1851,7 +1851,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
                     SetPhysicalName_Impl( aTemp );
 
                     pImpl->bIsTemp = true;
-                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+                    GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
                     // TODO/MBA
                     pImpl->aVersions.realloc(0);
                 }
@@ -2107,7 +2107,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
     if( ::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext(), aTempCont ) )
     {
         bool bTransactStarted = false;
-        const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
+        const SfxBoolItem* pOverWrite = GetItemSet().GetItem<SfxBoolItem>(SID_OVERWRITE, false);
         bool bOverWrite = !pOverWrite || pOverWrite->GetValue();
         bool bResult = false;
 
@@ -2211,14 +2211,14 @@ bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTar
     // if the document had no password it should be stored without password
     // if the document had password it should be stored with the same password
     // otherwise the stream copying can not be done
-    const SfxStringItem* pNewPassItem = aTargetSet.GetItem<SfxStringItem>(SID_PASSWORD, false);
-    const SfxStringItem* pOldPassItem = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_PASSWORD, false);
+    const SfxStringItem* pNewPassItem = aTargetSet.GetItem(SID_PASSWORD, false);
+    const SfxStringItem* pOldPassItem = GetItemSet().GetItem(SID_PASSWORD, false);
     if ( ( !pNewPassItem && !pOldPassItem )
       || ( pNewPassItem && pOldPassItem && pNewPassItem->GetValue() == pOldPassItem->GetValue() ) )
     {
         // the filter must be the same
-        const SfxStringItem* pNewFilterItem = aTargetSet.GetItem<SfxStringItem>(SID_FILTER_NAME, false);
-        const SfxStringItem* pOldFilterItem = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_FILTER_NAME, false);
+        const SfxStringItem* pNewFilterItem = aTargetSet.GetItem(SID_FILTER_NAME, false);
+        const SfxStringItem* pOldFilterItem = GetItemSet().GetItem(SID_FILTER_NAME, false);
         if ( pNewFilterItem && pOldFilterItem && pNewFilterItem->GetValue() == pOldFilterItem->GetValue() )
         {
             // get the input stream and copy it
@@ -2472,7 +2472,7 @@ void SfxMedium::Transfer_Impl()
             (void)::ucbhelper::Content::create( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xEnv, comphelper::getProcessComponentContext(), aSourceContent );
 
             // check for external parameters that may customize the handling of NameClash situations
-            const SfxBoolItem* pOverWrite = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_OVERWRITE, false);
+            const SfxBoolItem* pOverWrite = GetItemSet().GetItem<SfxBoolItem>(SID_OVERWRITE, false);
             sal_Int32 nNameClash;
             if ( pOverWrite && !pOverWrite->GetValue() )
                 // argument says: never overwrite
@@ -2490,9 +2490,9 @@ void SfxMedium::Transfer_Impl()
                 if ( IsInCheckIn( ) )
                 {
                     eOperation = ::ucbhelper::InsertOperation::Checkin;
-                    const SfxBoolItem* pMajor = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_DOCINFO_MAJOR, false);
+                    const SfxBoolItem* pMajor = GetItemSet().GetItem<SfxBoolItem>(SID_DOCINFO_MAJOR, false);
                     bMajor = pMajor && pMajor->GetValue( );
-                    const SfxStringItem* pComments = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_DOCINFO_COMMENTS, false);
+                    const SfxStringItem* pComments = GetItemSet().GetItem(SID_DOCINFO_COMMENTS, false);
                     if ( pComments )
                         sComment = pComments->GetValue( );
                 }
@@ -2753,7 +2753,7 @@ void SfxMedium::GetLockingStream_Impl()
 
     // open the original document
     uno::Sequence< beans::PropertyValue > xProps;
-    TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
+    TransformItems( SID_OPENDOC, GetItemSet(), xProps );
     utl::MediaDescriptor aMedium( xProps );
 
     aMedium.addInputStreamOwnLock();
@@ -2824,22 +2824,22 @@ void SfxMedium::GetMedium_Impl()
 
         if ( !bFromTempFile )
         {
-            GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
+            GetItemSet().Put( SfxStringItem( SID_FILE_NAME, aFileName ) );
             if( !(pImpl->m_nStorOpenMode & StreamMode::WRITE) )
-                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+                GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             if (xInteractionHandler.is())
-                GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any(xInteractionHandler) ) );
+                GetItemSet().Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any(xInteractionHandler) ) );
         }
 
         if ( pImpl->m_xInputStreamToLoadFrom.is() )
         {
             pImpl->xInputStream = pImpl->m_xInputStreamToLoadFrom;
             if (pImpl->m_bInputStreamIsReadOnly)
-                GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+                GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
         }
         else
         {
-            TransformItems( SID_OPENDOC, *GetItemSet(), xProps );
+            TransformItems( SID_OPENDOC, GetItemSet(), xProps );
             utl::MediaDescriptor aMedium( xProps );
 
             if ( pImpl->m_xLockingStream.is() && !bFromTempFile )
@@ -2887,9 +2887,9 @@ void SfxMedium::GetMedium_Impl()
         {
             //TODO/MBA: need support for SID_STREAM
             if ( pImpl->xStream.is() )
-                GetItemSet()->Put( SfxUnoAnyItem( SID_STREAM, Any( pImpl->xStream ) ) );
+                GetItemSet().Put( SfxUnoAnyItem( SID_STREAM, Any( pImpl->xStream ) ) );
 
-            GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, Any( pImpl->xInputStream ) ) );
+            GetItemSet().Put( SfxUnoAnyItem( SID_INPUTSTREAM, Any( pImpl->xInputStream ) ) );
         }
     }
 
@@ -2992,7 +2992,7 @@ void SfxMedium::Init_Impl()
                 pImpl->m_aLogicName = aUrl.GetURLNoMark( INetURLObject::DecodeMechanism::NONE );
                 if (chkEditLock.owns_lock())
                     chkEditLock.unlock();
-                GetItemSet()->Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
+                GetItemSet().Put( SfxStringItem( SID_JUMPMARK, aUrl.GetMark() ) );
             }
 
             // try to convert the URL into a physical name - but never change a physical name
@@ -3037,7 +3037,7 @@ void SfxMedium::Init_Impl()
         if ( !pFileNameItem )
         {
             // let the ItemSet be created if necessary
-            GetItemSet()->Put(
+            GetItemSet().Put(
                 SfxStringItem(
                     SID_FILE_NAME, INetURLObject( pImpl->m_aLogicName ).GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
         }
@@ -3439,9 +3439,9 @@ SfxMedium::SfxMedium(const OUString &rName, const OUString &rReferer, StreamMode
     pImpl(new SfxMedium_Impl)
 {
     pImpl->m_pSet = pInSet;
-    SfxItemSet * s = GetItemSet();
-    if (s->GetItem(SID_REFERER) == nullptr) {
-        s->Put(SfxStringItem(SID_REFERER, rReferer));
+    SfxItemSet& s = GetItemSet();
+    if (s.GetItem(SID_REFERER) == nullptr) {
+        s.Put(SfxStringItem(SID_REFERER, rReferer));
     }
     pImpl->m_pFilter = std::move(pFilter);
     pImpl->m_aLogicName = rName;
@@ -3541,9 +3541,9 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
     pImpl->bDisposeStorage = false;
 
     // always take BaseURL first, could be overwritten by ItemSet
-    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    GetItemSet().Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
     if ( p )
-        GetItemSet()->Put( *p );
+        GetItemSet().Put( *p );
 }
 
 
@@ -3558,9 +3558,9 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const OUS
     pImpl->bDisposeStorage = false;
 
     // always take BaseURL first, could be overwritten by ItemSet
-    GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
+    GetItemSet().Put( SfxStringItem( SID_DOC_BASEURL, rBaseURL ) );
     if ( p )
-        GetItemSet()->Put( *p );
+        GetItemSet().Put( *p );
 }
 
 // NOTE: should only be called on main thread
@@ -3644,12 +3644,11 @@ void SfxMedium::SetStorage_Impl( const uno::Reference < embed::XStorage >& rStor
 }
 
 
-SfxItemSet* SfxMedium::GetItemSet() const
+SfxItemSet& SfxMedium::GetItemSet() const
 {
-    // this method *must* return an ItemSet, returning NULL can cause crashes
     if (!pImpl->m_pSet)
         pImpl->m_pSet = std::make_shared<SfxAllItemSet>( SfxGetpApp()->GetPool() );
-    return pImpl->m_pSet.get();
+    return *pImpl->m_pSet;
 }
 
 
@@ -3809,7 +3808,7 @@ bool SfxMedium::IsReadOnly() const
     // c) the API can force the readonly state!
     if (!bReadOnly)
     {
-        const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_DOC_READONLY, false);
+        const SfxBoolItem* pItem = GetItemSet().GetItem(SID_DOC_READONLY, false);
         if (pItem)
             bReadOnly = pItem->GetValue();
     }
@@ -4440,7 +4439,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 const SfxBoolItem* pReadOnlyItem = SfxItemSet::GetItem<SfxBoolItem>(pImpl->m_pSet.get(), SID_DOC_READONLY, false);
                 if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
                     bWasReadonly = true;
-                GetItemSet()->ClearItem( SID_DOC_READONLY );
+                GetItemSet().ClearItem( SID_DOC_READONLY );
 
                 GetMedium_Impl();
                 LockOrigFileOnDemand( false, false );
@@ -4463,7 +4462,7 @@ OUString SfxMedium::SwitchDocumentToTempFile()
                 {
                     // set the readonly state back
                     pImpl->m_nStorOpenMode = SFX_STREAM_READONLY;
-                    GetItemSet()->Put(SfxBoolItem(SID_DOC_READONLY, true));
+                    GetItemSet().Put(SfxBoolItem(SID_DOC_READONLY, true));
                 }
 
                 if ( aResult.isEmpty() )

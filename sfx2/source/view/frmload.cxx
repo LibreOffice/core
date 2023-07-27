@@ -739,9 +739,9 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         {
             // Detach the medium from the template, and set proper document name and filter
             auto pMedium = xDoc->GetMedium();
-            auto pItemSet = pMedium->GetItemSet();
-            pItemSet->ClearItem(SID_TEMPLATE);
-            pItemSet->Put(SfxStringItem(SID_FILTER_NAME, pEmptyURLFilter->GetFilterName()));
+            auto& rItemSet = pMedium->GetItemSet();
+            rItemSet.ClearItem(SID_TEMPLATE);
+            rItemSet.Put(SfxStringItem(SID_FILTER_NAME, pEmptyURLFilter->GetFilterName()));
             pMedium->SetName(sURL, true);
             pMedium->SetFilter(pEmptyURLFilter);
             pMedium->GetInitFileDate(true);

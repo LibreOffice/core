@@ -617,15 +617,11 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     if (pDocSh->GetMedium())
     {
-        SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
-        if (pSet)
+        const SfxUnoAnyItem* pItem =
+            pDocSh->GetMedium()->GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        if (pItem)
         {
-            const SfxUnoAnyItem* pItem =
-                pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
-            if (pItem)
-            {
-                pItem->GetValue() >>= xStatusIndicator;
-            }
+            pItem->GetValue() >>= xStatusIndicator;
         }
     }
 
@@ -720,10 +716,10 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     OUString StreamPath;
     if( SfxObjectCreateMode::EMBEDDED == rDoc.GetDocShell()->GetCreateMode() )
     {
-        if ( pMedDescrMedium && pMedDescrMedium->GetItemSet() )
+        if (pMedDescrMedium)
         {
             const SfxStringItem* pDocHierarchItem =
-                pMedDescrMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
+                pMedDescrMedium->GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
             if ( pDocHierarchItem )
                 StreamPath = pDocHierarchItem->GetValue();
         }

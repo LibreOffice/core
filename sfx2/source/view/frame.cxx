@@ -307,16 +307,16 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell const *pDoc )
     GetDescriptor()->SetActualURL();
 
     // Mark FileOpen parameter
-    SfxItemSet* pItemSet = pMed->GetItemSet();
+    SfxItemSet& rItemSet = pMed->GetItemSet();
 
     const std::shared_ptr<const SfxFilter>& pFilter = pMed->GetFilter();
     OUString aFilter;
     if ( pFilter )
         aFilter = pFilter->GetFilterName();
 
-    const SfxStringItem* pRefererItem = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_REFERER, false);
-    const SfxStringItem* pOptionsItem = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_FILE_FILTEROPTIONS, false);
-    const SfxStringItem* pTitle1Item = SfxItemSet::GetItem<SfxStringItem>(pItemSet, SID_DOCINFO_TITLE, false);
+    const SfxStringItem* pRefererItem = rItemSet.GetItem<SfxStringItem>(SID_REFERER, false);
+    const SfxStringItem* pOptionsItem = rItemSet.GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS, false);
+    const SfxStringItem* pTitle1Item = rItemSet.GetItem<SfxStringItem>(SID_DOCINFO_TITLE, false);
 
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 

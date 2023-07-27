@@ -208,10 +208,10 @@ void SfxProgress::SetState
             {
                 // don't show status indicator for hidden documents (only valid while loading)
                 SfxMedium* pMedium = pObjSh->GetMedium();
-                const SfxBoolItem* pHiddenItem = SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(), SID_HIDDEN, false);
+                const SfxBoolItem* pHiddenItem = pMedium->GetItemSet().GetItem(SID_HIDDEN, false);
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
-                    const SfxUnoAnyItem* pIndicatorItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMedium->GetItemSet(), SID_PROGRESS_STATUSBAR_CONTROL, false);
+                    const SfxUnoAnyItem* pIndicatorItem = pMedium->GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL, false);
                     Reference< XStatusIndicator > xInd;
                     if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
                         pImpl->xStatusInd = xInd;

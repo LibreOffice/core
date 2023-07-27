@@ -100,7 +100,7 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
             officecfg::Office::Common::History::RecentDocsThumbnail::get())
     {
         // not modified => the document matches what is in the shell
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMed->GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = pMed->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionDataItem )
         {
             // encrypted document, will show a generic document icon instead

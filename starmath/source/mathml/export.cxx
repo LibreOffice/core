@@ -88,7 +88,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     bool bEmbedded = SfxObjectCreateMode::EMBEDDED == pDocShell->GetCreateMode();
 
     // Medium item set
-    SfxItemSet* pMediumItemSet = rMedium.GetItemSet();
+    SfxItemSet& rMediumItemSet = rMedium.GetItemSet();
     if (pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to get medium item set");
@@ -108,7 +108,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         }
 
         // Fetch progress bar
-        const SfxUnoAnyItem* pItem = pMediumItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        const SfxUnoAnyItem* pItem = rMediumItemSet.GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
         if (pItem)
         {
             // set progress range and start status indicator
@@ -152,7 +152,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
         if (bEmbedded) //&& !pStg->IsRoot() )
         {
             const SfxStringItem* pDocHierarchItem
-                = pMediumItemSet->GetItem(SID_DOC_HIERARCHICALNAME);
+                = rMediumItemSet.GetItem(SID_DOC_HIERARCHICALNAME);
             if (pDocHierarchItem != nullptr)
             {
                 OUString aName = pDocHierarchItem->GetValue();

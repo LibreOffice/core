@@ -94,13 +94,9 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     if (pMedium)
     {
-        SfxItemSet* pSet = pMedium->GetItemSet();
-        if (pSet)
-        {
-            const SfxUnoAnyItem* pItem = pSet->GetItem<SfxUnoAnyItem>(SID_PROGRESS_STATUSBAR_CONTROL);
-            if (pItem)
-                xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
-        }
+        const SfxUnoAnyItem* pItem = pMedium->GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        if (pItem)
+            xStatusIndicator.set(pItem->GetValue(), uno::UNO_QUERY);
     }
     return xStatusIndicator;
 }
@@ -358,10 +354,10 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     OUString aName;
     if (SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode())
     {
-        if ( pMedium && pMedium->GetItemSet() )
+        if ( pMedium )
         {
             const SfxStringItem* pDocHierarchItem =
-                pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
+                pMedium->GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
             if ( pDocHierarchItem )
                 aName = pDocHierarchItem->GetValue();
         }
@@ -822,10 +818,10 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         if( SfxObjectCreateMode::EMBEDDED == pObjSh->GetCreateMode() )
         {
             OUString aName("dummyObjectName");
-            if ( pMedium && pMedium->GetItemSet() )
+            if ( pMedium )
             {
                 const SfxStringItem* pDocHierarchItem =
-                    pMedium->GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
+                    pMedium->GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
                 if ( pDocHierarchItem )
                     aName = pDocHierarchItem->GetValue();
             }

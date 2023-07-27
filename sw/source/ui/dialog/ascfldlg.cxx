@@ -82,8 +82,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
         const SfxStringItem* pItem;
         OUString sAsciiOptions;
         if( rDocSh.GetMedium() != nullptr &&
-            rDocSh.GetMedium()->GetItemSet() != nullptr &&
-            (pItem = rDocSh.GetMedium()->GetItemSet()->GetItemIfSet( SID_FILE_FILTEROPTIONS )))
+            (pItem = rDocSh.GetMedium()->GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS )))
         {
             sAsciiOptions = pItem->GetValue();
         }

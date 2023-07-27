@@ -1199,7 +1199,7 @@ static void lcl_UpdateLinksInSect( const SwBaseLink& rUpdLnk, SwSectionNode& rSe
                 if( xDocSh->GetMedium() &&
                     rSection.GetLinkFilePassword().isEmpty() )
                 {
-                    if( const SfxStringItem* pItem = xDocSh->GetMedium()->GetItemSet()->
+                    if( const SfxStringItem* pItem = xDocSh->GetMedium()->GetItemSet().
                         GetItemIfSet( SID_PASSWORD, false ) )
                         rSection.SetLinkFilePassword( pItem->GetValue() );
                 }

@@ -134,9 +134,8 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maMaxPos.SetTab( ::std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
 
     // document URL and path
-    if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
-        if( const SfxStringItem* pItem = pItemSet->GetItem<SfxStringItem>( SID_FILE_NAME ) )
-            maDocUrl = pItem->GetValue();
+    if( const SfxStringItem* pItem = mrMedium.GetItemSet().GetItem( SID_FILE_NAME ) )
+        maDocUrl = pItem->GetValue();
     maBasePath = maDocUrl.copy( 0, maDocUrl.lastIndexOf( '/' ) + 1 );
 
     // extended document options - always own object, try to copy existing data from document

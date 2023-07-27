@@ -122,13 +122,9 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         }
 
         // Fetch the item set
-        SfxItemSet* pSet = rMedium.GetItemSet();
-        if (pSet)
-        {
-            const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
-            if (pItem != nullptr)
-                pItem->GetValue() >>= xStatusIndicator;
-        }
+        const SfxUnoAnyItem* pItem = rMedium.GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        if (pItem != nullptr)
+            pItem->GetValue() >>= xStatusIndicator;
     }
 
     // Create property list
@@ -164,13 +160,10 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         if (bEmbedded) // && !rMedium.GetStorage()->IsRoot() )
         {
             OUString aName(u"dummyObjName");
-            if (rMedium.GetItemSet())
-            {
-                const SfxStringItem* pDocHierarchItem
-                    = rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
-                if (pDocHierarchItem != nullptr)
-                    aName = pDocHierarchItem->GetValue();
-            }
+            const SfxStringItem* pDocHierarchItem
+                = rMedium.GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
+            if (pDocHierarchItem != nullptr)
+                aName = pDocHierarchItem->GetValue();
 
             if (!aName.isEmpty())
                 xInfoSet->setPropertyValue("StreamRelPath", Any(aName));

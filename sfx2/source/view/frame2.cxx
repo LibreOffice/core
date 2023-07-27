@@ -240,7 +240,7 @@ SfxFrame* SfxFrame::CreateHidden( SfxObjectShell const & rDoc, vcl::Window& rWin
 
         // create load arguments
         Sequence< PropertyValue > aLoadArgs;
-        TransformItems( SID_OPENDOC, *rDoc.GetMedium()->GetItemSet(), aLoadArgs );
+        TransformItems( SID_OPENDOC, rDoc.GetMedium()->GetItemSet(), aLoadArgs );
 
         ::comphelper::NamedValueCollection aArgs( aLoadArgs );
         aArgs.put( "Model", rDoc.GetModel() );

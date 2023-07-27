@@ -133,7 +133,7 @@ static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const t
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {
@@ -256,7 +256,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
 {
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
     uno::Sequence< beans::NamedValue > aEncryptionData;
-    const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+    const SfxUnoAnyItem* pEncryptionDataItem = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
     SvStream* pOriginalMediaStrm = pMedStrm;
     std::shared_ptr<SvStream> pMediaStrm;
     if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
@@ -280,7 +280,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
                 pMedStrm = pMediaStrm.get();
 
                 // Temp removal of EncryptionData to avoid password protection triggering
-                rMedium.GetItemSet()->ClearItem(SID_ENCRYPTIONDATA);
+                rMedium.GetItemSet().ClearItem(SID_ENCRYPTIONDATA);
             }
         }
     }
@@ -391,7 +391,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         xEncryptedRootStrg->Commit();
 
         // Restore encryption data
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        rMedium.GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
 
     return eRet;
@@ -447,8 +447,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     ScDLL::Init();
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::Any(xStm)));
-    aMedium.GetItemSet()->Put(SfxUInt16Item(SID_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE));
+    aMedium.GetItemSet().Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::Any(xStm)));
+    aMedium.GetItemSet().Put(SfxUInt16Item(SID_UPDATEDOCMODE, css::document::UpdateDocMode::NO_UPDATE));
 
     ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |

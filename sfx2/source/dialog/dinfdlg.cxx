@@ -775,9 +775,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
     {
         if (!pShell)
             break;
-        SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
-        if (!pMedSet)
-            break;
+        SfxItemSet& rMedSet = pShell->GetMedium()->GetItemSet();
         std::shared_ptr<const SfxFilter> pFilter = pShell->GetMedium()->GetFilter();
         if (!pFilter)
             break;
@@ -789,11 +787,11 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
             VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
             m_xPasswordDialog = pFact->CreatePasswordToOpenModifyDialog(GetFrameWeld(), maxPwdLen, false);
             m_xPasswordDialog->AllowEmpty(); // needed to remove password
-            m_xPasswordDialog->StartExecuteAsync([this, pFilter, pMedSet, pShell](sal_Int32 nResult)
+            m_xPasswordDialog->StartExecuteAsync([this, pFilter, &rMedSet, pShell](sal_Int32 nResult)
             {
                 if (nResult == RET_OK)
                 {
-                    sfx2::SetPassword(pFilter, pMedSet, m_xPasswordDialog->GetPasswordToOpen(),
+                    sfx2::SetPassword(pFilter, &rMedSet, m_xPasswordDialog->GetPasswordToOpen(),
                                       m_xPasswordDialog->GetPasswordToOpen(), true);
                     tools::JsonWriter payloadJson;
                     payloadJson.put("password", m_xPasswordDialog->GetPasswordToOpen());
@@ -805,7 +803,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
                 m_xPasswordDialog->disposeOnce();
             });
         } else {
-            sfx2::RequestPassword(pFilter, OUString(), pMedSet, GetFrameWeld()->GetXWindow());
+            sfx2::RequestPassword(pFilter, OUString(), &rMedSet, GetFrameWeld()->GetXWindow());
             pShell->SetModified();
         }
     }
@@ -855,10 +853,7 @@ void SfxDocumentPage::ImplCheckPasswordState()
     {
         if (!pShell)
             break;
-        SfxItemSet* pMedSet = pShell->GetMedium()->GetItemSet();
-        if (!pMedSet)
-            break;
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pMedSet, SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = pShell->GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         uno::Sequence< beans::NamedValue > aEncryptionData;
         if (pEncryptionDataItem)
             pEncryptionDataItem->GetValue() >>= aEncryptionData;

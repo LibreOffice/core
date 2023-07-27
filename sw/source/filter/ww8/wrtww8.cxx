@@ -3492,7 +3492,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
 
     if ( mpMedium )
     {
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mpMedium->GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = mpMedium->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionDataItem && ( pEncryptionDataItem->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
         {
             OSL_ENSURE( false, "Unexpected EncryptionData!" );
@@ -3502,7 +3502,7 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
         if ( !aEncryptionData.hasElements() )
         {
             // try to generate the encryption data based on password
-            const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(mpMedium->GetItemSet(), SID_PASSWORD, false);
+            const SfxStringItem* pPasswordItem = mpMedium->GetItemSet().GetItem(SID_PASSWORD, false);
             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() && pPasswordItem->GetValue().getLength() <= 15 )
             {
                 // Generate random number with a seed of time as salt.
@@ -3521,12 +3521,12 @@ bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec 
                 rCodec.InitKey( aPassword, pDocId );
                 aEncryptionData = rCodec.GetEncryptionData();
 
-                mpMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                mpMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
             }
         }
 
         if ( aEncryptionData.hasElements() )
-            mpMedium->GetItemSet()->ClearItem( SID_PASSWORD );
+            mpMedium->GetItemSet().ClearItem( SID_PASSWORD );
     }
 
     // nonempty encryption data means here that the codec was successfully initialized
@@ -3790,7 +3790,7 @@ ErrCode SwWW8Writer::WriteStorage()
     if (mpMedium)
     {
         // Check for specific encryption requests
-        const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(mpMedium->GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionDataItem = mpMedium->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if (pEncryptionDataItem && (pEncryptionDataItem->GetValue() >>= aEncryptionData))
         {
             ::comphelper::SequenceAsHashMap aHashData(aEncryptionData);

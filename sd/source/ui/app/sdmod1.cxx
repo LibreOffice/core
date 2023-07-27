@@ -431,8 +431,8 @@ SfxFrame* SdModule::CreateFromTemplate(const OUString& rTemplatePath, const Refe
     }
     else if( pDocShell )
     {
-        if (pDocShell->GetMedium() && pDocShell->GetMedium()->GetItemSet())
-            pDocShell->GetMedium()->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, bReplaceable));
+        if (pDocShell->GetMedium())
+            pDocShell->GetMedium()->GetItemSet().Put(SfxBoolItem(SID_REPLACEABLE, bReplaceable));
         SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pDocShell, i_rFrame );
         OSL_ENSURE( pViewFrame, "SdModule::CreateFromTemplate: no view frame - was the document really loaded?" );
         pFrame = pViewFrame ? &pViewFrame->GetFrame() : nullptr;
@@ -520,8 +520,8 @@ SfxFrame* SdModule::CreateEmptyDocument( const Reference< XFrame >& i_rFrame )
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
     }
-    if (pNewDocSh->GetMedium() && pNewDocSh->GetMedium()->GetItemSet())
-        pNewDocSh->GetMedium()->GetItemSet()->Put(SfxBoolItem(SID_REPLACEABLE, true));
+    if (pNewDocSh->GetMedium())
+        pNewDocSh->GetMedium()->GetItemSet().Put(SfxBoolItem(SID_REPLACEABLE, true));
 
     SfxViewFrame* pViewFrame = SfxViewFrame::LoadDocumentIntoFrame( *pNewDocSh, i_rFrame );
     OSL_ENSURE( pViewFrame, "SdModule::CreateEmptyDocument: no view frame - was the document really loaded?" );

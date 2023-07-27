@@ -5603,10 +5603,7 @@ namespace
     {
         OUString aPassw;
 
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxStringItem *pPasswordItem;
-
-        if(pSet && (pPasswordItem = pSet->GetItemIfSet(SID_PASSWORD)))
+        if (const SfxStringItem* pPasswordItem = rMedium.GetItemSet().GetItemIfSet(SID_PASSWORD))
             aPassw = pPasswordItem->GetValue();
         else
         {
@@ -5637,7 +5634,7 @@ namespace
     uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib const * pWwFib )
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
-        const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionData = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 
@@ -5690,7 +5687,7 @@ namespace
     uno::Sequence< beans::NamedValue > Init97Codec(msfilter::MSCodec97& rCodec, sal_uInt8 const pDocId[16], SfxMedium& rMedium)
     {
         uno::Sequence< beans::NamedValue > aEncryptionData;
-        const SfxUnoAnyItem* pEncryptionData = SfxItemSet::GetItem<SfxUnoAnyItem>(rMedium.GetItemSet(), SID_ENCRYPTIONDATA, false);
+        const SfxUnoAnyItem* pEncryptionData = rMedium.GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
         if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
             aEncryptionData.realloc( 0 );
 
@@ -5872,8 +5869,8 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                             m_pDataStream = pDecryptData;
                         }
 
-                        pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                        pMedium->GetItemSet().ClearItem( SID_PASSWORD );
+                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -5936,8 +5933,8 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                             m_pDataStream = pDecryptData;
                         }
 
-                        pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+                        pMedium->GetItemSet().ClearItem( SID_PASSWORD );
+                        pMedium->GetItemSet().Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -6483,7 +6480,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        m_pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
+        m_pMedium->GetItemSet().Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {

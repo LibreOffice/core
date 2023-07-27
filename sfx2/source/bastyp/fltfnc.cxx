@@ -373,7 +373,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
             aDescriptor[utl::MediaDescriptor::PROP_URL               ] <<= sURL;
             aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM       ] <<= xInStream;
             aDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER] <<= rMedium.GetInteractionHandler();
-            SfxStringItem const * it = rMedium.GetItemSet()->GetItem(SID_REFERER);
+            SfxStringItem const * it = rMedium.GetItemSet().GetItem(SID_REFERER);
             if (it != nullptr) {
                 aDescriptor[utl::MediaDescriptor::PROP_REFERRER]
                     <<= it->GetValue();
@@ -494,7 +494,7 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
             pOldFilter = nullptr;
         else
         {
-            const SfxStringItem* pSalvageItem = SfxItemSet::GetItem<SfxStringItem>(rMedium.GetItemSet(), SID_DOC_SALVAGE, false);
+            const SfxStringItem* pSalvageItem = rMedium.GetItemSet().GetItem(SID_DOC_SALVAGE, false);
             if ( ( pOldFilter->GetFilterFlags() & SfxFilterFlags::PACKED ) && pSalvageItem )
                 // Salvage is always done without packing
                 pOldFilter = nullptr;
@@ -504,7 +504,7 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
     std::shared_ptr<const SfxFilter> pFilter = pOldFilter;
 
     bool bPreview = rMedium.IsPreview_Impl();
-    const SfxStringItem* pReferer = SfxItemSet::GetItem<SfxStringItem>(rMedium.GetItemSet(), SID_REFERER, false);
+    const SfxStringItem* pReferer = rMedium.GetItemSet().GetItem(SID_REFERER, false);
     if ( bPreview && rMedium.IsRemote() && ( !pReferer || !pReferer->GetValue().match("private:searchfolder:") ) )
         return ERRCODE_ABORT;
 
@@ -541,7 +541,7 @@ ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<cons
     }
 
     bool bHidden = bPreview;
-    const SfxStringItem* pFlags = SfxItemSet::GetItem<SfxStringItem>(rMedium.GetItemSet(), SID_OPTIONS, false);
+    const SfxStringItem* pFlags = rMedium.GetItemSet().GetItem(SID_OPTIONS, false);
     if ( !bHidden && pFlags )
     {
         OUString aFlags( pFlags->GetValue() );

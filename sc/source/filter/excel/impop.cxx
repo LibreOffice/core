@@ -167,8 +167,7 @@ void ImportExcel::ReadFileSharing()
     if((nRecommendReadOnly == 0) && (nPasswordHash == 0))
         return;
 
-    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
-        pItemSet->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
+    GetMedium().GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
 
     if( SfxObjectShell* pShell = GetDocShell() )
     {

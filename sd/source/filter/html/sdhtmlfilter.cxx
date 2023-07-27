@@ -36,11 +36,9 @@ bool SdHTMLFilter::Export()
     mrMedium.Close();
     mrMedium.Commit();
 
-    SfxItemSet* pSet = mrMedium.GetItemSet();
-
     css::uno::Sequence<css::beans::PropertyValue> aParams;
 
-    if (const SfxUnoAnyItem* pItem = pSet->GetItemIfSet(SID_FILTER_DATA, false))
+    if (const SfxUnoAnyItem* pItem = mrMedium.GetItemSet().GetItemIfSet(SID_FILTER_DATA, false))
         pItem->GetValue() >>= aParams;
 
     HtmlExport aExport(mrMedium.GetName(), aParams, &mrDocument, &mrDocShell);

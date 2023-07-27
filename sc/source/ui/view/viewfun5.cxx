@@ -616,7 +616,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             aInsDoc.ResetClip( &rDoc, nSrcTab );
 
             SfxMedium aMed;
-            aMed.GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::Any( xStm ) ) );
+            aMed.GetItemSet().Put( SfxUnoAnyItem( SID_INPUTSTREAM, uno::Any( xStm ) ) );
             ErrCode eErr = ScFormatFilter::Get().ScImportExcel( aMed, &aInsDoc, EIF_AUTO );
             if ( eErr == ERRCODE_NONE )
             {

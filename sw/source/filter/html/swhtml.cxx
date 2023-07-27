@@ -531,7 +531,7 @@ SwHTMLParser::~SwHTMLParser()
 
         // the temporary view frame is hidden, so the hidden flag might need to be removed
         if ( m_bRemoveHidden && m_xDoc.is() && m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->GetMedium() )
-            m_xDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+            m_xDoc->GetDocShell()->GetMedium()->GetItemSet().ClearItem( SID_HIDDEN );
     }
 }
 
@@ -5596,11 +5596,7 @@ void HTMLReader::SetupFilterOptions()
     if (!m_pMedium)
         return;
 
-    const SfxItemSet* pItemSet = m_pMedium->GetItemSet();
-    if (!pItemSet)
-        return;
-
-    auto pItem = pItemSet->GetItem<SfxStringItem>(SID_FILE_FILTEROPTIONS);
+    auto pItem = m_pMedium->GetItemSet().GetItem(SID_FILE_FILTEROPTIONS);
     if (!pItem)
         return;
 

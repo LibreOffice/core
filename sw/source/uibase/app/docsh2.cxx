@@ -1733,7 +1733,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         if( pMed && pMed->GetURLObject() == aTmpObj )
         {
             const SfxPoolItem* pItem;
-            if( ( SfxItemState::SET == pMed->GetItemSet()->GetItemState(
+            if( ( SfxItemState::SET == pMed->GetItemSet().GetItemState(
                                             SID_VERSION, false, &pItem ) )
                     ? (nVersion == static_cast<const SfxInt16Item*>(pItem)->GetValue())
                     : !nVersion )
@@ -1773,10 +1773,10 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         }
 
         if( nVersion )
-            xMed->GetItemSet()->Put( SfxInt16Item( SID_VERSION, nVersion ));
+            xMed->GetItemSet().Put( SfxInt16Item( SID_VERSION, nVersion ));
 
         if( !rPasswd.isEmpty() )
-            xMed->GetItemSet()->Put( SfxStringItem( SID_PASSWORD, rPasswd ));
+            xMed->GetItemSet().Put( SfxStringItem( SID_PASSWORD, rPasswd ));
 
         if( !pSfxFlt )
             aMatcher.DetectFilter( *xMed, pSfxFlt );

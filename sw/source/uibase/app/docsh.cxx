@@ -139,10 +139,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
                                     SwPaM* pPaM )
 {
     bool bAPICall = false;
-    const SfxBoolItem* pApiItem;
-    const SfxItemSet* pMedSet = rMedium.GetItemSet();
-    if( pMedSet &&
-        (pApiItem = pMedSet->GetItemIfSet( FN_API_CALL )) )
+    if( const SfxBoolItem* pApiItem = rMedium.GetItemSet().GetItemIfSet( FN_API_CALL ) )
         bAPICall = pApiItem->GetValue();
 
     std::shared_ptr<const SfxFilter> pFlt = rMedium.GetFilter();
@@ -177,7 +174,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
         return nullptr;
 
     // #i30171# set the UpdateDocMode at the SwDocShell
-    const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(rMedium.GetItemSet(), SID_UPDATEDOCMODE, false);
+    const SfxUInt16Item* pUpdateDocItem = rMedium.GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
     m_nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     if (!pFlt->GetDefaultTemplate().isEmpty())
@@ -187,10 +184,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReaderPtr& rpRdr,
         pFlt->GetUserData() == FILTER_TEXT_DLG )
     {
         SwAsciiOptions aOpt;
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxStringItem* pItem;
-        if( pSet &&
-            (pItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+        if( const SfxStringItem* pItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             aOpt.ReadUserData( pItem->GetValue() );
 
         pRead->GetReaderOpt().SetASCIIOpts( aOpt );
@@ -425,7 +419,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     {
         // Don't save data source in case a temporary is being saved for preview in MM wizard
         if (const SfxBoolItem* pNoEmbDS
-            = SfxItemSet::GetItem(rMedium.GetItemSet(), SID_NO_EMBEDDED_DS, false))
+            = rMedium.GetItemSet().GetItem(SID_NO_EMBEDDED_DS, false))
             bSaveDS = !pNoEmbDS->GetValue();
     }
     if (bSaveDS)
@@ -462,7 +456,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
             if (!bCopyTo)
             {
                 if (const SfxBoolItem* pSaveToItem
-                    = SfxItemSet::GetItem(rMedium.GetItemSet(), SID_SAVETO, false))
+                    = rMedium.GetItemSet().GetItem(SID_SAVETO, false))
                     bCopyTo = pSaveToItem->GetValue();
             }
 
@@ -745,12 +739,8 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     {
         SwAsciiOptions aOpt;
         OUString sItemOpt;
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        if( nullptr != pSet )
-        {
-            if( const SfxStringItem* pItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
-                sItemOpt = pItem->GetValue();
-        }
+        if( const SfxStringItem* pItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
+            sItemOpt = pItem->GetValue();
         if(!sItemOpt.isEmpty())
             aOpt.ReadUserData( sItemOpt );
 

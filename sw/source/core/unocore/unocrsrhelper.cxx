@@ -1095,7 +1095,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
                 new SfxMedium(xReadStorage, sBaseURL ) :
                 new SfxMedium(sFileName, StreamMode::READ ));
         if( !sBaseURL.isEmpty() )
-            pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
+            pMed->GetItemSet().Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
 
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
         ErrCode nErr = aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE);
@@ -1122,9 +1122,9 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
                 pMed.reset(new SfxMedium(sFileName, StreamMode::READ, pFilter, nullptr));
         }
         if(!sFilterOptions.isEmpty())
-            pMed->GetItemSet()->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );
+            pMed->GetItemSet().Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );
         if(!sBaseURL.isEmpty())
-            pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
+            pMed->GetItemSet().Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
     }
 
     // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
@@ -1135,10 +1135,10 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         return;
 
     SwReaderPtr pRdr;
-    SfxItemSet* pSet =  pMed->GetItemSet();
-    pSet->Put(SfxBoolItem(FN_API_CALL, true));
+    SfxItemSet& rSet =  pMed->GetItemSet();
+    rSet.Put(SfxBoolItem(FN_API_CALL, true));
     if(!sPassword.isEmpty())
-        pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
+        rSet.Put(SfxStringItem(SID_PASSWORD, sPassword));
     Reader *pRead = pDocSh->StartConvertFrom( *pMed, pRdr, nullptr, pUnoCursor);
     if( !pRead )
         return;

@@ -103,7 +103,7 @@ void FmFormView::Init()
     SfxObjectShell* pObjShell = pFormModel->GetObjectShell();
     if ( pObjShell && pObjShell->GetMedium() )
     {
-        if ( const SfxUnoAnyItem *pItem = pObjShell->GetMedium()->GetItemSet()->GetItemIfSet( SID_COMPONENTDATA, false ) )
+        if ( const SfxUnoAnyItem *pItem = pObjShell->GetMedium()->GetItemSet().GetItemIfSet( SID_COMPONENTDATA, false ) )
         {
             ::comphelper::NamedValueCollection aComponentData( pItem->GetValue() );
             bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );

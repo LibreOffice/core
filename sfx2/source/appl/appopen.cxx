@@ -214,67 +214,64 @@ ErrCode CheckPasswd_Impl
 
                     nRet = ERRCODE_SFX_CANTGETPASSWD;
 
-                    SfxItemSet *pSet = pFile->GetItemSet();
-                    if( pSet )
+                    SfxItemSet& rSet = pFile->GetItemSet();
+                    Reference< css::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
+                    if( xInteractionHandler.is() )
                     {
-                        Reference< css::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
-                        if( xInteractionHandler.is() )
+                        // use the comphelper password helper to request a password
+                        OUString aPassword;
+                        const SfxStringItem* pPasswordItem = rSet.GetItem(SID_PASSWORD, false);
+                        if ( pPasswordItem )
+                            aPassword = pPasswordItem->GetValue();
+
+                        uno::Sequence< beans::NamedValue > aEncryptionData;
+                        const SfxUnoAnyItem* pEncryptionDataItem = rSet.GetItem(SID_ENCRYPTIONDATA, false);
+                        if ( pEncryptionDataItem )
+                            pEncryptionDataItem->GetValue() >>= aEncryptionData;
+
+                        // try if one of the public key entries is
+                        // decryptable, then extract session key
+                        // from it
+                        if ( !aEncryptionData.hasElements() && aGpgProperties.hasElements() )
+                            aEncryptionData = ::comphelper::DocPasswordHelper::decryptGpgSession(aGpgProperties);
+
+                        // tdf#93389: if recovering a document, encryption data should contain
+                        // entries for the real filter, not only for recovery ODF, to keep it
+                        // encrypted. Pass this in encryption data.
+                        // TODO: pass here the real filter (from AutoRecovery::implts_openDocs)
+                        // to marshal this to requestAndVerifyDocPassword
+                        if (rSet.GetItemState(SID_DOC_SALVAGE, false) == SfxItemState::SET)
                         {
-                            // use the comphelper password helper to request a password
-                            OUString aPassword;
-                            const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_PASSWORD, false);
-                            if ( pPasswordItem )
-                                aPassword = pPasswordItem->GetValue();
-
-                            uno::Sequence< beans::NamedValue > aEncryptionData;
-                            const SfxUnoAnyItem* pEncryptionDataItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_ENCRYPTIONDATA, false);
-                            if ( pEncryptionDataItem )
-                                pEncryptionDataItem->GetValue() >>= aEncryptionData;
-
-                            // try if one of the public key entries is
-                            // decryptable, then extract session key
-                            // from it
-                            if ( !aEncryptionData.hasElements() && aGpgProperties.hasElements() )
-                                aEncryptionData = ::comphelper::DocPasswordHelper::decryptGpgSession(aGpgProperties);
-
-                            // tdf#93389: if recovering a document, encryption data should contain
-                            // entries for the real filter, not only for recovery ODF, to keep it
-                            // encrypted. Pass this in encryption data.
-                            // TODO: pass here the real filter (from AutoRecovery::implts_openDocs)
-                            // to marshal this to requestAndVerifyDocPassword
-                            if (pSet->GetItemState(SID_DOC_SALVAGE, false) == SfxItemState::SET)
-                            {
-                                aEncryptionData = comphelper::concatSequences(
-                                    aEncryptionData, std::initializer_list<beans::NamedValue>{
-                                                         { "ForSalvage", css::uno::Any(true) } });
-                            }
-
-                            SfxDocPasswordVerifier aVerifier( xStorage );
-                            aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                                aVerifier, aEncryptionData, aPassword, xInteractionHandler, pFile->GetOrigURL(), comphelper::DocPasswordRequestType::Standard );
-
-                            pSet->ClearItem( SID_PASSWORD );
-                            pSet->ClearItem( SID_ENCRYPTIONDATA );
-
-                            if ( aEncryptionData.hasElements() )
-                            {
-                                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
-
-                                try
-                                {
-                                    // update the version list of the medium using the new password
-                                    pFile->GetVersionList();
-                                }
-                                catch( uno::Exception& )
-                                {
-                                    // TODO/LATER: set the error code
-                                }
-
-                                nRet = ERRCODE_NONE;
-                            }
-                            else
-                                nRet = ERRCODE_IO_ABORT;
+                            aEncryptionData = comphelper::concatSequences(
+                                aEncryptionData, std::initializer_list<beans::NamedValue>{
+                                                     { "ForSalvage", css::uno::Any(true) } });
                         }
+
+                        SfxDocPasswordVerifier aVerifier( xStorage );
+                        aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                            aVerifier, aEncryptionData, aPassword, xInteractionHandler, pFile->GetOrigURL(), comphelper::DocPasswordRequestType::Standard );
+
+                        rSet.ClearItem( SID_PASSWORD );
+                        rSet.ClearItem( SID_ENCRYPTIONDATA );
+
+                        if ( aEncryptionData.hasElements() )
+                        {
+                            rSet.Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
+
+                            try
+                            {
+                                // update the version list of the medium using the new password
+                                pFile->GetVersionList();
+                            }
+                            catch( uno::Exception& )
+                            {
+                                // TODO/LATER: set the error code
+                            }
+
+                            nRet = ERRCODE_NONE;
+                        }
+                        else
+                            nRet = ERRCODE_IO_ABORT;
                     }
                 }
             }
@@ -390,7 +387,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     css::uno::Reference< css::frame::XModel >  xModel = xDoc->GetModel();
     if ( xModel.is() )
     {
-        std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet()->Clone();
+        std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet().Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
         css::uno::Sequence< css::beans::PropertyValue > aArgs;

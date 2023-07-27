@@ -3055,8 +3055,7 @@ void SAL_CALL SwXTextDocument::render(
 
                             // prevent crash described in #i108805
                             SwDocShell *pRenderDocShell = pDoc->GetDocShell();
-                            SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
-                            pSet->Put( SfxBoolItem( SID_HIDDEN, false ) );
+                            pRenderDocShell->GetMedium()->GetItemSet().Put( SfxBoolItem( SID_HIDDEN, false ) );
 
                         }
                     }

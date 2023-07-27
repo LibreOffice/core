@@ -937,7 +937,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                                     GetMedium()->GetFilter()->GetFilterName())
                                             };
 
-                                            const SfxStringItem* pPasswordItem = SfxItemSet::GetItem<SfxStringItem>(GetMedium()->GetItemSet(), SID_PASSWORD, false);
+                                            const SfxStringItem* pPasswordItem = GetMedium()->GetItemSet().GetItem(SID_PASSWORD, false);
                                             if ( pPasswordItem && !pPasswordItem->GetValue().isEmpty() )
                                             {
                                                 aValues.realloc( 2 );
@@ -945,7 +945,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                                 pValues[1].Name = "Password";
                                                 pValues[1].Value <<= pPasswordItem->GetValue();
                                             }
-                                            const SfxUnoAnyItem* pEncryptionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(GetMedium()->GetItemSet(), SID_ENCRYPTIONDATA, false);
+                                            const SfxUnoAnyItem* pEncryptionItem = GetMedium()->GetItemSet().GetItem(SID_ENCRYPTIONDATA, false);
                                             if (pEncryptionItem)
                                             {
                                                 aValues.realloc(aValues.getLength() + 1);
@@ -1211,10 +1211,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName == pFilterLotus)
         {
             OUString sItStr;
-            SfxItemSet*  pSet = rMedium.GetItemSet();
-            const SfxStringItem* pOptionsItem;
-            if ( pSet &&
-                (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS, true )) )
+            if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS, true ) )
             {
                 sItStr = pOptionsItem->GetValue();
             }
@@ -1293,13 +1290,10 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName == SC_TEXT_CSV_FILTER_NAME)
         {
-            SfxItemSet*  pSet = rMedium.GetItemSet();
-            const SfxStringItem* pOptionsItem;
             ScAsciiOptions aOptions;
             bool bOptInit = false;
 
-            if ( pSet &&
-                (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+            if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             {
                 aOptions.ReadFromString( pOptionsItem->GetValue() );
                 bOptInit = true;
@@ -1339,9 +1333,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (const bool bIncludeBOM = aImpEx.GetIncludeBOM())
                     {
                         aOptions.SetIncludeBOM(bIncludeBOM);
-                        if (rMedium.GetItemSet() != nullptr)
-                            rMedium.GetItemSet()->Put(
-                                SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions.WriteToString()));
+                        rMedium.GetItemSet().Put(
+                            SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions.WriteToString()));
                     }
 
                     // for mobile case, we use a copy of the original document and give it a temporary name before editing
@@ -1390,10 +1383,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         else if (aFltName == pFilterDBase)
         {
             OUString sItStr;
-            SfxItemSet*  pSet = rMedium.GetItemSet();
-            const SfxStringItem* pOptionsItem;
-            if ( pSet &&
-                (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+            if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             {
                 sItStr = pOptionsItem->GetValue();
             }
@@ -1432,10 +1422,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 ErrCode eError;
                 OUString sItStr;
-                SfxItemSet*  pSet = rMedium.GetItemSet();
-                const SfxStringItem* pOptionsItem;
-                if ( pSet &&
-                    (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+                if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
                 {
                     sItStr = pOptionsItem->GetValue();
                 }
@@ -1584,10 +1571,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     LanguageType eLang = LANGUAGE_SYSTEM;
                     bool bDateConvert = false;
                     bool bScientificConvert = true;
-                    SfxItemSet*  pSet = rMedium.GetItemSet();
-                    const SfxStringItem* pOptionsItem;
-                    if ( pSet &&
-                        (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+                    if ( const SfxStringItem* pOptionsItem = rMedium.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
                     {
                         OUString aFilterOption = pOptionsItem->GetValue();
                         lcl_parseHtmlFilterOption(aFilterOption, eLang, bDateConvert, bScientificConvert);
@@ -2449,13 +2433,13 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 whether they want to save without it. */
             if( (rMed.GetFilter()->GetFilterFlags() & SfxFilterFlags::ENCRYPTION) == SfxFilterFlags::NONE )
             {
-                SfxItemSet* pItemSet = rMed.GetItemSet();
-                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD ) == SfxItemState::SET )
+                SfxItemSet& rItemSet = rMed.GetItemSet();
+                if( rItemSet.GetItemState( SID_PASSWORD ) == SfxItemState::SET )
                 {
                     bDoSave = ScWarnPassword::WarningOnPassword( rMed );
                     // #i42858# remove password from medium (warn only one time)
                     if( bDoSave )
-                        pItemSet->ClearItem( SID_PASSWORD );
+                        rItemSet.ClearItem( SID_PASSWORD );
                 }
             }
 
@@ -2488,10 +2472,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     else if (aFltName == SC_TEXT_CSV_FILTER_NAME)
     {
         OUString sItStr;
-        SfxItemSet*  pSet = rMed.GetItemSet();
-        const SfxStringItem* pOptionsItem;
-        if ( pSet &&
-            (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+        if ( const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
         {
             sItStr = pOptionsItem->GetValue();
         }
@@ -2615,10 +2596,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
     else if (aFltName == pFilterDBase)
     {
         OUString sCharSet;
-        SfxItemSet* pSet = rMed.GetItemSet();
-        const SfxStringItem* pOptionsItem;
-        if ( pSet &&
-            (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+        if ( const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
         {
             sCharSet = pOptionsItem->GetValue();
         }
@@ -2654,7 +2632,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
             if ( bHasMemo )
             {
-                const SfxStringItem* pNameItem = rMed.GetItemSet()->GetItem<SfxStringItem>( SID_FILE_NAME );
+                const SfxStringItem* pNameItem = rMed.GetItemSet().GetItem<SfxStringItem>( SID_FILE_NAME );
                 assert(pNameItem && "SID_FILE_NAME is required");
                 INetURLObject aDbtFile( pNameItem->GetValue(), INetProtocol::File );
                 aDbtFile.setExtension(u"dbt");
@@ -2690,10 +2668,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         if (pStream)
         {
             OUString sItStr;
-            SfxItemSet*  pSet = rMed.GetItemSet();
-            const SfxStringItem* pOptionsItem;
-            if ( pSet &&
-                (pOptionsItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS )) )
+            if ( const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
             {
                 sItStr = pOptionsItem->GetValue();
             }
@@ -2738,10 +2713,9 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
         {
-            SfxItemSet* pSet = rMed.GetItemSet();
             OUString sFilterOptions;
 
-            if (const SfxStringItem* pOptionsItem = pSet->GetItemIfSet(SID_FILE_FILTEROPTIONS))
+            if (const SfxStringItem* pOptionsItem = rMed.GetItemSet().GetItemIfSet(SID_FILE_FILTEROPTIONS))
                 sFilterOptions = pOptionsItem->GetValue();
 
             weld::WaitObject aWait(GetActiveDialogParent());

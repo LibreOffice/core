@@ -110,13 +110,10 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
         {
             OSL_ENSURE(pDocShell->GetMedium() == &rMedium, "different SfxMedium found");
 
-            SfxItemSet* pSet = rMedium.GetItemSet();
-            if (pSet)
-            {
-                const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
-                if (pItem)
-                    pItem->GetValue() >>= xStatusIndicator;
-            }
+            const SfxUnoAnyItem* pItem
+                = rMedium.GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+            if (pItem)
+                pItem->GetValue() >>= xStatusIndicator;
         }
 
         // set progress range and start status indicator
@@ -163,13 +160,10 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
         if (bEmbedded) //&& !pStg->IsRoot() )
         {
             OUString aName;
-            if (rMedium.GetItemSet())
-            {
-                const SfxStringItem* pDocHierarchItem
-                    = rMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
-                if (pDocHierarchItem)
-                    aName = pDocHierarchItem->GetValue();
-            }
+            const SfxStringItem* pDocHierarchItem
+                = rMedium.GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
+            if (pDocHierarchItem)
+                aName = pDocHierarchItem->GetValue();
 
             if (!aName.isEmpty())
             {

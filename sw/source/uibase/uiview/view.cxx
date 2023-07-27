@@ -549,7 +549,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify, LinkParamNone*, void)
             m_aTimer.Start();
 
             const SfxBoolItem *pItem =
-                GetObjectShell()->GetMedium()->GetItemSet()->
+                GetObjectShell()->GetMedium()->GetItemSet().
                                     GetItemIfSet( SID_HIDDEN, false );
             if ( !pItem || !pItem->GetValue() )
             {

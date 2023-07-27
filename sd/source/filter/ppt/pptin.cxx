@@ -1256,18 +1256,10 @@ bool ImplSdPPTImport::Import()
             switch ( m_aUserEditAtom.eLastViewType )
             {
                 case PptViewTypeEnum::Outline:
-                {
-                    SfxItemSet* pSet = mrMed.GetItemSet();
-                    if ( pSet )
-                        pSet->Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
-                }
+                    mrMed.GetItemSet().Put( SfxUInt16Item( SID_VIEW_ID, 3 ) );
                 break;
                 case PptViewTypeEnum::SlideSorter:
-                {
-                    SfxItemSet* pSet = mrMed.GetItemSet();
-                    if ( pSet )
-                        pSet->Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
-                }
+                    mrMed.GetItemSet().Put( SfxUInt16Item( SID_VIEW_ID, 2 ) );
                 break;
                 case PptViewTypeEnum::TitleMaster:
                     nSelectedPage = 1;

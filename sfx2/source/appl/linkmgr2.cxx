@@ -599,7 +599,7 @@ bool SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         if( pShell && pShell->GetMedium() )
         {
             sReferer = pShell->GetMedium()->GetBaseURL();
-            const SfxUInt16Item* pItem = SfxItemSet::GetItem<SfxUInt16Item>(pShell->GetMedium()->GetItemSet(), SID_UPDATEDOCMODE, false);
+            const SfxUInt16Item* pItem = pShell->GetMedium()->GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
             if ( pItem )
                 nUpdateMode = pItem->GetValue();
         }

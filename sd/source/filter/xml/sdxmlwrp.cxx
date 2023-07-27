@@ -504,14 +504,10 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     // try to get an XStatusIndicator from the Medium
     {
-        SfxItemSet* pSet = mrMedium.GetItemSet();
-        if(pSet)
+        const SfxUnoAnyItem* pItem = mrMedium.GetItemSet().GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
+        if (pItem)
         {
-            const SfxUnoAnyItem* pItem = pSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL);
-            if (pItem)
-            {
-                pItem->GetValue() >>= mxStatusIndicator;
-            }
+            pItem->GetValue() >>= mxStatusIndicator;
         }
 
         if(mxStatusIndicator.is())
@@ -561,13 +557,10 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( ERRCODE_NONE == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {
         OUString aName;
-        if ( mrMedium.GetItemSet() )
-        {
-            const SfxStringItem* pDocHierarchItem =
-                mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
-            if ( pDocHierarchItem )
-                aName = pDocHierarchItem->GetValue();
-        }
+        const SfxStringItem* pDocHierarchItem =
+            mrMedium.GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
+        if ( pDocHierarchItem )
+            aName = pDocHierarchItem->GetValue();
         else
             aName = "dummyObjectName" ;
 
@@ -797,13 +790,10 @@ bool SdXMLFilter::Export()
         if( SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
         {
             OUString aName;
-            if ( mrMedium.GetItemSet() )
-            {
-                const SfxStringItem* pDocHierarchItem =
-                    mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME);
-                if ( pDocHierarchItem )
-                    aName = pDocHierarchItem->GetValue();
-            }
+            const SfxStringItem* pDocHierarchItem =
+                mrMedium.GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
+            if ( pDocHierarchItem )
+                aName = pDocHierarchItem->GetValue();
 
             if( !aName.isEmpty() )
             {

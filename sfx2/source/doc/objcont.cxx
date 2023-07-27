@@ -462,7 +462,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     if ( !pFile->GetFilter() || !pFile->GetFilter()->IsOwnFormat() )
         return;
 
-    const SfxUInt16Item* pUpdateDocItem = SfxItemSet::GetItem<SfxUInt16Item>(pFile->GetItemSet(), SID_UPDATEDOCMODE, false);
+    const SfxUInt16Item* pUpdateDocItem = pFile->GetItemSet().GetItem(SID_UPDATEDOCMODE, false);
     sal_Int16 bCanUpdateFromTemplate = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
 
     // created from template?

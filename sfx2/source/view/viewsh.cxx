@@ -2087,12 +2087,12 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
     {
         if ( frame == &GetViewFrame() && &rBC == GetObjectShell() )
         {
-            SfxItemSet* pSet = GetObjectShell()->GetMedium()->GetItemSet();
-            const SfxUnoAnyItem* pItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_VIEW_DATA, false);
+            SfxItemSet& rSet = GetObjectShell()->GetMedium()->GetItemSet();
+            const SfxUnoAnyItem* pItem = rSet.GetItem(SID_VIEW_DATA, false);
             if ( pItem )
             {
                 pImpl->m_pController->restoreViewData( pItem->GetValue() );
-                pSet->ClearItem( SID_VIEW_DATA );
+                rSet.ClearItem( SID_VIEW_DATA );
             }
             break;
         }

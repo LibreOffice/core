@@ -99,7 +99,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
 
     if (rUserData == FILTER_TEXT_DLG)
     {
-        pSrcMed->GetItemSet()->Put(
+        pSrcMed->GetItemSet().Put(
             SfxStringItem(SID_FILE_FILTEROPTIONS, "UTF8,LF,Liberation Mono,en-US"));
     }
 

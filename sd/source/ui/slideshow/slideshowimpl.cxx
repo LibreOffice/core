@@ -2439,7 +2439,7 @@ void SlideshowImpl::setActiveXToolbarsVisible( bool bVisible )
     if ( !(!maPresSettings.mbFullScreen && mpDocSh && mpDocSh->GetMedium()) )
         return;
 
-    const SfxBoolItem* pItem = SfxItemSet::GetItem<SfxBoolItem>(mpDocSh->GetMedium()->GetItemSet(), SID_VIEWONLY, false);
+    const SfxBoolItem* pItem = mpDocSh->GetMedium()->GetItemSet().GetItem(SID_VIEWONLY, false);
     if ( !(pItem && pItem->GetValue()) )
         return;
 
