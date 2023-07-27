@@ -332,7 +332,8 @@ QAccessibleInterface* QtAccessibleWidget::parent() const
     if (pObj && pObj->parent())
         return QAccessible::queryAccessibleInterface(pObj->parent());
 
-    return nullptr;
+    // return app as parent for top-level objects
+    return QAccessible::queryAccessibleInterface(qApp);
 }
 
 QAccessibleInterface* QtAccessibleWidget::child(int index) const
