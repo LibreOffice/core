@@ -203,7 +203,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, std::string_vie
         { std::u16string_view(u".properties"), "propex", false },
         { std::u16string_view(u".ui"), "uiex", false },
         { std::u16string_view(u".tree"), "treex", false } };
-    for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
+    for (size_t i = 0; i != std::size(commands); ++i)
     {
         if (rUrl.endsWith(commands[i].extension) &&
             (commands[i].executable != "propex" || rUrl.indexOf("en_US") != -1))
