@@ -236,6 +236,8 @@ public:
     void                setTxbxHasLinkedTxtBox( const bool rhs){ mbHasLinkedTxbx = rhs; };
     const LinkedTxbxAttr&     getLinkedTxbxAttributes() const { return maLinkedTxbxAttr; };
     bool                isLinkedTxbx() const { return mbHasLinkedTxbx; };
+    void                setHasCustomPrompt(bool bValue) { mbHasCustomPrompt = bValue; }
+    bool                hasCustomPrompt() { return mbHasCustomPrompt; }
 
     void setZOrder(sal_Int32 nZOrder) { mnZOrder = nZOrder; }
 
@@ -391,6 +393,7 @@ private:
     bool mbTextBox; ///< This shape has a textbox.
     LinkedTxbxAttr                  maLinkedTxbxAttr;
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
+    bool                            mbHasCustomPrompt; // indicates that it's not a generic placeholder
 
     css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
 

@@ -81,6 +81,8 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const 
         mpShapePtr->setSubType( rAttribs.getToken( XML_type, XML_obj ) );
         if( rAttribs.hasAttribute( XML_idx ) )
             mpShapePtr->setSubTypeIndex( rAttribs.getInteger( XML_idx, 0 ) );
+        if( rAttribs.hasAttribute( XML_hasCustomPrompt ) )
+            mpShapePtr->setHasCustomPrompt( rAttribs.getBool( XML_hasCustomPrompt, false ) );
         break;
     // nvSpPr CT_ShapeNonVisual end
 

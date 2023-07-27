@@ -147,6 +147,7 @@ public:
     void testTdf149961AutofitIndentation();
     void testTdf149588TransparentSolidFill();
     void testOverflowBehaviorClip();
+    void testShapeMasterText();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -227,6 +228,7 @@ public:
     CPPUNIT_TEST(testTdf149961AutofitIndentation);
     CPPUNIT_TEST(testTdf149588TransparentSolidFill);
     CPPUNIT_TEST(testOverflowBehaviorClip);
+    CPPUNIT_TEST(testShapeMasterText);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2049,6 +2051,17 @@ void SdImportTest2::testOverflowBehaviorClip()
         CPPUNIT_ASSERT_EQUAL(true,
                              xPropSet->getPropertyValue("TextClipVerticalOverflow").get<bool>());
     }
+}
+
+void SdImportTest2::testShapeMasterText()
+{
+    createSdImpressDoc("pptx/shape-master-text.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), xRun->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
