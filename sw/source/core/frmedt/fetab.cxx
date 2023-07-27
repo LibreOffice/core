@@ -37,6 +37,8 @@
 #include <docsh.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
@@ -302,6 +304,21 @@ bool SwFEShell::DeleteCol()
                 SwCursor aCursor( SwPosition(aIdx), nullptr );
                 SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
                 GetDoc()->SetBoxAttr( aCursor, aHasTextChangesOnly );
+
+                // add dummy text content to the empty box for change tracking
+                if ( pBox->IsEmpty() )
+                {
+                    IDocumentContentOperations& rIDCO = GetDoc()->getIDocumentContentOperations();
+                    IDocumentRedlineAccess& rIDRA = GetDoc()->getIDocumentRedlineAccess();
+                    RedlineFlags eOld = rIDRA.GetRedlineFlags();
+                    rIDRA.SetRedlineFlags_intern(RedlineFlags::NONE);
+                    rIDCO.InsertString( aCursor, OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+                    aCursor.SetMark();
+                    aCursor.GetMark()->SetContent(0);
+                    rIDRA.SetRedlineFlags_intern( eOld );
+                    rIDCO.DeleteAndJoin( aCursor );
+                }
+
             }
         }
 
