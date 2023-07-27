@@ -324,6 +324,9 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(std::u16string_view _rDsn) con
     if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:firebird"))
         return DST_EMBEDDED_FIREBIRD;
 
+    if (sDsn.startsWithIgnoreAsciiCase("sdbc:embedded:"))
+        return DST_EMBEDDED_UNKNOWN;
+
     // find second :
     nSeparator = sDsn.indexOf(u':', nSeparator + 1);
     if (-1 == nSeparator)
@@ -467,6 +470,7 @@ void ODsnTypeCollection::fillPageIds(std::u16string_view _sURL,std::vector<sal_I
         case DST_MACAB:
         case DST_EMBEDDED_HSQLDB:
         case DST_EMBEDDED_FIREBIRD:
+        case DST_EMBEDDED_UNKNOWN:
             break;
         default:
             _rOutPathIds.push_back(PAGE_DBSETUPWIZARD_USERDEFINED);

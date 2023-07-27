@@ -63,6 +63,8 @@ enum DATASOURCE_TYPE
     DST_EMBEDDED_FIREBIRD   = 27,
     DST_POSTGRES            = 28,
     DST_WRITER              = 29,
+    DST_EMBEDDED_UNKNOWN    = 30,    /// for all embedded addons driver
+
 
     DST_USERDEFINE1,    /// first user defined driver
     DST_USERDEFINE2,
