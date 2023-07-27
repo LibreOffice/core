@@ -1730,12 +1730,18 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
         }
         else
         {
-            if ( _xBI->getScriptType( aText, nPos - 1 ) == i18n::ScriptType::WEAK )
+            auto nPrevPos = nPos;
+            auto nPrevChar = aText.iterateCodePoints(&nPrevPos, -1);
+            if (_xBI->getScriptType(aText, nPrevPos) == i18n::ScriptType::WEAK)
             {
-                switch ( u_charType(aText.iterateCodePoints(&nPos, 0) ) ) {
-                case U_NON_SPACING_MARK:
-                case U_ENCLOSING_MARK:
-                case U_COMBINING_SPACING_MARK:
+                auto nChar = aText.iterateCodePoints(&nPos, 0);
+                auto nType = unicode::getUnicodeType(nChar);
+                if (nType == css::i18n::UnicodeType::NON_SPACING_MARK ||
+                    nType == css::i18n::UnicodeType::ENCLOSING_MARK ||
+                    nType == css::i18n::UnicodeType::COMBINING_SPACING_MARK ||
+                    (nPrevChar == 0x202F /* NNBSP, tdf#112594 */ &&
+                     u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
+                {
                     --nPos;
                     rTypes.back().nEndPos--;
                     break;

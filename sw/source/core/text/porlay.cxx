@@ -1450,17 +1450,22 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
+        // tdf#112594: another soecial case for NNBSP followed by a Mongolian
+        // character, since NNBSP has special uses in Mongolian (tdf#112594)
         auto nPos = sal_Int32(nChg);
         auto nPrevPos = nPos;
-        rText.iterateCodePoints(&nPrevPos, -1);
+        auto nPrevChar = rText.iterateCodePoints(&nPrevPos, -1);
         if (nChg < TextFrameIndex(rText.getLength()) && nChg > TextFrameIndex(0)
             && (i18n::ScriptType::WEAK ==
                 g_pBreakIt->GetBreakIter()->getScriptType(rText, nPrevPos)))
         {
-            auto nType = u_charType(rText.iterateCodePoints(&nPos, 0));
+            auto nChar = rText.iterateCodePoints(&nPos, 0);
+            auto nType = u_charType(nChar);
             if (nType == U_NON_SPACING_MARK ||
                 nType == U_ENCLOSING_MARK ||
-                nType == U_COMBINING_SPACING_MARK)
+                nType == U_COMBINING_SPACING_MARK ||
+                (nPrevChar == CHAR_NNBSP &&
+                 u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
             {
                 --nPos;
             }
