@@ -151,7 +151,7 @@ void SmGraphicWindow::Resize()
     const auto nScrSize = mxScrolledWindow->get_scroll_thickness();
     bool bVVisible = false; // by default no vertical-ScrollBar
     bool bHVisible = false; // by default no horizontal-ScrollBar
-    bool bChanged;          // determines if a visiblility was changed
+    bool bChanged;          // determines if a visibility was changed
     do
     {
         bChanged = false;
