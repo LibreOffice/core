@@ -1463,6 +1463,23 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf129810)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testScriptinfosurrogatePairs)
+{
+    createSwDoc("scriptinfo-surrogate-pairs.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Test that a dotted circle is grouped with the mark after it, even if the
+    // mark is outside Unicode’s Basic Multilingual Plan (i.e. a surrogate pair
+    // in UTF-8)
+    //
+    // Without the fix it fails with:
+    // - Expected: 11
+    // - Actual  : 11◌
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
+                u"\u25CC\U00010EFD");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
