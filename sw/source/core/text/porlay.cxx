@@ -1450,25 +1450,22 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
+        auto nPos = sal_Int32(nChg);
+        auto nPrevPos = nPos;
+        rText.iterateCodePoints(&nPrevPos, -1);
         if (nChg < TextFrameIndex(rText.getLength()) && nChg > TextFrameIndex(0)
             && (i18n::ScriptType::WEAK ==
-                g_pBreakIt->GetBreakIter()->getScriptType(rText, sal_Int32(nChg) - 1)))
+                g_pBreakIt->GetBreakIter()->getScriptType(rText, nPrevPos)))
         {
-            int8_t nType = u_charType(rText[sal_Int32(nChg)]);
-            if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
-                nType == U_COMBINING_SPACING_MARK )
+            auto nType = u_charType(rText.iterateCodePoints(&nPos, 0));
+            if (nType == U_NON_SPACING_MARK ||
+                nType == U_ENCLOSING_MARK ||
+                nType == U_COMBINING_SPACING_MARK)
             {
-                m_ScriptChanges.emplace_back(nChg-TextFrameIndex(1), nScript);
-            }
-            else
-            {
-                m_ScriptChanges.emplace_back(nChg, nScript);
+                --nPos;
             }
         }
-        else
-        {
-            m_ScriptChanges.emplace_back(nChg, nScript);
-        }
+        m_ScriptChanges.emplace_back(TextFrameIndex(nPos), nScript);
         ++nCnt;
 
         // if current script is asian, we search for compressible characters
