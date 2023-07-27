@@ -721,6 +721,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScViewOptions aSetOpts = rOpts;
                 aSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
                 rViewData.SetOptions( aSetOpts );
+                ScDocument& rDoc = rViewData.GetDocument();
+                rDoc.SetViewOptions(aSetOpts);
 
                 rViewData.GetDocShell()->PostPaintGridAll();
 
