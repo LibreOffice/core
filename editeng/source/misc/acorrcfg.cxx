@@ -338,7 +338,6 @@ void SvxBaseAutoCorrCfg::ImplCommit()
          css::uno::Any(bool(nFlags & ACFlags::ChgWeightUnderl)),
             // "ChangeUnderlineWeight"
          css::uno::Any(bool(nFlags & ACFlags::SetINetAttr)), // "SetInetAttribute"
-         css::uno::Any(bool(nFlags & ACFlags::SetDOIAttr)), // "SetDOIAttr"
          css::uno::Any(bool(nFlags & ACFlags::ChgOrdinalNumber)),
             // "ChangeOrdinalNumber"
          css::uno::Any(bool(nFlags & ACFlags::AddNonBrkSpace)), // "AddNonBreakingSpace"
@@ -359,9 +358,10 @@ void SvxBaseAutoCorrCfg::ImplCommit()
             // "CorrectAccidentalCapsLock"
          css::uno::Any(bool(nFlags & ACFlags::TransliterateRTL)),
             // "TransliterateRTL"
-        css::uno::Any(bool(nFlags & ACFlags::ChgAngleQuotes))});
+         css::uno::Any(bool(nFlags & ACFlags::ChgAngleQuotes)),
             // "ChangeAngleQuotes"
-
+         css::uno::Any(bool(nFlags & ACFlags::SetDOIAttr)), // "SetDOIAttribute"
+        });
 }
 
 void SvxBaseAutoCorrCfg::Notify( const Sequence<OUString>& /* aPropertyNames */)
