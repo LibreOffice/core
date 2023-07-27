@@ -149,6 +149,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -168,6 +169,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -187,6 +189,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -274,6 +277,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -327,6 +331,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -346,6 +351,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -433,6 +439,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -452,6 +459,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -471,6 +479,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -490,6 +499,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -543,6 +553,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
@@ -562,6 +573,7 @@
                     <property name="receives-default">False</property>
                     <property name="xalign">0</property>
                     <property name="draw-indicator">True</property>
+                    <property name="label" translatable="no"></property>
                     <child>
                       <placeholder/>
                     </child>
