@@ -20,8 +20,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XText.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 using namespace css;
 using namespace css::uno;
 

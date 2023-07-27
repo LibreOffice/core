@@ -14,9 +14,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XAutoTextContainer.hpp>
 #include <com/sun/star/text/AutoTextContainer.hpp>
 
