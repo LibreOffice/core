@@ -335,8 +335,10 @@ void PPTShape::addShape(
         // Need to use service name css.drawing.CustomShape if they have a non default shape.
         // This workaround has the drawback of them not really being processed as placeholders
         // so it is only done for slide footers...
-        if ((mnSubType == XML_sldNum || mnSubType == XML_dt || mnSubType == XML_ftr)
-            && meShapeLocation == Slide && !mpCustomShapePropertiesPtr->representsDefaultShape())
+        bool convertInSlideMode = meShapeLocation == Slide &&
+            (mnSubType == XML_sldNum || mnSubType == XML_dt || mnSubType == XML_ftr || mnSubType == XML_body);
+        bool convertInLayoutMode = meShapeLocation == Layout && (mnSubType == XML_body);
+        if ((convertInSlideMode || convertInLayoutMode) && !mpCustomShapePropertiesPtr->representsDefaultShape())
         {
             sServiceName = "com.sun.star.drawing.CustomShape";
         }
