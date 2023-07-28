@@ -2735,13 +2735,28 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             SwPageFrame *pPage = FindPageFrame();
             if ( GetNext() )
             {
-                GetNext()->InvalidatePos_();
-                if (GetNext()->IsRowFrame())
-                {   // also invalidate first cell
-                    static_cast<SwLayoutFrame*>(GetNext())->Lower()->InvalidatePos_();
+                SwFrame * pNext = GetNext();
+                do
+                {
+                    pNext->InvalidatePos_();
+                    if (pNext->IsRowFrame())
+                    {   // also invalidate first cell
+                        static_cast<SwLayoutFrame*>(pNext)->Lower()->InvalidatePos_();
+                    }
+                    else if (pNext->IsContentFrame())
+                    {
+                        pNext->InvalidatePage(pPage);
+                    }
+                    if (pNext->HasFixSize())
+                    {   // continue to invalidate because growing pNext won't do it!
+                        pNext = pNext->GetNext();
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                if ( GetNext()->IsContentFrame() )
-                    GetNext()->InvalidatePage( pPage );
+                while (pNext);
             }
             if ( !IsPageBodyFrame() )
             {
