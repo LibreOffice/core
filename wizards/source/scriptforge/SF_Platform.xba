@@ -217,6 +217,14 @@ Property Get SystemLocale() As String
 	SystemLocale = _PropertyGet(&quot;SystemLocale&quot;)
 End Property	&apos;	ScriptForge.SF_Platform.SystemLocale (get)
 
+REM -----------------------------------------------------------------------------
+Property Get UserData() As Variant
+&apos;&apos;&apos;	Returns a dictionary of all Options + User Data values
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.UserData
+	UserData = _PropertyGet(&quot;UserData&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.UserData (get)
+
 REM ===================================================================== METHODS
 
 REM -----------------------------------------------------------------------------
@@ -285,6 +293,7 @@ Public Function Properties() As Variant
 					, &quot;Processor&quot; _
 					, &quot;PythonVersion&quot; _
 					, &quot;SystemLocale&quot; _
+					, &quot;UserData&quot; _
 					)
 
 End Function	&apos;	ScriptForge.SF_Platform.Properties
@@ -374,6 +383,10 @@ Dim sFont As String				&apos;	A single font name
 Dim vExtensionsList As Variant	&apos;	Array of extension descriptors
 Dim sExtensions As String		&apos;	Comma separated list of extensions
 Dim sExtension As String		&apos;	A single extension name
+Dim vUserDataInternal As Variant&apos;	The internal names of the supported user data items
+Dim vUserDataExternal As Variant&apos;	The external names of the supported user data items
+Dim vUserData As Variant		&apos;	A SF_Dictionary instance linking user data external names and values
+Dim vUserDataOptions As Variant	&apos;	configmgr.RootAccess
 Dim i As Long
 
 Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_Platform&quot;
@@ -438,6 +451,25 @@ Const cstSubArgs = &quot;&quot;
 		Case &quot;SystemLocale&quot;, &quot;Locale&quot;
 			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
 			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
+		Case &quot;UserData&quot;
+			vUserDataExternal = Array( _
+				&quot;city&quot;, &quot;company&quot;, &quot;country&quot;, &quot;email&quot;, &quot;encryptionkey&quot;, &quot;encrypttoself&quot;, &quot;fax&quot; _
+				, &quot;firstname&quot;, &quot;homephone&quot;, &quot;initials&quot;, &quot;lastname&quot;, &quot;officephone&quot;, &quot;position&quot; _
+				, &quot;postalcode&quot;, &quot;signingkey&quot;, &quot;state&quot;, &quot;street&quot;, &quot;title&quot; _
+				)
+			vUserDataInternal = Array( _
+				&quot;l&quot;, &quot;o&quot;, &quot;c&quot;, &quot;mail&quot;, &quot;encryptionkey&quot;, &quot;encrypttoself&quot;, &quot;facsimiletelephonenumber&quot; _
+				, &quot;givenname&quot;, &quot;homephone&quot;, &quot;initials&quot;, &quot;sn&quot;, &quot;telephonenumber&quot;, &quot;position&quot; _
+				, &quot;postalcode&quot;, &quot;signingkey&quot;, &quot;st&quot;, &quot;street&quot;, &quot;title&quot; _
+				)
+			&apos;	Get the UserData page from the Options database
+			vUserDataOptions = SF_Utils._GetRegistryKeyContent(&quot;org.openoffice.UserProfile/Data&quot;)
+			&apos;	Create and feed the ouput dictionary
+			vUserData = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+			For i = 0 To UBound(vUserDataExternal)
+				vUserData.Add(vUserDataExternal(i), vUserDataOptions.getByName(vUserDataInternal(i)))
+			Next i
+			_PropertyGet = vUserData
 		Case Else
 			_PropertyGet = Null
 	End Select

@@ -899,6 +899,8 @@ Try:
 			If Script = &quot;Dispose&quot; Then
 				&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
 				Set _SF_.PythonStorage(BasicObject) = Nothing
+			ElseIf sServiceName = &quot;ScriptForge.Platform&quot; And Script = &quot;UserData&quot; Then
+				vReturn = vReturn.ConvertToPropertyValues()
 			End If
 		Case Else
 	End Select

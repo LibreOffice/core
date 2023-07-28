@@ -1255,7 +1255,8 @@ class SFScriptForge:
                                  Extensions = False, FilterNames = False, Fonts = False, FormatLocale = False,
                                  Locale = False, Machine = False, OfficeLocale = False, OfficeVersion = False,
                                  OSName = False, OSPlatform = False, OSRelease = False, OSVersion = False,
-                                 Printers = False, Processor = False, PythonVersion = False, SystemLocale = False)
+                                 Printers = False, Processor = False, PythonVersion = False, SystemLocale = False,
+                                 UserData = False)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
@@ -1302,6 +1303,15 @@ class SFScriptForge:
         @property
         def PythonVersion(self):
             return self.SIMPLEEXEC(self.py, 'PythonVersion')
+
+        @property
+        def UserData(self):
+            props = self.GetProperty('UserData')    # is an array of property values
+            if len(props) == 0:
+                return dict()
+            dico = CreateScriptService('Dictionary')
+            dico.ImportFromPropertyValues(props, overwrite = True)
+            return dico
 
     # #########################################################################
     # SF_Region CLASS
