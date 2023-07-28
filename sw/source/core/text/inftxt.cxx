@@ -1494,6 +1494,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
         {
             bDraw = PortionType::Footnote != nWhich || m_pFrame->IsFootnoteAllowed();
         }
+        bDraw &= GetOpt().IsHardBlank();
         break;
     case PortionType::Bookmark:
         // no shading
