@@ -85,7 +85,7 @@ public:
     virtual ::Color     getPaletteColor( sal_Int32 nPaletteIdx ) const override;
 };
 
-class Color : public ::oox::drawingml::Color
+class XlsColor : public ::oox::drawingml::Color
 {
 public:
     /** Sets the color to automatic. */
@@ -109,7 +109,7 @@ public:
     bool         isAuto() const { return isPlaceHolder(); }
 };
 
-SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor );
+SequenceInputStream& operator>>( SequenceInputStream& rStrm, XlsColor& orColor );
 
 /** Stores all colors of the color palette. */
 class ColorPalette : public WorkbookHelper
@@ -138,8 +138,8 @@ private:
 /** Contains all XML font attributes, e.g. from a font or rPr element. */
 struct FontModel
 {
-    OUString     maName;             /// Font name.
-    Color               maColor;            /// Font color.
+    OUString maName;  /// Font name.
+    XlsColor maColor; /// Font color.
     sal_Int32           mnScheme;           /// Major/minor scheme font.
     sal_Int32           mnFamily;           /// Font family.
     sal_Int32           mnCharSet;          /// Windows font character set.
@@ -380,7 +380,7 @@ private:
 /** Contains XML attributes of a single border line. */
 struct BorderLineModel
 {
-    Color               maColor;            /// Borderline color.
+    XlsColor maColor; /// Borderline color.
     sal_Int32           mnStyle;            /// Border line style.
     bool                mbUsed;             /// True = line format used.
 
@@ -473,9 +473,9 @@ typedef std::shared_ptr< Border > BorderRef;
 /** Contains XML pattern fill attributes from the patternFill element. */
 struct PatternFillModel
 {
-    Color               maPatternColor;     /// Pattern foreground color.
-    Color               maFilterPatternColor; /// Pattern foreground for color filter.
-    Color               maFillColor;        /// Background fill color.
+    XlsColor maPatternColor;     /// Pattern foreground color.
+    XlsColor maFilterPatternColor; /// Pattern foreground for color filter.
+    XlsColor maFillColor;        /// Background fill color.
     sal_Int32           mnPattern;          /// Pattern identifier (e.g. solid).
     bool                mbPattColorUsed;    /// True = pattern foreground color used.
     bool                mbFillColorUsed;    /// True = background fill color used.
@@ -490,7 +490,7 @@ struct PatternFillModel
 /** Contains XML gradient fill attributes from the gradientFill element. */
 struct GradientFillModel
 {
-    typedef ::std::map< double, Color > ColorMap;
+    typedef ::std::map<double, XlsColor> ColorMap;
 
     sal_Int32           mnType;             /// Gradient type, linear or path.
     double              mfAngle;            /// Rotation angle for type linear.
