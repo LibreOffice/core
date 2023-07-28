@@ -49,7 +49,7 @@ from email.utils import formatdate
 from email.utils import parseaddr
 from socket import _GLOBAL_DEFAULT_TIMEOUT
 
-import sys, smtplib, imaplib, poplib
+import sys, ssl, smtplib, imaplib, poplib
 dbg = False
 
 # pythonloader looks for a static g_ImplementationHelper variable
@@ -105,7 +105,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print("Timeout: " + str(tout), file=dbgout)
 		if port == 465:
-			self.server = smtplib.SMTP_SSL(server, port,timeout=tout)
+			self.server = smtplib.SMTP_SSL(server, port, timeout=tout, context=ssl.create_default_context())
 		else:
 			self.server = smtplib.SMTP(server, port,timeout=tout)
 
@@ -121,7 +121,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print("ConnectionType: " + connectiontype, file=dbgout)
 		if connectiontype.upper() == 'SSL' and port != 465:
 			self.server.ehlo()
-			self.server.starttls()
+			self.server.starttls(context=ssl.create_default_context())
 			self.server.ehlo()
 
 		user = xAuthenticator.getUserName()
@@ -325,7 +325,7 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
 		if connectiontype.upper() == 'SSL':
-			self.server = imaplib.IMAP4_SSL(server, port)
+			self.server = imaplib.IMAP4_SSL(server, port, ssl_context=ssl.create_default_context())
 		else:
 			self.server = imaplib.IMAP4(server, port)
 		print("AFTER", file=dbgout)
@@ -397,7 +397,7 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			print(connectiontype, file=dbgout)
 		print("BEFORE", file=dbgout)
 		if connectiontype.upper() == 'SSL':
-			self.server = poplib.POP3_SSL(server, port)
+			self.server = poplib.POP3_SSL(server, port, context=ssl.create_default_context())
 		else:
 			tout = xConnectionContext.getValueByName("Timeout")
 			if dbg:
