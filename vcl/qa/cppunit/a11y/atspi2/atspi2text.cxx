@@ -831,7 +831,7 @@ void Atspi2TestTree::compareTextObjects(
         CPPUNIT_ASSERT_EQUAL_MESSAGE(offsetMsg.getStr(), loRect.Height,
                                      sal_Int32(atspiRect.height));
         /* for some reason getCharacterBounds() might return negative widths in some cases
-         * (including a space at the end of a right-justified line), and ATK will then then adjust
+         * (including a space at the end of a right-justified line), and ATK will then adjust
          * the X and width values to positive to workaround RTL issues (see
          * https://bugzilla.gnome.org/show_bug.cgi?id=102954), so we work around that */
         if (loRect.Width < 0)
