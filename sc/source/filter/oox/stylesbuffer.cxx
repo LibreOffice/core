@@ -241,37 +241,40 @@ ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
     return getStyles().getPaletteColor( nPaletteIdx );
 }
 
-void Color::setAuto()
+void XlsColor::setAuto()
 {
     clearTransformations();
     setSchemeClr( XML_phClr );
 }
 
-void Color::setRgb( ::Color nRgbValue, double fTint )
+void XlsColor::setRgb( ::Color nRgbValue, double fTint )
 {
     clearTransformations();
     setSrgbClr( sal_uInt32(nRgbValue) & 0xFFFFFF );
-    if( fTint != 0.0 ) addExcelTintTransformation( fTint );
+    if (fTint != 0.0)
+        addExcelTintTransformation(fTint);
 }
 
-void Color::setTheme( sal_Int32 nThemeIdx, double fTint )
+void XlsColor::setTheme( sal_Int32 nThemeIdx, double fTint )
 {
     clearTransformations();
     static const sal_Int32 spnColorTokens[] = {
         XML_lt1, XML_dk1, XML_lt2, XML_dk2, XML_accent1, XML_accent2,
         XML_accent3, XML_accent4, XML_accent5, XML_accent6, XML_hlink, XML_folHlink };
     setSchemeClr( STATIC_ARRAY_SELECT( spnColorTokens, nThemeIdx, XML_TOKEN_INVALID ) );
-    if( fTint != 0.0 ) addExcelTintTransformation( fTint );
+    if (fTint != 0.0)
+        addExcelTintTransformation( fTint );
 }
 
-void Color::setIndexed( sal_Int32 nPaletteIdx, double fTint )
+void XlsColor::setIndexed( sal_Int32 nPaletteIdx, double fTint )
 {
     clearTransformations();
     setPaletteClr( nPaletteIdx );
-    if( fTint != 0.0 ) addExcelTintTransformation( fTint );
+    if (fTint != 0.0)
+        addExcelTintTransformation(fTint);
 }
 
-void Color::importColor( const AttributeList& rAttribs )
+void XlsColor::importColor( const AttributeList& rAttribs )
 {
     // tdf#113271 The order of import color is very important in case of more than one color attributes was provided.
     // This order (theme -> rgb -> indexed -> auto) is not documented and was gathered experimentally based on MS Excel 2013.
@@ -294,7 +297,7 @@ void Color::importColor( const AttributeList& rAttribs )
     }
 }
 
-void Color::importColor( SequenceInputStream& rStrm )
+void XlsColor::importColor( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags, nIndex;
     sal_Int16 nTint;
@@ -333,12 +336,12 @@ void Color::importColor( SequenceInputStream& rStrm )
     }
 }
 
-void Color::importColorId( SequenceInputStream& rStrm )
+void XlsColor::importColorId( SequenceInputStream& rStrm )
 {
     setIndexed( rStrm.readInt32() );
 }
 
-SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
+SequenceInputStream& operator>>( SequenceInputStream& rStrm, XlsColor& orColor )
 {
     orColor.importColor( rStrm );
     return rStrm;
@@ -1693,7 +1696,7 @@ void GradientFillModel::readGradient( SequenceInputStream& rStrm )
 
 void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf )
 {
-    Color aColor;
+    XlsColor aColor;
     double fPosition;
     if( bDxf )
     {

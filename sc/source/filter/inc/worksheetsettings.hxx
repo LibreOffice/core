@@ -28,8 +28,8 @@ namespace oox::xls {
 /** Sheet and outline settings. */
 struct SheetSettingsModel
 {
-    OUString     maCodeName;             /// VBA module codename.
-    Color               maTabColor;             /// Sheet tab color.
+    OUString maCodeName; /// VBA module codename.
+    XlsColor maTabColor; /// Sheet tab color.
     bool                mbFilterMode;           /// True = sheet contains active filter.
     bool                mbApplyStyles;          /// True = automatic styles when creating outlines.
     bool                mbSummaryBelow;         /// True = row outline symbols below group.
