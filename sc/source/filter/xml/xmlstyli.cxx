@@ -301,34 +301,37 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsConte
     sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
     ::std::vector< XMLPropertyState > &rProperties,
-    const XMLPropertyState& rProp )
+    const XMLPropertyState& rProperty)
 {
-    // no need for a custom context or indeed a SvXMLTokenMap to grab just the
-    // single attribute ( href ) that we are interested in.
-    // still though, we will check namespaces etc.
-    if (nElement == XML_ELEMENT(STYLE, XML_HYPERLINK) ||
-        nElement == XML_ELEMENT(LO_EXT, XML_HYPERLINK) )
+    switch (mxMapper->getPropertySetMapper()->GetEntryContextId(rProperty.mnIndex))
     {
-        OUString sURL;
-        for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+        case CTF_COMPLEX_COLOR:
         {
-            if ( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
-                sURL = aIter.toString();
-            else
-                XMLOFF_WARN_UNKNOWN("sc", aIter);
+            return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProperty, rProperties);
         }
-        if ( !sURL.isEmpty() )
+        break;
+        case CTF_SC_HYPERLINK:
         {
-            XMLPropertyState aProp( rProp );
-            aProp.maValue <<=  sURL;
-            rProperties.push_back( aProp );
+            OUString sURL;
+            for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
+            {
+                if ( aIter.getToken() == XML_ELEMENT(XLINK, XML_HREF) )
+                    sURL = aIter.toString();
+                else
+                    XMLOFF_WARN_UNKNOWN("sc", aIter);
+            }
+            if ( !sURL.isEmpty() )
+            {
+                XMLPropertyState aProp(rProperty);
+                aProp.maValue <<=  sURL;
+                rProperties.push_back( aProp );
+            }
         }
+        break;
+        default:
+            break;
     }
-    else if (nElement == XML_ELEMENT(LO_EXT, XML_BACKGROUND_COMPLEX_COLOR))
-    {
-        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
-    }
-    return SvXMLPropertySetContext::createFastChildContext( nElement, xAttrList, rProperties, rProp );
+    return SvXMLPropertySetContext::createFastChildContext(nElement, xAttrList, rProperties, rProperty);
 }
 
 namespace {
