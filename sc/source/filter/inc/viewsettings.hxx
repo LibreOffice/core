@@ -42,7 +42,7 @@ struct SheetViewModel
     typedef RefMap< sal_Int32, PaneSelectionModel > PaneSelectionModelMap;
 
     PaneSelectionModelMap maPaneSelMap;                 /// Selections of all panes.
-    Color               maGridColor;                    /// Grid color.
+    XlsColor maGridColor; /// Grid color.
     ScAddress           maFirstPos;    /// First visible cell.
     ScAddress           maSecondPos;   /// First visible cell in additional panes.
     sal_Int32           mnWorkbookViewId;               /// Index into list of workbookView elements.
