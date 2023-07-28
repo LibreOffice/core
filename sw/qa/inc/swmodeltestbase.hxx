@@ -318,10 +318,9 @@ protected:
     SwDocShell* getSwDocShell();
 
     /**
-     * Wraps a reqif-xhtml fragment into an XHTML file, so an XML parser can
-     * parse it.
+     * Wraps a reqif-xhtml fragment into an XHTML file, and XML-parses it.
      */
-    void WrapReqifFromTempFile(SvMemoryStream& rStream);
+    xmlDocUniquePtr WrapReqifFromTempFile();
 
     void WrapFromTempFile(SvMemoryStream& rStream);
 

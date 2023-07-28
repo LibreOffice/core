@@ -120,9 +120,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSvmImageExport)
     save("HTML (StarWriter)");
 
     // Then make sure we only export PNG:
-    SvMemoryStream aStream;
-    WrapReqifFromTempFile(aStream);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 1
     // - Actual  : 2
@@ -154,9 +152,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTableCellFloatValueType)
     save("HTML (StarWriter)");
 
     // Then make sure that the sdval attribute is omitted, which is not in the XHTML spec:
-    SvMemoryStream aStream;
-    WrapReqifFromTempFile(aStream);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     // Without the accompanying fix in place, this test would have failed with:
     // - XPath '//reqif-xhtml:td' unexpected 'sdval' attribute
     // i.e. sdval was written in XHTML mode.
@@ -216,9 +212,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCenteredTableCSSExport)
     save("HTML (StarWriter)");
 
     // Then make sure that CSS is used to horizontally position the table:
-    SvMemoryStream aStream;
-    WrapReqifFromTempFile(aStream);
-    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 1

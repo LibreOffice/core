@@ -568,13 +568,18 @@ SwDocShell* SwModelTestBase::getSwDocShell()
     return pTextDoc->GetDocShell();
 }
 
-void SwModelTestBase::WrapReqifFromTempFile(SvMemoryStream& rStream)
+xmlDocUniquePtr SwModelTestBase::WrapReqifFromTempFile()
 {
-    rStream.WriteOString("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
+    SvMemoryStream aStream;
+    aStream.WriteOString("<reqif-xhtml:html xmlns:reqif-xhtml=\"http://www.w3.org/1999/xhtml\">\n");
     SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
-    rStream.WriteStream(aFileStream);
-    rStream.WriteOString("</reqif-xhtml:html>\n");
-    rStream.Seek(0);
+    aStream.WriteStream(aFileStream);
+    aStream.WriteOString("</reqif-xhtml:html>\n");
+    aStream.Seek(0);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Make sure the output is well-formed.
+    CPPUNIT_ASSERT(pXmlDoc);
+    return pXmlDoc;
 }
 
 void SwModelTestBase::WrapFromTempFile(SvMemoryStream& rStream)
