@@ -379,16 +379,12 @@ void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
     {
         OUString aDrive = rPar.Get(1)->GetOUString();
         if ( aDrive.getLength() != 1 )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-            return;
-        }
+            return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
         auto c = rtl::toAsciiUpperCase(aDrive[0]);
         if ( !rtl::isAsciiUpperCase( c ) )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-            return;
-        }
+            return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
         nCurDir = c - 'A' + 1;
     }
     wchar_t pBuffer[ _MAX_PATH ];
@@ -398,14 +394,10 @@ void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
     auto const handler = _set_thread_local_invalid_parameter_handler(&invalidParameterHandler);
     auto const ok = _wgetdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr;
     _set_thread_local_invalid_parameter_handler(handler);
-    if ( ok )
-    {
-        rPar.Get(0)->PutString(OUString(o3tl::toU(pBuffer)));
-    }
-    else
-    {
-        StarBASIC::Error( ERRCODE_BASIC_NO_DEVICE );
-    }
+    if ( !ok )
+        return StarBASIC::Error( ERRCODE_BASIC_NO_DEVICE );
+
+    rPar.Get(0)->PutString(OUString(o3tl::toU(pBuffer)));
 
 #else
 
@@ -417,20 +409,16 @@ void SbRtl_CurDir(StarBASIC *, SbxArray & rPar, bool)
     {
         pMem.reset(new char[nSize]);
         if( !pMem )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_NO_MEMORY );
-            return;
-        }
+            return StarBASIC::Error( ERRCODE_BASIC_NO_MEMORY );
+
         if( getcwd( pMem.get(), nSize-1 ) != nullptr )
         {
             rPar.Get(0)->PutString(OUString::createFromAscii(pMem.get()));
             return;
         }
         if( errno != ERANGE )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
-            return;
-        }
+            return StarBASIC::Error( ERRCODE_BASIC_INTERNAL_ERROR );
+
         nSize += PATH_INCR;
     };
 
