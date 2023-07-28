@@ -736,6 +736,12 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 {
 }
 
+static bool isFlyNode(const SwPaM& pam)
+{
+    return *pam.GetPoint() == *pam.GetMark()
+           && (pam.GetPoint()->GetNode().IsOLENode() || pam.GetPoint()->GetNode().IsGrfNode());
+}
+
 ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileName )
 {
     // #i73788#
@@ -777,13 +783,11 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
         SwPaM *pEnd = pPam;
 
         // 1st round: Check if there is a selection
-        while(true)
+        do
         {
-            bHasMark = bHasMark || pPam->HasMark();
+            bHasMark = pPam->HasMark() || isFlyNode(*pPam);
             pPam = pPam->GetNext();
-            if(bHasMark || pPam == pEnd)
-                break;
-        }
+        } while (!bHasMark && pPam != pEnd);
 
         // if there is no selection, select the whole document
         if(!bHasMark)
