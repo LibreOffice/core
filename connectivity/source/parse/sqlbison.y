@@ -218,7 +218,7 @@ using namespace connectivity;
 %type <pParseNode> like_predicate opt_escape test_for_null null_predicate_part_2 in_predicate in_predicate_part_2 character_like_predicate_part_2 other_like_predicate_part_2
 %type <pParseNode> all_or_any_predicate any_all_some existence_test subquery quantified_comparison_predicate_part_2
 %type <pParseNode> scalar_exp_commalist parameter_ref literal parenthesized_boolean_value_expression
-%type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/
+%type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/ datetime_unit
 /* new rules at OJ */
 %type <pParseNode> derived_column as_clause table_name num_primary term num_value_exp
 %type <pParseNode> value_exp_primary num_value_fct unsigned_value_spec cast_spec set_fct_spec  scalar_subquery
@@ -2966,6 +2966,18 @@ non_second_datetime_field:
 	|	SQL_TOKEN_MINUTE
 	|	SQL_TOKEN_MILLISECOND
 	;
+
+datetime_unit:
+		SQL_TOKEN_YEAR
+	|	SQL_TOKEN_MONTH
+	|	SQL_TOKEN_WEEK
+	|	SQL_TOKEN_DAY
+	|	SQL_TOKEN_HOUR
+	|	SQL_TOKEN_MINUTE
+	|	SQL_TOKEN_SECOND
+	|	SQL_TOKEN_MILLISECOND
+	;
+
 start_field:
 		non_second_datetime_field opt_paren_precision
 		{
@@ -3097,6 +3109,13 @@ function_args_commalist:
 			else
 				YYERROR;
 		}
+	|	datetime_unit ',' function_arg ',' function_arg
+        {
+            $$ = SQL_NEW_COMMALISTRULE;
+            $$->append($1);
+            $$->append($3);
+            $$->append($5);
+        }
 	;
 
 value_exp:
