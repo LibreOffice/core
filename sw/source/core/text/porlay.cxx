@@ -1441,7 +1441,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
 
         // special case for dotted circle since it can be used with complex
         // before a mark, so we want it associated with the mark's script
-        // tdf#112594: another soecial case for NNBSP followed by a Mongolian
+        // tdf#112594: another special case for NNBSP followed by a Mongolian
         // character, since NNBSP has special uses in Mongolian (tdf#112594)
         auto nPos = sal_Int32(nChg);
         auto nPrevPos = nPos;
