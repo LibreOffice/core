@@ -29,6 +29,7 @@
 #include <svtools/sfxecode.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <dbdata.hxx>
 #include <linkarea.hxx>
 #include <docsh.hxx>
 #include <tablink.hxx>
@@ -258,6 +259,13 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
             {
                 m_xLbRanges->append_text(pRangeData->GetName());
             }
+        }
+        // tdf#142600 - list database ranges
+        if (const auto pDBs = m_pSourceShell->GetDocument().GetDBCollection())
+        {
+            const auto& rNamedDBs = pDBs->getNamedDBs();
+            for (const auto& rNamedDB : rNamedDBs)
+                m_xLbRanges->append_text(rNamedDB->GetName());
         }
     }
 
