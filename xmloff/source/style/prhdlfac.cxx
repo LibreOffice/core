@@ -56,6 +56,7 @@
 #include <XMLRectangleMembersHandler.hxx>
 #include <XMLNumberWithAutoForVoidPropHdl.hxx>
 #include "DrawAspectHdl.hxx"
+#include <xmloff/XMLComplexColorHandler.hxx>
 
 #include <map>
 
@@ -474,7 +475,9 @@ std::unique_ptr<XMLPropertyHandler> XMLPropertyHandlerFactory::CreatePropertyHan
             pPropHdl.reset(new XMLNamedBoolPropertyHdl(GetXMLToken(XML_CLIP),
                                                        GetXMLToken(XML_AUTO_CREATE_NEW_FRAME)));
             break;
-
+        case XML_TYPE_COMPLEX_COLOR:
+            pPropHdl.reset(new XMLComplexColorHandler);
+            break;
     }
 
     return pPropHdl;
