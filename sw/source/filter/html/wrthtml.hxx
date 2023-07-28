@@ -672,7 +672,7 @@ public:
 SwHTMLWriter& OutHTML_FrameFormatOLENode( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
                                bool bInCntnr );
 SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFormat& rFormat,
-                                  bool bInCntnr );
+                                  bool bInCntnr, bool bWriteReplacementGraphic = true );
 
 SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter&, const SwContentNode& );
 SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& , SwTableNode &, const SwFrameFormat *,
