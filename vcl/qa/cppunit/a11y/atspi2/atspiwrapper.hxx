@@ -604,7 +604,7 @@ public:
     /** Wrapper for AtspiRange
      *
      * This is not actually required, but helps make this more C++-y (by allowing TextRange to
-     * inherit it) and more LibreOffice-y (by having cameCase names) */
+     * inherit it) and more LibreOffice-y (by having camelCase names) */
     struct Range
     {
         int startOffset;
