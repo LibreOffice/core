@@ -678,7 +678,7 @@ struct HTMLSaveData
 Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFormat,
                                bool bInCntnr );
 Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFormat,
-                                  bool bInCntnr );
+                                  bool bInCntnr, bool bWriteReplacementGraphic = true );
 
 Writer& OutHTML_SwTextNode( Writer&, const SwContentNode& );
 Writer& OutHTML_SwTableNode( Writer& , SwTableNode &, const SwFrameFormat *,

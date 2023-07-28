@@ -499,6 +499,13 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
                            bool bAsCharAlso ) const
 {
     SwPosFlyFrames aRetval;
+    const SwStartNode* pDirectFly = nullptr;
+    if (pCmpRange && *pCmpRange->GetPoint() == *pCmpRange->GetMark()
+        && (pCmpRange->GetPoint()->GetNode().IsOLENode()
+            || pCmpRange->GetPoint()->GetNode().IsGrfNode()))
+    {
+        pDirectFly = pCmpRange->GetPoint()->GetNode().FindFlyStartNode();
+    }
 
     // collect all anchored somehow to paragraphs
     for( auto pFly : *GetSpzFrameFormats() )
@@ -509,11 +516,23 @@ SwPosFlyFrames SwDoc::GetAllFlyFormats( const SwPaM* pCmpRange, bool bDrawAlso,
         {
             const SwFormatAnchor& rAnchor = pFly->GetAnchor();
             SwNode const*const pAnchorNode = rAnchor.GetAnchorNode();
-            if (pAnchorNode &&
-                ((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+            if (!pAnchorNode)
+                continue;
+            if (pDirectFly)
+            {
+                const SwFormatContent& rContent = pFly->GetContent();
+                const SwNodeIndex* pContentNodeIndex = rContent.GetContentIdx();
+                if (pContentNodeIndex && pContentNodeIndex->GetIndex() == pDirectFly->GetIndex())
+                {
+                    aRetval.insert(SwPosFlyFrame(*pAnchorNode, pFly, aRetval.size()));
+                    break;
+                }
+                continue;
+            }
+            if ( (RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
                  (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
-                 ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
+                 ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso) )
             {
                 if( pCmpRange && !lcl_TstFlyRange( pCmpRange, rAnchor ))
                         continue;       // not a valid FlyFrame

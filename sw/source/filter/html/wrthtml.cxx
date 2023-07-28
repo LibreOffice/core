@@ -531,64 +531,74 @@ ErrCode SwHTMLWriter::WriteStream()
     m_aHTMLPosFlyFrames.clear();
     CollectFlyFrames();
     m_nLastParaToken = HtmlTokenId::NONE;
-    GetControls();
-    CollectLinkTargets();
 
-    sal_uInt16 nHeaderAttrs = 0;
-    m_pCurrPageDesc = MakeHeader( nHeaderAttrs );
-
-    m_bLFPossible = true;
-
-    // output forms which contain only HiddenControls
-    OutHiddenForms();
-
-    if( !aStartTags.isEmpty() )
-        Strm().WriteOString( aStartTags );
-
-    const SwFormatHeader *pFormatHeader;
-    const SfxItemSet& rPageItemSet = m_pCurrPageDesc->GetMaster().GetAttrSet();
-    if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
-         (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) &&
-          !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)) &&
-        (pFormatHeader = rPageItemSet.GetItemIfSet( RES_HEADER )) )
+    if (mbReqIF && !m_bWriteAll && m_pCurrentPam
+        && *m_pCurrentPam->GetPoint() == *m_pCurrentPam->GetMark()
+        && m_pCurrentPam->GetPoint()->GetNode().IsOLENode() && m_aHTMLPosFlyFrames.size() == 1)
     {
-        const SwFrameFormat *pHeaderFormat = pFormatHeader->GetHeaderFormat();
-        if( pHeaderFormat )
-            OutHTML_HeaderFooter( *this, *pHeaderFormat, true );
+        // A single OLE object selection must be output: do it directly (without replacement)
+        OutHTML_FrameFormatOLENodeGrf(*this, m_aHTMLPosFlyFrames[0]->GetFormat(), true, false);
     }
-
-    m_nTextAttrsToIgnore = nHeaderAttrs;
-    Out_SwDoc( m_pOrigPam );
-    m_nTextAttrsToIgnore = 0;
-
-    if( mxFormComps.is() )
-        OutForm( false, mxFormComps );
-
-    if( m_xFootEndNotes )
-        OutFootEndNotes();
-
-    const SwFormatFooter* pFormatFooter;
-    if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
-        (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))  &&
-        (pFormatFooter = rPageItemSet.GetItemIfSet( RES_FOOTER )) )
+    else
     {
-        const SwFrameFormat *pFooterFormat = pFormatFooter->GetFooterFormat();
-        if( pFooterFormat )
-            OutHTML_HeaderFooter( *this, *pFooterFormat, false );
-    }
+        GetControls();
+        CollectLinkTargets();
 
-    if( m_bLFPossible )
-        OutNewLine();
-    if (!mbSkipHeaderFooter)
-    {
-        HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_body), false );
-        OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html), false );
-    }
-    else if (mbReqIF)
-        // ReqIF: end xhtml.BlkStruct.class.
-        HTMLOutFuncs::Out_AsciiTag(Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false);
+        sal_uInt16 nHeaderAttrs = 0;
+        m_pCurrPageDesc = MakeHeader( nHeaderAttrs );
 
+        m_bLFPossible = true;
+
+        // output forms which contain only HiddenControls
+        OutHiddenForms();
+
+        if( !aStartTags.isEmpty() )
+            Strm().WriteOString( aStartTags );
+
+        const SwFormatHeader *pFormatHeader;
+        const SfxItemSet& rPageItemSet = m_pCurrPageDesc->GetMaster().GetAttrSet();
+        if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
+             (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) &&
+              !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)) &&
+            (pFormatHeader = rPageItemSet.GetItemIfSet( RES_HEADER )) )
+        {
+            const SwFrameFormat *pHeaderFormat = pFormatHeader->GetHeaderFormat();
+            if( pHeaderFormat )
+                OutHTML_HeaderFooter( *this, *pHeaderFormat, true );
+        }
+
+        m_nTextAttrsToIgnore = nHeaderAttrs;
+        Out_SwDoc( m_pOrigPam );
+        m_nTextAttrsToIgnore = 0;
+
+        if( mxFormComps.is() )
+            OutForm( false, mxFormComps );
+
+        if( m_xFootEndNotes )
+            OutFootEndNotes();
+
+        const SwFormatFooter* pFormatFooter;
+        if( !m_bWriteClipboardDoc && m_pDoc->GetDocShell() &&
+            (!m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))  &&
+            (pFormatFooter = rPageItemSet.GetItemIfSet( RES_FOOTER )) )
+        {
+            const SwFrameFormat *pFooterFormat = pFormatFooter->GetFooterFormat();
+            if( pFooterFormat )
+                OutHTML_HeaderFooter( *this, *pFooterFormat, false );
+        }
+
+        if( m_bLFPossible )
+            OutNewLine();
+        if (!mbSkipHeaderFooter)
+        {
+            HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_body), false );
+            OutNewLine();
+            HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_html), false );
+        }
+        else if (mbReqIF)
+            // ReqIF: end xhtml.BlkStruct.class.
+            HTMLOutFuncs::Out_AsciiTag(Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false);
+    }
     // delete the table with floating frames
     OSL_ENSURE( m_aHTMLPosFlyFrames.empty(), "Were not all frames output?" );
     m_aHTMLPosFlyFrames.clear();
