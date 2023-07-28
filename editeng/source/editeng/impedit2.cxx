@@ -1742,8 +1742,7 @@ void ImpEditEngine::InitScriptTypes( sal_Int32 nPara )
                     (nPrevChar == 0x202F /* NNBSP, tdf#112594 */ &&
                      u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
                 {
-                    --nPos;
-                    rTypes.back().nEndPos--;
+                    rTypes.back().nEndPos = nPos = nPrevPos;
                     break;
                 }
             }

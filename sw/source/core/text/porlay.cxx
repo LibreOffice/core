@@ -1467,7 +1467,7 @@ void SwScriptInfo::InitScriptInfo(const SwTextNode& rNode,
                 (nPrevChar == CHAR_NNBSP &&
                  u_getIntPropertyValue(nChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN))
             {
-                --nPos;
+                nPos = nPrevPos;
             }
         }
         m_ScriptChanges.emplace_back(TextFrameIndex(nPos), nScript);
