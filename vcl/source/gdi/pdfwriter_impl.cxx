@@ -1692,12 +1692,8 @@ void PDFWriterImpl::newPage( double nPageWidth, double nPageHeight, PDFWriter::O
     m_nCurrentPage = m_aPages.size();
     m_aPages.emplace_back(this, nPageWidth, nPageHeight, eOrientation );
 
-    sal_Int32 nUserUnit = m_aPages.back().m_nUserUnit;
-    if (nUserUnit > 1)
-    {
-        m_aMapMode = MapMode(MapUnit::MapPoint, Point(), Fraction(nUserUnit, pointToPixel(1)),
-                             Fraction(nUserUnit, pointToPixel(1)));
-    }
+    const Fraction frac(m_aPages.back().m_nUserUnit, pointToPixel(1));
+    m_aMapMode = MapMode(MapUnit::MapPoint, Point(), frac, frac);
 
     m_aPages.back().beginStream();
 

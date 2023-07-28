@@ -4735,6 +4735,62 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf48707_2)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156528)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"wide_page1.fodt");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    // The document has two pages
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+
+    // 1st page (5100 mm width x 210 mm high, UserUnit = 2)
+    auto pPdfPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(5100.0 / 2, o3tl::Length::mm, o3tl::Length::pt),
+                                 pPdfPage->getWidth(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(210.0 / 2, o3tl::Length::mm, o3tl::Length::pt),
+                                 pPdfPage->getHeight(), 1);
+
+    // 1 object (rectangle 5060 mm width x 170 mm high, UserUnit = 2)
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    auto pRect = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT(pRect);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Path, pRect->getType());
+    auto bounds = pRect->getBounds();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(5060.0 / 2, o3tl::Length::mm, o3tl::Length::pt),
+                                 bounds.getWidth(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(170.0 / 2, o3tl::Length::mm, o3tl::Length::pt),
+                                 bounds.getHeight(), 1);
+
+    // 2nd page (210 mm width x 297 mm high, UserUnit = 1)
+    pPdfPage = pPdfDocument->openPage(1);
+    CPPUNIT_ASSERT(pPdfPage);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(210.0, o3tl::Length::mm, o3tl::Length::pt),
+                                 pPdfPage->getWidth(), 1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(297.0, o3tl::Length::mm, o3tl::Length::pt),
+                                 pPdfPage->getHeight(), 1);
+
+    // 1 object (rectangle 170 mm width x 257 mm high, UserUnit = 1)
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getObjectCount());
+    pRect = pPdfPage->getObject(0);
+    CPPUNIT_ASSERT(pRect);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFPageObjectType::Path, pRect->getType());
+    bounds = pRect->getBounds();
+    // Without the fix, this would fail with
+    // - Expected: 481.889763779528
+    // - Actual  : 241.925001144409
+    // - Delta   : 1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(170.0, o3tl::Length::mm, o3tl::Length::pt),
+                                 bounds.getWidth(), 1);
+    //
+    // - Expected: 728.503937007874
+    // - Actual  : 365.25
+    // - Delta   : 1
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(o3tl::convert(257.0, o3tl::Length::mm, o3tl::Length::pt),
+                                 bounds.getHeight(), 1);
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
