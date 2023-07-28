@@ -1049,20 +1049,40 @@ void SAL_CALL SwXTextRange::setString(const OUString& rString)
 
 bool SwXTextRange::GetPositions(SwPaM& rToFill, ::sw::TextRangeMode const eMode) const
 {
-    if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition
-        && eMode == ::sw::TextRangeMode::AllowNonTextNode)
+    if (RANGE_IS_SECTION == m_pImpl->m_eRangePosition)
     {
         if (auto const pSectFormat = static_cast<SwSectionFormat const*>(m_pImpl->m_pTableOrSectionFormat))
         {
-            SwNodeIndex const*const pSectionNode(pSectFormat->GetContent().GetContentIdx());
-            assert(pSectionNode);
-            assert(pSectionNode->GetNodes().IsDocNodes());
-            rToFill.GetPoint()->Assign( pSectionNode->GetNode(), SwNodeOffset(1) );
-            rToFill.SetMark();
-            rToFill.GetMark()->Assign( *pSectionNode->GetNode().EndOfSectionNode(), SwNodeOffset(-1) );
-            if (const SwContentNode* pCNd = rToFill.GetMark()->GetContentNode())
-                rToFill.GetMark()->AssignEndIndex(*pCNd);
-            return true;
+            if (eMode == ::sw::TextRangeMode::AllowNonTextNode)
+            {
+                SwNodeIndex const*const pSectionNode(pSectFormat->GetContent().GetContentIdx());
+                assert(pSectionNode);
+                assert(pSectionNode->GetNodes().IsDocNodes());
+                rToFill.GetPoint()->Assign( pSectionNode->GetNode(), SwNodeOffset(1) );
+                rToFill.SetMark();
+                rToFill.GetMark()->Assign( *pSectionNode->GetNode().EndOfSectionNode(), SwNodeOffset(-1) );
+                if (const SwContentNode* pCNd = rToFill.GetMark()->GetContentNode())
+                    rToFill.GetMark()->AssignEndIndex(*pCNd);
+                return true;
+            }
+            else
+            {
+                SwPaM aPaM(*pSectFormat->GetContent().GetContentIdx());
+                aPaM.Move(fnMoveForward, GoInContent);
+                assert(aPaM.GetPoint()->GetNode() < *pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+                aPaM.SetMark();
+                *aPaM.GetPoint() = SwPosition(*pSectFormat->GetContent().GetContentIdx()->GetNode().EndOfSectionNode());
+                aPaM.Move(fnMoveBackward, GoInContent);
+                assert(*pSectFormat->GetContent().GetContentIdx() < aPaM.GetPoint()->GetNode());
+                // tdf#149555 if there is no table involved, only nested
+                // sections, then PaM is valid
+                if (aPaM.GetPoint()->GetNode().FindTableNode()
+                    == aPaM.GetMark()->GetNode().FindTableNode())
+                {
+                    rToFill = aPaM;
+                    return true;
+                }
+            }
         }
     }
     ::sw::mark::IMark const * const pBkmk = m_pImpl->GetBookmark();
