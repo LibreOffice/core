@@ -1484,7 +1484,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
 }
 
 Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrameFormat,
-                                  bool bInCntnr )
+                                  bool bInCntnr, bool bWriteReplacementGraphic )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
@@ -1654,58 +1654,61 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         rHTMLWrt.m_bLFPossible = true;
     }
 
-    OUString aGraphicURL;
-    OUString aMimeType;
-    if(!rHTMLWrt.mbEmbedImages)
+    if (!bObjectOpened || bWriteReplacementGraphic)
     {
-        const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
-        if(pTempFileName)
-            aGraphicURL = *pTempFileName;
-
-        OUString aFilterName("JPG");
-        XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
-
-        if (bObjectOpened)
+        OUString aGraphicURL;
+        OUString aMimeType;
+        if(!rHTMLWrt.mbEmbedImages)
         {
-            aFilterName = "PNG";
-            nFlags = XOutFlags::NONE;
-            aMimeType = "image/png";
+            const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
+            if(pTempFileName)
+                aGraphicURL = *pTempFileName;
 
-            if (aGraphic.GetType() == GraphicType::NONE)
+            OUString aFilterName("JPG");
+            XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
+
+            if (bObjectOpened)
             {
-                // The OLE Object has no replacement image, write a stub.
-                aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"png");
-                osl::File aFile(aGraphicURL);
-                aFile.open(osl_File_OpenFlag_Create);
-                aFile.close();
+                aFilterName = "PNG";
+                nFlags = XOutFlags::NONE;
+                aMimeType = "image/png";
+
+                if (aGraphic.GetType() == GraphicType::NONE)
+                {
+                    // The OLE Object has no replacement image, write a stub.
+                    aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"png");
+                    osl::File aFile(aGraphicURL);
+                    aFile.open(osl_File_OpenFlag_Create);
+                    aFile.close();
+                }
             }
-        }
 
-        ErrCode nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
-                                    aFilterName,
-                                    nFlags );
-        if( nErr )              // error, don't write anything
-        {
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
-            if (bObjectOpened) // Still at least close the tag.
-                rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace()
-                    + OOO_STRING_SVTOOLS_HTML_object ">"));
-            return rWrt;
-        }
-        aGraphicURL = URIHelper::SmartRel2Abs(
-            INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
-            URIHelper::GetMaybeFileHdl() );
+            ErrCode nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
+                                        aFilterName,
+                                        nFlags );
+            if( nErr )              // error, don't write anything
+            {
+                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+                if (bObjectOpened) // Still at least close the tag.
+                    rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace()
+                        + OOO_STRING_SVTOOLS_HTML_object ">"));
+                return rWrt;
+            }
+            aGraphicURL = URIHelper::SmartRel2Abs(
+                INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
+                URIHelper::GetMaybeFileHdl() );
 
+        }
+        HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask
+            : HtmlFrmOpts::GenImgMask;
+        if (bObjectOpened)
+            nFlags |= HtmlFrmOpts::Replacement;
+        HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
+        OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic,
+                pOLENd->GetTitle(), pOLENd->GetTwipSize(),
+                nFlags, "ole", nullptr, aMimeType );
+        OutHTML_ImageEnd(aHtml, rWrt);
     }
-    HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask
-        : HtmlFrmOpts::GenImgMask;
-    if (bObjectOpened)
-        nFlags |= HtmlFrmOpts::Replacement;
-    HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
-    OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic,
-            pOLENd->GetTitle(), pOLENd->GetTwipSize(),
-            nFlags, "ole", nullptr, aMimeType );
-    OutHTML_ImageEnd(aHtml, rWrt);
 
     if (bObjectOpened)
         // Close native data.

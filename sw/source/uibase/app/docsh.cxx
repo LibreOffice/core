@@ -765,16 +765,24 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     ErrCode nErrno;
     const OUString aFileName( rMedium.GetName() );
 
-    // No View, so the whole Document!
-    if (m_pWrtShell && !Application::IsHeadlessModeEnabled())
+    bool bSelection = false;
+    if (m_pWrtShell)
     {
+        const SfxBoolItem* pSelectionItem = rMedium.GetItemSet()->GetItemIfSet(SID_SELECTION);
+        bSelection = pSelectionItem && pSelectionItem->GetValue();
+    }
+
+    // No View, so the whole Document! (unless SID_SELECTION explicitly set)
+    if (m_pWrtShell && (!Application::IsHeadlessModeEnabled() || bSelection))
+    {
+
         SwWait aWait( *this, true );
         // #i106906#
         const bool bFormerLockView = m_pWrtShell->IsViewLocked();
         m_pWrtShell->LockView( true );
         m_pWrtShell->StartAllAction();
         m_pWrtShell->Push();
-        SwWriter aWrt( rMedium, *m_pWrtShell, true );
+        SwWriter aWrt( rMedium, *m_pWrtShell, !bSelection );
         nErrno = aWrt.Write( xWriter, &aFileName );
         //JP 16.05.97: In case the SFX revokes the View while saving
         if (m_pWrtShell)

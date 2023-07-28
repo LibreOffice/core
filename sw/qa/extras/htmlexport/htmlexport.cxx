@@ -24,6 +24,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <test/htmltesttools.hxx>
 #include <tools/urlobj.hxx>
@@ -2593,6 +2594,53 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_FrameTextAsObjectAltText)
     assertXPathContent(pDoc,
                        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]/reqif-xhtml:object",
                        "Some text in frame & <foo>");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
+{
+    // Given a document containing an embedded OLE object:
+    createSwDoc("ole2.odt");
+
+    // Create a selection for that object:
+    uno::Reference<css::drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent,
+                                                                      uno::UNO_QUERY_THROW);
+    auto xDrawPage(xDrawPageSupplier->getDrawPage());
+    uno::Reference<css::frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<css::view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                              uno::UNO_QUERY_THROW);
+    xController->select(xDrawPage->getByIndex(0));
+
+    // Store only the selection
+    uno::Reference<css::frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("RTFOLEMimeType", OUString("text/rtf")),
+        comphelper::makePropertyValue("SelectionOnly", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+
+    // The root element must be reqif-xhtml:object
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:object", "type", "text/rtf");
+    // It has no children
+    assertXPathChildren(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:object", 0);
+    // And the content is empty
+    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:object", "");
+
+    OUString aRtfData = getXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:object", "data");
+    INetURLObject aUrl(maTempFile.GetURL());
+    aUrl.setName(aRtfData);
+    SvMemoryStream aRtf;
+    HtmlExportTest::wrapRtfFragment(aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE), aRtf);
+    tools::SvRef<TestReqIfRtfReader> xReader(new TestReqIfRtfReader(aRtf));
+    // The RTF OLE exports correctly
+    CPPUNIT_ASSERT(xReader->CallParser() != SvParserState::Error);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(9358), xReader->GetObjw());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(450), xReader->GetObjh());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
