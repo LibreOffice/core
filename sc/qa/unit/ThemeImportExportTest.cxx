@@ -213,6 +213,16 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColor)
     checkCellTextThemeColor(getScDoc());
 }
 
+CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testCellTextThemeColorODF)
+{
+    // Open the OOXML source
+    loadFromURL(u"xlsx/Test_ThemeColor_Text_Background_Border.xlsx");
+    // Save as ODF and load again - checks import / export cycle
+    saveAndReload("calc8");
+    // Check the values and show that the document is unchanged and all the data preserved
+    checkCellTextThemeColor(getScDoc());
+}
+
 void checkCellBorderThemeColor(ScDocument* pDoc)
 {
     // C1

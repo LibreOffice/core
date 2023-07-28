@@ -908,11 +908,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XmlScPropHdl_Vertical;
             }
             break;
-            case XML_TYPE_COMPLEX_COLOR:
-            {
-                pHdl = new XMLComplexColorHandler;
-            }
-            break;
         }
 
         if(pHdl)

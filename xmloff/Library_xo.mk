@@ -232,6 +232,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/style/PagePropertySetContext \
     xmloff/source/style/SinglePropertySetInfoCache \
     xmloff/source/style/StyleMap \
+    xmloff/source/style/StylePropertiesContext \
     xmloff/source/style/TransGradientStyle \
     xmloff/source/style/WordWrapPropertyHdl \
     xmloff/source/style/XMLBackgroundImageContext \

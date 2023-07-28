@@ -43,6 +43,7 @@
 #include <xmloff/xmlprmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include "StylePropertiesContext.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -208,12 +209,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLPropStyleContext::c
     {
         rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
             mxStyles->GetImportPropertyMapper( GetFamily() );
-        if( xImpPrMap.is() )
-            return new SvXMLPropertySetContext( GetImport(), nElement,
-                                                    xAttrList,
-                                                    nFamily,
-                                                    maProperties,
-                                                    xImpPrMap );
+        if (xImpPrMap.is())
+        {
+            return new StylePropertiesContext(GetImport(), nElement, xAttrList, nFamily, maProperties, xImpPrMap);
+        }
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
     return nullptr;
