@@ -172,8 +172,11 @@ public:
 
     model::ComplexColor const& getComplexColor() const
     {
+        auto pUnConst = const_cast<SvxBorderLine*>(this);
+        pUnConst->m_aComplexColor.setFinalColor(GetColor());
         return m_aComplexColor;
     }
+
     void setComplexColor(model::ComplexColor const& rComplexColor)
     {
         m_aComplexColor = rComplexColor;
@@ -258,4 +261,3 @@ EDITENG_DLLPUBLIC bool operator!=( const SvxBorderLine& rLeft, const SvxBorderLi
 } // namespace editeng
 
 #endif
-

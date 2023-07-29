@@ -47,6 +47,10 @@ struct SFX2_DLLPUBLIC NamedColor
             if (m_nLumMod != 0)
                 aComplexColor.addTransformation({ model::TransformationType::LumOff, m_nLumOff });
         }
+        else
+        {
+            aComplexColor.setColor(m_aColor);
+        }
 
         aComplexColor.setFinalColor(m_aColor);
 
