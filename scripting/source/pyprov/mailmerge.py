@@ -96,6 +96,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print("Timeout: " + str(tout), file=sys.stderr)
 		if port == 465:
+			if dbg:
+				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
 			self.server = smtplib.SMTP_SSL(server, port, timeout=tout, context=ssl.create_default_context())
 		else:
 			self.server = smtplib.SMTP(server, port,timeout=tout)
@@ -107,6 +109,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print("ConnectionType: " + connectiontype, file=sys.stderr)
 		if connectiontype.upper() == 'SSL' and port != 465:
+			if dbg:
+				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
 			self.server.ehlo()
 			self.server.starttls(context=ssl.create_default_context())
 			self.server.ehlo()
@@ -299,6 +303,8 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 			print(connectiontype, file=sys.stderr)
 		print("BEFORE", file=sys.stderr)
 		if connectiontype.upper() == 'SSL':
+			if dbg:
+				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
 			self.server = imaplib.IMAP4_SSL(server, port, ssl_context=ssl.create_default_context())
 		else:
 			self.server = imaplib.IMAP4(server, port)
@@ -368,6 +374,8 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 			print(connectiontype, file=sys.stderr)
 		print("BEFORE", file=sys.stderr)
 		if connectiontype.upper() == 'SSL':
+			if dbg:
+				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
 			self.server = poplib.POP3_SSL(server, port, context=ssl.create_default_context())
 		else:
 			tout = xConnectionContext.getValueByName("Timeout")
