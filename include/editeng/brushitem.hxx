@@ -93,6 +93,8 @@ public:
 
     model::ComplexColor getComplexColor() const
     {
+        auto pUnConst = const_cast<SvxBrushItem*>(this);
+        pUnConst->maComplexColor.setFinalColor(GetColor());
         return maComplexColor;
     }
 
