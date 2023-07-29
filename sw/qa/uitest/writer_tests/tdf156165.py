@@ -31,7 +31,7 @@ class tdf156165(UITestCase):
                 # Replace Custom Styles is default to be false
                 self.assertEqual("false", get_state_as_dict(checkbox)["IsChecked"])
 
-            # Replace Custom Styles when applying manully with it disabled, should not change style
+            # Replace Custom Styles when applying manually with it disabled, should not change style
             writer_edit.executeAction("SELECT", mkPropertyValues({"END_POS": "0", "START_POS": "12"}))
             self.xUITest.executeCommand(".uno:AutoFormatApply")
             sleep(1)
@@ -58,7 +58,7 @@ class tdf156165(UITestCase):
                 checkbox.executeAction("CLICK", tuple())
                 self.assertEqual("true", get_state_as_dict(checkbox)["IsChecked"])
 
-            # Replace Custom Styles when applying manully with it enabled, should change style
+            # Replace Custom Styles when applying manually with it enabled, should change style
             writer_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
             writer_edit.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
             writer_edit.executeAction("SELECT", mkPropertyValues({"END_POS": "0", "START_POS": "12"}))
