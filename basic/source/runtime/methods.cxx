@@ -2433,15 +2433,11 @@ void SbRtl_IsNumeric(StarBASIC *, SbxArray & rPar, bool)
 
 void SbRtl_IsMissing(StarBASIC *, SbxArray & rPar, bool)
 {
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        // #57915 Missing is reported by an error
-        rPar.Get(0)->PutBool(rPar.Get(1)->IsErr());
-    }
+    if (rPar.Count() != 2)
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    // #57915 Missing is reported by an error
+    rPar.Get(0)->PutBool(rPar.Get(1)->IsErr());
 }
 
 // Function looks for wildcards, removes them and always returns the pure path
