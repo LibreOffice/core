@@ -464,7 +464,7 @@ Const cstSubArgs = &quot;&quot;
 				)
 			&apos;	Get the UserData page from the Options database
 			vUserDataOptions = SF_Utils._GetRegistryKeyContent(&quot;org.openoffice.UserProfile/Data&quot;)
-			&apos;	Create and feed the ouput dictionary
+			&apos;	Create and feed the output dictionary
 			vUserData = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
 			For i = 0 To UBound(vUserDataExternal)
 				vUserData.Add(vUserDataExternal(i), vUserDataOptions.getByName(vUserDataInternal(i)))
