@@ -23,7 +23,6 @@
 
 #include <signalshared.hxx>
 
-#include <osl/diagnose.h>
 #include <mutex>
 
 namespace

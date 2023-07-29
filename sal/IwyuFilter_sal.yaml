@@ -1,0 +1,6 @@
+---
+assumeFilename: sal/osl/all/log.cxx
+excludelist:
+    sal/osl/all/log.cxx:
+    #sal_use_syslog required from this file
+    - salusesyslog.hxx

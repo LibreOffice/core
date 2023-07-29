@@ -18,9 +18,6 @@
  */
 
 #include <sal/config.h>
-
-#include <typeinfo>
-
 #include <osl/mutex.hxx>
 #include <salhelper/condition.hxx>
 #include <salhelper/dynload.hxx>

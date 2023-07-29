@@ -20,7 +20,6 @@
 #include <algorithm>
 
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <rtl/math.h>
 #include <sax/fastattribs.hxx>
 #include <utility>
 

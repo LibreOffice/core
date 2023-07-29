@@ -23,7 +23,6 @@
 #include <rtl/math.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <cassert>
 #include <optional>
