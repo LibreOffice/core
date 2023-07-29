@@ -24,6 +24,11 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QtGui/QShortcut>
+#else
+#include <QtWidgets/QShortcut>
+#endif
 #include <QtWidgets/QStyle>
 
 #include <o3tl/safeint.hxx>
@@ -47,6 +52,8 @@ static inline void lcl_force_menubar_layout_update(QMenuBar& rMenuBar)
     // it unfortunatly has additional side effects; see QtMenu::GetMenuBarButtonRectPixel.
     rMenuBar.adjustSize();
 }
+
+OUString QtMenu::m_sCurrentHelpId = u"";
 
 QtMenu::QtMenu(bool bMenuBar)
     : mpVCLMenu(nullptr)
@@ -77,6 +84,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
         if (validateQMenuBar())
         {
             QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
+            connectHelpSignalSlots(pQMenu, pSalMenuItem);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
@@ -108,12 +116,14 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
             // no QMenu set, instantiate own one
             mpOwnedQMenu.reset(new QMenu);
             mpQMenu = mpOwnedQMenu.get();
+            connectHelpSignalSlots(mpQMenu, pSalMenuItem);
         }
 
         if (pSalMenuItem->mpSubMenu)
         {
             // submenu
             QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
+            connectHelpSignalSlots(pQMenu, pSalMenuItem);
             pSalMenuItem->mpMenu.reset(pQMenu);
 
             if ((nPos != MENU_APPEND)
@@ -183,6 +193,8 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
 
                 connect(pAction, &QAction::triggered, this,
                         [pSalMenuItem] { slotMenuTriggered(pSalMenuItem); });
+                connect(pAction, &QAction::hovered, this,
+                        [pSalMenuItem] { slotMenuHovered(pSalMenuItem); });
             }
         }
     }
@@ -618,6 +630,22 @@ const QtFrame* QtMenu::GetFrame() const
     return pMenu ? pMenu->mpFrame : nullptr;
 }
 
+void QtMenu::slotMenuHovered(QtMenuItem* pItem)
+{
+    const OUString sHelpId = pItem->mpParentMenu->GetMenu()->GetHelpId(pItem->mnId);
+    m_sCurrentHelpId = sHelpId;
+}
+
+void QtMenu::slotShowHelp()
+{
+    SolarMutexGuard aGuard;
+    Help* pHelp = Application::GetHelp();
+    if (pHelp && !m_sCurrentHelpId.isEmpty())
+    {
+        pHelp->Start(m_sCurrentHelpId);
+    }
+}
+
 void QtMenu::slotMenuTriggered(QtMenuItem* pQItem)
 {
     if (!pQItem)
@@ -770,6 +798,26 @@ void QtMenu::ImplRemoveMenuBarButton(int nId)
     delete pButton;
 
     lcl_force_menubar_layout_update(*mpQMenuBar);
+}
+
+void QtMenu::connectHelpShortcut(QMenu* pMenu)
+{
+    assert(pMenu);
+    QKeySequence sequence(QKeySequence::HelpContents);
+    QShortcut* pQShortcut = new QShortcut(sequence, pMenu);
+    connect(pQShortcut, &QShortcut::activated, this, QtMenu::slotShowHelp);
+    connect(pQShortcut, &QShortcut::activatedAmbiguously, this, QtMenu::slotShowHelp);
+}
+
+void QtMenu::connectHelpSignalSlots(QMenu* pMenu, QtMenuItem* pSalMenuItem)
+{
+    // connect hovered signal of the menu's own action
+    QAction* pAction = pMenu->menuAction();
+    assert(pAction);
+    connect(pAction, &QAction::hovered, this, [pSalMenuItem] { slotMenuHovered(pSalMenuItem); });
+
+    // connect slot to handle Help key (F1)
+    connectHelpShortcut(pMenu);
 }
 
 void QtMenu::RemoveMenuBarButton(sal_uInt16 nId) { ImplRemoveMenuBarButton(nId); }
