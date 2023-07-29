@@ -49,6 +49,7 @@
 #include <conditio.hxx>
 #include <dbdata.hxx>
 #include <filterentries.hxx>
+#include <export/ExportTools.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
@@ -1852,29 +1853,17 @@ static void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt
     if( nLineStyle == EXC_LINE_NONE )
     {
         rStyleSheet->singleElement(nElement);
-    }
-    else if (rComplexColor.isValidSchemeType())
-    {
-        rStyleSheet->startElement(nElement, XML_style, ToLineStyle(nLineStyle));
-
-        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getSchemeType());
-        double fTintShade = oox::convertColorTransformsToTintOrShade(rComplexColor);
-        rStyleSheet->singleElement(XML_color,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-
-        rStyleSheet->endElement(nElement);
+        return;
     }
     else if (rColor == Color(0, 0, 0))
     {
         rStyleSheet->singleElement(nElement, XML_style, ToLineStyle(nLineStyle));
+        return;
     }
-    else
-    {
-        rStyleSheet->startElement(nElement, XML_style, ToLineStyle(nLineStyle));
-        rStyleSheet->singleElement(XML_color, XML_rgb, XclXmlUtils::ToOString(rColor));
-        rStyleSheet->endElement( nElement );
-    }
+
+    rStyleSheet->startElement(nElement, XML_style, ToLineStyle(nLineStyle));
+    oox::xls::writeComplexColor(rStyleSheet, XML_color, rComplexColor, rColor);
+    rStyleSheet->endElement(nElement);
 }
 
 void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
@@ -2004,62 +1993,27 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
         if (maForeColor != COL_TRANSPARENT || maBackColor != COL_TRANSPARENT)
         {
-            if (maForegroundComplexColor.isValidSchemeType())
-            {
-                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maForegroundComplexColor.getSchemeType());
-                double fTintShade = oox::convertColorTransformsToTintOrShade(maForegroundComplexColor);
-                rStyleSheet->singleElement(XML_fgColor,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-            }
-            else if (maForeColor != COL_TRANSPARENT)
-            {
-                rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(maForeColor));
-            }
-
-            if (maBackgroundComplexColor.isValidSchemeType())
-            {
-                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maBackgroundComplexColor.getSchemeType());
-                double fTintShade = oox::convertColorTransformsToTintOrShade(maBackgroundComplexColor);
-                rStyleSheet->singleElement(XML_bgColor,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-            }
-            else if (maBackColor != COL_TRANSPARENT)
-            {
-                rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maBackColor));
-            }
+            oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, maForeColor);
+            oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, maBackColor);
         }
         else
         {
-            if (maForegroundComplexColor.isValidSchemeType())
             {
-                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maForegroundComplexColor.getSchemeType());
-                double fTintShade = oox::convertColorTransformsToTintOrShade(maForegroundComplexColor);
-
-                rStyleSheet->singleElement(XML_fgColor,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-            }
-            else if (mnForeColor != 0)
-            {
-                rStyleSheet->singleElement(XML_fgColor, XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnForeColor)));
+                Color aColor = rPalette.GetColor(mnForeColor);
+                if (maForegroundComplexColor.isValidSchemeType())
+                    oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
+                else if (mnForeColor != 0)
+                    oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
             }
 
-            if (maBackgroundComplexColor.isValidSchemeType())
             {
-                sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maBackgroundComplexColor.getSchemeType());
-                double fTintShade = oox::convertColorTransformsToTintOrShade(maBackgroundComplexColor);
-                rStyleSheet->singleElement(XML_bgColor,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-            }
-            else if (mnBackColor != 0)
-            {
-                rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(rPalette.GetColor(mnBackColor)));
+                Color aColor = rPalette.GetColor(mnBackColor);
+                if (maBackgroundComplexColor.isValidSchemeType())
+                    oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);
+                else if (mnForeColor != 0)
+                    oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);
             }
         }
-
         rStyleSheet->endElement( XML_patternFill );
     }
 
@@ -2083,16 +2037,8 @@ void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement(XML_fill);
     rStyleSheet->startElement(XML_patternFill);
-    if (maComplexColor.isValidSchemeType())
-    {
-        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(maComplexColor.getSchemeType());
-        double fTintShade = oox::convertColorTransformsToTintOrShade(maComplexColor);
-        rStyleSheet->singleElement(XML_bgColor,
-                    XML_theme, OString::number(nTheme),
-                    XML_tint, sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
-    }
-    else
-        rStyleSheet->singleElement(XML_bgColor, XML_rgb, XclXmlUtils::ToOString(maColor));
+
+    oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maComplexColor, maColor);
 
     rStyleSheet->endElement( XML_patternFill );
     rStyleSheet->endElement( XML_fill );
