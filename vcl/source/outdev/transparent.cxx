@@ -114,8 +114,7 @@ void OutputDevice::DrawTransparent(
     if( mbInitFillColor )
         InitFillColor();
 
-    if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       (RasterOp::OverPaint == GetRasterOp()) )
+    if (RasterOp::OverPaint == GetRasterOp())
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
@@ -199,7 +198,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
 
     bool bDrawn = false;
 
-    if (mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
+    if (true
 #if defined UNX && ! defined MACOSX && ! defined IOS
         && GetBitCount() > 8
 #endif

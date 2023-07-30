@@ -2717,16 +2717,12 @@ bool WinSalGraphicsImpl::implDrawGradient(basegfx::B2DPolyPolygon const & /*rPol
 
 bool WinSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
-    static bool bAllowForTest(true);
     bool bRet = false;
 
     switch (eType)
     {
         case OutDevSupportType::TransparentRect:
             bRet = mrParent.mbVirDev || mrParent.mbWindow;
-            break;
-        case OutDevSupportType::B2DDraw:
-            bRet = bAllowForTest;
             break;
         default:
             break;

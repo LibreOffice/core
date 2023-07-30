@@ -1334,7 +1334,6 @@ bool AquaGraphicsBackend::supportsOperation(OutDevSupportType eType) const
     switch (eType)
     {
         case OutDevSupportType::TransparentRect:
-        case OutDevSupportType::B2DDraw:
             return true;
         default:
             break;

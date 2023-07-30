@@ -2178,7 +2178,6 @@ bool SkiaSalGraphicsImpl::supportsOperation(OutDevSupportType eType) const
 {
     switch (eType)
     {
-        case OutDevSupportType::B2DDraw:
         case OutDevSupportType::TransparentRect:
             return true;
         default:

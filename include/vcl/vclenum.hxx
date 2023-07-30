@@ -162,7 +162,6 @@ typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
 enum class OutDevSupportType
 {
     TransparentRect,
-    B2DDraw,
     TransparentText     // if alpha in TextColor can be honored
 };
 

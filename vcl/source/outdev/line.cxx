@@ -184,9 +184,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     bool bDrawn = false;
 
     // #i101598# support AA and snap for lines, too
-    if( mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && RasterOp::OverPaint == GetRasterOp()
-        && IsLineColor())
+    if (RasterOp::OverPaint == GetRasterOp() && IsLineColor())
     {
         // at least transform with double precision to device coordinates; this will
         // avoid pixel snap of single, appended lines
@@ -225,9 +223,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
 void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const LineInfo& rInfo )
 {
     static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
-    const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw)
-        && RasterOp::OverPaint == GetRasterOp()
-        && IsLineColor());
+    const bool bTryB2d(RasterOp::OverPaint == GetRasterOp() && IsLineColor());
     basegfx::B2DPolyPolygon aFillPolyPolygon;
     const bool bDashUsed(LineStyle::Dash == rInfo.GetStyle());
     const bool bLineWidthUsed(rInfo.GetWidth() > 1);

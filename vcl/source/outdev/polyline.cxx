@@ -366,9 +366,7 @@ bool OutputDevice::DrawPolyLineDirectInternal(
     if( mbInitLineColor )
         InitLineColor();
 
-    const bool bTryB2d(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-                      RasterOp::OverPaint == GetRasterOp() &&
-                      IsLineColor());
+    const bool bTryB2d(RasterOp::OverPaint == GetRasterOp() && IsLineColor());
 
     if(bTryB2d)
     {

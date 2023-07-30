@@ -61,9 +61,7 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
         InitFillColor();
 
     // use b2dpolygon drawing if possible
-    if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       RasterOp::OverPaint == GetRasterOp() &&
-       (IsLineColor() || IsFillColor()))
+    if (RasterOp::OverPaint == GetRasterOp() && (IsLineColor() || IsFillColor()))
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
@@ -181,9 +179,7 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
         InitFillColor();
 
     // use b2dpolygon drawing if possible
-    if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       RasterOp::OverPaint == GetRasterOp() &&
-       (IsLineColor() || IsFillColor()))
+    if (RasterOp::OverPaint == GetRasterOp() && (IsLineColor() || IsFillColor()))
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
@@ -291,9 +287,7 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
     bool bSuccess(false);
 
-    if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
-       RasterOp::OverPaint == GetRasterOp() &&
-       (IsLineColor() || IsFillColor()))
+    if (RasterOp::OverPaint == GetRasterOp() && (IsLineColor() || IsFillColor()))
     {
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
