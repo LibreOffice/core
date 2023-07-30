@@ -197,6 +197,7 @@ certain functionality.
 @li @c editeng
 @li @c editeng.chaining
 @li @c editeng.items
+@li @c editeng.quicktextsize
 
 @section embeddedobj
 

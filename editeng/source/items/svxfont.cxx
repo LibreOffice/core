@@ -478,8 +478,13 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen, KernArray* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsFixKerning() )
-        return Size( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen ),
+    {
+        SAL_INFO( "editeng.quicktextsize", "SvxFont::QuickGetTextSize before GetTextArray(): Case map: " << IsCaseMap() << " Fix kerning: " << IsFixKerning());
+        Size aTxtSize( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen ),
                      pOut->GetTextHeight() );
+        SAL_INFO( "editeng.quicktextsize", "SvxFont::QuickGetTextSize after GetTextArray(): Text length: " << nLen << " Text size: " << aTxtSize.Width() << "x" << aTxtSize.Height());
+        return aTxtSize;
+    }
 
     KernArray aDXArray;
 
@@ -492,11 +497,13 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
 
     Size aTxtSize;
     aTxtSize.setHeight( pOut->GetTextHeight() );
+    SAL_INFO( "editeng.quicktextsize", "SvxFont::QuickGetTextSize before GetTextArray(): Case map: " << IsCaseMap() << " Fix kerning: " << IsFixKerning());
     if ( !IsCaseMap() )
         aTxtSize.setWidth( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen ) );
     else
         aTxtSize.setWidth( GetTextArray( pOut, CalcCaseMap( rTxt ),
                            pDXArray, nIdx, nLen ) );
+    SAL_INFO( "editeng.quicktextsize", "SvxFont::QuickGetTextSize after GetTextArray(): Text length: " << nLen << " Text size: " << aTxtSize.Width() << "x" << aTxtSize.Height());
 
     if( IsFixKerning() && ( nLen > 1 ) )
     {
