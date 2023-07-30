@@ -1124,7 +1124,7 @@ void OS2METReader::ReadArc(bool bGivenPos)
          p*p*((y3*y3-y1*y1)*(x2-x1)+(y2*y2-y1*y1)*(x1-x3)) ) / ncy;
     cx=( q*q*(x2*x2-x1*x1)+p*p*(y2*y2-y1*y1)+cy*2*p*p*(y1-y2) ) / ncx;
     // now we still need the radius in x and y direction:
-    r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
+    r=hypot(q*(x1-cx), p*(y1-cy));
     rx=r/q; ry=r/p;
     // We now have to find out how the starting and the end point
     // have to be chosen so that point no. 2 lies inside the drawn arc:
