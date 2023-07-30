@@ -43,6 +43,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
+#include <osl/file.hxx>
 
 #include <utility>
 #include <vcl/gdimtf.hxx>
@@ -270,7 +271,6 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
     pPrinter->m_aJobData = aInfo;
-    pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
 
     if( pJobSetup->GetDriverData() )
         JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(),
@@ -396,7 +396,7 @@ SalGraphics* PspSalInfoPrinter::AcquireGraphics()
     if( ! m_pGraphics )
     {
         m_pGraphics = GetGenericInstance()->CreatePrintGraphics();
-        m_pGraphics->Init(&m_aJobData, &m_aPrinterGfx);
+        m_pGraphics->Init(&m_aJobData);
         pRet = m_pGraphics.get();
     }
     return pRet;

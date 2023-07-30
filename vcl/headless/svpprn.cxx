@@ -176,7 +176,6 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         PrinterInfoManager& rManager( PrinterInfoManager::get() );
         PrinterInfo aInfo( rManager.getPrinterInfo( pQueueInfo->maPrinterName ) );
         pPrinter->m_aJobData = aInfo;
-        pPrinter->m_aPrinterGfx.Init( pPrinter->m_aJobData );
 
         if( pJobSetup->GetDriverData() )
             JobData::constructFromStreamBuffer( pJobSetup->GetDriverData(),

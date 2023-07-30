@@ -28,9 +28,9 @@
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 
-#include <unx/GenPspGfxBackend.hxx>
 #include <unx/cairotextrender.hxx>
 
+#include <headless/SvpGraphicsBackend.hxx>
 #include <headless/CairoCommon.hxx>
 
 namespace vcl::font
@@ -39,7 +39,7 @@ class PhysicalFontFace;
 class PhysicalFontCollection;
 }
 
-namespace psp { struct JobData; class PrinterGfx; }
+namespace psp { struct JobData; }
 
 class FreetypeFontInstance;
 class FontAttributes;
@@ -48,18 +48,18 @@ class FontMetricData;
 
 class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
 {
-    std::unique_ptr<GenPspGfxBackend> m_pBackend;
 
     psp::JobData*           m_pJobData;
 
     CairoCommon             m_aCairoCommon;
     CairoTextRender         m_aTextRenderImpl;
+    std::unique_ptr<SvpGraphicsBackend> m_pBackend;
 
 public:
                             GenPspGraphics();
     virtual                ~GenPspGraphics() override;
 
-    void                    Init( psp::JobData* pJob, psp::PrinterGfx* pGfx );
+    void                    Init(psp::JobData* pJob);
 
     // helper methods
     static FontAttributes   Info2FontAttributes(const psp::FastPrintFontInfo&);

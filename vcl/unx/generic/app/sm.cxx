@@ -32,6 +32,7 @@
 
 #include <rtl/process.h>
 #include <osl/security.h>
+#include <osl/diagnose.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>

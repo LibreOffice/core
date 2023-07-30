@@ -41,7 +41,6 @@
 #include <unx/freetype_glyphcache.hxx>
 #include <unx/geninst.h>
 #include <unx/genpspgraphics.h>
-#include <unx/printergfx.hxx>
 #include <langboost.hxx>
 #include <font/LogicalFontInstance.hxx>
 #include <fontattributes.hxx>
@@ -61,12 +60,12 @@ using namespace psp;
 GenPspGraphics::GenPspGraphics()
     : m_pJobData( nullptr )
     , m_aTextRenderImpl(m_aCairoCommon)
+    , m_pBackend(new SvpGraphicsBackend(m_aCairoCommon))
 {
 }
 
-void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx)
+void GenPspGraphics::Init(psp::JobData* pJob)
 {
-    m_pBackend = std::make_unique<GenPspGfxBackend>(pGfx);
     m_pJobData = pJob;
     SetLayout( SalLayoutFlags::NONE );
 }

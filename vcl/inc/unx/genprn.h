@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_GENERIC_GENPRN_H
 
 #include <jobdata.hxx>
-#include <unx/printergfx.hxx>
 #include <salprn.hxx>
 
 class GenPspGraphics;
@@ -30,7 +29,6 @@ class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 public:
     std::unique_ptr<GenPspGraphics> m_pGraphics;
     psp::JobData            m_aJobData;
-    psp::PrinterGfx         m_aPrinterGfx;
 
     PspSalInfoPrinter();
     virtual ~PspSalInfoPrinter() override;
@@ -59,7 +57,6 @@ public:
     OUString                  m_aTmpFile;
     SalInfoPrinter*         m_pInfoPrinter;
     psp::JobData            m_aJobData;
-    psp::PrinterGfx         m_aPrinterGfx;
     sal_uInt32              m_nCopies;
     bool                    m_bCollate;
     bool                    m_bPdf;

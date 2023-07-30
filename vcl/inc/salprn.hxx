@@ -23,10 +23,12 @@
 #include <i18nutil/paper.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/dllapi.h>
+#include <tools/gen.hxx>
 
 #include "salptype.hxx"
 
 #include <vector>
+#include <optional>
 
 class SalGraphics;
 class SalFrame;

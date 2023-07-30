@@ -17,6 +17,7 @@
 
 #include <dndhelper.hxx>
 #include <osl/process.h>
+#include <osl/file.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/genprn.h>
