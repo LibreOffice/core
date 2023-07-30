@@ -2662,7 +2662,8 @@ void AutoRecovery::implts_markDocumentAsSaved(const css::uno::Reference< css::fr
 
     } /* SAFE */
 
-    implts_flushConfigItem(aInfo);
+    // no need to recover a saved document until modified and new recovery file is created
+    implts_flushConfigItem(aInfo, /*bRemoveIt=*/true);
 
     aCacheLock.unlock();
 
