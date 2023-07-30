@@ -60,7 +60,7 @@ using namespace psp;
 
 GenPspGraphics::GenPspGraphics()
     : m_pJobData( nullptr )
-    , m_pPrinterGfx( nullptr )
+    , m_aTextRenderImpl(m_aCairoCommon)
 {
 }
 
@@ -68,7 +68,6 @@ void GenPspGraphics::Init(psp::JobData* pJob, psp::PrinterGfx* pGfx)
 {
     m_pBackend = std::make_unique<GenPspGfxBackend>(pGfx);
     m_pJobData = pJob;
-    m_pPrinterGfx = pGfx;
     SetLayout( SalLayoutFlags::NONE );
 }
 
@@ -88,114 +87,29 @@ void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
     }
 }
 
-namespace {
-
-class PspSalLayout : public GenericSalLayout
-{
-public:
-    PspSalLayout(psp::PrinterGfx&, LogicalFontInstance &rFontInstance);
-
-    void                InitFont() const final override;
-
-private:
-    ::psp::PrinterGfx&  mrPrinterGfx;
-    sal_IntPtr          mnFontID;
-    int                 mnFontHeight;
-    int                 mnFontWidth;
-    bool                mbVertical;
-    bool                mbArtItalic;
-    bool                mbArtBold;
-};
-
-}
-
-PspSalLayout::PspSalLayout(::psp::PrinterGfx& rGfx, LogicalFontInstance &rFontInstance)
-:   GenericSalLayout(rFontInstance)
-,   mrPrinterGfx(rGfx)
-{
-    mnFontID     = mrPrinterGfx.GetFontID();
-    mnFontHeight = mrPrinterGfx.GetFontHeight();
-    mnFontWidth  = mrPrinterGfx.GetFontWidth();
-    mbVertical   = mrPrinterGfx.GetFontVertical();
-    mbArtItalic  = mrPrinterGfx.GetArtificialItalic();
-    mbArtBold    = mrPrinterGfx.GetArtificialBold();
-}
-
-void PspSalLayout::InitFont() const
-{
-    GenericSalLayout::InitFont();
-    mrPrinterGfx.SetFont(mnFontID, mnFontHeight, mnFontWidth,
-                         mnOrientation, mbVertical, mbArtItalic, mbArtBold);
-}
-
 void GenPspGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    const GlyphItem* pGlyph;
-    basegfx::B2DPoint aPos;
-    int nStart = 0;
-    while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
-        m_pPrinterGfx->DrawGlyph(Point(aPos.getX(), aPos.getY()), *pGlyph);
+    m_aTextRenderImpl.DrawTextLayout(rLayout, *this);
 }
 
 FontCharMapRef GenPspGraphics::GetFontCharMap() const
 {
-    if (!m_pFreetypeFont[0])
-        return nullptr;
-
-    return m_pFreetypeFont[0]->GetFontFace()->GetFontCharMap();
+    return m_aTextRenderImpl.GetFontCharMap();
 }
 
 bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
-    if (!m_pFreetypeFont[0])
-        return false;
-
-    return m_pFreetypeFont[0]->GetFontFace()->GetFontCapabilities(rFontCapabilities);
+    return m_aTextRenderImpl.GetFontCapabilities(rFontCapabilities);
 }
 
 void GenPspGraphics::SetFont(LogicalFontInstance *pFontInstance, int nFallbackLevel)
 {
-    // release all fonts that are to be overridden
-    for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
-    {
-        // old server side font is no longer referenced
-        m_pFreetypeFont[i] = nullptr;
-    }
-
-    // return early if there is no new font
-    if (!pFontInstance)
-        return;
-
-    sal_IntPtr nID = pFontInstance->GetFontFace()->GetFontId();
-
-    const vcl::font::FontSelectPattern& rEntry = pFontInstance->GetFontSelectPattern();
-
-    // also set the serverside font for layouting
-    // requesting a font provided by builtin rasterizer
-    FreetypeFontInstance* pFreetypeFont = static_cast<FreetypeFontInstance*>(pFontInstance);
-    m_pFreetypeFont[ nFallbackLevel ] = pFreetypeFont;
-
-    // ignore fonts with e.g. corrupted font files
-    if (!m_pFreetypeFont[nFallbackLevel]->GetFreetypeFont().TestFont())
-        m_pFreetypeFont[nFallbackLevel] = nullptr;
-
-    // set the printer font
-    m_pPrinterGfx->SetFont( nID,
-                            rEntry.mnHeight,
-                            rEntry.mnWidth,
-                            rEntry.mnOrientation,
-                            rEntry.mbVertical,
-                            pFontInstance->NeedsArtificialItalic(),
-                            pFontInstance->NeedsArtificialBold()
-                            );
+    m_aTextRenderImpl.SetFont(pFontInstance, nFallbackLevel);
 }
 
 void GenPspGraphics::SetTextColor( Color nColor )
 {
-    psp::PrinterColor aColor (nColor.GetRed(),
-                              nColor.GetGreen(),
-                              nColor.GetBlue());
-    m_pPrinterGfx->SetTextColor (aColor);
+    m_aTextRenderImpl.SetTextColor(nColor);
 }
 
 bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pFontCollection,
@@ -237,7 +151,7 @@ bool GenPspGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection* pFontCol
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
-    return AddTempDevFontHelper(pFontCollection, rFileURL, rFontName);
+    return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
 void GenPspGraphics::GetDevFontListHelper( vcl::font::PhysicalFontCollection *pFontCollection )
@@ -274,29 +188,22 @@ void GenPspGraphics::GetDevFontListHelper( vcl::font::PhysicalFontCollection *pF
 
 void GenPspGraphics::GetDevFontList( vcl::font::PhysicalFontCollection *pFontCollection )
 {
-    GetDevFontListHelper(pFontCollection);
+    m_aTextRenderImpl.GetDevFontList(pFontCollection);
 }
 
 void GenPspGraphics::ClearDevFontCache()
 {
-    FreetypeManager::get().ClearFontCache();
+    m_aTextRenderImpl.ClearDevFontCache();
 }
 
 void GenPspGraphics::GetFontMetric(FontMetricDataRef& rxFontMetric, int nFallbackLevel)
 {
-    if (nFallbackLevel >= MAX_FALLBACK)
-        return;
-
-    if (m_pFreetypeFont[nFallbackLevel])
-        m_pFreetypeFont[nFallbackLevel]->GetFreetypeFont().GetFontMetric(rxFontMetric);
+    m_aTextRenderImpl.GetFontMetric(rxFontMetric, nFallbackLevel);
 }
 
 std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLevel)
 {
-    assert(m_pFreetypeFont[nFallbackLevel]);
-    if (!m_pFreetypeFont[nFallbackLevel])
-        return nullptr;
-    return std::make_unique<PspSalLayout>(*m_pPrinterGfx, *m_pFreetypeFont[nFallbackLevel]);
+    return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);
 }
 
 FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )

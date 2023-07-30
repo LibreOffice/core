@@ -29,6 +29,9 @@
 #include <sallayout.hxx>
 
 #include <unx/GenPspGfxBackend.hxx>
+#include <unx/cairotextrender.hxx>
+
+#include <headless/CairoCommon.hxx>
 
 namespace vcl::font
 {
@@ -48,10 +51,9 @@ class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
     std::unique_ptr<GenPspGfxBackend> m_pBackend;
 
     psp::JobData*           m_pJobData;
-    psp::PrinterGfx*        m_pPrinterGfx;
 
-    rtl::Reference<FreetypeFontInstance>
-                            m_pFreetypeFont[ MAX_FALLBACK ];
+    CairoCommon             m_aCairoCommon;
+    CairoTextRender         m_aTextRenderImpl;
 
 public:
                             GenPspGraphics();
