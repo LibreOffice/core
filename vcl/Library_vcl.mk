@@ -559,15 +559,9 @@ vcl_headless_freetype_code=\
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
     vcl/unx/generic/fontmanager/helper \
-    vcl/unx/generic/print/bitmap_gfx \
-    vcl/unx/generic/print/common_gfx \
-    vcl/unx/generic/print/glyphset \
-    vcl/unx/generic/print/printerjob \
-    vcl/unx/generic/print/psputil \
     vcl/unx/generic/print/genpspgraphics \
     vcl/unx/generic/print/genprnpsp \
     vcl/unx/generic/print/prtsetup \
-    vcl/unx/generic/print/text_gfx \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
 
