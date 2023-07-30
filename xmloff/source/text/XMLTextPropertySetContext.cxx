@@ -70,7 +70,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextPropertySetCont
         break;
 
     case CTF_COMPLEX_COLOR:
-        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
+        return new XMLPropertyComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
         break;
 
     case CTF_DROPCAPFORMAT:

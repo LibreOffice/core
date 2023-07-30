@@ -19,6 +19,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/XMLComplexColorContext.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 using namespace css;
 using namespace xmloff::token;
@@ -38,12 +39,13 @@ SvXMLEnumMapEntry<sal_Int16> const pXML_ThemeColor_Enum[] = { { XML_NONE, -1 },
                                                               { XML_FOLLOWED_HYPERLINK, 11 },
                                                               { XML_TOKEN_INVALID, 0 } };
 
-XMLComplexColorContext::XMLComplexColorContext(
-    SvXMLImport& rImport, sal_Int32 nElement,
-    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList, const XMLPropertyState& rProp,
-    std::vector<XMLPropertyState>& rProps)
-    : XMLElementPropertyContext(rImport, nElement, rProp, rProps)
-    , mnRootElement(nElement)
+XMLComplexColorImport::XMLComplexColorImport(model::ComplexColor& rComplexColor)
+    : mrComplexColor(rComplexColor)
+{
+}
+
+void XMLComplexColorImport::fillAttributes(
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
     for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
     {
@@ -54,7 +56,7 @@ XMLComplexColorContext::XMLComplexColorContext(
                 sal_Int16 nValue = -1;
                 if (SvXMLUnitConverter::convertEnum(nValue, aIter.toView(), pXML_ThemeColor_Enum))
                 {
-                    maComplexColor.setSchemeColor(model::convertToThemeColorType(nValue));
+                    mrComplexColor.setSchemeColor(model::convertToThemeColorType(nValue));
                 }
                 break;
             }
@@ -62,7 +64,7 @@ XMLComplexColorContext::XMLComplexColorContext(
             {
                 const OUString aValue = aIter.toString();
                 if (aValue == u"theme")
-                    maComplexColor.setType(model::ColorType::Scheme);
+                    mrComplexColor.setType(model::ColorType::Scheme);
                 // TODO - handle other color types
                 break;
             }
@@ -73,8 +75,7 @@ XMLComplexColorContext::XMLComplexColorContext(
     }
 }
 
-css::uno::Reference<css::xml::sax::XFastContextHandler>
-XMLComplexColorContext::createFastChildContext(
+bool XMLComplexColorImport::handleTransformContext(
     sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_TRANSFORMATION))
@@ -110,24 +111,62 @@ XMLComplexColorContext::createFastChildContext(
                     break;
             }
         }
-        maComplexColor.addTransformation({ eTransformationType, nTransformationValue });
-        return this;
+        mrComplexColor.addTransformation({ eTransformationType, nTransformationValue });
+        return true;
     }
     XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+    return false;
+}
+
+XMLPropertyComplexColorContext::XMLPropertyComplexColorContext(
+    SvXMLImport& rImport, sal_Int32 nElement,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList, const XMLPropertyState& rProp,
+    std::vector<XMLPropertyState>& rProps)
+    : XMLElementPropertyContext(rImport, nElement, rProp, rProps)
+    , mnRootElement(nElement)
+    , maComplexColorImport(maComplexColor)
+{
+    maComplexColorImport.fillAttributes(xAttrList);
+}
+
+css::uno::Reference<css::xml::sax::XFastContextHandler>
+XMLPropertyComplexColorContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+{
+    if (maComplexColorImport.handleTransformContext(nElement, xAttrList))
+        return this;
     return nullptr;
 }
 
-void XMLComplexColorContext::endFastElement(sal_Int32 nElement)
+void XMLPropertyComplexColorContext::endFastElement(sal_Int32 nElement)
 {
     if (nElement == mnRootElement)
     {
-        if (maComplexColor.getSchemeType() != model::ThemeColorType::Unknown)
+        if (getComplexColor().getSchemeType() != model::ThemeColorType::Unknown)
         {
-            aProp.maValue <<= model::color::createXComplexColor(maComplexColor);
+            aProp.maValue <<= model::color::createXComplexColor(getComplexColor());
             SetInsert(true);
         }
     }
     XMLElementPropertyContext::endFastElement(nElement);
+}
+
+XMLComplexColorContext::XMLComplexColorContext(
+    SvXMLImport& rImport, model::ComplexColor& rComplexColor,
+    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+    : SvXMLImportContext(rImport)
+    , maComplexColorImport(rComplexColor)
+{
+    maComplexColorImport.fillAttributes(xAttrList);
+}
+
+css::uno::Reference<css::xml::sax::XFastContextHandler>
+XMLComplexColorContext::createFastChildContext(
+    sal_Int32 nElement, const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList)
+{
+    if (maComplexColorImport.handleTransformContext(nElement, xAttrList))
+        return this;
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

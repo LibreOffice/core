@@ -132,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/excel/xltracer \
 	sc/source/filter/excel/xlview \
 	sc/source/filter/excel/export/SparklineExt \
+	sc/source/filter/excel/export/ExportTools \
 	sc/source/filter/ftools/fapihelper \
 	sc/source/filter/ftools/fprogressbar \
 	sc/source/filter/ftools/ftools \

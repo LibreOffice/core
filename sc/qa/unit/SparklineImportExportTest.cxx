@@ -35,12 +35,16 @@ public:
     void testSparklinesExportODS();
     void testSparklinesRoundtripODS();
     void testNoSparklinesInDocumentXLSX();
+    void testSparklinesRoundtripThemeColorsODS();
+    void testSparklinesRoundtripThemeColorsOOXML();
 
     CPPUNIT_TEST_SUITE(SparklineImportExportTest);
     CPPUNIT_TEST(testSparklinesRoundtripXLSX);
     CPPUNIT_TEST(testSparklinesExportODS);
     CPPUNIT_TEST(testSparklinesRoundtripODS);
     CPPUNIT_TEST(testNoSparklinesInDocumentXLSX);
+    CPPUNIT_TEST(testSparklinesRoundtripThemeColorsODS);
+    CPPUNIT_TEST(testSparklinesRoundtripThemeColorsOOXML);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -58,14 +62,14 @@ void checkSparklines(ScDocument& rDocument)
         auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, rAttributes.getType());
 
-        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries());
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), rAttributes.getColorNegative());
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis());
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorMarkers());
-        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorFirst());
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorLast());
-        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorHigh());
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLow());
+        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), rAttributes.getColorNegative().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorMarkers().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorFirst().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorLast().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorHigh().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLow().getFinalColor());
 
         CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rAttributes.getLineWeight(), 1E-2);
         CPPUNIT_ASSERT_EQUAL(false, rAttributes.isDateAxis());
@@ -91,14 +95,14 @@ void checkSparklines(ScDocument& rDocument)
         auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
 
-        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries());
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorNegative());
-        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis());
-        CPPUNIT_ASSERT_EQUAL(Color(0xd00000), rAttributes.getColorMarkers());
-        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorFirst());
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLast());
-        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorHigh());
-        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), rAttributes.getColorLow());
+        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorNegative().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, rAttributes.getColorAxis().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xd00000), rAttributes.getColorMarkers().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorFirst().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLast().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorHigh().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), rAttributes.getColorLow().getFinalColor());
 
         CPPUNIT_ASSERT_EQUAL(0.75, rAttributes.getLineWeight());
         CPPUNIT_ASSERT_EQUAL(false, rAttributes.isDateAxis());
@@ -228,7 +232,7 @@ void SparklineImportExportTest::testSparklinesRoundtripODS()
 void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
 {
     // tdf#148835
-    // Check no sparkline elements are written when there is none in the document
+    // Check no sparkline elements are written when there are none in the document
 
     // Load the document containing NO sparklines
     loadFromURL(u"xlsx/empty.xlsx");
@@ -241,6 +245,60 @@ void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
     assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext/x14:sparklineGroups", 0);
     assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext", 0);
     assertXPath(pXmlDoc, "/x:worksheet/x:extLst", 0);
+}
+
+namespace
+{
+void checkSparklineThemeColors(ScDocument& rDocument)
+{
+    auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(OString("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"),
+                         pSparkline->getSparklineGroup()->getID().getString());
+
+    auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+    CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
+
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3,
+                         rAttributes.getColorSeries().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6,
+                         rAttributes.getColorNegative().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ColorType::Unused, rAttributes.getColorAxis().getType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light1,
+                         rAttributes.getColorMarkers().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5,
+                         rAttributes.getColorFirst().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2,
+                         rAttributes.getColorLast().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1,
+                         rAttributes.getColorHigh().getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4, rAttributes.getColorLow().getSchemeType());
+}
+} // end anonymous namespace
+
+void SparklineImportExportTest::testSparklinesRoundtripThemeColorsODS()
+{
+    loadFromURL(u"fods/Sparklines.fods");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    checkSparklineThemeColors(*pModelObj->GetDocument());
+
+    saveAndReload("calc8");
+
+    pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    checkSparklineThemeColors(*pModelObj->GetDocument());
+}
+
+void SparklineImportExportTest::testSparklinesRoundtripThemeColorsOOXML()
+{
+    loadFromURL(u"fods/Sparklines.fods");
+    saveAndReload("Calc Office Open XML");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+    checkSparklineThemeColors(*pModelObj->GetDocument());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SparklineImportExportTest);

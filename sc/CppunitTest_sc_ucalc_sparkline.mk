@@ -28,12 +28,15 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc_sparkline, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
+    editeng \
     sal \
     salhelper \
     sax \
     sc \
     scqahelper \
     sfx \
+    svxcore \
     subsequenttest \
     test \
     tl \

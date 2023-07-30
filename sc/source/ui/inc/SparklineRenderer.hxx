@@ -296,27 +296,27 @@ private:
 
                 if (rAttributes.isFirst() && nValueIndex == rSparklineValues.mnFirstIndex)
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorFirst());
+                    createMarker(aMarkers, x, y, rAttributes.getColorFirst().getFinalColor());
                 }
                 else if (rAttributes.isLast() && nValueIndex == rSparklineValues.mnLastIndex)
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorLast());
+                    createMarker(aMarkers, x, y, rAttributes.getColorLast().getFinalColor());
                 }
                 else if (rAttributes.isHigh() && nValue == rSparklineValues.mfMaximum)
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorHigh());
+                    createMarker(aMarkers, x, y, rAttributes.getColorHigh().getFinalColor());
                 }
                 else if (rAttributes.isLow() && nValue == rSparklineValues.mfMinimum)
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorLow());
+                    createMarker(aMarkers, x, y, rAttributes.getColorLow().getFinalColor());
                 }
                 else if (rAttributes.isNegative() && nValue < 0.0)
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorNegative());
+                    createMarker(aMarkers, x, y, rAttributes.getColorNegative().getFinalColor());
                 }
                 else if (rAttributes.isMarkers())
                 {
-                    createMarker(aMarkers, x, y, rAttributes.getColorMarkers());
+                    createMarker(aMarkers, x, y, rAttributes.getColorMarkers().getFinalColor());
                 }
             }
 
@@ -341,12 +341,12 @@ private:
                 aAxisPolygon.append({ x1, y });
                 aAxisPolygon.append({ x2, y });
 
-                rRenderContext.SetLineColor(rAttributes.getColorAxis());
+                rRenderContext.SetLineColor(rAttributes.getColorAxis().getFinalColor());
                 rRenderContext.DrawPolyLineDirect(aMatrix, aAxisPolygon, 0.2 * mfScaleX);
             }
         }
 
-        rRenderContext.SetLineColor(rAttributes.getColorSeries());
+        rRenderContext.SetLineColor(rAttributes.getColorSeries().getFinalColor());
 
         for (auto& rPolygon : aPolygons)
         {
@@ -371,33 +371,33 @@ private:
     {
         if (rAttributes.isFirst() && nValueIndex == rSparklineValues.mnFirstIndex)
         {
-            rRenderContext.SetLineColor(rAttributes.getColorFirst());
-            rRenderContext.SetFillColor(rAttributes.getColorFirst());
+            rRenderContext.SetLineColor(rAttributes.getColorFirst().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorFirst().getFinalColor());
         }
         else if (rAttributes.isLast() && nValueIndex == rSparklineValues.mnLastIndex)
         {
-            rRenderContext.SetLineColor(rAttributes.getColorLast());
-            rRenderContext.SetFillColor(rAttributes.getColorLast());
+            rRenderContext.SetLineColor(rAttributes.getColorLast().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorLast().getFinalColor());
         }
         else if (rAttributes.isHigh() && nValue == rSparklineValues.mfMaximum)
         {
-            rRenderContext.SetLineColor(rAttributes.getColorHigh());
-            rRenderContext.SetFillColor(rAttributes.getColorHigh());
+            rRenderContext.SetLineColor(rAttributes.getColorHigh().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorHigh().getFinalColor());
         }
         else if (rAttributes.isLow() && nValue == rSparklineValues.mfMinimum)
         {
-            rRenderContext.SetLineColor(rAttributes.getColorLow());
-            rRenderContext.SetFillColor(rAttributes.getColorLow());
+            rRenderContext.SetLineColor(rAttributes.getColorLow().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorLow().getFinalColor());
         }
         else if (rAttributes.isNegative() && nValue < 0.0)
         {
-            rRenderContext.SetLineColor(rAttributes.getColorNegative());
-            rRenderContext.SetFillColor(rAttributes.getColorNegative());
+            rRenderContext.SetLineColor(rAttributes.getColorNegative().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorNegative().getFinalColor());
         }
         else
         {
-            rRenderContext.SetLineColor(rAttributes.getColorSeries());
-            rRenderContext.SetFillColor(rAttributes.getColorSeries());
+            rRenderContext.SetLineColor(rAttributes.getColorSeries().getFinalColor());
+            rRenderContext.SetFillColor(rAttributes.getColorSeries().getFinalColor());
         }
     }
 
@@ -441,7 +441,7 @@ private:
                 aAxisPolygon.append({ x1, nZeroPosition });
                 aAxisPolygon.append({ x2, nZeroPosition });
 
-                rRenderContext.SetLineColor(rAttributes.getColorAxis());
+                rRenderContext.SetLineColor(rAttributes.getColorAxis().getFinalColor());
                 rRenderContext.DrawPolyLineDirect(aMatrix, aAxisPolygon, 0.2 * mfScaleX);
             }
         }

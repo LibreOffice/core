@@ -228,6 +228,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/dump/oledumper \
     oox/source/dump/pptxdumper \
     oox/source/export/ColorPropertySet \
+    oox/source/export/ColorExportUtils \
     oox/source/export/drawingml \
     oox/source/export/DMLPresetShapeExport \
     oox/source/export/shapes \

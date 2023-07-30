@@ -36,7 +36,8 @@ StylePropertiesContext::createFastChildContext(
 {
     if (nElement == XML_ELEMENT(LO_EXT, XML_CHAR_COMPLEX_COLOR))
     {
-        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProperty, rProperties);
+        return new XMLPropertyComplexColorContext(GetImport(), nElement, xAttrList, rProperty,
+                                                  rProperties);
     }
     return SvXMLPropertySetContext::createFastChildContext(nElement, xAttrList, rProperties,
                                                            rProperty);

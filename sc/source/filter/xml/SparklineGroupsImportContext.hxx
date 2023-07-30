@@ -14,6 +14,7 @@
 #include "xmlimprt.hxx"
 #include <address.hxx>
 #include <rangelst.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 namespace sax_fastparser
 {
@@ -37,6 +38,24 @@ class SparklineGroupsImportContext : public ScXMLImportContext
 private:
     std::shared_ptr<sc::SparklineGroup> m_pCurrentSparklineGroup;
     std::vector<SparklineImportData> m_aCurrentSparklineDataList;
+
+    model::ComplexColor maAxisComplexColor;
+    model::ComplexColor maFirstComplexColor;
+    model::ComplexColor maLastComplexColor;
+    model::ComplexColor maHighComplexColor;
+    model::ComplexColor maLowComplexColor;
+    model::ComplexColor maSeriesComplexColor;
+    model::ComplexColor maNegativeComplexColor;
+    model::ComplexColor maMarkersComplexColor;
+
+    Color maAxisColor = COL_TRANSPARENT;
+    Color maFirstColor = COL_TRANSPARENT;
+    Color maLastColor = COL_TRANSPARENT;
+    Color maHighColor = COL_TRANSPARENT;
+    Color maLowColor = COL_TRANSPARENT;
+    Color maSeriesColor = COL_TRANSPARENT;
+    Color maNegativeColor = COL_TRANSPARENT;
+    Color maMarkersColor = COL_TRANSPARENT;
 
     void
     fillSparklineGroupID(css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList);

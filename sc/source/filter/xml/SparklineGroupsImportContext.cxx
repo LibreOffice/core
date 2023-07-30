@@ -13,6 +13,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/XMLComplexColorContext.hxx>
 
 #include <document.hxx>
 #include <rangeutl.hxx>
@@ -181,58 +182,50 @@ void SparklineGroupsImportContext::fillSparklineGroupAttributes(
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_SERIES):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorSeries(aColor);
+                maSeriesColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maSeriesColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_NEGATIVE):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorNegative(aColor);
+                maNegativeColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maNegativeColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_AXIS):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorAxis(aColor);
+                maAxisColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maAxisColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_MARKERS):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorMarkers(aColor);
+                maMarkersColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maMarkersColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_FIRST):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorFirst(aColor);
+                maFirstColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maFirstColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_LAST):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorLast(aColor);
+                maLastColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maLastColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_HIGH):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorHigh(aColor);
+                maHighColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maHighColor, rIter.toView());
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_LOW):
             {
-                Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toView());
-                rAttributes.setColorLow(aColor);
+                maLowColor = COL_TRANSPARENT;
+                sax::Converter::convertColor(maLowColor, rIter.toView());
                 break;
             }
             default:
@@ -281,23 +274,72 @@ uno::Reference<xml::sax::XFastContextHandler>
         case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_GROUP):
         {
             m_pCurrentSparklineGroup = std::make_shared<sc::SparklineGroup>();
+            maAxisComplexColor = model::ComplexColor();
+            maFirstComplexColor = model::ComplexColor();
+            maLastComplexColor = model::ComplexColor();
+            maHighComplexColor = model::ComplexColor();
+            maLowComplexColor = model::ComplexColor();
+            maSeriesComplexColor = model::ComplexColor();
+            maNegativeComplexColor = model::ComplexColor();
+            maMarkersComplexColor = model::ComplexColor();
+
             fillSparklineGroupID(xAttrList);
             fillSparklineGroupAttributes(xAttrList);
             pContext = this;
-            break;
         }
+        break;
         case XML_ELEMENT(CALC_EXT, XML_SPARKLINES):
         {
             pContext = this;
-            break;
         }
+        break;
         case XML_ELEMENT(CALC_EXT, XML_SPARKLINE):
         {
             SparklineImportData& rImportData = m_aCurrentSparklineDataList.emplace_back();
             fillSparklineAttributes(rImportData, xAttrList);
             pContext = this;
-            break;
         }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_AXIS_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maAxisComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_FIRST_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maFirstComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_LAST_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maLastComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_HIGH_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maHighComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_LOW_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maLowComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_SERIES_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maSeriesComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_NEGATIVE_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maNegativeComplexColor, xAttrList);
+        }
+        break;
+        case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_MARKERS_COMPLEX_COLOR):
+        {
+            pContext = new XMLComplexColorContext(GetImport(), maMarkersComplexColor, xAttrList);
+        }
+        break;
     }
 
     return pContext;
@@ -314,12 +356,42 @@ void SparklineGroupsImportContext::insertSparklines()
     }
 }
 
+namespace
+{
+model::ComplexColor combineComplexColorAndColor(model::ComplexColor& rComplexColor, Color aColor)
+{
+    if (rComplexColor.getType() != model::ColorType::Unused)
+        rComplexColor.setFinalColor(aColor);
+    else if (aColor != COL_TRANSPARENT)
+        rComplexColor = model::ComplexColor::RGB(aColor);
+    return rComplexColor;
+}
+} // end anonymous namespace
+
 void SAL_CALL SparklineGroupsImportContext::endFastElement(sal_Int32 nElement)
 {
     switch (nElement)
     {
         case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_GROUP):
         {
+            sc::SparklineAttributes& rAttributes = m_pCurrentSparklineGroup->getAttributes();
+            {
+                rAttributes.setColorAxis(
+                    combineComplexColorAndColor(maAxisComplexColor, maAxisColor));
+                rAttributes.setColorFirst(
+                    combineComplexColorAndColor(maFirstComplexColor, maFirstColor));
+                rAttributes.setColorLast(
+                    combineComplexColorAndColor(maLastComplexColor, maLastColor));
+                rAttributes.setColorHigh(
+                    combineComplexColorAndColor(maHighComplexColor, maHighColor));
+                rAttributes.setColorLow(combineComplexColorAndColor(maLowComplexColor, maLowColor));
+                rAttributes.setColorSeries(
+                    combineComplexColorAndColor(maSeriesComplexColor, maSeriesColor));
+                rAttributes.setColorNegative(
+                    combineComplexColorAndColor(maNegativeComplexColor, maNegativeColor));
+                rAttributes.setColorMarkers(
+                    combineComplexColorAndColor(maMarkersComplexColor, maMarkersColor));
+            }
             insertSparklines();
             m_pCurrentSparklineGroup.reset();
             m_aCurrentSparklineDataList.clear();

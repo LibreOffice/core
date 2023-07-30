@@ -17,6 +17,9 @@
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineList.hxx>
+#include <SparklineAttributes.hxx>
+#include <ThemeColorChanger.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 using namespace css;
 
@@ -511,16 +514,16 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     {
         sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
         rAttibutes.setType(sc::SparklineType::Column);
-        rAttibutes.setColorSeries(COL_YELLOW);
-        rAttibutes.setColorAxis(COL_GREEN);
+        rAttibutes.setColorSeries(model::ComplexColor::RGB(COL_YELLOW));
+        rAttibutes.setColorAxis(model::ComplexColor::RGB(COL_GREEN));
     }
 
     m_pDoc->CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
 
     sc::SparklineAttributes aNewAttributes;
     aNewAttributes.setType(sc::SparklineType::Stacked);
-    aNewAttributes.setColorSeries(COL_BLACK);
-    aNewAttributes.setColorAxis(COL_BLUE);
+    aNewAttributes.setColorSeries(model::ComplexColor::RGB(COL_BLACK));
+    aNewAttributes.setColorAxis(model::ComplexColor::RGB(COL_BLUE));
 
     sc::SparklineAttributes aInitialAttibutes(pSparklineGroup->getAttributes());
 
@@ -530,8 +533,10 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(false, aNewAttributes == pSparklineGroup->getAttributes());
 
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->getAttributes().getType());
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pSparklineGroup->getAttributes().getColorSeries());
-    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pSparklineGroup->getAttributes().getColorAxis());
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW,
+                         pSparklineGroup->getAttributes().getColorSeries().getFinalColor());
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN,
+                         pSparklineGroup->getAttributes().getColorAxis().getFinalColor());
 
     rDocFunc.ChangeSparklineGroupAttributes(pSparklineGroup, aNewAttributes);
 
@@ -539,8 +544,9 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(true, aNewAttributes == pSparklineGroup->getAttributes());
 
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
+                         pSparklineGroup->getAttributes().getColorSeries().getFinalColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis().getFinalColor());
 
     m_pDoc->GetUndoManager()->Undo();
 
@@ -548,8 +554,10 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(false, aNewAttributes == pSparklineGroup->getAttributes());
 
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->getAttributes().getType());
-    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pSparklineGroup->getAttributes().getColorSeries());
-    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pSparklineGroup->getAttributes().getColorAxis());
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW,
+                         pSparklineGroup->getAttributes().getColorSeries().getFinalColor());
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN,
+                         pSparklineGroup->getAttributes().getColorAxis().getFinalColor());
 
     m_pDoc->GetUndoManager()->Redo();
 
@@ -557,8 +565,9 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(true, aNewAttributes == pSparklineGroup->getAttributes());
 
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
-    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
+                         pSparklineGroup->getAttributes().getColorSeries().getFinalColor());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis().getFinalColor());
 
     m_pDoc->DeleteTab(0);
 }
@@ -894,6 +903,93 @@ void SparklineTest::testSparklineList()
 
         auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
         CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
+{
+    m_pDoc->InitDrawLayer();
+    m_pDoc->InsertTab(0, "Test");
+
+    // insert test data - A1:A6
+    insertTestData(*m_pDoc);
+
+    auto& rDocFunc = m_xDocShell->GetDocFunc();
+
+    ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    const SdrPage* pPage(pDrawLayer->GetPage(0));
+    CPPUNIT_ASSERT(pPage);
+    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    CPPUNIT_ASSERT(pTheme);
+
+    // Sparkline range
+    ScRange aDataRange(0, 0, 0, 3, 5, 0); //A1:D6
+    ScRange aRange(0, 6, 0, 3, 6, 0); // A7:D7
+
+    {
+        auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+        sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
+
+        model::ComplexColor aSeriesComplexColor;
+        aSeriesComplexColor.setSchemeColor(model::ThemeColorType::Accent3);
+        aSeriesComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aSeriesComplexColor));
+        rAttibutes.setColorSeries(aSeriesComplexColor);
+
+        model::ComplexColor aAxisComplexColor;
+        aAxisComplexColor.setSchemeColor(model::ThemeColorType::Accent1);
+        aAxisComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aAxisComplexColor));
+        rAttibutes.setColorAxis(aAxisComplexColor);
+
+        CPPUNIT_ASSERT(rDocFunc.InsertSparklines(aDataRange, aRange, pSparklineGroup));
+    }
+
+    {
+        CPPUNIT_ASSERT_EQUAL(true, m_pDoc->HasSparkline(ScAddress(0, 6, 0))); // A7
+        auto pGroup = m_pDoc->GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        CPPUNIT_ASSERT(pGroup);
+        sc::SparklineAttributes& rAttibutes = pGroup->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(Color(0xa33e03), rAttibutes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x18a303), rAttibutes.getColorAxis().getFinalColor());
+    }
+
+    {
+        auto pColorSet = std::make_shared<model::ColorSet>("TestColorScheme");
+        pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
+        pColorSet->add(model::ThemeColorType::Light1, 0x111111);
+        pColorSet->add(model::ThemeColorType::Dark2, 0x222222);
+        pColorSet->add(model::ThemeColorType::Light2, 0x333333);
+        pColorSet->add(model::ThemeColorType::Accent1, 0x444444);
+        pColorSet->add(model::ThemeColorType::Accent2, 0x555555);
+        pColorSet->add(model::ThemeColorType::Accent3, 0x666666);
+        pColorSet->add(model::ThemeColorType::Accent4, 0x777777);
+        pColorSet->add(model::ThemeColorType::Accent5, 0x888888);
+        pColorSet->add(model::ThemeColorType::Accent6, 0x999999);
+        pColorSet->add(model::ThemeColorType::Hyperlink, 0xaaaaaa);
+        pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xbbbbbb);
+
+        sc::ThemeColorChanger aChanger(*m_xDocShell);
+        aChanger.apply(pColorSet);
+    }
+
+    {
+        CPPUNIT_ASSERT_EQUAL(true, m_pDoc->HasSparkline(ScAddress(0, 6, 0))); // A7
+        auto pGroup = m_pDoc->GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        CPPUNIT_ASSERT(pGroup);
+        sc::SparklineAttributes& rAttibutes = pGroup->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(Color(0x666666), rAttibutes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x444444), rAttibutes.getColorAxis().getFinalColor());
+    }
+
+    m_pDoc->GetUndoManager()->Undo();
+
+    {
+        CPPUNIT_ASSERT_EQUAL(true, m_pDoc->HasSparkline(ScAddress(0, 6, 0))); // A7
+        auto pGroup = m_pDoc->GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        CPPUNIT_ASSERT(pGroup);
+        sc::SparklineAttributes& rAttibutes = pGroup->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(Color(0xa33e03), rAttibutes.getColorSeries().getFinalColor());
+        CPPUNIT_ASSERT_EQUAL(Color(0x18a303), rAttibutes.getColorAxis().getFinalColor());
     }
 }
 

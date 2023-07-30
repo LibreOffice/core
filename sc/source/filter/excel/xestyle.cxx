@@ -53,7 +53,6 @@
 
 #include <o3tl/safeint.hxx>
 #include <oox/export/utils.hxx>
-#include <oox/export/ColorExportUtils.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>

@@ -307,7 +307,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTableCellPropsConte
     {
         case CTF_COMPLEX_COLOR:
         {
-            return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProperty, rProperties);
+            return new XMLPropertyComplexColorContext(GetImport(), nElement, xAttrList, rProperty, rProperties);
         }
         break;
         case CTF_SC_HYPERLINK:

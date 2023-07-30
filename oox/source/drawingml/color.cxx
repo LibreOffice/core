@@ -823,9 +823,14 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
         auto eTheme = getThemeColorType();
         aNewComplexColor.setSchemeColor(eTheme);
     }
+    else if (meMode == COLOR_RGB)
+    {
+        ::Color aColor(ColorTransparency, lclRgbComponentsToRgb(mnC1, mnC2, mnC3));
+        aNewComplexColor = model::ComplexColor::RGB(aColor);
+    }
     else
     {
-        // TODO
+        // TODO - Add other options
         return aNewComplexColor;
     }
 

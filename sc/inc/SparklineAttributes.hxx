@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 #include <sal/types.h>
 #include <tools/color.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 #include <optional>
 #include <o3tl/cow_wrapper.hxx>
 
@@ -63,29 +64,31 @@ public:
         return !(SparklineAttributes::operator==(rOther));
     }
 
-    Color getColorSeries() const;
-    void setColorSeries(Color aColorSeries);
+    void resetColors();
 
-    Color getColorNegative() const;
-    void setColorNegative(Color aColorSeries);
+    model::ComplexColor getColorSeries() const;
+    void setColorSeries(model::ComplexColor const& rColorSeries);
 
-    Color getColorAxis() const;
-    void setColorAxis(Color aColorSeries);
+    model::ComplexColor getColorNegative() const;
+    void setColorNegative(model::ComplexColor const& rColorSeries);
 
-    Color getColorMarkers() const;
-    void setColorMarkers(Color aColorSeries);
+    model::ComplexColor getColorAxis() const;
+    void setColorAxis(model::ComplexColor const& rColorSeries);
 
-    Color getColorFirst() const;
-    void setColorFirst(Color aColorSeries);
+    model::ComplexColor getColorMarkers() const;
+    void setColorMarkers(model::ComplexColor const& rColorSeries);
 
-    Color getColorLast() const;
-    void setColorLast(Color aColorSeries);
+    model::ComplexColor getColorFirst() const;
+    void setColorFirst(model::ComplexColor const& rColorSeries);
 
-    Color getColorHigh() const;
-    void setColorHigh(Color aColorSeries);
+    model::ComplexColor getColorLast() const;
+    void setColorLast(model::ComplexColor const& rColorSeries);
 
-    Color getColorLow() const;
-    void setColorLow(Color aColorSeries);
+    model::ComplexColor getColorHigh() const;
+    void setColorHigh(model::ComplexColor const& rColorSeries);
+
+    model::ComplexColor getColorLow() const;
+    void setColorLow(model::ComplexColor const& rColorSeries);
 
     AxisType getMinAxisType() const;
     void setMinAxisType(AxisType eAxisType);
