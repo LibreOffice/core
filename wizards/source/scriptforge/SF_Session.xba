@@ -679,6 +679,8 @@ Check:
 			If Not SF_FileSystem.FileExists(sFile) Then GoTo CatchNotExists
 			vFileNames(i) = ConvertToUrl(sFile)
 		Next i
+	Else
+		vFileNames = Array()
 	End If
 
 Try:
