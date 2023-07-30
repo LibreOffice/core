@@ -17,6 +17,7 @@
 #include <rangeutl.hxx>
 #include <Sparkline.hxx>
 #include <themebuffer.hxx>
+#include <docmodel/color/ComplexColor.hxx>
 
 using ::oox::core::ContextHandlerRef;
 
@@ -56,34 +57,46 @@ namespace
     return ::Color();
 }
 
+model::ComplexColor fillComplexColor(const AttributeList& rAttribs, ThemeBuffer const& rThemeBuffer,
+                                     const GraphicHelper& rGraphicHelper)
+{
+    XlsColor aColor;
+    aColor.importColor(rAttribs);
+    model::ComplexColor aComplexColor = aColor.createComplexColor(rGraphicHelper, -1);
+    ::Color aFinalColor = getColor(rAttribs, rThemeBuffer);
+    aComplexColor.setFinalColor(aFinalColor);
+    return aComplexColor;
+}
+
 void addColorsToSparklineAttributes(sc::SparklineAttributes& rAttributes, sal_Int32 nElement,
-                                    const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer)
+                                    const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer,
+                                    const GraphicHelper& rHelper)
 {
     switch (nElement)
     {
         case XLS14_TOKEN(colorSeries):
-            rAttributes.setColorSeries(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorSeries(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorNegative):
-            rAttributes.setColorNegative(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorNegative(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorAxis):
-            rAttributes.setColorAxis(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorAxis(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorMarkers):
-            rAttributes.setColorMarkers(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorMarkers(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorFirst):
-            rAttributes.setColorFirst(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorFirst(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorLast):
-            rAttributes.setColorLast(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorLast(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorHigh):
-            rAttributes.setColorHigh(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorHigh(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         case XLS14_TOKEN(colorLow):
-            rAttributes.setColorLow(getColor(rAttribs, rThemeBuffer));
+            rAttributes.setColorLow(fillComplexColor(rAttribs, rThemeBuffer, rHelper));
             break;
         default:
             break;
@@ -172,6 +185,7 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         {
             auto& rLastGroup = m_aSparklineGroups.emplace_back();
             auto& rSparklineAttributes = rLastGroup.getSparklineGroup()->getAttributes();
+            rSparklineAttributes.resetColors();
             addAttributesToSparklineAttributes(rSparklineAttributes, rAttribs);
             OUString sGUID = rAttribs.getString(XR2_TOKEN(uid), OUString());
             tools::Guid aGuid(OUStringToOString(sGUID, RTL_TEXTENCODING_ASCII_US));
@@ -189,7 +203,8 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         {
             auto& rLastGroup = m_aSparklineGroups.back();
             auto& rSparklineAttributes = rLastGroup.getSparklineGroup()->getAttributes();
-            addColorsToSparklineAttributes(rSparklineAttributes, nElement, rAttribs, getTheme());
+            addColorsToSparklineAttributes(rSparklineAttributes, nElement, rAttribs, getTheme(),
+                                           getBaseFilter().getGraphicHelper());
             return this;
         }
         case XLS14_TOKEN(sparklines):

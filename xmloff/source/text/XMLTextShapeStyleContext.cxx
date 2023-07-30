@@ -91,7 +91,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextShapePropertySe
         break;
 
     case CTF_COMPLEX_COLOR:
-        return new XMLComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
+        return new XMLPropertyComplexColorContext(GetImport(), nElement, xAttrList, rProp, rProperties);
 
     case CTF_BACKGROUND_URL:
         DBG_ASSERT( rProp.mnIndex >= 3 &&

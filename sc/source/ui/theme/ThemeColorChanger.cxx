@@ -29,9 +29,12 @@
 #include <document.hxx>
 #include <address.hxx>
 #include <dociter.hxx>
+#include <docfunc.hxx>
 #include <tabvwsh.hxx>
 #include <undostyl.hxx>
 #include <undoblk.hxx>
+#include <SparklineGroup.hxx>
+#include <SparklineList.hxx>
 
 #include <undo/UndoThemeChange.hxx>
 
@@ -245,6 +248,52 @@ bool changeSheets(ScDocShell& rDocShell, ScDrawLayer* pModel,
     return bChanged;
 }
 
+model::ComplexColor modifyComplexColor(model::ComplexColor const& rComplexColor,
+                                       std::shared_ptr<model::ColorSet> const& pColorSet)
+{
+    model::ComplexColor aComplexColor(rComplexColor);
+
+    if (aComplexColor.isValidSchemeType())
+    {
+        Color aColor = pColorSet->getColor(aComplexColor.meSchemeType);
+        aColor = aComplexColor.applyTransformations(aColor);
+        aComplexColor.setFinalColor(aColor);
+    }
+    return aComplexColor;
+}
+
+void changeSparklines(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+{
+    ScDocument& rDocument = rDocShell.GetDocument();
+    auto& rDocFunc = rDocShell.GetDocFunc();
+    for (SCTAB nTab = 0; nTab < rDocument.GetTableCount(); ++nTab)
+    {
+        auto* pSparklineList = rDocument.GetSparklineList(nTab);
+        if (pSparklineList && !pSparklineList->getSparklineGroups().empty())
+        {
+            auto const& rSparklineGroups = pSparklineList->getSparklineGroups();
+            for (auto const& rSparklineGroup : rSparklineGroups)
+            {
+                auto aAttributes = rSparklineGroup->getAttributes();
+
+                aAttributes.setColorAxis(modifyComplexColor(aAttributes.getColorAxis(), pColorSet));
+                aAttributes.setColorSeries(
+                    modifyComplexColor(aAttributes.getColorSeries(), pColorSet));
+                aAttributes.setColorNegative(
+                    modifyComplexColor(aAttributes.getColorNegative(), pColorSet));
+                aAttributes.setColorMarkers(
+                    modifyComplexColor(aAttributes.getColorMarkers(), pColorSet));
+                aAttributes.setColorHigh(modifyComplexColor(aAttributes.getColorHigh(), pColorSet));
+                aAttributes.setColorLow(modifyComplexColor(aAttributes.getColorLow(), pColorSet));
+                aAttributes.setColorFirst(
+                    modifyComplexColor(aAttributes.getColorFirst(), pColorSet));
+                aAttributes.setColorLast(modifyComplexColor(aAttributes.getColorLast(), pColorSet));
+                rDocFunc.ChangeSparklineGroupAttributes(rSparklineGroup, aAttributes);
+            }
+        }
+    }
+}
+
 void changeTheTheme(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     ScDocument& rDocument = rDocShell.GetDocument();
@@ -295,6 +344,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     bool bChanged = false;
     bChanged = changeStyles(m_rDocShell, pColorSet) || bChanged;
     bChanged = changeSheets(m_rDocShell, rDocument.GetDrawLayer(), pColorSet) || bChanged;
+    changeSparklines(m_rDocShell, pColorSet);
 
     changeTheTheme(m_rDocShell, pColorSet);
 

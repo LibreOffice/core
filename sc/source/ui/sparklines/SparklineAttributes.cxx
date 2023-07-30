@@ -16,14 +16,14 @@ namespace sc
 class SparklineAttributes::Implementation
 {
 public:
-    Color m_aColorSeries;
-    Color m_aColorNegative;
-    Color m_aColorAxis;
-    Color m_aColorMarkers;
-    Color m_aColorFirst;
-    Color m_aColorLast;
-    Color m_aColorHigh;
-    Color m_aColorLow;
+    model::ComplexColor m_aColorSeries;
+    model::ComplexColor m_aColorNegative;
+    model::ComplexColor m_aColorAxis;
+    model::ComplexColor m_aColorMarkers;
+    model::ComplexColor m_aColorFirst;
+    model::ComplexColor m_aColorLast;
+    model::ComplexColor m_aColorHigh;
+    model::ComplexColor m_aColorLow;
 
     AxisType m_eMinAxisType;
     AxisType m_eMaxAxisType;
@@ -48,19 +48,18 @@ public:
 
     std::optional<double> m_aManualMax;
     std::optional<double> m_aManualMin;
-
-    static constexpr ::Color COL_STANDARD_RED = 0xff0000;
-    static constexpr ::Color COL_STANDARD_BLUE = 0x2a6099;
+    static constexpr Color COL_STANDARD_RED = 0xff0000;
+    static constexpr Color COL_STANDARD_BLUE = 0x2a6099;
 
     Implementation()
-        : m_aColorSeries(COL_STANDARD_BLUE)
-        , m_aColorNegative(COL_STANDARD_RED)
-        , m_aColorAxis(COL_STANDARD_RED)
-        , m_aColorMarkers(COL_STANDARD_RED)
-        , m_aColorFirst(COL_STANDARD_RED)
-        , m_aColorLast(COL_STANDARD_RED)
-        , m_aColorHigh(COL_STANDARD_RED)
-        , m_aColorLow(COL_STANDARD_RED)
+        : m_aColorSeries(model::ComplexColor::RGB(COL_STANDARD_BLUE))
+        , m_aColorNegative(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorAxis(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorMarkers(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorFirst(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorLast(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorHigh(model::ComplexColor::RGB(COL_STANDARD_RED))
+        , m_aColorLow(model::ComplexColor::RGB(COL_STANDARD_RED))
         , m_eMinAxisType(AxisType::Individual)
         , m_eMaxAxisType(AxisType::Individual)
         , m_fLineWeight(0.75)
@@ -146,41 +145,92 @@ bool SparklineAttributes::operator==(SparklineAttributes const& rOther) const
     return m_aImplementation == rOther.m_aImplementation;
 }
 
-Color SparklineAttributes::getColorSeries() const { return m_aImplementation->m_aColorSeries; }
-
-void SparklineAttributes::setColorSeries(Color aColor)
+void SparklineAttributes::resetColors()
 {
-    m_aImplementation->m_aColorSeries = aColor;
+    m_aImplementation->m_aColorSeries = model::ComplexColor();
+    m_aImplementation->m_aColorNegative = model::ComplexColor();
+    m_aImplementation->m_aColorAxis = model::ComplexColor();
+    m_aImplementation->m_aColorMarkers = model::ComplexColor();
+    m_aImplementation->m_aColorFirst = model::ComplexColor();
+    m_aImplementation->m_aColorLast = model::ComplexColor();
+    m_aImplementation->m_aColorHigh = model::ComplexColor();
+    m_aImplementation->m_aColorLow = model::ComplexColor();
 }
 
-Color SparklineAttributes::getColorNegative() const { return m_aImplementation->m_aColorNegative; }
-
-void SparklineAttributes::setColorNegative(Color aColor)
+model::ComplexColor SparklineAttributes::getColorSeries() const
 {
-    m_aImplementation->m_aColorNegative = aColor;
+    return m_aImplementation->m_aColorSeries;
 }
 
-Color SparklineAttributes::getColorAxis() const { return m_aImplementation->m_aColorAxis; }
-
-void SparklineAttributes::setColorAxis(Color aColor) { m_aImplementation->m_aColorAxis = aColor; }
-
-Color SparklineAttributes::getColorMarkers() const { return m_aImplementation->m_aColorMarkers; }
-void SparklineAttributes::setColorMarkers(Color aColor)
+void SparklineAttributes::setColorSeries(model::ComplexColor const& rColor)
 {
-    m_aImplementation->m_aColorMarkers = aColor;
+    m_aImplementation->m_aColorSeries = rColor;
 }
 
-Color SparklineAttributes::getColorFirst() const { return m_aImplementation->m_aColorFirst; }
-void SparklineAttributes::setColorFirst(Color aColor) { m_aImplementation->m_aColorFirst = aColor; }
+model::ComplexColor SparklineAttributes::getColorNegative() const
+{
+    return m_aImplementation->m_aColorNegative;
+}
 
-Color SparklineAttributes::getColorLast() const { return m_aImplementation->m_aColorLast; }
-void SparklineAttributes::setColorLast(Color aColor) { m_aImplementation->m_aColorLast = aColor; }
+void SparklineAttributes::setColorNegative(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorNegative = rColor;
+}
 
-Color SparklineAttributes::getColorHigh() const { return m_aImplementation->m_aColorHigh; }
-void SparklineAttributes::setColorHigh(Color aColor) { m_aImplementation->m_aColorHigh = aColor; }
+model::ComplexColor SparklineAttributes::getColorAxis() const
+{
+    return m_aImplementation->m_aColorAxis;
+}
 
-Color SparklineAttributes::getColorLow() const { return m_aImplementation->m_aColorLow; }
-void SparklineAttributes::setColorLow(Color aColor) { m_aImplementation->m_aColorLow = aColor; }
+void SparklineAttributes::setColorAxis(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorAxis = rColor;
+}
+
+model::ComplexColor SparklineAttributes::getColorMarkers() const
+{
+    return m_aImplementation->m_aColorMarkers;
+}
+void SparklineAttributes::setColorMarkers(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorMarkers = rColor;
+}
+
+model::ComplexColor SparklineAttributes::getColorFirst() const
+{
+    return m_aImplementation->m_aColorFirst;
+}
+void SparklineAttributes::setColorFirst(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorFirst = rColor;
+}
+
+model::ComplexColor SparklineAttributes::getColorLast() const
+{
+    return m_aImplementation->m_aColorLast;
+}
+void SparklineAttributes::setColorLast(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorLast = rColor;
+}
+
+model::ComplexColor SparklineAttributes::getColorHigh() const
+{
+    return m_aImplementation->m_aColorHigh;
+}
+void SparklineAttributes::setColorHigh(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorHigh = rColor;
+}
+
+model::ComplexColor SparklineAttributes::getColorLow() const
+{
+    return m_aImplementation->m_aColorLow;
+}
+void SparklineAttributes::setColorLow(model::ComplexColor const& rColor)
+{
+    m_aImplementation->m_aColorLow = rColor;
+}
 
 AxisType SparklineAttributes::getMinAxisType() const { return m_aImplementation->m_eMinAxisType; }
 void SparklineAttributes::setMinAxisType(AxisType eAxisType)

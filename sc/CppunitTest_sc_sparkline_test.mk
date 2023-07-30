@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sparkline_test, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     sal \
     salhelper \
     sax \

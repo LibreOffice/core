@@ -14,6 +14,7 @@
 #include <oox/token/tokens.hxx>
 #include <SparklineGroup.hxx>
 #include <SparklineList.hxx>
+#include <export/ExportTools.hxx>
 
 using namespace oox;
 
@@ -126,50 +127,21 @@ void SparklineExt::addSparklineGroupColors(XclExpXmlStream& rStream,
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStream.GetCurrentStream();
 
-    rWorksheet->singleElementNS(XML_x14, XML_colorSeries, XML_rgb,
-                                XclXmlUtils::ToOString(rAttributes.getColorSeries()));
-
-    if (rAttributes.getColorNegative() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorNegative, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorNegative()));
-    }
-
-    if (rAttributes.getColorAxis() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorAxis, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorAxis()));
-    }
-
-    if (rAttributes.getColorMarkers() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorMarkers, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorMarkers()));
-    }
-
-    if (rAttributes.getColorFirst() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorFirst, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorFirst()));
-    }
-
-    if (rAttributes.getColorLast() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorLast, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorLast()));
-    }
-
-    if (rAttributes.getColorHigh() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorHigh, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorHigh()));
-    }
-
-    if (rAttributes.getColorLow() != COL_TRANSPARENT)
-    {
-        rWorksheet->singleElementNS(XML_x14, XML_colorLow, XML_rgb,
-                                    XclXmlUtils::ToOString(rAttributes.getColorLow()));
-    }
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorSeries),
+                                rAttributes.getColorSeries());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorNegative),
+                                rAttributes.getColorNegative());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorAxis),
+                                rAttributes.getColorAxis());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorMarkers),
+                                rAttributes.getColorMarkers());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorFirst),
+                                rAttributes.getColorFirst());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorLast),
+                                rAttributes.getColorLast());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorHigh),
+                                rAttributes.getColorHigh());
+    oox::xls::writeComplexColor(rWorksheet, FSNS(XML_x14, XML_colorLow), rAttributes.getColorLow());
 }
 
 void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGroup& rSparklineGroup,
