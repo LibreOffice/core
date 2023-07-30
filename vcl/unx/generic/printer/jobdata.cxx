@@ -45,7 +45,6 @@ JobData& JobData::operator=(const JobData& rRight)
     m_bPapersizeFromSetup   = rRight.m_bPapersizeFromSetup;
     m_pParser               = rRight.m_pParser;
     m_aContext              = rRight.m_aContext;
-    m_nPSLevel              = rRight.m_nPSLevel;
     m_nColorDevice          = rRight.m_nColorDevice;
 
     if( !m_pParser && !m_aPrinterName.isEmpty() )
@@ -130,8 +129,6 @@ bool JobData::getStreamBuffer( void*& pData, sal_uInt32& bytes )
 
     aStream.WriteLine(Concat2View("colordepth=" + OString::number(static_cast<sal_Int32>(m_nColorDepth))));
 
-    aStream.WriteLine(Concat2View("pslevel=" + OString::number(static_cast<sal_Int32>(m_nPSLevel))));
-
     aStream.WriteLine(Concat2View("colordevice=" + OString::number(static_cast<sal_Int32>(m_nColorDevice))));
 
     // now append the PPDContext stream buffer
@@ -161,7 +158,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     bool bMargin        = false;
     bool bColorDepth    = false;
     bool bColorDevice   = false;
-    bool bPSLevel       = false;
 
     const char printerEquals[] = "printer=";
     const char orientatationEquals[] = "orientation=";
@@ -170,7 +166,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
     const char marginadjustmentEquals[] = "marginadjustment=";
     const char colordepthEquals[] = "colordepth=";
     const char colordeviceEquals[] = "colordevice=";
-    const char pslevelEquals[] = "pslevel=";
 
     while( ! aStream.eof() )
     {
@@ -215,11 +210,6 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
             bColorDevice = true;
             rJobData.m_nColorDevice = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordeviceEquals)));
         }
-        else if (aLine.startsWith(pslevelEquals))
-        {
-            bPSLevel = true;
-            rJobData.m_nPSLevel = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pslevelEquals)));
-        }
         else if (aLine == "PPDContextData" && bPrinter)
         {
             PrinterInfoManager& rManager = PrinterInfoManager::get();
@@ -242,7 +232,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         }
     }
 
-    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
+    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bColorDevice && bColorDepth;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

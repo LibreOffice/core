@@ -240,10 +240,6 @@ void PrinterInfoManager::initialize()
             if (!aValue.isEmpty())
                 m_aGlobalDefaults.m_nColorDevice = aValue.toInt32();
 
-            aValue = aConfig.ReadKey( "PSLevel" );
-            if (!aValue.isEmpty())
-                m_aGlobalDefaults.m_nPSLevel = aValue.toInt32();
-
             // get the PPDContext of global JobData
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
@@ -419,10 +415,6 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "ColorDevice" );
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nColorDevice = aValue.toInt32();
-
-                aValue = aConfig.ReadKey( "PSLevel" );
-                if (!aValue.isEmpty())
-                    aPrinter.m_aInfo.m_nPSLevel = aValue.toInt32();
 
                 // now iterate over all keys to extract multi key information:
                 // 1. PPDContext information

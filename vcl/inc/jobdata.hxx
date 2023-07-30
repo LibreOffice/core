@@ -39,7 +39,6 @@ struct VCL_DLLPUBLIC JobData
     int                     m_nBottomMarginAdjust;
     // user overrides for PPD
     int                     m_nColorDepth;
-    int                     m_nPSLevel;     // 0: no override, else languagelevel to use
     int                     m_nColorDevice; // 0: no override, -1 grey scale, +1 color
     orientation             m_eOrientation;
     OUString                m_aPrinterName;
@@ -55,7 +54,6 @@ struct VCL_DLLPUBLIC JobData
             m_nTopMarginAdjust( 0 ),
             m_nBottomMarginAdjust( 0 ),
             m_nColorDepth( 24 ),
-            m_nPSLevel( 0 ),
             m_nColorDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
             m_bPapersizeFromSetup( false ),
