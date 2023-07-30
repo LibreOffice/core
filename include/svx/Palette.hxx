@@ -61,7 +61,7 @@ struct SVXCORE_DLLPUBLIC NamedColor
             if (m_nLumMod != 10000)
                 aComplexColor.addTransformation({ model::TransformationType::LumMod, m_nLumMod });
 
-            if (m_nLumMod != 0)
+            if (m_nLumOff != 0)
                 aComplexColor.addTransformation({ model::TransformationType::LumOff, m_nLumOff });
         }
         else
