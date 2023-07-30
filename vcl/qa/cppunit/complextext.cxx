@@ -540,4 +540,37 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
+{
+#if HAVE_MORE_FONTS
+    vcl::Font aFont(u"DejaVu Sans", u"Book", Size(0, 72));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    auto pLayout = pOutDev->ImplLayout(u"a\u202F\u1823", 0, -1, Point(0, 0), 0, {}, {});
+
+    // If font fallback happened, then the returned layout must be a
+    // MultiSalLayout instance.
+    auto pMultiLayout = dynamic_cast<MultiSalLayout*>(pLayout.get());
+    CPPUNIT_ASSERT(pMultiLayout);
+
+    auto pFallbackRuns = pMultiLayout->GetFallbackRuns();
+    CPPUNIT_ASSERT(!pFallbackRuns->IsEmpty());
+
+    bool bRTL;
+    int nCharPos = -1;
+    std::vector<sal_Int32> aFallbacks;
+    while (pFallbackRuns->GetNextPos(&nCharPos, &bRTL))
+        aFallbacks.push_back(nCharPos);
+
+    // Assert that U+202F is included in the fallback run.
+    // Without the fix this fails with:
+    // - Expected: { 2 }
+    // - Actual  : { 1, 2 }
+    std::vector<sal_Int32> aExpctedFallbacks = { 1, 2 };
+    CPPUNIT_ASSERT_EQUAL(aFallbacks, aExpctedFallbacks);
+#endif
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -128,6 +128,21 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
         mxBreak->previousCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
+    // tdf#107612
+    // If the start of the fallback run is Mongolian character and the previous
+    // character is NNBSP, we want to include the NNBSP in the fallback since
+    // it has special uses in Mongolian and have to be in the same text run to
+    // work.
+    sal_Int32 nTempPos = nGraphemeStartPos;
+    if (nGraphemeStartPos > 0)
+    {
+        auto nCurrChar = rArgs.mrStr.iterateCodePoints(&nTempPos, 0);
+        auto nPrevChar = rArgs.mrStr.iterateCodePoints(&nTempPos, -1);
+        if (nPrevChar == 0x202F
+            && u_getIntPropertyValue(nCurrChar, UCHAR_SCRIPT) == USCRIPT_MONGOLIAN)
+            nGraphemeStartPos = nTempPos;
+    }
+
     //stay inside the Layout range (e.g. with tdf124116-1.odt)
     nGraphemeStartPos = std::max(rArgs.mnMinCharPos, nGraphemeStartPos);
     nGraphemeEndPos = std::min(rArgs.mnEndCharPos, nGraphemeEndPos);

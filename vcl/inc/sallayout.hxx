@@ -57,7 +57,7 @@ namespace vcl::text {
     class TextLayoutCache;
 }
 
-class MultiSalLayout final : public SalLayout
+class VCL_DLLPUBLIC MultiSalLayout final : public SalLayout
 {
 public:
     void            DrawText(SalGraphics&) const override;
@@ -85,6 +85,8 @@ public:
     void            ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
                                           vcl::text::ImplLayoutArgs& rMultiArgs,
                                           const double* pMultiDXArray);
+
+    SAL_DLLPRIVATE ImplLayoutRuns* GetFallbackRuns() { return maFallbackRuns; }
 
     virtual         ~MultiSalLayout() override;
 
