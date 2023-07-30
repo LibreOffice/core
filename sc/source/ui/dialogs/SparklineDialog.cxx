@@ -192,13 +192,13 @@ void SparklineDialog::setupValues()
             break;
     }
 
-    mxColorSeries->SelectEntry(maAttributes.getColorSeries());
-    mxColorNegative->SelectEntry(maAttributes.getColorNegative());
-    mxColorMarker->SelectEntry(maAttributes.getColorMarkers());
-    mxColorHigh->SelectEntry(maAttributes.getColorHigh());
-    mxColorLow->SelectEntry(maAttributes.getColorLow());
-    mxColorFirst->SelectEntry(maAttributes.getColorFirst());
-    mxColorLast->SelectEntry(maAttributes.getColorLast());
+    mxColorSeries->SelectEntry(maAttributes.getColorSeries().getFinalColor());
+    mxColorNegative->SelectEntry(maAttributes.getColorNegative().getFinalColor());
+    mxColorMarker->SelectEntry(maAttributes.getColorMarkers().getFinalColor());
+    mxColorHigh->SelectEntry(maAttributes.getColorHigh().getFinalColor());
+    mxColorLow->SelectEntry(maAttributes.getColorLow().getFinalColor());
+    mxColorFirst->SelectEntry(maAttributes.getColorFirst().getFinalColor());
+    mxColorLast->SelectEntry(maAttributes.getColorLast().getFinalColor());
 
     mxCheckButtonNegative->set_active(maAttributes.isNegative());
     mxCheckButtonMarker->set_active(maAttributes.isMarkers());
@@ -526,13 +526,13 @@ bool SparklineDialog::checkValidInputOutput()
 
 void SparklineDialog::perform()
 {
-    maAttributes.setColorSeries(mxColorSeries->GetSelectEntryColor());
-    maAttributes.setColorNegative(mxColorNegative->GetSelectEntryColor());
-    maAttributes.setColorMarkers(mxColorMarker->GetSelectEntryColor());
-    maAttributes.setColorHigh(mxColorHigh->GetSelectEntryColor());
-    maAttributes.setColorLow(mxColorLow->GetSelectEntryColor());
-    maAttributes.setColorFirst(mxColorFirst->GetSelectEntryColor());
-    maAttributes.setColorLast(mxColorLast->GetSelectEntryColor());
+    maAttributes.setColorSeries(mxColorSeries->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorNegative(mxColorNegative->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorMarkers(mxColorMarker->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorHigh(mxColorHigh->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorLow(mxColorLow->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorFirst(mxColorFirst->GetSelectedEntry().getComplexColor());
+    maAttributes.setColorLast(mxColorLast->GetSelectedEntry().getComplexColor());
 
     auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
 

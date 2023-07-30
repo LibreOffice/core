@@ -21,6 +21,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <xmloff/XMLComplexColorExport.hxx>
 
 using namespace css;
 using namespace xmloff::token;
@@ -33,14 +34,24 @@ SparklineGroupsExport::SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable)
 {
 }
 
-void SparklineGroupsExport::insertColor(Color aColor, XMLTokenEnum eToken)
+void SparklineGroupsExport::insertColor(model::ComplexColor const& rComplexColor,
+                                        XMLTokenEnum eToken)
 {
+    if (rComplexColor.getType() == model::ColorType::Unused)
+        return;
+
     OUStringBuffer aStringBuffer;
-    if (aColor != COL_TRANSPARENT)
-    {
-        sax::Converter::convertColor(aStringBuffer, aColor);
-        m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, eToken, aStringBuffer.makeStringAndClear());
-    }
+    sax::Converter::convertColor(aStringBuffer, rComplexColor.getFinalColor());
+    m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, eToken, aStringBuffer.makeStringAndClear());
+}
+
+void SparklineGroupsExport::insertComplexColor(model::ComplexColor const& rComplexColor,
+                                               XMLTokenEnum eToken)
+{
+    if (!rComplexColor.isValidSchemeType())
+        return;
+    XMLComplexColorExport aComplexColorExport(m_rExport);
+    aComplexColorExport.exportComplexColor(rComplexColor, XML_NAMESPACE_CALC_EXT, eToken);
 }
 
 void SparklineGroupsExport::insertBool(bool bValue, XMLTokenEnum eToken)
@@ -181,6 +192,15 @@ void SparklineGroupsExport::addSparklineGroup(
 
     SvXMLElementExport aElementSparklineGroup(m_rExport, XML_NAMESPACE_CALC_EXT,
                                               XML_SPARKLINE_GROUP, true, true);
+
+    insertComplexColor(rAttributes.getColorSeries(), XML_SPARKLINE_SERIES_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorNegative(), XML_SPARKLINE_NEGATIVE_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorAxis(), XML_SPARKLINE_AXIS_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorMarkers(), XML_SPARKLINE_MARKERS_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorFirst(), XML_SPARKLINE_FIRST_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorLast(), XML_SPARKLINE_LAST_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorHigh(), XML_SPARKLINE_HIGH_COMPLEX_COLOR);
+    insertComplexColor(rAttributes.getColorLow(), XML_SPARKLINE_LOW_COMPLEX_COLOR);
 
     SvXMLElementExport aElementSparklines(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINES, true,
                                           true);

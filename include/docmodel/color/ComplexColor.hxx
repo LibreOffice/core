@@ -246,6 +246,13 @@ public:
         o3tl::hash_combine(seed, sal_uInt32(maFinalColor));
         return seed;
     }
+
+    static model::ComplexColor RGB(Color const& rColor)
+    {
+        model::ComplexColor aComplexColor;
+        aComplexColor.setColor(rColor);
+        return aComplexColor;
+    }
 };
 
 } // end of namespace svx

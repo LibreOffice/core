@@ -19,6 +19,10 @@
 #include <SparklineGroup.hxx>
 
 class ScXMLExport;
+namespace model
+{
+class ComplexColor;
+}
 
 namespace sc
 {
@@ -33,7 +37,10 @@ class SparklineGroupsExport
                            std::vector<std::shared_ptr<Sparkline>> const& rSparklines);
     void addSparklineAttributes(Sparkline const& rSparkline);
 
-    void insertColor(Color aColor, xmloff::token::XMLTokenEnum eToken);
+    void insertColor(model::ComplexColor const& rComplexColor, xmloff::token::XMLTokenEnum eToken);
+    void insertComplexColor(model::ComplexColor const& rComplexColor,
+                            xmloff::token::XMLTokenEnum eToken);
+
     void insertBool(bool bValue, xmloff::token::XMLTokenEnum eToken);
 
 public:
