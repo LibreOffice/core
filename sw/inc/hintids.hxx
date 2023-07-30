@@ -141,7 +141,7 @@ class SwTransparencyGrf;
 class SwFormatRuby;
 class SwTableFormulaUpdate;
 class SwAutoFormatGetDocNode;
-class SwVirtPageNumInfo;
+class VirtPageNumHint;
 class SwFindNearestNode;
 class SwFltAnchor;
 class SwFltTOX;
@@ -433,7 +433,6 @@ constexpr TypedWhichId<SwAttrSetChg> RES_ATTRSET_CHG(169);
 constexpr TypedWhichId<SwUpdateAttr> RES_UPDATE_ATTR(170);
 constexpr TypedWhichId<SwAutoFormatGetDocNode> RES_AUTOFMT_DOCNODE(176);
 constexpr TypedWhichId<SwMsgPoolItem> RES_HIDDENPARA_PRINT(178);
-constexpr TypedWhichId<SwVirtPageNumInfo> RES_VIRTPAGENUM_INFO(180);
 constexpr TypedWhichId<SwPtrMsgPoolItem> RES_REMOVE_UNO_OBJECT(181);
 // empty
 constexpr TypedWhichId<SwFindNearestNode> RES_FINDNEARESTNODE(184);

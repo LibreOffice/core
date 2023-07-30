@@ -69,6 +69,15 @@ RedlineUnDelText::RedlineUnDelText(sal_Int32 const nS, sal_Int32 const nL)
 {
 }
 
+VirtPageNumHint::VirtPageNumHint(const SwPageFrame* pPg):
+    SfxHint(SfxHintId::SwVirtPageNumHint),
+    m_pPage(nullptr),
+    m_pOrigPage(pPg),
+    m_pFrame(nullptr),
+    m_bFound(false)
+{
+}
+
 } // namespace sw
 
 SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
@@ -158,11 +167,6 @@ const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich )
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
 }
 #endif
-
-SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrame *pPg ) :
-    SwMsgPoolItem( RES_VIRTPAGENUM_INFO ), m_pPage( nullptr ), m_pOrigPage( pPg ), m_pFrame( nullptr )
-{
-}
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
     : SwMsgPoolItem( RES_FINDNEARESTNODE ), m_pNode( &rNd ), m_pFound( nullptr )

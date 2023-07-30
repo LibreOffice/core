@@ -2598,13 +2598,14 @@ const SwFooterFrame* SwPageFrame::GetFooterFrame() const
     return nullptr;
 }
 
-bool SwPageFrame::UpdateVirtPageNumInfo(SwVirtPageNumInfo& rHint, const SwFrame* pFrame) const
+void SwPageFrame::UpdateVirtPageNumInfo(sw::VirtPageNumHint& rHint, const SwFrame* pFrame) const
 {
+    assert(!rHint.IsFound());
     if(this == rHint.GetOrigPage() && !pFrame->GetPrev())
     {
         // Should be the one (can temporarily be different, should we be concerned about this possibility?)
+        rHint.SetFound();
         rHint.SetInfo(this, pFrame);
-        return false;
     }
     if(GetPhyPageNum() < rHint.GetOrigPage()->GetPhyPageNum() &&
          (!rHint.GetPage() || GetPhyPageNum() > rHint.GetPage()->GetPhyPageNum()))
@@ -2612,7 +2613,6 @@ bool SwPageFrame::UpdateVirtPageNumInfo(SwVirtPageNumInfo& rHint, const SwFrame*
         // This could be the one.
         rHint.SetInfo(this, pFrame);
     }
-    return true;
 }
 
 void SwPageFrame::dumpAsXml(xmlTextWriterPtr writer) const

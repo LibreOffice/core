@@ -2125,6 +2125,15 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
         InvalidateRange(SwCharRange(nIndex, TextFrameIndex(1)));
         return;
     }
+    else if (rHint.GetId() == SfxHintId::SwVirtPageNumHint)
+    {
+        auto& rVirtPageNumHint = const_cast<sw::VirtPageNumHint&>(static_cast<const sw::VirtPageNumHint&>(rHint));
+        if(!IsInDocBody() || IsFollow() || rVirtPageNumHint.IsFound())
+            return;
+        if(const SwPageFrame* pPage = FindPageFrame())
+            pPage->UpdateVirtPageNumInfo(rVirtPageNumHint, this);
+        return;
+    }
     else if (auto const pHt = dynamic_cast<sw::MoveText const*>(&rHint))
     {
         pMoveText = pHt;
@@ -2744,17 +2753,6 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
 
     if ( bRecalcFootnoteFlag )
         CalcFootnoteFlag();
-}
-
-bool SwTextFrame::GetInfo(SfxPoolItem& rHint) const
-{
-    if(RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && !IsFollow())
-    {
-        SwVirtPageNumInfo& rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
-        if(const SwPageFrame* pPage = FindPageFrame())
-            return pPage->UpdateVirtPageNumInfo(rInfo, this);
-    }
-    return true;
 }
 
 void SwTextFrame::PrepWidows( const sal_uInt16 nNeed, bool bNotify )

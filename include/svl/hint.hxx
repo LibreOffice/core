@@ -152,6 +152,7 @@ enum class SfxHintId {
     SwDocPosUpdate,
     SwDocPosUpdateAtIndex,
     SwTableHeadingChange,
+    SwVirtPageNumHint,
 
     ThisIsAnSdrHint
 };

@@ -421,7 +421,6 @@ public:
     SwRect GetPaintSwRect();
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
-    virtual bool GetInfo( SfxPoolItem & ) const override;
 
     /**
      * Layout oriented cursor travelling:

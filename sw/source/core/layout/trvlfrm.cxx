@@ -1839,15 +1839,15 @@ sal_uInt16 SwFrame::GetVirtPageNum() const
 
         if ( pDesc->GetNumOffset() && pDesc->GetDefinedIn() )
         {
-            const sw::BroadcastingModify *pMod = pDesc->GetDefinedIn();
-            SwVirtPageNumInfo aInfo( pPage );
-            pMod->GetInfo( aInfo );
-            if ( aInfo.GetPage() )
+            auto pMod = const_cast<sw::BroadcastingModify*>(pDesc->GetDefinedIn());
+            sw::VirtPageNumHint aHint(pPage);
+            pMod->CallSwClientNotify(aHint);
+            if(aHint.GetPage())
             {
-                if( !pVirtPage || aInfo.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum() )
+                if(!pVirtPage || aHint.GetPage()->GetPhyPageNum() > pVirtPage->GetPhyPageNum())
                 {
-                    pVirtPage = aInfo.GetPage();
-                    pFrame = aInfo.GetFrame();
+                    pVirtPage = aHint.GetPage();
+                    pFrame = aHint.GetFrame();
                 }
             }
         }

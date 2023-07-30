@@ -261,6 +261,32 @@ class TableHeadingChange final: public SfxHint
 public:
     TableHeadingChange() : SfxHint(SfxHintId::SwTableHeadingChange) {};
 };
+class VirtPageNumHint final: public SfxHint
+{
+    const SwPageFrame* m_pPage;
+    const SwPageFrame* m_pOrigPage;
+    const SwFrame* m_pFrame;
+    bool m_bFound;
+    /** Multiple attributes can be attached to a single paragraph / table
+     The frame, in the end, has to decide which attribute takes effect and which physical page it involves */
+public:
+    VirtPageNumHint(const SwPageFrame* pPg);
+    const SwPageFrame* GetPage() const
+        { return m_pPage; }
+    const SwPageFrame* GetOrigPage() const
+        { return m_pOrigPage; }
+    const SwFrame* GetFrame() const
+        { return m_pFrame; }
+    void SetInfo(const SwPageFrame* pPg, const SwFrame *pF)
+        { m_pFrame = pF; m_pPage = pPg; }
+    void SetFound()
+    {
+        assert(!m_bFound);
+        m_bFound = true;
+    }
+    bool IsFound()
+        { return m_bFound; }
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
@@ -359,22 +385,6 @@ public:
 #endif
 };
 
-class SwVirtPageNumInfo final : public SwMsgPoolItem
-{
-    const SwPageFrame *m_pPage;
-    const SwPageFrame *m_pOrigPage;
-    const SwFrame     *m_pFrame;
-    /** Multiple attributes can be attached to a single paragraph / table
-     The frame, in the end, has to decide which attribute takes effect and which physical page it involves */
-public:
-    SwVirtPageNumInfo( const SwPageFrame *pPg );
-
-    const SwPageFrame *GetPage() const          { return m_pPage;    }
-    const SwPageFrame *GetOrigPage() const      { return m_pOrigPage;}
-    const SwFrame *GetFrame() const             { return m_pFrame; }
-    void  SetInfo( const SwPageFrame *pPg,
-                   const SwFrame *pF )    { m_pFrame = pF; m_pPage = pPg; }
-};
 
 class SwFindNearestNode final : public SwMsgPoolItem
 {

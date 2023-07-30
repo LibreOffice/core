@@ -3512,6 +3512,14 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         HandleTableHeadlineChange();
         return;
     }
+    else if(rHint.GetId() == SfxHintId::SwVirtPageNumHint)
+    {
+        auto& rVirtPageNumHint = const_cast<sw::VirtPageNumHint&>(static_cast<const sw::VirtPageNumHint&>(rHint));
+        if(!IsInDocBody() || IsFollow() || rVirtPageNumHint.IsFound())
+            return;
+        if(const SwPageFrame* pPage = FindPageFrame())
+            pPage->UpdateVirtPageNumInfo(rVirtPageNumHint, this);
+    }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -3636,17 +3644,6 @@ void SwTabFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
-}
-
-bool SwTabFrame::GetInfo(SfxPoolItem& rHint) const
-{
-    if(RES_VIRTPAGENUM_INFO == rHint.Which() && IsInDocBody() && !IsFollow())
-    {
-        SwVirtPageNumInfo& rInfo = static_cast<SwVirtPageNumInfo&>(rHint);
-        if(const SwPageFrame* pPage = FindPageFrame())
-            return pPage->UpdateVirtPageNumInfo(rInfo, this);
-    }
-    return true;
 }
 
 SwFrame *SwTabFrame::FindLastContentOrTable()

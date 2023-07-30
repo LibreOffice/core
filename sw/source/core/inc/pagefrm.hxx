@@ -36,7 +36,9 @@ class SwAttrSetChg;
 namespace vcl { class Font; }
 class SwSortedObjs;
 class SwAnchoredObject;
-class SwVirtPageNumInfo;
+namespace sw {
+    class VirtPageNumHint;
+}
 
 enum class SwPageFrameInvFlags : sal_uInt8
 {
@@ -351,7 +353,7 @@ public:
     const SwHeaderFrame* GetHeaderFrame() const;
     const SwFooterFrame* GetFooterFrame() const;
 
-    bool UpdateVirtPageNumInfo(SwVirtPageNumInfo& rHint, const SwFrame* pFrame) const;
+    void UpdateVirtPageNumInfo(sw::VirtPageNumHint& rHint, const SwFrame* pFrame) const;
 
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
