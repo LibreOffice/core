@@ -96,7 +96,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         // font attributes
         OUString          m_aFamilyName;
         std::vector<OUString> m_aAliases;
-        OUString          m_aPSName;
         OUString          m_aStyleName;
         FontFamily        m_eFamilyStyle;
         FontItalic        m_eItalic;
@@ -104,9 +103,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         FontWeight        m_eWeight;
         FontPitch         m_ePitch;
         rtl_TextEncoding  m_aEncoding;
-        int               m_nAscend;
-        int               m_nDescend;
-        int               m_nLeading;
 
         int               m_nDirectory;       // atom containing system dependent path
         OString           m_aFontFile;        // relative to directory
@@ -202,9 +198,6 @@ public:
 
     // routines to get font info in small pieces
 
-    // get a specific fonts PSName name
-    OUString getPSName( fontID nFontID );
-
     // get a specific fonts system dependent filename
     OString getFontFileSysPath( fontID nFontID ) const
     {
@@ -216,12 +209,6 @@ public:
 
     // get the ttc face variation
     int getFontFaceVariation( fontID nFontID ) const;
-
-    // get a specific fonts ascend
-    int getFontAscend( fontID nFontID );
-
-    // get a specific fonts descent
-    int getFontDescend( fontID nFontID );
 
     // font administration functions
 

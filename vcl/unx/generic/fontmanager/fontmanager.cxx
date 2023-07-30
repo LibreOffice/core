@@ -87,9 +87,6 @@ PrintFontManager::PrintFont::PrintFont()
 ,   m_eWeight(WEIGHT_DONTKNOW)
 ,   m_ePitch(PITCH_DONTKNOW)
 ,   m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
-,   m_nAscend(0)
-,   m_nDescend(0)
-,   m_nLeading(0)
 ,   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
 ,   m_nVariationEntry(0)
@@ -563,12 +560,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
         if( !aInfo.usubfamily.isEmpty() )
             rFont.m_aStyleName = aInfo.usubfamily;
 
-        SAL_WARN_IF( aInfo.psname.isEmpty(), "vcl.fonts", "No PostScript name in font:" << aFile );
-
-        rFont.m_aPSName = !aInfo.psname.isEmpty() ?
-            OStringToOUString(aInfo.psname, aEncoding) :
-            rFont.m_aFamilyName; // poor font does not have a postscript name
-
         rFont.m_eFamilyStyle = matchFamilyName(rFont.m_aFamilyName);
 
         switch( aInfo.weight )
@@ -609,33 +600,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
             rFont.m_eItalic = ITALIC_NORMAL;
 
         rFont.m_aEncoding = aInfo.microsoftSymbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
-
-        if( aInfo.ascender && aInfo.descender )
-        {
-            rFont.m_nLeading   = aInfo.linegap;
-            rFont.m_nAscend    = aInfo.ascender;
-            rFont.m_nDescend   = -aInfo.descender;
-        }
-        else if( aInfo.typoAscender && aInfo.typoDescender )
-        {
-            rFont.m_nLeading   = aInfo.typoLineGap;
-            rFont.m_nAscend    = aInfo.typoAscender;
-            rFont.m_nDescend   = -aInfo.typoDescender;
-        }
-        else if( aInfo.winAscent && aInfo.winDescent )
-        {
-            rFont.m_nAscend    = aInfo.winAscent;
-            rFont.m_nDescend   = aInfo.winDescent;
-            rFont.m_nLeading   = rFont.m_nAscend + rFont.m_nDescend - 1000;
-        }
-
-        // last try: font bounding box
-        if( rFont.m_nAscend == 0 )
-            rFont.m_nAscend = aInfo.yMax;
-        if( rFont.m_nDescend == 0 )
-            rFont.m_nDescend = -aInfo.yMin;
-        if( rFont.m_nLeading == 0 )
-            rFont.m_nLeading = 15 * (rFont.m_nAscend+rFont.m_nDescend) / 100;
 
         CloseTTFont( pTTFont );
         bSuccess = true;
@@ -844,37 +808,6 @@ OString PrintFontManager::getFontFile(const PrintFont& rFont) const
     std::unordered_map< int, OString >::const_iterator it = m_aAtomToDir.find(rFont.m_nDirectory);
     OString aPath = it->second + "/" + rFont.m_aFontFile;
     return aPath;
-}
-
-OUString PrintFontManager::getPSName( fontID nFontID )
-{
-    PrintFont* pFont = getFont( nFontID );
-    if (pFont && pFont->m_aPSName.isEmpty())
-    {
-        analyzeSfntFile(*pFont);
-    }
-
-    return pFont ? pFont->m_aPSName : OUString();
-}
-
-int PrintFontManager::getFontAscend( fontID nFontID )
-{
-    PrintFont* pFont = getFont( nFontID );
-    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
-    {
-        analyzeSfntFile(*pFont);
-    }
-    return pFont ? pFont->m_nAscend : 0;
-}
-
-int PrintFontManager::getFontDescend( fontID nFontID )
-{
-    PrintFont* pFont = getFont( nFontID );
-    if (pFont && pFont->m_nAscend == 0 && pFont->m_nDescend == 0)
-    {
-        analyzeSfntFile(*pFont);
-    }
-    return pFont ? pFont->m_nDescend : 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
