@@ -38,8 +38,6 @@ enum class FontType {
     TYPE1_PFA   = 1<<3,                     ///< PSType1 Postscript Font Ascii
     TYPE1_PFB   = 1<<4,                     ///< PSType1 Postscript Font Binary
     CFF_FONT    = 1<<5,                     ///< CFF-container with PSType2 glyphs
-    TYPE3_FONT  = 1<<6,                     ///< PSType3 Postscript font
-    TYPE42_FONT = 1<<7,                     ///< PSType42 wrapper for an SFNT_TTF
     ANY_SFNT    = SFNT_TTF | SFNT_CFF,
     ANY_TYPE1   = TYPE1_PFA | TYPE1_PFB
 };
@@ -55,7 +53,6 @@ public:
 
     void        LoadFont( FontType eInFontType,
                     const unsigned char* pFontBytes, int nByteLength );
-    void        LoadFont( vcl::TrueTypeFont* pSftTrueTypeFont );
 
     bool        CreateFontSubset( FontType nOutFontTypeMask,
                     SvStream* pOutFile, const char* pOutFontName,
@@ -77,7 +74,6 @@ private:
     unsigned const char*    mpInFontBytes;
     int                     mnInByteLength;
     FontType                meInFontType;       ///< allowed mask of input font-types
-    vcl::TrueTypeFont*      mpSftTTFont;
 
     // subset-request details
     FontType                mnReqFontTypeMask;  ///< allowed subset-target font types
@@ -88,7 +84,6 @@ private:
     int                     mnReqGlyphCount;
 
     bool    CreateFontSubsetFromCff();
-    bool    CreateFontSubsetFromSfnt();
 };
 
 int VCL_DLLPUBLIC TestFontSubset(const void* data, sal_uInt32 size);

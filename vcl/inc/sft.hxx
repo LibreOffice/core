@@ -61,7 +61,7 @@ namespace vcl
     typedef sal_Int32       F16Dot16;           /**< fixed: 16.16 */
 /*@}*/
 
-/** Return value of OpenTTFont() and CreateT3FromTTGlyphs() */
+/** Return value of OpenTTFont() */
     enum class SFErrCodes {
         Ok,                              /**< no error                                     */
         BadFile,                         /**< file not found                               */
@@ -566,25 +566,6 @@ class TrueTypeFont;
     void GetTTNameRecords(AbstractTrueTypeFont const *ttf, std::vector<NameRecord>& nr);
 
 /**
- * Generates a new PostScript Type 3 font and dumps it to <b>outf</b> file.
- * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
- * @param ttf         pointer to the TrueTypeFont structure
- * @param outf        the resulting font is written to this stream
- * @param fname       font name for the new font. If it is NULL the PostScript name of the
- *                    original font will be used
- * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf
- * @param encoding    array of encoding values. encoding[i] specifies the position of the glyph
- *                    glyphArray[i] in the encoding vector of the resulting Type3 font
- * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @param wmode       writing mode for the output file: 0 - horizontal, 1 - vertical
- * @return            return the value of SFErrCodes enum
- * @see               SFErrCodes
- * @ingroup sft
- *
- */
-    SFErrCodes CreateT3FromTTGlyphs(TrueTypeFont *ttf, SvStream *outf, const char *fname, sal_uInt16 const *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
-
-/**
  * Generates a new TrueType font and dumps it to <b>outf</b> file.
  * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
  * @param ttf         pointer to the TrueTypeFont structure
@@ -612,32 +593,6 @@ class TrueTypeFont;
                               const sal_GlyphId* pGlyphIds,
                               const sal_uInt8* pEncoding,
                               int nGlyphCount, FontSubsetInfo& rInfo);
-/**
- * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
- * This function substitutes glyph 0 for all glyphIDs that are not found in the font.
- * @param ttf         pointer to the TrueTypeFont structure
- * @param outf        output stream for a resulting font
- * @param psname      PostScript name of the resulting font
- * @param glyphArray  pointer to an array of glyphs that are to be extracted from ttf. The first
- *                    element of this array has to be glyph 0 (default glyph)
- * @param encoding    array of encoding values. encoding[i] specifies character code for
- *                    the glyphID glyphArray[i]. Character code 0 usually points to a default
- *                    glyph (glyphID 0)
- * @param nGlyphs     number of glyph IDs in glyphArray and encoding values in encoding
- * @return            SFErrCodes::Ok - no errors
- *                    SFErrCodes::GlyphNum - too many glyphs (> 255)
- *                    SFErrCodes::TtFormat - corrupted TrueType fonts
- *
- * @see               SFErrCodes
- * @ingroup sft
- *
- */
-    SFErrCodes CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
-                               SvStream      *outf,
-                               const char    *psname,
-                               sal_uInt16 const *glyphArray,
-                               sal_uInt8          *encoding,
-                               int            nGlyphs);
 
 /**
  * Returns global font information about the TrueType font.
