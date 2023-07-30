@@ -180,7 +180,7 @@ struct VCL_DLLPUBLIC CairoCommon
     void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry,
                          bool bAntiAlias);
 
-    bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+    void drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                          const basegfx::B2DPolyPolygon&, double fTransparency, bool bAntiAlias);
 
     void drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias);

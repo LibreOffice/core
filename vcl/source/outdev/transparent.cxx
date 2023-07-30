@@ -131,18 +131,17 @@ void OutputDevice::DrawTransparent(
         // TODO: this must not drop transparency for mpAlphaVDev case, but instead use premultiplied
         // alpha... but that requires using premultiplied alpha also for already drawn data
         const double fAdjustedTransparency = mpAlphaVDev ? 0 : fTransparency;
-        bool bDrawnOk(true);
 
-        if( IsFillColor() )
+        if (IsFillColor())
         {
-            bDrawnOk = mpGraphics->DrawPolyPolygon(
+            mpGraphics->DrawPolyPolygon(
                 aFullTransform,
                 aB2DPolyPolygon,
                 fAdjustedTransparency,
                 *this);
         }
 
-        if( bDrawnOk && IsLineColor() )
+        if (IsLineColor())
         {
             const bool bPixelSnapHairline(mnAntialiasing & AntialiasingFlags::PixelSnapHairline);
 
@@ -162,24 +161,21 @@ void OutputDevice::DrawTransparent(
             }
         }
 
-        if( bDrawnOk )
+        if( mpMetaFile )
         {
-            if( mpMetaFile )
-            {
-                // tdf#119843 need transformed Polygon here
-                basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
-                aB2DPolyPoly.transform(rObjectTransform);
-                mpMetaFile->AddAction(
-                    new MetaTransparentAction(
-                        tools::PolyPolygon(aB2DPolyPoly),
-                        static_cast< sal_uInt16 >(fTransparency * 100.0)));
-            }
-
-            if (mpAlphaVDev)
-                mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
-
-            return;
+            // tdf#119843 need transformed Polygon here
+            basegfx::B2DPolyPolygon aB2DPolyPoly(rB2DPolyPoly);
+            aB2DPolyPoly.transform(rObjectTransform);
+            mpMetaFile->AddAction(
+                new MetaTransparentAction(
+                    tools::PolyPolygon(aB2DPolyPoly),
+                    static_cast< sal_uInt16 >(fTransparency * 100.0)));
         }
+
+        if (mpAlphaVDev)
+            mpAlphaVDev->DrawTransparent(rObjectTransform, rB2DPolyPoly, fTransparency);
+
+        return;
     }
 
     // fallback to old polygon drawing if needed
@@ -237,11 +233,12 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             // functionality and we use the fallback some lines below (which is not very good,
             // though. For now, WinSalGraphics::drawPolyPolygon will detect printer usage and
             // correct the wrong mapping (see there for details)
-            bDrawn = mpGraphics->DrawPolyPolygon(
+            mpGraphics->DrawPolyPolygon(
                 aTransform,
                 aB2DPolyPolygon,
                 fTransparency,
                 *this);
+            bDrawn = true;
         }
 
         if( mbLineColor )

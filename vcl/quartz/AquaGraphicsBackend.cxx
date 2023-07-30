@@ -664,22 +664,22 @@ void AquaGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt3
     mrShared.refreshRect(leftX, topY, maxWidth, maxHeight);
 }
 
-bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                           const basegfx::B2DPolyPolygon& rPolyPolygon,
                                           double fTransparency)
 {
 #ifdef IOS
     if (!mrShared.maContextHolder.isSet())
-        return true;
+        return;
 #endif
 
     // short circuit if there is nothing to do
     if (rPolyPolygon.count() == 0)
-        return true;
+        return;
 
     // ignore invisible polygons
     if ((fTransparency >= 1.0) || (fTransparency < 0))
-        return true;
+        return;
 
     // Fallback: Transform to DeviceCoordinates
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
@@ -716,7 +716,7 @@ bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
         {
             SAL_WARN("vcl.quartz", "Neither pen nor brush visible");
             CGPathRelease(xPath);
-            return true;
+            return;
         }
 
         // use the path to prepare the graphics context
@@ -735,8 +735,6 @@ bool AquaGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     }
 
     CGPathRelease(xPath);
-
-    return true;
 }
 
 bool AquaGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,

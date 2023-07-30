@@ -872,7 +872,7 @@ void CairoCommon::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPointCoun
     drawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPoly, 0.0, bAntiAlias);
 }
 
-bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                   const basegfx::B2DPolyPolygon& rPolyPolygon, double fTransparency,
                                   bool bAntiAlias)
 {
@@ -882,14 +882,14 @@ bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
     if (0 == rPolyPolygon.count() || !(bHasFill || bHasLine) || fTransparency < 0.0
         || fTransparency >= 1.0)
     {
-        return true;
+        return;
     }
 
     // don't bother trying to draw stuff which is effectively invisible
     basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
     aPolygonRange.transform(rObjectToDevice);
     if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
-        return true;
+        return;
 
     cairo_t* cr = getCairoContext(true, bAntiAlias);
     if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
@@ -897,7 +897,7 @@ bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
         SAL_WARN("vcl.gdi",
                  "cannot render to surface: " << cairo_status_to_string(cairo_status(cr)));
         releaseCairoContext(cr, true, basegfx::B2DRange());
-        return true;
+        return;
     }
     clipRegion(cr);
 
@@ -949,8 +949,6 @@ bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
     // of damage so they can be correctly redrawn
     extents.transform(rObjectToDevice);
     releaseCairoContext(cr, true, extents);
-
-    return true;
 }
 
 void CairoCommon::drawPolyLine(sal_uInt32 nPoints, const Point* pPtAry, bool bAntiAlias)

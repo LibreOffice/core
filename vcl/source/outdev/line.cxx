@@ -340,11 +340,12 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
         if (bTryB2d && !bDone)
         {
-            bDone = mpGraphics->DrawPolyPolygon(
+            mpGraphics->DrawPolyPolygon(
                 basegfx::B2DHomMatrix(),
                 aFillPolyPolygon,
                 0.0,
                 *this);
+            bDone = true;
         }
 
         if(!bDone)

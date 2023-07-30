@@ -53,12 +53,11 @@ void X11CairoSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32
     mrCairoCommon.drawPolyPolygon(nPoly, pPointCounts, pPtAry, getAntiAlias());
 }
 
-bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                               const basegfx::B2DPolyPolygon& rPolyPolygon,
                                               double fTransparency)
 {
-    return mrCairoCommon.drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency,
-                                         getAntiAlias());
+    mrCairoCommon.drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency, getAntiAlias());
 }
 
 void X11CairoSalGraphicsImpl::drawPixel(tools::Long nX, tools::Long nY)

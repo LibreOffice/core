@@ -2030,7 +2030,7 @@ sal_Int64 SystemDependentData_GraphicsPath::estimateUsageInBytes() const
     return nRetval;
 }
 
-bool WinSalGraphicsImpl::drawPolyPolygon(
+void WinSalGraphicsImpl::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& rPolyPolygon,
     double fTransparency)
@@ -2039,7 +2039,7 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
 
     if(!mbBrush || 0 == nCount || fTransparency < 0.0 || fTransparency > 1.0)
     {
-        return true;
+        return;
     }
 
     Gdiplus::Graphics aGraphics(mrParent.getHDC());
@@ -2182,8 +2182,6 @@ bool WinSalGraphicsImpl::drawPolyPolygon(
     aGraphics.FillPath(
         &aSolidBrush,
         &(*pGraphicsPath));
-
-    return true;
 }
 
 bool WinSalGraphicsImpl::drawPolyLine(

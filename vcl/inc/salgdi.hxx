@@ -203,7 +203,7 @@ public:
                                     const Point** pPtAry,
                                     const OutputDevice& rOutDev );
 
-    bool                        DrawPolyPolygon(
+    void                        DrawPolyPolygon(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon &i_rPolyPolygon,
                                     double i_fTransparency,
@@ -442,7 +442,7 @@ protected:
 
     virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) = 0;
 
-    virtual bool                drawPolyPolygon(
+    virtual void                drawPolyPolygon(
                                     const basegfx::B2DHomMatrix& rObjectToDevice,
                                     const basegfx::B2DPolyPolygon&,
                                     double fTransparency) = 0;
@@ -736,12 +736,12 @@ public:
         GetImpl()->drawPolyPolygon (nPoly, pPoints, pPtAry);
     }
 
-    bool drawPolyPolygon(
+    void drawPolyPolygon(
         const basegfx::B2DHomMatrix& rObjectToDevice,
         const basegfx::B2DPolyPolygon& rPolyPolygon,
         double fTransparency) override
     {
-        return GetImpl()->drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
+        GetImpl()->drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
     }
 
     bool drawPolyLine(

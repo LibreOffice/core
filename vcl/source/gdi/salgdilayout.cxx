@@ -475,7 +475,7 @@ namespace
     }
 }
 
-bool SalGraphics::DrawPolyPolygon(
+void SalGraphics::DrawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& i_rPolyPolygon,
     double i_fTransparency,
@@ -487,14 +487,15 @@ bool SalGraphics::DrawPolyPolygon(
         const basegfx::B2DHomMatrix& rMirror(getMirror(i_rOutDev));
         if(!rMirror.isIdentity())
         {
-            return drawPolyPolygon(
+            drawPolyPolygon(
                 rMirror * rObjectToDevice,
                 i_rPolyPolygon,
                 i_fTransparency);
+            return;
         }
     }
 
-    return drawPolyPolygon(
+    drawPolyPolygon(
         rObjectToDevice,
         i_rPolyPolygon,
         i_fTransparency);

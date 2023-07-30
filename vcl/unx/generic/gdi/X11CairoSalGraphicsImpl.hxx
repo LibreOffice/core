@@ -88,7 +88,7 @@ public:
     void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                          const Point** pPtAry) override;
 
-    bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+    void drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                          double fTransparency) override;
 

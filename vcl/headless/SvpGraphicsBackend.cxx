@@ -109,12 +109,11 @@ void SvpGraphicsBackend::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPo
     m_rCairoCommon.drawPolyPolygon(nPoly, pPointCounts, pPtAry, getAntiAlias());
 }
 
-bool SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void SvpGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                          const basegfx::B2DPolyPolygon& rPolyPolygon,
                                          double fTransparency)
 {
-    return m_rCairoCommon.drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency,
-                                          getAntiAlias());
+    m_rCairoCommon.drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency, getAntiAlias());
 }
 
 bool SvpGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,

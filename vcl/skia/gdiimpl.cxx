@@ -838,7 +838,7 @@ void SkiaSalGraphicsImpl::drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pP
     drawPolyPolygon(basegfx::B2DHomMatrix(), aPolyPolygon, 0.0);
 }
 
-bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                           const basegfx::B2DPolyPolygon& rPolyPolygon,
                                           double fTransparency)
 {
@@ -847,7 +847,7 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
 
     if (rPolyPolygon.count() == 0 || !(bHasFill || bHasLine) || fTransparency < 0.0
         || fTransparency >= 1.0)
-        return true;
+        return;
 
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
     aPolyPolygon.transform(rObjectToDevice);
@@ -859,11 +859,10 @@ bool SkiaSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectTo
     if (delayDrawPolyPolygon(aPolyPolygon, fTransparency))
     {
         scheduleFlush();
-        return true;
+        return;
     }
 
     performDrawPolyPolygon(aPolyPolygon, fTransparency, mParent.getAntiAlias());
-    return true;
 }
 
 void SkiaSalGraphicsImpl::performDrawPolyPolygon(const basegfx::B2DPolyPolygon& aPolyPolygon,

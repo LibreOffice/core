@@ -282,15 +282,15 @@ void QtGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32*
     aPainter.update(aPath.boundingRect());
 }
 
-bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+void QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                         const basegfx::B2DPolyPolygon& rPolyPolygon,
                                         double fTransparency)
 {
     // ignore invisible polygons
     if (!m_oFillColor && !m_oLineColor)
-        return true;
+        return;
     if ((fTransparency >= 1.0) || (fTransparency < 0))
-        return true;
+        return;
 
     // Fallback: Transform to DeviceCoordinates
     basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
@@ -299,12 +299,11 @@ bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDe
     QPainterPath aPath;
     // ignore empty polygons
     if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_oLineColor.has_value()))
-        return true;
+        return;
 
     QtPainter aPainter(*this, true, 255 * (1.0 - fTransparency));
     aPainter.drawPath(aPath);
     aPainter.update(aPath.boundingRect());
-    return true;
 }
 
 bool QtGraphicsBackend::drawPolyLineBezier(sal_uInt32 /*nPoints*/, const Point* /*pPtAry*/,

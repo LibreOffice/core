@@ -101,7 +101,7 @@ public:
     virtual void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints,
                                  const Point** pPtAry) override;
 
-    virtual bool drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
+    virtual void drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
                                  const basegfx::B2DPolyPolygon&, double fTransparency) override;
 
     virtual bool drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevice,

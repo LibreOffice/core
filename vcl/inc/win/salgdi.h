@@ -230,7 +230,7 @@ protected:
     virtual void        drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
     virtual void        drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
-    virtual bool        drawPolyPolygon(
+    virtual void        drawPolyPolygon(
         const basegfx::B2DHomMatrix& rObjectToDevice,
         const basegfx::B2DPolyPolygon&,
         double fTransparency) override;

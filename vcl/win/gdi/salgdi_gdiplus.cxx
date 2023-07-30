@@ -26,12 +26,12 @@
 
 #include "gdiimpl.hxx"
 
-bool WinSalGraphics::drawPolyPolygon(
+void WinSalGraphics::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolyPolygon& rPolyPolygon,
     double fTransparency)
 {
-    return mpImpl->drawPolyPolygon(
+    mpImpl->drawPolyPolygon(
         rObjectToDevice,
         rPolyPolygon,
         fTransparency);
