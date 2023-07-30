@@ -690,6 +690,9 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 }
             }
 
+            if (comphelper::IsContextFlagActive("DontEnableJava"))
+                return css::uno::Any();
+
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE
             //is defective. Please select another version or install a new JRE
