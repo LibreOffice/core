@@ -99,10 +99,6 @@ void SalGenericInstance::updatePrinterUpdate()
 {
 }
 
-void SalGenericInstance::jobStartedPrinterUpdate()
-{
-}
-
 void SalGenericInstance::jobEndedPrinterUpdate()
 {
 }

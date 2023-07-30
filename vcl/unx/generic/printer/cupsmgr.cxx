@@ -326,16 +326,6 @@ void CUPSManager::initialize()
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
     cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests);
-    const char* pOpt = cupsGetOption( "printer-info",
-                                                      pDest->num_options,
-                                                      pDest->options );
-    if( pOpt )
-        m_bUseIncludeFeature = true;
-
-    // do not send include JobPatch; CUPS will insert that itself
-    // TODO: currently unknown which versions of CUPS insert JobPatches
-    // so currently it is assumed CUPS = don't insert JobPatch files
-    m_bUseJobPatch = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;

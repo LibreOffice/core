@@ -592,9 +592,6 @@ const PPDParser* PPDParser::getParser( const OUString& rFile )
 
 PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
     : m_aFile(std::move(aFile))
-    , m_bColorDevice(false)
-    , m_bType42Capable(false)
-    , m_nLanguageLevel(0)
     , m_aFileEncoding(RTL_TEXTENCODING_MS_1252)
     , m_pImageableAreas(nullptr)
     , m_pDefaultPaperDimension(nullptr)
@@ -685,17 +682,10 @@ PPDParser::PPDParser(OUString aFile, const std::vector<PPDKey*>& keys)
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
-
-    // fill in direct values
-    if( (pKey = getKey( "print-color-mode" )) )
-        m_bColorDevice = pKey->countValues() > 1;
 }
 
 PPDParser::PPDParser( OUString aFile ) :
         m_aFile(std::move( aFile )),
-        m_bColorDevice( false ),
-        m_bType42Capable( false ),
-        m_nLanguageLevel( 0 ),
         m_aFileEncoding( RTL_TEXTENCODING_MS_1252 ),
         m_pImageableAreas( nullptr ),
         m_pDefaultPaperDimension( nullptr ),
@@ -806,9 +796,6 @@ PPDParser::PPDParser( OUString aFile ) :
     }
 #endif
 
-    // fill in shortcuts
-    const PPDKey* pKey;
-
     m_pImageableAreas = getKey( "ImageableArea" );
     const PPDValue * pDefaultImageableArea = nullptr;
     if( m_pImageableAreas )
@@ -843,24 +830,6 @@ PPDParser::PPDParser( OUString aFile ) :
         m_pDefaultInputSlot = pInputSlots->getDefaultValue();
     SAL_INFO_IF(!pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
     SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
-
-    // fill in direct values
-    if ((pKey = getKey("ColorDevice")))
-    {
-        if (const PPDValue* pValue = pKey->getValue(0))
-            m_bColorDevice = pValue->m_aValue.startsWithIgnoreAsciiCase("true");
-    }
-
-    if ((pKey = getKey("LanguageLevel")))
-    {
-        if (const PPDValue* pValue = pKey->getValue(0))
-            m_nLanguageLevel = pValue->m_aValue.toInt32();
-    }
-    if ((pKey = getKey("TTRasterizer")))
-    {
-        if (const PPDValue* pValue = pKey->getValue(0))
-            m_bType42Capable = pValue->m_aValue.equalsIgnoreAsciiCase( "Type42" );
-    }
 }
 
 PPDParser::~PPDParser()

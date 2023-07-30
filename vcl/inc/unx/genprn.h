@@ -53,14 +53,8 @@ public:
 class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 {
 public:
-    OUString                  m_aFileName;
-    OUString                  m_aTmpFile;
     SalInfoPrinter*         m_pInfoPrinter;
     psp::JobData            m_aJobData;
-    sal_uInt32              m_nCopies;
-    bool                    m_bCollate;
-    bool                    m_bPdf;
-    bool                    m_bIsPDFWriterJob;
 
     PspSalPrinter( SalInfoPrinter *pPrinter );
     virtual ~PspSalPrinter() override;

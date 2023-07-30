@@ -96,8 +96,6 @@ PrinterInfoManager& PrinterInfoManager::get()
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_eType( eType ),
-    m_bUseIncludeFeature( false ),
-    m_bUseJobPatch( true ),
     m_aSystemDefaultPaper( "A4" )
 {
     if( eType == Type::Default )
@@ -175,7 +173,6 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 
 void PrinterInfoManager::initialize()
 {
-    m_bUseIncludeFeature = false;
     m_aPrinters.clear();
     m_aWatchFiles.clear();
     OUString aDefaultPrinter;

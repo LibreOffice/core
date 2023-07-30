@@ -143,11 +143,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         auto it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? nullptr : &it->second;
     }
-    PrintFont* getFont( fontID nID )
-    {
-        auto it = m_aFonts.find( nID );
-        return it == m_aFonts.end() ? nullptr : &it->second;
-    }
     static void fillPrintFontInfo(const PrintFont& rFont, FastPrintFontInfo& rInfo);
 
     OString getDirectory( int nAtom ) const;

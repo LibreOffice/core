@@ -694,8 +694,6 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
  */
 PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
     : m_pInfoPrinter( pInfoPrinter )
-    , m_nCopies( 1 )
-    , m_bCollate( false )
 {
 }
 
@@ -1026,7 +1024,6 @@ class PrinterUpdate
     DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, Timer*, void );
 public:
     static void update(SalGenericInstance const &rInstance);
-    static void jobStarted() { nActiveJobs++; }
     static void jobEnded();
 };
 
@@ -1081,11 +1078,6 @@ void PrinterUpdate::update(SalGenericInstance const &rInstance)
 void SalGenericInstance::updatePrinterUpdate()
 {
     PrinterUpdate::update(*this);
-}
-
-void SalGenericInstance::jobStartedPrinterUpdate()
-{
-    PrinterUpdate::jobStarted();
 }
 
 void PrinterUpdate::jobEnded()

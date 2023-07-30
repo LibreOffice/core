@@ -224,12 +224,6 @@ struct TableEntry;
          */
         sal_uInt32 glyfAdd(std::unique_ptr<GlyphData> glyphdata, AbstractTrueTypeFont *fnt);
 
-        /**
-         * Query the number of glyphs currently stored in the 'glyf' table
-         *
-         */
-        sal_uInt32 glyfCount() { return m_list.size(); }
-
         std::vector<std::unique_ptr<GlyphData>> m_list;
     };
 

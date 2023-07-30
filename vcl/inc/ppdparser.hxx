@@ -101,7 +101,6 @@ public:
 
     const OUString&     getKey() const { return m_aKey; }
     bool                isUIKey() const { return m_bUIOption; }
-    SetupType           getSetupType() const { return m_eSetupType; }
     int                 getOrderDependency() const { return m_nOrderDependency; }
 };
 
@@ -145,9 +144,6 @@ private:
     // the full path of the PPD file
     OUString                                    m_aFile;
     // some basic attributes
-    bool                                        m_bColorDevice;
-    bool                                        m_bType42Capable;
-    sal_uLong                                       m_nLanguageLevel;
     rtl_TextEncoding                            m_aFileEncoding;
 
 
@@ -191,10 +187,6 @@ public:
     bool            hasKey( const PPDKey* ) const;
 
     const ::std::vector< PPDConstraint >& getConstraints() const { return m_aConstraints; }
-
-    bool            isColorDevice() const { return m_bColorDevice; }
-    bool            isType42Capable() const { return m_bType42Capable; }
-    sal_uLong       getLanguageLevel() const { return m_nLanguageLevel; }
 
     OUString        getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
