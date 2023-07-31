@@ -38,6 +38,7 @@ class SwFormat;
 class SwViewShell;
 class SwFEShell;
 class SwWrtShell;
+class SwFlyAtContentFrame;
 
 
 /** search an anchor for paragraph bound frames starting from pOldAnch
@@ -306,6 +307,8 @@ public:
 
     virtual const SwFlyFrame* DynCastFlyFrame() const override;
     virtual SwFlyFrame* DynCastFlyFrame() override;
+
+    SwFlyAtContentFrame* DynCastFlyAtContentFrame();
 
 private:
     void UpdateUnfloatButton(SwWrtShell* pWrtSh, bool bShow) const;
