@@ -1149,7 +1149,7 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32 
     auto aRange = m_aBookmarksOfParagraphStart.equal_range(nPos);
     for( auto aIter = aRange.first; aIter != aRange.second; ++aIter)
     {
-        GetExport().AppendBookmark(BookmarkToWord(aIter->second));
+        GetExport().AppendBookmark(GetExport().BookmarkToWord(aIter->second));
     }
 }
 
@@ -1165,9 +1165,9 @@ void WW8AttributeOutput::EndRun( const SwTextNode* /*pNode*/, sal_Int32 nPos, sa
     for( auto aIter = aRange.first; aIter != aRange.second; ++aIter)
     {
         if(bLastRun)
-            GetExport().AppendBookmarkEndWithCorrection(BookmarkToWord(aIter->second));
+            GetExport().AppendBookmarkEndWithCorrection(GetExport().BookmarkToWord(aIter->second));
         else
-            GetExport().AppendBookmark(BookmarkToWord(aIter->second));
+            GetExport().AppendBookmark(GetExport().BookmarkToWord(aIter->second));
     }
 }
 
@@ -3229,7 +3229,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     {
                         const OUString& aRefName(rRField.GetSetRefName());
                         sStr = FieldString(eField)
-                            + MSWordExportBase::GetBookmarkName(nSubType, &aRefName, 0);
+                               + GetExport().GetBookmarkName(nSubType, &aRefName, 0);
                     }
                     switch (pField->GetFormat())
                     {
@@ -3284,7 +3284,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                                     eField = ww::eNONE;
                                     break;
                         }
-                        sStr = FieldString(eField) + MSWordExportBase::GetBookmarkName(nSubType, &sName, 0);
+                        sStr = FieldString(eField) + GetExport().GetBookmarkName(nSubType, &sName, 0);
                     }
                     switch (pField->GetFormat())
                     {
@@ -3317,7 +3317,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                             break;
                     }
                     sStr = FieldString(eField)
-                        + MSWordExportBase::GetBookmarkName(nSubType, nullptr, rRField.GetSeqNo());
+                           + GetExport().GetBookmarkName(nSubType, nullptr, rRField.GetSeqNo());
                     break;
             }
 
@@ -3695,7 +3695,7 @@ void AttributeOutputBase::TextFootnote( const SwFormatFootnote& rFootnote )
     OUString sBkmkNm;
     if ( GetExport().HasRefToFootOrEndnote( rFootnote.IsEndNote(), rFootnote.GetTextFootnote()->GetSeqRefNo()))
     {
-        sBkmkNm = MSWordExportBase::GetBookmarkName( nTyp, nullptr,
+        sBkmkNm = GetExport().GetBookmarkName(nTyp, nullptr,
                                     rFootnote.GetTextFootnote()->GetSeqRefNo() );
         GetExport().AppendBookmark( sBkmkNm );
     }

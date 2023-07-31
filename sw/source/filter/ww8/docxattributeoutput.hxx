@@ -769,7 +769,7 @@ protected:
 
 private:
 
-    void DoWriteBookmarkTagStart(std::u16string_view bookmarkName);
+    void DoWriteBookmarkTagStart(const OUString& bookmarkName);
     void DoWriteBookmarkTagEnd(sal_Int32 nId);
     void DoWriteMoveRangeTagStart(std::u16string_view bookmarkName,
             bool bFrom, const SwRedlineData* pRedlineData);
