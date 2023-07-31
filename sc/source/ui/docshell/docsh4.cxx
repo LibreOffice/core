@@ -2549,30 +2549,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
         // Calculating the cell cursor position
         ScViewData* pViewData = GetViewData();
         if (pViewData && pViewData->GetActiveWin())
-        {
-            bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
-                    comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
-            OString aRectString;
-            if (bInPrintTwips)
-            {
-                Point aTopLeft = pViewData->GetPrintTwipsPos(rPos.Col(), rPos.Row());
-                tools::Long nSizeX, nSizeY;
-                pViewData->GetMergeSizePrintTwips(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
-                aRectString = tools::Rectangle(aTopLeft, Size(nSizeX - 1, nSizeY - 1)).toString();
-            }
-            else
-            {
-                Point aTopLeft = pViewData->GetScrPos(rPos.Col(), rPos.Row(),
-                        pViewData->GetActivePart(), true);
-                tools::Long nSizeXPix, nSizeYPix;
-                pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeXPix, nSizeYPix);
-                const double fPPTX = pViewData->GetPPTX();
-                const double fPPTY = pViewData->GetPPTY();
-                aRectString = tools::Rectangle(Point(aTopLeft.getX() / fPPTX, aTopLeft.getY() / fPPTY),
-                                               Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY)).toString();
-            }
-            aAnnotation.put("cellPos", aRectString);
-        }
+            aAnnotation.put("cellRange", ScPostIt::NoteRangeToJsonString(*pDocument, rPos));
     }
 
     boost::property_tree::ptree aTree;

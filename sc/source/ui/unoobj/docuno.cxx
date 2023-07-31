@@ -1185,22 +1185,29 @@ void ScModelObj::getPostIts(tools::JsonWriter& rJsonWriter)
             ScGridWindow* pGridWindow = pViewData->GetActiveWin();
             if (pGridWindow)
             {
-                SCCOL nX = aNote.maPos.Col();
-                SCROW nY = aNote.maPos.Row();
-                Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-                tools::Long nSizeXPix;
-                tools::Long nSizeYPix;
-                pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
-
-                double fPPTX = pViewData->GetPPTX();
-                double fPPTY = pViewData->GetPPTY();
-                tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                                Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
-
-                rJsonWriter.put("cellPos", aRect.toString());
+                rJsonWriter.put("cellRange", ScPostIt::NoteRangeToJsonString(rDoc, aNote.maPos));
             }
         }
     }
+}
+
+OString ScPostIt::NoteRangeToJsonString(const ScDocument& rDoc, const ScAddress& rPos)
+{
+    SCCOL nX(rPos.Col());
+    SCROW nY(rPos.Row());
+    OString aStartCellAddress(OString::number(nX) + " " + OString::number(nY));
+    const ScPatternAttr* pMarkPattern = rDoc.GetPattern(nX, nY, rPos.Tab());
+    if (pMarkPattern && pMarkPattern->GetItemSet().GetItemState(ATTR_MERGE, false) == SfxItemState::SET)
+    {
+        SCCOL nCol = pMarkPattern->GetItem(ATTR_MERGE).GetColMerge();
+        if (nCol > 1)
+            nX += nCol - 1;
+        SCROW nRow = pMarkPattern->GetItem(ATTR_MERGE).GetRowMerge();
+        if (nRow > 1)
+            nY += nRow - 1;
+    }
+    OString aEndCellAddress(OString::number(nX) + " " + OString::number(nY));
+    return aStartCellAddress + " " + aEndCellAddress;
 }
 
 void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
@@ -1226,19 +1233,7 @@ void ScModelObj::getPostItsPos(tools::JsonWriter& rJsonWriter)
             ScGridWindow* pGridWindow = pViewData->GetActiveWin();
             if (pGridWindow)
             {
-                SCCOL nX = aNote.maPos.Col();
-                SCROW nY = aNote.maPos.Row();
-                Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
-                tools::Long nSizeXPix;
-                tools::Long nSizeYPix;
-                pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
-
-                double fPPTX = pViewData->GetPPTX();
-                double fPPTY = pViewData->GetPPTY();
-                tools::Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
-                                Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
-
-                rJsonWriter.put("cellPos", aRect.toString());
+                rJsonWriter.put("cellRange", ScPostIt::NoteRangeToJsonString(rDoc, aNote.maPos));
             }
         }
     }

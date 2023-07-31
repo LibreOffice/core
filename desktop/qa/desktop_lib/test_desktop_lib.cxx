@@ -2487,14 +2487,14 @@ void DesktopLOKTest::testCommentsCalc()
             {
                 CPPUNIT_ASSERT_EQUAL(std::string("4"), rComment.second.get<std::string>("tab"));
                 CPPUNIT_ASSERT_EQUAL(std::string("Comment1"), rComment.second.get<std::string>("text"));
-                CPPUNIT_ASSERT_EQUAL(std::string("7650, 3570, 1274, 254"), rComment.second.get<std::string>("cellPos"));
+                CPPUNIT_ASSERT_EQUAL(std::string("6 14 6 14"), rComment.second.get<std::string>("cellRange"));
             }
             break;
             case 1:
             {
                 CPPUNIT_ASSERT_EQUAL(std::string("4"), rComment.second.get<std::string>("tab"));
                 CPPUNIT_ASSERT_EQUAL(std::string("Comment2"), rComment.second.get<std::string>("text"));
-                CPPUNIT_ASSERT_EQUAL(std::string("8925, 4335, 1274, 254"), rComment.second.get<std::string>("cellPos"));
+                CPPUNIT_ASSERT_EQUAL(std::string("7 17 7 17"), rComment.second.get<std::string>("cellRange"));
             }
             break;
         }
