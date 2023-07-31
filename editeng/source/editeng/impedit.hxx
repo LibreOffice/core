@@ -416,6 +416,8 @@ public:
     bool            IsSelectionAtPoint( const Point& rPosPixel );
     bool            IsInSelection( const EditPaM& rPaM );
 
+    bool            IsSelectionFullPara() const;
+    bool            IsSelectionInSinglePara() const;
 
     void            SetAnchorMode( EEAnchorMode eMode );
     EEAnchorMode    GetAnchorMode() const           { return eAnchorMode; }

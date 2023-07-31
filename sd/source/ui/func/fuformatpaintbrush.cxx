@@ -37,6 +37,25 @@
 
 #include <Window.hxx>
 
+namespace
+{
+// Paragraph properties are pasted if the selection contains a whole paragraph
+// or there was no selection at all (i.e. just a left click)
+bool ShouldPasteParaFormatPerSelection(const OutlinerView* pOLV)
+{
+    if(!pOLV)
+        return true;
+
+    if(!pOLV->GetEditView().HasSelection())
+        return true;
+
+    if(!pOLV->GetEditView().IsSelectionWithinSinglePara())
+        return true;
+
+    return pOLV->GetEditView().IsSelectionFullPara();
+}
+}
+
 namespace sd {
 
 
@@ -166,16 +185,21 @@ bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if( mxItemSet && mpView && mpView->AreObjectsMarked() )
     {
+        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+
         bool bNoCharacterFormats = false;
-        bool bNoParagraphFormats = false;
+        bool bNoParagraphFormats = !ShouldPasteParaFormatPerSelection(pOLV);
+
+        if ((rMEvt.GetModifier() & KEY_MOD1) && (rMEvt.GetModifier() & KEY_SHIFT))
         {
-            if( (rMEvt.GetModifier()&KEY_MOD1) && (rMEvt.GetModifier()&KEY_SHIFT) )
-                bNoCharacterFormats = true;
-            else if( rMEvt.GetModifier() & KEY_MOD1 )
-                bNoParagraphFormats = true;
+            bNoCharacterFormats = true;
+            bNoParagraphFormats = false;
+        }
+        else if (rMEvt.GetModifier() & KEY_MOD1)
+        {
+            bNoParagraphFormats = true;
         }
 
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
             pOLV->MouseButtonUp(rMEvt);
 

@@ -2047,6 +2047,29 @@ bool ImpEditView::IsInSelection( const EditPaM& rPaM )
     return false;
 }
 
+bool ImpEditView::IsSelectionFullPara() const
+{
+    if (!IsSelectionInSinglePara())
+        return false;
+
+    sal_Int32 nSelectionStartPos = GetEditSelection().Min().GetIndex();
+    sal_Int32 nSelectionEndPos = GetEditSelection().Max().GetIndex();
+
+    if (nSelectionStartPos > nSelectionEndPos)
+        std::swap(nSelectionStartPos, nSelectionEndPos);
+
+    if (nSelectionStartPos != 0)
+        return false;
+
+    const ContentNode* pNode = GetEditSelection().Min().GetNode();
+    return pNode->Len() == nSelectionEndPos;
+}
+
+bool ImpEditView::IsSelectionInSinglePara() const
+{
+    return GetEditSelection().Min().GetNode() == GetEditSelection().Max().GetNode();
+}
+
 void ImpEditView::CreateAnchor()
 {
     pEditEngine->SetInSelectionMode(true);

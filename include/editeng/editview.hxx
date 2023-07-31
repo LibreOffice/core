@@ -210,6 +210,8 @@ public:
     void            SelectCurrentWord( sal_Int16 nWordType = css::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     /// Returns the rectangles of the current selection in TWIPs.
     void GetSelectionRectangles(std::vector<tools::Rectangle>& rLogicRects) const;
+    bool IsSelectionFullPara() const;
+    bool IsSelectionWithinSinglePara() const;
 
     bool            IsInsertMode() const;
     void            SetInsertMode( bool bInsert );
