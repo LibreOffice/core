@@ -64,7 +64,6 @@ private:
     bool validateQMenuBar() const;
     QPushButton* ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId);
     void ImplRemoveMenuBarButton(int nId);
-    void adjustButtonSizes();
 
 public:
     QtMenu(bool bMenuBar);
