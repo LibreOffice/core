@@ -65,16 +65,29 @@ sal_uInt16 SfxWhichIter::FirstWhich()
 
 SfxItemState SfxWhichIter::GetItemState(bool bSrchInParent, const SfxPoolItem** ppItem) const
 {
-    sal_uInt16 nWhich = m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
-    sal_uInt16 nItemsOffsetHint = m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair;
-    return m_rItemSet.GetItemStateImpl(nWhich, bSrchInParent, ppItem, nItemsOffsetHint);
+    const sal_uInt16 nOffset(m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair);
+
+    // we have the offset, so use it to profit. It is always valid, so no need
+    // to check if smaller than TotalCount()
+    SfxItemState eState(m_rItemSet.GetItemState_ForOffset(nOffset, ppItem));
+
+    // search in parent?
+    if (bSrchInParent && nullptr != m_rItemSet.GetParent() && (SfxItemState::UNKNOWN == eState || SfxItemState::DEFAULT == eState))
+    {
+        // nOffset was only valid for *local* SfxItemSet, need to continue with WhichID
+        // Use the *highest* SfxItemState as result
+        const sal_uInt16 nWhich(m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair);
+        return m_rItemSet.GetParent()->GetItemState_ForWhichID( eState, nWhich, true, ppItem);
+    }
+
+    return eState;
 }
 
 void SfxWhichIter::ClearItem()
 {
-    sal_uInt16 nWhich = m_pCurrentWhichPair->first + m_nOffsetFromStartOfCurrentWhichPair;
-    sal_uInt16 nItemOffsetHint = m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair;
-    const_cast<SfxItemSet&>(m_rItemSet).ClearSingleItemImpl(nWhich, nItemOffsetHint);
+    // we have the offset, so use it to profit. It is always valid, so no need
+    // to check if smaller than TotalCount()
+    const_cast<SfxItemSet&>(m_rItemSet).ClearSingleItem_ForOffset(m_nItemsOffset + m_nOffsetFromStartOfCurrentWhichPair);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

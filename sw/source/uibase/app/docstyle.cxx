@@ -1848,7 +1848,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet, const bool bBroadcast,
             {
                 // use method <SwDoc::ResetAttrAtFormat(..)> in order to
                 // create an Undo object for the attribute reset.
-                aWhichIdsToReset.emplace_back(rSet.GetWhichByPos(aIter.GetCurPos()));
+                aWhichIdsToReset.emplace_back(rSet.GetWhichByOffset(aIter.GetCurPos()));
             }
 
             pItem = aIter.NextItem();

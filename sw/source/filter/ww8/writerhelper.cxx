@@ -385,7 +385,7 @@ namespace sw
                 for( sal_uInt16 nItem =0; nItem < nTotal; ++nItem )
                 {
                     const SfxPoolItem* pItem = nullptr;
-                    if( SfxItemState::SET == rSet.GetItemState( rSet.GetWhichByPos( nItem ), true, &pItem ) )
+                    if( SfxItemState::SET == rSet.GetItemState( rSet.GetWhichByOffset( nItem ), true, &pItem ) )
                     {
                         rItems[pItem->Which()] = pItem;
                     }

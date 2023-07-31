@@ -40,9 +40,10 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
+    sal_uInt16        m_nCount;        ///< number of items
+    sal_uInt16        m_nTotalCount;   ///< number of WhichIDs, also size of m_ppItems array
     SfxPoolItem const** m_ppItems;     ///< pointer to array of items, we allocate and free this unless m_bItemsFixed==true
     WhichRangesContainer m_pWhichRanges;  ///< array of Which Ranges
-    sal_uInt16        m_nCount;        ///< number of items
     bool              m_bItemsFixed; ///< true if this is a SfxItemSetFixed object
 
 friend class SfxItemPoolCache;
@@ -69,7 +70,7 @@ protected:
     enum class SfxAllItemSetFlag { Flag };
     SfxItemSet( SfxItemPool&, SfxAllItemSetFlag );
     /** special constructor for SfxItemSetFixed */
-    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems );
+    SfxItemSet( SfxItemPool&, WhichRangesContainer&& ranges, SfxPoolItem const ** ppItems, sal_uInt16 nTotalCount );
 
 public:
     SfxItemSet( const SfxItemSet& );
@@ -93,7 +94,7 @@ public:
 
     // Get number of items
     sal_uInt16                  Count() const { return m_nCount; }
-    sal_uInt16                  TotalCount() const;
+    sal_uInt16                  TotalCount() const { return m_nTotalCount; }
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     template<class T>
@@ -140,7 +141,7 @@ public:
         return GetItem<T>(pItemSet, static_cast<sal_uInt16>(nWhich), bSearchInParent);
     }
 
-    sal_uInt16                  GetWhichByPos(sal_uInt16 nPos) const;
+    sal_uInt16                  GetWhichByOffset(sal_uInt16 nOffset) const;
 
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
                                                 bool bSrchInParent = true,
@@ -224,12 +225,15 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
 private:
-    sal_uInt16 ClearSingleItemImpl( sal_uInt16 nWhich, std::optional<sal_uInt16> oItemOffsetHint );
+    // split version(s) of ClearSingleItemImpl for input types WhichID and Offset
+    sal_uInt16 ClearSingleItem_ForWhichID( sal_uInt16 nWhich );
+    sal_uInt16 ClearSingleItem_ForOffset( sal_uInt16 nOffset );
+
     sal_uInt16 ClearAllItemsImpl();
-    SfxItemState  GetItemStateImpl( sal_uInt16 nWhich,
-                                bool bSrchInParent,
-                                const SfxPoolItem **ppItem,
-                                std::optional<sal_uInt16> oItemsOffsetHint) const;
+
+    // split version(s) of GetItemStateImpl for input types WhichID and Offset
+    SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
+    SfxItemState GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPoolItem **ppItem) const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
@@ -275,7 +279,7 @@ class SfxItemSetFixed : public SfxItemSet
 {
 public:
     SfxItemSetFixed( SfxItemPool& rPool)
-        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}), m_aItems) {}
+        : SfxItemSet(rPool, WhichRangesContainer(svl::Items_t<WIDs...>{}), m_aItems, NITEMS) {}
 private:
     static constexpr sal_uInt16 NITEMS = svl::detail::CountRanges1<WIDs...>();
     const SfxPoolItem* m_aItems[NITEMS] = {};

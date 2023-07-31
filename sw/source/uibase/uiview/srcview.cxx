@@ -334,7 +334,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
         {
             const SfxItemSet* pTmpArgs = rReq.GetArgs();
 
-            const sal_uInt16 nWhich = pTmpArgs->GetWhichByPos( 0 );
+            const sal_uInt16 nWhich = pTmpArgs->GetWhichByOffset( 0 );
             OSL_ENSURE( nWhich, "Which for SearchItem ?" );
             const SfxPoolItem& rItem = pTmpArgs->Get( nWhich );
             SetSearchItem( static_cast<const SvxSearchItem&>(rItem));

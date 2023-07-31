@@ -58,14 +58,27 @@ const SfxPoolItem* SfxItemIter::ImplNextItem()
 
 SfxItemState SfxItemIter::GetItemState(bool bSrchInParent, const SfxPoolItem** ppItem) const
 {
-    sal_uInt16 nWhich = (*(m_rSet.m_ppItems + m_nCurrent))->Which();
-    return m_rSet.GetItemStateImpl(nWhich, bSrchInParent, ppItem, m_nCurrent);
+    // we have the offset, so use it to profit. It is always valid, so no need
+    // to check if smaller than TotalCount()
+    SfxItemState eState(m_rSet.GetItemState_ForOffset(m_nCurrent, ppItem));
+
+    // search in parent?
+    if (bSrchInParent && nullptr != m_rSet.GetParent()
+        && (SfxItemState::UNKNOWN == eState || SfxItemState::DEFAULT == eState))
+    {
+        // nOffset was only valid for *local* SfxItemSet, need to continue with WhichID
+        const sal_uInt16 nWhich(m_rSet.GetWhichByOffset(m_nCurrent));
+        eState = m_rSet.GetParent()->GetItemState_ForWhichID(eState, nWhich, true, ppItem);
+    }
+
+    return eState;
 }
 
 void SfxItemIter::ClearItem()
 {
-    sal_uInt16 nWhich = (*(m_rSet.m_ppItems + m_nCurrent))->Which();
-    const_cast<SfxItemSet&>(m_rSet).ClearSingleItemImpl(nWhich, m_nCurrent);
+    // we have the offset, so use it to profit. It is always valid, so no need
+    // to check if smaller than TotalCount()
+    const_cast<SfxItemSet&>(m_rSet).ClearSingleItem_ForOffset(m_nCurrent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
