@@ -434,7 +434,9 @@ void test::oustring::StringLiterals::checkOstr() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), u"foo\0bar"_ustr.getLength());
     CPPUNIT_ASSERT_EQUAL(u""_ustr, rtl::OUString(""_tstr));
     CPPUNIT_ASSERT_EQUAL(u"foobar"_ustr, rtl::OUString("foobar"_tstr));
-    CPPUNIT_ASSERT_EQUAL(u"foo\0bar"_ustr, rtl::OUString("foo\0bar"_tstr));
+    // Unlike in a OString context, the below "foo\0bar"_tstr in a OUString context would trigger
+    // the assert(c!='\0') in Copy in sal/rtl/strtmpl.hxx:
+    // CPPUNIT_ASSERT_EQUAL(u"foo\0bar"_ustr, rtl::OUString("foo\0bar"_tstr));
 #endif
 }
 
