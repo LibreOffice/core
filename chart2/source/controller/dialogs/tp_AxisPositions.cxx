@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl, weld::ComboBox&, void)
 
     if (m_xED_CrossesAt->get_text().isEmpty())
         m_xED_CrossesAt->GetFormatter().SetValue(0.0);
-    if (m_xED_CrossesAtCategory->get_active() == -1)
+    if (m_xED_CrossesAtCategory->get_active() == -1 && m_xED_CrossesAtCategory->get_count())
         m_xED_CrossesAtCategory->set_active(0);
 
     PlaceLabelsSelectHdl(*m_xLB_PlaceLabels);
