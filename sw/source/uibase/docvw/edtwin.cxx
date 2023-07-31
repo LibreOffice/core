@@ -5121,7 +5121,10 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SwWrtShell& rWrtShell = m_rView.GetWrtShell();
             SfxStyleSheetBasePool* pPool=nullptr;
             bool bNoCharacterFormats = false;
-            bool bNoParagraphFormats = false;
+            // Paste paragraph properties if the selection contains a whole paragraph or
+            // there was no selection at all (i.e. just a left click)
+            bool bNoParagraphFormats = rSh.HasSelection() && rSh.IsSelOnePara() && !rSh.IsSelFullPara();
+
             {
                 SwDocShell* pDocSh = m_rView.GetDocShell();
                 if(pDocSh)
