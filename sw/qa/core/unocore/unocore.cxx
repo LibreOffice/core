@@ -913,6 +913,25 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testConvertToTextFrame)
     CPPUNIT_ASSERT_EQUAL(aPaM.GetPoint()->nNode, aFrame3Anchor);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeWithLayout)
+{
+    // Given a document with a floating table on 2 pages, with a calculated layout:
+    createSwDoc("floattable-split.docx");
+    calcLayout();
+
+    // When saving to ODT:
+    save("writer8");
+
+    // Then make sure the output is valid and hasa 1 <draw:frame>:
+    // Without the accompanying fix in place, this test would have failed with:
+    // Error: uncompleted content model.
+    // i.e. the output was not valid, the second <draw:frame> has an empty <table:table> as a child
+    // element.
+    xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
+    // Also make sure that we don't have multiple <draw:frame> elements in the first place.
+    assertXPath(pXmlDoc, "//draw:frame", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

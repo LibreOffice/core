@@ -47,6 +47,8 @@
 #include <docsh.hxx>
 #include <pagedesc.hxx>
 #include <cntfrm.hxx>
+#include <flyfrm.hxx>
+#include <flyfrms.hxx>
 #include <unoparaframeenum.hxx>
 #include <unofootnote.hxx>
 #include <unotextbodyhf.hxx>
@@ -122,6 +124,22 @@ struct FrameClientSortListLess
             // Filter out textboxes, which are not interesting at a UNO level.
             if(SwTextBoxHelper::isTextBox(&rFormat, RES_FLYFRMFMT))
                 continue;
+
+            if (nAnchorType == RndStdIds::FLY_AT_PARA)
+            {
+                SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
+                if (pFly)
+                {
+                    auto pFlyAtContentFrame = pFly->DynCastFlyAtContentFrame();
+                    if (pFlyAtContentFrame && pFlyAtContentFrame->IsFollow())
+                    {
+                        // We're collecting frame formats, ignore non-master fly frames to prevent
+                        // duplication.
+                        continue;
+                    }
+                }
+            }
+
             if(rFormat.GetAnchor().GetAnchorId() == nAnchorType)
             {
                 const sal_Int32 nIdx = rFormat.GetAnchor().GetAnchorContentOffset();
