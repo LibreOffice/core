@@ -450,6 +450,15 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
 
     ItemVector aItemVector;
 
+    if (m_pItemSet_TextAttr && !( nSelectionType & SelectionType::DrawObject))
+    {
+        // reset all direct formatting before applying anything
+        o3tl::sorted_vector<sal_uInt16> aAttrs;
+        for (sal_uInt16 nWhich = RES_CHRATR_BEGIN; nWhich < RES_CHRATR_END; nWhich++)
+            aAttrs.insert(nWhich);
+        rWrtShell.ResetAttr({ aAttrs });
+    }
+
     if( nSelectionType & SelectionType::Text )
     {
         // apply the named text and paragraph formatting
@@ -543,12 +552,6 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             {
                 // copy the stored automatic text attributes in a temporary SfxItemSet
                 pTemplateItemSet->Put( *m_pItemSet_TextAttr );
-
-                // reset all direct formatting
-                o3tl::sorted_vector<sal_uInt16> aAttrs;
-                for( sal_uInt16 nWhich = RES_CHRATR_BEGIN; nWhich < RES_CHRATR_END; nWhich++ )
-                    aAttrs.insert( nWhich );
-                rWrtShell.ResetAttr( { aAttrs } );
 
                 // only attributes that were not apply by named style attributes and automatic
                 // paragraph attributes should be applied
