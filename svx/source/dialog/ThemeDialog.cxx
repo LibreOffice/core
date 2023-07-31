@@ -22,6 +22,7 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     : GenericDialogController(pParent, "svx/ui/themedialog.ui", "ThemeDialog")
     , mpWindow(pParent)
     , mpTheme(pTheme)
+    , mxSubDialog(false)
     , mxValueSetThemeColors(new svx::ThemeColorValueSet)
     , mxValueSetThemeColorsWindow(
           new weld::CustomWeld(*m_xBuilder, "valueset_theme_colors", *mxValueSetThemeColors))
@@ -85,12 +86,17 @@ IMPL_LINK_NOARG(ThemeDialog, SelectItem, ValueSet*, void)
 
 void ThemeDialog::runThemeColorEditDialog()
 {
+    if (mxSubDialog)
+        return;
+
     auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
     std::shared_ptr<DialogController> xKeepAlive(shared_from_this());
-    weld::DialogController::runAsync(pDialog, [this, xKeepAlive, pDialog](sal_uInt32 nResult) {
+
+    mxSubDialog = weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
         if (nResult != RET_OK)
         {
             mxAdd->set_sensitive(true);
+            mxSubDialog = false;
             return;
         }
         auto aColorSet = pDialog->getColorSet();
@@ -107,15 +113,16 @@ void ThemeDialog::runThemeColorEditDialog()
                 = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
         }
         mxAdd->set_sensitive(true);
+        mxSubDialog = false;
     });
 }
 
 IMPL_LINK(ThemeDialog, ButtonClicked, weld::Button&, rButton, void)
 {
+    mxAdd->set_sensitive(false);
     if (mpCurrentColorSet && mxAdd.get() == &rButton)
     {
         runThemeColorEditDialog();
-        mxAdd->set_sensitive(false);
     }
 }
 

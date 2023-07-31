@@ -30,6 +30,7 @@ class SVX_DLLPUBLIC ThemeDialog final : public weld::GenericDialogController
 private:
     weld::Window* mpWindow;
     model::Theme* mpTheme;
+    bool mxSubDialog;
     std::vector<model::ColorSet> maColorSets;
 
     std::unique_ptr<svx::ThemeColorValueSet> mxValueSetThemeColors;
