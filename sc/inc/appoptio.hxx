@@ -77,6 +77,9 @@ public:
     ScOptionsUtil::KeyBindingType GetKeyBindingType() const { return meKeyBindingType; }
     void        SetKeyBindingType( ScOptionsUtil::KeyBindingType e ) { meKeyBindingType = e; }
 
+    void        SetLinksInsertedLikeMSExcel(bool bNew) { mbLinksInsertedLikeMSExcel = bNew; }
+    bool        GetLinksInsertedLikeMSExcel() const { return mbLinksInsertedLikeMSExcel; }
+
     ScAppOptions& operator=   ( const ScAppOptions& rOpt );
 
 private:
@@ -99,6 +102,7 @@ private:
     sal_Int32       nDefaultObjectSizeHeight;
     bool            mbShowSharedDocumentWarning;
     ScOptionsUtil::KeyBindingType meKeyBindingType;
+    bool            mbLinksInsertedLikeMSExcel;
 };
 
 //  Config Item containing app options

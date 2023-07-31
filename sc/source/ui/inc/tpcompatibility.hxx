@@ -24,6 +24,7 @@ public:
 
 private:
     std::unique_ptr<weld::ComboBox> m_xLbKeyBindings;
+    std::unique_ptr<weld::CheckButton> m_xBtnLink;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -982,6 +982,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
     }
 
+    if (const SfxBoolItem* pItem = rOptSet.GetItemIfSet(SID_SC_OPT_LINKS))
+    {
+        aAppOptions.SetLinksInsertedLikeMSExcel(pItem->GetValue());
+        bSaveAppOptions = true;
+    }
+
     // DefaultsOptions
     if (const ScTpDefaultsItem* pItem = rOptSet.GetItemIfSet(SID_SCDEFAULTSOPTIONS))
     {
@@ -1973,7 +1979,8 @@ std::optional<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
                 SID_SC_INPUT_TEXTWYSIWYG, SID_SC_INPUT_TEXTWYSIWYG,
                 SID_SC_INPUT_REPLCELLSWARN, SID_SC_INPUT_REPLCELLSWARN,
                 // TP_VIEW:
-                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT>);
+                SID_SC_OPT_SYNCZOOM, SID_SC_OPT_KEY_BINDING_COMPAT,
+                SID_SC_OPT_LINKS, SID_SC_OPT_LINKS>);
 
         const ScAppOptions& rAppOpt = GetAppOptions();
 
@@ -2046,6 +2053,7 @@ std::optional<SfxItemSet> ScModule::CreateItemSet( sal_uInt16 nId )
         // TP_COMPATIBILITY
         pRet->Put( SfxUInt16Item( SID_SC_OPT_KEY_BINDING_COMPAT,
                                    rAppOpt.GetKeyBindingType() ) );
+        pRet->Put( SfxBoolItem( SID_SC_OPT_LINKS, rAppOpt.GetLinksInsertedLikeMSExcel()));
 
         // TP_DEFAULTS
         pRet->Put( ScTpDefaultsItem( GetDefaultsOptions() ) );
