@@ -4599,4 +4599,53 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
     return *m_pKeyMap;
 }
 
+OUString MSWordExportBase::BookmarkToWord(const OUString& rBookmark, bool* pIsMove, bool* pIsFrom)
+{
+    OUString sLookup = rBookmark;
+    if (pIsMove)
+    {
+        static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
+        static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
+        if (rBookmark.startsWith(MoveFrom_Bookmark_NamePrefix, &sLookup))
+        {
+            *pIsMove = true;
+            *pIsFrom = true;
+        }
+        else if (rBookmark.startsWith(MoveTo_Bookmark_NamePrefix, &sLookup))
+        {
+            *pIsMove = true;
+            *pIsFrom = false;
+        }
+    }
+    if (auto it = m_aBookmarkToWord.find(sLookup); it != m_aBookmarkToWord.end())
+        return it->second;
+
+    OUString sRet
+        = INetURLObject::encode(sLookup.replace(' ', '_'), // Spaces are prohibited in bookmark name
+                                INetURLObject::PART_REL_SEGMENT_EXTRA,
+                                INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US);
+    // Unicode letters are allowed
+    sRet = INetURLObject::decode(sRet, INetURLObject::DecodeMechanism::Unambiguous,
+                                 RTL_TEXTENCODING_UTF8);
+
+    /*#i15387#*/
+    // Word has 40 character limit for bookmarks: [MS-OE376] Part 4 Sect. 2.13.6.2, bookmarkStart
+    if (sRet.getLength() > 40)
+    {
+        // Generate a unique bookmark name
+        sRet = sRet.copy(0, 40);
+        for (sal_uInt32 n = 1; n; ++n)
+        {
+            if (m_aWordBookmarks.find(sRet) == m_aWordBookmarks.end())
+                break;
+            auto num = OUString::number(n, 36);
+            sRet = sRet.subView(0, 40 - num.length) + num;
+        }
+    }
+
+    m_aBookmarkToWord[sLookup] = sRet;
+    m_aWordBookmarks.insert(sRet);
+    return sRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

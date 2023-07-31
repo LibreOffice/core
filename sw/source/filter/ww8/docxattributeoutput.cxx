@@ -2112,11 +2112,11 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     DoWriteBookmarkEndIfExist(nPos);
 }
 
-void DocxAttributeOutput::DoWriteBookmarkTagStart(std::u16string_view bookmarkName)
+void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString& bookmarkName)
 {
     m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
         FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-        FSNS(XML_w, XML_name), BookmarkToWord(bookmarkName));
+        FSNS(XML_w, XML_name), GetExport().BookmarkToWord(bookmarkName));
 }
 
 void DocxAttributeOutput::DoWriteBookmarkTagEnd(sal_Int32 const nId)
@@ -2172,7 +2172,7 @@ void DocxAttributeOutput::DoWriteBookmarkStartIfExist(sal_Int32 nRunPos)
     {
         DoWriteBookmarkTagStart(aIter->second);
         m_rOpenedBookmarksIds[aIter->second] = m_nNextBookmarkId;
-        m_sLastOpenedBookmark = OUStringToOString(BookmarkToWord(aIter->second), RTL_TEXTENCODING_UTF8);
+        m_sLastOpenedBookmark = OUStringToOString(GetExport().BookmarkToWord(aIter->second), RTL_TEXTENCODING_UTF8);
         m_nNextBookmarkId++;
     }
 }
@@ -2202,7 +2202,7 @@ void DocxAttributeOutput::DoWriteBookmarksStart(std::vector<OUString>& rStarts, 
         bool bMove = false;
         bool bFrom = false;
         OString sBookmarkName = OUStringToOString(
-                BookmarkToWord(bookmarkName, &bMove, &bFrom), RTL_TEXTENCODING_UTF8);
+                GetExport().BookmarkToWord(bookmarkName, &bMove, &bFrom), RTL_TEXTENCODING_UTF8);
         if ( bMove )
         {
             // TODO: redline data of MoveBookmark is restored from the first redline of the bookmark
@@ -2234,7 +2234,7 @@ void DocxAttributeOutput::DoWriteBookmarksEnd(std::vector<OUString>& rEnds)
         {
             bool bMove = false;
             bool bFrom = false;
-            BookmarkToWord(bookmarkName, &bMove, &bFrom);
+            GetExport().BookmarkToWord(bookmarkName, &bMove, &bFrom);
             // Output the bookmark (including MoveBookmark of the tracked moving)
             if ( bMove )
                 DoWriteMoveRangeTagEnd(pPos->second, bFrom);
@@ -2262,12 +2262,12 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
     {
         const std::size_t separatorIndex = permissionIdAndName.find(u':');
         assert(separatorIndex != std::u16string_view::npos);
-        const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
-        const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
+        const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
+        const OUString permissionName(permissionIdAndName.substr(separatorIndex + 1));
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_edGrp), BookmarkToWord(permissionName));
+            FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId),
+            FSNS(XML_w, XML_edGrp), GetExport().BookmarkToWord(permissionName));
     }
     else
     {
@@ -2276,12 +2276,12 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
         assert(ok); (void)ok;
         const std::size_t separatorIndex = permissionIdAndName.find(u':');
         assert(separatorIndex != std::u16string_view::npos);
-        const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
-        const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
+        const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
+        const OUString permissionName(permissionIdAndName.substr(separatorIndex + 1));
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
-            FSNS(XML_w, XML_ed), BookmarkToWord(permissionName));
+            FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId),
+            FSNS(XML_w, XML_ed), GetExport().BookmarkToWord(permissionName));
     }
 }
 
@@ -2303,10 +2303,10 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(std::u16string_view permission
 
     const std::size_t separatorIndex = permissionIdAndName.find(u':');
     assert(separatorIndex != std::u16string_view::npos);
-    const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
+    const OUString permissionId(permissionIdAndName.substr(0, separatorIndex));
 
     m_pSerializer->singleElementNS(XML_w, XML_permEnd,
-        FSNS(XML_w, XML_id), BookmarkToWord(permissionId));
+        FSNS(XML_w, XML_id), GetExport().BookmarkToWord(permissionId));
 }
 
 /// Write the start permissions
@@ -3795,6 +3795,8 @@ void DocxAttributeOutput::EndRuby(const SwTextNode& rNode, sal_Int32 nPos)
 bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark )
 {
     bool bBookMarkOnly = AttributeOutputBase::AnalyzeURL( rUrl, rTarget, pLinkURL, pMark );
+    if (bBookMarkOnly)
+        *pMark = GetExport().BookmarkToWord(*pMark);
 
     if ( !pMark->isEmpty() )
     {

@@ -50,6 +50,7 @@
 #include <map>
 #include <string_view>
 #include <vector>
+#include <unordered_map>
 
 
 class SvxBrushItem;
@@ -639,7 +640,7 @@ public:
     bool HasRefToFootOrEndnote(const bool isEndNote, const sal_uInt16 nSeqNo);
 
     /// Find the bookmark name.
-    static OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
+    OUString GetBookmarkName( sal_uInt16 nTyp, const OUString* pName, sal_uInt16 nSeqNo );
 
     /// Use OutputItem() on an item set according to the parameters.
     void OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, bool bChpFormat, sal_uInt16 nScript, bool bExportParentItemSet );
@@ -927,9 +928,15 @@ public:
 
     static void CorrectTabStopInSet( SfxItemSet& rSet, sal_Int32 nAbsLeft );
 
+    OUString BookmarkToWord(const OUString& rBookmark, bool* pIsMove = nullptr,
+                            bool* pIsFrom = nullptr);
+
 private:
     MSWordExportBase( const MSWordExportBase& ) = delete;
     MSWordExportBase& operator=( const MSWordExportBase& ) = delete;
+
+    std::unordered_map<OUString, OUString> m_aBookmarkToWord;
+    o3tl::sorted_vector<OUString> m_aWordBookmarks;
 };
 
 /// The writer class that gets called for the WW8 filter.
@@ -1650,7 +1657,6 @@ public:
 sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);
-OUString BookmarkToWord(std::u16string_view rBookmark, bool* pIsMove = nullptr, bool* pIsFrom = nullptr);
 
 class WW8SHDLong
 {

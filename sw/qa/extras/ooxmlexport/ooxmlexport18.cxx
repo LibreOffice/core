@@ -629,6 +629,37 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150408_isLvl_RoundTrip)
     assertXPath(pXml, "/w:numbering/w:abstractNum/w:lvl[2]/w:isLgl");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf156548)
+{
+    // Given a document using two bookmarks with similar names longer than 40 characters
+    loadAndReload("longBookmarkName.fodt");
+
+    // After the export, the names must be no longer than 40 characters; they must be unique;
+    // and the hyperlinks must use the same names, to still point to the correct targets:
+
+    {
+        // 1st  paragraph - hyperlink to 4th paragraph
+        auto sURL = getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL");
+        CPPUNIT_ASSERT_EQUAL(OUString("#A_bookmark_name_longer_than_forty_charac"), sURL);
+        // 4th paragraph - a bookmark
+        auto xBookmark = getProperty<uno::Reference<container::XNamed>>(getRun(getParagraph(4), 1),
+                                                                        "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(OUString("A_bookmark_name_longer_than_forty_charac"),
+                             xBookmark->getName());
+    }
+
+    {
+        // 2nd  paragraph - hyperlink to 5th paragraph
+        auto sURL = getProperty<OUString>(getRun(getParagraph(2), 1), "HyperLinkURL");
+        CPPUNIT_ASSERT_EQUAL(OUString("#A_bookmark_name_longer_than_forty_chara1"), sURL);
+        // 5th paragraph - a bookmark
+        auto xBookmark = getProperty<uno::Reference<container::XNamed>>(getRun(getParagraph(5), 1),
+                                                                        "Bookmark");
+        CPPUNIT_ASSERT_EQUAL(OUString("A_bookmark_name_longer_than_forty_chara1"),
+                             xBookmark->getName());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

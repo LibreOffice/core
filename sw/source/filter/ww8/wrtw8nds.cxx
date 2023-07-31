@@ -921,15 +921,6 @@ void WW8AttributeOutput::EndRuby(const SwTextNode& /*rNode*/, sal_Int32 /*nPos*/
     m_rWW8Export.OutputField( nullptr, ww::eEQ, OUString(), FieldFlags::End | FieldFlags::Close );
 }
 
-/*#i15387# Better ideas welcome*/
-static OUString &TruncateBookmark( OUString &rRet )
-{
-    if ( rRet.getLength() > 40 )
-        rRet = rRet.copy( 0, 40 );
-    OSL_ENSURE( rRet.getLength() <= 40, "Word cannot have bookmarks longer than 40 chars" );
-    return rRet;
-}
-
 OUString AttributeOutputBase::ConvertURL( const OUString& rUrl, bool bAbsoluteOut )
 {
     OUString sURL = rUrl;
@@ -1024,7 +1015,7 @@ bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarg
     if (bBookMarkOnly)
     {
         sURL = FieldString(ww::eHYPERLINK);
-        *pMark = BookmarkToWord(*pMark);
+        *pMark = GetExport().BookmarkToWord(*pMark);
     }
     else
         sURL = FieldString( ww::eHYPERLINK ) + "\"" + sURL + "\"";
@@ -1205,35 +1196,6 @@ bool WW8AttributeOutput::EndURL(bool const)
     return true;
 }
 
-OUString BookmarkToWord(std::u16string_view rBookmark, bool* pIsMove, bool* pIsFrom)
-{
-    sal_Int32 nTrim = 0; // position to remove "__RefMoveRange" from bookmark names
-    if ( pIsMove )
-    {
-        static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
-        static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
-        if ( o3tl::starts_with(rBookmark, MoveFrom_Bookmark_NamePrefix) )
-        {
-            *pIsMove = true;
-            *pIsFrom = true;
-            nTrim = MoveFrom_Bookmark_NamePrefix.getLength();
-        }
-        else if ( o3tl::starts_with(rBookmark, MoveTo_Bookmark_NamePrefix) )
-        {
-            *pIsMove = true;
-            *pIsFrom = false;
-            nTrim = MoveTo_Bookmark_NamePrefix.getLength();
-        }
-    }
-    OUString sRet = INetURLObject::encode(
-        OUString(rBookmark.substr(nTrim)).replace(' ', '_'), // Spaces are prohibited in bookmark name
-        INetURLObject::PART_REL_SEGMENT_EXTRA,
-        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US);
-    // Unicode letters are allowed
-    sRet = INetURLObject::decode(sRet, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
-    return TruncateBookmark(sRet);
-}
-
 OUString BookmarkToWriter(std::u16string_view rBookmark)
 {
     return INetURLObject::decode(rBookmark,
@@ -1243,7 +1205,7 @@ OUString BookmarkToWriter(std::u16string_view rBookmark)
 void SwWW8AttrIter::OutSwFormatRefMark(const SwFormatRefMark& rAttr)
 {
     if(m_rExport.HasRefToAttr(rAttr.GetRefName()))
-        m_rExport.AppendBookmark( MSWordExportBase::GetBookmarkName( REF_SETREFATTR,
+        m_rExport.AppendBookmark( m_rExport.GetBookmarkName( REF_SETREFATTR,
                                             &rAttr.GetRefName(), 0 ));
 }
 
