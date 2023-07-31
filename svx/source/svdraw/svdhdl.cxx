@@ -1553,7 +1553,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
 E3dVolumeMarker::E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly)
 {
-    aWireframePoly = rWireframePoly;
+    m_aWireframePoly = rWireframePoly;
 }
 
 void E3dVolumeMarker::CreateB2dIAObject()
@@ -1579,11 +1579,11 @@ void E3dVolumeMarker::CreateB2dIAObject()
         if(rPageWindow.GetPaintWindow().OutputToWindow())
         {
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
-            if (xManager.is() && aWireframePoly.count())
+            if (xManager.is() && m_aWireframePoly.count())
             {
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
                     sdr::overlay::OverlayPolyPolygonStripedAndFilled(
-                        aWireframePoly));
+                        m_aWireframePoly));
 
                 pNewOverlayObject->setBaseColor(COL_BLACK);
 
@@ -1669,10 +1669,10 @@ void ImpEdgeHdl::CreateB2dIAObject()
 
 void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
 {
-    if(eLineCode != eCode)
+    if(m_eLineCode != eCode)
     {
         // remember new value
-        eLineCode = eCode;
+        m_eLineCode = eCode;
 
         // create new display
         Touch();
@@ -1705,7 +1705,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     const SdrEdgeInfoRec& rInfo=pEdge->aEdgeInfo;
     if (eEdgeKind==SdrEdgeKind::OrthoLines || eEdgeKind==SdrEdgeKind::Bezier)
     {
-        return !rInfo.ImpIsHorzLine(eLineCode,*pEdge->pEdgeTrack);
+        return !rInfo.ImpIsHorzLine(m_eLineCode,*pEdge->pEdgeTrack);
     }
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {

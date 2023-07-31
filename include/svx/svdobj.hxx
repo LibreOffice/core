@@ -150,8 +150,8 @@ public:
  */
 class SVXCORE_DLLPUBLIC SdrObjUserData
 {
-    SdrInventor                      nInventor;
-    sal_uInt16                       nIdentifier;
+    SdrInventor                      m_nInventor;
+    sal_uInt16                       m_nIdentifier;
 
     void operator=(const SdrObjUserData& rData) = delete;
     bool operator==(const SdrObjUserData& rData) const = delete;
@@ -163,8 +163,8 @@ public:
     virtual ~SdrObjUserData();
 
     virtual std::unique_ptr<SdrObjUserData> Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    SdrInventor GetInventor() const { return nInventor;}
-    sal_uInt16 GetId() const { return nIdentifier;}
+    SdrInventor GetInventor() const { return m_nInventor;}
+    sal_uInt16 GetId() const { return m_nIdentifier;}
 };
 
 /**

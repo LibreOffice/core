@@ -36,13 +36,13 @@ typedef bool (*SvxCompareValueFunc)( const NameOrIndex* p1, const NameOrIndex* p
 
 class SVXCORE_DLLPUBLIC NameOrIndex : public SfxStringItem
 {
-    sal_Int32    nPalIndex;
+    sal_Int32    m_nPalIndex;
 
 protected:
-    void    Detach()    { nPalIndex = -1; }
+    void    Detach()    { m_nPalIndex = -1; }
 
 public:
-            NameOrIndex() { nPalIndex = -1; }
+            NameOrIndex() { m_nPalIndex = -1; }
             NameOrIndex(TypedWhichId<NameOrIndex> nWhich, sal_Int32 nIndex);
             NameOrIndex(TypedWhichId<NameOrIndex> nWhich, const OUString& rName);
             NameOrIndex(const NameOrIndex& rNameOrIndex);
@@ -52,8 +52,8 @@ public:
 
             OUString const & GetName() const              { return GetValue();   }
             void         SetName(const OUString& rName) { SetValue(rName);     }
-            bool         IsIndex() const          { return (nPalIndex >= 0); }
-            sal_Int32    GetPalIndex() const { return nPalIndex; }
+            bool         IsIndex() const          { return (m_nPalIndex >= 0); }
+            sal_Int32    GetPalIndex() const { return m_nPalIndex; }
 
     /** this static checks if the given NameOrIndex item has a unique name for its value.
         The returned String is a unique name for an item with this value in both given pools.

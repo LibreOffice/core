@@ -98,26 +98,26 @@ typedef std::map<OUString, OUString> StringMap;
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, sal_Int32 nIndex) :
     SfxStringItem(_nWhich, OUString()),
-    nPalIndex(nIndex)
+    m_nPalIndex(nIndex)
 {
 }
 
 NameOrIndex::NameOrIndex(TypedWhichId<NameOrIndex> _nWhich, const OUString& rName) :
     SfxStringItem(_nWhich, rName),
-    nPalIndex(-1)
+    m_nPalIndex(-1)
 {
 }
 
 NameOrIndex::NameOrIndex(const NameOrIndex& rNameOrIndex) :
     SfxStringItem(rNameOrIndex),
-    nPalIndex(rNameOrIndex.nPalIndex)
+    m_nPalIndex(rNameOrIndex.m_nPalIndex)
 {
 }
 
 bool NameOrIndex::operator==(const SfxPoolItem& rItem) const
 {
     return ( SfxStringItem::operator==(rItem) &&
-            static_cast<const NameOrIndex&>(rItem).nPalIndex == nPalIndex );
+            static_cast<const NameOrIndex&>(rItem).m_nPalIndex == m_nPalIndex );
 }
 
 NameOrIndex* NameOrIndex::Clone(SfxItemPool* /*pPool*/) const
@@ -256,7 +256,7 @@ void NameOrIndex::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("isIndex"), BAD_CAST(OString::boolean(IsIndex()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(nPalIndex).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(m_nPalIndex).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

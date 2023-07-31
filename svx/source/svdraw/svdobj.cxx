@@ -148,12 +148,12 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
 
 
 SdrObjUserData::SdrObjUserData(SdrInventor nInv, sal_uInt16 nId) :
-    nInventor(nInv),
-    nIdentifier(nId) {}
+    m_nInventor(nInv),
+    m_nIdentifier(nId) {}
 
 SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
-    nInventor(rData.nInventor),
-    nIdentifier(rData.nIdentifier) {}
+    m_nInventor(rData.m_nInventor),
+    m_nIdentifier(rData.m_nIdentifier) {}
 
 SdrObjUserData::~SdrObjUserData() {}
 

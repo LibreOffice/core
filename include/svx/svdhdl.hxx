@@ -372,7 +372,7 @@ private:
 
 class E3dVolumeMarker final : public SdrHdl
 {
-    basegfx::B2DPolyPolygon             aWireframePoly;
+    basegfx::B2DPolyPolygon             m_aWireframePoly;
 
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
@@ -384,17 +384,17 @@ public:
 
 class ImpEdgeHdl final : public SdrHdl
 {
-    SdrEdgeLineCode eLineCode;
+    SdrEdgeLineCode m_eLineCode;
 
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
 public:
-    ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),eLineCode(SdrEdgeLineCode::MiddleLine) {}
+    ImpEdgeHdl(const Point& rPnt, SdrHdlKind eNewKind): SdrHdl(rPnt,eNewKind),m_eLineCode(SdrEdgeLineCode::MiddleLine) {}
     virtual ~ImpEdgeHdl() override;
 
     void SetLineCode(SdrEdgeLineCode eCode);
-    SdrEdgeLineCode GetLineCode() const     { return eLineCode; }
+    SdrEdgeLineCode GetLineCode() const     { return m_eLineCode; }
     bool IsHorzDrag() const;
     virtual PointerStyle GetPointer() const override;
 };
