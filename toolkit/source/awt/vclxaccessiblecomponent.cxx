@@ -629,7 +629,11 @@ OUString VCLXAccessibleComponent::getAccessibleName(  )
     {
         aName = GetWindow()->GetAccessibleName();
 #if OSL_DEBUG_LEVEL > 0
-        aName += " (Type = " + OUString::number(static_cast<sal_Int32>(GetWindow()->GetType())) + ")";
+        // append window type to accessible name for debugging purposes
+        // if LIBO_APPEND_WINDOW_TYPE_TO_ACCESSIBLE_NAME environment variable is set
+        static const char* pEnvAppendType = getenv("LIBO_APPEND_WINDOW_TYPE_TO_ACCESSIBLE_NAME");
+        if (pEnvAppendType && OUString::createFromAscii(pEnvAppendType) != u"0")
+            aName += " (Type = " + OUString::number(static_cast<sal_Int32>(GetWindow()->GetType())) + ")";
 #endif
     }
     return aName;
