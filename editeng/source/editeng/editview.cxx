@@ -316,6 +316,16 @@ bool EditView::HasSelection() const
     return pImpEditView->HasSelection();
 }
 
+bool EditView::IsSelectionFullPara() const
+{
+    return pImpEditView->IsSelectionFullPara();
+}
+
+bool EditView::IsSelectionWithinSinglePara() const
+{
+    return pImpEditView->IsSelectionInSinglePara();
+}
+
 bool EditView::IsSelectionAtPoint(const Point& rPointPixel)
 {
     return pImpEditView->IsSelectionAtPoint(rPointPixel);
