@@ -575,7 +575,7 @@ private:
     void implts_readAutoSaveConfig();
 
     // TODO document me
-    void implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt = false,
+    void implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt = false,
                                 bool bAllowAdd = true);
 
     // TODO document me
@@ -1981,7 +1981,7 @@ void AutoRecovery::implts_persistAllActiveViewNames()
     }
 }
 
-void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt,
+void AutoRecovery::implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt,
                                           bool bAllowAdd)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
@@ -2007,6 +2007,11 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             // DO IT!
             try
             {
+                osl::File::remove(rInfo.OldTempURL);
+                osl::File::remove(rInfo.NewTempURL);
+                rInfo.OldTempURL.clear();
+                rInfo.NewTempURL.clear();
+
                 xModify->removeByName(sID);
             }
             catch(const css::container::NoSuchElementException&)
@@ -2540,8 +2545,6 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);
 
-    AutoRecovery::st_impl_removeFile(aInfo.OldTempURL);
-    AutoRecovery::st_impl_removeFile(aInfo.NewTempURL);
     implts_flushConfigItem(aInfo, true); // sal_True => remove it from config
 }
 
@@ -3323,7 +3326,8 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
                 info.DocumentState |=  DocState::Damaged;
             }
 
-            implts_flushConfigItem(info, true);
+            implts_flushConfigItem(info, /*bRemoveIt=*/true);
+
             implts_informListener(eJob,
                 AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &info));
 
@@ -3898,8 +3902,6 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
     if (pIt != m_lDocCache.end())
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
-        AutoRecovery::st_impl_removeFile(rInfo.OldTempURL);
-        AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
         implts_flushConfigItem(rInfo, true); // sal_True => remove it from xml config!
 
         m_lDocCache.erase(pIt);
