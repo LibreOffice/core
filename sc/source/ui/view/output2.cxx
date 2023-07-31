@@ -3038,7 +3038,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
             ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
-            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
+            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );
         }
 
         if (eOutHorJust != SvxCellHorJustify::Left)
@@ -3213,12 +3213,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 }
 
 void ScOutputData::SetClipMarks( OutputAreaParam &aAreaParam, ScCellInfo* pClipMarkCell,
-                                 SvxCellHorJustify eOutHorJust, bool bHasHashText,
+                                 SvxCellHorJustify eOutHorJust,
                                  tools::Long nLayoutSign )
 {
-    if ( !bHasHashText )
-        return;
-
     tools::Long nMarkPixel = SC_CLIPMARK_SIZE * mnPPTX;
 
     if ( eOutHorJust == SvxCellHorJustify::Left )
@@ -3917,7 +3914,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
             tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
             ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
-            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
+            SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );
         }
 
         if ( eOutHorJust != SvxCellHorJustify::Left )
@@ -4217,7 +4214,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         nEngineWidth = SetEngineTextAndGetWidth( rParam, "###", nNeededPixel, ( nLeftM + nRightM ) );
         tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
         ScCellInfo* pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
-        SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, true, nLayoutSign );
+        SetClipMarks( aAreaParam, pClipMarkCell, eOutHorJust, nLayoutSign );
     }
 
     if (eOutHorJust != SvxCellHorJustify::Left)

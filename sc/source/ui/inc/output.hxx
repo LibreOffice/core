@@ -281,7 +281,7 @@ private:
     std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
 
     void SetClipMarks( OutputAreaParam &aAreaParam, ScCellInfo* pClipMarkCell,
-                       SvxCellHorJustify eOutHorJust, bool bHasHashText, tools::Long nLayoutSign );
+                       SvxCellHorJustify eOutHorJust, tools::Long nLayoutSign );
 
     void ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidth, const Size& aCellSize,
                         bool bMerged, OutputAreaParam& aAreaParam, bool bTop );
