@@ -10,6 +10,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <tpcompatibility.hxx>
 #include <sc.hrc>
@@ -18,6 +19,7 @@
 ScTpCompatOptions::ScTpCompatOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreAttrs)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optcompatibilitypage.ui", "OptCompatibilityPage", &rCoreAttrs)
     , m_xLbKeyBindings(m_xBuilder->weld_combo_box("keybindings"))
+    , m_xBtnLink(m_xBuilder->weld_check_button("cellLinkCB"))
 {
 }
 
@@ -40,6 +42,12 @@ bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)
                 SID_SC_OPT_KEY_BINDING_COMPAT, m_xLbKeyBindings->get_active()));
         bRet = true;
     }
+    if (m_xBtnLink->get_state_changed_from_saved())
+    {
+        rCoreAttrs->Put(SfxBoolItem(SID_SC_OPT_LINKS, m_xBtnLink->get_active()));
+        bRet = true;
+    }
+
     return bRet;
 }
 
@@ -62,8 +70,13 @@ void ScTpCompatOptions::Reset(const SfxItemSet *rCoreAttrs)
                 ;
         }
     }
-
     m_xLbKeyBindings->save_value();
+
+    if (const SfxBoolItem* pbItem = rCoreAttrs->GetItemIfSet(SID_SC_OPT_LINKS))
+    {
+        m_xBtnLink->set_active(pbItem->GetValue());
+    }
+    m_xBtnLink->save_state();
 }
 
 DeactivateRC ScTpCompatOptions::DeactivatePage(SfxItemSet* /*pSet*/)

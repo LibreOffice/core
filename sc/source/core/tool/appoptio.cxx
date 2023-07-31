@@ -80,6 +80,7 @@ void ScAppOptions::SetDefaults()
     mbShowSharedDocumentWarning = true;
 
     meKeyBindingType     = ScOptionsUtil::KEY_DEFAULT;
+    mbLinksInsertedLikeMSExcel = false;
 }
 
 ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
@@ -101,6 +102,7 @@ ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     mbShowSharedDocumentWarning = rCpy.mbShowSharedDocumentWarning;
     meKeyBindingType  = rCpy.meKeyBindingType;
+    mbLinksInsertedLikeMSExcel = rCpy.mbLinksInsertedLikeMSExcel;
     return *this;
 }
 
@@ -192,6 +194,7 @@ constexpr OUStringLiteral CFGPATH_MISC = u"Office.Calc/Misc";
 constexpr OUStringLiteral CFGPATH_COMPAT = u"Office.Calc/Compatibility";
 
 #define SCCOMPATOPT_KEY_BINDING     0
+#define SCCOMPATOPT_LINK_LIKE_MS    1
 
 // Default value of Layout/Other/StatusbarMultiFunction
 #define SCLAYOUTOPT_STATUSBARMULTI_DEFAULTVAL         514
@@ -258,7 +261,8 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 
 Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 {
-    return {"KeyBindings/BaseGroup"};   // SCCOMPATOPT_KEY_BINDING
+    return {"KeyBindings/BaseGroup",    // SCCOMPATOPT_KEY_BINDING
+            "Links" };                  // SCCOMPATOPT_LINK_LIKE_MS
 }
 
 ScAppCfg::ScAppCfg() :
@@ -454,6 +458,10 @@ void ScAppCfg::ReadCompatCfg()
     sal_Int32 nIntVal = 0; // 0 = 'Default'
     aValues[SCCOMPATOPT_KEY_BINDING] >>= nIntVal;
     SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
+
+    if (aValues.getLength() > SCCOMPATOPT_LINK_LIKE_MS)
+        SetLinksInsertedLikeMSExcel(
+            ScUnoHelpFunctions::GetBoolFromAny(aValues[SCCOMPATOPT_LINK_LIKE_MS]));
 }
 
 IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl, ScLinkConfigItem&, void)
@@ -625,6 +633,9 @@ IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl, ScLinkConfigItem&, void)
             case SCCOMPATOPT_KEY_BINDING:
                 pValues[nProp] <<= static_cast<sal_Int32>(GetKeyBindingType());
             break;
+            case SCCOMPATOPT_LINK_LIKE_MS:
+                pValues[nProp] <<= GetLinksInsertedLikeMSExcel();
+                break;
         }
     }
     aCompatItem.PutProperties(aNames, aValues);

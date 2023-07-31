@@ -49,6 +49,7 @@ private:
     std::optional<bool> moAtContextMenu_DisableEditHyperlink;
 
     const SvxURLField* GetURLField();
+    const SvxURLField* GetFirstURLFieldFromCell();
     ScInputHandler* GetMyInputHdl();
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );

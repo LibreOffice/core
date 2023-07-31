@@ -1864,6 +1864,13 @@
           </constraints>
         </prop>
       </group>
+      <prop oor:name="Links" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Insert link for the cell, instead of text fields in a cell.(Excel iteropability options)</desc>
+          <label>Links like Excel</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Defaults">
       <info>

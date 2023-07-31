@@ -44,6 +44,8 @@
 #include <editeng/wghtitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
@@ -59,6 +61,8 @@
 
 #include <editsh.hxx>
 #include <global.hxx>
+#include <appoptio.hxx>
+#include <scmod.hxx>
 #include <sc.hrc>
 #include <scmod.hxx>
 #include <inputhdl.hxx>
@@ -567,8 +571,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const OUString& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
+                    bool bCellLinksOnly
+                        = SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat();
+
                     bool bDone = false;
-                    if ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD )
+                    if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly )
                     {
                         const SvxURLField* pURLField = GetURLField();
                         if ( pURLField )
@@ -607,6 +615,17 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                     if (!bDone)
                     {
+                        if (bCellLinksOnly)
+                        {
+                            sal_Int32 nPar = pEngine->GetParagraphCount();
+                            if (nPar)
+                            {
+                                sal_Int32 nLen = pEngine->GetTextLen(nPar - 1);
+                                pTableView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                                if (pTopView)
+                                    pTopView->SetSelection(ESelection(0, 0, nPar - 1, nLen));
+                            }
+                        }
                         rViewData.GetViewShell()->
                             InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
 
@@ -764,19 +783,43 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_HYPERLINK_GETLINK:
                 {
                     SvxHyperlinkItem aHLinkItem;
+                    bool bCellLinksOnly
+                        = SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
+                          && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat();
                     const SvxURLField* pURLField = GetURLField();
-                    if ( pURLField )
+                    if (!bCellLinksOnly)
                     {
-                        aHLinkItem.SetName( pURLField->GetRepresentation() );
-                        aHLinkItem.SetURL( pURLField->GetURL() );
-                        aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
+                        if (pURLField)
+                        {
+                            aHLinkItem.SetName(pURLField->GetRepresentation());
+                            aHLinkItem.SetURL(pURLField->GetURL());
+                            aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
+                        }
+                        else if (pActiveView)
+                        {
+                            // use selected text as name for urls
+                            OUString sReturn = pActiveView->GetSelected();
+                            sReturn = sReturn.copy(
+                                0, std::min(sReturn.getLength(), static_cast<sal_Int32>(255)));
+                            aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
+                        }
                     }
-                    else if ( pActiveView )
+                    else
                     {
-                        // use selected text as name for urls
-                        OUString sReturn = pActiveView->GetSelected();
-                        sReturn = sReturn.copy(0, std::min(sReturn.getLength(), static_cast<sal_Int32>(255)));
-                        aHLinkItem.SetName(comphelper::string::stripEnd(sReturn, ' '));
+                        if (!pURLField)
+                        {
+                            pURLField = GetFirstURLFieldFromCell();
+                        }
+                        if (pURLField)
+                        {
+                            aHLinkItem.SetURL(pURLField->GetURL());
+                            aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
+                        }
+                        ScDocument& rDoc = rViewData.GetDocument();
+                        SCCOL nPosX = rViewData.GetCurX();
+                        SCROW nPosY = rViewData.GetCurY();
+                        SCTAB nTab = rViewData.GetTabNo();
+                        aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
                     }
                     rSet.Put(aHLinkItem);
                 }
@@ -855,6 +898,38 @@ const SvxURLField* ScEditShell::GetURLField()
     if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
         return pURLField;
 
+    return nullptr;
+}
+
+const SvxURLField* ScEditShell::GetFirstURLFieldFromCell()
+{
+    EditEngine* pEE = GetEditView()->GetEditEngine();
+    sal_Int32 nParaCount = pEE->GetParagraphCount();
+    for (sal_Int32 nPara = 0; nPara < nParaCount; ++nPara)
+    {
+        ESelection aSel(nPara, 0);
+        std::vector<sal_Int32> aPosList;
+        pEE->GetPortions(nPara, aPosList);
+        for (const auto& rPos : aPosList)
+        {
+            aSel.nEndPos = rPos;
+
+            SfxItemSet aEditSet(pEE->GetAttribs(aSel));
+            if (aSel.nStartPos + 1 == aSel.nEndPos)
+            {
+                // test if the character is a text field
+                if (const SvxFieldItem* pItem = aEditSet.GetItemIfSet(EE_FEATURE_FIELD, false))
+                {
+                    const SvxFieldData* pField = pItem->GetField();
+                    if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
+                    {
+                        return pUrlField;
+                    }
+                }
+            }
+            aSel.nStartPos = aSel.nEndPos;
+        }
+    }
     return nullptr;
 }
 
