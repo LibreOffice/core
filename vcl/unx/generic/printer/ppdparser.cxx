@@ -1273,7 +1273,6 @@ void PPDParser::parseOrderDependency(const OString& rLine)
         aLine = aLine.copy( nPos+1 );
 
     sal_Int32 nOrder = GetCommandLineToken( 0, aLine ).toInt32();
-    OString aSetup = GetCommandLineToken( 1, aLine );
     OUString aKey(OStringToOUString(GetCommandLineToken(2, aLine), RTL_TEXTENCODING_MS_1252));
     if( aKey[ 0 ] != '*' )
         return; // invalid order dependency
@@ -1290,18 +1289,6 @@ void PPDParser::parseOrderDependency(const OString& rLine)
         pKey = keyit->second.get();
 
     pKey->m_nOrderDependency = nOrder;
-    if( aSetup == "ExitServer" )
-        pKey->m_eSetupType = PPDKey::SetupType::ExitServer;
-    else if( aSetup == "Prolog" )
-        pKey->m_eSetupType = PPDKey::SetupType::Prolog;
-    else if( aSetup == "DocumentSetup" )
-        pKey->m_eSetupType = PPDKey::SetupType::DocumentSetup;
-    else if( aSetup == "PageSetup" )
-        pKey->m_eSetupType = PPDKey::SetupType::PageSetup;
-    else if( aSetup == "JCLSetup" )
-        pKey->m_eSetupType = PPDKey::SetupType::JCLSetup;
-    else
-        pKey->m_eSetupType = PPDKey::SetupType::AnySetup;
 }
 
 void PPDParser::parseConstraint( const OString& rLine )
@@ -1546,8 +1533,7 @@ PPDKey::PPDKey( OUString aKey ) :
         m_pDefaultValue( nullptr ),
         m_bQueryValue( false ),
         m_bUIOption( false ),
-        m_nOrderDependency( 100 ),
-        m_eSetupType( SetupType::AnySetup )
+        m_nOrderDependency( 100 )
 {
 }
 

@@ -76,13 +76,10 @@ class PPDKey
     bool                m_bQueryValue;
     OUString            m_aGroup;
 
-public:
-    enum class SetupType { ExitServer, Prolog, DocumentSetup, PageSetup, JCLSetup, AnySetup };
 private:
 
     bool                m_bUIOption;
     int                 m_nOrderDependency;
-    SetupType           m_eSetupType;
 
     void eraseValue( const OUString& rOption );
 public:
