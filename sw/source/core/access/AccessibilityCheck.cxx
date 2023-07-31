@@ -480,15 +480,43 @@ private:
             aBackgroundColor = nParaBackColor;
         else
         {
-            auto pIssue
-                = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
-                              sfx::AccessibilityIssueID::TEXT_FORMATTING);
-            pIssue->setIssueObject(IssueObject::TEXT);
-            pIssue->setNode(pTextNode);
-            SwDoc& rDocument = pTextNode->GetDoc();
-            pIssue->setDoc(rDocument);
-            pIssue->setStart(nTextStart);
-            pIssue->setEnd(nTextStart + xTextRange->getString().getLength());
+            OUString sCharStyleName;
+            Color nCharStyleBackColor(COL_AUTO);
+            if (xProperties->getPropertyValue("CharStyleName") >>= sCharStyleName)
+            {
+                try
+                {
+                    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(
+                        pTextNode->GetDoc().GetDocShell()->GetModel(), uno::UNO_QUERY);
+                    uno::Reference<container::XNameAccess> xCont
+                        = xStyleFamiliesSupplier->getStyleFamilies();
+                    uno::Reference<container::XNameAccess> xStyleFamily(
+                        xCont->getByName("CharacterStyles"), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xInfo(
+                        xStyleFamily->getByName(sCharStyleName), uno::UNO_QUERY);
+                    xInfo->getPropertyValue("CharBackColor") >>= nCharStyleBackColor;
+                }
+                catch (const uno::Exception&)
+                {
+                }
+            }
+            else
+            {
+                SAL_WARN("sw.a11y", "CharStyleName void");
+            }
+
+            if (aBackgroundColor != nCharStyleBackColor)
+            {
+                auto pIssue
+                    = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_FORMATTING_CONVEYS_MEANING),
+                                  sfx::AccessibilityIssueID::TEXT_FORMATTING);
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                SwDoc& rDocument = pTextNode->GetDoc();
+                pIssue->setDoc(rDocument);
+                pIssue->setStart(nTextStart);
+                pIssue->setEnd(nTextStart + xTextRange->getString().getLength());
+            }
         }
 
         Color aForegroundColor(ColorTransparency, nCharColor);
