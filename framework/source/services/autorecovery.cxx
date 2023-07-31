@@ -3096,6 +3096,10 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     else if (xModify.is())
         rInfo.DocumentState &= ~DocState::Modified;
 
+    // If it is no longer modified, it is the same as on disk, and can be removed from RecoveryList.
+    const bool bRemoveIt
+        = xModify.is() && !xModify->isModified() && !bEmergencySave && !(m_eJob & Job::SessionSave);
+
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     bool  bError = false;
     do
@@ -3184,7 +3188,8 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     rInfo.OldTempURL = rInfo.NewTempURL;
     rInfo.NewTempURL.clear();
 
-    implts_flushConfigItem(rInfo);
+    // If it is modified, a recovery file has just been created, so add to RecoveryList.
+    implts_flushConfigItem(rInfo, bRemoveIt, /*bAllowAdd=*/bModified);
 
     // We must know if the user modifies the document again ...
     implts_startModifyListeningOnDoc(rInfo);
