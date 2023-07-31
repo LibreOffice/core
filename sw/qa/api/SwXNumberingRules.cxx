@@ -11,6 +11,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/beans/xpropertyset.hxx>
 #include <test/container/xindexaccess.hxx>
+#include <test/text/numberingrules.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -37,7 +38,8 @@ namespace
 class SwXNumberingRules final : public UnoApiTest,
                                 public apitest::XElementAccess,
                                 public apitest::XIndexAccess,
-                                public apitest::XPropertySet
+                                public apitest::XPropertySet,
+                                public apitest::NumberingRules
 {
 public:
     SwXNumberingRules()
@@ -125,6 +127,7 @@ public:
     CPPUNIT_TEST(testGetPropertyValue);
     CPPUNIT_TEST(testPropertyChangeListener);
     CPPUNIT_TEST(testVetoableChangeListener);
+    CPPUNIT_TEST(testNumberingRulesProperties);
     CPPUNIT_TEST_SUITE_END();
 };
 
