@@ -25,7 +25,7 @@
 class SwTextNode;
 class SwCharFormat;
 
-/// SwTextAttr subclass that tracks the location of the wrapped SwFormatURL.
+/// SwTextAttr subclass that tracks the location of the wrapped SwFormatINetFormat.
 class SW_DLLPUBLIC SwTextINetFormat final: public SwTextAttrNesting, public SwClient
 {
     private:

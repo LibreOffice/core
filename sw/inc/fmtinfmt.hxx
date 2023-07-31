@@ -30,8 +30,8 @@ class SwTextINetFormat;
 class IntlWrapper;
 enum class SvMacroItemId : sal_uInt16;
 
-// ATT_INETFMT
-
+/// SfxPoolItem subclass that contains data about an inserted hyperlink / URL in Writer text. Its
+/// location is tracked by the wrapping SwTextINetFormat.
 class SW_DLLPUBLIC SwFormatINetFormat final
     : public SfxPoolItem
     , public sw::BroadcasterMixin
