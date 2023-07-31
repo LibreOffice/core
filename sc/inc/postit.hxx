@@ -155,6 +155,8 @@ public:
     /** Updates caption position according to position of the passed cell. */
     void                UpdateCaptionPos( const ScAddress& rPos );
 
+    static OString      NoteRangeToJsonString(const ScDocument& rDoc, const ScAddress& rPos);
+
 private:
                         ScPostIt( const ScPostIt& ) = delete;
     ScPostIt&           operator=( const ScPostIt& ) = delete;
