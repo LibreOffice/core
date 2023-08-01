@@ -2895,15 +2895,18 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
             continue;
         }
 
-        if (auto xDocRecovery2 = xDocRecover.query<XDocumentRecovery2>())
+        // If the document became modified not too long ago, don't autosave it yet.
+        if (bAllowUserIdleLoop)
         {
-            const sal_Int64 nDirtyDuration = xDocRecovery2->getModifiedStateDuration();
-            // If the document became modified not too long ago, don't autosave it yet.
-            // Round up to second - if this document is almost ready for autosave, do it now.
-            if (nDirtyDuration + 999 < nConfiguredAutoSaveInterval)
+            if (auto xDocRecovery2 = xDocRecover.query<XDocumentRecovery2>())
             {
-                aInfo.DocumentState |= DocState::Handled;
-                continue;
+                const sal_Int64 nDirtyDuration = xDocRecovery2->getModifiedStateDuration();
+                // Round up to second - if this document is almost ready for autosave, do it now.
+                if (nDirtyDuration + 999 < nConfiguredAutoSaveInterval)
+                {
+                    aInfo.DocumentState |= DocState::Handled;
+                    continue;
+                }
             }
         }
 
