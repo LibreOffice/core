@@ -253,10 +253,16 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int64 nSelectedChild
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
-    if(isAccessibleChildSelected(nSelectedChildIndex))
-        return getAccessibleChild(nSelectedChildIndex);
-    else
-        return nullptr;
+    if (nSelectedChildIndex < 0 || nSelectedChildIndex >= getSelectedAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException("Invalid index into selection", *this);
+
+    const sal_Int32 nColCount = getAccessibleColumnCount();
+    assert(nColCount > 0 && "Column count non-positive, but child count > 0");
+    const sal_Int32 nIndexInSelectedRowsSequence = nSelectedChildIndex / nColCount;
+    const Sequence<sal_Int32> aSelectedRows = getSelectedAccessibleRows();
+    const sal_Int32 nRowIndex = aSelectedRows[nIndexInSelectedRowsSequence];
+    const sal_Int32 nColIndex = nSelectedChildIndex % nColCount;
+    return getAccessibleCellAt(nRowIndex, nColIndex);
 }
 //not implemented yet, because only row selection possible
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
