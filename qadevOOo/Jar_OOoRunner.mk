@@ -593,7 +593,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_CellRange \
     qadevOOo/tests/java/ifc/text/_Defaults \
     qadevOOo/tests/java/ifc/text/_DocumentIndex \
-    qadevOOo/tests/java/ifc/text/_DocumentIndexMark \
     qadevOOo/tests/java/ifc/text/_DocumentSettings \
     qadevOOo/tests/java/ifc/text/_Footnote \
     qadevOOo/tests/java/ifc/text/_FootnoteSettings \

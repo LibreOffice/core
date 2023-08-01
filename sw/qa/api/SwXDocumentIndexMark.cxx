@@ -11,6 +11,7 @@
 #include <test/lang/xcomponent.hxx>
 #include <test/text/xtextcontent.hxx>
 #include <test/text/baseindexmark.hxx>
+#include <test/text/documentindexmark.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -35,7 +36,8 @@ class SwXDocumentIndexMark final : public test::BootstrapFixture,
                                    public unotest::MacrosTest,
                                    public apitest::XComponent,
                                    public apitest::XTextContent,
-                                   public apitest::BaseIndexMark
+                                   public apitest::BaseIndexMark,
+                                   public apitest::DocumentIndexMark
 {
 public:
     virtual void setUp() override;
@@ -55,6 +57,7 @@ public:
     CPPUNIT_TEST(testAttach);
     CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST(testBaseIndexMarkProperties);
+    CPPUNIT_TEST(testDocumentIndexMarkProperties);
     CPPUNIT_TEST_SUITE_END();
 
 private:
