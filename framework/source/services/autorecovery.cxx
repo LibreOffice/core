@@ -3127,7 +3127,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
             {
                 // delete the empty file created by implts_generateNewTempURL
                 if (tools::isEmptyFileUrl(rInfo.NewTempURL))
-                    AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
+                    osl::File::remove(rInfo.NewTempURL);
 
                 throw; // force stacktrace to know if there exist might other reasons, why an AutoSave can fail !!!
             }
