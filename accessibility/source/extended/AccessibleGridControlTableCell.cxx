@@ -74,12 +74,15 @@ namespace accessibility
         ensureIsAlive();
 
         OUString sAccName;
-        if (m_eObjType == TCTYPE_TABLECELL)
-            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_TABLECELL, m_nRowPos, m_nColPos);
-        else if (m_eObjType == TCTYPE_ROWHEADERCELL)
-            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_ROWHEADERCELL, m_nRowPos, 0);
-        else if (m_eObjType == TCTYPE_COLUMNHEADERCELL)
-            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_COLUMNHEADERCELL, 0, m_nRowPos);
+        if (m_eObjType == AccessibleTableControlObjType::TABLECELL)
+            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::TABLECELL,
+                                                        m_nRowPos, m_nColPos);
+        else if (m_eObjType == AccessibleTableControlObjType::ROWHEADERCELL)
+            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::ROWHEADERCELL,
+                                                        m_nRowPos, 0);
+        else if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL)
+            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::COLUMNHEADERCELL,
+                                                        0, m_nRowPos);
         else
             assert(false && "Unhandled table cell type");
         return sAccName;
@@ -108,7 +111,7 @@ namespace accessibility
                                 ::vcl::table::IAccessibleTable& _rTable,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos)
-        :AccessibleGridControlCell( _rxParent, _rTable, _nRowPos, _nColPos, TCTYPE_TABLECELL )
+        :AccessibleGridControlCell(_rxParent, _rTable, _nRowPos, _nColPos, AccessibleTableControlObjType::TABLECELL)
     {
     }
 

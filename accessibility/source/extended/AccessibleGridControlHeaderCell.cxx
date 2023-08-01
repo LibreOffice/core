@@ -128,7 +128,7 @@ tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBox()
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsRelative( *pParent ) );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     tools::Rectangle aCellRect;
-    if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
+    if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL)
         aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
     else
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);
@@ -141,7 +141,7 @@ tools::Rectangle AccessibleGridControlHeaderCell::implGetBoundingBoxOnScreen()
     tools::Rectangle aGridRect( m_aTable.GetWindowExtentsAbsolute() );
     sal_Int32 nIndex = getAccessibleIndexInParent();
     tools::Rectangle aCellRect;
-    if(m_eObjType == TCTYPE_COLUMNHEADERCELL)
+    if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL)
         aCellRect = m_aTable.calcHeaderCellRect(true, nIndex);
     else
         aCellRect = m_aTable.calcHeaderCellRect(false, nIndex);

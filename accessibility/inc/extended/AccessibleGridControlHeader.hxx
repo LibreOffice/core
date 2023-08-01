@@ -33,8 +33,8 @@ class AccessibleGridControlHeader final : public AccessibleGridControlTableBase
 public:
     /**  @param rxParent  accessible parent control
          @param rTable    accessible table
-         @param eObjType  One of the two allowed types TCTYPE_ROWHEADERBAR or
-                         TCTYPE_COLUMNHEADERBAR. */
+         @param eObjType  One of the two allowed types AccessibleTableControlObjType::ROWHEADERBAR or
+                          AccessibleTableControlObjType::COLUMNHEADERBAR. */
     AccessibleGridControlHeader(
         const css::uno::Reference<
             css::accessibility::XAccessible >& rxParent,
@@ -139,12 +139,12 @@ private:
 
 inline bool AccessibleGridControlHeader::isRowBar() const
 {
-    return getType() == ::vcl::table::TCTYPE_ROWHEADERBAR;
+    return getType() == ::vcl::table::AccessibleTableControlObjType::ROWHEADERBAR;
 }
 
 inline bool AccessibleGridControlHeader::isColumnBar() const
 {
-    return getType() == ::vcl::table::TCTYPE_COLUMNHEADERBAR;
+    return getType() == ::vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR;
 }
 
 

@@ -357,21 +357,21 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     sal_Int16 nRole = AccessibleRole::UNKNOWN;
     switch ( m_eObjType )
     {
-        case TCTYPE_ROWHEADERCELL:
+        case AccessibleTableControlObjType::ROWHEADERCELL:
         nRole = AccessibleRole::ROW_HEADER;
         break;
-    case TCTYPE_COLUMNHEADERCELL:
+    case AccessibleTableControlObjType::COLUMNHEADERCELL:
         nRole = AccessibleRole::COLUMN_HEADER;
         break;
-    case TCTYPE_COLUMNHEADERBAR:
-    case TCTYPE_ROWHEADERBAR:
-    case TCTYPE_TABLE:
+    case AccessibleTableControlObjType::COLUMNHEADERBAR:
+    case AccessibleTableControlObjType::ROWHEADERBAR:
+    case AccessibleTableControlObjType::TABLE:
         nRole = AccessibleRole::TABLE;
         break;
-    case TCTYPE_TABLECELL:
+    case AccessibleTableControlObjType::TABLECELL:
         nRole = AccessibleRole::TABLE_CELL;
         break;
-    case TCTYPE_GRIDCONTROL:
+    case AccessibleTableControlObjType::GRIDCONTROL:
         nRole = AccessibleRole::PANEL;
         break;
     }

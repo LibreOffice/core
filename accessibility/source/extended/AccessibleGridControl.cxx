@@ -41,7 +41,7 @@ using namespace ::vcl::table;
 AccessibleGridControl::AccessibleGridControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
             ::vcl::table::IAccessibleTable& _rTable )
-    : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL ),
+    : AccessibleGridControlBase(_rxParent, _rTable, AccessibleTableControlObjType::GRIDCONTROL),
       m_aCreator(_rxCreator)
 {
 }
@@ -102,7 +102,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
         {
             if(!m_xColumnHeaderBar.is())
             {
-                m_xColumnHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, vcl::table::TCTYPE_COLUMNHEADERBAR);
+                m_xColumnHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable,
+                                                                     vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR);
             }
             xChild = m_xColumnHeaderBar.get();
         }
@@ -110,7 +111,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int64 nChildIndex )
         {
             if(!m_xRowHeaderBar.is())
             {
-                m_xRowHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable, vcl::table::TCTYPE_ROWHEADERBAR);
+                m_xRowHeaderBar = new AccessibleGridControlHeader(m_aCreator, m_aTable,
+                                                                  vcl::table::AccessibleTableControlObjType::ROWHEADERBAR);
             }
             xChild = m_xRowHeaderBar.get();
         }
@@ -215,9 +217,9 @@ AccessibleGridControl::implGetHeaderBar( AccessibleTableControlObjType eObjType 
     css::uno::Reference< css::accessibility::XAccessible > xRet;
     rtl::Reference< AccessibleGridControlHeader >* pxMember = nullptr;
 
-    if( eObjType == TCTYPE_ROWHEADERBAR )
+    if (eObjType == AccessibleTableControlObjType::ROWHEADERBAR)
         pxMember = &m_xRowHeaderBar;
-    else if( eObjType ==  TCTYPE_COLUMNHEADERBAR )
+    else if (eObjType ==  AccessibleTableControlObjType::COLUMNHEADERBAR)
         pxMember = &m_xColumnHeaderBar;
 
     if( pxMember )
@@ -240,11 +242,11 @@ AccessibleGridControl::implGetFixedChild( sal_Int64 nChildIndex )
     {
         /** Child index of the column header bar (first row). */
         case 0:
-            xRet = implGetHeaderBar( TCTYPE_COLUMNHEADERBAR );
+            xRet = implGetHeaderBar(AccessibleTableControlObjType::COLUMNHEADERBAR);
         break;
         /** Child index of the row header bar ("handle column"). */
         case 1:
-            xRet = implGetHeaderBar( TCTYPE_ROWHEADERBAR );
+            xRet = implGetHeaderBar(AccessibleTableControlObjType::ROWHEADERBAR);
         break;
         /** Child index of the data table. */
         case 2:

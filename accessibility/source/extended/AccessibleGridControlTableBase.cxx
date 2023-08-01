@@ -53,11 +53,11 @@ sal_Int64 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
 
     ensureIsAlive();
     sal_Int64 nChildren = 0;
-    if(m_eObjType == TCTYPE_ROWHEADERBAR)
+    if (m_eObjType == AccessibleTableControlObjType::ROWHEADERBAR)
         nChildren = m_aTable.GetRowCount();
-    else if(m_eObjType == TCTYPE_TABLE)
+    else if (m_eObjType == AccessibleTableControlObjType::TABLE)
         nChildren = static_cast<sal_Int64>(m_aTable.GetRowCount()) * static_cast<sal_Int64>(m_aTable.GetColumnCount());
-    else if(m_eObjType == TCTYPE_COLUMNHEADERBAR)
+    else if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERBAR)
         nChildren = m_aTable.GetColumnCount();
     return nChildren;
 }

@@ -59,14 +59,16 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int64 nChildIndex )
         throw IndexOutOfBoundsException();
     ensureIsAlive();
     Reference< XAccessible > xChild;
-    if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
+    if (m_eObjType == vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR)
     {
-        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable,
+                                                                                                             vcl::table::AccessibleTableControlObjType::COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
-    else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
+    else if (m_eObjType == vcl::table::AccessibleTableControlObjType::ROWHEADERBAR)
     {
-        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nChildIndex, this, m_aTable,
+                                                                                                             vcl::table::AccessibleTableControlObjType::ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;
@@ -77,7 +79,7 @@ sal_Int64 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
-    if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
+    if (m_eObjType == vcl::table::AccessibleTableControlObjType::ROWHEADERBAR && m_aTable.HasColHeader())
         return 1;
     else
         return 0;
@@ -213,14 +215,16 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
         sal_Int32 nRow, sal_uInt32 nColumnPos )
 {
     Reference< XAccessible > xChild;
-    if(m_eObjType == vcl::table::TCTYPE_COLUMNHEADERBAR)
+    if (m_eObjType == vcl::table::AccessibleTableControlObjType::COLUMNHEADERBAR)
     {
-        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable, vcl::table::TCTYPE_COLUMNHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pColHeaderCell = new AccessibleGridControlHeaderCell(nColumnPos, this, m_aTable,
+                                                                                                             vcl::table::AccessibleTableControlObjType::COLUMNHEADERCELL);
         xChild = pColHeaderCell;
     }
-    else if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR)
+    else if (m_eObjType == vcl::table::AccessibleTableControlObjType::ROWHEADERBAR)
     {
-        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable, vcl::table::TCTYPE_ROWHEADERCELL);
+        rtl::Reference<AccessibleGridControlHeaderCell> pRowHeaderCell = new AccessibleGridControlHeaderCell(nRow, this, m_aTable,
+                                                                                                             vcl::table::AccessibleTableControlObjType::ROWHEADERCELL);
         xChild = pRowHeaderCell;
     }
     return xChild;

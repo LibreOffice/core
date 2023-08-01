@@ -32,15 +32,15 @@ namespace vcl::table
 
 typedef sal_Int32   RowPos;
 
-enum AccessibleTableControlObjType
+enum class AccessibleTableControlObjType
 {
-    TCTYPE_GRIDCONTROL,           /// The GridControl itself.
-    TCTYPE_TABLE,               /// The data table.
-    TCTYPE_ROWHEADERBAR,        /// The row header bar.
-    TCTYPE_COLUMNHEADERBAR,     /// The horizontal column header bar.
-    TCTYPE_TABLECELL,           /// A cell of the data table.
-    TCTYPE_ROWHEADERCELL,       /// A cell of the row header bar.
-    TCTYPE_COLUMNHEADERCELL,    /// A cell of the column header bar.
+    GRIDCONTROL,         /// The GridControl itself.
+    TABLE,               /// The data table.
+    ROWHEADERBAR,        /// The row header bar.
+    COLUMNHEADERBAR,     /// The horizontal column header bar.
+    TABLECELL,           /// A cell of the data table.
+    ROWHEADERCELL,       /// A cell of the row header bar.
+    COLUMNHEADERCELL,    /// A cell of the column header bar.
 };
 
 
