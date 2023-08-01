@@ -2376,6 +2376,9 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 //TODO: moggi Need to check if this can't be written simpler
 void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
 {
+    // cool#6911 draw the note indicator browser-side instead
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
 
     bool bFirst = true;
 
