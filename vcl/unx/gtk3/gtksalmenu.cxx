@@ -393,7 +393,7 @@ void GtkSalMenu::Update()
 
     bool bAlwaysShowDisabledEntries;
     if (pMenu->mbMenuBar)
-        bAlwaysShowDisabledEntries = true;
+        bAlwaysShowDisabledEntries = !bool(mpVCLMenu->GetMenuFlags() & MenuFlags::HideDisabledEntries);
     else
         bAlwaysShowDisabledEntries = bool(mpVCLMenu->GetMenuFlags() & MenuFlags::AlwaysShowDisabledEntries);
 
