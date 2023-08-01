@@ -2282,7 +2282,6 @@ size_t SdrHdlList::GetHdlNum(const SdrHdl* pHdl) const
         return SAL_MAX_SIZE;
     auto it = std::find_if( maList.begin(), maList.end(),
         [&](const std::unique_ptr<SdrHdl> & p) { return p.get() == pHdl; });
-    assert(it != maList.end());
     if( it == maList.end() )
         return SAL_MAX_SIZE;
     return it - maList.begin();
