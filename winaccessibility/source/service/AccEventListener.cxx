@@ -59,6 +59,9 @@ void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObje
 
     switch (aEvent.EventId)
     {
+        case AccessibleEventId::CHILD:
+            HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
+            break;
         case AccessibleEventId::NAME_CHANGED:
             HandleNameChangedEvent(aEvent.NewValue);
             break;
@@ -91,6 +94,37 @@ void AccEventListener::HandleNameChangedEvent(Any name)
 
     pAgent->UpdateAccName(m_xAccessible.get(), name);
     pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_NAMECHANGE, m_xAccessible.get());
+}
+
+/**
+ * Handle the CHILD event
+ * @param oldValue the child to be deleted
+ * @param newValue the child to be added
+ */
+void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue,
+                                               com::sun::star::uno::Any newValue)
+{
+    Reference<XAccessible> xChild;
+    if (newValue >>= xChild)
+    {
+        if (xChild.is())
+        {
+            XAccessible* pAcc = xChild.get();
+            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
+            pAgent->InsertChildrenAccObj(pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
+        }
+    }
+    else if (oldValue >>= xChild)
+    {
+        if (xChild.is())
+        {
+            XAccessible* pAcc = xChild.get();
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
+            pAgent->DeleteChildrenAccObj(pAcc);
+            pAgent->DeleteAccObj(pAcc);
+        }
+    }
 }
 
 /**

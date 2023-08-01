@@ -51,7 +51,7 @@ public:
 
     //for child changed event
     virtual void HandleChildChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue);
+            css::uno::Any oldValue, css::uno::Any newValue) override;
 
     virtual void HandleChildChangedNoFocusEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
