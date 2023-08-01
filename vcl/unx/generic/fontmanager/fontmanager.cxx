@@ -520,12 +520,11 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
 
-        ::std::vector< OUString > aNames;
-        analyzeSfntFamilyName( pTTFont, aNames );
-
-        // set family name from XLFD if possible
         if (rFont.m_aFamilyName.isEmpty())
         {
+            ::std::vector< OUString > aNames;
+            analyzeSfntFamilyName( pTTFont, aNames );
+
             if( !aNames.empty() )
             {
                 rFont.m_aFamilyName = aNames.front();
@@ -542,18 +541,6 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
                      dotIndex = rFont.m_aFontFile.getLength();
 
                  rFont.m_aFamilyName = OStringToOUString(rFont.m_aFontFile.subView(0, dotIndex), aEncoding);
-            }
-        }
-        for (auto const& aAlias : aNames)
-        {
-            if (!aAlias.isEmpty())
-            {
-                if (rFont.m_aFamilyName != aAlias)
-                {
-                    auto al_it = std::find(rFont.m_aAliases.begin(), rFont.m_aAliases.end(), aAlias);
-                    if( al_it == rFont.m_aAliases.end() )
-                        rFont.m_aAliases.push_back(aAlias);
-                }
             }
         }
 
@@ -698,7 +685,6 @@ void PrintFontManager::fillPrintFontInfo(const PrintFont& rFont, FastPrintFontIn
     rInfo.m_eWeight         = rFont.m_eWeight;
     rInfo.m_ePitch          = rFont.m_ePitch;
     rInfo.m_aEncoding       = rFont.m_aEncoding;
-    rInfo.m_aAliases        = rFont.m_aAliases;
 }
 
 bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const

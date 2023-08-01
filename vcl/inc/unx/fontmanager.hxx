@@ -66,7 +66,6 @@ struct FastPrintFontInfo
     // font attributes
     OUString                       m_aFamilyName;
     OUString                       m_aStyleName;
-    std::vector< OUString >        m_aAliases;
     FontFamily                     m_eFamilyStyle;
     FontItalic                     m_eItalic;
     FontWidth                      m_eWidth;
@@ -96,7 +95,6 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     {
         // font attributes
         OUString          m_aFamilyName;
-        std::vector<OUString> m_aAliases;
         OUString          m_aStyleName;
         FontFamily        m_eFamilyStyle;
         FontItalic        m_eItalic;

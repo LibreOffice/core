@@ -151,17 +151,6 @@ FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo
     aDFA.SetMicrosoftSymbolEncoded( rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL );
     aDFA.SetQuality(512);
 
-    // add font family name aliases
-    for (auto const& alias : rInfo.m_aAliases)
-        aDFA.AddMapName(alias);
-
-#if OSL_DEBUG_LEVEL > 2
-    if( aDFA.GetMapNames().getLength() > 0 )
-    {
-        SAL_INFO( "vcl.fonts", "using alias names " << aDFA.GetMapNames() << " for font family " << aDFA.GetFamilyName() );
-    }
-#endif
-
     return aDFA;
 }
 
