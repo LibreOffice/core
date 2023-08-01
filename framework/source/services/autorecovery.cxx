@@ -3073,6 +3073,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // Note that we must do it *before* calling storeToRecoveryFile, so in case of failure here
     // we won't remain with the modified flag set to true, even though the autorecovery save succeeded.
     const bool bEmergencySave(m_eJob & Job::EmergencySave);
+    bool bUserAutoSaved = false;
     try
     {
         // We must check here for an empty URL to avoid a "This operation is not supported on this operating system."
@@ -3081,6 +3082,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
         {
             Reference< XStorable > xDocSave(rInfo.Document, css::uno::UNO_QUERY_THROW);
             xDocSave->store();
+            bUserAutoSaved = true;
         }
     }
     catch(const css::uno::Exception&)
@@ -3098,7 +3100,7 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
 
     // If it is no longer modified, it is the same as on disk, and can be removed from RecoveryList.
     const bool bRemoveIt
-        = xModify.is() && !xModify->isModified() && !bEmergencySave && !(m_eJob & Job::SessionSave);
+        = xModify.is() && !xModify->isModified() && bUserAutoSaved && !(m_eJob & Job::SessionSave);
 
     sal_Int32 nRetry = RETRY_STORE_ON_FULL_DISC_FOREVER;
     bool  bError = false;
@@ -3106,7 +3108,10 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     {
         try
         {
-            xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
+            // skip recovery if it will be removed anyway.
+            if (!bRemoveIt)
+                xDocRecover->storeToRecoveryFile(rInfo.NewTempURL,
+                                                 lNewArgs.getAsConstPropertyValueList());
 
 #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception("trigger full disk check");
