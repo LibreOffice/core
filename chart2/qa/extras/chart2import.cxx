@@ -632,11 +632,11 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc889755)
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.25, 0.25, 0.25));
+    CPPUNIT_ASSERT_EQUAL(Color(0x404040), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.070000000000000007));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.25, 0.25, 0.25));
+    CPPUNIT_ASSERT_EQUAL(Color(0x404040), Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 0.080000000000000002));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[2].getStopColor(), basegfx::BColor(1.0, 1.0, 1.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff),  Color(aColorStops[2].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testBnc882383)
@@ -676,9 +676,9 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTransparencyGradientValue)
     // MCGR: Use the whole completely imported transparency gradient to check for correctness
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.3, 0.3, 0.3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4d4d4d), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.2, 0.2, 0.2));
+    CPPUNIT_ASSERT_EQUAL(Color(0x333333), Color(aColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testSimpleStrictXLSX)

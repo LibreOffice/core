@@ -1253,9 +1253,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127372)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 0.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(aColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127379)
@@ -1285,11 +1285,9 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127379)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(
-        aColorStops[1].getStopColor(),
-        basegfx::BColor(0.16470588235294117, 0.37647058823529411, 0.59999999999999998));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2a6099), Color(aColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf98603)

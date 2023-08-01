@@ -17,9 +17,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/rendering/RGBColor.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <rtl/character.hxx>
 #include <unotools/saveopt.hxx>
@@ -80,6 +80,12 @@ struct XmlFont
         return aFontFamilyGeneric.compareTo(rOther.aFontFamilyGeneric) < 0;
     }
 };
+
+Color asColor(com::sun::star::rendering::RGBColor const& rRGBColor)
+{
+    basegfx::BColor aBColor(rRGBColor.Red, rRGBColor.Green, rRGBColor.Blue);
+    return Color(aBColor);
+}
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
@@ -369,16 +375,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
 
     // Test new properties
     auto aColorStopSeq = aGradient.ColorStops;
-    awt::ColorStop aColorStop = aColorStopSeq[0];
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
-    aColorStop = aColorStopSeq[1];
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[0];
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), asColor(aColorStop.StopColor));
+    }
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[1];
+        CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0xffff00), asColor(aColorStop.StopColor));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
@@ -429,18 +435,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew_opacity)
 
     // Test new properties
     auto aColorStopSeq = aGradient.ColorStops;
-    awt::ColorStop aColorStop = aColorStopSeq[0];
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
-    // Rounding error because of converting through color: 90% => 0.9 * 255 => 229
-    // 299.0 / 255.0 = 0.898039215686275
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, aColorStop.StopColor.Red, 0.002);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, aColorStop.StopColor.Green, 0.002);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, aColorStop.StopColor.Blue, 0.002);
-    aColorStop = aColorStopSeq[1];
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[0];
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0xe5e5e5), asColor(aColorStop.StopColor));
+    }
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[1];
+        CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0x000000), asColor(aColorStop.StopColor));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
@@ -497,22 +501,21 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
 
     // Test new properties
     auto aColorStopSeq = aGradient.ColorStops;
-    awt::ColorStop aColorStop = aColorStopSeq[0];
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
-    aColorStop = aColorStopSeq[1];
-    CPPUNIT_ASSERT_EQUAL(0.3, aColorStop.StopOffset);
-    // 0x99 = 153 => 153/255 = 0.6, 0xbb = 187 => 187/255 = 0.733...
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(0.6, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.733333333333333, aColorStop.StopColor.Blue, 0.0000001);
-    aColorStop = aColorStopSeq[2];
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Red);
-    CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopColor.Green);
-    CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopColor.Blue);
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[0];
+        CPPUNIT_ASSERT_EQUAL(0.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), asColor(aColorStop.StopColor));
+    }
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[1];
+        CPPUNIT_ASSERT_EQUAL(0.3, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0x0099bb), asColor(aColorStop.StopColor));
+    }
+    {
+        awt::ColorStop aColorStop = aColorStopSeq[2];
+        CPPUNIT_ASSERT_EQUAL(1.0, aColorStop.StopOffset);
+        CPPUNIT_ASSERT_EQUAL(Color(0xffff00), asColor(aColorStop.StopColor));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBorderRestoration)

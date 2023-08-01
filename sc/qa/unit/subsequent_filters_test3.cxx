@@ -1653,12 +1653,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
-        CPPUNIT_ASSERT_EQUAL(
-            rColorStops[0].getStopColor(),
-            basegfx::BColor(0.8666666666666667, 0.90980392156862744, 0.79607843137254897));
+        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(rColorStops[1].getStopColor(),
-                             basegfx::BColor(1.0, 0.84313725490196079, 0.84313725490196079));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops[1].getStopColor()));
 
         SdrCaptionObj* const pCaptionH9 = checkCaption(*pDoc, ScAddress(7, 8, 0), false);
 
@@ -1670,12 +1667,9 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129789)
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops2.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[0].getStopOffset(), 0.0));
-        CPPUNIT_ASSERT_EQUAL(
-            rColorStops2[0].getStopColor(),
-            basegfx::BColor(0.8666666666666667, 0.90980392156862744, 0.79607843137254897));
+        CPPUNIT_ASSERT_EQUAL(Color(0xdde8cb), Color(rColorStops2[0].getStopColor()));
         CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops2[1].getStopOffset(), 1.0));
-        CPPUNIT_ASSERT_EQUAL(rColorStops2[1].getStopColor(),
-                             basegfx::BColor(1.0, 0.84313725490196079, 0.84313725490196079));
+        CPPUNIT_ASSERT_EQUAL(Color(0xffd7d7), Color(rColorStops2[1].getStopColor()));
     }
 
     {

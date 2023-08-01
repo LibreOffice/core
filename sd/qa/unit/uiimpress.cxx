@@ -819,9 +819,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), rColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(rColorStops[0].getStopColor(), basegfx::BColor(1.0, 0.0, 0.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(rColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops[1].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(rColorStops[1].getStopColor(), basegfx::BColor(0.0, 0.0, 1.0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(rColorStops[1].getStopColor()));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)

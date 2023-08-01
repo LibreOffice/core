@@ -616,10 +616,10 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // prepare compare colors
-    const basegfx::BColor aColA(0.85098039215686272, 0.58431372549019611, 0.58039215686274515);
-    const basegfx::BColor aColB(0.75294117647058822, 0.31372549019607843, 0.30196078431372547);
-    const basegfx::BColor aColC(0.40000000000000002, 0.40000000000000002, 0.40000000000000002);
-    const basegfx::BColor aColD(0.0, 0.0, 0.0);
+    const Color aColA(0xd99594);
+    const Color aColB(0xc0504d);
+    const Color aColC(0x666666);
+    const Color aColD(0x000000);
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
     basegfx::BColorStops aColorStops(aGradient.ColorStops);
@@ -627,11 +627,11 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), aColA);
+    CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), aColB);
+    CPPUNIT_ASSERT_EQUAL(aColB, Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[2].getStopColor(), aColA);
+    CPPUNIT_ASSERT_EQUAL(aColA, Color(aColorStops[2].getStopColor()));
 
     xFrame.set(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,
@@ -644,11 +644,11 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[0].getStopColor(), aColC);
+    CPPUNIT_ASSERT_EQUAL(aColC, Color(aColorStops[0].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[1].getStopOffset(), 0.5));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[1].getStopColor(), aColD);
+    CPPUNIT_ASSERT_EQUAL(aColD, Color(aColorStops[1].getStopColor()));
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[2].getStopOffset(), 1.0));
-    CPPUNIT_ASSERT_EQUAL(aColorStops[2].getStopColor(), aColC);
+    CPPUNIT_ASSERT_EQUAL(aColC, Color(aColorStops[2].getStopColor()));
 }
 
 DECLARE_RTFEXPORT_TEST(testRecordChanges, "record-changes.rtf")
