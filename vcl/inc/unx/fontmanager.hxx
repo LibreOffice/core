@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <config_options.h>
 
+#include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -115,7 +116,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     fontID                                      m_nNextFontID;
     std::unordered_map< fontID, PrintFont >     m_aFonts;
     // for speeding up findFontFileID
-    std::unordered_map< OString, std::set< fontID > >
+    std::unordered_map< OString, o3tl::sorted_vector< fontID > >
                                                 m_aFontFileToFontID;
 
     std::unordered_map< OString, int >

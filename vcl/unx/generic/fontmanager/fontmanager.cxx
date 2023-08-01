@@ -247,11 +247,11 @@ fontID PrintFontManager::findFontFileID(int nDirID, const OString& rFontFile, in
 {
     fontID nID = 0;
 
-    std::unordered_map< OString, ::std::set< fontID > >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    auto set_it = m_aFontFileToFontID.find( rFontFile );
     if( set_it == m_aFontFileToFontID.end() )
         return nID;
 
-    for (auto const& elem : set_it->second)
+    for (fontID elem : set_it->second)
     {
         auto it = m_aFonts.find(elem);
         if( it == m_aFonts.end() )
@@ -275,7 +275,7 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
 {
     std::vector<fontID> aIds;
 
-    std::unordered_map< OString, ::std::set< fontID > >::const_iterator set_it = m_aFontFileToFontID.find( rFontFile );
+    auto set_it = m_aFontFileToFontID.find( rFontFile );
     if( set_it == m_aFontFileToFontID.end() )
         return aIds;
 
