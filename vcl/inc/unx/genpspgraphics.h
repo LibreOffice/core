@@ -64,12 +64,6 @@ public:
     // helper methods
     static FontAttributes   Info2FontAttributes(const psp::FastPrintFontInfo&);
 
-    // helper methods for sharing with FreeTypeTextRenderImpl
-    static void             GetDevFontListHelper(vcl::font::PhysicalFontCollection*);
-    static bool             AddTempDevFontHelper(vcl::font::PhysicalFontCollection* pFontCollection,
-                                                 std::u16string_view rFileURL,
-                                                 const OUString& rFontName);
-
     // override all pure virtual methods
     virtual SalGraphicsImpl* GetImpl() const override
     {
