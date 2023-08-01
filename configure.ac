@@ -7550,18 +7550,18 @@ dnl C++11
 dnl ===================================================================
 
 if test -z "${CXXFLAGS_CXX11+x}"; then
-    AC_MSG_CHECKING([whether $CXX_BASE supports C++17])
+    AC_MSG_CHECKING([whether $CXX_BASE supports C++20])
     if test "$COM" = MSC -a "$COM_IS_CLANG" != TRUE; then
         if test "$with_latest_c__" = yes; then
             CXXFLAGS_CXX11=-std:c++latest
         else
-            CXXFLAGS_CXX11=-std:c++17
+            CXXFLAGS_CXX11=-std:c++20
         fi
         CXXFLAGS_CXX11="$CXXFLAGS_CXX11 -permissive- -Zc:__cplusplus,preprocessor"
     elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
-        my_flags='-std=c++17 -std=c++1z'
+        my_flags='-std=c++20 -std=c++2a'
         if test "$with_latest_c__" = yes; then
-            my_flags="-std=c++26 -std=c++2c -std=c++23 -std=c++2b -std=c++20 -std=c++2a $my_flags"
+            my_flags="-std=c++26 -std=c++2c -std=c++23 -std=c++2b $my_flags"
         fi
         for flag in $my_flags; do
             if test "$COM" = MSC; then
