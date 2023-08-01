@@ -70,6 +70,7 @@
 #include <fmtflcnt.hxx>
 #include <docedt.hxx>
 #include <frameformats.hxx>
+#include <formatflysplit.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
@@ -5254,7 +5255,27 @@ bool DocumentContentOperationsManager::CopyImplImpl(SwPaM& rPam, SwPosition& rPo
                 {
                     SwFormatAnchor anchor(*pAnchor);
                     anchor.SetAnchor( &startPosAtPara );
+
+                    bool bSplitFly = false;
+                    if (pFly->GetFlySplit().GetValue())
+                    {
+                        SwIterator<SwFrame, SwModify> aIter(*pFly);
+                        bSplitFly = aIter.First() && aIter.Next();
+                    }
+                    if (bSplitFly)
+                    {
+                        // This fly format has multiple frames, and we change the anchor. Remove the
+                        // old frames, which were based on the old anchor position.
+                        pFly->DelFrames();
+                    }
+
                     pFly->SetFormatAttr(anchor);
+
+                    if (bSplitFly)
+                    {
+                        // Re-create the frames now that the new anchor is set.
+                        pFly->MakeFrames();
+                    }
                 }
             }
         }

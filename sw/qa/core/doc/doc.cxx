@@ -37,6 +37,10 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <frmmgr.hxx>
 #include <formatflysplit.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
 
 /// Covers sw/source/core/doc/ fixes.
 class SwCoreDocTest : public SwModelTestBase
@@ -484,6 +488,35 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitFlyChain)
     // Also test the other way around, that should not be OK, either.
     eActual = pDoc->Chainable(*pFly2, *pFly);
     CPPUNIT_ASSERT_EQUAL(SwChainRet::IS_IN_CHAIN, eActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testSplitExpandGlossary)
+{
+    // Given a document with a split fly (2 pages) and a 'dt' at the end:
+    createSwDoc("floating-table-dummy-text.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // When expanding 'dt' to an actual dummy text:
+    dispatchCommand(mxComponent, ".uno:ExpandGlossary", {});
+
+    // Then make sure the 2 fly frames stay on the 2 pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. both parts of the split fly chain were on page 1.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
