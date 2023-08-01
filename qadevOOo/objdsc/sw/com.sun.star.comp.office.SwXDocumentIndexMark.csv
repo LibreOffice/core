@@ -4,7 +4,6 @@
 "SwXDocumentIndexMark";"com::sun::star::text::TextContent";"AnchorType#optional"
 "SwXDocumentIndexMark";"com::sun::star::text::TextContent";"AnchorTypes#optional"
 "SwXDocumentIndexMark";"com::sun::star::text::TextContent";"TextWrap#optional"
-"SwXDocumentIndexMark";"com::sun::star::text::BaseIndexMark";"AlternativeText"
 "SwXDocumentIndexMark";"com::sun::star::text::DocumentIndexMark";"PrimaryKey"
 "SwXDocumentIndexMark";"com::sun::star::text::DocumentIndexMark";"SecondaryKey"
 "SwXDocumentIndexMark";"com::sun::star::text::DocumentIndexMark";"IsMainEntry"

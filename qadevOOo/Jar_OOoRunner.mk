@@ -589,7 +589,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_BaseFrame \
     qadevOOo/tests/java/ifc/text/_BaseFrameProperties \
     qadevOOo/tests/java/ifc/text/_BaseIndex \
-    qadevOOo/tests/java/ifc/text/_BaseIndexMark \
     qadevOOo/tests/java/ifc/text/_CellProperties \
     qadevOOo/tests/java/ifc/text/_CellRange \
     qadevOOo/tests/java/ifc/text/_Defaults \
