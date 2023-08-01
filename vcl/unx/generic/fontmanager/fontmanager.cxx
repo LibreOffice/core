@@ -287,7 +287,9 @@ std::vector<fontID> PrintFontManager::findFontFileIDs( int nDirID, const OString
     return aIds;
 }
 
-OUString PrintFontManager::convertSfntName( const NameRecord& rNameRecord )
+namespace {
+
+OUString convertSfntName( const NameRecord& rNameRecord )
 {
     OUString aValue;
     if(
@@ -413,35 +415,9 @@ OUString PrintFontManager::convertSfntName( const NameRecord& rNameRecord )
     return aValue;
 }
 
-//fdo#33349.There exists an archaic Berling Antiqua font which has a "Times New
-//Roman" name field in it. We don't want the "Times New Roman" name to take
-//precedence in this case. We take Berling Antiqua as a higher priority name,
-//and erase the "Times New Roman" name
-namespace
-{
-    bool isBadTNR(std::u16string_view rName, ::std::set< OUString >& rSet)
-    {
-        bool bRet = false;
-        if ( rName == u"Berling Antiqua" )
-        {
-            ::std::set< OUString >::iterator aEnd = rSet.end();
-            ::std::set< OUString >::iterator aI = rSet.find("Times New Roman");
-            if (aI != aEnd)
-            {
-                bRet = true;
-                rSet.erase(aI);
-            }
-        }
-        return bRet;
-    }
-}
-
-void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vector< OUString >& rNames )
+OUString analyzeSfntFamilyName(void const * pTTFont)
 {
     OUString aFamily;
-
-    rNames.clear();
-    ::std::set< OUString > aSet;
 
     std::vector<NameRecord> aNameRecords;
     GetTTNameRecords( static_cast<TrueTypeFont const *>(pTTFont), aNameRecords );
@@ -482,23 +458,17 @@ void PrintFontManager::analyzeSfntFamilyName( void const * pTTFont, ::std::vecto
                     nMatch = 1000;
             }
             OUString aName = convertSfntName( aNameRecords[i] );
-            aSet.insert( aName );
-            if (aName.isEmpty())
-                continue;
-            if( nMatch > nLastMatch || isBadTNR(aName, aSet) )
+            if (!(aName.isEmpty()) && nMatch > nLastMatch)
             {
                 nLastMatch = nMatch;
                 aFamily = aName;
             }
         }
     }
-    if( !aFamily.isEmpty() )
-    {
-        rNames.push_back( aFamily );
-        for (auto const& elem : aSet)
-            if( elem != aFamily )
-                rNames.push_back(elem);
-    }
+
+    return aFamily;
+}
+
 }
 
 bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
@@ -519,26 +489,18 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
 
         if (rDFA.GetFamilyName().isEmpty())
         {
-            ::std::vector< OUString > aNames;
-            analyzeSfntFamilyName( pTTFont, aNames );
-
-            if( !aNames.empty() )
+            OUString aFamily = analyzeSfntFamilyName(pTTFont);
+            if (aFamily.isEmpty())
             {
-                rDFA.SetFamilyName(aNames.front());
-                aNames.erase(aNames.begin());
-            }
-            else
-            {
-                 sal_Int32   dotIndex;
-
                  // poor font does not have a family name
                  // name it to file name minus the extension
-                 dotIndex = rFont.m_aFontFile.lastIndexOf( '.' );
+                 sal_Int32 dotIndex = rFont.m_aFontFile.lastIndexOf('.');
                  if ( dotIndex == -1 )
                      dotIndex = rFont.m_aFontFile.getLength();
-
-                 rDFA.SetFamilyName(OStringToOUString(rFont.m_aFontFile.subView(0, dotIndex), aEncoding));
+                 aFamily = OStringToOUString(rFont.m_aFontFile.subView(0, dotIndex), aEncoding);
             }
+
+            rDFA.SetFamilyName(aFamily);
         }
 
         if( !aInfo.usubfamily.isEmpty() )
