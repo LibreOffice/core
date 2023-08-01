@@ -2701,6 +2701,82 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf155747)
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
+{
+    // load a table, and insert a column without change tracking,
+    // and delete the first column with the empty cell in the second row with change tracking
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn off red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // insert table column without change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+
+    // check table
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row[1]/cell", 3);
+
+    // turn on red-lining
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // go to the empty column
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // delete table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+
+    // This was 2 (deleted column)
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 3);
+
+    // accept the deletion of the empty column
+    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+
+    // test Undo/Redo
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 3);
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page[1]//body/tab");
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row", 1);
+    assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
+}
+
 #ifndef DBG_UTIL
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf149498)
 {
