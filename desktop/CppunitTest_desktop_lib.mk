@@ -26,6 +26,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	sfx \
 	sofficeapp \
 	subsequenttest \
+    svt \
 	sw \
 	test \
 	unotest \

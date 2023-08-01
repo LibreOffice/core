@@ -66,6 +66,8 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/filter/PngImageWriter.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
+#include <svtools/colorcfg.hxx>
+#include <sal/types.h>
 
 #if USE_TLS_NSS
 #include <nss.h>
@@ -186,6 +188,7 @@ public:
     void testTrackChanges();
     void testRedlineCalc();
     void testPaintPartTile();
+    void testPaintPartTileDifferentSchemes();
 #if HAVE_MORE_FONTS
     void testGetFontSubset();
 #endif
@@ -255,6 +258,7 @@ public:
     CPPUNIT_TEST(testTrackChanges);
     CPPUNIT_TEST(testRedlineCalc);
     CPPUNIT_TEST(testPaintPartTile);
+    CPPUNIT_TEST(testPaintPartTileDifferentSchemes);
 #if HAVE_MORE_FONTS
     CPPUNIT_TEST(testGetFontSubset);
 #endif
@@ -2301,6 +2305,83 @@ void DesktopLOKTest::testPaintPartTile()
     // This failed: paintPartTile() (as a side-effect) ended the text edit of
     // the first view, so there were no invalidations.
     //CPPUNIT_ASSERT(aView1.m_bTilesInvalidated);
+}
+
+void DesktopLOKTest::testPaintPartTileDifferentSchemes()
+{
+    Color aDarkColor = Color(0x1c, 0x1c, 0x1c);
+
+    // Add a minimal dark scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = aDarkColor;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Dark");
+    }
+
+    // Add a minimal light scheme
+    {
+        svtools::EditableColorConfig aColorConfig;
+        svtools::ColorConfigValue aValue;
+        aValue.bIsVisible = true;
+        aValue.nColor = COL_WHITE;
+        aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+        aColorConfig.AddScheme(u"Light");
+    }
+
+    // This view will default to light scheme
+    LibLODocument_Impl* pDocument = loadDoc("2slides.odp");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+    int nView1 = pDocument->m_pDocumentClass->getView(pDocument);
+
+    // Create a second view
+    pDocument->m_pDocumentClass->createView(pDocument);
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
+
+    // Go to the second slide in the second view
+    pDocument->m_pDocumentClass->setPart(pDocument, 1);
+
+    // Set to dark scheme
+    {
+        uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
+            {
+                { "NewTheme", uno::Any(OUString("Dark")) },
+            }
+        );
+        dispatchCommand(mxComponent, ".uno:ChangeTheme", aPropertyValues);
+    }
+
+    constexpr int nCanvasWidth = 256;
+    constexpr int nCanvasHeight = 256;
+
+    // Just a random pixel in the middle of the canvas
+    constexpr int nPixelX = 128;
+    constexpr int nPixelY = 128 * nCanvasWidth;
+
+    std::array<sal_uInt8, nCanvasWidth * nCanvasHeight * 4> aPixels;
+
+    // Both parts should be painted with dark scheme
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    Color aPixel(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
+
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
+    CPPUNIT_ASSERT_EQUAL(aDarkColor, aPixel);
+
+    // Switch back to first view
+    pDocument->m_pDocumentClass->setView(pDocument, nView1);
+
+    // Both parts should be painted with light scheme
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
+
+    pDocument->m_pDocumentClass->paintPartTile(pDocument, aPixels.data(), 0, 0, nCanvasWidth, nCanvasHeight, 0, 0, nCanvasWidth, nCanvasHeight);
+    aPixel = Color(aPixels[nPixelX + nPixelY + 0], aPixels[nPixelX + nPixelY + 1], aPixels[nPixelX + nPixelY + 2]);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aPixel);
 }
 
 #if HAVE_MORE_FONTS
