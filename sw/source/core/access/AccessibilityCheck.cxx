@@ -331,7 +331,9 @@ private:
         if (!sHyperlink.isEmpty())
         {
             OUString sText = xTextRange->getString();
-            if (INetURLObject(sText) == INetURLObject(sHyperlink))
+            INetURLObject aHyperlink(sHyperlink);
+            if (aHyperlink.GetProtocol() != INetProtocol::NotValid
+                && INetURLObject(sText) == aHyperlink)
             {
                 OUString sIssueText
                     = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
