@@ -74,7 +74,6 @@ public:
 
     const OUString& GetFamilyName() const { return maFamilyName; }
     const OUString& GetSearchName() const { return maSearchName; }
-    const OUString& GetAliasNames() const { return maMapNames; }
     int GetMinQuality() const { return mnMinQuality; }
     FontTypeFaces GetTypeFaces() const { return mnTypeFaces; }
 
@@ -99,7 +98,6 @@ private:
 
     OUString maFamilyName; // original font family name
     OUString maSearchName; // normalized font family name
-    OUString maMapNames; // fontname aliases
     FontTypeFaces mnTypeFaces; // Typeface Flags
     FontFamily meFamily;
     FontPitch mePitch;

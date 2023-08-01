@@ -52,7 +52,6 @@ void VclPhysicalFontFamilyTest::testCreateFontFamily()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString(""), aFamily.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
                                  aFamily.GetSearchName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Alias names", OUString(""), aFamily.GetAliasNames());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", -1, aFamily.GetMinQuality());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Type faces", FontTypeFaces::NONE, aFamily.GetTypeFaces());
 
@@ -71,7 +70,6 @@ void VclPhysicalFontFamilyTest::testAddFontFace_Default()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Family name", OUString(""), aFamily.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
                                  aFamily.GetSearchName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Alias names", OUString(""), aFamily.GetAliasNames());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 0, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace
         = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol | FontTypeFaces::NoneItalic;
@@ -98,7 +96,6 @@ void VclPhysicalFontFamilyTest::testAddOneFontFace()
                                  aFamily.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
                                  aFamily.GetSearchName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Alias names", OUString("Alias name"), aFamily.GetAliasNames());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 10, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol
                               | FontTypeFaces::Bold | FontTypeFaces::NoneItalic;
@@ -136,7 +133,6 @@ void VclPhysicalFontFamilyTest::testAddTwoFontFaces()
                                  aFamily.GetFamilyName());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Search name", OUString("Test font face"),
                                  aFamily.GetSearchName());
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Alias names", OUString("Alias name"), aFamily.GetAliasNames());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Min quality", 5, aFamily.GetMinQuality());
     FontTypeFaces eTypeFace = FontTypeFaces::Scalable | FontTypeFaces::NoneSymbol
                               | FontTypeFaces::Light | FontTypeFaces::Bold

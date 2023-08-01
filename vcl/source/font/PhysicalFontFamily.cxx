@@ -113,7 +113,6 @@ void PhysicalFontFamily::AddFontFace( PhysicalFontFace* pNewFontFace )
     if( maFontFaces.empty() )
     {
         maFamilyName   = pNewFontFace->GetFamilyName();
-        maMapNames     = pNewFontFace->GetMapNames();
         meFamily       = pNewFontFace->GetFamilyType();
         mePitch        = pNewFontFace->GetPitch();
         mnMinQuality   = pNewFontFace->GetQuality();
