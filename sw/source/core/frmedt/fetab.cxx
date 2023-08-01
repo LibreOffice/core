@@ -283,6 +283,7 @@ bool SwFEShell::DeleteCol()
     // and set IsNoTracked table box property to false
     if ( GetDoc()->GetDocShell()->IsChangeRecording() )
     {
+        bool bDeletedEmptyCell = false;
         StartUndo(SwUndoId::COL_DELETE);
         StartAllAction();
 
@@ -317,6 +318,7 @@ bool SwFEShell::DeleteCol()
                     aCursor.GetMark()->SetContent(0);
                     rIDRA.SetRedlineFlags_intern( eOld );
                     rIDCO.DeleteAndJoin( aCursor );
+                    bDeletedEmptyCell = true;
                 }
 
             }
@@ -332,7 +334,7 @@ bool SwFEShell::DeleteCol()
         // track column deletion only if there were tracked text changes
         // FIXME redline count can be the same in special cases, e.g. adding a
         // new tracked deletion with removing an own tracked insertion...
-        if ( nPrev != pEditShell->GetRedlineCount() )
+        if ( bDeletedEmptyCell || nPrev != pEditShell->GetRedlineCount() )
             return true;
     }
 
