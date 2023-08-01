@@ -2551,7 +2551,7 @@ uno::Sequence<beans::PropertyState> SwXStyle::getPropertyStates(const uno::Seque
             break;
             case XATTR_FILLSTYLE:
             {
-                if (m_rEntry.m_eFamily == SfxStyleFamily::Frame
+                if (m_rEntry.family() == SfxStyleFamily::Frame
                     && xStyle->GetFrameFormat()->DerivedFrom() == GetDoc()->GetDfltFrameFormat())
                 {   // tdf#156155 mpDfltFrameFormat is the parent, but because
                     // it IsDefault() it is not enumerated/exported as a style
