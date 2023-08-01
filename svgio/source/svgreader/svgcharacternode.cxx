@@ -263,7 +263,7 @@ namespace svgio::svgreader
 
                 // prepare TextArray
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
-                if(!aTextArray.empty() && aTextArray.size() < nLength)
+                if(aTextArray.size() < nLength)
                 {
                     const sal_uInt32 nArray(aTextArray.size());
 
@@ -273,17 +273,23 @@ namespace svgio::svgreader
                     {
                         fStartX = rSvgTextPosition.getParent()->getPosition().getX();
                     }
-                    else
+                    else if (!aTextArray.empty())
                     {
                         fStartX = aTextArray[nArray - 1];
                     }
 
                     ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
-                    aTextArray.reserve(nLength);
+                    ::std::vector< double > aDxArray(rSvgTextPosition.getDx());
+                    double fComulativeDx(0.0);
 
-                    for(const auto &a : aExtendArray)
+                    aTextArray.reserve(nLength);
+                    for(size_t a = 0; a < aExtendArray.size(); ++a)
                     {
-                        aTextArray.push_back(a + fStartX);
+                        if (a < aDxArray.size())
+                        {
+                            fComulativeDx += aDxArray[a];
+                        }
+                        aTextArray.push_back(aExtendArray[a] + fStartX + fComulativeDx);
                     }
                 }
 
@@ -642,16 +648,25 @@ namespace svgio::svgreader
             // fill deltas to maX
             maX.reserve(nSizeX);
 
-            for(sal_uInt32 a(1); a < nSizeX; a++)
+            for(sal_uInt32 a(1); a < std::max(nSizeX, nSizeDx); ++a)
             {
-                double nPos = rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
-
-                if(a < nSizeDx)
+                if (a < nSizeX)
                 {
-                    nPos += rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
-                }
+                    double nPos = rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
 
-                maX.push_back(nPos);
+                    if(a < nSizeDx)
+                    {
+                        nPos += rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
+                    }
+
+                    maX.push_back(nPos);
+                }
+                else
+                {
+                    // Apply them later since it also needs the character width to calculate
+                    // the final character position
+                    maDx.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
+                }
             }
 
             // get text positions Y
