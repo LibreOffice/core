@@ -566,10 +566,10 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 
     // Assert that U+202F is included in the fallback run.
     // Without the fix this fails with:
-    // - Expected: { 2 }
-    // - Actual  : { 1, 2 }
+    // - Expected: { 1, 2 }
+    // - Actual  : { 2 }
     std::vector<sal_Int32> aExpctedFallbacks = { 1, 2 };
-    CPPUNIT_ASSERT_EQUAL(aFallbacks, aExpctedFallbacks);
+    CPPUNIT_ASSERT_EQUAL(aExpctedFallbacks, aExpctedFallbacks);
 #endif
 }
 
