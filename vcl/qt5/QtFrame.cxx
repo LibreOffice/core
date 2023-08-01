@@ -1028,37 +1028,32 @@ static Color toColor(const QColor& rColor)
 
 static bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont)
 {
-    psp::FastPrintFontInfo aInfo;
-    QFontInfo qFontInfo(rQFont);
+    FontAttributes aFA;
+    QtFontFace::fillAttributesFromQFont(rQFont, aFA);
 
-    OUString sFamilyName = toOUString(rQFont.family());
-    aInfo.m_aFamilyName = sFamilyName;
-    aInfo.m_eItalic = QtFontFace::toFontItalic(qFontInfo.style());
-    aInfo.m_eWeight = QtFontFace::toFontWeight(qFontInfo.weight());
-    aInfo.m_eWidth = QtFontFace::toFontWidth(rQFont.stretch());
-
-    psp::PrintFontManager::get().matchFont(aInfo, rLocale);
+    bool bFound = psp::PrintFontManager::get().matchFont(aFA, rLocale);
     SAL_INFO("vcl.qt", "font match result for '"
-                           << sFamilyName << "': "
-                           << (aInfo.m_nID != 0 ? OUString::Concat("'") + aInfo.m_aFamilyName + "'"
-                                                : OUString("failed")));
+                           << rQFont.family() << "': "
+                           << (bFound ? OUString::Concat("'") + aFA.GetFamilyName() + "'"
+                                      : OUString("failed")));
 
-    if (aInfo.m_nID == 0)
+    if (!bFound)
         return false;
 
+    QFontInfo qFontInfo(rQFont);
     int nPointHeight = qFontInfo.pointSize();
     if (nPointHeight <= 0)
         nPointHeight = rQFont.pointSize();
 
-    vcl::Font aFont(aInfo.m_aFamilyName, Size(0, nPointHeight));
-    if (aInfo.m_eWeight != WEIGHT_DONTKNOW)
-        aFont.SetWeight(aInfo.m_eWeight);
-    if (aInfo.m_eWidth != WIDTH_DONTKNOW)
-        aFont.SetWidthType(aInfo.m_eWidth);
-    if (aInfo.m_eItalic != ITALIC_DONTKNOW)
-        aFont.SetItalic(aInfo.m_eItalic);
-    if (aInfo.m_ePitch != PITCH_DONTKNOW)
-        aFont.SetPitch(aInfo.m_ePitch);
+    vcl::Font aFont(aFA.GetFamilyName(), Size(0, nPointHeight));
+    if (aFA.GetWeight() != WEIGHT_DONTKNOW)
+        aFont.SetWeight(aFA.GetWeight());
+    if (aFA.GetWidthType() != WIDTH_DONTKNOW)
+        aFont.SetWidthType(aFA.GetWidthType());
+    if (aFA.GetItalic() != ITALIC_DONTKNOW)
+        aFont.SetItalic(aFA.GetItalic());
+    if (aFA.GetPitch() != PITCH_DONTKNOW)
+        aFont.SetPitch(aFA.GetPitch());
 
     rVclFont = aFont;
     return true;

@@ -138,22 +138,6 @@ std::unique_ptr<GenericSalLayout> GenPspGraphics::GetTextLayout(int nFallbackLev
     return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);
 }
 
-FontAttributes GenPspGraphics::Info2FontAttributes( const psp::FastPrintFontInfo& rInfo )
-{
-    FontAttributes aDFA;
-    aDFA.SetFamilyName( rInfo.m_aFamilyName );
-    aDFA.SetStyleName( rInfo.m_aStyleName );
-    aDFA.SetFamilyType( rInfo.m_eFamilyStyle );
-    aDFA.SetWeight( rInfo.m_eWeight );
-    aDFA.SetItalic( rInfo.m_eItalic );
-    aDFA.SetWidthType( rInfo.m_eWidth );
-    aDFA.SetPitch( rInfo.m_ePitch );
-    aDFA.SetMicrosoftSymbolEncoded( rInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL );
-    aDFA.SetQuality(512);
-
-    return aDFA;
-}
-
 namespace vcl
 {
     const char* getLangBoost()

@@ -28,7 +28,6 @@
 #include <unx/geninst.h>
 #include <unx/fontmanager.hxx>
 #include <unx/glyphcache.hxx>
-#include <unx/genpspgraphics.h>
 
 #include <sallayout.hxx>
 #include <font/PhysicalFontCollection.hxx>
@@ -94,23 +93,23 @@ void QtGraphics::GetDevFontList(vcl::font::PhysicalFontCollection* pPFC)
     FreetypeManager& rFontManager = FreetypeManager::get();
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector<psp::fontID> aList;
-    psp::FastPrintFontInfo aInfo;
 
     rMgr.getFontList(aList);
-    for (auto const& elem : aList)
+    for (auto const& nFontId : aList)
     {
-        if (!rMgr.getFontFastInfo(elem, aInfo))
+        auto const* pFont = rMgr.getFont(nFontId);
+        if (!pFont)
             continue;
 
         // normalize face number to the FreetypeManager
-        int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
-        int nVariantNum = rMgr.getFontFaceVariation(aInfo.m_nID);
+        int nFaceNum = rMgr.getFontFaceNumber(nFontId);
+        int nVariantNum = rMgr.getFontFaceVariation(nFontId);
 
         // inform FreetypeManager about this font provided by the PsPrint subsystem
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
-        aDFA.IncreaseQualityBy(4096);
-        const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
-        rFontManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
+        FontAttributes aFA = pFont->m_aFontAttributes;
+        aFA.IncreaseQualityBy(4096);
+        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
+        rFontManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aFA);
     }
 
     if (bUseFontconfig)

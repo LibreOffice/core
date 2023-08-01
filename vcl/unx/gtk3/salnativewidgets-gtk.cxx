@@ -2219,39 +2219,43 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
     PangoWeight    eWeight    = pango_font_description_get_weight( font );
     PangoStretch eStretch = pango_font_description_get_stretch( font );
 
-    psp::FastPrintFontInfo aInfo;
+    FontAttributes aDFA;
+
     // set family name
-    aInfo.m_aFamilyName = OStringToOUString( aFamily, RTL_TEXTENCODING_UTF8 );
+    aDFA.SetFamilyName(OStringToOUString(aFamily, RTL_TEXTENCODING_UTF8));
+
     // set italic
     switch( eStyle )
     {
-        case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = ITALIC_NONE;break;
-        case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = ITALIC_NORMAL;break;
-        case PANGO_STYLE_OBLIQUE:    aInfo.m_eItalic = ITALIC_OBLIQUE;break;
+        case PANGO_STYLE_NORMAL:    aDFA.SetItalic(ITALIC_NONE);break;
+        case PANGO_STYLE_ITALIC:    aDFA.SetItalic(ITALIC_NORMAL);break;
+        case PANGO_STYLE_OBLIQUE:    aDFA.SetItalic(ITALIC_OBLIQUE);break;
     }
+
     // set weight
     if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
-        aInfo.m_eWeight = WEIGHT_ULTRALIGHT;
+        aDFA.SetWeight(WEIGHT_ULTRALIGHT);
     else if( eWeight <= PANGO_WEIGHT_LIGHT )
-        aInfo.m_eWeight = WEIGHT_LIGHT;
+        aDFA.SetWeight(WEIGHT_LIGHT);
     else if( eWeight <= PANGO_WEIGHT_NORMAL )
-        aInfo.m_eWeight = WEIGHT_NORMAL;
+        aDFA.SetWeight(WEIGHT_NORMAL);
     else if( eWeight <= PANGO_WEIGHT_BOLD )
-        aInfo.m_eWeight = WEIGHT_BOLD;
+        aDFA.SetWeight(WEIGHT_BOLD);
     else
-        aInfo.m_eWeight = WEIGHT_ULTRABOLD;
+        aDFA.SetWeight(WEIGHT_ULTRABOLD);
+
     // set width
     switch( eStretch )
     {
-        case PANGO_STRETCH_ULTRA_CONDENSED:    aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;break;
-        case PANGO_STRETCH_EXTRA_CONDENSED:    aInfo.m_eWidth = WIDTH_EXTRA_CONDENSED;break;
-        case PANGO_STRETCH_CONDENSED:        aInfo.m_eWidth = WIDTH_CONDENSED;break;
-        case PANGO_STRETCH_SEMI_CONDENSED:    aInfo.m_eWidth = WIDTH_SEMI_CONDENSED;break;
-        case PANGO_STRETCH_NORMAL:            aInfo.m_eWidth = WIDTH_NORMAL;break;
-        case PANGO_STRETCH_SEMI_EXPANDED:    aInfo.m_eWidth = WIDTH_SEMI_EXPANDED;break;
-        case PANGO_STRETCH_EXPANDED:        aInfo.m_eWidth = WIDTH_EXPANDED;break;
-        case PANGO_STRETCH_EXTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_EXTRA_EXPANDED;break;
-        case PANGO_STRETCH_ULTRA_EXPANDED:    aInfo.m_eWidth = WIDTH_ULTRA_EXPANDED;break;
+        case PANGO_STRETCH_ULTRA_CONDENSED:    aDFA.SetWidthType(WIDTH_ULTRA_CONDENSED);break;
+        case PANGO_STRETCH_EXTRA_CONDENSED:    aDFA.SetWidthType(WIDTH_EXTRA_CONDENSED);break;
+        case PANGO_STRETCH_CONDENSED:        aDFA.SetWidthType(WIDTH_CONDENSED);break;
+        case PANGO_STRETCH_SEMI_CONDENSED:    aDFA.SetWidthType(WIDTH_SEMI_CONDENSED);break;
+        case PANGO_STRETCH_NORMAL:            aDFA.SetWidthType(WIDTH_NORMAL);break;
+        case PANGO_STRETCH_SEMI_EXPANDED:    aDFA.SetWidthType(WIDTH_SEMI_EXPANDED);break;
+        case PANGO_STRETCH_EXPANDED:        aDFA.SetWidthType(WIDTH_EXPANDED);break;
+        case PANGO_STRETCH_EXTRA_EXPANDED:    aDFA.SetWidthType(WIDTH_EXTRA_EXPANDED);break;
+        case PANGO_STRETCH_ULTRA_EXPANDED:    aDFA.SetWidthType(WIDTH_ULTRA_EXPANDED);break;
     }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2260,14 +2264,16 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
 #endif
 
     // match font to e.g. resolve "Sans"
-    psp::PrintFontManager::get().matchFont(aInfo, rLocale);
+    bool bFound = psp::PrintFontManager::get().matchFont(aDFA, rLocale);
 
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("vcl.gtk3", "font match "
-            << (aInfo.m_nID != 0 ? "succeeded" : "failed")
+            << (bFound ? "succeeded" : "failed")
             << ", name AFTER: \""
-            << aInfo.m_aFamilyName
+            << aDFA.GetFamilyName()
             << "\".");
+#else
+    (void) bFound;
 #endif
 
     int nPangoHeight = pango_font_description_get_size(font) / PANGO_SCALE;
@@ -2280,15 +2286,15 @@ vcl::Font pango_to_vcl(const PangoFontDescription* font, const css::lang::Locale
         nPangoHeight = nPangoHeight / nDPIY;
     }
 
-    vcl::Font aFont(aInfo.m_aFamilyName, Size(0, nPangoHeight));
-    if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
-        aFont.SetWeight( aInfo.m_eWeight );
-    if( aInfo.m_eWidth != WIDTH_DONTKNOW )
-        aFont.SetWidthType( aInfo.m_eWidth );
-    if( aInfo.m_eItalic != ITALIC_DONTKNOW )
-        aFont.SetItalic( aInfo.m_eItalic );
-    if( aInfo.m_ePitch != PITCH_DONTKNOW )
-        aFont.SetPitch( aInfo.m_ePitch );
+    vcl::Font aFont(aDFA.GetFamilyName(), Size(0, nPangoHeight));
+    if (aDFA.GetWeight() != WEIGHT_DONTKNOW)
+        aFont.SetWeight(aDFA.GetWeight());
+    if (aDFA.GetWidthType() != WIDTH_DONTKNOW)
+        aFont.SetWidthType(aDFA.GetWidthType());
+    if (aDFA.GetItalic() != ITALIC_DONTKNOW)
+        aFont.SetItalic(aDFA.GetItalic());
+    if (aDFA.GetPitch() != PITCH_DONTKNOW)
+        aFont.SetPitch(aDFA.GetPitch());
     return aFont;
 }
 

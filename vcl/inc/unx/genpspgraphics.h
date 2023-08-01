@@ -24,7 +24,6 @@
 #include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 
-#include <unx/fontmanager.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 
@@ -60,9 +59,6 @@ public:
     virtual                ~GenPspGraphics() override;
 
     void                    Init(psp::JobData* pJob);
-
-    // helper methods
-    static FontAttributes   Info2FontAttributes(const psp::FastPrintFontInfo&);
 
     // override all pure virtual methods
     virtual SalGraphicsImpl* GetImpl() const override

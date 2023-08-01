@@ -28,7 +28,7 @@
 #include <vcl/fontcharmap.hxx>
 #include <sal/log.hxx>
 
-#include <unx/genpspgraphics.h>
+#include <unx/fontmanager.hxx>
 #include <unx/geninst.h>
 #include <unx/glyphcache.hxx>
 #include <unx/fc_fontoptions.hxx>
@@ -103,23 +103,24 @@ bool FreeTypeTextRenderImpl::AddTempDevFont(vcl::font::PhysicalFontCollection* p
         return false;
 
     FreetypeManager& rFreetypeManager = FreetypeManager::get();
-    for (auto const& elem : aFontIds)
+    for (auto const& nFontId : aFontIds)
     {
         // prepare font data
-        psp::FastPrintFontInfo aInfo;
-        rMgr.getFontFastInfo(elem, aInfo);
-        if (!rFontName.isEmpty())
-            aInfo.m_aFamilyName = rFontName;
+        auto const* pFont = rMgr.getFont(nFontId);
+        if (!pFont)
+            continue;
 
         // inform glyph cache of new font
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
+        FontAttributes aDFA = pFont->m_aFontAttributes;
         aDFA.IncreaseQualityBy(5800);
+        if (!rFontName.isEmpty())
+            aDFA.SetFamilyName(rFontName);
 
-        int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
-        int nVariantNum = rMgr.getFontFaceVariation(aInfo.m_nID);
+        int nFaceNum = rMgr.getFontFaceNumber(nFontId);
+        int nVariantNum = rMgr.getFontFaceVariation(nFontId);
 
-        const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
-        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
+        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
+        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aDFA);
     }
 
     // announce new font to device's font list
@@ -139,22 +140,22 @@ void FreeTypeTextRenderImpl::GetDevFontList(vcl::font::PhysicalFontCollection* p
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     ::std::vector<psp::fontID> aList;
-    psp::FastPrintFontInfo aInfo;
     rMgr.getFontList(aList);
-    for (auto const& elem : aList)
+    for (auto const& nFontId : aList)
     {
-        if (!rMgr.getFontFastInfo(elem, aInfo))
+        auto const* pFont = rMgr.getFont(nFontId);
+        if (!pFont)
             continue;
 
         // normalize face number to the FreetypeManager
-        int nFaceNum = rMgr.getFontFaceNumber(aInfo.m_nID);
-        int nVariantNum = rMgr.getFontFaceVariation(aInfo.m_nID);
+        int nFaceNum = rMgr.getFontFaceNumber(nFontId);
+        int nVariantNum = rMgr.getFontFaceVariation(nFontId);
 
         // inform FreetypeManager about this font provided by the PsPrint subsystem
-        FontAttributes aDFA = GenPspGraphics::Info2FontAttributes(aInfo);
+        FontAttributes aDFA = pFont->m_aFontAttributes;
         aDFA.IncreaseQualityBy(4096);
-        const OString& rFileName = rMgr.getFontFileSysPath(aInfo.m_nID);
-        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, aInfo.m_nID, aDFA);
+        const OString& rFileName = rMgr.getFontFileSysPath(nFontId);
+        rFreetypeManager.AddFontFile(rFileName, nFaceNum, nVariantNum, nFontId, aDFA);
     }
 
     // announce glyphcache fonts

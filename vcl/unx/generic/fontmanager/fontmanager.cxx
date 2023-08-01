@@ -81,13 +81,7 @@ static sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
  *  PrintFont implementations
  */
 PrintFontManager::PrintFont::PrintFont()
-:   m_eFamilyStyle(FAMILY_DONTKNOW)
-,   m_eItalic(ITALIC_DONTKNOW)
-,   m_eWidth(WIDTH_DONTKNOW)
-,   m_eWeight(WEIGHT_DONTKNOW)
-,   m_ePitch(PITCH_DONTKNOW)
-,   m_aEncoding(RTL_TEXTENCODING_DONTKNOW)
-,   m_nDirectory(0)
+:   m_nDirectory(0)
 ,   m_nCollectionEntry(0)
 ,   m_nVariationEntry(0)
 {
@@ -514,20 +508,23 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
     OString aFile = getFontFile( rFont );
     TrueTypeFont* pTTFont = nullptr;
 
+    auto& rDFA = rFont.m_aFontAttributes;
+    rDFA.SetQuality(512);
+
     auto const e = OpenTTFontFile( aFile.getStr(), rFont.m_nCollectionEntry, &pTTFont );
     if( e == SFErrCodes::Ok )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
 
-        if (rFont.m_aFamilyName.isEmpty())
+        if (rDFA.GetFamilyName().isEmpty())
         {
             ::std::vector< OUString > aNames;
             analyzeSfntFamilyName( pTTFont, aNames );
 
             if( !aNames.empty() )
             {
-                rFont.m_aFamilyName = aNames.front();
+                rDFA.SetFamilyName(aNames.front());
                 aNames.erase(aNames.begin());
             }
             else
@@ -540,53 +537,53 @@ bool PrintFontManager::analyzeSfntFile( PrintFont& rFont ) const
                  if ( dotIndex == -1 )
                      dotIndex = rFont.m_aFontFile.getLength();
 
-                 rFont.m_aFamilyName = OStringToOUString(rFont.m_aFontFile.subView(0, dotIndex), aEncoding);
+                 rDFA.SetFamilyName(OStringToOUString(rFont.m_aFontFile.subView(0, dotIndex), aEncoding));
             }
         }
 
         if( !aInfo.usubfamily.isEmpty() )
-            rFont.m_aStyleName = aInfo.usubfamily;
+            rDFA.SetStyleName(aInfo.usubfamily);
 
-        rFont.m_eFamilyStyle = matchFamilyName(rFont.m_aFamilyName);
+        rDFA.SetFamilyType(matchFamilyName(rDFA.GetFamilyName()));
 
         switch( aInfo.weight )
         {
-            case FW_THIN:           rFont.m_eWeight = WEIGHT_THIN; break;
-            case FW_EXTRALIGHT: rFont.m_eWeight = WEIGHT_ULTRALIGHT; break;
-            case FW_LIGHT:          rFont.m_eWeight = WEIGHT_LIGHT; break;
-            case FW_MEDIUM:     rFont.m_eWeight = WEIGHT_MEDIUM; break;
-            case FW_SEMIBOLD:       rFont.m_eWeight = WEIGHT_SEMIBOLD; break;
-            case FW_BOLD:           rFont.m_eWeight = WEIGHT_BOLD; break;
-            case FW_EXTRABOLD:      rFont.m_eWeight = WEIGHT_ULTRABOLD; break;
-            case FW_BLACK:          rFont.m_eWeight = WEIGHT_BLACK; break;
+            case FW_THIN:       rDFA.SetWeight(WEIGHT_THIN); break;
+            case FW_EXTRALIGHT: rDFA.SetWeight(WEIGHT_ULTRALIGHT); break;
+            case FW_LIGHT:      rDFA.SetWeight(WEIGHT_LIGHT); break;
+            case FW_MEDIUM:     rDFA.SetWeight(WEIGHT_MEDIUM); break;
+            case FW_SEMIBOLD:   rDFA.SetWeight(WEIGHT_SEMIBOLD); break;
+            case FW_BOLD:       rDFA.SetWeight(WEIGHT_BOLD); break;
+            case FW_EXTRABOLD:  rDFA.SetWeight(WEIGHT_ULTRABOLD); break;
+            case FW_BLACK:      rDFA.SetWeight(WEIGHT_BLACK); break;
 
             case FW_NORMAL:
-            default:        rFont.m_eWeight = WEIGHT_NORMAL; break;
+            default:            rDFA.SetWeight(WEIGHT_NORMAL); break;
         }
 
         switch( aInfo.width )
         {
-            case FWIDTH_ULTRA_CONDENSED:    rFont.m_eWidth = WIDTH_ULTRA_CONDENSED; break;
-            case FWIDTH_EXTRA_CONDENSED:    rFont.m_eWidth = WIDTH_EXTRA_CONDENSED; break;
-            case FWIDTH_CONDENSED:          rFont.m_eWidth = WIDTH_CONDENSED; break;
-            case FWIDTH_SEMI_CONDENSED: rFont.m_eWidth = WIDTH_SEMI_CONDENSED; break;
-            case FWIDTH_SEMI_EXPANDED:      rFont.m_eWidth = WIDTH_SEMI_EXPANDED; break;
-            case FWIDTH_EXPANDED:           rFont.m_eWidth = WIDTH_EXPANDED; break;
-            case FWIDTH_EXTRA_EXPANDED: rFont.m_eWidth = WIDTH_EXTRA_EXPANDED; break;
-            case FWIDTH_ULTRA_EXPANDED: rFont.m_eWidth = WIDTH_ULTRA_EXPANDED; break;
+            case FWIDTH_ULTRA_CONDENSED:    rDFA.SetWidthType(WIDTH_ULTRA_CONDENSED); break;
+            case FWIDTH_EXTRA_CONDENSED:    rDFA.SetWidthType(WIDTH_EXTRA_CONDENSED); break;
+            case FWIDTH_CONDENSED:          rDFA.SetWidthType(WIDTH_CONDENSED); break;
+            case FWIDTH_SEMI_CONDENSED:     rDFA.SetWidthType(WIDTH_SEMI_CONDENSED); break;
+            case FWIDTH_SEMI_EXPANDED:      rDFA.SetWidthType(WIDTH_SEMI_EXPANDED); break;
+            case FWIDTH_EXPANDED:           rDFA.SetWidthType(WIDTH_EXPANDED); break;
+            case FWIDTH_EXTRA_EXPANDED:     rDFA.SetWidthType(WIDTH_EXTRA_EXPANDED); break;
+            case FWIDTH_ULTRA_EXPANDED:     rDFA.SetWidthType(WIDTH_ULTRA_EXPANDED); break;
 
             case FWIDTH_NORMAL:
-            default:                        rFont.m_eWidth = WIDTH_NORMAL; break;
+            default:                        rDFA.SetWidthType(WIDTH_NORMAL); break;
         }
 
-        rFont.m_ePitch = aInfo.pitch ? PITCH_FIXED : PITCH_VARIABLE;
-        rFont.m_eItalic = aInfo.italicAngle == 0 ? ITALIC_NONE : ( aInfo.italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE );
+        rDFA.SetPitch(aInfo.pitch ? PITCH_FIXED : PITCH_VARIABLE);
+        rDFA.SetItalic(aInfo.italicAngle == 0 ? ITALIC_NONE : (aInfo.italicAngle < 0 ? ITALIC_NORMAL : ITALIC_OBLIQUE));
         // #104264# there are fonts that set italic angle 0 although they are
         // italic; use macstyle bit here
         if( aInfo.italicAngle == 0 && (aInfo.macStyle & 2) )
-            rFont.m_eItalic = ITALIC_NORMAL;
+            rDFA.SetItalic(ITALIC_NORMAL);
 
-        rFont.m_aEncoding = aInfo.microsoftSymbolEncoded ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UCS2;
+        rDFA.SetMicrosoftSymbolEncoded(aInfo.microsoftSymbolEncoded);
 
         CloseTTFont( pTTFont );
         bSuccess = true;
@@ -673,29 +670,6 @@ void PrintFontManager::getFontList( ::std::vector< fontID >& rFontIDs )
 
     for (auto const& font : m_aFonts)
         rFontIDs.push_back(font.first);
-}
-
-void PrintFontManager::fillPrintFontInfo(const PrintFont& rFont, FastPrintFontInfo& rInfo)
-{
-    rInfo.m_aFamilyName     = rFont.m_aFamilyName;
-    rInfo.m_aStyleName      = rFont.m_aStyleName;
-    rInfo.m_eFamilyStyle    = rFont.m_eFamilyStyle;
-    rInfo.m_eItalic         = rFont.m_eItalic;
-    rInfo.m_eWidth          = rFont.m_eWidth;
-    rInfo.m_eWeight         = rFont.m_eWeight;
-    rInfo.m_ePitch          = rFont.m_ePitch;
-    rInfo.m_aEncoding       = rFont.m_aEncoding;
-}
-
-bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo ) const
-{
-    const PrintFont* pFont = getFont( nFontID );
-    if( pFont )
-    {
-        rInfo.m_nID = nFontID;
-        fillPrintFontInfo( *pFont, rInfo );
-    }
-    return pFont != nullptr;
 }
 
 int PrintFontManager::getFontFaceNumber( fontID nFontID ) const

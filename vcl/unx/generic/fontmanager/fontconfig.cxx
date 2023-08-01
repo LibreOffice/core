@@ -706,17 +706,18 @@ void PrintFontManager::countFontconfigFonts()
 
             if (xUpdate)
             {
+                auto& rDFA = xUpdate->m_aFontAttributes;
                 // set family name
                 if( eWeightRes == FcResultMatch )
-                    xUpdate->m_eWeight = convertWeight(weight);
+                    rDFA.SetWeight(convertWeight(weight));
                 if( eWidthRes == FcResultMatch )
-                    xUpdate->m_eWidth = convertWidth(width);
+                    rDFA.SetWidthType(convertWidth(width));
                 if( eSpacRes == FcResultMatch )
-                    xUpdate->m_ePitch = convertSpacing(spacing);
+                    rDFA.SetPitch(convertSpacing(spacing));
                 if( eSlantRes == FcResultMatch )
-                    xUpdate->m_eItalic = convertSlant(slant);
+                    rDFA.SetItalic(convertSlant(slant));
                 if( eStyleRes == FcResultMatch )
-                    xUpdate->m_aStyleName = OStringToOUString( std::string_view( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
+                    rDFA.SetStyleName(OStringToOUString( std::string_view( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 ));
                 if( eIndexRes == FcResultMatch )
                     xUpdate->m_nVariationEntry = GetVariationIndex(nEntryId);
 
@@ -1076,12 +1077,12 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
                 OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
                 int nDirID = getDirectoryAtom( aDir );
-                fontID aFont = findFontFileID(nDirID, aBase, GetCollectionIndex(nEntryId), GetVariationIndex(nEntryId));
-                if( aFont > 0 )
+                fontID nFontID = findFontFileID(nDirID, aBase, GetCollectionIndex(nEntryId), GetVariationIndex(nEntryId));
+                auto const* pFont = getFont(nFontID);
+                if (pFont)
                 {
-                    FastPrintFontInfo aInfo;
-                    bRet = getFontFastInfo( aFont, aInfo );
-                    rPattern.maSearchName = aInfo.m_aFamilyName;
+                    rPattern.maSearchName = pFont->m_aFontAttributes.GetFamilyName();
+                    bRet = true;
                 }
             }
 
@@ -1269,8 +1270,9 @@ std::unique_ptr<FontConfigFontOptions> PrintFontManager::getFontOptions(const Fo
 }
 
 
-void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Locale& rLocale )
+bool PrintFontManager::matchFont(FontAttributes& rDFA, const css::lang::Locale& rLocale)
 {
+    bool bFound = false;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     FcConfig* pConfig = FcConfigGetCurrent();
@@ -1282,11 +1284,11 @@ void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
     if (!aLangAttrib.isEmpty())
         FcPatternAddString(pPattern, FC_LANG, reinterpret_cast<FcChar8 const *>(aLangAttrib.getStr()));
 
-    OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
+    OString aFamily = OUStringToOString(rDFA.GetFamilyName(), RTL_TEXTENCODING_UTF8);
     if( !aFamily.isEmpty() )
         FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(aFamily.getStr()));
 
-    addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
+    addtopattern(pPattern, rDFA.GetItalic(), rDFA.GetWeight(), rDFA.GetWidthType(), rDFA.GetPitch());
 
     FcConfigSubstitute(pConfig, pPattern, FcMatchPattern);
     FcDefaultSubstitute(pPattern);
@@ -1311,11 +1313,15 @@ void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
                 OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
                 int nDirID = getDirectoryAtom( aDir );
-                fontID aFont = findFontFileID(nDirID, aBase,
+                fontID nFontID = findFontFileID(nDirID, aBase,
                                               GetCollectionIndex(nEntryId),
                                               GetVariationIndex(nEntryId));
-                if( aFont > 0 )
-                    getFontFastInfo( aFont, rInfo );
+                auto const* pFont = getFont(nFontID);
+                if (pFont)
+                {
+                    rDFA = pFont->m_aFontAttributes;
+                    bFound = true;
+                }
             }
         }
         // info: destroying the pSet destroys pResult implicitly
@@ -1325,6 +1331,8 @@ void PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const css::lang::Loc
 
     // cleanup
     FcPatternDestroy( pPattern );
+
+    return bFound;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
