@@ -1043,21 +1043,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                         "createInvisible X:" << aRect.Left() << " Y:"
                             << aRect.Top() << " on View #" << nViewCount);
 
-                    // tdf#144072 prevent use of a deleted pointer
-                    // BegDragObj_createInvisibleObjectAtPosition() may clear
-                    // the handle list and that will delete the SdrHdl instances
-                    // owned by this section view so set _pHdl to null if it has
-                    // been deleted during the call.
-                    bool bHdlInList = false;
-                    const SdrHdlList& rHdlList = rView.GetHdlList();
-                    if (_pHdl && rHdlList.GetHdlNum(_pHdl) < rHdlList.GetHdlCount())
-                        bHdlInList = true;
                     BegDragObj_createInvisibleObjectAtPosition(aRect, rView);
-                    if (bHdlInList && rHdlList.GetHdlNum(_pHdl) >= rHdlList.GetHdlCount())
-                    {
-                        SAL_WARN("reportdesign", "SdrHdl pointer parameter has been deleted");
-                        _pHdl = nullptr;
-                    }
                 }
             }
         }
