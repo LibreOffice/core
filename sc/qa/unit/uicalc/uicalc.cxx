@@ -1227,6 +1227,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
     lcl_AssertCurrentCursorPosition(*pDocSh, u"M3");
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf156462)
+{
+    createScDoc("tdf156462.ods");
+    ScDocShell* pDocSh = getScDocShell();
+
+    lcl_AssertCurrentCursorPosition(*pDocSh, u"G2");
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_LEFT);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the cursor would have jumped to cell C2
+    lcl_AssertCurrentCursorPosition(*pDocSh, u"D2");
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132057)
 {
     createScDoc("tdf132057.ods");
