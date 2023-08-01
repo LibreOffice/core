@@ -45,10 +45,6 @@ public:
     //AccessibleEventListener
     virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
-    //for child changed event
-    virtual void HandleChildChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue) override;
-
     //for selection changed event
     virtual void HandleSelectionChangedEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);

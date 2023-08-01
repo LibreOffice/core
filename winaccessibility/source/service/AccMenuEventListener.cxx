@@ -49,9 +49,6 @@ void  AccMenuEventListener::notifyEvent( const css::accessibility::AccessibleEve
 
     switch (aEvent.EventId)
     {
-    case AccessibleEventId::CHILD:
-        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
-        break;
     case AccessibleEventId::SELECTION_CHANGED:
         //don't need to process anything,just same as word behavior
         //handleSelectionChangedEvent();
@@ -60,44 +57,6 @@ void  AccMenuEventListener::notifyEvent( const css::accessibility::AccessibleEve
         AccComponentEventListener::notifyEvent(aEvent);
         break;
     }
-}
-
-/**
- *  handle the CHILD event
- *  @param  oldValue    the child to be deleted
- *  @param  newValue    the child to be added
- */
-void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
-{
-
-    Reference< XAccessible > xChild;
-    if( newValue >>= xChild)
-    {
-        //create a new child
-        if(xChild.is())
-        {
-            XAccessible* pAcc = xChild.get();
-            //add this child
-            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            //add all oldValue's existing children
-            pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
-        }
-    }
-    else if (oldValue >>= xChild)
-    {
-        //delete an existing child
-        if(xChild.is())
-        {
-            XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
-            //delete all oldValue's existing children
-            pAgent->DeleteChildrenAccObj( pAcc );
-            //delete this child
-            pAgent->DeleteAccObj( pAcc );
-        }
-    }
-
 }
 
 /**

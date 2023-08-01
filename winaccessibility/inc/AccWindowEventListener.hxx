@@ -40,9 +40,6 @@ public:
     virtual void SAL_CALL
     notifyEvent(const css::accessibility::AccessibleEventObject& aEvent) override;
 
-    //for child changed event
-    virtual void HandleChildChangedEvent(css::uno::Any oldValue, css::uno::Any newValue) override;
-
     //state changed
     virtual void SetComponentState(sal_Int64 state, bool enable) override;
 };

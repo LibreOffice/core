@@ -49,10 +49,6 @@ public:
     virtual void HandleSelectionChangedEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
-    //for child changed event
-    virtual void HandleChildChangedEvent(
-            css::uno::Any oldValue, css::uno::Any newValue) override;
-
     virtual void HandleChildChangedNoFocusEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 

@@ -55,9 +55,6 @@ void  AccFrameEventListener::notifyEvent( const css::accessibility::AccessibleEv
 
     switch (aEvent.EventId)
     {
-    case AccessibleEventId::CHILD:
-        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
-        break;
     case AccessibleEventId::VISIBLE_DATA_CHANGED:
         HandleVisibleDataChangedEvent();
         break;
@@ -80,37 +77,23 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     Reference< XAccessible > xChild;
     if( newValue >>= xChild)
     {
-        //create a new child
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-
             VCLXWindow* pvclwindow = dynamic_cast<VCLXWindow*>(m_xAccessible.get());
             assert(pvclwindow);
             const SystemEnvData* systemdata
                 = pvclwindow->GetWindow()->GetSystemData();
 
-            //add this child
             pAgent->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
-            //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
         }
     }
     else if (oldValue >>= xChild)
     {
-        //delete an existing child
-        if(xChild.is())
-        {
-            XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
-            //delete all oldValue's existing children
-            pAgent->DeleteChildrenAccObj( pAcc );
-            //delete this child
-            pAgent->DeleteAccObj( pAcc );
-        }
+        AccEventListener::HandleChildChangedEvent(oldValue, newValue);
     }
-
 }
 
 /**

@@ -54,9 +54,6 @@ void  AccDescendantManagerEventListener::notifyEvent( const css::accessibility::
     case AccessibleEventId::SELECTION_CHANGED:
         HandleSelectionChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
-    case AccessibleEventId::CHILD:
-        HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
-        break;
     case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
         HandleChildChangedNoFocusEvent(aEvent.OldValue, aEvent.NewValue);
         break;
@@ -73,43 +70,6 @@ void  AccDescendantManagerEventListener::notifyEvent( const css::accessibility::
         AccComponentEventListener::notifyEvent(aEvent);
         break;
     }
-}
-
-/**
- *  handle the CHILD event
- *  @param  oldValue    the child to be deleted
- *  @param  newValue    the child to be added
- */
-void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
-{
-
-    Reference< XAccessible > xChild;
-    if( newValue >>= xChild)
-    {
-        //create a new child
-        if(xChild.is())
-        {
-            XAccessible* pAcc = xChild.get();
-            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            pAgent->InsertChildrenAccObj(pAcc);
-
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
-
-        }
-    }
-
-    if (oldValue >>= xChild)
-    {
-        if(xChild.is())
-        {
-            XAccessible* pAcc = xChild.get();
-
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
-            pAgent->DeleteChildrenAccObj( pAcc );
-            pAgent->DeleteAccObj( pAcc );
-        }
-    }
-
 }
 
 /**
