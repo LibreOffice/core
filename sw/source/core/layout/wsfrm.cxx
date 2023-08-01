@@ -3043,26 +3043,48 @@ void SwLayoutFrame::ChgLowersProp( const Size& rOldSize )
             }
             else
             {
+                SwFrame const* pFirstInvalid(nullptr);
+                for (SwFrame const* pLow = Lower();
+                     pLow && pLow != pLowerFrame; pLow = pLow->GetNext())
+                {
+                    if (!pLow->isFrameAreaDefinitionValid())
+                    {
+                        pFirstInvalid = pLow;
+                        break;
+                    }
+                }
                 // variable size of body|section frame has shrunk. Thus,
                 // invalidate all lowers not matching the new body|section size
                 // and the dedicated new last lower.
                 if( aRectFnSet.IsVert() )
                 {
                     SwTwips nBot = getFrameArea().Left() + getFramePrintArea().Left();
-                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getFrameArea().Left() < nBot )
+                    while (pLowerFrame && pLowerFrame->GetPrev()
+                        && (pFirstInvalid != nullptr // tdf#152307 trust nothing after invalid frame
+                            || pLowerFrame->getFrameArea().Left() < nBot))
                     {
                         pLowerFrame->InvalidateAll_();
                         pLowerFrame->InvalidatePage( pPage );
+                        if (pLowerFrame == pFirstInvalid)
+                        {
+                            pFirstInvalid = nullptr; // continue checking nBot
+                        }
                         pLowerFrame = pLowerFrame->GetPrev();
                     }
                 }
                 else
                 {
                     SwTwips nBot = getFrameArea().Top() + getFramePrintArea().Bottom();
-                    while ( pLowerFrame && pLowerFrame->GetPrev() && pLowerFrame->getFrameArea().Top() > nBot )
+                    while (pLowerFrame && pLowerFrame->GetPrev()
+                        && (pFirstInvalid != nullptr // tdf#152307 trust nothing after invalid frame
+                            || nBot < pLowerFrame->getFrameArea().Top()))
                     {
                         pLowerFrame->InvalidateAll_();
                         pLowerFrame->InvalidatePage( pPage );
+                        if (pLowerFrame == pFirstInvalid)
+                        {
+                            pFirstInvalid = nullptr; // continue checking nBot
+                        }
                         pLowerFrame = pLowerFrame->GetPrev();
                     }
                 }
