@@ -2674,6 +2674,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf62032ApplyStyle)
                          getProperty<OUString>(getParagraph(2), "ListLabelString").trim());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf156560)
+{
+    createSwDoc("tdf156560.docx");
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | KEY_PAGEUP);
+
+    // Insert header
+    // Without the fix in place, this test would have got SIGABRT here
+    dispatchCommand(mxComponent, ".uno:InsertHeader", {});
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

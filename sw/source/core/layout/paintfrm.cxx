@@ -7070,6 +7070,10 @@ std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const S
     const SwFrame* pLay = Lower();
     const SwFrame* pFootnoteCont = nullptr;
     const SwFrame* pPageBody = nullptr;
+
+    if (!pLay)
+        return aPolygons;
+
     while ( pLay && !( pFootnoteCont && pPageBody ) )
     {
         if ( pLay->IsFootnoteContFrame( ) )
