@@ -68,7 +68,7 @@ private:
     QPushButton* ImplAddMenuBarButton(const QIcon& rIcon, const QString& rToolTip, int nId);
     void ImplRemoveMenuBarButton(int nId);
     void connectHelpShortcut(QMenu* pMenu);
-    // set slots that handle signals relevent for help menu
+    // set slots that handle signals relevant for help menu
     void connectHelpSignalSlots(QMenu* pMenu, QtMenuItem* pSalMenuItem);
 
 public:
