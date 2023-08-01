@@ -116,6 +116,12 @@ inline constexpr OUStringLiteral HID_TBX_FORMULA_CALC = u"SW_HID_TBX_FORMULA_CAL
 inline constexpr OUStringLiteral HID_TBX_FORMULA_CANCEL = u"SW_HID_TBX_FORMULA_CANCEL";
 inline constexpr OUStringLiteral HID_TBX_FORMULA_APPLY = u"SW_HID_TBX_FORMULA_APPLY";
 
+// Navigator context menu
+inline constexpr OUStringLiteral HID_NAV_OUTLINE_TRACKING = u"SW_HID_NAV_OUTLINE_TRACKING";
+inline constexpr OUStringLiteral HID_NAV_OUTLINE_LEVEL = u"SW_HID_NAV_OUTLINE_LEVEL";
+inline constexpr OUStringLiteral HID_NAV_DRAG_MODE = u"SW_HID_NAV_DRAG_MODE";
+inline constexpr OUStringLiteral HID_NAV_DISPLAY = u"SW_HID_NAV_DISPLAY";
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

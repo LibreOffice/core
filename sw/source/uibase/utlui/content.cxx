@@ -1575,19 +1575,42 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     xSubPopOutlineContent->append(OUString::number(SHOW_OUTLINE_CONTENT_VISIBILITY),
                                   SwResId(STR_OUTLINE_CONTENT_VISIBILITY_SHOW_ALL));
 
+    xSubPopOutlineContent->set_item_help_id(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY),
+                                            HID_NAVIGATOR_TREELIST);
+    xSubPopOutlineContent->set_item_help_id(OUString::number(HIDE_OUTLINE_CONTENT_VISIBILITY),
+                                            HID_NAVIGATOR_TREELIST);
+    xSubPopOutlineContent->set_item_help_id(OUString::number(SHOW_OUTLINE_CONTENT_VISIBILITY),
+                                            HID_NAVIGATOR_TREELIST);
+
+    // Add entries to the Outline Tracking submenu
+    OUString sId;
     for(int i = 1; i <= 3; ++i)
-        xSubPopOutlineTracking->append_radio(OUString::number(i + 10), m_aContextStrings[IDX_STR_OUTLINE_TRACKING + i]);
+    {
+        sId = OUString::number(i + 10);
+        xSubPopOutlineTracking->append_radio(sId, m_aContextStrings[IDX_STR_OUTLINE_TRACKING + i]);
+        xSubPopOutlineTracking->set_item_help_id(sId, HID_NAV_OUTLINE_TRACKING);
+    }
     xSubPopOutlineTracking->set_active(OUString::number(10 + m_nOutlineTracking), true);
 
+    // Add entries to the Outline Level submenu
     for (int i = 1; i <= MAXLEVEL; ++i)
-        xSubPop1->append_radio(OUString::number(i + 100), OUString::number(i));
+    {
+        sId = OUString::number(i + 100);
+        xSubPop1->append_radio(sId, OUString::number(i));
+        xSubPop1->set_item_help_id(sId, HID_NAV_OUTLINE_LEVEL);
+    }
     xSubPop1->set_active(OUString::number(100 + m_nOutlineLevel), true);
 
+    // Add entries to the Drag Mode submenu
     for (int i=0; i < 3; ++i)
-        xSubPop2->append_radio(OUString::number(i + 201), m_aContextStrings[IDX_STR_HYPERLINK + i]);
+    {
+        sId = OUString::number(i + 201);
+        xSubPop2->append_radio(sId, m_aContextStrings[IDX_STR_HYPERLINK + i]);
+        xSubPop2->set_item_help_id(sId, HID_NAV_DRAG_MODE);
+    }
     xSubPop2->set_active(OUString::number(201 + static_cast<int>(GetParentWindow()->GetRegionDropMode())), true);
 
-    // Insert the list of the open files
+    // Insert the list of the open files in the Display submenu
     {
     sal_uInt16 nId = 301;
     SwView *pView = SwModule::GetFirstView();
@@ -1596,20 +1619,28 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         OUString sInsert = pView->GetDocShell()->GetTitle() + " (" +
                 m_aContextStrings[pView == GetActiveView() ? IDX_STR_ACTIVE :
                                                              IDX_STR_INACTIVE] + ")";
-        xSubPop3->append_radio(OUString::number(nId), sInsert);
+        sId = OUString::number(nId);
+        xSubPop3->append_radio(sId, sInsert);
+        xSubPop3->set_item_help_id(sId, HID_NAV_DISPLAY);
         if (State::CONSTANT == m_eState && m_pActiveShell == &pView->GetWrtShell())
-            xSubPop3->set_active(OUString::number(nId), true);
+            xSubPop3->set_active(sId, true);
         pView = SwModule::GetNextView(pView);
         nId++;
     }
-    xSubPop3->append_radio(OUString::number(nId++), m_aContextStrings[IDX_STR_ACTIVE_VIEW]);
-    if (m_pHiddenShell) // can have only one hidden shell
+    // Active Window
+    sId = OUString::number(nId++);
+    xSubPop3->append_radio(sId, m_aContextStrings[IDX_STR_ACTIVE_VIEW]);
+    xSubPop3->set_item_help_id(sId, HID_NAV_DISPLAY);
+    // There can be only one hidden shell
+    if (m_pHiddenShell)
     {
         OUString sHiddenEntry = m_pHiddenShell->GetView().GetDocShell()->GetTitle() +
             " (" +
             m_aContextStrings[IDX_STR_HIDDEN] +
             ")";
-        xSubPop3->append_radio(OUString::number(nId), sHiddenEntry);
+        sId = OUString::number(nId);
+        xSubPop3->append_radio(sId, sHiddenEntry);
+        xSubPop3->set_item_help_id(sId, HID_NAV_DISPLAY);
     }
     if (State::ACTIVE == m_eState)
         xSubPop3->set_active(OUString::number(--nId), true);
