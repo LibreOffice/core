@@ -372,7 +372,11 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         sal_Int32 nChildIndex )
 {
     Reference< XAccessible > xRet;
-    Reference< XAccessibleContext > xContext( m_xParent, uno::UNO_QUERY );
+
+    if (!m_xParent.is())
+        return nullptr;
+
+    Reference<XAccessibleContext> xContext = m_xParent->getAccessibleContext();
     if( xContext.is() )
     {
         try
