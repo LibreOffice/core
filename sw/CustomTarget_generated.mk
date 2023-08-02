@@ -13,22 +13,26 @@ sw_SRC := $(SRCDIR)/sw/source/core/swg
 sw_PY := $(SRCDIR)/solenv/bin/gentoken.py
 sw_INC := $(call gb_CustomTarget_get_workdir,sw/generated)
 
-$(sw_INC)/TextBlockTokens.gperf : $(sw_SRC)/TextBlockTokens.txt $(sw_PY) \
-			$(call gb_ExternalExecutable_get_dependencies,python)
-	mkdir -p $(sw_INC)
-	$(call gb_ExternalExecutable_get_command,python) $(sw_PY) $(sw_SRC)/TextBlockTokens.txt $(sw_INC)/TextBlockTokens.gperf
+# static pattern rule
+$(sw_INC)/TextBlockTokens.gperf \
+$(sw_INC)/BlockListTokens.gperf : $(sw_INC)/%.gperf : $(sw_SRC)/%.txt $(sw_PY) \
+            | $(call gb_ExternalExecutable_get_dependencies,python)
+	mkdir -p $(@D)
+	$(call gb_ExternalExecutable_get_command,python) $(sw_PY) $< $@
 
-$(sw_INC)/BlockListTokens.gperf : $(sw_SRC)/BlockListTokens.txt $(sw_PY) \
-		$(call gb_ExternalExecutable_get_dependencies,python)
-	mkdir -p $(sw_INC)
-	$(call gb_ExternalExecutable_get_command,python) $(sw_PY) $(sw_SRC)/BlockListTokens.txt $(sw_INC)/BlockListTokens.gperf
+# appending when wrapping with wsl.exe is broken, will always replace from start instead of add
+# https://github.com/microsoft/WSL/issues/4400 so create them as separate intermediates
+$(sw_INC)/TextBlockTokens.processed : $(sw_INC)/TextBlockTokens.gperf
+	$(GPERF) --compare-strncmp --readonly-tables --class-name=TextBlockTokens \
+	--word-array-name=textBlockList --enum $(sw_INC)/TextBlockTokens.gperf > $@
 
-$(sw_INC)/tokens.cxx : $(sw_INC)/TextBlockTokens.gperf $(sw_INC)/BlockListTokens.gperf
-	$(GPERF) --compare-strncmp --readonly-tables --output-file=$(sw_INC)/tokens.cxx \
-	--class-name=TextBlockTokens --word-array-name=textBlockList --enum $(sw_INC)/TextBlockTokens.gperf
+$(sw_INC)/BlockListTokens.processed : $(sw_INC)/BlockListTokens.gperf
 	$(GPERF) --compare-strncmp --readonly-tables -T $(sw_INC)/BlockListTokens.gperf \
-	--class-name=BlockListTokens --word-array-name=blockListList >> $(sw_INC)/tokens.cxx
-	sed -i $(if $(filter MACOSX,$(OS_FOR_BUILD)),'') -e '/^#line/d' -e 's/(char\*)0/(char\*)0, XML_TOKEN_INVALID/g' $(sw_INC)/tokens.cxx
+	--class-name=BlockListTokens --word-array-name=blockListList > $@
+
+$(sw_INC)/tokens.cxx : sw_INC:=$(call gb_Helper_wsl_path,$(sw_INC))
+$(sw_INC)/tokens.cxx : $(sw_INC)/TextBlockTokens.processed $(sw_INC)/BlockListTokens.processed
+	sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, XML_TOKEN_INVALID/g' $^ > $@
 
 $(call gb_CustomTarget_get_target,sw/generated) : $(sw_INC)/tokens.cxx
 

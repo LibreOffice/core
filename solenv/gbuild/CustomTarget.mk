@@ -84,7 +84,7 @@ define gb_CustomTarget_token_hash
 $(call gb_CustomTarget_get_target,$(1)) : $(call gb_CustomTarget_get_workdir,$(1))/$(2)
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(call gb_CustomTarget_get_workdir,$(1))/misc/$(3)
 	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),build,GPF,1)
-	$(GPERF) --compare-strncmp --switch=2 --readonly-tables $$< \
+	$$(call gb_Helper_wsl_path,$(GPERF) --compare-strncmp --switch=2 --readonly-tables $$<) \
 		| sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, 0/g' > $$@
 
 endef

@@ -19,7 +19,7 @@ $(editeng_INC)/tokens.hxx $(editeng_INC)/tokens.gperf : $(editeng_SRC)/tokens.tx
 	$(call gb_ExternalExecutable_get_command,python) $(editeng_PY) $(editeng_SRC)/tokens.txt $(editeng_INC)/tokens.gperf
 
 $(editeng_INC)/tokens.cxx : $(editeng_INC)/tokens.gperf
-	$(GPERF) --compare-strncmp --readonly-tables $(editeng_INC)/tokens.gperf \
+	$(call gb_Helper_wsl_path,$(GPERF) --compare-strncmp --readonly-tables $(editeng_INC)/tokens.gperf) \
 	| sed -e '/^#line/d' -e 's/(char\*)0/(char\*)0, XML_TOKEN_INVALID/g' > $@
 
 $(call gb_CustomTarget_get_target,editeng/generated) : $(editeng_INC)/tokens.cxx
