@@ -149,7 +149,9 @@ namespace sdr::contact
             bool bClipRegionPushed(false);
             const vcl::Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
 
-            if(!rRedrawArea.IsEmpty() && !comphelper::LibreOfficeKit::isActive())
+            // tdf#153102 using the given RedrawArea is needed e.g. for Writer's
+            // visual clipping against PageBounds (also for android viewer)
+            if(!rRedrawArea.IsEmpty())
             {
                 bClipRegionPushed = true;
                 pOutDev->Push(vcl::PushFlags::CLIPREGION);
