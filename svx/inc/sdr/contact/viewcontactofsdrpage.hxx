@@ -113,12 +113,19 @@ class ViewContactOfPageHierarchy final : public ViewContactOfPageSubObject
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) override;
     virtual void createViewIndependentPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) const override;
 
+    SdrObject& GetSdrObject(sal_uInt32 nIndex) const;
+
 public:
     explicit ViewContactOfPageHierarchy(ViewContactOfSdrPage& rParentViewContactOfSdrPage);
     virtual ~ViewContactOfPageHierarchy() override;
 
     virtual sal_uInt32 GetObjectCount() const override;
     virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
+
+    // optimize version of parent impl to quicker skip hidden SdrObjects
+    virtual void getPrimitive2DSequenceHierarchyOfIndex(
+        sal_uInt32 a, DisplayInfo& rDisplayInfo, ObjectContact& rObjectContact,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor) override;
 };
 
 class ViewContactOfGrid final : public ViewContactOfPageSubObject

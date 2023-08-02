@@ -56,6 +56,8 @@ public:
         This method cares for this, by retrieving the very original OutputDevice.
     */
     const OutputDevice* getPageViewOutputDevice() const;
+
+    static bool isObjectVisibleOnAnyLayer(const SdrObject& rObject, const SdrLayerIDSet& rLayers);
 };
 }
 
