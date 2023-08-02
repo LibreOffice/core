@@ -50,8 +50,8 @@ $(call gb_Zip_get_target,%) :
                         $(FILES)) && \
 			cd $(LOCATION) && \
 			cat $${RESPONSEFILE} | tr "[:space:]" "\n" | \
-				$(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match \
-					$(call gb_Zip_get_target,$*) && \
+				$(call gb_Helper_wsl_path,$(WSL) $(gb_Zip_ZIPCOMMAND) -@rX --filesync --must-match \
+					$(call gb_Zip_get_target,$*)) && \
 			rm -f $${RESPONSEFILE} && \
 			touch $@\
 		,	cp $(SRCDIR)/solenv/gbuild/empty.zip $@)\
