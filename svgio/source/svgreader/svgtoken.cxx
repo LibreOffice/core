@@ -25,7 +25,7 @@
 namespace svgio::svgreader
 {
 
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMapperList
+constexpr frozen::unordered_map<std::u16string_view, SVGToken, 146> aSVGTokenMapperList
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -129,6 +129,7 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMap
     { u"g", SVGToken::G },
     { u"svg", SVGToken::Svg },
     { u"symbol", SVGToken::Symbol },
+    { u"switch", SVGToken::Switch },
     { u"use", SVGToken::Use },
     { u"a", SVGToken::A },
 
@@ -182,7 +183,7 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGTokenMap
 
 // The same elements as the map above but lowercase. CSS is case insensitive
 // TODO: create separate maps for css and xml elements
-constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGLowerCaseTokenMapperList
+constexpr frozen::unordered_map<std::u16string_view, SVGToken, 146> aSVGLowerCaseTokenMapperList
 {
     { u"width", SVGToken::Width },
     { u"height", SVGToken::Height },
@@ -286,6 +287,7 @@ constexpr frozen::unordered_map<std::u16string_view, SVGToken, 145> aSVGLowerCas
     { u"g", SVGToken::G },
     { u"svg", SVGToken::Svg },
     { u"symbol", SVGToken::Symbol },
+    { u"switch", SVGToken::Switch },
     { u"use", SVGToken::Use },
     { u"a", SVGToken::A },
 
