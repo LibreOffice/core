@@ -430,6 +430,18 @@ public:
      */
     bool                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
 
+    /** Replace all pixel where the given mask/alpha layer is on with the specified color
+
+        @param rMask
+        Mask specifying which pixel should be replaced
+
+        @param rReplaceColor
+        Color to be placed in all changed pixel
+
+        @return true, if the operation was completed successfully.
+     */
+    bool                    ReplaceMask( const AlphaMask& rMask, const Color& rReplaceColor );
+
     /** Replace all pixel having the search color with the specified color
 
         @param rSearchColor
