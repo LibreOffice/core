@@ -55,9 +55,16 @@ public:
     ~CrashZone() { leave(); }
     static bool isInZone() { return gnEnterCount != gnLeaveCount; }
     static const AtomicCounter& enterCount() { return gnEnterCount; }
+#if defined ARM32 && !defined __ARM_PCS_VFP && defined __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-volatile"
+#endif
     // prefer creating instances to manually calling enter()/leave()
     static void enter() { gnEnterCount++; }
     static void leave() { gnLeaveCount++; }
+#if defined ARM32 && !defined __ARM_PCS_VFP && defined __clang__
+#pragma clang diagnostic pop
+#endif
     // these should be implemented for each specific zone if needed
     // static void hardDisable();
     // static const CrashWatchdogTimingsValues& getCrashWatchdogTimingsValues();
