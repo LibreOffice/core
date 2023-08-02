@@ -127,16 +127,12 @@ struct FrameClientSortListLess
 
             if (nAnchorType == RndStdIds::FLY_AT_PARA)
             {
-                SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
-                if (pFly)
+                auto pFlyAtContentFrame = dynamic_cast<SwFlyAtContentFrame*>(pAnchoredObj);
+                if (pFlyAtContentFrame && pFlyAtContentFrame->IsFollow())
                 {
-                    auto pFlyAtContentFrame = pFly->DynCastFlyAtContentFrame();
-                    if (pFlyAtContentFrame && pFlyAtContentFrame->IsFollow())
-                    {
-                        // We're collecting frame formats, ignore non-master fly frames to prevent
-                        // duplication.
-                        continue;
-                    }
+                    // We're collecting frame formats, ignore non-master fly frames to prevent
+                    // duplication.
+                    continue;
                 }
             }
 
