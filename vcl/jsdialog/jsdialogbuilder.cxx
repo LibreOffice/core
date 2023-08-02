@@ -1665,6 +1665,12 @@ void JSComboBox::set_active(int pos)
     sendUpdate();
 }
 
+void JSComboBox::set_active_id(const OUString& rStr)
+{
+    sal_uInt16 nPos = find_id(rStr);
+    set_active(nPos);
+}
+
 bool JSComboBox::changed_by_direct_pick() const { return true; }
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
