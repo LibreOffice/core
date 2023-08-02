@@ -17,4 +17,6 @@ $(eval $(call gb_UITest_set_defs,sfx2_doc, \
     TDOC="$(SRCDIR)/sfx2/qa/uitest/doc/data" \
 ))
 
+$(eval $(call gb_UITest_use_oneprocess,sfx2_doc))
+
 # vim: set noet sw=4 ts=4:

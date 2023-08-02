@@ -14,3 +14,5 @@ $(eval $(call gb_UITest_add_modules,sd_findReplace,$(SRCDIR)/sd/qa/uitest,\
 $(eval $(call gb_UITest_set_defs,sd_findReplace, \
     TDOC="$(SRCDIR)/sd/qa/uitest/data" \
 ))
+
+$(eval $(call gb_UITest_use_oneprocess,sd_findReplace))
