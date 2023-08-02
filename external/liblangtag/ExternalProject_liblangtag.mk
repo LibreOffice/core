@@ -17,9 +17,6 @@ $(eval $(call gb_ExternalProject_register_targets,liblangtag,\
 	build \
 ))
 
-# disable ccache on windows, as it doesn't cope with the quoted defines
-# liblangtag uses (-DBUILDDIR="\"$(abs_top_builddir)\"" and similar).
-# Results in "cl : Command line error D8003 : missing source filename"
 $(call gb_ExternalProject_get_state_target,liblangtag,build):
 	$(call gb_Trace_StartRange,liblangtrag,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
@@ -39,10 +36,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN) \
-		&& $(if $(filter WNT,$(OS)),\
-			REAL_CC="$(shell cygpath -w $(lastword $(filter-out -%,$(CC))))" \
-			REAL_CC_FLAGS="$(filter -%,$(CC))") \
-		   $(if $(verbose),V=1) \
+		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
                 LIBO_TUNNEL_LIBRARY_PATH='$(subst ','\'',$(subst $$,$$$$,$(call gb_Helper_extend_ld_path,$(call gb_UnpackedTarball_get_dir,liblangtag)/liblangtag/.libs)))' \
 		$(if $(filter MACOSX,$(OS)),\
