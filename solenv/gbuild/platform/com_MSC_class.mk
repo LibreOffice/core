@@ -673,7 +673,7 @@ gb_NMAKE_VARS = \
 	INCLUDE="$(gb_ExternalProject_INCLUDE)" \
 	LIB="$(ILIB)" \
 	MAKEFLAGS= \
-	MAKE=
+	MAKE=nmake
 
 # InstallScript class
 
