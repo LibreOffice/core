@@ -35,9 +35,13 @@ AccessibleGridControlHeaderCell::AccessibleGridControlHeaderCell(sal_Int32 _nCol
                                   const Reference< XAccessible >& rxParent,
                                   IAccessibleTable& rTable,
                                   AccessibleTableControlObjType  eObjType)
-: AccessibleGridControlCell( rxParent, rTable, _nColumnRowId, 0, eObjType)
+: AccessibleGridControlCell(rxParent, rTable,
+                            (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? _nColumnRowId : 0,
+                            (eObjType == AccessibleTableControlObjType::ROWHEADERCELL) ? 0 : _nColumnRowId,
+                            eObjType)
 , m_nColumnRowId(_nColumnRowId)
 {
+    assert(eObjType == AccessibleTableControlObjType::ROWHEADERCELL || eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL);
 }
 /** Return a bitset of states of the current object.
 */

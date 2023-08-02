@@ -139,10 +139,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The row index of the specified cell index. */
-    sal_Int32 implGetRow( sal_Int64 nChildIndex ) const;
+    sal_Int32 implGetRow( sal_Int64 nChildIndex );
     /** @attention  This method requires locked mutex's and a living object.
         @return  The column index of the specified cell index. */
-    sal_Int32 implGetColumn( sal_Int64 nChildIndex ) const;
+    sal_Int32 implGetColumn( sal_Int64 nChildIndex );
 
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.

@@ -77,6 +77,9 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowCount()
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
+
+    if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERBAR)
+        return 1;
     return  m_aTable.GetRowCount();
 }
 
@@ -85,6 +88,9 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnCount()
     SolarMutexGuard aSolarGuard;
 
     ensureIsAlive();
+
+    if (m_eObjType == AccessibleTableControlObjType::ROWHEADERBAR)
+        return 1;
     return m_aTable.GetColumnCount();
 }
 
@@ -187,15 +193,15 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationI
 
 // internal helper methods ----------------------------------------------------
 
-sal_Int32 AccessibleGridControlTableBase::implGetRow( sal_Int64 nChildIndex ) const
+sal_Int32 AccessibleGridControlTableBase::implGetRow( sal_Int64 nChildIndex )
 {
-    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nColumns = getAccessibleColumnCount();
     return nColumns ? (nChildIndex / nColumns) : 0;
 }
 
-sal_Int32 AccessibleGridControlTableBase::implGetColumn( sal_Int64 nChildIndex ) const
+sal_Int32 AccessibleGridControlTableBase::implGetColumn( sal_Int64 nChildIndex )
 {
-    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nColumns = getAccessibleColumnCount();
     return nColumns ? (nChildIndex % nColumns) : 0;
 }
 
@@ -210,13 +216,13 @@ void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >&
 
 void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )
 {
-    if( nRow >= m_aTable.GetRowCount() )
+    if (nRow >= getAccessibleRowCount())
         throw lang::IndexOutOfBoundsException( "row index is invalid", *this );
 }
 
 void AccessibleGridControlTableBase::ensureIsValidColumn( sal_Int32 nColumn )
 {
-    if( nColumn >= m_aTable.GetColumnCount() )
+    if (nColumn >= getAccessibleColumnCount())
         throw lang::IndexOutOfBoundsException( "column index is invalid", *this );
 }
 

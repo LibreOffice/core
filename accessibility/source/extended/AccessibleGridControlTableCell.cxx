@@ -58,6 +58,10 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
+        assert(((m_eObjType == AccessibleTableControlObjType::TABLECELL)
+                || ((m_eObjType == AccessibleTableControlObjType::ROWHEADERCELL) && _nColPos == 0)
+                || ((m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL) && _nRowPos == 0))
+               && "Unhandled table cell type");
     }
 
     void SAL_CALL AccessibleGridControlCell::grabFocus()
@@ -72,20 +76,7 @@ namespace accessibility
         SolarMutexGuard g;
 
         ensureIsAlive();
-
-        OUString sAccName;
-        if (m_eObjType == AccessibleTableControlObjType::TABLECELL)
-            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::TABLECELL,
-                                                        m_nRowPos, m_nColPos);
-        else if (m_eObjType == AccessibleTableControlObjType::ROWHEADERCELL)
-            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::ROWHEADERCELL,
-                                                        m_nRowPos, 0);
-        else if (m_eObjType == AccessibleTableControlObjType::COLUMNHEADERCELL)
-            sAccName = m_aTable.GetAccessibleObjectName(AccessibleTableControlObjType::COLUMNHEADERCELL,
-                                                        0, m_nRowPos);
-        else
-            assert(false && "Unhandled table cell type");
-        return sAccName;
+        return m_aTable.GetAccessibleObjectName(m_eObjType, m_nRowPos, m_nColPos);
     }
 
     // implementation of a table cell
