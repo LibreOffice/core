@@ -160,6 +160,11 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="numeric">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="NF_PAGE_COUNT-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|NF_PAGE_COUNT">Set the number of title pages to insert.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -196,6 +201,11 @@
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_USE_EXISTING_PAGES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|RB_USE_EXISTING_PAGES">Change the current page style to First Page and the following pages will have the Default Page Style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -213,6 +223,11 @@
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
                         <property name="group">RB_USE_EXISTING_PAGES</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_INSERT_NEW_PAGES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|RB_INSERT_NEW_PAGES">Insert a page break and change the current page style to First Page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
@@ -232,6 +247,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label7"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_DOCUMENT_START-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|RB_DOCUMENT_START">The title pages are inserted before the first page of the document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -251,6 +271,11 @@
                         <accessibility>
                           <relation type="labelled-by" target="label7"/>
                         </accessibility>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="RB_PAGE_START-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|RB_PAGE_START">The title pages are inserted at the page specified by its current numbering.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
@@ -304,6 +329,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="CB_RESTART_NUMBERING-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|CB_RESTART_NUMBERING">When checked, stop current numbering page count and restart numbering after the last inserted title page.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -341,6 +371,11 @@
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment3</property>
                             <property name="numeric">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="NF_RESTART_NUMBERING-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|NF_RESTART_NUMBERING">Set the page number of the page following the last title page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -363,6 +398,11 @@
                         <property name="receives-default">False</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="CB_SET_PAGE_NUMBER-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|CB_SET_PAGE_NUMBER">When checked, set the page number for the first title page inserted.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -400,6 +440,11 @@
                             <property name="truncate-multiline">True</property>
                             <property name="adjustment">adjustment4</property>
                             <property name="numeric">True</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="NF_SET_PAGE_NUMBER-atkobject">
+                                <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|NF_SET_PAGE_NUMBER">Set the page number for the first title page.</property>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -464,6 +509,11 @@
                       <object class="GtkComboBoxText" id="LB_PAGE_PROPERTIES">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="LB_PAGE_PROPERTIES-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|entended_tip|LB_PAGE_PROPERTIES">Select the page style from the available pages styles in the document.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -477,6 +527,11 @@
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="PB_PAGE_PROPERTIES-atkobject">
+                            <property name="AtkObject::accessible-name" translatable="yes" context="titlepage|extended_tip|PB_PAGE_PROPERTIES">Click to edit the page style.</property>
+                          </object>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
