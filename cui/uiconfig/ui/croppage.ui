@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.20.3 -->
 <interface domain="cui">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -51,7 +51,6 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
-  <!-- n-columns=1 n-rows=1 -->
   <object class="GtkGrid" id="CropPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -68,15 +67,14 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid10">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_start">12</property>
+            <property name="margin_top">6</property>
             <property name="hexpand">True</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">18</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
             <child>
               <object class="GtkRadioButton" id="keepscale">
                 <property name="label" translatable="yes" context="croppage|keepscale">Keep _scale</property>
@@ -108,7 +106,6 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -133,8 +130,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustment1</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -161,8 +158,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustment7</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -177,7 +174,6 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -216,8 +212,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustment6</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -230,8 +226,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="activates_default">True</property>
+                    <property name="truncate_multiline">True</property>
                     <property name="adjustment">adjustment8</property>
-                    <property name="truncate-multiline">True</property>
                     <property name="digits">2</property>
                   </object>
                   <packing>
@@ -278,7 +274,6 @@
               </packing>
             </child>
             <child>
-              <!-- n-columns=1 n-rows=1 -->
               <object class="GtkGrid" id="origsizegrid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -320,7 +315,16 @@
               </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkButton" id="uncrop">
+                <property name="label" translatable="yes" context="croppage|uncrop">Reset Crop</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+              </packing>
             </child>
           </object>
         </child>
@@ -348,14 +352,13 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_start">12</property>
+            <property name="margin_top">6</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
@@ -375,7 +378,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="adjustment">adjustment2</property>
               </object>
               <packing>
@@ -402,7 +405,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="adjustment">adjustment5</property>
               </object>
               <packing>
@@ -435,14 +438,13 @@
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
           <object class="GtkGrid" id="grid3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_start">12</property>
+            <property name="margin_top">6</property>
             <property name="row_spacing">6</property>
             <property name="column_spacing">12</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
             <child>
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
@@ -462,8 +464,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="adjustment">adjustment3</property>
-                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>
@@ -490,8 +492,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
+                <property name="truncate_multiline">True</property>
                 <property name="adjustment">adjustment4</property>
-                <property name="truncate-multiline">True</property>
                 <property name="digits">2</property>
               </object>
               <packing>

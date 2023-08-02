@@ -80,6 +80,8 @@ class SvxGrfCropPage : public SfxTabPage
     std::unique_ptr<weld::Label> m_xOrigSizeFT;
     std::unique_ptr<weld::Button> m_xOrigSizePB;
 
+    std::unique_ptr<weld::Button> m_xUncropPB;
+
     // Example
     std::unique_ptr<weld::CustomWeld> m_xExampleWN;
 
@@ -87,6 +89,7 @@ class SvxGrfCropPage : public SfxTabPage
     DECL_LINK(SizeHdl, weld::MetricSpinButton&, void);
     DECL_LINK(CropModifyHdl, weld::MetricSpinButton&, void);
     DECL_LINK(OrigSizeHdl, weld::Button&, void);
+    DECL_LINK(UncropHdl, weld::Button&, void);
 
     void            CalcZoom();
     void            CalcMinMaxBorder();

@@ -75,6 +75,7 @@ SvxGrfCropPage::SvxGrfCropPage(weld::Container* pPage, weld::DialogController* p
     , m_xOrigSizeGrid(m_xBuilder->weld_widget("origsizegrid"))
     , m_xOrigSizeFT(m_xBuilder->weld_label("origsizeft"))
     , m_xOrigSizePB(m_xBuilder->weld_button("origsize"))
+    , m_xUncropPB(m_xBuilder->weld_button("uncrop"))
     , m_xExampleWN(new weld::CustomWeld(*m_xBuilder, "preview", m_aExampleWN))
 {
     SetExchangeSupport();
@@ -104,6 +105,7 @@ SvxGrfCropPage::SvxGrfCropPage(weld::Container* pPage, weld::DialogController* p
     m_xBottomMF->connect_value_changed( aLk );
 
     m_xOrigSizePB->connect_clicked(LINK(this, SvxGrfCropPage, OrigSizeHdl));
+    m_xUncropPB->connect_clicked(LINK(this, SvxGrfCropPage, UncropHdl));
 }
 
 SvxGrfCropPage::~SvxGrfCropPage()
@@ -524,6 +526,32 @@ IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl, weld::Button&, void)
     m_xHeightZoomMF->set_value(100, FieldUnit::NONE);
     m_bSetOrigSize = true;
 }
+
+/*--------------------------------------------------------------------
+    description: reset crop
+ --------------------------------------------------------------------*/
+
+IMPL_LINK_NOARG(SvxGrfCropPage, UncropHdl, weld::Button&, void)
+{
+    SfxItemPool* pPool = GetItemSet().GetPool();
+    DBG_ASSERT( pPool, "Where is the pool?" );
+
+    m_xLeftMF->set_value(0, FieldUnit::NONE);
+    m_xRightMF->set_value(0, FieldUnit::NONE);
+    m_xTopMF->set_value(0, FieldUnit::NONE);
+    m_xBottomMF->set_value(0, FieldUnit::NONE);
+
+    m_aExampleWN.SetLeft(0);
+    m_aExampleWN.SetRight(0);
+    m_aExampleWN.SetTop(0);
+    m_aExampleWN.SetBottom(0);
+
+    m_aExampleWN.Invalidate();
+    CalcMinMaxBorder();
+
+}
+
+
 /*--------------------------------------------------------------------
     description: compute scale
  --------------------------------------------------------------------*/
