@@ -1245,7 +1245,10 @@ public:
             }
             resultString
                 = resultString.replaceAll("%LEVEL_CURRENT%", OUString::number(currentLevel));
-            lclAddIssue(m_rIssueCollection, resultString);
+            auto pIssue = lclAddIssue(m_rIssueCollection, resultString);
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setDoc(pCurrent->GetDoc());
+            pIssue->setNode(pCurrent);
         }
 
         // Updating previous level.
