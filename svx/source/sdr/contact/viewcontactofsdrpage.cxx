@@ -18,6 +18,7 @@
  */
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
+#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <sdr/contact/viewobjectcontactofsdrpage.hxx>
@@ -27,6 +28,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontactofsdrobj.hxx>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
@@ -400,11 +402,34 @@ sal_uInt32 ViewContactOfPageHierarchy::GetObjectCount() const
     return getPage().GetObjCount();
 }
 
-ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
+SdrObject& ViewContactOfPageHierarchy::GetSdrObject(sal_uInt32 nIndex) const
 {
     SdrObject* pObj = getPage().GetObj(nIndex);
     assert(pObj && "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
-    return pObj->GetViewContact();
+    return *pObj;
+}
+
+ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
+{
+    return GetSdrObject(nIndex).GetViewContact();
+}
+
+void ViewContactOfPageHierarchy::getPrimitive2DSequenceHierarchyOfIndex(
+    sal_uInt32 nIndex, DisplayInfo& rDisplayInfo, ObjectContact& rObjectContact,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
+{
+    SdrObject& rSdrObject(GetSdrObject(nIndex));
+
+    // optimization over parent impl to skip SdrObject::GetViewContent(), etc if the SdrObject isn't
+    // shown on the target layer. ViewObjectContactOfSdrobject::getPrimitive2DSequenceHierarchy does
+    // the same check, but after a set of allocations which is expensive in the case of SdrCaptions
+    // in a calc internal layer where there can be thousands of such objects.
+    if (!ViewObjectContactOfSdrObj::isObjectVisibleOnAnyLayer(rSdrObject, rDisplayInfo.GetProcessLayers()))
+        return;
+
+    ViewContact& rViewContact = rSdrObject.GetViewContact();
+    const ViewObjectContact& rCandidate(rViewContact.GetViewObjectContact(rObjectContact));
+    rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo, rVisitor);
 }
 
 ViewObjectContact& ViewContactOfGrid::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)

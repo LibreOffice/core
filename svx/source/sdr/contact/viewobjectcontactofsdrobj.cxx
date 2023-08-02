@@ -50,9 +50,14 @@ ViewObjectContactOfSdrObj::~ViewObjectContactOfSdrObj()
 {
 }
 
-bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& aLayers) const
+bool ViewObjectContactOfSdrObj::isObjectVisibleOnAnyLayer(const SdrObject& rSdrObject, const SdrLayerIDSet& rLayers)
 {
-    return aLayers.IsSet(getSdrObject().GetLayer());
+    return rLayers.IsSet(rSdrObject.GetLayer());
+}
+
+bool ViewObjectContactOfSdrObj::isPrimitiveVisibleOnAnyLayer(const SdrLayerIDSet& rLayers) const
+{
+    return ViewObjectContactOfSdrObj::isObjectVisibleOnAnyLayer(getSdrObject(), rLayers);
 }
 
 bool ViewObjectContactOfSdrObj::isPrimitiveVisible(const DisplayInfo& rDisplayInfo) const
