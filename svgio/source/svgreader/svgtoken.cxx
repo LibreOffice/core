@@ -129,6 +129,7 @@ constexpr auto aSVGTokenMapperList = frozen::make_unordered_map<std::u16string_v
     { u"g", SVGToken::G },
     { u"svg", SVGToken::Svg },
     { u"symbol", SVGToken::Symbol },
+    { u"switch", SVGToken::Switch },
     { u"use", SVGToken::Use },
     { u"a", SVGToken::A },
 
@@ -286,6 +287,7 @@ constexpr auto  aSVGLowerCaseTokenMapperList = frozen::make_unordered_map<std::u
     { u"g", SVGToken::G },
     { u"svg", SVGToken::Svg },
     { u"symbol", SVGToken::Symbol },
+    { u"switch", SVGToken::Switch },
     { u"use", SVGToken::Use },
     { u"a", SVGToken::A },
 
