@@ -180,7 +180,7 @@ bool SwLayoutFrame::ContainsDeleteForbiddenLayFrame() const
             continue;
         }
         SwLayoutFrame const*const pLay(static_cast<SwLayoutFrame const*>(pFrame));
-        if (pLay->ContainsDeleteForbiddenLayFrame())
+        if (pLay->ContainsDeleteForbiddenLayFrame() || pLay->IsColLocked())
         {
             return true;
         }
