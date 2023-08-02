@@ -145,17 +145,13 @@ namespace svt::table
             { KEY_UP,       KEY_SHIFT,  cursorSelectRowUp },
             { KEY_DOWN,     KEY_SHIFT,  cursorSelectRowDown },
             { KEY_END,      KEY_SHIFT,  cursorSelectRowAreaBottom },
-            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop },
-
-            { 0, 0, invalidTableControlAction }
+            { KEY_HOME,     KEY_SHIFT,  cursorSelectRowAreaTop }
         };
-
-        const ActionMapEntry* pActions = aKnownActions;
-        for ( ; pActions->eAction != invalidTableControlAction; ++pActions )
+        for (const ActionMapEntry& rAction : aKnownActions)
         {
-            if ( ( pActions->nKeyCode == nKeyCode ) && ( pActions->nKeyModifier == rKeyCode.GetModifier() ) )
+            if ( ( rAction.nKeyCode == nKeyCode ) && ( rAction.nKeyModifier == rKeyCode.GetModifier() ) )
             {
-                bHandled = _rControl.dispatchAction( pActions->eAction );
+                bHandled = _rControl.dispatchAction( rAction.eAction );
                 break;
             }
         }

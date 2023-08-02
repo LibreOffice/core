@@ -64,10 +64,7 @@ namespace svt::table
         /// selects the row, from the actual cursor till top
         cursorSelectRowAreaTop,
         /// selects the row, from the actual cursor till bottom
-        cursorSelectRowAreaBottom,
-
-        /// invalid and final enumeration value, not to be actually used
-        invalidTableControlAction
+        cursorSelectRowAreaBottom
     };
 
 
