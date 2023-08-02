@@ -2896,12 +2896,17 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         if ((aInfo.DocumentState & DocState::Handled) == DocState::Handled)
             continue;
 
+        // don't allow implts_deregisterDocument to remove from RecoveryList during shutdown jobs
+        if (m_eJob & (Job::EmergencySave | Job::SessionSave))
+            aInfo.IgnoreClosing = true;
+
         // Not modified documents are not saved.
-        // We safe an information about the URL only!
+        // We save information about the URL only!
         Reference< XDocumentRecovery > xDocRecover( aInfo.Document, UNO_QUERY_THROW );
         if ( !xDocRecover->wasModifiedSinceLastSave() )
         {
             aInfo.DocumentState |= DocState::Handled;
+            *pIt = aInfo;
             continue;
         }
 
