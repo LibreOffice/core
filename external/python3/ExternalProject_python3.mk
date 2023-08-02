@@ -43,7 +43,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=$(python3_WIN_PLATFORM_MSBUILD) \
 			/p:opensslIncludeDir=$(call gb_UnpackedTarball_get_dir,openssl)/include \
-			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl)/out32dll \
+			/p:opensslOutDir=$(call gb_UnpackedTarball_get_dir,openssl)/ \
 			/p:zlibDir=$(call gb_UnpackedTarball_get_dir,zlib) \
 			/p:libffiOutDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs \
 			/p:libffiIncludeDir=$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
