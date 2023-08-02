@@ -135,6 +135,7 @@ namespace svgio::svgreader
             G,
             Svg,
             Symbol,
+            Switch,
             Use,
             A,
 
