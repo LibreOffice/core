@@ -153,9 +153,10 @@ $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp : \
 	$(call gb_Trace_StartRange,templates/presnt/$*.otp,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(dir $<) && \
-		zip -q0X --filesync --must-match $@ mimetype && \
-		zip -qrX --must-match $@ content.xml styles.xml META-INF/manifest.xml Thumbnails/thumbnail.png && \
-		zip -qrX --must-match $@ $(call extras_PRESNT_XMLFILES_RELATIVE,$*) \
+		$(call gb_Helper_wsl_path,\
+		$(WSL) zip -q0X --filesync --must-match $@ mimetype && \
+		$(WSL) zip -qrX --must-match $@ content.xml styles.xml META-INF/manifest.xml Thumbnails/thumbnail.png && \
+		$(WSL) zip -qrX --must-match $@ $(call extras_PRESNT_XMLFILES_RELATIVE,$*)) \
 	)
 	$(call gb_Trace_EndRange,templates/presnt/$*.otp,ZIP)
 
