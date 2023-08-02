@@ -53,6 +53,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"cui/ui/linetabpage.ui"
         || rUIFile == u"cui/ui/macroselectordialog.ui"
         || rUIFile == u"cui/ui/numberingformatpage.ui"
+        || rUIFile == u"cui/ui/numberingoptionspage.ui"
         || rUIFile == u"cui/ui/numberingpositionpage.ui"
         || rUIFile == u"cui/ui/optlingupage.ui"
         || rUIFile == u"cui/ui/pageformatpage.ui"

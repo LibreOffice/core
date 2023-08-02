@@ -52,6 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/lok.hxx>
 #include <svx/svxids.hrc>
 #include <o3tl/string_view.hxx>
 
@@ -1089,7 +1090,9 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(weld::Container* pPage, weld::DialogC
     sal_uInt32 nCount = SvxNumberingTypeTable::Count();
     for (sal_uInt32 i = 0; i < nCount; ++i)
     {
-        m_xFmtLB->append(OUString::number(SvxNumberingTypeTable::GetValue(i)), SvxNumberingTypeTable::GetString(i));
+        int nValue = SvxNumberingTypeTable::GetValue(i);
+        if (comphelper::LibreOfficeKit::isActive() && (nValue & SVX_NUM_BITMAP)) continue;
+        m_xFmtLB->append(OUString::number(nValue), SvxNumberingTypeTable::GetString(i));
     }
 
     // Get advanced numbering types from the component.
@@ -1464,6 +1467,7 @@ void SvxNumOptionsTabPage::InitControls()
         else
             m_xBulColLB->SetNoSelection();
     }
+    m_xStartED->set_value(1); // If this isn't set then changing the bullet type to a numbered type doesn't reset the start level
     switch(nBullet)
     {
         case SHOW_NUMBERING:

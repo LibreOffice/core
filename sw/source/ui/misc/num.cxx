@@ -873,16 +873,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     AddTabPage("bullets", RID_SVXPAGE_PICK_BULLET );
     AddTabPage("outlinenum", RID_SVXPAGE_PICK_NUM );
     AddTabPage("graphics", RID_SVXPAGE_PICK_BMP );
-
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        RemoveTabPage("customize");
-    }
-    else
-    {
-        AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
-    }
-
+    AddTabPage("customize", RID_SVXPAGE_NUM_OPTIONS );
     AddTabPage("position", RID_SVXPAGE_NUM_POSITION );
 }
 
