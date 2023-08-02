@@ -179,12 +179,11 @@ protected:
                           const SwNodeOffset* pEndNdIdx = nullptr,
                           bool bForceCreateFrames = false);
 
-    // These two methods move the SPoint back/forth from PaM. With it
-    // a range can be spanned for Undo/Redo. (In this case the SPoint
-    // is before the manipulated range!!)
-    // The flag indicates if there is content before the SPoint.
-    static bool MovePtBackward( SwPaM& rPam );
-    static void MovePtForward( SwPaM& rPam, bool bMvBkwrd );
+    // These two methods save and restore the Point of PaM.
+    // If the point cannot be moved, a "backup" is created on the previous node.
+    // Either way, it will not be moved by inserting at its original position.
+    static ::std::optional<SwNodeIndex> MovePtBackward(SwPaM& rPam);
+    static void MovePtForward(SwPaM& rPam, ::std::optional<SwNodeIndex> && oMvBkwrd);
 
     // Before moving stuff into UndoNodes-Array care has to be taken that
     // the content-bearing attributes are removed from the nodes-array.
