@@ -12256,6 +12256,7 @@ LO_CLANG_CXXFLAGS_INTRINSICS_AVX512=
 LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F=
 LO_CLANG_CXXFLAGS_INTRINSICS_F16C=
 LO_CLANG_CXXFLAGS_INTRINSICS_FMA=
+LO_CLANG_VERSION=
 HAVE_LO_CLANG_DLLEXPORTINLINES=
 
 if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
@@ -12298,8 +12299,8 @@ if test "$ENABLE_SKIA" = TRUE -a "$COM_IS_CLANG" != TRUE; then
     fi
     if test -n "$LO_CLANG_CC" -a -n "$LO_CLANG_CXX"; then
         clang2_version=`echo __clang_major__.__clang_minor__.__clang_patchlevel__ | $LO_CLANG_CC -E - | tail -1 | sed 's/ //g'`
-        clang2_ver=`echo "$clang2_version" | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
-        if test "$clang2_ver" -lt 50002; then
+        LO_CLANG_VERSION=`echo "$clang2_version" | $AWK -F. '{ print \$1*10000+(\$2<100?\$2:99)*100+(\$3<100?\$3:99) }'`
+        if test "$LO_CLANG_VERSION" -lt 50002; then
             AC_MSG_WARN(["$clang2_version" is too old or unrecognized, must be at least Clang 5.0.2])
             LO_CLANG_CC=
             LO_CLANG_CXX=
@@ -12599,6 +12600,7 @@ AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_AVX512F)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_F16C)
 AC_SUBST(LO_CLANG_CXXFLAGS_INTRINSICS_FMA)
 AC_SUBST(LO_CLANG_SHOWINCLUDES_PREFIX)
+AC_SUBST(LO_CLANG_VERSION)
 AC_SUBST(CLANG_USE_LD)
 AC_SUBST([HAVE_LO_CLANG_DLLEXPORTINLINES])
 
