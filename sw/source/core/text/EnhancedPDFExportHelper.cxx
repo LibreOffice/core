@@ -449,7 +449,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 {
     void const* pKey(nullptr);
 
-    if ( mpFrameInfo )
+    if (mpFrameInfo && eType != vcl::PDFWriter::LIBody)
     {
         const SwFrame& rFrame = mpFrameInfo->mrFrame;
 
