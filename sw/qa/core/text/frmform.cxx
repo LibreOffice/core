@@ -17,6 +17,8 @@
 #include <anchoredobject.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
+#include <docsh.hxx>
+#include <wrtsh.hxx>
 
 namespace
 {
@@ -78,6 +80,41 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidManipOfst)
     // If this is not 0, that means some of the anchor text is shifted to a previous page, while
     // anchors of non-last split fly frames should contain no text.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), pAnchor->GetOffset().get());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidLastManipOfst)
+{
+    // Given a document with a 5-page floating table and some anchor text:
+    createSwDoc("floattable-avoid-last-manip-ofst.docx");
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert2("dt");
+
+    // When expanding dummy text on the last page:
+    dispatchCommand(mxComponent, ".uno:ExpandGlossary", {});
+
+    // Then make sure the expanded text starts on page 5:
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = dynamic_cast<SwPageFrame*>(pPage1->GetNext());
+    CPPUNIT_ASSERT(pPage2);
+    auto pPage3 = dynamic_cast<SwPageFrame*>(pPage2->GetNext());
+    CPPUNIT_ASSERT(pPage3);
+    auto pPage4 = dynamic_cast<SwPageFrame*>(pPage3->GetNext());
+    CPPUNIT_ASSERT(pPage4);
+    auto pPage5 = dynamic_cast<SwPageFrame*>(pPage4->GetNext());
+    CPPUNIT_ASSERT(pPage5);
+    SwContentFrame* pAnchor = pPage5->FindFirstBodyContent();
+    SwTextFrame* pAnchorText = pAnchor->DynCastTextFrame();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1123
+    // i.e. the expand result went to page 4 and page 5 (page 5's content had no zero offset),
+    // instead of starting on page 5 (and creating a 6th page).
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
+                         static_cast<sal_Int32>(pAnchorText->GetOffset()));
 }
 }
 
