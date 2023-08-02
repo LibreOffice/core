@@ -314,8 +314,6 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
 
     if (aDstRect.Intersection(tools::Rectangle(aOutPt, aOutSz)).IsEmpty())
         return;
-    if (ImplLogicToDevicePixel(aOutSz).IsEmpty()) // nothing to draw
-        return;
 
     {
         Point aRelPt = aOutPt + Point(mnOutOffX, mnOutOffY);
@@ -341,6 +339,8 @@ void OutputDevice::DrawDeviceAlphaBitmap( const Bitmap& rBmp, const AlphaMask& r
         // try to blend the alpha bitmap with the alpha virtual device
         if (mpAlphaVDev)
         {
+            if (ImplLogicToDevicePixel(aOutSz).IsEmpty()) // nothing to draw
+                return;
             Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( aRelPt, aOutSz ) );
             if (SalBitmap* pSalAlphaBmp2 = aAlphaBitmap.ImplGetSalBitmap().get())
             {
