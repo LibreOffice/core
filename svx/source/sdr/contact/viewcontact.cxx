@@ -292,6 +292,13 @@ void ViewContact::flushViewObjectContacts(bool bWithHierarchy)
     // delete local VOCs
     deleteAllVOCs();
 }
-}
 
+void ViewContact::getPrimitive2DSequenceHierarchyOfIndex(
+    sal_uInt32 a, DisplayInfo& rDisplayInfo, ObjectContact& rObjectContact,
+    drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor)
+{
+    const ViewObjectContact& rCandidate(GetViewContact(a).GetViewObjectContact(rObjectContact));
+    rCandidate.getPrimitive2DSequenceHierarchy(rDisplayInfo, rVisitor);
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

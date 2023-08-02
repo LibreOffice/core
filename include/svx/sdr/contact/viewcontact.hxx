@@ -30,6 +30,7 @@ class SdrObject;
 
 namespace sdr::contact
 {
+class DisplayInfo;
 class ObjectContact;
 class ViewObjectContact;
 
@@ -146,6 +147,10 @@ public:
     // delete all existing VOCs by purpose, but can also be used for other purposes.
     // It is always possible to delete the VOCs, these are re-created on demand
     void flushViewObjectContacts(bool bWithHierarchy = true);
+
+    void getPrimitive2DSequenceHierarchyOfIndex(
+        sal_uInt32 a, DisplayInfo& rDisplayInfo, ObjectContact& rObjectContact,
+        drawinglayer::primitive2d::Primitive2DDecompositionVisitor& rVisitor);
 };
 }
 
