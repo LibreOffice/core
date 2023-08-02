@@ -9,8 +9,6 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,basic_macros))
 
-$(eval $(call gb_CppunitTest_use_external,basic_macros,boost_headers))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,basic_macros, \
 	basic/qa/cppunit/basictest \
 	basic/qa/cppunit/basic_coverage \
