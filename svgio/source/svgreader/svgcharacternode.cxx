@@ -263,23 +263,27 @@ namespace svgio::svgreader
 
                 // prepare TextArray
                 ::std::vector< double > aTextArray(rSvgTextPosition.getX());
-                if(aTextArray.size() < nLength)
+                ::std::vector< double > aDxArray(rSvgTextPosition.getDx());
+
+                // Do nothing when X and Dx arrays are empty
+                if((!aTextArray.empty() || !aDxArray.empty()) && aTextArray.size() < nLength)
                 {
                     const sal_uInt32 nArray(aTextArray.size());
 
                     double fStartX(0.0);
-
-                    if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
+                    if (!aTextArray.empty())
                     {
-                        fStartX = rSvgTextPosition.getParent()->getPosition().getX();
-                    }
-                    else if (!aTextArray.empty())
-                    {
-                        fStartX = aTextArray[nArray - 1];
+                        if(rSvgTextPosition.getParent() && rSvgTextPosition.getParent()->getAbsoluteX())
+                        {
+                            fStartX = rSvgTextPosition.getParent()->getPosition().getX();
+                        }
+                        else
+                        {
+                            fStartX = aTextArray[nArray - 1];
+                        }
                     }
 
                     ::std::vector< double > aExtendArray(aTextLayouterDevice.getTextArray(getText(), nArray, nLength - nArray));
-                    ::std::vector< double > aDxArray(rSvgTextPosition.getDx());
                     double fComulativeDx(0.0);
 
                     aTextArray.reserve(nLength);
