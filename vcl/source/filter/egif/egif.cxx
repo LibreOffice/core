@@ -252,7 +252,8 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
             if( aAccBmp.Convert( BmpConversion::N8BitTrans ) )
             {
                 aMask.Convert( BmpConversion::N1BitThreshold );
-                aAccBmp.Replace( aMask, BMP_COL_TRANS );
+                aMask.Invert();
+                aAccBmp.ReplaceMask( aMask, BMP_COL_TRANS );
                 bTransparent = true;
             }
             else
@@ -467,6 +468,9 @@ void GIFWriter::WriteAccess()
     if( !bNative )
         pBuffer.reset(new sal_uInt8[ nWidth ]);
 
+    assert(bStatus && "should not calling here if status is bad");
+    assert( 8 == m_pAcc->GetBitCount() && m_pAcc->HasPalette()
+            && "by the time we get here, the image should be in palette format");
     if( !(bStatus && ( 8 == m_pAcc->GetBitCount() ) && m_pAcc->HasPalette()) )
         return;
 
