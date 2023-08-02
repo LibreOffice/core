@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 	$(call gb_Trace_StartRange,gpgmepp,EXTERNAL)
 	$(call gb_ExternalProject_run,build, \
 		$(gb_WIN_GPG_cross_setup_exports) \
-		&& autoreconf \
+		&& $(WSL) autoreconf \
 		&& $(gb_RUN_CONFIGURE) ./configure \
 		   $(gb_CONFIGURE_PLATFORMS) \
 		   --disable-shared \
