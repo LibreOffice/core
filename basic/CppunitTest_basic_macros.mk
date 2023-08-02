@@ -56,15 +56,8 @@ $(eval $(call gb_CppunitTest_use_api,basic_macros,\
 $(eval $(call gb_CppunitTest_use_ure,basic_macros))
 $(eval $(call gb_CppunitTest_use_vcl,basic_macros))
 
-$(eval $(call gb_CppunitTest_use_components,basic_macros,\
-	configmgr/source/configmgr \
-	i18npool/source/search/i18nsearch \
-	i18npool/util/i18npool \
-	ucb/source/core/ucb1 \
-	ucb/source/ucp/file/ucpfile1 \
-	$(if $(filter $(OS),WNT), \
-		extensions/source/ole/oleautobridge) \
-))
+$(eval $(call gb_CppunitTest_use_rdb,basic_macros,services))
+
 $(eval $(call gb_CppunitTest_use_configuration,basic_macros))
 
 # vim: set noet sw=4 ts=4:
