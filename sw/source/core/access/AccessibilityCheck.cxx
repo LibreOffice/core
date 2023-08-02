@@ -332,18 +332,23 @@ private:
         {
             OUString sText = xTextRange->getString();
             INetURLObject aHyperlink(sHyperlink);
+            std::shared_ptr<sw::AccessibilityIssue> pIssue;
             if (aHyperlink.GetProtocol() != INetProtocol::NotValid
                 && INetURLObject(sText) == aHyperlink)
             {
                 OUString sIssueText
                     = SwResId(STR_HYPERLINK_TEXT_IS_LINK).replaceFirst("%LINK%", sHyperlink);
-                lclAddIssue(m_rIssueCollection, sIssueText,
-                            sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
+                pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                     sfx::AccessibilityIssueID::HYPERLINK_IS_TEXT);
             }
             else if (sText.getLength() <= 5)
             {
-                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
-                                          sfx::AccessibilityIssueID::HYPERLINK_SHORT);
+                pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HYPERLINK_TEXT_IS_SHORT),
+                                     sfx::AccessibilityIssueID::HYPERLINK_SHORT);
+            }
+
+            if (pIssue)
+            {
                 pIssue->setIssueObject(IssueObject::TEXT);
                 pIssue->setNode(pTextNode);
                 SwDoc& rDocument = pTextNode->GetDoc();
