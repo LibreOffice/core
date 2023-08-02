@@ -499,9 +499,8 @@ endef
 
 #  gb_LexTarget__command(scanner-file, stem-for-message, done-pseudo-target, source-target)
 define gb_LexTarget__command
-$(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(3)) && \
-	$(FLEX) $(T_LEXFLAGS) -o$(4) $(1) && touch $(3) )
+	$(call gb_Helper_wsl_path,$(FLEX) $(T_LEXFLAGS) -o$(4) $(1)) && touch $(3)
 endef
 
 
@@ -647,8 +646,8 @@ $(call gb_GenNasmObject_get_target,%) :
 	$(call gb_Trace_StartRange,$*,ASM)
 	test -f $(call gb_GenNasmObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenNasmObject_get_source,$*)" && false)
 	mkdir -p $(dir $@) $(dir $(call gb_GenNasmObject_get_dep_target,$*)) && cd $(SRCDIR) && \
-	    $(NASM) $(T_NASMFLAGS) $(T_NASMFLAGS_APPEND) -I$(dir $(call gb_GenNasmObject_get_source,$*)) \
-	    $(call gb_GenNasmObject_get_source,$*) -o $@ && \
+	    $(call gb_Helper_wsl_path,$(NASM) $(T_NASMFLAGS) $(T_NASMFLAGS_APPEND) -I$(dir $(call gb_GenNasmObject_get_source,$*)) \
+	    $(call gb_GenNasmObject_get_source,$*) -o $@) && \
 	    echo "$@ : $(call gb_GenNasmObject_get_source,$*)" > $(call gb_GenNasmObject_get_dep_target,$*)
 	$(call gb_Trace_EndRange,$*,ASM)
 
