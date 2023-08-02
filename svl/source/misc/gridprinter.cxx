@@ -68,7 +68,14 @@ GridPrinter::~GridPrinter()
 
 void GridPrinter::set( size_t nRow, size_t nCol, const OUString& rStr )
 {
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
     mpImpl->maMatrix.set(nRow, nCol, rStr);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#pragma GCC diagnostic pop
+#endif
 }
 
 void GridPrinter::print( const char* pHeader ) const

@@ -579,7 +579,14 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
     {
         maMat.set_empty(nR, nC);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
         maMatFlag.set(nR, nC, SC_MATFLAG_EMPTYPATH);
+#if defined __GNUC__ && !defined __clang__ && __GNUC__ == 12 && __cplusplus == 202002L
+#pragma GCC diagnostic pop
+#endif
     }
     else
     {
