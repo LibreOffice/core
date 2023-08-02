@@ -508,7 +508,7 @@ void SfxLokHelper::notifyOtherViews(const SfxViewShell* pThisView, int nType,
                                     const boost::property_tree::ptree& rTree)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
-    if (DisableCallbacks::disabled())
+    if (!pThisView || DisableCallbacks::disabled())
         return;
 
     // Cache the payload so we only have to generate it once, at most.
