@@ -814,14 +814,14 @@ public:
     bool                Contains( const RectangleT& rRect ) const { return RectangleTemplateBase::Contains(rRect); }
     bool                Overlaps( const RectangleT& rRect ) const { return RectangleTemplateBase::Overlaps(rRect); }
 
-    bool         operator == ( const RectangleT& rRect ) const
+    bool         operator == ( const RectangleTemplate& rRect ) const
     {
         return (mnLeft   == rRect.mnLeft   ) &&
                (mnTop    == rRect.mnTop    ) &&
                (mnRight  == rRect.mnRight  ) &&
                (mnBottom == rRect.mnBottom );
     }
-    bool         operator != ( const RectangleT& rRect ) const
+    bool         operator != ( const RectangleTemplate& rRect ) const
     {
         return (mnLeft   != rRect.mnLeft   ) ||
                (mnTop    != rRect.mnTop    ) ||
