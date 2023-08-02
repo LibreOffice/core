@@ -600,7 +600,8 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     // We got the rest of the text mass: Delete all Follows
     // DummyPortions() are a special case.
     // Special cases are controlled by parameter <nMode>.
-    if( HasFollow() && !(nMode & 1) && nOffset == nEnd )
+    bool bDontJoin = nMode & 1;
+    if( HasFollow() && !bDontJoin && nOffset == nEnd )
     {
         while( GetFollow() )
         {
@@ -632,14 +633,20 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     const TextFrameIndex nNewOfst = (IsInFootnote() && (!GetIndNext() || HasFollow()))
         ? rLine.FormatQuoVadis(nOffset) : nOffset;
 
-    if( !(nMode & 1) )
+    bool bHasNonLastSplitFlyDrawObj = false;
+    if (GetFollow() && GetOffset() == GetFollow()->GetOffset())
+    {
+        bHasNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
+    }
+
+    if( !bDontJoin )
     {
         // We steal text mass from our Follows
         // It can happen that we have to join some of them
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOffset() )
         {
-            if (HasNonLastSplitFlyDrawObj())
+            if (bHasNonLastSplitFlyDrawObj)
             {
                 // A non-last split fly is anchored to us, don't move content from the last frame to
                 // this one and don't join.
@@ -659,6 +666,13 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
     // The Offset moved
     if( GetFollow() )
     {
+        if (!bDontJoin && bHasNonLastSplitFlyDrawObj)
+        {
+            // A non-last split fly is anchored to us, our follow is the last one in the text frame
+            // chain. No move of text from that follow to this text frame.
+            return;
+        }
+
         if ( nMode )
             GetFollow()->ManipOfst(TextFrameIndex(0));
 
