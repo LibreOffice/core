@@ -20,7 +20,7 @@ ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_Trace_StartRange,icu,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		autoconf -f \
+		$(WSL) autoconf -f \
 		&& export LIB="$(ILIB)" PYTHONWARNINGS="default" \
 			gb_ICU_XFLAGS="-FS $(SOLARINC) $(gb_DEBUGINFO_FLAGS) $(if $(MSVC_USE_DEBUG_RUNTIME),-MDd,-MD -Gy)" \
 		&& CFLAGS="$${gb_ICU_XFLAGS}" CPPFLAGS="$(SOLARINC)" CXXFLAGS="$${gb_ICU_XFLAGS}" \
