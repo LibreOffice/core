@@ -206,7 +206,8 @@ void PPTShape::addShape(
                    case XML_obj :
                 {
                     sServiceName = sOutlinerShapeService;
-                    aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
+                    if (getSubTypeIndex().has_value())
+                        aMasterTextListStyle = rSlidePersist.getMasterPersist() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                 }
                 break;
                 case XML_body :
