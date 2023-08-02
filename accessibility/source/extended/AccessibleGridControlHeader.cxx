@@ -161,11 +161,15 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_I
 {
     return false;
 }
-//not implemented
+
 Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCellAt(
-        sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
+        sal_Int32 nRow, sal_Int32 nColumn)
 {
-    return nullptr;
+    SolarMutexGuard g;
+
+    ensureIsAlive();
+    ensureIsValidAddress(nRow, nColumn);
+    return implGetChild(nRow, nColumn);
 }
 // not selectable
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
