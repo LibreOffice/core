@@ -467,7 +467,7 @@ bool GtkSalMenu::ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangl
     mpFrame->BlockTooltip();
 
 #if GTK_CHECK_VERSION(4, 0, 0)
-    tools::Rectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
+    AbsoluteScreenPixelRectangle aFloatRect = FloatingWindow::ImplConvertToAbsPos(xParent, rRect);
     aFloatRect.Move(-mpFrame->maGeometry.x(), -mpFrame->maGeometry.y());
     GdkRectangle rect {static_cast<int>(aFloatRect.Left()), static_cast<int>(aFloatRect.Top()),
                        static_cast<int>(aFloatRect.GetWidth()), static_cast<int>(aFloatRect.GetHeight())};
