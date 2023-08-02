@@ -399,7 +399,9 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData& rData, ScSplitPos 
             bIsInPaint( false ),
             bNeedsRepaint( false ),
             bAutoMarkVisible( false ),
-            bListValButton( false )
+            bListValButton( false ),
+            m_nDownPosX( -1 ),
+            m_nDownPosY( -1 )
 {
     set_id("grid_window");
     switch(eWhich)
@@ -1955,6 +1957,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
     SCROW nPosY;
     mrViewData.GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
     SCTAB nTab = mrViewData.GetTabNo();
+    m_nDownPosX = nPosX;
+    m_nDownPosY = nPosY;
 
     // FIXME: this is to limit the number of rows handled in the Online
     // to 1000; this will be removed again when the performance
@@ -2608,6 +2612,22 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     }
     mrViewData.GetViewShell()->SelectionChanged();
+
+    if (bIsTiledRendering && !bRefMode && !bDouble)
+    {
+        OUString aName, aUrl, aTarget;
+        ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+        if (pViewShell && nPosX == m_nDownPosX && nPosY == m_nDownPosY
+            && GetEditUrl(aPos, &aName, &aUrl, &aTarget))
+        {
+            OString aMsg(aUrl.toUtf8() + " coordinates: " +
+                         pViewShell->GetViewData().describeCellCursorAt(nPosX, nPosY) + ", " +
+                         OString::number(aPos.X() / pViewShell->GetViewData().GetPPTX()));
+            pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_HYPERLINK_CLICKED, aMsg.getStr());
+        }
+    }
+
+    m_nDownPosX = m_nDownPosY = -1;
 
     return;
 }

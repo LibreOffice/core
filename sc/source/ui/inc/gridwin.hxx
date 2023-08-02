@@ -509,6 +509,8 @@ protected:
     void ImpDestroyOverlayObjects();
 
 private:
+    SCCOL m_nDownPosX;
+    SCROW m_nDownPosY;
 
 #ifdef DBG_UTIL
     void dumpCellProperties();
