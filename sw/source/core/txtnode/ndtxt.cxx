@@ -3849,19 +3849,27 @@ void SwTextNode::ReplaceText( const SwContentIndex& rStart, const sal_Int32 nDel
     bool bOldExpFlg = IsIgnoreDontExpand();
     SetIgnoreDontExpand( true );
 
-    if (nLen && sInserted.getLength())
+    const sal_Int32 nInsLen = sInserted.getLength();
+    if (nLen && nInsLen)
     {
-        // Replace the 1st char, then delete the rest and insert.
-        // This way the attributes of the 1st char are expanded!
-        m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.subView(0, 1));
+        m_Text = m_Text.replaceAt(nStartPos, nLen, sInserted);
 
-        ++const_cast<SwContentIndex&>(rStart);
-        m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, u"");
-        Update(rStart, nLen - 1, UpdateMode::Negative);
+        if (nLen > nInsLen) // short insert
+        {
+            // delete up to the point that the user specified
+            const SwContentIndex aNegIdx(rStart, nInsLen);
+            Update(aNegIdx, nLen - nInsLen, UpdateMode::Negative);
+        }
+        else if (nLen < nInsLen) // long insert
+        {
+            const SwContentIndex aIdx(rStart, nLen);
+            Update(aIdx, nInsLen - nLen, UpdateMode::Replace);
+        }
 
-        std::u16string_view aTmpText( sInserted.subView(1) );
-        m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpText);
-        Update(rStart, aTmpText.size(), UpdateMode::Replace);
+        for (sal_Int32 i = 0; i < nInsLen; i++)
+        {
+            ++const_cast<SwContentIndex&>(rStart);
+        }
     }
     else
     {
