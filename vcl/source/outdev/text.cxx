@@ -674,7 +674,7 @@ sal_Int32 OutputDevice::ImplBreakLinesWithIterator(const tools::Long nWidth, con
         ++nTxtEnd;
     }
 
-    SAL_WARN_IF( ( nAltEnd - nAltStart ) != 1, "vcl", "Alternate: Wrong assumption!" );
+    SAL_INFO_IF( ( nAltEnd - nAltStart ) != 1, "vcl", "Alternate: Wrong assumption!" );
 
     sal_Unicode cAlternateReplChar = 0;
     if ( nTxtEnd > nTxtStart )
