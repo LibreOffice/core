@@ -148,6 +148,7 @@ public:
     void testTdf149588TransparentSolidFill();
     void testOverflowBehaviorClip();
     void testShapeMasterText();
+    void testIndentDuplication();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -229,6 +230,7 @@ public:
     CPPUNIT_TEST(testTdf149588TransparentSolidFill);
     CPPUNIT_TEST(testOverflowBehaviorClip);
     CPPUNIT_TEST(testShapeMasterText);
+    CPPUNIT_TEST(testIndentDuplication);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2062,6 +2064,24 @@ void SdImportTest2::testShapeMasterText()
 
     uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
     CPPUNIT_ASSERT_EQUAL(OUString("Custom"), xRun->getString());
+}
+
+void SdImportTest2::testIndentDuplication()
+{
+    createSdImpressDoc("pptx/formatting-bullet-indent.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(2, 0));
+
+    uno::Reference<beans::XPropertySet> const xParagraph1(getParagraphFromShape(0, xShape),
+                                                          uno::UNO_QUERY_THROW);
+    sal_Int32 nIndent1;
+    xParagraph1->getPropertyValue("ParaFirstLineIndent") >>= nIndent1;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2500), nIndent1);
+
+    uno::Reference<beans::XPropertySet> const xParagraph2(getParagraphFromShape(1, xShape),
+                                                          uno::UNO_QUERY_THROW);
+    sal_Int32 nIndent2;
+    xParagraph2->getPropertyValue("ParaFirstLineIndent") >>= nIndent2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndent2);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
