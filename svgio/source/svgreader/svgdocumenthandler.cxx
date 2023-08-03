@@ -230,8 +230,7 @@ namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
         :   maDocument(aAbsolutePath),
-            mpTarget(nullptr),
-            bSkip(false)
+            mpTarget(nullptr)
         {
         }
 
@@ -266,8 +265,6 @@ namespace
 
         void SvgDocHdl::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         {
-            if (bSkip)
-                return;
             if(aName.isEmpty())
                 return;
 
@@ -533,13 +530,6 @@ namespace
                     break;
                 }
 
-                // ignore FlowRoot and child nodes
-                case SVGToken::FlowRoot:
-                {
-                    bSkip = true;
-                    break;
-                }
-
                 default:
                 {
                     mpTarget = new SvgNode(SVGToken::Unknown, maDocument, mpTarget);
@@ -557,13 +547,6 @@ namespace
             SvgNode* pTextNode(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
             SvgStyleNode* pCssStyle(SVGToken::Style == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
             SvgTitleDescNode* pSvgTitleDescNode(SVGToken::Title == aSVGToken || SVGToken::Desc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
-
-            // if we are in skipping mode and we reach the flowRoot end tag: stop skipping mode
-            if(bSkip && aSVGToken == SVGToken::FlowRoot)
-                bSkip = false;
-            // we are in skipping mode: do nothing until we found the flowRoot end tag
-            else if(bSkip)
-                return;
 
             switch (aSVGToken)
             {

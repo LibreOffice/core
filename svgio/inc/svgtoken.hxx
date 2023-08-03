@@ -188,9 +188,7 @@ namespace svgio::svgreader
 
             // text tokens
             Text,
-            BaselineShift,
-
-            FlowRoot
+            BaselineShift
         };
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent);
