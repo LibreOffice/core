@@ -79,6 +79,9 @@ public:
     {
         if (!atspi_is_initialized())
             atspi_init();
+
+        // increase timeout to avoid spurious avoid CI failures
+        atspi_set_timeout(2500, 15000);
     }
 
     virtual void setUp() override
