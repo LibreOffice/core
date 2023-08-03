@@ -543,95 +543,23 @@ namespace
             if(aName.isEmpty())
                 return;
 
+            if(!mpTarget)
+                return;
+
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
             SvgNode* pTextNode(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
             SvgStyleNode* pCssStyle(SVGToken::Style == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
             SvgTitleDescNode* pSvgTitleDescNode(SVGToken::Title == aSVGToken || SVGToken::Desc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
 
-            switch (aSVGToken)
+            if(!mpTarget->getParent())
             {
-                /// valid tokens for which a new one was created
-
-                /// structural elements
-                case SVGToken::Defs:
-                case SVGToken::G:
-                case SVGToken::Svg:
-                case SVGToken::Symbol:
-                case SVGToken::Use:
-                case SVGToken::A:
-
-                /// shape elements
-                case SVGToken::Circle:
-                case SVGToken::Ellipse:
-                case SVGToken::Line:
-                case SVGToken::Path:
-                case SVGToken::Polygon:
-                case SVGToken::Polyline:
-                case SVGToken::Rect:
-                case SVGToken::Image:
-
-                /// title and description
-                case SVGToken::Title:
-                case SVGToken::Desc:
-
-                /// gradients
-                case SVGToken::LinearGradient:
-                case SVGToken::RadialGradient:
-
-                /// gradient stops
-                case SVGToken::Stop:
-
-                /// text
-                case SVGToken::Text:
-                case SVGToken::Tspan:
-                case SVGToken::TextPath:
-                case SVGToken::Tref:
-
-                /// styles (as stylesheets)
-                case SVGToken::Style:
-
-                /// structural elements clip-path and mask
-                case SVGToken::ClipPathNode:
-                case SVGToken::Mask:
-
-                /// structural elements for filters
-                case SVGToken::FeColorMatrix:
-                case SVGToken::FeDropShadow:
-                case SVGToken::FeFlood:
-                case SVGToken::FeImage:
-                case SVGToken::FeGaussianBlur:
-                case SVGToken::FeOffset:
-                case SVGToken::Filter:
-
-                /// structural element marker
-                case SVGToken::Marker:
-
-                /// structural element pattern
-                case SVGToken::Pattern:
-
-                default:
-
-                /// content handling after parsing
-                {
-                    if(mpTarget)
-                    {
-                        if(!mpTarget->getParent())
-                        {
-                            // last element closing, save this tree
-                            maDocument.appendNode(std::unique_ptr<SvgNode>(mpTarget));
-                        }
-
-                        mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
-                    }
-                    else
-                    {
-                        OSL_ENSURE(false, "Closing token, but no context (!)");
-                    }
-                    break;
-                }
+                // last element closing, save this tree
+                maDocument.appendNode(std::unique_ptr<SvgNode>(mpTarget));
             }
 
-            if(pSvgTitleDescNode && mpTarget)
+            mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
+
+            if(pSvgTitleDescNode)
             {
                 const OUString& aText(pSvgTitleDescNode->getText());
 
