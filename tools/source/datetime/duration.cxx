@@ -47,8 +47,9 @@ Duration::Duration(const Time& rStart, const Time& rEnd)
     }
 }
 
-Duration::Duration(double fTimeInDays)
+Duration::Duration(double fTimeInDays, sal_uInt64 nAccuracyEpsilonNanoseconds)
 {
+    assert(nAccuracyEpsilonNanoseconds <= Time::nanoSecPerSec - 1);
     double fInt, fFrac;
     if (fTimeInDays < 0.0)
     {
@@ -66,19 +67,21 @@ Duration::Duration(double fTimeInDays)
         fFrac *= Time::nanoSecPerDay;
         fFrac = ::rtl::math::approxFloor(fFrac);
         sal_Int64 nNS = static_cast<sal_Int64>(fFrac);
-        // Round by 1 nanosecond if it's just 1 off to a second, i.e.
-        // 0999999999 or 0000000001. This could be loosened to rounding by 2 or
-        // such if necessary.
         const sal_Int64 nN = nNS % Time::nanoSecPerSec;
-        if (std::abs(nN) == 1)
-            nNS -= (nNS < 0) ? -1 : 1;
-        else if (std::abs(nN) == Time::nanoSecPerSec - 1)
+        if (nN)
         {
-            nNS += (nNS < 0) ? -1 : 1;
-            if (std::abs(nNS) >= Time::nanoSecPerDay)
+            const sal_uInt64 nA = std::abs(nN);
+            if (nA <= nAccuracyEpsilonNanoseconds)
+                nNS -= (nNS < 0) ? -nN : nN;
+            else if (nA >= Time::nanoSecPerSec - nAccuracyEpsilonNanoseconds)
             {
-                mnDays += nNS / Time::nanoSecPerDay;
-                nNS %= Time::nanoSecPerDay;
+                const sal_Int64 nD = Time::nanoSecPerSec - nA;
+                nNS += (nNS < 0) ? -nD : nD;
+                if (std::abs(nNS) >= Time::nanoSecPerDay)
+                {
+                    mnDays += nNS / Time::nanoSecPerDay;
+                    nNS %= Time::nanoSecPerDay;
+                }
             }
         }
         maTime.MakeTimeFromNS(nNS);

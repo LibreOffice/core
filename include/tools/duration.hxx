@@ -31,8 +31,17 @@ public:
         minutes and seconds values here though. */
     Duration(const Time& rStart, const Time& rEnd);
 
-    /** Difference in days, like DateTime()-DateTime(). */
-    explicit Duration(double fTimeInDays);
+    /** Difference in days, like DateTime()-DateTime().
+
+        @param  nAccuracyEpsilonNanoseconds
+                Round for example by 1 nanosecond if it's just 1 off to a
+                second,  i.e. 0999999999 or 0000000001. This can be loosened if
+                necessary. For example, if fTimeInDays is a date+time in
+                "today's" range with a significant seconds resolution, an
+                accuracy epsilon (=unsharpness) of ~300 is required. Hence default.
+                Must be 0 <= nAccuracyEpsilonNanoseconds <= Time::nanoSecPerSec - 1.
+     */
+    explicit Duration(double fTimeInDays, sal_uInt64 nAccuracyEpsilonNanoseconds = 300);
 
     /** Time can be a limited duration as well and can have out-of-range
         values, it will be normalized. Sign of both days and Time must be equal
