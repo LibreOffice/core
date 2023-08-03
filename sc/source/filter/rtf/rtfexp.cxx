@@ -188,7 +188,7 @@ void ScRTFExport::WriteFontTable(const SvxFontItem& rFontItem, int nIndex)
 
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
     rtl_TextEncoding eChrSet = rFontItem.GetCharSet();
-    if (IsOpenSymbol(rFontItem.GetFamilyName()))
+    if (IsStarSymbol(rFontItem.GetFamilyName()))
         eChrSet = RTL_TEXTENCODING_UTF8;
     else if( RTL_TEXTENCODING_DONTKNOW == eChrSet )
         eChrSet = osl_getThreadTextEncoding();
