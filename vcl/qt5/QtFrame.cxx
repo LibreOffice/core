@@ -50,9 +50,6 @@
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QApplication>
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-#include <QtWidgets/QDesktopWidget>
-#endif
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMainWindow>
 #if CHECK_QT5_USING_X11
@@ -341,18 +338,7 @@ QWindow* QtFrame::windowHandle() const
     return pChild->windowHandle();
 }
 
-QScreen* QtFrame::screen() const
-{
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    return asChild()->screen();
-#else
-    // QWidget::screen only available from Qt 5.14 on, call windowHandle(),
-    // with the indirect result that mouse move events on Wayland will not be
-    // emitted reliably, s. QTBUG-75766
-    QWindow* const pWindow = windowHandle();
-    return pWindow ? pWindow->screen() : nullptr;
-#endif
-}
+QScreen* QtFrame::screen() const { return asChild()->screen(); }
 
 bool QtFrame::GetUseDarkMode() const
 {
@@ -515,13 +501,7 @@ Size QtFrame::CalcDefaultSize()
         }
         else
         {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
-#else
-            // QGuiApplication::screenAt was added in Qt 5.10, use deprecated QDesktopWidget
-            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            QScreen* pScreen = QGuiApplication::screens()[nLeftScreen];
-#endif
             aSize = toSize(pScreen->availableVirtualGeometry().size());
         }
     }
@@ -1321,13 +1301,7 @@ void QtFrame::SetScreenNumber(unsigned int nScreen)
         {
             assert(m_bFullScreen);
             // left-most screen
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             QScreen* pScreen = QGuiApplication::screenAt(QPoint(0, 0));
-#else
-            // QGuiApplication::screenAt was added in Qt 5.10, use deprecated QDesktopWidget
-            int nLeftScreen = QApplication::desktop()->screenNumber(QPoint(0, 0));
-            QScreen* pScreen = QGuiApplication::screens()[nLeftScreen];
-#endif
             // entire virtual desktop
             screenGeo = pScreen->availableVirtualGeometry();
             pWindow->setScreen(pScreen);
