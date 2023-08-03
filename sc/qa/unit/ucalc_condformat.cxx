@@ -1394,21 +1394,19 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testConditionStyleInMergedCell)
     // Add a conditional format.
     auto pFormat = std::make_unique<ScConditionalFormat>(1, m_pDoc);
     pFormat->SetRange(ScRange(0, 0, 0, 0, 0, 0));
-    auto pFormatTmp = pFormat.get();
-    sal_uLong nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     // Add condition in which if the value equals 1, set the "Good" style.
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(
         ScConditionMode::Equal, "=1", "", *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_GOOD));
-    pFormatTmp->AddEntry(pEntry);
+    pFormat->AddEntry(pEntry);
 
     // Apply the format to the range.
-    m_pDoc->AddCondFormatData(pFormatTmp->GetRange(), 0, nKey);
+    m_pDoc->AddCondFormatData(pFormat->GetRange(), 0, 1);
 
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
-    sal_uInt32 nOldFormat = pFormatTmp->GetKey();
-    const ScRangeList& rRangeList = pFormatTmp->GetRange();
-    rFunc.ReplaceConditionalFormat(nOldFormat, pFormatTmp->Clone(), 0, rRangeList);
+    sal_uInt32 nOldFormat = pFormat->GetKey();
+    const ScRangeList& rRangeList = pFormat->GetRange();
+    rFunc.ReplaceConditionalFormat(nOldFormat, std::move(pFormat), 0, rRangeList);
 
     CPPUNIT_ASSERT_EQUAL(true, aListener.mbPaintAllMergedCell);
 
