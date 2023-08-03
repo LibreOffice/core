@@ -23,6 +23,9 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <swdtflvr.hxx>
+#include <caption.hxx>
+#include <view.hxx>
+#include <formatflysplit.hxx>
 
 /// Covers sw/source/core/frmedt/ fixes.
 class SwCoreFrmedtTest : public SwModelTestBase
@@ -166,6 +169,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testTextBoxSelectCursorPos)
     // - Actual  : 6 (in-fly-format position)
     // i.e. the cursor had a broken position after trying to select the fly format.
     CPPUNIT_ASSERT_EQUAL(nAnchor, nCursor);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreFrmedtTest, testSplitFlyInsertCaption)
+{
+    // Given a document with a full-page floating table:
+    createSwDoc("floating-table-caption.docx");
+
+    // When trying to insert a caption below that table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GotoTable("Table1");
+    InsCaptionOpt aOpt;
+    SwView& rView = pWrtShell->GetView();
+    aOpt.SetCategory("Table");
+    aOpt.SetCaption("Numbers English-German");
+    // After, not before.
+    aOpt.SetPos(1);
+    // Without the accompanying fix in place, this call never finished, layout didn't handle content
+    // after the table in a floating table.
+    rView.InsertCaption(&aOpt);
+
+    // Then make sure the insertion finishes and now this is just a plain table-in-frame:
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetFlySplit().GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
