@@ -24,7 +24,11 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "osl_Mutex_Const.h"
+
+#include <osl/thread.hxx>
+#include <osl/mutex.hxx>
+
+#define BUFFER_SIZE 16
 
 using namespace osl;
 
