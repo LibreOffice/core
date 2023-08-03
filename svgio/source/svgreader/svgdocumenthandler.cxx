@@ -203,7 +203,6 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
-                case SVGToken::Switch: //TODO: Support switch element
                 case SVGToken::Defs:
                 case SVGToken::G:
                 {
@@ -447,6 +446,12 @@ namespace
                     break;
                 }
 
+                case SVGToken::Switch:
+                {
+                    //TODO: Support switch element
+                    break;
+                }
+
                 // ignore FlowRoot and child nodes
                 case SVGToken::FlowRoot:
                 {
@@ -488,7 +493,6 @@ namespace
                 case SVGToken::G:
                 case SVGToken::Svg:
                 case SVGToken::Symbol:
-                case SVGToken::Switch:
                 case SVGToken::Use:
                 case SVGToken::A:
 
