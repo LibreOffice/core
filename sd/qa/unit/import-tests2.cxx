@@ -1900,6 +1900,24 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testShapeMasterText)
     CPPUNIT_ASSERT_EQUAL(OUString("Custom"), xRun->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testIndentDuplication)
+{
+    createSdImpressDoc("pptx/formatting-bullet-indent.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(2, 0));
+
+    uno::Reference<beans::XPropertySet> const xParagraph1(getParagraphFromShape(0, xShape),
+                                                          uno::UNO_QUERY_THROW);
+    sal_Int32 nIndent1;
+    xParagraph1->getPropertyValue("ParaFirstLineIndent") >>= nIndent1;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2500), nIndent1);
+
+    uno::Reference<beans::XPropertySet> const xParagraph2(getParagraphFromShape(1, xShape),
+                                                          uno::UNO_QUERY_THROW);
+    sal_Int32 nIndent2;
+    xParagraph2->getPropertyValue("ParaFirstLineIndent") >>= nIndent2;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndent2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

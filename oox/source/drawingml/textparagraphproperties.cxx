@@ -494,6 +494,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             aPropSet.setProperty( PROP_ParaTabStops, aSeq );
         }
     }
+    else
+        aPropSet.setProperty<sal_Int32>( PROP_ParaFirstLineIndent, 0);
 
     if ( moDefaultTabSize )
     {
