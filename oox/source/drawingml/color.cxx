@@ -619,8 +619,7 @@ sal_Int16 Color::getLumOff() const
 
 model::ComplexColor Color::getComplexColor() const
 {
-    model::ComplexColor aComplexColor;
-    aComplexColor.setSchemeColor(model::convertToThemeColorType(getSchemeColorIndex()));
+    auto aComplexColor = model::ComplexColor::Theme(model::convertToThemeColorType(getSchemeColorIndex()));
 
     if (getTintOrShade() > 0)
     {
@@ -818,12 +817,12 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
     if (meMode == COLOR_PH)
     {
         auto eTheme = model::convertToThemeColorType(nPhClrTheme);
-        aNewComplexColor.setSchemeColor(eTheme);
+        aNewComplexColor.setThemeColor(eTheme);
     }
     else if (meMode == COLOR_SCHEME)
     {
         auto eTheme = getThemeColorType();
-        aNewComplexColor.setSchemeColor(eTheme);
+        aNewComplexColor.setThemeColor(eTheme);
     }
     else if (meMode == COLOR_RGB)
     {

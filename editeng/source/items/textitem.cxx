@@ -1424,7 +1424,7 @@ bool SvxColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= sal_Int16(maComplexColor.meSchemeType);
+            rVal <<= sal_Int16(maComplexColor.getThemeColorType());
             break;
         }
         case MID_COLOR_TINT_OR_SHADE:
@@ -1509,7 +1509,7 @@ bool SvxColorItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            maComplexColor.setSchemeColor(model::convertToThemeColorType(nIndex));
+            maComplexColor.setThemeColor(model::convertToThemeColorType(nIndex));
         }
         break;
         case MID_COLOR_TINT_OR_SHADE:
@@ -1617,7 +1617,7 @@ void SvxColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("complex-color"));
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"),
-                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.meType)).getStr()));
+                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.getType())).getStr()));
 
     for (auto const& rTransform : maComplexColor.getTransformations())
     {

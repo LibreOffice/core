@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
         CPPUNIT_ASSERT(xShape4->getPropertyValue("FillComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
     }
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
         CPPUNIT_ASSERT(xShape5->getPropertyValue("FillComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), aComplexColor.getTransformations()[0].mnValue);

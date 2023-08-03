@@ -64,13 +64,13 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
     ScPatternAttr aNewPattern(m_pDoc->GetPool());
     {
         model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(eBackgroundThemeType);
+        aComplexColor.setThemeColor(eBackgroundThemeType);
         Color aColor = pTheme->getColorSet()->resolveColor(aComplexColor);
         aNewPattern.GetItemSet().Put(SvxBrushItem(aColor, aComplexColor, ATTR_BACKGROUND));
     }
     {
         model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(eCellTextThemeType);
+        aComplexColor.setThemeColor(eCellTextThemeType);
         Color aColor = pTheme->getColorSet()->resolveColor(aComplexColor);
         aNewPattern.GetItemSet().Put(SvxColorItem(aColor, aComplexColor, ATTR_FONT_COLOR));
     }

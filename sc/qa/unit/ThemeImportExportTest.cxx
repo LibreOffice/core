@@ -93,7 +93,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0x27ced7), pBrushItem->GetColor());
         auto aComplexColor = pBrushItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(size_t(0), aComplexColor.getTransformations().size());
     }
 
@@ -107,7 +107,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0xd4f5f7), pBrushItem->GetColor());
         auto aComplexColor = pBrushItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -126,7 +126,7 @@ void checkCellBackgroundThemeColor(ScDocument* pDoc)
         auto* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0x14676b), pBrushItem->GetColor());
         auto aComplexColor = pBrushItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -164,7 +164,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0x62a39f), pColorItem->getColor());
         auto aComplexColor = pColorItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(size_t(0), aComplexColor.getTransformations().size());
     }
 
@@ -178,7 +178,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0xa1c8c5), pColorItem->getColor());
         auto aComplexColor = pColorItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -197,7 +197,7 @@ void checkCellTextThemeColor(ScDocument* pDoc)
         auto* pColorItem = static_cast<const SvxColorItem*>(pItem);
         CPPUNIT_ASSERT_EQUAL(Color(0x305250), pColorItem->getColor());
         auto aComplexColor = pColorItem->getComplexColor();
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
         auto& rTransformations = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -242,7 +242,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pTop);
             CPPUNIT_ASSERT_EQUAL(Color(0x3e8853), pTop->GetColor());
             auto aComplexColor = pTop->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTransformations.size());
         }
@@ -263,7 +263,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pTop);
             CPPUNIT_ASSERT_EQUAL(Color(0xd4ebdb), pTop->GetColor());
             auto aComplexColor = pTop->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -276,7 +276,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pTop);
             CPPUNIT_ASSERT_EQUAL(Color(0xd4ebdb), pTop->GetColor());
             auto aComplexColor = pTop->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -289,7 +289,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pTop);
             CPPUNIT_ASSERT_EQUAL(Color(0x1f442a), pTop->GetColor());
             auto aComplexColor = pTop->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -313,7 +313,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pTop);
             CPPUNIT_ASSERT_EQUAL(Color(0x1f442a), pTop->GetColor());
             auto aComplexColor = pTop->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);
@@ -325,7 +325,7 @@ void checkCellBorderThemeColor(ScDocument* pDoc)
             CPPUNIT_ASSERT(pBottom);
             CPPUNIT_ASSERT_EQUAL(Color(0x1f442a), pBottom->GetColor());
             auto aComplexColor = pBottom->getComplexColor();
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5, aComplexColor.getThemeColorType());
             auto& rTransformations = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTransformations.size());
             CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTransformations[0].meType);

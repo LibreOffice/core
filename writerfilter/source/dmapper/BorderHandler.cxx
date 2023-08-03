@@ -222,7 +222,7 @@ model::ComplexColor BorderHandler::getComplexColor() const
     if (m_eThemeColorType == model::ThemeColorType::Unknown)
         return aComplexColor;
 
-    aComplexColor.setSchemeColor(m_eThemeColorType);
+    aComplexColor.setThemeColor(m_eThemeColorType);
 
     if (m_nThemeTint > 0 )
     {

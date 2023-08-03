@@ -376,7 +376,6 @@
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/color/Transformation.hxx>
 #include <docmodel/dllapi.h>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

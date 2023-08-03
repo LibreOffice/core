@@ -55,16 +55,11 @@ bool changeBorderLine(editeng::SvxBorderLine* pBorderLine, model::ColorSet const
         return false;
 
     model::ComplexColor const& rComplexColor = pBorderLine->getComplexColor();
-    if (rComplexColor.meType == model::ColorType::Scheme)
+    if (rComplexColor.isValidThemeType())
     {
-        auto eThemeType = rComplexColor.meSchemeType;
-
-        if (eThemeType != model::ThemeColorType::Unknown)
-        {
-            Color aColor = rColorSet.resolveColor(rComplexColor);
-            pBorderLine->SetColor(aColor);
-            return true;
-        }
+        Color aColor = rColorSet.resolveColor(rComplexColor);
+        pBorderLine->SetColor(aColor);
+        return true;
     }
     return false;
 }
@@ -77,38 +72,28 @@ bool changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
     {
         auto const* pColorItem = static_cast<const SvxColorItem*>(pItem);
         model::ComplexColor const& rComplexColor = pColorItem->getComplexColor();
-        if (rComplexColor.meType == model::ColorType::Scheme)
+        if (rComplexColor.isValidThemeType())
         {
-            auto eThemeType = rComplexColor.meSchemeType;
-            if (eThemeType != model::ThemeColorType::Unknown)
-            {
-                Color aColor = rColorSet.getColor(eThemeType);
-                aColor = rComplexColor.applyTransformations(aColor);
+            Color aColor = rColorSet.resolveColor(rComplexColor);
 
-                SvxColorItem aColorItem(*pColorItem);
-                aColorItem.setColor(aColor);
-                rItemSet.Put(aColorItem);
-                bChanged = true;
-            }
+            SvxColorItem aColorItem(*pColorItem);
+            aColorItem.setColor(aColor);
+            rItemSet.Put(aColorItem);
+            bChanged = true;
         }
     }
     if (rItemSet.HasItem(ATTR_BACKGROUND, &pItem))
     {
         auto const* pBrushItem = static_cast<const SvxBrushItem*>(pItem);
         model::ComplexColor const& rComplexColor = pBrushItem->getComplexColor();
-        if (rComplexColor.meType == model::ColorType::Scheme)
+        if (rComplexColor.isValidThemeType())
         {
-            auto eThemeType = rComplexColor.meSchemeType;
-            if (eThemeType != model::ThemeColorType::Unknown)
-            {
-                Color aColor = rColorSet.getColor(eThemeType);
-                aColor = rComplexColor.applyTransformations(aColor);
+            Color aColor = rColorSet.resolveColor(rComplexColor);
 
-                SvxBrushItem aNewBrushItem(*pBrushItem);
-                aNewBrushItem.SetColor(aColor);
-                rItemSet.Put(aNewBrushItem);
-                bChanged = true;
-            }
+            SvxBrushItem aNewBrushItem(*pBrushItem);
+            aNewBrushItem.SetColor(aColor);
+            rItemSet.Put(aNewBrushItem);
+            bChanged = true;
         }
     }
     if (rItemSet.HasItem(ATTR_BORDER, &pItem))
@@ -253,10 +238,9 @@ model::ComplexColor modifyComplexColor(model::ComplexColor const& rComplexColor,
 {
     model::ComplexColor aComplexColor(rComplexColor);
 
-    if (aComplexColor.isValidSchemeType())
+    if (aComplexColor.isValidThemeType())
     {
-        Color aColor = pColorSet->getColor(aComplexColor.meSchemeType);
-        aColor = aComplexColor.applyTransformations(aColor);
+        Color aColor = pColorSet->resolveColor(aComplexColor);
         aComplexColor.setFinalColor(aColor);
     }
     return aComplexColor;

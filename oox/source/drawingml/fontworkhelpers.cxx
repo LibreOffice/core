@@ -1020,10 +1020,7 @@ bool FontworkHelpers::getThemeColorFromShape(
         && (xPropertySet->getPropertyValue(rPropertyName) >>= xComplexColor) && xComplexColor.is())
     {
         rComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        if (rComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
-            return false;
-        else
-            return true;
+        return rComplexColor.isValidThemeType();
     }
     return false;
 }
@@ -1062,7 +1059,7 @@ constexpr const std::array<std::u16string_view, 12> WColorNames{
 OUString lcl_getW14MarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
-        sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(rComplexColor.getThemeColorType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
     return OUString(W14ColorNames[nClrNameIndex]);
 }
@@ -1071,7 +1068,7 @@ OUString lcl_getW14MarkupStringForThemeColor(const model::ComplexColor& rComplex
 OUString lcl_getWMarkupStringForThemeColor(const model::ComplexColor& rComplexColor)
 {
     const sal_uInt8 nClrNameIndex = std::clamp<sal_uInt8>(
-        sal_Int32(rComplexColor.getSchemeType()), sal_Int32(model::ThemeColorType::Dark1),
+        sal_Int32(rComplexColor.getThemeColorType()), sal_Int32(model::ThemeColorType::Dark1),
         sal_Int32(model::ThemeColorType::FollowedHyperlink));
     return OUString(WColorNames[nClrNameIndex]);
 }
@@ -1313,7 +1310,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
                 pGrabBagStack->push("attributes");
                 pGrabBagStack->addInt32("pos", (*it).first);
                 pGrabBagStack->pop();
-                if ((*it).second.TTColor.getSchemeType() == model::ThemeColorType::Unknown)
+                if ((*it).second.TTColor.getThemeColorType() == model::ThemeColorType::Unknown)
                 {
                     pGrabBagStack->push("srgbClr");
                     pGrabBagStack->push("attributes");

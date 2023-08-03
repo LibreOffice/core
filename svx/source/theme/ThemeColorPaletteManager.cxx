@@ -147,7 +147,7 @@ OString ThemeColorPaletteManager::generateJSON()
             aColorTree.put("Name", rEffectData.maColorName.toUtf8());
 
             model::ComplexColor aComplexColor;
-            aComplexColor.setSchemeColor(rColorData.meThemeColorType);
+            aComplexColor.setThemeColor(rColorData.meThemeColorType);
             aComplexColor.addTransformation(
                 { model::TransformationType::LumMod, rEffectData.mnLumMod });
             aComplexColor.addTransformation(

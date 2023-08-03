@@ -14,7 +14,6 @@
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/ColorSet.hxx>

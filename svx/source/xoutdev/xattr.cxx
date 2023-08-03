@@ -392,7 +392,7 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("complex-color"));
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("scheme-index"),
-                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.getSchemeType())).getStr()));
+                                      BAD_CAST(OString::number(sal_Int16(maComplexColor.getThemeColorType())).getStr()));
 
     for (auto const& rTransform : maComplexColor.getTransformations())
     {
@@ -2026,7 +2026,7 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
     {
         case MID_COLOR_THEME_INDEX:
         {
-            rVal <<= sal_Int16(getComplexColor().getSchemeType());
+            rVal <<= sal_Int16(getComplexColor().getThemeColorType());
             break;
         }
         case MID_COLOR_LUM_MOD:
@@ -2082,7 +2082,7 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int16 nIndex = -1;
             if (!(rVal >>= nIndex))
                 return false;
-            getComplexColor().setSchemeColor(model::convertToThemeColorType(nIndex));
+            getComplexColor().setThemeColor(model::convertToThemeColorType(nIndex));
         }
         break;
         case MID_COLOR_LUM_MOD:

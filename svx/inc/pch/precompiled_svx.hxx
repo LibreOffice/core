@@ -227,7 +227,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>

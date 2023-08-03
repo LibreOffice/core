@@ -504,12 +504,12 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
         if (aColor == nPhClr)
         {
-            aComplexColor.setSchemeColor(model::convertToThemeColorType(nPhClrTheme));
+            aComplexColor.setThemeColor(model::convertToThemeColorType(nPhClrTheme));
             rPropMap.setProperty(PROP_LineComplexColor, model::color::createXComplexColor(aComplexColor));
         }
         else
         {
-            aComplexColor.setSchemeColor(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
+            aComplexColor.setThemeColor(model::convertToThemeColorType(aLineColor.getSchemeColorIndex()));
             if (aLineColor.getLumMod() != 10000)
                 aComplexColor.addTransformation({model::TransformationType::LumMod, aLineColor.getLumMod()});
             if (aLineColor.getLumOff() != 0)

@@ -1964,8 +1964,7 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                 if (pMap->nMemberId == MID_COLOR_THEME_INDEX)
                 {
                     const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
-                    if (pColor->getComplexColor().getType() == model::ColorType::Unused ||
-                        pColor->getComplexColor().getSchemeType() == model::ThemeColorType::Unknown)
+                    if (!pColor->getComplexColor().isValidThemeType())
                     {
                         eState = beans::PropertyState_DEFAULT_VALUE;
                     }

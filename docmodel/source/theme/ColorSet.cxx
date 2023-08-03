@@ -40,13 +40,13 @@ Color ColorSet::getColor(model::ThemeColorType eType) const
 
 Color ColorSet::resolveColor(model::ComplexColor const& rComplexColor) const
 {
-    auto eSchemeType = rComplexColor.meSchemeType;
-    if (eSchemeType == model::ThemeColorType::Unknown)
+    auto eThemeType = rComplexColor.getThemeColorType();
+    if (eThemeType == model::ThemeColorType::Unknown)
     {
         SAL_WARN("svx", "ColorSet::resolveColor with ThemeColorType::Unknown");
         return COL_AUTO;
     }
-    Color aColor = getColor(eSchemeType);
+    Color aColor = getColor(eThemeType);
     return rComplexColor.applyTransformations(aColor);
 }
 

@@ -245,43 +245,45 @@ void ThemeExport::writeColorRGB(model::ComplexColor const& rComplexColor)
 
 void ThemeExport::writeColorCRGB(model::ComplexColor const& rComplexColor)
 {
-    mpFS->startElementNS(XML_a, XML_scrgbClr, XML_r, OString::number(rComplexColor.mnComponent1),
-                         XML_g, OString::number(rComplexColor.mnComponent2), XML_b,
-                         OString::number(rComplexColor.mnComponent3));
-    writeColorTransformations(rComplexColor.maTransformations);
+    mpFS->startElementNS(XML_a, XML_scrgbClr, XML_r,
+                         OString::number(sal_Int32(rComplexColor.getRed())), XML_g,
+                         OString::number(sal_Int32(rComplexColor.getGreen())), XML_b,
+                         OString::number(sal_Int32(rComplexColor.getBlue())));
+    writeColorTransformations(rComplexColor.getTransformations());
     mpFS->endElementNS(XML_a, XML_scrgbClr);
 }
 
 void ThemeExport::writeColorHSL(model::ComplexColor const& rComplexColor)
 {
-    mpFS->startElementNS(XML_a, XML_hslClr, XML_hue, OString::number(rComplexColor.mnComponent1),
-                         XML_sat, OString::number(rComplexColor.mnComponent2), XML_lum,
-                         OString::number(rComplexColor.mnComponent3));
-    writeColorTransformations(rComplexColor.maTransformations);
+    mpFS->startElementNS(XML_a, XML_hslClr, XML_hue,
+                         OString::number(sal_Int32(rComplexColor.getRed())), XML_sat,
+                         OString::number(sal_Int32(rComplexColor.getGreen())), XML_lum,
+                         OString::number(sal_Int32(rComplexColor.getBlue())));
+    writeColorTransformations(rComplexColor.getTransformations());
     mpFS->endElementNS(XML_a, XML_hslClr);
 }
 
-void ThemeExport::writeColorScheme(model::ComplexColor const& rComplexColor)
+void ThemeExport::writeColorTheme(model::ComplexColor const& rComplexColor)
 {
-    auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.meSchemeType);
+    auto iterator = constThemeColorTypeTokenMap.find(rComplexColor.getThemeColorType());
     if (iterator != constThemeColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
         mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, sValue);
-        writeColorTransformations(rComplexColor.maTransformations);
+        writeColorTransformations(rComplexColor.getTransformations());
         mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
 
 void ThemeExport::writeColorSystem(model::ComplexColor const& rComplexColor)
 {
-    auto iterator = constSystemColorTypeTokenMap.find(rComplexColor.meSystemColorType);
+    auto iterator = constSystemColorTypeTokenMap.find(rComplexColor.getSystemColorType());
     if (iterator != constSystemColorTypeTokenMap.end())
     {
         const char* sValue = iterator->second;
         mpFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
         //XML_lastClr
-        writeColorTransformations(rComplexColor.maTransformations);
+        writeColorTransformations(rComplexColor.getTransformations());
         mpFS->endElementNS(XML_a, XML_schemeClr);
     }
 }
@@ -289,13 +291,13 @@ void ThemeExport::writeColorSystem(model::ComplexColor const& rComplexColor)
 void ThemeExport::writeColorPlaceholder(model::ComplexColor const& rComplexColor)
 {
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, "phClr");
-    writeColorTransformations(rComplexColor.maTransformations);
+    writeColorTransformations(rComplexColor.getTransformations());
     mpFS->endElementNS(XML_a, XML_schemeClr);
 }
 
 void ThemeExport::writeComplexColor(model::ComplexColor const& rComplexColor)
 {
-    switch (rComplexColor.meType)
+    switch (rComplexColor.getType())
     {
         case model::ColorType::Unused:
             break;
@@ -308,8 +310,8 @@ void ThemeExport::writeComplexColor(model::ComplexColor const& rComplexColor)
         case model::ColorType::HSL:
             writeColorHSL(rComplexColor);
             break;
-        case model::ColorType::Scheme:
-            writeColorScheme(rComplexColor);
+        case model::ColorType::Theme:
+            writeColorTheme(rComplexColor);
             break;
         case model::ColorType::Palette:
             break;

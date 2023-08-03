@@ -491,7 +491,7 @@ void TDefTableHandler::fillCellProperties( const ::tools::SvRef< TablePropertyMa
     if (m_eThemeColorType != model::ThemeColorType::Unknown)
     {
         model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(m_eThemeColorType);
+        aComplexColor.setThemeColor(m_eThemeColorType);
 
         if (m_nThemeTint > 0 )
         {

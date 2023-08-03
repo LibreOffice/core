@@ -56,7 +56,7 @@ void XMLComplexColorImport::fillAttributes(
                 sal_Int16 nValue = -1;
                 if (SvXMLUnitConverter::convertEnum(nValue, aIter.toView(), pXML_ThemeColor_Enum))
                 {
-                    mrComplexColor.setSchemeColor(model::convertToThemeColorType(nValue));
+                    mrComplexColor.setThemeColor(model::convertToThemeColorType(nValue));
                 }
                 break;
             }
@@ -64,7 +64,7 @@ void XMLComplexColorImport::fillAttributes(
             {
                 const OUString aValue = aIter.toString();
                 if (aValue == u"theme")
-                    mrComplexColor.setType(model::ColorType::Scheme);
+                    mrComplexColor.setType(model::ColorType::Theme);
                 // TODO - handle other color types
                 break;
             }
@@ -142,7 +142,7 @@ void XMLPropertyComplexColorContext::endFastElement(sal_Int32 nElement)
 {
     if (nElement == mnRootElement)
     {
-        if (getComplexColor().getSchemeType() != model::ThemeColorType::Unknown)
+        if (getComplexColor().getThemeColorType() != model::ThemeColorType::Unknown)
         {
             aProp.maValue <<= model::color::createXComplexColor(getComplexColor());
             SetInsert(true);

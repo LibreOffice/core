@@ -48,7 +48,7 @@ void SparklineGroupsExport::insertColor(model::ComplexColor const& rComplexColor
 void SparklineGroupsExport::insertComplexColor(model::ComplexColor const& rComplexColor,
                                                XMLTokenEnum eToken)
 {
-    if (!rComplexColor.isValidSchemeType())
+    if (!rComplexColor.isValidThemeType())
         return;
     XMLComplexColorExport aComplexColorExport(m_rExport);
     aComplexColorExport.exportComplexColor(rComplexColor, XML_NAMESPACE_CALC_EXT, eToken);

@@ -1182,7 +1182,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             switch (pMap->nMemberId)
             {
                 case MID_COLOR_THEME_INDEX:
-                    if (pColor->getComplexColor().meSchemeType == model::ThemeColorType::Unknown)
+                    if (!pColor->getComplexColor().isValidThemeType())
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }
@@ -1216,7 +1216,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                     break;
                 }
                 case MID_COMPLEX_COLOR:
-                    if (pColor->getComplexColor().meType == model::ColorType::Unused)
+                    if (pColor->getComplexColor().getType() == model::ColorType::Unused)
                     {
                         eItemState = SfxItemState::DEFAULT;
                     }

@@ -46,7 +46,7 @@ void updateTextPortionColorSet(model::ColorSet const& rColorSet,
 
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
 
-    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
+    if (!aComplexColor.isValidThemeType())
         return;
 
     Color aColor = rColorSet.resolveColor(aComplexColor);
@@ -67,7 +67,7 @@ void updateFillColorSet(model::ColorSet const& rColorSet,
 
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
 
-    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
+    if (!aComplexColor.isValidThemeType())
         return;
 
     Color aColor = rColorSet.resolveColor(aComplexColor);
@@ -88,7 +88,7 @@ void updateLineColorSet(model::ColorSet const& rColorSet,
 
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
 
-    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
+    if (!aComplexColor.isValidThemeType())
         return;
 
     Color aColor = rColorSet.resolveColor(aComplexColor);

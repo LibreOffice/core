@@ -208,7 +208,6 @@
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/dllapi.h>
 #include <docmodel/theme/ColorSet.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawingml/colorchoicecontext.hxx>

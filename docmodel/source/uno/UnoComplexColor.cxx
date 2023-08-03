@@ -15,7 +15,7 @@ using namespace css;
 
 sal_Int32 UnoComplexColor::getType() { return sal_Int32(maColor.getType()); }
 
-sal_Int32 UnoComplexColor::getSchemeColorType() { return sal_Int32(maColor.getSchemeType()); }
+sal_Int32 UnoComplexColor::getThemeColorType() { return sal_Int32(maColor.getThemeColorType()); }
 
 util::Color UnoComplexColor::resolveColor(uno::Reference<util::XTheme> const& /*xTheme*/)
 {

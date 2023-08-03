@@ -18,10 +18,10 @@ namespace oox::xls
 void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor, Color const& rColor)
 {
-    if (rComplexColor.isValidSchemeType())
+    if (rComplexColor.isValidThemeType())
     {
         sal_Int32 nTheme
-            = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getSchemeType());
+            = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getThemeColorType());
         double fTintShade = oox::convertColorTransformsToTintOrShade(rComplexColor);
         pFS->singleElement(nElement, XML_theme, OString::number(nTheme), XML_tint,
                            sax_fastparser::UseIf(OString::number(fTintShade), fTintShade != 0.0));
@@ -35,7 +35,7 @@ void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
 void writeComplexColor(sax_fastparser::FSHelperPtr& pFS, sal_Int32 nElement,
                        model::ComplexColor const& rComplexColor)
 {
-    if (rComplexColor.isValidSchemeType() || rComplexColor.getType() == model::ColorType::RGB)
+    if (rComplexColor.isValidThemeType() || rComplexColor.getType() == model::ColorType::RGB)
     {
         writeComplexColor(pFS, nElement, rComplexColor, rComplexColor.getFinalColor());
     }
