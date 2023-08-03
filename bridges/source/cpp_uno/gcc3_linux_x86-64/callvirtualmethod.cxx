@@ -153,6 +153,8 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         *static_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &data.rax );
         break;
     case typelib_TypeClass_FLOAT:
+        *static_cast<float *>(pRegisterReturn) = *reinterpret_cast<float *>(&data.xmm0);
+        break;
     case typelib_TypeClass_DOUBLE:
         *static_cast<double *>( pRegisterReturn ) = data.xmm0;
         break;
