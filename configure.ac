@@ -6091,7 +6091,7 @@ fi
 
 AC_SUBST(ENABLE_CUPS)
 
-libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.4.1],,system,TRUE)
+libo_CHECK_SYSTEM_MODULE([fontconfig],[FONTCONFIG],[fontconfig >= 2.12.0],,system,TRUE)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================

@@ -859,11 +859,12 @@ static void addtopattern(FcPattern *pPattern,
 
 namespace
 {
-    //Someday fontconfig will hopefully use bcp47, see fdo#19869
-    //In the meantime try something that will fit to workaround fdo#35118
+    //Someday fontconfig will hopefully use bcp47, see:
+    //https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/50
+    //In the meantime try something that will fit to workaround, see:
+    //https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/30
     OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
     {
-#if defined(FC_VERSION) && (FC_VERSION >= 20492)
         std::shared_ptr<FcStrSet> xLangSet(FcGetLangs(), FcStrSetDestroy);
         OString sLangAttrib;
 
@@ -897,12 +898,6 @@ namespace
         }
 
         return OString();
-#else
-        OString sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
-        if (sLangAttrib.equalsIgnoreAsciiCase("pa-in"))
-            sLangAttrib = "pa";
-        return sLangAttrib;
-#endif
     }
 
     bool isEmoji(sal_uInt32 nCurrentChar)
