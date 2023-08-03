@@ -359,17 +359,19 @@ namespace svgio::svgreader
                     }
                 }
 
+                // Use the whole text line to calculate the align position
+                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(getWholeTextLine(), 0, getWholeTextLine().getLength()));
                 // apply TextAlign
                 switch(aTextAlign)
                 {
                     case TextAlign::right:
                     {
-                        aPosition.setX(aPosition.getX() - fTextWidth);
+                        aPosition.setX(aPosition.getX() - fWholeTextLineWidth);
                         break;
                     }
                     case TextAlign::center:
                     {
-                        aPosition.setX(aPosition.getX() - (fTextWidth * 0.5));
+                        aPosition.setX(aPosition.getX() - (fWholeTextLineWidth * 0.5));
                         break;
                     }
                     case TextAlign::notset:

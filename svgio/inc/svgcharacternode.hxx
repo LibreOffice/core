@@ -127,6 +127,9 @@ namespace svgio::svgreader
             // keep a copy of string data before space handling
             OUString           maTextBeforeSpaceHandling;
 
+            // The whole text line of which this SvgCharacterNode is parted of
+            OUString           maWholeTextLine;
+
             /// local helpers
             rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> createSimpleTextPrimitive(
                 SvgTextPosition& rSvgTextPosition,
@@ -153,6 +156,10 @@ namespace svgio::svgreader
             const OUString& getText() const { return maText; }
 
             const OUString& getTextBeforeSpaceHandling() const { return maTextBeforeSpaceHandling; }
+
+            void setWholeTextLine(const OUString& rWholeTextLine) { maWholeTextLine = rWholeTextLine; }
+
+            const OUString& getWholeTextLine() const { return maWholeTextLine; }
         };
 
 } // end of namespace svgio::svgreader

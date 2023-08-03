@@ -145,6 +145,87 @@ namespace
 
         return pLast;
     }
+
+    OUString getWholeTextLine(svgio::svgreader::SvgNode const * pNode)
+    {
+        OUString sText;
+        if (pNode)
+        {
+            const auto& rChilds = pNode->getChildren();
+            const sal_uInt32 nCount(rChilds.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
+            {
+                svgio::svgreader::SvgNode* pCandidate = rChilds[a].get();
+
+                if(pCandidate)
+                {
+                    switch(pCandidate->getType())
+                    {
+                        case SVGToken::Character:
+                        {
+                            svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
+                            sText += pCharNode->getText();
+                            break;
+                        }
+                        case SVGToken::Tspan:
+                        case SVGToken::TextPath:
+                        case SVGToken::Tref:
+                        {
+                            sText += getWholeTextLine(pCandidate);
+                            break;
+                        }
+                        default:
+                        {
+                            OSL_ENSURE(false, "Unexpected token inside SVGTokenText (!)");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return sText;
+    }
+
+    void setWholeTextLine(svgio::svgreader::SvgNode const * pNode, const OUString& rText)
+    {
+        if (pNode)
+        {
+            const auto& rChilds = pNode->getChildren();
+            const sal_uInt32 nCount(rChilds.size());
+
+            for(sal_uInt32 a(0); a < nCount; a++)
+            {
+                svgio::svgreader::SvgNode* pCandidate = rChilds[a].get();
+
+                if(pCandidate)
+                {
+                    switch(pCandidate->getType())
+                    {
+                        case SVGToken::Character:
+                        {
+                            svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
+                            pCharNode->setWholeTextLine(rText);
+                            break;
+                        }
+                        case SVGToken::Tspan:
+                        case SVGToken::TextPath:
+                        case SVGToken::Tref:
+                        {
+                            setWholeTextLine(pCandidate, rText);
+                            break;
+                        }
+                        default:
+                        {
+                            OSL_ENSURE(false, "Unexpected token inside SVGTokenText (!)");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 } // end anonymous namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
@@ -468,7 +549,7 @@ namespace
                 return;
 
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
-            SvgNode* pWhitespaceCheck(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
+            SvgNode* pTextNode(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
             SvgStyleNode* pCssStyle(SVGToken::Style == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
             SvgTitleDescNode* pSvgTitleDescNode(SVGToken::Title == aSVGToken || SVGToken::Desc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
 
@@ -597,10 +678,14 @@ namespace
                 }
             }
 
-            if(pWhitespaceCheck)
+            if(pTextNode)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pWhitespaceCheck, nullptr);
+                whiteSpaceHandling(pTextNode, nullptr);
+
+                // Iterate over all the nodes in this text element to get the whole text line
+                OUString sWholeTextLine = getWholeTextLine(pTextNode);
+                setWholeTextLine(pTextNode, sWholeTextLine);
             }
         }
 
