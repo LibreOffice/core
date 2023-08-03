@@ -1044,6 +1044,13 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                             << aRect.Top() << " on View #" << nViewCount);
 
                     BegDragObj_createInvisibleObjectAtPosition(aRect, rView);
+                    // BegDragObj_createInvisibleObjectAtPosition will call
+                    //   SdrMarkView::MarkObj
+                    //   -> SdrMarkView::AdjustMarkHdl
+                    //   -> SdrDragView::SetMarkHandles
+                    //   -> SdrMarkView::SetMarkHandles
+                    // which will recreate the SdrHdl objects.
+                    _pHdl = _pSection->PickHandle(_aPnt);
                 }
             }
         }
