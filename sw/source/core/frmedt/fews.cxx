@@ -50,6 +50,7 @@
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <UndoInsert.hxx>
+#include <formatflysplit.hxx>
 
 using namespace com::sun::star;
 
@@ -452,9 +453,24 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const OUString &rText, con
         if( pCnt->IsInTab() )
         {
             // pass down index to the TableNode for tables
-            const SwTable& rTable = *pCnt->FindTabFrame()->GetTable();
+            SwTabFrame* pTabFrame = pCnt->FindTabFrame();
+            const SwTable& rTable = *pTabFrame->GetTable();
             nIdx = rTable.GetTabSortBoxes()[ 0 ]
                         ->GetSttNd()->FindTableNode()->GetIndex();
+
+            SwFlyFrame* pFly = pTabFrame->FindFlyFrame();
+            if (pFly && pFly->IsFlySplitAllowed())
+            {
+                // This table is in a split fly, but we will insert a label, which means this is not
+                // a floating table anymore, disable the "can split" bit, it'll be hidden on the UI
+                // anyway.
+                SwFrameFormat& rFlyFormat = pFly->GetFrameFormat();
+                SfxItemSetFixed<RES_FLY_SPLIT, RES_FLY_SPLIT> aSet(GetDoc()->GetAttrPool());
+                SwFormatFlySplit aSplit(false);
+                aSet.Put(aSplit);
+                // SwUndoFormatAttr is created for us.
+                GetDoc()->SetFlyFrameAttr(rFlyFormat, aSet);
+            }
         }
         break;
     case SwLabelType::Draw:
