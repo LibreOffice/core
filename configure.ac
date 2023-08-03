@@ -1199,8 +1199,6 @@ test "${test_gtk3_kde5+set}" != set -a "$test_kf5" = yes -a "$test_gtk3" = yes &
 test "${test_system_fontconfig+set}" != set -a "${test_system_freetype+set}" = set && test_system_fontconfig="$test_system_freetype"
 test "${test_system_freetype+set}" != set -a "${test_system_fontconfig+set}" = set && test_system_freetype="$test_system_fontconfig"
 
-test "${test_atspi_tests+set}" = set || test_atspi_tests="$test_gtk3"
-
 # convenience / platform overriding "fixes"
 # Don't sort!
 test "$test_kf5" = yes -a "$test_qt5" = no && test_kf5=no
@@ -11784,14 +11782,13 @@ if test "$enable_introspection" = yes; then
 fi
 
 # AT-SPI2 tests require gtk3, xvfb-run, dbus-launch and atspi-2
-test enable_atspi_tests = yes && test_atspi_tests=yes
-if test "$test_atspi_tests" = yes && ! test "$ENABLE_GTK3" = TRUE; then
+if ! test "$ENABLE_GTK3" = TRUE; then
     if test "$enable_atspi_tests" = yes; then
         AC_MSG_ERROR([--enable-atspi-tests requires --enable-gtk3])
     fi
-    test_atspi_tests=no
+    enable_atspi_tests=no
 fi
-if test "$test_atspi_tests" = yes; then
+if ! test "$enable_atspi_tests" = no; then
     AC_PATH_PROGS([XVFB_RUN], [xvfb-run], no)
     if ! test "$XVFB_RUN" = no; then
         dnl make sure the found xvfb-run actually works
@@ -11807,27 +11804,27 @@ if test "$test_atspi_tests" = yes; then
         if test "$enable_atspi_tests" = yes; then
             AC_MSG_ERROR([xvfb-run required by --enable-atspi-tests not found])
         fi
-        test_atspi_tests=no
+        enable_atspi_tests=no
     fi
 fi
-if test "$test_atspi_tests" = yes; then
+if ! test "$enable_atspi_tests" = no; then
     AC_PATH_PROGS([DBUS_LAUNCH], [dbus-launch], no)
     if test "$DBUS_LAUNCH" = no; then
         if test "$enable_atspi_tests" = yes; then
             AC_MSG_ERROR([dbus-launch required by --enable-atspi-tests not found])
         fi
-        test_atspi_tests=no
+        enable_atspi_tests=no
     fi
 fi
-if test "$test_atspi_tests" = yes; then
+if ! test "$enable_atspi_tests" = no; then
     PKG_CHECK_MODULES([ATSPI2], [atspi-2 gobject-2.0],,
                       [if test "$enable_atspi_tests" = yes; then
                            AC_MSG_ERROR([$ATSPI2_PKG_ERRORS])
                        else
-                           test_atspi_tests=no
+                           enable_atspi_tests=no
                        fi])
 fi
-if test "x$test_atspi_tests" = xyes; then
+if ! test "x$enable_atspi_tests" = xno; then
     PKG_CHECK_MODULES([ATSPI2_2_32], [atspi-2 >= 2.32],
                       [have_atspi_scroll_to=1],
                       [have_atspi_scroll_to=0])
@@ -11835,7 +11832,7 @@ if test "x$test_atspi_tests" = xyes; then
                        [Whether AT-SPI2 has the scrollTo API])
 fi
 ENABLE_ATSPI_TESTS=
-test "$test_atspi_tests" = yes && ENABLE_ATSPI_TESTS=TRUE
+test "$enable_atspi_tests" = no || ENABLE_ATSPI_TESTS=TRUE
 AC_SUBST([ENABLE_ATSPI_TESTS])
 
 dnl ===================================================================
