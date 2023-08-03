@@ -372,7 +372,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 if (nName == NS_ooxml::LN_CT_Underline_themeColor)
                 {
                     auto eThemeColorType = TDefTableHandler::getThemeColorTypeIndex(nIntValue);
-                    aComplexColor.setSchemeColor(eThemeColorType);
+                    aComplexColor.setThemeColor(eThemeColorType);
                 }
                 else if (nName == NS_ooxml::LN_CT_Underline_themeTint)
                 {
@@ -2291,10 +2291,10 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
 
                     model::ComplexColor aComplexColor;
-                    aComplexColor.setSchemeColor(eType);
+                    aComplexColor.setThemeColor(eType);
 
                     auto eUsage = TDefTableHandler::getThemeColorUsage(pThemeColorHandler->mnIndex);
-                    aComplexColor.meThemeColorUsage = eUsage;
+                    aComplexColor.setThemeColorUsage(eUsage);
 
                     if (pThemeColorHandler->mnTint > 0 )
                     {

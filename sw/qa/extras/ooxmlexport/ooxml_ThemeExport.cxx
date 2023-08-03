@@ -29,7 +29,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_ODF,
     auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getRun(xParagraph, 1),
                                                                           "CharComplexColor");
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -44,7 +44,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionLevelCharColor_DOCX,
     auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(getRun(xParagraph, 1),
                                                                           "CharComplexColor");
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -60,7 +60,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderCol
         auto xComplexColor
             = getProperty<uno::Reference<util::XComplexColor>>(xParagraph, "TopBorderComplexColor");
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2, aComplexColor.getThemeColorType());
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -70,7 +70,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testThemePortionBorderColor_DOCX, "Test_ThemeBorderCol
         auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
             xParagraph, "BottomBorderComplexColor");
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4, aComplexColor.getThemeColorType());
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -90,7 +90,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testCharUnderlineTheme_DOCX, "Test_CharUnderlineThemeC
     auto xComplexColor
         = getProperty<uno::Reference<util::XComplexColor>>(xRun, "CharUnderlineComplexColor");
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
     auto const& rTransforms = aComplexColor.getTransformations();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
     CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTransforms[0].meType);
@@ -106,7 +106,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackg
         auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
             xParagraph, "ParaBackgroundComplexColor");
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -119,7 +119,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackg
         auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
             xParagraph, "ParaBackgroundComplexColor");
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);
@@ -132,7 +132,7 @@ DECLARE_SW_ROUNDTRIP_TEST(testParaBackgroundTheme_DOCX, "Test_ThemeTextParaBackg
         auto xComplexColor = getProperty<uno::Reference<util::XComplexColor>>(
             xParagraph, "ParaBackgroundComplexColor");
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
         auto const& rTransforms = aComplexColor.getTransformations();
         CPPUNIT_ASSERT_EQUAL(size_t(1), rTransforms.size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTransforms[0].meType);

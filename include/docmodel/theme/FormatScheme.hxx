@@ -12,7 +12,6 @@
 
 #include <docmodel/dllapi.h>
 #include <tools/color.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
@@ -475,19 +474,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
     }
@@ -518,7 +517,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -530,7 +529,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -542,7 +541,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
     }
@@ -592,19 +591,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.meType = model::ColorType::Placeholder;
+            pFill->maColor.setPlaceholder();
             pFillStyle->mpFill = pFill;
         }
     }

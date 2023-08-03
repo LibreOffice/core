@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     // Set theme color
     {
         model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(model::ThemeColorType::Accent1);
+        aComplexColor.setThemeColor(model::ThemeColorType::Accent1);
         aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
         aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
         xShape->setPropertyValue("FillComplexColor",
@@ -117,7 +117,7 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
         CPPUNIT_ASSERT(xShape->getPropertyValue("FillComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(2000), aComplexColor.getTransformations()[0].mnValue);

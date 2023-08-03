@@ -353,7 +353,7 @@ model::ComplexColor CellColorHandler::getComplexColor() const
     model::ComplexColor aComplexColor;
     if (m_eThemeColorType != model::ThemeColorType::Unknown)
     {
-        aComplexColor.setSchemeColor(m_eThemeColorType);
+        aComplexColor.setThemeColor(m_eThemeColorType);
 
         if (m_nThemeColorTint > 0 )
         {
@@ -374,7 +374,7 @@ model::ComplexColor CellColorHandler::getFillComplexColor() const
     model::ComplexColor aComplexColor;
     if (m_eFillThemeColorType != model::ThemeColorType::Unknown)
     {
-        aComplexColor.setSchemeColor(m_eFillThemeColorType);
+        aComplexColor.setThemeColor(m_eFillThemeColorType);
 
         if (m_nFillThemeColorTint > 0 )
         {

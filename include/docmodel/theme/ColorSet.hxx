@@ -14,7 +14,6 @@
 #include <docmodel/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <tools/color.hxx>
 

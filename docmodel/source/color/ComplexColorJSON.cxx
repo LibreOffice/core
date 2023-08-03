@@ -26,7 +26,7 @@ bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexCo
         boost::property_tree::read_json(aStream, aRootTree);
 
         sal_Int32 nThemeType = aRootTree.get<sal_Int32>("ThemeIndex", -1);
-        aComplexColor.setSchemeColor(model::convertToThemeColorType(nThemeType));
+        aComplexColor.setThemeColor(model::convertToThemeColorType(nThemeType));
         boost::property_tree::ptree aTransformTree = aRootTree.get_child("Transformations");
         for (const auto& rEachTransformationNode :
              boost::make_iterator_range(aTransformTree.equal_range("")))
@@ -60,7 +60,7 @@ bool convertFromJSON(OString const& rJsonString, model::ComplexColor& rComplexCo
 
 void convertToJSONTree(boost::property_tree::ptree& rTree, model::ComplexColor const& rComplexColor)
 {
-    rTree.put("ThemeIndex", sal_Int16(rComplexColor.getSchemeType()));
+    rTree.put("ThemeIndex", sal_Int16(rComplexColor.getThemeColorType()));
 
     boost::property_tree::ptree aTransformationsList;
     for (auto const& rTransformation : rComplexColor.getTransformations())

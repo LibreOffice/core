@@ -36,10 +36,11 @@ constexpr const std::array<XMLTokenEnum, 12> constThemeColorTypeToToken{
 void XMLComplexColorExport::doExport(model::ComplexColor const& rComplexColor, sal_uInt16 nPrefix,
                                      const OUString& rLocalName)
 {
-    if (rComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
+    auto eThemeType = rComplexColor.getThemeColorType();
+    if (eThemeType == model::ThemeColorType::Unknown)
         return;
 
-    XMLTokenEnum nToken = constThemeColorTypeToToken[sal_Int16(rComplexColor.getSchemeType())];
+    XMLTokenEnum nToken = constThemeColorTypeToToken[sal_Int16(eThemeType)];
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_THEME_TYPE, nToken);
     mrExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, "theme");
     SvXMLElementExport aComplexColorElement(mrExport, nPrefix, rLocalName, true, true);

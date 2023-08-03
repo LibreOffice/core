@@ -36,12 +36,10 @@ $(eval $(call gb_Library_set_precompiled_header,docmodel,docmodel/inc/pch/precom
 $(eval $(call gb_Library_use_sdk_api,docmodel))
 
 $(eval $(call gb_Library_use_libraries,docmodel,\
-    basegfx \
     comphelper \
     cppuhelper \
     cppu \
     sal \
-    vcl \
     tl \
 ))
 

@@ -430,7 +430,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 model::ComplexColor aComplexColor;
                 if (aFillColor == nPhClr)
                 {
-                    aComplexColor.setSchemeColor(model::convertToThemeColorType(nPhClrTheme));
+                    aComplexColor.setThemeColor(model::convertToThemeColorType(nPhClrTheme));
                 }
                 else
                 {

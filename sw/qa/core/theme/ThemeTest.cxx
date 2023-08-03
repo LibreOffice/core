@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeading)
     auto xComplexColor
         = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeadingODT)
@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeColorInHeadingODT)
     auto xComplexColor
         = getProperty<uno::Reference<util::XComplexColor>>(getParagraph(1), "CharComplexColor");
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 }
 
 void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
@@ -67,8 +67,8 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.getType());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.getTransformations().size());
     }
 
     // Fill style 2
@@ -88,21 +88,21 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[0];
             CPPUNIT_ASSERT_EQUAL(0.0, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
 
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(11000), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(6700), rTrasnsformation.mnValue);
             }
@@ -110,21 +110,21 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[1];
             CPPUNIT_ASSERT_EQUAL(0.5, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
 
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10300), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(7300), rTrasnsformation.mnValue);
             }
@@ -132,21 +132,21 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[2];
             CPPUNIT_ASSERT_EQUAL(1.0, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
 
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10500), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10900), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(8100), rTrasnsformation.mnValue);
             }
@@ -170,20 +170,20 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[0];
             CPPUNIT_ASSERT_EQUAL(0.0, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10300), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10200), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Tint, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(9400), rTrasnsformation.mnValue);
             }
@@ -191,20 +191,20 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[1];
             CPPUNIT_ASSERT_EQUAL(0.5, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(11000), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10000), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(10000), rTrasnsformation.mnValue);
             }
@@ -212,20 +212,20 @@ void checkFillStyles(std::vector<model::FillStyle> const& rStyleList)
         {
             auto const& rGradientStop = pGradientFill->maGradientStops[2];
             CPPUNIT_ASSERT_EQUAL(1.0, rGradientStop.mfPosition);
-            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.meType);
-            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.maTransformations.size());
+            CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, rGradientStop.maColor.getType());
+            CPPUNIT_ASSERT_EQUAL(size_t(3), rGradientStop.maColor.getTransformations().size());
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[0];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[0];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(9900), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[1];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[1];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::SatMod, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(12000), rTrasnsformation.mnValue);
             }
             {
-                auto const& rTrasnsformation = rGradientStop.maColor.maTransformations[2];
+                auto const& rTrasnsformation = rGradientStop.maColor.getTransformations()[2];
                 CPPUNIT_ASSERT_EQUAL(model::TransformationType::Shade, rTrasnsformation.meType);
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(7800), rTrasnsformation.mnValue);
             }
@@ -251,8 +251,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.getType());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.getTransformations().size());
     }
 
     // Line style 2
@@ -270,8 +270,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.getType());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.getTransformations().size());
     }
 
     // Line style 3
@@ -289,8 +289,8 @@ void checkLineStyles(std::vector<model::LineStyle> const& rStyleList)
         CPPUNIT_ASSERT(rFillStyle.mpFill);
         CPPUNIT_ASSERT_EQUAL(model::FillType::Solid, rFillStyle.mpFill->meType);
         auto* pSolidFill = static_cast<model::SolidFill*>(rFillStyle.mpFill.get());
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::Placeholder, pSolidFill->maColor.getType());
+        CPPUNIT_ASSERT_EQUAL(size_t(0), pSolidFill->maColor.getTransformations().size());
     }
 }
 
@@ -319,15 +319,13 @@ void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
         CPPUNIT_ASSERT_EQUAL(model::RectangleAlignment::Center, rEffect.meAlignment);
         CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
 
-        CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent1);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent2);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rEffect.maColor.mnComponent3);
+        CPPUNIT_ASSERT_EQUAL(model::ColorType::RGB, rEffect.maColor.getType());
+        CPPUNIT_ASSERT_EQUAL(Color(0x000000), rEffect.maColor.getRGB());
 
-        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.maTransformations.size());
+        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffect.maColor.getTransformations().size());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::Alpha,
-                             rEffect.maColor.maTransformations[0].meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int16(6300), rEffect.maColor.maTransformations[0].mnValue);
+                             rEffect.maColor.getTransformations()[0].meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6300), rEffect.maColor.getTransformations()[0].mnValue);
     }
 }
 

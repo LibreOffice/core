@@ -260,19 +260,20 @@ void checkSparklineThemeColors(ScDocument& rDocument)
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
 
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3,
-                         rAttributes.getColorSeries().getSchemeType());
+                         rAttributes.getColorSeries().getThemeColorType());
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6,
-                         rAttributes.getColorNegative().getSchemeType());
+                         rAttributes.getColorNegative().getThemeColorType());
     CPPUNIT_ASSERT_EQUAL(model::ColorType::Unused, rAttributes.getColorAxis().getType());
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light1,
-                         rAttributes.getColorMarkers().getSchemeType());
+                         rAttributes.getColorMarkers().getThemeColorType());
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent5,
-                         rAttributes.getColorFirst().getSchemeType());
+                         rAttributes.getColorFirst().getThemeColorType());
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent2,
-                         rAttributes.getColorLast().getSchemeType());
+                         rAttributes.getColorLast().getThemeColorType());
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1,
-                         rAttributes.getColorHigh().getSchemeType());
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4, rAttributes.getColorLow().getSchemeType());
+                         rAttributes.getColorHigh().getThemeColorType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent4,
+                         rAttributes.getColorLow().getThemeColorType());
 }
 } // end anonymous namespace
 

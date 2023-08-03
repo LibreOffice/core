@@ -1600,8 +1600,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
         model::ThemeColorType eType = model::convertToThemeColorType(aSelectedColor.m_nThemeIndex);
         if (eType != model::ThemeColorType::Unknown)
         {
-            model::ComplexColor aComplexColor;
-            aComplexColor.setSchemeColor(eType);
+            auto aComplexColor = model::ComplexColor::Theme(eType);
             aComplexColor.addTransformation({model::TransformationType::LumMod, aSelectedColor.m_nLumMod});
             aComplexColor.addTransformation({model::TransformationType::LumOff, aSelectedColor.m_nLumOff});
             aItem.setComplexColor(aComplexColor);

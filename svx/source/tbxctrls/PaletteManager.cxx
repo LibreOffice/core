@@ -434,7 +434,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
     if (rColor.m_nThemeIndex != -1)
     {
         model::ComplexColor aComplexColor;
-        aComplexColor.setSchemeColor(model::convertToThemeColorType(rColor.m_nThemeIndex));
+        aComplexColor.setThemeColor(model::convertToThemeColorType(rColor.m_nThemeIndex));
         if (rColor.m_nLumMod != 10000)
             aComplexColor.addTransformation({model::TransformationType::LumMod, rColor.m_nLumMod});
         if (rColor.m_nLumMod != 0)

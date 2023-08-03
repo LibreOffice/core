@@ -37,7 +37,7 @@ public:
 
     // XComplexColor
     sal_Int32 SAL_CALL getType() override;
-    sal_Int32 SAL_CALL getSchemeColorType() override;
+    sal_Int32 SAL_CALL getThemeColorType() override;
     css::util::Color SAL_CALL
     resolveColor(css::uno::Reference<css::util::XTheme> const& xTheme) override;
 };

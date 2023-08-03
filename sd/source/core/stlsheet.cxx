@@ -1359,7 +1359,7 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                 if (pEntry->nMemberId == MID_COLOR_THEME_INDEX)
                 {
                     const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
-                    if (pColor->getComplexColor().getSchemeType() == model::ThemeColorType::Unknown)
+                    if (pColor->getComplexColor().getThemeColorType() == model::ThemeColorType::Unknown)
                     {
                         eState = PropertyState_DEFAULT_VALUE;
                     }

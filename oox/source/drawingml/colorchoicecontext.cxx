@@ -185,12 +185,12 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
                 {
                     if (nToken == XML_phClr)
                     {
-                        mpComplexColor->setSchemePlaceholder();
+                        mpComplexColor->setThemePlaceholder();
                     }
                     else
                     {
                         model::ThemeColorType eType = schemeNameToThemeColorType(*sSchemeName);
-                        mpComplexColor->setSchemeColor(eType);
+                        mpComplexColor->setThemeColor(eType);
                     }
                 }
             }
@@ -205,10 +205,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             {
                 // TODO - just converted to RGB for now
                 ::Color nRgbValue = Color::getDmlPresetColor(nToken, API_RGB_TRANSPARENT);
-                mpComplexColor->mnComponent1 = nRgbValue.GetRed();
-                mpComplexColor->mnComponent2 = nRgbValue.GetGreen();
-                mpComplexColor->mnComponent3 = nRgbValue.GetBlue();
-                mpComplexColor->meType = model::ColorType::RGB;
+                mpComplexColor->setColor(nRgbValue);
             }
         }
         break;
@@ -279,7 +276,7 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
             else
                 nValue = rAttribs.getInteger(XML_val, 0);
 
-            mpComplexColor->maTransformations.push_back({eType, sal_Int16(nValue / 10)});
+            mpComplexColor->addTransformation({eType, sal_Int16(nValue / 10)});
         }
     }
 

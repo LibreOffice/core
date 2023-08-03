@@ -537,9 +537,9 @@ bool DrawingML::WriteSchemeColor(OUString const& rPropertyName, const uno::Refer
         return false;
 
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    if (aComplexColor.getSchemeType() == model::ThemeColorType::Unknown)
+    if (aComplexColor.getThemeColorType() == model::ThemeColorType::Unknown)
         return false;
-    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aComplexColor.getSchemeType())];
+    const char* pColorName = g_aPredefinedClrNames[sal_Int16(aComplexColor.getThemeColorType())];
     mpFS->startElementNS(XML_a, XML_solidFill);
     mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
     for (auto const& rTransform : aComplexColor.getTransformations())

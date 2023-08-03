@@ -607,7 +607,7 @@ public:
                 if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
                 {
                     auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                    aComplexColor.setSchemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
+                    aComplexColor.setThemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
                 }
                 if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
                 {

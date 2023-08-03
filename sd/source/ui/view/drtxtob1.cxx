@@ -822,7 +822,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
                 if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_THEME_INDEX, false))
                 {
-                    aComplexColor.setSchemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
+                    aComplexColor.setThemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
                 }
                 if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_MOD, false))
                 {

@@ -304,22 +304,21 @@ void lclAddThemeValuesToCustomAttributes(
         { model::ThemeColorType::FollowedHyperlink, "followedHyperlink" }
     };
 
-    if (rComplexColor.getType() == model::ColorType::Scheme &&
-        rComplexColor.getSchemeType() != model::ThemeColorType::Unknown)
+    if (rComplexColor.isValidThemeType())
     {
-        OString sSchemeType = constThemeColorTypeTokenMap[rComplexColor.getSchemeType()];
-        if (rComplexColor.meThemeColorUsage == model::ThemeColorUsage::Text)
+        OString sSchemeType = constThemeColorTypeTokenMap[rComplexColor.getThemeColorType()];
+        if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Text)
         {
-            if (rComplexColor.getSchemeType() == model::ThemeColorType::Dark1)
+            if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark1)
                 sSchemeType = "text1";
-            else if (rComplexColor.getSchemeType() == model::ThemeColorType::Dark2)
+            else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Dark2)
                 sSchemeType = "text2";
         }
-        else if (rComplexColor.meThemeColorUsage == model::ThemeColorUsage::Background)
+        else if (rComplexColor.getThemeColorUsage() == model::ThemeColorUsage::Background)
         {
-            if (rComplexColor.getSchemeType() == model::ThemeColorType::Light1)
+            if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light1)
                 sSchemeType = "background1";
-            else if (rComplexColor.getSchemeType() == model::ThemeColorType::Light2)
+            else if (rComplexColor.getThemeColorType() == model::ThemeColorType::Light2)
                 sSchemeType = "background2";
         }
 

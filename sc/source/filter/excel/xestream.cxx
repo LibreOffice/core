@@ -890,9 +890,9 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     pStream->singleElement(XML_sz, XML_val, OString::number( rFontData.mnHeight / 20.0 )); // Twips->Pt
 
     auto& rComplexColor = rFontData.maComplexColor;
-    if (rComplexColor.isValidSchemeType())
+    if (rComplexColor.isValidThemeType())
     {
-        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getSchemeType());
+        sal_Int32 nTheme = oox::convertThemeColorTypeToExcelThemeNumber(rComplexColor.getThemeColorType());
         double fTintShade = oox::convertColorTransformsToTintOrShade(rComplexColor);
         pStream->singleElement(XML_color,
             XML_theme, OString::number(nTheme),

@@ -419,7 +419,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testPptxTheme)
         CPPUNIT_ASSERT(xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod,
                              aComplexColor.getTransformations()[0].meType);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[0].mnValue);
@@ -474,7 +474,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
         CPPUNIT_ASSERT(xA1->getPropertyValue("FillComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         {
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
@@ -487,7 +487,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColorTint_Table)
         CPPUNIT_ASSERT(xA2->getPropertyValue("FillComplexColor") >>= xComplexColor);
         CPPUNIT_ASSERT(xComplexColor.is());
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
         {
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
 
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(2), rTrans.size());
@@ -530,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent6, aComplexColor.getThemeColorType());
 
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());
@@ -546,7 +546,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(0), rTrans.size());
@@ -556,7 +556,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeColor_Shape)
         CPPUNIT_ASSERT(xComplexColor.is());
         {
             auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getSchemeType());
+            CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
 
             auto const& rTrans = aComplexColor.getTransformations();
             CPPUNIT_ASSERT_EQUAL(size_t(1), rTrans.size());

@@ -12,8 +12,8 @@
 
 #include <docmodel/dllapi.h>
 #include <tools/color.hxx>
-#include <docmodel/theme/ThemeColor.hxx>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <docmodel/theme/ThemeColorType.hxx>
+#include <docmodel/color/Transformation.hxx>
 #include <o3tl/hash_combine.hxx>
 
 namespace model
@@ -24,7 +24,7 @@ enum class ColorType
     RGB,
     CRGB,
     HSL,
-    Scheme,
+    Theme,
     Palette,
     System,
     Placeholder
@@ -69,7 +69,7 @@ enum class SystemColorType
  *
  * A color that can be expresses as a RGB, CRGB or HSL representation or
  * a more abstract representation as for example system color, palette,
- * scheme (theme) color or a placeholder. In these representations the
+ * theme color or a placeholder. In these representations the
  * color needs to be additionally
  *
  * The color can also have transformations defined, which in addition
@@ -77,32 +77,45 @@ enum class SystemColorType
  */
 class DOCMODEL_DLLPUBLIC ComplexColor
 {
-public:
+private:
     ColorType meType = ColorType::Unused;
 
-    sal_Int32 mnComponent1 = 0; // Red, Hue
-    sal_Int32 mnComponent2 = 0; // Green, Saturation
-    sal_Int32 mnComponent3 = 0; // Blue, Luminance
+    double mnComponent1 = 0.0; // Red, Hue
+    double mnComponent2 = 0.0; // Green, Saturation
+    double mnComponent3 = 0.0; // Blue, Luminance
 
     SystemColorType meSystemColorType = SystemColorType::Unused;
     ::Color maLastColor;
 
-    ThemeColorType meSchemeType = ThemeColorType::Unknown;
+    ThemeColorType meThemeColorType = ThemeColorType::Unknown;
     ThemeColorUsage meThemeColorUsage = ThemeColorUsage::Unknown;
+
     std::vector<Transformation> maTransformations;
 
     ::Color maFinalColor;
 
 public:
     ColorType getType() const { return meType; }
-
     void setType(ColorType eType) { meType = eType; }
 
-    ThemeColorType getSchemeType() const { return meSchemeType; }
-
-    bool isValidSchemeType() const
+    ThemeColorType getThemeColorType() const { return meThemeColorType; }
+    bool isValidThemeType() const
     {
-        return meType == model::ColorType::Scheme && meSchemeType != ThemeColorType::Unknown;
+        return meType == model::ColorType::Theme && meThemeColorType != ThemeColorType::Unknown;
+    }
+
+    ThemeColorUsage getThemeColorUsage() const { return meThemeColorUsage; }
+    void setThemeColorUsage(ThemeColorUsage eThemeColorUsage)
+    {
+        meThemeColorUsage = eThemeColorUsage;
+    }
+
+    SystemColorType getSystemColorType() const { return meSystemColorType; }
+
+    void setSystemColorType(SystemColorType eSystemColorType)
+    {
+        meSystemColorType = eSystemColorType;
+        meType = ColorType::System;
     }
 
     Color getRGBColor() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
@@ -130,6 +143,10 @@ public:
 
     void clearTransformations() { maTransformations.clear(); }
 
+    double getRed() const { return mnComponent1; }
+    double getGreen() const { return mnComponent2; }
+    double getBlue() const { return mnComponent3; }
+
     void setCRGB(sal_Int32 nR, sal_Int32 nG, sal_Int32 nB)
     {
         mnComponent1 = nR;
@@ -137,6 +154,8 @@ public:
         mnComponent3 = nB;
         meType = ColorType::CRGB;
     }
+
+    Color getRGB() const { return Color(mnComponent1, mnComponent2, mnComponent3); }
 
     void setColor(Color const& rColor)
     {
@@ -161,6 +180,8 @@ public:
         meType = ColorType::HSL;
     }
 
+    void setPlaceholder() { meType = ColorType::Placeholder; }
+
     void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB)
     {
         maLastColor = ::Color(ColorTransparency, nRGB);
@@ -168,23 +189,12 @@ public:
         meType = ColorType::System;
     }
 
-    void setSchemePlaceholder() { meType = ColorType::Placeholder; }
+    void setThemePlaceholder() { meType = ColorType::Placeholder; }
 
-    void setSchemeColor(ThemeColorType eType)
+    void setThemeColor(ThemeColorType eType)
     {
-        meSchemeType = eType;
-        meType = ColorType::Scheme;
-    }
-
-    model::ThemeColor createThemeColor() const
-    {
-        model::ThemeColor aThemeColor;
-        if (meType == ColorType::Scheme)
-        {
-            aThemeColor.setType(meSchemeType);
-            aThemeColor.setTransformations(maTransformations);
-        }
-        return aThemeColor;
+        meThemeColorType = eType;
+        meType = ColorType::Theme;
     }
 
     bool operator==(const ComplexColor& rComplexColor) const
@@ -194,7 +204,7 @@ public:
                && mnComponent3 == rComplexColor.mnComponent3
                && meSystemColorType == rComplexColor.meSystemColorType
                && maLastColor == rComplexColor.maLastColor
-               && meSchemeType == rComplexColor.meSchemeType
+               && meThemeColorType == rComplexColor.meThemeColorType
                && maTransformations.size() == rComplexColor.maTransformations.size()
                && std::equal(maTransformations.begin(), maTransformations.end(),
                              rComplexColor.maTransformations.begin());
@@ -251,6 +261,13 @@ public:
     {
         model::ComplexColor aComplexColor;
         aComplexColor.setColor(rColor);
+        return aComplexColor;
+    }
+
+    static model::ComplexColor Theme(ThemeColorType eThemeColorType)
+    {
+        model::ComplexColor aComplexColor;
+        aComplexColor.setThemeColor(eThemeColorType);
         return aComplexColor;
     }
 };

@@ -932,12 +932,12 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
         sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
 
         model::ComplexColor aSeriesComplexColor;
-        aSeriesComplexColor.setSchemeColor(model::ThemeColorType::Accent3);
+        aSeriesComplexColor.setThemeColor(model::ThemeColorType::Accent3);
         aSeriesComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aSeriesComplexColor));
         rAttibutes.setColorSeries(aSeriesComplexColor);
 
         model::ComplexColor aAxisComplexColor;
-        aAxisComplexColor.setSchemeColor(model::ThemeColorType::Accent1);
+        aAxisComplexColor.setThemeColor(model::ThemeColorType::Accent1);
         aAxisComplexColor.setFinalColor(pTheme->getColorSet()->resolveColor(aAxisComplexColor));
         rAttibutes.setColorAxis(aAxisComplexColor);
 

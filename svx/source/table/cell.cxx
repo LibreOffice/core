@@ -1475,8 +1475,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                     if (pMap->nMemberId == MID_COLOR_THEME_INDEX)
                     {
                         auto const* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
-                        if (pColor->getComplexColor().getType() == model::ColorType::Unused ||
-                            pColor->getComplexColor().getSchemeType() == model::ThemeColorType::Unknown)
+                        if (!pColor->getComplexColor().isValidThemeType())
                         {
                             eState = PropertyState_DEFAULT_VALUE;
                         }

@@ -307,7 +307,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
     xPortion->getPropertyValue("CharComplexColor") >>= xComplexColor;
     CPPUNIT_ASSERT(xComplexColor.is());
     auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aComplexColor.getSchemeType());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Dark2, aComplexColor.getThemeColorType());
 
     if (!bUseGroup)
     {

@@ -1999,7 +1999,7 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
         {
             {
                 Color aColor = rPalette.GetColor(mnForeColor);
-                if (maForegroundComplexColor.isValidSchemeType())
+                if (maForegroundComplexColor.isValidThemeType())
                     oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
                 else if (mnForeColor != 0)
                     oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
@@ -2007,7 +2007,7 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
             {
                 Color aColor = rPalette.GetColor(mnBackColor);
-                if (maBackgroundComplexColor.isValidSchemeType())
+                if (maBackgroundComplexColor.isValidThemeType())
                     oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);
                 else if (mnForeColor != 0)
                     oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);

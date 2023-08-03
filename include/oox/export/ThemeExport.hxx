@@ -61,7 +61,7 @@ private:
     void writeComplexColor(model::ComplexColor const& rComplexColor);
     void writeColorPlaceholder(model::ComplexColor const& rComplexColor);
     void writeColorSystem(model::ComplexColor const& rComplexColor);
-    void writeColorScheme(model::ComplexColor const& rComplexColor);
+    void writeColorTheme(model::ComplexColor const& rComplexColor);
     void writeColorHSL(model::ComplexColor const& rComplexColor);
     void writeColorCRGB(model::ComplexColor const& rComplexColor);
     void writeColorRGB(model::ComplexColor const& rComplexColor);
