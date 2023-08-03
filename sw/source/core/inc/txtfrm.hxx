@@ -808,8 +808,6 @@ public:
 
     static SwView* GetView();
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
-
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 

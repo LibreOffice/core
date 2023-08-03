@@ -294,18 +294,6 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterEndElement(writer);
 }
 
-void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
-{
-    SwFrame::dumpAsXmlAttributes( writer );
-    if ( HasFollow() )
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
-
-    if (m_pPrecede != nullptr)
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
-
-    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("offset"), BAD_CAST(OString::number(static_cast<sal_Int32>(mnOffset)).getStr()));
-}
-
 void SwFlyAtContentFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
 {
     SwFlyFreeFrame::dumpAsXmlAttributes(pWriter);

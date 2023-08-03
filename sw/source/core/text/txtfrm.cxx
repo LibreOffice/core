@@ -796,7 +796,15 @@ SwTextFrame::SwTextFrame(SwTextNode * const pNode, SwFrame* pSib,
 void SwTextFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("txt"));
-    dumpAsXmlAttributes(writer);
+    SwFrame::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+
+    if (m_pPrecede != nullptr)
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTextFrame*>(m_pPrecede)->GetFrameId() );
+
+    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("offset"), BAD_CAST(OString::number(static_cast<sal_Int32>(mnOffset)).getStr()));
+
     sw::MergedPara const*const pMerged(GetMergedPara());
     if (pMerged)
     {
