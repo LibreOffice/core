@@ -1369,6 +1369,20 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf151046)
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(0, 2, 0));
 }
 
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf147955)
+{
+    createScDoc("xlsx/tdf147955.xlsx");
+
+    ScDocument* pDoc = getScDoc();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 892.75
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(892.75, pDoc->GetValue(1, 6, 0));
+    CPPUNIT_ASSERT_EQUAL(130.25, pDoc->GetValue(1, 10, 0));
+    CPPUNIT_ASSERT_EQUAL(10.98, pDoc->GetValue(1, 15, 0));
+}
+
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testImportCrashes)
 {
     testImportCrash("ods/tdf149752.ods");
