@@ -535,18 +535,24 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
                 {
                     pWrtShell->SelectTableRow();
-                    SwShellTableCursor* pTableCursor = GetTableCursor();
+                    SwCursor* pTableCursor = static_cast<SwCursor*>(GetTableCursor());
                     auto pStt = aBoxes[0];
                     auto pEnd = aBoxes.back();
-                    pTableCursor->DeleteMark();
+                    if ( pTableCursor )
+                        pTableCursor->DeleteMark();
+                    else
+                        pTableCursor = GetCursor(true);
 
-                    // set start and end of the selection
-                    pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd()->EndOfSectionNode() );
-                    pTableCursor->Move( fnMoveBackward, GoInContent );
-                    pTableCursor->SetMark();
-                    pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
-                    pTableCursor->Move( fnMoveBackward, GoInContent );
-                    pWrtShell->UpdateCursor();
+                    if ( pTableCursor )
+                    {
+                        // set start and end of the selection
+                        pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd()->EndOfSectionNode() );
+                        pTableCursor->Move( fnMoveBackward, GoInContent );
+                        pTableCursor->SetMark();
+                        pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
+                        pTableCursor->Move( fnMoveBackward, GoInContent );
+                        pWrtShell->UpdateCursor();
+                    }
                 }
 
                 if (pEditShell)
