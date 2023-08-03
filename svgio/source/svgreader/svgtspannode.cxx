@@ -18,14 +18,17 @@
  */
 
 #include <svgtspannode.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace svgio::svgreader
 {
         SvgTspanNode::SvgTspanNode(
+            SVGToken aType,
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGToken::Tspan, rDocument, pParent),
-            maSvgStyleAttributes(*this)
+        :   SvgNode(aType, rDocument, pParent),
+            maSvgStyleAttributes(*this),
+            mbLengthAdjust(true)
         {
         }
 
@@ -47,15 +50,87 @@ namespace svgio::svgreader
             // read style attributes
             maSvgStyleAttributes.parseStyleAttribute(aSVGToken, aContent);
 
-            // read text position attributes
-            maSvgTextPositions.parseTextPositionAttributes(aSVGToken, aContent);
-
             // parse own
             switch(aSVGToken)
             {
                 case SVGToken::Style:
                 {
                     readLocalCssStyle(aContent);
+                    break;
+                }
+                case SVGToken::X:
+                {
+                    SvgNumberVector aVector;
+
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setX(std::move(aVector));
+                    }
+                    break;
+                }
+                case SVGToken::Y:
+                {
+                    SvgNumberVector aVector;
+
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setY(std::move(aVector));
+                    }
+                    break;
+                }
+                case SVGToken::Dx:
+                {
+                    SvgNumberVector aVector;
+
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setDx(std::move(aVector));
+                    }
+                    break;
+                }
+                case SVGToken::Dy:
+                {
+                    SvgNumberVector aVector;
+
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setDy(std::move(aVector));
+                    }
+                    break;
+                }
+                case SVGToken::Rotate:
+                {
+                    SvgNumberVector aVector;
+
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setRotate(std::move(aVector));
+                    }
+                    break;
+                }
+                case SVGToken::TextLength:
+                {
+                    SvgNumber aNum;
+
+                    if(readSingleNumber(aContent, aNum))
+                    {
+                        if(aNum.isPositive())
+                        {
+                            setTextLength(aNum);
+                        }
+                    }
+                    break;
+                }
+                case SVGToken::LengthAdjust:
+                {
+                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
+                    {
+                        setLengthAdjust(true);
+                    }
+                    else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
+                    {
+                        setLengthAdjust(false);
+                    }
                     break;
                 }
                 default:

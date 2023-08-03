@@ -19,23 +19,23 @@
 
 #pragma once
 
-#include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
-#include "svgcharacternode.hxx"
+#include "svgtextposition.hxx"
+#include "svgtspannode.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace svgio::svgreader
     {
-        class SvgTextNode final : public SvgNode
+        class SvgTextNode final : public SvgTspanNode
         {
         private:
-            /// use styles
-            SvgStyleAttributes      maSvgStyleAttributes;
-
             /// variable scan values, dependent of given XAttributeList
             std::optional<basegfx::B2DHomMatrix>
                                     mpaTransform;
-            SvgTextPositions        maSvgTextPositions;
+
+            // The text line composed by the different SvgCharacterNode children
+            // it will be used to calculate their alignment
+            OUString maTextLine;
 
             /// local helpers
             void DecomposeChild(
@@ -53,13 +53,15 @@ namespace svgio::svgreader
                 SvgNode* pParent);
             virtual ~SvgTextNode() override;
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// transform content, set if found in current context
             const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
             void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
+
+            void concatenateTextLine(std::u16string_view rText) {maTextLine += rText;}
+            const OUString& getTextLine() const { return maTextLine; }
         };
 
 } // end of namespace svgio::svgreader

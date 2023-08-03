@@ -1,0 +1,18 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <text text-anchor="start" x="60" y="40">ABC</text>
+  <text text-anchor="middle" x="60" y="50">ABC</text>
+  <text text-anchor="end" x="60" y="60">ABC</text>
+
+  <text><tspan text-anchor="start" x="60" y="40">ABC</tspan></text>
+  <text><tspan text-anchor="middle" x="60" y="50">ABC</tspan></text>
+  <text><tspan text-anchor="end" x="60" y="60">ABC</tspan></text>
+
+  <text text-anchor="start" x="60" y="40"><tspan>ABC</tspan></text>
+  <text text-anchor="middle" x="60" y="50"><tspan>ABC</tspan></text>
+  <text text-anchor="end" x="60" y="60"><tspan>ABC</tspan></text>
+
+  <text text-anchor="start" x="60" y="40">A<tspan>B</tspan>C</text>
+  <text text-anchor="middle" x="60" y="50">A<tspan>B</tspan>C</text>
+  <text text-anchor="end" x="60" y="60">A<tspan>B</tspan>C</text>
+</svg>
+

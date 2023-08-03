@@ -30,8 +30,7 @@ namespace svgio::svgreader
         SvgTextNode::SvgTextNode(
             SvgDocument& rDocument,
             SvgNode* pParent)
-        :   SvgNode(SVGToken::Text, rDocument, pParent),
-            maSvgStyleAttributes(*this)
+        :   SvgTspanNode(SVGToken::Text, rDocument, pParent)
         {
         }
 
@@ -39,30 +38,14 @@ namespace svgio::svgreader
         {
         }
 
-        const SvgStyleAttributes* SvgTextNode::getSvgStyleAttributes() const
-        {
-            return checkForCssStyle(maSvgStyleAttributes);
-        }
-
         void SvgTextNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
-            SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
-
-            // read style attributes
-            maSvgStyleAttributes.parseStyleAttribute(aSVGToken, aContent);
-
-            // read text position attributes
-            maSvgTextPositions.parseTextPositionAttributes(aSVGToken, aContent);
+            SvgTspanNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
             // parse own
             switch(aSVGToken)
             {
-                case SVGToken::Style:
-                {
-                    readLocalCssStyle(aContent);
-                    break;
-                }
                 case SVGToken::Transform:
                 {
                     const basegfx::B2DHomMatrix aMatrix(readTransform(aContent, *this));
@@ -159,7 +142,7 @@ namespace svgio::svgreader
 
                     if(nCount)
                     {
-                        SvgTextPosition aSvgTextPosition(&rSvgTextPosition, rSvgTspanNode, rSvgTspanNode.getSvgTextPositions());
+                        SvgTextPosition aSvgTextPosition(&rSvgTextPosition, rSvgTspanNode);
                         drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
 
                         for(sal_uInt32 a(0); a < nCount; a++)
@@ -229,7 +212,7 @@ namespace svgio::svgreader
             if(fOpacity <= 0.0)
                 return;
 
-            SvgTextPosition aSvgTextPosition(nullptr, *this, maSvgTextPositions);
+            SvgTextPosition aSvgTextPosition(nullptr, *this);
             drawinglayer::primitive2d::Primitive2DContainer aNewTarget;
             const auto& rChildren = getChildren();
             const sal_uInt32 nCount(rChildren.size());

@@ -19,22 +19,29 @@
 
 #pragma once
 
-#include "svgcharacternode.hxx"
+#include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 
 namespace svgio::svgreader
     {
-        class SvgTspanNode final : public SvgNode
+        class SvgTspanNode : public SvgNode
         {
         private:
             /// use styles
             SvgStyleAttributes      maSvgStyleAttributes;
 
-            /// variable scan values, dependent of given XAttributeList
-            SvgTextPositions        maSvgTextPositions;
+            SvgNumberVector         maX;
+            SvgNumberVector         maY;
+            SvgNumberVector         maDx;
+            SvgNumberVector         maDy;
+            SvgNumberVector         maRotate;
+            SvgNumber               maTextLength;
+
+            bool                    mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
 
         public:
             SvgTspanNode(
+                SVGToken aType,
                 SvgDocument& rDocument,
                 SvgNode* pParent);
             virtual ~SvgTspanNode() override;
@@ -44,8 +51,33 @@ namespace svgio::svgreader
 
             double getCurrentFontSize() const;
 
-            /// access to SvgTextPositions
-            const SvgTextPositions& getSvgTextPositions() const { return maSvgTextPositions; }
+            /// X content
+            const SvgNumberVector& getX() const { return maX; }
+            void setX(SvgNumberVector&& aX) { maX = std::move(aX); }
+
+            /// Y content
+            const SvgNumberVector& getY() const { return maY; }
+            void setY(SvgNumberVector&& aY) { maY = std::move(aY); }
+
+            /// Dx content
+            const SvgNumberVector& getDx() const { return maDx; }
+            void setDx(SvgNumberVector&& aDx) { maDx = std::move(aDx); }
+
+            /// Dy content
+            const SvgNumberVector& getDy() const { return maDy; }
+            void setDy(SvgNumberVector&& aDy) { maDy = std::move(aDy); }
+
+            /// Rotate content
+            const SvgNumberVector& getRotate() const { return maRotate; }
+            void setRotate(SvgNumberVector&& aRotate) { maRotate = std::move(aRotate); }
+
+            /// TextLength content
+            const SvgNumber& getTextLength() const { return maTextLength; }
+            void setTextLength(const SvgNumber& rTextLength) { maTextLength = rTextLength; }
+
+            /// LengthAdjust content
+            bool getLengthAdjust() const { return mbLengthAdjust; }
+            void setLengthAdjust(bool bNew) { mbLengthAdjust = bNew; }
         };
 
 } // end of namespace svgio::svgreader

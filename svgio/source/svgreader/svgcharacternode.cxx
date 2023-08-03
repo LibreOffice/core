@@ -33,116 +33,6 @@ using namespace drawinglayer::primitive2d;
 
 namespace svgio::svgreader
 {
-        SvgTextPositions::SvgTextPositions()
-        :  mbLengthAdjust(true)
-        {
-        }
-
-        void SvgTextPositions::parseTextPositionAttributes(SVGToken aSVGToken, std::u16string_view aContent)
-        {
-            // parse own
-            switch(aSVGToken)
-            {
-                case SVGToken::X:
-                {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
-
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setX(std::move(aVector));
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::Y:
-                {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
-
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setY(std::move(aVector));
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::Dx:
-                {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
-
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setDx(std::move(aVector));
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::Dy:
-                {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
-
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setDy(std::move(aVector));
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::Rotate:
-                {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
-
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setRotate(std::move(aVector));
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::TextLength:
-                {
-                    SvgNumber aNum;
-
-                    if(readSingleNumber(aContent, aNum))
-                    {
-                        if(aNum.isPositive())
-                        {
-                            setTextLength(aNum);
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::LengthAdjust:
-                {
-                    if(!aContent.empty())
-                    {
-                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
-                        {
-                            setLengthAdjust(true);
-                        }
-                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
-                        {
-                            setLengthAdjust(false);
-                        }
-                    }
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-        }
-
         namespace {
 
         class localTextBreakupHelper : public TextBreakupHelper
@@ -188,7 +78,8 @@ namespace svgio::svgreader
             SvgNode* pParent,
             OUString aText)
         :   SvgNode(SVGToken::Character, rDocument, pParent),
-            maText(std::move(aText))
+            maText(std::move(aText)),
+            mpTextParent(nullptr)
         {
         }
 
@@ -359,17 +250,19 @@ namespace svgio::svgreader
                     }
                 }
 
+                // Use the whole text line to calculate the align position
+                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(mpTextParent->getTextLine(), 0, mpTextParent->getTextLine().getLength()));
                 // apply TextAlign
                 switch(aTextAlign)
                 {
                     case TextAlign::right:
                     {
-                        aPosition.setX(aPosition.getX() - fTextWidth);
+                        aPosition.setX(aPosition.getX() - fWholeTextLineWidth);
                         break;
                     }
                     case TextAlign::center:
                     {
-                        aPosition.setX(aPosition.getX() - (fTextWidth * 0.5));
+                        aPosition.setX(aPosition.getX() - (fWholeTextLineWidth * 0.5));
                         break;
                     }
                     case TextAlign::notset:
@@ -573,9 +466,46 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgCharacterNode::addGap()
+        SvgCharacterNode* SvgCharacterNode::addGap(SvgCharacterNode* pPreviousCharacterNode)
         {
-            maText += " ";
+            // maText may have lost all text. If that's the case, ignore as invalid character node
+            // Also ignore if maTextBeforeSpaceHandling just have spaces
+            if(!maText.isEmpty() && !o3tl::trim(maTextBeforeSpaceHandling).empty())
+            {
+                if(pPreviousCharacterNode)
+                {
+                    bool bAddGap(true);
+
+                    // Do not add a gap if last node doesn't end with a space and
+                    // current note doesn't start with a space
+                    const sal_uInt32 nLastLength(pPreviousCharacterNode->maTextBeforeSpaceHandling.getLength());
+                    if(pPreviousCharacterNode->maTextBeforeSpaceHandling[nLastLength - 1] != ' ' && maTextBeforeSpaceHandling[0] != ' ')
+                        bAddGap = false;
+
+                    // With this option a baseline shift between two char parts ('words')
+                    // will not add a space 'gap' to the end of the (non-last) word. This
+                    // seems to be the standard behaviour, see last bugdoc attached #122524#
+                    const SvgStyleAttributes* pStyleLast = pPreviousCharacterNode->getSvgStyleAttributes();
+                    const SvgStyleAttributes* pStyleCurrent = getSvgStyleAttributes();
+
+                    if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
+                    {
+                        bAddGap = false;
+                    }
+
+                    // add in-between whitespace (single space) to last
+                    // known character node
+                    if(bAddGap)
+                    {
+                        maText = " " + maText;
+                    }
+                }
+
+                // this becomes the previous character node
+                return this;
+            }
+
+            return pPreviousCharacterNode;
         }
 
         void SvgCharacterNode::concatenate(std::u16string_view rText)
@@ -594,176 +524,6 @@ namespace svgio::svgreader
                     decomposeTextWithStyle(rTarget, rSvgTextPosition, *pSvgStyleAttributes);
                 }
             }
-        }
-
-
-        SvgTextPosition::SvgTextPosition(
-            SvgTextPosition* pParent,
-            const InfoProvider& rInfoProvider,
-            const SvgTextPositions& rSvgTextPositions)
-        :   mpParent(pParent),
-            maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider)),
-            mfTextLength(0.0),
-            mnRotationIndex(0),
-            mbLengthAdjust(rSvgTextPositions.getLengthAdjust()),
-            mbAbsoluteX(false)
-        {
-            // get TextLength if provided
-            if(rSvgTextPositions.getTextLength().isSet())
-            {
-                mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider);
-            }
-
-            // SVG does not really define in which units a \91rotate\92 for Text/TSpan is given,
-            // but it seems to be degrees. Convert here to radians
-            if(!maRotate.empty())
-            {
-                for (double& f : maRotate)
-                {
-                    f = basegfx::deg2rad(f);
-                }
-            }
-
-            // get text positions X
-            const sal_uInt32 nSizeX(rSvgTextPositions.getX().size());
-
-            if(nSizeX)
-            {
-                // we have absolute positions, get first one as current text position X
-                maPosition.setX(rSvgTextPositions.getX()[0].solve(rInfoProvider, NumberType::xcoordinate));
-                mbAbsoluteX = true;
-            }
-            else
-            {
-                // no absolute position, get from parent
-                if(pParent)
-                {
-                    maPosition.setX(pParent->getPosition().getX());
-                }
-            }
-
-            const sal_uInt32 nSizeDx(rSvgTextPositions.getDx().size());
-            if(nSizeDx)
-            {
-                // relative positions given, translate position derived from parent
-                maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
-            }
-
-            // fill deltas to maX
-            maX.reserve(nSizeX);
-
-            for(sal_uInt32 a(1); a < std::max(nSizeX, nSizeDx); ++a)
-            {
-                if (a < nSizeX)
-                {
-                    double nPos = rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
-
-                    if(a < nSizeDx)
-                    {
-                        nPos += rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
-                    }
-
-                    maX.push_back(nPos);
-                }
-                else
-                {
-                    // Apply them later since it also needs the character width to calculate
-                    // the final character position
-                    maDx.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
-                }
-            }
-
-            // get text positions Y
-            const sal_uInt32 nSizeY(rSvgTextPositions.getY().size());
-
-            if(nSizeY)
-            {
-                // we have absolute positions, get first one as current text position Y
-                maPosition.setY(rSvgTextPositions.getY()[0].solve(rInfoProvider, NumberType::ycoordinate));
-                mbAbsoluteX = true;
-            }
-            else
-            {
-                // no absolute position, get from parent
-                if(pParent)
-                {
-                    maPosition.setY(pParent->getPosition().getY());
-                }
-            }
-
-            const sal_uInt32 nSizeDy(rSvgTextPositions.getDy().size());
-
-            if(nSizeDy)
-            {
-                // relative positions given, translate position derived from parent
-                maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
-            }
-
-            // fill deltas to maY
-            maY.reserve(nSizeY);
-
-            for(sal_uInt32 a(1); a < nSizeY; a++)
-            {
-                double nPos = rSvgTextPositions.getY()[a].solve(rInfoProvider, NumberType::ycoordinate) - maPosition.getY();
-
-                if(a < nSizeDy)
-                {
-                    nPos += rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate);
-                }
-
-                maY.push_back(nPos);
-            }
-        }
-
-        bool SvgTextPosition::isRotated() const
-        {
-            if(maRotate.empty())
-            {
-                if(getParent())
-                {
-                    return getParent()->isRotated();
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        double SvgTextPosition::consumeRotation()
-        {
-            double fRetval(0.0);
-
-            if(maRotate.empty())
-            {
-                if(getParent())
-                {
-                    fRetval = mpParent->consumeRotation();
-                }
-                else
-                {
-                    fRetval = 0.0;
-                }
-            }
-            else
-            {
-                const sal_uInt32 nSize(maRotate.size());
-
-                if(mnRotationIndex < nSize)
-                {
-                    fRetval = maRotate[mnRotationIndex++];
-                }
-                else
-                {
-                    fRetval = maRotate[nSize - 1];
-                }
-            }
-
-            return fRetval;
         }
 
 } // end of namespace svgio

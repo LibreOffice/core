@@ -54,7 +54,6 @@
 #include <svgtitledescnode.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -63,7 +62,7 @@ namespace svgio::svgreader
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgTextNode* pText, svgio::svgreader::SvgCharacterNode* pLast)
     {
         if(pNode)
         {
@@ -84,45 +83,10 @@ namespace
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
 
                             pCharNode->whiteSpaceHandling();
+                            pLast = pCharNode->addGap(pLast);
 
-                            // pCharNode may have lost all text. If that's the case, ignore
-                            // as invalid character node
-                            // Also ignore if textBeforeSpaceHandling just have spaces
-                            if(!pCharNode->getText().isEmpty() && !o3tl::trim(pCharNode->getTextBeforeSpaceHandling()).empty())
-                            {
-                                if(pLast)
-                                {
-                                    bool bAddGap(true);
-
-                                    // Do not add a gap if last node doesn't end with a space and
-                                    // current note doesn't start with a space
-                                    const sal_uInt32 nLastLength(pLast->getTextBeforeSpaceHandling().getLength());
-                                    if(pLast->getTextBeforeSpaceHandling()[nLastLength - 1] != ' ' && pCharNode->getTextBeforeSpaceHandling()[0] != ' ')
-                                        bAddGap = false;
-
-                                    // With this option a baseline shift between two char parts ('words')
-                                    // will not add a space 'gap' to the end of the (non-last) word. This
-                                    // seems to be the standard behaviour, see last bugdoc attached #122524#
-                                    const svgio::svgreader::SvgStyleAttributes* pStyleLast = pLast->getSvgStyleAttributes();
-                                    const svgio::svgreader::SvgStyleAttributes* pStyleCurrent = pCandidate->getSvgStyleAttributes();
-
-                                    if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
-                                    {
-                                        bAddGap = false;
-                                    }
-
-                                    // add in-between whitespace (single space) to last
-                                    // known character node
-                                    if(bAddGap)
-                                    {
-                                        pLast->addGap();
-                                    }
-                                }
-
-                                // remember new last corrected character node
-                                pLast = pCharNode;
-                            }
-
+                            pCharNode->setTextParent(pText);
+                            pText->concatenateTextLine(pCharNode->getText());
                             break;
                         }
                         case SVGToken::Tspan:
@@ -130,7 +94,7 @@ namespace
                         case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pLast);
+                            pLast = whiteSpaceHandling(pCandidate, pText, pLast);
                             break;
                         }
                         default:
@@ -145,6 +109,7 @@ namespace
 
         return pLast;
     }
+
 } // end anonymous namespace
 
         SvgDocHdl::SvgDocHdl(const OUString& aAbsolutePath)
@@ -323,7 +288,7 @@ namespace
                 }
                 case SVGToken::Tspan:
                 {
-                    mpTarget = new SvgTspanNode(maDocument, mpTarget);
+                    mpTarget = new SvgTspanNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
@@ -463,7 +428,7 @@ namespace
                 return;
 
             const SVGToken aSVGToken(StrToSVGToken(aName, false));
-            SvgNode* pWhitespaceCheck(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
+            SvgNode* pTextNode(SVGToken::Text == aSVGToken ? mpTarget : nullptr);
             SvgStyleNode* pCssStyle(SVGToken::Style == aSVGToken ? static_cast< SvgStyleNode* >(mpTarget) : nullptr);
             SvgTitleDescNode* pSvgTitleDescNode(SVGToken::Title == aSVGToken || SVGToken::Desc == aSVGToken ? static_cast< SvgTitleDescNode* >(mpTarget) : nullptr);
 
@@ -584,10 +549,10 @@ namespace
                 }
             }
 
-            if(pWhitespaceCheck)
+            if(pTextNode)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pWhitespaceCheck, nullptr);
+                whiteSpaceHandling(pTextNode, static_cast< SvgTextNode*>(pTextNode), nullptr);
             }
         }
 
@@ -605,24 +570,23 @@ namespace
                 case SVGToken::TextPath:
                 {
                     const auto& rChilds = mpTarget->getChildren();
-                    SvgCharacterNode* pTarget = nullptr;
 
                     if(!rChilds.empty())
                     {
-                        pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1].get());
+                        SvgNode* pChild = rChilds[rChilds.size() - 1].get();
+                        if ( pChild->getType() == SVGToken::Character )
+                        {
+                            SvgCharacterNode& rSvgCharacterNode = static_cast< SvgCharacterNode& >(*pChild);
+
+                            // concatenate to current character span
+                            rSvgCharacterNode.concatenate(aChars);
+                            break;
+                        }
                     }
 
-                    if(pTarget)
-                    {
-                        // concatenate to current character span
-                        pTarget->concatenate(aChars);
-                    }
-                    else
-                    {
-                        // add character span as simplified tspan (no arguments)
-                        // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
-                        new SvgCharacterNode(maDocument, mpTarget, aChars);
-                    }
+                    // add character span as simplified tspan (no arguments)
+                    // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
+                    new SvgCharacterNode(maDocument, mpTarget, aChars);
                     break;
                 }
                 case SVGToken::Style:
