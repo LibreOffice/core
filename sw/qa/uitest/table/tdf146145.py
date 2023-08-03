@@ -250,4 +250,36 @@ class tdf146145(UITestCase):
             xToolkit.processEventsToIdle()
             self.assertEqual(len(tables[0].getColumns()), 5)
 
+   def test_crashWithHiddenFirstTableColumn(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as self.document:
+
+            # accept all tracked changes
+            self.xUITest.executeCommand(".uno:AcceptAllTrackedChanges")
+            # delete first table column
+            self.xUITest.executeCommand(".uno:DeleteColumns")
+
+            # Check enabling Accept/Reject Track Change icons
+            # and Accept Change/Reject Change context menu items
+            # on table columns with tracked deletion or insertion
+
+            # enable Track Changes toolbar
+            self.xUITest.executeCommand(".uno:AvailableToolbars?Toolbar:string=changes")
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
+            # cursor at changed text: Accept Track Change is enabled
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # hide changes
+            self.xUITest.executeCommand(".uno:ShowTrackedChanges")
+            while self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertFalse(self.is_enabled_Accept_Track_Change())
+
+            # Without the fix in place, this test would have crashed here
+            self.xUITest.executeCommand(".uno:DeleteRows")
+
+            self.xUITest.executeCommand(".uno:ShowTrackedChanges")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

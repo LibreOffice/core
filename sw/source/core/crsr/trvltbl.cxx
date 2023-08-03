@@ -128,7 +128,7 @@ bool SwCursorShell::SelTableRowOrCol( bool bRow, bool bRowSimple )
 {
     // check if the current cursor's SPoint/Mark are in a table
     SwFrame *pFrame = GetCurrFrame();
-    if( !pFrame->IsInTab() )
+    if( !pFrame || !pFrame->IsInTab() )
         return false;
 
     const SwTabFrame* pTabFrame = pFrame->FindTabFrame();
