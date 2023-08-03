@@ -215,7 +215,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowHeaderCells(IUnknown*** 
         assert(bOK && "Couldn't retrieve IAccessible object for cell.");
 
         pIAccessible->AddRef();
-        (*cellAccessibles)[nRow] = pIAccessible;
+        (*cellAccessibles)[nCol] = pIAccessible;
     }
     return S_OK;
 }
