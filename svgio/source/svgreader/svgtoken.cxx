@@ -177,8 +177,7 @@ constexpr auto aSVGTokenMapperList = frozen::make_unordered_map<std::u16string_v
     { u"stroke-width", SVGToken::StrokeWidth },
 
     { u"text", SVGToken::Text },
-    { u"baseline-shift", SVGToken::BaselineShift },
-    { u"flowRoot", SVGToken::FlowRoot }
+    { u"baseline-shift", SVGToken::BaselineShift }
 });
 
 // The same elements as the map above but lowercase. CSS is case insensitive
@@ -335,8 +334,7 @@ constexpr auto  aSVGLowerCaseTokenMapperList = frozen::make_unordered_map<std::u
     { u"stroke-width", SVGToken::StrokeWidth },
 
     { u"text", SVGToken::Text },
-    { u"baseline-shift", SVGToken::BaselineShift },
-    { u"flowroot", SVGToken::FlowRoot }
+    { u"baseline-shift", SVGToken::BaselineShift }
 });
 
 static_assert(sizeof(aSVGTokenMapperList) == sizeof(aSVGLowerCaseTokenMapperList),
