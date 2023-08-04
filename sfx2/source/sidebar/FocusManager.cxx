@@ -297,6 +297,11 @@ bool FocusManager::MoveFocusInsideDeckTitle (
                 FocusPanelContent(0);
                 bConsumed = true;
             }
+            else if (nDirection < 0)
+            {
+                FocusButton(0);
+                bConsumed = true;
+            }
             break;
 
         default: break;
@@ -369,6 +374,8 @@ bool FocusManager::HandleKeyEvent(
             {
                 case PC_PanelTitle:
                 case PC_PanelToolBox:
+                    if (rKeyCode.IsShift())
+                        break;
                     MoveFocusInsidePanel(aLocation, nDirection);
                     bConsumed = true;
                     break;
