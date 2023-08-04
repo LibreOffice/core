@@ -36,6 +36,8 @@
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <rootfrm.hxx>
+#include <redline.hxx>
+#include <itabenum.hxx>
 #include <officecfg/Office/Common.hxx>
 
 /// 8th set of tests asserting the behavior of Writer user interface shells.
@@ -1476,6 +1478,61 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
     uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
     // This was 8 (missing recalculation)
     CPPUNIT_ASSERT_EQUAL(OUString("204"), xCellA4->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147938)
+{
+    createSwDoc("tdf147938.fodt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+    pWrtShell->TableToText('\t');
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    SwInsertTableOptions const opts(SwInsertTableFlags::NONE, 0);
+    pWrtShell->TextToTable(opts, '\t', nullptr);
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    pWrtShell->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    pWrtShell->Redo();
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
+
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
+    CPPUNIT_ASSERT_EQUAL(OUString("Bar\nbaz "),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable()[0]->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf148799)

@@ -548,8 +548,13 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
         SwNodeOffset n, nTmpEnd = aEndIdx.GetIndex();
         for( n = pTableNd->GetIndex() + 1; n < nTmpEnd; ++n )
         {
-            if( ( pNd = (*this)[ n ] )->IsContentNode() )
+            pNd = (*this)[n];
+            if (pNd->IsContentNode())
+            {
                 static_cast<SwContentNode*>(pNd)->DelFrames(nullptr);
+            }
+            // tdf#147938 reset merge flag in nodes
+            pNd->SetRedlineMergeFlag(SwNode::Merge::None);
             pNd->m_pStartOfSection = pTableNd;
         }
     }
