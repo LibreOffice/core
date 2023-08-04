@@ -2651,6 +2651,78 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSingleOleExport)
     CPPUNIT_ASSERT_EQUAL(tools::Long(450), xReader->GetObjh());
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_Tdf156602)
+{
+    createSwDoc("NestingInA1.fodt");
+    ExportToReqif();
+
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+
+    // The outer table must be kept in the document where the outer table is the first element,
+    // and its A1 starts with a nested table
+
+    // Only two sub-elements must be inside the div: an outer table and a trailing paragraph
+    assertXPathChildren(pDoc, "/reqif-xhtml:html/reqif-xhtml:div", 2);
+    // The outer table must have exactly two rows
+    assertXPath(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr", 2);
+    // First outer table cell must have two sub-elements: an inner table and a trailing paragraph
+    assertXPathChildren(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]",
+        2);
+    // The inner table must have exactly two rows
+    assertXPath(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:table/reqif-xhtml:tr",
+        2);
+    // Check all the elements' content
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/reqif-xhtml:p",
+        "Inner.A1");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[2]/reqif-xhtml:p",
+        "Inner.B1");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:table/reqif-xhtml:tr[2]/reqif-xhtml:td[1]/reqif-xhtml:p",
+        "Inner.A2");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:table/reqif-xhtml:tr[2]/reqif-xhtml:td[2]/reqif-xhtml:p",
+        "Inner.B2");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:p",
+        "Outer.A1");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[1]/reqif-xhtml:td[2]/"
+        "reqif-xhtml:p",
+        "Outer.B1");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[2]/reqif-xhtml:td[1]/"
+        "reqif-xhtml:p",
+        "Outer.A2");
+    assertXPathContent(
+        pDoc,
+        "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr[2]/reqif-xhtml:td[2]/"
+        "reqif-xhtml:p",
+        "Outer.B2");
+    assertXPathContent(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "Following text");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

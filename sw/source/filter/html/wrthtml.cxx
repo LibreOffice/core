@@ -485,17 +485,20 @@ ErrCode SwHTMLWriter::WriteStream()
 
     // respect table and section at document beginning
     {
-        SwTableNode * pTNd = m_pCurrentPam->GetPointNode().FindTableNode();
-        if( pTNd && m_bWriteAll )
+        if (m_bWriteAll)
         {
-            // start with table node !!
-            m_pCurrentPam->GetPoint()->Assign(*pTNd);
+            while (const SwStartNode* pTNd = m_pCurrentPam->GetPointNode().FindTableBoxStartNode())
+            {
+                // start with table node !!
+                m_pCurrentPam->GetPoint()->Assign(*pTNd->FindTableNode());
 
-            if( m_bWriteOnlyFirstTable )
-                m_pCurrentPam->GetMark()->Assign(*pTNd->EndOfSectionNode());
+                if (m_bWriteOnlyFirstTable)
+                    m_pCurrentPam->GetMark()->Assign(
+                        *m_pCurrentPam->GetPointNode().EndOfSectionNode());
+            }
         }
 
-        // first node (with can contain a page break)
+        // first node (which can contain a page break)
         m_pStartNdIdx = new SwNodeIndex( m_pCurrentPam->GetPoint()->GetNode() );
 
         SwSectionNode * pSNd = m_pCurrentPam->GetPointNode().FindSectionNode();
