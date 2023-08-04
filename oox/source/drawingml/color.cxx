@@ -828,7 +828,7 @@ model::ComplexColor Color::createComplexColor(const GraphicHelper& /*rGraphicHel
     else if (meMode == COLOR_RGB)
     {
         ::Color aColor(ColorTransparency, lclRgbComponentsToRgb(mnC1, mnC2, mnC3));
-        aNewComplexColor = model::ComplexColor::RGB(aColor);
+        aNewComplexColor = model::ComplexColor::setRGB(aColor);
     }
     else
     {

@@ -247,7 +247,7 @@ public:
         return seed;
     }
 
-    static model::ComplexColor RGB(Color const& rColor)
+    static model::ComplexColor setRGB(Color const& rColor)
     {
         model::ComplexColor aComplexColor;
         aComplexColor.setColor(rColor);
