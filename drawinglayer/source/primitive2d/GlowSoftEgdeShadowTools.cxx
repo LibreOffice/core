@@ -58,10 +58,10 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
     else if (fErodeDilateRadius < 0)
         BitmapFilter::Filter(mask, BitmapErodeFilter(-fErodeDilateRadius, 0xFF));
 
-    if (nTransparency != 255)
+    if (nTransparency)
     {
         const Color aTransparency(nTransparency, nTransparency, nTransparency);
-        mask.Replace(COL_WHITE, aTransparency);
+        mask.Replace(COL_BLACK, aTransparency);
     }
 
     // We need 8-bit grey mask for blurring
@@ -71,8 +71,6 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
     BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
 
     mask.Scale(rMask.GetSizePixel());
-
-    mask.Invert(); // convert transparency to alpha
 
     return AlphaMask(mask.GetBitmap());
 }
