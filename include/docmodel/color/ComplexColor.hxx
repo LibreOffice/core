@@ -255,7 +255,7 @@ public:
     }
 };
 
-} // end of namespace svx
+} // end of namespace model
 
 namespace std
 {
