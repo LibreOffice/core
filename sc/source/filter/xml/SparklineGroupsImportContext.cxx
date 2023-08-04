@@ -363,7 +363,7 @@ model::ComplexColor combineComplexColorAndColor(model::ComplexColor& rComplexCol
     if (rComplexColor.getType() != model::ColorType::Unused)
         rComplexColor.setFinalColor(aColor);
     else if (aColor != COL_TRANSPARENT)
-        rComplexColor = model::ComplexColor::setRGB(aColor);
+        rComplexColor = model::ComplexColor::createRGB(aColor);
     return rComplexColor;
 }
 } // end anonymous namespace
