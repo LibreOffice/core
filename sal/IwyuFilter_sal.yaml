@@ -4,3 +4,9 @@ excludelist:
     sal/osl/all/log.cxx:
     #sal_use_syslog required from this file
     - salusesyslog.hxx
+    sal/osl/unx/system.hxx:
+    # needed for the define  pthread_testcancel() to work
+    - pthread.h
+    sal/android/uthash.h:
+    # needed for defines to work / somehow on Linux there is a warning about android-related file
+    - string.h

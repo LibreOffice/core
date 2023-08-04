@@ -24,6 +24,7 @@
 #include <limits>
 #include <functional>
 #include <mutex>
+#include <unistd.h>
 
 #include "system.hxx"
 #include "unixerrnostring.hxx"

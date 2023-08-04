@@ -23,6 +23,8 @@
 #include <cstddef>
 #include <cstring>
 #include <limits>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #ifdef IOS
 #include <premac.h>

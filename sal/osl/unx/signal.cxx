@@ -49,6 +49,9 @@
 #include <valgrind/memcheck.h>
 #endif
 
+#include <sys/wait.h>
+#include <unistd.h>
+
 namespace
 {
 extern "C" using Handler1 = void (*)(int);

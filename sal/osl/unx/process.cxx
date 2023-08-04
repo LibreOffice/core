@@ -21,6 +21,11 @@
 #include <rtl/ustring.hxx>
 
 #include <cassert>
+#include <dirent.h>
+#include <sys/file.h>
+#include <sys/time.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 /*
  *   ToDo:

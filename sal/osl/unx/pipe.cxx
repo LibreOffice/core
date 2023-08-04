@@ -35,6 +35,9 @@
 
 #include <cassert>
 #include <cstring>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 constexpr OStringLiteral PIPEDEFAULTPATH = "/tmp";
 constexpr OStringLiteral PIPEALTERNATEPATH = "/var/tmp";

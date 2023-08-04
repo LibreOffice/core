@@ -19,27 +19,7 @@
 
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <string.h>
 #include <errno.h>
-#include <stdarg.h>
-
-#include <unistd.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <signal.h>
-#include <utime.h>
-
-#include <pwd.h>
-
-#include <netdb.h>
-
-#include <sys/stat.h>
-#include <sys/wait.h>
-
-#include <sys/types.h>
 
 /* Make sockets of type AF_UNIX use underlying FS rights */
 #if defined(__sun) && !defined(_XOPEN_SOURCE)
@@ -50,9 +30,6 @@
 #   include <sys/socket.h>
 #endif
 
-#include <netinet/in.h>
-#include <arpa/inet.h>
-
 #ifdef SYSV
 #   include <sys/utsname.h>
 #endif
@@ -62,16 +39,7 @@
 #   define __USE_GNU
 #   endif
 
-#   include <shadow.h>
 #   include <pthread.h>
-#   include <sys/file.h>
-#   include <sys/ioctl.h>
-#   include <sys/uio.h>
-#   include <sys/un.h>
-#   include <netinet/tcp.h>
-#   include <dlfcn.h>
-#   include <endian.h>
-#   include <sys/time.h>
 #   define  IORESOURCE_TRANSFER_BSD
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  pthread_testcancel()

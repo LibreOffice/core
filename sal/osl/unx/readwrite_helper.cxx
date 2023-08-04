@@ -13,6 +13,7 @@
 #include <cassert>
 #include <cstddef>
 #include <limits>
+#include <unistd.h>
 
 #include "readwrite_helper.hxx"
 

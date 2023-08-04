@@ -11,6 +11,8 @@
 #include <oslrandom.h>
 
 #include <assert.h>
+#include <sys/file.h>
+#include <unistd.h>
 
 int osl_get_system_random_data(char* buffer, size_t desired_len)
 {

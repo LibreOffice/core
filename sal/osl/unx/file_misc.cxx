@@ -43,6 +43,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <utime.h>
+#include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
 

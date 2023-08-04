@@ -43,8 +43,10 @@
 #include <cassert>
 #include <limits>
 
+#include <dirent.h>
 #include <string.h>
 #include <pthread.h>
+#include <sys/file.h>
 #include <sys/mman.h>
 
 #if defined(MACOSX)

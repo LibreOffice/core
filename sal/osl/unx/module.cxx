@@ -28,6 +28,8 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <assert.h>
+#include <dlfcn.h>
+#include <dirent.h>
 #include "system.hxx"
 #include "file_url.hxx"
 

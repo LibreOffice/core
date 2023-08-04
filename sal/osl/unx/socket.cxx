@@ -38,7 +38,12 @@
 #include "unixerrnostring.hxx"
 #include <oslsocket.hxx>
 
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <netinet/tcp.h>
 #include <poll.h>
+#include <sys/file.h>
+#include <unistd.h>
 
 /* defines for shutdown */
 #define SD_RECEIVE 0

@@ -26,6 +26,8 @@
 
 #include "system.hxx"
 
+#include <sys/un.h>
+
 #if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
 #define CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT 1
 #endif

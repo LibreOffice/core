@@ -29,6 +29,12 @@
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
 
+#include <dirent.h>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/un.h>
+#include <unistd.h>
+
 #define LINES_INI       32
 #define LINES_ADD       10
 #define SECTIONS_INI    5
