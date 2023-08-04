@@ -31,6 +31,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <canvas/canvastools.hxx>
 
@@ -136,10 +137,17 @@ namespace vclcanvas
                 BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
                                                                        aOutputSize ) );
 
+                AlphaMask aAlpha( aMask.GetBitmap() );
+#if HAVE_FEATURE_SKIA
+                // tdf#156540 invert alpha mask when using Skia
+                if ( SkiaHelper::isVCLSkiaEnabled() )
+                    aAlpha.Invert();
+#endif
+
                 // Note: since we retrieved aBmp and aMask
                 // directly from an OutDev, it's already a
                 // 'display bitmap' on windows.
-                maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
+                maContent = BitmapEx( aBmp.GetBitmap(), aAlpha );
             }
         }
 
@@ -180,7 +188,13 @@ namespace vclcanvas
         aMoveTransform.translate( aOutPos.X(), aOutPos.Y() );
         aTransform = aMoveTransform * aTransform * aSizeTransform;
 
-        rTargetSurface.DrawTransformedBitmapEx( aTransform, *maContent, fAlpha );
+        // tdf#156540 invert alpha when Skia is disabled
+        bool bAlpha = false;
+#if HAVE_FEATURE_SKIA
+        if ( SkiaHelper::isVCLSkiaEnabled() )
+            bAlpha = true;
+#endif
+        rTargetSurface.DrawTransformedBitmapEx( aTransform, *maContent, bAlpha ? fAlpha : 1.0 - fAlpha );
 
         rTargetSurface.Pop();
 
