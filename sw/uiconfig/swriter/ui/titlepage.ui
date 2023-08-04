@@ -511,7 +511,7 @@
                         <property name="can-focus">False</property>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="LB_PAGE_PROPERTIES-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|entended_tip|LB_PAGE_PROPERTIES">Select the page style from the available pages styles in the document.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="titlepage|extended_tip|LB_PAGE_PROPERTIES">Select the page style from the available pages styles in the document.</property>
                           </object>
                         </child>
                       </object>
