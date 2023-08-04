@@ -348,7 +348,7 @@ void testSuspiciousReinterpretCast() {
 
 void testDynamicCast() {
 
-    struct S1 { virtual ~S1(); };
+    struct S1 { virtual ~S1() {} };
     struct S2 final: S1 {};
     struct S3: S1 {};
 
