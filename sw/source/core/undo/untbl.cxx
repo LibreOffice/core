@@ -561,7 +561,6 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
     SwTableLine* pLine = new SwTableLine( pLineFormat, rSavedData.size(), nullptr );
     pTableNd->GetTable().GetTabLines().insert( pTableNd->GetTable().GetTabLines().begin(), pLine );
 
-    const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
     for( size_t n = rSavedData.size(); n; )
     {
         const SwTableToTextSave *const pSave = rSavedData[ --n ].get();
@@ -576,6 +575,9 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
             OSL_ENSURE( pTextNd, "Where is my TextNode?" );
             SwContentIndex aCntPos( pTextNd, pSave->m_nContent - 1 );
 
+            const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
+            pContentStore->Save(GetDoc(), aSttIdx.GetIndex(), aCntPos.GetIndex());
+
             pTextNd->EraseText( aCntPos, 1 );
 
             std::function<void (SwTextNode *, sw::mark::RestoreMode, bool)> restoreFunc(
@@ -588,14 +590,6 @@ SwTableNode* SwNodes::UndoTableToText( SwNodeOffset nSttNd, SwNodeOffset nEndNd,
                 });
             pTextNd->SplitContentNode(
                         SwPosition(aSttIdx, aCntPos), &restoreFunc);
-        }
-        else
-        {
-            pContentStore->Clear();
-            if( pTextNd )
-            {
-                pContentStore->Save(GetDoc(), aSttIdx.GetIndex(), SAL_MAX_INT32);
-            }
         }
 
         if( pTextNd )
