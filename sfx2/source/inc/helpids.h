@@ -52,6 +52,8 @@ inline constexpr OUString HID_QUERY_LOAD_TEMPLATE = u"SFX2_HID_QUERY_LOAD_TEMPLA
 
 inline constexpr OUString HID_SIDEBAR_WINDOW = u"SFX2_HID_SIDEBAR_WINDOW"_ustr;
 
+inline constexpr OUString HID_HELPMANUAL_OFFLINE = u"SFX2_HID_HELPMANUAL_OFFLINE"_ustr;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

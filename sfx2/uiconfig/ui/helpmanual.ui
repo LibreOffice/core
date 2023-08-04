@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sfx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMessageDialog" id="onlinehelpmanual">
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <property name="title" translatable="yes" context="helpmanual|onlinehelpmanual">%PRODUCTNAME Help Not Installed</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
+    <property name="type-hint">dialog</property>
+    <property name="skip-taskbar-hint">True</property>
     <property name="text" translatable="yes" context="helpmanual|onlinehelpmanual">The %PRODUCTNAME built-in help for current UI language ($UILOCALE) is not installed on your computer.</property>
-    <property name="secondary_text" translatable="yes" context="helpmanual|onlinehelpmanual">You may either install it from our website or your system’s repositories, or read an online version.</property>
+    <property name="secondary-text" translatable="yes" context="helpmanual|onlinehelpmanual">You may either install it from our website or your system’s repositories, or read an online version.</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="internal_box">
-        <property name="can_focus">False</property>
+        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="btnbox">
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
+            <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="website">
                 <property name="label" translatable="yes" context="helpmanual|website">Read Help Online</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -33,47 +34,80 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes" context="stock">_Cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label" translatable="yes" context="stock">_Close</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="has-default">True</property>
+                <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
               </object>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
+            <property name="padding">5</property>
+            <property name="pack-type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="hidedialog">
-            <property name="label" translatable="yes" context="helpmanual|hidedialog">Do not show this dialog again</property>
+          <object class="GtkBox" id="box">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="draw_indicator">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLinkButton" id="downloadinfo">
+                <property name="label" translatable="yes" context="helpmanual|builtin">Learn more about installing the built-in help</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="focus-on-click">False</property>
+                <property name="receives-default">True</property>
+                <property name="relief">none</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="hidedialog">
+                <property name="label" translatable="yes" context="helpmanual|hidedialog">Do not show this dialog again</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="padding">6</property>
+            <property name="position">6</property>
           </packing>
         </child>
       </object>
     </child>
     <action-widgets>
       <action-widget response="-5">website</action-widget>
-      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-7">close</action-widget>
     </action-widgets>
   </object>
 </interface>

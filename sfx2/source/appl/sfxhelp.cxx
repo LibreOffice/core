@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 #include <sfx2/sfxhelp.hxx>
+#include <helpids.h>
 
 #include <string_view>
 #include <algorithm>
@@ -1011,21 +1012,32 @@ namespace {
 class HelpManualMessage : public weld::MessageDialogController
 {
 private:
+    std::unique_ptr<weld::LinkButton> m_xDownloadInfo;
     std::unique_ptr<weld::CheckButton> m_xHideOfflineHelpCB;
 
+    DECL_LINK(DownloadClickHdl, weld::LinkButton&, bool);
 public:
     HelpManualMessage(weld::Widget* pParent)
-        : MessageDialogController(pParent, "sfx/ui/helpmanual.ui", "onlinehelpmanual", "hidedialog")
+        : MessageDialogController(pParent, "sfx/ui/helpmanual.ui", "onlinehelpmanual", "box")
+        , m_xDownloadInfo(m_xBuilder->weld_link_button("downloadinfo"))
         , m_xHideOfflineHelpCB(m_xBuilder->weld_check_button("hidedialog"))
     {
         LanguageType aLangType = Application::GetSettings().GetUILanguageTag().getLanguageType();
         OUString sLocaleString = SvtLanguageTable::GetLanguageString(aLangType);
         OUString sPrimText = get_primary_text();
         set_primary_text(sPrimText.replaceAll("$UILOCALE", sLocaleString));
+
+        m_xDownloadInfo->connect_activate_link(LINK(this, HelpManualMessage, DownloadClickHdl));
     }
 
     bool GetOfflineHelpPopUp() const { return !m_xHideOfflineHelpCB->get_active(); }
 };
+
+IMPL_LINK(HelpManualMessage, DownloadClickHdl, weld::LinkButton&, /* rButton */, bool)
+{
+    m_xDialog->response(RET_YES);
+    return true;
+}
 
 }
 
@@ -1138,6 +1150,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
         if ( !impl_hasHelpInstalled() )
         {
             bool bShowOfflineHelpPopUp = officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get();
+            short retOnlineHelpBox = RET_CLOSE;
 
             TopLevelWindowLocker aBusy;
 
@@ -1145,24 +1158,41 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
             {
                 aBusy.incBusy(pWeldWindow);
                 HelpManualMessage aQueryBox(pWeldWindow);
-                short OnlineHelpBox = aQueryBox.run();
-                bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
+                retOnlineHelpBox = aQueryBox.run();
                 auto xChanges = comphelper::ConfigurationChanges::create();
                 officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(aQueryBox.GetOfflineHelpPopUp(), xChanges);
                 xChanges->commit();
                 aBusy.decBusy();
             }
-            if(!bShowOfflineHelpPopUp)
+
+            // Checks whether the user clicked "Read Help Online" (RET_OK) or "Information on downloading offline help" (RET_YES)
+            if(retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
             {
-                if ( impl_showOnlineHelp(aHelpURL, pWeldWindow) )
-                    return true;
+                bool bTopicExists;
+
+                if (retOnlineHelpBox == RET_OK)
+                {
+                    bTopicExists = impl_showOnlineHelp(aHelpURL, pWeldWindow);
+                }
                 else
+                {
+                    // Opens the help page that explains how to install offline help
+                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, "shared"));
+                    impl_showOnlineHelp(aOfflineHelpURL, pWeldWindow);
+                    bTopicExists = true;
+                }
+
+                if (!bTopicExists)
                 {
                     aBusy.incBusy(pWeldWindow);
                     NoHelpErrorBox aErrBox(pWeldWindow);
                     aErrBox.run();
                     aBusy.decBusy();
                     return false;
+                }
+                else
+                {
+                    return true;
                 }
             }
             else
@@ -1307,6 +1337,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
         if ( !impl_hasHelpInstalled() )
         {
             bool bShowOfflineHelpPopUp = officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get();
+            short retOnlineHelpBox = RET_CLOSE;
 
             TopLevelWindowLocker aBusy;
 
@@ -1314,18 +1345,31 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
             {
                 aBusy.incBusy(pWidget);
                 HelpManualMessage aQueryBox(pWidget);
-                short OnlineHelpBox = aQueryBox.run();
-                bShowOfflineHelpPopUp = OnlineHelpBox != RET_OK;
+                retOnlineHelpBox = aQueryBox.run();
                 auto xChanges = comphelper::ConfigurationChanges::create();
                 officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::set(aQueryBox.GetOfflineHelpPopUp(), xChanges);
                 xChanges->commit();
                 aBusy.decBusy();
             }
-            if(!bShowOfflineHelpPopUp)
+
+            // Checks whether the user clicked "Read Help Online" (RET_OK) or "Information on downloading offline help" (RET_YES)
+            if(retOnlineHelpBox == RET_OK || retOnlineHelpBox == RET_YES)
             {
-                if ( impl_showOnlineHelp(aHelpURL, pWidget) )
-                    return true;
+                bool bTopicExists;
+
+                if (retOnlineHelpBox == RET_OK)
+                {
+                    bTopicExists = impl_showOnlineHelp(aHelpURL, pWidget);
+                }
                 else
+                {
+                    // Opens the help page that explains how to install offline help
+                    OUString aOfflineHelpURL(CreateHelpURL_Impl(HID_HELPMANUAL_OFFLINE, "shared"));
+                    impl_showOnlineHelp(aOfflineHelpURL, pWidget);
+                    bTopicExists = true;
+                }
+
+                if (!bTopicExists)
                 {
                     aBusy.incBusy(pWidget);
                     NoHelpErrorBox aErrBox(pWidget);
@@ -1333,12 +1377,15 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                     aBusy.decBusy();
                     return false;
                 }
+                else
+                {
+                    return true;
+                }
             }
             else
             {
                 return false;
             }
-
         }
     }
 
