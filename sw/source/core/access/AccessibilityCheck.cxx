@@ -100,9 +100,12 @@ class NoTextNodeAltTextCheck : public NodeCheck
         if (!pNoTextNode->GetTitle().isEmpty() || !pNoTextNode->GetDescription().isEmpty())
             return;
 
-        OUString sName = pNoTextNode->GetFlyFormat()->GetName();
+        const SwFrameFormat* pFrameFormat = pNoTextNode->GetFlyFormat();
+        if (!pFrameFormat)
+            return;
 
-        OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
+        OUString sIssueText
+            = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", pFrameFormat->GetName());
 
         if (pNoTextNode->IsOLENode())
         {
@@ -110,11 +113,10 @@ class NoTextNodeAltTextCheck : public NodeCheck
                                       sfx::AccessibilityIssueID::NO_ALT_OLE);
             pIssue->setDoc(pNoTextNode->GetDoc());
             pIssue->setIssueObject(IssueObject::OLE);
-            pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+            pIssue->setObjectID(pFrameFormat->GetName());
         }
         else if (pNoTextNode->IsGrfNode())
         {
-            const SwFrameFormat* pFrameFormat = pNoTextNode->GetFlyFormat();
             const SfxBoolItem* pIsDecorItem = pFrameFormat->GetItemIfSet(RES_DECORATIVE);
             if (!(pIsDecorItem && pIsDecorItem->GetValue()))
             {

@@ -812,6 +812,9 @@ bool SwNodes::MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                 pCurrentNode->m_pStartOfSection = aSttNdStack[ nLevel ];
                 nInsPos++;
                 --aRg.aEnd;
+
+                // reset Accessibility issue state
+                pCurrentNode->resetAndQueueAccessibilityCheck();
             }
             break;
 
