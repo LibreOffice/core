@@ -54,8 +54,8 @@ End Sub
 
 ' Same as AssertEqual, but also checks actual and expected types
 Sub AssertEqualStrict(actual As Variant, expected As Variant, testName As String)
-    AssertEqual(actual, expected, testName)
-    AssertEqual(TypeName(actual), TypeName(expected), testName & " type mismatch:")
+    AssertEqual actual, expected, testName
+    AssertEqual TypeName(actual), TypeName(expected), testName & " type mismatch:"
 End Sub
 
 Sub AssertEqualApprox(actual, expected, epsilon, testName As String)
