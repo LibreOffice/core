@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table table:name="Outer">
+    <table:table-column table:number-columns-repeated="2"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <table:table table:name="Inner">
+       <table:table-column table:number-columns-repeated="2"/>
+       <table:table-row>
+        <table:table-cell office:value-type="string">
+         <text:p>Inner.A1</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string">
+         <text:p>Inner.B1</text:p>
+        </table:table-cell>
+       </table:table-row>
+       <table:table-row>
+        <table:table-cell office:value-type="string">
+         <text:p>Inner.A2</text:p>
+        </table:table-cell>
+        <table:table-cell office:value-type="string">
+         <text:p>Inner.B2</text:p>
+        </table:table-cell>
+       </table:table-row>
+      </table:table>
+      <text:p>Outer.A1</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p>Outer.B1</text:p>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell office:value-type="string">
+      <text:p>Outer.A2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string">
+      <text:p>Outer.B2</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>Following text</text:p>
+  </office:text>
+ </office:body>
+</office:document>
