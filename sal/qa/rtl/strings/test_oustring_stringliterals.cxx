@@ -419,7 +419,15 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
     CPPUNIT_ASSERT(s.startsWith(a));
     CPPUNIT_ASSERT(s.startsWith(p));
     CPPUNIT_ASSERT(s.startsWith(u"foo\0hidden"));
+    // For Clang against libstdc++ with C++20 and greater, this would hit not-yet-fixed
+    // <https://github.com/llvm/llvm-project/issues/24502> "eagerly-instantiated entities whose
+    // templates are defined after the first point of instantiation don't get instantiated at all"
+    // (see the mailing list thread starting at
+    // <https://gcc.gnu.org/pipermail/libstdc++/2021-November/053548.html> "std::basic_string<_Tp>
+    // constructor point of instantiation woes?"):
+#if !(defined __clang__ && defined __GLIBCXX__ && __cplusplus >= 202002L)
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"s));
+#endif
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"sv));
 /*TODO:*/
     CPPUNIT_ASSERT(!s.startsWith(rtlunittest::OUStringLiteral(a)));
