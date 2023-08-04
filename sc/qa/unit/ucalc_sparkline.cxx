@@ -484,16 +484,16 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testUndoRedoEditSparklineGroup)
     {
         sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
         rAttibutes.setType(sc::SparklineType::Column);
-        rAttibutes.setColorSeries(model::ComplexColor::RGB(COL_YELLOW));
-        rAttibutes.setColorAxis(model::ComplexColor::RGB(COL_GREEN));
+        rAttibutes.setColorSeries(model::ComplexColor::setRGB(COL_YELLOW));
+        rAttibutes.setColorAxis(model::ComplexColor::setRGB(COL_GREEN));
     }
 
     m_pDoc->CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
 
     sc::SparklineAttributes aNewAttributes;
     aNewAttributes.setType(sc::SparklineType::Stacked);
-    aNewAttributes.setColorSeries(model::ComplexColor::RGB(COL_BLACK));
-    aNewAttributes.setColorAxis(model::ComplexColor::RGB(COL_BLUE));
+    aNewAttributes.setColorSeries(model::ComplexColor::setRGB(COL_BLACK));
+    aNewAttributes.setColorAxis(model::ComplexColor::setRGB(COL_BLUE));
 
     sc::SparklineAttributes aInitialAttibutes(pSparklineGroup->getAttributes());
 
