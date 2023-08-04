@@ -686,7 +686,20 @@ bool SwFlyFrame::IsFlySplitAllowed() const
         return false;
     }
 
-    return GetFormat()->GetFlySplit().GetValue();
+    const SwFlyFrameFormat* pFormat = GetFormat();
+    const SwFormatVertOrient& rVertOrient = pFormat->GetVertOrient();
+    if (rVertOrient.GetVertOrient() == text::VertOrientation::BOTTOM)
+    {
+        // We have to grow from bottom to top, and the fly split code assumes that we grow from top
+        // to bottom, so don't split for now.
+        if (rVertOrient.GetRelationOrient() == text::RelOrientation::PAGE_PRINT_AREA)
+        {
+            // Growing from the bottom of the body frame.
+            return false;
+        }
+    }
+
+    return pFormat->GetFlySplit().GetValue();
 }
 
 SwFrame *SwFlyFrame::FindLastLower()
