@@ -515,16 +515,16 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     {
         sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
         rAttibutes.setType(sc::SparklineType::Column);
-        rAttibutes.setColorSeries(model::ComplexColor::setRGB(COL_YELLOW));
-        rAttibutes.setColorAxis(model::ComplexColor::setRGB(COL_GREEN));
+        rAttibutes.setColorSeries(model::ComplexColor::createRGB(COL_YELLOW));
+        rAttibutes.setColorAxis(model::ComplexColor::createRGB(COL_GREEN));
     }
 
     m_pDoc->CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
 
     sc::SparklineAttributes aNewAttributes;
     aNewAttributes.setType(sc::SparklineType::Stacked);
-    aNewAttributes.setColorSeries(model::ComplexColor::setRGB(COL_BLACK));
-    aNewAttributes.setColorAxis(model::ComplexColor::setRGB(COL_BLUE));
+    aNewAttributes.setColorSeries(model::ComplexColor::createRGB(COL_BLACK));
+    aNewAttributes.setColorAxis(model::ComplexColor::createRGB(COL_BLUE));
 
     sc::SparklineAttributes aInitialAttibutes(pSparklineGroup->getAttributes());
 
