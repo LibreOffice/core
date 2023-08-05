@@ -105,7 +105,8 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
 
 void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
                                const Link<void*, void>& rUpdateFavHdl,
-                               const Link<void*, void>& rUpdateRecentHdl)
+                               const Link<void*, void>& rUpdateRecentHdl,
+                               const Link<SvxCharView*,void> &rFocusInHdl)
 {
     m_aUpdateFavHdl = rUpdateFavHdl;
     m_aUpdateRecentHdl = rUpdateRecentHdl;
@@ -118,10 +119,12 @@ void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &r
     for(int i = 0; i < 16; i++)
     {
         m_aRecentCharView[i].SetHasInsert(bHasInsert);
+        m_aRecentCharView[i].setFocusInHdl(rFocusInHdl);
         m_aRecentCharView[i].setMouseClickHdl(rMouseClickHdl);
         m_aRecentCharView[i].setClearClickHdl(LINK(this, SfxCharmapContainer, RecentClearClickHdl));
         m_aRecentCharView[i].setClearAllClickHdl(LINK(this, SfxCharmapContainer, RecentClearAllClickHdl));
         m_aFavCharView[i].SetHasInsert(bHasInsert);
+        m_aFavCharView[i].setFocusInHdl(rFocusInHdl);
         m_aFavCharView[i].setMouseClickHdl(rMouseClickHdl);
         m_aFavCharView[i].setClearClickHdl(LINK(this, SfxCharmapContainer, FavClearClickHdl));
         m_aFavCharView[i].setClearAllClickHdl(LINK(this, SfxCharmapContainer, FavClearAllClickHdl));
@@ -135,11 +138,16 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     , m_aCharmapContents(*m_xBuilder, m_xVirDev, false)
     , m_xRecentLabel(m_xBuilder->weld_label("label2"))
     , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
+    , m_xCharInfoLabel(m_xBuilder->weld_label("charinfolabel"))
 {
+    m_xCharInfoLabel->set_size_request(-1, m_xCharInfoLabel->get_text_height() * 2);
+
     m_aCharmapContents.init(false, LINK(this, SfxCharmapCtrl, CharClickHdl),
-                            Link<void*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl));
+                            Link<void*,void>(), LINK(this, SfxCharmapCtrl, UpdateRecentHdl),
+                            LINK(this, SfxCharmapCtrl, CharFocusInHdl));
 
     m_xDlgBtn->connect_clicked(LINK(this, SfxCharmapCtrl, OpenDlgHdl));
+    m_xDlgBtn->connect_focus_in(LINK(this, SfxCharmapCtrl, DlgBtnFocusInHdl));
 }
 
 SfxCharmapCtrl::~SfxCharmapCtrl()
@@ -209,6 +217,11 @@ void SfxCharmapContainer::getRecentCharacterList()
     m_aRecentCharFontList.resize(nCommonLength);
 }
 
+IMPL_LINK(SfxCharmapCtrl, CharFocusInHdl, SvxCharView*, pView, void)
+{
+    m_xCharInfoLabel->set_label(pView->GetCharInfoText());
+}
+
 IMPL_LINK(SfxCharmapCtrl, CharClickHdl, SvxCharView*, pView, void)
 {
     m_xControl->EndPopupMode();
@@ -225,6 +238,11 @@ IMPL_LINK_NOARG(SfxCharmapCtrl, OpenDlgHdl, weld::Button&, void)
         uno::Reference<frame::XFrame> xFrame = pViewFrm->GetFrame().GetFrameInterface();
         comphelper::dispatchCommand(".uno:InsertSymbol", xFrame, {});
     }
+}
+
+IMPL_LINK_NOARG(SfxCharmapCtrl, DlgBtnFocusInHdl, weld::Widget&, void)
+{
+    m_xCharInfoLabel->set_label("");
 }
 
 void SfxCharmapCtrl::GrabFocus()

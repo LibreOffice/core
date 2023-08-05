@@ -35,6 +35,7 @@ private:
     bool            maHasInsert;
     OUString        m_sText;
 
+    Link<SvxCharView*, void> maFocusInHdl;
     Link<SvxCharView*, void> maMouseClickHdl;
     Link<SvxCharView*, void> maClearClickHdl;
     Link<SvxCharView*, void> maClearAllClickHdl;
@@ -44,6 +45,7 @@ private:
     virtual bool MouseButtonDown(const MouseEvent&) override;
     virtual void GetFocus() override;
     virtual void LoseFocus() override;
+    virtual OUString RequestHelp(tools::Rectangle&rHelpRect) override;
     virtual bool KeyInput(const KeyEvent&) override;
     virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
@@ -54,6 +56,7 @@ public:
     vcl::Font const & GetFont() const { return maFont; }
     void            SetText( const OUString& rText );
     OUString const & GetText() const { return m_sText; }
+    OUString GetCharInfoText();
     void            SetHasInsert( bool bInsert );
     void            InsertCharToDoc();
 
@@ -61,6 +64,7 @@ public:
 
     Size            get_preferred_size() const { return GetDrawingArea()->get_preferred_size(); }
 
+    void setFocusInHdl(const Link<SvxCharView*,void> &rLink);
     void setMouseClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearClickHdl(const Link<SvxCharView*,void> &rLink);
     void setClearAllClickHdl(const Link<SvxCharView*,void> &rLink);
@@ -96,7 +100,8 @@ public:
 
     void            init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
                          const Link<void*,void> &rUpdateFavHdl,
-                         const Link<void*,void> &rUpdateRecentHdl);
+                         const Link<void*,void> &rUpdateRecentHdl,
+                         const Link<SvxCharView *,void> &rFocusInHdl = Link<SvxCharView *,void>());
 
     void            getFavCharacterList();
     void            updateFavCharControl();

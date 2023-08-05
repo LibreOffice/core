@@ -29,6 +29,10 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <o3tl/temporary.hxx>
+#include <unicode/uchar.h>
+#include <unicode/utypes.h>
+
 using namespace com::sun::star;
 
 SvxCharView::SvxCharView(const VclPtr<VirtualDevice>& rVirDev)
@@ -52,9 +56,40 @@ void SvxCharView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     mxVirDev->Pop();
 }
 
-void SvxCharView::GetFocus() { Invalidate(); }
+void SvxCharView::GetFocus()
+{
+    Invalidate();
+    if (maFocusInHdl.IsSet())
+        maFocusInHdl.Call(this);
+}
 
 void SvxCharView::LoseFocus() { Invalidate(); }
+
+OUString SvxCharView::GetCharInfoText()
+{
+    OUString charValue = GetText();
+    sal_UCS4 nDecimalValue = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
+    /* get the character name */
+    UErrorCode errorCode = U_ZERO_ERROR;
+    // icu has a private uprv_getMaxCharNameLength function which returns the max possible
+    // length of this property. Unicode 3.2 max char name length was 83
+    char buffer[100];
+    u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
+    if (U_SUCCESS(errorCode))
+    {
+        OUString aHexText = OUString::number(nDecimalValue, 16).toAsciiUpperCase();
+        return charValue + u" " + OUString::createFromAscii(buffer) + u" U+" + aHexText;
+    }
+    return OUString();
+}
+
+OUString SvxCharView::RequestHelp(tools::Rectangle& rHelpRect)
+{
+    OUString sCharInfoText(GetCharInfoText());
+    // Gtk3 requires a help rectangle be supplied for the tooltip to display, X11 does not.
+    mxVirDev->GetTextBoundRect(rHelpRect, sCharInfoText);
+    return sCharInfoText;
+}
 
 bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -220,6 +255,8 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
     if (bShrankFont)
         rRenderContext.SetFont(aOrigFont);
 }
+
+void SvxCharView::setFocusInHdl(const Link<SvxCharView*, void>& rLink) { maFocusInHdl = rLink; }
 
 void SvxCharView::setMouseClickHdl(const Link<SvxCharView*, void>& rLink)
 {
