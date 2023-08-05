@@ -546,7 +546,7 @@ ErrCode SwHTMLWriter::WriteStream()
     CollectFlyFrames();
     m_nLastParaToken = HtmlTokenId::NONE;
 
-    if (mbReqIF && !m_bWriteAll && m_pCurrentPam
+    if (mbReqIF && !m_bWriteAll
         && *m_pCurrentPam->GetPoint() == *m_pCurrentPam->GetMark()
         && m_pCurrentPam->GetPoint()->GetNode().IsOLENode() && m_aHTMLPosFlyFrames.size() == 1)
     {
