@@ -52,6 +52,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     , m_xFTDescription(m_xBuilder->weld_label("description-label"))
     , m_xDescriptionED(m_xBuilder->weld_entry("description"))
     , m_xSearchBox(m_xBuilder->weld_entry("searchbox"))
+    , m_xReloadBtn(m_xBuilder->weld_button("reloadcert"))
 {
     auto nControlWidth = m_xCertLB->get_approximate_digit_width() * 105;
     m_xCertLB->set_size_request(nControlWidth, m_xCertLB->get_height_rows(12));
@@ -61,6 +62,7 @@ CertificateChooser::CertificateChooser(weld::Window* _pParent,
     m_xCertLB->connect_row_activated( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     m_xViewBtn->connect_clicked( LINK( this, CertificateChooser, ViewButtonHdl ) );
     m_xSearchBox->connect_changed(LINK(this, CertificateChooser, SearchModifyHdl));
+    m_xReloadBtn->connect_clicked( LINK( this, CertificateChooser, ReloadButtonHdl ) );
 
     mxSecurityContexts = std::move(rxSecurityContexts);
     mbInitialized = false;
@@ -311,6 +313,18 @@ OUString CertificateChooser::GetUsageText()
         GetSelectedCertificates();
     return (xCerts.hasElements() && xCerts[0].is()) ?
         UsageInClearText(xCerts[0]->getCertificateUsage()) : OUString();
+}
+
+void CertificateChooser::ImplReloadCertificates()
+{
+    xMemCerts.clear();
+}
+
+IMPL_LINK_NOARG(CertificateChooser, ReloadButtonHdl, weld::Button&, void)
+{
+    ImplReloadCertificates();
+    mbInitialized = false;
+    ImplInitialize();
 }
 
 IMPL_LINK_NOARG(CertificateChooser, SearchModifyHdl, weld::Entry&, void)

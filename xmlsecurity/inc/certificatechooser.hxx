@@ -51,6 +51,8 @@ enum class UserAction
 class CertificateChooser final : public weld::GenericDialogController
 {
 private:
+    static inline CertificateChooser* mxInstance = nullptr;
+
     std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > mxSecurityContexts;
     std::vector<std::shared_ptr<UserData>> mvUserData;
 
@@ -67,11 +69,12 @@ private:
     std::unique_ptr<weld::Label>    m_xFTDescription;
     std::unique_ptr<weld::Entry>    m_xDescriptionED;
     std::unique_ptr<weld::Entry>    m_xSearchBox;
+    std::unique_ptr<weld::Button>   m_xReloadBtn;
 
     std::unordered_map<css::uno::Reference< css::xml::crypto::XXMLSecurityContext>,
         css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > > xMemCerts;
 
-
+    DECL_LINK(ReloadButtonHdl, weld::Button&, void);
     DECL_LINK(ViewButtonHdl, weld::Button&, void);
     DECL_LINK(CertificateHighlightHdl, weld::TreeView&, void);
     DECL_LINK(CertificateSelectHdl, weld::TreeView&, bool);
@@ -79,7 +82,8 @@ private:
 
     void ImplShowCertificateDetails();
     void ImplInitialize(bool mbSearch = false);
-
+    void ImplReloadCertificates();
+    void ImplSecCtxToCerts(SvtUserOptions &aUserOpts, bool bOnlyReload);
     static void HandleOneUsageBit(OUString& string, int& bits, int bit, TranslateId name);
 
 public:
@@ -87,6 +91,16 @@ public:
                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
                        UserAction eAction);
     virtual ~CertificateChooser() override;
+
+    static CertificateChooser* getInstance(weld::Window* _pParent,
+                        std::vector< css::uno::Reference< css::xml::crypto::XXMLSecurityContext > > && rxSecurityContexts,
+                        UserAction eAction) {
+        if (!mxInstance)
+        {
+            mxInstance = new CertificateChooser(_pParent, std::move(rxSecurityContexts), eAction);
+        }
+        return mxInstance;
+    }
 
     short run() override;
 

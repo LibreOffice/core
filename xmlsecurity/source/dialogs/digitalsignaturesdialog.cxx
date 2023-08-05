@@ -412,12 +412,12 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, weld::Button&, void)
         if (DocumentSignatureHelper::CanSignWithGPG(maSignatureManager.getStore(), m_sODFVersion))
             xSecContexts.push_back(maSignatureManager.getGpgSecurityContext());
 
-        CertificateChooser aChooser(m_xDialog.get(), std::move(xSecContexts), UserAction::Sign);
-        if (aChooser.run() == RET_OK)
+        CertificateChooser* aChooser = CertificateChooser::getInstance(m_xDialog.get(), std::move(xSecContexts), UserAction::Sign);
+        if (aChooser->run() == RET_OK)
         {
             sal_Int32 nSecurityId;
-            if (!maSignatureManager.add(aChooser.GetSelectedCertificates()[0], aChooser.GetSelectedSecurityContext(),
-                                        aChooser.GetDescription(), nSecurityId, m_bAdESCompliant))
+            if (!maSignatureManager.add(aChooser->GetSelectedCertificates()[0], aChooser->GetSelectedSecurityContext(),
+                                        aChooser->GetDescription(), nSecurityId, m_bAdESCompliant))
                 return;
             mbSignaturesChanged = true;
 

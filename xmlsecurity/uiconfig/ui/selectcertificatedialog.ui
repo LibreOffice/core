@@ -193,24 +193,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="viewcert">
-                <property name="label" translatable="yes" context="selectcertificatedialog|viewcert">View Certificate...</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">end</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="viewcert-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|viewcert">Opens the View Certificate dialog where you can examine the selected certificate.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkEntry" id="searchbox">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -267,6 +249,56 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="halign">end</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkButton" id="viewcert">
+                    <property name="label" translatable="yes" context="selectcertificatedialog|viewcert">View Certificate...</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="viewcert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|viewcert">Opens the View Certificate dialog where you can examine the selected certificate.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="reloadcert">
+                    <property name="label" translatable="yes" context="selectcertificatedialog|reloadcert">Reload Certificates</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">end</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="reloadcert-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="selectcertificatedialog|extended_tip|reloadcert">Reload the list of certificates.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
           </object>
