@@ -484,7 +484,7 @@ public:
     void OutCSS1_Property( std::string_view pProp, std::string_view pVal,
                            const OUString *pSVal, std::optional<sw::Css1Background> oBackground = std::nullopt );
     void OutCSS1_UnitProperty( std::string_view pProp, tools::Long nVal );
-    void OutCSS1_PixelProperty( std::string_view pProp, tools::Long nVal, bool bVert );
+    void OutCSS1_PixelProperty( std::string_view pProp, tools::Long nTwips );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
 
     // events of BODY tag from SFX configuration
@@ -542,7 +542,8 @@ public:
     SwPaM* GetEndPaM() { return m_pOrigPam; }
     void SetEndPaM( SwPaM* pPam ) { m_pOrigPam = pPam; }
 
-    static sal_uInt32 ToPixel( sal_uInt32 nVal, const bool bVert );
+    static sal_uInt32 ToPixel(sal_uInt32 nTwips);
+    static Size ToPixel(Size aTwips);
 
     SwHTMLFrameType GuessFrameType( const SwFrameFormat& rFrameFormat,
                          const SdrObject*& rpStrObj );

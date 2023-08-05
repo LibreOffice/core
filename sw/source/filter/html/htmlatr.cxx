@@ -2074,7 +2074,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                         nPageWidth = pBox->GetFrameFormat()->GetFrameSize().GetWidth();
                 }
 
-                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nPageWidth - nLeft - nRight, false));
+                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nPageWidth - nLeft - nRight));
                 aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
 
                 if( !nLeft )
@@ -2092,7 +2092,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             if( pBorderLine )
             {
                 sal_uInt16 nWidth = pBorderLine->GetScaledWidth();
-                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nWidth, false));
+                OString sWidth = OString::number(SwHTMLWriter::ToPixel(nWidth));
                 aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_size, sWidth);
 
                 const Color& rBorderColor = pBorderLine->GetColor();
@@ -2625,17 +2625,18 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     return rWrt;
 }
 
-sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert )
+// In CSS, "px" is 1/96 of inch: https://www.w3.org/TR/css3-values/#absolute-lengths
+sal_uInt32 SwHTMLWriter::ToPixel(sal_uInt32 nTwips)
 {
-    if( Application::GetDefaultDevice() && nVal )
-    {
-        Size aSz( bVert ? 0 : nVal, bVert ? nVal : 0 );
-        aSz = Application::GetDefaultDevice()->LogicToPixel(aSz, MapMode( MapUnit::MapTwip ));
-        nVal = bVert ? aSz.Height() : aSz.Width();
-        if( !nVal )     // if there is a Twip, there should be a pixel as well
-            nVal = 1;
-    }
-    return nVal;
+    // if there is a Twip, there should be a pixel as well
+    return nTwips
+               ? std::max(o3tl::convert(nTwips, o3tl::Length::twip, o3tl::Length::px), sal_Int64(1))
+               : 0;
+}
+
+Size SwHTMLWriter::ToPixel(Size aTwips)
+{
+    return Size(ToPixel(aTwips.Width()), ToPixel(aTwips.Height()));
 }
 
 static SwHTMLWriter& OutHTML_CSS1Attr( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )

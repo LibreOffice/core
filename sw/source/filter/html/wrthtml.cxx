@@ -781,11 +781,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sal_uInt16 nGutter = pCol->GetGutterWidth( true );
         if( nGutter!=USHRT_MAX )
         {
-            if( nGutter && Application::GetDefaultDevice() )
-            {
-                nGutter = o3tl::narrowing<sal_uInt16>(Application::GetDefaultDevice()
-                                ->LogicToPixel( Size(nGutter, 0), MapMode(MapUnit::MapTwip) ).Width());
-            }
+            nGutter = SwHTMLWriter::ToPixel(nGutter);
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_gutter "=\"" + OString::number(nGutter) + "\"");
         }
     }

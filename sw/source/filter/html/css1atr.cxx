@@ -466,10 +466,9 @@ void SwHTMLWriter::OutCSS1_UnitProperty( std::string_view pProp, tools::Long nVa
     OutCSS1_PropertyAscii(pProp, sOut);
 }
 
-void SwHTMLWriter::OutCSS1_PixelProperty( std::string_view pProp, tools::Long nVal,
-                                          bool bVert )
+void SwHTMLWriter::OutCSS1_PixelProperty( std::string_view pProp, tools::Long nTwips )
 {
-    OString sOut(OString::number(ToPixel(nVal,bVert)) + sCSS1_UNIT_px);
+    OString sOut(OString::number(ToPixel(nTwips)) + sCSS1_UNIT_px);
     OutCSS1_PropertyAscii(pProp, sOut);
 }
 
@@ -1965,16 +1964,14 @@ void SwHTMLWriter::OutCSS1_FrameFormatOptions( const SwFrameFormat& rFrameFormat
                 if( nFrameOpts & HtmlFrmOpts::SWidth )
                 {
                     if( nFrameOpts & HtmlFrmOpts::SPixSize )
-                        OutCSS1_PixelProperty( sCSS1_P_width, aTwipSz.Width(),
-                                               false );
+                        OutCSS1_PixelProperty( sCSS1_P_width, aTwipSz.Width() );
                     else
                         OutCSS1_UnitProperty( sCSS1_P_width, aTwipSz.Width() );
                 }
                 if( nFrameOpts & HtmlFrmOpts::SHeight )
                 {
                     if( nFrameOpts & HtmlFrmOpts::SPixSize )
-                        OutCSS1_PixelProperty( sCSS1_P_height, aTwipSz.Height(),
-                                               true );
+                        OutCSS1_PixelProperty( sCSS1_P_height, aTwipSz.Height() );
                     else
                         OutCSS1_UnitProperty( sCSS1_P_height, aTwipSz.Height() );
                 }
@@ -2780,7 +2777,7 @@ static SwHTMLWriter& OutCSS1_SwFormatFrameSize( SwHTMLWriter& rWrt, const SfxPoo
         else if( nMode & Css1FrameSize::Pixel )
         {
             rWrt.OutCSS1_PixelProperty( sCSS1_P_width,
-                                            rFSItem.GetSize().Width(), false );
+                                            rFSItem.GetSize().Width() );
         }
         else
         {
@@ -3235,9 +3232,7 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rWrt,
     sal_Int32 nWidth = pLine->GetWidth();
 
     OStringBuffer sOut;
-    if( Application::GetDefaultDevice() &&
-        nWidth <= Application::GetDefaultDevice()->PixelToLogic(
-                    Size( 1, 1 ), MapMode( MapUnit::MapTwip) ).Width() )
+    if( nWidth <= o3tl::convert(1, o3tl::Length::px, o3tl::Length::twip) )
     {
         // If the width is smaller than one pixel, then export as 1px
         // so that Netscape and IE show the line.

@@ -972,19 +972,7 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             }
         }
 
-        Size aTwipSz( rFormObj.GetLogicRect().GetSize() );
-        Size aPixelSz( 0, 0 );
-        if( (aTwipSz.Width() || aTwipSz.Height()) &&
-            Application::GetDefaultDevice() )
-        {
-            aPixelSz =
-                Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
-                                                    MapMode(MapUnit::MapTwip) );
-            if( !aPixelSz.Width() && aTwipSz.Width() )
-                aPixelSz.setWidth( 1 );
-            if( !aPixelSz.Height() && aTwipSz.Height() )
-                aPixelSz.setHeight( 1 );
-        }
+        Size aPixelSz(SwHTMLWriter::ToPixel(rFormObj.GetLogicRect().GetSize()));
 
         if( aPixelSz.Width() )
         {

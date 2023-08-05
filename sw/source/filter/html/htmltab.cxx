@@ -2031,10 +2031,9 @@ void HTMLTable::InsertCell( std::shared_ptr<HTMLTableCnts> const& rCnts,
     }
 
     Size aTwipSz( bRelWidth ? 0 : nCellWidth, nCellHeight );
-    if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
+    if( aTwipSz.Width() || aTwipSz.Height() )
     {
-        aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
+        aTwipSz = o3tl::convert(aTwipSz, o3tl::Length::px, o3tl::Length::twip);
     }
 
     // Only set width on the first cell!
@@ -2164,17 +2163,12 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
         m_nCols = nColsReq;
     }
 
-    Size aTwipSz( bRelWidth ? 0 : nColWidth, 0 );
-    if( aTwipSz.Width() && Application::GetDefaultDevice() )
-    {
-        aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
-    }
+    sal_uInt16 nTwipWidth(bRelWidth ? 0 : o3tl::convert(nColWidth, o3tl::Length::px, o3tl::Length::twip));
 
     for( i=m_nCurrentColumn; i<nColsReq; i++ )
     {
         HTMLTableColumn& rCol = m_aColumns[i];
-        sal_uInt16 nTmp = bRelWidth ? nColWidth : o3tl::narrowing<sal_uInt16>(aTwipSz.Width());
+        sal_uInt16 nTmp = bRelWidth ? nColWidth : o3tl::narrowing<sal_uInt16>(nTwipWidth);
         rCol.SetWidth( nTmp, bRelWidth );
         rCol.SetAdjust( eAdjust );
         rCol.SetVertOri( eVertOrient );

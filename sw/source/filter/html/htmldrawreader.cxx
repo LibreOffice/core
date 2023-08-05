@@ -87,14 +87,10 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         Reader::ResetFrameFormatAttrs( aFrameSet );
 
     sal_uInt16 nLeftSpace = 0, nRightSpace = 0, nUpperSpace = 0, nLowerSpace = 0;
-    if( (rPixSpace.Width() || rPixSpace.Height()) && Application::GetDefaultDevice() )
+    if( rPixSpace.Width() || rPixSpace.Height() )
     {
-        Size aTwipSpc( rPixSpace.Width(), rPixSpace.Height() );
-        aTwipSpc =
-            Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
-                                                MapMode(MapUnit::MapTwip) );
-        nLeftSpace = nRightSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Width());
-        nUpperSpace = nLowerSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
+        nLeftSpace = nRightSpace = o3tl::convert(rPixSpace.Width(), o3tl::Length::px, o3tl::Length::twip);
+        nUpperSpace = nLowerSpace = o3tl::convert(rPixSpace.Height(), o3tl::Length::px, o3tl::Length::twip);
     }
 
     // set left/right border
@@ -454,10 +450,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // now set the size
     Size aTwipSz( bPercentWidth ? 0 : nWidth, nHeight );
-    if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
+    if( aTwipSz.Width() || aTwipSz.Height() )
     {
-        aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
+        aTwipSz = o3tl::convert(aTwipSz, o3tl::Length::px, o3tl::Length::twip);
     }
 
     if( SVX_CSS1_LTYPE_TWIP== aPropInfo.m_eWidthType )
