@@ -134,12 +134,14 @@ namespace vclcanvas
                 // sprite content might contain alpha, create
                 // BmpEx, then.
                 BitmapEx aMask( mpBackBufferMask->getOutDev().GetBitmapEx( aEmptyPoint,
-                                                                       aOutputSize ) );
+                                                                           aOutputSize ) );
+                AlphaMask aAlpha( aMask.GetBitmap() );
+                aAlpha.Invert();
 
                 // Note: since we retrieved aBmp and aMask
                 // directly from an OutDev, it's already a
                 // 'display bitmap' on windows.
-                maContent = BitmapEx( aBmp.GetBitmap(), AlphaMask( aMask.GetBitmap()) );
+                maContent = BitmapEx( aBmp.GetBitmap(), aAlpha );
             }
         }
 
