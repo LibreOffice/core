@@ -224,7 +224,7 @@ void FocusManager::FocusPanel (
     }
     // Fallback to deck title should only be applicable when there is more than one panel,
     // or else it will never be possible to enter the panel contents when there's a single panel
-    // withouth a titlebar and expander
+    // without a titlebar and expander
     else if (bFallbackToDeckTitle && maPanels.size() > 1)
     {
         // The panel title is not visible, fall back to the deck
