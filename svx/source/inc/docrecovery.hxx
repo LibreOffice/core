@@ -438,6 +438,8 @@ class RecoveryDialog final : public weld::GenericDialogController
         virtual void stepNext(TURLInfo* pItem) override;
         virtual void end() override;
 
+        bool allSuccessfullyRecovered();
+
         short execute();
 
     // helper

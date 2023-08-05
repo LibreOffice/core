@@ -737,6 +737,21 @@ RecoveryDialog::~RecoveryDialog()
         xComp->dispose();
 }
 
+bool RecoveryDialog::allSuccessfullyRecovered()
+{
+    const int c = m_xFileListLB->n_children();
+    for (int i = 0; i < c; ++i)
+    {
+        TURLInfo* pInfo = weld::fromId<TURLInfo*>(m_xFileListLB->get_id(i));
+        if (!pInfo)
+            continue;
+
+        if (pInfo->RecoveryState != E_SUCCESSFULLY_RECOVERED)
+            return false;
+    }
+    return true;
+}
+
 short RecoveryDialog::execute()
 {
     ::SolarMutexGuard aSolarLock;
@@ -761,7 +776,12 @@ short RecoveryDialog::execute()
                     Application::Yield();
 
                 m_pCore->setUpdateListener(nullptr);
-                m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
+
+                // Skip FINISH button if everything was successfully recovered
+                if (allSuccessfullyRecovered())
+                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_DONE;
+                else
+                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_CORE_DONE;
                 return execute();
              }
 
