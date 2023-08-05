@@ -492,7 +492,7 @@ SwXText::insertControlCharacter(
     {
         pRange->SetPositions(aCursor);
     }
-    else
+    else if (pCursor)
     {
         SwPaM *const pUnoCursor = pCursor->GetPaM();
         *pUnoCursor->GetPoint() = *aCursor.GetPoint();
