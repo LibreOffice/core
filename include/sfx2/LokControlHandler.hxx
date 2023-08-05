@@ -76,7 +76,7 @@ public:
                         // and set pointer style to arrow
                         if (!eDocPointerStyle)
                         {
-                            *eDocPointerStyle = rMainWindow.GetPointer();
+                            eDocPointerStyle = rMainWindow.GetPointer();
                             rMainWindow.SetPointer(pWindow->GetPointer());
                         }
 
