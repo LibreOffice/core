@@ -224,9 +224,7 @@ void SwHTMLParser::NewNumberBulletList( HtmlTokenId nToken )
         Size aTwipSz( nWidth, nHeight), *pTwipSz=nullptr;
         if( nWidth!=USHRT_MAX && nHeight!=USHRT_MAX )
         {
-            aTwipSz =
-                Application::GetDefaultDevice()->PixelToLogic( aTwipSz,
-                                                    MapMode(MapUnit::MapTwip) );
+            aTwipSz = o3tl::convert(aTwipSz, o3tl::Length::px, o3tl::Length::twip);
             pTwipSz = &aTwipSz;
         }
 

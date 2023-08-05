@@ -4995,12 +4995,7 @@ void SwHTMLParser::InsertSpacer()
     case HTML_SPTYPE_VERT:
         if( nSize > 0 )
         {
-            if (Application::GetDefaultDevice())
-            {
-                nSize = Application::GetDefaultDevice()
-                            ->PixelToLogic( Size(0,nSize),
-                                            MapMode(MapUnit::MapTwip) ).Height();
-            }
+            nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
 
             // set a paragraph margin
             SwTextNode *pTextNode = nullptr;
@@ -5042,12 +5037,7 @@ void SwHTMLParser::InsertSpacer()
             // If the paragraph is still empty, set first line
             // indentation, otherwise apply letter spacing over a space.
 
-            if (Application::GetDefaultDevice())
-            {
-                nSize = Application::GetDefaultDevice()
-                            ->PixelToLogic( Size(nSize,0),
-                                            MapMode(MapUnit::MapTwip) ).Width();
-            }
+            nSize = o3tl::convert(nSize, o3tl::Length::px, o3tl::Length::twip);
 
             if( !m_pPam->GetPoint()->GetContentIndex() )
             {
@@ -5080,14 +5070,8 @@ void SwHTMLParser::InsertSpacer()
 
 sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
 {
-    if( nPixel && Application::GetDefaultDevice() )
-    {
-        SwTwips nTwips = Application::GetDefaultDevice()->PixelToLogic(
-                    Size( nPixel, nPixel ), MapMode( MapUnit::MapTwip ) ).Width();
-        return o3tl::narrowing<sal_uInt16>(std::min(nTwips, SwTwips(SAL_MAX_UINT16)));
-    }
-    else
-        return nPixel;
+    return std::min(o3tl::convert(nPixel, o3tl::Length::px, o3tl::Length::twip),
+                    sal_Int64(SAL_MAX_UINT16));
 }
 
 SwTwips SwHTMLParser::GetCurrentBrowseWidth()

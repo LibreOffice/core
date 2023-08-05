@@ -68,6 +68,7 @@
 #include <frameformats.hxx>
 
 #include <vcl/graphicfilter.hxx>
+#include <tools/UnitConversion.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/securityoptions.hxx>
 
@@ -611,19 +612,19 @@ IMAGE_SETEVENT:
     SetFrameFormatAttrs( aItemSet, HtmlFrameFormatFlags::Box, aFrameSet );
 
     Size aTwipSz( bPercentWidth ? 0 : nWidth, bPercentHeight ? 0 : nHeight );
-    if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
+    if( aTwipSz.Width() || aTwipSz.Height() )
     {
         if (bWidthProvided || bHeightProvided || // attributes imply pixel!
             aGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
         {
-            aTwipSz = Application::GetDefaultDevice()
-                    ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
+            aTwipSz = o3tl::convert(aTwipSz, o3tl::Length::px, o3tl::Length::twip);
         }
         else
         {   // some bitmaps may have a size in metric units (e.g. PNG); use that
             assert(aGraphic.GetPrefMapMode().GetMapUnit() < MapUnit::MapPixel);
-            aTwipSz = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
-                    aGraphic.GetPrefMapMode(), MapMode(MapUnit::MapTwip));
+            aTwipSz = o3tl::convert(aGraphic.GetPrefSize(),
+                                    MapToO3tlLength(aGraphic.GetPrefMapMode().GetMapUnit()),
+                                    o3tl::Length::twip);
         }
     }
 
@@ -679,8 +680,8 @@ IMAGE_SETEVENT:
         {
             // Try to use size info from the image header before defaulting to
             // HTML_DFLT_IMG_WIDTH/HEIGHT.
-            aTwipSz = Application::GetDefaultDevice()->PixelToLogic(aDescriptor.GetSizePixel(),
-                                                                    MapMode(MapUnit::MapTwip));
+            aTwipSz
+                = o3tl::convert(aDescriptor.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
             if (!bPercentWidth && !nWidth)
             {
                 nWidth = aTwipSz.getWidth();

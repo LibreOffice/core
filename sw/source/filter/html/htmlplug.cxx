@@ -172,11 +172,9 @@ void SwHTMLParser::SetFixSize( const Size& rPixSize,
     sal_uInt8 nPercentWidth = 0, nPercentHeight = 0;
     Size aTwipSz( bPercentWidth || USHRT_MAX==rPixSize.Width() ? 0 : rPixSize.Width(),
                   bPercentHeight || USHRT_MAX==rPixSize.Height() ? 0 : rPixSize.Height() );
-    if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
+    if( aTwipSz.Width() || aTwipSz.Height() )
     {
-        aTwipSz =
-            Application::GetDefaultDevice()->PixelToLogic( aTwipSz,
-                                                MapMode(MapUnit::MapTwip) );
+        aTwipSz = o3tl::convert(aTwipSz, o3tl::Length::px, o3tl::Length::twip);
     }
 
     // process width
@@ -247,14 +245,10 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
 {
     sal_Int32 nLeftSpace = 0, nRightSpace = 0;
     sal_uInt16 nUpperSpace = 0, nLowerSpace = 0;
-    if( (rPixSpace.Width() || rPixSpace.Height()) && Application::GetDefaultDevice() )
+    if( rPixSpace.Width() || rPixSpace.Height() )
     {
-        Size aTwipSpc( rPixSpace.Width(), rPixSpace.Height() );
-        aTwipSpc =
-            Application::GetDefaultDevice()->PixelToLogic( aTwipSpc,
-                                                MapMode(MapUnit::MapTwip) );
-        nLeftSpace = nRightSpace = aTwipSpc.Width();
-        nUpperSpace = nLowerSpace = o3tl::narrowing<sal_uInt16>(aTwipSpc.Height());
+        nLeftSpace = nRightSpace = o3tl::convert(rPixSpace.Width(), o3tl::Length::px, o3tl::Length::twip);
+        nUpperSpace = nLowerSpace = o3tl::convert(rPixSpace.Height(), o3tl::Length::px, o3tl::Length::twip);
     }
 
     // set left/right margin
@@ -525,8 +519,7 @@ bool SwHTMLParser::InsertEmbed()
             return true;
         SwAttrSet aAttrSet(pFormat->GetAttrSet());
         aAttrSet.ClearItem(RES_CNTNT);
-        OutputDevice* pDevice = Application::GetDefaultDevice();
-        Size aDefaultTwipSize(pDevice->PixelToLogic(aGraphic.GetSizePixel(pDevice), MapMode(MapUnit::MapTwip)));
+        Size aDefaultTwipSize(o3tl::convert(aGraphic.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip));
 
         if (aSize.Width() == USHRT_MAX && bPercentHeight)
         {

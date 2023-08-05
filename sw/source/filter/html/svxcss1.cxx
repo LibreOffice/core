@@ -885,15 +885,8 @@ bool SvxCSS1Parser::GetEnum( const CSS1PropertyEnum *pPropTable,
 
 void SvxCSS1Parser::PixelToTwip( tools::Long &rWidth, tools::Long &rHeight )
 {
-    if( Application::GetDefaultDevice() )
-    {
-        Size aTwipSz( rWidth, rHeight );
-        aTwipSz = Application::GetDefaultDevice()->PixelToLogic( aTwipSz,
-                                                          MapMode(MapUnit::MapTwip) );
-
-        rWidth = aTwipSz.Width();
-        rHeight = aTwipSz.Height();
-    }
+    rWidth = o3tl::convert(rWidth, o3tl::Length::px, o3tl::Length::twip);
+    rHeight = o3tl::convert(rHeight, o3tl::Length::px, o3tl::Length::twip);
 }
 
 sal_uInt32 SvxCSS1Parser::GetFontHeight( sal_uInt16 nSize ) const

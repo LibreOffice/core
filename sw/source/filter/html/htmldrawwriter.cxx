@@ -187,11 +187,9 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsMarquee( SwHTMLWriter& rWrt,
     {
         nAmount = -nAmount;
     }
-    else if( nAmount && Application::GetDefaultDevice() )
+    else
     {
-        nAmount = Application::GetDefaultDevice()
-                            ->LogicToPixel( Size(nAmount,0),
-                                            MapMode(MapUnit::MapTwip) ).Width();
+        nAmount = SwHTMLWriter::ToPixel(nAmount);
     }
     if( nAmount )
     {

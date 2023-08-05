@@ -119,14 +119,9 @@ SwHTMLWrtTable::SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo )
 
 void SwHTMLWrtTable::Pixelize( sal_uInt16& rValue )
 {
-    if( rValue && Application::GetDefaultDevice() )
+    if( rValue )
     {
-        Size aSz( rValue, 0 );
-        aSz = Application::GetDefaultDevice()->LogicToPixel( aSz, MapMode(MapUnit::MapTwip) );
-        if( !aSz.Width() )
-            aSz.setWidth( 1 );
-        aSz = Application::GetDefaultDevice()->PixelToLogic( aSz, MapMode(MapUnit::MapTwip) );
-        rValue = o3tl::narrowing<sal_uInt16>(aSz.Width());
+        rValue = o3tl::convert(SwHTMLWriter::ToPixel(rValue), o3tl::Length::px, o3tl::Length::twip);
     }
 }
 
@@ -358,19 +353,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     tools::Long nHeight = pCell->GetHeight() > 0
                         ? GetAbsHeight( pCell->GetHeight(), nRow, nRowSpan )
                         : 0;
-    Size aPixelSz( nWidth, nHeight );
-
-    // output WIDTH (Argh: only for Netscape)
-    if( (aPixelSz.Width() || aPixelSz.Height()) && Application::GetDefaultDevice() )
-    {
-        Size aOldSz( aPixelSz );
-        aPixelSz = Application::GetDefaultDevice()->LogicToPixel( aPixelSz,
-                                                        MapMode(MapUnit::MapTwip) );
-        if( aOldSz.Width() && !aPixelSz.Width() )
-            aPixelSz.setWidth( 1 );
-        if( aOldSz.Height() && !aPixelSz.Height() )
-            aPixelSz.setHeight( 1 );
-    }
+    Size aPixelSz(SwHTMLWriter::ToPixel(nWidth), SwHTMLWriter::ToPixel(nHeight));
 
     // output WIDTH: from layout or calculated
     if( bOutWidth )
@@ -676,53 +659,36 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_width "=\"");
         if( HasRelWidths() )
             sOut.append(OString::number(static_cast<sal_Int32>(m_nTabWidth)) + "%");
-        else if( Application::GetDefaultDevice() )
-        {
-            sal_Int32 nPixWidth = Application::GetDefaultDevice()->LogicToPixel(
-                        Size(m_nTabWidth,0), MapMode(MapUnit::MapTwip) ).Width();
-            if( !nPixWidth )
-                nPixWidth = 1;
-
-            sOut.append(nPixWidth);
-        }
         else
         {
-            OSL_ENSURE( Application::GetDefaultDevice(), "no Application-Window!?" );
-            sOut.append("100%");
+            sal_Int32 nPixWidth =  SwHTMLWriter::ToPixel(m_nTabWidth);
+            sOut.append(nPixWidth);
         }
         sOut.append("\"");
     }
 
-    if( (nHSpace || nVSpace) && Application::GetDefaultDevice() && !rWrt.mbReqIF)
+    if( (nHSpace || nVSpace) && !rWrt.mbReqIF)
     {
-        Size aPixelSpc =
-            Application::GetDefaultDevice()->LogicToPixel( Size(nHSpace,nVSpace),
-                                                   MapMode(MapUnit::MapTwip) );
-        if( !aPixelSpc.Width() && nHSpace )
-            aPixelSpc.setWidth( 1 );
-        if( !aPixelSpc.Height() && nVSpace )
-            aPixelSpc.setHeight( 1 );
-
-        if( aPixelSpc.Width() )
+        if (auto nPixHSpace = SwHTMLWriter::ToPixel(nHSpace))
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_hspace
-                    "=\"" + OString::number(aPixelSpc.Width()) + "\"");
+                    "=\"" + OString::number(nPixHSpace) + "\"");
         }
 
-        if( aPixelSpc.Height() )
+        if (auto nPixVSpace = SwHTMLWriter::ToPixel(nVSpace))
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_vspace
-                    "=\"" + OString::number(aPixelSpc.Height()) + "\"");
+                    "=\"" + OString::number(nPixVSpace) + "\"");
         }
     }
 
     // output CELLPADDING: from layout or calculated
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellpadding
-            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellPadding,false)) + "\"");
+            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellPadding)) + "\"");
 
     // output CELLSPACING: from layout or calculated
     sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_cellspacing
-            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellSpacing,false)) + "\"");
+            "=\"" + OString::number(SwHTMLWriter::ToPixel(m_nCellSpacing)) + "\"");
 
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
@@ -801,7 +767,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             if( bRel )
                 html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, Concat2View(OString::number(nWidth) + "*"));
             else
-                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(SwHTMLWriter::ToPixel(nWidth,false)));
+                html.attribute(OOO_STRING_SVTOOLS_HTML_O_width, OString::number(SwHTMLWriter::ToPixel(nWidth)));
             html.end();
 
             if( bColGroups && pColumn->m_bRightBorder && nCol<nCols-1 )

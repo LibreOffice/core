@@ -600,11 +600,9 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
     // Calculate width.
     sal_uInt8 nPercentWidth = bPercentWidth ? static_cast<sal_uInt8>(nWidth) : 0;
     SwTwips nTwipWidth = 0;
-    if( !bPercentWidth && nWidth && Application::GetDefaultDevice() )
+    if( !bPercentWidth && nWidth )
     {
-        nTwipWidth = Application::GetDefaultDevice()
-                             ->PixelToLogic( Size(nWidth, 0),
-                                             MapMode(MapUnit::MapTwip) ).Width();
+        nTwipWidth = o3tl::convert(nWidth, o3tl::Length::px, o3tl::Length::twip);
     }
 
     if( !nPercentWidth && nTwipWidth < MINFLY )
@@ -689,11 +687,9 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
 
-        if( nGutter && Application::GetDefaultDevice() )
+        if( nGutter )
         {
-            nGutter = o3tl::narrowing<sal_uInt16>(Application::GetDefaultDevice()
-                             ->PixelToLogic( Size(nGutter, 0),
-                                             MapMode(MapUnit::MapTwip) ).Width());
+            nGutter = o3tl::convert(nGutter, o3tl::Length::px, o3tl::Length::twip);
         }
 
         SwFormatCol aFormatCol;
