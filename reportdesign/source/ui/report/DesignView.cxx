@@ -250,11 +250,14 @@ void ODesignView::resizeDocumentView(tools::Rectangle& _rPlayground)
                 nSplitPos = aTaskPanePos.X() - nSplitterWidth;
                 getController().setSplitPos(nSplitPos);
 
-                const tools::Long nTaskPaneSize = static_cast<tools::Long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
-                if ( m_aSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
+                if (const auto nWidth = aPlaygroundSize.Width())
                 {
-                    m_aSplitWin->SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
-                    m_aSplitWin->SetItemSize( TASKPANE_ID, nTaskPaneSize );
+                    const tools::Long nTaskPaneSize = static_cast<tools::Long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/nWidth);
+                    if ( m_aSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
+                    {
+                        m_aSplitWin->SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
+                        m_aSplitWin->SetItemSize( TASKPANE_ID, nTaskPaneSize );
+                    }
                 }
             }
         }
