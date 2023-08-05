@@ -108,6 +108,41 @@ using namespace css::frame;
 using namespace css::lang;
 using namespace framework;
 
+/** After the fact documentation - hopefully it is correct.
+ *
+ * AutoRecovery handles 3 types of recovery, as well as periodic document saving
+ *   1) timed, ODF, temporary, recovery files created in the backup folder
+ *      -can instead be used to actually save the documents periodically if settings request that.
+ *      -temporary: deleted when the document itself is saved
+ *      -handles the situation where LO immediately exits (power outage, program crash, pkill -9 soffice)
+ *          -not restored immediately
+ *          -no guarantee of availability of recovery file (since deleted on document save)
+ *           or original document (perhaps /tmp, removeable, disconnected server).
+ *          -therefore does not include unmodified files in RecoveryList (@since LO 24.2).
+ *            -TODO: perhaps can be enhanced for users who always want sessions restored?
+ *   2) emergency save-and-restart immediately triggers creation of temporary, ODF, recovery files
+ *      -handles the situation where LO is partially functioning (pkill -6 soffice)
+ *          -restore attempted immediately, so try to restore entire session - all open files
+ *          -always create recovery file for every open document in emergency situation
+ *      -works without requiring AutoRecovery to be enabled
+ *   3) session save on exit desired by OS or user creates recovery files for every open document
+ *      -triggered by some OS's shutdown/logout (no known way for user to initiate within LO)
+ *      -same as emergency save, except maybe more time critical - OS kill timeout
+ *          -not restored until much later - the user has stopped doing computer work
+ *          -always create recovery file for every open document: needed for /tmp, disconnected docs
+ *
+ * All of these use the same recovery dialog - re-opening all the files listed in the RecoveryList
+ * of the user's officecfg settings.
+ *
+ * Since these 3 have very different expectations, and yet share the same code, keep all of them
+ * in mind when making code changes.
+ *
+ * Note: often, entries in m_lDocCache are copied. So realize that changes to aInfo/rInfo might not
+ * apply to async events like mark-document-as-saved-and-delete-TMP-URLs or set-modified-status,
+ * or ignoreClosing, or ListenForModify. For example, DocState::Modified should be considered only
+ * a good hint, and not as definitively accurate.
+ */
+
 namespace {
 
 /** @short  hold all needed information for an asynchronous dispatch alive.
@@ -326,8 +361,8 @@ public:
             OUString FactoryURL;
             OUString TemplateURL;
 
-            OUString OldTempURL;
-            OUString NewTempURL;
+            OUString OldTempURL; // previous recovery file (filename_0.odf) which will be removed
+            OUString NewTempURL; // new recovery file (filename_1.odf) that is being created
 
             OUString AppModule;      // e.g. com.sun.star.text.TextDocument - used to identify app module
             OUString FactoryService; // the service to create a document of the module
@@ -574,7 +609,17 @@ private:
       */
     void implts_readAutoSaveConfig();
 
-    // TODO document me
+    /** After the fact documentation
+     * @short adds/updates/removes entries in the RecoveryList - files to be recovered at startup
+     *
+     * @descr Deciding whether to add or remove an entry is very dependent on the context!
+     *        EmergencySave and SessionSave are interested in all open documents (which may not
+     *        even be available at next start - i.e. /tmp files might be lost after a reboot,
+     *        or removable media / server access might not be connected).
+     *        On the other hand, timer-based autorecovery should not be interested in recoverying
+     *        the session, but only modified documents that are recoverable
+     *        (TODO: unless the user always wants to recover a session).
+     */
     void implts_flushConfigItem(AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt = false,
                                 bool bAllowAdd = true);
 
@@ -641,7 +686,7 @@ private:
     /** @short  remove the specified document from our internal document list.
 
         @param  xDocument
-                the new document, which should be deregistered.
+                the closing document, which should be deregistered.
 
         @param  bStopListening
                 sal_False: must be used in case this method is called within disposing() of the document,
