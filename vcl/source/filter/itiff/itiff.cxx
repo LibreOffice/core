@@ -222,7 +222,16 @@ bool ImportTiffGraphicImport(SvStream& rTIFF, Graphic& rGraphic)
             break;
 
         std::vector<uint32_t> raster(nPixelsRequired);
-        aContext.bAllowOneShortRead = true;
+
+        uint16_t compression(COMPRESSION_NONE);
+        const bool bNewCodec = TIFFGetField(tif, TIFFTAG_COMPRESSION, &compression) == 1 &&
+                               compression >= COMPRESSION_ZSTD; // >= 50000 at time of writing
+        // For tdf#149417 we generally allow one short read for fidelity with the old
+        // parser that this replaced. But don't allow that for new format variations
+        // that the old parser didn't handle so we don't take libtiff into uncharted
+        // territory.
+        aContext.bAllowOneShortRead = !bNewCodec;
+
         if (TIFFReadRGBAImageOriented(tif, w, h, raster.data(), ORIENTATION_TOPLEFT, 1))
         {
             Bitmap bitmap(Size(w, h), vcl::PixelFormat::N24_BPP);
