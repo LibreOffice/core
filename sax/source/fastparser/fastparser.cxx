@@ -1264,12 +1264,14 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
             OUString aElementPrefix;
             if( prefix != nullptr )
             {
-                if ( !m_bIgnoreMissingNSDecl || URI != nullptr )
-                    sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
-                else
-                    sNamespace.clear();
-                nNamespaceToken = GetNamespaceToken( sNamespace );
                 aElementPrefix = OUString( XML_CAST( prefix ), strlen( XML_CAST( prefix )), RTL_TEXTENCODING_UTF8 );
+                if ( URI != nullptr )
+                    sNamespace = OUString( XML_CAST( URI ), strlen( XML_CAST( URI )), RTL_TEXTENCODING_UTF8 );
+                else if ( m_bIgnoreMissingNSDecl )
+                    sNamespace.clear();
+                else
+                    throw SAXException("No namespace defined for " + aElementPrefix, {}, {});
+                nNamespaceToken = GetNamespaceToken( sNamespace );
             }
             OUString aElementLocalName( XML_CAST( localName ), strlen( XML_CAST( localName )), RTL_TEXTENCODING_UTF8 );
             rEvent.msNamespace = sNamespace;
