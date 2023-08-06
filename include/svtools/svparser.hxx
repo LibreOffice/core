@@ -51,6 +51,7 @@ protected:
     OUStringBuffer      aToken;             // scanned token
     sal_uInt32          nlLineNr;           // current line number
     sal_uInt32          nlLinePos;          // current column number
+    sal_uInt32          nConversionErrors;  // count of conversion errors
 
     std::unique_ptr<SvParser_Impl<T>> pImplData; // internal data
     tools::Long                m_nTokenIndex;      // current token index to detect loops for seeking backwards
