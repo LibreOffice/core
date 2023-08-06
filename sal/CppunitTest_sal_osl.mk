@@ -37,7 +37,6 @@ $(call gb_CppunitTest_get_target,sal_osl) : $(call gb_CppunitTest_get_linktarget
 $(eval $(call gb_CppunitTest_use_executable,sal_osl,osl_process_child))
 
 $(eval $(call gb_CppunitTest_use_externals,sal_osl,\
-	boost_headers \
 	valgrind \
 ))
 

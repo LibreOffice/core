@@ -67,8 +67,6 @@ $(eval $(call gb_CppunitTest_set_include,sal_rtl,\
 $(call gb_CppunitTest_get_target,sal_rtl) : \
 	$(call gb_Library_get_target,sal_textenc)
 
-$(eval $(call gb_CppunitTest_use_external,sal_rtl,boost_headers))
-
 ifeq ($(ENABLE_CIPHER_OPENSSL_BACKEND),TRUE)
 $(eval $(call gb_CppunitTest_add_defs,sal_rtl,-DLIBO_CIPHER_OPENSSL_BACKEND))
 endif
