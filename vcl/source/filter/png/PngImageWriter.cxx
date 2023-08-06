@@ -11,7 +11,10 @@
 #include <png.h>
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <sal/log.hxx>
+#include <rtl/crc.h>
 
 namespace
 {
@@ -56,12 +59,79 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
         png_error(pPng, "Write Error");
 }
 
-static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompressionLevel,
+static void writeFctlChunk(std::vector<uint8_t>& aFctlChunk, sal_uInt32 nSequenceNumber, Size aSize,
+                           Point aOffset, sal_uInt16 nDelayNum, sal_uInt16 nDelayDen,
+                           Disposal nDisposeOp, Blend nBlendOp)
+{
+    if (aFctlChunk.size() != 26)
+        aFctlChunk.resize(26);
+
+    sal_uInt32 nWidth = aSize.Width();
+    sal_uInt32 nHeight = aSize.Height();
+    sal_uInt32 nXOffset = aOffset.X();
+    sal_uInt32 nYOffset = aOffset.Y();
+
+    // Writing each byte separately instead of using memcpy here for clarity
+    // about PNG chunks using big endian
+
+    // Write sequence number
+    aFctlChunk[0] = (nSequenceNumber >> 24) & 0xFF;
+    aFctlChunk[1] = (nSequenceNumber >> 16) & 0xFF;
+    aFctlChunk[2] = (nSequenceNumber >> 8) & 0xFF;
+    aFctlChunk[3] = nSequenceNumber & 0xFF;
+
+    // Write width
+    aFctlChunk[4] = (nWidth >> 24) & 0xFF;
+    aFctlChunk[5] = (nWidth >> 16) & 0xFF;
+    aFctlChunk[6] = (nWidth >> 8) & 0xFF;
+    aFctlChunk[7] = nWidth & 0xFF;
+
+    // Write height
+    aFctlChunk[8] = (nHeight >> 24) & 0xFF;
+    aFctlChunk[9] = (nHeight >> 16) & 0xFF;
+    aFctlChunk[10] = (nHeight >> 8) & 0xFF;
+    aFctlChunk[11] = nHeight & 0xFF;
+
+    // Write x offset
+    aFctlChunk[12] = (nXOffset >> 24) & 0xFF;
+    aFctlChunk[13] = (nXOffset >> 16) & 0xFF;
+    aFctlChunk[14] = (nXOffset >> 8) & 0xFF;
+    aFctlChunk[15] = nXOffset & 0xFF;
+
+    // Write y offset
+    aFctlChunk[16] = (nYOffset >> 24) & 0xFF;
+    aFctlChunk[17] = (nYOffset >> 16) & 0xFF;
+    aFctlChunk[18] = (nYOffset >> 8) & 0xFF;
+    aFctlChunk[19] = nYOffset & 0xFF;
+
+    // Write delay numerator
+    aFctlChunk[20] = (nDelayNum >> 8) & 0xFF;
+    aFctlChunk[21] = nDelayNum & 0xFF;
+
+    // Write delay denominator
+    aFctlChunk[22] = (nDelayDen >> 8) & 0xFF;
+    aFctlChunk[23] = nDelayDen & 0xFF;
+
+    // Write disposal method
+    aFctlChunk[24] = static_cast<uint8_t>(nDisposeOp);
+
+    // Write blend operation
+    aFctlChunk[25] = static_cast<uint8_t>(nBlendOp);
+}
+
+static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressionLevel,
                      bool bInterlaced, bool bTranslucent,
                      const std::vector<PngChunk>& aAdditionalChunks)
 {
-    if (rBitmapEx.IsEmpty())
+    if (rGraphic.IsNone())
         return false;
+
+    Animation aAnimation;
+    sal_uInt32 nSequenceNumber = 0;
+    bool bIsApng = rGraphic.IsAnimated();
+
+    if (bIsApng)
+        aAnimation = rGraphic.GetAnimation();
 
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
@@ -76,14 +146,14 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
     }
 
     BitmapEx aBitmapEx;
-    if (rBitmapEx.GetBitmap().getPixelFormat() == vcl::PixelFormat::N32_BPP)
+    if (rGraphic.GetBitmapEx().getPixelFormat() == vcl::PixelFormat::N32_BPP)
     {
-        if (!vcl::bitmap::convertBitmap32To24Plus8(rBitmapEx, aBitmapEx))
+        if (!vcl::bitmap::convertBitmap32To24Plus8(rGraphic.GetBitmapExRef(), aBitmapEx))
             return false;
     }
     else
     {
-        aBitmapEx = rBitmapEx;
+        aBitmapEx = rGraphic.GetBitmapExRef();
     }
 
     if (!bTranslucent)
@@ -228,6 +298,43 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
 
         png_write_info(pPng, pInfo);
 
+        if (bIsApng)
+        {
+            // Write acTL chunk
+            sal_uInt32 nNumFrames = aAnimation.Count();
+            sal_uInt32 nNumPlays = aAnimation.GetLoopCount();
+
+            std::vector<uint8_t> aActlChunk;
+            aActlChunk.resize(8);
+
+            // Write number of frames
+            aActlChunk[0] = (nNumFrames >> 24) & 0xFF;
+            aActlChunk[1] = (nNumFrames >> 16) & 0xFF;
+            aActlChunk[2] = (nNumFrames >> 8) & 0xFF;
+            aActlChunk[3] = nNumFrames & 0xFF;
+
+            // Write number of plays
+            aActlChunk[4] = (nNumPlays >> 24) & 0xFF;
+            aActlChunk[5] = (nNumPlays >> 16) & 0xFF;
+            aActlChunk[6] = (nNumPlays >> 8) & 0xFF;
+            aActlChunk[7] = nNumPlays & 0xFF;
+
+            png_write_chunk(pPng, reinterpret_cast<png_const_bytep>("acTL"),
+                            reinterpret_cast<png_const_bytep>(aActlChunk.data()),
+                            aActlChunk.size());
+
+            // Write first frame fcTL chunk which is corresponding to the IDAT chunk
+            std::vector<uint8_t> aFctlChunk;
+            const AnimationFrame& rFirstFrame = *aAnimation.GetAnimationFrames()[0];
+            writeFctlChunk(aFctlChunk, nSequenceNumber++, rFirstFrame.maSizePixel,
+                           rFirstFrame.maPositionPixel, rFirstFrame.mnWait, 100,
+                           rFirstFrame.meDisposal, rFirstFrame.meBlend);
+
+            png_write_chunk(pPng, reinterpret_cast<png_const_bytep>("fcTL"),
+                            reinterpret_cast<png_const_bytep>(aFctlChunk.data()),
+                            aFctlChunk.size());
+        }
+
         int nNumberOfPasses = 1;
 
         Scanline pSourcePointer;
@@ -256,6 +363,69 @@ static bool pngWrite(SvStream& rStream, const BitmapEx& rBitmapEx, int nCompress
                 }
                 png_write_row(pPng, pFinalPointer);
             }
+        }
+    }
+
+    if (bIsApng)
+    {
+        // Already wrote first frame as an IDAT chunk
+        // Need to write the rest of the frames as fcTL & fdAT chunks
+        const auto& rFrames = aAnimation.GetAnimationFrames();
+
+        for (uint32_t i = 0; i < rFrames.size() - 1; i++)
+        {
+            const AnimationFrame& rCurrentFrame = *rFrames[1 + i];
+            SvMemoryStream aStream;
+
+            if (!pngWrite(aStream, rCurrentFrame.maBitmapEx, nCompressionLevel, bInterlaced,
+                          bTranslucent, {}))
+                return false;
+
+            std::vector<uint8_t> aFdatChunk;
+
+            aStream.SetEndian(SvStreamEndian::BIG);
+
+            aStream.Seek(STREAM_SEEK_TO_BEGIN);
+            aStream.Seek(8); // Skip PNG signature
+
+            while (aStream.good())
+            {
+                sal_uInt32 nChunkSize;
+                char sChunkName[4] = { 0 };
+                aStream.ReadUInt32(nChunkSize);
+                aStream.ReadBytes(sChunkName, 4);
+
+                if (std::string(sChunkName, 4) == "IDAT")
+                {
+                    // 4 extra bytes for the sequence number
+                    aFdatChunk.resize(nChunkSize + 4);
+                    aStream.ReadBytes(aFdatChunk.data() + 4, nChunkSize);
+                    break;
+                }
+                else
+                {
+                    aStream.SeekRel(nChunkSize + 4);
+                }
+            }
+
+            std::vector<uint8_t> aFctlChunk;
+            writeFctlChunk(aFctlChunk, nSequenceNumber++, rCurrentFrame.maSizePixel,
+                           rCurrentFrame.maPositionPixel, rCurrentFrame.mnWait, 100,
+                           rCurrentFrame.meDisposal, rCurrentFrame.meBlend);
+
+            // Write sequence number
+            aFdatChunk[0] = nSequenceNumber >> 24;
+            aFdatChunk[1] = nSequenceNumber >> 16;
+            aFdatChunk[2] = nSequenceNumber >> 8;
+            aFdatChunk[3] = nSequenceNumber;
+            nSequenceNumber++;
+
+            png_write_chunk(pPng, reinterpret_cast<png_const_bytep>("fcTL"),
+                            reinterpret_cast<png_const_bytep>(aFctlChunk.data()),
+                            aFctlChunk.size());
+            png_write_chunk(pPng, reinterpret_cast<png_const_bytep>("fdAT"),
+                            reinterpret_cast<png_const_bytep>(aFdatChunk.data()),
+                            aFdatChunk.size());
         }
     }
 
@@ -333,9 +503,9 @@ PngImageWriter::PngImageWriter(SvStream& rStream)
 {
 }
 
-bool PngImageWriter::write(const BitmapEx& rBitmapEx)
+bool PngImageWriter::write(const Graphic& rGraphic)
 {
-    return pngWrite(mrStream, rBitmapEx, mnCompressionLevel, mbInterlaced, mbTranslucent,
+    return pngWrite(mrStream, rGraphic, mnCompressionLevel, mbInterlaced, mbTranslucent,
                     maAdditionalChunks);
 }
 

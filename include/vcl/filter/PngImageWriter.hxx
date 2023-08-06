@@ -12,7 +12,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
-#include <vcl/bitmapex.hxx>
+#include <vcl/graph.hxx>
 #include <vector>
 
 #pragma once
@@ -39,7 +39,7 @@ public:
     PngImageWriter(SvStream& rStream);
 
     void setParameters(css::uno::Sequence<css::beans::PropertyValue> const& rParameters);
-    bool write(const BitmapEx& rBitmap);
+    bool write(const Graphic& rGraphic);
 };
 
 } // namespace vcl

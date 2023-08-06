@@ -382,12 +382,46 @@ void PngFilterTest::testApng()
     CPPUNIT_ASSERT(aGraphic.IsAnimated());
     CPPUNIT_ASSERT_EQUAL(size_t(2), aGraphic.GetAnimation().GetAnimationFrames().size());
 
-    auto aFrame1 = aGraphic.GetAnimation().GetAnimationFrames()[0]->maBitmapEx;
-    auto aFrame2 = aGraphic.GetAnimation().GetAnimationFrames()[1]->maBitmapEx;
+    AnimationFrame aFrame1 = *aGraphic.GetAnimation().GetAnimationFrames()[0];
+    AnimationFrame aFrame2 = *aGraphic.GetAnimation().GetAnimationFrames()[1];
 
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.GetPixelColor(0, 0));
-    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.GetPixelColor(2, 2));
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1.maBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1.maBitmapEx.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2.maBitmapEx.GetPixelColor(0, 0));
+
+    // Roundtrip the APNG
+    SvMemoryStream aOutStream;
+    vcl::PngImageWriter aPngWriter(aOutStream);
+    bSuccess = aPngWriter.write(aGraphic);
+    CPPUNIT_ASSERT(bSuccess);
+
+    aOutStream.Seek(STREAM_SEEK_TO_BEGIN);
+    vcl::PngImageReader aPngReader2(aOutStream);
+    Graphic aGraphic2;
+    bSuccess = aPngReader2.read(aGraphic2);
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT(aGraphic2.IsAnimated());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aGraphic2.GetAnimation().GetAnimationFrames().size());
+
+    AnimationFrame aFrame1Roundtripped = *aGraphic2.GetAnimation().GetAnimationFrames()[0];
+    AnimationFrame aFrame2Roundtripped = *aGraphic2.GetAnimation().GetAnimationFrames()[1];
+
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFrame1Roundtripped.maBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(0x72d1c8), aFrame1Roundtripped.maBitmapEx.GetPixelColor(2, 2));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aFrame2Roundtripped.maBitmapEx.GetPixelColor(0, 0));
+
+    // Make sure the two frames have the same properties
+    CPPUNIT_ASSERT_EQUAL(aFrame1.maPositionPixel, aFrame1Roundtripped.maPositionPixel);
+    CPPUNIT_ASSERT_EQUAL(aFrame1.maSizePixel, aFrame1Roundtripped.maSizePixel);
+    CPPUNIT_ASSERT_EQUAL(aFrame1.mnWait, aFrame1Roundtripped.mnWait);
+    CPPUNIT_ASSERT_EQUAL(aFrame1.meDisposal, aFrame1Roundtripped.meDisposal);
+    CPPUNIT_ASSERT_EQUAL(aFrame1.meBlend, aFrame1Roundtripped.meBlend);
+
+    CPPUNIT_ASSERT_EQUAL(aFrame2.maPositionPixel, aFrame2Roundtripped.maPositionPixel);
+    CPPUNIT_ASSERT_EQUAL(aFrame2.maSizePixel, aFrame2Roundtripped.maSizePixel);
+    CPPUNIT_ASSERT_EQUAL(aFrame2.mnWait, aFrame2Roundtripped.mnWait);
+    CPPUNIT_ASSERT_EQUAL(aFrame2.meDisposal, aFrame2Roundtripped.meDisposal);
+    CPPUNIT_ASSERT_EQUAL(aFrame2.meBlend, aFrame2Roundtripped.meBlend);
 }
 
 void PngFilterTest::testPngSuite()
