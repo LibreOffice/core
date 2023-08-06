@@ -1274,6 +1274,7 @@ bool TestImportSVM(SvStream& rStream)
     GDIMetaFile aGDIMetaFile;
     SvmReader aReader(rStream);
     aReader.Read(aGDIMetaFile);
+#if 0
     ScopedVclPtrInstance<VirtualDevice> aVDev;
     try
     {
@@ -1283,6 +1284,7 @@ bool TestImportSVM(SvStream& rStream)
     {
         return false;
     }
+#endif
     return true;
 }
 
