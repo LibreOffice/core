@@ -3519,6 +3519,7 @@ void SwTabFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             return;
         if(const SwPageFrame* pPage = FindPageFrame())
             pPage->UpdateVirtPageNumInfo(rVirtPageNumHint, this);
+        return;
     }
     else if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
