@@ -65,7 +65,6 @@ python3_EXTENSION_MODULES= \
 	LO_lib/binascii.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_bisect.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_blake2.$(python3_EXTENSION_MODULE_SUFFIX).so \
-	LO_lib/_bz2.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/cmath.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_codecs_cn.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_codecs_hk.$(python3_EXTENSION_MODULE_SUFFIX).so \
