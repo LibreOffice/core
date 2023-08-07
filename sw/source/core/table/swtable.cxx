@@ -2282,16 +2282,7 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
         case RES_AUTOFMT_DOCNODE:
         {
             const SwTableNode* pNode = GetTableNode();
-            if (pNode && &pNode->GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes)
-            {
-                if (!m_TabSortContentBoxes.empty())
-                {
-                    SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
-                    GetFrameFormat()->GetDoc()->GetNodes().GoNext( &aIdx );
-                }
-                return false;
-            }
-            break;
+            return !(pNode && &pNode->GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes);
         }
         case RES_FINDNEARESTNODE:
             if( GetFrameFormat() &&
