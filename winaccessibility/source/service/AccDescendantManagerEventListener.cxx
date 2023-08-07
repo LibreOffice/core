@@ -84,8 +84,9 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
+            Reference<css::accessibility::XAccessibleContext> xContext = pAcc->getAccessibleContext();
             //if the Role is the SC cell ,don't add the selected state.
-            if (pAgent->GetRole(pAcc) != AccessibleRole::TABLE_CELL)
+            if (xContext.is() && xContext->getAccessibleRole() != AccessibleRole::TABLE_CELL)
             {
                 pAgent->IncreaseState( pAcc, AccessibleStateType::SELECTED);
             }

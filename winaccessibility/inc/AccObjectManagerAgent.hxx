@@ -87,8 +87,6 @@ public:
 
     bool IsSpecialToolbarItem(css::accessibility::XAccessible* pXAcc);
 
-    short GetRole(css::accessibility::XAccessible* pXAcc);
-
     css::accessibility::XAccessible* GetAccDocByAccTopWin( css::accessibility::XAccessible* pXAcc );
     bool IsTopWinAcc( css::accessibility::XAccessible* pXAcc );
 

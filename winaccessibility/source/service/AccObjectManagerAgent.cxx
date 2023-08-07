@@ -311,14 +311,6 @@ bool AccObjectManagerAgent::IsSpecialToolbarItem(XAccessible* pXAcc)
     return false;
 }
 
-short AccObjectManagerAgent::GetRole(XAccessible* pXAcc)
-{
-    if(pWinManager)
-        return AccObjectWinManager::GetRole( pXAcc );
-
-    return -1;
-}
-
 XAccessible* AccObjectManagerAgent::GetAccDocByAccTopWin( XAccessible* pXAcc )
 {
     if (pWinManager)
