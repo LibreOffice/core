@@ -18,6 +18,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/table/TableBorder2.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
@@ -2721,6 +2722,40 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_Tdf156602)
         "reqif-xhtml:p",
         "Outer.B2");
     assertXPathContent(pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "Following text");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf156647_CellPaddingRoundtrip)
+{
+    // Given a document with a table with cell padding:
+    createSwDoc("table_cell_padding.fodt");
+    {
+        auto xTable = getParagraphOrTable(1);
+        auto aTableBorder = getProperty<css::table::TableBorder2>(xTable, "TableBorder2");
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1270), aTableBorder.Distance);
+        CPPUNIT_ASSERT(aTableBorder.IsDistanceValid);
+    }
+    // When exporting to reqif-xhtml:
+    ExportToReqif();
+    // Make sure that we export it:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "//reqif-xhtml:table", "cellpadding", "48"); // px
+    // Now import it
+    mxComponent->dispose();
+    ImportFromReqif(maTempFile.GetURL());
+    // Then make sure that padding is not lost:
+    {
+        auto xTable = getParagraphOrTable(1);
+        auto aTableBorder = getProperty<css::table::TableBorder2>(xTable, "TableBorder2");
+        // Without the accompanying fix in place, this test would have failed:
+        // - Expected: 1270
+        // - Actual  : 97
+        // as the padding was lost, and the default 55 twip padding was used.
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(1270), aTableBorder.Distance);
+        CPPUNIT_ASSERT(aTableBorder.IsDistanceValid);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
