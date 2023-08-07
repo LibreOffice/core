@@ -104,6 +104,10 @@ namespace drawinglayer::primitive2d
                     maVirtualDeviceMask->EnableMapMode(false);
                     maVirtualDevice->SetOutputSizePixel(aTarget);
                     maVirtualDeviceMask->SetOutputSizePixel(aTarget);
+
+                    // tdf#156630 make erase calls fill with transparency
+                    maVirtualDevice->SetBackground(COL_BLACK);
+                    maVirtualDeviceMask->SetBackground(COL_ALPHA_TRANSPARENT);
                 }
 
                 maVirtualDevice->Erase();
@@ -176,12 +180,26 @@ namespace drawinglayer::primitive2d
                 BitmapEx bitmap;
                 if( useAlphaMask )
                 {
-                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+
+                    // Related tdf#156630 force snapshot of alpha mask
+                    // On macOS, with Skia/Raster with a Retina display (i.e.
+                    // 2.0 window scale), the alpha mask gets upscaled. Also,
+                    // when Skia is enabled, the alpha mask gets inverted in
+                    // the first export to PDF after launching the application.
+                    // These two bugs appear to be caused by asynchronous
+                    // rendering of the returned bitmap. So, we force a copy
+                    // of the alpha mask in case it changes before the bitmap
+                    // is actually drawn.
+                    AlphaMask::ScopedReadAccess pAccessAlpha(aMaskBitmap);
+
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
                 else
                 {
-                    const Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    Bitmap aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
+                    // tdf#156630 invert the alpha mask
+                    aMaskBitmap.Invert(); // convert from transparency to alpha
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
 

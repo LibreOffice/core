@@ -135,7 +135,10 @@ void AquaSkiaSalGraphicsImpl::flushSurfaceToScreenCG()
         // by creating a subset SkImage (which as is said above copies data), or set the x coordinate
         // to 0, which will then make rowBytes() match the actual data.
         mDirtyRect.fLeft = 0;
-        assert(mDirtyRect.width() == pixmap.bounds().width());
+        // Related tdf#156630 pixmaps can be wider than the dirty rectangle
+        // This seems to most commonly occur when SAL_FORCE_HIDPI_SCALING=1
+        // and the native window scale is 2.
+        assert(mDirtyRect.width() <= pixmap.bounds().width());
     }
 
     // tdf#145843 Do not use CGBitmapContextCreate() to create a bitmap context

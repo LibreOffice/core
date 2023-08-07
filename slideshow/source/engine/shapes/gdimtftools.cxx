@@ -37,6 +37,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <tools.hxx>
 
@@ -272,6 +273,10 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     pVDevMask->SetOutputSizePixel( aAnimSize );
     pVDevMask->EnableMapMode( false );
 
+    // tdf#156630 make erase calls fill with transparency
+    pVDev->SetBackground( Wallpaper( COL_BLACK ) );
+    pVDevMask->SetBackground( Wallpaper( COL_ALPHA_TRANSPARENT ) );
+
     o_rLoopCount = aAnimation.GetLoopCount();
 
     for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
@@ -338,15 +343,49 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         // extract current aVDev content into a new animation
         // frame
         GDIMetaFileSharedPtr pMtf = std::make_shared<GDIMetaFile>();
-        Bitmap aAlphaMask = pVDevMask->GetBitmap(aEmptyPoint, aAnimSize);
-        aAlphaMask.Invert(); // convert from transparency to alpha
-        pMtf->AddAction(
-            new MetaBmpExAction( aEmptyPoint,
-                                 BitmapEx(
-                                     pVDev->GetBitmap(
-                                         aEmptyPoint,
-                                         aAnimSize ),
-                                     aAlphaMask)));
+        bool useAlphaMask = false;
+#if defined(MACOSX) || defined(IOS)
+        useAlphaMask = true;
+#else
+        // GetBitmap()-> AlphaMask is optimized with SkiaSalBitmap::InterpretAs8Bit(), 1bpp mask is not.
+        if( SkiaHelper::isVCLSkiaEnabled())
+            useAlphaMask = true;
+#endif
+        if( useAlphaMask )
+        {
+            AlphaMask aAlphaMask(pVDevMask->GetBitmap(aEmptyPoint, aAnimSize));
+
+            // Related tdf#156630 force snapshot of alpha mask
+            // On macOS, with Skia/Raster with a Retina display (i.e.
+            // 2.0 window scale), the alpha mask gets upscaled. Also,
+            // when Skia is enabled, the alpha mask gets inverted in
+            // the first export to PDF after launching the application.
+            // These two bugs appear to be caused by asynchronous
+            // rendering of the returned bitmap. So, we force a copy
+            // of the alpha mask in case it changes before the bitmap
+            // is actually drawn.
+            AlphaMask::ScopedReadAccess pAccessAlpha(aAlphaMask);
+
+            pMtf->AddAction(
+                new MetaBmpExAction( aEmptyPoint,
+                                     BitmapEx(
+                                         pVDev->GetBitmap(
+                                             aEmptyPoint,
+                                             aAnimSize ),
+                                         aAlphaMask)));
+        }
+        else
+        {
+            Bitmap aAlphaMask = pVDevMask->GetBitmap(aEmptyPoint, aAnimSize);
+            aAlphaMask.Invert(); // convert from transparency to alpha
+            pMtf->AddAction(
+                new MetaBmpExAction( aEmptyPoint,
+                                     BitmapEx(
+                                         pVDev->GetBitmap(
+                                             aEmptyPoint,
+                                             aAnimSize ),
+                                         aAlphaMask)));
+        }
 
         // setup mtf dimensions and pref map mode (for
         // simplicity, keep it all in pixel. the metafile

@@ -372,7 +372,9 @@ namespace sdr::contact
         {
             if (utl::ConfigManager::IsFuzzing())
                 return true;
-            return SvtAccessibilityOptions::GetIsAllowAnimatedGraphics();
+
+            // Related tdf#156630 respect system animation setting
+            return SvtAccessibilityOptions::GetIsAllowAnimatedGraphics() && !MiscSettings::GetUseReducedAnimation();
         }
 
         // print?
