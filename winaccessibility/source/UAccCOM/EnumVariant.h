@@ -23,7 +23,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include  <UAccCOM.h>
-#include <AccObjectManagerAgent.hxx>
 
 /**
  * CEnumVariant implements IEnumVARIANT interface.
