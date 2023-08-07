@@ -3754,6 +3754,22 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf132519)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf127334)
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab(0, "Sheet1"));
+
+    m_pDoc->SetString(
+        0, 0, 0,
+        "= (((DATE(2019;9;17) + TIME(0;0;1)) - DATE(2019;9;17)) - TIME(0;0;1))/TIME(0;0;1)");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 2.32e-07
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0, 0, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf100818)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab(0, "Sheet1"));
