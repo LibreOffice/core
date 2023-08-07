@@ -1486,11 +1486,34 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             if (pTableFormat)
             {
                 sal_uInt8 nPos = SwTableAutoFormat::CountPos(nCol, m_nCols, nRow, m_nRows);
+                const SfxItemSet& rAttrSet = pFrameFormat->GetAttrSet();
+                std::unique_ptr<SvxBoxItem> pOldBoxItem;
+                if (const SvxBoxItem* pBoxItem2 = rAttrSet.GetItemIfSet(RES_BOX))
+                    pOldBoxItem.reset(pBoxItem2->Clone());
                 pTableFormat->UpdateToSet(nPos, m_nRows==1, m_nCols==1,
-                                          const_cast<SfxItemSet&>(static_cast<SfxItemSet const&>(
-                                              pFrameFormat->GetAttrSet())),
+                                          const_cast<SfxItemSet&>(rAttrSet),
                                           SwTableAutoFormatUpdateFlags::Box,
                                           pFrameFormat->GetDoc()->GetNumberFormatter());
+                if (pOldBoxItem)
+                {
+                    // There was an old item, so it's guaranteed that there's a new item
+                    const SvxBoxItem* pBoxItem2(rAttrSet.GetItem(RES_BOX));
+                    if (*pBoxItem2 != *pOldBoxItem)
+                    {
+                        std::unique_ptr<SvxBoxItem> pNewBoxItem(pBoxItem2->Clone());
+                        // Restore the box elements that could have been already set
+                        for (auto eLine : { SvxBoxItemLine::TOP, SvxBoxItemLine::BOTTOM,
+                                            SvxBoxItemLine::LEFT, SvxBoxItemLine::RIGHT })
+                        {
+                            if (auto pLine = pOldBoxItem->GetLine(eLine))
+                                pNewBoxItem->SetLine(pLine, eLine);
+                            if (auto nDistance = pOldBoxItem->GetDistance(eLine, true))
+                                pNewBoxItem->SetDistance(nDistance, eLine);
+                        }
+
+                        pFrameFormat->SetFormatAttr(*pNewBoxItem);
+                    }
+                }
             }
         }
     }
