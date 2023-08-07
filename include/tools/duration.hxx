@@ -31,8 +31,30 @@ public:
         minutes and seconds values here though. */
     Duration(const Time& rStart, const Time& rEnd);
 
-    /** Difference in days, like DateTime()-DateTime(). */
-    explicit Duration(double fTimeInDays);
+    /** Difference in days, like DateTime()-DateTime().
+
+        @param  nAccuracyEpsilonNanoseconds
+                Round for example by 1 nanosecond if it's just 1 off to a
+                second,  i.e. 0999999999 or 0000000001. This can be loosened if
+                necessary. For example, if fTimeInDays is a date+time in
+                "today's" range with a significant seconds resolution, an
+                accuracy epsilon (=unsharpness) of ~300 is required. Hence default.
+                Must be 0 <= nAccuracyEpsilonNanoseconds <= Time::nanoSecPerSec - 1.
+     */
+    explicit Duration(double fTimeInDays, sal_uInt64 nAccuracyEpsilonNanoseconds = 300);
+
+    /** Time can be a limited duration as well and can have out-of-range
+        values, it will be normalized. Sign of both days and Time must be equal
+        unless one is 0. */
+    Duration(sal_Int32 nDays, const Time& rTime);
+
+    /** Individual time values can be out-of-range, all will be normalized.
+        Additionally, the resulting time overall hour value is not restricted
+        to sal_uInt16 like it is with Time, as values >=24 flow over into days.
+        For a negative duration only a negative nDays can be given, thus a
+        negative duration of less than one day is not possible. */
+    Duration(sal_Int32 nDays, sal_uInt32 nHours, sal_uInt32 nMinutes, sal_uInt32 nSeconds,
+             sal_uInt64 nNanoseconds);
 
     bool IsNegative() const { return mnDays < 0 || maTime.GetTime() < 0; }
     sal_Int32 GetDays() const { return mnDays; }
@@ -54,6 +76,10 @@ public:
 private:
     /** Internal days and Time values. */
     Duration(sal_Int32 nDays, sal_Int64 nTime);
+
+    /** Prerequisite: mnDays is already set. */
+    void Normalize(sal_uInt64 nHours, sal_uInt64 nMinutes, sal_uInt64 nSeconds,
+                   sal_uInt64 nNanoseconds, bool bNegative);
 
     /** Prerequisite: mnDays is already correctly set and absolute value of
         nanoseconds less than one day. */

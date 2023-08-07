@@ -27,6 +27,7 @@
 
 #include <unotools/bootstrap.hxx>
 #include <svl/zforlist.hxx>
+#include <tools/duration.hxx>
 
 #include <interpre.hxx>
 #include <global.hxx>
@@ -1220,6 +1221,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     double fVal1 = 0.0, fVal2 = 0.0;
     SvNumFormatType nFmt1, nFmt2;
     nFmt1 = nFmt2 = SvNumFormatType::UNDEFINED;
+    bool bDuration = false;
     SvNumFormatType nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     SvNumFormatType nFmtPercentType = nCurFmtType;
@@ -1235,6 +1237,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             case SvNumFormatType::DATETIME :
             case SvNumFormatType::DURATION :
                 nFmt2 = nCurFmtType;
+                bDuration = true;
             break;
             case SvNumFormatType::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
@@ -1258,6 +1261,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             case SvNumFormatType::DATETIME :
             case SvNumFormatType::DURATION :
                 nFmt1 = nCurFmtType;
+                bDuration = true;
             break;
             case SvNumFormatType::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
@@ -1334,10 +1338,22 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             if (nFmtPercentType == SvNumFormatType::PERCENT && nFuncFmtType == SvNumFormatType::NUMBER)
                 nFuncFmtType = SvNumFormatType::PERCENT;
         }
-        if ( _bSub )
-            PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+        if ((nFuncFmtType == SvNumFormatType::DURATION || bDuration)
+                && ((_bSub && std::fabs(fVal1 - fVal2) <= SAL_MAX_INT32)
+                    || (!_bSub && std::fabs(fVal1 + fVal2) <= SAL_MAX_INT32)))
+        {
+            if (_bSub)
+                PushDouble( ::tools::Duration( fVal1 - fVal2).GetInDays());
+            else
+                PushDouble( ::tools::Duration( fVal1 + fVal2).GetInDays());
+        }
         else
-            PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+        {
+            if (_bSub)
+                PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
+            else
+                PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
+        }
     }
 }
 
