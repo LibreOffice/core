@@ -46,8 +46,8 @@ AccObjectManagerAgent::~AccObjectManagerAgent()
    */
 void  AccObjectManagerAgent::UpdateAccName( XAccessible* pXAcc )
 {
-    if( pWinManager )
-        pWinManager->UpdateAccName( pXAcc );
+    assert(pWinManager);
+    pWinManager->UpdateAccName( pXAcc );
 }
 
 /**
@@ -57,8 +57,8 @@ void  AccObjectManagerAgent::UpdateAccName( XAccessible* pXAcc )
    */
 void  AccObjectManagerAgent::UpdateAction( XAccessible* pXAcc )
 {
-    if( pWinManager )
-        pWinManager->UpdateAction( pXAcc );
+    assert(pWinManager);
+    pWinManager->UpdateAction( pXAcc );
 }
 
 /**
@@ -69,8 +69,8 @@ void  AccObjectManagerAgent::UpdateAction( XAccessible* pXAcc )
    */
 void  AccObjectManagerAgent::UpdateValue( XAccessible* pXAcc, Any pAny )
 {
-    if( pWinManager )
-        pWinManager->SetValue( pXAcc, pAny );
+    assert(pWinManager);
+    pWinManager->SetValue( pXAcc, pAny );
 }
 
 /**
@@ -81,8 +81,8 @@ void  AccObjectManagerAgent::UpdateValue( XAccessible* pXAcc, Any pAny )
    */
 void  AccObjectManagerAgent::UpdateValue( XAccessible* pXAcc )
 {
-    if( pWinManager )
-        pWinManager->UpdateValue( pXAcc );
+    assert(pWinManager);
+    pWinManager->UpdateValue( pXAcc );
 }
 
 /**
@@ -93,8 +93,8 @@ void  AccObjectManagerAgent::UpdateValue( XAccessible* pXAcc )
    */
 void  AccObjectManagerAgent::UpdateAccName( XAccessible* pXAcc, Any newName)
 {
-    if( pWinManager )
-        pWinManager->SetAccName( pXAcc, newName );
+    assert(pWinManager);
+    pWinManager->SetAccName( pXAcc, newName );
 }
 
 /**
@@ -107,10 +107,8 @@ void  AccObjectManagerAgent::UpdateAccName( XAccessible* pXAcc, Any newName)
 bool AccObjectManagerAgent::InsertAccObj(
         XAccessible* pXAcc, XAccessible* pParentXAcc, HWND hWnd)
 {
-    if( pWinManager )
-        return pWinManager->InsertAccObj(pXAcc, pParentXAcc, hWnd);
-
-    return false;
+    assert(pWinManager);
+    return pWinManager->InsertAccObj(pXAcc, pParentXAcc, hWnd);
 }
 
 /**
@@ -122,8 +120,8 @@ bool AccObjectManagerAgent::InsertAccObj(
 void
 AccObjectManagerAgent::SaveTopWindowHandle(HWND hWnd, XAccessible* pXAcc)
 {
-    if( pWinManager )
-        pWinManager->SaveTopWindowHandle(hWnd, pXAcc);
+    assert(pWinManager);
+    pWinManager->SaveTopWindowHandle(hWnd, pXAcc);
 }
 
 
@@ -137,10 +135,8 @@ AccObjectManagerAgent::SaveTopWindowHandle(HWND hWnd, XAccessible* pXAcc)
 bool
 AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, HWND hWnd)
 {
-    if( pWinManager )
-        return pWinManager->InsertChildrenAccObj(pXAcc, hWnd);
-
-    return false;
+    assert(pWinManager);
+    return pWinManager->InsertChildrenAccObj(pXAcc, hWnd);
 }
 
 /**
@@ -151,8 +147,8 @@ AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, HWND hWnd)
    */
 void AccObjectManagerAgent::DeleteAccObj( XAccessible* pXAcc )
 {
-    if( pWinManager )
-        pWinManager->DeleteAccObj( pXAcc );
+    assert(pWinManager);
+    pWinManager->DeleteAccObj( pXAcc );
 }
 
 /**
@@ -163,8 +159,8 @@ void AccObjectManagerAgent::DeleteAccObj( XAccessible* pXAcc )
    */
 void AccObjectManagerAgent::DeleteChildrenAccObj( XAccessible* pXAcc )
 {
-    if( pWinManager )
-        pWinManager->DeleteChildrenAccObj( pXAcc );
+    assert(pWinManager);
+    pWinManager->DeleteChildrenAccObj( pXAcc );
 }
 
 /**
@@ -175,10 +171,8 @@ void AccObjectManagerAgent::DeleteChildrenAccObj( XAccessible* pXAcc )
    */
 void AccObjectManagerAgent::DecreaseState( XAccessible* pXAcc, sal_Int64 pState )
 {
-    if(pWinManager)
-    {
-        pWinManager->DecreaseState( pXAcc,  pState );
-    }
+    assert(pWinManager);
+    pWinManager->DecreaseState( pXAcc,  pState );
 }
 
 /**
@@ -189,16 +183,14 @@ void AccObjectManagerAgent::DecreaseState( XAccessible* pXAcc, sal_Int64 pState 
    */
 void AccObjectManagerAgent::IncreaseState( XAccessible* pXAcc, sal_Int64 pState )
 {
-    if(pWinManager)
-    {
-        pWinManager->IncreaseState( pXAcc,  pState );
-    }
+    assert(pWinManager);
+    pWinManager->IncreaseState( pXAcc,  pState );
 }
 
 void  AccObjectManagerAgent::UpdateState( css::accessibility::XAccessible* pXAcc )
 {
-    if(pWinManager)
-        pWinManager->UpdateState(pXAcc);
+    assert(pWinManager);
+    pWinManager->UpdateState(pXAcc);
 }
 
 /**
@@ -209,10 +201,8 @@ void  AccObjectManagerAgent::UpdateState( css::accessibility::XAccessible* pXAcc
    */
 bool AccObjectManagerAgent::NotifyAccEvent(UnoMSAAEvent eEvent, XAccessible* pXAcc)
 {
-    if(pWinManager)
-        return pWinManager->NotifyAccEvent(pXAcc, eEvent);
-
-    return false;
+    assert(pWinManager);
+    return pWinManager->NotifyAccEvent(pXAcc, eEvent);
 }
 
 /**
@@ -222,10 +212,8 @@ bool AccObjectManagerAgent::NotifyAccEvent(UnoMSAAEvent eEvent, XAccessible* pXA
    */
 bool AccObjectManagerAgent::IsContainer( XAccessible* pXAcc )
 {
-    if(pWinManager)
-        return AccObjectWinManager::IsContainer(pXAcc);
-
-    return false;
+    assert(pWinManager);
+    return AccObjectWinManager::IsContainer(pXAcc);
 }
 
 /**
@@ -235,10 +223,8 @@ bool AccObjectManagerAgent::IsContainer( XAccessible* pXAcc )
    */
 IMAccessible* AccObjectManagerAgent::GetIMAccByXAcc(XAccessible* pXAcc)
 {
-    if(pWinManager)
-        return pWinManager->GetIMAccByXAcc(pXAcc);
-
-    return nullptr;
+    assert(pWinManager);
+    return pWinManager->GetIMAccByXAcc(pXAcc);
 }
 
 /**
@@ -248,8 +234,8 @@ IMAccessible* AccObjectManagerAgent::GetIMAccByXAcc(XAccessible* pXAcc)
    */
 void  AccObjectManagerAgent::NotifyDestroy(XAccessible* pXAcc)
 {
-    if(pWinManager)
-        pWinManager->NotifyDestroy(pXAcc);
+    assert(pWinManager);
+    pWinManager->NotifyDestroy(pXAcc);
 }
 
 /**
@@ -259,8 +245,8 @@ void  AccObjectManagerAgent::NotifyDestroy(XAccessible* pXAcc)
    */
 void AccObjectManagerAgent::GetIAccessibleFromResID(long childID,IMAccessible** pIMAcc)
 {
-    if(pWinManager)
-        *pIMAcc = pWinManager->GetIAccessibleFromResID(childID);
+    assert(pWinManager);
+    *pIMAcc = pWinManager->GetIAccessibleFromResID(childID);
 }
 
 /**
@@ -271,69 +257,54 @@ void AccObjectManagerAgent::GetIAccessibleFromResID(long childID,IMAccessible** 
 bool AccObjectManagerAgent::GetIAccessibleFromXAccessible(
         XAccessible* pXAcc, IAccessible** ppXI)
 {
-    if(pWinManager)
-    {
-        *ppXI = pWinManager->GetIMAccByXAcc(pXAcc);
-        if(*ppXI)
-            return true;
-    }
+    assert(pWinManager);
+    *ppXI = pWinManager->GetIMAccByXAcc(pXAcc);
+    if(*ppXI)
+        return true;
     return false;
 }
 
 XAccessible* AccObjectManagerAgent::GetParentXAccessible( XAccessible* pXAcc )
 {
-    if(pWinManager)
-        return pWinManager->GetParentXAccessible( pXAcc );
-
-    return nullptr;
+    assert(pWinManager);
+    return pWinManager->GetParentXAccessible( pXAcc );
 }
 
 short AccObjectManagerAgent::GetParentRole( XAccessible* pXAcc )
 {
-    if(pWinManager)
-        return pWinManager->GetParentRole( pXAcc );
-
-    return -1;
+    assert(pWinManager);
+    return pWinManager->GetParentRole( pXAcc );
 }
 
 void AccObjectManagerAgent::UpdateChildState(XAccessible* pXAcc)
 {
-    if(pWinManager)
-        pWinManager->UpdateChildState( pXAcc );
+    assert(pWinManager);
+    pWinManager->UpdateChildState( pXAcc );
 }
 
 
 bool AccObjectManagerAgent::IsSpecialToolbarItem(XAccessible* pXAcc)
 {
-    if(pWinManager)
-        return pWinManager->IsSpecialToolbarItem(pXAcc);
-
-    return false;
+    assert(pWinManager);
+    return pWinManager->IsSpecialToolbarItem(pXAcc);
 }
 
 XAccessible* AccObjectManagerAgent::GetAccDocByAccTopWin( XAccessible* pXAcc )
 {
-    if (pWinManager)
-    {
-        return pWinManager->GetAccDocByAccTopWin( pXAcc );
-    }
-    return nullptr;
+    assert(pWinManager);
+    return pWinManager->GetAccDocByAccTopWin( pXAcc );
 }
+
 bool AccObjectManagerAgent::IsTopWinAcc(XAccessible* pXAcc)
 {
-    if (pWinManager)
-    {
-        return pWinManager->IsTopWinAcc( pXAcc );
-    }
-    return false;
+    assert(pWinManager);
+    return pWinManager->IsTopWinAcc( pXAcc );
 }
 
 bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)
 {
-    if(pWinManager)
-        return AccObjectWinManager::IsStateManageDescendant( pXAcc );
-
-    return false;
+    assert(pWinManager);
+    return AccObjectWinManager::IsStateManageDescendant( pXAcc );
 }
 
 /**
