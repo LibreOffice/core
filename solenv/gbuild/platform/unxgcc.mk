@@ -191,8 +191,18 @@ endef
 define gb_LinkTarget__command_staticlink
 $(call gb_Helper_abbreviate_dirs,\
 	rm -f $(1) && \
-	$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS ;) \
+	$(if $(filter EMSCRIPTEN,$(OS)),unset PYTHONWARNINGS ; \
+		RESPONSEFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)), \
+			$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+			$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+			$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
+			$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
+			$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+			$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
+			$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist)))) && ) \
 	$(gb_AR) $(gb_LTOPLUGINFLAGS) -rsu $(1) \
+		$(if $(filter EMSCRIPTEN, $(OS)), \
+			@$${RESPONSEFILE} $(if $(findstring s,$(MAKEFLAGS)),2> /dev/null); rm $${RESPONSEFILE},\
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
@@ -200,7 +210,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(GENNASMOBJECTS),$(call gb_GenNasmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),@$(extraobjectlist)) \
-		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
+		$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null)))
 endef
 
 define gb_LinkTarget__command

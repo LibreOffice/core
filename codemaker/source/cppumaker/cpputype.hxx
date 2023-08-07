@@ -28,6 +28,15 @@ namespace rtl { class OUString; }
 class CppuOptions;
 class TypeManager;
 
+namespace codemaker::cppumaker {
+enum class FileType
+{
+    HDL,
+    HPP,
+    EMBIND_CXX
+};
+}
+
 void produce(
     OUString const & name, rtl::Reference< TypeManager > const & manager,
     codemaker::GeneratedTypeSet & generated, CppuOptions const & options);

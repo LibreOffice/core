@@ -216,6 +216,24 @@ bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
 
                     m_options["-G"] = OString();
                     break;
+                case 'W': // generate embind javascript bindings for LOWA
+                    if (av[i][2] != '\0')
+                    {
+                        OString tmp("'-W', please check");
+                        if (i <= ac - 1)
+                        {
+                            tmp += OString::Concat(" your input '") + av[i] + "'";
+                        }
+
+                        throw IllegalArgument(tmp);
+                    }
+
+                    if (!isValid("-C") && !isValid("-CS") && !isValid("-L"))
+                    {
+                        throw IllegalArgument("'-W' requires '-C' or '-CS' or '-L' option");
+                    }
+                    m_options["-W"] = OString();
+                    break;
                 case 'X': // support for eXtra type rdbs
                 {
                     if (av[i][2] == '\0')

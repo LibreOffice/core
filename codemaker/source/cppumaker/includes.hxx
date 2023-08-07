@@ -29,12 +29,13 @@ class FileStream;
 class TypeManager;
 
 namespace codemaker::cppumaker {
+enum class FileType;
 
 class Includes {
 public:
     Includes(
         rtl::Reference< TypeManager > manager,
-        Dependencies const & dependencies, bool hpp);
+        Dependencies const & dependencies, FileType eFileType);
 
     ~Includes();
 
@@ -73,7 +74,7 @@ private:
 
     rtl::Reference< TypeManager > m_manager;
     Dependencies::Map m_map;
-    bool m_hpp;
+    FileType m_filetype;
     bool m_includeCassert;
     bool m_includeAny;
     bool m_includeReference;

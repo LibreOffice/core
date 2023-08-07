@@ -53,6 +53,8 @@
 namespace
 {
 
+using FileType = codemaker::cppumaker::FileType;
+
 bool isBootstrapType(OUString const & name)
 {
     static char const * const names[] = {
@@ -150,6 +152,17 @@ bool isBootstrapType(OUString const & name)
     return std::any_of(std::begin(names), std::end(names), pred);
 }
 
+OString getFileExtension(FileType eFileType)
+{
+    switch(eFileType)
+    {
+        default:
+        case FileType::HDL: return ".hdl";
+        case FileType::HPP: return ".hpp";
+        case FileType::EMBIND_CXX: return "_embind.cxx";
+    }
+}
+
 class CppuType
 {
 public:
@@ -163,7 +176,7 @@ public:
     void dump(CppuOptions const & options);
 
     void dumpFile(
-        std::u16string_view uri, std::u16string_view name, bool hpp,
+        std::u16string_view uri, std::u16string_view name, FileType eFileType,
         CppuOptions const & options);
 
     void dumpDependedTypes(
@@ -175,6 +188,8 @@ public:
     }
 
     virtual void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) = 0;
+
+    virtual void dumpEmbindCppFile(FileStream& o);
 
     OUString dumpHeaderDefine(FileStream& o, std::u16string_view extension) const;
 
@@ -225,6 +240,8 @@ protected:
     virtual void dumpDeclaration(FileStream &) {
         assert(false);    // this cannot happen
     }
+
+    virtual void dumpEmbindDeclaration(FileStream &) {};
 
     virtual void dumpFiles(OUString const & uri, CppuOptions const & options);
 
@@ -305,8 +322,10 @@ const
 
 void CppuType::dumpFiles(OUString const & uri, CppuOptions const & options)
 {
-    dumpFile(uri, name_, false, options);
-    dumpFile(uri, name_, true, options);
+    dumpFile(uri, name_, FileType::HDL, options);
+    dumpFile(uri, name_, FileType::HPP, options);
+    if(options.isValid("-W"))
+        dumpFile(uri, name_, FileType::EMBIND_CXX, options);
 }
 
 void CppuType::addLightGetCppuTypeIncludes(
@@ -411,12 +430,12 @@ void CppuType::dump(CppuOptions const & options)
 }
 
 void CppuType::dumpFile(
-    std::u16string_view uri, std::u16string_view name, bool hpp,
+    std::u16string_view uri, std::u16string_view name, FileType eFileType,
     CppuOptions const & options)
 {
     OUString fileUri(
         b2u(createFileNameFromType(
-                u2b(uri), u2b(name), hpp ? ".hpp" : ".hdl")));
+                u2b(uri), u2b(name), getFileExtension(eFileType))));
     if (fileUri.isEmpty()) {
         throw CannotDumpException(OUString::Concat("empty target URI for entity ") + name);
     }
@@ -430,13 +449,20 @@ void CppuType::dumpFile(
     if(!out.isValid()) {
         throw CannotDumpException("cannot open " + tmpUri + " for writing");
     }
-    codemaker::cppumaker::Includes includes(m_typeMgr, m_dependencies, hpp);
+    codemaker::cppumaker::Includes includes(m_typeMgr, m_dependencies, eFileType);
     try {
-        if (hpp) {
-            addGetCppuTypeIncludes(includes);
-            dumpHppFile(out, includes);
-        } else {
-            dumpHdlFile(out, includes);
+        switch(eFileType)
+        {
+            case FileType::HPP:
+                addGetCppuTypeIncludes(includes);
+                dumpHppFile(out, includes);
+                break;
+            case FileType::HDL:
+                dumpHdlFile(out, includes);
+                break;
+            case FileType::EMBIND_CXX:
+                dumpEmbindCppFile(out);
+                break;
         }
     } catch (...) {
         out.close();
@@ -580,6 +606,16 @@ void CppuType::dumpHFileContent(
     dumpType(out, name_, true);
     dumpTemplateParameters(out);
     out << " *);\n\n#endif\n";
+}
+
+void CppuType::dumpEmbindCppFile(FileStream &out)
+{
+    out << "#ifdef EMSCRIPTEN\n";
+    out << "#include <emscripten/bind.h>\n"
+           "#include <" << name_.replace('.', '/') << ".hpp>\n";
+    out << "using namespace emscripten;\n\n";
+    dumpEmbindDeclaration(out);
+    out << "#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out)
@@ -1103,10 +1139,14 @@ public:
         OUString const & name, rtl::Reference< TypeManager > const & typeMgr);
 
     virtual void dumpDeclaration(FileStream& o) override;
+    virtual void dumpEmbindDeclaration(FileStream& o) override;
     void dumpHppFile(FileStream& o, codemaker::cppumaker::Includes & includes) override;
 
     void        dumpAttributes(FileStream& o) const;
+    void        dumpEmbindAttributeBindings(FileStream& o) const;
     void        dumpMethods(FileStream& o) const;
+    void        dumpEmbindMethodBindings(FileStream& o, bool bDumpForReference=false) const;
+    void        dumpEmbindWrapperFunc(FileStream& o, const unoidl::InterfaceTypeEntity::Method& method, bool bDumpForReference=false) const;
     void        dumpNormalGetCppuType(FileStream& o) override;
     void        dumpComprehensiveGetCppuType(FileStream& o) override;
     void        dumpCppuAttributeRefs(FileStream& o, sal_uInt32& index);
@@ -1168,14 +1208,64 @@ void InterfaceType::dumpDeclaration(FileStream & out)
         << ("static inline ::css::uno::Type const & SAL_CALL"
             " static_type(void * = 0);\n\n");
     dec();
+#ifdef EMSCRIPTEN
+    out << "#ifndef EMSCRIPTEN\n";
+#endif
     out << "protected:\n";
     inc();
     out << indent() << "~" << id_
         << ("() SAL_NOEXCEPT {} // avoid warnings about virtual members and"
             " non-virtual dtor\n");
+#ifdef EMSCRIPTEN
+    out << "#endif\n";
+#endif
     dec();
     out << "};\n\n";
 }
+
+void InterfaceType::dumpEmbindDeclaration(FileStream & out)
+{
+    out << "namespace emscripten { namespace internal { \n"
+           "template<> void raw_destructor<" << codemaker::cpp::scopedCppName(u2b(name_))
+        << ">(" << codemaker::cpp::scopedCppName(u2b(name_)) << "*){}\n"
+           "}}\n";
+
+    out << "EMSCRIPTEN_BINDINGS(uno_bindings_";
+    codemaker::cppumaker::dumpTypeFullWithDecorator(out, name_, u"_");
+    codemaker::cppumaker::dumpTypeIdentifier(out, name_);
+    out << ") {\n";
+
+    out << "\nclass_<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">(\"";
+    codemaker::cppumaker::dumpTypeFullWithDecorator(out, name_, u"$");
+    codemaker::cppumaker::dumpTypeIdentifier(out, name_);
+    out << "\")\n";
+
+    inc();
+    // dump bindings for attributes and methods.
+    dumpEmbindAttributeBindings(out);
+    dumpEmbindMethodBindings(out);
+    out << indent() << ";\n";
+    dec();
+
+    // dump reference bindings.
+    out << "\nclass_<::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">, base<::css::uno::BaseReference>>(\"";
+    codemaker::cppumaker::dumpTypeFullWithDecorator(out, name_, u"$");
+    codemaker::cppumaker::dumpTypeIdentifier(out, name_);
+    out << "Ref\")\n";
+    inc();
+    out << indent() << ".constructor<>()\n"
+        << indent() << ".constructor<::css::uno::BaseReference, ::css::uno::UnoReference_Query>()\n"
+        << indent() << ".function(\"is\", &::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::is)\n"
+        << indent() << ".function(\"get\", &::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::get, allow_raw_pointers())\n"
+        << indent() << ".function(\"set\", emscripten::select_overload<bool(const ::css::uno::Any&, com::sun::star::uno::UnoReference_Query)>(&::css::uno::Reference<" << codemaker::cpp::scopedCppName(u2b(name_)) << ">::set))\n";
+    dumpEmbindAttributeBindings(out);
+    dumpEmbindMethodBindings(out, true);
+    out << indent() << ";\n";
+    dec();
+
+    out << "}\n";
+}
+
 
 void InterfaceType::dumpHppFile(
     FileStream & out, codemaker::cppumaker::Includes & includes)
@@ -1228,6 +1318,31 @@ void InterfaceType::dumpAttributes(FileStream & out) const
     }
 }
 
+void InterfaceType::dumpEmbindAttributeBindings(FileStream& out) const
+{
+    if (!entity_->getDirectAttributes().empty())
+    {
+        out << indent() << "// Bindings for attributes\n";
+    }
+    for (const unoidl::InterfaceTypeEntity::Attribute& attr : entity_->getDirectAttributes())
+    {
+        if (m_isDeprecated || isDeprecated(attr.annotations))
+            continue;
+
+        out << indent();
+        out << ".function(\"";
+        out << "get" << attr.name << "\", &" << codemaker::cpp::scopedCppName(u2b(name_)) << "::get"
+            << attr.name << ")\n";
+        if (!attr.readOnly)
+        {
+            out << indent();
+            out << ".function(\"";
+            out << "set" << attr.name << "\", &" << codemaker::cpp::scopedCppName(u2b(name_))
+                << "::set" << attr.name << ")\n";
+        }
+    }
+}
+
 void InterfaceType::dumpMethods(FileStream & out) const
 {
     if (!entity_->getDirectMethods().empty()) {
@@ -1267,6 +1382,115 @@ void InterfaceType::dumpMethods(FileStream & out) const
         out << ") = 0;\n";
     }
 }
+
+void InterfaceType::dumpEmbindWrapperFunc(FileStream& out,
+                                          const unoidl::InterfaceTypeEntity::Method& method,
+                                          bool bDumpForReference) const
+{
+    out << indent();
+    out << ".function(\"" << method.name << "\", ";
+    out << indent() << "+[](";
+    if (bDumpForReference)
+        out << "::css::uno::Reference<";
+    out << codemaker::cpp::scopedCppName(u2b(name_));
+    if (bDumpForReference)
+        out << ">";
+    out << "* self";
+    if(!method.parameters.empty())
+        out << ",";
+
+    auto dumpParameters = [&](bool bDumpType)
+    {
+        // dumpParams with references as pointers
+        if (!method.parameters.empty())
+        {
+            out << " ";
+            for (std::vector<unoidl::InterfaceTypeEntity::Method::Parameter>::const_iterator
+                     parameter(method.parameters.begin());
+                 parameter != method.parameters.end();)
+            {
+                bool isConst;
+                bool isRef;
+                if (parameter->direction
+                    == unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN)
+                {
+                    isConst = passByReference(parameter->type);
+                    isRef = isConst;
+                }
+                else
+                {
+                    isConst = false;
+                    isRef = true;
+                }
+                // for the embind wrapper, we define a pointer instead of a reference.
+                if (bDumpType)
+                    dumpType(out, parameter->type, isConst, /*isRef=*/false);
+                if (isRef)
+                    out << "*";
+
+                out << " " << parameter->name;
+                ++parameter;
+                if (parameter != method.parameters.end())
+                {
+                    out << ", ";
+                }
+            }
+            out << " ";
+        }
+    };
+    dumpParameters(/*bDumpType=*/true);
+
+    if (bDumpForReference)
+    {
+        out << ") { return self->get()->" << method.name << "(";
+    }
+    else
+    {
+        out << ") { return self->" << method.name << "(";
+    }
+
+    dumpParameters(/*bDumpType=*/false);
+    out << "); }, allow_raw_pointers() )\n";
+}
+
+void InterfaceType::dumpEmbindMethodBindings(FileStream & out, bool bDumpForReference) const
+{
+    if (!entity_->getDirectMethods().empty()) {
+        out << indent() << "// Bindings for methods\n";
+    }
+    for (const unoidl::InterfaceTypeEntity::Method& method : entity_->getDirectMethods()) {
+        if( m_isDeprecated || isDeprecated(method.annotations) )
+            continue;
+
+        // if dumping the method binding for a reference implementation
+        // dump wrapper.
+        if(bDumpForReference)
+        {
+            dumpEmbindWrapperFunc(out, method, true);
+            continue;
+        }
+
+        bool bHasOutParams = std::any_of(
+            method.parameters.begin(), method.parameters.end(),
+            [](const auto& parameter) {
+                return parameter.direction
+                       != unoidl::InterfaceTypeEntity::Method::Parameter::DIRECTION_IN;
+            });
+
+        if (bHasOutParams)
+        {
+            dumpEmbindWrapperFunc(out, method, false);
+            continue;
+        }
+
+        out << indent();
+        out << ".function(\"" << method.name << "\", &"
+            << codemaker::cpp::scopedCppName(u2b(name_))
+            << "::" << method.name << ")\n";
+    }
+}
+
+
 
 void InterfaceType::dumpNormalGetCppuType(FileStream & out)
 {
@@ -3515,7 +3739,9 @@ private:
     }
 
     virtual void dumpFiles(OUString const & uri, CppuOptions const & options) override {
-        dumpFile(uri, name_, true, options);
+        dumpFile(uri, name_, FileType::HPP, options);
+        if(options.isValid("-W"))
+            dumpFile(uri, name_, FileType::EMBIND_CXX, options);
     }
 };
 

@@ -20,6 +20,7 @@
 
 #include "includes.hxx"
 
+#include "cpputype.hxx"
 #include "dependencies.hxx"
 #include "dumputils.hxx"
 
@@ -40,8 +41,8 @@ using codemaker::cppumaker::Includes;
 
 Includes::Includes(
     rtl::Reference< TypeManager > manager,
-    codemaker::cppumaker::Dependencies const & dependencies, bool hpp):
-    m_manager(std::move(manager)), m_map(dependencies.getMap()), m_hpp(hpp),
+    codemaker::cppumaker::Dependencies const & dependencies, FileType eFileType):
+    m_manager(std::move(manager)), m_map(dependencies.getMap()), m_filetype(eFileType),
     m_includeCassert(false),
     m_includeAny(dependencies.hasAnyDependency()), m_includeReference(false),
     m_includeSequence(dependencies.hasSequenceDependency()),
@@ -136,7 +137,7 @@ void dumpEmptyLineBeforeFirst(FileStream & out, bool * first) {
 void Includes::dump(
     FileStream & out, OUString const * companionHdl, bool exceptions)
 {
-    OSL_ASSERT(companionHdl == nullptr || m_hpp);
+    OSL_ASSERT(companionHdl == nullptr || m_filetype == FileType::HPP);
     if (!m_includeReference) {
         for (const auto& pair : m_map)
         {
@@ -159,12 +160,12 @@ void Includes::dump(
     {
         if (exceptions || pair.second != Dependencies::KIND_EXCEPTION) {
             dumpEmptyLineBeforeFirst(out, &first);
-            if (m_hpp || pair.second == Dependencies::KIND_BASE
+            if ((m_filetype == FileType::HPP) || pair.second == Dependencies::KIND_BASE
                 || !isInterfaceType(u2b(pair.first)))
             {
                 // If we know our name, then avoid including ourselves.
                 if (!companionHdl || *companionHdl != pair.first) {
-                    dumpInclude(out, u2b(pair.first), m_hpp);
+                    dumpInclude(out, u2b(pair.first), (m_filetype == FileType::HPP));
                 }
             } else {
                 bool ns = dumpNamespaceOpen(out, pair.first, false);
@@ -185,22 +186,22 @@ void Includes::dump(
     static char const * hxxExtension[2] = { "h", "hxx" };
     if (m_includeAny) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Any." << hxxExtension[m_hpp]
+        out << "#include \"com/sun/star/uno/Any." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeReference) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Reference." << hxxExtension[m_hpp]
+        out << "#include \"com/sun/star/uno/Reference." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeSequence) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[m_hpp]
+        out << "#include \"com/sun/star/uno/Sequence." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeType) {
         dumpEmptyLineBeforeFirst(out, &first);
-        out << "#include \"com/sun/star/uno/Type." << hxxExtension[m_hpp]
+        out << "#include \"com/sun/star/uno/Type." << hxxExtension[(m_filetype == FileType::HPP)]
             << "\"\n";
     }
     if (m_includeCppuMacrosHxx) {
