@@ -132,6 +132,8 @@ IMPL_LINK(SwNavigationPI, DocListBoxSelectHdl, weld::ComboBox&, rBox, void)
 
 void SwNavigationPI::UpdateNavigateBy()
 {
+    if (!m_pNavigateByComboBox)
+        return;
     SfxUInt32Item aParam(FN_NAV_ELEMENT, m_pNavigateByComboBox->get_active_id().toUInt32());
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
@@ -543,8 +545,17 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
             m_xContent2Dispatch->GetControllerForCommand(".uno:NavElement");
     NavElementToolBoxControl* pToolBoxControl =
             dynamic_cast<NavElementToolBoxControl*>(xController.get());
-    assert(pToolBoxControl);
-    m_pNavigateByComboBox = pToolBoxControl->GetComboBox();
+
+    // In case of LOK, the xController may not a NavElementToolBoxControl
+    if (comphelper::LibreOfficeKit::isActive() && !pToolBoxControl)
+    {
+        m_pNavigateByComboBox = nullptr;
+    }
+    else
+    {
+        assert(pToolBoxControl);
+        m_pNavigateByComboBox = pToolBoxControl->GetComboBox();
+    }
 
     // Restore content tree settings before calling UpdateInitShow. UpdateInitShow calls Fillbox,
     // which calls Display and UpdateTracking. Incorrect outline levels could be displayed and
@@ -652,7 +663,9 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xInsertMenu->connect_activate(LINK(this, SwNavigationPI, GlobalMenuSelectHdl));
     m_xGlobalToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBoxClickHdl));
     m_xGlobalToolBox->set_item_active("globaltoggle", true);
-    m_pNavigateByComboBox->connect_changed(LINK(this, SwNavigationPI, NavigateByComboBoxSelectHdl));
+    if (m_pNavigateByComboBox)
+        m_pNavigateByComboBox->connect_changed(
+            LINK(this, SwNavigationPI, NavigateByComboBoxSelectHdl));
 
 //  set toolbar of both modes to widest of each
     m_xGlobalToolBox->set_size_request(m_xContent1ToolBox->get_preferred_size().Width() +
@@ -1138,6 +1151,8 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 
 void SwNavigationPI::SelectNavigateByContentType(const OUString& rContentTypeName)
 {
+    if (!m_pNavigateByComboBox)
+        return;
     if (auto nPos = m_pNavigateByComboBox->find_text(rContentTypeName); nPos != -1)
     {
         m_pNavigateByComboBox->set_active(nPos);
