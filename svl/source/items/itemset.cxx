@@ -351,7 +351,7 @@ SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt1
 
 SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPoolItem **ppItem) const
 {
-    // check and assert fr iinvaliid offset. The caller is responsible for
+    // check and assert from invalid offset. The caller is responsible for
     // ensuring a valid offset (see callers, all checked & safe)
     assert(nOffset < TotalCount());
     SfxPoolItem const** pFoundOne = m_ppItems + nOffset;
@@ -1520,7 +1520,7 @@ sal_uInt16 WhichRangesContainer::getOffsetFromWhich(sal_uInt16 nWhich) const
         return INVALID_WHICHPAIR_OFFSET;
     }
 
-    // check if nWhich is inside last sucessfully used WhichPair
+    // check if nWhich is inside last successfully used WhichPair
     if (INVALID_WHICHPAIR_OFFSET != m_aLastWhichPairOffset
         && m_aLastWhichPairFirst <= nWhich
         && nWhich <= m_aLastWhichPairSecond)
@@ -1579,7 +1579,7 @@ sal_uInt16 WhichRangesContainer::getWhichFromOffset(sal_uInt16 nOffset) const
         return 0;
     }
 
-    // check if nWhich is inside last sucessfully used WhichPair
+    // check if nWhich is inside last successfully used WhichPair
     if (INVALID_WHICHPAIR_OFFSET != m_aLastWhichPairOffset)
     {
         // only try if we are beyond or at m_aLastWhichPairOffset to
@@ -1604,7 +1604,7 @@ sal_uInt16 WhichRangesContainer::getWhichFromOffset(sal_uInt16 nOffset) const
 
     // Iterate over WhichPairs in WhichRangesContainer
     // Do not update buffered last hit (m_aLastWhichPair*), these calls
-    // are potetially more rare than getOffsetFromWhich calls. Still,
+    // are potentially more rare than getOffsetFromWhich calls. Still,
     // it could also be done here
     for( auto const & pPtr : *this )
     {
