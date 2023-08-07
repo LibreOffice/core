@@ -26,14 +26,14 @@
 #include <vcl/svapp.hxx>
 
 #include <AccTextComponentEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccTextComponentEventListener::AccTextComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccComponentEventListener(pAcc, Agent)
+AccTextComponentEventListener::AccTextComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+        :AccComponentEventListener(pAcc, pManager)
 {}
 AccTextComponentEventListener::~AccTextComponentEventListener()
 {

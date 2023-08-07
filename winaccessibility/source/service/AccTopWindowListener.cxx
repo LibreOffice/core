@@ -65,19 +65,19 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
     //Only AccessibleContext exist, add all listeners
     if(pAccessibleContext != nullptr && systemdata != nullptr)
     {
-        accManagerAgent.SaveTopWindowHandle(systemdata->hWnd, pAccessible);
+        m_aAccObjectManager.SaveTopWindowHandle(systemdata->hWnd, pAccessible);
 
         AddAllListeners(pAccessible,nullptr,systemdata->hWnd);
 
         if( window->GetStyle() & WB_MOVEABLE )
-            accManagerAgent.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
+            m_aAccObjectManager.IncreaseState( pAccessible, static_cast<unsigned short>(-1) /* U_MOVEBLE */ );
 
         short role = pAccessibleContext->getAccessibleRole();
 
         if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
                 role == css::accessibility::AccessibleRole::MENU )
         {
-            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
+            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
         }
 
         if (role == css::accessibility::AccessibleRole::FRAME ||
@@ -85,13 +85,13 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
                 role == css::accessibility::AccessibleRole::WINDOW ||
                 role == css::accessibility::AccessibleRole::ALERT)
         {
-            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
+            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
         }
     }
 }
 
 AccTopWindowListener::AccTopWindowListener()
-    : accManagerAgent()
+    : m_aAccObjectManager()
 {
 }
 
@@ -138,9 +138,9 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
         return;
     }
 
-    accManagerAgent.InsertAccObj(pAccessible, pParentXAcc, pWND);
+    m_aAccObjectManager.InsertAccObj(pAccessible, pParentXAcc, pWND);
 
-    if (!accManagerAgent.IsContainer(pAccessible))
+    if (!AccObjectWinManager::IsContainer(pAccessible))
     {
         return;
     }
@@ -152,7 +152,7 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
             css::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET == role ||
             css::accessibility::AccessibleRole::DOCUMENT_TEXT == role)
     {
-        if(accManagerAgent.IsStateManageDescendant(pAccessible))
+        if(AccObjectWinManager::IsStateManageDescendant(pAccessible))
         {
             return ;
         }
@@ -213,14 +213,14 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
         if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
                 role == css::accessibility::AccessibleRole::MENU)
         {
-            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPEND);
+            m_aAccObjectManager.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPEND);
         }
     }
 
 
-    accManagerAgent.DeleteChildrenAccObj( pAccessible );
+    m_aAccObjectManager.DeleteChildrenAccObj( pAccessible );
     if( role != css::accessibility::AccessibleRole::POPUP_MENU )
-        accManagerAgent.DeleteAccObj( pAccessible );
+        m_aAccObjectManager.DeleteAccObj( pAccessible );
 
 }
 
@@ -247,7 +247,7 @@ void AccTopWindowListener::disposing( const css::lang::EventObject&  )
 sal_Int64 AccTopWindowListener::GetMSComPtr(
         sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
 {
-    return accManagerAgent.Get_ToATInterface(hWnd, lParam, wParam);
+    return m_aAccObjectManager.Get_ToATInterface(hWnd, lParam, wParam);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

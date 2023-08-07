@@ -39,7 +39,7 @@ enum class UnoMSAAEvent;
 class AccContainerEventListener: public AccEventListener
 {
 public:
-    AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccContainerEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
     virtual ~AccContainerEventListener() override;
 
     //AccessibleEventListener

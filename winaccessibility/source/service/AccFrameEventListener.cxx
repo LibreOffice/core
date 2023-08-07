@@ -26,7 +26,7 @@
 #include <vcl/svapp.hxx>
 
 #include <AccFrameEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
@@ -36,8 +36,8 @@ using namespace com::sun::star::accessibility;
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/sysdata.hxx>
 
-AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccEventListener(pAcc, Agent)
+AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+        :AccEventListener(pAcc, pManager)
 {
 }
 
@@ -85,9 +85,9 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             const SystemEnvData* systemdata
                 = pvclwindow->GetWindow()->GetSystemData();
 
-            pAgent->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
-            pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
+            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
+            m_pObjManager->InsertChildrenAccObj(pAcc);
+            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
@@ -112,9 +112,9 @@ void AccFrameEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

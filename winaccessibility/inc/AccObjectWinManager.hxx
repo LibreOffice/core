@@ -25,7 +25,9 @@
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
+#include <prewin.h>
 #include <windows.h>
+#include <postwin.h>
 #include <rtl/ref.hxx>
 #include "ResIDGenerator.hxx"
 #include  <UAccCOM.h>
@@ -34,7 +36,6 @@ namespace com::sun::star::accessibility {
 class XAccessible;
 }
 class ResIDGenerator;
-class AccObjectManagerAgent;
 class AccEventListener;
 class AccObject;
 enum class UnoMSAAEvent;
@@ -49,8 +50,6 @@ AccObjectWinManager complete the functions:
  *******************************************************************/
 class AccObjectWinManager
 {
-    friend class AccObjectManagerAgent;
-
 private:
     typedef std::map<com::sun::star::accessibility::XAccessible*, AccObject> XIdToAccObjHash;
     typedef std::map<HWND, com::sun::star::accessibility::XAccessible*> XHWNDToXAccHash;
@@ -76,10 +75,7 @@ private:
 
     css::accessibility::XAccessible* oldFocus;
 
-    AccObjectManagerAgent*   pAgent;
     ResIDGenerator ResIdGen;
-
-    AccObjectWinManager(AccObjectManagerAgent* Agent=nullptr);
 
 private:
     long ImpleGenerateResID();
@@ -97,8 +93,11 @@ private:
     ::rtl::Reference<AccEventListener> CreateAccEventListener(
             css::accessibility::XAccessible* pXAcc);
 public:
+    AccObjectWinManager();
     virtual ~AccObjectWinManager();
-    bool InsertAccObj( css::accessibility::XAccessible* pXAcc,css::accessibility::XAccessible* pParentXAcc,HWND pWnd);
+    virtual bool InsertAccObj(css::accessibility::XAccessible* pXAcc,
+                              css::accessibility::XAccessible* pParentXAcc,
+                              HWND pWnd = nullptr);
     bool InsertChildrenAccObj( css::accessibility::XAccessible* pXAcc,HWND pWnd=nullptr);
     void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
     void DeleteChildrenAccObj(css::accessibility::XAccessible* pAccObj);
@@ -122,9 +121,9 @@ public:
 
     static bool IsContainer( css::accessibility::XAccessible* pAccessible );
 
-    IMAccessible* GetIMAccByXAcc( css::accessibility::XAccessible* pXAcc );
-    bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
-    IMAccessible* GetIAccessibleFromResID(long resID);
+    virtual IMAccessible* GetIMAccByXAcc(css::accessibility::XAccessible* pXAcc);
+    virtual bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
+    virtual IMAccessible* GetIAccessibleFromResID(long resID);
 
     void NotifyDestroy( css::accessibility::XAccessible* pXAcc );
     css::accessibility::XAccessible* GetParentXAccessible( css::accessibility::XAccessible* pXAcc );

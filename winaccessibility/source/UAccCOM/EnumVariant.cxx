@@ -75,8 +75,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
         }
         else if(pRXAcc.is())
         {
-            if(CMAccessible::g_pAgent)
-                CMAccessible::g_pAgent->InsertAccObj(pRXAcc.get(),pUNOInterface);
+            if (CMAccessible::g_pAccObjectManager)
+                CMAccessible::g_pAccObjectManager->InsertAccObj(pRXAcc.get(),pUNOInterface);
             isGet = CMAccessible::get_IAccessibleFromXAccessible(
                             pRXAcc.get(), &pChild);
             if(isGet)

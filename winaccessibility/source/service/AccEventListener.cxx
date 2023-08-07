@@ -24,7 +24,7 @@
 #include <vcl/svapp.hxx>
 
 #include <AccEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -41,9 +41,9 @@ using namespace com::sun::star::accessibility;
 using namespace cppu;
 
 AccEventListener::AccEventListener(css::accessibility::XAccessible* pAcc,
-                                   AccObjectManagerAgent* Agent)
+                                   AccObjectWinManager* pManager)
     : m_xAccessible(pAcc)
-    , pAgent(Agent)
+    , m_pObjManager(pManager)
 {
 }
 
@@ -82,18 +82,18 @@ void AccEventListener::notifyEvent(const css::accessibility::AccessibleEventObje
  */
 void AccEventListener::HandleNameChangedEvent(Any name)
 {
-    if (pAgent->IsTopWinAcc(m_xAccessible.get()))
+    if (m_pObjManager->IsTopWinAcc(m_xAccessible.get()))
     {
-        XAccessible* pAccDoc = pAgent->GetAccDocByAccTopWin(m_xAccessible.get());
+        XAccessible* pAccDoc = m_pObjManager->GetAccDocByAccTopWin(m_xAccessible.get());
         if (pAccDoc)
         {
-            pAgent->UpdateAccName(pAccDoc);
-            pAgent->NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
+            m_pObjManager->UpdateAccName(pAccDoc);
+            m_pObjManager->NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
         }
     }
 
-    pAgent->UpdateAccName(m_xAccessible.get(), name);
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
+    m_pObjManager->SetAccName(m_xAccessible.get(), name);
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
 }
 
 /**
@@ -110,9 +110,9 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
         if (xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
+            m_pObjManager->InsertAccObj(pAcc, m_xAccessible.get());
+            m_pObjManager->InsertChildrenAccObj(pAcc);
+            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
@@ -120,9 +120,9 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
         if (xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_REMOVED);
-            pAgent->DeleteChildrenAccObj(pAcc);
-            pAgent->DeleteAccObj(pAcc);
+            m_pObjManager->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_REMOVED);
+            m_pObjManager->DeleteChildrenAccObj(pAcc);
+            m_pObjManager->DeleteAccObj(pAcc);
         }
     }
 }
@@ -132,7 +132,7 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
  */
 void AccEventListener::HandleDescriptionChangedEvent()
 {
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE);
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE);
 }
 
 /**
@@ -140,7 +140,7 @@ void AccEventListener::HandleDescriptionChangedEvent()
  */
 void AccEventListener::HandleBoundrectChangedEvent()
 {
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::BOUNDRECT_CHANGED);
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::BOUNDRECT_CHANGED);
 }
 
 /**
@@ -148,8 +148,8 @@ void AccEventListener::HandleBoundrectChangedEvent()
  */
 void AccEventListener::HandleVisibleDataChangedEvent()
 {
-    pAgent->UpdateValue(m_xAccessible.get());
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::VISIBLE_DATA_CHANGED);
+    m_pObjManager->UpdateValue(m_xAccessible.get());
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::VISIBLE_DATA_CHANGED);
 }
 
 /**
@@ -196,8 +196,8 @@ void AccEventListener::FireStateFocusedChange(bool enable)
 {
     if (enable)
     {
-        pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-        pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
+        m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
+        m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
@@ -243,7 +243,7 @@ short AccEventListener::GetParentRole()
 {
     if (m_xAccessible.is())
     {
-        return pAgent->GetParentRole(m_xAccessible.get());
+        return m_pObjManager->GetParentRole(m_xAccessible.get());
     }
     return -1;
 }
@@ -273,7 +273,7 @@ void AccEventListener::RemoveMeFromBroadcaster(bool const isNotifyDestroy)
         }
         if (isNotifyDestroy)
         {
-            pAgent->NotifyDestroy(m_xAccessible.get());
+            m_pObjManager->NotifyDestroy(m_xAccessible.get());
         }
         m_xAccessible.clear(); // release cyclic reference
     }

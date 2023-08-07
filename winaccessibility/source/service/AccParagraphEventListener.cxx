@@ -26,14 +26,14 @@
 #include <vcl/svapp.hxx>
 
 #include <AccParagraphEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccParagraphEventListener::AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccContainerEventListener(pAcc, Agent)
+AccParagraphEventListener::AccParagraphEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+        :AccContainerEventListener(pAcc, pManager)
 {}
 AccParagraphEventListener::~AccParagraphEventListener()
 {
@@ -64,12 +64,12 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
             sal_Int64 State;
             if( (aEvent.NewValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                pAgent->IncreaseState(m_xAccessible.get(), State);
+                m_pObjManager->IncreaseState(m_xAccessible.get(), State);
                 break;
             }
             else if( (aEvent.OldValue >>= State) && (State == AccessibleStateType::SELECTED) )
             {
-                pAgent->DecreaseState(m_xAccessible.get(), State);
+                m_pObjManager->DecreaseState(m_xAccessible.get(), State);
                 break;
             }
 
@@ -94,7 +94,7 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
 }
 
 /**
@@ -124,7 +124,7 @@ void AccParagraphEventListener::SetComponentState(sal_Int64 state, bool enable )
 
 void AccParagraphEventListener::HandleTextSelectionChangedEvent()
 {
-    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
+    m_pObjManager->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

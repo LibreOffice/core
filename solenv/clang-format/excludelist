@@ -15132,7 +15132,6 @@ winaccessibility/inc/AccContainerEventListener.hxx
 winaccessibility/inc/AccDescendantManagerEventListener.hxx
 winaccessibility/inc/AccObject.hxx
 winaccessibility/inc/AccObjectContainerEventListener.hxx
-winaccessibility/inc/AccObjectManagerAgent.hxx
 winaccessibility/inc/AccObjectWinManager.hxx
 winaccessibility/source/UAccCOM/AccAction.cxx
 winaccessibility/source/UAccCOM/AccAction.h
@@ -15168,7 +15167,6 @@ winaccessibility/source/service/AccFrameEventListener.cxx
 winaccessibility/source/service/AccListEventListener.cxx
 winaccessibility/source/service/AccMenuEventListener.cxx
 winaccessibility/source/service/AccObject.cxx
-winaccessibility/source/service/AccObjectManagerAgent.cxx
 winaccessibility/source/service/AccObjectWinManager.cxx
 winaccessibility/source/service/AccParagraphEventListener.cxx
 winaccessibility/source/service/AccTableEventListener.cxx

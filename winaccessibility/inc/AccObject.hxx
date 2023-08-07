@@ -37,7 +37,7 @@
 #include  <UAccCOM.h>
 
 class AccEventListener;
-class AccObjectManagerAgent;
+class AccObjectWinManager;
 class AccObject;
 
 typedef std::vector<AccObject *> IAccChildList;
@@ -71,7 +71,8 @@ private:
 
 public:
 
-    AccObject ( css::accessibility::XAccessible* pXAcc = nullptr,AccObjectManagerAgent* pAgent = nullptr ,AccEventListener* accListener=nullptr);
+    AccObject(css::accessibility::XAccessible* pXAcc = nullptr, AccObjectWinManager* pManager = nullptr,
+              AccEventListener* accListener=nullptr);
     virtual ~AccObject();
 
     bool UpdateAccessibleInfoFromUnoToMSAA(  ); //implement accessible information mapping

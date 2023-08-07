@@ -46,7 +46,7 @@ import "defines.idl";
         [id(20), helpstring("method GetUNOInterface")] HRESULT GetUNOInterface(hyper* UNOInterface);
         [id(23), helpstring("method SetDefaultAction")] HRESULT SetDefaultAction(hyper pAction);
         [id(24), helpstring("method Put_ActionDescription")] HRESULT Put_ActionDescription( const OLECHAR* szAction);
-        [id(25), helpstring("method Put_XAccAgent")] HRESULT Put_XAccAgent(hyper pAgent);
+        [id(25), helpstring("method Put_XAccObjectManager")] HRESULT Put_XAccObjectManager(hyper pManager);
         [id(26), helpstring("method NotifyDestroy")] HRESULT NotifyDestroy();
     };
     [

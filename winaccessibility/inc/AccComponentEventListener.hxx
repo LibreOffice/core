@@ -36,7 +36,7 @@ class AccComponentEventListener : public AccEventListener
 private:
     static FILE *output, *output2, *output3, *outacc; //used for debugging
 public:
-    AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccComponentEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
     virtual ~AccComponentEventListener() override;
 
     // XAccessibleEventListener

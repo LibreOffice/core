@@ -121,7 +121,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnHeaderCells(IUnknown*
         if (!bOK)
         {
             Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
-            CMAccessible::g_pAgent->InsertAccObj(xCell.get(), xTableAcc.get());
+            CMAccessible::g_pAccObjectManager->InsertAccObj(xCell.get(), xTableAcc.get());
             bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
         }
         assert(bOK && "Couldn't retrieve IAccessible object for cell.");
@@ -209,7 +209,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowHeaderCells(IUnknown*** 
         if (!bOK)
         {
             Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
-            CMAccessible::g_pAgent->InsertAccObj(xCell.get(), xTableAcc.get());
+            CMAccessible::g_pAccObjectManager->InsertAccObj(xCell.get(), xTableAcc.get());
             bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
         }
         assert(bOK && "Couldn't retrieve IAccessible object for cell.");

@@ -26,14 +26,14 @@
 #include <vcl/svapp.hxx>
 
 #include <AccDialogEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccDialogEventListener::AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccEventListener(pAcc, Agent)
+AccDialogEventListener::AccDialogEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+        :AccEventListener(pAcc, pManager)
 {}
 AccDialogEventListener::~AccDialogEventListener()
 {
@@ -77,9 +77,9 @@ void AccDialogEventListener::SetComponentState(sal_Int64 state, bool enable)
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::ACTIVE:
         // Only frames should be active

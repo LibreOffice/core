@@ -26,14 +26,14 @@
 #include <vcl/svapp.hxx>
 
 #include <AccWindowEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
-AccWindowEventListener::AccWindowEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-        :AccEventListener(pAcc, Agent)
+AccWindowEventListener::AccWindowEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+        :AccEventListener(pAcc, pManager)
 {}
 AccWindowEventListener::~AccWindowEventListener()
 {
@@ -77,18 +77,18 @@ void AccWindowEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::VISIBLE:
         // UNO !VISIBLE == MSAA INVISIBLE
         if( enable )
-            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         else
-            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
+            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
         break;
     case AccessibleStateType::SHOWING:
         // UNO !SHOWING == MSAA OFFSCREEN
         if( enable )
         {
-            pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_pObjManager->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
         }
         else
-            pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
+            m_pObjManager->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
         break;
     default:
         break;

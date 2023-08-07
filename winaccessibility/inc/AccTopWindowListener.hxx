@@ -25,7 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include "AccObjectManagerAgent.hxx"
+#include "AccObjectWinManager.hxx"
 
 /**
  * AccEventListener is the general event listener for all top windows. The top windows defined
@@ -37,7 +37,7 @@
 class AccTopWindowListener : public ::cppu::WeakImplHelper<css::awt::XTopWindowListener>
 {
 private:
-    AccObjectManagerAgent accManagerAgent;
+    AccObjectWinManager m_aAccObjectManager;
 
 public:
     AccTopWindowListener();

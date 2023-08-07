@@ -26,15 +26,15 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
 #include <AccObjectContainerEventListener.hxx>
-#include <AccObjectManagerAgent.hxx>
+#include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::accessibility;
 
 AccObjectContainerEventListener::AccObjectContainerEventListener(
-    css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent)
-    : AccContainerEventListener(pAcc, Agent)
+    css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
+    : AccContainerEventListener(pAcc, pManager)
 {
 }
 AccObjectContainerEventListener::~AccObjectContainerEventListener() {}
@@ -51,7 +51,7 @@ void AccObjectContainerEventListener::HandleStateChangedEvent(Any oldValue, Any 
     {
         if (newV == AccessibleStateType::FOCUSED)
         {
-            pAgent->UpdateAccName(m_xAccessible.get());
+            m_pObjManager->UpdateAccName(m_xAccessible.get());
         }
     }
     AccContainerEventListener::HandleStateChangedEvent(oldValue, newValue);

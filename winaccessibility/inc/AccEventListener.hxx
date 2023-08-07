@@ -24,7 +24,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class AccObjectManagerAgent;
+class AccObjectWinManager;
 
 /**
  * AccEventListener is the general event listener for all controls. It defines the
@@ -36,11 +36,11 @@ class AccEventListener : public ::cppu::WeakImplHelper<css::accessibility::XAcce
 protected:
     //accessible owner's pointer
     css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
-    //agent pointer for objects' manager
-    AccObjectManagerAgent* pAgent;
+    // pointer for object's manager
+    AccObjectWinManager* m_pObjManager;
 
 public:
-    AccEventListener(css::accessibility::XAccessible* pAcc, AccObjectManagerAgent* Agent);
+    AccEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager);
     virtual ~AccEventListener() override;
 
     // XEventListener

@@ -153,12 +153,11 @@ const short ROLE_TABLE[][2] =
 /**
    * Constructor.
    * @param pXAcc Uno XAccessible interface of control.
-   * @param Agent The agent kept in all listeners,it's the sole interface by which
-   *              listener communicate with windows manager.
+   * @param pManager The accessible object manager kept in all listeners.
    * @param listener listener that registers in UNO system.
    * @return.
    */
-AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
+AccObject::AccObject(XAccessible* pAcc, AccObjectWinManager* pManager,
                      AccEventListener* pListener) :
         m_resID     (0),
         m_pParantID (nullptr),
@@ -175,7 +174,7 @@ AccObject::AccObject(XAccessible* pAcc, AccObjectManagerAgent* pAgent,
     if( m_pIMAcc )
     {
         m_pIMAcc->SetXAccessible(reinterpret_cast<hyper>(m_xAccRef.get()));
-        m_pIMAcc->Put_XAccAgent(reinterpret_cast<hyper>(pAgent));
+        m_pIMAcc->Put_XAccObjectManager(reinterpret_cast<hyper>(pManager));
         m_pIMAcc->SetDefaultAction(reinterpret_cast<hyper>(m_xAccActionRef.get()));
     }
 }

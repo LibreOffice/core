@@ -178,7 +178,7 @@ sal_Int64 const UNO_STATES[] =
 using namespace com::sun::star::accessibility::AccessibleRole;
 
 
-AccObjectManagerAgent* CMAccessible::g_pAgent = nullptr;
+AccObjectWinManager* CMAccessible::g_pAccObjectManager = nullptr;
 
 CMAccessible::CMAccessible():
 m_pszName(nullptr),
@@ -799,8 +799,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
         //if the descendant of current object has focus indicated by m_dFocusChildID, return the IDispatch of this focused object
         else
         {
-            IMAccessible* pIMAcc = nullptr;
-            g_pAgent->GetIAccessibleFromResID(m_dFocusChildID,&pIMAcc);
+            IMAccessible* pIMAcc = g_pAccObjectManager->GetIAccessibleFromResID(m_dFocusChildID);
             if (pIMAcc == nullptr)
             {
                 return E_FAIL;
@@ -1263,15 +1262,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccChildID(long dChildID)
 }
 
 /**
-* Set AccObjectManagerAgent object pointer to COM
-* @param    pAgent, the AccObjectManagerAgent point.
+* Set AccObjectWinManager object pointer to COM
+* @param    pManager, the AccObjectWinManager pointer.
 * @return   S_OK if successful and E_FAIL if failure.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccAgent(hyper pAgent)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccObjectManager(hyper pManager)
 {
     // internal IMAccessible - no mutex meeded
 
-    g_pAgent = reinterpret_cast<AccObjectManagerAgent*>(pAgent);
+    g_pAccObjectManager = reinterpret_cast<AccObjectWinManager*>(pManager);
     return S_OK;
 }
 
@@ -1303,10 +1302,9 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 {
     if(dChildID<0)
     {
-        if(g_pAgent)
+        if(g_pAccObjectManager)
         {
-            IMAccessible* pIMAcc = nullptr;
-            g_pAgent->GetIAccessibleFromResID(dChildID,&pIMAcc);
+            IMAccessible* pIMAcc = g_pAccObjectManager->GetIAccessibleFromResID(dChildID);
             return pIMAcc;
         }
         return nullptr;
@@ -1330,7 +1328,7 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
 
         if(!isGet)
         {
-            g_pAgent->InsertAccObj(pXChild.get(), m_xAccessible.get(), m_hwnd);
+            g_pAccObjectManager->InsertAccObj(pXChild.get(), m_xAccessible.get(), m_hwnd);
             isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
         }
 
@@ -1417,8 +1415,8 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
         return nullptr;
     }
     pChildXAcc = pRChildXAcc.get();
-    g_pAgent->InsertAccObj(pChildXAcc, m_xAccessible.get());
-    return g_pAgent->GetIMAccByXAcc(pChildXAcc);
+    g_pAccObjectManager->InsertAccObj(pChildXAcc, m_xAccessible.get());
+    return g_pAccObjectManager->GetIMAccByXAcc(pChildXAcc);
 }
 
 /**
@@ -2454,8 +2452,8 @@ bool CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc, IAccessibl
             return false;
         }
         bool isGet = false;
-        if(g_pAgent)
-            isGet = g_pAgent->GetIAccessibleFromXAccessible(pXAcc, ppIA);
+        if (g_pAccObjectManager)
+            isGet = g_pAccObjectManager->GetIAccessibleFromXAccessible(pXAcc, ppIA);
 
         return isGet;
     }
@@ -2750,7 +2748,7 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                         if(pIAcc == nullptr)
                         {
                             Reference< XAccessibleContext > pXAccContext = pXAcc->getAccessibleContext();
-                            g_pAgent->InsertAccObj(pXAcc.get(),pXAccContext->getAccessibleParent().get());
+                            g_pAccObjectManager->InsertAccObj(pXAcc.get(),pXAccContext->getAccessibleParent().get());
                             get_IAccessibleFromXAccessible(pXAcc.get(), &pIAcc);
                         }
                         if(pIAcc)

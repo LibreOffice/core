@@ -29,7 +29,6 @@ $(eval $(call gb_Library_add_exception_objects,winaccessibility,\
 	winaccessibility/source/service/AccObject \
 	winaccessibility/source/service/ResIDGenerator \
 	winaccessibility/source/service/AccObjectWinManager \
-	winaccessibility/source/service/AccObjectManagerAgent \
 	winaccessibility/source/service/AccEventListener \
 	winaccessibility/source/service/AccComponentEventListener \
 	winaccessibility/source/service/AccContainerEventListener \

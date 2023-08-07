@@ -77,7 +77,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
     {
         Reference<XAccessible> pxTable(pRXTable, UNO_QUERY);
 
-        CMAccessible::g_pAgent->InsertAccObj(pRAcc.get(),pxTable.get());
+        CMAccessible::g_pAccObjectManager->InsertAccObj(pRAcc.get(),pxTable.get());
         isTRUE = CMAccessible::get_IAccessibleFromXAccessible(pRAcc.get(), &pRet);
 
         if(isTRUE)
@@ -1105,7 +1105,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedCells(IUnknown * * * ce
         if (!bOK)
         {
             Reference<XAccessible> xTable(pRXTable, UNO_QUERY);
-            CMAccessible::g_pAgent->InsertAccObj(xAcc.get(), xTable.get());
+            CMAccessible::g_pAccObjectManager->InsertAccObj(xAcc.get(), xTable.get());
             bOK = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get(), &pIAccessible);
         }
 
