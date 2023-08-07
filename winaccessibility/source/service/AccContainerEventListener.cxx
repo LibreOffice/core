@@ -125,7 +125,7 @@ void AccContainerEventListener::HandleSelectionChangedEvent(const Any& /*oldValu
 
     //menu bar does not process selection change event,just same as word behavior
     if (GetRole()!=AccessibleRole::MENU_BAR)
-        pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, m_xAccessible.get());
+        pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 /**
@@ -140,7 +140,7 @@ void AccContainerEventListener::HandleAllChildrenChangedEvent()
         pAgent->DeleteChildrenAccObj(m_xAccessible.get());
         //add all oldValue's existing children
         pAgent->InsertChildrenAccObj(m_xAccessible.get());
-        pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_REORDER, m_xAccessible.get());
+        pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_REORDER);
     }
 }
 
@@ -150,7 +150,7 @@ void AccContainerEventListener::HandleAllChildrenChangedEvent()
 void AccContainerEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
     pAgent->UpdateValue(m_xAccessible.get(), newValue);
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_TEXTCHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_TEXTCHANGE);
 }
 
 /**
@@ -217,7 +217,7 @@ void AccContainerEventListener::SetComponentState(sal_Int64 state, bool enable )
     case AccessibleStateType::CHECKED:
         {
             pAgent->UpdateState(m_xAccessible.get());
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_BUSY, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         }
 
@@ -246,7 +246,7 @@ void AccContainerEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::FOCUSABLE:
         case AccessibleStateType::OFFSCREEN:
             pAgent->IncreaseState(m_xAccessible.get(), state);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_BUSY, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         case AccessibleStateType::SHOWING:
             // UNO !SHOWING == MSAA OFFSCREEN
@@ -273,7 +273,7 @@ void AccContainerEventListener::FireStatePropertyChange(sal_Int64 state, bool se
         case AccessibleStateType::FOCUSABLE:
         case AccessibleStateType::OFFSCREEN:
             pAgent->DecreaseState(m_xAccessible.get(), state);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_BUSY, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_BUSY);
             break;
         case AccessibleStateType::SHOWING:
             // UNO !SHOWING == MSAA OFFSCREEN
@@ -303,10 +303,10 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
         short role = GetRole();
         if(role == AccessibleRole::MENU_BAR)
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::MENU_START, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_START);
         }
         else if (role == AccessibleRole::POPUP_MENU)
-            pAgent->NotifyAccEvent(UnoMSAAEvent::MENUPOPUPSTART, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPSTART);
         //Disable the focused event on option_pane and Panel.
         //only disable option_pane for toolbar has panel to get focus
         else if (role == AccessibleRole::PANEL || role == AccessibleRole::OPTION_PANE )
@@ -316,7 +316,7 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
             if (parentRole == AccessibleRole::TOOL_BAR
                 || parentRole == AccessibleRole::SCROLL_PANE // sidebar
                 || parentRole == AccessibleRole::PANEL) // sidebar
-                pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, m_xAccessible.get());
+                pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
         }
         else if (role == AccessibleRole::COMBO_BOX )
         {
@@ -337,17 +337,17 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
                         {
                             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
                             pAgent->IncreaseState( mxChild.get(), AccessibleStateType::FOCUSED);
-                            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, mxChild.get());
+                            pAgent->NotifyAccEvent(mxChild.get(), UnoMSAAEvent::STATE_FOCUSED);
                             bSendFocusOnCombobox = false;
                         }
                     }
                 }
             }
             if (bSendFocusOnCombobox)
-                pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, m_xAccessible.get());
+                pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
         }
         else
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
@@ -356,11 +356,11 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
         // if the acc role is POPUP_MENU, UnoMSAAEvent::MENUPOPUPEND event should be sent
         if (GetRole() == AccessibleRole::MENU_BAR)
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::MENU_END, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENU_END);
         }
         else if (GetRole() == AccessibleRole::POPUP_MENU)
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::MENUPOPUPEND, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::MENUPOPUPEND);
         }
     }
 }
@@ -374,7 +374,7 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
 void AccContainerEventListener::HandleValueChangedEvent(Any, Any)
 {
     pAgent->UpdateValue(m_xAccessible.get());
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_VALUECHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 bool AccContainerEventListener::IsEditable(Reference<XAccessibleContext> const & xContext)
@@ -391,7 +391,7 @@ bool AccContainerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent, const A
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(eWinEvent, pAcc);
+            pAgent->NotifyAccEvent(pAcc, eWinEvent);
             return true;
         }
     }
@@ -404,7 +404,7 @@ void AccContainerEventListener::HandleSelectionChangedAddEvent(const Any& /*oldV
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_ADD, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_ADD);
 }
 
 void AccContainerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any& newValue)
@@ -413,7 +413,7 @@ void AccContainerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*o
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_REMOVE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_REMOVE);
 }
 
 void AccContainerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any& newValue)
@@ -422,7 +422,7 @@ void AccContainerEventListener::HandleSelectionChangedWithinEvent(const Any& /*o
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_WITHIN, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED_WITHIN);
 }
 
 void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible)
@@ -460,17 +460,17 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
 
 void AccContainerEventListener::HandlePageChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/)
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_PAGECHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_PAGECHANGED);
 }
 
 void AccContainerEventListener::HandleSectionChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/ )
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SECTION_CHANGED);
 }
 
 void AccContainerEventListener::HandleColumnChangedEvent(const Any& /*oldValue*/, const Any& /*newValue*/)
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::COLUMN_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::COLUMN_CHANGED);
 }
 
 void  AccContainerEventListener::HandleNameChangedEvent( Any name )

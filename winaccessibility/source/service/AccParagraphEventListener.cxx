@@ -94,7 +94,7 @@ void  AccParagraphEventListener::notifyEvent( const css::accessibility::Accessib
  */
 void AccParagraphEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_CARETCHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
 }
 
 /**
@@ -124,7 +124,7 @@ void AccParagraphEventListener::SetComponentState(sal_Int64 state, bool enable )
 
 void AccParagraphEventListener::HandleTextSelectionChangedEvent()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::TEXT_SELECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

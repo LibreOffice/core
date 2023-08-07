@@ -88,12 +88,12 @@ void AccEventListener::HandleNameChangedEvent(Any name)
         if (pAccDoc)
         {
             pAgent->UpdateAccName(pAccDoc);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_NAMECHANGE, pAccDoc);
+            pAgent->NotifyAccEvent(pAccDoc, UnoMSAAEvent::OBJECT_NAMECHANGE);
         }
     }
 
     pAgent->UpdateAccName(m_xAccessible.get(), name);
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_NAMECHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_NAMECHANGE);
 }
 
 /**
@@ -112,7 +112,7 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
             XAccessible* pAcc = xChild.get();
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
+            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
@@ -120,7 +120,7 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
         if (xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
+            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_REMOVED);
             pAgent->DeleteChildrenAccObj(pAcc);
             pAgent->DeleteAccObj(pAcc);
         }
@@ -132,7 +132,7 @@ void AccEventListener::HandleChildChangedEvent(com::sun::star::uno::Any oldValue
  */
 void AccEventListener::HandleDescriptionChangedEvent()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE);
 }
 
 /**
@@ -140,7 +140,7 @@ void AccEventListener::HandleDescriptionChangedEvent()
  */
 void AccEventListener::HandleBoundrectChangedEvent()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::BOUNDRECT_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::BOUNDRECT_CHANGED);
 }
 
 /**
@@ -149,7 +149,7 @@ void AccEventListener::HandleBoundrectChangedEvent()
 void AccEventListener::HandleVisibleDataChangedEvent()
 {
     pAgent->UpdateValue(m_xAccessible.get());
-    pAgent->NotifyAccEvent(UnoMSAAEvent::VISIBLE_DATA_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::VISIBLE_DATA_CHANGED);
 }
 
 /**
@@ -197,7 +197,7 @@ void AccEventListener::FireStateFocusedChange(bool enable)
     if (enable)
     {
         pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-        pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, m_xAccessible.get());
+        pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {

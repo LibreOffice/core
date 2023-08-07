@@ -93,7 +93,7 @@ void  AccComponentEventListener::notifyEvent( const css::accessibility::Accessib
 void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
 {
     pAgent->UpdateValue(m_xAccessible.get());
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_VALUECHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 /**
@@ -102,7 +102,7 @@ void AccComponentEventListener::HandleValueChangedEvent(Any, Any)
 void AccComponentEventListener::HandleActionChangedEvent()
 {
     pAgent->UpdateAction(m_xAccessible.get());
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_DEFACTIONCHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_DEFACTIONCHANGE);
 }
 
 /**
@@ -114,7 +114,7 @@ void AccComponentEventListener::HandleActionChangedEvent()
 void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
 {
     pAgent->UpdateValue(m_xAccessible.get(), newValue);
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_VALUECHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_VALUECHANGE);
 }
 
 /**
@@ -125,7 +125,7 @@ void AccComponentEventListener::HandleTextChangedEvent(Any, Any newValue)
  */
 void AccComponentEventListener::HandleCaretChangedEvent(Any, Any)
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_CARETCHANGE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::OBJECT_CARETCHANGE);
 }
 
 /**
@@ -219,25 +219,25 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
 
             if (!pAgent->IsSpecialToolbarItem(m_xAccessible.get()))
             {
-                pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_CHECKED, m_xAccessible.get());
+                pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
             }
             break;
         case AccessibleStateType::PRESSED:
             pAgent->IncreaseState(m_xAccessible.get(), state);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_PRESSED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             break;
         case AccessibleStateType::SELECTED:
             pAgent->IncreaseState(m_xAccessible.get(), state);
             break;
         case AccessibleStateType::ARMED:
             pAgent->IncreaseState(m_xAccessible.get(), state);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_ARMED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
             break;
         case AccessibleStateType::SHOWING:
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
             // UNO !SHOWING == MSAA OFFSCREEN
             pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_SHOWING, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
             // UNO !VISIBLE == MSAA INVISIBLE
@@ -259,23 +259,23 @@ void AccComponentEventListener::FireStatePropertyChange(sal_Int64 state, bool se
 
             if (!pAgent->IsSpecialToolbarItem(m_xAccessible.get()))
             {
-                pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_CHECKED, m_xAccessible.get());
+                pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_CHECKED);
             }
             break;
         case AccessibleStateType::PRESSED:
             pAgent->DecreaseState(m_xAccessible.get(), state);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_PRESSED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_PRESSED);
             break;
         case AccessibleStateType::SELECTED:
             pAgent->DecreaseState(m_xAccessible.get(), state);
             //if the state is unset, no need to send MSAA SELECTION event
-            //pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_SELECTED, m_xAccessible.get());
+            //pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_SELECTED);
             break;
         case AccessibleStateType::ARMED:
             {
                 pAgent->DecreaseState(m_xAccessible.get(), state);
                 //if the state is unset, no need to send MSAA MENU event
-                //pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_ARMED, m_xAccessible.get());
+                //pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_ARMED);
             }
             break;
         case AccessibleStateType::SHOWING:
@@ -304,7 +304,7 @@ void AccComponentEventListener::FireStateFocusedChange(bool enable)
     if(enable)
     {
         if (GetParentRole() != AccessibleRole::COMBO_BOX)
-            pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_FOCUSED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::STATE_FOCUSED);
     }
     else
     {
@@ -315,13 +315,13 @@ void AccComponentEventListener::FireStateFocusedChange(bool enable)
 
 void AccComponentEventListener::HandleSelectionChangedEventNoArgs()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 //add TEXT_SELECTION_CHANGED event
 void AccComponentEventListener::HandleTextSelectionChangedEvent()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::TEXT_SELECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TEXT_SELECTION_CHANGED);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

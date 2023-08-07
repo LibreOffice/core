@@ -64,7 +64,7 @@ void  AccMenuEventListener::notifyEvent( const css::accessibility::AccessibleEve
  */
 void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 {
-    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::SELECTION_CHANGED);
 }
 
 /**

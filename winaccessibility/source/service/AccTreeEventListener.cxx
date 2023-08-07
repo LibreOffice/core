@@ -72,7 +72,7 @@ void AccTreeEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         {
             XAccessible* pAcc = xChild.get();
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            pAgent->NotifyAccEvent(UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED, pAcc);
+            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
         }
     }
     if (oldValue >>= xChild)

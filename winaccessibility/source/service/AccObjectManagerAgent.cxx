@@ -199,7 +199,7 @@ void  AccObjectManagerAgent::UpdateState( css::accessibility::XAccessible* pXAcc
    * @param eEvent event type.
    * @return If the method is correctly processed.
    */
-bool AccObjectManagerAgent::NotifyAccEvent(UnoMSAAEvent eEvent, XAccessible* pXAcc)
+bool AccObjectManagerAgent::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent)
 {
     assert(pWinManager);
     return pWinManager->NotifyAccEvent(pXAcc, eEvent);

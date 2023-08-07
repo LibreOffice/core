@@ -77,7 +77,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
         if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
                 role == css::accessibility::AccessibleRole::MENU )
         {
-            accManagerAgent.NotifyAccEvent(UnoMSAAEvent::MENUPOPUPSTART, pAccessible);
+            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPSTART);
         }
 
         if (role == css::accessibility::AccessibleRole::FRAME ||
@@ -85,7 +85,7 @@ void AccTopWindowListener::HandleWindowOpened( css::accessibility::XAccessible* 
                 role == css::accessibility::AccessibleRole::WINDOW ||
                 role == css::accessibility::AccessibleRole::ALERT)
         {
-            accManagerAgent.NotifyAccEvent(UnoMSAAEvent::SHOW, pAccessible);
+            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::SHOW);
         }
     }
 }
@@ -213,7 +213,7 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
         if (role == css::accessibility::AccessibleRole::POPUP_MENU ||
                 role == css::accessibility::AccessibleRole::MENU)
         {
-            accManagerAgent.NotifyAccEvent(UnoMSAAEvent::MENUPOPUPEND, pAccessible);
+            accManagerAgent.NotifyAccEvent(pAccessible, UnoMSAAEvent::MENUPOPUPEND);
         }
     }
 

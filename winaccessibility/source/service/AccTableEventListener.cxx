@@ -56,22 +56,22 @@ void  AccTableEventListener::notifyEvent( const css::accessibility::AccessibleEv
 
     case AccessibleEventId::TABLE_CAPTION_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_CAPTION_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_CAPTION_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_DESCRIPTION_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_COLUMN_DESCRIPTION_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_DESCRIPTION_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_COLUMN_HEADER_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_COLUMN_HEADER_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_COLUMN_HEADER_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_ROW_HEADER_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_ROW_HEADER_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_HEADER_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_MODEL_CHANGED:
@@ -81,12 +81,12 @@ void  AccTableEventListener::notifyEvent( const css::accessibility::AccessibleEv
         }
     case AccessibleEventId::TABLE_SUMMARY_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_SUMMARY_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_SUMMARY_CHANGED);
             break;
         }
     case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
         {
-            pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_ROW_DESCRIPTION_CHANGED, m_xAccessible.get());
+            pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_ROW_DESCRIPTION_CHANGED);
             break;
         }
     default:
@@ -109,7 +109,7 @@ void AccTableEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any
         {
             XAccessible* pAcc = xChild.get();
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            pAgent->NotifyAccEvent(UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED, pAcc);
+            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED);
         }
     }
     else if (oldValue >>= xChild)
@@ -135,7 +135,7 @@ void AccTableEventListener::HandleTableModelChangeEvent(Any newValue)
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(m_xAccessible.get());
         }
-        pAgent->NotifyAccEvent(UnoMSAAEvent::TABLE_MODEL_CHANGED, m_xAccessible.get());
+        pAgent->NotifyAccEvent(m_xAccessible.get(), UnoMSAAEvent::TABLE_MODEL_CHANGED);
     }
 }
 

@@ -87,7 +87,7 @@ void AccFrameEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
 
             pAgent->InsertAccObj(pAcc, m_xAccessible.get(), systemdata->hWnd);
             pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
+            pAgent->NotifyAccEvent(pAcc, UnoMSAAEvent::CHILD_ADDED);
         }
     }
     else if (oldValue >>= xChild)
