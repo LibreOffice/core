@@ -312,8 +312,7 @@ bool AccObjectManagerAgent::IsStateManageDescendant(XAccessible* pXAcc)
 sal_Int64 AccObjectManagerAgent::Get_ToATInterface(
         sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam)
 {
-    return static_cast<sal_Int64>(pWinManager->Get_ToATInterface(
-            static_cast<HWND>(reinterpret_cast<void*>(hWnd)), lParam, wParam));
+    return pWinManager->Get_ToATInterface(hWnd, lParam, wParam);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

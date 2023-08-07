@@ -105,7 +105,7 @@ public:
 
     bool NotifyAccEvent(css::accessibility::XAccessible* pXAcc, UnoMSAAEvent eEvent);
 
-    LRESULT Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);
+    sal_Int64 Get_ToATInterface(sal_Int64 nHWnd, long lParam, WPARAM wParam);
 
     void  DecreaseState(css::accessibility::XAccessible* pXAcc, sal_Int64 nState);
     void  IncreaseState(css::accessibility::XAccessible* pXAcc, sal_Int64 nState);

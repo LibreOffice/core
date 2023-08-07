@@ -91,13 +91,14 @@ AccObjectWinManager::~AccObjectWinManager()
    * @return Com interface with event.
    */
 
-LRESULT
-AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
+sal_Int64
+AccObjectWinManager::Get_ToATInterface(sal_Int64 nHWnd, long lParam, WPARAM wParam)
 {
     IMAccessible* pRetIMAcc = nullptr;
 
     if(lParam == OBJID_CLIENT )
     {
+        HWND hWnd = reinterpret_cast<HWND>(nHWnd);
         pRetIMAcc = GetTopWindowIMAccessible(hWnd);
     }
 
@@ -105,7 +106,7 @@ AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
     {
         LRESULT result = LresultFromObject(IID_IAccessible, wParam, pRetIMAcc);
         pRetIMAcc->Release();
-        return result;
+        return static_cast<sal_Int64>(result);
     }
     return 0;
 }
