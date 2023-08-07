@@ -86,6 +86,8 @@ public:
     void SetSuffix(const OUString& rSet)   { m_sSuffix = rSet; }
 };
 
+/// SwFormatFootnoteEndAtTextEnd subclass, specific to footnotes, placed in the item set of an
+/// SwSectionFormat.
 class SW_DLLPUBLIC SwFormatFootnoteAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
@@ -96,6 +98,8 @@ public:
     virtual SwFormatFootnoteAtTextEnd* Clone( SfxItemPool *pPool = nullptr ) const override;
 };
 
+/// SwFormatFootnoteEndAtTextEnd subclass, specific to endnotes, placed in the item set of an
+/// SwSectionFormat.
 class SW_DLLPUBLIC SwFormatEndAtTextEnd final : public SwFormatFootnoteEndAtTextEnd
 {
 public:
