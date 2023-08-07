@@ -123,6 +123,7 @@ public:
     static bool IsContainer( css::accessibility::XAccessible* pAccessible );
 
     IMAccessible* GetIMAccByXAcc( css::accessibility::XAccessible* pXAcc );
+    bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
     IMAccessible* GetIAccessibleFromResID(long resID);
 
     void NotifyDestroy( css::accessibility::XAccessible* pXAcc );

@@ -258,10 +258,7 @@ bool AccObjectManagerAgent::GetIAccessibleFromXAccessible(
         XAccessible* pXAcc, IAccessible** ppXI)
 {
     assert(pWinManager);
-    *ppXI = pWinManager->GetIMAccByXAcc(pXAcc);
-    if(*ppXI)
-        return true;
-    return false;
+    return pWinManager->GetIAccessibleFromXAccessible(pXAcc, ppXI);
 }
 
 XAccessible* AccObjectManagerAgent::GetParentXAccessible( XAccessible* pXAcc )

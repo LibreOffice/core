@@ -1023,6 +1023,15 @@ IMAccessible* AccObjectWinManager::GetIMAccByXAcc(XAccessible* pXAcc)
     }
 }
 
+bool AccObjectWinManager::GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc,
+                                                        IAccessible** ppIA)
+{
+    *ppIA = GetIMAccByXAcc(pXAcc);
+    if (*ppIA)
+        return true;
+    return false;
+}
+
 /**
    * Query and get IAccessible interface by child id from list.
    * @param resID, childID.
