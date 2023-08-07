@@ -57,7 +57,7 @@ public:
     virtual void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
     virtual IMAccessible*  GetIMAccByXAcc(css::accessibility::XAccessible* pXAcc);
 
-    bool NotifyAccEvent(UnoMSAAEvent eEvent, css::accessibility::XAccessible* pXAcc = nullptr);
+    bool NotifyAccEvent(UnoMSAAEvent eEvent, css::accessibility::XAccessible* pXAcc);
 
     bool InsertChildrenAccObj(css::accessibility::XAccessible* pXAcc,
                               HWND  hWnd = nullptr);
