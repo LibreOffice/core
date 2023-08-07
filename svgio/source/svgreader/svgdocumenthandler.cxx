@@ -559,7 +559,7 @@ namespace
 
             mpTarget = const_cast< SvgNode* >(mpTarget->getParent());
 
-            if(pSvgTitleDescNode)
+            if (pSvgTitleDescNode && mpTarget)
             {
                 const OUString& aText(pSvgTitleDescNode->getText());
 
