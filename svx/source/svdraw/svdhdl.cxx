@@ -1709,7 +1709,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     }
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
-        tools::Long nAngle=nObjHdlNum==2 ? rInfo.nAngle1 : rInfo.nAngle2;
+        tools::Long nAngle=nObjHdlNum==2 ? rInfo.m_nAngle1 : rInfo.m_nAngle2;
         return nAngle==0 || nAngle==18000;
     }
     return false;

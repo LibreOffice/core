@@ -78,26 +78,26 @@ public:
     // The 5 distances are set on dragging or via SetAttr and are
     // evaluated by ImpCalcEdgeTrack. Only 0-3 longs are transported
     // via Get/SetAttr/Get/SetStyleSh though.
-    Point                       aObj1Line2;
-    Point                       aObj1Line3;
-    Point                       aObj2Line2;
-    Point                       aObj2Line3;
-    Point                       aMiddleLine;
+    Point                       m_aObj1Line2;
+    Point                       m_aObj1Line3;
+    Point                       m_aObj2Line2;
+    Point                       m_aObj2Line3;
+    Point                       m_aMiddleLine;
 
     // Following values are set by ImpCalcEdgeTrack
-    tools::Long                        nAngle1;           // exit angle at Obj1
-    tools::Long                        nAngle2;           // exit angle at Obj2
-    sal_uInt16                  nObj1Lines;        // 1..3
-    sal_uInt16                  nObj2Lines;        // 1..3
-    sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwise point number of the beginning of the line
+    tools::Long                        m_nAngle1;           // exit angle at Obj1
+    tools::Long                        m_nAngle2;           // exit angle at Obj2
+    sal_uInt16                  m_nObj1Lines;        // 1..3
+    sal_uInt16                  m_nObj2Lines;        // 1..3
+    sal_uInt16                  m_nMiddleLine;       // 0xFFFF=none, otherwise point number of the beginning of the line
 
 public:
     SdrEdgeInfoRec()
-    :   nAngle1(0),
-        nAngle2(0),
-        nObj1Lines(0),
-        nObj2Lines(0),
-        nMiddleLine(0xFFFF)
+    :   m_nAngle1(0),
+        m_nAngle2(0),
+        m_nObj1Lines(0),
+        m_nObj2Lines(0),
+        m_nMiddleLine(0xFFFF)
     {}
 
     Point& ImpGetLineOffsetPoint(SdrEdgeLineCode eLineCode);
