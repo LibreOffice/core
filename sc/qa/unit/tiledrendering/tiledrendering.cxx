@@ -1079,6 +1079,9 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testCommentCallback)
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
+    // FIXME: Hack because previous tests do not destroy ScDocument(with annotations) on exit (?).
+    ScPostIt::mnLastPostItId = 1;
+
     {
         ScModelObj* pModelObj = createDoc("small.ods");
         ViewCallback aView1;
