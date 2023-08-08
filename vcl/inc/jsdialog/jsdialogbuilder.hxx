@@ -620,6 +620,8 @@ public:
     virtual void set_entry_text(const OUString& rText) override;
     virtual void set_active(int pos) override;
     virtual bool changed_by_direct_pick() const override;
+
+    void render_entry(int pos);
 };
 
 class JSNotebook final : public JSWidget<SalInstanceNotebook, ::TabControl>
