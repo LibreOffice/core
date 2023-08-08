@@ -3775,22 +3775,22 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
     {
         // Underlying algorithm
         // We try to find the optimal height for the column.
-        // nMinimum starts with the passed minimum height and is then remembered
-        // as the maximum height on which column content still juts out of a
+        // nMinimum starts with the passed minimum height and is then maintained
+        // as the maximum height on which column content did not fit into a
         // column.
-        // nMaximum starts with LONG_MAX and is then remembered as the minimum
-        // width on which the content fitted.
+        // nMaximum starts with LONG_MAX and is then maintained as the minimum
+        // height on which the content fit into the columns.
         // In column based sections nMaximum starts at the maximum value which
-        // the surrounding defines, this can certainly be a value on which
-        // content still juts out.
+        // the environment defines, this can certainly be a value on which
+        // content doesn't fit.
         // The columns are formatted. If content still juts out, nMinimum is
-        // adjusted accordingly, then we grow, at least by uMinDiff but not
+        // adjusted accordingly, then we grow, at least by nMinDiff but not
         // over a certain nMaximum. If no content juts out but there is still
-        // some space left in the column, shrinking is done accordingly, at
-        // least by nMindIff but not below the nMinimum.
+        // some space left in a column, shrinking is done accordingly, at
+        // least by nMinDiff but not below the nMinimum.
         // Cancel as soon as no content juts out and the difference from minimum
-        // to maximum is less than MinDiff or the maximum which was defined by
-        // the surrounding is reached even if some content still juts out.
+        // to maximum is less than nMinDiff or the maximum which was defined by
+        // the environment is reached and some content still doesn't fit.
 
         // Criticism of this implementation
         // 1. Theoretically situations are possible in which the content fits in
@@ -3799,7 +3799,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // minimum and maximum which probably are never triggered.
         // 2. We use the same nMinDiff for shrinking and growing, but nMinDiff
         // is more or less the smallest first line height and doesn't seem ideal
-        // as minimum value.
+        // as minimum value for shrinking.
 
         tools::Long nMinimum = nMinHeight;
         tools::Long nMaximum;
@@ -3876,7 +3876,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 pImp->CheckWaitCursor();
 
             setFrameAreaSizeValid(true);
-            //First format the column as this will relieve the stack a bit.
+            //First format the column, before using lots of stack space here.
             //Also set width and height of the column (if they are wrong)
             //while we are at it.
             SwLayoutFrame *pCol = static_cast<SwLayoutFrame*>(Lower());
@@ -3909,7 +3909,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 pCol = static_cast<SwLayoutFrame*>(pCol->GetNext());
             }
             pCol = static_cast<SwLayoutFrame*>(Lower());
-            // OD 28.03.2003 #108446# - initialize local variable
+
             SwTwips nDiff = 0;
             SwTwips nMaxFree = 0;
             SwTwips nAllFree = LONG_MAX;
@@ -3991,13 +3991,13 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         else if( nDiff < nMinDiff )
                             nDiff = nMinDiff - nPrtHeight + 1;
                     }
-                    // nMaximum has a size which fits the content or the
-                    // requested value from the surrounding therefore we don't
-                    // need to exceed this value.
+                    // nMaximum is a size in which the content fit or the
+                    // requested value from the environment, therefore we don't
+                    // should not exceed this value.
                     if( nDiff + nPrtHeight > nMaximum )
                         nDiff = nMaximum - nPrtHeight;
                 }
-                else if( nMaximum > nMinimum ) // We fit, do we still have some margin?
+                else if (nMaximum > nMinimum) // We fit, do we still have some opportunity to shrink?
                 {
                     tools::Long nPrtHeight = aRectFnSet.GetHeight(getFramePrintArea());
                     if ( nMaximum < nPrtHeight )
@@ -4005,11 +4005,11 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // height and shrink back to it, but will this ever
                         // happen?
                     else
-                    {   // We have a new maximum, a size which fits for the content.
+                    {   // We have a new maximum, a size where the content fits.
                         nMaximum = nPrtHeight;
-                        // If the margin in the column is bigger than nMinDiff
-                        // and we therefore drop under the minimum, we deflate
-                        // a bit.
+                        // If the extra space in the column is bigger than
+                        // nMinDiff, we shrink a bit, unless size would drop
+                        // below the minimum.
                         if ( !bNoBalance &&
                              // #i23129# - <nMinDiff> can be
                              // big, because of an object at the beginning of
@@ -4068,7 +4068,7 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         }
                     }
                     //Invalidate suitable to nicely balance the Frames.
-                    //- Every first one after the second column gets a
+                    //- Every first lower starting from the second column gets a
                     //  InvalidatePos();
                     pCol = static_cast<SwLayoutFrame*>(Lower()->GetNext());
                     while ( pCol )
