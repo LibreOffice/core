@@ -1842,7 +1842,12 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
                 {
                     assert(static_cast<SwTabFrame*>(pFrame)->IsFollow());
                     static_cast<SwTabFrame*>(pFrame)->m_bLockBackMove = false;
-                    pFrame->InvalidatePos();
+                    // tdf#150606 encourage it to move back in FormatLayout()
+                    if (static_cast<SwTabFrame*>(pFrame)->m_bWantBackMove)
+                    {
+                        static_cast<SwTabFrame*>(pFrame)->m_bWantBackMove = false;
+                        pFrame->InvalidatePos();
+                    }
                 }
             }
 

@@ -79,6 +79,7 @@ SwTabFrame::SwTabFrame( SwTable &rTab, SwFrame* pSib )
     , m_bCalcLowers(false)
     , m_bLowersFormatted(false)
     , m_bLockBackMove(false)
+    , m_bWantBackMove(false)
     , m_bResizeHTMLTable(false)
     , m_bONECalcLowers(false)
     , m_bHasFollowFlowLine(false)
@@ -124,6 +125,7 @@ SwTabFrame::SwTabFrame( SwTabFrame &rTab )
     , m_bCalcLowers(false)
     , m_bLowersFormatted(false)
     , m_bLockBackMove(false)
+    , m_bWantBackMove(false)
     , m_bResizeHTMLTable(false)
     , m_bONECalcLowers(false)
     , m_bHasFollowFlowLine(false)
@@ -3805,9 +3807,17 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             }
             else if (!m_bLockBackMove)
                 bMoveAnyway = true;
+            else
+            {
+                m_bWantBackMove = true;
+            }
         }
         else if (!m_bLockBackMove)
             bMoveAnyway = true;
+        else
+        {
+            m_bWantBackMove = true;
+        }
 
         if ( bMoveAnyway )
         {
@@ -3820,7 +3830,7 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             // This frame fits into pNewUpper in case it has no space, but this
             // frame is empty.
             bFits = nSpace >= 0;
-        if (!m_bLockBackMove && bFits)
+        if (bFits)
         {
             // #i26945# - check, if follow flow line
             // contains frame, which are moved forward due to its object
@@ -3839,7 +3849,17 @@ bool SwTabFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat )
             // 'return nHeight <= nSpace' to 'return nTmpHeight < nSpace'.
             // This obviously results in problems with table frames in
             // sections. Remember: Every twip is sacred.
-            return nTmpHeight <= nSpace;
+            if (nTmpHeight <= nSpace)
+            {
+                if (m_bLockBackMove)
+                {
+                    m_bWantBackMove = true;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
     }
     return false;
