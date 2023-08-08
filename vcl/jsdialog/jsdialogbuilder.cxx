@@ -7,10 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <jsdialog/jsdialogbuilder.hxx>
-#include <sal/log.hxx>
+#include <boost/property_tree/json_parser.hpp>
+
+#include <comphelper/base64.hxx>
 #include <comphelper/lok.hxx>
+#include <cppuhelper/supportsservice.hxx>
+
+#include <jsdialog/jsdialogbuilder.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <memory>
+#include <messagedialog.hxx>
+#include <o3tl/deleter.hxx>
+#include <sal/log.hxx>
+
+#include <tools/json_writer.hxx>
+#include <tools/stream.hxx>
+
 #include <utility>
+
+#include <vcl/cvtgrf.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/toolkit/button.hxx>
@@ -18,15 +34,8 @@
 #include <vcl/toolkit/dialog.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
+
 #include <verticaltabctrl.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <messagedialog.hxx>
-#include <tools/json_writer.hxx>
-#include <o3tl/deleter.hxx>
-#include <memory>
-#include <boost/property_tree/json_parser.hpp>
-#include <vcl/jsdialog/executor.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <wizdlg.hxx>
 
 static std::map<std::string, vcl::Window*>& GetLOKPopupsMap()
@@ -96,17 +105,6 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
     }
 }
 
-namespace
-{
-OUString extractActionType(const jsdialog::ActionDataMap& rData)
-{
-    auto it = rData.find(ACTION_TYPE);
-    if (it != rData.end())
-        return it->second;
-    return "";
-}
-};
-
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
                                      std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
@@ -120,8 +118,8 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
     {
         if (it->m_eType == eType && it->m_pWindow == pWindow)
         {
-            if (it->m_pData && pData
-                && extractActionType(*it->m_pData) != extractActionType(*pData))
+            // actions should be always sent, eg. renrering of custom entries in combobox
+            if (eType == jsdialog::MessageType::Action)
             {
                 it++;
                 continue;
@@ -1682,6 +1680,32 @@ void JSComboBox::set_active_id(const OUString& rStr)
 }
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
+
+void JSComboBox::render_entry(int pos)
+{
+    ScopedVclPtrInstance<VirtualDevice> pDevice;
+    Size aRenderSize = signal_custom_get_size(*pDevice);
+    pDevice->SetOutputSize(aRenderSize);
+
+    signal_custom_render(*pDevice, tools::Rectangle(Point(0, 0), aRenderSize), false, get_id(pos));
+
+    BitmapEx aImage = pDevice->GetBitmapEx(Point(0, 0), aRenderSize);
+
+    SvMemoryStream aOStm(65535, 65535);
+    if (GraphicConverter::Export(aOStm, aImage, ConvertDataFormat::PNG) == ERRCODE_NONE)
+    {
+        css::uno::Sequence<sal_Int8> aSeq(static_cast<sal_Int8 const*>(aOStm.GetData()),
+                                          aOStm.Tell());
+        OUStringBuffer aBuffer("data:image/png;base64,");
+        ::comphelper::Base64::encode(aBuffer, aSeq);
+
+        std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+        (*pMap)[ACTION_TYPE] = "rendered_combobox_entry";
+        (*pMap)["pos"] = OUString::number(pos);
+        (*pMap)["image"] = aBuffer;
+        sendAction(std::move(pMap));
+    }
+}
 
 JSNotebook::JSNotebook(JSDialogSender* pSender, ::TabControl* pControl,
                        SalInstanceBuilder* pBuilder, bool bTakeOwnership)

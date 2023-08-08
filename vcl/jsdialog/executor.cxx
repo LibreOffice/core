@@ -129,6 +129,13 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     LOKTrigger::trigger_changed(*pCombobox);
                     return true;
                 }
+                else if (sAction == "render_entry")
+                {
+                    auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
+                    if (pJSCombobox)
+                        pJSCombobox->render_entry(o3tl::toInt32(rData["data"]));
+                    return true;
+                }
             }
         }
         else if (sControlType == "pushbutton")
