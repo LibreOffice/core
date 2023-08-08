@@ -1180,6 +1180,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf152014)
     CPPUNIT_ASSERT_EQUAL(OUString("#N/A"), pDoc2->GetString(ScAddress(0, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf156286)
+{
+    createScDoc("tdf156286.ods");
+    ScDocument* pDoc = getScDoc();
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // Without the fix in place, this test would have crash here
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(12, 2, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("xxxxxxxxxxxx"), pDoc->GetString(ScAddress(12, 2, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf126926)
 {
     createScDoc();
