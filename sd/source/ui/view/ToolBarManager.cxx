@@ -1129,7 +1129,9 @@ void ToolBarRules::SubShellAdded (
             break;
 
         case ToolbarId::Draw_Table_Toolbox:
-            mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTableObjectBar);
+            // tdf#142489 Do not show the table toolbar when the Notebookbar UI is active
+            if (!sfx2::SfxNotebookBar::IsActive(true))
+                mpToolBarManager->AddToolBar(eGroup, ToolBarManager::msTableObjectBar);
             break;
 
         default:
