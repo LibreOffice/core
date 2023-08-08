@@ -17,9 +17,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# set tmpdir to some mixed case path, suitable for native tools
-gb_TMPDIR:=$(if $(TMPDIR),$(shell cygpath -m $(TMPDIR)),$(shell cygpath -m /tmp))
-
 # please make generic Windows modifications to windows.mk
 include $(GBUILDDIR)/platform/windows.mk
 

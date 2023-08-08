@@ -17,7 +17,7 @@ gb_Helper_get_rcfile = $(1).ini
 
 gb_Helper_LIBRARY_PATH_VAR := PATH
 
-gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
+gb_MKTEMP := mktemp --tmpdir=$(TMPDIR) gbuild.XXXXXX
 
 # define _WIN32_WINNT and WINVER will be derived from it in sdkddkver.h
 # current baseline is Windows 7 (NT 6.1)
