@@ -510,7 +510,7 @@ static bool IsRunningUnitTest() { return getenv("LO_TESTNAME") != nullptr; }
 
 void FontNameBox::EnableWYSIWYG(bool bEnable)
 {
-    if (comphelper::LibreOfficeKit::isActive() || IsRunningUnitTest())
+    if (IsRunningUnitTest())
         return;
     if (mbWYSIWYG == bEnable)
         return;
