@@ -206,9 +206,6 @@ public:
     }
 };
 
-#define DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(TestName, filename)                                      \
-    DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, HtmlExportTest)
-
 /// HTML export of the sw doc model tests.
 class SwHtmlDomExportTest : public SwModelTestBase, public HtmlTestTools
 {
@@ -319,20 +316,28 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo62336)
     save("HTML (StarWriter)");
 }
 
-DECLARE_HTMLEXPORT_ROUNDTRIP_TEST(testFdo86857, "fdo86857.html")
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFdo86857)
 {
-    // problem was that background color on page style was not exported
-    uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
-    uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("HTML"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xStyle, "BackColor"));
-    // check that table background color works, which still uses RES_BACKGROUND
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
-                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
-    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), getProperty<Color>(xCell, "BackColor"));
+    auto verify = [this]() {
+        // problem was that background color on page style was not exported
+        uno::Reference<container::XNameAccess> xPageStyles(getStyles("PageStyles"));
+        uno::Reference<beans::XPropertySet> xStyle(xPageStyles->getByName("HTML"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xStyle, "BackColor"));
+        // check that table background color works, which still uses RES_BACKGROUND
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                        uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(Color(0x66ffff), getProperty<Color>(xCell, "BackColor"));
+    };
+
+    setImportFilterName(mpFilter);
+    createSwDoc("fdo86857.html");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testCharacterBorder)
