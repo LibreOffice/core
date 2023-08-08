@@ -2327,7 +2327,9 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // force save of all currently open documents
         // The called method returns an info, if and how this
         // timer must be restarted.
-        AutoRecovery::ETimerType eSuggestedTimer = implts_saveDocs(true/*bAllowUserIdleLoop*/, false);
+        const bool bIsAlreadyIdle(m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE);
+        AutoRecovery::ETimerType eSuggestedTimer
+            = implts_saveDocs(/*AllowUserIdleLoop=*/!bIsAlreadyIdle, /*RemoveLockFiles=*/false);
 
         // If timer is not used for "short callbacks" (means polling
         // for special states) ... reset the handle state of all
