@@ -996,6 +996,20 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyGrowFromBottom)
     // frame on page 1 even when it would fit, and this lead to a crash on export later.
     CPPUNIT_ASSERT(!pFly->GetFollow());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyIntoTable)
+{
+    // Given a document with a floating table, then an inline table on the next page:
+    createSwDoc("floattable-then-table.doc");
+
+    // When inserting a page break:
+    // Then make sure the layout doesn't crash:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->InsertPageBreak();
+    // Without the accompanying fix in place, this test would have crashed, we tried to insert the
+    // second part of a floating table into a table on the next page, not before that table.
+    calcLayout();
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
