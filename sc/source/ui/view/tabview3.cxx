@@ -1779,33 +1779,34 @@ void ScTabView::SelectNextTab( short nDir, bool bExtendSelection )
 
     ScDocument& rDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    if (nDir<0)
+    SCTAB nNextTab = nTab;
+    if (nDir < 0)
     {
-        if (!nTab)
-            return;
-        --nTab;
-        while (!rDoc.IsVisible(nTab))
+        do
         {
-            if (!nTab)
-                return;
-            --nTab;
-        }
+            --nNextTab;
+            if (nNextTab < 0)
+                nNextTab = rDoc.GetTableCount();
+            if (rDoc.IsVisible(nNextTab))
+                break;
+        } while (nNextTab != nTab);
     }
-    else
+    if (nDir > 0)
     {
         SCTAB nCount = rDoc.GetTableCount();
-        ++nTab;
-        if (nTab >= nCount)
-            return;
-        while (!rDoc.IsVisible(nTab))
+        do
         {
-            ++nTab;
-            if (nTab >= nCount)
-                return;
-        }
+            ++nNextTab;
+            if (nNextTab >= nCount)
+                nNextTab = 0;
+            if (rDoc.IsVisible(nNextTab))
+                break;
+        } while (nNextTab != nTab);
     }
+    if (nNextTab == nTab)
+        return;
 
-    SetTabNo( nTab, false, bExtendSelection );
+    SetTabNo(nNextTab, false, bExtendSelection);
     PaintExtras();
 }
 
