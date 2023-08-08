@@ -370,7 +370,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     {
         sal_Int16 nType(0);
         rIStm.ReadInt16(nType);
-        sal_Int32 nActBegin = rIStm.Tell();
+        sal_uInt64 nActBegin = rIStm.Tell();
         sal_Int32 nActionSize(0);
         rIStm.ReadInt32(nActionSize);
 
