@@ -974,48 +974,38 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop
     if (!pvarChild)
         return E_INVALIDARG;
 
-    try {
-        long x, y, w, h;
-        VARIANT varSelf;
-        VariantInit(&varSelf);
-        varSelf.vt = VT_I4;
-        varSelf.lVal = CHILDID_SELF;
-        accLocation(&x,&y,&w,&h,varSelf);
-        if( (x < xLeft && (x + w) >xLeft) && (y < yTop && (y + h) >yTop) )
+    try
+    {
+        pvarChild->vt = VT_EMPTY;
+
+        Reference<XAccessibleContext> xContext = GetContextByXAcc(m_xAccessible.get());
+        Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
+        if (!xComponent.is())
+            return S_FALSE;
+
+        // convert from screen to object-local coordinates
+        css::awt::Point aTopLeft = xComponent->getLocationOnScreen();
+        css::awt::Point aPoint(xLeft - aTopLeft.X, yTop - aTopLeft.Y);
+
+        Reference<XAccessible> xAccAtPoint = xComponent->getAccessibleAtPoint(aPoint);
+        if (!xAccAtPoint.is())
+            return S_FALSE;
+
+        IAccessible* pRet = nullptr;
+        bool bHaveIAccessible = get_IAccessibleFromXAccessible(xAccAtPoint.get(), &pRet);
+        if (!bHaveIAccessible)
         {
-            sal_Int64 i, nCount;
-            pvarChild->vt = VT_EMPTY;
-            Reference< XAccessibleContext > pRContext = GetContextByXAcc(m_xAccessible.get());
-            nCount = pRContext->getAccessibleChildCount();
-            if(nCount > 256)
-                return E_FAIL;
-            IMAccessible* child = nullptr;
-            for( i = 0; i<nCount; i++)
-            {
-
-                child = GetChildInterface(i + 1);
-                if(child && child->accHitTest(xLeft,yTop,pvarChild) == S_OK)
-                    break;
-            }
-
-            if(pvarChild->vt == VT_DISPATCH)
-                return S_OK;
-
-            if( i < nCount)
-            {
-                pvarChild->vt = VT_DISPATCH;
-                pvarChild->pdispVal = child;
-                child->AddRef();
-            }
-            else
-            {
-                pvarChild->vt = VT_I4;
-                pvarChild->lVal = CHILDID_SELF;
-            }
-            return S_OK;
+            g_pAccObjectManager->InsertAccObj(xAccAtPoint.get(), m_xAccessible.get(), m_hwnd);
+            bHaveIAccessible = get_IAccessibleFromXAccessible(xAccAtPoint.get(), &pRet);
         }
-        return S_FALSE;
+        if (!bHaveIAccessible)
+            return S_FALSE;
 
+        pvarChild->vt = VT_DISPATCH;
+        pvarChild->pdispVal = pRet;
+        pRet->AddRef();
+
+        return S_OK;
     } catch(...) { return E_FAIL; }
 }
 
