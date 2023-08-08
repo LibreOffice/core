@@ -417,7 +417,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelectio
    * @param offset Variant to accept offset.
    * @return Result.
 */
-COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, long * offset)
+COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType coordType, long * offset)
 {
     SolarMutexGuard g;
 
@@ -432,6 +432,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y
     css::awt::Point point;
     point.X = x;
     point.Y = y;
+
+    if (coordType == IA2_COORDTYPE_SCREEN_RELATIVE)
+    {
+        // convert from screen to local coordinates
+        Reference<XAccessibleContext> xContext = pUNOInterface->getAccessibleContext();
+        Reference<XAccessibleComponent> xComponent(xContext, UNO_QUERY);
+        if (!xComponent.is())
+            return S_FALSE;
+
+        css::awt::Point aObjectPos = xComponent->getLocationOnScreen();
+        point.X -= aObjectPos.X;
+        point.Y -= aObjectPos.Y;
+    }
+
     *offset = GetXInterface()->getIndexAtPoint(point);
     return S_OK;
 
