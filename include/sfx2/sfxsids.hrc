@@ -375,6 +375,7 @@ class SvxZoomItem;
 #define SID_STYLE_APPLY                     TypedWhichId<SfxStringItem>(SID_SFX_START + 552)
 #define SID_STYLE_FAMILY                    TypedWhichId<SfxUInt16Item>(SID_SFX_START + 553)
 #define SID_STYLE_FAMILYNAME                TypedWhichId<SfxStringItem>(SID_SFX_START + 566)
+#define SID_STYLE_FONT                      TypedWhichId<SfxStringItem>(SID_SFX_START + 558)
 #define SID_STYLE_WATERCAN                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 554)
 #define SID_STYLE_NEW_BY_EXAMPLE            TypedWhichId<SfxStringItem>(SID_SFX_START + 555)
 #define SID_STYLE_UPDATE_BY_EXAMPLE         TypedWhichId<SfxStringItem>(SID_SFX_START + 556)

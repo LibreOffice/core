@@ -28,6 +28,7 @@ enum class IssueObject
     TEXT,
     DOCUMENT_TITLE,
     DOCUMENT_BACKGROUND,
+    LANGUAGE_NOT_SET,
     FOOTENDNOTE,
     TEXTFRAME,
 };

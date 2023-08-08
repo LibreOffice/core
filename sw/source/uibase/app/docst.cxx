@@ -360,6 +360,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
             [[fallthrough]];
 
         case SID_STYLE_EDIT:
+        case SID_STYLE_FONT:
         case SID_STYLE_DELETE:
         case SID_STYLE_HIDE:
         case SID_STYLE_SHOW:
@@ -492,7 +493,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                 switch(nSlot)
                 {
                     case SID_STYLE_EDIT:
-                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, {}, pActShell);
+                    case SID_STYLE_FONT:
+                        Edit(rReq.GetFrameWeld(), aParam, {}, nFamily, nMask, false, (nSlot == SID_STYLE_FONT) ? "font" : OUString(), pActShell);
                         break;
                     case SID_STYLE_DELETE:
                         Delete(aParam, nFamily);

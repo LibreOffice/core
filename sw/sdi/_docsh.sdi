@@ -42,6 +42,12 @@ interface BaseTextDocument
         StateMethod = StateStyleSheet ;
     ]
 
+    SID_STYLE_FONT
+    [
+        ExecMethod = ExecStyleSheet ;
+        StateMethod = StateStyleSheet ;
+    ]
+
     SID_STYLE_DELETE
     [
         ExecMethod = ExecStyleSheet ;

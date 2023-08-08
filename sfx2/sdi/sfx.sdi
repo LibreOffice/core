@@ -1103,6 +1103,24 @@ SfxVoidItem EditStyle SID_STYLE_EDIT
 ]
 
 
+SfxVoidItem EditStyleFont SID_STYLE_FONT
+(SfxStringItem Param SID_STYLE_FONT,SfxUInt16Item Family SID_STYLE_FAMILY)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Template;
+]
+
+
 SfxVoidItem HideStyle SID_STYLE_HIDE
 (SfxStringItem Param SID_STYLE_HIDE,SfxUInt16Item Family SID_STYLE_FAMILY)
 [

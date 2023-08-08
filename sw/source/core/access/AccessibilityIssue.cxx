@@ -51,7 +51,8 @@ bool AccessibilityIssue::canGotoIssue() const
 {
     if (m_pDoc && m_eIssueObject != IssueObject::UNKNOWN
         && m_eIssueObject != IssueObject::DOCUMENT_TITLE
-        && m_eIssueObject != IssueObject::DOCUMENT_BACKGROUND)
+        && m_eIssueObject != IssueObject::DOCUMENT_BACKGROUND
+        && m_eIssueObject != IssueObject::LANGUAGE_NOT_SET)
         return true;
     return false;
 }
@@ -149,7 +150,8 @@ bool AccessibilityIssue::canQuickFixIssue() const
     return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
            || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM
            || m_eIssueObject == IssueObject::DOCUMENT_TITLE
-           || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND;
+           || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND
+           || m_eIssueObject == IssueObject::LANGUAGE_NOT_SET;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -253,6 +255,19 @@ void AccessibilityIssue::quickFixIssue() const
 
             comphelper::dispatchCommand(".uno:PageAreaDialog",
                                         xModel->getCurrentController()->getFrame(), {});
+        }
+        break;
+        case IssueObject::LANGUAGE_NOT_SET:
+        {
+            uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
+                                                 uno::UNO_QUERY_THROW);
+
+            uno::Sequence<beans::PropertyValue> aArgs{
+                comphelper::makePropertyValue("Param", m_sObjectID),
+                comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+            };
+            comphelper::dispatchCommand(".uno:EditStyleFont",
+                                        xModel->getCurrentController()->getFrame(), aArgs);
         }
         break;
         default:
