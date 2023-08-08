@@ -240,13 +240,17 @@ void SwAnnotationWin::DrawForPage(OutputDevice* pDev, const Point& rPt)
 }
 
 void SwAnnotationWin::SetPosSizePixelRect(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                       const SwRect& aAnchorRect, const tools::Long aPageBorder)
+                                          const tools::Long aPageBorder)
 {
     mPosSize = tools::Rectangle(Point(nX,nY),Size(nWidth,nHeight));
+    mPageBorder = aPageBorder;
+}
+
+void SwAnnotationWin::SetAnchorRect(const SwRect& aAnchorRect)
+{
     if (!mAnchorRect.IsEmpty() && mAnchorRect != aAnchorRect)
         mbAnchorRectChanged = true;
     mAnchorRect = aAnchorRect;
-    mPageBorder = aPageBorder;
 }
 
 void SwAnnotationWin::SetSize( const Size& rNewSize )
@@ -534,105 +538,106 @@ void SwAnnotationWin::Rescale()
 
 void SwAnnotationWin::SetPosAndSize()
 {
-    bool bChange = false;
-
-    if (GetSizePixel() != mPosSize.GetSize())
+    const bool bShowNotes = mrMgr.ShowNotes();
+    if (bShowNotes)
     {
-        bChange = true;
-        SetSizePixel(mPosSize.GetSize());
+        bool bChange = false;
 
-        DoResize();
-    }
-
-    if (GetPosPixel().X() != mPosSize.Left() || (std::abs(GetPosPixel().Y() - mPosSize.Top()) > 5) )
-    {
-        bChange = true;
-        SetPosPixel(mPosSize.TopLeft());
-
-        Point aLineStart;
-        Point aLineEnd ;
-        switch ( meSidebarPosition )
+        if (GetSizePixel() != mPosSize.GetSize())
         {
-            case sw::sidebarwindows::SidebarPosition::LEFT:
-            {
-                aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
-                aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
-            }
-            break;
-            case sw::sidebarwindows::SidebarPosition::RIGHT:
-            {
-                aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
-                aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
-            }
-            break;
-            default:
-                OSL_FAIL( "<SwAnnotationWin::SetPosAndSize()> - unexpected position of sidebar" );
-            break;
+            bChange = true;
+            SetSizePixel(mPosSize.GetSize());
+
+            DoResize();
         }
 
-        // LOK has map mode disabled, and we still want to perform pixel ->
-        // twips conversion for the size of the line above the note.
-        if (comphelper::LibreOfficeKit::isActive() && !EditWin().IsMapModeEnabled())
+        if (GetPosPixel().X() != mPosSize.Left() || (std::abs(GetPosPixel().Y() - mPosSize.Top()) > 5) )
         {
-            EditWin().EnableMapMode();
-            Size aSize(aLineEnd.getX() - aLineStart.getX(), aLineEnd.getY() - aLineStart.getY());
-            aSize = EditWin().PixelToLogic(aSize);
-            aLineEnd = aLineStart;
-            aLineEnd.Move(aSize.getWidth(), aSize.getHeight());
-            EditWin().EnableMapMode(false);
-        }
+            bChange = true;
+            SetPosPixel(mPosSize.TopLeft());
 
-        if (mpAnchor)
-        {
-            mpAnchor->SetAllPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
-                                      basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
-                                      basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
-                                      basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
-                                      basegfx::B2DPoint( mPageBorder ,mAnchorRect.Bottom()+2*15),
-                                      basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
-                                      basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
-        }
-        else
-        {
-            mpAnchor = AnchorOverlayObject::CreateAnchorOverlayObject( mrView,
-                                                                       mAnchorRect,
-                                                                       mPageBorder,
-                                                                       aLineStart,
-                                                                       aLineEnd,
-                                                                       mColorAnchor );
-            if ( mpAnchor )
+            Point aLineStart;
+            Point aLineEnd ;
+            switch ( meSidebarPosition )
             {
-                mpAnchor->setVisible(true);
-                mpAnchor->SetAnchorState(AnchorState::Tri);
-                if (HasChildPathFocus())
+                case sw::sidebarwindows::SidebarPosition::LEFT:
                 {
-                    mpAnchor->setLineSolid(true);
+                    aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+                    aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+                }
+                break;
+                case sw::sidebarwindows::SidebarPosition::RIGHT:
+                {
+                    aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+                    aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+                }
+                break;
+                default:
+                    OSL_FAIL( "<SwAnnotationWin::SetPosAndSize()> - unexpected position of sidebar" );
+                break;
+            }
+
+            // LOK has map mode disabled, and we still want to perform pixel ->
+            // twips conversion for the size of the line above the note.
+            if (comphelper::LibreOfficeKit::isActive() && !EditWin().IsMapModeEnabled())
+            {
+                EditWin().EnableMapMode();
+                Size aSize(aLineEnd.getX() - aLineStart.getX(), aLineEnd.getY() - aLineStart.getY());
+                aSize = EditWin().PixelToLogic(aSize);
+                aLineEnd = aLineStart;
+                aLineEnd.Move(aSize.getWidth(), aSize.getHeight());
+                EditWin().EnableMapMode(false);
+            }
+
+            if (mpAnchor)
+            {
+                mpAnchor->SetAllPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
+                                          basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
+                                          basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
+                                          basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
+                                          basegfx::B2DPoint( mPageBorder ,mAnchorRect.Bottom()+2*15),
+                                          basegfx::B2DPoint( aLineStart.X(),aLineStart.Y()),
+                                          basegfx::B2DPoint( aLineEnd.X(),aLineEnd.Y()));
+            }
+            else
+            {
+                mpAnchor = AnchorOverlayObject::CreateAnchorOverlayObject( mrView,
+                                                                           mAnchorRect,
+                                                                           mPageBorder,
+                                                                           aLineStart,
+                                                                           aLineEnd,
+                                                                           mColorAnchor );
+                if ( mpAnchor )
+                {
+                    mpAnchor->setVisible(true);
+                    mpAnchor->SetAnchorState(AnchorState::Tri);
+                    if (HasChildPathFocus())
+                    {
+                        mpAnchor->setLineSolid(true);
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        if ( mpAnchor &&
-             ( mpAnchor->getBasePosition() != basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom()-5*15) ) )
+        else
         {
-            mpAnchor->SetTriPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
-                                      basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
-                                      basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
-                                      basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
-                                      basegfx::B2DPoint( mPageBorder , mAnchorRect.Bottom()+2*15));
+            if ( mpAnchor &&
+                 ( mpAnchor->getBasePosition() != basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom()-5*15) ) )
+            {
+                mpAnchor->SetTriPosition( basegfx::B2DPoint( mAnchorRect.Left() , mAnchorRect.Bottom() - 5* 15),
+                                          basegfx::B2DPoint( mAnchorRect.Left()-5*15 , mAnchorRect.Bottom()+5*15),
+                                          basegfx::B2DPoint( mAnchorRect.Left()+5*15 , mAnchorRect.Bottom()+5*15),
+                                          basegfx::B2DPoint( mAnchorRect.Left(), mAnchorRect.Bottom()+2*15),
+                                          basegfx::B2DPoint( mPageBorder , mAnchorRect.Bottom()+2*15));
+            }
         }
-    }
 
-    if (mpShadow && bChange)
-    {
-        Point aStart = EditWin().PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
-        Point aEnd = EditWin().PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
-        mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
-    }
+        if (mpShadow && bChange)
+        {
+            Point aStart = EditWin().PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
+            Point aEnd = EditWin().PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
+            mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
+        }
 
-    if (mrMgr.ShowNotes())
-    {
         if (IsFollow() && !HasChildPathFocus())
         {
             // #i111964#
@@ -656,7 +661,6 @@ void SwAnnotationWin::SetPosAndSize()
             }
         }
     }
-
 
     // text range overlay
     maAnnotationTextRanges.clear();
@@ -717,7 +721,7 @@ void SwAnnotationWin::SetPosAndSize()
         }
     }
 
-    if (mrMgr.ShowNotes() && !maAnnotationTextRanges.empty())
+    if (bShowNotes && !maAnnotationTextRanges.empty())
     {
         if ( mpTextRangeOverlay != nullptr )
         {

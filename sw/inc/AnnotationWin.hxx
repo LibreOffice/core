@@ -90,8 +90,8 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
                                   tools::Long nY,
                                   tools::Long nWidth,
                                   tools::Long nHeight,
-                                  const SwRect& aAnchorRect,
                                   const tools::Long PageBorder);
+        void SetAnchorRect(const SwRect& aAnchorRect);
         void SetPosAndSize();
         void TranslateTopPosition(const tools::Long aAmount);
         void CheckMetaText();

@@ -707,7 +707,11 @@ void SwPostItMgr::PreparePageContainer()
 
 void SwPostItMgr::LayoutPostIts()
 {
-    bool bEnableMapMode = comphelper::LibreOfficeKit::isActive() && !mpEditWin->IsMapModeEnabled();
+    const bool bLoKitActive = comphelper::LibreOfficeKit::isActive();
+    const bool bTiledAnnotations = comphelper::LibreOfficeKit::isTiledAnnotations();
+    const bool bShowNotes = ShowNotes();
+
+    const bool bEnableMapMode = bLoKitActive && !mpEditWin->IsMapModeEnabled();
     if (bEnableMapMode)
         mpEditWin->EnableMapMode();
 
@@ -727,38 +731,13 @@ void SwPostItMgr::LayoutPostIts()
             {
                 std::vector<SwAnnotationWin*> aVisiblePostItList;
                 tools::ULong                  lNeededHeight = 0;
-                tools::Long                    mlPageBorder = 0;
-                tools::Long                    mlPageEnd = 0;
 
                 for (auto const& pItem : pPage->mvSidebarItems)
                 {
                     VclPtr<SwAnnotationWin> pPostIt = pItem->mpPostIt;
 
-                    if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
-                    {
-                        // x value for notes positioning
-                        mlPageBorder = mpEditWin->LogicToPixel( Point( pPage->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
-                        //bending point
-                        mlPageEnd =
-                            mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
-                            ? pItem->maLayoutInfo.mPagePrtArea.Left()
-                            : pPage->mPageRect.Left() + 350;
-                    }
-                    else if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
-                    {
-                        // x value for notes positioning
-                        mlPageBorder = mpEditWin->LogicToPixel( Point(pPage->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
-                        //bending point
-                        mlPageEnd =
-                            mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
-                            ? pItem->maLayoutInfo.mPagePrtArea.Right() :
-                            pPage->mPageRect.Right() - 350;
-                    }
-
                     if (pItem->mbShow)
                     {
-                        tools::Long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
-                        tools::Long aPostItHeight = 0;
                         if (!pPostIt)
                         {
                             pPostIt = pItem->GetSidebarWindow( mpView->GetEditWin(),
@@ -779,16 +758,49 @@ void SwPostItMgr::LayoutPostIts()
                             GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
                         pPostIt->SetSidebarPosition(pPage->eSidebarPosition);
                         pPostIt->SetFollow(static_cast<bool>(pPostIt->CalcParent()));
-                        aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
-                                          ? pPostIt->GetMinimumSizeWithoutMeta()
-                                          : pPostIt->GetPostItTextHeight() )
-                                        + pPostIt->GetMetaHeight();
-                        pPostIt->SetPosSizePixelRect( mlPageBorder ,
-                                                      Y - GetInitialAnchorDistance(),
-                                                      GetSidebarWidth(true),
-                                                      aPostItHeight,
-                                                      pItem->maLayoutInfo.mPosition,
-                                                      mlPageEnd );
+
+                        tools::Long aPostItHeight = 0;
+                        if (bShowNotes)
+                        {
+                            tools::Long mlPageBorder = 0;
+                            tools::Long mlPageEnd = 0;
+
+                            if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::LEFT )
+                            {
+                                // x value for notes positioning
+                                mlPageBorder = mpEditWin->LogicToPixel( Point( pPage->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
+                                //bending point
+                                mlPageEnd =
+                                    mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
+                                    ? pItem->maLayoutInfo.mPagePrtArea.Left()
+                                    : pPage->mPageRect.Left() + 350;
+                            }
+                            else if (pPage->eSidebarPosition == sw::sidebarwindows::SidebarPosition::RIGHT )
+                            {
+                                // x value for notes positioning
+                                mlPageBorder = mpEditWin->LogicToPixel( Point(pPage->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
+                                //bending point
+                                mlPageEnd =
+                                    mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
+                                    ? pItem->maLayoutInfo.mPagePrtArea.Right() :
+                                    pPage->mPageRect.Right() - 350;
+                            }
+
+                            tools::Long Y = mpEditWin->LogicToPixel( Point(0,pItem->maLayoutInfo.mPosition.Bottom())).Y();
+
+                            aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
+                                              ? pPostIt->GetMinimumSizeWithoutMeta()
+                                              : pPostIt->GetPostItTextHeight() )
+                                            + pPostIt->GetMetaHeight();
+                            pPostIt->SetPosSizePixelRect( mlPageBorder ,
+                                                          Y - GetInitialAnchorDistance(),
+                                                          GetSidebarWidth(true),
+                                                          aPostItHeight,
+                                                          mlPageEnd );
+                        }
+
+                        pPostIt->SetAnchorRect(pItem->maLayoutInfo.mPosition);
+
                         pPostIt->ChangeSidebarItem( *pItem );
 
                         if (pItem->mbFocus)
@@ -799,7 +811,8 @@ void SwPostItMgr::LayoutPostIts()
                         }
                         // only the visible postits are used for the final layout
                         aVisiblePostItList.push_back(pPostIt);
-                        lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
+                        if (bShowNotes)
+                            lNeededHeight += pPostIt->IsFollow() ? aPostItHeight : aPostItHeight+GetSpaceBetween();
                     }
                     else // we don't want to see it
                     {
@@ -808,13 +821,10 @@ void SwPostItMgr::LayoutPostIts()
                     }
                 }
 
-                if ((!aVisiblePostItList.empty()) && ShowNotes())
+                if (!aVisiblePostItList.empty() && ShowNotes())
                 {
                     bool bOldScrollbar = pPage->bScrollbar;
-                    if (ShowNotes())
-                        pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
-                    else
-                        pPage->bScrollbar = false;
+                    pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
                     if (!pPage->bScrollbar)
                     {
                         pPage->lOffset = 0;
@@ -893,7 +903,7 @@ void SwPostItMgr::LayoutPostIts()
 
                 for (auto const& visiblePostIt : aVisiblePostItList)
                 {
-                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    if (bLoKitActive && !bTiledAnnotations)
                     {
                         if (visiblePostIt->GetSidebarItem().mbPendingLayout)
                             lcl_CommentNotification(mpView, CommentNotificationType::Add, &visiblePostIt->GetSidebarItem(), 0);
@@ -916,7 +926,7 @@ void SwPostItMgr::LayoutPostIts()
             }
         }
 
-        if (!ShowNotes())
+        if (!bShowNotes)
         {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
             IDocumentRedlineAccess const& rIDRA(mpWrtShell->getIDocumentRedlineAccess());
             bool bRepair = false;
