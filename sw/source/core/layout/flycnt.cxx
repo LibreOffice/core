@@ -1614,6 +1614,15 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
                 // The above conditions are not held, reject.
                 pOldLayLeaf = pLayLeaf;
                 pLayLeaf = pLayLeaf->GetNextLayoutLeaf();
+
+                if (pLayLeaf && pLayLeaf->IsInDocBody() && !bSameBody && !pLayLeaf->IsInFly() && pLayLeaf->IsInTab())
+                {
+                    // We found a next leaf in a next body frame, which is in an inline table. Make
+                    // sure we won't insert the follow anchor inside the table, but before it.
+                    SwTabFrame* pTabFrame = pLayLeaf->FindTabFrame();
+                    pLayLeaf = pTabFrame->GetUpper();
+                }
+
                 continue;
             }
         }
