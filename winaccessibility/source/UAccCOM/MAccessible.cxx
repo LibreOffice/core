@@ -968,13 +968,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop
 {
     SolarMutexGuard g;
 
+    if (m_isDestroy)
+        return S_FALSE;
+
+    if (!pvarChild)
+        return E_INVALIDARG;
+
     try {
-        if (m_isDestroy) return S_FALSE;
-        // #CHECK#
-        if(pvarChild == nullptr)
-        {
-            return E_INVALIDARG;
-        }
         long x, y, w, h;
         VARIANT varSelf;
         VariantInit(&varSelf);
