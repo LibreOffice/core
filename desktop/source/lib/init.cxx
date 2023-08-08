@@ -4570,12 +4570,12 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
         // backspace
         if (nLOKWindowId == 0)
         {
-            KeyEvent aEvt(8, 1283);
+            KeyEvent aEvt(8, KEY_BACKSPACE);
             for (int i = 0; i < nCharBefore; ++i)
                 pWindow->KeyInput(aEvt);
         }
         else
-            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, 1283, nCharBefore - 1);
+            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 8, KEY_BACKSPACE, nCharBefore - 1);
     }
 
     if (nCharAfter > 0)
@@ -4583,12 +4583,12 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
         // delete (forward)
         if (nLOKWindowId == 0)
         {
-            KeyEvent aEvt(46, 1286);
+            KeyEvent aEvt(46, KEY_DELETE);
             for (int i = 0; i < nCharAfter; ++i)
                 pWindow->KeyInput(aEvt);
         }
         else
-            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, 1286, nCharAfter - 1);
+            SfxLokHelper::postKeyEventAsync(pWindow, LOK_KEYEVENT_KEYINPUT, 46, KEY_DELETE, nCharAfter - 1);
     }
 }
 
