@@ -542,6 +542,9 @@ void SwFrame::MakePos()
              !pPrv->GetAttrSet()->GetKeep().GetValue()
            )
         {
+            // tdf#151866 pPrv may MoveBwd and if this is a newly created
+            // section frame then CheckPageDescs() may delete the whole page!
+            SwFrameDeleteGuard g(this); // Prevent it.
             pPrv->Calc(getRootFrame()->GetCurrShell() ? getRootFrame()->GetCurrShell()->GetOut() : nullptr);   // This may cause Prev to vanish!
         }
         else if ( pPrv->getFrameArea().Top() == 0 )
