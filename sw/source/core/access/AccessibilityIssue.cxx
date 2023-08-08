@@ -10,6 +10,9 @@
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/dispatchcommand.hxx>
+
 #include <AccessibilityIssue.hxx>
 #include <AccessibilityCheckStrings.hrc>
 #include <drawdoc.hxx>
@@ -47,7 +50,8 @@ void AccessibilityIssue::setObjectID(OUString const& rID) { m_sObjectID = rID; }
 bool AccessibilityIssue::canGotoIssue() const
 {
     if (m_pDoc && m_eIssueObject != IssueObject::UNKNOWN
-        && m_eIssueObject != IssueObject::DOCUMENT_TITLE)
+        && m_eIssueObject != IssueObject::DOCUMENT_TITLE
+        && m_eIssueObject != IssueObject::DOCUMENT_BACKGROUND)
         return true;
     return false;
 }
@@ -144,7 +148,8 @@ bool AccessibilityIssue::canQuickFixIssue() const
 {
     return m_eIssueObject == IssueObject::GRAPHIC || m_eIssueObject == IssueObject::OLE
            || m_eIssueObject == IssueObject::SHAPE || m_eIssueObject == IssueObject::FORM
-           || m_eIssueObject == IssueObject::DOCUMENT_TITLE;
+           || m_eIssueObject == IssueObject::DOCUMENT_TITLE
+           || m_eIssueObject == IssueObject::DOCUMENT_BACKGROUND;
 }
 
 void AccessibilityIssue::quickFixIssue() const
@@ -152,7 +157,7 @@ void AccessibilityIssue::quickFixIssue() const
     if (!m_pDoc)
         return;
 
-    if (m_eIssueObject != IssueObject::UNKNOWN)
+    if (canGotoIssue())
         gotoIssue();
 
     switch (m_eIssueObject)
@@ -239,6 +244,15 @@ void AccessibilityIssue::quickFixIssue() const
 
                 m_pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
             }
+        }
+        break;
+        case IssueObject::DOCUMENT_BACKGROUND:
+        {
+            uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
+                                                 uno::UNO_QUERY_THROW);
+
+            comphelper::dispatchCommand(".uno:PageAreaDialog",
+                                        xModel->getCurrentController()->getFrame(), {});
         }
         break;
         default:
