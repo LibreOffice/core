@@ -380,9 +380,19 @@ bool FocusManager::HandleKeyEvent(
 
                 case PC_DeckToolBox:
                     {
-                        // Moves to the first deck activation button that is visible
-                        sal_Int32 nIndex(1);
-                        while(!maButtons[nIndex]->get_visible() && ++nIndex > 0);
+                        // Moves to the first deck activation button that is visible and sensitive
+                        sal_Int32 nIndex(0);
+                        sal_Int32 nButtons(maButtons.size());
+                        if (nButtons > 1)
+                        {
+                            nIndex = 1;
+                            // Finds the next visible button that is sensitive
+                            while((!maButtons[nIndex]->get_visible() ||
+                                   !maButtons[nIndex]->get_sensitive()) && ++nIndex < nButtons);
+                            // Wrap to the menu button when going past the last button
+                            if (nIndex >= nButtons)
+                                nIndex = 0;
+                        }
                         FocusButton(nIndex);
                         bConsumed = true;
                     }
@@ -420,9 +430,10 @@ bool FocusManager::HandleKeyEvent(
                         FocusDeckTitle();
                     else
                     {
-                        // Focus the last button.
+                        // Set focus to the last visible sensitive button.
                         sal_Int32 nIndex(maButtons.size()-1);
-                        while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
+                        while((!maButtons[nIndex]->get_visible() ||
+                               !maButtons[nIndex]->get_sensitive()) && --nIndex > 0);
                         FocusButton(nIndex);
                     }
                     bConsumed = true;
@@ -439,8 +450,9 @@ bool FocusManager::HandleKeyEvent(
                         else
                             nIndex = aLocation.mnIndex - 1;
 
-                        // Finds the previous visible button
-                        while(!maButtons[nIndex]->get_visible() && --nIndex > 0);
+                        // Finds the previous visible sensitive button
+                        while((!maButtons[nIndex]->get_visible() ||
+                               !maButtons[nIndex]->get_sensitive()) && --nIndex > 0);
                         FocusButton(nIndex);
                         bConsumed = true;
                     }
@@ -470,14 +482,18 @@ bool FocusManager::HandleKeyEvent(
                         if (rKeyCode.GetCode() == KEY_RIGHT)
                             break;
 
-                        sal_Int32 nIndex;
-                        if (o3tl::make_unsigned(aLocation.mnIndex) >= maButtons.size() - 1)
-                            nIndex = 0;
-                        else
-                            nIndex = aLocation.mnIndex + 1;
+                        sal_Int32 nButtons(maButtons.size());
 
-                        // Finds the next visible button
-                        while(!maButtons[nIndex]->get_visible() && ++nIndex > 0);
+                        sal_Int32 nIndex = aLocation.mnIndex + 1;
+                        if (nIndex >= nButtons)
+                            nIndex = 0;
+
+                        // Finds the next visible sensitive button
+                        while((!maButtons[nIndex]->get_visible() ||
+                               !maButtons[nIndex]->get_sensitive()) && ++nIndex < nButtons);
+                        // Wrap to the menu button when going past the last button
+                        if (nIndex >= nButtons)
+                            nIndex = 0;
                         FocusButton(nIndex);
                         bConsumed = true;
                     }
