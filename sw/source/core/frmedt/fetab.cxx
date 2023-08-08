@@ -279,11 +279,14 @@ bool SwFEShell::DeleteCol()
 
     CurrShell aCurr( this );
 
+    bool bRecordChanges = GetDoc()->GetDocShell()->IsChangeRecording();
+    bool bRecordAndHideChanges = bRecordChanges &&
+        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+
     // tracked deletion: remove only textbox content,
     // and set IsNoTracked table box property to false
-    if ( GetDoc()->GetDocShell()->IsChangeRecording() )
+    if ( bRecordChanges )
     {
-        bool bDeletedEmptyCell = false;
         StartUndo(SwUndoId::COL_DELETE);
         StartAllAction();
 
@@ -295,6 +298,10 @@ bool SwFEShell::DeleteCol()
         GetTableSel( *this, aBoxes, SwTableSearchType::Col );
 
         TableWait aWait( 20, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
+
+        SwTableNode* pTableNd = pFrame->IsTextFrame()
+            ? static_cast<SwTextFrame*>(pFrame)->GetTextNodeFirst()->FindTableNode()
+            : static_cast<SwNoTextFrame*>(pFrame)->GetNode()->FindTableNode();
 
         for (size_t i = 0; i < aBoxes.size(); ++i)
         {
@@ -318,24 +325,30 @@ bool SwFEShell::DeleteCol()
                     aCursor.GetMark()->SetContent(0);
                     rIDRA.SetRedlineFlags_intern( eOld );
                     rIDCO.DeleteAndJoin( aCursor );
-                    bDeletedEmptyCell = true;
                 }
 
             }
         }
 
         SwEditShell* pEditShell = GetDoc()->GetEditShell();
-        SwRedlineTable::size_type nPrev = pEditShell->GetRedlineCount();
         pEditShell->Delete();
+
+        // remove cell frames in Hide Changes mode (and table frames, if needed)
+        if ( bRecordAndHideChanges )
+        {
+            // remove all frames of the table, and make them again without the deleted ones
+            // TODO remove only the deleted frames
+            pTableNd->DelFrames();
+
+            if ( !pTableNd->GetTable().IsDeleted() )
+            {
+                pTableNd->MakeOwnFrames();
+            }
+        }
 
         EndAllActionAndCall();
         EndUndo(SwUndoId::COL_DELETE);
-
-        // track column deletion only if there were tracked text changes
-        // FIXME redline count can be the same in special cases, e.g. adding a
-        // new tracked deletion with removing an own tracked insertion...
-        if ( bDeletedEmptyCell || nPrev != pEditShell->GetRedlineCount() )
-            return true;
+        return true;
     }
 
     StartAllAction();
