@@ -4759,9 +4759,18 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     try
     {
         OString sControlId = OUStringToOString(aMap["id"], RTL_TEXTENCODING_ASCII_US);
+        std::string sWindowId = std::to_string(nWindowId);
+
+        // special values for window id
+        if (nWindowId == static_cast<unsigned long long int>(-1))
+            sWindowId = std::to_string(nCurrentShellId) + "sidebar";
+        if (nWindowId == static_cast<unsigned long long int>(-2))
+            sWindowId = std::to_string(nCurrentShellId) + "notebookbar";
+        if (nWindowId == static_cast<unsigned long long int>(-3))
+            sWindowId = std::to_string(nCurrentShellId) + "formulabar";
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        bool bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nWindowId), sControlId, aMap);
+        bool bFoundWeldedControl = jsdialog::ExecuteAction(sWindowId, sControlId, aMap);
         if (!bFoundWeldedControl)
             bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "sidebar", sControlId, aMap);
         if (!bFoundWeldedControl)
