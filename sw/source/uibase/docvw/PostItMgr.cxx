@@ -796,13 +796,10 @@ void SwPostItMgr::LayoutPostIts()
                     }
                 }
 
-                if ((!aVisiblePostItList.empty()) && ShowNotes())
+                if (!aVisiblePostItList.empty() && ShowNotes())
                 {
                     bool bOldScrollbar = pPage->bScrollbar;
-                    if (ShowNotes())
-                        pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
-                    else
-                        pPage->bScrollbar = false;
+                    pPage->bScrollbar = LayoutByPage(aVisiblePostItList, pPage->mPageRect.SVRect(), lNeededHeight);
                     if (!pPage->bScrollbar)
                     {
                         pPage->lOffset = 0;
