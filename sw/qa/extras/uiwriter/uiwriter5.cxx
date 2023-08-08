@@ -2777,6 +2777,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156544)
     assertXPath(pXmlDoc, "//page[1]//body/tab/row/cell", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf156487)
+{
+    // load a table, and delete a column in Hide Changes mode
+    createSwDoc("tdf118311.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and hide changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    CPPUNIT_ASSERT_MESSAGE("redlines shouldn't be visible",
+                           !IDocumentRedlineAccess::IsShowChanges(
+                               pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // delete table column with enabled change tracking
+    // (HasTextChangesOnly property of the cell will be false)
+    dispatchCommand(mxComponent, ".uno:DeleteColumns", {});
+
+    // Dump the rendering of the first page as an XML file.
+    SwDocShell* pShell = pDoc->GetDocShell();
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This would be 2 without hiding the first cell
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textarray/text", 1);
+}
+
 #ifndef DBG_UTIL
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf149498)
 {
