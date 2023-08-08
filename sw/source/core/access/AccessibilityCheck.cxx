@@ -1374,8 +1374,12 @@ public:
                     OUString sName = pTextFormatCollection->GetName();
                     OUString sIssueText
                         = SwResId(STR_STYLE_NO_LANGUAGE).replaceAll("%STYLE_NAME%", sName);
-                    lclAddIssue(m_rIssueCollection, sIssueText,
-                                sfx::AccessibilityIssueID::STYLE_LANGUAGE);
+
+                    auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                              sfx::AccessibilityIssueID::STYLE_LANGUAGE);
+                    pIssue->setIssueObject(IssueObject::LANGUAGE_NOT_SET);
+                    pIssue->setObjectID(sName);
+                    pIssue->setDoc(*pDoc);
                 }
             }
         }
