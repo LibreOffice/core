@@ -289,6 +289,12 @@ interface BaseTextSelection
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
+    FN_FORMAT_PAGE_AREA_DLG
+    [
+        ExecMethod = ExecDlg ;
+        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
+    ]
+
     FN_CONVERT_TABLE_TO_TEXT
     [
         ExecMethod = Execute ;

@@ -1453,8 +1453,12 @@ public:
                 drawing::FillStyle aFillStyle = aFillStyleContainer.get<drawing::FillStyle>();
                 if (aFillStyle == drawing::FillStyle_BITMAP)
                 {
-                    lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_BACKGROUND_IMAGES),
-                                sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND);
+                    auto pIssue
+                        = lclAddIssue(m_rIssueCollection, SwResId(STR_AVOID_BACKGROUND_IMAGES),
+                                      sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND);
+
+                    pIssue->setDoc(*pDoc);
+                    pIssue->setIssueObject(IssueObject::DOCUMENT_BACKGROUND);
                 }
             }
         }

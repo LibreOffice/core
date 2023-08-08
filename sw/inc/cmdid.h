@@ -356,6 +356,7 @@ class SwUINumRuleItem;
 #define FN_FORMAT_FRAME_DLG         TypedWhichId<SfxStringItem>(FN_FORMAT + 56)  /* frame */
 #define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
 #define FN_FORMAT_TABLE_DLG         TypedWhichId<SfxStringItem>(FN_FORMAT + 60)  /* table */
+#define FN_FORMAT_PAGE_AREA_DLG     (FN_FORMAT + 62)  /* area/background */
 
 #define FN_UPDATE_STYLE_BY_EXAMPLE            (FN_FORMAT + 63)  /* update style */
 #define FN_FORMAT_FOOTNOTE_DLG                (FN_FORMAT + 68)  /* footnote dialog */

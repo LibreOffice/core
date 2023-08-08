@@ -2811,6 +2811,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_PAGE_DLG:
         case FN_FORMAT_PAGE_COLUMN_DLG:
         case FN_FORMAT_PAGE_SETTING_DLG:
+        case FN_FORMAT_PAGE_AREA_DLG:
         {
             if( !bBackground )
             {
@@ -2828,6 +2829,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                         break;
                     case FN_FORMAT_PAGE_SETTING_DLG:
                         sPageId = "page";
+                        break;
+                    case FN_FORMAT_PAGE_AREA_DLG:
+                        sPageId = "area";
                         break;
                     case FN_FORMAT_PAGE_DLG:
                         if (pItem)
