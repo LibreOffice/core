@@ -4721,11 +4721,21 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
     try
     {
         OUString sControlId = aMap["id"];
+        OUString sWindowId = OUString::number(nWindowId);
+        OUString sCurrentShellId = OUString::number(nCurrentShellId);
+
+        // special values for window id
+        if (nWindowId == static_cast<unsigned long long int>(-1))
+            sWindowId = sCurrentShellId + "sidebar";
+        if (nWindowId == static_cast<unsigned long long int>(-2))
+            sWindowId = sCurrentShellId + "notebookbar";
+        if (nWindowId == static_cast<unsigned long long int>(-3))
+            sWindowId = sCurrentShellId + "formulabar";
 
         // dialogs send own id but notebookbar and sidebar controls are remembered by SfxViewShell id
-        if (jsdialog::ExecuteAction(OUString::number(nWindowId), sControlId, aMap))
+        if (jsdialog::ExecuteAction(sWindowId, sControlId, aMap))
             return;
-        auto sCurrentShellId = OUString::number(nCurrentShellId);
+
         if (jsdialog::ExecuteAction(sCurrentShellId + "sidebar", sControlId, aMap))
             return;
         if (jsdialog::ExecuteAction(sCurrentShellId + "notebookbar", sControlId, aMap))
