@@ -148,16 +148,13 @@ typedef cppu::PartialWeakComponentImplHelper<   css::frame::XModel3
                                                 ,   css::document::XEventsSupplier
                                                 ,   css::frame::XLoadable
                                                 ,   css::document::XDocumentRecovery
+                                                , css::frame::XTitle
+                                                ,   css::frame::XTitleChangeBroadcaster
+                                                ,   css::frame::XUntitledNumbers
                                                 >   ODatabaseDocument_OfficeDocument;
-
-typedef ::cppu::ImplHelper3<    css::frame::XTitle
-                            ,   css::frame::XTitleChangeBroadcaster
-                            ,   css::frame::XUntitledNumbers
-                            >   ODatabaseDocument_Title;
 
 class ODatabaseDocument :public ModelDependentComponent             // ModelDependentComponent must be first!
                         ,public ODatabaseDocument_OfficeDocument
-                        ,public ODatabaseDocument_Title
 {
     enum InitState
     {
@@ -299,8 +296,6 @@ public:
 
     // XInterface
     virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
-    virtual void SAL_CALL acquire(  ) noexcept override;
-    virtual void SAL_CALL release(  ) noexcept override;
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;

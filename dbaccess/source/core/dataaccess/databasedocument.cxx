@@ -197,28 +197,12 @@ Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType )
         )
         return Any();
 
-    Any aReturn = ODatabaseDocument_OfficeDocument::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = ODatabaseDocument_Title::queryInterface(_rType);
-    return aReturn;
-}
-
-void SAL_CALL ODatabaseDocument::acquire(  ) noexcept
-{
-    ODatabaseDocument_OfficeDocument::acquire();
-}
-
-void SAL_CALL ODatabaseDocument::release(  ) noexcept
-{
-    ODatabaseDocument_OfficeDocument::release();
+    return ODatabaseDocument_OfficeDocument::queryInterface(_rType);
 }
 
 Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
 {
-    Sequence< Type > aTypes = ::comphelper::concatSequences(
-        ODatabaseDocument_OfficeDocument::getTypes(),
-        ODatabaseDocument_Title::getTypes()
-    );
+    Sequence< Type > aTypes = ODatabaseDocument_OfficeDocument::getTypes();
 
     // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
     // which already contains macros. In this case, the database document itself is not
