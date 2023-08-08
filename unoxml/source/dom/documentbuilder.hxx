@@ -46,7 +46,7 @@ namespace DOM
         : public CDocumentBuilder_Base
     {
     private:
-        std::mutex m_Mutex;
+        std::recursive_mutex m_Mutex;
         css::uno::Reference< css::xml::sax::XEntityResolver > m_xEntityResolver;
         css::uno::Reference< css::xml::sax::XErrorHandler > m_xErrorHandler;
 
