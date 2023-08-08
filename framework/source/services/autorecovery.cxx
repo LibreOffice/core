@@ -2840,16 +2840,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     if (pParams)
         xExternalProgress = pParams->m_xProgress;
 
-    css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
     OUString                              sBackupPath(SvtPathOptions().GetBackupPath());
-
-    css::uno::Reference< css::frame::XController > xActiveController;
-    css::uno::Reference< css::frame::XModel >      xActiveModel;
-    css::uno::Reference< css::frame::XFrame >      xActiveFrame     = xDesktop->getActiveFrame();
-    if (xActiveFrame.is())
-        xActiveController = xActiveFrame->getController();
-    if (xActiveController.is())
-        xActiveModel = xActiveController->getModel();
 
     // Set the default timer action for our call.
     // Default = NORMAL_AUTOSAVE
@@ -2967,37 +2958,27 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
             }
         }
 
-        // a) Document was not postponed - and is     active now. => postpone it (restart timer, restart loop)
-        // b) Document was not postponed - and is not active now. => save it
-        // c) Document was     postponed - and is not active now. => save it
-        // d) Document was     postponed - and is     active now. => save it (because user idle was checked already)
-        bool bActive       = (xActiveModel == aInfo.Document);
-        bool bWasPostponed = ((aInfo.DocumentState & DocState::Postponed) == DocState::Postponed);
-
-        if (
-            ! bWasPostponed &&
-              bActive
-           )
+        // a) Document was not postponed => wait for user idle if not urgent
+        // b) Document was postponed => save it (because user idle/call_back was checked already)
+        if (!(aInfo.DocumentState & DocState::Postponed))
         {
             aInfo.DocumentState |= DocState::Postponed;
             *pIt = aInfo;
             // postponed documents will be saved if this method is called again!
             // That can be done by an outside started timer           => E_POLL_FOR_USER_IDLE (if normal AutoSave is active)
             // or it must be done directly without starting any timer => E_CALL_ME_BACK       (if Emergency- or SessionSave is active and must be finished ASAP!)
-            eTimer = AutoRecovery::E_POLL_FOR_USER_IDLE;
             if (!bAllowUserIdleLoop)
                 eTimer = AutoRecovery::E_CALL_ME_BACK;
+            else
+                eTimer = AutoRecovery::E_POLL_FOR_USER_IDLE;
             continue;
         }
 
-        // b, c, d)
-        // } /* SAFE */
         g.clear();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
         implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         g.reset();
-        // /* SAFE */ {
 
         *pIt = aInfo;
     }
@@ -3009,13 +2990,11 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         pIt = dangerousDoc;
         AutoRecovery::TDocumentInfo aInfo = *pIt;
 
-        // } /* SAFE */
         g.clear();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
         implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         g.reset();
-        // /* SAFE */ {
 
         *pIt = aInfo;
     }
