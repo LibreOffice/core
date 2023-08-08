@@ -61,6 +61,7 @@ class SW_DLLPUBLIC SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
     bool m_bCalcLowers      :1; /// For stability of the content in MakeAll
     bool m_bLowersFormatted :1; /// Communication between MakeAll and Layact
     bool m_bLockBackMove    :1; /// The Master took care of the BackMove test
+    bool m_bWantBackMove    :1; /// Table wants to move back but was locked
     bool m_bResizeHTMLTable :1; /// Call the Resize of the HTMLTableLayout in the MakeAll
                                 /// This is an optimization, so that we don't have to call
                                 /// it in ContentFrame::Grow; there it might be called for
