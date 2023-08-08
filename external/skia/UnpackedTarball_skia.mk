@@ -45,6 +45,11 @@ skia_patches := \
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,skia,1))
 
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,skia,--binary))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,skia,\
     $(foreach patch,$(skia_patches),external/skia/$(patch)) \
 ))

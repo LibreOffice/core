@@ -29,6 +29,11 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,coinmp,\
 	Osi \
 ))
 
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,coinmp,--binary))
+endif
+
 # * external/coinmp/Wnon-c-typedef-for-linkage.patch upstream at
 #   <https://list.coin-or.org/pipermail/coin-discuss/2020-February/003972.html> "[Coin-discuss]
 #   Small patch to fix Clang -Wnon-c-typedef-for-linkage in Clp":

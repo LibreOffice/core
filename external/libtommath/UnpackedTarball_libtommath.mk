@@ -13,6 +13,11 @@ $(eval $(call gb_UnpackedTarball_set_tarball,libtommath,$(LIBTOMMATH_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,libtommath,0))
 
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,libtommath,--binary))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,libtommath,\
 ))
 

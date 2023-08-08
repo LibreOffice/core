@@ -16,6 +16,11 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
 	PCbuild/pcbuild.sln \
 ))
 
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,python3,--binary))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \

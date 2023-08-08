@@ -15,6 +15,11 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,lcms2))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,lcms2,3))
 
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,lcms2,--binary))
+endif
+
 # external/lcms2/0001-Added-missing-export.patch.1:
 # backport of https://github.com/mm2/Little-CMS/commit/f7b3c637c20508655f8b49935a4b556d52937b69
 $(eval $(call gb_UnpackedTarball_add_patches,lcms2,\

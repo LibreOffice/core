@@ -19,6 +19,12 @@ $(eval $(call gb_UnpackedTarball_set_tarball,breakpad,$(BREAKPAD_TARBALL)))
 # external/breakpad/SIGSTKSZ.patch upstreamed at
 #  <https://chromium-review.googlesource.com/c/breakpad/breakpad/+/3226470> "Adpat to SIGSTKSZ type
 #  in glibc 2.34":
+
+ifneq ($(MSYSTEM),)
+# use binary flag so patch from git-bash won't choke on mixed line-endings in patches
+$(eval $(call gb_UnpackedTarball_set_patchflags,breakpad,--binary))
+endif
+
 $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-use-correct-http-header.patch.1 \
 	external/breakpad/breakpad-wshadow.patch.1 \
