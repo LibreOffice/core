@@ -1785,11 +1785,19 @@ void ScDocument::UnlockAdjustHeight()
         --nAdjustHeightLock;
 }
 
-bool ScDocument::HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup )
+bool ScDocument::HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup, ScAddress* pDirtiedAddress)
 {
     SCTAB nTab = rPos.Tab();
     if (ScTable* pTable = FetchTable(nTab))
-        return pTable->HandleRefArrayForParallelism(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1, mxGroup);
+    {
+        bool bRet = pTable->HandleRefArrayForParallelism(rPos.Col(), rPos.Row(), rPos.Row()+nLength-1, mxGroup, pDirtiedAddress);
+        if (!bRet && pDirtiedAddress && pDirtiedAddress->Row() != -1)
+        {
+            pDirtiedAddress->SetCol(rPos.Col());
+            pDirtiedAddress->SetTab(nTab);
+        }
+        return bRet;
+    }
     return false;
 }
 

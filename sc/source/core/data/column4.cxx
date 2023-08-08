@@ -1858,7 +1858,7 @@ static bool lcl_InterpretSpan(sc::formula_block::const_iterator& rSpanIter, SCRO
 
 static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, ScDocument& rDoc,
                           const ScFormulaCellGroupRef& mxGroup, bool bThreadingDepEval, bool bSkipRunning,
-                          bool& bIsDirty, bool& bAllowThreading)
+                          bool& bIsDirty, bool& bAllowThreading, ScAddress* pDirtiedAddress)
 {
     ScRecursionHelper& rRecursionHelper = rDoc.GetRecursionHelper();
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = rCells.position(nRow1);
@@ -1964,6 +1964,8 @@ static void lcl_EvalDirty(sc::CellStoreType& rCells, SCROW nRow1, SCROW nRow2, S
                         {
                             // Set itCell as dirty as itCell may be interpreted in InterpretTail()
                             (*itCell)->SetDirtyVar();
+                            if (pDirtiedAddress)
+                                pDirtiedAddress->SetRow(nRow);
                             bAllowThreading = false;
                             return;
                         }
@@ -1999,17 +2001,17 @@ bool ScColumn::EnsureFormulaCellResults( SCROW nRow1, SCROW nRow2, bool bSkipRun
         return false;
 
     bool bAnyDirty = false, bTmp = false;
-    lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), nullptr, false, bSkipRunning, bAnyDirty, bTmp);
+    lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), nullptr, false, bSkipRunning, bAnyDirty, bTmp, nullptr);
     return bAnyDirty;
 }
 
-bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
+bool ScColumn::HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup, ScAddress* pDirtiedAddress )
 {
     if (nRow1 > nRow2)
         return false;
 
     bool bAllowThreading = true, bTmp = false;
-    lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), mxGroup, true, false, bTmp, bAllowThreading);
+    lcl_EvalDirty(maCells, nRow1, nRow2, GetDoc(), mxGroup, true, false, bTmp, bAllowThreading, pDirtiedAddress);
 
     return bAllowThreading;
 }

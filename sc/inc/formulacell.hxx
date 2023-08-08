@@ -160,7 +160,9 @@ private:
     ScFormulaCell( const ScFormulaCell& ) = delete;
 
     bool CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope, bool fromFirstRow,
-                                  SCROW nStartOffset, SCROW nEndOffset, bool bCalcDependencyOnly = false);
+                                  SCROW nStartOffset, SCROW nEndOffset, bool bCalcDependencyOnly = false,
+                                  ScRangeList* pSuccessfulDependencies = nullptr,
+                                  ScAddress* pFailedAndDirtiedAddress = nullptr);
     bool InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope& aScope,
                                         bool& bDependencyComputed,
                                         bool& bDependencyCheckFailed,

@@ -4432,7 +4432,7 @@ struct ScDependantsCalculator
         return nRowLen;
     }
 
-    bool DoIt()
+    bool DoIt(ScRangeList* pSuccessfulDependencies, ScAddress* pDirtiedAddress)
     {
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
 
@@ -4583,13 +4583,16 @@ struct ScDependantsCalculator
                     nStartRow = 0;
                 }
                 if (!mrDoc.HandleRefArrayForParallelism(ScAddress(nCol, nStartRow, rRange.aStart.Tab()),
-                                                        nLength, mxGroup))
+                                                        nLength, mxGroup, pDirtiedAddress))
                     return false;
             }
         }
 
         if (bHasSelfReferences)
             mxGroup->mbPartOfCycle = true;
+
+        if (pSuccessfulDependencies && !bHasSelfReferences)
+            *pSuccessfulDependencies = aRangeList;
 
         return !bHasSelfReferences;
     }
@@ -4688,7 +4691,9 @@ bool ScFormulaCell::InterpretFormulaGroup(SCROW nStartOffset, SCROW nEndOffset)
 
 bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rScope, bool fromFirstRow,
                                              SCROW nStartOffset, SCROW nEndOffset,
-                                             bool bCalcDependencyOnly)
+                                             bool bCalcDependencyOnly,
+                                             ScRangeList* pSuccessfulDependencies,
+                                             ScAddress* pDirtiedAddress)
 {
     ScRecursionHelper& rRecursionHelper = rDocument.GetRecursionHelper();
     // iterate over code in the formula ...
@@ -4701,7 +4706,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
         // (We can only reach here from a multi-group dependency evaluation attempt).
         // (These two have to be in pairs always for any given formula-group)
         ScDependantsCalculator aCalculator(rDocument, *pCode, *this, mxGroup->mpTopCell->aPos, fromFirstRow, nStartOffset, nEndOffset);
-        return aCalculator.DoIt();
+        return aCalculator.DoIt(pSuccessfulDependencies, pDirtiedAddress);
     }
 
     bool bOKToParallelize = false;
@@ -4716,7 +4721,7 @@ bool ScFormulaCell::CheckComputeDependencies(sc::FormulaLogger::GroupScope& rSco
 
         ScFormulaGroupDependencyComputeGuard aDepComputeGuard(rRecursionHelper);
         ScDependantsCalculator aCalculator(rDocument, *pCode, *this, mxGroup->mpTopCell->aPos, fromFirstRow, nStartOffset, nEndOffset);
-        bOKToParallelize = aCalculator.DoIt();
+        bOKToParallelize = aCalculator.DoIt(pSuccessfulDependencies, pDirtiedAddress);
 
     }
 
@@ -4822,7 +4827,8 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
         pCode->IsEnabledForThreading() &&
         ScCalcConfig::isThreadingEnabled())
     {
-        if(!bDependencyComputed && !CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset))
+        ScRangeList aOrigDependencies;
+        if(!bDependencyComputed && !CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset, false, &aOrigDependencies))
         {
             bDependencyComputed = true;
             bDependencyCheckFailed = true;
@@ -4899,6 +4905,8 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
             nColEnd = lcl_probeLeftOrRightFGs(mxGroup, rDocument, aFGSet, aFGMap, false);
         }
 
+        bool bFGOK = true;
+        ScAddress aDirtiedAddress(ScAddress::INITIALIZE_INVALID);
         if (nColStart != nColEnd)
         {
             ScCheckIndependentFGGuard aGuard(rRecursionHelper, &aFGSet);
@@ -4907,13 +4915,25 @@ bool ScFormulaCell::InterpretFormulaGroupThreading(sc::FormulaLogger::GroupScope
                 if (nCurrCol == aPos.Col())
                     continue;
 
-                bool bFGOK = aFGMap[nCurrCol]->CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset, true);
+                bFGOK = aFGMap[nCurrCol]->CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset,
+                                                                   true, nullptr, &aDirtiedAddress);
                 if (!bFGOK || !aGuard.AreGroupsIndependent())
                 {
                     nColEnd = nColStart = aPos.Col();
                     break;
                 }
             }
+        }
+
+        // tdf#156677 it is possible that if a check of a column in the new range fails that the check has
+        // now left a cell that the original range depended on in a Dirty state. So if the dirtied cell
+        // was part of the original dependencies re-run the initial CheckComputeDependencies to fix it.
+        if (!bFGOK && aDirtiedAddress.IsValid() && aOrigDependencies.Find(aDirtiedAddress))
+        {
+            SAL_WARN("sc.core.formulacell", "rechecking dependencies due to a dirtied cell during speculative probe");
+            const bool bRedoEntryCheckSucceeded = CheckComputeDependencies(aScope, false, nStartOffset, nEndOffset);
+            assert(bRedoEntryCheckSucceeded && "if it worked on the original range it should work again on that range");
+            (void)bRedoEntryCheckSucceeded;
         }
 
         std::vector<std::unique_ptr<ScInterpreter>> aInterpreters(nThreadCount);

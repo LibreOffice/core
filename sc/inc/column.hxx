@@ -648,7 +648,8 @@ public:
     bool ResolveStaticReference( ScMatrix& rMat, SCCOL nMatCol, SCROW nRow1, SCROW nRow2 );
     void FillMatrix( ScMatrix& rMat, size_t nMatCol, SCROW nRow1, SCROW nRow2, svl::SharedStringPool* pPool ) const;
     formula::VectorRefArray FetchVectorRefArray( SCROW nRow1, SCROW nRow2 );
-    bool HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup );
+    bool HandleRefArrayForParallelism( SCROW nRow1, SCROW nRow2,
+                                       const ScFormulaCellGroupRef& mxGroup, ScAddress* pDirtiedAddress );
 #ifdef DBG_UTIL
     void AssertNoInterpretNeeded( SCROW nRow1, SCROW nRow2 );
 #endif

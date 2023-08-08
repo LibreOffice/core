@@ -2574,7 +2574,8 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( const ScRange& rRange );
 
     formula::VectorRefArray FetchVectorRefArray( const ScAddress& rPos, SCROW nLength );
-    bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength, const ScFormulaCellGroupRef& mxGroup );
+    bool HandleRefArrayForParallelism( const ScAddress& rPos, SCROW nLength,
+                                       const ScFormulaCellGroupRef& mxGroup, ScAddress* pDirtiedAddress );
 #ifdef DBG_UTIL
     void AssertNoInterpretNeeded( const ScAddress& rPos, SCROW nLength );
 #endif

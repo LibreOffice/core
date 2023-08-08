@@ -2551,7 +2551,7 @@ void ScTable::AssertNoInterpretNeeded( SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 }
 #endif
 
-bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup )
+bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScFormulaCellGroupRef& mxGroup, ScAddress* pDirtiedAddress )
 {
     if (nRow2 < nRow1)
         return false;
@@ -2564,7 +2564,7 @@ bool ScTable::HandleRefArrayForParallelism( SCCOL nCol, SCROW nRow1, SCROW nRow2
     mpFilteredCols->makeReady();
     mpFilteredRows->makeReady();
 
-    return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup);
+    return aCol[nCol].HandleRefArrayForParallelism(nRow1, nRow2, mxGroup, pDirtiedAddress);
 }
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
