@@ -1166,21 +1166,28 @@ bool SwLayAction::IsShortCut( SwPageFrame *&prPage )
                 }
                 // no shortcut, if at previous page
                 // an anchored object is registered, whose anchor is <pContent>.
-                else if ( prPage->GetPrev() )
+                else
                 {
-                    SwSortedObjs* pObjs =
-                        static_cast<SwPageFrame*>(prPage->GetPrev())->GetSortedObjs();
-                    if ( pObjs )
+                    auto const CheckFlys = [&bRet,pContent](SwPageFrame & rPage)
                     {
-                        for (SwAnchoredObject* pObj : *pObjs)
+                        SwSortedObjs *const pObjs(rPage.GetSortedObjs());
+                        if (pObjs)
                         {
-                            if ( pObj->GetAnchorFrameContainingAnchPos() == pContent )
+                            for (SwAnchoredObject *const pObj : *pObjs)
                             {
-                                bRet = false;
-                                break;
+                                if (pObj->GetAnchorFrameContainingAnchPos() == pContent)
+                                {
+                                    bRet = false;
+                                    break;
+                                }
                             }
                         }
+                    };
+                    if (prPage->GetPrev())
+                    {
+                        CheckFlys(*static_cast<SwPageFrame*>(prPage->GetPrev()));
                     }
+                    CheckFlys(*prPage); // tdf#147666 also check this page
                 }
             }
         }
