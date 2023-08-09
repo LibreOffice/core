@@ -102,7 +102,7 @@ namespace emfio::emfreader
                 // rough check - import and conv to primitive
                 GDIMetaFile aMtf;
                 std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream(xEmfStream));
-                sal_uInt32 nOrgPos = pStream->Tell();
+                sal_uInt64 nOrgPos = pStream->Tell();
 
                 SvStreamEndian nOrigNumberFormat = pStream->GetEndian();
                 pStream->SetEndian(SvStreamEndian::LITTLE);

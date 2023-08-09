@@ -1475,7 +1475,7 @@ namespace emfio
                         sal_uInt32 BkColorSrc(0), iUsageSrc(0), offBmiSrc(0);
                         sal_uInt32 cbBmiSrc(0), offBitsSrc(0), cbBitsSrc(0);
 
-                        sal_uInt32   nStart = mpInputStream->Tell() - 8;
+                        sal_uInt64   nStart = mpInputStream->Tell() - 8;
                         mpInputStream->SeekRel( 0x10 );
 
                         mpInputStream->ReadInt32( xDest ).ReadInt32( yDest ).ReadInt32( cxDest ).ReadInt32( cyDest );
@@ -1636,7 +1636,7 @@ namespace emfio
                         sal_uInt32  dwRop, iUsageSrc, offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc;
                         XForm   xformSrc;
 
-                        sal_uInt32  nStart = mpInputStream->Tell() - 8;
+                        sal_uInt64  nStart = mpInputStream->Tell() - 8;
 
                         mpInputStream->SeekRel( 0x10 );
                         mpInputStream->ReadInt32( xDest ).ReadInt32( yDest ).ReadInt32( cxDest ).ReadInt32( cyDest ).ReadUInt32( dwRop ).ReadInt32( xSrc ).ReadInt32( ySrc )
@@ -1712,7 +1712,7 @@ namespace emfio
                     {
                         sal_Int32   xDest, yDest, xSrc, ySrc, cxSrc, cySrc, cxDest, cyDest;
                         sal_uInt32  offBmiSrc, cbBmiSrc, offBitsSrc, cbBitsSrc, iUsageSrc, dwRop;
-                        sal_uInt32  nStart = mpInputStream->Tell() - 8;
+                        sal_uInt64  nStart = mpInputStream->Tell() - 8;
 
                         mpInputStream->SeekRel( 0x10 );
                         mpInputStream->ReadInt32( xDest )
@@ -2075,7 +2075,7 @@ namespace emfio
 
                     case EMR_CREATEDIBPATTERNBRUSHPT :
                     {
-                        sal_uInt32  nStart = mpInputStream->Tell() - 8;
+                        sal_uInt64  nStart = mpInputStream->Tell() - 8;
                         Bitmap aBitmap;
 
                         mpInputStream->ReadUInt32( nIndex );
@@ -2256,8 +2256,8 @@ namespace emfio
         SAL_INFO("emfio", "\tMetafile size: " << mnEndPos);
         mnEndPos += mnStartPos;
 
-        sal_uInt32 nStrmPos = mpInputStream->Tell(); // checking if mnEndPos is valid
-        sal_uInt32 nActualFileSize = nStrmPos + mpInputStream->remainingSize();
+        sal_uInt64 nStrmPos = mpInputStream->Tell(); // checking if mnEndPos is valid
+        sal_uInt64 nActualFileSize = nStrmPos + mpInputStream->remainingSize();
 
         if ( nActualFileSize < mnEndPos )
         {
