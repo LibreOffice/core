@@ -139,6 +139,12 @@ uno::Sequence<beans::PropertyValue> TablePositionHandler::getTablePosition() con
     aFrameProperties["VertOrientPosition"] <<= ConversionHelper::convertTwipToMM100(m_nY);
     aFrameProperties["FillTransparence"] <<= sal_Int32(100);
 
+    if (m_nTableOverlap == NS_ooxml::LN_Value_ST_TblOverlap_never)
+    {
+        // NS_ooxml::LN_Value_ST_TblOverlap_overlap is the default, both in OOXML and in Writer.
+        aFrameProperties["AllowOverlap"] <<= false;
+    }
+
     return aFrameProperties.getAsConstPropertyValueList();
 }
 
