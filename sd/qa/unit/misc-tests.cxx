@@ -37,10 +37,11 @@
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <comphelper/base64.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <undo/undomanager.hxx>
 #include <GraphicViewShell.hxx>
 #include <sdpage.hxx>
-#include <comphelper/base64.hxx>
 #include <LayerTabBar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
@@ -286,7 +287,8 @@ void SdMiscTest::testFillGradient()
     CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aGradient2.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aGradient2.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

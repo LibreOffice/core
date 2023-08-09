@@ -31,6 +31,7 @@
 
 #include <tools/UnitConversion.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace css;
 
@@ -622,7 +623,7 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     const Color aColD(0x000000);
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops(aGradient.ColorStops);
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);
@@ -639,7 +640,7 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    aColorStops = basegfx::BColorStops(aGradient.ColorStops);
+    aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aGradient.Style);

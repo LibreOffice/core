@@ -35,6 +35,7 @@
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -178,7 +179,7 @@ void XMLTransGradientStyleExport::exportXML(
     if (!rValue.has<css::awt::Gradient2>() && !rValue.has<css::awt::Gradient>())
         return;
 
-    basegfx::BGradient aGradient(rValue);
+    basegfx::BGradient aGradient = model::gradient::getFromAny(rValue);
 
     aGradient.tryToConvertToAxial();
 

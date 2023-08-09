@@ -26,6 +26,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
@@ -1170,7 +1171,7 @@ ColorMapType lcl_createColorMapFromShapeProps(
     basegfx::BColorStops aColorStops;
     if (rbHasColorGradient)
     {
-        aColorBGradient = basegfx::BGradient(rColorGradient);
+        aColorBGradient = model::gradient::getFromUnoGradient2(rColorGradient);
         aColorBGradient.tryToApplyStartEndIntensity();
         aColorBGradient.tryToApplyBorder();
         aColorBGradient.tryToApplyAxial();
@@ -1193,7 +1194,7 @@ ColorMapType lcl_createColorMapFromShapeProps(
     basegfx::BColorStops aTransStops;
     if (rbHasTransparenceGradient)
     {
-        aTransBGradient = basegfx::BGradient(rTransparenceGradient);
+        aTransBGradient = model::gradient::getFromUnoGradient2(rTransparenceGradient);
         aTransBGradient.tryToApplyStartEndIntensity(); // usually 100%, but might be set by macro
         aTransBGradient.tryToApplyBorder();
         aTransBGradient.tryToApplyAxial();

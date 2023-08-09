@@ -27,6 +27,7 @@
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/BitmapMonochromeFilter.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -547,7 +548,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 }
 
                 // push gradient or named gradient to property map
-                if (rPropMap.setProperty(ShapeProperty::FillGradient, aGradient.getAsGradient2()))
+                if (rPropMap.setProperty(ShapeProperty::FillGradient, model::gradient::createUnoGradient2(aGradient)))
                 {
                     eFillStyle = FillStyle_GRADIENT;
                 }
@@ -556,7 +557,7 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                 if (!aTransparencyStops.empty())
                 {
                     aGradient.SetColorStops(aTransparencyStops);
-                    rPropMap.setProperty(ShapeProperty::GradientTransparency, aGradient.getAsGradient2());
+                    rPropMap.setProperty(ShapeProperty::GradientTransparency, model::gradient::createUnoGradient2(aGradient));
                 }
             }
         break;

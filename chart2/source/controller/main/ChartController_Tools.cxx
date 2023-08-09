@@ -47,6 +47,7 @@
 #include <ObjectNameProvider.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -55,6 +56,7 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/ActionDescriptionProvider.hxx>
@@ -957,7 +959,7 @@ void ChartController::executeDispatch_FillColor(sal_uInt32 nColor)
 void ChartController::executeDispatch_FillGradient(std::u16string_view sJSONGradient)
 {
     basegfx::BGradient aBGradient = basegfx::BGradient::fromJSON(sJSONGradient);
-    css::awt::Gradient aGradient = aBGradient.getAsGradient2();
+    css::awt::Gradient aGradient = model::gradient::createUnoGradient2(aBGradient);
 
     try
     {

@@ -36,6 +36,7 @@
 #include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
 #include <tools/mapunit.hxx>
@@ -2252,7 +2253,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
         case 0:
         {
             // fill values
-            const css::awt::Gradient2 aGradient2(GetGradientValue().getAsGradient2());
+            const css::awt::Gradient2 aGradient2 = model::gradient::createUnoGradient2(GetGradientValue());
 
             // create sequence
             uno::Sequence< beans::PropertyValue > aPropSeq{
@@ -2266,7 +2267,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
         case MID_FILLGRADIENT:
         {
             // fill values
-            const css::awt::Gradient2 aGradient2(GetGradientValue().getAsGradient2());
+            const css::awt::Gradient2 aGradient2 = model::gradient::createUnoGradient2(GetGradientValue());
 
             // create sequence
             rVal <<= aGradient2;
@@ -2282,8 +2283,7 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
         case MID_GRADIENT_COLORSTOPSEQUENCE:
         {
             // fill values
-            const css::awt::ColorStopSequence aColorStopSequence(
-                GetGradientValue().GetColorStops().getAsColorStopSequence());
+            const css::awt::ColorStopSequence aColorStopSequence = model::gradient::createColorStopSequence(GetGradientValue().GetColorStops());
 
             // create sequence
             rVal <<= aColorStopSequence;
@@ -2334,8 +2334,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
 
                 if (aGradientAny.hasValue() && (aGradientAny.has<css::awt::Gradient>() || aGradientAny.has<css::awt::Gradient2>()))
                 {
-                    const basegfx::BGradient aBGradient(aGradientAny);
-                    SetGradientValue(aBGradient);
+                    SetGradientValue(model::gradient::getFromAny(aGradientAny));
                 }
 
                 return true;
@@ -2357,8 +2356,7 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
         {
             if (rVal.hasValue() && (rVal.has<css::awt::Gradient>() || rVal.has<css::awt::Gradient2>()))
             {
-                const basegfx::BGradient aBGradient(rVal);
-                SetGradientValue(aBGradient);
+                SetGradientValue(model::gradient::getFromAny(rVal));
             }
 
             break;
@@ -2369,7 +2367,8 @@ bool XFillGradientItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId
             // check if we have a awt::ColorStopSequence
             if (rVal.hasValue() && rVal.has<css::awt::ColorStopSequence>())
             {
-                const basegfx::BColorStops aColorStops(rVal);
+
+                const basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromAny(rVal);
 
                 if (!aColorStops.empty())
                 {

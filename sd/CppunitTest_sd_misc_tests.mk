@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_misc_tests, \
     cppu \
     cppuhelper \
     drawinglayer \
+    docmodel \
     editeng \
     for \
     forui \

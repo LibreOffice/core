@@ -26,6 +26,7 @@
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/XPresentationPage.hpp>
