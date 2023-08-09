@@ -127,6 +127,11 @@ SwTextFormatColl::~SwTextFormatColl()
 }
 void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        CallSwClientNotify(rHint);
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

@@ -28,6 +28,7 @@ class SwFormatMeta;
 
 namespace sw {
     class MetaFieldManager;
+    class AutoFormatUsedHint;
 }
 
 class SwTextCharFormat final : public SwTextAttrEnd
@@ -47,6 +48,7 @@ public:
 
     void SetSortNumber( sal_uInt16 nSortNumber ) { m_nSortNumber = nSortNumber; }
     sal_uInt16 GetSortNumber() const { return m_nSortNumber; }
+    void HandleAutoFormatUsedHint(const sw::AutoFormatUsedHint&);
 };
 
 
@@ -77,8 +79,6 @@ class SW_DLLPUBLIC SwTextRuby final: public SwTextAttrNesting, public SwClient
 public:
     SwTextRuby( SwFormatRuby& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
     virtual ~SwTextRuby() override;
-
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
 
     SAL_DLLPRIVATE void InitRuby(SwTextNode & rNode);
 

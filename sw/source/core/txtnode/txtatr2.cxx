@@ -34,6 +34,26 @@
 #include <IDocumentStylePoolAccess.hxx>
 
 
+namespace {
+
+bool lcl_CheckAutoFormatHint(const SfxHint& rHint)
+{
+    if (rHint.GetId() != SfxHintId::SwAutoFormatUsedHint)
+        return false;
+    auto& rAutoFormatUsed = static_cast<const sw::AutoFormatUsedHint&>(rHint);
+    rAutoFormatUsed.SetUsed();
+    return true;
+}
+bool lcl_CheckAutoFormatHint(const SfxHint& rHint, const SwTextNode* pTextNode)
+{
+    if (rHint.GetId() != SfxHintId::SwAutoFormatUsedHint)
+        return false;
+    auto& rAutoFormatUsed = static_cast<const sw::AutoFormatUsedHint&>(rHint);
+    rAutoFormatUsed.CheckNode(pTextNode);
+    return true;
+}
+}
+
 SwTextCharFormat::SwTextCharFormat( SwFormatCharFormat& rAttr,
                     sal_Int32 nStt, sal_Int32 nEnd )
     : SwTextAttr( rAttr, nStt )
@@ -68,10 +88,9 @@ void SwTextCharFormat::TriggerNodeUpdate(const sw::LegacyModifyHint& rHint)
     }
 }
 
-bool SwTextCharFormat::GetInfo( SfxPoolItem const & rInfo ) const
+void SwTextCharFormat::HandleAutoFormatUsedHint(const sw::AutoFormatUsedHint& rHint)
 {
-    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode const &>(rInfo).pNodes;
+    rHint.CheckNode(m_pTextNode);
 }
 
 SwTextAttrNesting::SwTextAttrNesting( SfxPoolItem & i_rAttr,
@@ -151,6 +170,9 @@ SwCharFormat* SwTextINetFormat::GetCharFormat()
 
 void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if(lcl_CheckAutoFormatHint(rHint))
+        return;
+
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -163,12 +185,6 @@ void SwTextINetFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 
     const SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
     m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
-}
-
-bool SwTextINetFormat::GetInfo( SfxPoolItem& rInfo ) const
-{
-    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 bool SwTextINetFormat::IsProtect( ) const
@@ -192,6 +208,8 @@ SwTextRuby::~SwTextRuby()
 
 void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if(lcl_CheckAutoFormatHint(rHint, m_pTextNode))
+        return;
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -204,12 +222,6 @@ void SwTextRuby::SwClientNotify(const SwModify&, const SfxHint& rHint)
         return;
     SwUpdateAttr aUpdateAttr(GetStart(), *GetEnd(), nWhich);
     m_pTextNode->TriggerNodeUpdate(sw::LegacyModifyHint(&aUpdateAttr, &aUpdateAttr));
-}
-
-bool SwTextRuby::GetInfo( SfxPoolItem& rInfo ) const
-{
-    return RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTextNode ||
-        &m_pTextNode->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 SwCharFormat* SwTextRuby::GetCharFormat()

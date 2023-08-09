@@ -208,7 +208,7 @@ SwFormat::~SwFormat()
         return;
 
     m_bFormatInDTOR = true;
-    
+
     if(!DerivedFrom())
     {
         SwFormat::ResetFormatAttr(RES_PAGEDESC);
@@ -758,6 +758,17 @@ void SwFormat::RemoveAllUnos()
 {
     SwPtrMsgPoolItem aMsgHint(RES_REMOVE_UNO_OBJECT, this);
     SwClientNotify(*this, sw::LegacyModifyHint(&aMsgHint, &aMsgHint));
+}
+
+bool SwFormat::IsUsed() const
+{
+    auto pDoc = GetDoc();
+    if(!pDoc)
+        return false;
+    bool isUsed = false;
+    sw::AutoFormatUsedHint aHint(isUsed, pDoc->GetNodes());
+    CallSwClientNotify(aHint);
+    return isUsed;
 }
 
 SwFormatsBase::~SwFormatsBase()

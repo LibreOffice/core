@@ -844,6 +844,12 @@ void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
         // #i87645# - reset flags for the layout process (only if something has been invalidated)
         ResetLayoutProcessBools();
     }
+    else if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        // There's a FlyFrame, so use it
+        static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
+        return;
+    }
     else if (rHint.GetId() == SfxHintId::SwGetZOrder)
     {
         auto pGetZOrdnerHint = static_cast<const sw::GetZOrderHint*>(&rHint);
@@ -1212,14 +1218,6 @@ void SwFlyFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
-}
-
-/// Gets information from the Modify
-bool SwFlyFrame::GetInfo( SfxPoolItem & rInfo ) const
-{
-    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-        return false;   // There's a FlyFrame, so use it
-    return true;        // Continue searching
 }
 
 void SwFlyFrame::Invalidate_( SwPageFrame const *pPage )

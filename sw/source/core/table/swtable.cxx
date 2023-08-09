@@ -324,6 +324,11 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const tools::Long nOld,
 
 void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint) {
+        auto& rAutoFormatUsedHint = static_cast<const sw::AutoFormatUsedHint&>(rHint);
+        rAutoFormatUsedHint.CheckNode(GetTableNode());
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -2279,11 +2284,6 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
-        case RES_AUTOFMT_DOCNODE:
-        {
-            const SwTableNode* pNode = GetTableNode();
-            return !(pNode && &pNode->GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes);
-        }
         case RES_FINDNEARESTNODE:
             if( GetFrameFormat() &&
                 GetFrameFormat()->GetFormatAttr( RES_PAGEDESC ).GetPageDesc() &&

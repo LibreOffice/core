@@ -38,8 +38,6 @@ class SW_DLLPUBLIC SwTextINetFormat final: public SwTextAttrNesting, public SwCl
         SwTextINetFormat( SwFormatINetFormat& rAttr, sal_Int32 nStart, sal_Int32 nEnd );
         virtual ~SwTextINetFormat() override;
 
-        virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
-
         SAL_DLLPRIVATE void InitINetFormat(SwTextNode & rNode);
 
         // get and set TextNode pointer

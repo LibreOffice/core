@@ -1195,6 +1195,11 @@ void SwContentNode::SwClientNotify( const SwModify&, const SfxHint& rHint)
             static_cast<SwTextNode*>(this)->SetCalcHiddenCharFlags();
         CallSwClientNotify(rHint);
     }
+    else if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        static_cast<const sw::AutoFormatUsedHint&>(rHint).CheckNode(this);
+        return;
+    }
     else if (auto pModifyChangedHint = dynamic_cast<const sw::ModifyChangedHint*>(&rHint))
     {
         m_pCondColl = const_cast<SwFormatColl*>(static_cast<const SwFormatColl*>(pModifyChangedHint->m_pNew));
@@ -1572,12 +1577,6 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
         if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
             static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
         return true;
-    case RES_AUTOFMT_DOCNODE:
-        if( &GetNodes() == static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes )
-        {
-            return false;
-        }
-        break;
     }
     return sw::BroadcastingModify::GetInfo( rInfo );
 }

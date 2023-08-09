@@ -87,6 +87,12 @@ SwFormatCharFormat* SwFormatCharFormat::Clone( SfxItemPool* ) const
 // forward to the TextAttribute
 void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
+    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        if(m_pTextAttribute)
+            m_pTextAttribute->HandleAutoFormatUsedHint(static_cast<const sw::AutoFormatUsedHint&>(rHint));
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -94,11 +100,6 @@ void SwFormatCharFormat::SwClientNotify(const SwModify&, const SfxHint& rHint)
         m_pTextAttribute->TriggerNodeUpdate(*pLegacy);
 }
 
-// forward to the TextAttribute
-bool SwFormatCharFormat::GetInfo( SfxPoolItem& rInfo ) const
-{
-    return m_pTextAttribute && m_pTextAttribute->GetInfo( rInfo );
-}
 bool SwFormatCharFormat::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     OUString sCharFormatName;

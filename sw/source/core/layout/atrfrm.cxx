@@ -678,7 +678,12 @@ SwFormatPageDesc* SwFormatPageDesc::Clone( SfxItemPool* ) const
 
 void SwFormatPageDesc::SwClientNotify(const SwModify&, const SfxHint& rHint)
 {
-    if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
+    if(rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        if(GetRegisteredIn())
+            static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed(); //TODO: recheck if this is really the right way to check for use
+    }
+    else if (const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint))
     {
         // mba: shouldn't that be broadcasted also?
         SwFormatPageDesc aDfltDesc(pHint->GetPageDesc());
@@ -1760,7 +1765,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case text::TextContentAnchorType_AT_PARAGRAPH:
                     eAnchor = RndStdIds::FLY_AT_PARA;
                     break;
-                default:                    
+                default:
                     eAnchor = RndStdIds::FLY_AT_PARA; // just to keep some compilers happy
                     assert(false);
             }

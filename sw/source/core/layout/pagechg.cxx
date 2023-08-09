@@ -526,6 +526,12 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         // here, the page might be destroyed:
         static_cast<SwRootFrame*>(GetUpper())->RemoveFootnotes(nullptr, false, true);
     }
+    else if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        // a page frame exists, so use this one
+        static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
+        return;
+    }
     else if (rHint.GetId() == SfxHintId::SwLegacyModify)
     {
         auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
@@ -732,17 +738,6 @@ void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
         SwModify aMod;
         SwLayoutFrame::SwClientNotify(aMod, sw::LegacyModifyHint(pOld, pNew));
     }
-}
-
-/// get information from Modify
-bool SwPageFrame::GetInfo( SfxPoolItem & rInfo ) const
-{
-    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-    {
-        // a page frame exists, so use this one
-        return false;
-    }
-    return true; // continue searching
 }
 
 void  SwPageFrame::SetPageDesc( SwPageDesc *pNew, SwFrameFormat *pFormat )

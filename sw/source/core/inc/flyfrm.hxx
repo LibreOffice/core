@@ -170,9 +170,6 @@ protected:
 
 public:
     // #i26791#
-
-    // get client information
-    virtual bool GetInfo( SfxPoolItem& ) const override;
     virtual void PaintSwFrame( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = nullptr ) const override;
     virtual Size ChgSize( const Size& aNewSize ) override;

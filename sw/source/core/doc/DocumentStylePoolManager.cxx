@@ -2497,8 +2497,10 @@ bool DocumentStylePoolManager::IsPoolTextCollUsed( sal_uInt16 nId ) const
     if( !bFnd || !pNewColl->HasWriterListeners() )
         return false;
 
-    SwAutoFormatGetDocNode aGetHt( &m_rDoc.GetNodes() );
-    return !pNewColl->GetInfo( aGetHt );
+    bool isUsed = false;
+    sw::AutoFormatUsedHint aHint(isUsed, m_rDoc.GetNodes());
+    pNewColl->CallSwClientNotify(aHint);
+    return isUsed;
 }
 
 /// Check if this AutoCollection is already/still in use
@@ -2540,17 +2542,11 @@ bool DocumentStylePoolManager::IsPoolFormatUsed( sal_uInt16 nId ) const
     }
 
     // Not found or no dependencies?
-    if( bFnd && pNewFormat->HasWriterListeners() )
-    {
-        // Check if we have dependent ContentNodes in the Nodes array
-        // (also indirect ones for derived Formats)
-        SwAutoFormatGetDocNode aGetHt( &m_rDoc.GetNodes() );
-        bFnd = !pNewFormat->GetInfo( aGetHt );
-    }
-    else
-        bFnd = false;
-
-    return bFnd;
+    if(!bFnd || !pNewFormat->HasWriterListeners() )
+        return false;
+    // Check if we have dependent ContentNodes in the Nodes array
+    // (also indirect ones for derived Formats)
+    return pNewFormat->IsUsed();
 }
 
 /// Check if this AutoCollection is already/still in use in this Document
@@ -2573,8 +2569,10 @@ bool DocumentStylePoolManager::IsPoolPageDescUsed( sal_uInt16 nId ) const
 
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
-    SwAutoFormatGetDocNode aGetHt( &m_rDoc.GetNodes() );
-    return !pNewPgDsc->GetInfo( aGetHt );
+    bool isUsed = false;
+    sw::AutoFormatUsedHint aHint(isUsed, m_rDoc.GetNodes());
+    pNewPgDsc->CallSwClientNotify(aHint);
+    return isUsed;
 }
 
 DocumentStylePoolManager::~DocumentStylePoolManager()

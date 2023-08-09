@@ -78,6 +78,8 @@
 #include <textboxhelper.hxx>
 #include <textcontentcontrol.hxx>
 #include <memory>
+#include <algorithm>
+#include <functional>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -778,40 +780,23 @@ SwDrawFrameFormat *SwDoc::MakeDrawFrameFormat( const OUString &rFormatName,
 size_t SwDoc::GetTableFrameFormatCount(bool bUsed) const
 {
     if (!bUsed)
-    {
         return mpTableFrameFormatTable->size();
-    }
-
-    SwAutoFormatGetDocNode aGetHt(&GetNodes());
-    size_t nCount = 0;
-    for (const SwTableFormat* pFormat: *mpTableFrameFormatTable)
-    {
-        if (!pFormat->GetInfo(aGetHt))
-            nCount++;
-    }
-    return nCount;
+    return std::count_if(mpTableFrameFormatTable->begin(), mpTableFrameFormatTable->end(),
+            std::mem_fn(&SwFormat::IsUsed));
 }
 
 SwTableFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed) const
 {
     if (!bUsed)
-    {
         return *const_cast<SwTableFormat*>((*mpTableFrameFormatTable)[nFormat]);
-    }
-
-    SwAutoFormatGetDocNode aGetHt(&GetNodes());
-
-    size_t index = 0;
-
     for(SwTableFormat* pFormat: *mpTableFrameFormatTable)
     {
-        if (!pFormat->GetInfo(aGetHt))
-        {
-            if (index == nFormat)
-                return *pFormat;
-            else
-                index++;
-        }
+        if(!pFormat->IsUsed())
+            continue;
+        if(nFormat)
+            --nFormat;
+        else
+            return *pFormat;
     }
     throw std::out_of_range("Format index out of range.");
 }

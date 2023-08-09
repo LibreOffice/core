@@ -157,8 +157,9 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
             }
             else if( dynamic_cast< const SwFormat* >(pDesc->GetDefinedIn()) !=  nullptr)
             {
-                SwAutoFormatGetDocNode aGetHt( &pDoc->GetNodes() );
-                m_bVirtual = !pDesc->GetDefinedIn()->GetInfo( aGetHt );
+                m_bVirtual = false;
+                sw::AutoFormatUsedHint aHint(m_bVirtual, pDoc->GetNodes());
+                pDesc->GetDefinedIn()->CallSwClientNotify(aHint);
                 break;
             }
         }

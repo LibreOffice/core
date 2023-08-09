@@ -60,8 +60,6 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    virtual bool    GetInfo( SfxPoolItem& rInfo ) const override;
-
     void SetCharFormat( SwFormat* pFormat )
     {
         assert(!pFormat->IsDefault()); // expose cases that lead to use-after-free

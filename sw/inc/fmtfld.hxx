@@ -124,8 +124,6 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SwFormatField*  Clone( SfxItemPool* pPool = nullptr ) const override;
 
-    virtual bool GetInfo( SfxPoolItem& rInfo ) const override;
-
     void InvalidateField();
 
     const SwField* GetField() const

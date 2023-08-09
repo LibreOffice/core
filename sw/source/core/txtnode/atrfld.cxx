@@ -222,7 +222,12 @@ void SwFormatField::InvalidateField()
 void SwFormatField::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
     SwClient::SwClientNotify(rModify, rHint);
-    if (rHint.GetId() == SfxHintId::SwField)
+    if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint) {
+        if(mpTextField)
+            static_cast<const sw::AutoFormatUsedHint&>(rHint).CheckNode(mpTextField->GetpTextNode());
+        return;
+    }
+    else if (rHint.GetId() == SfxHintId::SwField)
     {
         const auto pFieldHint = static_cast<const SwFieldHint*>( &rHint );
         // replace field content by text
@@ -447,15 +452,6 @@ void SwFormatField::UpdateTextNode(const SfxHint& rHint)
         pTextNd->TriggerNodeUpdate(sw::LegacyModifyHint(pOld, pNew));
     if(bExpand)
         mpTextField->ExpandTextField(false);
-}
-
-bool SwFormatField::GetInfo( SfxPoolItem& rInfo ) const
-{
-    if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !mpTextField )
-        return true;
-    const SwTextNode* pTextNd = mpTextField->GetpTextNode();
-    return nullptr == pTextNd ||
-        &pTextNd->GetNodes() != static_cast<SwAutoFormatGetDocNode&>(rInfo).pNodes;
 }
 
 bool SwFormatField::IsFieldInDoc() const

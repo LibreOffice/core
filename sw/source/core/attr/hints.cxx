@@ -78,6 +78,11 @@ VirtPageNumHint::VirtPageNumHint(const SwPageFrame* pPg):
 {
 }
 
+void AutoFormatUsedHint::CheckNode(const SwNode* pNode) const
+{
+    if(pNode && &pNode->GetNodes() == &m_rNodes)
+        SetUsed();
+}
 } // namespace sw
 
 SwUpdateAttr::SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW )
@@ -98,11 +103,6 @@ SwTableFormulaUpdate::SwTableFormulaUpdate(const SwTable* pNewTable)
     m_aData.pDelTable = nullptr;
     m_bModified = m_bBehindSplitLine = false;
     OSL_ENSURE( m_pTable, "No Table pointer" );
-}
-
-SwAutoFormatGetDocNode::SwAutoFormatGetDocNode( const SwNodes* pNds )
-    : SwMsgPoolItem( RES_AUTOFMT_DOCNODE ), pNodes( pNds )
-{
 }
 
 SwAttrSetChg::SwAttrSetChg( const SwAttrSet& rTheSet, SwAttrSet& rSet )

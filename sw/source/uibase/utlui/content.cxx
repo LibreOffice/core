@@ -497,11 +497,10 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         {
             const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
             const sw::TableFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
-            SwAutoFormatGetDocNode aGetHt(&m_pWrtShell->GetNodes());
             for(size_t n = 0, i = 0; i < nCount + n; ++i)
             {
                 const SwTableFormat& rTableFormat = *(*pFrameFormats)[i];
-                if (rTableFormat.GetInfo(aGetHt))  // skip deleted tables
+                if(!rTableFormat.IsUsed())  // skip deleted tables
                 {
                     n++;
                     continue;
@@ -5791,11 +5790,10 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 std::vector<const SwNode*> aNodesArr;
                 const size_t nCount = m_pActiveShell->GetTableFrameFormatCount(false);
                 const sw::TableFrameFormats& rTableFormats = *m_pActiveShell->GetDoc()->GetTableFrameFormats();
-                SwAutoFormatGetDocNode aGetHt(&m_pActiveShell->GetNodes());
                 for(size_t i = 0; i < nCount; ++i)
                 {
                     if (const SwTableFormat* pTableFormat = rTableFormats[i])
-                        if (!pTableFormat->GetInfo(aGetHt))  // skip deleted tables
+                        if(pTableFormat->IsUsed())  // skip deleted tables
                         {
                             SwTable* pTable = SwTable::FindTable(pTableFormat);
                             if (pTable)

@@ -737,6 +737,12 @@ void SwFlyLayFrame::RegisterAtPage(SwPageFrame & rPageFrame)
 
 void SwFlyLayFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
+    if (rHint.GetId() == SfxHintId::SwAutoFormatUsedHint)
+    {
+        // There's a FlyFrame, so use it
+        static_cast<const sw::AutoFormatUsedHint&>(rHint).SetUsed();
+        return;
+    }
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);

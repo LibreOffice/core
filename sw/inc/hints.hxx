@@ -287,6 +287,15 @@ public:
     bool IsFound()
         { return m_bFound; }
 };
+class AutoFormatUsedHint final : public SfxHint
+{
+    bool& m_isUsed;
+    const SwNodes& m_rNodes;
+public:
+    AutoFormatUsedHint(bool& isUsed, const SwNodes& rNodes) : SfxHint(SfxHintId::SwAutoFormatUsedHint), m_isUsed(isUsed), m_rNodes(rNodes) {}
+    void SetUsed() const { m_isUsed = true; }
+    void CheckNode(const SwNode*) const;
+};
 }
 
 class SwUpdateAttr final : public SwMsgPoolItem
@@ -345,14 +354,6 @@ public:
 
     /** Is sent if a table should be recalculated */
     SwTableFormulaUpdate( const SwTable* );
-};
-
-class SwAutoFormatGetDocNode final : public SwMsgPoolItem
-{
-public:
-    const SwNodes* pNodes;
-
-    SwAutoFormatGetDocNode( const SwNodes* pNds );
 };
 
 /*

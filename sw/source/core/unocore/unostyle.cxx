@@ -4457,18 +4457,15 @@ sal_Bool SAL_CALL SwXTextTableStyle::isInUse()
     if (!m_bPhysical)
         return false;
 
-    SwAutoFormatGetDocNode aGetHt( &m_pDocShell->GetDoc()->GetNodes() );
-
     for (const SwTableFormat* pFormat : *m_pDocShell->GetDoc()->GetTableFrameFormats())
     {
-        if (!pFormat->GetInfo(aGetHt))
+        if(pFormat->IsUsed())
         {
             SwTable* pTable = SwTable::FindTable(pFormat);
-            if (pTable->GetTableStyleName() == m_pTableAutoFormat->GetName())
+            if(pTable->GetTableStyleName() == m_pTableAutoFormat->GetName())
                 return true;
         }
     }
-
     return false;
 }
 

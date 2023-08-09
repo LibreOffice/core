@@ -863,29 +863,25 @@ sal_Int32 SwXTextTables::getCount()
 uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
 {
     SolarMutexGuard aGuard;
-    uno::Any aRet;
     if (!IsValid())
         throw uno::RuntimeException();
 
     if (nInputIndex < 0)
         throw IndexOutOfBoundsException();
 
-    SwAutoFormatGetDocNode aGetHt( &GetDoc()->GetNodes() );
     size_t nIndex = static_cast<size_t>(nInputIndex);
-    size_t nCurrentIndex = 0;
-
     for(SwTableFormat* pFormat: *GetDoc()->GetTableFrameFormats())
     {
-        if (!pFormat->GetInfo(aGetHt))
+        if(!pFormat->IsUsed())
+            continue;
+        if(nIndex)
+            --nIndex;
+        else
         {
-            if (nCurrentIndex == nIndex)
-            {
-                uno::Reference<XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
-                aRet <<= xTable;
-                return aRet;
-            }
-            else
-                nCurrentIndex++;
+            uno::Reference<XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
+            uno::Any aRet;
+            aRet <<= xTable;
+            return aRet;
         }
     }
     throw IndexOutOfBoundsException();

@@ -181,9 +181,6 @@ public:
 
     virtual bool GetModelPositionForViewPoint( SwPosition *, Point&,
                               SwCursorMoveState* = nullptr, bool bTestBackground = false ) const override;
-    /// Get info from Client
-    virtual bool GetInfo( SfxPoolItem& ) const override;
-
     virtual void Cut() override;
     virtual void Paste( SwFrame* pParent, SwFrame* pSibling = nullptr ) override;
     virtual void CheckDirection( bool bVert ) override;

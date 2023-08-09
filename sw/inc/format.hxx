@@ -280,6 +280,7 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;
     void RemoveAllUnos();
+    bool IsUsed() const;
 };
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX

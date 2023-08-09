@@ -87,8 +87,10 @@ bool SwDoc::IsUsed( const sw::BroadcastingModify& rModify ) const
 {
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)
-    SwAutoFormatGetDocNode aGetHt( &GetNodes() );
-    return !rModify.GetInfo( aGetHt );
+    bool isUsed = false;
+    sw::AutoFormatUsedHint aHint(isUsed, GetNodes());
+    rModify.CallSwClientNotify(aHint);
+    return isUsed;
 }
 
 // See if Table style is in use
@@ -225,7 +227,7 @@ sal_uInt16 GetPoolParent( sal_uInt16 nId )
             case RES_POOLCOLL_HEADERFOOTER:
             case RES_POOLCOLL_LABEL:
             case RES_POOLCOLL_COMMENT:
-                    nRet = RES_POOLCOLL_STANDARD;              break;        
+                    nRet = RES_POOLCOLL_STANDARD;              break;
             case RES_POOLCOLL_HEADER:
                     nRet = RES_POOLCOLL_HEADERFOOTER;          break;
             case RES_POOLCOLL_HEADERL:
