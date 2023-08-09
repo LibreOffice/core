@@ -134,7 +134,9 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_osx,\
     vcl/osx/salsys \
     vcl/osx/saltimer \
     vcl/osx/service_entry \
-    vcl/quartz/ctfonts \
+    vcl/quartz/CoreTextFont \
+    vcl/quartz/CoreTextFontFace \
+    vcl/quartz/SystemFontList \
     vcl/quartz/salbmp \
     vcl/quartz/salgdi \
     vcl/quartz/salgdicommon \

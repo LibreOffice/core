@@ -14558,7 +14558,7 @@ vcl/qa/cppunit/graphicfilter/filters-tga-test.cxx
 vcl/qa/cppunit/lifecycle.cxx
 vcl/qa/cppunit/svm/svmtest.cxx
 vcl/qa/cppunit/timer.cxx
-vcl/quartz/ctfonts.cxx
+vcl/quartz/SystemFontList.cxx
 vcl/quartz/salbmp.cxx
 vcl/quartz/salgdi.cxx
 vcl/quartz/salgdicommon.cxx

@@ -25,7 +25,8 @@
 
 #include <tools/sk_app/mac/WindowContextFactory_mac.h>
 
-#include <quartz/ctfonts.hxx>
+#include <quartz/CoreTextFont.hxx>
+#include <quartz/SystemFontList.hxx>
 #include <skia/quartz/cgutils.h>
 
 #include <SkBitmap.h>

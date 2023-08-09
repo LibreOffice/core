@@ -23,7 +23,6 @@
 
 #include <vector>
 
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/long.hxx>
 
 #include <premac.h>
@@ -49,85 +48,15 @@
 
 #include <font/LogicalFontInstance.hxx>
 #include <font/FontMetricData.hxx>
-#include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 
 #include <quartz/salgdicommon.hxx>
-#include <unordered_map>
-#include <hb-ot.h>
 
 #include <quartz/CGHelpers.hxx>
 
 class AquaSalFrame;
-class FontAttributes;
 class XorEmulation;
-
-// CoreText-specific physically available font face
-class CoreTextFontFace final : public vcl::font::PhysicalFontFace
-{
-public:
-                                    CoreTextFontFace( const FontAttributes&, CTFontDescriptorRef xRef );
-                                    ~CoreTextFontFace() override;
-
-    sal_IntPtr                      GetFontId() const override;
-
-    CTFontDescriptorRef             GetFontDescriptorRef() const { return mxFontDescriptor; }
-
-    rtl::Reference<LogicalFontInstance> CreateFontInstance(const vcl::font::FontSelectPattern&) const override;
-
-    hb_blob_t* GetHbTable(hb_tag_t nTag) const override;
-
-    const std::vector<hb_variation_t>& GetVariations(const LogicalFontInstance&) const override;
-
-private:
-    CTFontDescriptorRef             mxFontDescriptor;
-};
-
-class CoreTextFont final : public LogicalFontInstance
-{
-    friend rtl::Reference<LogicalFontInstance> CoreTextFontFace::CreateFontInstance(const vcl::font::FontSelectPattern&) const;
-
-public:
-    ~CoreTextFont() override;
-
-    void       GetFontMetric( FontMetricDataRef const & );
-    bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const override;
-
-    CTFontRef GetCTFont() const { return mpCTFont; }
-
-    /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
-    float mfFontStretch;
-    /// text rotation in radian
-    float mfFontRotation;
-
-private:
-    explicit CoreTextFont(const CoreTextFontFace&, const vcl::font::FontSelectPattern&);
-
-    CTFontRef mpCTFont;
-};
-
-// TODO: move into cross-platform headers
-
-class SystemFontList
-{
-public:
-    SystemFontList( void );
-    ~SystemFontList( void );
-
-    bool        Init( void );
-    void        AddFont( CoreTextFontFace* );
-
-    void    AnnounceFonts( vcl::font::PhysicalFontCollection& ) const;
-    CoreTextFontFace* GetFontDataFromId( sal_IntPtr nFontId ) const;
-
-    CTFontCollectionRef fontCollection() { return mpCTFontCollection; }
-
-private:
-    CTFontCollectionRef mpCTFontCollection;
-    CFArrayRef mpCTFontArray;
-
-    std::unordered_map<sal_IntPtr, rtl::Reference<CoreTextFontFace>> maFontContainer;
-};
+class CoreTextFont;
 
 namespace sal::aqua
 {

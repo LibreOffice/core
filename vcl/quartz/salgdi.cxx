@@ -39,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 
-#include <quartz/ctfonts.hxx>
 #include <fontsubset.hxx>
 #include <impfont.hxx>
 #include <font/FontMetricData.hxx>
@@ -60,6 +59,10 @@
 #if HAVE_FEATURE_SKIA
 #include <skia/osx/gdiimpl.hxx>
 #endif
+
+#include <quartz/SystemFontList.hxx>
+#include <quartz/CoreTextFont.hxx>
+#include <quartz/CoreTextFontFace.hxx>
 
 using namespace vcl;
 
@@ -118,23 +121,6 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
     }
 
     return bFound;
-}
-
-CoreTextFontFace::CoreTextFontFace( const FontAttributes& rDFA, CTFontDescriptorRef xFontDescriptor )
-  : vcl::font::PhysicalFontFace( rDFA )
-  , mxFontDescriptor( xFontDescriptor )
-{
-    CFRetain(mxFontDescriptor);
-}
-
-CoreTextFontFace::~CoreTextFontFace()
-{
-    CFRelease(mxFontDescriptor);
-}
-
-sal_IntPtr CoreTextFontFace::GetFontId() const
-{
-    return reinterpret_cast<sal_IntPtr>(mxFontDescriptor);
 }
 
 AquaSalGraphics::AquaSalGraphics(bool bPrinter)

@@ -32,6 +32,7 @@
 #include <bitmaps.hlst>
 #include <cursor_hotspots.hxx>
 #include <quartz/salgdi.h>
+#include <quartz/SystemFontList.hxx>
 
 #import "apple_remote/RemoteMainController.h"
 
