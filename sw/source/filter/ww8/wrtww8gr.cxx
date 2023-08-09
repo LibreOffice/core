@@ -745,7 +745,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 {
     sal_uInt16 nWidth = rItem.mnWid;
     sal_uInt16 nHeight = rItem.mnHei;
-    sal_uInt32 nPos = rStrm.Tell();         // store start of graphic
+    sal_uInt64 nPos = rStrm.Tell();         // store start of graphic
 
     const ww8::Frame &rFly = rItem.maFly;
     switch (rFly.GetWriterType())
@@ -834,7 +834,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             break;
     }
 
-    sal_uInt32 nPos2 = rStrm.Tell();                    // store the end
+    sal_uInt64 nPos2 = rStrm.Tell();                    // store the end
     rStrm.Seek( nPos );
     rStrm.WriteUInt32(nPos2 - nPos); // patch graphic length in the header
     rStrm.Seek( nPos2 );                            // restore Pos
@@ -852,7 +852,7 @@ void SwWW8WrGrf::Write()
     auto aEnd = maDetails.end();
     for (auto aIter = maDetails.begin(); aIter != aEnd; ++aIter)
     {
-        sal_uInt32 nPos = rStrm.Tell();                 // align to 4 Bytes
+        sal_uInt64 nPos = rStrm.Tell();                 // align to 4 Bytes
         if( nPos & 0x3 )
             SwWW8Writer::FillCount( rStrm, 4 - ( nPos & 0x3 ) );
 

@@ -1061,7 +1061,7 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
 
 void SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
 {
-    sal_uInt32 nPos = m_pStream->Tell();
+    sal_uInt64 nPos = m_pStream->Tell();
     if( m_bWriteMode )
     {
         m_aRecords.emplace_back(cType, nPos );
@@ -1094,7 +1094,7 @@ void SwLayCacheIoImpl::CloseRec()
     OSL_ENSURE( !m_aRecords.empty(), "CloseRec: no levels" );
     if( !m_aRecords.empty() )
     {
-        sal_uInt32 nPos = m_pStream->Tell();
+        sal_uInt64 nPos = m_pStream->Tell();
         if( m_bWriteMode )
         {
             sal_uInt32 nBgn = m_aRecords.back().size;
@@ -1132,7 +1132,7 @@ sal_uInt32 SwLayCacheIoImpl::BytesLeft()
     if( !m_bError && !m_aRecords.empty() )
     {
         sal_uInt32 nEndPos = m_aRecords.back().size;
-        sal_uInt32 nPos = m_pStream->Tell();
+        sal_uInt64 nPos = m_pStream->Tell();
         if( nEndPos > nPos )
             n = nEndPos - nPos;
     }
@@ -1144,7 +1144,7 @@ sal_uInt8 SwLayCacheIoImpl::Peek()
     sal_uInt8 c(0);
     if( !m_bError )
     {
-        sal_uInt32 nPos = m_pStream->Tell();
+        sal_uInt64 nPos = m_pStream->Tell();
         m_pStream->ReadUChar( c );
         m_pStream->Seek( nPos );
         if( m_pStream->GetErrorCode() != ERRCODE_NONE )

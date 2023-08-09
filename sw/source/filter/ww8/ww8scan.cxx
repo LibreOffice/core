@@ -63,7 +63,7 @@ namespace
     bool TestBeltAndBraces(SvStream& rStrm)
     {
         bool bRet = false;
-        sal_uInt32 nOldPos = rStrm.Tell();
+        sal_uInt64 nOldPos = rStrm.Tell();
         sal_uInt16 nBelt(0);
         rStrm.ReadUInt16( nBelt );
         nBelt *= sizeof(sal_Unicode);
@@ -2791,7 +2791,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
                             pStartData = nullptr;
                         if ((IsReplaceAllSprm(nSpId) || bExpand) && pStartData)
                         {
-                            sal_uInt32 nCurr = pDataSt->Tell();
+                            sal_uInt64 nCurr = pDataSt->Tell();
                             sal_uInt32 nPos = SVBT32ToUInt32(pStartData);
                             sal_uInt16 nLen(0);
 
@@ -6012,7 +6012,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset):
         rSt.ReadUInt16( m_cfclcb );
 
         // Read cswNew to find out if nFib should be ignored.
-        sal_uInt32 nPos = rSt.Tell();
+        sal_uInt64 nPos = rSt.Tell();
         rSt.SeekRel(m_cfclcb * 8);
         if (rSt.good() && rSt.remainingSize() >= 2)
         {

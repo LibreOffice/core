@@ -321,7 +321,7 @@ public:
     sal_uInt32 m_aFontHeights[7];         // font heights 1-7
 
     ErrCode m_nWarn;                      // warning code
-    sal_uInt32 m_nLastLFPos;              // last position of LF
+    sal_uInt64 m_nLastLFPos;              // last position of LF
 
     HtmlTokenId m_nLastParaToken;         // to hold paragraphs together
     sal_Int32 m_nBkmkTabPos;              // current position in bookmark table

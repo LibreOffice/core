@@ -1484,7 +1484,7 @@ void SwEscherEx::WritePictures()
     if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
     {
         // set the blip - entries to the correct stream pos
-        sal_Int32 nEndPos = mrWrt.Strm().Tell();
+        sal_uInt64 nEndPos = mrWrt.Strm().Tell();
         mxGlobal->SetNewBlipStreamOffset( nEndPos );
 
         pPicStrm->Seek( 0 );
@@ -2162,7 +2162,7 @@ void SwBasicEscherEx::WritePictures()
     if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
     {
         // set the blip - entries to the correct stream pos
-        sal_Int32 nEndPos = pPicStrm->Tell();
+        sal_uInt64 nEndPos = pPicStrm->Tell();
         mxGlobal->WriteBlibStoreEntry(*mpEscherStrm, 1, nEndPos);
 
         pPicStrm->Seek(0);

@@ -1397,7 +1397,7 @@ class GraphicDetails
 {
 public:
     ww8::Frame maFly;                // surrounding FlyFrames
-    sal_uLong mnPos;                // FilePos of the graphics
+    sal_uInt64 mnPos;                // FilePos of the graphics
     sal_uInt16 mnWid;               // Width of the graphics
     sal_uInt16 mnHei;               // Height of the graphics
 

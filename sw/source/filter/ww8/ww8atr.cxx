@@ -1792,7 +1792,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         // write hyperlink data to data stream
         SvStream& rStrm = *rWrt.m_pDataStrm;
         // position of hyperlink data
-        const sal_uInt32 nLinkPosInDataStrm = rStrm.Tell();
+        const sal_uInt64 nLinkPosInDataStrm = rStrm.Tell();
         // write empty header
         const sal_uInt16 nEmptyHdrLen = 0x44;
         sal_uInt8 aEmptyHeader[ nEmptyHdrLen ] = { 0 };
@@ -1815,7 +1815,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
         // write additional two NULL Bytes
         SwWW8Writer::WriteLong( rStrm, 0 );
         // write length of hyperlink data
-        const sal_uInt32 nCurrPos = rStrm.Tell();
+        const sal_uInt64 nCurrPos = rStrm.Tell();
         rStrm.Seek( nLinkPosInDataStrm );
         rStrm.WriteUInt32(nCurrPos - nLinkPosInDataStrm);
         rStrm.Seek( nCurrPos );

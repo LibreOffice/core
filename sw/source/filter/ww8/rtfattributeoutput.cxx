@@ -4295,7 +4295,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, *pGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the graphic");
-    sal_uInt32 nSize = aStream.TellEnd();
+    sal_uInt64 nSize = aStream.TellEnd();
     pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
     m_aRunText->append(ExportPICT(pFlyFrameFormat, aSize, aRendered, aMapped, rCr, pBLIPType,
                                   pGraphicAry, nSize, m_rExport));
@@ -4599,7 +4599,7 @@ void RtfAttributeOutput::BulletDefinition(int /*nId*/, const Graphic& rGraphic, 
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG) != ERRCODE_NONE)
         SAL_WARN("sw.rtf", "failed to export the numbering picture bullet");
-    sal_uInt32 nSize = aStream.TellEnd();
+    sal_uInt64 nSize = aStream.TellEnd();
     pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
     msfilter::rtfutil::WriteHex(pGraphicAry, nSize, &m_rExport.Strm());
     m_rExport.Strm().WriteOString("}}"); // pict, shppict
