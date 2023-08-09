@@ -760,7 +760,7 @@ sal_Int64 SAL_CALL TempFileFastService::getPosition()
     std::unique_lock aGuard( maMutex );
     checkConnected();
 
-    sal_uInt32 nPos = mpStream->Tell();
+    sal_uInt64 nPos = mpStream->Tell();
     checkError();
     return static_cast<sal_Int64>(nPos);
 }

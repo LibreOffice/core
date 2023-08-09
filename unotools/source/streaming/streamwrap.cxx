@@ -185,7 +185,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
-    sal_uInt32 nPos = m_pSvStream->Tell();
+    sal_uInt64 nPos = m_pSvStream->Tell();
     checkError();
     return static_cast<sal_Int64>(nPos);
 }
@@ -264,7 +264,7 @@ void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
 
 sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  )
 {
-    sal_uInt32 nPos = rStream.Tell();
+    sal_uInt64 nPos = rStream.Tell();
     checkError();
     return static_cast<sal_Int64>(nPos);
 }
