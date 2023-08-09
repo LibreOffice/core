@@ -32,8 +32,8 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
     // SwWw6ReadMetaStream, so do *not* ignore. OTOH XclImpDrawing::ReadWmf
     // is nice enough to copy to an own MemStream to avoid that indirect
     // parameter passing...)
-    const sal_uInt32 nStreamStart(rStream.Tell());
-    const sal_uInt32 nStreamEnd(rStream.TellEnd());
+    const sal_uInt64 nStreamStart(rStream.Tell());
+    const sal_uInt64 nStreamEnd(rStream.TellEnd());
 
     if (nStreamStart >= nStreamEnd)
     {
@@ -41,7 +41,7 @@ bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF )
     }
 
     // Read binary data to mem array
-    const sal_uInt32 nStreamLength(nStreamEnd - nStreamStart);
+    const sal_uInt64 nStreamLength(nStreamEnd - nStreamStart);
     BinaryDataContainer aDataContainer(rStream, nStreamLength);
     rStream.Seek(nStreamStart);
 

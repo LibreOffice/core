@@ -36,8 +36,8 @@ private:
     std::vector<bool>       mHandlesUsed;
     sal_uLong               mnHandleCount;
     sal_uLong               mnRecordCount;
-    sal_uLong               mnRecordPos;
-    sal_uLong               mnRecordPlusPos;
+    sal_uInt64              mnRecordPos;
+    sal_uInt64              mnRecordPlusPos;
     bool                mbRecordOpen;
     bool                mbRecordPlusOpen;
     bool                mbLineChanged;

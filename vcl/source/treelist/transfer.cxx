@@ -85,7 +85,8 @@ using namespace std::literals::string_view_literals;
 
 SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc )
 {
-    const sal_uInt32    nFirstPos = rOStm.Tell(), nViewAspect = rObjDesc.mnViewAspect;
+    const sal_uInt64    nFirstPos = rOStm.Tell();
+    const sal_uInt32    nViewAspect = rObjDesc.mnViewAspect;
     const sal_uInt32    nSig1 = TOD_SIG1, nSig2 = TOD_SIG2;
 
     rOStm.SeekRel( 4 );
@@ -99,7 +100,7 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     rOStm.WriteUniOrByteString( rObjDesc.maDisplayName, osl_getThreadTextEncoding() );
     rOStm.WriteUInt32( nSig1 ).WriteUInt32( nSig2 );
 
-    const sal_uInt32 nLastPos = rOStm.Tell();
+    const sal_uInt64 nLastPos = rOStm.Tell();
 
     rOStm.Seek( nFirstPos );
     rOStm.WriteUInt32( nLastPos - nFirstPos  );

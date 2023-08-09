@@ -97,7 +97,7 @@ BinaryDataContainer createBinaryDataContainer(SvStream& rStream)
     if (!getCompatibleStream(rStream, aMemoryStream))
         return {};
 
-    const sal_uInt32 nStreamLength = aMemoryStream.TellEnd();
+    const sal_uInt64 nStreamLength = aMemoryStream.TellEnd();
 
     aMemoryStream.Seek(STREAM_SEEK_TO_BEGIN);
     BinaryDataContainer aPdfData(aMemoryStream, nStreamLength);

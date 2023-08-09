@@ -267,7 +267,7 @@ bool PSDReader::ImplReadHeader()
     m_rPSD.ReadUInt32(nResourceLength);
     if (nResourceLength > m_rPSD.remainingSize())
         return false;
-    sal_uInt32 nLayerPos = m_rPSD.Tell() + nResourceLength;
+    sal_uInt64 nLayerPos = m_rPSD.Tell() + nResourceLength;
 
     // this is a loop over the resource entries to get the resolution info
     while( m_rPSD.Tell() < nLayerPos )
@@ -286,7 +286,7 @@ bool PSDReader::ImplReadHeader()
         m_rPSD.ReadUInt32( nResEntryLen );
         if ( nResEntryLen & 1 )
             nResEntryLen++;             // the resource entries are padded
-        sal_uInt32 nCurrentPos = m_rPSD.Tell();
+        sal_uInt64 nCurrentPos = m_rPSD.Tell();
         if (nCurrentPos > nLayerPos || nResEntryLen > (nLayerPos - nCurrentPos))   // check if size
             break;                                                                 // is possible
         switch( nUniqueID )

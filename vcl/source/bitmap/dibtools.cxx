@@ -905,7 +905,7 @@ bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uI
         // end of BITMAPINFOHEADER or 12 bytes further in case
         // of WinBMPv3-NT format. It is possible to seek forward
         // though because a gap may be there.
-        sal_Int32 nSeekRel = nOffset - (pIStm->Tell() - nStmPos);
+        sal_Int64 nSeekRel = nOffset - (pIStm->Tell() - nStmPos);
         if (nSeekRel > 0)
             pIStm->SeekRel(nSeekRel);
     }

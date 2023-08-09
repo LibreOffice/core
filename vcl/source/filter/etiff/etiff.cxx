@@ -59,7 +59,7 @@ class TIFFWriter
 private:
 
     SvStream& m_rOStm;
-    sal_uInt32              mnStreamOfs;
+    sal_uInt64              mnStreamOfs;
 
     bool                    mbStatus;
     BitmapReadAccess*       mpAcc;
@@ -72,7 +72,7 @@ private:
 
     sal_uInt32              mnLatestIfdPos;
     sal_uInt16              mnTagCount;                 // number of tags already written
-    sal_uInt32              mnCurrentTagCountPos;       // offset to the position where the current
+    sal_uInt64              mnCurrentTagCountPos;       // offset to the position where the current
                                                         // tag count is to insert
 
     sal_uInt32              mnXResPos;                  // if != 0 this DWORDs stores the
@@ -204,7 +204,7 @@ bool TIFFWriter::WriteTIFF( const Graphic& rGraphic, FilterConfigItem const * pF
                         ImplWritePalette();
                     ImplWriteBody();
                 }
-                sal_uInt32 nCurPos = m_rOStm.Tell();
+                sal_uInt64 nCurPos = m_rOStm.Tell();
                 m_rOStm.Seek( mnCurrentTagCountPos );
                 m_rOStm.WriteUInt16( mnTagCount );
                 m_rOStm.Seek( nCurPos );
@@ -246,7 +246,7 @@ bool TIFFWriter::ImplWriteHeader( bool bMultiPage )
 
     if ( mnWidth && mnHeight && mnBitsPerPixel && mbStatus )
     {
-        sal_uInt32 nCurrentPos = m_rOStm.Tell();
+        sal_uInt64 nCurrentPos = m_rOStm.Tell();
         m_rOStm.Seek( mnLatestIfdPos );
         m_rOStm.WriteUInt32( nCurrentPos - mnStreamOfs );   // offset to the IFD
         m_rOStm.Seek( nCurrentPos );

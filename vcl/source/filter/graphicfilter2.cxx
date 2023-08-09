@@ -151,7 +151,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
     sal_uInt32  nTemp32 = 0;
     bool    bRet = false;
 
-    sal_Int32 nStmPos = rStm.Tell();
+    sal_uInt64 nStmPos = rStm.Tell();
 
     rStm.SetEndian( SvStreamEndian::BIG );
     rStm.ReadUInt32( nTemp32 );
@@ -208,7 +208,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                             bScanFailure = true;
                         else
                         {
-                            sal_uInt32 nNextMarkerPos = rStm.Tell() + nLength - 2;
+                            sal_uInt64 nNextMarkerPos = rStm.Tell() + nLength - 2;
                             switch( nMarker )
                             {
                                 case 0xe0 : // APP0 Marker

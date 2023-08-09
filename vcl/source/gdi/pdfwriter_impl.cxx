@@ -2952,10 +2952,10 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8 const * pEncoding,
     OStringBuffer aLine( 40 );
 
     aLine.append( OString::number(nStream ) + " 0 obj\n<</Length " );
-    sal_Int32 nLen = 0;
+    sal_uInt64 nLen = 0;
     if (!g_bDebugDisableCompression)
     {
-        nLen = static_cast<sal_Int32>(aStream.Tell());
+        nLen = aStream.Tell();
         aStream.Seek( 0 );
         aLine.append( OString::number(nLen) + "/Filter/FlateDecode" );
     }
@@ -8981,7 +8981,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     CHECK_RETURN2( rObject.m_pStream );
     CHECK_RETURN2( updateObject( rObject.m_nObject ) );
 
-    sal_Int32 nLength = rObject.m_pStream->TellEnd();
+    sal_uInt64 nLength = rObject.m_pStream->TellEnd();
     rObject.m_pStream->Seek( STREAM_SEEK_TO_BEGIN );
 
     sal_Int32 nMaskObject = 0;
@@ -9016,7 +9016,7 @@ void PDFWriterImpl::writeJPG( const JPGEmit& rObject )
     else
         aLine.append( "/ColorSpace/DeviceGray" );
     aLine.append( "/Filter/DCTDecode/Length " );
-    aLine.append( nLength );
+    aLine.append( static_cast<sal_Int64>(nLength) );
     if( nMaskObject )
     {
         aLine.append(" /SMask ");

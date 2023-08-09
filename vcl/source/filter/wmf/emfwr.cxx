@@ -118,7 +118,7 @@ void EMFWriter::ImplEndCommentRecord()
 {
     if( mbRecordOpen )
     {
-        sal_Int32 nActPos = m_rStm.Tell();
+        sal_uInt64 nActPos = m_rStm.Tell();
         m_rStm.Seek( mnRecordPos + 8 );
         m_rStm.WriteUInt32( nActPos - mnRecordPos - 0xc );
         m_rStm.Seek( nActPos );
@@ -146,7 +146,7 @@ void EMFWriter::ImplEndPlusRecord()
 
     if( mbRecordPlusOpen )
     {
-        sal_Int32 nActPos = m_rStm.Tell();
+        sal_uInt64 nActPos = m_rStm.Tell();
         sal_Int32 nSize = nActPos - mnRecordPlusPos;
         m_rStm.Seek( mnRecordPlusPos + 4 );
         m_rStm.WriteUInt32( nSize )         // Size
@@ -366,7 +366,8 @@ void EMFWriter::ImplEndRecord()
     if( !mbRecordOpen )
         return;
 
-    sal_Int32 nFillBytes, nActPos = m_rStm.Tell();
+    sal_Int32 nFillBytes;
+    sal_uInt64 nActPos = m_rStm.Tell();
     m_rStm.Seek( mnRecordPos + 4 );
     nFillBytes = nActPos - mnRecordPos;
     nFillBytes += 3;    // each record has to be dword aligned
@@ -821,7 +822,8 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
 
     WriteDIB(rBmp, aMemStm, true, false);
 
-    sal_uInt32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
+    sal_uInt64  nDIBSize = aMemStm.Tell();
+    sal_uInt32  nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
     sal_uInt16  nBitCount;
 
     // get DIB parameters

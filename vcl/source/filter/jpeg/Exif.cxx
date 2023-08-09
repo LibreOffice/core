@@ -65,7 +65,7 @@ Degree10 Exif::getRotation() const
 
 bool Exif::read(SvStream& rStream)
 {
-    sal_Int32 nStreamPosition = rStream.Tell();
+    sal_uInt64 nStreamPosition = rStream.Tell();
     bool result = processJpeg(rStream, false);
     rStream.Seek( nStreamPosition );
 
@@ -74,7 +74,7 @@ bool Exif::read(SvStream& rStream)
 
 void Exif::write(SvStream& rStream)
 {
-    sal_Int32 nStreamPosition = rStream.Tell();
+    sal_uInt64 nStreamPosition = rStream.Tell();
     processJpeg(rStream, true);
     rStream.Seek( nStreamPosition );
 }
@@ -84,7 +84,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     sal_uInt16  aMagic16;
     sal_uInt16  aLength;
 
-    sal_uInt32 aSize = rStream.TellEnd();
+    sal_uInt64 aSize = rStream.TellEnd();
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     rStream.SetEndian( SvStreamEndian::BIG );
@@ -133,7 +133,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
         }
         else
         {
-            sal_uInt32 aCurrentPosition = rStream.SeekRel(aLength-1);
+            sal_uInt64 aCurrentPosition = rStream.SeekRel(aLength-1);
             if (aCurrentPosition == aPreviousPosition || aCurrentPosition > aSize)
             {
                 return false;
@@ -228,7 +228,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
 
     std::unique_ptr<sal_uInt8[]> aExifData(new sal_uInt8[aLength]);
-    sal_uInt32 aExifDataBeginPosition = rStream.Tell();
+    sal_uInt64 aExifDataBeginPosition = rStream.Tell();
 
     rStream.ReadBytes(aExifData.get(), aLength);
 

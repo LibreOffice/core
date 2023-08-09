@@ -642,7 +642,7 @@ bool ImportEpsGraphic( SvStream & rStream, Graphic & rGraphic)
     }
     if (bOk)
     {
-        sal_uInt32 nBufStartPos = rStream.Tell();
+        sal_uInt64 nBufStartPos = rStream.Tell();
         BinaryDataContainer aBuf(rStream, nPSSize);
         if (!aBuf.isEmpty())
         {
