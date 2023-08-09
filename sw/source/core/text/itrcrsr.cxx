@@ -1249,6 +1249,7 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
 
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
+    AddExtraBlankWidth();
 
     const Point aCharPos( GetTopLeft() );
 
