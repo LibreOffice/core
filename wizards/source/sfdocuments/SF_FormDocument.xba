@@ -65,6 +65,7 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Private Const BASEFORMNOTFOUNDERROR	=	&quot;BASEFORMNOTFOUNDERROR&quot;
+Private Const DBCONNECTERROR		=	&quot;DBCONNECTERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -244,6 +245,8 @@ Public Function GetDatabase(Optional ByVal User As Variant _
 &apos;&apos;&apos;		User, Password: the login parameters as strings. Defaults = &quot;&quot;
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A SFDatabases.Database instance or Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DBCONNECTERROR				The database could not be connected, credentials are probably wrong
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim myDb As Object
 &apos;&apos;&apos;			Set myDb = oFormDoc.GetDatabase()
@@ -267,7 +270,7 @@ Check:
 Try:
 	If IsNull(_DataSource) Then GoTo CatchConnect
 	Set oDatabase = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.DatabaseFromDocument&quot; _
-						, _DataSource, Iif(User = &quot;&quot;, _User, User), Iif(Password = &quot;&quot;, _Password, &quot;&quot;))
+						, _DataSource, Iif(User = &quot;&quot;, _User, User), Iif(Password = &quot;&quot;, _Password, Password))
 	If IsNull(oDatabase) Then GoTo CatchConnect
 	oDatabase._Location = _DataSource.Name
 

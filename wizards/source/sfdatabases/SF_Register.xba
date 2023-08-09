@@ -25,6 +25,7 @@ Option Explicit
 REM ================================================================== EXCEPTIONS
 
 Private Const BASEDOCUMENTOPENERROR	=	&quot;BASEDOCUMENTOPENERROR&quot;
+Private Const DBCONNECTERROR		=	&quot;DBCONNECTERROR&quot;
 
 REM ============================================================== PUBLIC METHODS
 
@@ -65,7 +66,8 @@ Public Function _NewDatabase(Optional ByVal pvArgs As Variant) As Object
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The instance or Nothing
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		BASEDOCUMENTOPENERROR		The database file could not be opened or connected
+&apos;&apos;&apos;		BASEDOCUMENTOPENERROR		The database file could not be opened
+&apos;&apos;&apos;		DBCONNECTERROR				The database could not be connected, credentials are probably wrong
 
 Dim oDatabase As Object					&apos;	Return value
 Dim vFileName As Variant				&apos;	alias of pvArgs(0)
@@ -116,7 +118,9 @@ Try:
 		Set .[Me] = oDatabase
 		._Location = ConvertToUrl(vFileName)
 		Set ._DataSource = oDBContext.getByName(._Location)
+		If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo CatchConnect
 		Set ._Connection = ._DataSource.getConnection(vUser, vPassword)
+		If IsNull(._Connection) Then GoTo CatchConnect
 		._ReadOnly = vReadOnly
 		Set ._MetaData = ._Connection.MetaData
 		._URL = ._MetaData.URL
@@ -130,20 +134,23 @@ Catch:
 CatchError:
 	ScriptForge.SF_Exception.RaiseFatal(BASEDOCUMENTOPENERROR, &quot;FileName&quot;, vFileName, &quot;RegistrationName&quot;, vRegistration)
 	GoTo Finally
+CatchConnect:
+	ScriptForge.SF_Exception.RaiseFatal(DBCONNECTERROR, &quot;User&quot;, vUser, &quot;Password&quot;, vPassword, vFileName)
+	GoTo Finally
 End Function	&apos;	SFDatabases.SF_Register._NewDatabase
 
 REM -----------------------------------------------------------------------------
 Public Function _NewDatabaseFromSource(Optional ByVal pvArgs As Variant) As Object
-&apos;										ByRef poDataSource As Object _
-&apos;											, ByVal psUser As String _
-&apos;											, ByVal psPassword As String _
+&apos;										ByRef oDataSource As Object _
+&apos;											, ByVal sUser As String _
+&apos;											, ByVal sPassword As String _
 &apos;											) As Object
 &apos;&apos;&apos;	Create a new instance of the SF_Database class from the given datasource
 &apos;&apos;&apos;	established in the SFDocuments.Base service
 &apos;&apos;&apos;	THIS SERVICE MUST NOT BE CALLED FROM A USER SCRIPT
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		DataSource: 	com.sun.star.sdbc.XDataSource
-&apos;&apos;&apos;		User, Password : connection parameters
+&apos;&apos;&apos;		oDataSource: 	com.sun.star.sdbc.XDataSource
+&apos;&apos;&apos;		sUser, sPassword : connection parameters
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The instance or Nothing
 &apos;&apos;&apos;	Exceptions:
@@ -189,6 +196,7 @@ Finally:
 	Set _NewDatabaseFromSource = oDatabase
 	Exit Function
 Catch:
+	ScriptForge.SF_Exception.Clear()
 	GoTo Finally
 End Function	&apos;	SFDatabases.SF_Register._NewDatabaseFromSource
 

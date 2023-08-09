@@ -81,6 +81,7 @@ REM ================================================================== EXCEPTION
 
 Private Const FORMDEADERROR			=	&quot;FORMDEADERROR&quot;
 Private Const SUBFORMNOTFOUNDERROR	=	&quot;SUBFORMNOTFOUNDERROR&quot;
+Private Const DBCONNECTERROR		=	&quot;DBCONNECTERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -668,6 +669,8 @@ Public Function GetDatabase(Optional ByVal User As Variant _
 &apos;&apos;&apos;		User, Password: the login parameters as strings. Defaults = &quot;&quot;
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A SFDatabases.Database instance or Nothing
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		DBCONNECTERROR				The database could not be connected, credentials are probably wrong
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		Dim myDb As Object
 &apos;&apos;&apos;			Set myDb = oForm.GetDatabase()
