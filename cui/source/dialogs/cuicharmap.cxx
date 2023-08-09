@@ -58,7 +58,7 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , isSearchMode(true)
     , m_xFrame(std::move(xFrame))
-    , m_aCharmapContents(*m_xBuilder, m_xVirDev)
+    , m_aCharmapContents(*m_xBuilder, m_xVirDev, true)
     , m_aShowChar(m_xVirDev)
     , m_xOKBtn(m_xFrame.is() ? m_xBuilder->weld_button("insert") : m_xBuilder->weld_button("ok"))
     , m_xFontText(m_xBuilder->weld_label("fontft"))

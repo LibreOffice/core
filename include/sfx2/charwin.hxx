@@ -92,7 +92,7 @@ class SFX2_DLLPUBLIC SfxCharmapContainer
     DECL_DLLPRIVATE_LINK(FavClearAllClickHdl, SvxCharView*, void);
 
 public:
-    SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev);
+    SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev, bool bLockGridSizes);
 
     void            init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
                          const Link<void*,void> &rUpdateFavHdl,

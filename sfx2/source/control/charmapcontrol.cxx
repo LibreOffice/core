@@ -27,7 +27,7 @@
 
 using namespace css;
 
-SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev)
+SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<VirtualDevice>& rVirDev, bool bLockGridSizes)
     : m_aRecentCharView{SvxCharView(rVirDev),
                         SvxCharView(rVirDev),
                         SvxCharView(rVirDev),
@@ -95,9 +95,12 @@ SfxCharmapContainer::SfxCharmapContainer(weld::Builder& rBuilder, const VclPtr<V
     , m_xRecentGrid(rBuilder.weld_widget("viewgrid"))
     , m_xFavGrid(rBuilder.weld_widget("favgrid"))
 {
-    //so things don't jump around if all the children are hidden
-    m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
-    m_xFavGrid->set_size_request(-1, m_aFavCharView[0].get_preferred_size().Height());
+    if (bLockGridSizes)
+    {
+        //so things don't jump around if all the children are hidden
+        m_xRecentGrid->set_size_request(-1, m_aRecentCharView[0].get_preferred_size().Height());
+        m_xFavGrid->set_size_request(-1, m_aFavCharView[0].get_preferred_size().Height());
+    }
 }
 
 void SfxCharmapContainer::init(bool bHasInsert, const Link<SvxCharView*,void> &rMouseClickHdl,
@@ -129,7 +132,7 @@ SfxCharmapCtrl::SfxCharmapCtrl(CharmapPopup* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "sfx/ui/charmapcontrol.ui", "charmapctrl")
     , m_xControl(pControl)
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
-    , m_aCharmapContents(*m_xBuilder, m_xVirDev)
+    , m_aCharmapContents(*m_xBuilder, m_xVirDev, false)
     , m_xRecentLabel(m_xBuilder->weld_label("label2"))
     , m_xDlgBtn(m_xBuilder->weld_button("specialchardlg"))
 {
