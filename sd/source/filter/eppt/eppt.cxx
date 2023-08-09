@@ -324,7 +324,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     SvMemoryStream amsofbtAnimGroup;
     ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
     aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
-    sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
+    sal_uInt64 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
     if ( nmsofbtAnimGroupSize )
     {
         {
@@ -472,7 +472,7 @@ bool PPTWriter::ImplCreateCurrentUserStream()
     mpCurUserStrm->WriteUInt32( 0x14 )                  // Len
                   .WriteUInt32( 0xe391c05f );           // Magic
 
-    sal_uInt32 nEditPos = mpCurUserStrm->Tell();
+    sal_uInt64 nEditPos = mpCurUserStrm->Tell();
     mpCurUserStrm->WriteUInt32( 0x0 )                   // OffsetToCurrentEdit;
                   .WriteUInt16( nLenOfUserName )
                   .WriteUInt16( 0x3f4 )                 // DocFileVersion
@@ -514,7 +514,7 @@ void PPTWriter::ImplCreateDocumentSummaryInformation()
     SvMemoryStream  aHyperBlob;
     ImplCreateHyperBlob( aHyperBlob );
 
-    auto nHyperLength = static_cast<sal_Int32>(aHyperBlob.Tell());
+    sal_uInt64 nHyperLength = aHyperBlob.Tell();
     const sal_Int8* pBlob(
         static_cast<const sal_Int8*>(aHyperBlob.GetData()));
     auto aHyperSeq = comphelper::arrayToSequence<sal_Int8>(pBlob, nHyperLength);
@@ -1219,7 +1219,7 @@ void PPTWriter::ImplWriteVBA()
 {
     if ( mpVBA )
     {
-        sal_uInt32 nLen = mpVBA->TellEnd();
+        sal_uInt64 nLen = mpVBA->TellEnd();
         if ( nLen > 8 )
         {
             nLen -= 8;
@@ -1389,7 +1389,7 @@ void PPTWriter::ImplWriteAtomEnding()
                   .ReadUInt32( n2 );
 
             mpStrm->WriteUInt32( mnVBAOleOfs );
-            sal_uInt32 nOldPos = mpStrm->Tell();
+            sal_uInt64 nOldPos = mpStrm->Tell();
             mpStrm->Seek( nOfs );               // Fill the VBAInfoAtom with the correct index to the persisttable
             mpStrm->WriteUInt32( nPersistEntrys )
                    .WriteUInt32( n1 )

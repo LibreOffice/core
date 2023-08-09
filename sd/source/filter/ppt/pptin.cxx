@@ -788,7 +788,7 @@ bool ImplSdPPTImport::Import()
 
                 bool bNewAnimationsUsed = false;
                 ProcessData aProcessData( (*pList)[ m_nCurrentPageNum ], SdPageCapsule(pMPage) );
-                sal_uInt32 nOldFPos = rStCtrl.Tell();
+                sal_uInt64 nOldFPos = rStCtrl.Tell();
                 DffRecordHeader aPageHd;
                 if ( SeekToCurrentPage( &aPageHd ) )
                 {
@@ -921,7 +921,7 @@ bool ImplSdPPTImport::Import()
 
     // importing slide pages
     {
-        sal_uInt32          nOldFPos = rStCtrl.Tell();
+        sal_uInt64          nOldFPos = rStCtrl.Tell();
         PptPageKind     ePageKind = m_eCurrentPageKind;
         sal_uInt16          nPageNum = m_nCurrentPageNum;
 
@@ -1891,7 +1891,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const bool bNewAnimations
 OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
     OUString aRetval;
-    sal_uInt32 nOldPos = rStCtrl.Tell();
+    sal_uInt64 nOldPos = rStCtrl.Tell();
     DffRecordHeader aDocHd;
     if ( SeekToDocument( &aDocHd ) )
     {
@@ -1908,7 +1908,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
             {
                 sal_uInt32 nStrLen = aSoundRecHd.GetRecEndFilePos();
                 OUString aRefStr;
-                sal_uInt32 nOldPos2 = rStCtrl.Tell();
+                sal_uInt64 nOldPos2 = rStCtrl.Tell();
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, nullptr, 2 ) )
                 {
                     if ( ReadString( aRefStr ) )
@@ -2667,7 +2667,7 @@ rtl::Reference<SdrObject> ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData
                         break;
                         case PPT_PST_InteractiveInfo:
                         {
-                            sal_uInt32 nOldFilePos2 = rSt.Tell();
+                            sal_uInt64 nOldFilePos2 = rSt.Tell();
                             OUString aMacroName;
 
                             if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd ) )

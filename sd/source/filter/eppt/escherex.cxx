@@ -168,8 +168,8 @@ void PptEscherEx::CloseContainer()
     if ( ( mRecTypes.back() == ESCHER_SpgrContainer ) && ( mnGroupLevel >= 12 ) )
         return;
 
-    sal_uInt32 nSize, nPos = mpOutStrm->Tell();
-    nSize = ( nPos - mOffsets.back() ) - 4;
+    sal_uInt64 nPos = mpOutStrm->Tell();
+    sal_uInt32 nSize = ( nPos - mOffsets.back() ) - 4;
     mpOutStrm->Seek( mOffsets.back() );
     mpOutStrm->WriteUInt32( nSize );
 

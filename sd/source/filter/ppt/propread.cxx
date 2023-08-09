@@ -310,8 +310,8 @@ void Section::GetDictionary(PropDictionary& rDict)
 
 void Section::Read( SotStorageStream *pStrm )
 {
-    sal_uInt32 nSecOfs = pStrm->Tell();
-    sal_uInt32 nStrmSize = pStrm->remainingSize();
+    sal_uInt64 nSecOfs = pStrm->Tell();
+    sal_uInt64 nStrmSize = pStrm->remainingSize();
 
     mnTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt32 nSecSize(0), nPropCount(0);
@@ -401,7 +401,7 @@ void Section::Read( SotStorageStream *pStrm )
                         {
                         pStrm->ReadUInt32( nTemp );
                         // looks like these are aligned to 4 bytes
-                        sal_uInt32 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
+                        sal_uInt64 nLength = nPropOfs + nSecOfs + nPropSize + ( nTemp << 1 ) + 4;
                         nPropSize += ( nTemp << 1 ) + 4 + (nLength % 4);
                         }
                     break;
@@ -504,7 +504,7 @@ void Section::Read( SotStorageStream *pStrm )
                 if (!checkSeek(*pStrm, nPos))
                     break;
             }
-            sal_uInt32 nSize = pStrm->Tell();
+            sal_uInt64 nSize = pStrm->Tell();
             pStrm->Seek( nPropOfs + nSecOfs );
             nSize -= pStrm->Tell();
             if ( nSize > nStrmSize )
@@ -585,7 +585,7 @@ void PropRead::Read()
             mpSvStream->ReadBytes(aSectCLSID.data(), aSectCLSID.size());
             sal_uInt32 nSectionOfs(0);
             mpSvStream->ReadUInt32( nSectionOfs );
-            sal_uInt32 nCurrent = mpSvStream->Tell();
+            sal_uInt64 nCurrent = mpSvStream->Tell();
             if (checkSeek(*mpSvStream, nSectionOfs))
             {
                 Section aSection(aSectCLSID.data());

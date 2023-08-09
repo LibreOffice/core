@@ -5080,8 +5080,8 @@ void EscherEx::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 
 void EscherEx::CloseContainer()
 {
-    sal_uInt32 nSize, nPos = mpOutStrm->Tell();
-    nSize = ( nPos - mOffsets.back() ) - 4;
+    sal_uInt64 nPos = mpOutStrm->Tell();
+    sal_uInt32 nSize = ( nPos - mOffsets.back() ) - 4;
     mpOutStrm->Seek( mOffsets.back() );
     mpOutStrm->WriteUInt32( nSize );
 

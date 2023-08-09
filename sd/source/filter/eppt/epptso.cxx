@@ -355,7 +355,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     mpExEmbed->WriteUInt16( 0xf )
                .WriteUInt16( EPP_ExHyperlink )
                .WriteUInt32( 0 );
-    sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
+    sal_uInt64 nHyperStart = mpExEmbed->Tell();
     mpExEmbed->WriteUInt16( 0 )
                .WriteUInt16( EPP_ExHyperlinkAtom )
                .WriteUInt32( 4 )
@@ -366,7 +366,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const OUString& rBookmarkURL, const
     PPTWriter::WriteCString( *mpExEmbed, aStringVer2, 2 );
     PPTWriter::WriteCString( *mpExEmbed, aStringVer3, 3 );
 
-    nHyperSize = mpExEmbed->Tell() - nHyperStart;
+    sal_uInt32 nHyperSize = mpExEmbed->Tell() - nHyperStart;
     mpExEmbed->SeekRel( - ( static_cast<sal_Int32>(nHyperSize) + 4 ) );
     mpExEmbed->WriteUInt32( nHyperSize );
     mpExEmbed->SeekRel( nHyperSize );
@@ -1046,12 +1046,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     if ( pPropOpt && mType != "drawing.Table" )
         ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
 
-    sal_uInt32 nSize, nPos = rOut.Tell();
+    sal_uInt64 nPos = rOut.Tell();
 
     rOut.WriteUInt32( EPP_StyleTextPropAtom << 16 ).WriteUInt32( 0 );
     ImplWriteParagraphs( rOut, aTextObj );
     ImplWritePortions( rOut, aTextObj );
-    nSize = rOut.Tell() - nPos;
+    sal_uInt32 nSize = rOut.Tell() - nPos;
     rOut.SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
     rOut.WriteUInt32( nSize - 8 );
     rOut.SeekRel( nSize - 8 );
@@ -1230,7 +1230,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                 pRuleOut = pTextRule->pOut.get();
             }
 
-            sal_uInt32 nRulePos = pRuleOut->Tell();
+            sal_uInt64 nRulePos = pRuleOut->Tell();
             pRuleOut->WriteUInt32( EPP_TextRulerAtom << 16 ).WriteUInt32( 0 );
             pRuleOut->WriteUInt32( nTextRulerAtomFlags );
             if ( nTextRulerAtomFlags & 4 )
@@ -1279,7 +1279,8 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
     if ( !aTextObj.ParagraphCount() )
         return;
 
-    sal_uInt32  nNumberingType = 0, nPos2 = rExtBuStr.Tell();
+    sal_uInt32 nNumberingType = 0;
+    sal_uInt64 nPos2 = rExtBuStr.Tell();
 
     rExtBuStr.WriteUInt32( EPP_PST_ExtendedParagraphAtom << 16 ).WriteUInt32( 0 );
 
@@ -1952,7 +1953,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpExEmbed->WriteUInt32( 0xf | ( EPP_ExControl << 16 ) )
                            .WriteUInt32( 0 );               // Size of this container
 
-                sal_uInt32 nSize, nOldPos = mpExEmbed->Tell();
+                sal_uInt64 nOldPos = mpExEmbed->Tell();
 
                 sal_uInt32 nPageId = nPageNumber;
                 if ( ePageType == MASTER )
@@ -2020,7 +2021,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
                     PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
                 }
-                nSize = mpExEmbed->Tell() - nOldPos;
+                sal_uInt32 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
                 mpExEmbed->WriteUInt32( nSize );
                 mpExEmbed->Seek( STREAM_SEEK_TO_END );
@@ -2504,7 +2505,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mpExEmbed->WriteUInt32( 0xf | ( EPP_ExEmbed << 16 ) )
                                .WriteUInt32( 0 );               // Size of this container
 
-                    sal_uInt32 nSize, nOldPos = mpExEmbed->Tell();
+                    sal_uInt64 nOldPos = mpExEmbed->Tell();
 
                     mpExEmbed->WriteUInt32( EPP_ExEmbedAtom << 16 )
                                .WriteUInt32( 8 )
@@ -2541,7 +2542,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                .WriteUInt32( 0 )
                                .WriteUInt32( 0x0012b600 );
 
-                    nSize = mpExEmbed->Tell() - nOldPos;
+                    sal_uInt32 nSize = mpExEmbed->Tell() - nOldPos;
                     mpExEmbed->Seek( nOldPos - 4 );
                     mpExEmbed->WriteUInt32( nSize );
                     mpExEmbed->Seek( STREAM_SEEK_TO_END );
@@ -2636,7 +2637,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         mpExEmbed->WriteUInt16( 0xf )
                                    .WriteUInt16( EPP_ExMCIMovie )       // PPT_PST_ExAviMovie
                                    .WriteUInt32( 0 );
-                        sal_uInt32 nSize, nStart = mpExEmbed->Tell();
+                        sal_uInt64 nStart = mpExEmbed->Tell();
                         mpExEmbed->WriteUInt16( 0 )
                                    .WriteUInt16( EPP_ExObjRefAtom )
                                    .WriteUInt32( 4 )
@@ -2659,7 +2660,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             sal_Unicode nChar = aMediaURL[ i ];
                             mpExEmbed->WriteUInt16( nChar );
                         }
-                        nSize = mpExEmbed->Tell() - nStart;
+                        sal_uInt32 nSize = mpExEmbed->Tell() - nStart;
                         mpExEmbed->SeekRel( - ( static_cast<sal_Int32>(nSize) + 4 ) );
                         mpExEmbed->WriteUInt32( nSize );    // size of PPT_PST_ExMCIMovie
                         mpExEmbed->SeekRel( 0x10 );
@@ -3321,11 +3322,11 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape > const & rXSha
 
 void TextObjBinary::Write( SvStream* pStrm )
 {
-    sal_uInt32 nSize, nPos = pStrm->Tell();
+    sal_uInt64 nPos = pStrm->Tell();
     pStrm->WriteUInt32( EPP_TextCharsAtom << 16 ).WriteUInt32( 0 );
     for ( sal_uInt32 i = 0; i < ParagraphCount(); ++i )
         GetParagraph(i)->Write( pStrm );
-    nSize = pStrm->Tell() - nPos;
+    sal_uInt32 nSize = pStrm->Tell() - nPos;
     pStrm->SeekRel( - ( static_cast<sal_Int32>(nSize) - 4 ) );
     pStrm->WriteUInt32( nSize - 8 );
     pStrm->SeekRel( nSize - 8 );

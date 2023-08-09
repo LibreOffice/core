@@ -1054,7 +1054,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         std::unique_ptr<SvStream> mxOwnStrm;
         SvStream*                   mpOutStrm;
         sal_uInt32                  mnStrmStartOfs;
-        std::vector< sal_uInt32 >   mOffsets;
+        std::vector< sal_uInt64 >   mOffsets;
         std::vector< sal_uInt16 >   mRecTypes;
 
         sal_uInt32                  mnCurrentDg;

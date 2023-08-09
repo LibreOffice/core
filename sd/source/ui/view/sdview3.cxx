@@ -691,7 +691,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Graphic aGraphic;
             if (vcl::ImportPDF(*xStm, aGraphic))
             {
-                const sal_Int32 nGraphicContentSize(xStm->Tell());
+                const sal_uInt64 nGraphicContentSize(xStm->Tell());
                 xStm->Seek(0);
                 BinaryDataContainer aGraphicContent(*xStm, nGraphicContentSize);
                 aGraphic.SetGfxLink(std::make_shared<GfxLink>(aGraphicContent, GfxLinkType::NativePdf));
