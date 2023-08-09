@@ -2974,11 +2974,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
             continue;
         }
 
+        // } /* SAFE */
         g.clear();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
         implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         g.reset();
+        // /* SAFE */ {
 
         *pIt = aInfo;
     }
@@ -2990,11 +2992,13 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         pIt = dangerousDoc;
         AutoRecovery::TDocumentInfo aInfo = *pIt;
 
+        // } /* SAFE */
         g.clear();
         // changing of aInfo and flushing it is done inside implts_saveOneDoc!
         implts_saveOneDoc(sBackupPath, aInfo, xExternalProgress);
         implts_informListener(eJob, AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &aInfo));
         g.reset();
+        // /* SAFE */ {
 
         *pIt = aInfo;
     }
