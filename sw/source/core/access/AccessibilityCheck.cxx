@@ -251,8 +251,15 @@ private:
             }
             // If more than half of the boxes are empty we can assume that it is used for formatting
             if (nEmptyBoxes > nBoxCount / 2)
-                lclAddIssue(m_rIssueCollection, SwResId(STR_TABLE_FORMATTING),
-                            sfx::AccessibilityIssueID::TABLE_FORMATTING);
+            {
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TABLE_FORMATTING),
+                                          sfx::AccessibilityIssueID::TABLE_FORMATTING);
+
+                pIssue->setDoc(pTableNode->GetDoc());
+                pIssue->setIssueObject(IssueObject::TABLE);
+                if (const SwTableFormat* pFormat = rTable.GetFrameFormat())
+                    pIssue->setObjectID(pFormat->GetName());
+            }
         }
     }
 
