@@ -25,57 +25,12 @@
 #include <string_view>
 
 #include "svgnode.hxx"
+#include "svgtspannode.hxx"
 
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
 
 namespace svgio::svgreader
     {
-        class SvgTextPositions
-        {
-        private:
-            SvgNumberVector         maX;
-            SvgNumberVector         maY;
-            SvgNumberVector         maDx;
-            SvgNumberVector         maDy;
-            SvgNumberVector         maRotate;
-            SvgNumber               maTextLength;
-
-            bool                    mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
-
-        public:
-            SvgTextPositions();
-
-            void parseTextPositionAttributes(SVGToken aSVGToken, std::u16string_view aContent);
-
-            /// X content
-            const SvgNumberVector& getX() const { return maX; }
-            void setX(SvgNumberVector&& aX) { maX = std::move(aX); }
-
-            /// Y content
-            const SvgNumberVector& getY() const { return maY; }
-            void setY(SvgNumberVector&& aY) { maY = std::move(aY); }
-
-            /// Dx content
-            const SvgNumberVector& getDx() const { return maDx; }
-            void setDx(SvgNumberVector&& aDx) { maDx = std::move(aDx); }
-
-            /// Dy content
-            const SvgNumberVector& getDy() const { return maDy; }
-            void setDy(SvgNumberVector&& aDy) { maDy = std::move(aDy); }
-
-            /// Rotate content
-            const SvgNumberVector& getRotate() const { return maRotate; }
-            void setRotate(SvgNumberVector&& aRotate) { maRotate = std::move(aRotate); }
-
-            /// TextLength content
-            const SvgNumber& getTextLength() const { return maTextLength; }
-            void setTextLength(const SvgNumber& rTextLength) { maTextLength = rTextLength; }
-
-            /// LengthAdjust content
-            bool getLengthAdjust() const { return mbLengthAdjust; }
-            void setLengthAdjust(bool bNew) { mbLengthAdjust = bNew; }
-        };
-
         class SvgTextPosition
         {
         private:
@@ -98,8 +53,7 @@ namespace svgio::svgreader
         public:
             SvgTextPosition(
                 SvgTextPosition* pParent,
-                const InfoProvider& rInfoProvider,
-                const SvgTextPositions& rSvgTextPositions);
+                const SvgTspanNode& rSvgCharacterNode);
 
             // data read access
             const SvgTextPosition* getParent() const { return mpParent; }
@@ -147,6 +101,7 @@ namespace svgio::svgreader
             virtual ~SvgCharacterNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
+
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
             void addGap();

@@ -404,7 +404,7 @@ namespace
                 }
                 case SVGToken::Tspan:
                 {
-                    mpTarget = new SvgTspanNode(maDocument, mpTarget);
+                    mpTarget = new SvgTspanNode(aSVGToken, maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }

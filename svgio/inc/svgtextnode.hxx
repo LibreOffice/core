@@ -19,23 +19,19 @@
 
 #pragma once
 
-#include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 #include "svgcharacternode.hxx"
+#include "svgtspannode.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace svgio::svgreader
     {
-        class SvgTextNode final : public SvgNode
+        class SvgTextNode final : public SvgTspanNode
         {
         private:
-            /// use styles
-            SvgStyleAttributes      maSvgStyleAttributes;
-
             /// variable scan values, dependent of given XAttributeList
             std::optional<basegfx::B2DHomMatrix>
                                     mpaTransform;
-            SvgTextPositions        maSvgTextPositions;
 
             /// local helpers
             void DecomposeChild(
@@ -53,7 +49,6 @@ namespace svgio::svgreader
                 SvgNode* pParent);
             virtual ~SvgTextNode() override;
 
-            virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
             virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 

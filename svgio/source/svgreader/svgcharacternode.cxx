@@ -26,105 +26,12 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <utility>
-#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 using namespace drawinglayer::primitive2d;
 
 namespace svgio::svgreader
 {
-        SvgTextPositions::SvgTextPositions()
-        :  mbLengthAdjust(true)
-        {
-        }
-
-        void SvgTextPositions::parseTextPositionAttributes(SVGToken aSVGToken, std::u16string_view aContent)
-        {
-            // parse own
-            switch(aSVGToken)
-            {
-                case SVGToken::X:
-                {
-                    SvgNumberVector aVector;
-
-                    if(readSvgNumberVector(aContent, aVector))
-                    {
-                        setX(std::move(aVector));
-                    }
-                    break;
-                }
-                case SVGToken::Y:
-                {
-                    SvgNumberVector aVector;
-
-                    if(readSvgNumberVector(aContent, aVector))
-                    {
-                        setY(std::move(aVector));
-                    }
-                    break;
-                }
-                case SVGToken::Dx:
-                {
-                    SvgNumberVector aVector;
-
-                    if(readSvgNumberVector(aContent, aVector))
-                    {
-                        setDx(std::move(aVector));
-                    }
-                    break;
-                }
-                case SVGToken::Dy:
-                {
-                    SvgNumberVector aVector;
-
-                    if(readSvgNumberVector(aContent, aVector))
-                    {
-                        setDy(std::move(aVector));
-                    }
-                    break;
-                }
-                case SVGToken::Rotate:
-                {
-                    SvgNumberVector aVector;
-
-                    if(readSvgNumberVector(aContent, aVector))
-                    {
-                        setRotate(std::move(aVector));
-                    }
-                    break;
-                }
-                case SVGToken::TextLength:
-                {
-                    SvgNumber aNum;
-
-                    if(readSingleNumber(aContent, aNum))
-                    {
-                        if(aNum.isPositive())
-                        {
-                            setTextLength(aNum);
-                        }
-                    }
-                    break;
-                }
-                case SVGToken::LengthAdjust:
-                {
-                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
-                    {
-                        setLengthAdjust(true);
-                    }
-                    else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
-                    {
-                        setLengthAdjust(false);
-                    }
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
-            }
-        }
-
         namespace {
 
         class localTextBreakupHelper : public TextBreakupHelper
@@ -583,19 +490,20 @@ namespace svgio::svgreader
 
         SvgTextPosition::SvgTextPosition(
             SvgTextPosition* pParent,
-            const InfoProvider& rInfoProvider,
-            const SvgTextPositions& rSvgTextPositions)
+            const SvgTspanNode& rSvgTspanNode)
         :   mpParent(pParent),
-            maRotate(solveSvgNumberVector(rSvgTextPositions.getRotate(), rInfoProvider)),
+            maRotate(solveSvgNumberVector(rSvgTspanNode.getRotate(), rSvgTspanNode)),
             mfTextLength(0.0),
             mnRotationIndex(0),
-            mbLengthAdjust(rSvgTextPositions.getLengthAdjust()),
+            mbLengthAdjust(rSvgTspanNode.getLengthAdjust()),
             mbAbsoluteX(false)
         {
+            const InfoProvider& rInfoProvider(rSvgTspanNode);
+
             // get TextLength if provided
-            if(rSvgTextPositions.getTextLength().isSet())
+            if(rSvgTspanNode.getTextLength().isSet())
             {
-                mfTextLength = rSvgTextPositions.getTextLength().solve(rInfoProvider);
+                mfTextLength = rSvgTspanNode.getTextLength().solve(rInfoProvider);
             }
 
             // SVG does not really define in which units a \91rotate\92 for Text/TSpan is given,
@@ -609,12 +517,12 @@ namespace svgio::svgreader
             }
 
             // get text positions X
-            const sal_uInt32 nSizeX(rSvgTextPositions.getX().size());
+            const sal_uInt32 nSizeX(rSvgTspanNode.getX().size());
 
             if(nSizeX)
             {
                 // we have absolute positions, get first one as current text position X
-                maPosition.setX(rSvgTextPositions.getX()[0].solve(rInfoProvider, NumberType::xcoordinate));
+                maPosition.setX(rSvgTspanNode.getX()[0].solve(rInfoProvider, NumberType::xcoordinate));
                 mbAbsoluteX = true;
             }
             else
@@ -626,11 +534,11 @@ namespace svgio::svgreader
                 }
             }
 
-            const sal_uInt32 nSizeDx(rSvgTextPositions.getDx().size());
+            const sal_uInt32 nSizeDx(rSvgTspanNode.getDx().size());
             if(nSizeDx)
             {
                 // relative positions given, translate position derived from parent
-                maPosition.setX(maPosition.getX() + rSvgTextPositions.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
+                maPosition.setX(maPosition.getX() + rSvgTspanNode.getDx()[0].solve(rInfoProvider, NumberType::xcoordinate));
             }
 
             // fill deltas to maX
@@ -640,11 +548,11 @@ namespace svgio::svgreader
             {
                 if (a < nSizeX)
                 {
-                    double nPos = rSvgTextPositions.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
+                    double nPos = rSvgTspanNode.getX()[a].solve(rInfoProvider, NumberType::xcoordinate) - maPosition.getX();
 
                     if(a < nSizeDx)
                     {
-                        nPos += rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
+                        nPos += rSvgTspanNode.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate);
                     }
 
                     maX.push_back(nPos);
@@ -653,17 +561,17 @@ namespace svgio::svgreader
                 {
                     // Apply them later since it also needs the character width to calculate
                     // the final character position
-                    maDx.push_back(rSvgTextPositions.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
+                    maDx.push_back(rSvgTspanNode.getDx()[a].solve(rInfoProvider, NumberType::xcoordinate));
                 }
             }
 
             // get text positions Y
-            const sal_uInt32 nSizeY(rSvgTextPositions.getY().size());
+            const sal_uInt32 nSizeY(rSvgTspanNode.getY().size());
 
             if(nSizeY)
             {
                 // we have absolute positions, get first one as current text position Y
-                maPosition.setY(rSvgTextPositions.getY()[0].solve(rInfoProvider, NumberType::ycoordinate));
+                maPosition.setY(rSvgTspanNode.getY()[0].solve(rInfoProvider, NumberType::ycoordinate));
                 mbAbsoluteX = true;
             }
             else
@@ -675,12 +583,12 @@ namespace svgio::svgreader
                 }
             }
 
-            const sal_uInt32 nSizeDy(rSvgTextPositions.getDy().size());
+            const sal_uInt32 nSizeDy(rSvgTspanNode.getDy().size());
 
             if(nSizeDy)
             {
                 // relative positions given, translate position derived from parent
-                maPosition.setY(maPosition.getY() + rSvgTextPositions.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
+                maPosition.setY(maPosition.getY() + rSvgTspanNode.getDy()[0].solve(rInfoProvider, NumberType::ycoordinate));
             }
 
             // fill deltas to maY
@@ -688,11 +596,11 @@ namespace svgio::svgreader
 
             for(sal_uInt32 a(1); a < nSizeY; a++)
             {
-                double nPos = rSvgTextPositions.getY()[a].solve(rInfoProvider, NumberType::ycoordinate) - maPosition.getY();
+                double nPos = rSvgTspanNode.getY()[a].solve(rInfoProvider, NumberType::ycoordinate) - maPosition.getY();
 
                 if(a < nSizeDy)
                 {
-                    nPos += rSvgTextPositions.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate);
+                    nPos += rSvgTspanNode.getDy()[a].solve(rInfoProvider, NumberType::ycoordinate);
                 }
 
                 maY.push_back(nPos);
