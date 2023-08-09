@@ -349,6 +349,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     }
                 }
                 break;
+            case NS_ooxml::LN_CT_TblPrBase_tblOverlap:
+                if (!m_aTmpPosition.empty() && m_aTmpPosition.back())
+                {
+                    m_aTmpPosition.back()->setTableOverlap(nIntValue);
+                }
+                break;
             case NS_ooxml::LN_CT_TrPrBase_gridBefore:
                 setCurrentGridBefore( nIntValue );
                 break;
