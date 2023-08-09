@@ -108,12 +108,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_target(long targetIndex, IUn
         return E_FAIL;
 
     Reference<XAccessible> xRAcc(xTargets[targetIndex], UNO_QUERY);
-    IAccessible* pRet = nullptr;
-
-    bool isGet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get(), &pRet);
-    if(isGet)
+    IAccessible* pRet = CMAccessible::get_IAccessibleFromXAccessible(xRAcc.get());
+    if (pRet)
     {
-        *target = /*(IAccessible2 *)*/pRet;
+        *target = pRet;
         pRet->AddRef();
         return S_OK;
     }

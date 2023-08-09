@@ -998,26 +998,13 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
    * @param pXAcc XAccessible interface.
    * @return Com accobject interface.
    */
-IMAccessible* AccObjectWinManager::GetIMAccByXAcc(XAccessible* pXAcc)
+IMAccessible* AccObjectWinManager::GetIAccessibleFromXAccessible(XAccessible* pXAcc)
 {
     AccObject* pAccObj = GetAccObjByXAcc(pXAcc);
-    if(pAccObj)
-    {
+    if (pAccObj)
         return pAccObj->GetIMAccessible();
-    }
-    else
-    {
-        return nullptr;
-    }
-}
 
-bool AccObjectWinManager::GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc,
-                                                        IAccessible** ppIA)
-{
-    *ppIA = GetIMAccByXAcc(pXAcc);
-    if (*ppIA)
-        return true;
-    return false;
+    return nullptr;
 }
 
 /**

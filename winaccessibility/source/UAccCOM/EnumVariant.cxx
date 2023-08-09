@@ -64,10 +64,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
     for (l1 = m_nCurrent, l2 = 0; l1 < nChildCount && l2 < cElements; l1++, l2++)
     {
         Reference< XAccessible > pRXAcc = m_pXAccessibleSelection->getSelectedAccessibleChild(l1);
-        IAccessible* pChild = nullptr;
-        bool isGet = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get(),
-                        &pChild);
-        if(isGet)
+        IAccessible* pChild = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get());
+        if(pChild)
         {
             pvar[l2].vt = VT_DISPATCH;
             pvar[l2].pdispVal = pChild;
@@ -77,9 +75,8 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
         {
             if (CMAccessible::g_pAccObjectManager)
                 CMAccessible::g_pAccObjectManager->InsertAccObj(pRXAcc.get(),pUNOInterface);
-            isGet = CMAccessible::get_IAccessibleFromXAccessible(
-                            pRXAcc.get(), &pChild);
-            if(isGet)
+            pChild = CMAccessible::get_IAccessibleFromXAccessible(pRXAcc.get());
+            if(pChild)
             {
                 pvar[l2].vt = VT_DISPATCH;
                 pvar[l2].pdispVal = pChild;

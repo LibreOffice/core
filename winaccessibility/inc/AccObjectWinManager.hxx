@@ -121,8 +121,7 @@ public:
 
     static bool IsContainer( css::accessibility::XAccessible* pAccessible );
 
-    virtual IMAccessible* GetIMAccByXAcc(css::accessibility::XAccessible* pXAcc);
-    virtual bool GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc, IAccessible** ppIA);
+    virtual IMAccessible* GetIAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc);
     virtual IMAccessible* GetIAccessibleFromResID(long resID);
 
     void NotifyDestroy( css::accessibility::XAccessible* pXAcc );

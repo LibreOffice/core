@@ -116,15 +116,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_columnHeaderCells(IUnknown*
         Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
         assert(xCell.is());
 
-        IAccessible* pIAccessible;
-        bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
-        if (!bOK)
+        IAccessible* pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xCell.get());
+        if (!pIAccessible)
         {
             Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
             CMAccessible::g_pAccObjectManager->InsertAccObj(xCell.get(), xTableAcc.get());
-            bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+            pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xCell.get());
         }
-        assert(bOK && "Couldn't retrieve IAccessible object for cell.");
+        assert(pIAccessible && "Couldn't retrieve IAccessible object for cell.");
 
         pIAccessible->AddRef();
         (*cellAccessibles)[nRow] = pIAccessible;
@@ -204,15 +203,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_rowHeaderCells(IUnknown*** 
         Reference<XAccessible> xCell = xHeaders->getAccessibleCellAt(nRow, nCol);
         assert(xCell.is());
 
-        IAccessible* pIAccessible;
-        bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
-        if (!bOK)
+        IAccessible* pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xCell.get());
+        if (!pIAccessible)
         {
             Reference<XAccessible> xTableAcc(m_xTable, UNO_QUERY);
             CMAccessible::g_pAccObjectManager->InsertAccObj(xCell.get(), xTableAcc.get());
-            bOK = CMAccessible::get_IAccessibleFromXAccessible(xCell.get(), &pIAccessible);
+            pIAccessible = CMAccessible::get_IAccessibleFromXAccessible(xCell.get());
         }
-        assert(bOK && "Couldn't retrieve IAccessible object for cell.");
+        assert(pIAccessible && "Couldn't retrieve IAccessible object for cell.");
 
         pIAccessible->AddRef();
         (*cellAccessibles)[nCol] = pIAccessible;
@@ -301,9 +299,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTableCell::get_table(IUnknown** ppTable)
     if (!xAcc.is())
         return E_FAIL;
 
-    IAccessible* pRet = nullptr;
-    bool bOK = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get(), &pRet);
-    if (!bOK)
+    IAccessible* pRet = CMAccessible::get_IAccessibleFromXAccessible(xAcc.get());
+    if (!pRet)
         return E_FAIL;
 
     *ppTable = pRet;

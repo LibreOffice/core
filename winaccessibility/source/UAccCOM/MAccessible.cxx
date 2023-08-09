@@ -991,14 +991,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop
         if (!xAccAtPoint.is())
             return S_FALSE;
 
-        IAccessible* pRet = nullptr;
-        bool bHaveIAccessible = get_IAccessibleFromXAccessible(xAccAtPoint.get(), &pRet);
-        if (!bHaveIAccessible)
+        IAccessible* pRet = get_IAccessibleFromXAccessible(xAccAtPoint.get());
+        if (!pRet)
         {
             g_pAccObjectManager->InsertAccObj(xAccAtPoint.get(), m_xAccessible.get(), m_hwnd);
-            bHaveIAccessible = get_IAccessibleFromXAccessible(xAccAtPoint.get(), &pRet);
+            pRet = get_IAccessibleFromXAccessible(xAccAtPoint.get());
         }
-        if (!bHaveIAccessible)
+        if (!pRet)
             return S_FALSE;
 
         pvarChild->vt = VT_DISPATCH;
@@ -1312,17 +1311,16 @@ IMAccessible* CMAccessible::GetChildInterface(long dChildID)//for test
         if(dChildID<1 || dChildID>pRContext->getAccessibleChildCount())
             return nullptr;
 
-        IAccessible* pChild = nullptr;
         Reference< XAccessible > pXChild = pRContext->getAccessibleChild(dChildID-1);
-        bool isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
+        IAccessible* pChild = get_IAccessibleFromXAccessible(pXChild.get());
 
-        if(!isGet)
+        if(!pChild)
         {
             g_pAccObjectManager->InsertAccObj(pXChild.get(), m_xAccessible.get(), m_hwnd);
-            isGet = get_IAccessibleFromXAccessible(pXChild.get(), &pChild);
+            pChild = get_IAccessibleFromXAccessible(pXChild.get());
         }
 
-        if(isGet)
+        if (pChild)
         {
             IMAccessible* pIMAcc =  static_cast<IMAccessible*>(pChild);
             return pIMAcc;
@@ -1406,7 +1404,7 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
     }
     pChildXAcc = pRChildXAcc.get();
     g_pAccObjectManager->InsertAccObj(pChildXAcc, m_xAccessible.get());
-    return g_pAccObjectManager->GetIMAccByXAcc(pChildXAcc);
+    return g_pAccObjectManager->GetIAccessibleFromXAccessible(pChildXAcc);
 }
 
 /**
@@ -2432,25 +2430,17 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
     } catch(...) { return E_FAIL; }
 }
 
-bool CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc, IAccessible** ppIA)
+IAccessible* CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc)
 {
     try
     {
-        // #CHECK#
-        if(ppIA == nullptr)
-        {
-            return false;
-        }
-        bool isGet = false;
         if (g_pAccObjectManager)
-            isGet = g_pAccObjectManager->GetIAccessibleFromXAccessible(pXAcc, ppIA);
-
-        return isGet;
+            return g_pAccObjectManager->GetIAccessibleFromXAccessible(pXAcc);
     }
     catch(...)
     {
-        return false;
     }
+    return nullptr;
 }
 
 OUString CMAccessible::get_StringFromAny(Any const & pAny)
@@ -2733,13 +2723,12 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
                 {
                     if(pXAcc.is())
                     {
-                        IAccessible* pIAcc = nullptr;
-                        get_IAccessibleFromXAccessible(pXAcc.get(), &pIAcc);
+                        IAccessible* pIAcc = get_IAccessibleFromXAccessible(pXAcc.get());
                         if(pIAcc == nullptr)
                         {
                             Reference< XAccessibleContext > pXAccContext = pXAcc->getAccessibleContext();
                             g_pAccObjectManager->InsertAccObj(pXAcc.get(),pXAccContext->getAccessibleParent().get());
-                            get_IAccessibleFromXAccessible(pXAcc.get(), &pIAcc);
+                            pIAcc = get_IAccessibleFromXAccessible(pXAcc.get());
                         }
                         if(pIAcc)
                         {

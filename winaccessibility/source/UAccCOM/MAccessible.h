@@ -206,8 +206,7 @@ public:
     // implement some specific MSAA methods,such as accSelection,accNavigate
     static AccObjectWinManager* g_pAccObjectManager;
 
-    static bool get_IAccessibleFromXAccessible(
-            css::accessibility::XAccessible * pXAcc, IAccessible** ppIA);
+    static IAccessible* get_IAccessibleFromXAccessible(css::accessibility::XAccessible* pXAcc);
     XGUIDToComObjHash m_containedObjects;
 
     static HRESULT WINAPI SmartQI_(void* pv,
