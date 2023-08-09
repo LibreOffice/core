@@ -33,10 +33,11 @@ $(eval $(call gb_Library_use_libraries,chartcontroller,\
     cppu \
     cppuhelper \
     drawinglayer \
+    docmodel \
     editeng \
     sal \
     salhelper \
-	i18nlangtag \
+    i18nlangtag \
     sfx \
     sot \
     svl \

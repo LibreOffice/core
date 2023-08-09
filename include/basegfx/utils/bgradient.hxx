@@ -13,7 +13,6 @@
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <vector>
-#include <com/sun/star/awt/Gradient2.hpp>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <tools/degree.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
@@ -109,9 +108,6 @@ public:
     */
 class BASEGFX_DLLPUBLIC BColorStops final : public std::vector<BColorStop>
 {
-private:
-    void setColorStopSequence(const css::awt::ColorStopSequence& rColorStops);
-
 public:
     explicit BColorStops()
         : vector()
@@ -133,10 +129,6 @@ public:
         : vector(first, last)
     {
     }
-    BColorStops(const css::awt::ColorStopSequence& rColorStops);
-
-    // needs true == rVal.has<css::awt::ColorStopSequence>()
-    BColorStops(const css::uno::Any& rVal);
 
     // constructor with two colors to explicitly create a
     // BColorStops for StartColor @0.0 & EndColor @1.0
@@ -243,12 +235,6 @@ public:
     // tessellation for gradients does have to create an extra ending/closing entry
     bool checkPenultimate() const;
 
-    /* Tooling method to fill a awt::ColorStopSequence with
-           the data from the given ColorStops. This is used in
-           UNO API implementations.
-        */
-    css::awt::ColorStopSequence getAsColorStopSequence() const;
-
     /* Tooling method to check if a ColorStop vector is defined
             by a single color. It returns true if this is the case.
             If true is returned, rSingleColor contains that single
@@ -304,7 +290,6 @@ private:
     sal_uInt16 nStepCount;
 
     static std::string GradientStyleToString(css::awt::GradientStyle eStyle);
-    void setGradient2(const css::awt::Gradient2& rGradient2);
 
 public:
     BGradient();
@@ -313,10 +298,6 @@ public:
               Degree10 nAngle = 0_deg10, sal_uInt16 nXOfs = 50, sal_uInt16 nYOfs = 50,
               sal_uInt16 nBorder = 0, sal_uInt16 nStartIntens = 100, sal_uInt16 nEndIntens = 100,
               sal_uInt16 nSteps = 0);
-    BGradient(const css::awt::Gradient2& rGradient2);
-
-    // needs true == (rVal.has<css::awt::Gradient>() || rVal.has<css::awt::Gradient2>())
-    BGradient(const css::uno::Any& rVal);
 
     bool operator==(const BGradient& rGradient) const;
 
@@ -342,9 +323,6 @@ public:
 
     boost::property_tree::ptree dumpAsJSON() const;
     static BGradient fromJSON(std::u16string_view rJSON);
-
-    /// Tooling method to fill awt::Gradient2 from data contained in the given basegfx::BGradient
-    css::awt::Gradient2 getAsGradient2() const;
 
     // Tooling to handle
     // - border correction/integration

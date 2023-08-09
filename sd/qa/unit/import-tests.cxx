@@ -33,6 +33,7 @@
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
 
+#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>

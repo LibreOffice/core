@@ -30,6 +30,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/util/XTheme.hpp>
 
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
@@ -191,7 +192,8 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testGradientMultiStepTransparency)
     // i.e. the end transparency was not 100%, but was 21%, leading to an unexpected visible line on
     // the right of this shape.
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aTransparence.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aTransparence.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(5), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[4].getStopOffset(), 1.0));

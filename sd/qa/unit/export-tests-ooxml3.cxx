@@ -16,6 +16,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/unoprnms.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <svx/xlineit0.hxx>
 #include <svx/xlndsit.hxx>
@@ -1247,7 +1248,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127372)
     xShape->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
 
     // MCGR: Use the completely imported gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aTransparenceGradient.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -1279,7 +1281,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest3, testTdf127379)
     CPPUNIT_ASSERT(aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aGradient);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aGradient.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

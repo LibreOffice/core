@@ -135,6 +135,7 @@
 #include <svx/unoshape.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -481,7 +482,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         && !sFillTransparenceGradientName.isEmpty()
         && GetProperty(rXPropSet, "FillTransparenceGradient"))
     {
-        aTransparenceGradient = basegfx::BGradient(mAny);
+        aTransparenceGradient = model::gradient::getFromAny(mAny);
         basegfx::BColor aSingleColor;
         bNeedGradientFill = !aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor);
 
@@ -605,7 +606,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
         return;
 
     // use BGradient constructor directly, it will take care of Gradient/Gradient2
-    basegfx::BGradient aGradient(mAny);
+    basegfx::BGradient aGradient = model::gradient::getFromAny(mAny);
 
     // get InteropGrabBag and search the relevant attributes
     basegfx::BGradient aOriginalGradient;
@@ -618,8 +619,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
             if( rProp.Name == "GradFillDefinition" )
                 rProp.Value >>= aGradientStops;
             else if( rProp.Name == "OriginalGradFill" )
-                // use BGradient constructor directly, it will take care of Gradient/Gradient2
-                aOriginalGradient = basegfx::BGradient(rProp.Value);
+                aOriginalGradient = model::gradient::getFromAny(rProp.Value);
     }
 
     // check if an ooxml gradient had been imported and if the user has modified it
@@ -650,7 +650,7 @@ void DrawingML::WriteGradientFill( const Reference< XPropertySet >& rXPropSet )
             && GetProperty(rXPropSet, "FillTransparenceGradient"))
         {
             // TransparenceGradient is only used when name is not empty
-            aTransparenceGradient = basegfx::BGradient(mAny);
+            aTransparenceGradient = model::gradient::getFromAny(mAny);
             pTransparenceGradient = &aTransparenceGradient;
         }
         else if (GetProperty(rXPropSet, "FillTransparence"))
@@ -5312,7 +5312,7 @@ void DrawingML::WriteFill(const Reference<XPropertySet>& xPropSet, const awt::Si
         {
             // check if a fully transparent TransparenceGradient is used
             // use BGradient constructor & tooling here now
-            const basegfx::BGradient aTransparenceGradient(mAny);
+            const basegfx::BGradient aTransparenceGradient = model::gradient::getFromAny(mAny);
             basegfx::BColor aSingleColor;
             const bool bSingleColor(aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor));
             const bool bCompletelyTransparent(bSingleColor && basegfx::fTools::equal(aSingleColor.luminance(), 1.0));

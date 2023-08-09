@@ -36,6 +36,7 @@
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 
+#include <docmodel/uno/UnoGradientTools.hxx>
 #include <svx/svdotable.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <rtl/uri.hxx>
@@ -1226,7 +1227,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), aGradient.Border);
 
     // MCGR: Use the completely imported gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aGradient.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     // Without the accompanying fix in place, this test would have failed with
     // 'Expected: 0, Actual  : 10592673', i.e. the start color of the gradient
@@ -1485,7 +1487,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf128345GradientAxial)
     xShapePropSet->getPropertyValue("FillTransparenceGradient") >>= aTransparenceGradient;
 
     // MCGR: Use the completely imported gradient to check for correctness
-    const basegfx::BColorStops aColorStops(aTransparenceGradient.ColorStops);
+    const basegfx::BColorStops aColorStops
+        = model::gradient::getColorStopsFromUno(aTransparenceGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

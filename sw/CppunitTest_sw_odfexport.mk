@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odfexport, \
     comphelper \
     cppu \
     cppuhelper \
+    docmodel \
     sal \
 	sfx \
 	subsequenttest \

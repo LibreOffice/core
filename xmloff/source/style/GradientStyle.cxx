@@ -35,6 +35,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <basegfx/utils/bgradient.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -226,7 +227,7 @@ void XMLGradientStyleExport::exportXML(
     if (!rValue.has<css::awt::Gradient2>() && !rValue.has<css::awt::Gradient>())
         return;
 
-    basegfx::BGradient aGradient(rValue);
+    basegfx::BGradient aGradient = model::gradient::getFromAny(rValue);
 
     // Export of axial gradient to OOXML produces a symmetrical linear multi-color gradient. Import
     // does not regenerate it as 'axial' because that is not needed for MCGR. For export to ODF we

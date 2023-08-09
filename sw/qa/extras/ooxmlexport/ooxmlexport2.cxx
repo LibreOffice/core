@@ -33,6 +33,7 @@
 
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -571,7 +572,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     awt::Gradient2 aGradient(getProperty<awt::Gradient2>(xFrame, "FillGradient"));
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    basegfx::BColorStops aColorStops(aGradient.ColorStops);
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -587,7 +588,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported transparency gradient to check for correctness
-    aColorStops = basegfx::BColorStops(aGradient.ColorStops);
+    aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(3), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

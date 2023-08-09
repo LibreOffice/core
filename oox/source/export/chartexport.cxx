@@ -26,6 +26,7 @@
 #include <oox/export/utils.hxx>
 #include <drawingml/chart/typegroupconverter.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <cstdio>
 #include <limits>
@@ -1913,9 +1914,9 @@ void ChartExport::exportSolidFill(const Reference< XPropertySet >& xPropSet)
     {
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
-        const uno::Any rTransparenceValue = xTransparenceGradient->getByName(sFillTransparenceGradientName);
+        const uno::Any rTransparenceAny = xTransparenceGradient->getByName(sFillTransparenceGradientName);
 
-        aTransparenceGradient = basegfx::BGradient(rTransparenceValue);
+        aTransparenceGradient = model::gradient::getFromAny(rTransparenceAny);
         basegfx::BColor aSingleColor;
         bNeedGradientFill = !aTransparenceGradient.GetColorStops().isSingleColor(aSingleColor);
 
@@ -2001,8 +2002,8 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
     try
     {
         uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY );
-        const uno::Any rGradientValue(xGradient->getByName( sFillGradientName ));
-        const basegfx::BGradient aGradient(rGradientValue);
+        const uno::Any rGradientAny(xGradient->getByName( sFillGradientName ));
+        const basegfx::BGradient aGradient = model::gradient::getFromAny(rGradientAny);
         basegfx::BColor aSingleColor;
 
         if (!aGradient.GetColorStops().isSingleColor(aSingleColor))
@@ -2014,9 +2015,9 @@ void ChartExport::exportGradientFill( const Reference< XPropertySet >& xPropSet 
             if( (xPropSet->getPropertyValue("FillTransparenceGradientName") >>= sFillTransparenceGradientName) && !sFillTransparenceGradientName.isEmpty())
             {
                 uno::Reference< container::XNameAccess > xTransparenceGradient(xFact->createInstance("com.sun.star.drawing.TransparencyGradientTable"), uno::UNO_QUERY);
-                const uno::Any rTransparenceValue(xTransparenceGradient->getByName(sFillTransparenceGradientName));
+                const uno::Any rTransparenceAny(xTransparenceGradient->getByName(sFillTransparenceGradientName));
 
-                aTransparenceGradient = basegfx::BGradient(rTransparenceValue);
+                aTransparenceGradient = model::gradient::getFromAny(rTransparenceAny);
 
                 WriteGradientFill(&aGradient, 0, &aTransparenceGradient);
             }

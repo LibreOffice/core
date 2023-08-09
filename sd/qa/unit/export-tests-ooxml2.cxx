@@ -14,6 +14,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdpage.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
@@ -1011,7 +1012,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf105739)
         aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
 
         // MCGR: Use the completely imported gradient to check for correctness
-        const basegfx::BColorStops aColorStops(aFillGradient.ColorStops);
+        const basegfx::BColorStops aColorStops
+            = model::gradient::getColorStopsFromUno(aFillGradient.ColorStops);
 
         CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
         CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));

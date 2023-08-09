@@ -52,6 +52,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <basegfx/utils/gradienttools.hxx>
+#include <docmodel/uno/UnoGradientTools.hxx>
 
 #include <docufld.hxx> // for SwHiddenTextField::ParseIfFieldDefinition() method call
 #include <unoprnms.hxx>
@@ -790,7 +791,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     awt::Gradient2 aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported gradient to check for correctness
-    basegfx::BColorStops aColorStops(aGradient.ColorStops);
+    basegfx::BColorStops aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
@@ -804,7 +805,7 @@ DECLARE_ODFEXPORT_TEST(testTextframeGradient, "textframe-gradient.odt")
     aGradient = getProperty<awt::Gradient2>(xFrame, "FillGradient");
 
     // MCGR: Use the completely imported gradient to check for correctness
-    aColorStops = basegfx::BColorStops(aGradient.ColorStops);
+    aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
     CPPUNIT_ASSERT_EQUAL(size_t(2), aColorStops.size());
     CPPUNIT_ASSERT(basegfx::fTools::equal(aColorStops[0].getStopOffset(), 0.0));
