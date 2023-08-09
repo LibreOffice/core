@@ -1108,7 +1108,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
 
     sal_uInt32 nPropCount = aHd.nRecInstance;
 
-    sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
+    sal_uInt64 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
 
     const size_t nMaxPossibleRecords = rIn.remainingSize() / (sizeof(sal_uInt16) + sizeof(sal_uInt32));
     if (nPropCount > nMaxPossibleRecords)
@@ -1176,7 +1176,7 @@ void DffPropSet::ReadPropSet( SvStream& rIn, bool bSetUninitializedOnly )
                                 || ( nRecType == DFF_Prop_textRectangles ) )
                 {
                     // now check if the current content size is possible, or 6 bytes too small
-                    sal_uInt32  nOldPos = rIn.Tell();
+                    sal_uInt64  nOldPos = rIn.Tell();
 
                     sal_Int16 nNumElem(0), nNumElemReserved(0), nSize(0);
                     if (checkSeek(rIn, nComplexDataFilePos))

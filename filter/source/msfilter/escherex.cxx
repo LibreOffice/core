@@ -109,8 +109,8 @@ EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, 
 }
 EscherExContainer::~EscherExContainer()
 {
-    sal_uInt32 nPos = rStrm.Tell();
-    sal_uInt32 nSize= nPos - nContPos;
+    sal_uInt64 nPos  = rStrm.Tell();
+    sal_uInt32 nSize = nPos - nContPos;
     if ( nSize )
     {
         rStrm.Seek( nContPos - 4 );
@@ -127,8 +127,8 @@ EscherExAtom::EscherExAtom( SvStream& rSt, const sal_uInt16 nRecType, const sal_
 }
 EscherExAtom::~EscherExAtom()
 {
-    sal_uInt32 nPos = rStrm.Tell();
-    sal_uInt32 nSize= nPos - nContPos;
+    sal_uInt64 nPos  = rStrm.Tell();
+    sal_uInt32 nSize = nPos - nContPos;
     if ( nSize )
     {
         rStrm.Seek( nContPos - 4 );
@@ -4054,7 +4054,8 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
 
     if ( pMergePicStreamBSE )
     {
-        sal_uInt32 nBlipSize, nOldPos = pMergePicStreamBSE->Tell();
+        sal_uInt32 nBlipSize;
+        sal_uInt64 nOldPos = pMergePicStreamBSE->Tell();
         const sal_uInt32 nBuf = 0x40000;    // 256KB buffer
         std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nBuf ]);
 
@@ -4341,7 +4342,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
             }
             if ( nAtomSize )
             {
-                sal_uInt32  nPos = rPicOutStrm.Tell();
+                sal_uInt64  nPos = rPicOutStrm.Tell();
                 rPicOutStrm.Seek( nAtomSize - 4 );
                 rPicOutStrm.WriteUInt32( nPos - nAtomSize );
                 rPicOutStrm.Seek( nPos );
@@ -4921,7 +4922,8 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 
 void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
 {
-    sal_uInt32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
+    sal_uInt32 nSize, nType, nSource, nBufSize, nToCopy;
+    sal_uInt64 nCurPos = mpOutStrm->Tell();
 
     // adjust persist table
     for(auto const & pPtr : maPersistTable) {
@@ -4936,7 +4938,7 @@ void EscherEx::InsertAtCurrentPos( sal_uInt32 nBytes )
     while ( mpOutStrm->Tell() < nCurPos )
     {
         mpOutStrm->ReadUInt32( nType ).ReadUInt32( nSize );
-        sal_uInt32 nEndOfRecord = mpOutStrm->Tell() + nSize;
+        sal_uInt64 nEndOfRecord = mpOutStrm->Tell() + nSize;
         bool bContainer = (nType & 0x0F) == 0x0F;
         /*  Expand the record, if the insertion position is inside, or if the
             position is at the end of a container (expands always), or at the
@@ -5013,7 +5015,7 @@ bool EscherEx::SeekToPersistOffset( sal_uInt32 nKey )
 
 void EscherEx::InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue )
 {
-    sal_uInt32  nOldPos = mpOutStrm->Tell();
+    sal_uInt64  nOldPos = mpOutStrm->Tell();
     bool        bRetValue = SeekToPersistOffset( nKey );
     if ( bRetValue )
     {
@@ -5124,7 +5126,7 @@ void EscherEx::BeginAtom()
 
 void EscherEx::EndAtom( sal_uInt16 nRecType, int nRecVersion, int nRecInstance )
 {
-    sal_uInt32  nOldPos = mpOutStrm->Tell();
+    sal_uInt64  nOldPos = mpOutStrm->Tell();
     mpOutStrm->Seek( mnCountOfs );
     sal_uInt32 nSize = nOldPos - mnCountOfs;
     mpOutStrm->WriteUInt16( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ).WriteUInt16( nRecType ).WriteUInt32( nSize - 8 );
@@ -5216,7 +5218,7 @@ void EscherEx::SetGroupSnapRect( sal_uInt32 nGroupLevel, const tools::Rectangle&
 {
     if ( nGroupLevel )
     {
-        sal_uInt32 nCurrentPos = mpOutStrm->Tell();
+        sal_uInt64 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
             mpOutStrm ->WriteInt32( rRect.Left() )  // Bounding box for the grouped shapes to which they will be attached
@@ -5232,7 +5234,7 @@ void EscherEx::SetGroupLogicRect( sal_uInt32 nGroupLevel, const tools::Rectangle
 {
     if ( nGroupLevel )
     {
-        sal_uInt32 nCurrentPos = mpOutStrm->Tell();
+        sal_uInt64 nCurrentPos = mpOutStrm->Tell();
         if ( DoSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
         {
             mpOutStrm->WriteInt16( rRect.Top() ).WriteInt16( rRect.Left() ).WriteInt16( rRect.Right() ).WriteInt16( rRect.Bottom() );

@@ -701,7 +701,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                 sal_uInt64 const nInSize = rIn.remainingSize();
                 rIn.Seek(0);
 
-                sal_uInt32  nNext = 0;
+                sal_uInt64  nNext = 0;
                 sal_uInt32  nAdd = nInSize / 20;
                 bool bProgressBar = aXStatInd.is();
                 if ( bProgressBar )
@@ -711,7 +711,7 @@ ImportCGM(SvStream& rIn, uno::Reference< frame::XModel > const & rXModel, css::u
                 {
                     if ( bProgressBar )
                     {
-                        sal_uInt32 nCurrentPos = rIn.Tell();
+                        sal_uInt64 nCurrentPos = rIn.Tell();
                         if ( nCurrentPos >= nNext )
                         {
                             aXStatInd->setValue( nCurrentPos );

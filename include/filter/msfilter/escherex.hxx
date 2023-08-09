@@ -1058,7 +1058,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         std::vector< sal_uInt16 >   mRecTypes;
 
         sal_uInt32                  mnCurrentDg;
-        sal_uInt32                  mnCountOfs;
+        sal_uInt64                  mnCountOfs;
 
         sal_uInt32                  mnGroupLevel;
         SdrLayerID                  mnHellLayerId;
