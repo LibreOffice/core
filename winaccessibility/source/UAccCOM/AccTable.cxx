@@ -49,10 +49,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_accessibleAt(long row, long col
 
     try {
 
-    // #CHECK#
     if(accessible == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -117,16 +116,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnDescription(long column, 
 
     try {
 
-    // #CHECK#
     if(description == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
     const OUString& ouStr = pRXTable->getAccessibleColumnDescription(column);
-    // #CHECK#
 
     SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -175,11 +171,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable _
 
     try {
 
-    // #CHECK#
     if(accessibleTable == nullptr || startingRowIndex == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -225,11 +219,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nColumns(long * columnCount)
 
     try {
 
-    // #CHECK#
     if(columnCount == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -250,11 +242,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nRows(long * rowCount)
 
     try {
 
-    // #CHECK#
     if(rowCount == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -275,11 +265,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedColumns(long * columnC
 
     try {
 
-    // #CHECK#
     if(columnCount == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -301,11 +289,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedRows(long * rowCount)
 
     try {
 
-    // #CHECK#
     if(rowCount == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -328,16 +314,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR *
 
     try {
 
-    // #CHECK#
     if(description == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
     const OUString& ouStr = pRXTable->getAccessibleRowDescription(row);
-    // #CHECK#
 
     SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -387,11 +370,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RP
 
     try {
 
-    // #CHECK#
     if(accessibleTable == nullptr || startingColumnIndex == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -438,11 +419,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedRows(long** rows, long*
 
     try {
 
-    // #CHECK#
     if(rows == nullptr || nRows == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -488,11 +467,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedColumns(long ** columns
 
     try {
 
-    // #CHECK#
     if(columns == nullptr || numColumns == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -537,11 +514,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible
 
     try {
 
-    // #CHECK#
     if(accessible == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -573,11 +548,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isColumnSelected(long column, b
 
     try {
 
-    // #CHECK#
     if(isSelected == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -599,11 +572,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isRowSelected(long row, boolean
 
     try {
 
-    // #CHECK#
     if(isSelected == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -626,11 +597,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_isSelected(long row, long colum
 
     try {
 
-    // #CHECK#
     if(isSelected == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -864,11 +833,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnIndex(long childIndex, lo
 
     try {
 
-    // #CHECK#
     if(columnIndex == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -888,11 +855,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long 
 
     try {
 
-    // #CHECK#
     if(rowIndex == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -913,11 +878,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_childIndex(long RowIndex , long
 
     try {
 
-    // #CHECK#
     if(childIndex == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -961,11 +924,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCo
 
     try {
 
-    // #CHECK#
     if(childCount == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -1006,11 +967,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_selectedChildren(long, long **c
 
     try {
 
-    // #CHECK#
     if(children == nullptr || nChildren == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXTable.is())
         return E_FAIL;
 

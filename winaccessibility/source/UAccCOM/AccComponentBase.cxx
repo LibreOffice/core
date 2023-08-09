@@ -47,7 +47,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationInParent(long* 
     {
         if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
-        // #CHECK XInterface#
+
         if (!pRXComp.is())
             return E_FAIL;
 
@@ -77,7 +77,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_locationOnScreen(long* 
     {
         if (x == nullptr || y == nullptr)
             return E_INVALIDARG;
-        // #CHECK XInterface#
+
         if (!pRXComp.is())
             return E_FAIL;
 
@@ -105,7 +105,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean* success)
     {
         if (success == nullptr)
             return E_INVALIDARG;
-        // #CHECK XInterface#
+
         if (!pRXComp.is())
         {
             return E_FAIL;
@@ -134,7 +134,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color* fo
     {
         if (foreground == nullptr)
             return E_INVALIDARG;
-        // #CHECK XInterface#
+
         if (!pRXComp.is())
         {
             return E_FAIL;
@@ -162,7 +162,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color* ba
     {
         if (background == nullptr)
             return E_INVALIDARG;
-        // #CHECK XInterface#
+
         if (!pRXComp.is())
         {
             return E_FAIL;

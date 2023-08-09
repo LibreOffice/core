@@ -94,7 +94,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffse
 
     try {
 
-    // #CHECK XInterface#
     if(pUNOInterface == nullptr)
         return E_FAIL;
 
@@ -132,7 +131,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
 
     if (startOffset == nullptr || endOffset == nullptr || textAttributes == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
     {
         return E_FAIL;
@@ -216,7 +215,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         }
     }
     strAttrs.append(';');
-    // #CHECK#
+
     if(*textAttributes)
         SysFreeString(*textAttributes);
     *textAttributes = SysAllocString(o3tl::toW(strAttrs.makeStringAndClear().getStr()));
@@ -251,7 +250,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
 
     if (offset == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
     {
         *offset = 0;
@@ -277,7 +276,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long * nChara
 
     if (nCharacters == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
     {
         *nCharacters = 0;
@@ -307,7 +306,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset
 
     if (x == nullptr || height == nullptr || y == nullptr || width == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -379,7 +378,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelectio
 
     if (nSelections == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(pUNOInterface == nullptr)
     {
         *nSelections = 0;
@@ -425,7 +424,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y
 
     if (offset == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -468,7 +467,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionInde
 
     if (startOffset == nullptr || endOffset == nullptr )
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(pUNOInterface == nullptr )
         return E_FAIL;
 
@@ -517,7 +516,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long 
 
     if (text == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -562,10 +561,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset
 
     try {
 
-    // #CHECK#
     if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -611,7 +609,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset,
 
     if (startOffset == nullptr || endOffset == nullptr || text == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -657,7 +655,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA
 
     if (startOffset == nullptr || text == nullptr ||endOffset == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
         return E_FAIL;
 
@@ -698,7 +696,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::removeSelection(long selectionIn
 
     try {
 
-    // #CHECK XInterface#
     if(pUNOInterface == nullptr)
     {
         return E_FAIL;
@@ -734,7 +731,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 
     try {
 
-    // #CHECK XInterface#
     if(!pRXText.is())
         return E_FAIL;
 
@@ -759,7 +755,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setSelection(long, long startOff
 
     try {
 
-    // #CHECK XInterface#
     if(!pRXText.is())
     {
         return E_FAIL;
@@ -785,7 +780,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacte
 
     if (nCharacters == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pRXText.is())
     {
         *nCharacters = 0;
@@ -827,7 +822,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startInde
 
     try {
 
-    // #CHECK XInterface#
     if(!pRXText.is())
         return E_FAIL;
 

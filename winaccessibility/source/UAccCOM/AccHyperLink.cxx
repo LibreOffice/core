@@ -109,12 +109,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_anchor(/* [in] */ long inde
 
     try {
 
-    // #CHECK#
     if(anchor == nullptr)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+
     if(!pRXLink.is())
     {
         return E_FAIL;
@@ -141,12 +140,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_anchorTarget(/* [in] */ lon
 
     try {
 
-    // #CHECK#
     if(anchorTarget == nullptr)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+
     if(!pRXLink.is())
     {
         return E_FAIL;
@@ -173,7 +171,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_startIndex(/* [retval][out]
 
     try {
 
-    // #CHECK#
     if(index == nullptr)
     {
         return E_INVALIDARG;
@@ -196,12 +193,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_endIndex(/* [retval][out] *
 
     try {
 
-    // #CHECK#
     if(index == nullptr)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+
     if(!pRXLink.is())
     {
         return E_FAIL;
@@ -224,12 +220,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHyperLink::get_valid(/* [retval][out] */ b
 
     try {
 
-    // #CHECK#
     if(valid == nullptr)
     {
         return E_INVALIDARG;
     }
-    // #CHECK XInterface#
+
     if(!pRXLink.is())
     {
         return E_FAIL;

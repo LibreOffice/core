@@ -237,7 +237,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdisp
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(ppdispParent == nullptr)
         {
             return E_INVALIDARG;
@@ -274,7 +274,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pcountChildren == nullptr)
         {
             return E_INVALIDARG;
@@ -316,7 +316,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, I
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(ppdispChild == nullptr)
         {
             return E_INVALIDARG;
@@ -354,7 +354,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszName == nullptr)
         {
             return E_INVALIDARG;
@@ -393,7 +393,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, B
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if( pszValue == nullptr )
         {
             return E_INVALIDARG;
@@ -438,7 +438,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszDescription == nullptr)
         {
             return E_INVALIDARG;
@@ -485,7 +485,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VA
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarRole == nullptr)
         {
             return E_INVALIDARG;
@@ -532,7 +532,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, V
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarState == nullptr)
         {
             return E_INVALIDARG;
@@ -634,7 +634,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
     try {
 
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszKeyboardShortcut == nullptr)
         {
             return E_INVALIDARG;
@@ -786,7 +786,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarChild == nullptr)
         {
             return E_INVALIDARG;
@@ -828,7 +828,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarChildren == nullptr)
         {
             return E_INVALIDARG;
@@ -880,7 +880,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pxLeft == nullptr || pyTop == nullptr || pcxWidth == nullptr || pcyHeight == nullptr)
         {
             return E_INVALIDARG;
@@ -928,7 +928,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarEndUpAt == nullptr)
         {
             return E_INVALIDARG;
@@ -1075,7 +1075,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszName == nullptr)
         {
             return E_INVALIDARG;
@@ -1153,7 +1153,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RP
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszAccValue == nullptr)
         {
             return E_INVALIDARG;
@@ -1423,7 +1423,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarEndUpAt == nullptr)
         {
             return E_INVALIDARG;
@@ -1460,7 +1460,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarEndUpAt == nullptr)
         {
             return E_INVALIDARG;
@@ -1531,7 +1531,7 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pvarEndUpAt == nullptr)
         {
             return E_INVALIDARG;
@@ -1570,7 +1570,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *
     try {
         if (m_isDestroy) return S_FALSE;
 
-        // #CHECK#
         if(nRelations == nullptr)
         {
             return E_INVALIDARG;
@@ -1600,7 +1599,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relation( long relationIndex
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(relation == nullptr)
         {
             return E_INVALIDARG;
@@ -1663,12 +1662,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relations( long, IAccessible
     try {
         if (m_isDestroy) return S_FALSE;
 
-        // #CHECK#
         if(relation == nullptr || nRelations == nullptr)
         {
             return E_INVALIDARG;
         }
-        // #CHECK XInterface#
 
         if (!m_xContext.is())
             return E_FAIL;
@@ -1738,7 +1735,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nActions(long __RPC_FAR *nAc
     try
     {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(nActions == nullptr)
         {
             return E_INVALIDARG;
@@ -1774,7 +1771,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::scrollTo(enum IA2ScrollType)
 
 static XAccessible* getTheParentOfMember(XAccessible* pXAcc)
 {
-    // #CHECK#
     if(pXAcc == nullptr)
     {
         return nullptr;
@@ -1800,7 +1796,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(groupLevel == nullptr || similarItemsInGroup == nullptr || positionInGroup == nullptr)
         {
             return E_INVALIDARG;
@@ -1988,7 +1984,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_uniqueID(long __RPC_FAR *uni
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(uniqueID == nullptr)
         {
             return E_INVALIDARG;
@@ -2005,7 +2001,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_windowHandle(HWND __RPC_FAR 
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(windowHandle == nullptr)
         {
             return E_INVALIDARG;
@@ -2209,7 +2205,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(pszDefaultAction == nullptr)
         {
             return E_INVALIDARG;
@@ -2283,7 +2279,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
 
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(szAction == nullptr)
         {
             return E_INVALIDARG;
@@ -2821,7 +2817,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_indexInParent(long __RPC_FAR
 {
     try {
         if (m_isDestroy) return S_FALSE;
-        // #CHECK#
+
         if(accParentIndex == nullptr)
             return E_INVALIDARG;
 

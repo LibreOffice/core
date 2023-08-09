@@ -41,7 +41,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
 
     try
     {
-        // #CHECK#
         if (description == nullptr)
             return E_INVALIDARG;
         if (!pRXImg.is())

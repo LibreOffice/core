@@ -270,10 +270,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlink
 
     try {
 
-    // #CHECK#
     if(hyperlinkCount == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pHyperText.is())
     {
         return E_FAIL;
@@ -297,10 +296,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlink(long index,IAcces
 
     try {
 
-    // #CHECK#
     if(hyperlink == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pHyperText.is())
     {
         return E_FAIL;
@@ -345,10 +343,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccHypertext::get_hyperlinkIndex(long charInd
 
     try {
 
-    // #CHECK#
     if(hyperlinkIndex == nullptr)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+
     if(!pHyperText.is())
     {
         return E_FAIL;

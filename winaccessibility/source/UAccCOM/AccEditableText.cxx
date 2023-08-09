@@ -54,7 +54,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::copyText(long startOffset, l
 
     try {
 
-    // #CHECK XInterface#
     if(!pRXEdtTxt.is())
     {
         return E_FAIL;
@@ -182,7 +181,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::replaceText(long startOffset
 
     try {
 
-    // #CHECK#
     if (text == nullptr)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )
@@ -211,7 +209,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccEditableText::setAttributes(long startOffs
 
     try {
 
-    // #CHECK#
     if (attributes == nullptr)
         return E_INVALIDARG;
     if( !pRXEdtTxt.is() )

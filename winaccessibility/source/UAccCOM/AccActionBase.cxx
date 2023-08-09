@@ -60,7 +60,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long*
 
     try {
 
-    // #CHECK#
     if( pRXAct.is() && nActions != nullptr )
     {
         *nActions = GetXInterface()->getAccessibleActionCount();
@@ -105,16 +104,13 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionInd
 
     try {
 
-    // #CHECK#
     if(description == nullptr)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
     if(!pRXAct.is())
         return E_FAIL;
 
     OUString ouStr = GetXInterface()->getAccessibleActionDescription(actionIndex);
-    // #CHECK#
 
     SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));

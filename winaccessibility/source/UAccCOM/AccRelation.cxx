@@ -134,7 +134,6 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_targets(long, IUnknown * * t
 
     try {
 
-    // #CHECK#
     if(target == nullptr)
         return E_INVALIDARG;
     if (nTargets == nullptr)
