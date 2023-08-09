@@ -30,6 +30,7 @@ class TablePositionHandler : public LoggedProperties
     sal_Int32 m_nRightFromText = 0;
     sal_Int32 m_nTopFromText = 0;
     sal_Int32 m_nBottomFromText = 0;
+    Id m_nTableOverlap = 0;
 
     // Properties
     void lcl_attribute(Id nId, Value& rVal) override;
@@ -47,6 +48,8 @@ public:
     const OUString& getYSpec() const { return m_aYSpec; }
     const OUString& getHorzAnchor() const { return m_aHorzAnchor; }
     const OUString& getXSpec() const { return m_aXSpec; }
+
+    void setTableOverlap(Id nTableOverlap) { m_nTableOverlap = nTableOverlap; }
 
     TablePositionHandler();
     ~TablePositionHandler() override;
