@@ -116,7 +116,7 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
         pStream.Flush();
         if ( !nFailed )
         {
-            sal_Int32 nLength = pStream.TellEnd();
+            sal_uInt64 nLength = pStream.TellEnd();
             if ( nLength > 22 )
             {
                 HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,

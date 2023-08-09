@@ -253,9 +253,9 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
     std::scoped_lock aGuard( m_aMutex );
     checkConnected();
 
-    sal_uInt32 nPos = m_pSvStream->Tell();
+    sal_uInt64 nPos = m_pSvStream->Tell();
     checkError();
-    return static_cast<sal_Int64>(nPos);
+    return nPos;
 }
 
 

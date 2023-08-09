@@ -1915,7 +1915,7 @@ bool MathType::ConvertFromStarMath( SfxMedium& rMedium )
         pS->WriteUChar( 0x01 );
         pS->WriteUChar( 0x03 );
         pS->WriteUChar( 0x00 );
-        sal_uInt32 nSize = pS->Tell();
+        sal_uInt64 nSize = pS->Tell();
         nPendingAttributes=0;
 
         HandleNodes(pTree, 0);

@@ -1300,8 +1300,8 @@ std::size_t StgTmpStrm::GetData( void* pData, std::size_t n )
 
 std::size_t StgTmpStrm::PutData( const void* pData, std::size_t n )
 {
-    sal_uInt32 nCur = Tell();
-    sal_uInt32 nNew = nCur + n;
+    sal_uInt64 nCur = Tell();
+    sal_uInt64 nNew = nCur + n;
     if( nNew > THRESHOLD && !m_pStrm )
     {
         SetSize( nNew );
