@@ -45,66 +45,51 @@ namespace svgio::svgreader
             {
                 case SVGToken::X:
                 {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
+                    SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setX(std::move(aVector));
-                        }
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setX(std::move(aVector));
                     }
                     break;
                 }
                 case SVGToken::Y:
                 {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
+                    SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setY(std::move(aVector));
-                        }
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setY(std::move(aVector));
                     }
                     break;
                 }
                 case SVGToken::Dx:
                 {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
+                    SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setDx(std::move(aVector));
-                        }
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setDx(std::move(aVector));
                     }
                     break;
                 }
                 case SVGToken::Dy:
                 {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
+                    SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setDy(std::move(aVector));
-                        }
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setDy(std::move(aVector));
                     }
                     break;
                 }
                 case SVGToken::Rotate:
                 {
-                    if(!aContent.empty())
-                    {
-                        SvgNumberVector aVector;
+                    SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
-                        {
-                            setRotate(std::move(aVector));
-                        }
+                    if(readSvgNumberVector(aContent, aVector))
+                    {
+                        setRotate(std::move(aVector));
                     }
                     break;
                 }
@@ -123,16 +108,13 @@ namespace svgio::svgreader
                 }
                 case SVGToken::LengthAdjust:
                 {
-                    if(!aContent.empty())
+                    if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
                     {
-                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacing"))
-                        {
-                            setLengthAdjust(true);
-                        }
-                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
-                        {
-                            setLengthAdjust(false);
-                        }
+                        setLengthAdjust(true);
+                    }
+                    else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"spacingAndGlyphs"))
+                    {
+                        setLengthAdjust(false);
                     }
                     break;
                 }
