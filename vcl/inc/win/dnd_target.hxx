@@ -54,7 +54,7 @@ class DropTarget : public cppu::BaseMutex,
 
 {
 private:
-    friend DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
+    friend unsigned __stdcall DndTargetOleSTAFunc(void* pParams);
     // The native window which acts as drop target.
     // It is set in initialize. In case RegisterDragDrop fails it is set
     // to NULL
@@ -65,7 +65,7 @@ private:
     DWORD m_threadIdWindow;
     // This is the thread id of the OLE thread that is created in DropTarget::initialize
     // when the calling thread is an MTA
-    DWORD m_threadIdTarget;
+    unsigned m_threadIdTarget;
     // The handle of the thread that is created in DropTarget::initialize
     // when the calling thread is an MTA
     HANDLE m_hOleThread;

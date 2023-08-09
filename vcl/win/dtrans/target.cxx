@@ -44,7 +44,7 @@ using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 #define WM_REGISTERDRAGDROP WM_USER + 1
 #define WM_REVOKEDRAGDROP WM_USER + 2
 
-DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
+unsigned __stdcall DndTargetOleSTAFunc(void* pParams);
 
 DropTarget::DropTarget( const Reference<XComponentContext>& rxContext):
     WeakComponentImplHelper<XInitialization,XDropTarget, XServiceInfo>(m_aMutex),
@@ -146,8 +146,8 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
             // It indicates that the thread is ready to receive messages.
             HANDLE m_evtThreadReady= CreateEventW( nullptr, FALSE, FALSE, nullptr);
 
-            m_hOleThread= CreateThread( nullptr, 0, DndTargetOleSTAFunc,
-                                            &m_evtThreadReady, 0, &m_threadIdTarget);
+            m_hOleThread = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, DndTargetOleSTAFunc,
+                                            &m_evtThreadReady, 0, &m_threadIdTarget));
             WaitForSingleObject( m_evtThreadReady, INFINITE);
             CloseHandle( m_evtThreadReady);
             PostThreadMessageW( m_threadIdTarget, WM_REGISTERDRAGDROP, reinterpret_cast<WPARAM>(this), 0);
@@ -190,7 +190,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
 // This function is called as extra thread from DragSource::startDrag.
 // The function carries out a drag and drop operation by calling
 // DoDragDrop. The thread also notifies all XSourceListener.
-DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
+unsigned __stdcall DndTargetOleSTAFunc(void* pParams)
 {
     osl_setThreadName("DropTarget DndTargetOleSTAFunc");
 

@@ -426,7 +426,7 @@ static LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 }
 
 
-static DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
+static unsigned __stdcall SystrayThread(void* /*lpParam*/)
 {
     osl_setThreadName("SystrayThread");
 
@@ -516,8 +516,8 @@ void win32_init_sys_tray()
             nullptr                      // window-creation data
             );
 
-        DWORD   dwThreadId;
-        CloseHandle(CreateThread(nullptr, 0, SystrayThread, nullptr, 0, &dwThreadId));
+        CloseHandle(reinterpret_cast<HANDLE>(
+            _beginthreadex(nullptr, 0, SystrayThread, nullptr, 0, nullptr)));
     }
 }
 

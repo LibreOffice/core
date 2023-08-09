@@ -241,8 +241,8 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
 
     s_theMtaOleClipboardInst = this;
 
-    m_hOleThread = CreateThread(
-        nullptr, 0, CMtaOleClipboard::oleThreadProc, this, 0, &m_uOleThreadId );
+    m_hOleThread = reinterpret_cast<HANDLE>(_beginthreadex(
+        nullptr, 0, CMtaOleClipboard::oleThreadProc, this, 0, &m_uOleThreadId ));
     OSL_ASSERT( nullptr != m_hOleThread );
 
     // setup the clipboard changed notifier thread
@@ -253,9 +253,8 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_hClipboardChangedNotifierEvents[1] = CreateEventW( nullptr, MANUAL_RESET, INIT_NONSIGNALED, nullptr );
     OSL_ASSERT( nullptr != m_hClipboardChangedNotifierEvents[1] );
 
-    DWORD uThreadId;
-    m_hClipboardChangedNotifierThread = CreateThread(
-        nullptr, 0, CMtaOleClipboard::clipboardChangedNotifierThreadProc, this, 0, &uThreadId );
+    m_hClipboardChangedNotifierThread = reinterpret_cast<HANDLE>(_beginthreadex(
+        nullptr, 0, CMtaOleClipboard::clipboardChangedNotifierThreadProc, this, 0, nullptr ));
 
     OSL_ASSERT( nullptr != m_hClipboardChangedNotifierThread );
 }
@@ -675,7 +674,7 @@ unsigned int CMtaOleClipboard::run( )
     return nRet;
 }
 
-DWORD WINAPI CMtaOleClipboard::oleThreadProc( _In_ LPVOID pParam )
+unsigned __stdcall CMtaOleClipboard::oleThreadProc( void* pParam )
 {
     osl_setThreadName("CMtaOleClipboard::run()");
 
@@ -686,7 +685,7 @@ DWORD WINAPI CMtaOleClipboard::oleThreadProc( _In_ LPVOID pParam )
     return pInst->run( );
 }
 
-DWORD WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( _In_ LPVOID pParam )
+unsigned __stdcall CMtaOleClipboard::clipboardChangedNotifierThreadProc(void* pParam)
 {
     osl_setThreadName("CMtaOleClipboard::clipboardChangedNotifierThreadProc()");
     CMtaOleClipboard* pInst = static_cast< CMtaOleClipboard* >( pParam );

@@ -43,7 +43,7 @@ namespace {
 typedef struct
 {
     HANDLE              m_hThread;      /* OS-handle used for all thread-functions */
-    DWORD               m_ThreadId;     /* identifier for this thread */
+    unsigned            m_ThreadId;     /* identifier for this thread */
     sal_Int32           m_nTerminationRequested;
     oslWorkerFunction   m_WorkerFunction;
     void*               m_pData;
@@ -54,7 +54,7 @@ typedef struct
 
 static oslThread oslCreateThread(oslWorkerFunction pWorker, void* pThreadData, sal_uInt32 nFlags);
 
-static DWORD WINAPI oslWorkerWrapperFunction(_In_ LPVOID pData)
+static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
 {
     osl_TThreadImpl* pThreadImpl= static_cast<osl_TThreadImpl*>(pData);
 
@@ -89,13 +89,13 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
     pThreadImpl->m_pData= pThreadData;
     pThreadImpl->m_nTerminationRequested= 0;
 
-    pThreadImpl->m_hThread= CreateThread(
+    pThreadImpl->m_hThread= reinterpret_cast<HANDLE>(_beginthreadex(
                                nullptr,                     /* no security */
                                0,                           /* default stack-size */
                                oslWorkerWrapperFunction,    /* worker-function */
                                pThreadImpl,                 /* provide worker-function with data */
                                nFlags,                      /* start thread immediately or suspended */
-                               &pThreadImpl->m_ThreadId);
+                               &pThreadImpl->m_ThreadId));
 
     if(pThreadImpl->m_hThread == nullptr)
     {

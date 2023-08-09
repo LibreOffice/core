@@ -18,6 +18,7 @@
  */
 
 #include <systools/win32/uwinapi.h>
+#include <process.h>
 #include <tlhelp32.h>
 #include <rpc.h>
 #include <winsock.h>
@@ -159,7 +160,7 @@ static DWORD GetParentProcessId()
     return dwParentProcessId;
 }
 
-static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
+static unsigned __stdcall ParentMonitorThreadProc(void* lpParam)
 {
     DWORD_PTR dwParentProcessId = reinterpret_cast<DWORD_PTR>(lpParam);
 
@@ -196,8 +197,6 @@ BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
 
             if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
             {
-                DWORD   dwThreadId = 0;
-
                 DWORD_PTR dwParentProcessId = static_cast<DWORD_PTR>(_wtol( szBuffer ));
 
                 if ( dwParentProcessId && GetParentProcessId() == dwParentProcessId )
@@ -205,8 +204,8 @@ BOOL WINAPI DllMain( HINSTANCE, DWORD fdwReason, LPVOID )
                     // No error check, it works or it does not
                     // Thread should only be started for headless mode, see desktop/win32/source/officeloader.cxx
                     HANDLE hThread
-                        = CreateThread(nullptr, 0, ParentMonitorThreadProc,
-                                       reinterpret_cast<LPVOID>(dwParentProcessId), 0, &dwThreadId);
+                        = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, ParentMonitorThreadProc,
+                                       reinterpret_cast<LPVOID>(dwParentProcessId), 0, nullptr));
                     // Note: calling CreateThread in DllMain is discouraged
                     // but this is only done in the headless mode and in
                     // that case no other threads should be running at startup

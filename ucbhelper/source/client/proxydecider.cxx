@@ -43,6 +43,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Winhttp.h>
+#include <process.h>
 #endif
 
 using namespace com::sun::star;
@@ -460,7 +461,7 @@ struct GetPACProxyData
 // Tries to get proxy configuration using WinHttpGetProxyForUrl, which supports Web Proxy Auto-Discovery
 // (WPAD) protocol and manually configured address to get Proxy Auto-Configuration (PAC) file.
 // The WinINet/WinHTTP functions cannot correctly run in a STA COM thread, so use a dedicated thread
-DWORD WINAPI GetPACProxyThread(_In_ LPVOID lpParameter)
+unsigned __stdcall GetPACProxyThread(void* lpParameter)
 {
     assert(lpParameter);
     GetPACProxyData* pData = static_cast<GetPACProxyData*>(lpParameter);
@@ -557,7 +558,8 @@ InternetProxyServer GetPACProxy(const OUString& rProtocol, const OUString& rHost
         }
     }
 
-    HANDLE hThread = CreateThread(nullptr, 0, GetPACProxyThread, &aData, 0, nullptr);
+    HANDLE hThread = reinterpret_cast<HANDLE>(
+        _beginthreadex(nullptr, 0, GetPACProxyThread, &aData, 0, nullptr));
     if (hThread)
     {
         WaitForSingleObject(hThread, INFINITE);

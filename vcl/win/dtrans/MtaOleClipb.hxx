@@ -75,15 +75,15 @@ private:
     LRESULT onClipboardUpdate();
 
     static LRESULT CALLBACK mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
-    static DWORD WINAPI oleThreadProc( _In_ LPVOID pParam );
+    static unsigned __stdcall oleThreadProc(void* pParam);
 
-    static DWORD WINAPI clipboardChangedNotifierThreadProc( _In_ LPVOID pParam );
+    static unsigned __stdcall clipboardChangedNotifierThreadProc(void* pParam);
 
     bool WaitForThreadReady( ) const;
 
 private:
     HANDLE                      m_hOleThread;
-    DWORD                       m_uOleThreadId;
+    unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HWND                        m_hwndMtaOleReqWnd;
     HANDLE                      m_hEvtWndDisposed;
