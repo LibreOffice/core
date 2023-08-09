@@ -1506,15 +1506,6 @@ void SwContentNode::DelFrames(SwRootFrame const*const pLayout)
                     pMerged->listener.EndListening(this);
                     continue; // don't delete
                 }
-                else
-                {
-                    for (SwNodeOffset i = pMerged->pLastNode->GetIndex();
-                         GetIndex() <= i; --i)
-                    {   // tdf#147938 reset flag in nodes
-                        SwNode *const pNode = GetNodes()[i];
-                        pNode->SetRedlineMergeFlag(SwNode::Merge::None);
-                    }
-                }
             }
         // #i27138#
         // notify accessibility paragraphs objects about changed
