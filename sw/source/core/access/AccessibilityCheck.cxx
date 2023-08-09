@@ -1122,10 +1122,10 @@ public:
         if (!pCurrent->IsTextNode())
             return;
 
-        const auto& text = pCurrent->GetTextNode()->GetText();
+        SwTextNode* pTextNode = pCurrent->GetTextNode();
+        const auto& text = pTextNode->GetText();
 
         // Series of tests to detect if there are fake forms in the text.
-
         bool bCheck = text.indexOf("___") == -1; // Repeated underscores.
 
         if (bCheck)
@@ -1142,7 +1142,15 @@ public:
 
         // Checking if all the tests are passed successfully. If not, adding a warning.
         if (!bCheck)
-            lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+        {
+            sal_Int32 nStart = 0;
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_NON_INTERACTIVE_FORMS));
+            pIssue->setIssueObject(IssueObject::TEXT);
+            pIssue->setNode(pTextNode);
+            pIssue->setDoc(pTextNode->GetDoc());
+            pIssue->setStart(nStart);
+            pIssue->setEnd(nStart + text.getLength());
+        }
     }
 };
 
