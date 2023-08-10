@@ -861,7 +861,21 @@ Image createImage(const OUString& rImage)
 
 Image createImage(const VirtualDevice& rDevice)
 {
-    return Image(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
+    BitmapEx aBitmapEx(rDevice.GetBitmapEx(Point(), rDevice.GetOutputSizePixel()));
+
+    // Related tdf#156629 force snapshot of alpha mask
+    // On macOS, with Skia/Metal with a Retina display (i.e. 2.0 window
+    // scale), the alpha mask gets upscaled for the font color and the
+    // character background color icons in Writer's properties sidebar
+    // with most icon sets. The Breeze and Colibre icon sets running in
+    // light mode are the most obvious cases.
+    // This bug appears to be caused by asynchronous rendering of the
+    // returned image. So, we force a copy of the alpha mask in case it
+    // changes before the image is actually drawn.
+    AlphaMask aAlphaMask(aBitmapEx.GetAlphaMask());
+    AlphaMask::ScopedReadAccess pAccessAlpha(aAlphaMask);
+
+    return Image(BitmapEx(aBitmapEx.GetBitmap(), aAlphaMask));
 }
 
 sal_uInt16 insert_to_menu(sal_uInt16 nLastId, PopupMenu* pMenu, int pos, const OUString& rId,
