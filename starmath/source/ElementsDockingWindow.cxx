@@ -532,6 +532,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     pDevice->SetDrawMode(DrawModeFlags::Default);
     pDevice->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
     pDevice->SetDigitLanguage(LANGUAGE_ENGLISH);
+    pDevice->EnableRTL(false);
 
     pDevice->SetBackground(GetControlBackground());
     pDevice->SetTextColor(GetTextColor());
