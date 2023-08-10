@@ -928,14 +928,10 @@ void ScInputHandler::ImplCreateEditEngine()
     if ( mpEditEngine )
         return;
 
-    if ( pActiveViewSh )
-    {
-        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
-        mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
-    }
-    else
-        mpEditEngine = std::make_unique<ScFieldEditEngine>(nullptr, EditEngine::CreatePool().get(), nullptr, true);
-
+    // we cannot create a properly initialised EditEngine until we have a document
+    assert( pActiveViewSh );
+    ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+    mpEditEngine = std::make_unique<ScFieldEditEngine>(&rDoc, rDoc.GetEnginePool(), rDoc.GetEditPool());
     mpEditEngine->SetWordDelimiters( ScEditUtil::ModifyDelimiters( mpEditEngine->GetWordDelimiters() ) );
     UpdateRefDevice();      // also sets MapMode
     mpEditEngine->SetPaperSize( Size( 1000000, 1000000 ) );
@@ -4197,7 +4193,8 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
     else
         pActiveViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current() );
 
-    ImplCreateEditEngine();
+    if (pActiveViewSh)
+        ImplCreateEditEngine();
 
     if ( pState != pLastState.get() )
     {
