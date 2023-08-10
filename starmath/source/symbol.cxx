@@ -115,6 +115,17 @@ SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
     SymbolMap_t::iterator aIt( m_aSymbols.find( rSymbolName ) );
     if (aIt != m_aSymbols.end())
         pRes = &aIt->second;
+    else
+    {
+        for (auto& [_, rSymbol] : m_aSymbols)
+        {
+            if (rSymbol.GetExportName() == rSymbolName)
+            {
+                pRes = &rSymbol;
+                break;
+            }
+        }
+    }
     return pRes;
 }
 
