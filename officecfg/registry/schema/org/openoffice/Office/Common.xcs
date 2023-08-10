@@ -1880,6 +1880,11 @@
           <desc>Specifies the URL for a privacy policy.</desc>
         </info>
       </prop>
+      <prop oor:name="ExtensionsURL" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Specifies the URL used for Extensions box.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="History">
       <info>

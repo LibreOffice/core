@@ -28,6 +28,7 @@
 
 #include <unotools/historyoptions.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
@@ -39,6 +40,7 @@
 #include <sfx2/app.hxx>
 #include <officecfg/Office/Common.hxx>
 
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -519,15 +521,10 @@ void BackingWindow::setOwningFrame( const css::uno::Reference< css::frame::XFram
         xFramesSupplier->setActiveFrame(mxFrame);
 }
 
-IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton, void)
+IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton,void)
 {
-    OUString aNode;
-
-    if (&rButton == mxExtensionsButton.get())
-        aNode = "AddFeatureURL";
-
-    if (aNode.isEmpty())
-        return;
+    if (&rButton != mxExtensionsButton.get())
+       return;
 
     try
     {
@@ -540,11 +537,9 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, weld::Button&, rButton, void)
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, args), UNO_QUERY);
         if (xNameAccess.is())
         {
-            OUString sURL;
-            Any value(xNameAccess->getByName(aNode));
-
-            sURL = value.get<OUString>();
-            localizeWebserviceURI(sURL);
+            OUString sURL(officecfg::Office::Common::Menus::ExtensionsURL::get() +
+                "?LOvers=" + utl::ConfigManager::getProductVersion() +
+                "&LOlocale=" + LanguageTag(utl::ConfigManager::getUILocale()).getBcp47() );
 
             Reference<css::system::XSystemShellExecute> const
                 xSystemShellExecute(
