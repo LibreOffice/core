@@ -945,9 +945,19 @@ SwFrame *SwFrame::FindNext_()
                          )
                        )
                     {
-                        pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrame()
-                                                    : pNxtCnt;
-                        break;
+                        if (pNxtCnt->IsInTab())
+                        {
+                            if (!IsTabFrame() || !static_cast<SwLayoutFrame*>(this)->IsAnLower(pNxtCnt))
+                            {
+                                pRet = pNxtCnt->FindTabFrame();
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            pRet = pNxtCnt;
+                            break;
+                        }
                     }
                     pNxtCnt = lcl_NextFrame( pNxtCnt );
                 }
