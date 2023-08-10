@@ -26,6 +26,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <utility>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 using namespace drawinglayer::primitive2d;
@@ -464,9 +465,46 @@ namespace svgio::svgreader
             }
         }
 
-        void SvgCharacterNode::addGap()
+        SvgCharacterNode* SvgCharacterNode::addGap(SvgCharacterNode* pPreviousCharacterNode)
         {
-            maText += " ";
+            // maText may have lost all text. If that's the case, ignore as invalid character node
+            // Also ignore if maTextBeforeSpaceHandling just have spaces
+            if(!maText.isEmpty() && !o3tl::trim(maTextBeforeSpaceHandling).empty())
+            {
+                if(pPreviousCharacterNode)
+                {
+                    bool bAddGap(true);
+
+                    // Do not add a gap if last node doesn't end with a space and
+                    // current note doesn't start with a space
+                    const sal_uInt32 nLastLength(pPreviousCharacterNode->maTextBeforeSpaceHandling.getLength());
+                    if(pPreviousCharacterNode->maTextBeforeSpaceHandling[nLastLength - 1] != ' ' && maTextBeforeSpaceHandling[0] != ' ')
+                        bAddGap = false;
+
+                    // With this option a baseline shift between two char parts ('words')
+                    // will not add a space 'gap' to the end of the (non-last) word. This
+                    // seems to be the standard behaviour, see last bugdoc attached #122524#
+                    const SvgStyleAttributes* pStyleLast = pPreviousCharacterNode->getSvgStyleAttributes();
+                    const SvgStyleAttributes* pStyleCurrent = getSvgStyleAttributes();
+
+                    if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
+                    {
+                        bAddGap = false;
+                    }
+
+                    // add in-between whitespace (single space) to last
+                    // known character node
+                    if(bAddGap)
+                    {
+                        maText = " " + maText;
+                    }
+                }
+
+                // this becomes the previous character node
+                return this;
+            }
+
+            return pPreviousCharacterNode;
         }
 
         void SvgCharacterNode::concatenate(std::u16string_view rText)

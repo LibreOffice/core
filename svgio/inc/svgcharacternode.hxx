@@ -104,13 +104,11 @@ namespace svgio::svgreader
 
             void decomposeText(drawinglayer::primitive2d::Primitive2DContainer& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
-            void addGap();
+            SvgCharacterNode* addGap(SvgCharacterNode* pPreviousCharacterNode);
             void concatenate(std::u16string_view rText);
 
             /// Text content
             const OUString& getText() const { return maText; }
-
-            const OUString& getTextBeforeSpaceHandling() const { return maTextBeforeSpaceHandling; }
 
             void setWholeTextLine(const OUString& rWholeTextLine) { maWholeTextLine = rWholeTextLine; }
 
