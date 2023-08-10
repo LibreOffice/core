@@ -618,24 +618,23 @@ namespace
                 case SVGToken::TextPath:
                 {
                     const auto& rChilds = mpTarget->getChildren();
-                    SvgCharacterNode* pTarget = nullptr;
 
                     if(!rChilds.empty())
                     {
-                        pTarget = dynamic_cast< SvgCharacterNode* >(rChilds[rChilds.size() - 1].get());
+                        SvgNode* pChild = rChilds[rChilds.size() - 1].get();
+                        if ( pChild->getType() == SVGToken::Character )
+                        {
+                            SvgCharacterNode& rSvgCharacterNode = static_cast< SvgCharacterNode& >(*pChild);
+
+                            // concatenate to current character span
+                            rSvgCharacterNode.concatenate(aChars);
+                            break;
+                        }
                     }
 
-                    if(pTarget)
-                    {
-                        // concatenate to current character span
-                        pTarget->concatenate(aChars);
-                    }
-                    else
-                    {
-                        // add character span as simplified tspan (no arguments)
-                        // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
-                        new SvgCharacterNode(maDocument, mpTarget, aChars);
-                    }
+                    // add character span as simplified tspan (no arguments)
+                    // as direct child of SvgTextNode/SvgTspanNode/SvgTextPathNode
+                    new SvgCharacterNode(maDocument, mpTarget, aChars);
                     break;
                 }
                 case SVGToken::Style:
