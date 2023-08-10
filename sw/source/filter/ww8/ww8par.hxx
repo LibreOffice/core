@@ -216,7 +216,7 @@ struct WW8FlyPara
     WW8FlyPara(bool bIsVer67, const WW8FlyPara* pSrc = nullptr);
     bool operator==(const WW8FlyPara& rSrc) const;
     void Read(sal_uInt8 nSprmTPc, WW8PLCFx_Cp_FKP* pPap);
-    void ReadFull(sal_uInt8 nSprm29, SwWW8ImplReader* pIo);
+    void ReadFull(sal_uInt8 nOrigSprmTPc, SwWW8ImplReader* pIo);
     void Read(sal_uInt8 nSprmTPc, WW8RStyle const * pStyle);
     void ApplyTabPos(const WW8_TablePos *pTabPos);
     bool IsEmpty() const;
@@ -1006,15 +1006,16 @@ struct ApoTestResults
 {
     bool mbStartApo;
     bool mbStopApo;
-    bool m_bHasSprm37;
-    bool m_bHasSprm29;
-    sal_uInt8 m_nSprm29;
+    bool m_bHasSprmPWr;
+    bool m_bHasSprmPPc;
+    /// sprmPPc if m_bHasSprmPPc is true, sprmTPc otherwise.
+    sal_uInt8 m_nSprmPPc;
     WW8FlyPara* mpStyleApo;
     ApoTestResults()
-        : mbStartApo(false), mbStopApo(false), m_bHasSprm37(false)
-        , m_bHasSprm29(false), m_nSprm29(0), mpStyleApo(nullptr) {}
+        : mbStartApo(false), mbStopApo(false), m_bHasSprmPWr(false)
+        , m_bHasSprmPPc(false), m_nSprmPPc(0), mpStyleApo(nullptr) {}
     bool HasStartStop() const { return (mbStartApo || mbStopApo); }
-    bool HasFrame() const { return (m_bHasSprm29 || m_bHasSprm37 || mpStyleApo); }
+    bool HasFrame() const { return (m_bHasSprmPPc || m_bHasSprmPWr || mpStyleApo); }
 };
 
 struct ANLDRuleMap

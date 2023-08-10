@@ -2419,7 +2419,7 @@ std::unique_ptr<WW8FlyPara> SwWW8ImplReader::ConstructApo(const ApoTestResults &
 
     // find APO parameter and test for bGrafApo
     if (rApo.HasFrame())
-        pRet->ReadFull(rApo.m_nSprm29, this);
+        pRet->ReadFull(rApo.m_nSprmPPc, this);
 
     pRet->ApplyTabPos(pTabPos);
 
@@ -2809,7 +2809,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
     WW8FlyPara aF(m_bVer67, rApo.mpStyleApo);
     // WWPara for current para
     if (rApo.HasFrame())
-        aF.Read(rApo.m_nSprm29, m_xPlcxMan->GetPapPLCF());
+        aF.Read(rApo.m_nSprmPPc, m_xPlcxMan->GetPapPLCF());
     aF.ApplyTabPos(pTabPos);
 
     return aF == *m_xWFlyPara;
