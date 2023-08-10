@@ -155,8 +155,16 @@ void XmpMetadata::write()
         aXmlWriter.startElement("xmp:CreateDate");
         aXmlWriter.content(m_sCreateDate);
         aXmlWriter.endElement();
+
+        aXmlWriter.startElement("xmp:ModifyDate");
+        aXmlWriter.content(m_sCreateDate);
         aXmlWriter.endElement();
 
+        aXmlWriter.startElement("xmp:MetadataDate");
+        aXmlWriter.content(m_sCreateDate);
+        aXmlWriter.endElement();
+
+        aXmlWriter.endElement();
         aXmlWriter.endElement();
         aXmlWriter.endElement();
         aXmlWriter.endDocument();
