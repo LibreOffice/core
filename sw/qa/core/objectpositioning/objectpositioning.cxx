@@ -15,6 +15,12 @@
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <flyfrm.hxx>
 
 /// Covers sw/source/core/objectpositioning/ fixes.
 class SwCoreObjectpositioningTest : public SwModelTestBase
@@ -278,6 +284,33 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nBodyBottom - nFourthVMLShapeTop);
     // Verify that the distance between the bottom of page and bottom of fifth shape is around 0cm. (align=outside)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFifthVMLShapeOutside - nPageBottom);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableOverlapNever)
+{
+    // Given a document with two floating tables, positioned in a way that normally these would
+    // overlap, but SwFormatWrapInfluenceOnObjPos::mbAllowOverlap == false explicitly asks to avoid
+    // overlaps:
+    createSwDoc("floattable-tbl-overlap.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure no overlap happens:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage1Objs.size());
+    auto pFlyFrame1 = rPage1Objs[0]->DynCastFlyFrame();
+    auto pFlyFrame2 = rPage1Objs[1]->DynCastFlyFrame();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 2291
+    // - Actual  : 2175
+    // i.e. the 2nd floating table overlapped with the first one.
+    CPPUNIT_ASSERT_GREATER(pFlyFrame1->getFrameArea().Bottom(), pFlyFrame2->getFrameArea().Top());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
