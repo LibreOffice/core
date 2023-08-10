@@ -1427,7 +1427,7 @@
         <draw:frame presentation:style-name="pr9" draw:text-style-name="P33" draw:layer="layout" svg:width="7.4cm" svg:height="2.217cm" svg:x="17.635cm" svg:y="7.077cm" presentation:class="title" presentation:user-transformed="true">
           <draw:text-box>
             <text:p text:style-name="P31">
-              <text:span text:style-name="T4">Ispum</text:span>
+              <text:span text:style-name="T4">Ipsum</text:span>
             </text:p>
           </draw:text-box>
         </draw:frame>
