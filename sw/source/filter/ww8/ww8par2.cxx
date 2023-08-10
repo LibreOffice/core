@@ -418,12 +418,12 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     to see if we are still in that frame.
     */
 
-    aRet.m_bHasSprm37 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 37 : 0x2423).pSprm != nullptr; // sprmPWr
-    SprmResult aSrpm29 = m_xPlcxMan->HasParaSprm(m_bVer67 ? 29 : 0x261B); // sprmPPc
-    const sal_uInt8 *pSrpm29 = aSrpm29.pSprm;
-    aRet.m_bHasSprm29 = pSrpm29 != nullptr;
+    aRet.m_bHasSprmPWr = m_xPlcxMan->HasParaSprm(m_bVer67 ? 37 : 0x2423).pSprm != nullptr; // sprmPWr
+    SprmResult aSrpmPPc = m_xPlcxMan->HasParaSprm(m_bVer67 ? 29 : 0x261B); // sprmPPc
+    const sal_uInt8 *pSrpmPPc = aSrpmPPc.pSprm;
+    aRet.m_bHasSprmPPc = pSrpmPPc != nullptr;
     const sal_Int16 nTPc = aRet.mpStyleApo ? aRet.mpStyleApo->nTPc : 0;
-    aRet.m_nSprm29 = (pSrpm29 && aSrpm29.nRemainingData >= 1) ? *pSrpm29 : nTPc;
+    aRet.m_nSprmPPc = (pSrpmPPc && aSrpmPPc.nRemainingData >= 1) ? *pSrpmPPc : nTPc;
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
