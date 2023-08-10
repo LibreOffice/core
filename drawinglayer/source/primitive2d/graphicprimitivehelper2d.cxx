@@ -180,19 +180,7 @@ namespace drawinglayer::primitive2d
                 BitmapEx bitmap;
                 if( useAlphaMask )
                 {
-                    AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
-
-                    // Related tdf#156630 force snapshot of alpha mask
-                    // On macOS, with Skia/Raster with a Retina display (i.e.
-                    // 2.0 window scale), the alpha mask gets upscaled. Also,
-                    // when Skia is enabled, the alpha mask gets inverted in
-                    // the first export to PDF after launching the application.
-                    // These two bugs appear to be caused by asynchronous
-                    // rendering of the returned bitmap. So, we force a copy
-                    // of the alpha mask in case it changes before the bitmap
-                    // is actually drawn.
-                    AlphaMask::ScopedReadAccess pAccessAlpha(aMaskBitmap);
-
+                    const AlphaMask aMaskBitmap(maVirtualDeviceMask->GetBitmap(Point(), maVirtualDeviceMask->GetOutputSizePixel()));
                     bitmap = BitmapEx(aMainBitmap, aMaskBitmap);
                 }
                 else

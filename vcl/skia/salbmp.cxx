@@ -224,6 +224,20 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             assert(!mEraseColorSet);
             break;
         case BitmapAccessMode::Info:
+            // Related tdf#156630 and tdf#156629 force snapshot of alpha mask
+            // On macOS, with Skia/Metal or Skia/Raster with a Retina display
+            // (i.e. 2.0 window scale), the alpha mask gets upscaled in certain
+            // cases.
+            // This bug appears to be caused by pending scaling of an existing
+            // SkImage in the bitmap parameter. So, force the SkiaSalBitmap to
+            // handle its pending scaling.
+            // Note: also handle pending scaling if SAL_FORCE_HIDPI_SCALING is
+            // set otherwise exporting the following animated .png image will
+            // fail:
+            //   https://bugs.documentfoundation.org/attachment.cgi?id=188792
+            if ((mPixelsSize != mSize || getenv("SAL_FORCE_HIDPI_SCALING")) && mImage)
+                EnsureBitmapData();
+            assert(mPixelsSize == mSize);
             break;
     }
 #ifdef DBG_UTIL
