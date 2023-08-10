@@ -607,9 +607,9 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl, weld::Button&, void)
     xProgress.reset();
 
     // if "CANCEL" => return "CANCEL"
-    // if "OK"     => "AUTOLUNCH" always !
+    // if "OK"     => request a restart always!
     if (nResult == DLG_RET_OK)
-        nResult = DLG_RET_OK_AUTOLUNCH;
+        nResult = DLG_RET_OK_AUTOLAUNCH;
 
     m_xDialog->response(nResult);
 }

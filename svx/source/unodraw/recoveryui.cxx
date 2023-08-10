@@ -256,7 +256,7 @@ bool RecoveryUI::impl_doEmergencySave()
 
     // start the dialog
     short nRet = xDialog->run();
-    return (nRet==DLG_RET_OK_AUTOLUNCH);
+    return (nRet==DLG_RET_OK_AUTOLAUNCH);
 }
 
 bool RecoveryUI::impl_doRecovery()

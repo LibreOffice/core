@@ -64,7 +64,7 @@ inline constexpr OUStringLiteral STATEPROP_MODULE = u"Module";
 #define DLG_RET_UNKNOWN                                  -1
 #define DLG_RET_OK                                      RET_OK
 #define DLG_RET_CANCEL                                  RET_CANCEL
-#define DLG_RET_OK_AUTOLUNCH                            101
+#define DLG_RET_OK_AUTOLAUNCH                           101 // request a restart
 
 
 enum class EDocStates
