@@ -42,9 +42,20 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
     const SfxItemSet* m_pParent;       ///< derivation
     sal_uInt16        m_nCount;        ///< number of items
     sal_uInt16        m_nTotalCount;   ///< number of WhichIDs, also size of m_ppItems array
+
+    // bitfield (better packaging if a bool needs to be added)
+    bool              m_bItemsFixed : 1; ///< true if this is a SfxItemSetFixed object, so does not *own* m_ppItems
+
     SfxPoolItem const** m_ppItems;     ///< pointer to array of items, we allocate and free this unless m_bItemsFixed==true
     WhichRangesContainer m_pWhichRanges;  ///< array of Which Ranges
-    bool              m_bItemsFixed; ///< true if this is a SfxItemSetFixed object
+
+    // Notification-Callback mechanism for SwAttrSet in SW, functionPtr for callback
+    std::function<void(const SfxPoolItem*, const SfxPoolItem*)> m_aCallback;
+
+protected:
+    // Notification-Callback mechanism for SwAttrSet in SW
+    void setCallback(const std::function<void(const SfxPoolItem*, const SfxPoolItem*)> &func) { m_aCallback = func; }
+    void clearCallback() { m_aCallback = nullptr; }
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -59,9 +70,6 @@ private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;
 
 protected:
-    // Notification-Callback
-    virtual void                Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew );
-
     void                        PutDirect(const SfxPoolItem &rItem);
 
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership );

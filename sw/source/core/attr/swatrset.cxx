@@ -92,19 +92,100 @@ SwAttrPool::~SwAttrPool()
     SetSecondaryPool(nullptr);
 }
 
+/// Notification callback
+void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const
+{
+    // at least one SfxPoolItem has to be provided, else this is an error
+    assert(nullptr != pOld || nullptr != pNew);
+    sal_uInt16 nWhich(0);
+
+    if (nullptr != pOld)
+    {
+        // do not handle if an invalid item is involved
+        if (IsInvalidItem(pOld))
+            return;
+
+        // get WhichID from pOld
+        nWhich = pOld->Which();
+    }
+
+    if (nullptr != pNew)
+    {
+        // do not handle if an invalid item is involved
+        if (IsInvalidItem(pNew))
+            return;
+
+        if (0 == nWhich)
+        {
+            // get WhichID from pNew
+            nWhich = pNew->Which();
+        }
+    }
+
+    // all given itmes are valid. If we got no WhichID != 0 then
+    // pOld == pNew == nullptr or SfxVoidItem(0) and we have no
+    // valid input. Also not needed if !IsWhich (aka > SFX_WHICH_MAX)
+    if (0 == nWhich || !SfxItemPool::IsWhich(nWhich))
+        return;
+
+    if(m_pOldSet)
+    {
+        // old state shall be saved
+        if (nullptr == pOld)
+        {
+            // no old value given, generate default from WhichID
+            const SfxItemSet* pParent(GetParent());
+            m_pOldSet->PutChgd(nullptr != pParent
+                ? pParent->Get(nWhich)
+                : GetPool()->GetDefaultItem(nWhich));
+        }
+        else if (!IsInvalidItem(pOld))
+        {
+            // set/remember old value
+            m_pOldSet->PutChgd(*pOld);
+        }
+    }
+
+    if(m_pNewSet)
+    {
+        // old state shall be saved
+        if (nullptr == pNew)
+        {
+            // no new value given, generate default from WhichID
+            const SfxItemSet* pParent(GetParent());
+            m_pNewSet->PutChgd(nullptr != pParent
+                ? pParent->Get(nWhich)
+                : GetPool()->GetDefaultItem(nWhich));
+        }
+        else if (!IsInvalidItem(pNew))
+        {
+            // set/remember new value
+            m_pNewSet->PutChgd(*pNew);
+        }
+    }
+}
+
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
-    : SfxItemSet( rPool, nWh1, nWh2 ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
+    : SfxItemSet( rPool, nWh1, nWh2 )
+    , m_pOldSet( nullptr )
+    , m_pNewSet( nullptr )
+    , m_aCallbackHolder(this)
 {
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, const WhichRangesContainer& nWhichPairTable )
     : SfxItemSet( rPool, nWhichPairTable )
-    , m_pOldSet( nullptr ), m_pNewSet( nullptr )
+    , m_pOldSet( nullptr )
+    , m_pNewSet( nullptr )
+    , m_aCallbackHolder(this)
 {
 }
 
 SwAttrSet::SwAttrSet( const SwAttrSet& rSet )
-    : SfxItemSet( rSet ), m_pOldSet( nullptr ), m_pNewSet( nullptr )
+    : SfxItemSet( rSet )
+    , m_pOldSet( nullptr )
+    , m_pNewSet( nullptr )
+    , m_aCallbackHolder(this)
 {
 }
 
@@ -146,7 +227,9 @@ bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
 {
     m_pNewSet = pNew;
     m_pOldSet = pOld;
+    setCallback(m_aCallbackHolder);
     bool bRet = nullptr != SfxItemSet::Put( rAttr );
+    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return bRet;
 }
@@ -156,7 +239,9 @@ bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
 {
     m_pNewSet = pNew;
     m_pOldSet = pOld;
+    setCallback(m_aCallbackHolder);
     bool bRet = SfxItemSet::Put( rSet );
+    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return bRet;
 }
@@ -166,7 +251,9 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
 {
     m_pNewSet = pNew;
     m_pOldSet = pOld;
+    setCallback(m_aCallbackHolder);
     sal_uInt16 nRet = SfxItemSet::ClearItem( nWhich );
+    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return nRet;
 }
@@ -177,9 +264,11 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
     OSL_ENSURE( nWhich1 <= nWhich2, "no valid range" );
     m_pNewSet = pNew;
     m_pOldSet = pOld;
+    setCallback(m_aCallbackHolder);
     sal_uInt16 nRet = 0;
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
         nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
+    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return nRet;
 }
@@ -189,18 +278,11 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
 {
     m_pNewSet = pNew;
     m_pOldSet = pOld;
+    setCallback(m_aCallbackHolder);
     SfxItemSet::Intersect( rSet );
+    clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
     return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
-}
-
-/// Notification callback
-void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
-{
-    if( m_pOldSet )
-        m_pOldSet->PutChgd( rOld );
-    if( m_pNewSet )
-        m_pNewSet->PutChgd( rNew );
 }
 
 /** special treatment for some attributes

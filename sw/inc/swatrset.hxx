@@ -161,10 +161,22 @@ public:
 class SW_DLLPUBLIC SwAttrSet final : public SfxItemSet
 {
     // Pointer for Modify-System
-    SwAttrSet *m_pOldSet, *m_pNewSet;
+    SwAttrSet *m_pOldSet;
+    SwAttrSet *m_pNewSet;
 
-    // Notification-Callback
-    virtual void Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew ) override;
+    // helper class for change callback & local instance
+    // needed to forward the processing call to the correct instance
+    class callbackHolder final
+    {
+    private:
+        SwAttrSet* m_Set;
+    public:
+        callbackHolder(SwAttrSet* pSet) : m_Set(pSet) {}
+        void operator () (const SfxPoolItem* pOld, const SfxPoolItem* pNew) { m_Set->changeCallback(pOld, pNew); }
+    } m_aCallbackHolder;
+
+    // processor for change callback
+    void changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const;
 
     void PutChgd( const SfxPoolItem& rI ) { SfxItemSet::PutDirect( rI ); }
 public:
