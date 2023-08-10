@@ -88,6 +88,7 @@
 #include <unotools/pathoptions.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <svtools/sfxecode.hxx>
 
@@ -3459,6 +3460,8 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
             // TODO: remove load-process specific arguments from the descriptor, e.g. the status indicator
             xModel->attachResource( sURL, lDescriptor.getAsConstPropertyValueList() );
         }
+        else if (!utl::UCBContentHelper::Exists(sURL))
+            throw css::uno::Exception();
         else
         {
             OUString sFilterName;
