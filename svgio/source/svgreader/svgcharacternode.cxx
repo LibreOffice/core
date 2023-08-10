@@ -250,7 +250,7 @@ namespace svgio::svgreader
                 }
 
                 // Use the whole text line to calculate the align position
-                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(getWholeTextLine(), 0, getWholeTextLine().getLength()));
+                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(mpTextParent->getTextLine(), 0, mpTextParent->getTextLine().getLength()));
                 // apply TextAlign
                 switch(aTextAlign)
                 {

@@ -62,7 +62,7 @@ namespace svgio::svgreader
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgCharacterNode* pLast)
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgTextNode* pText, svgio::svgreader::SvgCharacterNode* pLast)
     {
         if(pNode)
         {
@@ -84,6 +84,9 @@ namespace
 
                             pCharNode->whiteSpaceHandling();
                             pLast = pCharNode->addGap(pLast);
+
+                            pCharNode->setTextParent(pText);
+                            pText->concatenateTextLine(pCharNode->getText());
                             break;
                         }
                         case SVGToken::Tspan:
@@ -91,7 +94,7 @@ namespace
                         case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pLast);
+                            pLast = whiteSpaceHandling(pCandidate, pText, pLast);
                             break;
                         }
                         default:
@@ -105,86 +108,6 @@ namespace
         }
 
         return pLast;
-    }
-
-    OUString getWholeTextLine(svgio::svgreader::SvgNode const * pNode)
-    {
-        OUString sText;
-        if (pNode)
-        {
-            const auto& rChilds = pNode->getChildren();
-            const sal_uInt32 nCount(rChilds.size());
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                svgio::svgreader::SvgNode* pCandidate = rChilds[a].get();
-
-                if(pCandidate)
-                {
-                    switch(pCandidate->getType())
-                    {
-                        case SVGToken::Character:
-                        {
-                            svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
-                            sText += pCharNode->getText();
-                            break;
-                        }
-                        case SVGToken::Tspan:
-                        case SVGToken::TextPath:
-                        case SVGToken::Tref:
-                        {
-                            sText += getWholeTextLine(pCandidate);
-                            break;
-                        }
-                        default:
-                        {
-                            OSL_ENSURE(false, "Unexpected token inside SVGTokenText (!)");
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        return sText;
-    }
-
-    void setWholeTextLine(svgio::svgreader::SvgNode const * pNode, const OUString& rText)
-    {
-        if (pNode)
-        {
-            const auto& rChilds = pNode->getChildren();
-            const sal_uInt32 nCount(rChilds.size());
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                svgio::svgreader::SvgNode* pCandidate = rChilds[a].get();
-
-                if(pCandidate)
-                {
-                    switch(pCandidate->getType())
-                    {
-                        case SVGToken::Character:
-                        {
-                            svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
-                            pCharNode->setWholeTextLine(rText);
-                            break;
-                        }
-                        case SVGToken::Tspan:
-                        case SVGToken::TextPath:
-                        case SVGToken::Tref:
-                        {
-                            setWholeTextLine(pCandidate, rText);
-                            break;
-                        }
-                        default:
-                        {
-                            OSL_ENSURE(false, "Unexpected token inside SVGTokenText (!)");
-                            break;
-                        }
-                    }
-                }
-            }
-        }
     }
 
 } // end anonymous namespace
@@ -557,11 +480,7 @@ namespace
             if(pTextNode)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pTextNode, nullptr);
-
-                // Iterate over all the nodes in this text element to get the whole text line
-                OUString sWholeTextLine = getWholeTextLine(pTextNode);
-                setWholeTextLine(pTextNode, sWholeTextLine);
+                whiteSpaceHandling(pTextNode, static_cast< SvgTextNode*>(pTextNode), nullptr);
             }
         }
 

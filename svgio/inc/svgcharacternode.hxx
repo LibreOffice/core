@@ -24,7 +24,7 @@
 
 #include <string_view>
 
-#include "svgnode.hxx"
+#include "svgtextnode.hxx"
 #include "svgtextposition.hxx"
 
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
@@ -40,8 +40,7 @@ namespace svgio::svgreader
             // keep a copy of string data before space handling
             OUString           maTextBeforeSpaceHandling;
 
-            // The whole text line of which this SvgCharacterNode is parted of
-            OUString           maWholeTextLine;
+            SvgTextNode*        mpTextParent;
 
             /// local helpers
             rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> createSimpleTextPrimitive(
@@ -69,9 +68,7 @@ namespace svgio::svgreader
             /// Text content
             const OUString& getText() const { return maText; }
 
-            void setWholeTextLine(const OUString& rWholeTextLine) { maWholeTextLine = rWholeTextLine; }
-
-            const OUString& getWholeTextLine() const { return maWholeTextLine; }
+            void setTextParent(SvgTextNode* pTextParent) { mpTextParent = pTextParent; }
         };
 
 } // end of namespace svgio::svgreader
