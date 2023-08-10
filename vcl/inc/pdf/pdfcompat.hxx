@@ -17,7 +17,7 @@
 
 namespace vcl::pdf
 {
-/// Convert to inch, then assume 96 DPI.
+/// Convert to inch, then apply custom resolution.
 inline double pointToPixel(const double fPoint, const double fResolutionDPI)
 {
     return o3tl::convert(fPoint, o3tl::Length::pt, o3tl::Length::in) * fResolutionDPI;

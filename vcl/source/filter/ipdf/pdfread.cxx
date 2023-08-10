@@ -368,14 +368,10 @@ size_t ImportPDFUnloaded(const OUString& rURL, std::vector<PDFGraphicResult>& rG
         if (aPageSize.getWidth() <= 0.0 || aPageSize.getHeight() <= 0.0)
             continue;
 
-        // Returned unit is points, convert that to twip
-        // 1 pt = 20 twips
-        constexpr double pointToTwipconversionRatio = 20;
+        // Returned unit is points
 
-        tools::Long nPageWidth
-            = convertTwipToMm100(aPageSize.getWidth() * pointToTwipconversionRatio);
-        tools::Long nPageHeight
-            = convertTwipToMm100(aPageSize.getHeight() * pointToTwipconversionRatio);
+        tools::Long nPageWidth = std::round(convertPointToMm100(aPageSize.getWidth()));
+        tools::Long nPageHeight = std::round(convertPointToMm100(aPageSize.getHeight()));
 
         // Create the Graphic with the VectorGraphicDataPtr and link the original PDF stream.
         // We swap out this Graphic as soon as possible, and a later swap in
