@@ -64,6 +64,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testBtlrCellChinese)
     assertXPath(pXmlDoc, "//font[1]", "vertical", "false");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSpecialInsertAfterMergedCells)
+{
+    // Load a document with a table with bottom right cells merged vertically.
+    // SpecialInsert with alt-Enter must work here, too.
+    createSwDoc("special-insert-after-merged-cells.fodt");
+    SwDoc* pDoc = getSwDoc();
+    SwNodeOffset const nNodes(pDoc->GetNodes().Count());
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pShell->GetWrtShell();
+    // go to the merged cell
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+
+    // When pressing alt-Enter on the keyboard:
+    SwEditWin& rEditWin = pWrtShell->GetView().GetEditWin();
+    vcl::KeyCode aKeyCode(KEY_RETURN, KEY_MOD2);
+    KeyEvent aKeyEvent(' ', aKeyCode);
+    rEditWin.KeyInput(aKeyEvent);
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: nNodes + 1
+    // - Actual  : nNodes
+    // i.e. new empty paragraph wasn't inserted under the table
+    CPPUNIT_ASSERT_EQUAL(nNodes + 1, pDoc->GetNodes().Count());
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTextBoxCopyAnchor)
 {
     createSwDoc("textbox-copy-anchor.docx");

@@ -356,12 +356,31 @@ static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
         // we found an end if
         // - we're at or just before an end node
         // - there are only end nodes between the current node and
-        //   pInnermostNode's end node
+        //   pInnermostNode's end node or
+        // - there are only end nodes between the last table cell merged with
+        //   the current cell and pInnermostNode's end node
         SwNodeIndex aEnd( pCurrentPos->GetNode() );
         if( rCurrentNode.IsContentNode() &&
             ( pCurrentPos->GetContentIndex() ==
               rCurrentNode.GetContentNode()->Len() ) )
+        {
             ++aEnd;
+
+            // tdf#156492 handle cells merged vertically in the bottom right corner
+            if ( pInnermostNode->IsTableNode() )
+            {
+                const SwNode* pTableBoxStartNode = pCurrentPos->GetNode().FindTableBoxStartNode();
+                const SwTableBox* pTableBox = pTableBoxStartNode->GetTableBox();
+                if ( pTableBox && pTableBox->getRowSpan() > 1 )
+                {
+                    const SwTableNode* pTableNd = pInnermostNode->FindTableNode();
+                    pTableBox = & pTableBox->FindEndOfRowSpan( pTableNd->GetTable(),
+                                                                        pTableBox->getRowSpan() );
+                    pTableBoxStartNode = pTableBox->GetSttNd();
+                    aEnd = pTableBoxStartNode->GetIndex() + 2;
+                }
+            }
+        }
         while( (aEnd != pInnermostNode->EndOfSectionNode()->GetIndex()) &&
                aEnd.GetNode().IsEndNode() )
             ++aEnd;
