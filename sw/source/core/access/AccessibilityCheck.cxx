@@ -1282,20 +1282,15 @@ private:
 /// Checking content controls in header or footer
 class ContentControlCheck : public NodeCheck
 {
-private:
-    // Boolean indicating if content controls in header or footer warning is already triggered.
-    bool m_bPrevPassed;
-
 public:
     ContentControlCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
-        , m_bPrevPassed(true)
     {
     }
 
     void check(SwNode* pCurrent) override
     {
-        if (!m_bPrevPassed)
+        if (!pCurrent->IsContentNode())
             return;
 
         const SwTextNode* pTextNode = pCurrent->GetTextNode();
@@ -1311,9 +1306,12 @@ public:
                         const SwTextAttr* pHt = pHts->Get(i);
                         if (pHt->Which() == RES_TXTATR_CONTENTCONTROL)
                         {
-                            m_bPrevPassed = false;
-                            lclAddIssue(m_rIssueCollection,
-                                        SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER));
+                            auto pIssue
+                                = lclAddIssue(m_rIssueCollection,
+                                              SwResId(STR_CONTENT_CONTROL_IN_HEADER_OR_FOOTER));
+                            pIssue->setIssueObject(IssueObject::TEXT);
+                            pIssue->setDoc(pCurrent->GetDoc());
+                            pIssue->setNode(pCurrent);
                             break;
                         }
                     }
