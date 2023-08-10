@@ -790,44 +790,65 @@ void Font::finalizeImport()
     if( !maUsedFlags.mbNameUsed )
         return;
 
-    PropertySet aDocProps( getDocument() );
-    Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
-    if( !xDevice.is() )
-        return;
+    bool bHasAsian(false), bHasCmplx(false), bHasLatin(false);
+    FontClassificationMap& rFontClassificationCache = getFontClassificationCache();
+    if (auto found = rFontClassificationCache.find(maApiData.maDesc); found != rFontClassificationCache.end())
+    {
+        FontClassification eClassification = found->second;
+        bHasAsian = bool(eClassification & FontClassification::Asian);
+        bHasCmplx = bool(eClassification & FontClassification::Cmplx);
+        bHasLatin = bool(eClassification & FontClassification::Latin);
+    }
+    else
+    {
+        PropertySet aDocProps( getDocument() );
+        Reference< XDevice > xDevice( aDocProps.getAnyProperty( PROP_ReferenceDevice ), UNO_QUERY );
+        if( !xDevice.is() )
+            return;
 
-    Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
-    if( !xFont.is() )
-        return;
+        Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
+        if( !xFont.is() )
+            return;
 
-    // #91658# CJK fonts
-    bool bHasAsian =
-        xFont->hasGlyphs( OUString( u'\x3041' ) ) ||    // 3040-309F: Hiragana
-        xFont->hasGlyphs( OUString( u'\x30A1' ) ) ||    // 30A0-30FF: Katakana
-        xFont->hasGlyphs( OUString( u'\x3111' ) ) ||    // 3100-312F: Bopomofo
-        xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
-        xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
-        xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
-        xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
-        xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
-        xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
-        xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
-        xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
-        xFont->hasGlyphs( OUString( u'\xF901' ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
-        xFont->hasGlyphs( OUString( u'\xFF71' ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
-    // #113783# CTL fonts
-    bool bHasCmplx =
-        xFont->hasGlyphs( OUString( u'\x05D1' ) ) ||    // 0590-05FF: Hebrew
-        xFont->hasGlyphs( OUString( u'\x0631' ) ) ||    // 0600-06FF: Arabic
-        xFont->hasGlyphs( OUString( u'\x0721' ) ) ||    // 0700-074F: Syriac
-        xFont->hasGlyphs( OUString( u'\x0911' ) ) ||    // 0900-0DFF: Indic scripts
-        xFont->hasGlyphs( OUString( u'\x0E01' ) ) ||    // 0E00-0E7F: Thai
-        xFont->hasGlyphs( OUString( u'\xFB21' ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
-        xFont->hasGlyphs( OUString( u'\xFB51' ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
-        xFont->hasGlyphs( OUString( u'\xFE71' ) );      // FE70-FEFF: Arabic Presentation Forms-B
-    // Western fonts
-    bool bHasLatin =
-        (!bHasAsian && !bHasCmplx) ||
-        xFont->hasGlyphs( OUString( 'A' ) );
+        // #91658# CJK fonts
+        bHasAsian =
+            xFont->hasGlyphs( OUString( u'\x3041' ) ) ||    // 3040-309F: Hiragana
+            xFont->hasGlyphs( OUString( u'\x30A1' ) ) ||    // 30A0-30FF: Katakana
+            xFont->hasGlyphs( OUString( u'\x3111' ) ) ||    // 3100-312F: Bopomofo
+            xFont->hasGlyphs( OUString( u'\x3131' ) ) ||    // 3130-318F: Hangul Compatibility Jamo
+            xFont->hasGlyphs( OUString( u'\x3301' ) ) ||    // 3300-33FF: CJK Compatibility
+            xFont->hasGlyphs( OUString( u'\x3401' ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
+            xFont->hasGlyphs( OUString( u'\x4E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
+            xFont->hasGlyphs( OUString( u'\x7E01' ) ) ||    // 4E00-9FFF: CJK Unified Ideographs
+            xFont->hasGlyphs( OUString( u'\xA001' ) ) ||    // A001-A48F: Yi Syllables
+            xFont->hasGlyphs( OUString( u'\xAC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+            xFont->hasGlyphs( OUString( u'\xCC01' ) ) ||    // AC00-D7AF: Hangul Syllables
+            xFont->hasGlyphs( OUString( u'\xF901' ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
+            xFont->hasGlyphs( OUString( u'\xFF71' ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
+        // #113783# CTL fonts
+        bHasCmplx =
+            xFont->hasGlyphs( OUString( u'\x05D1' ) ) ||    // 0590-05FF: Hebrew
+            xFont->hasGlyphs( OUString( u'\x0631' ) ) ||    // 0600-06FF: Arabic
+            xFont->hasGlyphs( OUString( u'\x0721' ) ) ||    // 0700-074F: Syriac
+            xFont->hasGlyphs( OUString( u'\x0911' ) ) ||    // 0900-0DFF: Indic scripts
+            xFont->hasGlyphs( OUString( u'\x0E01' ) ) ||    // 0E00-0E7F: Thai
+            xFont->hasGlyphs( OUString( u'\xFB21' ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
+            xFont->hasGlyphs( OUString( u'\xFB51' ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
+            xFont->hasGlyphs( OUString( u'\xFE71' ) );      // FE70-FEFF: Arabic Presentation Forms-B
+        // Western fonts
+        bHasLatin =
+            (!bHasAsian && !bHasCmplx) ||
+            xFont->hasGlyphs( OUString( 'A' ) );
+
+        FontClassification eClassification(FontClassification::None);
+        if (bHasAsian)
+            eClassification = eClassification | FontClassification::Asian;
+        if (bHasCmplx)
+            eClassification = eClassification | FontClassification::Cmplx;
+        if (bHasLatin)
+            eClassification = eClassification | FontClassification::Latin;
+        rFontClassificationCache.emplace(maApiData.maDesc, eClassification);
+    }
 
     lclSetFontName( maApiData.maLatinFont, maApiData.maDesc, bHasLatin );
     lclSetFontName( maApiData.maAsianFont, maApiData.maDesc, bHasAsian );

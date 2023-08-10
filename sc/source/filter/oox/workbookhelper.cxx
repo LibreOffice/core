@@ -193,6 +193,8 @@ public:
     PivotCacheBuffer& getPivotCaches() const { return *mxPivotCaches; }
     /** Returns the collection of pivot tables. */
     PivotTableBuffer& getPivotTables() { return *mxPivotTables; }
+    /** Shared cache of Font Classifications to avoid repeated lookups */
+    FontClassificationMap& getFontClassificationCache() { return maFontClassificationMap; }
 
     // converters -------------------------------------------------------------
 
@@ -275,6 +277,7 @@ private:
     ConnectionsBfrPtr   mxConnections;          /// All external data connections.
     PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
     PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
+    FontClassificationMap maFontClassificationMap; /// Shared to avoid repeated lookups
 
     // converters
     FormulaParserPtr    mxFmlaParser;           /// Import formula parser.
@@ -968,6 +971,11 @@ PivotCacheBuffer& WorkbookHelper::getPivotCaches() const
 PivotTableBuffer& WorkbookHelper::getPivotTables() const
 {
     return mrBookGlob.getPivotTables();
+}
+
+FontClassificationMap& WorkbookHelper::getFontClassificationCache() const
+{
+    return mrBookGlob.getFontClassificationCache();
 }
 
 // converters -----------------------------------------------------------------

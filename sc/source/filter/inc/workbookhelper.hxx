@@ -21,9 +21,13 @@
 
 #include <memory>
 #include <string_view>
+#include <unordered_map>
 
+#include <o3tl/hash_combine.hxx>
 #include <oox/helper/storagebase.hxx>
 #include <address.hxx>
+
+#include <com/sun/star/awt/FontDescriptor.hpp>
 
 namespace oox::drawingml::chart { class ChartConverter; }
 namespace rtl { template <class reference_type> class Reference; }
@@ -57,6 +61,22 @@ class ScRangeData;
 
 namespace oox::xls {
 
+enum class FontClassification : sal_uInt8
+{
+    None                = 0x0000,
+    Asian               = 0x0001,
+    Cmplx               = 0x0002,
+    Latin               = 0x0004
+};
+
+}
+
+namespace o3tl {
+    template<> struct typed_flags<oox::xls::FontClassification> : is_typed_flags<oox::xls::FontClassification, 0x07> {};
+}
+
+namespace oox::xls {
+
 class ExcelFilter;
 
 /** Functor for case-insensitive string comparison, usable in maps etc. */
@@ -86,6 +106,32 @@ class FormulaBuffer;
 
 class WorkbookGlobals;
 typedef std::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
+
+struct FontDescriptorHash
+{
+    size_t operator()( const css::awt::FontDescriptor& rKey) const
+    {
+        std::size_t seed = rKey.Name.hashCode();
+        o3tl::hash_combine(seed, rKey.Height);
+        o3tl::hash_combine(seed, rKey.Width);
+        o3tl::hash_combine(seed, rKey.StyleName.hashCode());
+        o3tl::hash_combine(seed, rKey.Family);
+        o3tl::hash_combine(seed, rKey.CharSet);
+        o3tl::hash_combine(seed, rKey.Pitch);
+        o3tl::hash_combine(seed, rKey.CharacterWidth);
+        o3tl::hash_combine(seed, rKey.Weight);
+        o3tl::hash_combine(seed, rKey.Slant);
+        o3tl::hash_combine(seed, rKey.Underline);
+        o3tl::hash_combine(seed, rKey.Strikeout);
+        o3tl::hash_combine(seed, rKey.Orientation);
+        o3tl::hash_combine(seed, rKey.Kerning);
+        o3tl::hash_combine(seed, rKey.WordLineMode);
+        o3tl::hash_combine(seed, rKey.Type);
+        return seed;
+    }
+};
+
+typedef std::unordered_map<css::awt::FontDescriptor, FontClassification, FontDescriptorHash> FontClassificationMap;
 
 /** Helper class to provide access to global workbook data.
 
@@ -233,6 +279,8 @@ public:
     PivotCacheBuffer&   getPivotCaches() const;
     /** Returns the collection of pivot tables. */
     PivotTableBuffer&   getPivotTables() const;
+    /** Shared cache of Font Classifications to avoid repeated lookups */
+    FontClassificationMap& getFontClassificationCache() const;
 
     // converters -------------------------------------------------------------
 
