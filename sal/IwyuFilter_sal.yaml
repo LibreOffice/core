@@ -4,6 +4,9 @@ excludelist:
     sal/osl/all/log.cxx:
     #sal_use_syslog required from this file
     - salusesyslog.hxx
+    sal/osl/unx/backtrace.h:
+    # needed for the "shadow" backtrace API
+    - execinfo.h
     sal/osl/unx/system.hxx:
     # needed for the define  pthread_testcancel() to work
     - pthread.h

@@ -48,6 +48,8 @@
 #include <pthread.h>
 #include <sys/file.h>
 #include <sys/mman.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #if defined(MACOSX)
 

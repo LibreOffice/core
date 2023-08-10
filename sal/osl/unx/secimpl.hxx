@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
 #define INCLUDED_SAL_OSL_UNX_SECIMPL_HXX
 
+#include <osl/security.h>
+
 #include <pwd.h>
 
 struct oslSecurityImpl

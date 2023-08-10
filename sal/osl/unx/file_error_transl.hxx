@@ -21,7 +21,6 @@
 #define INCLUDED_SAL_OSL_UNX_FILE_ERROR_TRANSL_HXX
 
 #include <osl/file.h>
-#include <sal/types.h>
 
 /** Translate errno's to osl file errors
 

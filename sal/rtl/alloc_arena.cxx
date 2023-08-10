@@ -29,6 +29,10 @@
 #include <string.h>
 #include <stdio.h>
 
+#if defined(SAL_UNX)
+#include <unistd.h>
+#endif /* SAL_UNX */
+
 namespace {
 
 /**

@@ -21,7 +21,6 @@
 #define INCLUDED_SAL_OSL_UNX_FILE_IMPL_HXX
 
 #include <osl/file.h>
-#include <stddef.h>
 #include <sys/types.h>
 #include <rtl/string.hxx>
 

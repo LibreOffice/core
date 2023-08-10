@@ -26,8 +26,8 @@
 #endif
 
 #include <sal/types.h>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
 
 /* ======================================================================= */
 /* Help functions for String and UString                                   */

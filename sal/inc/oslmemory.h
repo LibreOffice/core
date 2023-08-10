@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SAL_INC_INTERNAL_OSLMEMORY_H
 #define INCLUDED_SAL_INC_INTERNAL_OSLMEMORY_H
 
-#include <sal/saldllapi.h>
 #include <sal/types.h>
 
 #if defined __cplusplus

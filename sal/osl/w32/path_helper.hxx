@@ -23,8 +23,6 @@
 #include <sal/config.h>
 
 #include <osl/diagnose.h>
-#include <osl/file.h>
-#include <rtl/alloc.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

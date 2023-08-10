@@ -181,7 +181,6 @@ static inline unsigned int lowbit(sal_Size n)
 
 #if defined(SAL_UNX)
 
-#include <unistd.h>
 #include <pthread.h>
 
 typedef pthread_mutex_t rtl_memory_lock_type;

@@ -26,6 +26,7 @@
 #include <iterator>
 
 #include <rtl/textenc.h>
+#include <rtl/tencinfo.h>
 #include <sal/types.h>
 
 #define NOTABUNI_START 0xFF

@@ -19,6 +19,7 @@
 #include <sal/config.h>
 
 #include <assert.h>
+#include <stdlib.h>
 #include <rtl/alloc.h>
 #include <rtl/ustring.h>
 #include <rtllifecycle.h>

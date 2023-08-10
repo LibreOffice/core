@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 
-#include <sal/types.h>
-
 void osl_callThreadKeyCallbackOnThreadDetach(void);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

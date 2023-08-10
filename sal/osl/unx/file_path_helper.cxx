@@ -21,6 +21,7 @@
 
 #include <cassert>
 #include <utility>
+#include <unistd.h>
 
 #include "file_path_helper.hxx"
 #include "uunxapi.hxx"

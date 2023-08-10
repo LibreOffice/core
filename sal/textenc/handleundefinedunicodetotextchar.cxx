@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <rtl/character.hxx>
 #include <rtl/textcvt.h>
 #include <sal/types.h>
 

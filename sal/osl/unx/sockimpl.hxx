@@ -20,12 +20,9 @@
 #ifndef INCLUDED_SAL_OSL_UNX_SOCKIMPL_HXX
 #define INCLUDED_SAL_OSL_UNX_SOCKIMPL_HXX
 
-#include <osl/pipe.h>
-#include <osl/socket.h>
 #include <osl/interlck.h>
 
-#include "system.hxx"
-
+#include <sys/socket.h>
 #include <sys/un.h>
 
 #if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)

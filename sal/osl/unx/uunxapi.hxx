@@ -24,11 +24,7 @@
 
 #include <string_view>
 
-#include <unistd.h>
-#include <stdlib.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <rtl/ustring.h>
 
 #include <rtl/ustring.hxx>
 

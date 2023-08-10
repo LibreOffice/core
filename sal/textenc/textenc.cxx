@@ -28,6 +28,7 @@
 
 #include <osl/module.hxx>
 #include <rtl/textenc.h>
+#include <rtl/tencinfo.h>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>

@@ -22,9 +22,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-
-#include <rtl/character.hxx>
 #include <sal/types.h>
 
 #define RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER 0xFFFD

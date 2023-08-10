@@ -22,9 +22,7 @@
 
 #include <sal/config.h>
 
-#include <rtl/tencinfo.h>
 #include <rtl/textcvt.h>
-#include <rtl/textenc.h>
 #include <sal/types.h>
 
 #include "unichars.hxx"

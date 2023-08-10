@@ -21,6 +21,9 @@
 
 #include <sal/config.h>
 
+#include <sal/types.h>
+#include <rtl/textenc.h>
+
 namespace rtl::uri::detail
 {
 enum EscapeType

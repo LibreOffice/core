@@ -23,6 +23,8 @@
 #include <sal/config.h>
 
 #include <cmath>
+#include <stdio.h>
+#include <sal/types.h>
 
 #define PREC_float 1
 #define PREC_double 2
