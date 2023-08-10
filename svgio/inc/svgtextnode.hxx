@@ -20,7 +20,7 @@
 #pragma once
 
 #include "svgstyleattributes.hxx"
-#include "svgcharacternode.hxx"
+#include "svgtextposition.hxx"
 #include "svgtspannode.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 

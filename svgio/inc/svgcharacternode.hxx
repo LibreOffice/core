@@ -25,53 +25,12 @@
 #include <string_view>
 
 #include "svgnode.hxx"
-#include "svgtspannode.hxx"
+#include "svgtextposition.hxx"
 
 namespace drawinglayer::primitive2d { class TextSimplePortionPrimitive2D; }
 
 namespace svgio::svgreader
     {
-        class SvgTextPosition
-        {
-        private:
-            SvgTextPosition*            mpParent;
-            ::std::vector< double >     maX;
-            ::std::vector< double >     maY;
-            ::std::vector< double >     maDx;
-            ::std::vector< double >     maRotate;
-            double                      mfTextLength;
-
-            // absolute, current, advancing position
-            basegfx::B2DPoint           maPosition;
-
-            // advancing rotation index
-            sal_uInt32                  mnRotationIndex;
-
-            bool                        mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
-            bool                        mbAbsoluteX : 1;
-
-        public:
-            SvgTextPosition(
-                SvgTextPosition* pParent,
-                const SvgTspanNode& rSvgCharacterNode);
-
-            // data read access
-            const SvgTextPosition* getParent() const { return mpParent; }
-            const ::std::vector< double >& getX() const { return maX; }
-            const ::std::vector< double >& getDx() const { return maDx; }
-            double getTextLength() const { return mfTextLength; }
-            bool getLengthAdjust() const { return mbLengthAdjust; }
-            bool getAbsoluteX() const { return mbAbsoluteX; }
-
-            // get/set absolute, current, advancing position
-            const basegfx::B2DPoint& getPosition() const { return maPosition; }
-            void setPosition(const basegfx::B2DPoint& rNew) { maPosition = rNew; }
-
-            // rotation handling
-            bool isRotated() const;
-            double consumeRotation();
-        };
-
         class SvgCharacterNode final : public SvgNode
         {
         private:
