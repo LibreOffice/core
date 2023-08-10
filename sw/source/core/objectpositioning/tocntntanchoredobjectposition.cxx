@@ -1194,6 +1194,21 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
 
     // Get the list of objects.
     auto pSortedObjs = pAnchorFrameForVertPos->GetDrawObjs();
+
+    bool bSplitFly = false;
+    SwFlyFrame* pFlyFrame = GetAnchoredObj().DynCastFlyFrame();
+    if (pFlyFrame && pFlyFrame->IsFlySplitAllowed())
+    {
+        // At least for split flys we need to consider objects on the same page, but anchored in
+        // different text frames.
+        bSplitFly = true;
+        const SwPageFrame* pPageFrame = pAnchorFrameForVertPos->FindPageFrame();
+        if (pPageFrame)
+        {
+            pSortedObjs = pPageFrame->GetSortedObjs();
+        }
+    }
+
     if (!pSortedObjs)
     {
         return;
@@ -1210,6 +1225,13 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         if (SwTextBoxHelper::isTextBox(&pAnchoredObj->GetFrameFormat(), RES_FLYFRMFMT))
         {
             // Overlapping with the frame of a textbox is fine.
+            continue;
+        }
+
+        SwFlyFrame* pAnchoredObjFly = pAnchoredObj->DynCastFlyFrame();
+        if (bSplitFly && !pAnchoredObjFly)
+        {
+            // This is a split fly, then overlap is only checked against other split flys.
             continue;
         }
 
