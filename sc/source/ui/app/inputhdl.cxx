@@ -494,10 +494,15 @@ ReferenceMark ScInputHandler::GetReferenceMark( const ScViewData& rViewData, ScD
     {
         SCCOL nCol1 = nX1, nCol2 = nX2;
         SCROW nRow1 = nY1, nRow2 = nY2;
+        ScDocument& rDoc = pDocSh->GetDocument();
+
         PutInOrder(nCol1, nCol2);
         PutInOrder(nRow1, nRow2);
+
         if (nCol1 == nCol2 && nRow1 == nRow2)
-            pDocSh->GetDocument().ExtendMerge(nCol1, nRow1, nCol2, nRow2, nTab);
+            rDoc.ExtendMerge(nCol1, nRow1, nCol2, nRow2, nTab);
+        else if (rDoc.HasAttrib(nCol2, nRow2, nTab, HasAttrFlags::Merged))
+            rDoc.ExtendMerge(nCol2, nRow2, nCol2, nRow2, nTab);
 
         Point aTopLeft = rViewData.GetPrintTwipsPos(nCol1, nRow1);
         Point aBottomRight = rViewData.GetPrintTwipsPos(nCol2 + 1, nRow2 + 1);
