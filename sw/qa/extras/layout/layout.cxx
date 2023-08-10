@@ -3532,6 +3532,30 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
     assertXPathContent(pXmlDoc, "//tab/row/cell[1]/txt", "Abcd efghijkl");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf142694)
+{
+    createSwDoc("tdf142694-1.odt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // the problem with this table is that the 3rd text frame (inside a nested
+    // table) contains an as-char fly that doesn't fit on a page with the
+    // repeated header row; currently it's split so that the 3rd text frame is
+    // on a page of its own and extends outside the table.
+
+    assertXPathNoAttribute(pXmlDoc, "/root/page[4]/body/tab[1]", "precede");
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, "/root/page[4]/body/tab[1]", "follow").isEmpty());
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab[1]/row[1]/cell[1]/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab[1]/row[2]/cell[1]/txt", 2);
+    CPPUNIT_ASSERT(!getXPath(pXmlDoc, "/root/page[5]/body/tab[1]", "precede").isEmpty());
+    assertXPathNoAttribute(pXmlDoc, "/root/page[5]/body/tab[1]", "follow");
+    assertXPath(pXmlDoc, "/root/page[5]/body/tab[1]/row[1]/cell[1]/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[5]/body/tab[1]/row[2]/cell[1]/tab", 1);
+    assertXPathNoAttribute(pXmlDoc, "/root/page[5]/body/tab[1]/row[2]/cell[1]/tab", "follow");
+    assertXPath(pXmlDoc, "/root/page[5]/body/tab[1]/row[2]/cell[1]/tab/row/cell/txt", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf152413)
 {
     createSwDoc("tdf152413.fodt");
