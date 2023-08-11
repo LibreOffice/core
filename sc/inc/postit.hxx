@@ -242,6 +242,15 @@ public:
                             const OutlinerParaObject& rOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 
+    // similar to above, except rPropertyNames/rPropertyValues contain the
+    // uno properties for the caption object formatting.
+    static ScPostIt*    CreateNoteFromObjectProperties(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            const css::uno::Sequence<OUString>& rPropertyNames,
+                            const css::uno::Sequence<css::uno::Any>& rPropertyValues,
+                            const OutlinerParaObject& rOutlinerObj,
+                            const tools::Rectangle& rCaptionRect, bool bShown );
+
     /** Creates a cell note based on the passed string and inserts it into the
         document.
 

@@ -25,6 +25,7 @@
 #include <unotools/useroptions.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/unoshape.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -427,6 +428,10 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 struct ScCaptionInitData
 {
     std::optional< SfxItemSet > moItemSet;  /// Caption object formatting.
+
+    uno::Sequence<OUString> maPropertyNames; /// Alternative import filter Caption object formatting property names
+    uno::Sequence<uno::Any> maPropertyValues; /// Alternative import filter Caption object formatting property values
+
     std::optional< OutlinerParaObject > mxOutlinerObj; /// Text object with all text portion formatting.
     OUString            maStyleName;        /// Drawing style associated with the caption object.
     OUString            maSimpleText;       /// Simple text without formatting.
@@ -677,6 +682,13 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         // copy all items and reset shadow items
         if (xInitData->moItemSet)
             ScCaptionUtil::SetExtraItems(*maNoteData.mxCaption, *xInitData->moItemSet);
+    }
+
+    if (xInitData->maPropertyNames.getLength())
+    {
+        rtl::Reference<SvxShapeText> xAnnoShape(dynamic_cast<SvxShapeText*>(maNoteData.mxCaption->getUnoShape().get())); // SvxShapeText
+        assert(xAnnoShape && "will not be null");
+        static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(xInitData->maPropertyNames, xInitData->maPropertyValues);
     }
 
     // set position and size of the caption object
@@ -960,6 +972,21 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.maStyleName = ScStyleNameConversion::ProgrammaticToDisplayName(rStyleName, SfxStyleFamily::Frame);
+
+    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
+}
+
+ScPostIt* ScNoteUtil::CreateNoteFromObjectProperties(
+        ScDocument& rDoc, const ScAddress& rPos,
+        const uno::Sequence<OUString>& rPropertyNames,
+        const uno::Sequence<uno::Any>& rPropertyValues,
+        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
+        bool bShown )
+{
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rOutlinerObj, rCaptionRect, bShown));
+    ScCaptionInitData& rInitData = *aNoteData.mxInitData;
+    rInitData.maPropertyNames = rPropertyNames;
+    rInitData.maPropertyValues = rPropertyValues;
 
     return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
 }
