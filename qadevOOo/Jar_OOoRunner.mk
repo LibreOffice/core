@@ -616,7 +616,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_TextTable \
     qadevOOo/tests/java/ifc/text/_TextTableRow \
     qadevOOo/tests/java/ifc/text/_ViewSettings \
-    qadevOOo/tests/java/ifc/text/_XAutoTextContainer \
     qadevOOo/tests/java/ifc/text/_XAutoTextEntry \
     qadevOOo/tests/java/ifc/text/_XAutoTextGroup \
     qadevOOo/tests/java/ifc/text/_XBookmarksSupplier \

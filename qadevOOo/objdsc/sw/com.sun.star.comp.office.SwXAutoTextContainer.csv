@@ -5,5 +5,3 @@
 "SwXAutoTextContainer";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
 "SwXAutoTextContainer";"com::sun::star::container::XElementAccess";"getElementType()"
 "SwXAutoTextContainer";"com::sun::star::container::XElementAccess";"hasElements()"
-"SwXAutoTextContainer";"com::sun::star::text::XAutoTextContainer";"insertNewByName()"
-"SwXAutoTextContainer";"com::sun::star::text::XAutoTextContainer";"removeByName()"

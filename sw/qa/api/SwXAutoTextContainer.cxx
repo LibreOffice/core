@@ -11,6 +11,7 @@
 #include <test/container/xnameaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xelementaccess.hxx>
+#include <test/text/xautotextcontainer.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -30,14 +31,16 @@ namespace
 class SwXAutoTextContainer final : public UnoApiTest,
                                    public apitest::XElementAccess,
                                    public apitest::XIndexAccess,
-                                   public apitest::XNameAccess
+                                   public apitest::XNameAccess,
+                                   public apitest::XAutoTextContainer
 {
 public:
     SwXAutoTextContainer()
         : UnoApiTest("")
         , XElementAccess(cppu::UnoType<text::XAutoTextGroup>::get())
         , XIndexAccess(3)
-        , XNameAccess("standard")
+        , XNameAccess("crdbus50")
+        , XAutoTextContainer("crdbus50")
     {
     }
 
@@ -52,6 +55,10 @@ public:
         Reference<text::XAutoTextContainer> xAutoTextContainer
             = text::AutoTextContainer::create(comphelper::getProcessComponentContext());
 
+        Reference<container::XNameAccess> xNA(xAutoTextContainer, UNO_QUERY_THROW);
+        Sequence<rtl::OUString> aNames = xNA->getElementNames();
+        std::cout << aNames[0] << std::endl;
+
         return Reference<XInterface>(xAutoTextContainer, UNO_QUERY_THROW);
     }
 
@@ -63,6 +70,8 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
+    CPPUNIT_TEST(testInsertNewByName);
+    CPPUNIT_TEST(testRemoveByName);
     CPPUNIT_TEST_SUITE_END();
 };
 
