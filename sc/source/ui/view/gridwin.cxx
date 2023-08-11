@@ -1943,8 +1943,9 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
         mrViewData.GetEditView( eWhich, pEditView, nEditCol, nEditRow );
         SCCOL nEndCol = mrViewData.GetEditEndCol();
         SCROW nEndRow = mrViewData.GetEditEndRow();
+        SCCOL nStartCol = mrViewData.GetEditStartCol();
 
-        if ( nPosX >= nEditCol && nPosX <= nEndCol &&
+        if ( nPosX >= nStartCol && nPosX <= nEndCol &&
              nPosY >= nEditRow && nPosY <= nEndRow )
         {
             // when clicking in the table EditView, always reset the focus
