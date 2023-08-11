@@ -26,6 +26,7 @@
 #include <pagefrm.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <sortedobjs.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 
 namespace
 {
@@ -384,6 +385,50 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCVerticalFlyOffset)
     CPPUNIT_ASSERT(pTable2);
     // Page 2 starts with an inline table:
     CPPUNIT_ASSERT(pTable2->IsTabFrame());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
+{
+    // Given a document with a floating table, overlap is not allowed:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert2("before table");
+    // Insert a table:
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    // Select table:
+    pWrtShell->SelAll();
+    // Wrap the table in a text frame:
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    // Allow the text frame to split:
+    pWrtShell->StartAllAction();
+    auto& rFlys = *pDoc->GetSpzFrameFormats();
+    auto pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    // Don't allow overlap:
+    SwFormatWrapInfluenceOnObjPos aInfluence;
+    aInfluence.SetAllowOverlap(false);
+    aSet.Put(aInfluence);
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+
+    // When saving to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure that the overlap=never markup is written:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:tblPr/w:tblOverlap' number of nodes is incorrect
+    // i.e. <w:tblOverlap> was not written.
+    assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap", "val", "never");
 }
 }
 
