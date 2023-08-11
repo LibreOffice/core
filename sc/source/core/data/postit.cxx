@@ -929,17 +929,13 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     return pNote;
 }
 
-ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet, const OUString& rStyleName,
-        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
-        bool bShown )
+ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos, const OutlinerParaObject& rOutlinerObj,
+                                      const tools::Rectangle& rCaptionRect, bool bShown)
 {
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.mxOutlinerObj = rOutlinerObj;
-    rInitData.maStyleName = ScStyleNameConversion::ProgrammaticToDisplayName(rStyleName, SfxStyleFamily::Frame);
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
@@ -951,6 +947,19 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         rInitData.maCaptionOffset.setY( rCaptionRect.Top() - aCellRect.Top() );
         rInitData.maCaptionSize = rCaptionRect.GetSize();
     }
+
+    return aNoteData;
+}
+
+ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
+        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet, const OUString& rStyleName,
+        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
+        bool bShown )
+{
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rOutlinerObj, rCaptionRect, bShown));
+    ScCaptionInitData& rInitData = *aNoteData.mxInitData;
+    rInitData.moItemSet.emplace(std::move(rItemSet));
+    rInitData.maStyleName = ScStyleNameConversion::ProgrammaticToDisplayName(rStyleName, SfxStyleFamily::Frame);
 
     return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
 }
