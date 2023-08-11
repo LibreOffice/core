@@ -617,7 +617,7 @@ private:
      *        EmergencySave and SessionSave are interested in all open documents (which may not
      *        even be available at next start - i.e. /tmp files might be lost after a reboot,
      *        or removable media / server access might not be connected).
-     *        On the other hand, timer-based autorecovery should not be interested in recoverying
+     *        On the other hand, timer-based autorecovery should not be interested in recovering
      *        the session, but only modified documents that are recoverable
      *        (TODO: unless the user always wants to recover a session).
      */
