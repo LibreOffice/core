@@ -229,9 +229,13 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         ScRefType eType = aViewData.GetRefType();
         if ( eType == SC_REFTYPE_REF )
         {
+            if ((nStartX > nEndX || nStartY > nEndY) &&
+                rDoc.HasAttrib(nStartX, nStartY, nTab, HasAttrFlags::Merged))
+                rDoc.ExtendMerge( nStartX, nStartY, nStartX, nStartY, nTab );
+
             ScRange aRef(
-                    aViewData.GetRefStartX(), aViewData.GetRefStartY(), aViewData.GetRefStartZ(),
-                    aViewData.GetRefEndX(), aViewData.GetRefEndY(), aViewData.GetRefEndZ() );
+                    nStartX, nStartY, aViewData.GetRefStartZ(),
+                    nEndX, nEndY, aViewData.GetRefEndZ() );
             SC_MOD()->SetReference( aRef, rDoc, &rMark );
             ShowRefTip();
         }
