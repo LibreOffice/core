@@ -137,7 +137,8 @@ void SfxBroadcaster::ForAllListeners(std::function<bool(SfxListener*)> f) const
     {
         SfxListener* const pListener = m_Listeners[i];
         if (pListener)
-            f(pListener);
+            if (f(pListener))
+                break;
     }
 }
 
