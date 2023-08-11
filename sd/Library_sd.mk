@@ -154,6 +154,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/core/EffectMigration \
 	sd/source/core/PageListWatcher \
 	sd/source/core/TransitionPreset \
+	sd/source/core/ThemeColorChanger \
 	sd/source/core/anminfo \
 	sd/source/core/annotations/Annotation \
 	sd/source/core/annotations/AnnotationEnumeration \

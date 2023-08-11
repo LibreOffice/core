@@ -12,7 +12,7 @@
 #include <swdllapi.h>
 #include <docsh.hxx>
 #include <docmodel/theme/ColorSet.hxx>
-#include <svx/theme/ThemeColorChanger.hxx>
+#include <svx/theme/IThemeColorChanger.hxx>
 
 namespace sw
 {

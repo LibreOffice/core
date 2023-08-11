@@ -2942,5 +2942,9 @@ interface DrawView
         ExecMethod = FuTemporary;
         StateMethod = GetAttrState;
     ]
-
+    SID_THEME_DIALOG
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetAttrState;
+    ]
 }

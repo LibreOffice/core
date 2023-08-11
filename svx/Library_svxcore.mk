@@ -429,7 +429,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/table/tablerows \
     svx/source/table/tableundo \
     svx/source/table/viewcontactoftableobj \
-    svx/source/theme/ThemeColorChanger \
+    svx/source/theme/ThemeColorChangerCommon \
     svx/source/theme/ThemeColorPaletteManager \
     svx/source/tbxctrls/extrusioncontrols \
     svx/source/tbxctrls/fontworkgallery \

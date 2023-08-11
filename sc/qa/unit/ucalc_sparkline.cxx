@@ -20,6 +20,7 @@
 #include <SparklineAttributes.hxx>
 #include <ThemeColorChanger.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <svx/svdpage.hxx>
 
 using namespace css;
 

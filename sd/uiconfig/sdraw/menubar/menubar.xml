@@ -363,6 +363,7 @@
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
       <menu:menuitem menu:id=".uno:OutlineBullet"/>
+      <menu:menuitem menu:id=".uno:ThemeDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ModifyLayer"/>
       <menu:menu menu:id=".uno:TableMenu">

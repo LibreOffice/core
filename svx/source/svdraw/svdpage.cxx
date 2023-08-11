@@ -45,7 +45,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
-#include <svx/theme/ThemeColorChanger.hxx>
 #include <svx/ColorSets.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
@@ -1308,23 +1307,6 @@ void SdrPageProperties::SetTheme(std::shared_ptr<model::Theme> const& pTheme)
         return;
 
     mpTheme = pTheme;
-
-    if (mpTheme && mpTheme->getColorSet() && mpSdrPage->IsMasterPage())
-    {
-        SdrModel& rModel = mpSdrPage->getSdrModelFromSdrPage();
-        sal_uInt16 nPageCount = rModel.GetPageCount();
-        for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
-        {
-            SdrPage* pPage = rModel.GetPage(nPage);
-            if (!pPage->TRG_HasMasterPage() || &pPage->TRG_GetMasterPage() != mpSdrPage)
-            {
-                continue;
-            }
-
-            svx::ThemeColorChanger aChanger(pPage);
-            aChanger.apply(mpTheme->getColorSet());
-        }
-    }
 }
 
 std::shared_ptr<model::Theme> const& SdrPageProperties::GetTheme() const

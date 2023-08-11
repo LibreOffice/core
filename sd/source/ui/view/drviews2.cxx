@@ -186,6 +186,12 @@
 #include <controller/SlsPageSelector.hxx>
 #include <tools/GraphicSizeCheck.hxx>
 
+#include <theme/ThemeColorChanger.hxx>
+#include <svx/dialog/ThemeDialog.hxx>
+#include <svx/theme/ThemeColorPaletteManager.hxx>
+#include <sfx2/lokhelper.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <ViewShellBase.hxx>
 #include <memory>
 
@@ -3575,6 +3581,35 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             pDlg->Execute();
             Cancel();
             rReq.Ignore ();
+        }
+        break;
+
+        case SID_THEME_DIALOG:
+        {
+            SdrPage* pMasterPage = &GetActualPage()->TRG_GetMasterPage();
+            auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+            auto pDialog = std::make_shared<svx::ThemeDialog>(GetFrameWeld(), pTheme.get());
+            weld::DialogController::runAsync(pDialog, [pDialog, pMasterPage](sal_uInt32 nResult)
+            {
+                if (RET_OK != nResult)
+                    return;
+
+                auto pColorSet = pDialog->getCurrentColorSet();
+                if (pColorSet)
+                {
+                    sd::ThemeColorChanger aChanger(pMasterPage);
+                    aChanger.apply(pColorSet);
+
+                    if (comphelper::LibreOfficeKit::isActive())
+                    {
+                        svx::ThemeColorPaletteManager aManager(pColorSet);
+                        SfxLokHelper::notifyAllViews(LOK_CALLBACK_COLOR_PALETTES, aManager.generateJSON());
+                    }
+                }
+            });
+
+            Cancel();
+            rReq.Ignore();
         }
         break;
 

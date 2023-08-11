@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <svx/unoapi.hxx>
 
@@ -23,6 +24,7 @@
 #include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
+#include <theme/ThemeColorChanger.hxx>
 
 using namespace css;
 
@@ -38,7 +40,7 @@ public:
 namespace
 {
 /// Get the character color of the first text portion in xShape.
-sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
+Color GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
 {
     uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xPara(xText->createEnumeration()->nextElement(),
@@ -47,15 +49,15 @@ sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
                                                  uno::UNO_QUERY);
     sal_Int32 nColor{};
     xPortion->getPropertyValue("CharColor") >>= nColor;
-    return nColor;
+    return Color(nColor);
 }
 
 /// Get the solid fill color of xShape.
-sal_Int32 GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
+Color GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
 {
     sal_Int32 nColor{};
     xShape->getPropertyValue("FillColor") >>= nColor;
-    return nColor;
+    return Color(nColor);
 }
 
 } // end anonymous namespace
@@ -86,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     // Shape fill:
     uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
     // Blue.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeFillColor(xShape4));
 
     // The theme color of this filled shape is set by the PPTX import:
     {
@@ -99,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
+    CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeFillColor(xShape5));
     // The theme index, and effects (lum mod, lum off) are set by the PPTX import:
     {
         uno::Reference<util::XComplexColor> xComplexColor;
@@ -123,6 +125,14 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue("Theme", aTheme);
+
+    css::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPageMaster.is());
+    auto* pMasterPage = GetSdrPageFromXDrawPage(xDrawPageMaster);
+    auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+
+    sd::ThemeColorChanger aChanger(pMasterPage);
+    aChanger.apply(pTheme->getColorSet());
 
     // Then make sure the shape text color is now green:
     CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeTextColor(xShape));
