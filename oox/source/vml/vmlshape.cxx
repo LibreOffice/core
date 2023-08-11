@@ -484,20 +484,11 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
     return xShape;
 }
 
-awt::Rectangle ShapeBase::convertFormatting( const Reference< XShape >& rxShape ) const
+awt::Rectangle ShapeBase::getShapeRectangle() const
 {
-    if( !rxShape.is() )
-        return awt::Rectangle();
-
     /*  Calculate shape rectangle. Applications may do something special
         according to some imported shape client data (e.g. Excel cell anchor). */
-    awt::Rectangle aShapeRect = calcShapeRectangle( nullptr );
-
-    // convert the shape, if the calculated rectangle is not empty
-    if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
-        convertShapeProperties( rxShape );
-
-    return aShapeRect;
+    return calcShapeRectangle(nullptr);
 }
 
 void ShapeBase::setContainer(ShapeContainer* pContainer) { mpContainer = pContainer; }

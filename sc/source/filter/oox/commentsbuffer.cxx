@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <osl/diagnose.h>
+#include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <addressconverter.hxx>
@@ -183,11 +184,15 @@ void Comment::finalizeImport()
         if( const ::oox::vml::ShapeBase* pVmlNoteShape = getVmlDrawing().getNoteShape( maModel.maRange.aStart ) )
         {
             // position and formatting
-            css::awt::Rectangle aShapeRect = pVmlNoteShape->convertFormatting(xAnnoShape);
+            css::awt::Rectangle aShapeRect = pVmlNoteShape->getShapeRectangle();
             if (aShapeRect.Width > 0 || aShapeRect.Height > 0)
             {
                 xAnnoShape->setPosition(css::awt::Point(aShapeRect.X, aShapeRect.Y));
                 xAnnoShape->setSize(css::awt::Size(aShapeRect.Width, aShapeRect.Height));
+
+                ::oox::drawingml::ShapePropertyMap aPropMap(pVmlNoteShape->makeShapePropertyMap());
+                css::uno::Reference<css::drawing::XShape> xShape(xAnnoShape);
+                PropertySet(xShape).setProperties(aPropMap);
             }
             // visibility
             bVisible = pVmlNoteShape->getTypeModel().mbVisible;
