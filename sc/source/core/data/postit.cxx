@@ -424,15 +424,11 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 } // namespace
 
-
 struct ScCaptionInitData
 {
     std::optional< SfxItemSet > moItemSet;  /// Caption object formatting.
-
-    uno::Sequence<OUString> maPropertyNames; /// Alternative import filter Caption object formatting property names
-    uno::Sequence<uno::Any> maPropertyValues; /// Alternative import filter Caption object formatting property values
-
     std::optional< OutlinerParaObject > mxOutlinerObj; /// Text object with all text portion formatting.
+    std::unique_ptr< GenerateNoteCaption > mxGenerator; /// Operator to generate Caption Object from import data
     OUString            maStyleName;        /// Drawing style associated with the caption object.
     OUString            maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
@@ -658,13 +654,18 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     bool bWasLocked = maNoteData.mxCaption->getSdrModelFromSdrObject().isLocked();
     maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(true);
 
-    // transfer ownership of outliner object to caption, or set simple text
-    OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
-        "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
-    if (xInitData->mxOutlinerObj)
-        maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );
+    if (xInitData->mxGenerator)
+        xInitData->mxGenerator->Generate(*maNoteData.mxCaption);
     else
-        maNoteData.mxCaption->SetText( xInitData->maSimpleText );
+    {
+        // transfer ownership of outliner object to caption, or set simple text
+        OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
+            "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
+        if (xInitData->mxOutlinerObj)
+            maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );
+        else
+            maNoteData.mxCaption->SetText( xInitData->maSimpleText );
+    }
 
     if (!xInitData->maStyleName.isEmpty())
     {
@@ -682,13 +683,6 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
         // copy all items and reset shadow items
         if (xInitData->moItemSet)
             ScCaptionUtil::SetExtraItems(*maNoteData.mxCaption, *xInitData->moItemSet);
-    }
-
-    if (xInitData->maPropertyNames.getLength())
-    {
-        rtl::Reference<SvxShapeText> xAnnoShape(dynamic_cast<SvxShapeText*>(maNoteData.mxCaption->getUnoShape().get())); // SvxShapeText
-        assert(xAnnoShape && "will not be null");
-        static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(xInitData->maPropertyNames, xInitData->maPropertyValues);
     }
 
     // set position and size of the caption object
@@ -941,13 +935,12 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     return pNote;
 }
 
-ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos, const OutlinerParaObject& rOutlinerObj,
+ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
                                       const tools::Rectangle& rCaptionRect, bool bShown)
 {
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.mxOutlinerObj = rOutlinerObj;
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
@@ -968,25 +961,28 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
-    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rOutlinerObj, rCaptionRect, bShown));
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rCaptionRect, bShown));
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
+    rInitData.mxOutlinerObj = rOutlinerObj;
     rInitData.moItemSet.emplace(std::move(rItemSet));
     rInitData.maStyleName = ScStyleNameConversion::ProgrammaticToDisplayName(rStyleName, SfxStyleFamily::Frame);
 
     return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
 }
 
-ScPostIt* ScNoteUtil::CreateNoteFromObjectProperties(
+ScPostIt* ScNoteUtil::CreateNoteFromGenerator(
         ScDocument& rDoc, const ScAddress& rPos,
-        const uno::Sequence<OUString>& rPropertyNames,
-        const uno::Sequence<uno::Any>& rPropertyValues,
-        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
+        std::unique_ptr<GenerateNoteCaption> xGenerator,
+        const tools::Rectangle& rCaptionRect,
         bool bShown )
 {
-    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rOutlinerObj, rCaptionRect, bShown));
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rCaptionRect, bShown));
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.maPropertyNames = rPropertyNames;
-    rInitData.maPropertyValues = rPropertyValues;
+    rInitData.mxGenerator = std::move(xGenerator);
+    // because the Caption is generated on demand, we will need to create the
+    // simple text now to supply any querys for that which don't require
+    // creation of a full Caption
+    rInitData.maSimpleText = rInitData.mxGenerator->GetSimpleText();
 
     return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
 }
