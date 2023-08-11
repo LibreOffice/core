@@ -23,8 +23,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdpage.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -952,13 +952,18 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         rInitData.maCaptionSize = rCaptionRect.GetSize();
     }
 
+    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
+}
+
+ScPostIt* ScNoteUtil::InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
+                                 bool bAlwaysCreateCaption, sal_uInt32 nPostItId)
+{
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(rNoteData), bAlwaysCreateCaption, nPostItId );
     pNote->AutoStamp();
-
+    //insert takes ownership
     rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
-
     return pNote;
 }
 
@@ -976,12 +981,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         rInitData.maStyleName = ScResId(STR_STYLENAME_NOTE);
         rInitData.mbDefaultPosSize = true;
 
-        /*  Create the note and insert it into the document. If the note is
-            visible, the caption object will be created automatically. */
-        pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), bAlwaysCreateCaption, nPostItId );
-        pNote->AutoStamp();
-        //insert takes ownership
-        rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
+        pNote = InsertNote(rDoc, rPos, std::move(aNoteData), bAlwaysCreateCaption, nPostItId);
     }
     return pNote;
 }

@@ -176,6 +176,8 @@ private:
 
 class SC_DLLPUBLIC ScNoteUtil
 {
+    static ScPostIt* InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
+                                bool bAlwaysCreateCaption, sal_uInt32 nPostItId);
 public:
 
     /** Creates and returns a caption object for a temporary caption. */
