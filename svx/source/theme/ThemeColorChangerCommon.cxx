@@ -7,11 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/theme/ThemeColorChanger.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 
 #include <sal/config.h>
-#include <svx/svdpage.hxx>
-#include <svx/svditer.hxx>
 #include <editeng/unoprnms.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
@@ -24,9 +22,7 @@
 
 using namespace css;
 
-namespace svx
-{
-namespace theme
+namespace svx::theme
 {
 namespace
 {
@@ -126,35 +122,6 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject)
     updateLineColorSet(rColorSet, xShapeProps);
 }
 
-} // end theme
-
-ThemeColorChanger::ThemeColorChanger(SdrPage* pPage)
-    : mpPage(pPage)
-{
-}
-
-ThemeColorChanger::~ThemeColorChanger() = default;
-
-void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
-{
-    for (size_t nObject = 0; nObject < mpPage->GetObjCount(); ++nObject)
-    {
-        SdrObject* pObject = mpPage->GetObj(nObject);
-        theme::updateSdrObject(*pColorSet, pObject);
-
-        // update child objects
-        SdrObjList* pList = pObject->GetSubList();
-        if (pList)
-        {
-            SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
-            while (aIter.IsMore())
-            {
-                theme::updateSdrObject(*pColorSet, aIter.Next());
-            }
-        }
-    }
-}
-
-} // end svx namespace
+} // end svx::theme namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <svx/unoapi.hxx>
 
@@ -23,6 +24,7 @@
 #include <unomodel.hxx>
 #include <sdpage.hxx>
 #include <ViewShell.hxx>
+#include <theme/ThemeColorChanger.hxx>
 
 using namespace css;
 
@@ -123,6 +125,14 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue("Theme", aTheme);
+
+    css::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xDrawPageMaster.is());
+    auto* pMasterPage = GetSdrPageFromXDrawPage(xDrawPageMaster);
+    auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+
+    sd::ThemeColorChanger aChanger(pMasterPage);
+    aChanger.apply(pTheme->getColorSet());
 
     // Then make sure the shape text color is now green:
     CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeTextColor(xShape));

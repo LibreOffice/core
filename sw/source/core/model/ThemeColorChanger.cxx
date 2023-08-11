@@ -30,6 +30,7 @@
 #include <sal/config.h>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <editeng/unoprnms.hxx>

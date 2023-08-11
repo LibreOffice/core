@@ -22,18 +22,6 @@ namespace theme
 SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject);
 }
 
-class SVXCORE_DLLPUBLIC ThemeColorChanger : public IThemeColorChanger
-{
-private:
-    SdrPage* mpPage;
-
-public:
-    ThemeColorChanger(SdrPage* pPage);
-    virtual ~ThemeColorChanger() override;
-
-    void apply(std::shared_ptr<model::ColorSet> const& pColorSet) override;
-};
-
 } // end svx namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

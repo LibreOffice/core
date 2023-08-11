@@ -19,6 +19,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/borderline.hxx>
 #include <svx/svditer.hxx>
+#include <svx/theme/ThemeColorChangerCommon.hxx>
 
 #include <undodraw.hxx>
 #include <stlpool.hxx>
