@@ -13,6 +13,7 @@
 #include <test/text/xtextrange.hxx>
 #include <test/text/xtextcontent.hxx>
 #include <test/text/xtext.hxx>
+#include <test/text/xfootnote.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -39,7 +40,8 @@ class SwXFootnote final : public test::BootstrapFixture,
                           public apitest::XSimpleText,
                           public apitest::XTextRange,
                           public apitest::XTextContent,
-                          public apitest::XText
+                          public apitest::XText,
+                          public apitest::XFootnote
 {
 public:
     virtual void setUp() override;
@@ -67,6 +69,7 @@ public:
     CPPUNIT_TEST(testGetStart);
     CPPUNIT_TEST(testGetText);
     // CPPUNIT_TEST(testInsertRemoveTextContent);
+    CPPUNIT_TEST(testGetSetLabel);
     CPPUNIT_TEST_SUITE_END();
 
 private:

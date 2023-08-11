@@ -193,6 +193,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/text/numberingrules \
 	test/source/text/textcontent \
 	test/source/text/xautotextcontainer \
+	test/source/text/xfootnote \
 	test/source/text/xsimpletext \
 	test/source/text/xtext \
 	test/source/text/xtextcontent \
