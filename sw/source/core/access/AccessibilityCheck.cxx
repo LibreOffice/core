@@ -1039,7 +1039,8 @@ public:
 class BlinkingTextCheck : public NodeCheck
 {
 private:
-    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange)
+    void checkTextRange(uno::Reference<text::XTextRange> const& xTextRange, SwTextNode* pTextNode,
+                        sal_Int32 nStart)
     {
         uno::Reference<beans::XPropertySet> xProperties(xTextRange, uno::UNO_QUERY);
         if (xProperties.is() && xProperties->getPropertySetInfo()->hasPropertyByName("CharFlash"))
@@ -1049,7 +1050,12 @@ private:
 
             if (bBlinking)
             {
-                lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING));
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_TEXT_BLINKING));
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setNode(pTextNode);
+                pIssue->setDoc(pTextNode->GetDoc());
+                pIssue->setStart(nStart);
+                pIssue->setEnd(nStart + xTextRange->getString().getLength());
             }
         }
     }
@@ -1073,11 +1079,15 @@ public:
 
         uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
         uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {
             uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
             if (xRun.is())
-                checkTextRange(xRun);
+            {
+                checkTextRange(xRun, pTextNode, nStart);
+                nStart += xRun->getString().getLength();
+            }
         }
     }
 };
