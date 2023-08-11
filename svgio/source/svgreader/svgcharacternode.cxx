@@ -78,7 +78,8 @@ namespace svgio::svgreader
             SvgNode* pParent,
             OUString aText)
         :   SvgNode(SVGToken::Character, rDocument, pParent),
-            maText(std::move(aText))
+            maText(std::move(aText)),
+            mpTextParent(nullptr)
         {
         }
 
