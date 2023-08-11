@@ -2045,7 +2045,7 @@ sub create_packages_without_epm
             $installer::globals::rpminfologged = 1;
         }
 
-        my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
+        my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" --define \"_build_id_links none\" $specfilename --target $target $buildrootstring 2\>\&1 |";
 
         installer::logger::print_message( "... $systemcall ...\n" );
 
