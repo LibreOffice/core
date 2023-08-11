@@ -169,10 +169,11 @@ void Comment::finalizeImport()
         // setting a property triggers expensive process, so set them all at once
 
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
-        static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(
-            Sequence<OUString> { "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" },
-            Sequence<Any> { Any(maModel.mbAutoScale), Any(maModel.mbLocked),
-                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) });
+        // vvv TODO vvv TextFitToSize should be a drawing::TextFitToSizeType not bool
+        Sequence<OUString> aPropertyNames{ "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" };
+        Sequence<Any> aPropertyValues{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
+                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) };
+
         if( maModel.maAnchor.Width > 0 && maModel.maAnchor.Height > 0 )
         {
             xAnnoShape->setPosition( css::awt::Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
@@ -191,18 +192,42 @@ void Comment::finalizeImport()
                 xAnnoShape->setSize(css::awt::Size(aShapeRect.Width, aShapeRect.Height));
 
                 ::oox::drawingml::ShapePropertyMap aPropMap(pVmlNoteShape->makeShapePropertyMap());
-                css::uno::Reference<css::drawing::XShape> xShape(xAnnoShape);
-                PropertySet(xShape).setProperties(aPropMap);
+
+                Sequence<OUString> aVMLPropNames;
+                Sequence<Any> aVMLPropValues;
+                aPropMap.fillSequences(aVMLPropNames, aVMLPropValues);
+
+                sal_uInt32 nOldPropLen = aPropertyNames.getLength();
+                sal_uInt32 nVMLPropLen = aVMLPropNames.getLength();
+                aPropertyNames.realloc(nOldPropLen + nVMLPropLen);
+                aPropertyValues.realloc(nOldPropLen + nVMLPropLen);
+                OUString* pNames = aPropertyNames.getArray();
+                Any* pValues = aPropertyValues.getArray();
+                for (sal_uInt32 i = 0; i < nVMLPropLen; ++i)
+                {
+                    pNames[nOldPropLen + i] = aVMLPropNames[i];
+                    pValues[nOldPropLen + i] = aVMLPropValues[i];
+                }
             }
+
             // visibility
             bVisible = pVmlNoteShape->getTypeModel().mbVisible;
 
             // Setting comment text alignment
             const ::oox::vml::ClientData* xClientData = pVmlNoteShape->getClientData();
-            static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(
-                Sequence<OUString> { "TextVerticalAdjust", "ParaAdjust" },
-                Sequence<Any> { Any(lcl_ToVertAlign( xClientData->mnTextVAlign )), Any(lcl_ToParaAlign( xClientData->mnTextHAlign )) });
+            sal_uInt32 nOldPropLen = aPropertyNames.getLength();
+            aPropertyNames.realloc(nOldPropLen + 2);
+            aPropertyValues.realloc(nOldPropLen + 2);
+            OUString* pNames = aPropertyNames.getArray();
+            Any* pValues = aPropertyValues.getArray();
+            pNames[nOldPropLen] = "TextVerticalAdjust";
+            pValues[nOldPropLen] <<= lcl_ToVertAlign(xClientData->mnTextVAlign);
+            pNames[nOldPropLen + 1] = "ParaAdjust";
+            pValues[nOldPropLen + 1] <<= lcl_ToParaAlign( xClientData->mnTextHAlign);
         }
+
+        static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(aPropertyNames, aPropertyValues);
+
         if (bVisible)
             pDocShell->GetDocFunc().ShowNote( maModel.maRange.aStart, bVisible );
 
