@@ -183,7 +183,12 @@ void Comment::finalizeImport()
         if( const ::oox::vml::ShapeBase* pVmlNoteShape = getVmlDrawing().getNoteShape( maModel.maRange.aStart ) )
         {
             // position and formatting
-            pVmlNoteShape->convertFormatting( xAnnoShape );
+            css::awt::Rectangle aShapeRect = pVmlNoteShape->convertFormatting(xAnnoShape);
+            if (aShapeRect.Width > 0 || aShapeRect.Height > 0)
+            {
+                xAnnoShape->setPosition(css::awt::Point(aShapeRect.X, aShapeRect.Y));
+                xAnnoShape->setSize(css::awt::Size(aShapeRect.Width, aShapeRect.Height));
+            }
             // visibility
             bVisible = pVmlNoteShape->getTypeModel().mbVisible;
 

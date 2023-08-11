@@ -267,8 +267,8 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
-    /** Converts position and formatting into the passed existing XShape. */
-    void                convertFormatting(
+    /** Converts formatting into the passed existing XShape and returns position. */
+    css::awt::Rectangle convertFormatting(
                             const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
 
     void setContainer(ShapeContainer* pContainer);
