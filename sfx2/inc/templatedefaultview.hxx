@@ -19,8 +19,6 @@ public:
 
     virtual void showAllTemplates() override;
 
-    virtual bool KeyInput(const KeyEvent& rKEvt) override;
-
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) override;
 
     void createContextMenu();

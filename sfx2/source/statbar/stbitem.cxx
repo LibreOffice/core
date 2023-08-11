@@ -156,18 +156,6 @@ SfxStatusBarControl::~SfxStatusBarControl()
 {}
 
 
-// XInterface
-void SAL_CALL SfxStatusBarControl::acquire() noexcept
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SfxStatusBarControl::release() noexcept
-{
-    OWeakObject::release();
-}
-
-
 // XStatusListener
 void SAL_CALL SfxStatusBarControl::statusChanged( const frame::FeatureStateEvent& rEvent )
 {

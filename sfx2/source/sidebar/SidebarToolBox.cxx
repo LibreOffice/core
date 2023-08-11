@@ -147,7 +147,7 @@ bool SidebarToolBox::EventNotify (NotifyEvent& rEvent)
             // Special handling for transferring handling of KEY_TAB
             // that becomes necessary because of our parent that is
             // not the dialog but a background control.
-            return DockingWindow::EventNotify(rEvent);
+            return DockingWindow::EventNotify(rEvent); // NOLINT(bugprone-parent-virtual-call)
         }
     }
     return ToolBox::EventNotify(rEvent);

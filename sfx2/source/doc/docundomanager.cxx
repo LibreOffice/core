@@ -224,7 +224,7 @@ namespace sfx2
 
     void SAL_CALL DocumentUndoManager::acquire() noexcept
     {
-        OWeakObject::acquire();
+        WeakImplHelper::acquire();
         SfxModelSubComponent::acquireModel();
     }
 
@@ -232,7 +232,7 @@ namespace sfx2
     void SAL_CALL DocumentUndoManager::release() noexcept
     {
         SfxModelSubComponent::releaseModel();
-        OWeakObject::release();
+        WeakImplHelper::release();
     }
 
 
