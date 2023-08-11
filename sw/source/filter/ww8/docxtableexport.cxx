@@ -37,6 +37,7 @@
 #include <frmatr.hxx>
 #include <swmodule.hxx>
 #include <fmtrowsplt.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 
 #include "docxexportfilter.hxx"
 #include "docxhelper.hxx"
@@ -281,6 +282,13 @@ void DocxAttributeOutput::TableDefinition(
         bFloatingTableWritten = true;
         // The outer table was floating, make sure potential inner tables are not floating.
         m_rExport.SetFloatingTableFrame(nullptr);
+
+        const SwFrameFormat& rFloatingTableFormat = pFloatingTableFrame->GetFrameFormat();
+        if (!rFloatingTableFormat.GetWrapInfluenceOnObjPos().GetAllowOverlap())
+        {
+            // Allowing overlap is the default, both in OOXML and in Writer.
+            m_pSerializer->singleElementNS(XML_w, XML_tblOverlap, FSNS(XML_w, XML_val), "never");
+        }
     }
 
     // Extract properties from grab bag
