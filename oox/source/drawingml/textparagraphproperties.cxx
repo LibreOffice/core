@@ -420,7 +420,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     }
     else if ( pMasterBuList && pMasterBuList->mnNumberingType.hasValue() )
         pMasterBuList->mnNumberingType >>= nNumberingType;
-    if ( nNumberingType == NumberingType::NUMBER_NONE )
+    if ( nNumberingType == NumberingType::NUMBER_NONE
+        && aPropSet.hasProperty(PROP_NumberingLevel) )
         aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, -1 );
 
     maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
