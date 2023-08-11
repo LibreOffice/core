@@ -118,10 +118,24 @@ namespace vclcanvas
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
-        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
-        //                                       |                 |                            |
-        //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
+        virtual void SAL_CALL acquire() noexcept override { WindowGraphicDeviceBase_Base::acquire(); }
+        virtual void SAL_CALL release() noexcept override { WindowGraphicDeviceBase_Base::release(); }
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override
+            { return WindowGraphicDeviceBase_Base::queryInterface(_rType); }
+        virtual void SAL_CALL dispose() override
+        {
+            WeakComponentImplHelper::dispose();
+        }
+        virtual void SAL_CALL addEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            WeakComponentImplHelper::addEventListener(xListener);
+        }
+        virtual void SAL_CALL removeEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            WeakComponentImplHelper::removeEventListener(xListener);
+        }
 
         // XBufferController (partial)
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) override;

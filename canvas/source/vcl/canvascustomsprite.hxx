@@ -86,10 +86,24 @@ namespace vclcanvas
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
-        //                                    Classname           Base doing refcount          Base implementing the XComponent interface
-        //                                          |                    |                         |
-        //                                          V                    V                         V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
+        virtual void SAL_CALL acquire() noexcept override { CanvasCustomSpriteBase_Base::acquire(); }
+        virtual void SAL_CALL release() noexcept override { CanvasCustomSpriteBase_Base::release(); }
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override
+            { return CanvasCustomSpriteBase_Base::queryInterface(_rType); }
+        virtual void SAL_CALL dispose() override
+        {
+            PartialWeakComponentImplHelper::dispose();
+        }
+        virtual void SAL_CALL addEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            WeakComponentImplHelper::addEventListener(xListener);
+        }
+        virtual void SAL_CALL removeEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            WeakComponentImplHelper::removeEventListener(xListener);
+        }
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName() override;

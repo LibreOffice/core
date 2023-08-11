@@ -78,10 +78,24 @@ namespace cairocanvas
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
-        //                                    Classname     Base doing refcounting        Base implementing the XComponent interface
-        //                                       |                 |                            |
-        //                                       V                 V                            V
-        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase )
+        virtual void SAL_CALL acquire() noexcept override { CanvasBitmapBase_Base::acquire(); }
+        virtual void SAL_CALL release() noexcept override { CanvasBitmapBase_Base::release(); }
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override
+            { return CanvasBitmapBase_Base::queryInterface(_rType); }
+        virtual void SAL_CALL dispose() override
+        {
+            CanvasBitmapSpriteSurface_Base::dispose();
+        }
+        virtual void SAL_CALL addEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            CanvasBitmapSpriteSurface_Base::addEventListener(xListener);
+        }
+        virtual void SAL_CALL removeEventListener(
+            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
+        {
+            CanvasBitmapSpriteSurface_Base::removeEventListener(xListener);
+        }
 
         // XServiceInfo
         virtual OUString SAL_CALL getImplementationName(  ) override;
