@@ -29,6 +29,7 @@
 #include <vector>
 #include <map>
 
+class GenerateNoteCaption;
 class ScEditEngineDefaulter;
 class SdrUndoAction;
 class ScAddress;
@@ -47,7 +48,6 @@ class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
 class ScRangeName;
-class ScPostIt;
 
 enum class TransliterationFlags;
 enum class CreateNameFlags;
@@ -57,6 +57,10 @@ namespace sc
     class SparklineAttributes;
     class SparklineGroup;
     class Sparkline;
+}
+namespace tools
+{
+    class Rectangle;
 }
 
 class ScDocFunc
@@ -124,7 +128,9 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
     void            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );
-    SC_DLLPUBLIC ScPostIt* ImportNote( const ScAddress& rPos, const OUString& rNoteText );
+    SC_DLLPUBLIC void ImportNote( const ScAddress& rPos,
+                                  std::unique_ptr<GenerateNoteCaption> xGenerator,
+                                  const tools::Rectangle& rCaptionRect, bool bShown );
 
     bool            ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
                                            bool bApi );

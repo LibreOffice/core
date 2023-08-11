@@ -267,9 +267,11 @@ public:
                             const css::uno::Reference< css::drawing::XShapes >& rxShapes,
                             const ShapeParentAnchor* pParentAnchor = nullptr ) const;
 
-    /** Converts position and formatting into the passed existing XShape. */
-    void                convertFormatting(
-                            const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
+    /** Returns bounds of Shape */
+    css::awt::Rectangle getShapeRectangle() const;
+
+    /** Collects common shape properties such as formatting attributes. */
+    oox::drawingml::ShapePropertyMap makeShapePropertyMap() const;
 
     void setContainer(ShapeContainer* pContainer);
     ShapeContainer* getContainer() const;

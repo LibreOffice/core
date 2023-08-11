@@ -1622,12 +1622,8 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
     // get the main note text
     OUString aNoteText;
     if( pScNote )
-    {
         aNoteText = pScNote->GetText();
-        const EditTextObject *pEditObj = pScNote->GetEditTextObject();
-        if( pEditObj )
-            mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
-    }
+
     // append additional text
     aNoteText = ScGlobal::addToken( aNoteText, rAddText, '\n', 2 );
 
@@ -1668,6 +1664,9 @@ XclExpNote::XclExpNote(const XclExpRoot& rRoot, const ScAddress& rScPos,
                     maAuthor = XclExpString( " " );
                 else
                     maAuthor = XclExpString( pScNote->GetAuthor(), XclStrFlags::NONE, 54 );
+
+                if (const EditTextObject *pEditObj = pScNote->GetEditTextObject())
+                    mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
             }
 
             SetRecSize( 9 + maAuthor.GetSize() );

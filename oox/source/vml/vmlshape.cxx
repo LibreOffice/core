@@ -484,22 +484,11 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
     return xShape;
 }
 
-void ShapeBase::convertFormatting( const Reference< XShape >& rxShape ) const
+awt::Rectangle ShapeBase::getShapeRectangle() const
 {
-    if( !rxShape.is() )
-        return;
-
     /*  Calculate shape rectangle. Applications may do something special
         according to some imported shape client data (e.g. Excel cell anchor). */
-    awt::Rectangle aShapeRect = calcShapeRectangle( nullptr );
-
-    // convert the shape, if the calculated rectangle is not empty
-    if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
-    {
-        rxShape->setPosition( awt::Point( aShapeRect.X, aShapeRect.Y ) );
-        rxShape->setSize( awt::Size( aShapeRect.Width, aShapeRect.Height ) );
-        convertShapeProperties( rxShape );
-    }
+    return calcShapeRectangle(nullptr);
 }
 
 void ShapeBase::setContainer(ShapeContainer* pContainer) { mpContainer = pContainer; }
@@ -519,16 +508,23 @@ awt::Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAn
     return aShapeRect;
 }
 
-void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
+::oox::drawingml::ShapePropertyMap ShapeBase::makeShapePropertyMap() const
 {
     ::oox::drawingml::ShapePropertyMap aPropMap( mrDrawing.getFilter().getModelObjectHelper() );
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
+    return aPropMap;
+}
+
+void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
+{
+    ::oox::drawingml::ShapePropertyMap aPropMap(makeShapePropertyMap());
 
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
     if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
     {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         // Any other service supporting the ShadowFormat property?
         maTypeModel.maShadowModel.pushToPropMap(aPropMap, rGraphicHelper);
         // TextFrames have BackColor, not FillColor
@@ -566,7 +562,10 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         }
     }
     else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
+    {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
+    }
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }

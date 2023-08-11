@@ -228,6 +228,9 @@ public:
                             OUString& orString,
                             const oox::xls::Font* pFirstPortionFont ) const;
 
+    /** Get the text of all portions as a single string regardless of formatted or not */
+    OUString            getStringContent() const;
+
     /** Converts the string and writes it into the passed XText, replace old contents of the text object,.
         @param rxText  The XText interface of the target object.
      */

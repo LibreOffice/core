@@ -24,12 +24,14 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <osl/diagnose.h>
+#include <oox/drawingml/shapepropertymap.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
 #include <addressconverter.hxx>
 #include <drawingfragment.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/unoshape.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <document.hxx>
 #include <drwlayer.hxx>
@@ -145,6 +147,44 @@ RichStringRef const & Comment::createText()
     return maModel.mxText;
 }
 
+namespace
+{
+    struct OOXGenerateNoteCaption : public GenerateNoteCaption
+    {
+        css::uno::Sequence<OUString> maPropertyNames;  /// import filter Caption object formatting property names
+        css::uno::Sequence<css::uno::Any> maPropertyValues; /// import filter Caption object formatting property values
+        std::shared_ptr<RichString> mxText;
+
+        OOXGenerateNoteCaption(std::shared_ptr<RichString>& rText)
+            : mxText(rText)
+        {
+        }
+
+        virtual void Generate(SdrCaptionObj& rCaptionObj) override
+        {
+            rtl::Reference<SvxShapeText> xAnnoShape(dynamic_cast<SvxShapeText*>(rCaptionObj.getUnoShape().get())); // SvxShapeText
+            assert(xAnnoShape && "will not be null");
+
+            if (maPropertyNames.getLength())
+            {
+                // setting a property triggers expensive process, so set them all at once
+                static_cast<SvxShape*>(xAnnoShape.get())->setPropertyValues(maPropertyNames, maPropertyValues);
+            }
+
+            // insert text and convert text formatting
+            Reference< XText > xAnnoText( xAnnoShape );
+            xAnnoShape->addActionLock();
+            mxText->convert( xAnnoText );
+            xAnnoShape->removeActionLock();
+        }
+
+        virtual OUString GetSimpleText() const override
+        {
+            return mxText->getStringContent();
+        }
+    };
+}
+
 void Comment::finalizeImport()
 {
     // BIFF12 stores cell range instead of cell address, use first cell of this range
@@ -158,23 +198,22 @@ void Comment::finalizeImport()
         ScTableSheetObj* pAnnosSupp = static_cast<ScTableSheetObj*>(getSheet().get());
         rtl::Reference<ScAnnotationsObj> xAnnos = static_cast<ScAnnotationsObj*>(pAnnosSupp->getAnnotations().get());
         ScDocShell* pDocShell = xAnnos->GetDocShell();
-        // non-empty string required by note implementation (real text will be added below)
-        ScPostIt* pPostIt = pDocShell->GetDocFunc().ImportNote( maModel.maRange.aStart, OUString( ' ' ) );
-        SdrCaptionObj* pCaption = pPostIt->GetOrCreateCaption( maModel.maRange.aStart );
 
-        Reference< XShape > xAnnoShape( pCaption->getUnoShape() ); // SvxShapeText
-        // setting a property triggers expensive process, so set them all at once
-        Reference< css::beans::XMultiPropertySet > xAnnoShapeMultiPropSet(xAnnoShape, UNO_QUERY_THROW);
+        auto xGenerator = std::make_unique<OOXGenerateNoteCaption>(maModel.mxText);
 
         // Add shape formatting properties (autoFill, colHidden and rowHidden are dropped)
-        xAnnoShapeMultiPropSet->setPropertyValues(
-            Sequence<OUString> { "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" },
-            Sequence<Any> { Any(maModel.mbAutoScale), Any(maModel.mbLocked),
-                Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) });
+        // vvv TODO vvv TextFitToSize should be a drawing::TextFitToSizeType not bool
+        xGenerator->maPropertyNames =
+            css::uno::Sequence<OUString>{ "TextFitToSize", "MoveProtect", "TextHorizontalAdjust", "TextVerticalAdjust" };
+        xGenerator->maPropertyValues =
+            css::uno::Sequence<css::uno::Any>{ Any(maModel.mbAutoScale), Any(maModel.mbLocked),
+                                               Any(lcl_ToHorizAlign( maModel.mnTHA )), Any(lcl_ToVertAlign( maModel.mnTVA )) };
+
+        tools::Rectangle aCaptionRect;
         if( maModel.maAnchor.Width > 0 && maModel.maAnchor.Height > 0 )
         {
-            xAnnoShape->setPosition( css::awt::Point( maModel.maAnchor.X, maModel.maAnchor.Y ) );
-            xAnnoShape->setSize( css::awt::Size( maModel.maAnchor.Width, maModel.maAnchor.Height ) );
+            aCaptionRect = tools::Rectangle(Point(maModel.maAnchor.X, maModel.maAnchor.Y),
+                                            Size(maModel.maAnchor.Width, maModel.maAnchor.Height));
         }
 
         // convert shape formatting and visibility
@@ -182,26 +221,54 @@ void Comment::finalizeImport()
         if( const ::oox::vml::ShapeBase* pVmlNoteShape = getVmlDrawing().getNoteShape( maModel.maRange.aStart ) )
         {
             // position and formatting
-            pVmlNoteShape->convertFormatting( xAnnoShape );
+            css::awt::Rectangle aShapeRect = pVmlNoteShape->getShapeRectangle();
+            if (aShapeRect.Width > 0 || aShapeRect.Height > 0)
+            {
+                aCaptionRect = tools::Rectangle(Point(aShapeRect.X, aShapeRect.Y),
+                                                Size(aShapeRect.Width, aShapeRect.Height));
+
+                ::oox::drawingml::ShapePropertyMap aPropMap(pVmlNoteShape->makeShapePropertyMap());
+
+                Sequence<OUString> aVMLPropNames;
+                Sequence<Any> aVMLPropValues;
+                aPropMap.fillSequences(aVMLPropNames, aVMLPropValues);
+
+                sal_uInt32 nOldPropLen = xGenerator->maPropertyNames.getLength();
+                sal_uInt32 nVMLPropLen = aVMLPropNames.getLength();
+                xGenerator->maPropertyNames.realloc(nOldPropLen + nVMLPropLen);
+                xGenerator->maPropertyValues.realloc(nOldPropLen + nVMLPropLen);
+                OUString* pNames = xGenerator->maPropertyNames.getArray();
+                Any* pValues = xGenerator->maPropertyValues.getArray();
+                for (sal_uInt32 i = 0; i < nVMLPropLen; ++i)
+                {
+                    pNames[nOldPropLen + i] = aVMLPropNames[i];
+                    pValues[nOldPropLen + i] = aVMLPropValues[i];
+                }
+            }
+
             // visibility
             bVisible = pVmlNoteShape->getTypeModel().mbVisible;
 
             // Setting comment text alignment
             const ::oox::vml::ClientData* xClientData = pVmlNoteShape->getClientData();
-            xAnnoShapeMultiPropSet->setPropertyValues(
-                Sequence<OUString> { "TextVerticalAdjust", "ParaAdjust" },
-                Sequence<Any> { Any(lcl_ToVertAlign( xClientData->mnTextVAlign )), Any(lcl_ToParaAlign( xClientData->mnTextHAlign )) });
+            sal_uInt32 nOldPropLen = xGenerator->maPropertyNames.getLength();
+            xGenerator->maPropertyNames.realloc(nOldPropLen + 2);
+            xGenerator->maPropertyValues.realloc(nOldPropLen + 2);
+            OUString* pNames = xGenerator->maPropertyNames.getArray();
+            Any* pValues = xGenerator->maPropertyValues.getArray();
+            pNames[nOldPropLen] = "TextVerticalAdjust";
+            pValues[nOldPropLen] <<= lcl_ToVertAlign(xClientData->mnTextVAlign);
+            pNames[nOldPropLen + 1] = "ParaAdjust";
+            pValues[nOldPropLen + 1] <<= lcl_ToParaAlign( xClientData->mnTextHAlign);
         }
+
+        xGenerator->mxText->finalizeImport(*this);
+
+        pDocShell->GetDocFunc().ImportNote(maModel.maRange.aStart, std::move(xGenerator),
+                                           aCaptionRect, bVisible);
+
         if (bVisible)
             pDocShell->GetDocFunc().ShowNote( maModel.maRange.aStart, bVisible );
-
-        // insert text and convert text formatting
-        maModel.mxText->finalizeImport(*this);
-        Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
-        Reference< css::document::XActionLockable > xAnnoLock( xAnnoShape, UNO_QUERY_THROW );
-        xAnnoLock->addActionLock();
-        maModel.mxText->convert( xAnnoText );
-        xAnnoLock->removeActionLock();
     }
     catch( Exception& )
     {

@@ -23,8 +23,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/useroptions.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoshape.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -453,11 +454,11 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 } // namespace
 
-
 struct ScCaptionInitData
 {
     std::optional< SfxItemSet > moItemSet;  /// Caption object formatting.
     std::optional< OutlinerParaObject > mxOutlinerObj; /// Text object with all text portion formatting.
+    std::unique_ptr< GenerateNoteCaption > mxGenerator; /// Operator to generate Caption Object from import data
     OUString            maSimpleText;       /// Simple text without formatting.
     Point               maCaptionOffset;    /// Caption position relative to cell corner.
     Size                maCaptionSize;      /// Size of the caption object.
@@ -686,13 +687,18 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
     bool bWasLocked = maNoteData.mxCaption->getSdrModelFromSdrObject().isLocked();
     maNoteData.mxCaption->getSdrModelFromSdrObject().setLock(true);
 
-    // transfer ownership of outliner object to caption, or set simple text
-    OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
-        "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
-    if (xInitData->mxOutlinerObj)
-        maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );
+    if (xInitData->mxGenerator)
+        xInitData->mxGenerator->Generate(*maNoteData.mxCaption);
     else
-        maNoteData.mxCaption->SetText( xInitData->maSimpleText );
+    {
+        // transfer ownership of outliner object to caption, or set simple text
+        OSL_ENSURE( xInitData->mxOutlinerObj || !xInitData->maSimpleText.isEmpty(),
+            "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
+        if (xInitData->mxOutlinerObj)
+            maNoteData.mxCaption->SetOutlinerParaObject( std::move(xInitData->mxOutlinerObj) );
+        else
+            maNoteData.mxCaption->SetText( xInitData->maSimpleText );
+    }
 
     // copy all items or set default items; reset shadow items
     ScCaptionUtil::SetDefaultItems( *maNoteData.mxCaption, mrDoc, xInitData->moItemSet ? &*xInitData->moItemSet : nullptr );
@@ -890,16 +896,12 @@ ScPostIt* ScNoteUtil::CreateNoteFromCaption(
     return pNote;
 }
 
-ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
-        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet,
-        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
-        bool bShown )
+ScNoteData ScNoteUtil::CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
+                                      const tools::Rectangle& rCaptionRect, bool bShown)
 {
     ScNoteData aNoteData( bShown );
     aNoteData.mxInitData = std::make_shared<ScCaptionInitData>();
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
-    rInitData.moItemSet.emplace(std::move(rItemSet));
-    rInitData.mxOutlinerObj = rOutlinerObj;
 
     // convert absolute caption position to relative position
     rInitData.mbDefaultPosSize = rCaptionRect.IsEmpty();
@@ -912,13 +914,48 @@ ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
         rInitData.maCaptionSize = rCaptionRect.GetSize();
     }
 
+    return aNoteData;
+}
+
+ScPostIt* ScNoteUtil::CreateNoteFromObjectData(
+        ScDocument& rDoc, const ScAddress& rPos, SfxItemSet&& rItemSet,
+        const OutlinerParaObject& rOutlinerObj, const tools::Rectangle& rCaptionRect,
+        bool bShown )
+{
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rCaptionRect, bShown));
+    ScCaptionInitData& rInitData = *aNoteData.mxInitData;
+    rInitData.mxOutlinerObj = rOutlinerObj;
+    rInitData.moItemSet.emplace(std::move(rItemSet));
+
+    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
+}
+
+ScPostIt* ScNoteUtil::CreateNoteFromGenerator(
+        ScDocument& rDoc, const ScAddress& rPos,
+        std::unique_ptr<GenerateNoteCaption> xGenerator,
+        const tools::Rectangle& rCaptionRect,
+        bool bShown )
+{
+    ScNoteData aNoteData(CreateNoteData(rDoc, rPos, rCaptionRect, bShown));
+    ScCaptionInitData& rInitData = *aNoteData.mxInitData;
+    rInitData.mxGenerator = std::move(xGenerator);
+    // because the Caption is generated on demand, we will need to create the
+    // simple text now to supply any querys for that which don't require
+    // creation of a full Caption
+    rInitData.maSimpleText = rInitData.mxGenerator->GetSimpleText();
+
+    return InsertNote(rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/);
+}
+
+ScPostIt* ScNoteUtil::InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
+                                 bool bAlwaysCreateCaption, sal_uInt32 nPostItId)
+{
     /*  Create the note and insert it into the document. If the note is
         visible, the caption object will be created automatically. */
-    ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), /*bAlwaysCreateCaption*/false, 0/*nPostItId*/ );
+    ScPostIt* pNote = new ScPostIt( rDoc, rPos, std::move(rNoteData), bAlwaysCreateCaption, nPostItId );
     pNote->AutoStamp();
-
+    //insert takes ownership
     rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
-
     return pNote;
 }
 
@@ -935,12 +972,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromString(
         rInitData.maSimpleText = rNoteText;
         rInitData.mbDefaultPosSize = true;
 
-        /*  Create the note and insert it into the document. If the note is
-            visible, the caption object will be created automatically. */
-        pNote = new ScPostIt( rDoc, rPos, std::move(aNoteData), bAlwaysCreateCaption, nPostItId );
-        pNote->AutoStamp();
-        //insert takes ownership
-        rDoc.SetNote(rPos, std::unique_ptr<ScPostIt>(pNote));
+        pNote = InsertNote(rDoc, rPos, std::move(aNoteData), bAlwaysCreateCaption, nPostItId);
     }
     return pNote;
 }

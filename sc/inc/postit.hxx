@@ -176,8 +176,21 @@ private:
     sal_uInt32          mnPostItId;
 };
 
+class GenerateNoteCaption
+{
+public:
+    virtual void Generate(SdrCaptionObj& rCaptionObj) = 0;
+    virtual OUString GetSimpleText() const = 0;
+    virtual ~GenerateNoteCaption() {};
+};
+
 class SC_DLLPUBLIC ScNoteUtil
 {
+    static ScPostIt* InsertNote(ScDocument& rDoc, const ScAddress& rPos, ScNoteData&& rNoteData,
+                                bool bAlwaysCreateCaption, sal_uInt32 nPostItId);
+
+    static ScNoteData CreateNoteData(ScDocument& rDoc, const ScAddress& rPos,
+                                     const tools::Rectangle& rCaptionRect, bool bShown);
 public:
 
     /** Creates and returns a caption object for a temporary caption. */
@@ -233,6 +246,13 @@ public:
                             ScDocument& rDoc, const ScAddress& rPos,
                             SfxItemSet&& oItemSet,
                             const OutlinerParaObject& rOutlinerObj,
+                            const tools::Rectangle& rCaptionRect, bool bShown );
+
+    // similar to above, except xGenerator is a functor to apply import
+    // properties to the caption object to finalize it on demand
+    static ScPostIt*    CreateNoteFromGenerator(
+                            ScDocument& rDoc, const ScAddress& rPos,
+                            std::unique_ptr<GenerateNoteCaption> xGenerator,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 
     /** Creates a cell note based on the passed string and inserts it into the

@@ -398,18 +398,24 @@ void RichString::convert( const Reference< XText >& rxText )
     }
 }
 
+OUString RichString::getStringContent() const
+{
+    OUStringBuffer sString;
+    for( auto& rTextPortion : maTextPortions )
+        sString.append(rTextPortion.getText());
+    return sString.makeStringAndClear();
+}
+
 std::unique_ptr<EditTextObject> RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont )
 {
     ESelection aSelection;
 
-    OUStringBuffer sString;
-    for( auto& rTextPortion : maTextPortions )
-        sString.append(rTextPortion.getText());
+    OUString sString(getStringContent());
 
     // fdo#84370 - diving into editeng is not thread safe.
     SolarMutexGuard aGuard;
 
-    rEE.SetTextCurrentDefaults( sString.makeStringAndClear() );
+    rEE.SetTextCurrentDefaults(sString);
 
     for( auto& rTextPortion : maTextPortions )
     {
