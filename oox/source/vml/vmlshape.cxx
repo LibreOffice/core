@@ -517,16 +517,23 @@ awt::Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAn
     return aShapeRect;
 }
 
-void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
+::oox::drawingml::ShapePropertyMap ShapeBase::makeShapePropertyMap() const
 {
     ::oox::drawingml::ShapePropertyMap aPropMap( mrDrawing.getFilter().getModelObjectHelper() );
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     maTypeModel.maStrokeModel.pushToPropMap( aPropMap, rGraphicHelper );
     maTypeModel.maFillModel.pushToPropMap( aPropMap, rGraphicHelper );
+    return aPropMap;
+}
+
+void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) const
+{
+    ::oox::drawingml::ShapePropertyMap aPropMap(makeShapePropertyMap());
 
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
     if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
     {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         // Any other service supporting the ShadowFormat property?
         maTypeModel.maShadowModel.pushToPropMap(aPropMap, rGraphicHelper);
         // TextFrames have BackColor, not FillColor
@@ -564,7 +571,10 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
         }
     }
     else if (xSInfo->supportsService("com.sun.star.drawing.CustomShape"))
+    {
+        const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
         maTypeModel.maTextpathModel.pushToPropMap(aPropMap, rxShape, rGraphicHelper);
+    }
 
     PropertySet( rxShape ).setProperties( aPropMap );
 }

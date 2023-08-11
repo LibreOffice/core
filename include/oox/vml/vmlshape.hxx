@@ -295,6 +295,9 @@ protected:
     css::awt::Rectangle calcShapeRectangle(
                             const ShapeParentAnchor* pParentAnchor ) const;
 
+    /** Collects common shape properties such as formatting attributes. */
+    oox::drawingml::ShapePropertyMap makeShapePropertyMap() const;
+
     /** Converts common shape properties such as formatting attributes. */
     void                convertShapeProperties(
                             const css::uno::Reference< css::drawing::XShape >& rxShape ) const;
