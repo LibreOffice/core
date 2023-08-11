@@ -1231,7 +1231,10 @@ public:
             if (parentTable)
             {
                 m_bPrevPassed = false;
-                lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
+                auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_HEADING_IN_TABLE));
+                pIssue->setIssueObject(IssueObject::TEXT);
+                pIssue->setDoc(pCurrent->GetDoc());
+                pIssue->setNode(pCurrent);
             }
         }
     }
