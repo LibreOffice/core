@@ -122,7 +122,7 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
         }
     }
 
-    // all given itmes are valid. If we got no WhichID != 0 then
+    // all given items are valid. If we got no WhichID != 0 then
     // pOld == pNew == nullptr or SfxVoidItem(0) and we have no
     // valid input. Also not needed if !IsWhich (aka > SFX_WHICH_MAX)
     if (0 == nWhich || !SfxItemPool::IsWhich(nWhich))
