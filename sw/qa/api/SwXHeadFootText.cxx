@@ -13,6 +13,7 @@
 #include <test/text/xtextrange.hxx>
 #include <test/text/xtext.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/text/xtextrangecompare.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -34,25 +35,26 @@ using namespace css::uno;
 namespace
 {
 /**
- * Initial tests for SwXHeadFootTextText.
+ * Initial tests for SwXHeadFootText.
  */
-class SwXHeadFootTextText final : public test::BootstrapFixture,
-                                  public unotest::MacrosTest,
-                                  public apitest::XElementAccess,
-                                  public apitest::XSimpleText,
-                                  public apitest::XTextRange,
-                                  public apitest::XText,
-                                  public apitest::XEnumerationAccess
+class SwXHeadFootText final : public test::BootstrapFixture,
+                              public unotest::MacrosTest,
+                              public apitest::XElementAccess,
+                              public apitest::XSimpleText,
+                              public apitest::XTextRange,
+                              public apitest::XText,
+                              public apitest::XEnumerationAccess,
+                              public apitest::XTextRangeCompare
 {
 public:
-    SwXHeadFootTextText();
+    SwXHeadFootText();
     virtual void setUp() override;
     void tearDown() override;
 
     Reference<XInterface> init() override;
     Reference<text::XTextContent> getTextContent() override { return mxTextContent; };
 
-    CPPUNIT_TEST_SUITE(SwXHeadFootTextText);
+    CPPUNIT_TEST_SUITE(SwXHeadFootText);
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
     CPPUNIT_TEST(testCreateTextCursor);
@@ -65,6 +67,8 @@ public:
     CPPUNIT_TEST(testGetText);
     // CPPUNIT_TEST(testInsertRemoveTextContent);
     CPPUNIT_TEST(testCreateEnumeration);
+    CPPUNIT_TEST(testCompareRegionStarts);
+    CPPUNIT_TEST(testCompareRegionEnds);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -72,19 +76,19 @@ private:
     Reference<text::XTextContent> mxTextContent;
 };
 
-SwXHeadFootTextText::SwXHeadFootTextText()
+SwXHeadFootText::SwXHeadFootText()
     : XElementAccess(cppu::UnoType<text::XTextRange>::get())
 {
 }
 
-void SwXHeadFootTextText::setUp()
+void SwXHeadFootText::setUp()
 {
     test::BootstrapFixture::setUp();
     mxDesktop.set(
         frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
-void SwXHeadFootTextText::tearDown()
+void SwXHeadFootText::tearDown()
 {
     if (component_.is())
         component_->dispose();
@@ -92,7 +96,7 @@ void SwXHeadFootTextText::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-Reference<XInterface> SwXHeadFootTextText::init()
+Reference<XInterface> SwXHeadFootText::init()
 {
     component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
@@ -114,7 +118,7 @@ Reference<XInterface> SwXHeadFootTextText::init()
     return Reference<XInterface>(xText, UNO_QUERY_THROW);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SwXHeadFootTextText);
+CPPUNIT_TEST_SUITE_REGISTRATION(SwXHeadFootText);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

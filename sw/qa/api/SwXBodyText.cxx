@@ -12,6 +12,7 @@
 #include <test/container/xelementaccess.hxx>
 #include <test/text/xtextrange.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/text/xtextrangecompare.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -36,7 +37,8 @@ class SwXBodyText final : public test::BootstrapFixture,
                           public apitest::XElementAccess,
                           public apitest::XTextRange,
                           public apitest::XSimpleText,
-                          public apitest::XEnumerationAccess
+                          public apitest::XEnumerationAccess,
+                          public apitest::XTextRangeCompare
 {
 public:
     SwXBodyText();
@@ -57,6 +59,8 @@ public:
     CPPUNIT_TEST(testGetEnd);
     CPPUNIT_TEST(testGetSetString);
     CPPUNIT_TEST(testCreateEnumeration);
+    CPPUNIT_TEST(testCompareRegionStarts);
+    CPPUNIT_TEST(testCompareRegionEnds);
     CPPUNIT_TEST_SUITE_END();
 
 private:

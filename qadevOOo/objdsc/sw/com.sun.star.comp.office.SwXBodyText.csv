@@ -1,6 +1,4 @@
 "SwXBodyText";"com::sun::star::text::XTextRangeMover#optional";"moveTextRange()"
-"SwXBodyText";"com::sun::star::text::XTextRangeCompare#optional";"compareRegionStarts()"
-"SwXBodyText";"com::sun::star::text::XTextRangeCompare#optional";"compareRegionEnds()"
 "SwXBodyText";"com::sun::star::text::XSimpleText";"createTextCursor()"
 "SwXBodyText";"com::sun::star::text::XSimpleText";"createTextCursorByRange()"
 "SwXBodyText";"com::sun::star::text::XSimpleText";"insertString()"

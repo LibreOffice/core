@@ -197,6 +197,7 @@ $(eval $(call gb_Library_add_exception_objects,subsequenttest,\
 	test/source/text/xtextcontent \
 	test/source/text/xtextfield \
 	test/source/text/xtextrange \
+	test/source/text/xtextrangecompare \
     test/source/text/xdocumentindex \
     test/source/text/textdocumentsettings \
     test/source/text/textprintersettings \

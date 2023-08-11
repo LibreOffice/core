@@ -13,6 +13,7 @@
 #include <test/text/xtextrange.hxx>
 #include <test/text/xtext.hxx>
 #include <test/container/xenumerationaccess.hxx>
+#include <test/text/xtextrangecompare.hxx>
 #include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
@@ -40,7 +41,8 @@ class SwXFootnoteText final : public test::BootstrapFixture,
                               public apitest::XSimpleText,
                               public apitest::XTextRange,
                               public apitest::XText,
-                              public apitest::XEnumerationAccess
+                              public apitest::XEnumerationAccess,
+                              public apitest::XTextRangeCompare
 {
 public:
     SwXFootnoteText();
@@ -63,6 +65,8 @@ public:
     CPPUNIT_TEST(testGetText);
     // CPPUNIT_TEST(testInsertRemoveTextContent);
     CPPUNIT_TEST(testCreateEnumeration);
+    CPPUNIT_TEST(testCompareRegionStarts);
+    CPPUNIT_TEST(testCompareRegionEnds);
     CPPUNIT_TEST_SUITE_END();
 
 private:

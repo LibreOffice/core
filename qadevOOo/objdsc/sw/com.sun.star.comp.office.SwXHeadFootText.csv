@@ -1,6 +1,4 @@
 "SwXHeadFootText";"com::sun::star::text::XTextRangeMover#optional";"moveTextRange()"
-"SwXHeadFootText";"com::sun::star::text::XTextRangeCompare#optional";"compareRegionStarts()"
-"SwXHeadFootText";"com::sun::star::text::XTextRangeCompare#optional";"compareRegionEnds()"
 "SwXHeadFootText";"com::sun::star::text::XSimpleText";"createTextCursor()"
 "SwXHeadFootText";"com::sun::star::text::XSimpleText";"createTextCursorByRange()"
 "SwXHeadFootText";"com::sun::star::text::XSimpleText";"insertString()"
