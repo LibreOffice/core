@@ -1148,8 +1148,10 @@ void ScUndoPaste::DoChange(bool bUndo)
     pDocShell->PostPaint(aDrawRanges, nPaint, nExtFlags);
 
     pDocShell->PostDataChanged();
-    if (pViewShell)
-        pViewShell->CellContentChanged();
+    if (!pViewShell)
+        return;
+
+    pViewShell->CellContentChanged();
 
     if (bColsAffected || bRowsAffected)
         ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
