@@ -444,14 +444,4 @@ void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrame*>( m_pPrecede )->GetFrameId() );
 }
 
-void SwTabFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
-{
-    SwFrame::dumpAsXmlAttributes( writer );
-    if ( HasFollow() )
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
-
-    if (m_pPrecede != nullptr)
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrame*>( m_pPrecede )->GetFrameId() );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

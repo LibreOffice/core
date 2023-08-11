@@ -239,7 +239,6 @@ public:
 
     sal_uInt16 GetBottomLineSize() const;
 
-    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
     void dumpAsXml(xmlTextWriterPtr writer = nullptr) const override;
 };
 

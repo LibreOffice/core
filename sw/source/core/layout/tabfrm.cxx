@@ -6229,7 +6229,12 @@ bool SwTabFrame::IsCollapsingBorders() const
 void SwTabFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("tab"));
-    dumpAsXmlAttributes(writer);
+    SwFrame::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+
+    if (m_pPrecede != nullptr)
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrame*>( m_pPrecede )->GetFrameId() );
 
     (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
     dumpInfosAsXml(writer);
