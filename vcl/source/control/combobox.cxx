@@ -575,7 +575,7 @@ void ComboBox::setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWid
 
 void ComboBox::Resize()
 {
-    Control::Resize();
+    Edit::Resize();
 
     if (m_pImpl->m_pSubEdit)
     {
@@ -693,7 +693,7 @@ void ComboBox::StateChanged( StateChangedType nType )
 
 void ComboBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Control::DataChanged( rDCEvt );
+    Edit::DataChanged( rDCEvt );
 
     if ( !((rDCEvt.GetType() == DataChangedEventType::FONTS) ||
          (rDCEvt.GetType() == DataChangedEventType::FONTSUBSTITUTION) ||
@@ -1570,7 +1570,7 @@ bool ComboBox::set_property(const OUString &rKey, const OUString &rValue)
     else if (rKey == "placeholder-text")
         SetPlaceholderText(rValue);
     else
-        return Control::set_property(rKey, rValue);
+        return Edit::set_property(rKey, rValue);
     return true;
 }
 
@@ -1581,7 +1581,7 @@ FactoryFunction ComboBox::GetUITestFactory() const
 
 void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
-    Control::DumpAsPropertyTree(rJsonWriter);
+    Edit::DumpAsPropertyTree(rJsonWriter);
 
     {
         auto entriesNode = rJsonWriter.startArray("entries");

@@ -33,7 +33,7 @@ Idle::Idle( const char *pDebugName )
 
 void Idle::Start(const bool bStartTimer)
 {
-    Task::Start(false);
+    Timer::Start(false);
 
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
     if (Scheduler::GetDeterministicMode())

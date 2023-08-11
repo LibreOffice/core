@@ -6227,22 +6227,22 @@ void SalInstanceDrawingArea::queue_draw_area(int x, int y, int width, int height
 
 void SalInstanceDrawingArea::connect_size_allocate(const Link<const Size&, void>& rLink)
 {
-    weld::Widget::connect_size_allocate(rLink);
+    SalInstanceWidget::connect_size_allocate(rLink);
 }
 
 void SalInstanceDrawingArea::connect_key_press(const Link<const KeyEvent&, bool>& rLink)
 {
-    weld::Widget::connect_key_press(rLink);
+    SalInstanceWidget::connect_key_press(rLink);
 }
 
 void SalInstanceDrawingArea::connect_key_release(const Link<const KeyEvent&, bool>& rLink)
 {
-    weld::Widget::connect_key_release(rLink);
+    SalInstanceWidget::connect_key_release(rLink);
 }
 
 void SalInstanceDrawingArea::connect_style_updated(const Link<Widget&, void>& rLink)
 {
-    weld::Widget::connect_style_updated(rLink);
+    SalInstanceWidget::connect_style_updated(rLink);
 }
 
 void SalInstanceDrawingArea::set_cursor(PointerStyle ePointerStyle)
