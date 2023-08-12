@@ -40,7 +40,7 @@ namespace svgio::svgreader
             // keep a copy of string data before space handling
             OUString           maTextBeforeSpaceHandling;
 
-            SvgTextNode*        mpTextParent;
+            SvgTspanNode*        mpParentLine;
 
             /// local helpers
             rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> createSimpleTextPrimitive(
@@ -68,7 +68,7 @@ namespace svgio::svgreader
             /// Text content
             const OUString& getText() const { return maText; }
 
-            void setTextParent(SvgTextNode* pTextParent) { mpTextParent = pTextParent; }
+            void setParentLine(SvgTspanNode* pParentLine) { mpParentLine = pParentLine; }
         };
 
 } // end of namespace svgio::svgreader

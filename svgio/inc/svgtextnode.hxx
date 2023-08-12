@@ -33,10 +33,6 @@ namespace svgio::svgreader
             std::optional<basegfx::B2DHomMatrix>
                                     mpaTransform;
 
-            // The text line composed by the different SvgCharacterNode children
-            // it will be used to calculate their alignment
-            OUString maTextLine;
-
             /// local helpers
             void DecomposeChild(
                 const SvgNode& rCandidate,
@@ -59,9 +55,6 @@ namespace svgio::svgreader
             /// transform content, set if found in current context
             const std::optional<basegfx::B2DHomMatrix>& getTransform() const { return mpaTransform; }
             void setTransform(const std::optional<basegfx::B2DHomMatrix>& pMatrix) { mpaTransform = pMatrix; }
-
-            void concatenateTextLine(std::u16string_view rText) {maTextLine += rText;}
-            const OUString& getTextLine() const { return maTextLine; }
         };
 
 } // end of namespace svgio::svgreader

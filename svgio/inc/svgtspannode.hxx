@@ -39,6 +39,10 @@ namespace svgio::svgreader
 
             bool                    mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
 
+            // The text line composed by the different SvgCharacterNode children
+            // it will be used to calculate their alignment
+            OUString maTextLine;
+
         public:
             SvgTspanNode(
                 SVGToken aType,
@@ -78,6 +82,9 @@ namespace svgio::svgreader
             /// LengthAdjust content
             bool getLengthAdjust() const { return mbLengthAdjust; }
             void setLengthAdjust(bool bNew) { mbLengthAdjust = bNew; }
+
+            void concatenateTextLine(std::u16string_view rText) {maTextLine += rText;}
+            const OUString& getTextLine() const { return maTextLine; }
         };
 
 } // end of namespace svgio::svgreader
