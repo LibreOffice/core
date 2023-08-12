@@ -616,7 +616,7 @@ int LOKDocumentFocusListener::getCaretPosition() const
 //  is skipped until the composition is over.
 //  On the contrary the composition would be aborted, making dictation not possible.
 //  Anyway when the text change has been performed by another view we are in due
-//  to upadate the clipboard content even if the user is in the middle of a composition.
+//  to update the clipboard content even if the user is in the middle of a composition.
 void LOKDocumentFocusListener::notifyFocusedParagraphChanged(bool force)
 {
     aboutView("LOKDocumentFocusListener::notifyFocusedParagraphChanged", this, m_pViewShell);
