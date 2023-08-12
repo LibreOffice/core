@@ -62,7 +62,7 @@ namespace svgio::svgreader
 
 namespace
 {
-    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgTextNode* pText, svgio::svgreader::SvgCharacterNode* pLast)
+    svgio::svgreader::SvgCharacterNode* whiteSpaceHandling(svgio::svgreader::SvgNode const * pNode, svgio::svgreader::SvgTspanNode* pParentLine, svgio::svgreader::SvgCharacterNode* pLast)
     {
         if(pNode)
         {
@@ -82,19 +82,31 @@ namespace
                             // clean whitespace in text span
                             svgio::svgreader::SvgCharacterNode* pCharNode = static_cast< svgio::svgreader::SvgCharacterNode* >(pCandidate);
 
+                            pCharNode->setParentLine(pParentLine);
+
                             pCharNode->whiteSpaceHandling();
                             pLast = pCharNode->addGap(pLast);
 
-                            pCharNode->setTextParent(pText);
-                            pText->concatenateTextLine(pCharNode->getText());
+                            pParentLine->concatenateTextLine(pCharNode->getText());
                             break;
                         }
                         case SVGToken::Tspan:
+                        {
+                            svgio::svgreader::SvgTspanNode* pTspanNode = static_cast< svgio::svgreader::SvgTspanNode* >(pCandidate);
+
+                            // If x or y exist it means it's a new line of text
+                            if(!pTspanNode->getX().empty() || !pTspanNode->getY().empty())
+                                pParentLine = pTspanNode;
+
+                            // recursively clean whitespaces in subhierarchy
+                            pLast = whiteSpaceHandling(pCandidate, pParentLine, pLast);
+                            break;
+                        }
                         case SVGToken::TextPath:
                         case SVGToken::Tref:
                         {
                             // recursively clean whitespaces in subhierarchy
-                            pLast = whiteSpaceHandling(pCandidate, pText, pLast);
+                            pLast = whiteSpaceHandling(pCandidate, pParentLine, pLast);
                             break;
                         }
                         default:
@@ -552,7 +564,7 @@ namespace
             if(pTextNode)
             {
                 // cleanup read strings
-                whiteSpaceHandling(pTextNode, static_cast< SvgTextNode*>(pTextNode), nullptr);
+                whiteSpaceHandling(pTextNode, static_cast< SvgTspanNode*>(pTextNode), nullptr);
             }
         }
 

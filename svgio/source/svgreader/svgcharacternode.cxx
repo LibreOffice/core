@@ -79,7 +79,7 @@ namespace svgio::svgreader
             OUString aText)
         :   SvgNode(SVGToken::Character, rDocument, pParent),
             maText(std::move(aText)),
-            mpTextParent(nullptr)
+            mpParentLine(nullptr)
         {
         }
 
@@ -251,7 +251,7 @@ namespace svgio::svgreader
                 }
 
                 // Use the whole text line to calculate the align position
-                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(mpTextParent->getTextLine(), 0, mpTextParent->getTextLine().getLength()));
+                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(mpParentLine->getTextLine(), 0, mpParentLine->getTextLine().getLength()));
                 // apply TextAlign
                 switch(aTextAlign)
                 {
@@ -480,6 +480,10 @@ namespace svgio::svgreader
                     // current note doesn't start with a space
                     const sal_uInt32 nLastLength(pPreviousCharacterNode->maTextBeforeSpaceHandling.getLength());
                     if(pPreviousCharacterNode->maTextBeforeSpaceHandling[nLastLength - 1] != ' ' && maTextBeforeSpaceHandling[0] != ' ')
+                        bAddGap = false;
+
+                    // Do not add a gap if this node and last node are in different lines
+                    if(pPreviousCharacterNode->mpParentLine != mpParentLine)
                         bAddGap = false;
 
                     // With this option a baseline shift between two char parts ('words')
