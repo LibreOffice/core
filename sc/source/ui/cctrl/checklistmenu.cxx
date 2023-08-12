@@ -180,7 +180,7 @@ void ScCheckListMenuControl::CreateDropDown()
         aSpinColor = rStyleSettings.GetDarkShadowColor();
 
     int nWidth = (mxMenu->get_text_height() * 3) / 4;
-    mxDropDown->SetOutputSizePixel(Size(nWidth, nWidth));
+    mxDropDown->SetOutputSizePixel(Size(nWidth, nWidth), /*bErase*/true, /*bAlphaMaskTransparent*/true);
     DecorationView aDecoView(mxDropDown.get());
     aDecoView.DrawSymbol(tools::Rectangle(Point(0, 0), Size(nWidth, nWidth)),
                          SymbolType::SPIN_RIGHT, aSpinColor,
