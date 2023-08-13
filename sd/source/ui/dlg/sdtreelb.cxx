@@ -354,6 +354,7 @@ IMPL_LINK(SdPageObjsTLV, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
 IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 {
+    m_bMouseReleased = false;
     m_bEditing = false;
     m_bSelectionHandlerNavigates = rMEvt.GetClicks() == 1;
     m_bNavigationGrabsFocus = rMEvt.GetClicks() != 1;
@@ -362,6 +363,7 @@ IMPL_LINK(SdPageObjsTLV, MousePressHdl, const MouseEvent&, rMEvt, bool)
 
 IMPL_LINK_NOARG(SdPageObjsTLV, MouseReleaseHdl, const MouseEvent&, bool)
 {
+    m_bMouseReleased = true;
     if (m_aMouseReleaseHdl.IsSet() && m_aMouseReleaseHdl.Call(MouseEvent()))
         return false;
 
@@ -758,6 +760,7 @@ SdPageObjsTLV::SdPageObjsTLV(std::unique_ptr<weld::TreeView> xTreeView)
 
     m_xTreeView->set_size_request(m_xTreeView->get_approximate_digit_width() * 28,
                                   m_xTreeView->get_text_height() * 8);
+    m_xTreeView->set_column_editables({true});
 }
 
 IMPL_LINK(SdPageObjsTLV, EditEntryAgain, void*, p, void)
@@ -839,7 +842,8 @@ void SdPageObjsTLV::Select()
 {
     m_nSelectEventId = nullptr;
 
-    if (IsEditingActive())
+    // hack to make inplace editing work for x11
+    if (m_bMouseReleased)
         return;
 
     m_bLinkableSelected = true;
