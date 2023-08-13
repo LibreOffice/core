@@ -109,24 +109,10 @@ namespace cairocanvas
 
         // Forwarding the XComponent implementation to the
         // cppu::ImplHelper templated base
-        virtual void SAL_CALL acquire() noexcept override { GraphicDeviceBase_Base::acquire(); }   \
-        virtual void SAL_CALL release() noexcept override { GraphicDeviceBase_Base::release(); }   \
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override
-            { return GraphicDeviceBase_Base::queryInterface(_rType); }
-        virtual void SAL_CALL dispose() override
-        {
-            CanvasBaseSurfaceProvider_Base::dispose();
-        }
-        virtual void SAL_CALL addEventListener(
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
-        {
-            CanvasBaseSurfaceProvider_Base::addEventListener(xListener);
-        }
-        virtual void SAL_CALL removeEventListener(
-            css::uno::Reference< css::lang::XEventListener > const & xListener ) override
-        {
-            CanvasBaseSurfaceProvider_Base::removeEventListener(xListener);
-        }
+        //                          Classname     Base doing refcounting        Base implementing the XComponent interface
+        //                            |                 |                            |
+        //                            V                 V                            V
+        DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
         virtual OUString SAL_CALL getServiceName(  ) override;
