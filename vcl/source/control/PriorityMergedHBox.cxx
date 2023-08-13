@@ -46,18 +46,18 @@ PriorityMergedHBox::PriorityMergedHBox(vcl::Window* pParent)
 void PriorityMergedHBox::Resize()
 {
     if (comphelper::LibreOfficeKit::isActive())
-        return PriorityHBox::Resize();
+        return VclHBox::Resize();
 
     if (!m_bInitialized)
         Initialize();
 
     if (!m_bInitialized)
     {
-        return PriorityHBox::Resize();
+        return VclHBox::Resize();
     }
 
     tools::Long nWidth = GetSizePixel().Width();
-    tools::Long nCurrentWidth = PriorityHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
+    tools::Long nCurrentWidth = VclHBox::calculateRequisition().getWidth() + BUTTON_WIDTH;
 
     // Hide lower priority controls
     for (int i = GetChildCount() - 1; i >= 0; i--)
@@ -104,7 +104,7 @@ void PriorityMergedHBox::Resize()
         }
     }
 
-    PriorityHBox::Resize();
+    VclHBox::Resize();
 
     if (GetHiddenCount())
         m_pButton->Show();
@@ -138,7 +138,7 @@ Size PriorityMergedHBox::calculateRequisition() const
 {
     if (!m_bInitialized)
     {
-        return PriorityHBox::calculateRequisition();
+        return VclHBox::calculateRequisition();
     }
 
     sal_uInt16 nVisibleChildren = 0;

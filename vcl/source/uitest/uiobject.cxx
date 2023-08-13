@@ -1379,7 +1379,7 @@ OUString SpinFieldUIObject::get_action(VclEventId nEvent) const
             "' from " + get_top_parent(mxSpinField)->get_id();
     }
     else
-        return EditUIObject::get_action(nEvent);
+        return WindowUIObject::get_action(nEvent);
 }
 
 OUString SpinFieldUIObject::get_name() const
@@ -1422,7 +1422,7 @@ void MetricFieldUIObject::execute(const OUString& rAction,
 
 StringMap MetricFieldUIObject::get_state()
 {
-    StringMap aMap = SpinFieldUIObject::get_state();
+    StringMap aMap = EditUIObject::get_state();
     aMap["Value"] = mxMetricField->GetValueString();
 
     return aMap;
@@ -1467,7 +1467,7 @@ void FormattedFieldUIObject::execute(const OUString& rAction,
 
 StringMap FormattedFieldUIObject::get_state()
 {
-    StringMap aMap = SpinFieldUIObject::get_state();
+    StringMap aMap = EditUIObject::get_state();
     aMap["Value"] = OUString::number(mxFormattedField->GetFormatter().GetValue());
 
     return aMap;

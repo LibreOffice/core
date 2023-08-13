@@ -2399,7 +2399,7 @@ bool ImplListBox::EventNotify( NotifyEvent& rNEvt )
         }
     }
 
-    return bDone || Control::EventNotify( rNEvt );
+    return bDone || Window::EventNotify( rNEvt );
 }
 
 const Wallpaper& ImplListBox::GetDisplayBackground() const

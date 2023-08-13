@@ -718,7 +718,7 @@ void SpinField::Resize()
     if (!mbSpin)
         return;
 
-    Edit::Resize();
+    Control::Resize();
     Size aSize = GetOutputSizePixel();
     bool bSubEditPositioned = false;
 

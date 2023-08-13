@@ -1252,7 +1252,7 @@ void VclMultiLineEdit::StateChanged( StateChangedType nType )
         }
     }
 
-    Edit::StateChanged( nType );
+    Control::StateChanged( nType );
 }
 
 void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
@@ -1265,7 +1265,7 @@ void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
     else
-        Edit::DataChanged( rDCEvt );
+        Control::DataChanged( rDCEvt );
 }
 
 void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, SystemTextColorFlags nFlags )

@@ -47,7 +47,7 @@ DecoToolBox::DecoToolBox( vcl::Window* pParent ) :
 
 void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    ToolBox::DataChanged( rDCEvt );
+    Window::DataChanged( rDCEvt );
 
     if ( rDCEvt.GetFlags() & AllSettingsFlags::STYLE )
     {
