@@ -2061,6 +2061,40 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
       </rng:element>
     </rng:define>
 
+    <!-- Adds hidden option to named ranges -->
+    <rng:define name="table-named-range-attlist">
+    <rng:attribute name="table:name">
+      <rng:ref name="string"/>
+    </rng:attribute>
+    <rng:attribute name="table:cell-range-address">
+      <rng:ref name="cellRangeAddress"/>
+    </rng:attribute>
+    <rng:optional>
+      <rng:attribute name="table:base-cell-address">
+        <rng:ref name="cellAddress"/>
+      </rng:attribute>
+    </rng:optional>
+    <rng:optional>
+      <rng:attribute name="table:range-usable-as">
+        <rng:choice>
+          <rng:value>none</rng:value>
+          <rng:list>
+            <rng:oneOrMore>
+              <rng:choice>
+                <rng:value>print-range</rng:value>
+                <rng:value>filter</rng:value>
+                <rng:value>repeat-row</rng:value>
+                <rng:value>repeat-column</rng:value>
+                <!-- The option "hidden" is the new value for "range-usable-as" -->
+                <rng:value>hidden</rng:value>
+              </rng:choice>
+            </rng:oneOrMore>
+          </rng:list>
+        </rng:choice>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
    </rng:include>
 
     <!-- TODO no proposal -->

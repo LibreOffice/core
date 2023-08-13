@@ -35,8 +35,10 @@
 #include <formula/grammar.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/token/tokens.hxx>
+#include <com/sun/star/sheet/NamedRangeFlag.hdl>
 
 using namespace ::oox;
+using namespace ::com::sun::star;
 
 // *** Helper classes ***
 
@@ -629,6 +631,10 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
     // store the index of the NAME record in the lookup map
     NamedExpMap::key_type key(nTab, rRangeData.GetName());
     maNamedExpMap[key] = nNameIdx;
+
+    // Check if it is a hidden named range
+    if ((rRangeData.GetUnoType() & sheet::NamedRangeFlag::HIDDEN) == sheet::NamedRangeFlag::HIDDEN)
+        xName->SetHidden(true);
 
     /*  Create the definition formula.
         This may cause recursive creation of other defined names. */

@@ -529,6 +529,7 @@ sal_uInt32 ScRangeData::GetUnoType() const
     if ( HasType(Type::PrintArea) ) nUnoType |= css::sheet::NamedRangeFlag::PRINT_AREA;
     if ( HasType(Type::ColHeader) ) nUnoType |= css::sheet::NamedRangeFlag::COLUMN_HEADER;
     if ( HasType(Type::RowHeader) ) nUnoType |= css::sheet::NamedRangeFlag::ROW_HEADER;
+    if ( HasType(Type::Hidden) )    nUnoType |= css::sheet::NamedRangeFlag::HIDDEN;
     return nUnoType;
 }
 

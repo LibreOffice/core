@@ -106,6 +106,7 @@ constexpr OUStringLiteral SC_CURRENCYSYMBOL = u"CurrencySymbol";
 constexpr OUStringLiteral SC_REPEAT_ROW = u"repeat-row";
 constexpr OUStringLiteral SC_FILTER = u"filter";
 constexpr OUStringLiteral SC_PRINT_RANGE = u"print-range";
+constexpr OUStringLiteral SC_HIDDEN = u"hidden";
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -1202,6 +1203,8 @@ sal_Int32 ScXMLImport::GetRangeType(std::u16string_view sRangeType)
                 nRangeType |= sheet::NamedRangeFlag::FILTER_CRITERIA;
             else if (sTemp == SC_PRINT_RANGE)
                 nRangeType |= sheet::NamedRangeFlag::PRINT_AREA;
+            else if (sTemp == SC_HIDDEN)
+                nRangeType |= sheet::NamedRangeFlag::HIDDEN;
         }
         else if (i < sRangeType.size())
             sBuffer.append(sRangeType[i]);
@@ -1275,6 +1278,7 @@ public:
         if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
         if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
         if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
+        if ( nUnoType & sheet::NamedRangeFlag::HIDDEN )             nNewType |= ScRangeData::Type::Hidden;
 
         // Insert a new name.
         ScAddress aPos;

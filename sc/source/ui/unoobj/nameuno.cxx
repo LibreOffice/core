@@ -75,10 +75,11 @@ SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )
 SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.sheet.NamedRanges" )
 
+// Database named ranges are not considered by getCount, hasByName, removeByName and getElementNames
+// Note that hidden named ranges are considered by these methods
 static bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! as method to ScRangeData
-
     return !rData.HasType(ScRangeData::Type::Database);
 }
 
@@ -293,6 +294,7 @@ sal_Int32 SAL_CALL ScNamedRangeObj::getType()
         if ( pData->HasType(ScRangeData::Type::PrintArea) ) nType |= sheet::NamedRangeFlag::PRINT_AREA;
         if ( pData->HasType(ScRangeData::Type::ColHeader) ) nType |= sheet::NamedRangeFlag::COLUMN_HEADER;
         if ( pData->HasType(ScRangeData::Type::RowHeader) ) nType |= sheet::NamedRangeFlag::ROW_HEADER;
+        if ( pData->HasType(ScRangeData::Type::Hidden) )    nType |= sheet::NamedRangeFlag::HIDDEN;
     }
     return nType;
 }
@@ -305,6 +307,7 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType )
     if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
+    if ( nUnoType & sheet::NamedRangeFlag::HIDDEN )             nNewType |= ScRangeData::Type::Hidden;
 
     // GRAM_API for API compatibility.
     Modify_Impl( nullptr, nullptr, nullptr, nullptr, &nNewType,formula::FormulaGrammar::GRAM_API );
@@ -458,6 +461,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     if ( nUnoType & sheet::NamedRangeFlag::PRINT_AREA )         nNewType |= ScRangeData::Type::PrintArea;
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= ScRangeData::Type::ColHeader;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= ScRangeData::Type::RowHeader;
+    if ( nUnoType & sheet::NamedRangeFlag::HIDDEN )             nNewType |= ScRangeData::Type::Hidden;
 
     bool bDone = false;
     if (pDocShell)

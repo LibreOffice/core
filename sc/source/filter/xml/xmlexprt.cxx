@@ -4549,6 +4549,12 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
                     sBufferRangeType.append(" ");
                 sBufferRangeType.append(GetXMLToken(XML_PRINT_RANGE));
             }
+            if ((nRangeType & sheet::NamedRangeFlag::HIDDEN) == sheet::NamedRangeFlag::HIDDEN)
+            {
+                if (!sBufferRangeType.isEmpty())
+                    sBufferRangeType.append(" ");
+                sBufferRangeType.append(GetXMLToken(XML_HIDDEN));
+            }
             OUString sRangeType = sBufferRangeType.makeStringAndClear();
             if (!sRangeType.isEmpty())
                 AddAttribute(XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS, sRangeType);

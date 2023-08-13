@@ -152,7 +152,9 @@ void ScRangeManagerTable::Init()
             aLine.aScope = itr.first;
         for (const auto& rEntry : rLocalRangeName)
         {
-            if (!rEntry.second->HasType(ScRangeData::Type::Database))
+            // Database and hidden named ranges are not shown in the Manage Names dialog
+            if (!rEntry.second->HasType(ScRangeData::Type::Database)
+                && !rEntry.second->HasType(ScRangeData::Type::Hidden))
             {
                 aLine.aName = rEntry.second->GetName();
                 addEntry(aLine, false);

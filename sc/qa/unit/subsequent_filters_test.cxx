@@ -26,6 +26,7 @@
 #include <postit.hxx>
 #include <undomanager.hxx>
 
+#include <com/sun/star/sheet/NamedRangeFlag.hdl>
 #include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 
@@ -638,6 +639,69 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testRangeNameODS)
 
     OUString aCSVPath = createFilePath(u"contentCSV/rangeExp_Sheet2.csv");
     testFile(aCSVPath, *pDoc, 1);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameODS)
+{
+    createScDoc("ods/named-ranges-hidden.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // This named range is set to "hidden"
+    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+    // This named range is visible
+    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
+                         pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+
+    // Set NamedRange2 to hidden
+    pRangeData2->AddType(ScRangeData::Type::Hidden);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+
+    // Check if both named ranges are hidden after saving and reloading
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+    pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+    pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHiddenRangeNameXLSX)
+{
+    createScDoc("xlsx/named-ranges-hidden.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // This named range is set to "hidden"
+    ScRangeData* pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+    // This named range is visible
+    ScRangeData* pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
+                         pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+
+    // Save as ODS and test if the named ranges are still with the correct hidden flag
+    saveAndReload("calc8");
+    pDoc = getScDoc();
+    pRangeData1 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE1"));
+    CPPUNIT_ASSERT(pRangeData1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(sheet::NamedRangeFlag::HIDDEN),
+                         pRangeData1->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
+    pRangeData2 = pDoc->GetRangeName()->findByUpperName(OUString("NAMEDRANGE2"));
+    CPPUNIT_ASSERT(pRangeData2);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0),
+                         pRangeData2->GetUnoType() & sheet::NamedRangeFlag::HIDDEN);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest, testHyperlinksXLSX)

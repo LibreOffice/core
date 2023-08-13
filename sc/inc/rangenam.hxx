@@ -55,7 +55,8 @@ public:
         RowHeader  = 0x0010,
         AbsArea    = 0x0020,
         RefArea    = 0x0040,
-        AbsPos     = 0x0080
+        AbsPos     = 0x0080,
+        Hidden     = 0x0100
     };
 
     enum class IsNameValidType
@@ -124,7 +125,7 @@ public:
     void            AddType( Type nType );
     Type            GetType() const                 { return eType; }
     bool            HasType( Type nType ) const;
-    sal_uInt32      GetUnoType() const;
+    SC_DLLPUBLIC sal_uInt32 GetUnoType() const;
     SC_DLLPUBLIC OUString GetSymbol( const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     SC_DLLPUBLIC OUString GetSymbol( const ScAddress& rPos, const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            UpdateSymbol( OUStringBuffer& rBuffer, const ScAddress& );
@@ -166,7 +167,7 @@ public:
 };
 namespace o3tl
 {
-    template<> struct typed_flags<ScRangeData::Type> : is_typed_flags<ScRangeData::Type, 0xff> {};
+    template<> struct typed_flags<ScRangeData::Type> : is_typed_flags<ScRangeData::Type, 0x1ff> {};
 }
 
 
