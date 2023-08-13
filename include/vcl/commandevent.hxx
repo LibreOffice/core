@@ -139,7 +139,7 @@ enum class CommandWheelMode
 };
 
 // Magic value used in mnLines field in CommandWheelData
-#define COMMAND_WHEEL_PAGESCROLL        (sal_uLong(0xFFFFFFFF))
+#define COMMAND_WHEEL_PAGESCROLL        (double(0xFFFFFFFF))
 
 class VCL_DLLPUBLIC CommandWheelData
 {

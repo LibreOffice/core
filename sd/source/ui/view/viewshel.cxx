@@ -736,7 +736,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 {
                     if( mpContentWindow.get() == pWin )
                     {
-                        sal_uLong nScrollLines = pData->GetScrollLines();
+                        double nScrollLines = pData->GetScrollLines();
                         if(IsPageFlipMode())
                             nScrollLines = COMMAND_WHEEL_PAGESCROLL;
                         CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
