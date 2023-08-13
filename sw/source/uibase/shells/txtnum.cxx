@@ -200,7 +200,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         auto pRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
 
-        pDlg->StartExecuteAsync([aSet, pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([aSet=std::move(aSet), pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
             if (RET_OK == nResult)
             {
                 const SvxNumBulletItem* pBulletItem = pDlg->GetOutputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
