@@ -54,7 +54,7 @@ SvxZoomItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    assert(SfxPoolItem::operator==(rAttr)); // NOLINT(bugprone-parent-virtual-call)
+    assert(SfxPoolItem::operator==(rAttr));
 
     const SvxZoomItem& rItem = static_cast<const SvxZoomItem&>(rAttr);
 

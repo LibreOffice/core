@@ -184,6 +184,27 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override ;
 
+    /**___________________________________________________________________________________________________
+        @short      increment refcount
+        @seealso    XInterface
+        @seealso    release()
+        @onerror    A RuntimeException is thrown.
+    */
+
+    virtual void SAL_CALL acquire() noexcept override
+    { OWeakObject::acquire(); }
+
+    /**___________________________________________________________________________________________________
+        @short      decrement refcount
+        @seealso    XInterface
+        @seealso    acquire()
+        @onerror    A RuntimeException is thrown.
+    */
+
+    virtual void SAL_CALL release() noexcept override
+    { OWeakObject::release(); }
+
+
     //  XTypeProvider
 
 

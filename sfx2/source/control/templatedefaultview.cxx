@@ -47,6 +47,11 @@ void TemplateDefaultView::showAllTemplates()
     insertItems(maAllTemplates, false);
 }
 
+bool TemplateDefaultView::KeyInput( const KeyEvent& rKEvt )
+{
+    return ThumbnailView::KeyInput(rKEvt);
+}
+
 bool TemplateDefaultView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )

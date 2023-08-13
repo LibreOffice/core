@@ -1367,7 +1367,7 @@ short SfxTemplateSelectionDlg::run()
     maIdle.Start();
     setTemplateViewMode(TemplateViewMode::eThumbnailView);
 
-    return SfxTemplateManagerDlg::run();
+    return weld::GenericDialogController::run();
 }
 
 IMPL_LINK_NOARG(SfxTemplateSelectionDlg, TimeOut, Timer*, void)

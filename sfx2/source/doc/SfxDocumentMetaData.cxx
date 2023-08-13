@@ -1345,7 +1345,7 @@ void SAL_CALL SfxDocumentMetaData::dispose()
     if (!m_isInitialized) {
         return;
     }
-    PartialWeakComponentImplHelper::dispose(); // superclass
+    WeakComponentImplHelperBase::dispose(); // superclass
     m_NotifyListeners.disposeAndClear(css::lang::EventObject(
             getXWeak()));
     m_isInitialized = false;

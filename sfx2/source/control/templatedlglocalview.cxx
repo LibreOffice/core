@@ -401,7 +401,7 @@ bool TemplateDlgLocalView::KeyInput(const KeyEvent& rKEvt)
         reload();
     }
 
-    return TemplateLocalView::KeyInput(rKEvt);
+    return ThumbnailView::KeyInput(rKEvt);
 }
 
 IMPL_LINK(TemplateDlgLocalView, KeyPressHdl, const KeyEvent&, rKEvt, bool)
