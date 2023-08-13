@@ -126,12 +126,9 @@ static bool pngWrite(SvStream& rStream, const Graphic& rGraphic, int nCompressio
     if (rGraphic.IsNone())
         return false;
 
-    Animation aAnimation;
     sal_uInt32 nSequenceNumber = 0;
-    bool bIsApng = rGraphic.IsAnimated();
-
-    if (bIsApng)
-        aAnimation = rGraphic.GetAnimation();
+    const bool bIsApng = rGraphic.IsAnimated();
+    Animation aAnimation = bIsApng ? rGraphic.GetAnimation() : Animation();
 
     png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
