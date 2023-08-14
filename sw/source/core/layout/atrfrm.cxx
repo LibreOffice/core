@@ -3237,6 +3237,18 @@ OUString SwFlyFrameFormat::GetObjDescription() const
         return msDesc;
 }
 
+bool SwFlyFrameFormat::IsDecorative() const
+{
+    const SdrObject* pMasterObject = FindSdrObject();
+    OSL_ENSURE(pMasterObject, "<SwFlyFrameFormat::SetDescription(..)> - missing <SdrObject> instance");
+    if (!pMasterObject)
+    {
+        return false;
+    }
+
+    return pMasterObject->IsDecorative();
+}
+
 void SwFlyFrameFormat::SetObjDecorative(bool const isDecorative)
 {
     SdrObject* pMasterObject = FindSdrObject();

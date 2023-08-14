@@ -1469,8 +1469,7 @@ void AccessibilityCheck::checkObject(SwNode* pCurrent, SdrObject* pObject)
         || nObjId == SdrObjKind::Media || nObjId == SdrObjKind::Group
         || nObjId == SdrObjKind::Graphic || nInv == SdrInventor::FmForm)
     {
-        OUString sAlternative = pObject->GetTitle();
-        if (sAlternative.isEmpty())
+        if (pObject->GetTitle().isEmpty() && pObject->GetDescription().isEmpty())
         {
             OUString sName = pObject->GetName();
             OUString sIssueText = SwResId(STR_NO_ALT).replaceAll("%OBJECT_NAME%", sName);
