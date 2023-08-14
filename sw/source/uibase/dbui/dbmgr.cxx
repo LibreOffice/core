@@ -591,7 +591,7 @@ void SwDBManager::ImportFromConnection(  SwWrtShell* pSh )
     std::optional<SwWait> oWait;
 
     {
-        sal_uLong i = 0;
+        sal_uInt32 i = 0;
         do {
 
             ImportDBEntry(pSh);
@@ -1670,13 +1670,13 @@ void SwDBManager::MergeCancel()
 
 // determine the column's Numberformat and transfer to the forwarded Formatter,
 // if applicable.
-sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
+sal_uInt32 SwDBManager::GetColumnFormat( const OUString& rDBName,
                                 const OUString& rTableName,
                                 const OUString& rColNm,
                                 SvNumberFormatter* pNFormatr,
                                 LanguageType nLanguage )
 {
-    sal_uLong nRet = 0;
+    sal_uInt32 nRet = 0;
     if(pNFormatr)
     {
         uno::Reference< sdbc::XDataSource> xSource;
@@ -1750,7 +1750,7 @@ sal_uLong SwDBManager::GetColumnFormat( const OUString& rDBName,
     return nRet;
 }
 
-sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const & xSource_in,
+sal_uInt32 SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const & xSource_in,
                         uno::Reference< sdbc::XConnection> const & xConnection,
                         uno::Reference< beans::XPropertySet> const & xColumn,
                         SvNumberFormatter* pNFormatr,
@@ -1759,7 +1759,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
     auto xSource = xSource_in;
 
     // set the NumberFormat in the doc if applicable
-    sal_uLong nRet = 0;
+    sal_uInt32 nRet = 0;
 
     if(!xSource.is())
     {
@@ -1813,6 +1813,7 @@ sal_uLong SwDBManager::GetColumnFormat( uno::Reference< sdbc::XDataSource> const
                         nFormat = xDocNumberFormats->queryKey( sFormat, aLoc, false );
                         if(NUMBERFORMAT_ENTRY_NOT_FOUND == sal::static_int_cast< sal_uInt32, sal_Int32>(nFormat))
                             nFormat = xDocNumberFormats->addNew( sFormat, aLoc );
+
                         nRet = nFormat;
                         bUseDefault = false;
                     }

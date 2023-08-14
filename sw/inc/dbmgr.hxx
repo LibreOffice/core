@@ -325,13 +325,13 @@ public:
                             css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             const OUString& rTableName);
 
-    static sal_uLong GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> const & xSource,
+    static sal_uInt32 GetColumnFormat( css::uno::Reference< css::sdbc::XDataSource> const & xSource,
                             css::uno::Reference< css::sdbc::XConnection> const & xConnection,
                             css::uno::Reference< css::beans::XPropertySet> const & xColumn,
                             SvNumberFormatter* pNFormatr,
                             LanguageType nLanguage );
 
-    sal_uLong GetColumnFormat( const OUString& rDBName,
+    sal_uInt32 GetColumnFormat( const OUString& rDBName,
                             const OUString& rTableName,
                             const OUString& rColNm,
                             SvNumberFormatter* pNFormatr,
