@@ -125,7 +125,73 @@ namespace
     constexpr std::u16string_view aGUIServers[]
         = { u"kleopatra", u"seahorse", u"gpa", u"kgpg"};
 #endif
+
+bool GetPathAllOS(OUString& aPath)
+{
+#ifdef _WIN32
+    sal::systools::CoTaskMemAllocated<wchar_t> sPath;
+    HRESULT hr
+        = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
+
+    if (FAILED(hr))
+        return false;
+    aPath = o3tl::toU(sPath);
+#else
+    const char* cPath = getenv("PATH");
+    if (!cPath)
+        return false;
+    aPath = OUString(cPath, strlen(cPath), osl_getThreadTextEncoding());
+#endif
+    return (!aPath.isEmpty());
 }
+
+void GetCertificateManager(OUString& sExecutable)
+{
+    OUString aPath, aFoundGUIServer;
+    if (!GetPathAllOS(aPath))
+        return;
+
+    OUString aCetMgrConfig = officecfg::Office::Common::Security::Scripting::CertMgrPath::get();
+    if (!aCetMgrConfig.isEmpty())
+    {
+#ifdef _WIN32
+        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('\\');
+#else
+        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('/');
+#endif
+        osl::FileBase::RC searchError = osl::File::searchFileURL(
+            aCetMgrConfig.copy(0, nLastBackslashIndex + 1), aPath,
+            aFoundGUIServer);
+        if (searchError == osl::FileBase::E_None)
+            return;
+    }
+
+    for (const auto& rServer: aGUIServers)
+    {
+        osl::FileBase::RC searchError = osl::File::searchFileURL(
+            OUString(rServer), aPath,
+            aFoundGUIServer);
+        if (searchError == osl::FileBase::E_None)
+        {
+            osl::File::getSystemPathFromFileURL(aFoundGUIServer, sExecutable);
+            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+                comphelper::ConfigurationChanges::create());
+            officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
+                                                                                pBatch);
+            pBatch->commit();
+
+            return;
+        }
+    }
+}
+
+bool IsThereCertificateMgr()
+{
+    OUString sExecutable;
+    GetCertificateManager(sExecutable);
+    return (!sExecutable.isEmpty());
+}
+}//anonymous namespace
 
 DigitalSignaturesDialog::DigitalSignaturesDialog(
     weld::Window* pParent,
@@ -480,82 +546,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, RemoveButtonHdl, weld::Button&, void)
     }
 }
 
-bool DigitalSignaturesDialog::GetPathAllOS(OUString& aPath)
-{
-#ifdef _WIN32
-    aPath = []
-    {
-        sal::systools::CoTaskMemAllocated<wchar_t> sPath;
-        HRESULT hr
-            = SHGetKnownFolderPath(FOLDERID_ProgramFilesX86, KF_FLAG_DEFAULT, nullptr, &sPath);
-        if (SUCCEEDED(hr))
-            return OUString(o3tl::toU(sPath));
-        return OUString();
-    }();
-    if (aPath.isEmpty())
-        return false;
-#else
-    const char* cPath = getenv("PATH");
-    if (!cPath)
-        return false;
-    aPath = OUString(cPath, strlen(cPath), osl_getThreadTextEncoding());
-#endif
-    return (!aPath.isEmpty());
-}
-
-void DigitalSignaturesDialog::GetCertificateManager(OUString& aPath, OUString& sExecutable,
-                                            OUString& sFoundGUIServer)
-{
-    OUString aCetMgrConfig = officecfg::Office::Common::Security::Scripting::CertMgrPath::get();
-    if (!aCetMgrConfig.isEmpty())
-    {
-#ifdef _WIN32
-        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('\\');
-#else
-        sal_Int32 nLastBackslashIndex = aCetMgrConfig.lastIndexOf('/');
-#endif
-        osl::FileBase::RC searchError = osl::File::searchFileURL(
-            aCetMgrConfig.copy(0, nLastBackslashIndex + 1), aPath,
-            sFoundGUIServer);
-        if (searchError == osl::FileBase::E_None)
-            return;
-    }
-
-    for (const auto& rServer: aGUIServers)
-    {
-        osl::FileBase::RC searchError = osl::File::searchFileURL(
-            OUString(rServer), aPath,
-            sFoundGUIServer);
-        if (searchError == osl::FileBase::E_None)
-        {
-            osl::File::getSystemPathFromFileURL(sFoundGUIServer, sExecutable);
-            std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
-                comphelper::ConfigurationChanges::create());
-            officecfg::Office::Common::Security::Scripting::CertMgrPath::set(sExecutable,
-                                                                                pBatch);
-            pBatch->commit();
-
-            return;
-        }
-    }
-}
-
-bool DigitalSignaturesDialog::IsThereCertificateMgr()
-{
-    OUString aPath, sFoundGUIServer, sExecutable;
-    if (!GetPathAllOS(aPath))
-        return false;
-    GetCertificateManager(aPath, sExecutable, sFoundGUIServer);
-    return (!sExecutable.isEmpty());
-}
 
 IMPL_LINK_NOARG(DigitalSignaturesDialog, CertMgrButtonHdl, weld::Button&, void)
 {
-    OUString aPath, sFoundGUIServer, sExecutable;
-    if (!GetPathAllOS(aPath))
-        return;
-
-    GetCertificateManager(aPath, sExecutable, sFoundGUIServer);
+    OUString sExecutable;
+    GetCertificateManager(sExecutable);
 
     if (!sExecutable.isEmpty())
     {
