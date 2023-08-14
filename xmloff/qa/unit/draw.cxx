@@ -238,7 +238,58 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeImport)
                          pColorSet->getColor(model::ThemeColorType::FollowedHyperlink));
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeColorExportImport)
+namespace
+{
+void checkFillAndLineComplexColors(uno::Reference<drawing::XShape> const& xShape)
+{
+    CPPUNIT_ASSERT(xShape.is());
+    uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+    {
+        uno::Reference<util::XComplexColor> xComplexColor;
+        xShapeProperties->getPropertyValue("FillComplexColor") >>= xComplexColor;
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
+        auto const& rTrans1 = aComplexColor.getTransformations()[0];
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans1.mnValue);
+        auto const& rTrans2 = aComplexColor.getTransformations()[1];
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans2.mnValue);
+    }
+    {
+        uno::Reference<util::XComplexColor> xComplexColor;
+        xShapeProperties->getPropertyValue("LineComplexColor") >>= xComplexColor;
+        CPPUNIT_ASSERT(xComplexColor.is());
+        auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, aComplexColor.getThemeColorType());
+        CPPUNIT_ASSERT_EQUAL(size_t(2), aComplexColor.getTransformations().size());
+        auto const& rTrans1 = aComplexColor.getTransformations()[0];
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumMod, rTrans1.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), rTrans1.mnValue);
+        auto const& rTrans2 = aComplexColor.getTransformations()[1];
+        CPPUNIT_ASSERT_EQUAL(model::TransformationType::LumOff, rTrans2.meType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(4000), rTrans2.mnValue);
+    }
+}
+
+} // end anonymous ns
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testFillAndLineThemeColorExportImport)
+{
+    loadFromURL(u"FillAndStrokeThemeColorTest.fodp");
+
+    checkFillAndLineComplexColors(getShape(0));
+
+    save("impress8");
+
+    load(maTempFile.GetURL());
+
+    checkFillAndLineComplexColors(getShape(0));
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextAndFillThemeColorExportImport)
 {
     // Given a document that refers to a theme color:
     loadFromURL(u"Reference-ThemeColors-TextAndFill.pptx");

@@ -1801,6 +1801,7 @@ string-value-if-true
 stripes
 stroke
 stroke-color
+stroke-complex-color
 stroke-dash
 stroke-linecap
 stroke-linejoin

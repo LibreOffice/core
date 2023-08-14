@@ -1901,6 +1901,7 @@ namespace xmloff::token {
         TOKEN( "stripes",                         XML_STRIPES ),
         TOKEN( "stroke",                          XML_STROKE ),
         TOKEN( "stroke-color",                    XML_STROKE_COLOR ),
+        TOKEN( "stroke-complex-color",            XML_STROKE_COMPLEX_COLOR ),
         TOKEN( "stroke-dash",                     XML_STROKE_DASH ),
         TOKEN( "stroke-linecap",                  XML_STROKE_LINECAP ),
         TOKEN( "stroke-linejoin",                 XML_STROKE_LINEJOIN ),

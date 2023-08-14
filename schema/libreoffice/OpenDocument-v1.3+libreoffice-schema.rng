@@ -3500,6 +3500,13 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+  <!-- TODO no proposal - Document Themes -->
+  <rng:define name="loext-stroke-complex-color">
+    <rng:element name="loext:stroke-complex-color">
+      <rng:ref name="loext-complex-color-definition"/>
+    </rng:element>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="style-text-properties-elements" combine="interleave">
     <rng:optional>
@@ -3509,6 +3516,9 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
 
   <!-- TODO no proposal -->
   <rng:define name="style-graphic-properties-elements" combine="interleave">
+    <rng:optional>
+        <rng:ref name="loext-stroke-complex-color"/>
+    </rng:optional>
     <rng:optional>
         <rng:ref name="loext-fill-complex-color"/>
     </rng:optional>

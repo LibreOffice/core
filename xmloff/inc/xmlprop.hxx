@@ -415,6 +415,7 @@ inline constexpr OUStringLiteral PROP_LeftBorderDistance = u"LeftBorderDistance"
 inline constexpr OUStringLiteral PROP_LeftMargin = u"LeftMargin";
 inline constexpr OUStringLiteral PROP_LineCap = u"LineCap";
 inline constexpr OUStringLiteral PROP_LineColor = u"LineColor";
+inline constexpr OUStringLiteral PROP_LineComplexColor = u"LineComplexColor";
 inline constexpr OUStringLiteral PROP_LineDashName = u"LineDashName";
 inline constexpr OUStringLiteral PROP_LineEndCenter = u"LineEndCenter";
 inline constexpr OUStringLiteral PROP_LineEndName = u"LineEndName";
