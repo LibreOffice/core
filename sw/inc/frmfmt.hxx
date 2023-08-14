@@ -256,6 +256,8 @@ public:
 
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription, bool bBroadcast = false );
+
+    bool IsDecorative() const;
     void SetObjDecorative(bool isDecorative);
 
     /** SwFlyFrameFormat::IsBackgroundTransparent

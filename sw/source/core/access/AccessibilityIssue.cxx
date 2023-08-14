@@ -26,6 +26,7 @@
 #include <comphelper/lok.hxx>
 #include <cui/dlgname.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svxdlg.hxx>
 
 namespace sw
 {
@@ -160,29 +161,64 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         {
-            OUString aDesc = SwResId(STR_ENTER_ALT);
-            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
-            if (aNameDialog.run() == RET_OK)
+            SwFlyFrameFormat* pFlyFormat
+                = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
+            if (pFlyFormat)
             {
-                SwFlyFrameFormat* pFlyFormat
-                    = const_cast<SwFlyFrameFormat*>(m_pDoc->FindFlyByName(m_sObjectID));
-                if (pFlyFormat)
-                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, aNameDialog.GetName());
+                OUString aDescription(pFlyFormat->GetObjDescription());
+                OUString aTitle(pFlyFormat->GetObjTitle());
+                bool isDecorative(pFlyFormat->IsDecorative());
+
+                SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
+                    pFact->CreateSvxObjectTitleDescDialog(pWrtShell->GetView().GetFrameWeld(),
+                                                          aTitle, aDescription, isDecorative));
+
+                if (pDlg->Execute() == RET_OK)
+                {
+                    pDlg->GetTitle(aTitle);
+                    pDlg->GetDescription(aDescription);
+                    pDlg->IsDecorative(isDecorative);
+
+                    m_pDoc->SetFlyFrameTitle(*pFlyFormat, aTitle);
+                    m_pDoc->SetFlyFrameDescription(*pFlyFormat, aDescription);
+                    m_pDoc->SetFlyFrameDecorative(*pFlyFormat, isDecorative);
+
+                    pWrtShell->SetModified();
+                }
             }
         }
         break;
         case IssueObject::SHAPE:
         case IssueObject::FORM:
         {
-            OUString aDesc = SwResId(STR_ENTER_ALT);
-            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
-            if (aNameDialog.run() == RET_OK)
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            auto pPage = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+            SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
+            if (pObj)
             {
-                SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
-                auto pPage = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-                SdrObject* pObj = pPage->GetObjByName(m_sObjectID);
-                if (pObj)
-                    pObj->SetTitle(aNameDialog.GetName());
+                OUString aTitle(pObj->GetTitle());
+                OUString aDescription(pObj->GetDescription());
+                bool isDecorative(pObj->IsDecorative());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(
+                    pFact->CreateSvxObjectTitleDescDialog(pWrtShell->GetView().GetFrameWeld(),
+                                                          aTitle, aDescription, isDecorative));
+
+                if (RET_OK == pDlg->Execute())
+                {
+                    pDlg->GetTitle(aTitle);
+                    pDlg->GetDescription(aDescription);
+                    pDlg->IsDecorative(isDecorative);
+
+                    pObj->SetTitle(aTitle);
+                    pObj->SetDescription(aDescription);
+                    pObj->SetDecorative(isDecorative);
+
+                    pWrtShell->SetModified();
+                }
             }
         }
         break;
