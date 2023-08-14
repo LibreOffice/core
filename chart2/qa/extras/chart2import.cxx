@@ -1979,6 +1979,17 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf121205)
     CPPUNIT_ASSERT_EQUAL(OUString("Firstline\nSecondline\nThirdline"), aTitle);
 }
 
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testTdf146487)
+{
+    loadFromFile(u"pptx/tdf146487.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT_MESSAGE("chart doc should not have a title", !xTitle.is());
+}
+
 CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testFixedSizeBarChartVeryLongLabel)
 {
     // Bar chart area size is fixed (not automatic) so we can't resize

@@ -76,6 +76,8 @@ public:
 
     /** Returns the automatic chart title if the axes set contains only one series. */
     const OUString& getAutomaticTitle() const { return maAutoTitle; }
+    /** Returns true, if the chart contains only one series and have title textbox (even empty). */
+    bool         isSingleSeriesTitle() const { return mbSingleSeriesTitle; }
     /** Returns true, if the chart is three-dimensional. */
     bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
@@ -88,13 +90,15 @@ private:
     bool                mb3dChart;
     bool                mbWall3dChart;
     bool                mbPieChart;
+    bool                mbSingleSeriesTitle;
 };
 
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),
     mb3dChart( false ),
     mbWall3dChart( false ),
-    mbPieChart( false )
+    mbPieChart( false ),
+    mbSingleSeriesTitle( false )
 {
 }
 
@@ -127,7 +131,10 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
 
         // get automatic chart title, if there is only one type group
         if( aTypeGroups.size() == 1 )
+        {
             maAutoTitle = rFirstTypeGroup.getSingleSeriesTitle();
+            mbSingleSeriesTitle = rFirstTypeGroup.isSingleSeriesTitle();
+        }
 
         /*  Create a coordinate system. For now, all type groups from all axes sets
             have to be inserted into one coordinate system. Later, chart2 should
@@ -422,6 +429,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         if(nAxesSetIdx == nStartAxesSetIdx)
         {
             maAutoTitle = aAxesSetConv.getAutomaticTitle();
+            mbSingleSeriesTitle = aAxesSetConv.isSingleSeriesTitle();
             mb3dChart = aAxesSetConv.is3dChart();
             mbWall3dChart = aAxesSetConv.isWall3dChart();
             mbPieChart = aAxesSetConv.isPieChart();
