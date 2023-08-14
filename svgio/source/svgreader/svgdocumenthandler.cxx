@@ -55,6 +55,9 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
+#include <com/sun/star/lang/Locale.hpp>
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+
 using namespace com::sun::star;
 
 namespace svgio::svgreader
@@ -87,7 +90,26 @@ namespace
                             pCharNode->whiteSpaceHandling();
                             pLast = pCharNode->addGap(pLast);
 
-                            pParentLine->concatenateTextLine(pCharNode->getText());
+                            double fTextWidth(0.0);
+
+                            const SvgStyleAttributes* pSvgStyleAttributes = pCharNode->getSvgStyleAttributes();
+
+                            if(pSvgStyleAttributes)
+                            {
+                                const drawinglayer::attribute::FontAttribute aFontAttribute(
+                                        svgio::svgreader::SvgCharacterNode::getFontAttribute(*pSvgStyleAttributes));
+
+                                double fFontWidth(pSvgStyleAttributes->getFontSizeNumber().solve(*pCharNode));
+                                double fFontHeight(fFontWidth);
+
+                                css::lang::Locale aLocale;
+
+                                drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                                aTextLayouterDevice.setFontAttribute(aFontAttribute, fFontWidth, fFontHeight, aLocale);
+                                fTextWidth = aTextLayouterDevice.getTextWidth(pCharNode->getText(), 0.0, pCharNode->getText().getLength());
+                            }
+
+                            pParentLine->concatenateTextLineWidth(fTextWidth);
                             break;
                         }
                         case SVGToken::Tspan:

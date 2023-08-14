@@ -28,7 +28,8 @@ namespace svgio::svgreader
             SvgNode* pParent)
         :   SvgNode(aType, rDocument, pParent),
             maSvgStyleAttributes(*this),
-            mbLengthAdjust(true)
+            mbLengthAdjust(true),
+            mnTextLineWidth(0.0)
         {
         }
 

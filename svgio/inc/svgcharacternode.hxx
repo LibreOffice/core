@@ -24,6 +24,7 @@
 
 #include <string_view>
 
+#include <drawinglayer/attribute/fontattribute.hxx>
 #include "svgtextnode.hxx"
 #include "svgtextposition.hxx"
 
@@ -57,6 +58,9 @@ namespace svgio::svgreader
                 SvgNode* pParent,
                 OUString aText);
             virtual ~SvgCharacterNode() override;
+
+            static drawinglayer::attribute::FontAttribute getFontAttribute(
+                const SvgStyleAttributes& rSvgStyleAttributes);
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
 

@@ -19,7 +19,6 @@
 
 #include <svgcharacternode.hxx>
 #include <svgstyleattributes.hxx>
-#include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
@@ -100,6 +99,39 @@ namespace svgio::svgreader
             }
         }
 
+        drawinglayer::attribute::FontAttribute SvgCharacterNode::getFontAttribute(
+            const SvgStyleAttributes& rSvgStyleAttributes)
+        {
+            const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
+            OUString aFontFamily("Times New Roman");
+            if(!rFontFamilyVector.empty())
+                aFontFamily=rFontFamilyVector[0];
+
+            // #i122324# if the FontFamily name ends on ' embedded' it is probably a re-import
+            // of a SVG export with font embedding. Remove this to make font matching work. This
+            // is pretty safe since there should be no font family names ending on ' embedded'.
+            // Remove again when FontEmbedding is implemented in SVG import
+            if(aFontFamily.endsWith(" embedded"))
+            {
+                aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
+            }
+
+            const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
+            bool bItalic(FontStyle::italic == rSvgStyleAttributes.getFontStyle() || FontStyle::oblique == rSvgStyleAttributes.getFontStyle());
+
+            return drawinglayer::attribute::FontAttribute(
+                aFontFamily,
+                OUString(),
+                nFontWeight,
+                false/*bSymbol*/,
+                false/*bVertical*/,
+                bItalic,
+                false/*bMonospaced*/,
+                false/*bOutline*/,
+                false/*bRTL*/,
+                false/*bBiDiStrong*/);
+        }
+
         rtl::Reference<BasePrimitive2D> SvgCharacterNode::createSimpleTextPrimitive(
             SvgTextPosition& rSvgTextPosition,
             const SvgStyleAttributes& rSvgStyleAttributes) const
@@ -111,35 +143,9 @@ namespace svgio::svgreader
             if(nLength)
             {
                 sal_uInt32 nIndex(0);
+
                 // prepare FontAttribute
-                const SvgStringVector& rFontFamilyVector = rSvgStyleAttributes.getFontFamily();
-                OUString aFontFamily("Times New Roman");
-                if(!rFontFamilyVector.empty())
-                    aFontFamily=rFontFamilyVector[0];
-
-                // #i122324# if the FontFamily name ends on ' embedded' it is probably a re-import
-                // of a SVG export with font embedding. Remove this to make font matching work. This
-                // is pretty safe since there should be no font family names ending on ' embedded'.
-                // Remove again when FontEmbedding is implemented in SVG import
-                if(aFontFamily.endsWith(" embedded"))
-                {
-                    aFontFamily = aFontFamily.copy(0, aFontFamily.getLength() - 9);
-                }
-
-                const ::FontWeight nFontWeight(getVclFontWeight(rSvgStyleAttributes.getFontWeight()));
-                bool bItalic(FontStyle::italic == rSvgStyleAttributes.getFontStyle() || FontStyle::oblique == rSvgStyleAttributes.getFontStyle());
-
-                const drawinglayer::attribute::FontAttribute aFontAttribute(
-                    aFontFamily,
-                    OUString(),
-                    nFontWeight,
-                    false/*bSymbol*/,
-                    false/*bVertical*/,
-                    bItalic,
-                    false/*bMonospaced*/,
-                    false/*bOutline*/,
-                    false/*bRTL*/,
-                    false/*bBiDiStrong*/);
+                const drawinglayer::attribute::FontAttribute aFontAttribute(getFontAttribute(rSvgStyleAttributes));
 
                 // prepare FontSizeNumber
                 double fFontWidth(rSvgStyleAttributes.getFontSizeNumber().solve(*this));
@@ -250,19 +256,17 @@ namespace svgio::svgreader
                     }
                 }
 
-                // Use the whole text line to calculate the align position
-                double fWholeTextLineWidth(aTextLayouterDevice.getTextWidth(mpParentLine->getTextLine(), 0, mpParentLine->getTextLine().getLength()));
                 // apply TextAlign
                 switch(aTextAlign)
                 {
                     case TextAlign::right:
                     {
-                        aPosition.setX(aPosition.getX() - fWholeTextLineWidth);
+                        aPosition.setX(aPosition.getX() - mpParentLine->getTextLineWith());
                         break;
                     }
                     case TextAlign::center:
                     {
-                        aPosition.setX(aPosition.getX() - (fWholeTextLineWidth * 0.5));
+                        aPosition.setX(aPosition.getX() - (mpParentLine->getTextLineWith() * 0.5));
                         break;
                     }
                     case TextAlign::notset:
