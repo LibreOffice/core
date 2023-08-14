@@ -57,6 +57,7 @@
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
+#include <salinst.hxx>
 #include <svdata.hxx>
 #include <bitmaps.hlst>
 

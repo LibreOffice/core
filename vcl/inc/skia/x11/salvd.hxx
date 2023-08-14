@@ -11,6 +11,8 @@
 #define INCLUDED_VCL_INC_SKIA_X11_SALVD_H
 
 #include <salvd.hxx>
+#include <unx/saldisp.hxx>
+#include <unx/salgdi.h>
 
 class X11SkiaSalVirtualDevice final : public SalVirtualDevice
 {

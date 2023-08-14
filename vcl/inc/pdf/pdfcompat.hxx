@@ -9,11 +9,9 @@
 
 #pragma once
 
-#include <config_features.h>
-#include <tools/gen.hxx>
+#include <o3tl/unit_conversion.hxx>
 #include <tools/stream.hxx>
-#include <tools/UnitConversion.hxx>
-#include <vcl/graph.hxx>
+#include <vcl/BinaryDataContainer.hxx>
 
 namespace vcl::pdf
 {

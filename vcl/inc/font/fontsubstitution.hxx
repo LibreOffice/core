@@ -31,8 +31,6 @@
 
 #include <rtl/ustring.hxx>
 
-#include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
-
 #include <font/FontSelectPattern.hxx>
 
 namespace vcl::font

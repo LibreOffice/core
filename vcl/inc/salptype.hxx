@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 enum class JobSetFlags : sal_uInt16 {

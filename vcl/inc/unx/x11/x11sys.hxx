@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_UNX_X11_X11SYS_HXX
 
 #include <unx/gensys.h>
-#include <vclpluginapi.h>
 
 class X11SalSystem final : public SalGenericSystem
 {

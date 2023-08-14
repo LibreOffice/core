@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_SALPRN_HXX
 
 #include <i18nutil/paper.hxx>
+#include <rtl/ustring.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>

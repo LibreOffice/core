@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_INC_TOOLBOX_H
 #define INCLUDED_VCL_INC_TOOLBOX_H
 
+#include <vcl/ctrl.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <optional>

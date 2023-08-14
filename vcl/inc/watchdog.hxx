@@ -11,8 +11,6 @@
 
 #include <sal/config.h>
 #include <salhelper/thread.hxx>
-#include <atomic>
-#include <vector>
 
 class WatchdogThread final : private salhelper::Thread
 {

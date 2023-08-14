@@ -25,7 +25,6 @@
 
 #include <X11/Xlib.h>
 
-#include <vclpluginapi.h>
 #include "salframe.h"
 #include <vector>
 

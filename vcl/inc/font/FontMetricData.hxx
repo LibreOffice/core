@@ -22,11 +22,10 @@
 #include <sal/config.h>
 
 #include <vcl/dllapi.h>
+#include <tools/degree.hxx>
 #include <tools/long.hxx>
 #include <tools/ref.hxx>
 #include <fontattributes.hxx>
-
-#include <vector>
 
 class FontMetricData;
 typedef tools::SvRef<FontMetricData> FontMetricDataRef;

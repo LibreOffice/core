@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
+#include <string_view>
 
 namespace jsdialog
 {

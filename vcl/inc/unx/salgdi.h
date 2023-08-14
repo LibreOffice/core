@@ -22,17 +22,10 @@
 #include <sal/config.h>
 
 #include <X11/Xlib.h>
-#include <X11/Xutil.h>
 
-#include <vcl/salgtype.hxx>
-#include <vcl/vclenum.hxx>
-
-#include <unx/saldisp.hxx>
 #include <salgdi.hxx>
 #include <salgeom.hxx>
 #include <sallayout.hxx>
-#include <vclpluginapi.h>
-#include <ControlCacheKey.hxx>
 
 #include <headless/CairoCommon.hxx>
 

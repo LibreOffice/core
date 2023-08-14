@@ -13,7 +13,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
 
-#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
 #include <optional>

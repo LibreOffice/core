@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_INC_REGBAND_HXX
 #define INCLUDED_VCL_INC_REGBAND_HXX
 
+#include <tools/long.hxx>
+
 /*
 
 class ImplRegionBand

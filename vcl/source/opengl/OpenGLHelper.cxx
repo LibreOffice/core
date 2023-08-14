@@ -30,6 +30,7 @@
 #include <vector>
 #include <unordered_map>
 
+#include <driverblocklist.hxx>
 #include <opengl/zone.hxx>
 #include <vcl/opengl/OpenGLWrapper.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>

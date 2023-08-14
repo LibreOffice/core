@@ -19,6 +19,9 @@
 
 #pragma once
 
+#include <tools/link.hxx>
+#include <vcl/vclevent.hxx>
+
 #include <vector>
 
 class VclEventListeners

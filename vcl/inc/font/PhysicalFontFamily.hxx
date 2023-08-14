@@ -24,8 +24,6 @@
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
-#include <o3tl/sorted_vector.hxx>
-
 #include <unotools/fontcfg.hxx>
 
 namespace vcl::font

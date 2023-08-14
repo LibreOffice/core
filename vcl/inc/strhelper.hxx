@@ -19,10 +19,8 @@
 #ifndef INCLUDED_VCL_STRHELPER_HXX
 #define INCLUDED_VCL_STRHELPER_HXX
 
-#include <cstring>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
-#include <vcl/dllapi.h>
 
 namespace psp
 {

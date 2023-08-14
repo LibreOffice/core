@@ -76,6 +76,7 @@
 #include <vcl/toolkit/viewdataentry.hxx>
 #include <vcl/virdev.hxx>
 #include <bitmaps.hlst>
+#include <listbox.hxx>
 #include <menutogglebutton.hxx>
 #include <verticaltabctrl.hxx>
 #include <window.h>

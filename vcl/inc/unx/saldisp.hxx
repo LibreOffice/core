@@ -22,7 +22,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#include <X11/extensions/render.h>
 #include <epoxy/glx.h>
 
 #include <rtl/string.hxx>
@@ -32,7 +31,6 @@
 #include <sal/types.h>
 #include <cassert>
 #include <list>
-#include <unordered_map>
 #include <vector>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>

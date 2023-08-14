@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sal/config.h>
-#include <config_options.h>
 
 #include <o3tl/sorted_vector.hxx>
 #include <tools/fontenum.hxx>
@@ -31,9 +30,6 @@
 
 #include <font/PhysicalFontFace.hxx>
 
-#include <glyphid.hxx>
-
-#include <map>
 #include <set>
 #include <memory>
 #include <string_view>

@@ -8,6 +8,12 @@
  */
 #ifndef INCLUDED_VCL_GRAPHIC_GRAPHICMETADATA_HXX
 #define INCLUDED_VCL_GRAPHIC_GRAPHICMETADATA_HXX
+
+#include <tools/gen.hxx>
+#include <vcl/mapmod.hxx>
+
+#include <optional>
+
 // Info class for all supported file formats
 enum class GraphicFileFormat
 {

@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <tools/stream.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <memory>

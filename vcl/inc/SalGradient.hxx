@@ -11,6 +11,7 @@
 #define INCLUDED_VCL_INC_SALGRADIENT_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <tools/color.hxx>
 
 struct SalGradientStop
 {

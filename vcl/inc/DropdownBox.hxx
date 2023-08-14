@@ -24,6 +24,8 @@
 #include "IPrioritable.hxx"
 #include "NotebookbarPopup.hxx"
 
+class Button;
+
 class DropdownBox final : public VclHBox, public vcl::IPrioritable
 {
 private:

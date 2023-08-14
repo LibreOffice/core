@@ -20,7 +20,8 @@
 #ifndef INCLUDED_VCL_INC_TEXTLINEINFO_HXX
 #define INCLUDED_VCL_INC_TEXTLINEINFO_HXX
 
-#include <memory>
+#include <tools/long.hxx>
+
 #include <vector>
 
 class ImplTextLineInfo

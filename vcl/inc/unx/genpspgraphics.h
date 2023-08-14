@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/vclenum.hxx>
 #include <config_cairo_canvas.h>
 
 #include <salgdi.hxx>

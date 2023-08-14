@@ -28,6 +28,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2irange.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 #include <osl/module.h>

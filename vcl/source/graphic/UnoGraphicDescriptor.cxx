@@ -19,6 +19,7 @@
 
 #include <graphic/UnoGraphicDescriptor.hxx>
 
+#include <cppuhelper/weakagg.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -15,7 +15,6 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
 #include <sal/types.h>
-#include <vcl/dllapi.h>
 
 class SvMemoryStream;
 

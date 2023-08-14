@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
 #include <rtl/string.hxx>
 #include <vcl/checksum.hxx>
 

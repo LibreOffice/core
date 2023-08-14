@@ -32,7 +32,6 @@
 
 #include <config_cairo_canvas.h>
 
-#include <map>
 #include <vector>
 
 class SalBitmap;

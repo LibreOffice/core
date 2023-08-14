@@ -23,6 +23,7 @@
 #include <unx/cairotextrender.hxx>
 #include <unx/fc_fontoptions.hxx>
 #include <unx/freetype_glyphcache.hxx>
+#include <unx/gendata.hxx>
 #include <headless/CairoCommon.hxx>
 #include <vcl/svapp.hxx>
 #include <sallayout.hxx>

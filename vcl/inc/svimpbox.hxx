@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_SOURCE_INC_SVIMPBOX_HXX
 #define INCLUDED_VCL_SOURCE_INC_SVIMPBOX_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/seleng.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/image.hxx>

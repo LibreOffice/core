@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <vcl/builder.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
@@ -29,7 +30,6 @@
 #include <o3tl/sorted_vector.hxx>
 #include "calendar.hxx"
 #include "iconview.hxx"
-#include "listbox.hxx"
 #include "messagedialog.hxx"
 
 namespace vcl

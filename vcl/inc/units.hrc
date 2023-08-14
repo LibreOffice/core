@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_INC_UNITS_HRC
 #define INCLUDED_VCL_INC_UNITS_HRC
 
+#include <tools/fldunit.hxx>
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 std::pair<TranslateId, FieldUnit> SV_FUNIT_STRINGS[] =

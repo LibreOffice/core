@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
 #include <basegfx/point/b2dpoint.hxx>
 #include <tools/gen.hxx>
 

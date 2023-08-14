@@ -41,6 +41,7 @@
 #include <hb-graphite2.h>
 #include <hb-icu.h>
 
+#include <map>
 #include <memory>
 
 GenericSalLayout::GenericSalLayout(LogicalFontInstance &rFont)

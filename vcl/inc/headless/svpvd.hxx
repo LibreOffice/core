@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_INC_HEADLESS_SVPVD_HXX
 
 #include <salvd.hxx>
-#include <vcl/salgtype.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 
 #include <vector>

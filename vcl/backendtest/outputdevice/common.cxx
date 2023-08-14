@@ -13,6 +13,8 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <salgdi.hxx>
 
+#include <map>
+
 namespace vcl::test {
 
 namespace

@@ -19,10 +19,7 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <tools/gen.hxx>
-#include <memory>
 
 class GraphicReader
 {

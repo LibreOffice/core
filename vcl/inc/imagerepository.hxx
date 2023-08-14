@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_IMAGEREPOSITORY_HXX
 #define INCLUDED_VCL_IMAGEREPOSITORY_HXX
 
-#include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 
 class BitmapEx;

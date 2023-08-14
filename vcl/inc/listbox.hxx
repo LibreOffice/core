@@ -24,12 +24,11 @@
 
 #include <o3tl/safeint.hxx>
 #include <utility>
+#include <vcl/glyphitem.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/floatwin.hxx>
+#include <vcl/toolkit/lstbox.hxx>
 #include <vcl/quickselectionengine.hxx>
-#include <vcl/vcllayout.hxx>
-
-#include "glyphid.hxx"
 
 #include <set>
 #include <vector>

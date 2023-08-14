@@ -24,9 +24,6 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <tools/gen.hxx>
-#include <tools/degree.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/dllapi.h>
 #include <vcl/vclenum.hxx> // for typedef sal_UCS4
@@ -39,7 +36,6 @@
 
 #include <hb.h>
 
-#include <iostream>
 #include <memory>
 #include <vector>
 

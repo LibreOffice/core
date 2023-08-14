@@ -9,14 +9,10 @@
 
 #pragma once
 
-#include <comphelper/string.hxx>
-#include <osl/mutex.hxx>
 #include <utility>
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/builder.hxx>
 #include <salvtables.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>

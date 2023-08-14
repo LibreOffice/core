@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/print.hxx>
+#include <vcl/QueueInfo.hxx>
 #include "salprn.hxx"
 
 #include <vector>

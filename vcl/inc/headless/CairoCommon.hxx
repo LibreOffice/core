@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sal/config.h>
-#include <config_features.h>
 
 #include <cairo.h>
 
@@ -34,7 +33,6 @@
 
 #include <basegfx/utils/systemdependentdata.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/range/b2irange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

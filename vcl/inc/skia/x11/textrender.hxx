@@ -23,7 +23,6 @@
 #include <unx/freetypetextrender.hxx>
 
 #include <SkFontMgr.h>
-#include <SkFontMgr_fontconfig.h>
 
 class VCL_DLLPUBLIC SkiaTextRender final : public FreeTypeTextRenderImpl
 {

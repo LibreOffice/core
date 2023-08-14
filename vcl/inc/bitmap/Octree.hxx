@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/BitmapColor.hxx>
+#include <vcl/BitmapPalette.hxx>
 #include <tools/solar.h>
 
 struct OctreeNode

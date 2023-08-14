@@ -25,11 +25,11 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/inputctx.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <cppuhelper/weakref.hxx>
 #include "windowdev.hxx"
 #include "salwtype.hxx"
 

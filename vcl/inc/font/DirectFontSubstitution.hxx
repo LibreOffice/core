@@ -22,12 +22,12 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <unotools/fontdefs.hxx>
 
 #include <vcl/rendercontext/AddFontSubstituteFlags.hxx>
 
 #include <font/fontsubstitution.hxx>
 
-#include <string>
 #include <string_view>
 #include <vector>
 

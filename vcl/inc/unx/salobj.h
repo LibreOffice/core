@@ -24,7 +24,6 @@
 
 #include <salobj.hxx>
 #include <vcl/sysdata.hxx>
-#include <vclpluginapi.h>
 #include <memory>
 
 class SalClipRegion

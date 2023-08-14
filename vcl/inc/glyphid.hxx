@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <sal/types.h>
+#include <cstdint>
 
 typedef uint32_t sal_GlyphId;
 

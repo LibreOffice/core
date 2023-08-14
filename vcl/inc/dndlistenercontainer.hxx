@@ -25,11 +25,8 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
-#include <cppuhelper/compbase.hxx>
 #include <comphelper/compbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-
-#include <vcl/unohelp2.hxx>
 
 class GenericDropTargetDropContext :
     public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>

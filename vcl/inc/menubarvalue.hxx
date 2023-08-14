@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_MENUBARVALUE_HXX
 #define INCLUDED_VCL_INC_MENUBARVALUE_HXX
 
-#include <tools/gen.hxx>
 #include <vcl/salnativewidgets.hxx>
 
 /*  MenubarValue:

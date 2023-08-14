@@ -13,7 +13,7 @@
 
 #include <vcl/font/Feature.hxx>
 #include <hb.h>
-#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <font/PhysicalFontFace.hxx>
 

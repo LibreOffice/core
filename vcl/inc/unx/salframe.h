@@ -27,12 +27,10 @@
 #include <unx/sessioninhibitor.hxx>
 #include <salframe.hxx>
 #include <salwtype.hxx>
-#include <salinst.hxx>
 
 #include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
-#include <vclpluginapi.h>
 
 #include <list>
 

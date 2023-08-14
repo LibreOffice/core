@@ -26,15 +26,12 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <tools/gen.hxx>
-#include <tools/solar.h>
-#include <unx/gendata.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
 
 #include <fontattributes.hxx>
-#include <font/LogicalFontInstance.hxx>
 #include <font/FontMetricData.hxx>
+#include <glyphid.hxx>
 
 #include <unordered_map>
 

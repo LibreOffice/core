@@ -19,8 +19,6 @@
 #ifndef INCLUDED_VCL_HYPERLABEL_HXX
 #define INCLUDED_VCL_HYPERLABEL_HXX
 
-#include <memory>
-
 #include <vcl/toolkit/fixed.hxx>
 
 namespace vcl

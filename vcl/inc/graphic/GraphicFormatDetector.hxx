@@ -22,10 +22,8 @@
 
 #include <tools/stream.hxx>
 #include <vector>
-#include <vcl/mapmod.hxx>
-#include <tools/gen.hxx>
-#include <optional>
 #include <vcl/graphic/GraphicMetadata.hxx>
+
 namespace vcl
 {
 static inline OUString getImportFormatShortName(GraphicFileFormat nFormat)

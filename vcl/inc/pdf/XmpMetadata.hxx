@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>
 #include <memory>

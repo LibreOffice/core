@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_SALINST_H
 #define INCLUDED_VCL_INC_UNX_SALINST_H
 
-#include <vclpluginapi.h>
 #include <salinst.hxx>
 #include <unx/geninst.h>
 

@@ -24,7 +24,6 @@
 
 #include <unx/saldisp.hxx>
 #include <unx/gendata.hxx>
-#include <vclpluginapi.h>
 
 class SalXLib;
 class SalDisplay;

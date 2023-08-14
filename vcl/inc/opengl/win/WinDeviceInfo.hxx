@@ -12,11 +12,7 @@
 
 #include <vcl/dllapi.h>
 
-#include <driverblocklist.hxx>
-
 #include <rtl/ustring.hxx>
-#include <vector>
-#include <cstdint>
 
 class VCL_DLLPUBLIC WinOpenGLDeviceInfo
 {

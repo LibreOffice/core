@@ -22,6 +22,8 @@
 
 #include <X11/Xlib.h>
 
+#include <vcl/salgtype.hxx>
+
 #include <unx/saldisp.hxx>
 #include <unx/saltype.h>
 #include <salvd.hxx>

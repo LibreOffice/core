@@ -22,7 +22,6 @@
 #include <memory>
 #include <string_view>
 
-#include <vcl/dllapi.h>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 

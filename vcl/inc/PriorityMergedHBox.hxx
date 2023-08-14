@@ -18,7 +18,6 @@
 */
 
 #include <vcl/toolkit/button.hxx>
-#include <vcl/layout.hxx>
 #include "NotebookbarPopup.hxx"
 #include "PriorityHBox.hxx"
 

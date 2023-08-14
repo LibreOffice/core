@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <vclpluginapi.h>
-
 bool InitAtkBridge();
 void DeInitAtkBridge();
 

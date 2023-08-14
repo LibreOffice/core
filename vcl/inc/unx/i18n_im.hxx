@@ -22,8 +22,6 @@
 
 #include <X11/Xlib.h>
 
-#include <vclpluginapi.h>
-
 #define bUseInputMethodDefault True
 
 class SalI18N_InputMethod

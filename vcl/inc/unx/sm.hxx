@@ -27,8 +27,6 @@
 #include <rtl/ustring.hxx>
 #include <memory>
 
-#include <vclpluginapi.h>
-
 class ICEConnectionObserver;
 class SalSession;
 

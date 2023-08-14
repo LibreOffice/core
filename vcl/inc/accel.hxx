@@ -19,11 +19,9 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <tools/solar.h>
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
-#include <vcl/dllapi.h>
 #include <memory>
 #include <map>
 #include <vector>

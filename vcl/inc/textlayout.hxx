@@ -20,7 +20,11 @@
 #ifndef INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 #define INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 
+#include <tools/long.hxx>
+#include <vcl/outdev.hxx>
+
 #include <memory>
+#include <vector>
 
 class Control;
 

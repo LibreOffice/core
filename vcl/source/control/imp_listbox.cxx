@@ -24,6 +24,7 @@
 #include <vcl/event.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/naturalsort.hxx>
+#include <vcl/vcllayout.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/scrbar.hxx>
 

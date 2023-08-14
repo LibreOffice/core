@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral SV_RESID_BITMAP_CHECK1 = u"vcl/res/check1.png";
 inline constexpr OUStringLiteral SV_RESID_BITMAP_CHECK2 = u"vcl/res/check2.png";
 inline constexpr OUStringLiteral SV_RESID_BITMAP_CHECK3 = u"vcl/res/check3.png";

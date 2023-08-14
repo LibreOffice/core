@@ -25,7 +25,6 @@
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/color.hxx>
-#include <tools/long.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>

@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sallayout.hxx"
+#include <i18nlangtag/languagetag.hxx>
+#include <vcl/outdev.hxx>
+
+#include "impglyphitem.hxx"
+#include "ImplLayoutRuns.hxx"
 
 namespace vcl::text
 {

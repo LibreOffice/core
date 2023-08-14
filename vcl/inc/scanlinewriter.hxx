@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_SCANLINEWRITER_HXX
 #define INCLUDED_VCL_INC_SCANLINEWRITER_HXX
 
-#include <vcl/bitmap.hxx>
+#include <tools/long.hxx>
 #include <vcl/BitmapPalette.hxx>
 
 namespace vcl

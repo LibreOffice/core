@@ -12,7 +12,6 @@
 
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
-#include <rtl/ustring.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate/Animation.hxx>
 #include <vcl/vectorgraphicdata.hxx>

@@ -10,7 +10,6 @@
 #ifndef INCLUDED_VCL_DEBUGEVENT_HXX
 #define INCLUDED_VCL_DEBUGEVENT_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
 #include <sal/types.h>
 

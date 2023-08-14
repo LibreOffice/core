@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_INC_SALWTYPE_HXX
 #define INCLUDED_VCL_INC_SALWTYPE_HXX
 
-#include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>

@@ -40,17 +40,18 @@
 #ifndef INCLUDED_VCL_INC_SFT_HXX
 #define INCLUDED_VCL_INC_SFT_HXX
 
+#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <i18nlangtag/lang.h>
 
+#include "fontsubset.hxx"
+#include "glyphid.hxx"
+
 #include <array>
 #include <memory>
 #include <vector>
-#include <cstdint>
-
-#include "font/PhysicalFontFace.hxx"
 
 class SvStream;
 

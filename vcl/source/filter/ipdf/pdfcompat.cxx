@@ -10,6 +10,7 @@
 #include <pdf/pdfcompat.hxx>
 
 #include <o3tl/string_view.hxx>
+#include <tools/solar.h>
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <sal/log.hxx>
 

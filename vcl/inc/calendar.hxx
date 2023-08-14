@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_CALENDAR_HXX
 #define INCLUDED_VCL_CALENDAR_HXX
 
-#include <vcl/dllapi.h>
 #include <unotools/calendarwrapper.hxx>
 
 #include <vcl/ctrl.hxx>

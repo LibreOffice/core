@@ -11,7 +11,6 @@
 #define INCLUDED_VCL_INC_OPENGL_ZONE_H
 
 #include <sal/config.h>
-#include <sal/types.h>
 #include <vcl/dllapi.h>
 #include <comphelper/crashzone.hxx>
 

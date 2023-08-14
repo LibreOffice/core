@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <vcl/dllapi.h>
 #include <rtl/strbuf.hxx>
 #include <map>
 

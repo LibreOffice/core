@@ -27,6 +27,7 @@
 #include <tools/gen.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/fntstyle.hxx>
+#include <vcl/font.hxx>
 
 /* The following class is extraordinarily similar to FontAttributes. */
 

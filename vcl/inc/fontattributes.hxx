@@ -22,7 +22,6 @@
 
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 #include <tools/fontenum.hxx>
 
 

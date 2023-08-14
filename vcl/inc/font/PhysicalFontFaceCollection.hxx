@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <vcl/dllapi.h>
-
 #include "PhysicalFontFace.hxx"
 
 #include <vector>

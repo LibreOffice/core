@@ -23,7 +23,7 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/outdev.hxx>
+#include <vcl/rendercontext/SalLayoutFlags.hxx>
 #include <rtl/math.hxx>
 #include <vector>
 

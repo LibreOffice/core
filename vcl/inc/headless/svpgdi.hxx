@@ -24,13 +24,11 @@
 #endif
 
 #include <sal/config.h>
-#include <config_features.h>
 
 #include <osl/endian.h>
 #include <vcl/sysdata.hxx>
 #include <config_cairo_canvas.h>
 
-#include <font/PhysicalFontFace.hxx>
 #include <salgdi.hxx>
 #include <sallayout.hxx>
 #include <unx/cairotextrender.hxx>

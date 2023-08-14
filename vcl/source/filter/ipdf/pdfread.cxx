@@ -15,6 +15,7 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/datetime.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <sal/log.hxx>

@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_UNX_FC_FONTOPTIONS_HXX
 
 #include <rtl/string.hxx>
+#include <vcl/dllapi.h>
 
 typedef struct _FcPattern   FcPattern;
 class VCL_DLLPUBLIC FontConfigFontOptions

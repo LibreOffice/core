@@ -20,7 +20,7 @@
 #ifndef INCLUDED_VCL_INC_IMPOCTREE_HXX
 #define INCLUDED_VCL_INC_IMPOCTREE_HXX
 
-#include "Octree.hxx"
+#include <vcl/BitmapColor.hxx>
 
 class ImpErrorQuad
 {

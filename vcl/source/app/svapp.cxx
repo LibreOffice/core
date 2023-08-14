@@ -18,6 +18,7 @@
  */
 
 #include <config_features.h>
+#include <config_version.h>
 
 #include <osl/file.hxx>
 #include <osl/thread.hxx>

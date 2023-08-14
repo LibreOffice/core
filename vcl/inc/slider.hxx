@@ -20,9 +20,7 @@
 #ifndef INCLUDED_VCL_SLIDER_HXX
 #define INCLUDED_VCL_SLIDER_HXX
 
-#include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
-#include <vcl/toolkit/scrbar.hxx>
 
 class Slider final : public Control
 {

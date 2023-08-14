@@ -10,6 +10,10 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
+#include <vector>
+
 namespace vcl
 {
 const char* matchArray(const char* pSource, sal_Int32 nSourceSize, const char* pSearch,

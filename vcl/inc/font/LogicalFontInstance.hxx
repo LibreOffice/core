@@ -35,7 +35,6 @@
 
 #include <optional>
 #include <unordered_map>
-#include <memory>
 
 #include <hb.h>
 
