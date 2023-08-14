@@ -117,6 +117,7 @@
 #include <rdfhelper.hxx>
 #include <fmtclbl.hxx>
 #include <iodetect.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 
 using namespace css;
 using namespace sw::util;
@@ -2407,6 +2408,13 @@ void WW8AttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
     sal_uInt16 nDxaFromTextRight = pFlyFormat->GetLRSpace().GetRight();
     m_rWW8Export.InsUInt16(NS_sprm::TDxaFromTextRight::val);
     m_rWW8Export.InsUInt16(nDxaFromTextRight);
+
+    if (!pFlyFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap())
+    {
+        // Allowing overlap is the default in both Writer and in WW8.
+        m_rWW8Export.InsUInt16(NS_sprm::TFNoAllowOverlap::val);
+        m_rWW8Export.m_pO->push_back(1);
+    }
 }
 
 void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )

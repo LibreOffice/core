@@ -2516,6 +2516,15 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *p
 
             // Map a positioned table to a split fly.
             aFlySet.Put(SwFormatFlySplit(true));
+
+            if (pTabPos->nTFNoAllowOverlap)
+            {
+                // text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE is not the default and is set in
+                // the WW8FlySet ctor already, keep that unchanged.
+                SwFormatWrapInfluenceOnObjPos aInfluence(aFlySet.Get(RES_WRAP_INFLUENCE_ON_OBJPOS));
+                aInfluence.SetAllowOverlap(false);
+                aFlySet.Put(aInfluence);
+            }
         }
 
         m_xSFlyPara->SetFlyFormat(m_rDoc.MakeFlySection(WW8SwFlyPara::eAnchor,
@@ -5370,6 +5379,14 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
         aRes = pPap->HasSprm(NS_sprm::TDyaFromTextBottom::val);
         if (aRes.pSprm && aRes.nRemainingData >= 2)
             pTabPos->nLowerMargin = SVBT16ToUInt16(aRes.pSprm);
+
+        aRes = pPap->HasSprm(NS_sprm::TFNoAllowOverlap::val);
+        if (aRes.pSprm)
+        {
+            // Remember the no-overlap request, to be consumed in SwWW8ImplReader::StartApo().
+            pTabPos->nTFNoAllowOverlap = *aRes.pSprm;
+        }
+
         bRet = true;
     }
     return bRet;

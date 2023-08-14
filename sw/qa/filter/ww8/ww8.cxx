@@ -430,6 +430,21 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCXExport)
     // i.e. <w:tblOverlap> was not written.
     assertXPath(pXmlDoc, "//w:tblPr/w:tblOverlap", "val", "never");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCImport)
+{
+    // Given a document with two floating tables, the second has sprmTFNoAllowOverlap=1 set:
+    // When importing that document:
+    createSwDoc("floattable-tbl-overlap.doc");
+
+    // Then make sure the second table is marked as "can't overlap":
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[1];
+    // Without the accompanying fix in place, this test would have failed, the fly had the default
+    // "can overlap".
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
