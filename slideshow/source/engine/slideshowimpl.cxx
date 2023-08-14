@@ -479,6 +479,7 @@ private:
     bool                                    mbShowPaused;
     bool                                    mbSlideShowIdle;
     bool                                    mbDisableAnimationZOrder;
+    bool                                    mbMovingForward;
 
     EffectRewinder                          maEffectRewinder;
     FrameSynchronization                    maFrameSynchronization;
@@ -590,6 +591,7 @@ SlideShowImpl::SlideShowImpl(
       mbShowPaused( false ),
       mbSlideShowIdle( true ),
       mbDisableAnimationZOrder( false ),
+      mbMovingForward( true ),
       maEffectRewinder(maEventMultiplexer, maEventQueue, maUserEventQueue),
       maFrameSynchronization(1.0 / FrameRate::PreferredFramesPerSecond)
 
@@ -1215,6 +1217,7 @@ void SlideShowImpl::redisplayCurrentSlide()
 
 sal_Bool SlideShowImpl::nextEffect()
 {
+    mbMovingForward = true;
     osl::MutexGuard const guard( m_aMutex );
 
     if (isDisposed())
@@ -1231,6 +1234,7 @@ sal_Bool SlideShowImpl::nextEffect()
 
 sal_Bool SlideShowImpl::previousEffect()
 {
+    mbMovingForward = false;
     osl::MutexGuard const guard( m_aMutex );
 
     if (isDisposed())
@@ -2310,7 +2314,8 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         // step slides manually.
         if( !mbForceManualAdvance &&
             !mpRehearseTimingsActivity &&
-            bHasAutomaticNextSlide )
+            bHasAutomaticNextSlide &&
+            mbMovingForward )
         {
             aNotificationEvents = makeInterruptableDelay(
                 [this]() { return this->notifySlideEnded( false ); },
