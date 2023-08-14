@@ -38,6 +38,7 @@
 #include <drawingml/chart/titleconverter.hxx>
 #include <ooxresid.hxx>
 #include <strings.hrc>
+#include <drawingml/textbody.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -183,7 +184,18 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         OUString aAutoTitle = aPlotAreaConv.getAutomaticTitle();
         if( mrModel.mxTitle.is() || !aAutoTitle.isEmpty() )
         {
-            if( aAutoTitle.isEmpty() )
+            // tdf#146487 In some cases, we need to show the empty title
+            bool bShowEmptyTitle = aAutoTitle.isEmpty() && !mrModel.mbAutoTitleDel
+                                   && aPlotAreaConv.isSingleSeriesTitle()
+                                   && mrModel.mxTitle->mxShapeProp.is()
+                                   && mrModel.mxTitle->mxTextProp.is()
+                                   && mrModel.mxTitle->mxTextProp->isEmpty();
+            // Also for tdf#146487
+            bool bEmptyRichText = mrModel.mxTitle->mxText.is()
+                && mrModel.mxTitle->mxText->mxTextBody.is()
+                && mrModel.mxTitle->mxText->mxTextBody->isEmpty();
+
+            if (aAutoTitle.isEmpty() && !bShowEmptyTitle && !bEmptyRichText)
                 aAutoTitle = OoxResId(STR_DIAGRAM_TITLE);
             Reference< XTitled > xTitled( getChartDocument(), UNO_QUERY_THROW );
             TitleConverter aTitleConv( *this, mrModel.mxTitle.getOrCreate() );
