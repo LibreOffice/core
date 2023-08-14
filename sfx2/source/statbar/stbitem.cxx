@@ -18,6 +18,7 @@
  */
 
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>

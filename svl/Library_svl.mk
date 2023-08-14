@@ -143,6 +143,7 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/items/style \
     svl/source/items/stylepool \
     svl/source/items/visitem \
+    svl/source/items/voiditem \
     svl/source/items/whiter \
     svl/source/misc/PasswordHelper \
     svl/source/misc/adrparse \

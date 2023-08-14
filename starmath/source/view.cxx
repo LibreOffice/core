@@ -55,6 +55,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/transfer.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/whiter.hxx>

@@ -21,6 +21,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <i18nutil/unicode.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

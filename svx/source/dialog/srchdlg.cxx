@@ -175,19 +175,19 @@ static void StrArrToList_Impl( TypedWhichId<SfxStringListItem> nId, const std::v
 }
 
 SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) :
-    SrchAttrItemList(std::move(rList))
+    SrchAttrInfoList(std::move(rList))
 {
     for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItem ) )
-            (*this)[i].pItem = (*this)[i].pItem->Clone();
+        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
+            (*this)[i].pItemPtr = (*this)[i].pItemPtr->Clone();
 }
 
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
-    SrchAttrItemList(rList)
+    SrchAttrInfoList(rList)
 {
     for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItem ) )
-            (*this)[i].pItem = (*this)[i].pItem->Clone();
+        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
+            (*this)[i].pItemPtr = (*this)[i].pItemPtr->Clone();
 }
 
 SearchAttrItemList::~SearchAttrItemList()
@@ -202,7 +202,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 
     SfxItemPool* pPool = rSet.GetPool();
     SfxItemIter aIter( rSet );
-    SearchAttrItem aItem;
+    SearchAttrInfo aItem;
     const SfxPoolItem* pItem = aIter.GetCurItem();
     sal_uInt16 nWhich;
 
@@ -212,12 +212,12 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
         if( IsInvalidItem( pItem ) )
         {
             nWhich = rSet.GetWhichByOffset( aIter.GetCurPos() );
-            aItem.pItem = const_cast<SfxPoolItem*>(pItem);
+            aItem.pItemPtr = pItem;
         }
         else
         {
             nWhich = pItem->Which();
-            aItem.pItem = pItem->Clone();
+            aItem.pItemPtr = pItem->Clone();
         }
 
         aItem.nSlot = pPool->GetSlotId( nWhich );
@@ -233,10 +233,10 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
     SfxItemPool* pPool = rSet.GetPool();
 
     for ( size_t i = 0; i < size(); ++i )
-        if ( IsInvalidItem( (*this)[i].pItem ) )
+        if ( IsInvalidItem( (*this)[i].pItemPtr ) )
             rSet.InvalidateItem( pPool->GetWhich( (*this)[i].nSlot ) );
         else
-            rSet.Put( *(*this)[i].pItem );
+            rSet.Put( *(*this)[i].pItemPtr );
     return rSet;
 }
 
@@ -244,9 +244,9 @@ SfxItemSet& SearchAttrItemList::Get( SfxItemSet& rSet )
 void SearchAttrItemList::Clear()
 {
     for ( size_t i = 0; i < size(); ++i )
-        if ( !IsInvalidItem( (*this)[i].pItem ) )
-            delete (*this)[i].pItem;
-    SrchAttrItemList::clear();
+        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
+            delete (*this)[i].pItemPtr;
+    SrchAttrInfoList::clear();
 }
 
 
@@ -258,10 +258,10 @@ void SearchAttrItemList::Remove(size_t nPos)
         nLen = size() - nPos;
 
     for ( size_t i = nPos; i < nPos + nLen; ++i )
-        if ( !IsInvalidItem( (*this)[i].pItem ) )
-            delete (*this)[i].pItem;
+        if ( !IsInvalidItem( (*this)[i].pItemPtr ) )
+            delete (*this)[i].pItemPtr;
 
-    SrchAttrItemList::erase( begin() + nPos, begin() + nPos + nLen );
+    SrchAttrInfoList::erase( begin() + nPos, begin() + nPos + nLen );
 }
 
 SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind)
@@ -1996,14 +1996,14 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
     const SfxPoolItem* pItem;
     for( sal_uInt16 n = 0; n < pList->Count(); ++n )
     {
-        SearchAttrItem* pAItem = &pList->GetObject(n);
-        if( !IsInvalidItem( pAItem->pItem ) &&
+        SearchAttrInfo* pAItem = &pList->GetObject(n);
+        if( !IsInvalidItem( pAItem->pItemPtr ) &&
             SfxItemState::SET == aOutSet.GetItemState(
-                pAItem->pItem->Which(), false, &pItem ) )
+                pAItem->pItemPtr->Which(), false, &pItem ) )
         {
-            delete pAItem->pItem;
-            pAItem->pItem = pItem->Clone();
-            aOutSet.ClearItem( pAItem->pItem->Which() );
+            delete pAItem->pItemPtr;
+            pAItem->pItemPtr = pItem->Clone();
+            aOutSet.ClearItem( pAItem->pItemPtr->Which() );
         }
     }
 
@@ -2135,15 +2135,15 @@ OUString& SvxSearchDialog::BuildAttrText_Impl( OUString& rStr,
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
     for ( sal_uInt16 i = 0; i < pList->Count(); ++i )
     {
-        const SearchAttrItem& rItem = pList->GetObject(i);
+        const SearchAttrInfo& rItem = pList->GetObject(i);
 
         if ( !rStr.isEmpty() )
             rStr += ", ";
 
-        if ( !IsInvalidItem( rItem.pItem ) )
+        if ( !IsInvalidItem( rItem.pItemPtr ) )
         {
             OUString aStr;
-            rPool.GetPresentation(*rItem.pItem, eMapUnit, aStr, aIntlWrapper);
+            rPool.GetPresentation(*rItem.pItemPtr, eMapUnit, aStr, aIntlWrapper);
             if (aStr.isEmpty())
             {
                 if (rStr.endsWith(", "))

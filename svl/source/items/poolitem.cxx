@@ -461,16 +461,30 @@
 // class SwPaMItem : public SfxPoolItem
 //////////////////////////////////////////////////////////////////////////////
 
+#ifdef DBG_UTIL
+static size_t nAllocatedSfxPoolItemCount(0);
+static size_t nUsedSfxPoolItemCount(0);
+size_t getAllocatedSfxPoolItemCount() { return nAllocatedSfxPoolItemCount; }
+size_t getUsedSfxPoolItemCount() { return nUsedSfxPoolItemCount; }
+#endif
+
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
     , m_nKind(SfxItemKind::NONE)
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemCount++;
+    nUsedSfxPoolItemCount++;
+#endif
     assert(nWhich <= SHRT_MAX);
 }
 
 SfxPoolItem::~SfxPoolItem()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxPoolItemCount--;
+#endif
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
 }
 
@@ -562,40 +576,6 @@ std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich(sal_uInt16 nNewWhich) co
 
 bool SfxPoolItem::IsVoidItem() const { return false; }
 
-SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
-
-SfxVoidItem::SfxVoidItem(sal_uInt16 which)
-    : SfxPoolItem(which)
-{
-}
-
-bool SfxVoidItem::operator==(const SfxPoolItem& rCmp) const
-{
-    assert(SfxPoolItem::operator==(rCmp));
-    (void)rCmp;
-    return true;
-}
-
-bool SfxVoidItem::GetPresentation(SfxItemPresentation /*ePresentation*/, MapUnit /*eCoreMetric*/,
-                                  MapUnit /*ePresentationMetric*/, OUString& rText,
-                                  const IntlWrapper&) const
-{
-    rText = "Void";
-    return true;
-}
-
-void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
-{
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SfxVoidItem"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"),
-                                      BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
-}
-
-SfxVoidItem* SfxVoidItem::Clone(SfxItemPool*) const { return new SfxVoidItem(*this); }
-
-bool SfxVoidItem::IsVoidItem() const { return true; }
-
 void SfxPoolItem::ScaleMetrics(tools::Long /*lMult*/, tools::Long /*lDiv*/) {}
 
 bool SfxPoolItem::HasMetrics() const { return false; }
@@ -612,6 +592,16 @@ bool SfxPoolItem::PutValue(const css::uno::Any&, sal_uInt8)
     return false;
 }
 
-SfxVoidItem::~SfxVoidItem() {}
+namespace
+{
+class InvalidItem final : public SfxPoolItem
+{
+    virtual bool operator==(const SfxPoolItem&) const override { return true; }
+    virtual SfxPoolItem* Clone(SfxItemPool*) const override { return nullptr; }
+};
+InvalidItem aInvalidItem;
+}
+
+SfxPoolItem const* const INVALID_POOL_ITEM = &aInvalidItem;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -135,7 +135,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(weld::Window* pParent,
                     if ( nSlot == rList[i].nSlot )
                     {
                         bFound = true;
-                        if ( IsInvalidItem( rList[i].pItem ) )
+                        if ( IsInvalidItem( rList[i].pItemPtr ) )
                             bChecked = true;
                     }
                 }
@@ -167,8 +167,8 @@ SvxSearchAttributeDialog::~SvxSearchAttributeDialog()
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 {
-    SearchAttrItem aInvalidItem;
-    aInvalidItem.pItem = INVALID_POOL_ITEM;
+    SearchAttrInfo aInvalidItem;
+    aInvalidItem.pItemPtr = INVALID_POOL_ITEM;
 
     for (int i = 0, nCount = m_xAttrLB->n_children(); i < nCount; ++i)
     {
@@ -178,17 +178,17 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
         {
-            SearchAttrItem& rItem = rList[ --j ];
+            SearchAttrInfo& rItem = rList[ --j ];
             if( rItem.nSlot == nSlot )
             {
                 if( bChecked )
                 {
-                    if( !IsInvalidItem( rItem.pItem ) )
-                        delete rItem.pItem;
-                    rItem.pItem = INVALID_POOL_ITEM;
+                    if( !IsInvalidItem( rItem.pItemPtr ) )
+                        delete rItem.pItemPtr;
+                    rItem.pItemPtr = INVALID_POOL_ITEM;
                 }
-                else if( IsInvalidItem( rItem.pItem ) )
-                    rItem.pItem = nullptr;
+                else if( IsInvalidItem( rItem.pItemPtr ) )
+                    rItem.pItemPtr = nullptr;
                 j = 1;
                 break;
             }
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
 
     // remove invalid items (pItem == NULL)
     for ( sal_uInt16 n = rList.Count(); n; )
-        if ( !rList[ --n ].pItem )
+        if ( !rList[ --n ].pItemPtr )
             rList.Remove( n );
 
     m_xDialog->response(RET_OK);

@@ -29,6 +29,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>

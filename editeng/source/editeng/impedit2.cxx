@@ -59,6 +59,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <svl/asiancfg.hxx>
+#include <svl/voiditem.hxx>
 #include <i18nutil/unicode.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/flagguard.hxx>

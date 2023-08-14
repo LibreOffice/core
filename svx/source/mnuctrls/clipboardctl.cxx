@@ -22,6 +22,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <svl/intitem.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weldutils.hxx>

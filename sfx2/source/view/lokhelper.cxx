@@ -558,7 +558,7 @@ namespace {
 
 void SfxLokHelper::sendUnoStatus(const SfxViewShell* pShell, const SfxPoolItem* pItem)
 {
-    if (!pShell || !pItem || pItem == INVALID_POOL_ITEM || DisableCallbacks::disabled())
+    if (!pShell || !pItem || IsInvalidItem(pItem) || DisableCallbacks::disabled())
         return;
 
     boost::property_tree::ptree aItem = pItem->dumpAsJSON();

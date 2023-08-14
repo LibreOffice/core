@@ -31,6 +31,7 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
+#include <svl/voiditem.hxx>
 
 #include <sfx2/app.hxx>
 #include <statcach.hxx>

@@ -38,15 +38,15 @@ struct SearchDlg_Impl;
 enum class ModifyFlags;
 enum class TransliterationFlags;
 
-struct SearchAttrItem
+struct SearchAttrInfo
 {
     sal_uInt16          nSlot;
-    SfxPoolItem*    pItem;
+    const SfxPoolItem*  pItemPtr;
 };
 
-typedef std::vector<SearchAttrItem> SrchAttrItemList;
+typedef std::vector<SearchAttrInfo> SrchAttrInfoList;
 
-class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrItemList
+class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrInfoList
 {
 public:
     SearchAttrItemList() {}
@@ -57,15 +57,15 @@ public:
     void            Put( const SfxItemSet& rSet );
     SfxItemSet&     Get( SfxItemSet& rSet );
     void            Clear();
-    sal_uInt16      Count() const { return SrchAttrItemList::size(); }
-    SearchAttrItem& operator[](sal_uInt16 nPos)
-                        { return SrchAttrItemList::operator[]( nPos ); }
-    SearchAttrItem& GetObject( sal_uInt16 nPos )
-                        { return SrchAttrItemList::operator[]( nPos ); }
+    sal_uInt16      Count() const { return SrchAttrInfoList::size(); }
+    SearchAttrInfo& operator[](sal_uInt16 nPos)
+                        { return SrchAttrInfoList::operator[]( nPos ); }
+    SearchAttrInfo& GetObject( sal_uInt16 nPos )
+                        { return SrchAttrInfoList::operator[]( nPos ); }
 
     // the pointer to the item is not being copied, so don't delete
-    void Insert( const SearchAttrItem& rItem )
-        { SrchAttrItemList::push_back( rItem ); }
+    void Insert( const SearchAttrInfo& rItem )
+        { SrchAttrInfoList::push_back( rItem ); }
     // deletes the pointer to the items
     void Remove(size_t nPos);
 };

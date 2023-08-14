@@ -20,6 +20,7 @@
 #include <vcl/outdev.hxx>
 
 #include <svl/grabbagitem.hxx>
+#include <svl/voiditem.hxx>
 #include <libxml/xmlwriter.h>
 #include <editeng/svxfont.hxx>
 #include <editeng/flditem.hxx>

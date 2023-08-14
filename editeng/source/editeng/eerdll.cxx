@@ -36,6 +36,7 @@
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
 #include <svl/grabbagitem.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 

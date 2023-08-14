@@ -57,6 +57,21 @@ protected:
     void setCallback(const std::function<void(const SfxPoolItem*, const SfxPoolItem*)> &func) { m_aCallback = func; }
     void clearCallback() { m_aCallback = nullptr; }
 
+    // container library interface support
+    // only for internal use (for now), thus protected
+    using const_iterator = SfxPoolItem const**;
+
+    const_iterator begin() const noexcept { return m_ppItems; }
+    const_iterator end() const noexcept { return begin() + m_nTotalCount; }
+
+    bool empty() const noexcept { return 0 == m_nTotalCount; }
+    sal_Int32 size() const noexcept { return m_nTotalCount; }
+    SfxPoolItem const* operator[](sal_Int32 idx) const noexcept
+    {
+        assert(idx >= 0 && idx < m_nTotalCount && "index out of range");
+        return m_ppItems[idx];
+    }
+
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 
@@ -242,6 +257,9 @@ private:
     // split version(s) of GetItemStateImpl for input types WhichID and Offset
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
     SfxItemState GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPoolItem **ppItem) const;
+
+    void implCreateItemEntry(SfxPoolItem const*& rpTarget, SfxPoolItem const* pSource);
+    void implCleanupItemEntry(SfxPoolItem const* pSource);
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )

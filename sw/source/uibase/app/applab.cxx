@@ -23,6 +23,7 @@
 #include <hintids.hxx>
 
 #include <comphelper/string.hxx>
+#include <svl/voiditem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>

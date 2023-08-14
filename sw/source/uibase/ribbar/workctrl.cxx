@@ -36,6 +36,7 @@
 #include <wrtsh.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/event.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>

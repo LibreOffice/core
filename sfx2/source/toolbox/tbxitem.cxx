@@ -39,6 +39,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>
+#include <svl/voiditem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 

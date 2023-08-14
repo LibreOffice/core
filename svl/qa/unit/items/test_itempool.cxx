@@ -8,6 +8,7 @@
  */
 
 #include <svl/itempool.hxx>
+#include <svl/voiditem.hxx>
 #include <poolio.hxx>
 
 #include <cppunit/TestAssert.h>

@@ -32,6 +32,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/setitem.hxx>
 #include <svl/whiter.hxx>
+#include <svl/voiditem.hxx>
 
 #include <items_helper.hxx>
 
@@ -99,6 +100,68 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
+void SfxItemSet::implCreateItemEntry(SfxPoolItem const*& rpTarget, SfxPoolItem const* pSource)
+{
+    if (nullptr == pSource
+        || IsInvalidItem(pSource)
+        || IsStaticDefaultItem(pSource))
+    {
+        // copy the pointer if
+        // - SfxItemState::UNKNOWN aka current default (nullptr)
+        // - SfxItemState::DONTCARE aka invalid item
+        // - StaticDefaultItem aka static pool default (however this finds
+        //   it's way to the ItemSet? It *should* be default, too)
+        rpTarget = pSource;
+        return;
+    }
+
+    if (0 == pSource->Which())
+    {
+        // these *should* be SfxVoidItem(0) the only Items with 0 == WhichID
+        rpTarget = pSource->Clone();
+        return;
+    }
+
+    if (m_pPool->IsItemPoolable(*pSource))
+    {
+        // copy the pointer and increase RefCount
+        rpTarget = pSource;
+        rpTarget->AddRef();
+        return;
+    }
+
+    // !IsPoolable() => assign via Pool
+    rpTarget = &m_pPool->Put(*pSource);
+}
+
+void SfxItemSet::implCleanupItemEntry(SfxPoolItem const* pSource)
+{
+    if (nullptr == pSource         // no entry, done
+        || IsInvalidItem(pSource)  // nothing to do for invalid item entries
+        || IsDefaultItem(pSource)) // default items are owned by the pool, nothing to do
+    {
+        return;
+    }
+
+    if (0 == pSource->Which())
+    {
+        // these *should* be SfxVoidItem(0) the only Items with 0 == WhichID
+        // and need to be deleted
+        delete pSource;
+        return;
+    }
+
+    if (1 < pSource->GetRefCount())
+    {
+        // Still multiple references present, so just alter the RefCount
+        pSource->ReleaseRef();
+        return;
+    }
+
+    // Delete from Pool
+    m_pPool->Remove(*pSource);
+}
+
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
@@ -114,28 +177,17 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
         return;
     }
 
-    m_ppItems = new const SfxPoolItem* [TotalCount()] {};
+    // allocate new array (no need to initialize, will be done below)
+    m_ppItems = new const SfxPoolItem* [TotalCount()];
 
     // Copy attributes
-    SfxPoolItem const** ppDst = m_ppItems;
-    SfxPoolItem const** ppSrc = rASet.m_ppItems;
-    for( sal_uInt16 n = TotalCount(); n; --n, ++ppDst, ++ppSrc )
-        if ( nullptr == *ppSrc ||                 // Current Default?
-             IsInvalidItem(*ppSrc) ||       // DontCare?
-             IsStaticDefaultItem(*ppSrc) )  // Defaults that are not to be pooled?
-            // Just copy the pointer
-            *ppDst = *ppSrc;
-        else if (m_pPool->IsItemPoolable( **ppSrc ))
-        {
-            // Just copy the pointer and increase RefCount
-            *ppDst = *ppSrc;
-            (*ppDst)->AddRef();
-        }
-        else if ( !(*ppSrc)->Which() )
-            *ppDst = (*ppSrc)->Clone();
-        else
-            // !IsPoolable() => assign via Pool
-            *ppDst = &m_pPool->Put( **ppSrc );
+    SfxPoolItem const** ppDst(m_ppItems);
+
+    for (const auto& rSource : rASet)
+    {
+        implCreateItemEntry(*ppDst, rSource);
+        ppDst++;
+    }
 
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
@@ -170,32 +222,24 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
 
 SfxItemSet::~SfxItemSet()
 {
-    if (!m_pWhichRanges.empty()) // might be nullptr if we have been moved-from
+    // might be nullptr if we have been moved-from, also only needed
+    // when we have ::SET items
+    if (!m_pWhichRanges.empty() && Count())
     {
-        if( Count() )
+        for (auto& rCandidate : *this)
         {
-            SfxPoolItem const** ppFnd = m_ppItems;
-            for( sal_uInt16 nCnt = TotalCount(); nCnt; --nCnt, ++ppFnd )
-                if( *ppFnd && !IsInvalidItem(*ppFnd) )
-                {
-                    if( !(*ppFnd)->Which() )
-                        delete *ppFnd;
-                    else {
-                        // Still multiple references present, so just alter the RefCount
-                        if ( 1 < (*ppFnd)->GetRefCount() && !IsDefaultItem(*ppFnd) )
-                            (*ppFnd)->ReleaseRef();
-                        else
-                            if ( !IsDefaultItem(*ppFnd) )
-                                // Delete from Pool
-                                m_pPool->Remove( **ppFnd );
-                    }
-                }
+            implCleanupItemEntry(rCandidate);
         }
     }
 
     if (!m_bItemsFixed)
+    {
+        // free SfxPoolItem array
         delete[] m_ppItems;
-    m_pWhichRanges.reset(); // for invariant-testing
+    }
+
+    // for invariant-testing
+    m_pWhichRanges.reset();
 }
 
 /**
@@ -316,7 +360,7 @@ void SfxItemSet::ClearInvalidItems()
 void SfxItemSet::InvalidateAllItems()
 {
     assert( !m_nCount && "There are still Items set" );
-    memset(static_cast<void*>(m_ppItems), -1, TotalCount() * sizeof(SfxPoolItem*));
+    std::fill(m_ppItems, m_ppItems + TotalCount(), INVALID_POOL_ITEM);
 }
 
 SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,

@@ -25,6 +25,7 @@
 #include <osl/diagnose.h>
 #include <svl/itempool.hxx>
 #include <svl/setitem.hxx>
+#include <svl/voiditem.hxx>
 #include <svl/undo.hxx>
 #include <itemdel.hxx>
 #include <svtools/asynclink.hxx>

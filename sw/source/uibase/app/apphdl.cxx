@@ -30,6 +30,7 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/ctloptions.hxx>

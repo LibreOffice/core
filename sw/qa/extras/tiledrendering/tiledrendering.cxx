@@ -38,6 +38,7 @@
 #include <svl/srchitem.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>

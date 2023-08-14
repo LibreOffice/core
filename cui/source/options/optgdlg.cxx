@@ -48,6 +48,7 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 #include <svl/intitem.hxx>
+#include <svl/voiditem.hxx>
 #include <GraphicsTestsDialog.hxx>
 #include <unotools/searchopt.hxx>
 #include <sal/log.hxx>

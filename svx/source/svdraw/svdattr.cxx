@@ -46,6 +46,7 @@
 #include <vcl/settings.hxx>
 
 #include <svl/grabbagitem.hxx>
+#include <svl/voiditem.hxx>
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>

@@ -54,6 +54,7 @@
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <svl/stritem.hxx>
+#include <svl/voiditem.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>

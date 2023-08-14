@@ -29,6 +29,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/voiditem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
 

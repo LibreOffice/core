@@ -23,6 +23,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/visitem.hxx>
+#include <svl/voiditem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>

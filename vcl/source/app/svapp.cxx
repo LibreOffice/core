@@ -74,6 +74,10 @@
 #include <comphelper/solarmutex.hxx>
 #include <osl/process.h>
 
+#ifdef DBG_UTIL
+#include <svl/poolitem.hxx>
+#endif
+
 #include <cassert>
 #include <limits>
 #include <string_view>
@@ -174,6 +178,21 @@ Application::~Application()
 {
     ImplDeInitSVData();
     ImplGetSVData()->mpApp = nullptr;
+#ifdef DBG_UTIL
+    // Due to
+    //   svx/source/dialog/framelinkarray.cxx
+    //   class Cell final : public SfxPoolItem
+    //   const Cell OBJ_CELL_NONE;
+    // being a static held SfxPoolItem which is not yet de-initialized here
+    // number often is (1), even higher with other modules loaded (like 5).
+    // These get de-allocated reliaby in module-deinitializations, so this
+    // is no memory loss. These counters are more to be able to have an eye
+    // on amounts of SfxPoolItems used during office usage and to be able to
+    // detect if an error in future changes may lead to memory losses - these
+    // would show in dramaitically higher numbers then imediately
+    SAL_WARN("vcl", "ITEM: " << getAllocatedSfxPoolItemCount() << " SfxPoolItems still allocated at shutdown");
+    SAL_WARN("vcl", "ITEM: " << getUsedSfxPoolItemCount() << " SfxPoolItems were incarnated during office usage");
+#endif
 }
 
 int Application::Main()

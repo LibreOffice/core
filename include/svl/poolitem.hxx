@@ -106,7 +106,10 @@ enum class SfxItemState {
     SET      = 0x0040
 };
 
-#define INVALID_POOL_ITEM reinterpret_cast<SfxPoolItem*>(-1)
+#ifdef DBG_UTIL
+SVL_DLLPUBLIC size_t getAllocatedSfxPoolItemCount();
+SVL_DLLPUBLIC size_t getUsedSfxPoolItemCount();
+#endif
 
 class SfxItemPool;
 class SfxItemSet;
@@ -118,7 +121,6 @@ friend class SfxItemPool;
 friend class SfxItemDisruptor_Impl;
 friend class SfxItemPoolCache;
 friend class SfxItemSet;
-friend class SfxVoidItem;
 
     mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
@@ -286,39 +288,12 @@ inline bool IsPooledItem( const SfxPoolItem *pItem )
     return pItem && pItem->GetRefCount() > 0 && pItem->GetRefCount() <= SFX_ITEMS_MAXREF;
 }
 
+SVL_DLLPUBLIC extern SfxPoolItem const * const INVALID_POOL_ITEM;
+
 inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
     return pItem == INVALID_POOL_ITEM;
 }
-
-class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
-{
-public:
-                            static SfxPoolItem* CreateDefault();
-                            explicit SfxVoidItem( sal_uInt16 nWhich );
-                            virtual ~SfxVoidItem() override;
-
-    SfxVoidItem(SfxVoidItem const &) = default;
-    SfxVoidItem(SfxVoidItem &&) = default;
-    SfxVoidItem & operator =(SfxVoidItem const &) = delete; // due to SfxPoolItem
-    SfxVoidItem & operator =(SfxVoidItem &&) = delete; // due to SfxPoolItem
-
-    virtual bool            operator==( const SfxPoolItem& ) const override;
-
-    virtual bool GetPresentation( SfxItemPresentation ePres,
-                                    MapUnit eCoreMetric,
-                                    MapUnit ePresMetric,
-                                    OUString &rText,
-                                    const IntlWrapper& ) const override;
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;
-
-    // create a copy of itself
-    virtual SfxVoidItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-
-    /** Always returns true as this is an SfxVoidItem. */
-    virtual bool            IsVoidItem() const override;
-};
-
 
 class SVL_DLLPUBLIC SfxPoolItemHint final : public SfxHint
 {

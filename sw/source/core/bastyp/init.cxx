@@ -63,6 +63,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/rsiditem.hxx>
 #include <svl/grabbagitem.hxx>
+#include <svl/voiditem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
