@@ -5,6 +5,8 @@
     <style:font-face style:name="Liberation Sans1" svg:font-family="'Liberation Sans'" style:font-adornments="Regular" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Sans2" svg:font-family="'Liberation Sans'" style:font-adornments="Bold" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Sans Narrow" svg:font-family="'Liberation Sans Narrow'" style:font-adornments="Regular" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans CJK" svg:font-family="'Noto Sans CJK JP:palt','Noto Sans CJK KR','Noto Sans CJK SC','Noto Sans CJK TC','Noto Sans CJK HK'" style:font-family-generic="swiss" style:font-pitch="variable" />
+    <style:font-face style:name="Noto Sans" svg:font-family="Noto Sans" style:font-family-generic="swiss" style:font-pitch="variable" />
   </office:font-face-decls>
   <office:styles>
     <draw:gradient draw:name="Filled" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
@@ -20,7 +22,7 @@
       <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Sans" fo:font-size="24pt" style:font-size-asian="24pt" style:font-name-asian="Noto Sans CJK" style:font-size-complex="24pt" style:font-name-complex="Noto Sans" />
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0.03cm" svg:stroke-color="#999999" draw:marker-start-width="0.2cm" draw:marker-start-center="false" draw:marker-end-width="0.2cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#dddddd" draw:textarea-horizontal-align="justify" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" fo:wrap-option="wrap" draw:shadow="hidden" draw:shadow-offset-x="0.07cm" draw:shadow-offset-y="0.07cm" draw:shadow-color="#eeeeee">

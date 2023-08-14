@@ -4,6 +4,8 @@
     <style:font-face style:name="Source Sans Pro" svg:font-family="'Source Sans Pro'" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Black" svg:font-family="'Source Sans Pro Black'" style:font-family-generic="swiss" style:font-pitch="variable"/>
     <style:font-face style:name="Source Sans Pro Semibold" svg:font-family="'Source Sans Pro Semibold'" style:font-adornments="Semibold" style:font-family-generic="swiss" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Sans CJK" svg:font-family="'Noto Sans CJK JP:palt','Noto Sans CJK KR','Noto Sans CJK SC','Noto Sans CJK TC','Noto Sans CJK HK'" style:font-family-generic="swiss" style:font-pitch="variable" />
+    <style:font-face style:name="Noto Sans" svg:font-family="Noto Sans" style:font-family-generic="swiss" style:font-pitch="variable" />
   </office:font-face-decls>
   <office:styles>
     <draw:gradient draw:name="Filled" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
@@ -22,7 +24,7 @@
       <style:paragraph-properties style:text-autospace="none" style:punctuation-wrap="simple" style:line-break="strict" style:writing-mode="lr-tb" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Source Sans Pro" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Source Sans Pro" fo:font-size="24pt" style:font-size-asian="24pt" style:font-name-asian="Noto Sans CJK" style:font-size-complex="24pt" style:font-name-complex="Noto Sans" />
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_1" svg:stroke-width="0.03cm" svg:stroke-color="#1abc9c" draw:marker-start-width="0.25cm" draw:marker-start-center="false" draw:marker-end-width="0.25cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#ffffff" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.2cm" draw:shadow-offset-y="0.2cm" draw:shadow-color="#808080" draw:start-line-spacing-horizontal="0.25cm" draw:start-line-spacing-vertical="0.25cm" draw:end-line-spacing-horizontal="0.25cm" draw:end-line-spacing-vertical="0.25cm">
@@ -777,7 +779,7 @@
       <style:graphic-properties draw:opacity="100%" fo:min-height="10.25cm" fo:min-width="27.5cm" draw:shadow-opacity="100%"/>
     </style:style>
     <style:style style:name="Mgr8" style:family="graphic" style:parent-style-name="standard">
-      <style:graphic-properties svg:stroke-width="0.2cm" draw:marker-start-width="0.51cm" draw:marker-end-width="0.51cm" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="4.831cm" fo:min-width="13.331cm" fo:padding-top="0.21cm" fo:padding-bottom="0.21cm" fo:padding-left="0.335cm" fo:padding-right="0.335cm" fo:wrap-option="no-wrap"/>
+      <style:graphic-properties svg:stroke-width="0.2cm" svg:stroke-color="#ffffff" draw:marker-start-width="0.51cm" draw:marker-end-width="0.51cm" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="4.831cm" fo:min-width="13.331cm" fo:padding-top="0.21cm" fo:padding-bottom="0.21cm" fo:padding-left="0.335cm" fo:padding-right="0.335cm" fo:wrap-option="no-wrap"/>
     </style:style>
     <style:style style:name="Mgr9" style:family="graphic" style:parent-style-name="Accent_20_2">
       <style:graphic-properties draw:opacity="100%" fo:min-height="0.634cm" fo:min-width="0.384cm" draw:shadow-opacity="100%"/>

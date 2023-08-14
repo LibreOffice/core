@@ -3,6 +3,8 @@
   <office:font-face-decls>
     <style:font-face style:name="Liberation Sans" svg:font-family="'Liberation Sans'" style:font-family-generic="roman" style:font-pitch="variable"/>
     <style:font-face style:name="Liberation Serif" svg:font-family="'Liberation Serif'" style:font-family-generic="roman" style:font-pitch="variable"/>
+    <style:font-face style:name="Noto Serif CJK" svg:font-family="'Noto Serif CJK JP:palt','Noto Serif CJK KR','Noto Serif CJK SC','Noto Serif CJK TC','Noto Serif CJK HK'" style:font-family-generic="roman" style:font-pitch="variable" />
+    <style:font-face style:name="Noto Serif" svg:font-family="Noto Serif" style:font-family-generic="roman" style:font-pitch="variable" />
   </office:font-face-decls>
   <office:styles>
     <draw:gradient draw:name="Ausgefüllt" draw:style="linear" draw:start-color="#ffffff" draw:end-color="#cccccc" draw:start-intensity="100%" draw:end-intensity="100%" draw:angle="300" draw:border="0%"/>
@@ -18,7 +20,7 @@
       <style:paragraph-properties style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict" style:font-independent-line-spacing="false">
         <style:tab-stops/>
       </style:paragraph-properties>
-      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="24pt" style:font-size-asian="24pt" style:font-size-complex="24pt"/>
+      <style:text-properties style:use-window-font-color="true" loext:opacity="0%" style:font-name="Liberation Serif" fo:font-size="24pt" style:font-size-asian="24pt" style:font-name-asian="Noto Serif CJK" style:font-size-complex="24pt" style:font-name-complex="Noto Serif" />
     </style:default-style>
     <style:style style:name="standard" style:family="graphic">
       <style:graphic-properties draw:stroke="solid" draw:stroke-dash="Dashed_20__28_var_29__20_2" svg:stroke-width="0.05cm" svg:stroke-color="#2a6099" draw:marker-start-width="0.28cm" draw:marker-start-center="false" draw:marker-end-width="0.28cm" draw:marker-end-center="false" draw:fill="solid" draw:fill-color="#dee6ef" draw:textarea-horizontal-align="justify" draw:auto-grow-height="false" fo:padding-top="0.125cm" fo:padding-bottom="0.125cm" fo:padding-left="0.25cm" fo:padding-right="0.25cm" draw:shadow="hidden" draw:shadow-offset-x="0.05cm" draw:shadow-offset-y="0.05cm" draw:shadow-color="#ff5429">
