@@ -1361,8 +1361,11 @@ public:
         LanguageType eLanguage = rLang.GetLanguage();
         if (eLanguage == LANGUAGE_NONE)
         {
-            lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_DEFAULT_LANGUAGE),
-                        sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
+            auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_DOCUMENT_DEFAULT_LANGUAGE),
+                                      sfx::AccessibilityIssueID::DOCUMENT_LANGUAGE);
+            pIssue->setIssueObject(IssueObject::LANGUAGE_NOT_SET);
+            pIssue->setObjectID(OUString());
+            pIssue->setDoc(*pDoc);
         }
         else
         {
