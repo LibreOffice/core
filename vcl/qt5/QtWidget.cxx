@@ -516,6 +516,52 @@ void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int
     rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
 }
 
+bool QtWidget::handleGestureEvent(QtFrame& rFrame, QGestureEvent* pGestureEvent)
+{
+    if (QGesture* pGesture = pGestureEvent->gesture(Qt::PinchGesture))
+    {
+        if (!pGesture->hasHotSpot())
+        {
+            pGestureEvent->ignore();
+            return false;
+        }
+
+        GestureEventZoomType eType = GestureEventZoomType::Begin;
+        switch (pGesture->state())
+        {
+            case Qt::GestureStarted:
+                eType = GestureEventZoomType::Begin;
+                break;
+            case Qt::GestureUpdated:
+                eType = GestureEventZoomType::Update;
+                break;
+            case Qt::GestureFinished:
+                eType = GestureEventZoomType::End;
+                break;
+            case Qt::NoGesture:
+            case Qt::GestureCanceled:
+            default:
+                SAL_WARN("vcl.qt", "Unhandled pinch gesture state: " << pGesture->state());
+                pGestureEvent->ignore();
+                return false;
+        }
+
+        QPinchGesture* pPinchGesture = static_cast<QPinchGesture*>(pGesture);
+        const QPointF aHotspot = pGesture->hotSpot();
+        SalGestureZoomEvent aEvent;
+        aEvent.meEventType = eType;
+        aEvent.mnX = aHotspot.x();
+        aEvent.mnY = aHotspot.y();
+        aEvent.mfScaleDelta = 1 + pPinchGesture->totalScaleFactor();
+        rFrame.CallCallback(SalEvent::GestureZoom, &aEvent);
+        pGestureEvent->accept();
+        return true;
+    }
+
+    pGestureEvent->ignore();
+    return false;
+}
+
 bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
 {
     const bool bIsKeyPressed
@@ -632,7 +678,12 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
 
 bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
 {
-    if (pEvent->type() == QEvent::ShortcutOverride)
+    if (pEvent->type() == QEvent::Gesture)
+    {
+        QGestureEvent* pGestureEvent = static_cast<QGestureEvent*>(pEvent);
+        return handleGestureEvent(rFrame, pGestureEvent);
+    }
+    else if (pEvent->type() == QEvent::ShortcutOverride)
     {
         // ignore non-spontaneous QEvent::ShortcutOverride events,
         // since such an extra event is sent e.g. with Orca screen reader enabled,
@@ -725,6 +776,8 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
         setFocusPolicy(Qt::StrongFocus);
     else
         setFocusPolicy(Qt::ClickFocus);
+
+    grabGesture(Qt::PinchGesture);
 }
 
 static ExtTextInputAttr lcl_MapUnderlineStyle(QTextCharFormat::UnderlineStyle us)

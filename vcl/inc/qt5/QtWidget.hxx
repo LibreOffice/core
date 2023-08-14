@@ -20,6 +20,7 @@
 #pragma once
 
 #include <QtCore/QRect>
+#include <QtWidgets/QGestureEvent>
 #include <QtWidgets/QWidget>
 #include <rtl/ustring.hxx>
 
@@ -45,6 +46,7 @@ class QtWidget : public QWidget
     static void commitText(QtFrame&, const QString& aText);
     static void deleteReplacementText(QtFrame& rFrame, int nReplacementStart,
                                       int nReplacementLength);
+    static bool handleGestureEvent(QtFrame& rFrame, QGestureEvent* pGestureEvent);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
     static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
     static void fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
