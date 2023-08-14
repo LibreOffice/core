@@ -40,7 +40,7 @@ class ScXMLTableContext : public ScXMLImportContext
 {
     OUString   sPrintRanges;
     ::std::unique_ptr<ScXMLExternalTabData> pExternalRefInfo;
-    sal_Int32       nStartOffset;
+    sal_Int64       nStartOffset;
     bool            bStartFormPage;
     bool            bPrintEntireSheet;
 

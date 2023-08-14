@@ -296,7 +296,7 @@ public:
     void LockSolarMutex();
     void UnlockSolarMutex();
 
-    sal_Int32 GetByteOffset() const;
+    sal_Int64 GetByteOffset() const;
 
     void SetRangeOverflowType(ErrCode nType);
 

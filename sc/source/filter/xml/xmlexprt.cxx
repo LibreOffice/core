@@ -1742,17 +1742,17 @@ void ScXMLExport::SetBodyAttributes()
 
 static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xInput,
                             const uno::Reference< io::XOutputStream >& xOutput,
-                            sal_Int32 nCount )
+                            sal_Int64 nCount )
 {
     const sal_Int32 nBufSize = 16*1024;
     uno::Sequence<sal_Int8> aSequence(nBufSize);
 
-    sal_Int32 nRemaining = nCount;
+    sal_Int64 nRemaining = nCount;
     bool bFirst = true;
 
     while ( nRemaining > 0 )
     {
-        sal_Int32 nRead = xInput->readBytes( aSequence, std::min( nRemaining, nBufSize ) );
+        sal_Int32 nRead = xInput->readBytes( aSequence, std::min( nRemaining, static_cast<sal_Int64>(nBufSize) ) );
         if (bFirst)
         {
             // safety check: Make sure the copied part actually points to the start of an element
@@ -1789,17 +1789,17 @@ static bool lcl_CopyStreamElement( const uno::Reference< io::XInputStream >& xIn
     return true;    // successful
 }
 
-static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xInput, sal_Int32 nBytesToSkip )
+static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xInput, sal_Int64 nBytesToSkip )
 {
     // skipBytes in zip stream is implemented as reading.
     // For now, split into several calls to avoid allocating a large buffer.
     // Later, skipBytes should be changed.
 
-    const sal_Int32 nMaxSize = 32*1024;
+    const sal_Int64 nMaxSize = 32*1024;
 
     if ( nBytesToSkip > 0 )
     {
-        sal_Int32 nRemaining = nBytesToSkip;
+        sal_Int64 nRemaining = nBytesToSkip;
         while ( nRemaining > 0 )
         {
             sal_Int32 nSkip = std::min( nRemaining, nMaxSize );
@@ -1809,7 +1809,7 @@ static void lcl_SkipBytesInBlocks( const uno::Reference< io::XInputStream >& xIn
     }
 }
 
-void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd )
+void ScXMLExport::CopySourceStream( sal_Int64 nStartOffset, sal_Int64 nEndOffset, sal_Int64& rNewStart, sal_Int64& rNewEnd )
 {
     uno::Reference<xml::sax::XDocumentHandler> xHandler = GetDocHandler();
     uno::Reference<io::XActiveDataSource> xDestSource( xHandler, uno::UNO_QUERY );
@@ -1831,7 +1831,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
         xDestStream->writeBytes( aOutSeq );
     }
 
-    rNewStart = static_cast<sal_Int32>(xDestSeek->getPosition());
+    rNewStart = xDestSeek->getPosition();
 
     if ( nStartOffset > nSourceStreamPos )
         lcl_SkipBytesInBlocks( xSourceStream, nStartOffset - nSourceStreamPos );
@@ -1846,7 +1846,7 @@ void ScXMLExport::CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset
     }
     nSourceStreamPos = nEndOffset;
 
-    rNewEnd = static_cast<sal_Int32>(xDestSeek->getPosition());
+    rNewEnd = xDestSeek->getPosition();
 }
 
 const ScXMLEditAttributeMap& ScXMLExport::GetEditAttributeMap() const
@@ -1921,15 +1921,15 @@ void ScXMLExport::ExportContent_()
         WriteTheLabelRanges( xSpreadDoc );
         for (sal_Int32 nTable = 0; nTable < nTableCount; ++nTable)
         {
-            sal_Int32 nStartOffset = -1;
-            sal_Int32 nEndOffset = -1;
+            sal_Int64 nStartOffset = -1;
+            sal_Int64 nEndOffset = -1;
             if (pSheetData && pDoc && pDoc->IsStreamValid(static_cast<SCTAB>(nTable)) && !pDoc->GetChangeTrack())
                 pSheetData->GetStreamPos( nTable, nStartOffset, nEndOffset );
 
             if ( nStartOffset >= 0 && nEndOffset >= 0 && xSourceStream.is() )
             {
-                sal_Int32 nNewStart = -1;
-                sal_Int32 nNewEnd = -1;
+                sal_Int64 nNewStart = -1;
+                sal_Int64 nNewEnd = -1;
                 CopySourceStream( nStartOffset, nEndOffset, nNewStart, nNewEnd );
 
                 // store position of copied sheet in output

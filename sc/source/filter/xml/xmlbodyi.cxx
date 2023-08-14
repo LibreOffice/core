@@ -125,7 +125,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     if ( pSheetData && pSheetData->HasStartPos() )
     {
         // stream part to copy ends before the next child element
-        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        sal_Int64 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
 
@@ -199,7 +199,7 @@ void SAL_CALL ScXMLBodyContext::characters(const OUString &)
     if ( pSheetData && pSheetData->HasStartPos() )
     {
         // stream part to copy ends before any content (whitespace) within the spreadsheet element
-        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        sal_Int64 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
     // otherwise ignore
@@ -211,7 +211,7 @@ void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 nElement)
     if ( pSheetData && pSheetData->HasStartPos() )
     {
         // stream part to copy ends before the closing tag of spreadsheet element
-        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+        sal_Int64 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
 

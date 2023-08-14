@@ -105,7 +105,7 @@ bool ScSheetSaveData::IsSheetBlocked( SCTAB nTab ) const
         return false;
 }
 
-void ScSheetSaveData::AddStreamPos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
+void ScSheetSaveData::AddStreamPos( SCTAB nTab, sal_Int64 nStartOffset, sal_Int64 nEndOffset )
 {
     if ( nTab >= static_cast<SCTAB>(maStreamEntries.size()) )
         maStreamEntries.resize( nTab + 1 );
@@ -113,7 +113,7 @@ void ScSheetSaveData::AddStreamPos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int3
     maStreamEntries[nTab] = ScStreamEntry( nStartOffset, nEndOffset );
 }
 
-void ScSheetSaveData::StartStreamPos( SCTAB nTab, sal_Int32 nStartOffset )
+void ScSheetSaveData::StartStreamPos( SCTAB nTab, sal_Int64 nStartOffset )
 {
     OSL_ENSURE( mnStartTab < 0, "StartStreamPos without EndStreamPos" );
 
@@ -121,7 +121,7 @@ void ScSheetSaveData::StartStreamPos( SCTAB nTab, sal_Int32 nStartOffset )
     mnStartOffset = nStartOffset;
 }
 
-void ScSheetSaveData::EndStreamPos( sal_Int32 nEndOffset )
+void ScSheetSaveData::EndStreamPos( sal_Int64 nEndOffset )
 {
     if ( mnStartTab >= 0 )
     {
@@ -131,7 +131,7 @@ void ScSheetSaveData::EndStreamPos( sal_Int32 nEndOffset )
     }
 }
 
-void ScSheetSaveData::GetStreamPos( SCTAB nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const
+void ScSheetSaveData::GetStreamPos( SCTAB nTab, sal_Int64& rStartOffset, sal_Int64& rEndOffset ) const
 {
     if ( nTab < static_cast<SCTAB>(maStreamEntries.size()) )
     {
@@ -145,8 +145,8 @@ void ScSheetSaveData::GetStreamPos( SCTAB nTab, sal_Int32& rStartOffset, sal_Int
 
 bool ScSheetSaveData::HasStreamPos( SCTAB nTab ) const
 {
-    sal_Int32 nStartOffset = -1;
-    sal_Int32 nEndOffset = -1;
+    sal_Int64 nStartOffset = -1;
+    sal_Int64 nEndOffset = -1;
     GetStreamPos( nTab, nStartOffset, nEndOffset );
     return ( nStartOffset >= 0 && nEndOffset >= 0 );
 }
@@ -156,7 +156,7 @@ void ScSheetSaveData::ResetSaveEntries()
     maSaveEntries.clear();
 }
 
-void ScSheetSaveData::AddSavePos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset )
+void ScSheetSaveData::AddSavePos( SCTAB nTab, sal_Int64 nStartOffset, sal_Int64 nEndOffset )
 {
     if ( nTab >= static_cast<SCTAB>(maSaveEntries.size()) )
         maSaveEntries.resize( nTab + 1 );

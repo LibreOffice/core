@@ -32,8 +32,8 @@ enum class XmlStyleFamily;
 
 struct ScStreamEntry
 {
-    sal_Int32   mnStartOffset;
-    sal_Int32   mnEndOffset;
+    sal_Int64   mnStartOffset;
+    sal_Int64   mnEndOffset;
 
                 ScStreamEntry() :
                     mnStartOffset(-1),
@@ -41,7 +41,7 @@ struct ScStreamEntry
                 {
                 }
 
-                ScStreamEntry( sal_Int32 nStart, sal_Int32 nEnd ) :
+                ScStreamEntry( sal_Int64 nStart, sal_Int64 nEnd ) :
                     mnStartOffset(nStart),
                     mnEndOffset(nEnd)
                 {
@@ -119,7 +119,7 @@ class ScSheetSaveData
     std::vector<ScStreamEntry> maStreamEntries;
     std::vector<ScStreamEntry> maSaveEntries;
     SCTAB   mnStartTab;
-    sal_Int32   mnStartOffset;
+    sal_Int64   mnStartOffset;
 
     ScNoteStyleEntry    maPreviousNote;
 
@@ -142,17 +142,17 @@ public:
     void        BlockSheet( SCTAB nTab );
     bool        IsSheetBlocked( SCTAB nTab ) const;
 
-    void        AddStreamPos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
-    void        GetStreamPos( SCTAB nTab, sal_Int32& rStartOffset, sal_Int32& rEndOffset ) const;
+    void        AddStreamPos( SCTAB nTab, sal_Int64 nStartOffset, sal_Int64 nEndOffset );
+    void        GetStreamPos( SCTAB nTab, sal_Int64& rStartOffset, sal_Int64& rEndOffset ) const;
     bool        HasStreamPos( SCTAB nTab ) const;
 
-    void        StartStreamPos( SCTAB nTab, sal_Int32 nStartOffset );
-    void        EndStreamPos( sal_Int32 nEndOffset );
+    void        StartStreamPos( SCTAB nTab, sal_Int64 nStartOffset );
+    void        EndStreamPos( sal_Int64 nEndOffset );
 
     bool        HasStartPos() const { return mnStartTab >= 0; }
 
     void        ResetSaveEntries();
-    void        AddSavePos( SCTAB nTab, sal_Int32 nStartOffset, sal_Int32 nEndOffset );
+    void        AddSavePos( SCTAB nTab, sal_Int64 nStartOffset, sal_Int64 nEndOffset );
     void        UseSaveEntries();
 
     void        StoreInitialNamespaces( const SvXMLNamespaceMap& rNamespaces );

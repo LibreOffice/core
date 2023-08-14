@@ -76,7 +76,7 @@ class ScXMLExport : public SvXMLExport
     css::uno::Reference <css::sheet::XSpreadsheet> xCurrentTable;
 
     css::uno::Reference<css::io::XInputStream> xSourceStream;
-    sal_Int32                   nSourceStreamPos;
+    sal_Int64                   nSourceStreamPos;
 
     mutable std::unique_ptr<ScXMLEditAttributeMap> mpEditAttrMap;
     std::unique_ptr<ScMyNotEmptyCellsIterator> mpCellsItr;
@@ -218,7 +218,7 @@ class ScXMLExport : public SvXMLExport
 
     void IncrementProgressBar(bool bFlush, sal_Int32 nInc = 1);
 
-    void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
+    void CopySourceStream( sal_Int64 nStartOffset, sal_Int64 nEndOffset, sal_Int64& rNewStart, sal_Int64& rNewEnd );
 
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;
 
