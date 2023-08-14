@@ -301,7 +301,7 @@ namespace svgio::svgreader
                         const SvgNumber aNumber(rSvgStyleAttributes.getBaselineShiftNumber());
                         const double mfBaselineShift(aNumber.solve(*this));
 
-                        aPosition.setY(aPosition.getY() + mfBaselineShift);
+                        aPosition.setY(aPosition.getY() - mfBaselineShift);
                         break;
                     }
                     default: // BaselineShift::Baseline
