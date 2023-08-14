@@ -234,6 +234,15 @@ OUString TypeGroupConverter::getSingleSeriesTitle() const
     return aSeriesTitle;
 }
 
+bool TypeGroupConverter::isSingleSeriesTitle() const
+{
+    if (!mrModel.maSeries.empty() && (maTypeInfo.mbSingleSeriesVis || (mrModel.maSeries.size() == 1)) &&
+        mrModel.maSeries.front()->mxText.is())
+        return true;
+
+    return false;
+}
+
 Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 {
     // create the coordinate system object
