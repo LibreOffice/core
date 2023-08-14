@@ -1423,7 +1423,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 PopFormatLayout();
             }
         }
-        else if (m_pImp->GetShell()->IsPaintLocked() || !pLay->IsColBodyFrame())
+        else if (!pLay->IsColBodyFrame())
         {   // tdf#156724 unconditionally for frames in tables, so their footnotes exist before trying to split
             pLow->OptCalc();
         }
