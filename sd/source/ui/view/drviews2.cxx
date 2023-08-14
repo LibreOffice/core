@@ -3589,7 +3589,8 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SdrPage* pMasterPage = &GetActualPage()->TRG_GetMasterPage();
             auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
             auto pDialog = std::make_shared<svx::ThemeDialog>(GetFrameWeld(), pTheme.get());
-            weld::DialogController::runAsync(pDialog, [pDialog, pMasterPage](sal_uInt32 nResult)
+            auto* pDocShell = GetDocSh();
+            weld::DialogController::runAsync(pDialog, [pDialog, pMasterPage, pDocShell](sal_uInt32 nResult)
             {
                 if (RET_OK != nResult)
                     return;
@@ -3597,7 +3598,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 auto pColorSet = pDialog->getCurrentColorSet();
                 if (pColorSet)
                 {
-                    sd::ThemeColorChanger aChanger(pMasterPage);
+                    sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
                     aChanger.apply(pColorSet);
 
                     if (comphelper::LibreOfficeKit::isActive())

@@ -12,13 +12,19 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svditer.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <DrawDocShell.hxx>
+#include <stlsheet.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xdef.hxx>
 
 using namespace css;
 
 namespace sd
 {
-ThemeColorChanger::ThemeColorChanger(SdrPage* pMasterPage)
+ThemeColorChanger::ThemeColorChanger(SdrPage* pMasterPage, sd::DrawDocShell* pDocShell)
     : mpMasterPage(pMasterPage)
+    , mpDocShell(pDocShell)
 {
 }
 
@@ -37,10 +43,48 @@ void changeTheTheme(SdrPage* pMasterPage, std::shared_ptr<model::ColorSet> const
     pTheme->setColorSet(pColorSet);
 }
 
+bool changeStyles(sd::DrawDocShell* pDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+{
+    SfxStyleSheetBasePool* pPool = pDocShell->GetStyleSheetPool();
+
+    SdStyleSheet* pStyle = static_cast<SdStyleSheet*>(pPool->First(SfxStyleFamily::Para));
+    while (pStyle)
+    {
+        auto& rItemSet = pStyle->GetItemSet();
+        if (const XFillColorItem* pItem = rItemSet.GetItemIfSet(XATTR_FILLCOLOR, false))
+        {
+            model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+            if (rComplexColor.isValidThemeType())
+            {
+                Color aNewColor = pColorSet->resolveColor(rComplexColor);
+                std::unique_ptr<XFillColorItem> pNewItem(pItem->Clone());
+                pNewItem->SetColorValue(aNewColor);
+                rItemSet.Put(*pNewItem);
+            }
+        }
+        if (const XLineColorItem* pItem = rItemSet.GetItemIfSet(XATTR_LINECOLOR, false))
+        {
+            model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+            if (rComplexColor.isValidThemeType())
+            {
+                Color aNewColor = pColorSet->resolveColor(rComplexColor);
+                std::unique_ptr<XLineColorItem> pNewItem(pItem->Clone());
+                pNewItem->SetColorValue(aNewColor);
+                rItemSet.Put(*pNewItem);
+            }
+        }
+        pStyle = static_cast<SdStyleSheet*>(pPool->Next());
+    }
+
+    return true;
+}
+
 } // end anonymous ns
 
 void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
+    changeStyles(mpDocShell, pColorSet);
+
     SdrModel& rModel = mpMasterPage->getSdrModelFromSdrPage();
     for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
     {

@@ -13,6 +13,8 @@
 #include <svx/theme/IThemeColorChanger.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
 
 namespace sd
 {
@@ -20,9 +22,10 @@ class SD_DLLPUBLIC ThemeColorChanger : public svx::IThemeColorChanger
 {
 private:
     SdrPage* mpMasterPage;
+    sd::DrawDocShell* mpDocShell;
 
 public:
-    ThemeColorChanger(SdrPage* pMasterPage);
+    ThemeColorChanger(SdrPage* pMasterPage, sd::DrawDocShell* pDocShell);
     virtual ~ThemeColorChanger() override;
 
     void apply(std::shared_ptr<model::ColorSet> const& pColorSet) override;
