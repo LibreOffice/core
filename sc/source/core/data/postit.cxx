@@ -980,7 +980,7 @@ ScPostIt* ScNoteUtil::CreateNoteFromGenerator(
     ScCaptionInitData& rInitData = *aNoteData.mxInitData;
     rInitData.mxGenerator = std::move(xGenerator);
     // because the Caption is generated on demand, we will need to create the
-    // simple text now to supply any querys for that which don't require
+    // simple text now to supply any queries for that which don't require
     // creation of a full Caption
     rInitData.maSimpleText = rInitData.mxGenerator->GetSimpleText();
 
