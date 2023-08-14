@@ -70,6 +70,10 @@ void AccessibilityIssue::gotoIssue() const
                 pWrtShell->HideCursor();
                 pWrtShell->EnterSelFrameMode();
             }
+
+            if (!bSelected && m_eIssueObject == IssueObject::TEXTFRAME)
+                pWrtShell->GotoDrawingObject(m_sObjectID);
+
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
