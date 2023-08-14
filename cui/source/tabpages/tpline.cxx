@@ -456,8 +456,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
     // Line color
     if (m_xLbColor->IsValueChangedFromSaved())
     {
-        NamedColor aColor = m_xLbColor->GetSelectedEntry();
-        XLineColorItem aItem(aColor.m_aName, aColor.m_aColor);
+        NamedColor aNamedColor = m_xLbColor->GetSelectedEntry();
+        XLineColorItem aItem(aNamedColor.m_aName, aNamedColor.m_aColor);
+        aItem.setComplexColor(aNamedColor.getComplexColor());
+
         pOld = GetOldItem( *rAttrs, XATTR_LINECOLOR );
         if ( !pOld || !( *static_cast<const XLineColorItem*>(pOld) == aItem ) )
         {
@@ -758,8 +760,10 @@ void SvxLineTabPage::FillXLSet_Impl()
     m_rXLSet.Put( XLineEndWidthItem( GetCoreValue( *m_xMtrEndWidth, m_ePoolUnit ) ) );
 
     m_rXLSet.Put( XLineWidthItem( GetCoreValue( *m_xMtrLineWidth, m_ePoolUnit ) ) );
-    NamedColor aColor = m_xLbColor->GetSelectedEntry();
-    m_rXLSet.Put(XLineColorItem(aColor.m_aName, aColor.m_aColor));
+    NamedColor aNamedColor = m_xLbColor->GetSelectedEntry();
+    XLineColorItem aLineColor(aNamedColor.m_aName, aNamedColor.m_aColor);
+    aLineColor.setComplexColor(aNamedColor.getComplexColor());
+    m_rXLSet.Put(aLineColor);
 
     // Centered line end
     if( m_xTsbCenterStart->get_state() == TRISTATE_TRUE )
