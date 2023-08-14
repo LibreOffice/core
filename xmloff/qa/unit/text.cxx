@@ -9,6 +9,7 @@
 
 #include <test/unoapixml_test.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -1247,6 +1248,31 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParagraphScopedTabDistance)
                 "tab-stop-distance", "10cm");
 
     assertXPath(pXmlDoc, "//text:p[@text:style-name='P1']");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testNestedSpans)
+{
+    // Given a document with a first paragraph that has a nested span, the outer span setting the
+    // boldness:
+    // When importing that document:
+    loadFromURL(u"nested-spans.odt");
+
+    // Then make sure the text portion is bold, not normal:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    float fWeight{};
+    xTextPortion->getPropertyValue("CharWeight") >>= fWeight;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 150 (awt::FontWeight::BOLD)
+    // - Actual  : 100 (awt::FontWeight::NORMAL)
+    // i.e. the boldness was lost on import.
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, fWeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
