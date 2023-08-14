@@ -1888,6 +1888,7 @@ namespace xmloff::token {
         XML_STRIPES,
         XML_STROKE,
         XML_STROKE_COLOR,
+        XML_STROKE_COMPLEX_COLOR,
         XML_STROKE_DASH,
         XML_STROKE_LINECAP,
         XML_STROKE_LINEJOIN,
