@@ -262,12 +262,25 @@ void AccessibilityIssue::quickFixIssue() const
             uno::Reference<frame::XModel> xModel(m_pDoc->GetDocShell()->GetModel(),
                                                  uno::UNO_QUERY_THROW);
 
-            uno::Sequence<beans::PropertyValue> aArgs{
-                comphelper::makePropertyValue("Param", m_sObjectID),
-                comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
-            };
-            comphelper::dispatchCommand(".uno:EditStyleFont",
-                                        xModel->getCurrentController()->getFrame(), aArgs);
+            if (m_sObjectID.isEmpty())
+            {
+                // open the dialog "Tools/Options/Language Settings - Language"
+                uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
+                    "Language", OUString("*")) };
+
+                comphelper::dispatchCommand(".uno:LanguageStatus",
+                                            xModel->getCurrentController()->getFrame(), aArgs);
+            }
+            else
+            {
+                uno::Sequence<beans::PropertyValue> aArgs{
+                    comphelper::makePropertyValue("Param", m_sObjectID),
+                    comphelper::makePropertyValue("Family", sal_Int16(SfxStyleFamily::Para))
+                };
+
+                comphelper::dispatchCommand(".uno:EditStyleFont",
+                                            xModel->getCurrentController()->getFrame(), aArgs);
+            }
         }
         break;
         default:
