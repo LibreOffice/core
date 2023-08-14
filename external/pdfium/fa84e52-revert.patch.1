@@ -1,0 +1,86 @@
+From fa84e52cd9c79a800568184863186ac984592fbd Mon Sep 17 00:00:00 2001
+From: Lei Zhang <thestig@chromium.org>
+Date: Mon, 05 Jun 2023 20:12:02 +0000
+Subject: Revert [PATCH] Remove FT_Done_MM_Var() workaround
+
+FT_Done_MM_Var() has been around since FreeType 2.9 from early 2018. Use
+it directly to simplify code instead of assuming that it may not exist.
+The default build, which uses a bundled FreeType, is up-to-date, so the
+issue of FT_Done_MM_Var() being missing could only happen if someone is
+building the code with an old system FreeType.
+
+Bug: pdfium:1400
+Change-Id: I7642de8884969484ff90a4cf865acc67e07e419b
+Reviewed-on: https://pdfium-review.googlesource.com/c/pdfium/+/107510
+Reviewed-by: Dominik Röttsches <drott@chromium.org>
+Commit-Queue: Lei Zhang <thestig@chromium.org>
+---
+
+diff --git a/core/fxge/freetype/fx_freetype.cpp b/core/fxge/freetype/fx_freetype.cpp
+index a2a44df..8b5f4fc 100644
+--- a/core/fxge/freetype/fx_freetype.cpp
++++ b/core/fxge/freetype/fx_freetype.cpp
+@@ -82,13 +82,40 @@
+ 
+ }  // namespace
+ 
++// TODO(crbug.com/pdfium/1400): When FT_Done_MM_Var() is more likely to be
++// available to all users in the future, remove FreeMMVar() and use
++// FT_Done_MM_Var() directly.
++//
++// Use weak symbols to check if FT_Done_MM_Var() is available at runtime.
++#if !BUILDFLAG(IS_WIN)
++FT_EXPORT( FT_Error ) FT_Done_MM_Var( FT_Library   library, FT_MM_Var   *amaster );
++extern "C" __attribute__((weak)) decltype(FT_Done_MM_Var) FT_Done_MM_Var;
++#endif
++
++void FreeMMVar(FXFT_FaceRec* rec, FT_MM_Var* variation_desc) {
++#if BUILDFLAG(IS_WIN)
++  // Assume `use_system_freetype` GN var is never set on Windows.
++  constexpr bool has_ft_done_mm_var_func = true;
++#else
++  static const bool has_ft_done_mm_var_func = !!FT_Done_MM_Var;
++#endif
++  if (has_ft_done_mm_var_func) {
++    FT_Done_MM_Var(CFX_GEModule::Get()->GetFontMgr()->GetFTLibrary(),
++                   variation_desc);
++  } else {
++    FXFT_Free(rec, variation_desc);
++  }
++}
++
+ void FXFTMMVarDeleter::operator()(FT_MM_Var* variation_desc) {
+-  FT_Done_MM_Var(CFX_GEModule::Get()->GetFontMgr()->GetFTLibrary(),
++  FreeMMVar(m_pFace,
+                  variation_desc);
+ }
++
++FXFTMMVarDeleter::FXFTMMVarDeleter(FXFT_FaceRec* face) : m_pFace(face) {}
+ 
+ ScopedFXFTMMVar::ScopedFXFTMMVar(FXFT_FaceRec* face)
+-    : variation_desc_(GetVariationDescriptor(face)) {}
++    : variation_desc_(GetVariationDescriptor(face), FXFTMMVarDeleter(face)) {}
+ 
+ ScopedFXFTMMVar::~ScopedFXFTMMVar() = default;
+ 
+diff --git a/core/fxge/freetype/fx_freetype.h b/core/fxge/freetype/fx_freetype.h
+index 3da0372..e09ca61 100644
+--- a/core/fxge/freetype/fx_freetype.h
++++ b/core/fxge/freetype/fx_freetype.h
+@@ -34,6 +34,8 @@
+ 
+ struct FXFTMMVarDeleter {
+   void operator()(FT_MM_Var* variation_desc);
++  FXFT_FaceRec *const m_pFace;
++  FXFTMMVarDeleter(FXFT_FaceRec *);
+ };
+ 
+ using ScopedFXFTFaceRec = std::unique_ptr<FXFT_FaceRec, FXFTFaceRecDeleter>;
+@@ -76,6 +76,7 @@
+ #define FXFT_Get_Face_Ascender(face) (face)->ascender
+ #define FXFT_Get_Face_Descender(face) (face)->descender
+ #define FXFT_Get_Glyph_HoriAdvance(face) (face)->glyph->metrics.horiAdvance
++#define FXFT_Free(face, p) (face)->memory->free((face)->memory, p)
+ #define FXFT_Get_Glyph_Outline(face) &((face)->glyph->outline)
+ #define FXFT_Get_Glyph_Bitmap(face) (face)->glyph->bitmap
+ #define FXFT_Get_Bitmap_Width(bitmap) (bitmap).width
