@@ -2828,6 +2828,29 @@ static bool lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
         && rBoxItem.GetBottom());
 }
 
+/**
+ * Special case:
+ * last visible cell of a table row followed with a hidden deleted cell,
+ * and the right border of the visible cell was painted by its left border
+ */
+static bool lcl_IsLastVisibleCellBeforeHiddenCellAtTheEndOfRow(
+        SwFrame const& rFrame, SvxBoxItem const& rBoxItem)
+{
+    SwRowFrame const*const pThisRowFrame =
+        dynamic_cast<const SwRowFrame*>(rFrame.GetUpper());
+    const SwCellFrame* pThisCell = static_cast<const SwCellFrame*>(&rFrame);
+
+    return pThisRowFrame
+        // last visible cell
+        && !rFrame.GetNext()
+        // it has only left border
+        && !rBoxItem.GetRight()
+        && rBoxItem.GetLeft()
+        // last visible table cell isn't equal to the last cell:
+        // there are invisible deleted cells in Hide Changes mode
+        && pThisRowFrame->GetTabLine()->GetTabBoxes().back() != pThisCell->GetTabBox();
+}
+
 void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem, const SwRect& rPaintArea)
 {
     // build 4 line entries for the 4 borders:
@@ -2837,6 +2860,9 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
 
     bool const bBottomAsTop(lcl_IsFirstRowInFollowTableWithoutRepeatedHeadlines(
                 mrTabFrame, rFrame, rBoxItem));
+    bool const bLeftAsRight(lcl_IsLastVisibleCellBeforeHiddenCellAtTheEndOfRow(
+                rFrame, rBoxItem));
+
     bool const bVert = mrTabFrame.IsVertical();
     bool const bR2L  = mrTabFrame.IsRightToLeft();
 
@@ -2898,7 +2924,7 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     }
 
     SwLineEntry aRight (nRight,  nTop,  nBottom, bRightIsOuter,
-            bVert ? (bBottomAsTop ? aB : aT) : (bR2L ? aL : aR));
+            bVert ? (bBottomAsTop ? aB : aT) : ((bR2L || bLeftAsRight) ? aL : aR));
     if (bWordTableCell && rBoxItem.GetRight())
     {
         aRight.LimitVerticalEndPos(rFrame, SwLineEntry::VerticalType::RIGHT);
