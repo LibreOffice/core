@@ -117,8 +117,9 @@ SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
         pRes = &aIt->second;
     else
     {
-        for (auto& [_, rSymbol] : m_aSymbols)
+        for (auto& rPair : m_aSymbols)
         {
+            SmSym& rSymbol = rPair.second;
             if (rSymbol.GetExportName() == rSymbolName)
             {
                 pRes = &rSymbol;
