@@ -746,6 +746,33 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf85770)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "familyname", "Times New Roman");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf93583)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf93583.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "This is the");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "x", "62");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "y", "303");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "width", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", " first");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "x", "127");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "303");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "width", "32");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "32");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", " line");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "x", "187");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "y", "303");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "width", "16");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "height", "16");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf156616)
 {
     Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf156616.svg");
