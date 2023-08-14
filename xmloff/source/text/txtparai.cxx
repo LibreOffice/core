@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -1852,9 +1853,28 @@ void XMLParaContext::endFastElement(sal_Int32 )
     {
         bool bSetNoFormatAttr = false;
         uno::Reference<beans::XPropertySet> xCursorProps(xAttrCursor, uno::UNO_QUERY);
-        if (m_xHints->GetHints().size() > 1 || m_aMarkerStyleName.hasValue())
+        int nEmptyHints = 0;
+        uno::Reference<text::XTextRangeCompare> xCompare(xTxtImport->GetText(), uno::UNO_QUERY);
+        if (xCompare.is())
         {
-            // We have multiple hints, then make try to ask the cursor to not upgrade our character
+            try
+            {
+                for (const auto& pHint : m_xHints->GetHints())
+                {
+                    if (xCompare->compareRegionStarts(pHint->GetStart(), pHint->GetEnd()) == 0)
+                    {
+                        ++nEmptyHints;
+                    }
+                }
+            }
+            catch (const uno::Exception&)
+            {
+                TOOLS_WARN_EXCEPTION("xmloff.text", "");
+            }
+        }
+        if (nEmptyHints > 0 || m_aMarkerStyleName.hasValue())
+        {
+            // We have at least one empty hint, then make try to ask the cursor to not upgrade our character
             // attributes to paragraph-level formatting, which would lead to incorrect rendering.
             uno::Reference<beans::XPropertySetInfo> xCursorPropsInfo = xCursorProps->getPropertySetInfo();
             bSetNoFormatAttr = xCursorPropsInfo->hasPropertyByName("NoFormatAttr");
