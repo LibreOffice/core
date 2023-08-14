@@ -23,9 +23,10 @@ $(eval $(call gb_ExternalProject_use_autoconf,libtiff,build))
 
 # using ac_cv_lib_z_inflateEnd=yes to skip test for our
 # static windows lib where the name is zlib not z
-# using ac_cv_lib_jpeg_jpeg_read_scanlines to skip test
-# for our static windows lib where the name is libjpeg-turbo.lib
-# not libjpeg.lib
+# using ac_cv_lib_jpeg_jpeg_read_scanlines and
+# ac_cv_lib_jpeg_jpeg12_read_scanlines to skip tests
+# for our static jpeg lib where the name is libjpeg-turbo.lib
+# or liblibjpeg-turbo.a not libjpeg.lib/libjpeg.a
 # we're building this statically anyway so the lib isn't
 # used during the link done here
 
@@ -63,6 +64,7 @@ $(call gb_ExternalProject_get_state_target,libtiff,build) :
 			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libtiff) $(gb_EMSCRIPTEN_LDFLAGS)" \
 			ac_cv_lib_z_inflateEnd=yes \
 			ac_cv_lib_jpeg_jpeg_read_scanlines=yes \
+			ac_cv_lib_jpeg_jpeg12_read_scanlines=no \
 			ac_cv_lib_webp_WebPDecode=yes \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& cd libtiff && $(MAKE) libtiff.la \
