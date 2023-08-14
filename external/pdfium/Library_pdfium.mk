@@ -414,14 +414,12 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxcrt/cfx_datetime \
     UnpackedTarball/pdfium/core/fxcrt/bytestring \
     UnpackedTarball/pdfium/core/fxcrt/cfx_bitstream \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_utf8decoder \
     UnpackedTarball/pdfium/core/fxcrt/fx_random \
     UnpackedTarball/pdfium/core/fxcrt/fx_string \
     UnpackedTarball/pdfium/core/fxcrt/widestring \
     UnpackedTarball/pdfium/core/fxcrt/css/cfx_cssdata \
     UnpackedTarball/pdfium/core/fxcrt/fx_codepage \
     UnpackedTarball/pdfium/core/fxcrt/fx_number \
-    UnpackedTarball/pdfium/core/fxcrt/cfx_utf8encoder \
     UnpackedTarball/pdfium/core/fxcrt/observed_ptr \
     UnpackedTarball/pdfium/core/fxcrt/string_data_template \
     UnpackedTarball/pdfium/core/fxcrt/binary_buffer \
@@ -436,7 +434,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapcomposer \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_bitmapstorer \
-    UnpackedTarball/pdfium/core/fxge/dib/cfx_dibextractor \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_dibitmap \
     UnpackedTarball/pdfium/core/fxge/cfx_drawutils \
     UnpackedTarball/pdfium/core/fxge/dib/cfx_imagerenderer \
@@ -569,11 +566,6 @@ endif
 $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/third_party/base/debug/alias \
     UnpackedTarball/pdfium/third_party/base/memory/aligned_memory \
-))
-
-# skia_shared
-$(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
-    UnpackedTarball/pdfium/third_party/skia_shared/SkFloatToDecimal \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfium,\

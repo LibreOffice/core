@@ -1,24 +1,3 @@
---- core/fxcrt/string_data_template.cpp
-+++ core/fxcrt/string_data_template.cpp
-@@ -73,7 +73,7 @@
-                                                 size_t nLen) {
-   DCHECK_GE(nLen, 0);
-   DCHECK_LE(nLen, m_nAllocLength);
--  memcpy(m_String, pStr, nLen * sizeof(CharType));
-+  if (nLen != 0) memcpy(m_String, pStr, nLen * sizeof(CharType));
-   m_String[nLen] = 0;
- }
- 
-@@ -82,7 +82,8 @@ void StringDataTemplate<CharType>::CopyContentsAt(size_t offset,
-   DCHECK_GE(offset, 0);
-   DCHECK_GE(nLen, 0);
-   DCHECK_LE(offset + nLen, m_nAllocLength);
--  memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
-+  if (nLen != 0)
-+    memcpy(m_String + offset, pStr, nLen * sizeof(CharType));
-   m_String[offset + nLen] = 0;
- }
- 
 --- core/fxge/cfx_glyphcache.cpp
 +++ core/fxge/cfx_glyphcache.cpp
 @@ -183,7 +183,8 @@ std::unique_ptr<CFX_GlyphBitmap> CFX_GlyphCache::RenderGlyph(
