@@ -27,6 +27,11 @@
 #include <unotxdoc.hxx>
 #include <ndtxt.hxx>
 #include <editeng/lrspitem.hxx>
+#include <wrtsh.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
+#include <formatflysplit.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -142,6 +147,51 @@ CPPUNIT_TEST_FIXTURE(Test, testDontBreakWrappedTables)
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bDontBreakWrappedTables);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCExport)
+{
+    // Given a document with a floating table, overlap is not allowed:
+    {
+        createSwDoc();
+        SwDoc* pDoc = getSwDoc();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->Insert2("before table");
+        // Insert a table:
+        SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+        pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+        pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+        // Select table:
+        pWrtShell->SelAll();
+        // Wrap the table in a text frame:
+        SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+        pWrtShell->StartAllAction();
+        aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+        pWrtShell->EndAllAction();
+        // Allow the text frame to split:
+        pWrtShell->StartAllAction();
+        sw::FrameFormats<sw::SpzFrameFormat*>* pFlys = pDoc->GetSpzFrameFormats();
+        sw::SpzFrameFormat* pFly = (*pFlys)[0];
+        SwAttrSet aSet(pFly->GetAttrSet());
+        aSet.Put(SwFormatFlySplit(true));
+        // Don't allow overlap:
+        SwFormatWrapInfluenceOnObjPos aInfluence;
+        aInfluence.SetAllowOverlap(false);
+        aSet.Put(aInfluence);
+        pDoc->SetAttr(aSet, *pFly);
+        pWrtShell->EndAllAction();
+    }
+
+    // When saving to DOC:
+    saveAndReload("MS Word 97");
+
+    // Then make sure that the overlap=never markup is written:
+    SwDoc* pDoc = getSwDoc();
+    sw::FrameFormats<sw::SpzFrameFormat*>* pFlys = pDoc->GetSpzFrameFormats();
+    sw::SpzFrameFormat* pFly = (*pFlys)[0];
+    // Without the accompanying fix in place, this test would have failed, i.e. TFNoAllowOverlap was
+    // not written.
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
 }
 
 static bool IsFirstLine(const SwTextNode* pTextNode)
