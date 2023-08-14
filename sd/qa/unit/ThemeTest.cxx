@@ -67,6 +67,10 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     // Given a document, with a first slide and blue shape text from theme:
     loadFromURL(u"theme.pptx");
 
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    auto* pDocShell = pXImpressDocument->GetDocShell();
+
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     // The draw page also contains a group shape to make sure we don't crash on group shapes.
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
@@ -131,7 +135,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     auto* pMasterPage = GetSdrPageFromXDrawPage(xDrawPageMaster);
     auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
 
-    sd::ThemeColorChanger aChanger(pMasterPage);
+    sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
     aChanger.apply(pTheme->getColorSet());
 
     // Then make sure the shape text color is now green:
