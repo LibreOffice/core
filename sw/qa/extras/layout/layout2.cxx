@@ -2929,6 +2929,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, TestTdf161508)
     assertXPath(pExportDump, "//page[2]/body/tab", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf156724)
+{
+    discardDumpedLayout();
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    OUString const url(createFileURL(u"fdo56797-2-min.odt"));
+
+    // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
+    // does *not* forward initial VCL Window Resize and thereby triggers a
+    // layout which does not happen on soffice --convert-to pdf.
+    std::vector<beans::PropertyValue> aFilterOptions = {
+        { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
+    };
+
+    // inline the loading because currently properties can't be passed...
+    mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
+                                  comphelper::containerToSequence(aFilterOptions));
+    save("writer_pdf_Export");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // both pages have a tab frame and one footnote
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/ftncont/ftn", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/ftncont/ftn", 1);
+    assertXPath(pXmlDoc, "/root/page", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
