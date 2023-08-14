@@ -350,7 +350,7 @@ void ImpEditView::lokSelectionCallback(const std::optional<tools::PolyPolygon> &
         aItems.emplace_back("endHandleVisible", OString::boolean(bEndHandleVisible));
         pNotifier->notifyWindow(pParent->GetLOKWindowId(), "text_selection", aItems);
     }
-    else
+    else if (mpViewShell)
     {
         pOutWin->GetOutDev()->Push(vcl::PushFlags::MAPMODE);
         if (pOutWin->GetMapMode().GetMapUnit() == MapUnit::MapTwip)
