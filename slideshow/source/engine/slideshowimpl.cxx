@@ -1445,14 +1445,16 @@ void lcl_setPropertiesToShape(const drawing::PointSequenceSequence& rPoints,
     aXPropSet->setPropertyValue("LineCap", uno::Any(eLC));
 
     //LineColor
-    sal_uInt32 nLineColor;
-    nLineColor = pCanvasPolyPoly->getRGBALineColor();
+    sal_uInt32 nLineColor = 0;
+    if (pCanvasPolyPoly)
+        nLineColor = pCanvasPolyPoly->getRGBALineColor();
     //Transform polygon color from RRGGBBAA to AARRGGBB
     aXPropSet->setPropertyValue("LineColor", uno::Any(RGBAColor2UnoColor(nLineColor)));
 
     //LineWidth
-    double  fLineWidth;
-    fLineWidth = pCanvasPolyPoly->getStrokeWidth();
+    double  fLineWidth = 0;
+    if (pCanvasPolyPoly)
+        fLineWidth = pCanvasPolyPoly->getStrokeWidth();
     aXPropSet->setPropertyValue("LineWidth", uno::Any(static_cast<sal_Int32>(fLineWidth)));
 }
 
@@ -1509,7 +1511,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         // We collect these points into one B2DPolygon and use that to generate the shape on the
         // slide.
         ::basegfx::B2DPolygon aDrawingPoints;
-        cppcanvas::PolyPolygonSharedPtr pFirstPolyPoly; // for style properties
+        cppcanvas::PolyPolygonSharedPtr pFirstPolyPoly = aPolygons.front(); // for style properties
         for( const auto& pPolyPoly : aPolygons )
         {
             // Actually, each item in aPolygons has two points, but wrapped in a cppcanvas::PopyPolygon.
