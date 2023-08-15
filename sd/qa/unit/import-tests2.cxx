@@ -1918,6 +1918,25 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testIndentDuplication)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndent2);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, test_srcRect_smallNegBound)
+{
+    // Given a cropped custom shape, with a srcRect having a small negative value in one of bounds
+    createSdImpressDoc("pptx/tdf153008-srcRect-smallNegBound.pptx");
+
+    uno::Reference<graphic::XGraphic> xGraphic(
+        getShapeFromPage(0, 0)->getPropertyValue("FillBitmap"), uno::UNO_QUERY_THROW);
+
+    BitmapEx aBitmap(Graphic(xGraphic).GetBitmapEx());
+
+    // Properly cropped bitmap should have black pixels close to left edge, near vertical center.
+    // Before the fix, the gear was distorted, and this area was white.
+    auto yMiddle = aBitmap.GetSizePixel().Height() / 2;
+    auto x5Percent = aBitmap.GetSizePixel().Width() / 20;
+    CPPUNIT_ASSERT(aBitmap.GetPixelColor(x5Percent, yMiddle).IsDark());
+    // Just in case, check that the corner is bright (it is in fact yellow)
+    CPPUNIT_ASSERT(aBitmap.GetPixelColor(0, 0).IsBright());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
