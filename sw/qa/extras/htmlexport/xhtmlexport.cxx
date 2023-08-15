@@ -155,8 +155,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
         != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf66305, "tdf66305.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf66305)
 {
+    createSwDoc("tdf66305.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
