@@ -80,6 +80,18 @@ bool changeStyle(sd::DrawDocShell* pDocShell, SdStyleSheet* pStyle,
             bChanged = true;
         }
     }
+    if (const SvxColorItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_COLOR, false))
+    {
+        model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+        if (rComplexColor.isValidThemeType())
+        {
+            Color aNewColor = pColorSet->resolveColor(rComplexColor);
+            std::unique_ptr<SvxColorItem> pNewItem(pItem->Clone());
+            pNewItem->setColor(aNewColor);
+            aItemSet.Put(*pNewItem);
+            bChanged = true;
+        }
+    }
     if (bChanged)
     {
         pDocShell->GetUndoManager()->AddUndoAction(
