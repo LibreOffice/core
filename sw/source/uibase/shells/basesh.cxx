@@ -2786,7 +2786,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     weld::Window* pMDI = GetView().GetFrameWeld();
-    // So that from the basic no dialogs for the background views are called:
+    // So that from the basic no dialogues for the background views are called:
     bool bBackground = (&GetView() != GetActiveView());
     const SfxPoolItem* pItem = nullptr;
     const SfxItemSet* pArgs = rReq.GetArgs();
