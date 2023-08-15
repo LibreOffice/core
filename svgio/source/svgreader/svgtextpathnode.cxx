@@ -252,7 +252,7 @@ namespace svgio::svgreader
 
         const SvgStyleAttributes* SvgTextPathNode::getSvgStyleAttributes() const
         {
-            return &maSvgStyleAttributes;
+            return checkForCssStyle(maSvgStyleAttributes);
         }
 
         void SvgTextPathNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
