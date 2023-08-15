@@ -46,7 +46,7 @@
     </child>
     <child>
       <object class="GtkButton" id="accessibilityCheckEntryFixButton">
-        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton" comments="This is a verb. Push this button to quickly fix an a11y problem.">Fix</property>
+        <property name="label" translatable="yes" context="accessibilitycheckentry|accessibilityCheckEntryFixButton" comments="This is a verb. Push this button to quickly fix an a11y problem.">Fix…</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
