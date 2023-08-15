@@ -1106,6 +1106,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf115094v3)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tblPr/w:tblpPr", "tblpY", "1064");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf155470)
+{
+    loadAndSave("numbers-rtl.docx");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Make sure that <w:rtl/> is preserved
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:rtl");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
