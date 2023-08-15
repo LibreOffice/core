@@ -826,13 +826,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
                     aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
-                bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
-                // Positive GraphicCrop values means "crop" here.
-                bool bNeedCrop = aGraphCrop.Left >= 0 && aGraphCrop.Right >= 0 && aGraphCrop.Top >= 0 && aGraphCrop.Bottom >= 0;
-
-                if(mbIsCustomShape && bHasCropValues && bNeedCrop)
+                if(mbIsCustomShape)
                 {
-                    xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromSrcRect(oClipRect));
+                    // Positive GraphicCrop values means "crop" here.
+                    if (aGraphCrop.Left > 0 || aGraphCrop.Right > 0 || aGraphCrop.Top > 0 || aGraphCrop.Bottom > 0)
+                        xGraphic = lclCropGraphic(xGraphic, CropQuotientsFromSrcRect(oClipRect));
                 }
             }
         }
