@@ -29,6 +29,11 @@
 #include <fmtpdsc.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <itabenum.hxx>
+#include <frmmgr.hxx>
+#include <formatflysplit.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
+#include <frameformats.hxx>
 
 using namespace css;
 
@@ -640,6 +645,51 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableExport)
     xFrame->getPropertyValue("RightMargin") >>= nRightMargin;
     nExpected = 71;
     CPPUNIT_ASSERT_EQUAL(nExpected, nRightMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverRTFExport)
+{
+    // Given a document with a floating table, overlap is not allowed:
+    {
+        createSwDoc();
+        SwDoc* pDoc = getSwDoc();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->Insert2("before table");
+        // Insert a table:
+        SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+        pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+        pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+        // Select table:
+        pWrtShell->SelAll();
+        // Wrap the table in a text frame:
+        SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+        pWrtShell->StartAllAction();
+        aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+        pWrtShell->EndAllAction();
+        // Allow the text frame to split:
+        pWrtShell->StartAllAction();
+        SwFrameFormats* pFlys = pDoc->GetSpzFrameFormats();
+        SwFrameFormat* pFly = (*pFlys)[0];
+        SwAttrSet aSet(pFly->GetAttrSet());
+        aSet.Put(SwFormatFlySplit(true));
+        // Don't allow overlap:
+        SwFormatWrapInfluenceOnObjPos aInfluence;
+        aInfluence.SetAllowOverlap(false);
+        aSet.Put(aInfluence);
+        pDoc->SetAttr(aSet, *pFly);
+        pWrtShell->EndAllAction();
+    }
+
+    // When saving to RTF:
+    saveAndReload("Rich Text Format");
+
+    // Then make sure that the overlap=never markup is written:
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats* pFlys = pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = (*pFlys)[0];
+    // Without the accompanying fix in place, this test would have failed, i.e. \tabsnoovrlp was not
+    // written.
+    CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

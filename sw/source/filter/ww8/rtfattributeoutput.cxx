@@ -94,6 +94,7 @@
 #include <frmatr.hxx>
 #include <swtable.hxx>
 #include <formatflysplit.hxx>
+#include <fmtwrapinfluenceonobjpos.hxx>
 #include "rtfexport.hxx"
 
 using namespace ::com::sun::star;
@@ -784,6 +785,13 @@ void RtfAttributeOutput::TablePositioning(SwFrameFormat* pFlyFormat)
     sal_uInt16 nTdfrmtxtRight = pFlyFormat->GetLRSpace().GetRight();
     m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TDFRMTXTRIGHT);
     m_aRowDefs.append(static_cast<sal_Int32>(nTdfrmtxtRight));
+
+    if (!pFlyFormat->GetWrapInfluenceOnObjPos().GetAllowOverlap())
+    {
+        // Allowing overlap is the default in both Writer and in RTF.
+        m_aRowDefs.append(LO_STRING_SVTOOLS_RTF_TABSNOOVRLP);
+        m_aRowDefs.append(static_cast<sal_Int32>(1));
+    }
 }
 
 void RtfAttributeOutput::TableDefinition(

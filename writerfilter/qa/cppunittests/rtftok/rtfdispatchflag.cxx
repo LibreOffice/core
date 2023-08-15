@@ -12,6 +12,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 using namespace ::com::sun::star;
 
@@ -81,6 +82,23 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTblOverlap)
+{
+    // Given a document with 2 floating tables, the second is not allowed to overlap:
+    // When importing that document:
+    loadFromURL(u"floattable-tbl-overlap.rtf");
+
+    // Then make sure the second table is marked as "can't overlap":
+    uno::Reference<text::XTextFramesSupplier> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xTextDocument->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame(xFrames->getByIndex(1), uno::UNO_QUERY);
+    bool bAllowOverlap{};
+    CPPUNIT_ASSERT(xFrame->getPropertyValue("AllowOverlap") >>= bAllowOverlap);
+    // Without the accompanying fix in place, this test would have failed, the tables were marked as
+    // "can overlap".
+    CPPUNIT_ASSERT(!bAllowOverlap);
 }
 }
 

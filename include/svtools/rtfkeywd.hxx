@@ -1240,5 +1240,6 @@
 #define LO_STRING_SVTOOLS_RTF_TDFRMTXTRIGHT "\\tdfrmtxtRight"
 #define LO_STRING_SVTOOLS_RTF_TDFRMTXTTOP "\\tdfrmtxtTop"
 #define LO_STRING_SVTOOLS_RTF_TDFRMTXTBOTTOM "\\tdfrmtxtBottom"
+#define LO_STRING_SVTOOLS_RTF_TABSNOOVRLP "\\tabsnoovrlp"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

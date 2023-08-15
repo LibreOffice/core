@@ -111,6 +111,14 @@ bool RTFDocumentImpl::dispatchFloatingTableFlag(RTFKeyword nKeyword)
         return true;
     }
 
+    if (nKeyword == RTFKeyword::TABSNOOVRLP)
+    {
+        m_aStates.top().getTableRowSprms().set(
+            NS_ooxml::LN_CT_TblPrBase_tblOverlap,
+            new RTFValue(NS_ooxml::LN_Value_ST_TblOverlap_never));
+        return true;
+    }
+
     return false;
 }
 
