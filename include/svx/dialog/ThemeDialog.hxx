@@ -13,6 +13,7 @@
 #include <vcl/weld.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/theme/IThemeColorChanger.hxx>
+#include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
 #include <functional>
 
@@ -30,7 +31,7 @@ class SVX_DLLPUBLIC ThemeDialog final : public weld::GenericDialogController
 private:
     weld::Window* mpWindow;
     model::Theme* mpTheme;
-    bool mxSubDialog;
+    std::shared_ptr<svx::ThemeColorEditDialog> mxSubDialog;
     std::vector<model::ColorSet> maColorSets;
 
     std::unique_ptr<svx::ThemeColorValueSet> mxValueSetThemeColors;

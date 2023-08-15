@@ -8,7 +8,6 @@
  */
 
 #include <svx/dialog/ThemeDialog.hxx>
-#include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ColorSets.hxx>
@@ -22,7 +21,6 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     : GenericDialogController(pParent, "svx/ui/themedialog.ui", "ThemeDialog")
     , mpWindow(pParent)
     , mpTheme(pTheme)
-    , mxSubDialog(false)
     , mxValueSetThemeColors(new svx::ThemeColorValueSet)
     , mxValueSetThemeColorsWindow(
           new weld::CustomWeld(*m_xBuilder, "valueset_theme_colors", *mxValueSetThemeColors))
@@ -45,7 +43,11 @@ ThemeDialog::ThemeDialog(weld::Window* pParent, model::Theme* pTheme)
     }
 }
 
-ThemeDialog::~ThemeDialog() = default;
+ThemeDialog::~ThemeDialog()
+{
+    if (mxSubDialog)
+        mxSubDialog->response(RET_CANCEL);
+}
 
 void ThemeDialog::initColorSets()
 {
@@ -89,17 +91,16 @@ void ThemeDialog::runThemeColorEditDialog()
     if (mxSubDialog)
         return;
 
-    auto pDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
-    std::shared_ptr<DialogController> xKeepAlive(shared_from_this());
+    mxSubDialog = std::make_shared<svx::ThemeColorEditDialog>(mpWindow, *mpCurrentColorSet);
 
-    mxSubDialog = weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {
+    weld::DialogController::runAsync(mxSubDialog, [this](sal_uInt32 nResult) {
         if (nResult != RET_OK)
         {
             mxAdd->set_sensitive(true);
-            mxSubDialog = false;
+            mxSubDialog = nullptr;
             return;
         }
-        auto aColorSet = pDialog->getColorSet();
+        auto aColorSet = mxSubDialog->getColorSet();
         if (!aColorSet.getName().isEmpty())
         {
             ColorSets::get().insert(aColorSet, ColorSets::IdenticalNameAction::AutoRename);
@@ -113,7 +114,7 @@ void ThemeDialog::runThemeColorEditDialog()
                 = std::make_shared<model::ColorSet>(maColorSets[maColorSets.size() - 1]);
         }
         mxAdd->set_sensitive(true);
-        mxSubDialog = false;
+        mxSubDialog = nullptr;
     });
 }
 
