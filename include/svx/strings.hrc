@@ -1135,6 +1135,7 @@
 #define RID_SVXSTR_THEME_COLOR12                            NC_("RID_SVXSTR_THEME_COLOR12", "Followed Hyperlink")
 #define RID_SVXSTR_THEME_EFFECT_LIGHTER                     NC_("RID_SVXSTR_THEME_EFFECT_LIGHTER", "$THEME_NAME, $PERCENTAGE% Lighter")
 #define RID_SVXSTR_THEME_EFFECT_DARKER                      NC_("RID_SVXSTR_THEME_EFFECT_DARKER", "$THEME_NAME, $PERCENTAGE% Darker")
+#define RID_SVXSTR_UNDO_THEME_COLOR_CHANGE                  NC_("RID_SVXSTR_UNDO_THEME_COLOR_CHANGE", "Theme Color Change")
 
 #define RID_SVX_EXTRUSION_BAR                               NC_("RID_SVX_EXTRUSION_BAR", "Extrusion")
 #define RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF              NC_("RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF", "Apply Extrusion On/Off")
