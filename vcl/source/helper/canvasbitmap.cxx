@@ -932,13 +932,11 @@ uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertFromPARGB( const uno::S
 
 sal_Int32 SAL_CALL VclCanvasBitmap::getBitsPerPixel(  )
 {
-    SolarMutexGuard aGuard;
     return m_nBitsPerOutputPixel;
 }
 
 uno::Sequence< ::sal_Int32 > SAL_CALL VclCanvasBitmap::getComponentBitCounts(  )
 {
-    SolarMutexGuard aGuard;
     return m_aComponentBitCounts;
 }
 
