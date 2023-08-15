@@ -585,6 +585,10 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bWritingMode = true;
                 break;
 
+            case vcl::PDFWriter::Note:
+                bPlacement = true;
+                break;
+
             case vcl::PDFWriter::Table :
                 bPlacement =
                 bWritingMode =
