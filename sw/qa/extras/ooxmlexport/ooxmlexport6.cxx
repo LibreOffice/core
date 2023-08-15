@@ -260,10 +260,10 @@ DECLARE_OOXMLEXPORT_TEST(testDMLShapeFillBitmapCrop, "dml-shape-fillbitmapcrop.d
 
     // 1st shape has some cropping
     text::GraphicCrop aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(1), "GraphicCrop");
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? 454 : 455 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? 367 : 368 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? -454 : -455 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(isExported() ? -367 : -368 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 455 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 368 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -455 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( -368 ), aGraphicCropStruct.Bottom );
 
     // 2nd shape has no cropping
     aGraphicCropStruct = getProperty<text::GraphicCrop>(getShape(2), "GraphicCrop");

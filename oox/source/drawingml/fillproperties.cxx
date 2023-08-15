@@ -105,9 +105,9 @@ std::optional<Quotients> CropQuotientsFromSrcRect(geometry::IntegerRectangle2D a
     aSrcRect.X2 = std::max(aSrcRect.X2, sal_Int32(0));
     aSrcRect.Y1 = std::max(aSrcRect.Y1, sal_Int32(0));
     aSrcRect.Y2 = std::max(aSrcRect.Y2, sal_Int32(0));
-    if (aSrcRect.X1 + aSrcRect.X2 >= 100'000 || aSrcRect.Y1 + aSrcRect.Y2 >= 100'000)
+    if (aSrcRect.X1 + aSrcRect.X2 >= MAX_PERCENT || aSrcRect.Y1 + aSrcRect.Y2 >= MAX_PERCENT)
         return {}; // Cropped everything
-    return getQuotients(aSrcRect, 100'000.0, 100'000.0);
+    return getQuotients(aSrcRect, MAX_PERCENT, MAX_PERCENT);
 }
 
 // ECMA-376 Part 1 20.1.8.30 fillRect (Fill Rectangle)
@@ -118,8 +118,8 @@ std::optional<Quotients> CropQuotientsFromFillRect(geometry::IntegerRectangle2D 
     aFillRect.Y1 = std::min(aFillRect.Y1, sal_Int32(0));
     aFillRect.Y2 = std::min(aFillRect.Y2, sal_Int32(0));
     // Negative divisor and negative relative offset give positive value wanted in lclCropGraphic
-    return getQuotients(aFillRect, -100'000.0 + aFillRect.X1 + aFillRect.X2,
-                        -100'000.0 + aFillRect.Y1 + aFillRect.Y2);
+    return getQuotients(aFillRect, -MAX_PERCENT + aFillRect.X1 + aFillRect.X2,
+                        -MAX_PERCENT + aFillRect.Y1 + aFillRect.Y2);
 }
 
 // Crops a piece of the bitmap. lclCropGraphic doesn't handle growing.
@@ -624,13 +624,13 @@ void FillProperties::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelp
                         {
                             text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
                             if ( aFillRect.X1 )
-                                aGraphCrop.Left = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X1 ) / 100000 );
+                                aGraphCrop.Left = o3tl::convert(aFillRect.X1, aOriginalSize.Width, MAX_PERCENT);
                             if ( aFillRect.Y1 )
-                                aGraphCrop.Top = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y1 ) / 100000 );
+                                aGraphCrop.Top = o3tl::convert(aFillRect.Y1, aOriginalSize.Height, MAX_PERCENT);
                             if ( aFillRect.X2 )
-                                aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * aFillRect.X2 ) / 100000 );
+                                aGraphCrop.Right = o3tl::convert(aFillRect.X2, aOriginalSize.Width, MAX_PERCENT);
                             if ( aFillRect.Y2 )
-                                aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * aFillRect.Y2 ) / 100000 );
+                                aGraphCrop.Bottom = o3tl::convert(aFillRect.Y2, aOriginalSize.Height, MAX_PERCENT);
 
                             bool bHasCropValues = aGraphCrop.Left != 0 || aGraphCrop.Right !=0 || aGraphCrop.Top != 0 || aGraphCrop.Bottom != 0;
                             // Negative GraphicCrop values means "crop" here.
@@ -817,13 +817,13 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             {
                 text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
                 if ( oClipRect.X1 )
-                    aGraphCrop.Left = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
+                    aGraphCrop.Left = o3tl::convert(oClipRect.X1, aOriginalSize.Width, MAX_PERCENT);
                 if ( oClipRect.Y1 )
-                    aGraphCrop.Top = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
+                    aGraphCrop.Top = o3tl::convert(oClipRect.Y1, aOriginalSize.Height, MAX_PERCENT);
                 if ( oClipRect.X2 )
-                    aGraphCrop.Right = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
+                    aGraphCrop.Right = o3tl::convert(oClipRect.X2, aOriginalSize.Width, MAX_PERCENT);
                 if ( oClipRect.Y2 )
-                    aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
+                    aGraphCrop.Bottom = o3tl::convert(oClipRect.Y2, aOriginalSize.Height, MAX_PERCENT);
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
 
                 if(mbIsCustomShape)
