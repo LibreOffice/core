@@ -309,7 +309,9 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_bInteractionRequested )
     {
-        m_xSession->queryInteraction();
+        if (m_xSession)
+            m_xSession->queryInteraction();
+
         m_bInteractionRequested = true;
     }
     for (auto & listener: m_aListeners)

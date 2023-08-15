@@ -366,7 +366,8 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
         catch( const css::uno::Exception& )
         {
             StoreSession( true );
-            m_rSessionManager->interactionDone( this );
+            if (m_rSessionManager.is())
+                m_rSessionManager->interactionDone(this);
         }
 
         if ( m_rSessionManager.is() && m_bTerminated )
