@@ -9,7 +9,7 @@ dnl in order to create a configure script.
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[24.2.6.2],[],[],[http://documentfoundation.org/])
+AC_INIT([ZetaOffice],[24.2.6.2],[],[],[http://documentfoundation.org/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -496,7 +496,7 @@ if test -n "$with_product_name" -a "$with_product_name" != no; then
     PRODUCTNAME="$with_product_name"
 fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
-    PRODUCTNAME="${PRODUCTNAME}Dev"
+    PRODUCTNAME=AC_PACKAGE_NAME
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)

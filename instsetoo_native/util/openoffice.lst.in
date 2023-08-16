@@ -5,15 +5,15 @@ Globals
         variables
         {
             LIBO_VERSION_MAJOR @LIBO_VERSION_MAJOR@
-            UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
-            WINDOWSBASISROOTNAME LibreOffice
-            UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME ZetaOffice
+            UNIXBASISROOTNAME zetaoffice
             HIDELICENSEDIALOG 1
             PACKAGEPREFIX
-            BASISPACKAGEPREFIX libobasis
-            UREPACKAGEPREFIX libreoffice
+            BASISPACKAGEPREFIX zetaofficebasis
+            UREPACKAGEPREFIX zetaoffice
             SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 0,0,0
             PROGRESSFRAMECOLOR 102,102,102
@@ -29,7 +29,8 @@ Globals
             UPDATE_DATABASE 1
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 8
+            WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
+            OOOVENDOR Allotropia Software GmbH
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
@@ -37,15 +38,15 @@ Globals
     }
 }
 
-LibreOffice
+ZetaOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME @PRODUCTNAME@
+            PRODUCTNAME ZetaOffice
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
@@ -55,7 +56,7 @@ LibreOffice
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
-            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             PACKAGEREVISION {buildid}
             LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
@@ -67,33 +68,33 @@ LibreOffice
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOffice_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        downloadname    ZetaOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    ZetaOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    ZetaOffice_{productversion}_helppack_{os}_install_{languages}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
-LibreOfficeDev
+ZetaOfficeDev
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME LibreOfficeDev
+            PRODUCTNAME ZetaOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME ZetaOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME zetaofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             USERDIRPRODUCTVERSION 4
             BASEPRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             DEVELOPMENTPRODUCT 1
-            BASISPACKAGEPREFIX lodevbasis
-            UREPACKAGEPREFIX libreofficedev
-            SOLSUREPACKAGEPREFIX libreofficedev
+            BASISPACKAGEPREFIX zetaofficedevbasis
+            UREPACKAGEPREFIX zetaofficedev
+            SOLSUREPACKAGEPREFIX zetaofficedev
             REGISTRYLAYERNAME LayerDev
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
@@ -112,21 +113,21 @@ LibreOfficeDev
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        downloadname    ZetaOfficeDev_{productversion}_{os}_install_{languages}
+        langpackdownloadname    ZetaOfficeDev_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    ZetaOfficeDev_{productversion}_helppack_{os}_install_{languages}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
-LibreOffice_SDK
+ZetaOffice_SDK
 {
     Settings
     {
-        downloadname LibreOffice-SDK_{packageversion}_{os}_install_{languages}
+        downloadname ZetaOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOffice
+            PRODUCTNAME ZetaOffice
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             POSTVERSIONEXTENSION SDK
@@ -149,30 +150,30 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
-LibreOfficeDev_SDK
+ZetaOfficeDev_SDK
 {
     Settings
     {
-        downloadname LibreOfficeDev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname ZetaOfficeDev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
-            PRODUCTNAME LibreOfficeDev
+            PRODUCTNAME ZetaOfficeDev
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            WINDOWSBASISROOTNAME LibreOfficeDev @LIBO_VERSION_MAJOR@
-            UNIXBASISROOTNAME libreofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
+            WINDOWSBASISROOTNAME ZetaOfficeDev @LIBO_VERSION_MAJOR@
+            UNIXBASISROOTNAME zetaofficedev@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             POSTVERSIONEXTENSION SDK
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@.SDK
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
             PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
             PACKAGEREVISION {buildid}
             BASISPACKAGEPREFIX lodevbasis
-            UREPACKAGEPREFIX libreofficedev
-            SOLSUREPACKAGEPREFIX libreofficedev
+            UREPACKAGEPREFIX zetaofficedev
+            SOLSUREPACKAGEPREFIX zetaofficedev
             REGISTRYLAYERNAME LayerDev
             DEVELOPMENTPRODUCT 1
             PACK_INSTALLED 1
@@ -190,6 +191,6 @@ LibreOfficeDev_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
