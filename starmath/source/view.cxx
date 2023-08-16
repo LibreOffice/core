@@ -2067,6 +2067,15 @@ void SmViewShell::Execute(SfxRequest& rReq)
             aDialog.run();
         }
         break;
+
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+        {
+            bool bRTL = rReq.GetSlot() == SID_ATTR_PARA_RIGHT_TO_LEFT;
+            GetDoc()->SetRightToLeft(bRTL);
+            GetViewFrame().GetBindings().Invalidate(bRTL ? SID_ATTR_PARA_LEFT_TO_RIGHT : SID_ATTR_PARA_RIGHT_TO_LEFT);
+        }
+        break;
     }
     rReq.Done();
 }
@@ -2154,6 +2163,13 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                     u"MathElementsPanel", GetViewFrame().GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
             }
+            break;
+        case SID_ATTR_PARA_LEFT_TO_RIGHT:
+            rSet.Put(SfxBoolItem(nWh, !GetDoc()->GetFormat().IsRightToLeft()));
+            break;
+
+        case SID_ATTR_PARA_RIGHT_TO_LEFT:
+            rSet.Put(SfxBoolItem(nWh, GetDoc()->GetFormat().IsRightToLeft()));
             break;
         }
     }
