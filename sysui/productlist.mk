@@ -7,12 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-PRODUCTLIST := libreoffice libreofficedev
+PRODUCTLIST := zetaoffice
 PKGVERSION := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO)
 PKGVERSIONSHORT := $(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR)
 PRODUCTNAME.libreoffice := LibreOffice
 PRODUCTNAME.libreofficedev := LibreOfficeDev
+PRODUCTNAME.zetaoffice := ZetaOffice
 UNIXFILENAME.libreoffice := libreoffice$(PKGVERSIONSHORT)
 UNIXFILENAME.libreofficedev := libreofficedev$(PKGVERSIONSHORT)
+UNIXFILENAME.zetaoffice := zetaoffice
 
 # vim: set noet sw=4 ts=4:

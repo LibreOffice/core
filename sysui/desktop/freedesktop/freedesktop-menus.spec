@@ -375,7 +375,7 @@ fi
 # glibc breaks rpm unless rpm is build with internal glob-matching (issue 49374)
 # https://bugzilla.redhat.com/beta/show_bug.cgi?id=134362
 %defattr(-, root, root)
-%if "%unixfilename" != "libreoffice%productversion" && "%unixfilename" != "libreofficedev%productversion"
+%if "%unixfilename" != "zetaoffice" && "%unixfilename" != "zetaofficedev"
 # compat symlinks
 %attr(0755,root,root) /opt/%unixfilename
 %endif

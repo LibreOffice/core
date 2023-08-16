@@ -881,9 +881,13 @@
                 <it>/org.openoffice.Office.Common/Misc/DisableUICustomization</it>
                 <it>/org.openoffice.Office.Common/Misc/ExperimentalMode</it>
                 <it>/org.openoffice.Office.Common/Misc/FormControlPilotsEnabled</it>
+                <it>/org.openoffice.Office.Common/Misc/LastTipOfTheDayID</it>
+                <it>/org.openoffice.Office.Common/Misc/LastTipOfTheDayShown</it>
                 <it>/org.openoffice.Office.Common/Misc/MacroRecorderMode</it>
+                <it>/org.openoffice.Office.Common/Misc/PersonaSettings</it>
                 <it>/org.openoffice.Office.Common/Misc/PluginsEnabled</it>
                 <it>/org.openoffice.Office.Common/Misc/ShowLinkWarningDialog</it>
+                <it>/org.openoffice.Office.Common/Misc/ShowTipOfTheDay</it>
                 <it>/org.openoffice.Office.Common/Misc/SymbolSet</it>
                 <it>/org.openoffice.Office.Common/Misc/SymbolStyle</it>
                 <it>/org.openoffice.Office.Common/Misc/ToolboxStyle</it>
@@ -962,7 +966,10 @@
           </node>
           <node oor:name="Setup" oor:op="replace">
             <prop oor:name="IncludedNodes">
-              <value>/org.openoffice.Setup/Office/Factories</value>
+              <value>
+                <it>/org.openoffice.Setup/Office/Factories</it>
+                <it>/org.openoffice.Setup/L10N</it>
+              </value>
             </prop>
           </node>
           <node oor:name="UI" oor:op="replace">
