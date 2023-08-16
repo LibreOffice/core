@@ -38,7 +38,6 @@
 -o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
 -o sw.SwXBookmark
--o sw.SwXBookmarks
 -o sw.SwXCell
 -o sw.SwXCellRange
 -o sw.SwXChapterNumbering
