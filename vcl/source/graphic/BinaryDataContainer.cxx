@@ -45,7 +45,6 @@ struct BinaryDataContainer::Impl
         // Horrifying data loss ...
         SAL_WARN_IF(pStream->GetError(), "vcl",
                     "Inconsistent system - failed to swap image back in");
-        SAL_DEBUG("Swap in: " << pStream->GetError());
     }
 
     void swapOut()
