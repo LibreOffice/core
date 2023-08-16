@@ -172,8 +172,14 @@ void Test::doTestCommentsInMargin(bool commentsInMarginEnabled)
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
         = pPDFium->openDocument(aStream.GetData(), aStream.GetSize(), OString());
     CPPUNIT_ASSERT(pPdfDocument);
-    CPPUNIT_ASSERT_EQUAL(commentsInMarginEnabled ? 9 : 1,
-                         pPdfDocument->openPage(0)->getObjectCount());
+    if (commentsInMarginEnabled)
+    {
+        // Unfortunately, the comment box is DPI dependent, and the lines there may split
+        // at higher DPIs, creating additional objects on import, hence the "_GREATER"
+        CPPUNIT_ASSERT_GREATER(8, pPdfDocument->openPage(0)->getObjectCount());
+    }
+    else
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->openPage(0)->getObjectCount());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsInMargin)
