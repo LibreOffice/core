@@ -2958,8 +2958,13 @@ bool SwSectionFrame::IsBalancedSection() const
 
 void SwSectionFrame::dumpAsXml(xmlTextWriterPtr writer) const
 {
-    (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("section"));
-    dumpAsXmlAttributes(writer);
+    (void)xmlTextWriterStartElement(writer, BAD_CAST("section"));
+    SwFrame::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
+
+    if (m_pPrecede != nullptr)
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, m_pPrecede->GetFrame().GetFrameId() );
 
     (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
     dumpInfosAsXml(writer);
