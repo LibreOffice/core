@@ -3055,7 +3055,7 @@ bool SwContentTree::HasContentChanged()
                     {
                         SAL_WARN("sw.ui", "unexpected missing entry");
                         bContentChanged = true;
-                        continue;
+                        break;
                     }
 
                     const SwContent* pCnt = pArrType->GetMember(j);
@@ -3067,7 +3067,7 @@ bool SwContentTree::HasContentChanged()
                             !(sEntryText == m_sSpace && pCnt->GetName().isEmpty()))
                     {
                         bContentChanged = true;
-                        continue;
+                        break;
                     }
                 }
             }
