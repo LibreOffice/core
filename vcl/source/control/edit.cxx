@@ -1978,6 +1978,8 @@ void Edit::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId(u"copy"), bEnableCopy);
         pPopup->EnableItem(pPopup->GetItemId(u"delete"), bEnableDelete);
         pPopup->EnableItem(pPopup->GetItemId(u"paste"), bEnablePaste);
+        pPopup->SetItemText(pPopup->GetItemId(u"specialchar"),
+            BuilderUtils::convertMnemonicMarkup(VclResId(STR_SPECIAL_CHARACTER_MENU_ENTRY)));
         pPopup->EnableItem(pPopup->GetItemId(u"specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(
             pPopup->GetItemId(u"undo"),

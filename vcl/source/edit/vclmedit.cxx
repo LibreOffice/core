@@ -41,6 +41,8 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 #include <tools/json_writer.hxx>
+#include <strings.hrc>
+#include <svdata.hxx>
 
 class ImpVclMEdit : public SfxListener
 {
@@ -789,6 +791,8 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId(u"copy"), bEnableCopy);
         pPopup->EnableItem(pPopup->GetItemId(u"delete"), bEnableDelete);
         pPopup->EnableItem(pPopup->GetItemId(u"paste"), bEnablePaste);
+        pPopup->SetItemText(pPopup->GetItemId(u"specialchar"),
+            BuilderUtils::convertMnemonicMarkup(VclResId(STR_SPECIAL_CHARACTER_MENU_ENTRY)));
         pPopup->EnableItem(pPopup->GetItemId(u"specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(pPopup->GetItemId(u"undo"), bEnableUndo);
         pPopup->ShowItem(pPopup->GetItemId(u"specialchar"), !vcl::GetGetSpecialCharsFunction());

@@ -69,7 +69,6 @@
       <object class="GtkMenuItem" id="specialchar">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="editmenu|specialchar">_Special Character...</property>
         <property name="use_underline">True</property>
       </object>
     </child>

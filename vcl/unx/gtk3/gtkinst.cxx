@@ -19024,41 +19024,67 @@ void GtkInstanceDrawingArea::im_context_set_cursor_location(const tools::Rectang
 }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
+
+static void InsertSpecialChar(GtkEntry *pEntry)
+{
+    if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
+    {
+        weld::Window* pDialogParent = nullptr;
+
+        GtkWidget* pTopLevel = widget_get_toplevel(GTK_WIDGET(pEntry));
+        if (GtkSalFrame* pFrame = pTopLevel ? GtkSalFrame::getFromWindow(pTopLevel) : nullptr)
+            pDialogParent = pFrame->GetFrameWeld();
+
+        std::unique_ptr<GtkInstanceWindow> xFrameWeld;
+        if (!pDialogParent && pTopLevel)
+        {
+            xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(pTopLevel), nullptr, false));
+            pDialogParent = xFrameWeld.get();
+        }
+
+        OUString aChars = pImplFncGetSpecialChars(pDialogParent, ::get_font(GTK_WIDGET(pEntry)));
+        if (!aChars.isEmpty())
+        {
+            gtk_editable_delete_selection(GTK_EDITABLE(pEntry));
+            gint position = gtk_editable_get_position(GTK_EDITABLE(pEntry));
+            OString sText(OUStringToOString(aChars, RTL_TEXTENCODING_UTF8));
+            gtk_editable_insert_text(GTK_EDITABLE(pEntry), sText.getStr(), sText.getLength(),
+                                     &position);
+            gtk_editable_set_position(GTK_EDITABLE(pEntry), position);
+        }
+    }
+}
+
 static gboolean signalEntryInsertSpecialCharKeyPress(GtkEntry* pEntry, GdkEventKey* pEvent, gpointer)
 {
     if ((pEvent->keyval == GDK_KEY_S || pEvent->keyval == GDK_KEY_s) &&
         (pEvent->state & GDK_MODIFIER_MASK) == static_cast<GdkModifierType>(GDK_SHIFT_MASK|GDK_CONTROL_MASK))
     {
-        if (auto pImplFncGetSpecialChars = vcl::GetGetSpecialCharsFunction())
-        {
-            weld::Window* pDialogParent = nullptr;
-
-            GtkWidget* pTopLevel = widget_get_toplevel(GTK_WIDGET(pEntry));
-            if (GtkSalFrame* pFrame = pTopLevel ? GtkSalFrame::getFromWindow(pTopLevel) : nullptr)
-                pDialogParent = pFrame->GetFrameWeld();
-
-            std::unique_ptr<GtkInstanceWindow> xFrameWeld;
-            if (!pDialogParent && pTopLevel)
-            {
-                xFrameWeld.reset(new GtkInstanceWindow(GTK_WINDOW(pTopLevel), nullptr, false));
-                pDialogParent = xFrameWeld.get();
-            }
-
-            OUString aChars = pImplFncGetSpecialChars(pDialogParent, ::get_font(GTK_WIDGET(pEntry)));
-            if (!aChars.isEmpty())
-            {
-                gtk_editable_delete_selection(GTK_EDITABLE(pEntry));
-                gint position = gtk_editable_get_position(GTK_EDITABLE(pEntry));
-                OString sText(OUStringToOString(aChars, RTL_TEXTENCODING_UTF8));
-                gtk_editable_insert_text(GTK_EDITABLE(pEntry), sText.getStr(), sText.getLength(),
-                                         &position);
-                gtk_editable_set_position(GTK_EDITABLE(pEntry), position);
-            }
-        }
+        InsertSpecialChar(pEntry);
         return true;
     }
     return false;
 }
+
+static void signalActivateEntryInsertSpecialChar(GtkEntry *pEntry)
+{
+    InsertSpecialChar(pEntry);
+}
+
+static void signalEntryPopulatePopup(GtkEntry* pEntry, GtkWidget* pMenu, gpointer)
+{
+    if (!GTK_IS_MENU(pMenu))
+        return;
+
+    if (!vcl::GetGetSpecialCharsFunction())
+        return;
+
+    GtkWidget *item = gtk_menu_item_new_with_mnemonic(MapToGtkAccelerator(VclResId(STR_SPECIAL_CHARACTER_MENU_ENTRY)).getStr());
+    gtk_widget_show(item);
+    g_signal_connect_swapped(item, "activate", G_CALLBACK(signalActivateEntryInsertSpecialChar), pEntry);
+    gtk_menu_shell_append(GTK_MENU_SHELL(pMenu), item);
+}
+
 #endif
 
 namespace {
@@ -20970,6 +20996,7 @@ private:
     gulong m_nEntryFocusInSignalId;
     gulong m_nEntryFocusOutSignalId;
     gulong m_nEntryKeyPressEventSignalId;
+    gulong m_nEntryPopulatePopupMenuSignalId;
     guint m_nAutoCompleteIdleId;
     gint m_nNonCustomLineHeight;
     gint m_nPrePopupCursorPos;
@@ -22071,6 +22098,7 @@ public:
             m_nEntryFocusInSignalId = g_signal_connect(m_pEntry, "focus-in-event", G_CALLBACK(signalEntryFocusIn), this);
             m_nEntryFocusOutSignalId = g_signal_connect(m_pEntry, "focus-out-event", G_CALLBACK(signalEntryFocusOut), this);
             m_nEntryKeyPressEventSignalId = g_signal_connect(m_pEntry, "key-press-event", G_CALLBACK(signalEntryKeyPress), this);
+            m_nEntryPopulatePopupMenuSignalId = g_signal_connect(m_pEntry, "populate-popup", G_CALLBACK(signalEntryPopulatePopup), nullptr);
             m_nKeyPressEventSignalId = 0;
         }
         else
@@ -22116,6 +22144,7 @@ public:
             m_nEntryFocusInSignalId = 0;
             m_nEntryFocusOutSignalId = 0;
             m_nEntryKeyPressEventSignalId = 0;
+            m_nEntryPopulatePopupMenuSignalId = 0;
             m_nKeyPressEventSignalId = g_signal_connect(m_pToggleButton, "key-press-event", G_CALLBACK(signalKeyPress), this);
         }
 
@@ -22711,6 +22740,7 @@ public:
             g_signal_handler_disconnect(m_pEntry, m_nEntryFocusInSignalId);
             g_signal_handler_disconnect(m_pEntry, m_nEntryFocusOutSignalId);
             g_signal_handler_disconnect(m_pEntry, m_nEntryKeyPressEventSignalId);
+            g_signal_handler_disconnect(m_pEntry, m_nEntryPopulatePopupMenuSignalId);
         }
         else
             g_signal_handler_disconnect(m_pToggleButton, m_nKeyPressEventSignalId);
@@ -23835,6 +23865,7 @@ private:
         else if (GTK_IS_ENTRY(pWidget))
         {
             g_signal_connect(pWidget, "key-press-event", G_CALLBACK(signalEntryInsertSpecialCharKeyPress), nullptr);
+            g_signal_connect(pWidget, "populate-popup", G_CALLBACK(signalEntryPopulatePopup), nullptr);
         }
 #endif
         else if (GTK_IS_WINDOW(pWidget))
