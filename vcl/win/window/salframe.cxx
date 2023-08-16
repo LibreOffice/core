@@ -108,15 +108,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
-#ifndef SPI_GETWHEELSCROLLCHARS
-# define SPI_GETWHEELSCROLLCHARS   0x006C
-#endif
-#ifndef SPI_SETWHEELSCROLLCHARS
-# define SPI_SETWHEELSCROLLCHARS   0x006D
-#endif
-#ifndef WM_MOUSEHWHEEL
-# define WM_MOUSEHWHEEL 0x020E
-#endif
 #ifndef IDC_PEN
 # define IDC_PEN MAKEINTRESOURCE(32631)
 #endif
