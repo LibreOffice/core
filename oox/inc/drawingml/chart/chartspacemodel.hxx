@@ -20,6 +20,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
 #define INCLUDED_OOX_DRAWINGML_CHART_CHARTSPACEMODEL_HXX
 
+#include <sal/config.h>
+
+#include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <drawingml/chart/plotareamodel.hxx>
 #include <drawingml/chart/titlemodel.hxx>
@@ -46,6 +49,7 @@ struct ChartSpaceModel
     View3DRef           mxView3D;           /// 3D settings.
     TitleRef            mxTitle;            /// Chart main title.
     LegendRef           mxLegend;           /// Chart legend.
+    ClrMapPtr           mpClrMap;           /// Optionally passed color map to update
     OUString            maDrawingPath;      /// Path to drawing fragment with embedded shapes.
     OUString            maSheetPath;        /// Path to embedded charts.
     sal_Int32           mnDispBlanksAs;     /// Mode how to display blank values.

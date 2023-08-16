@@ -75,6 +75,25 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN (externalData):
                     mrModel.maSheetPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted(R_TOKEN(id)));
                     return nullptr;
+                case C_TOKEN(clrMapOvr):
+                    if (mrModel.mpClrMap)
+                        for (auto nClrToken : {
+                                 XML_bg1,
+                                 XML_tx1,
+                                 XML_bg2,
+                                 XML_tx2,
+                                 XML_accent1,
+                                 XML_accent2,
+                                 XML_accent3,
+                                 XML_accent4,
+                                 XML_accent5,
+                                 XML_accent6,
+                                 XML_hlink,
+                                 XML_folHlink,
+                             })
+                            if (auto oMappedToken = rAttribs.getToken(nClrToken))
+                                mrModel.mpClrMap->setColorMap(nClrToken, *oMappedToken);
+                    return nullptr;
             }
         break;
 
