@@ -1519,22 +1519,19 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
     mbSmallOutBorder    = false;
     if ( nTypeStyle & BorderWindowStyle::Frame )
     {
+        mpWindowImpl->mbOverlapWin = true;
+        mpWindowImpl->mbFrame = true;
+
         if( nStyle & WB_SYSTEMCHILDWINDOW )
         {
-            mpWindowImpl->mbOverlapWin  = true;
-            mpWindowImpl->mbFrame       = true;
             mbFrameBorder               = false;
         }
         else if( nStyle & (WB_OWNERDRAWDECORATION | WB_POPUP) )
         {
-            mpWindowImpl->mbOverlapWin  = true;
-            mpWindowImpl->mbFrame       = true;
             mbFrameBorder   = (nOrgStyle & WB_NOBORDER) == 0;
         }
         else
         {
-            mpWindowImpl->mbOverlapWin  = true;
-            mpWindowImpl->mbFrame       = true;
             mbFrameBorder   = false;
             // closeable windows may have a border as well, eg. system floating windows without caption
             if ( (nOrgStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE/* | WB_CLOSEABLE*/)) == WB_BORDER )
