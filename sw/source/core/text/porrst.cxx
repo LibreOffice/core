@@ -413,7 +413,7 @@ bool SwTextFrame::FormatEmpty()
     // Split fly frames: non-last parts of the anchor want this optimization to clear the old
     // content.
     bool bHasNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
-    if ((HasFollow() && !bHasNonLastSplitFlyDrawObj) || GetMergedPara() || GetTextNodeFirst()->GetpSwpHints() ||
+    if ((HasFollow() && !bHasNonLastSplitFlyDrawObj) || GetMergedPara() || (GetTextNodeFirst()->GetpSwpHints() && !bHasNonLastSplitFlyDrawObj) ||
         nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNodeFirst()->HasHiddenCharAttribute(true) ||
          IsInFootnote() || ( HasPara() && GetPara()->IsPrepMustFit() ) )
