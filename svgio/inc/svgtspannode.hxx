@@ -84,7 +84,7 @@ namespace svgio::svgreader
             void setLengthAdjust(bool bNew) { mbLengthAdjust = bNew; }
 
             void concatenateTextLineWidth(double nWidth) {mnTextLineWidth += nWidth;}
-            double getTextLineWith() const { return mnTextLineWidth; }
+            double getTextLineWidth() const { return mnTextLineWidth; }
         };
 
 } // end of namespace svgio::svgreader

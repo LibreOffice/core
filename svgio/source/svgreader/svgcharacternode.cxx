@@ -261,12 +261,12 @@ namespace svgio::svgreader
                 {
                     case TextAlign::right:
                     {
-                        aPosition.setX(aPosition.getX() - mpParentLine->getTextLineWith());
+                        aPosition.setX(aPosition.getX() - mpParentLine->getTextLineWidth());
                         break;
                     }
                     case TextAlign::center:
                     {
-                        aPosition.setX(aPosition.getX() - (mpParentLine->getTextLineWith() * 0.5));
+                        aPosition.setX(aPosition.getX() - (mpParentLine->getTextLineWidth() * 0.5));
                         break;
                     }
                     case TextAlign::notset:
