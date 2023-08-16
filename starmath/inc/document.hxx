@@ -222,6 +222,8 @@ public:
         mathml::SmMlIteratorFree(m_pMlElementTree);
         m_pMlElementTree = pMlElementTree;
     }
+
+    void SetRightToLeft(bool bRTL);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

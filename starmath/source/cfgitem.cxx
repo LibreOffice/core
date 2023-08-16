@@ -91,6 +91,7 @@ static Sequence< OUString > lcl_GetFormatPropertyNames()
     //! see respective load/save routines here
     return Sequence< OUString > {
                         "StandardFormat/Textmode",
+                        "StandardFormat/RightToLeft",
                         "StandardFormat/GreekCharStyle",
                         "StandardFormat/ScaleNormalBracket",
                         "StandardFormat/HorizontalAlignment",
@@ -983,6 +984,10 @@ void SmMathConfig::LoadFormat()
     if (pVal->hasValue()  &&  (*pVal >>= bTmp))
         pFormat->SetTextmode( bTmp );
     ++pVal;
+    // StandardFormat/RightToLeft
+    if (pVal->hasValue()  &&  (*pVal >>= bTmp))
+        pFormat->SetRightToLeft( bTmp );
+    ++pVal;
     // StandardFormat/GreekCharStyle
     if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
         pFormat->SetGreekCharStyle( nTmp16 );
@@ -1061,6 +1066,8 @@ void SmMathConfig::SaveFormat()
 
     // StandardFormat/Textmode
     *pValue++ <<= pFormat->IsTextmode();
+    // StandardFormat/RightToLeft
+    *pValue++ <<= pFormat->IsRightToLeft();
     // StandardFormat/GreekCharStyle
     *pValue++ <<= pFormat->GetGreekCharStyle();
     // StandardFormat/ScaleNormalBracket

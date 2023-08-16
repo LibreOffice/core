@@ -282,6 +282,12 @@ published service FormulaProperties
     @since OOo 3.4
      */
     [property, optional] short    BaseLine;
+
+    /** switches into right-to-left layout.
+
+    @since LibreOffice 24.2
+     */
+    [property, optional] boolean  IsRightToLeft;
 };
 
 

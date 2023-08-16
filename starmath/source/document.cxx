@@ -1219,4 +1219,22 @@ bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
     return aEquation.ConvertFromStarMath( rMedium );
 }
 
+void SmDocShell::SetRightToLeft(bool bRTL)
+{
+    SmFormat aOldFormat = GetFormat();
+    if (aOldFormat.IsRightToLeft() == bRTL)
+        return;
+
+    SmFormat aNewFormat(aOldFormat);
+    aNewFormat.SetRightToLeft(bRTL);
+
+    SfxUndoManager* pTmpUndoMgr = GetUndoManager();
+    if (pTmpUndoMgr)
+        pTmpUndoMgr->AddUndoAction(
+            std::make_unique<SmFormatAction>(this, aOldFormat, aNewFormat));
+
+    SetFormat(aNewFormat);
+    Repaint();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

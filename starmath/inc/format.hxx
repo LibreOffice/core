@@ -98,6 +98,7 @@ class SM_DLLPUBLIC SmFormat final : public SfxBroadcaster
     SmHorAlign  eHorAlign;
     sal_Int16       nGreekCharStyle;
     bool        bIsTextmode,
+                bIsRightToLeft,
                 bScaleNormalBrackets;
 
 public:
@@ -125,6 +126,9 @@ public:
 
     bool            IsTextmode() const     { return bIsTextmode; }
     void            SetTextmode(bool bVal) { bIsTextmode = bVal; }
+
+    bool            IsRightToLeft() const     { return bIsRightToLeft; }
+    void            SetRightToLeft(bool bVal) { bIsRightToLeft = bVal; }
 
     sal_Int16       GetGreekCharStyle() const     { return nGreekCharStyle; }
     void            SetGreekCharStyle(sal_Int16 nVal) { nGreekCharStyle = nVal; }

@@ -25,7 +25,7 @@ SmFormat::SmFormat()
 {
     eHorAlign       = SmHorAlign::Center;
     nGreekCharStyle = 0;
-    bIsTextmode     = bScaleNormalBrackets = false;
+    bIsTextmode     = bIsRightToLeft = bScaleNormalBrackets = false;
 
     vSize[SIZ_TEXT]     = 100;
     vSize[SIZ_INDEX]    = 60;
@@ -102,6 +102,7 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
     SetBaseSize(rFormat.GetBaseSize());
     SetHorAlign(rFormat.GetHorAlign());
     SetTextmode(rFormat.IsTextmode());
+    SetRightToLeft(rFormat.IsRightToLeft());
     SetGreekCharStyle(rFormat.GetGreekCharStyle());
     SetScaleNormalBrackets(rFormat.IsScaleNormalBrackets());
 
@@ -126,6 +127,7 @@ bool SmFormat::operator == (const SmFormat &rFormat) const
                 eHorAlign == rFormat.eHorAlign  &&
                 nGreekCharStyle == rFormat.nGreekCharStyle &&
                 bIsTextmode == rFormat.bIsTextmode  &&
+                bIsRightToLeft == rFormat.bIsRightToLeft &&
                 bScaleNormalBrackets  == rFormat.bScaleNormalBrackets;
 
     sal_uInt16 i;

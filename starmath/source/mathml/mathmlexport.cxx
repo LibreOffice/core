@@ -412,13 +412,24 @@ void SmXMLExport::ExportContent_()
     SmDocShell* pDocShell = pModel ? static_cast<SmDocShell*>(pModel->GetObjectShell()) : nullptr;
     OSL_ENSURE(pDocShell, "doc shell missing");
 
-    if (pDocShell && !pDocShell->GetFormat().IsTextmode())
+    if (pDocShell)
     {
-        // If the Math equation is not in text mode, we attach a display="block"
-        // attribute on the <math> root. We don't do anything if it is in
-        // text mode, the default display="inline" value will be used.
-        AddAttribute(XML_NAMESPACE_MATH, XML_DISPLAY, XML_BLOCK);
+        if (!pDocShell->GetFormat().IsTextmode())
+        {
+            // If the Math equation is not in text mode, we attach a display="block"
+            // attribute on the <math> root. We don't do anything if it is in
+            // text mode, the default display="inline" value will be used.
+            AddAttribute(XML_NAMESPACE_MATH, XML_DISPLAY, XML_BLOCK);
+        }
+        if (pDocShell->GetFormat().IsRightToLeft())
+        {
+            // If the Math equation is set right-to-left, we attach a dir="rtl"
+            // attribute on the <math> root. We don't do anything if it is set
+            // left-to-right, the default dir="ltr" value will be used.
+            AddAttribute(XML_NAMESPACE_MATH, XML_DIR, XML_RTL);
+        }
     }
+
     SvXMLElementExport aEquation(*this, XML_NAMESPACE_MATH, XML_MATH, true, true);
     std::unique_ptr<SvXMLElementExport> pSemantics;
 

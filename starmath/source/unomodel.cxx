@@ -188,6 +188,7 @@ enum SmModelPropertyHandles
     HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS,
     HANDLE_RELATIVE_FONT_HEIGHT_LIMITS,
     HANDLE_IS_TEXT_MODE,
+    HANDLE_IS_RIGHT_TO_LEFT,
     HANDLE_GREEK_CHAR_STYLE,
     HANDLE_ALIGNMENT,
     HANDLE_RELATIVE_SPACING,
@@ -267,6 +268,7 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
         { OUString("Formula")                          , HANDLE_FORMULA                            ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
         { OUString("IsScaleAllBrackets")               , HANDLE_IS_SCALE_ALL_BRACKETS              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
         { OUString("IsTextMode")                       , HANDLE_IS_TEXT_MODE                       ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
+        { OUString("IsRightToLeft")                    , HANDLE_IS_RIGHT_TO_LEFT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  0                     },
         { OUString("GreekCharStyle")                   , HANDLE_GREEK_CHAR_STYLE                   ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  0                     },
         { OUString("LeftMargin")                       , HANDLE_LEFT_MARGIN                        ,  ::cppu::UnoType<sal_Int16>::get(),                                     PROPERTY_NONE,  DIS_LEFTSPACE         },
         { OUString("PrinterName")                      , HANDLE_PRINTER_NAME                       ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  0                     },
@@ -501,6 +503,10 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 aFormat.SetTextmode(*o3tl::doAccess<bool>(*pValues));
             }
+            break;
+
+            case HANDLE_IS_RIGHT_TO_LEFT                   :
+                aFormat.SetRightToLeft(*o3tl::doAccess<bool>(*pValues));
             break;
 
             case HANDLE_GREEK_CHAR_STYLE                    :
@@ -777,6 +783,10 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
             case HANDLE_IS_TEXT_MODE                       :
                 *pValue <<= aFormat.IsTextmode();
+            break;
+
+            case HANDLE_IS_RIGHT_TO_LEFT                   :
+                *pValue <<= aFormat.IsRightToLeft();
             break;
 
             case HANDLE_GREEK_CHAR_STYLE                    :
