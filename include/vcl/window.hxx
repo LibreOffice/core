@@ -779,6 +779,7 @@ public:
     bool                                IsDialog() const;
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
+    bool                                IsNativeFrame() const;
     bool                                IsTopWindow() const;
     SystemWindow*                       GetSystemWindow() const;
 
@@ -1187,7 +1188,6 @@ protected:
 private:
 
     SAL_DLLPRIVATE bool                 ImplIsAccessibleCandidate() const;
-    SAL_DLLPRIVATE bool                 ImplIsAccessibleNativeFrame() const;
     ///@}
 
     /*

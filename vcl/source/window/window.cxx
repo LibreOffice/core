@@ -157,7 +157,7 @@ void Window::dispose()
     CallEventListeners( VclEventId::ObjectDying );
 
     // do not send child events for frames that were registered as native frames
-    if( !ImplIsAccessibleNativeFrame() && mpWindowImpl->mbReallyVisible )
+    if( !IsNativeFrame() && mpWindowImpl->mbReallyVisible )
         if ( ImplIsAccessibleCandidate() && GetAccessibleParentWindow() )
             GetAccessibleParentWindow()->CallEventListeners( VclEventId::WindowChildDestroyed, this );
 

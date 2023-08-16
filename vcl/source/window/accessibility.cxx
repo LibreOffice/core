@@ -95,24 +95,12 @@ bool Window::ImplIsAccessibleCandidate() const
     if( !mpWindowImpl->mbBorderWin )
         return true;
 
-    return ImplIsAccessibleNativeFrame();
-}
-
-bool Window::ImplIsAccessibleNativeFrame() const
-{
-    if( mpWindowImpl->mbFrame )
-        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
-        if( mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
-            return true;
-        else
-            return false;
-    else
-        return false;
+    return IsNativeFrame();
 }
 
 vcl::Window* Window::GetAccessibleParentWindow() const
 {
-    if (!mpWindowImpl || ImplIsAccessibleNativeFrame())
+    if (!mpWindowImpl || IsNativeFrame())
         return nullptr;
 
     vcl::Window* pParent = mpWindowImpl->mpParent;
@@ -327,7 +315,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::BORDERWINDOW:
         case WindowType::SYSTEMCHILDWINDOW:
         default:
-            if (ImplIsAccessibleNativeFrame() )
+            if (IsNativeFrame() )
                 nRole = accessibility::AccessibleRole::FRAME;
             else if( IsScrollable() )
                 nRole = accessibility::AccessibleRole::SCROLL_PANE;
