@@ -599,7 +599,7 @@ bool SwCursorShell::SttEndDoc( bool bStt )
 
 const SwTableNode* SwCursorShell::IsCursorInTable() const
 {
-    if (m_pTableCursor)
+    if (m_pTableCursor && m_pTableCursor->GetSelectedBoxesCount())
     {   // find the table that has the selected boxes
         return m_pTableCursor->GetSelectedBoxes()[0]->GetSttNd()->FindTableNode();
     }
