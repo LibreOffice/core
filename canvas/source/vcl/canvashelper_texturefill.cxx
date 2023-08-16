@@ -154,24 +154,17 @@ namespace vclcanvas
             // 2 colors and 2 stops (at 0 and 1) is a linear gradient:
             if( rColors.size() == 2 && rValues.maStops.size() == 2 && rValues.maStops[0] == 0 && rValues.maStops[1] == 1)
             {
-                // tdf#144073: Note that the code below adjusts the gradient area this way.
-                // No, I have no idea why.
-                aLeftTop -= 2.0*nDiagonalLength*aDirection;
-                aLeftBottom -= 2.0*nDiagonalLength*aDirection;
-                aRightTop += 2.0*nDiagonalLength*aDirection;
-                aRightBottom += 2.0*nDiagonalLength*aDirection;
+                // tdf#144073 and tdf#147645: use bounds and angle for gradient
+                // Passing an expanded, rotated polygon noticeably modifies the
+                // drawing of the gradient in a slideshow due to moving of the
+                // starting and ending colors far off the edges of the drawing
+                // surface. So try another way and set the angle of the
+                // gradient and draw only the unadjusted bounds.
                 Gradient vclGradient( css::awt::GradientStyle_LINEAR, rColors[ 0 ], rColors[ 1 ] );
-                ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
-                aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
-                                        ::basegfx::fround( aLeftTop.getY() ) );
-                aTempPoly[1] = ::Point( ::basegfx::fround( aRightTop.getX() ),
-                                        ::basegfx::fround( aRightTop.getY() ) );
-                aTempPoly[2] = ::Point( ::basegfx::fround( aRightBottom.getX() ),
-                                        ::basegfx::fround( aRightBottom.getY() ) );
-                aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
-                                        ::basegfx::fround( aLeftBottom.getY() ) );
-                aTempPoly[4] = aTempPoly[0];
-                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                double fRotate = atan2( aDirection.getY(), aDirection.getX() );
+                const double nAngleInTenthOfDegrees = 3600.0 - basegfx::rad2deg<10>( fRotate ) + 900.0;
+                vclGradient.SetAngle( Degree10( ::basegfx::fround( nAngleInTenthOfDegrees ) ) );
+                rOutDev.DrawGradient( rBounds, vclGradient );
                 return;
             }
             // 3 colors with first and last being equal and 3 stops (at 0, 0.5 and 1) is an axial gradient:
@@ -179,24 +172,17 @@ namespace vclcanvas
                 && rValues.maStops.size() == 3 && rValues.maStops[0] == 0
                 && rValues.maStops[1] == 0.5 && rValues.maStops[2] == 1)
             {
-                // tdf#144073: Note that the code below adjusts the gradient area this way.
-                // No, I have no idea why.
-                aLeftTop -= 2.0*nDiagonalLength*aDirection;
-                aLeftBottom -= 2.0*nDiagonalLength*aDirection;
-                aRightTop += 2.0*nDiagonalLength*aDirection;
-                aRightBottom += 2.0*nDiagonalLength*aDirection;
+                // tdf#144073 and tdf#147645: use bounds and angle for gradient
+                // Passing an expanded, rotated polygon noticeably modifies the
+                // drawing of the gradient in a slideshow due to moving of the
+                // starting and ending colors far off the edges of the drawing
+                // surface. So try another way and set the angle of the
+                // gradient and draw only the unadjusted bounds.
                 Gradient vclGradient( css::awt::GradientStyle_AXIAL, rColors[ 1 ], rColors[ 0 ] );
-                ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
-                aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
-                                        ::basegfx::fround( aLeftTop.getY() ) );
-                aTempPoly[1] = ::Point( ::basegfx::fround( aRightTop.getX() ),
-                                        ::basegfx::fround( aRightTop.getY() ) );
-                aTempPoly[2] = ::Point( ::basegfx::fround( aRightBottom.getX() ),
-                                        ::basegfx::fround( aRightBottom.getY() ) );
-                aTempPoly[3] = ::Point( ::basegfx::fround( aLeftBottom.getX() ),
-                                        ::basegfx::fround( aLeftBottom.getY() ) );
-                aTempPoly[4] = aTempPoly[0];
-                rOutDev.DrawGradient( aTempPoly, vclGradient );
+                double fRotate = atan2( aDirection.getY(), aDirection.getX() );
+                const double nAngleInTenthOfDegrees = 3600.0 - basegfx::rad2deg<10>( fRotate ) + 900.0;
+                vclGradient.SetAngle( Degree10( ::basegfx::fround( nAngleInTenthOfDegrees ) ) );
+                rOutDev.DrawGradient( rBounds, vclGradient );
                 return;
             }
 
