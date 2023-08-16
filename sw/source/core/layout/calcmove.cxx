@@ -2004,6 +2004,12 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
         pTmpPrev = static_cast<const SwFootnoteFrame*>(pTmpPrev)->Lower();
     while ( pTmpPrev && pTmpPrev->GetNext() )
         pTmpPrev = pTmpPrev->GetNext();
+
+    // tdf#156727 if the previous one has keep-with-next, ignore it on this one!
+    bool const isIgnoreKeep(pTmpPrev && pTmpPrev->IsFlowFrame()
+            && SwFlowFrame::CastFlowFrame(pTmpPrev)->IsKeep(
+                pTmpPrev->GetAttrSet()->GetKeep(), pTmpPrev->GetBreakItem()));
+
     do
     {
         // #i46181#
@@ -2153,7 +2159,8 @@ bool SwContentFrame::WouldFit_( SwTwips nSpace,
             }
         }
 
-        if (bRet && !bSplit && pFrame->IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem()))
+        if (bRet && !bSplit && !isIgnoreKeep
+            && pFrame->IsKeep(rAttrs.GetAttrSet().GetKeep(), GetBreakItem()))
         {
             if( bTstMove )
             {
