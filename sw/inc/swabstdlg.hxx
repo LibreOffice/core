@@ -532,7 +532,7 @@ public:
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
-                                                const SfxItemSet* pSwItemSet,
+                                                const SfxItemSet& rSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
                                                 weld::Widget* pParent, const SfxItemSet& rSet,

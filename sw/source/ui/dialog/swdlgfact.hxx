@@ -820,7 +820,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
-                                                const SfxItemSet* pSwItemSet,
+                                                const SfxItemSet& rSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(
                                                 weld::Widget* pParent, const SfxItemSet& rSet,

@@ -860,9 +860,9 @@ void SwNumPositionTabPage::SetModified()
 #endif
 
 SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
-                    const SfxItemSet* pSwItemSet, SwWrtShell & rSh)
+                    const SfxItemSet& rSwItemSet, SwWrtShell & rSh)
     : SfxTabDialogController(pParent, "modules/swriter/ui/bulletsandnumbering.ui", "BulletsAndNumberingDialog",
-        pSwItemSet)
+        &rSwItemSet)
     , m_rWrtSh(rSh)
     , m_xDummyCombo(m_xBuilder->weld_combo_box("dummycombo"))
 {

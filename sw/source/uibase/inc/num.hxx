@@ -129,7 +129,7 @@ class SwSvxNumBulletTabDialog final : public SfxTabDialogController
 
 public:
     SwSvxNumBulletTabDialog(weld::Window* pParent,
-                    const SfxItemSet* pSwItemSet,
+                    const SfxItemSet& rSwItemSet,
                     SwWrtShell &);
     virtual ~SwSvxNumBulletTabDialog() override;
 };

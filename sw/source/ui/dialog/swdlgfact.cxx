@@ -1214,10 +1214,10 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(we
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(weld::Window* pParent,
-                                                const SfxItemSet* pSwItemSet,
+                                                const SfxItemSet& rSwItemSet,
                                                 SwWrtShell & rWrtSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwSvxNumBulletTabDialog>(pParent, pSwItemSet, rWrtSh));
+    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwSvxNumBulletTabDialog>(pParent, rSwItemSet, rWrtSh));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(weld::Window* pParent,

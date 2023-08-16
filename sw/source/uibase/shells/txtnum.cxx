@@ -192,7 +192,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         weld::Window *pParent = rReq.GetFrameWeld();
-        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, &aSet, GetShell()));
+        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, aSet, GetShell()));
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if ( pPageItem )
             pDlg->SetCurPageId( pPageItem->GetValue() );
