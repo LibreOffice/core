@@ -2914,7 +2914,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         if (aGraphic.GetType() == GraphicType::Bitmap)
         {
             const BitmapEx& rGraphicBitmap = aGraphic.GetBitmapExRef();
-            if (rGraphicBitmap.GetChecksum() == rBmpEx.GetChecksum())
+            if (rGraphicBitmap == rBmpEx)
             {
                 bool bPNG = false;
                 GfxLink aGfxLink = aGraphic.GetGfxLink();
