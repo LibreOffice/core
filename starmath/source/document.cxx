@@ -261,10 +261,18 @@ void SmDocShell::ArrangeFormula()
     const SmFormat &rFormat = GetFormat();
     mpTree->Prepare(rFormat, *this, 0);
 
-    // format/draw formulas always from left to right,
-    // and numbers should not be converted
-    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
-    pOutDev->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
+    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE |
+                  vcl::PushFlags::RTLENABLED);
+
+    // We want the device to always be LTR, we handle RTL formulas ourselves.
+    pOutDev->EnableRTL(false);
+
+    // For RTL formulas, we want the brackets to be mirrored.
+    bool bRTL = GetFormat().IsRightToLeft();
+    pOutDev->SetLayoutMode(bRTL ? vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                                : vcl::text::ComplexTextLayoutFlags::Default);
+
+    // Numbers should not be converted, for now.
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
     mpTree->Arrange(*pOutDev, rFormat);
@@ -313,6 +321,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
     ArrangeFormula();
 
+    bool bRTL = GetFormat().IsRightToLeft();
+
     // Problem: What happens to WYSIWYG? While we're active inplace, we don't have a reference
     // device and aren't aligned to that either. So now there can be a difference between the
     // VisArea (i.e. the size within the client) and the current size.
@@ -320,6 +330,10 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
     rPosition.AdjustX(maFormat.GetDistance( DIS_LEFTSPACE ) );
     rPosition.AdjustY(maFormat.GetDistance( DIS_TOPSPACE  ) );
+
+    Point aPosition(rPosition);
+    if (bRTL)
+        aPosition.AdjustX(GetSize().Width() - maFormat.GetDistance(DIS_LEFTSPACE) - maFormat.GetDistance(DIS_RIGHTSPACE));
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when embedding
@@ -335,20 +349,27 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
         bRestoreDrawMode = true;
     }
 
-    // format/draw formulas always from left to right
-    // and numbers should not be converted
-    rDev.Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
-    rDev.SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
+    rDev.Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE |
+              vcl::PushFlags::RTLENABLED);
+
+    // We want the device to always be LTR, we handle RTL formulas ourselves.
+    rDev.EnableRTL(false);
+
+    // For RTL formulas, we want the brackets to be mirrored.
+    rDev.SetLayoutMode(bRTL ? vcl::text::ComplexTextLayoutFlags::BiDiRtl
+                            : vcl::text::ComplexTextLayoutFlags::Default);
+
+    // Numbers should not be converted, for now.
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
     //Set selection if any
     if(mpCursor && bDrawSelection){
         mpCursor->AnnotateSelection();
-        SmSelectionDrawingVisitor(rDev, mpTree.get(), rPosition);
+        SmSelectionDrawingVisitor(rDev, mpTree.get(), aPosition);
     }
 
     //Drawing using visitor
-    SmDrawingVisitor(rDev, rPosition, mpTree.get());
+    SmDrawingVisitor(rDev, aPosition, mpTree.get(), GetFormat());
 
     rDev.Pop();
 

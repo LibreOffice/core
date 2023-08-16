@@ -211,12 +211,16 @@ public:
      * @param rDevice   Device to draw on
      * @param position  Offset on device to draw the formula
      * @param pTree     Formula tree to draw
+     * @param rFormat   Formula formatting settings
      * @remarks This constructor will do the drawing, no need to anything more.
      */
-    SmDrawingVisitor( OutputDevice &rDevice, Point position, SmNode* pTree )
+    SmDrawingVisitor( OutputDevice &rDevice, Point position, SmNode* pTree, const SmFormat& rFormat )
         : mrDev( rDevice )
         , maPosition( position )
+        , mrFormat( rFormat )
     {
+        if (mrFormat.IsRightToLeft())
+            mrDev.ReMirror(maPosition);
         pTree->Accept( this );
     }
     virtual ~SmDrawingVisitor() {}
@@ -265,6 +269,7 @@ private:
                 so if needed cache it locally on the stack.
      */
     Point maPosition;
+    const SmFormat& mrFormat;
 };
 
 // SmSetSelectionVisitor

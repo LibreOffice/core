@@ -437,6 +437,10 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     Point aBarPos( maPosition + aBarOffset );
 
     tools::Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
+
+    if (mrFormat.IsRightToLeft())
+        mrDev.ReMirror(aBar);
+
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
@@ -460,6 +464,10 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
     Point aOffset ( Point( ) - pNode->GetPolygon( ).GetBoundRect( ).TopLeft( )
                    + Point( nBorderwidth, nBorderwidth ) ),
           aPos ( maPosition + aOffset );
+
+    if (mrFormat.IsRightToLeft())
+        mrDev.ReMirror(aPos);
+
     pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
 
     SmTmpDevice aTmpDev ( mrDev, false );
@@ -489,6 +497,9 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
 
     SAL_WARN_IF( aTmp.IsEmpty(), "starmath", "Empty rectangle" );
 
+    if (mrFormat.IsRightToLeft())
+        mrDev.ReMirror(aTmp);
+
     //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
     //! increasing zoomfactor.
     //  This is done by shifting its output-position to a point that
@@ -509,6 +520,10 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 
     Point  aPos ( maPosition );
     aPos.AdjustY(pNode->GetBaselineOffset( ) );
+
+    if (mrFormat.IsRightToLeft())
+        mrDev.ReMirror(aPos);
+
     // round to pixel coordinate
     aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
 

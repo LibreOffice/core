@@ -1217,9 +1217,9 @@ public:
 
     // tells whether this output device is RTL in an LTR UI or LTR in a RTL UI
     SAL_DLLPRIVATE bool         ImplIsAntiparallel() const ;
-    SAL_DLLPRIVATE void         ReMirror( Point &rPoint ) const;
-    SAL_DLLPRIVATE void         ReMirror( tools::Rectangle &rRect ) const;
-    SAL_DLLPRIVATE void         ReMirror( vcl::Region &rRegion ) const;
+                   void         ReMirror( Point &rPoint ) const;
+                   void         ReMirror( tools::Rectangle &rRect ) const;
+                   void         ReMirror( vcl::Region &rRegion ) const;
     SAL_DLLPRIVATE bool         ImplIsRecordLayout() const;
     virtual bool                HasMirroredGraphics() const;
     std::unique_ptr<SalLayout>

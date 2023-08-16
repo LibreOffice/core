@@ -546,7 +546,7 @@ void SmElementsControl::addElement(const OUString& aElementVisual, const OUStrin
     Size aSize = pDevice->LogicToPixel(Size(pNode->GetWidth(), pNode->GetHeight()));
     aSize.extendBy(10, 0); // Add 5 pixels from both sides to accommodate extending parts of italics
     pDevice->SetOutputSizePixel(aSize);
-    SmDrawingVisitor(*pDevice, pDevice->PixelToLogic(Point(5, 0)), pNode.get());
+    SmDrawingVisitor(*pDevice, pDevice->PixelToLogic(Point(5, 0)), pNode.get(), maFormat);
 
     maItemDatas.push_back(std::make_unique<ElementData>(aElementSource, aHelpText));
     const OUString aId(weld::toId(maItemDatas.back().get()));
