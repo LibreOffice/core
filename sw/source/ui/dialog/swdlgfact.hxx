@@ -206,6 +206,26 @@ public:
     virtual short Execute() override;
 };
 
+class AbstractNumBulletDialog_Impl : public AbstractNumBulletDialog
+{
+protected:
+    std::shared_ptr<SfxTabDialogController> m_xDlg;
+public:
+    explicit AbstractNumBulletDialog_Impl(std::shared_ptr<SfxTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool  StartExecuteAsync(AsyncContext &rCtx) override;
+    virtual void                SetCurPageId( const OUString &rName ) override;
+    virtual const SfxItemSet*   GetOutputItemSet() const override;
+    virtual const SfxItemSet*   GetInputItemSet() const override;
+    virtual WhichRangesContainer GetInputRanges( const SfxItemPool& pItem ) override;
+    virtual void                SetInputSet( const SfxItemSet* pInSet ) override;
+        //From class Window.
+    virtual void        SetText( const OUString& rStr ) override;
+};
+
 class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 {
     std::shared_ptr<weld::DialogController> m_xDlg;
@@ -819,7 +839,7 @@ public:
     virtual VclPtr<VclAbstractDialog>          CreateMultiTOXMarkDlg(weld::Window* pParent, SwTOXMgr &rTOXMgr) override;
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent, const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) override;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractNumBulletDialog>    CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet& rSwItemSet,
                                                 SwWrtShell &) override;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(

@@ -192,7 +192,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         weld::Window *pParent = rReq.GetFrameWeld();
-        VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, aSet, GetShell()));
+        VclPtr<AbstractNumBulletDialog> pDlg(pFact->CreateSvxNumBulletTabDialog(pParent, aSet, GetShell()));
         const SfxStringItem* pPageItem = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
         if ( pPageItem )
             pDlg->SetCurPageId( pPageItem->GetValue() );
@@ -200,7 +200,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         auto pRequest = std::make_shared<SfxRequest>(rReq);
         rReq.Ignore(); // the 'old' request is not relevant any more
 
-        pDlg->StartExecuteAsync([aSet=std::move(aSet), pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
+        pDlg->StartExecuteAsync([pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
             if (RET_OK == nResult)
             {
                 const SvxNumBulletItem* pBulletItem = pDlg->GetOutputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
@@ -224,7 +224,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 // If the Dialog was leaved with OK but nothing was chosen then the
                 // numbering must be at least activated, if it is not already.
                 else if (pNumRuleAtCurrentSelection == nullptr
-                         && (pBulletItem = aSet.GetItemIfSet(SID_ATTR_NUMBERING_RULE, false)))
+                         && (pBulletItem = pDlg->GetInputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false)))
                 {
                     pRequest->AppendItem(*pBulletItem);
                     pRequest->Done();

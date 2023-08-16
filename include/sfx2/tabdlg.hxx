@@ -141,6 +141,7 @@ public:
     const WhichRangesContainer& GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return m_pOutSet.get(); }
+    const SfxItemSet*   GetInputItemSet() const { return m_pSet.get(); }
 
     virtual weld::Button& GetOKButton() const override { return *m_xOKBtn; }
     weld::Button&       GetCancelButton() const { return *m_xCancelBtn; }

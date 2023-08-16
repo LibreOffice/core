@@ -339,6 +339,14 @@ public:
     virtual std::shared_ptr<SfxDialogController> GetController() = 0;
 };
 
+class AbstractNumBulletDialog : public SfxAbstractTabDialog
+{
+protected:
+    virtual ~AbstractNumBulletDialog() override = default;
+public:
+    virtual const SfxItemSet* GetInputItemSet() const = 0;
+};
+
 /**
  * Interface for e.g. the insert -> bookmark -> rename dialog. It's implemented by
  * AbstractSwRenameXNamedDlg_Impl, but SwInsertBookmarkDlg only knows about this interface and the
@@ -531,7 +539,7 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateOutlineTabDialog(weld::Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0;
-    virtual VclPtr<SfxAbstractTabDialog>       CreateSvxNumBulletTabDialog(weld::Window* pParent,
+    virtual VclPtr<AbstractNumBulletDialog>    CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet& rSwItemSet,
                                                 SwWrtShell &) = 0;
     virtual VclPtr<AbstractMultiTOXTabDialog>  CreateMultiTOXTabDialog(

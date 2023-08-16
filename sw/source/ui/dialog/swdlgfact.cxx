@@ -187,6 +187,11 @@ short AbstractTabController_Impl::Execute()
     return m_xDlg->run();
 }
 
+short AbstractNumBulletDialog_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
 short AbstractSwConvertTableDlg_Impl::Execute()
 {
     return m_xDlg->run();
@@ -349,6 +354,42 @@ bool AbstractTabController_Impl::StartExecuteAsync(AsyncContext &rCtx)
 
 //From class Window.
 void AbstractTabController_Impl::SetText( const OUString& rStr )
+{
+    m_xDlg->set_title(rStr);
+}
+
+void AbstractNumBulletDialog_Impl::SetCurPageId( const OUString &rName )
+{
+    m_xDlg->SetCurPageId( rName );
+}
+
+const SfxItemSet* AbstractNumBulletDialog_Impl::GetOutputItemSet() const
+{
+    return m_xDlg->GetOutputItemSet();
+}
+
+const SfxItemSet* AbstractNumBulletDialog_Impl::GetInputItemSet() const
+{
+    return m_xDlg->GetInputItemSet();
+}
+
+WhichRangesContainer AbstractNumBulletDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+{
+    return m_xDlg->GetInputRanges( pItem );
+}
+
+void AbstractNumBulletDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+{
+     m_xDlg->SetInputSet( pInSet );
+}
+
+bool AbstractNumBulletDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxTabDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
+//From class Window.
+void AbstractNumBulletDialog_Impl::SetText( const OUString& rStr )
 {
     m_xDlg->set_title(rStr);
 }
@@ -1213,11 +1254,11 @@ VclPtr<VclAbstractDialog> SwAbstractDialogFactory_Impl::CreateMultiTOXMarkDlg(we
     return VclPtr<AbstractMultiTOXMarkDlg_Impl>::Create(std::make_unique<SwMultiTOXMarkDlg>(pParent, rTOXMgr));
 }
 
-VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(weld::Window* pParent,
+VclPtr<AbstractNumBulletDialog> SwAbstractDialogFactory_Impl::CreateSvxNumBulletTabDialog(weld::Window* pParent,
                                                 const SfxItemSet& rSwItemSet,
                                                 SwWrtShell & rWrtSh)
 {
-    return VclPtr<AbstractTabController_Impl>::Create(std::make_shared<SwSvxNumBulletTabDialog>(pParent, rSwItemSet, rWrtSh));
+    return VclPtr<AbstractNumBulletDialog_Impl>::Create(std::make_shared<SwSvxNumBulletTabDialog>(pParent, rSwItemSet, rWrtSh));
 }
 
 VclPtr<SfxAbstractTabDialog> SwAbstractDialogFactory_Impl::CreateOutlineTabDialog(weld::Window* pParent,
