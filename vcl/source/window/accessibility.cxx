@@ -94,12 +94,8 @@ bool Window::ImplIsAccessibleCandidate() const
 {
     if( !mpWindowImpl->mbBorderWin )
         return true;
-    else
-        // #101741 do not check for WB_CLOSEABLE because undecorated floaters (like menus!) are closeable
-        if( mpWindowImpl->mbFrame && mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
-            return true;
-        else
-            return false;
+
+    return ImplIsAccessibleNativeFrame();
 }
 
 bool Window::ImplIsAccessibleNativeFrame() const
