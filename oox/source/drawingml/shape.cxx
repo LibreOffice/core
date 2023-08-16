@@ -2190,13 +2190,24 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                 // in the imported chart data
                 bool bMSO2007Doc = rFilter.isMSO2007Document();
                 chart::ChartSpaceModel aModel(bMSO2007Doc);
+                oox::ppt::PowerPointImport* pPowerPointImport
+                    = dynamic_cast<oox::ppt::PowerPointImport*>(&rFilter);
+
+                ClrMapPtr pClrMap; // The original color map
+                if (pPowerPointImport)
+                {
+                    // Use a copy of current color map, which the fragment may override locally
+                    pClrMap = pPowerPointImport->getActualSlidePersist()->getClrMap();
+                    aModel.mpClrMap = pClrMap ? std::make_shared<ClrMap>(*pClrMap)
+                                              : std::make_shared<ClrMap>();
+                    pPowerPointImport->getActualSlidePersist()->setClrMap(aModel.mpClrMap);
+                }
+
                 rtl::Reference<chart::ChartSpaceFragment> pChartSpaceFragment = new chart::ChartSpaceFragment(
                         rFilter, mxChartShapeInfo->maFragmentPath, aModel );
                 const OUString aThemeOverrideFragmentPath( pChartSpaceFragment->
                         getFragmentPathFromFirstTypeFromOfficeDoc(u"themeOverride") );
                 rFilter.importFragment( pChartSpaceFragment );
-                ::oox::ppt::PowerPointImport *pPowerPointImport =
-                    dynamic_cast< ::oox::ppt::PowerPointImport* >(&rFilter);
 
                 // The original theme.
                 ThemePtr pTheme;
@@ -2236,10 +2247,15 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
 
                 }
 
-                if (!aThemeOverrideFragmentPath.isEmpty() && pPowerPointImport)
+                if (pPowerPointImport)
                 {
-                    // Restore the original theme.
-                    pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
+                    if (!aThemeOverrideFragmentPath.isEmpty())
+                    {
+                        // Restore the original theme.
+                        pPowerPointImport->getActualSlidePersist()->setTheme(pTheme);
+                    }
+                    // Restore the original color map
+                    pPowerPointImport->getActualSlidePersist()->setClrMap(pClrMap);
                 }
 #endif
             }

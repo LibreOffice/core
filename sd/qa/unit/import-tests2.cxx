@@ -1937,6 +1937,37 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, test_srcRect_smallNegBound)
     CPPUNIT_ASSERT(aBitmap.GetPixelColor(0, 0).IsBright());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf153012)
+{
+    // Given a chart with a data point with solid fill of "Background 1, Darker 15%" color,
+    // where the 'bg1' is mapped in the slide to "dk1", but in the chart to "lt1":
+    createSdImpressDoc("pptx/chart_pt_color_bg1.pptx");
+
+    uno::Reference<chart2::XChartDocument> xChart2Doc(
+        getShapeFromPage(0, 0)->getPropertyValue("Model"), uno::UNO_QUERY_THROW);
+
+    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysCnt(xChart2Doc->getFirstDiagram(),
+                                                                  uno::UNO_QUERY_THROW);
+
+    uno::Reference<chart2::XChartTypeContainer> xCTCnt(xCooSysCnt->getCoordinateSystems()[0],
+                                                       uno::UNO_QUERY_THROW);
+
+    uno::Reference<chart2::XDataSeriesContainer> xDSCnt(xCTCnt->getChartTypes()[0],
+                                                        uno::UNO_QUERY_THROW);
+
+    uno::Sequence<uno::Reference<chart2::XDataSeries>> aSeriesSeq(xDSCnt->getDataSeries());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeriesSeq.getLength());
+
+    css::uno::Reference<css::beans::XPropertySet> xPropSet1(aSeriesSeq[0]->getDataPointByIndex(1),
+                                                            uno::UNO_SET_THROW);
+    Color aFillColor;
+    xPropSet1->getPropertyValue("FillColor") >>= aFillColor;
+    // The color must arrive correctly. Without the fix, it would fail:
+    // - Expected: rgba[d9d9d9ff]
+    // - Actual  : rgba[000000ff]
+    CPPUNIT_ASSERT_EQUAL(Color(0xd9d9d9), aFillColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
