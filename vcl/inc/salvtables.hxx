@@ -31,6 +31,7 @@
 #include "iconview.hxx"
 #include "listbox.hxx"
 #include "messagedialog.hxx"
+#include "verticaltabctrl.hxx"
 
 namespace vcl
 {
@@ -2239,6 +2240,48 @@ public:
     virtual Formatter& GetFormatter() override;
 
     virtual ~SalInstanceFormattedSpinButton() override;
+};
+
+class SalInstanceVerticalNotebook : public SalInstanceWidget, public virtual weld::Notebook
+{
+private:
+    VclPtr<VerticalTabControl> m_xNotebook;
+    mutable std::vector<std::unique_ptr<SalInstanceContainer>> m_aPages;
+
+    DECL_LINK(DeactivatePageHdl, VerticalTabControl*, bool);
+    DECL_LINK(ActivatePageHdl, VerticalTabControl*, void);
+
+public:
+    SalInstanceVerticalNotebook(VerticalTabControl* pNotebook, SalInstanceBuilder* pBuilder,
+                                bool bTakeOwnership);
+
+    virtual int get_current_page() const override;
+
+    virtual OString get_page_ident(int nPage) const override;
+
+    virtual OString get_current_page_ident() const override;
+
+    virtual int get_page_index(const OString& rIdent) const override;
+
+    virtual weld::Container* get_page(const OString& rIdent) const override;
+
+    virtual void set_current_page(int nPage) override;
+
+    virtual void set_current_page(const OString& rIdent) override;
+
+    virtual void remove_page(const OString& rIdent) override;
+
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
+
+    virtual int get_n_pages() const override;
+
+    virtual void set_tab_label_text(const OString& rIdent, const OUString& rText) override;
+
+    virtual OUString get_tab_label_text(const OString& rIdent) const override;
+
+    virtual void set_show_tabs(bool /*bShow*/) override;
+
+    virtual ~SalInstanceVerticalNotebook() override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
