@@ -7,11 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/lang/xcomponent.hxx>
 #include <test/container/xnamed.hxx>
 #include <test/text/xtextcontent.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -28,22 +27,48 @@ namespace
 /**
  * Initial tests for SwXBookmark.
  */
-class SwXBookmark final : public test::BootstrapFixture,
-                          public unotest::MacrosTest,
+class SwXBookmark final : public UnoApiTest,
                           public apitest::XComponent,
                           public apitest::XNamed,
                           public apitest::XTextContent
 {
 public:
-    SwXBookmark();
-    virtual void setUp() override;
-    void tearDown() override;
+    SwXBookmark()
+        : UnoApiTest("")
+        , XNamed("Bookmark")
+    {
+    }
 
-    Reference<XInterface> init() override;
-    Reference<text::XTextRange> getTextRange() override;
-    Reference<text::XTextContent> getTextContent() override;
+    virtual void setUp() override
+    {
+        UnoApiTest::setUp();
+        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxComponent = loadFromDesktop("private:factory/swriter");
+        CPPUNIT_ASSERT(mxComponent.is());
+    }
+
+    Reference<XInterface> init() override
+    {
+        Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+        Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
+
+        Reference<text::XText> xText = xTextDocument->getText();
+        Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+        Reference<text::XTextContent> xBookmark(xMSF->createInstance("com.sun.star.text.Bookmark"),
+                                                UNO_QUERY_THROW);
+
+        xText->insertTextContent(xCursor, xBookmark, false);
+        mxTextRange = Reference<text::XTextRange>(xCursor, UNO_QUERY_THROW);
+        mxTextContent = Reference<text::XTextContent>(
+            xMSF->createInstance("com.sun.star.text.Bookmark"), UNO_QUERY_THROW);
+
+        return Reference<XInterface>(xBookmark, UNO_QUERY_THROW);
+    }
+
+    Reference<text::XTextRange> getTextRange() override { return mxTextRange; };
+    Reference<text::XTextContent> getTextContent() override { return mxTextContent; };
     bool isAttachSupported() override { return true; }
-    Reference<text::XTextDocument> getTextDocument() { return mxTextDocument; }
     void triggerDesktopTerminate() override { mxDesktop->terminate(); }
 
     CPPUNIT_TEST_SUITE(SwXBookmark);
@@ -57,56 +82,9 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    Reference<text::XTextDocument> mxTextDocument;
     Reference<text::XTextRange> mxTextRange;
     Reference<text::XTextContent> mxTextContent;
 };
-
-SwXBookmark::SwXBookmark()
-    : XNamed("Bookmark")
-{
-}
-
-void SwXBookmark::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-    mxTextDocument = Reference<text::XTextDocument>(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
-        UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
-}
-
-void SwXBookmark::tearDown()
-{
-    if (mxTextDocument.is())
-        mxTextDocument->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-Reference<XInterface> SwXBookmark::init()
-{
-    Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
-
-    Reference<text::XText> xText = getTextDocument()->getText();
-    Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-
-    Reference<text::XTextContent> xBookmark(xMSF->createInstance("com.sun.star.text.Bookmark"),
-                                            UNO_QUERY_THROW);
-
-    xText->insertTextContent(xCursor, xBookmark, false);
-    mxTextRange = Reference<text::XTextRange>(xCursor, UNO_QUERY_THROW);
-    mxTextContent = Reference<text::XTextContent>(
-        xMSF->createInstance("com.sun.star.text.Bookmark"), UNO_QUERY_THROW);
-
-    return Reference<XInterface>(xBookmark, UNO_QUERY_THROW);
-}
-
-Reference<text::XTextRange> SwXBookmark::getTextRange() { return mxTextRange; }
-
-Reference<text::XTextContent> SwXBookmark::getTextContent() { return mxTextContent; }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXBookmark);
 }

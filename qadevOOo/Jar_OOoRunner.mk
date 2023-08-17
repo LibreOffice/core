@@ -1094,7 +1094,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXAutoTextEntry \
     qadevOOo/tests/java/mod/_sw/SwXAutoTextGroup \
     qadevOOo/tests/java/mod/_sw/SwXBodyText \
-    qadevOOo/tests/java/mod/_sw/SwXBookmark \
     qadevOOo/tests/java/mod/_sw/SwXCell \
     qadevOOo/tests/java/mod/_sw/SwXCellRange \
     qadevOOo/tests/java/mod/_sw/SwXChapterNumbering \

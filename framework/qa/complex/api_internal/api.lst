@@ -139,7 +139,6 @@ job200=sw.SwAccessibleTableCellView
 job201=sw.SwAccessibleTextFrameView
 job202=sw.SwAccessibleTextGraphicObject
 job203=sw.SwXBodyText
-job204=sw.SwXBookmark
 job206=sw.SwXCell
 job207=sw.SwXDocumentIndexes
 job208=sw.SwXDocumentIndexMark
