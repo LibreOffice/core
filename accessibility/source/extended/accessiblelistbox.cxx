@@ -240,25 +240,6 @@ namespace accessibility
         }
     }
 
-
-    void AccessibleListBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
-    {
-        switch ( rVclWindowEvent.GetId() )
-        {
-            case VclEventId::WindowShow:
-            case VclEventId::WindowHide:
-            {
-            }
-            break;
-            default:
-            {
-                VCLXAccessibleComponent::ProcessWindowChildEvent( rVclWindowEvent );
-            }
-            break;
-        }
-    }
-
-
     // XComponent
 
     void SAL_CALL AccessibleListBox::disposing()
