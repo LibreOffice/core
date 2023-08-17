@@ -2841,6 +2841,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf155611)
     // Also must not crash on close because of a frame that accidentally fell off of the layout
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf156725)
+{
+    createSwDoc("tdf156725.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    // the fly has 2 columns, the section in it has 2 columns, and is split
+    // across the fly columns => 4 columns with 1 text frame each
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column", 2);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column", 2);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[2]/body/txt", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
