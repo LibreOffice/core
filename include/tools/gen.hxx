@@ -95,11 +95,10 @@ template<class PointT, class SizeT>
 class PointTemplate : public PointTemplateBase
 {
 public:
+    using SizeType = SizeT;
+
     constexpr PointTemplate() {}
     constexpr PointTemplate( tools::Long nX, tools::Long nY ) : PointTemplateBase( nX, nY ) {}
-
-    using PointTemplateBase::X;
-    using PointTemplateBase::Y;
 
     void Move( tools::Long nHorzMove, tools::Long nVertMove )
     {
@@ -124,25 +123,25 @@ public:
     {
         mnA += rPoint.mnA;
         mnB += rPoint.mnB;
-        return reinterpret_cast<PointT&>(*this);
+        return static_cast<PointT&>(*this);
     }
     PointT& operator-=( const PointT& rPoint )
     {
         mnA -= rPoint.mnA;
         mnB -= rPoint.mnB;
-        return reinterpret_cast<PointT&>(*this);
+        return static_cast<PointT&>(*this);
     }
     PointT& operator*=( const tools::Long nVal )
     {
         mnA *= nVal;
         mnB *= nVal;
-        return reinterpret_cast<PointT&>(*this);
+        return static_cast<PointT&>(*this);
     }
     PointT& operator/=( const tools::Long nVal )
     {
         mnA /= nVal;
         mnB /= nVal;
-        return reinterpret_cast<PointT&>(*this);
+        return static_cast<PointT&>(*this);
     }
 
     constexpr tools::Long      getX() const { return X(); }
@@ -249,12 +248,9 @@ constexpr Point::Point(const AbsoluteScreenPixelPoint& p) : Point(p.X(), p.Y()) 
 
 namespace o3tl
 {
-constexpr Point convert(const Point& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
-{
-    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
-    return rPoint.scale(num, den, num, den);
-}
-constexpr AbsoluteScreenPixelPoint convert(const AbsoluteScreenPixelPoint& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
+template <class PointT,
+          std::enable_if_t<std::is_base_of_v<PointTemplate<PointT, typename PointT::SizeType>, PointT>, int> = 0>
+constexpr auto convert(const PointT& rPoint, o3tl::Length eFrom, o3tl::Length eTo)
 {
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rPoint.scale(num, den, num, den);
@@ -314,25 +310,25 @@ public:
     {
         mnA += rSize.mnA;
         mnB += rSize.mnB;
-        return reinterpret_cast<SizeT&>(*this);
+        return static_cast<SizeT&>(*this);
     }
     SizeT&              operator -= ( const SizeT& rSize )
     {
         mnA -= rSize.mnA;
         mnB -= rSize.mnB;
-        return reinterpret_cast<SizeT&>(*this);
+        return static_cast<SizeT&>(*this);
     }
     SizeT&              operator *= ( const tools::Long nVal )
     {
         mnA *= nVal;
         mnB *= nVal;
-        return reinterpret_cast<SizeT&>(*this);
+        return static_cast<SizeT&>(*this);
     }
     SizeT&              operator /= ( const tools::Long nVal )
     {
         mnA /= nVal;
         mnB /= nVal;
-        return reinterpret_cast<SizeT&>(*this);
+        return static_cast<SizeT&>(*this);
     }
 
     constexpr SizeT scale(sal_Int64 nMulX, sal_Int64 nDivX,
@@ -420,12 +416,9 @@ inline AbsoluteScreenPixelSize operator/( const AbsoluteScreenPixelSize &rVal1, 
 namespace o3tl
 {
 
-constexpr Size convert(const Size& rSize, o3tl::Length eFrom, o3tl::Length eTo)
-{
-    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
-    return rSize.scale(num, den, num, den);
-}
-constexpr AbsoluteScreenPixelSize convert(const AbsoluteScreenPixelSize& rSize, o3tl::Length eFrom, o3tl::Length eTo)
+template <class SizeT,
+          std::enable_if_t<std::is_base_of_v<SizeTemplate<SizeT>, SizeT>, int> = 0>
+constexpr auto convert(const SizeT& rSize, o3tl::Length eFrom, o3tl::Length eTo)
 {
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rSize.scale(num, den, num, den);
@@ -797,17 +790,17 @@ public:
     constexpr PointT GetPos() const { return TopLeft(); }
     constexpr SizeT GetSize() const { return { GetWidth(), GetHeight() }; }
 
-    RectangleT&          Union( const RectangleT& rRect ) { RectangleTemplateBase::Union(rRect); return reinterpret_cast<RectangleT&>(*this); }
-    RectangleT&          Intersection( const RectangleT& rRect ) { RectangleTemplateBase::Intersection(rRect); return reinterpret_cast<RectangleT&>(*this); }
+    RectangleT&          Union( const RectangleTemplate& rRect ) { RectangleTemplateBase::Union(rRect); return static_cast<RectangleT&>(*this); }
+    RectangleT&          Intersection( const RectangleTemplate& rRect ) { RectangleTemplateBase::Intersection(rRect); return static_cast<RectangleT&>(*this); }
     RectangleT    GetUnion( const RectangleT& rRect ) const
     {
-        RectangleT aTmpRect( reinterpret_cast<const RectangleT&>(*this) );
-        return aTmpRect.Union( rRect );
+        RectangleT aTmpRect( rRect );
+        return aTmpRect.Union( *this );
     }
     RectangleT    GetIntersection( const RectangleT& rRect ) const
     {
-        RectangleT aTmpRect( reinterpret_cast<const RectangleT&>(*this) );
-        return aTmpRect.Intersection( rRect );
+        RectangleT aTmpRect( rRect );
+        return aTmpRect.Intersection( *this );
     }
 
     bool                Contains( const PointT& rPt ) const { return RectangleTemplateBase::Contains(rPt); }
@@ -832,12 +825,12 @@ public:
     RectangleT&   operator += ( const PointT& rPt )
     {
         Move(rPt.X(), rPt.Y());
-        return reinterpret_cast<RectangleT&>(*this);
+        return static_cast<RectangleT&>(*this);
     }
     RectangleT&   operator -= ( const PointT& rPt )
     {
         Move(-rPt.X(), -rPt.Y());
-        return reinterpret_cast<RectangleT&>(*this);
+        return static_cast<RectangleT&>(*this);
     }
 
     RectangleT operator+( const Point& rPt ) const
@@ -909,12 +902,9 @@ namespace tools
 namespace o3tl
 {
 
-constexpr tools::Rectangle convert(const tools::Rectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
-{
-    const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
-    return rRectangle.scale(num, den, num, den);
-}
-constexpr AbsoluteScreenPixelRectangle convert(const AbsoluteScreenPixelRectangle& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
+template <class RectangleT,
+          std::enable_if_t<std::is_base_of_v<RectangleTemplate<RectangleT, typename RectangleT::PointType, typename RectangleT::SizeType>, RectangleT>, int> = 0>
+constexpr auto convert(const RectangleT& rRectangle, o3tl::Length eFrom, o3tl::Length eTo)
 {
     const auto [num, den] = o3tl::getConversionMulDiv(eFrom, eTo);
     return rRectangle.scale(num, den, num, den);
