@@ -1207,6 +1207,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156724)
     assertXPath(pXmlDoc, "/root/page", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156725)
+{
+    createSwDoc("tdf156725.fodt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    // the fly has 2 columns, the section in it has 2 columns, and is split
+    // across the fly columns => 4 columns with 1 text frame each
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column", 2);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[1]/body/section/column[2]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column", 2);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[1]/body/txt", 1);
+    assertXPath(pXmlDoc,
+                "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[2]/body/txt", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf145826)
 {
     createSwDoc("tdf145826.odt");
