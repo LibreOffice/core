@@ -1098,7 +1098,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXCell \
     qadevOOo/tests/java/mod/_sw/SwXCellRange \
     qadevOOo/tests/java/mod/_sw/SwXChapterNumbering \
-    qadevOOo/tests/java/mod/_sw/SwXDocumentIndex \
     qadevOOo/tests/java/mod/_sw/SwXDocumentIndexes \
     qadevOOo/tests/java/mod/_sw/SwXDocumentIndexMark \
     qadevOOo/tests/java/mod/_sw/SwXDrawPage \
