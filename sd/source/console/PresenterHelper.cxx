@@ -36,17 +36,10 @@ Reference<presentation::XSlideShowController> PresenterHelper::GetSlideShowContr
 {
     Reference<presentation::XSlideShowController> xSlideShowController;
 
-    if( rxController.is() ) try
-    {
-        Reference<XPresentationSupplier> xPS ( rxController->getModel(), UNO_QUERY_THROW);
-
-        Reference<XPresentation2> xPresentation(xPS->getPresentation(), UNO_QUERY_THROW);
-
-        xSlideShowController = xPresentation->getController();
-    }
-    catch(RuntimeException&)
-    {
-    }
+    if( rxController.is() )
+        if (auto xPS = rxController->getModel().query<XPresentationSupplier>())
+            if (auto xPresentation = xPS->getPresentation().query<XPresentation2>())
+                xSlideShowController = xPresentation->getController();
 
     return xSlideShowController;
 }

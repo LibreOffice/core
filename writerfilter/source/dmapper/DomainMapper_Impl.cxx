@@ -4498,15 +4498,11 @@ void DomainMapper_Impl::PopShapeContext()
     // or anchored to a discarded header or footer
     if ( m_aAnchoredStack.top().bToRemove || m_bDiscardHeaderFooter )
     {
-        try
+        if (auto xDrawPageSupplier = m_xTextDocument.query<drawing::XDrawPageSupplier>())
         {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(m_xTextDocument, uno::UNO_QUERY_THROW);
             uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
             if ( xDrawPage.is() )
                 xDrawPage->remove( xShape );
-        }
-        catch( const uno::Exception& )
-        {
         }
     }
 

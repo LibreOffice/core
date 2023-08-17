@@ -353,15 +353,8 @@ ScriptEventHelper::~ScriptEventHelper()
     // dispose control ( and remove any associated event registrations )
     if ( m_bDispose )
     {
-        try
-        {
-            uno::Reference< lang::XComponent > xComp( m_xControl, uno::UNO_QUERY_THROW );
+        if (auto xComp = m_xControl.query<lang::XComponent>() )
             xComp->dispose();
-        }
-        // destructor can't throw
-        catch( uno::Exception& )
-        {
-        }
     }
 }
 

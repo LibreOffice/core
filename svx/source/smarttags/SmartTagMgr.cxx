@@ -240,13 +240,8 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
     if ( bCommit )
     {
-        try
-        {
-            Reference< util::XChangesBatch >( mxConfigurationSettings, UNO_QUERY_THROW )->commitChanges();
-        }
-        catch ( css::uno::Exception& )
-        {
-        }
+        if (auto xChangesBatch = mxConfigurationSettings.query<util::XChangesBatch>() )
+            xChangesBatch->commitChanges();
     }
 }
 
@@ -448,25 +443,16 @@ void SmartTagMgr::RegisterListener()
     {
         Reference<deployment::XExtensionManager> xExtensionManager(
                 deployment::ExtensionManager::get( mxContext ) );
-        Reference< util::XModifyBroadcaster > xMB ( xExtensionManager, UNO_QUERY_THROW );
-
-        Reference< util::XModifyListener > xListener( this );
-        xMB->addModifyListener( xListener );
+        if (auto xMB = xExtensionManager.query<util::XModifyBroadcaster>() )
+            xMB->addModifyListener( Reference< util::XModifyListener >( this ) );
     }
     catch ( uno::Exception& )
     {
     }
 
     // register as listener at configuration
-    try
-    {
-        Reference<util::XChangesNotifier> xCN( mxConfigurationSettings, UNO_QUERY_THROW );
-        Reference< util::XChangesListener > xListener( this );
-        xCN->addChangesListener( xListener );
-    }
-    catch ( uno::Exception& )
-    {
-    }
+    if (auto xCN = mxConfigurationSettings.query<util::XChangesNotifier>() )
+        xCN->addChangesListener( Reference< util::XChangesListener >( this ) );
 }
 
 typedef std::pair < const OUString, ActionReference > SmartTagMapElement;

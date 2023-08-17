@@ -73,10 +73,10 @@ static void ImpExtractCustomShow( const Reference< XModel >& rxModel, std::u16st
     try
     {
         PageCollector::CollectNonCustomShowPages( rxModel, rCustomShowName, vNonUsedPageList );
-        Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
-        for( const auto& rxPage : vNonUsedPageList )
-            xDrawPages->remove( rxPage );
+        if (auto xDrawPagesSupplier = rxModel.query<XDrawPagesSupplier>() )
+            if (auto xDrawPages = xDrawPagesSupplier->getDrawPages().query<XDrawPages>() )
+                for( const auto& rxPage : vNonUsedPageList )
+                    xDrawPages->remove( rxPage );
     }
     catch( Exception& )
     {
@@ -544,10 +544,12 @@ static void DispatchURL( const Reference< XComponentContext >& xContext, const O
         aUrl.Complete = sURL;
         xURLTransformer->parseStrict( aUrl );
         Sequence< PropertyValue > aArgs;
-        Reference< XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY_THROW );
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  // "_self"
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aUrl, aArgs );
+        if (auto xDispatchProvider = xFrame.query<XDispatchProvider>() )
+        {
+            Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  // "_self"
+            if ( xDispatch.is() )
+                xDispatch->dispatch( aUrl, aArgs );
+        }
     }
     catch( Exception& )
     {

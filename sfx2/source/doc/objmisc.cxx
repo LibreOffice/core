@@ -1806,8 +1806,8 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
         OUString aVersion;
         try
         {
-            uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue("Version") >>= aVersion;
+            if (auto xPropSet = rDocShell.GetStorage().query<beans::XPropertySet>() )
+                xPropSet->getPropertyValue("Version") >>= aVersion;
         }
         catch( uno::Exception& )
         {

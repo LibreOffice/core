@@ -124,15 +124,8 @@ IMPL_STATIC_LINK( MainThreadFrameCloserRequest, worker, void*, p, void )
             // ignore all the errors
         }
 
-        try
-        {
-            uno::Reference< util::XCloseable > xCloseable( pMTRequest->m_xFrame, uno::UNO_QUERY_THROW );
+        if (auto xCloseable = pMTRequest->m_xFrame.query<util::XCloseable>() )
             xCloseable->close( true );
-        }
-        catch( uno::Exception& )
-        {
-            // ignore all the errors
-        }
     }
 
     delete pMTRequest;

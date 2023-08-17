@@ -395,8 +395,8 @@ static uno::Reference< vba::XVBACompatibility > getVBACompatibility( const uno::
     uno::Reference< vba::XVBACompatibility > xVBACompat;
     try
     {
-        uno::Reference< beans::XPropertySet > xModelProps( rxModel, uno::UNO_QUERY_THROW );
-        xVBACompat.set( xModelProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY );
+        if (auto xModelProps = rxModel.query<beans::XPropertySet>() )
+            xVBACompat.set( xModelProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY );
     }
     catch(const uno::Exception& )
     {

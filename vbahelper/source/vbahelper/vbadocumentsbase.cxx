@@ -198,24 +198,21 @@ namespace {
 
 void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, bool bScreenUpdating, bool bInteractive )
 {
-    if( !bScreenUpdating ) try
-    {
-        uno::Reference< frame::XModel >( rxComponent, uno::UNO_QUERY_THROW )->lockControllers();
-    }
-    catch( uno::Exception& )
-    {
-    }
+    auto xModel = rxComponent.query<frame::XModel>();
+    if( !bScreenUpdating && xModel )
+        xModel->lockControllers();
 
-    if( !bInteractive ) try
-    {
-        uno::Reference< frame::XModel > xModel( rxComponent, uno::UNO_QUERY_THROW );
-        uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
-        uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
-        uno::Reference< awt::XWindow >( xFrame->getContainerWindow(), uno::UNO_SET_THROW )->setEnable( false );
-    }
-    catch( uno::Exception& )
-    {
-    }
+    if( !bInteractive )
+        try
+        {
+            if (auto xController = xModel->getCurrentController().query<frame::XController>() )
+                if (auto xFrame = xController->getFrame().query<frame::XFrame>() )
+                    if (auto xWindow = xFrame->getContainerWindow().query<awt::XWindow>() )
+                        xWindow->setEnable( false );
+        }
+        catch( uno::Exception& )
+        {
+        }
 }
 
 } // namespace

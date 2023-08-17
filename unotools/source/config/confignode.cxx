@@ -146,15 +146,8 @@ namespace utl
     OUString OConfigurationNode::getLocalName() const
     {
         OUString sLocalName;
-        try
-        {
-            Reference< XNamed > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
+        if (auto xNamed = m_xDirectAccess.query<XNamed>() )
             sLocalName = xNamed->getName();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("unotools");
-        }
         return sLocalName;
     }
 

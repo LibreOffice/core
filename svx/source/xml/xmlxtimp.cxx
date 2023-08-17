@@ -475,14 +475,8 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         if (xGraphicHelper.is())
             xGraphicStorageHandler = xGraphicHelper.get();
 
-        try
-        {
-            uno::Reference< io::XSeekable > xSeek( aParserInput.aInputStream, uno::UNO_QUERY_THROW );
+        if (auto xSeek = aParserInput.aInputStream.query<io::XSeekable>() )
             xSeek->seek( 0 );
-        }
-        catch (const uno::Exception&)
-        {
-        }
 
         rtl::Reference<SvxXMLXTableImport> xImport(new SvxXMLXTableImport(xContext, xTable, xGraphicStorageHandler));
         xImport->parseStream( aParserInput );

@@ -1866,14 +1866,8 @@ private:
 NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
     maEnUsLocale( "en", "US", OUString() )
 {
-    try
-    {
-        Reference< XNumberFormatsSupplier > xNumFmtsSupp( rHelper.getDocument(), UNO_QUERY_THROW );
+    if (auto xNumFmtsSupp = rHelper.getDocument().query<XNumberFormatsSupplier>() )
         mxNumFmts = xNumFmtsSupp->getNumberFormats();
-    }
-    catch( Exception& )
-    {
-    }
     OSL_ENSURE( mxNumFmts.is(), "NumberFormatFinalizer::NumberFormatFinalizer - cannot get number formats" );
 }
 

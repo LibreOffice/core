@@ -167,15 +167,8 @@ namespace
 {
     void lcl_dispose_nothrow( const Any& i_component )
     {
-        try
-        {
-            const Reference< XComponent > xComponent( i_component, UNO_QUERY_THROW );
+        if (auto xComponent = i_component.query<XComponent>() )
             xComponent->dispose();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION("toolkit.controls");
-        }
     }
 }
 

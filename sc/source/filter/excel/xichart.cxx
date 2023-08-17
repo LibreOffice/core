@@ -3988,15 +3988,10 @@ void XclImpChChart::Convert( const Reference<XChartDocument>& xChartDoc,
     }
 
     // chart title
-    if( mxTitle ) try
-    {
-        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY_THROW );
-        Reference< XTitle > xTitle( mxTitle->CreateTitle(), UNO_SET_THROW );
-        xTitled->setTitleObject( xTitle );
-    }
-    catch( Exception& )
-    {
-    }
+    if( mxTitle )
+        if (auto xTitled = xChartDoc.query<XTitled>() )
+            if (auto xTitle = mxTitle->CreateTitle().query<XTitle>() )
+                xTitled->setTitleObject( xTitle );
 
     /*  Create the diagram object and attach it to the chart document. Currently,
         one diagram is used to carry all coordinate systems and data series. */

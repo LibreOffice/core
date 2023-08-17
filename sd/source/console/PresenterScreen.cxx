@@ -411,8 +411,8 @@ void PresenterScreen::SwitchMonitors()
             nNewScreen++; // otherwise we store screens offset by one.
 
         // Set the new presentation display
-        Reference<beans::XPropertySet> xProperties (xPresentation, UNO_QUERY_THROW);
-        xProperties->setPropertyValue("Display", Any(nNewScreen));
+        if (auto xProperties = xPresentation.query<beans::XPropertySet>())
+            xProperties->setPropertyValue("Display", Any(nNewScreen));
     } catch (const uno::Exception &) {
     }
 }

@@ -74,9 +74,9 @@ void OptimizationStats::InitializeStatusValuesFromDocument( const Reference< XMo
 {
     try
     {
-        Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
-        Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_SET_THROW );
-        SetStatusValue( TK_Pages, Any( awt::Size( 0, xDrawPages->getCount() ) ) );
+        if (auto xDrawPagesSupplier = rxModel.query<XDrawPagesSupplier>() )
+            if (auto xDrawPages = xDrawPagesSupplier->getDrawPages().query<XDrawPages>() )
+                SetStatusValue( TK_Pages, Any( awt::Size( 0, xDrawPages->getCount() ) ) );
     }
     catch ( Exception& )
     {

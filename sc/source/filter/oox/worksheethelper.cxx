@@ -527,13 +527,8 @@ Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
 Reference< XDrawPage > WorksheetGlobals::getDrawPage() const
 {
     Reference< XDrawPage > xDrawPage;
-    try
-    {
-        xDrawPage = Reference< XDrawPageSupplier >( mxSheet, UNO_QUERY_THROW )->getDrawPage();
-    }
-    catch( Exception& )
-    {
-    }
+    if (auto xSupplier = mxSheet.query<XDrawPageSupplier>())
+        xDrawPage = xSupplier->getDrawPage();
     return xDrawPage;
 }
 

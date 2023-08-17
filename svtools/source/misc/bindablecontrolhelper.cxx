@@ -45,9 +45,9 @@ static bool lcl_isNamedRange( const OUString& sAddress, const uno::Reference< fr
     uno::Reference< sheet::XCellRangeReferrer > xReferrer;
     try
     {
-        uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY_THROW );
-        uno::Reference< container::XNameAccess > xNamed( xPropSet->getPropertyValue( "NamedRanges" ), uno::UNO_QUERY_THROW );
-        xReferrer.set ( xNamed->getByName( sAddress ), uno::UNO_QUERY );
+        if (auto xPropSet = xModel.query<beans::XPropertySet>() )
+            if (auto xNamed = xPropSet->getPropertyValue( "NamedRanges" ).query<container::XNameAccess>() )
+                xReferrer.set ( xNamed->getByName( sAddress ), uno::UNO_QUERY );
     }
     catch( uno::Exception& /*e*/ )
     {

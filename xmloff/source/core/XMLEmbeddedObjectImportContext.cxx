@@ -122,14 +122,8 @@ void XMLEmbeddedObjectImportContext::SetComponent( Reference< XComponent > const
     SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(xFilter.get());
     mxFastHandler = pFastHandler;
 
-    try
-    {
-        Reference < XModifiable2 > xModifiable2( rComp, UNO_QUERY_THROW );
+    if (auto xModifiable2 = rComp.query<XModifiable2>() )
         xModifiable2->disableSetModified();
-    }
-    catch( Exception& )
-    {
-    }
 
     Reference < XImporter > xImporter( mxFastHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
@@ -242,14 +236,10 @@ void XMLEmbeddedObjectImportContext::endFastElement(sal_Int32 nElement)
     mxFastHandler->endFastElement( nElement );
     mxFastHandler->endDocument();
 
-    try
+    if (auto xModifiable2 = xComp.query<XModifiable2>() )
     {
-        Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
         xModifiable2->enableSetModified();
         xModifiable2->setModified( true ); // trigger new replacement image generation
-    }
-    catch( Exception& )
-    {
     }
 }
 

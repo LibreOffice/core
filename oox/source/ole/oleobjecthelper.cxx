@@ -74,14 +74,8 @@ OleObjectHelper::OleObjectHelper(
 
 OleObjectHelper::~OleObjectHelper()
 {
-    try
-    {
-        Reference< XComponent > xResolverComp( mxResolver, UNO_QUERY_THROW );
+    if (auto xResolverComp = mxResolver.query<XComponent>() )
         xResolverComp->dispose();
-    }
-    catch(const Exception& )
-    {
-    }
 }
 
 // TODO: this is probably a sub-optimal approach: ideally the media type

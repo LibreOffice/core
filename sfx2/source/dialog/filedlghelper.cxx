@@ -1109,11 +1109,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     if ( mbExport )
     {
         mxFileDlg->setTitle( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) );
-        try {
-                css::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
-                xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
-        }
-        catch( const Exception & ) { }
+        if (auto xCtrlAccess = mxFileDlg.query<XFilePickerControlAccess>() )
+            xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, true );
     }
 
     // Save a copy dialog

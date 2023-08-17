@@ -307,9 +307,8 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
                 && Version != ODFVER_010_TEXT
                 && Version != ODFVER_011_TEXT)
             {
-                const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(
-                    xModelComp, uno::UNO_QUERY_THROW);
-                xDMA->storeMetadataToStorage(m_xStg);
+                if (auto xDMA = xModelComp.query<rdf::XDocumentMetadataAccess>())
+                    xDMA->storeMetadataToStorage(m_xStg);
             }
         }
         catch (beans::UnknownPropertyException &)

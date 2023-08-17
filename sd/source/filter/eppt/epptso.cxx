@@ -1944,8 +1944,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 try
                 {
                     // try to get the aspect when available
-                    css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
-                    xShapeProps->getPropertyValue("Aspect") >>= nAspect;
+                    if (auto xShapeProps = mXShape.query<css::beans::XPropertySet>() )
+                        xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                 }
                 catch( css::uno::Exception& )
                 {}
@@ -2527,8 +2527,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     try
                     {
                         // try to get the aspect when available
-                        css::uno::Reference< css::beans::XPropertySet > xShapeProps( mXShape, css::uno::UNO_QUERY_THROW );
-                        xShapeProps->getPropertyValue("Aspect") >>= nAspect;
+                        if (auto xShapeProps = mXShape.query<css::beans::XPropertySet>() )
+                            xShapeProps->getPropertyValue("Aspect") >>= nAspect;
                     }
                     catch( css::uno::Exception& )
                     {}

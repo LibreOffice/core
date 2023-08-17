@@ -43,14 +43,10 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
 {
     m_xPropertySet.set( xShape, uno::UNO_QUERY_THROW );
     m_nFillFormatBackColor = 0;
-    try
-    {
-        uno::Reference< ov::msforms::XFillFormat > xFillFormat( xInternalParent, uno::UNO_QUERY_THROW );
+    if (auto xFillFormat = xInternalParent.query<ov::msforms::XFillFormat>() )
         m_pFillFormat = static_cast<ScVbaFillFormat*>( xFillFormat.get() );
-    }catch ( uno::RuntimeException& )
-    {
+    else
         m_pFillFormat = nullptr;
-    }
 }
 
 // Attribute

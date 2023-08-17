@@ -102,14 +102,8 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
 
 void ModelEventListener::disposing( const lang::EventObject& rEvent )
 {
-    try
-    {
-        uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY_THROW )->removeEventListener(
-            uno::Reference<document::XEventListener>(this));
-    }
-    catch( const uno::Exception& )
-    {
-    }
+    if (auto xEventBroadcaster = rEvent.Source.query<document::XEventBroadcaster>())
+        xEventBroadcaster->removeEventListener(uno::Reference<document::XEventListener>(this));
 }
 
 } //namespace writerfilter::dmapper

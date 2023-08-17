@@ -646,14 +646,8 @@ OUString PivotCacheField::createDateGroupField( const Reference< XDataPilotField
             default:    OSL_FAIL( "PivotCacheField::convertRangeGrouping - unknown date/time interval" );
         }
 
-        try
-        {
-            Reference< XDataPilotFieldGrouping > xDPGrouping( rxBaseDPField, UNO_QUERY_THROW );
+        if (auto xDPGrouping = rxBaseDPField.query<XDataPilotFieldGrouping>() )
             xDPGroupField = xDPGrouping->createDateGroup( aGroupInfo );
-        }
-        catch( Exception& )
-        {
-        }
     }
 
     Reference< XNamed > xFieldName( xDPGroupField, UNO_QUERY );

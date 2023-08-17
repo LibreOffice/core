@@ -1174,14 +1174,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 TOOLS_WARN_EXCEPTION( "sc", "SID_SHARE_DOC" );
                                 SC_MOD()->SetInSharedDocSaving( false );
 
-                                try
-                                {
-                                    uno::Reference< util::XCloseable > xClose( xModel, uno::UNO_QUERY_THROW );
+                                if (auto xClose = xModel.query<util::XCloseable>() )
                                     xClose->close( true );
-                                }
-                                catch ( uno::Exception& )
-                                {
-                                }
                             }
                         }
                     }
