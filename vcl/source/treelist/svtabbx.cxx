@@ -765,10 +765,14 @@ tools::Rectangle SvHeaderTabListBox::calcHeaderRect( bool _bIsColumnBar, bool _b
     if ( _bIsColumnBar )
     {
         vcl::Window* pParent = nullptr;
-        if ( !_bOnScreen )
+        if (_bOnScreen)
+            aRect = tools::Rectangle(m_pImpl->m_pHeaderBar->GetWindowExtentsAbsolute());
+        else
+        {
             pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
-
-        aRect = m_pImpl->m_pHeaderBar->GetWindowExtentsRelative( *pParent );
+            assert(pParent);
+            aRect = m_pImpl->m_pHeaderBar->GetWindowExtentsRelative(*pParent );
+        }
     }
     return aRect;
 }
