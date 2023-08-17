@@ -133,7 +133,13 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
 
     // MT: Change this later, normally a show/hide event shouldn't have the vcl::Window* in pData.
     vcl::Window* pChildWindow = static_cast<vcl::Window *>(rVclWindowEvent.GetData());
-    if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
+    // tdf#141101/tdf#156561 Handle the event if this is either the a11y parent or the
+    // vcl::Window parent, since child events are sent for the vcl::Window hierarchy
+    // (s. Window::CallEventListeners) and e.g. DockingManager does manual partial reparenting
+    // that would cause child events to not be forwarded to the a11y level when
+    // not taking GetParent() into account here
+    if (pChildWindow && (GetWindow() == pChildWindow->GetAccessibleParentWindow()
+                         || GetWindow() == pChildWindow->GetParent()))
         return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VclEventId::WindowShow );
     else
         return uno::Reference< accessibility::XAccessible > ();
