@@ -33,4 +33,3 @@
 -o sw.SwXTextRanges
 -o sw.SwXTextSearch
 -o sw.SwXTextSection
--o sw.SwXTextSections

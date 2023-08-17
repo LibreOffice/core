@@ -176,7 +176,6 @@ job239=sw.SwXTextPortionEnumeration
 job240=sw.SwXTextRanges
 job241=sw.SwXTextSearch
 job242=sw.SwXTextSection
-job243=sw.SwXTextSections
 job244=sw.SwXTextTableRow
 job245=sw.SwXTextTables
 job246=sw.SwXViewSettings
