@@ -68,6 +68,9 @@ void SvxCharView::LoseFocus() { Invalidate(); }
 bool SvxCharView::GetDecimalValueAndCharName(sal_UCS4& rDecimalValue, OUString& rCharName)
 {
     OUString charValue = GetText();
+    if (charValue.isEmpty())
+        return false;
+
     sal_UCS4 nDecimalValue = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
     /* get the character name */
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -313,6 +316,12 @@ void SvxCharView::SetText(const OUString& rText)
 {
     m_sText = rText;
     Invalidate();
+
+    OUString sName;
+    if (GetDecimalValueAndCharName(o3tl::temporary(sal_UCS4()), sName))
+        SetAccessibleName(sName);
+    else
+        SetAccessibleName(OUString());
 }
 
 void SvxCharView::SetHasInsert(bool bInsert) { maHasInsert = bInsert; }
