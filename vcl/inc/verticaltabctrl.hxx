@@ -22,6 +22,8 @@
 #include <memory>
 #include <string_view>
 
+#include <tools/json_writer.hxx>
+
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
 
@@ -77,6 +79,8 @@ public:
     void SetPageText(std::u16string_view rPageId, const OUString& rText);
 
     vcl::Window* GetPageParent() { return m_xBox.get(); }
+
+    virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 
     virtual FactoryFunction GetUITestFactory() const override;
 };
