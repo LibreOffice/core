@@ -1150,7 +1150,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXTextTable \
     qadevOOo/tests/java/mod/_sw/SwXTextTableCursor \
     qadevOOo/tests/java/mod/_sw/SwXTextTableRow \
-    qadevOOo/tests/java/mod/_sw/SwXTextTables \
     qadevOOo/tests/java/mod/_sw/SwXTextView \
     qadevOOo/tests/java/mod/_sw/SwXTextViewCursor \
     qadevOOo/tests/java/mod/_sw/SwXViewSettings \

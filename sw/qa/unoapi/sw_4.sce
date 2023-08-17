@@ -18,7 +18,6 @@
 -o sw.SwXTextTable
 -o sw.SwXTextTableCursor
 -o sw.SwXTextTableRow
--o sw.SwXTextTables
 #i85580 -o sw.SwXTextView
 -o sw.SwXTextViewCursor
 -o sw.SwXViewSettings

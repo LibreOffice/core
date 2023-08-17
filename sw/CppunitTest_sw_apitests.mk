@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXTextFieldTypes \
     sw/qa/api/SwXTextSections \
     sw/qa/api/SwXTextTable \
+    sw/qa/api/SwXTextTables \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_apitests, \

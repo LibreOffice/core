@@ -177,7 +177,6 @@ job240=sw.SwXTextRanges
 job241=sw.SwXTextSearch
 job242=sw.SwXTextSection
 job244=sw.SwXTextTableRow
-job245=sw.SwXTextTables
 job246=sw.SwXViewSettings
 job247=sw.XMLContentExporter
 job248=sw.XMLExporter
