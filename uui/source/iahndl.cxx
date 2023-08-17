@@ -141,9 +141,16 @@ void UUIInteractionHelper::handlerequest(
         = static_cast< UUIInteractionHelper * >(pInteractionHelper);
     bool bDummy = false;
     OUString aDummy;
-    pHND->bHandled
-        = pUUI->handleRequest_impl(pHND->m_rRequest, false, bDummy, aDummy);
-    pHND->set();
+    try
+    {
+        pHND->bHandled
+            = pUUI->handleRequest_impl(pHND->m_rRequest, false, bDummy, aDummy);
+        pHND->set();
+    }
+    catch (css::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("uui", "");
+    }
 }
 
 bool
