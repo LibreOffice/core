@@ -199,6 +199,7 @@ namespace
                     mpTarget->parseAttributes(xAttribs);
                     break;
                 }
+                case SVGToken::Switch: //TODO: Support switch element
                 case SVGToken::Defs:
                 case SVGToken::G:
                 {
@@ -439,12 +440,6 @@ namespace
                     /// new node for pattern
                     mpTarget = new SvgPatternNode(maDocument, mpTarget);
                     mpTarget->parseAttributes(xAttribs);
-                    break;
-                }
-
-                case SVGToken::Switch:
-                {
-                    //TODO: Support switch element
                     break;
                 }
 
