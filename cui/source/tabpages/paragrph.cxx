@@ -1753,9 +1753,9 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 
     // paragraph split
     _nWhich = GetWhich( SID_ATTR_PARA_SPLIT );
-    eState = m_xKeepTogetherBox->get_state();
+    eState = m_xAllowSplitBox->get_state();
 
-    if (m_xKeepTogetherBox->get_state_changed_from_saved())
+    if (m_xAllowSplitBox->get_state_changed_from_saved())
     {
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_SPLIT );
 
@@ -2056,13 +2056,13 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     {
         const SvxFormatSplitItem& rSplit =
             static_cast<const SvxFormatSplitItem&>(rSet->Get( _nWhich ));
-        aKeepTogetherState.bTriStateEnabled = false;
+        aAllowSplitState.bTriStateEnabled = false;
 
         if ( !rSplit.GetValue() )
-            m_xKeepTogetherBox->set_state(TRISTATE_TRUE);
+            m_xAllowSplitBox->set_state(TRISTATE_FALSE);
         else
         {
-            m_xKeepTogetherBox->set_state(TRISTATE_FALSE);
+            m_xAllowSplitBox->set_state(TRISTATE_TRUE);
             // default widows and orphans to enabled
             m_xWidowBox->set_sensitive(true);
             m_xOrphanBox->set_sensitive(true);
@@ -2113,12 +2113,12 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         aOrphanState.eState = m_xOrphanBox->get_state();
     }
     else if ( SfxItemState::DONTCARE == eItemState )
-        m_xKeepTogetherBox->set_state(TRISTATE_INDET);
+        m_xAllowSplitBox->set_state(TRISTATE_INDET);
     else
-        m_xKeepTogetherBox->set_sensitive(false);
+        m_xAllowSplitBox->set_sensitive(false);
 
     // so that everything is enabled correctly
-    KeepTogetherHdl();
+    AllowSplitHdl();
     WidowHdl();
     OrphanHdl();
     ChangesApplied();
@@ -2144,7 +2144,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xApplyCollBox->save_value();
     m_xPageNumBox->save_state();
     m_xPagenumEdit->save_value();
-    m_xKeepTogetherBox->save_state();
+    m_xAllowSplitBox->save_state();
     m_xKeepParaBox->save_state();
     m_xWidowBox->save_state();
     m_xOrphanBox->save_state();
@@ -2202,7 +2202,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
     , m_xPageNumBox(m_xBuilder->weld_check_button("labelPageNum"))
     , m_xPagenumEdit(m_xBuilder->weld_spin_button("spinPageNumber"))
     // Options
-    , m_xKeepTogetherBox(m_xBuilder->weld_check_button("checkSplitPara"))
+    , m_xAllowSplitBox(m_xBuilder->weld_check_button("checkSplitPara"))
     , m_xKeepParaBox(m_xBuilder->weld_check_button("checkKeepPara"))
     , m_xOrphanBox(m_xBuilder->weld_check_button("checkOrphan"))
     , m_xOrphanRowNo(m_xBuilder->weld_spin_button("spinOrphan"))
@@ -2216,7 +2216,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage(weld::Container* pPage, weld::Dia
 
     m_xHyphenBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, HyphenClickHdl_Impl));
     m_xPageBreakBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, PageBreakHdl_Impl));
-    m_xKeepTogetherBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, KeepTogetherHdl_Impl));
+    m_xAllowSplitBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, AllowSplitHdl_Impl));
     m_xWidowBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, WidowHdl_Impl));
     m_xOrphanBox->connect_toggled(LINK(this, SvxExtParagraphTabPage, OrphanHdl_Impl));
     m_xApplyCollBtn->connect_toggled(LINK(this, SvxExtParagraphTabPage, ApplyCollClickHdl_Impl));
@@ -2318,17 +2318,17 @@ IMPL_LINK(SvxExtParagraphTabPage, PageBreakHdl_Impl, weld::Toggleable&, rToggle,
     PageBreakHdl();
 }
 
-void SvxExtParagraphTabPage::KeepTogetherHdl()
+void SvxExtParagraphTabPage::AllowSplitHdl()
 {
-    bool bEnable = m_xKeepTogetherBox->get_state() == TRISTATE_FALSE;
+    bool bEnable = m_xAllowSplitBox->get_state() == TRISTATE_TRUE;
     m_xWidowBox->set_sensitive(bEnable);
     m_xOrphanBox->set_sensitive(bEnable);
 }
 
-IMPL_LINK(SvxExtParagraphTabPage, KeepTogetherHdl_Impl, weld::Toggleable&, rToggle, void)
+IMPL_LINK(SvxExtParagraphTabPage, AllowSplitHdl_Impl, weld::Toggleable&, rToggle, void)
 {
-    aKeepTogetherState.ButtonToggled(rToggle);
-    KeepTogetherHdl();
+    aAllowSplitState.ButtonToggled(rToggle);
+    AllowSplitHdl();
 }
 
 void SvxExtParagraphTabPage::WidowHdl()
@@ -2338,11 +2338,11 @@ void SvxExtParagraphTabPage::WidowHdl()
         case TRISTATE_TRUE:
             m_xWidowRowNo->set_sensitive(true);
             m_xWidowRowLabel->set_sensitive(true);
-            m_xKeepTogetherBox->set_sensitive(false);
+            m_xAllowSplitBox->set_sensitive(true);
             break;
         case TRISTATE_FALSE:
             if (m_xOrphanBox->get_state() == TRISTATE_FALSE)
-                m_xKeepTogetherBox->set_sensitive(true);
+                m_xAllowSplitBox->set_sensitive(false);
             [[fallthrough]];
         case TRISTATE_INDET:
             m_xWidowRowNo->set_sensitive(false);
@@ -2370,12 +2370,12 @@ void SvxExtParagraphTabPage::OrphanHdl()
         case TRISTATE_TRUE:
             m_xOrphanRowNo->set_sensitive(true);
             m_xOrphanRowLabel->set_sensitive(true);
-            m_xKeepTogetherBox->set_sensitive(false);
+            m_xAllowSplitBox->set_sensitive(true);
             break;
 
         case TRISTATE_FALSE:
             if (m_xWidowBox->get_state() == TRISTATE_FALSE)
-                m_xKeepTogetherBox->set_sensitive(true);
+                m_xAllowSplitBox->set_sensitive(true);
             [[fallthrough]];
         case TRISTATE_INDET:
             m_xOrphanRowNo->set_sensitive(false);

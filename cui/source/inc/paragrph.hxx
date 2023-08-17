@@ -219,7 +219,7 @@ private:
     weld::TriStateEnabled aPageBreakState;
     weld::TriStateEnabled aApplyCollState;
     weld::TriStateEnabled aPageNumState;
-    weld::TriStateEnabled aKeepTogetherState;
+    weld::TriStateEnabled aAllowSplitState;
     weld::TriStateEnabled aKeepParaState;
     weld::TriStateEnabled aOrphanState;
     weld::TriStateEnabled aWidowState;
@@ -255,7 +255,7 @@ private:
     std::unique_ptr<weld::SpinButton> m_xPagenumEdit;
 
     // paragraph division
-    std::unique_ptr<weld::CheckButton> m_xKeepTogetherBox;
+    std::unique_ptr<weld::CheckButton> m_xAllowSplitBox;
     std::unique_ptr<weld::CheckButton> m_xKeepParaBox;
 
     // orphan/widow
@@ -271,12 +271,12 @@ private:
     void PageNumBoxClickHdl();
     void ApplyCollClickHdl();
     void PageBreakHdl();
-    void KeepTogetherHdl();
+    void AllowSplitHdl();
     void OrphanHdl();
     void WidowHdl();
 
     DECL_LINK(PageBreakHdl_Impl, weld::Toggleable&, void);
-    DECL_LINK(KeepTogetherHdl_Impl, weld::Toggleable&, void);
+    DECL_LINK(AllowSplitHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(WidowHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(OrphanHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(HyphenClickHdl_Impl, weld::Toggleable&, void);
