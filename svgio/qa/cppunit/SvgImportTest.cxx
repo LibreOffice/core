@@ -962,6 +962,27 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneColor)
     assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "width", "3");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf117920)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf117920.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy11", "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy12", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy13", "-18");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy21", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy22", "1");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy23", "-6");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy31", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy32", "0");
+    assertXPath(pDocument, "/primitive2D/transform/transform", "xy33", "1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97936)
 {
     // check that both rectangles are rendered in the viewBox
