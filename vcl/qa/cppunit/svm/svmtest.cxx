@@ -2298,11 +2298,11 @@ void SvmTest::checkLayoutMode(const GDIMetaFile& rMetaFile)
     xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
 
     assertXPathAttrs(pDoc, "/metafile/layoutmode[1]", {
-        {"textlayout", "#0004"}
+        {"textlayout", "TextOriginLeft"}
     });
 
     assertXPathAttrs(pDoc, "/metafile/layoutmode[2]", {
-        {"textlayout", "#0001"}
+        {"textlayout", "BiDiRtl"}
     });
 }
 

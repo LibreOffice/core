@@ -439,17 +439,33 @@ OUString convertPixelFormatToString(vcl::PixelFormat ePixelFormat)
     return OUString();
 }
 
-OUString convertComplexTestLayoutFlags(vcl::text::ComplexTextLayoutFlags eComplexTestLayoutFlags)
+OUString convertComplexTestLayoutFlags(vcl::text::ComplexTextLayoutFlags nFlags)
 {
-    switch(eComplexTestLayoutFlags)
+    if (nFlags == vcl::text::ComplexTextLayoutFlags::Default)
+        return "Default";
+
+    std::vector<OUString> aStrings;
+
+    if (nFlags & vcl::text::ComplexTextLayoutFlags::BiDiRtl)
+        aStrings.emplace_back("BiDiRtl");
+    if (nFlags & vcl::text::ComplexTextLayoutFlags::BiDiStrong)
+        aStrings.emplace_back("BiDiStrong");
+    if (nFlags & vcl::text::ComplexTextLayoutFlags::TextOriginLeft)
+        aStrings.emplace_back("TextOriginLeft");
+    if (nFlags & vcl::text::ComplexTextLayoutFlags::TextOriginRight)
+        aStrings.emplace_back("TextOriginRight");
+
+    OUString aString;
+
+    if (aStrings.empty())
+        return aString;
+
+    aString = aStrings[0];
+    for (size_t i = 1; i < aStrings.size(); ++i)
     {
-        default:
-        case vcl::text::ComplexTextLayoutFlags::Default: return "#0000";
-        case vcl::text::ComplexTextLayoutFlags::BiDiRtl: return "#0001";
-        case vcl::text::ComplexTextLayoutFlags::BiDiStrong: return "#0002";
-        case vcl::text::ComplexTextLayoutFlags::TextOriginLeft: return "#0004";
-        case vcl::text::ComplexTextLayoutFlags::TextOriginRight: return "#0008";
+        aString += ", " + aStrings[i];
     }
+    return aString;
 }
 
 OUString convertGfxLinkTypeToString(GfxLinkType eGfxLinkType)
