@@ -82,6 +82,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
+#include <comphelper/types.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
@@ -202,6 +203,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Linguistic.hxx>
+#include <officecfg/Office/UI/ToolbarMode.hxx>
 #include <unotools/optionsdlg.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -7427,7 +7429,23 @@ static void activateNotebookbar(std::u16string_view rApp)
 
     if (aAppNode.isValid())
     {
-        aAppNode.setNodeValue("Active", Any(OUString("notebookbar_online.ui")));
+        OUString sNoteBookbarName("notebookbar_online.ui");
+        aAppNode.setNodeValue("Active", Any(sNoteBookbarName));
+
+        const utl::OConfigurationNode aImplsNode = aAppNode.openNode("Modes");
+        const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
+
+        for (const auto& rModeNodeName : aModeNodeNames)
+        {
+            const utl::OConfigurationNode aImplNode(aImplsNode.openNode(rModeNodeName));
+            if (!aImplNode.isValid())
+                continue;
+
+            OUString aCommandArg = comphelper::getString(aImplNode.getNodeValue("CommandArg"));
+            if (aCommandArg == "notebookbar.ui")
+                aImplNode.setNodeValue("CommandArg", Any(sNoteBookbarName));
+        }
+
         aAppNode.commit();
     }
 }
@@ -7866,6 +7884,13 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     if (bNotebookbar)
     {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+        officecfg::Office::UI::ToolbarMode::ActiveWriter::set("notebookbar_online.ui", batch);
+        officecfg::Office::UI::ToolbarMode::ActiveCalc::set("notebookbar_online.ui", batch);
+        officecfg::Office::UI::ToolbarMode::ActiveImpress::set("notebookbar_online.ui", batch);
+        officecfg::Office::UI::ToolbarMode::ActiveDraw::set("notebookbar_online.ui", batch);
+        batch->commit();
+
         activateNotebookbar(u"Writer");
         activateNotebookbar(u"Calc");
         activateNotebookbar(u"Impress");
