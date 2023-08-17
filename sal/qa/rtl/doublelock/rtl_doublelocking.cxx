@@ -30,16 +30,12 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#else
-#include <unistd.h>
-#include <time.h>
 #endif
 
 #define CONST_TEST_STRING "gregorian"

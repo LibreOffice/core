@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <algorithm>
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
@@ -29,7 +28,6 @@
 #include "osl_Security_Const.h"
 #include <osl/thread.h>
 #include <rtl/process.h>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 

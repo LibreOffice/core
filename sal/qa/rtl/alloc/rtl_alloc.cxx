@@ -26,8 +26,6 @@
 
 #include "../../../rtl/strimp.hxx"
 
-#include <memory.h>
-
 namespace rtl_alloc
 {
 

@@ -24,7 +24,6 @@
 #   include <unistd.h>
 #endif
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
 #include <string.h>

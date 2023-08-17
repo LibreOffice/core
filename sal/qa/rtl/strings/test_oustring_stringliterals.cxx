@@ -18,10 +18,8 @@
 
 #include <o3tl/cppunittraitshelper.hxx>
 #include <sal/types.h>
-#include <config_global.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <rtl/string.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 

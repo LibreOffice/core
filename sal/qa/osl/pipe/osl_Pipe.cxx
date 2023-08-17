@@ -23,18 +23,13 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/ustring.hxx>
 
 #include <osl/test/uniquepipename.hxx>
 #include <osl/thread.hxx>
 
 #include <osl/pipe.hxx>
-#include <osl/time.h>
 
-#ifdef UNX
-#include <unistd.h>
-#endif
 #include <string.h>
 
 using namespace osl;

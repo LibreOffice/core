@@ -28,10 +28,6 @@ libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:62
     gpointer gtv_lok_dialog_parent_class
 sal/osl/unx/system.cxx:164
     void *[3] dummy
-sal/qa/osl/condition/osl_Condition_Const.h:41
-    OUString aTestCon
-sal/qa/osl/condition/osl_Condition_Const.h:43
-    char[17] pTestString
 sal/qa/osl/file/osl_File_Const.h:63
     char[11] pBuffer_Number
 sal/qa/osl/file/osl_File_Const.h:64

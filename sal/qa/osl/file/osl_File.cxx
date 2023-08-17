@@ -20,17 +20,12 @@
 #include <sal/types.h>
 #include <rtl/byteseq.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 
-#include <osl/thread.h>
 #include <osl/file.hxx>
 #include "osl_File_Const.h"
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
-
-#include <tools/urlobj.hxx>
 
 #include <memory>
 
@@ -38,6 +33,7 @@
 #include <prewin.h>
 #include <postwin.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <tools/urlobj.hxx>
 #endif
 
 using namespace osl;

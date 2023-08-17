@@ -22,10 +22,9 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
-#include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
+#include <rtl/string.hxx>
 
 namespace rtl_cipher
 {

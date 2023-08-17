@@ -8,10 +8,8 @@
  */
 
 #include <rtl/ref.hxx>
-#include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 namespace rtl_ref
 {

@@ -19,13 +19,10 @@
 
 #include <config_locales.h>
 
-#include <string.h>
-
 #include <rtl/tencinfo.h>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 namespace
 {

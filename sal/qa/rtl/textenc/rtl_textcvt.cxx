@@ -21,9 +21,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
-#include <cstring>
-
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 

@@ -17,25 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <math.h>
-#include <stdio.h>
 #include <string.h>
 
 #include <rtl/uuid.h>
-#include <rtl/ustring.h>
-#include <rtl/ustring.hxx>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#elif defined UNX
-#include <unistd.h>
-#include <time.h>
 #endif
 
 

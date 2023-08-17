@@ -17,8 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl_Condition_Const.h"
-#include <stdlib.h>
+#include <sal/types.h>
+#include <osl/thread.hxx>
+#include <osl/conditn.hxx>
+#include <osl/time.h>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 using namespace osl;
 

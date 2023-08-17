@@ -11,7 +11,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <rtl/ustring.hxx>
-#include <iostream>
 
 namespace test::strings {
 

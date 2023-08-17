@@ -23,16 +23,12 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
-#else
-#include <unistd.h>
-#include <time.h>
 #endif
 
 // include files
 
 #include <sal/types.h>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
 #include <osl/time.h>
@@ -42,7 +38,6 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #define t_print printf
 

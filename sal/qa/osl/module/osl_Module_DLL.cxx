@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "osl_Module_Const.h"
-
-#include <stdio.h>
 #include <sal/types.h>
+
+#include <cppunit/plugin/TestPlugIn.h>
 
 // This module contains no tests. It is loaded as a dynamic library by
 // osl_Module.

@@ -19,15 +19,11 @@
 
 #include <config_locales.h>
 
-#include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
-#include <cstddef>
 #include <stdio.h>
 
 namespace {

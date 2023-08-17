@@ -21,9 +21,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/math.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 #include <limits>
 

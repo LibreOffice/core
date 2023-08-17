@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/uri.hxx>
 #include <osl/thread.h>
-#include <osl/file.hxx>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 namespace Stringtest
 {

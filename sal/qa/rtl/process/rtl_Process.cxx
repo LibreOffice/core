@@ -18,14 +18,12 @@
  */
 
 #include <memory>
-#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sal/types.h>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>

@@ -24,16 +24,12 @@
 #include <sal/types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
-#include <signal.h>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <osl/module.hxx>
 #include <sal/macros.h>
 
@@ -43,15 +39,9 @@
 #define RUNNING_ON_VALGRIND false
 #endif
 
-#if !defined(_WIN32)                     // Windows
-#include <unistd.h>
-#endif
-
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <algorithm>
-#include <iterator>
 #include <string>
 
 #ifdef UNX

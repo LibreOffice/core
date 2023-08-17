@@ -13,3 +13,24 @@ excludelist:
     sal/android/uthash.h:
     # needed for defines to work / somehow on Linux there is a warning about android-related file
     - string.h
+    sal/qa/osl/security/osl_Security.cxx:
+    # Needed on _WIN32
+    - o3tl/char16_t2wchar_t.hxx
+    sal/qa/rtl/oustringbuffer/test_oustringbuffer_appendchar.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sal/qa/rtl/oustring/rtl_ustr.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sal/qa/rtl/oustring/rtl_OUString2.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sal/qa/rtl/oustringbuffer/test_oustringbuffer_assign.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sal/qa/rtl/strings/test_oustring_stringliterals.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx
+    sal/qa/rtl/textenc/rtl_textcvt.cxx:
+    # Required in C++20 mode.
+    - o3tl/cppunittraitshelper.hxx

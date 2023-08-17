@@ -23,12 +23,8 @@
 #include <math.h>
 #include <stdio.h>
 
-#include <algorithm>
-#include <limits>
-
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <config_options.h>
 #include <o3tl/cppunittraitshelper.hxx>

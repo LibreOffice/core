@@ -583,9 +583,6 @@ sal/osl/unx/signal.cxx:59
 sal/osl/unx/sockimpl.hxx:39
     oslSocketImpl m_bIsInShutdown
     1
-sal/qa/osl/condition/osl_Condition_Const.h:41
-    /home/noel/libo/sal/qa/osl/condition/osl_Condition.cxx aTestCon
-    testcondition
 sal/qa/osl/file/osl_File_Const.h:118
     extern aPreURL
     file:///

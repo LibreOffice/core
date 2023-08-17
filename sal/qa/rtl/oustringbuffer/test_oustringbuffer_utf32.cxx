@@ -23,7 +23,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 namespace test::oustringbuffer {

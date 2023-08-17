@@ -21,15 +21,12 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <memory>
 #include <string_view>
 
 #include <rtl/digest.h>
 #include <rtl/string.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <string.h>

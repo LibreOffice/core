@@ -13,9 +13,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
-#include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
 namespace {
