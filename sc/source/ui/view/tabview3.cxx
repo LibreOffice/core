@@ -2237,7 +2237,7 @@ void ScTabView::KillEditView( bool bNoPaint )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 const tools::Rectangle& rInvRect = aRectangle[i];
-                pGridWin[i]->Invalidate(rInvRect);
+                pGridWin[i]->LogicInvalidate(&rInvRect);
 
                 // invalidate other views
                 auto lInvalidateWindows =
@@ -2246,7 +2246,7 @@ void ScTabView::KillEditView( bool bNoPaint )
                             for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
                             {
                                 if (pWin)
-                                    pWin->Invalidate(rInvRect);
+                                    pWin->LogicInvalidate(&rInvRect);
                             }
                         };
 
