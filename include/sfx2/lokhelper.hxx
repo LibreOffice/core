@@ -138,6 +138,9 @@ public:
     /// Emits a LOK_CALLBACK_DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
     /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed.
+    static void notifyInvalidation(SfxViewShell const* pThisView, int nPart, tools::Rectangle const *);
+    /// Emits a LOK_CALLBACK_INVALIDATE_TILES, but tweaks it according to setOptionalFeatures() if needed
+    /// uses the Part reported by pThisView
     static void notifyInvalidation(SfxViewShell const* pThisView, tools::Rectangle const *);
     /// Notifies all views with the given type and payload.
     static void notifyAllViews(int nType, const OString& rPayload);
