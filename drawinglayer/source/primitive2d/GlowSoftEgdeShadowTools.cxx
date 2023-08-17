@@ -46,8 +46,7 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
         fScale /= 2;
         fBlurRadius /= 2;
         fErodeDilateRadius /= 2;
-        aSize.setHeight(aSize.Height() / 2);
-        aSize.setWidth(aSize.Width() / 2);
+        aSize /= 2;
     }
 
     // BmpScaleFlag::NearestNeighbor is important for following color replacement
