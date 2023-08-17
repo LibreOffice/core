@@ -91,6 +91,13 @@ static rtl::Reference<VCLXWindow> CreateXWindow( vcl::Window const * pWindow )
 
         case WindowType::HEADERBAR:     return new VCLXHeaderBar;
 
+        case WindowType::BORDERWINDOW:
+        {
+            if (pWindow->IsNativeFrame())
+                return new VCLXTopWindow;
+            return new VCLXWindow(true);
+        }
+
         // case WindowType::FIXEDLINE:
         // case WindowType::FIXEDBITMAP:
         // case WindowType::DATEBOX:
