@@ -7,10 +7,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <boost/property_tree/json_parser.hpp>
-
+#include <jsdialog/jsdialogbuilder.hxx>
+#include <sal/log.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/lok.hxx>
+#include <utility>
+#include <vcl/tabpage.hxx>
+#include <vcl/toolbox.hxx>
+#include <vcl/toolkit/button.hxx>
+#include <vcl/toolkit/combobox.hxx>
+#include <vcl/toolkit/dialog.hxx>
+#include <vcl/toolkit/treelistentry.hxx>
+#include <vcl/toolkit/vclmedit.hxx>
+#include <verticaltabctrl.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <messagedialog.hxx>
+#include <tools/json_writer.hxx>
+#include <o3tl/deleter.hxx>
+#include <memory>
+#include <boost/property_tree/json_parser.hpp>
+#include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <jsdialog/jsdialogbuilder.hxx>
@@ -1043,9 +1059,15 @@ std::unique_ptr<weld::ComboBox> JSInstanceBuilder::weld_combo_box(const OUString
 
 std::unique_ptr<weld::Notebook> JSInstanceBuilder::weld_notebook(const OUString& id)
 {
-    TabControl* pNotebook = m_xBuilder->get<TabControl>(id);
-    auto pWeldWidget
-        = pNotebook ? std::make_unique<JSNotebook>(this, pNotebook, this, false) : nullptr;
+    std::unique_ptr<weld::Notebook> pWeldWidget;
+    vcl::Window* pNotebook = m_xBuilder->get(id);
+
+    if (pNotebook && pNotebook->GetType() == WindowType::TABCONTROL)
+        pWeldWidget
+            = std::make_unique<JSNotebook>(this, static_cast<TabControl*>(pNotebook), this, false);
+    else if (pNotebook->GetType() == WindowType::VERTICALTABCONTROL)
+        pWeldWidget = std::make_unique<JSVerticalNotebook>(
+            this, static_cast<VerticalTabControl*>(pNotebook), this, false);
 
     if (pWeldWidget)
         RememberWidget(id, pWeldWidget.get());
@@ -1708,6 +1730,25 @@ void JSNotebook::remove_page(const OUString& rIdent)
 void JSNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
 {
     SalInstanceNotebook::insert_page(rIdent, rLabel, nPos);
+    sendFullUpdate();
+}
+
+JSVerticalNotebook::JSVerticalNotebook(JSDialogSender* pSender, ::VerticalTabControl* pControl,
+                                       SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+    : JSWidget<SalInstanceVerticalNotebook, ::VerticalTabControl>(pSender, pControl, pBuilder,
+                                                                  bTakeOwnership)
+{
+}
+
+void JSVerticalNotebook::remove_page(const OUString& rIdent)
+{
+    SalInstanceVerticalNotebook::remove_page(rIdent);
+    sendFullUpdate();
+}
+
+void JSVerticalNotebook::insert_page(const OUString& rIdent, const OUString& rLabel, int nPos)
+{
+    SalInstanceVerticalNotebook::insert_page(rIdent, rLabel, nPos);
     sendFullUpdate();
 }
 
