@@ -524,6 +524,25 @@ namespace basegfx::utils
          */
         BASEGFX_DLLPUBLIC OUString exportToSvgPoints( const B2DPolygon& rPoly );
 
+        /** Reduces the number of points using the Ramer-Douglas-Peucker (RDP) algorithm. If the input
+            polygon has control points or less than three points, the input polygon is returned
+            unchanged. Otherwise, a simplified polygon is returned. If the input polygon is closed,
+            the caller is expected to ensure that the first and last points of the polygon are
+            identical. The polygon is treated as open in this case. Closing the result polygon is not
+            performed here, but left to the caller.
+
+            @param rCandidate
+            The source polygon from which the reduced polygon is generated
+
+            @param fTolerance
+            The tolerance for the RDP algorithm.
+
+            @return
+            A newly created polygon with reduced point count.
+         */
+        BASEGFX_DLLPUBLIC B2DPolygon createSimplifiedPolygon(const B2DPolygon& rCandidate,
+                                                             const double fTolerance);
+
 } // end of namespace basegfx::utils
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

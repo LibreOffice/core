@@ -18,6 +18,7 @@
  */
 #include <numeric>
 #include <algorithm>
+#include <stack>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -3573,6 +3574,105 @@ namespace basegfx::utils
                 rFlagSequenceRetval.realloc(0);
             }
         }
+
+B2DPolygon createSimplifiedPolygon(const B2DPolygon& rCandidate, const double fTolerance)
+{
+    const sal_uInt32 nPointCount(rCandidate.count());
+    if (nPointCount < 3 || rCandidate.areControlPointsUsed())
+        return rCandidate;
+
+    // The solution does not use recursion directly, since this could lead to a stack overflow if
+    // nPointCount is very large. Instead, an own stack is used. This does not contain points, but
+    // pairs of low and high index of a range in rCandidate. A parallel boolean vector is used to note
+    // whether a point of rCandidate belongs to the output polygon or not.
+    std::vector<bool> bIsKeptVec(nPointCount, false);
+    bIsKeptVec[0] = true;
+    bIsKeptVec[nPointCount - 1] = true;
+    sal_uInt32 nKept = 2;
+    std::stack<std::pair<sal_uInt32, sal_uInt32>> aUnfinishedRangesStack;
+
+    // The RDP algorithm draws a straight line from the first point to the last point of a range.
+    // Then, from the inner points of the range, the point that has the largest distance to the line
+    // is determined. If the distance is greater than the tolerance, this point is kept and the lower
+    // and upper sub-segments of the range are treated in the same way. If the distance is smaller
+    // than the tolerance, none of the inner points will be kept.
+    sal_uInt32 nLowIndex = 0;
+    sal_uInt32 nHighIndex = nPointCount - 1;
+    bool bContinue = true;
+    do
+    {
+        bContinue = false;
+        if (nHighIndex - nLowIndex < 2) // maximal two points, range is finished.
+        {
+            // continue with sibling upper range if any
+            if (!aUnfinishedRangesStack.empty())
+            {
+                std::pair<sal_uInt32, sal_uInt32> aIndexPair = aUnfinishedRangesStack.top();
+                aUnfinishedRangesStack.pop();
+                nLowIndex = aIndexPair.first;
+                nHighIndex = aIndexPair.second;
+                bContinue = true;
+            }
+        }
+        else // the range needs examine the max distance
+        {
+            // Get maximal distance of inner points of the range to the straight line from start to
+            // end point of the range.
+            // For calculation of the distance we use the Hesse normal form of the straight line.
+            B2DPoint aLowPoint = rCandidate.getB2DPoint(nLowIndex);
+            B2DPoint aHighPoint = rCandidate.getB2DPoint(nHighIndex);
+            B2DVector aNormalVec
+                = basegfx::getNormalizedPerpendicular(B2DVector(aHighPoint) - B2DVector(aLowPoint));
+            double fLineOriginDistance = aNormalVec.scalar(B2DVector(aLowPoint));
+            double fMaxDist = 0;
+            sal_uInt32 nMaxPointIndex = nLowIndex;
+            for (sal_uInt32 i = nLowIndex + 1; i < nHighIndex; i++)
+            {
+                double fDistance
+                    = aNormalVec.scalar(B2DVector(rCandidate.getB2DPoint(i))) - fLineOriginDistance;
+                if (std::fabs(fDistance) > fMaxDist)
+                {
+                    fMaxDist = std::fabs(fDistance);
+                    nMaxPointIndex = i;
+                }
+            }
+
+            if (fMaxDist >= fTolerance)
+            {
+                // We need to divide the current range into two sub ranges.
+                bIsKeptVec[nMaxPointIndex] = true;
+                nKept++;
+                // continue with lower sub range and push upper sub range to stack
+                aUnfinishedRangesStack.push(std::make_pair(nMaxPointIndex, nHighIndex));
+                nHighIndex = nMaxPointIndex;
+                bContinue = true;
+            }
+            else
+            {
+                // We do not keep any of the inner points of the current range.
+                // continue with sibling upper range if any
+                if (!aUnfinishedRangesStack.empty())
+                {
+                    std::pair<sal_uInt32, sal_uInt32> aIndexPair = aUnfinishedRangesStack.top();
+                    aUnfinishedRangesStack.pop();
+                    nLowIndex = aIndexPair.first;
+                    nHighIndex = aIndexPair.second;
+                    bContinue = true;
+                }
+            }
+        }
+    } while (bContinue);
+
+    // Put all points which are marked as "keep" into the result polygon
+    B2DPolygon aResultPolygon;
+    aResultPolygon.reserve(nKept);
+    for (sal_uInt32 i = 0; i < nPointCount; i++)
+    {
+        if (bIsKeptVec[i])
+            aResultPolygon.append(rCandidate.getB2DPoint(i));
+    }
+    return aResultPolygon;
+}
 
 } // end of namespace
 

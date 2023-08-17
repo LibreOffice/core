@@ -36,6 +36,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 
 #include <sal/log.hxx>
@@ -1499,11 +1500,17 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     xDrawnInSlideshow->setPropertyValue("IsLocked", aPropLayer);
 
     //Register polygons for each slide
-    for( const auto& rPoly : maPolygons )
+    // The polygons are simplified using the Ramer-Douglas-Peucker algorithm.
+    // This is the therefore needed tolerance. Ideally the value should be user defined.
+    // For now a suitable value is found experimental.
+    constexpr double fTolerance(12);
+    for (const auto& rPoly : maPolygons)
     {
         PolyPolygonVector aPolygons = rPoly.second;
+        if (aPolygons.empty())
+            continue;
         //Get shapes for the slide
-        css::uno::Reference< css::drawing::XShapes > Shapes = rPoly.first;
+        css::uno::Reference<css::drawing::XShapes> Shapes = rPoly.first;
 
         //Retrieve polygons for one slide
         // #tdf112687 A pen drawing in slideshow is actually a chain of individual line shapes, where
@@ -1512,15 +1519,17 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         // slide.
         ::basegfx::B2DPolygon aDrawingPoints;
         cppcanvas::PolyPolygonSharedPtr pFirstPolyPoly = aPolygons.front(); // for style properties
-        for( const auto& pPolyPoly : aPolygons )
+        for (const auto& pPolyPoly : aPolygons)
         {
             // Actually, each item in aPolygons has two points, but wrapped in a cppcanvas::PopyPolygon.
-            ::basegfx::B2DPolyPolygon b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
+            ::basegfx::B2DPolyPolygon b2DPolyPoly
+                = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
+                    pPolyPoly->getUNOPolyPolygon());
 
             //Normally there is only one polygon
-            for(sal_uInt32 i=0; i< b2DPolyPoly.count();i++)
+            for (sal_uInt32 i = 0; i < b2DPolyPoly.count(); i++)
             {
-                const ::basegfx::B2DPolygon& aPoly =  b2DPolyPoly.getB2DPolygon(i);
+                const ::basegfx::B2DPolygon& aPoly = b2DPolyPoly.getB2DPolygon(i);
 
                 if (aPoly.count() > 1) // otherwise skip it, count should be 2
                 {
@@ -1530,8 +1539,8 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                         pFirstPolyPoly = pPolyPoly;
                         continue;
                     }
-
-                    basegfx::B2DPoint aLast = aDrawingPoints.getB2DPoint(aDrawingPoints.count() - 1);
+                    basegfx::B2DPoint aLast
+                        = aDrawingPoints.getB2DPoint(aDrawingPoints.count() - 1);
                     if (aPoly.getB2DPoint(0).equal(aLast))
                     {
                         aDrawingPoints.append(aPoly, 1);
@@ -1540,12 +1549,14 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
 
                     // Put what we have collected to the slide and then start a new pen drawing object
                     //create the PolyLineShape. The points will be in its PolyPolygon property.
-                    uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
-                                                                    "com.sun.star.drawing.PolyLineShape" ) );
-                    uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
+                    uno::Reference<uno::XInterface> polyshape(
+                        xDocFactory->createInstance("com.sun.star.drawing.PolyLineShape"));
+                    uno::Reference<drawing::XShape> rPolyShape(polyshape, uno::UNO_QUERY);
                     //Add the shape to the slide
                     Shapes->add(rPolyShape);
                     //Construct a sequence of points sequence
+                    aDrawingPoints
+                        = basegfx::utils::createSimplifiedPolygon(aDrawingPoints, fTolerance);
                     const drawing::PointSequenceSequence aRetval
                         = lcl_createPointSequenceSequenceFromB2DPolygon(aDrawingPoints);
                     //Fill the properties
@@ -1563,12 +1574,13 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
         if (aDrawingPoints.count() > 1)
         {
             //create the PolyLineShape. The points will be in its PolyPolygon property.
-            uno::Reference< uno::XInterface > polyshape(
+            uno::Reference<uno::XInterface> polyshape(
                 xDocFactory->createInstance("com.sun.star.drawing.PolyLineShape"));
-            uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
+            uno::Reference<drawing::XShape> rPolyShape(polyshape, uno::UNO_QUERY);
             //Add the shape to the slide
             Shapes->add(rPolyShape);
             //Construct a sequence of points sequence
+            aDrawingPoints = basegfx::utils::createSimplifiedPolygon(aDrawingPoints, fTolerance);
             drawing::PointSequenceSequence aRetval
                 = lcl_createPointSequenceSequenceFromB2DPolygon(aDrawingPoints);
             //Fill the properties
