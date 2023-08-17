@@ -545,7 +545,7 @@
             <property name="column-spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="checkSplitPara">
-                <property name="label" translatable="yes" context="textflowpage|checkSplitPara">_Do not split paragraph</property>
+                <property name="label" translatable="yes" context="textflowpage|checkSplitPara">_Allow to split paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -560,7 +560,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
+                <property name="top-attach">1</property>
                 <property name="width">3</property>
               </packing>
             </child>
@@ -581,16 +581,18 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
+                <property name="top-attach">0</property>
                 <property name="width">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="checkOrphan">
-                <property name="label" translatable="yes" context="textflowpage|checkOrphan">_Orphan control</property>
+                <property name="label" translatable="yes" context="textflowpage|checkOrphan">No split at _beginning of paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="textflowpage|checkOrphan">Number of lines, that will be kept together at the beginning of the paragraph (orphan control).</property>
+                <property name="margin-start">12</property>
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
@@ -610,10 +612,12 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="checkWidow">
-                <property name="label" translatable="yes" context="textflowpage|checkWidow">_Widow control</property>
+                <property name="label" translatable="yes" context="textflowpage|checkWidow">No split at _end of paragraph</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes" context="textflowpage|checkOrphan">Number of lines, that will be kept together at the end of the paragraph (widow control).</property>
+                <property name="margin-start">12</property>
                 <property name="use-underline">True</property>
                 <property name="inconsistent">True</property>
                 <property name="draw-indicator">True</property>
@@ -704,7 +708,7 @@
           <object class="GtkLabel" id="labelOptions">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="textflowpage|labelOptions">Options</property>
+            <property name="label" translatable="yes" context="textflowpage|labelOptions">Split Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
