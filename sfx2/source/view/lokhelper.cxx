@@ -466,7 +466,7 @@ void SfxLokHelper::notifyOtherView(const SfxViewShell* pThisView, SfxViewShell c
                                    int nType, const boost::property_tree::ptree& rTree)
 {
     assert(pThisView != nullptr && "pThisView must be valid");
-    if (DisableCallbacks::disabled())
+    if (DisableCallbacks::disabled() || !pOtherView)
         return;
 
     const int viewId = SfxLokHelper::getView(pThisView);
