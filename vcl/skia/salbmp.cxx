@@ -235,7 +235,8 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             // set otherwise exporting the following animated .png image will
             // fail:
             //   https://bugs.documentfoundation.org/attachment.cgi?id=188792
-            if ((mPixelsSize != mSize || getenv("SAL_FORCE_HIDPI_SCALING")) && mImage)
+            static const bool bForceHiDPIScaling = getenv("SAL_FORCE_HIDPI_SCALING") != nullptr;
+            if (mPixelsSize != mSize || (bForceHiDPIScaling && mImage))
                 EnsureBitmapData();
             assert(mPixelsSize == mSize);
             break;
