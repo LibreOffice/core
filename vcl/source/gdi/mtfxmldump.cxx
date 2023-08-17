@@ -63,6 +63,8 @@ OUString collectPushFlags(vcl::PushFlags nFlags)
         aStrings.emplace_back("PushTextLanguage");
     if (nFlags & vcl::PushFlags::OVERLINECOLOR)
         aStrings.emplace_back("PushOverlineColor");
+    if (nFlags & vcl::PushFlags::RTLENABLED)
+        aStrings.emplace_back("PushRTLEnabled");
 
     OUString aString;
 

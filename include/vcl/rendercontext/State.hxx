@@ -53,6 +53,7 @@ enum class PushFlags
     TEXTLAYOUTMODE = 0x0800,
     TEXTLANGUAGE = 0x1000,
     OVERLINECOLOR = 0x2000,
+    RTLENABLED = 0x4000,
     ALL = 0xFFFF
 };
 }
@@ -66,7 +67,7 @@ template <> struct typed_flags<vcl::PushFlags> : is_typed_flags<vcl::PushFlags, 
 #define PUSH_ALLFONT                                                                               \
     (vcl::PushFlags::TEXTCOLOR | vcl::PushFlags::TEXTFILLCOLOR | vcl::PushFlags::TEXTLINECOLOR     \
      | vcl::PushFlags::OVERLINECOLOR | vcl::PushFlags::TEXTALIGN | vcl::PushFlags::TEXTLAYOUTMODE  \
-     | vcl::PushFlags::TEXTLANGUAGE | vcl::PushFlags::FONT)
+     | vcl::PushFlags::TEXTLANGUAGE | vcl::PushFlags::RTLENABLED | vcl::PushFlags::FONT)
 
 namespace vcl::text
 {
@@ -114,6 +115,7 @@ struct State
     LanguageType meTextLanguage = LANGUAGE_SYSTEM;
     PushFlags mnFlags = PushFlags::NONE;
     bool mbMapActive = false;
+    bool mbRTLEnabled = false;
 };
 }
 
