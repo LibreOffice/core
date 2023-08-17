@@ -238,6 +238,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
             pWin->EnableDocking();
             mxImpl->SetPopupWindow(pWin,pToolBox);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin, eFloatFlags );
+            return VCLUnoHelper::GetInterface(pWin.get());
         }
     }
     return Reference< awt::XWindow >();
