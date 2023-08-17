@@ -452,7 +452,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             {
                 SwTextNode* pNode = rOutlineNodes[i]->GetTextNode();
                 const sal_uInt8 nLevel = pNode->GetAttrOutlineLevel() - 1;
-                if (nLevel >= m_nOutlineLevel || !pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
+                if (nLevel >= m_nOutlineLevel)
                     continue;
                 double nYPos = m_bAlphabeticSort ? 0 : static_cast<double>(getYPos(*pNode));
                 if (nEndOfExtrasIndex >= pNode->GetIndex() && pNode->GetFlyFormat())
@@ -466,6 +466,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 aEntry = SwNavigationPI::CleanEntry(aEntry);
                 auto pCnt(std::make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable(i), nYPos));
+                if (!pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
 
@@ -1425,16 +1427,6 @@ static void lcl_SetOutlineContentEntriesSensitivities(SwContentTree* pThis, cons
         return;
 
     bool bIsRoot = lcl_IsContentType(rEntry, rContentTree);
-
-    if (const SwWrtShell* pSh = pThis->GetActiveWrtShell())
-    {
-        if (pSh->GetViewOptions()->IsTreatSubOutlineLevelsAsContent())
-        {
-            if (!bIsRoot)
-                rPop.set_sensitive(OUString::number(TOGGLE_OUTLINE_CONTENT_VISIBILITY), true);
-            return;
-        }
-    }
 
     const SwNodes& rNodes = pThis->GetWrtShell()->GetNodes();
     const SwOutlineNodes& rOutlineNodes = rNodes.GetOutLineNds();
@@ -2945,7 +2937,7 @@ bool SwContentTree::HasContentChanged()
         return false;
     }
 
-    // root content navigation view
+    // single content type navigation view
     if(m_bIsRoot)
     {
         std::unique_ptr<weld::TreeIter> xRootEntry(m_xTreeView->make_iterator());
@@ -2983,8 +2975,9 @@ bool SwContentTree::HasContentChanged()
             // the member data in the array. The Display function will clear and recreate the
             // treeview from the content type member arrays if content change is detected.
             const SwContent* pCnt = pArrType->GetMember(j);
-            OUString sSubId(weld::toId(pCnt));
-            m_xTreeView->set_id(*xEntry, sSubId);
+
+            if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, -1))
+                return true;
 
             OUString sEntryText = m_xTreeView->get_text(*xEntry);
             if (sEntryText != pCnt->GetName() &&
@@ -2992,9 +2985,16 @@ bool SwContentTree::HasContentChanged()
             {
                 return true;
             }
+
+            // Set_id needs to be done here because FillMemberList clears the content type member
+            // list and refills with new data making the previously set id invalid. If there is no
+            // content change detected the Dispay function will not be called and the tree entry
+            // user data will not be set to the new content member pointer address.
+            OUString sSubId(weld::toId(pCnt));
+            m_xTreeView->set_id(*xEntry, sSubId);
         }
     }
-    // all content navigation view
+    // all content types navigation view
     else
     {
         // Fill member list for each content type and check for content change. If content change
@@ -3059,8 +3059,12 @@ bool SwContentTree::HasContentChanged()
                     }
 
                     const SwContent* pCnt = pArrType->GetMember(j);
-                    OUString sSubId(weld::toId(pCnt));
-                    m_xTreeView->set_id(*xEntry, sSubId);
+
+                    if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, -1))
+                    {
+                        bContentChanged = true;
+                        break;
+                    }
 
                     OUString sEntryText = m_xTreeView->get_text(*xEntry);
                     if( sEntryText != pCnt->GetName() &&
@@ -3069,6 +3073,11 @@ bool SwContentTree::HasContentChanged()
                         bContentChanged = true;
                         break;
                     }
+
+                    // See comment above in single content type navigation view block for why the
+                    // following is done here.
+                    OUString sSubId(weld::toId(pCnt));
+                    m_xTreeView->set_id(*xEntry, sSubId);
                 }
             }
             // not expanded and has children
@@ -5365,6 +5374,17 @@ void SwContentTree::CopyOutlineSelections()
 
 void SwContentTree::GotoContent(const SwContent* pCnt)
 {
+    if (pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE)
+    {
+        // Maybe the outline node doesn't have a layout frame to go to.
+        const SwOutlineNodes::size_type nPos =
+                static_cast<const SwOutlineContent*>(pCnt)->GetOutlinePos();
+        const SwNodes& rNds = m_pActiveShell->GetDoc()->GetNodes();
+        SwTextNode* pTextNd = rNds.GetOutLineNds()[nPos]->GetTextNode();
+        if (!pTextNd->getLayoutFrame(m_pActiveShell->GetLayout()))
+            return;
+    }
+
     if (m_bSelectTo)
     {
         if (m_pActiveShell->IsCursorInTable() ||
