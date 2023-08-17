@@ -49,6 +49,7 @@ private:
     virtual bool KeyInput(const KeyEvent&) override;
     virtual bool Command(const CommandEvent&) override;
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    bool GetDecimalValueAndCharName(sal_UCS4& rDecimalValue, OUString& rCharName);
 public:
     SvxCharView(const VclPtr<VirtualDevice>& rVirDev);
 

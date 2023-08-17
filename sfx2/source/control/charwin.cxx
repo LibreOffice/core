@@ -65,7 +65,7 @@ void SvxCharView::GetFocus()
 
 void SvxCharView::LoseFocus() { Invalidate(); }
 
-OUString SvxCharView::GetCharInfoText()
+bool SvxCharView::GetDecimalValueAndCharName(sal_UCS4& rDecimalValue, OUString& rCharName)
 {
     OUString charValue = GetText();
     sal_UCS4 nDecimalValue = charValue.iterateCodePoints(&o3tl::temporary(sal_Int32(1)), -1);
@@ -77,8 +77,22 @@ OUString SvxCharView::GetCharInfoText()
     u_charName(nDecimalValue, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
     if (U_SUCCESS(errorCode))
     {
+        rDecimalValue = nDecimalValue;
+        rCharName = OUString::createFromAscii(buffer);
+        return true;
+    }
+    return false;
+}
+
+OUString SvxCharView::GetCharInfoText()
+{
+    sal_UCS4 nDecimalValue = 0;
+    OUString sCharName;
+    const bool bSuccess = GetDecimalValueAndCharName(nDecimalValue, sCharName);
+    if (bSuccess)
+    {
         OUString aHexText = OUString::number(nDecimalValue, 16).toAsciiUpperCase();
-        return charValue + u" " + OUString::createFromAscii(buffer) + u" U+" + aHexText;
+        return GetText() + u" " + sCharName + u" U+" + aHexText;
     }
     return OUString();
 }
