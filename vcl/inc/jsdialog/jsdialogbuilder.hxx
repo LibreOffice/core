@@ -637,6 +637,16 @@ public:
     virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
 };
 
+class JSVerticalNotebook final : public JSWidget<SalInstanceVerticalNotebook, ::VerticalTabControl>
+{
+public:
+    JSVerticalNotebook(JSDialogSender* pSender, ::VerticalTabControl* pControl,
+                       SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    virtual void remove_page(const OString& rIdent) override;
+    virtual void insert_page(const OString& rIdent, const OUString& rLabel, int nPos) override;
+};
+
 class JSSpinButton final : public JSWidget<SalInstanceSpinButton, ::FormattedField>
 {
 public:
