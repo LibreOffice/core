@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
-#define INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
+#pragma once
 
 #define GLIB_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
@@ -364,6 +363,5 @@ GtkSalDisplay *GtkSalData::GetGtkDisplay() const
     return static_cast<GtkSalDisplay *>(GetDisplay());
 }
 
-#endif // INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
