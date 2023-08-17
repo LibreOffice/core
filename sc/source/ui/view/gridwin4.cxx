@@ -1727,7 +1727,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     }
 }
 
-void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
+void ScGridWindow::LogicInvalidatePart(const tools::Rectangle* pRectangle, int nPart)
 {
     tools::Rectangle aRectangle;
     tools::Rectangle* pResultRectangle;
@@ -1759,7 +1759,13 @@ void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
     }
 
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    SfxLokHelper::notifyInvalidation(pViewShell, pResultRectangle);
+    SfxLokHelper::notifyInvalidation(pViewShell, nPart, pResultRectangle);
+}
+
+void ScGridWindow::LogicInvalidate(const tools::Rectangle* pRectangle)
+{
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    LogicInvalidatePart(pRectangle, pViewShell->getPart());
 }
 
 void ScGridWindow::SetCellSelectionPixel(int nType, int nPixelX, int nPixelY)
