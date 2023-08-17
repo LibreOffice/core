@@ -821,21 +821,8 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
     if( pParentToolBox->IsKeyEvent() )
         nFlags |= FloatWinPopupFlags::GrabFocus;
 
-    // tdf#140762, tdf#152671, tdf#154470, tdf#156100: Without client window being visible
-    // before showing popup, at least NVDA on Windows does not announce items in the popup,
-    // so make the client window visible first. This is problematic for gtk VCL plugins though,
-    // so don't do it there and use different code paths for now.
-    // For further analysis of the root causes, there's tdf#156561.
-    const OUString sToolkit = Application::GetToolkitName();
-    if (sToolkit == "gtk3" || sToolkit == "gtk4")
-    {
-        mpFloatWin->StartPopupMode( pParentToolBox, nFlags);
-        GetWindow()->Show();
-    }
-    else
-    {
-        mpFloatWin->StartPopupMode( pParentToolBox, nFlags | FloatWinPopupFlags::MakeClientWindowVisibleBeforePopup);
-    }
+    mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
+    GetWindow()->Show();
 
     if( pParentToolBox->IsKeyEvent() )
     {
@@ -852,7 +839,8 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
         return;
 
     ImplPreparePopupMode();
-    mpFloatWin->StartPopupMode( rRect, nFlags | FloatWinPopupFlags::MakeClientWindowVisibleBeforePopup);
+    mpFloatWin->StartPopupMode( rRect, nFlags );
+    GetWindow()->Show();
 }
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
