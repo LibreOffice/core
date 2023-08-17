@@ -20,13 +20,17 @@
 #include <charatr.hxx>
 #include <paratr.hxx>
 #include <frmatr.hxx>
+#include <wrtsh.hxx>
+
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <UndoThemeChange.hxx>
+#include <UndoManager.hxx>
 
 #include <svx/xflclit.hxx>
 
+#include <svl/undo.hxx>
 #include <sal/config.h>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
@@ -69,11 +73,13 @@ bool changeBorderLine(editeng::SvxBorderLine* pBorderLine, model::ColorSet const
 class ThemeColorHandler : public sw::ModelTraverseHandler
 {
     SwDoc& mrDocument;
+    SwDocShell* mpDocShell;
     model::ColorSet const& mrColorSet;
 
 public:
-    ThemeColorHandler(SwDoc& rDocument, model::ColorSet const& rColorSet)
+    ThemeColorHandler(SwDoc& rDocument, SwDocShell* pDocShell, model::ColorSet const& rColorSet)
         : mrDocument(rDocument)
+        , mpDocShell(pDocShell)
         , mrColorSet(rColorSet)
     {
     }
@@ -221,8 +227,13 @@ public:
 
     void handleSdrObject(SdrObject* pObject) override
     {
+        SwWrtShell* pWrtShell = mpDocShell->GetWrtShell();
+        SdrView* pView = pWrtShell->GetDrawView();
+
+        SfxUndoManager* pManager = &mrDocument.GetUndoManager();
+
         // update current object
-        svx::theme::updateSdrObject(mrColorSet, pObject);
+        svx::theme::updateSdrObject(mrColorSet, pObject, pView, pManager);
 
         // update child objects
         SdrObjList* pList = pObject->GetSubList();
@@ -231,7 +242,7 @@ public:
             SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
             while (aIter.IsMore())
             {
-                svx::theme::updateSdrObject(mrColorSet, aIter.Next());
+                svx::theme::updateSdrObject(mrColorSet, aIter.Next(), pView, pManager);
             }
         }
     }
@@ -422,7 +433,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     }
 
     // Direct format change
-    auto pHandler = std::make_shared<ThemeColorHandler>(*pDocument, *pColorSet);
+    auto pHandler = std::make_shared<ThemeColorHandler>(*pDocument, mpDocSh, *pColorSet);
     sw::ModelTraverser aModelTraverser(pDocument);
     aModelTraverser.addNodeHandler(pHandler);
     aModelTraverser.traverse();

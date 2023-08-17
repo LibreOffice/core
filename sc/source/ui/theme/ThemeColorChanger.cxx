@@ -151,7 +151,7 @@ bool changeStyles(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const&
     return bChanged;
 }
 
-bool changeSheets(ScDocShell& rDocShell, ScDrawLayer* pModel,
+bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer* pModel,
                   std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     ScDocument& rDocument = rDocShell.GetDocument();
@@ -209,14 +209,15 @@ bool changeSheets(ScDocShell& rDocShell, ScDrawLayer* pModel,
         // Change all SdrObjects
         {
             pModel->BeginCalcUndo(true);
+            SdrView* pView = nullptr;
+            if (pViewShell)
+                pView = pViewShell->GetScDrawView();
 
             SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
             SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
-            SdrObject* pObject = aIter.Next();
-            while (pObject)
+            for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
             {
-                svx::theme::updateSdrObject(*pColorSet, pObject);
-                pObject = aIter.Next();
+                svx::theme::updateSdrObject(*pColorSet, pObject, pView, rDocShell.GetUndoManager());
             }
 
             std::unique_ptr<SdrUndoGroup> pUndo = pModel->GetCalcUndo();
@@ -224,7 +225,6 @@ bool changeSheets(ScDocShell& rDocShell, ScDrawLayer* pModel,
             if (pUndo)
             {
                 bChanged = true;
-                pUndo->SetComment("Hi!");
                 auto pUndoDraw = std::make_unique<ScUndoDraw>(std::move(pUndo), &rDocShell);
                 rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDraw));
             }
@@ -316,9 +316,11 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 
     const bool bUndo(rDocument.IsUndoEnabled());
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+
     ViewShellId nViewShellId(-1);
-    if (ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell())
-        nViewShellId = pViewSh->GetViewShellId();
+    if (pViewShell)
+        nViewShellId = pViewShell->GetViewShellId();
 
     if (bUndo)
     {
@@ -328,7 +330,8 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 
     bool bChanged = false;
     bChanged = changeStyles(m_rDocShell, pColorSet) || bChanged;
-    bChanged = changeSheets(m_rDocShell, rDocument.GetDrawLayer(), pColorSet) || bChanged;
+    bChanged
+        = changeSheets(m_rDocShell, pViewShell, rDocument.GetDrawLayer(), pColorSet) || bChanged;
     changeSparklines(m_rDocShell, pColorSet);
 
     changeTheTheme(m_rDocShell, pColorSet);

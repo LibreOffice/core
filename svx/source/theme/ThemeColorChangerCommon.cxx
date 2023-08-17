@@ -20,106 +20,154 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xdef.hxx>
+#include <editeng/eeitem.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdotext.hxx>
+
+#include <editeng/editeng.hxx>
+#include <editeng/section.hxx>
+#include <editeng/eeitem.hxx>
+
 using namespace css;
 
 namespace svx::theme
 {
 namespace
 {
-/// Updates text portion property colors
-void updateTextPortionColorSet(model::ColorSet const& rColorSet,
-                               const uno::Reference<beans::XPropertySet>& xPortion)
+const SvxColorItem* getColorItem(const editeng::Section& rSection)
 {
-    if (!xPortion->getPropertySetInfo()->hasPropertyByName(UNO_NAME_EDIT_CHAR_COMPLEX_COLOR))
+    auto iterator = std::find_if(
+        rSection.maAttributes.begin(), rSection.maAttributes.end(),
+        [](const SfxPoolItem* pPoolItem) { return pPoolItem->Which() == EE_CHAR_COLOR; });
+
+    if (iterator != rSection.maAttributes.end())
+        return static_cast<const SvxColorItem*>(*iterator);
+    return nullptr;
+}
+
+bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObject, SdrView* pView)
+{
+    SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
+
+    if (!pTextObject)
+        return false;
+
+    pView->SdrBeginTextEdit(pTextObject);
+
+    auto* pOutlinerView = pView->GetTextEditOutlinerView();
+    if (!pOutlinerView)
+        return false;
+
+    auto* pEditEngine = pOutlinerView->GetEditView().GetEditEngine();
+    if (!pEditEngine)
+        return false;
+
+    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    if (pOutlinerParagraphObject)
     {
-        return;
+        const EditTextObject& rEditText = pOutlinerParagraphObject->GetTextObject();
+        std::vector<editeng::Section> aSections;
+        rEditText.GetAllSections(aSections);
+
+        for (editeng::Section const& rSection : aSections)
+        {
+            const SvxColorItem* pItem = getColorItem(rSection);
+            if (!pItem)
+                continue;
+
+            model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+            if (rComplexColor.isValidThemeType())
+            {
+                SfxItemSet aSet(pEditEngine->GetAttribs(rSection.mnParagraph, rSection.mnStart,
+                                                        rSection.mnEnd,
+                                                        GetAttribsFlags::CHARATTRIBS));
+                Color aNewColor = rColorSet.resolveColor(rComplexColor);
+                std::unique_ptr<SvxColorItem> pNewItem(pItem->Clone());
+                pNewItem->setColor(aNewColor);
+                aSet.Put(*pNewItem);
+
+                ESelection aSelection(rSection.mnParagraph, rSection.mnStart, rSection.mnParagraph,
+                                      rSection.mnEnd);
+                pEditEngine->QuickSetAttribs(aSet, aSelection);
+            }
+        }
     }
 
-    uno::Reference<util::XComplexColor> xComplexColor;
-    xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COMPLEX_COLOR) >>= xComplexColor;
-    if (!xComplexColor.is())
-        return;
+    pView->SdrEndTextEdit();
 
-    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-
-    if (!aComplexColor.isValidThemeType())
-        return;
-
-    Color aColor = rColorSet.resolveColor(aComplexColor);
-    xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR, uno::Any(static_cast<sal_Int32>(aColor)));
+    return true;
 }
 
-/// Updates the fill property colors
-void updateFillColorSet(model::ColorSet const& rColorSet,
-                        const uno::Reference<beans::XPropertySet>& xShape)
+bool updateObjectAttributes(model::ColorSet const& rColorSet, SdrObject& rObject,
+                            SfxUndoManager* pUndoManager)
 {
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILL_COMPLEX_COLOR))
-        return;
+    if (pUndoManager)
+    {
+        pUndoManager->AddUndoAction(
+            rObject.getSdrModelFromSdrObject().GetSdrUndoFactory().CreateUndoAttrObject(
+                rObject, true, true));
+    }
+    bool bChanged = false;
+    auto aItemSet = rObject.GetMergedItemSet();
 
-    uno::Reference<util::XComplexColor> xComplexColor;
-    xShape->getPropertyValue(UNO_NAME_FILL_COMPLEX_COLOR) >>= xComplexColor;
-    if (!xComplexColor.is())
-        return;
-
-    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-
-    if (!aComplexColor.isValidThemeType())
-        return;
-
-    Color aColor = rColorSet.resolveColor(aComplexColor);
-    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
-}
-
-/// Updates the line property colors
-void updateLineColorSet(model::ColorSet const& rColorSet,
-                        const uno::Reference<beans::XPropertySet>& xShape)
-{
-    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_LINE_COMPLEX_COLOR))
-        return;
-
-    uno::Reference<util::XComplexColor> xComplexColor;
-    xShape->getPropertyValue(UNO_NAME_LINE_COMPLEX_COLOR) >>= xComplexColor;
-    if (!xComplexColor.is())
-        return;
-
-    auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
-
-    if (!aComplexColor.isValidThemeType())
-        return;
-
-    Color aColor = rColorSet.resolveColor(aComplexColor);
-    xShape->setPropertyValue(UNO_NAME_LINECOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
+    if (const XFillColorItem* pItem = aItemSet.GetItemIfSet(XATTR_FILLCOLOR, false))
+    {
+        model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+        if (rComplexColor.isValidThemeType())
+        {
+            Color aNewColor = rColorSet.resolveColor(rComplexColor);
+            std::unique_ptr<XFillColorItem> pNewItem(pItem->Clone());
+            pNewItem->SetColorValue(aNewColor);
+            aItemSet.Put(*pNewItem);
+            bChanged = true;
+        }
+    }
+    if (const XLineColorItem* pItem = aItemSet.GetItemIfSet(XATTR_LINECOLOR, false))
+    {
+        model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+        if (rComplexColor.isValidThemeType())
+        {
+            Color aNewColor = rColorSet.resolveColor(rComplexColor);
+            std::unique_ptr<XLineColorItem> pNewItem(pItem->Clone());
+            pNewItem->SetColorValue(aNewColor);
+            aItemSet.Put(*pNewItem);
+            bChanged = true;
+        }
+    }
+    if (const SvxColorItem* pItem = aItemSet.GetItemIfSet(EE_CHAR_COLOR, false))
+    {
+        model::ComplexColor const& rComplexColor = pItem->getComplexColor();
+        if (rComplexColor.isValidThemeType())
+        {
+            Color aNewColor = rColorSet.resolveColor(rComplexColor);
+            std::unique_ptr<SvxColorItem> pNewItem(pItem->Clone());
+            pNewItem->setColor(aNewColor);
+            aItemSet.Put(*pNewItem);
+            bChanged = true;
+        }
+    }
+    if (bChanged)
+    {
+        rObject.SetMergedItemSetAndBroadcast(aItemSet);
+    }
+    return bChanged;
 }
 
 } // end anonymous namespace
 
 /// Updates properties of the SdrObject
-void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject)
+void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrView* pView,
+                     SfxUndoManager* pUndoManager)
 {
-    uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
-    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
-    if (xShapeText.is())
-    {
-        // E.g. group shapes have no text.
-        uno::Reference<container::XEnumerationAccess> xText(xShapeText->getText(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
-        while (xParagraphs->hasMoreElements())
-        {
-            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
-                                                                     uno::UNO_QUERY);
-            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-            while (xPortions->hasMoreElements())
-            {
-                uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(),
-                                                             uno::UNO_QUERY);
-                updateTextPortionColorSet(rColorSet, xPortion);
-            }
-        }
-    }
+    if (!pObject)
+        return;
 
-    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    updateFillColorSet(rColorSet, xShapeProps);
-    updateLineColorSet(rColorSet, xShapeProps);
+    updateEditEngTextSections(rColorSet, pObject, pView);
+    updateObjectAttributes(rColorSet, *pObject, pUndoManager);
 }
 
 } // end svx::theme namespace

@@ -122,10 +122,15 @@ bool changeStyles(sd::DrawDocShell* pDocShell, std::shared_ptr<model::ColorSet> 
 void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     auto* pUndoManager = mpDocShell->GetUndoManager();
+    sd::ViewShell* pViewShell = mpDocShell->GetViewShell();
+    if (!pViewShell)
+        return;
 
-    ViewShellId nViewShellId(-1);
-    if (sd::ViewShell* pViewShell = mpDocShell->GetViewShell())
-        nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
+    SdrView* pView = pViewShell->GetView();
+    if (!pView)
+        return;
+
+    ViewShellId nViewShellId = pViewShell->GetViewShellBase().GetViewShellId();
     pUndoManager->EnterListAction(SvxResId(RID_SVXSTR_UNDO_THEME_COLOR_CHANGE), "", 0,
                                   nViewShellId);
 
@@ -135,6 +140,8 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
     {
         SdrPage* pCurrentPage = rModel.GetPage(nPage);
+
+        // Skip pages that are usign a different master page
         if (!pCurrentPage->TRG_HasMasterPage()
             || &pCurrentPage->TRG_GetMasterPage() != mpMasterPage)
             continue;
@@ -142,7 +149,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
         for (size_t nObject = 0; nObject < pCurrentPage->GetObjCount(); ++nObject)
         {
             SdrObject* pObject = pCurrentPage->GetObj(nObject);
-            svx::theme::updateSdrObject(*pColorSet, pObject);
+            svx::theme::updateSdrObject(*pColorSet, pObject, pView, pUndoManager);
 
             // update child objects
             SdrObjList* pList = pObject->GetSubList();
@@ -151,7 +158,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
                 SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
                 while (aIter.IsMore())
                 {
-                    svx::theme::updateSdrObject(*pColorSet, aIter.Next());
+                    svx::theme::updateSdrObject(*pColorSet, aIter.Next(), pView, pUndoManager);
                 }
             }
         }
