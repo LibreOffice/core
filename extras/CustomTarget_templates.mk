@@ -38,6 +38,8 @@ extras_TEMPLATES_XMLFILES := \
 	draw/bpmn/meta.xml \
 	l10n/zh_CN_ott_normal/meta.xml \
 	l10n/zh_CN_ott_normal/content.xml \
+	l10n/ja_ott_normal/meta.xml \
+	l10n/ja_ott_normal/content.xml \
 
 # param: style-base (e.g. Modern)
 extras_TEMPLATES_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_TEMPLATES_XMLFILES)))
