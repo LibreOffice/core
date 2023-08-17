@@ -2718,10 +2718,23 @@ void SwLayoutFrame::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
         {
             assert( dynamic_cast<const SwAnchoredDrawObject*>( pObj) &&
                     "<SwLayoutFrame::NotifyFlys() - anchored object of unexpected type" );
+            // tdf#156728 invalidate fly positioned dependent on header/footer size
+            bool isPositionedByHF(false);
+            if (IsHeaderFrame() || IsFooterFrame())
+            {
+                auto const nO(pObj->GetFrameFormat().GetVertOrient().GetRelationOrient());
+                if (nO == text::RelOrientation::PAGE_PRINT_AREA
+                    || nO == text::RelOrientation::PAGE_PRINT_AREA_BOTTOM
+                    || nO == text::RelOrientation::PAGE_PRINT_AREA_TOP)
+                {
+                    isPositionedByHF = true;
+                }
+            }
             // #i26945# - use <pAnchorFrame> to check, if
             // fly frame is lower of layout frame resp. if fly frame is
             // at a different page registered as its anchor frame is on.
             if ( IsAnLower( pAnchorFrame ) ||
+                 isPositionedByHF ||
                  pAnchorFrame->FindPageFrame() != pPageFrame )
             {
                 // #i44016#
