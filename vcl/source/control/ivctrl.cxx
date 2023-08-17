@@ -627,6 +627,50 @@ void VerticalTabControl::SetPageText(std::string_view rPageId, const OUString& r
     pData->pEntry->SetText(rText);
 }
 
+void VerticalTabControl::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    rJsonWriter.put("id", get_id());
+    rJsonWriter.put("type", "tabcontrol");
+    rJsonWriter.put("vertical", true);
+    rJsonWriter.put("selected", GetCurPageId());
+
+    {
+        auto childrenNode = rJsonWriter.startArray("children");
+        for (int i = 0; i < GetPageCount(); i++)
+        {
+            VclPtr<vcl::Window> pChild = GetPage(GetPageId(i));
+
+            if (pChild)
+            {
+                if (!pChild->GetChildCount())
+                    continue;
+
+                auto aChildNode = rJsonWriter.startStruct();
+                pChild->DumpAsPropertyTree(rJsonWriter);
+            }
+        }
+    }
+    {
+        auto tabsNode = rJsonWriter.startArray("tabs");
+        for(int i = 0; i < GetPageCount(); i++)
+        {
+            VclPtr<vcl::Window> pChild = GetPage(GetPageId(i));
+
+            if (pChild)
+            {
+                if (!pChild->GetChildCount())
+                    continue;
+
+                auto aTabNode = rJsonWriter.startStruct();
+                auto sId = GetPageId(i);
+                rJsonWriter.put("text", GetPageText(sId));
+                rJsonWriter.put("id", sId);
+                rJsonWriter.put("name", GetPageText(sId));
+            }
+        }
+    }
+}
+
 FactoryFunction VerticalTabControl::GetUITestFactory() const
 {
     return VerticalTabControlUIObject::create;
