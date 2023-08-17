@@ -14,12 +14,15 @@
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdview.hxx>
+#include <svl/undo.hxx>
 
 namespace svx
 {
 namespace theme
 {
-SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject);
+SVXCORE_DLLPUBLIC void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject,
+                                       SdrView* pView, SfxUndoManager* pUndoManager = nullptr);
 }
 
 } // end svx namespace
