@@ -2200,6 +2200,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     SCROW nRow1 = aViewData.GetEditStartRow();
     SCCOL nCol2 = aViewData.GetEditEndCol();
     SCROW nRow2 = aViewData.GetEditEndRow();
+    SCTAB nTab = aViewData.GetTabNo();
     bool bPaint[4];
     bool bNotifyAcc = false;
     tools::Rectangle aRectangle[4];
@@ -2237,16 +2238,16 @@ void ScTabView::KillEditView( bool bNoPaint )
             if (comphelper::LibreOfficeKit::isActive())
             {
                 const tools::Rectangle& rInvRect = aRectangle[i];
-                pGridWin[i]->LogicInvalidate(&rInvRect);
+                pGridWin[i]->LogicInvalidatePart(&rInvRect, nTab);
 
                 // invalidate other views
                 auto lInvalidateWindows =
-                        [&rInvRect] (ScTabView* pTabView)
+                        [nTab, &rInvRect] (ScTabView* pTabView)
                         {
                             for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
                             {
                                 if (pWin)
-                                    pWin->LogicInvalidate(&rInvRect);
+                                    pWin->LogicInvalidatePart(&rInvRect, nTab);
                             }
                         };
 

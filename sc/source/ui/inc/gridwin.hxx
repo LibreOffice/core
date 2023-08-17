@@ -320,8 +320,6 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
     void            SetupInitialPageBreaks(const ScDocument& rDoc, SCTAB nTab);
     DECL_DLLPRIVATE_LINK(InitiatePageBreaksTimer, Timer*, void);
 
-    void            LogicInvalidatePart(const tools::Rectangle* pRectangle, int nPart);
-
 protected:
     virtual void    PrePaint(vcl::RenderContext& rRenderContext) override;
     virtual void    Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect) override;
@@ -380,6 +378,7 @@ public:
 
     /// @see Window::LogicInvalidate().
     void LogicInvalidate(const tools::Rectangle* pRectangle) override;
+    void LogicInvalidatePart(const tools::Rectangle* pRectangle, int nPart);
 
     /// Update the cell selection according to what handles have been dragged.
     /// @see vcl::ITiledRenderable::setTextSelection() for the values of nType.
