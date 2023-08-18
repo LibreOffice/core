@@ -1666,6 +1666,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf137675)
                 "none");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf151134)
+{
+    createSdImpressDoc("pptx/tdf151134.odp");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "lIns", "91440");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
