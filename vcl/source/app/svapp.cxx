@@ -185,7 +185,7 @@ Application::~Application()
     //   const Cell OBJ_CELL_NONE;
     // being a static held SfxPoolItem which is not yet de-initialized here
     // number often is (1), even higher with other modules loaded (like 5).
-    // These get de-allocated reliaby in module-deinitializations, so this
+    // These get de-allocated reliably in module-deinitializations, so this
     // is no memory loss. These counters are more to be able to have an eye
     // on amounts of SfxPoolItems used during office usage and to be able to
     // detect if an error in future changes may lead to memory losses - these
