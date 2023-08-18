@@ -8647,8 +8647,8 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 10900; then
-                AC_MSG_ERROR([JDK is too old, you need at least 9 ($_jdk_ver < 10900)])
+            if test "$_jdk_ver" -lt 90000; then
+                AC_MSG_ERROR([JDK is too old, you need at least 9 ($_jdk_ver < 90000)])
             fi
             dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
             dnl completely removed in some Java version > 18 (see
