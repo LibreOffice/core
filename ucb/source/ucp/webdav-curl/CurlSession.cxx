@@ -1216,11 +1216,18 @@ auto CurlProcessor::ProcessRequest(
     ::std::optional<Auth> oAuthProxy;
     if (pEnv && !rSession.m_isAuthenticatedProxy && !rSession.m_Proxy.aName.isEmpty())
     {
-        // the hope is that this must be a URI
-        CurlUri const uri(rSession.m_Proxy.aName);
-        if (!uri.GetUser().isEmpty() || !uri.GetPassword().isEmpty())
+        try
         {
-            oAuthProxy.emplace(uri.GetUser(), uri.GetPassword(), CURLAUTH_ANY);
+            // the hope is that this must be a URI
+            CurlUri const uri(rSession.m_Proxy.aName);
+            if (!uri.GetUser().isEmpty() || !uri.GetPassword().isEmpty())
+            {
+                oAuthProxy.emplace(uri.GetUser(), uri.GetPassword(), CURLAUTH_ANY);
+            }
+        }
+        catch (DAVException&)
+        {
+            // ignore any parsing failure here
         }
     }
     decltype(CURLAUTH_ANY) const authSystem(CURLAUTH_NEGOTIATE | CURLAUTH_NTLM | CURLAUTH_NTLM_WB);
