@@ -138,6 +138,7 @@ private:
     AdditionsDialog* m_pAdditionsDialog;
     std::atomic<bool> m_bExecute;
     bool m_bIsFirstLoading;
+    bool m_bUITest;
 
     void Search();
     void Append(AdditionInfo& additionInfo);

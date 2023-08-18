@@ -275,6 +275,11 @@ SearchAndParseThread::SearchAndParseThread(AdditionsDialog* pDialog, const bool 
     , m_bExecute(true)
     , m_bIsFirstLoading(isFirstLoading)
 {
+    // if we are running a UITest, e.g. UITest_sw_options then
+    // don't attempt to downloading anything
+    static const bool bUITest = getenv("LIBO_TEST_UNIT");
+
+    m_bUITest = bUITest;
 }
 
 SearchAndParseThread::~SearchAndParseThread() {}
@@ -284,7 +289,8 @@ void SearchAndParseThread::Append(AdditionInfo& additionInfo)
     if (!m_bExecute)
         return;
     OUString aPreviewFile;
-    bool bResult = getPreviewFile(additionInfo, aPreviewFile); // info vector json data
+    bool bResult
+        = !m_bUITest && getPreviewFile(additionInfo, aPreviewFile); // info vector json data
 
     if (!bResult)
     {
@@ -398,7 +404,7 @@ void SearchAndParseThread::execute()
 
     if (m_bIsFirstLoading)
     {
-        std::string sResponse = ucbGet(m_pAdditionsDialog->m_sURL);
+        std::string sResponse = !m_bUITest ? ucbGet(m_pAdditionsDialog->m_sURL) : "";
         parseResponse(sResponse, m_pAdditionsDialog->m_aAllExtensionsVector);
         std::sort(m_pAdditionsDialog->m_aAllExtensionsVector.begin(),
                   m_pAdditionsDialog->m_aAllExtensionsVector.end(),
