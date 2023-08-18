@@ -585,8 +585,9 @@ InternetProxyServer GetUnixSystemProxy(const OUString & rProtocol)
     OUString tmp = OUString::createFromAscii(pEnvProxy);
     if (tmp.getLength() < (rProtocol.getLength() + 3))
         return aProxy;
-    tmp = tmp.copy(rProtocol.getLength() + 3);
-    sal_Int32 x = tmp.indexOf(':');
+    sal_Int32 x = tmp.indexOf("://");
+    sal_Int32 at = tmp.indexOf('@', x == -1 ? 0 : x + 3);
+    x = tmp.indexOf(':', at == -1 ? x == -1 ? 0 : x + 3 : at + 1);
     if (x == -1)
         return aProxy;
     int nPort = o3tl::toInt32(tmp.subView(x + 1));
@@ -937,13 +938,19 @@ bool InternetProxyDecider::shouldUseProxy( const OUString & rProtocol,
     return !rData.aName.isEmpty();
 }
 
-
-InternetProxyServer InternetProxyDecider::getProxy(
+OUString InternetProxyDecider::getProxy(
                                             const OUString & rProtocol,
                                             const OUString & rHost,
                                             sal_Int32 nPort ) const
 {
-    return m_xImpl->getProxy( rProtocol, rHost, nPort );
+    InternetProxyServer ret(m_xImpl->getProxy(rProtocol, rHost, nPort));
+
+    if (ret.aName.isEmpty() || ret.nPort == -1)
+    {
+        return ret.aName;
+    }
+
+    return ret.aName + ":" + OUString::number(ret.nPort);
 }
 
 } // namespace ucbhelper

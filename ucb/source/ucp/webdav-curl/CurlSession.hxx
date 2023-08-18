@@ -31,8 +31,8 @@ private:
     CurlUri const m_URI;
     /// buffer for libcurl detailed error messages
     char m_ErrorBuffer[CURL_ERROR_SIZE];
-    /// proxy is used if aName is non-empty
-    ::ucbhelper::InternetProxyServer const m_Proxy;
+    /// proxy is used if non-empty
+    OUString const m_Proxy;
     /// once authentication was successful, rely on m_pCurl's data
     bool m_isAuthenticated = false;
     bool m_isAuthenticatedProxy = false;

@@ -139,7 +139,7 @@ void CrashReporter::writeCommonInfo()
     static constexpr OUStringLiteral url = u"crashreport.libreoffice.org";
     const sal_Int32 port = 443;
 
-    const ucbhelper::InternetProxyServer proxy_server = proxy_decider.getProxy(protocol, url, port);
+    const OUString proxy_server = proxy_decider.getProxy(protocol, url, port);
 
     // save the new Keys
     vmaKeyValues atlast = maKeyValues;
@@ -152,9 +152,9 @@ void CrashReporter::writeCommonInfo()
     addKeyValue("BuildID", utl::Bootstrap::getBuildIdData(""), AddItem);
     addKeyValue("URL", protocol + "://" + url + "/submit/", AddItem);
 
-    if (!proxy_server.aName.isEmpty())
+    if (!proxy_server.isEmpty())
     {
-        addKeyValue("Proxy", proxy_server.aName + ":" + OUString::number(proxy_server.nPort), AddItem);
+        addKeyValue("Proxy", proxy_server, AddItem);
     }
 
     // write the new keys at the end

@@ -693,18 +693,15 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     assert(rc == CURLE_OK); // ANY is always available
     // always set CURLOPT_PROXY to suppress proxy detection in libcurl
-    OString const utf8Proxy(OUStringToOString(m_Proxy.aName, RTL_TEXTENCODING_UTF8));
+    OString const utf8Proxy(OUStringToOString(m_Proxy, RTL_TEXTENCODING_UTF8));
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY, utf8Proxy.getStr());
     if (rc != CURLE_OK)
     {
         SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_PROXY failed: " << GetErrorString(rc));
-        throw DAVException(DAVException::DAV_SESSION_CREATE,
-                           ConnectionEndPointString(m_Proxy.aName, m_Proxy.nPort));
+        throw DAVException(DAVException::DAV_SESSION_CREATE, m_Proxy);
     }
-    if (!m_Proxy.aName.isEmpty())
+    if (!m_Proxy.isEmpty())
     {
-        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYPORT, static_cast<long>(m_Proxy.nPort));
-        assert(rc == CURLE_OK);
         // set this initially, may be overwritten during authentication
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYAUTH, CURLAUTH_ANY);
         assert(rc == CURLE_OK); // ANY is always available
@@ -749,7 +746,7 @@ auto CurlSession::CanUse(OUString const& rURI, uno::Sequence<beans::NamedValue> 
 auto CurlSession::UsesProxy() -> bool
 {
     assert(m_URI.GetScheme() == "http" || m_URI.GetScheme() == "https");
-    return !m_Proxy.aName.isEmpty();
+    return !m_Proxy.isEmpty();
 }
 
 auto CurlSession::abort() -> void
@@ -967,9 +964,7 @@ auto CurlProcessor::ProcessRequestImpl(
             case CURLE_UNSUPPORTED_PROTOCOL:
                 throw DAVException(DAVException::DAV_UNSUPPORTED);
             case CURLE_COULDNT_RESOLVE_PROXY:
-                throw DAVException(
-                    DAVException::DAV_HTTP_LOOKUP,
-                    ConnectionEndPointString(rSession.m_Proxy.aName, rSession.m_Proxy.nPort));
+                throw DAVException(DAVException::DAV_HTTP_LOOKUP, rSession.m_Proxy);
             case CURLE_COULDNT_RESOLVE_HOST:
                 throw DAVException(
                     DAVException::DAV_HTTP_LOOKUP,
@@ -1214,12 +1209,12 @@ auto CurlProcessor::ProcessRequest(
     };
     ::std::optional<Auth> oAuth;
     ::std::optional<Auth> oAuthProxy;
-    if (pEnv && !rSession.m_isAuthenticatedProxy && !rSession.m_Proxy.aName.isEmpty())
+    if (pEnv && !rSession.m_isAuthenticatedProxy && !rSession.m_Proxy.isEmpty())
     {
         try
         {
             // the hope is that this must be a URI
-            CurlUri const uri(rSession.m_Proxy.aName);
+            CurlUri const uri(rSession.m_Proxy);
             if (!uri.GetUser().isEmpty() || !uri.GetPassword().isEmpty())
             {
                 oAuthProxy.emplace(uri.GetUser(), uri.GetPassword(), CURLAUTH_ANY);
@@ -1452,7 +1447,7 @@ auto CurlProcessor::ProcessRequest(
                             auto const ret = pEnv->m_xAuthListener->authenticate(
                                 oRealm ? *oRealm : "",
                                 statusCode == SC_UNAUTHORIZED ? rSession.m_URI.GetHost()
-                                                              : rSession.m_Proxy.aName,
+                                                              : rSession.m_Proxy,
                                 userName, passWord, isSystemCredSupported);
 
                             if (ret == 0)

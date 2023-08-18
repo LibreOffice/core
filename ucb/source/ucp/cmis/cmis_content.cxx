@@ -304,11 +304,8 @@ namespace cmis
         // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
         ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
-        const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
+        const OUString sProxy = aProxyDecider.getProxy(
                 INetURLObject::GetScheme( aBindingUrl.GetProtocol( ) ), aBindingUrl.GetHost(), aBindingUrl.GetPort() );
-        OUString sProxy = rProxy.aName;
-        if ( rProxy.nPort > 0 )
-            sProxy += ":" + OUString::number( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), std::string(), std::string(), std::string() );
 
         // Look for a cached session, key is binding url + repo id
