@@ -175,8 +175,6 @@ namespace oglcanvas
 
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return mnTextDirection;
     }
 
@@ -189,8 +187,6 @@ namespace oglcanvas
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return maText;
     }
 

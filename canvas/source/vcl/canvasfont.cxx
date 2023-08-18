@@ -98,8 +98,6 @@ namespace vclcanvas
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  )
     {
-        SolarMutexGuard aGuard;
-
         return maFontRequest;
     }
 
@@ -156,8 +154,6 @@ namespace vclcanvas
 
     const css::geometry::Matrix2D& CanvasFont::getFontMatrix() const
     {
-        SolarMutexGuard aGuard;
-
         return maFontMatrix;
     }
 }

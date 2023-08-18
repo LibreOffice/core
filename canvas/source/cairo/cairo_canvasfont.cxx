@@ -116,8 +116,6 @@ namespace cairocanvas
 
     rendering::FontRequest SAL_CALL  CanvasFont::getFontRequest(  )
     {
-        SolarMutexGuard aGuard;
-
         return maFontRequest;
     }
 

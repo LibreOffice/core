@@ -912,7 +912,6 @@ Sequence< OUString > AnimationNode::getSupportedServiceNames()
 // XAnimationNode
 sal_Int16 SAL_CALL AnimationNode::getType()
 {
-    std::unique_lock aGuard( m_aMutex );
     return mnNodeType;
 }
 

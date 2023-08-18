@@ -261,8 +261,6 @@ namespace accessibility
 
     sal_Int64 SAL_CALL AccessibleIconChoiceCtrlEntry::getAccessibleIndexInParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
-
         return m_nIndex;
     }
 

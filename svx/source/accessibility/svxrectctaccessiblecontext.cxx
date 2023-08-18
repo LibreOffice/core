@@ -466,13 +466,11 @@ sal_Int16 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleRole()
 
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleDescription()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
     return msDescription;
 }
 
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleName()
 {
-    ::osl::MutexGuard   aGuard( m_aMutex );
     return msName;
 }
 

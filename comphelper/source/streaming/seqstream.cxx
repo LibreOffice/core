@@ -150,7 +150,6 @@ sal_Int64 SAL_CALL MemoryInputStream::getPosition()
 
 sal_Int64 SAL_CALL MemoryInputStream::getLength(  )
 {
-    std::scoped_lock aGuard( m_aMutex );
     return m_nMemoryDataLength;
 }
 

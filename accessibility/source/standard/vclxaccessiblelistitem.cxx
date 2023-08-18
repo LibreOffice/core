@@ -211,7 +211,6 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleListItem::getAccessibleParent(  
 
 sal_Int64 SAL_CALL VCLXAccessibleListItem::getAccessibleIndexInParent(  )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     return m_nIndexInParent;
 }
 

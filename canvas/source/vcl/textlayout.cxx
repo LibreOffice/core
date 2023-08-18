@@ -324,8 +324,6 @@ namespace vclcanvas
 
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
-        SolarMutexGuard aGuard;
-
         return mnTextDirection;
     }
 
@@ -338,8 +336,6 @@ namespace vclcanvas
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )
     {
-        SolarMutexGuard aGuard;
-
         return maText;
     }
 

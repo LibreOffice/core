@@ -228,8 +228,6 @@ namespace canvas
 
     ParametricPolyPolygon::Values ParametricPolyPolygon::getValues() const
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return maValues;
     }
 

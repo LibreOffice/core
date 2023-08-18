@@ -37,8 +37,6 @@ SidebarController* SfxUnoDeck::getSidebarController()
 
 OUString SAL_CALL SfxUnoDeck::getId()
 {
-    SolarMutexGuard aGuard;
-
     return mDeckId;
 }
 

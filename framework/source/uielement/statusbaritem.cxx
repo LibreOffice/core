@@ -84,13 +84,11 @@ void StatusbarItem::disposing(std::unique_lock<std::mutex>&)
 
 OUString SAL_CALL StatusbarItem::getCommand()
 {
-    std::unique_lock aGuard( m_aMutex );
     return m_aCommand;
 }
 
 ::sal_uInt16 SAL_CALL StatusbarItem::getItemId()
 {
-    std::unique_lock aGuard( m_aMutex );
     return m_nId;
 }
 

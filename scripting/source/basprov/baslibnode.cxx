@@ -68,8 +68,6 @@ namespace basprov
 
     OUString BasicLibraryNodeImpl::getName(  )
     {
-        SolarMutexGuard aGuard;
-
         return m_sLibName;
     }
 

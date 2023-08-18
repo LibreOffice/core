@@ -53,8 +53,6 @@ namespace oglcanvas
 
     rendering::FontRequest SAL_CALL CanvasFont::getFontRequest(  )
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return maFontRequest;
     }
 

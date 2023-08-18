@@ -132,8 +132,6 @@ uno::Sequence<OUString> SAL_CALL PivotTableDataSequence::getTextualData()
 
 OUString SAL_CALL PivotTableDataSequence::getSourceRangeRepresentation()
 {
-    SolarMutexGuard aGuard;
-
     return m_aID;
 }
 

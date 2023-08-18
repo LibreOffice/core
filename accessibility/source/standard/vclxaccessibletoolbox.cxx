@@ -70,7 +70,6 @@ namespace
 
     sal_Int64 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  )
     {
-        ::osl::MutexGuard aGuard( m_aMutex );
         return m_nIndexInParent;
     }
 

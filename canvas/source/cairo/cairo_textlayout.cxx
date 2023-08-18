@@ -244,8 +244,6 @@ namespace cairocanvas
 
     sal_Int8 SAL_CALL TextLayout::getMainTextDirection(  )
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return mnTextDirection;
     }
 
@@ -258,8 +256,6 @@ namespace cairocanvas
 
     rendering::StringContext SAL_CALL TextLayout::getText(  )
     {
-        std::unique_lock aGuard( m_aMutex );
-
         return maText;
     }
 

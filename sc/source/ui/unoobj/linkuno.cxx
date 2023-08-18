@@ -1050,7 +1050,6 @@ void SAL_CALL ScDDELinkObj::setName( const OUString& /* aName */ )
 
 OUString SAL_CALL ScDDELinkObj::getApplication()
 {
-    SolarMutexGuard aGuard;
     //! Test if the link is still in the document?
 
     return aAppl;
@@ -1058,7 +1057,6 @@ OUString SAL_CALL ScDDELinkObj::getApplication()
 
 OUString SAL_CALL ScDDELinkObj::getTopic()
 {
-    SolarMutexGuard aGuard;
     //! Test if the link is still in the document?
 
     return aTopic;
@@ -1066,7 +1064,6 @@ OUString SAL_CALL ScDDELinkObj::getTopic()
 
 OUString SAL_CALL ScDDELinkObj::getItem()
 {
-    SolarMutexGuard aGuard;
     //! Test if the link is still in the document?
 
     return aItem;
