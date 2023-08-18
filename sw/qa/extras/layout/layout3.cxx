@@ -1228,6 +1228,24 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156725)
                 "/root/page[2]/body/txt/anchored/fly/column[2]/body/section/column[2]/body/txt", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf156419)
+{
+    createSwDoc("linked_frames_section_bug.odt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page", 2);
+    // there are 2 flys on page 1, and 1 on page 2, all linked
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[1]/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[1]/section/column[1]/body/txt", 11);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[1]/section/column[2]/body/txt", 11);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[2]/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[2]/section/column[1]/body/txt", 12);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt/anchored/fly[2]/section/column[2]/body/txt", 12);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly[1]/section/column", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly[1]/section/column[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/txt/anchored/fly[1]/section/column[2]/body/txt", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf145826)
 {
     createSwDoc("tdf145826.odt");
