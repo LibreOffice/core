@@ -227,7 +227,13 @@
     </CollationOptions>
   </LC_COLLATION>
   <LC_SEARCH ref="en_US"/>
-  <LC_INDEX ref="en_US"/>
+  <LC_INDEX>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
+    <UnicodeScript>0</UnicodeScript>
+    <UnicodeScript>1</UnicodeScript>
+    <FollowPageWord> i seg.</FollowPageWord>
+    <FollowPageWord> i seg.</FollowPageWord>
+  </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
