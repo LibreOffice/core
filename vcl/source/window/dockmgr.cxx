@@ -823,6 +823,10 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
 
     mpFloatWin->StartPopupMode( pParentToolBox, nFlags );
     GetWindow()->Show();
+    // grab focus (again) after showing docking window, as e.g. a11y focus
+    // events require window to be visible first
+    if (nFlags & FloatWinPopupFlags::GrabFocus)
+        mpFloatWin->GrabFocus();
 
     if( pParentToolBox->IsKeyEvent() )
     {
@@ -841,6 +845,10 @@ void ImplDockingWindowWrapper::StartPopupMode( const tools::Rectangle& rRect, Fl
     ImplPreparePopupMode();
     mpFloatWin->StartPopupMode( rRect, nFlags );
     GetWindow()->Show();
+    // grab focus (again) after showing docking window, as e.g. a11y focus
+    // events require window to be visible first
+    if (nFlags & FloatWinPopupFlags::GrabFocus)
+        mpFloatWin->GrabFocus();
 }
 
 IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd, FloatingWindow*, void)
