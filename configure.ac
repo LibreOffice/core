@@ -5850,7 +5850,6 @@ if test "$cross_compiling" = "yes"; then
         ANT
         ANT_HOME
         ANT_LIB
-        JAVA_CLASSPATH_NOT_SET
         JAVA_SOURCE_VER
         JAVA_TARGET_VER
         JAVACFLAGS
@@ -8651,9 +8650,6 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             if test "$_jdk_ver" -lt 10900; then
                 AC_MSG_ERROR([JDK is too old, you need at least 9 ($_jdk_ver < 10900)])
             fi
-            if test "$_jdk_ver" -gt 10900; then
-                JAVA_CLASSPATH_NOT_SET=TRUE
-            fi
             dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
             dnl completely removed in some Java version > 18 (see
             dnl <https://openjdk.java.net/jeps/411> "Deprecate the Security Manager for Removal"):
@@ -8970,7 +8966,6 @@ AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVAIFLAGS_FOR_BUILD)
-AC_SUBST(JAVA_CLASSPATH_NOT_SET)
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_HOME_FOR_BUILD)
 AC_SUBST(JDK)
