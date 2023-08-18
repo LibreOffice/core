@@ -1519,7 +1519,7 @@ SfxVoidItem ClearOutline SID_OUTLINE_DELETEALL
 
 
 SvxColorItem Color SID_ATTR_CHAR_COLOR
-(SvxColorItem Color SID_ATTR_CHAR_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
+(SvxColorItem Color SID_ATTR_CHAR_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
@@ -2811,7 +2811,7 @@ XFillBitmapItem FillPageBitmap SID_ATTR_PAGE_BITMAP
 ]
 
 XFillColorItem FillColor SID_ATTR_FILL_COLOR
-(XFillColorItem FillColor SID_ATTR_FILL_COLOR, SfxInt16Item ColorThemeIndex SID_ATTR_COLOR_THEME_INDEX, SfxInt16Item ColorLumMod SID_ATTR_COLOR_LUM_MOD, SfxInt16Item ColorLumOff SID_ATTR_COLOR_LUM_OFF)
+(XFillColorItem FillColor SID_ATTR_FILL_COLOR)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
