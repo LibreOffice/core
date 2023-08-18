@@ -57,9 +57,7 @@ Java is required for building many parts of LibreOffice. In TDF Wiki article
 [Development/Java](https://wiki.documentfoundation.org/Development/Java), the
 exact modules that depend on Java are listed.
 
-The baseline for Java is Java Development Kit (JDK) Version 17 or later. It is
-possible to build LibreOffice with JDK version 9, but it is no longer supported
-by the JDK vendors, thus it should be avoided.
+The baseline for Java is Java Development Kit (JDK) Version 17 or later.
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 12.0.1. Since Xcode doesn't provide the compiler plugin

@@ -2548,7 +2548,7 @@ AC_ARG_WITH(linker-hash-style,
 
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home=<absolute path to JDK home>],
-        [If you have installed JDK 9 or later on your system please supply the
+        [If you have installed JDK 17 or later on your system please supply the
          path here. Note that this is not the location of the java command but the
          location of the entire distribution. In case of cross-compiling, this
          is the JDK of the host os. Use --with-build-platform-configure-options
@@ -8580,7 +8580,7 @@ if test "$ENABLE_JAVA" != ""; then
         fi
 
         if ! test -f "$with_jdk_home/lib/jvm.lib" -a -f "$with_jdk_home/bin/java.exe"; then
-            AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 9])
+            AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option (or fix the path) pointing to a $WIN_HOST_BITS-bit JDK >= 17])
         fi
     fi
 
@@ -8665,8 +8665,8 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             _jdk=`$JAVAINTERPRETER -version 2>&1 | $AWK -F'"' '{ print \$2 }' | $SED '/^$/d' | $SED s/[[-A-Za-z]]*//`
             _jdk_ver=`echo "$_jdk" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
 
-            if test "$_jdk_ver" -lt 90000; then
-                AC_MSG_ERROR([JDK is too old, you need at least 9 ($_jdk_ver < 90000)])
+            if test "$_jdk_ver" -lt 170000; then
+                AC_MSG_ERROR([JDK is too old, you need at least 17 ($_jdk_ver < 170000)])
             fi
             dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
             dnl completely removed in some Java version > 18 (see
@@ -8687,7 +8687,7 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             JAVACFLAGS=-J-Xmx128M
         fi
     else
-        AC_MSG_ERROR([Java not found. You need at least JDK 9])
+        AC_MSG_ERROR([Java not found. You need at least JDK 17])
     fi
 else
     if test -z "$ENABLE_JAVA"; then
