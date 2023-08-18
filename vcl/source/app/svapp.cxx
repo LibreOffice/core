@@ -189,7 +189,7 @@ Application::~Application()
     // is no memory loss. These counters are more to be able to have an eye
     // on amounts of SfxPoolItems used during office usage and to be able to
     // detect if an error in future changes may lead to memory losses - these
-    // would show in dramaitically higher numbers then imediately
+    // would show in dramatically higher numbers then immediately
     SAL_WARN("vcl", "ITEM: " << getAllocatedSfxPoolItemCount() << " SfxPoolItems still allocated at shutdown");
     SAL_WARN("vcl", "ITEM: " << getUsedSfxPoolItemCount() << " SfxPoolItems were incarnated during office usage");
 #endif
