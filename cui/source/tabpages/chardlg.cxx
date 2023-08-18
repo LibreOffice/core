@@ -1594,18 +1594,7 @@ bool SvxCharEffectsPage::FillItemSetColor_Impl( SfxItemSet& rSet )
 
     if (bChanged)
     {
-        SvxColorItem aItem( aSelectedColor.m_aColor, nWhich );
-
-        // The color was picked from the theme palette, remember its index.
-        model::ThemeColorType eType = model::convertToThemeColorType(aSelectedColor.m_nThemeIndex);
-        if (eType != model::ThemeColorType::Unknown)
-        {
-            auto aComplexColor = model::ComplexColor::Theme(eType);
-            aComplexColor.addTransformation({model::TransformationType::LumMod, aSelectedColor.m_nLumMod});
-            aComplexColor.addTransformation({model::TransformationType::LumOff, aSelectedColor.m_nLumOff});
-            aItem.setComplexColor(aComplexColor);
-        }
-
+        SvxColorItem aItem(aSelectedColor.m_aColor, aSelectedColor.getComplexColor(), nWhich);
         rSet.Put(aItem);
     }
     else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich, false ) )
