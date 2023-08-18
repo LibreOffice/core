@@ -1809,6 +1809,37 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
     }
 }
 
+namespace {
+    constexpr struct {
+        SfxFilterFlags eFlag;
+        rtl::OUStringConstExpr aName;
+    } flagFilterSwitcher[] = {
+        { SfxFilterFlags::STARONEFILTER, FLAGNAME_3RDPARTYFILTER },
+        { SfxFilterFlags::ALIEN, FLAGNAME_ALIEN },
+        { SfxFilterFlags::CONSULTSERVICE, FLAGNAME_CONSULTSERVICE },
+        { SfxFilterFlags::DEFAULT, FLAGNAME_DEFAULT },
+        { SfxFilterFlags::ENCRYPTION, FLAGNAME_ENCRYPTION },
+        { SfxFilterFlags::EXPORT, FLAGNAME_EXPORT },
+        { SfxFilterFlags::IMPORT, FLAGNAME_IMPORT },
+        { SfxFilterFlags::INTERNAL, FLAGNAME_INTERNAL },
+        { SfxFilterFlags::NOTINFILEDLG, FLAGNAME_NOTINFILEDIALOG },
+        { SfxFilterFlags::MUSTINSTALL, FLAGNAME_NOTINSTALLED },
+        { SfxFilterFlags::OWN, FLAGNAME_OWN },
+        { SfxFilterFlags::PACKED, FLAGNAME_PACKED },
+        { SfxFilterFlags::PASSWORDTOMODIFY, FLAGNAME_PASSWORDTOMODIFY },
+        { SfxFilterFlags::PREFERED, FLAGNAME_PREFERRED },
+        { SfxFilterFlags::STARTPRESENTATION, FLAGNAME_STARTPRESENTATION },
+        { SfxFilterFlags::OPENREADONLY, FLAGNAME_READONLY },
+        { SfxFilterFlags::SUPPORTSSELECTION, FLAGNAME_SUPPORTSSELECTION },
+        { SfxFilterFlags::TEMPLATE, FLAGNAME_TEMPLATE },
+        { SfxFilterFlags::TEMPLATEPATH, FLAGNAME_TEMPLATEPATH },
+        { SfxFilterFlags::COMBINED, FLAGNAME_COMBINED },
+        { SfxFilterFlags::SUPPORTSSIGNING, FLAGNAME_SUPPORTSSIGNING },
+        { SfxFilterFlags::GPGENCRYPTION, FLAGNAME_GPGENCRYPTION },
+        { SfxFilterFlags::EXOTIC, FLAGNAME_EXOTIC },
+    };
+}
+
 /*-----------------------------------------------
     static! => no locks necessary
 -----------------------------------------------*/
@@ -1816,29 +1847,11 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
 {
     std::vector<OUString> lFlagNames;
 
-    if (nFlags & SfxFilterFlags::STARONEFILTER    ) lFlagNames.emplace_back(FLAGNAME_3RDPARTYFILTER   );
-    if (nFlags & SfxFilterFlags::ALIEN            ) lFlagNames.emplace_back(FLAGNAME_ALIEN            );
-    if (nFlags & SfxFilterFlags::CONSULTSERVICE   ) lFlagNames.emplace_back(FLAGNAME_CONSULTSERVICE   );
-    if (nFlags & SfxFilterFlags::DEFAULT          ) lFlagNames.emplace_back(FLAGNAME_DEFAULT          );
-    if (nFlags & SfxFilterFlags::ENCRYPTION       ) lFlagNames.emplace_back(FLAGNAME_ENCRYPTION       );
-    if (nFlags & SfxFilterFlags::EXPORT           ) lFlagNames.emplace_back(FLAGNAME_EXPORT           );
-    if (nFlags & SfxFilterFlags::IMPORT           ) lFlagNames.emplace_back(FLAGNAME_IMPORT           );
-    if (nFlags & SfxFilterFlags::INTERNAL         ) lFlagNames.emplace_back(FLAGNAME_INTERNAL         );
-    if (nFlags & SfxFilterFlags::NOTINFILEDLG     ) lFlagNames.emplace_back(FLAGNAME_NOTINFILEDIALOG  );
-    if (nFlags & SfxFilterFlags::MUSTINSTALL      ) lFlagNames.emplace_back(FLAGNAME_NOTINSTALLED     );
-    if (nFlags & SfxFilterFlags::OWN              ) lFlagNames.emplace_back(FLAGNAME_OWN              );
-    if (nFlags & SfxFilterFlags::PACKED           ) lFlagNames.emplace_back(FLAGNAME_PACKED           );
-    if (nFlags & SfxFilterFlags::PASSWORDTOMODIFY ) lFlagNames.emplace_back(FLAGNAME_PASSWORDTOMODIFY );
-    if (nFlags & SfxFilterFlags::PREFERED         ) lFlagNames.emplace_back(FLAGNAME_PREFERRED        );
-    if (nFlags & SfxFilterFlags::STARTPRESENTATION) lFlagNames.emplace_back(FLAGNAME_STARTPRESENTATION);
-    if (nFlags & SfxFilterFlags::OPENREADONLY     ) lFlagNames.emplace_back(FLAGNAME_READONLY         );
-    if (nFlags & SfxFilterFlags::SUPPORTSSELECTION) lFlagNames.emplace_back(FLAGNAME_SUPPORTSSELECTION);
-    if (nFlags & SfxFilterFlags::TEMPLATE         ) lFlagNames.emplace_back(FLAGNAME_TEMPLATE         );
-    if (nFlags & SfxFilterFlags::TEMPLATEPATH     ) lFlagNames.emplace_back(FLAGNAME_TEMPLATEPATH     );
-    if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.emplace_back(FLAGNAME_COMBINED         );
-    if (nFlags & SfxFilterFlags::SUPPORTSSIGNING) lFlagNames.emplace_back(FLAGNAME_SUPPORTSSIGNING);
-    if (nFlags & SfxFilterFlags::GPGENCRYPTION) lFlagNames.emplace_back(FLAGNAME_GPGENCRYPTION);
-    if (nFlags & SfxFilterFlags::EXOTIC) lFlagNames.emplace_back(FLAGNAME_EXOTIC);
+    for (const auto& [eFlag, aName] : flagFilterSwitcher)
+    {
+        if (nFlags & eFlag)
+            lFlagNames.emplace_back(aName);
+    }
 
     return comphelper::containerToSequence(lFlagNames);
 }
@@ -1854,120 +1867,12 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
     sal_Int32       c      = lNames.getLength();
     for (sal_Int32 i=0; i<c; ++i)
     {
-        if (pNames[i] == FLAGNAME_3RDPARTYFILTER)
+        for (const auto& [eFlag, aName] : flagFilterSwitcher)
         {
-            nField |= SfxFilterFlags::STARONEFILTER;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_ALIEN)
-        {
-            nField |= SfxFilterFlags::ALIEN;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_CONSULTSERVICE)
-        {
-            nField |= SfxFilterFlags::CONSULTSERVICE;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_DEFAULT)
-        {
-            nField |= SfxFilterFlags::DEFAULT;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_ENCRYPTION)
-        {
-            nField |= SfxFilterFlags::ENCRYPTION;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_EXOTIC)
-        {
-            nField |= SfxFilterFlags::EXOTIC;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_EXPORT)
-        {
-            nField |= SfxFilterFlags::EXPORT;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_GPGENCRYPTION)
-        {
-            nField |= SfxFilterFlags::GPGENCRYPTION;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_IMPORT)
-        {
-            nField |= SfxFilterFlags::IMPORT;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_INTERNAL)
-        {
-            nField |= SfxFilterFlags::INTERNAL;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_NOTINFILEDIALOG)
-        {
-            nField |= SfxFilterFlags::NOTINFILEDLG;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_NOTINSTALLED)
-        {
-            nField |= SfxFilterFlags::MUSTINSTALL;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_OWN)
-        {
-            nField |= SfxFilterFlags::OWN;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_PACKED)
-        {
-            nField |= SfxFilterFlags::PACKED;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_PASSWORDTOMODIFY)
-        {
-            nField |= SfxFilterFlags::PASSWORDTOMODIFY;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_PREFERRED)
-        {
-            nField |= SfxFilterFlags::PREFERED;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_STARTPRESENTATION)
-        {
-            nField |= SfxFilterFlags::STARTPRESENTATION;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_SUPPORTSSIGNING)
-        {
-            nField |= SfxFilterFlags::SUPPORTSSIGNING;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_READONLY)
-        {
-            nField |= SfxFilterFlags::OPENREADONLY;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_SUPPORTSSELECTION)
-        {
-            nField |= SfxFilterFlags::SUPPORTSSELECTION;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_TEMPLATE)
-        {
-            nField |= SfxFilterFlags::TEMPLATE;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_TEMPLATEPATH)
-        {
-            nField |= SfxFilterFlags::TEMPLATEPATH;
-            continue;
-        }
-        if (pNames[i] == FLAGNAME_COMBINED)
-        {
-            nField |= SfxFilterFlags::COMBINED;
-            continue;
+            if (pNames[i] == aName) {
+                nField |= eFlag;
+                break;
+            }
         }
     }
 
