@@ -24,6 +24,9 @@ Sealed: true
 Name: com/sun/star/lib/connections/socket/
 Sealed: true
 
+Name: com/sun/star/lib/connections/websocket/
+Sealed: true
+
 Name: com/sun/star/lib/uno/
 Sealed: true
 

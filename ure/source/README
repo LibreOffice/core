@@ -74,6 +74,7 @@ ELF platforms (Linux, Solaris, *BSD):
 /opt/libreoffice/ure/lib/libstocserviceslo.so  [private]
 /opt/libreoffice/ure/lib/libuuresolverlo.so  [private]
 /opt/libreoffice/ure/share/java/java_uno.jar  [private]
+/opt/libreoffice/ure/share/java/java_websocket.jar [private]
 /opt/libreoffice/ure/share/misc/javavendors.xml  [private]
 
 Windows:
@@ -132,6 +133,7 @@ Program Files\URE\bin\stocserviceslo.dll  [private]
 Program Files\URE\bin\uuresolverlo.dll  [private]
 Program Files\URE\bin\uwinapi.dll  [private]
 Program Files\URE\java\java_uno.jar  [private]
+Program Files\URE\java\java_websocket.jar [private]
 Program Files\URE\misc\javavendors.xml  [private]
 
 %windir%\assembly\cli_basetypes.dll [GAC]
