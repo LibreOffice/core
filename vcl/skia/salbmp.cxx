@@ -164,6 +164,7 @@ bool SkiaSalBitmap::Create(const SalBitmap& rSalBmp, vcl::PixelFormat eNewPixelF
     ResetAllData();
     const SkiaSalBitmap& src = static_cast<const SkiaSalBitmap&>(rSalBmp);
     mImage = src.mImage;
+    mImageImmutable = src.mImageImmutable;
     mAlphaImage = src.mAlphaImage;
     mBuffer = src.mBuffer;
     mPalette = src.mPalette;
@@ -224,7 +225,7 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             assert(!mEraseColorSet);
             break;
         case BitmapAccessMode::Info:
-            // Related tdf#156630 and tdf#156629 force snapshot of alpha mask
+            // Related tdf#156629 and tdf#156630 force snapshot of alpha mask
             // On macOS, with Skia/Metal or Skia/Raster with a Retina display
             // (i.e. 2.0 window scale), the alpha mask gets upscaled in certain
             // cases.
@@ -236,9 +237,24 @@ BitmapBuffer* SkiaSalBitmap::AcquireBuffer(BitmapAccessMode nMode)
             // fail:
             //   https://bugs.documentfoundation.org/attachment.cgi?id=188792
             static const bool bForceHiDPIScaling = getenv("SAL_FORCE_HIDPI_SCALING") != nullptr;
-            if (mPixelsSize != mSize || (bForceHiDPIScaling && mImage))
-                EnsureBitmapData();
-            assert(mPixelsSize == mSize);
+            if (mImage && !mImageImmutable && mBitCount == 8 && mPalette.IsGreyPalette8Bit()
+                && (mPixelsSize != mSize || bForceHiDPIScaling))
+            {
+                ResetToSkImage(GetSkImage());
+                ResetPendingScaling();
+                assert(mPixelsSize == mSize);
+
+                // When many of the images affected by tdf#156629 and
+                // tdf#156630 are exported to PDF the first time after the
+                // image has been opened and before it has been printed or run
+                // in a slideshow, the alpha mask will unexpectedly be
+                // inverted. Fix that by marking this alpha mask as immutable
+                // so that when Invert() is called on this alpha mask, it will
+                // be a noop. Invert() is a noop after EnsureBitmapData() is
+                // called but we don't want to call that due to performance
+                // so set a flag instead.
+                mImageImmutable = true;
+            }
             break;
     }
 #ifdef DBG_UTIL
@@ -653,17 +669,18 @@ bool SkiaSalBitmap::Invert()
     // Normally this would need to convert contents of mBuffer for all possible formats,
     // so just let the VCL algorithm do it.
     // Avoid the costly SkImage->buffer->SkImage conversion.
-    if (!mBuffer && mImage && !mEraseColorSet)
+    if (!mBuffer && mImage && !mImageImmutable && !mEraseColorSet)
     {
         // This is 8-bit bitmap serving as alpha/transparency/mask, so the image itself needs no alpha.
-        sk_sp<SkSurface> surface = createSkSurface(mSize, kOpaque_SkAlphaType);
+        // Use pixels size so that we don't downscale the image
+        sk_sp<SkSurface> surface = createSkSurface(mPixelsSize, kOpaque_SkAlphaType);
         surface->getCanvas()->clear(SK_ColorWHITE);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kDifference);
         // Drawing the image does not work so create a shader from the image
         paint.setShader(GetSkShader(SkSamplingOptions()));
-        surface->getCanvas()->drawRect(SkRect::MakeXYWH(0, 0, mSize.Width(), mSize.Height()),
-                                       paint);
+        surface->getCanvas()->drawRect(
+            SkRect::MakeXYWH(0, 0, mPixelsSize.Width(), mPixelsSize.Height()), paint);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
         DataChanged();
         SAL_INFO("vcl.skia.trace", "invert(" << this << ")");
@@ -1351,6 +1368,7 @@ void SkiaSalBitmap::ResetToBuffer()
     // This should never be called to drop mImage if that's the only data we have.
     assert(mBuffer || !mImage);
     mImage.reset();
+    mImageImmutable = false;
     mAlphaImage.reset();
     mEraseColorSet = false;
 }
@@ -1360,6 +1378,7 @@ void SkiaSalBitmap::ResetToSkImage(sk_sp<SkImage> image)
     assert(mReadAccessCount == 0); // can't reset mBuffer if there's a read access pointing to it
     SkiaZone zone;
     mBuffer.reset();
+    // Just to be safe, assume mutability of the image does not change
     mImage = image;
     mAlphaImage.reset();
     mEraseColorSet = false;
@@ -1371,6 +1390,7 @@ void SkiaSalBitmap::ResetAllData()
     SkiaZone zone;
     mBuffer.reset();
     mImage.reset();
+    mImageImmutable = false;
     mAlphaImage.reset();
     mEraseColorSet = false;
     mPixelsSize = mSize;
@@ -1391,7 +1411,10 @@ void SkiaSalBitmap::ResetPendingScaling()
     // Information about the pending scaling has been discarded, so make sure we do not
     // keep around any cached images that would still need scaling.
     if (mImage && imageSize(mImage) != mSize)
+    {
         mImage.reset();
+        mImageImmutable = false;
+    }
     if (mAlphaImage && imageSize(mAlphaImage) != mSize)
         mAlphaImage.reset();
 }
