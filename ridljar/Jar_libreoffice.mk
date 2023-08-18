@@ -18,11 +18,16 @@ $(eval $(call gb_Jar_use_jars,libreoffice, \
     unoloader \
 ))
 
+$(eval $(call gb_Jar_use_externals,libreoffice,\
+    java_websocket \
+))
+
 $(eval $(call gb_Jar_set_packageroot,libreoffice,com))
 
 $(eval $(call gb_Jar_set_manifest,libreoffice,$(SRCDIR)/ridljar/util/manifest))
 
 $(eval $(call gb_Jar_add_manifest_classpath,libreoffice, \
+    java_websocket.jar \
     unoloader.jar \
     $(if $(filter MACOSX,$(OS)),../../Frameworks/,../) \
 ))
@@ -63,6 +68,9 @@ $(eval $(call gb_Jar_add_sourcefiles,libreoffice,\
     ridljar/com/sun/star/lib/connections/socket/SocketConnection \
     ridljar/com/sun/star/lib/connections/socket/socketAcceptor \
     ridljar/com/sun/star/lib/connections/socket/socketConnector \
+    ridljar/com/sun/star/lib/connections/websocket/ConnectionDescriptor \
+    ridljar/com/sun/star/lib/connections/websocket/WebsocketConnection \
+    ridljar/com/sun/star/lib/connections/websocket/websocketConnector \
     ridljar/com/sun/star/lib/uno/Proxy \
     ridljar/com/sun/star/lib/uno/adapter/ByteArrayToXInputStreamAdapter \
     ridljar/com/sun/star/lib/uno/adapter/InputStreamToXInputStreamAdapter \

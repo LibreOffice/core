@@ -64,6 +64,7 @@ module org.libreoffice.uno
     exports com.sun.star.ldap;
     exports com.sun.star.lib.connections.pipe;
     exports com.sun.star.lib.connections.socket;
+    exports com.sun.star.lib.connections.websocket;
     exports com.sun.star.lib.uno;
     exports com.sun.star.lib.uno.adapter;
     exports com.sun.star.lib.uno.bridges.java_remote;

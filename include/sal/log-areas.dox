@@ -322,6 +322,7 @@ certain functionality.
 @li @c lok.tiledrendering
 @li @c lok.dialog
 @li @c lok.a11y - LOK accessibility
+@li @c lok.urp - Uno Remote Protocol
 
 @section l10ntools
 

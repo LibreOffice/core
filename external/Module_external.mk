@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	$(call gb_Helper_optional,ICU,icu) \
+	$(call gb_Helper_optional,JAVA_WEBSOCKET,java_websocket) \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	$(call gb_Helper_optional,LIBJPEG_TURBO,libjpeg-turbo) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \

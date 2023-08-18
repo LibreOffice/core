@@ -1165,6 +1165,32 @@ public:
     {
         mpThis->pClass->trimMemory(mpThis, nTarget);
     }
+
+    /**
+     * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
+     *
+     * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
+     * @param ppSendURPToLOContext A pointer to a pointer that you should give to the function passing URP to LO will be stored in this.
+     * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
+     * @param pfnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO will be stored in this.
+     */
+    bool startURP(void* pReceiveURPFromLOContext, void** ppSendURPToLOContext,
+                  int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+                  int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen))
+    {
+        return mpThis->pClass->startURP(mpThis, pReceiveURPFromLOContext, ppSendURPToLOContext,
+                                        fnReceiveURPFromLO, pfnSendURPToLO);
+    }
+
+    /**
+     * Stop a function based URP connection you previously started with startURP
+     *
+     * @param pSendURPToLOContext the context you got back in the ppSendURPToLOContext argument when starting the connection
+     */
+    void stopURP(void* pSendURPToLOContext)
+    {
+        mpThis->pClass->stopURP(mpThis, pSendURPToLOContext);
+    }
 };
 
 /// Factory method to create a lok::Office instance.

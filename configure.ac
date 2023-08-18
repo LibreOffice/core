@@ -12627,6 +12627,17 @@ AC_SUBST(LIBASSUAN_LIBS)
 AC_SUBST(GPGMEPP_CFLAGS)
 AC_SUBST(GPGMEPP_LIBS)
 
+AC_MSG_CHECKING([whether to build Java Websocket for the UNO remote websocket client])
+if test "$with_java" != "no"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_JAVA_WEBSOCKET=TRUE
+    BUILD_TYPE="$BUILD_TYPE JAVA_WEBSOCKET"
+else
+    AC_MSG_RESULT([no])
+    ENABLE_JAVA_WEBSOCKET=
+fi
+AC_SUBST(ENABLE_JAVA_WEBSOCKET)
+
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
     AC_MSG_RESULT([yes])

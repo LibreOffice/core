@@ -3728,7 +3728,6 @@ endef
 
 endif # SYSTEM_HSQLDB
 
-
 ifeq ($(ENABLE_SCRIPTING_BEANSHELL),TRUE)
 
 ifneq ($(SYSTEM_BSH),)
@@ -3887,6 +3886,17 @@ endef
 
 endif # SYSTEM_JFREEREPORT
 
+# no known distro packaged java-websocket
+
+ifeq ($(ENABLE_JAVA),TRUE)
+$(eval $(call gb_Helper_register_jars_for_install,URE,ure, \
+	java_websocket \
+))
+endif
+
+define gb_Jar__use_java_websocket
+$(call gb_Jar_use_jar,$(1),java_websocket)
+endef
 
 # Executables
 

@@ -135,6 +135,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,HYPHEN,HYPHEN_TARBALL) \
 		$(call fetch_Optional,ICU,ICU_TARBALL) \
 		$(call fetch_Optional,ICU,ICU_DATA_TARBALL) \
+		$(call fetch_Optional,JAVA_WEBSOCKET,JAVA_WEBSOCKET_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLOW_ENGINE_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_FLUTE_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBBASE_TARBALL) \

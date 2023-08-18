@@ -53,6 +53,7 @@
 #include <memory>
 #include <iostream>
 #include <string_view>
+#include <queue>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/algorithm/string.hpp>
@@ -91,6 +92,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
+#include <com/sun/star/connection/XConnection.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -113,6 +115,10 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/document/XRedlinesSupplier.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
+#include <com/sun/star/bridge/BridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridgeFactory.hpp>
+#include <com/sun/star/bridge/XBridge.hpp>
+#include <com/sun/star/uno/XNamingService.hpp>
 
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
@@ -127,6 +133,7 @@
 #include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <editeng/flstitem.hxx>
 #ifdef IOS
@@ -235,6 +242,9 @@ using namespace css;
 using namespace vcl;
 using namespace desktop;
 using namespace utl;
+using namespace bridge;
+using namespace uno;
+using namespace lang;
 
 static LibLibreOffice_Impl *gImpl = nullptr;
 static bool lok_preinit_2_called = false;
@@ -2574,6 +2584,13 @@ static char* lo_extractRequest(LibreOfficeKit* pThis,
 
 static void lo_trimMemory(LibreOfficeKit* pThis, int nTarget);
 
+static int
+lo_startURP(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext, void** pSendURPToLOContext,
+            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+            int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen));
+
+static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
+
 static void lo_runLoop(LibreOfficeKit* pThis,
                        LibreOfficeKitPollCallback pPollCallback,
                        LibreOfficeKitWakeCallback pWakeCallback,
@@ -2616,6 +2633,8 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->dumpState = lo_dumpState;
         m_pOfficeClass->extractRequest = lo_extractRequest;
         m_pOfficeClass->trimMemory = lo_trimMemory;
+        m_pOfficeClass->startURP = lo_startURP;
+        m_pOfficeClass->stopURP = lo_stopURP;
 
         gOfficeClass = m_pOfficeClass;
     }
@@ -3196,6 +3215,214 @@ static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
         malloc_trim(0);
 #endif
     }
+}
+
+namespace
+{
+class FunctionBasedURPInstanceProvider
+    : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
+{
+private:
+    css::uno::Reference<css::uno::XComponentContext> m_rContext;
+
+public:
+    FunctionBasedURPInstanceProvider(
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
+
+    // XInstanceProvider
+    virtual css::uno::Reference<css::uno::XInterface>
+        SAL_CALL getInstance(const OUString& aName) override;
+};
+
+// InstanceProvider
+FunctionBasedURPInstanceProvider::FunctionBasedURPInstanceProvider(
+    const Reference<XComponentContext>& rxContext)
+    : m_rContext(rxContext)
+{
+}
+
+Reference<XInterface> FunctionBasedURPInstanceProvider::getInstance(const OUString& aName)
+{
+    Reference<XInterface> rInstance;
+
+    if (aName == "StarOffice.ServiceManager")
+    {
+        rInstance.set(m_rContext->getServiceManager());
+    }
+    else if (aName == "StarOffice.ComponentContext")
+    {
+        rInstance = m_rContext;
+    }
+    else if (aName == "StarOffice.NamingService")
+    {
+        Reference<XNamingService> rNamingService(
+            m_rContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.uno.NamingService", m_rContext),
+            UNO_QUERY);
+        if (rNamingService.is())
+        {
+            rNamingService->registerObject("StarOffice.ServiceManager",
+                                           m_rContext->getServiceManager());
+            rNamingService->registerObject("StarOffice.ComponentContext", m_rContext);
+            rInstance = rNamingService;
+        }
+    }
+    return rInstance;
+}
+
+class FunctionBasedURPConnection : public cppu::WeakImplHelper<css::connection::XConnection>
+{
+public:
+    explicit FunctionBasedURPConnection(void*, int (*)(void* pContext, const signed char* pBuffer,
+                                                       int nLen));
+    ~FunctionBasedURPConnection();
+
+    // These overridden member functions use "read" and "write" from the point of view of LO,
+    // i.e. the opposite to how startURP() uses them.
+    virtual sal_Int32 SAL_CALL read(Sequence<sal_Int8>& aReadBytes,
+                                    sal_Int32 nBytesToRead) override;
+    virtual void SAL_CALL write(const Sequence<sal_Int8>& aData) override;
+    virtual void SAL_CALL flush() override;
+    virtual void SAL_CALL close() override;
+    virtual OUString SAL_CALL getDescription() override;
+    void setBridge(Reference<XBridge>);
+    int addClientURPToBuffer(const signed char* pBuffer, int nLen);
+    void* getContext();
+    inline static int g_connectionCount = 0;
+
+private:
+    std::shared_ptr<std::deque<signed char>> m_pBuffer;
+    void* m_pRecieveFromLOContext;
+    int (*m_fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen);
+    Reference<XBridge> m_URPBridge;
+    std::atomic<bool> m_closed = false;
+    std::condition_variable m_URPInBuffer;
+    std::mutex m_bufferMutex;
+};
+
+FunctionBasedURPConnection::FunctionBasedURPConnection(
+    void* pRecieveFromLOContext,
+    int (*fnRecieveFromLO)(void* pContext, const signed char* pBuffer, int nLen))
+    : m_pBuffer(std::make_shared<std::deque<signed char>>())
+    , m_pRecieveFromLOContext(pRecieveFromLOContext)
+    , m_fnReceiveURPFromLO(fnRecieveFromLO)
+{
+    g_connectionCount++;
+}
+
+FunctionBasedURPConnection::~FunctionBasedURPConnection()
+{
+    Reference<XComponent> xComp(m_URPBridge, UNO_QUERY_THROW);
+    xComp->dispose(); // TODO: check this doesn't deadlock
+}
+
+int sendURPToLO(void* pContext /* FunctionBasedURPConnection* */, const signed char* pBuffer,
+                int nLen)
+{
+    return static_cast<FunctionBasedURPConnection*>(pContext)->addClientURPToBuffer(pBuffer, nLen);
+}
+
+int FunctionBasedURPConnection::addClientURPToBuffer(const signed char* pBuffer, int nLen)
+{
+    {
+        std::scoped_lock lock(m_bufferMutex);
+
+        if (m_closed)
+        {
+            // We can't write URP to a closed connection
+            SAL_WARN("lok.urp", "A client attempted to write URP to a closed "
+                            "FunctionBasedURPConnection... ignoring");
+            return 0;
+        }
+        m_pBuffer->insert(m_pBuffer->end(), pBuffer, pBuffer + nLen);
+    }
+    m_URPInBuffer.notify_one();
+    return nLen;
+}
+
+void* FunctionBasedURPConnection::getContext() { return this; }
+
+sal_Int32 FunctionBasedURPConnection::read(Sequence<sal_Int8>& aReadBytes, sal_Int32 nBytesToRead)
+{
+    if (aReadBytes.getLength() != nBytesToRead)
+    {
+        aReadBytes.realloc(nBytesToRead);
+    }
+
+    sal_Int8* result = aReadBytes.getArray();
+    // As with osl::StreamPipe, we must always read nBytesToRead...
+
+    {
+        std::unique_lock lock(m_bufferMutex);
+
+        if (nBytesToRead < 0)
+        {
+            return 0;
+        }
+        m_URPInBuffer.wait(
+            lock, [this, nBytesToRead] { return static_cast<sal_Int32>(m_pBuffer->size()) >= nBytesToRead; });
+
+        std::copy(m_pBuffer->begin(), m_pBuffer->begin() + nBytesToRead, result);
+        m_pBuffer->erase(m_pBuffer->begin(), m_pBuffer->begin() + nBytesToRead);
+    }
+
+    return nBytesToRead;
+}
+
+void FunctionBasedURPConnection::write(const Sequence<sal_Int8>& aData)
+{
+    m_fnReceiveURPFromLO(m_pRecieveFromLOContext, aData.getConstArray(), aData.getLength());
+}
+
+void FunctionBasedURPConnection::flush() {}
+
+void FunctionBasedURPConnection::close()
+{
+    SAL_INFO("lok.urp", "Requested to close FunctionBasedURPConnection");
+    m_closed = true;
+}
+
+OUString FunctionBasedURPConnection::getDescription() { return ""; }
+
+void FunctionBasedURPConnection::setBridge(Reference<XBridge> xBridge) { m_URPBridge = xBridge; }
+}
+
+static int
+lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void** ppSendToLOContext,
+            int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+            int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen))
+{
+    // Here we will roughly do what desktop LO does when one passes a command-line switch like
+    // --accept=socket,port=nnnn;urp;StarOffice.ServiceManager. Except that no listening socket will
+    // be created. The communication to the URP will be through the fnReceiveURPFromLO and pfnSendURPToLO functions.
+
+    rtl::Reference<FunctionBasedURPConnection> connection(
+        new FunctionBasedURPConnection(pRecieveFromLOContext, fnReceiveURPFromLO));
+
+    *pfnSendURPToLO = sendURPToLO;
+    *ppSendToLOContext = connection->getContext();
+
+    Reference<XBridgeFactory> xBridgeFactory = css::bridge::BridgeFactory::create(xContext);
+
+    Reference<XInstanceProvider> xInstanceProvider(new FunctionBasedURPInstanceProvider(xContext));
+
+    Reference<XBridge> xBridge(xBridgeFactory->createBridge(
+        "functionurp" + OUString::number(FunctionBasedURPConnection::g_connectionCount), "urp",
+        connection, xInstanceProvider));
+
+    connection->setBridge(std::move(xBridge));
+
+    return true;
+}
+
+/**
+ * Stop a function based URP connection that you started with lo_startURP above
+ *
+ * @param pSendToLOContext a pointer to the context you got back using your ppSendToLOContext before */
+static void lo_stopURP(LibreOfficeKit* /* pThis */,
+                       void* pSendToLOContext /* FunctionBasedURPConnection* */)
+{
+    static_cast<FunctionBasedURPConnection*>(pSendToLOContext)->close();
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,

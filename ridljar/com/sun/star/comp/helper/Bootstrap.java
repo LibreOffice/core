@@ -32,6 +32,7 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.beans.XPropertySet;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -396,6 +397,68 @@ public class Bootstrap {
 
         return xContext;
     }
+
+    /**
+     * Bootstraps the component context from a websocket location.
+     *
+     * @param url
+     *        the ws:// or wss:// url of the websocket server
+     *
+     * @throws BootstrapException if things go awry.
+     *
+     * @return a bootstrapped component context.
+     *
+     * @since LibreOffice 24.2
+     */
+    public static final XComponentContext bootstrapWebsocketConnection( String url )
+        throws BootstrapException {
+
+        XComponentContext xContext = null;
+
+        try {
+            // create default local component context
+            XComponentContext xLocalContext =
+                createInitialComponentContext( (Map<String, Object>) null );
+            if ( xLocalContext == null )
+                throw new BootstrapException( "no local component context!" );
+
+            // initial service manager
+            XMultiComponentFactory xLocalServiceManager =
+                xLocalContext.getServiceManager();
+            if ( xLocalServiceManager == null )
+                throw new BootstrapException( "no initial service manager!" );
+
+            // create a URL resolver
+            XUnoUrlResolver xUrlResolver =
+                UnoUrlResolver.create( xLocalContext );
+
+            // connection string
+            String sConnect = "uno:websocket"
+                              + ",url=" + url
+                              + ";urp;StarOffice.ComponentContext";
+
+            try {
+                // try to connect to office
+                Object xOfficeServiceManager = xUrlResolver.resolve(sConnect);
+
+                xContext = UnoRuntime.queryInterface(XComponentContext.class, xOfficeServiceManager);
+
+                if ( xContext == null )
+                    throw new BootstrapException( "no component context!" );
+            } catch ( com.sun.star.connection.NoConnectException ex ) {
+                throw new BootstrapException(ex);
+            }
+        } catch ( BootstrapException e ) {
+            throw e;
+        } catch ( java.lang.RuntimeException e ) {
+            throw e;
+        } catch ( java.lang.Exception e ) {
+            throw new BootstrapException( e );
+        }
+
+        return xContext;
+    }
+
 
     private static final Random randomPipeName = new Random();
 
