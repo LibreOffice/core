@@ -238,7 +238,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mbAutoSelect( true ),
     mbHCMode( false )
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    ,maChildVec( 8 )
+    ,maChildVec(FRAMEBORDERTYPE_COUNT)
 #endif
 {
     maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
