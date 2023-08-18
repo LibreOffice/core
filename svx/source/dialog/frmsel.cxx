@@ -275,7 +275,10 @@ FrameSelectorImpl::~FrameSelectorImpl()
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
     for( auto& rpChild : maChildVec )
         if( rpChild.is() )
+        {
             rpChild->Invalidate();
+            rpChild->dispose();
+        }
 #endif
 }
 
