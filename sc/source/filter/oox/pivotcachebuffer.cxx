@@ -720,7 +720,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                     previous field if that is grouped too. To find the correct
                     group, the first item used to create the group is searched.
                     Calc provides the original item names of the base field
-                    when the group is querried for its members. Its does not
+                    when the group is queried for its members. Its does not
                     provide the names of members that are already groups in the
                     field used to create the new groups. (Is this a bug?)
                     Therefore, a name from the passed list of original item
