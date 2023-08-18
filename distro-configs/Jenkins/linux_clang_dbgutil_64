@@ -4,7 +4,7 @@
 --disable-compiler-plugins-analyzer-pch
 --disable-dependency-tracking
 --disable-split-debug
---with-jdk-home=/etc/alternatives/java_sdk_11
+--with-jdk-home=/etc/alternatives/java_sdk_17
 --enable-odk
 --disable-dconf
 --enable-python=internal
