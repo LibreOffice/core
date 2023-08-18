@@ -36,7 +36,7 @@ struct QueryTableModel : public AutoFormatModel
     bool                mbFirstBackground;  /// True = first background refresh not yet finished.
     bool                mbRefreshOnLoad;    /// True = refresh table after import.
     bool                mbFillFormulas;     /// True = expand formulas next to range when source data grows.
-    bool                mbRemoveDataOnSave; /// True = remove querried data before saving.
+    bool                mbRemoveDataOnSave; /// True = remove queried data before saving.
     bool                mbDisableEdit;      /// True = connection locked for editing.
     bool                mbPreserveFormat;   /// True = use existing formatting for new rows.
     bool                mbAdjustColWidth;   /// True = adjust column widths after refresh.

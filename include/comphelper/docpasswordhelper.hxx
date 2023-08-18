@@ -392,7 +392,7 @@ public:
         @param rMediaPassword
             If not empty, will be passed to the password validator before
             requesting a password from the user. This password usually should
-            be querried from a media descriptor.
+            be queried from a media descriptor.
 
         @param rxInteractHandler
             The interaction handler that will be used to request a password
