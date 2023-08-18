@@ -567,6 +567,8 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
     {"com.sun.star.chart2.template.PieAllExploded" ,         ChartTypeParameter(2,false,false)},
     {"com.sun.star.chart2.template.Donut" ,                  ChartTypeParameter(3,false,false)},
     {"com.sun.star.chart2.template.DonutAllExploded" ,       ChartTypeParameter(4,false,false)},
+    {"com.sun.star.chart2.template.BarOfPie" ,               ChartTypeParameter(5,false,false)},
+    {"com.sun.star.chart2.template.PieOfPie" ,               ChartTypeParameter(6,false,false)},
     {"com.sun.star.chart2.template.ThreeDPie" ,              ChartTypeParameter(1,false,true)},
     {"com.sun.star.chart2.template.ThreeDPieAllExploded" ,   ChartTypeParameter(2,false,true)},
     {"com.sun.star.chart2.template.ThreeDDonut" ,            ChartTypeParameter(3,false,true)},
@@ -590,11 +592,15 @@ void PieChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const Ch
         rSubTypeList.InsertItem(2, Image(StockImage::Yes, BMP_CIRCLES_2D_EXPLODED));
         rSubTypeList.InsertItem(3, Image(StockImage::Yes, BMP_DONUT_2D));
         rSubTypeList.InsertItem(4, Image(StockImage::Yes, BMP_DONUT_2D_EXPLODED));
+        rSubTypeList.InsertItem(5, Image(StockImage::Yes, BMP_BAR_OF_PIE));
+        rSubTypeList.InsertItem(6, Image(StockImage::Yes, BMP_PIE_OF_PIE));
     }
     rSubTypeList.SetItemText( 1, SchResId( STR_NORMAL         ) );
     rSubTypeList.SetItemText( 2, SchResId( STR_PIE_EXPLODED   ) );
     rSubTypeList.SetItemText( 3, SchResId( STR_DONUT          ) );
     rSubTypeList.SetItemText( 4, SchResId( STR_DONUT_EXPLODED ) );
+    rSubTypeList.SetItemText( 5, SchResId( STR_BAR_OF_PIE ) );
+    rSubTypeList.SetItemText( 6, SchResId( STR_PIE_OF_PIE ) );
 }
 
 bool PieChartDialogController::shouldShow_3DLookControl() const

@@ -56,7 +56,8 @@ enum
     PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
     PROP_PIE_TEMPLATE_OFFSET_MODE,
     PROP_PIE_TEMPLATE_DIMENSION,
-    PROP_PIE_TEMPLATE_USE_RINGS
+    PROP_PIE_TEMPLATE_USE_RINGS,
+    PROP_PIE_TEMPLATE_SUB_PIE_TYPE
 };
 
 ::chart::tPropertyValueMap& StaticPieChartTypeTemplateDefaults()
@@ -68,6 +69,7 @@ enum
             ::chart::PropertyHelper::setPropertyValueDefault< double >( aOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_SUB_PIE_TYPE, chart2::PieChartSubType_NONE );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -98,7 +100,14 @@ enum
                   PROP_PIE_TEMPLATE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT } };
+                  | beans::PropertyAttribute::MAYBEDEFAULT }
+                ,
+                { "SubPieType",
+                  PROP_PIE_TEMPLATE_SUB_PIE_TYPE,
+                  cppu::UnoType<chart2::PieChartSubType>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT }
+            };
 
             std::sort( aProperties.begin(), aProperties.end(),
                          ::chart::PropertyNameLess() );
@@ -125,13 +134,15 @@ PieChartTypeTemplate::PieChartTypeTemplate(
         uno::XComponentContext > const & xContext,
     const OUString & rServiceName,
     chart2::PieChartOffsetMode eMode,
-    bool bRings            /* = false */,
+    bool bRings,
+    chart2::PieChartSubType eSubType,
     sal_Int32 nDim         /* = 2 */    ) :
         ChartTypeTemplate( xContext, rServiceName )
 {
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::Any( eMode ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));
     setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_SUB_PIE_TYPE,   uno::Any( eSubType ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
@@ -283,6 +294,10 @@ bool PieChartTypeTemplate::matchesTemplate2(
     getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
     chart2::PieChartOffsetMode ePieOffsetMode;
     getFastPropertyValue( PROP_PIE_TEMPLATE_OFFSET_MODE ) >>= ePieOffsetMode;
+    /*
+    chart2::PieChartSubType ePieSubType;
+    getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ) >>= ePieSubType;
+    */
 
     //check offset-mode
     if( bResult )
@@ -370,6 +385,8 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int3
         xResult = new PieChartType();
         xResult->setFastPropertyValue(
             PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
+        xResult->setFastPropertyValue(
+            PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
     }
     catch( const uno::Exception & )
     {
@@ -390,6 +407,8 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries2(
         ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
         xResult->setFastPropertyValue(
             PROP_PIECHARTTYPE_USE_RINGS, getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS )); // "UseRings"
+        xResult->setFastPropertyValue(
+            PROP_PIECHARTTYPE_SUBTYPE, getFastPropertyValue( PROP_PIE_TEMPLATE_SUB_PIE_TYPE ));
     }
     catch( const uno::Exception & )
     {

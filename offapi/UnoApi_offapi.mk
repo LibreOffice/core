@@ -2014,6 +2014,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	LegendPosition \
 	LightSource \
 	PieChartOffsetMode \
+	PieChartSubType \
 	RelativePosition \
 	RelativeSize \
 	ScaleData \

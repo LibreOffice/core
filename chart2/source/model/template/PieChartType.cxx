@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/chart2/PieChartSubType.hpp>
 
 using namespace ::com::sun::star;
 
@@ -45,6 +46,7 @@ namespace
             ::chart::tPropertyValueMap aOutMap;
             ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, ::chart::PROP_PIECHARTTYPE_USE_RINGS, false );
             ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT, 100 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, ::chart::PROP_PIECHARTTYPE_SUBTYPE, chart2::PieChartSubType_NONE );
             return aOutMap;
         }();
     return aStaticDefaults;
@@ -64,7 +66,11 @@ namespace
                 { "3DRelativeHeight",
                   ::chart::PROP_PIECHARTTYPE_3DRELATIVEHEIGHT,
                   cppu::UnoType<sal_Int32>::get(),
-                  beans::PropertyAttribute::MAYBEVOID }
+                  beans::PropertyAttribute::MAYBEVOID },
+                { "SubPieType",
+                  ::chart::PROP_PIECHARTTYPE_SUBTYPE,
+                  cppu::UnoType<chart2::PieChartSubType>::get(),
+                  beans::PropertyAttribute::MAYBEDEFAULT }
             };
             std::sort( aProperties.begin(), aProperties.end(),
                          ::chart::PropertyNameLess() );

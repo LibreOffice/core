@@ -89,6 +89,8 @@ enum TemplateId
     TEMPLATE_PIEALLEXPLODED,
     TEMPLATE_DONUT,
     TEMPLATE_DONUTALLEXPLODED,
+    TEMPLATE_BAROFPIE,
+    TEMPLATE_PIEOFPIE,
     TEMPLATE_THREEDPIE,
     TEMPLATE_THREEDPIEALLEXPLODED,
     TEMPLATE_THREEDDONUT,
@@ -162,6 +164,9 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         {"com.sun.star.chart2.template.Pie",                            TEMPLATE_PIE},
         {"com.sun.star.chart2.template.PieAllExploded",                 TEMPLATE_PIEALLEXPLODED},
         {"com.sun.star.chart2.template.Donut",                          TEMPLATE_DONUT},
+        {"com.sun.star.chart2.template.DonutAllExploded",               TEMPLATE_DONUTALLEXPLODED},
+        {"com.sun.star.chart2.template.BarOfPie",                       TEMPLATE_BAROFPIE},
+        {"com.sun.star.chart2.template.PieOfPie",                       TEMPLATE_PIEOFPIE},
         {"com.sun.star.chart2.template.DonutAllExploded",               TEMPLATE_DONUTALLEXPLODED},
         {"com.sun.star.chart2.template.ThreeDPie",                      TEMPLATE_THREEDPIE},
         {"com.sun.star.chart2.template.ThreeDPieAllExploded",           TEMPLATE_THREEDPIEALLEXPLODED},
@@ -382,35 +387,49 @@ rtl::Reference< ::chart::ChartTypeTemplate > ChartTypeManager::createTemplate(
 
         case TEMPLATE_PIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_NONE, false ));
+                chart2::PieChartOffsetMode_NONE, false, chart2::PieChartSubType_NONE ));
             break;
         case TEMPLATE_PIEALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, false ));
+                chart2::PieChartOffsetMode_ALL_EXPLODED, false,
+                chart2::PieChartSubType_NONE ));
             break;
         case TEMPLATE_DONUT:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_NONE, true ));
+                chart2::PieChartOffsetMode_NONE, true, chart2::PieChartSubType_NONE ));
             break;
         case TEMPLATE_DONUTALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, true ));
+                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
+                chart2::PieChartSubType_NONE ));
+            break;
+        case TEMPLATE_BAROFPIE:
+            xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
+                chart2::PieChartSubType_BAR ));
+            break;
+        case TEMPLATE_PIEOFPIE:
+            xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
+                chart2::PieChartSubType_PIE ));
             break;
         case TEMPLATE_THREEDPIE:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_NONE, false, 3 ));
+                chart2::PieChartOffsetMode_NONE, false, chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDPIEALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, false, 3 ));
+                chart2::PieChartOffsetMode_ALL_EXPLODED, false,
+                chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDDONUT:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_NONE, true, 3 ));
+                chart2::PieChartOffsetMode_NONE, true, chart2::PieChartSubType_NONE, 3 ));
             break;
         case TEMPLATE_THREEDDONUTALLEXPLODED:
             xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
-                chart2::PieChartOffsetMode_ALL_EXPLODED, true, 3 ));
+                chart2::PieChartOffsetMode_ALL_EXPLODED, true,
+                chart2::PieChartSubType_NONE, 3 ));
             break;
 
         case TEMPLATE_SCATTERLINESYMBOL:
