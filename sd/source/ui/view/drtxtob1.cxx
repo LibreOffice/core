@@ -812,30 +812,6 @@ void TextObjectBar::Execute( SfxRequest &rReq )
 
             std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
             lcl_convertStringArguments(nSlot, pNewArgs);
-
-            // Merge the color parameters to the color itself.
-            std::unique_ptr<SvxColorItem> pColorItem;
-            if (nSlot == SID_ATTR_CHAR_COLOR)
-            {
-                pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
-                model::ComplexColor aComplexColor;
-
-                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_THEME_INDEX, false))
-                {
-                    aComplexColor.setThemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
-                }
-                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_MOD, false))
-                {
-                    aComplexColor.addTransformation({model::TransformationType::LumMod, pIntItem->GetValue()});
-                }
-                if (const SfxInt16Item* pIntItem = pArgs->GetItemIfSet(SID_ATTR_COLOR_LUM_OFF, false))
-                {
-                    aComplexColor.addTransformation({model::TransformationType::LumOff, pIntItem->GetValue()});
-                }
-                pColorItem->setComplexColor(aComplexColor);
-                pNewArgs->Put(std::move(pColorItem));
-            }
-
             mpView->SetAttributes(*pNewArgs);
 
             // invalidate entire shell because of performance and

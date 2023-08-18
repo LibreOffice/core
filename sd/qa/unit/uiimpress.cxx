@@ -47,6 +47,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <docmodel/uno/UnoTheme.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <docmodel/color/ComplexColorJSON.hxx>
 
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>
@@ -1012,14 +1013,23 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     Scheduler::ProcessEventsToIdle();
 
     // When picking a theme color on the sidebar:
-    uno::Sequence<beans::PropertyValue> aColorArgs = {
-        comphelper::makePropertyValue("Color", static_cast<sal_Int32>(0xdae3f3)), // 80% light blue
-        comphelper::makePropertyValue("ColorThemeIndex", static_cast<sal_Int16>(4)), // accent 1
-        comphelper::makePropertyValue("ColorLumMod", static_cast<sal_Int16>(2000)),
-        comphelper::makePropertyValue("ColorLumOff", static_cast<sal_Int16>(8000)),
-    };
-    dispatchCommand(mxComponent, ".uno:Color", aColorArgs);
-    Scheduler::ProcessEventsToIdle();
+    {
+        model::ComplexColor aComplexColor;
+        aComplexColor.setThemeColor(model::ThemeColorType::Accent1);
+        aComplexColor.addTransformation({ model::TransformationType::LumMod, 2000 });
+        aComplexColor.addTransformation({ model::TransformationType::LumOff, 8000 });
+
+        OUString aJSON
+            = OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
+
+        // When setting the fill color of that shape, with theme metadata & effects:
+        uno::Sequence<beans::PropertyValue> aColorArgs = {
+            comphelper::makePropertyValue("Color.Color", sal_Int32(0xdae3f3)), // 80% light blue
+            comphelper::makePropertyValue("Color.ComplexColorJSON", uno::Any(aJSON)),
+        };
+        dispatchCommand(mxComponent, ".uno:Color", aColorArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
 
     // Then make sure the theme "metadata" is set in the document model:
     pView->EndTextEditCurrentView();
@@ -1057,15 +1067,25 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
                                                          uno::UNO_QUERY);
     xController->select(uno::Any(xShape));
 
-    // When setting the fill color of that shape, with theme metadata & effects:
-    uno::Sequence<beans::PropertyValue> aColorArgs = {
-        comphelper::makePropertyValue("FillColor", static_cast<sal_Int32>(0xed7d31)), // orange
-        comphelper::makePropertyValue("ColorThemeIndex", static_cast<sal_Int16>(4)), // accent 1
-        comphelper::makePropertyValue("ColorLumMod", static_cast<sal_Int16>(4000)),
-        comphelper::makePropertyValue("ColorLumOff", static_cast<sal_Int16>(6000)),
-    };
-    dispatchCommand(mxComponent, ".uno:FillColor", aColorArgs);
-    Scheduler::ProcessEventsToIdle();
+    // Change fill color
+    {
+        model::ComplexColor aComplexColor;
+        aComplexColor.setThemeColor(model::ThemeColorType::Accent1);
+        aComplexColor.addTransformation({ model::TransformationType::LumMod, 4000 });
+        aComplexColor.addTransformation({ model::TransformationType::LumOff, 6000 });
+
+        OUString aJSON
+            = OStringToOUString(model::color::convertToJSON(aComplexColor), RTL_TEXTENCODING_UTF8);
+
+        // When setting the fill color of that shape, with theme metadata & effects:
+        uno::Sequence<beans::PropertyValue> aColorArgs = {
+            comphelper::makePropertyValue("FillColor.Color", sal_Int32(0xed7d31)), // orange
+            comphelper::makePropertyValue("FillColor.ComplexColorJSON",
+                                          uno::Any(aJSON)), // accent 1
+        };
+        dispatchCommand(mxComponent, ".uno:FillColor", aColorArgs);
+        Scheduler::ProcessEventsToIdle();
+    }
 
     // Then make sure the theme index is not lost when the sidebar sets it:
     {

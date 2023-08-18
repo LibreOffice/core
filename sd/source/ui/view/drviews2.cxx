@@ -600,35 +600,6 @@ public:
                 pArgs->Put(aItem);
             }
         }
-
-        if (nSlot == SID_ATTR_FILL_COLOR)
-        {
-            // Merge the color parameters to the color itself.
-            const XFillColorItem* pColorItem = static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_FILL_COLOR));
-            if (pColorItem)
-            {
-                XFillColorItem aColorItem(*pColorItem);
-                model::ComplexColor aComplexColor = aColorItem.getComplexColor();
-
-                if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
-                {
-                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                    aComplexColor.setThemeColor(model::convertToThemeColorType(pIntItem->GetValue()));
-                }
-                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
-                {
-                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                    aComplexColor.addTransformation({model::TransformationType::LumMod, pIntItem->GetValue()});
-                }
-                if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
-                {
-                    auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                    aComplexColor.addTransformation({model::TransformationType::LumOff, pIntItem->GetValue()});
-                }
-                aColorItem.setComplexColor(aComplexColor);
-                pArgs->Put(aColorItem);
-            }
-        }
     }
 }
 
