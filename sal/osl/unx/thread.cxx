@@ -20,8 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
-#include <limits>
 #include <functional>
 #include <mutex>
 #include <unistd.h>
@@ -45,7 +43,6 @@
 #include <osl/thread.h>
 #include <osl/nlsupport.h>
 #include <rtl/textenc.h>
-#include <rtl/alloc.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #ifdef ANDROID

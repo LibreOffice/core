@@ -17,16 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unistd.h>
-#include <string.h>
-
-#include <config_features.h>
-
 #include "system.hxx"
 
 #ifdef NO_PTHREAD_RTL
 
 #if defined(MACOSX)
+
+#include <config_features.h>
 
 #include <premac.h>
 #include <Foundation/Foundation.h>

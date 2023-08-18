@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <rtl/locale.h>
+#include <rtl/ustring.hxx>
 
 namespace rtl
 {

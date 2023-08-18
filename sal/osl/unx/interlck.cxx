@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "system.hxx"
-
 #include <config_global.h>
 #include <osl/interlck.h>
 

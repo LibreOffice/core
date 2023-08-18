@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include "saltime.hxx"
-#include "system.hxx"
 
 #include <osl/time.h>
 #include <time.h>

@@ -23,7 +23,6 @@
 #define _GNU_SOURCE 1
 #endif
 #endif
-#include "system.hxx"
 #include "unixerrnostring.hxx"
 
 #include <sal/log.hxx>

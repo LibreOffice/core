@@ -7,9 +7,14 @@ excludelist:
     sal/osl/unx/backtrace.h:
     # needed for the "shadow" backtrace API
     - execinfo.h
+    sal/osl/unx/nlsupport.hxx:
+    # Needed on MACOSX
+    - #include <rtl/ustring.hxx>
     sal/osl/unx/system.hxx:
     # needed for the define  pthread_testcancel() to work
     - pthread.h
+    # needed for the INIT_GROUPS macro to work
+    - grp.h
     sal/android/uthash.h:
     # needed for defines to work / somehow on Linux there is a warning about android-related file
     - string.h
@@ -34,3 +39,30 @@ excludelist:
     sal/qa/rtl/textenc/rtl_textcvt.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
+    sal/osl/unx/file.cxx:
+    # Needed for macxp_resolveAlias on MACOSX
+    - system.hxx
+    sal/osl/unx/file_misc.cxx:
+    # Needed for macxp_resolveAlias on MACOSX
+    - system.hxx
+    sal/osl/unx/file_stat.cxx:
+    # Needed for macxp_resolveAlias on MACOSX
+    - system.hxx
+    sal/osl/unx/file_volume.cxx:
+    # Needed for macxp_resolveAlias on MACOSX
+    - system.hxx
+    # Needed for HAVE_STATFS_H cases
+    - osl/thread.h
+    sal/osl/unx/backtraceapi.cxx:
+    # needed for the "shadow" backtrace API
+    - backtrace.h
+    sal/osl/unx/signal.cxx:
+    # needed for the "shadow" backtrace API
+    - backtrace.h
+    sal/osl/unx/thread.cxx:
+    # needed for older glibc
+    - sys/syscall.h
+    - o3tl/safeint.hxx
+    sal/osl/unx/uunxapi.cxx:
+    # Needed for macxp_resolveAlias on MACOSX
+    - system.hxx

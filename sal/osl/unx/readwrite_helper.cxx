@@ -12,12 +12,11 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <errno.h>
 #include <limits>
 #include <unistd.h>
 
 #include "readwrite_helper.hxx"
-
-#include "system.hxx"
 
 namespace {
 

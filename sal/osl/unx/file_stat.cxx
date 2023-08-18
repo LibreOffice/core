@@ -19,9 +19,7 @@
 
 #include <osl/file.h>
 
-#include "system.hxx"
 #include <sys/stat.h>
-#include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
 #include <limits.h>
@@ -31,6 +29,7 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
+#include "system.hxx"
 #include "file_impl.hxx"
 #include "file_error_transl.hxx"
 #include "file_path_helper.hxx"

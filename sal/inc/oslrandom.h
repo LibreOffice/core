@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SAL_INC_INTERNAL_OSLRANDOM_H
 #define INCLUDED_SAL_INC_INTERNAL_OSLRANDOM_H
 
-#include <stddef.h>
+#include <cstddef>
 
 #if defined __cplusplus
 extern "C" {

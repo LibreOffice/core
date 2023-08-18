@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "system.hxx"
-
 #include <o3tl/safeint.hxx>
 #include <osl/pipe.h>
 #include <osl/diagnose.h>
@@ -35,7 +33,7 @@
 
 #include <cassert>
 #include <cstring>
-#include <sys/file.h>
+#include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
 

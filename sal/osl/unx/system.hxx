@@ -20,6 +20,7 @@
 #pragma once
 
 #include <errno.h>
+#include <grp.h>
 
 /* Make sockets of type AF_UNIX use underlying FS rights */
 #if defined(__sun) && !defined(_XOPEN_SOURCE)

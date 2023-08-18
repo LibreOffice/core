@@ -20,14 +20,12 @@
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 
 #include <osl/nlsupport.h>
 #include <osl/diagnose.h>
 #include <osl/process.h>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/log.hxx>
 
 #include "nlsupport.hxx"
 
@@ -45,10 +43,10 @@
 #elif defined(MACOSX) || defined(IOS)
 #include <osl/module.h>
 #include <osl/thread.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include "system.hxx"
 #endif
-
-#include <string.h>
 
 namespace {
 

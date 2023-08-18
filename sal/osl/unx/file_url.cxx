@@ -19,18 +19,13 @@
 
 #include "file_url.hxx"
 
-#include "system.hxx"
-
 #include <algorithm>
 #include <cassert>
 #include <cstring>
 #include <stdexcept>
 #include <string_view>
-#include <type_traits>
 #include <limits.h>
 #include <errno.h>
-#include <strings.h>
-#include <unistd.h>
 
 #include <o3tl/safeint.hxx>
 #include <osl/file.hxx>
@@ -46,7 +41,6 @@
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/textcvt.h>
 #include <sal/log.hxx>

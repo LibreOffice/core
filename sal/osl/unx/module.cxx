@@ -23,14 +23,12 @@
 #include <sal/types.h>
 #include <osl/module.h>
 #include <osl/thread.h>
-#include <osl/process.h>
 #include <osl/file.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <assert.h>
 #include <dlfcn.h>
-#include <dirent.h>
-#include "system.hxx"
+#include <limits.h>
 #include "file_url.hxx"
 
 static bool getModulePathFromAddress(void * address, rtl_String ** path)

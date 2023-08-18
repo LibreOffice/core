@@ -17,13 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include "system.hxx"
 #include <osl/file.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.h>

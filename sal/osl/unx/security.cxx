@@ -32,19 +32,13 @@
 #include <postmac.h>
 #endif
 
-#include "system.hxx"
-
 #include <o3tl/safeint.hxx>
 #include <osl/security.h>
-#include <rtl/bootstrap.hxx>
+#include <rtl/string.hxx>
 #include <sal/log.hxx>
 
 #include <osl/thread.h>
 #include <osl/file.h>
-
-#if defined LINUX || defined __sun
-#include <crypt.h>
-#endif
 
 #if defined HAIKU
 #include <fs_info.h>
@@ -55,6 +49,7 @@
 
 #ifdef ANDROID
 #define getpwuid_r(uid, pwd, buf, buflen, result) (*(result) = getpwuid(uid), (*(result) ? (memcpy (buf, *(result), sizeof (struct passwd)), 0) : errno))
+#include <rtl/bootstrap.hxx>
 #endif
 
 static bool osl_psz_getHomeDir(oslSecurity Security, OString* pszDirectory);

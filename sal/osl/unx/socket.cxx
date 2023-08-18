@@ -24,8 +24,6 @@
 #include "system.hxx"
 
 #include <osl/socket.h>
-#include <osl/mutex.h>
-#include <osl/signal.h>
 
 #include <rtl/alloc.h>
 #include <rtl/byteseq.h>
@@ -39,10 +37,10 @@
 #include <oslsocket.hxx>
 
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <netdb.h>
 #include <netinet/tcp.h>
 #include <poll.h>
-#include <sys/file.h>
 #include <unistd.h>
 
 /* defines for shutdown */

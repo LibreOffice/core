@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/file.hxx>
 #include <osl/detail/file.h>
 
 #include <osl/diagnose.h>
-#include <osl/thread.h>
-#include <osl/signal.h>
-#include <rtl/alloc.h>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 
@@ -36,22 +32,17 @@
 #include "readwrite_helper.hxx"
 #include "unixerrnostring.hxx"
 
-#include <sys/types.h>
 #include <errno.h>
 #include <dirent.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <utime.h>
-#include <sys/file.h>
 #include <sys/stat.h>
-#include <sys/mman.h>
 
 #include <algorithm>
-#include <cassert>
-#include <cstring>
-#include <memory>
 #include <new>
 
 #ifdef ANDROID

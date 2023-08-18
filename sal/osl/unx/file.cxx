@@ -19,14 +19,10 @@
 
 #include <config_features.h>
 #include <o3tl/safeint.hxx>
-#include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
-#include <osl/file.hxx>
 #include <osl/detail/file.h>
-#include <rtl/alloc.h>
-#include <rtl/byteseq.hxx>
+#include <rtl/byteseq.h>
 #include <rtl/string.hxx>
 
 #include "system.hxx"
@@ -39,14 +35,13 @@
 
 #include <algorithm>
 #include <atomic>
-#include <vector>
 #include <cassert>
+#include <fcntl.h>
 #include <limits>
+#include <limits.h>
 
-#include <dirent.h>
 #include <string.h>
 #include <pthread.h>
-#include <sys/file.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -65,6 +60,8 @@
 #include <osl/detail/android-bootstrap.h>
 #include <android/log.h>
 #include <android/asset_manager.h>
+#include <o3tl/string_view.hxx>
+#include <vector>
 #endif
 
 namespace {

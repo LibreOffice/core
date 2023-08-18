@@ -54,7 +54,6 @@ std::unique_ptr<sal::BacktraceState> sal::backtrace_get(sal_uInt32 maxDepth)
 #include <vector>
 #include <osl/process.h>
 #include <rtl/strbuf.hxx>
-#include <osl/mutex.hxx>
 #include <o3tl/lru_map.hxx>
 #include "file_url.hxx"
 

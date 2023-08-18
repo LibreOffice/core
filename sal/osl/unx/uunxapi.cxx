@@ -31,9 +31,9 @@
 #include <osl/thread.h>
 #include <sal/log.hxx>
 
-#include <sys/file.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <utime.h>
 
 #ifdef ANDROID

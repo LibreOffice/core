@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "system.hxx"
 #include <oslrandom.h>
 
 #include <assert.h>
-#include <sys/file.h>
+#include <errno.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 int osl_get_system_random_data(char* buffer, size_t desired_len)

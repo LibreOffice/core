@@ -21,8 +21,8 @@
 #include <rtl/ustring.hxx>
 
 #include <cassert>
-#include <dirent.h>
-#include <sys/file.h>
+#include <fcntl.h>
+#include <limits.h>
 #include <sys/time.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -57,16 +57,11 @@
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
-#include <osl/signal.h>
-#include <rtl/alloc.h>
 #include <sal/log.hxx>
-
-#include <grp.h>
 
 #include "createfilehandlefromfd.hxx"
 #include "file_url.hxx"
 #include "readwrite_helper.hxx"
-#include "sockimpl.hxx"
 #include "secimpl.hxx"
 
 #define MAX_ARGS        255
