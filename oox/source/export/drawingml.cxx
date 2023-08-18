@@ -4012,6 +4012,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             sVertOverflow = "clip";
         }
 
+        // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
+        bool bRequireInset = GetProperty(rXPropSet, "IsPresentationObject") && rXPropSet->getPropertyValue("IsPresentationObject").get<bool>();
+
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
                                XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
@@ -4019,10 +4022,14 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
                                XML_horzOverflow, sHorzOverflow,
                                XML_vertOverflow, sVertOverflow,
                                XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),
-                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)), nLeft != constDefaultLeftRightInset),
-                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)), nRight != constDefaultLeftRightInset),
-                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)), nTop != constDefaultTopBottomInset),
-                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)), nBottom != constDefaultTopBottomInset),
+                               XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
+                                                               bRequireInset || nLeft != constDefaultLeftRightInset),
+                               XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)),
+                                                               bRequireInset || nRight != constDefaultLeftRightInset),
+                               XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
+                                                               bRequireInset || nTop != constDefaultTopBottomInset),
+                               XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
+                                                               bRequireInset || nBottom != constDefaultTopBottomInset),
                                XML_anchor, sAnchor,
                                XML_anchorCtr, sax_fastparser::UseIf("1", bAnchorCtr),
                                XML_vert, sWritingMode,
