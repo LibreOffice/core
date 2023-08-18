@@ -34,11 +34,13 @@
 #include <svx/xbtmpit.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/smallcaps.hxx>
 #include <tools/helpers.hxx>
 #include <svl/itemset.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
@@ -66,6 +68,11 @@ using namespace com::sun::star;
 
 namespace
 {
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> buildTextPortionPrimitive(const DrawPortionInfo& rInfo, const OUString& rText,
+                                                                                         const drawinglayer::attribute::FontAttribute& rFontAttribute,
+                                                                                         const std::vector<double>& rDXArray,
+                                                                                         const basegfx::B2DHomMatrix& rNewTransform);
+
     class impTextBreakupHandler
     {
     private:
@@ -94,7 +101,6 @@ namespace
         DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
         DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
 
-        void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
         static rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo);
         void impFlushTextPortionPrimitivesToLinePrimitives();
         void impFlushLinePrimitivesToParagraphPrimitives(sal_Int32 nPara);
@@ -146,6 +152,71 @@ namespace
         }
 
         drawinglayer::primitive2d::Primitive2DContainer extractPrimitive2DSequence();
+
+        void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
+    };
+
+    class DoCapitalsDrawPortionInfo : public SvxDoCapitals
+    {
+    private:
+        impTextBreakupHandler& m_rHandler;
+        const DrawPortionInfo& m_rInfo;
+        SvxFont m_aFont;
+    public:
+        DoCapitalsDrawPortionInfo(impTextBreakupHandler& rHandler, const DrawPortionInfo& rInfo)
+            : SvxDoCapitals(rInfo.maText, rInfo.mnTextStart, rInfo.mnTextLen)
+            , m_rHandler(rHandler)
+            , m_rInfo(rInfo)
+            , m_aFont(rInfo.mrFont)
+        {
+            assert(!m_rInfo.mpDXArray.empty());
+
+            /* turn all these off as they are handled outside subportions for the whole portion */
+            m_aFont.SetTransparent(false);
+            m_aFont.SetUnderline(LINESTYLE_NONE);
+            m_aFont.SetOverline(LINESTYLE_NONE);
+            m_aFont.SetStrikeout(STRIKEOUT_NONE);
+
+            m_aFont.SetCaseMap(SvxCaseMap::NotMapped); /* otherwise this would call itself */
+        }
+        virtual void Do( const OUString &rSpanTxt, const sal_Int32 nSpanIdx,
+                         const sal_Int32 nSpanLen, const bool bUpper ) override
+        {
+            sal_uInt8 nProp(0);
+            if (!bUpper)
+            {
+                nProp = m_aFont.GetPropr();
+                m_aFont.SetProprRel(SMALL_CAPS_PERCENTAGE);
+            }
+
+            sal_Int32 nStartOffset = nSpanIdx - nIdx;
+            sal_Int32 nStartX = nStartOffset ? m_rInfo.mpDXArray[nStartOffset - 1] : 0;
+
+            Point aStartPos(m_rInfo.mrStartPos.X() + nStartX, m_rInfo.mrStartPos.Y());
+
+            std::vector<sal_Int32> aDXArray;
+            aDXArray.reserve(nSpanLen);
+            for (sal_Int32 i = 0; i < nSpanLen; ++i)
+                aDXArray.push_back(m_rInfo.mpDXArray[nStartOffset + i] - nStartX);
+
+            auto aKashidaArray = !m_rInfo.mpKashidaArray.empty() ?
+                o3tl::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen) :
+                o3tl::span<const sal_Bool>();
+
+            DrawPortionInfo aInfo(aStartPos, rSpanTxt,
+                                  nSpanIdx, nSpanLen,
+                                  m_aFont, m_rInfo.mnPara,
+                                  aDXArray, aKashidaArray,
+                                  nullptr, /* no spelling in subportion, handled outside */
+                                  nullptr, /* no field in subportion, handled outside */
+                                  m_rInfo.mpLocale, m_rInfo.maOverlineColor, m_rInfo.maTextLineColor,
+                                  m_rInfo.mnBiDiLevel, false, 0, false, false, false);
+
+            m_rHandler.impCreateTextPortionPrimitive(aInfo);
+
+            if (!bUpper)
+                m_aFont.SetPropr(nProp);
+        }
     };
 
     void impTextBreakupHandler::impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo)
@@ -153,7 +224,6 @@ namespace
         if(rInfo.maText.isEmpty() || !rInfo.mnTextLen)
             return;
 
-        OUString caseMappedText = rInfo.mrFont.CalcCaseMap( rInfo.maText );
         basegfx::B2DVector aFontScaling;
         drawinglayer::attribute::FontAttribute aFontAttribute(
             drawinglayer::primitive2d::getFontAttributeFromVclFont(
@@ -222,148 +292,55 @@ namespace
         // the text transformation), scale it to unit coordinates
         ::std::vector< double > aDXArray;
 
-        if(!rInfo.mpDXArray.empty() && rInfo.mnTextLen)
+        if (!rInfo.mpDXArray.empty())
         {
             aDXArray.reserve(rInfo.mnTextLen);
-
             for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
             {
                 aDXArray.push_back(static_cast<double>(rInfo.mpDXArray[a]));
             }
         }
 
-        ::std::vector< sal_Bool > aKashidaArray;
+        OUString caseMappedText = rInfo.mrFont.CalcCaseMap(rInfo.maText);
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive(buildTextPortionPrimitive(rInfo, caseMappedText,
+                                                                                                           aFontAttribute,
+                                                                                                           aDXArray, aNewTransform));
 
-        if(!rInfo.mpKashidaArray.empty() && rInfo.mnTextLen)
+        bool bSmallCaps = rInfo.mrFont.IsCapital();
+        if (bSmallCaps && rInfo.mpDXArray.empty())
         {
-            aKashidaArray.reserve(rInfo.mnTextLen);
+            SAL_WARN("svx", "SmallCaps requested with DXArray, abandoning");
+            bSmallCaps = false;
+        }
+        if (bSmallCaps)
+        {
+            // rerun with each sub-portion
+            DoCapitalsDrawPortionInfo aDoDrawPortionInfo(*this, rInfo);
+            rInfo.mrFont.DoOnCapitals(aDoDrawPortionInfo);
 
-            for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
+            // transfer collected primitives from maTextPortionPrimitives to a new container
+            drawinglayer::primitive2d::Primitive2DContainer aContainer;
+            aContainer.swap(maTextPortionPrimitives);
+
+            // Take any decoration for the whole formatted portion and keep it to get continous over/under/strike-through
+            if (pNewPrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
             {
-                aKashidaArray.push_back(rInfo.mpKashidaArray[a]);
+                const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
+                    static_cast<const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D*>(pNewPrimitive.get());
+
+                pTCPP->CreateDecorationGeometryContent(
+                    aContainer,
+                    pTCPP->getTextTransform(),
+                    caseMappedText,
+                    rInfo.mnTextStart,
+                    rInfo.mnTextLen,
+                    aDXArray);
             }
+
+            pNewPrimitive = new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aContainer));
         }
 
-        // create complex text primitive and append
         const Color aFontColor(rInfo.mrFont.GetColor());
-        const basegfx::BColor aBFontColor(aFontColor.getBColor());
-
-        const Color aTextFillColor(rInfo.mrFont.GetFillColor());
-
-        // prepare wordLineMode (for underline and strikeout)
-        // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
-        // to be split which would not look like the original
-        const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
-
-        // prepare new primitive
-        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive;
-        const bool bDecoratedIsNeeded(
-               LINESTYLE_NONE != rInfo.mrFont.GetOverline()
-            || LINESTYLE_NONE != rInfo.mrFont.GetUnderline()
-            || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
-            || FontEmphasisMark::NONE != (rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
-            || FontRelief::NONE != rInfo.mrFont.GetRelief()
-            || rInfo.mrFont.IsShadow()
-            || bWordLineMode);
-
-        if(bDecoratedIsNeeded)
-        {
-            // TextDecoratedPortionPrimitive2D needed, prepare some more data
-            // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
-            const Color aUnderlineColor(rInfo.maTextLineColor);
-            const basegfx::BColor aBUnderlineColor((aUnderlineColor == COL_AUTO) ? aBFontColor : aUnderlineColor.getBColor());
-            const Color aOverlineColor(rInfo.maOverlineColor);
-            const basegfx::BColor aBOverlineColor((aOverlineColor == COL_AUTO) ? aBFontColor : aOverlineColor.getBColor());
-
-            // prepare overline and underline data
-            const drawinglayer::primitive2d::TextLine eFontOverline(
-                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetOverline()));
-            const drawinglayer::primitive2d::TextLine eFontLineStyle(
-                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetUnderline()));
-
-            // check UnderlineAbove
-            const bool bUnderlineAbove(
-                drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && rInfo.mrFont.IsUnderlineAbove());
-
-            // prepare strikeout data
-            const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
-                drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
-
-            // prepare emphasis mark data
-            drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE);
-
-            switch(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
-            {
-                case FontEmphasisMark::Dot : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT; break;
-                case FontEmphasisMark::Circle : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE; break;
-                case FontEmphasisMark::Disc : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC; break;
-                case FontEmphasisMark::Accent : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT; break;
-                default: break;
-            }
-
-            const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosAbove);
-            const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosBelow);
-
-            // prepare font relief data
-            drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
-
-            switch(rInfo.mrFont.GetRelief())
-            {
-                case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
-                case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
-                default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
-            }
-
-            // prepare shadow/outline data
-            const bool bShadow(rInfo.mrFont.IsShadow());
-
-            // TextDecoratedPortionPrimitive2D is needed, create one
-            pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
-
-                // attributes for TextSimplePortionPrimitive2D
-                aNewTransform,
-                caseMappedText,
-                rInfo.mnTextStart,
-                rInfo.mnTextLen,
-                std::vector(aDXArray),
-                std::vector(aKashidaArray),
-                aFontAttribute,
-                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
-                aBFontColor,
-                aTextFillColor,
-
-                // attributes for TextDecoratedPortionPrimitive2D
-                aBOverlineColor,
-                aBUnderlineColor,
-                eFontOverline,
-                eFontLineStyle,
-                bUnderlineAbove,
-                eTextStrikeout,
-                bWordLineMode,
-                eTextEmphasisMark,
-                bEmphasisMarkAbove,
-                bEmphasisMarkBelow,
-                eTextRelief,
-                bShadow);
-        }
-        else
-        {
-            // TextSimplePortionPrimitive2D is enough
-            pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                aNewTransform,
-                caseMappedText,
-                rInfo.mnTextStart,
-                rInfo.mnTextLen,
-                std::vector(aDXArray),
-                std::vector(aKashidaArray),
-                std::move(aFontAttribute),
-                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
-                aBFontColor,
-                rInfo.mbFilled,
-                rInfo.mnWidthToFill,
-                aTextFillColor);
-        }
-
         if (aFontColor.IsTransparent())
         {
             // Handle semi-transparent text for both the decorated and simple case here.
@@ -454,6 +431,147 @@ namespace
                 }
             }
         }
+    }
+
+    rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> buildTextPortionPrimitive(
+            const DrawPortionInfo& rInfo, const OUString& rText,
+            const drawinglayer::attribute::FontAttribute& rFontAttribute,
+            const std::vector<double>& rDXArray,
+            const basegfx::B2DHomMatrix& rNewTransform)
+    {
+        ::std::vector< sal_Bool > aKashidaArray;
+
+        if(!rInfo.mpKashidaArray.empty() && rInfo.mnTextLen)
+        {
+            aKashidaArray.reserve(rInfo.mnTextLen);
+
+            for(sal_Int32 a=0; a < rInfo.mnTextLen; a++)
+            {
+                aKashidaArray.push_back(rInfo.mpKashidaArray[a]);
+            }
+        }
+
+        // create complex text primitive and append
+        const Color aFontColor(rInfo.mrFont.GetColor());
+        const basegfx::BColor aBFontColor(aFontColor.getBColor());
+
+        const Color aTextFillColor(rInfo.mrFont.GetFillColor());
+
+        // prepare wordLineMode (for underline and strikeout)
+        // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
+        // to be split which would not look like the original
+        const bool bWordLineMode(rInfo.mrFont.IsWordLineMode() && !rInfo.mbEndOfBullet);
+
+        // prepare new primitive
+        rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> pNewPrimitive;
+        const bool bDecoratedIsNeeded(
+               LINESTYLE_NONE != rInfo.mrFont.GetOverline()
+            || LINESTYLE_NONE != rInfo.mrFont.GetUnderline()
+            || STRIKEOUT_NONE != rInfo.mrFont.GetStrikeout()
+            || FontEmphasisMark::NONE != (rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
+            || FontRelief::NONE != rInfo.mrFont.GetRelief()
+            || rInfo.mrFont.IsShadow()
+            || bWordLineMode);
+
+        if(bDecoratedIsNeeded)
+        {
+            // TextDecoratedPortionPrimitive2D needed, prepare some more data
+            // get overline and underline color. If it's on automatic (0xffffffff) use FontColor instead
+            const Color aUnderlineColor(rInfo.maTextLineColor);
+            const basegfx::BColor aBUnderlineColor((aUnderlineColor == COL_AUTO) ? aBFontColor : aUnderlineColor.getBColor());
+            const Color aOverlineColor(rInfo.maOverlineColor);
+            const basegfx::BColor aBOverlineColor((aOverlineColor == COL_AUTO) ? aBFontColor : aOverlineColor.getBColor());
+
+            // prepare overline and underline data
+            const drawinglayer::primitive2d::TextLine eFontOverline(
+                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetOverline()));
+            const drawinglayer::primitive2d::TextLine eFontLineStyle(
+                drawinglayer::primitive2d::mapFontLineStyleToTextLine(rInfo.mrFont.GetUnderline()));
+
+            // check UnderlineAbove
+            const bool bUnderlineAbove(
+                drawinglayer::primitive2d::TEXT_LINE_NONE != eFontLineStyle && rInfo.mrFont.IsUnderlineAbove());
+
+            // prepare strikeout data
+            const drawinglayer::primitive2d::TextStrikeout eTextStrikeout(
+                drawinglayer::primitive2d::mapFontStrikeoutToTextStrikeout(rInfo.mrFont.GetStrikeout()));
+
+            // prepare emphasis mark data
+            drawinglayer::primitive2d::TextEmphasisMark eTextEmphasisMark(drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_NONE);
+
+            switch(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::Style)
+            {
+                case FontEmphasisMark::Dot : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DOT; break;
+                case FontEmphasisMark::Circle : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_CIRCLE; break;
+                case FontEmphasisMark::Disc : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_DISC; break;
+                case FontEmphasisMark::Accent : eTextEmphasisMark = drawinglayer::primitive2d::TEXT_FONT_EMPHASIS_MARK_ACCENT; break;
+                default: break;
+            }
+
+            const bool bEmphasisMarkAbove(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosAbove);
+            const bool bEmphasisMarkBelow(rInfo.mrFont.GetEmphasisMark() & FontEmphasisMark::PosBelow);
+
+            // prepare font relief data
+            drawinglayer::primitive2d::TextRelief eTextRelief(drawinglayer::primitive2d::TEXT_RELIEF_NONE);
+
+            switch(rInfo.mrFont.GetRelief())
+            {
+                case FontRelief::Embossed : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_EMBOSSED; break;
+                case FontRelief::Engraved : eTextRelief = drawinglayer::primitive2d::TEXT_RELIEF_ENGRAVED; break;
+                default : break; // RELIEF_NONE, FontRelief_FORCE_EQUAL_SIZE
+            }
+
+            // prepare shadow/outline data
+            const bool bShadow(rInfo.mrFont.IsShadow());
+
+            // TextDecoratedPortionPrimitive2D is needed, create one
+            pNewPrimitive = new drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D(
+
+                // attributes for TextSimplePortionPrimitive2D
+                rNewTransform,
+                rText,
+                rInfo.mnTextStart,
+                rInfo.mnTextLen,
+                std::vector(rDXArray),
+                std::vector(aKashidaArray),
+                rFontAttribute,
+                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
+                aBFontColor,
+                aTextFillColor,
+
+                // attributes for TextDecoratedPortionPrimitive2D
+                aBOverlineColor,
+                aBUnderlineColor,
+                eFontOverline,
+                eFontLineStyle,
+                bUnderlineAbove,
+                eTextStrikeout,
+                bWordLineMode,
+                eTextEmphasisMark,
+                bEmphasisMarkAbove,
+                bEmphasisMarkBelow,
+                eTextRelief,
+                bShadow);
+        }
+        else
+        {
+            // TextSimplePortionPrimitive2D is enough
+            pNewPrimitive = new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                rNewTransform,
+                rText,
+                rInfo.mnTextStart,
+                rInfo.mnTextLen,
+                std::vector(rDXArray),
+                std::vector(aKashidaArray),
+                rFontAttribute,
+                rInfo.mpLocale ? *rInfo.mpLocale : css::lang::Locale(),
+                aBFontColor,
+                rInfo.mbFilled,
+                rInfo.mnWidthToFill,
+                aTextFillColor);
+        }
+
+        return pNewPrimitive;
     }
 
     rtl::Reference<drawinglayer::primitive2d::BasePrimitive2D> impTextBreakupHandler::impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo)

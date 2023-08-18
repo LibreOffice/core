@@ -76,7 +76,7 @@ public:
     void SetPhysFont(OutputDevice& rOut) const;
     vcl::Font ChgPhysFont(OutputDevice& rOut) const;
 
-    Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
+    Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt, KernArray* pDXAry,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
