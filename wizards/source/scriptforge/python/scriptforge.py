@@ -28,27 +28,27 @@
     By collecting most-demanded document operations in a set of easy to use, easy to read routines, users can now
     program document macros with much less hassle and get quicker results.
 
-    ScriptForge abundant methods are organized in reusable modules that cleanly isolate Basic/Python programming
-    language constructs from ODF document content accesses and user interface(UI) features.
+    The use of the ScriptForge interfaces in user scripts hides the complexity of the usual UNO interfaces.
+    However it does not replace them. At the opposite their coexistence is ensured.
+    Indeed, ScriptForge provides a number of shortcuts to key UNO objects.
 
     The scriptforge.py module
-        - implements a protocol between Python (user) scripts and the ScriptForge Basic library
-        - contains the interfaces (classes and attributes) to be used in Python user scripts
-          to run the services implemented in the standard libraries shipped with LibreOffice
+        - describes the interfaces (classes and attributes) to be used in Python user scripts
+          to run the services implemented in the standard modules shipped with LibreOffice
+        - implements a protocol between those interfaces and, when appropriate, the corresponding ScriptForge
+          Basic libraries implementing the requested services.
 
     Usage:
 
-        When Python and LibreOffice run in the same process (usual case): either
-            from scriptforge import *   # or, better ...
+        When Python and LibreOffice run in the same process (usual case):
             from scriptforge import CreateScriptService
 
         When Python and LibreOffice are started in separate processes,
-        LibreOffice being started from console ... (example for Linux with port = 2021)
-            ./soffice --accept='socket,host=localhost,port=2021;urp;'
-        then use next statement:
-            from scriptforge import *   # or, better ...
+        LibreOffice being started from console ... (example for Linux with port = 2023)
+            ./soffice --accept='socket,host=localhost,port=2023;urp;'
+        then use next statements:
             from scriptforge import CreateScriptService, ScriptForge
-            ScriptForge(hostname = 'localhost', port = 2021)
+            ScriptForge(hostname = 'localhost', port = 2023)
 
     Specific documentation about the use of ScriptForge from Python scripts:
         https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_intro.html?DbPAR=BASIC
@@ -80,24 +80,29 @@ class _Singleton(type):
 
 class ScriptForge(object, metaclass = _Singleton):
     """
-        The ScriptForge (singleton) class encapsulates the core of the ScriptForge run-time
+        The ScriptForge class encapsulates the core of the ScriptForge run-time
             - Bridge with the LibreOffice process
             - Implementation of the inter-language protocol with the Basic libraries
             - Identification of the available services interfaces
             - Dispatching of services
             - Coexistence with UNO
 
-        It embeds the Service class that manages the protocol with Basic
+        The class may be instantiated several times. Only the first instance will be retained ("Singleton").
         """
 
     # #########################################################################
     # Class attributes
     # #########################################################################
+    # Inter-process parameters
     hostname = ''
     port = 0
-    componentcontext = None
-    scriptprovider = None
-    SCRIPTFORGEINITDONE = False
+
+    componentcontext = None  # com.sun.star.uno.XComponentContext
+    scriptprovider = None   # com.sun.star.script.provider.XScriptProvider
+    SCRIPTFORGEINITDONE = False  # When True, an instance of the class exists
+
+    servicesdispatcher = None   # com.sun.star.script.provider.XScript to 'basicdispatcher' constant
+    serviceslist = {}           # Dictionary of all available services
 
     # #########################################################################
     # Class constants
@@ -105,17 +110,18 @@ class ScriptForge(object, metaclass = _Singleton):
     library = 'ScriptForge'
     Version = '7.6'  # Actual version number
     #
-    # Basic dispatcher for Python scripts
+    # Basic dispatcher for Python scripts (@scope#library.module.function)
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
     # Python helper functions module
-    pythonhelpermodule = 'ScriptForgeHelper.py'
+    pythonhelpermodule = 'ScriptForgeHelper.py'     # Preset in production mode,
+    #                                                 might be changed (by devs only) in test mode
     #
     # VarType() constants
     V_EMPTY, V_NULL, V_INTEGER, V_LONG, V_SINGLE, V_DOUBLE = 0, 1, 2, 3, 4, 5
     V_CURRENCY, V_DATE, V_STRING, V_OBJECT, V_BOOLEAN = 6, 7, 8, 9, 11
     V_VARIANT, V_ARRAY, V_ERROR, V_UNO = 12, 8192, -1, 16
-    # Object types
-    objMODULE, objCLASS, objUNO = 1, 2, 3
+    # Types of objects returned from Basic
+    objMODULE, objCLASS, objDICT, objUNO = 1, 2, 3, 4
     # Special argument symbols
     cstSymEmpty, cstSymNull, cstSymMissing = '+++EMPTY+++', '+++NULL+++', '+++MISSING+++'
     # Predefined references for services implemented as standard Basic modules
@@ -132,7 +138,8 @@ class ScriptForge(object, metaclass = _Singleton):
     def __init__(self, hostname = '', port = 0):
         """
             Because singleton, constructor is executed only once while Python active
-            Arguments are mandatory when Python and LibreOffice run in separate processes
+            Both arguments are mandatory when Python and LibreOffice run in separate processes
+            Otherwise both arguments must be left out.
             :param hostname: probably 'localhost'
             :param port: port number
             """
@@ -194,57 +201,63 @@ class ScriptForge(object, metaclass = _Singleton):
     @classmethod
     def InvokeSimpleScript(cls, script, *args):
         """
-            Create a UNO object corresponding with the given Python or Basic script
-            The execution is done with the invoke() method applied on the created object
+            Low-level script execution via the script provider protocol:
+                Create a UNO object corresponding with the given Python or Basic script
+                The execution is done with the invoke() method applied on the created object
             Implicit scope: Either
-                "application"            a shared library                               (BASIC)
-                "share"                  a library of LibreOffice Macros                (PYTHON)
+                "application"            a shared library                    (BASIC)
+                "share"                  a module within LibreOffice Macros  (PYTHON)
             :param script: Either
                     [@][scope#][library.]module.method - Must not be a class module or method
                         [@] means that the targeted method accepts ParamArray arguments (Basic only)
                     [scope#][directory/]module.py$method - Must be a method defined at module level
-            :return: the value returned by the invoked script, or an error if the script was not found
+            :return: the value returned by the invoked script without interpretation
+                    An error is raised when the script is not found.
             """
+
+        def ParseScript(_script):
+            # Check ParamArray arguments
+            _paramarray = False
+            if _script[0] == '@':
+                _script = _script[1:]
+                _paramarray = True
+            scope = ''
+            if '#' in _script:
+                scope, _script = _script.split('#')
+            if '.py$' in _script.lower():  # Python
+                if len(scope) == 0:
+                    scope = 'share'  # Default for Python
+                # Provide an alternate helper script depending on test context
+                if _script.startswith(cls.pythonhelpermodule) and hasattr(cls, 'pythonhelpermodule2'):
+                    _script = cls.pythonhelpermodule2 + _script[len(cls.pythonhelpermodule):]
+                    if '#' in _script:
+                        scope, _script = _script.split('#')
+                uri = 'vnd.sun.star.script:{0}?language=Python&location={1}'.format(_script, scope)
+            else:  # Basic
+                if len(scope) == 0:
+                    scope = 'application'  # Default for Basic
+                lib = ''
+                if len(_script.split('.')) < 3:
+                    lib = cls.library + '.'  # Default library = ScriptForge
+                uri = 'vnd.sun.star.script:{0}{1}?language=Basic&location={2}'.format(lib, _script, scope)
+            # Get the script object
+            _fullscript = ('@' if _paramarray else '') + scope + ':' + _script
+            try:
+                _xscript = cls.scriptprovider.getScript(uri)     # com.sun.star.script.provider.XScript
+            except Exception:
+                raise RuntimeError(
+                    'The script \'{0}\' could not be located in your LibreOffice installation'.format(_script))
+            return _paramarray, _fullscript, _xscript
 
         # The frequently called PythonDispatcher in the ScriptForge Basic library is cached to privilege performance
         if cls.servicesdispatcher is not None and script == ScriptForge.basicdispatcher:
             xscript = cls.servicesdispatcher
             fullscript = script
             paramarray = True
-        #    Build the URI specification described in
-        #    https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
+        # Parse the 'script' argument and build the URI specification described in
+        # https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
         elif len(script) > 0:
-            # Check ParamArray arguments
-            paramarray = False
-            if script[0] == '@':
-                script = script[1:]
-                paramarray = True
-            scope = ''
-            if '#' in script:
-                scope, script = script.split('#')
-            if '.py$' in script.lower():  # Python
-                if len(scope) == 0:
-                    scope = 'share'  # Default for Python
-                # Provide an alternate helper script depending on test context
-                if script.startswith(cls.pythonhelpermodule) and hasattr(cls, 'pythonhelpermodule2'):
-                    script = cls.pythonhelpermodule2 + script[len(cls.pythonhelpermodule):]
-                    if '#' in script:
-                        scope, script = script.split('#')
-                uri = 'vnd.sun.star.script:{0}?language=Python&location={1}'.format(script, scope)
-            else:  # Basic
-                if len(scope) == 0:
-                    scope = 'application'  # Default for Basic
-                lib = ''
-                if len(script.split('.')) < 3:
-                    lib = cls.library + '.'  # Default library = ScriptForge
-                uri = 'vnd.sun.star.script:{0}{1}?language=Basic&location={2}'.format(lib, script, scope)
-            # Get the script object
-            fullscript = ('@' if paramarray else '') + scope + ':' + script
-            try:
-                xscript = cls.scriptprovider.getScript(uri)
-            except Exception:
-                raise RuntimeError(
-                    'The script \'{0}\' could not be located in your LibreOffice installation'.format(script))
+            paramarray, fullscript, xscript = ParseScript(script)
         else:  # Should not happen
             return None
 
@@ -265,33 +278,57 @@ class ScriptForge(object, metaclass = _Singleton):
     @classmethod
     def InvokeBasicService(cls, basicobject, flags, method, *args):
         """
-            Execute a given Basic script and interpret its result
+            High-level script execution via the ScriptForge inter-language protocol:
+            To be used for all service methods having their implementation in the Basic world
+                Substitute dictionary arguments by sets of UNO property values
+                Execute the given Basic method on a class instance
+                Interpret its result
             This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
-            :param basicobject: a Service subclass
+            :param basicobject: a SFServices subclass instance
+                The real object is cached in a Basic Global variable and identified by its reference
             :param flags: see the vb* and flg* constants in the SFServices class
             :param method: the name of the method or property to invoke, as a string
             :param args: the arguments of the method. Symbolic cst* constants may be necessary
             :return: The invoked Basic counterpart script (with InvokeSimpleScript()) will return a tuple
-                [0]     The returned value - scalar, object reference or a tuple
-                [1]     The Basic VarType() of the returned value
-                        Null, Empty and Nothing have different vartypes but return all None to Python
+                [0/Value]       The returned value - scalar, object reference, UNO object or a tuple
+                [1/VarType]     The Basic VarType() of the returned value
+                                Null, Empty and Nothing have own vartypes but return all None to Python
                 Additionally, when [0] is a tuple:
-                [2]     Number of dimensions in Basic
+                    [2/Dims]        Number of dimensions of the original Basic array
                 Additionally, when [0] is a UNO or Basic object:
-                [2]     Module (1), Class instance (2) or UNO (3)
-                [3]     The object's ObjectType
-                [4]     The object's ServiceName
-                [5]     The object's name
+                    [2/Class]       Basic module (1), Basic class instance (2), Dictionary (3), UNO object (4)
+                Additionally, when [0] is a Basic object:
+                    [3/Type]        The object's ObjectType
+                    [4/Service]     The object's ServiceName
+                    [5/Name]        The object's name
                 When an error occurs Python receives None as a scalar. This determines the occurrence of a failure
                 The method returns either
                     - the 0th element of the tuple when scalar, tuple or UNO object
-                    - a new Service() object or one of its subclasses otherwise
+                    - a new SFServices() object or one of its subclasses otherwise
             """
         # Constants
         script = ScriptForge.basicdispatcher
         cstNoArgs = '+++NOARGS+++'
         cstValue, cstVarType, cstDims, cstClass, cstType, cstService, cstName = 0, 1, 2, 2, 3, 4, 5
 
+        def ConvertDictArgs():
+            """
+                Convert dictionaries in arguments to sets of property values
+                """
+            argslist = list(args)
+            for i in range(len(args)):
+                arg = argslist[i]
+                if isinstance(arg, dict):
+                    argdict = arg
+                    if not isinstance(argdict, SFScriptForge.SF_Dictionary):
+                        argdict = CreateScriptService('ScriptForge.Dictionary', arg)
+                    argslist[i] = argdict.ConvertToPropertyValues()
+            return tuple(argslist)
+
+        #
+        # Intercept dictionary arguments
+        if flags & SFServices.flgDictArg == SFServices.flgDictArg:  # Bits comparison
+            args = ConvertDictArgs()
         #
         # Run the basic script
         # The targeted script has a ParamArray argument. Do not change next 4 lines except if you know what you do !
@@ -307,9 +344,21 @@ class ScriptForge(object, metaclass = _Singleton):
             raise RuntimeError("The execution of the method '" + method + "' failed. Execution stops.")
         #
         # Analyze the returned tuple
-        if returntuple[cstVarType] == ScriptForge.V_OBJECT and len(returntuple) > cstClass:  # Avoid Nothing
+        # Distinguish:
+        #   A Basic object to be mapped onto a new Python class instance
+        #   A UNO object
+        #   A set of property values to be returned as a dict()
+        #   An array, tuple or tuple of tuples
+        #   A scalar or Nothing
+        returnvalue = returntuple[cstValue]
+        if returntuple[cstVarType] == ScriptForge.V_OBJECT and len(returntuple) > cstClass:  # Skip Nothing
             if returntuple[cstClass] == ScriptForge.objUNO:
                 pass
+            elif returntuple[cstClass] == ScriptForge.objDICT:
+                dico = CreateScriptService('ScriptForge.Dictionary')
+                if not isinstance(returnvalue, uno.ByteSequence):   # if array not empty
+                    dico.ImportFromPropertyValues(returnvalue, overwrite = True)
+                return dico
             else:
                 # Create the new class instance of the right subclass of SFServices()
                 servname = returntuple[cstService]
@@ -318,18 +367,17 @@ class ScriptForge(object, metaclass = _Singleton):
                     raise RuntimeError("The service '" + servname + "' is not available in Python. Execution stops.")
                 subcls = cls.serviceslist[servname]
                 if subcls is not None:
-                    return subcls(returntuple[cstValue], returntuple[cstType], returntuple[cstClass],
-                                  returntuple[cstName])
+                    return subcls(returnvalue, returntuple[cstType], returntuple[cstClass], returntuple[cstName])
         elif returntuple[cstVarType] >= ScriptForge.V_ARRAY:
             # Intercept empty array
-            if isinstance(returntuple[cstValue], uno.ByteSequence):
+            if isinstance(returnvalue, uno.ByteSequence):
                 return ()
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
-            dat = SFScriptForge.SF_Basic.CDateFromUnoDateTime(returntuple[cstValue])
+            dat = SFScriptForge.SF_Basic.CDateFromUnoDateTime(returnvalue)
             return dat
         else:  # All other scalar values
             pass
-        return returntuple[cstValue]
+        return returnvalue
 
     @staticmethod
     def SetAttributeSynonyms():
@@ -429,8 +477,6 @@ class SFServices(object):
                 Conventionally, camel-cased and lower-cased synonyms are supported where relevant
                     a dictionary named 'serviceproperties' with keys = (proper-cased) property names and value = boolean
                         True = editable, False = read-only
-                    a list named 'localProperties' reserved to properties for internal use
-                        e.g. oDlg.Controls() is a method that uses '_Controls' to hold the list of available controls
                 When
                     forceGetProperty = False    # Standard behaviour
                 read-only serviceproperties are buffered in Python after their 1st get request to Basic
@@ -449,7 +495,8 @@ class SFServices(object):
         """
     # Python-Basic protocol constants and flags
     vbGet, vbLet, vbMethod, vbSet = 2, 4, 1, 8  # CallByName constants
-    flgPost = 32  # The method or the property implies a hardcoded post-processing
+    flgPost = 16  # The method or the property implies a hardcoded post-processing
+    flgDictArg = 32  # Invoked service method may contain a dict argument
     flgDateArg = 64  # Invoked service method may contain a date argument
     flgDateRet = 128  # Invoked service method can return a date
     flgArrayArg = 512  # 1st argument can be a 2D array
@@ -476,14 +523,12 @@ class SFServices(object):
         """
             Trivial initialization of internal properties
             If the subclass has its own __init()__ method, a call to this one should be its first statement.
-            Afterwards localProperties should be filled with the list of its own properties
             """
         self.objectreference = reference  # the index in the Python storage where the Basic object is stored
-        self.objecttype = objtype  # ('SF_String', 'DICTIONARY', ...)
+        self.objecttype = objtype  # ('SF_String', 'TIMER', ...)
         self.classmodule = classmodule  # Module (1), Class instance (2)
         self.name = name  # '' when no name
         self.internal = False  # True to exceptionally allow assigning a new value to a read-only property
-        self.localProperties = []  # the properties reserved for internal use (often empty)
 
     def __getattr__(self, name):
         """
@@ -495,7 +540,7 @@ class SFServices(object):
         if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
             name = self.propertysynonyms[name]
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms',
+            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms',
                         'forceGetProperty'):
                 pass
             elif name in self.serviceproperties:
@@ -519,10 +564,10 @@ class SFServices(object):
             Management of __dict__ is automatically done in the final usual object.__setattr__ method
             """
         if self.serviceimplementation == 'basic':
-            if name in ('serviceproperties', 'localProperties', 'internal_attributes', 'propertysynonyms',
+            if name in ('serviceproperties', 'internal_attributes', 'propertysynonyms',
                         'forceGetProperty'):
                 pass
-            elif name[0:2] == '__' or name in self.internal_attributes or name in self.localProperties:
+            elif name[0:2] == '__' or name in self.internal_attributes:
                 pass
             elif name in self.serviceproperties or name in self.propertysynonyms:
                 if name in self.propertysynonyms:  # Reset real name if argument provided in lower or camel case
@@ -534,9 +579,9 @@ class SFServices(object):
                     return
                 else:
                     raise AttributeError(
-                        "type object '" + self.objecttype + "' has no editable property '" + name + "'")
+                        "object of type '" + self.objecttype + "' has no editable property '" + name + "'")
             else:
-                raise AttributeError("type object '" + self.objecttype + "' has no property '" + name + "'")
+                raise AttributeError("object of type '" + self.objecttype + "' has no property '" + name + "'")
         object.__setattr__(self, name, value)
         return
 
@@ -547,7 +592,7 @@ class SFServices(object):
     def Dispose(self):
         if self.serviceimplementation == 'basic':
             if self.objectreference >= len(ScriptForge.servicesmodules):  # Do not dispose predefined module objects
-                self.ExecMethod(self.vbMethod, 'Dispose')
+                self.ExecMethod(self.vbMethod + self.flgPost, 'Dispose')
                 self.objectreference = -1
 
     def ExecMethod(self, flags = 0, methodname = '', *args):
@@ -593,6 +638,8 @@ class SFServices(object):
             if isinstance(value, datetime.datetime):
                 value = SFScriptForge.SF_Basic.CDateToUnoDateTime(value)
                 flag += self.flgDateArg
+            elif isinstance(value, dict):
+                flag += self.flgDictArg
             if repr(type(value)) == "<class 'pyuno'>":
                 flag += self.flgUno
             return self.EXEC(self.objectreference, flag, propertyname, value)
@@ -1128,7 +1175,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'FileExists', filename)
 
         def Files(self, foldername, filter = '', includesubfolders = False):
-            return self.ExecMethod(self.vbMethod, 'Files', foldername, filter, includesubfolders)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Files', foldername, filter, includesubfolders)
 
         def FolderExists(self, foldername):
             return self.ExecMethod(self.vbMethod, 'FolderExists', foldername)
@@ -1186,7 +1233,8 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'PickFolder', defaultfolder, freetext)
 
         def SubFolders(self, foldername, filter = '', includesubfolders = False):
-            return self.ExecMethod(self.vbMethod, 'SubFolders', foldername, filter, includesubfolders)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'SubFolders', foldername,
+                                   filter, includesubfolders)
 
         @classmethod
         def _ConvertFromUrl(cls, filename):
@@ -1303,15 +1351,6 @@ class SFScriptForge:
         @property
         def PythonVersion(self):
             return self.SIMPLEEXEC(self.py, 'PythonVersion')
-
-        @property
-        def UserData(self):
-            props = self.GetProperty('UserData')    # is an array of property values
-            if len(props) == 0:
-                return dict()
-            dico = CreateScriptService('Dictionary')
-            dico.ImportFromPropertyValues(props, overwrite = True)
-            return dico
 
     # #########################################################################
     # SF_Region CLASS
@@ -1457,6 +1496,9 @@ class SFScriptForge:
         def ExecutePythonScript(cls, scope = '', script = '', *args):
             return cls.SIMPLEEXEC(scope + '#' + script, *args)
 
+        def GetPDFExportOptions(self):
+            return self.ExecMethod(self.vbMethod, 'GetPDFExportOptions')
+
         def HasUnoMethod(self, unoobject, methodname):
             return self.ExecMethod(self.vbMethod, 'HasUnoMethod', unoobject, methodname)
 
@@ -1474,14 +1516,17 @@ class SFScriptForge:
         def SendMail(self, recipient, cc = '', bcc = '', subject = '', body = '', filenames = '', editmessage = True):
             return self.ExecMethod(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
 
+        def SetPDFExportOptions(self, pdfoptions):
+            return self.ExecMethod(self.vbMethod + self.flgDictArg, 'SetPDFExportOptions', pdfoptions)
+
         def UnoObjectType(self, unoobject):
             return self.ExecMethod(self.vbMethod, 'UnoObjectType', unoobject)
 
         def UnoMethods(self, unoobject):
-            return self.ExecMethod(self.vbMethod, 'UnoMethods', unoobject)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoMethods', unoobject)
 
         def UnoProperties(self, unoobject):
-            return self.ExecMethod(self.vbMethod, 'UnoProperties', unoobject)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'UnoProperties', unoobject)
 
         def WebService(self, uri):
             return self.ExecMethod(self.vbMethod, 'WebService', uri)
@@ -1531,10 +1576,11 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'IsUrl', inputstr)
 
         def SplitNotQuoted(self, inputstr, delimiter = ' ', occurrences = 0, quotechar = '"'):
-            return self.ExecMethod(self.vbMethod, 'SplitNotQuoted', inputstr, delimiter, occurrences, quotechar)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'SplitNotQuoted', inputstr, delimiter,
+                                   occurrences, quotechar)
 
         def Wrap(self, inputstr, width = 70, tabsize = 8):
-            return self.ExecMethod(self.vbMethod, 'Wrap', inputstr, width, tabsize)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Wrap', inputstr, width, tabsize)
 
     # #########################################################################
     # SF_TextStream CLASS
@@ -1647,8 +1693,6 @@ class SFScriptForge:
         def ActiveWindow(self):
             return self.ExecMethod(self.vbMethod, 'ActiveWindow')
 
-        activeWindow, activewindow = ActiveWindow, ActiveWindow
-
         def Activate(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'Activate', windowname)
 
@@ -1660,7 +1704,7 @@ class SFScriptForge:
             return self.ExecMethod(self.vbMethod, 'CreateDocument', documenttype, templatefile, hidden)
 
         def Documents(self):
-            return self.ExecMethod(self.vbMethod, 'Documents')
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Documents')
 
         def GetDocument(self, windowname = ''):
             return self.ExecMethod(self.vbMethod, 'GetDocument', windowname)
@@ -1868,13 +1912,13 @@ class SFDialogs:
 
         # Methods potentially executed while the dialog is in execution require the flgHardCode flag
         def Activate(self):
-            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Activate')
+            return self.ExecMethod(self.vbMethod, 'Activate')
 
         def Center(self, parent = ScriptForge.cstSymMissing):
             parentclasses = (SFDocuments.SF_Document, SFDocuments.SF_Base, SFDocuments.SF_Calc, SFDocuments.SF_Writer,
                              SFDialogs.SF_Dialog)
             parentobj = parent.objectreference if isinstance(parent, parentclasses) else parent
-            return self.ExecMethod(self.vbMethod + self.flgObject + self.flgHardCode, 'Center', parentobj)
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'Center', parentobj)
 
         def CloneControl(self, sourcename, controlname, left = 1, top = 1):
             return self.ExecMethod(self.vbMethod, 'CloneControl', sourcename, controlname, left, top)
@@ -1981,7 +2025,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'CreateTreeControl', controlname, place, border)
 
         def EndExecute(self, returnvalue):
-            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'EndExecute', returnvalue)
+            return self.ExecMethod(self.vbMethod, 'EndExecute', returnvalue)
 
         def Execute(self, modal = True):
             return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Execute', modal)
@@ -1994,7 +2038,7 @@ class SFDialogs:
             return self.ExecMethod(self.vbMethod, 'OrderTabs', tabslist, start, increment)
 
         def Resize(self, left = -99999, top = -99999, width = -1, height = -1):
-            return self.ExecMethod(self.vbMethod + self.flgHardCode, 'Resize', left, top, width, height)
+            return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
 
         def SetPageManager(self, pilotcontrols = '', tabcontrols = '', wizardcontrols = '', lastpage = 0):
             return self.ExecMethod(self.vbMethod, 'SetPageManager', pilotcontrols, tabcontrols, wizardcontrols,
@@ -2117,10 +2161,11 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Document'
         servicesynonyms = ('document', 'sfdocuments.document')
-        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
-                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
-                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
+        serviceproperties = dict(CustomProperties = True, Description = True, DocumentProperties = False,
+                                 DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
+                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
+                                 Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2242,11 +2287,12 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Calc'
         servicesynonyms = ('calc', 'sfdocuments.calc')
-        serviceproperties = dict(CurrentSelection = True, Sheets = False,
-                                 Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
-                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
-                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
+        serviceproperties = dict(CurrentSelection = True, CustomProperties = True, Description = True,
+                                 DocumentProperties = False, DocumentType = False, ExportFilters = False,
+                                 FileSystem = False, ImportFilters = False, IsBase = False, IsCalc = False,
+                                 IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, Keywords = True, Readonly = False, Sheets = False,  Subject = True,
+                                 Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2637,10 +2683,11 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Writer'
         servicesynonyms = ('writer', 'sfdocuments.writer')
-        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, FileSystem = False,
-                                 ImportFilters = False, IsBase = False, IsCalc = False, IsDraw = False,
-                                 IsFormDocument = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True, XComponent = False)
+        serviceproperties = dict(CustomProperties = True, Description = True, DocumentProperties = False,
+                                 DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
+                                 IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
+                                 Subject = True, Title = True, XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 

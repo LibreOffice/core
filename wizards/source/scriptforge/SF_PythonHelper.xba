@@ -565,6 +565,8 @@ Public Function _PythonDispatcher(ByRef BasicObject As Variant _
 &apos;&apos;&apos;	The invocation of the method can be a Property Get, Property Let or a usual call
 &apos;&apos;&apos;	NB: arguments and return values must not be 2D arrays
 &apos;&apos;&apos;	The implementation intends to be as AGNOSTIC as possible in terms of objects nature and methods called
+&apos;&apos;&apos;	The method returns the value effectively returned by the called component,
+&apos;&apos;&apos;	completed with additional metadata. The whole is packaged in a 1D array.
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		BasicObject: a module or a class instance - May also be the reserved string: &quot;SF_Services&quot;
 &apos;&apos;&apos;		CallType: one of the constants applicable to a CallByName statement + optional protocol flags
@@ -597,8 +599,10 @@ Dim sServiceName As String			&apos;	Alias of BasicObject.ServiceName
 Dim bBasicClass As Boolean			&apos;	True when BasicObject is a class
 Dim sLibrary As String				&apos;	Library where the object belongs to
 Dim bUno As Boolean					&apos;	Return value is a UNO object
+Dim bDict As Boolean				&apos;	Return value is a Basic SF_Dictionary class instance
+Dim oDict As Object					&apos;	SF_Dictionary class instance
 Dim oObjDesc As Object				&apos;	_ObjectDescriptor type
-Dim iDims As Integer				&apos;	# of dims of vReturn
+Dim iDims As Integer				&apos;	# of dims of vReturn when array
 Dim sess As Object					:	Set sess = ScriptForge.SF_Session
 Dim i As Long, j As Long
 
@@ -609,6 +613,8 @@ Const cstNoArgs = &quot;+++NOARGS+++&quot;, cstSymEmpty = &quot;+++EMPTY+++&quot
 &apos;	Determines the CallType
 Const vbGet = 2, vbLet = 4, vbMethod = 1, vbSet = 8
 &apos;	Protocol flags
+Const cstPost = 16			&apos;	Requires a hardcoded post-processing
+Const cstDictArg = 32		&apos;	May contain a Dictionary argument
 Const cstDateArg = 64		&apos;	May contain a date argument
 Const cstDateRet = 128		&apos;	Return value can be a date
 Const cstUno = 256			&apos;	Return value can be a UNO object
@@ -616,8 +622,8 @@ Const cstArgArray = 512		&apos;	Any argument can be a 2D array
 Const cstRetArray = 1024	&apos;	Return value can be an array
 Const cstObject = 2048		&apos;	1st argument is a Basic object when numeric
 Const cstHardCode = 4096	&apos;	Method must not be executed with CallByName()
-&apos;	Object nature in returned array
-Const objMODULE = 1, objCLASS = 2, objUNO = 3
+&apos;	Returned object nature
+Const objMODULE = 1, objCLASS = 2, objDICT = 3, objUNO = 4
 
 Check:
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
@@ -626,7 +632,10 @@ Check:
 	&apos;	Ignore Null basic objects (Null = Null or Nothing)
 	If IsNull(BasicObject) Or IsEmpty(BasicObject) Then GoTo Catch
 
-	&apos;	Reinterpret arguments one by one into vArgs, convert UNO date/times and conventional NoArgs/Empty/Null/Missing values
+	&apos;	Reinterpret arguments one by one into vArgs
+	&apos;	- convert UNO dates/times
+	&apos;	- identify conventional NoArgs/Empty/Null/Missing constants
+	&apos;	- convert arrays of property values into DictionarY
 	iNbArgs = -1
 	vArgs = Array()
 
@@ -642,7 +651,7 @@ Check:
 				If vArg &lt; 0 Or Not IsArray(_SF_.PythonStorage) Then GoTo Catch
 				If vArg &gt; UBound(_SF_.PythonStorage) Then GoTo Catch
 				vArg = _SF_.PythonStorage(vArg)
-			&apos;	Is argument a symbolic constant for Null, Empty, ... , or a date?
+			&apos;	Is argument a symbolic constant for Null, Empty, ... , or a date, or a dictionary ?
 			ElseIf VarType(vArg) = V_STRING Then
 				If Len(vArg) = 0 Then
 				ElseIf vArg = cstSymEmpty Then
@@ -654,6 +663,16 @@ Check:
 				End If
 			ElseIf  VarType(vArg) = V_OBJECT Then
 				If ( CallType And cstDateArg ) = cstDateArg Then vArg = CDateFromUnoDateTime(vArg)
+			ElseIf ( CallType And cstDictArg ) = cstDictArg Then
+				If IsArray(vArg) Then
+					If UBound(vArg) &gt;= 0 Then
+						If sess.UnoObjectType(vArg(0)) = &quot;com.sun.star.beans.PropertyValue&quot; Then
+							Set oDict = CreateScriptService(&quot;ScriptForge.Dictionary&quot;)
+							oDict.ImportFromPropertyValues(vArg, Overwrite := True)
+							vArg = oDict
+						End If
+					End If
+				End If
 			End If
 			iNbArgs = iNbArgs + 1
 
@@ -669,9 +688,12 @@ Try:
 	&apos;			(2) Python has tuples and tuple of tuples, not 2D arrays
 	&apos;			(3) Passing 2D arrays through a script provider always transform it into a sequence of sequences
 	&apos;			(4) The CallByName function takes exclusive control on the targeted object up to its exit
-	&apos;	1.	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
+	&apos;			(5) A script provider returns a Basic Date variable as Empty
+	&apos; RULES:
+	&apos;	1.	All methods in any module are invoked with CallByName
 	&apos;	2.	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
-	&apos;	3.	Methods in class modules are invoked with CallByName
+	&apos; EXCEPTIONS:
+	&apos;	3.	Methods in usual modules are called by ExecuteBasicScript() when they manipulate arrays
 	&apos;	4.	Methods in class modules using a 2D array or returning arrays, or methods using ParamArray,
 &apos;&apos;&apos;			are hardcoded as exceptions or are not implemented
 	&apos;	5.	Due to constraint (4), a predefined list of method calls must be hardcoded to avoid blocking use of CallByName
@@ -706,7 +728,7 @@ Try:
 				sObjectType = vBasicObject.ObjectType
 				bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
 			End If
-		
+
 		&apos;	Implement dispatching strategy
 		Case V_INTEGER
 			If BasicObject &lt; 0 Or Not IsArray(_SF_.PythonStorage) Then GoTo Catch
@@ -718,41 +740,9 @@ Try:
 			&apos;	Basic modules have type = &quot;SF_*&quot;
 			bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
 			sLibrary = Split(sServiceName, &quot;.&quot;)(0)
-			
-			&apos;	Methods in standard modules returning/passing a date are hardcoded as exceptions
-			If Not bBasicClass And ((CallType And vbMethod) = vbMethod) _
-					And (((CallType And cstDateRet) = cstDateRet) Or ((CallType And cstDateArg) = cstDateArg)) Then
-				Select Case sServiceName
-					Case &quot;ScriptForge.FileSystem&quot;
-						If Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
-					Case &quot;ScriptForge.Region&quot;
-						Select Case Script
-							Case &quot;DSTOffset&quot;		:	vReturn = SF_Region.DSTOffset(vArgs(0), vArgs(1), vArgs(2))
-							Case &quot;LocalDateTime&quot;	:	vReturn = SF_Region.LocalDateTime(vArgs(0), vArgs(1), vArgs(2))
-							Case &quot;UTCDateTime&quot;		:	vReturn = SF_Region.UTCDateTime(vArgs(0), vArgs(1), vArgs(2))
-							Case &quot;UTCNow&quot;			:	vReturn = SF_Region.UTCNow(vArgs(0), vArgs(1))
-							Case Else
-						End Select
-				End Select
 
-			&apos;	Methods in usual modules using a 2D array or returning arrays are hardcoded as exceptions
-			ElseIf Not bBasicClass And _
-						(((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
-				   		((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray) Then
-				&apos;	Not service related
-				If Script = &quot;Methods&quot; Then
-					vReturn = vBasicObject.Methods()
-				ElseIf Script = &quot;Properties&quot; Then
-					vReturn = vBasicObject.Properties()
-				Else
-					Select Case sServiceName
-						Case &quot;ScriptForge.Array&quot;
-							If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2), True)
-					End Select
-				End If
-
-			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
-			ElseIf Not bBasicClass And (CallType And vbMethod) = vbMethod Then
+			&apos;	Methods in standard modules are called by ExecuteBasicScript() when arrays are returned
+			If Not bBasicClass And (CallType And vbMethod) = vbMethod And (CallType And cstRetArray) = cstRetArray Then
 				sScript = sLibrary &amp; &quot;.&quot; &amp; sObjectType &amp; &quot;.&quot; &amp; Script
 				&apos;	Force validation in targeted function, not in ExecuteBasicScript()
 				_SF_.StackLevel = -1
@@ -768,13 +758,13 @@ Try:
 					Case 7	:	vReturn = sess.ExecuteBasicScript(, sScript, vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5), vArgs(6), vArgs(7))
 				End Select
 				_SF_.StackLevel = 0
-			
+
 			&apos;	Properties in any service are got and set with obj.GetProperty/SetProperty(...)
 			ElseIf (CallType And vbGet) = vbGet Then	&apos;	In some cases (Calc ...) GetProperty may have an argument
 				If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.GetProperty(Script) Else vReturn = vBasicObject.GetProperty(Script, vArgs(0))
 			ElseIf (CallType And vbLet) = vbLet Then
 				vReturn = vBasicObject.SetProperty(Script, vArgs(0))
-			
+
 			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions. Bug #138155
 			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
@@ -830,23 +820,18 @@ Try:
 							End Select
 					End Select
 				End If
-			
-			&apos;	Methods in class modules may better not be executed with CallByName()
+
+			&apos;	Specific methods in class modules may better not be executed with CallByName() because they do not return immediately
 			ElseIf bBasicClass And ((CallType And vbMethod) + (CallType And cstHardCode)) = vbMethod + cstHardCode Then
 				Select Case sServiceName
 					Case &quot;SFDialogs.Dialog&quot;
 						Select Case Script
-							Case &quot;Activate&quot;			:	vReturn = vBasicObject.Activate()
-							Case &quot;Center&quot;
-								If UBound(vArgs) &lt; 0 Then vReturn = vBasicObject.Center() Else vReturn = vBasicObject.Center(vArgs(0))
-							Case &quot;EndExecute&quot;		:	vReturn = vBasicObject.EndExecute(vArgs(0))
 							Case &quot;Execute&quot;			:	vReturn = vBasicObject.Execute(vArgs(0))
-							Case &quot;Resize&quot;			:	vReturn = vBasicObject.Resize(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
 						End Select
 				End Select
 
-			&apos;	Methods in class modules are invoked with CallByName
-			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then
+			&apos;	Methods in all modules are invoked with CallByName
+			ElseIf ((CallType And vbMethod) = vbMethod) Then
 				Select Case UBound(vArgs)
 					&apos;	Dirty alternatives to process usual and ParamArray cases
 					&apos;	But, up to ... how many ?
@@ -896,11 +881,11 @@ Try:
 			End If
 
 			&apos;	Post processing
-			If Script = &quot;Dispose&quot; Then
-				&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
-				Set _SF_.PythonStorage(BasicObject) = Nothing
-			ElseIf sServiceName = &quot;ScriptForge.Platform&quot; And Script = &quot;UserData&quot; Then
-				vReturn = vReturn.ConvertToPropertyValues()
+			If (CallType And cstPost) = cstPost Then
+				If Script = &quot;Dispose&quot; Then
+					&apos;	Special case: Dispose() must update the cache for class objects created in Python scripts
+					Set _SF_.PythonStorage(BasicObject) = Nothing
+				End If
 			End If
 		Case Else
 	End Select
@@ -909,6 +894,7 @@ Try:
 	vReturnArray = Array()
 	&apos;	Distinguish:	Basic object
 	&apos;					UNO object
+	&apos;					Dictionary
 	&apos;					Array
 	&apos;					Scalar
 	If IsArray(vReturn) Then
@@ -941,15 +927,25 @@ Try:
 			Set vReturnArray(0) = vReturn
 		Else
 			ReDim vReturnArray(0 To 5)
-			vReturnArray(0) = _SF_._AddToPythonSTorage(vReturn)
+			bDict = ( vReturn.ObjectType = &quot;DICTIONARY&quot; )
+			If bDict Then
+				vReturnArray(0) = vReturn.ConvertToPropertyValues()
+			Else
+				vReturnArray(0) = _SF_._AddToPythonSTorage(vReturn)
+			End If
 		End If
 		vReturnArray(1) = V_OBJECT
-		vReturnArray(2) = Iif(bUno, objUNO, Iif(bBasicClass, objCLASS, objMODULE))
+		Select Case True
+			Case bUno			:	vReturnArray(2) = objUNO
+			Case bDICT			:	vReturnArray(2) = objDICT
+			Case bBasicClass	:	vReturnArray(2) = objCLASS
+			Case Else			:	vReturnArray(2) = objMODULE
+		End Select
 		If Not bUno Then
 			vReturnArray(3) = vReturn.ObjectType
 			vReturnArray(4) = vReturn.ServiceName
 			vReturnArray(5) = &quot;&quot;
-			If vReturn.ObjectType &lt;&gt; &quot;SF_CalcReference&quot; Then	&apos;	Calc references are implemented as a Type ... End Type data structure
+			If vReturn.ObjectType &lt;&gt; &quot;SF_CalcReference&quot; And Not bDict Then	&apos;	Calc references are implemented as a Type ... End Type data structure
 				If SF_Array.Contains(vReturn.Properties(), &quot;Name&quot;, SortOrder := &quot;ASC&quot;) Then vReturnArray(5) = vReturn.Name
 			End If
 		End If
