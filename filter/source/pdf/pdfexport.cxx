@@ -49,7 +49,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentProperties2.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
@@ -470,7 +470,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
             if ( xDocumentPropsSupplier.is() )
             {
-                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
+                Reference< document::XDocumentProperties2 > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties(), UNO_QUERY );
                 if ( xDocumentProps.is() )
                 {
                     aContext.DocumentInfo.Title = xDocumentProps->getTitle();
@@ -481,6 +481,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         = xDocumentProps->getEditingCycles() < 1
                               ? xDocumentProps->getCreationDate()
                               : xDocumentProps->getModificationDate();
+                    aContext.DocumentInfo.Contributor = xDocumentProps->getContributor();
+                    aContext.DocumentInfo.Coverage = xDocumentProps->getCoverage();
+                    aContext.DocumentInfo.Identifier = xDocumentProps->getIdentifier();
+                    aContext.DocumentInfo.Publisher = xDocumentProps->getPublisher();
+                    aContext.DocumentInfo.Relation = xDocumentProps->getRelation();
+                    aContext.DocumentInfo.Rights = xDocumentProps->getRights();
+                    aContext.DocumentInfo.Source = xDocumentProps->getSource();
+                    aContext.DocumentInfo.Type = xDocumentProps->getType();
                 }
             }
 

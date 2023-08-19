@@ -13,6 +13,7 @@
 #include <rtl/string.hxx>
 #include <tools/stream.hxx>
 #include <memory>
+#include <vector>
 
 namespace vcl::pdf
 {
@@ -29,6 +30,14 @@ public:
     OString msProducer;
     OString msPDFVersion;
     OString msKeywords;
+    std::vector<OString> maContributor;
+    OString msCoverage;
+    OString msIdentifier;
+    std::vector<OString> maPublisher;
+    std::vector<OString> maRelation;
+    OString msRights;
+    OString msSource;
+    OString msType;
     OString m_sCreatorTool;
     OString m_sCreateDate;
 

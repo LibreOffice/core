@@ -2229,6 +2229,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	XDocumentInsertable \
 	XDocumentLanguages \
 	XDocumentProperties \
+	XDocumentProperties2 \
 	XDocumentPropertiesSupplier \
 	XDocumentRecovery \
 	XDocumentRecovery2 \

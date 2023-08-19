@@ -435,6 +435,7 @@ continue-numbering
 contour-path
 contour-polygon
 contrast
+contributor
 control
 conversion-mode
 conversion-type
@@ -459,6 +460,7 @@ countnums
 country
 country-asian
 country-complex
+coverage
 covered-table-cell
 create-date
 create-date-string
@@ -1536,6 +1538,7 @@ rel-height
 rel-height-rel
 rel-width
 rel-width-rel
+relation
 relative
 relative-tab-stop-position
 reln
@@ -1557,6 +1560,7 @@ right-text
 right-to-left
 right-arc
 right-circle
+rights
 ring
 role
 roll-from-bottom

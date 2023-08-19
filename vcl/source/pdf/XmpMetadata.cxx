@@ -65,7 +65,10 @@ void XmpMetadata::write()
         }
 
         // Dublin Core properties
-        if (!msTitle.isEmpty() || !msAuthor.isEmpty() || !msSubject.isEmpty())
+        if (!msTitle.isEmpty() || !msAuthor.isEmpty() || !msSubject.isEmpty()
+            || !maContributor.empty() || !msCoverage.isEmpty() || !msIdentifier.isEmpty()
+            || !maPublisher.empty() || !maRelation.empty() || !msRights.isEmpty()
+            || !msSource.isEmpty() || !msType.isEmpty())
         {
             aXmlWriter.startElement("rdf:Description");
             aXmlWriter.attribute("rdf:about", OString(""));
@@ -101,6 +104,80 @@ void XmpMetadata::write()
                 aXmlWriter.content(msSubject);
                 aXmlWriter.endElement();
                 aXmlWriter.endElement();
+                aXmlWriter.endElement();
+            }
+            if (!maContributor.empty())
+            {
+                aXmlWriter.startElement("dc:contributor");
+                aXmlWriter.startElement("rdf:Bag");
+                for (const OString& rContributor : maContributor)
+                {
+                    aXmlWriter.startElement("rdf:li");
+                    aXmlWriter.content(rContributor);
+                    aXmlWriter.endElement();
+                }
+                aXmlWriter.endElement();
+                aXmlWriter.endElement();
+            }
+            if (!msCoverage.isEmpty())
+            {
+                aXmlWriter.startElement("dc:coverage");
+                aXmlWriter.content(msCoverage);
+                aXmlWriter.endElement();
+            }
+            if (!msIdentifier.isEmpty())
+            {
+                aXmlWriter.startElement("dc:identifier");
+                aXmlWriter.content(msIdentifier);
+                aXmlWriter.endElement();
+            }
+            if (!maPublisher.empty())
+            {
+                aXmlWriter.startElement("dc:publisher");
+                aXmlWriter.startElement("rdf:Bag");
+                for (const OString& rPublisher : maPublisher)
+                {
+                    aXmlWriter.startElement("rdf:li");
+                    aXmlWriter.content(rPublisher);
+                    aXmlWriter.endElement();
+                }
+                aXmlWriter.endElement();
+                aXmlWriter.endElement();
+            }
+            if (!maRelation.empty())
+            {
+                aXmlWriter.startElement("dc:relation");
+                aXmlWriter.startElement("rdf:Bag");
+                for (const OString& rRelation : maRelation)
+                {
+                    aXmlWriter.startElement("rdf:li");
+                    aXmlWriter.content(rRelation);
+                    aXmlWriter.endElement();
+                }
+                aXmlWriter.endElement();
+                aXmlWriter.endElement();
+            }
+            if (!msRights.isEmpty())
+            {
+                aXmlWriter.startElement("dc:rights");
+                aXmlWriter.startElement("rdf:Alt");
+                aXmlWriter.startElement("rdf:li");
+                aXmlWriter.attribute("xml:lang", OString("x-default"));
+                aXmlWriter.content(msRights);
+                aXmlWriter.endElement();
+                aXmlWriter.endElement();
+                aXmlWriter.endElement();
+            }
+            if (!msSource.isEmpty())
+            {
+                aXmlWriter.startElement("dc:source");
+                aXmlWriter.content(msSource);
+                aXmlWriter.endElement();
+            }
+            if (!msType.isEmpty())
+            {
+                aXmlWriter.startElement("dc:type");
+                aXmlWriter.content(msType);
                 aXmlWriter.endElement();
             }
             aXmlWriter.endElement();

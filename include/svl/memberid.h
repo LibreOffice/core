@@ -74,11 +74,19 @@
 #define MID_DOCINFO_USEUSERDATA              0x31
 #define MID_DOCINFO_DELETEUSERDATA           0x32
 #define MID_DOCINFO_USETHUMBNAILSAVE         0x33
+#define MID_DOCINFO_CONTRIBUTOR              0x34
+#define MID_DOCINFO_COVERAGE                 0x35
+#define MID_DOCINFO_IDENTIFIER               0x38
+#define MID_DOCINFO_PUBLISHER                0x3a
+#define MID_DOCINFO_RELATION                 0x3b
+#define MID_DOCINFO_RIGHTS                   0x3c
+#define MID_DOCINFO_SOURCE                   0x3d
+#define MID_DOCINFO_TYPE                     0x3e
 
 // only for FastPropertySet
-#define MID_TYPE                             0x38
-#define MID_VALUE                            0x39
-#define MID_VALUESET                         0x40
+#define MID_TYPE                             0x3f
+#define MID_VALUE                            0x40
+#define MID_VALUESET                         0x41
 
 #endif
 

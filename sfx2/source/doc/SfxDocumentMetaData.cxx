@@ -24,6 +24,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentProperties2.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -123,7 +124,7 @@ typedef std::vector<std::vector<std::pair<OUString, OUString> > >
 
 typedef ::cppu::WeakComponentImplHelper<
             css::lang::XServiceInfo,
-            css::document::XDocumentProperties,
+            css::document::XDocumentProperties2,
             css::lang::XInitialization,
             css::util::XCloneable,
             css::util::XModifiable,
@@ -210,6 +211,23 @@ public:
         const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
     virtual void SAL_CALL storeToMedium(const OUString & URL,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getContributor() override;
+    virtual void SAL_CALL setContributor(const css::uno::Sequence< OUString >& the_value) override;
+    virtual OUString SAL_CALL getCoverage() override;
+    virtual void SAL_CALL setCoverage(const OUString & the_value) override;
+    virtual OUString SAL_CALL getIdentifier() override;
+    virtual void SAL_CALL setIdentifier(const OUString & the_value) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getPublisher() override;
+    virtual void SAL_CALL setPublisher(const css::uno::Sequence< OUString > & the_value) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getRelation() override;
+    virtual void SAL_CALL setRelation(const css::uno::Sequence< OUString > & the_value) override;
+    virtual OUString SAL_CALL getRights() override;
+    virtual void SAL_CALL setRights(const OUString & the_value) override;
+    virtual OUString SAL_CALL getSource() override;
+    virtual void SAL_CALL setSource(const OUString& the_value) override;
+    virtual OUString SAL_CALL getType() override;
+    virtual void SAL_CALL setType(const OUString& the_value) override;
+
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(
@@ -411,14 +429,25 @@ const char* s_stdMeta[] = {
     "meta:editing-cycles",      // nonNegativeInteger
     "meta:editing-duration",    // duration
     "meta:document-statistic",  // ... // note: statistic is singular, no s!
+    "dc:coverage",
+    "dc:identifier",
+    "dc:rights",
+    "dc:source",
+    "dc:type",
     nullptr
 };
 
 constexpr OUStringLiteral sMetaKeyword = u"meta:keyword";
 constexpr OUStringLiteral sMetaUserDefined = u"meta:user-defined";
+constexpr OUStringLiteral sDCContributor = u"dc:contributor";
+constexpr OUStringLiteral sDCPublisher = u"dc:publisher";
+constexpr OUStringLiteral sDCRelation = u"dc:relation";
 constexpr rtl::OUStringConstExpr s_stdMetaList[] {
     sMetaKeyword,             // string*
     sMetaUserDefined,        // ...*
+    sDCContributor, // string*
+    sDCPublisher, // string*
+    sDCRelation, // string*
 };
 
 constexpr OUStringLiteral s_nsXLink = u"http://www.w3.org/1999/xlink";
@@ -1451,6 +1480,110 @@ SfxDocumentMetaData::setKeywords(
         g.clear();
         setModified(true);
     }
+}
+
+// css::document::XDocumentProperties2
+css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getContributor()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaList("dc:contributor");
+}
+
+void SAL_CALL SfxDocumentMetaData::setContributor(const css::uno::Sequence<OUString>& the_value)
+{
+    ::osl::ClearableMutexGuard g(m_aMutex);
+    if (setMetaList("dc:contributor", the_value, nullptr))
+    {
+        g.clear();
+        setModified(true);
+    }
+}
+
+OUString SAL_CALL SfxDocumentMetaData::getCoverage()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaText("dc:coverage");
+}
+
+void SAL_CALL SfxDocumentMetaData::setCoverage(const OUString& the_value)
+{
+    setMetaTextAndNotify("dc:coverage", the_value);
+}
+
+OUString SAL_CALL SfxDocumentMetaData::getIdentifier()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaText("dc:identifier");
+}
+
+void SAL_CALL SfxDocumentMetaData::setIdentifier(const OUString& the_value)
+{
+    setMetaTextAndNotify("dc:identifier", the_value);
+}
+
+css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getPublisher()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaList("dc:publisher");
+}
+
+void SAL_CALL SfxDocumentMetaData::setPublisher(const css::uno::Sequence<OUString>& the_value)
+{
+    ::osl::ClearableMutexGuard g(m_aMutex);
+    if (setMetaList("dc:publisher", the_value, nullptr))
+    {
+        g.clear();
+        setModified(true);
+    }
+}
+
+css::uno::Sequence<OUString> SAL_CALL SfxDocumentMetaData::getRelation()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaList("dc:relation");
+}
+
+void SAL_CALL SfxDocumentMetaData::setRelation(const css::uno::Sequence<OUString>& the_value)
+{
+    ::osl::ClearableMutexGuard g(m_aMutex);
+    if (setMetaList("dc:relation", the_value, nullptr))
+    {
+        g.clear();
+        setModified(true);
+    }
+}
+
+OUString SAL_CALL SfxDocumentMetaData::getRights()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaText("dc:rights");
+}
+
+void SAL_CALL SfxDocumentMetaData::setRights(const OUString& the_value)
+{
+    setMetaTextAndNotify("dc:rights", the_value);
+}
+
+OUString SAL_CALL SfxDocumentMetaData::getSource()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaText("dc:source");
+}
+
+void SAL_CALL SfxDocumentMetaData::setSource(const OUString& the_value)
+{
+    setMetaTextAndNotify("dc:source", the_value);
+}
+
+OUString SAL_CALL SfxDocumentMetaData::getType()
+{
+    ::osl::MutexGuard g(m_aMutex);
+    return getMetaText("dc:type");
+}
+
+void SAL_CALL SfxDocumentMetaData::setType(const OUString& the_value)
+{
+    setMetaTextAndNotify("dc:type", the_value);
 }
 
 css::lang::Locale SAL_CALL

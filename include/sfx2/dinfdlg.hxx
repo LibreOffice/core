@@ -72,6 +72,14 @@ private:
     sal_Int32                    m_EditingDuration;
     OUString                     m_Description;
     OUString                     m_Keywords;
+    OUString                     m_Contributor;
+    OUString                     m_Coverage;
+    OUString                     m_Identifier;
+    OUString                     m_Publisher;
+    OUString                     m_Relation;
+    OUString                     m_Rights;
+    OUString                     m_Source;
+    OUString                     m_Type;
     OUString                     m_Subject;
     OUString                     m_Title;
     bool                         m_bHasTemplate;
@@ -120,6 +128,22 @@ public:
     void        setDescription(const OUString& i_val) { m_Description = i_val; }
     const OUString& getKeywords() const { return m_Keywords; }
     void        setKeywords(const OUString& i_val) { m_Keywords = i_val; }
+    const OUString& getContributor() const { return m_Contributor; }
+    void        setContributor(const OUString& i_val) { m_Contributor = i_val; }
+    const OUString& getCoverage() const { return m_Coverage; }
+    void        setCoverage(const OUString& i_val) { m_Coverage = i_val; }
+    const OUString& getIdentifier() const { return m_Identifier; }
+    void        setIdentifier(const OUString& i_val) { m_Identifier = i_val; }
+    const OUString& getPublisher() const { return m_Publisher; }
+    void        setPublisher(const OUString& i_val) { m_Publisher = i_val; }
+    const OUString& getRelation() const { return m_Relation; }
+    void        setRelation(const OUString& i_val) { m_Relation = i_val; }
+    const OUString& getRights() const { return m_Rights; }
+    void        setRights(const OUString& i_val) { m_Rights = i_val; }
+    const OUString& getSource() const { return m_Source; }
+    void        setSource(const OUString& i_val) { m_Source = i_val; }
+    const OUString& getType() const { return m_Type; }
+    void        setType(const OUString& i_val) { m_Type = i_val; }
     const OUString& getSubject() const { return m_Subject; }
     void        setSubject(const OUString& i_val) { m_Subject = i_val; }
     const OUString& getTitle() const { return m_Title; }
@@ -217,6 +241,14 @@ private:
     std::unique_ptr<weld::Entry> m_xTitleEd;
     std::unique_ptr<weld::Entry> m_xThemaEd;
     std::unique_ptr<weld::Entry> m_xKeywordsEd;
+    std::unique_ptr<weld::Entry> m_xContributorEd;
+    std::unique_ptr<weld::Entry> m_xCoverageEd;
+    std::unique_ptr<weld::Entry> m_xIdentifierEd;
+    std::unique_ptr<weld::Entry> m_xPublisherEd;
+    std::unique_ptr<weld::Entry> m_xRelationEd;
+    std::unique_ptr<weld::Entry> m_xRightsEd;
+    std::unique_ptr<weld::Entry> m_xSourceEd;
+    std::unique_ptr<weld::Entry> m_xTypeEd;
     std::unique_ptr<weld::TextView> m_xCommentEd;
 
     virtual bool            FillItemSet( SfxItemSet* ) override;

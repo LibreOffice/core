@@ -59,7 +59,7 @@
 #include <com/sun/star/util/DateTimeWithTimezone.hpp>
 #include <com/sun/star/util/DateWithTimezone.hpp>
 #include <com/sun/star/util/Duration.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentProperties2.hpp>
 #include <com/sun/star/document/CmisProperty.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -215,6 +215,16 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
     , m_bUseUserData( bIs )
     , m_bUseThumbnailSave( _bIs )
 {
+    Reference< document::XDocumentProperties2 > xDocProps2(i_xDocProps, UNO_QUERY);
+    m_Contributor = ::comphelper::string::convertCommaSeparated(xDocProps2->getContributor());
+    m_Coverage = xDocProps2->getCoverage();
+    m_Identifier = xDocProps2->getIdentifier();
+    m_Publisher = ::comphelper::string::convertCommaSeparated(xDocProps2->getPublisher());
+    m_Relation = ::comphelper::string::convertCommaSeparated(xDocProps2->getRelation());
+    m_Rights = xDocProps2->getRights();
+    m_Source = xDocProps2->getSource();
+    m_Type = xDocProps2->getType();
+
     try
     {
         Reference< beans::XPropertyContainer > xContainer = i_xDocProps->getUserDefinedProperties();
@@ -260,6 +270,14 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     , m_EditingDuration( rItem.getEditingDuration() )
     , m_Description( rItem.getDescription() )
     , m_Keywords( rItem.getKeywords() )
+    , m_Contributor(rItem.getContributor())
+    , m_Coverage(rItem.getCoverage())
+    , m_Identifier(rItem.getIdentifier())
+    , m_Publisher(rItem.getPublisher())
+    , m_Relation(rItem.getRelation())
+    , m_Rights(rItem.getRights())
+    , m_Source(rItem.getSource())
+    , m_Type(rItem.getType())
     , m_Subject( rItem.getSubject() )
     , m_Title( rItem.getTitle() )
     , m_bHasTemplate( rItem.m_bHasTemplate )
@@ -306,6 +324,14 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_EditingDuration      == rInfoItem.m_EditingDuration   &&
          m_Description          == rInfoItem.m_Description       &&
          m_Keywords             == rInfoItem.m_Keywords          &&
+         m_Contributor          == rInfoItem.m_Contributor       &&
+         m_Coverage             == rInfoItem.m_Coverage          &&
+         m_Identifier           == rInfoItem.m_Identifier        &&
+         m_Publisher            == rInfoItem.m_Publisher         &&
+         m_Relation             == rInfoItem.m_Relation          &&
+         m_Rights               == rInfoItem.m_Rights            &&
+         m_Source               == rInfoItem.m_Source            &&
+         m_Type                 == rInfoItem.m_Type              &&
          m_Subject              == rInfoItem.m_Subject           &&
          m_Title                == rInfoItem.m_Title             &&
          comphelper::ContainerUniquePtrEquals(m_aCustomProperties, rInfoItem.m_aCustomProperties) &&
@@ -350,8 +376,18 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
     i_xDocProps->setDescription(getDescription());
     i_xDocProps->setKeywords(
         ::comphelper::string::convertCommaSeparated(getKeywords()));
-    i_xDocProps->setSubject(getSubject());
-    i_xDocProps->setTitle(getTitle());
+
+    Reference<document::XDocumentProperties2> xDocProps2(i_xDocProps, UNO_QUERY);
+    xDocProps2->setContributor(::comphelper::string::convertCommaSeparated(getContributor()));
+    xDocProps2->setCoverage(getCoverage());
+    xDocProps2->setIdentifier(getIdentifier());
+    xDocProps2->setPublisher(::comphelper::string::convertCommaSeparated(getPublisher()));
+    xDocProps2->setRelation(::comphelper::string::convertCommaSeparated(getRelation()));
+    xDocProps2->setRights(getRights());
+    xDocProps2->setSource(getSource());
+    xDocProps2->setType(getType());
+    xDocProps2->setSubject(getSubject());
+    xDocProps2->setTitle(getTitle());
 
     // this is necessary in case of replaying a recorded macro:
     // in this case, the macro may contain the 4 old user-defined DocumentInfo
@@ -585,6 +621,14 @@ SfxDocumentDescPage::SfxDocumentDescPage(weld::Container* pPage, weld::DialogCon
     , m_xTitleEd(m_xBuilder->weld_entry("title"))
     , m_xThemaEd(m_xBuilder->weld_entry("subject"))
     , m_xKeywordsEd(m_xBuilder->weld_entry("keywords"))
+    , m_xContributorEd(m_xBuilder->weld_entry("contributor"))
+    , m_xCoverageEd(m_xBuilder->weld_entry("coverage"))
+    , m_xIdentifierEd(m_xBuilder->weld_entry("identifier"))
+    , m_xPublisherEd(m_xBuilder->weld_entry("publisher"))
+    , m_xRelationEd(m_xBuilder->weld_entry("relation"))
+    , m_xRightsEd(m_xBuilder->weld_entry("rights"))
+    , m_xSourceEd(m_xBuilder->weld_entry("source"))
+    , m_xTypeEd(m_xBuilder->weld_entry("type"))
     , m_xCommentEd(m_xBuilder->weld_text_view("comments"))
 {
     m_xCommentEd->set_size_request(m_xKeywordsEd->get_preferred_size().Width(),
@@ -606,8 +650,18 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     const bool bTitleMod = m_xTitleEd->get_value_changed_from_saved();
     const bool bThemeMod = m_xThemaEd->get_value_changed_from_saved();
     const bool bKeywordsMod = m_xKeywordsEd->get_value_changed_from_saved();
+    const bool bContributorMod = m_xContributorEd->get_value_changed_from_saved();
+    const bool bCoverageMod = m_xCoverageEd->get_value_changed_from_saved();
+    const bool bIdentifierMod = m_xIdentifierEd->get_value_changed_from_saved();
+    const bool bPublisherMod = m_xPublisherEd->get_value_changed_from_saved();
+    const bool bRelationMod = m_xRelationEd->get_value_changed_from_saved();
+    const bool bRightsMod = m_xRightsEd->get_value_changed_from_saved();
+    const bool bSourceMod = m_xSourceEd->get_value_changed_from_saved();
+    const bool bTypeMod = m_xTypeEd->get_value_changed_from_saved();
     const bool bCommentMod = m_xCommentEd->get_value_changed_from_saved();
-    if ( !( bTitleMod || bThemeMod || bKeywordsMod || bCommentMod ) )
+    if (!(bTitleMod || bThemeMod || bKeywordsMod || bTitleMod || bThemeMod || bKeywordsMod
+          || bContributorMod || bCoverageMod || bIdentifierMod || bPublisherMod || bRelationMod
+          || bRightsMod || bSourceMod || bTypeMod || bCommentMod))
     {
         return false;
     }
@@ -640,6 +694,38 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
     {
         pInfo->setKeywords( m_xKeywordsEd->get_text() );
     }
+    if (bContributorMod)
+    {
+        pInfo->setContributor(m_xContributorEd->get_text());
+    }
+    if (bCoverageMod)
+    {
+        pInfo->setCoverage(m_xCoverageEd->get_text());
+    }
+    if (bIdentifierMod)
+    {
+        pInfo->setIdentifier(m_xIdentifierEd->get_text());
+    }
+    if (bPublisherMod)
+    {
+        pInfo->setPublisher(m_xPublisherEd->get_text());
+    }
+    if (bRelationMod)
+    {
+        pInfo->setRelation(m_xRelationEd->get_text());
+    }
+    if (bRightsMod)
+    {
+        pInfo->setRights(m_xRightsEd->get_text());
+    }
+    if (bSourceMod)
+    {
+        pInfo->setSource(m_xSourceEd->get_text());
+    }
+    if (bTypeMod)
+    {
+        pInfo->setType(m_xTypeEd->get_text());
+    }
     if ( bCommentMod )
     {
         pInfo->setDescription( m_xCommentEd->get_text() );
@@ -660,11 +746,27 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
     m_xTitleEd->set_text(m_pInfoItem->getTitle());
     m_xThemaEd->set_text(m_pInfoItem->getSubject());
     m_xKeywordsEd->set_text(m_pInfoItem->getKeywords());
+    m_xContributorEd->set_text(m_pInfoItem->getContributor());
+    m_xCoverageEd->set_text(m_pInfoItem->getCoverage());
+    m_xIdentifierEd->set_text(m_pInfoItem->getIdentifier());
+    m_xPublisherEd->set_text(m_pInfoItem->getPublisher());
+    m_xRelationEd->set_text(m_pInfoItem->getRelation());
+    m_xRightsEd->set_text(m_pInfoItem->getRights());
+    m_xSourceEd->set_text(m_pInfoItem->getSource());
+    m_xTypeEd->set_text(m_pInfoItem->getType());
     m_xCommentEd->set_text(m_pInfoItem->getDescription());
 
     m_xTitleEd->save_value();
     m_xThemaEd->save_value();
     m_xKeywordsEd->save_value();
+    m_xContributorEd->save_value();
+    m_xCoverageEd->save_value();
+    m_xIdentifierEd->save_value();
+    m_xPublisherEd->save_value();
+    m_xRelationEd->save_value();
+    m_xRightsEd->save_value();
+    m_xSourceEd->save_value();
+    m_xTypeEd->save_value();
     m_xCommentEd->save_value();
 
     const SfxBoolItem* pROItem = SfxItemSet::GetItem<SfxBoolItem>(rSet, SID_DOC_READONLY, false);
@@ -673,6 +775,14 @@ void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
         m_xTitleEd->set_editable(false);
         m_xThemaEd->set_editable(false);
         m_xKeywordsEd->set_editable(false);
+        m_xContributorEd->set_editable(false);
+        m_xCoverageEd->set_editable(false);
+        m_xIdentifierEd->set_editable(false);
+        m_xPublisherEd->set_editable(false);
+        m_xRelationEd->set_editable(false);
+        m_xRightsEd->set_editable(false);
+        m_xSourceEd->set_editable(false);
+        m_xTypeEd->set_editable(false);
         m_xCommentEd->set_editable(false);
     }
 }

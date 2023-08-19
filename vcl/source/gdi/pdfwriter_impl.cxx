@@ -5930,9 +5930,25 @@ static void lcl_assignMeta(std::u16string_view aValue, OString& aMeta)
 {
     if (!aValue.empty())
     {
-        OUString aTempString = comphelper::string::encodeForXml(aValue);
-        aMeta = OUStringToOString(aTempString, RTL_TEXTENCODING_UTF8);
+        aMeta = OUStringToOString(comphelper::string::encodeForXml(aValue), RTL_TEXTENCODING_UTF8);
     }
+}
+
+static void lcl_assignMeta(const css::uno::Sequence<OUString>& rValues, std::vector<OString>& rMeta)
+{
+    if (!rValues.hasElements())
+        return;
+
+    std::vector<OString> aNewMetaVector;
+    aNewMetaVector.reserve(rValues.getLength());
+
+    for (const OUString& rValue : rValues)
+    {
+        aNewMetaVector.emplace_back(
+            OUStringToOString(comphelper::string::encodeForXml(rValue), RTL_TEXTENCODING_UTF8));
+    }
+
+    rMeta = std::move(aNewMetaVector);
 }
 
 // emits the document metadata
@@ -5963,6 +5979,14 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
         aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
         lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
+        lcl_assignMeta(m_aContext.DocumentInfo.Contributor, aMetadata.maContributor);
+        lcl_assignMeta(m_aContext.DocumentInfo.Coverage, aMetadata.msCoverage);
+        lcl_assignMeta(m_aContext.DocumentInfo.Identifier, aMetadata.msIdentifier);
+        lcl_assignMeta(m_aContext.DocumentInfo.Publisher, aMetadata.maPublisher);
+        lcl_assignMeta(m_aContext.DocumentInfo.Relation, aMetadata.maRelation);
+        lcl_assignMeta(m_aContext.DocumentInfo.Rights, aMetadata.msRights);
+        lcl_assignMeta(m_aContext.DocumentInfo.Source, aMetadata.msSource);
+        lcl_assignMeta(m_aContext.DocumentInfo.Type, aMetadata.msType);
         lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
         aMetadata.m_sCreateDate = m_aCreationMetaDateString;
 
