@@ -4432,6 +4432,52 @@ struct ScDependantsCalculator
         return nRowLen;
     }
 
+    // Because Lookup will extend the Result Vector under certain cirumstances listed at:
+    // https://wiki.documentfoundation.org/Documentation/Calc_Functions/LOOKUP
+    // then if the Lookup has a Result Vector only accept the Lookup for parallelization
+    // of the Result Vector has the same dimensions as the Search Vector.
+    bool LookupResultVectorMismatch(sal_Int32 nTokenIdx)
+    {
+        if (nTokenIdx >= 3)
+        {
+            FormulaToken** pRPNArray = mrCode.GetCode();
+            if (pRPNArray[nTokenIdx - 1]->GetOpCode() == ocPush &&   // <- result vector
+                pRPNArray[nTokenIdx - 2]->GetOpCode() == ocPush &&   // <- search vector
+                pRPNArray[nTokenIdx - 2]->GetType() == svDoubleRef &&
+                pRPNArray[nTokenIdx - 3]->GetOpCode() == ocPush)     // <- search criterion
+            {
+                auto res = pRPNArray[nTokenIdx - 1];
+                // If Result vector is just a single cell reference
+                // LOOKUP extends it as a column vector.
+                if (res->GetType() == svSingleRef)
+                    return true;
+
+                // If Result vector is a cell range and the match position
+                // falls outside its length, it gets automatically extended
+                // to the length of Search vector, but in the direction of
+                // Result vector.
+                if (res->GetType() == svDoubleRef)
+                {
+                    ScComplexRefData aRef1 = *res->GetDoubleRef();
+                    ScComplexRefData aRef2 = *pRPNArray[nTokenIdx - 2]->GetDoubleRef();
+                    ScRange resultRange = aRef1.toAbs(mrDoc, mrPos);
+                    ScRange sourceRange = aRef2.toAbs(mrDoc, mrPos);
+
+                    SCROW nResultRows = resultRange.aEnd.Row() - resultRange.aStart.Row();
+                    SCROW nSourceRows = sourceRange.aEnd.Row() - sourceRange.aStart.Row();
+                    if (nResultRows != nSourceRows)
+                        return true;
+
+                    SCCOL nResultCols = resultRange.aEnd.Col() - resultRange.aStart.Col();
+                    SCCOL nSourceCols = sourceRange.aEnd.Col() - sourceRange.aStart.Col();
+                    if (nResultCols != nSourceCols)
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
     bool DoIt(ScRangeList* pSuccessfulDependencies, ScAddress* pDirtiedAddress)
     {
         // Partially from ScGroupTokenConverter::convert in sc/source/core/data/grouptokenconverter.cxx
@@ -4458,6 +4504,12 @@ struct ScDependantsCalculator
                 OpCode nOpCode = p->GetOpCode();
                 if (nOpCode == ocIf || nOpCode == ocIfs_MS || nOpCode == ocSwitch_MS)
                     return false;
+            }
+
+            if (p->GetOpCode() == ocLookup && LookupResultVectorMismatch(nTokenIdx))
+            {
+                SAL_INFO("sc.core.formulacell", "Lookup Result Vector size doesn't match Search Vector");
+                return false;
             }
 
             switch (p->GetType())
