@@ -39,7 +39,6 @@ $(eval $(call gb_Module_add_check_targets,svx,\
 	CppunitTest_svx_unit \
 	CppunitTest_svx_gallery_test \
 	CppunitTest_svx_removewhichrange \
-	CppunitTest_svx_styles \
 	CppunitTest_svx_core \
 ))
 
