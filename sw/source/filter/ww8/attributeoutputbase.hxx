@@ -618,6 +618,7 @@ protected:
     virtual void FormatTextGrid( const SwTextGridItem& ) = 0;
 
     /// Sfx item RES_LINENUMBER
+    void FormatLineNumberingBase(const SwFormatLineNumber&);
     virtual void FormatLineNumbering( const SwFormatLineNumber& ) = 0;
 
     /// Sfx item RES_FRAMEDIR

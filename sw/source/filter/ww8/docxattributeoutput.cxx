@@ -9869,6 +9869,8 @@ void DocxAttributeOutput::FormatLineNumbering( const SwFormatLineNumber& rNumber
 {
     if ( !rNumbering.IsCount( ) )
         m_pSerializer->singleElementNS(XML_w, XML_suppressLineNumbers);
+    else
+        m_pSerializer->singleElementNS(XML_w, XML_suppressLineNumbers, FSNS(XML_w, XML_val), "0");
 }
 
 void DocxAttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDirection )

@@ -3774,6 +3774,40 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
     m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), aZeroArr, aZeroArr+3);
 }
 
+void AttributeOutputBase::FormatLineNumberingBase(const SwFormatLineNumber& rNumbering)
+{
+    // always write out suppressLineNumberings - even if it matches the parent,
+    // so that even if the parent is modified, special styles/situations won't lose that suppression
+    if (!rNumbering.IsCount())
+    {
+        FormatLineNumbering(rNumbering);
+        return;
+    }
+
+    // Don't spam suppressLineNumberings = false - that is the default when not specified at all
+    if (auto pNd = dynamic_cast<const SwContentNode*>(GetExport().m_pOutFormatNode)) //paragraph
+    {
+        // useless IsCount can be added to paragraph when specifying MID_LINENUMBER_STARTVALUE
+        const auto& rSet = static_cast<SwTextFormatColl&>(pNd->GetAnyFormatColl()).GetAttrSet();
+        const SwFormatLineNumber& rInherited = rSet.GetLineNumber();
+        if (rInherited.IsCount() && rInherited.GetStartValue() != rNumbering.GetStartValue())
+            return; // same IsCount as parent style
+    }
+    else if (GetExport().m_bStyDef) //style
+    {
+        if (GetExport().m_pCurrentStyle && GetExport().m_pCurrentStyle->DerivedFrom())
+        {
+            const auto& rSet = GetExport().m_pCurrentStyle->DerivedFrom()->GetAttrSet();
+            if (rSet.GetLineNumber().IsCount())
+                return; // same as parent style
+        }
+        else
+            return; // same as default value
+    }
+
+    FormatLineNumbering(rNumbering);
+}
+
 void AttributeOutputBase::ParaOutlineLevelBase( const SfxUInt16Item& rItem )
 {
     sal_uInt16 nOutLvl = rItem.GetValue();
@@ -5749,7 +5783,7 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             FormatTextGrid( static_cast< const SwTextGridItem& >( rHt ) );
             break;
         case RES_LINENUMBER:
-            FormatLineNumbering( static_cast< const SwFormatLineNumber& >( rHt ) );
+            FormatLineNumberingBase(static_cast<const SwFormatLineNumber&>(rHt));
             break;
         case RES_FRAMEDIR:
             FormatFrameDirection( static_cast< const SvxFrameDirectionItem& >( rHt ) );

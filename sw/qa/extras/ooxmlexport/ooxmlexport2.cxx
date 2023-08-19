@@ -882,6 +882,13 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
     uno::Reference< text::XTextRange > paragraph1 = getParagraph( 1 );
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2),
                          getProperty<sal_Int32>(paragraph1, "ParaLineNumberStartValue"));
+
+    if (!isExported())
+        return;
+
+    // ensure unnecessary suppressLineNumbers entry is not created.
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "//w:p[1]/w:pPr/w:suppressLineNumbers", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testN822175)

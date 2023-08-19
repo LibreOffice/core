@@ -1145,6 +1145,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf128290)
     xmlDocUniquePtr pXml = parseExport("word/document.xml");
     CPPUNIT_ASSERT(pXml);
     assertXPath(pXml, "/w:document/w:body/w:tbl/w:tblPr/w:tblLayout", "type", "fixed");
+
+    // ensure unnecessary suppressLineNumbers entry is not created.
+    xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressLineNumbers", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf120394, "tdf120394.docx")
