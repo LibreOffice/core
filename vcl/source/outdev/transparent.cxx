@@ -30,7 +30,6 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/skia/SkiaHelper.hxx>
 
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <pdf/pdfwriter_impl.hxx>
@@ -648,18 +647,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
                     AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
-#if HAVE_FEATURE_SKIA
-                    // One of the alpha masks is inverted from what
+                    // The alpha mask is inverted from what
                     // is expected so invert it again
-                    if ( SkiaHelper::isVCLSkiaEnabled() )
-                    {
-                        aAlpha.Invert(); // convert to alpha
-                    }
-                    else
-#endif
-                    {
-                        aPaintAlpha.Invert(); // convert to alpha
-                    }
+                    aAlpha.Invert(); // convert to alpha
                     aAlpha.BlendWith(aPaintAlpha);
 
                     xVDev.disposeAndClear();
@@ -694,18 +684,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
                     AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
-#if HAVE_FEATURE_SKIA
-                    // One of the alpha masks is inverted from what
+                    // The alpha mask is inverted from what
                     // is expected so invert it again
-                    if ( SkiaHelper::isVCLSkiaEnabled() )
-                    {
-                        aAlpha.Invert(); // convert to alpha
-                    }
-                    else
-#endif
-                    {
-                        aPaintAlpha.Invert(); // convert to alpha
-                    }
+                    aAlpha.Invert(); // convert to alpha
                     aAlpha.BlendWith(aPaintAlpha);
 
                     xVDev.disposeAndClear();

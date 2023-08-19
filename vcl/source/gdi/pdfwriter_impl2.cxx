@@ -499,23 +499,19 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
                                 AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
-#if HAVE_FEATURE_SKIA
-                                // One of the alpha masks is inverted from what
+                                // The alpha mask is inverted from what
                                 // is expected so invert it again
-                                if ( SkiaHelper::isVCLSkiaEnabled() )
-                                {
-                                    aAlpha.Invert(); // convert to alpha
-                                }
-                                else
-#endif
-                                {
-                                    aPaintAlpha.Invert(); // convert to alpha
-                                }
+                                aAlpha.Invert(); // convert to alpha
                                 aAlpha.BlendWith(aPaintAlpha);
 #if HAVE_FEATURE_SKIA
                                 if ( !SkiaHelper::isVCLSkiaEnabled() )
 #endif
                                 {
+                                    // When Skia is disabled, the alpha mask
+                                    // must be inverted a second time. To test
+                                    // this code, export the following
+                                    // document to PDF:
+                                    //   https://bugs.documentfoundation.org/attachment.cgi?id=188084
                                     aAlpha.Invert(); // convert to alpha
                                 }
 
