@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include "sdmodeltestbase.hxx"
+
 #include <test/unoapi_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -15,20 +17,26 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
-using namespace ::com::sun::star;
+#include <svx/unoapi.hxx>
 
-namespace
-{
-/// Tests for svx/source/styles/ code.
-class Test : public UnoApiTest
+#include <DrawDocShell.hxx>
+#include <unomodel.hxx>
+#include <sdpage.hxx>
+#include <ViewShell.hxx>
+
+using namespace css;
+
+class ThemeTest : public SdModelTestBase
 {
 public:
-    Test()
-        : UnoApiTest("svx/qa/unit/data/")
+    ThemeTest()
+        : SdModelTestBase("/sd/qa/unit/data/")
     {
     }
 };
 
+namespace
+{
 /// Get the character color of the first text portion in xShape.
 sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
 {
@@ -50,24 +58,31 @@ sal_Int32 GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
     return nColor;
 }
 
-CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
+} // end anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
 {
     // Given a document, with a first slide and blue shape text from theme:
     loadFromURL(u"theme.pptx");
+
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
     // The draw page also contains a group shape to make sure we don't crash on group shapes.
     uno::Reference<drawing::XMasterPageTarget> xDrawPage(
         xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<drawing::XShapes> xDrawPageShapes(xDrawPage, uno::UNO_QUERY);
+
     uno::Reference<text::XTextRange> xShape(xDrawPageShapes->getByIndex(0), uno::UNO_QUERY);
     // Blue.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeTextColor(xShape));
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), GetShapeTextColor(xShape));
+
     uno::Reference<text::XTextRange> xShape2(xDrawPageShapes->getByIndex(1), uno::UNO_QUERY);
     // Blue, lighter.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeTextColor(xShape2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xb4c7e7), GetShapeTextColor(xShape2));
+
     uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getByIndex(2), uno::UNO_QUERY);
     // Blue, darker.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x2f5597), GetShapeTextColor(xShape3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x2f5597), GetShapeTextColor(xShape3));
+
     // Shape fill:
     uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
     // Blue.
@@ -81,6 +96,7 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
         auto aComplexColor = model::color::getFromXComplexColor(xComplexColor);
         CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aComplexColor.getThemeColorType());
     }
+
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
@@ -98,40 +114,26 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
                              aComplexColor.getTransformations()[1].meType);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(6000), aComplexColor.getTransformations()[1].mnValue);
     }
+
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
         xDrawPagesSupplier->getDrawPages()->getByIndex(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMasterPage2(xDrawPage2->getMasterPage(), uno::UNO_QUERY);
     uno::Any aTheme = xMasterPage2->getPropertyValue("Theme");
+
     uno::Reference<beans::XPropertySet> xMasterPage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // Then make sure the shape text color is now green:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 9486886 (#90c226, green)
-    // - Actual  : 4485828 (#4472c4, blue)
-    // i.e. shape text was not updated on theme change.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeTextColor(xShape));
+    CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeTextColor(xShape));
     // Green, lighter:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 14020002 (#d5eda2, light green)
-    // - Actual  : 9486886 (#90c226, stock green)
-    // i.e. the "light" effect on green was not applied.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeTextColor(xShape2));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeTextColor(xShape2));
     // Green, darker.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x6c911d), GetShapeTextColor(xShape3));
+    CPPUNIT_ASSERT_EQUAL(Color(0x6c911d), GetShapeTextColor(xShape3));
     // Shape fill:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 9486886 (#90c226, green)
-    // - Actual  : 4485828 (#4472c4, blue)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeFillColor(xShape4));
+    CPPUNIT_ASSERT_EQUAL(Color(0x90c226), GetShapeFillColor(xShape4));
     // Green, lighter:
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 14020002 (#d5eda2, light green)
-    // - Actual  : 9486886 (#90c226, green)
-    // i.e. the "light" effect on green was not applied.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeFillColor(xShape5));
-}
+    CPPUNIT_ASSERT_EQUAL(Color(0xd5eda2), GetShapeFillColor(xShape5));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

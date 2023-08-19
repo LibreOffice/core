@@ -50,6 +50,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
     CppunitTest_sd_shape_import_export_tests \
     CppunitTest_sd_a11y \
     CppunitTest_sd_textfitting_tests \
+    CppunitTest_sd_theme_tests \
 ))
 endif
 
