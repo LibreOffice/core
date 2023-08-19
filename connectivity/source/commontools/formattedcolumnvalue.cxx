@@ -126,7 +126,9 @@ namespace dbtools
                 {
                     case DataType::DATE:
                     case DataType::TIME:
+                    case DataType::TIME_WITH_TIMEZONE:
                     case DataType::TIMESTAMP:
+                    case DataType::TIMESTAMP_WITH_TIMEZONE:
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                     case DataType::TINYINT:

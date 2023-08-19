@@ -33,97 +33,169 @@
  */
 published constants DataType
 {
-    const long BIT          =  -7;
+    const long BIT                        =   -7;
 
-    const long TINYINT      =  -6;
+    const long TINYINT                    =   -6;
 
-    const long SMALLINT     =   5;
+    const long SMALLINT                   =    5;
 
-    const long INTEGER      =   4;
+    const long INTEGER                    =    4;
 
-    const long BIGINT       =  -5;
+    const long BIGINT                     =   -5;
 
-    const long FLOAT        =   6;
+    const long FLOAT                      =    6;
 
-    const long REAL         =   7;
+    const long REAL                       =    7;
 
-    const long DOUBLE       =   8;
+    const long DOUBLE                     =    8;
 
-    const long NUMERIC      =   2;
+    const long NUMERIC                    =    2;
 
-    const long DECIMAL      =   3;
+    const long DECIMAL                    =    3;
 
-    const long CHAR         =   1;
+    const long CHAR                       =    1;
 
-    const long VARCHAR      =  12;
+    const long VARCHAR                    =   12;
 
-    const long LONGVARCHAR  =  -1;
+    const long LONGVARCHAR                =   -1;
 
-    const long DATE         =  91;
+    const long DATE                       =   91;
 
-    const long TIME         =  92;
+    const long TIME                       =   92;
 
-    const long TIMESTAMP    =  93;
+    const long TIMESTAMP                  =   93;
 
-    const long BINARY       =  -2;
+    const long BINARY                     =   -2;
 
-    const long VARBINARY    =  -3;
+    const long VARBINARY                  =   -3;
 
-    const long LONGVARBINARY =  -4;
+    const long LONGVARBINARY              =   -4;
 
-    const long SQLNULL      =   0;
+    const long SQLNULL                    =    0;
 
 
     /** indicates that the SQL type is database-specific and
              gets mapped to an object that can be accessed via
              the method com::sun::star::sdbc::XRow::getObject().
      */
-    const long OTHER        = 1111;
+    const long OTHER                      = 1111;
 
 
     /** indicates a type which is represented by an object which implements
              this type.
      */
-    const long OBJECT        = 2000;
+    const long OBJECT                     = 2000;
 
 
     /** describes a type based on a built-in type.
                  It is a user-defined data type (UDT).
      */
-    const long DISTINCT     = 2001;
+    const long DISTINCT                   = 2001;
 
 
     /** indicates a type consisting of attributes that may be any type.
                  It is a user-defined data type (UDT).
      */
-    const long STRUCT       = 2002;
+    const long STRUCT                     = 2002;
 
 
     /** indicates a type representing an SQL ARRAY.
      */
-    const long ARRAY        = 2003;
+    const long ARRAY                      = 2003;
 
 
     /** indicates a type representing an SQL Binary Large Object.
      */
-    const long BLOB         = 2004;
+    const long BLOB                       = 2004;
 
 
     /** indicates a type representing an SQL Character Large Object.
      */
-    const long CLOB         = 2005;
+    const long CLOB                       = 2005;
 
 
     /** indicates a type representing an SQL REF, a referencing type.
      */
-    const long REF          = 2006;
+    const long REF                        = 2006;
+
 
     /** identifies the generic SQL type
      * <code>BOOLEAN</code>.
      *
      * @since OOo 2.0
      */
-    const long BOOLEAN = 16;
+    const long BOOLEAN                    =   16;
+
+
+    /** indicates a type representing an SQL DATALINK.
+     *
+     * @since LO 24.02
+     */
+    const long DATALINK                   =   70;
+
+
+    /** indicates a type representing an SQL ROWID.
+     *
+     * @since LO 24.02
+     */
+    const long ROWID                      =   -8;
+
+
+    /** indicates a type representing an SQL NCHAR.
+     *
+     * @since LO 24.02
+     */
+    const long NCHAR                      =  -15;
+
+
+    /** indicates a type representing an SQL NVARCHAR.
+     *
+     * @since LO 24.02
+     */
+    const long NVARCHAR                   =   -9;
+
+
+    /** indicates a type representing an SQL LONGNVARCHAR.
+     *
+     * @since LO 24.02
+     */
+    const long LONGNVARCHAR               =  -16;
+
+
+    /** indicates a type representing an SQL NCLOB.
+     *
+     * @since LO 24.02
+     */
+    const long NCLOB                      = 2011;
+
+
+    /** indicates a type representing an SQL XML.
+     *
+     * @since LO 24.02
+     */
+    const long SQLXML                     = 2009;
+
+
+    /** indicates a type representing an SQL REF CURSOR.
+     *
+     * @since LO 24.02
+     */
+    const long REF_CURSOR                 = 2012;
+
+
+    /** indicates a type representing an SQL TIME WITH TIMEZONE.
+     *
+     * @since LO 24.02
+     */
+    const long TIME_WITH_TIMEZONE         = 2013;
+
+
+    /** indicates a type representing an SQL TIMESTAMP WITH TIMEZONE.
+     *
+     * @since LO 24.02
+     */
+    const long TIMESTAMP_WITH_TIMEZONE    = 2014;
+
 };
 
 

@@ -127,30 +127,39 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
 
     if ( (nPrecision > 0 || nScale > 0) && bUseLiteral )
     {
-        sal_Int32 nParenPos = sTypeName.indexOf('(');
-        if ( nParenPos == -1 )
-        {
-            aSql.append(sTypeName + "(");
-        }
-        else
-        {
-            aSql.append(sTypeName.subView(0, ++nParenPos));
-        }
+        bool bTimed = (nDataType == DataType::TIME ||
+                       nDataType == DataType::TIME_WITH_TIMEZONE ||
+                       nDataType == DataType::TIMESTAMP ||
+                       nDataType == DataType::TIMESTAMP_WITH_TIMEZONE);
 
-        if ( nPrecision > 0 && nDataType != DataType::TIMESTAMP )
+        sal_Int32 nParenPos = (nDataType == DataType::TIME_WITH_TIMEZONE ||
+                               nDataType == DataType::TIMESTAMP_WITH_TIMEZONE) ?
+                               sTypeName.indexOf(' ') :
+                               sTypeName.indexOf('(');
+
+        if ( nParenPos == -1 )
+            aSql.append(sTypeName);
+        else
+            aSql.append(sTypeName.subView(0, nParenPos));
+        aSql.append("(");
+
+        if ( nPrecision > 0 && !bTimed )
         {
             aSql.append(nPrecision);
             if ( (nScale > 0) || (!_sCreatePattern.empty() && sCreateParams.indexOf(_sCreatePattern) != -1) )
                 aSql.append(",");
         }
-        if ( (nScale > 0) || ( !_sCreatePattern.empty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || nDataType == DataType::TIMESTAMP )
+        if ( (nScale > 0) || ( !_sCreatePattern.empty() && sCreateParams.indexOf(_sCreatePattern) != -1 ) || bTimed )
             aSql.append(nScale);
 
         if ( nParenPos == -1 )
             aSql.append(")");
         else
         {
-            nParenPos = sTypeName.indexOf(')',nParenPos);
+            if ( bTimed )
+                aSql.append(")");
+            else
+                nParenPos = sTypeName.indexOf(')',nParenPos);
             aSql.append(sTypeName.subView(nParenPos));
         }
     }

@@ -187,7 +187,10 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,bool _bForce
                 SetPrecision(std::min<sal_Int32>(nPrec,_pType->nPrecision));
             }
             break;
+        case DataType::TIME:
+        case DataType::TIME_WITH_TIMEZONE:
         case DataType::TIMESTAMP:
+        case DataType::TIMESTAMP_WITH_TIMEZONE:
             if ( bForce && _pType->nMaximumScale)
             {
                 SetScale(std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
