@@ -1601,6 +1601,9 @@ void ComboBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     }
 
     rJsonWriter.put("selectedCount", GetSelectedEntryCount());
+
+    if (IsUserDrawEnabled())
+        rJsonWriter.put("customEntryRenderer", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
