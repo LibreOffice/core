@@ -14,6 +14,8 @@
 #include <tools/long.hxx>
 #include "writerperfectdllapi.h"
 #include <memory>
+#include <tools/stream.hxx>
+#include <sot/storage.hxx>
 
 namespace com::sun::star::io
 {
@@ -23,7 +25,8 @@ class XSeekable;
 
 namespace writerperfect
 {
-class WPXSvInputStreamImpl;
+struct OLEStorageImpl;
+struct ZipStorageImpl;
 
 class SAL_DLLPUBLIC_RTTI WPXSvInputStream final : public librevenge::RVNGInputStream
 {
@@ -47,7 +50,30 @@ public:
     virtual bool isEnd() override;
 
 private:
-    std::unique_ptr<WPXSvInputStreamImpl> mpImpl;
+    tools::Long tellImpl();
+    const unsigned char* readImpl(unsigned long numBytes, unsigned long& numBytesRead);
+    int seek(tools::Long offset);
+    void invalidateReadBuffer();
+    bool isOLE();
+    void ensureOLEIsInitialized();
+    bool isZip();
+    void ensureZipIsInitialized();
+    static librevenge::RVNGInputStream*
+    createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage);
+    static librevenge::RVNGInputStream*
+    createWPXStream(const css::uno::Reference<css::io::XInputStream>& rxStream);
+
+    css::uno::Reference<css::io::XInputStream> mxStream;
+    css::uno::Reference<css::io::XSeekable> mxSeekable;
+    css::uno::Sequence<sal_Int8> maData;
+    std::unique_ptr<OLEStorageImpl> mpOLEStorage;
+    std::unique_ptr<ZipStorageImpl> mpZipStorage;
+    sal_Int64 mnLength;
+    const unsigned char* mpReadBuffer;
+    unsigned long mnReadBufferLength;
+    unsigned long mnReadBufferPos;
+    bool mbCheckedOLE;
+    bool mbCheckedZip;
 };
 }
 

@@ -18,9 +18,6 @@
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 
-#include <sot/storage.hxx>
-
-#include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -54,6 +51,7 @@ private:
     const Reference<XSeekable> mxSeekable;
     const sal_uInt64 mnPosition;
 };
+} // anonymous namespace
 
 PositionHolder::PositionHolder(const Reference<XSeekable>& rxSeekable)
     : mxSeekable(rxSeekable)
@@ -72,11 +70,7 @@ PositionHolder::~PositionHolder()
     }
 }
 
-} // anonymous namespace
-
-namespace
-{
-OUString lcl_normalizeSubStreamPath(const OUString& rPath)
+static OUString lcl_normalizeSubStreamPath(const OUString& rPath)
 {
     // accept paths which begin by '/'
     // TODO: maybe this should do a full normalization
@@ -84,20 +78,23 @@ OUString lcl_normalizeSubStreamPath(const OUString& rPath)
         return rPath.copy(1);
     return rPath;
 }
-}
 
-namespace
-{
-OUString concatPath(std::u16string_view lhs, const OUString& rhs)
+static OUString concatPath(std::u16string_view lhs, const OUString& rhs)
 {
     if (lhs.empty())
         return rhs;
     return OUString::Concat(lhs) + "/" + rhs;
 }
 
+namespace
+{
 struct OLEStreamData
 {
-    OLEStreamData(OString aName, OString rvngName);
+    OLEStreamData(OString aName, OString rvngName)
+        : name(std::move(aName))
+        , RVNGname(std::move(rvngName))
+    {
+    }
 
     tools::SvRef<SotStorageStream> stream;
 
@@ -114,6 +111,7 @@ struct OLEStreamData
       */
     OString RVNGname;
 };
+} // anonymous namespace
 
 typedef std::unordered_map<OUString, std::size_t> NameMap_t;
 typedef std::unordered_map<OUString, tools::SvRef<SotStorage>> OLEStorageMap_t;
@@ -155,12 +153,6 @@ public:
     NameMap_t maNameMap; //< map of stream names to indexes (into @c maStreams)
     bool mbInitialized;
 };
-
-OLEStreamData::OLEStreamData(OString aName, OString rvngName)
-    : name(std::move(aName))
-    , RVNGname(std::move(rvngName))
-{
-}
 
 OLEStorageImpl::OLEStorageImpl()
     : mbInitialized(false)
@@ -260,7 +252,6 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::createStream(const OUString& rPat
 
     return aIt->second->OpenSotStream(aName, StreamMode::STD_READ);
 }
-}
 
 namespace
 {
@@ -268,7 +259,7 @@ struct ZipStreamData
 {
     explicit ZipStreamData(OString aName);
 
-    Reference<XInputStream> xStream;
+    css::uno::Reference<css::io::XInputStream> xStream;
 
     /** Name of the stream.
       *
@@ -277,6 +268,7 @@ struct ZipStreamData
       */
     OString aName;
 };
+} // anonymous namespace
 
 /** Representation of a Zip storage.
   *
@@ -285,7 +277,7 @@ struct ZipStreamData
   */
 struct ZipStorageImpl
 {
-    explicit ZipStorageImpl(const Reference<container::XNameAccess>& rxContainer);
+    explicit ZipStorageImpl(const css::uno::Reference<css::container::XNameAccess>& rxContainer);
 
     /** Initialize for access.
       *
@@ -295,8 +287,8 @@ struct ZipStorageImpl
       */
     void initialize();
 
-    Reference<XInputStream> getStream(const OUString& rPath);
-    Reference<XInputStream> const& getStream(std::size_t nId);
+    Reference<css::io::XInputStream> getStream(const OUString& rPath);
+    Reference<css::io::XInputStream> const& getStream(std::size_t nId);
 
 private:
     void traverse(const Reference<container::XNameAccess>& rxEnum);
@@ -393,64 +385,17 @@ Reference<XInputStream> ZipStorageImpl::createStream(const OUString& rPath)
 
     return xStream;
 }
-}
 
-class WPXSvInputStreamImpl
-{
-public:
-    explicit WPXSvInputStreamImpl(css::uno::Reference<css::io::XInputStream> const& xStream);
-
-    bool isStructured();
-    unsigned subStreamCount();
-    const char* subStreamName(unsigned id);
-    bool existsSubStream(const char* name);
-    librevenge::RVNGInputStream* getSubStreamByName(const char* name);
-    librevenge::RVNGInputStream* getSubStreamById(unsigned id);
-
-    const unsigned char* read(unsigned long numBytes, unsigned long& numBytesRead);
-    int seek(tools::Long offset);
-    tools::Long tell();
-    bool isEnd();
-
-    void invalidateReadBuffer();
-
-private:
-    bool isOLE();
-    void ensureOLEIsInitialized();
-
-    bool isZip();
-    void ensureZipIsInitialized();
-
-    static librevenge::RVNGInputStream*
-    createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage);
-    static librevenge::RVNGInputStream* createWPXStream(const Reference<XInputStream>& rxStream);
-
-private:
-    css::uno::Reference<css::io::XInputStream> mxStream;
-    css::uno::Reference<css::io::XSeekable> mxSeekable;
-    css::uno::Sequence<sal_Int8> maData;
-    std::unique_ptr<OLEStorageImpl> mpOLEStorage;
-    std::unique_ptr<ZipStorageImpl> mpZipStorage;
-    bool mbCheckedOLE;
-    bool mbCheckedZip;
-
-public:
-    sal_Int64 mnLength;
-    const unsigned char* mpReadBuffer;
-    unsigned long mnReadBufferLength;
-    unsigned long mnReadBufferPos;
-};
-
-WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference<XInputStream> const& xStream)
+WPXSvInputStream::WPXSvInputStream(Reference<XInputStream> const& xStream)
     : mxStream(xStream)
     , mxSeekable(xStream, UNO_QUERY)
     , maData(0)
-    , mbCheckedOLE(false)
-    , mbCheckedZip(false)
     , mnLength(0)
     , mpReadBuffer(nullptr)
     , mnReadBufferLength(0)
     , mnReadBufferPos(0)
+    , mbCheckedOLE(false)
+    , mbCheckedZip(false)
 {
     if (!xStream.is() || !mxStream.is())
         mnLength = 0;
@@ -475,7 +420,7 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference<XInputStream> const& xStrea
     }
 }
 
-const unsigned char* WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned long& numBytesRead)
+const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned long& numBytesRead)
 {
     numBytesRead = 0;
 
@@ -489,7 +434,7 @@ const unsigned char* WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
     return reinterpret_cast<const unsigned char*>(maData.getConstArray());
 }
 
-tools::Long WPXSvInputStreamImpl::tell()
+tools::Long WPXSvInputStream::tellImpl()
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1;
@@ -502,7 +447,7 @@ tools::Long WPXSvInputStreamImpl::tell()
     }
 }
 
-int WPXSvInputStreamImpl::seek(tools::Long offset)
+int WPXSvInputStream::seek(tools::Long offset)
 {
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1;
@@ -523,15 +468,10 @@ int WPXSvInputStreamImpl::seek(tools::Long offset)
     }
 }
 
-bool WPXSvInputStreamImpl::isEnd()
+bool WPXSvInputStream::isStructured()
 {
-    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
-        return true;
-    return (mxSeekable->getPosition() >= mnLength);
-}
+    invalidateReadBuffer();
 
-bool WPXSvInputStreamImpl::isStructured()
-{
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return false;
 
@@ -546,8 +486,10 @@ bool WPXSvInputStreamImpl::isStructured()
     return isZip();
 }
 
-unsigned WPXSvInputStreamImpl::subStreamCount()
+unsigned WPXSvInputStream::subStreamCount()
 {
+    invalidateReadBuffer();
+
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
 
@@ -573,8 +515,10 @@ unsigned WPXSvInputStreamImpl::subStreamCount()
     return 0;
 }
 
-const char* WPXSvInputStreamImpl::subStreamName(const unsigned id)
+const char* WPXSvInputStream::subStreamName(const unsigned id)
 {
+    invalidateReadBuffer();
+
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return nullptr;
 
@@ -606,8 +550,10 @@ const char* WPXSvInputStreamImpl::subStreamName(const unsigned id)
     return nullptr;
 }
 
-bool WPXSvInputStreamImpl::existsSubStream(const char* const name)
+bool WPXSvInputStream::existsSubStream(const char* const name)
 {
+    invalidateReadBuffer();
+
     if (!name)
         return false;
 
@@ -636,8 +582,10 @@ bool WPXSvInputStreamImpl::existsSubStream(const char* const name)
     return false;
 }
 
-librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamByName(const char* const name)
+librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamByName(const char* const name)
 {
+    invalidateReadBuffer();
+
     if (!name)
         return nullptr;
 
@@ -674,8 +622,10 @@ librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamByName(const char
     return nullptr;
 }
 
-librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamById(const unsigned id)
+librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamById(const unsigned id)
 {
+    invalidateReadBuffer();
+
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return nullptr;
 
@@ -713,7 +663,7 @@ librevenge::RVNGInputStream* WPXSvInputStreamImpl::getSubStreamById(const unsign
     return nullptr;
 }
 
-void WPXSvInputStreamImpl::invalidateReadBuffer()
+void WPXSvInputStream::invalidateReadBuffer()
 {
     if (mpReadBuffer)
     {
@@ -726,7 +676,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 }
 
 librevenge::RVNGInputStream*
-WPXSvInputStreamImpl::createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage)
+WPXSvInputStream::createWPXStream(const tools::SvRef<SotStorageStream>& rxStorage)
 {
     if (rxStorage.is())
     {
@@ -737,7 +687,7 @@ WPXSvInputStreamImpl::createWPXStream(const tools::SvRef<SotStorageStream>& rxSt
 }
 
 librevenge::RVNGInputStream*
-WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream>& rxStream)
+WPXSvInputStream::createWPXStream(const Reference<XInputStream>& rxStream)
 {
     if (rxStream.is())
         return new WPXSvInputStream(rxStream);
@@ -745,7 +695,7 @@ WPXSvInputStreamImpl::createWPXStream(const Reference<XInputStream>& rxStream)
         return nullptr;
 }
 
-bool WPXSvInputStreamImpl::isOLE()
+bool WPXSvInputStream::isOLE()
 {
     if (!mbCheckedOLE)
     {
@@ -761,7 +711,7 @@ bool WPXSvInputStreamImpl::isOLE()
     return bool(mpOLEStorage);
 }
 
-bool WPXSvInputStreamImpl::isZip()
+bool WPXSvInputStream::isZip()
 {
     if (!mbCheckedZip)
     {
@@ -788,7 +738,7 @@ bool WPXSvInputStreamImpl::isZip()
     return bool(mpZipStorage);
 }
 
-void WPXSvInputStreamImpl::ensureOLEIsInitialized()
+void WPXSvInputStream::ensureOLEIsInitialized()
 {
     assert(mpOLEStorage);
 
@@ -796,7 +746,7 @@ void WPXSvInputStreamImpl::ensureOLEIsInitialized()
         mpOLEStorage->initialize(utl::UcbStreamHelper::CreateStream(mxStream));
 }
 
-void WPXSvInputStreamImpl::ensureZipIsInitialized()
+void WPXSvInputStream::ensureZipIsInitialized()
 {
     assert(mpZipStorage);
 
@@ -804,80 +754,74 @@ void WPXSvInputStreamImpl::ensureZipIsInitialized()
         mpZipStorage->initialize();
 }
 
-WPXSvInputStream::WPXSvInputStream(Reference<XInputStream> const& xStream)
-    : mpImpl(new WPXSvInputStreamImpl(xStream))
-{
-}
-
 WPXSvInputStream::~WPXSvInputStream() {}
 
 #define BUFFER_MAX 65536
 
-const unsigned char* WPXSvInputStream::read(unsigned long numBytes, unsigned long& numBytesRead)
+const unsigned char* WPXSvInputStream::readImpl(unsigned long numBytes, unsigned long& numBytesRead)
 {
     numBytesRead = 0;
 
     if (numBytes == 0 || numBytes > std::numeric_limits<unsigned long>::max() / 2)
         return nullptr;
 
-    if (mpImpl->mpReadBuffer)
+    if (mpReadBuffer)
     {
-        if ((mpImpl->mnReadBufferPos + numBytes > mpImpl->mnReadBufferPos)
-            && (mpImpl->mnReadBufferPos + numBytes <= mpImpl->mnReadBufferLength))
+        if ((mnReadBufferPos + numBytes > mnReadBufferPos)
+            && (mnReadBufferPos + numBytes <= mnReadBufferLength))
         {
-            const unsigned char* pTmp = mpImpl->mpReadBuffer + mpImpl->mnReadBufferPos;
-            mpImpl->mnReadBufferPos += numBytes;
+            const unsigned char* pTmp = mpReadBuffer + mnReadBufferPos;
+            mnReadBufferPos += numBytes;
             numBytesRead = numBytes;
             return pTmp;
         }
 
-        mpImpl->invalidateReadBuffer();
+        invalidateReadBuffer();
     }
 
-    unsigned long curpos = static_cast<unsigned long>(mpImpl->tell());
+    unsigned long curpos = static_cast<unsigned long>(tellImpl());
     if (curpos == static_cast<unsigned long>(-1)) // returned ERROR
         return nullptr;
 
     if ((curpos + numBytes < curpos) /*overflow*/
-        || (curpos + numBytes
-            >= o3tl::make_unsigned(mpImpl->mnLength))) /*reading more than available*/
+        || (curpos + numBytes >= o3tl::make_unsigned(mnLength))) /*reading more than available*/
     {
-        numBytes = mpImpl->mnLength - curpos;
+        numBytes = mnLength - curpos;
     }
 
     if (numBytes < BUFFER_MAX)
     {
-        if (BUFFER_MAX < mpImpl->mnLength - curpos)
-            mpImpl->mnReadBufferLength = BUFFER_MAX;
-        else /* BUFFER_MAX >= mpImpl->mnLength - curpos */
-            mpImpl->mnReadBufferLength = mpImpl->mnLength - curpos;
+        if (BUFFER_MAX < mnLength - curpos)
+            mnReadBufferLength = BUFFER_MAX;
+        else /* BUFFER_MAX >= mnLength - curpos */
+            mnReadBufferLength = mnLength - curpos;
     }
     else
-        mpImpl->mnReadBufferLength = numBytes;
+        mnReadBufferLength = numBytes;
 
     unsigned long tmpNumBytes(0);
-    mpImpl->mpReadBuffer = mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes);
-    if (tmpNumBytes != mpImpl->mnReadBufferLength)
-        mpImpl->mnReadBufferLength = tmpNumBytes;
+    mpReadBuffer = readImpl(mnReadBufferLength, tmpNumBytes);
+    if (tmpNumBytes != mnReadBufferLength)
+        mnReadBufferLength = tmpNumBytes;
 
-    mpImpl->mnReadBufferPos = 0;
-    if (!mpImpl->mnReadBufferLength)
+    mnReadBufferPos = 0;
+    if (!mnReadBufferLength)
         return nullptr;
 
-    if (numBytes <= mpImpl->mnReadBufferLength)
+    if (numBytes <= mnReadBufferLength)
         numBytesRead = numBytes;
     else
-        numBytesRead = mpImpl->mnReadBufferLength;
+        numBytesRead = mnReadBufferLength;
 
-    mpImpl->mnReadBufferPos += numBytesRead;
-    return mpImpl->mpReadBuffer;
+    mnReadBufferPos += numBytesRead;
+    return mpReadBuffer;
 }
 
 long WPXSvInputStream::tell()
 {
-    tools::Long retVal = mpImpl->tell();
-    return retVal - static_cast<tools::Long>(mpImpl->mnReadBufferLength)
-           + static_cast<tools::Long>(mpImpl->mnReadBufferPos);
+    tools::Long retVal = tellImpl();
+    return retVal - static_cast<tools::Long>(mnReadBufferLength)
+           + static_cast<tools::Long>(mnReadBufferPos);
 }
 
 int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
@@ -886,7 +830,7 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
     if (seekType == librevenge::RVNG_SEEK_CUR)
         tmpOffset += tell();
     if (seekType == librevenge::RVNG_SEEK_END)
-        tmpOffset += mpImpl->mnLength;
+        tmpOffset += mnLength;
 
     int retVal = 0;
     if (tmpOffset < 0)
@@ -894,67 +838,35 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
         tmpOffset = 0;
         retVal = -1;
     }
-    if (tmpOffset > mpImpl->mnLength)
+    if (tmpOffset > mnLength)
     {
-        tmpOffset = mpImpl->mnLength;
+        tmpOffset = mnLength;
         retVal = -1;
     }
 
-    if (tmpOffset < mpImpl->tell()
+    if (tmpOffset < tellImpl()
         && o3tl::make_unsigned(tmpOffset)
-               >= static_cast<unsigned long>(mpImpl->tell()) - mpImpl->mnReadBufferLength)
+               >= static_cast<unsigned long>(tellImpl()) - mnReadBufferLength)
     {
-        mpImpl->mnReadBufferPos = static_cast<unsigned long>(
-            tmpOffset + static_cast<tools::Long>(mpImpl->mnReadBufferLength) - mpImpl->tell());
+        mnReadBufferPos = static_cast<unsigned long>(
+            tmpOffset + static_cast<tools::Long>(mnReadBufferLength) - tellImpl());
         return retVal;
     }
 
-    mpImpl->invalidateReadBuffer();
+    invalidateReadBuffer();
 
-    if (mpImpl->seek(tmpOffset))
+    if (seek(tmpOffset))
         return -1;
     return retVal;
 }
 
 bool WPXSvInputStream::isEnd()
 {
-    return mpImpl->isEnd() && mpImpl->mnReadBufferPos == mpImpl->mnReadBufferLength;
-}
-
-bool WPXSvInputStream::isStructured()
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->isStructured();
-}
-
-unsigned WPXSvInputStream::subStreamCount()
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->subStreamCount();
-}
-
-const char* WPXSvInputStream::subStreamName(const unsigned id)
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->subStreamName(id);
-}
-
-bool WPXSvInputStream::existsSubStream(const char* const name)
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->existsSubStream(name);
-}
-
-librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamByName(const char* name)
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->getSubStreamByName(name);
-}
-
-librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamById(const unsigned id)
-{
-    mpImpl->invalidateReadBuffer();
-    return mpImpl->getSubStreamById(id);
+    if (mnReadBufferPos != mnReadBufferLength)
+        return false;
+    if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
+        return true;
+    return (mxSeekable->getPosition() >= mnLength);
 }
 }
 
