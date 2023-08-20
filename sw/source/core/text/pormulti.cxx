@@ -2309,6 +2309,9 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
                 // we try to keep our ruby portion together
                 lcl_TruncateMultiPortion( rMulti, rInf, nStartIdx );
                 pTmp = nullptr;
+                // A follow field portion may still be waiting. If nobody wants
+                // it, we delete it.
+                delete pNextSecond;
             }
         }
         else if( rMulti.HasRotation() )
