@@ -22,7 +22,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XStream.hpp>
 
 #include <o3tl/safeint.hxx>
@@ -48,8 +47,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-namespace {
-
 class ButtonsImpl
 {
 public:
@@ -64,8 +61,6 @@ public:
 private:
     Reference< XStorage > mxStorage;
 };
-
-}
 
 ButtonsImpl::ButtonsImpl( const OUString& rURL )
 {
@@ -139,25 +134,7 @@ bool ButtonsImpl::copyGraphic( const OUString& rName, const OUString& rPath )
     return false;
 }
 
-class ButtonSetImpl
-{
-public:
-    ButtonSetImpl();
-
-    int getCount() const;
-
-    bool getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage );
-    bool exportButton( int nSet, const OUString& rPath, const OUString& rName );
-
-    void scanForButtonSets( const OUString& rPath );
-
-    Reference< XGraphicProvider > const & getGraphicProvider();
-
-    std::vector< std::shared_ptr< ButtonsImpl > >  maButtons;
-    Reference< XGraphicProvider > mxGraphicProvider;
-};
-
-ButtonSetImpl::ButtonSetImpl()
+ButtonSet::ButtonSet()
 {
     static const char sSubPath[] = "/wizard/web/buttons" ;
 
@@ -170,7 +147,7 @@ ButtonSetImpl::ButtonSetImpl()
     scanForButtonSets( sUserPath );
 }
 
-void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
+void ButtonSet::scanForButtonSets( const OUString& rPath )
 {
     osl::Directory aDirectory( rPath );
     if( aDirectory.open() != osl::FileBase::E_None )
@@ -189,12 +166,12 @@ void ButtonSetImpl::scanForButtonSets( const OUString& rPath )
     }
 }
 
-int ButtonSetImpl::getCount() const
+int ButtonSet::getCount() const
 {
     return maButtons.size();
 }
 
-bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
+bool ButtonSet::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
 {
     if( (nSet >= 0) && (o3tl::make_unsigned(nSet) < maButtons.size()))
     {
@@ -242,7 +219,7 @@ bool ButtonSetImpl::getPreview( int nSet, const std::vector< OUString >& rButton
     return false;
 }
 
-bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUString& rName )
+bool ButtonSet::exportButton( int nSet, const OUString& rPath, const OUString& rName )
 {
     if( (nSet >= 0) && (o3tl::make_unsigned(nSet) < maButtons.size()))
     {
@@ -253,7 +230,7 @@ bool ButtonSetImpl::exportButton( int nSet, const OUString& rPath, const OUStrin
     return false;
 }
 
-Reference< XGraphicProvider > const & ButtonSetImpl::getGraphicProvider()
+Reference< XGraphicProvider > const & ButtonSet::getGraphicProvider()
 {
     if( !mxGraphicProvider.is() )
     {
@@ -263,28 +240,8 @@ Reference< XGraphicProvider > const & ButtonSetImpl::getGraphicProvider()
     return mxGraphicProvider;
 }
 
-ButtonSet::ButtonSet()
-: mpImpl( new ButtonSetImpl() )
-{
-}
-
 ButtonSet::~ButtonSet()
 {
-}
-
-int ButtonSet::getCount() const
-{
-    return mpImpl->getCount();
-}
-
-bool ButtonSet::getPreview( int nSet, const std::vector< OUString >& rButtons, Image& rImage )
-{
-    return mpImpl->getPreview( nSet, rButtons, rImage );
-}
-
-bool ButtonSet::exportButton( int nSet, const OUString& rPath, const OUString& rName )
-{
-    return mpImpl->exportButton( nSet, rPath, rName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

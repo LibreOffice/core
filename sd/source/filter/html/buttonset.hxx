@@ -20,13 +20,13 @@
 #pragma once
 
 #include <sddllapi.h>
-
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <memory>
 
 class Image;
-class ButtonSetImpl;
+class ButtonsImpl;
 
 class SD_DLLPUBLIC ButtonSet
 {
@@ -40,7 +40,12 @@ public:
     bool exportButton(int nSet, const OUString& rPath, const OUString& rName);
 
 private:
-    std::unique_ptr<ButtonSetImpl> mpImpl;
+    void scanForButtonSets(const OUString& rPath);
+
+    css::uno::Reference<css::graphic::XGraphicProvider> const& getGraphicProvider();
+
+    std::vector<std::shared_ptr<ButtonsImpl>> maButtons;
+    css::uno::Reference<css::graphic::XGraphicProvider> mxGraphicProvider;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
