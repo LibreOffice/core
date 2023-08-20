@@ -1699,6 +1699,16 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_vi
                 if( rOStm.GetError() )
                     nStatus = ERRCODE_GRFILTER_IOERROR;
             }
+            else if ( aFilterName.equalsIgnoreAsciiCase( EXP_APNG ) )
+            {
+                vcl::PngImageWriter aPNGWriter( rOStm );
+                if ( pFilterData )
+                    aPNGWriter.setParameters( *pFilterData );
+                aPNGWriter.write( aGraphic );
+
+                if( rOStm.GetError() )
+                    nStatus = ERRCODE_GRFILTER_IOERROR;
+            }
             else if( aFilterName.equalsIgnoreAsciiCase( EXP_SVG ) || aFilterName.equalsIgnoreAsciiCase( EXP_SVGZ ) )
             {
                 bool bDone(false);

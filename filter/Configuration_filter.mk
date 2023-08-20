@@ -726,6 +726,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_drawgraphics_typ
 ))
 
 $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_filters.xcu,filter/source/config/fragments/filters,\
+	APNG___Animated_Portable_Network_Graphic \
 	BMP___MS_Windows \
 	DXF___AutoCAD_Interchange \
 	EMF___MS_Windows_Metafile \
@@ -757,6 +758,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_PCD_Photo_CD_Base \
 	draw_PCD_Photo_CD_Base16 \
 	draw_PCD_Photo_CD_Base4 \
+	draw_apng_Export \
 	draw_bmp_Export \
 	draw_emf_Export \
 	draw_emz_Export \
@@ -845,6 +847,7 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calcgraphics_f
 
 # fcfg_internalgraphics
 $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics_types.xcu,filter/source/config/fragments/types,\
+	apng_Animated_Portable_Network_Graphic \
 	bmp_MS_Windows \
 	dxf_AutoCAD_Interchange \
 	emf_MS_Windows_Metafile \
@@ -878,6 +881,7 @@ $(eval $(call filter_Configuration_add_types,fcfg_langpack,fcfg_internalgraphics
 ))
 
 $(eval $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgraphics_filters.xcu,filter/source/config/fragments/internalgraphicfilters,\
+	apng_Export \
 	bmp_Export \
 	bmp_Import \
 	dxf_Import \
