@@ -37,12 +37,13 @@
 #include <svx/xdef.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdouno.hxx>
+#include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 #include <svl/cjkoptions.hxx>
-
 #include <app.hrc>
 
 #include <sdmod.hxx>
+#include <sdpage.hxx>
 #include <stlsheet.hxx>
 #include <drawview.hxx>
 #include <drawdoc.hxx>
@@ -465,6 +466,21 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                     bool bValue = aAttrs.Get( EE_PARA_HYPHENATE ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
                 }
+            }
+            break;
+
+            case SID_THEME_DIALOG:
+            {
+                bool bDisable = true;
+                SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+                if (pPageView)
+                {
+                    SdPage* pPage = dynamic_cast<SdPage*>(pPageView->GetPage());
+                    if (pPage && pPage->IsMasterPage())
+                        bDisable = false;
+                }
+                if (bDisable)
+                    rSet.DisableItem(nWhich);
             }
             break;
 
