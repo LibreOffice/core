@@ -135,7 +135,7 @@ typedef sal_uInt32 BenContainerPos;
 typedef sal_uInt32 BenObjectID;
 typedef sal_uInt32 BenGeneration;
 
-sal_uLong BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer);
+sal_uInt8 BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer);
 
 class CBenIDListElmt : public CUtListElmt
 {
@@ -175,7 +175,7 @@ public:
 public: // Overridden methods
 
     /* added by  */
-    sal_uLong GetSize() const { return m_ulValueLength; };
+    sal_uInt64 GetSize() const { return m_ulValueLength; };
 protected: // Overridden methods
 
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
@@ -188,7 +188,7 @@ private: // Data
     CBenValue * cpValue;
     size_t cCurrentPosition;
 
-    sal_uLong m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
+    sal_uInt64 m_ulValueLength;      // Added by , sum of length of all sub-valuesegments
 };
 
 class LtcBenContainer
@@ -207,7 +207,7 @@ public: // Internal methods
     explicit LtcBenContainer(LwpSvStream * pStream);
     ~LtcBenContainer();
 
-    sal_uLong remainingSize() const;
+    sal_uInt64 remainingSize() const;
     void Read(void * pBuffer, size_t MaxSize,
       size_t* pAmtRead);
     BenError ReadKnownSize(void * pBuffer, size_t Amt);
@@ -222,12 +222,12 @@ public: // Internal methods
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
     std::vector<sal_uInt8> GetGraphicData(const char *pObjectName);
 
-    sal_uLong GetSize() const { return m_ulLength; }
+    sal_uInt64 GetSize() const { return m_ulLength; }
 private: // Data
     CUtOwningList cObjects;
     CUtList cNamedObjects;
     LwpSvStream * cpStream;
-    sal_uLong m_ulLength;   // Added for TOCRead.cpp
+    sal_uInt64 m_ulLength;   // Added for TOCRead.cpp
     BenObjectID cNextAvailObjectID; // for new object
 };
 

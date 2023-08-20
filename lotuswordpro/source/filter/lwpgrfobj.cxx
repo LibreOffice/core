@@ -286,7 +286,7 @@ void LwpGraphicObject::CreateDrawObjects()
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
-    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    sal_uInt8 ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     if (ulRet != OpenStormBento::BenErr_OK)
         return;
 
@@ -333,7 +333,7 @@ std::vector<sal_uInt8> LwpGraphicObject::GetRawGrafData()
 
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+        sal_uInt8 ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
         if (ulRet != OpenStormBento::BenErr_OK)
             return aGrafData;
     }
@@ -359,7 +359,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(std::unique_ptr<sal_uInt8[]>& pGrafData
     LwpSvStream* pStream = m_pStrm->GetCompressedStream() ?  m_pStrm->GetCompressedStream(): m_pStrm;
 
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
-    sal_uLong ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
+    sal_uInt8 ulRet = OpenStormBento::BenOpenContainer(pStream, &pBentoContainer);
     if (ulRet != OpenStormBento::BenErr_OK)
         return 0;
 

@@ -96,7 +96,7 @@ static bool Decompress(SvStream* pCompressed, SvStream*& pOutDecompressed)
     LwpSvStream aLwpStream(pCompressed);
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        sal_uLong ulRet = BenOpenContainer(&aLwpStream, &pBentoContainer);
+        sal_uInt8 ulRet = BenOpenContainer(&aLwpStream, &pBentoContainer);
         if (ulRet != BenErr_OK)
             return false;
     }
@@ -112,7 +112,7 @@ static bool Decompress(SvStream* pCompressed, SvStream*& pOutDecompressed)
     if (0 != decompress.explode())
         return false;
 
-    sal_uInt32 nPos = aWordProData->GetSize();
+    sal_uInt64 nPos = aWordProData->GetSize();
     nPos += 0x10;
 
     pCompressed->Seek(nPos);
