@@ -442,7 +442,7 @@ namespace svgio::svgreader
 
             // BaselineShift
             void setBaselineShift(const BaselineShift aBaselineShift) { maBaselineShift = aBaselineShift; }
-            BaselineShift getBaselineShift() const { return maBaselineShift; }
+            BaselineShift getBaselineShift() const;
             SvgNumber getBaselineShiftNumber() const;
         };
 
