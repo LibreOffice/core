@@ -279,6 +279,30 @@ namespace svgio::svgreader
                     }
                 }
 
+                // get DominantBaseline
+                const DominantBaseline aDominantBaseline(rSvgStyleAttributes.getDominantBaseline());
+
+                basegfx::B2DRange aRange(aTextLayouterDevice.getTextBoundRect(getText(), nIndex, nLength));
+                // apply DominantBaseline
+                switch(aDominantBaseline)
+                {
+                    case DominantBaseline::Middle:
+                    {
+                        aPosition.setY(aPosition.getY() - aRange.getCenterY());
+                        break;
+                    }
+                    case DominantBaseline::Hanging:
+                    {
+                        aPosition.setY(aPosition.getY() - aRange.getMinY());
+                        break;
+                    }
+                    default: // DominantBaseline::Auto
+                    {
+                        // nothing to do
+                        break;
+                    }
+                }
+
                 // get BaselineShift
                 const BaselineShift aBaselineShift(rSvgStyleAttributes.getBaselineShift());
 
