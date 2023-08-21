@@ -98,6 +98,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf119875)
     CPPUNIT_ASSERT_LESS(nSecondTop, nFirstTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf137523)
+{
+    createSwDoc("tdf137523-1-min.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // the problem was that in the footer, the text frames below the table
+    // had wrong height and were not visible
+    assertXPath(pXmlDoc, "/root/page/footer/txt[1]/infos/bounds", "height", "304");
+    assertXPath(pXmlDoc, "/root/page/footer/txt[2]/infos/bounds", "height", "191");
+    assertXPath(pXmlDoc, "/root/page/footer/txt[3]/infos/bounds", "height", "153");
+    assertXPath(pXmlDoc, "/root/page/footer/tab/infos/bounds", "height", "1378");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287)
 {
     createSwDoc("tdf120287.fodt");
