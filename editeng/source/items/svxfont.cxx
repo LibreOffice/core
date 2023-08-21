@@ -825,8 +825,10 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
 
     // Set the desired font
     FontLineStyle eUnder = pFont->GetUnderline();
+    FontLineStyle eOver = pFont->GetOverline();
     FontStrikeout eStrike = pFont->GetStrikeout();
     pFont->SetUnderline( LINESTYLE_NONE );
+    pFont->SetOverline( LINESTYLE_NONE );
     pFont->SetStrikeout( STRIKEOUT_NONE );
     if ( !bUpper )
     {
@@ -847,6 +849,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
 
     // Restore Font
     pFont->SetUnderline( eUnder );
+    pFont->SetOverline( eOver );
     pFont->SetStrikeout( eStrike );
     if ( !bUpper )
         pFont->SetPropr( nProp );
