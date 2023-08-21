@@ -266,7 +266,6 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     {
         aDefault.clear();
     }
-    SetPropertyValueByHandle( nHandle, rValue );
     if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && aDefault.hasValue() && aDefault == rValue ) //#i98893# don't export defaults to file
         SetPropertyToDefault( nHandle );
     else
