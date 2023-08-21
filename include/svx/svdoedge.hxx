@@ -138,15 +138,15 @@ private:
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
     virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
 
-    SdrObjConnection            aCon1;  // Connection status of the beginning of the line
-    SdrObjConnection            aCon2;  // Connection status of the end of the line
+    SdrObjConnection            m_aCon1;  // Connection status of the beginning of the line
+    SdrObjConnection            m_aCon2;  // Connection status of the end of the line
 
-    std::optional<XPolygon>     pEdgeTrack;
-    sal_uInt16                  nNotifyingCount; // Locking
-    SdrEdgeInfoRec              aEdgeInfo;
+    std::optional<XPolygon>     m_pEdgeTrack;
+    sal_uInt16                  m_nNotifyingCount; // Locking
+    SdrEdgeInfoRec              m_aEdgeInfo;
 
-    bool                        bEdgeTrackDirty : 1; // true -> Connection track needs to be recalculated
-    bool                        bEdgeTrackUserDefined : 1;
+    bool                        m_bEdgeTrackDirty : 1; // true -> Connection track needs to be recalculated
+    bool                        m_bEdgeTrackUserDefined : 1;
 
     // Bool to allow suppression of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
@@ -196,7 +196,7 @@ public:
     // react on model/page change
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
-    SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
+    SdrObjConnection& GetConnection(bool bTail1) { return *(bTail1 ? &m_aCon1 : &m_aCon2); }
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
@@ -209,11 +209,11 @@ public:
     // * for all of the below: bTail1=true: beginning of the line,
     //   otherwise end of the line
     // * pObj=NULL: disconnect connector
-    void SetEdgeTrackDirty() { bEdgeTrackDirty=true; }
+    void SetEdgeTrackDirty() { m_bEdgeTrackDirty=true; }
     void ConnectToNode(bool bTail1, SdrObject* pObj) override;
     void DisconnectFromNode(bool bTail1) override;
     SdrObject* GetConnectedNode(bool bTail1) const override;
-    const SdrObjConnection& GetConnection(bool bTail1) const { return *(bTail1 ? &aCon1 : &aCon2); }
+    const SdrObjConnection& GetConnection(bool bTail1) const { return *(bTail1 ? &m_aCon1 : &m_aCon2); }
     bool CheckNodeConnection(bool bTail1) const;
 
     virtual void RecalcSnapRect() override;
