@@ -1641,7 +1641,11 @@ bool SwLayAction::FormatLayoutTab( SwTabFrame *pTab, bool bAddRect )
     // format lowers, only if table frame is valid
     if ( pTab->isFrameAreaDefinitionValid() )
     {
-        FlowFrameJoinLockGuard tabG(pTab); // tdf#124675 prevent Join() if pTab becomes empty
+        ::std::optional<FlowFrameJoinLockGuard> oTabGuard;
+        if (pTab->IsMoveable()) // tdf#137523 not in footer
+        {   // tdf#124675 prevent Join() if pTab becomes empty
+            oTabGuard.emplace(pTab);
+        }
         SwLayoutFrame *pLow = static_cast<SwLayoutFrame*>(pTab->Lower());
         while ( pLow )
         {
