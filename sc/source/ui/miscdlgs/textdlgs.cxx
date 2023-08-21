@@ -32,7 +32,8 @@
 
 ScCharDlg::ScCharDlg(weld::Window* pParent, const SfxItemSet* pAttr, const SfxObjectShell* pDocShell, bool bDrawText)
     : SfxTabDialogController(pParent, "modules/scalc/ui/chardialog.ui", "CharDialog", pAttr)
-    , rDocShell(*pDocShell)
+    , m_rDocShell(*pDocShell)
+    , m_bDrawText(bDrawText)
 {
     AddTabPage("font", RID_SVXPAGE_CHAR_NAME);
     AddTabPage("fonteffects", RID_SVXPAGE_CHAR_EFFECTS);
@@ -50,14 +51,16 @@ void ScCharDlg::PageCreated(const OUString& rId, SfxTabPage &rPage)
     if (rId == "font")
     {
         SvxFontListItem aItem(*static_cast<const SvxFontListItem*>(
-            ( rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
+            ( m_rDocShell.GetItem( SID_ATTR_CHAR_FONTLIST) ) ) );
 
         aSet.Put (SvxFontListItem( aItem.GetFontList(), SID_ATTR_CHAR_FONTLIST));
         rPage.PageCreated(aSet);
     }
     else if (rId == "fonteffects")
     {
-        aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
+        // Allow CaseMap in drawings, but not in normal text
+        if (!m_bDrawText)
+            aSet.Put (SfxUInt16Item(SID_DISABLE_CTL,DISABLE_CASEMAP));
         rPage.PageCreated(aSet);
     }
     else if (rId == "background")

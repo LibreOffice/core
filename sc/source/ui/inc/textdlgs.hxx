@@ -26,7 +26,8 @@ class SfxObjectShell;
 class ScCharDlg : public SfxTabDialogController
 {
 private:
-    const SfxObjectShell& rDocShell;
+    const SfxObjectShell& m_rDocShell;
+    bool m_bDrawText;
 
     virtual void PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 
