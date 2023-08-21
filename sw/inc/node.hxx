@@ -336,7 +336,7 @@ public:
         return m_aAccessibilityCheckStatus;
     }
 
-    void resetAndQueueAccessibilityCheck();
+    void resetAndQueueAccessibilityCheck(bool bIssueObjectNameChanged = false);
 
 private:
     SwNode( const SwNode & rNodes ) = delete;

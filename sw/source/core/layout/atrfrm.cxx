@@ -2614,6 +2614,16 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
         if (bBroadcast) {
             GetNotifier().Broadcast(aHint);
         }
+
+        // update accessibility sidebar object name if we modify the object name on the navigator bar
+        if (!aHint.m_sOld.isEmpty() && aHint.m_sOld != aHint.m_sNew)
+        {
+            if (SwFlyFrame* pSFly = SwIterator<SwFlyFrame, SwFormat>(*this).First())
+            {
+                if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFly->Lower())->GetNode())
+                    pSwNode->resetAndQueueAccessibilityCheck(true);
+            }
+        }
     }
     else
         SwFormat::SetFormatName( rNewName, bBroadcast );

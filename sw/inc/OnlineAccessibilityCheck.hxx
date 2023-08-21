@@ -57,7 +57,7 @@ private:
 
     void runAccessibilityCheck(SwNode* pNode);
     void updateStatusbar();
-    void updateNodeStatus(SwNode* pContentNode);
+    void updateNodeStatus(SwNode* pContentNode, bool bIssueObjectNameChanged = false);
     void initialCheck();
     void lookForPreviousNodeAndUpdate(SwPosition const& rNewPos);
     void clearAccessibilityIssuesFromAllNodes();
@@ -66,7 +66,7 @@ private:
 public:
     OnlineAccessibilityCheck(SwDoc& rDocument);
     void update(SwPosition const& rNewPos);
-    void resetAndQueue(SwNode* pNode);
+    void resetAndQueue(SwNode* pNode, bool bIssueObjectNameChanged = false);
     void resetAndQueueDocumentLevel();
     void updateCheckerActivity();
     sal_Int32 getNumberOfAccessibilityIssues() { return m_nAccessibilityIssues; }

@@ -2179,9 +2179,9 @@ void SwNode::RemoveAnchoredFly(SwFrameFormat *const pFlyFormat)
     m_aAnchoredFlys.erase(it);
 }
 
-void SwNode::resetAndQueueAccessibilityCheck()
+void SwNode::resetAndQueueAccessibilityCheck(bool bIssueObjectNameChanged)
 {
-    GetDoc().getOnlineAccessibilityCheck()->resetAndQueue(this);
+    GetDoc().getOnlineAccessibilityCheck()->resetAndQueue(this, bIssueObjectNameChanged);
 }
 
 
