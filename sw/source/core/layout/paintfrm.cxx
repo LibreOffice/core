@@ -2394,6 +2394,9 @@ class SwTabFramePainter
     void InsertFollowTopBorder(const SwFrame& rFrame, const SvxBoxItem& rBoxItem,
                                bool bWordTableCell, SwTwips nTop, SwTwips nLeft, SwTwips nRight,
                                bool bTopIsOuter);
+    void InsertMasterBottomBorder(const SwFrame& rFrame, const SvxBoxItem& rBoxItem,
+                                  bool bWordTableCell, SwTwips nBottom, SwTwips nLeft, SwTwips nRight,
+                                  bool bBottomIsOuter);
 
     void HandleFrame(const SwLayoutFrame& rFrame, const SwRect& rPaintArea);
     void FindStylesForLine( Point&,
@@ -2866,7 +2869,7 @@ void SwTabFramePainter::InsertFollowTopBorder(const SwFrame& rFrame, const SvxBo
 
     // This is then a first row in a follow table, without repeated headlines.
     auto pLastRow = dynamic_cast<const SwRowFrame*>(mrTabFrame.GetLastLower());
-    if (!pLastRow && pLastRow == pThisRow)
+    if (!pLastRow || pLastRow == pThisRow)
     {
         return;
     }
@@ -2900,6 +2903,79 @@ void SwTabFramePainter::InsertFollowTopBorder(const SwFrame& rFrame, const SvxBo
     SwLineEntry aFollowTop(nTop, nLeft, nRight, bTopIsOuter, aFollowB);
     aFollowB.SetRefMode(svx::frame::RefMode::Begin);
     Insert(aFollowTop, true);
+}
+
+void SwTabFramePainter::InsertMasterBottomBorder(const SwFrame& rFrame, const SvxBoxItem& rBoxItem,
+                                              bool bWordTableCell, SwTwips nBottom, SwTwips nLeft,
+                                              SwTwips nRight, bool bBottomIsOuter)
+{
+    // Figure out which cell to copy.
+    int nCol = 0;
+    const SwFrame* pCell = &rFrame;
+    while (pCell)
+    {
+        if (!pCell->GetPrev())
+        {
+            break;
+        }
+
+        ++nCol;
+        pCell = pCell->GetPrev();
+    }
+
+    auto pThisRow = dynamic_cast<const SwRowFrame*>(rFrame.GetUpper());
+    if (!pThisRow || pThisRow->GetUpper() != &mrTabFrame)
+    {
+        return;
+    }
+
+    if (mrTabFrame.IsFollow() || !mrTabFrame.GetFollow())
+    {
+        return;
+    }
+
+    // This is a master table that is split.
+    if (pThisRow->GetNext() || rBoxItem.GetTop() || rBoxItem.GetBottom())
+    {
+        return;
+    }
+
+    // This is then a last row in a master table.
+    auto pFirstRow = dynamic_cast<const SwRowFrame*>(mrTabFrame.GetLower());
+    if (!pFirstRow || pFirstRow == pThisRow)
+    {
+        return;
+    }
+
+    const SwFrame* pFirstCell = pFirstRow->GetLower();
+    for (int i = 0; i < nCol; ++i)
+    {
+        if (!pFirstCell)
+        {
+            break;
+        }
+
+        pFirstCell = pFirstCell->GetNext();
+    }
+    if (!pFirstCell)
+    {
+        return;
+    }
+
+    SwBorderAttrAccess aAccess(SwFrame::GetCache(), pFirstCell);
+    const SwBorderAttrs& rAttrs = *aAccess.Get();
+    const SvxBoxItem& rFirstBoxItem = rAttrs.GetBox();
+    if (!rFirstBoxItem.GetTop())
+    {
+        return;
+    }
+
+    // The matching (same column) row in the first row has a top border for us.
+    svx::frame::Style aMasterT(rFirstBoxItem.GetTop(), 1.0);
+    aMasterT.SetWordTableCell(bWordTableCell);
+    SwLineEntry aMasterBottom(nBottom, nLeft, nRight, bBottomIsOuter, aMasterT);
+    aMasterT.SetRefMode(svx::frame::RefMode::Begin);
+    Insert(aMasterBottom, true);
 }
 
 void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem, const SwRect& rPaintArea)
@@ -2989,6 +3065,8 @@ void SwTabFramePainter::Insert(const SwFrame& rFrame, const SvxBoxItem& rBoxItem
     Insert( aTop, true );
     Insert( aBottom, true );
 
+    InsertMasterBottomBorder(rFrame, rBoxItem, bWordTableCell, nBottom, nLeft, nRight,
+                             bBottomIsOuter);
     InsertFollowTopBorder(rFrame, rBoxItem, bWordTableCell, nTop, nLeft, nRight, bTopIsOuter);
 }
 
