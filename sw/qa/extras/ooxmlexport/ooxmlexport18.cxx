@@ -523,7 +523,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
     xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
     // user specified: do not include in line numbering
     assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:pPr/w:suppressLineNumbers", 1);
-    // even though it matches the parent style, these should always avoid showing line numberings
+    // even though it matches the parent style, these should always avoid showing line numbering
     assertXPath(pStylesXml, "//w:style[@w:styleId='Footer']/w:pPr/w:suppressLineNumbers", 1);
     assertXPath(pStylesXml,
                 "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers", "val", "0");
