@@ -79,12 +79,15 @@ OnlineAccessibilityCheck::OnlineAccessibilityCheck(SwDoc& rDocument)
 {
 }
 
-void OnlineAccessibilityCheck::updateNodeStatus(SwNode* pNode)
+void OnlineAccessibilityCheck::updateNodeStatus(SwNode* pNode, bool bIssueObjectNameChanged)
 {
     if (!pNode->IsContentNode() && !pNode->IsTableNode())
         return;
 
     m_nAccessibilityIssues = 0;
+
+    if (bIssueObjectNameChanged)
+        return;
 
     auto it = m_aNodes.find(pNode);
     if (it == m_aNodes.end())
@@ -291,7 +294,7 @@ void OnlineAccessibilityCheck::clearAccessibilityIssuesFromAllNodes()
     updateStatusbar();
 }
 
-void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode)
+void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode, bool bIssueObjectNameChanged)
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
@@ -304,7 +307,7 @@ void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode)
     pNode->getAccessibilityCheckStatus().reset();
     m_aNodes.erase(pNode);
     runAccessibilityCheck(pNode);
-    updateNodeStatus(pNode);
+    updateNodeStatus(pNode, bIssueObjectNameChanged);
     updateStatusbar();
 }
 

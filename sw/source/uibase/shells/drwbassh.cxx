@@ -595,9 +595,17 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
 
                 if(RET_OK == pDlg->Execute())
                 {
+                    const OUString aOrigName = aName;
                     pDlg->GetName(aName);
                     pSelected->SetName(aName);
                     pSh->SetModified();
+
+                    // update accessibility sidebar object name if we modify the object name on the navigator bar
+                    if (!aName.isEmpty() && aOrigName != aName)
+                    {
+                        if (SwNode* pSwNode = FindFrameFormat(pSelected)->GetAnchor().GetAnchorNode())
+                            pSwNode->resetAndQueueAccessibilityCheck(true);
+                    }
                 }
             }
 
