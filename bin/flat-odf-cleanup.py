@@ -251,6 +251,74 @@ def remove_unused(root):
     add_parent_styles(useddrawingpagestyles, drawingpagestyles)
     remove_unused_styles(root, useddrawingpagestyles, drawingpagestyles, "drawing-page style")
 
+    # 10) page layouts
+    usedpagelayouts = set()
+    collect_all_attribute(usedpagelayouts, "{urn:oasis:names:tc:opendocument:xmlns:style:1.0}page-layout-name")
+    pagelayouts = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}page-layout")
+    remove_unused_styles(root, usedpagelayouts, pagelayouts, "page layout")
+
+    # 11) presentation page layouts
+    usedpresentationpagelayouts = set()
+    collect_all_attribute(usedpresentationpagelayouts, "{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}presentation-page-layout-name")
+    presentationpagelayouts = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}presentation-page-layout")
+    remove_unused_styles(root, usedpresentationpagelayouts, presentationpagelayouts, "presentation page layout")
+
+    # 12) table (column/row/cell) styles
+    usedtablestyles = set()
+    usedtablecolumnstyles = set()
+    usedtablerowstyles = set()
+    usedtablecellstyles = set()
+
+    tables = {
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table:background",
+    }
+    tablecells = {
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}covered-table-cell",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-cell",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}body",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}even-columns",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}even-rows",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}first-column",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}first-row",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}last-column",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}last-row",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}odd-columns",
+        "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}odd-rows",
+    }
+    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:table:1.0}style-name]"):
+        style = element.get("{urn:oasis:names:tc:opendocument:xmlns:table:1.0}style-name")
+        if element.tag == "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-column":
+            usedtablecolumnstyles.add(style)
+        elif element.tag == "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-row":
+            usedtablerowstyles.add(style)
+        elif element.tag in tables:
+            usedtablestyles.add(style)
+        elif element.tag in tablecells:
+            usedtablecellstyles.add(style)
+
+    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:database:1.0}style-name]"):
+        style = element.get("{urn:oasis:names:tc:opendocument:xmlns:database:1.0}style-name")
+        if element.tag == "{urn:oasis:names:tc:opendocument:xmlns:database:1.0}column":
+            usedtablecolumnstyles.add(style)
+        else: # db:query db:table-representation
+            usedtablestyles.add(style)
+
+    collect_all_attribute(usedtablerowstyles, "{urn:oasis:names:tc:opendocument:xmlns:database:1.0}default-row-style-name")
+    collect_all_attribute(usedtablecellstyles, "{urn:oasis:names:tc:opendocument:xmlns:database:1.0}default-cell-style-name")
+    collect_all_attribute(usedtablecellstyles, "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}default-cell-style-name")
+
+    tablecolumstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='table-column']")
+    tablerowstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='table-row']")
+    tablecellstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='table-cell']")
+    add_parent_styles(usedtablestyles, tstyles)
+    add_parent_styles(usedtablecolumnstyles, tablecolumstyles)
+    add_parent_styles(usedtablerowstyles, tablerowstyles)
+    add_parent_styles(usedtablecellstyles, tablecellstyles)
+    remove_unused_styles(root, usedtstyles, tstyles, "table style")
+    remove_unused_styles(root, usedtablecolumnstyles, tablecolumstyles, "table column style")
+    remove_unused_styles(root, usedtablerowstyles, tablerowstyles, "table row style")
+    remove_unused_styles(root, usedtablecellstyles, tablecellstyles, "table cell style")
 
     # TODO 3 other styles
 
@@ -317,22 +385,10 @@ if __name__ == "__main__":
     TODO
     chart:style-name
     -> chart
-    db:style-name
-    -> table-column, table
-    db:default-row-style-name
-    -> table-row
-    db:default-cell-style-name
-    -> cell
     style:data-style-name
     -> data style
-    presentation:presentation-page-layout-name
-    -> presentation-page-layout
-    style:page-layout-name
-    -> "page layout style" ?
     style:percentage-data-style-name
     -> data style
-    table:default-cell-style-name
-    -> cell
 
     draw:stroke-dash-names
     -> draw:stroke-dash
