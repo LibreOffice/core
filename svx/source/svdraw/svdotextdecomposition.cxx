@@ -168,11 +168,9 @@ namespace
 
         // look for proportional font scaling, if necessary, scale accordingly
         sal_Int8 nPropr(rInfo.mrFont.GetPropr());
-        if(100 != nPropr)
-        {
-            const double fFactor(rInfo.mrFont.GetPropr() / 100.0);
-            aNewTransform.scale(fFactor, fFactor);
-        }
+        const double fPropFontFactor(nPropr / 100.0);
+        if (100 != nPropr)
+            aNewTransform.scale(fPropFontFactor, fPropFontFactor);
 
         // apply font rotate
         if(rInfo.mrFont.GetOrientation())
@@ -439,7 +437,7 @@ namespace
 
                     // need to take FontScaling out of values; it's already part of
                     // aNewTransform and would be double applied
-                    const double fFontScaleX(aFontScaling.getX());
+                    const double fFontScaleX(aFontScaling.getX() * fPropFontFactor);
 
                     if(!basegfx::fTools::equal(fFontScaleX, 1.0)
                         && !basegfx::fTools::equalZero(fFontScaleX))
