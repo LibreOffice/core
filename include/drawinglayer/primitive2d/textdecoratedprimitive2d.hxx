@@ -112,6 +112,14 @@ namespace drawinglayer::primitive2d
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
 
+            void CreateDecorationGeometryContent(
+                Primitive2DContainer& rTarget,
+                basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
+                const OUString& rText,
+                sal_Int32 nTextPosition,
+                sal_Int32 nTextLength,
+                const std::vector< double >& rDXArray) const;
+
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const override;
 

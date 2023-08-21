@@ -52,6 +52,19 @@ namespace drawinglayer::primitive2d
                     getLocale(),
                     getFontColor())));
 
+            CreateDecorationGeometryContent(rTarget, rDecTrans, rText,
+                                            nTextPosition, nTextLength,
+                                            rDXArray);
+        }
+
+        void TextDecoratedPortionPrimitive2D::CreateDecorationGeometryContent(
+            Primitive2DContainer& rTarget,
+            basegfx::utils::B2DHomMatrixBufferedOnDemandDecompose const & rDecTrans,
+            const OUString& rText,
+            sal_Int32 nTextPosition,
+            sal_Int32 nTextLength,
+            const std::vector< double >& rDXArray) const
+        {
             // see if something else needs to be done
             const bool bOverlineUsed(TEXT_LINE_NONE != getFontOverline());
             const bool bUnderlineUsed(TEXT_LINE_NONE != getFontUnderline());
