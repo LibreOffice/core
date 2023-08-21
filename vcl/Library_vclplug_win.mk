@@ -60,7 +60,6 @@ $(eval $(call gb_Library_use_libraries,vclplug_win,\
 $(eval $(call gb_Library_use_externals,vclplug_win,\
     boost_headers \
     epoxy \
-    glm_headers \
     harfbuzz \
     $(if $(filter SKIA,$(BUILD_TYPE)),skia) \
 ))

@@ -48,7 +48,6 @@ $(eval $(call gb_Library_add_defs,vcl,\
     -DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
     -DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
     -DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
-    $(if $(SYSTEM_GLM),-DGLM_ENABLE_EXPERIMENTAL) \
     $(if $(SYSTEM_LIBFIXMATH),-DSYSTEM_LIBFIXMATH) \
 ))
 
@@ -84,7 +83,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     expat \
     frozen \
     gio \
-    glm_headers \
     graphite \
     harfbuzz \
     icu_headers \

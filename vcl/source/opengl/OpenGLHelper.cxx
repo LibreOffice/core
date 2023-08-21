@@ -45,8 +45,6 @@
 #include <opengl/win/WinDeviceInfo.hxx>
 #endif
 
-#include "GLMHelper.hxx"
-
 static bool volatile gbInShaderCompile = false;
 
 namespace {
@@ -627,33 +625,6 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
     }
 
     return nullptr;
-}
-
-std::ostream& operator<<(std::ostream& rStrm, const glm::vec4& rPos)
-{
-    rStrm << "( " << rPos[0] << ", " << rPos[1] << ", " << rPos[2] << ", " << rPos[3] << ")";
-    return rStrm;
-}
-
-std::ostream& operator<<(std::ostream& rStrm, const glm::vec3& rPos)
-{
-    rStrm << "( " << rPos[0] << ", " << rPos[1] << ", " << rPos[2] << ")";
-    return rStrm;
-}
-
-std::ostream& operator<<(std::ostream& rStrm, const glm::mat4& rMatrix)
-{
-    for(int i = 0; i < 4; ++i)
-    {
-        rStrm << "\n( ";
-        for(int j = 0; j < 4; ++j)
-        {
-            rStrm << rMatrix[j][i];
-            rStrm << " ";
-        }
-        rStrm << ")\n";
-    }
-    return rStrm;
 }
 
 void OpenGLHelper::createFramebuffer(tools::Long nWidth, tools::Long nHeight, GLuint& nFramebufferId,

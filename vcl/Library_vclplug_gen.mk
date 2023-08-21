@@ -56,7 +56,6 @@ $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	graphite \
 	epoxy \
 	expat \
-	glm_headers \
 	harfbuzz \
 	icu_headers \
 	icuuc \

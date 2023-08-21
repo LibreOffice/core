@@ -3464,12 +3464,6 @@ vcl/source/fontsubset/xlat.hxx:33
     unsigned short vcl::TranslateChar15(unsigned short)
 vcl/source/fontsubset/xlat.hxx:34
     unsigned short vcl::TranslateChar16(unsigned short)
-vcl/source/opengl/GLMHelper.hxx:17
-    std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const struct glm::mat<4, 4, float> &)
-vcl/source/opengl/GLMHelper.hxx:18
-    std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const struct glm::vec<4, float> &)
-vcl/source/opengl/GLMHelper.hxx:19
-    std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const struct glm::vec<3, float> &)
 vcl/source/window/menuitemlist.hxx:123
     void MenuItemList::Clear()
 vcl/unx/generic/dtrans/X11_clipboard.hxx:106
