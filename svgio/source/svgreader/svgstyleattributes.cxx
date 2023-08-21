@@ -1292,7 +1292,8 @@ namespace svgio::svgreader
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(30, 0),
+            maDominantBaseline(DominantBaseline::Auto),
+            maResolvingParent(31, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -1960,6 +1961,26 @@ namespace svgio::svgreader
                         {
                             // no BaselineShift or inherit (which is automatically)
                             setBaselineShift(BaselineShift::Baseline);
+                        }
+                    }
+                    break;
+                }
+                case SVGToken::DominantBaseline:
+                {
+                    if(!aContent.isEmpty())
+                    {
+                        if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"middle"))
+                        {
+                            setDominantBaseline(DominantBaseline::Middle);
+                        }
+                        else if(o3tl::equalsIgnoreAsciiCase(o3tl::trim(aContent), u"hanging"))
+                        {
+                            setDominantBaseline(DominantBaseline::Hanging);
+                        }
+                        else
+                        {
+                            // no DominantBaseline
+                            setDominantBaseline(DominantBaseline::Auto);
                         }
                     }
                     break;
@@ -3112,6 +3133,26 @@ namespace svgio::svgreader
             }
 
             return BaselineShift::Baseline;
+        }
+
+        DominantBaseline SvgStyleAttributes::getDominantBaseline() const
+        {
+            if(maDominantBaseline != DominantBaseline::Auto)
+            {
+                return maDominantBaseline;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[30] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[30];
+                auto ret = pSvgStyleAttributes->getDominantBaseline();
+                --maResolvingParent[30];
+                return ret;
+            }
+
+            return DominantBaseline::Auto;
         }
 } // end of namespace svgio
 

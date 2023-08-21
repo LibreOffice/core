@@ -727,6 +727,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156777)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "y", "23");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf156834)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf156834.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion", 3);
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Auto");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "x", "30");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "y", "20");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Middle");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "x", "30");
+    //assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "57");
+
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "text", "Hanging");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "x", "30");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[3]", "y", "94");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf104339)
 {
     Primitive2DSequence aSequenceTdf104339 = parseSvg(u"/svgio/qa/cppunit/data/tdf104339.svg");

@@ -162,6 +162,13 @@ namespace svgio::svgreader
             Length
         };
 
+        enum class DominantBaseline
+        {
+            Auto,
+            Middle,
+            Hanging
+        };
+
         enum class Visibility
         {
             notset,
@@ -228,6 +235,8 @@ namespace svgio::svgreader
             // BaselineShift: Type and number (in case of BaselineShift_Percentage or BaselineShift_Length)
             BaselineShift               maBaselineShift;
             SvgNumber                   maBaselineShiftNumber;
+
+            DominantBaseline            maDominantBaseline;
 
             mutable std::vector<sal_uInt16> maResolvingParent;
 
@@ -444,6 +453,10 @@ namespace svgio::svgreader
             void setBaselineShift(const BaselineShift aBaselineShift) { maBaselineShift = aBaselineShift; }
             BaselineShift getBaselineShift() const;
             SvgNumber getBaselineShiftNumber() const;
+
+            // DominantBaseline
+            void setDominantBaseline(const DominantBaseline aDominantBaseline) { maDominantBaseline = aDominantBaseline; }
+            DominantBaseline getDominantBaseline() const;
         };
 
 } // end of namespace svgio::svgreader
