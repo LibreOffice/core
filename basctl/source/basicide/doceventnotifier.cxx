@@ -148,20 +148,26 @@ namespace basctl
             if ( !_rEvent.EventName.equalsAscii( aEvent.pEventName ) )
                 continue;
 
+            // Listener implementations require that we hold the mutex, but to avoid lock ordering issues,
+            // we need to take the solar mutex before we take our own mutex.
+            aGuard.unlock();
+
+            // Listener implements require that we hold the solar mutex.
+            SolarMutexGuard aSolarGuard;
+
+            // Take the lock again, so we can check our local fields.
+            aGuard.lock();
+            if ( impl_isDisposed_nothrow(aGuard) )
+                // somebody took the chance to dispose us -> bail out
+                return;
+            DocumentEventListener* pListener = m_pListener;
             ScriptDocument aDocument( xDocument );
-            {
-                // the listener implementations usually require the SolarMutex, so lock it here.
-                // But ensure the proper order of locking the solar and the own mutex
-                aGuard.unlock();
-                SolarMutexGuard aSolarGuard;
-                std::unique_lock aGuard2( m_aMutex );
+            // We cannot call the listener while holding our mutex because the listener
+            // call might trigger an event which call back into us.
+            aGuard.unlock();
 
-                if ( impl_isDisposed_nothrow(aGuard2) )
-                    // somebody took the chance to dispose us -> bail out
-                    return;
+            (pListener->*aEvent.listenerMethod)( aDocument );
 
-                (m_pListener->*aEvent.listenerMethod)( aDocument );
-            }
             break;
         }
     }
