@@ -1285,7 +1285,7 @@ namespace svgio::svgreader
             maClipRule(FillRule::notset),
             maBaselineShift(BaselineShift::Baseline),
             maBaselineShiftNumber(0),
-            maResolvingParent(29, 0),
+            maResolvingParent(30, 0),
             mbIsClipPathContent(SVGToken::ClipPathNode == mrOwner.getType()),
             mbStrokeDasharraySet(false)
         {
@@ -3061,6 +3061,26 @@ namespace svgio::svgreader
             }
 
             return maBaselineShiftNumber;
+        }
+
+        BaselineShift SvgStyleAttributes::getBaselineShift() const
+        {
+            if(maBaselineShift != BaselineShift::Baseline)
+            {
+                return maBaselineShift;
+            }
+
+            const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
+
+            if (pSvgStyleAttributes && maResolvingParent[29] < nStyleDepthLimit)
+            {
+                ++maResolvingParent[29];
+                auto ret = pSvgStyleAttributes->getBaselineShift();
+                --maResolvingParent[29];
+                return ret;
+            }
+
+            return BaselineShift::Baseline;
         }
 } // end of namespace svgio
 
