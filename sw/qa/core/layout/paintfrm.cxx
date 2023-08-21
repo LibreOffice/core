@@ -36,7 +36,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     // When rendering that document:
     std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
 
-    // Then make sure that the follow table has a top border:
+    // Then make sure that the master table has a bottom border and the follow table has a top
+    // border:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
@@ -61,10 +62,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     }
     xmlXPathFreeObject(pXmlObj);
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 3
+    // - Expected: 4
     // - Actual  : 2
-    // i.e. the top border in the follow table was missing.
-    CPPUNIT_ASSERT_EQUAL(3, nHorizontalBorders);
+    // i.e. the bottom border in the master table and the top border in the follow table were
+    // missing.
+    CPPUNIT_ASSERT_EQUAL(4, nHorizontalBorders);
 }
 }
 
