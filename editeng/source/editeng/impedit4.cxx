@@ -19,8 +19,9 @@
 
 
 #include <svl/srchitem.hxx>
-#include <editeng/lspcitem.hxx>
 #include <editeng/adjustitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/tstpitem.hxx>
 
 #include "eertfpar.hxx"
@@ -963,6 +964,26 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             else if ( nEsc > 0 )
                 rOutput.WriteOString( OOO_STRING_SVTOOLS_RTF_UP );
             rOutput.WriteNumberAsString(nUpDown);
+        }
+        break;
+        case EE_CHAR_CASEMAP:
+        {
+            const SvxCaseMapItem& rCaseMap = static_cast<const SvxCaseMapItem&>(rItem);
+            switch (rCaseMap.GetValue())
+            {
+                case SvxCaseMap::SmallCaps:
+                    rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_SCAPS);
+                    break;
+                case SvxCaseMap::Uppercase:
+                    rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_CAPS);
+                    break;
+                default: // Something that rtf does not support
+                    rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_SCAPS);
+                    rOutput.WriteNumberAsString(0);
+                    rOutput.WriteOString(OOO_STRING_SVTOOLS_RTF_CAPS);
+                    rOutput.WriteNumberAsString(0);
+                    break;
+            }
         }
         break;
     }
