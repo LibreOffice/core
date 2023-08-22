@@ -9804,16 +9804,6 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
 const BitmapEmit& PDFWriterImpl::createBitmapEmit(const BitmapEx& i_rBitmap, const Graphic& rGraphic, std::list<BitmapEmit>& rBitmaps, ResourceDict& rResourceDict, std::list<StreamRedirect>& rOutputStreams)
 {
     BitmapEx aBitmap( i_rBitmap );
-
-    // When rendering an image with an alpha mask during PDF export, the alpha
-    // mask needs to be inverted
-    if (aBitmap.IsAlpha())
-    {
-        AlphaMask aAlpha = aBitmap.GetAlphaMask();
-        aAlpha.Invert();
-        aBitmap = BitmapEx(aBitmap.GetBitmap(), aAlpha);
-    }
-
     auto ePixelFormat = aBitmap.GetBitmap().getPixelFormat();
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
         aBitmap.Convert(BmpConversion::N8BitGreys);
