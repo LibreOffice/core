@@ -735,21 +735,40 @@ static void lcl_Insert(weld::TreeView& rTreeView, const OUString& rName, SfxStyl
     rTreeView.insert(pParent, -1, &rName, &rName, nullptr, xDevice.get(), false, pRet);
 }
 
-static void FillBox_Impl(weld::TreeView& rBox, StyleTree_Impl* pEntry,
-                         const std::vector<OUString>& rEntries, SfxStyleFamily eStyleFamily,
-                         const weld::TreeIter* pParent, bool blcl_insert, SfxViewShell* pViewShell)
+static void FillBox_Impl1(weld::TreeView& rBox, StyleTree_Impl* pEntry, SfxStyleFamily eStyleFamily,
+                          const weld::TreeIter* pParent, SfxViewShell* pViewShell)
 {
     std::unique_ptr<weld::TreeIter> xResult = rBox.make_iterator();
     const OUString& rName = pEntry->getName();
 
-    if (blcl_insert)
-        lcl_Insert(rBox, rName, eStyleFamily, pParent, xResult.get(), pViewShell);
-    else
-        rBox.insert(pParent, -1, &rName, &rName, nullptr, nullptr, false, xResult.get());
+    lcl_Insert(rBox, rName, eStyleFamily, pParent, xResult.get(), pViewShell);
 
     for (size_t i = 0; i < pEntry->getChildren().size(); ++i)
-        FillBox_Impl(rBox, pEntry->getChildren()[i].get(), rEntries, eStyleFamily, xResult.get(),
-                     blcl_insert, pViewShell);
+        FillBox_Impl1(rBox, pEntry->getChildren()[i].get(), eStyleFamily, xResult.get(),
+                      pViewShell);
+}
+
+static void FillBox_Impl2(weld::TreeView& rBox, StyleTreeArr_Impl& rTreeArr,
+                          const weld::TreeIter* pParent)
+{
+    rBox.bulk_insert_for_each(rTreeArr.size(),
+                              [&rTreeArr, &rBox](weld::TreeIter& rIter, int nSourceIndex) {
+                                  const OUString& rName = rTreeArr[nSourceIndex]->getName();
+                                  rBox.set_text(rIter, rName, 0);
+                                  rBox.set_id(rIter, rName);
+                              },
+                              pParent);
+
+    for (size_t i = 0; i < rTreeArr.size(); ++i)
+    {
+        StyleTreeArr_Impl& rChildren = rTreeArr[i]->getChildren();
+        if (rChildren.size())
+        {
+            std::unique_ptr<weld::TreeIter> iter = rBox.make_iterator(pParent);
+            rBox.iter_nth_child(*iter, i);
+            FillBox_Impl2(rBox, rChildren, iter.get());
+        }
+    }
 }
 
 namespace SfxTemplate
@@ -1045,13 +1064,17 @@ void StyleList::FillTreeBox(SfxStyleFamily eFam)
     bool blcl_insert = pViewShell && m_bModuleHasStylesHighlighterFeature
                        && ((eFam == SfxStyleFamily::Para && m_bHighlightParaStyles)
                            || (eFam == SfxStyleFamily::Char && m_bHighlightCharStyles));
-
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    if (blcl_insert)
     {
-        FillBox_Impl(*m_xTreeBox, aArr[i].get(), aEntries, eFam, nullptr, blcl_insert, pViewShell);
-        aArr[i].reset();
+        for (sal_uInt16 i = 0; i < nCount; ++i)
+            FillBox_Impl1(*m_xTreeBox, aArr[i].get(), eFam, nullptr, pViewShell);
     }
-
+    else
+    {
+        FillBox_Impl2(*m_xTreeBox, aArr, nullptr);
+    }
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+        aArr[i].reset();
     m_xTreeBox->columns_autosize();
 
     m_pParentDialog->EnableItem("watercan", false);
@@ -1247,8 +1270,12 @@ void StyleList::UpdateStyles(StyleFlags nFlags)
     }
     else
     {
-        for (nPos = 0; nPos < nCount; ++nPos)
-            m_xFmtLb->append(aStrings[nPos], aStrings[nPos]);
+        m_xFmtLb->bulk_insert_for_each(nCount,
+                                       [&aStrings, this](weld::TreeIter& rIter, int nSourceIndex) {
+                                           const OUString& rName = aStrings[nSourceIndex];
+                                           m_xFmtLb->set_text(rIter, rName, 0);
+                                           m_xFmtLb->set_id(rIter, rName);
+                                       });
     }
 
     m_xFmtLb->columns_autosize();
