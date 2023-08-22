@@ -45,11 +45,14 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(
     svl::Items<
@@ -407,6 +410,19 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
     return bModified;
 }
 
+static bool UseCharUnitInUI(const SfxItemSet& rSet)
+{
+    const bool bApplyCharUnit = GetApplyCharUnit(rSet);
+    if (!bApplyCharUnit)
+        return false;
+    if (!SvtCJKOptions::IsAsianTypographyEnabled())
+        return false;
+    // tdf#101895 Given that we choose to show cm vs inch based on this Locale
+    // setting, also choose to use ch[ar] and line based on that locale when
+    // bApplyCharUnit is enabled.
+    return MsLangId::isCJK(SvtSysLocaleOptions().GetRealLanguageTag().getLanguageType());
+}
+
 void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemPool* pPool = rSet->GetPool();
@@ -414,10 +430,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     // adjust metric
     FieldUnit eFUnit = GetModuleFieldUnit( *rSet );
-
-    bool bApplyCharUnit = GetApplyCharUnit( *rSet );
-
-    if(SvtCJKOptions::IsAsianTypographyEnabled() && bApplyCharUnit )
+    if (UseCharUnitInUI(*rSet))
         eFUnit = FieldUnit::CHAR;
 
     m_xLeftIndent->SetFieldUnit(eFUnit);
@@ -1599,10 +1612,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     // adjust metric
     FieldUnit eFUnit = GetModuleFieldUnit( *rSet );
-
-    bool bApplyCharUnit = GetApplyCharUnit( *rSet );
-
-    if( SvtCJKOptions::IsAsianTypographyEnabled() && bApplyCharUnit )
+    if (UseCharUnitInUI(*rSet))
         eFUnit = FieldUnit::CHAR;
 
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
