@@ -618,9 +618,9 @@ VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabCharDialo
     return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdCharDlg>(pParent, pAttr, pDocShell));
 }
 
-VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage, bool bIsImpressDoc, bool bIsImpressMaster )
+VclPtr<SfxAbstractTabDialog>  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog(weld::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, bool bAreaPage, bool bIsImpressDoc)
 {
-    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdPageDlg>(pDocShell, pParent, pAttr, bAreaPage, bIsImpressDoc, bIsImpressMaster));
+    return VclPtr<SdAbstractTabController_Impl>::Create(std::make_shared<SdPageDlg>(pDocShell, pParent, pAttr, bAreaPage, bIsImpressDoc));
 }
 
 VclPtr<AbstractSdModifyFieldDlg> SdAbstractDialogFactory_Impl::CreateSdModifyFieldDlg(weld::Window* pParent, const SvxFieldData* pInField, const SfxItemSet& rSet)

@@ -308,7 +308,7 @@ VclPtr<VclAbstractDialog> SdDialogsTest::createDialogByID(sal_uInt32 nID)
                 getViewShell()->GetFrameWeld(),
                 &getEmptyFillStyleSfxItemSet(),
                 getDocShell(),
-                true, /*bIsImpressDoc=*/false, /*bIsImpressMaster=*/false);
+                true, /*bIsImpressDoc=*/false);
             break;
         }
         case 6:
