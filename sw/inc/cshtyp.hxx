@@ -50,9 +50,9 @@ extern SW_DLLPUBLIC SwMoveFnCollection const & fnParaEnd;
 // Direction-parameter for MoveSection.
 typedef bool (*SwWhichSection)( SwPaM&, SwMoveFnCollection const & );
 extern SwMoveFnCollection const & fnSectionStart;
-extern SwMoveFnCollection const & fnSectionEnd;
+extern SW_DLLPUBLIC SwMoveFnCollection const & fnSectionEnd;
 
-bool GoCurrSection( SwPaM&, SwMoveFnCollection const &);
+SW_DLLPUBLIC bool GoCurrSection( SwPaM&, SwMoveFnCollection const &);
 
 // Direction-parameter for MoveTable
 typedef bool (*SwWhichTable)( SwPaM&, SwMoveFnCollection const &, bool bInReadOnly );

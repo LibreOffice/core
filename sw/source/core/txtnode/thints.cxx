@@ -53,6 +53,7 @@
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
 #include <formatcontentcontrol.hxx>
+#include <formatflysplit.hxx>
 #include <textcontentcontrol.hxx>
 #include <breakit.hxx>
 #include <doc.hxx>
@@ -1440,7 +1441,16 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 SwNodes &rNodes = rDoc.GetNodes();
 
                 // check that footnote is inserted into body or redline section
-                if( StartOfSectionIndex() < rNodes.GetEndOfAutotext().GetIndex() )
+                bool bSplitFly = false;
+                if (StartOfSectionIndex() < rNodes.GetEndOfAutotext().GetIndex()
+                    && StartOfSectionIndex() >= rNodes.GetEndOfInserts().GetIndex())
+                {
+                    // This is a frame, header or footer. Check if it's a split frame.
+                    SwFrameFormat* pFlyFormat = StartOfSectionNode()->GetFlyFormat();
+                    bSplitFly = pFlyFormat && pFlyFormat->GetFlySplit().GetValue();
+                }
+
+                if (StartOfSectionIndex() < rNodes.GetEndOfAutotext().GetIndex() && !bSplitFly)
                 {
                     // This should not be allowed, prevent it here.
                     // The dtor of the SwTextAttr does not delete the
@@ -1527,7 +1537,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 static_cast<SwTextFootnote*>(pAttr)->ChgTextNode( this );
 
                 // do not insert footnote in redline section into footnote array
-                if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
+                if (StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() || bSplitFly)
                 {
                     const bool bSuccess = rDoc.GetFootnoteIdxs().insert(pTextFootnote).second;
                     OSL_ENSURE( bSuccess, "FootnoteIdx not inserted." );
