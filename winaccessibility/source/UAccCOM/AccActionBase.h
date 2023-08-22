@@ -66,9 +66,6 @@ public:
 
 protected:
     css::uno::Reference<css::accessibility::XAccessibleAction> pRXAct;
-
-private:
-    css::accessibility::XAccessibleAction* GetXInterface() { return pRXAct.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
