@@ -455,7 +455,7 @@ Try:
 
 	Set oOpen = ScriptForge.SF_Services.CreateScriptService(&quot;SFDocuments.FormDocument&quot;, oNewForm)
 
-	&apos;	Prevent desynchonization when using .last(), .next() etc immediately after component loading. Bug #156836
+	&apos;	Prevent desynchronization when using .last(), .next() etc immediately after component loading. Bug #156836
 	Wait 1
 
 Finally:
