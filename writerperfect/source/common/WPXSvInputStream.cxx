@@ -453,19 +453,20 @@ int WPXSvInputStream::seek(tools::Long offset)
         return -1;
 
     const sal_Int64 tmpPosition = mxSeekable->getPosition();
-    if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
+    if (tmpPosition < 0)
         return -1;
 
     try
     {
         mxSeekable->seek(offset);
-        return 0;
     }
     catch (...)
     {
         SAL_WARN("writerperfect", "mxSeekable->seek(offset) threw exception");
         return -1;
     }
+
+    return 0;
 }
 
 bool WPXSvInputStream::isStructured()
