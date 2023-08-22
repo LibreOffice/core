@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <controls/table/tablemodel.hxx>
 #include <controls/table/tablecontrolinterface.hxx>
 
@@ -132,6 +133,8 @@ namespace svt::table
 
         vcl::AccessibleFactoryAccess     m_aFactoryAccess;
         vcl::table::IAccessibleTableControl*    m_pAccessibleTable;
+
+        css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
 
     public:
         void        setModel( const PTableModel& _pModel );

@@ -2371,6 +2371,9 @@ namespace svt::table
 
     Reference< XAccessible > TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
     {
+        if (m_xAccessible.is())
+            return m_xAccessible;
+
         DBG_TESTSOLARMUTEX();
         if ( m_pAccessibleTable == nullptr )
         {
@@ -2383,10 +2386,9 @@ namespace svt::table
             }
         }
 
-        Reference< XAccessible > xAccessible;
         if ( m_pAccessibleTable )
-            xAccessible = m_pAccessibleTable->getMyself();
-        return xAccessible;
+            m_xAccessible = m_pAccessibleTable->getMyself();
+        return m_xAccessible;
     }
 
 
@@ -2395,6 +2397,7 @@ namespace svt::table
         if ( m_pAccessibleTable )
             m_pAccessibleTable->DisposeAccessImpl();
         m_pAccessibleTable = nullptr;
+        m_xAccessible.clear();
     }
 
 
