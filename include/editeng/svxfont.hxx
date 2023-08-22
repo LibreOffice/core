@@ -79,6 +79,8 @@ public:
     Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt, KernArray* pDXAry,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
+                      o3tl::span<const sal_Int32> pDXArray,
+                      o3tl::span<const sal_Bool> pKashidaArray,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,

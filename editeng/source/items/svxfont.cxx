@@ -562,8 +562,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     if( IsCapital() )
     {
-        DBG_ASSERT( pDXArray.empty(), "DrawCapital not for TextArray!" );
-        DrawCapital( pOut, aPos, rTxt, nIdx, nLen );
+        DrawCapital( pOut, aPos, rTxt, pDXArray, pKashidaArray, nIdx, nLen );
     }
     else
     {
@@ -623,7 +622,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
     Font aOldPrnFont( ChgPhysFont(*pPrinter) );
 
     if ( IsCapital() )
-        DrawCapital( pOut, aPos, rTxt, nIdx, nTmp );
+        DrawCapital( pOut, aPos, rTxt, {}, {}, nIdx, nTmp );
     else
     {
         Size aSize = GetPhysTxtSize( pPrinter, rTxt, nIdx, nTmp );
@@ -775,8 +774,12 @@ protected:
     Point aPos;
     Point aSpacePos;
     short nKern;
+    o3tl::span<const sal_Int32> pDXArray;
+    o3tl::span<const sal_Bool> pKashidaArray;
 public:
     SvxDoDrawCapital( SvxFont *pFnt, OutputDevice *_pOut, const OUString &_rTxt,
+                      o3tl::span<const sal_Int32> _pDXArray,
+                      o3tl::span<const sal_Bool> _pKashidaArray,
                       const sal_Int32 _nIdx, const sal_Int32 _nLen,
                       const Point &rPos, const short nKrn )
         : SvxDoCapitals( _rTxt, _nIdx, _nLen ),
@@ -784,7 +787,9 @@ public:
           pFont( pFnt ),
           aPos( rPos ),
           aSpacePos( rPos ),
-          nKern( nKrn )
+          nKern( nKrn ),
+          pDXArray(_pDXArray),
+          pKashidaArray(_pKashidaArray)
         { }
     virtual void DoSpace( const bool bDraw ) override;
     virtual void SetSpace() override;
@@ -820,8 +825,8 @@ void SvxDoDrawCapital::SetSpace()
         aSpacePos.setX( aPos.X() );
 }
 
-void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
-                           const sal_Int32 _nLen, const bool bUpper)
+void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 nSpanIdx,
+                           const sal_Int32 nSpanLen, const bool bUpper)
 {
     sal_uInt8 nProp = 0;
 
@@ -839,13 +844,39 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     }
     pFont->SetPhysFont(*pOut);
 
-    tools::Long nWidth = pOut->GetTextWidth( _rTxt, _nIdx, _nLen );
-    if ( nKern )
+    if (pDXArray.empty())
     {
-        aPos.AdjustX(nKern/2);
-        if ( _nLen ) nWidth += (_nLen*tools::Long(nKern));
+        auto nWidth = pOut->GetTextWidth(_rTxt, nSpanIdx, nSpanLen);
+        if (nKern)
+        {
+            aPos.AdjustX(nKern/2);
+            if (nSpanLen)
+                nWidth += (nSpanLen * nKern);
+        }
+        pOut->DrawStretchText(aPos, nWidth-nKern, _rTxt, nSpanIdx, nSpanLen);
+        // in this case we move aPos along to be the start of each subspan
+        aPos.AdjustX(nWidth-(nKern/2) );
     }
-    pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
+    else
+    {
+        const sal_Int32 nStartOffset = nSpanIdx - nIdx;
+        sal_Int32 nStartX = nStartOffset ? pDXArray[nStartOffset - 1] : 0;
+
+        Point aStartPos(aPos.X() + nStartX, aPos.Y());
+
+        std::vector<sal_Int32> aDXArray;
+        aDXArray.reserve(nSpanLen);
+        for (sal_Int32 i = 0; i < nSpanLen; ++i)
+            aDXArray.push_back(pDXArray[nStartOffset + i] - nStartX);
+
+        auto aKashidaArray = !pKashidaArray.empty() ?
+            o3tl::span<const sal_Bool>(pKashidaArray.data() + nStartOffset, nSpanLen) :
+            o3tl::span<const sal_Bool>();
+
+        DrawTextArray(pOut, aStartPos, _rTxt, aDXArray, aKashidaArray, nSpanIdx, nSpanLen);
+        // in this case we leave aPos at the start and use the DXArray to find the start
+        // of each subspan
+    }
 
     // Restore Font
     pFont->SetUnderline( eUnder );
@@ -854,8 +885,6 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     if ( !bUpper )
         pFont->SetPropr( nProp );
     pFont->SetPhysFont(*pOut);
-
-    aPos.AdjustX(nWidth-(nKern/2) );
 }
 
 /*************************************************************************
@@ -864,9 +893,13 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
 
 void SvxFont::DrawCapital( OutputDevice *pOut,
                const Point &rPos, const OUString &rTxt,
+               o3tl::span<const sal_Int32> pDXArray,
+               o3tl::span<const sal_Bool> pKashidaArray,
                const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
-    SvxDoDrawCapital aDo( const_cast<SvxFont *>(this),pOut,rTxt,nIdx,nLen,rPos,GetFixKerning() );
+    SvxDoDrawCapital aDo(const_cast<SvxFont *>(this), pOut,
+                         rTxt, pDXArray, pKashidaArray,
+                         nIdx, nLen, rPos, GetFixKerning());
     DoOnCapitals( aDo );
 }
 
