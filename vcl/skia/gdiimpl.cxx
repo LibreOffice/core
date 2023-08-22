@@ -63,7 +63,7 @@ void addPolygonToPath(const basegfx::B2DPolygon& rPolygon, SkPath& rPath, sal_uI
                       sal_uInt32 nLastIndex, const sal_uInt32 nPointCount, const bool bClosePath,
                       const bool bHasCurves, bool* hasOnlyOrthogonal = nullptr)
 {
-    assert(nFirstIndex < nPointCount);
+    assert(nFirstIndex < nPointCount || (nFirstIndex == 0 && nPointCount == 0));
     assert(nLastIndex <= nPointCount);
 
     if (nPointCount <= 1)
@@ -1443,52 +1443,54 @@ void SkiaSalGraphicsImpl::invert(basegfx::B2DPolygon const& rPoly, SalInvert eFl
     addPolygonToPath(rPoly, aPath);
     aPath.setFillType(SkPathFillType::kEvenOdd);
     addUpdateRegion(aPath.getBounds());
-    SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
-    SkPaint aPaint;
-    // There's no blend mode for inverting as such, but kExclusion is 's + d - 2*s*d',
-    // so with d = 1.0 (all channels) it becomes effectively '1 - s', i.e. inverted color.
-    aPaint.setBlendMode(SkBlendMode::kExclusion);
-    aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
-    // TrackFrame just inverts a dashed path around the polygon
-    if (eFlags == SalInvert::TrackFrame)
     {
-        // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
-        // but wider stroke width usually results in that, so ensure the requirement
-        // by clipping.
-        getDrawCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
-        aPaint.setStrokeWidth(2);
-        constexpr float intervals[] = { 4.0f, 4.0f };
-        aPaint.setStyle(SkPaint::kStroke_Style);
-        aPaint.setPathEffect(SkDashPathEffect::Make(intervals, std::size(intervals), 0));
-    }
-    else
-    {
-        aPaint.setStyle(SkPaint::kFill_Style);
-
-        // N50 inverts in checker pattern
-        if (eFlags == SalInvert::N50)
+        SkAutoCanvasRestore autoRestore(getDrawCanvas(), true);
+        SkPaint aPaint;
+        // There's no blend mode for inverting as such, but kExclusion is 's + d - 2*s*d',
+        // so with d = 1.0 (all channels) it becomes effectively '1 - s', i.e. inverted color.
+        aPaint.setBlendMode(SkBlendMode::kExclusion);
+        aPaint.setColor(SkColorSetARGB(255, 255, 255, 255));
+        // TrackFrame just inverts a dashed path around the polygon
+        if (eFlags == SalInvert::TrackFrame)
         {
-            // This creates 2x2 checker pattern bitmap
-            // TODO Use createSkSurface() and cache the image
-            SkBitmap aBitmap;
-            aBitmap.allocN32Pixels(2, 2);
-            const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
-            const SkPMColor black = SkPreMultiplyARGB(0xFF, 0x00, 0x00, 0x00);
-            SkPMColor* scanline;
-            scanline = aBitmap.getAddr32(0, 0);
-            *scanline++ = white;
-            *scanline++ = black;
-            scanline = aBitmap.getAddr32(0, 1);
-            *scanline++ = black;
-            *scanline++ = white;
-            aBitmap.setImmutable();
-            // The bitmap is repeated in both directions the checker pattern is as big
-            // as the polygon (usually rectangle)
-            aPaint.setShader(
-                aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat, SkSamplingOptions()));
+            // TrackFrame is not supposed to paint outside of the polygon (usually rectangle),
+            // but wider stroke width usually results in that, so ensure the requirement
+            // by clipping.
+            getDrawCanvas()->clipRect(aPath.getBounds(), SkClipOp::kIntersect, false);
+            aPaint.setStrokeWidth(2);
+            constexpr float intervals[] = { 4.0f, 4.0f };
+            aPaint.setStyle(SkPaint::kStroke_Style);
+            aPaint.setPathEffect(SkDashPathEffect::Make(intervals, std::size(intervals), 0));
         }
+        else
+        {
+            aPaint.setStyle(SkPaint::kFill_Style);
+
+            // N50 inverts in checker pattern
+            if (eFlags == SalInvert::N50)
+            {
+                // This creates 2x2 checker pattern bitmap
+                // TODO Use createSkSurface() and cache the image
+                SkBitmap aBitmap;
+                aBitmap.allocN32Pixels(2, 2);
+                const SkPMColor white = SkPreMultiplyARGB(0xFF, 0xFF, 0xFF, 0xFF);
+                const SkPMColor black = SkPreMultiplyARGB(0xFF, 0x00, 0x00, 0x00);
+                SkPMColor* scanline;
+                scanline = aBitmap.getAddr32(0, 0);
+                *scanline++ = white;
+                *scanline++ = black;
+                scanline = aBitmap.getAddr32(0, 1);
+                *scanline++ = black;
+                *scanline++ = white;
+                aBitmap.setImmutable();
+                // The bitmap is repeated in both directions the checker pattern is as big
+                // as the polygon (usually rectangle)
+                aPaint.setShader(aBitmap.makeShader(SkTileMode::kRepeat, SkTileMode::kRepeat,
+                                                    SkSamplingOptions()));
+            }
+        }
+        getDrawCanvas()->drawPath(aPath, aPaint);
     }
-    getDrawCanvas()->drawPath(aPath, aPaint);
     postDraw();
 }
 
@@ -1668,36 +1670,39 @@ sk_sp<SkImage> SkiaSalGraphicsImpl::mergeCacheBitmaps(const SkiaSalBitmap& bitma
     if (!tmpSurface)
         return nullptr;
     SkCanvas* canvas = tmpSurface->getCanvas();
-    SkAutoCanvasRestore autoRestore(canvas, true);
-    SkPaint paint;
-    SkSamplingOptions samplingOptions;
-    if (targetSize != sourceSize)
     {
-        SkMatrix matrix;
-        matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / sourceSize.Width());
-        matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / sourceSize.Height());
-        canvas->concat(matrix);
-        if (!isUnitTestRunning()) // unittests want exact pixel values
-            samplingOptions = makeSamplingOptions(matrix, 1);
+        SkAutoCanvasRestore autoRestore(canvas, true);
+        SkPaint paint;
+        SkSamplingOptions samplingOptions;
+        if (targetSize != sourceSize)
+        {
+            SkMatrix matrix;
+            matrix.set(SkMatrix::kMScaleX, 1.0 * targetSize.Width() / sourceSize.Width());
+            matrix.set(SkMatrix::kMScaleY, 1.0 * targetSize.Height() / sourceSize.Height());
+            canvas->concat(matrix);
+            if (!isUnitTestRunning()) // unittests want exact pixel values
+                samplingOptions = makeSamplingOptions(matrix, 1);
+        }
+        if (alphaBitmap != nullptr)
+        {
+            canvas->clear(SK_ColorTRANSPARENT);
+            paint.setShader(SkShaders::Blend(
+                SkBlendMode::kDstIn, bitmap.GetSkShader(samplingOptions, bitmapType),
+                alphaBitmap->GetAlphaSkShader(samplingOptions, alphaBitmapType)));
+            canvas->drawPaint(paint);
+        }
+        else if (bitmap.PreferSkShader())
+        {
+            paint.setShader(bitmap.GetSkShader(samplingOptions, bitmapType));
+            canvas->drawPaint(paint);
+        }
+        else
+            canvas->drawImage(bitmap.GetSkImage(bitmapType), 0, 0, samplingOptions, &paint);
+        if (isGPU())
+            SAL_INFO("vcl.skia.trace", "mergecachebitmaps(" << this << "): caching GPU downscaling:"
+                                                            << bitmap.GetSize() << "->"
+                                                            << targetSize);
     }
-    if (alphaBitmap != nullptr)
-    {
-        canvas->clear(SK_ColorTRANSPARENT);
-        paint.setShader(
-            SkShaders::Blend(SkBlendMode::kDstIn, bitmap.GetSkShader(samplingOptions, bitmapType),
-                             alphaBitmap->GetAlphaSkShader(samplingOptions, alphaBitmapType)));
-        canvas->drawPaint(paint);
-    }
-    else if (bitmap.PreferSkShader())
-    {
-        paint.setShader(bitmap.GetSkShader(samplingOptions, bitmapType));
-        canvas->drawPaint(paint);
-    }
-    else
-        canvas->drawImage(bitmap.GetSkImage(bitmapType), 0, 0, samplingOptions, &paint);
-    if (isGPU())
-        SAL_INFO("vcl.skia.trace", "mergecachebitmaps(" << this << "): caching GPU downscaling:"
-                                                        << bitmap.GetSize() << "->" << targetSize);
     sk_sp<SkImage> image = makeCheckedImageSnapshot(tmpSurface);
     addCachedImage(key, image);
     return image;
@@ -1817,27 +1822,29 @@ void SkiaSalGraphicsImpl::drawShader(const SalTwoRect& rPosAry, const sk_sp<SkSh
     paint.setShader(shader);
     SkCanvas* canvas = getDrawCanvas();
     // Scaling needs to be done explicitly using a matrix.
-    SkAutoCanvasRestore autoRestore(canvas, true);
-    SkMatrix matrix = SkMatrix::Translate(rPosAry.mnDestX, rPosAry.mnDestY)
-                      * SkMatrix::Scale(1.0 * rPosAry.mnDestWidth / rPosAry.mnSrcWidth,
-                                        1.0 * rPosAry.mnDestHeight / rPosAry.mnSrcHeight)
-                      * SkMatrix::Translate(-rPosAry.mnSrcX, -rPosAry.mnSrcY);
+    {
+        SkAutoCanvasRestore autoRestore(canvas, true);
+        SkMatrix matrix = SkMatrix::Translate(rPosAry.mnDestX, rPosAry.mnDestY)
+                          * SkMatrix::Scale(1.0 * rPosAry.mnDestWidth / rPosAry.mnSrcWidth,
+                                            1.0 * rPosAry.mnDestHeight / rPosAry.mnSrcHeight)
+                          * SkMatrix::Translate(-rPosAry.mnSrcX, -rPosAry.mnSrcY);
 #ifndef NDEBUG
-    // Handle floating point imprecisions, round p1 to 2 decimal places.
-    auto compareRounded = [](const SkPoint& p1, const SkPoint& p2) {
-        return rtl::math::round(p1.x(), 2) == p2.x() && rtl::math::round(p1.y(), 2) == p2.y();
-    };
+        // Handle floating point imprecisions, round p1 to 2 decimal places.
+        auto compareRounded = [](const SkPoint& p1, const SkPoint& p2) {
+            return rtl::math::round(p1.x(), 2) == p2.x() && rtl::math::round(p1.y(), 2) == p2.y();
+        };
 #endif
-    assert(compareRounded(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY),
-                          SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY)));
-    assert(compareRounded(
-        matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight),
-        SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
-                      rPosAry.mnDestY + rPosAry.mnDestHeight)));
-    canvas->concat(matrix);
-    SkRect sourceRect
-        = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth, rPosAry.mnSrcHeight);
-    canvas->drawRect(sourceRect, paint);
+        assert(compareRounded(matrix.mapXY(rPosAry.mnSrcX, rPosAry.mnSrcY),
+                              SkPoint::Make(rPosAry.mnDestX, rPosAry.mnDestY)));
+        assert(compareRounded(
+            matrix.mapXY(rPosAry.mnSrcX + rPosAry.mnSrcWidth, rPosAry.mnSrcY + rPosAry.mnSrcHeight),
+            SkPoint::Make(rPosAry.mnDestX + rPosAry.mnDestWidth,
+                          rPosAry.mnDestY + rPosAry.mnDestHeight)));
+        canvas->concat(matrix);
+        SkRect sourceRect = SkRect::MakeXYWH(rPosAry.mnSrcX, rPosAry.mnSrcY, rPosAry.mnSrcWidth,
+                                             rPosAry.mnSrcHeight);
+        canvas->drawRect(sourceRect, paint);
+    }
     postDraw();
 }
 

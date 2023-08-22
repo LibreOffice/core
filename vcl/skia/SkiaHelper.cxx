@@ -352,11 +352,6 @@ bool isVCLSkiaEnabled()
     if (bTestSystemPrimitiveRenderer)
         return false;
 
-    // No hardware rendering, so no Skia
-    // TODO SKIA
-    if (Application::IsBitmapRendering())
-        return false;
-
     if (bSet)
     {
         return bForceSkia || bEnable;
@@ -422,6 +417,12 @@ static RenderMethod methodToUse = RenderRaster;
 
 static bool initRenderMethodToUse()
 {
+    if (Application::IsBitmapRendering())
+    {
+        methodToUse = RenderRaster;
+        return true;
+    }
+
     if (const char* env = getenv("SAL_SKIA"))
     {
         if (strcmp(env, "raster") == 0)
