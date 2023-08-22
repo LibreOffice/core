@@ -134,9 +134,6 @@ endif
 
 ## handle Xinerama
 ifneq ($(USING_X11),)
-$(eval $(call gb_Library_add_defs,vclplug_gen,\
-    -DUSE_XINERAMA_XORG \
-))
 ifeq ($(XINERAMA_LINK),dynamic)
 $(eval $(call gb_Library_add_libs,vclplug_gen,\
     -lXinerama \

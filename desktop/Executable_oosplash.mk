@@ -24,15 +24,9 @@ $(eval $(call gb_Executable_add_cobjects,oosplash,\
 ))
 
 ifneq ($(USING_X11),)
-
-$(eval $(call gb_Executable_add_defs,oosplash,\
-    -DUSE_XINERAMA \
-))
-
 $(eval $(call gb_Executable_add_libs,oosplash,\
     -lXinerama \
 ))
-
 endif
 
 ifneq ($(DISABLE_GUI),TRUE)

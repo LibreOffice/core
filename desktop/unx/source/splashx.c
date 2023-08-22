@@ -16,9 +16,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#ifdef USING_X11
 #include <X11/extensions/Xinerama.h>
-#endif
 
 #include <osl/endian.h>
 #include <fcntl.h>
@@ -406,10 +404,8 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
 {
     char *display_name = NULL;
     int i;
-#ifdef USING_X11
     int n_xinerama_screens = 1;
     XineramaScreenInfo* p_screens = NULL;
-#endif
 
     for ( i = 0; i < argc; i++ )
     {
@@ -442,7 +438,6 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
     splash->display_x_pos = 0;
     splash->display_y_pos = 0;
 
-#ifdef USING_X11
     p_screens = XineramaQueryScreens( splash->display, &n_xinerama_screens );
     if( p_screens )
     {
@@ -459,7 +454,6 @@ static int splash_init_display( struct splash* splash, int argc, char** argv )
         }
         XFree( p_screens );
     }
-#endif
     return 1;
 }
 
@@ -812,6 +806,6 @@ struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv)
 }
 
 
-#endif // ENABLE_QUICKSTART_LIBPNG
+#endif // defined(ENABLE_QUICKSTART_LIBPNG) && HAVE_FEATURE_UI
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
