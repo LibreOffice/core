@@ -14668,6 +14668,8 @@ AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
 
 if test "$enable_mpl_subset" = "yes"; then
+    mpl_error_string=
+    newline=$'\n    *'
     warn_report=false
     if test "$enable_report_builder" != "no" -a "$with_java" != "no"; then
         warn_report=true
@@ -14675,35 +14677,43 @@ if test "$enable_mpl_subset" = "yes"; then
         warn_report=true
     fi
     if test "$warn_report" = "true"; then
-        AC_MSG_ERROR([need to --disable-report-builder - extended database report builder.])
+        mpl_error_string="$mpl_error_string$newline Need to --disable-report-builder - extended database report builder."
     fi
     if test "x$enable_postgresql_sdbc" != "xno"; then
-        AC_MSG_ERROR([need to --disable-postgresql-sdbc - the PostgreSQL database backend.])
+        mpl_error_string="$mpl_error_string$newline Need to --disable-postgresql-sdbc - the PostgreSQL database backend."
     fi
     if test "$enable_lotuswordpro" = "yes"; then
-        AC_MSG_ERROR([need to --disable-lotuswordpro - a Lotus Word Pro file format import filter.])
+        mpl_error_string="$mpl_error_string$newline Need to --disable-lotuswordpro - a Lotus Word Pro file format import filter."
     fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
-            AC_MSG_ERROR([need to disable PDF import via poppler or use system library])
+            mpl_error_string="$mpl_error_string$newline Need to disable PDF import via poppler or use system library."
         fi
     fi
     # cf. m4/libo_check_extension.m4
     if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
-        AC_MSG_ERROR([need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'])
+        mpl_error_string="$mpl_error_string$newline Need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'."
     fi
+    denied_themes=
     for theme in $WITH_THEMES; do
         case $theme in
         breeze|breeze_dark|breeze_dark_svg|breeze_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg) #denylist of icon themes under GPL or LGPL
-            AC_MSG_ERROR([need to disable icon themes from '$WITH_THEMES': $theme present, use --with-theme=colibre]) ;;
+            denied_themes="$denied_themes $theme" ;;
         *) : ;;
         esac
     done
+    if test "x$denied_themes" != "x"; then
+        mpl_error_string="$mpl_error_string$newline Need to disable icon themes from '$WITH_THEMES': $denied_themes present, use --with-theme=colibre."
+    fi
 
     ENABLE_OPENGL_TRANSITIONS=
 
     if test "$enable_lpsolve" != "no" -o "x$ENABLE_LPSOLVE" = "xTRUE"; then
-        AC_MSG_ERROR([need to --disable-lpsolve - calc linear programming solver.])
+        mpl_error_string="$mpl_error_string$newline Need to --disable-lpsolve - calc linear programming solver."
+    fi
+
+    if test "x$mpl_error_string" != "x"; then
+        AC_MSG_ERROR([$mpl_error_string])
     fi
 
     MPL_SUBSET="TRUE"
