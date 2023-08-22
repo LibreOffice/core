@@ -19,10 +19,11 @@ public:
     ManagedMenuButton(vcl::Window* pParent, WinBits nStyle);
     ~ManagedMenuButton() override;
 
-    void Activate() override;
     void dispose() override;
 
 private:
+    void PrepareExecute() override;
+
     css::uno::Reference<css::awt::XPopupMenu> m_xPopupMenu;
     css::uno::Reference<css::frame::XPopupMenuController> m_xPopupController;
 };

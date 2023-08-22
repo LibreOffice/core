@@ -57,7 +57,7 @@ void MenuButton::ExecuteMenu()
 {
     mbStartingMenu = true;
 
-    Activate();
+    PrepareExecute();
 
     if (!mpMenu && !mpFloatingWindow)
     {
@@ -93,6 +93,8 @@ void MenuButton::ExecuteMenu()
             vcl::Window::GetDockingManager()->StartPopupMode(mpFloatingWindow, aRect, nFlags);
         }
     }
+
+    Activate();
 
     mbStartingMenu = false;
 

@@ -39,12 +39,12 @@ void ManagedMenuButton::dispose()
     MenuButton::dispose();
 }
 
-void ManagedMenuButton::Activate()
+void ManagedMenuButton::PrepareExecute()
 {
     if (!GetPopupMenu())
         SetPopupMenu(VclPtr<PopupMenu>::Create());
 
-    MenuButton::Activate();
+    MenuButton::PrepareExecute();
 
     if (m_xPopupController.is())
     {

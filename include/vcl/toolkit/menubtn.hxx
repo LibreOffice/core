@@ -54,6 +54,8 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( vcl::Window* pParent, WinBits nStyle );
+    // override in derived classes to set up anything needed to execute menu
+    virtual void PrepareExecute() {};
 
 public:
     explicit        MenuButton( vcl::Window* pParent, WinBits nStyle = 0 );
