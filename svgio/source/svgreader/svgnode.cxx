@@ -94,7 +94,7 @@ namespace {
 
         void SvgNode::fillCssStyleVectorUsingHierarchyAndSelectors(
             const SvgNode& rCurrent,
-            const OUString& aConcatenated)
+            std::u16string_view aConcatenated)
         {
             const SvgDocument& rDocument = getDocument();
 
@@ -102,6 +102,7 @@ namespace {
                 return;
 
             const SvgNode* pParent = rCurrent.getParent();
+            OUString sCurrentType(SVGTokenToStr(rCurrent.getType()));
 
             // check for ID (highest priority)
             if(rCurrent.getId())
@@ -110,20 +111,16 @@ namespace {
 
                 if(rId.getLength())
                 {
-                    const OUString aNewConcatenated(
-                        "#" + rId + aConcatenated);
+                    const OUString aNewConcatenated("#" + rId + aConcatenated);
+                    addCssStyle(rDocument, aNewConcatenated);
+
+                    if(!sCurrentType.isEmpty())
+                        addCssStyle(rDocument, sCurrentType + aNewConcatenated);
+
                     if(pParent)
                     {
                         // check for combined selectors at parent first so that higher specificity will be in front
                         fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
-                    }
-                    addCssStyle(rDocument, aNewConcatenated);
-
-                    // look further up in the hierarchy
-                    if(!aConcatenated.isEmpty() && pParent && pParent->getId())
-                    {
-                        const OUString& rParentId = pParent->getId().value();
-                        addCssStyle(rDocument, "#" + rParentId + aConcatenated);
                     }
                 }
             }
@@ -132,55 +129,34 @@ namespace {
             for(const auto &aClass : aClasses)
             {
                 const OUString aNewConcatenated("." + aClass + aConcatenated);
+                addCssStyle(rDocument, aNewConcatenated);
+
+                if(!sCurrentType.isEmpty())
+                    addCssStyle(rDocument, sCurrentType + aNewConcatenated);
+
                 if(pParent)
                 {
                     // check for combined selectors at parent first so that higher specificity will be in front
                     fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
                 }
-                addCssStyle(rDocument, aNewConcatenated);
-
-                // look further up in the hierarchy
-                if(!aConcatenated.isEmpty() && pParent)
-                {
-                    std::vector <OUString> aParentClasses = parseClass(*pParent);
-                    for(const auto &aParentClass : aParentClasses)
-                    {
-                        addCssStyle(rDocument, "." + aParentClass + aConcatenated);
-                    }
-                }
             }
 
-            OUString sCurrentType(SVGTokenToStr(getType()));
+            if(!sCurrentType.isEmpty())
+            {
+                const OUString aNewConcatenated(sCurrentType + aConcatenated);
+                addCssStyle(rDocument, aNewConcatenated);
+            }
+
+            OUString sType(SVGTokenToStr(getType()));
 
             // check for class-dependent references to CssStyles
-            if(sCurrentType.isEmpty())
+            if(sType.isEmpty())
                 return;
-
-            OUString aNewConcatenated(aConcatenated);
-
-            if(!rCurrent.getId() && !rCurrent.getClass() && 0 == aConcatenated.indexOf(sCurrentType))
-            {
-                // no new CssStyle Selector and already starts with sCurrentType, do not concatenate;
-                // we pass an 'empty' node (in the sense of CssStyle Selector)
-            }
-            else
-            {
-                aNewConcatenated = sCurrentType + aConcatenated;
-            }
 
             if(pParent)
             {
                 // check for combined selectors at parent first so that higher specificity will be in front
-                fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, aNewConcatenated);
-            }
-
-            addCssStyle(rDocument, aNewConcatenated);
-
-            // check if there is a css style with element inside element
-            if(pParent)
-            {
-                OUString sParentType(SVGTokenToStr(pParent->getType()));
-                addCssStyle(rDocument, sParentType + sCurrentType);
+                fillCssStyleVectorUsingHierarchyAndSelectors(*pParent, sType);
             }
         }
 
@@ -309,7 +285,7 @@ namespace {
             fillCssStyleVectorUsingParent(*this);
 
             // check the hierarchy for concatenated patterns of Selectors
-            fillCssStyleVectorUsingHierarchyAndSelectors(*this, OUString());
+            fillCssStyleVectorUsingHierarchyAndSelectors(*this, std::u16string_view());
 
 
             // tdf#99115, Add css selector '*' style only if the element is on top of the hierarchy
