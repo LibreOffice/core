@@ -59,11 +59,11 @@ class tdf79236(UITestCase):
                     xTopSpnBtn.executeAction("UP", tuple())
 
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 3704)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 3704)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 5503)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 5503)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 3704)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 1016)
 
             with self.ui_test.execute_dialog_through_command(".uno:ParagraphDialog") as xParagraphDlg:
 
@@ -98,11 +98,11 @@ class tdf79236(UITestCase):
 
             self.xUITest.executeCommand(".uno:Undo")
 
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 3704)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 3704)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 5503)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 5503)
-            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 3704)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaTopMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaBottomMargin, 1016)
+            self.assertEqual(document.CurrentSelection.getByIndex(0).ParaFirstLineIndent, 1016)
 
             self.xUITest.executeCommand(".uno:Undo")
 
