@@ -39,6 +39,8 @@ struct HashImpl
                 return HASH_AlgSHA1;
             case HashType::SHA256:
                 return HASH_AlgSHA256;
+            case HashType::SHA384:
+                return HASH_AlgSHA384;
             case HashType::SHA512:
                 return HASH_AlgSHA512;
         }
@@ -58,6 +60,8 @@ struct HashImpl
                 return EVP_sha1();
             case HashType::SHA256:
                 return EVP_sha256();
+            case HashType::SHA384:
+                return EVP_sha384();
             case HashType::SHA512:
                 return EVP_sha512();
         }
@@ -138,6 +142,8 @@ size_t Hash::getLength() const
             return 20;
         case HashType::SHA256:
             return 32;
+        case HashType::SHA384:
+            return 48;
         case HashType::SHA512:
             return 64;
     }

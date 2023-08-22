@@ -444,6 +444,7 @@ const sal_uInt32 SALT_LENGTH                    = 16;
 const sal_uInt32 ENCRYPTED_VERIFIER_LENGTH      = 16;
 const sal_uInt32 SHA1_HASH_LENGTH = RTL_DIGEST_LENGTH_SHA1; // 20
 const sal_uInt32 SHA256_HASH_LENGTH = 32;
+const sal_uInt32 SHA384_HASH_LENGTH = 48;
 const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct MSFILTER_DLLPUBLIC EncryptionStandardHeader

@@ -71,6 +71,7 @@ struct OOX_DLLPUBLIC AgileEncryptionParameters
 enum class AgileEncryptionPreset
 {
     AES_128_SHA1,
+    AES_128_SHA384,
     AES_256_SHA512,
 };
 

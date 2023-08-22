@@ -268,7 +268,9 @@ std::vector<unsigned char> DocPasswordHelper::GetOoxHashAsVector(
         eType = comphelper::HashType::SHA512;
     else if (rAlgorithmName == "SHA-256" || rAlgorithmName == "SHA256")
         eType = comphelper::HashType::SHA256;
-    else if (rAlgorithmName == "SHA-1" || rAlgorithmName == "SHA1") // "SHA1" might be in the wild
+    else if (rAlgorithmName == u"SHA-384" || rAlgorithmName == u"SHA384")
+        eType = comphelper::HashType::SHA384;
+    else if (rAlgorithmName == u"SHA-1" || rAlgorithmName == u"SHA1") // "SHA1" might be in the wild
         eType = comphelper::HashType::SHA1;
     else if (rAlgorithmName == "MD5")
         eType = comphelper::HashType::MD5;
