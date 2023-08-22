@@ -93,7 +93,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
     libpng \
     libtiff \
     libwebp \
-    mdds_headers \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
