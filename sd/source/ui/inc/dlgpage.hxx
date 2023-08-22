@@ -40,7 +40,7 @@ private:
     XPatternListRef       mpPatternList;
 public:
 
-    SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc, bool bIsImpressMaster);
+    SdPageDlg(SfxObjectShell const * pDocSh, weld::Window* pParent, const SfxItemSet* pAttr, bool bAreaPage, bool bIsImpressDoc);
 
     virtual void PageCreated(const OString& rId, SfxTabPage& rPage) override;
 };

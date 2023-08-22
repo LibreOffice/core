@@ -94,7 +94,6 @@
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
 #include <TextColumnsPage.hxx>
-#include <themepage.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1322,8 +1321,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
             return SfxMacroTabPage::Create;
         case RID_SVXPAGE_TEXTCOLUMNS:
             return SvxTextColumnsPage::Create;
-        case RID_SVXPAGE_THEME:
-            return SvxThemePage::Create;
         default:
             break;
     }
@@ -1389,8 +1386,6 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nI
             return SvxAsianLayoutPage::GetRanges;
         case RID_SVXPAGE_TEXTCOLUMNS:
             return SvxTextColumnsPage::GetRanges;
-        case RID_SVXPAGE_THEME:
-            return SvxThemePage::GetRanges;
         default:
             break;
     }
