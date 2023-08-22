@@ -125,7 +125,7 @@ namespace svgio::svgreader
                 const OUString& aConcatenated);
             void fillCssStyleVectorUsingHierarchyAndSelectors(
                 const SvgNode& rCurrent,
-                const OUString& aConcatenated);
+                std::u16string_view aConcatenated);
             void fillCssStyleVectorUsingParent(
                 const SvgNode& rCurrent);
 
