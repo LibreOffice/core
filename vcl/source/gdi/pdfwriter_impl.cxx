@@ -2580,13 +2580,14 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             + OString::number(aSubsetInfo.m_aFontBBox.Bottom() + 1)
             + "]\n");
 
-        auto nScale = 1. / pFace->UnitsPerEm();
-        aLine.append(
-            "/FontMatrix["
-            + OString::number(nScale)
-            + " 0 0 "
-            + OString::number(nScale)
-            + " 0 0]\n");
+        // tdf#155610
+        // Adobe Acrobat does not seem to like certain UPEMs, so instead of
+        // setting the FontMatrix scale relative to the UPEM, we always set to
+        // 0.001 (1000 UPEM) and scale everything if the font’s UPEM is
+        // different.
+        double fScale = 1000. / pFace->UnitsPerEm();
+
+        aLine.append("/FontMatrix[0.001 0 0 0.001 0 0]\n");
 
         sal_Int32 pGlyphStreams[256] = {};
         aLine.append("/CharProcs<<\n");
@@ -2615,7 +2616,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             "/Widths[");
         for (auto i = 0u; i < nGlyphs; i++)
         {
-            aLine.append(OString::number(pWidths[i]) + " ");
+            appendDouble(pWidths[i] * fScale, aLine);
+            aLine.append(" ");
         }
         aLine.append("]\n");
 
@@ -2645,8 +2647,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
         std::list<StreamRedirect> aOutputStreams;
 
         // Scale for glyph outlines.
-        double fScaleX = GetDPIX() / 72.;
-        double fScaleY = GetDPIY() / 72.;
+        double fScaleX = (GetDPIX() / 72.) * fScale;
+        double fScaleY = (GetDPIY() / 72.) * fScale;
 
         for (auto i = 1u; i < nGlyphs; i++)
         {
@@ -2654,7 +2656,8 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
             if (!updateObject(nStream))
                 return false;
             OStringBuffer aContents(1024);
-            aContents.append(OString::number(pWidths[i]) + " 0 d0\n");
+            appendDouble(pWidths[i] * fScale, aContents);
+            aContents.append(" 0 d0\n");
 
             const auto& rGlyph = rSubset.m_aMapping.find(pGlyphIds[i])->second;
             const auto& rLayers = rGlyph.getColorLayers();
@@ -2691,8 +2694,10 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 }
                 aContents.append(
                     "BT "
-                    "/F" + OString::number(rLayer.m_nFontID) + " "
-                    + OString::number(pFace->UnitsPerEm()) + " Tf "
+                    "/F" + OString::number(rLayer.m_nFontID) + " ");
+                appendDouble(pFace->UnitsPerEm() * fScale, aContents);
+                aContents.append(
+                    " Tf "
                     "<");
                 appendHex(rLayer.m_nSubsetGlyphID, aContents);
                 aContents.append(
@@ -2712,11 +2717,11 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                                                     aUsedBitmaps, aResourceDict, aOutputStreams);
 
                 auto nObject = aBitmapEmit.m_aReferenceXObject.getObject();
+                aContents.append("q ");
+                appendDouble(aRect.GetWidth() * fScale, aContents);
+                aContents.append(" 0 0 ");
+                appendDouble(aRect.GetHeight() * fScale, aContents);
                 aContents.append(
-                    "q "
-                    + OString::number(aRect.GetWidth())
-                    + " 0 0 "
-                    + OString::number(aRect.GetHeight())
                     + " "
                     + OString::number(aRect.getX())
                     + " "
