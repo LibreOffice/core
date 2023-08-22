@@ -824,7 +824,6 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
                            const sal_Int32 _nLen, const bool bUpper)
 {
     sal_uInt8 nProp = 0;
-    Size aPartSize;
 
     // Set the desired font
     FontLineStyle eUnder = pFont->GetUnderline();
@@ -840,9 +839,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     }
     pFont->SetPhysFont(*pOut);
 
-    aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
-    aPartSize.setHeight( pOut->GetTextHeight() );
-    tools::Long nWidth = aPartSize.Width();
+    tools::Long nWidth = pOut->GetTextWidth( _rTxt, _nIdx, _nLen );
     if ( nKern )
     {
         aPos.AdjustX(nKern/2);
