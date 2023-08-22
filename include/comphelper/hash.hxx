@@ -27,12 +27,14 @@ enum class HashType
     MD5,
     SHA1,
     SHA256,
+    SHA384,
     SHA512
 };
 
 const sal_uInt32 MD5_HASH_LENGTH = RTL_DIGEST_LENGTH_MD5;
 const sal_uInt32 SHA1_HASH_LENGTH = RTL_DIGEST_LENGTH_SHA1;
 const sal_uInt32 SHA256_HASH_LENGTH = 32;
+const sal_uInt32 SHA384_HASH_LENGTH = 48;
 const sal_uInt32 SHA512_HASH_LENGTH = 64;
 
 struct HashImpl;

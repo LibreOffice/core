@@ -206,6 +206,12 @@ bool hashCalc(std::vector<sal_uInt8>& output,
         output = out;
         return true;
     }
+    else if (sAlgorithm == u"SHA384")
+    {
+        std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA384);
+        output = out;
+        return true;
+    }
     else if (sAlgorithm == u"SHA512")
     {
         std::vector<unsigned char> out = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA512);
@@ -219,7 +225,10 @@ CryptoHashType cryptoHashTypeFromString(std::u16string_view sAlgorithm)
 {
     if (sAlgorithm == u"SHA512")
         return CryptoHashType::SHA512;
-    return CryptoHashType::SHA1;
+    else if (sAlgorithm == u"SHA384")
+        return CryptoHashType::SHA384;
+    else
+        return CryptoHashType::SHA1;
 }
 
 } // namespace
@@ -384,6 +393,8 @@ bool AgileEngine::decryptHmacKey()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA384")
+        eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
         eType = comphelper::HashType::SHA512;
     else
@@ -410,6 +421,8 @@ bool AgileEngine::decryptHmacValue()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA384")
+        eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
         eType = comphelper::HashType::SHA512;
     else
@@ -550,6 +563,16 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
         return true;
     }
 
+    // AES 128 CBC with SHA384
+    if (mInfo.keyBits         == 128 &&
+        mInfo.cipherAlgorithm == "AES" &&
+        mInfo.cipherChaining  == "ChainingModeCBC" &&
+        mInfo.hashAlgorithm   == "SHA384" &&
+        mInfo.hashSize        == comphelper::SHA384_HASH_LENGTH)
+    {
+        return true;
+    }
+
     // AES 256 CBC with SHA512
     if (mInfo.keyBits         == 256 &&
         mInfo.cipherAlgorithm == "AES" &&
@@ -613,6 +636,8 @@ bool AgileEngine::encryptHmacKey()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA384")
+        eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
         eType = comphelper::HashType::SHA512;
     else
@@ -640,6 +665,8 @@ bool AgileEngine::encryptHmacValue()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA384")
+        eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
         eType = comphelper::HashType::SHA512;
     else
@@ -679,6 +706,8 @@ bool AgileEngine::setupEncryption(OUString const & rPassword)
 {
     if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA1)
         setupEncryptionParameters({ 100000, 16, 128, 20, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA1") });
+    else if (meEncryptionPreset == AgileEncryptionPreset::AES_128_SHA384)
+        setupEncryptionParameters({ 100000, 16, 128, 48, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA384") });
     else
         setupEncryptionParameters({ 100000, 16, 256, 64, 16, OUString("AES"), OUString("ChainingModeCBC"), OUString("SHA512") });
 
