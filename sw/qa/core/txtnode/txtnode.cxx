@@ -31,6 +31,9 @@
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <swdtflvr.hxx>
+#include <frmmgr.hxx>
+#include <formatflysplit.hxx>
+#include <ftnidx.hxx>
 
 /// Covers sw/source/core/txtnode/ fixes.
 class SwCoreTxtnodeTest : public SwModelTestBase
@@ -357,6 +360,38 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testContentControlCopy)
     // - Actual  : 0 (RICH_TEXT)
     // i.e. properties were not copied from the source to the destination content control.
     CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, rFormat2.GetContentControl()->GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlySplitFootnote)
+{
+    // Given a document with a split fly (to host a table):
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    pWrtShell->StartAllAction();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    SwAttrSet aSet(pFly->GetAttrSet());
+    aSet.Put(SwFormatFlySplit(true));
+    pDoc->SetAttr(aSet, *pFly);
+    pWrtShell->EndAllAction();
+    pWrtShell->UnSelectFrame();
+    pWrtShell->LeaveSelFrameMode();
+    pWrtShell->GetView().AttrChangedNotify(nullptr);
+    pWrtShell->MoveSection(GoCurrSection, fnSectionEnd);
+
+    // When inserting a footnote:
+    pWrtShell->InsertFootnote(OUString());
+
+    // Then make sure the footnote gets inserted to the doc model.
+    // Without the accompanying fix in place, this test would have failed, insert code refused to
+    // have footnotes in all fly frames.
+    CPPUNIT_ASSERT(!pDoc->GetFootnoteIdxs().empty());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
