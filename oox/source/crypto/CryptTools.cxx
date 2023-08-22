@@ -117,6 +117,8 @@ struct CryptoImpl
                 aEvpMd = EVP_sha1(); break;
             case CryptoHashType::SHA256:
                 aEvpMd = EVP_sha256(); break;
+            case CryptoHashType::SHA384:
+                aEvpMd = EVP_sha384(); break;
             case CryptoHashType::SHA512:
                 aEvpMd = EVP_sha512(); break;
         }
@@ -318,6 +320,9 @@ struct CryptoImpl
             case CryptoHashType::SHA256:
                 aMechanism = CKM_SHA256_HMAC;
                 break;
+            case CryptoHashType::SHA384:
+                aMechanism = CKM_SHA384_HMAC;
+                break;
             case CryptoHashType::SHA512:
                 aMechanism = CKM_SHA512_HMAC;
                 break;
@@ -460,6 +465,7 @@ sal_Int32 getSizeForHashType(CryptoHashType eType)
     {
         case CryptoHashType::SHA1: return 20;
         case CryptoHashType::SHA256: return 32;
+        case CryptoHashType::SHA384: return 48;
         case CryptoHashType::SHA512: return 64;
     }
     return 0;
