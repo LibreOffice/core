@@ -66,6 +66,7 @@
 #include <ndtxt.hxx>
 #include <unotextcursor.hxx>
 #include <SwStyleNameMapper.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include <algorithm>
 #include <vector>
@@ -1502,6 +1503,14 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
 void SwXMLTableContext::InsertCoveredCell(const OUString& rStyleName)
 {
+    const IDocumentSettingAccess& rIDSA = GetSwImport().getDoc()->getIDocumentSettingAccess();
+    bool bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+    if (!bWordTableCell)
+    {
+        // Compatibility flag not active, ignore formatting of covered cells.
+        return;
+    }
+
     SwXMLTableCell_Impl* pCell = GetCell(m_nCurRow, m_nNonMergedCurCol);
     ++m_nNonMergedCurCol;
     if (!pCell)
