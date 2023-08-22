@@ -499,8 +499,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 AlphaMask aAlpha(xVDev->GetBitmap(Point(), xVDev->GetOutputSizePixel()));
                                 AlphaMask aPaintAlpha(aPaint.GetAlphaMask());
-                                // The alpha mask is inverted from what
-                                // is expected so invert it again
+                                // The alpha mask is inverted from what is
+                                // expected so invert it again. To test this
+                                // code, export to PDF the transparent shapes,
+                                // gradients, and images in the documents
+                                // attached to the following bug reports:
+                                //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
+                                //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                                 aAlpha.Invert(); // convert to alpha
                                 aAlpha.BlendWith(aPaintAlpha);
 #if HAVE_FEATURE_SKIA
@@ -763,8 +768,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
+                    // The alpha mask is inverted from what is
+                    // expected so invert it again. To test this
+                    // code, export to PDF the transparent shapes,
+                    // gradients, and images in the documents
+                    // attached to the following bug reports:
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     if ( aBitmapEx.IsAlpha())
                     {
@@ -784,8 +794,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
+                    // The alpha mask is inverted from what is
+                    // expected so invert it again. To test this
+                    // code, export to PDF the transparent shapes,
+                    // gradients, and images in the documents
+                    // attached to the following bug reports:
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     if ( aBitmapEx.IsAlpha())
                     {
@@ -803,8 +818,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
+                    // The alpha mask is inverted from what is
+                    // expected so invert it again. To test this
+                    // code, export to PDF the transparent shapes,
+                    // gradients, and images in the documents
+                    // attached to the following bug reports:
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=155912
+                    //   https://bugs.documentfoundation.org/show_bug.cgi?id=156630
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
                     if ( aBitmapEx.IsAlpha())
                     {

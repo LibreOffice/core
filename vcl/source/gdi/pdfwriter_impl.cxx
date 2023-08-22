@@ -2713,7 +2713,18 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
                 SvMemoryStream aStream(const_cast<uint8_t*>(rBitmapData.data()), rBitmapData.size(),
                                        StreamMode::READ);
                 vcl::PngImageReader aReader(aStream);
-                auto aBitmapEmit = createBitmapEmit(std::move(aReader.read()), Graphic(),
+
+                // When rendering an image with an alpha mask during PDF
+                // export, the alpha mask needs to be inverted
+                BitmapEx aBitmapEx = std::move(aReader.read());
+                if ( aBitmapEx.IsAlpha())
+                {
+                    AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
+                    aAlpha.Invert();
+                    aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
+                }
+
+                auto aBitmapEmit = createBitmapEmit(aBitmapEx, Graphic(),
                                                     aUsedBitmaps, aResourceDict, aOutputStreams);
 
                 auto nObject = aBitmapEmit.m_aReferenceXObject.getObject();
