@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sd,\
 		CppunitTest_sd_uimpress) \
     CppunitTest_sd_import_tests \
     CppunitTest_sd_import_tests2 \
+    CppunitTest_sd_import_tests_skia \
     CppunitTest_sd_import_tests-smartart \
     CppunitTest_sd_export_tests-ooxml1 \
     CppunitTest_sd_export_tests-ooxml2 \
