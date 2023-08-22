@@ -763,15 +763,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
-                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
+                    const BitmapEx& aBitmapEx( pA->GetBitmapEx() );
 
                     Size aSize( OutputDevice::LogicToLogic( aBitmapEx.GetPrefSize(),
                             aBitmapEx.GetPrefMapMode(), pDummyVDev->GetMapMode() ) );
@@ -784,18 +776,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
-                    BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
-
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
-                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), aBitmapEx, aGraphic, pDummyVDev, i_rContext );
+                    implWriteBitmapEx( pA->GetPoint(), pA->GetSize(), pA->GetBitmapEx(), aGraphic, pDummyVDev, i_rContext );
                 }
                 break;
 
@@ -803,15 +785,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
 
-                    // When rendering an image with an alpha mask during PDF
-                    // export, the alpha mask needs to be inverted
                     BitmapEx aBitmapEx( pA->GetBitmapEx() );
-                    if ( aBitmapEx.IsAlpha())
-                    {
-                        AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
-                        aAlpha.Invert();
-                        aBitmapEx = BitmapEx(aBitmapEx.GetBitmap(), aAlpha);
-                    }
 
                     aBitmapEx.Crop( tools::Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Graphic aGraphic = i_pOutDevData ? i_pOutDevData->GetCurrentGraphic() : Graphic();
