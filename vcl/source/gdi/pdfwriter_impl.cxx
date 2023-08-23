@@ -2716,7 +2716,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
 
                 // When rendering an image with an alpha mask during PDF
                 // export, the alpha mask needs to be inverted
-                BitmapEx aBitmapEx = std::move(aReader.read());
+                BitmapEx aBitmapEx = aReader.read();
                 if ( aBitmapEx.IsAlpha())
                 {
                     AlphaMask aAlpha = aBitmapEx.GetAlphaMask();
