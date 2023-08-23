@@ -1508,7 +1508,7 @@ bool XclExpCellAlign::FillFromItemSet(const XclRoot& rRoot, const SfxItemSet& rI
         case EXC_BIFF3: // attributes new in BIFF3
         {
             // text wrap
-            mbLineBreak = bForceLineBreak || rItemSet.Get( ATTR_LINEBREAK ).GetValue();
+            mbLineBreak = bForceLineBreak;
             bUsed |= bForceLineBreak || ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
 
             [[fallthrough]];

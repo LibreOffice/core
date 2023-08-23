@@ -98,6 +98,7 @@ public:
     void testBuiltinRangesXLSX();
     void testRichTextExportODS();
     void testRichTextCellFormatXLSX();
+    void testWrapText();
     void testFormulaRefSheetNameODS();
 
     void testCellValuesExportODS();
@@ -219,6 +220,7 @@ public:
     CPPUNIT_TEST(testBuiltinRangesXLSX);
     CPPUNIT_TEST(testRichTextExportODS);
     CPPUNIT_TEST(testRichTextCellFormatXLSX);
+    CPPUNIT_TEST(testWrapText);
     CPPUNIT_TEST(testFormulaRefSheetNameODS);
     CPPUNIT_TEST(testCellValuesExportODS);
     CPPUNIT_TEST(testCellNoteExportODS);
@@ -2050,6 +2052,26 @@ void ScExportTest::testRichTextCellFormatXLSX()
     // that font should be bold
     const OString aXPath3("/x:styleSheet/x:fonts/x:font[" + nFontIdx + "]/x:b");
     assertXPath(pStyles, aXPath3, "val", "true");
+}
+
+void ScExportTest::testWrapText()
+{
+    createScDoc("xlsx/wrap-text.xlsx");
+
+    save("Calc Office Open XML");
+
+    xmlDocUniquePtr pStyles = parseExport("xl/styles.xml");
+    CPPUNIT_ASSERT(pStyles);
+
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs", "count", "7");
+
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[1]/x:alignment", "wrapText", "false");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[2]/x:alignment", "wrapText", "false");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[3]/x:alignment", "wrapText", "false");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[4]/x:alignment", "wrapText", "false");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[5]/x:alignment", "wrapText", "true");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[6]/x:alignment", "wrapText", "true");
+    assertXPath(pStyles, "/x:styleSheet/x:cellXfs/x:xf[7]/x:alignment", "wrapText", "true");
 }
 
 void ScExportTest::testFormulaRefSheetNameODS()
