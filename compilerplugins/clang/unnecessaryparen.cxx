@@ -143,6 +143,55 @@ private:
 
     bool removeParens(ParenExpr const * expr);
 
+    // Returns 0 if not a string literal at all:
+    unsigned getStringLiteralTokenCount(Expr const * expr, Expr const * parenExpr) {
+        if (auto const e = dyn_cast<clang::StringLiteral>(expr)) {
+            if (parenExpr == nullptr || !isPrecededBy_BAD_CAST(parenExpr)) {
+                return e->getNumConcatenated();
+            }
+        } else if (auto const e = dyn_cast<UserDefinedLiteral>(expr)) {
+            clang::StringLiteral const * lit = nullptr;
+            switch (e->getLiteralOperatorKind()) {
+            case UserDefinedLiteral::LOK_Template:
+                {
+                    auto const decl = e->getDirectCallee();
+                    assert(decl != nullptr);
+                    auto const args = decl->getTemplateSpecializationArgs();
+                    assert(args != nullptr);
+                    if (args->size() == 1 && (*args)[0].getKind() == TemplateArgument::Declaration)
+                    {
+                        if (auto const d
+                            = dyn_cast<TemplateParamObjectDecl>((*args)[0].getAsDecl()))
+                        {
+                            if (d->getValue().isStruct() || d->getValue().isUnion()) {
+                                //TODO: There appears to be no way currently to get at the original
+                                // clang::StringLiteral expression from which this struct/union
+                                // non-type template argument was constructued, so no way to tell
+                                // whether it was written as a single literal (=> in which case we
+                                // should warn about unnecessary parentheses) or as a concatenation
+                                // of multiple literals (=> in which case we should not warn).  So
+                                // be conservative and not warn at all (by pretending to have more
+                                // than one token):
+                                return 2;
+                            }
+                        }
+                    }
+                    break;
+                }
+            case UserDefinedLiteral::LOK_String:
+                assert(e->getNumArgs() == 2);
+                lit = dyn_cast<clang::StringLiteral>(e->getArg(0)->IgnoreImplicit());
+                break;
+            default:
+                break;
+            }
+            if (lit != nullptr) {
+                return lit->getNumConcatenated();
+            }
+        }
+        return 0;
+    }
+
     std::unordered_set<ParenExpr const *> handled_;
 };
 
@@ -217,8 +266,8 @@ bool UnnecessaryParen::VisitParenExpr(const ParenExpr* parenExpr)
             parenExpr->getBeginLoc())
             << parenExpr->getSourceRange();
         handled_.insert(parenExpr);
-    } else if (auto const e = dyn_cast<clang::StringLiteral>(subExpr)) {
-        if (e->getNumConcatenated() == 1 && !isPrecededBy_BAD_CAST(parenExpr)) {
+    } else if (isa<clang::StringLiteral>(subExpr) || isa<UserDefinedLiteral>(subExpr)) {
+        if (getStringLiteralTokenCount(subExpr, parenExpr) == 1) {
             report(
                 DiagnosticsEngine::Warning,
                 "unnecessary parentheses around single-token string literal",
@@ -320,7 +369,8 @@ bool UnnecessaryParen::VisitReturnStmt(const ReturnStmt* returnStmt)
 
     // only non-operator-calls for now
     auto subExpr = ignoreAllImplicit(parenExpr->getSubExpr());
-    if (isa<CallExpr>(subExpr) && !isa<CXXOperatorCallExpr>(subExpr))
+    if (isa<CallExpr>(subExpr) && !isa<CXXOperatorCallExpr>(subExpr)
+        && !isa<UserDefinedLiteral>(subExpr))
     {
         report(
             DiagnosticsEngine::Warning, "parentheses immediately inside return statement",
@@ -384,6 +434,9 @@ bool UnnecessaryParen::VisitCallExpr(const CallExpr* callExpr)
     auto binaryOp = dyn_cast<BinaryOperator>(parenExpr->getSubExpr());
     if (binaryOp && binaryOp->getOpcode() == BO_Assign)
         return true;
+    if (getStringLiteralTokenCount(parenExpr->getSubExpr()->IgnoreImplicit(), nullptr) > 1) {
+        return true;
+    }
     report(
         DiagnosticsEngine::Warning, "parentheses immediately inside single-arg call",
         parenExpr->getBeginLoc())
