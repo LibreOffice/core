@@ -263,15 +263,13 @@ void SmDocShell::ArrangeFormula()
 
     // format/draw formulas always from left to right,
     // and numbers should not be converted
-    vcl::text::ComplexTextLayoutFlags nLayoutMode = pOutDev->GetLayoutMode();
+    pOutDev->Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
     pOutDev->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
-    LanguageType nDigitLang = pOutDev->GetDigitLanguage();
     pOutDev->SetDigitLanguage( LANGUAGE_ENGLISH );
 
     mpTree->Arrange(*pOutDev, rFormat);
 
-    pOutDev->SetLayoutMode( nLayoutMode );
-    pOutDev->SetDigitLanguage( nDigitLang );
+    pOutDev->Pop();
 
     SetFormulaArranged(true);
 
@@ -339,9 +337,8 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
 
     // format/draw formulas always from left to right
     // and numbers should not be converted
-    vcl::text::ComplexTextLayoutFlags nLayoutMode = rDev.GetLayoutMode();
+    rDev.Push(vcl::PushFlags::TEXTLAYOUTMODE | vcl::PushFlags::TEXTLANGUAGE);
     rDev.SetLayoutMode( vcl::text::ComplexTextLayoutFlags::Default );
-    LanguageType nDigitLang = rDev.GetDigitLanguage();
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
 
     //Set selection if any
@@ -353,9 +350,7 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     //Drawing using visitor
     SmDrawingVisitor(rDev, rPosition, mpTree.get());
 
-
-    rDev.SetLayoutMode( nLayoutMode );
-    rDev.SetDigitLanguage( nDigitLang );
+    rDev.Pop();
 
     if (bRestoreDrawMode)
         rDev.SetDrawMode( nOldDrawMode );
