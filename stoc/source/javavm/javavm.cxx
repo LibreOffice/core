@@ -128,6 +128,9 @@ static void destroyAttachGuards(void * pData)
 
 bool askForRetry(css::uno::Any const & rException)
 {
+    if (comphelper::IsContextFlagActive("DontEnableJava"))
+        return false;
+
     css::uno::Reference< css::uno::XCurrentContext > xContext(
         css::uno::getCurrentContext());
     if (xContext.is())
@@ -650,9 +653,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
         case JFW_E_JAVA_DISABLED:
         {
-            if (comphelper::IsContextFlagActive("DontEnableJava"))
-                return css::uno::Any();
-
             //QueryBox:
             //%PRODUCTNAME requires a Java runtime environment (JRE) to perform
             //this task. However, use of a JRE has been disabled. Do you want to
@@ -689,9 +689,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     }
                 }
             }
-
-            if (comphelper::IsContextFlagActive("DontEnableJava"))
-                return css::uno::Any();
 
             //Error: %PRODUCTNAME requires a Java
             //runtime environment (JRE) to perform this task. The selected JRE
