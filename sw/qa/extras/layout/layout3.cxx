@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf137523)
     // had wrong height and were not visible
     assertXPath(pXmlDoc, "/root/page/footer/txt[1]/infos/bounds", "height", "304");
     assertXPath(pXmlDoc, "/root/page/footer/txt[2]/infos/bounds", "height", "191");
-    assertXPath(pXmlDoc, "/root/page/footer/txt[3]/infos/bounds", "height", "153");
+    assertXPath(pXmlDoc, "/root/page/footer/txt[3]/infos/bounds", "height", "219");
     assertXPath(pXmlDoc, "/root/page/footer/tab/infos/bounds", "height", "1378");
 }
 
