@@ -2887,9 +2887,13 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 //   text frame has already changed its page.
                 const SwTextFrame* pAnchorCharFrame = pFly->FindAnchorCharFrame();
                 const SwFormatHoriOrient& rHori = pFly->GetFormat()->GetHoriOrient();
+                // TODO: why not just ignore HoriOrient?
+                bool isHoriOrientShiftDown =
+                    rHori.GetHoriOrient() == text::HoriOrientation::NONE
+                    || rHori.GetHoriOrient() == text::HoriOrientation::LEFT;
                 // Only consider invalid Writer fly frames if they'll be shifted down.
                 bool bIgnoreFlyValidity
-                    = bAddVerticalFlyOffsets && rHori.GetHoriOrient() == text::HoriOrientation::NONE;
+                    = bAddVerticalFlyOffsets && isHoriOrientShiftDown;
                 bool bConsiderFly =
                     // #i46807# - do not consider invalid
                     // Writer fly frames.
@@ -2940,8 +2944,7 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     bool bShiftDown = css::text::WrapTextMode_NONE == rSur.GetSurround();
                     if (!bShiftDown && bAddVerticalFlyOffsets)
                     {
-                        if (rSur.GetSurround() == text::WrapTextMode_PARALLEL
-                            && rHori.GetHoriOrient() == text::HoriOrientation::NONE)
+                        if (rSur.GetSurround() == text::WrapTextMode_PARALLEL && isHoriOrientShiftDown)
                         {
                             // We know that wrapping was requested and the table frame overlaps with
                             // the fly frame. Check if the print area overlaps with the fly frame as
@@ -3002,7 +3005,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                     }
                     if ( (css::text::WrapTextMode_RIGHT    == rSur.GetSurround() ||
                           css::text::WrapTextMode_PARALLEL == rSur.GetSurround())&&
-                         text::HoriOrientation::LEFT == rHori.GetHoriOrient() )
+                         text::HoriOrientation::LEFT == rHori.GetHoriOrient()
+                         && !bShiftDown)
                     {
                         const tools::Long nWidth = aRectFnSet.XDiff(
                             aRectFnSet.GetRight(aFlyRect),
