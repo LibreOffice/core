@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <flyfrm.hxx>
 
 #define ENDNOTE 0x80000000
 
@@ -886,7 +887,15 @@ SwLayoutFrame *SwFrame::GetPrevFootnoteLeaf( MakePageType eMakeFootnote )
 
 bool SwFrame::IsFootnoteAllowed() const
 {
-    if ( !IsInDocBody() )
+    bool bSplitFly = false;
+    const SwFlyFrame* pFlyFrame = FindFlyFrame();
+    if (pFlyFrame)
+    {
+        // This is a fly. Check if it's a split fly, which is OK to host a footnote.
+        bSplitFly = pFlyFrame->IsFlySplitAllowed();
+    }
+
+    if (!IsInDocBody() && !bSplitFly)
         return false;
 
     if ( IsInTab() )
