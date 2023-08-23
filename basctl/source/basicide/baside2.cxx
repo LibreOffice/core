@@ -26,6 +26,7 @@
 #include <iderid.hxx>
 #include "moduldlg.hxx"
 #include <docsignature.hxx>
+#include <colorscheme.hxx>
 #include <officecfg/Office/BasicIDE.hxx>
 
 #include <helpids.h>
@@ -69,6 +70,7 @@
 #include <cassert>
 #include <osl/diagnose.h>
 #include <officecfg/Office/Common.hxx>
+#include <BasicColorConfig.hxx>
 
 namespace basctl
 {
@@ -201,6 +203,9 @@ ModulWindow::ModulWindow (ModulWindowLayout* pParent, ScriptDocument const& rDoc
     , m_aXEditorWindow(VclPtr<ComplexEditorWindow>::Create(this))
     , m_aModule(std::move(aModule))
 {
+    // Active editor color scheme
+    m_sWinColorScheme = GetShell()->GetColorConfig()->GetCurrentColorSchemeName();
+
     m_aXEditorWindow->Show();
     SetBackground();
 }
@@ -1428,13 +1433,32 @@ void ModulWindow::UpdateModule ()
     MarkDocumentModified(m_aDocument);
 }
 
+void ModulWindow::SetEditorColorScheme(OUString aColorScheme)
+{
+    m_sWinColorScheme = aColorScheme;
+    EditorWindow& rEditWindow = GetEditorWindow();
+    Wallpaper aBackgroundColor(GetLayout().GetSyntaxBackgroundColor());
+    rEditWindow.SetBackground(aBackgroundColor);
+    rEditWindow.GetWindow(GetWindowType::Border)->SetBackground(aBackgroundColor);
+
+    // The EditEngine is created only when the module is actually opened for the first time,
+    // therefore we need to check if it actually exists before updating its syntax highlighting
+    ExtTextEngine* pEditEngine = GetEditEngine();
+    if (pEditEngine)
+        rEditWindow.UpdateSyntaxHighlighting();
+}
+
 ModulWindowLayout::ModulWindowLayout (vcl::Window* pParent, ObjectCatalog& rObjectCatalog_) :
     Layout(pParent),
     pChild(nullptr),
     aWatchWindow(VclPtr<WatchWindow>::Create(this)),
     aStackWindow(VclPtr<StackWindow>::Create(this)),
     rObjectCatalog(rObjectCatalog_)
-{ }
+{
+    // Get active color scheme from the registry
+    m_sColorSchemeId = GetShell()->GetColorConfig()->GetCurrentColorSchemeName();
+    aSyntaxColors.ApplyColorScheme(m_sColorSchemeId, true);
+}
 
 ModulWindowLayout::~ModulWindowLayout()
 {
@@ -1471,6 +1495,7 @@ void ModulWindowLayout::Activating (BaseWindow& rChild)
     rObjectCatalog.UpdateEntries();
     Layout::Activating(rChild);
     aSyntaxColors.SetActiveEditor(&pChild->GetEditorWindow());
+    aSyntaxColors.SetActiveColorSchemeId(m_sColorSchemeId);
 }
 
 void ModulWindowLayout::Deactivating ()
@@ -1526,12 +1551,19 @@ void ModulWindowLayout::OnFirstSize (tools::Long const nWidth, tools::Long const
     AddToBottom(aStackWindow.get(), Size(nWidth * 0.33, nHeight * 0.25));
 }
 
-ModulWindowLayout::SyntaxColors::SyntaxColors () :
-    pEditor(nullptr)
+// Applies the color scheme to the current window and updates color definitions;
+// note that other ModulWindow instances are not affected by calling this method
+void ModulWindowLayout::ApplyColorSchemeToCurrentWindow(OUString aSchemeId)
+{
+    // Apply new color scheme to the UI
+    m_sColorSchemeId = aSchemeId;
+    aSyntaxColors.ApplyColorScheme(m_sColorSchemeId, false);
+}
+
+ModulWindowLayout::SyntaxColors::SyntaxColors ()
+    : pEditor(nullptr)
 {
     aConfig.AddListener(this);
-
-    NewConfig(true);
 }
 
 ModulWindowLayout::SyntaxColors::~SyntaxColors ()
@@ -1542,62 +1574,87 @@ ModulWindowLayout::SyntaxColors::~SyntaxColors ()
 // virtual
 void ModulWindowLayout::SyntaxColors::ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints)
 {
-    NewConfig(false);
+    // The color scheme only needs to be applied when configuration changed if the "default" color
+    // scheme (based on Application Colors) is being used
+    if (m_sActiveSchemeId == DEFAULT_SCHEME)
+        ApplyColorScheme(DEFAULT_SCHEME, false);
 }
 
-// when a new configuration has to be set
-void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
+// Applies an entire new color scheme; when bFirst is true, then the checks to see if the color scheme
+// has changed are ignored to make sure the color scheme is applied
+void ModulWindowLayout::SyntaxColors::ApplyColorScheme(OUString aSchemeId, bool bFirst)
 {
-    static struct
+    const TokenType vTokenTypes[] =
     {
-        TokenType eTokenType;
-        svtools::ColorConfigEntry eEntry;
-    }
-    const vIds[] =
-    {
-        { TokenType::Unknown,     svtools::FONTCOLOR },
-        { TokenType::Identifier,  svtools::BASICIDENTIFIER },
-        { TokenType::Whitespace,  svtools::FONTCOLOR },
-        { TokenType::Number,      svtools::BASICNUMBER },
-        { TokenType::String,      svtools::BASICSTRING },
-        { TokenType::EOL,         svtools::FONTCOLOR },
-        { TokenType::Comment,     svtools::BASICCOMMENT },
-        { TokenType::Error,       svtools::BASICERROR },
-        { TokenType::Operator,    svtools::BASICOPERATOR },
-        { TokenType::Keywords,    svtools::BASICKEYWORD },
+        TokenType::Unknown,
+        TokenType::Identifier,
+        TokenType::Whitespace,
+        TokenType::Number,
+        TokenType::String,
+        TokenType::EOL,
+        TokenType::Comment,
+        TokenType::Error,
+        TokenType::Operator,
+        TokenType::Keywords
     };
 
-    Color aDocColor = aConfig.GetColorValue(svtools::BASICEDITOR).nColor;
-    if (bFirst || aDocColor != m_aBackgroundColor)
+    m_sActiveSchemeId = aSchemeId;
+    ColorScheme aColorScheme = GetShell()->GetColorConfig()->GetColorScheme(aSchemeId);
+    Color aFontColor = aColorScheme.m_aGenericFontColor;
+    m_aFontColor = aFontColor;
+    Color aDocColor = aColorScheme.m_aBackgroundColor;
+    m_aBackgroundColor = aDocColor;
+    if (!bFirst && pEditor)
     {
-        m_aBackgroundColor = aDocColor;
-        if (!bFirst && pEditor)
-        {
-            pEditor->SetBackground(Wallpaper(m_aBackgroundColor));
-            pEditor->Invalidate();
-        }
+        pEditor->ChangeFontColor(aFontColor);
+        pEditor->SetBackground(Wallpaper(aDocColor));
+        pEditor->Invalidate();
     }
 
-    Color aFontColor = aConfig.GetColorValue(svtools::FONTCOLOR).nColor;
-    if (bFirst || aFontColor != m_aFontColor)
+    for (const auto& aToken: vTokenTypes)
     {
-        m_aFontColor = aFontColor;
-        if (!bFirst && pEditor)
-            pEditor->ChangeFontColor(m_aFontColor);
+        // Retrieves the new color to be set from the color scheme
+        Color aNewColor;
+        switch (aToken)
+        {
+        case TokenType::EOL:
+        case TokenType::Whitespace:
+        case TokenType::Unknown:
+            aNewColor = aColorScheme.m_aGenericFontColor;
+            break;
+        case TokenType::Identifier:
+            aNewColor = aColorScheme.m_aIdentifierColor;
+            break;
+        case TokenType::Number:
+            aNewColor = aColorScheme.m_aNumberColor;
+            break;
+        case TokenType::String:
+            aNewColor = aColorScheme.m_aStringColor;
+            break;
+        case TokenType::Comment:
+            aNewColor = aColorScheme.m_aCommentColor;
+            break;
+        case TokenType::Error:
+            aNewColor = aColorScheme.m_aErrorColor;
+            break;
+        case TokenType::Operator:
+            aNewColor = aColorScheme.m_aOperatorColor;
+            break;
+        case TokenType::Keywords:
+            aNewColor = aColorScheme.m_aKeywordColor;
+            break;
+        default:
+            SAL_WARN("basctl.basicide", "Unexpected token type for color scheme");
+            aNewColor = aColorScheme.m_aGenericFontColor;
+        }
+
+        Color& rCurrentColor = aColors[aToken];
+        rCurrentColor = aNewColor;
     }
 
-    bool bChanged = false;
-    for (const auto& vId: vIds)
-    {
-        Color const aColor = aConfig.GetColorValue(vId.eEntry).nColor;
-        Color& rMyColor = aColors[vId.eTokenType];
-        if (bFirst || aColor != rMyColor)
-        {
-            rMyColor = aColor;
-            bChanged = true;
-        }
-    }
-    if (bChanged && !bFirst && pEditor)
+    // This check is needed because the EditEngine will only exist in the EditorWindow when the
+    // module is actually opened
+    if (!bFirst && pEditor)
         pEditor->UpdateSyntaxHighlighting();
 }
 

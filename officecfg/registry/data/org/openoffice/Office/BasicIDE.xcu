@@ -18,4 +18,288 @@
  -->
  <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="BasicIDE" oor:package="org.openoffice.Office">
+  <node oor:name="IDEColorSchemes">
+    <node oor:name="COLORSCHEME_LIBREOFFICE_LIGHT" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>0</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>32768</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>16711680</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>16711680</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>8421504</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>16711680</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>128</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>128</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>16777215</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="COLORSCHEME_LIBREOFFICE_DARK" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>16777215</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>14543051</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>16754342</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>16754342</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>15658734</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>16726072</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>11847644</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>11847644</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>0</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="COLORSCHEME_BREEZE_LIGHT" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>2038811</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>2038811</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>11567104</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>12518147</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>9144455</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>12518147</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>13263050</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>22446</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>16777215</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="COLORSCHEME_BREEZE_DARK" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>11974316</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>13619134</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>15822859</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>15814479</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>8358783</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>15814479</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>4161624</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>2719383</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>2303529</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="COLORSCHEME_SOLARIZED_LIGHT" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>6650755</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>6650755</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>3252632</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>3252632</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>9675169</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>14430772</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>8755456</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>8755456</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>16643811</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="COLORSCHEME_SOLARIZED_DARK" oor:op="replace">
+      <node oor:name="GenericColor">
+        <prop oor:name="Color">
+          <value>8623254</value>
+        </prop>
+      </node>
+      <node oor:name="IdentifierColor">
+        <prop oor:name="Color">
+          <value>8623254</value>
+        </prop>
+      </node>
+      <node oor:name="NumberColor">
+        <prop oor:name="Color">
+          <value>2793880</value>
+        </prop>
+      </node>
+      <node oor:name="StringColor">
+        <prop oor:name="Color">
+          <value>2793880</value>
+        </prop>
+      </node>
+      <node oor:name="CommentColor">
+        <prop oor:name="Color">
+          <value>5664373</value>
+        </prop>
+      </node>
+      <node oor:name="ErrorColor">
+        <prop oor:name="Color">
+          <value>14430767</value>
+        </prop>
+      </node>
+      <node oor:name="OperatorColor">
+        <prop oor:name="Color">
+          <value>8755456</value>
+        </prop>
+      </node>
+      <node oor:name="KeywordColor">
+        <prop oor:name="Color">
+          <value>8755456</value>
+        </prop>
+      </node>
+      <node oor:name="BackgroundColor">
+        <prop oor:name="Color">
+          <value>11062</value>
+        </prop>
+      </node>
+    </node>
+  </node>
 </oor:component-data>

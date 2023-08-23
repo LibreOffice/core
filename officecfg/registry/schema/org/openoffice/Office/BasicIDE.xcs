@@ -21,6 +21,103 @@
     <info>
         <desc>Contains configuration for the BASIC IDE.</desc>
     </info>
+    <templates>
+      <group oor:name="IDEColorScheme">
+      <info>
+        <desc>Defines the templates for color schemes used in the Basic IDE code editor.</desc>
+      </info>
+      <group oor:name="GenericColor">
+        <info>
+          <desc>Specifies the formatting used for unknown tokens.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for unknown tokens.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="IdentifierColor">
+        <info>
+          <desc>Specifies the formatting used for identifier tokens.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for identifier tokens.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="NumberColor">
+        <info>
+          <desc>Specifies the formatting used for numbers.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for numbers.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="StringColor">
+        <info>
+          <desc>Specifies the formatting used for strings.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for strings.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="CommentColor">
+        <info>
+          <desc>Specifies the formatting used for comments.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for comments.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="ErrorColor">
+        <info>
+          <desc>Specifies the formatting used for errors.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for errors.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="OperatorColor">
+        <info>
+          <desc>Specifies the formatting used for operators.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for operators.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="KeywordColor">
+        <info>
+          <desc>Specifies the formatting used for keywords.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for keywords.</desc>
+          </info>
+        </prop>
+      </group>
+      <group oor:name="BackgroundColor">
+        <info>
+          <desc>Specifies the settings for the editor's background color.</desc>
+        </info>
+        <prop oor:name="Color" oor:type="xs:int">
+          <info>
+            <desc>Specifies the color used for the editor's background.</desc>
+          </info>
+        </prop>
+      </group>
+    </group>
+    </templates>
     <component>
     <group oor:name="Autocomplete">
         <info>
@@ -64,15 +161,26 @@
         </prop>
     </group>
     <group oor:name="EditorSettings">
+      <info>
+        <desc>Contains user configuration.</desc>
+      </info>
+      <prop oor:name="LineNumbering" oor:type="xs:boolean" oor:nillable="false">
         <info>
-            <desc>Contains user configuration.</desc>
+          <desc>Sets the line numbering on/off. Default is true.</desc>
         </info>
-        <prop oor:name="LineNumbering" oor:type="xs:boolean" oor:nillable="false">
-            <info>
-                <desc>Sets the line numbering on/off. Default is true.</desc>
-            </info>
-            <value>true</value>
-        </prop>
+        <value>true</value>
+      </prop>
+      <prop oor:name="ColorScheme" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>Name of the selected color scheme used in the Basic IDE.</desc>
+        </info>
+        <value>COLORSCHEME_DEFAULT</value>
+      </prop>
     </group>
+    <set oor:name="IDEColorSchemes" oor:node-type="IDEColorScheme">
+      <info>
+        <desc>Lists entries with color settings.</desc>
+      </info>
+    </set>
     </component>
 </oor:component-schema>

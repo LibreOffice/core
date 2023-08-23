@@ -31,6 +31,7 @@
 #include "iderdll2.hxx"
 #include <localizationmgr.hxx>
 #include <managelang.hxx>
+#include <ColorSchemeDialog.hxx>
 
 #include <basic/basmgr.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -59,6 +60,7 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <basegfx/utils/zoomtools.hxx>
+#include <officecfg/Office/BasicIDE.hxx>
 
 constexpr sal_Int32 TAB_HEIGHT_MARGIN = 10;
 
@@ -789,6 +791,50 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         }
         break;
 
+        case SID_BASICIDE_COLOR_SCHEME_DLG:
+        {
+            ModulWindowLayout* pMyLayout = dynamic_cast<ModulWindowLayout*>(pLayout.get());
+            if (!pMyLayout)
+                return;
+
+            OUString curScheme = pMyLayout->GetActiveColorSchemeId();
+            auto xDlg = std::make_shared<ColorSchemeDialog>(pCurWin ? pCurWin->GetFrameWeld() : nullptr,
+                                                            pMyLayout);
+            weld::DialogController::runAsync(xDlg, [xDlg, pMyLayout, curScheme](sal_Int32 nResult){
+                OUString sNewScheme(xDlg->GetColorSchemeId());
+                // If the user canceled the dialog, restores the original color scheme
+                if (nResult != RET_OK)
+                {
+                    if (curScheme != sNewScheme)
+                        pMyLayout->ApplyColorSchemeToCurrentWindow(curScheme);
+                }
+
+                // If the user selects OK, apply the color scheme to all open ModulWindow
+                if (nResult == RET_OK)
+                {
+                    // Set the global color scheme in ModulWindowLayout and update definitions in SyntaxColors
+                    pMyLayout->ApplyColorSchemeToCurrentWindow(sNewScheme);
+
+                    // Update color scheme for all windows
+                    for (auto const& window : GetShell()->GetWindowTable())
+                    {
+                        ModulWindow* pModuleWindow = dynamic_cast<ModulWindow*>(window.second.get());
+                        if (pModuleWindow)
+                        {
+                            // We need to set the current scheme for each window
+                            pModuleWindow->SetEditorColorScheme(sNewScheme);
+                        }
+                    }
+
+                    // Update registry with the new color scheme ID
+                    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+                    officecfg::Office::BasicIDE::EditorSettings::ColorScheme::set(sNewScheme, batch);
+                    batch->commit();
+                }
+            });
+        }
+        break;
+
         case SID_BASICIDE_MANAGE_LANG:
         {
             auto xRequest = std::make_shared<SfxRequest>(rReq);
@@ -1227,6 +1273,13 @@ void Shell::GetState(SfxItemSet &rSet)
                 const sal_uInt16 nCurrentZoom = GetCurrentZoomSliderValue();
                 if ((nWh == SID_ZOOM_IN && nCurrentZoom >= GetMaxZoom()) ||
                     (nWh == SID_ZOOM_OUT && nCurrentZoom <= GetMinZoom()))
+                    rSet.DisableItem(nWh);
+            }
+            break;
+
+            case SID_BASICIDE_COLOR_SCHEME_DLG:
+            {
+                if (!dynamic_cast<ModulWindowLayout*>(pLayout.get()))
                     rSet.DisableItem(nWh);
             }
             break;

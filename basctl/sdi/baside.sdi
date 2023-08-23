@@ -343,6 +343,12 @@ shell basctl_Shell
         StateMethod = GetState;
     ]
 
+    SID_BASICIDE_COLOR_SCHEME_DLG
+    [
+        ExecMethod  = ExecuteGlobal;
+        StateMethod = GetState;
+    ]
+
     SID_ATTR_ZOOMSLIDER
     [
         ExecMethod      = ExecuteGlobal;

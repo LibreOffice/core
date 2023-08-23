@@ -24,6 +24,7 @@
 #include <layout.hxx>
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
+#include <colorscheme.hxx>
 
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
@@ -37,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <set>
+#include <map>
 #include <string_view>
 
 #include <vcl/textdata.hxx>
@@ -290,6 +292,7 @@ private:
     BasicStatus         m_aStatus;
     SbModuleRef         m_xModule;
     OUString            m_aModule;
+    OUString            m_sWinColorScheme;
 
     void                CheckCompileBasic();
     void                BasicExecute();
@@ -392,6 +395,8 @@ public:
     virtual bool HasActiveEditor () const override;
 
     void UpdateModule ();
+    OUString GetEditorColorScheme() { return m_sWinColorScheme; }
+    void SetEditorColorScheme(OUString aColorScheme);
 };
 
 class ModulWindowLayout: public Layout
@@ -416,6 +421,8 @@ public:
     Color const & GetSyntaxBackgroundColor () const { return aSyntaxColors.GetBackgroundColor(); }
     Color const & GetFontColor () const { return aSyntaxColors.GetFontColor(); }
     Color const & GetSyntaxColor (TokenType eType) const { return aSyntaxColors.GetColor(eType); }
+    OUString GetActiveColorSchemeId() { return m_sColorSchemeId; }
+    void ApplyColorSchemeToCurrentWindow (OUString aSchemeId);
 
 protected:
     // Window:
@@ -430,6 +437,8 @@ private:
     VclPtr<WatchWindow> aWatchWindow;
     VclPtr<StackWindow> aStackWindow;
     ObjectCatalog& rObjectCatalog;
+    // Active color scheme ID
+    OUString m_sColorSchemeId;
 
     // SyntaxColors -- stores Basic syntax highlighting colors
     class SyntaxColors : public utl::ConfigurationListener
@@ -439,25 +448,26 @@ private:
         virtual ~SyntaxColors () override;
     public:
         void SetActiveEditor (EditorWindow* pEditor_) { pEditor = pEditor_; }
+        void SetActiveColorSchemeId(OUString aColorSchemeId) { m_sActiveSchemeId = aColorSchemeId; }
     public:
         Color const & GetBackgroundColor () const { return m_aBackgroundColor; };
         Color const & GetFontColor () const { return m_aFontColor; }
         Color const & GetColor(TokenType eType) const { return aColors[eType]; }
+        void ApplyColorScheme(OUString aSchemeId, bool bFirst);
 
     private:
         virtual void ConfigurationChanged (utl::ConfigurationBroadcaster*, ConfigurationHints) override;
-        void NewConfig (bool bFirst);
 
     private:
         Color m_aBackgroundColor;
         Color m_aFontColor;
+        OUString m_sActiveSchemeId;
         // the color values (the indexes are TokenType, see comphelper/syntaxhighlight.hxx)
         o3tl::enumarray<TokenType, Color> aColors;
         // the configuration
         svtools::ColorConfig aConfig;
         // the active editor
         VclPtr<EditorWindow> pEditor;
-
     } aSyntaxColors;
 };
 

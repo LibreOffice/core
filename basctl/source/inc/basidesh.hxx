@@ -54,6 +54,7 @@ class DialogWindowLayout;
 class TabBar;
 class BaseWindow;
 class LocalizationMgr;
+class BasicColorConfig;
 
 class Shell :
     public SfxViewShell,
@@ -80,6 +81,9 @@ private:
     VclPtr<ScrollAdaptor> aVScrollBar;
     VclPtr<TabBar>       pTabBar;           // basctl::TabBar
     bool                 bCreatingWindow;
+
+    // Basic editor color configuration
+    std::shared_ptr<BasicColorConfig> m_aColorConfig;
 
     // layout windows
     VclPtr<ModulWindowLayout>   pModulLayout;
@@ -220,6 +224,8 @@ public:
     void UpdateObjectCatalog () { aObjectCatalog->UpdateEntries(); }
 
     void RemoveWindow (BaseWindow* pWindow, bool bDestroy, bool bAllowChangeCurWindow = true);
+
+    const std::shared_ptr<BasicColorConfig>& GetColorConfig() const { return m_aColorConfig; }
 };
 
 } // namespace basctl

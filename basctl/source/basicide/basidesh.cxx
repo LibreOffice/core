@@ -74,6 +74,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <BasicColorConfig.hxx>
 
 namespace basctl
 {
@@ -195,6 +196,9 @@ void Shell::Init()
     GetViewFrame().GetWindow().SetBackground(
         GetViewFrame().GetWindow().GetSettings().GetStyleSettings().GetWindowColor()
     );
+
+    // Used to access color settings of the Basic code editor
+    m_aColorConfig = std::make_shared<BasicColorConfig>();
 
     pCurWin = nullptr;
     m_aCurDocument = ScriptDocument::getApplicationScriptDocument();

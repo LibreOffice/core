@@ -114,6 +114,15 @@
 #define RID_STR_MODULE_READONLY             NC_("RID_STR_READONLY_WARNING", "This module is read-only and cannot be edited.")
 #define RID_STR_DIALOG_READONLY             NC_("RID_STR_READONLY_WARNING", "This dialog is read-only and cannot be edited.")
 
+// Color scheme names
+#define RID_STR_COLORSCHEME_DEFAULT         NC_("RID_STR_COLORSCHEME_DEFAULT", "Default")
+#define RID_STR_COLORSCHEME_LIGHT           NC_("RID_STR_COLORSCHEME_LIGHT", "%PRODUCTNAME Light")
+#define RID_STR_COLORSCHEME_DARK            NC_("RID_STR_COLORSCHEME_DARK", "%PRODUCTNAME Dark")
+#define RID_STR_COLORSCHEME_BREEZE_LIGHT    NC_("RID_STR_COLORSCHEME_BREEZE_LIGHT", "Breeze Light")
+#define RID_STR_COLORSCHEME_BREEZE_DARK     NC_("RID_STR_COLORSCHEME_BREEZE_DARK", "Breeze Dark")
+#define RID_STR_COLORSCHEME_SOLARIZED_DARK  NC_("RID_STR_COLORSCHEME_SOLARIZED_DARK", "Solarized Dark")
+#define RID_STR_COLORSCHEME_SOLARIZED_LIGHT NC_("RID_STR_COLORSCHEME_SOLARIZED_LIGHT", "Solarized Light")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

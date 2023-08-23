@@ -669,6 +669,7 @@ class SvxZoomItem;
 #define SID_BASICIDE_CURRENT_ZOOM           TypedWhichId<SfxStringItem>( SID_BASICIDE_START + 54 )
 #define SID_BASICIDE_WATCH                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 55 )
 #define SID_BASICIDE_STACK                  TypedWhichId<SfxBoolItem>( SID_BASICIDE_START + 56 )
+#define SID_BASICIDE_COLOR_SCHEME_DLG       ( SID_BASICIDE_START + 57 )
 #define SID_OPTIONS_TREEDIALOG              ( SID_BASICIDE_START + 862)
 
 // SlotIds for Apps --------------------------------------------------------
