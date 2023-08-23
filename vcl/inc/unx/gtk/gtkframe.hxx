@@ -250,7 +250,7 @@ class GtkSalFrame final : public SalFrame
     static gboolean     signalButton( GtkWidget*, GdkEventButton*, gpointer );
     static void         signalStyleUpdated(GtkWidget*, gpointer);
 #else
-    static void         signalStyleUpdated(GtkWidget*, const gchar* pSetting, pointer);
+    static void         signalStyleUpdated(GtkWidget*, const gchar* pSetting, gpointer);
 #endif
     void DrawingAreaResized(GtkWidget* pWidget, int nWidth, int nHeight);
     void DrawingAreaDraw(cairo_t *cr);
