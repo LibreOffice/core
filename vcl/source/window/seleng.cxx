@@ -395,7 +395,7 @@ bool SelectionEngine::Command( const CommandEvent& rCEvt )
     return true;
 }
 
-void SelectionEngine::SetUpdateInterval( sal_uLong nInterval )
+void SelectionEngine::SetUpdateInterval( sal_uInt64 nInterval )
 {
     if (nInterval < SELENG_AUTOREPEAT_INTERVAL_MIN)
         // Set a lower threshold.  On Windows, setting this value too low

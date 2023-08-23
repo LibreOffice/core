@@ -49,7 +49,7 @@ private:
 
     ScSplitPos      GetWhich() const;
 
-    sal_uLong           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+    sal_uInt64           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
                                         bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );
 
 public:

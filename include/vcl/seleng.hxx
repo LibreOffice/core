@@ -33,10 +33,10 @@ namespace vcl {
 }
 
 // Timerticks
-#define SELENG_DRAGDROP_TIMEOUT     400
-#define SELENG_AUTOREPEAT_INTERVAL  50
-#define SELENG_AUTOREPEAT_INTERVAL_MIN 25
-#define SELENG_AUTOREPEAT_INTERVAL_MAX 300
+constexpr sal_uInt64 SELENG_DRAGDROP_TIMEOUT = 400;
+constexpr sal_uInt64 SELENG_AUTOREPEAT_INTERVAL =  50;
+constexpr sal_uInt64 SELENG_AUTOREPEAT_INTERVAL_MIN  = 25;
+constexpr sal_uInt64 SELENG_AUTOREPEAT_INTERVAL_MAX  = 300;
 
 class VCL_DLLPUBLIC FunctionSet
 {
@@ -84,7 +84,7 @@ private:
     Timer               aWTimer; // generate fake mouse moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
-    sal_uLong               nUpdateInterval;
+    sal_uInt64               nUpdateInterval;
     sal_uInt16              nLockedMods;
     SelectionEngineFlags    nFlags;
     DECL_DLLPRIVATE_LINK( ImpWatchDog, Timer*, void );
@@ -159,7 +159,7 @@ public:
     bool                HasAnchor() const;
     void                SetAnchor( bool bAnchor );
 
-    void                SetUpdateInterval( sal_uLong nInterval );
+    void                SetUpdateInterval( sal_uInt64 nInterval );
 
     // is switched on in the Ctor
     void                ExpandSelectionOnMouseMove( bool bExpand = true )

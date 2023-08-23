@@ -60,10 +60,10 @@ ScSplitPos ScViewFunctionSet::GetWhich() const
         return m_pViewData->GetActivePart();
 }
 
-sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+sal_uInt64 ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
                                              bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll )
 {
-    sal_uLong nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
+    sal_uInt64 nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
     vcl::Window* pWin = m_pEngine->GetWindow();
     AbsoluteScreenPixelRectangle aScrRect = pWin->GetDesktopRectPixel();
     AbsoluteScreenPixelPoint aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
@@ -77,7 +77,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
         if (nHAccelRate > 1.0)
             nHAccelRate = 1.0;
 
-        nUpdateInterval = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate));
+        nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate);
     }
 
     if (bLeftScroll)
@@ -104,7 +104,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
         if (nVAccelRate > 1.0)
             nVAccelRate = 1.0;
 
-        sal_uLong nTmp = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        sal_uInt64 nTmp = SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate);
         if (nUpdateInterval > nTmp)
             nUpdateInterval = nTmp;
     }
@@ -118,7 +118,7 @@ sal_uLong ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Poi
         if (nVAccelRate > 1.0)
             nVAccelRate = 1.0;
 
-        sal_uLong nTmp = static_cast<sal_uLong>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        sal_uInt64 nTmp = SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate);
         if (nUpdateInterval > nTmp)
             nUpdateInterval = nTmp;
     }
@@ -409,7 +409,7 @@ void ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, bool /* bDon
     if (bScroll)
     {
         // Adjust update interval based on how far the mouse pointer is from the edge.
-        sal_uLong nUpdateInterval = CalcUpdateInterval(
+        sal_uInt64 nUpdateInterval = CalcUpdateInterval(
             aWinSize, aEffPos, bLeftScroll, bTopScroll, bRightScroll, bBottomScroll);
         m_pEngine->SetUpdateInterval(nUpdateInterval);
     }
