@@ -1423,10 +1423,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrame *pLa
                 PopFormatLayout();
             }
         }
-        else if (!pLay->IsColBodyFrame())
-        {   // tdf#156724 unconditionally for frames in tables, so their footnotes exist before trying to split
-            pLow->OptCalc();
-        }
+        // else: don't calc content frames any more
 
         if ( IsAgain() )
             return false;

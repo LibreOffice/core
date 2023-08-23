@@ -646,7 +646,8 @@ inline void TableSplitRecalcLock( SwFlowFrame *pTab ) { pTab->LockJoin(); }
 inline void TableSplitRecalcUnlock( SwFlowFrame *pTab ) { pTab->UnlockJoin(); }
 
 static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
-                          SwTwips nRemainingSpaceForLastRow, SwTwips nAlreadyFree )
+                          SwTwips nRemainingSpaceForLastRow, SwTwips nAlreadyFree,
+                          bool & rIsFootnoteGrowth)
 {
     bool bRet = true;
 
@@ -654,6 +655,34 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
     SwTabFrame& rTab = static_cast<SwTabFrame&>(*rLastLine.GetUpper());
     SwRectFnSet aRectFnSet(rTab.GetUpper());
     SwTwips nCurLastLineHeight = aRectFnSet.GetHeight(rLastLine.getFrameArea());
+
+    SwTwips nFootnoteHeight(0);
+    if (SwFootnoteBossFrame const*const pBoss = rTab.FindFootnoteBossFrame())
+    {
+        if (SwFootnoteContFrame const*const pCont = pBoss->FindFootnoteCont())
+        {
+            for (SwFootnoteFrame const* pFootnote = static_cast<SwFootnoteFrame const*>(pCont->Lower());
+                 pFootnote != nullptr;
+                 pFootnote = static_cast<SwFootnoteFrame const*>(pFootnote->GetNext()))
+            {
+                SwContentFrame const*const pAnchor = pFootnote->GetRef();
+                SwTabFrame const* pTab = pAnchor->FindTabFrame();
+                if (pTab == &rTab)
+                {
+                    while (pTab->GetUpper()->IsInTab())
+                    {
+                        pTab = pTab->GetUpper()->FindTabFrame();
+                    }
+                    // TODO currently do this only for top-level tables?
+                    // otherwise would need to check rTab's follow and any upper table's follow?
+                    if (pTab == &rTab)
+                    {
+                        nFootnoteHeight += aRectFnSet.GetHeight(pFootnote->getFrameArea());
+                    }
+                }
+            }
+        }
+    }
 
     // If there are nested cells in rLastLine, the recalculation of the last
     // line needs some preprocessing.
@@ -759,7 +788,15 @@ static bool lcl_RecalcSplitLine( SwRowFrame& rLastLine, SwRowFrame& rFollowLine,
                     {
                         nFollowFootnotes += aRectFnSet.GetHeight(pFootnote->getFrameArea());
                     }
+                    if (pTab == &rTab)
+                    {
+                        nFootnoteHeight -= aRectFnSet.GetHeight(pFootnote->getFrameArea());
+                    }
                 }
+            }
+            if (nFootnoteHeight < 0)
+            {   // tdf#156724 footnotes have grown, try to split again
+                rIsFootnoteGrowth = true;
             }
         }
     }
@@ -1020,7 +1057,8 @@ static bool lcl_FindSectionsInRow( const SwRowFrame& rRow )
     return bRet;
 }
 
-bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep )
+bool SwTabFrame::Split(const SwTwips nCutPos, bool bTryToSplit,
+        bool bTableRowKeep, bool & rIsFootnoteGrowth)
 {
     bool bRet = true;
 
@@ -1358,7 +1396,7 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
         // we also don't shrink here, because we will be doing that in lcl_RecalcSplitLine
 
         // recalculate the split line
-        bRet = lcl_RecalcSplitLine( *pLastRow, *pFollowRow, nRemainingSpaceForLastRow, nShrink );
+        bRet = lcl_RecalcSplitLine(*pLastRow, *pFollowRow, nRemainingSpaceForLastRow, nShrink, rIsFootnoteGrowth);
 
         // RecalcSplitLine did not work. In this case we conceal the split error:
         if (!bRet && !bSplitRowAllowed)
@@ -2590,7 +2628,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     }
 
                     oAccess.reset();
-                    const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed) ) );
+                    bool isFootnoteGrowth(false);
+                    const bool bSplitError = !Split(nDeadLine, bTryToSplit,
+                        (bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed)),
+                        isFootnoteGrowth);
 
                     // tdf#130639 don't start table on a new page after the fallback "switch off repeating header"
                     if (bSplitError && nRepeat > GetTable()->GetRowsToRepeat())
@@ -2625,7 +2666,11 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     {
                         lcl_RecalcRow(*static_cast<SwRowFrame*>(Lower()), LONG_MAX);
                         setFrameAreaPositionValid(false);
-                        bTryToSplit = false;
+                        // tdf#156724 if the table added footnotes, try to split *again*
+                        if (!isFootnoteGrowth)
+                        {
+                            bTryToSplit = false;
+                        }
                         continue;
                     }
 
