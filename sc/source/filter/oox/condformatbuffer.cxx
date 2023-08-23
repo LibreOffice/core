@@ -1341,7 +1341,7 @@ void CondFormatBuffer::finalizeImport()
             auto pNewFormat = std::make_unique<ScConditionalFormat>(0, pDoc);
             pFormat = pNewFormat.get();
             pNewFormat->SetRange(rRange);
-            sal_uLong nKey = pDoc->AddCondFormat(std::move(pNewFormat), nTab);
+            sal_uInt32 nKey = pDoc->AddCondFormat(std::move(pNewFormat), nTab);
             pDoc->AddCondFormatData(rRange, nTab, nKey);
         }
 

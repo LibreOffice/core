@@ -339,7 +339,7 @@ void SAL_CALL ScXMLConditionalFormatContext::endFastElement( sal_Int32 /*nElemen
         }
     }
 
-    sal_uLong nIndex = pDoc->AddCondFormat(std::move(pFormat), nTab);
+    sal_uInt32 nIndex = pDoc->AddCondFormat(std::move(pFormat), nTab);
     ScConditionalFormat* pInsertedFormat = pDoc->GetCondFormList(nTab)->GetFormat(nIndex);
     assert(pInsertedFormat && pInsertedFormat->GetKey() == nIndex);
 

@@ -509,7 +509,7 @@ void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRange
 
     if(mpCondFormat && mbDeleteCondFormat)
     {
-        sal_uLong nIndex = pDoc->AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpCondFormat), nTab );
+        sal_uInt32 nIndex = pDoc->AddCondFormat(std::unique_ptr<ScConditionalFormat>(mpCondFormat), nTab );
         mpCondFormat->SetKey(nIndex);
         mpCondFormat->SetRange(aRangeList);
 

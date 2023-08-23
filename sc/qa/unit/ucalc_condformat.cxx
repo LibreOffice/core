@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondFormatInsertDeleteSheets)
     pFormat->SetRange(ScRange(1,1,0,1,3,0));
 
     auto pFormatTmp = pFormat.get();
-    sal_uLong nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     // Add condition in which if the value equals 2, set the "Result" style.
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(
@@ -305,7 +305,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
     pDatabar->SetDataBarData(pFormatData);
     pFormat->AddEntry(pDatabar);
 
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
@@ -324,14 +324,14 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testDataBarCondCopyPaste)
         CPPUNIT_ASSERT(pPastedFormat);
         CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
 
-        sal_uLong nPastedKey = pPastedFormat->GetKey();
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
         CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
 
         const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
         const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
         CPPUNIT_ASSERT(pCondFormatItem);
         CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-        CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
+        CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
     }
 
     m_pDoc->DeleteTab(0);
@@ -346,7 +346,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleInMergedCell)
     auto pFormat = std::make_unique<ScConditionalFormat>(1, m_pDoc);
     pFormat->SetRange(ScRange(0, 0, 0, 0, 0, 0));
     auto pFormatTmp = pFormat.get();
-    sal_uLong nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nKey = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     // Add color scale entries.
     // The coloring is based on the value. (BLUE (x <= 0), GREEN (x == 1), RED (x >= 2))
@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
     pColorScaleFormat->AddEntry(pEntryRed);
 
     pFormat->AddEntry(pColorScaleFormat);
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testColorScaleCondCopyPaste)
         CPPUNIT_ASSERT(pPastedFormat);
         CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
 
-        sal_uLong nPastedKey = pPastedFormat->GetKey();
+        sal_uInt32 nPastedKey = pPastedFormat->GetKey();
         CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
 
         const SfxPoolItem* pItem = m_pDoc->GetAttr(nCol, 3, 0, ATTR_CONDITIONAL);
@@ -450,7 +450,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPaste)
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, aCondFormatRange, &aClipDoc);
@@ -467,13 +467,13 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPaste)
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
     aRangeList.Join(aTargetRange);
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
+    CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
     const SfxPoolItem* pItem = m_pDoc->GetAttr( 7, 7, 0, ATTR_CONDITIONAL );
     const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
+    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }
@@ -490,7 +490,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCell)
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
@@ -507,13 +507,13 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCell)
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
     aRangeList.Join(aTargetRange);
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
+    CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
     const SfxPoolItem* pItem = m_pDoc->GetAttr( 4, 4, 0, ATTR_CONDITIONAL );
     const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front() );
+    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front() );
 
     m_pDoc->DeleteTab(0);
 }
@@ -530,7 +530,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellToRange)
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct,"=B2","",*m_pDoc,ScAddress(0,0,0),ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,0,0,0), &aClipDoc);
@@ -550,14 +550,14 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellToRange)
             CPPUNIT_ASSERT(pPastedFormat);
 
             CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
-            sal_uLong nPastedKey = pPastedFormat->GetKey();
+            sal_uInt32 nPastedKey = pPastedFormat->GetKey();
             CPPUNIT_ASSERT_EQUAL(nIndex, nPastedKey);
             const SfxPoolItem* pItem = m_pDoc->GetAttr( nCol, nRow, 0, ATTR_CONDITIONAL );
             const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
             CPPUNIT_ASSERT(pCondFormatItem);
             CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-            CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front() );
+            CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front() );
         }
     }
 
@@ -576,7 +576,7 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellIntoSameFormatRa
 
     ScCondFormatEntry* pEntry = new ScCondFormatEntry(ScConditionMode::Direct, "=B2", "", *m_pDoc, ScAddress(0, 0, 0), ScResId(STR_STYLENAME_RESULT));
     pFormat->AddEntry(pEntry);
-    sal_uLong nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
+    sal_uInt32 nIndex = m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(1, 1, 0, 1, 1, 0), &aClipDoc);
@@ -591,13 +591,13 @@ CPPUNIT_TEST_FIXTURE(TestCondformat, testCondCopyPasteSingleCellIntoSameFormatRa
     // since it already covers the pasted range. No new conditional formats must be created.
     CPPUNIT_ASSERT_EQUAL(size_t(1), m_pDoc->GetCondFormList(0)->size());
     CPPUNIT_ASSERT_EQUAL(aRangeList, pPastedFormat->GetRange());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pPastedFormat->GetKey());
+    CPPUNIT_ASSERT_EQUAL(nIndex, pPastedFormat->GetKey());
     const SfxPoolItem* pItem = m_pDoc->GetAttr(2, 2, 0, ATTR_CONDITIONAL);
     const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
 
     CPPUNIT_ASSERT(pCondFormatItem);
     CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(nIndex), pCondFormatItem->GetCondFormatData().front());
+    CPPUNIT_ASSERT_EQUAL(nIndex, pCondFormatItem->GetCondFormatData().front());
 
     m_pDoc->DeleteTab(0);
 }

@@ -1065,7 +1065,7 @@ public:
 
     void DeleteConditionalFormat(sal_uLong nOldIndex);
 
-    sal_uLong          AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew );
+    sal_uInt32          AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew );
 
     SvtScriptType GetScriptType( SCCOL nCol, SCROW nRow ) const;
     void SetScriptType( SCCOL nCol, SCROW nRow, SvtScriptType nType );

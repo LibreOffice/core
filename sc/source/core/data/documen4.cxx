@@ -706,7 +706,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat, const ScI
 
 // conditional formats and validation ranges
 
-sal_uLong ScDocument::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, SCTAB nTab )
+sal_uInt32 ScDocument::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, SCTAB nTab )
 {
     if(!pNew)
         return 0;
@@ -717,7 +717,7 @@ sal_uLong ScDocument::AddCondFormat( std::unique_ptr<ScConditionalFormat> pNew, 
     return 0;
 }
 
-sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
+sal_uInt32 ScDocument::AddValidationEntry( const ScValidationData& rNew )
 {
     if (rNew.IsEmpty())
         return 0;                   // empty is always 0
@@ -728,11 +728,11 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
         pValidationList.reset(new ScValidationDataList);
     }
 
-    sal_uLong nMax = 0;
+    sal_uInt32 nMax = 0;
     for( const auto& rxData : *pValidationList )
     {
         const ScValidationData* pData = rxData.get();
-        sal_uLong nKey = pData->GetKey();
+        sal_uInt32 nKey = pData->GetKey();
         if ( pData->EqualEntries( rNew ) )
             return nKey;
         if ( nKey > nMax )
@@ -740,7 +740,7 @@ sal_uLong ScDocument::AddValidationEntry( const ScValidationData& rNew )
     }
 
     // might be called from ScPatternAttr::MigrateToDocument; thus clone (real copy)
-    sal_uLong nNewKey = nMax + 1;
+    sal_uInt32 nNewKey = nMax + 1;
     std::unique_ptr<ScValidationData> pInsert(rNew.Clone(this));
     pInsert->SetKey( nNewKey );
     ScMutationGuard aGuard(*this, ScMutationGuardFlags::CORE);

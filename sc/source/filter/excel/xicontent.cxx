@@ -706,7 +706,7 @@ void XclImpCondFormat::Apply()
         ScDocument& rDoc = GetDoc();
 
         SCTAB nTab = maRanges.front().aStart.Tab();
-        sal_uLong nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), nTab );
+        sal_uInt32 nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), nTab );
 
         rDoc.AddCondFormatData( maRanges, nTab, nKey );
     }

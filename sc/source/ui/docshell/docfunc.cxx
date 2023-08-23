@@ -5653,7 +5653,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, std::unique_ptr<
         else
             pRepaintRange.reset(new ScRange(aCombinedRange));
 
-        sal_uLong nIndex = rDoc.AddCondFormat(std::move(pFormat), nTab);
+        sal_uInt32 nIndex = rDoc.AddCondFormat(std::move(pFormat), nTab);
 
         rDoc.AddCondFormatData(rRanges, nTab, nIndex);
         rDoc.SetStreamValid(nTab, false);
