@@ -594,7 +594,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         }
 
         JNIEnv * pMainThreadEnv = nullptr;
-        javaFrameworkError errcode = JFW_E_NONE;
+        javaFrameworkError errcode;
 
         if (getenv("STOC_FORCE_NO_JRE"))
             errcode = JFW_E_NO_SELECT;
@@ -610,9 +610,11 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
         {
             // No Java configured. We silently run the Java configuration
             info.reset();
-            javaFrameworkError errFind = jfw_findAndSelectJRE(&info);
+            javaFrameworkError errFind;
             if (getenv("STOC_FORCE_NO_JRE"))
                 errFind = JFW_E_NO_JAVA_FOUND;
+            else
+                errFind = jfw_findAndSelectJRE(&info);
             if (errFind == JFW_E_NONE)
             {
                 continue;
