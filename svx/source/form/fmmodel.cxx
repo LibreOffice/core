@@ -151,7 +151,7 @@ bool FmFormModel::OpenInDesignModeIsDefaulted( )
 
 bool FmFormModel::ControlsUseRefDevice() const
 {
-    if ( !m_pImpl->aControlsUseRefDevice )
+    if ( !m_pImpl->aControlsUseRefDevice.has_value() )
     {
         DocumentType eDocType = eUnknownDocumentType;
         if ( m_pObjShell )

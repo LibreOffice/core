@@ -502,7 +502,7 @@ void SidebarController::NotifyResize()
 
 void SidebarController::ProcessNewWidth (const sal_Int32 nNewWidth)
 {
-    if ( ! mbIsDeckRequestedOpen)
+    if ( ! mbIsDeckRequestedOpen.has_value())
         return;
 
     if (*mbIsDeckRequestedOpen)
@@ -680,7 +680,7 @@ void SidebarController::SwitchToDeck (
     std::u16string_view rsDeckId)
 {
     if (  msCurrentDeckId != rsDeckId
-        || ! mbIsDeckOpen
+        || ! mbIsDeckOpen.has_value()
         || mnRequestedForceFlags!=SwitchFlag_NoForce)
     {
         std::shared_ptr<DeckDescriptor> xDeckDescriptor = mpResourceManager->GetDeckDescriptor(rsDeckId);
@@ -1272,17 +1272,17 @@ bool SidebarController::IsDeckOpen(const sal_Int32 nIndex)
         OUString asDeckId(mpTabBar->GetDeckIdForIndex(nIndex));
         return IsDeckVisible(asDeckId);
     }
-    return mbIsDeckOpen && *mbIsDeckOpen;
+    return mbIsDeckOpen.has_value() && *mbIsDeckOpen;
 }
 
 bool SidebarController::IsDeckVisible(std::u16string_view rsDeckId)
 {
-    return mbIsDeckOpen && *mbIsDeckOpen && msCurrentDeckId == rsDeckId;
+    return mbIsDeckOpen.has_value() && *mbIsDeckOpen && msCurrentDeckId == rsDeckId;
 }
 
 void SidebarController::UpdateDeckOpenState()
 {
-    if ( ! mbIsDeckRequestedOpen)
+    if ( ! mbIsDeckRequestedOpen.has_value() )
         // No state requested.
         return;
 
@@ -1290,7 +1290,7 @@ void SidebarController::UpdateDeckOpenState()
 
     // Update (change) the open state when it either has not yet been initialized
     // or when its value differs from the requested state.
-    if ( mbIsDeckOpen && *mbIsDeckOpen == *mbIsDeckRequestedOpen )
+    if ( mbIsDeckOpen.has_value() && *mbIsDeckOpen == *mbIsDeckRequestedOpen )
         return;
 
     if (*mbIsDeckRequestedOpen)

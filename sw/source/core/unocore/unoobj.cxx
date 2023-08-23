@@ -2927,8 +2927,8 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[13];
             nIndex = nIndex - '0';
-            auto bTemp = o3tl::tryAccess<bool>(aValue);
-            if (bTemp && nIndex < 3)
+            std::optional<const bool> bTemp = o3tl::tryAccess<bool>(aValue);
+            if (bTemp.has_value() && nIndex < 3)
             {
                 aKeys[nIndex]->bIsNumeric = *bTemp;
             }
@@ -2944,8 +2944,8 @@ bool SwUnoCursorHelper::ConvertSortProperties(
             bOldSortdescriptor = true;
             sal_uInt16 nIndex = rPropName[15];
             nIndex -= '0';
-            auto bTemp = o3tl::tryAccess<bool>(aValue);
-            if (bTemp && nIndex < 3)
+            std::optional<const bool> bTemp = o3tl::tryAccess<bool>(aValue);
+            if (bTemp.has_value() && nIndex < 3)
             {
                 aKeys[nIndex]->eSortOrder = (*bTemp)
                     ? SwSortOrder::Ascending : SwSortOrder::Descending;

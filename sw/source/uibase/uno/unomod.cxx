@@ -286,8 +286,8 @@ namespace
 {
     bool tryBoolAccess(const uno::Any &rValue)
     {
-        const auto xPrSet = o3tl::tryAccess<bool>(rValue);
-        if (!xPrSet)
+        const std::optional<const bool> xPrSet = o3tl::tryAccess<bool>(rValue);
+        if (!xPrSet.has_value())
             throw lang::IllegalArgumentException();
         return *xPrSet;
     }

@@ -837,7 +837,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_REMOVE_HYPERLINK:
                 {
                     bool bDisableEditHyperlink;
-                    if (!moAtContextMenu_DisableEditHyperlink)
+                    if (!moAtContextMenu_DisableEditHyperlink.has_value())
                         bDisableEditHyperlink = ShouldDisableEditHyperlink();
                     else
                     {

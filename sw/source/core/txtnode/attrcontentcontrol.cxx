@@ -501,7 +501,7 @@ std::optional<bool> SwContentControl::GetLock(bool bControl) const
     else if (m_aLock.equalsIgnoreAsciiCase("contentLocked"))
         oLock = !bControl;
 
-    assert(oLock && "invalid or unknown lock state");
+    assert(oLock.has_value() && "invalid or unknown lock state");
     return oLock;
 }
 

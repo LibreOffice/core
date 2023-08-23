@@ -139,7 +139,7 @@ OUString ScUnoHelpFunctions::GetStringProperty(
 bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     auto b = o3tl::tryAccess<bool>(aAny);
-    return b && *b;
+    return b.has_value() && *b;
 }
 
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )

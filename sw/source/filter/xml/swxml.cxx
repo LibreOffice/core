@@ -314,8 +314,8 @@ ErrCode ReadThroughComponent(
 
         Any aAny = xProps->getPropertyValue("Encrypted");
 
-        auto b = o3tl::tryAccess<bool>(aAny);
-        bool bEncrypted = b && *b;
+        std::optional<const bool> b = o3tl::tryAccess<bool>(aAny);
+        bool bEncrypted = b.has_value() && *b;
 
         uno::Reference <io::XInputStream> xInputStream = xStream->getInputStream();
 

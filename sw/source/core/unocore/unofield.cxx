@@ -2275,8 +2275,8 @@ SwXTextField::setPropertyValue(
         }
         if (pBool)
         {
-            auto b = o3tl::tryAccess<bool>(rValue);
-            if( !b )
+            std::optional<const bool> b = o3tl::tryAccess<bool>(rValue);
+            if( !b.has_value() )
                 throw lang::IllegalArgumentException();
             *pBool = *b;
 

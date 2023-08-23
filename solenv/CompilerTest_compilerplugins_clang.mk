@@ -52,6 +52,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/noexcept \
     compilerplugins/clang/test/noexceptmove \
     compilerplugins/clang/test/nullptr \
+    compilerplugins/clang/test/optionalbool \
     compilerplugins/clang/test/oslendian-1 \
     compilerplugins/clang/test/oslendian-2 \
     compilerplugins/clang/test/oslendian-3 \

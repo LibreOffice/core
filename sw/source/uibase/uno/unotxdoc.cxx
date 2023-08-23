@@ -1060,8 +1060,8 @@ void SwXTextDocument::setPagePrintSettings(const Sequence< beans::PropertyValue 
         }
         else if(sName == "IsLandscape")
         {
-            auto b = o3tl::tryAccess<bool>(rVal);
-            bException = !b;
+            std::optional<const bool> b = o3tl::tryAccess<bool>(rVal);
+            bException = !b.has_value();
             if (b)
             {
                 aData.SetLandscape(*b);
@@ -1118,8 +1118,8 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         // Collate-Property
         else if ( rProp.Name == UNO_NAME_COLLATE )
         {
-            auto b = o3tl::tryAccess<bool>(rProp.Value);
-            if ( !b )
+            std::optional<const bool> b = o3tl::tryAccess<bool>(rProp.Value);
+            if ( !b.has_value() )
                 throw IllegalArgumentException();
             aReq.AppendItem(SfxBoolItem( SID_PRINT_COLLATE, *b ) );
 
@@ -1128,8 +1128,8 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
         // Sort-Property
         else if ( rProp.Name == UNO_NAME_SORT )
         {
-            auto b = o3tl::tryAccess<bool>(rProp.Value);
-            if ( !b )
+            std::optional<const bool> b = o3tl::tryAccess<bool>(rProp.Value);
+            if ( !b.has_value() )
                 throw IllegalArgumentException();
 
             aReq.AppendItem(SfxBoolItem( SID_PRINT_SORT, *b ) );

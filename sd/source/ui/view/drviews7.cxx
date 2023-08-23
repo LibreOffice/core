@@ -1480,7 +1480,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
     bool bDisableEditHyperlink;
-    if (!moAtContextMenu_DisableEditHyperlink)
+    if (!moAtContextMenu_DisableEditHyperlink.has_value())
         bDisableEditHyperlink = ShouldDisableEditHyperlink();
     else
     {

@@ -1387,7 +1387,7 @@ namespace
 {
     void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const optional_bool& _bSuppressMacros, const optional_bool& _bReadOnly )
     {
-        if ( !!_bSuppressMacros )
+        if ( _bSuppressMacros.has_value() )
         {
             if ( *_bSuppressMacros )
             {
@@ -1404,7 +1404,7 @@ namespace
             }
         }
 
-        if ( !!_bReadOnly )
+        if ( _bReadOnly.has_value() )
             _io_rArgs.put( "ReadOnly", *_bReadOnly );
     }
 }

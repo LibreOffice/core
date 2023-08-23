@@ -193,8 +193,8 @@ Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType)
 {
     if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
     {
-        OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::queryInterface: did not initialize this, yet!" );
-        if ( !!m_aDocScriptSupport && *m_aDocScriptSupport )
+        OSL_PRECOND( m_aDocScriptSupport.has_value(), "SbaTableQueryBrowser::queryInterface: did not initialize this, yet!" );
+        if ( m_aDocScriptSupport.has_value() && *m_aDocScriptSupport )
             return Any( Reference< XScriptInvocationContext >( this ) );
         return Any();
     }
@@ -212,8 +212,8 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
         SbaTableQueryBrowser_Base::getTypes()
     ) );
 
-    OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::getTypes: did not initialize this, yet!" );
-    if ( !m_aDocScriptSupport || !*m_aDocScriptSupport )
+    OSL_PRECOND( m_aDocScriptSupport.has_value(), "SbaTableQueryBrowser::getTypes: did not initialize this, yet!" );
+    if ( !m_aDocScriptSupport.has_value() || !*m_aDocScriptSupport )
     {
         auto [begin, end] = asNonConstRange(aTypes);
         auto newEnd = std::remove_if( begin, end,

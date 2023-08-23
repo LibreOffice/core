@@ -1505,7 +1505,7 @@ void ScOrcusBorder::applyToItemSet( SfxItemSet& rSet ) const
 
 void ScOrcusProtection::applyToItemSet( SfxItemSet& rSet ) const
 {
-    if (!mbLocked && !mbHidden && !mbPrintContent && !mbFormulaHidden)
+    if (!mbLocked.has_value() && !mbHidden.has_value() && !mbPrintContent.has_value() && !mbFormulaHidden.has_value())
         return;
 
     bool bLocked = mbLocked.value_or(true); // defaults to true.

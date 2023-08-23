@@ -331,9 +331,9 @@ namespace
         //          framework's implementation details
         if ( !!_rFeatureState.sTitle )
             _out_rStates.push_back( Any( *_rFeatureState.sTitle ) );
-        if ( !!_rFeatureState.bChecked )
+        if ( _rFeatureState.bChecked.has_value() )
             _out_rStates.push_back( Any( *_rFeatureState.bChecked ) );
-        if ( !!_rFeatureState.bInvisible )
+        if ( _rFeatureState.bInvisible.has_value() )
             _out_rStates.push_back( Any( Visibility( !*_rFeatureState.bInvisible ) ) );
         if ( _rFeatureState.aValue.hasValue() )
             _out_rStates.push_back( _rFeatureState.aValue );
@@ -1111,7 +1111,7 @@ bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
 {
     FeatureState aState = GetState( _nCommandId );
 
-    return aState.bChecked && *aState.bChecked;
+    return aState.bChecked.has_value() && *aState.bChecked;
 }
 
 bool OGenericUnoController::isCommandEnabled( const OUString& _rCompleteCommandURL ) const

@@ -37,11 +37,11 @@ struct SC_DLLPUBLIC ScDxfFont
 
     bool isEmpty() const
     {
-        return !(pFontAttr || nFontHeight ||
-            eWeight || eItalic || eUnder ||
-            eOver || bWordLine || eStrike ||
-            bOutline || bShadow || eEmphasis ||
-            eRelief || aColor || eLang);
+        return !(pFontAttr.has_value() || nFontHeight.has_value() ||
+            eWeight.has_value() || eItalic.has_value() || eUnder.has_value() ||
+            eOver.has_value() || bWordLine.has_value() || eStrike.has_value() ||
+            bOutline.has_value() || bShadow.has_value() || eEmphasis.has_value() ||
+            eRelief.has_value() || aColor.has_value() || eLang.has_value());
     }
 };
 

@@ -177,7 +177,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
 
     if( text::HoriOrientation::INSIDE == eHor || text::HoriOrientation::OUTSIDE == eHor )
     {
-        if (!oIsRightPage)
+        if (!oIsRightPage.has_value())
             oIsRightPage = pFrame->FindPageFrame()->OnRightPage();
         if (*oIsRightPage)
             eHor = eHor == text::HoriOrientation::INSIDE ? text::HoriOrientation::LEFT : text::HoriOrientation::RIGHT;

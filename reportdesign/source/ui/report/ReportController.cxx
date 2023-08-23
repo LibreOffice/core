@@ -2714,7 +2714,7 @@ uno::Any SAL_CALL OReportController::getViewData()
         sCommandURL = sCommandURL.copy( 5 );
 
         Any aCommandState;
-        if ( !!aFeatureState.bChecked )
+        if ( aFeatureState.bChecked.has_value() )
             aCommandState <<= *aFeatureState.bChecked;
         else if ( aFeatureState.aValue.hasValue() )
             aCommandState = aFeatureState.aValue;

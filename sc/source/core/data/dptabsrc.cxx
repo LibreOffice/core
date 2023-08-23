@@ -88,7 +88,7 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 static bool lcl_GetBoolFromAny( const uno::Any& aAny )
 {
     auto b = o3tl::tryAccess<bool>(aAny);
-    return b && *b;
+    return b.has_value() && *b;
 }
 
 ScDPSource::ScDPSource( ScDPTableData* pD ) :

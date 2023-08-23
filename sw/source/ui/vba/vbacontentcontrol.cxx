@@ -481,20 +481,20 @@ sal_Int32 SwVbaContentControl::getLevel()
 sal_Bool SwVbaContentControl::getLockContentControl()
 {
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
-    return oLock && *oLock;
+    return oLock.has_value() && *oLock;
 }
 
 void SwVbaContentControl::setLockContentControl(sal_Bool bSet)
 {
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
-    m_pCC->SetLock(/*bContents=*/oLock && *oLock, /*bControl=*/bSet);
+    m_pCC->SetLock(/*bContents=*/oLock.has_value() && *oLock, /*bControl=*/bSet);
 }
 
 sal_Bool SwVbaContentControl::getLockContents()
 {
     // If the theoretical design model says it is locked, then report as locked.
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/false);
-    if (oLock && *oLock)
+    if (oLock.has_value() && *oLock)
         return true;
 
     // Now check the real implementation.
@@ -513,7 +513,7 @@ void SwVbaContentControl::setLockContents(sal_Bool bSet)
 {
     // Set the lock both theoretically and actually.
     std::optional<bool> oLock = m_pCC->GetLock(/*bControl=*/true);
-    m_pCC->SetLock(/*bContents=*/bSet, /*bControl=*/oLock && *oLock);
+    m_pCC->SetLock(/*bContents=*/bSet, /*bControl=*/oLock.has_value() && *oLock);
 
     // Checkbox/DropDown/Picture are normally locked in LO implementation - don't unlock them.
     if (m_pCC->GetType() == SwContentControlType::CHECKBOX

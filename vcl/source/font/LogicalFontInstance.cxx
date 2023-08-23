@@ -237,7 +237,7 @@ double LogicalFontInstance::GetGlyphWidth(sal_GlyphId nGlyph, bool bVertical, bo
 
 bool LogicalFontInstance::IsGraphiteFont()
 {
-    if (!m_xbIsGraphiteFont)
+    if (!m_xbIsGraphiteFont.has_value())
     {
         m_xbIsGraphiteFont
             = hb_graphite2_face_get_gr_face(hb_font_get_face(GetHbFont())) != nullptr;

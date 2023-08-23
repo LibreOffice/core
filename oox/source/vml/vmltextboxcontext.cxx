@@ -60,15 +60,15 @@ TextPortionContext::TextPortionContext( ContextHandler2Helper const & rParent,
             maFont.monEscapement = nElement;
         break;
         case XML_b:
-            OSL_ENSURE( !maFont.mobBold, "TextPortionContext::TextPortionContext - nested <b> elements" );
+            OSL_ENSURE( !maFont.mobBold.has_value(), "TextPortionContext::TextPortionContext - nested <b> elements" );
             maFont.mobBold = true;
         break;
         case XML_i:
-            OSL_ENSURE( !maFont.mobItalic, "TextPortionContext::TextPortionContext - nested <i> elements" );
+            OSL_ENSURE( !maFont.mobItalic.has_value(), "TextPortionContext::TextPortionContext - nested <i> elements" );
             maFont.mobItalic = true;
         break;
         case XML_s:
-            OSL_ENSURE( !maFont.mobStrikeout, "TextPortionContext::TextPortionContext - nested <s> elements" );
+            OSL_ENSURE( !maFont.mobStrikeout.has_value(), "TextPortionContext::TextPortionContext - nested <s> elements" );
             maFont.mobStrikeout = true;
         break;
         case OOX_TOKEN(dml, blip):

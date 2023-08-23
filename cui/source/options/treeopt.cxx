@@ -233,7 +233,7 @@ namespace {
 bool MailMergeCfgIsEmailSupported()
 {
     std::optional<bool> b = officecfg::Office::Writer::MailMergeWizard::EMailSupported::get();
-    return b && *b;
+    return b.has_value() && *b;
 }
 
 }

@@ -1495,7 +1495,7 @@ namespace cppcanvas::internal
                         // TODO(Q2): define and use appropriate enumeration types
                         rState.textReliefStyle          = rFont.GetRelief();
                         rState.textOverlineStyle        = static_cast<sal_Int8>(rFont.GetOverline());
-                        rState.textUnderlineStyle       = rParms.maFontUnderline ?
+                        rState.textUnderlineStyle       = rParms.maFontUnderline.has_value() ?
                             (*rParms.maFontUnderline ? sal_Int8(LINESTYLE_SINGLE) : sal_Int8(LINESTYLE_NONE)) :
                             static_cast<sal_Int8>(rFont.GetUnderline());
                         rState.textStrikeoutStyle       = static_cast<sal_Int8>(rFont.GetStrikeout());
@@ -2932,7 +2932,7 @@ namespace cppcanvas::internal
             if( rParams.maFontName ||
                 rParams.maFontWeight ||
                 rParams.maFontLetterForm ||
-                rParams.maFontUnderline )
+                rParams.maFontUnderline.has_value() )
             {
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
 

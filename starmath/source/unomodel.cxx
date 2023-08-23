@@ -455,8 +455,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_POSTURE     :
             case HANDLE_FONT_TEXT_POSTURE        :
             {
-                auto bVal = o3tl::tryAccess<bool>(*pValues);
-                if(!bVal)
+                std::optional<const bool> bVal = o3tl::tryAccess<bool>(*pValues);
+                if(!bVal.has_value())
                     throw IllegalArgumentException();
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic(*bVal ? ITALIC_NORMAL : ITALIC_NONE);
@@ -472,8 +472,8 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_FONT_NUMBERS_WEIGHT      :
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
-                auto bVal = o3tl::tryAccess<bool>(*pValues);
-                if(!bVal)
+                std::optional<const bool> bVal = o3tl::tryAccess<bool>(*pValues);
+                if(!bVal.has_value())
                     throw IllegalArgumentException();
                 vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight(*bVal ? WEIGHT_BOLD : WEIGHT_NORMAL);

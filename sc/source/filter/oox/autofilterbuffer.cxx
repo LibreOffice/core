@@ -773,7 +773,7 @@ void AutoFilter::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRa
             the global mode in obNeedsRegExp. If either one is still in
             don't-care state, all is fine. If both are set, they must be
             equal. */
-        bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.value() == aSettings.mobNeedsRegExp.value());
+        bool bRegExpCompatible = !obNeedsRegExp.has_value() || !aSettings.mobNeedsRegExp.has_value() || (obNeedsRegExp.value() == aSettings.mobNeedsRegExp.value());
 
         // check whether fields are connected by 'or' (see comments above).
         if( rColumnFields.size() >= 2 )

@@ -217,7 +217,7 @@ namespace dbaui
             else
                 OSL_FAIL( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
 
-            if ( !aValue )
+            if ( !aValue.has_value() )
             {
                 booleanSetting.xControl->set_state(TRISTATE_INDET);
             }

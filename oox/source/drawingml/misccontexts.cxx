@@ -57,7 +57,7 @@ GradientFillContext::GradientFillContext(ContextHandler2Helper const & rParent,
     auto oRotateWithShape = rAttribs.getBool(XML_rotWithShape);
     mrGradientProps.moShadeFlip = rAttribs.getToken( XML_flip );
     mrGradientProps.moRotateWithShape = oRotateWithShape;
-    if (mpGradientFill && oRotateWithShape)
+    if (mpGradientFill && oRotateWithShape.has_value())
         mpGradientFill->mbRotateWithShape = *oRotateWithShape;
 }
 

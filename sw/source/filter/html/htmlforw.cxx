@@ -809,8 +809,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
             if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
             {
                 aTmp = xPropSet->getPropertyValue( sMultiLine );
-                auto b = o3tl::tryAccess<bool>(aTmp);
-                bMultiLine = b && *b;
+                std::optional<const bool> b = o3tl::tryAccess<bool>(aTmp);
+                bMultiLine = b.has_value() && *b;
             }
 
             if( bMultiLine )
@@ -837,8 +837,8 @@ SwHTMLWriter& OutHTML_DrawFrameFormatAsControl( SwHTMLWriter& rWrt,
                 {
                     const char *pWrapStr = nullptr;
                     auto aTmp2 = xPropSet->getPropertyValue( "HardLineBreaks" );
-                    auto b = o3tl::tryAccess<bool>(aTmp2);
-                    pWrapStr = (b && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard
+                    std::optional<const bool> b = o3tl::tryAccess<bool>(aTmp2);
+                    pWrapStr = (b.has_value() && *b) ? OOO_STRING_SVTOOLS_HTML_WW_hard
                                          : OOO_STRING_SVTOOLS_HTML_WW_soft;
                     sOptions += OString::Concat(" " OOO_STRING_SVTOOLS_HTML_O_wrap "=\"") +
                         pWrapStr + "\"";

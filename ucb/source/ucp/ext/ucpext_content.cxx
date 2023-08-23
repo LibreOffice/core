@@ -577,7 +577,7 @@ namespace ucb::ucp::ext
 
     bool Content::impl_isFolder()
     {
-        if ( !!m_aIsFolder )
+        if ( m_aIsFolder.has_value() )
             return *m_aIsFolder;
 
         bool bIsFolder = false;

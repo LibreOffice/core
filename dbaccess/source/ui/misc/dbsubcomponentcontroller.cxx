@@ -152,14 +152,14 @@ namespace dbaui
 
         bool    documentHasScriptSupport() const
         {
-            OSL_PRECOND( !!m_aDocScriptSupport,
+            OSL_PRECOND( m_aDocScriptSupport.has_value(),
                 "DBSubComponentController_Impl::documentHasScriptSupport: not completely initialized, yet - don't know!?" );
-            return !!m_aDocScriptSupport && *m_aDocScriptSupport;
+            return m_aDocScriptSupport.has_value() && *m_aDocScriptSupport;
         }
 
         void    setDocumentScriptSupport( const bool _bSupport )
         {
-            OSL_PRECOND( !m_aDocScriptSupport,
+            OSL_PRECOND( !m_aDocScriptSupport.has_value(),
                 "DBSubComponentController_Impl::setDocumentScriptSupport: already initialized!" );
             m_aDocScriptSupport = ::std::optional< bool >( _bSupport );
         }

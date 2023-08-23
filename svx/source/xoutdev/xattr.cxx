@@ -1813,7 +1813,7 @@ bool XLineStartCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberI
 bool XLineStartCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     auto b = o3tl::tryAccess<bool>(rVal);
-    if( !b )
+    if( !b.has_value() )
         return false;
 
     SetValue( *b );
@@ -1852,7 +1852,7 @@ bool XLineEndCenterItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*
 bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     auto b = o3tl::tryAccess<bool>(rVal);
-    if( !b )
+    if( !b.has_value() )
         return false;
 
     SetValue( *b );

@@ -1200,7 +1200,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
 bool ScPatternAttr::IsVisible() const
 {
-    if (!mxVisible)
+    if (!mxVisible.has_value())
         mxVisible = CalcVisible();
     return *mxVisible;
 }
