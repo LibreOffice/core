@@ -322,7 +322,7 @@ namespace
             drawinglayer::primitive2d::Primitive2DContainer aContainer;
             aContainer.swap(maTextPortionPrimitives);
 
-            // Take any decoration for the whole formatted portion and keep it to get continous over/under/strike-through
+            // Take any decoration for the whole formatted portion and keep it to get continuous over/under/strike-through
             if (pNewPrimitive->getPrimitive2DID() == PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
             {
                 const drawinglayer::primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
