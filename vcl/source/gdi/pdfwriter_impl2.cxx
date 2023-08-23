@@ -509,7 +509,13 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aAlpha.Invert(); // convert to alpha
                                 aAlpha.BlendWith(aPaintAlpha);
 #if HAVE_FEATURE_SKIA
+#if OSL_DEBUG_LEVEL > 0
+                                // In release builds, we always invert
+                                // regardless of whether Skia is enabled or not.
+                                // But in debug builds, we can't invert when
+                                // Skia is enabled.
                                 if ( !SkiaHelper::isVCLSkiaEnabled() )
+#endif
 #endif
                                 {
                                     // When Skia is disabled, the alpha mask

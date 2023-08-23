@@ -672,15 +672,19 @@ bool SkiaSalBitmap::Invert()
     if (!mBuffer && mImage && !mImageImmutable && !mEraseColorSet)
     {
         // This is 8-bit bitmap serving as alpha/transparency/mask, so the image itself needs no alpha.
-        // Use pixels size so that we don't downscale the image
-        sk_sp<SkSurface> surface = createSkSurface(mPixelsSize, kOpaque_SkAlphaType);
+        // tdf#156866 use mSize instead of mPixelSize for inverted surface
+        // Commit 5baac4e53128d3c0fc73b9918dc9a9c2777ace08 switched to setting
+        // the surface size to mPixelsSize in an attempt to avoid downscaling
+        // mImage but since it causes tdf#156866, revert back to setting the
+        // surface size to mSize.
+        sk_sp<SkSurface> surface = createSkSurface(mSize, kOpaque_SkAlphaType);
         surface->getCanvas()->clear(SK_ColorWHITE);
         SkPaint paint;
         paint.setBlendMode(SkBlendMode::kDifference);
         // Drawing the image does not work so create a shader from the image
         paint.setShader(GetSkShader(SkSamplingOptions()));
-        surface->getCanvas()->drawRect(
-            SkRect::MakeXYWH(0, 0, mPixelsSize.Width(), mPixelsSize.Height()), paint);
+        surface->getCanvas()->drawRect(SkRect::MakeXYWH(0, 0, mSize.Width(), mSize.Height()),
+                                       paint);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
         DataChanged();
         SAL_INFO("vcl.skia.trace", "invert(" << this << ")");

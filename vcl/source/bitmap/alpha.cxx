@@ -25,6 +25,10 @@
 #include <svdata.hxx>
 #include <salbmp.hxx>
 #include <sal/log.hxx>
+#if HAVE_FEATURE_SKIA
+#include <vcl/skia/SkiaHelper.hxx>
+#endif
+
 
 AlphaMask::AlphaMask() = default;
 
@@ -34,6 +38,16 @@ AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
     // no need to do any conversion if it is already an AlphaMask
     if ( typeid(rBitmap) != typeid(AlphaMask) && !rBitmap.IsEmpty() )
         Convert( BmpConversion::N8BitNoConversion );
+#if HAVE_FEATURE_SKIA
+    // Related tdf#156866 force snapshot of alpha mask when using Skia
+    // In release builds, tdf#156629 and tdf#156630 reappear in many
+    // cases because a BitmapInfoAccess is in a debug block. So, instead
+    // of relying on other code to a create a BitmapInfoAccess instance,
+    // create one here to force the alpha mask to handle any pending
+    // scaling and make the alpha mask immutable.
+    else if ( SkiaHelper::isVCLSkiaEnabled() )
+        BitmapInfoAccess aInfoAccess( *this );
+#endif
     assert( (IsEmpty() || getPixelFormat() == vcl::PixelFormat::N8_BPP) && "alpha bitmap should be 8bpp" );
     assert( (IsEmpty() || HasGreyPalette8Bit()) && "alpha bitmap should have greyscale palette" );
 }
