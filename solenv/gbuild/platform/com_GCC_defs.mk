@@ -260,20 +260,20 @@ gb_LinkTarget_INCLUDE :=\
 
 ifeq ($(COM_IS_CLANG),TRUE)
 gb_COMPILER_TEST_FLAGS := -Xclang -plugin-arg-loplugin -Xclang --unit-test-mode
-ifeq ($(COMPILER_PLUGIN_TOOL),)
 gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/clang/plugin.so -Xclang -add-plugin -Xclang loplugin
 ifneq ($(COMPILER_PLUGIN_WARNINGS_ONLY),)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang \
     --warnings-only='$(COMPILER_PLUGIN_WARNINGS_ONLY)'
 endif
-else
-gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/clang/plugin.so -Xclang -plugin -Xclang loplugin $(foreach plugin,$(COMPILER_PLUGIN_TOOL), -Xclang -plugin-arg-loplugin -Xclang $(plugin))
-ifneq ($(UPDATE_FILES),)
-gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
-endif
-endif
 ifeq ($(COMPILER_PLUGINS_DEBUG),TRUE)
 gb_COMPILER_PLUGINS += -Xclang -plugin-arg-loplugin -Xclang --debug
+endif
+gb_COMPILER_PLUGINS_TOOL := -Xclang -load -Xclang $(BUILDDIR)/compilerplugins/clang/plugin.so -Xclang -plugin -Xclang loplugin $(foreach plugin,$(COMPILER_PLUGIN_TOOL), -Xclang -plugin-arg-loplugin -Xclang $(plugin))
+ifneq ($(UPDATE_FILES),)
+gb_COMPILER_PLUGINS_TOOL += -Xclang -plugin-arg-loplugin -Xclang --scope=$(UPDATE_FILES)
+endif
+ifeq ($(COMPILER_PLUGINS_DEBUG),TRUE)
+gb_COMPILER_PLUGINS_TOOL += -Xclang -plugin-arg-loplugin -Xclang --debug
 endif
 
 # Set CCACHE_CPP2=1 to prevent Clang generating spurious warnings.
@@ -296,6 +296,7 @@ gb_COMPILER_SETUP += CCACHE_CPP2=1
 endif
 gb_COMPILER_TEST_FLAGS :=
 gb_COMPILER_PLUGINS :=
+gb_COMPILER_PLUGINS_TOOL :=
 gb_COMPILER_PLUGINS_SETUP :=
 gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS :=
 endif

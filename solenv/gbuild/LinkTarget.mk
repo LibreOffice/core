@@ -98,7 +98,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS)) \
+		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
 		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -113,7 +113,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS)) \
+		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
 		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -128,7 +128,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS)) \
+		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
 		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -143,7 +143,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS)) \
+		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
 		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -158,7 +158,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
-		$(if $(3),$(gb_COMPILER_PLUGINS)) \
+		$(if $(3),$(gb_COMPILER_PLUGINS_TOOL)) \
 		$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND) \
 		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
 		-c $(2) \
@@ -266,6 +266,7 @@ $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) $(gb
 	$(call gb_Output_announce,$*.c,$(true),C  ,3)
 	$(call gb_Trace_StartRange,$*.c,C  )
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$<,$(call gb_CObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
@@ -328,6 +329,8 @@ $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) 
 	$(call gb_Output_announce,$*.cxx,$(true),CXX,3)
 	$(call gb_Trace_StartRange,$*.cxx,CXX)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(eval $(gb_CxxObject__set_pchflags))))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) $(if $(COMPILER_TEST),$(gb_COMPILER_TEST_FLAGS)),$<,$(call gb_CxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CXX))))
 	$(call gb_Trace_EndRange,$*.cxx,CXX)
 else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
@@ -361,6 +364,7 @@ $(call gb_GenCObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Trace_StartRange,$*.c,C  )
 	test -f $(call gb_GenCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenCObject_get_source,$*)" && false)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CObject__tool_command,$*,$(call gb_GenCObject_get_source,$*),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CFLAGS) $(T_CFLAGS_APPEND),$(call gb_GenCObject_get_source,$*),$(call gb_GenCObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CC))))
 	$(call gb_Trace_EndRange,$*.c,C  )
 else
 $(call gb_GenCObject_get_target,%) :
@@ -394,6 +398,8 @@ $(call gb_GenCxxObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
 	test -f $(GEN_CXX_SOURCE) || (echo "Missing generated source file $(GEN_CXX_SOURCE)" && false)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxObject__tool_command,$*,$(GEN_CXX_SOURCE),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(eval $(gb_CxxObject__set_pchflags))))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND),$(GEN_CXX_SOURCE),$(call gb_GenCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),$(T_CXX))))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXX_SOURCE)),CXX)
 else
 $(call gb_GenCxxObject_get_target,%) :
@@ -428,6 +434,7 @@ $(call gb_GenCxxClrObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Trace_StartRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
 	test -f $(GEN_CXXCLR_SOURCE) || (echo "Missing generated source file $(GEN_CXXCLR_SOURCE)" && false)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$(GEN_CXXCLR_SOURCE),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$(GEN_CXXCLR_SOURCE),$(call gb_GenCxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$(subst $(BUILDDIR)/,,$(GEN_CXXCLR_SOURCE)),CLR)
 else
 $(call gb_GenCxxClrObject_get_target,%) :
@@ -519,6 +526,7 @@ $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDI
 	$(call gb_Output_announce,$*.mm,$(true),OCX,3)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCxxObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$<,$(call gb_ObjCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
 else
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
@@ -551,6 +559,7 @@ $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%
 	$(call gb_Output_announce,$*.m,$(true),OCC,3)
 	$(call gb_Trace_StartRange,$*.m,OCC)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$<,$(call gb_ObjCObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$*.m,OCC)
 else
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
@@ -583,6 +592,7 @@ $(call gb_GenObjCObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Trace_StartRange,$*.m,OCC)
 	test -f $(call gb_GenObjCObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCObject_get_source,$*)" && false)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCObject__tool_command,$*,$(call gb_GenObjCObject_get_source,$*),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND),$(call gb_GenObjCObject_get_source,$*),$(call gb_GenObjCObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$*.m,OCC)
 else
 $(call gb_GenObjCObject_get_target,%) :
@@ -616,6 +626,7 @@ $(call gb_GenObjCxxObject_get_target,%) : $(gb_FORCE_COMPILE_TARGET)
 	$(call gb_Trace_StartRange,$*.mm,OCX)
 	test -f $(call gb_GenObjCxxObject_get_source,$*) || (echo "Missing generated source file $(call gb_GenObjCxxObject_get_source,$*)" && false)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_ObjCxxObject__tool_command,$*,$(call gb_GenObjCxxObject_get_source,$*),$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND),$(call gb_GenObjCxxObject_get_source,$*),$(call gb_GenObjCxxObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$*.mm,OCX)
 else
 $(call gb_GenObjCxxObject_get_target,%) :
@@ -675,6 +686,7 @@ $(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDI
 	$(call gb_Output_announce,$*.cxx,$(true),CLR,3)
 	$(call gb_Trace_StartRange,$*.cxx,CLR)
 	$(if $(call gb_LinkTarget__tool_compile_enabled),$(call gb_CxxClrObject__tool_command,$*,$<,$(COMPILER_PLUGINS)))
+	$(if $(call gb_LinkTarget__tool_compile_enabled),$(if $(COMPILER_PLUGIN_TOOL),$(call gb_CObject__command_pattern,$@,$(T_CXXCLRFLAGS) $(T_CXXCLRFLAGS_APPEND),$<,$(call gb_CxxClrObject_get_dep_target,$*),$(COMPILER_PLUGINS),)))
 	$(call gb_Trace_EndRange,$*.cxx,CLR)
 else
 $(call gb_CxxClrObject_get_target,%) : $(call gb_CxxClrObject_get_source,$(SRCDIR),%)
