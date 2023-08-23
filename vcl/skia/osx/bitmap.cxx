@@ -63,6 +63,10 @@ CGImageRef createCGImage(const Image& rImage)
     else
     {
         AlphaMask alpha(bitmapEx.GetAlphaMask());
+        // tdf#156854 invert alpha mask for macOS native menu item images
+        // At the time of this change, only the AquaSalMenu class calls this
+        // function so it should be safe to invert the alpha mask here.
+        alpha.Invert();
         Bitmap alphaBitmap(alpha.GetBitmap());
         assert(dynamic_cast<SkiaSalBitmap*>(alphaBitmap.ImplGetSalBitmap().get()) != nullptr);
         SkiaSalBitmap* skiaAlpha
