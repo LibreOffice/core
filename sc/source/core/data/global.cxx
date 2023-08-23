@@ -188,7 +188,7 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rOldAttrs )
 {
     std::optional<bool> equal = ScPatternAttr::FastEqualPatternSets( rNewAttrs, rOldAttrs );
-    if( equal.has_value() && equal )
+    if( equal.has_value() && *equal )
     {
         bNumFormatChanged = false;
         return false;
