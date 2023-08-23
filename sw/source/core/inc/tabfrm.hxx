@@ -108,7 +108,7 @@ class SW_DLLPUBLIC SwTabFrame final: public SwLayoutFrame, public SwFlowFrame
      * created and constructed and inserted directly after this.
      * Join() gets the Follow's content and destroys it.
      */
-    bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
+    bool Split(const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep, bool & rIsFootnoteGrowth);
     void Join();
 
     void UpdateAttr_(
