@@ -270,9 +270,6 @@ protected:
     */
     AbsoluteScreenPixelRectangle getBoundingBoxOnScreen();
 
-    ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
-    void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
-
 public:
     /** @return  The osl::Mutex member provided by the class BaseMutex. */
     ::osl::Mutex&    getMutex( ) { return m_aMutex; }
@@ -294,6 +291,9 @@ protected:
     css::uno::Reference< css::awt::XWindow > m_xFocusWindow;
 
 private:
+    ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
+    void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
+
     /** Localized name. */
     OUString maName;
     /** Localized description text. */
