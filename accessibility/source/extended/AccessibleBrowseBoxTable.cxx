@@ -205,19 +205,24 @@ AbsoluteScreenPixelRectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScree
 Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
         sal_Int32 nChildIndex )
 {
+    assert(nChildIndex == vcl::BBINDEX_ROWHEADERBAR || nChildIndex == vcl::BBINDEX_COLUMNHEADERBAR);
+
     Reference< XAccessible > xRet;
     Reference< XAccessibleContext > xContext( mxParent, uno::UNO_QUERY );
     if( xContext.is() )
     {
-        try
+        if (nChildIndex == vcl::BBINDEX_COLUMNHEADERBAR || mpBrowseBox->HasRowHeader())
         {
-            xRet = xContext->getAccessibleChild( nChildIndex );
+            try
+            {
+                xRet = xContext->getAccessibleChild( nChildIndex );
+            }
+            catch (const lang::IndexOutOfBoundsException&)
+            {
+                OSL_FAIL( "implGetHeaderBar - wrong child index" );
+            }
+            // RuntimeException goes to caller
         }
-        catch (const lang::IndexOutOfBoundsException&)
-        {
-            OSL_FAIL( "implGetHeaderBar - wrong child index" );
-        }
-        // RuntimeException goes to caller
     }
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
