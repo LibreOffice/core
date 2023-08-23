@@ -269,10 +269,19 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     if (!m_GlyphItems.IsValid())
         return 0;
 
-    DeviceCoordinate nWidth = 0;
-    for (auto const& aGlyphItem : m_GlyphItems)
-        nWidth += aGlyphItem.newWidth();
+    // initialize the extent
+    DeviceCoordinate nMinPos = 0;
+    DeviceCoordinate nMaxPos = 0;
 
+    for (auto const& aGlyphItem : m_GlyphItems)
+    {
+        // update the text extent with the glyph extent
+        DeviceCoordinate nXPos = aGlyphItem.linearPos().getX() - aGlyphItem.xOffset();
+        nMinPos = std::min(nMinPos, nXPos);
+        nMaxPos = std::max(nMaxPos, nXPos + aGlyphItem.newWidth());
+    }
+
+    DeviceCoordinate nWidth = nMaxPos - nMinPos;
     return nWidth;
 }
 
