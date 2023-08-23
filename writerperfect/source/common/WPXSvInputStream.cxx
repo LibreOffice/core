@@ -441,8 +441,12 @@ tools::Long WPXSvInputStream::tellImpl()
     else
     {
         const sal_Int64 tmpPosition = mxSeekable->getPosition();
-        if ((tmpPosition < 0) || (tmpPosition > LONG_MAX))
+        if (tmpPosition < 0)
             return -1;
+#if SAL_TYPES_SIZEOFLONG == 4
+        if (tmpPosition > LONG_MAX)
+            return -1;
+#endif
         return static_cast<tools::Long>(tmpPosition);
     }
 }
