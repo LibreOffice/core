@@ -579,7 +579,8 @@ namespace svxform
         else if( auto pNameChangedHint = dynamic_cast<const FmNavNameChangedHint*>(&rHint) )
         {
             std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pNameChangedHint->GetEntryData());
-            m_xTreeView->set_text(*xEntry, pNameChangedHint->GetNewName());
+            if (xEntry)
+                m_xTreeView->set_text(*xEntry, pNameChangedHint->GetNewName());
         }
         else if( dynamic_cast<const FmNavClearedHint*>(&rHint) )
         {
