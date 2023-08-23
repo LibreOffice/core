@@ -202,7 +202,14 @@ void SwFrameNotify::ImplDestroy()
         }
 
         if ( pNxt )
+        {
             pNxt->InvalidatePos();
+            if (pNxt->IsTextFrame() && static_cast<SwTextFrame*>(pNxt)->IsUndersized())
+            {   // tdf#137523 it could have more space at new pos
+                pNxt->InvalidateSize();
+                pNxt->Prepare(PrepareHint::AdjustSizeWithoutFormatting);
+            }
+        }
         else
         {
             // #104100# - correct condition for setting retouche
