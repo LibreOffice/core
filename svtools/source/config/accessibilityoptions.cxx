@@ -146,7 +146,8 @@ void SvtAccessibilityOptions::SetVCLSettings()
         StyleSettingsChanged = true;
     }
 
-    const bool bPreviewUsesCheckeredBackground(officecfg::Office::Common::Accessibility::PreviewUsesCheckeredBackground::get());
+    std::optional<bool> bTmp = officecfg::Office::Common::Accessibility::PreviewUsesCheckeredBackground::get();
+    const bool bPreviewUsesCheckeredBackground = bTmp.value_or(false);
 
     if(aStyleSettings.GetPreviewUsesCheckeredBackground() != bPreviewUsesCheckeredBackground)
     {
