@@ -21,7 +21,7 @@ class tdf156611(UITestCase):
         # but it does not need any data from the file, any xlsx or xls file can be opened for this test
         with self.ui_test.load_file(get_url_for_data_file("tdf126541_GridOff.xlsx")) as document:
 
-            # datas that we will check against when hyperlink is inserted
+            # data that we will check against when hyperlink is inserted
             urls =[["",""],["https://www.documentfoundation.org/",""]]
             texts =[["aaa bbb","bbb"],["cccc ddd","ddd"],["eeee","aaa cccc eeee"]]
 
