@@ -102,7 +102,7 @@ class SmMathConfig final : public utl::ConfigItem, public SfxBroadcaster
     std::unique_ptr<SmSymbolManager> pSymbolMgr;
     bool bIsOtherModified;
     bool bIsFormatModified;
-    SmFontPickList vFontPickList[7];
+    SmFontPickList vFontPickList[8];
     sal_Int32 m_nCommitLock = 0;
 
     SmMathConfig(const SmMathConfig&) = delete;

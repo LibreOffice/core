@@ -430,7 +430,9 @@ IMPL_LINK(SmFontTypeDialog, MenuSelectHdl, const OUString&, rIdent, void)
     SmFontPickListBox *pActiveListBox;
 
     bool bHideCheckboxes = false;
-    if (rIdent == "variables")
+    if (rIdent == "math")
+        pActiveListBox = m_xMathFont.get();
+    else if (rIdent == "variables")
         pActiveListBox = m_xVariableFont.get();
     else if (rIdent == "functions")
         pActiveListBox = m_xFunctionFont.get();
@@ -481,6 +483,7 @@ IMPL_LINK_NOARG(SmFontTypeDialog, DefaultButtonClickHdl, weld::Button&, void)
 SmFontTypeDialog::SmFontTypeDialog(weld::Window* pParent, OutputDevice *pFntListDevice)
     : GenericDialogController(pParent, "modules/smath/ui/fonttypedialog.ui", "FontsDialog")
     , pFontListDev(pFntListDevice)
+    , m_xMathFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("mathCB")))
     , m_xVariableFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("variableCB")))
     , m_xFunctionFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("functionCB")))
     , m_xNumberFont(new SmFontPickListBox(m_xBuilder->weld_combo_box("numberCB")))
@@ -503,6 +506,7 @@ void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
 {
     SmModule *pp = SM_MOD();
 
+    *m_xMathFont     = pp->GetConfig()->GetFontPickList(FNT_MATH);
     *m_xVariableFont = pp->GetConfig()->GetFontPickList(FNT_VARIABLE);
     *m_xFunctionFont = pp->GetConfig()->GetFontPickList(FNT_FUNCTION);
     *m_xNumberFont   = pp->GetConfig()->GetFontPickList(FNT_NUMBER);
@@ -511,6 +515,7 @@ void SmFontTypeDialog::ReadFrom(const SmFormat &rFormat)
     *m_xSansFont     = pp->GetConfig()->GetFontPickList(FNT_SANS);
     *m_xFixedFont    = pp->GetConfig()->GetFontPickList(FNT_FIXED);
 
+    m_xMathFont->Insert( rFormat.GetFont(FNT_MATH) );
     m_xVariableFont->Insert( rFormat.GetFont(FNT_VARIABLE) );
     m_xFunctionFont->Insert( rFormat.GetFont(FNT_FUNCTION) );
     m_xNumberFont->Insert( rFormat.GetFont(FNT_NUMBER) );
@@ -525,6 +530,7 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
 {
     SmModule *pp = SM_MOD();
 
+    pp->GetConfig()->GetFontPickList(FNT_MATH)     = *m_xMathFont;
     pp->GetConfig()->GetFontPickList(FNT_VARIABLE) = *m_xVariableFont;
     pp->GetConfig()->GetFontPickList(FNT_FUNCTION) = *m_xFunctionFont;
     pp->GetConfig()->GetFontPickList(FNT_NUMBER)   = *m_xNumberFont;
@@ -533,6 +539,7 @@ void SmFontTypeDialog::WriteTo(SmFormat &rFormat) const
     pp->GetConfig()->GetFontPickList(FNT_SANS)     = *m_xSansFont;
     pp->GetConfig()->GetFontPickList(FNT_FIXED)    = *m_xFixedFont;
 
+    rFormat.SetFont( FNT_MATH,     m_xMathFont->Get() );
     rFormat.SetFont( FNT_VARIABLE, m_xVariableFont->Get() );
     rFormat.SetFont( FNT_FUNCTION, m_xFunctionFont->Get() );
     rFormat.SetFont( FNT_NUMBER,   m_xNumberFont->Get() );

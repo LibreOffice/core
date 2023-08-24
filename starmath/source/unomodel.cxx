@@ -157,6 +157,7 @@ namespace {
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
+    HANDLE_FONT_NAME_MATH,
     HANDLE_FONT_NAME_VARIABLES,
     HANDLE_FONT_NAME_FUNCTIONS,
     HANDLE_FONT_NAME_NUMBERS,
@@ -170,6 +171,8 @@ enum SmModelPropertyHandles
     HANDLE_CUSTOM_FONT_SANS_WEIGHT,
     HANDLE_CUSTOM_FONT_SERIF_POSTURE,
     HANDLE_CUSTOM_FONT_SERIF_WEIGHT,
+    HANDLE_FONT_MATH_POSTURE,
+    HANDLE_FONT_MATH_WEIGHT,
     HANDLE_FONT_VARIABLES_POSTURE,
     HANDLE_FONT_VARIABLES_WEIGHT,
     HANDLE_FONT_FUNCTIONS_POSTURE,
@@ -244,7 +247,10 @@ static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
         { OUString("FontFixedIsItalic")                , HANDLE_CUSTOM_FONT_FIXED_POSTURE          ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FIXED             },
         { OUString("FontFunctionsIsBold")              , HANDLE_FONT_FUNCTIONS_WEIGHT              ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
         { OUString("FontFunctionsIsItalic")            , HANDLE_FONT_FUNCTIONS_POSTURE             ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_FUNCTION          },
+        { OUString("FontMathIsBold")                   , HANDLE_FONT_MATH_WEIGHT                   ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
+        { OUString("FontMathIsItalic")                 , HANDLE_FONT_MATH_POSTURE                  ,  cppu::UnoType<bool>::get(),                                                 PROPERTY_NONE,  FNT_MATH              },
         { OUString("FontNameFunctions")                , HANDLE_FONT_NAME_FUNCTIONS                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_FUNCTION          },
+        { OUString("FontNameMath")                     , HANDLE_FONT_NAME_MATH                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_MATH              },
         { OUString("FontNameNumbers")                  , HANDLE_FONT_NAME_NUMBERS                  ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_NUMBER            },
         { OUString("FontNameText")                     , HANDLE_FONT_NAME_TEXT                     ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_TEXT              },
         { OUString("FontNameVariables")                , HANDLE_FONT_NAME_VARIABLES                ,  ::cppu::UnoType<OUString>::get(),                                      PROPERTY_NONE,  FNT_VARIABLE          },
@@ -415,6 +421,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 pDocSh->SetText(aText);
             }
             break;
+            case HANDLE_FONT_NAME_MATH                     :
             case HANDLE_FONT_NAME_VARIABLES                :
             case HANDLE_FONT_NAME_FUNCTIONS                :
             case HANDLE_FONT_NAME_NUMBERS                  :
@@ -442,6 +449,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
             case HANDLE_CUSTOM_FONT_SANS_POSTURE :
             case HANDLE_CUSTOM_FONT_SERIF_POSTURE:
+            case HANDLE_FONT_MATH_POSTURE        :
             case HANDLE_FONT_VARIABLES_POSTURE   :
             case HANDLE_FONT_FUNCTIONS_POSTURE   :
             case HANDLE_FONT_NUMBERS_POSTURE     :
@@ -458,6 +466,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
             case HANDLE_CUSTOM_FONT_SANS_WEIGHT  :
             case HANDLE_CUSTOM_FONT_SERIF_WEIGHT :
+            case HANDLE_FONT_MATH_WEIGHT         :
             case HANDLE_FONT_VARIABLES_WEIGHT    :
             case HANDLE_FONT_FUNCTIONS_WEIGHT    :
             case HANDLE_FONT_NUMBERS_WEIGHT      :
@@ -688,6 +697,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FORMULA:
                 *pValue <<= pDocSh->GetText();
             break;
+            case HANDLE_FONT_NAME_MATH                     :
             case HANDLE_FONT_NAME_VARIABLES                :
             case HANDLE_FONT_NAME_FUNCTIONS                :
             case HANDLE_FONT_NAME_NUMBERS                  :
@@ -703,6 +713,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
             case HANDLE_CUSTOM_FONT_SANS_POSTURE :
             case HANDLE_CUSTOM_FONT_SERIF_POSTURE:
+            case HANDLE_FONT_MATH_POSTURE        :
             case HANDLE_FONT_VARIABLES_POSTURE   :
             case HANDLE_FONT_FUNCTIONS_POSTURE   :
             case HANDLE_FONT_NUMBERS_POSTURE     :
@@ -715,6 +726,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
             case HANDLE_CUSTOM_FONT_SANS_WEIGHT  :
             case HANDLE_CUSTOM_FONT_SERIF_WEIGHT :
+            case HANDLE_FONT_MATH_WEIGHT         :
             case HANDLE_FONT_VARIABLES_WEIGHT    :
             case HANDLE_FONT_FUNCTIONS_WEIGHT    :
             case HANDLE_FONT_NUMBERS_WEIGHT      :

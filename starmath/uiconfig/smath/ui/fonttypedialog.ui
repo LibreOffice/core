@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="sm">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkMenu" id="menu1">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="math">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="fonttypedialog|menuitem0">_Math</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
     <child>
       <object class="GtkMenuItem" id="variables">
         <property name="visible">True</property>
@@ -192,7 +200,7 @@
                 <property name="label-xalign">0</property>
                 <property name="shadow-type">none</property>
                 <child>
-                  <!-- n-columns=2 n-rows=4 -->
+                  <!-- n-columns=2 n-rows=5 -->
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
@@ -200,6 +208,23 @@
                     <property name="margin-top">6</property>
                     <property name="row-spacing">6</property>
                     <property name="column-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="label0">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="fonttypedialog|label1">_Math:</property>
+                        <property name="use-underline">True</property>
+                        <property name="mnemonic-widget">mathCB</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="normal"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
@@ -214,7 +239,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -231,7 +256,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -248,7 +273,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -265,7 +290,23 @@
                       </object>
                       <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="mathCB">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="mathCB-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="fonttypedialog|extended_tip|mathCB">You can select the font for the math symbols in your formula.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
                       </packing>
                     </child>
                     <child>
@@ -281,7 +322,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -297,7 +338,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -313,7 +354,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="top-attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -329,7 +370,7 @@
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                   </object>

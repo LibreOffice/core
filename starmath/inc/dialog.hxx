@@ -131,6 +131,7 @@ class SmFontTypeDialog final : public weld::GenericDialogController
 {
     VclPtr<OutputDevice> pFontListDev;
 
+    std::unique_ptr<SmFontPickListBox> m_xMathFont;
     std::unique_ptr<SmFontPickListBox> m_xVariableFont;
     std::unique_ptr<SmFontPickListBox> m_xFunctionFont;
     std::unique_ptr<SmFontPickListBox> m_xNumberFont;
