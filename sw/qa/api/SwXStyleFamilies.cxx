@@ -61,9 +61,6 @@ public:
         Reference<style::XStyleFamiliesSupplier> xStyleFamSupp(xTextDocument, UNO_QUERY_THROW);
         Reference<container::XNameAccess> xSF = xStyleFamSupp->getStyleFamilies();
 
-        // Sequence<OUString> aNames = xSF->getElementNames();
-        // std::cout << aNames[0] << std::endl;
-
         return Reference<XInterface>(xSF, UNO_QUERY_THROW);
     }
 

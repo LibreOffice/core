@@ -159,7 +159,6 @@ job222=sw.SwXPropertySet
 job223=sw.SwXPropertySetInfo
 job225=sw.SwXReferenceMarks
 job226=sw.SwXStyle
-job227=sw.SwXStyleFamilies
 job228=sw.SwXStyleFamily
 job229=sw.SwXTableCellText
 job230=sw.SwXTableRows

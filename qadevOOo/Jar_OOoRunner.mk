@@ -1119,7 +1119,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXReferenceMarks \
     qadevOOo/tests/java/mod/_sw/SwXShape \
     qadevOOo/tests/java/mod/_sw/SwXStyle \
-    qadevOOo/tests/java/mod/_sw/SwXStyleFamilies \
     qadevOOo/tests/java/mod/_sw/SwXStyleFamily \
     qadevOOo/tests/java/mod/_sw/SwXTableCellText \
     qadevOOo/tests/java/mod/_sw/SwXTableColumns \
