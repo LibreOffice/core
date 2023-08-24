@@ -32,7 +32,6 @@
 -o sw.SwXPrintSettings
 -o sw.SwXPropertySet
 -o sw.SwXPropertySetInfo
--o sw.SwXReferenceMarks
 #i111190 -o sw.SwXShape
 -o sw.SwXStyleFamily
 -o sw.SwXTableCellText

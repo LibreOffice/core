@@ -7,11 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
 #include <test/container/xelementaccess.hxx>
 #include <test/container/xindexaccess.hxx>
 #include <test/container/xnameaccess.hxx>
-#include <unotest/macros_test.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -30,22 +29,61 @@ using namespace css::uno;
 namespace
 {
 /**
- * Initial tests for SwXReferenceMark.
+ * Initial tests for SwXReferenceMarks.
  */
-class SwXReferenceMark final : public test::BootstrapFixture,
-                               public unotest::MacrosTest,
-                               public apitest::XElementAccess,
-                               public apitest::XIndexAccess,
-                               public apitest::XNameAccess
+class SwXReferenceMarks final : public UnoApiTest,
+                                public apitest::XElementAccess,
+                                public apitest::XIndexAccess,
+                                public apitest::XNameAccess
 {
 public:
-    SwXReferenceMark();
-    virtual void setUp() override;
-    void tearDown() override;
+    SwXReferenceMarks()
+        : UnoApiTest("")
+        , XElementAccess(cppu::UnoType<text::XTextContent>::get())
+        , XIndexAccess(2)
+        , XNameAccess("SwXReferenceMarks2")
+    {
+    }
 
-    Reference<XInterface> init() override;
+    virtual void setUp() override
+    {
+        UnoApiTest::setUp();
+        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxComponent = loadFromDesktop("private:factory/swriter");
+        CPPUNIT_ASSERT(mxComponent.is());
+    }
 
-    CPPUNIT_TEST_SUITE(SwXReferenceMark);
+    Reference<XInterface> init() override
+    {
+        Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+        Reference<lang::XMultiServiceFactory> xMSF(xTextDocument, UNO_QUERY_THROW);
+
+        Reference<text::XText> xText = xTextDocument->getText();
+        Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+
+        //RefMark 1
+        Reference<XInterface> xRefMark1 = xMSF->createInstance("com.sun.star.text.ReferenceMark");
+        Reference<container::XNamed> xNamed1(xRefMark1, UNO_QUERY_THROW);
+        xNamed1->setName("SwXReferenceMarks1");
+
+        Reference<text::XTextContent> xTextContent1(xRefMark1, UNO_QUERY_THROW);
+        xText->insertTextContent(xCursor, xTextContent1, false);
+
+        //RefMark 2
+        Reference<XInterface> xRefMark2 = xMSF->createInstance("com.sun.star.text.ReferenceMark");
+        Reference<container::XNamed> xNamed2(xRefMark2, UNO_QUERY_THROW);
+        xNamed2->setName("SwXReferenceMarks2");
+
+        Reference<text::XTextContent> xTextContent2(xRefMark2, UNO_QUERY_THROW);
+        xText->insertTextContent(xCursor, xTextContent2, false);
+
+        // Getting ReferenceMarks from Text Document
+        Reference<text::XReferenceMarksSupplier> xRefMarkSupp(xTextDocument, UNO_QUERY_THROW);
+
+        return Reference<XInterface>(xRefMarkSupp->getReferenceMarks(), UNO_QUERY_THROW);
+    }
+
+    CPPUNIT_TEST_SUITE(SwXReferenceMarks);
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
     CPPUNIT_TEST(testGetCount);
@@ -54,67 +92,9 @@ public:
     CPPUNIT_TEST(testGetElementNames);
     CPPUNIT_TEST(testHasByName);
     CPPUNIT_TEST_SUITE_END();
-
-private:
-    Reference<text::XTextDocument> mxTextDocument;
 };
 
-SwXReferenceMark::SwXReferenceMark()
-    : XElementAccess(cppu::UnoType<text::XTextContent>::get())
-    , XIndexAccess(2)
-    , XNameAccess("SwXReferenceMark2")
-{
-}
-
-void SwXReferenceMark::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-    mxTextDocument = Reference<text::XTextDocument>(
-        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"),
-        uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT(mxTextDocument.is());
-}
-
-void SwXReferenceMark::tearDown()
-{
-    if (mxTextDocument.is())
-        mxTextDocument->dispose();
-
-    test::BootstrapFixture::tearDown();
-}
-
-Reference<XInterface> SwXReferenceMark::init()
-{
-    Reference<lang::XMultiServiceFactory> xMSF(mxTextDocument, UNO_QUERY_THROW);
-
-    Reference<text::XText> xText = mxTextDocument->getText();
-    Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-
-    //RefMark 1
-    Reference<XInterface> xRefMark1 = xMSF->createInstance("com.sun.star.text.ReferenceMark");
-    Reference<container::XNamed> xNamed1(xRefMark1, UNO_QUERY_THROW);
-    xNamed1->setName("SwXReferenceMark1");
-
-    Reference<text::XTextContent> xTextContent1(xRefMark1, UNO_QUERY_THROW);
-    xText->insertTextContent(xCursor, xTextContent1, false);
-
-    //RefMark 2
-    Reference<XInterface> xRefMark2 = xMSF->createInstance("com.sun.star.text.ReferenceMark");
-    Reference<container::XNamed> xNamed2(xRefMark2, UNO_QUERY_THROW);
-    xNamed2->setName("SwXReferenceMark2");
-
-    Reference<text::XTextContent> xTextContent2(xRefMark2, UNO_QUERY_THROW);
-    xText->insertTextContent(xCursor, xTextContent2, false);
-
-    // Getting ReferenceMarks from Text Document
-    Reference<text::XReferenceMarksSupplier> xRefMarkSupp(mxTextDocument, UNO_QUERY_THROW);
-
-    return Reference<XInterface>(xRefMarkSupp->getReferenceMarks(), UNO_QUERY_THROW);
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(SwXReferenceMark);
+CPPUNIT_TEST_SUITE_REGISTRATION(SwXReferenceMarks);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
