@@ -14,4 +14,3 @@
 "SwXFootnote";"com::sun::star::text::XTextContent";"getAnchor()"
 "SwXFootnote";"com::sun::star::text::XText";"insertTextContent()"
 "SwXFootnote";"com::sun::star::text::XText";"removeTextContent()"
-"SwXFootnote";"com::sun::star::text::Footnote";"ReferenceId#optional"

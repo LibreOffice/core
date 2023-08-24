@@ -9,6 +9,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/lang/xcomponent.hxx>
+#include <test/text/footnote.hxx>
 #include <test/text/xsimpletext.hxx>
 #include <test/text/xtextrange.hxx>
 #include <test/text/xtextcontent.hxx>
@@ -41,7 +42,8 @@ class SwXFootnote final : public test::BootstrapFixture,
                           public apitest::XTextRange,
                           public apitest::XTextContent,
                           public apitest::XText,
-                          public apitest::XFootnote
+                          public apitest::XFootnote,
+                          public apitest::Footnote
 {
 public:
     virtual void setUp() override;
@@ -68,6 +70,7 @@ public:
     CPPUNIT_TEST(testGetSetString);
     CPPUNIT_TEST(testGetStart);
     CPPUNIT_TEST(testGetText);
+    CPPUNIT_TEST(testFootnoteProperties);
     // CPPUNIT_TEST(testInsertRemoveTextContent);
     CPPUNIT_TEST(testGetSetLabel);
     CPPUNIT_TEST_SUITE_END();

@@ -594,7 +594,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/ifc/text/_Defaults \
     qadevOOo/tests/java/ifc/text/_DocumentIndex \
     qadevOOo/tests/java/ifc/text/_DocumentSettings \
-    qadevOOo/tests/java/ifc/text/_Footnote \
     qadevOOo/tests/java/ifc/text/_FootnoteSettings \
     qadevOOo/tests/java/ifc/text/_GenericTextDocument \
     qadevOOo/tests/java/ifc/text/_LineNumberingProperties \
