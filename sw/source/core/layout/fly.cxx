@@ -686,6 +686,12 @@ bool SwFlyFrame::IsFlySplitAllowed() const
         return false;
     }
 
+    if (pFlyAnchor && pFlyAnchor->IsInFootnote())
+    {
+        // No split in footnotes.
+        return false;
+    }
+
     const SwFlyFrameFormat* pFormat = GetFormat();
     const SwFormatVertOrient& rVertOrient = pFormat->GetVertOrient();
     if (rVertOrient.GetVertOrient() == text::VertOrientation::BOTTOM)
