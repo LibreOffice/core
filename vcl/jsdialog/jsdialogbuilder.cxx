@@ -1655,6 +1655,9 @@ void JSComboBox::set_entry_text(const OUString& rText)
 
 void JSComboBox::set_active(int pos)
 {
+    if (pos == get_active())
+        return;
+
     SalInstanceComboBoxWithEdit::set_active(pos);
     sendUpdate();
 }
