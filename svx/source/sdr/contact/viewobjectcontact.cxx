@@ -584,7 +584,7 @@ const basegfx::B2DVector& ViewObjectContact::getGridOffset() const
             // calculation have changed. E.g. - I saw errors with +/-5740, that
             // was in the environment of massive external UNO API using LO as
             // target.
-            // If condtions for this calculation change, it is usually required to call
+            // If conditions for this calculation change, it is usually required to call
             // - ViewObjectContact::resetGridOffset(), or
             // - ObjectContact::resetAllGridOffsets() or
             // - ScDrawView::resetGridOffsetsForAllSdrPageViews()
