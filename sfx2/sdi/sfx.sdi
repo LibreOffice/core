@@ -4636,7 +4636,7 @@ SfxBoolItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy S
       RecordAbsolute = FALSE,
       RecordPerSet;
 
-      AccelConfig = TRUE,
+      AccelConfig = FALSE,
       MenuConfig = TRUE,
       ToolBoxConfig = TRUE,
       GroupId = SfxGroupId::Edit;
