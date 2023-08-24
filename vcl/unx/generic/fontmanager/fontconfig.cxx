@@ -187,6 +187,10 @@ FontCfgWrapper::FontCfgWrapper()
     FcInit();
 }
 
+#ifndef FC_FONT_WRAPPER
+#define FC_FONT_WRAPPER "fontwrapper"
+#endif
+
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
 {
     // Add only acceptable fonts to our config, for future fontconfig use.
@@ -210,6 +214,12 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         FcChar8* pFormat = nullptr;
         FcResult eFormatRes = FcPatternGetString(pPattern, FC_FONTFORMAT, 0, &pFormat);
         if ((eFormatRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pFormat), "Type 1") == 0))
+            continue;
+
+        // Ignore any other non-SFNT wrapper format, including WOFF and WOFF2, too.
+        FcChar8* pWrapper = nullptr;
+        FcResult eWrapperRes = FcPatternGetString(pPattern, FC_FONT_WRAPPER, 0, &pWrapper);
+        if ((eWrapperRes == FcResultMatch) && (strcmp(reinterpret_cast<char*>(pWrapper), "SFNT") != 0))
             continue;
 
         FcPatternReference( pPattern );
