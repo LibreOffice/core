@@ -150,7 +150,6 @@ job216=sw.SwXFrames
 job217=sw.SwXHeadFootText
 job218=sw.SwXLineNumberingProperties
 job219=sw.SwXModule
-job220=sw.SwXParagraphEnumeration
 job221=sw.SwXPrintSettings
 job222=sw.SwXPropertySet
 job223=sw.SwXPropertySetInfo

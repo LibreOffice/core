@@ -29,7 +29,6 @@
 -o sw.SwXModule
 -o sw.SwXNumberingRules
 #i103696 -o sw.SwXParagraph
--o sw.SwXParagraphEnumeration
 -o sw.SwXPrintSettings
 -o sw.SwXPropertySet
 -o sw.SwXPropertySetInfo

@@ -1109,7 +1109,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXModule \
     qadevOOo/tests/java/mod/_sw/SwXNumberingRules \
     qadevOOo/tests/java/mod/_sw/SwXParagraph \
-    qadevOOo/tests/java/mod/_sw/SwXParagraphEnumeration \
     qadevOOo/tests/java/mod/_sw/SwXPrintSettings \
     qadevOOo/tests/java/mod/_sw/SwXPropertySet \
     qadevOOo/tests/java/mod/_sw/SwXPropertySetInfo \
