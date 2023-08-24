@@ -111,7 +111,7 @@ class tdf156611(UITestCase):
                 # Check contents of the cell
                 xCell = get_cell_by_position(document, 0, 0, 0)
                 self.assertEqual(xCell.getString(), texts[2][i])
-                # 1. run: "eeee" last hyperlink insertion overwritten the whol cell text with "eeee"
+                # 1. run: "eeee" last hyperlink insertion overwritten the whole cell text with "eeee"
                 # 2. run: "aaa cccc eeee" as every hypelink insertion only overwritten the actually selected text
                 xTextFields = xCell.getTextFields()
                 self.assertEqual(xTextFields.getCount(), i+1)
