@@ -64,7 +64,6 @@
 #include <appoptio.hxx>
 #include <scmod.hxx>
 #include <sc.hrc>
-#include <scmod.hxx>
 #include <inputhdl.hxx>
 #include <viewutil.hxx>
 #include <viewdata.hxx>
