@@ -1116,7 +1116,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXPrintSettings \
     qadevOOo/tests/java/mod/_sw/SwXPropertySet \
     qadevOOo/tests/java/mod/_sw/SwXPropertySetInfo \
-    qadevOOo/tests/java/mod/_sw/SwXReferenceMark \
     qadevOOo/tests/java/mod/_sw/SwXReferenceMarks \
     qadevOOo/tests/java/mod/_sw/SwXShape \
     qadevOOo/tests/java/mod/_sw/SwXStyle \

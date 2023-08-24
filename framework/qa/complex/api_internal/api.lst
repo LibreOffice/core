@@ -157,7 +157,6 @@ job220=sw.SwXParagraphEnumeration
 job221=sw.SwXPrintSettings
 job222=sw.SwXPropertySet
 job223=sw.SwXPropertySetInfo
-job224=sw.SwXReferenceMark
 job225=sw.SwXReferenceMarks
 job226=sw.SwXStyle
 job227=sw.SwXStyleFamilies

@@ -35,7 +35,6 @@
 -o sw.SwXPrintSettings
 -o sw.SwXPropertySet
 -o sw.SwXPropertySetInfo
--o sw.SwXReferenceMark
 -o sw.SwXReferenceMarks
 #i111190 -o sw.SwXShape
 -o sw.SwXStyleFamilies
