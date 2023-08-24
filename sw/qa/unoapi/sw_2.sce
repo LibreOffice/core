@@ -22,7 +22,6 @@
 -o sw.SwXFootnote
 -o sw.SwXFootnoteProperties
 -o sw.SwXFootnoteText
--o sw.SwXFootnotes
 -o sw.SwXFrames
 -o sw.SwXHeadFootText
 -o sw.SwXLineNumberingProperties
