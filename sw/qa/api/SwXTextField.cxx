@@ -7,9 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/bootstrapfixture.hxx>
+#include <test/unoapi_test.hxx>
+#include <test/beans/xpropertyset.hxx>
 #include <test/lang/xcomponent.hxx>
-#include <unotest/macros_test.hxx>
+#include <test/text/textcontent.hxx>
+#include <test/text/xtextcontent.hxx>
+#include <test/text/xtextfield.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
 
@@ -27,70 +30,81 @@
 
 using namespace css;
 using namespace css::uno;
-using namespace css::beans;
 
 namespace
 {
 /**
  * Initial tests for SwXTextField.
  */
-struct SwXTextField final : public test::BootstrapFixture,
-                            public unotest::MacrosTest,
-                            public apitest::XComponent
+struct SwXTextField final : public UnoApiTest,
+                            public apitest::XPropertySet,
+                            public apitest::XComponent,
+                            public apitest::TextContent,
+                            public apitest::XTextContent,
+                            public apitest::XTextField
 {
-    virtual void setUp() override;
-    void tearDown() override;
+    SwXTextField()
+        : UnoApiTest("")
+        , TextContent(text::TextContentAnchorType_AS_CHARACTER,
+                      text::TextContentAnchorType_AS_CHARACTER, text::WrapTextMode_NONE,
+                      text::WrapTextMode_NONE)
+    {
+    }
 
-    Reference<XInterface> init() override;
-    void triggerDesktopTerminate() override;
+    virtual void setUp() override
+    {
+        UnoApiTest::setUp();
+        mxDesktop.set(frame::Desktop::create(mxComponentContext));
+        mxComponent = loadFromDesktop("private:factory/swriter");
+        CPPUNIT_ASSERT(mxComponent.is());
+    }
+
+    Reference<XInterface> init() override
+    {
+        Reference<text::XTextDocument> xTextDocument(mxComponent, UNO_QUERY_THROW);
+        Reference<lang::XMultiServiceFactory> xMSF(mxComponent, UNO_QUERY_THROW);
+
+        Reference<beans::XPropertySet> xFieldMaster(
+            xMSF->createInstance("com.sun.star.text.FieldMaster.Database"), UNO_QUERY_THROW);
+
+        xFieldMaster->setPropertyValue("DataBaseName", Any(OUString("Address Book File")));
+        xFieldMaster->setPropertyValue("DataTableName", Any(OUString("address")));
+        xFieldMaster->setPropertyValue("DataColumnName", Any(OUString("FIRSTNAME")));
+
+        Reference<text::XDependentTextField> xField(
+            xMSF->createInstance("com.sun.star.text.TextField.Database"), UNO_QUERY_THROW);
+        xField->attachTextFieldMaster(xFieldMaster);
+
+        Reference<text::XText> xText = xTextDocument->getText();
+        Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+        Reference<text::XTextContent> xFieldAsContent(xField, UNO_QUERY_THROW);
+        xText->insertTextContent(xCursor, xFieldAsContent, false);
+
+        mxTextRange = Reference<text::XTextRange>(xCursor, UNO_QUERY_THROW);
+        mxTextContent = Reference<text::XTextContent>(
+            xMSF->createInstance("com.sun.star.text.TextField.DateTime"), UNO_QUERY_THROW);
+
+        return Reference<XInterface>(xField, UNO_QUERY_THROW);
+    }
+
+    void triggerDesktopTerminate() override { mxDesktop->terminate(); };
+    bool isAttachSupported() override { return true; };
+    Reference<text::XTextRange> getTextRange() override { return mxTextRange; };
+    Reference<text::XTextContent> getTextContent() override { return mxTextContent; };
 
     CPPUNIT_TEST_SUITE(SwXTextField);
+    CPPUNIT_TEST(testDispose);
     CPPUNIT_TEST(testAddEventListener);
     CPPUNIT_TEST(testRemoveEventListener);
+    CPPUNIT_TEST(testTextContentProperties);
+    CPPUNIT_TEST(testAttach);
+    CPPUNIT_TEST(testGetAnchor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    css::uno::Reference<css::lang::XComponent> component_;
+    Reference<text::XTextRange> mxTextRange;
+    Reference<text::XTextContent> mxTextContent;
 };
-
-void SwXTextField::setUp()
-{
-    test::BootstrapFixture::setUp();
-    mxDesktop.set(
-        frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-}
-
-void SwXTextField::tearDown()
-{
-    if (component_.is())
-    {
-        component_->dispose();
-    }
-}
-
-void SwXTextField::triggerDesktopTerminate() { mxDesktop->terminate(); }
-
-Reference<XInterface> SwXTextField::init()
-{
-    component_ = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
-    Reference<text::XTextDocument> xTextDocument(component_, UNO_QUERY_THROW);
-    Reference<lang::XMultiServiceFactory> xMSF(component_, UNO_QUERY_THROW);
-
-    Reference<XPropertySet> xFieldMaster(
-        xMSF->createInstance("com.sun.star.text.FieldMaster.Database"), UNO_QUERY_THROW);
-    xFieldMaster->setPropertyValue("DataBaseName", Any(OUString("Address Book File")));
-    xFieldMaster->setPropertyValue("DataTableName", Any(OUString("address")));
-    xFieldMaster->setPropertyValue("DataColumnName", Any(OUString("FIRSTNAME")));
-
-    Reference<text::XDependentTextField> xField(
-        xMSF->createInstance("com.sun.star.text.TextField.Database"), UNO_QUERY_THROW);
-    xField->attachTextFieldMaster(xFieldMaster);
-    Reference<text::XText> xText = xTextDocument->getText();
-    Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    Reference<text::XTextContent> xFieldAsContent(xField, UNO_QUERY_THROW);
-    xText->insertTextContent(xCursor, xFieldAsContent, false);
-    return Reference<XInterface>(xField, UNO_QUERY_THROW);
-}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwXTextField);
 }
