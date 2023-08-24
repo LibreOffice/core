@@ -90,8 +90,7 @@ DomainMapperTableHandler::DomainMapperTableHandler(
             css::uno::Reference<css::text::XTextAppendAndConvert> xText,
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(std::move(xText)),
-        m_rDMapper_Impl( rDMapper_Impl ),
-        m_bHadFootOrEndnote(false)
+        m_rDMapper_Impl( rDMapper_Impl )
 {
 }
 
@@ -1549,8 +1548,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.
-        // Unless the table had a foot or endnote, as Writer doesn't support those in TextFrames.
-        if (xTable.is() && xStart.is() && xEnd.is() && !m_bHadFootOrEndnote)
+        if (xTable.is() && xStart.is() && xEnd.is())
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             bool bIsRelative = false;
@@ -1678,7 +1676,6 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
     m_aTableProperties.clear();
     m_aCellProperties.clear();
     m_aRowProperties.clear();
-    m_bHadFootOrEndnote = false;
 
 #ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
@@ -1753,11 +1750,6 @@ void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTe
         xEnd = end->getEnd();
     m_aCellRange.push_back(xEnd);
     m_aRowRanges.push_back(comphelper::containerToSequence(m_aCellRange));
-}
-
-void DomainMapperTableHandler::setHadFootOrEndnote(bool bHadFootOrEndnote)
-{
-    m_bHadFootOrEndnote = bHadFootOrEndnote;
 }
 
 DomainMapper_Impl& DomainMapperTableHandler::getDomainMapperImpl()

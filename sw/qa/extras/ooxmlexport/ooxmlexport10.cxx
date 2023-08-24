@@ -958,6 +958,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf87460, "tdf87460.docx")
     uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
     // This was 0: endnote was lost on import.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xEndnotes->getCount());
+
+    // Also make sure that <w:tblpPr> is mapped to a text frame (hosting the table):
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTextFrames = xTextFramesSupplier->getTextFrames();
+    // Without the fix in place, this test would have failed, the table was inline.
+    CPPUNIT_ASSERT(xTextFrames->hasByName("Frame1"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf90611, "tdf90611.docx")
