@@ -13,7 +13,6 @@
 #include <svx/theme/IThemeColorChanger.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdpage.hxx>
 #include <drawdoc.hxx>
 
 namespace sd
