@@ -25,8 +25,8 @@ class tdf156611(UITestCase):
             urls =[["",""],["https://www.documentfoundation.org/",""]]
             texts =[["aaa bbb","bbb"],["cccc ddd","ddd"],["eeee","aaa cccc eeee"]]
 
-            # 1. run, we want hypelink insertion work like in MS excel (only 1 hyperlink/cell is allowed)
-            # 2. run, we want hypelink insertion work as it did in calc (more hyperlinks can be in 1 cell)
+            # 1. run, we want hyperlink insertion work like in MS excel (only 1 hyperlink/cell is allowed)
+            # 2. run, we want hyperlink insertion work as it did in calc (more hyperlinks can be in 1 cell)
             for i in range(2):
                 xCalcDoc = self.xUITest.getTopFocusWindow()
                 xGridWindow = xCalcDoc.getChild("grid_window")
@@ -112,7 +112,7 @@ class tdf156611(UITestCase):
                 xCell = get_cell_by_position(document, 0, 0, 0)
                 self.assertEqual(xCell.getString(), texts[2][i])
                 # 1. run: "eeee" last hyperlink insertion overwritten the whole cell text with "eeee"
-                # 2. run: "aaa cccc eeee" as every hypelink insertion only overwritten the actually selected text
+                # 2. run: "aaa cccc eeee" as every hyperlink insertion only overwritten the actually selected text
                 xTextFields = xCell.getTextFields()
                 self.assertEqual(xTextFields.getCount(), i+1)
                 self.assertEqual(xTextFields.getByIndex(i).URL, "https://aWrongLink/")
