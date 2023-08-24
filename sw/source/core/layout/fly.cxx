@@ -3173,22 +3173,7 @@ void SwFlyFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("fly"));
     dumpAsXmlAttributes(writer);
 
-    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
-    dumpInfosAsXml(writer);
-    (void)xmlTextWriterEndElement(writer);
-    const SwSortedObjs* pAnchored = GetDrawObjs();
-    if (pAnchored && pAnchored->size() > 0)
-    {
-        (void)xmlTextWriterStartElement(writer, BAD_CAST("anchored"));
-
-        for (SwAnchoredObject* pObject : *pAnchored)
-        {
-            pObject->dumpAsXml(writer);
-        }
-
-        (void)xmlTextWriterEndElement(writer);
-    }
-    dumpChildrenAsXml(writer);
+    SwLayoutFrame::dumpAsXml(writer);
 
     SwAnchoredObject::dumpAsXml(writer);
 

@@ -770,10 +770,7 @@ void SwHeaderFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("header"));
     dumpAsXmlAttributes(writer);
 
-    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
-    dumpInfosAsXml(writer);
-    (void)xmlTextWriterEndElement(writer);
-    dumpChildrenAsXml(writer);
+    SwHeadFootFrame::dumpAsXml(writer);
 
     (void)xmlTextWriterEndElement(writer);
 }
@@ -783,10 +780,7 @@ void SwFooterFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("footer"));
     dumpAsXmlAttributes(writer);
 
-    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
-    dumpInfosAsXml(writer);
-    (void)xmlTextWriterEndElement(writer);
-    dumpChildrenAsXml(writer);
+    SwHeadFootFrame::dumpAsXml(writer);
 
     (void)xmlTextWriterEndElement(writer);
 }

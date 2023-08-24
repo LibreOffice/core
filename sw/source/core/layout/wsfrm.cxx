@@ -292,6 +292,27 @@ void TransformableSwFrame::transform(const basegfx::B2DHomMatrix& aTransform)
     maFramePrintAreaTransformation *= aTransform;
 }
 
+void SwFrame::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("infos"));
+    dumpInfosAsXml(pWriter);
+    (void)xmlTextWriterEndElement(pWriter);
+
+    if ( m_pDrawObjs && m_pDrawObjs->size() > 0 )
+    {
+        (void)xmlTextWriterStartElement( pWriter, BAD_CAST( "anchored" ) );
+
+        for (SwAnchoredObject* pObject : *m_pDrawObjs)
+        {
+            pObject->dumpAsXml( pWriter );
+        }
+
+        (void)xmlTextWriterEndElement( pWriter );
+    }
+
+    dumpChildrenAsXml(pWriter);
+}
+
 SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
 :   SwClient( pMod ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),

@@ -179,10 +179,7 @@ void SwBodyFrame::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterStartElement(writer, reinterpret_cast<const xmlChar*>("body"));
     dumpAsXmlAttributes(writer);
 
-    (void)xmlTextWriterStartElement(writer, BAD_CAST("infos"));
-    dumpInfosAsXml(writer);
-    (void)xmlTextWriterEndElement(writer);
-    dumpChildrenAsXml(writer);
+    SwLayoutFrame::dumpAsXml(writer);
 
     (void)xmlTextWriterEndElement(writer);
 }
