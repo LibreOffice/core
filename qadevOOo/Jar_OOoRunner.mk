@@ -1132,7 +1132,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sw/SwXTextEmbeddedObject \
     qadevOOo/tests/java/mod/_sw/SwXTextEmbeddedObjects \
     qadevOOo/tests/java/mod/_sw/SwXTextField \
-    qadevOOo/tests/java/mod/_sw/SwXTextFieldMasters \
     qadevOOo/tests/java/mod/_sw/SwXTextFrame \
     qadevOOo/tests/java/mod/_sw/SwXTextFrameText \
     qadevOOo/tests/java/mod/_sw/SwXTextGraphicObject \

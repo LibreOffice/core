@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXTableCellText \
     sw/qa/api/SwXTextFrame \
     sw/qa/api/SwXTextField \
+    sw/qa/api/SwXTextFieldMasters \
     sw/qa/api/SwXTextFieldTypes \
     sw/qa/api/SwXTextSections \
     sw/qa/api/SwXTextTable \
