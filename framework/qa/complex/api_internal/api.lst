@@ -142,7 +142,6 @@ job203=sw.SwXBodyText
 job206=sw.SwXCell
 job208=sw.SwXDocumentIndexMark
 job209=sw.SwXEndnoteProperties
-job210=sw.SwXFieldEnumeration
 job211=sw.SwXFieldMaster
 job212=sw.SwXFootnote
 job213=sw.SwXFootnoteProperties

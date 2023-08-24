@@ -18,7 +18,6 @@
 
 -o sw.SwXDrawPage
 -o sw.SwXEndnoteProperties
--o sw.SwXFieldEnumeration
 -o sw.SwXFieldMaster
 -o sw.SwXFootnote
 -o sw.SwXFootnoteProperties
