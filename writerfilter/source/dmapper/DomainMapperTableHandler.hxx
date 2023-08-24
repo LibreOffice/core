@@ -67,9 +67,6 @@ class DomainMapperTableHandler final : public virtual SvRefBase
     PropertyMapVector1      m_aRowProperties;
     TablePropertyMapPtr     m_aTableProperties;
 
-    /// Did we have a foot or endnote in this table?
-    bool m_bHadFootOrEndnote;
-
     TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo,
                     std::vector<css::beans::PropertyValue>& rFrameProperties,
                     bool bConvertToFloating);
@@ -115,8 +112,6 @@ public:
         @param rT    end handle of cell
     */
     void endCell(const css::uno::Reference< css::text::XTextRange > & end);
-
-    void setHadFootOrEndnote(bool bHadFootOrEndnote);
 
     DomainMapper_Impl& getDomainMapperImpl();
 };

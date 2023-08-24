@@ -9355,7 +9355,6 @@ void DomainMapper_Impl::substream(Id rName,
     {
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
-        m_pTableHandler->setHadFootOrEndnote(true);
         m_bHasFtn = true;
         break;
     }
