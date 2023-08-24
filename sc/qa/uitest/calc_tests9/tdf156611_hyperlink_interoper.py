@@ -25,8 +25,8 @@ class tdf156611(UITestCase):
             urls =[["",""],["https://www.documentfoundation.org/",""]]
             texts =[["aaa bbb","bbb"],["cccc ddd","ddd"],["eeee","aaa cccc eeee"]]
 
-            # 1. run, we want hypelink inserton work like in MS excel (only 1 hyperlink/cell is allowed)
-            # 2. run, we want hypelink inserton work as it did in calc (more hyperlinks can be in 1 cell)
+            # 1. run, we want hypelink insertion work like in MS excel (only 1 hyperlink/cell is allowed)
+            # 2. run, we want hypelink insertion work as it did in calc (more hyperlinks can be in 1 cell)
             for i in range(2):
                 xCalcDoc = self.xUITest.getTopFocusWindow()
                 xGridWindow = xCalcDoc.getChild("grid_window")
