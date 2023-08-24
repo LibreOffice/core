@@ -1010,6 +1010,20 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyIntoTable)
     // second part of a floating table into a table on the next page, not before that table.
     calcLayout();
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFromAsCharAnchor)
+{
+    // Given a document with a footnote that has a table (imported in an as-char anchored frame in
+    // Writer):
+    createSwDoc("table-in-footnote.docx");
+
+    // When changing the anchor type of that frame to to-para:
+    // Then make sure we don't crash:
+    selectShape(1);
+    // Without the accompanying fix in place, this test would have crashed, we tried to split a
+    // frame+table inside a footnote.
+    dispatchCommand(mxComponent, ".uno:SetAnchorToPara", {});
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
