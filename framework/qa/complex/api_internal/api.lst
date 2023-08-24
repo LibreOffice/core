@@ -165,7 +165,6 @@ job229=sw.SwXTableCellText
 job230=sw.SwXTableRows
 job231=sw.SwXTextColumns
 job232=sw.SwXTextDefaults
-job233=sw.SwXTextEmbeddedObjects
 job234=sw.SwXTextField
 job237=sw.SwXTextFrameText
 job238=sw.SwXTextGraphicObjects

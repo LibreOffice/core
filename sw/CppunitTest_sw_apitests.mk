@@ -38,6 +38,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_apitests, \
     sw/qa/api/SwXStyleFamilies \
     sw/qa/api/SwXReferenceMarks \
     sw/qa/api/SwXTableCellText \
+    sw/qa/api/SwXTextEmbeddedObjects \
     sw/qa/api/SwXTextFrame \
     sw/qa/api/SwXTextField \
     sw/qa/api/SwXTextFieldMasters \
