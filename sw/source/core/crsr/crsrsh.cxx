@@ -77,6 +77,7 @@
 #include <view.hxx>
 #include <hints.hxx>
 #include <tools/json_writer.hxx>
+#include <redline.hxx>
 
 using namespace com::sun::star;
 using namespace util;
@@ -2168,6 +2169,14 @@ void SwCursorShell::UpdateCursor( sal_uInt16 eFlags, bool bIdleEnd )
             // created, because there used to be a Frame here!
             if ( !pFrame )
             {
+                // skip, if it is a hidden deleted cell without frame
+                if ( GetLayout()->IsHideRedlines() )
+                {
+                    const SwStartNode* pNd = pShellCursor->GetPointNode().FindTableBoxStartNode();
+                    if ( pNd && pNd->GetTableBox()->GetRedlineType() == RedlineType::Delete )
+                        return;
+                }
+
                 do
                 {
                     CalcLayout();

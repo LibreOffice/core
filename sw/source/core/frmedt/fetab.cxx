@@ -1175,7 +1175,8 @@ bool SwFEShell::CanUnProtectCells() const
         {
             SwFrame *pFrame = GetCurrFrame();
             do {
-                pFrame = pFrame->GetUpper();
+                if ( pFrame )
+                    pFrame = pFrame->GetUpper();
             } while ( pFrame && !pFrame->IsCellFrame() );
             if( pFrame )
             {
