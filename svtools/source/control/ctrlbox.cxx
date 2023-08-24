@@ -777,7 +777,10 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
     {
         if (nPage >= gFontPreviewVirDevs.size())
         {
-            gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
+            if (comphelper::LibreOfficeKit::isActive())
+                gFontPreviewVirDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
+            else
+                gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
             VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
             weld::SetPointFont(rDevice, m_xComboBox->get_font());
