@@ -1,7 +1,0 @@
-"SwXDocumentIndexes";"com::sun::star::container::XNameAccess";"getByName()"
-"SwXDocumentIndexes";"com::sun::star::container::XNameAccess";"getElementNames()"
-"SwXDocumentIndexes";"com::sun::star::container::XNameAccess";"hasByName()"
-"SwXDocumentIndexes";"com::sun::star::container::XIndexAccess";"getCount()"
-"SwXDocumentIndexes";"com::sun::star::container::XIndexAccess";"getByIndex()"
-"SwXDocumentIndexes";"com::sun::star::container::XElementAccess";"getElementType()"
-"SwXDocumentIndexes";"com::sun::star::container::XElementAccess";"hasElements()"

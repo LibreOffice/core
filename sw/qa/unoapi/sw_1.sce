@@ -41,4 +41,3 @@
 -o sw.SwXCellRange
 -o sw.SwXChapterNumbering
 -o sw.SwXDocumentIndexMark
--o sw.SwXDocumentIndexes
