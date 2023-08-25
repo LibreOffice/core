@@ -90,8 +90,11 @@ void ScAttrDlg::PageCreated(const OUString& rPageId, SfxTabPage& rTabPage)
     {
         const SfxPoolItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
         assert(pInfoItem && "FontListItem  not found :-(");
-        aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem*>(pInfoItem)->GetFontList(), SID_ATTR_CHAR_FONTLIST ));
-        rTabPage.PageCreated(aSet);
+        if (pInfoItem)
+        {
+            aSet.Put (SvxFontListItem(static_cast<const SvxFontListItem*>(pInfoItem)->GetFontList(), SID_ATTR_CHAR_FONTLIST ));
+            rTabPage.PageCreated(aSet);
+        }
     }
     else if (rPageId == "background")
     {
