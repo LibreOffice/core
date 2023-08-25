@@ -517,11 +517,11 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     for (i = 0 ; i< nCount ; ++i)
     {
         Reference<XReportComponent> xReportElement(_xProp->getByIndex(i),uno::UNO_QUERY);
-        uno::Reference< XShape> xShape(xReportElement,uno::UNO_QUERY);
-        if ( xShape.is() )
-            continue;
         OSL_ENSURE( xReportElement.is(),"NULL Element in Section!" );
         if ( !xReportElement.is() )
+            continue;
+        uno::Reference< XShape> xShape(xReportElement,uno::UNO_QUERY);
+        if ( xShape.is() )
             continue;
         sal_Int32 nX = xReportElement->getPositionX();
         aColumnPos.push_back(nX);
@@ -580,6 +580,9 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
     for (i = 0 ; i< nCount ; ++i)
     {
         Reference<XReportComponent> xReportElement(_xProp->getByIndex(i),uno::UNO_QUERY);
+        OSL_ENSURE( xReportElement.is(),"NULL Element in Section!" );
+        if ( !xReportElement.is() )
+            continue;
         uno::Reference< XShape> xShape(xReportElement,uno::UNO_QUERY);
         if ( xShape.is() )
             continue;
