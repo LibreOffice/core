@@ -1750,6 +1750,8 @@ static void lcl_RecalcRow(SwRowFrame & rRow, tools::Long const nBottom)
 
         if( bCheck )
         {
+            SwFrameDeleteGuard g(&rRow);
+
             // #115759# - force another format of the
             // lowers, if at least one of it was invalid.
             bCheck = SwContentFrame::CalcLowers(rRow, *rRow.GetUpper(), nBottom, true);
@@ -2341,7 +2343,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if ( !bSplit && GetFollow() )
             {
                 bool bDummy;
-                if ( GetFollow()->ShouldBwdMoved( GetUpper(), bDummy ) )
+                if (!(HasFollowFlowLine()
+                        && GetFollow()->GetFirstNonHeadlineRow()->IsDeleteForbidden())
+                    && GetFollow()->ShouldBwdMoved(GetUpper(), bDummy))
                 {
                     SwFrame *pTmp = GetUpper();
                     SwTwips nDeadLine = aRectFnSet.GetPrtBottom(*pTmp);
