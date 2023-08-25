@@ -573,6 +573,30 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
     return true;
 }
 
+namespace sw {
+
+auto FindNonFlyPortion(SwLineLayout const& rLine) -> bool
+{
+    for (SwLinePortion const* pPortion = rLine.GetFirstPortion();
+            pPortion; pPortion = pPortion->GetNextPortion())
+    {
+        switch (pPortion->GetWhichPor())
+        {
+            case PortionType::Fly:
+            case PortionType::Glue:
+            case PortionType::Margin:
+                break;
+            default:
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+};
+
+} // namespace sw
+
 bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool bTst, bool bMoveBwd )
 {
     // Here it does not matter, if pFrame is swapped or not.
@@ -592,6 +616,10 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
 
     // tdf#146500 for MoveBwd(), want at least 1 line with non-fly
     bool hasNonFly(!bMoveBwd);
+    if (!hasNonFly)
+    {
+        hasNonFly = ::sw::FindNonFlyPortion(*rLine.GetCurr());
+    }
     while (nMinLines > rLine.GetLineNr() || !hasNonFly)
     {
         if( !rLine.NextLine() )
@@ -602,21 +630,9 @@ bool WidowsAndOrphans::WouldFit( SwTextMargin &rLine, SwTwips &rMaxHeight, bool 
                 break;
         }
         nLineSum += rLine.GetLineHeight();
-        for (SwLinePortion const* pPortion = rLine.GetCurr()->GetFirstPortion();
-                !hasNonFly && pPortion; pPortion = pPortion->GetNextPortion())
+        if (!hasNonFly)
         {
-            switch (pPortion->GetWhichPor())
-            {
-                case PortionType::Fly:
-                case PortionType::Glue:
-                case PortionType::Margin:
-                    break;
-                default:
-                {
-                    hasNonFly = true;
-                    break;
-                }
-            }
+            hasNonFly = ::sw::FindNonFlyPortion(*rLine.GetCurr());
         }
     }
 
