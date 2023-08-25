@@ -72,7 +72,7 @@ extern "C" {
 #define SAL_MATH_FINITE(d) std::isfinite(d)
 #elif defined __APPLE__ && !(defined __i386__ || defined __x86_64__)
 #define SAL_MATH_FINITE(d) isfinite(d)
-#elif defined( WNT)
+#elif defined(_WIN32)
 #define SAL_MATH_FINITE(d) _finite(d)
 #elif defined(ANDROID) || defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)

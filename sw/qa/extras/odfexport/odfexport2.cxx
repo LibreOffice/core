@@ -999,7 +999,7 @@ DECLARE_ODFEXPORT_TEST(testTdf78510, "WordTest_edit.odt")
     // wonder how fragile this is...
     // FIXME some platform difference, 1st one is 2306 on Linux, 3087 on WNT ?
     // some Mac has 3110
-#if !defined(WNT) && !defined(MACOSX)
+#if !defined(_WIN32) && !defined(MACOSX)
     {
         SwDocShell *const pShell(dynamic_cast<SwXTextDocument&>(*mxComponent).GetDocShell());
         std::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
