@@ -1499,6 +1499,11 @@ public:
                                         const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
                                         const Gradient& rTransparenceGradient );
 
+    void                        DrawTransparent(
+                                        const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                        const Point& rMtfPos, const Size& rMtfSize,
+                                        const Gradient& rTransparenceGradient );
+
 protected:
 
     virtual void                EmulateDrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
