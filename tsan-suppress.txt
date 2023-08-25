@@ -88,7 +88,7 @@ deadlock:DeInitVCL
 # but I can't see how it could lead to a problem in practice
 deadlock:ItemHolder1::impl_addItem
 
-# ignore warning aboure nRefCount in sal_Sequence.
+# ignore warning about nRefCount in sal_Sequence.
 # <sberg> noelgrandin, we generally assume that sal_Int32 is small enough, and hardware sane enough,
 #      that reading it will always give a sane value, i.e., if the read happens in parallel with a write,
 #      the read produces either the old, original value, or the newly written one.
