@@ -571,6 +571,9 @@ namespace
 
 IMPL_LINK_NOARG(FontNameBox, UpdateHdl, Timer*, void)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     CachePreview(mnPreviewProgress++, nullptr);
     // tdf#132536 limit to ~25 pre-rendered for now. The font caches look
     // b0rked, the massive charmaps are ~never swapped out, and don't count
