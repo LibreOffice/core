@@ -237,19 +237,15 @@ bool OLEObjCache::UnloadObj(SdrOle2Obj& rObj)
     return bUnloaded;
 }
 
-bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
+std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet)
 {
     drawing::FillStyle eFill=rSet.Get(XATTR_FILLSTYLE).GetValue();
-    bool bRetval = false;
 
     switch(eFill)
     {
         case drawing::FillStyle_SOLID:
         {
-            rCol = rSet.Get(XATTR_FILLCOLOR).GetColorValue();
-            bRetval = true;
-
-            break;
+            return rSet.Get(XATTR_FILLCOLOR).GetColorValue();
         }
         case drawing::FillStyle_HATCH:
         {
@@ -264,20 +260,14 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             }
 
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
-            rCol = Color(aAverageColor);
-            bRetval = true;
-
-            break;
+            return Color(aAverageColor);
         }
         case drawing::FillStyle_GRADIENT: {
             const basegfx::BGradient& rGrad=rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
             Color aCol1(Color(rGrad.GetColorStops().front().getStopColor()));
             Color aCol2(Color(rGrad.GetColorStops().back().getStopColor()));
             const basegfx::BColor aAverageColor(basegfx::average(aCol1.getBColor(), aCol2.getBColor()));
-            rCol = Color(aAverageColor);
-            bRetval = true;
-
-            break;
+            return Color(aAverageColor);
         }
         case drawing::FillStyle_BITMAP:
         {
@@ -286,7 +276,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
             const sal_uInt32 nWidth = aSize.Width();
             const sal_uInt32 nHeight = aSize.Height();
             if (nWidth <= 0 || nHeight <= 0)
-                return bRetval;
+                return {};
 
             Bitmap::ScopedReadAccess pAccess(aBitmap);
 
@@ -317,16 +307,14 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 nGn /= nCount;
                 nBl /= nCount;
 
-                rCol = Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
-
-                bRetval = true;
+                return Color(sal_uInt8(nRt), sal_uInt8(nGn), sal_uInt8(nBl));
             }
             break;
         }
         default: break;
     }
 
-    return bRetval;
+    return {};
 }
 
 std::unique_ptr<SdrOutliner> SdrMakeOutliner(OutlinerMode nOutlinerMode, SdrModel& rModel)
@@ -473,17 +461,15 @@ void SvdProgressInfo::SetNextObject()
 
 namespace
 {
-    bool impGetSdrObjListFillColor(
+    std::optional<Color> impGetSdrObjListFillColor(
         const SdrObjList& rList,
         const Point& rPnt,
         const SdrPageView& rTextEditPV,
-        const SdrLayerIDSet& rVisLayers,
-        Color& rCol)
+        const SdrLayerIDSet& rVisLayers)
     {
-        bool bRet(false);
         bool bMaster(rList.getSdrPageFromSdrObjList() && rList.getSdrPageFromSdrObjList()->IsMasterPage());
 
-        for(size_t no(rList.GetObjCount()); !bRet && no > 0; )
+        for(size_t no(rList.GetObjCount()); no > 0; )
         {
             no--;
             SdrObject* pObj = rList.GetObj(no);
@@ -492,7 +478,8 @@ namespace
             if(pOL)
             {
                 // group object
-                bRet = impGetSdrObjListFillColor(*pOL, rPnt, rTextEditPV, rVisLayers, rCol);
+                if (auto oColor = impGetSdrObjListFillColor(*pOL, rPnt, rTextEditPV, rVisLayers))
+                    return oColor;
             }
             else
             {
@@ -506,25 +493,26 @@ namespace
                     && !pText->IsHideContour()
                     && SdrObjectPrimitiveHit(*pObj, rPnt, {0, 0}, rTextEditPV, &rVisLayers, false))
                 {
-                    bRet = GetDraftFillColor(pObj->GetMergedItemSet(), rCol);
+                    if (auto oColor = GetDraftFillColor(pObj->GetMergedItemSet()))
+                        return oColor;
                 }
             }
         }
 
-        return bRet;
+        return {};
     }
 
-    bool impGetSdrPageFillColor(
+    std::optional<Color> impGetSdrPageFillColor(
         const SdrPage& rPage,
         const Point& rPnt,
         const SdrPageView& rTextEditPV,
         const SdrLayerIDSet& rVisLayers,
-        Color& rCol,
         bool bSkipBackgroundShape)
     {
-        bool bRet(impGetSdrObjListFillColor(rPage, rPnt, rTextEditPV, rVisLayers, rCol));
+        if (auto oColor = impGetSdrObjListFillColor(rPage, rPnt, rTextEditPV, rVisLayers))
+            return oColor;
 
-        if(!bRet && !rPage.IsMasterPage())
+        if(!rPage.IsMasterPage())
         {
             if(rPage.TRG_HasMasterPage())
             {
@@ -538,18 +526,18 @@ namespace
                 // the silly ordering: 1. shapes, 2. master page
                 // shapes, 3. page background, 4. master page
                 // background.
-                bRet = impGetSdrPageFillColor(rMasterPage, rPnt, rTextEditPV, aSet, rCol, true);
+                if (auto oColor = impGetSdrPageFillColor(rMasterPage, rPnt, rTextEditPV, aSet, true))
+                    return oColor;
             }
         }
 
         // Only now determine background color from background shapes
-        if(!bRet && !bSkipBackgroundShape)
+        if(!bSkipBackgroundShape)
         {
-            rCol = rPage.GetPageBackgroundColor();
-            return true;
+            return rPage.GetPageBackgroundColor();
         }
 
-        return bRet;
+        return {};
     }
 
     Color impCalcBackgroundColor(
@@ -625,8 +613,8 @@ namespace
 
                 }
 
-                aSpotColor[i] = COL_WHITE;
-                impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), aSpotColor[i], false);
+                aSpotColor[i] =
+                    impGetSdrPageFillColor(rPage, aSpotPos[i], rTextEditPV, rTextEditPV.GetVisibleLayers(), false).value_or(COL_WHITE);
             }
 
             sal_uInt16 aMatch[SPOTCOUNT];
@@ -672,13 +660,10 @@ namespace
 
 Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
 {
-    svtools::ColorConfig aColorConfig;
-    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     if(!rStyleSettings.GetHighContrastMode())
     {
-        bool bFound(false);
         SdrTextObj* pText = rView.GetTextEditObject();
 
         if(pText && pText->IsClosedObj())
@@ -686,13 +671,14 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
             sdr::table::SdrTableObj* pTable = dynamic_cast< sdr::table::SdrTableObj * >( pText );
 
             if( pTable )
-                bFound = GetDraftFillColor(pTable->GetActiveCellItemSet(), aBackground );
+                if (auto oColor = GetDraftFillColor(pTable->GetActiveCellItemSet()))
+                    return *oColor;
 
-            if( !bFound )
-                bFound=GetDraftFillColor(pText->GetMergedItemSet(), aBackground);
+            if (auto oColor = GetDraftFillColor(pText->GetMergedItemSet()))
+                return *oColor;
         }
 
-        if(!bFound && pText)
+        if (pText)
         {
             SdrPageView* pTextEditPV = rView.GetTextEditPageView();
 
@@ -712,7 +698,7 @@ Color GetTextEditBackgroundColor(const SdrObjEditView& rView)
         }
     }
 
-    return aBackground;
+    return svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

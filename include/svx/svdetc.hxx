@@ -87,7 +87,7 @@ class SfxItemSet;
  *
  * @returns false for XFILL_NONE and rCol remains unchanged
  */
-SVXCORE_DLLPUBLIC bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
+SVXCORE_DLLPUBLIC std::optional<Color> GetDraftFillColor(const SfxItemSet& rSet);
 
 
 /**

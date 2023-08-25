@@ -1795,7 +1795,8 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView const * pView, bool bScreenDi
         }
     }
 
-    GetDraftFillColor(*pBackgroundFill, aColor);
+    if (auto oColor = GetDraftFillColor(*pBackgroundFill))
+        aColor = *oColor;
 
     return aColor;
 }

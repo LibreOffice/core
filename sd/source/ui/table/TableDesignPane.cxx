@@ -757,8 +757,7 @@ CellInfo::CellInfo( const Reference< XStyle >& xStyle )
     SfxItemSet& rSet = pStyleSheet->GetItemSet();
 
     // get style fill color
-    if( !GetDraftFillColor(rSet, maCellColor) )
-        maCellColor = COL_TRANSPARENT;
+    maCellColor = GetDraftFillColor(rSet).value_or(COL_TRANSPARENT);
 
     // get style text color
     const SvxColorItem* pTextColor = rSet.GetItem(EE_CHAR_COLOR);

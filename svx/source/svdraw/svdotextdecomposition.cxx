@@ -1002,8 +1002,7 @@ bool SdrObject::setSuitableOutlinerBg(::Outliner& rOutliner) const
     const SfxItemSet* pBackgroundFillSet = getBackgroundFillSet();
     if (drawing::FillStyle_NONE != pBackgroundFillSet->Get(XATTR_FILLSTYLE).GetValue())
     {
-        Color aColor(rOutliner.GetBackgroundColor());
-        GetDraftFillColor(*pBackgroundFillSet, aColor);
+        Color aColor(GetDraftFillColor(*pBackgroundFillSet).value_or(rOutliner.GetBackgroundColor()));
         rOutliner.SetBackgroundColor(aColor);
         return true;
     }
