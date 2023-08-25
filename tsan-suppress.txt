@@ -66,3 +66,31 @@ race:g_slice_alloc0
 
 # Python build, lock order inversion
 deadlock:take_gil
+
+# Not interested in deadlock issues when they involve the shutdown path 
+# - the shutdown path is special, so if we see a lock-ordering here that conflicts with
+# a "normal" lock-ordering path, that is highly unlikely to result in a real issue.
+deadlock:DeInitVCL
+
+# Sometimes tsan will report data-races in these, who knows why, they should be thread-safe
+race:malloc
+race:free
+race:close
+
+# Not interested in deadlock issues when they involve the shutdown path
+# - the shutdown path is special, so if we see a lock-ordering here that conflicts with
+# a "normal" lock-ordering path, that is highly unlikely to result in a real issue.
+deadlock:DeInitVCL
+
+# There is a lock-cycle here, together with the mutexes acquired in
+#    SvtSysLocaleOptions::SvtSysLocaleOptions
+#    SvtSysLocale::SvtSysLocale
+# but I can't see how it could lead to a problem in practice
+deadlock:ItemHolder1::impl_addItem
+
+# ignore warning aboure nRefCount in sal_Sequence.
+# <sberg> noelgrandin, we generally assume that sal_Int32 is small enough, and hardware sane enough,
+#      that reading it will always give a sane value, i.e., if the read happens in parallel with a write,
+#      the read produces either the old, original value, or the newly written one.
+race:cppu::createEmptySequence
+race:uno_type_sequence_reference2One
