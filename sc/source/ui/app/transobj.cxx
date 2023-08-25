@@ -566,7 +566,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
     }
 
     ScModule* pScMod = SC_MOD();
-    if ( pScMod->GetDragData().pCellTransfer == this )
+    if ( pScMod && pScMod->GetDragData().pCellTransfer == this )
         pScMod->ResetDragObject();
 
     m_xDragSourceRanges = nullptr;       // don't keep source after dropping
