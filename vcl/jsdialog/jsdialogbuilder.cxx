@@ -1681,9 +1681,12 @@ void JSComboBox::set_active_id(const OUString& rStr)
 
 bool JSComboBox::changed_by_direct_pick() const { return true; }
 
-void JSComboBox::render_entry(int pos)
+void JSComboBox::render_entry(int pos, int dpix, int dpiy)
 {
     ScopedVclPtrInstance<VirtualDevice> pDevice(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT);
+    pDevice->SetDPIX(96.0 * dpix / 100);
+    pDevice->SetDPIY(96.0 * dpiy / 100);
+
     Size aRenderSize = signal_custom_get_size(*pDevice);
     pDevice->SetOutputSize(aRenderSize);
 

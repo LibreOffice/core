@@ -133,7 +133,16 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 {
                     auto pJSCombobox = dynamic_cast<JSComboBox*>(pWidget);
                     if (pJSCombobox)
-                        pJSCombobox->render_entry(o3tl::toInt32(rData["data"]));
+                    {
+                        // pos;dpix;dpiy
+                        const OUString& sParams = rData["data"];
+                        const OUString aPos = sParams.getToken(0, ';');
+                        const OUString aDpiScaleX = sParams.getToken(1, ';');
+                        const OUString aDpiScaleY = sParams.getToken(2, ';');
+
+                        pJSCombobox->render_entry(o3tl::toInt32(aPos), o3tl::toInt32(aDpiScaleX),
+                                                  o3tl::toInt32(aDpiScaleY));
+                    }
                     return true;
                 }
             }
