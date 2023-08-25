@@ -43,8 +43,7 @@ HelpCompiler::HelpCompiler(StreamTable &in_streamTable, fs::path in_inputFile,
     char* os = getenv("OS");
     if (os)
     {
-        gui = (strcmp(os, "WNT") ? "UNIX" : "WIN");
-        gui = (strcmp(os, "MACOSX") ? gui : "MAC");
+        gui = (strcmp(os, "WNT") == 0 ? "WIN" : (strcmp(os, "MACOSX") == 0 ? "MAC" : "UNIX"));
     }
 }
 
@@ -71,7 +70,7 @@ xmlDocPtr HelpCompiler::compactXhpForJar( xmlDocPtr doc )
 
     if (!compact)
     {
-        compact = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resCompactStylesheet.native_file_string().c_str()));
+        compact = xsltParseStylesheetFile(BAD_CAST(resCompactStylesheet.native_file_string().c_str()));
     }
 
     compacted = xsltApplyStylesheet(compact, doc, params);
@@ -129,7 +128,7 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
         {
             static std::string fsroot('\'' + src.toUTF8() + '\'');
 
-            cur = xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(resEmbStylesheet.native_file_string().c_str()));
+            cur = xsltParseStylesheetFile(BAD_CAST(resEmbStylesheet.native_file_string().c_str()));
 
             int nbparams = 0;
             params[nbparams++] = "fsroot";
@@ -158,7 +157,7 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
         {
             if (strcmp(reinterpret_cast<const char*>(list->name), "switchinline") == 0 || strcmp(reinterpret_cast<const char*>(list->name), "switch") == 0)
             {
-                std::string tmp="";
+                std::string tmp;
                 xmlChar * prop = xmlGetProp(list, reinterpret_cast<xmlChar const *>("select"));
                 if (prop != nullptr)
                 {
@@ -172,13 +171,13 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
                     }
                     xmlFree(prop);
                 }
-                if (tmp.compare("") != 0)
+                if (!tmp.empty())
                 {
                     bool isCase=false;
                     xmlNodePtr caseList=list->xmlChildrenNode;
                     while (caseList)
                     {
-                        xmlChar *select = xmlGetProp(caseList, reinterpret_cast<xmlChar const *>("select"));
+                        xmlChar* select = xmlGetProp(caseList, BAD_CAST("select"));
                         if (select)
                         {
                             if (!strcmp(reinterpret_cast<char*>(select), tmp.c_str()) && !isCase)
@@ -314,14 +313,14 @@ void myparser::traverse( xmlNodePtr parentNode )
         }
         else if (!strcmp(reinterpret_cast<const char*>(test->name), "bookmark"))
         {
-            xmlChar *branchxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("branch"));
+            xmlChar* branchxml = xmlGetProp(test, BAD_CAST("branch"));
             if (branchxml == nullptr) {
                 throw HelpProcessingException(
                     HelpProcessingErrorClass::XmlParsing, "bookmark lacks branch attribute");
             }
             std::string branch(reinterpret_cast<char*>(branchxml));
             xmlFree (branchxml);
-            xmlChar *idxml = xmlGetProp(test, reinterpret_cast<const xmlChar*>("id"));
+            xmlChar* idxml = xmlGetProp(test, BAD_CAST("id"));
             if (idxml == nullptr) {
                 throw HelpProcessingException(
                     HelpProcessingErrorClass::XmlParsing, "bookmark lacks id attribute");
@@ -355,7 +354,7 @@ void myparser::traverse( xmlNodePtr parentNode )
                         continue;
 
                     std::string embedded;
-                    xmlChar *embeddedxml = xmlGetProp(nd, reinterpret_cast<const xmlChar*>("embedded"));
+                    xmlChar* embeddedxml = xmlGetProp(nd, BAD_CAST("embedded"));
                     if (embeddedxml)
                     {
                         embedded = std::string(reinterpret_cast<char*>(embeddedxml));
@@ -399,7 +398,7 @@ void myparser::traverse( xmlNodePtr parentNode )
 
             //tool-tip target
             std::string hidstr(".");  //. == previous seen hid bookmarks
-            xmlChar *hid = xmlGetProp(test, reinterpret_cast<const xmlChar*>("hid"));
+            xmlChar* hid = xmlGetProp(test, BAD_CAST("hid"));
             if (hid)
             {
                 hidstr = std::string(reinterpret_cast<char*>(hid));
