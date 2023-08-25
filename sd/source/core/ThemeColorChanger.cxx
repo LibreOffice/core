@@ -141,7 +141,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     {
         SdrPage* pCurrentPage = rModel.GetPage(nPage);
 
-        // Skip pages that are usign a different master page
+        // Skip pages that are using a different master page
         if (!pCurrentPage->TRG_HasMasterPage()
             || &pCurrentPage->TRG_GetMasterPage() != mpMasterPage)
             continue;
