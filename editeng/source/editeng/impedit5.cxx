@@ -316,7 +316,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
-        DBG_ASSERT( aEditDoc.GetObject( nNode ), "Node not found: GetAttrib" );
+        assert( pNode && "Node not found: GetAttrib" );
 
         const sal_Int32 nStartPos = nNode==nStartNode ? aSel.Min().GetIndex() : 0;
         const sal_Int32 nEndPos = nNode==nEndNode ? aSel.Max().GetIndex() : pNode->Len(); // Can also be == nStart!
@@ -327,7 +327,8 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
         // 2) Examine Style and paragraph attributes only when OFF...
 
         // First the very hard formatting...
-        EditDoc::FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
+        if (pNode)
+            EditDoc::FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
 
         if( nOnlyHardAttrib != EditEngineAttribs::OnlyHard )
         {
