@@ -9,6 +9,8 @@
 
 # hack plugging into the CppunitTest machinery yet using a xvfb-wrapper GTK3 run
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += SAL_USE_VCLPLUGIN=gtk3
+# force running with the X11 Gdk backend also when running on Wayland
+$(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += GDK_BACKEND=x11
 ifeq (,$(VCL_GTK3_TESTS_NO_XVFB))
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : \
 	ICECREAM_RUN += $(XVFB_RUN) $(DBUS_LAUNCH) --exit-with-session
