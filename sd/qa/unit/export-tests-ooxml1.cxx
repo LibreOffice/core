@@ -1588,6 +1588,15 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testNarrationMimeType)
     assertXPath(pSlideDoc, "//p:childTnLst/p:audio", "isNarration", "1");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf150316)
+{
+    createSdImpressDoc("odp/tdf150316.odp");
+    save("Impress Office Open XML");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p/a:pPr", "indent", "-343080");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf140865Wordart3D)
 {
     createSdImpressDoc("pptx/tdf140865Wordart3D.pptx");

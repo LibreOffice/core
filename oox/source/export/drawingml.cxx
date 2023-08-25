@@ -3440,7 +3440,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         mpFS->startElementNS( XML_a, nElement,
                            XML_lvl, sax_fastparser::UseIf(OString::number(nLevel), nLevel > 0),
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
-                           XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nParaFirstLineIndent) : 0), (bForceZeroIndent || (nParaFirstLineIndent != 0))),
+                           XML_indent, sax_fastparser::UseIf(OString::number((bForceZeroIndent && nParaFirstLineIndent == 0) ? 0 : oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), (bForceZeroIndent || nParaFirstLineIndent != 0)),
                            XML_algn, GetAlignment( nAlignment ),
                            XML_defTabSz, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaDefaultTabSize)), nParaDefaultTabSize > 0),
                            XML_rtl, sax_fastparser::UseIf(ToPsz10(bRtl), bRtl));
