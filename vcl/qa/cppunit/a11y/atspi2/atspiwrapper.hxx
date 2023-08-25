@@ -505,7 +505,7 @@ public:
         {
         }
 
-        iterator(iterator& other)
+        iterator(iterator const& other)
             : m_pAccessible(other.m_pAccessible)
             , m_idx(other.m_idx)
         {
