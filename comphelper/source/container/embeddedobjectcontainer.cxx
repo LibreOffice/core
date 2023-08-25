@@ -1477,9 +1477,9 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
                 // if this method is used as part of SaveCompleted the object must stay unmodified after execution
                 try
                 {
-                    if (auto xModif = xObj->getComponent().query<util::XModifiable>() )
-                        if ( xModif->isModified() )
-                            xModif->setModified( false );
+                    uno::Reference< util::XModifiable > xModif( xObj->getComponent(), uno::UNO_QUERY_THROW );
+                    if ( xModif->isModified() )
+                        xModif->setModified( false );
                 }
                 catch (const uno::Exception&)
                 {

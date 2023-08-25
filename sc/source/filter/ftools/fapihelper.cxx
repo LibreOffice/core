@@ -159,8 +159,8 @@ bool ScfPropertySet::HasProperty( const OUString& rPropName ) const
     bool bHasProp = false;
     try
     {
-        if (auto xPropState = mxPropSet.query<XPropertyState>() )
-            bHasProp = xPropState->getPropertyState( rPropName ) == css::beans::PropertyState_DIRECT_VALUE;
+        Reference< XPropertyState > xPropState( mxPropSet, UNO_QUERY_THROW );
+        bHasProp = xPropState->getPropertyState( rPropName ) == css::beans::PropertyState_DIRECT_VALUE;
     }
     catch( Exception& )
     {

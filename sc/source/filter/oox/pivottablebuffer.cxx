@@ -1409,8 +1409,14 @@ Reference< XDataPilotField > PivotTable::getDataPilotField( sal_Int32 nFieldIdx 
 Reference< XDataPilotField > PivotTable::getDataLayoutField() const
 {
     Reference< XDataPilotField > xDPField;
-    if (auto xDPDataFieldSupp = mxDPDescriptor.query<XDataPilotDataLayoutFieldSupplier>() )
+    try
+    {
+        Reference< XDataPilotDataLayoutFieldSupplier > xDPDataFieldSupp( mxDPDescriptor, UNO_QUERY_THROW );
         xDPField = xDPDataFieldSupp->getDataLayoutField();
+    }
+    catch( Exception& )
+    {
+    }
     return xDPField;
 }
 

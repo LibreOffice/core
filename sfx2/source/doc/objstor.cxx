@@ -1197,8 +1197,8 @@ bool SfxObjectShell::SaveTo_Impl
             OUString aODFVersion;
             try
             {
-                if (auto xPropSet = GetStorage().query<beans::XPropertySet>() )
-                    xPropSet->getPropertyValue("Version") >>= aODFVersion;
+                uno::Reference < beans::XPropertySet > xPropSet( GetStorage(), uno::UNO_QUERY_THROW );
+                xPropSet->getPropertyValue("Version") >>= aODFVersion;
             }
             catch( uno::Exception& )
             {}
@@ -1375,9 +1375,9 @@ bool SfxObjectShell::SaveTo_Impl
 
                 try
                 {
-                    if (auto xProps = rMedium.GetStorage().query<beans::XPropertySet>() )
-                        xProps->setPropertyValue("MediaType",
-                                                uno::Any( aDataFlavor.MimeType ) );
+                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
+                    xProps->setPropertyValue("MediaType",
+                                            uno::Any( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -1591,8 +1591,8 @@ bool SfxObjectShell::SaveTo_Impl
                 OUString aVersion;
                 try
                 {
-                    if (auto xPropSet = rMedium.GetStorage().query<beans::XPropertySet>() )
-                        xPropSet->getPropertyValue("Version") >>= aVersion;
+                    uno::Reference < beans::XPropertySet > xPropSet( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
+                    xPropSet->getPropertyValue("Version") >>= aVersion;
                 }
                 catch( uno::Exception& )
                 {
@@ -1817,16 +1817,14 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
         try
         {
             // the empty argument means that the storage will create temporary stream itself
-            if (auto xOptStorage = xStorage.query<embed::XOptimizedStorage>() )
-            {
-                xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
+            uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
+            xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
 
-                // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
-                if ( pMediumArg )
-                    pMediumArg->CanDisposeStorage_Impl( false );
+            // the storage is successfully disconnected from the original sources, thus the medium must not dispose it
+            if ( pMediumArg )
+                pMediumArg->CanDisposeStorage_Impl( false );
 
-                bResult = true;
-            }
+            bResult = true;
         }
         catch( uno::Exception& )
         {
@@ -1851,10 +1849,20 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
                 pImpl->aBasicManager.setStorage( xTmpStorage );
 
                 // Get rid of this workaround after issue i113914 is fixed
-                if (auto xBasicLibraries = pImpl->xBasicLibraries.query<script::XStorageBasedLibraryContainer>() )
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY_THROW );
                     xBasicLibraries->setRootStorage( xTmpStorage );
-                if (auto xDialogLibraries = pImpl->xDialogLibraries.query<script::XStorageBasedLibraryContainer>() )
+                }
+                catch( uno::Exception& )
+                {}
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY_THROW );
                     xDialogLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
             }
         }
         catch( uno::Exception& )
@@ -2005,10 +2013,20 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
         pImpl->aBasicManager.setStorage( xStorage );
 
         // Get rid of this workaround after issue i113914 is fixed
-        if (auto xBasicLibraries = pImpl->xBasicLibraries.query<script::XStorageBasedLibraryContainer>() )
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImpl->xBasicLibraries, uno::UNO_QUERY_THROW );
             xBasicLibraries->setRootStorage( xStorage );
-        if (auto xDialogLibraries = pImpl->xDialogLibraries.query<script::XStorageBasedLibraryContainer>() )
+        }
+        catch( uno::Exception& )
+        {}
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImpl->xDialogLibraries, uno::UNO_QUERY_THROW );
             xDialogLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
     }
     else
     {
@@ -3432,9 +3450,9 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
 
                 try
                 {
-                    if (auto xOptStorage = xSource.query<embed::XOptimizedStorage>() )
-                        bGotMediaType =
-                            ( xOptStorage->getElementPropertyValue( rSubElement, aMediaTypePropName ) >>= aMediaType );
+                    uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
+                    bGotMediaType =
+                        ( xOptStorage->getElementPropertyValue( rSubElement, aMediaTypePropName ) >>= aMediaType );
                 }
                 catch( uno::Exception& )
                 {}
@@ -3575,8 +3593,8 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
 
                 try
                 {
-                    if (auto xOptStorage = xSource.query<embed::XOptimizedStorage>() )
-                        bGotMediaType = (xOptStorage->getElementPropertyValue(rSubElement, aMediaTypePropName)
+                    uno::Reference< embed::XOptimizedStorage > xOptStorage( xSource, uno::UNO_QUERY_THROW );
+                    bGotMediaType = (xOptStorage->getElementPropertyValue(rSubElement, aMediaTypePropName)
                            >>= aMediaType);
                 }
                 catch( uno::Exception& )

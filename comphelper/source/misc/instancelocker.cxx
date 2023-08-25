@@ -238,8 +238,13 @@ void OLockListener::Dispose()
 
     if ( nMode & embed::Actions::PREVENT_TERMINATION )
     {
-        if (auto xDesktop = xInstance.query<frame::XDesktop>() )
+        try
+        {
+            uno::Reference< frame::XDesktop > xDesktop( xInstance, uno::UNO_QUERY_THROW );
             xDesktop->removeTerminateListener( static_cast< frame::XTerminateListener* >( this ) );
+        }
+        catch( uno::Exception& )
+        {}
     }
 }
 

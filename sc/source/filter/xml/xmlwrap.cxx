@@ -568,9 +568,9 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
                 VBA Globals object and does all related initialization. */
             if ( xModelSet.is() ) try
             {
-                if (auto xVBACompat = xModelSet->getPropertyValue(
-                    "BasicLibraries" ).query<script::vba::XVBACompatibility>() )
-                    xVBACompat->setVBACompatibilityMode( true );
+                uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
+                    "BasicLibraries" ), uno::UNO_QUERY_THROW );
+                xVBACompat->setVBACompatibilityMode( true );
             }
             catch( const uno::Exception& )
             {
@@ -853,8 +853,9 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
                     && aVersion != ODFVER_010_TEXT
                     && aVersion != ODFVER_011_TEXT )
                 {
-                    if (auto xDMA = xModel.query<rdf::XDocumentMetadataAccess>() )
-                        xDMA->storeMetadataToStorage( xStorage );
+                    const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
+                        xModel, uno::UNO_QUERY_THROW );
+                    xDMA->storeMetadataToStorage( xStorage );
                 }
             }
             catch ( const beans::UnknownPropertyException &)

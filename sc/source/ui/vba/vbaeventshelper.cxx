@@ -425,14 +425,26 @@ void SAL_CALL ScVbaEventListener::disposing( const lang::EventObject& rEvent )
 
 void ScVbaEventListener::startModelListening()
 {
-    if (auto xChangesNotifier = mxModel.query<util::XChangesNotifier>() )
+    try
+    {
+        uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
         xChangesNotifier->addChangesListener( this );
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 void ScVbaEventListener::stopModelListening()
 {
-    if (auto xChangesNotifier = mxModel.query<util::XChangesNotifier>() )
+    try
+    {
+        uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
         xChangesNotifier->removeChangesListener( this );
+    }
+    catch( uno::Exception& )
+    {
+    }
 }
 
 uno::Reference< frame::XController > ScVbaEventListener::getControllerForWindow( vcl::Window* pWindow ) const

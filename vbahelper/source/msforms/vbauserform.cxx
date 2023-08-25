@@ -88,11 +88,15 @@ ScVbaUserForm::Show(  )
     if ( !mbDispose )
         return;
 
-    if (auto xComp = m_xDialog.query<lang::XComponent>() )
+    try
     {
+        uno::Reference< lang::XComponent > xComp( m_xDialog, uno::UNO_QUERY_THROW );
         m_xDialog = nullptr;
         xComp->dispose();
         mbDispose = false;
+    }
+    catch( uno::Exception& )
+    {
     }
 }
 

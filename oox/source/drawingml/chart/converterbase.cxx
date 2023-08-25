@@ -277,9 +277,15 @@ void ConverterRoot::registerTitleLayout( const Reference< XTitle >& rxTitle,
 
 void ConverterRoot::convertTitlePositions()
 {
-    if (auto xChart1Doc = mxData->mxDoc.query<cssc::XChartDocument>() )
+    try
+    {
+        Reference< cssc::XChartDocument > xChart1Doc( mxData->mxDoc, UNO_QUERY_THROW );
         for (auto & title : mxData->maTitles)
             title.second.convertTitlePos( *this, xChart1Doc );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 namespace {

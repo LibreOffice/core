@@ -603,14 +603,31 @@ void DocumentHolder::FreeOffice()
 
 void DocumentHolder::DisconnectFrameDocument( bool bComplete )
 {
-    if (auto xModifiable = m_xDocument.query<util::XModifyBroadcaster>() )
+    try
+    {
+        uno::Reference< util::XModifyBroadcaster > xModifiable( m_xDocument, uno::UNO_QUERY_THROW );
         xModifiable->removeModifyListener( static_cast<util::XModifyListener*>(this) );
+    }
+    catch( const uno::Exception& )
+    {}
 
-    if (auto xBroadcaster = m_xDocument.query<util::XCloseBroadcaster>() )
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xDocument, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
+    }
+    catch( const uno::Exception& )
+    {}
 
-    if (auto xBroadcaster = m_xFrame.query<util::XCloseBroadcaster>() )
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
+    }
+    catch( const uno::Exception& )
+    {}
 
     if ( bComplete )
     {
@@ -644,8 +661,14 @@ void DocumentHolder::CloseDocument()
 
 void DocumentHolder::CloseFrame()
 {
-    if (auto xBroadcaster = m_xFrame.query<util::XCloseBroadcaster>() )
+    try
+    {
+        uno::Reference< util::XCloseBroadcaster > xBroadcaster(
+            m_xFrame, uno::UNO_QUERY_THROW );
         xBroadcaster->removeCloseListener( static_cast<util::XCloseListener*>(this) );
+    }
+    catch( const uno::Exception& )
+    {}
 
     uno::Reference<util::XCloseable> xCloseable(
         m_xFrame,uno::UNO_QUERY);

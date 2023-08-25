@@ -315,8 +315,8 @@ OUString OLEHandler::copyOLEOStream(
             sRet = aPersistName.copy( strlen("vnd.sun.star.EmbeddedObject:") );
 
         }
-        if (auto xComp = xEmbeddedResolver.query<lang::XComponent>() )
-            xComp->dispose();
+        uno::Reference< lang::XComponent > xComp( xEmbeddedResolver, uno::UNO_QUERY_THROW );
+        xComp->dispose();
         m_aURL = aURL;
     }
     catch( const uno::Exception& )

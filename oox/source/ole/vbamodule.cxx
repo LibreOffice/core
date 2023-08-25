@@ -323,8 +323,14 @@ void VbaModule::createModule( std::u16string_view rVBASourceCode,
         aSourceCode.append( "End Sub\n" );
 
     // insert extended module info
-    if (auto xVBAModuleInfo = rxBasicLib.query<XVBAModuleInfo>() )
+    try
+    {
+        Reference< XVBAModuleInfo > xVBAModuleInfo( rxBasicLib, UNO_QUERY_THROW );
         xVBAModuleInfo->insertModuleInfo( maName, aModuleInfo );
+    }
+    catch (const Exception&)
+    {
+    }
 
     // insert the module into the passed Basic library
     try

@@ -69,8 +69,15 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
             uno::Reference < embed::XEmbeddedObject > xIP = pONd->GetOLEObj().GetOleRef();
             if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
             {
-                if (auto xModif = xIP->getComponent().query<util::XModifiable>() )
+                try
+                {
+                    uno::Reference< util::XModifiable > xModif( xIP->getComponent(), uno::UNO_QUERY_THROW );
                     xModif->setModified( true );
+                }
+                catch ( uno::Exception& )
+                {
+                }
+
             }
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );

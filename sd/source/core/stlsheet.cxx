@@ -309,9 +309,9 @@ bool SdStyleSheet::IsUsed() const
                     Reference< XStyle > xStyle( rListener, UNO_QUERY );
                     try
                     {
-                        if (auto xPropertySet = xStyle.query<XPropertySet>() )
-                            if (xPropertySet->getPropertyValue("IsPhysical").get<bool>())
-                                return true;
+                        Reference<XPropertySet> xPropertySet(xStyle, UNO_QUERY_THROW);
+                        if (xPropertySet->getPropertyValue("IsPhysical").get<bool>())
+                            return true;
                     }
                     catch (const Exception&)
                     {

@@ -2791,8 +2791,14 @@ SvxLineWindow_Impl::SvxLineWindow_Impl(SvxFrameToolBoxControl* pControl, weld::W
     , m_xLineStyleLbWin(new weld::CustomWeld(*m_xBuilder, "valueset", *m_xLineStyleLb))
     , m_bIsWriter(false)
 {
-    if (auto xServices = m_xFrame->getController()->getModel().query<lang::XServiceInfo>())
+    try
+    {
+        Reference< lang::XServiceInfo > xServices(m_xFrame->getController()->getModel(), UNO_QUERY_THROW);
         m_bIsWriter = xServices->supportsService("com.sun.star.text.TextDocument");
+    }
+    catch(const uno::Exception& )
+    {
+    }
 
     m_xLineStyleLb->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT | WB_TABSTOP) );
 

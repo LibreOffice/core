@@ -295,11 +295,9 @@ ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& 
     {
         m_xRoot = m_xBlkRoot->openStorageElement( rPackageName, embed::ElementModes::READWRITE );
 
-        if (auto xRootProps = m_xRoot.query<beans::XPropertySet>() )
-        {
-            OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
-            xRootProps->setPropertyValue( "MediaType", uno::Any( aMime ) );
-        }
+        uno::Reference< beans::XPropertySet > xRootProps( m_xRoot, uno::UNO_QUERY_THROW );
+        OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
+        xRootProps->setPropertyValue( "MediaType", uno::Any( aMime ) );
     }
     catch (const uno::Exception&)
     {

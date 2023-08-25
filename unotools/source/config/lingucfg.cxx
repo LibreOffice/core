@@ -1016,11 +1016,9 @@ uno::Sequence< OUString > SvtLinguConfig::GetDisabledDictionaries() const
     uno::Sequence< OUString > aResult;
     try
     {
-        if (auto xNA = GetMainUpdateAccess().query<container::XNameAccess>() )
-        {
-            xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
-            xNA->getByName( "DisabledDictionaries" ) >>= aResult;
-        }
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
+        xNA->getByName( "DisabledDictionaries" ) >>= aResult;
     }
     catch (uno::Exception &)
     {

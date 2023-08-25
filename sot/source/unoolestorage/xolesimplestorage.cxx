@@ -95,8 +95,13 @@ OLESimpleStorage::OLESimpleStorage(
 
         if ( xInputStream.is() )
         {
-            if (auto xSeek = xInputStream.query<io::XSeekable>() )
+            try
+            {
+                uno::Reference< io::XSeekable > xSeek( xInputStream, uno::UNO_QUERY_THROW );
                 xSeek->seek( 0 );
+            }
+            catch( uno::Exception& )
+            {}
 
             ::comphelper::OStorageHelper::CopyInputToOutput( xInputStream, xTempOut );
             xTempOut->closeOutput();

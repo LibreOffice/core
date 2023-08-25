@@ -183,15 +183,29 @@ void AnnotationManagerImpl::init()
         TOOLS_WARN_EXCEPTION( "sd", "sd::AnnotationManagerImpl::AnnotationManagerImpl()" );
     }
 
-    if (auto xModel = mrBase.GetDocShell()->GetModel().query<XEventBroadcaster>() )
-        xModel->addEventListener( Reference<XEventListener>( this ) );
+    try
+    {
+        Reference<XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), UNO_QUERY_THROW );
+        Reference<XEventListener> xListener( this );
+        xModel->addEventListener( xListener );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 // WeakComponentImplHelper
 void AnnotationManagerImpl::disposing (std::unique_lock<std::mutex>&)
 {
-    if (auto xModel = mrBase.GetDocShell()->GetModel().query<XEventBroadcaster>() )
-        xModel->removeEventListener( Reference<XEventListener>( this ) );
+    try
+    {
+        Reference<XEventBroadcaster> xModel (mrBase.GetDocShell()->GetModel(), UNO_QUERY_THROW );
+        Reference<XEventListener> xListener( this );
+        xModel->removeEventListener( xListener );
+    }
+    catch( Exception& )
+    {
+    }
 
     removeListener();
     DisposeTags();

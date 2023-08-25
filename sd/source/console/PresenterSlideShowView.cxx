@@ -799,8 +799,8 @@ Reference<awt::XWindow> PresenterSlideShowView::CreateViewWindow (
         xViewWindow.set( xToolkit->createWindow(aWindowDescriptor),UNO_QUERY_THROW);
 
         // Make the background transparent.  The slide show paints its own background.
-        if (auto xPeer = xViewWindow.query<awt::XWindowPeer>())
-            xPeer->setBackground(0xff000000);
+        Reference<awt::XWindowPeer> xPeer (xViewWindow, UNO_QUERY_THROW);
+        xPeer->setBackground(0xff000000);
 
         xViewWindow->setVisible(true);
     }
