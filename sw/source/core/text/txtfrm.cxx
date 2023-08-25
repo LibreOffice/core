@@ -3807,28 +3807,7 @@ sal_uInt16 SwTextFrame::FirstLineHeight() const
     for (SwLineLayout const* pLine = pPara; pLine; pLine = pLine->GetNext())
     {
         nHeight += pLine->Height();
-        bool hasNonFly(false);
-        for (SwLinePortion const* pPortion = pLine->GetFirstPortion();
-                pPortion; pPortion = pPortion->GetNextPortion())
-        {
-            switch (pPortion->GetWhichPor())
-            {
-                case PortionType::Fly:
-                case PortionType::Glue:
-                case PortionType::Margin:
-                    break;
-                default:
-                {
-                    hasNonFly = true;
-                    break;
-                }
-            }
-            if (hasNonFly)
-            {
-                break;
-            }
-        }
-        if (hasNonFly)
+        if (::sw::FindNonFlyPortion(*pLine))
         {
             break;
         }
