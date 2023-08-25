@@ -58,6 +58,7 @@
 #include <fmtanchr.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtfollowtextflow.hxx>
+#include <formatflysplit.hxx>
 #include <numrule.hxx>
 #include "sprmids.hxx"
 #include <wwstyles.hxx>
@@ -167,14 +168,38 @@ sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
 }
 
+namespace
+{
+bool IsInSplitFly(SwPaM& rPaM)
+{
+    SwNode& rNode = rPaM.GetPoint()->GetNode();
+    SwNodeOffset nNodeIndex = rNode.GetIndex();
+    SwNodes& rNodes = rNode.GetNodes();
+    if (nNodeIndex >= rNodes.GetEndOfAutotext().GetIndex()
+        || nNodeIndex < rNodes.GetEndOfInserts().GetIndex())
+    {
+        return false;
+    }
+
+    SwFrameFormat* pFlyFormat = rNode.StartOfSectionNode()->GetFlyFormat();
+    if (!pFlyFormat)
+    {
+        return false;
+    }
+
+    return pFlyFormat->GetFlySplit().GetValue();
+}
+}
+
 sal_uInt16 SwWW8ImplReader::End_Footnote()
 {
     /*
     Ignoring Footnote outside of the normal Text. People will put footnotes
     into field results and field commands.
     */
-    if (m_bIgnoreText ||
-        m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras())
+    bool bSplitFly = IsInSplitFly(*m_pPaM);
+    if (m_bIgnoreText
+        || (m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras() && !bSplitFly))
     {
         return 0;
     }
@@ -301,8 +326,9 @@ tools::Long SwWW8ImplReader::Read_Footnote(WW8PLCFManResult* pRes)
     Ignoring Footnote outside of the normal Text. People will put footnotes
     into field results and field commands.
     */
-    if (m_bIgnoreText ||
-        m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras())
+    bool bSplitFly = IsInSplitFly(*m_pPaM);
+    if (m_bIgnoreText
+        || (m_pPaM->GetPoint()->GetNode() < m_rDoc.GetNodes().GetEndOfExtras() && !bSplitFly))
     {
         return 0;
     }

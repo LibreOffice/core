@@ -27,6 +27,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <sortedobjs.hxx>
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <ftnidx.hxx>
 
 namespace
 {
@@ -444,6 +445,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverDOCImport)
     // Without the accompanying fix in place, this test would have failed, the fly had the default
     // "can overlap".
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableFootnote)
+{
+    // Given a document with a floating table and a footnote inside:
+    // When importing that document:
+    createSwDoc("floattable-footnote.doc");
+
+    // Then make sure we both have a fly frame and a footnote:
+    SwDoc* pDoc = getSwDoc();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFlys.size());
+    SwFootnoteIdxs& rFootnotes = pDoc->GetFootnoteIdxs();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rFootnotes.size());
 }
 }
 
