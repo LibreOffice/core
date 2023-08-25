@@ -120,6 +120,58 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf120287)
     assertXPath(pXmlDoc, "/root/page/body/txt[1]/SwParaPortion/SwLineLayout", 1);
 }
 
+static auto getXPathIntAttributeValue(xmlXPathContextPtr pXmlXpathCtx, char const* const pXPath)
+    -> sal_Int32
+{
+    xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(pXPath), pXmlXpathCtx);
+    CPPUNIT_ASSERT(pXmlXpathObj->nodesetval);
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlXpathObj->nodesetval));
+    auto ret
+        = sal_Int32(xmlXPathCastNodeToNumber(xmlXPathNodeSetItem(pXmlXpathObj->nodesetval, 0)));
+    xmlXPathFreeObject(pXmlXpathObj);
+    return ret;
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf128966)
+{
+    createSwDoc("tdf128966-2-min.odt");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    xmlXPathObjectPtr pXmlObj
+        = getXPathNode(pXmlDoc, "/root/page/body/tab/row/cell[@rowspan > 0][child::txt]");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    CPPUNIT_ASSERT(pXmlNodes);
+    CPPUNIT_ASSERT_GREATER(300, xmlXPathNodeSetGetLength(pXmlNodes)); // many...
+
+    xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc.get());
+    registerNamespaces(pXmlXpathCtx);
+
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); ++i)
+    {
+        xmlNodePtr pNode = xmlXPathNodeSetItem(pXmlNodes, i);
+        xmlXPathSetContextNode(pNode, pXmlXpathCtx);
+
+        OString msg("Cell nr.: " + OString::number(i)
+                    + " id=" + OString::number(getXPathIntAttributeValue(pXmlXpathCtx, "@id")));
+
+        auto nCellTop = getXPathIntAttributeValue(pXmlXpathCtx, "infos/bounds/@top");
+        auto nCellHeight = getXPathIntAttributeValue(pXmlXpathCtx, "infos/bounds/@height");
+        auto nCellCenter = nCellTop + (nCellHeight / 2);
+
+        auto nContentTop
+            = getXPathIntAttributeValue(pXmlXpathCtx, "txt[position()=1]/infos/bounds/@top");
+        auto nContentBottom = getXPathIntAttributeValue(
+            pXmlXpathCtx, "txt[position()=last()]/infos/bounds/@bottom");
+
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), nContentTop < nCellCenter);
+        CPPUNIT_ASSERT_MESSAGE(msg.getStr(), nContentBottom > nCellCenter);
+    }
+
+    xmlXPathFreeContext(pXmlXpathCtx);
+    xmlXPathFreeObject(pXmlObj);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf106234)
 {
     createSwDoc("tdf106234.fodt");
