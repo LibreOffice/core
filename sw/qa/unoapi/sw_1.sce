@@ -33,7 +33,6 @@
 #i111178 -o sw.SwAccessibleTextEmbeddedObject
 #i111178 -o sw.SwAccessibleTextFrameView
 -o sw.SwAccessibleTextGraphicObject
--o sw.SwXAutoTextContainer
 -o sw.SwXAutoTextEntry
 -o sw.SwXAutoTextGroup
 -o sw.SwXBodyText
