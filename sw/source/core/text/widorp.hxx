@@ -79,4 +79,10 @@ public:
     }
 };
 
+namespace sw {
+
+auto FindNonFlyPortion(SwLineLayout const& rLine) -> bool;
+
+} // namespace sw
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
