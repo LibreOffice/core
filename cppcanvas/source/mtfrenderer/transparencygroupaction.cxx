@@ -205,6 +205,8 @@ namespace cppcanvas::internal
                     return false;
                 }
 
+                ::Point aMtfOffsetPoint;
+
                 // if there's no buffer bitmap, or as soon as the
                 // total transformation changes, we've got to
                 // re-render the bitmap
@@ -215,15 +217,59 @@ namespace cppcanvas::internal
                 {
                     DBG_TESTSOLARMUTEX();
 
+                    // tdf#150610 fix broken rendering of text meta actions
+                    // Even when drawing to a VirtualDevice where antialiasing
+                    // is disabled, text will still be drawn with some
+                    // antialiased pixels on HiDPI displays. So, expand the
+                    // size of the VirtualDevice slightly to capture any of
+                    // the pixles drawn past the edges of the destination
+                    // bounds.
+                    bool        bHasTextActions = false;
+                    MetaAction* pCurrAct;
+                    int         nCurrActionIndex;
+                    for( nCurrActionIndex=0, pCurrAct=mpGroupMtf->FirstAction();
+                         pCurrAct && !bHasTextActions;
+                         ++nCurrActionIndex, pCurrAct = mpGroupMtf->NextAction() )
+                    {
+                        switch( pCurrAct->GetType() )
+                        {
+                            case MetaActionType::TEXT:
+                            case MetaActionType::TEXTARRAY:
+                            case MetaActionType::STRETCHTEXT:
+                            case MetaActionType::TEXTRECT:
+                                if( ( rSubset.mnSubsetBegin == 0 && rSubset.mnSubsetEnd == -1 ) || ( rSubset.mnSubsetBegin <= nCurrActionIndex && rSubset.mnSubsetEnd > nCurrActionIndex ) )
+                                    bHasTextActions = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
                     // output size of metafile
                     ::Size aOutputSizePixel( ::basegfx::fround( aScale.getX() * maDstSize.getWidth() ),
                                              ::basegfx::fround( aScale.getY() * maDstSize.getHeight() ) );
 
-                    // pixel size of cache bitmap: round up to nearest int
-                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getWidth() )+1,
-                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.getHeight() )+1 );
+                    sal_Int32 nBitmapExtra;
+                    if ( bHasTextActions )
+                    {
+                        nBitmapExtra = 10;
+                        aMtfOffsetPoint = ::Point( nBitmapExtra / 2, nBitmapExtra / 2 );
+                    }
+                    else
+                    {
+                        // Related tdf#150610 assume antialiasing is enabled
+                        // Although antialiasing is normally disabled in the
+                        // VirtualDevice, lines in tdf#150610 will draw past
+                        // the edge of the VirtualDevice when running a
+                        // slideshow so always add an extra pixel on the
+                        // right and bottom edges.
+                        nBitmapExtra = 1;
+                    }
 
-                    ::Point aEmptyPoint;
+                    // pixel size of cache bitmap: round up to nearest int
+                    ::Point aBitmapPoint;
+                    ::Size aBitmapSizePixel( static_cast<sal_Int32>( aScale.getX() * maDstSize.getWidth() ) + nBitmapExtra,
+                                             static_cast<sal_Int32>( aScale.getY() * maDstSize.getHeight() ) + nBitmapExtra );
 
                     // render our content into an appropriately sized
                     // VirtualDevice with alpha channel
@@ -238,8 +284,6 @@ namespace cppcanvas::internal
                         // true subset - extract referenced
                         // metaactions from mpGroupMtf
                         GDIMetaFile aMtf;
-                        MetaAction* pCurrAct;
-                        int         nCurrActionIndex;
 
                         // extract subset actions
                         for( nCurrActionIndex=0,
@@ -320,7 +364,9 @@ namespace cppcanvas::internal
                         }
 
                         aVDev->DrawTransparent( aMtf,
-                                               aEmptyPoint,
+                                               aBitmapPoint,
+                                               aBitmapSizePixel,
+                                               aMtfOffsetPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
                     }
@@ -328,7 +374,9 @@ namespace cppcanvas::internal
                     {
                         // no subsetting - render whole mtf
                         aVDev->DrawTransparent( *mpGroupMtf,
-                                               aEmptyPoint,
+                                               aBitmapPoint,
+                                               aBitmapSizePixel,
+                                               aMtfOffsetPoint,
                                                aOutputSizePixel,
                                                *mpAlphaGradient );
                     }
@@ -338,7 +386,7 @@ namespace cppcanvas::internal
                     BitmapSharedPtr aBmp( VCLFactory::createBitmap(
                                               mpCanvas,
                                               aVDev->GetBitmapEx(
-                                                  aEmptyPoint,
+                                                  aBitmapPoint,
                                                   aBitmapSizePixel ) ) );
                     mxBufferBitmap = aBmp->getUNOBitmap();
                     maLastTransformation = aTotalTransform;
@@ -362,6 +410,7 @@ namespace cppcanvas::internal
                 // the contained scaling, we've got to right-multiply with
                 // the inverse.
                 ::basegfx::B2DHomMatrix aScaleCorrection;
+                aScaleCorrection.translate( -aMtfOffsetPoint.X(), -aMtfOffsetPoint.Y() );
                 aScaleCorrection.scale( 1/aScale.getX(), 1/aScale.getY() );
                 aTransform = aTransform * aScaleCorrection;
 

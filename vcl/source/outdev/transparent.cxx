@@ -557,6 +557,13 @@ void OutputDevice::DrawTransparent( const tools::PolyPolygon& rPolyPoly,
 void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                                     const Size& rSize, const Gradient& rTransparenceGradient )
 {
+    DrawTransparent( rMtf, rPos, rSize, rPos, rSize, rTransparenceGradient );
+}
+
+void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos, const Size& rSize,
+                                    const Point& rMtfPos, const Size& rMtfSize,
+                                    const Gradient& rTransparenceGradient )
+{
     assert(!is_double_buffered_window());
 
     const Color aBlack( COL_BLACK );
@@ -574,7 +581,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
         ( mnDrawMode & DrawModeFlags::NoTransparency ) )
     {
         const_cast<GDIMetaFile&>(rMtf).WindStart();
-        const_cast<GDIMetaFile&>(rMtf).Play(*this, rPos, rSize);
+        const_cast<GDIMetaFile&>(rMtf).Play(*this, rMtfPos, rMtfSize);
         const_cast<GDIMetaFile&>(rMtf).WindStart();
     }
     else
@@ -599,7 +606,13 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
             if( xVDev->SetOutputSizePixel( aDstRect.GetSize(), true, true ) )
             {
-                if(GetAntialiasing() != AntialiasingFlags::NONE)
+                // tdf#150610 fix broken rendering of text meta actions
+                // Even when drawing to a VirtualDevice that has antialiasing
+                // disabled, text will still be drawn with some antialiased
+                // pixels on HiDPI displays. So, use the antialiasing enabled
+                // code to render if there are any text meta actions in the
+                // metafile.
+                if(GetAntialiasing() != AntialiasingFlags::NONE || rPos != rMtfPos || rSize != rMtfSize)
                 {
                     // #i102109#
                     // For MetaFile replay (see task) it may now be necessary to take
@@ -630,7 +643,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // draw MetaFile to buffer
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
+                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rMtfPos, rMtfSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
 
                     // get content bitmap from buffer
@@ -641,6 +654,11 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // create alpha mask from gradient and get as Bitmap
                     xVDev->EnableMapMode(bBufferMapModeEnabled);
                     xVDev->SetDrawMode(DrawModeFlags::GrayGradient);
+                    // Related tdf#150610 draw gradient to VirtualDevice bounds
+                    // If we are here and the metafile bounds differs from the
+                    // VirtualDevice bounds so that we apply the transparency
+                    // gradient to any pixels drawn outside of the metafile
+                    // bounds.
                     xVDev->DrawGradient(tools::Rectangle(rPos, rSize), rTransparenceGradient);
                     xVDev->SetDrawMode(DrawModeFlags::Default);
                     xVDev->EnableMapMode(false);
@@ -670,7 +688,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create paint bitmap
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
-                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rPos, rSize);
+                    const_cast<GDIMetaFile&>(rMtf).Play(*xVDev, rMtfPos, rMtfSize);
                     const_cast<GDIMetaFile&>(rMtf).WindStart();
                     xVDev->EnableMapMode( false );
                     BitmapEx aPaint = xVDev->GetBitmapEx(Point(), xVDev->GetOutputSizePixel());
@@ -678,7 +696,7 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                     // create alpha mask from gradient
                     xVDev->SetDrawMode( DrawModeFlags::GrayGradient );
-                    xVDev->DrawGradient( tools::Rectangle( rPos, rSize ), rTransparenceGradient );
+                    xVDev->DrawGradient( tools::Rectangle( rMtfPos, rMtfSize ), rTransparenceGradient );
                     xVDev->SetDrawMode( DrawModeFlags::Default );
                     xVDev->EnableMapMode( false );
 
