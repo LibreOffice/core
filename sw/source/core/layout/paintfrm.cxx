@@ -7257,7 +7257,8 @@ void SwPageFrame::PaintSubsidiaryLines( const SwPageFrame *,
         pLay = pLay->GetNext();
     }
 
-    assert(pPageBody && "presumably this is impossible");
+    if (!pPageBody)
+        return;
 
     SwRect aArea( pPageBody->getFrameArea() );
     if ( pFootnoteCont )
