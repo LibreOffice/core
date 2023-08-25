@@ -345,6 +345,8 @@ namespace
         size_t nMaxDeviceHeight = SAL_MAX_INT16 / 16; // see limitXCreatePixmap and be generous wrt up to x16 hidpi
         assert(gUserItemSz.Height() != 0);
         gPreviewsPerDevice = gUserItemSz.Height() == 0 ? 16 : nMaxDeviceHeight / gUserItemSz.Height();
+        if (comphelper::LibreOfficeKit::isActive())
+            gPreviewsPerDevice = 1;
     }
 }
 
@@ -528,8 +530,14 @@ void FontNameBox::EnableWYSIWYG(bool bEnable)
     m_xComboBox->set_custom_renderer(mbWYSIWYG);
 }
 
-IMPL_LINK_NOARG(FontNameBox, CustomGetSizeHdl, OutputDevice&, Size)
+IMPL_LINK(FontNameBox, CustomGetSizeHdl, OutputDevice&, rDevice, Size)
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        calcCustomItemSize(*m_xComboBox);
+        gUserItemSz.setWidth(1.0 * rDevice.GetDPIX() / 96.0 * gUserItemSz.getWidth());
+        gUserItemSz.setHeight(1.0 * rDevice.GetDPIY() / 96.0 * gUserItemSz.getHeight());
+    }
     return mbWYSIWYG ? gUserItemSz : Size();
 }
 
@@ -751,7 +759,8 @@ static void DrawPreview(const FontMetric& rFontMetric, const Point& rTopLeft, Ou
     rDevice.Pop();
 }
 
-OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
+OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
+                                        sal_Int32 nDPIX, sal_Int32 nDPIY)
 {
     SolarMutexGuard aGuard;
     const FontMetric& rFontMetric = (*mpFontList)[nIndex];
@@ -777,13 +786,21 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft)
     {
         if (nPage >= gFontPreviewVirDevs.size())
         {
-            if (comphelper::LibreOfficeKit::isActive())
+            bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+            if (bIsLOK) // allow transparent background in LOK case
                 gFontPreviewVirDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
             else
                 gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
+
             VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
-            weld::SetPointFont(rDevice, m_xComboBox->get_font());
+            if (bIsLOK)
+            {
+                rDevice.SetDPIX(nDPIX);
+                rDevice.SetDPIY(nDPIY);
+            }
+
+            weld::SetPointFont(rDevice, m_xComboBox->get_font(), bIsLOK);
             assert(gFontPreviewVirDevs.size() == nPage + 1);
         }
 
@@ -818,7 +835,9 @@ IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, v
     {
         // use cache of unselected entries
         Point aTopLeft;
-        OutputDevice& rDevice = CachePreview(nIndex, &aTopLeft);
+        OutputDevice& rDevice = CachePreview(nIndex, &aTopLeft,
+                                             rRenderContext.GetDPIX(),
+                                             rRenderContext.GetDPIY());
 
         rRenderContext.DrawOutDev(aDestPoint, gUserItemSz,
                                   aTopLeft, gUserItemSz,

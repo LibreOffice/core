@@ -900,6 +900,8 @@ SvxStyleBox_Base::SvxStyleBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
 IMPL_LINK(SvxStyleBox_Base, CustomGetSizeHdl, OutputDevice&, rArg, Size)
 {
     CalcOptimalExtraUserWidth(rArg);
+    if (comphelper::LibreOfficeKit::isActive())
+        return Size(m_nMaxUserDrawFontWidth * rArg.GetDPIX() / 96, ITEM_HEIGHT * rArg.GetDPIY() / 96);
     return Size(m_nMaxUserDrawFontWidth, ITEM_HEIGHT);
 }
 

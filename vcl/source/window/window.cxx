@@ -1375,17 +1375,20 @@ void Window::ImplInitResolutionSettings()
     }
 }
 
-void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont) const
+void Window::ImplPointToLogic(vcl::RenderContext const & rRenderContext, vcl::Font& rFont,
+                            bool bUseRenderContextDPI) const
 {
     Size aSize = rFont.GetFontSize();
 
     if (aSize.Width())
     {
-        aSize.setWidth( aSize.Width() * ( mpWindowImpl->mpFrameData->mnDPIX) );
+        aSize.setWidth( aSize.Width() *
+            ( bUseRenderContextDPI ? rRenderContext.GetDPIX() : mpWindowImpl->mpFrameData->mnDPIX) );
         aSize.AdjustWidth(72 / 2 );
         aSize.setWidth( aSize.Width() / 72 );
     }
-    aSize.setHeight( aSize.Height() * ( mpWindowImpl->mpFrameData->mnDPIY) );
+    aSize.setHeight( aSize.Height()
+        * ( bUseRenderContextDPI ? rRenderContext.GetDPIY() : mpWindowImpl->mpFrameData->mnDPIY) );
     aSize.AdjustHeight(72/2 );
     aSize.setHeight( aSize.Height() / 72 );
 
@@ -2174,10 +2177,11 @@ void Window::CollectChildren(::std::vector<vcl::Window *>& rAllChildren )
     }
 }
 
-void Window::SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont)
+void Window::SetPointFont(vcl::RenderContext& rRenderContext, const vcl::Font& rFont,
+                          bool bUseRenderContextDPI)
 {
     vcl::Font aFont = rFont;
-    ImplPointToLogic(rRenderContext, aFont);
+    ImplPointToLogic(rRenderContext, aFont, bUseRenderContextDPI);
     rRenderContext.SetFont(aFont);
 }
 
