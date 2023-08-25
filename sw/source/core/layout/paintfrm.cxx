@@ -7116,7 +7116,8 @@ std::vector<basegfx::B2DPolygon> SwPageFrame::GetSubsidiaryLinesPolygons(const S
         pLay = pLay->GetNext();
     }
 
-    assert(pPageBody && "presumably this is impossible");
+    if (!pPageBody)
+        return aPolygons;
 
     SwRect aArea( pPageBody->getFrameArea() );
     if ( pFootnoteCont )
