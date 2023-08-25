@@ -30,7 +30,6 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/section.hxx>
-#include <editeng/eeitem.hxx>
 
 using namespace css;
 
