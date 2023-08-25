@@ -28,7 +28,7 @@
  <draw:stroke-dash draw:name="Fine Dashed"                  draw:style="rect" draw:dots1="1" draw:dots1-length="0.2inch" draw:dots2="1" draw:dots2-length="0.2inch" draw:distance="0.2inch"/>
  <draw:stroke-dash draw:name="Fine Dashed (var)"            draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="197%"/>
  <draw:stroke-dash draw:name="Dashed (var)"                 draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="127%"/>
- <draw:stroke-dash draw:name="Line Style 9"                 draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
+ <draw:stroke-dash draw:name="Sparse Dash"                  draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
 
  <draw:stroke-dash draw:name="3 Dashes 3 Dots (var)"        draw:style="rect" draw:dots1="3" draw:dots1-length="197%" draw:dots2="3" draw:distance="100%"/>
  <draw:stroke-dash draw:name="Ultrafine 2 Dots 3 Dashes"    draw:style="rect" draw:dots1="2" draw:dots1-length="0.0201inch" draw:dots2="3" draw:dots2-length="0.1inch" draw:distance="0.05inch"/>

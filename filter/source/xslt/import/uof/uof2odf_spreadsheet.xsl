@@ -522,7 +522,7 @@
             <draw:stroke-dash draw:name="Fine_20_Dashed_20__28_var_29_" draw:display-name="Fine Dashed (var)" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="197%"/>
             <draw:stroke-dash draw:name="Fine_20_Dotted" draw:display-name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
             <draw:stroke-dash draw:name="Line_20_with_20_Fine_20_Dots" draw:display-name="Line with Fine Dots" draw:style="rect" draw:dots1="1" draw:dots1-length="2.007cm" draw:dots2="10" draw:distance="0.152cm"/>
-            <draw:stroke-dash draw:name="Line_20_Style_20_9" draw:display-name="Line Style 9" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
+            <draw:stroke-dash draw:name="Sparse_20_Dash" draw:display-name="Sparse Dash" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
             <draw:stroke-dash draw:name="_33__20_Dashes_20_3_20_Dots_20__28_var_29_" draw:display-name="3 Dashes 3 Dots (var)" draw:style="rect" draw:dots1="3" draw:dots1-length="197%" draw:dots2="3" draw:distance="100%"/>
             <draw:stroke-dash draw:name="_32__20_Dots_20_1_20_Dash" draw:display-name="2 Dots 1 Dash" draw:style="rect" draw:dots1="2" draw:dots2="1" draw:dots2-length="0.203cm" draw:distance="0.203cm"/>
             <draw:stroke-dash draw:name="Ultrafine_20_Dotted_20__28_var_29_" draw:display-name="Ultrafine Dotted (var)" draw:style="rect" draw:dots1="1" draw:distance="50%"/>
@@ -6779,7 +6779,7 @@
             <draw:stroke-dash draw:name="Fine_20_Dashed_20__28_var_29_" draw:display-name="Fine Dashed (var)" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="197%"/>
             <draw:stroke-dash draw:name="Fine_20_Dotted" draw:display-name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
             <draw:stroke-dash draw:name="Line_20_with_20_Fine_20_Dots" draw:display-name="Line with Fine Dots" draw:style="rect" draw:dots1="1" draw:dots1-length="2.007cm" draw:dots2="10" draw:distance="0.152cm"/>
-            <draw:stroke-dash draw:name="Line_20_Style_20_9" draw:display-name="Line Style 9" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
+            <draw:stroke-dash draw:name="Sparse_20_Dash" draw:display-name="Sparse Dash" draw:style="rect" draw:dots1="1" draw:dots1-length="197%" draw:distance="120%"/>
             <draw:stroke-dash draw:name="_33__20_Dashes_20_3_20_Dots_20__28_var_29_" draw:display-name="3 Dashes 3 Dots (var)" draw:style="rect" draw:dots1="3" draw:dots1-length="197%" draw:dots2="3" draw:distance="100%"/>
             <draw:stroke-dash draw:name="_32__20_Dots_20_1_20_Dash" draw:display-name="2 Dots 1 Dash" draw:style="rect" draw:dots1="2" draw:dots2="1" draw:dots2-length="0.203cm" draw:distance="0.203cm"/>
             <draw:stroke-dash draw:name="Ultrafine_20_Dotted_20__28_var_29_" draw:display-name="Ultrafine Dotted (var)" draw:style="rect" draw:dots1="1" draw:distance="50%"/>

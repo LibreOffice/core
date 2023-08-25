@@ -130,7 +130,7 @@ void lclRecoverStandardDashStyles(LineDash& orLineDash, sal_Int32 nLineWidth)
     // Use same ersatz for hairline as in export.
     double fWidthHelp = nLineWidth == 0 ? 26.95/100.0 : nLineWidth / 100.0;
     // start with (var) cases, because they have no rounding problems
-    // "Fine Dashed", "Line Style 9" and "Dashed (var)" need no recover
+    // "Fine Dashed", "Sparse Dash" and "Dashed (var)" need no recover
     if (nDots == 3 && nDotLen == 197 &&nDashes == 3 && nDashLen == 100 && nDistance == 100)
     {   // "3 Dashes 3 Dots (var)"
         orLineDash.DashLen = 0;

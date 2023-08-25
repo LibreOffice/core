@@ -920,7 +920,7 @@
 #define RID_SVXSTR_DASH12                                   NC_("RID_SVXSTR_DASH12", "Fine Dashed")
 #define RID_SVXSTR_DASH13                                   NC_("RID_SVXSTR_DASH13", "Fine Dashed")
 #define RID_SVXSTR_DASH14                                   NC_("RID_SVXSTR_DASH14", "Dashed")
-#define RID_SVXSTR_DASH15                                   NC_("RID_SVXSTR_DASH15", "Line Style 9")
+#define RID_SVXSTR_DASH15                                   NC_("RID_SVXSTR_DASH15", "Sparse Dash")
 #define RID_SVXSTR_DASH16                                   NC_("RID_SVXSTR_DASH16", "3 Dashes 3 Dots")
 #define RID_SVXSTR_DASH17                                   NC_("RID_SVXSTR_DASH17", "Ultrafine 2 Dots 3 Dashes")
 #define RID_SVXSTR_DASH18                                   NC_("RID_SVXSTR_DASH18", "2 Dots 1 Dash")
