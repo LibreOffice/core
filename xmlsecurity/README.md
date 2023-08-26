@@ -24,7 +24,7 @@ the exported PDF files. It is also possible to sign existing PDF files.
 
 ## Source Primary Contents
 
- * `component`: Main implementation of `DocumentDigitalSignatuers` where the interaction with security environment and certificates occur.
+ * `component`: Main implementation of `DocumentDigitalSignatures` where the interaction with security environment and certificates occur.
  * `dialogs`: Certificate & Signatures management dialogs.
    * `certificatechooser`: Dialog that allows you to find and choose certificates or signatures for encryption.
    * `certificateviewer`: More detailed information about each certificate.
