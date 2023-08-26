@@ -2988,7 +2988,7 @@ bool SwContentTree::HasContentChanged()
 
             // Set_id needs to be done here because FillMemberList clears the content type member
             // list and refills with new data making the previously set id invalid. If there is no
-            // content change detected the Dispay function will not be called and the tree entry
+            // content change detected the Display function will not be called and the tree entry
             // user data will not be set to the new content member pointer address.
             OUString sSubId(weld::toId(pCnt));
             m_xTreeView->set_id(*xEntry, sSubId);
