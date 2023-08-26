@@ -15,8 +15,6 @@ excludelist:
     shell/source/backends/kf5be/kf5backend.cxx:
     # Keep abstract QT headers
     - QtWidgets/QApplication
-    # Keep abstract boost headers
-    - boost/noncopyable.hpp
     shell/source/backends/localebe/localebackend.cxx:
     # Needed on WIN for toU
     - o3tl/char16_t2wchar_t.hxx

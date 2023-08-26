@@ -12,7 +12,6 @@ $(eval $(call gb_Library_Library,kf5be1))
 $(eval $(call gb_Library_use_sdk_api,kf5be1))
 
 $(eval $(call gb_Library_use_externals,kf5be1,\
-	boost_headers \
 	kf5 \
 ))
 
