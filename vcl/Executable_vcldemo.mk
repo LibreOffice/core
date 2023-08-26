@@ -15,12 +15,6 @@ $(eval $(call gb_Executable_use_api,vcldemo,\
     udkapi \
 ))
 
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Executable_use_externals,vcldemo,\
-    epoxy \
-))
-endif
-
 $(eval $(call gb_Executable_add_defs,vcldemo,\
     -DVCL_INTERNALS \
 ))

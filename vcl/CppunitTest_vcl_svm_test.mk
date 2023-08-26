@@ -15,7 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,vcl_svm_test, \
 
 $(eval $(call gb_CppunitTest_use_externals,vcl_svm_test,\
 	boost_headers \
-    epoxy \
     libxml2 \
 ))
 

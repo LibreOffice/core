@@ -27,7 +27,6 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,chart2/inc/pch/precomp
 
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
-    epoxy \
 	libxml2 \
 ))
 

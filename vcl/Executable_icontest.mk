@@ -9,12 +9,6 @@
 
 $(eval $(call gb_Executable_Executable,icontest))
 
-ifeq ($(DISABLE_GUI),)
-$(eval $(call gb_Executable_use_externals,icontest,\
-    epoxy \
-))
-endif
-
 $(eval $(call gb_Executable_add_defs,icontest,\
     -DVCL_INTERNALS \
 ))

@@ -41,10 +41,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 
 ifneq (,$(filter AVMEDIA,$(BUILD_TYPE)))
 
-$(eval $(call gb_Library_use_externals,avmedia,\
-    epoxy \
-))
-
 $(eval $(call gb_Library_set_componentfile,avmedia,avmedia/util/avmedia,services))
 
 $(eval $(call gb_Library_use_libraries,avmedia,\
