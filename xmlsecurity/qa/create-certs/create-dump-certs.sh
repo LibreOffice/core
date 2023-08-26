@@ -8,7 +8,7 @@
 #
 # This script generates 100 certificates (modifiable) for cases of testing UI latency for instance.
 #
-# Basically, it creates certificates with sender same as reciever following User [number] pattern.
+# Basically, it creates certificates with sender same as receiver following User [number] pattern.
 #
 
 for ((i=1; i<=100; i++))
