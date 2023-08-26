@@ -229,9 +229,6 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 $(eval $(call gb_Library_use_externals,scfilt,\
 	orcus \
 	orcus-parser \
-	boost_filesystem \
-	boost_system \
-	boost_iostreams \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\

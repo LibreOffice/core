@@ -133,9 +133,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_dataprovider,\
 $(eval $(call gb_CppunitTest_use_externals,sc_dataprovider,\
 	orcus \
 	orcus-parser \
-	boost_filesystem \
-	boost_system \
-	boost_iostreams \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_dataprovider))
