@@ -232,7 +232,6 @@ $(eval $(call gb_Library_use_externals,scfilt,\
 	boost_filesystem \
 	boost_system \
 	boost_iostreams \
-	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,scfilt,\

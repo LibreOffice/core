@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_libraries,ucpftp1,\
 
 $(eval $(call gb_Library_use_externals,ucpftp1,\
 	curl \
-	zlib \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpftp1,\

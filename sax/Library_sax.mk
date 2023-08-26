@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_externals,sax,\
 	boost_headers \
 	libxml2 \
 	expat \
-	zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,sax,\

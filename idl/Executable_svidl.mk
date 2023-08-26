@@ -24,7 +24,6 @@ $(eval $(call gb_Executable_use_external,svidl,boost_headers))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Executable_use_externals,svidl,\
     dtoa \
-    zlib \
 ))
 endif
 

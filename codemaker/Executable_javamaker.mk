@@ -14,7 +14,6 @@ $(eval $(call gb_Executable_use_external,javamaker,boost_headers))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Executable_use_externals,javamaker,\
     dtoa \
-    zlib \
 ))
 endif
 

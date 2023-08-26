@@ -60,7 +60,6 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	visio \
 	wpg \
 	wpd \
-	zlib \
 	lcms2 \
 	libxml2 \
 	icu_headers \

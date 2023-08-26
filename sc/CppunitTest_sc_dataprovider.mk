@@ -136,7 +136,6 @@ $(eval $(call gb_CppunitTest_use_externals,sc_dataprovider,\
 	boost_filesystem \
 	boost_system \
 	boost_iostreams \
-	zlib \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_dataprovider))

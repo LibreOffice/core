@@ -14,7 +14,6 @@ $(eval $(call gb_Executable_use_external,cppumaker,boost_headers))
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Executable_use_externals,cppumaker,\
     dtoa \
-    zlib \
 ))
 endif
 

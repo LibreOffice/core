@@ -24,7 +24,6 @@ $(eval $(call gb_Executable_use_libraries,unoidl-write, \
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Executable_use_externals,unoidl-write,\
     dtoa \
-    zlib \
 ))
 endif
 

@@ -56,7 +56,6 @@ $(eval $(call gb_Library_use_externals,wpftcalc,\
 	mwaw \
 	staroffice \
 	wps \
-	zlib \
 	lcms2 \
 	libxml2 \
 	icu_headers \

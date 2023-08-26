@@ -50,7 +50,6 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 	odfgen \
 	staroffice \
 	revenge \
-	zlib \
 	libxml2 \
 ))
 
