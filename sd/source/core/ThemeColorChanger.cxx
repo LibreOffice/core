@@ -41,11 +41,11 @@ namespace
 {
 void changeTheTheme(SdrPage* pMasterPage, std::shared_ptr<model::ColorSet> const& pColorSet)
 {
-    auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+    auto pTheme = pMasterPage->getSdrPageProperties().getTheme();
     if (!pTheme)
     {
         pTheme = std::make_shared<model::Theme>("Office");
-        pMasterPage->getSdrPageProperties().SetTheme(pTheme);
+        pMasterPage->getSdrPageProperties().setTheme(pTheme);
     }
     pTheme->setColorSet(pColorSet);
 }

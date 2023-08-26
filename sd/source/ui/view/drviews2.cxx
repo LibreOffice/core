@@ -3558,7 +3558,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_THEME_DIALOG:
         {
             SdrPage* pMasterPage = &GetActualPage()->TRG_GetMasterPage();
-            auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+            auto pTheme = pMasterPage->getSdrPageProperties().getTheme();
             auto pDialog = std::make_shared<svx::ThemeDialog>(GetFrameWeld(), pTheme.get());
             auto* pDocShell = GetDocSh();
             weld::DialogController::runAsync(pDialog, [pDialog, pMasterPage, pDocShell](sal_uInt32 nResult)

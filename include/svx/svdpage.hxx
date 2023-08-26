@@ -347,8 +347,8 @@ public:
     void SetStyleSheet(SfxStyleSheet* pStyleSheet);
     SfxStyleSheet* GetStyleSheet() const { return mpStyleSheet;}
 
-    void SetTheme(std::shared_ptr<model::Theme> const& pTheme);
-    std::shared_ptr<model::Theme> const& GetTheme() const;
+    void setTheme(std::shared_ptr<model::Theme> const& pTheme);
+    std::shared_ptr<model::Theme> const& getTheme() const;
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

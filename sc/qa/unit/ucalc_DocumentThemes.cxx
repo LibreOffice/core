@@ -37,9 +37,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testGetTheme)
 
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
-    const SdrPage* pPage(pDrawLayer->GetPage(0));
-    CPPUNIT_ASSERT(pPage);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pDrawLayer->getTheme();
     CPPUNIT_ASSERT(pTheme);
 }
 
@@ -50,9 +48,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
 
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
-    const SdrPage* pPage(pDrawLayer->GetPage(0));
-    CPPUNIT_ASSERT(pPage);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pDrawLayer->getTheme();
     CPPUNIT_ASSERT(pTheme);
 
     Color aBackgroundThemeColor(0xc99c00);

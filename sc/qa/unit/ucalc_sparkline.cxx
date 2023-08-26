@@ -919,9 +919,7 @@ CPPUNIT_TEST_FIXTURE(SparklineTest, testSparklineThemeColorChange)
 
     ScDrawLayer* pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT(pDrawLayer);
-    const SdrPage* pPage(pDrawLayer->GetPage(0));
-    CPPUNIT_ASSERT(pPage);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pDrawLayer->getTheme();
     CPPUNIT_ASSERT(pTheme);
 
     // Sparkline range

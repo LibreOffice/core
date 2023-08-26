@@ -330,13 +330,13 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 
     pDocument->GetIDocumentUndoRedo().StartUndo(SwUndoId::EMPTY, nullptr);
 
-    SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrModel* pModel = pDocument->getIDocumentDrawModelAccess().GetDrawModel();
 
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto pTheme = pModel->getTheme();
     if (!pTheme)
     {
         pTheme = std::make_shared<model::Theme>("Office");
-        pPage->getSdrPageProperties().SetTheme(pTheme);
+        pModel->setTheme(pTheme);
     }
 
     std::shared_ptr<model::ColorSet> pNewColorSet = pColorSet;

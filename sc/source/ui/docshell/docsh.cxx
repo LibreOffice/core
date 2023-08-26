@@ -225,19 +225,11 @@ std::shared_ptr<model::ColorSet> ScDocShell::GetThemeColors()
     if (!pShell)
         return {};
 
-    ScTabView* pTabView = pShell->GetViewData().GetView();
-    if (!pTabView)
+    SdrModel* pSdrModel = GetDocument().GetDrawLayer();
+    if (!pSdrModel)
         return {};
 
-    ScDrawView* pView = pTabView->GetScDrawView();
-    if (!pView)
-        return {};
-
-    SdrPage* pPage = pView->GetSdrPageView()->GetPage();
-    if (!pPage)
-        return {};
-
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pSdrModel->getTheme();
     if (!pTheme)
         return {};
 

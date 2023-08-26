@@ -495,9 +495,9 @@ std::shared_ptr<model::ColorSet> DrawDocShell::GetThemeColors()
         return {};
 
     SdPage* pPage = pViewShell->getCurrentPage();
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto pTheme = pPage->getSdrPageProperties().getTheme();
     if (!pPage->IsMasterPage())
-        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().GetTheme();
+        pTheme = pPage->TRG_GetMasterPage().getSdrPageProperties().getTheme();
 
     if (!pTheme)
         return {};

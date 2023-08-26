@@ -50,6 +50,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
+#include <svx/theme/IThemeColorChanger.hxx>
 #include <svdoutlinercache.hxx>
 #include <svx/sdasitm.hxx>
 #include <officecfg/Office/Common.hxx>
@@ -89,6 +90,7 @@ struct SdrModelImpl
     bool mbConnectorUseSnapRect;       // tdf#149756 compatibility flag
     bool mbIgnoreBreakAfterMultilineField; ///< tdf#148966 compatibility flag
     std::shared_ptr<model::Theme> mpTheme;
+    std::shared_ptr<svx::IThemeColorChanger> mpThemeColorChanger;
 
     SdrModelImpl()
         : mpUndoManager(nullptr)

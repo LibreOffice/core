@@ -1582,10 +1582,10 @@ std::set<Color> SwDocShell::GetDocColors()
 
 std::shared_ptr<model::ColorSet> SwDocShell::GetThemeColors()
 {
-    SdrPage* pPage = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    if (!pPage)
+    SdrModel* pModel = m_xDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    if (!pModel)
         return {};
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pModel->getTheme();
     if (!pTheme)
         return {};
     return pTheme->getColorSet();

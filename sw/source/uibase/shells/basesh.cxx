@@ -2218,10 +2218,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 auto* pDocumentShell = pDocument->GetDocShell();
                 if (pDocumentShell)
                 {
-                    SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-                    if (pPage)
+                    SdrModel* pModel = pDocument->getIDocumentDrawModelAccess().GetDrawModel();
+                    if (pModel)
                     {
-                        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+                        auto const& pTheme = pModel->getTheme();
                         if (pTheme)
                             bDisable = false;
                     }
@@ -3082,8 +3082,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             auto* pDocumentShell = pDocument->GetDocShell();
             if (pDocumentShell)
             {
-                SdrPage* pPage = pDocument->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-                auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+                SdrModel* pModel = pDocument->getIDocumentDrawModelAccess().GetDrawModel();
+                auto const& pTheme = pModel->getTheme();
                 if (pTheme)
                 {
                     std::shared_ptr<svx::IThemeColorChanger> pChanger(new sw::ThemeColorChanger(pDocumentShell));

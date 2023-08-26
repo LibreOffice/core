@@ -1469,8 +1469,10 @@ void DocxExport::WriteSettings()
 
 void DocxExport::WriteTheme()
 {
-    SdrPage* pPage = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    SdrModel* pModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+    if (!pModel)
+        return;
+    auto const& pTheme = pModel->getTheme();
     if (!pTheme)
         return;
 

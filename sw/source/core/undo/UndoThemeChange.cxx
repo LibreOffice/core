@@ -32,15 +32,15 @@ UndoThemeChange::~UndoThemeChange() {}
 
 void UndoThemeChange::UndoImpl(UndoRedoContext& /*rUndoRedoContext*/)
 {
-    SdrPage* pPage = mrDocument.getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
+    SdrModel* pModel = mrDocument.getIDocumentDrawModelAccess().GetDrawModel();
+    auto pTheme = pModel->getTheme();
     pTheme->setColorSet(mpOldColorSet);
 }
 
 void UndoThemeChange::RedoImpl(UndoRedoContext& /*rUndoRedoContext*/)
 {
-    SdrPage* pPage = mrDocument.getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
+    SdrModel* pModel = mrDocument.getIDocumentDrawModelAccess().GetDrawModel();
+    auto pTheme = pModel->getTheme();
     pTheme->setColorSet(mpNewColorSet);
 }
 }

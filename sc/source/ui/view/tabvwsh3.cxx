@@ -1343,13 +1343,12 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_THEME_DIALOG:
         {
             MakeDrawLayer();
-            ScTabView* pTabView = GetViewData().GetView();
-            ScDrawView* pView = pTabView->GetScDrawView();
-            SdrPage* pPage = pView->GetSdrPageView()->GetPage();
-            auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+            ScViewData& rViewData = GetViewData();
+            ScDocument& rDocument = rViewData.GetDocument();
+            ScDrawLayer* pModel = rDocument.GetDrawLayer();
+            auto const& pTheme = pModel->getTheme();
             if (pTheme)
             {
-                ScViewData& rViewData = GetViewData();
                 vcl::Window* pWin = rViewData.GetActiveWin();
                 auto pDialog = std::make_shared<svx::ThemeDialog>(pWin ? pWin->GetFrameWeld() : nullptr, pTheme.get());
                 weld::DialogController::runAsync(pDialog, [this, pDialog](sal_uInt32 nResult) {

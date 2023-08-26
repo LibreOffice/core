@@ -868,22 +868,18 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         auto* pDrawLayer = GetDoc().GetDrawLayer();
         if (pDrawLayer)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(0);
-            if (pPage)
+            std::shared_ptr<model::Theme> pTheme = pDrawLayer->getTheme();
+            if (pTheme)
             {
-                std::shared_ptr<model::Theme> pTheme = pPage->getSdrPageProperties().GetTheme();
-                if (pTheme)
-                {
-                    OUString sThemeRelationshipPath = "theme/theme1.xml";
-                    OUString sThemeDocumentPath = "xl/" + sThemeRelationshipPath;
+                OUString sThemeRelationshipPath = "theme/theme1.xml";
+                OUString sThemeDocumentPath = "xl/" + sThemeRelationshipPath;
 
-                    oox::ThemeExport aThemeExport(&rStrm, oox::drawingml::DOCUMENT_XLSX);
-                    aThemeExport.write(sThemeDocumentPath, *pTheme);
+                oox::ThemeExport aThemeExport(&rStrm, oox::drawingml::DOCUMENT_XLSX);
+                aThemeExport.write(sThemeDocumentPath, *pTheme);
 
-                    rStrm.addRelation(rStrm.GetCurrentStream()->getOutputStream(),
-                                      oox::getRelationship(Relationship::THEME),
-                                      sThemeRelationshipPath);
-                }
+                rStrm.addRelation(rStrm.GetCurrentStream()->getOutputStream(),
+                                  oox::getRelationship(Relationship::THEME),
+                                  sThemeRelationshipPath);
             }
         }
 

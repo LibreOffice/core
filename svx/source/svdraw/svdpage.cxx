@@ -1222,17 +1222,6 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
     {
         maProperties.Put(XFillStyleItem(drawing::FillStyle_NONE));
     }
-
-    //if (rSdrPage.getSdrModelFromSdrPage().IsWriter() || rSdrPage.IsMasterPage())
-    {
-        mpTheme.reset(new model::Theme("Office Theme"));
-        auto const* pColorSet = svx::ColorSets::get().getColorSet(u"LibreOffice");
-        if (pColorSet)
-        {
-            std::shared_ptr<model::ColorSet> pDefaultColorSet(new model::ColorSet(*pColorSet));
-            mpTheme->setColorSet(pDefaultColorSet);
-        }
-    }
 }
 
 SdrPageProperties::~SdrPageProperties()
@@ -1301,16 +1290,33 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
-void SdrPageProperties::SetTheme(std::shared_ptr<model::Theme> const& pTheme)
+void SdrPageProperties::setTheme(std::shared_ptr<model::Theme> const& pTheme)
 {
-    if (mpTheme == pTheme)
+    if (!mpSdrPage)
         return;
 
-    mpTheme = pTheme;
+    // Only set the theme on a master page, else set it on the model
+
+    if (mpSdrPage->IsMasterPage())
+    {
+        if (mpTheme != pTheme)
+            mpTheme = pTheme;
+    }
+    else
+    {
+        mpSdrPage->getSdrModelFromSdrPage().setTheme(pTheme);
+    }
 }
 
-std::shared_ptr<model::Theme> const& SdrPageProperties::GetTheme() const
+std::shared_ptr<model::Theme> const& SdrPageProperties::getTheme() const
 {
+    // if set - page theme has priority
+    if (mpTheme)
+        return mpTheme;
+    // else the model theme
+    else if (mpSdrPage)
+        return mpSdrPage->getSdrModelFromSdrPage().getTheme();
+    // else return empty shared_ptr
     return mpTheme;
 }
 

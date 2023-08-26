@@ -335,8 +335,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsDOCX)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    CPPUNIT_ASSERT(pModel);
+    auto const& pTheme = pModel->getTheme();
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -382,8 +383,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testDrawPageThemeExistsODT)
     SwDoc* pDoc = getSwDoc();
     CPPUNIT_ASSERT(pDoc);
 
-    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    CPPUNIT_ASSERT(pModel);
+    auto const& pTheme = pModel->getTheme();
     CPPUNIT_ASSERT(pTheme);
     CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -410,12 +412,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
     CPPUNIT_ASSERT(pDoc);
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT(pWrtShell);
-    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-    CPPUNIT_ASSERT(pPage);
+    SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    CPPUNIT_ASSERT(pModel);
 
     // Check current theme colors
     {
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pModel->getTheme();
         CPPUNIT_ASSERT(pTheme);
         CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -438,7 +440,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 
     // Check new theme colors
     {
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pModel->getTheme();
         CPPUNIT_ASSERT(pTheme);
         CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -453,7 +455,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 
     // Check theme colors have been reverted
     {
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pModel->getTheme();
         CPPUNIT_ASSERT(pTheme);
         CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
@@ -468,7 +470,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreThemeTest, testThemeChanging)
 
     // Check theme colors have been applied again
     {
-        auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+        auto const& pTheme = pModel->getTheme();
         CPPUNIT_ASSERT(pTheme);
         CPPUNIT_ASSERT_EQUAL(OUString(u"Office Theme"), pTheme->GetName());
 
