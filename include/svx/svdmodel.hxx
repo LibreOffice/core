@@ -96,6 +96,11 @@ namespace model
 class Theme;
 }
 
+namespace svx
+{
+class IThemeColorChanger;
+}
+
 constexpr const sal_Unicode DEGREE_CHAR = u'\x00B0'; /* U+00B0 DEGREE SIGN */
 
 

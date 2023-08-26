@@ -120,7 +120,7 @@ void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPa
     if (!pPage)
         return;
 
-    pPage->getSdrPageProperties().SetTheme(getTheme());
+    pPage->getSdrPageProperties().setTheme(getTheme());
 }
 
 } // namespace oox::drawingml

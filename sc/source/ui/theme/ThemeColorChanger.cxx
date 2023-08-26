@@ -279,23 +279,27 @@ void changeSparklines(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> co
     }
 }
 
-void changeTheTheme(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+std::shared_ptr<model::Theme> getTheme(ScDocShell& rDocShell)
 {
-    ScDocument& rDocument = rDocShell.GetDocument();
-    ScDrawLayer* pModel = rDocument.GetDrawLayer();
-    SdrPage* pPage = pModel->GetPage(0);
+    ScDrawLayer* pModel = rDocShell.GetDocument().GetDrawLayer();
 
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto pTheme = pModel->getTheme();
     if (!pTheme)
     {
         pTheme = std::make_shared<model::Theme>("Office");
-        pPage->getSdrPageProperties().SetTheme(pTheme);
+        pModel->setTheme(pTheme);
     }
+    return pTheme;
+}
 
+void changeTheTheme(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+{
+    auto pTheme = getTheme(rDocShell);
     std::shared_ptr<model::ColorSet> pNewColorSet = pColorSet;
     std::shared_ptr<model::ColorSet> pOldColorSet = pTheme->getColorSet();
     pTheme->setColorSet(pNewColorSet);
 
+    ScDocument& rDocument = rDocShell.GetDocument();
     if (rDocument.IsUndoEnabled())
     {
         auto pUndoThemeChange

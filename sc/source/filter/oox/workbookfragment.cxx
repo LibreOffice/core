@@ -487,10 +487,9 @@ void WorkbookFragment::finalizeImport()
     // load all worksheets
     importSheetFragments(*this, aSheetFragments);
 
-    SdrPage* pPage = pModel->GetPage(0);
-    if (pPage && pTheme && !pTheme->GetName().isEmpty())
+    if (pTheme && !pTheme->GetName().isEmpty())
     {
-        pPage->getSdrPageProperties().SetTheme(pTheme);
+        pModel->setTheme(pTheme);
     }
 
     // assumes getTables().finalizeImport ( which creates the DatabaseRanges )

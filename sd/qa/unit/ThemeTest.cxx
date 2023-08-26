@@ -133,7 +133,7 @@ CPPUNIT_TEST_FIXTURE(ThemeTest, testThemeChange)
     css::uno::Reference<css::drawing::XDrawPage> xDrawPageMaster(xMasterPage, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDrawPageMaster.is());
     auto* pMasterPage = GetSdrPageFromXDrawPage(xDrawPageMaster);
-    auto pTheme = pMasterPage->getSdrPageProperties().GetTheme();
+    auto pTheme = pMasterPage->getSdrPageProperties().getTheme();
 
     sd::ThemeColorChanger aChanger(pMasterPage, pDocShell);
     aChanger.apply(pTheme->getColorSet());

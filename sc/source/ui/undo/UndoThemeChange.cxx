@@ -26,20 +26,27 @@ UndoThemeChange::UndoThemeChange(ScDocShell& rDocShell,
 
 UndoThemeChange::~UndoThemeChange() = default;
 
+namespace
+{
+std::shared_ptr<model::Theme> getTheme(ScDocShell& rDocShell)
+{
+    ScDrawLayer* pModel = rDocShell.GetDocument().GetDrawLayer();
+
+    auto pTheme = pModel->getTheme();
+    if (!pTheme)
+    {
+        pTheme = std::make_shared<model::Theme>("Office");
+        pModel->setTheme(pTheme);
+    }
+    return pTheme;
+}
+}
+
 void UndoThemeChange::Undo()
 {
     BeginUndo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
-    ScDrawLayer* pModel = rDocument.GetDrawLayer();
-    SdrPage* pPage = pModel->GetPage(0);
-
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
-    if (!pTheme)
-    {
-        pTheme = std::make_shared<model::Theme>("Office");
-        pPage->getSdrPageProperties().SetTheme(pTheme);
-    }
+    auto pTheme = getTheme(*pDocShell);
     pTheme->setColorSet(mpOldColorSet);
 
     EndUndo();
@@ -47,18 +54,9 @@ void UndoThemeChange::Undo()
 
 void UndoThemeChange::Redo()
 {
-    BeginRedo();
+    BeginUndo();
 
-    ScDocument& rDocument = pDocShell->GetDocument();
-    ScDrawLayer* pModel = rDocument.GetDrawLayer();
-    SdrPage* pPage = pModel->GetPage(0);
-
-    auto pTheme = pPage->getSdrPageProperties().GetTheme();
-    if (!pTheme)
-    {
-        pTheme = std::make_shared<model::Theme>("Office");
-        pPage->getSdrPageProperties().SetTheme(pTheme);
-    }
+    auto pTheme = getTheme(*pDocShell);
     pTheme->setColorSet(mpNewColorSet);
 
     EndRedo();

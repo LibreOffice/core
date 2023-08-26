@@ -45,6 +45,7 @@
 #include <o3tl/enumrange.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
 #include <docmodel/theme/Theme.hxx>
 
@@ -205,7 +206,7 @@ void SwXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     if (!pPage)
         return;
 
-    auto const& pTheme = pPage->getSdrPageProperties().GetTheme();
+    auto const& pTheme = pPage->getSdrModelFromSdrPage().getTheme();
     if (!pTheme)
         return;
 

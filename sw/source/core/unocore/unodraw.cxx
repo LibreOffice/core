@@ -406,7 +406,7 @@ void SwFmDrawPage::setPropertyValue(const OUString& rPropertyName, const uno::An
             if (aValue >>= xTheme)
             {
                 auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
-                pPage->getSdrPageProperties().SetTheme(rUnoTheme.getTheme());
+                pPage->getSdrModelFromSdrPage().setTheme(rUnoTheme.getTheme());
             }
         }
         break;
@@ -442,7 +442,7 @@ uno::Any SwFmDrawPage::getPropertyValue(const OUString& rPropertyName)
         {
             css::uno::Reference<css::util::XTheme> xTheme;
 
-            auto pTheme = GetSdrPage()->getSdrPageProperties().GetTheme();
+            auto pTheme = GetSdrPage()->getSdrModelFromSdrPage().getTheme();
             if (pTheme)
                 xTheme = model::theme::createXTheme(pTheme);
             aAny <<= xTheme;
