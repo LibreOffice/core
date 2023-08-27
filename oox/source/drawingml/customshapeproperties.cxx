@@ -228,6 +228,22 @@ void CustomShapeProperties::pushToPropSet(
             aPath.setProperty( PROP_TextFrames, aTextFrames);
         }
 
+        if (!maConnectionSiteList.empty())
+        {
+            css::uno::Sequence<EnhancedCustomShapeParameterPair> seqGluePoints;
+            seqGluePoints.realloc(maConnectionSiteList.size());
+            sal_Int32 nId = 0;
+            for (auto& rGluePoint : asNonConstRange(seqGluePoints))
+            {
+                rGluePoint.First.Value = maConnectionSiteList[nId].pos.First.Value;
+                rGluePoint.First.Type = maConnectionSiteList[nId].pos.First.Type;
+                rGluePoint.Second.Value = maConnectionSiteList[nId].pos.Second.Value;
+                rGluePoint.Second.Type = maConnectionSiteList[nId].pos.Second.Type;
+                nId++;
+            }
+            aPath.setProperty(PROP_GluePoints, seqGluePoints);
+        }
+
         sal_uInt32 nParameterPairs = 0;
         for ( auto const & i: maPath2DList )
             nParameterPairs += i.parameter.size();

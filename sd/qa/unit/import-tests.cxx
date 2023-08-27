@@ -85,6 +85,7 @@ public:
 
     void testDocumentLayout();
     void testTdf154363();
+    void testFreeformShapeGluePoints();
     void testTdf153466();
     void testTdf152434();
     void testStandardConnectors();
@@ -165,6 +166,7 @@ public:
 
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testTdf154363);
+    CPPUNIT_TEST(testFreeformShapeGluePoints);
     CPPUNIT_TEST(testTdf153466);
     CPPUNIT_TEST(testTdf152434);
     CPPUNIT_TEST(testStandardConnectors);
@@ -360,6 +362,34 @@ void SdImportTest::testDocumentLayout()
             }
         }
     }
+}
+
+void SdImportTest::testFreeformShapeGluePoints()
+{
+    createSdImpressDoc("pptx/tdf156829.pptx");
+    uno::Reference<beans::XPropertySet> xFreeformShape(getShapeFromPage(0, 0));
+    uno::Sequence<beans::PropertyValue> aProps;
+    xFreeformShape->getPropertyValue("CustomShapeGeometry") >>= aProps;
+
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    {
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+    }
+
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    {
+        if (rProp.Name == "GluePoints")
+        {
+            seqGluePoints
+                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+        }
+    }
+
+    sal_Int32 nCountGluePoints = seqGluePoints.getLength();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCountGluePoints);
 }
 
 void SdImportTest::testTdf154363()

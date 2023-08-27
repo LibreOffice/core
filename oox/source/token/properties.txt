@@ -224,6 +224,7 @@ GenerateVbaEvents
 Geometry3D
 GlowEffect
 GlowEffectRadius
+GluePoints
 GradientName
 HatchName
 Graphic

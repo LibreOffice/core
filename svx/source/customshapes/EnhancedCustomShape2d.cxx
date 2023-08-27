@@ -3034,7 +3034,7 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
     {
         SdrGluePoint aGluePoint;
 
-        aGluePoint.SetPos( GetPoint( rGluePoint, true, true ) );
+        aGluePoint.SetPos( GetPoint( rGluePoint, !bOOXMLShape, true ) );
         aGluePoint.SetPercent( false );
         aGluePoint.SetAlign( SdrAlign::VERT_TOP | SdrAlign::HORZ_LEFT );
         aGluePoint.SetEscDir( SdrEscapeDirection::SMART );
