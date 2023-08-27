@@ -203,6 +203,34 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testFreeformShapeGluePoints)
+{
+    createSdImpressDoc("pptx/tdf156829.pptx");
+    uno::Reference<beans::XPropertySet> xFreeformShape(getShapeFromPage(0, 0));
+    uno::Sequence<beans::PropertyValue> aProps;
+    xFreeformShape->getPropertyValue("CustomShapeGeometry") >>= aProps;
+
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    {
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+    }
+
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    {
+        if (rProp.Name == "GluePoints")
+        {
+            seqGluePoints
+                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+        }
+    }
+
+    sal_Int32 nCountGluePoints = seqGluePoints.getLength();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), nCountGluePoints);
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf154363)
 {
     sal_Int32 nGlueId;
