@@ -24,6 +24,8 @@
 #include <unchss.hxx>
 #include <ViewShell.hxx>
 #include <ViewShellBase.hxx>
+#include <undo/undomanager.hxx>
+#include <UndoThemeChange.hxx>
 
 using namespace css;
 
@@ -39,7 +41,8 @@ ThemeColorChanger::~ThemeColorChanger() = default;
 
 namespace
 {
-void changeTheTheme(SdrPage* pMasterPage, std::shared_ptr<model::ColorSet> const& pColorSet)
+void changeThemeColors(sd::DrawDocShell* pDocShell, SdrPage* pMasterPage,
+                       std::shared_ptr<model::ColorSet> const& pNewColorSet)
 {
     auto pTheme = pMasterPage->getSdrPageProperties().getTheme();
     if (!pTheme)
@@ -47,7 +50,17 @@ void changeTheTheme(SdrPage* pMasterPage, std::shared_ptr<model::ColorSet> const
         pTheme = std::make_shared<model::Theme>("Office");
         pMasterPage->getSdrPageProperties().setTheme(pTheme);
     }
-    pTheme->setColorSet(pColorSet);
+
+    std::shared_ptr<model::ColorSet> const& pOldColorSet = pTheme->getColorSet();
+
+    auto* pUndoManager = pDocShell->GetUndoManager();
+    if (pUndoManager)
+    {
+        pUndoManager->AddUndoAction(std::make_unique<UndoThemeChange>(
+            pDocShell->GetDoc(), pMasterPage, pOldColorSet, pNewColorSet));
+    }
+
+    pTheme->setColorSet(pNewColorSet);
 }
 
 bool changeStyle(sd::DrawDocShell* pDocShell, SdStyleSheet* pStyle,
@@ -164,7 +177,7 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
         }
     }
 
-    changeTheTheme(mpMasterPage, pColorSet);
+    changeThemeColors(mpDocShell, mpMasterPage, pColorSet);
 
     pUndoManager->LeaveListAction();
 }
