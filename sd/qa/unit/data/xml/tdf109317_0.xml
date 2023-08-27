@@ -22,6 +22,7 @@
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="SubViewSize" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
@@ -130,6 +131,7 @@
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="SubViewSize" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
@@ -406,6 +408,7 @@
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="SubViewSize" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
