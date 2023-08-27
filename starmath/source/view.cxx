@@ -310,6 +310,7 @@ void SmGraphicWidget::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 
     OutputDevice& rDevice = GetOutputDevice();
 
+    rDevice.EnableRTL(GetDoc()->GetFormat().IsRightToLeft());
     rDevice.SetBackground(SM_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor);
 
     if (comphelper::LibreOfficeKit::isActive())
@@ -2073,6 +2074,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             bool bRTL = rReq.GetSlot() == SID_ATTR_PARA_RIGHT_TO_LEFT;
             GetDoc()->SetRightToLeft(bRTL);
+            GetGraphicWindow().GetGraphicWidget().GetOutputDevice().EnableRTL(bRTL);
             GetViewFrame().GetBindings().Invalidate(bRTL ? SID_ATTR_PARA_LEFT_TO_RIGHT : SID_ATTR_PARA_RIGHT_TO_LEFT);
         }
         break;
