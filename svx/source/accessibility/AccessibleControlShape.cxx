@@ -61,29 +61,18 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    OUString lcl_getNamePropertyName( )
-    {
-        return "Name";
-    }
-    OUString lcl_getDescPropertyName( )
-    {
-        return "HelpText";
-    }
-    OUString lcl_getLabelPropertyName( )
-    {
-        return "Label";
-    }
-    OUString lcl_getLabelControlPropertyName( )
-    {
-        return "LabelControl";
-    }
+    constexpr OUStringLiteral NAME_PROPERTY_NAME = u"Name";
+    constexpr OUStringLiteral DESC_PROPERTY_NAME = u"HelpText";
+    constexpr OUStringLiteral LABEL_PROPERTY_NAME = u"Label";
+    constexpr OUStringLiteral LABEL_CONTROL_PROPERTY_NAME = u"LabelControl";
+
     // return the property which should be used as AccessibleName
     OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )
     {
-        if ( _rxPSI.is() && _rxPSI->hasPropertyByName( lcl_getLabelPropertyName() ) )
-            return lcl_getLabelPropertyName();
+        if ( _rxPSI.is() && _rxPSI->hasPropertyByName( LABEL_PROPERTY_NAME ) )
+            return LABEL_PROPERTY_NAME;
         else
-            return lcl_getNamePropertyName();
+            return NAME_PROPERTY_NAME;
     }
 
     // determines whether or not a state which belongs to the inner context needs to be forwarded to the "composed"
@@ -325,7 +314,7 @@ OUString
         case DRAWING_CONTROL:
         {
             // check if we can obtain the "Desc" property from the model
-            OUString sDesc( getControlModelStringProperty( lcl_getDescPropertyName() ) );
+            OUString sDesc( getControlModelStringProperty( DESC_PROPERTY_NAME ) );
             if ( sDesc.isEmpty() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
@@ -333,7 +322,7 @@ OUString
                 aDG.AddProperty ( "ControlBorder", DescriptionGenerator::PropertyType::Integer);
             }
             // ensure that we are listening to the Name property
-            m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, true, lcl_getDescPropertyName() );
+            m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, true, DESC_PROPERTY_NAME );
         }
         break;
 
@@ -357,14 +346,14 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
     ::osl::MutexGuard aGuard( m_aMutex );
 
     // check if it is the name or the description
-    if  (   _rEvent.PropertyName == lcl_getNamePropertyName()
-            ||  _rEvent.PropertyName == lcl_getLabelPropertyName() )
+    if  (   _rEvent.PropertyName == NAME_PROPERTY_NAME
+            ||  _rEvent.PropertyName == LABEL_PROPERTY_NAME )
     {
         SetAccessibleName(
             CreateAccessibleName(),
             AccessibleContextBase::AutomaticallyCreated);
     }
-    else if ( _rEvent.PropertyName == lcl_getDescPropertyName() )
+    else if ( _rEvent.PropertyName == DESC_PROPERTY_NAME )
     {
         SetAccessibleDescription(
             CreateAccessibleDescription(),
@@ -612,7 +601,7 @@ void SAL_CALL AccessibleControlShape::disposing()
 {
     // ensure we're not listening
     m_bListeningForName = ensureListeningState( m_bListeningForName, false, lcl_getPreferredAccNameProperty( m_xModelPropsMeta ) );
-    m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, false, lcl_getDescPropertyName() );
+    m_bListeningForDesc = ensureListeningState( m_bListeningForDesc, false, DESC_PROPERTY_NAME );
 
     if ( m_bMultiplexingStates )
         stopStateMultiplexing( );
@@ -843,12 +832,11 @@ AccessibleControlShape* AccessibleControlShape::GetLabeledByControlShape( )
 {
     if(m_xControlModel.is())
     {
-        const OUString& rAccLabelControlProperty = lcl_getLabelControlPropertyName();
         Any sCtlLabelBy;
         // get the "label by" property value of the control
-        if (::comphelper::hasProperty(rAccLabelControlProperty, m_xControlModel))
+        if (::comphelper::hasProperty(LABEL_CONTROL_PROPERTY_NAME, m_xControlModel))
         {
-            sCtlLabelBy = m_xControlModel->getPropertyValue(rAccLabelControlProperty);
+            sCtlLabelBy = m_xControlModel->getPropertyValue(LABEL_CONTROL_PROPERTY_NAME);
             if( sCtlLabelBy.hasValue() )
             {
                 Reference< XPropertySet >  xAsSet (sCtlLabelBy, UNO_QUERY);
