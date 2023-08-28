@@ -4007,7 +4007,7 @@ void SelectionManager::registerDropTarget( ::Window aWindow, DropTarget* pTarget
 
 void SelectionManager::deregisterDropTarget( ::Window aWindow )
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::ResettableGuard aGuard(m_aMutex);
 
     m_aDropTargets.erase( aWindow );
     if( aWindow != m_aDragSourceWindow || !m_aDragRunning.check() )
@@ -4022,6 +4022,7 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
         dte.Source = it->second.m_pTarget->getXWeak();
         aGuard.clear();
         it->second.m_pTarget->dragExit( dte );
+        aGuard.reset();
     }
     else if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
     {
@@ -4048,7 +4049,6 @@ void SelectionManager::deregisterDropTarget( ::Window aWindow )
     m_xDragSourceListener.clear();
     aGuard.clear();
     xListener->dragDropEnd( dsde );
-
 }
 
 /*
