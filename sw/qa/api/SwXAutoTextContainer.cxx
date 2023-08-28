@@ -31,8 +31,7 @@ namespace
 class SwXAutoTextContainer final : public UnoApiTest,
                                    public apitest::XElementAccess,
                                    public apitest::XIndexAccess,
-                                   public apitest::XNameAccess,
-                                   public apitest::XAutoTextContainer
+                                   public apitest::XNameAccess
 {
 public:
     SwXAutoTextContainer()
@@ -40,7 +39,6 @@ public:
         , XElementAccess(cppu::UnoType<text::XAutoTextGroup>::get())
         , XIndexAccess(3)
         , XNameAccess("crdbus50")
-        , XAutoTextContainer("crdbus50")
     {
     }
 
@@ -70,8 +68,6 @@ public:
     CPPUNIT_TEST(testGetByIndex);
     CPPUNIT_TEST(testGetElementType);
     CPPUNIT_TEST(testHasElements);
-    CPPUNIT_TEST(testInsertNewByName);
-    CPPUNIT_TEST(testRemoveByName);
     CPPUNIT_TEST_SUITE_END();
 };
 

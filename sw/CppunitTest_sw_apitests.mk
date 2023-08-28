@@ -106,4 +106,6 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_apitests, \
     svx \
 ))
 
+$(call gb_CppunitTest_get_target,sw_apitests): $(call gb_AllLangPackage_get_target,autotextshare)
+
 # vim: set noet sw=4 ts=4:
