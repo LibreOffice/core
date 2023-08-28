@@ -488,7 +488,7 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
     {
         XmlIdVector_t & rVector( isContentFile(i_rStream)
             ? i_rIter->second.first : i_rIter->second.second );
-        rVector.erase(std::remove(rVector.begin(), rVector.end(), &const_cast<Metadatable&>(i_rObject)));
+        rVector.erase(std::remove(rVector.begin(), rVector.end(), &const_cast<Metadatable&>(i_rObject)), rVector.end());
         if (i_rIter->second.first.empty() && i_rIter->second.second.empty())
         {
             i_rXmlIdMap.erase(i_rIter);
