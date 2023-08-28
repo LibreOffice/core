@@ -48,6 +48,7 @@ private:
 
 public:
     AccessibilityIssue(sfx::AccessibilityIssueID eIssueID = sfx::AccessibilityIssueID::UNSPECIFIED);
+    AccessibilityIssue(AccessibilityIssue const&) = default;
 
     void setIssueObject(IssueObject eIssueObject);
     void setDoc(SwDoc& rDoc);
@@ -76,6 +77,8 @@ public:
     sal_Int32 getEnd() { return m_nEnd; }
     SwNode* getNode() { return m_pNode; }
     SwTextFootnote* getTextFootnote() { return m_pTextFootnote; }
+
+    AccessibilityIssue& operator=(const AccessibilityIssue&) = default;
 };
 
 } // end sw namespace
