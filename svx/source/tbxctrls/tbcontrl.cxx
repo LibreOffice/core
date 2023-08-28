@@ -42,7 +42,6 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
-#include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
@@ -1744,7 +1743,7 @@ SvxFontNameBox_Base::SvxFontNameBox_Base(std::unique_ptr<weld::ComboBox> xWidget
 
 SvxFontNameBox_Impl::SvxFontNameBox_Impl(vcl::Window* pParent, const Reference<XDispatchProvider>& rDispatchProvider,
                                          const Reference<XFrame>& rFrame, SvxFontNameToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, "svx/ui/fontnamebox.ui", "FontNameBox", true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
+    : InterimItemWindow(pParent, "svx/ui/fontnamebox.ui", "FontNameBox")
     , SvxFontNameBox_Base(m_xBuilder->weld_combo_box("fontnamecombobox"), rDispatchProvider, rFrame, rCtrl)
 {
     set_id("fontnamecombobox");

@@ -372,10 +372,7 @@ bool isBuilderEnabledForSidebar(std::u16string_view rUIFile)
 
 bool isInterimBuilderEnabledForNotebookbar(std::u16string_view rUIFile)
 {
-    if (rUIFile == u"modules/scalc/ui/numberbox.ui"
-        || rUIFile == u"svx/ui/fontnamebox.ui"
-        || rUIFile == u"svx/ui/fontsizebox.ui"
-        || rUIFile == u"svx/ui/stylespreview.ui")
+    if (rUIFile == u"modules/scalc/ui/numberbox.ui" || rUIFile == u"svx/ui/stylespreview.ui")
     {
         return true;
     }
