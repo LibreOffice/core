@@ -3877,8 +3877,7 @@ void ScExportTest::testPreserveTextWhitespace2XLSX()
     xmlDocUniquePtr pDoc = parseExport("xl/sharedStrings.xml");
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/x:sst/x:si[1]/x:t", "space", "preserve");
-    assertXPath(pDoc, "/x:sst/x:si[2]/x:r[1]/x:t", "space", "preserve");
-    assertXPath(pDoc, "/x:sst/x:si[2]/x:r[2]/x:t", "space", "preserve");
+    assertXPath(pDoc, "/x:sst/x:si[2]/x:t", "space", "preserve");
 }
 
 void ScExportTest::testHiddenShapeXLS()
