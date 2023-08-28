@@ -202,6 +202,7 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         const AlphaMask blurMask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
             aMask, -fDiscreteSoftRadius * fScale, fDiscreteSoftRadius * fScale, 0));
         aMask.BlendWith(blurMask);
+        aMask.Invert();
 
         // The end result is the original bitmap with blurred 8-bit alpha mask
         BitmapEx result(aBitmapEx.GetBitmap(), aMask);
