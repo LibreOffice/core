@@ -102,6 +102,7 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_apitests))
 $(eval $(call gb_CppunitTest_use_rdb,sw_apitests,services))
 
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_apitests, \
+    svt \
     svx \
 ))
 
