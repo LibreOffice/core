@@ -98,10 +98,11 @@
             <property name="margin-top">6</property>
             <child>
               <object class="GtkCheckButton" id="cellLinkCB">
-                <property name="label" translatable="yes" context="optcompatibilitypage|cellLinkCB">Insert _hyperlink for the cell, not for the text in the cell. By default, Excel allows only one hyperlink per cell. (Works only if Excel file format is used.)</property>
+                <property name="label" translatable="yes" context="optcompatibilitypage|cellLinkCB">Insert _hyperlink for the cell, not for the text in the cell.</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
+                <property name="tooltip-text" translatable="yes" context="optcompatibilitypage|cellLinkCB|tooltip_text">By default, Excel allows only one hyperlink per cell. (Works only if Excel file format is used.)</property>
                 <property name="use_underline">True</property>
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
