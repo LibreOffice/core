@@ -61,6 +61,7 @@ public:
 
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt16 m_nRedlineCount;
+    bool m_bRedlineCountDontCheck;
     bool m_bRedlineMoved;
 #endif
 };
@@ -78,6 +79,9 @@ public:
     void push_back(std::unique_ptr<SwRedlineSaveData> pNew) { m_Data.push_back(std::move(pNew)); }
     const SwRedlineSaveData& operator[](size_t const nIdx) const { return *m_Data[ nIdx ]; }
     SwRedlineSaveData& operator[](size_t const nIdx) { return *m_Data[ nIdx ]; }
+#if OSL_DEBUG_LEVEL > 0
+    void SetRedlineCountDontCheck(bool bCheck) { m_Data[0]->m_bRedlineCountDontCheck=bCheck; }
+#endif
 };
 
 namespace sw {
