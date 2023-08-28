@@ -333,9 +333,32 @@ static int gFontNameBoxes;
 static size_t gPreviewsPerDevice;
 static std::vector<VclPtr<VirtualDevice>> gFontPreviewVirDevs;
 static std::vector<OUString> gRenderedFontNames;
+static int gHighestDPI = 0;
 
 namespace
 {
+    std::vector<VclPtr<VirtualDevice>>& getFontPreviewVirDevs()
+    {
+        return gFontPreviewVirDevs;
+    }
+
+    void clearFontPreviewVirDevs()
+    {
+        for (auto &rDev : gFontPreviewVirDevs)
+            rDev.disposeAndClear();
+        gFontPreviewVirDevs.clear();
+    }
+
+    std::vector<OUString>& getRenderedFontNames()
+    {
+        return gRenderedFontNames;
+    }
+
+    void clearRenderedFontNames()
+    {
+        gRenderedFontNames.clear();
+    }
+
     void calcCustomItemSize(const weld::ComboBox& rComboBox)
     {
         gUserItemSz = Size(rComboBox.get_approximate_digit_width() * 52, rComboBox.get_text_height());
@@ -355,13 +378,14 @@ IMPL_LINK(FontNameBox, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
     if (rEvent.GetId() != VclEventId::ApplicationDataChanged)
         return;
 
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
     if (pData->GetType() == DataChangedEventType::SETTINGS)
     {
-        for (auto &rDev : gFontPreviewVirDevs)
-            rDev.disposeAndClear();
-        gFontPreviewVirDevs.clear();
-        gRenderedFontNames.clear();
+        clearFontPreviewVirDevs();
+        clearRenderedFontNames();
         calcCustomItemSize(*m_xComboBox);
         if (mbWYSIWYG && mpFontList && !mpFontList->empty())
         {
@@ -398,10 +422,8 @@ FontNameBox::~FontNameBox()
     --gFontNameBoxes;
     if (!gFontNameBoxes)
     {
-        for (auto &rDev : gFontPreviewVirDevs)
-            rDev.disposeAndClear();
-        gFontPreviewVirDevs.clear();
-        gRenderedFontNames.clear();
+        clearFontPreviewVirDevs();
+        clearRenderedFontNames();
     }
 }
 
@@ -769,16 +791,34 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
     const FontMetric& rFontMetric = (*mpFontList)[nIndex];
     const OUString& rFontName = rFontMetric.GetFamilyName();
 
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        // we want to cache only best quality previews
+        if (gHighestDPI < nDPIX || gHighestDPI < nDPIY)
+        {
+            clearRenderedFontNames();
+            clearFontPreviewVirDevs();
+            gHighestDPI = std::max(nDPIX, nDPIY);
+        }
+        else if (gHighestDPI > nDPIX || gHighestDPI > nDPIY)
+        {
+            nDPIX = gHighestDPI;
+            nDPIY = gHighestDPI;
+        }
+    }
+
     size_t nPreviewIndex;
-    auto xFind = std::find(gRenderedFontNames.begin(), gRenderedFontNames.end(), rFontName);
-    bool bPreviewAvailable = xFind != gRenderedFontNames.end();
+    auto& rFontNames = getRenderedFontNames();
+    auto& rVirtualDevs = getFontPreviewVirDevs();
+    auto xFind = std::find(rFontNames.begin(), rFontNames.end(), rFontName);
+    bool bPreviewAvailable = xFind != rFontNames.end();
     if (!bPreviewAvailable)
     {
-        nPreviewIndex = gRenderedFontNames.size();
-        gRenderedFontNames.push_back(rFontName);
+        nPreviewIndex = rFontNames.size();
+        rFontNames.push_back(rFontName);
     }
     else
-        nPreviewIndex = std::distance(gRenderedFontNames.begin(), xFind);
+        nPreviewIndex = std::distance(rFontNames.begin(), xFind);
 
     size_t nPage = nPreviewIndex / gPreviewsPerDevice;
     size_t nIndexInPage = nPreviewIndex - (nPage * gPreviewsPerDevice);
@@ -787,15 +827,15 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
 
     if (!bPreviewAvailable)
     {
-        if (nPage >= gFontPreviewVirDevs.size())
+        if (nPage >= rVirtualDevs.size())
         {
             bool bIsLOK = comphelper::LibreOfficeKit::isActive();
             if (bIsLOK) // allow transparent background in LOK case
-                gFontPreviewVirDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
+                rVirtualDevs.emplace_back(VclPtr<VirtualDevice>::Create(DeviceFormat::DEFAULT, DeviceFormat::DEFAULT));
             else
-                gFontPreviewVirDevs.emplace_back(m_xComboBox->create_render_virtual_device());
+                rVirtualDevs.emplace_back(m_xComboBox->create_render_virtual_device());
 
-            VirtualDevice& rDevice = *gFontPreviewVirDevs.back();
+            VirtualDevice& rDevice = *rVirtualDevs.back();
             rDevice.SetOutputSizePixel(Size(gUserItemSz.Width(), gUserItemSz.Height() * gPreviewsPerDevice));
             if (bIsLOK)
             {
@@ -804,16 +844,16 @@ OutputDevice& FontNameBox::CachePreview(size_t nIndex, Point* pTopLeft,
             }
 
             weld::SetPointFont(rDevice, m_xComboBox->get_font(), bIsLOK);
-            assert(gFontPreviewVirDevs.size() == nPage + 1);
+            assert(rVirtualDevs.size() == nPage + 1);
         }
 
-        DrawPreview(rFontMetric, aTopLeft, *gFontPreviewVirDevs.back(), false);
+        DrawPreview(rFontMetric, aTopLeft, *rVirtualDevs.back(), false);
     }
 
     if (pTopLeft)
         *pTopLeft = aTopLeft;
 
-    return *gFontPreviewVirDevs[nPage];
+    return *rVirtualDevs[nPage];
 }
 
 IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, void)
@@ -842,8 +882,9 @@ IMPL_LINK(FontNameBox, CustomRenderHdl, weld::ComboBox::render_args, aPayload, v
                                              rRenderContext.GetDPIX(),
                                              rRenderContext.GetDPIY());
 
+        Size aSourceSize = comphelper::LibreOfficeKit::isActive() ? rDevice.GetOutputSizePixel() : gUserItemSz;
         rRenderContext.DrawOutDev(aDestPoint, gUserItemSz,
-                                  aTopLeft, gUserItemSz,
+                                  aTopLeft, aSourceSize,
                                   rDevice);
     }
 }
