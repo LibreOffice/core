@@ -222,7 +222,7 @@ namespace cppcanvas::internal
                     // is disabled, text will still be drawn with some
                     // antialiased pixels on HiDPI displays. So, expand the
                     // size of the VirtualDevice slightly to capture any of
-                    // the pixles drawn past the edges of the destination
+                    // the pixels drawn past the edges of the destination
                     // bounds.
                     bool        bHasTextActions = false;
                     MetaAction* pCurrAct;
