@@ -44,6 +44,7 @@ class SFX2_DLLPUBLIC AccessibilityIssue
 {
 public:
     AccessibilityIssue(AccessibilityIssueID eIssueID = AccessibilityIssueID::UNSPECIFIED);
+    AccessibilityIssue(AccessibilityIssue const&) = default;
     virtual ~AccessibilityIssue();
 
     virtual bool canGotoIssue() const = 0;
@@ -53,6 +54,8 @@ public:
     virtual void quickFixIssue() const = 0;
 
     void setParent(weld::Window* pParent) { m_pParent = pParent; }
+
+    AccessibilityIssue& operator=(const AccessibilityIssue&) = default;
 
     AccessibilityIssueID m_eIssueID;
     OUString m_aIssueText;

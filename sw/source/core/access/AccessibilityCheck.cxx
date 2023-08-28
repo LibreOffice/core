@@ -1176,6 +1176,10 @@ public:
 /// Check for floating text frames, as it causes problems with reading order.
 class FloatingTextCheck : public NodeCheck
 {
+private:
+    // list of already added textframes.
+    std::map<SwNodeIndex, SwNodeIndex> m_vIdx;
+
 public:
     FloatingTextCheck(sfx::AccessibilityIssueCollection& rIssueCollection)
         : NodeCheck(rIssueCollection)
@@ -1192,7 +1196,9 @@ public:
         // If a node is in fly and if it is not anchored as char, throw warning.
         const SwNode* startFly = pCurrent->FindFlyStartNode();
         if (startFly
-            && startFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR)
+            && startFly->GetFlyFormat()->GetAnchor().GetAnchorId() != RndStdIds::FLY_AS_CHAR
+            && m_vIdx.insert(std::make_pair(SwNodeIndex(*startFly), SwNodeIndex(*pCurrent))).second
+                   == true)
         {
             auto pIssue = lclAddIssue(m_rIssueCollection, SwResId(STR_FLOATING_TEXT));
             pIssue->setIssueObject(IssueObject::TEXTFRAME);

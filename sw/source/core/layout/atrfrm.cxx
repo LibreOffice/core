@@ -2620,8 +2620,17 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
         {
             if (SwFlyFrame* pSFly = SwIterator<SwFlyFrame, SwFormat>(*this).First())
             {
-                if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFly->Lower())->GetNode())
-                    pSwNode->resetAndQueueAccessibilityCheck(true);
+                if (pSFly->Lower() && !pSFly->Lower()->IsNoTextFrame())
+                {
+                    // TODO: update AccessibilityCheckStatus for textframes
+                }
+                else
+                {
+                    if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFly->Lower())->GetNode())
+                    {
+                        pSwNode->resetAndQueueAccessibilityCheck(true);
+                    }
+                }
             }
         }
     }
