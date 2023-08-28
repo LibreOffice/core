@@ -19,6 +19,7 @@
 
 #include <drawingml/textrun.hxx>
 
+#include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -67,6 +68,7 @@ sal_Int32 TextRun::insertAt(
         Any aOldFontName = xState->getPropertyDefault("CharFontName");
         Any aOldFontPitch = xState->getPropertyDefault("CharFontPitch");
         Any aOldFontFamily = xState->getPropertyDefault("CharFontFamily");
+        Any aOldFontCharSet = xState->getPropertyDefault("CharFontCharSet");
 
         TextCharacterProperties aTextCharacterProps( rTextCharacterStyle );
 
@@ -104,15 +106,17 @@ sal_Int32 TextRun::insertAt(
 
                     OUString aFontName;
                     sal_Int16 nFontFamily = 0, nFontPitch = 0;
+                    bool bSymbolEnc(false);
                     bool bReset = false;
 
                     // Direct formatting for symbols.
-                    if (bSymbol && aTextCharacterProps.maSymbolFont.getFontData(aFontName, nFontPitch, nFontFamily, rFilterBase))
+                    if (bSymbol && aTextCharacterProps.maSymbolFont.getFontData(aFontName, nFontPitch, nFontFamily, &bSymbolEnc, rFilterBase))
 
                     {
                         aPropSet.setAnyProperty(PROP_CharFontName, Any(aFontName));
                         aPropSet.setAnyProperty(PROP_CharFontPitch, Any(nFontPitch));
                         aPropSet.setAnyProperty(PROP_CharFontFamily, Any(nFontFamily));
+                        aPropSet.setAnyProperty(PROP_CharFontCharSet, Any(bSymbolEnc ? css::awt::CharSet::SYMBOL : css::awt::CharSet::DONTKNOW));
                         bReset = true;
                     }
 
@@ -126,6 +130,7 @@ sal_Int32 TextRun::insertAt(
                         aPropSet.setAnyProperty(PROP_CharFontName, aOldFontName);
                         aPropSet.setAnyProperty(PROP_CharFontPitch, aOldFontPitch);
                         aPropSet.setAnyProperty(PROP_CharFontFamily, aOldFontFamily);
+                        aPropSet.setAnyProperty(PROP_CharFontCharSet, aOldFontCharSet);
                     }
 
                     nIndex += nCount;

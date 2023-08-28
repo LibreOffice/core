@@ -50,6 +50,7 @@ public:
                             OUString& rFontName,
                             sal_Int16& rnFontPitch,
                             sal_Int16& rnFontFamily,
+                            bool* pbSymbol,
                             const ::oox::core::XmlFilterBase& rFilter ) const;
 
     void fillThemeFont(model::ThemeFont& rThemeFont) const;
@@ -60,7 +61,8 @@ private:
     bool                implGetFontData(
                             OUString& rFontName,
                             sal_Int16& rnFontPitch,
-                            sal_Int16& rnFontFamily ) const;
+                            sal_Int16& rnFontFamily,
+                            bool* pbSymbol ) const;
 
 private:
     OUString maTypeface;

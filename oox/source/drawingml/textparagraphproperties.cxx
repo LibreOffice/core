@@ -314,14 +314,14 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     if( pFilterBase) {
         bool bFollowTextFont = false;
         mbBulletFontFollowText >>= bFollowTextFont;
-        if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
+        if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, nullptr, *pFilterBase ) )
         {
             FontDescriptor aFontDesc;
             sal_Int16 nFontSize = 0;
             if( mnFontSize >>= nFontSize )
                 aFontDesc.Height = nFontSize;
 
-            // TODO move the to the TextFont struct.
+            // TODO either use getFontData encoding hint, or move this to the TextFont struct.
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
@@ -347,7 +347,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
 
         msBulletChar >>= sBuChar;
 
-        if( pFilterBase && sBuChar.getLength() == 1 && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) && bSymbolFont )
+        if( pFilterBase && sBuChar.getLength() == 1 && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, nullptr, *pFilterBase ) && bSymbolFont )
         {
             sal_Unicode nBuChar = sBuChar.toChar();
             nBuChar &= 0x00ff;

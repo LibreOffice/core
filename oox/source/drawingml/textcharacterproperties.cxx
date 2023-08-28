@@ -78,10 +78,10 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     sal_Int16 nFontPitch = 0;
     sal_Int16 nFontFamily = 0;
 
-    bool bRet = maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    bool bRet = maLatinFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (!bRet)
         // In case there is no direct font, try to look it up as a theme reference.
-        bRet = maLatinThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+        bRet = maLatinThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (bRet)
     {
         rPropMap.setProperty( PROP_CharFontName, aFontName);
@@ -89,9 +89,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharFontFamily, nFontFamily);
     }
 
-    bRet = maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    bRet = maAsianFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (!bRet)
-        bRet = maAsianThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+        bRet = maAsianThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (bRet)
     {
         rPropMap.setProperty( PROP_CharFontNameAsian, aFontName);
@@ -99,9 +99,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharFontFamilyAsian, nFontPitch);
     }
 
-    bRet = maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+    bRet = maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (!bRet)
-        bRet = maComplexThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, rFilter );
+        bRet = maComplexThemeFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );
     if (bRet)
     {
         rPropMap.setProperty( PROP_CharFontNameComplex, aFontName);
