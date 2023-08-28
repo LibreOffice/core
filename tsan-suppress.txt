@@ -77,11 +77,6 @@ race:malloc
 race:free
 race:close
 
-# Not interested in deadlock issues when they involve the shutdown path
-# - the shutdown path is special, so if we see a lock-ordering here that conflicts with
-# a "normal" lock-ordering path, that is highly unlikely to result in a real issue.
-deadlock:DeInitVCL
-
 # There is a lock-cycle here, together with the mutexes acquired in
 #    SvtSysLocaleOptions::SvtSysLocaleOptions
 #    SvtSysLocale::SvtSysLocale
