@@ -784,7 +784,7 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 // minor Latin
                 if (const TextFont* pFont = pTheme->resolveFont(u"+mn-lt"))
                 {
-                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
                         xSet->setPropertyValue(u"CharFontName", uno::Any(sFontName));
@@ -795,7 +795,7 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 // minor Asian
                 if (const TextFont* pFont = pTheme->resolveFont(u"+mn-ea"))
                 {
-                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
                         xSet->setPropertyValue(u"CharFontNameAsian", uno::Any(sFontName));
@@ -806,7 +806,7 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 // minor Complex
                 if (const TextFont* pFont = pTheme->resolveFont(u"+mn-cs"))
                 {
-                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                    bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
                         xSet->setPropertyValue(u"CharFontNameComplex", uno::Any(sFontName));
@@ -818,10 +818,10 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
 
             // Replace theme fonts with formatting at run if any. ToDo: Inspect paragraph too?
             // Latin
-            bRet = rCharProps.maLatinFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+            bRet = rCharProps.maLatinFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
             if (!bRet)
                 // In case there is no direct font, try to look it up as a theme reference.
-                bRet = rCharProps.maLatinThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                bRet = rCharProps.maLatinThemeFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr,
                                                                rFilter);
 
             if (bRet)
@@ -831,10 +831,10 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 xSet->setPropertyValue(u"CharFontFamily", uno::Any(nFontFamily));
             }
             // Asian
-            bRet = rCharProps.maAsianFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+            bRet = rCharProps.maAsianFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
             if (!bRet)
                 // In case there is no direct font, try to look it up as a theme reference.
-                bRet = rCharProps.maAsianThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                bRet = rCharProps.maAsianThemeFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr,
                                                                rFilter);
             if (bRet)
             {
@@ -844,10 +844,10 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
             }
             // Complex
             bRet
-                = rCharProps.maComplexFont.getFontData(sFontName, nFontPitch, nFontFamily, rFilter);
+                = rCharProps.maComplexFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
             if (!bRet)
                 // In case there is no direct font, try to look it up as a theme reference.
-                bRet = rCharProps.maComplexThemeFont.getFontData(sFontName, nFontPitch, nFontFamily,
+                bRet = rCharProps.maComplexThemeFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr,
                                                                  rFilter);
             if (bRet)
             {

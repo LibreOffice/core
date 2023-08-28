@@ -76,18 +76,20 @@ void TextFont::assignIfUsed( const TextFont& rTextFont )
         *this = rTextFont;
 }
 
-bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily, const XmlFilterBase& rFilter ) const
+bool TextFont::getFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily, bool* pbSymbol, const XmlFilterBase& rFilter ) const
 {
     if( const Theme* pTheme = rFilter.getCurrentTheme() )
         if( const TextFont* pFont = pTheme->resolveFont( maTypeface ) )
-            return pFont->implGetFontData( rFontName, rnFontPitch, rnFontFamily );
-    return implGetFontData( rFontName, rnFontPitch, rnFontFamily );
+            return pFont->implGetFontData( rFontName, rnFontPitch, rnFontFamily, pbSymbol );
+    return implGetFontData( rFontName, rnFontPitch, rnFontFamily, pbSymbol );
 }
 
-bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily ) const
+bool TextFont::implGetFontData( OUString& rFontName, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily, bool* pbSymbol ) const
 {
     rFontName = maTypeface;
     resolvePitch(mnPitchFamily, rnFontPitch, rnFontFamily);
+    if (pbSymbol)
+        *pbSymbol = mnCharset == WINDOWS_CHARSET_SYMBOL;
     return !rFontName.isEmpty();
 }
 
