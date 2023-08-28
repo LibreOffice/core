@@ -1074,6 +1074,20 @@ bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
                     *m_pExtraData == *rCmp.m_pExtraData ));
 }
 
+// Check if we could/should accept/reject the 2 redlineData at the same time.
+// No need to check its childs equality
+bool SwRedlineData::CanCombineForAcceptReject(const SwRedlineData& rCmp) const
+{
+    return m_nAuthor == rCmp.m_nAuthor &&
+            m_eType == rCmp.m_eType &&
+            m_sComment == rCmp.m_sComment &&
+            deltaOneMinute(GetTimeStamp(), rCmp.GetTimeStamp()) &&
+            m_bMoved == rCmp.m_bMoved &&
+            (( !m_pExtraData && !rCmp.m_pExtraData ) ||
+                ( m_pExtraData && rCmp.m_pExtraData &&
+                    *m_pExtraData == *rCmp.m_pExtraData ));
+}
+
 /// ExtraData is copied. The Pointer's ownership is thus NOT transferred
 /// to the Redline Object!
 void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
@@ -1911,6 +1925,27 @@ bool SwRangeRedline::PopData()
     m_pRedlineData = pCur->m_pNext;
     pCur->m_pNext = nullptr;
     delete pCur;
+    return true;
+}
+
+bool SwRangeRedline::PopAllDataAfter(int depth)
+{
+    assert(depth > 0);
+    SwRedlineData* pCur = m_pRedlineData;
+    while (depth > 1)
+    {
+        pCur = pCur->m_pNext;
+        if (!pCur)
+            return false;
+        depth--;
+    }
+
+    while (pCur->m_pNext)
+    {
+        SwRedlineData* pToDelete = pCur->m_pNext;
+        pCur->m_pNext = pToDelete->m_pNext;
+        delete pToDelete;
+    }
     return true;
 }
 

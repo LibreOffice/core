@@ -36,12 +36,13 @@ protected:
     std::unique_ptr<SwRedlineSaveDatas> mpRedlSaveData;
     SwUndoId mnUserId;
     bool mbHiddenRedlines;
+    sal_Int8 mnDepth;       // index of the SwRedlineData in SwRangeRedline
 
     virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
-    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange );
+    SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange, sal_Int8 nDepth = 0 );
 
     virtual ~SwUndoRedline() override;
 
@@ -49,6 +50,9 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & ) override;
 
     sal_uInt16 GetRedlSaveCount() const;
+#if OSL_DEBUG_LEVEL > 0
+    void SetRedlineCountDontCheck(bool bCheck);
+#endif
 };
 
 class SwUndoRedlineDelete final : public SwUndoRedline
@@ -106,7 +110,7 @@ private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoAcceptRedline( const SwPaM& rRange );
+    SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth = 0 );
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };
@@ -117,7 +121,7 @@ private:
     virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam) override;
 
 public:
-    SwUndoRejectRedline( const SwPaM& rRange );
+    SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth = 0 );
 
     virtual void RepeatImpl( ::sw::RepeatContext & ) override;
 };

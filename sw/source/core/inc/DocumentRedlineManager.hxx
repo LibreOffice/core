@@ -89,15 +89,19 @@ public:
 
     virtual void SetRedlineMove(/*[in]*/bool bFlag) override;
 
-    virtual bool AcceptRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) override;
+    virtual bool AcceptRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ bool bRange = false) override;
 
-    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
+    virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ sal_Int8 nDepth = 0) override;
 
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam) override;
 
-    virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) override;
+    virtual bool RejectRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ bool bRange = false) override;
 
-    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
+    virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ sal_Int8 nDepth = 0) override;
 
     virtual void AcceptAllRedline(/*[in]*/bool bAcceptReject) override;
 
@@ -136,6 +140,13 @@ public:
     virtual ~DocumentRedlineManager() override;
 
 private:
+
+    void FindRangeToAcceptReject(SwRedlineTable::size_type nPos, SwPosition** pPamStart,
+                                 SwPosition** pPamEnd, SwRedlineTable::size_type& nPosEnd) const;
+    bool RejectRedlineRange(SwRedlineTable::size_type nPos, bool bCallDelete, SwPosition* pPamStart,
+                            SwPosition* pPamEnd, SwRedlineTable::size_type& nPosEnd);
+    bool AcceptRedlineRange(SwRedlineTable::size_type nPos, bool bCallDelete, SwPosition* pPamStart,
+                            SwPosition* pPamEnd, SwRedlineTable::size_type& nPosEnd);
 
     DocumentRedlineManager(DocumentRedlineManager const&) = delete;
     DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;

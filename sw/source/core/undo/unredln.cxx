@@ -37,10 +37,11 @@
 #include <sortopt.hxx>
 #include <docedt.hxx>
 
-SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
+SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange, sal_Int8 nDepth )
     : SwUndo( SwUndoId::REDLINE, &rRange.GetDoc() ), SwUndRng( rRange ),
     mnUserId( nUsrId ),
-    mbHiddenRedlines( false )
+    mbHiddenRedlines( false ),
+    mnDepth( nDepth )
 {
     // consider Redline
     SwDoc& rDoc = rRange.GetDoc();
@@ -87,6 +88,14 @@ sal_uInt16 SwUndoRedline::GetRedlSaveCount() const
 {
     return mpRedlSaveData ? mpRedlSaveData->size() : 0;
 }
+
+#if OSL_DEBUG_LEVEL > 0
+void SwUndoRedline::SetRedlineCountDontCheck(bool bCheck)
+{
+    if (mpRedlSaveData)
+        mpRedlSaveData->SetRedlineCountDontCheck(bCheck);
+}
+#endif
 
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 {
@@ -417,14 +426,14 @@ void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
     m_nSaveEndContent = rPos.GetContentIndex();
 }
 
-SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )
-    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange )
+SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */ )
+    : SwUndoRedline( SwUndoId::ACCEPT_REDLINE, rRange, nDepth )
 {
 }
 
 void SwUndoAcceptRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().AcceptRedline(rPam, false);
+    rDoc.getIDocumentRedlineAccess().AcceptRedline(rPam, false, mnDepth);
 }
 
 void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)
@@ -432,14 +441,14 @@ void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().getIDocumentRedlineAccess().AcceptRedline(rContext.GetRepeatPaM(), true);
 }
 
-SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange )
-    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange )
+SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange, sal_Int8 nDepth /* = 0 */ )
+    : SwUndoRedline( SwUndoId::REJECT_REDLINE, rRange, nDepth )
 {
 }
 
 void SwUndoRejectRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rDoc.getIDocumentRedlineAccess().RejectRedline(rPam, false);
+    rDoc.getIDocumentRedlineAccess().RejectRedline(rPam, false, mnDepth);
 }
 
 void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)

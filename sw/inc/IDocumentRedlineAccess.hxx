@@ -184,15 +184,23 @@ public:
 
     virtual void SetRedlineMove(/*[in]*/bool bFlag) = 0;
 
-    virtual bool AcceptRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) = 0;
+    virtual bool AcceptRedline(/*[in]*/ SwRedlineTable::size_type nPos, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ bool bRange = false)
+        = 0;
 
-    virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
+    virtual bool AcceptRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ sal_Int8 nDepth = 0)
+        = 0;
 
     virtual void AcceptRedlineParagraphFormatting(/*[in]*/const SwPaM& rPam ) = 0;
 
-    virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) = 0;
+    virtual bool RejectRedline(/*[in]*/ SwRedlineTable::size_type nPos,
+                               /*[in]*/ bool bCallDelete, /*[in]*/ bool bRange = false)
+        = 0;
 
-    virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
+    virtual bool RejectRedline(/*[in]*/ const SwPaM& rPam, /*[in]*/ bool bCallDelete,
+                               /*[in]*/ sal_Int8 nDepth = 0)
+        = 0;
 
     virtual const SwRangeRedline* SelNextRedline(/*[in]*/SwPaM& rPam) const = 0;
 

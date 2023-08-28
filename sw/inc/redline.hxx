@@ -144,6 +144,7 @@ public:
     void SetMoved() { m_bMoved = true; }
     bool IsMoved() const { return m_bMoved; }
     bool CanCombine( const SwRedlineData& rCmp ) const;
+    bool CanCombineForAcceptReject( const SwRedlineData& rCmp ) const;
 
     // ExtraData gets copied, the pointer is therefore not taken over by
     // the RedlineObject
@@ -259,6 +260,7 @@ public:
 
     void PushData( const SwRangeRedline& rRedl, bool bOwnAsNext = true );
     bool PopData();
+    bool PopAllDataAfter(int depth);
 
     /**
        Returns textual description of a redline data element of
