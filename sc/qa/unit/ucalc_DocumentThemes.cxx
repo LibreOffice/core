@@ -71,6 +71,7 @@ CPPUNIT_TEST_FIXTURE(DocumentThemesTest, testChangeTheme)
         aNewPattern.GetItemSet().Put(SvxColorItem(aColor, aComplexColor, ATTR_FONT_COLOR));
     }
 
+    // Apply the pattern to cells C3:E5 (2,2 - 4,4) on the first sheet
     m_pDoc->ApplyPatternAreaTab(2, 2, 4, 4, 0, aNewPattern);
 
     {

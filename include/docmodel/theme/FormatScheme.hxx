@@ -474,19 +474,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
     }
@@ -517,7 +517,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -529,7 +529,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
         {
@@ -541,7 +541,7 @@ public:
             pLineStyle->maLineDash.mePresetType = PresetDashType::Solid;
             pLineStyle->maLineJoin.meType = LineJoinType::Miter;
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pLineStyle->maLineFillStyle.mpFill = pFill;
         }
     }
@@ -591,19 +591,19 @@ public:
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
         {
             FillStyle* pFillStyle = pThis->addBackgroundFillStyle();
             auto pFill = std::make_shared<SolidFill>();
-            pFill->maColor.setPlaceholder();
+            pFill->maColor.setThemePlaceholder();
             pFillStyle->mpFill = pFill;
         }
     }

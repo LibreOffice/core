@@ -117,7 +117,7 @@ bool changeCellItems(SfxItemSet& rItemSet, model::ColorSet const& rColorSet)
     return bChanged;
 }
 
-bool changeStyles(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+bool changeStyles(ScDocShell& rDocShell, model::ColorSet const& rColorSet)
 {
     ScDocument& rDocument = rDocShell.GetDocument();
     ScStyleSheetPool* pPool = rDocument.GetStyleSheetPool();
@@ -132,7 +132,7 @@ bool changeStyles(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const&
         aOldData.InitFromStyle(pStyle);
 
         auto rItemSet = pStyle->GetItemSet();
-        if (changeCellItems(rItemSet, *pColorSet))
+        if (changeCellItems(rItemSet, rColorSet))
         {
             if (rDocument.IsUndoEnabled())
             {
@@ -152,7 +152,7 @@ bool changeStyles(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const&
 }
 
 bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer* pModel,
-                  std::shared_ptr<model::ColorSet> const& pColorSet)
+                  model::ColorSet const& rColorSet)
 {
     ScDocument& rDocument = rDocShell.GetDocument();
     bool bChanged = false;
@@ -174,7 +174,7 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
 
                 ScPatternAttr aNewPattern(*pPattern);
                 auto& rItemSet = aNewPattern.GetItemSet();
-                bool bItemChanged = changeCellItems(rItemSet, *pColorSet);
+                bool bItemChanged = changeCellItems(rItemSet, rColorSet);
                 bChanged = bChanged || bItemChanged;
 
                 if (bItemChanged && rDocument.IsUndoEnabled())
@@ -217,7 +217,7 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
             SdrObjListIter aIter(pPage, SdrIterMode::DeepNoGroups);
             for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
             {
-                svx::theme::updateSdrObject(*pColorSet, pObject, pView, rDocShell.GetUndoManager());
+                svx::theme::updateSdrObject(rColorSet, pObject, pView, rDocShell.GetUndoManager());
             }
 
             std::unique_ptr<SdrUndoGroup> pUndo = pModel->GetCalcUndo();
@@ -235,19 +235,19 @@ bool changeSheets(ScDocShell& rDocShell, ScTabViewShell* pViewShell, ScDrawLayer
 }
 
 model::ComplexColor modifyComplexColor(model::ComplexColor const& rComplexColor,
-                                       std::shared_ptr<model::ColorSet> const& pColorSet)
+                                       model::ColorSet const& rColorSet)
 {
     model::ComplexColor aComplexColor(rComplexColor);
 
     if (aComplexColor.isValidThemeType())
     {
-        Color aColor = pColorSet->resolveColor(aComplexColor);
+        Color aColor = rColorSet.resolveColor(aComplexColor);
         aComplexColor.setFinalColor(aColor);
     }
     return aComplexColor;
 }
 
-void changeSparklines(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+void changeSparklines(ScDocShell& rDocShell, model::ColorSet const& rColorSet)
 {
     ScDocument& rDocument = rDocShell.GetDocument();
     auto& rDocFunc = rDocShell.GetDocFunc();
@@ -261,18 +261,18 @@ void changeSparklines(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> co
             {
                 auto aAttributes = rSparklineGroup->getAttributes();
 
-                aAttributes.setColorAxis(modifyComplexColor(aAttributes.getColorAxis(), pColorSet));
+                aAttributes.setColorAxis(modifyComplexColor(aAttributes.getColorAxis(), rColorSet));
                 aAttributes.setColorSeries(
-                    modifyComplexColor(aAttributes.getColorSeries(), pColorSet));
+                    modifyComplexColor(aAttributes.getColorSeries(), rColorSet));
                 aAttributes.setColorNegative(
-                    modifyComplexColor(aAttributes.getColorNegative(), pColorSet));
+                    modifyComplexColor(aAttributes.getColorNegative(), rColorSet));
                 aAttributes.setColorMarkers(
-                    modifyComplexColor(aAttributes.getColorMarkers(), pColorSet));
-                aAttributes.setColorHigh(modifyComplexColor(aAttributes.getColorHigh(), pColorSet));
-                aAttributes.setColorLow(modifyComplexColor(aAttributes.getColorLow(), pColorSet));
+                    modifyComplexColor(aAttributes.getColorMarkers(), rColorSet));
+                aAttributes.setColorHigh(modifyComplexColor(aAttributes.getColorHigh(), rColorSet));
+                aAttributes.setColorLow(modifyComplexColor(aAttributes.getColorLow(), rColorSet));
                 aAttributes.setColorFirst(
-                    modifyComplexColor(aAttributes.getColorFirst(), pColorSet));
-                aAttributes.setColorLast(modifyComplexColor(aAttributes.getColorLast(), pColorSet));
+                    modifyComplexColor(aAttributes.getColorFirst(), rColorSet));
+                aAttributes.setColorLast(modifyComplexColor(aAttributes.getColorLast(), rColorSet));
                 rDocFunc.ChangeSparklineGroupAttributes(rSparklineGroup, aAttributes);
             }
         }
@@ -292,7 +292,8 @@ std::shared_ptr<model::Theme> getTheme(ScDocShell& rDocShell)
     return pTheme;
 }
 
-void changeTheTheme(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> const& pColorSet)
+void changeThemeColorInTheDocModel(ScDocShell& rDocShell,
+                                   std::shared_ptr<model::ColorSet> const& pColorSet)
 {
     auto pTheme = getTheme(rDocShell);
     std::shared_ptr<model::ColorSet> pNewColorSet = pColorSet;
@@ -312,6 +313,10 @@ void changeTheTheme(ScDocShell& rDocShell, std::shared_ptr<model::ColorSet> cons
 
 void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
 {
+    // Can't change to an empty color set
+    if (!pColorSet)
+        return;
+
     m_rDocShell.MakeDrawLayer();
 
     ScDocShellModificator aModificator(m_rDocShell);
@@ -333,12 +338,12 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     }
 
     bool bChanged = false;
-    bChanged = changeStyles(m_rDocShell, pColorSet) || bChanged;
+    bChanged = changeStyles(m_rDocShell, *pColorSet) || bChanged;
     bChanged
-        = changeSheets(m_rDocShell, pViewShell, rDocument.GetDrawLayer(), pColorSet) || bChanged;
-    changeSparklines(m_rDocShell, pColorSet);
+        = changeSheets(m_rDocShell, pViewShell, rDocument.GetDrawLayer(), *pColorSet) || bChanged;
+    changeSparklines(m_rDocShell, *pColorSet);
 
-    changeTheTheme(m_rDocShell, pColorSet);
+    changeThemeColorInTheDocModel(m_rDocShell, pColorSet);
 
     if (bUndo)
     {
@@ -349,6 +354,6 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     aModificator.SetDocumentModified();
 }
 
-} // end sw namespace
+} // end sc namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
