@@ -180,8 +180,6 @@ public:
         meType = ColorType::HSL;
     }
 
-    void setPlaceholder() { meType = ColorType::Placeholder; }
-
     void setSystemColor(SystemColorType eSystemColorType, sal_Int32 nRGB)
     {
         maLastColor = ::Color(ColorTransparency, nRGB);

@@ -14,9 +14,6 @@
 namespace model
 {
 class ComplexColor;
-}
-namespace model
-{
 enum class ThemeColorType : sal_Int32;
 }
 

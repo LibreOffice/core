@@ -1846,7 +1846,9 @@ static const char* ToLineStyle( sal_uInt8 nLineStyle )
     return "*unknown*";
 }
 
-static void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor, model::ComplexColor const& rComplexColor)
+namespace
+{
+void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt8 nLineStyle, const Color& rColor, model::ComplexColor const& rComplexColor)
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     if( nLineStyle == EXC_LINE_NONE )
@@ -1854,7 +1856,7 @@ static void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt
         rStyleSheet->singleElement(nElement);
         return;
     }
-    else if (rColor == Color(0, 0, 0))
+    else if (rColor == Color(0, 0, 0) && !rComplexColor.isValidThemeType())
     {
         rStyleSheet->singleElement(nElement, XML_style, ToLineStyle(nLineStyle));
         return;
@@ -1864,6 +1866,7 @@ static void lcl_WriteBorder(XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uInt
     oox::xls::writeComplexColor(rStyleSheet, XML_color, rComplexColor, rColor);
     rStyleSheet->endElement(nElement);
 }
+} // end anonymous namespace
 
 void XclExpCellBorder::SaveXml(XclExpXmlStream& rStream) const
 {
@@ -1999,7 +2002,7 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
         {
             {
                 Color aColor = rPalette.GetColor(mnForeColor);
-                if (maForegroundComplexColor.isValidThemeType())
+                if (maForegroundComplexColor.isValidThemeType() || mnForeColor != 0)
                     oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
                 else if (mnForeColor != 0)
                     oox::xls::writeComplexColor(rStyleSheet, XML_fgColor, maForegroundComplexColor, aColor);
@@ -2007,9 +2010,7 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
             {
                 Color aColor = rPalette.GetColor(mnBackColor);
-                if (maBackgroundComplexColor.isValidThemeType())
-                    oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);
-                else if (mnForeColor != 0)
+                if (maBackgroundComplexColor.isValidThemeType() || mnBackColor != 0)
                     oox::xls::writeComplexColor(rStyleSheet, XML_bgColor, maBackgroundComplexColor, aColor);
             }
         }
