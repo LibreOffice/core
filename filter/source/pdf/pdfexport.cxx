@@ -477,6 +477,10 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.DocumentInfo.Author = xDocumentProps->getAuthor();
                     aContext.DocumentInfo.Subject = xDocumentProps->getSubject();
                     aContext.DocumentInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
+                    aContext.DocumentInfo.ModificationDate
+                        = xDocumentProps->getEditingCycles() < 1
+                              ? xDocumentProps->getCreationDate()
+                              : xDocumentProps->getModificationDate();
                 }
             }
 

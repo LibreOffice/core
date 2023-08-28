@@ -1375,7 +1375,7 @@ void PDFWriterImpl::setupDocInfo()
 {
     std::vector< sal_uInt8 > aId;
     m_aCreationDateString = PDFWriter::GetDateTime();
-    computeDocumentIdentifier( aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aCreationMetaDateString );
+    computeDocumentIdentifier( aId, m_aContext.DocumentInfo, m_aCreationDateString, m_aContext.DocumentInfo.ModificationDate, m_aCreationMetaDateString );
     if( m_aContext.Encryption.DocumentIdentifier.empty() )
         m_aContext.Encryption.DocumentIdentifier = aId;
 }
@@ -1401,6 +1401,7 @@ OString PDFWriter::GetDateTime()
 void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIdentifier,
                                                const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
                                                const OString& i_rCString1,
+                                               const css::util::DateTime& rCreationMetaDate,
                                                OString& o_rCString2
                                                )
 {
@@ -1424,9 +1425,16 @@ void PDFWriterImpl::computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIden
 
     TimeValue aTVal, aGMT;
     oslDateTime aDT;
+    aDT.NanoSeconds = rCreationMetaDate.NanoSeconds;
+    aDT.Seconds = rCreationMetaDate.Seconds;
+    aDT.Minutes = rCreationMetaDate.Minutes;
+    aDT.Hours = rCreationMetaDate.Hours;
+    aDT.Day = rCreationMetaDate.Day;
+    aDT.Month = rCreationMetaDate.Month;
+    aDT.Year = rCreationMetaDate.Year;
+
     osl_getSystemTime( &aGMT );
     osl_getLocalTimeFromSystemTime( &aGMT, &aTVal );
-    osl_getDateTimeFromTimeValue( &aTVal, &aDT );
     OStringBuffer aCreationMetaDateString(64);
 
     // i59651: we fill the Metadata date string as well, if PDF/A is requested

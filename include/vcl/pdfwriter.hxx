@@ -559,6 +559,7 @@ The following structure describes the permissions used in PDF security
         OUString          Author;         // document author
         OUString          Subject;        // subject
         OUString          Keywords;       // keywords
+        css::util::DateTime ModificationDate;
         OUString          Creator;        // application that created the original document
         OUString          Producer;       // OpenOffice
     };

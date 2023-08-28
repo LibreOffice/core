@@ -1115,6 +1115,7 @@ i12626
     static void computeDocumentIdentifier( std::vector< sal_uInt8 >& o_rIdentifier,
                                            const vcl::PDFWriter::PDFDocInfo& i_rDocInfo,
                                            const OString& i_rCString1,
+                                           const css::util::DateTime& rCreationMetaDate,
                                            OString& o_rCString2
                                           );
     static sal_Int32 computeAccessPermissions( const vcl::PDFWriter::PDFEncryptionProperties& i_rProperties,
