@@ -38,6 +38,7 @@
 #include <svx/svdoole2.hxx>
 #include <sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
