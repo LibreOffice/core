@@ -5081,6 +5081,8 @@ SalInstanceTreeView::~SalInstanceTreeView()
         static_cast<LclTabListBox&>(*m_xTreeView).SetStartDragHdl(Link<SvTreeListBox*, bool>());
         static_cast<LclTabListBox&>(*m_xTreeView).SetModelChangedHdl(Link<SvTreeListBox*, void>());
     }
+    if (g_DragSource == this)
+        g_DragSource = nullptr;
     m_xTreeView->SetPopupMenuHdl(Link<const CommandEvent&, bool>());
     m_xTreeView->SetExpandingHdl(Link<SvTreeListBox*, bool>());
     m_xTreeView->SetDoubleClickHdl(Link<SvTreeListBox*, bool>());

@@ -16720,6 +16720,9 @@ public:
         g_signal_handler_disconnect(m_pTreeView, m_nRowActivatedSignalId);
         g_signal_handler_disconnect(gtk_tree_view_get_selection(m_pTreeView), m_nChangedSignalId);
 
+        if (g_DragSource == this)
+            g_DragSource = nullptr;
+
         GValue value = G_VALUE_INIT;
         g_value_init(&value, G_TYPE_POINTER);
         g_value_set_pointer(&value, static_cast<gpointer>(nullptr));
