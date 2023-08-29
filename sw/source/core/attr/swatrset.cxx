@@ -135,14 +135,14 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
         {
             // no old value given, generate default from WhichID
             const SfxItemSet* pParent(GetParent());
-            m_pOldSet->PutChgd(nullptr != pParent
+            m_pOldSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich));
+                : GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
         }
         else if (!IsInvalidItem(pOld))
         {
             // set/remember old value
-            m_pOldSet->PutChgd(*pOld);
+            m_pOldSet->PutImpl(*pOld, nWhich, true, false);
         }
     }
 
@@ -153,14 +153,14 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
         {
             // no new value given, generate default from WhichID
             const SfxItemSet* pParent(GetParent());
-            m_pNewSet->PutChgd(nullptr != pParent
+            m_pNewSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich));
+                : GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
         }
         else if (!IsInvalidItem(pNew))
         {
             // set/remember new value
-            m_pNewSet->PutChgd(*pNew);
+            m_pNewSet->PutImpl(*pNew, nWhich, true, false);
         }
     }
 }

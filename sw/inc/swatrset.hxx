@@ -177,8 +177,6 @@ class SW_DLLPUBLIC SwAttrSet final : public SfxItemSet
 
     // processor for change callback
     void changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const;
-
-    void PutChgd( const SfxPoolItem& rI ) { SfxItemSet::PutDirect( rI ); }
 public:
     SwAttrSet( SwAttrPool&, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwAttrSet( SwAttrPool&, const WhichRangesContainer& nWhichPairTable );

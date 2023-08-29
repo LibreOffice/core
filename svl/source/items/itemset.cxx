@@ -100,52 +100,66 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
-void SfxItemSet::implCreateItemEntry(SfxPoolItem const*& rpTarget, SfxPoolItem const* pSource)
+SfxPoolItem const* SfxItemSet::implCreateItemEntry(SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bItemIsSetMember, bool bPassingOwnership)
 {
-    if (nullptr == pSource
-        || IsInvalidItem(pSource)
-        || IsStaticDefaultItem(pSource))
-    {
-        // copy the pointer if
-        // - SfxItemState::UNKNOWN aka current default (nullptr)
-        // - SfxItemState::DONTCARE aka invalid item
-        // - StaticDefaultItem aka static pool default (however this finds
-        //   it's way to the ItemSet? It *should* be default, too)
-        rpTarget = pSource;
-        return;
-    }
+    if (nullptr == pSource)
+        // SfxItemState::UNKNOWN aka current default (nullptr)
+        // just use nullptr
+        return pSource;
+
+    if (IsInvalidItem(pSource))
+        // SfxItemState::DONTCARE aka invalid item
+        // just use pSource which is INVALID_POOL_ITEM
+        return pSource;
+
+    // CAUTION: static default items are not *that* static as it seems
+    // (or: should be). If they are freed with the Pool (see
+    // ::ReleaseDefaults) they will be deleted. If the target pool is
+    // different from the source pool static default items from the
+    // source pool can be used that then might be deleted (sigh).
+    // A solution would be to change all pools to really work on
+    // static instances of default items. Another one would be to know
+    // here that the targetPool != sourcePool, so maybe extend
+    // bItemIsSetMember -> bSamePool.
+    // A good test for this is CppunitTest_chart2_uichart/testTdf98690.
+    // Until solving/cleaning up we unfortunately *have* to continue
+    // to clone static default items...
+
+    // if (IsStaticDefaultItem(pSource))
+    //     // these Items are owned by the pool and not ref-counted.
+    //     // they will exist while the pool exists, and thus the
+    //     // ItemSet (this).
+    //     return pSource;
 
     if (0 == pSource->Which())
+        // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID,
+        // these need to be cloned
+        return pSource->Clone();
+
+    if (bItemIsSetMember && IsPooledItem(pSource))//!IsPoolDefaultItem(pSource) && GetPool()->IsItemPoolable(*pSource))
     {
-        // these *should* be SfxVoidItem(0) the only Items with 0 == WhichID
-        rpTarget = pSource->Clone();
-        return;
+        // shortcut: if we know that the Item is already a member
+        // of another SfxItemSet we can just copy the pointer and increase RefCount
+        pSource->AddRef();
+        return pSource;
     }
 
-    if (m_pPool->IsItemPoolable(*pSource))
-    {
-        // copy the pointer and increase RefCount
-        rpTarget = pSource;
-        rpTarget->AddRef();
-        return;
-    }
-
-    // !IsPoolable() => assign via Pool
-    rpTarget = &m_pPool->Put(*pSource);
+    // assign via Pool
+    return &GetPool()->PutImpl(*pSource, 0 == nWhich ? pSource->Which() : nWhich, bPassingOwnership);
 }
 
 void SfxItemSet::implCleanupItemEntry(SfxPoolItem const* pSource)
 {
-    if (nullptr == pSource         // no entry, done
-        || IsInvalidItem(pSource)  // nothing to do for invalid item entries
-        || IsDefaultItem(pSource)) // default items are owned by the pool, nothing to do
+    if (nullptr == pSource                  // no entry, done
+        || IsInvalidItem(pSource)           // nothing to do for invalid item entries
+        || IsStaticDefaultItem(pSource))    // static default items are owned by the pool, nothing to do
     {
         return;
     }
 
     if (0 == pSource->Which())
     {
-        // these *should* be SfxVoidItem(0) the only Items with 0 == WhichID
+        // These *should* be SfxVoidItem(0) the only Items with 0 == WhichID
         // and need to be deleted
         delete pSource;
         return;
@@ -159,7 +173,7 @@ void SfxItemSet::implCleanupItemEntry(SfxPoolItem const* pSource)
     }
 
     // Delete from Pool
-    m_pPool->Remove(*pSource);
+    GetPool()->Remove(*pSource);
 }
 
 SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
@@ -172,7 +186,7 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     , m_pWhichRanges( rASet.m_pWhichRanges )
     , m_aCallback(rASet.m_aCallback)
 {
-    if (rASet.m_pWhichRanges.empty())
+    if (rASet.GetRanges().empty())
     {
         return;
     }
@@ -182,10 +196,11 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
 
     // Copy attributes
     SfxPoolItem const** ppDst(m_ppItems);
+    const bool bSamePool(GetPool() == rASet.GetPool());
 
     for (const auto& rSource : rASet)
     {
-        implCreateItemEntry(*ppDst, rSource);
+        *ppDst = implCreateItemEntry(rSource, 0, bSamePool, false);
         ppDst++;
     }
 
@@ -196,7 +211,7 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     : m_pPool( rASet.m_pPool )
     , m_pParent( rASet.m_pParent )
     , m_nCount( rASet.m_nCount )
-    , m_nTotalCount( rASet.TotalCount() )
+    , m_nTotalCount( rASet.m_nTotalCount )
     , m_bItemsFixed(false)
     , m_ppItems( rASet.m_ppItems )
     , m_pWhichRanges( std::move(rASet.m_pWhichRanges) )
@@ -206,6 +221,10 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     {
         // have to make a copy
         m_ppItems = new const SfxPoolItem* [TotalCount()];
+
+        // can just copy the pointers, the ones in the original m_ppItems
+        // array will no longer be used/referenced (unused mem, but not lost,
+        // it's part of the ItemSet-derived object)
         std::copy(rASet.m_ppItems, rASet.m_ppItems + TotalCount(), m_ppItems);
     }
     else
@@ -217,20 +236,15 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     rASet.m_pPool = nullptr;
     rASet.m_pParent = nullptr;
     rASet.m_nCount = 0;
+
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
 SfxItemSet::~SfxItemSet()
 {
-    // might be nullptr if we have been moved-from, also only needed
-    // when we have ::SET items
-    if (!m_pWhichRanges.empty() && Count())
-    {
-        for (auto& rCandidate : *this)
-        {
-            implCleanupItemEntry(rCandidate);
-        }
-    }
+    // cleanup items. No std::fill needed, we are done with this ItemSet.
+    // the callback is not set in destructor, so no worries about that
+    ClearAllItemsImpl();
 
     if (!m_bItemsFixed)
     {
@@ -242,22 +256,24 @@ SfxItemSet::~SfxItemSet()
     m_pWhichRanges.reset();
 }
 
-/**
- * Delete single Items or all Items (nWhich == 0)
- */
+// Delete single Items or all Items (nWhich == 0)
 sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
 {
     if( !Count() )
         return 0;
+
     if( nWhich )
         return ClearSingleItem_ForWhichID(nWhich);
-    else
-        return ClearAllItemsImpl();
+
+    // clear all & reset to nullptr
+    const sal_uInt16 nRetval(ClearAllItemsImpl());
+    std::fill(begin(), begin() + TotalCount(), nullptr);
+    return nRetval;
 }
 
 sal_uInt16 SfxItemSet::ClearSingleItem_ForWhichID( sal_uInt16 nWhich )
 {
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(nWhich));
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
@@ -271,110 +287,85 @@ sal_uInt16 SfxItemSet::ClearSingleItem_ForWhichID( sal_uInt16 nWhich )
 
 sal_uInt16 SfxItemSet::ClearSingleItem_ForOffset( sal_uInt16 nOffset )
 {
-    sal_uInt16 nDel = 0;
-    SfxPoolItem const** pFoundOne = m_ppItems + nOffset;
-    assert(!*pFoundOne || IsInvalidItem(*pFoundOne) || (*pFoundOne)->IsVoidItem() || (*pFoundOne)->Which() != 0);
     assert(nOffset < TotalCount());
+    const_iterator aEntry(begin() + nOffset);
+    assert(nullptr == *aEntry || IsInvalidItem(*aEntry) || (*aEntry)->IsVoidItem() || 0 != (*aEntry)->Which());
 
-    if (*pFoundOne)
+    if (nullptr == *aEntry)
+        // no entry, done
+        return 0;
+
+    // we reset an entry to nullptr -> decrement count
+    --m_nCount;
+
+    // Notification-Callback
+    if(m_aCallback)
     {
-        // Due to the assertions in the sub calls, we need to do the following
-        --m_nCount;
-        const SfxPoolItem *pItemToClear = *pFoundOne;
-        *pFoundOne = nullptr;
-
-        if ( !IsInvalidItem(pItemToClear) )
-        {
-            // Notification-Callback
-            if(m_aCallback)
-            {
-                m_aCallback(pItemToClear, nullptr);
-            }
-
-            if ( pItemToClear->Which() )
-                m_pPool->Remove( *pItemToClear );
-        }
-        ++nDel;
+        m_aCallback(*aEntry, nullptr);
     }
-    return nDel;
-}
 
+    // cleanup item & reset ptr
+    implCleanupItemEntry(*aEntry);
+    *aEntry = nullptr;
+
+    return 1;
+}
 
 sal_uInt16 SfxItemSet::ClearAllItemsImpl()
 {
-    sal_uInt16 nDel = m_nCount;
-    SfxPoolItem const** ppFnd = m_ppItems;
+    if (0 == Count())
+        // no items set, done
+        return 0;
 
-    for (const WhichPair& rPair : m_pWhichRanges)
+    // loop & cleanup items
+    for (auto& rCandidate : *this)
     {
-        for( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich, ++ppFnd )
+        if (nullptr != rCandidate && m_aCallback)
         {
-            if( !*ppFnd )
-                continue;
-
-            // Due to the assertions in the sub calls, we need to do this
-            --m_nCount;
-            const SfxPoolItem *pItemToClear = *ppFnd;
-            *ppFnd = nullptr;
-
-            if ( IsInvalidItem(pItemToClear) )
-                continue;
-
-            // Notification-Callback
-            if(m_aCallback)
-            {
-                m_aCallback(pItemToClear, nullptr);
-            }
-
-            // #i32448#
-            // Take care of disabled items, too.
-            if (!pItemToClear->m_nWhich)
-            {
-                // item is disabled, delete it
-                delete pItemToClear;
-            }
-            else
-            {
-                // remove item from pool
-                m_pPool->Remove( *pItemToClear );
-            }
+            m_aCallback(rCandidate, nullptr);
         }
+
+        implCleanupItemEntry(rCandidate);
     }
-    return nDel;
+
+    // remember count before resetting it, that is the retval
+    const sal_uInt16 nRetval(Count());
+    m_nCount = 0;
+    return nRetval;
 }
 
 void SfxItemSet::ClearInvalidItems()
 {
-    SfxPoolItem const** ppFnd = m_ppItems;
-    for (const WhichPair& rPair : m_pWhichRanges)
+    if (0 == Count())
+        // no items set, done
+        return;
+
+    // loop, here using const_iterator due to need to set ptr in m_ppItems array
+    for (const_iterator candidate(begin()); candidate != end(); candidate++)
     {
-        for( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich, ++ppFnd )
-            if( IsInvalidItem(*ppFnd) )
-            {
-                *ppFnd = nullptr;
-                --m_nCount;
-            }
+        if (IsInvalidItem(*candidate))
+        {
+            *candidate = nullptr;
+            --m_nCount;
+        }
     }
 }
 
 void SfxItemSet::InvalidateAllItems()
 {
-    assert( !m_nCount && "There are still Items set" );
-    std::fill(m_ppItems, m_ppItems + TotalCount(), INVALID_POOL_ITEM);
-}
+    // instead of just asserting, do the change. Clear all items
+    ClearAllItemsImpl();
 
-SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
-                                        bool bSrchInParent,
-                                        const SfxPoolItem **ppItem ) const
-{
-    // use local helper, start value for looped-through SfxItemState value
-    // is SfxItemState::UNKNOWN
-    return GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, bSrchInParent, ppItem);
+    // set all to invalid
+    std::fill(begin(), begin() + TotalCount(), INVALID_POOL_ITEM);
+
+    // ...and correct the count - invalid items get counted
+    m_nCount = m_nTotalCount;
 }
 
 SfxItemState SfxItemSet::GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const
 {
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(nWhich));
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
@@ -398,23 +389,23 @@ SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPo
     // check and assert from invalid offset. The caller is responsible for
     // ensuring a valid offset (see callers, all checked & safe)
     assert(nOffset < TotalCount());
-    SfxPoolItem const** pFoundOne = m_ppItems + nOffset;
+    SfxPoolItem const* pCandidate(*(begin() + nOffset));
 
-    if ( nullptr == *pFoundOne )
+    if (nullptr == pCandidate)
         // set to Default
         return SfxItemState::DEFAULT;
 
-    if ( IsInvalidItem(*pFoundOne) )
+    if (IsInvalidItem(pCandidate))
         // Different ones are present
         return SfxItemState::DONTCARE;
 
-    if ( (*pFoundOne)->IsVoidItem() )
+    if (pCandidate->IsVoidItem())
         // Item is Disabled
         return SfxItemState::DISABLED;
 
-    if (ppItem)
+    if (nullptr != ppItem)
         // if we have the Item, add it to output an hand back
-        *ppItem = *pFoundOne;
+        *ppItem = pCandidate;
 
     // Item is set
     return SfxItemState::SET;
@@ -422,140 +413,138 @@ SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPo
 
 bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
 {
-    bool bRet = SfxItemState::SET == GetItemState(nWhich, true, ppItem);
-    if (!bRet && ppItem)
+    const bool bRet(SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, true, ppItem));
+
+    // we need to reset ppItem when it was *not* set by GetItemState_ForWhichID
+    // since many usages of that return parameter re-use it, so it might still
+    // be set to 'something'
+    if (!bRet && nullptr != ppItem)
+    {
         *ppItem = nullptr;
+    }
+
     return bRet;
 }
 
-const SfxPoolItem* SfxItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
+const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bItemIsSetMember, bool bPassingOwnership)
 {
-    if ( !nWhich )
+    bool bActionNeeded(0 != nWhich);
+    sal_uInt16 nOffset(INVALID_WHICHPAIR_OFFSET);
+
+#ifdef _WIN32
+    // Win build *insists* for initialzation, triggers warning C4701:
+    // "potentially uninitialized local variable 'aEntry' used" for
+    // lines below. This is not the case here, but I know of no way
+    // to silence the warning in another way
+    const_iterator aEntry(begin());
+#else
+    const_iterator aEntry;
+#endif
+
+    if (bActionNeeded)
     {
-        assert(!bPassingOwnership);
-        return nullptr; //FIXME: Only because of Outliner bug
+        nOffset = GetRanges().getOffsetFromWhich(nWhich);
+        bActionNeeded = (INVALID_WHICHPAIR_OFFSET != nOffset);
     }
 
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(nWhich));
-
-    if (INVALID_WHICHPAIR_OFFSET != nOffset)
+    if (bActionNeeded)
     {
-        SfxPoolItem const** ppFnd(m_ppItems + nOffset);
+        aEntry = begin() + nOffset;
 
-        if( *ppFnd ) // Already one present
+        if (nullptr == *aEntry)
         {
-            // Same Item already present?
-            if ( *ppFnd == &rItem )
-            {
-                assert(!bPassingOwnership);
-                return nullptr;
-            }
-
-            // Will 'dontcare' or 'disabled' be overwritten with some real value?
-            if ( rItem.Which() && ( IsInvalidItem(*ppFnd) || !(*ppFnd)->Which() ) )
-            {
-                auto const old = *ppFnd;
-                *ppFnd = &m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
-                if (!IsInvalidItem(old)) {
-                    assert(old->Which() == 0);
-                    delete old;
-                }
-                return *ppFnd;
-            }
-
-            // Turns into disabled?
-            if( !rItem.Which() )
-            {
-                if (IsInvalidItem(*ppFnd) || (*ppFnd)->Which() != 0) {
-                    *ppFnd = rItem.Clone(m_pPool);
-                }
-                if (bPassingOwnership)
-                    delete &rItem;
-                return nullptr;
-            }
-            else
-            {
-                // Same value already present?
-                if ( rItem == **ppFnd )
-                {
-                    if (bPassingOwnership)
-                        delete &rItem;
-                    return nullptr;
-                }
-
-                // Add the new one, remove the old one
-                const SfxPoolItem& rNew = m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
-                const SfxPoolItem* pOld = *ppFnd;
-                *ppFnd = &rNew;
-
-                // Notification-Callback
-                if(m_aCallback)
-                {
-                    m_aCallback(pOld, &rNew);
-                }
-
-                m_pPool->Remove( *pOld );
-            }
+            // increase count if there was no entry before
+            ++m_nCount;
         }
         else
         {
-            ++m_nCount;
-            if( !rItem.Which() )
+            if (*aEntry == &rItem)
             {
-                *ppFnd = rItem.Clone(m_pPool);
-                if (bPassingOwnership)
-                    delete &rItem;
+                // Same Item already present (ptr compare)?
+                bActionNeeded = false;
             }
-            else
+            else if (typeid(**aEntry) == typeid(rItem) && **aEntry == rItem)
             {
-                const SfxPoolItem& rNew = m_pPool->PutImpl( rItem, nWhich, bPassingOwnership );
-                *ppFnd = &rNew;
-
-                // Notification-Callback
-                if(m_aCallback)
-                {
-                    m_aCallback(nullptr, &rNew);
-                }
+                // Same value already present (content compare)?
+                // NOTE: we can now use typeid since we do not have (-1)
+                // anymore for Invalid state -> safe
+                bActionNeeded = false;
             }
         }
-        SAL_WARN_IF(!bPassingOwnership && m_pPool->IsItemPoolable(nWhich) &&
-                    dynamic_cast<const SfxSetItem*>( &rItem ) == nullptr &&
-                    **ppFnd != rItem,
-                    "svl.items", "putted Item unequal, with ID/pos " << nWhich );
-        return *ppFnd;
     }
 
-    if (bPassingOwnership)
-        delete &rItem;
-    return nullptr;
+    if (!bActionNeeded)
+    {
+        if (bPassingOwnership)
+        {
+            delete &rItem;
+        }
+
+        return nullptr;
+    }
+
+    // prepare new entry
+    SfxPoolItem const* pNew(implCreateItemEntry(&rItem, nWhich, bItemIsSetMember, bPassingOwnership));
+
+    // Notification-Callback
+    if(m_aCallback)
+    {
+        m_aCallback(*aEntry, pNew);
+    }
+
+    // cleanup old entry & set entry at m_ppItems array
+    implCleanupItemEntry(*aEntry);
+    *aEntry = pNew;
+
+    return pNew;
 }
 
-bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
+bool SfxItemSet::Put(const SfxItemSet& rSource, bool bInvalidAsDefault)
 {
-    bool bRet = false;
-    if( rSet.Count() )
+    if (0 == rSource.Count())
+        // no items in source, done
+        return false;
+
+    const_iterator aSource(rSource.begin());
+    sal_uInt16 nNumberToGo(rSource.Count());
+    const bool bSamePool(GetPool() == rSource.GetPool());
+    bool bRetval(false);
+
+    // iterate based on WhichIDs to have it available for evtl. PutImpl calls
+    for (const WhichPair& rPair : rSource.GetRanges())
     {
-        SfxPoolItem const** ppFnd = rSet.m_ppItems;
-        for (const WhichPair& rPair : rSet.m_pWhichRanges)
+        for (sal_uInt16 nWhich(rPair.first); nWhich <= rPair.second; nWhich++, aSource++)
         {
-            for ( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich, ++ppFnd )
-                if( *ppFnd )
+            if (nullptr != *aSource)
+            {
+                nNumberToGo--;
+
+                if (IsInvalidItem(*aSource))
                 {
-                    if ( IsInvalidItem( *ppFnd ) )
+                    if (bInvalidAsDefault)
                     {
-                        if ( bInvalidAsDefault )
-                            bRet |= 0 != ClearItem( nWhich );
-                            // FIXME: Caused a SEGFAULT on non Windows-platforms:
-                            // bRet |= 0 != Put( rSet.GetPool()->GetDefaultItem(nWhich), nWhich );
-                        else
-                            InvalidateItem( nWhich );
+                        bRetval |= 0 != ClearSingleItem_ForWhichID(nWhich);
                     }
                     else
-                        bRet |= nullptr != Put( **ppFnd, nWhich );
+                    {
+                        InvalidateItem_ForWhichID(nWhich);
+                    }
                 }
+                else
+                {
+                    bRetval |= nullptr != PutImpl(**aSource, nWhich, bSamePool, false);
+                }
+            }
+
+            if (0 == nNumberToGo)
+            {
+                // we can return early if all set Items are handled
+                return bRetval;
+            }
         }
     }
-    return bRet;
+
+    return bRetval;
 }
 
 /**
@@ -575,33 +564,36 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
  */
 void SfxItemSet::PutExtended
 (
-    const SfxItemSet&   rSet,           // Source of the Items to be put
+    const SfxItemSet&   rSource,        // Source of the Items to be put
     SfxItemState        eDontCareAs,    // What will happen to the DontCare Items
     SfxItemState        eDefaultAs      // What will happen to the Default Items
 )
 {
-    // don't "optimize" with "if( rSet.Count()" because of dont-care + defaults
-    SfxPoolItem const** ppFnd = rSet.m_ppItems;
-    for (const WhichPair& rPair : rSet.m_pWhichRanges)
+    // don't "optimize" with "if( rSource.Count()" because of dont-care + defaults
+    const_iterator aSource(rSource.begin());
+    const bool bSamePool(GetPool() == rSource.GetPool());
+
+    for (const WhichPair& rPair : rSource.GetRanges())
     {
-        for ( sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; ++nWhich, ++ppFnd )
-            if( *ppFnd )
+        for (sal_uInt16 nWhich = rPair.first; nWhich <= rPair.second; nWhich++, aSource++)
+        {
+            if (nullptr != *aSource)
             {
-                if ( IsInvalidItem( *ppFnd ) )
+                if (IsInvalidItem(*aSource))
                 {
                     // Item is DontCare:
-                    switch ( eDontCareAs )
+                    switch (eDontCareAs)
                     {
                         case SfxItemState::SET:
-                            Put( rSet.GetPool()->GetDefaultItem(nWhich), nWhich );
+                            PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
                             break;
 
                         case SfxItemState::DEFAULT:
-                            ClearItem( nWhich );
+                            ClearSingleItem_ForWhichID(nWhich);
                             break;
 
                         case SfxItemState::DONTCARE:
-                            InvalidateItem( nWhich );
+                            InvalidateItem_ForWhichID(nWhich);
                             break;
 
                         default:
@@ -609,30 +601,33 @@ void SfxItemSet::PutExtended
                     }
                 }
                 else
+                {
                     // Item is set:
-                    Put( **ppFnd, nWhich );
+                    PutImpl(**aSource, nWhich, bSamePool, false);
+                }
             }
             else
             {
                 // Item is default:
-                switch ( eDefaultAs )
+                switch (eDefaultAs)
                 {
                     case SfxItemState::SET:
-                        Put( rSet.GetPool()->GetDefaultItem(nWhich), nWhich );
+                        PutImpl(rSource.GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
                         break;
 
                     case SfxItemState::DEFAULT:
-                        ClearItem( nWhich );
+                        ClearSingleItem_ForWhichID(nWhich);
                         break;
 
                     case SfxItemState::DONTCARE:
-                        InvalidateItem( nWhich );
+                        InvalidateItem_ForWhichID(nWhich);
                         break;
 
                     default:
                         assert(!"invalid Argument for eDefaultAs");
                 }
             }
+        }
     }
 }
 
@@ -645,12 +640,12 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
     // check if all from new range are already included. This will
     // use the cache in WhichRangesContainer since we check linearly.
     // Start with assuming all are included, but only if not empty.
-    // If empty all included is wrong (and m_pWhichRanges.MergeRange
+    // If empty all included is wrong (and GetRanges().MergeRange
     // will do the right thing/shortcut)
-    bool bAllIncluded(!m_pWhichRanges.empty());
+    bool bAllIncluded(!GetRanges().empty());
 
     for (sal_uInt16 a(nFrom); bAllIncluded && a <= nTo; a++)
-        if (INVALID_WHICHPAIR_OFFSET == m_pWhichRanges.getOffsetFromWhich(a))
+        if (INVALID_WHICHPAIR_OFFSET == GetRanges().getOffsetFromWhich(a))
             bAllIncluded = false;
 
     // if yes, we are done
@@ -670,8 +665,9 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 void SfxItemSet::SetRanges( const WhichRangesContainer& pNewRanges )
 {
     // Identical Ranges?
-    if (m_pWhichRanges == pNewRanges)
+    if (GetRanges() == pNewRanges)
         return;
+
     assert(svl::detail::validRanges2(pNewRanges));
     RecreateRanges_Impl(pNewRanges);
     m_pWhichRanges = pNewRanges;
@@ -680,71 +676,82 @@ void SfxItemSet::SetRanges( const WhichRangesContainer& pNewRanges )
 void SfxItemSet::SetRanges( WhichRangesContainer&& pNewRanges )
 {
     // Identical Ranges?
-    if (m_pWhichRanges == pNewRanges)
+    if (GetRanges() == pNewRanges)
         return;
+
     assert(svl::detail::validRanges2(pNewRanges));
     RecreateRanges_Impl(pNewRanges);
     m_pWhichRanges = std::move(pNewRanges);
 }
 
-void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& pNewRanges)
+void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& rNewRanges)
 {
     // create new item-array (by iterating through all new ranges)
-    const sal_uInt16 nTotalCount(svl::detail::CountRanges(pNewRanges));
-    SfxPoolItem const** aNewItems = new const SfxPoolItem* [ nTotalCount ];
-    sal_uInt16 nNewCount = 0;
-    if (m_nCount == 0)
-        memset( aNewItems, 0, nTotalCount * sizeof( SfxPoolItem* ) );
+    const sal_uInt16 nNewTotalCount(svl::detail::CountRanges(rNewRanges));
+    SfxPoolItem const** aNewItemArray(new const SfxPoolItem* [nNewTotalCount]);
+    sal_uInt16 nNewCount(0);
+
+    if (0 == Count())
+    {
+        // no Items set, just reset to nullptr (default)
+        std::fill(aNewItemArray, aNewItemArray + nNewTotalCount, nullptr);
+    }
     else
     {
-        sal_uInt16 n = 0;
-        for ( auto const & pRange : pNewRanges )
+        // iterate over target - all entries there need to be set/initialized. Use
+        // WhichIDs, we need to access two different WhichRanges
+        const_iterator aNewTarget(aNewItemArray);
+
+        for (auto const & rNewRange : rNewRanges)
         {
-            // iterate through all ids in the range
-            for ( sal_uInt16 nWID = pRange.first; nWID <= pRange.second; ++nWID, ++n )
+            for (sal_uInt16 nWhich(rNewRange.first); nWhich <= rNewRange.second; nWhich++, aNewTarget++)
             {
-                // direct move of pointer (not via pool)
-                SfxItemState eState = GetItemState( nWID, false, aNewItems+n );
-                if ( SfxItemState::SET == eState )
+                // check if we have that WhichID in source ranges
+                const sal_uInt16 nSourceOffset(GetRanges().getOffsetFromWhich(nWhich));
+
+                if (INVALID_WHICHPAIR_OFFSET == nSourceOffset)
                 {
-                    // increment new item count and possibly increment ref count
-                    ++nNewCount;
-                    aNewItems[n]->AddRef();
-                }
-                else if ( SfxItemState::DISABLED == eState )
-                {
-                    // put "disabled" item
-                    ++nNewCount;
-                    aNewItems[n] = new SfxVoidItem(0);
-                }
-                else if ( SfxItemState::DONTCARE == eState )
-                {
-                    ++nNewCount;
-                    aNewItems[n] = INVALID_POOL_ITEM;
+                    // no entry in source, init to nullptr
+                    *aNewTarget = nullptr;
                 }
                 else
                 {
-                    // default
-                    aNewItems[n] = nullptr;
+                    // we have entry in source, transfer entry - whatever it may be,
+                    // also for nullptr (for initialization)
+                    const_iterator aSourceEntry(begin() + nSourceOffset);
+                    *aNewTarget = *aSourceEntry;
+
+                    // take care of new Count
+                    if (nullptr != *aNewTarget)
+                    {
+                        nNewCount++;
+                    }
+
+                    // reset entry, since it got transfered it should not be cleaned-up
+                    *aSourceEntry = nullptr;
                 }
             }
         }
-        // free old items
-        for ( sal_uInt16 nItem = 0; nItem < TotalCount(); ++nItem )
+
+        // free old items: only necessary when not all Items were transfered
+        if (nNewCount != Count())
         {
-            const SfxPoolItem *pItem = m_ppItems[nItem];
-            if ( pItem && !IsInvalidItem(pItem) && pItem->Which() )
-                m_pPool->Remove(*pItem);
+            ClearAllItemsImpl();
         }
     }
 
     // replace old items-array and ranges
     if (m_bItemsFixed)
+    {
         m_bItemsFixed = false;
+    }
     else
+    {
         delete[] m_ppItems;
-    m_nTotalCount = nTotalCount;
-    m_ppItems = aNewItems;
+    }
+
+    m_nTotalCount = nNewTotalCount;
+    m_ppItems = aNewItemArray;
     m_nCount = nNewCount;
 }
 
@@ -784,7 +791,7 @@ bool SfxItemSet::Set
 )
 {
     bool bRet = false;
-    if (m_nCount)
+    if (Count())
         ClearItem();
     if ( bDeep )
     {
@@ -821,15 +828,16 @@ bool SfxItemSet::Set
 
 const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) const
 {
-    // Convert to WhichId
-    sal_uInt16 nWhich = GetPool()->GetWhich(nId);
+    // evtl. Convert from SlotID to WhichId
+    const sal_uInt16 nWhich(GetPool()->GetWhich(nId));
 
     // Is the Item set or 'bDeep == true' available?
-    const SfxPoolItem *pItem = nullptr;
-    SfxItemState eState = GetItemState(nWhich, bSearchInParent, &pItem);
+    const SfxPoolItem *pItem(nullptr);
+    const SfxItemState eState(GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, bSearchInParent, &pItem));
+
     if (bSearchInParent && SfxItemState::DEFAULT == eState && SfxItemPool::IsWhich(nWhich))
     {
-        pItem = &m_pPool->GetDefaultItem(nWhich);
+        pItem = &GetPool()->GetDefaultItem(nWhich);
     }
 
     return pItem;
@@ -838,38 +846,39 @@ const SfxPoolItem* SfxItemSet::GetItem(sal_uInt16 nId, bool bSearchInParent) con
 const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
 {
     // Search the Range in which the Which is located in:
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(nWhich));
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
-        SfxPoolItem const** ppFnd(m_ppItems + nOffset);
+        const_iterator aFoundOne(begin() + nOffset);
 
-        if( *ppFnd )
+        if (nullptr != *aFoundOne)
         {
-            if( IsInvalidItem(*ppFnd) ) {
+            if (IsInvalidItem(*aFoundOne))
+            {
                 //FIXME: The following code is duplicated further down
                 assert(m_pPool);
                 //!((SfxAllItemSet *)this)->aDefault.SetWhich(nWhich);
                 //!return aDefault;
-                return m_pPool->GetDefaultItem( nWhich );
+                return GetPool()->GetDefaultItem(nWhich);
             }
 #ifdef DBG_UTIL
-            const SfxPoolItem *pItem = *ppFnd;
+            const SfxPoolItem *pItem = *aFoundOne;
             if ( pItem->IsVoidItem() || !pItem->Which() )
                 SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
-            return **ppFnd;
+            return **aFoundOne;
         }
     }
 
-    if (bSrchInParent && nullptr != m_pParent)
+    if (bSrchInParent && nullptr != GetParent())
     {
-        return m_pParent->Get( nWhich, bSrchInParent);
+        return GetParent()->Get(nWhich, bSrchInParent);
     }
 
     // Get the Default from the Pool and return
     assert(m_pPool);
-    return m_pPool->GetDefaultItem( nWhich );
+    return GetPool()->GetDefaultItem(nWhich);
 }
 
 /**
@@ -878,94 +887,114 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
  */
 void SfxItemSet::Intersect( const SfxItemSet& rSet )
 {
+    // Delete all Items not contained in rSet
     assert(m_pPool && "Not implemented without Pool");
-    if( !Count() ) // None set?
+
+    if (!Count() || this == &rSet)
+        // none set -> none to delete
+        // same ItemSet? -> no Items not contained
         return;
 
-    // Delete all Items not contained in rSet
-    if( !rSet.Count() )
+    if (!rSet.Count())
     {
-        ClearItem(); // Delete everything
+        // no Items contained in rSet -> Delete everything
+        ClearItem();
         return;
     }
 
-    // If the Ranges are identical, we can easily process it
-    if( m_pWhichRanges == rSet.m_pWhichRanges )
+    // CAUTION: In the former impl, the
+    // - version for different ranges checked for SfxItemState::UNKNOWN
+    //   in rSet -> this means that the WhichID is *not* defined in
+    //   the ranges of rSet *at all* > definitely an *error*
+    // - version for same ranges checked for
+    //   nullptr != local && nullptr == rSet.
+    // All together I think also using the text
+    // "Delete all Items not contained in rSet" leads to
+    // locally delete all Items that are *not* set in rSet
+    // -> != SfxItemState::SET
+
+    // same ranges?
+    if (GetRanges() == rSet.GetRanges())
     {
-        sal_uInt16 nSize(TotalCount());
-        SfxPoolItem const** ppFnd1 = m_ppItems;
-        SfxPoolItem const** ppFnd2 = rSet.m_ppItems;
-
-        for( ; nSize; --nSize, ++ppFnd1, ++ppFnd2 )
-            if( *ppFnd1 && !*ppFnd2 )
+        for (sal_uInt16 nOffset(0); nOffset < TotalCount(); nOffset++)
+        {
+            if (SfxItemState::SET != rSet.GetItemState_ForOffset(nOffset, nullptr))
             {
-                // Delete from Pool
-                if( !IsInvalidItem( *ppFnd1 ) )
-                {
-                    // Notification-Callback
-                    if(m_aCallback)
-                    {
-                        m_aCallback(*ppFnd1, nullptr);
-                    }
-
-                    m_pPool->Remove( **ppFnd1 );
-                }
-                *ppFnd1 = nullptr;
-                --m_nCount;
+                // can use same offset
+                ClearSingleItem_ForOffset(nOffset);
             }
+        }
     }
     else
     {
-        SfxWhichIter aIter( *this );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while ( nWhich )
+        sal_uInt16 nOffset(0);
+
+        for (auto const & rRange : GetRanges())
         {
-            if( SfxItemState::UNKNOWN == rSet.GetItemState( nWhich, false ) )
-                aIter.ClearItem(); // Delete
-            nWhich = aIter.NextWhich();
+            for (sal_uInt16 nWhich(rRange.first); nWhich <= rRange.second; nWhich++, nOffset++)
+            {
+                if (SfxItemState::SET != rSet.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, nullptr))
+                {
+                    // can use offset
+                    ClearSingleItem_ForOffset(nOffset);
+                }
+            }
         }
     }
 }
 
-void SfxItemSet::Differentiate( const SfxItemSet& rSet )
+void SfxItemSet::Differentiate(const SfxItemSet& rSet)
 {
-    if( !Count() || !rSet.Count() )// None set?
+    assert(m_pPool && "Not implemented without Pool");
+
+    // Delete all Items contained in rSet
+    if (!Count() || !rSet.Count())
+        // None set?
         return;
 
-    // If the Ranges are identical, we can easily process it
-    if( m_pWhichRanges == rSet.m_pWhichRanges )
+    if (this == &rSet)
     {
-        sal_uInt16 nSize(TotalCount());
-        SfxPoolItem const** ppFnd1 = m_ppItems;
-        SfxPoolItem const** ppFnd2 = rSet.m_ppItems;
+        // same ItemSet, all Items are contained -> Delete everything
+        ClearItem();
+        return;
+    }
 
-        for( ; nSize; --nSize, ++ppFnd1, ++ppFnd2 )
-            if( *ppFnd1 && *ppFnd2 )
+    // CAUTION: In the former impl, the
+    // - version for different ranges checked for SfxItemState::SET
+    //   in rSet
+    // - version for same ranges checked for
+    //   nullptr != local && nullptr != rSet.
+    // All together I think also using the text
+    // "Delete all Items contained in rSet" leads to
+    // locally delete all Items that *are *not* set in rSet
+    // -> ==SfxItemState::SET
+
+    // same ranges?
+    if (GetRanges() == rSet.GetRanges())
+    {
+        for (sal_uInt16 nOffset(0); nOffset < TotalCount(); nOffset++)
+        {
+            if (SfxItemState::SET == rSet.GetItemState_ForOffset(nOffset, nullptr))
             {
-                // Delete from Pool
-                if( !IsInvalidItem( *ppFnd1 ) )
-                {
-                    // Notification-Callback
-                    if(m_aCallback)
-                    {
-                        m_aCallback(*ppFnd1, nullptr);
-                    }
-
-                    m_pPool->Remove( **ppFnd1 );
-                }
-                *ppFnd1 = nullptr;
-                --m_nCount;
+                // can use same offset
+                ClearSingleItem_ForOffset(nOffset);
             }
+        }
     }
     else
     {
-        SfxWhichIter aIter( *this );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while ( nWhich )
+        sal_uInt16 nOffset(0);
+
+        for (auto const & rRange : GetRanges())
         {
-            if( SfxItemState::SET == rSet.GetItemState( nWhich, false ) )
-                aIter.ClearItem(); // Delete
-            nWhich = aIter.NextWhich();
+            for (sal_uInt16 nWhich(rRange.first); nWhich <= rRange.second; nWhich++, nOffset++)
+            {
+                if (SfxItemState::SET == rSet.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, nullptr))
+                {
+                    // can use offset
+                    ClearSingleItem_ForOffset(nOffset);
+                }
+            }
         }
     }
 }
@@ -1048,9 +1077,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
  * dontcare    unknown     !=      sal_True            -           -           -
  * unknown     unknown     !=      sal_True            -           -           -
  */
-static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
-                            const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2,
-                            bool bIgnoreDefaults )
+void SfxItemSet::MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bItemIsSetMember, bool bIgnoreDefaults)
 {
     assert(ppFnd1 != nullptr && "Merging to 0-Item");
 
@@ -1062,16 +1089,17 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             *ppFnd1 = INVALID_POOL_ITEM;
 
         else if ( pFnd2 && !bIgnoreDefaults &&
-                  _pPool->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
+                  GetPool()->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
             // Decision table: default, set, !=, sal_False
             *ppFnd1 = INVALID_POOL_ITEM;
 
         else if ( pFnd2 && bIgnoreDefaults )
             // Decision table: default, set, doesn't matter, sal_True
-            *ppFnd1 = &_pPool->Put( *pFnd2 );
+            *ppFnd1 = implCreateItemEntry(pFnd2, 0, bItemIsSetMember, false);
+            // *ppFnd1 = &GetPool()->Put( *pFnd2 );
 
         if ( *ppFnd1 )
-            ++rCount;
+            ++m_nCount;
     }
 
     // 1st Item set?
@@ -1081,10 +1109,11 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
         {
             // 2nd Item is Default
             if ( !bIgnoreDefaults &&
-                 **ppFnd1 != _pPool->GetDefaultItem((*ppFnd1)->Which()) )
+                 **ppFnd1 != GetPool()->GetDefaultItem((*ppFnd1)->Which()) )
             {
                 // Decision table: set, default, !=, sal_False
-                _pPool->Remove( **ppFnd1 );
+                implCleanupItemEntry(*ppFnd1);
+                // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
@@ -1092,11 +1121,12 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
         {
             // 2nd Item is dontcare
             if ( !bIgnoreDefaults ||
-                 **ppFnd1 != _pPool->GetDefaultItem( (*ppFnd1)->Which()) )
+                 **ppFnd1 != GetPool()->GetDefaultItem( (*ppFnd1)->Which()) )
             {
                 // Decision table: set, dontcare, doesn't matter, sal_False
                 // or:             set, dontcare, !=, sal_True
-                _pPool->Remove( **ppFnd1 );
+                implCleanupItemEntry(*ppFnd1);
+                // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
@@ -1106,7 +1136,8 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             if ( **ppFnd1 != *pFnd2 )
             {
                 // Decision table: set, set, !=, doesn't matter
-                _pPool->Remove( **ppFnd1 );
+                implCleanupItemEntry(*ppFnd1);
+                // GetPool()->Remove( **ppFnd1 );
                 *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
@@ -1118,77 +1149,99 @@ void SfxItemSet::MergeValues( const SfxItemSet& rSet )
     // WARNING! When making changes/fixing bugs, always update the table above!!
     assert( GetPool() == rSet.GetPool() && "MergeValues with different Pools" );
 
-    // If the Ranges match, they are easier to process!
-    if( m_pWhichRanges == rSet.m_pWhichRanges )
-    {
-        sal_uInt16 nSize(TotalCount());
-        SfxPoolItem const** ppFnd1 = m_ppItems;
-        SfxPoolItem const** ppFnd2 = rSet.m_ppItems;
+    // CAUTION: Old version did *different* things when the WhichRanges
+    // were the same (true) or different (false) (which is an error/
+    // false optimization):
+    // true:  MergeItem_Impl was directly fed with SfxItem*'s
+    //        for entry @this & @rSet
+    // false: Looped over rSet WhichID's, fetched defaults from pool,
+    //        fed all that to SfxItemSet::MergeValue which then
+    //        evtl. could not find that WhichID in local WhichRanges
+    // Better to loop over local WhichRanges (these get changed) and look
+    // for Item with same WhichID in rSet, this is done now.
 
-        for( ; nSize; --nSize, ++ppFnd1, ++ppFnd2 )
-            MergeItem_Impl(m_pPool, m_nCount, ppFnd1, *ppFnd2, false/*bIgnoreDefaults*/);
+    const bool bSamePool(GetPool() == rSet.GetPool());
+
+    if (GetRanges() == rSet.GetRanges())
+    {
+
+        // loop over both & merge, WhichIDs are identical
+        for (const_iterator dst(begin()), src(rSet.begin()); dst != end(); dst++, src++)
+        {
+            MergeItem_Impl(dst, *src, bSamePool/*bItemIsSetMember*/, false/*bIgnoreDefaults*/);
+        }
     }
     else
     {
-        SfxWhichIter aIter( rSet );
-        sal_uInt16 nWhich;
-        while( 0 != ( nWhich = aIter.NextWhich() ) )
+        // loop over local which-ranges - the local Items need to be changed
+        const_iterator dst(begin());
+
+        for (auto const & rRange : GetRanges())
         {
-            const SfxPoolItem* pItem = nullptr;
-            (void)aIter.GetItemState( true, &pItem );
-            if( !pItem )
+            for (sal_uInt16 nWhich(rRange.first); nWhich <= rRange.second; nWhich++, dst++)
             {
-                // Not set, so default
-                MergeValue( rSet.GetPool()->GetDefaultItem( nWhich ) );
+                // try to get offset in rSet for same WhichID
+                const sal_uInt16 nOffset(rSet.GetRanges().getOffsetFromWhich(nWhich));
+
+                if (INVALID_WHICHPAIR_OFFSET != nOffset)
+                {
+                    // if entry with same WhichID exists in rSet, merge with local entry
+                    MergeItem_Impl(dst, *(rSet.begin() + nOffset), bSamePool/*bItemIsSetMember*/, false/*bIgnoreDefaults*/);
+                }
             }
-            else if( IsInvalidItem( pItem ) )
-                // don't care
-                InvalidateItem( nWhich );
-            else
-                MergeValue( *pItem );
         }
     }
 }
 
-void SfxItemSet::MergeValue( const SfxPoolItem& rAttr, bool bIgnoreDefaults )
+void SfxItemSet::MergeValue(const SfxPoolItem& rAttr, bool bIgnoreDefaults)
 {
-    SfxPoolItem const** ppFnd = m_ppItems;
-    const sal_uInt16 nWhich = rAttr.Which();
-    for( auto const & pPtr : m_pWhichRanges )
-    {
-        // In this Range??
-        if( pPtr.first <= nWhich && nWhich <= pPtr.second )
-        {
-            ppFnd += nWhich - pPtr.first;
-            MergeItem_Impl(m_pPool, m_nCount, ppFnd, &rAttr, bIgnoreDefaults);
-            break;
-        }
-        ppFnd += pPtr.second - pPtr.first + 1;
-    }
-}
+    if (0 == rAttr.Which())
+        // seems to be SfxVoidItem(0), nothing to do
+        return;
 
-void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
-{
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(nWhich));
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(rAttr.Which()));
 
     if (INVALID_WHICHPAIR_OFFSET != nOffset)
     {
-        SfxPoolItem const** ppFnd(m_ppItems + nOffset);
-
-        if( *ppFnd ) // Set for me
-        {
-            if( !IsInvalidItem(*ppFnd) )
-            {
-                m_pPool->Remove( **ppFnd );
-                *ppFnd = INVALID_POOL_ITEM;
-            }
-        }
-        else
-        {
-            *ppFnd = INVALID_POOL_ITEM;
-            ++m_nCount;
-        }
+        MergeItem_Impl(begin() + nOffset, &rAttr, false/*bItemIsSetMember*/, bIgnoreDefaults);
     }
+}
+
+void SfxItemSet::InvalidateItem_ForWhichID(sal_uInt16 nWhich)
+{
+    const sal_uInt16 nOffset(GetRanges().getOffsetFromWhich(nWhich));
+
+    if (INVALID_WHICHPAIR_OFFSET != nOffset)
+    {
+        InvalidateItem_ForOffset(nOffset);
+    }
+}
+
+void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
+{
+    // check and assert from invalid offset. The caller is responsible for
+    // ensuring a valid offset (see callers, all checked & safe)
+    assert(nOffset < TotalCount());
+    const_iterator aFoundOne(begin() + nOffset);
+
+    if (nullptr == *aFoundOne)
+    {
+        // entry goes from nullptr -> invalid
+        ++m_nCount;
+    }
+    else
+    {
+        // entry is set
+        if (IsInvalidItem(*aFoundOne))
+            // already inivalid item, done
+            return;
+
+        // cleanup entry
+        implCleanupItemEntry(*aFoundOne);
+    }
+
+    // set new entry
+    *aFoundOne = INVALID_POOL_ITEM;
 }
 
 sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const
@@ -1199,14 +1252,14 @@ sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const
     const SfxPoolItem* pItem(nullptr);
     GetItemState_ForOffset(nOffset, &pItem);
 
-    if (nullptr != pItem)
+    if (nullptr != pItem && 0 != pItem->Which())
         return pItem->Which();
 
     // 2nd have to get from WhichRangesContainer. That might use
     // the buffering, too. We might assert a return value of zero
     // (which means invalid WhichID), but we already assert for
     // a valid offset at the start of this method
-    return m_pWhichRanges.getWhichFromOffset(nOffset);
+    return GetRanges().getWhichFromOffset(nOffset);
 }
 
 bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
@@ -1217,8 +1270,8 @@ bool SfxItemSet::operator==(const SfxItemSet &rCmp) const
 bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
 {
     // Values we can get quickly need to be the same
-    const bool bDifferentPools = (m_pPool != rCmp.m_pPool);
-    if ( (bComparePool && m_pParent != rCmp.m_pParent) ||
+    const bool bDifferentPools = (GetPool() != rCmp.GetPool());
+    if ( (bComparePool && GetParent() != rCmp.GetParent()) ||
          (bComparePool && bDifferentPools) ||
          Count() != rCmp.Count() )
         return false;
@@ -1232,9 +1285,9 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
         return false;
 
     // Are the Ranges themselves unequal?
-    for (sal_Int32 i = 0; i < m_pWhichRanges.size(); ++i)
+    for (sal_Int32 i = 0; i < GetRanges().size(); ++i)
     {
-        if (m_pWhichRanges[i] != rCmp.m_pWhichRanges[i])
+        if (GetRanges()[i] != rCmp.GetRanges()[i])
         {
             // We must use the slow method then
             SfxWhichIter aIter( *this );
@@ -1244,11 +1297,11 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
             {
                 // If the pointer of the poolable Items are unequal, the Items must match
                 const SfxPoolItem *pItem1 = nullptr, *pItem2 = nullptr;
-                if ( GetItemState( nWh, false, &pItem1 ) !=
-                        rCmp.GetItemState( nWh, false, &pItem2 ) ||
+                if ( GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWh, false, &pItem1 ) !=
+                        rCmp.GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWh, false, &pItem2 ) ||
                      ( pItem1 != pItem2 &&
                         ( !pItem1 || IsInvalidItem(pItem1) ||
-                          (m_pPool->IsItemPoolable(*pItem1) &&
+                          (GetPool()->IsItemPoolable(*pItem1) &&
                             *pItem1 != *pItem2 ) ) ) )
                     return false;
             }
@@ -1271,7 +1324,7 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
         if ( *ppItem1 != *ppItem2 &&
              ( ( !*ppItem1 || !*ppItem2 ) ||
                ( IsInvalidItem(*ppItem1) || IsInvalidItem(*ppItem2) ) ||
-               (!bDifferentPools && m_pPool->IsItemPoolable(**ppItem1)) ||
+               (!bDifferentPools && GetPool()->IsItemPoolable(**ppItem1)) ||
                  **ppItem1 != **ppItem2 ) )
             return false;
 
@@ -1284,9 +1337,9 @@ bool SfxItemSet::Equals(const SfxItemSet &rCmp, bool bComparePool) const
 
 std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
-    if (pToPool && pToPool != m_pPool)
+    if (pToPool && pToPool != GetPool())
     {
-        std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(*pToPool, m_pWhichRanges));
+        std::unique_ptr<SfxItemSet> pNewSet(new SfxItemSet(*pToPool, GetRanges()));
         if ( bItems )
         {
             SfxWhichIter aIter(*pNewSet);
@@ -1294,7 +1347,7 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                if ( SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem ) )
                     pNewSet->Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }
@@ -1304,7 +1357,7 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
     else
         return std::unique_ptr<SfxItemSet>(bItems
                 ? new SfxItemSet(*this)
-                : new SfxItemSet(*m_pPool, m_pWhichRanges));
+                : new SfxItemSet(*GetPool(), GetRanges()));
 }
 
 SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
@@ -1313,9 +1366,9 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
     // it cannot be cloned as a value
     assert((typeid(*this) == typeid(SfxItemSet)) && "cannot call this on a subclass of SfxItemSet");
 
-    if (pToPool && pToPool != m_pPool)
+    if (pToPool && pToPool != GetPool())
     {
-        SfxItemSet aNewSet(*pToPool, m_pWhichRanges);
+        SfxItemSet aNewSet(*pToPool, GetRanges());
         if ( bItems )
         {
             SfxWhichIter aIter(aNewSet);
@@ -1323,7 +1376,7 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
+                if ( SfxItemState::SET == GetItemState_ForWhichID(SfxItemState::UNKNOWN, nWhich, false, &pItem ) )
                     aNewSet.Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }
@@ -1333,40 +1386,7 @@ SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
     else
         return bItems
                 ? *this
-                : SfxItemSet(*m_pPool, m_pWhichRanges);
-}
-
-void SfxItemSet::PutDirect(const SfxPoolItem &rItem)
-{
-#ifdef DBG_UTIL
-    IsPoolDefaultItem(&rItem) || m_pPool->CheckItemInPool(&rItem);
-        // Only cause assertion in the callees
-#endif
-    const sal_uInt16 nOffset(m_pWhichRanges.getOffsetFromWhich(rItem.Which()));
-
-    if (INVALID_WHICHPAIR_OFFSET != nOffset)
-    {
-        SfxPoolItem const** ppFnd(m_ppItems + nOffset);
-        const SfxPoolItem* pOld = *ppFnd;
-        if( pOld ) // One already present
-        {
-            if( rItem == **ppFnd )
-                return; // Already present!
-            m_pPool->Remove( *pOld );
-        }
-        else
-            ++m_nCount;
-
-        // Add the new one
-        if( IsPoolDefaultItem(&rItem) )
-            *ppFnd = &m_pPool->Put( rItem );
-        else
-        {
-            *ppFnd = &rItem;
-            if( !IsStaticDefaultItem( &rItem ) )
-                rItem.AddRef();
-        }
-    }
+                : SfxItemSet(*GetPool(), GetRanges());
 }
 
 void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -1413,10 +1433,10 @@ SfxAllItemSet::SfxAllItemSet(const SfxAllItemSet &rCopy)
 /**
  * Putting with automatic extension of the WhichId with the ID of the Item.
  */
-const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
+const SfxPoolItem* SfxAllItemSet::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bItemIsSetMember, bool bPassingOwnership )
 {
     MergeRange(nWhich, nWhich);
-    return SfxItemSet::PutImpl(rItem, nWhich, bPassingOwnership);
+    return SfxItemSet::PutImpl(rItem, nWhich, bItemIsSetMember, bPassingOwnership);
 }
 
 /**
@@ -1430,7 +1450,7 @@ void SfxItemSet::DisableItem(sal_uInt16 nWhich)
 
 std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
 {
-    if (pToPool && pToPool != m_pPool)
+    if (pToPool && pToPool != GetPool())
     {
         std::unique_ptr<SfxAllItemSet> pNewSet(new SfxAllItemSet( *pToPool ));
         if ( bItems )
@@ -1438,7 +1458,7 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
         return pNewSet;
     }
     else
-        return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool));
+        return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*GetPool()));
 }
 
 

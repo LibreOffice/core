@@ -81,7 +81,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     std::unique_ptr<SfxSetItem> pNewItem(rOrigItem.Clone());
     if ( pItemToPut )
     {
-        pNewItem->GetItemSet().PutDirect( *pItemToPut );
+        pNewItem->GetItemSet().Put( *pItemToPut );
         DBG_ASSERT( &pNewItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,
                     "wrong item in temporary set" );
     }
