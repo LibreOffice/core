@@ -726,6 +726,63 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTextRotationPlusPre)
     // But reload catches it.
     saveAndReload("writer8");
 }
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
+{
+    // It tests, that a theme is written to master page in Draw documents.
+    // Without fix for tdf#156975 it was not written at all.
+    // The test needs to be adapted, when themes are available in ODF.
+
+    mxComponent = loadFromDesktop("private:factory/sdraw");
+    // generate a theme to be sure we have got one and know the values
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterPageProps(xDrawPage->getMasterPage(),
+                                                         uno::UNO_QUERY);
+
+    auto pTheme = std::make_shared<model::Theme>("Custom");
+    auto pColorSet = std::make_shared<model::ColorSet>("My Colors");
+    pColorSet->add(model::ThemeColorType::Dark1, 0x000000);
+    pColorSet->add(model::ThemeColorType::Light1, 0xffff11);
+    pColorSet->add(model::ThemeColorType::Dark2, 0x002200);
+    pColorSet->add(model::ThemeColorType::Light2, 0xff33ff);
+    pColorSet->add(model::ThemeColorType::Accent1, 0x440000);
+    pColorSet->add(model::ThemeColorType::Accent2, 0x005500);
+    pColorSet->add(model::ThemeColorType::Accent3, 0x000066);
+    pColorSet->add(model::ThemeColorType::Accent4, 0x777700);
+    pColorSet->add(model::ThemeColorType::Accent5, 0x880088);
+    pColorSet->add(model::ThemeColorType::Accent6, 0x009999);
+    pColorSet->add(model::ThemeColorType::Hyperlink, 0x0a0a0a);
+    pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xb0b0b0);
+    pTheme->setColorSet(pColorSet);
+
+    uno::Reference<util::XTheme> xTheme = model::theme::createXTheme(pTheme);
+    xMasterPageProps->setPropertyValue("Theme", uno::Any(xTheme));
+
+    // save as odg
+    save("draw8");
+
+    // and check the markup.
+    xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+    static constexpr OStringLiteral sThemePath
+        = "//office:master-styles/style:master-page/loext:theme";
+    assertXPath(pXmlDoc, sThemePath, 1);
+    assertXPath(pXmlDoc, sThemePath + "[@loext:name='Custom']");
+
+    const OString sThemeColorsPath = sThemePath + "/loext:theme-colors";
+    assertXPath(pXmlDoc, sThemeColorsPath, 1);
+    assertXPath(pXmlDoc, sThemeColorsPath + "[@loext:name='My Colors']");
+
+    const OString sThemeColorPath = sThemeColorsPath + "/loext:color";
+    assertXPath(pXmlDoc, sThemeColorPath, 12);
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name", "dark2");
+    assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color", "#002200");
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name", "accent5");
+    assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color", "#880088");
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name", "followed-hyperlink");
+    assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color", "#b0b0b0");
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
