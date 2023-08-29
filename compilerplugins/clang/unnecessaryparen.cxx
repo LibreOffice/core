@@ -166,7 +166,7 @@ private:
                             if (d->getValue().isStruct() || d->getValue().isUnion()) {
                                 //TODO: There appears to be no way currently to get at the original
                                 // clang::StringLiteral expression from which this struct/union
-                                // non-type template argument was constructued, so no way to tell
+                                // non-type template argument was constructed, so no way to tell
                                 // whether it was written as a single literal (=> in which case we
                                 // should warn about unnecessary parentheses) or as a concatenation
                                 // of multiple literals (=> in which case we should not warn).  So
