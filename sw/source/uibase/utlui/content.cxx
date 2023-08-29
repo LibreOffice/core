@@ -2991,18 +2991,24 @@ bool SwContentTree::HasContentChanged()
             // In case of LOK, empty contentTypes are hidden, even in all content view
             // so it is not enough to check only the m_xTreeView.
             bool bCountChanged = false;
+            bool bHasContentChanged = false;
             for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
             {
                 if (m_aActiveContentArr[i])
                 {
                     auto nLastTMCount = m_aActiveContentArr[i]->GetMemberCount();
-                    m_aActiveContentArr[i]->FillMemberList();
+                    if (i == ContentTypeId::OUTLINE) // this is required for checking if header level is changed
+                        m_aActiveContentArr[i]->FillMemberList(&bHasContentChanged);
+                    else
+                        m_aActiveContentArr[i]->FillMemberList();
                     // If the member count of a type is changed, then the content is surely changed
                     if (m_aActiveContentArr[i]->GetMemberCount() != nLastTMCount)
                         bCountChanged = true;
+                    if (bHasContentChanged)
+                        bContentChanged = true;
                 }
             }
-            if (bCountChanged)
+            if (bCountChanged || bContentChanged)
                 return true;
         }
 
