@@ -314,19 +314,22 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     if( pFilterBase) {
         bool bFollowTextFont = false;
         mbBulletFontFollowText >>= bFollowTextFont;
-        if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, nullptr, *pFilterBase ) )
+        if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, &bSymbolFont, *pFilterBase ) )
         {
             FontDescriptor aFontDesc;
             sal_Int16 nFontSize = 0;
             if( mnFontSize >>= nFontSize )
                 aFontDesc.Height = nFontSize;
 
-            // TODO either use getFontData encoding hint, or move this to the TextFont struct.
+            // TODO It is likely that bSymbolFont from getFontData is sufficient to check here
+            // and looking at the font name is not necessary, if it is necessary then moving
+            // the name lookup into getFontData is likely the best fix
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
             aFontDesc.Weight = nBulletFontWeight;
-            if ( aBulletFontName.equalsIgnoreAsciiCase("Wingdings") ||
+            if ( bSymbolFont ||
+                 aBulletFontName.equalsIgnoreAsciiCase("Wingdings") ||
                  aBulletFontName.equalsIgnoreAsciiCase("Wingdings 2") ||
                  aBulletFontName.equalsIgnoreAsciiCase("Wingdings 3") ||
                  aBulletFontName.equalsIgnoreAsciiCase("Monotype Sorts") ||
