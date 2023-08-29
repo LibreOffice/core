@@ -24,10 +24,8 @@
 #include "swrect.hxx"
 #include "swtypes.hxx"
 
-#include <map>
 #include <memory>
 #include <vector>
-#include <set>
 
 namespace vcl
 {
@@ -176,7 +174,7 @@ class SwTaggedPDFHelper
 /*
  * Analyses the document structure and export Notes, Hyperlinks, References,
  * and Outline. Link ids created during pdf export are stored in
- * aReferenceIdMap and aHyperlinkIdMap, in order to use them during
+ * SwEnhancedPDFState, in order to use them during
  * tagged pdf output. Therefore the SwEnhancedPDFExportHelper is used
  * before painting. Unfortunately links from the EditEngine into the
  * Writer document require to be exported after they have been painted.
@@ -184,14 +182,6 @@ class SwTaggedPDFHelper
  * painting process, the parameter bEditEngineOnly indicated that only
  * the bookmarks from the EditEngine have to be processed.
  */
-typedef std::set< tools::Long, lt_TableColumn > TableColumnsMapEntry;
-typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
-typedef std::vector< IdMapEntry > LinkIdMap;
-typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
-typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
-typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
-typedef std::set<const void*> FrameTagSet;
-
 class SwEnhancedPDFExportHelper
 {
     private:
@@ -214,15 +204,7 @@ class SwEnhancedPDFExportHelper
 
     const SwPrintData& mrPrintData;
 
-    static TableColumnsMap s_aTableColumnsMap;
-    static LinkIdMap s_aLinkIdMap;
-    static NumListIdMap s_aNumListIdMap;
-    static NumListBodyIdMap s_aNumListBodyIdMap;
-    static FrameTagSet s_FrameTagSet;
-
-    static LanguageType s_eLanguageDefault;
-
-    void EnhancedPDFExport();
+    void EnhancedPDFExport(LanguageType const eLanguageDefault);
 
     /// Exports bibliography entry links.
     void ExportAuthorityEntryLinks();
@@ -245,14 +227,6 @@ class SwEnhancedPDFExportHelper
                                const SwPrintData& rPrintData );
 
     ~SwEnhancedPDFExportHelper();
-
-    static TableColumnsMap& GetTableColumnsMap() {return s_aTableColumnsMap; }
-    static LinkIdMap& GetLinkIdMap() { return s_aLinkIdMap; }
-    static NumListIdMap& GetNumListIdMap() {return s_aNumListIdMap; }
-    static NumListBodyIdMap& GetNumListBodyIdMap() {return s_aNumListBodyIdMap; }
-    static FrameTagSet & GetFrameTagSet() { return s_FrameTagSet; }
-
-    static LanguageType GetDefaultLanguage() {return s_eLanguageDefault; }
 
     //scale and position rRectangle if we're scaling due to notes in margins.
     tools::Rectangle SwRectToPDFRect(const SwPageFrame* pCurrPage,

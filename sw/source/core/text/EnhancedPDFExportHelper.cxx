@@ -17,11 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <EnhancedPDFExportHelper.hxx>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 
 #include <sot/exchange.hxx>
@@ -77,7 +78,6 @@
 #include <vprint.hxx>
 #include <SwNodeNum.hxx>
 #include <calbck.hxx>
-#include <stack>
 #include <frmtool.hxx>
 #include <strings.hrc>
 #include <frameformats.hxx>
@@ -88,17 +88,11 @@
 #include <tools/globname.hxx>
 #include <svx/svdobj.hxx>
 
+#include <stack>
+#include <map>
+#include <set>
+
 using namespace ::com::sun::star;
-
-// Some static data structures
-
-TableColumnsMap SwEnhancedPDFExportHelper::s_aTableColumnsMap;
-LinkIdMap SwEnhancedPDFExportHelper::s_aLinkIdMap;
-NumListIdMap SwEnhancedPDFExportHelper::s_aNumListIdMap;
-NumListBodyIdMap SwEnhancedPDFExportHelper::s_aNumListBodyIdMap;
-FrameTagSet SwEnhancedPDFExportHelper::s_FrameTagSet;
-
-LanguageType SwEnhancedPDFExportHelper::s_eLanguageDefault = LANGUAGE_SYSTEM;
 
 #if OSL_DEBUG_LEVEL > 1
 
@@ -128,6 +122,30 @@ void lcl_DBGCheckStack()
 };
 
 #endif
+
+typedef std::set< tools::Long, lt_TableColumn > TableColumnsMapEntry;
+typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
+typedef std::vector< IdMapEntry > LinkIdMap;
+typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
+typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
+typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
+typedef std::set<const void*> FrameTagSet;
+
+struct SwEnhancedPDFState
+{
+    TableColumnsMap m_TableColumnsMap;
+    LinkIdMap m_LinkIdMap;
+    NumListIdMap m_NumListIdMap;
+    NumListBodyIdMap m_NumListBodyIdMap;
+    FrameTagSet m_FrameTagSet;
+
+    LanguageType m_eLanguageDefault;
+
+    SwEnhancedPDFState(LanguageType const eLanguageDefault)
+        : m_eLanguageDefault(eLanguageDefault)
+    {
+    }
+};
 
 namespace
 {
@@ -408,7 +426,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         if ( pKeyFrame )
         {
             void const*const pKey = lcl_GetKeyFromFrame(*pKeyFrame);
-            FrameTagSet& rFrameTagSet(SwEnhancedPDFExportHelper::GetFrameTagSet());
+            FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
             if (rFrameTagSet.find(pKey) != rFrameTagSet.end()
                 || rFrame.IsFlyFrame()) // for hell layer flys
             {
@@ -464,7 +482,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 
             if (pKey)
             {
-                FrameTagSet& rFrameTagSet(SwEnhancedPDFExportHelper::GetFrameTagSet());
+                FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
                 assert(rFrameTagSet.find(pKey) == rFrameTagSet.end());
                 rFrameTagSet.emplace(pKey);
             }
@@ -497,12 +515,12 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 
         if ( vcl::PDFWriter::List == eType )
         {
-            NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+            NumListIdMap& rNumListIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListIdMap);
             rNumListIdMap[ pNodeNum ] = nId;
         }
         else if ( vcl::PDFWriter::LIBody == eType )
         {
-            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+            NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
             rNumListBodyIdMap[ pNodeNum ] = nId;
         }
     }
@@ -515,7 +533,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
             SwTextFrame const& rTextFrame(static_cast<const SwTextFrame&>(rFrame));
             SwTextNode const*const pTextNd(rTextFrame.GetTextNodeForParaProps());
             SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
-            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+            NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
             rNumListBodyIdMap[ pNodeNum ] = nId;
         }
     }
@@ -537,7 +555,7 @@ namespace {
     // link the link annotation to the link structured element
     void LinkLinkLink(vcl::PDFExtOutDevData & rPDFExtOutDevData, SwRect const& rRect)
     {
-        const LinkIdMap& rLinkIdMap = SwEnhancedPDFExportHelper::GetLinkIdMap();
+        const LinkIdMap& rLinkIdMap(rPDFExtOutDevData.GetSwPDFState()->m_LinkIdMap);
         const Point aCenter = rRect.Center();
         auto aIter = std::find_if(rLinkIdMap.begin(), rLinkIdMap.end(),
             [&aCenter](const IdMapEntry& rEntry) { return rEntry.first.Contains(aCenter); });
@@ -811,7 +829,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
 
                 SwRectFnSet fnRectX(pTabFrame);
 
-                const TableColumnsMapEntry& rCols = SwEnhancedPDFExportHelper::GetTableColumnsMap()[ pTable ];
+                const TableColumnsMapEntry& rCols(mpPDFExtOutDevData->GetSwPDFState()->m_TableColumnsMap[pTable]);
 
                 const tools::Long nLeft  = fnRectX.GetLeft(pThisCell->getFrameArea());
                 const tools::Long nRight = fnRectX.GetRight(pThisCell->getFrameArea());
@@ -925,7 +943,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
 
             const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
-            const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
+            const LanguageType nDefaultLang(mpPDFExtOutDevData->GetSwPDFState()->m_eLanguageDefault);
 
             if ( nDefaultLang != nCurrentLanguage )
                 mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::Language, static_cast<sal_uInt16>(nCurrentLanguage) );
@@ -1040,7 +1058,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         if ( bNewSubListStart || bNoLabel )
         {
             // Fine, we try to reopen the appropriate list body
-            NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+            NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
 
             if ( bNewSubListStart )
             {
@@ -1080,7 +1098,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
         {
             // any other than the first node in a list level has to reopen the current
             // list. The current list is associated in a map with the first child of the list:
-            NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+            NumListIdMap& rNumListIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListIdMap);
 
             // Search backwards and check if any of the previous nodes has a list associated with it:
             const SwNumberTreeNode* pPrevious = pNodeNum->GetPred(true);
@@ -1111,9 +1129,9 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
     else
     {
         // clear list maps in case a list has been interrupted
-        NumListIdMap& rNumListIdMap = SwEnhancedPDFExportHelper::GetNumListIdMap();
+        NumListIdMap& rNumListIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListIdMap);
         rNumListIdMap.clear();
-        NumListBodyIdMap& rNumListBodyIdMap = SwEnhancedPDFExportHelper::GetNumListBodyIdMap();
+        NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
         rNumListBodyIdMap.clear();
     }
 
@@ -1372,7 +1390,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwTabFrame* pTabFrame = static_cast<const SwTabFrame*>(pFrame);
                 const SwTable* pTable = pTabFrame->GetTable();
 
-                TableColumnsMap& rTableColumnsMap = SwEnhancedPDFExportHelper::GetTableColumnsMap();
+                TableColumnsMap& rTableColumnsMap(mpPDFExtOutDevData->GetSwPDFState()->m_TableColumnsMap);
                 const TableColumnsMap::const_iterator aIter = rTableColumnsMap.find( pTable );
 
                 if ( aIter == rTableColumnsMap.end() )
@@ -1588,7 +1606,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
                     const SwFontScript nFont = rInf.GetFont()->GetActual();
-                    const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
+                    const LanguageType nDefaultLang(mpPDFExtOutDevData->GetSwPDFState()->m_eLanguageDefault);
 
                     if ( LINESTYLE_NONE    != rInf.GetFont()->GetUnderline() ||
                          LINESTYLE_NONE    != rInf.GetFont()->GetOverline()  ||
@@ -1710,12 +1728,6 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
         }
     }
 
-    s_aTableColumnsMap.clear();
-    s_aLinkIdMap.clear();
-    s_aNumListIdMap.clear();
-    s_aNumListBodyIdMap.clear();
-    s_FrameTagSet.clear();
-
 #if OSL_DEBUG_LEVEL > 1
     aStructStack.clear();
 #endif
@@ -1728,9 +1740,9 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     else if ( i18n::ScriptType::COMPLEX == nScript )
         nLangRes = RES_CHRATR_CTL_LANGUAGE;
 
-    s_eLanguageDefault = static_cast<const SvxLanguageItem*>(&mrSh.GetDoc()->GetDefault( nLangRes ))->GetLanguage();
+    auto const eLanguageDefault = static_cast<const SvxLanguageItem*>(&mrSh.GetDoc()->GetDefault( nLangRes ))->GetLanguage();
 
-    EnhancedPDFExport();
+    EnhancedPDFExport(eLanguageDefault);
 }
 
 SwEnhancedPDFExportHelper::~SwEnhancedPDFExportHelper()
@@ -1761,7 +1773,7 @@ tools::Rectangle SwEnhancedPDFExportHelper::SwRectToPDFRect(const SwPageFrame* p
     return aRect;
 }
 
-void SwEnhancedPDFExportHelper::EnhancedPDFExport()
+void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDefault)
 {
     vcl::PDFExtOutDevData* pPDFExtOutDevData =
         dynamic_cast< vcl::PDFExtOutDevData*>( mrOut.GetExtOutDevData() );
@@ -1771,7 +1783,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     // set the document locale
 
-    css::lang::Locale aDocLocale( LanguageTag( SwEnhancedPDFExportHelper::GetDefaultLanguage() ).getLocale() );
+    lang::Locale const aDocLocale( LanguageTag(eLanguageDefault).getLocale() );
     pPDFExtOutDevData->SetDocumentLocale( aDocLocale );
 
     // Prepare the output device:
@@ -1791,6 +1803,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
     if ( !mbEditEngineOnly )
     {
+        assert(pPDFExtOutDevData->GetSwPDFState() == nullptr);
+        pPDFExtOutDevData->SetSwPDFState(new SwEnhancedPDFState(eLanguageDefault));
 
         // POSTITS
 
@@ -1933,7 +1947,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                                 // Store link info for tagged pdf output:
                                 const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                                s_aLinkIdMap.push_back( aLinkEntry );
+                                pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
 
                                 // Connect Link and Destination:
                                 if ( bInternal )
@@ -2013,7 +2027,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // Store link info for tagged pdf output:
                         const IdMapEntry aLinkEntry(aLinkRect, nLinkId);
-                        s_aLinkIdMap.push_back(aLinkEntry);
+                        pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
 
                         // Connect Link and Destination:
                         if ( bInternal )
@@ -2151,7 +2165,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                             // Store link info for tagged pdf output:
                             const IdMapEntry aLinkEntry( rLinkRect, nLinkId );
-                            s_aLinkIdMap.push_back( aLinkEntry );
+                            pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
 
                             // Connect Link and Destination:
                             pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
@@ -2258,11 +2272,11 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                     const sal_Int32 nBackDestId = pPDFExtOutDevData->CreateDest(aRect, aLinkPageNum);
                     // Store link info for tagged pdf output:
                     const IdMapEntry aLinkEntry( aLinkRect, nLinkId );
-                    s_aLinkIdMap.push_back( aLinkEntry );
+                    pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
 
                     // Store backlink info for tagged pdf output:
                     const IdMapEntry aBackLinkEntry( aFootnoteSymbolRect, nBackLinkId );
-                    s_aLinkIdMap.push_back( aBackLinkEntry );
+                    pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aBackLinkEntry);
                     // Connect Links and Destinations:
                     pPDFExtOutDevData->SetLinkDest( nLinkId, nDestId );
                     pPDFExtOutDevData->SetLinkDest( nBackLinkId, nBackDestId );
@@ -2422,6 +2436,9 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 pPDFExtOutDevData->SetLinkURL( rBookmark.nLinkId, aBookmarkName );
         }
         rBookmarks.clear();
+        assert(pPDFExtOutDevData->GetSwPDFState());
+        delete pPDFExtOutDevData->GetSwPDFState();
+        pPDFExtOutDevData->SetSwPDFState(nullptr);
     }
 
     // Restore view, cursor, and outdev:
@@ -2532,7 +2549,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                     tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
                     sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
                     IdMapEntry aLinkEntry(rLinkRect, nLinkId);
-                    s_aLinkIdMap.push_back(aLinkEntry);
+                    pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
                     pPDFExtOutDevData->SetLinkURL(nLinkId, rURL);
                 }
             }
@@ -2582,7 +2599,7 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
                     tools::Rectangle aRect(SwRectToPDFRect(pPageFrame, rLinkRect.SVRect()));
                     sal_Int32 nLinkId = pPDFExtOutDevData->CreateLink(aRect, content, rLinkPageNum);
                     IdMapEntry aLinkEntry(rLinkRect, nLinkId);
-                    s_aLinkIdMap.push_back(aLinkEntry);
+                    pPDFExtOutDevData->GetSwPDFState()->m_LinkIdMap.push_back(aLinkEntry);
                     pPDFExtOutDevData->SetLinkDest(nLinkId, nDestId);
                 }
             }
