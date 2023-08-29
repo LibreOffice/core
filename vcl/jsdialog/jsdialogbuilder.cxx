@@ -118,7 +118,7 @@ void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Wi
     {
         if (it->m_eType == eType && it->m_pWindow == pWindow)
         {
-            // actions should be always sent, eg. renrering of custom entries in combobox
+            // actions should be always sent, eg. rendering of custom entries in combobox
             if (eType == jsdialog::MessageType::Action)
             {
                 it++;
