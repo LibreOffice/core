@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/types.hxx>
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/toolkit/svtabbx.hxx>
@@ -24,6 +25,7 @@
 #include <vcl/toolkit/svlbitm.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
@@ -497,6 +499,10 @@ SvHeaderTabListBox::~SvHeaderTabListBox()
 
 void SvHeaderTabListBox::dispose()
 {
+    for (css::uno::Reference<css::accessibility::XAccessible>& rxChild : m_aAccessibleChildren)
+        comphelper::disposeComponent(rxChild);
+    m_aAccessibleChildren.clear();
+
     m_pImpl.reset();
     SvTabListBox::dispose();
 }
