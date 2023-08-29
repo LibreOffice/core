@@ -2301,10 +2301,7 @@ void SdXMLExport::ExportMasterStyles_()
             exportFormsElement( xMasterPage );
 
             // write optional loext:theme
-            if (IsImpress())
-            {
-                ExportThemeElement(xMasterPage);
-            }
+            ExportThemeElement(xMasterPage);
 
             // write graphic objects on this master page (if any)
             if(xMasterPage.is() && xMasterPage->getCount())
