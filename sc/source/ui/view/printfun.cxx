@@ -713,7 +713,7 @@ bool ScPrintFunc::AdjustPrintArea( bool bNew )
     {
         nStartCol = 0;
         nStartRow = 0;
-        if (!rDoc.GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes ))
+        if (!rDoc.GetPrintArea( nPrintTab, nEndCol, nEndRow, bNotes ) && aTableParam.bSkipEmpty)
             return false;   // nothing
         bPrintAreaValid = true;
     }

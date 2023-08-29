@@ -2141,7 +2141,18 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     if (bSinglePageSheets)
         nTotalPages = pDocShell->GetDocument().GetTableCount();
 
-    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
+    // if no pages counted then user must be trying to print sheet/selection without any content (i.e empty)
+    if (nTotalPages == 0)
+    {
+        ScPrintOptions aNewOptions = aStatus.GetOptions();
+        aNewOptions.SetSkipEmpty(false);
+        aStatus.SetOptions(aNewOptions);
+
+        pPrintFuncCache.reset(new ScPrintFuncCache( pDocShell, aMark, aStatus ));
+        nTotalPages = pPrintFuncCache->GetPageCount();
+    }
+
+    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages ); // 0, "", 0
     if ( nRenderer < 0 )
         throw lang::IllegalArgumentException();
 

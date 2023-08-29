@@ -128,8 +128,10 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbCanExtractForAccessibility;
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
-    bool                        mbIsRangeChecked;
+    bool                        mbIsPageRangeChecked;
     OUString                    msPageRange;
+    bool                        mbIsSheetRangeChecked;
+    OUString                    msSheetRange;
     bool                        mbSelectionIsChecked;
 
     bool                        mbExportRelativeFsysLinks;
@@ -184,9 +186,11 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     ImpPDFTabDialog*             mpParent;
 
     std::unique_ptr<weld::RadioButton> mxRbAll;
-    std::unique_ptr<weld::RadioButton> mxRbRange;
+    std::unique_ptr<weld::RadioButton> mxRbPageRange;
+    std::unique_ptr<weld::RadioButton> mxRbSheetRange;
     std::unique_ptr<weld::RadioButton> mxRbSelection;
     std::unique_ptr<weld::Entry> mxEdPages;
+    std::unique_ptr<weld::Entry> mxEdSheets;
     std::unique_ptr<weld::RadioButton> mxRbLosslessCompression;
     std::unique_ptr<weld::RadioButton> mxRbJPEGCompression;
     std::unique_ptr<weld::Widget> mxQualityFrame;
@@ -217,10 +221,11 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     std::unique_ptr<weld::Label> mxFtWatermark;
     std::unique_ptr<weld::Entry> mxEdWatermark;
     std::unique_ptr<weld::Label> mxSlidesFt;
-    std::unique_ptr<weld::Label> mxSheetsFt;
+    std::unique_ptr<weld::Label> mxSheetsSelectionFt;
 
     DECL_LINK(ToggleAllHdl, weld::Toggleable&, void);
     DECL_LINK(TogglePagesHdl, weld::Toggleable&, void);
+    DECL_LINK(ToggleSheetsHdl, weld::Toggleable&, void);
     DECL_LINK(ToggleSelectionHdl, weld::Toggleable&, void);
     DECL_LINK(ToggleCompressionHdl, weld::Toggleable&, void);
     DECL_LINK(ToggleReduceImageResolutionHdl, weld::Toggleable&, void);
@@ -230,6 +235,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK(ToggleExportNotesPagesHdl, weld::Toggleable&, void);
 
     void                        TogglePagesHdl();
+    void                        ToggleSheetsHdl();
     void                        EnableExportNotesPages();
 
     DECL_LINK(TogglePDFVersionOrUniversalAccessibilityHandle, weld::Toggleable&, void);
