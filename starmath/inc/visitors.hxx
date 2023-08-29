@@ -219,7 +219,7 @@ public:
         , maPosition( position )
         , mrFormat( rFormat )
     {
-        if (mrFormat.IsRightToLeft())
+        if (mrFormat.IsRightToLeft() && mrDev.GetOutDevType() != OUTDEV_WINDOW)
             mrDev.ReMirror(maPosition);
         pTree->Accept( this );
     }

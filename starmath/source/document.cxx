@@ -332,8 +332,10 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
     rPosition.AdjustY(maFormat.GetDistance( DIS_TOPSPACE  ) );
 
     Point aPosition(rPosition);
-    if (bRTL)
-        aPosition.AdjustX(GetSize().Width() - maFormat.GetDistance(DIS_LEFTSPACE) - maFormat.GetDistance(DIS_RIGHTSPACE));
+    if (bRTL && rDev.GetOutDevType() != OUTDEV_WINDOW)
+        aPosition.AdjustX(GetSize().Width()
+                          - maFormat.GetDistance(DIS_LEFTSPACE)
+                          - maFormat.GetDistance(DIS_RIGHTSPACE));
 
     //! in case of high contrast-mode (accessibility option!)
     //! the draw mode needs to be set to default, because when embedding
@@ -353,11 +355,21 @@ void SmDocShell::DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSel
               vcl::PushFlags::RTLENABLED);
 
     // We want the device to always be LTR, we handle RTL formulas ourselves.
-    rDev.EnableRTL(false);
+    if (rDev.GetOutDevType() == OUTDEV_WINDOW)
+        rDev.EnableRTL(bRTL);
+    else
+        rDev.EnableRTL(false);
 
-    // For RTL formulas, we want the brackets to be mirrored.
-    rDev.SetLayoutMode(bRTL ? vcl::text::ComplexTextLayoutFlags::BiDiRtl
-                            : vcl::text::ComplexTextLayoutFlags::Default);
+    auto nLayoutFlags = vcl::text::ComplexTextLayoutFlags::Default;
+    if (bRTL)
+    {
+        // For RTL formulas, we want the brackets to be mirrored.
+        nLayoutFlags |= vcl::text::ComplexTextLayoutFlags::BiDiRtl;
+        if (rDev.GetOutDevType() == OUTDEV_WINDOW)
+            nLayoutFlags |= vcl::text::ComplexTextLayoutFlags::TextOriginLeft;
+    }
+
+    rDev.SetLayoutMode(nLayoutFlags);
 
     // Numbers should not be converted, for now.
     rDev.SetDigitLanguage( LANGUAGE_ENGLISH );
