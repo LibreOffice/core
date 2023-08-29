@@ -93,12 +93,10 @@ namespace vcl {
 class VCL_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public vcl::IAccessibleTableProvider
 {
 private:
-    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
-
     bool                            m_bFirstPaint;
     std::unique_ptr<::vcl::SvHeaderTabListBoxImpl>  m_pImpl;
     ::vcl::IAccessibleTabListBox*   m_pAccessible;
-    AccessibleChildren              m_aAccessibleChildren;
+    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
 
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, SvTreeListBox*, void );
     DECL_DLLPRIVATE_LINK( CreateAccessibleHdl_Impl, HeaderBar*, void );
