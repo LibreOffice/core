@@ -31,6 +31,7 @@
 class Graphic;
 class GDIMetaFile;
 class SdrObject;
+struct SwEnhancedPDFState;
 
 namespace vcl
 {
@@ -96,6 +97,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
     // map from annotation SdrObject to annotation index
     ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_ScreenAnnotations;
 
+    SwEnhancedPDFState * m_pSwPDFState = nullptr;
+
 public:
 
     PDFExtOutDevData( const OutputDevice& rOutDev );
@@ -152,6 +155,9 @@ public:
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
     const std::vector<OUString>& GetChapterNames() const { return maChapterNames; }
+
+    SwEnhancedPDFState * GetSwPDFState() { return m_pSwPDFState; }
+    void SetSwPDFState(SwEnhancedPDFState *const pSwPDFState) { m_pSwPDFState = pSwPDFState; }
 
     const Graphic& GetCurrentGraphic() const;
 
