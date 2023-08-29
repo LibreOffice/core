@@ -1178,7 +1178,7 @@ The following structure describes the permissions used in PDF security
      */
     void SetActualText( const OUString& rText );
 
-    /** set the Alt attribute of a strutural element
+    /** set the Alt attribute of a structural element
 
     Alt is s replacement text describing the contents of a structural element. This
     is mainly used by accessibility applications; e.g. a screen reader would read
