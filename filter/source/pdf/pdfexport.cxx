@@ -59,6 +59,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/sheet/XSheetRange.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
@@ -499,6 +500,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 if ( rProp.Name == "PageRange" )
                     rProp.Value >>= aPageRange;
+                else if ( rProp.Name == "SheetRange" )
+                {
+                    Reference< frame::XController > xController( Reference< frame::XModel >( mxSrcDoc, UNO_QUERY_THROW )->getCurrentController() );
+                    Reference< sheet::XSheetRange > xView( xController, UNO_QUERY);
+                    OUString aSheetRange;
+                    rProp.Value >>= aSheetRange;
+                    aSelection = xView->getSelectionFromString(aSheetRange);
+                }
                 else if ( rProp.Name == "Selection" )
                     aSelection = rProp.Value;
                 else if ( rProp.Name == "UseLosslessCompression" )

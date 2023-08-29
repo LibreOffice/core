@@ -60,8 +60,8 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="range">
-                    <property name="label" translatable="yes" context="pdfgeneralpage|range">_Pages:</property>
+                  <object class="GtkRadioButton" id="pagerange">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|pagerange">_Pages:</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
@@ -74,14 +74,39 @@
                       <relation type="label-for" target="pages"/>
                     </accessibility>
                     <child internal-child="accessible">
-                      <object class="AtkObject" id="range-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|range">Exports the pages you type in the box.</property>
+                      <object class="AtkObject" id="pagerange-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|pagerange">Exports the pages you type in the box.</property>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRadioButton" id="sheetrange">
+                    <property name="label" translatable="yes" context="pdfgeneralpage|sheetrange">_Sheets:</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <property name="group">all</property>
+                    <accessibility>
+                      <relation type="label-for" target="sheets"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sheetrange-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|sheetrange">Exports the sheets you type in the box.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>
@@ -114,7 +139,7 @@
                     <property name="width-chars">5</property>
                     <property name="truncate-multiline">True</property>
                     <accessibility>
-                      <relation type="labelled-by" target="range"/>
+                      <relation type="labelled-by" target="pagerange"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="pages-atkobject">
@@ -128,11 +153,32 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkEntry" id="sheets">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="activates-default">True</property>
+                    <property name="width-chars">5</property>
+                    <property name="truncate-multiline">True</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="sheetrange"/>
+                    </accessibility>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="sheets-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="pdfgeneralpage|extended_tip|sheets">Exports the sheets you type in the box.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkLabel" id="slides">
                     <property name="can-focus">False</property>
                     <property name="no-show-all">True</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes" context="pdfgeneralpage|slides">Slides:</property>
+                    <property name="label" translatable="yes" context="pdfgeneralpage|slides">_Slides:</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -1039,7 +1085,8 @@
   <object class="GtkSizeGroup" id="sizegroupLabel">
     <widgets>
       <widget name="all"/>
-      <widget name="range"/>
+      <widget name="pagerange"/>
+      <widget name="sheetrange"/>
       <widget name="selection"/>
       <widget name="losslesscompress"/>
       <widget name="box3"/>
@@ -1050,6 +1097,7 @@
   <object class="GtkSizeGroup" id="sizegroupWidget">
     <widgets>
       <widget name="pages"/>
+      <widget name="sheets"/>
       <widget name="qualityframe"/>
       <widget name="resolution"/>
       <widget name="watermarkentry"/>

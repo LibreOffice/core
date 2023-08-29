@@ -52,7 +52,7 @@ class exportToPDF(UITestCase):
                         self.assertEqual("true", get_state_as_dict(xDialog.getChild(child))['Checked'])
 
                     nonCheckedChildren = ['all', 'changecomment', 'changeform', 'changeinsdel', 'changenone', 'contfacinglayout', 'contlayout', 'fitvis', 'fitwidth',
-                            'fitwin', 'fitzoom', 'losslesscompress', 'openinternet', 'openpdf', 'pageonly', 'printlow', 'printnone', 'range',
+                            'fitwin', 'fitzoom', 'losslesscompress', 'openinternet', 'openpdf', 'pageonly', 'printlow', 'printnone', 'pagerange', 'sheetrange',
                             'singlelayout', 'thumbs', 'visiblebookmark']
 
                     for child in nonCheckedChildren:

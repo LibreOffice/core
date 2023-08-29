@@ -35,6 +35,7 @@
 #include <com/sun/star/sheet/XActivationBroadcaster.hpp>
 #include <com/sun/star/sheet/XViewPane.hpp>
 #include <com/sun/star/sheet/XRangeSelection.hpp>
+#include <com/sun/star/sheet/XSheetRange.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -137,6 +138,7 @@ class ScTabViewObj final : public ScViewPaneBase,
                      public css::sheet::XViewSplitable,
                      public css::sheet::XViewFreezable,
                      public css::sheet::XRangeSelection,
+                     public css::sheet::XSheetRange,
                      public css::lang::XUnoTunnel,
                      public css::datatransfer::XTransferableSupplier,
                      public css::sheet::XSelectedSheetsSupplier
@@ -197,6 +199,9 @@ public:
     virtual css::uno::Any SAL_CALL getSelection() override;
     virtual void SAL_CALL   addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL   removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+
+                            // XSheetRange
+    virtual css::uno::Any SAL_CALL getSelectionFromString( const OUString& aStrRange ) override;
 
     //! XPrintable?
 

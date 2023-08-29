@@ -106,8 +106,10 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     mbCanCopyOrExtract( false ),
     mbCanExtractForAccessibility( true ),
 
-    mbIsRangeChecked( false ),
+    mbIsPageRangeChecked( false ),
     msPageRange( ' ' ),
+    mbIsSheetRangeChecked( false ),
+    msSheetRange( ' ' ),
 
     mbSelectionIsChecked( false ),
     mbExportRelativeFsysLinks( false ),
@@ -492,8 +494,10 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
         comphelper::makePropertyValue("RestrictPermissions", mbRestrictPermissions),
         comphelper::makePropertyValue("PreparedPermissionPassword", maPreparedOwnerPassword)
     };
-    if( mbIsRangeChecked )
+    if( mbIsPageRangeChecked )
         aRet.push_back(comphelper::makePropertyValue("PageRange", msPageRange));
+    if( mbIsSheetRangeChecked )
+        aRet.push_back(comphelper::makePropertyValue("SheetRange", msSheetRange));
     else if( mbSelectionIsChecked )
         aRet.push_back(comphelper::makePropertyValue("Selection", maSelection));
 
@@ -517,9 +521,11 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mbIsWriter(false)
     , mpParent(nullptr)
     , mxRbAll(m_xBuilder->weld_radio_button("all"))
-    , mxRbRange(m_xBuilder->weld_radio_button("range"))
+    , mxRbPageRange(m_xBuilder->weld_radio_button("pagerange"))
+    , mxRbSheetRange(m_xBuilder->weld_radio_button("sheetrange"))
     , mxRbSelection(m_xBuilder->weld_radio_button("selection"))
     , mxEdPages(m_xBuilder->weld_entry("pages"))
+    , mxEdSheets(m_xBuilder->weld_entry("sheets"))
     , mxRbLosslessCompression(m_xBuilder->weld_radio_button("losslesscompress"))
     , mxRbJPEGCompression(m_xBuilder->weld_radio_button("jpegcompress"))
     , mxQualityFrame(m_xBuilder->weld_widget("qualityframe"))
@@ -550,7 +556,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogC
     , mxFtWatermark(m_xBuilder->weld_label("watermarklabel"))
     , mxEdWatermark(m_xBuilder->weld_entry("watermarkentry"))
     , mxSlidesFt(m_xBuilder->weld_label("slides"))
-    , mxSheetsFt(m_xBuilder->weld_label("selectedsheets"))
+    , mxSheetsSelectionFt(m_xBuilder->weld_label("selectedsheets"))
 {
 }
 
@@ -565,11 +571,13 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mpParent = pParent;
 
     // init this class data
-    mxRbRange->connect_toggled( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
+    mxRbPageRange->connect_toggled( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
+    mxRbSheetRange->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleSheetsHdl ) );
 
     mxRbAll->set_active(true);
     mxRbAll->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleAllHdl ) );
     TogglePagesHdl();
+    ToggleSheetsHdl();
 
     mxRbSelection->set_sensitive( pParent->mbSelectionPresent );
     if ( pParent->mbSelectionPresent )
@@ -654,7 +662,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     if ( mbIsPresentation )
     {
-        mxRbRange->set_label(mxSlidesFt->get_label());
+        mxRbPageRange->set_label(mxSlidesFt->get_label());
         mxCbExportNotesPages->show();
         mxCbExportNotesPages->set_active(pParent->mbExportNotesPages);
         mxCbExportNotesPages->connect_toggled( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
@@ -677,9 +685,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     if( mbIsSpreadsheet )
     {
-        mxRbSelection->set_label(mxSheetsFt->get_label());
+        mxRbSelection->set_label(mxSheetsSelectionFt->get_label());
         // tdf#105965 Make Selection/Selected sheets the default PDF export range setting for spreadsheets
         mxRbSelection->set_active(true);
+
+        mxRbSheetRange->show();
+        mxEdSheets->show();
 
         mxCbSinglePageSheets->show();
         mxCbSinglePageSheets->set_active(pParent->mbSinglePageSheets);
@@ -688,6 +699,9 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     {
         mxCbSinglePageSheets->hide();
         mxCbSinglePageSheets->set_active(false);
+        mxRbSheetRange->hide();
+        mxRbSheetRange->set_active(false);
+        mxEdSheets->hide();
     }
 
     mxCbExportPlaceholders->set_visible(mbIsWriter);
@@ -734,11 +748,16 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* pParent )
     pParent->mbIsExportPlaceholders = mxCbExportPlaceholders->get_active();
     pParent->mbAddStream = mxCbAddStream->get_visible() && mxCbAddStream->get_active();
 
-    pParent->mbIsRangeChecked = false;
-    if( mxRbRange->get_active() )
+    pParent->mbIsPageRangeChecked = false;
+    if( mxRbPageRange->get_active() )
     {
-        pParent->mbIsRangeChecked = true;
+        pParent->mbIsPageRangeChecked = true;
         pParent->msPageRange = mxEdPages->get_text(); //FIXME all right on other languages ?
+    }
+    else if ( mxRbSheetRange->get_active() )
+    {
+        pParent->mbIsSheetRangeChecked = true;
+        pParent->msSheetRange = mxEdSheets->get_text();
     }
     else if( mxRbSelection->get_active() )
     {
@@ -802,6 +821,12 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePagesHdl, weld::Toggleable&, void)
     EnableExportNotesPages();
 }
 
+IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSheetsHdl, weld::Toggleable&, void)
+{
+    ToggleSheetsHdl();
+    EnableExportNotesPages();
+}
+
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, weld::Toggleable&, void)
 {
     EnableExportNotesPages();
@@ -809,9 +834,16 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleSelectionHdl, weld::Toggleable&, voi
 
 void ImpPDFTabGeneralPage::TogglePagesHdl()
 {
-    mxEdPages->set_sensitive( mxRbRange->get_active() );
-    if (mxRbRange->get_active())
+    mxEdPages->set_sensitive( mxRbPageRange->get_active() );
+    if (mxRbPageRange->get_active())
         mxEdPages->grab_focus();
+}
+
+void ImpPDFTabGeneralPage::ToggleSheetsHdl()
+{
+    mxEdSheets->set_sensitive( mxRbSheetRange->get_active() );
+    if (mxRbSheetRange->get_active())
+        mxEdSheets->grab_focus();
 }
 
 void ImpPDFTabGeneralPage::EnableExportNotesPages()
@@ -859,7 +891,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::Toggleable&, voi
     if( mxCbAddStream->get_active() )
     {
         mxRbAll->set_active(true);
-        mxRbRange->set_sensitive( false );
+        mxRbPageRange->set_sensitive( false );
+        mxRbSheetRange->set_sensitive( false );
         mxRbSelection->set_sensitive( false );
         mxEdPages->set_sensitive( false );
         mxRbAll->set_sensitive( false );
@@ -867,7 +900,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleAddStreamHdl, weld::Toggleable&, voi
     else
     {
         mxRbAll->set_sensitive(true);
-        mxRbRange->set_sensitive(true);
+        mxRbPageRange->set_sensitive(true);
+        mxRbSheetRange->set_sensitive(true);
         mxRbSelection->set_sensitive(true);
     }
 }

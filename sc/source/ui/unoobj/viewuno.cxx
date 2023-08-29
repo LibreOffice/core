@@ -42,6 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/multisel.hxx>
 
 #include <drawsh.hxx>
 #include <drtxtob.hxx>
@@ -479,6 +480,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XViewSplitable )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
+    SC_QUERYINTERFACE( sheet::XSheetRange )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
     SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
     SC_QUERYINTERFACE( sheet::XSelectedSheetsSupplier )
@@ -588,6 +590,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes()
             cppu::UnoType<sheet::XViewSplitable>::get(),
             cppu::UnoType<sheet::XViewFreezable>::get(),
             cppu::UnoType<sheet::XRangeSelection>::get(),
+            cppu::UnoType<sheet::XSheetRange>::get(),
             cppu::UnoType<lang::XUnoTunnel>::get(),
             cppu::UnoType<sheet::XEnhancedMouseClickBroadcaster>::get(),
             cppu::UnoType<sheet::XActivationBroadcaster>::get(),
@@ -940,6 +943,35 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             pObj->SetCursorOnly( true );
         }
     }
+
+    return uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
+}
+
+uno::Any SAL_CALL ScTabViewObj::getSelectionFromString( const OUString& aStrRange )
+{
+    ScDocShell* pDocSh = GetViewShell()->GetViewData().GetDocShell();
+    const sal_Int16 nTabCount = pDocSh->GetDocument().GetTableCount();
+
+    StringRangeEnumerator aRangeEnum(aStrRange , 0, nTabCount-1);
+
+    // iterate through sheet range
+
+    StringRangeEnumerator::Iterator aIter = aRangeEnum.begin();
+    StringRangeEnumerator::Iterator aEnd  = aRangeEnum.end();
+
+    ScRangeListRef aRangeList = new ScRangeList;
+
+    while ( aIter != aEnd )
+    {
+        ScRange currentTab(SCCOL(0), SCROW(0), SCTAB(*aIter));
+        aRangeList->push_back(currentTab);
+        ++aIter;
+    }
+
+    rtl::Reference<ScCellRangesBase> pObj = new ScCellRangesObj(pDocSh, *aRangeList);
+
+    // SetCursorOnly tells the range the specific cells selected are irelevant - maybe could rename?
+    pObj->SetCursorOnly(true);
 
     return uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
 }
