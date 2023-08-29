@@ -1104,6 +1104,10 @@ void ScInputBarGroup::NumLinesChanged()
 
 void ScInputBarGroup::TriggerToolboxLayout()
 {
+    // layout changes are expensive and un-necessary.
+    if (comphelper::LibreOfficeKit::isActive())
+        return;
+
     vcl::Window *w=GetParent();
     ScInputWindow &rParent = dynamic_cast<ScInputWindow&>(*w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
