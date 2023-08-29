@@ -971,65 +971,28 @@ Bitmap OutputDevice::BlendBitmap(
 
         if( pP && pA && pB && !bFastBlend )
         {
-            switch( pP->GetScanlineFormat() )
+            for( nY = 0; nY < nDstHeight; nY++ )
             {
-                case ScanlineFormat::N8BitPal:
-                    {
-                        for( nY = 0; nY < nDstHeight; nY++ )
-                        {
-                            tools::Long  nMapY = pMapY[ nY ];
-                            if ( bVMirr )
-                            {
-                                nMapY = aBmpRect.Bottom() - nMapY;
-                            }
-                            Scanline pPScan = pP->GetScanline( nMapY );
-                            Scanline pAScan = pA->GetScanline( nMapY );
-                            Scanline pBScan = pB->GetScanline( nY );
+                tools::Long  nMapY = pMapY[ nY ];
 
-                            for( nX = 0; nX < nDstWidth; nX++ )
-                            {
-                                tools::Long nMapX = pMapX[ nX ];
-
-                                if ( bHMirr )
-                                {
-                                    nMapX = aBmpRect.Right() - nMapX;
-                                }
-                                aDstCol = pB->GetPixelFromData( pBScan, nX );
-                                aDstCol.Merge( pP->GetPaletteColor( pPScan[ nMapX ] ), pAScan[ nMapX ] );
-                                pB->SetPixelOnData( pBScan, nX, aDstCol );
-                            }
-                        }
-                    }
-                    break;
-
-                default:
+                if ( bVMirr )
                 {
-
-                    for( nY = 0; nY < nDstHeight; nY++ )
-                    {
-                        tools::Long  nMapY = pMapY[ nY ];
-
-                        if ( bVMirr )
-                        {
-                            nMapY = aBmpRect.Bottom() - nMapY;
-                        }
-                        Scanline pAScan = pA->GetScanline( nMapY );
-                        Scanline pBScan = pB->GetScanline(nY);
-                        for( nX = 0; nX < nDstWidth; nX++ )
-                        {
-                            tools::Long nMapX = pMapX[ nX ];
-
-                            if ( bHMirr )
-                            {
-                                nMapX = aBmpRect.Right() - nMapX;
-                            }
-                            aDstCol = pB->GetPixelFromData( pBScan, nX );
-                            aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pAScan[ nMapX ] );
-                            pB->SetPixelOnData( pBScan, nX, aDstCol );
-                        }
-                    }
+                    nMapY = aBmpRect.Bottom() - nMapY;
                 }
-                break;
+                Scanline pAScan = pA->GetScanline( nMapY );
+                Scanline pBScan = pB->GetScanline(nY);
+                for( nX = 0; nX < nDstWidth; nX++ )
+                {
+                    tools::Long nMapX = pMapX[ nX ];
+
+                    if ( bHMirr )
+                    {
+                        nMapX = aBmpRect.Right() - nMapX;
+                    }
+                    aDstCol = pB->GetPixelFromData( pBScan, nX );
+                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pAScan[ nMapX ] );
+                    pB->SetPixelOnData( pBScan, nX, aDstCol );
+                }
             }
         }
 
