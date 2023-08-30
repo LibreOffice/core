@@ -25,12 +25,10 @@
 #include <cppuhelper/implbase.hxx>
 
 
-
-
-typedef std::map< sal_Int32, css::uno::Reference< css::accessibility::XAccessible > > ToolBoxItemsMap;
-
 class VCLXAccessibleToolBoxItem;
 class ToolBox;
+
+typedef std::map< sal_Int32, rtl::Reference< VCLXAccessibleToolBoxItem > > ToolBoxItemsMap;
 
 class VCLXAccessibleToolBox final : public cppu::ImplInheritanceHelper<VCLXAccessibleComponent, css::accessibility::XAccessibleSelection>
 {

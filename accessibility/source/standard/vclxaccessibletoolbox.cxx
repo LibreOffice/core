@@ -137,7 +137,7 @@ VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( ToolBox::ImplToo
             //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
         // returns only toolbox buttons, not windows
         if ( aIter != m_aAccessibleChildren.end()  && aIter->second.is())
-            pItem = static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+            pItem = aIter->second.get();
     }
 
     return pItem;
@@ -173,8 +173,7 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
 
         if ( rxChild.is() )
         {
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
+            VCLXAccessibleToolBoxItem* pItem = rxChild.get();
             if ( pItem->HasFocus() && nItemId != nHighlightItemId )
             {
                 // reset the old focused item
@@ -203,8 +202,7 @@ void VCLXAccessibleToolBox::ReleaseFocus_Impl( ToolBox::ImplToolItems::size_type
             //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
         if ( aIter != m_aAccessibleChildren.end() && aIter->second.is() )
         {
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+            VCLXAccessibleToolBoxItem* pItem = aIter->second.get();
             if ( pItem->HasFocus() )
                 pItem->SetFocus( false );
         }
@@ -224,8 +222,7 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( ToolBox::ImplToolItems::size_typ
     {
             ToolBoxItemId nItemId = pToolBox->GetItemId( rPos );
 
-            VCLXAccessibleToolBoxItem* pItem =
-                static_cast< VCLXAccessibleToolBoxItem* >( rxChild.get() );
+            VCLXAccessibleToolBoxItem* pItem = rxChild.get();
             pItem->SetChecked( pToolBox->IsItemChecked( nItemId ) );
             if ( nItemId == nFocusId )
                 pFocusItem = pItem;
@@ -247,8 +244,7 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( ToolBox::ImplToolItems::si
         //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
     if ( aIter != m_aAccessibleChildren.end() && aIter->second.is() )
     {
-        VCLXAccessibleToolBoxItem* pItem =
-            static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
+        VCLXAccessibleToolBoxItem* pItem = aIter->second.get();
         if ( pItem )
             pItem->SetIndeterminate( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET );
     }
@@ -646,7 +642,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
     if ( (!pToolBox) || i < 0 || o3tl::make_unsigned(i) >= pToolBox->GetItemCount() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild;
+    rtl::Reference< VCLXAccessibleToolBoxItem > xChild;
     // search for the child
     ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find(i);
     if ( m_aAccessibleChildren.end() == aIter )
@@ -655,21 +651,20 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         ToolBoxItemId nHighlightItemId = pToolBox->GetHighlightItemId();
         vcl::Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
         // not found -> create a new child
-        rtl::Reference<VCLXAccessibleToolBoxItem> pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
-        Reference< XAccessible> xParent = pChild;
+        xChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
         if ( pItemWindow )
         {
-            xChild = new OToolBoxWindowItem(0,::comphelper::getProcessComponentContext(),pItemWindow->GetAccessible(),xParent);
-            pItemWindow->SetAccessible(xChild);
-            pChild->SetChild( xChild );
+            Reference< XAccessible> xParent = xChild;
+            rtl::Reference<OToolBoxWindowItem> xChild2( new OToolBoxWindowItem(0,::comphelper::getProcessComponentContext(),pItemWindow->GetAccessible(),xParent) );
+            pItemWindow->SetAccessible(xChild2);
+            xChild->SetChild( xChild2 );
         }
-        xChild = pChild;
         if ( nHighlightItemId > ToolBoxItemId(0) && nItemId == nHighlightItemId )
-            pChild->SetFocus( true );
+            xChild->SetFocus( true );
         if ( pToolBox->IsItemChecked( nItemId ) )
-            pChild->SetChecked( true );
+            xChild->SetChecked( true );
         if ( pToolBox->GetItemState( nItemId ) == TRISTATE_INDET )
-            pChild->SetIndeterminate( true );
+            xChild->SetIndeterminate( true );
         m_aAccessibleChildren.emplace( i, xChild );
     }
     else
