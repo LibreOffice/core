@@ -223,7 +223,7 @@
                 <property name="no-show-all">True</property>
                 <items>
                   <item translatable="yes" context="optcompatpage|format">Add spacing between paragraphs and tables</item>
-                  <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at tops of pages</item>
+                  <item translatable="yes" context="optcompatpage|format">Add paragraph and table spacing at top of first page and page breaks</item>
                   <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 tabstop formatting</item>
                   <item translatable="yes" context="optcompatpage|format">Do not add leading (extra space) between lines of text</item>
                   <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 line spacing</item>

@@ -46,7 +46,7 @@
       </prop>
       <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean" oor:nillable="false">
         <info>
-          <desc>Add paragraph and table spacing at tops of pages</desc>
+          <desc>Add paragraph and table spacing at top of first page and page breaks</desc>
         </info>
         <value>true</value>
       </prop>
