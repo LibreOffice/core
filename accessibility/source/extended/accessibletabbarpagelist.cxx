@@ -52,20 +52,16 @@ namespace accessibility
         ,m_nIndexInParent( nIndexInParent )
     {
         if ( m_pTabBar )
-            m_aAccessibleChildren.assign( m_pTabBar->GetPageCount(), Reference< XAccessible >() );
+            m_aAccessibleChildren.assign( m_pTabBar->GetPageCount(), rtl::Reference< AccessibleTabBarPage >() );
     }
 
 
     void AccessibleTabBarPageList::UpdateShowing( bool bShowing )
     {
-        for (const Reference<XAccessible>& xChild : m_aAccessibleChildren)
+        for (const rtl::Reference<AccessibleTabBarPage>& xChild : m_aAccessibleChildren)
         {
             if ( xChild.is() )
-            {
-                AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                if ( pAccessibleTabBarPage )
-                    pAccessibleTabBarPage->SetShowing( bShowing );
-            }
+                xChild->SetShowing( bShowing );
         }
     }
 
@@ -76,13 +72,9 @@ namespace accessibility
 
         if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
         {
-            Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+            rtl::Reference< AccessibleTabBarPage > xChild( m_aAccessibleChildren[i] );
             if ( xChild.is() )
-            {
-                AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                if ( pAccessibleTabBarPage )
-                    pAccessibleTabBarPage->SetSelected( bSelected );
-            }
+                xChild->SetSelected( bSelected );
         }
     }
 
@@ -92,11 +84,10 @@ namespace accessibility
         if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
             return;
 
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-        if ( xChild.is() )
+        if ( m_pTabBar )
         {
-            AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-            if ( pAccessibleTabBarPage && m_pTabBar )
+            rtl::Reference< AccessibleTabBarPage > pAccessibleTabBarPage( m_aAccessibleChildren[i] );
+            if ( pAccessibleTabBarPage.is() )
             {
                 OUString sPageText = m_pTabBar->GetPageText( m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) ) );
                 pAccessibleTabBarPage->SetPageText( sPageText );
@@ -111,7 +102,7 @@ namespace accessibility
             return;
 
         // insert entry in child list
-        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+        m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, rtl::Reference< AccessibleTabBarPage >() );
 
         // send accessible child event
         Reference< XAccessible > xChild( getAccessibleChild( i ) );
@@ -130,7 +121,7 @@ namespace accessibility
             return;
 
         // get the accessible of the removed page
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+        rtl::Reference< AccessibleTabBarPage > xChild( m_aAccessibleChildren[i] );
 
         // remove entry in child list
         m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
@@ -139,12 +130,10 @@ namespace accessibility
         if ( xChild.is() )
         {
             Any aOldValue, aNewValue;
-            aOldValue <<= xChild;
+            aOldValue <<= uno::Reference<XAccessible>(xChild);
             NotifyAccessibleEvent( AccessibleEventId::CHILD, aOldValue, aNewValue );
 
-            Reference< XComponent > xComponent( xChild, UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->dispose();
+            xChild->dispose();
         }
     }
 
@@ -159,7 +148,7 @@ namespace accessibility
             --j;
 
         // get the accessible of the moved page
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
+        rtl::Reference< AccessibleTabBarPage > xChild( m_aAccessibleChildren[i] );
 
         // remove entry in child list at old position
         m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
@@ -248,6 +237,8 @@ namespace accessibility
                 {
                     sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
 
+                    OExternalLockGuard aGuard( this );
+
                     if ( nPageId == TabBar::PAGE_NOT_FOUND )
                     {
                         for ( sal_Int32 i = m_aAccessibleChildren.size() - 1; i >= 0; --i )
@@ -255,17 +246,13 @@ namespace accessibility
                     }
                     else
                     {
-                        for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                        for ( sal_Int64 i = 0, nCount = m_aAccessibleChildren.size(); i < nCount; ++i )
                         {
-                            Reference< XAccessible > xChild( getAccessibleChild( i ) );
-                            if ( xChild.is() )
+                            sal_uInt16 nChildPageId = m_pTabBar->GetPageId( static_cast<sal_uInt16>(i) );
+                            if (nPageId == nChildPageId)
                             {
-                                AccessibleTabBarPage* pAccessibleTabBarPage = static_cast< AccessibleTabBarPage* >( xChild.get() );
-                                if ( pAccessibleTabBarPage && pAccessibleTabBarPage->GetPageId() == nPageId )
-                                {
-                                    RemoveChild( i );
-                                    break;
-                                }
+                                RemoveChild( i );
+                                break;
                             }
                         }
                     }
@@ -334,9 +321,8 @@ namespace accessibility
         AccessibleTabBarBase::disposing();
 
         // dispose all children
-        for (const Reference<XAccessible>& i : m_aAccessibleChildren)
+        for (const rtl::Reference<AccessibleTabBarPage>& xComponent : m_aAccessibleChildren)
         {
-            Reference< XComponent > xComponent( i, UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
@@ -391,10 +377,15 @@ namespace accessibility
     {
         OExternalLockGuard aGuard( this );
 
+        return getAccessibleChildImpl(i);
+    }
+
+    rtl::Reference< AccessibleTabBarPage > AccessibleTabBarPageList::getAccessibleChildImpl( sal_Int64 i )
+    {
         if ( i < 0 || i >= getAccessibleChildCount() )
             throw IndexOutOfBoundsException();
 
-        Reference< XAccessible > xChild = m_aAccessibleChildren[i];
+        rtl::Reference< AccessibleTabBarPage > xChild = m_aAccessibleChildren[i];
         if ( !xChild.is() )
         {
             if ( m_pTabBar )
@@ -495,7 +486,7 @@ namespace accessibility
         Reference< XAccessible > xChild;
         for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
-            Reference< XAccessible > xAcc = getAccessibleChild( i );
+            rtl::Reference< AccessibleTabBarPage > xAcc = getAccessibleChildImpl( i );
             if ( xAcc.is() )
             {
                 Reference< XAccessibleComponent > xComp( xAcc->getAccessibleContext(), UNO_QUERY );
