@@ -2976,7 +2976,7 @@ bool SwContentTree::HasContentChanged()
             // treeview from the content type member arrays if content change is detected.
             const SwContent* pCnt = pArrType->GetMember(j);
 
-            if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, -1))
+            if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, 0))
                 return true;
 
             OUString sEntryText = m_xTreeView->get_text(*xEntry);
@@ -3060,7 +3060,7 @@ bool SwContentTree::HasContentChanged()
 
                     const SwContent* pCnt = pArrType->GetMember(j);
 
-                    if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, -1))
+                    if (pCnt->IsInvisible() != m_xTreeView->get_sensitive(*xEntry, 0))
                     {
                         bContentChanged = true;
                         break;
