@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 #include <svl/listener.hxx>
+#include <unotools/weakref.hxx>
 
 #include "acccontext.hxx"
 
@@ -46,8 +47,7 @@ class SwAccessibleTable :
 {
     std::unique_ptr<SwAccessibleTableData_Impl> mpTableData;    // the table's data, protected by SolarMutex
     OUString m_sDesc;
-    typedef std::vector< std::pair<SwAccessibleContext*,
-        css::uno::WeakReference<css::accessibility::XAccessible> > > Cells_t;
+    typedef std::vector< unotools::WeakReference<SwAccessibleContext> > Cells_t;
     Cells_t m_vecCellAdd;
     Cells_t m_vecCellRemove;
 
