@@ -217,7 +217,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
                                const Reference<XComponentContext>& _rContext )
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
-    ,m_aSqlParser( _rContext, &m_aParseContext )
+    ,m_aSqlParser( _rContext, &m_aParseContext, &m_aNeutralContext )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser )
     ,m_aElementaryParts( size_t(SQLPartCount) )
