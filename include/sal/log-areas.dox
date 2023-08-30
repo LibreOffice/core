@@ -40,6 +40,7 @@ certain functionality.
 @section basic
 
 @li @c basic
+@li @c basic.qa
 @li @c basic.sbx
 
 @section bridges

@@ -81,16 +81,15 @@ void Coverage::process_directory(const OUString& sDirName)
                     testMacro.LoadSourceFromFile("TestModule", sFileURL);
                     SbxVariableRef pReturn = testMacro.Run();
                     CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
-                    fprintf(stderr, "macro result for %s\n", OUStringToOString(sFileURL,RTL_TEXTENCODING_UTF8).getStr());
-                    fprintf(stderr, "macro returned:\n%s\n",
-                            OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
+                    SAL_INFO("basic.qa", "macro result for " << sFileURL);
+                    SAL_INFO("basic.qa", "macro returned:\n" << pReturn->GetOUString());
                     CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
                                                  pReturn->GetOUString());
                 }
             }
         }
     }
-    fprintf(stderr,"end process directory\n");
+    SAL_INFO("basic.qa", "end process directory");
 }
 
 void Coverage::Coverage_Iterator()

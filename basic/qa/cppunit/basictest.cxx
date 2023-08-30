@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/log.hxx>
 #include "basictest.hxx"
 #include <cppunit/plugin/TestPlugIn.h>
 #include <basic/sbstar.hxx>
@@ -42,7 +43,7 @@ MacroSnippet::MacroSnippet()
 void MacroSnippet::LoadSourceFromFile(const OUString& sModuleName, const OUString& sMacroFileURL)
 {
     OUString sSource;
-    fprintf(stderr,"loadSource opening macro file %s\n", OUStringToOString( sMacroFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic.qa", "loadSource opening macro file" << sMacroFileURL);
 
     osl::File aFile(sMacroFileURL);
     if(aFile.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
@@ -112,9 +113,8 @@ const ErrCode& MacroSnippet::getError() const { return maErrCode; }
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {
-    fprintf(stderr,"(%d:%d)\n",
-            StarBASIC::GetLine(), StarBASIC::GetCol1());
-    fprintf(stderr,"Basic error: %s\n", OUStringToOString( StarBASIC::GetErrorText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+    SAL_INFO("basic.qa", '(' << StarBASIC::GetLine() << ':' << StarBASIC::GetCol1() << ")");
+    SAL_INFO("basic.qa", "Basic error: " << StarBASIC::GetErrorText());
     mbError = true;
     maErrCode = StarBASIC::GetErrorCode();
     return false;
