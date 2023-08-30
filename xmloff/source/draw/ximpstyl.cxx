@@ -836,11 +836,8 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterPageContext
         }
         case XML_ELEMENT(LO_EXT, XML_THEME):
         {
-            if (GetSdImport().IsImpress())
-            {
-                uno::Reference<drawing::XDrawPage> xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
-                return new XMLThemeContext(GetSdImport(), xAttrList, xMasterPage);
-            }
+            uno::Reference<drawing::XDrawPage> xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
+            return new XMLThemeContext(GetSdImport(), xAttrList, xMasterPage);
             break;
         }
     }

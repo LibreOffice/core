@@ -783,6 +783,39 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
     assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name", "followed-hyperlink");
     assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color", "#b0b0b0");
 }
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf157018_ThemeImportDraw)
+{
+    // Similar to testThemeImport but for Draw.
+    // Load document with custom color theme
+    loadFromURL(u"tdf157018_CustomTheme.fodg");
+
+    // First make sure the doc model has a master page with a theme:
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xDrawPage(
+        xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMasterpage(xDrawPage->getMasterPage(), uno::UNO_QUERY);
+
+    uno::Reference<util::XTheme> xTheme;
+    xMasterpage->getPropertyValue("Theme") >>= xTheme;
+    CPPUNIT_ASSERT(xTheme.is());
+
+    // Then make sure it is the custom color theme
+    auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+    CPPUNIT_ASSERT(pUnoTheme);
+    auto pTheme = pUnoTheme->getTheme();
+    CPPUNIT_ASSERT(pTheme);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), pTheme->GetName());
+    auto pColorSet = pTheme->getColorSet();
+    CPPUNIT_ASSERT(pColorSet);
+    CPPUNIT_ASSERT_EQUAL(OUString("My Colors"), pColorSet->getName());
+
+    // and test some colors
+    CPPUNIT_ASSERT_EQUAL(Color(0xFFFF11), pColorSet->getColor(model::ThemeColorType::Light1));
+    CPPUNIT_ASSERT_EQUAL(Color(0x0A0A0A), pColorSet->getColor(model::ThemeColorType::Hyperlink));
+    CPPUNIT_ASSERT_EQUAL(Color(0x440000), pColorSet->getColor(model::ThemeColorType::Accent1));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
