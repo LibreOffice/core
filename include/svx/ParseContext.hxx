@@ -31,11 +31,12 @@ namespace svxform
 
     //= OSystemParseContext
 
-    class SVXCORE_DLLPUBLIC OSystemParseContext final : public ::connectivity::IParseContext
+    class SVXCORE_DLLPUBLIC OSystemParseContext : public ::connectivity::IParseContext
     {
-    private:
+    protected:
 
         ::std::vector< OUString > m_aLocalizedKeywords;
+        OSystemParseContext(bool bInit);
 
     public:
         OSystemParseContext();
@@ -57,6 +58,12 @@ namespace svxform
 
     };
 
+    class SAL_DLLPUBLIC_RTTI ONeutralParseContext final : public OSystemParseContext
+    {
+    public:
+        SVXCORE_DLLPUBLIC ONeutralParseContext();
+        SVXCORE_DLLPUBLIC virtual ~ONeutralParseContext();
+    };
 
     //= OParseContextClient
 

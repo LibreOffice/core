@@ -25,6 +25,7 @@
 #include <svx/dialmgr.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <unotools/resmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
@@ -39,6 +40,11 @@ OSystemParseContext::OSystemParseContext()
 {
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_RSC_SQL_INTERNATIONAL); ++i)
         m_aLocalizedKeywords.push_back(SvxResId(RID_RSC_SQL_INTERNATIONAL[i]));
+}
+
+OSystemParseContext::OSystemParseContext(bool /*bInit*/)
+    : IParseContext()
+{
 }
 
 OSystemParseContext::~OSystemParseContext()
@@ -140,6 +146,17 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
     return InternationalKeyCode::None;
 }
 
+ONeutralParseContext::ONeutralParseContext()
+    : OSystemParseContext(false)
+{
+    std::locale aLocale = Translate::Create("svx", LanguageTag("en-US"));
+    for (size_t i = 0; i < SAL_N_ELEMENTS(RID_RSC_SQL_INTERNATIONAL); ++i)
+        m_aLocalizedKeywords.push_back(Translate::get(RID_RSC_SQL_INTERNATIONAL[i], aLocale));
+}
+
+ONeutralParseContext::~ONeutralParseContext()
+{
+}
 
 namespace
 {
