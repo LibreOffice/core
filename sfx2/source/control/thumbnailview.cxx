@@ -160,10 +160,8 @@ ThumbnailView::ThumbnailView(std::unique_ptr<weld::ScrolledWindow> xWindow, std:
 
 ThumbnailView::~ThumbnailView()
 {
-    css::uno::Reference< css::lang::XComponent> xComponent(mxAccessible, css::uno::UNO_QUERY);
-
-    if (xComponent.is())
-        xComponent->dispose();
+    if (mxAccessible.is())
+        mxAccessible->dispose();
 
     mpItemAttrs.reset();
 
@@ -328,7 +326,7 @@ css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAcce
     return mxAccessible;
 }
 
-const css::uno::Reference< css::accessibility::XAccessible > & ThumbnailView::getAccessible() const
+const rtl::Reference< ThumbnailViewAcc > & ThumbnailView::getAccessible() const
 {
     return mxAccessible;
 }
@@ -550,16 +548,13 @@ ThumbnailViewItem* ThumbnailView::ImplGetVisibleItem( sal_uInt16 nVisiblePos )
 
 void ThumbnailView::ImplFireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue )
 {
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
-
-    if( pAcc )
-        pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
+    if( mxAccessible )
+        mxAccessible->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
 bool ThumbnailView::ImplHasAccessibleListeners() const
 {
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
-    return( pAcc && pAcc->HasAccessibleListeners() );
+    return mxAccessible && mxAccessible->HasAccessibleListeners();
 }
 
 IMPL_LINK_NOARG(ThumbnailView, ImplScrollHdl, weld::ScrolledWindow&, void)
@@ -950,9 +945,8 @@ void ThumbnailView::GetFocus()
     }
 
     // Tell the accessible object that we got the focus.
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
-    if( pAcc )
-        pAcc->GetFocus();
+    if( mxAccessible )
+        mxAccessible->GetFocus();
 
     CustomWidgetController::GetFocus();
 }
@@ -962,9 +956,8 @@ void ThumbnailView::LoseFocus()
     CustomWidgetController::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
-    ThumbnailViewAcc* pAcc = ThumbnailViewAcc::getImplementation(mxAccessible);
-    if( pAcc )
-        pAcc->LoseFocus();
+    if( mxAccessible )
+        mxAccessible->LoseFocus();
 }
 
 void ThumbnailView::Resize()
