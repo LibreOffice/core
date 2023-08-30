@@ -470,21 +470,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             }
             break;
 
-            case SID_THEME_DIALOG:
-            {
-                bool bDisable = true;
-                SdrPageView* pPageView = mpDrawView->GetSdrPageView();
-                if (pPageView)
-                {
-                    SdPage* pPage = dynamic_cast<SdPage*>(pPageView->GetPage());
-                    if (pPage && pPage->IsMasterPage())
-                        bDisable = false;
-                }
-                if (bDisable)
-                    rSet.DisableItem(nWhich);
-            }
-            break;
-
             case SID_STYLE_FAMILY2:
             case SID_STYLE_FAMILY3:
             case SID_STYLE_FAMILY5:
