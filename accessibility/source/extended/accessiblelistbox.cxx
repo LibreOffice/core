@@ -102,10 +102,9 @@ namespace accessibility
             {
                 if ( getListBox() && getListBox()->HasFocus() )
                 {
-                    AccessibleListBoxEntry* pEntry =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                    if (pEntry)
+                    if (m_xFocusedEntry.is())
                     {
-                        pEntry->NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
+                        m_xFocusedEntry->NotifyAccessibleEvent(AccessibleEventId::SELECTION_CHANGED, Any(), Any());
                     }
                 }
             }
@@ -119,20 +118,18 @@ namespace accessibility
                     SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
                     {
-                        AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-                        if (pEntryFocus && pEntryFocus->GetSvLBoxEntry() == pEntry)
+                        if (m_xFocusedEntry.is() && m_xFocusedEntry->GetSvLBoxEntry() == pEntry)
                         {
-                            aNewValue <<= m_xFocusedChild;
+                            aNewValue <<= uno::Reference<XAccessible>(m_xFocusedEntry);;
                             NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, uno::Any(), aNewValue );
                             return ;
                         }
-
                         uno::Any aOldValue;
-                        aOldValue <<= m_xFocusedChild;
+                        aOldValue <<= uno::Reference<XAccessible>(m_xFocusedEntry);;
 
-                        m_xFocusedChild.set(implGetAccessible(*pEntry));
+                        m_xFocusedEntry = implGetAccessible(*pEntry);
 
-                        aNewValue <<= m_xFocusedChild;
+                        aNewValue <<= uno::Reference<XAccessible>(m_xFocusedEntry);
                         NotifyAccessibleEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldValue, aNewValue );
                     }
                     else
@@ -202,8 +199,7 @@ namespace accessibility
         if ( !pEntry )
             pEntry = getListBox()->GetCurEntry();
 
-        AccessibleListBoxEntry* pEntryFocus =static_cast< AccessibleListBoxEntry* >(m_xFocusedChild.get());
-        if (pEntryFocus && pEntry && pEntry != pEntryFocus->GetSvLBoxEntry())
+        if (m_xFocusedEntry.is() && pEntry && pEntry != m_xFocusedEntry->GetSvLBoxEntry())
         {
             AccessibleListBoxEntry *const pAccCurOptionEntry = implGetAccessible(*pEntry).get();
             uno::Any aNewValue;
@@ -214,7 +210,7 @@ namespace accessibility
         }
         else
         {
-            return pEntryFocus;
+            return m_xFocusedEntry.get();
         }
     }
 

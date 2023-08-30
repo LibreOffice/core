@@ -105,7 +105,7 @@ namespace accessibility
         typedef std::unordered_map<SvTreeListEntry*, rtl::Reference<AccessibleListBoxEntry>> MAP_ENTRY;
         MAP_ENTRY m_mapEntry;
 
-        css::uno::Reference< css::accessibility::XAccessible > m_xFocusedChild;
+        rtl::Reference<AccessibleListBoxEntry> m_xFocusedEntry;
 
         accessibility::AccessibleListBoxEntry* GetCurEventEntry( const VclWindowEvent& rVclWindowEvent );
 
