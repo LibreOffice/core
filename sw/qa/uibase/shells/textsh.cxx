@@ -12,8 +12,17 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/bindings.hxx>
 
 #include <docary.hxx>
+#include <docsh.hxx>
+#include <frmmgr.hxx>
+#include <wrtsh.hxx>
+#include <formatflysplit.hxx>
+#include <view.hxx>
+#include <cmdid.h>
+#include <frameformats.hxx>
 
 namespace
 {
@@ -58,6 +67,44 @@ CPPUNIT_TEST_FIXTURE(Test, testDeleteSections)
     // - Actual  : 1
     // i.e. the section was not deleted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDoc->GetSections().size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFootnoteUI)
+{
+    // Given a document with a split fly (to host a table):
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+    RndStdIds eAnchor = RndStdIds::FLY_AT_PARA;
+    pWrtShell->StartAllAction();
+    aMgr.InsertFlyFrame(eAnchor, aMgr.GetPos(), aMgr.GetSize());
+    pWrtShell->EndAllAction();
+    pWrtShell->StartAllAction();
+    SwFrameFormats& rFlys = *pDoc->GetSpzFrameFormats();
+    SwFrameFormat* pFly = rFlys[0];
+    {
+        SwAttrSet aSet(pFly->GetAttrSet());
+        aSet.Put(SwFormatFlySplit(true));
+        pDoc->SetAttr(aSet, *pFly);
+    }
+    pWrtShell->EndAllAction();
+    pWrtShell->UnSelectFrame();
+    pWrtShell->LeaveSelFrameMode();
+    pWrtShell->GetView().AttrChangedNotify(nullptr);
+    pWrtShell->MoveSection(GoCurrSection, fnSectionEnd);
+
+    // When checking if we can insert a footnote inside the split fly:
+    SwView& rView = pWrtShell->GetView();
+    std::unique_ptr<SfxPoolItem> pItem;
+    SfxItemState eState = rView.GetViewFrame()->GetBindings().QueryState(FN_INSERT_FOOTNOTE, pItem);
+
+    // Then make sure that the insertion is allowed:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 32 (DEFAULT)
+    // - Actual  : 1 (DISABLED)
+    // i.e. the insertion was denied.
+    CPPUNIT_ASSERT_EQUAL(SfxItemState::DEFAULT, eState);
 }
 }
 

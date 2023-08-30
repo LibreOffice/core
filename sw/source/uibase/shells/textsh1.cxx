@@ -118,6 +118,8 @@
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtrfmrk.hxx>
+#include <cntfrm.hxx>
+#include <flyfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::beans;
@@ -2261,7 +2263,18 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 const FrameTypeFlags nNoType =
                     FrameTypeFlags::FLY_ANY | FrameTypeFlags::HEADER | FrameTypeFlags::FOOTER | FrameTypeFlags::FOOTNOTE;
-                if ( rSh.GetFrameType(nullptr,true) & nNoType )
+                FrameTypeFlags eType = rSh.GetFrameType(nullptr, true);
+                bool bSplitFly = false;
+                if (eType & FrameTypeFlags::FLY_ATCNT)
+                {
+                    SwContentFrame* pContentFrame = rSh.GetCurrFrame(/*bCalcFrame=*/false);
+                    if (pContentFrame)
+                    {
+                        SwFlyFrame* pFlyFrame = pContentFrame->FindFlyFrame();
+                        bSplitFly = pFlyFrame && pFlyFrame->IsFlySplitAllowed();
+                    }
+                }
+                if (eType & nNoType && !bSplitFly)
                     rSet.DisableItem(nWhich);
 
                 if ( rSh.CursorInsideInputField() )
