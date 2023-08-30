@@ -2627,14 +2627,13 @@ void SwFrameFormat::SetFormatName( const OUString& rNewName, bool bBroadcast )
             {
                 if (pSFly->Lower() && !pSFly->Lower()->IsNoTextFrame())
                 {
-                    // TODO: update AccessibilityCheckStatus for textframes
+                    if (SwTextNode* pSwTxtNode = static_cast<SwTextFrame*>(pSFly->ContainsContent())->GetTextNodeFirst())
+                        pSwTxtNode->resetAndQueueAccessibilityCheck(true);
                 }
                 else
                 {
                     if (SwNode* pSwNode = static_cast<SwNoTextFrame*>(pSFly->Lower())->GetNode())
-                    {
                         pSwNode->resetAndQueueAccessibilityCheck(true);
-                    }
                 }
             }
         }
