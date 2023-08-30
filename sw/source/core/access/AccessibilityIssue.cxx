@@ -65,24 +65,24 @@ void AccessibilityIssue::gotoIssue() const
     /* Copying the issueobject because the EnterSelFrameMode ends up calling some sidebar functions
     that recreate the list of a11y issues and the AccessibilityIssue objects are stored by value in a vector
     and the vector is being mutated there and so the instance is overwritten with something else. */
-    AccessibilityIssue TempObject(*this);
+    AccessibilityIssue TempIssueObject(*this);
 
-    switch (TempObject.m_eIssueObject)
+    switch (TempIssueObject.m_eIssueObject)
     {
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         case IssueObject::TEXTFRAME:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
-            bool bSelected = pWrtShell->GotoFly(TempObject.m_sObjectID, FLYCNTTYPE_ALL, true);
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            bool bSelected = pWrtShell->GotoFly(TempIssueObject.m_sObjectID, FLYCNTTYPE_ALL, true);
             if (bSelected && pWrtShell->IsFrameSelected())
             {
                 pWrtShell->HideCursor();
                 pWrtShell->EnterSelFrameMode();
             }
 
-            if (!bSelected && TempObject.m_eIssueObject == IssueObject::TEXTFRAME)
-                pWrtShell->GotoDrawingObject(TempObject.m_sObjectID);
+            if (!bSelected && TempIssueObject.m_eIssueObject == IssueObject::TEXTFRAME)
+                pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
 
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
@@ -90,21 +90,21 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::SHAPE:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
-            pWrtShell->GotoDrawingObject(TempObject.m_sObjectID);
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
         case IssueObject::FORM:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             bool bIsDesignMode = pWrtShell->GetView().GetFormShell()->IsDesignMode();
             if (bIsDesignMode || (!bIsDesignMode && pWrtShell->WarnSwitchToDesignModeDialog()))
             {
                 if (!bIsDesignMode)
                     pWrtShell->GetView().GetFormShell()->SetDesignMode(true);
-                pWrtShell->GotoDrawingObject(TempObject.m_sObjectID);
+                pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
                 if (comphelper::LibreOfficeKit::isActive())
                     pWrtShell->ShowCursor();
             }
@@ -112,18 +112,18 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::TABLE:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
-            pWrtShell->GotoTable(TempObject.m_sObjectID);
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            pWrtShell->GotoTable(TempIssueObject.m_sObjectID);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
         break;
         case IssueObject::TEXT:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
-            SwContentNode* pContentNode = TempObject.m_pNode->GetContentNode();
-            SwPosition aPoint(*pContentNode, TempObject.m_nStart);
-            SwPosition aMark(*pContentNode, TempObject.m_nEnd);
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            SwContentNode* pContentNode = TempIssueObject.m_pNode->GetContentNode();
+            SwPosition aPoint(*pContentNode, TempIssueObject.m_nStart);
+            SwPosition aMark(*pContentNode, TempIssueObject.m_nEnd);
             pWrtShell->EnterStdMode();
             pWrtShell->StartAllAction();
             SwPaM* pPaM = pWrtShell->GetCursor();
@@ -137,9 +137,9 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::FOOTENDNOTE:
         {
-            SwWrtShell* pWrtShell = TempObject.m_pDoc->GetDocShell()->GetWrtShell();
-            if (TempObject.m_pTextFootnote)
-                pWrtShell->GotoFootnoteAnchor(*TempObject.m_pTextFootnote);
+            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            if (TempIssueObject.m_pTextFootnote)
+                pWrtShell->GotoFootnoteAnchor(*TempIssueObject.m_pTextFootnote);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
@@ -147,7 +147,7 @@ void AccessibilityIssue::gotoIssue() const
         default:
             break;
     }
-    TempObject.m_pDoc->GetDocShell()->GetView()->GetEditWin().GrabFocus();
+    TempIssueObject.m_pDoc->GetDocShell()->GetView()->GetEditWin().GrabFocus();
 }
 
 bool AccessibilityIssue::canQuickFixIssue() const
