@@ -91,6 +91,7 @@
 #include <stack>
 #include <map>
 #include <set>
+#include <optional>
 
 using namespace ::com::sun::star;
 
@@ -140,6 +141,20 @@ struct SwEnhancedPDFState
     FrameTagSet m_FrameTagSet;
 
     LanguageType m_eLanguageDefault;
+
+    struct Span
+    {
+        FontLineStyle eUnderline;
+        FontLineStyle eOverline;
+        FontStrikeout eStrikeout;
+        FontEmphasisMark eFontEmphasis;
+        short nEscapement;
+        SwFontScript nScript;
+        LanguageType nLang;
+        OUString StyleName;
+    };
+
+    ::std::optional<Span> m_oCurrentSpan;
 
     SwEnhancedPDFState(LanguageType const eLanguageDefault)
         : m_eLanguageDefault(eLanguageDefault)
@@ -1556,6 +1571,15 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
 void SwTaggedPDFHelper::EndStructureElements()
 {
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
+    {
+        if (mpFrameInfo != nullptr)
+        {   // close span at end of paragraph
+            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
+            ++m_nEndStructureElement;
+        }
+    }
+
     while ( m_nEndStructureElement > 0 )
     {
         EndTag();
@@ -1563,6 +1587,53 @@ void SwTaggedPDFHelper::EndStructureElements()
     }
 
     CheckRestoreTag();
+}
+
+void SwTaggedPDFHelper::EndCurrentSpan()
+{
+    mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
+    EndTag(); // close span
+}
+
+void SwTaggedPDFHelper::CreateCurrentSpan(
+        SwTextPaintInfo const& rInf, OUString const& rStyleName)
+{
+    assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan);
+    mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.emplace(
+        SwEnhancedPDFState::Span{
+            rInf.GetFont()->GetUnderline(),
+            rInf.GetFont()->GetOverline(),
+            rInf.GetFont()->GetStrikeout(),
+            rInf.GetFont()->GetEmphasisMark(),
+            rInf.GetFont()->GetEscapement(),
+            rInf.GetFont()->GetActual(),
+            rInf.GetFont()->GetLanguage(),
+            rStyleName});
+    // leave it open to let next portion decide to merge or close
+    --m_nEndStructureElement;
+}
+
+bool SwTaggedPDFHelper::CheckContinueSpan(
+        SwTextPaintInfo const& rInf, std::u16string_view const rStyleName)
+{
+    if (!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
+        return false;
+
+    SwEnhancedPDFState::Span const& rCurrent(*mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan);
+
+    bool const ret(rCurrent.eUnderline == rInf.GetFont()->GetUnderline()
+                && rCurrent.eOverline == rInf.GetFont()->GetOverline()
+                && rCurrent.eStrikeout == rInf.GetFont()->GetStrikeout()
+                && rCurrent.eFontEmphasis == rInf.GetFont()->GetEmphasisMark()
+                && rCurrent.nEscapement == rInf.GetFont()->GetEscapement()
+                && rCurrent.nScript == rInf.GetFont()->GetActual()
+                && rCurrent.nLang == rInf.GetFont()->GetLanguage()
+                && rCurrent.StyleName == rStyleName);
+    if (!ret)
+    {
+        EndCurrentSpan();
+    }
+    return ret;
 }
 
 void SwTaggedPDFHelper::BeginInlineStructureElements()
@@ -1575,6 +1646,26 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
     if ( lcl_IsInNonStructEnv( *pFrame ) )
         return;
+
+    std::pair<SwTextNode const*, sal_Int32> const pos(
+            pFrame->MapViewToModel(rInf.GetIdx()));
+    SwTextAttr const*const pInetFormatAttr =
+        pos.first->GetTextAttrAt(pos.second, RES_TXTATR_INETFMT);
+
+    OUString sStyleName;
+    if (!pInetFormatAttr)
+    {
+        std::vector<SwTextAttr *> const charAttrs(
+            pos.first->GetTextAttrsAt(pos.second, RES_TXTATR_CHARFMT));
+        // TODO: handle more than 1 char style?
+        const SwCharFormat* pCharFormat = (charAttrs.size())
+            ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
+        if (pCharFormat)
+            SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
+    }
+
+    // note: ILSE may be nested, so only end the span if needed to start new one
+    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName));
 
     sal_uInt16 nPDFType = USHRT_MAX;
     OUString aPDFType;
@@ -1594,23 +1685,6 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::Text :
         case PortionType::Para :
             {
-                std::pair<SwTextNode const*, sal_Int32> const pos(
-                        pFrame->MapViewToModel(rInf.GetIdx()));
-                SwTextAttr const*const pInetFormatAttr =
-                    pos.first->GetTextAttrAt(pos.second, RES_TXTATR_INETFMT);
-
-                OUString sStyleName;
-                if ( !pInetFormatAttr )
-                {
-                    std::vector<SwTextAttr *> const charAttrs(
-                        pos.first->GetTextAttrsAt(pos.second, RES_TXTATR_CHARFMT));
-                    // TODO: handle more than 1 char style?
-                    const SwCharFormat* pCharFormat = (charAttrs.size())
-                        ? (*charAttrs.begin())->GetCharFormat().GetCharFormat() : nullptr;
-                    if ( pCharFormat )
-                        SwStyleNameMapper::FillProgName( pCharFormat->GetName(), sStyleName, SwGetPoolIdFromName::TxtColl );
-                }
-
                 // Check for Link:
                 if( pInetFormatAttr )
                 {
@@ -1620,15 +1694,23 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 // Check for Quote/Code character style:
                 else if (sStyleName == aQuotation)
                 {
-                    nPDFType = vcl::PDFWriter::Quote;
-                    aPDFType = aQuoteString;
+                    if (!isContinueSpan)
+                    {
+                        nPDFType = vcl::PDFWriter::Quote;
+                        aPDFType = aQuoteString;
+                        CreateCurrentSpan(rInf, sStyleName);
+                    }
                 }
                 else if (sStyleName == aSourceText)
                 {
-                    nPDFType = vcl::PDFWriter::Code;
-                    aPDFType = aCodeString;
+                    if (!isContinueSpan)
+                    {
+                        nPDFType = vcl::PDFWriter::Code;
+                        aPDFType = aCodeString;
+                        CreateCurrentSpan(rInf, sStyleName);
+                    }
                 }
-                else
+                else if (!isContinueSpan)
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
                     const SwFontScript nFont = rInf.GetFont()->GetActual();
@@ -1648,6 +1730,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                             aPDFType = sStyleName;
                         else
                             aPDFType = aSpanString;
+                        CreateCurrentSpan(rInf, sStyleName);
                     }
                 }
             }
@@ -1684,6 +1767,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
 
         // for FootnoteNum, is called twice: outer generates Lbl, inner Link
         case PortionType::FootnoteNum:
+            assert(!isContinueSpan); // is at start
             if (!mpPorInfo->m_isNumberingLabel)
             {   // tdf#152218 link both directions
                 nPDFType = vcl::PDFWriter::Link;
@@ -1694,6 +1778,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::Number:
         case PortionType::Bullet:
         case PortionType::GrfNum:
+            assert(!isContinueSpan); // is at start
             if (mpPorInfo->m_isNumberingLabel)
             {   // only works for multiple lines via wrapper from PaintSwFrame
                 nPDFType = vcl::PDFWriter::LILabel;
