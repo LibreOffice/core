@@ -76,6 +76,7 @@ namespace dbaccess
         typedef std::function<const ::connectivity::OSQLParseNode*(::connectivity::OSQLParseTreeIterator *)>
                                                 TGetParseNode;
         ::svxform::OSystemParseContext          m_aParseContext;
+        ::svxform::ONeutralParseContext         m_aNeutralContext;
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;         // the iterator for the complete statement
         ::connectivity::OSQLParseTreeIterator   m_aAdditiveIterator;    // the iterator for the "additive statement" (means without the clauses of the elementary statement)
