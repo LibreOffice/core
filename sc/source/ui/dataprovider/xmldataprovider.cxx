@@ -71,6 +71,7 @@ void XMLFetchThread::execute()
         maParam.maRangeLinks.push_back(aRangeLink);
     }
     // Do the import.
+    SolarMutexGuard aGuard;
     mpXMLContext->importXML(maParam);
 
     for (auto& itr : maDataTransformations)
@@ -78,7 +79,6 @@ void XMLFetchThread::execute()
         itr->Transform(mrDocument);
     }
 
-    SolarMutexGuard aGuard;
     maImportFinishedHdl();
 }
 

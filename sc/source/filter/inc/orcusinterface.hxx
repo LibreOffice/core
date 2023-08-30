@@ -11,10 +11,12 @@
 
 #include <address.hxx>
 #include <documentimport.hxx>
+#include <editutil.hxx>
 
 #include <tools/color.hxx>
 #include <tools/fontenum.hxx>
 #include <editeng/svxenum.hxx>
+#include <editeng/editobj.hxx>
 
 #include "sharedformulagroups.hxx"
 
@@ -30,6 +32,7 @@
 #include <map>
 #include <unordered_map>
 #include <vector>
+#include <variant>
 
 class ScOrcusSheet;
 class ScOrcusStyles;
@@ -103,8 +106,13 @@ public:
 class ScOrcusSharedStrings : public orcus::spreadsheet::iface::import_shared_strings
 {
     ScOrcusFactory& mrFactory;
+    ScFieldEditEngine& mrEditEngine;
 
-    OStringBuffer maCurSegment;
+    SfxItemSet maCurFormat;
+    std::vector<std::pair<ESelection, SfxItemSet>> maFormatSegments;
+
+    OUString toOUString(std::string_view s);
+
 public:
     ScOrcusSharedStrings(ScOrcusFactory& rFactory);
 
@@ -696,12 +704,13 @@ class ScOrcusFactory : public orcus::spreadsheet::iface::import_factory
         CellStoreToken( const ScAddress& rPos, OUString aFormula, formula::FormulaGrammar::Grammar eGrammar );
     };
 
+    using StringValueType = std::variant<OUString, std::unique_ptr<EditTextObject>>;
     typedef std::unordered_map<OUString, size_t> StringHashType;
     typedef std::vector<CellStoreToken> CellStoreTokensType;
 
     ScDocumentImport maDoc;
 
-    std::vector<OUString> maStrings;
+    std::vector<StringValueType> maStrings;
     StringHashType maStringHash;
 
     CellStoreTokensType maCellStoreTokens;
@@ -735,6 +744,8 @@ public:
 
     size_t appendString(const OUString& rStr);
     size_t addString(const OUString& rStr);
+    std::size_t appendFormattedString(std::unique_ptr<EditTextObject> pEditText);
+
     const OUString* getString(size_t nIndex) const;
 
     void pushCellStoreAutoToken( const ScAddress& rPos, const OUString& rVal );

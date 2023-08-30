@@ -37,6 +37,7 @@
 #include <editeng/lineitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/numformat.hxx>
@@ -455,7 +456,16 @@ void ScOrcusFactory::finalize()
                     // String index out-of-bound!  Something is up.
                     break;
 
-                maDoc.setStringCell(rToken.maPos, maStrings[rToken.mnIndex1]);
+                const auto& s = maStrings[rToken.mnIndex1];
+                switch (s.index())
+                {
+                    case 0: // OUString
+                        maDoc.setStringCell(rToken.maPos, std::get<0>(s));
+                        break;
+                    case 1: // std::unique_ptr<EditTextObject>
+                        maDoc.setEditCell(rToken.maPos, std::get<1>(s)->Clone());
+                        break;
+                }
                 ++nCellCount;
                 break;
             }
@@ -577,9 +587,23 @@ size_t ScOrcusFactory::addString(const OUString& rStr)
     return appendString(rStr);
 }
 
+std::size_t ScOrcusFactory::appendFormattedString(std::unique_ptr<EditTextObject> pEditText)
+{
+    std::size_t nPos = maStrings.size();
+    maStrings.push_back(std::move(pEditText));
+    return nPos;
+}
+
 const OUString* ScOrcusFactory::getString(size_t nIndex) const
 {
-    return nIndex < maStrings.size() ? &maStrings[nIndex] : nullptr;
+    if (nIndex >= maStrings.size())
+        return nullptr;
+
+    const StringValueType& rStr = maStrings[nIndex];
+    if (rStr.index() != 0)
+        return nullptr;
+
+    return &std::get<OUString>(rStr);
 }
 
 void ScOrcusFactory::pushCellStoreAutoToken( const ScAddress& rPos, const OUString& rVal )
@@ -1294,31 +1318,43 @@ ScOrcusFactory& ScOrcusSheet::getFactory()
     return mrFactory;
 }
 
+OUString ScOrcusSharedStrings::toOUString(std::string_view s)
+{
+    return {s.data(), sal_Int32(s.size()), mrFactory.getGlobalSettings().getTextEncoding()};
+}
+
 ScOrcusSharedStrings::ScOrcusSharedStrings(ScOrcusFactory& rFactory) :
-    mrFactory(rFactory) {}
+    mrFactory(rFactory),
+    mrEditEngine(rFactory.getDoc().getDoc().GetEditEngine()),
+    maCurFormat(mrEditEngine.GetEmptyItemSet())
+{
+    mrEditEngine.Clear();
+}
 
 size_t ScOrcusSharedStrings::append(std::string_view s)
 {
-    OUString aNewString(s.data(), s.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    return mrFactory.appendString(aNewString);
+    return mrFactory.appendString(toOUString(s));
 }
 
 size_t ScOrcusSharedStrings::add(std::string_view s)
 {
-    OUString aNewString(s.data(), s.size(), mrFactory.getGlobalSettings().getTextEncoding());
-    return mrFactory.addString(aNewString);
+    return mrFactory.addString(toOUString(s));
 }
 
 void ScOrcusSharedStrings::set_segment_font(size_t /*font_index*/)
 {
 }
 
-void ScOrcusSharedStrings::set_segment_bold(bool /*b*/)
+void ScOrcusSharedStrings::set_segment_bold(bool b)
 {
+    FontWeight eWeight = b ? WEIGHT_BOLD : WEIGHT_NORMAL;
+    maCurFormat.Put(SvxWeightItem(eWeight, EE_CHAR_WEIGHT));
 }
 
-void ScOrcusSharedStrings::set_segment_italic(bool /*b*/)
+void ScOrcusSharedStrings::set_segment_italic(bool b)
 {
+    FontItalic eItalic = b ? ITALIC_NORMAL : ITALIC_NONE;
+    maCurFormat.Put(SvxPostureItem(eItalic, EE_CHAR_ITALIC));
 }
 
 void ScOrcusSharedStrings::set_segment_font_name(std::string_view /*s*/)
@@ -1329,23 +1365,35 @@ void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
 {
 }
 
-void ScOrcusSharedStrings::set_segment_font_color(orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t)
+void ScOrcusSharedStrings::set_segment_font_color(
+    os::color_elem_t alpha, os::color_elem_t red, os::color_elem_t green, os::color_elem_t blue)
 {
+    Color aColor(ColorAlpha, alpha, red, green, blue);
+    maCurFormat.Put(SvxColorItem(aColor, EE_CHAR_COLOR));
 }
 
 void ScOrcusSharedStrings::append_segment(std::string_view s)
 {
-    maCurSegment.append(s.data(), s.size());
+    sal_Int32 nPos = mrEditEngine.GetText().getLength();
+    ESelection aSel{0, nPos, 0, nPos}; // end of current text
+
+    OUString aStr = toOUString(s);
+    mrEditEngine.QuickInsertText(aStr, aSel);
+
+    aSel.nEndPos += aStr.getLength(); // expand the selection over the current segment
+    maFormatSegments.emplace_back(aSel, maCurFormat);
+    maCurFormat.ClearItem();
 }
 
 size_t ScOrcusSharedStrings::commit_segments()
 {
-    OString aStr = maCurSegment.makeStringAndClear();
-    return mrFactory.addString(
-        OStringToOUString(aStr, mrFactory.getGlobalSettings().getTextEncoding()));
+    for (const auto& [rSel, rFormat] : maFormatSegments)
+        mrEditEngine.QuickSetAttribs(rFormat, rSel);
+
+    auto nPos = mrFactory.appendFormattedString(mrEditEngine.CreateTextObject());
+    mrEditEngine.Clear();
+    maFormatSegments.clear();
+    return nPos;
 }
 
 void ScOrcusFont::applyToItemSet( SfxItemSet& rSet ) const
