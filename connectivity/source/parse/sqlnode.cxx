@@ -2494,7 +2494,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
 
 sal_Int32 OSQLParser::getFunctionReturnType(std::u16string_view _sFunctionName, const IParseContext* pContext)
 {
-    sal_Int32 nType = DataType::VARCHAR;
+    sal_Int32 nType = DataType::SQLNULL;
     OString sFunctionName(OUStringToOString(_sFunctionName,RTL_TEXTENCODING_UTF8));
 
     if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_ASCII,pContext)))                     nType = DataType::INTEGER;
