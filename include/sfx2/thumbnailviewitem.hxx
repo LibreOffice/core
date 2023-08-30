@@ -27,6 +27,7 @@
 
 namespace com::sun::star::accessibility { class XAccessible; }
 namespace drawinglayer::primitive2d { class Primitive2DContainer; }
+class ThumbnailViewItemAcc;
 
 #define THUMBNAILVIEW_ITEM_NONEITEM      0xFFFE
 
@@ -76,7 +77,7 @@ public:
     BitmapEx maPreview1;
     OUString maTitle;
     OUString maHelpText;
-    css::uno::Reference< css::accessibility::XAccessible > mxAcc;
+    rtl::Reference< ThumbnailViewItemAcc > mxAcc;
 
     bool mbPinnedDocumentHighlighted;
     BitmapEx maPinnedDocumentBitmap;
@@ -85,6 +86,9 @@ public:
     ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId);
 
     virtual ~ThumbnailViewItem ();
+
+    ThumbnailViewItem& operator=( ThumbnailViewItem const & ) = delete; // MSVC workaround
+    ThumbnailViewItem( ThumbnailViewItem const & ) = delete; // MSVC workaround
 
     bool isVisible () const { return mbVisible; }
 
@@ -115,7 +119,7 @@ public:
 
     void setTitle (const OUString& rTitle);
 
-    css::uno::Reference< css::accessibility::XAccessible > const &
+    rtl::Reference< ThumbnailViewItemAcc > const &
                         GetAccessible( bool bIsTransientChildrenDisabled );
 
     void setDrawArea (const tools::Rectangle &area);

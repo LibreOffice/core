@@ -67,7 +67,7 @@ ThumbnailViewItem::~ThumbnailViewItem()
 {
     if( mxAcc.is() )
     {
-        static_cast< ThumbnailViewItemAcc* >( mxAcc.get() )->ParentDestroyed();
+        mxAcc->ParentDestroyed();
     }
 }
 
@@ -129,7 +129,7 @@ void ThumbnailViewItem::setTitle (const OUString& rTitle)
         maTitle = rTitle;
 }
 
-uno::Reference< accessibility::XAccessible > const & ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
+const rtl::Reference< ThumbnailViewItemAcc > & ThumbnailViewItem::GetAccessible( bool bIsTransientChildrenDisabled )
 {
     if( !mxAcc.is() )
         mxAcc = new ThumbnailViewItemAcc( this, bIsTransientChildrenDisabled );

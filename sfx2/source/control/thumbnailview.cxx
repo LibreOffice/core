@@ -294,7 +294,7 @@ void ThumbnailView::ImplDeleteItems()
         {
             css::uno::Any aOldAny, aNewAny;
 
-            aOldAny <<= pItem->GetAccessible( false );
+            aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
             ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
         }
 
@@ -438,7 +438,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aNewAny <<= pItem->GetAccessible( false );
+                    aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
@@ -466,7 +466,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible( false );
+                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
@@ -1124,12 +1124,12 @@ void ThumbnailView::SelectItem( sal_uInt16 nItemId )
         return;
 
     // focus event (select)
-    ThumbnailViewItemAcc* pItemAcc = ThumbnailViewItemAcc::getImplementation( pItem->GetAccessible( false ) );
+    const rtl::Reference<ThumbnailViewItemAcc> & pItemAcc = pItem->GetAccessible( false );
 
     if( pItemAcc )
     {
         css::uno::Any aOldAny, aNewAny;
-        aNewAny <<= css::uno::Reference(getXWeak( pItemAcc ));
+        aNewAny <<= css::uno::Reference<css::accessibility::XAccessible>( pItemAcc );
         ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
     }
 
@@ -1207,7 +1207,7 @@ void ThumbnailView::filterItems(const std::function<bool (const ThumbnailViewIte
                 {
                     css::uno::Any aOldAny, aNewAny;
 
-                    aOldAny <<= pItem->GetAccessible( false );
+                    aOldAny <<= css::uno::Reference<css::accessibility::XAccessible>(pItem->GetAccessible( false ));
                     ImplFireAccessibleEvent( css::accessibility::AccessibleEventId::CHILD, aOldAny, aNewAny );
                 }
 
