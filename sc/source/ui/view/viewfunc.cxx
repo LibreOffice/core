@@ -77,6 +77,7 @@
 #include <conditio.hxx>
 #include <columnspanset.hxx>
 #include <stringutil.hxx>
+#include <SparklineList.hxx>
 
 #include <memory>
 
@@ -100,6 +101,26 @@ static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDo
         const ScRangeList& rRanges = pCondFmt->GetRange();
 
         pDocSh->PostPaint( rRanges, PaintPartFlags::All );
+    }
+}
+
+static void lcl_PostRepaintSparkLine(sc::SparklineList* pSparklineList, const ScRange& rRange,
+                                     ScDocShell* pDocSh)
+{
+    if (pSparklineList)
+    {
+        for (auto& rSparkLineGroup : pSparklineList->getSparklineGroups())
+        {
+            for (auto& rSparkline : pSparklineList->getSparklinesFor(rSparkLineGroup))
+            {
+                if (rSparkline->getInputRange().Contains(rRange))
+                {
+                    pDocSh->PostPaint(
+                        ScRange(rSparkline->getColumn(), rSparkline->getRow(), rRange.aStart.Tab()),
+                        PaintPartFlags::All, SC_PF_TESTMERGE);
+                }
+            }
+        }
     }
 }
 
@@ -662,6 +683,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
     aModificator.SetDocumentModified();
     lcl_PostRepaintCondFormat( rDoc.GetCondFormat( nCol, nRow, nTab ), pDocSh );
+    lcl_PostRepaintSparkLine(rDoc.GetSparklineList(nTab), ScRange(nCol, nRow, nTab), pDocSh);
 }
 
 // enter value in single cell (on nTab only)
