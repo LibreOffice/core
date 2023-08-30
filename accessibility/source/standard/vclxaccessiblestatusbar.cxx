@@ -43,7 +43,7 @@ VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
     m_pStatusBar = GetAs<StatusBar>();
 
     if ( m_pStatusBar )
-        m_aAccessibleChildren.assign( m_pStatusBar->GetItemCount(), Reference< XAccessible >() );
+        m_aAccessibleChildren.assign( m_pStatusBar->GetItemCount(), rtl::Reference< VCLXAccessibleStatusBarItem >() );
 }
 
 
@@ -51,13 +51,9 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, bool bShowing )
 {
     if ( i >= 0 && o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
     {
-        Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-        if ( xChild.is() )
-        {
-            VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
-            if ( pVCLXAccessibleStatusBarItem )
-                pVCLXAccessibleStatusBarItem->SetShowing( bShowing );
-        }
+        rtl::Reference< VCLXAccessibleStatusBarItem > pVCLXAccessibleStatusBarItem( m_aAccessibleChildren[i] );
+        if ( pVCLXAccessibleStatusBarItem )
+            pVCLXAccessibleStatusBarItem->SetShowing( bShowing );
     }
 }
 
@@ -67,15 +63,11 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
     if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
-    Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-    if ( xChild.is() )
+    rtl::Reference< VCLXAccessibleStatusBarItem > pVCLXAccessibleStatusBarItem( m_aAccessibleChildren[i] );
+    if ( pVCLXAccessibleStatusBarItem.is() )
     {
-        VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
-        if ( pVCLXAccessibleStatusBarItem )
-        {
-            OUString sItemName = pVCLXAccessibleStatusBarItem->GetItemName();
-            pVCLXAccessibleStatusBarItem->SetItemName( sItemName );
-        }
+        OUString sItemName = pVCLXAccessibleStatusBarItem->GetItemName();
+        pVCLXAccessibleStatusBarItem->SetItemName( sItemName );
     }
 }
 
@@ -85,15 +77,11 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
     if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         return;
 
-    Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
-    if ( xChild.is() )
+    rtl::Reference< VCLXAccessibleStatusBarItem > pVCLXAccessibleStatusBarItem( m_aAccessibleChildren[i] );
+    if ( pVCLXAccessibleStatusBarItem.is() )
     {
-        VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
-        if ( pVCLXAccessibleStatusBarItem )
-        {
-            OUString sItemText = pVCLXAccessibleStatusBarItem->GetItemText();
-            pVCLXAccessibleStatusBarItem->SetItemText( sItemText );
-        }
+        OUString sItemText = pVCLXAccessibleStatusBarItem->GetItemText();
+        pVCLXAccessibleStatusBarItem->SetItemText( sItemText );
     }
 }
 
@@ -104,7 +92,7 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
         return;
 
     // insert entry in child list
-    m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
+    m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, rtl::Reference< VCLXAccessibleStatusBarItem >() );
 
     // send accessible child event
     Reference< XAccessible > xChild( getAccessibleChild( i ) );
@@ -160,18 +148,16 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         {
             if ( m_pStatusBar )
             {
+                OExternalLockGuard aGuard( this );
+
                 sal_uInt16 nItemId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
-                for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                for ( sal_Int64 i = 0, nCount = m_aAccessibleChildren.size(); i < nCount; ++i )
                 {
-                    Reference< XAccessible > xChild( getAccessibleChild( i ) );
-                    if ( xChild.is() )
+                    sal_uInt16 nChildItemId = m_pStatusBar->GetItemId( static_cast<sal_uInt16>(i) );
+                    if ( nChildItemId == nItemId )
                     {
-                        VCLXAccessibleStatusBarItem* pVCLXAccessibleStatusBarItem = static_cast< VCLXAccessibleStatusBarItem* >( xChild.get() );
-                        if ( pVCLXAccessibleStatusBarItem && pVCLXAccessibleStatusBarItem->GetItemId() == nItemId )
-                        {
-                            RemoveChild( i );
-                            break;
-                        }
+                        RemoveChild( i );
+                        break;
                     }
                 }
             }
@@ -221,9 +207,8 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
                 m_pStatusBar = nullptr;
 
                 // dispose all children
-                for (const Reference<XAccessible>& i : m_aAccessibleChildren)
+                for (const rtl::Reference<VCLXAccessibleStatusBarItem>& xComponent : m_aAccessibleChildren)
                 {
-                    Reference< XComponent > xComponent( i, UNO_QUERY );
                     if ( xComponent.is() )
                         xComponent->dispose();
                 }
@@ -252,9 +237,8 @@ void VCLXAccessibleStatusBar::disposing()
     m_pStatusBar = nullptr;
 
     // dispose all children
-    for (const Reference<XAccessible>& i : m_aAccessibleChildren)
+    for (const rtl::Reference<VCLXAccessibleStatusBarItem>& xComponent : m_aAccessibleChildren)
     {
-        Reference< XComponent > xComponent( i, UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }
@@ -295,7 +279,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int64 
     if ( i < 0 || o3tl::make_unsigned(i) >= m_aAccessibleChildren.size() )
         throw IndexOutOfBoundsException();
 
-    Reference< XAccessible > xChild = m_aAccessibleChildren[i];
+    rtl::Reference< VCLXAccessibleStatusBarItem > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
     {
         if ( m_pStatusBar )

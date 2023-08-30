@@ -26,12 +26,12 @@
 #include <vector>
 
 
-
+class VCLXAccessibleStatusBarItem;
 
 class VCLXAccessibleStatusBar final : public VCLXAccessibleComponent
 {
 private:
-    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< rtl::Reference< VCLXAccessibleStatusBarItem > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<StatusBar>       m_pStatusBar;
