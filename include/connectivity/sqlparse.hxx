@@ -124,7 +124,8 @@ namespace connectivity
         static sal_Int32                        s_nRefCount;
 
     // information on the current parse action
-        const IParseContext*        m_pContext;
+        const IParseContext*             m_pContext;
+        const IParseContext*             m_pNeutral;
         std::unique_ptr<OSQLParseNode> m_pParseTree;   // result from parsing
         ::std::unique_ptr< OSQLParser_Data >
                                     m_pData;
@@ -156,7 +157,9 @@ namespace connectivity
     public:
         // if NULL, a default context will be used
         // the context must live as long as the parser
-        OSQLParser(css::uno::Reference< css::uno::XComponentContext > xContext, const IParseContext* _pContext = nullptr);
+        OSQLParser(css::uno::Reference< css::uno::XComponentContext > xContext,
+                   const IParseContext* _pContext = nullptr,
+                   const IParseContext* _pNeutral = nullptr);
         ~OSQLParser();
 
         // Parsing an SQLStatement
@@ -173,7 +176,8 @@ namespace connectivity
                        bool bUseRealName = true);
 
         // Access to the context
-        const IParseContext& getContext() const {return *m_pContext;}
+        const IParseContext& getContext() const { return *m_pContext; }
+        const IParseContext* getNeutral() const { return m_pNeutral; }
 
         /// access to the SQLError instance owned by this parser
         const SQLError& getErrorHelper() const;
