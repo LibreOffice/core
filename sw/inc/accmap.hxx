@@ -176,7 +176,7 @@ public:
     }
     static bool IsInSameLevel(const SdrObject* pObj, const SwFEShell* pFESh);
     void AddShapeContext(const SdrObject *pObj,
-                             css::uno::Reference < css::accessibility::XAccessible > const & xAccShape);
+                             rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape);
 
     void AddGroupContext(const SdrObject *pParentObj,
                     css::uno::Reference < css::accessibility::XAccessible > const & xAccParent);
