@@ -42,6 +42,7 @@ class StringRangeEnumerator;
 class SwTextNode;
 class SwTable;
 class SwNumberTreeNode;
+class SwTextPaintInfo;
 
 /*
  * Mapping of OOo elements to tagged pdf elements:
@@ -155,6 +156,10 @@ class SwTaggedPDFHelper
     void BeginBlockStructureElements();
     void BeginInlineStructureElements();
     void EndStructureElements();
+
+    void EndCurrentSpan();
+    void CreateCurrentSpan(SwTextPaintInfo const& rInf, OUString const& rStyleName);
+    bool CheckContinueSpan(SwTextPaintInfo const& rInf, std::u16string_view rStyleName);
 
     bool CheckReopenTag();
     void CheckRestoreTag() const;
