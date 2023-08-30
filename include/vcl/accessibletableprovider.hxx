@@ -22,8 +22,8 @@
 
 #include <vcl/AccessibleBrowseBoxObjType.hxx>
 #include <vcl/window.hxx>
-
-namespace com::sun::star::accessibility { class XAccessible; }
+#include <cppuhelper/implbase.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace vcl
 {
@@ -158,19 +158,9 @@ protected:
 
 /** interface for an implementation of a browse box's Accessible component
 */
-class IAccessibleBrowseBox
+class IAccessibleBrowseBox : public cppu::WeakImplHelper<css::accessibility::XAccessible>
 {
 public:
-    /** returns the XAccessible object itself
-
-        The reference returned here can be used to control the life time of the
-        IAccessibleTableImplementation object.
-
-        The returned reference is guaranteed to not be <NULL/>.
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() = 0;
-
     /** disposes the accessible implementation, so that it becomes defunc
     */
     virtual void dispose() = 0;

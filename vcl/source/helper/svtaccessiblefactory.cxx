@@ -23,6 +23,7 @@
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
 #include <vcl/accessibletable.hxx>
+#include <vcl/accessibletableprovider.hxx>
 
 #include <tools/svlibrary.h>
 #include <tools/debug.hxx>
@@ -92,7 +93,7 @@ namespace vcl
                 return nullptr;
             }
 
-            virtual vcl::IAccessibleBrowseBox*
+            virtual rtl::Reference<vcl::IAccessibleBrowseBox>
                 createAccessibleBrowseBox(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
                     vcl::IAccessibleTableProvider& /*_rBrowseBox*/

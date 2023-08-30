@@ -55,12 +55,12 @@ namespace svt
 
     public:
         vcl::AccessibleFactoryAccess m_aFactoryAccess;
-        vcl::IAccessibleBrowseBox* m_pAccessible;
+        rtl::Reference<vcl::IAccessibleBrowseBox> m_pAccessible;
         THeaderCellMap          m_aColHeaderCellMap;
         THeaderCellMap          m_aRowHeaderCellMap;
 
     public:
-        BrowseBoxImpl() : m_pAccessible(nullptr)
+        BrowseBoxImpl()
         {
         }
 

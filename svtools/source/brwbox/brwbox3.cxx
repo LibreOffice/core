@@ -97,11 +97,7 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
         }
     }
 
-    Reference< XAccessible > xAccessible;
-    if ( m_pImpl->m_pAccessible )
-        xAccessible = m_pImpl->m_pAccessible->getMyself();
-
-    return xAccessible;
+    return m_pImpl->m_pAccessible;
 }
 
 
@@ -427,7 +423,7 @@ void BrowseBox::commitBrowseBoxEvent( sal_Int16 _nEventId, const Any& _rNewValue
 
 bool BrowseBox::isAccessibleAlive( ) const
 {
-    return ( nullptr != m_pImpl->m_pAccessible ) && m_pImpl->m_pAccessible->isAlive();
+    return m_pImpl->m_pAccessible && m_pImpl->m_pAccessible->isAlive();
 }
 
 // IAccessibleTableProvider

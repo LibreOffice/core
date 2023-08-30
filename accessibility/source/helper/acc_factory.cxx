@@ -122,7 +122,7 @@ public:
             SvHeaderTabListBox& rBox
         ) const override;
 
-    virtual vcl::IAccessibleBrowseBox*
+    virtual rtl::Reference<vcl::IAccessibleBrowseBox>
         createAccessibleBrowseBox(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             vcl::IAccessibleTableProvider& _rBrowseBox
@@ -374,7 +374,7 @@ vcl::IAccessibleTabListBox* AccessibleFactory::createAccessibleTabListBox(
     return new AccessibleTabListBox( rxParent, rBox );
 }
 
-vcl::IAccessibleBrowseBox* AccessibleFactory::createAccessibleBrowseBox(
+rtl::Reference<vcl::IAccessibleBrowseBox> AccessibleFactory::createAccessibleBrowseBox(
     const Reference< XAccessible >& _rxParent, vcl::IAccessibleTableProvider& _rBrowseBox ) const
 {
     return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
