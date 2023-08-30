@@ -2109,7 +2109,11 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
                 nType = DataType::DOUBLE;
         }
         else
+        {
             nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, &m_rParser.getContext() );
+            if (nType == DataType::SQLNULL)
+                nType = ::connectivity::OSQLParser::getFunctionReturnType( sFunctionName, m_rParser.getNeutral() );
+        }
     }
 
     return nType;
