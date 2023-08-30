@@ -623,6 +623,25 @@ void appendPdfTimeDate(OStringBuffer & rBuffer,
     }
 }
 
+const char* getPDFVersionStr(PDFWriter::PDFVersion ePDFVersion)
+{
+    switch (ePDFVersion)
+    {
+        case PDFWriter::PDFVersion::PDF_A_1:
+        case PDFWriter::PDFVersion::PDF_1_4:
+            return "1.4";
+        case PDFWriter::PDFVersion::PDF_1_5:
+            return "1.5";
+        case PDFWriter::PDFVersion::PDF_1_6:
+            return "1.6";
+        default:
+        case PDFWriter::PDFVersion::PDF_A_2:
+        case PDFWriter::PDFVersion::PDF_A_3:
+        case PDFWriter::PDFVersion::PDF_1_7:
+            return "1.7";
+    }
+}
+
 } // end namespace
 
 PDFPage::PDFPage( PDFWriterImpl* pWriter, double nPageWidth, double nPageHeight, PDFWriter::Orientation eOrientation )
@@ -1295,17 +1314,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext,
     // write header
     OStringBuffer aBuffer( 20 );
     aBuffer.append( "%PDF-" );
-    switch( m_aContext.Version )
-    {
-        case PDFWriter::PDFVersion::PDF_A_1:
-        case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
-        case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
-        case PDFWriter::PDFVersion::PDF_1_6: aBuffer.append( "1.6" );break;
-        default:
-        case PDFWriter::PDFVersion::PDF_A_2:
-        case PDFWriter::PDFVersion::PDF_A_3:
-        case PDFWriter::PDFVersion::PDF_1_7: aBuffer.append( "1.7" );break;
-    }
+    aBuffer.append(getPDFVersionStr(m_aContext.Version));
     // append something binary as comment (suggested in PDF Reference)
     aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
     if( !writeBuffer( aBuffer ) )
@@ -5952,6 +5961,7 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
         lcl_assignMeta(m_aContext.DocumentInfo.Author, aMetadata.msAuthor);
         lcl_assignMeta(m_aContext.DocumentInfo.Subject, aMetadata.msSubject);
         lcl_assignMeta(m_aContext.DocumentInfo.Producer, aMetadata.msProducer);
+        aMetadata.msPDFVersion = getPDFVersionStr(m_aContext.Version);
         lcl_assignMeta(m_aContext.DocumentInfo.Keywords, aMetadata.msKeywords);
         lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
         aMetadata.m_sCreateDate = m_aCreationMetaDateString;

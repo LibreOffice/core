@@ -27,6 +27,7 @@ public:
     OString msAuthor;
     OString msSubject;
     OString msProducer;
+    OString msPDFVersion;
     OString msKeywords;
     OString m_sCreatorTool;
     OString m_sCreateDate;

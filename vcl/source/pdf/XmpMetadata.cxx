@@ -122,7 +122,7 @@ void XmpMetadata::write()
         }
 
         // PDF properties
-        if (!msProducer.isEmpty() || !msKeywords.isEmpty())
+        if (!msProducer.isEmpty() || !msKeywords.isEmpty() || !msPDFVersion.isEmpty())
         {
             aXmlWriter.startElement("rdf:Description");
             aXmlWriter.attribute("rdf:about", OString(""));
@@ -137,6 +137,12 @@ void XmpMetadata::write()
             {
                 aXmlWriter.startElement("pdf:Keywords");
                 aXmlWriter.content(msKeywords);
+                aXmlWriter.endElement();
+            }
+            if (!msPDFVersion.isEmpty())
+            {
+                aXmlWriter.startElement("pdf:PDFVersion");
+                aXmlWriter.content(msPDFVersion);
                 aXmlWriter.endElement();
             }
             aXmlWriter.endElement();
