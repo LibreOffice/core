@@ -27,7 +27,7 @@
 
 #include <vector>
 
-
+class VCLXAccessibleTabPage;
 
 
 class VCLXAccessibleTabControl final : public cppu::ImplInheritanceHelper<
@@ -35,7 +35,7 @@ class VCLXAccessibleTabControl final : public cppu::ImplInheritanceHelper<
                                            css::accessibility::XAccessibleSelection>
 {
 private:
-    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< rtl::Reference< VCLXAccessibleTabPage > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<TabControl>      m_pTabControl;
