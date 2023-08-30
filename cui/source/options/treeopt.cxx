@@ -791,6 +791,12 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, SearchUpdateHdl, weld::Entry&, void)
 
 IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
 {
+    // initializeFirstNDialog() can take a long time, show wait cursor and disable input
+    std::unique_ptr<weld::WaitObject> xWait(m_pParent ? new weld::WaitObject(m_pParent) : nullptr);
+
+    // Pause redraw
+    xTreeLB->freeze();
+
     if (bIsFirtsInitialize)
     {
         m_xSearchEdit->freeze();
@@ -802,9 +808,6 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
         xTreeLB->show();
         bIsFirtsInitialize = false;
     }
-
-    // Pause redraw
-    xTreeLB->freeze();
 
     // Apply the search filter
     OUString aSearchTerm(m_xSearchEdit->get_text());
@@ -1185,6 +1188,9 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     xTreeLB->select(*xEntry);
     m_xSearchEdit->grab_focus();
     SelectHdl_Impl();
+
+    // initializeFirstNDialog() can take a long time, show wait cursor
+    std::unique_ptr<weld::WaitObject> xWait(m_pParent ? new weld::WaitObject(m_pParent) : nullptr);
 
     /* initialize first 25 dialogs which are almost half of the dialogs
     in a row while Options dialog opens. then clear&reselect to avoid UI test failures. */
