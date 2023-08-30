@@ -33,6 +33,7 @@ class Menu;
 class VclSimpleEvent;
 class VclMenuEvent;
 
+class OAccessibleMenuItemComponent;
 
 class OAccessibleMenuBaseComponent : public cppu::ImplInheritanceHelper<
                                          comphelper::OAccessibleExtendedComponentHelper,
@@ -44,9 +45,9 @@ class OAccessibleMenuBaseComponent : public cppu::ImplInheritanceHelper<
     friend class VCLXAccessibleMenu;
 
 protected:
-    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< rtl::Reference< OAccessibleMenuItemComponent > > AccessibleChildren;
 
-    AccessibleChildren      m_aAccessibleChildren;
+    AccessibleChildren      m_aAccessibleChildren1;
     VclPtr<Menu>            m_pMenu;
 
     bool                    m_bEnabled;
