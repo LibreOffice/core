@@ -393,7 +393,8 @@ struct PaintListener : public SfxListener
         {
             if ((pPaintHint->GetStartCol() <= 0 && pPaintHint->GetEndCol() >= 0)
                 && ((pPaintHint->GetStartRow() <= 9 && pPaintHint->GetEndRow() >= 9)
-                    || (pPaintHint->GetStartRow() == 2 && pPaintHint->GetEndRow() == 3)))
+                    || (pPaintHint->GetStartRow() == 2 && pPaintHint->GetEndRow() == 3)
+                    || (pPaintHint->GetStartRow() == 1 && pPaintHint->GetEndRow() == 1)))
             {
                 mbCalled = true;
             }
@@ -437,6 +438,25 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf131471)
     CPPUNIT_ASSERT(pFormat);
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 1.0);
+
+    CPPUNIT_ASSERT(aListener.mbCalled);
+}
+
+CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf150815_RepaintSparkline)
+{
+    createScDoc("ods/tdf150815.ods");
+
+    ScDocument* pDoc = getScDoc();
+    ScDocShell* pDocSh = getScDocShell();
+
+    PaintListener aListener;
+    aListener.StartListening(*pDocSh);
+
+    auto pSparkline = pDoc->GetSparkline(ScAddress(0, 1, 0));
+    CPPUNIT_ASSERT(pSparkline);
+
+    ScTabViewShell* pViewShell = getViewShell();
+    pViewShell->EnterData(0, 0, 0, "10");
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
