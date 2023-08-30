@@ -123,9 +123,8 @@ Reference<XAccessible> ValueSet::CreateAccessible()
 
 ValueSet::~ValueSet()
 {
-    Reference<XComponent> xComponent(mxAccessible, UNO_QUERY);
-    if (xComponent.is())
-        xComponent->dispose();
+    if (mxAccessible)
+        mxAccessible->dispose();
 
     ImplDeleteItems();
 }
@@ -228,16 +227,13 @@ sal_uInt16 ValueSet::ImplGetVisibleItemCount() const
 
 void ValueSet::ImplFireAccessibleEvent( short nEventId, const Any& rOldValue, const Any& rNewValue )
 {
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation(mxAccessible);
-
-    if( pAcc )
-        pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
+    if( mxAccessible )
+        mxAccessible->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
 bool ValueSet::ImplHasAccessibleListeners() const
 {
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation(mxAccessible);
-    return( pAcc && pAcc->HasAccessibleListeners() );
+    return mxAccessible && mxAccessible->HasAccessibleListeners();
 }
 
 IMPL_LINK(ValueSet, ImplScrollHdl, weld::ScrolledWindow&, rScrollWin, void)
@@ -265,9 +261,8 @@ void ValueSet::GetFocus()
     CustomWidgetController::GetFocus();
 
     // Tell the accessible object that we got the focus.
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation(mxAccessible);
-    if (pAcc)
-        pAcc->GetFocus();
+    if (mxAccessible)
+        mxAccessible->GetFocus();
 }
 
 void ValueSet::LoseFocus()
@@ -277,9 +272,8 @@ void ValueSet::LoseFocus()
     CustomWidgetController::LoseFocus();
 
     // Tell the accessible object that we lost the focus.
-    ValueSetAcc* pAcc = ValueSetAcc::getImplementation(mxAccessible);
-    if( pAcc )
-        pAcc->LoseFocus();
+    if( mxAccessible )
+        mxAccessible->LoseFocus();
 }
 
 void ValueSet::Resize()

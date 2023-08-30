@@ -23,6 +23,7 @@
 #include <vcl/wintypes.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/image.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 
@@ -34,6 +35,7 @@ class DataChangedEvent;
 class ScrollBar;
 class UserDrawEvent;
 class VirtualDevice;
+class ValueSetAcc;
 
 struct ValueSetItem;
 
@@ -185,7 +187,7 @@ class SVT_DLLPUBLIC ValueSet : public weld::CustomWidgetController
 {
 private:
     ScopedVclPtr<VirtualDevice> maVirDev;
-    css::uno::Reference<css::accessibility::XAccessible> mxAccessible;
+    rtl::Reference<ValueSetAcc> mxAccessible;
     ValueItemList   mItemList;
     std::unique_ptr<ValueSetItem> mpNoneItem;
     std::unique_ptr<weld::ScrolledWindow> mxScrolledWindow;
