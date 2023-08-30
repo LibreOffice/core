@@ -283,61 +283,56 @@ ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
     return *this;
 }
 
-bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
+bool ImpGraphic::operator==( const ImpGraphic& rOther ) const
 {
+    if( this == &rOther )
+        return true;
+
+    if (mbPrepared && rOther.mbPrepared)
+        return (*mpGfxLink == *rOther.mpGfxLink);
+
+    if (!isAvailable() || !rOther.isAvailable())
+        return false;
+
+    if ( meType != rOther.meType )
+        return false;
+
     bool bRet = false;
+    switch( meType )
+    {
+        case GraphicType::NONE:
+        case GraphicType::Default:
+            return true;
 
-    if( this == &rImpGraphic )
-        bRet = true;
-    else if (mbPrepared && rImpGraphic.mbPrepared)
-    {
-        bRet = (*mpGfxLink == *rImpGraphic.mpGfxLink);
-    }
-    else if (isAvailable() && rImpGraphic.isAvailable())
-    {
-        switch( meType )
+        case GraphicType::GdiMetafile:
+            return ( rOther.maMetaFile == maMetaFile );
+
+        case GraphicType::Bitmap:
         {
-            case GraphicType::NONE:
+            if(maVectorGraphicData)
+            {
+                if(maVectorGraphicData == rOther.maVectorGraphicData)
+                {
+                    // equal instances
+                    bRet = true;
+                }
+                else if(rOther.maVectorGraphicData)
+                {
+                    // equal content
+                    bRet = (*maVectorGraphicData) == (*rOther.maVectorGraphicData);
+                }
+            }
+            else if( mpAnimation )
+            {
+                if( rOther.mpAnimation && ( *rOther.mpAnimation == *mpAnimation ) )
+                    bRet = true;
+            }
+            else if( !rOther.mpAnimation && ( rOther.maBitmapEx == maBitmapEx ) )
+            {
                 bRet = true;
-            break;
-
-            case GraphicType::GdiMetafile:
-            {
-                if( rImpGraphic.maMetaFile == maMetaFile )
-                    bRet = true;
             }
-            break;
-
-            case GraphicType::Bitmap:
-            {
-                if(maVectorGraphicData)
-                {
-                    if(maVectorGraphicData == rImpGraphic.maVectorGraphicData)
-                    {
-                        // equal instances
-                        bRet = true;
-                    }
-                    else if(rImpGraphic.maVectorGraphicData)
-                    {
-                        // equal content
-                        bRet = (*maVectorGraphicData) == (*rImpGraphic.maVectorGraphicData);
-                    }
-                }
-                else if( mpAnimation )
-                {
-                    if( rImpGraphic.mpAnimation && ( *rImpGraphic.mpAnimation == *mpAnimation ) )
-                        bRet = true;
-                }
-                else if( !rImpGraphic.mpAnimation && ( rImpGraphic.maBitmapEx == maBitmapEx ) )
-                {
-                    bRet = true;
-                }
-            }
-            break;
-
-            case GraphicType::Default:
-            break;
         }
+        break;
     }
 
     return bRet;
