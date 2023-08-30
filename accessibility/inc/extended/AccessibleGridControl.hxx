@@ -21,7 +21,6 @@
 
 #include <extended/AccessibleGridControlBase.hxx>
 #include <extended/AccessibleGridControlTable.hxx>
-#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/accessibletable.hxx>
@@ -160,9 +159,7 @@ private:
     the context holds this instance weak.</p>
 */
 
-class AccessibleGridControlAccess final :
-     public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
-    ,public ::vcl::table::IAccessibleTableControl
+class AccessibleGridControlAccess final : public ::vcl::table::IAccessibleTableControl
 {
 private:
     css::uno::Reference< css::accessibility::XAccessible > m_xParent;
@@ -186,11 +183,6 @@ private:
         SAL_CALL getAccessibleContext() override;
 
     // IAccessibleTable
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() override
-    {
-        return this;
-    }
     void DisposeAccessImpl() override;
     virtual bool isAlive() const override
     {

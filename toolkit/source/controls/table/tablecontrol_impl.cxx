@@ -237,7 +237,6 @@ namespace svt::table
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              ( -1                            )
         ,m_bUpdatingColWidths   ( false                         )
-        ,m_pAccessibleTable     ( nullptr                          )
     {
         m_pSelEngine.reset( new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet.get() ) );
         m_pSelEngine->SetSelectionMode(SelectionMode::Single);
@@ -2369,10 +2368,10 @@ namespace svt::table
     }
 
 
-    Reference< XAccessible > TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
+    rtl::Reference<vcl::table::IAccessibleTableControl> TableControl_Impl::getAccessible( vcl::Window& i_parentWindow )
     {
-        if (m_xAccessible.is())
-            return m_xAccessible;
+        if (m_pAccessibleTable)
+            return m_pAccessibleTable;
 
         DBG_TESTSOLARMUTEX();
         if ( m_pAccessibleTable == nullptr )
@@ -2386,9 +2385,7 @@ namespace svt::table
             }
         }
 
-        if ( m_pAccessibleTable )
-            m_xAccessible = m_pAccessibleTable->getMyself();
-        return m_xAccessible;
+        return m_pAccessibleTable;
     }
 
 
@@ -2397,13 +2394,12 @@ namespace svt::table
         if ( m_pAccessibleTable )
             m_pAccessibleTable->DisposeAccessImpl();
         m_pAccessibleTable = nullptr;
-        m_xAccessible.clear();
     }
 
 
     bool TableControl_Impl::impl_isAccessibleAlive() const
     {
-        return ( nullptr != m_pAccessibleTable ) && m_pAccessibleTable->isAlive();
+        return m_pAccessibleTable && m_pAccessibleTable->isAlive();
     }
 
 

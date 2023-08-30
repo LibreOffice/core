@@ -128,7 +128,7 @@ public:
             vcl::IAccessibleTableProvider& _rBrowseBox
         ) const override;
 
-    virtual IAccessibleTableControl*
+    virtual rtl::Reference<IAccessibleTableControl>
         createAccessibleTableControl(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             IAccessibleTable& _rTable
@@ -380,7 +380,7 @@ vcl::IAccessibleBrowseBox* AccessibleFactory::createAccessibleBrowseBox(
     return new AccessibleBrowseBoxAccess( _rxParent, _rBrowseBox );
 }
 
-IAccessibleTableControl* AccessibleFactory::createAccessibleTableControl(
+rtl::Reference<IAccessibleTableControl> AccessibleFactory::createAccessibleTableControl(
     const Reference< XAccessible >& _rxParent, IAccessibleTable& _rTable ) const
 {
     return new AccessibleGridControlAccess( _rxParent, _rTable );

@@ -22,6 +22,7 @@
 
 #include <vcl/svtaccessiblefactory.hxx>
 #include <vcl/accessiblefactory.hxx>
+#include <vcl/accessibletable.hxx>
 
 #include <tools/svlibrary.h>
 #include <tools/debug.hxx>
@@ -100,7 +101,7 @@ namespace vcl
                 return nullptr;
             }
 
-            virtual table::IAccessibleTableControl*
+            virtual rtl::Reference<table::IAccessibleTableControl>
                 createAccessibleTableControl(
                     const css::uno::Reference< css::accessibility::XAccessible >& /*_rxParent*/,
                     table::IAccessibleTable& /*_rTable*/

@@ -132,9 +132,7 @@ namespace svt::table
         bool                    m_bUpdatingColWidths;
 
         vcl::AccessibleFactoryAccess     m_aFactoryAccess;
-        vcl::table::IAccessibleTableControl*    m_pAccessibleTable;
-
-        css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
+        rtl::Reference<vcl::table::IAccessibleTableControl> m_pAccessibleTable;
 
     public:
         void        setModel( const PTableModel& _pModel );
@@ -282,7 +280,7 @@ namespace svt::table
         tools::Rectangle calcCellRect( sal_Int32 nRow, sal_Int32 nCol ) const;
 
         // A11Y
-        css::uno::Reference< css::accessibility::XAccessible >
+        rtl::Reference<vcl::table::IAccessibleTableControl>
                         getAccessible( vcl::Window& i_parentWindow );
         void            disposeAccessible();
 

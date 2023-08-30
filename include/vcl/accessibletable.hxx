@@ -21,10 +21,10 @@
 #define INCLUDED_VCL_ACCESSIBLETABLE_HXX
 
 #include <tools/gen.hxx>
-
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <cppuhelper/implbase.hxx>
 
-namespace com::sun::star::accessibility { class XAccessible; }
 namespace vcl { class Window; }
 
 namespace vcl::table
@@ -108,18 +108,9 @@ protected:
 
 /** interface for an implementation of a table control's Accessible component
 */
-class IAccessibleTableControl
+class IAccessibleTableControl : public ::cppu::WeakImplHelper< css::accessibility::XAccessible >
 {
 public:
-    /** returns the XAccessible object itself
-
-        The reference returned here can be used to control the life time of the
-        IAccessibleTableImplementation object.
-
-        The returned reference is guaranteed to not be <NULL/>.
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getMyself() = 0;
 
     /** disposes the accessible implementation, so that it becomes defunc
     */
