@@ -1316,8 +1316,11 @@ std::unique_ptr<OSQLParseNode> OSQLParser::predicateTree(OUString& rErrorMessage
 }
 
 
-OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const IParseContext* _pContext)
+OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                       const IParseContext* _pContext,
+                       const IParseContext* _pNeutral)
     :m_pContext(_pContext)
+    ,m_pNeutral(_pNeutral)
     ,m_pData( new OSQLParser_Data )
     ,m_nFormatKey(0)
     ,m_nDateFormatKey(0)
