@@ -37,7 +37,7 @@ class DialogWindow;
 class DlgEditor;
 class DlgEdModel;
 class DlgEdObj;
-
+class AccessibleDialogControlShape;
 
 
 class AccessibleDialogWindow final : public cppu::ImplInheritanceHelper<
@@ -52,8 +52,8 @@ private:
     class ChildDescriptor
     {
     public:
-        DlgEdObj*                                                 pDlgEdObj;
-        css::uno::Reference< css::accessibility::XAccessible >    rxAccessible;
+        DlgEdObj*                                         pDlgEdObj;
+        rtl::Reference< AccessibleDialogControlShape >    mxAccessible;
 
         ChildDescriptor( DlgEdObj* _pDlgEdObj );
 
