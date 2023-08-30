@@ -27,7 +27,7 @@
 
 #include <svx/AccessibleControlShape.hxx>
 #include <o3tl/typed_flags_set.hxx>
-
+#include <unotools/weakref.hxx>
 #include <vector>
 #include <memory>
 #include <o3tl/sorted_vector.hxx>
@@ -108,7 +108,7 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     /// preview-to-display coordinates
     std::unique_ptr<SwAccPreviewData> mpPreview;
 
-    css::uno::WeakReference < css::accessibility::XAccessible > mxCursorContext;
+    unotools::WeakReference< SwAccessibleContext > mxCursorContext;
 
     bool mbShapeSelected;
 
