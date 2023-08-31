@@ -73,6 +73,11 @@ void XmpMetadata::write()
             aXmlWriter.startElement("rdf:Description");
             aXmlWriter.attribute("rdf:about", OString(""));
             aXmlWriter.attribute("xmlns:dc", OString("http://purl.org/dc/elements/1.1/"));
+
+            aXmlWriter.startElement("dc:format");
+            aXmlWriter.content("application/pdf");
+            aXmlWriter.endElement();
+
             if (!msTitle.isEmpty())
             {
                 // this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
