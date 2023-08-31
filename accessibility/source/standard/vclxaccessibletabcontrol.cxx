@@ -218,7 +218,10 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
 
                 // dispose all tab pages
                 for (const rtl::Reference<VCLXAccessibleTabPage>& i : m_aAccessibleChildren)
-                    i->dispose();
+                {
+                    if (i.is())
+                        i->dispose();
+                }
                 m_aAccessibleChildren.clear();
             }
 
