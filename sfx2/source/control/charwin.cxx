@@ -102,10 +102,9 @@ OUString SvxCharView::GetCharInfoText()
 
 OUString SvxCharView::RequestHelp(tools::Rectangle& rHelpRect)
 {
-    OUString sCharInfoText(GetCharInfoText());
-    // Gtk3 requires a help rectangle be supplied for the tooltip to display, X11 does not.
-    mxVirDev->GetTextBoundRect(rHelpRect, sCharInfoText);
-    return sCharInfoText;
+    // Gtk3 requires a rectangle be specified for the tooltip to display, X11 does not.
+    rHelpRect = tools::Rectangle(Point(), GetOutputSizePixel());
+    return GetCharInfoText();
 }
 
 bool SvxCharView::MouseButtonDown(const MouseEvent& rMEvt)
