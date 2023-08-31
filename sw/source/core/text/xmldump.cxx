@@ -294,22 +294,4 @@ void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
     (void)xmlTextWriterEndElement(writer);
 }
 
-void SwFlyAtContentFrame::dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const
-{
-    SwFlyFreeFrame::dumpAsXmlAttributes(pWriter);
-
-    if (m_pFollow != nullptr)
-    {
-        (void)xmlTextWriterWriteAttribute(
-            pWriter, BAD_CAST("follow"),
-            BAD_CAST(OString::number(m_pFollow->GetFrame().GetFrameId()).getStr()));
-    }
-    if (m_pPrecede != nullptr)
-    {
-        (void)xmlTextWriterWriteAttribute(
-            pWriter, BAD_CAST("precede"),
-            BAD_CAST(OString::number(m_pPrecede->GetFrame().GetFrameId()).getStr()));
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
