@@ -1186,6 +1186,12 @@
       </object>
     </child>
     <child>
+      <object class="GtkSeparatorMenuItem" id="separator159">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="InsertBreakD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1197,6 +1203,13 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:InsertSection</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuInsert-InsertHorizontalLine">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Horizontal Line&amp;FamilyName:string=ParagraphStyles</property>
       </object>
     </child>
     <child>
@@ -1777,9 +1790,53 @@
         <property name="can_focus">False</property>
         <property name="action_name">.uno:MoreDictionaries</property>
       </object>
-      <packing>
-        <property name="bottom_attach">0</property>
-      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuReview-AutoCorrect">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:AutoFormatMenu</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="Menu AutoCorrect">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkMenuItem" id="MenuReview-AutoCorrectWhileTyping">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="action_name">.uno:OnlineAutoFormat</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="MenuReview-AutoFormatApply">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="action_name">.uno:AutoFormatApply</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="MenuReview-AutoFormatApplyAndEdit">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="action_name">.uno:AutoFormatRedlineApply</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparatorMenuItem" id="MenuReview-separator6">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="MenuReview-AutoCorrectDialog">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="action_name">.uno:AutoCorrectDlg</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
     </child>
     <child>
       <object class="GtkSeparatorMenuItem" id="MenuReview-separator1">
