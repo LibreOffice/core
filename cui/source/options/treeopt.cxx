@@ -820,7 +820,6 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, ImplUpdateDataHdl, Timer*, void)
 
 void OfaTreeOptionsDialog::selectFirstEntry()
 {
-    std::unique_ptr<weld::TreeIter> xEntry;
     std::unique_ptr<weld::TreeIter> xTemp = xTreeLB->make_iterator();
     bool bTemp = xTreeLB->get_iter_first(*xTemp);
 
@@ -829,17 +828,7 @@ void OfaTreeOptionsDialog::selectFirstEntry()
         // select only the first child
         if (xTreeLB->get_iter_depth(*xTemp) && xTreeLB->get_id(*xTemp).toInt64())
         {
-            xEntry = xTreeLB->make_iterator(xTemp.get());
-
-            if (!xEntry)
-            {
-                xEntry = xTreeLB->make_iterator();
-                if (!xTreeLB->get_iter_first(*xEntry) || !xTreeLB->iter_next(*xEntry))
-                    xEntry.reset();
-            }
-
-            if (!xEntry)
-                return;
+            std::unique_ptr<weld::TreeIter> xEntry(xTreeLB->make_iterator(xTemp.get()));
 
             std::unique_ptr<weld::TreeIter> xParent(xTreeLB->make_iterator(xEntry.get()));
             xTreeLB->iter_parent(*xParent);
