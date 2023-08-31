@@ -188,7 +188,7 @@ void ControlMenuController::updateImagesPopupMenu(Reference<awt::XPopupMenu> con
 {
     if (!rPopupMenu)
         return;
-    for (size_t i=0; i < SAL_N_ELEMENTS(aCommands); ++i)
+    for (size_t i=0; i < std::size(aCommands); ++i)
     {
         sal_Int16 nItemId = i + 1;
         if (m_bShowMenuImages)
