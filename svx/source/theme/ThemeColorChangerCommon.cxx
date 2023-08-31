@@ -49,16 +49,16 @@ const SvxColorItem* getColorItem(const editeng::Section& rSection)
     return nullptr;
 }
 
-bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObject, SdrView* pView)
+bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObject, SdrView& rView)
 {
     SdrTextObj* pTextObject = DynCastSdrTextObj(pObject);
 
     if (!pTextObject)
         return false;
 
-    pView->SdrBeginTextEdit(pTextObject);
+    rView.SdrBeginTextEdit(pTextObject);
 
-    auto* pOutlinerView = pView->GetTextEditOutlinerView();
+    auto* pOutlinerView = rView.GetTextEditOutlinerView();
     if (!pOutlinerView)
         return false;
 
@@ -97,7 +97,7 @@ bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObj
         }
     }
 
-    pView->SdrEndTextEdit();
+    rView.SdrEndTextEdit();
 
     return true;
 }
@@ -166,7 +166,8 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
     if (!pObject)
         return;
 
-    updateEditEngTextSections(rColorSet, pObject, pView);
+    if (pView)
+        updateEditEngTextSections(rColorSet, pObject, *pView);
     updateObjectAttributes(rColorSet, *pObject, pUndoManager);
 }
 
