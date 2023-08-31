@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_external,starmath_import,boost_headers))
 $(eval $(call gb_CppunitTest_use_sdk_api,starmath_import))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,starmath_import,\
+    starmath/qa/cppunit/test_import \
     starmath/qa/extras/mmlimport-test \
 ))
 

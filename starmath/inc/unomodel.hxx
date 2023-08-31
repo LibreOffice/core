@@ -27,6 +27,8 @@
 #include <vcl/print.hxx>
 #include <oox/mathml/imexport.hxx>
 
+#include "format.hxx"
+
 inline constexpr OUStringLiteral PRTUIOPT_TITLE_ROW = u"TitleRow";
 inline constexpr OUStringLiteral PRTUIOPT_FORMULA_TEXT = u"FormulaText";
 inline constexpr OUStringLiteral PRTUIOPT_BORDER = u"Border";
@@ -47,6 +49,8 @@ class SmModel final : public SfxBaseModel,
                 public oox::FormulaImExportBase
 {
     std::unique_ptr<SmPrintUIOptions> m_pPrintUIOptions;
+
+    SmFace maFonts[FNT_END + 1];
 
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;

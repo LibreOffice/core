@@ -434,16 +434,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 *pValues >>= sFontName;
                 if(sFontName.isEmpty())
                     throw IllegalArgumentException();
-
-                if(aFormat.GetFont((*ppEntries)->mnMemberId).GetFamilyName() != sFontName)
-                {
-                    const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
-
-                    SmFace aSet( sFontName, rOld.GetFontSize() );
-                    aSet.SetBorderWidth( rOld.GetBorderWidth() );
-                    aSet.SetAlignment( ALIGN_BASELINE );
-                    aFormat.SetFont( (*ppEntries)->mnMemberId, aSet );
-                }
+                maFonts[(*ppEntries)->mnMemberId].SetFamilyName(sFontName);
             }
             break;
             case HANDLE_CUSTOM_FONT_FIXED_POSTURE:
@@ -458,9 +449,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 std::optional<const bool> bVal = o3tl::tryAccess<bool>(*pValues);
                 if(!bVal.has_value())
                     throw IllegalArgumentException();
-                vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
-                aNewFont.SetItalic(*bVal ? ITALIC_NORMAL : ITALIC_NONE);
-                aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
+                maFonts[(*ppEntries)->mnMemberId].SetItalic(*bVal ? ITALIC_NORMAL : ITALIC_NONE);
             }
             break;
             case HANDLE_CUSTOM_FONT_FIXED_WEIGHT :
@@ -475,9 +464,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 std::optional<const bool> bVal = o3tl::tryAccess<bool>(*pValues);
                 if(!bVal.has_value())
                     throw IllegalArgumentException();
-                vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
-                aNewFont.SetWeight(*bVal ? WEIGHT_BOLD : WEIGHT_NORMAL);
-                aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
+                maFonts[(*ppEntries)->mnMemberId].SetWeight(*bVal ? WEIGHT_BOLD : WEIGHT_NORMAL);
             }
             break;
             case HANDLE_BASE_FONT_HEIGHT                   :
@@ -493,7 +480,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 // apply base size to fonts
                 const Size aTmp( aFormat.GetBaseSize() );
                 for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
-                    aFormat.SetFontSize(i, aTmp);
+                    maFonts[i].SetSize(aTmp);
             }
             break;
             case HANDLE_RELATIVE_FONT_HEIGHT_TEXT          :
@@ -671,6 +658,42 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_STARMATH_VERSION:
                 pDocSh->SetSmSyntaxVersion(pValues->get<sal_uInt16>());
                 break;
+        }
+    }
+
+    // tdf#143213
+    // Collect all font settings and apply them at the end, since the font name change can be seen
+    // after italic or bold settings and would then override them.
+    for (sal_uInt16 nFontDesc = FNT_BEGIN; nFontDesc <= FNT_END; ++nFontDesc)
+    {
+        const SmFace& rFont = maFonts[nFontDesc];
+        if (aFormat.GetFont(nFontDesc).GetFamilyName() != rFont.GetFamilyName())
+        {
+            const SmFace rOld = aFormat.GetFont(nFontDesc);
+
+            SmFace aSet(rFont.GetFamilyName(), rOld.GetFontSize());
+            aSet.SetBorderWidth(rOld.GetBorderWidth());
+            aSet.SetAlignment(ALIGN_BASELINE);
+            aFormat.SetFont(nFontDesc, aSet);
+        }
+
+        if (aFormat.GetFont(nFontDesc).GetItalic() != rFont.GetItalic())
+        {
+            vcl::Font aNewFont(aFormat.GetFont(nFontDesc));
+            aNewFont.SetItalic(rFont.GetItalic());
+            aFormat.SetFont(nFontDesc, aNewFont);
+        }
+
+        if (aFormat.GetFont(nFontDesc).GetWeight() != rFont.GetWeight())
+        {
+            vcl::Font aNewFont(aFormat.GetFont(nFontDesc));
+            aNewFont.SetWeight(rFont.GetWeight());
+            aFormat.SetFont(nFontDesc, aNewFont);
+        }
+
+        if (aFormat.GetFont(nFontDesc).GetFontSize() != rFont.GetFontSize())
+        {
+            aFormat.SetFontSize(nFontDesc, rFont.GetFontSize());
         }
     }
 
