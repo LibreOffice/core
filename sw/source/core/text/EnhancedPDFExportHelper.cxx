@@ -464,11 +464,27 @@ void SwTaggedPDFHelper::CheckRestoreTag() const
     }
 }
 
+sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
+    vcl::PDFWriter::StructElement const eType, const OUString& rString)
+{
+    // write new tag
+    const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
+    mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
+    mpPDFExtOutDevData->BeginStructureElement(nId);
+    ++m_nEndStructureElement;
+
+#if OSL_DEBUG_LEVEL > 1
+    aStructStack.push_back( o3tl::narrowing<sal_uInt16>(eType) );
+#endif
+
+    return nId;
+}
+
 void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUString& rString )
 {
     void const* pKey(nullptr);
 
-    if (mpFrameInfo && eType != vcl::PDFWriter::LIBody && eType != vcl::PDFWriter::TOCI)
+    if (mpFrameInfo)
     {
         const SwFrame& rFrame = mpFrameInfo->mrFrame;
 
@@ -489,15 +505,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
         }
     }
 
-    // write new tag
-    const sal_Int32 nId = mpPDFExtOutDevData->EnsureStructureElement(pKey);
-    mpPDFExtOutDevData->InitStructureElement(nId, eType, rString);
-    mpPDFExtOutDevData->BeginStructureElement(nId);
-    ++m_nEndStructureElement;
-
-#if OSL_DEBUG_LEVEL > 1
-    aStructStack.push_back( o3tl::narrowing<sal_uInt16>(eType) );
-#endif
+    sal_Int32 const nId = BeginTagImpl(pKey, eType, rString);
 
     // Store the id of the current structure element if
     // - it is a list structure element
@@ -520,19 +528,6 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
         }
         else if ( vcl::PDFWriter::LIBody == eType )
         {
-            NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
-            rNumListBodyIdMap[ pNodeNum ] = nId;
-        }
-    }
-    else if ( mpFrameInfo )
-    {
-        const SwFrame& rFrame = mpFrameInfo->mrFrame;
-
-        if (vcl::PDFWriter::LIBody == eType && rFrame.IsTextFrame())
-        {
-            SwTextFrame const& rTextFrame(static_cast<const SwTextFrame&>(rFrame));
-            SwTextNode const*const pTextNd(rTextFrame.GetTextNodeForParaProps());
-            SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
             NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
             rNumListBodyIdMap[ pNodeNum ] = nId;
         }
@@ -1250,13 +1245,16 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
         case SwFrameType::Txt :
             {
                 SwTextFrame const& rTextFrame(*static_cast<const SwTextFrame*>(pFrame));
+                const SwTextNode *const pTextNd(rTextFrame.GetTextNodeForParaProps());
+
                 // lazy open LBody after Lbl
                 if (rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
                 {
-                    BeginTag(vcl::PDFWriter::LIBody, aListBodyString);
+                    sal_Int32 const nId = BeginTagImpl(nullptr, vcl::PDFWriter::LIBody, aListBodyString);
+                    SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
+                    NumListBodyIdMap& rNumListBodyIdMap(mpPDFExtOutDevData->GetSwPDFState()->m_NumListBodyIdMap);
+                    rNumListBodyIdMap[ pNodeNum ] = nId;
                 }
-
-                const SwTextNode *const pTextNd(rTextFrame.GetTextNodeForParaProps());
 
                 const SwFormat* pTextFormat = pTextNd->GetFormatColl();
                 const SwFormat* pParentTextFormat = pTextFormat ? pTextFormat->DerivedFrom() : nullptr;
@@ -1371,7 +1369,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                         if ( pTOXBase && TOX_INDEX != pTOXBase->GetType() )
                         {
                             // Special case: Open additional TOCI tag:
-                            BeginTag( vcl::PDFWriter::TOCI, aTOCIString );
+                            BeginTagImpl(nullptr, vcl::PDFWriter::TOCI, aTOCIString);
                         }
                     }
                 }
