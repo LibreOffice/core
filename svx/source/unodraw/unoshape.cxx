@@ -1876,7 +1876,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet const & aSet, const SfxItemProperty
             }
             else
             {
-                OSL_FAIL("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
+                SAL_WARN("svx", "SvxShape::GetAnyForItem() Return value has wrong Type, " << pMap->aType << " != " << aAny.getValueType());
             }
         }
 
