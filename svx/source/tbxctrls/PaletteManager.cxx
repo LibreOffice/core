@@ -162,7 +162,11 @@ bool PaletteManager::IsThemePaletteSelected() const
 
 bool PaletteManager::GetThemeAndEffectIndex(sal_uInt16 nItemId, sal_uInt16& rThemeIndex, sal_uInt16& rEffectIndex)
 {
-     // Each column is the same color with different effects.
+    // tdf#157034, nItemId begins with 1 but list of themes begin with 0
+    // so decrement nItemId
+    --nItemId;
+
+    // Each column is the same color with different effects.
     rThemeIndex = nItemId % 12;
 
     rEffectIndex = nItemId / 12;

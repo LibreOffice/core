@@ -106,9 +106,9 @@ class Test(UITestCase):
             portion = portions.nextElement()
 
             # Without the accompanying fix in place, this test would have failed with:
-            # AssertionError: -1 != 4
+            # AssertionError: -1 != 3
             # i.e. no theme index was set, instead of accent1 (index into the above color scheme).
-            self.assertEqual(portion.CharColorTheme, 4)
+            self.assertEqual(portion.CharColorTheme, 3)
 
             # Then make sure that '80% lighter' is lum-mod=2000 and lum-off=8000:
             # Without the accompanying fix in place, this test would have failed with:
