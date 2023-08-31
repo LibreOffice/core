@@ -252,7 +252,10 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     OInterfaceIteratorHelper4 aIt( l, mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
+        // cannot hold lock over call to approveFiring, since it might recurse back into us
+        l.unlock();
         aRet = aIt.next()->approveFiring( aScriptEvent );
+        l.lock();
         try
         {
             Reference< XIdlClass > xListenerType = mxManager->getReflection(l)->
