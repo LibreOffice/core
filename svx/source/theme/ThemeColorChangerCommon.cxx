@@ -105,13 +105,8 @@ bool updateEditEngTextSections(model::ColorSet const& rColorSet, SdrObject* pObj
 bool updateObjectAttributes(model::ColorSet const& rColorSet, SdrObject& rObject,
                             SfxUndoManager* pUndoManager)
 {
-    if (pUndoManager)
-    {
-        pUndoManager->AddUndoAction(
-            rObject.getSdrModelFromSdrObject().GetSdrUndoFactory().CreateUndoAttrObject(
-                rObject, true, true));
-    }
     bool bChanged = false;
+
     auto aItemSet = rObject.GetMergedItemSet();
 
     if (const XFillColorItem* pItem = aItemSet.GetItemIfSet(XATTR_FILLCOLOR, false))
@@ -152,6 +147,13 @@ bool updateObjectAttributes(model::ColorSet const& rColorSet, SdrObject& rObject
     }
     if (bChanged)
     {
+        const bool bUndo = pUndoManager && pUndoManager->IsInListAction();
+        if (bUndo)
+        {
+            pUndoManager->AddUndoAction(
+                rObject.getSdrModelFromSdrObject().GetSdrUndoFactory().CreateUndoAttrObject(
+                    rObject));
+        }
         rObject.SetMergedItemSetAndBroadcast(aItemSet);
     }
     return bChanged;
@@ -165,10 +167,9 @@ void updateSdrObject(model::ColorSet const& rColorSet, SdrObject* pObject, SdrVi
 {
     if (!pObject)
         return;
-
+    updateObjectAttributes(rColorSet, *pObject, pUndoManager);
     if (pView)
         updateEditEngTextSections(rColorSet, pObject, *pView);
-    updateObjectAttributes(rColorSet, *pObject, pUndoManager);
 }
 
 } // end svx::theme namespace

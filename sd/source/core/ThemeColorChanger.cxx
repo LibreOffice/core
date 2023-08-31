@@ -154,30 +154,34 @@ void ThemeColorChanger::apply(std::shared_ptr<model::ColorSet> const& pColorSet)
     {
         SdrPage* pCurrentPage = rModel.GetPage(nPage);
 
-        // Skip pages that are usign a different master page
-        if (!pCurrentPage->TRG_HasMasterPage()
-            || &pCurrentPage->TRG_GetMasterPage() != mpMasterPage)
-            continue;
+        // TODO - for now change all the objects regardless to which master page it belongs to.
+        // Currently we don't have a concept of master slide with a group of layouts as in MSO, but we always only
+        // have master pages, which aren't grouped together. In MSO the theme is defined per master slide, so when
+        // changing a theme, all the layouts get the new theme, as layouts are synonomus to master pages in LibreOffise,
+        // this is not possible to do and we would need to change the theme for each master page separately, which
+        // is just annoying for the user.
 
-        for (size_t nObject = 0; nObject < pCurrentPage->GetObjCount(); ++nObject)
+        // if (!pCurrentPage->TRG_HasMasterPage() || &pCurrentPage->TRG_GetMasterPage() != mpMasterPage)
+        //     continue;
+
+        SdrObjListIter aIter(pCurrentPage, SdrIterMode::DeepWithGroups);
+        while (aIter.IsMore())
         {
-            SdrObject* pObject = pCurrentPage->GetObj(nObject);
-            svx::theme::updateSdrObject(*pColorSet, pObject, pView, pUndoManager);
-
-            // update child objects
-            SdrObjList* pList = pObject->GetSubList();
-            if (pList)
-            {
-                SdrObjListIter aIter(pList, SdrIterMode::DeepWithGroups);
-                while (aIter.IsMore())
-                {
-                    svx::theme::updateSdrObject(*pColorSet, aIter.Next(), pView, pUndoManager);
-                }
-            }
+            svx::theme::updateSdrObject(*pColorSet, aIter.Next(), pView, pUndoManager);
         }
     }
 
     changeThemeColors(mpDocShell, mpMasterPage, pColorSet);
+
+    // See the TODO comment a couple of line above for the explanation - need to change the ThemeColors for all master
+    // pages for now, but the following code will need to be changed in the future when we have the concept similar to
+    // master slide and layouts
+    for (sal_uInt16 nPage = 0; nPage < rModel.GetPageCount(); ++nPage)
+    {
+        SdrPage* pCurrentPage = rModel.GetPage(nPage);
+        if (pCurrentPage->IsMasterPage() && pCurrentPage != mpMasterPage)
+            changeThemeColors(mpDocShell, pCurrentPage, pColorSet);
+    }
 
     pUndoManager->LeaveListAction();
 }
