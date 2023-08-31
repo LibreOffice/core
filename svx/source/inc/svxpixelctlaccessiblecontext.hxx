@@ -119,7 +119,7 @@ public:
     virtual sal_Int32 SAL_CALL getForeground(  ) override;
     virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
-    css::uno::Reference< css::accessibility::XAccessible >
+    rtl::Reference<SvxPixelCtlAccessibleChild>
          CreateChild (tools::Long nIndex, Point mPoint);
 
 private:
@@ -138,7 +138,7 @@ private:
     virtual void SAL_CALL disposing() override;
 
     SvxPixelCtl* mpPixelCtl;
-    css::uno::Reference< css::accessibility::XAccessible> m_xCurChild;
+    rtl::Reference<SvxPixelCtlAccessibleChild> m_xCurChild;
 
 public:
     void NotifyChild(tools::Long nIndex, bool bSelect, bool bCheck);
