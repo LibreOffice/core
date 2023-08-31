@@ -835,26 +835,24 @@ bool SmGraphicWidget::Command(const CommandEvent& rCEvt)
             default: break;
         }
     }
-    else
+
+    switch (rCEvt.GetCommand())
     {
-        switch (rCEvt.GetCommand())
-        {
-            case CommandEventId::ExtTextInput:
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
-                    assert(pData);
-                    const OUString& rText = pData->GetText();
-                    SmCursor& rCursor = GetCursor();
-                    OutputDevice& rDevice = GetOutputDevice();
-                    for (sal_Int32 i = 0; i < rText.getLength();)
-                        CharInput(rText.iterateCodePoints(&i), rCursor, rDevice);
-                    bCallBase = false;
-                }
-                break;
-            default:
-                break;
-        }
+        case CommandEventId::ExtTextInput:
+            if (SmViewShell::IsInlineEditEnabled())
+            {
+                const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
+                assert(pData);
+                const OUString& rText = pData->GetText();
+                SmCursor& rCursor = GetCursor();
+                OutputDevice& rDevice = GetOutputDevice();
+                for (sal_Int32 i = 0; i < rText.getLength();)
+                    CharInput(rText.iterateCodePoints(&i), rCursor, rDevice);
+                bCallBase = false;
+            }
+            break;
+        default:
+            break;
     }
     return !bCallBase;
 }
