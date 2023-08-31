@@ -452,13 +452,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
     if (pReopenKey)
     {
-        sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(pReopenKey);
-        mpPDFExtOutDevData->BeginStructureElement(id);
-        ++m_nEndStructureElement;
-
-#if OSL_DEBUG_LEVEL > 1
-        aStructStack.push_back( 99 );
-#endif
+        OpenTagImpl(pReopenKey);
 
         bRet = true;
     }
@@ -477,6 +471,17 @@ void SwTaggedPDFHelper::CheckRestoreTag() const
         aStructStack.pop_back();
 #endif
     }
+}
+
+void SwTaggedPDFHelper::OpenTagImpl(void const*const pKey)
+{
+    sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(pKey);
+    mpPDFExtOutDevData->BeginStructureElement(id);
+    ++m_nEndStructureElement;
+
+#if OSL_DEBUG_LEVEL > 1
+    aStructStack.push_back( 99 );
+#endif
 }
 
 sal_Int32 SwTaggedPDFHelper::BeginTagImpl(void const*const pKey,
@@ -1228,7 +1233,30 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
             {
                 const SwSection* pSection =
                         static_cast<const SwSectionFrame*>(pFrame)->GetSection();
-                if ( SectionType::ToxContent == pSection->GetType() )
+
+                // open all parent sections, so that the SEs of sections
+                // are nested in the same way as their SwSectionNodes
+                std::vector<SwSection const*> parents;
+                for (SwSection const* pParent = pSection->GetParent();
+                     pParent != nullptr; pParent = pParent->GetParent())
+                {
+                    parents.push_back(pParent);
+                }
+                for (auto it = parents.rbegin(); it != parents.rend(); ++it)
+                {
+                    // key is the SwSection - see lcl_GetKeyFromFrame()
+                    OpenTagImpl(*it);
+                }
+
+                FrameTagSet& rFrameTagSet(mpPDFExtOutDevData->GetSwPDFState()->m_FrameTagSet);
+                if (rFrameTagSet.find(pSection) != rFrameTagSet.end())
+                {
+                    // special case: section may have *multiple* master frames,
+                    // when it is interrupted by nested section - reopen!
+                    OpenTagImpl(pSection);
+                    break;
+                }
+                else if (SectionType::ToxContent == pSection->GetType())
                 {
                     const SwTOXBase* pTOXBase = pSection->GetTOXBase();
                     if ( pTOXBase )
