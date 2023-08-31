@@ -36,6 +36,7 @@ public:
 
 private:
     void testTdf47813();
+    void CHECK_GREEK_SYMBOL(OUString const & text, sal_Unicode code, bool bItalic);
     void testTdf52225();
 
     CPPUNIT_TEST_SUITE(NodeTest);
@@ -92,26 +93,26 @@ void NodeTest::testTdf47813()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, nWidthR/static_cast<double>(nWidthA), 0.03);
 }
 
+void NodeTest::CHECK_GREEK_SYMBOL(OUString const & text, sal_Unicode code, bool bItalic) {
+    mxDocShell->SetText(text);
+    const SmTableNode *pTree= mxDocShell->GetFormulaTree();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pTree->GetNumSubNodes());
+    const SmNode *pLine = pTree->GetSubNode(0);
+    CPPUNIT_ASSERT(pLine);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pLine->GetNumSubNodes());
+    const SmNode *pNode = pLine->GetSubNode(0);
+    CPPUNIT_ASSERT(pNode);
+    CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());
+    const SmSpecialNode *pSn = static_cast<const SmSpecialNode *>(pNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pSn->GetText().getLength());
+    CPPUNIT_ASSERT_EQUAL(code, pSn->GetText()[0]);
+    CPPUNIT_ASSERT_EQUAL(text, pSn->GetToken().aText);
+    CPPUNIT_ASSERT_EQUAL(bItalic, IsItalic(pSn->GetFont()));
+}
+
 void NodeTest::testTdf52225()
 {
-#define CHECK_GREEK_SYMBOL(text, code, bItalic) do {                    \
-        mxDocShell->SetText(text);                                      \
-        const SmTableNode *pTree= mxDocShell->GetFormulaTree();         \
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pTree->GetNumSubNodes());       \
-        const SmNode *pLine = pTree->GetSubNode(0);                     \
-        CPPUNIT_ASSERT(pLine);                                          \
-        CPPUNIT_ASSERT_EQUAL(SmNodeType::Line, pLine->GetType());       \
-        CPPUNIT_ASSERT_EQUAL(size_t(1), pLine->GetNumSubNodes());       \
-        const SmNode *pNode = pLine->GetSubNode(0);                     \
-        CPPUNIT_ASSERT(pNode);                                          \
-        CPPUNIT_ASSERT_EQUAL(SmNodeType::Special, pNode->GetType());    \
-        const SmSpecialNode *pSn = static_cast<const SmSpecialNode *>(pNode); \
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pSn->GetText().getLength()); \
-        CPPUNIT_ASSERT_EQUAL(code, pSn->GetText()[0]);     \
-        CPPUNIT_ASSERT_EQUAL(OUString(text), pSn->GetToken().aText);    \
-        CPPUNIT_ASSERT_EQUAL(bItalic, IsItalic(pSn->GetFont()));        \
-    } while (false)
-
     SmFormat aFormat = mxDocShell->GetFormat();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aFormat.GetGreekCharStyle()); // default format = 2
     CHECK_GREEK_SYMBOL("%ALPHA", u'\x0391', false);
