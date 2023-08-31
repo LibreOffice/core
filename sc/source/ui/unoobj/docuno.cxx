@@ -57,6 +57,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/XTheme.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/sheet/XSelectedSheetsSupplier.hpp>
@@ -82,6 +83,8 @@
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/LokControlHandler.hxx>
+#include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <cellsuno.hxx>
 #include <columnspanset.hxx>
@@ -165,6 +168,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
         { SC_UNO_LOOKUPLABELS,            PROP_UNO_LOOKUPLABELS, cppu::UnoType<bool>::get(),                         0, 0},
         { SC_UNO_MATCHWHOLE,              PROP_UNO_MATCHWHOLE, cppu::UnoType<bool>::get(),                           0, 0},
         { SC_UNO_NAMEDRANGES,             0, cppu::UnoType<sheet::XNamedRanges>::get(),             0, 0},
+        { SC_UNO_THEME,                   0, cppu::UnoType<util::XTheme>::get(), 0,  0},
         { SC_UNO_DATABASERNG,             0, cppu::UnoType<sheet::XDatabaseRanges>::get(),          0, 0},
         { SC_UNO_NULLDATE,                PROP_UNO_NULLDATE, cppu::UnoType<util::Date>::get(),                      0, 0},
         { SC_UNO_ROWLABELRNG,             0, cppu::UnoType<sheet::XLabelRanges>::get(),             0, 0},
@@ -2837,6 +2841,16 @@ void SAL_CALL ScModelObj::setPropertyValue(
     {
         setGrabBagItem(aValue);
     }
+    else if (aPropertyName == SC_UNO_THEME)
+    {
+        SdrModel& rSdrModel = getSdrModelFromUnoModel();
+        uno::Reference<util::XTheme> xTheme;
+        if (aValue >>= xTheme)
+        {
+            auto& rUnoTheme = dynamic_cast<UnoTheme&>(*xTheme);
+            rSdrModel.setTheme(rUnoTheme.getTheme());
+        }
+    }
 
     if ( aNewOpt != rOldOpt )
     {
@@ -3022,6 +3036,15 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         else if ( aPropertyName == SC_UNO_INTEROPGRABBAG )
         {
             getGrabBagItem(aRet);
+        }
+        else if (aPropertyName == SC_UNO_THEME)
+        {
+            SdrModel& rSdrModel = getSdrModelFromUnoModel();
+            css::uno::Reference<css::util::XTheme> xTheme;
+            auto pTheme = rSdrModel.getTheme();
+            if (pTheme)
+                xTheme = model::theme::createXTheme(pTheme);
+            aRet <<= xTheme;
         }
     }
 

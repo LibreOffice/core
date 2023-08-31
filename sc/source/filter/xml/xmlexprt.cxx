@@ -121,7 +121,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdomeas.hxx>
+#include <svx/svdmodel.hxx>
 #include <vcl/svapp.hxx>
+#include <docmodel/theme/Theme.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1991,6 +1993,25 @@ void ScXMLExport::ExportStyles_( bool bUsed )
         XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, false, XmlStyleFamily::TABLE_CELL);
 
     SvXMLExport::ExportStyles_(bUsed);
+
+    exportTheme();
+}
+
+void ScXMLExport::exportTheme()
+{
+    if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
+        return;
+
+    SdrModel* pModel = GetDocument()->GetDrawLayer();
+
+    if (!pModel)
+        return;
+
+    auto const& pTheme = pModel->getTheme();
+    if (!pTheme)
+        return;
+
+    ExportThemeElement(pTheme);
 }
 
 void ScXMLExport::AddStyleFromCells(const uno::Reference<beans::XPropertySet>& xProperties,
