@@ -1253,7 +1253,7 @@ void SAL_CALL SdStyleSheet::setPropertyValues(const css::uno::Sequence<OUString>
         }
         catch (const css::beans::UnknownPropertyException&)
         {
-            DBG_UNHANDLED_EXCEPTION("sd");
+            // ignore this, some code likes to liberally sprinkle properties all over stuff that doesn't support those properties
         }
     }
 
