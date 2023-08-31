@@ -1080,7 +1080,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             {
                 if(aMissingCodes != oldMissingCodes)
                 {
-                    SAL_WARN("vcl.gdi", "Font fallback to the same font, but has missing codes");
+                    SAL_INFO("vcl.gdi", "Font fallback to the same font, but has missing codes");
                     // Restore the missing codes if we're not going to use this font.
                     aMissingCodes = oldMissingCodes;
                 }
