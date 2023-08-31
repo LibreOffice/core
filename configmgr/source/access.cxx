@@ -1377,7 +1377,7 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                     << locale << "\" recursively starting with \"*\"");
             return getChild(locale);
         }
-        SAL_WARN_IF(
+        SAL_INFO_IF(
             locale.isEmpty(), "configmgr",
             ("access best-matching localized property value via \"*<locale>\""
              " with empty <locale>; falling back to defaults"));
