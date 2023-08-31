@@ -40,8 +40,10 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
             SCROW maxRow = rDoc.GetLastDataRow(tab, 2, 2, rDoc.MaxRow());
             for(SCROW row = 0; row <= maxRow; ++row)
             {
-                // Column C has the check result, column D has the formula text.
-                if(rDoc.HasStringData(2, row, tab))
+                // Column A has the result value, column B has the expected
+                // value, Column C has the check result (1 or 0), column D has
+                // the formula text.
+                if(rDoc.HasStringData(2, row, tab) || !rDoc.HasData(2, row, tab))
                     continue;
                 if(!rtl::math::approxEqual(1.0, rDoc.GetValue(2, row, 1)))
                     CPPUNIT_FAIL( OUString( "Testing " + rURL + " failed, "
