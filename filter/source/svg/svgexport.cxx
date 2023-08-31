@@ -1906,7 +1906,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
         }
     }
 
-    if(!mbExportShapeSelection)
+    if (!mbExportShapeSelection)
     {
         // We wrap all slide in a group element with class name "SlideGroup".
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
@@ -1914,17 +1914,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
 
         for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
         {
-            Reference< css::drawing::XShapes > xShapes;
-
-            if (mbExportShapeSelection)
-            {
-                // #i124608# export a given object selection
-                xShapes = maShapeSelection;
-            }
-            else
-            {
-                xShapes = rxPages[i];
-            }
+            Reference<css::drawing::XShapes> xShapes = rxPages[i];
 
             if( xShapes.is() )
             {
