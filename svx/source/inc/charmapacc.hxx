@@ -52,7 +52,7 @@ namespace svx
         SvxShowCharSetItem( SvxShowCharSet& rParent, SvxShowCharSetAcc* _pParent, sal_uInt16 _nPos );
         ~SvxShowCharSetItem();
 
-        css::uno::Reference< css::accessibility::XAccessible > GetAccessible();
+        rtl::Reference< SvxShowCharSetItemAcc > GetAccessible();
     };
 
 
@@ -66,7 +66,7 @@ namespace svx
                                         css::accessibility::XAccessible,
                                         css::accessibility::XAccessibleTable>
     {
-        ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > m_aChildren;
+        ::std::vector< rtl::Reference< SvxShowCharSetItemAcc > > m_aChildren;
         SvxShowCharSet*             m_pParent; // the vcl control
         virtual void SAL_CALL disposing() override;
     public:

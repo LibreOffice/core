@@ -767,11 +767,14 @@ void SvxShowCharSet::SelectIndex(int nNewIndex, bool bFocus)
         if( m_xAccessible.is() )
         {
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
+            rtl::Reference<svx::SvxShowCharSetItemAcc> xItemAcc = pItem->GetAccessible();
             // Don't fire the focus event.
             if ( bFocus )
-                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), Any(pItem->GetAccessible()) ); // this call assures that m_pItem is set
+                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(),
+                                Any(uno::Reference<XAccessible>(xItemAcc)) ); // this call assures that m_pItem is set
             else
-                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), Any(pItem->GetAccessible()) ); // this call assures that m_pItem is set
+                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(),
+                                Any(uno::Reference<XAccessible>(xItemAcc)) ); // this call assures that m_pItem is set
 
             assert(pItem->m_xItem.is() && "No accessible created!");
             Any aOldAny, aNewAny;
@@ -826,7 +829,7 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, weld::ScrolledWindow&, void)
             int nLast = LastInView();
             for ( ; nLast != nSelectedIndex; ++nLast)
             {
-                aOldAny <<= ImplGetItem(nLast)->GetAccessible();
+                aOldAny <<= uno::Reference<XAccessible>(ImplGetItem(nLast)->GetAccessible());
                 m_xAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }

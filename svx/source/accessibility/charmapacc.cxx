@@ -56,7 +56,7 @@ SvxShowCharSetItem::~SvxShowCharSetItem()
     }
 }
 
-uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessible()
+rtl::Reference<SvxShowCharSetItemAcc> SvxShowCharSetItem::GetAccessible()
 {
     if( !m_xItem.is() )
     {
@@ -84,8 +84,8 @@ SvxShowCharSetAcc::~SvxShowCharSetAcc()
 void SAL_CALL SvxShowCharSetAcc::disposing()
 {
     OAccessibleSelectionHelper::disposing();
-    for (auto& rChild : m_aChildren)
-        ::comphelper::disposeComponent(rChild);
+    for (auto& rxChild : m_aChildren)
+        rxChild->dispose();
 
     m_aChildren.clear();
     m_pParent = nullptr;
@@ -146,7 +146,7 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
 {
     OExternalLockGuard aGuard( this );
 
-    uno::Reference< css::accessibility::XAccessible >    xRet;
+    rtl::Reference< SvxShowCharSetItemAcc >  xRet;
     SvxShowCharSetItem* pItem = m_pParent->ImplGetItem( static_cast< sal_uInt16 >( i ) );
 
     if( !pItem )
