@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -208,6 +209,7 @@ private:
     bool                                mbExportShapeSelection;
     Sequence< PropertyValue >           maFilterData;
     Reference< css::drawing::XDrawPage > mxDefaultPage;
+    Reference<css::task::XStatusIndicator> mxStatusIndicator;
     std::vector< Reference< css::drawing::XDrawPage > > mSelectedPages;
     bool                                mbIsPreview;
     bool                                mbShouldCompress;

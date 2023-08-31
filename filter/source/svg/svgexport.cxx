@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <strings.hrc>
 #include "svgwriter.hxx"
 #include "svgfontexport.hxx"
 #include "svgfilter.hxx"
@@ -653,6 +654,8 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         {
             pValue[ i ].Value >>= maFilterData;
         }
+        else if (pValue[i].Name == "StatusIndicator")
+            pValue[i].Value >>= mxStatusIndicator;
     }
 
     if(mbWriterFilter || mbCalcFilter)
@@ -1912,8 +1915,14 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", "SlideGroup" );
         SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
 
+        if (mxStatusIndicator)
+            mxStatusIndicator->start(FilterResId(STR_FILTER_DOC_SAVING), nLastPage - nFirstPage + 1);
+
         for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
         {
+            if (mxStatusIndicator.is())
+                mxStatusIndicator->setValue(i - nFirstPage);
+
             Reference<css::drawing::XShapes> xShapes = rxPages[i];
 
             if( xShapes.is() )
@@ -1957,6 +1966,9 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< css::drawing:
                 } // append the </g> closing tag related to inserted elements
             } // append the </g> closing tag related to the svg element handling the slide visibility
         }
+
+        if (mxStatusIndicator)
+            mxStatusIndicator->end();
     }
     else
     {
