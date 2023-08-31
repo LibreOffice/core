@@ -145,6 +145,7 @@ class SwTaggedPDFHelper
     const Frame_Info* mpFrameInfo;
     const Por_Info* mpPorInfo;
 
+    void OpenTagImpl(void const* pKey);
     sal_Int32 BeginTagImpl(void const* pKey,vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName);
     void BeginTag( vcl::PDFWriter::StructElement aTagRole, const OUString& rTagName );
     void EndTag();
