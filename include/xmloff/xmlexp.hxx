@@ -88,6 +88,8 @@ namespace com::sun::star {
 }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
+namespace model { class Theme; }
+
 enum class SvXMLExportFlags {
     NONE                     = 0,
     META                     = 0x0001,
@@ -261,6 +263,8 @@ protected:
     void SetGraphicStorageHandler(css::uno::Reference<css::document::XGraphicStorageHandler> const & rxGraphicStorageHandler);
 
     void SetDocHandler( const css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
+
+    void ExportThemeElement(std::shared_ptr<model::Theme> const& pTheme);
 
     bool mbAutoStylesCollected;
 public:

@@ -2306,7 +2306,7 @@ void SdXMLExport::ExportMasterStyles_()
             exportFormsElement( xMasterPage );
 
             // write optional loext:theme
-            ExportThemeElement(xMasterPage);
+            exportTheme(xMasterPage);
 
             // write graphic objects on this master page (if any)
             if(xMasterPage.is() && xMasterPage->getCount())
@@ -2363,7 +2363,7 @@ void SdXMLExport::exportFormsElement( const Reference< XDrawPage >& xDrawPage )
     }
 }
 
-void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& xDrawPage)
+void SdXMLExport::exportTheme(const uno::Reference<drawing::XDrawPage>& xDrawPage)
 {
     if ((getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED) == 0)
     {
@@ -2387,46 +2387,8 @@ void SdXMLExport::ExportThemeElement(const uno::Reference<drawing::XDrawPage>& x
     auto pTheme = pUnoTheme->getTheme();
     if (!pTheme)
         return;
-    auto pColorSet = pTheme->getColorSet();
-    if (!pColorSet)
-        return;
 
-    if (!pTheme->GetName().isEmpty())
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pTheme->GetName());
-    SvXMLElementExport aTheme(*this, XML_NAMESPACE_LO_EXT, XML_THEME, true, true);
-
-    if (!pColorSet->getName().isEmpty())
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, pColorSet->getName());
-    SvXMLElementExport aColorTable(*this, XML_NAMESPACE_LO_EXT, XML_THEME_COLORS, true, true);
-
-    static const XMLTokenEnum aColorTokens[] =
-    {
-        XML_DARK1, // Text 1
-        XML_LIGHT1, // Background 1
-        XML_DARK2, // Text 2
-        XML_LIGHT2, // Background 2
-        XML_ACCENT1,
-        XML_ACCENT2,
-        XML_ACCENT3,
-        XML_ACCENT4,
-        XML_ACCENT5,
-        XML_ACCENT6,
-        XML_HYPERLINK, // Hyperlink
-        XML_FOLLOWED_HYPERLINK, // Followed hyperlink
-    };
-
-    for (auto eThemeColorType : o3tl::enumrange<model::ThemeColorType>())
-    {
-        if (eThemeColorType == model::ThemeColorType::Unknown)
-            continue;
-
-        auto nColor = size_t(eThemeColorType);
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, GetXMLToken(aColorTokens[nColor]));
-        OUStringBuffer sValue;
-        sax::Converter::convertColor(sValue, pColorSet->getColor(eThemeColorType));
-        AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR, sValue.makeStringAndClear());
-        SvXMLElementExport aColor(*this, XML_NAMESPACE_LO_EXT, XML_COLOR, true, true);
-    }
+    ExportThemeElement(pTheme);
 }
 
 void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)

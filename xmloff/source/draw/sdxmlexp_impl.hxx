@@ -135,7 +135,7 @@ class SdXMLExport : public SvXMLExport
     void ImplExportHeaderFooterDeclAttributes( const HeaderFooterPageSettingsImpl& aSettings );
 
     void exportFormsElement( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage );
-    void ExportThemeElement(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
+    void exportTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPage);
     void exportPresentationSettings();
 
     // #82003# helper function for recursive object count
