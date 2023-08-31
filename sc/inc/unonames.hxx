@@ -47,6 +47,7 @@ inline constexpr OUStringLiteral SC_UNO_ROWLABELRNG          = u"RowLabelRanges"
 inline constexpr OUStringLiteral SC_UNO_SHEETLINKS           = u"SheetLinks";
 inline constexpr OUStringLiteral SC_UNO_FORBIDDEN            = u"ForbiddenCharacters";
 inline constexpr OUStringLiteral SC_UNO_HASDRAWPAGES         = u"HasDrawPages";
+inline constexpr OUStringLiteral SC_UNO_THEME                = u"Theme";
 
 //  CharacterProperties
 inline constexpr OUStringLiteral SC_UNONAME_CCOLOR           = u"CharColor";

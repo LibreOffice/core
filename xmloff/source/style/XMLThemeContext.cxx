@@ -33,9 +33,9 @@ using namespace xmloff::token;
 
 XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
                                  const uno::Reference<xml::sax::XFastAttributeList>& xAttrList,
-                                 css::uno::Reference<css::drawing::XDrawPage> const& xPage)
+                                 css::uno::Reference<css::uno::XInterface> const& xObject)
     : SvXMLImportContext(rImport)
-    , m_xPage(xPage)
+    , m_xObject(xObject)
     , mpTheme(new model::Theme)
 {
     for (const auto& rAttribute : sax_fastparser::castToFastAttributeList(xAttrList))
@@ -56,7 +56,7 @@ XMLThemeContext::~XMLThemeContext()
 {
     if (mpTheme && mpTheme->getColorSet())
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(m_xPage, uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(m_xObject, uno::UNO_QUERY);
         auto xTheme = model::theme::createXTheme(mpTheme);
         xPropertySet->setPropertyValue("Theme", uno::Any(xTheme));
     }

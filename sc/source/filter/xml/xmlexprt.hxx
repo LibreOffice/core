@@ -222,6 +222,8 @@ class ScXMLExport : public SvXMLExport
 
     const ScXMLEditAttributeMap& GetEditAttributeMap() const;
 
+    void exportTheme();
+
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool() override;
     virtual XMLPageExport* CreatePageExport() override;

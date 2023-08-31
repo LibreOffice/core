@@ -48,21 +48,10 @@ public:
 
 ScSpreadsheetSettingsObj::ScSpreadsheetSettingsObj()
     : UnoApiTest("/sc/qa/extras/testdocuments")
-    , XPropertySet({
-          "AreaLinks",
-          "CharLocale",
-          "CharLocaleAsian",
-          "CharLocaleComplex",
-          "ColumnLabelRanges",
-          "DDELinks",
-          "DatabaseRanges",
-          "ExternalDocLinks",
-          "InteropGrabBag",
-          "NamedRanges",
-          "NullDate",
-          "RowLabelRanges",
-          "SheetLinks",
-      })
+    , XPropertySet({ "AreaLinks", "CharLocale", "CharLocaleAsian", "CharLocaleComplex",
+                     "ColumnLabelRanges", "DDELinks", "DatabaseRanges", "ExternalDocLinks",
+                     "InteropGrabBag", "NamedRanges", "NullDate", "RowLabelRanges", "SheetLinks",
+                     "Theme" })
 {
 }
 

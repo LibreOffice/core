@@ -15,6 +15,11 @@
 #include <editeng/colritem.hxx>
 #include <editeng/borderline.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XTheme.hpp>
+#include <docmodel/uno/UnoTheme.hxx>
+#include <docmodel/theme/Theme.hxx>
+
 using namespace css;
 
 namespace
@@ -28,7 +33,85 @@ public:
     }
 };
 
-CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExport)
+CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
+
+        auto pTheme = std::make_shared<model::Theme>("MyTheme");
+        auto pColorSet = std::make_shared<model::ColorSet>("MyColorSet");
+        pColorSet->add(model::ThemeColorType::Dark1, 0x111111);
+        pColorSet->add(model::ThemeColorType::Light1, 0x222222);
+        pColorSet->add(model::ThemeColorType::Dark2, 0x333333);
+        pColorSet->add(model::ThemeColorType::Light2, 0x444444);
+        pColorSet->add(model::ThemeColorType::Accent1, 0x555555);
+        pColorSet->add(model::ThemeColorType::Accent2, 0x666666);
+        pColorSet->add(model::ThemeColorType::Accent3, 0x777777);
+        pColorSet->add(model::ThemeColorType::Accent4, 0x888888);
+        pColorSet->add(model::ThemeColorType::Accent5, 0x999999);
+        pColorSet->add(model::ThemeColorType::Accent6, 0xaaaaaa);
+        pColorSet->add(model::ThemeColorType::Hyperlink, 0xbbbbbb);
+        pColorSet->add(model::ThemeColorType::FollowedHyperlink, 0xcccccc);
+        pTheme->setColorSet(pColorSet);
+
+        xPropertySet->setPropertyValue("Theme", uno::Any(model::theme::createXTheme(pTheme)));
+    }
+
+    // Check the "Theme" property
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue("Theme"),
+                                            uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xTheme.is());
+        auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+        CPPUNIT_ASSERT(pUnoTheme);
+        auto pTheme = pUnoTheme->getTheme();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("MyTheme"), pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(OUString("MyColorSet"), pTheme->getColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+    }
+
+    saveAndReload("calc8");
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
+        static constexpr OStringLiteral sThemePath = "//office:styles/loext:theme";
+        assertXPath(pXmlDoc, sThemePath, 1);
+        assertXPath(pXmlDoc, sThemePath + "[@loext:name='MyTheme']");
+        const OString sThemeColorsPath = sThemePath + "/loext:theme-colors";
+        assertXPath(pXmlDoc, sThemeColorsPath, 1);
+        assertXPath(pXmlDoc, sThemeColorsPath + "[@loext:name='MyColorSet']");
+        const OString sThemeColorPath = sThemeColorsPath + "/loext:color";
+        assertXPath(pXmlDoc, sThemeColorPath, 12);
+        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "name", "dark2");
+        assertXPath(pXmlDoc, sThemeColorPath + "[3]", "color", "#333333");
+        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "name", "accent5");
+        assertXPath(pXmlDoc, sThemeColorPath + "[9]", "color", "#999999");
+        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "name", "followed-hyperlink");
+        assertXPath(pXmlDoc, sThemeColorPath + "[12]", "color", "#cccccc");
+    }
+
+    // Check the theme after import/export cycle
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY_THROW);
+        uno::Reference<util::XTheme> xTheme(xPropertySet->getPropertyValue("Theme"),
+                                            uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xTheme.is());
+        auto* pUnoTheme = dynamic_cast<UnoTheme*>(xTheme.get());
+        CPPUNIT_ASSERT(pUnoTheme);
+        auto pTheme = pUnoTheme->getTheme();
+
+        CPPUNIT_ASSERT_EQUAL(OUString("MyTheme"), pTheme->GetName());
+        CPPUNIT_ASSERT_EQUAL(OUString("MyColorSet"), pTheme->getColorSet()->getName());
+        CPPUNIT_ASSERT_EQUAL(OUString("Office"), pTheme->getFontScheme().getName());
+        CPPUNIT_ASSERT_EQUAL(OUString(""), pTheme->getFormatScheme().getName());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportOOXML)
 {
     loadFromURL(u"xlsx/CalcThemeTest.xlsx");
 

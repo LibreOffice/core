@@ -10,7 +10,7 @@
 #include <utility>
 #include <xmloff/xmlprcon.hxx>
 
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 
@@ -24,13 +24,13 @@ class Theme;
 /// Imports the theme
 class XMLThemeContext : public SvXMLImportContext
 {
-    css::uno::Reference<css::drawing::XDrawPage> m_xPage;
+    css::uno::Reference<css::uno::XInterface> m_xObject;
     std::shared_ptr<model::Theme> mpTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    css::uno::Reference<css::drawing::XDrawPage> const& xPage);
+                    css::uno::Reference<css::uno::XInterface> const& xObject);
     ~XMLThemeContext();
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
