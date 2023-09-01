@@ -49,6 +49,7 @@
 #define FIELD_PROP_TEXT             34
 #define FIELD_PROP_TITLE 35
 #define FIELD_PROP_PAR6             36
+#define FIELD_PROP_PAR7             37
 
 #endif
 

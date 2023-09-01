@@ -343,6 +343,7 @@ constexpr OUStringLiteral gsPropertyItems(u"Items");
 constexpr OUStringLiteral gsPropertyLevel(u"Level");
 constexpr OUStringLiteral gsPropertyMeasureKind(u"Kind");
 constexpr OUStringLiteral gsPropertyName(u"Name");
+constexpr OUStringLiteral gsPropertyParentName(u"ParentName");
 constexpr OUStringLiteral gsPropertyNumberFormat(u"NumberFormat");
 constexpr OUStringLiteral gsPropertyNumberingSeparator(u"NumberingSeparator");
 constexpr OUStringLiteral gsPropertyNumberingType(u"NumberingType");
@@ -1729,6 +1730,14 @@ void XMLTextFieldExport::ExportFieldHelper(
         {
             GetExport().AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, aName);
         }
+
+        OUString aParentName;
+        rPropSet->getPropertyValue(gsPropertyParentName) >>= aParentName;
+        if (!aParentName.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_PARENT_NAME, aParentName);
+        }
+
         SvtSaveOptions::ODFSaneDefaultVersion eVersion = rExport.getSaneDefaultVersion();
         if (eVersion & SvtSaveOptions::ODFSVER_EXTENDED)
         {

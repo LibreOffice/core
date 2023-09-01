@@ -1517,6 +1517,7 @@ namespace xmloff::token {
         TOKEN( "paragraph-start-margin",          XML_PARAGRAPH_START_MARGIN ),
         TOKEN( "parallel",                        XML_PARALLEL ),
         TOKEN( "param",                           XML_PARAM ),
+        TOKEN( "parent-name",                     XML_PARENT_NAME ),
         TOKEN( "parent-style-name",               XML_PARENT_STYLE_NAME ),
         TOKEN( "parse-sql-statement",             XML_PARSE_SQL_STATEMENT ),
         TOKEN( "parsed",                          XML_PARSED ),

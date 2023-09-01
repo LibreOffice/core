@@ -897,6 +897,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     {UNO_NAME_NAME,       FIELD_PROP_PAR4,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_PARA_ID_PARENT,       FIELD_PROP_PAR5,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_PARA_ID,       FIELD_PROP_PAR6,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
+                    {UNO_NAME_PARENT_NAME,   FIELD_PROP_PAR7,   cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_RESOLVED,       FIELD_PROP_BOOL1,    cppu::UnoType<bool>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_DATE_TIME_VALUE,    FIELD_PROP_DATE_TIME,   cppu::UnoType<css::util::DateTime>::get(),    PROPERTY_NONE, 0},
                     {UNO_NAME_DATE,    FIELD_PROP_DATE,   cppu::UnoType<css::util::Date>::get(),    PROPERTY_NONE, 0},

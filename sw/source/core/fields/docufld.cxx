@@ -1743,7 +1743,9 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const bool bResolved,
         const sal_uInt32 nPostItId,
         const sal_uInt32 nParentId,
-        const sal_uInt32 nParaId
+        const sal_uInt32 nParaId,
+        const sal_uInt32 nParentPostItId,
+        const OUString aParentName
 )
     : SwField( pT )
     , m_sText( std::move(aText) )
@@ -1754,6 +1756,8 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , m_bResolved( bResolved )
     , m_nParentId( nParentId )
     , m_nParaId( nParaId )
+    , m_nParentPostItId ( nParentPostItId )
+    , m_sParentName( aParentName )
 {
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
 }
@@ -1796,7 +1800,7 @@ bool SwPostItField::GetResolved() const
 std::unique_ptr<SwField> SwPostItField::Copy() const
 {
     std::unique_ptr<SwPostItField> pRet(new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), m_sAuthor, m_sText, m_sInitials, m_sName,
-                                                           m_aDateTime, m_bResolved, m_nPostItId, m_nParentId, m_nParaId));
+                                                           m_aDateTime, m_bResolved, m_nPostItId, m_nParentId, m_nParaId, m_nParentPostItId, m_sParentName));
     if (mpText)
         pRet->SetTextObject( *mpText );
 
@@ -1835,6 +1839,10 @@ void SwPostItField::SetName(const OUString& rName)
     m_sName = rName;
 }
 
+void SwPostItField::SetParentName(const OUString& rName)
+{
+    m_sParentName = rName;
+}
 
 void SwPostItField::SetTextObject( std::optional<OutlinerParaObject> pText )
 {
@@ -1849,6 +1857,11 @@ sal_Int32 SwPostItField::GetNumberOfParagraphs() const
 void SwPostItField::SetPostItId(const sal_uInt32 nPostItId)
 {
     m_nPostItId = nPostItId == 0 ? s_nLastPostItId++ : nPostItId;
+}
+
+void SwPostItField::SetParentPostItId(const sal_uInt32 nParentPostItId)
+{
+    m_nParentPostItId = nParentPostItId;
 }
 
 void SwPostItField::SetParentId(const sal_uInt32 nParentId)
@@ -1878,6 +1891,9 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR4:
         rAny <<= m_sName;
+        break;
+    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file convertion.
+        rAny <<= m_sParentName;
         break;
     case FIELD_PROP_BOOL1:
         rAny <<= m_bResolved;
@@ -1952,6 +1968,9 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR4:
         rAny >>= m_sName;
+        break;
+    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file convertion.
+        rAny >>= m_sParentName;
         break;
     case FIELD_PROP_BOOL1:
         rAny >>= m_bResolved;

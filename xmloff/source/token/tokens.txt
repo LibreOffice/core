@@ -1417,6 +1417,7 @@ paragraph-end-margin
 paragraph-start-margin
 parallel
 param
+parent-name
 parent-style-name
 parse-sql-statement
 parsed

@@ -3374,8 +3374,7 @@ void SwXTextDocument::getPostIts(tools::JsonWriter& rJsonWriter)
 
         auto commentNode = rJsonWriter.startStruct();
         rJsonWriter.put("id", pField->GetPostItId());
-        rJsonWriter.put("parent", pWin->CalcParent());
-        rJsonWriter.put("paraIdParent", pField->GetParentId());
+        rJsonWriter.put("parentId", pField->GetParentPostItId());
         rJsonWriter.put("author", pField->GetPar1());
         rJsonWriter.put("text", pField->GetPar2());
         rJsonWriter.put("resolved", pField->GetResolved() ? "true" : "false");
