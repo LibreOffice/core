@@ -262,6 +262,9 @@ void PaletteGPL::LoadPalette()
 
     OStringBuffer aLine;
     do {
+        if (aLine.isEmpty())
+            continue;
+
         if (aLine[0] != '#' && aLine[0] != '\n')
         {
             // TODO check if r,g,b are 0<= x <=255, or just clamp?
