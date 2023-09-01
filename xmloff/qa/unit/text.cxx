@@ -55,7 +55,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMailMergeInEditeng)
     loadFromURL(u"mail-merge-editeng.odt");
 }
 
-CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentProperty)
 {
     mxComponent = loadFromDesktop("private:factory/swriter");
     uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
@@ -72,6 +72,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     uno::Reference<beans::XPropertySet> xField(xPortion->getPropertyValue("TextField"),
                                                uno::UNO_QUERY);
     xField->setPropertyValue("Resolved", uno::Any(true));
+    xField->setPropertyValue("ParentName", uno::Any(OUString("parent_comment_name")));
 
     saveAndReload("writer8");
     xTextDocument.set(mxComponent, uno::UNO_QUERY);
@@ -83,6 +84,9 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     xField.set(xPortion->getPropertyValue("TextField"), uno::UNO_QUERY);
     bool bResolved = false;
     xField->getPropertyValue("Resolved") >>= bResolved;
+    OUString parentName;
+    xField->getPropertyValue("ParentName") >>= parentName;
+    CPPUNIT_ASSERT_EQUAL(OUString("parent_comment_name"), parentName); // Check if the parent comment name is written and read correctly.
     // Without the accompanying fix in place, this test would have failed, as the resolved state was
     // not saved for non-range comments.
     CPPUNIT_ASSERT(bResolved);

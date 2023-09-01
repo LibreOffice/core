@@ -2451,7 +2451,7 @@ void DesktopLOKTest::testCommentsWriter()
         // This is a reply comment
         else if (rComment.second.get<std::string>("text") == "Reply to Comment 2")
         {
-            CPPUNIT_ASSERT_EQUAL(nComment2Id, rComment.second.get<int>("parent"));
+            CPPUNIT_ASSERT_EQUAL(nComment2Id, rComment.second.get<int>("parentId"));
         }
     }
 
@@ -2593,8 +2593,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
     int nCommentId2 = aView1.m_aCommentCallbackResult.get<int>("id");
@@ -2608,8 +2608,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
     // parent is unchanged still
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
 
@@ -2632,8 +2632,8 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
     CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parentId"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parentId"));
     CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
 
