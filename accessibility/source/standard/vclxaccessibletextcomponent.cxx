@@ -61,6 +61,14 @@ void VCLXAccessibleTextComponent::SetText( const OUString& sText )
         m_sText = sText;
         NotifyAccessibleEvent( AccessibleEventId::TEXT_CHANGED, aOldValue, aNewValue );
     }
+
+    // check whether accessible name has also changed, since text is (often) used as name as well
+    const OUString sName = getAccessibleName();
+    if (sName != m_sOldName)
+    {
+        NotifyAccessibleEvent(AccessibleEventId::NAME_CHANGED, Any(m_sOldName), Any(sName));
+        m_sOldName = sName;
+    }
 }
 
 

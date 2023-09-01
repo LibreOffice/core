@@ -34,6 +34,9 @@ class VCLXAccessibleTextComponent : public cppu::ImplInheritanceHelper<
 {
     OUString                                m_sText;
 
+    // accessible name the object had when SetText was called last time
+    OUString m_sOldName;
+
 protected:
     void                                    SetText( const OUString& sText );
 
