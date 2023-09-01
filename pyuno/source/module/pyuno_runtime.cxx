@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <config_folders.h>
 
 #include "pyuno_impl.hxx"
@@ -944,10 +945,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             buf.append( ", no traceback available\n" );
         }
         RuntimeException e(buf.makeStringAndClear());
-#if OSL_DEBUG_LEVEL > 0
-        fprintf( stderr, "Python exception: %s\n",
-                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+        SAL_WARN("pyuno.runtime", "Python exception: " << e.Message);
         ret <<= e;
     }
     return ret;

@@ -346,6 +346,11 @@ certain functionality.
 @li @c package.xstor
 @li @c package.threadeddeflate
 
+@section pyuno
+
+@li @c pyuno
+@li @c pyuno.runtime
+
 @section sdext
 
 @li @c sdext
