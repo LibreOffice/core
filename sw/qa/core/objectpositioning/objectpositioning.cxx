@@ -313,6 +313,30 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableOverlapNever)
     CPPUNIT_ASSERT_GREATER(pFlyFrame1->getFrameArea().Bottom(), pFlyFrame2->getFrameArea().Top());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableVertOrientTop)
+{
+    // Given a document with a vert-orient=from-top anchored floating table:
+    createSwDoc("floattable-vert-orient-top.odt");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure we correctly split the table to two pages:
+    // Without the accompanying fix in place, this test would have produced a layout loop.
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
