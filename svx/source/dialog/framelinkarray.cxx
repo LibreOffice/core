@@ -523,7 +523,6 @@ private:
 
 MergedCellIterator::MergedCellIterator( const Array& rArray, sal_Int32 nCol, sal_Int32 nRow )
 {
-    DBG_ASSERT( rArray.IsMerged( nCol, nRow ), "svx::frame::MergedCellIterator::MergedCellIterator - not in merged range" );
     rArray.GetMergedRange( mnFirstCol, mnFirstRow, mnLastCol, mnLastRow, nCol, nRow );
     mnCol = mnFirstCol;
     mnRow = mnFirstRow;
