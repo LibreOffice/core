@@ -868,9 +868,9 @@ void SAL_CALL ChartDocumentWrapper::dispose()
         DisposeHelper::DisposeAndClear( m_xChartData );
         DisposeHelper::DisposeAndClear( m_xDiagram );
         DisposeHelper::DisposeAndClear( m_xArea );
-        m_xChartView.set( nullptr );
-        m_xShapeFactory.set( nullptr );
-        m_xDelegator.set( nullptr );
+        m_xChartView.clear();
+        m_xShapeFactory.clear();
+        m_xDelegator.clear();
 
         clearWrappedPropertySet();
         m_spChart2ModelContact->clear();
@@ -897,7 +897,7 @@ void SAL_CALL ChartDocumentWrapper::dispose()
 void ChartDocumentWrapper::impl_resetAddIn()
 {
     Reference< util::XRefreshable > xAddIn( m_xAddIn );
-    m_xAddIn.set( nullptr );
+    m_xAddIn.clear();
 
     if( !xAddIn.is() )
         return;
@@ -1349,21 +1349,21 @@ uno::Any SAL_CALL ChartDocumentWrapper::queryAggregation( const uno::Type& rType
 void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
 {
     if( rSource.Source == m_xTitle )
-        m_xTitle.set( nullptr );
+        m_xTitle.clear();
     else if( rSource.Source == m_xSubTitle )
-        m_xSubTitle.set( nullptr );
+        m_xSubTitle.clear();
     else if( rSource.Source == m_xLegend )
-        m_xLegend.set( nullptr );
+        m_xLegend.clear();
     else if( rSource.Source == m_xChartData )
-        m_xChartData.set( nullptr );
+        m_xChartData.clear();
     else if( rSource.Source == m_xDiagram )
-        m_xDiagram.set( nullptr );
+        m_xDiagram.clear();
     else if( rSource.Source == m_xArea )
-        m_xArea.set( nullptr );
+        m_xArea.clear();
     else if( rSource.Source == m_xAddIn )
-        m_xAddIn.set( nullptr );
+        m_xAddIn.clear();
     else if( rSource.Source == static_cast<cppu::OWeakObject*>(m_xChartView.get()) )
-        m_xChartView.set( nullptr );
+        m_xChartView.clear();
 }
 
 // WrappedPropertySet

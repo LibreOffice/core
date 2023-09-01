@@ -340,7 +340,7 @@ Axis::~Axis()
         if( m_aScaleData.Categories.is())
         {
             ModifyListenerHelper::removeListener( m_aScaleData.Categories, m_xModifyEventForwarder );
-            m_aScaleData.Categories.set(nullptr);
+            m_aScaleData.Categories.clear();
         }
     }
     catch( const uno::Exception & )

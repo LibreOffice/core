@@ -768,7 +768,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
             else if( xLabeledSeq.is())
             {
                 // clear existing categories
-                xLabeledSeq.set(nullptr);
+                xLabeledSeq.clear();
                 m_rDialogModel.setCategories( xLabeledSeq );
             }
         }

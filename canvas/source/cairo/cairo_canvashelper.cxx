@@ -1229,7 +1229,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 free( data );
         }
         else
-            rv.set(nullptr);
+            rv.clear();
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );
@@ -1262,7 +1262,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                 free( data );
         }
         else
-            rv.set(nullptr);
+            rv.clear();
 
 #ifdef CAIRO_CANVAS_PERF_TRACE
         mxDevice->stopPerfTrace( &aTimer, "drawBitmap" );

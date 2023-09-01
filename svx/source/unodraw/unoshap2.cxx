@@ -1699,7 +1699,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
             // UNO API object, but the XCustomShapeEngine involved. This
             // object is on-demand replaceable and can be reset here. This
             // will free the involved EditEngine and VirtualDevice.
-            pTarget->mxCustomShapeEngine.set(nullptr);
+            pTarget->mxCustomShapeEngine.clear();
         }
         // since this case is only for the application cores
         // we should return from this function now

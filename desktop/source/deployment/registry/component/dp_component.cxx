@@ -1560,7 +1560,7 @@ BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
     catch (registry::InvalidRegistryException const&)
     {
         // If the registry does not exist, we do not need to bother at all
-        xRegistry.set(nullptr);
+        xRegistry.clear();
     }
 
     SAL_WARN_IF( !xRegistry.is(), "desktop.deployment", "could not create registry for the package's platform");

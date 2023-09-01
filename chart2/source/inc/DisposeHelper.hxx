@@ -33,7 +33,7 @@ template <class T> void Dispose(const T& xInterface)
 template <class T> void DisposeAndClear(css::uno::Reference<T>& rInterface)
 {
     Dispose<css::uno::Reference<T>>(rInterface);
-    rInterface.set(nullptr);
+    rInterface.clear();
 }
 
 template <class Container> void DisposeAllElements(Container& rContainer)

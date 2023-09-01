@@ -817,7 +817,7 @@ void SAL_CALL ChartController::dispose()
         if( m_xLayoutManagerEventBroadcaster.is())
         {
             m_xLayoutManagerEventBroadcaster->removeLayoutManagerEventListener( this );
-            m_xLayoutManagerEventBroadcaster.set( nullptr );
+            m_xLayoutManagerEventBroadcaster.clear();
         }
 
         m_xFrame.clear();
@@ -961,7 +961,7 @@ void SAL_CALL ChartController::disposing(
     if( !impl_releaseThisModel( rSource.Source ))
     {
         if( rSource.Source == m_xLayoutManagerEventBroadcaster )
-            m_xLayoutManagerEventBroadcaster.set( nullptr );
+            m_xLayoutManagerEventBroadcaster.clear();
     }
 }
 

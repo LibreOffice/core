@@ -3245,7 +3245,7 @@ void SdrObjCustomShape::setUnoShape(const uno::Reference<drawing::XShape>& rxUno
 
     // The shape engine is created with _current_ shape. This means we
     // _must_ reset it when the shape changes.
-    mxCustomShapeEngine.set(nullptr);
+    mxCustomShapeEngine.clear();
 }
 
 OUString SdrObjCustomShape::GetCustomShapeName() const

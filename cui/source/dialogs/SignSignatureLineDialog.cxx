@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(SignSignatureLineDialog, loadImage, weld::Button&, void)
 
 IMPL_LINK_NOARG(SignSignatureLineDialog, clearImage, weld::Button&, void)
 {
-    m_xSignatureImage.set(nullptr);
+    m_xSignatureImage.clear();
     m_xBtnLoadImage->set_label(m_sOriginalImageBtnLabel);
     ValidateFields();
 }

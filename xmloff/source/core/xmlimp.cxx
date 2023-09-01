@@ -1794,8 +1794,8 @@ void SvXMLImport::DisposingModel()
     if( mxMasterStyles.is() )
         mxMasterStyles->dispose();
 
-    mxModel.set(nullptr);
-    mxEventListener.set(nullptr);
+    mxModel.clear();
+    mxEventListener.clear();
 }
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLImport::getInterfaceToIdentifierMapper()

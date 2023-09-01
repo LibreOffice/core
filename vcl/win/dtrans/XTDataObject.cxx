@@ -93,7 +93,7 @@ public:
 
     virtual void SAL_CALL notify(css::uno::Any const &) override
     {
-        maTransferable.set(nullptr);
+        maTransferable.clear();
     }
 };
 

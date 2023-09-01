@@ -766,7 +766,7 @@ namespace pcr
             singleUI.second->dispose();
         }
         m_pCollectedUIs.reset();
-        m_xDelegatorUI.set( nullptr );
+        m_xDelegatorUI.clear();
     }
 
 

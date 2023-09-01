@@ -288,7 +288,7 @@ SfxObjectShell::~SfxObjectShell()
         EnableSetModified( false );
 
     SfxObjectShell::CloseInternal();
-    pImpl->pBaseModel.set( nullptr );
+    pImpl->pBaseModel.clear();
 
     pImpl->pReloadTimer.reset();
 
@@ -302,7 +302,7 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp && pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
-    pImpl->pBaseModel.set( nullptr );
+    pImpl->pBaseModel.clear();
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage( false ) == pImpl->m_xDocStorage )

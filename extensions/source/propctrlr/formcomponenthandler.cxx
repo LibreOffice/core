@@ -3151,7 +3151,7 @@ namespace pcr
                     return true;
                 }
                 m_xCommandDesigner->dispose();
-                m_xCommandDesigner.set( nullptr );
+                m_xCommandDesigner.clear();
             }
 
             if ( !impl_ensureRowsetConnection_nothrow() )

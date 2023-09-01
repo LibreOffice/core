@@ -285,12 +285,12 @@ void VDataSeries::doSortByXValues()
 
 void VDataSeries::releaseShapes()
 {
-    m_xGroupShape.set(nullptr);
-    m_xLabelsGroupShape.set(nullptr);
-    m_xErrorXBarsGroupShape.set(nullptr);
-    m_xErrorYBarsGroupShape.set(nullptr);
-    m_xFrontSubGroupShape.set(nullptr);
-    m_xBackSubGroupShape.set(nullptr);
+    m_xGroupShape.clear();
+    m_xLabelsGroupShape.clear();
+    m_xErrorXBarsGroupShape.clear();
+    m_xErrorYBarsGroupShape.clear();
+    m_xFrontSubGroupShape.clear();
+    m_xBackSubGroupShape.clear();
 
     m_aPolyPolygonShape3D.clear();
     m_nPolygonIndex = 0;

@@ -2643,7 +2643,7 @@ void SwXMLTableContext::MakeTable()
                                                         m_pTableNode );
 
         // 2) release the DDE source context,
-        m_xDDESource.set(nullptr);
+        m_xDDESource.clear();
 
         // 3) create new DDE table, and
         std::unique_ptr<SwDDETable> pDDETable( new SwDDETable( m_pTableNode->GetTable(),

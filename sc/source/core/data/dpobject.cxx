@@ -3273,7 +3273,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         OSL_ENSURE( xRowProp.is(), "can't get RowSet" );
         if (!xRowProp.is())
         {
-            xRowSet.set(nullptr);
+            xRowSet.clear();
             return xRowSet;
         }
 
@@ -3309,7 +3309,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         TOOLS_WARN_EXCEPTION( "sc", "Unexpected exception in database");
     }
 
-    xRowSet.set(nullptr);
+    xRowSet.clear();
     return xRowSet;
 }
 
