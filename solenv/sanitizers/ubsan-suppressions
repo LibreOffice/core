@@ -26,3 +26,9 @@ float-divide-by-zero:/scaddins/source/analysis/financial.cxx$
 #workdir/UnpackedTarball/liblangtag/liblangtag/lt-string.c:127: note: lt_string_unref defined here
 function:lt_mem_unref
 function:lt_mem_delete_ref
+function:raptor_avltree_delete_internal
+function:raptor_free_sequence
+function:raptor_avltree_sprout
+function:raptor_avltree_search_internal
+function:librdf_stream_free_stream_map
+function:xmlSecPtrListEmpty
