@@ -96,6 +96,9 @@ public:
     virtual sal_Bool SAL_CALL replaceText( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const OUString& sReplacement ) override;
     virtual sal_Bool SAL_CALL setAttributes( sal_Int32 nStartIndex, sal_Int32 nEndIndex, const css::uno::Sequence< css::beans::PropertyValue >& aAttributeSet ) override;
     virtual sal_Bool SAL_CALL setText( const OUString& sText ) override;
+
+private:
+    bool isEditable();
 };
 
 
