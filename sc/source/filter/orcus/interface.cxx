@@ -1357,12 +1357,23 @@ void ScOrcusSharedStrings::set_segment_italic(bool b)
     maCurFormat.Put(SvxPostureItem(eItalic, EE_CHAR_ITALIC));
 }
 
-void ScOrcusSharedStrings::set_segment_font_name(std::string_view /*s*/)
+void ScOrcusSharedStrings::set_segment_font_name(std::string_view s)
 {
+    OUString aName = toOUString(s);
+    maCurFormat.Put(
+        SvxFontItem(
+            FAMILY_DONTKNOW, aName, aName, PITCH_DONTKNOW,
+            mrFactory.getGlobalSettings().getTextEncoding(),
+            EE_CHAR_FONTINFO
+        )
+    );
 }
 
-void ScOrcusSharedStrings::set_segment_font_size(double /*point*/)
+void ScOrcusSharedStrings::set_segment_font_size(double point)
 {
+    // points to 100th of millimeters
+    tools::Long nMM = o3tl::convert(point, o3tl::Length::pt, o3tl::Length::mm100);
+    maCurFormat.Put(SvxFontHeightItem(nMM, 100, EE_CHAR_FONTHEIGHT));
 }
 
 void ScOrcusSharedStrings::set_segment_font_color(
