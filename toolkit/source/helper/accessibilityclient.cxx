@@ -108,6 +108,11 @@ namespace toolkit
             return nullptr;
         }
         css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXMultiLineEdit* /*_pXWindow*/ ) override
+        {
+            return nullptr;
+        }
+        css::uno::Reference< css::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXComboBox* /*_pXWindow*/ ) override
         {
             return nullptr;

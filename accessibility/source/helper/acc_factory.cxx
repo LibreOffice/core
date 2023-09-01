@@ -103,6 +103,8 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXEdit* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXMultiLineEdit* _pXWindow ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXComboBox* _pXWindow ) override;
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXToolBox* _pXWindow ) override;
@@ -276,6 +278,11 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
 }
 
 Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXEdit* _pXWindow )
+{
+    return new VCLXAccessibleEdit( _pXWindow );
+}
+
+Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXMultiLineEdit* _pXWindow )
 {
     return new VCLXAccessibleEdit( _pXWindow );
 }

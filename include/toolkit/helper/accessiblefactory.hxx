@@ -37,6 +37,7 @@ class VCLXFixedText;
 class VCLXScrollBar;
 class VCLXEdit;
 class VCLXComboBox;
+class VCLXMultiLineEdit;
 class VCLXToolBox;
 class VCLXHeaderBar;
 class VCLXWindow;
@@ -101,6 +102,11 @@ namespace toolkit
         */
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXEdit* _pXWindow ) = 0;
+
+        /** creates an accessible context for a multiline edit window
+        */
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        createAccessibleContext( VCLXMultiLineEdit* _pXWindow ) = 0;
 
         /** creates an accessible context for a combo box window
         */

@@ -461,6 +461,9 @@ public:
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
+
+protected:
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> CreateAccessibleContext() override;
 };
 
 //  class VCLXSpinField

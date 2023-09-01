@@ -7869,4 +7869,9 @@ void VCLXMultiLineEdit::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
 
+css::uno::Reference<css::accessibility::XAccessibleContext> VCLXMultiLineEdit::CreateAccessibleContext()
+{
+    return getAccessibleFactory().createAccessibleContext(this);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
