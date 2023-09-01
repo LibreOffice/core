@@ -262,7 +262,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         String[] messageParts = message.split(": ", 2);
         if (messageParts.length != 2)
         {
-            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Recieved URP/WS message (%s) without a type specifier. Messages must be proceeded by 'urp: '", message))));
+            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Messages must be proceeded by 'urp: '", message))));
             return;
         }
 
@@ -283,7 +283,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
             return;
         }
 
-        if (DEBUG) System.err.println(String.format("##### %s - recieved %s chars", getClass().getName(), Integer.toString(messageBytes.length)));
+        if (DEBUG) System.err.println(String.format("##### %s - received %s chars", getClass().getName(), Integer.toString(messageBytes.length)));
     }
 
     @Override
@@ -302,14 +302,14 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         }
 
         if(!hasType) {
-            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Recieved URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: ' or 'urp:\\n'", message))));
+            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: ' or 'urp:\\n'", message))));
             return;
         }
 
         int messageStartIndex = i + 2;
 
         if (!messageType.equals("urp")) {
-            if (DEBUG) System.err.println(String.format("##### %s - recieved %s binary message but that is not URP", getClass().getName(), messageType));
+            if (DEBUG) System.err.println(String.format("##### %s - received %s binary message but that is not URP", getClass().getName(), messageType));
             return;
         }
 
@@ -322,7 +322,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
             return;
         }
 
-        if (DEBUG) System.err.println(String.format("##### %s - recieved %s bytes", getClass().getName(), Integer.toString(prefixedMessageBytes.length)));
+        if (DEBUG) System.err.println(String.format("##### %s - received %s bytes", getClass().getName(), Integer.toString(prefixedMessageBytes.length)));
     }
 
     @Override
