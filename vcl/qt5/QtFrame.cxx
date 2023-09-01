@@ -362,7 +362,10 @@ void QtFrame::SetWindowStateImpl(Qt::WindowStates eState)
 
 void QtFrame::SetTitle(const OUString& rTitle)
 {
-    m_pQWidget->window()->setWindowTitle(toQString(rTitle));
+    QtInstance* pSalInst(GetQtInstance());
+    assert(pSalInst);
+    pSalInst->RunInMainThread(
+        [this, rTitle]() { m_pQWidget->window()->setWindowTitle(toQString(rTitle)); });
 }
 
 void QtFrame::SetIcon(sal_uInt16 nIcon)
@@ -771,21 +774,25 @@ void QtFrame::SetAlwaysOnTop(bool bOnTop)
 
 void QtFrame::ToTop(SalFrameToTop nFlags)
 {
-    QWidget* const pWidget = asChild();
-    if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
-        pWidget->raise();
-    if ((nFlags & SalFrameToTop::RestoreWhenMin) || (nFlags & SalFrameToTop::ForegroundTask))
-    {
-        if (nFlags & SalFrameToTop::RestoreWhenMin)
-            pWidget->setWindowState(pWidget->windowState() & ~Qt::WindowMinimized);
-        pWidget->activateWindow();
-    }
-    else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
-    {
-        if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+    QtInstance* pSalInst(GetQtInstance());
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this, nFlags]() {
+        QWidget* const pWidget = asChild();
+        if (isWindow() && !(nFlags & SalFrameToTop::GrabFocusOnly))
+            pWidget->raise();
+        if ((nFlags & SalFrameToTop::RestoreWhenMin) || (nFlags & SalFrameToTop::ForegroundTask))
+        {
+            if (nFlags & SalFrameToTop::RestoreWhenMin)
+                pWidget->setWindowState(pWidget->windowState() & ~Qt::WindowMinimized);
             pWidget->activateWindow();
-        pWidget->setFocus(Qt::OtherFocusReason);
-    }
+        }
+        else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
+        {
+            if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+                pWidget->activateWindow();
+            pWidget->setFocus(Qt::OtherFocusReason);
+        }
+    });
 }
 
 void QtFrame::SetPointer(PointerStyle ePointerStyle)
@@ -1365,7 +1372,10 @@ void QtFrame::registerDropTarget(QtDropTarget* pDropTarget)
 {
     assert(!m_pDropTarget);
     m_pDropTarget = pDropTarget;
-    m_pQWidget->setAcceptDrops(true);
+
+    QtInstance* pSalInst(GetQtInstance());
+    assert(pSalInst);
+    pSalInst->RunInMainThread([this]() { m_pQWidget->setAcceptDrops(true); });
 }
 
 void QtFrame::deregisterDropTarget(QtDropTarget const* pDropTarget)
