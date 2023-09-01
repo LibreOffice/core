@@ -71,8 +71,15 @@ public:
       */
     inline void add(const KahanSum& fSum)
     {
+#ifdef _WIN32
+        // For some odd unknown reason WIN32 fails badly with the
+        // sum+compensation value. Continue keeping the old though slightly off
+        // (see tdf#156985) explicit addition of the compensation value.
         add(fSum.m_fSum);
         add(fSum.m_fError);
+#else
+        add(fSum.m_fSum + fSum.m_fError);
+#endif
         add(fSum.m_fMem);
     }
 
@@ -82,8 +89,12 @@ public:
       */
     inline void subtract(const KahanSum& fSum)
     {
+#ifdef _WIN32
         add(-fSum.m_fSum);
         add(-fSum.m_fError);
+#else
+        add(-(fSum.m_fSum + fSum.m_fError));
+#endif
         add(-fSum.m_fMem);
     }
 
