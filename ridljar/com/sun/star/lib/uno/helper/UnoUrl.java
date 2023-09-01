@@ -46,7 +46,7 @@ import java.util.HashMap;
  * Usage:
  *
  * <code>
- *   UnoUrl url = UnoUrl.parseUnoUrl("socket,host=localhost,port=2002;urp;StarOffice.ServiceManager");
+ *   UnoUrl url = UnoUrl.parseUnoUrl("uno:socket,host=localhost,port=2002;urp;StarOffice.ServiceManager");
  * </code>
  */
 public class UnoUrl {
