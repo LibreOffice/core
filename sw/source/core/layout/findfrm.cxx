@@ -1934,4 +1934,14 @@ const SwTextFrame* SwFrame::DynCastTextFrame() const
     return IsTextFrame() ? static_cast<const SwTextFrame*>(this) : nullptr;
 }
 
+SwPageFrame* SwFrame::DynCastPageFrame()
+{
+    return IsPageFrame() ? static_cast<SwPageFrame*>(this) : nullptr;
+}
+
+const SwPageFrame* SwFrame::DynCastPageFrame() const
+{
+    return IsPageFrame() ? static_cast<const SwPageFrame*>(this) : nullptr;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

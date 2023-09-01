@@ -870,6 +870,8 @@ public:
     inline bool IsTextFrame() const;
     SwTextFrame* DynCastTextFrame();
     const SwTextFrame* DynCastTextFrame() const;
+    SwPageFrame* DynCastPageFrame();
+    const SwPageFrame* DynCastPageFrame() const;
     inline bool IsNoTextFrame() const;
     // Frames where its PrtArea depends on their neighbors and that are
     // positioned in the content flow

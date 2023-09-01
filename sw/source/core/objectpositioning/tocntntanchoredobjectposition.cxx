@@ -422,7 +422,10 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // the frame, the object is oriented at.
             // #i28701# - correction: adjust relative position,
             // only if the floating screen object has to follow the text flow.
-            if ( DoesObjFollowsTextFlow() && pOrientFrame != &rAnchorTextFrame )
+            // Also don't do this for split flys: pOrientFrame already points to the follow anchor,
+            // so pOrientFrame is not the anchor text frame anymore, and that would lead to an
+            // additional, unwanted increase of nRelPosY.
+            if (DoesObjFollowsTextFlow() && pOrientFrame != &rAnchorTextFrame && !bFollowSplitFly)
             {
                 // #i11860# - use new method <GetTopForObjPos>
                 // to get top of frame for object positioning.
