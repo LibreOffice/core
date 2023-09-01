@@ -790,13 +790,6 @@ void PieChart::createShapes()
     ///the angle axis scale range is [0, 1]. The max_offset parameter is used
     ///for exploded pie chart and its value is 0.5.
 
-    ///the `explodeable` ring is the first one except when the radius axis
-    ///orientation is reversed (always!?) and we are dealing with a donut: in
-    ///such a case the `explodeable` ring is the last one.
-    std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
-    if( m_aPosHelper.isMathematicalOrientationRadius() && m_bUseRings )
-        nExplodeableSlot = m_aZSlots.front().size()-1;
-
     m_aLabelInfoList.clear();
     m_fMaxOffset = std::numeric_limits<double>::quiet_NaN();
     sal_Int32 n3DRelativeHeight = 100;
@@ -815,16 +808,12 @@ void PieChart::createShapes()
     ///(m_bUseRings||fSlotX<0.5)
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
     {
-        ShapeParam aParam;
-
         std::vector< std::unique_ptr<VDataSeries> >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
         if(pSeriesList->empty())//there should be only one series in each x slot
             continue;
         VDataSeries* pSeries = pSeriesList->front().get();
         if(!pSeries)
             continue;
-
-        bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
 
         /// The angle degree offset is set by the same property of the
         /// data series.
@@ -835,6 +824,8 @@ void PieChart::createShapes()
         ///the current data series
         sal_Int32 nPointIndex=0;
         sal_Int32 nPointCount=pSeries->getTotalPointCount();
+        ShapeParam aParam;
+
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fY = pSeries->getYValue( nPointIndex );
@@ -851,134 +842,175 @@ void PieChart::createShapes()
             // Total sum of all Y values in this series is zero. Skip the whole series.
             continue;
 
-        double fLogicYForNextPoint = 0.0;
-        ///iterate through all points to create shapes
-        for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
-        {
-            double fLogicInnerRadius, fLogicOuterRadius;
-
-            ///compute the maximum relative distance offset of the current slice
-            ///from the pie center
-            ///it is worth noting that after the first invocation the maximum
-            ///offset value is cached, so it is evaluated only once per each
-            ///call to `createShapes`
-            double fOffset = getMaxOffset();
-
-            ///compute the outer and the inner radius for the current ring slice
-            bool bIsVisible = m_aPosHelper.getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
-            if( !bIsVisible )
-                continue;
-
-            aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
-
-            rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
-            ///collect data point information (logic coordinates, style ):
-            double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
-            if( std::isnan(fLogicYValue) )
-                continue;
-            if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
-                continue;
-            double fLogicYPos = fLogicYForNextPoint;
-            fLogicYForNextPoint += fLogicYValue;
-
-            uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint( nPointIndex );
-
-            //iterate through all subsystems to create partial points
-            {
-                //logic values on angle axis:
-                double fLogicStartAngleValue = fLogicYPos / aParam.mfLogicYSum;
-                double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / aParam.mfLogicYSum;
-
-                ///note that the explode percentage is set to the `Offset`
-                ///property of the current data series entry only for slices
-                ///belonging to the outer ring
-                aParam.mfExplodePercentage = 0.0;
-                bool bDoExplode = ( nExplodeableSlot == static_cast< std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
-                if(bDoExplode) try
-                {
-                    xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("chart2", "" );
-                }
-
-                ///see notes for `PolarPlottingPositionHelper` methods
-                ///transform to unit circle:
-                aParam.mfUnitCircleWidthAngleDegree = m_aPosHelper.getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
-                aParam.mfUnitCircleStartAngleDegree = m_aPosHelper.transformToAngleDegree( fLogicStartAngleValue );
-                aParam.mfUnitCircleInnerRadius = m_aPosHelper.transformToRadius( fLogicInnerRadius );
-                aParam.mfUnitCircleOuterRadius = m_aPosHelper.transformToRadius( fLogicOuterRadius );
-
-                ///create data point
-                aParam.mfLogicZ = -1.0; // For 3D pie chart label position
-
-                // Do concentric explosion if it's a donut chart with more than one series
-                const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
-                rtl::Reference<SvxShape> xPointShape =
-                    createDataPoint(
-                        xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
-                        bConcentricExplosion);
-
-                ///point color:
-                if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
-                {
-                    xPointShape->setPropertyValue("FillColor",
-                        uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
-                }
-
-
-                if(bHasFillColorMapping)
-                {
-                    double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
-                    if(!std::isnan(nPropVal))
-                    {
-                        xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
-                    }
-                }
-
-                ///create label
-                createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
-
-                if(!bDoExplode)
-                {
-                    ShapeFactory::setShapeName( xPointShape
-                                , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
-                }
-                else try
-                {
-                    ///enable dragging of outer segments
-
-                    double fAngle  = aParam.mfUnitCircleStartAngleDegree + aParam.mfUnitCircleWidthAngleDegree/2.0;
-                    double fMaxDeltaRadius = aParam.mfUnitCircleOuterRadius-aParam.mfUnitCircleInnerRadius;
-                    drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
-                    drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
-
-                    sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
-
-                    awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aOrigin, m_xLogicTarget, m_nDimension ) );
-                    awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aNewOrigin, m_xLogicTarget, m_nDimension ) );
-
-                    //enable dragging of piesegments
-                    OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
-                        , pSeries->getSeriesParticle()
-                        , ObjectIdentifier::getPieSegmentDragMethodServiceName()
-                        , ObjectIdentifier::createPieSegmentDragParameterString(
-                            nOffsetPercent, aMinimumPosition, aMaximumPosition )
-                        ) );
-
-                    ShapeFactory::setShapeName( xPointShape
-                                , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("chart2", "" );
-                }
-            }//next series in x slot (next y slot)
-        }//next category
+        switch (m_eSubType) {
+        case PieChartSubType_NONE:
+            createOneRing(SubPieType::NONE, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            break;
+        case PieChartSubType_BAR:
+            createOneRing(SubPieType::LEFT, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            break;
+        case PieChartSubType_PIE:
+            createOneRing(SubPieType::LEFT, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            break;
+        default:
+            assert(false); // this shouldn't happen
+        }
     }//next x slot
+}
+
+void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
+        double fSlotX,
+        ShapeParam& aParam,
+        const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
+        const rtl::Reference<SvxShapeGroup>& xTextTarget,
+        VDataSeries* pSeries,
+        sal_Int32 n3DRelativeHeight)
+{
+    bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
+
+    /// The angle degree offset is set by the same property of the
+    /// data series.
+    /// Counter-clockwise offset from the 3 o'clock position.
+    m_aPosHelper.m_fAngleDegreeOffset = pSeries->getStartingAngle();
+
+    ///iterate through all points to get the sum of all entries of
+    ///the current data series
+    sal_Int32 nPointCount=pSeries->getTotalPointCount();
+
+    ///the `explodeable` ring is the first one except when the radius axis
+    ///orientation is reversed (always!?) and we are dealing with a donut: in
+    ///such a case the `explodeable` ring is the last one.
+    std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
+    if( m_aPosHelper.isMathematicalOrientationRadius() && m_bUseRings )
+        nExplodeableSlot = m_aZSlots.front().size()-1;
+
+    double fLogicYForNextPoint = 0.0;
+    ///iterate through all points to create shapes
+    for(sal_Int32 nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
+    {
+        double fLogicInnerRadius, fLogicOuterRadius;
+
+        ///compute the maximum relative distance offset of the current slice
+        ///from the pie center
+        ///it is worth noting that after the first invocation the maximum
+        ///offset value is cached, so it is evaluated only once per each
+        ///call to `createShapes`
+        double fOffset = getMaxOffset();
+
+        ///compute the outer and the inner radius for the current ring slice
+        bool bIsVisible = m_aPosHelper.getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
+        if( !bIsVisible )
+            continue;
+
+        aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
+
+        rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+        ///collect data point information (logic coordinates, style ):
+        double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
+        if( std::isnan(fLogicYValue) )
+            continue;
+        if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
+            continue;
+        double fLogicYPos = fLogicYForNextPoint;
+        fLogicYForNextPoint += fLogicYValue;
+
+        uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint( nPointIndex );
+
+        //iterate through all subsystems to create partial points
+        {
+            //logic values on angle axis:
+            double fLogicStartAngleValue = fLogicYPos / aParam.mfLogicYSum;
+            double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / aParam.mfLogicYSum;
+
+            ///note that the explode percentage is set to the `Offset`
+            ///property of the current data series entry only for slices
+            ///belonging to the outer ring
+            aParam.mfExplodePercentage = 0.0;
+            bool bDoExplode = ( nExplodeableSlot == static_cast< std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
+            if(bDoExplode) try
+            {
+                xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+
+            ///see notes for `PolarPlottingPositionHelper` methods
+            ///transform to unit circle:
+            aParam.mfUnitCircleWidthAngleDegree = m_aPosHelper.getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
+            aParam.mfUnitCircleStartAngleDegree = m_aPosHelper.transformToAngleDegree( fLogicStartAngleValue );
+            aParam.mfUnitCircleInnerRadius = m_aPosHelper.transformToRadius( fLogicInnerRadius );
+            aParam.mfUnitCircleOuterRadius = m_aPosHelper.transformToRadius( fLogicOuterRadius );
+
+            ///create data point
+            aParam.mfLogicZ = -1.0; // For 3D pie chart label position
+
+            // Do concentric explosion if it's a donut chart with more than one series
+            const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
+            rtl::Reference<SvxShape> xPointShape =
+                createDataPoint(
+                    xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
+                    bConcentricExplosion);
+
+            ///point color:
+            if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
+            {
+                xPointShape->setPropertyValue("FillColor",
+                    uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+            }
+
+
+            if(bHasFillColorMapping)
+            {
+                double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                if(!std::isnan(nPropVal))
+                {
+                    xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+                }
+            }
+
+            ///create label
+            createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
+
+            if(!bDoExplode)
+            {
+                ShapeFactory::setShapeName( xPointShape
+                            , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
+            }
+            else try
+            {
+                ///enable dragging of outer segments
+
+                double fAngle  = aParam.mfUnitCircleStartAngleDegree + aParam.mfUnitCircleWidthAngleDegree/2.0;
+                double fMaxDeltaRadius = aParam.mfUnitCircleOuterRadius-aParam.mfUnitCircleInnerRadius;
+                drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
+                drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
+
+                sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
+
+                awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
+                    aOrigin, m_xLogicTarget, m_nDimension ) );
+                awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
+                    aNewOrigin, m_xLogicTarget, m_nDimension ) );
+
+                //enable dragging of piesegments
+                OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
+                    , pSeries->getSeriesParticle()
+                    , ObjectIdentifier::getPieSegmentDragMethodServiceName()
+                    , ObjectIdentifier::createPieSegmentDragParameterString(
+                        nOffsetPercent, aMinimumPosition, aMaximumPosition )
+                    ) );
+
+                ShapeFactory::setShapeName( xPointShape
+                            , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+        }//next series in x slot (next y slot)
+    }//next category
 }
 
 PieChart::PieLabelInfo::PieLabelInfo()

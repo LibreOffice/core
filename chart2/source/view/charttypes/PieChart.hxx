@@ -75,6 +75,12 @@ public:
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
 
+    enum class SubPieType {
+        NONE,
+        LEFT,
+        RIGHT
+    };
+
 private: //methods
     rtl::Reference<SvxShape>
         createDataPoint(
@@ -121,6 +127,14 @@ struct PieLabelInfo;
 
     bool                performLabelBestFitInnerPlacement( ShapeParam& rShapeParam
                                 , PieLabelInfo const & rPieLabelInfo );
+
+    void                createOneRing([[maybe_unused]]enum SubPieType eType
+                                , double fSlotX
+                                , ShapeParam& aParam
+                                , const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget
+                                , const rtl::Reference<SvxShapeGroup>& xTextTarget
+                                , VDataSeries* pSeries
+                                , sal_Int32 n3DRelativeHeight);
 
 private: //member
     PiePositionHelper     m_aPosHelper;
