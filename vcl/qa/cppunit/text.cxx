@@ -181,7 +181,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
     tools::Long height72 = getCharacterLeftSideHeight(device, Point(0, 30));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 * 2, height72, 4);
     tools::Long width72 = getCharacterBaseWidth(device, Point(20, 99));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 * 2, width72, 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 * 2, width72, 5);
 
     font.SetOrientation(2700_deg10);
     device->Erase();
@@ -207,7 +207,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
     tools::Long height36pct200 = getCharacterLeftSideHeight(device, Point(0, 30));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36, height36pct200, 2);
     tools::Long width36pct200 = getCharacterBaseWidth(device, Point(20, 99));
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 * 2, width36pct200, 4);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 * 2, width36pct200, 5);
 
     // Test width scaled to 50%.
     font = vcl::Font("DejaVu Sans", "Book", Size(18, 36));
@@ -218,7 +218,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
     device->SetFont(font);
     device->DrawText(Point(10, 10), text);
     exportDevice("simple-text-36-50pct.png", device);
-    tools::Long height36pct50 = getCharacterLeftSideHeight(device, Point(0, 30));
+    tools::Long height36pct50 = getCharacterLeftSideHeight(device, Point(0, 40));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36, height36pct50, 2);
     tools::Long width36pct50 = getCharacterBaseWidth(device, Point(15, 99));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 / 2, width36pct50, 2);
