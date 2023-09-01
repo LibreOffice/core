@@ -366,6 +366,11 @@ def remove_unused(root):
     if scripts is not None:
         root.remove(scripts)
 
+    # remove theme
+    theme = root.find(".//{urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0}theme")
+    if theme is not None:
+        theme.getparent().remove(theme)
+
     # TODO: replace embedded image with some tiny one
     # TODO: perhaps replace text with xxx (optionally)?
 
