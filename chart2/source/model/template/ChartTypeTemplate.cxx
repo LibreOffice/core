@@ -571,7 +571,13 @@ void ChartTypeTemplate::adaptScales(
                             rtl::Reference< ChartType > xChartType = getChartTypeForNewSeries2({});
                             if( aData.AxisType == AxisType::CATEGORY )
                             {
-                                aData.ShiftedCategoryPosition = m_aServiceName.indexOf("Column") != -1 || m_aServiceName.indexOf("Bar") != -1 || m_aServiceName.endsWith("Close");
+                                // Shift for Column, Hi-Lo-Close, and regular
+                                // Bar types, but not BarOfPie
+                                aData.ShiftedCategoryPosition =
+                                    m_aServiceName.indexOf("Column") != -1 ||
+                                    (m_aServiceName.indexOf("Bar") != -1 &&
+                                     !m_aServiceName.indexOf("BarOfPie")) ||
+                                    m_aServiceName.endsWith("Close");
                             }
                             bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, nDimensionX );
                             if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )

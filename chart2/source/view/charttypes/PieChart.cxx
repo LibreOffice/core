@@ -287,6 +287,7 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             aOffset = aNewOrigin - aOrigin;
         }
     } else if (m_eSubType != PieChartSubType_NONE) {
+        // Draw the main pie for bar-of-pie/pie-of-pie smaller and to the left
         drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
         drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(180, 1.0, rParam.mfLogicZ);
         aOffset = aNewOrigin - aOrigin;
