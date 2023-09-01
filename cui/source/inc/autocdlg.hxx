@@ -97,6 +97,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     OUString        sDash;
     OUString        sRightMargin;
     OUString        sNum;
+    OUString        sBulletsAfterSpace;
     OUString        sBorder;
     OUString        sTable;
     OUString        sReplaceTemplates;

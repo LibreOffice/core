@@ -14,7 +14,9 @@
 #include <comphelper/classids.hxx>
 #include <tools/globname.hxx>
 #include <svtools/embedhlp.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <editeng/svxacorr.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
@@ -110,6 +112,55 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testNumDownIndent)
     // - Actual  : B
     // i.e. pressing <tab> at the start of the paragraph did not change the layout.
     CPPUNIT_ASSERT_EQUAL(OUString("\tB"), pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpaceOff)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = false;
+    pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = false;
+
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aKeyEvent('-', 0);
+    rEditWin.KeyInput(aKeyEvent);
+    KeyEvent aKeyEvent2(' ', KEY_SPACE);
+    rEditWin.KeyInput(aKeyEvent2);
+    KeyEvent aKeyEvent3('a', 0);
+    rEditWin.KeyInput(aKeyEvent3);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("- a"), pTextNode->GetText());
+    ErrorRegistry::Reset();
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
+{
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    pAutoCorrect->GetSwFlags().bSetNumRule = true;
+    pAutoCorrect->GetSwFlags().bSetNumRuleAfterSpace = true;
+
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Down(/*bSelect=*/false);
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    KeyEvent aKeyEvent('-', 0);
+    rEditWin.KeyInput(aKeyEvent);
+    KeyEvent aKeyEvent2(' ', KEY_SPACE);
+    rEditWin.KeyInput(aKeyEvent2);
+    KeyEvent aKeyEvent3('a', 0);
+    rEditWin.KeyInput(aKeyEvent3);
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+
+    // '- ' was converted into bullet
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), pTextNode->GetText());
     ErrorRegistry::Reset();
 }
 

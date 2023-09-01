@@ -25,7 +25,7 @@ class tdf156165(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
                 options=xDialog.getChild('list')
-                checkbox=options.getChild("16")
+                checkbox=options.getChild("17")
                 self.assertEqual("Replace Custom Styles", get_state_as_dict(checkbox)["Text"])
 
                 # Replace Custom Styles is default to be false
@@ -51,7 +51,7 @@ class tdf156165(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "2")
                 options=xDialog.getChild('list')
-                checkbox=options.getChild("16")
+                checkbox=options.getChild("17")
                 self.assertEqual("Replace Custom Styles", get_state_as_dict(checkbox)["Text"])
 
                 # set Replace Custom Styles to True

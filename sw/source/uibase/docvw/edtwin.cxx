@@ -2502,6 +2502,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             aCh = '\t';
             [[fallthrough]];
         case SwKeyState::InsChar:
+        {
             if (rSh.CursorInsideContentControl())
             {
                 const SwPosition* pStart = rSh.GetCursor()->Start();
@@ -2606,6 +2607,20 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.InfoReadOnlyDialog(true);
                 eKeyState = SwKeyState::End;
             }
+
+            bool bIsSpace = (aCh == ' ');
+            if (bIsSpace && pACorr && pACfg)
+            {
+                // do the formatting only for few starting characters (for "* " or "- " conversion)
+                SwPosition aPos(*rSh.GetCursor()->GetPoint());
+                if (aPos.nContent < 3)
+                {
+                    SvxSwAutoFormatFlags& rFlags = pACorr->GetSwFlags();
+                    if(pACfg->IsAutoFormatByInput() && rFlags.bSetNumRule && rFlags.bSetNumRuleAfterSpace)
+                        rSh.AutoFormat(&rFlags, true);
+                }
+            }
+        }
         break;
 
         case SwKeyState::CheckAutoCorrect:

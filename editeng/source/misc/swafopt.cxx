@@ -46,6 +46,7 @@ SvxSwAutoFormatFlags::SvxSwAutoFormatFlags()
     bDelEmptyNode =
     bWithRedlining =
     bAutoCmpltEndless =
+    bSetNumRuleAfterSpace =
     bAutoCmpltAppendBlank = false;
 
     bAutoCmpltShowAsTip =

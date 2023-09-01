@@ -102,6 +102,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFormatFlags
     bool bAFormatByInput : 1;
     bool bDelEmptyNode : 1;
     bool bSetNumRule : 1;
+    bool bSetNumRuleAfterSpace : 1;
 
     bool bChgOrdinalNumber : 1;
     bool bChgToEnEmDash : 1;

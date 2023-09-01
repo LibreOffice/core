@@ -421,6 +421,7 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
         "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //46
         "Format/Option/SetDOIAttribute",                                //47
+        "Format/ByInput/ApplyNumberingAfterSpace",                      //48
     };
     const int nCount = 48;
     Sequence<OUString> aNames(nCount);
@@ -573,6 +574,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
                 }
                 break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
                 case   47: rSwFlags.bSetDOIAttr = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/Option/SetDOIAttribute",
+                case 48 : rSwFlags.bSetNumRuleAfterSpace = *o3tl::doAccess<bool>(pValues[nProp]); break; // "Format/ByInput/ApplyNumberingAfterSpace",
             }
         }
     }
@@ -643,6 +645,7 @@ void SvxSwAutoCorrCfg::ImplCommit()
          css::uno::Any(rParent.bAutoFmtByInput), // "Format/ByInput/Enable"
          css::uno::Any(rSwFlags.bChgToEnEmDash), // "Format/ByInput/ChangeDash"
          css::uno::Any(rSwFlags.bSetNumRule),
+         css::uno::Any(rSwFlags.bSetNumRuleAfterSpace),
             // "Format/ByInput/ApplyNumbering/Enable"
          css::uno::Any(rSwFlags.bSetBorder), // "Format/ByInput/ChangeToBorders"
          css::uno::Any(rSwFlags.bCreateTable), // "Format/ByInput/ChangeToTable"

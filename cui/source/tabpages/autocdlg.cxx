@@ -344,6 +344,7 @@ enum OfaAutoFmtOptions
     IGNORE_DBLSPACE,
     CORRECT_CAPS_LOCK,
     APPLY_NUMBERING,
+    APPLY_NUMBERING_AFTER_SPACE,
     INSERT_BORDER,
     CREATE_TABLE,
     REPLACE_STYLES,
@@ -372,6 +373,7 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage(weld::Container* pPage, weld::D
     , sDash(CuiResId(RID_CUISTR_DASH))
     , sRightMargin(CuiResId(RID_CUISTR_RIGHT_MARGIN))
     , sNum(CuiResId(RID_CUISTR_NUM))
+    , sBulletsAfterSpace(CuiResId(RID_SVXSTR_NUM_FORMAT_AFTER_SPACE))
     , sBorder(CuiResId(RID_CUISTR_BORDER))
     , sTable(CuiResId(RID_CUISTR_CREATE_TABLE))
     , sReplaceTemplates(CuiResId(RID_CUISTR_REPLACE_TEMPLATES))
@@ -498,6 +500,10 @@ bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
     bModified |= pOpt->bSetNumRule != bCheck;
     pOpt->bSetNumRule = bCheck;
 
+    bCheck = m_xCheckLB->get_toggle(APPLY_NUMBERING_AFTER_SPACE, CBCOL_SECOND) == TRISTATE_TRUE;
+    bModified |= pOpt->bSetNumRuleAfterSpace != bCheck;
+    pOpt->bSetNumRuleAfterSpace = bCheck;
+
     bCheck = m_xCheckLB->get_toggle(INSERT_BORDER, CBCOL_SECOND) == TRISTATE_TRUE;
     bModified |= pOpt->bSetBorder != bCheck;
     pOpt->bSetBorder = bCheck;
@@ -578,6 +584,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     CreateEntry(sNoDblSpaces,       CBCOL_SECOND);
     CreateEntry(sCorrectCapsLock,   CBCOL_SECOND);
     CreateEntry(sNum.replaceFirst("%1", sBulletChar), CBCOL_SECOND);
+    CreateEntry(sBulletsAfterSpace,  CBCOL_SECOND);
     CreateEntry(sBorder,            CBCOL_SECOND);
     CreateEntry(sTable,             CBCOL_SECOND);
     CreateEntry(sReplaceTemplates,  CBCOL_SECOND);
@@ -607,6 +614,7 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
     m_xCheckLB->set_toggle(IGNORE_DBLSPACE, bool(nFlags & ACFlags::IgnoreDoubleSpace) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(CORRECT_CAPS_LOCK, bool(nFlags & ACFlags::CorrectCapsLock) ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(APPLY_NUMBERING, pOpt->bSetNumRule ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
+    m_xCheckLB->set_toggle(APPLY_NUMBERING_AFTER_SPACE, pOpt->bSetNumRuleAfterSpace ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(INSERT_BORDER, pOpt->bSetBorder ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(CREATE_TABLE, pOpt->bCreateTable ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);
     m_xCheckLB->set_toggle(REPLACE_STYLES, pOpt->bReplaceStyles ? TRISTATE_TRUE : TRISTATE_FALSE, CBCOL_SECOND);

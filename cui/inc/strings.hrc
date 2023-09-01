@@ -334,6 +334,7 @@
 // To translators: %1 will be replaced with a percentage, e.g. "10%"
 #define RID_CUISTR_RIGHT_MARGIN                     NC_("RID_SVXSTR_RIGHT_MARGIN", "Combine single line paragraphs if length greater than %1")
 #define RID_CUISTR_NUM                              NC_("RID_SVXSTR_NUM", "Bulleted and numbered lists. Bullet symbol: %1")
+#define RID_SVXSTR_NUM_FORMAT_AFTER_SPACE           NC_("RID_SVXSTR_NUM_FORMAT_AFTER_SPACE", "Bulleted and numbered lists immediate after pressing space")
 #define RID_CUISTR_BORDER                           NC_("RID_SVXSTR_BORDER", "Apply border")
 #define RID_CUISTR_CREATE_TABLE                     NC_("RID_SVXSTR_CREATE_TABLE", "Create table")
 #define RID_CUISTR_REPLACE_TEMPLATES                NC_("RID_SVXSTR_REPLACE_TEMPLATES", "Apply Styles")
