@@ -28,7 +28,6 @@
 #include <com/sun/star/awt/XPatternField.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/awt/XSimpleTabController.hpp>
-#include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTimeField.hpp>
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/awt/grid/XGridRowSelection.hpp>
@@ -40,7 +39,6 @@
 #include <com/sun/star/util/Date.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <tools/lineend.hxx>
 
 #include <awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindows.hxx>
@@ -199,59 +197,6 @@ public:
     /// @throws css::uno::RuntimeException
     TabControl*  getTabControl() const;
     sal_uInt16 insertTab( TabPage*, OUString const & sTitle );
-    static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
-    virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
-};
-
-class VCLXMultiLineEdit final : public cppu::ImplInheritanceHelper<
-                            VCLXWindow,
-                            css::awt::XTextComponent,
-                            css::awt::XTextArea,
-                            css::awt::XTextLayoutConstrains>
-{
-private:
-    TextListenerMultiplexer maTextListeners;
-    LineEnd                 meLineEndType;
-
-    void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
-
-public:
-                    VCLXMultiLineEdit();
-                    virtual ~VCLXMultiLineEdit() override;
-
-    // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
-    void SAL_CALL setText( const OUString& aText ) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
-    OUString SAL_CALL getText(  ) override;
-    OUString SAL_CALL getSelectedText(  ) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
-    css::awt::Selection SAL_CALL getSelection(  ) override;
-    sal_Bool SAL_CALL isEditable(  ) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
-
-    //XTextArea
-    OUString SAL_CALL getTextLines(  ) override;
-
-    // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
-
-    // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
-
-    // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
-
-    // css::awt::XWindow
-    void SAL_CALL setFocus(  ) override;
-
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
 };
