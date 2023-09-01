@@ -33,7 +33,6 @@
 
 constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
 constexpr sal_uInt32 WMF_EMF_CHECK_SIZE = 44;
-constexpr sal_uInt32 DATA_SIZE = 640;
 
 namespace
 {
@@ -716,6 +715,7 @@ bool GraphicFormatDetector::checkTIF()
         if (bDetectOk)
         {
             sal_uInt16 nTemp16 = 0;
+            sal_uInt32 nTemp32 = 0;
 
             mrStream.ReadUInt16(nTemp16);
             if (nTemp16 == 0x2a)
@@ -725,90 +725,84 @@ bool GraphicFormatDetector::checkTIF()
 
                 if (mbExtendedInfo)
                 {
-                    sal_uLong nCount;
-                    sal_uLong nMax = DATA_SIZE - 48;
-                    sal_uInt32 nTemp32 = 0;
+                    sal_uInt32 nIfdOffset = 0;
 
                     // Offset of the first IFD
-                    mrStream.ReadUInt32(nTemp32);
-                    nCount = nTemp32 + 2;
-                    mrStream.SeekRel(nCount - 0x08);
+                    mrStream.ReadUInt32(nIfdOffset);
+                    mrStream.SeekRel(nIfdOffset - 8); // read 6 bytes until here
 
-                    if (nCount < nMax)
+                    sal_uInt16 nNumberOfTags = 0;
+                    mrStream.ReadUInt16(nNumberOfTags);
+
+                    bool bOk = true;
+                    sal_Int32 nCount = 0;
+
+                    // read tags till we find Tag256(Width)
+                    mrStream.ReadUInt16(nTemp16);
+                    while (nTemp16 != 256 && bOk)
                     {
-                        bool bOk = false;
-
-                        // read tags till we find Tag256 ( Width )
-                        // do not read more bytes than DATA_SIZE
+                        mrStream.SeekRel(10);
                         mrStream.ReadUInt16(nTemp16);
-                        while (nTemp16 != 256)
-                        {
-                            bOk = nCount < nMax;
-                            if (!bOk)
-                            {
-                                break;
-                            }
-                            mrStream.SeekRel(10);
-                            mrStream.ReadUInt16(nTemp16);
-                            nCount += 12;
-                        }
+                        nCount++;
+                        if (nCount > nNumberOfTags)
+                            bOk = false;
+                    }
 
-                        if (bOk)
+                    if (bOk)
+                    {
+                        // width
+                        mrStream.ReadUInt16(nTemp16);
+                        mrStream.SeekRel(4);
+                        if (nTemp16 == 3)
                         {
-                            // width
                             mrStream.ReadUInt16(nTemp16);
-                            mrStream.SeekRel(4);
-                            if (nTemp16 == 3)
-                            {
-                                mrStream.ReadUInt16(nTemp16);
-                                maMetadata.maPixSize.setWidth(nTemp16);
-                                mrStream.SeekRel(2);
-                            }
-                            else
-                            {
-                                mrStream.ReadUInt32(nTemp32);
-                                maMetadata.maPixSize.setWidth(nTemp32);
-                            }
-
-                            // height
+                            maMetadata.maPixSize.setWidth(nTemp16);
                             mrStream.SeekRel(2);
-                            mrStream.ReadUInt16(nTemp16);
-                            mrStream.SeekRel(4);
-                            if (nTemp16 == 3)
-                            {
-                                mrStream.ReadUInt16(nTemp16);
-                                maMetadata.maPixSize.setHeight(nTemp16);
-                                mrStream.SeekRel(2);
-                            }
-                            else
-                            {
-                                mrStream.ReadUInt32(nTemp32);
-                                maMetadata.maPixSize.setHeight(nTemp32);
-                            }
-
-                            // Bits/Pixel
-                            mrStream.ReadUInt16(nTemp16);
-                            if (nTemp16 == 258)
-                            {
-                                mrStream.SeekRel(6);
-                                mrStream.ReadUInt16(nTemp16);
-                                maMetadata.mnBitsPerPixel = nTemp16;
-                                mrStream.SeekRel(2);
-                            }
-                            else
-                                mrStream.SeekRel(-2);
-
-                            // compression
-                            mrStream.ReadUInt16(nTemp16);
-                            if (nTemp16 == 259)
-                            {
-                                mrStream.SeekRel(6);
-                                mrStream.ReadUInt16(nTemp16); // compression
-                                mrStream.SeekRel(2);
-                            }
-                            else
-                                mrStream.SeekRel(-2);
                         }
+                        else
+                        {
+                            mrStream.ReadUInt32(nTemp32);
+                            maMetadata.maPixSize.setWidth(nTemp32);
+                        }
+
+                        // height
+                        mrStream.SeekRel(2);
+                        mrStream.ReadUInt16(nTemp16);
+                        mrStream.SeekRel(4);
+                        if (nTemp16 == 3)
+                        {
+                            mrStream.ReadUInt16(nTemp16);
+                            maMetadata.maPixSize.setHeight(nTemp16);
+                            mrStream.SeekRel(2);
+                        }
+                        else
+                        {
+                            mrStream.ReadUInt32(nTemp32);
+                            maMetadata.maPixSize.setHeight(nTemp32);
+                        }
+
+                        // Bits/Pixel
+                        mrStream.ReadUInt16(nTemp16);
+                        if (nTemp16 == 258)
+                        {
+                            mrStream.SeekRel(6);
+                            mrStream.ReadUInt16(nTemp16);
+                            maMetadata.mnBitsPerPixel = nTemp16;
+                            mrStream.SeekRel(2);
+                        }
+                        else
+                            mrStream.SeekRel(-2);
+
+                        // compression
+                        mrStream.ReadUInt16(nTemp16);
+                        if (nTemp16 == 259)
+                        {
+                            mrStream.SeekRel(6);
+                            mrStream.ReadUInt16(nTemp16); // compression
+                            mrStream.SeekRel(2);
+                        }
+                        else
+                            mrStream.SeekRel(-2);
                     }
                 }
             }
