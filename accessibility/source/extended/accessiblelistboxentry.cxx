@@ -794,9 +794,10 @@ namespace accessibility
                 //Sometimes, a List or Tree may have both checkbox and label at the same time
                 return OUString();
             }
-        }else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
+        }
+        else if( (nIndex == 1 && (treeFlag & SvTreeFlags::CHKBTN)) || nIndex == 0 )
         {
-            if( pEntry->HasChildren() || pEntry->HasChildrenOnDemand() )
+            if( pEntry && (pEntry->HasChildren() || pEntry->HasChildrenOnDemand()) )
                 return m_pTreeListBox->IsExpanded( pEntry ) ?
                 AccResId(STR_SVT_ACC_ACTION_COLLAPSE) :
                 AccResId(STR_SVT_ACC_ACTION_EXPAND);
