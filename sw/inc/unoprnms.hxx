@@ -88,6 +88,7 @@ inline constexpr OUStringLiteral UNO_NAME_TEXT_RANGE = u"TextRange";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_BOX = u"TextBox";
 inline constexpr OUStringLiteral UNO_NAME_TEXT_BOX_CONTENT = u"TextBoxContent";
 inline constexpr OUStringLiteral UNO_NAME_NAME = u"Name";
+inline constexpr OUStringLiteral UNO_NAME_PARENT_NAME = u"ParentName";
 inline constexpr OUStringLiteral UNO_NAME_CHAR_STYLE_NAME = u"CharStyleName";
 inline constexpr OUStringLiteral UNO_NAME_ANCHOR_CHAR_STYLE_NAME = u"AnchorCharStyleName";
 inline constexpr OUStringLiteral UNO_NAME_SUFFIX = u"Suffix";

@@ -458,6 +458,8 @@ class SW_DLLPUBLIC SwPostItField final : public SwField
     sal_uInt32 m_nPostItId;
     sal_uInt32 m_nParentId;
     sal_uInt32 m_nParaId;
+    sal_uInt32 m_nParentPostItId;
+    OUString m_sParentName; /// Parent comment's name.
 
 public:
     static sal_uInt32 s_nLastPostItId;
@@ -471,7 +473,9 @@ public:
                    const bool bResolved = false,
                    const sal_uInt32 nPostItId = 0,
                    const sal_uInt32 nParentId = 0,
-                   const sal_uInt32 nParaId = 0);
+                   const sal_uInt32 nParaId = 0,
+                   const sal_uInt32 nParentPostItId = 0,
+                   const OUString aParentName = OUString());
 
     SwPostItField(const SwPostItField&) = delete;
     SwPostItField* operator=(const SwPostItField&) = delete;
@@ -486,7 +490,9 @@ public:
     tools::Time GetTime() const                 { return tools::Time(m_aDateTime.GetTime()); }
     sal_uInt32 GetPostItId() const             { return m_nPostItId; }
     void SetPostItId(const sal_uInt32 nPostItId = 0);
+    void SetParentPostItId(const sal_uInt32 nParentPostItId = 0);
     sal_uInt32 GetParentId() const             { return m_nParentId; }
+    sal_uInt32 GetParentPostItId() const       { return m_nParentPostItId; }
     void SetParentId(const sal_uInt32 nParentId);
     sal_uInt32 GetParaId() const               { return m_nParaId; }
     void SetParaId(const sal_uInt32 nParaId);
@@ -502,6 +508,8 @@ public:
     const OUString&         GetInitials() const { return m_sInitials;}
     void                    SetName(const OUString& rStr);
     const OUString&         GetName() const { return m_sName;}
+    const OUString&         GetParentName() const { return m_sParentName; }
+    void                    SetParentName(const OUString& rStr);
 
     const OutlinerParaObject* GetTextObject() const { return mpText ? &*mpText : nullptr;}
     void SetTextObject( std::optional<OutlinerParaObject> pText );

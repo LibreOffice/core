@@ -204,6 +204,14 @@ void SwAnnotationWin::SetPostItText()
     Invalidate();
 }
 
+void SwAnnotationWin::GeneratePostItName()
+{
+    if (mpField && mpField->GetName().isEmpty())
+    {
+        mpField->SetName(sw::mark::MarkBase::GenerateNewName(u"__Annotation__"));
+    }
+}
+
 void SwAnnotationWin::SetResolved(bool resolved)
 {
     bool oldState = IsResolved();
@@ -254,6 +262,12 @@ sal_uInt32 SwAnnotationWin::GetParaId()
         pField->SetParaId(nParaId);
     }
     return nParaId;
+}
+
+sal_uInt32 SwAnnotationWin::GetPostItId()
+{
+    auto pField = static_cast<SwPostItField*>(mpFormatField->GetField());
+    return pField->GetPostItId();
 }
 
 sal_uInt32 SwAnnotationWin::CreateUniqueParaId()

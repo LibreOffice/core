@@ -1506,6 +1506,7 @@ namespace xmloff::token {
         XML_PARAGRAPH_START_MARGIN,
         XML_PARALLEL,
         XML_PARAM,
+        XML_PARENT_NAME,
         XML_PARENT_STYLE_NAME,
         XML_PARSE_SQL_STATEMENT,
         XML_PARSED,
