@@ -372,7 +372,7 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
                 break;
 
             default:
-                SAL_WARN("editeng", "Id service unknown: " << mnServiceId);
+                SAL_INFO("editeng", "Id service unknown: " << mnServiceId);
                 break;
             }
         }
