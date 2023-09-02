@@ -50,8 +50,4 @@ inline constexpr OUStringLiteral CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME
 inline constexpr OUStringLiteral CHART_CHARTAPIWRAPPER_SERVICE_NAME
     = u"com.sun.star.chart2.ChartDocumentWrapper";
 
-// accessibility
-inline constexpr OUStringLiteral CHART_ACCESSIBLE_TEXT_SERVICE_NAME
-    = u"com.sun.star.accessibility.AccessibleTextComponent";
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

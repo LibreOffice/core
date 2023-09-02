@@ -1424,38 +1424,6 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
     }
 }
 
-// ____ XMultiServiceFactory ____
-uno::Reference< uno::XInterface > SAL_CALL
-    ChartController::createInstance( const OUString& aServiceSpecifier )
-{
-    uno::Reference< uno::XInterface > xResult;
-
-#if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    if( aServiceSpecifier == CHART_ACCESSIBLE_TEXT_SERVICE_NAME )
-        xResult.set( impl_createAccessibleTextContext());
-#else
-    (void)aServiceSpecifier;
-#endif
-
-    return xResult;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL
-    ChartController::createInstanceWithArguments(
-        const OUString& ServiceSpecifier,
-        const uno::Sequence< uno::Any >& /* Arguments */ )
-{
-    // ignore Arguments
-    return createInstance( ServiceSpecifier );
-}
-
-uno::Sequence< OUString > SAL_CALL
-    ChartController::getAvailableServiceNames()
-{
-    uno::Sequence< OUString > aServiceNames { CHART_ACCESSIBLE_TEXT_SERVICE_NAME };
-    return aServiceNames;
-}
-
 // ____ XModifyListener ____
 void SAL_CALL ChartController::modified(
     const lang::EventObject& /* aEvent */ )

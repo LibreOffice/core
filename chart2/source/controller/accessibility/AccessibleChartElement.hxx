@@ -27,6 +27,7 @@ namespace com::sun::star::awt { class XFont; }
 
 namespace chart
 {
+class AccessibleTextHelper;
 
 /** Base class for all Chart Accessibility objects except the root node (see AccessibleChartView)
 
@@ -93,7 +94,7 @@ public:
 
 private:
     bool                m_bHasText;
-    css::uno::Reference< css::accessibility::XAccessibleContext >
+    rtl::Reference< ::chart::AccessibleTextHelper >
                         m_xTextHelper;
 
     void InitTextEdit();

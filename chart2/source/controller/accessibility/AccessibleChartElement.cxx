@@ -18,6 +18,7 @@
  */
 
 #include "AccessibleChartElement.hxx"
+#include <AccessibleTextHelper.hxx>
 #include <CharacterProperties.hxx>
 #include <ChartModel.hxx>
 #include <ChartController.hxx>
@@ -86,29 +87,15 @@ void AccessibleChartElement::InitTextEdit()
     if( ! m_xTextHelper.is())
     {
         // get hard reference
-        rtl::Reference< ::chart::ChartController > xSelSupp( GetInfo().m_xChartController );
-        if( xSelSupp.is())
-        {
-            m_xTextHelper.set(
-                xSelSupp->createInstance( CHART_ACCESSIBLE_TEXT_SERVICE_NAME ), uno::UNO_QUERY );
-        }
+        rtl::Reference< ::chart::ChartController > xChartController( GetInfo().m_xChartController );
+        if( xChartController.is())
+            m_xTextHelper = xChartController->createAccessibleTextContext();
     }
 
     if( !m_xTextHelper.is())
         return;
 
-    try
-    {
-        Reference< lang::XInitialization > xInit( m_xTextHelper, uno::UNO_QUERY_THROW );
-        Sequence< uno::Any > aArgs{ uno::Any(GetInfo().m_aOID.getObjectCID()),
-                                    uno::Any(Reference< XAccessible >( this )),
-                                    uno::Any(Reference< awt::XWindow >( GetInfo().m_xWindow )) };
-        xInit->initialize( aArgs );
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
+    m_xTextHelper->initialize( GetInfo().m_aOID.getObjectCID(), this, GetInfo().m_xWindow );
 }
 
 //             Interfaces

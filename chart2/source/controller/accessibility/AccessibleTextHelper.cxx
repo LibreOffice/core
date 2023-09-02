@@ -53,19 +53,10 @@ AccessibleTextHelper::~AccessibleTextHelper()
 {
 }
 
-// ____ XInitialization ____
-void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArguments )
+void AccessibleTextHelper::initialize( const OUString& aCID,
+                                const Reference< XAccessible >& xEventSource,
+                                const Reference< awt::XWindow >& xWindow )
 {
-    OUString aCID;
-    Reference< XAccessible > xEventSource;
-    Reference< awt::XWindow > xWindow;
-
-    if( aArguments.getLength() >= 3 )
-    {
-        aArguments[0] >>= aCID;
-        aArguments[1] >>= xEventSource;
-        aArguments[2] >>= xWindow;
-    }
     OSL_ENSURE( !aCID.isEmpty(), "Empty CID" );
     OSL_ENSURE( xEventSource.is(), "Empty Event Source" );
     OSL_ENSURE( xWindow.is(), "Empty Window" );

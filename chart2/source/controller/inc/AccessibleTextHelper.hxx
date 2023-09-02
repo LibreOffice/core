@@ -20,8 +20,8 @@
 
 #include <memory>
 #include <comphelper/compbase.hxx>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 
 // forward declaration of helper class from svx
 namespace accessibility
@@ -37,7 +37,6 @@ class DrawViewWrapper;
 namespace impl
 {
 typedef comphelper::WeakComponentImplHelper<
-        css::lang::XInitialization,
         css::accessibility::XAccessibleContext >
     AccessibleTextHelper_Base;
 }
@@ -49,7 +48,6 @@ public:
     explicit AccessibleTextHelper( DrawViewWrapper * pDrawViewWrapper );
     virtual ~AccessibleTextHelper() override;
 
-    // ____ XInitialization ____
     /** Must be called at least once for this helper class to work.
 
         mandatory parameter 0: type string. This is the CID that is used to find
@@ -62,8 +60,9 @@ public:
         mandatory parameter 2: type awt::XWindow.  The Window that shows the
             text currently.
      */
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    void initialize(const OUString& aCID,
+                    const css::uno::Reference< css::accessibility::XAccessible >& xEventSource,
+                    const css::uno::Reference< css::awt::XWindow >& xWindow );
 
     // ____ XAccessibleContext ____
     virtual sal_Int64 SAL_CALL getAccessibleChildCount() override;

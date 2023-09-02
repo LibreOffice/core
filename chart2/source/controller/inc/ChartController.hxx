@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <memory>
 #include <string_view>
@@ -90,6 +89,7 @@ class ReferenceSizeProvider;
 class ViewElementListProvider;
 class Diagram;
 class AccessibleChartView;
+class AccessibleTextHelper;
 
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
@@ -102,7 +102,6 @@ class ChartController final : public ::cppu::WeakImplHelper <
         ,css::util::XCloseListener         //(needed for communication with XModel)
         ,css::frame::XDispatch
         ,css::awt::XWindow //this is the Window Controller part of this Controller, that will be given to a Frame via setComponent
-        ,css::lang::XMultiServiceFactory
         ,css::util::XModifyListener
         ,css::util::XModeChangeListener
         ,css::frame::XLayoutManagerListener
@@ -263,16 +262,6 @@ public:
     virtual void SAL_CALL
         removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& xListener ) override;
 
-    // css::lang XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-        createInstance( const OUString& aServiceSpecifier ) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-        createInstanceWithArguments( const OUString& ServiceSpecifier,
-                                     const css::uno::Sequence<
-                                         css::uno::Any >& Arguments ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL
-        getAvailableServiceNames() override;
-
     // css::util::XModifyListener
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
@@ -318,6 +307,15 @@ public:
         OUString & rOutQuickHelpText, css::awt::Rectangle & rOutEqualRect );
 
     css::uno::Reference< css::accessibility::XAccessible > CreateAccessible();
+
+    /** Creates a helper accessibility class that must be initialized via initialize().  For
+        parameters see
+
+        The returned object should not be used directly.  Instead a proxy object
+        should use this helper to retrieve its children and add them to its own
+        children.
+     */
+    rtl::Reference< ::chart::AccessibleTextHelper > createAccessibleTextContext();
 
     static bool isObjectDeleteable( const css::uno::Any& rSelection );
 
@@ -540,16 +538,6 @@ private:
     bool impl_DragDataPoint( std::u16string_view rCID, double fOffset );
 
     static const o3tl::sorted_vector< OUString >& impl_getAvailableCommands();
-
-    /** Creates a helper accessibility class that must be initialized via XInitialization.  For
-        parameters see
-
-        The returned object should not be used directly.  Instead a proxy object
-        should use this helper to retrieve its children and add them to its own
-        children.
-     */
-    css::uno::Reference< css::accessibility::XAccessibleContext >
-        impl_createAccessibleTextContext();
 
     void impl_PasteGraphic( css::uno::Reference< css::graphic::XGraphic > const & xGraphic,
                             const ::Point & aPosition );
