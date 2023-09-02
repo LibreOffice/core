@@ -25,12 +25,6 @@ inline constexpr OUStringLiteral CHART_MODEL_SERVICE_IMPLEMENTATION_NAME
 inline constexpr OUStringLiteral CHART_MODEL_SERVICE_NAME = u"com.sun.star.chart2.ChartDocument";
 //@todo create your own service containing the service com.sun.star.document.OfficeDocument
 
-inline constexpr OUStringLiteral CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartController";
-inline constexpr OUStringLiteral CHART_CONTROLLER_SERVICE_NAME
-    = u"com.sun.star.chart2.ChartController";
-//@todo create your own service containing the service com.sun.star.frame.Controller
-
 inline constexpr OUStringLiteral CHART_VIEW_SERVICE_IMPLEMENTATION_NAME
     = u"com.sun.star.comp.chart2.ChartView";
 inline constexpr OUStringLiteral CHART_VIEW_SERVICE_NAME = u"com.sun.star.chart2.ChartView";

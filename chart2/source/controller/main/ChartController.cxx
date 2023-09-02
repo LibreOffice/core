@@ -306,27 +306,6 @@ bool ChartController::impl_isDisposedOrSuspended() const
     return false;
 }
 
-// lang::XServiceInfo
-
-OUString SAL_CALL ChartController::getImplementationName()
-{
-    return CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME;
-}
-
-sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName )
-{
-    return cppu::supportsService(this, rServiceName);
-}
-
-css::uno::Sequence< OUString > SAL_CALL ChartController::getSupportedServiceNames()
-{
-    return {
-        CHART_CONTROLLER_SERVICE_NAME,
-        "com.sun.star.frame.Controller"
-        //// @todo : add additional services if you support any further
-    };
-}
-
 namespace {
 
 uno::Reference<ui::XSidebar> getSidebarFromModel(const uno::Reference<frame::XModel>& xModel)
@@ -1696,12 +1675,5 @@ ViewElementListProvider ChartController::getViewElementListProvider()
 }
 
 } //namespace chart
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
-com_sun_star_comp_chart2_ChartController_get_implementation(css::uno::XComponentContext *context,
-                                                            css::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new chart::ChartController(context));
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

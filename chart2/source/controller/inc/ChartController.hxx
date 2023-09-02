@@ -100,7 +100,6 @@ class ChartController final : public ::cppu::WeakImplHelper <
         ,css::view::XSelectionSupplier     //(optional interface)
         ,css::ui::XContextMenuInterception //(optional interface)
         ,css::util::XCloseListener         //(needed for communication with XModel)
-        ,css::lang::XServiceInfo
         ,css::frame::XDispatch
         ,css::awt::XWindow //this is the Window Controller part of this Controller, that will be given to a Frame via setComponent
         ,css::lang::XMultiServiceFactory
@@ -115,11 +114,6 @@ public:
     virtual ~ChartController() override;
 
     OUString GetContextName();
-
-    // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::frame::XController (required interface)
     virtual void SAL_CALL
