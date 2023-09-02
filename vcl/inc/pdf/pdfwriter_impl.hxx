@@ -113,9 +113,6 @@ class PDFObjectElement;
 
 namespace pdf
 {
-constexpr sal_Int32 g_nInheritedPageWidth = 595;  // default A4 in inch/72
-constexpr sal_Int32 g_nInheritedPageHeight = 842; // default A4 in inch/72
-
 struct PDFPage
 {
     VclPtr<PDFWriterImpl>       m_pWriter;

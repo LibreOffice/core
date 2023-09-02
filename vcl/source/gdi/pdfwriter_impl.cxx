@@ -1211,7 +1211,7 @@ void PDFPage::appendMatrix3(Matrix3 const & rMatrix, OStringBuffer& rBuffer)
 
 double PDFPage::getHeight() const
 {
-    double fRet = m_nPageHeight ? m_nPageHeight : vcl::pdf::g_nInheritedPageHeight;
+    double fRet = m_nPageHeight ? m_nPageHeight : 842; // default A4 height in inch/72, OK to use hardcoded value here?
 
     if (m_nUserUnit > 1)
     {
@@ -5241,41 +5241,9 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( getResourceDictObj() );
     aLine.append( " 0 R\n" );
 
-    double nMediaBoxWidth = 0;
-    double nMediaBoxHeight = 0;
-    sal_Int32 nUserUnit = 1;
     if( m_aPages.empty() ) // sanity check, this should not happen
-    {
-        nMediaBoxWidth = g_nInheritedPageWidth;
-        nMediaBoxHeight = g_nInheritedPageHeight;
-    }
-    else
-    {
-        for (auto const& page : m_aPages)
-        {
-            if( page.m_nPageWidth > nMediaBoxWidth )
-            {
-                nMediaBoxWidth = page.m_nPageWidth;
-                nUserUnit = page.m_nUserUnit;
-            }
-            if( page.m_nPageHeight > nMediaBoxHeight )
-            {
-                nMediaBoxHeight = page.m_nPageHeight;
-                nUserUnit = page.m_nUserUnit;
-            }
-        }
-    }
-    aLine.append( "/MediaBox[ 0 0 " );
-    aLine.append(nMediaBoxWidth / nUserUnit);
-    aLine.append( ' ' );
-    aLine.append(nMediaBoxHeight / nUserUnit);
-    aLine.append(" ]\n");
-    if (nUserUnit > 1)
-    {
-        aLine.append("/UserUnit ");
-        aLine.append(nUserUnit);
-        aLine.append("\n");
-    }
+        aLine.append( "/MediaBox[0 0 595 842]\n" ); // default A4 size in pt
+
     aLine.append("/Kids[ ");
     unsigned int i = 0;
     for (const auto & page : m_aPages)
@@ -5421,16 +5389,12 @@ bool PDFWriterImpl::emitCatalog()
     case PDFWriter::FitWidth :
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef );
-        aLine.append( " /FitH " );
-        aLine.append( g_nInheritedPageHeight );//Open fit width
-        aLine.append( "]\n" );
+        aLine.append( " /FitH 842]\n" ); //Open fit width, default A4 height in pt, OK to use hardcoded value here?
         break;
     case PDFWriter::FitVisible :
         aLine.append( "/OpenAction[" );
         aLine.append( aInitPageRef );
-        aLine.append( " /FitBH " );
-        aLine.append( g_nInheritedPageHeight );//Open fit visible
-        aLine.append( "]\n" );
+        aLine.append( " /FitBH 842]\n" ); //Open fit visible, , default A4 height in pt, OK to use hardcoded value here?
         break;
     case PDFWriter::ActionZoom :
         aLine.append( "/OpenAction[" );
