@@ -128,7 +128,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isWindow() const;
     QWindow* windowHandle() const;
     QScreen* screen() const;
-    static bool isUsingDarkColorScheme();
     bool isMinimized() const;
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
@@ -215,6 +214,7 @@ public:
     virtual void SetScreenNumber(unsigned int) override;
     virtual void SetApplicationID(const OUString&) override;
     virtual void ResolveWindowHandle(SystemEnvData& rData) const override;
+    virtual bool GetUseDarkMode() const override;
     virtual bool GetUseReducedAnimation() const override;
 
     inline bool CallCallback(SalEvent nEvent, const void* pEvent) const;

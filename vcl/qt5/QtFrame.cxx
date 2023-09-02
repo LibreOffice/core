@@ -354,7 +354,7 @@ QScreen* QtFrame::screen() const
 #endif
 }
 
-bool QtFrame::isUsingDarkColorScheme()
+bool QtFrame::GetUseDarkMode() const
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
     const QStyleHints* pStyleHints = QApplication::styleHints();
@@ -1234,7 +1234,7 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
         style.SetMenuFont(aFont);
 
     // Icon theme
-    const bool bPreferDarkTheme = isUsingDarkColorScheme();
+    const bool bPreferDarkTheme = GetUseDarkMode();
     style.SetPreferredIconTheme(toOUString(QIcon::themeName()), bPreferDarkTheme);
 
     // Scroll bar size
