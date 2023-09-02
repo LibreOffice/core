@@ -75,6 +75,7 @@ Private _WindowName				As String		&apos;	Object Name
 Private _WindowTitle			As String		&apos;	Only mean to identify new documents
 Private _WindowFileName			As String		&apos;	URL of file name
 Private _DocumentType			As String		&apos;	Writer, Calc, ...
+Private _DocumentSettings		As Object		&apos;	com.sun.star.XXX.DocumentSettings (XXX = sheet, text, drawing or presentation)
 
 &apos;	Properties (work variables - real properties could have been set manually by user)
 Private _DocumentProperties		As Object		&apos;	Dictionary of document properties
@@ -102,6 +103,7 @@ Private Sub Class_Initialize()
 	_WindowTitle = &quot;&quot;
 	_WindowFileName = &quot;&quot;
 	_DocumentType = &quot;&quot;
+	Set _DocumentSettings = Nothing
 	Set _DocumentProperties = Nothing
 	Set _CustomProperties = Nothing
 	Set _Toolbars = Nothing
@@ -405,6 +407,13 @@ Property Get XComponent() As Variant
 &apos;&apos;&apos;	Returns the com.sun.star.lang.XComponent UNO object representing the document
 	XComponent = _PropertyGet(&quot;XComponent&quot;)
 End Property	&apos;	SFDocuments.SF_Document.XComponent
+
+REM -----------------------------------------------------------------------------
+Property Get XDocumentSettings() As Variant
+&apos;&apos;&apos;	Gives access to a bunch of additional properties, specific to the document&apos;s type, about the document
+&apos;&apos;&apos;	Returns Nothing or a com.sun.star.XXX.DocumentSettings, XXX = text, sheet, drawing or presentation. 
+	XDocumentSettings = _PropertyGet(&quot;XDocumentSettings&quot;)
+End Property	&apos;	SFDocuments.SF_Document.XDocumentSettings
 
 REM ===================================================================== METHODS
 
@@ -860,6 +869,7 @@ Public Function Properties() As Variant
 					, &quot;Subject&quot; _
 					, &quot;Title&quot; _
 					, &quot;XComponent&quot; _
+					, &quot;XDocumentSettings&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Document.Properties
@@ -1636,6 +1646,20 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = _Component.DocumentProperties.Title
 		Case &quot;XComponent&quot;
 			Set _PropertyGet = _Component
+		Case &quot;XDocumentSettings&quot;
+			With _Component
+				If IsNull(_DocumentSettings) Then
+					Select Case _DocumentType
+						Case &quot;Calc&quot;			:	Set _DocumentSettings = .createInstance(&quot;com.sun.star.sheet.DocumentSettings&quot;)
+						Case &quot;Draw&quot;			:	Set _DocumentSettings = .createInstance(&quot;com.sun.star.drawing.DocumentSettings&quot;)
+						Case &quot;FormDocument&quot;, &quot;Writer&quot;
+												Set _DocumentSettings = .createInstance(&quot;com.sun.star.text.DocumentSettings&quot;)
+						Case &quot;Impress&quot;		:	Set _DocumentSettings = .createInstance(&quot;com.sun.star.presentation.DocumentSettings&quot;)
+						Case Else			:	Set _DocumentSettings = Nothing
+					End Select
+				End If
+				Set _PropertyGet = _DocumentSettings
+			End With
 		Case Else
 			_PropertyGet = Null
 	End Select

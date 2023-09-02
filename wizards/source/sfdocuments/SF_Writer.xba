@@ -324,6 +324,7 @@ Public Function Properties() As Variant
 					, &quot;Subject&quot; _
 					, &quot;Title&quot; _
 					, &quot;XComponent&quot; _
+					, &quot;XDocumentSettings&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Writer.Properties
@@ -497,6 +498,11 @@ REM ----------------------------------------------------------------------------
 Property Get XComponent() As Variant
 	XComponent = [_Super].GetProperty(&quot;XComponent&quot;)
 End Property	&apos;	SFDocuments.SF_Writer.XComponent
+
+REM -----------------------------------------------------------------------------
+Property Get XDocumentSettings() As Variant
+	XDocumentSettings = [_Super].GetProperty(&quot;XDocumentSettings&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.XDocumentSettings
 
 REM ========================================================== SUPERCLASS METHODS
 

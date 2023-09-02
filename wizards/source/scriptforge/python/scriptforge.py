@@ -2165,7 +2165,7 @@ class SFDocuments:
                                  DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
                                  IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
                                  IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False)
+                                 Subject = True, Title = True, XComponent = False, XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2292,7 +2292,7 @@ class SFDocuments:
                                  FileSystem = False, ImportFilters = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
                                  IsWriter = False, Keywords = True, Readonly = False, Sheets = False,  Subject = True,
-                                 Title = True, XComponent = False)
+                                 Title = True, XComponent = False, XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2648,7 +2648,7 @@ class SFDocuments:
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
         serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Readonly = False, XComponent = False)
+                                 IsWriter = False, Readonly = False, XComponent = False, XDocumentSettings = False)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2687,7 +2687,7 @@ class SFDocuments:
                                  DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
                                  IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
                                  IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False)
+                                 Subject = True, Title = True, XComponent = False, XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 

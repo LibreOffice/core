@@ -2579,6 +2579,7 @@ Public Function Properties() As Variant
 					, &quot;Width&quot; _
 					, &quot;XCellRange&quot; _
 					, &quot;XComponent&quot; _
+					, &quot;XDocumentSettings&quot; _
 					, &quot;XSheetCellCursor&quot; _
 					, &quot;XSpreadsheet&quot; _
 					)
@@ -3703,6 +3704,11 @@ REM ----------------------------------------------------------------------------
 Property Get XComponent() As Variant
 	XComponent = [_Super].GetProperty(&quot;XComponent&quot;)
 End Property	&apos;	SFDocuments.SF_Calc.XComponent
+
+REM -----------------------------------------------------------------------------
+Property Get XDocumentSettings() As Variant
+	XDocumentSettings = [_Super].GetProperty(&quot;XDocumentSettings&quot;)
+End Property	&apos;	SFDocuments.SF_Calc.XDocumentSettings
 
 REM ========================================================== SUPERCLASS METHODS
 
