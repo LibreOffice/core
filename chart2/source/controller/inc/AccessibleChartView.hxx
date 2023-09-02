@@ -44,7 +44,6 @@ namespace impl
 {
 typedef ::cppu::ImplInheritanceHelper<
         ::chart::AccessibleBase,
-        css::lang::XInitialization,
         css::view::XSelectionChangeListener >
     AccessibleChartView_Base;
 }
@@ -53,7 +52,7 @@ class AccessibleChartView final :
         public impl::AccessibleChartView_Base
 {
 public:
-    AccessibleChartView(SdrView* pView );
+    AccessibleChartView( SdrView* pView );
     virtual ~AccessibleChartView() override;
 
     AccessibleChartView() = delete;
@@ -61,15 +60,19 @@ public:
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
     using AccessibleBase::disposing;
 
-    // ____ lang::XInitialization ____
     // 0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     // 1: frame::XModel representing the chart model - offers access to object data
     // 2: lang::XInterface representing the normal chart view - offers access to some extra object data
     // 3: accessibility::XAccessible representing the parent accessible
     // 4: awt::XWindow representing the view's window (is a vcl Window)
     // all arguments are only valid until next initialization - don't keep them longer
-    virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
+    void initialize( ChartController& rChartController,
+                     const rtl::Reference<::chart::ChartModel>& xChartModel,
+                     const rtl::Reference<::chart::ChartView>& xChartView,
+                     const css::uno::Reference< css::accessibility::XAccessible >& xParent,
+                     const css::uno::Reference<css::awt::XWindow>& xViewWindow );
+    // used to disconnect from view
+    void initialize();
 
     // ____ view::XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
@@ -102,8 +105,8 @@ private: // methods
     css::awt::Rectangle GetWindowPosSize() const;
 
 private: // members
-    css::uno::WeakReference< css::view::XSelectionSupplier >        m_xSelectionSupplier;
-    unotools::WeakReference<::chart::ChartModel>                    m_xChartModel;
+    unotools::WeakReference< ::chart::ChartController >             m_xChartController;
+    unotools::WeakReference< ::chart::ChartModel >                  m_xChartModel;
     unotools::WeakReference< ChartView >                            m_xChartView;
     css::uno::WeakReference< css::awt::XWindow >                    m_xWindow;
     css::uno::WeakReference< css::accessibility::XAccessible >      m_xParent;

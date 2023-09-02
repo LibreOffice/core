@@ -22,6 +22,7 @@
 #include <ObjectHierarchy.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ChartView.hxx>
+#include <ChartController.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -535,7 +536,7 @@ sal_Int64 SAL_CALL AccessibleBase::getAccessibleStateSet()
 {
     if( ! m_bStateSetInitialized )
     {
-        Reference< view::XSelectionSupplier > xSelSupp( GetInfo().m_xSelectionSupplier );
+        rtl::Reference< ::chart::ChartController > xSelSupp( GetInfo().m_xChartController );
         if ( xSelSupp.is() )
         {
             ObjectIdentifier aOID( xSelSupp->getSelection() );
@@ -679,7 +680,7 @@ void SAL_CALL AccessibleBase::grabFocus()
 {
     CheckDisposeState();
 
-    Reference< view::XSelectionSupplier > xSelSupp( GetInfo().m_xSelectionSupplier );
+    rtl::Reference< ::chart::ChartController > xSelSupp( GetInfo().m_xChartController );
     if ( xSelSupp.is() )
     {
         xSelSupp->select( GetId().getAny() );

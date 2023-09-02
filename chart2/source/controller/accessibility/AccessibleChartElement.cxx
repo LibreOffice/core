@@ -20,6 +20,7 @@
 #include "AccessibleChartElement.hxx"
 #include <CharacterProperties.hxx>
 #include <ChartModel.hxx>
+#include <ChartController.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ObjectNameProvider.hxx>
 #include <servicenames.hxx>
@@ -85,13 +86,11 @@ void AccessibleChartElement::InitTextEdit()
     if( ! m_xTextHelper.is())
     {
         // get hard reference
-        Reference< view::XSelectionSupplier > xSelSupp( GetInfo().m_xSelectionSupplier );
-        // get factory from selection supplier (controller)
-        Reference< lang::XMultiServiceFactory > xFact( xSelSupp, uno::UNO_QUERY );
-        if( xFact.is())
+        rtl::Reference< ::chart::ChartController > xSelSupp( GetInfo().m_xChartController );
+        if( xSelSupp.is())
         {
             m_xTextHelper.set(
-                xFact->createInstance( CHART_ACCESSIBLE_TEXT_SERVICE_NAME ), uno::UNO_QUERY );
+                xSelSupp->createInstance( CHART_ACCESSIBLE_TEXT_SERVICE_NAME ), uno::UNO_QUERY );
         }
     }
 

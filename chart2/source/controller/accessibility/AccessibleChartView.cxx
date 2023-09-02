@@ -26,6 +26,7 @@
 #include "AccessibleViewForwarder.hxx"
 #include <ChartModel.hxx>
 #include <ChartView.hxx>
+#include <ChartController.hxx>
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -158,9 +159,11 @@ awt::Point SAL_CALL AccessibleChartView::getLocationOnScreen()
     return aResult;
 }
 
-// lang::XInitialization
-
-void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments )
+void AccessibleChartView::initialize( ChartController& rNewChartController,
+                     const rtl::Reference<::chart::ChartModel>& xNewChartModel,
+                     const rtl::Reference<::chart::ChartView>& xNewChartView,
+                     const uno::Reference< XAccessible >& xNewParent,
+                     const css::uno::Reference<css::awt::XWindow>& xNewWindow )
 {
     //0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
     //1: frame::XModel representing the chart model - offers access to object data
@@ -171,109 +174,71 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
     bool bOldInvalid = false;
     bool bNewInvalid = false;
 
-    Reference< view::XSelectionSupplier > xSelectionSupplier;
+    rtl::Reference< ::chart::ChartController > xChartController;
     rtl::Reference<::chart::ChartModel> xChartModel;
     rtl::Reference<::chart::ChartView> xChartView;
     Reference< XAccessible > xParent;
     Reference< awt::XWindow > xWindow;
     {
         MutexGuard aGuard( m_aMutex);
-        xSelectionSupplier.set( m_xSelectionSupplier );
+        xChartController = m_xChartController;
         xChartModel = m_xChartModel;
         xChartView = m_xChartView;
         xParent.set( m_xParent );
         xWindow.set( m_xWindow );
     }
 
-    if( !xSelectionSupplier.is() || !xChartModel.is() || !xChartView.is() )
+    if( !xChartController.is() || !xChartModel.is() || !xChartView.is() )
     {
         bOldInvalid = true;
     }
 
-    if( rArguments.getLength() > 1 )
+    if( xNewChartModel.get() != xChartModel.get() )
     {
-        Reference< frame::XModel > xNewChartModel;
-        rArguments[1] >>= xNewChartModel;
-        assert(!xNewChartModel || dynamic_cast<::chart::ChartModel*>(xNewChartModel.get()));
-        ::chart::ChartModel* pNewChartModel = dynamic_cast<::chart::ChartModel*>(xNewChartModel.get());
-        if( pNewChartModel != xChartModel.get() )
+        xChartModel = xNewChartModel;
+        bChanged = true;
+    }
+
+    if( xNewChartView != xChartView )
+    {
+        xChartView = xNewChartView;
+        bChanged = true;
+    }
+
+    if( xNewParent != xParent )
+    {
+        xParent = xNewParent;
+        bChanged = true;
+    }
+
+    if( xNewWindow != xWindow )
+    {
+        xWindow.set( xNewWindow );
+        bChanged = true;
+    }
+
+    if( xChartModel.is() && xChartView.is() )
+    {
+        if(xChartController != &rNewChartController)
         {
-            xChartModel = pNewChartModel;
             bChanged = true;
+            xChartController->removeSelectionChangeListener(this);
+            rNewChartController.addSelectionChangeListener(this);
+            xChartController = &rNewChartController;
         }
     }
-    else if( xChartModel.is() )
+    else if( xChartController.is() )
     {
         bChanged = true;
-        xChartModel = nullptr;
+        xChartController->removeSelectionChangeListener(this);
+        xChartController = nullptr;
     }
 
-    if( rArguments.getLength() > 2 )
+    if( !xChartController.is() || !xChartModel.is() || !xChartView.is() )
     {
-        Reference< uno::XInterface > xTmp;
-        rArguments[2] >>= xTmp;
-        rtl::Reference<::chart::ChartView> xNewChartView = dynamic_cast<::chart::ChartView*>(xTmp.get());
-        assert(bool(xTmp)==bool(xNewChartView) && "we only support ChartView");
-        if( xNewChartView != xChartView )
-        {
-            xChartView = xNewChartView;
-            bChanged = true;
-        }
-    }
-    else if( xChartView.is() )
-    {
-        bChanged = true;
-        xChartView = nullptr;
-    }
-
-    if( rArguments.getLength() > 3 )
-    {
-        Reference< XAccessible > xNewParent;
-        rArguments[3] >>= xNewParent;
-        if( xNewParent != xParent )
-        {
-            xParent = xNewParent;
-            bChanged = true;
-        }
-    }
-
-    if( rArguments.getLength() > 4 )
-    {
-        Reference< awt::XWindow > xNewWindow;
-        rArguments[4] >>= xNewWindow;
-        if( xNewWindow != xWindow )
-        {
-            xWindow.set( xNewWindow );
-            bChanged = true;
-        }
-    }
-
-    if( rArguments.hasElements() && xChartModel.is() && xChartView.is() )
-    {
-        Reference< view::XSelectionSupplier > xNewSelectionSupplier;
-        rArguments[0] >>= xNewSelectionSupplier;
-        if(xSelectionSupplier!=xNewSelectionSupplier)
-        {
-            bChanged = true;
-            if(xSelectionSupplier.is())
-                xSelectionSupplier->removeSelectionChangeListener(this);
-            if(xNewSelectionSupplier.is())
-                xNewSelectionSupplier->addSelectionChangeListener(this);
-            xSelectionSupplier = xNewSelectionSupplier;
-        }
-    }
-    else if( xSelectionSupplier.is() )
-    {
-        bChanged = true;
-        xSelectionSupplier->removeSelectionChangeListener(this);
-        xSelectionSupplier = nullptr;
-    }
-
-    if( !xSelectionSupplier.is() || !xChartModel.is() || !xChartView.is() )
-    {
-        if(xSelectionSupplier.is())
-            xSelectionSupplier->removeSelectionChangeListener(this);
-        xSelectionSupplier = nullptr;
+        if(xChartController.is())
+            xChartController->removeSelectionChangeListener(this);
+        xChartController = nullptr;
         xChartModel.clear();
         xChartView.clear();
         xParent.clear();
@@ -284,11 +249,11 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
     {
         MutexGuard aGuard( m_aMutex);
-        m_xSelectionSupplier = WeakReference< view::XSelectionSupplier >(xSelectionSupplier);
+        m_xChartController = xChartController.get();
         m_xChartModel = xChartModel.get();
         m_xChartView = xChartView.get();
-        m_xParent = WeakReference< XAccessible >(xParent);
-        m_xWindow = WeakReference< awt::XWindow >(xWindow);
+        m_xParent = xParent;
+        m_xWindow = xWindow;
     }
 
     if( bOldInvalid && bNewInvalid )
@@ -312,7 +277,102 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
         AccessibleElementInfo aAccInfo;
         aAccInfo.m_aOID = ObjectIdentifier("ROOT");
         aAccInfo.m_xChartDocument = m_xChartModel;
-        aAccInfo.m_xSelectionSupplier = m_xSelectionSupplier;
+        aAccInfo.m_xChartController = m_xChartController;
+        aAccInfo.m_xView = m_xChartView;
+        aAccInfo.m_xWindow = m_xWindow;
+        aAccInfo.m_pParent = nullptr;
+        aAccInfo.m_spObjectHierarchy = m_spObjectHierarchy;
+        aAccInfo.m_pSdrView = m_pSdrView;
+        VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xWindow );
+        m_pViewForwarder.reset( new AccessibleViewForwarder( this, pWindow ) );
+        aAccInfo.m_pViewForwarder = m_pViewForwarder.get();
+        // broadcasts an INVALIDATE_ALL_CHILDREN event globally
+        SetInfo( aAccInfo );
+    }
+}
+
+void AccessibleChartView::initialize()
+{
+    //0: view::XSelectionSupplier offers notifications for selection changes and access to the selection itself
+    //1: frame::XModel representing the chart model - offers access to object data
+    //2: lang::XInterface representing the normal chart view - offers access to some extra object data
+
+    //all arguments are only valid until next initialization
+    bool bChanged = false;
+    bool bOldInvalid = false;
+
+    rtl::Reference< ::chart::ChartController > xChartController;
+    rtl::Reference<::chart::ChartModel> xChartModel;
+    rtl::Reference<::chart::ChartView> xChartView;
+    Reference< XAccessible > xParent;
+    Reference< awt::XWindow > xWindow;
+    {
+        MutexGuard aGuard( m_aMutex);
+        xChartController = m_xChartController;
+        xChartModel = m_xChartModel;
+        xChartView = m_xChartView;
+        xParent.set( m_xParent );
+        xWindow.set( m_xWindow );
+    }
+
+    if( !xChartController.is() || !xChartModel.is() || !xChartView.is() )
+    {
+        bOldInvalid = true;
+    }
+
+    if( xChartModel.is() )
+    {
+        bChanged = true;
+        xChartModel = nullptr;
+    }
+
+    if( xChartView.is() )
+    {
+        bChanged = true;
+        xChartView = nullptr;
+    }
+
+    if( xChartController.is() )
+    {
+        bChanged = true;
+        xChartController->removeSelectionChangeListener(this);
+        xChartController = nullptr;
+    }
+
+    xParent.clear();
+    xWindow.clear();
+
+    {
+        MutexGuard aGuard( m_aMutex);
+        m_xChartController = xChartController.get();
+        m_xChartModel = xChartModel.get();
+        m_xChartView = xChartView.get();
+        m_xParent = WeakReference< XAccessible >(xParent);
+        m_xWindow = WeakReference< awt::XWindow >(xWindow);
+    }
+
+    if( bOldInvalid )
+        bChanged = false;
+
+    if( !bChanged )
+        return;
+
+    {
+        //before notification we prepare for creation of new context
+        //the old context will be deleted after notification than
+        MutexGuard aGuard( m_aMutex);
+        if( xChartModel.is())
+            m_spObjectHierarchy =
+                std::make_shared<ObjectHierarchy>( xChartModel, m_xChartView.get().get() );
+        else
+            m_spObjectHierarchy.reset();
+    }
+
+    {
+        AccessibleElementInfo aAccInfo;
+        aAccInfo.m_aOID = ObjectIdentifier("ROOT");
+        aAccInfo.m_xChartDocument = m_xChartModel;
+        aAccInfo.m_xChartController = m_xChartController;
         aAccInfo.m_xView = m_xChartView;
         aAccInfo.m_xWindow = m_xWindow;
         aAccInfo.m_pParent = nullptr;
@@ -330,16 +390,16 @@ void SAL_CALL AccessibleChartView::initialize( const Sequence< Any >& rArguments
 
 void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
 {
-    Reference< view::XSelectionSupplier > xSelectionSupplier;
+    rtl::Reference< ::chart::ChartController > xChartController;
     {
         MutexGuard aGuard( m_aMutex);
-        xSelectionSupplier.set(m_xSelectionSupplier);
+        xChartController = m_xChartController.get();
     }
 
-    if( !xSelectionSupplier.is() )
+    if( !xChartController.is() )
         return;
 
-    ObjectIdentifier aSelectedOID( xSelectionSupplier->getSelection() );
+    ObjectIdentifier aSelectedOID( xChartController->getSelection() );
     if ( m_aCurrentSelectionOID.isValid() )
     {
         NotifyEvent( EventType::LOST_SELECTION, m_aCurrentSelectionOID );

@@ -61,7 +61,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::util { class XCloseable; }
 namespace com::sun::star::view { class XSelectionSupplier; }
 
-
 class SdrModel;
 
 namespace svt
@@ -90,6 +89,7 @@ class DrawViewWrapper;
 class ReferenceSizeProvider;
 class ViewElementListProvider;
 class Diagram;
+class AccessibleChartView;
 
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
@@ -529,7 +529,7 @@ private:
     void impl_notifySelectionChangeListeners();
     void impl_invalidateAccessible();
     void impl_initializeAccessible();
-    void impl_initializeAccessible( const css::uno::Reference< css::lang::XInitialization >& xInit );
+    void impl_initializeAccessible( AccessibleChartView& xInit );
 
     //sets the model member to null if it equals the parameter
     //returns true if successful

@@ -55,6 +55,7 @@ namespace chart
 class AccessibleBase;
 class ChartView;
 class ObjectHierarchy;
+class ChartController;
 
 typedef ObjectIdentifier AccessibleUniqueId;
 
@@ -63,7 +64,7 @@ struct AccessibleElementInfo
     AccessibleUniqueId m_aOID;
 
     unotools::WeakReference< ::chart::ChartModel > m_xChartDocument;
-    css::uno::WeakReference< css::view::XSelectionSupplier > m_xSelectionSupplier;
+    unotools::WeakReference< ::chart::ChartController > m_xChartController;
     unotools::WeakReference< ::chart::ChartView >   m_xView;
     css::uno::WeakReference< css::awt::XWindow >      m_xWindow;
 

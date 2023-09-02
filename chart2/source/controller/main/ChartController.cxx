@@ -1571,8 +1571,8 @@ void ChartController::SetAndApplySelection(const Reference<drawing::XShape>& rxS
 uno::Reference< XAccessible > ChartController::CreateAccessible()
 {
 #if !ENABLE_WASM_STRIP_ACCESSIBILITY
-    uno::Reference< XAccessible > xResult = new AccessibleChartView( GetDrawViewWrapper() );
-    impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
+    rtl::Reference< AccessibleChartView > xResult = new AccessibleChartView( GetDrawViewWrapper() );
+    impl_initializeAccessible( *xResult );
     return xResult;
 #else
     return uno::Reference< XAccessible >();
@@ -1585,11 +1585,11 @@ void ChartController::impl_invalidateAccessible()
     auto pChartWindow(GetChartWindow());
     if( pChartWindow )
     {
-        Reference< lang::XInitialization > xInit( pChartWindow->GetAccessible(false), uno::UNO_QUERY );
+        Reference< XInterface > xInit( pChartWindow->GetAccessible(false) );
         if(xInit.is())
         {
-            uno::Sequence< uno::Any > aArguments(3);//empty arguments -> invalid accessible
-            xInit->initialize(aArguments);
+            //empty arguments -> invalid accessible
+            dynamic_cast<AccessibleChartView&>(*xInit).initialize();
         }
     }
 }
@@ -1597,14 +1597,14 @@ void ChartController::impl_initializeAccessible()
 {
     SolarMutexGuard aGuard;
     auto pChartWindow(GetChartWindow());
-    if( pChartWindow )
-        this->impl_initializeAccessible( Reference< lang::XInitialization >( pChartWindow->GetAccessible(false), uno::UNO_QUERY ) );
-}
-void ChartController::impl_initializeAccessible( const uno::Reference< lang::XInitialization >& xInit )
-{
-    if(!xInit.is())
+    if( !pChartWindow )
         return;
-
+    Reference< XInterface > xInit( pChartWindow->GetAccessible(false) );
+    if(xInit.is())
+        impl_initializeAccessible( dynamic_cast<AccessibleChartView&>(*xInit) );
+}
+void ChartController::impl_initializeAccessible( AccessibleChartView& rAccChartView )
+{
     uno::Reference< XAccessible > xParent;
     {
         SolarMutexGuard aGuard;
@@ -1616,13 +1616,8 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
                 xParent.set( pParentWin->GetAccessible());
         }
     }
-    uno::Sequence< uno::Any > aArguments{ uno::Any(uno::Reference<view::XSelectionSupplier>(this)),
-                                          uno::Any(getModel()),
-                                          uno::Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(m_xChartView.get()))),
-                                          uno::Any(xParent),
-                                          uno::Any(m_xViewWindow) };
 
-    xInit->initialize(aArguments);
+    rAccChartView.initialize(*this, getChartModel(), m_xChartView, xParent, m_xViewWindow);
 }
 
 const o3tl::sorted_vector< OUString >& ChartController::impl_getAvailableCommands()
