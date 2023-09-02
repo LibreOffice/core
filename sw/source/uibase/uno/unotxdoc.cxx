@@ -1471,7 +1471,7 @@ void    SwXTextDocument::InitNewDoc()
     {
         // #i91798#, #i91895#
         // dispose XDrawPage here. We are the owner and know that it is no longer in a valid condition.
-        Reference<XComponent>(static_cast<cppu::OWeakObject*>(m_xDrawPage.get()), UNO_QUERY_THROW)->dispose();
+        m_xDrawPage->dispose();
         m_xDrawPage->InvalidateSwDoc();
         m_xDrawPage.clear();
     }

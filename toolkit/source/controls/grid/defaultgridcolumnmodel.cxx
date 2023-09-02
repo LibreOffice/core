@@ -285,8 +285,9 @@ private:
         {
             try
             {
-                const Reference< XComponent > xColComp( rEvent.Element, UNO_QUERY_THROW );
-                xColComp->dispose();
+                const Reference< XComponent > xColComp( rEvent.Element, UNO_QUERY );
+                if (xColComp)
+                    xColComp->dispose();
             }
             catch( const Exception& )
             {

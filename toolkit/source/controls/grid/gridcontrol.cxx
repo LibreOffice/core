@@ -169,8 +169,9 @@ namespace
     {
         try
         {
-            const Reference< XComponent > xComponent( i_component, UNO_QUERY_THROW );
-            xComponent->dispose();
+            const Reference< XComponent > xComponent( i_component, UNO_QUERY );
+            if (xComponent)
+                xComponent->dispose();
         }
         catch( const Exception& )
         {

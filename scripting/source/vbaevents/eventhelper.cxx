@@ -355,8 +355,9 @@ ScriptEventHelper::~ScriptEventHelper()
     {
         try
         {
-            uno::Reference< lang::XComponent > xComp( m_xControl, uno::UNO_QUERY_THROW );
-            xComp->dispose();
+            uno::Reference< lang::XComponent > xComp( m_xControl, uno::UNO_QUERY );
+            if (xComp)
+                xComp->dispose();
         }
         // destructor can't throw
         catch( uno::Exception& )
