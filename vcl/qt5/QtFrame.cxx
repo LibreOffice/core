@@ -44,6 +44,9 @@
 #include <QtGui/QIcon>
 #include <QtGui/QWindow>
 #include <QtGui/QScreen>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+#include <QtGui/QStyleHints>
+#endif
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QApplication>
@@ -348,6 +351,20 @@ QScreen* QtFrame::screen() const
     // emitted reliably, s. QTBUG-75766
     QWindow* const pWindow = windowHandle();
     return pWindow ? pWindow->screen() : nullptr;
+#endif
+}
+
+bool QtFrame::isUsingDarkColorScheme()
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    const QStyleHints* pStyleHints = QApplication::styleHints();
+    return pStyleHints->colorScheme() == Qt::ColorScheme::Dark;
+#else
+    // use same mechanism for determining dark mode preference as xdg-desktop-portal-kde, s.
+    // https://invent.kde.org/plasma/xdg-desktop-portal-kde/-/blob/0a4237549debf9518f8cfbaf531456850c0729bd/src/settings.cpp#L213-227
+    const QPalette aPalette = QApplication::palette();
+    const int nWindowBackGroundGray = qGray(aPalette.window().color().rgb());
+    return nWindowBackGroundGray < 192;
 #endif
 }
 
@@ -1217,7 +1234,8 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
         style.SetMenuFont(aFont);
 
     // Icon theme
-    style.SetPreferredIconTheme(toOUString(QIcon::themeName()));
+    const bool bPreferDarkTheme = isUsingDarkColorScheme();
+    style.SetPreferredIconTheme(toOUString(QIcon::themeName()), bPreferDarkTheme);
 
     // Scroll bar size
     style.SetScrollBarSize(QApplication::style()->pixelMetric(QStyle::PM_ScrollBarExtent));
