@@ -62,7 +62,7 @@ class AccessibleTableShapeImpl : public cppu::WeakImplHelper< XModifyListener >
 public:
     explicit AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rShapeTreeInfo );
 
-    void init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable );
+    void init( const rtl::Reference< AccessibleTableShape>& xAccessible, const Reference< XTable >& xTable );
     void dispose();
 
     /// @throws IndexOutOfBoundsException
@@ -80,7 +80,7 @@ public:
     AccessibleShapeTreeInfo& mrShapeTreeInfo;
     Reference< XTable > mxTable;
     AccessibleCellMap maChildMap;
-    Reference< XAccessible> mxAccessible;
+    rtl::Reference< AccessibleTableShape> mxAccessible;
     sal_Int32 mRowCount, mColCount;
     //get the cached AccessibleCell from XCell
     rtl::Reference< AccessibleCell > getAccessibleCell (const Reference< XCell >& xCell);
@@ -98,7 +98,7 @@ AccessibleTableShapeImpl::AccessibleTableShapeImpl( AccessibleShapeTreeInfo& rSh
 }
 
 
-void AccessibleTableShapeImpl::init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable )
+void AccessibleTableShapeImpl::init( const rtl::Reference<AccessibleTableShape>& xAccessible, const Reference< XTable >& xTable )
 {
     mxAccessible = xAccessible;
     mxTable = xTable;
@@ -109,7 +109,7 @@ void AccessibleTableShapeImpl::init( const Reference< XAccessible>& xAccessible,
         mxTable->addModifyListener( xListener );
         //register the listener with table model
         Reference< css::view::XSelectionSupplier > xSelSupplier(xTable, UNO_QUERY);
-        Reference< css::view::XSelectionChangeListener > xSelListener( xAccessible, UNO_QUERY );
+        Reference< css::view::XSelectionChangeListener > xSelListener( xAccessible );
         if (xSelSupplier.is())
             xSelSupplier->addSelectionChangeListener(xSelListener);
         mRowCount = mxTable->getRowCount();
@@ -303,9 +303,8 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
             rEntry.second->dispose();
         }
         //notify bridge to update the acc cache.
-        AccessibleTableShape *pAccTable = dynamic_cast <AccessibleTableShape *> (mxAccessible.get());
-        if (pAccTable)
-            pAccTable->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any(), -1);
+        if (mxAccessible)
+            mxAccessible->CommitChange(AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any(), -1);
     }
     catch( const Exception& )
     {
