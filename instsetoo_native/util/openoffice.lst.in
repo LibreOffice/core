@@ -31,6 +31,7 @@ Globals
             PACKAGEMAP package_names.txt,package_names_ext.txt
             WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
             OOOVENDOR Allotropia Software GmbH
+            OOODOWNLOADNAME 1
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
@@ -62,8 +63,14 @@ ZetaOffice
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
+            OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.allotropia.de/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
@@ -105,10 +112,15 @@ ZetaOfficeDev
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
+            OOODOWNLOADNAME 1
             CHANGETARGETDIR 1
             PATCHCODEFILE ooodev_patchcodes.txt
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.allotropia.de/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active          1
         compression     5
@@ -146,6 +158,10 @@ ZetaOffice_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.allotropia.de/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
@@ -187,6 +203,10 @@ ZetaOfficeDev_SDK
             NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
+            STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
+            STARTCENTER_INFO_URL https://www.allotropia.de/
+            STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
+            DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
         }
         active 1
         compression 5
