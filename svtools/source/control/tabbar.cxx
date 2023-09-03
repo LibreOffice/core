@@ -404,6 +404,12 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
     ResetPostEvent();
     maLoseFocusIdle.Stop();
 
+    // tdf#156958: when renaming and clicking on canvas, LO goes into GetParent()->EndEditMode first time
+    // then it calls TabBarEdit::dispose method which resets m_xEntry BUT, on the same thread, LO comes here again
+    // so return if already disposed to avoid a crash
+    if (isDisposed())
+        return;
+
     // We need this query, because the edit gets a losefocus event,
     // when it shows the context menu or the insert symbol dialog
     if (!m_xEntry->has_focus() && m_xEntry->has_child_focus())
