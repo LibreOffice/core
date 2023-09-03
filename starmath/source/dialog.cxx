@@ -167,6 +167,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::Dialo
     , m_xSizeScaled(m_xBuilder->weld_radio_button("sizescaled"))
     , m_xSizeZoomed(m_xBuilder->weld_radio_button("sizezoomed"))
     , m_xZoom(m_xBuilder->weld_metric_spin_button("zoom", FieldUnit::PERCENT))
+    , m_xEnableInlineEdit(m_xBuilder->weld_check_button("enableinlineedit"))
     , m_xNoRightSpaces(m_xBuilder->weld_check_button("norightspaces"))
     , m_xSaveOnlyUsedSymbols(m_xBuilder->weld_check_button("saveonlyusedsymbols"))
     , m_xAutoCloseBrackets(m_xBuilder->weld_check_button("autoclosebrackets"))
@@ -223,6 +224,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
     rSet->Put(SfxBoolItem(SID_PRINTTITLE, m_xTitle->get_active()));
     rSet->Put(SfxBoolItem(SID_PRINTTEXT, m_xText->get_active()));
     rSet->Put(SfxBoolItem(SID_PRINTFRAME, m_xFrame->get_active()));
+    rSet->Put(SfxBoolItem(SID_INLINE_EDIT_ENABLE, m_xEnableInlineEdit->get_active()));
     rSet->Put(SfxBoolItem(SID_NO_RIGHT_SPACES, m_xNoRightSpaces->get_active()));
     rSet->Put(SfxBoolItem(SID_SAVE_ONLY_USED_SYMBOLS, m_xSaveOnlyUsedSymbols->get_active()));
     rSet->Put(SfxBoolItem(SID_AUTO_CLOSE_BRACKETS, m_xAutoCloseBrackets->get_active()));
@@ -251,6 +253,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
     m_xSmZoom->set_value(rSet->Get(SID_SMEDITWINDOWZOOM).GetValue(), FieldUnit::PERCENT);
 
     m_xTitle->set_active(rSet->Get(SID_PRINTTITLE).GetValue());
+    m_xEnableInlineEdit->set_active(rSet->Get(SID_INLINE_EDIT_ENABLE).GetValue());
     m_xNoRightSpaces->set_active(rSet->Get(SID_NO_RIGHT_SPACES).GetValue());
     m_xSaveOnlyUsedSymbols->set_active(rSet->Get(SID_SAVE_ONLY_USED_SYMBOLS).GetValue());
     m_xAutoCloseBrackets->set_active(rSet->Get(SID_AUTO_CLOSE_BRACKETS).GetValue());

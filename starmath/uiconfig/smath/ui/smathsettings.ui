@@ -253,6 +253,21 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <object class="GtkCheckButton" id="enableinlineedit">
+                <property name="label" translatable="yes" context="smathsettings|enableinlineedit">Enable visual editing</property>
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkCheckButton" id="norightspaces">
                 <property name="label" translatable="yes" context="smathsettings|norightspaces">Ig_nore ~~ and ' at the end of the line</property>
                 <property name="visible">True</property>
@@ -269,7 +284,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -289,7 +304,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -304,7 +319,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>

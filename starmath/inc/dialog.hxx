@@ -46,6 +46,7 @@ class SmPrintOptionsTabPage final : public SfxTabPage
     std::unique_ptr<weld::RadioButton>      m_xSizeScaled;
     std::unique_ptr<weld::RadioButton>      m_xSizeZoomed;
     std::unique_ptr<weld::MetricSpinButton> m_xZoom;
+    std::unique_ptr<weld::CheckButton>      m_xEnableInlineEdit;
     std::unique_ptr<weld::CheckButton>      m_xNoRightSpaces;
     std::unique_ptr<weld::CheckButton>      m_xSaveOnlyUsedSymbols;
     std::unique_ptr<weld::CheckButton>      m_xAutoCloseBrackets;

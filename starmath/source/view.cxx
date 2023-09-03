@@ -2334,7 +2334,7 @@ void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 bool SmViewShell::IsInlineEditEnabled()
 {
     return comphelper::LibreOfficeKit::isActive()
-           || officecfg::Office::Common::Misc::ExperimentalMode::get();
+           || SM_MOD()->GetConfig()->IsInlineEditEnable();
 }
 
 void SmViewShell::StartMainHelp()

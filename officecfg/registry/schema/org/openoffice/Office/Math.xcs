@@ -297,6 +297,12 @@
       <info>
         <desc>Contains miscellaneous settings.</desc>
       </info>
+      <prop oor:name="InlineEditEnable" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Enables inline (visual) editing mode.</desc>
+        </info>
+        <value>true</value>
+      </prop>
       <prop oor:name="IgnoreSpacesRight" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Ignores spacing symbols at the end of a line.</desc>
