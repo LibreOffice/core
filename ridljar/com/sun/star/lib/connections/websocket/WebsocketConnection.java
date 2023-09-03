@@ -278,6 +278,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
 
         try {
             _inputStreamWriter.write(messageBytes);
+            _inputStreamWriter.flush();
         } catch (IOException e) {
             notifyListeners_error(new com.sun.star.uno.Exception(e));
             return;
@@ -317,6 +318,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
 
         try {
             _inputStreamWriter.write(messageBytes);
+            _inputStreamWriter.flush();
         } catch (IOException e) {
             notifyListeners_error(new com.sun.star.uno.Exception(e));
             return;
