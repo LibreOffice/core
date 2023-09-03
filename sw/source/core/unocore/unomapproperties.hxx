@@ -532,6 +532,7 @@
                     { UNO_NAME_CHAR_UNDERLINE_COMPLEX_COLOR, RES_CHRATR_UNDERLINE, cppu::UnoType<css::util::XComplexColor>::get(), PropertyAttribute::MAYBEVOID, MID_TL_COMPLEX_COLOR},    \
                     { UNO_NAME_CHAR_WEIGHT, RES_CHRATR_WEIGHT    ,  cppu::UnoType<float>::get(),             PropertyAttribute::MAYBEVOID, MID_WEIGHT},  \
                     { UNO_NAME_NUMBERING_LEVEL, RES_PARATR_LIST_LEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
+                    { UNO_NAME_NUMBERING, RES_PARATR_LIST_ISCOUNTED,     cppu::UnoType<bool>::get(),       PropertyAttribute::MAYBEVOID,     0},    \
                     { UNO_NAME_CHAR_UNDERLINE, RES_CHRATR_UNDERLINE ,  cppu::UnoType<sal_Int16>::get(),              PropertyAttribute::MAYBEVOID, MID_TL_STYLE},    \
                     { UNO_NAME_NUMBERING_RULES, RES_PARATR_NUMRULE,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},    \
                     { UNO_NAME_PARA_ADJUST, RES_PARATR_ADJUST,      cppu::UnoType<sal_Int16>::get(),         PropertyAttribute::MAYBEVOID, MID_PARA_ADJUST}, \

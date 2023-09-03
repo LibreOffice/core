@@ -932,9 +932,11 @@ typedef enum
      *       "position": N
      *       "start": N1
      *       "end": N2
+     *       "listPrefixLength": L
      *   }
      *   where N is the position of the text cursor inside the focused paragraph,
      *   and [N1,N2] is the range of the text selection inside the focused paragraph.
+     *   In case the paragraph is a list item, L is the length of the bullet/number prefix.
      */
     LOK_CALLBACK_A11Y_FOCUS_CHANGED = 62,
 

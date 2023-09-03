@@ -910,6 +910,7 @@ static uno::Sequence< OUString > const & getSupplementalAttributeNames()
     {
         // sorted list of strings
         UNO_NAME_NUMBERING_LEVEL,
+        UNO_NAME_NUMBERING,
         UNO_NAME_NUMBERING_RULES,
         UNO_NAME_PARA_ADJUST,
         UNO_NAME_PARA_BOTTOM_MARGIN,
@@ -1357,6 +1358,9 @@ uno::Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     tAccParaPropValMap aRunAttrSeq;
     _getRunAttributesImpl( nIndex, aNames, aRunAttrSeq );
 
+    // this allows to request one or more supplemental attributes, only
+    bSupplementalMode = bSupplementalMode || aDefAttrSeq.empty() || aRunAttrSeq.empty();
+
     // merge default and run attributes
     std::vector< PropertyValue > aValues( aDefAttrSeq.size() );
     sal_Int32 i = 0;
@@ -1761,6 +1765,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
     if ( pTextNode->HasBullet() || pTextNode->HasNumber() )
     {
         aSet.Put( pTextNode->GetAttr(RES_PARATR_LIST_LEVEL) );
+        aSet.Put( pTextNode->GetAttr(RES_PARATR_LIST_ISCOUNTED) );
     }
     aSet.Put( pTextNode->SwContentNode::GetAttr(RES_UL_SPACE) );
     aSet.Put( pTextNode->SwContentNode::GetAttr(RES_LR_SPACE) );
@@ -1772,6 +1777,15 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
         for (const auto & rEntry : pPropMap)
         {
+            // For a paragraph, list level property is not set but when queried the returned default
+            // value is 0, exactly the same value of top level list item; that prevents using
+            // list level property for discerning simple paragraph from list item;
+            // the following check allows not to return the list level property at all
+            // when we are dealing with a simple paragraph
+            if ((rEntry.nWID == RES_PARATR_LIST_LEVEL || rEntry.nWID == RES_PARATR_LIST_ISCOUNTED) &&
+                !aSet.HasItem( rEntry.nWID ))
+                continue;
+
             const SfxPoolItem* pItem = aSet.GetItem( rEntry.nWID );
             if ( pItem )
             {
