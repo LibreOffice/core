@@ -6,7 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <sal/log.hxx>
 #include "basictest.hxx"
 #include <unotools/syslocaleoptions.hxx>
 
@@ -169,8 +168,9 @@ void VBATest::testMiscVBAFunctions()
         myMacro.LoadSourceFromFile("TestModule", sMacroURL);
         SbxVariableRef pReturn = myMacro.Run();
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
-        SAL_INFO("basic.qa", "macro result for" << macroSource[i]);
-        SAL_INFO("basic.qa", "macro returned:\n" << pReturn->GetOUString());
+        fprintf(stderr, "macro result for %s\n", macroSource[i]);
+        fprintf(stderr, "macro returned:\n%s\n",
+                OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
                                      pReturn->GetOUString());
     }
@@ -248,8 +248,9 @@ void VBATest::testMiscOLEStuff()
         myMacro.LoadSourceFromFile("TestModule", sMacroURL);
         SbxVariableRef pReturn = myMacro.Run( aArgs );
         CPPUNIT_ASSERT_MESSAGE("No return variable huh?", pReturn.is());
-        SAL_INFO("basic.qa", "macro result for" << macroSource[i]);
-        SAL_INFO("basic.qa", "macro returned:\n" << pReturn->GetOUString());
+        fprintf(stderr, "macro result for %s\n", macroSource[i]);
+        fprintf(stderr, "macro returned:\n%s\n",
+                OUStringToOString(pReturn->GetOUString(), RTL_TEXTENCODING_UTF8).getStr());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Result not as expected", OUString("OK"),
                                      pReturn->GetOUString());
     }
