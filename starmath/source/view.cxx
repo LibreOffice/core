@@ -2144,8 +2144,10 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_FORMULACURSOR:
             {
-                SmModule *pp = SM_MOD();
-                rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
+                if (IsInlineEditEnabled())
+                    rSet.DisableItem(nWh);
+                else
+                    rSet.Put(SfxBoolItem(nWh, SM_MOD()->GetConfig()->IsShowFormulaCursor()));
             }
             break;
         case SID_ELEMENTSDOCKINGWINDOW:
