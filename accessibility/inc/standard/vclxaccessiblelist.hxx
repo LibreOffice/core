@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-typedef std::vector< css::uno::WeakReference< css::accessibility::XAccessible > >
+typedef std::vector<css::uno::Reference<css::accessibility::XAccessible>>
     ListItems;
 
 namespace accessibility

@@ -107,6 +107,7 @@ void SAL_CALL VCLXAccessibleList::disposing()
     VCLXAccessibleComponent::disposing();
 
     // Dispose all items in the list.
+
     m_aAccessibleChildren.clear();
 
     m_pListBoxHelper.reset();
@@ -155,14 +156,14 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     // adjust the index inside the VCLXAccessibleListItem
     for ( ; aIter != m_aAccessibleChildren.end(); )
     {
-        Reference< XAccessible > xHold = *aIter;
-        if (!xHold.is())
+        Reference<XAccessible> xChild = *aIter;
+        if (!xChild.is())
         {
             aIter = m_aAccessibleChildren.erase(aIter);
         }
         else
         {
-            VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xHold.get());
+            VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xChild.get());
             const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
             const sal_Int32 nPos = static_cast<sal_Int32>(aIter - m_aAccessibleChildren.begin());
             bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
@@ -205,12 +206,11 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( const auto& rChild : m_aAccessibleChildren )
+            for (const Reference<XAccessible>& rxChild : m_aAccessibleChildren)
             {
-                Reference< XAccessible > xHold = rChild;
-                if ( xHold.is() )
+                if (rxChild.is())
                 {
-                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
+                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(rxChild.get() );
                     // Retrieve the item's index from the list entry.
                     bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
                     if (bNowSelected)
@@ -218,7 +218,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
 
                     if ( bNowSelected && !pItem->IsSelected() )
                     {
-                        xNewAcc = rChild;
+                        xNewAcc = rxChild;
                         aNewValue <<= xNewAcc;
                     }
                     else if ( pItem->IsSelected() )
@@ -663,12 +663,11 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for ( const auto& rChild : m_aAccessibleChildren )
+            for (const Reference<XAccessible>& rxChild : m_aAccessibleChildren )
             {
-                Reference< XAccessible > xHold = rChild;
-                if ( xHold.is() )
+                if (rxChild.is())
                 {
-                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( xHold.get() );
+                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( rxChild.get() );
                     // Retrieve the item's index from the list entry.
                     bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
                     if (bNowSelected)
@@ -676,7 +675,7 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
 
                     if ( bNowSelected && !pItem->IsSelected() )
                     {
-                        xNewAcc = rChild;
+                        xNewAcc = rxChild;
                         aNewValue <<= xNewAcc;
                     }
                     else if ( pItem->IsSelected() )
