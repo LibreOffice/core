@@ -24,13 +24,14 @@ class Theme;
 /// Imports the theme
 class XMLThemeContext : public SvXMLImportContext
 {
-    css::uno::Reference<css::uno::XInterface> m_xObject;
+    // Any UNO object that has the "Theme" property - usually XPage (master page) or XModel
+    css::uno::Reference<css::uno::XInterface> m_xObjectWithThemeProperty;
     std::shared_ptr<model::Theme> mpTheme;
 
 public:
     XMLThemeContext(SvXMLImport& rImport,
                     css::uno::Reference<css::xml::sax::XFastAttributeList> const& xAttrList,
-                    css::uno::Reference<css::uno::XInterface> const& xObject);
+                    css::uno::Reference<css::uno::XInterface> const& xObjectWithThemeProperty);
     ~XMLThemeContext();
 
     css::uno::Reference<css::xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(
