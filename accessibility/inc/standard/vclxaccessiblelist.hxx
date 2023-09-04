@@ -25,6 +25,8 @@
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
+class VCLXAccessibleListItem;
+
 namespace accessibility
 {
     class IComboListBoxHelper;
@@ -114,7 +116,7 @@ public:
 private:
     BoxType     m_aBoxType;
     std::unique_ptr<::accessibility::IComboListBoxHelper> m_pListBoxHelper;
-    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
+    std::vector<rtl::Reference<VCLXAccessibleListItem>> m_aAccessibleChildren;
     sal_Int32   m_nVisibleLineCount;
     /// Index in parent.  This is settable from the outside.
     sal_Int32   m_nIndexInParent;
@@ -144,8 +146,7 @@ private:
     /** Create the specified child and insert it into the list of children.
         Sets the child's states.
     */
-    css::uno::Reference< css::accessibility::XAccessible >
-        CreateChild (sal_Int32 i);
+    rtl::Reference<VCLXAccessibleListItem> CreateChild (sal_Int32 i);
 
     /** Call this method when the item list has been changed, i.e. items
         have been deleted or inserted.

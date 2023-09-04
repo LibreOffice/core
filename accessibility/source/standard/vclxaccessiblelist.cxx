@@ -108,8 +108,11 @@ void SAL_CALL VCLXAccessibleList::disposing()
     VCLXAccessibleComponent::disposing();
 
     // Dispose all items in the list.
-    for (Reference<XAccessible>& rxChild : m_aAccessibleChildren)
-        comphelper::disposeComponent(rxChild);
+    for (rtl::Reference<VCLXAccessibleListItem>& rxChild : m_aAccessibleChildren)
+    {
+        if (rxChild.is())
+            rxChild->dispose();
+    }
 
     m_aAccessibleChildren.clear();
 
@@ -159,18 +162,17 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     // adjust the index inside the VCLXAccessibleListItem
     for ( ; aIter != m_aAccessibleChildren.end(); )
     {
-        Reference<XAccessible> xChild = *aIter;
+        rtl::Reference<VCLXAccessibleListItem> xChild = *aIter;
         if (!xChild.is())
         {
             aIter = m_aAccessibleChildren.erase(aIter);
         }
         else
         {
-            VCLXAccessibleListItem* pItem = static_cast<VCLXAccessibleListItem*>(xChild.get());
             const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
             const sal_Int32 nPos = static_cast<sal_Int32>(aIter - m_aAccessibleChildren.begin());
             bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
-            pItem->SetVisible( m_bVisible && bVisible );
+            xChild->SetVisible(m_bVisible && bVisible);
             ++aIter;
         }
 
@@ -209,25 +211,24 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for (const Reference<XAccessible>& rxChild : m_aAccessibleChildren)
+            for (const rtl::Reference<VCLXAccessibleListItem>& rxChild : m_aAccessibleChildren)
             {
                 if (rxChild.is())
                 {
-                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(rxChild.get() );
                     // Retrieve the item's index from the list entry.
                     bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
                     if (bNowSelected)
                         m_nCurSelectedPos = i;
 
-                    if ( bNowSelected && !pItem->IsSelected() )
+                    if (bNowSelected && !rxChild->IsSelected())
                     {
                         xNewAcc = rxChild;
                         aNewValue <<= xNewAcc;
                     }
-                    else if ( pItem->IsSelected() )
+                    else if (rxChild->IsSelected())
                         m_nLastSelectedPos = i;
 
-                    pItem->SetSelected( bNowSelected );
+                    rxChild->SetSelected(bNowSelected);
                 }
                 else
                 { // it could happen that a child was not created before
@@ -332,7 +333,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                             nPos = m_pListBoxHelper->GetTopEntry();
                         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-                            aNewValue <<= CreateChild(nPos);
+                            aNewValue <<= uno::Reference<XAccessible>(CreateChild(nPos));
                         NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                                                 aOldValue,
                                                 aNewValue );
@@ -401,7 +402,7 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
                         if ( nPos == LISTBOX_ENTRY_NOTFOUND )
                             nPos = m_pListBoxHelper->GetTopEntry();
                         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-                            aNewValue <<= CreateChild(nPos);
+                            aNewValue <<= Reference<XAccessible>(CreateChild(nPos));
                         NotifyAccessibleEvent(  AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                                                 aOldValue,
                                                 aNewValue );
@@ -455,9 +456,9 @@ void VCLXAccessibleList::UpdateSelection (std::u16string_view sTextOfSelectedIte
 }
 
 
-Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
+rtl::Reference<VCLXAccessibleListItem> VCLXAccessibleList::CreateChild(sal_Int32 nPos)
 {
-    Reference<XAccessible> xChild;
+    rtl::Reference<VCLXAccessibleListItem> xChild;
 
     if ( o3tl::make_unsigned(nPos) >= m_aAccessibleChildren.size() )
     {
@@ -486,14 +487,13 @@ Reference<XAccessible> VCLXAccessibleList::CreateChild (sal_Int32 nPos)
             bNowSelected = m_pListBoxHelper->IsEntryPosSelected(nPos);
         if (bNowSelected)
             m_nCurSelectedPos = nPos;
-        VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >(xChild.get());
-        pItem->SetSelected( bNowSelected );
+        xChild->SetSelected(bNowSelected);
 
         // Set the child's VISIBLE state.
         UpdateVisibleLineCount();
         const sal_Int32 nTopEntry = m_pListBoxHelper ? m_pListBoxHelper->GetTopEntry() : 0;
         bool bVisible = ( nPos>=nTopEntry && nPos<( nTopEntry + m_nVisibleLineCount ) );
-        pItem->SetVisible( m_bVisible && bVisible );
+        xChild->SetVisible(m_bVisible && bVisible);
     }
 
     return xChild;
@@ -622,14 +622,14 @@ void VCLXAccessibleList::UpdateEntryRange_Impl()
         for (sal_Int32 i = nBegin; (i <= nEnd); ++i)
         {
             bool bVisible = ( i >= nTop && i < ( nTop + m_nVisibleLineCount ) );
-            Reference< XAccessible > xHold;
+            rtl::Reference<VCLXAccessibleListItem> xChild;
             if ( o3tl::make_unsigned(i) < m_aAccessibleChildren.size() )
-                xHold = m_aAccessibleChildren[i];
+                xChild = m_aAccessibleChildren[i];
             else if ( bVisible )
-                xHold = CreateChild(i);
+                xChild = CreateChild(i);
 
-            if ( xHold.is() )
-                static_cast< VCLXAccessibleListItem* >( xHold.get() )->SetVisible( m_bVisible && bVisible );
+            if (xChild.is())
+                xChild->SetVisible(m_bVisible && bVisible);
         }
     }
 
@@ -666,25 +666,24 @@ void VCLXAccessibleList::UpdateSelection_Impl(sal_Int32)
         {
             sal_Int32 i=0;
             m_nCurSelectedPos = LISTBOX_ENTRY_NOTFOUND;
-            for (const Reference<XAccessible>& rxChild : m_aAccessibleChildren )
+            for (const rtl::Reference<VCLXAccessibleListItem>& rxChild : m_aAccessibleChildren)
             {
                 if (rxChild.is())
                 {
-                    VCLXAccessibleListItem* pItem = static_cast< VCLXAccessibleListItem* >( rxChild.get() );
                     // Retrieve the item's index from the list entry.
                     bool bNowSelected = m_pListBoxHelper->IsEntryPosSelected (i);
                     if (bNowSelected)
                         m_nCurSelectedPos = i;
 
-                    if ( bNowSelected && !pItem->IsSelected() )
+                    if (bNowSelected && !rxChild->IsSelected())
                     {
                         xNewAcc = rxChild;
                         aNewValue <<= xNewAcc;
                     }
-                    else if ( pItem->IsSelected() )
+                    else if (rxChild->IsSelected())
                         m_nLastSelectedPos = i;
 
-                    pItem->SetSelected( bNowSelected );
+                    rxChild->SetSelected(bNowSelected);
                 }
                 else
                 { // it could happen that a child was not created before
