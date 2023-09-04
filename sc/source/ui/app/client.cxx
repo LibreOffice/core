@@ -184,6 +184,8 @@ void ScClient::ViewChanged()
     }
 
     uno::Reference < embed::XEmbeddedObject > xObj = GetObject();
+    if (!xObj.is())
+        return;
 
     // TODO/LEAN: working with Visual Area can switch object to running state
     awt::Size aSz;
