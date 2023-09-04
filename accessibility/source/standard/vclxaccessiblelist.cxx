@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -107,6 +108,8 @@ void SAL_CALL VCLXAccessibleList::disposing()
     VCLXAccessibleComponent::disposing();
 
     // Dispose all items in the list.
+    for (Reference<XAccessible>& rxChild : m_aAccessibleChildren)
+        comphelper::disposeComponent(rxChild);
 
     m_aAccessibleChildren.clear();
 
