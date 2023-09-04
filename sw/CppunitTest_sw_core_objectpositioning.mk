@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_objectpositioning, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     subsequenttest \
@@ -69,6 +70,9 @@ $(eval $(call gb_CppunitTest_use_configuration,sw_core_objectpositioning))
 $(eval $(call gb_CppunitTest_use_uiconfigs,sw_core_objectpositioning, \
     modules/swriter \
 ))
+
+# assert if font/glyph fallback occurs
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sw_core_objectpositioning,abort))
 
 $(eval $(call gb_CppunitTest_use_more_fonts,sw_core_objectpositioning))
 

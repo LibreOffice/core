@@ -193,6 +193,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
     // If true, this means that the anchored object is a split fly frame and it's not a master but
     // one of the follows.
     bool bFollowSplitFly = false;
+    // The anchored object is a fly that is allowed to split.
+    bool bSplitFly = false;
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.
@@ -257,6 +259,7 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     // Anchored object has a precede, so it's a follow.
                     bFollowSplitFly = true;
                 }
+                bSplitFly = true;
             }
         }
     }
@@ -952,7 +955,9 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
                     }
                 }
             }
-            else
+            // Don't move split flys around for follow text flow purposes; if they don't fit their
+            // parent anymore, they will shrink and part of the content will move to the follow fly.
+            else if (!bSplitFly)
             {
                 // follow text flow
                 const bool bInFootnote = rAnchorTextFrame.IsInFootnote();
