@@ -1067,10 +1067,14 @@ void AreaPropertyPanelBase::updateFillUseBackground(bool bDisabled, bool bDefaul
         if (pState)
         {
             const XFillUseSlideBackgroundItem* pItem = static_cast<const XFillUseSlideBackgroundItem*>(pState);
-            // When XFillUseSlideBackgroundItem is true, select "Use Background Fill". When false, select "None"
+            // When XFillUseSlideBackgroundItem is set, select "Use Background Fill".
+            // When false, select "None" (only if "Use background fill" was selected beforehand)
             int nPos = pItem->GetValue() ? USE_BACKGROUND : NONE;
-            mxLbFillType->set_active(nPos);
-            FillStyleChanged(false);
+            if ((nPos == NONE && mxLbFillType->get_active() == USE_BACKGROUND) || nPos == USE_BACKGROUND)
+            {
+                mxLbFillType->set_active(nPos);
+                FillStyleChanged(false);
+            }
         }
     }
 }
