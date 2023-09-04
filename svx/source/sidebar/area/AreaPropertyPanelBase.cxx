@@ -1389,6 +1389,33 @@ basegfx::BColorStops AreaPropertyPanelBase::createColorStops()
     return aColorStops;
 }
 
+void AreaPropertyPanelBase::HandleContextChange(
+    const vcl::EnumContext& rContext)
+{
+    if (maContext.GetApplication() == rContext.GetApplication())
+        return;
+
+    maContext = rContext;
+
+    switch (maContext.GetApplication())
+    {
+        case vcl::EnumContext::Application::Impress:
+            if (!msUseBackgroundText.isEmpty())
+            {
+                mxLbFillType->insert_text(USE_BACKGROUND, msUseBackgroundText);
+                msUseBackgroundText = OUString();
+            }
+        break;
+        default:
+            if (msUseBackgroundText.isEmpty())
+            {
+                msUseBackgroundText = mxLbFillType->get_text(USE_BACKGROUND);
+                mxLbFillType->remove(USE_BACKGROUND);
+            }
+        break;
+    }
+}
+
 } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

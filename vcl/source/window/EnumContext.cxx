@@ -60,6 +60,11 @@ sal_Int32 EnumContext::GetCombinedContext_DI() const
     return CombinedEnumContext(GetApplication_DI(), meContext);
 }
 
+EnumContext::Application EnumContext::GetApplication() const
+{
+     return meApplication;
+}
+
 EnumContext::Application EnumContext::GetApplication_DI() const
 {
      switch (meApplication)
