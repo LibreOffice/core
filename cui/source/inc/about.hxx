@@ -23,9 +23,6 @@
 class AboutDialog : public weld::GenericDialogController
 {
 private:
-    std::unique_ptr<weld::LinkButton> m_pCreditsButton;
-    std::unique_ptr<weld::LinkButton> m_pWebsiteButton;
-    std::unique_ptr<weld::LinkButton> m_pReleaseNotesButton;
     std::unique_ptr<weld::Button> m_pCloseButton;
     std::unique_ptr<weld::Button> m_pCopyButton;
 

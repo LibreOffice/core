@@ -56,9 +56,6 @@ using namespace ::com::sun::star::uno;
 
 AboutDialog::AboutDialog(weld::Window *pParent)
     : GenericDialogController(pParent, u"cui/ui/aboutdialog.ui"_ustr, u"AboutDialog"_ustr),
-      m_pCreditsButton(m_xBuilder->weld_link_button(u"btnCredits"_ustr)),
-      m_pWebsiteButton(m_xBuilder->weld_link_button(u"btnWebsite"_ustr)),
-      m_pReleaseNotesButton(m_xBuilder->weld_link_button(u"btnReleaseNotes"_ustr)),
       m_pCloseButton(m_xBuilder->weld_button(u"btnClose"_ustr)),
       m_pCopyButton(m_xBuilder->weld_button(u"btnCopyVersion"_ustr)),
       m_pBrandImage(m_xBuilder->weld_image(u"imBrand"_ustr)),
@@ -116,19 +113,6 @@ AboutDialog::AboutDialog(weld::Window *pParent)
     Graphic aGraphic(aBackgroundBitmap);
     m_pAboutImage->set_image(aGraphic.GetXGraphic());
   }
-
-  // Links
-  m_pCreditsButton->set_uri(officecfg::Office::Common::Menus::CreditsURL::get());
-
-  OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
-  // localizeWebserviceURI(sURL);
-  m_pWebsiteButton->set_uri(sURL);
-
-  // See also SID_WHATSNEW in sfx2/source/appl/appserv.cxx
-  sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get() +
-         "?LOvers=" + utl::ConfigManager::getProductVersion() + "&LOlocale=" +
-         LanguageTag(utl::ConfigManager::getUILocale()).getBcp47();
-  m_pReleaseNotesButton->set_uri(sURL);
 
   // Handler
   m_pCopyButton->connect_clicked(LINK(this, AboutDialog, HandleClick));
