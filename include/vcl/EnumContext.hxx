@@ -128,6 +128,7 @@ public:
     */
     sal_Int32 GetCombinedContext_DI() const;
 
+    Application GetApplication() const;
     Application GetApplication_DI() const;
 
     bool operator == (const EnumContext& rOther) const;

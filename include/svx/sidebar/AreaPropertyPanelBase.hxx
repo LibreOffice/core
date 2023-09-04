@@ -20,6 +20,7 @@
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREAPROPERTYPANELBASE_HXX
 
 #include <memory>
+#include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/AreaTransparencyGradientPopup.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <svx/colorbox.hxx>
@@ -33,6 +34,7 @@
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svxdllapi.h>
+#include <vcl/EnumContext.hxx>
 
 class ToolbarUnoDispatcher;
 class XFillFloatTransparenceItem;
@@ -48,6 +50,7 @@ namespace svx::sidebar {
 
 class SVX_DLLPUBLIC AreaPropertyPanelBase
 :   public PanelLayout,
+    public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
@@ -99,9 +102,11 @@ public:
 
 private:
     void Initialize();
+    virtual void HandleContextChange(const vcl::EnumContext& rContext) override;
 
 protected:
     const css::uno::Reference<css::frame::XFrame>&      mxFrame;
+    vcl::EnumContext                                    maContext;
 
     sal_uInt16                                          meLastXFS;
 
@@ -109,6 +114,7 @@ protected:
     sal_Int32                                           mnLastPosBitmap;
     sal_Int32                                           mnLastPosPattern;
     sal_uInt16                                          mnLastTransSolid;
+    OUString                                            msUseBackgroundText;
 
     basegfx::BGradient                                  maGradientLinear;
     basegfx::BGradient                                  maGradientAxial;
