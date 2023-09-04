@@ -30,6 +30,7 @@
 #include "swrect.hxx"
 #include "SidebarWindowsTypes.hxx"
 #include <optional>
+#include <annotationmark.hxx>
 
 class EditView;
 class PopupMenu;
@@ -76,6 +77,7 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
         OUString GetAuthor() const;
         Date     GetDate() const;
         tools::Time GetTime() const;
+        void GeneratePostItName();
 
         sal_uInt32 MoveCaret();
 

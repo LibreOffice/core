@@ -204,6 +204,14 @@ void SwAnnotationWin::SetPostItText()
     Invalidate();
 }
 
+void SwAnnotationWin::GeneratePostItName()
+{
+    if (mpField && mpField->GetName().isEmpty())
+    {
+        mpField->SetName(sw::mark::MarkBase::GenerateNewName(u"__Annotation__"));
+    }
+}
+
 void SwAnnotationWin::SetResolved(bool resolved)
 {
     bool oldState = IsResolved();
