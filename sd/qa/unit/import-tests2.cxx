@@ -581,7 +581,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf105150PPT)
     // This was drawing::FillStyle_NONE, the shape's mso_fillBackground was
     // ignored when the slide didn't have an explicit background fill.
     auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
-    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rFillStyleItem.GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
+    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf104445)
@@ -1486,6 +1488,18 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf127964)
         auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
         CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf48083)
+{
+    createSdImpressDoc("ppt/tdf48083.ppt");
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+    const SdrObject* pObj = pPage->GetObj(1);
+    auto& rFillStyleItem = pObj->GetMergedItem(XATTR_FILLSTYLE);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rFillStyleItem.GetValue());
+    auto& rFillBackgroundItem = pObj->GetMergedItem(XATTR_FILLUSESLIDEBACKGROUND);
+    CPPUNIT_ASSERT_EQUAL(true, rFillBackgroundItem.GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf106638)

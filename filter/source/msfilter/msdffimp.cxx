@@ -74,6 +74,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsflclit.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/sdgcpitm.hxx>
@@ -1338,6 +1339,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
     if ( nFillFlags & 0x10 )
     {
         auto eMSO_FillType = GetPropertyValue(DFF_Prop_fillType, mso_fillSolid);
+        bool bUseSlideBackground = false;
         drawing::FillStyle eXFill = drawing::FillStyle_NONE;
         switch( eMSO_FillType )
         {
@@ -1366,7 +1368,10 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
             case mso_fillShadeTitle :       // special type - shade to title ---  for PP
                 eXFill = drawing::FillStyle_GRADIENT;
             break;
-//          case mso_fillBackground :       // Use the background fill color/pattern
+            case mso_fillBackground :       // Use the background fill color/pattern
+                eXFill = drawing::FillStyle_NONE;
+                bUseSlideBackground = true;
+            break;
             default: break;
         }
         rSet.Put( XFillStyleItem( eXFill ) );
@@ -1465,6 +1470,12 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                     }
                 }
             }
+        }
+        else if (eXFill == drawing::FillStyle_BITMAP && bUseSlideBackground)
+        {
+            rSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
+            XFillUseSlideBackgroundItem aFillBgItem(true);
+            rSet.Put(aFillBgItem);
         }
     }
     else

@@ -53,6 +53,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xfilluseslidebackgrounditem.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xflclit.hxx>
@@ -2930,17 +2931,13 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         {
                             if (!aProcessData.aBackgroundColoredObjects.empty())
                             {
-                                if (!rSlidePersist.pBObj)
+                                for (auto const & pObject : aProcessData.aBackgroundColoredObjects)
                                 {
-                                    for (auto const & pObject : aProcessData.aBackgroundColoredObjects)
-                                    {
-                                        // The shape wants a background, but the slide doesn't have
-                                        // one: default to white.
-                                        SfxItemSet aNewSet(*pObject->GetMergedItemSet().GetPool());
-                                        aNewSet.Put(XFillStyleItem(css::drawing::FillStyle_SOLID));
-                                        aNewSet.Put(XFillColorItem(OUString(), COL_WHITE));
-                                        pObject->SetMergedItemSet(aNewSet);
-                                    }
+                                    SfxItemSet aNewSet(*pObject->GetMergedItemSet().GetPool());
+                                    aNewSet.Put(XFillStyleItem(css::drawing::FillStyle_NONE));
+                                    XFillUseSlideBackgroundItem aFillBgItem(true);
+                                    aNewSet.Put(aFillBgItem);
+                                    pObject->SetMergedItemSet(aNewSet);
                                 }
                             }
                         }
