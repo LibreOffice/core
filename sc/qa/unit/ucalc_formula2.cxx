@@ -4606,6 +4606,27 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf147398)
     m_pDoc->DeleteTab(0);
 }
 
+#if !defined(_WIN32)
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf156985)
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(0, 0, 0, "=-170.87");
+    m_pDoc->SetString(0, 1, 0, "-223.73");
+    m_pDoc->SetString(0, 2, 0, "-12.58");
+    m_pDoc->SetString(0, 3, 0, "234.98");
+    m_pDoc->SetString(0, 4, 0, "172.2");
+    m_pDoc->SetString(0, 5, 0, "=SUM(A1:A5)");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : -1.59872115546023e-14
+    CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(0, 5, 0));
+
+    m_pDoc->DeleteTab(0);
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaAfterDeleteRows)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
