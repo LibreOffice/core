@@ -217,10 +217,7 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
         SCCOL nTempX = rNewX;
         while (rDoc.IsHorOverlapped(nTempX, rNewY, nRefTab))
         {
-            if (nMovX > 0)
-                ++nTempX;
-            else
-                --nTempX;
+            nTempX = (nMovX > 0) ? nTempX + 1 : nTempX - 1;
             if (!checkBoundary(&rDoc, nTempX, rNewY))
                 break;
         }
@@ -242,10 +239,7 @@ void moveRefByCell(SCCOL& rNewX, SCROW& rNewY,
         SCROW nTempY = rNewY;
         while (rDoc.IsVerOverlapped(rNewX, nTempY, nRefTab))
         {
-            if (nMovY > 0)
-                ++nTempY;
-            else
-                --nTempY;
+            nTempY = (nMovY > 0) ? nTempY + 1 : nTempY - 1;
             if (!checkBoundary(&rDoc, rNewX, nTempY))
                 break;
         }
