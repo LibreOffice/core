@@ -33,7 +33,7 @@
                 <property name="label" translatable="yes" context="managestylepage|nameft">_Name:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">name</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -47,7 +47,7 @@
                 <property name="label" translatable="yes" context="managestylepage|nextstyleft">Ne_xt style:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">nextstyle</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -61,7 +61,7 @@
                 <property name="label" translatable="yes" context="managestylepage|linkedwithft">Inherit from:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">linkedwith</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -75,7 +75,7 @@
                 <property name="label" translatable="yes" context="managestylepage|categoryft">_Category:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">category</property>
-                <property name="xalign">1</property>
+                <property name="xalign">0</property>
               </object>
               <packing>
                 <property name="left-attach">0</property>
