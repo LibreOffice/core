@@ -430,6 +430,7 @@ module com {
      const short BRACKETRIGHT = 1316;
      const short C = 514;
      const short CAPSLOCK = 1312;
+     const short COLON = 1320;
      const short COMMA = 1292;
      const short CONTEXTMENU = 1305;
      const short COPY = 1298;
@@ -2846,7 +2847,7 @@ module com {
     };
     published enum LineJoint {
      NONE = 0,
-     MIDDLE = 1,
+     /** @deprecated */ MIDDLE = 1,
      BEVEL = 2,
      MITER = 3,
      ROUND = 4
@@ -3273,6 +3274,9 @@ module com {
      [property, optional] short RelativeWidth;
      [property, optional] short RelativeHeightRelation;
      [property, optional] short RelativeWidthRelation;
+     [property, optional] string Title;
+     [property, optional] string Description;
+     [property, optional] boolean Decorative;
     };
    };
    module chart {
@@ -3658,6 +3662,7 @@ module com {
      [property, optional] boolean ParaHyphenationNoLastWord;
      [property, optional] short ParaHyphenationMinWordLength;
      [property, optional] long ParaHyphenationZone;
+     [property, optional, readonly] long SortedTextId;
     };
    };
    module util {
@@ -4323,11 +4328,6 @@ module com {
       interface ::com::sun::star::lang::XInitialization;
       interface ::com::sun::star::lang::XComponent;
      };
-     published constants RenderingCapabilities {
-      const byte Delayed = 1;
-      /** @deprecated */ const byte Persistant = 2;
-      const byte Persistent = 2;
-     };
      published interface XFlushableClipboard {
       interface ::com::sun::star::uno::XInterface;
       void flushClipboard();
@@ -4337,6 +4337,11 @@ module com {
       interface ::com::sun::star::datatransfer::clipboard::XClipboardNotifier;
       interface ::com::sun::star::lang::XComponent;
       [optional] interface ::com::sun::star::datatransfer::clipboard::XFlushableClipboard;
+     };
+     published constants RenderingCapabilities {
+      const byte Delayed = 1;
+      /** @deprecated */ const byte Persistant = 2;
+      const byte Persistent = 2;
      };
      published service SystemClipboard: ::com::sun::star::datatransfer::clipboard::XSystemClipboard;
      published interface XClipboardFactory {
@@ -7888,7 +7893,7 @@ module com {
      const short HYPHENATION = 2;
      const short WORDBOUNDARY = 1;
     };
-    published constants CTLScriptType {
+    /** @deprecated */ published constants CTLScriptType {
      const short CTL_ARABIC = 2;
      const short CTL_HEBREW = 1;
      const short CTL_INDIC = 4;
@@ -8779,9 +8784,9 @@ module com {
      long beginOfScriptDirection([in] string aText, [in] long nPos, [in] short nScriptDirection);
      long endOfScriptDirection([in] string aText, [in] long nPos, [in] short nScriptDirection);
      short getScriptDirection([in] string aText, [in] long nPos, [in] short nDefaultScriptDirection);
-     long beginOfCTLScriptType([in] string aText, [in] long nPos);
-     long endOfCTLScriptType([in] string aText, [in] long nPos);
-     short getCTLScriptType([in] string aText, [in] long nPos);
+     /** @deprecated */ long beginOfCTLScriptType([in] string aText, [in] long nPos);
+     /** @deprecated */ long endOfCTLScriptType([in] string aText, [in] long nPos);
+     /** @deprecated */ short getCTLScriptType([in] string aText, [in] long nPos);
     };
     published constants reservedWords {
      const short ABOVE_WORD = 6;
@@ -13376,14 +13381,18 @@ module com {
      const short CHARS_CYRILLIC_LOWER_LETTER_N_BG = 41;
      const short CHARS_CYRILLIC_LOWER_LETTER_N_RU = 45;
      const short CHARS_CYRILLIC_LOWER_LETTER_N_SR = 51;
+     const short CHARS_CYRILLIC_LOWER_LETTER_N_UK = 75;
      const short CHARS_CYRILLIC_LOWER_LETTER_RU = 43;
      const short CHARS_CYRILLIC_LOWER_LETTER_SR = 49;
+     const short CHARS_CYRILLIC_LOWER_LETTER_UK = 73;
      const short CHARS_CYRILLIC_UPPER_LETTER_BG = 38;
      const short CHARS_CYRILLIC_UPPER_LETTER_N_BG = 40;
      const short CHARS_CYRILLIC_UPPER_LETTER_N_RU = 44;
      const short CHARS_CYRILLIC_UPPER_LETTER_N_SR = 50;
+     const short CHARS_CYRILLIC_UPPER_LETTER_N_UK = 74;
      const short CHARS_CYRILLIC_UPPER_LETTER_RU = 42;
      const short CHARS_CYRILLIC_UPPER_LETTER_SR = 48;
+     const short CHARS_CYRILLIC_UPPER_LETTER_UK = 72;
      const short CHARS_GREEK_LOWER_LETTER = 53;
      const short CHARS_GREEK_UPPER_LETTER = 52;
      const short CHARS_HEBREW = 33;
@@ -13872,6 +13881,7 @@ module com {
      [property, optional] boolean AllowOverlap;
      [property, optional] string Tooltip;
      [property, optional] boolean Decorative;
+     [property, optional] boolean IsSplitAllowed;
     };
     published service BaseFrame {
      service ::com::sun::star::text::BaseFrameProperties;
@@ -14014,6 +14024,7 @@ module com {
      [property] short VertOrient;
      [property, optional] ::com::sun::star::graphic::XGraphic BackGraphic;
      [property, optional, readonly] ::com::sun::star::text::XText ParentText;
+     [property, optional] boolean HasTextChangesOnly;
     };
     published service CellRange {
      service ::com::sun::star::style::CharacterProperties;
@@ -14423,6 +14434,7 @@ module com {
      [property, optional] boolean CreateFromLabels;
      [property, optional] string LabelCategory;
      [property, optional] short LabelDisplayType;
+     [property, maybevoid, optional] string CreateFromParagraphStyle;
     };
     published exception InvalidTextContentException: ::com::sun::star::uno::Exception {
      ::com::sun::star::text::XTextContent TextContent;
@@ -14548,6 +14560,7 @@ module com {
      [property, optional] boolean CreateFromStarCalc;
      [property, optional] boolean CreateFromStarDraw;
      [property, optional] boolean CreateFromOtherEmbeddedObjects;
+     [property, maybevoid, optional] string CreateFromParagraphStyle;
     };
     published service PageFootnoteInfo {
      [property] long FootnoteHeight;
@@ -14791,6 +14804,7 @@ module com {
      [property, optional] boolean CreateFromLabels;
      [property, optional] string LabelCategory;
      [property, optional] short LabelDisplayType;
+     [property, maybevoid, optional] string CreateFromParagraphStyle;
     };
     published service TableRows {
      interface ::com::sun::star::table::XTableRows;
