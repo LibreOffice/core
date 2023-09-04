@@ -25,9 +25,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
-typedef std::vector<css::uno::Reference<css::accessibility::XAccessible>>
-    ListItems;
-
 namespace accessibility
 {
     class IComboListBoxHelper;
@@ -117,7 +114,7 @@ public:
 private:
     BoxType     m_aBoxType;
     std::unique_ptr<::accessibility::IComboListBoxHelper> m_pListBoxHelper;
-    ListItems   m_aAccessibleChildren;
+    std::vector<css::uno::Reference<css::accessibility::XAccessible>> m_aAccessibleChildren;
     sal_Int32   m_nVisibleLineCount;
     /// Index in parent.  This is settable from the outside.
     sal_Int32   m_nIndexInParent;

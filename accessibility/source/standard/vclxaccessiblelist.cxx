@@ -154,7 +154,7 @@ void VCLXAccessibleList::notifyVisibleStates(bool _bSetNew )
     (_bSetNew ? aNewValue : aOldValue ) <<= AccessibleStateType::SHOWING;
     NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
 
-    ListItems::iterator aIter = m_aAccessibleChildren.begin();
+    auto aIter = m_aAccessibleChildren.begin();
     UpdateVisibleLineCount();
     // adjust the index inside the VCLXAccessibleListItem
     for ( ; aIter != m_aAccessibleChildren.end(); )
