@@ -85,6 +85,7 @@ public:
 
     /** True, if the cursor has a selection */
     bool HasSelection() const { return mpAnchor != mpPosition; }
+    const ESelection& GetSelection();
 
     /** Move the position of this cursor */
     void Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor = true);

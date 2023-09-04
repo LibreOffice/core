@@ -368,8 +368,13 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pTree)
         return true;
 
+    SmEditWindow* pEdit = GetView().GetEditWindow();
+
     if (SmViewShell::IsInlineEditEnabled()) {
-        GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        SmCursor& rCursor = GetCursor();
+        rCursor.MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        if (pEdit)
+            pEdit->SetSelection(rCursor.GetSelection());
         // 'on grab' window events are missing in lok, do it explicitly
         if (comphelper::LibreOfficeKit::isActive())
             SetIsCursorVisible(true);
@@ -383,7 +388,6 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     if (!pNode)
         return true;
 
-    SmEditWindow* pEdit = GetView().GetEditWindow();
     if (!pEdit)
         return true;
 
@@ -713,6 +717,7 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         return GetView().KeyInput(rKEvt);
 
     bool bConsumed = true;
+    bool bSetSelection = false;
 
     SmCursor& rCursor = GetCursor();
     switch (rKEvt.GetKeyCode().GetFunction())
@@ -737,24 +742,32 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         {
             case KEY_LEFT:
                 rCursor.Move(&GetOutputDevice(), MoveLeft, !rKEvt.GetKeyCode().IsShift());
+                bSetSelection = true;
                 break;
             case KEY_RIGHT:
                 rCursor.Move(&GetOutputDevice(), MoveRight, !rKEvt.GetKeyCode().IsShift());
+                bSetSelection = true;
                 break;
             case KEY_UP:
                 rCursor.Move(&GetOutputDevice(), MoveUp, !rKEvt.GetKeyCode().IsShift());
+                bSetSelection = true;
                 break;
             case KEY_DOWN:
                 rCursor.Move(&GetOutputDevice(), MoveDown, !rKEvt.GetKeyCode().IsShift());
+                bSetSelection = true;
                 break;
             case KEY_RETURN:
                 if (!rKEvt.GetKeyCode().IsShift())
+                {
                     rCursor.InsertRow();
+                    bSetSelection = true;
+                }
                 break;
             case KEY_DELETE:
                 if (!rCursor.HasSelection())
                 {
                     rCursor.Move(&GetOutputDevice(), MoveRight, false);
+                    bSetSelection = true;
                     if (rCursor.HasComplexSelection())
                         break;
                 }
@@ -762,12 +775,17 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
                 break;
             case KEY_BACKSPACE:
                 rCursor.DeletePrev(&GetOutputDevice());
+                bSetSelection = true;
                 break;
             default:
                 if (!CharInput(rKEvt.GetCharCode(), rCursor, GetOutputDevice()))
                     bConsumed = GetView().KeyInput(rKEvt);
         }
     }
+
+    SmEditWindow* pEdit = GetView().GetEditWindow();
+    if (pEdit && bSetSelection)
+        pEdit->SetSelection(rCursor.GetSelection());
     CaretBlinkStop();
     CaretBlinkStart();
     SetIsCursorVisible(true);
@@ -1766,12 +1784,22 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
 
         case SID_CUT:
-            if (pWin)
+            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            {
+                GetDoc()->GetCursor().Cut();
+                GetGraphicWidget().GrabFocus();
+            }
+            else if (pWin)
                 pWin->Cut();
             break;
 
         case SID_COPY:
-            if (pWin)
+            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            {
+                GetDoc()->GetCursor().Copy();
+                GetGraphicWidget().GrabFocus();
+            }
+            else if (pWin)
             {
                 if (pWin->IsAllSelected())
                 {
@@ -1786,6 +1814,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTE:
             {
+                if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+                {
+                    GetDoc()->GetCursor().Paste();
+                    GetGraphicWidget().GrabFocus();
+                    break;
+                }
+
                 bool bCallExec = nullptr == pWin;
                 if( !bCallExec )
                 {
@@ -1812,7 +1847,19 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_DELETE:
-            if (pWin)
+            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            {
+                if (!GetDoc()->GetCursor().HasSelection())
+                {
+                    GetDoc()->GetCursor().Move(&GetGraphicWindow().GetGraphicWidget().GetOutputDevice(), MoveRight, false);
+                    if (!GetDoc()->GetCursor().HasComplexSelection())
+                        GetDoc()->GetCursor().Delete();
+                }
+                else
+                    GetDoc()->GetCursor().Delete();
+                GetGraphicWidget().GrabFocus();
+            }
+            else if (pWin)
                 pWin->Delete();
             break;
 
@@ -2095,7 +2142,12 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_CUT:
         case SID_COPY:
         case SID_DELETE:
-            if (! pEditWin || ! pEditWin->IsSelected())
+            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            {
+                if (!GetDoc()->GetCursor().HasSelection())
+                    rSet.DisableItem(nWh);
+            }
+            else if (! pEditWin || ! pEditWin->IsSelected())
                 rSet.DisableItem(nWh);
             break;
 

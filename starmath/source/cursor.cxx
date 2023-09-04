@@ -1141,6 +1141,13 @@ SmNode* SmCursor::FindSelectedNode(SmNode* pNode){
     return nullptr;
 }
 
+const ESelection& SmCursor::GetSelection() {
+    const SmNode* pNode = FindSelectedNode(mpTree);
+    if (!pNode)
+        return mpTree->GetSelection();
+    return pNode->GetSelection();
+}
+
 void SmCursor::LineToList(SmStructureNode* pLine, SmNodeList& list){
     for(auto pChild : *pLine)
     {
