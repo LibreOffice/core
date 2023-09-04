@@ -12,6 +12,8 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
+#include <editeng/ulspitem.hxx>
+
 #include <wrtsh.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
@@ -21,18 +23,21 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <flyfrm.hxx>
+#include <frmatr.hxx>
 
+namespace
+{
 /// Covers sw/source/core/objectpositioning/ fixes.
-class SwCoreObjectpositioningTest : public SwModelTestBase
+class Test : public SwModelTestBase
 {
 public:
-    SwCoreObjectpositioningTest()
+    Test()
         : SwModelTestBase("/sw/qa/core/objectpositioning/data/")
     {
     }
 };
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
+CPPUNIT_TEST_FIXTURE(Test, testOverlapCrash)
 {
     // Load a document with 2 images.
     createSwDoc("overlap-crash.odt");
@@ -51,7 +56,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
     pWrtShell->SplitNode();
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
+CPPUNIT_TEST_FIXTURE(Test, testVertPosFromBottom)
 {
     // Create a document, insert a shape and position it 1cm above the bottom of the body area.
     createSwDoc();
@@ -80,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(565), nBodyBottom - nAnchoredBottom);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
+CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMargin)
 {
     // Create a document, insert three shapes and align it the bottom,center,top of page print area bottom.
     // The size of shapes are 284 ~ 0.5cm
@@ -151,7 +156,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nThirdShapeTop - nBodyBottom);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithFooter)
+CPPUNIT_TEST_FIXTURE(Test, testVertAlignBottomMarginWithFooter)
 {
     // Load an empty document with footer.
     createSwDoc("bottom-margin-with-footer.docx");
@@ -223,7 +228,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithF
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nThirdShapeTop - nBodyBottom);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBottomMargin)
+CPPUNIT_TEST_FIXTURE(Test, testInsideOutsideVertAlignBottomMargin)
 {
     // Load a document, with two shapes.
     // The shapes align the outside and inside of page print area bottom.
@@ -244,7 +249,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testInsideOutsideVertAlignBott
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), nBodyBottom - nSecondShapeInside);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
+CPPUNIT_TEST_FIXTURE(Test, testVMLVertAlignBottomMargin)
 {
     // Load a document, with five shapes.
     // The shapes align the top,center,bottom,outside and inside of page print area bottom.
@@ -286,7 +291,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVMLVertAlignBottomMargin)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), nFifthVMLShapeOutside - nPageBottom);
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableOverlapNever)
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableOverlapNever)
 {
     // Given a document with two floating tables, positioned in a way that normally these would
     // overlap, but SwFormatWrapInfluenceOnObjPos::mbAllowOverlap == false explicitly asks to avoid
@@ -313,7 +318,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableOverlapNever)
     CPPUNIT_ASSERT_GREATER(pFlyFrame1->getFrameArea().Bottom(), pFlyFrame2->getFrameArea().Top());
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableVertOrientTop)
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableVertOrientTop)
 {
     // Given a document with a vert-orient=from-top anchored floating table:
     createSwDoc("floattable-vert-orient-top.odt");
@@ -335,6 +340,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testFloatingTableVertOrientTop
     CPPUNIT_ASSERT(pPage2->GetSortedObjs());
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableFollowWrongPage)
+{
+    // Given a document with text on 2 pages, the first page has a fly frame that can split:
+    createSwDoc("floattable-follow-on-wrong-page.odt");
+
+    // When increasing the top and bottom margins from 0.5cm to 2.5cm:
+    SwDoc* pDoc = getSwDoc();
+    SwPageDesc aStandard(pDoc->GetPageDesc(0));
+    SvxULSpaceItem aPageMargin(aStandard.GetMaster().GetULSpace());
+    aPageMargin.SetUpper(1417);
+    aPageMargin.SetLower(1417);
+    aStandard.GetMaster().SetFormatAttr(aPageMargin);
+    pDoc->ChgPageDesc(0, aStandard);
+
+    // Then make sure the first and second page has fly frames:
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    const SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage1Objs.size());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    // Without the accompanying fix in place, this test would have failed, page 2 had no fly frame
+    // (page 3 had one).
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
