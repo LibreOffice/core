@@ -73,17 +73,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     drawinglayer::primitive2d::Primitive2DContainer xPrimitiveSequence
         = renderPageToPrimitives(xDrawPage);
 
-    // Then make sure that the cell fill part of the shadow is excluded from blurring:
+    // Then make sure that the cell fill part of the shadow has the expected transparency:
     drawinglayer::Primitive2dXmlDump aDumper;
     xmlDocUniquePtr pDocument = aDumper.dumpAndParse(xPrimitiveSequence);
     // Without the accompanying fix in place, this test would have failed with:
-    // - number of nodes is incorrect
-    // - Expected: 1
-    // - Actual  : 0
-    // i.e. the shadow itself was not transparent and that resulted in a non-transparent rendering
-    // as well, while the rendering transparency should be based on the transparency of the shadow
-    // itself and the transparency of the cell fill.
-    assertXPath(pDocument, "//objectinfo/unifiedtransparence[1]", "transparence", "80");
+    //- Expected: 0
+    //- Actual  : 2
+    //- In <>, XPath contents of child does not match
+    // i.e. the shadow's transparency was miscalculated.
+    assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)", "0");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
