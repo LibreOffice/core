@@ -23,6 +23,10 @@
 #include <svl/poolitem.hxx>
 #include <memory>
 
+/// Has a shared reference to an "auto-style", i.e. a not named collection of character formats. It
+/// is owned by an SwTextAttrEnd, which is then stored in the SwpHints of an SwTextNode.
+///
+/// This is the primary way how direct character formats are stored inside a paragraph.
 class SW_DLLPUBLIC SwFormatAutoFormat final : public SfxPoolItem
 {
     std::shared_ptr<SfxItemSet> mpHandle;
