@@ -182,7 +182,7 @@ public:
 
 class SVXCORE_DLLPUBLIC SdrGluePointList
 {
-    std::vector<SdrGluePoint> aList;
+    std::vector<SdrGluePoint> m_aList;
 public:
     SdrGluePointList() {};
     SdrGluePointList(const SdrGluePointList& rSrcList)
@@ -193,22 +193,22 @@ public:
     SdrGluePointList& operator=(const SdrGluePointList& rSrcList);
     sal_uInt16 GetCount() const
     {
-        return sal_uInt16(aList.size());
+        return sal_uInt16(m_aList.size());
     }
     // At insert, the object (GluePoint) automatically gets an ID assigned.
     // Return value is the index of the new GluePoint in the list.
     sal_uInt16 Insert(const SdrGluePoint& rGP);
     void Delete(sal_uInt16 nPos)
     {
-        aList.erase(aList.begin() + nPos);
+        m_aList.erase(m_aList.begin() + nPos);
     }
     SdrGluePoint& operator[](sal_uInt16 nPos)
     {
-        return aList[nPos];
+        return m_aList[nPos];
     }
     const SdrGluePoint& operator[](sal_uInt16 nPos) const
     {
-        return aList[nPos];
+        return m_aList[nPos];
     }
     sal_uInt16 FindGluePoint(sal_uInt16 nId) const;
     sal_uInt16 HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
