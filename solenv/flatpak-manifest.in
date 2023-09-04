@@ -1,12 +1,12 @@
 {
-    "id": "org.libreoffice.LibreOffice",
+    "id": "com.allotropia.ZetaOffice",
     "runtime": "org.freedesktop.Platform",
     "runtime-version": "22.08",
     "sdk": "org.freedesktop.Sdk",
     "sdk-extensions": [
         "org.freedesktop.Sdk.Extension.openjdk11"
     ],
-    "command": "libreoffice",
+    "command": "zetaoffice",
     "modules": [
         {
             "name": "openjdk",
@@ -54,7 +54,7 @@
             ]
         },
         {
-            "name": "libreoffice",
+            "name": "zetaoffice",
             "sources": [
                 {
                     "type": "git",
@@ -686,7 +686,7 @@
             ],
             "buildsystem": "simple",
             "build-commands": [
-                "./autogen.sh --prefix=/run/build/libreoffice/inst --with-distro=LibreOfficeFlatpak",
+                "./autogen.sh --prefix=/run/build/libreoffice/inst --with-distro=ZetaOfficeFlatpak",
                 "make check",
                 "make distro-pack-install",
                 "make cmd cmd='$(SRCDIR)/solenv/bin/assemble-flatpak.sh'",
@@ -695,13 +695,13 @@
         }
     ],
     "add-extensions": {
-        "org.libreoffice.LibreOffice.BundledExtension": {
+        "com.allotropia.ZetaOffice.BundledExtension": {
             "directory": "libreoffice/share/extensions",
             "subdirectories": true,
             "no-autodownload": true,
             "autodelete": true
         },
-        "org.libreoffice.LibreOffice.Help": {
+        "com.allotropia.ZetaOffice.Help": {
             "directory": "libreoffice/help",
             "bundle": true,
             "autodelete": true,
