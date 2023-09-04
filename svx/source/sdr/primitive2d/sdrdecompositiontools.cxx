@@ -850,25 +850,16 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
             Primitive2DContainer aRetval;
             for (const auto& xChild : rContentForShadow)
             {
-                double fChildTransparence = 0.0;
-                auto pChild = dynamic_cast<BufferedDecompositionPrimitive2D*>(xChild.get());
-                if (pChild)
-                {
-                        fChildTransparence = pChild->getTransparenceForShadow();
-                        fChildTransparence /= 100;
-                }
                 aRetval.push_back(Primitive2DReference(
                     new ShadowPrimitive2D(aShadowOffset, rShadow.getColor(), rShadow.getBlur(),
                                             Primitive2DContainer({ xChild }))));
-                if (rShadow.getTransparence() != 0.0 || fChildTransparence != 0.0)
+                if (rShadow.getTransparence() != 0.0)
                 {
                     Primitive2DContainer aTempContent{ aRetval.back() };
 
-                    double fChildAlpha = 1.0 - fChildTransparence;
                     double fShadowAlpha = 1.0 - rShadow.getTransparence();
-                    double fTransparence = 1.0 - fChildAlpha * fShadowAlpha;
                     aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
-                            std::move(aTempContent), fTransparence));
+                            std::move(aTempContent), fShadowAlpha));
                 }
             }
 
