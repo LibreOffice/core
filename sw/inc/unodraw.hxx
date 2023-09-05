@@ -30,17 +30,17 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
+#include <cppuhelper/implbase.hxx>
 
 class SdrMarkList;
 class SdrView;
 class SwDoc;
 class SwXShape;
 
-typedef cppu::AggImplInheritanceHelper2
+typedef cppu::ImplInheritanceHelper
 <
     SvxFmDrawPage,
     css::container::XEnumerationAccess,

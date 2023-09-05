@@ -22,6 +22,7 @@
 
 #include <svx/unopage.hxx>
 #include <com/sun/star/report/XSection.hpp>
+#include <cppuhelper/weakref.hxx>
 
 namespace reportdesign
 {

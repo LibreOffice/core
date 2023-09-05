@@ -32,7 +32,7 @@
 #include <svx/svdobjkind.hxx>
 #include <rtl/ref.hxx>
 
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <memory>
@@ -48,7 +48,7 @@ class SvxShapeConnector;
 enum class SdrInventor : sal_uInt32;
 
 class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
-                                    public ::cppu::WeakAggImplHelper7< css::drawing::XDrawPage,
+                                    public ::cppu::WeakImplHelper< css::drawing::XDrawPage,
                                                css::drawing::XShapeGrouper,
                                                css::drawing::XShapes2,
                                                css::drawing::XShapes3,
@@ -96,9 +96,6 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
-
-    // XInterface
-    virtual void SAL_CALL release() noexcept override;
 
     // XShapes
     virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;

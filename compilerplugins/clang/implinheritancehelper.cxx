@@ -74,6 +74,10 @@ bool ImplInheritanceHelper::VisitCXXRecordDecl(const CXXRecordDecl* cxxRecordDec
             .Namespace("pcr")
             .GlobalNamespace())
         return true;
+    if (loplugin::DeclCheck(cxxRecordDecl).Class("SdDrawPage").GlobalNamespace())
+        return true;
+    if (loplugin::DeclCheck(cxxRecordDecl).Class("SdMasterPage").GlobalNamespace())
+        return true;
 
     // check if this class extends cppu::WeakImplHelper
     if (!loplugin::isDerivedFrom(cxxRecordDecl, [](Decl const* decl) -> bool {

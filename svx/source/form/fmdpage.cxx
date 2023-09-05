@@ -28,7 +28,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::form::XFormsSupplier2;
 
 SvxFmDrawPage::SvxFmDrawPage( SdrPage* pInPage ) :
-    SvxDrawPage( pInPage )
+    SvxFmDrawPage_Base( pInPage )
 {
 }
 
@@ -39,24 +39,6 @@ SvxFmDrawPage::~SvxFmDrawPage() noexcept
 css::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
-}
-
-Any SAL_CALL SvxFmDrawPage::queryAggregation( const css::uno::Type& _rType )
-{
-    Any aRet = ::cppu::queryInterface   (   _rType
-                                        ,   static_cast< XFormsSupplier2* >( this )
-                                        ,   static_cast< XFormsSupplier* >( this )
-                                        );
-    if ( !aRet.hasValue() )
-        aRet = SvxDrawPage::queryAggregation( _rType );
-
-    return aRet;
-}
-
-css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  )
-{
-    return comphelper::concatSequences(SvxDrawPage::getTypes(),
-        css::uno::Sequence { cppu::UnoType<css::form::XFormsSupplier2>::get() });
 }
 
 rtl::Reference<SdrObject> SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )

@@ -82,12 +82,6 @@ SvxDrawPage::~SvxDrawPage() noexcept
     }
 }
 
-// XInterface
-void SvxDrawPage::release() noexcept
-{
-    OWeakAggObject::release();
-}
-
 // XComponent
 void SvxDrawPage::disposing() noexcept
 {

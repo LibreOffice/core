@@ -512,12 +512,8 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
 }
 
 // XInterface
-Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
+Any SdGenericDrawPage::queryInterface(const uno::Type & rType)
 {
-    return SvxFmDrawPage::queryInterface(rType);
-}
-
-css::uno::Any SdGenericDrawPage::queryAggregation(css::uno::Type const & rType) {
     Any aAny;
 
     if (rType == cppu::UnoType<beans::XPropertySet>::get())
@@ -564,7 +560,7 @@ css::uno::Any SdGenericDrawPage::queryAggregation(css::uno::Type const & rType) 
             return Any( Reference< XAnimationNodeSupplier >( this ) );
     }
     else
-        return SvxFmDrawPage::queryAggregation( rType );
+        return SvxFmDrawPage::queryInterface( rType );
 
     return aAny;
 }
@@ -1880,13 +1876,6 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     refreshpage( &rDoc, ePageKind );
 }
 
-// XInterface
-void SdGenericDrawPage::release() noexcept
-{
-
-    OWeakAggObject::release();
-}
-
 // XComponent
 void SdGenericDrawPage::disposing() noexcept
 {
@@ -2069,10 +2058,6 @@ SdDrawPage::~SdDrawPage() noexcept
 // XInterface
 Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
 {
-    return SdGenericDrawPage::queryInterface(rType);
-}
-
-css::uno::Any SdDrawPage::queryAggregation(css::uno::Type const & rType) {
     if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
         return Any( Reference< drawing::XMasterPageTarget >( this ) );
@@ -2087,7 +2072,7 @@ css::uno::Any SdDrawPage::queryAggregation(css::uno::Type const & rType) {
         }
     }
 
-    return SdGenericDrawPage::queryAggregation( rType );
+    return SdGenericDrawPage::queryInterface( rType );
 }
 
 void SAL_CALL SdDrawPage::acquire() noexcept
@@ -2670,10 +2655,6 @@ SdMasterPage::~SdMasterPage() noexcept
 // XInterface
 Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
 {
-    return SdGenericDrawPage::queryInterface(rType);
-}
-
-css::uno::Any SdMasterPage::queryAggregation(css::uno::Type const & rType) {
     ::SolarMutexGuard aGuard;
 
     throwIfDisposed();
@@ -2691,7 +2672,7 @@ css::uno::Any SdMasterPage::queryAggregation(css::uno::Type const & rType) {
                GetPage()  && GetPage()->GetPageKind() != PageKind::Handout) )
         aAny <<= Reference< presentation::XPresentationPage >( this );
     else
-        return SdGenericDrawPage::queryAggregation( rType );
+        return SdGenericDrawPage::queryInterface( rType );
 
     return aAny;
 }

@@ -21,14 +21,14 @@
 
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <svx/unopage.hxx>
-#include <comphelper/uno3.hxx>
 #include <svx/svxdllapi.h>
 
 
 // SvxFmDrawPage
 
-class SVXCORE_DLLPUBLIC SvxFmDrawPage   :public SvxDrawPage
-                                    ,public css::form::XFormsSupplier2
+typedef cppu::ImplInheritanceHelper<SvxDrawPage, css::form::XFormsSupplier2> SvxFmDrawPage_Base;
+
+class SVXCORE_DLLPUBLIC SvxFmDrawPage : public SvxFmDrawPage_Base
 {
 protected:
 
@@ -44,13 +44,7 @@ public:
     SvxFmDrawPage( SdrPage* pPage );
     virtual ~SvxFmDrawPage() noexcept override;
 
-    // UNO binding
-    DECLARE_UNO3_AGG_DEFAULTS(SvxFmDrawPage, SvxDrawPage)
-
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
-
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XFormsSupplier
     virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getForms() override;

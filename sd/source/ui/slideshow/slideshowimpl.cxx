@@ -44,6 +44,7 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <sfx2/infobar.hxx>
 #include <sfx2/dispatch.hxx>
