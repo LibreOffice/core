@@ -19,20 +19,13 @@ public:
         : SwModelTestBase("/sw/qa/extras/odfexport/data/", "XHTML Writer File")
     {
     }
-
-private:
-    virtual std::unique_ptr<Resetter> preTest(const char*) override
-    {
-        setFilterOptions("UTF8");
-        return nullptr;
-    }
 };
 
-#define DECLARE_HTMLEXPORT_TEST(TestName, filename)                                                \
-    DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, XHtmlExportTest)
-
-DECLARE_HTMLEXPORT_TEST(testImageEmbedding, "image-mimetype.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testImageEmbedding)
 {
+    createSwDoc("image-mimetype.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     htmlDocUniquePtr pDoc = parseHtml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
 
@@ -42,8 +35,11 @@ DECLARE_HTMLEXPORT_TEST(testImageEmbedding, "image-mimetype.odt")
     CPPUNIT_ASSERT(aValue.startsWith("data:image/svg+xml;base64"));
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf131812)
 {
+    createSwDoc("tdf131812.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -54,8 +50,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf131812, "tdf131812.odt")
         != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf146264, "tdf146264.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf146264)
 {
+    createSwDoc("tdf146264.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -70,8 +69,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf146264, "tdf146264.odt")
     }
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf118637)
 {
+    createSwDoc("tdf118637.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -80,8 +82,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf118637, "tdf118637.odt")
     CPPUNIT_ASSERT(aStream.indexOf("should be inline.</div>") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf145361, "tdf145361.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf145361)
 {
+    createSwDoc("tdf145361.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     // Without the fix in place, this test would have failed with
     // - SfxBaseModel::impl_store <file:///tmp/lu66091ameq.tmp> failed: 0xc10(Error Area:Io Class:Write Code:16)
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
@@ -92,8 +97,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf145361, "tdf145361.odt")
         aStream.indexOf("List entry has<br/><span style=\"margin-left:0cm\"/>a line break") != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf142483, "tdf142483.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf142483)
 {
+    createSwDoc("tdf142483.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
@@ -128,8 +136,11 @@ DECLARE_HTMLEXPORT_TEST(testTdf142483, "tdf142483.odt")
         != -1);
 }
 
-DECLARE_HTMLEXPORT_TEST(testTdf107696, "tdf107696.odt")
+CPPUNIT_TEST_FIXTURE(XHtmlExportTest, testTdf107696)
 {
+    createSwDoc("tdf107696.odt");
+    setFilterOptions("UTF8");
+    save(mpFilter);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     sal_uInt64 nLength = pStream->TellEnd();
