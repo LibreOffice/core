@@ -28,9 +28,7 @@ def convert_str_to_date(value):
     value = value.replace('Sept', 'Sep')
     # reset the time leaving the date
     value = ", ".join(value.split(", ")[:-1])
-    dtDate = datetime.strptime(value, '%b %d, %Y')
-
-    return dtDate.strftime('%y/%m/%d')
+    return datetime.strptime(value, '%b %d, %Y')
 
 def parse_version_url(url):
     crashReports = {}
@@ -201,7 +199,7 @@ if __name__ == '__main__':
 
     with open(fileName, "a") as f:
         if bInsertHeader:
-            line = '\t'.join(["Name", "Count", "First report", "Last Report",
+            line = '\t'.join(["Name", "Ratio", "Count", "First report", "Last Report",
                 "ID", "Version", "Reason", "OS", "Stack", "Code Lines", "Last 4 UNO Commands", '\n'])
             f.write(line)
             f.flush()
@@ -214,7 +212,8 @@ if __name__ == '__main__':
                             "https://crashreport.libreoffice.org/stats/signature/" + urllib.parse.quote(k))
                     crashReason, crashStack, codeLine, unoCommands = parse_details_and_get_info(
                             "https://crashreport.libreoffice.org/stats/crash_details/" + crashID, args.repository)
-                    line = '\t'.join([k, str(crashCount), lDate[1], lDate[2],
+                    ratio = round(crashCount / ((lDate[2] - lDate[1]).days + 1), 2)
+                    line = '\t'.join([k, str(ratio), str(crashCount) , lDate[1].strftime('%y/%m/%d'), lDate[2].strftime('%y/%m/%d'),
                             crashID, crashVersion, crashReason, crashOS, crashStack, codeLine, unoCommands, '\n'])
                     f.write(line)
                     f.flush()
