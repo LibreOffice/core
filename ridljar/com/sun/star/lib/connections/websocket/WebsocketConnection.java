@@ -20,7 +20,7 @@ package com.sun.star.lib.connections.websocket;
 
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,10 +61,8 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
 
     protected String       _description;
     protected InputStream  _inputStream;
-    protected OutputStream _outputStream;
-
-    protected InputStream _outputStreamReader;
     protected OutputStream _inputStreamWriter;
+    protected ByteArrayOutputStream _outputStream;
 
     protected ArrayList<XStreamListener>       _listeners;
 
@@ -83,14 +81,10 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
 
         PipedOutputStream inputStreamWriter = new PipedOutputStream();
         PipedInputStream inputPipe = new PipedInputStream(inputStreamWriter);
-        PipedOutputStream outputPipe = new PipedOutputStream();
-        PipedInputStream outputStreamReader = new PipedInputStream(outputPipe);
-
 
         _inputStream = new BufferedInputStream(inputPipe);
         _inputStreamWriter = inputStreamWriter;
-        _outputStream = new BufferedOutputStream(outputPipe);
-        _outputStreamReader = outputStreamReader;
+        _outputStream = new ByteArrayOutputStream();
 
         _listeners = new ArrayList<XStreamListener>();
 
@@ -206,23 +200,16 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      */
     public void flush() throws com.sun.star.io.IOException,
         com.sun.star.uno.RuntimeException {
-        try {
-            _outputStream.flush();
 
-            Integer available = _outputStreamReader.available();
-
-            byte[] outputBytes = new byte[available + outgoingPrefix.length];
-            System.arraycopy(outgoingPrefix, 0, outputBytes, 0, outgoingPrefix.length);
-
-            _outputStreamReader.read(outputBytes, outgoingPrefix.length, available);
-
-            send(outputBytes);
-        } catch(IOException ioException) {
-            com.sun.star.io.IOException unoIOException = new com.sun.star.io.IOException(ioException);
-            notifyListeners_error(unoIOException);
-
-            throw unoIOException;
+        byte[] accumulatedBytes;
+        synchronized (_outputStream) {
+            accumulatedBytes = _outputStream.toByteArray();
+            _outputStream.reset();
         }
+        byte[] outputBytes = new byte[accumulatedBytes.length + outgoingPrefix.length];
+        System.arraycopy(outgoingPrefix, 0, outputBytes, 0, outgoingPrefix.length);
+        System.arraycopy(accumulatedBytes, 0, outputBytes, outgoingPrefix.length, accumulatedBytes.length);
+        send(outputBytes);
 
         if (DEBUG)
             System.err.println(String.format("##### %s - flushed", getClass().getName()));
