@@ -349,7 +349,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
         if (!pContext->processAttribute( aIter ))
-            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+            XMLOFF_INFO_UNKNOWN("xmloff", aIter);
     }
     return pContext;
 }

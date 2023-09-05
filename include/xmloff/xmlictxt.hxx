@@ -114,6 +114,9 @@ public:
 #define XMLOFF_WARN_UNKNOWN(area, rIter) \
     SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
 
+#define XMLOFF_INFO_UNKNOWN(area, rIter) \
+    SAL_INFO(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(rIter.getToken()) << " value=" << rIter.toString());
+
 #define XMLOFF_WARN_UNKNOWN_ATTR(area, token, value) \
     SAL_WARN(area, "unknown attribute " << SvXMLImport::getPrefixAndNameFromToken(token) << "=" << value);
 
