@@ -204,7 +204,7 @@ public:
     /** Returns the object model of the Calc document. */
     ScModelObj*         GetDocModelObj() const;
     /** Returns pointer to the printer of the Calc document. */
-    OutputDevice*       GetPrinter() const;
+    OutputDevice*       GetPrinter(bool bForceVirtDev = false) const;
     /** Returns the style sheet pool of the Calc document. */
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */

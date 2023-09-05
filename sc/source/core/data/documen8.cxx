@@ -196,11 +196,11 @@ VirtualDevice* ScDocument::GetVirtualDevice_100th_mm()
     return mpVirtualDevice_100th_mm;
 }
 
-OutputDevice* ScDocument::GetRefDevice()
+OutputDevice* ScDocument::GetRefDevice(bool bForceVirtDev)
 {
     // Create printer like ref device, see Writer...
     OutputDevice* pRefDevice = nullptr;
-    if ( SC_MOD()->GetInputOptions().GetTextWysiwyg() )
+    if ( !bForceVirtDev && SC_MOD()->GetInputOptions().GetTextWysiwyg() )
         pRefDevice = GetPrinter();
     else
         pRefDevice = GetVirtualDevice_100th_mm();
