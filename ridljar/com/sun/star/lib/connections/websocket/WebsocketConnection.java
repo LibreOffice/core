@@ -222,6 +222,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
      */
     public void close() throws com.sun.star.uno.RuntimeException {
         if (DEBUG) System.err.println("##### " + getClass().getName() + " - socket closed");
+        super.close();
     }
 
     /**
