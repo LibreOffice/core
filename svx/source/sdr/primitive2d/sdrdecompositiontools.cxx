@@ -856,10 +856,8 @@ sal_uInt32 SlideBackgroundFillPrimitive2D::getPrimitive2DID() const
                 if (rShadow.getTransparence() != 0.0)
                 {
                     Primitive2DContainer aTempContent{ aRetval.back() };
-
-                    double fShadowAlpha = 1.0 - rShadow.getTransparence();
                     aRetval.back() = Primitive2DReference(new UnifiedTransparencePrimitive2D(
-                            std::move(aTempContent), fShadowAlpha));
+                            std::move(aTempContent), rShadow.getTransparence()));
                 }
             }
 
