@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sot/storage.hxx>
@@ -37,6 +38,7 @@
 #include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/virdev.hxx>
 
 #include <editeng/editstat.hxx>
 #include <scitems.hxx>
@@ -207,7 +209,8 @@ void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     mrData.mnCharWidth = 0;
-    if( OutputDevice* pPrinter = GetPrinter() )
+    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
+    if( OutputDevice* pPrinter = GetPrinter( bIsLOK ) )
     {
         vcl::Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
         aFont.SetFamily( rFontData.GetScFamily( GetTextEncoding() ) );
@@ -298,9 +301,9 @@ ScModelObj* XclRoot::GetDocModelObj() const
     return pDocShell ? comphelper::getFromUnoTunnel<ScModelObj>( pDocShell->GetModel() ) : nullptr;
 }
 
-OutputDevice* XclRoot::GetPrinter() const
+OutputDevice* XclRoot::GetPrinter(bool bForceVirtDev) const
 {
-    return GetDoc().GetRefDevice();
+    return GetDoc().GetRefDevice(bForceVirtDev);
 }
 
 ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
