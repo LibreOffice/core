@@ -2186,7 +2186,7 @@ public:
     SfxPrinter*                 GetPrinter( bool bCreateIfNotExist = true );
     void                        SetPrinter( VclPtr<SfxPrinter> const & pNewPrinter );
     VirtualDevice*              GetVirtualDevice_100th_mm();
-    SC_DLLPUBLIC OutputDevice*  GetRefDevice(); // WYSIWYG: Printer, otherwise VirtualDevice...
+    SC_DLLPUBLIC OutputDevice*  GetRefDevice(bool bForceVirtDev = false); // WYSIWYG: Printer, otherwise VirtualDevice...
 
     bool            GetNextSpellingCell( SCCOL& nCol, SCROW& nRow, SCTAB nTab,
                                          bool bInSel, const ScMarkData& rMark) const;
