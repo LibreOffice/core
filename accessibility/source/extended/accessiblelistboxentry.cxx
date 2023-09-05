@@ -73,7 +73,6 @@ namespace accessibility
         , m_pSvLBoxEntry(&rEntry)
         , m_nClientId( 0 )
         , m_wListBox(&rListBox)
-        , m_rListBox(rListBox)
     {
         m_pTreeListBox->AddEventListener( LINK( this, AccessibleListBoxEntry, WindowEventListener ) );
         _rListBox.FillEntryPath( m_pSvLBoxEntry, m_aEntryPath );
@@ -310,10 +309,10 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        uno::Reference<XAccessible> xListBox(m_wListBox);
+        rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
         assert(xListBox.is());
 
-        return m_rListBox.implGetAccessible(*pEntry);
+        return xListBox->implGetAccessible(*pEntry);
     }
 
     Reference< XAccessible > AccessibleListBoxEntry::implGetParentAccessible( ) const
@@ -338,9 +337,9 @@ namespace accessibility
             assert(pParentEntry && "AccessibleListBoxEntry::implGetParentAccessible: could not obtain a parent entry!");
             if ( pParentEntry )
             {
-                uno::Reference<XAccessible> xListBox(m_wListBox);
+                rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
                 assert(xListBox.is());
-                return m_rListBox.implGetAccessible(*pParentEntry);
+                return xListBox->implGetAccessible(*pParentEntry);
                 // the AccessibleListBoxEntry class will create its parent
                 // when needed
             }
@@ -529,9 +528,9 @@ namespace accessibility
             throw RuntimeException("AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!");
 
         Reference< XAccessible > xAcc;
-        uno::Reference<XAccessible> xListBox(m_wListBox);
+        rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
         assert(xListBox.is());
-        auto pAccEntry = m_rListBox.implGetAccessible(*pEntry);
+        auto pAccEntry = xListBox->implGetAccessible(*pEntry);
         tools::Rectangle aRect = pAccEntry->GetBoundingBox_Impl();
         if ( aRect.Contains( VCLPoint( _aPoint ) ) )
             xAcc = pAccEntry.get();
@@ -932,9 +931,9 @@ namespace accessibility
 
             if ( nSelCount == ( nSelectedChildIndex + 1 ) )
             {
-                uno::Reference<XAccessible> xListBox(m_wListBox);
+                rtl::Reference<AccessibleListBox> xListBox(m_wListBox);
                 assert(xListBox.is());
-                xChild = m_rListBox.implGetAccessible(*pEntry).get();
+                xChild = xListBox->implGetAccessible(*pEntry).get();
                 break;
             }
         }

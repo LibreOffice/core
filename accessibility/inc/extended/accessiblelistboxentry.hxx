@@ -34,6 +34,7 @@
 #include <comphelper/accessibletexthelper.hxx>
 #include <vcl/toolkit/treelistentry.hxx>
 #include <tools/gen.hxx>
+#include <unotools/weakref.hxx>
 
 // forward ---------------------------------------------------------------
 
@@ -80,8 +81,7 @@ namespace accessibility
         /// client id in the AccessibleEventNotifier queue
         sal_uInt32                          m_nClientId;
 
-        css::uno::WeakReference<css::accessibility::XAccessible> m_wListBox;
-        AccessibleListBox & m_rListBox;
+        unotools::WeakReference<AccessibleListBox> m_wListBox;
 
         tools::Rectangle               GetBoundingBox_Impl() const;
         tools::Rectangle               GetBoundingBoxOnScreen_Impl() const;
