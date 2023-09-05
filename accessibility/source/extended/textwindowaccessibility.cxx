@@ -1601,16 +1601,13 @@ void Document::init()
 ::rtl::Reference< Paragraph >
 Document::getParagraph(Paragraphs::iterator const & rIt)
 {
-    return static_cast< Paragraph * >(
-        css::uno::Reference< css::accessibility::XAccessible >(
-            rIt->getParagraph()).get());
+    return rIt->getParagraph().get();
 }
 
 css::uno::Reference< css::accessibility::XAccessible >
 Document::getAccessibleChild(Paragraphs::iterator const & rIt)
 {
-    css::uno::Reference< css::accessibility::XAccessible > xParagraph(
-        rIt->getParagraph());
+    rtl::Reference< Paragraph > xParagraph(rIt->getParagraph());
     if (!xParagraph.is())
     {
         xParagraph = new Paragraph(this, rIt - m_xParagraphs->begin());
@@ -1841,8 +1838,7 @@ void Document::handleParagraphNotifications()
                           xStrong;
                     if (bWasVisible)
                         xStrong = getAccessibleChild(aIt);
-                    css::uno::WeakReference<
-                          css::accessibility::XAccessible > xWeak(
+                    unotools::WeakReference<Paragraph> xWeak(
                               aIt->getParagraph());
                     aIt = m_xParagraphs->erase(aIt);
 
@@ -1865,8 +1861,7 @@ void Document::handleParagraphNotifications()
                             css::uno::Any(xStrong),
                             css::uno::Any());
 
-                    css::uno::Reference< css::lang::XComponent > xComponent(
-                        xWeak.get(), css::uno::UNO_QUERY);
+                    rtl::Reference< Paragraph > xComponent( xWeak.get() );
                     if (xComponent.is())
                         xComponent->dispose();
 
@@ -2197,8 +2192,8 @@ void Document::disposeParagraphs()
 {
     for (auto const& paragraph : *m_xParagraphs)
     {
-        css::uno::Reference< css::lang::XComponent > xComponent(
-            paragraph.getParagraph().get(), css::uno::UNO_QUERY);
+        rtl::Reference< Paragraph > xComponent(
+            paragraph.getParagraph().get() );
         if (xComponent.is())
             xComponent->dispose();
     }
