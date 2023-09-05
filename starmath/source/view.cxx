@@ -950,8 +950,8 @@ SmCmdBoxWindow::SmCmdBoxWindow(SfxBindings *pBindings_, SfxChildWindow *pChildWi
 
     Hide();
 
-    // Don't try to grab focus in LOK inline edit mode
-    if (!comphelper::LibreOfficeKit::isActive())
+    // Don't try to grab focus in inline edit mode
+    if (!SmViewShell::IsInlineEditEnabled())
     {
         aInitialFocusTimer.SetInvokeHandler(LINK(this, SmCmdBoxWindow, InitialFocusTimerHdl));
         aInitialFocusTimer.SetTimeout(100);
@@ -2322,7 +2322,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
 {
     SfxViewShell::Activate( bIsMDIActivate );
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (IsInlineEditEnabled())
     {
         // In LOK, activate in-place editing
         GetGraphicWidget().GrabFocus();

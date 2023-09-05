@@ -1000,7 +1000,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_simreg/SimpleRegistry \
     qadevOOo/tests/java/mod/_smgr/OServiceManager \
     qadevOOo/tests/java/mod/_smplmail/SimpleSystemMail \
-    qadevOOo/tests/java/mod/_sm/SmEditAccessible \
     qadevOOo/tests/java/mod/_sm/SmGraphicAccessible \
     qadevOOo/tests/java/mod/_sm/SmModel \
     qadevOOo/tests/java/mod/_sm/XMLExporter \
