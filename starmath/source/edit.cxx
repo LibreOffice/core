@@ -556,10 +556,6 @@ void SmEditTextWindow::GetFocus()
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)
         pEditEngine->SetStatusEventHdl(LINK(this, SmEditTextWindow, EditStatusHdl));
-
-    //Let SmViewShell know we got focus
-    if (mrEditWindow.GetView() && SmViewShell::IsInlineEditEnabled())
-        mrEditWindow.GetView()->SetInsertIntoEditWindow(true);
 }
 
 void SmEditTextWindow::LoseFocus()

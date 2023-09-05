@@ -249,11 +249,6 @@ class SmViewShell final : public SfxViewShell
     SmGraphicController maGraphicController;
     OUString maStatusText;
     bool mbPasteState;
-    /** Used to determine whether insertions using SID_INSERTSPECIAL and SID_INSERTCOMMANDTEXT
-     * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
-     * visual editor was last to have focus.
-     */
-    bool mbInsertIntoEditWindow;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
@@ -337,15 +332,6 @@ public:
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
             tools::Rectangle aOutRect );
 
-    /** Set bInsertIntoEditWindow so we know where to insert
-     *
-     * This method is called whenever SmGraphicWidget or SmEditWindow gets focus,
-     * so that when text is inserted from catalog or elsewhere we know whether to
-     * insert for the visual editor, or the text editor.
-     */
-    void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast){
-        mbInsertIntoEditWindow = bEditWindowHadFocusLast;
-    }
     static bool IsInlineEditEnabled();
 
     // Opens the main help page for the Math module

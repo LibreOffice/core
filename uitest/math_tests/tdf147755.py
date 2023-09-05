@@ -26,7 +26,7 @@ class Tdf147755(UITestCase):
             xEditView = xMathDoc.getChild("editview")
 
             # Without the fix in place, this test would have failed with
-            # AssertionError: '%ALPHA ' != ''
-            self.assertEqual("%ALPHA ", get_state_as_dict(xEditView)["Text"])
+            # AssertionError: '%ALPHA' != ''
+            self.assertEqual("%ALPHA", get_state_as_dict(xEditView)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

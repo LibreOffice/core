@@ -424,8 +424,6 @@ void SmGraphicWidget::GetFocus()
         return;
     if (SmEditWindow* pEdit = GetView().GetEditWindow())
         pEdit->Flush();
-    //Let view shell know what insertions should be done in visual editor
-    GetView().SetInsertIntoEditWindow(false);
     SetIsCursorVisible(true);
     ShowLine(true);
     CaretBlinkStart();
@@ -1784,7 +1782,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
 
         case SID_CUT:
-            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            if (IsInlineEditEnabled())
             {
                 GetDoc()->GetCursor().Cut();
                 GetGraphicWidget().GrabFocus();
@@ -1794,7 +1792,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_COPY:
-            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            if (IsInlineEditEnabled())
             {
                 GetDoc()->GetCursor().Copy();
                 GetGraphicWidget().GrabFocus();
@@ -1814,7 +1812,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
         case SID_PASTE:
             {
-                if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+                if (IsInlineEditEnabled())
                 {
                     GetDoc()->GetCursor().Paste();
                     GetGraphicWidget().GrabFocus();
@@ -1847,7 +1845,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_DELETE:
-            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            if (IsInlineEditEnabled())
             {
                 if (!GetDoc()->GetCursor().HasSelection())
                 {
@@ -1872,14 +1870,14 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_INSERTCOMMANDTEXT);
 
-            if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
-            {
-                pWin->InsertText(rItem.GetValue());
-            }
-            if (IsInlineEditEnabled() && (GetDoc() && !mbInsertIntoEditWindow))
+            if (IsInlineEditEnabled())
             {
                 GetDoc()->GetCursor().InsertCommandText(rItem.GetValue());
                 GetGraphicWidget().GrabFocus();
+            }
+            else if (pWin)
+            {
+                pWin->InsertText(rItem.GetValue());
             }
             break;
 
@@ -1889,10 +1887,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             const SfxStringItem& rItem = rReq.GetArgs()->Get(SID_INSERTSPECIAL);
 
-            if (pWin && (mbInsertIntoEditWindow || !IsInlineEditEnabled()))
-                pWin->InsertText(rItem.GetValue());
-            if (IsInlineEditEnabled() && (GetDoc() && !mbInsertIntoEditWindow))
+            if (IsInlineEditEnabled())
                 GetDoc()->GetCursor().InsertSpecial(rItem.GetValue());
+            else if (pWin)
+                pWin->InsertText(rItem.GetValue());
             break;
         }
 
@@ -2142,7 +2140,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
         case SID_CUT:
         case SID_COPY:
         case SID_DELETE:
-            if (IsInlineEditEnabled() && !mbInsertIntoEditWindow)
+            if (IsInlineEditEnabled())
             {
                 if (!GetDoc()->GetCursor().HasSelection())
                     rSet.DisableItem(nWh);
@@ -2308,7 +2306,6 @@ SmViewShell::SmViewShell(SfxViewFrame& rFrame_, SfxViewShell *)
     , mxGraphicWindow(VclPtr<SmGraphicWindow>::Create(*this))
     , maGraphicController(mxGraphicWindow->GetGraphicWidget(), SID_GRAPHIC_SM, rFrame_.GetBindings())
     , mbPasteState(false)
-    , mbInsertIntoEditWindow(false)
 {
     SetStatusText(OUString());
     SetWindow(mxGraphicWindow.get());
