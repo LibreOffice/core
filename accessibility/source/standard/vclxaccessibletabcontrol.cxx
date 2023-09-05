@@ -181,18 +181,14 @@ void VCLXAccessibleTabControl::ProcessWindowEvent( const VclWindowEvent& rVclWin
         {
             if ( m_pTabControl )
             {
+                OExternalLockGuard aGuard( this );
                 sal_uInt16 nPageId = static_cast<sal_uInt16>(reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()));
-                for ( sal_Int64 i = 0, nCount = getAccessibleChildCount(); i < nCount; ++i )
+                for ( sal_Int64 i = 0, nCount = m_aAccessibleChildren.size(); i < nCount; ++i )
                 {
-                    Reference< XAccessible > xChild( getAccessibleChild( i ) );
-                    if ( xChild.is() )
+                    if ( m_aAccessibleChildren[i] && m_aAccessibleChildren[i]->GetPageId() == nPageId )
                     {
-                        VCLXAccessibleTabPage* pVCLXAccessibleTabPage = static_cast< VCLXAccessibleTabPage* >( xChild.get() );
-                        if ( pVCLXAccessibleTabPage && pVCLXAccessibleTabPage->GetPageId() == nPageId )
-                        {
-                            RemoveChild( i );
-                            break;
-                        }
+                        RemoveChild( i );
+                        break;
                     }
                 }
             }
