@@ -1070,7 +1070,6 @@ void SvXMLExport::ImplExportSettings()
 
 void SvXMLExport::ImplExportStyles()
 {
-    printf ("SvXMLExport::ImplExportStyles\n");
     CheckAttrList();
 
     {
