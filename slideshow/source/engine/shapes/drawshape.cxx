@@ -775,7 +775,7 @@ namespace slideshow::internal
                             aAABorder.setWidth( ::std::max(
                                     rShapeBorder.getWidth(),
                                     aAABorder.getWidth() ) );
-                            aAABorder.setWidth( ::std::max(
+                            aAABorder.setHeight( ::std::max(
                                     rShapeBorder.getHeight(),
                                     aAABorder.getHeight() ) );
                         }
