@@ -52,6 +52,8 @@ VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, boo
         m_bHasTextChild = true;
 }
 
+VCLXAccessibleBox::~VCLXAccessibleBox() {}
+
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
     uno::Any aOldValue, aNewValue;
@@ -106,11 +108,11 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VclEventId::ListboxSelect:
         {
             // Forward the call to the list child.
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
-                pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+                pList = m_xList.get();
             }
             if ( pList != nullptr )
             {
@@ -126,11 +128,11 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VclEventId::DropdownOpen:
         {
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
-                pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+                pList = m_xList.get();
             }
             if ( pList != nullptr )
             {
@@ -141,11 +143,11 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VclEventId::DropdownClose:
         {
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
-                pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+                pList = m_xList.get();
             }
             if ( pList != nullptr )
             {
@@ -162,7 +164,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         }
         case VclEventId::ComboboxSelect:
         {
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if (pList != nullptr && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
@@ -191,11 +193,11 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VclEventId::ComboboxItemRemoved:
         {
             // Forward the call to the list child.
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if ( pList == nullptr )
             {
                 getAccessibleChild ( m_bHasTextChild ? 1 : 0 );
-                pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+                pList = m_xList.get();
             }
             if ( pList != nullptr )
                 pList->ProcessWindowEvent (rVclWindowEvent);
@@ -209,7 +211,7 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
             // the same VCL object as this box does.  In case of the
             // combobox, however, we have to help by providing the list with
             // the text of the currently selected item.
-            VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+            VCLXAccessibleList* pList = m_xList.get();
             if (pList != nullptr && m_xText.is())
             {
                 Reference<XAccessibleText> xText (m_xText->getAccessibleContext(), UNO_QUERY);
@@ -442,7 +444,7 @@ Any VCLXAccessibleBox::getCurrentValue( )
     if (m_aBoxType == LISTBOX && m_bIsDropDownBox  && m_xList.is() )
     {
 
-        VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
+        VCLXAccessibleList* pList = m_xList.get();
         if(pList->IsInDropDown())
         {
             if(pList->getSelectedAccessibleChildCount()>0)

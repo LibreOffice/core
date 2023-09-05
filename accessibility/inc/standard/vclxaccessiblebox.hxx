@@ -26,6 +26,7 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <cppuhelper/implbase.hxx>
 
+class VCLXAccessibleList;
 
 /** Base class for list- and combo boxes.  This class manages the box'
     children.  The classed derived from this one have only to implement the
@@ -102,7 +103,7 @@ public:
     virtual css::uno::Any SAL_CALL getMinimumIncrement(  ) override;
 
 protected:
-    virtual ~VCLXAccessibleBox() override = default;
+    virtual ~VCLXAccessibleBox() override;
 
     /** Returns true when the object is valid.
     */
@@ -129,8 +130,7 @@ private:
         m_xText;
 
     /// The child that contains the items of this box.
-    css::uno::Reference< css::accessibility::XAccessible>
-        m_xList;
+    rtl::Reference<VCLXAccessibleList> m_xList;
 
     /** This flag specifies whether an object has a text field as child
         regardless of whether that child being currently instantiated or
