@@ -84,10 +84,6 @@ namespace
         sal_Int32 m_nIndexInParent;
 
     public:
-        sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
-        void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
-
-    public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
             const css::uno::Reference< css::accessibility::XAccessible >& _rxInnerAccessible,
@@ -253,26 +249,17 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( ToolBox::ImplToolItems::si
 void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator const & _rMapPos,
         bool _bNotifyRemoval )
 {
-    Reference< XAccessible > xItemAcc( _rMapPos->second );
+    rtl::Reference<VCLXAccessibleToolBoxItem> xItemAcc(_rMapPos->second);
     if ( !xItemAcc.is() )
         return;
 
     if ( _bNotifyRemoval )
     {
-        NotifyAccessibleEvent( AccessibleEventId::CHILD, Any( xItemAcc ), Any() );
+        NotifyAccessibleEvent(AccessibleEventId::CHILD, Any(Reference<XAccessible>(xItemAcc)), Any());
     }
 
-    auto pWindowItem = dynamic_cast<OToolBoxWindowItem*>(xItemAcc.get());
-    if ( !pWindowItem )
-    {
-        static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() )->ReleaseToolBox();
-        ::comphelper::disposeComponent( xItemAcc );
-    }
-    else
-    {
-        Reference< XAccessibleContext > xContext( pWindowItem->getContextNoCreate() );
-        ::comphelper::disposeComponent( xContext );
-    }
+    xItemAcc->ReleaseToolBox();
+    xItemAcc->dispose();
 }
 
 void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _nPos)
@@ -292,24 +279,12 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( ToolBox::ImplToolItems::size_type _
         //TODO: ToolBox::ImplToolItems::size_type -> sal_Int32!
     while ( m_aAccessibleChildren.end() != aIndexAdjust )
     {
-        Reference< XAccessible > xItemAcc( aIndexAdjust->second );
-
-        auto pWindowItem = dynamic_cast<OToolBoxWindowItem*>(xItemAcc.get());
-        if ( !pWindowItem )
+        rtl::Reference<VCLXAccessibleToolBoxItem> xItem(aIndexAdjust->second);
+        if (xItem.is())
         {
-            VCLXAccessibleToolBoxItem* pItem = static_cast< VCLXAccessibleToolBoxItem* >( xItemAcc.get() );
-            if ( pItem )
-            {
-                sal_Int32 nIndex = pItem->getIndexInParent( );
-                nIndex++;
-                pItem->setIndexInParent( nIndex );
-            }
-        }
-        else
-        {
-            sal_Int32 nIndex = pWindowItem->getIndexInParent( );
+            sal_Int32 nIndex = xItem->getIndexInParent();
             nIndex++;
-            pWindowItem->setIndexInParent( nIndex );
+            xItem->setIndexInParent(nIndex);
         }
 
         ++aIndexAdjust;
