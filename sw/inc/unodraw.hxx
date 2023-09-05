@@ -146,8 +146,6 @@ class SwXShape : public SwXShapeBaseClass
 
     bool                        m_bDescriptor;
 
-    SvxShape*               GetSvxShape();
-
     /** method to determine top group object */
     SdrObject* GetTopGroupObj( SvxShape* _pSvxShape = nullptr );
 
@@ -246,6 +244,7 @@ public:
     SwShapeDescriptor_Impl*     GetDescImpl() {return m_pImpl.get();}
     SwFrameFormat* GetFrameFormat() const;
     const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() const {return m_xShapeAgg;}
+    SvxShape*               GetSvxShape();
 
     // helper
     static void AddExistingShapeToFormat( SdrObject const & _rObj );

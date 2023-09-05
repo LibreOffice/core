@@ -148,19 +148,12 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     SwXShape *const pShape(comphelper::getFromUnoTunnel<SwXShape>(xTunnel));
     if (pShape)
     {
-        uno::Reference<uno::XAggregation> const xAgg(
-                pShape->GetAggregationInterface());
-        if (xAgg.is())
+        if (SvxShape * pSvxShape = pShape->GetSvxShape())
         {
-            SvxShape *const pSvxShape(
-                    comphelper::getFromUnoTunnel<SvxShape>(xTunnel));
-            if (pSvxShape)
-            {
-                SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
-                if (pSdrObject)
-                {   // hmm... needs view to verify it's in right doc...
-                    o_rSdrObjects.push_back(pSdrObject);
-                }
+            SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
+            if (pSdrObject)
+            {   // hmm... needs view to verify it's in right doc...
+                o_rSdrObjects.push_back(pSdrObject);
             }
         }
         return;
