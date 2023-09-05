@@ -446,7 +446,13 @@ namespace svgio::svgreader
             {
                 const sal_Unicode aCharA(rCandidate[nPos]);
 
-                if(nPos + 1 < nLen)
+                if('%' == aCharA)
+                {
+                    // percent used, relative to current
+                    nPos++;
+                    aRetval = SvgUnit::percent;
+                }
+                else if(nPos + 1 < nLen)
                 {
                     const sal_Unicode aCharB(rCandidate[nPos + 1]);
                     bool bTwoCharValid(false);
@@ -525,15 +531,6 @@ namespace svgio::svgreader
                     if(bTwoCharValid)
                     {
                         nPos += 2;
-                    }
-                }
-                else
-                {
-                    if('%' == aCharA)
-                    {
-                        // percent used, relative to current
-                        nPos++;
-                        aRetval = SvgUnit::percent;
                     }
                 }
             }
