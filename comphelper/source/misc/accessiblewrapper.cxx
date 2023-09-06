@@ -585,8 +585,12 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextWrapper::disposing()
+    void SAL_CALL OAccessibleContextWrapper::disposing(const css::lang::EventObject& rEvent)
     {
+        assert(rEvent.Source == Reference<XInterface>(m_xInnerContext, UNO_QUERY)
+               && "OAccessibleContextWrapper::disposing called with event source that's not the "
+                  "wrapped a11y context");
+
         AccessibleEventNotifier::TClientId nClientId( 0 );
 
         // --- <mutex lock> -----------------------------------------
@@ -603,7 +607,7 @@ namespace comphelper
         // --- </mutex lock> -----------------------------------------
 
         // let the base class do
-        OAccessibleContextWrapperHelper::dispose();
+        OAccessibleContextWrapperHelper::disposing(rEvent);
 
         // notify the disposal
         if ( nClientId )
