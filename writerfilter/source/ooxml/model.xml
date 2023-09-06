@@ -30,6 +30,7 @@
   xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
   xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+  xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
   xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
   xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
   xmlns:wvml="urn:schemas-microsoft-com:office:word"
@@ -4036,6 +4037,7 @@
         <ref name="chart"/>
         <ref name="wsp"/>
         <ref name="wgp"/>
+        <ref name="wpc"/>
         <element>
           <ref name="BUILT_IN_ANY_TYPE"/>
         </element>
@@ -4061,6 +4063,7 @@
       <element name="chart" tokenid="ooxml:CT_GraphicalObjectData_chart"/>
       <element name="wsp" tokenid="ooxml:CT_GraphicalObjectData_wsp"/>
       <element name="wgp" tokenid="ooxml:CT_GraphicalObjectData_wgp"/>
+      <element name="wpc" tokenid="ooxml:CT_GraphicalObjectData_wpc"/>
       <attribute name="uri" tokenid="ooxml:CT_GraphicalObjectData_uri"/>
     </resource>
     <resource name="CT_GraphicalObject" resource="Properties">
@@ -8484,6 +8487,37 @@
           <ref name="CT_WordprocessingGroup"/>
         </element>
       </define>
+      <define name="CT_BackgroundFormatting">
+        <ref name="EG_FillProperties"/>
+        <ref name="EG_EffectProperties"/>
+      </define>
+      <define name="CT_WholeE2oFormatting">
+        <element name="ln">
+          <ref name="CT_LineProperties"/>
+        </element>
+        <ref name="EG_EffectProperties"/>
+      </define>
+      <define name="CT_WordprocessingCanvas">
+        <element name="wpc:bg">
+          <ref name="CT_BackgroundFormatting"/>
+        </element>
+        <element name="wpc:whole">
+          <ref name="CT_WholeE2oFormatting"/>
+        </element>
+        <choice>
+            <ref name="wsp"/>
+            <ref name="pic"/>
+          <!-- ToDo w14:contentPart missing -->
+            <ref name="wgp"/>
+          <!-- ToDo graphicFrame missing -->
+        </choice>
+        <!-- ToDo extLst missing -->
+      </define>
+      <define name="wpc">
+        <element name="wpc:wpc">
+          <ref name="CT_WordprocessingCanvas"/>
+        </element>
+      </define>
     </grammar>
     <resource name="CT_PictureNonVisual" resource="Properties">
       <element name="cNvPr" tokenid="ooxml:CT_PictureNonVisual_cNvPr"/>
@@ -8532,6 +8566,19 @@
     </resource>
     <resource name="wgp" resource="Shape">
       <element name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
+    </resource>
+    <resource name="CT_WholeE2oFormatting" resource="Properties">
+      <element name="a:ln" tokenid="ooxml:CT_WholeE2oFormatting_ln"/>
+    </resource>
+    <resource name="CT_WordprocessingCanvas" resource="Shape">
+      <element name="wpc:bg" tokenid="ooxml:CT_WordprocessingCanvas_bg"/>
+      <element name="wpc:whole" tokenid="ooxml:CT_WordprocessingCanvas_whole"/>
+      <element name="wps:wsp" tokenid="ooxml:CT_WordprocessingCanvas_wsp"/>
+      <element name="pic" tokenid="ooxml:CT_WordprocessingCanvas_pic"/>
+      <element name="wpg:wgp" tokenid="ooxml:CT_WordprocessingCanvas_wgp"/>
+    </resource>
+    <resource name="wpc" resource="Shape">
+      <element name="wpc:wpc" tokenid="ooxml:wpc_wpc"/>
     </resource>
 
   </namespace>

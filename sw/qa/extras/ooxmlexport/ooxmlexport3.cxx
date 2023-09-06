@@ -1138,7 +1138,10 @@ CPPUNIT_TEST_FIXTURE(Test, testArrowFlipXY)
 
     xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
 
-    OUString arrowStyle = getXPath(pXmlDocument, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:group/v:shape[2]", "style");
+    OUString arrowStyle = getXPath(pXmlDocument,
+                                   "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/"
+                                   "w:pict/v:group/v:shape[@type='_x0000_t32']",
+                                   "style");
     CPPUNIT_ASSERT(arrowStyle.indexOf(u"flip:xy") != sal_Int32(-1));
 }
 

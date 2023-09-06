@@ -9,6 +9,7 @@
 
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
+#include "WordprocessingCanvasContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -20,6 +21,7 @@
 #include <drawingml/textbody.hxx>
 #include <drawingml/textbodyproperties.hxx>
 #include <oox/drawingml/color.hxx>
+#include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>
@@ -555,8 +557,14 @@ WpsContext::WpsContext(ContextHandler2Helper const& rParent, uno::Reference<draw
 
     if (const auto pParent = dynamic_cast<const WpgContext*>(&rParent))
         m_bHasWPGParent = pParent->isFullWPGSupport();
+    else if (dynamic_cast<const WordprocessingCanvasContext*>(&rParent))
+        m_bHasWPGParent = true;
     else
         m_bHasWPGParent = false;
+
+    if ((pMasterShapePtr && pMasterShapePtr->isInWordprocessingCanvas())
+        || dynamic_cast<const WordprocessingCanvasContext*>(&rParent) != nullptr)
+        pShapePtr->setWordprocessingCanvas(true);
 }
 
 WpsContext::~WpsContext() = default;
@@ -567,8 +575,30 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     switch (getBaseToken(nElementToken))
     {
         case XML_wsp:
-        case XML_cNvCnPr:
             break;
+        case XML_cNvCnPr:
+        {
+            // It might be a connector shape in a wordprocessing canvas
+            // Replace the custom shape with a connector shape.
+            if (!mpShapePtr || !mpShapePtr->isInWordprocessingCanvas() || !mpMasterShapePtr)
+                break;
+            // Generate new shape
+            oox::drawingml::ShapePtr pShape = std::make_shared<oox::drawingml::Shape>(
+                "com.sun.star.drawing.ConnectorShape", false);
+            pShape->setConnectorShape(true);
+            pShape->setWps(true);
+            pShape->setWordprocessingCanvas(true);
+            // ToDo: Can only copy infos from mpShapePtr to pShape for which getter available.
+            pShape->setName(mpShapePtr->getName());
+            pShape->setId(mpShapePtr->getId());
+            pShape->setWPGChild(mpShapePtr->isWPGChild());
+            // And actually replace the shape.
+            mpShapePtr = pShape;
+            mpMasterShapePtr->getChildren().pop_back();
+            mpMasterShapePtr->getChildren().push_back(pShape);
+            return new oox::drawingml::ConnectorShapePropertiesContext(
+                *this, mpShapePtr, mpShapePtr->getConnectorShapeProperties());
+        }
         case XML_bodyPr:
             if (mxShape.is())
             {

@@ -36,23 +36,6 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {
 
-namespace
-{
-class ConnectorShapePropertiesContext : public ::oox::core::ContextHandler2
-{
-    std::vector<ConnectorShapeProperties>& mrConnectorShapePropertiesList;
-    ShapePtr mpConnectorShapePtr;
-
-public:
-    ConnectorShapePropertiesContext(
-        ::oox::core::ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
-        std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList);
-
-    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 aElementToken,
-                                                           const AttributeList& rAttribs) override;
-};
-}
-
 ConnectorShapePropertiesContext::ConnectorShapePropertiesContext(
     ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
     std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList)

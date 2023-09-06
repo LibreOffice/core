@@ -145,6 +145,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/clrschemecontext \
     oox/source/drawingml/clrscheme \
     oox/source/drawingml/colorchoicecontext \
+    oox/source/drawingml/connectorhelper \
     oox/source/drawingml/connectorshapecontext \
     oox/source/drawingml/customshapegeometry \
     oox/source/drawingml/customshapepresetdata \
@@ -302,6 +303,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/shape/ShapeContextHandler \
     oox/source/shape/ShapeDrawingFragmentHandler \
     oox/source/shape/ShapeFilterBase \
+    oox/source/shape/WordprocessingCanvasContext \
     oox/source/shape/WpgContext \
     oox/source/shape/WpsContext \
     oox/source/token/namespacemap \

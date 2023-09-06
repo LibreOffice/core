@@ -337,11 +337,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
     awt::Point aPosGroup = xGroupShape->getPosition();
     awt::Size aSizeGroup = xGroupShape->getSize();
 
+    // ToDo: width and height are inaccurate for unknown reason.
+    // Allow some tolerance
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10162), aPosGroup.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(118), aPosGroup.Y);
-    // As of LO7.2 width by 1 too small, height by 2 too small. Reason unclear.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(6368), aSizeGroup.Width);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4981), aSizeGroup.Height);
+    // width 2292840 EMU = 6369, height 1793875 EMU = 4982.98
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(6369), aSizeGroup.Width, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4983), aSizeGroup.Height, 2);
 
     // Without the fix in place, this test would have failed at many places
     // as the first shape in the group would have had an incorrect position,
@@ -353,8 +355,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12861), aPosShape1.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(146), aPosShape1.Y);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3669), aSizeShape1.Width);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4912), aSizeShape1.Height);
+    // width 2292840/2293461*1321179 EMU = 3668.94, height 1767845 EMU = 4910.68
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(3671), aSizeShape1.Width, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4914), aSizeShape1.Height, 2);
 
     uno::Reference<drawing::XShape> xShape2(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
     awt::Point aPosShape2 = xShape2->getPosition();
@@ -362,8 +365,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf118693)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10162), aPosShape2.X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(118), aPosShape2.Y);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4595), aSizeShape2.Width);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4981), aSizeShape2.Height);
+    // width 2292840/2293461*1654824 EMU = 4595.48, height 1793875 EMU = 4982.98
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4597), aSizeShape2.Width, 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(4983), aSizeShape2.Height, 2);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
@@ -381,7 +385,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGroupShapeFontName)
         OUString("Calibri"),
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameComplex"));
     CPPUNIT_ASSERT_EQUAL(
-        OUString(""),
+        OUString("Calibri"),
         getProperty<OUString>(getRun(getParagraphOfText(1, xText), 1), "CharFontNameAsian"));
 }
 

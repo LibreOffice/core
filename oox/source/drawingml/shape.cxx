@@ -147,6 +147,7 @@ Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 , mbLocked( false )
 , mbWPGChild(false)
 , mbLockedCanvas( false )
+, mbWordprocessingCanvas(false)
 , mbWps( false )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
@@ -191,6 +192,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mbLocked( pSourceShape->mbLocked )
 , mbWPGChild( pSourceShape->mbWPGChild )
 , mbLockedCanvas( pSourceShape->mbLockedCanvas )
+, mbWordprocessingCanvas(pSourceShape->mbWordprocessingCanvas)
 , mbWps( pSourceShape->mbWps )
 , mbTextBox( pSourceShape->mbTextBox )
 , mbHasLinkedTxbx(false)
@@ -374,6 +376,33 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aMatrix );
 
+            if (mbWordprocessingCanvas && !mbWPGChild)
+            {
+                // This is a drawing canvas. In case the canvas has no fill and no stroke, Word does
+                // not render shadow or glow, even if it is set for the canvas. Thus we disable shadow
+                // and glow in this case for the ersatz background shape of the drawing canvas.
+                try
+                {
+                    oox::drawingml::ShapePtr pBgShape = getChildren().front();
+                    const Reference<css::drawing::XShape>& xBgShape = pBgShape->getXShape();
+                    Reference<XPropertySet> xBgProps(xBgShape, uno::UNO_QUERY);
+                    drawing::FillStyle eFillStyle = drawing::FillStyle_NONE;
+                    xBgProps->getPropertyValue("FillStyle") >>= eFillStyle;
+                    drawing::LineStyle eLineStyle = drawing::LineStyle_NONE;
+                    xBgProps->getPropertyValue("LineStyle") >>= eLineStyle;
+                    if (eFillStyle == drawing::FillStyle_NONE
+                        && eLineStyle == drawing::LineStyle_NONE)
+                    {
+                        xBgProps->setPropertyValue(UNO_NAME_SHADOW, uno::Any(false));
+                        xBgProps->setPropertyValue(u"GlowEffectRadius"_ustr, uno::Any(sal_Int32(0)));
+                    }
+                }
+                catch (const Exception&)
+                {
+                    TOOLS_WARN_EXCEPTION("oox.drawingml", "Shape::addShape mbWordprocessingCanvas");
+                }
+            }
+
             if (isWPGChild() && xShape)
             {
                 // This is a wps shape and it is the child of the WPG, now copy the
@@ -462,6 +491,11 @@ void Shape::addShape(
 void Shape::setLockedCanvas(bool bLockedCanvas)
 {
     mbLockedCanvas = bLockedCanvas;
+}
+
+void Shape::setWordprocessingCanvas(bool bWordprocessingCanvas)
+{
+    mbWordprocessingCanvas = bWordprocessingCanvas;
 }
 
 void Shape::setWPGChild(bool bWPG)
@@ -1567,6 +1601,11 @@ Reference< XShape > const & Shape::createAndInsert(
                 }
             }
 
+            if (mbWordprocessingCanvas)
+            {
+                putPropertyToGrabBag("WordprocessingCanvas", Any(true));
+            }
+
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
             std::vector<beans::PropertyValue> aProperties
             {
@@ -1712,6 +1751,11 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             //If we have aServiceName as "com.sun.star.drawing.GroupShape" and lockedCanvas
             putPropertyToGrabBag( "LockedCanvas", Any( true ) );
+        }
+        else if (mbWordprocessingCanvas)
+        {
+            putPropertyToGrabBag("WordprocessingCanvas", Any(true));
+            putPropertyToGrabBag("mso-edit-as", Any(OUString("canvas"))); // for export VML Fallback
         }
 
         // These can have a custom geometry, so position should be set here,

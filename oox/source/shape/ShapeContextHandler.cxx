@@ -18,12 +18,15 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 #include <oox/shape/ShapeContextHandler.hxx>
 #include <oox/shape/ShapeDrawingFragmentHandler.hxx>
 #include "LockedCanvasContext.hxx"
+#include "WordprocessingCanvasContext.hxx"
 #include "WpsContext.hxx"
 #include "WpgContext.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -35,6 +38,12 @@
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdobj.hxx>
+
+#include <drawingml/connectorhelper.hxx>
+
 #include <memory>
 #include <utility>
 
@@ -219,6 +228,25 @@ ShapeContextHandler::getDiagramShapeContext()
     return mxDiagramShapeContext;
 }
 
+uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getWordprocessingCanvasContext(sal_Int32 nElement)
+{
+    if (!mxWordprocessingCanvasContext.is())
+    {
+        FragmentHandler2Ref rFragmentHandler(new ShapeFragmentHandler(*mxShapeFilterBase, msRelationFragmentPath));
+
+        switch (getBaseToken(nElement))
+        {
+            case XML_wpc:
+                mxWordprocessingCanvasContext.set(new WordprocessingCanvasContext(*rFragmentHandler, maSize));
+                break;
+            default:
+                break;
+        }
+    }
+
+    return static_cast<ContextHandler *>(mxWordprocessingCanvasContext.get());
+}
+
 uno::Reference<xml::sax::XFastContextHandler>
 ShapeContextHandler::getContextHandler(sal_Int32 nElement)
 {
@@ -246,6 +274,9 @@ ShapeContextHandler::getContextHandler(sal_Int32 nElement)
         case NMSP_wpg:
             xResult.set(getWpgContext(nStartToken));
             break;
+        case NMSP_wpc:
+            xResult.set(getWordprocessingCanvasContext(nStartToken));
+            break;
         default:
             xResult.set(getGraphicShapeContext(nStartToken));
             break;
@@ -262,7 +293,8 @@ void SAL_CALL ShapeContextHandler::startFastElement
     mxShapeFilterBase->filter(maMediaDescriptor);
 
     if (Element == DGM_TOKEN(relIds) || Element == LC_TOKEN(lockedCanvas) || Element == C_TOKEN(chart) ||
-        Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic))
+        Element == WPS_TOKEN(wsp) || Element == WPG_TOKEN(wgp) || Element == OOX_TOKEN(dmlPicture, pic)
+        || Element == WPC_TOKEN(wpc))
     {
         // Parse the theme relation, if available; the diagram won't have colors without it.
         if (!mpThemePtr && !msRelationFragmentPath.isEmpty())
@@ -392,6 +424,23 @@ void SAL_CALL ShapeContextHandler::characters(const OUString & aChars)
         xContextHandler->characters(aChars);
 }
 
+namespace // helpers for case mxWordprocessingCanvasContext
+{
+    void lcl_createShapeMap(oox::drawingml::ShapePtr rShapePtr,
+                            oox::drawingml::ShapeIdMap& rShapeMap)
+{
+    std::vector< ShapePtr >& rChildren = rShapePtr->getChildren();
+    if (rChildren.empty())
+        return;
+    for (auto& pIt : rChildren)
+    {
+        rShapeMap[pIt->getId()] = pIt; // add child itself
+        lcl_createShapeMap(pIt, rShapeMap); // and all its descendants
+    }
+}
+
+} // end anonymous namespace
+
 uno::Reference< drawing::XShape >
 ShapeContextHandler::getShape()
 {
@@ -460,6 +509,43 @@ ShapeContextHandler::getShape()
                 pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
                 xResult = pShape->getXShape();
                 mxLockedCanvasContext.clear();
+            }
+        }
+        else if (mxWordprocessingCanvasContext.is())
+        {
+             // group which represents the drawing canvas
+            ShapePtr pShape = mxWordprocessingCanvasContext->getShape();
+            if (pShape)
+            {
+                basegfx::B2DHomMatrix aMatrix;
+                pShape->addShape(*mxShapeFilterBase, mpThemePtr.get(), xShapes, aMatrix, pShape->getFillProperties());
+
+                // create a flat map of all shapes in the drawing canvas group.
+                oox::drawingml::ShapeIdMap aShapeMap;
+                lcl_createShapeMap(pShape, aShapeMap);
+
+                // Travers aShapeMap and generate edge related properties.
+                for (auto& rIt : aShapeMap)
+                {
+                    if ((rIt.second)->getServiceName() == "com.sun.star.drawing.ConnectorShape")
+                    {
+                        ConnectorHelper::applyConnections(rIt.second, aShapeMap);
+
+                        if (rIt.second->getConnectorName() == u"bentConnector3"_ustr
+                           || rIt.second->getConnectorName() == u"bentConnector4"_ustr
+                           || rIt.second->getConnectorName() == u"bentConnector5"_ustr)
+                        {
+                           ConnectorHelper::applyBentHandleAdjustments(rIt.second);
+                        }
+                        // else use the default path of LibreOffice
+                        // curveConnecto2 and bentConnector2 do not have handles.
+                        // ToDo: OOXML defines a path for curveConnector3, curveConnector4 and
+                        // curveConnector5 that is basically incompatible with the way LibreOffice
+                        // creates the path.
+                    }
+                }
+                xResult = pShape->getXShape();
+                mxWordprocessingCanvasContext.clear();
             }
         }
         //NMSP_dmlChart == getNamespace( mnStartToken ) check is introduced to make sure that

@@ -94,6 +94,7 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         {
             ShapePtr pShape = std::make_shared<Shape>("com.sun.star.drawing.ConnectorShape");
             pShape->setLockedCanvas(mpGroupShapePtr->getLockedCanvas());
+            pShape->setWordprocessingCanvas(mpGroupShapePtr->isInWordprocessingCanvas());
             return new ConnectorShapeContext(*this, mpGroupShapePtr, pShape,
                                              pShape->getConnectorShapeProperties());
         }

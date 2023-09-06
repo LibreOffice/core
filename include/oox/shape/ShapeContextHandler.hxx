@@ -37,6 +37,7 @@ namespace oox::shape {
 
 class LockedCanvasContext;
 class ShapeFilterBase;
+class WordprocessingCanvasContext;
 class WpgContext;
 class WpsContext;
 
@@ -108,6 +109,7 @@ public:
     void setFullWPGSupport(bool bUse) { m_bFullWPGSUpport = bUse; }
 
     bool isWordProcessingGroupShape() const { return mxWpgContext ? true : false; }
+    bool isWordprocessingCanvas() const { return mxWordprocessingCanvasContext ? true : false; }
 
     void setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
     void setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor);
@@ -138,6 +140,7 @@ private:
     css::uno::Reference<XFastContextHandler> mxGraphicShapeContext;
     rtl::Reference<drawingml::DiagramGraphicDataContext> mxDiagramShapeContext;
     rtl::Reference<LockedCanvasContext> mxLockedCanvasContext;
+    rtl::Reference<WordprocessingCanvasContext> mxWordprocessingCanvasContext;
     rtl::Reference<WpsContext> mxWpsContext;
     css::uno::Reference<css::drawing::XShape> mxSavedShape;
     rtl::Reference<WpgContext> mxWpgContext;
@@ -155,6 +158,7 @@ private:
     css::uno::Reference<XFastContextHandler> getDrawingShapeContext();
     css::uno::Reference<XFastContextHandler> getDiagramShapeContext();
     css::uno::Reference<XFastContextHandler> getLockedCanvasContext(sal_Int32 nElement);
+    css::uno::Reference<XFastContextHandler> getWordprocessingCanvasContext(sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getWpsContext(sal_Int32 nStartElement, sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getWpgContext(sal_Int32 nElement);
     css::uno::Reference<XFastContextHandler> getContextHandler(sal_Int32 nElement = 0);

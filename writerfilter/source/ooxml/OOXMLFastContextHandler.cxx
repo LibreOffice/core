@@ -134,6 +134,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                 "wps",
                 "wpg",
                 "w14",
+                "wpc",
             };
             for (const char *p : aFeatures)
             {
@@ -1714,9 +1715,9 @@ void OOXMLFastContextHandlerShape::lcl_startFastElement
 
     if (mrShapeContext.is())
     {
-        if (Element == DGM_TOKEN(relIds))
+        if (Element == DGM_TOKEN(relIds) || Element == WPC_TOKEN(wpc))
         {
-            // It is a SmartArt. Make size available for generated group.
+            // It is a SmartArt or a WordprocessingCanvas. Make size available for generated group.
             // Search for PropertySet in parents
             OOXMLFastContextHandler* pHandler = getParent();
             while (pHandler && pHandler->getId() != NS_ooxml::LN_anchor_anchor
@@ -1843,7 +1844,8 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
 
 bool OOXMLFastContextHandlerShape::isDMLGroupShape() const
 {
-    return (mrShapeContext->getFullWPGSupport() && mrShapeContext->isWordProcessingGroupShape());
+    return (mrShapeContext->getFullWPGSupport()
+       && (mrShapeContext->isWordProcessingGroupShape() || mrShapeContext->isWordprocessingCanvas()));
 };
 
 void OOXMLFastContextHandlerShape::lcl_endFastElement

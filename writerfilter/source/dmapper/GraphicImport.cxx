@@ -57,7 +57,6 @@
 #include <comphelper/string.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
-
 #include <oox/drawingml/drawingmltypes.hxx>
 
 #include "DomainMapper.hxx"
@@ -934,8 +933,10 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         // got size and position. Values from m_Impl has to be used.
                         bool bIsLockedCanvas(false);
                         aInteropGrabBag.getValue("LockedCanvas") >>= bIsLockedCanvas;
+                        bool bIsWordprocessingCanvas(false);
+                        aInteropGrabBag.getValue("WordprocessingCanvas") >>= bIsWordprocessingCanvas;
                         const bool bIsGroupOrLine = (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape")
-                            && !bIsDiagram && !bIsLockedCanvas)
+                            && !bIsDiagram && !bIsLockedCanvas && !bIsWordprocessingCanvas)
                             || xServiceInfo->supportsService("com.sun.star.drawing.LineShape");
                         SdrObject* pShape = SdrObject::getSdrObjectFromXShape(m_xShape);
                         if ((bIsGroupOrLine && !lcl_bHasGroupSlantedChild(pShape) && nOOXAngle == 0)
@@ -956,7 +957,13 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (pShape)
                                 nRotation = pShape->GetRotateAngle();
                         }
-                        m_xShape->setSize(aSize);
+
+                        // tdf#157960: SdrEdgeObj::NbcResize would reset the adjustment values of
+                        // connectors to default zero. Thus we do not resize in case of a group that
+                        // represents a Word drawing canvas.
+                        if (!bIsWordprocessingCanvas)
+                            m_xShape->setSize(aSize);
+
                         if (bKeepRotation)
                         {
                             xShapeProps->setPropertyValue("RotateAngle", uno::Any(nRotation.get()));
@@ -1079,7 +1086,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                                   || m_pImpl->m_nWrap == text::WrapTextMode_LEFT
                                   || m_pImpl->m_nWrap == text::WrapTextMode_RIGHT
                                   || m_pImpl->m_nWrap == text::WrapTextMode_NONE)
-                                  && !(m_pImpl->mpWrapPolygon) && !bIsDiagram)
+                                  && !(m_pImpl->mpWrapPolygon) && !bIsDiagram && !bIsWordprocessingCanvas)
                         {
                             // For wrap "Square" an area is defined around which the text wraps. MSO
                             // describes the area by a base rectangle and effectExtent. LO uses the
@@ -1113,7 +1120,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             m_pImpl->m_nBottomMargin += aMSOBaseLeftTop.Y + aMSOBaseSize.Height
                                                       - (aLOBoundRect.Y + aLOBoundRect.Height);
                         }
-                        else if (m_pImpl->mpWrapPolygon && !bIsDiagram)
+                        else if (m_pImpl->mpWrapPolygon && !bIsDiagram && !bIsWordprocessingCanvas)
                         {
                             // Word uses a wrap polygon, LibreOffice has no explicit wrap polygon
                             // but creates the wrap contour based on the shape geometry, without
@@ -1203,7 +1210,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             if (m_pImpl->m_nRightMargin < 0)
                                 m_pImpl->m_nRightMargin = 0;
                         }
-                        else if (!bIsDiagram) // text::WrapTextMode_THROUGH
+                        else if (!bIsDiagram && !bIsWordprocessingCanvas) // text::WrapTextMode_THROUGH
                         {
                             // Word writes and evaluates the effectExtent in case of position
                             // type 'Alignment' (UI). We move these values to margin to approximate
@@ -1540,6 +1547,7 @@ void GraphicImport::lcl_sprm(Sprm& rSprm)
         case NS_ooxml::LN_sizeRelH_sizeRelH:
         case NS_ooxml::LN_sizeRelV_sizeRelV:
         case NS_ooxml::LN_hlinkClick_hlinkClick:
+        case NS_ooxml::LN_wpc_wpc:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties )
