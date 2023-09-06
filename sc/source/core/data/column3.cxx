@@ -3638,6 +3638,8 @@ public:
             {
                 // Both previous and current cells are regular cells.
                 assert(pPrev->aPos.Row() == static_cast<SCROW>(nRow - 1));
+                // silence set-but-unused warning for non-dbg build
+                (void) nRow;
                 xPrevGrp = pPrev->CreateCellGroup(2, eCompState == ScFormulaCell::EqualInvariant);
                 pCur->SetCellGroup(xPrevGrp);
                 ++nRow;
