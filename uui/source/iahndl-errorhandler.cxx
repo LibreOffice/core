@@ -33,6 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <ids.hrc>
+#include <strings.hrc>
 #include "getcontinuations.hxx"
 
 #include "iahndl.hxx"
@@ -289,5 +290,43 @@ UUIInteractionHelper::handleErrorHandlerRequest(
 
     }
 }
+
+void
+UUIInteractionHelper::handleLoadReadOnlyRequest(
+    const OUString& sDocumentURL,
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
+    rContinuations)
+{
+    std::locale aLocale(Translate::Create("uui"));
+    std::vector<OUString> aArguments = { sDocumentURL };
+    uno::Reference<task::XInteractionRetry> xRetry;
+    uno::Reference<task::XInteractionAbort> xAbort;
+    uno::Reference<task::XInteractionApprove> xApprove;
+    uno::Reference<task::XInteractionDisapprove> xDisapprove;
+    uno::Reference<awt::XWindow> xParent = getParentXWindow();
+    OUString aMessage(Translate::get(STR_LOADREADONLY_MSG, aLocale));
+
+    aMessage = replaceMessageWithArguments(aMessage, aArguments);
+    getContinuations(rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort);
+
+    std::unique_ptr<weld::MessageDialog> xBox(
+        Application::CreateMessageDialog(Application::GetFrameWeld(xParent),
+                                         VclMessageType::Question,
+                                         VclButtonsType::YesNo,
+                                         aMessage,
+                                         GetpApp()));
+
+    if (xBox->run() == RET_YES)
+    {
+        if (xApprove.is())
+            xApprove->select();
+    }
+    else
+    {
+        if (xDisapprove.is())
+            xDisapprove->select();
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

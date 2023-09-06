@@ -813,6 +813,17 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
             }
 
+            OUString aFileName;
+            beans::NamedValue aLoadReadOnlyRequest;
+            if ((aAnyRequest >>= aLoadReadOnlyRequest) &&
+                aLoadReadOnlyRequest.Name == "LoadReadOnlyRequest" &&
+                (aLoadReadOnlyRequest.Value >>= aFileName))
+            {
+                handleLoadReadOnlyRequest(aFileName,
+                                          rRequest->getContinuations());
+                return true;
+            }
+
             // Last chance: interaction handlers registered in the configuration
 
 

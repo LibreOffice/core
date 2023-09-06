@@ -78,5 +78,6 @@
 #define STR_RELOADEDITABLE_TITLE                NC_("STR_RELOADEDITABLE_TITLE", "Document is now editable")
 #define STR_RELOADEDITABLE_MSG                  NC_("STR_RELOADEDITABLE_MSG", "Document file '$(ARG1)' is now editable \n\nReload this document for editing?")
 #define STR_RELOADEDITABLE_BTN                  NC_("STR_RELOADEDITABLE_BTN", "~Reload")
+#define STR_LOADREADONLY_MSG                    NC_("STR_LOADREADONLY_MSG", "The author would like you to open '$(ARG1)' as read-only unless you need to make changes. Open as read-only?.")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
