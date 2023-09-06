@@ -514,17 +514,6 @@ namespace svgio::svgreader
                     if(pPreviousCharacterNode->mpParentLine != mpParentLine)
                         bAddGap = false;
 
-                    // With this option a baseline shift between two char parts ('words')
-                    // will not add a space 'gap' to the end of the (non-last) word. This
-                    // seems to be the standard behaviour, see last bugdoc attached #122524#
-                    const SvgStyleAttributes* pStyleLast = pPreviousCharacterNode->getSvgStyleAttributes();
-                    const SvgStyleAttributes* pStyleCurrent = getSvgStyleAttributes();
-
-                    if(pStyleLast && pStyleCurrent && pStyleLast->getBaselineShift() != pStyleCurrent->getBaselineShift())
-                    {
-                        bAddGap = false;
-                    }
-
                     // add in-between whitespace (single space) to last
                     // known character node
                     if(bAddGap)
