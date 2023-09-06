@@ -585,12 +585,8 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OAccessibleContextWrapper::disposing(const css::lang::EventObject& rEvent)
+    void OAccessibleContextWrapper::implDisposing(const css::lang::EventObject* pEvent)
     {
-        assert(rEvent.Source == Reference<XInterface>(m_xInnerContext, UNO_QUERY)
-               && "OAccessibleContextWrapper::disposing called with event source that's not the "
-                  "wrapped a11y context");
-
         AccessibleEventNotifier::TClientId nClientId( 0 );
 
         // --- <mutex lock> -----------------------------------------
@@ -607,11 +603,28 @@ namespace comphelper
         // --- </mutex lock> -----------------------------------------
 
         // let the base class do
-        OAccessibleContextWrapperHelper::disposing(rEvent);
+        if (pEvent)
+            OAccessibleContextWrapperHelper::disposing(*pEvent);
+        else
+            OAccessibleContextWrapperHelper::dispose();
 
         // notify the disposal
         if ( nClientId )
             AccessibleEventNotifier::revokeClientNotifyDisposing( nClientId, *this );
+    }
+
+    void SAL_CALL OAccessibleContextWrapper::disposing()
+    {
+        implDisposing(nullptr);
+    }
+
+    void SAL_CALL OAccessibleContextWrapper::disposing(const css::lang::EventObject& rEvent)
+    {
+        assert(rEvent.Source == Reference<XInterface>(m_xInnerContext, UNO_QUERY)
+               && "OAccessibleContextWrapper::disposing called with event source that's not the "
+                  "wrapped a11y context");
+
+        implDisposing(&rEvent);
     }
 }   // namespace accessibility
 
