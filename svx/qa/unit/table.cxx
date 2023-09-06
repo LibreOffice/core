@@ -82,6 +82,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTableShadowBlur)
     //- In <>, XPath contents of child does not match
     // i.e. the shadow's transparency was miscalculated.
     assertXPathContent(pDocument, "count(//objectinfo/unifiedtransparence)", "0");
+
+    assertXPath(pDocument, "//objectinfo/shadow[1]", "color", "#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[1]", "blur", "141");
+    assertXPath(pDocument, "//objectinfo/shadow[2]", "color", "#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[2]", "blur", "141");
+    assertXPath(pDocument, "//objectinfo/shadow[3]", "color", "#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[3]", "blur", "141");
+    assertXPath(pDocument, "//objectinfo/shadow[4]", "color", "#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[4]", "blur", "141");
+    assertXPath(pDocument, "//objectinfo/shadow[5]", "color", "#ff0000");
+    assertXPath(pDocument, "//objectinfo/shadow[5]", "blur", "141");
+
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[1]/unifiedtransparence", 0);
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[2]/unifiedtransparence", 0);
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[3]/unifiedtransparence", "transparence",
+                "80");
+    assertXPath(pDocument, "//objectinfo/group/sdrCell[4]/unifiedtransparence", "transparence",
+                "80");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSvxTableControllerSetAttrToSelectedShape)
