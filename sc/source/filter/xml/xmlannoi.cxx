@@ -91,7 +91,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             }
             break;
             default:
-                XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+                XMLOFF_INFO_UNKNOWN("xmloff", aIter);
         }
     }
 }
