@@ -40,6 +40,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <memory>
+#include "recentdocsviewitem.hxx"
 
 using namespace basegfx;
 using namespace basegfx::utils;
@@ -418,16 +419,19 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
         ThumbnailViewItem *const pItem = mFilteredItemList[i];
 
         // tdf#38742 - show pinned items in a separate line
-        if (bPinnedItems && !pItem->isPinned())
+        if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(pItem))
         {
-            bPinnedItems = false;
-            // Start a new line only if the entire line is not filled
-            if ((nCurCount + 1) % mnCols && nCurCount > nFirstItem)
+            if (bPinnedItems && !pRecentDocsItem->isPinned())
             {
-                x = nStartX;
-                y += mnItemHeight + nVItemSpace;
+                bPinnedItems = false;
+                // Start a new line only if the entire line is not filled
+                if (nCurCount % mnCols && nCurCount > nFirstItem)
+                {
+                    x = nStartX;
+                    y += mnItemHeight + nVItemSpace;
+                }
+                nCurCount = 0;
             }
-            nCurCount = 0;
         }
 
         if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))

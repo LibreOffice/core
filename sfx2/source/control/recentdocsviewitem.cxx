@@ -128,10 +128,13 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
       mrParentView(rView),
       maURL(rURL),
       m_isReadOnly(isReadOnly),
-      m_isPinned(isPinned),
       m_bRemoveIconHighlighted(false),
       m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
-      m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED)
+      m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED),
+      m_bPinned(isPinned),
+      m_bPinnedIconHighlighted(false),
+      m_aPinnedDocumentBitmap(BMP_PIN_DOC),
+      m_aPinnedDocumentBitmapHiglighted(BMP_PIN_DOC_HIGHLIGHTED)
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);
@@ -231,7 +234,6 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
 
     maTitle = aTitle;
     maPreview1 = aThumbnail;
-    mbPinned = m_isPinned;
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
@@ -253,6 +255,21 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
         m_bRemoveIconHighlighted = false;
     }
 
+    if (bVisible && getPinnedIconArea().Contains(rPoint))
+    {
+        if (!m_bPinnedIconHighlighted)
+            aRect.Union(getPinnedIconArea());
+
+        m_bPinnedIconHighlighted = true;
+    }
+    else
+    {
+        if (m_bPinnedIconHighlighted)
+            aRect.Union(getPinnedIconArea());
+
+        m_bPinnedIconHighlighted = false;
+    }
+
     return aRect;
 }
 
@@ -266,6 +283,11 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
             aSize);
 }
 
+::tools::Rectangle RecentDocsViewItem::getPinnedIconArea() const
+{
+    return ::tools::Rectangle(maPinPos, m_aPinnedDocumentBitmap.GetSizePixel());
+}
+
 OUString RecentDocsViewItem::getHelpText() const
 {
     return m_sHelpText;
@@ -275,16 +297,33 @@ void RecentDocsViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProc
 {
     ThumbnailViewItem::Paint(pProcessor, pAttrs);
 
-    // paint the remove icon when hovered
+    // paint the remove/pinned icon when hovered
     if (isHighlighted())
     {
-        drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
+        drawinglayer::primitive2d::Primitive2DContainer aSeq(2);
 
         Point aIconPos(getRemoveIconArea().TopLeft());
 
         aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
                     m_bRemoveIconHighlighted ? m_aRemoveRecentBitmapHighlighted : m_aRemoveRecentBitmap,
                     B2DPoint(aIconPos.X(), aIconPos.Y())));
+
+        // tdf#38742 - draw pinned icon
+        const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
+        aSeq[1] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+            m_aPinnedDocumentBitmap, B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
+
+        pProcessor->process(aSeq);
+    }
+    // tdf#38742 - draw pinned icon if item is pinned
+    else if (m_bPinned)
+    {
+        drawinglayer::primitive2d::Primitive2DContainer aSeq(1);
+
+        const Point aPinnedIconPos(getPinnedIconArea().TopLeft());
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
+            m_bPinnedIconHighlighted ? m_aPinnedDocumentBitmapHiglighted : m_aPinnedDocumentBitmap,
+            B2DPoint(aPinnedIconPos.X(), aPinnedIconPos.Y())));
 
         pProcessor->process(aSeq);
     }
@@ -301,8 +340,7 @@ void RecentDocsViewItem::MouseButtonUp(const MouseEvent& rMEvt)
             return;
         }
 
-        const ::tools::Rectangle aPinPosRectangle(maPinPos, maPinnedDocumentBitmap.GetSizePixel());
-        if (aPinPosRectangle.Contains(rMEvt.GetPosPixel()))
+        if (getPinnedIconArea().Contains(rMEvt.GetPosPixel()))
         {
             SvtHistoryOptions::TogglePinItem(EHistoryType::PickList, maURL);
             mrParent.Reload();
