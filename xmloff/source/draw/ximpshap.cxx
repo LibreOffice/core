@@ -498,7 +498,11 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
             xShape.set(xServiceFact->createInstance("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"), uno::UNO_QUERY);
         }
         else if (serviceName == "com.sun.star.drawing.GraphicObjectShape"
+                 || serviceName == "com.sun.star.drawing.AppletShape"
+                 || serviceName == "com.sun.star.drawing.FrameShape"
                  || serviceName == "com.sun.star.drawing.MediaShape"
+                 || serviceName == "com.sun.star.drawing.OLE2Shape"
+                 || serviceName == "com.sun.star.drawing.PluginShape"
                  || serviceName == "com.sun.star.presentation.MediaShape")
         {
             xShape.set( xServiceFact->createInstanceWithArguments(serviceName, { css::uno::Any(GetImport().GetDocumentBase()) }),

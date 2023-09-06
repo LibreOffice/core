@@ -694,13 +694,13 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                     pRet = new SvxGraphicObject( pObj );
                     break;
                 case SdrObjKind::OLEPluginFrame:
-                    pRet = new SvxFrameShape( pObj );
+                    pRet = new SvxFrameShape( pObj, referer );
                     break;
                 case SdrObjKind::OLE2Applet:
-                    pRet = new SvxAppletShape( pObj );
+                    pRet = new SvxAppletShape( pObj, referer );
                     break;
                 case SdrObjKind::OLE2Plugin:
-                    pRet = new SvxPluginShape( pObj );
+                    pRet = new SvxPluginShape( pObj, referer );
                     break;
                  case SdrObjKind::OLE2:
                      {
@@ -728,17 +728,17 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
 
                                         if( aPluginClassId == aClassId )
                                         {
-                                            pRet = new SvxPluginShape( pObj );
+                                            pRet = new SvxPluginShape( pObj, referer );
                                             nType = SdrObjKind::OLE2Plugin;
                                         }
                                         else if( aAppletClassId == aClassId )
                                         {
-                                            pRet = new SvxAppletShape( pObj );
+                                            pRet = new SvxAppletShape( pObj, referer );
                                             nType = SdrObjKind::OLE2Applet;
                                         }
                                         else if( aIFrameClassId == aClassId )
                                         {
-                                            pRet = new SvxFrameShape( pObj );
+                                            pRet = new SvxFrameShape( pObj, referer );
                                             nType = SdrObjKind::OLEPluginFrame;
                                         }
                                     }
@@ -748,7 +748,7 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
                         if( pRet == nullptr )
                         {
                             SvxUnoPropertyMapProvider& rSvxMapProvider = getSvxMapProvider();
-                            pRet = new SvxOle2Shape( pObj, rSvxMapProvider.GetMap(SVXMAP_OLE2),  rSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
+                            pRet = new SvxOle2Shape( pObj, referer, rSvxMapProvider.GetMap(SVXMAP_OLE2),  rSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
                         }
                      }
                     break;

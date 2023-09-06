@@ -589,6 +589,8 @@ public:
 // #i118485# changed parent to SvxShapeText to allow Text handling over UNO API
 class SVXCORE_DLLPUBLIC SvxOle2Shape : public SvxShapeText
 {
+private:
+    OUString referer_;
 protected:
     // override these for special property handling in subcasses. Return true if property is handled
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
@@ -598,8 +600,8 @@ protected:
 
     SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
-    SvxOle2Shape(SdrObject* pObj);
-    SvxOle2Shape(SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
+    SvxOle2Shape(SdrObject* pObj, OUString referer);
+    SvxOle2Shape(SdrObject* pObject, OUString referer, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxOle2Shape() noexcept override;
 
     bool createObject( const SvGlobalName &aClassName );

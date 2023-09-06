@@ -36,7 +36,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    explicit SvxPluginShape(SdrObject* pObj);
+    explicit SvxPluginShape(SdrObject* pObj, OUString referer);
     virtual ~SvxPluginShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -46,6 +46,7 @@ public:
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 };
+
 class SvxAppletShape : public SvxOle2Shape
 {
 protected:
@@ -54,7 +55,7 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
 
 public:
-    explicit SvxAppletShape(SdrObject* pObj);
+    explicit SvxAppletShape(SdrObject* pObj, OUString referer);
     virtual ~SvxAppletShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
@@ -76,7 +77,7 @@ protected:
         css::uno::Any& rValue) override;
 
 public:
-    explicit SvxFrameShape(SdrObject* pObj);
+    explicit SvxFrameShape(SdrObject* pObj, OUString referer);
     virtual ~SvxFrameShape() noexcept override;
 
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
