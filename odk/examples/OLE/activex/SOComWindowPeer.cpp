@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-// SOComWindowPeer.cpp : Implementation of CHelpApp and DLL registration.
+// SOComWindowPeer.cxx : Implementation of CHelpApp and DLL registration.
 
 #include "stdafx2.h"
 #include "so_activex.h"
@@ -42,15 +42,8 @@
 
 STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = {
-        &IID_ISOComWindowPeer,
-    };
-
-    for (int i = 0; i < SAL_N_ELEMENTS(arr); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
+    if (InlineIsEqualGUID(IID_ISOComWindowPeer, riid))
+        return S_OK;
     return S_FALSE;
 }
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SOActionsApproval.cpp : Implementation of CHelpApp and DLL registration.
+// SOActionsApproval.cxx : Implementation of CHelpApp and DLL registration.
 
 #include <sal/config.h>
 
@@ -31,15 +31,8 @@
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP SOActionsApproval::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = {
-        &IID_ISOActionsApproval,
-    };
-
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(arr); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
+    if (InlineIsEqualGUID(IID_ISOActionsApproval, riid))
+        return S_OK;
     return S_FALSE;
 }
 

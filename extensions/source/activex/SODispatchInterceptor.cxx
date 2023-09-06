@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SODispatchInterceptor.cpp : Implementation of CHelpApp and DLL registration.
+// SODispatchInterceptor.cxx : Implementation of CHelpApp and DLL registration.
 
 #include <sal/config.h>
 
@@ -33,16 +33,8 @@
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] =
-    {
-        &IID_ISODispatchInterceptor,
-    };
-
-    for (auto const &i : arr)
-    {
-        if (InlineIsEqualGUID(*i,riid))
-            return S_OK;
-    }
+    if (InlineIsEqualGUID(IID_ISODispatchInterceptor, riid))
+        return S_OK;
     return S_FALSE;
 }
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-// SOComWindowPeer.cpp : Implementation of CHelpApp and DLL registration.
+// SOComWindowPeer.cxx : Implementation of CHelpApp and DLL registration.
 
 #include <sal/config.h>
 
@@ -30,15 +30,8 @@
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
 {
-    static const IID* arr[] = {
-        &IID_ISOComWindowPeer,
-    };
-
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(arr); i++)
-    {
-        if (InlineIsEqualGUID(*arr[i], riid))
-            return S_OK;
-    }
+    if (InlineIsEqualGUID(IID_ISOComWindowPeer, riid))
+        return S_OK;
     return S_FALSE;
 }
 
