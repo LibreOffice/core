@@ -176,8 +176,7 @@ public:
     /// @throws css::uno::RuntimeException
     css::uno::Any GetBitmap( bool bMetaFile = false ) const;
 
-    void notifyPropertyChange(svx::ShapePropertyProviderId eProp);
-    void registerProvider(svx::ShapePropertyProviderId eProp, std::unique_ptr<svx::PropertyValueProvider> provider);
+    void notifyPropertyChange(const OUString& rPropName);
 
     void setShapeKind( SdrObjKind nKind );
     SdrObjKind getShapeKind() const;

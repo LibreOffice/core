@@ -60,7 +60,6 @@
 #include <editeng/ulspitem.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
-#include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/profilezone.hxx>
@@ -103,9 +102,6 @@ class SwShapeDescriptor_Impl
     SwShapeDescriptor_Impl& operator=(const SwShapeDescriptor_Impl&) = delete;
 
 public:
-    bool    m_bInitializedPropertyNotifier;
-
-public:
     SwShapeDescriptor_Impl(SwDoc const*const pDoc)
         : m_isInReading(pDoc && pDoc->IsInReading())
      // #i32349# - no defaults, in order to determine on
@@ -118,7 +114,6 @@ public:
                             text::WrapInfluenceOnPosition::ONCE_CONCURRENT) )
      // #i28749#
         , mnPositionLayoutDir(text::PositionLayoutDir::PositionInLayoutDirOfAnchor)
-        , m_bInitializedPropertyNotifier(false)
      {}
 
     SwFormatAnchor*    GetAnchor(bool bCreate = false)
@@ -903,14 +898,6 @@ sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId 
     }
     return 0;
 }
-namespace
-{
-    void lcl_addShapePropertyEventFactories( SdrObject& _rObj, SwXShape& _rShape )
-    {
-        auto pProvider = std::make_unique<svx::PropertyValueProvider>( _rShape, "AnchorType" );
-        _rObj.registerProvider( svx::ShapePropertyProviderId::TextDocAnchor, std::move(pProvider) );
-    }
-}
 
 SwXShape::SwXShape(
         uno::Reference<uno::XInterface> & xShape,
@@ -942,14 +929,6 @@ SwXShape::SwXShape(
     if( m_xShapeAgg.is() )
         m_xShapeAgg->setDelegator( static_cast<cppu::OWeakObject*>(this) );
     osl_atomic_decrement(&m_refCount);
-
-    SdrObject* pObj = SdrObject::getSdrObjectFromXShape(m_xShapeAgg);
-    if(pObj)
-    {
-        lcl_addShapePropertyEventFactories( *pObj, *this );
-        m_pImpl->m_bInitializedPropertyNotifier = true;
-    }
-
 }
 
 SwFrameFormat* SwXShape::GetFrameFormat() const
@@ -975,12 +954,6 @@ void SwXShape::AddExistingShapeToFormat( SdrObject const & _rObj )
         {
             if ( pSwShape->m_bDescriptor )
                 pSwShape->m_bDescriptor = false;
-
-            if ( !pSwShape->m_pImpl->m_bInitializedPropertyNotifier )
-            {
-                lcl_addShapePropertyEventFactories( *pCurrent, *pSwShape );
-                pSwShape->m_pImpl->m_bInitializedPropertyNotifier = true;
-            }
         }
     }
 }

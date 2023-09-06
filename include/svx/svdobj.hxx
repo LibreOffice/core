@@ -78,8 +78,6 @@ class Fraction;
 enum class PointerStyle;
 class Graphic;
 class SvxShape;
-namespace svx { enum class ShapePropertyProviderId; }
-namespace svx { class PropertyValueProvider; }
 namespace basegfx
 {
     class B2DPoint;
@@ -787,9 +785,7 @@ public:
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
-    void notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const;
-
-    void registerProvider( const svx::ShapePropertyProviderId _eProperty, std::unique_ptr<svx::PropertyValueProvider> propProvider );
+    void notifyShapePropertyChange( const OUString& rPropName ) const;
 
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the

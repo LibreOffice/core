@@ -441,7 +441,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/toolbars/fontworkbar \
     svx/source/uitest/sdrobject \
     svx/source/unodraw/gluepts \
-    svx/source/unodraw/shapepropertynotifier \
     svx/source/unodraw/SvxXTextColumns \
     svx/source/unodraw/tableshape \
     svx/source/unodraw/unobrushitemhelper \

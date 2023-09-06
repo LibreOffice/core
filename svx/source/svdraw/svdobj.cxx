@@ -51,7 +51,6 @@
 #include <vcl/ptrstyle.hxx>
 #include <vector>
 
-#include <svx/shapepropertynotifier.hxx>
 #include <svx/svdotable.hxx>
 
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -2810,10 +2809,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     switch ( eUserCall )
     {
     case SdrUserCallType::Resize:
-        notifyShapePropertyChange( svx::ShapePropertyProviderId::Size );
+        notifyShapePropertyChange( "Size" );
         [[fallthrough]]; // RESIZE might also imply a change of the position
     case SdrUserCallType::MoveOnly:
-        notifyShapePropertyChange( svx::ShapePropertyProviderId::Position );
+        notifyShapePropertyChange( "Position" );
         break;
     default:
         // not interested in
@@ -2953,21 +2952,13 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
     return xShape;
 }
 
-void SdrObject::notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const
+void SdrObject::notifyShapePropertyChange( const OUString& rPropName ) const
 {
     DBG_TESTSOLARMUTEX();
 
     SvxShape* pSvxShape = const_cast< SdrObject* >( this )->getSvxShape();
     if ( pSvxShape )
-        return pSvxShape->notifyPropertyChange( _eProperty );
-}
-
-void SdrObject::registerProvider( const svx::ShapePropertyProviderId _eProperty, std::unique_ptr<svx::PropertyValueProvider> provider )
-{
-    DBG_TESTSOLARMUTEX();
-
-    SvxShape* pSvxShape = getSvxShape();
-    return pSvxShape->registerProvider( _eProperty, std::move(provider) );
+        return pSvxShape->notifyPropertyChange( rPropName );
 }
 
 // transformation interface for StarOfficeAPI. This implements support for

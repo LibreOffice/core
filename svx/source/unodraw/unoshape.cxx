@@ -29,10 +29,10 @@
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/shapepropertynotifier.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/virdev.hxx>
@@ -106,7 +106,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
-using svx::PropertyValueProvider;
 
 class GDIMetaFile;
 
@@ -126,51 +125,18 @@ struct SvxShapeImpl
 
     // for xComponent
     ::comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> maDisposeListeners;
-    svx::PropertyChangeNotifier       maPropertyNotifier;
+    ::comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, css::beans::XPropertyChangeListener> maPropertyChangeListeners;
 
-    SvxShapeImpl( SvxShape& _rAntiImpl )
+    SvxShapeImpl()
         :mnObjId( SdrObjKind::NONE )
         ,mpMaster( nullptr )
         ,mbDisposing( false )
-        ,maPropertyNotifier( _rAntiImpl )
     {
     }
 };
 
 namespace {
 
-class ShapePositionProvider : public PropertyValueProvider
-{
-public:
-    static constexpr OUStringLiteral sPosition = u"Position";
-    explicit ShapePositionProvider( SvxShape& _shape )
-        :PropertyValueProvider( _shape, sPosition )
-    {
-    }
-
-protected:
-    virtual void getCurrentValue( Any& _out_rCurrentValue ) const override
-    {
-        _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getPosition();
-    }
-};
-
-
-class ShapeSizeProvider : public PropertyValueProvider
-{
-public:
-    static constexpr OUStringLiteral sSize = u"Size";
-    explicit ShapeSizeProvider( SvxShape& _shape )
-        :PropertyValueProvider( _shape, sSize )
-    {
-    }
-
-protected:
-    virtual void getCurrentValue( Any& _out_rCurrentValue ) const override
-    {
-        _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
-    }
-};
 
 /// Calculates what scaling factor will be used for autofit text scaling of this shape.
 double GetTextFitToSizeScale(SdrObject* pObject)
@@ -194,7 +160,7 @@ double GetTextFitToSizeScale(SdrObject* pObject)
 
 SvxShape::SvxShape( SdrObject* pObject )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this ) )
+,   mpImpl( new SvxShapeImpl )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 ,   maPropMapEntries(getSvxMapProvider().GetMap(SVXMAP_SHAPE))
@@ -207,7 +173,7 @@ SvxShape::SvxShape( SdrObject* pObject )
 
 SvxShape::SvxShape( SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet )
 :   maSize(100,100)
-,   mpImpl( new SvxShapeImpl( *this ) )
+,   mpImpl( new SvxShapeImpl )
 ,   mbIsMultiPropertyCall(false)
 ,   mpPropSet(pPropertySet)
 ,   maPropMapEntries(pEntries)
@@ -289,24 +255,29 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const css::uno::Sequence< sal_Int8 >&
 }
 
 
-void SvxShape::notifyPropertyChange(svx::ShapePropertyProviderId eProp)
+void SvxShape::notifyPropertyChange(const OUString& rPropName)
 {
     std::unique_lock g(m_aMutex);
-    mpImpl->maPropertyNotifier.notifyPropertyChange(g, eProp);
-}
-
-void SvxShape::registerProvider(svx::ShapePropertyProviderId eProp, std::unique_ptr<svx::PropertyValueProvider> provider)
-{
-    mpImpl->maPropertyNotifier.registerProvider(eProp, std::move(provider));
+    comphelper::OInterfaceContainerHelper4<beans::XPropertyChangeListener>* pPropListeners =
+            mpImpl->maPropertyChangeListeners.getContainer( g, rPropName );
+    comphelper::OInterfaceContainerHelper4<beans::XPropertyChangeListener>* pAllListeners =
+            mpImpl->maPropertyChangeListeners.getContainer( g, OUString() );
+    if (pPropListeners || pAllListeners)
+    {
+        // Handle/OldValue not supported
+        beans::PropertyChangeEvent aEvt;
+        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+        aEvt.PropertyName = rPropName;
+        aEvt.NewValue = getPropertyValue(rPropName);
+        if (pPropListeners)
+            pPropListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
+        if (pAllListeners)
+            pAllListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
+    }
 }
 
 void SvxShape::impl_construct()
 {
-    mpImpl->maPropertyNotifier.registerProvider( svx::ShapePropertyProviderId::Position,
-        std::make_unique<ShapePositionProvider>( *this ) );
-    mpImpl->maPropertyNotifier.registerProvider( svx::ShapePropertyProviderId::Size,
-        std::make_unique<ShapeSizeProvider>( *this ) );
-
     if ( HasSdrObject() )
     {
         StartListening(GetSdrObject()->getSdrModelFromSdrObject());
@@ -1209,7 +1180,7 @@ void SAL_CALL SvxShape::dispose()
     lang::EventObject aEvt;
     aEvt.Source = *static_cast<OWeakAggObject*>(this);
     mpImpl->maDisposeListeners.disposeAndClear(g, aEvt);
-    mpImpl->maPropertyNotifier.disposing(g);
+    mpImpl->maPropertyChangeListeners.disposeAndClear(g, aEvt);
 
     rtl::Reference<SdrObject> pObject = mxSdrObject;
     if (!pObject)
@@ -1276,14 +1247,14 @@ Reference< beans::XPropertySetInfo > const &
 void SAL_CALL SvxShape::addPropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
     std::unique_lock g(m_aMutex);
-    mpImpl->maPropertyNotifier.addPropertyChangeListener( g, _propertyName, _listener );
+    mpImpl->maPropertyChangeListeners.addInterface( g, _propertyName, _listener );
 }
 
 
 void SAL_CALL SvxShape::removePropertyChangeListener( const OUString& _propertyName, const Reference< beans::XPropertyChangeListener >& _listener  )
 {
     std::unique_lock g(m_aMutex);
-    mpImpl->maPropertyNotifier.removePropertyChangeListener( g, _propertyName, _listener );
+    mpImpl->maPropertyChangeListeners.removeInterface( g, _propertyName, _listener );
 }
 
 
