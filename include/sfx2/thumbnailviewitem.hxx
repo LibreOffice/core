@@ -73,15 +73,10 @@ public:
     bool mbBorder;
     bool mbSelected;
     bool mbHover;
-    bool mbPinned;
     BitmapEx maPreview1;
     OUString maTitle;
     OUString maHelpText;
     rtl::Reference< ThumbnailViewItemAcc > mxAcc;
-
-    bool mbPinnedDocumentHighlighted;
-    BitmapEx maPinnedDocumentBitmap;
-    BitmapEx maPinnedDocumentBitmapHiglighted;
 
     ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId);
 
@@ -101,8 +96,6 @@ public:
     bool isHighlighted () const { return mbHover; }
 
     void setHighlight (bool state);
-
-    bool isPinned () const { return mbPinned; }
 
     /** Updates own highlight status based on the aPoint position.
 

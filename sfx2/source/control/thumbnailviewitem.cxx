@@ -56,10 +56,6 @@ ThumbnailViewItem::ThumbnailViewItem(ThumbnailView& rView, sal_uInt16 nId)
     , mbBorder(true)
     , mbSelected(false)
     , mbHover(false)
-    , mbPinned(false)
-    , mbPinnedDocumentHighlighted(false)
-    , maPinnedDocumentBitmap(BMP_PIN_DOC)
-    , maPinnedDocumentBitmapHiglighted(BMP_PIN_DOC_HIGHLIGHTED)
 {
 }
 
@@ -101,20 +97,6 @@ void ThumbnailViewItem::setHighlight (bool state)
         if (isHighlighted())
             bNeedsPaint = true;
         setHighlight(false);
-    }
-
-    const ::tools::Rectangle aPinPosRectangle(maPinPos, maPinnedDocumentBitmap.GetSizePixel());
-    if (bVisible && aPinPosRectangle.Contains(rPoint))
-    {
-        if (!mbPinnedDocumentHighlighted)
-            bNeedsPaint = true;
-        mbPinnedDocumentHighlighted = true;
-    }
-    else
-    {
-        if (mbPinnedDocumentHighlighted)
-            bNeedsPaint = true;
-        mbPinnedDocumentHighlighted = false;
     }
 
     if (bNeedsPaint)
@@ -168,7 +150,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                const ThumbnailItemAttributes *pAttrs)
 {
     BColor aFillColor = pAttrs->aFillColor;
-    drawinglayer::primitive2d::Primitive2DContainer aSeq(5);
+    drawinglayer::primitive2d::Primitive2DContainer aSeq(4);
     double fTransparence = 0.0;
 
     // Draw background
@@ -201,20 +183,6 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                                                 B2DPoint(aImageSize.Width(),aImageSize.Height())),
                                                             false)
                                         ));
-
-    // tdf#38742 - draw pinned icon
-    if (mbPinned)
-    {
-        const BitmapEx& aBitmapEx
-            = mbHover ? maPinnedDocumentBitmapHiglighted : maPinnedDocumentBitmap;
-        aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(
-            new DiscreteBitmapPrimitive2D(aBitmapEx, B2DPoint(maPinPos.X(), maPinPos.Y())));
-    }
-    else if (mbHover)
-        aSeq[nPrimitive++]
-            = drawinglayer::primitive2d::Primitive2DReference(new DiscreteBitmapPrimitive2D(
-                maPinnedDocumentBitmap, B2DPoint(maPinPos.X(), maPinPos.Y())));
-
 
     if (mbBorder)
     {
