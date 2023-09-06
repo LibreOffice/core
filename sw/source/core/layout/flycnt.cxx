@@ -1591,6 +1591,7 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     }
 
     SwLayoutFrame* pOldLayLeaf = nullptr;
+    bool bNesting = false;
     while (true)
     {
         if (pLayLeaf)
@@ -1609,6 +1610,18 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
                     bSameBody = true;
                 }
             }
+
+            if (bLeftFly && pFlyAnchor && pFlyAnchor->IsInFly()
+                && FindFlyFrame() == pLayLeaf->FindFlyFrame())
+            {
+                // This is an inner fly, then the follow anchor will be just next to us.
+                SwLayoutFrame* pFlyAnchorUpper = pFlyAnchor->GetUpper();
+                pOldLayLeaf = pLayLeaf;
+                pLayLeaf = pFlyAnchorUpper;
+                bLeftFly = false;
+                bNesting = true;
+            }
+
             if (bLeftBody || bLeftFly || bSameBody)
             {
                 // The above conditions are not held, reject.
@@ -1650,8 +1663,12 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
             // Split the anchor at char 0: all the content goes to the follow of the anchor.
             pFlyAnchor->SplitFrame(TextFrameIndex(0));
             auto pNext = static_cast<SwTextFrame*>(pFlyAnchor->GetNext());
-            // Move the new anchor frame, before the first child of pLayLeaf.
-            pNext->MoveSubTree(pLayLeaf, pLayLeaf->Lower());
+            // The nesting case just splits the inner fly; the outer fly will split and move.
+            if (!bNesting)
+            {
+                // Move the new anchor frame, before the first child of pLayLeaf.
+                pNext->MoveSubTree(pLayLeaf, pLayLeaf->Lower());
+            }
 
             // Now create the follow of the fly and anchor it in the master of the anchor.
             pNew = new SwFlyAtContentFrame(*pFly);

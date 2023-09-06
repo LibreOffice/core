@@ -492,11 +492,13 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
             // same page as <pOrientFrame> and the vertical position isn't aligned
             // automatic at the anchor character or the top of the line of the
             // anchor character, the anchor frame determines the vertical position.
+            // Split fly follows: always let the anchor char frame determine the vertical position.
+            // This gives us a vertical cut position between the master and the follow.
             if ( &rAnchorTextFrame == pOrientFrame ||
                  ( rAnchorTextFrame.FindPageFrame() == pOrientFrame->FindPageFrame() &&
                    aVert.GetVertOrient() == text::VertOrientation::NONE &&
                    aVert.GetRelationOrient() != text::RelOrientation::CHAR &&
-                   aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE ) )
+                   aVert.GetRelationOrient() != text::RelOrientation::TEXT_LINE && !bFollowSplitFly ) )
             {
                 pUpperOfOrientFrame = rAnchorTextFrame.GetUpper();
                 pAnchorFrameForVertPos = &rAnchorTextFrame;

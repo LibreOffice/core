@@ -1024,6 +1024,47 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyFromAsCharAnchor)
     // frame+table inside a footnote.
     dispatchCommand(mxComponent, ".uno:SetAnchorToPara", {});
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
+{
+    // Given a document with a nested, multi-page floating table:
+    // When calculating the layout:
+    createSwDoc("floattable-nested.odt");
+    calcLayout();
+
+    // Then make sure we don't crash:
+    // Without the accompanying fix in place, this test would have crashed.
+    // Check that we have exactly 4 fly frames, all of them on the expected pages: master outer,
+    // follow outer, master inner and follow inner.
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage1Objs.size());
+    auto pPage1Fly1 = rPage1Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage1Fly1);
+    CPPUNIT_ASSERT(pPage1Fly1->GetAnchorFrameContainingAnchPos()->IsInFly());
+    CPPUNIT_ASSERT(pPage1Fly1->GetFollow());
+    auto pPage1Fly2 = rPage1Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage1Fly2);
+    CPPUNIT_ASSERT(!pPage1Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
+    CPPUNIT_ASSERT(pPage1Fly2->GetFollow());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
+    auto pPage2Fly1 = rPage2Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage2Fly1);
+    CPPUNIT_ASSERT(pPage2Fly1->GetAnchorFrameContainingAnchPos()->IsInFly());
+    CPPUNIT_ASSERT(pPage2Fly1->GetPrecede());
+    auto pPage2Fly2 = rPage2Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage2Fly2);
+    CPPUNIT_ASSERT(!pPage2Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
+    CPPUNIT_ASSERT(pPage2Fly2->GetPrecede());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

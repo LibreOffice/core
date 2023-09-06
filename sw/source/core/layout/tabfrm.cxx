@@ -5217,11 +5217,24 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                 lcl_ArrangeLowers( static_cast<SwLayoutFrame*>(pFrame),
                     aRectFnSet.GetTop(static_cast<SwLayoutFrame*>(pFrame)->Lower()->getFrameArea())
                     + lDiffX, bInva );
-            if ( pFrame->GetDrawObjs() )
+            SwSortedObjs* pDrawObjs = pFrame->GetDrawObjs();
+            auto pTextFrame = pFrame->DynCastTextFrame();
+            if (pTextFrame && pTextFrame->IsInFly())
             {
-                for ( size_t i = 0; i < pFrame->GetDrawObjs()->size(); ++i )
+                // See if this is a follow anchor. If so, we want the flys anchored in the master
+                // which are also lowers of pFrame.
+                SwTextFrame* pMaster = pTextFrame;
+                while (pMaster->IsFollow())
                 {
-                    SwAnchoredObject* pAnchoredObj = (*pFrame->GetDrawObjs())[i];
+                    pMaster = pMaster->FindMaster();
+                }
+                pDrawObjs = pMaster->GetDrawObjs();
+            }
+            if (pDrawObjs)
+            {
+                for (size_t i = 0; i < pDrawObjs->size(); ++i)
+                {
+                    SwAnchoredObject* pAnchoredObj = (*pDrawObjs)[i];
                     // #i26945# - check, if anchored object
                     // is lower of layout frame by checking, if the anchor
                     // frame, which contains the anchor position, is a lower
