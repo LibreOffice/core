@@ -213,32 +213,26 @@ void AccessibleChartView::initialize( ChartController& rNewChartController,
 
     if( xNewWindow != xWindow )
     {
-        xWindow.set( xNewWindow );
+        xWindow = xNewWindow;
         bChanged = true;
     }
 
-    if( xChartModel.is() && xChartView.is() )
+    if(xChartController != &rNewChartController)
     {
-        if(xChartController != &rNewChartController)
-        {
-            bChanged = true;
+        if (xChartController)
             xChartController->removeSelectionChangeListener(this);
-            rNewChartController.addSelectionChangeListener(this);
-            xChartController = &rNewChartController;
-        }
-    }
-    else if( xChartController.is() )
-    {
+        rNewChartController.addSelectionChangeListener(this);
+        xChartController = &rNewChartController;
         bChanged = true;
-        xChartController->removeSelectionChangeListener(this);
-        xChartController = nullptr;
     }
 
     if( !xChartController.is() || !xChartModel.is() || !xChartView.is() )
     {
         if(xChartController.is())
+        {
             xChartController->removeSelectionChangeListener(this);
-        xChartController = nullptr;
+            xChartController.clear();
+        }
         xChartModel.clear();
         xChartView.clear();
         xParent.clear();
