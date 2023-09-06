@@ -959,8 +959,17 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         else
             nCellSizeX = nCellSizeY = 0;
         Size aScrSize = aViewData.GetScrSize();
-        tools::Long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / 2;
-        tools::Long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / 2;
+
+        tools::Long nDenom;
+        if ( eMode == SC_FOLLOW_JUMP_END && nCurX > aViewData.GetRefStartX()
+            && nCurY > aViewData.GetRefStartY() )
+            nDenom = 1; // tdf#154271 Selected cell will be at the bottom corner
+                        // to maximize the visible/usable area
+        else
+            nDenom = 2; // Selected cell will be at the center of the screen, so that
+                        // it will be visible. This is useful for search results, etc.
+        tools::Long nSpaceX = ( aScrSize.Width()  - nCellSizeX ) / nDenom;
+        tools::Long nSpaceY = ( aScrSize.Height() - nCellSizeY ) / nDenom;
         //  nSpaceY: desired start position of cell for FOLLOW_JUMP, modified if dialog interferes
 
         bool bForceNew = false;     // force new calculation of JUMP position (vertical only)
@@ -971,7 +980,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         // if possible, put the row with the cursor above or below the dialog
         //! not if already completely visible
 
-        if ( eMode == SC_FOLLOW_JUMP )
+        if ( eMode == SC_FOLLOW_JUMP || eMode == SC_FOLLOW_JUMP_END )
         {
             weld::Window* pCare = lcl_GetCareWin( aViewData.GetViewShell()->GetViewFrame() );
             if (pCare)
@@ -1042,6 +1051,7 @@ void ScTabView::AlignToCursor( SCCOL nCurX, SCROW nCurY, ScFollowMode eMode,
         switch (eMode)
         {
             case SC_FOLLOW_JUMP:
+            case SC_FOLLOW_JUMP_END:
                 if ( nCurX < nDeltaX || nCurX >= nDeltaX+nSizeX )
                 {
                     nNewDeltaX = nCurX - aViewData.CellsAtX( nCurX, -1, eAlignX, static_cast<sal_uInt16>(nSpaceX) );
@@ -1521,7 +1531,7 @@ bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
     if( (nCode == KEY_HOME) || (nCode == KEY_END) )
     {
         nDX = (nCode == KEY_HOME) ? -1 : 1;
-        ScFollowMode eMode = (nCode == KEY_HOME) ? SC_FOLLOW_LINE : SC_FOLLOW_JUMP;
+        ScFollowMode eMode = (nCode == KEY_HOME) ? SC_FOLLOW_LINE : SC_FOLLOW_JUMP_END;
         switch( eModifier )
         {
             case MOD_NONE:  MoveCursorEnd( nDX, 0, eMode, bSel );   break;

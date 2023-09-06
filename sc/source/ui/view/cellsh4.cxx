@@ -507,7 +507,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
             break;
 
         case SID_CURSORENDOFFILE:
-            pTabViewShell->MoveCursorEnd( 1, 1, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorEnd( 1, 1, SC_FOLLOW_JUMP_END, bSel, bKeep );
             break;
 
         default:
