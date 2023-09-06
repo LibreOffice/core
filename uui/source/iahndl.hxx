@@ -238,6 +238,11 @@ private:
             const OUString & instructions,
             const OUString & url,
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
+
+    void
+    handleLoadReadOnlyRequest(
+        const OUString& sDocumentURL,
+        css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations);
 };
 
 class ErrorResource
