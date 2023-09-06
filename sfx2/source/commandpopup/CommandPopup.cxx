@@ -83,11 +83,11 @@ void MenuContentHandler::gatherMenuContent(
             aNewContent.m_aCommandURL, m_sModuleLongName);
         OUString aLabel = vcl::CommandInfoProvider::GetLabelForCommand(aCommandProperties);
         aNewContent.m_aMenuLabel = aLabel;
-        aNewContent.m_aSearchableMenuLabel = toLower(aLabel);
 
         if (!rMenuContent.m_aFullLabelWithPath.isEmpty())
             aNewContent.m_aFullLabelWithPath = rMenuContent.m_aFullLabelWithPath + " / ";
         aNewContent.m_aFullLabelWithPath += aNewContent.m_aMenuLabel;
+        aNewContent.m_aSearchableMenuLabel = toLower(aNewContent.m_aFullLabelWithPath);
 
         aNewContent.m_aTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(
             aNewContent.m_aCommandURL, aCommandProperties, m_xFrame);
@@ -107,13 +107,16 @@ void MenuContentHandler::findInMenu(OUString const& rText,
 
     OUString aLowerCaseText = toLower(rText);
 
+    // find submenus and menu items that start with the searched text
     auto aTextStartCriterium = [](MenuContent const& rMenuContent, OUString const& rSearchText) {
-        return rMenuContent.m_aSearchableMenuLabel.startsWith(rSearchText);
+        OUString aSearchText = " / " + rSearchText;
+        return rMenuContent.m_aSearchableMenuLabel.indexOf(aSearchText) > 0;
     };
 
     findInMenuRecursive(m_aMenuContent, aLowerCaseText, rpCommandTreeView, rCommandList,
                         aTextStartCriterium);
 
+    // find submenus and menu items that contain the searched text
     auto aTextAllCriterium = [](MenuContent const& rMenuContent, OUString const& rSearchText) {
         return rMenuContent.m_aSearchableMenuLabel.indexOf(rSearchText) > 0;
     };
