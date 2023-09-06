@@ -2264,6 +2264,16 @@ bool SwTableBox::IsEmpty( bool bWithRemainingNestedTable ) const
         const SwContentNode *pCNd = pFirstNode->GetContentNode();
         if ( pCNd && !pCNd->Len() )
             return true;
+
+        // tdf#157011 OOXML w:std cell content is imported with terminating 0x01 characters,
+        // i.e. an empty box can contain double 0x01: handle it to avoid losing change tracking
+        // FIXME regression since LibreOffice 7.3?
+        if ( pCNd && pCNd->Len() == 2 && pCNd->GetTextNode() )
+        {
+            const OUString &rText = pCNd->GetTextNode()->GetText();
+            if ( rText[0] == 0x01 && rText[1] == 0x01 )
+                return true;
+        }
     }
     else if ( bWithRemainingNestedTable )
     {

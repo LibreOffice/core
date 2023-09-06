@@ -1323,6 +1323,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf150824, "tdf150824.fodt")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf157011, "tdf157011_ins_del_empty_cols.docx")
+{
+    // check tracked table column insertions and deletions with empty cells
+    if (isExported())
+    {
+        xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+        // This was 1 (missing tracked table cell insertions)
+        assertXPath(pXmlDoc, "//w:ins", 3);
+
+        // This was 4 (missing tracked table cell deletions)
+        assertXPath(pXmlDoc, "//w:del", 6);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf150824_regression, "ooo30436-1-minimized.sxw")
 {
     // There should be no crash during loading of the document
