@@ -695,13 +695,13 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                     pRet = new SvxGraphicObject( pObj );
                     break;
                 case OBJ_FRAME:
-                    pRet = new SvxFrameShape( pObj );
+                    pRet = new SvxFrameShape( pObj, referer );
                     break;
                 case OBJ_OLE2_APPLET:
-                    pRet = new SvxAppletShape( pObj );
+                    pRet = new SvxAppletShape( pObj, referer );
                     break;
                 case OBJ_OLE2_PLUGIN:
-                    pRet = new SvxPluginShape( pObj );
+                    pRet = new SvxPluginShape( pObj, referer );
                     break;
                  case OBJ_OLE2:
                      {
@@ -729,17 +729,17 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
 
                                         if( aPluginClassId == aClassId )
                                         {
-                                            pRet = new SvxPluginShape( pObj );
+                                            pRet = new SvxPluginShape( pObj, referer );
                                             nType = OBJ_OLE2_PLUGIN;
                                         }
                                         else if( aAppletClassId == aClassId )
                                         {
-                                            pRet = new SvxAppletShape( pObj );
+                                            pRet = new SvxAppletShape( pObj, referer );
                                             nType = OBJ_OLE2_APPLET;
                                         }
                                         else if( aIFrameClassId == aClassId )
                                         {
-                                            pRet = new SvxFrameShape( pObj );
+                                            pRet = new SvxFrameShape( pObj, referer );
                                             nType = OBJ_FRAME;
                                         }
                                     }
@@ -749,7 +749,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
                         if( pRet == nullptr )
                         {
                             SvxUnoPropertyMapProvider& rSvxMapProvider = getSvxMapProvider();
-                            pRet = new SvxOle2Shape( pObj, rSvxMapProvider.GetMap(SVXMAP_OLE2),  rSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
+                            pRet = new SvxOle2Shape( pObj, referer, rSvxMapProvider.GetMap(SVXMAP_OLE2),  rSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
                         }
                      }
                     break;

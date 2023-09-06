@@ -68,14 +68,16 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 
-SvxOle2Shape::SvxOle2Shape(SdrObject* pObject)
-: SvxShapeText( pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
-                getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer)
+    : SvxShapeText(pObject, getSvxMapProvider().GetMap(SVXMAP_OLE2),
+                getSvxMapProvider().GetPropertySet(SVXMAP_OLE2,SdrObject::GetGlobalDrawObjectItemPool()))
+    , referer_(std::move(referer))
 {
 }
 
-SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
-: SvxShapeText( pObject, pPropertyMap, pPropertySet  )
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer, const SfxItemPropertyMapEntry* pPropertyMap, const SvxItemPropertySet* pPropertySet)
+    : SvxShapeText(pObject, pPropertyMap, pPropertySet)
+    , referer_(std::move(referer))
 {
 }
 
@@ -450,16 +452,18 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
 
     ::comphelper::IEmbeddedHelper* pPersist = GetSdrObject()->getSdrModelFromSdrObject().GetPersist();
 
-    uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
+    uno::Sequence< beans::PropertyValue > aMediaDescr( 2 );
     aMediaDescr[0].Name = "URL";
     aMediaDescr[0].Value <<= aLinkURL;
+    aMediaDescr[1].Name = "Referer";
+    aMediaDescr[1].Value <<= referer_;
 
     uno::Reference< task::XInteractionHandler > xInteraction = pPersist->getInteractionHandler();
     if ( xInteraction.is() )
     {
-        aMediaDescr.realloc( 2 );
-        aMediaDescr[1].Name = "InteractionHandler";
-        aMediaDescr[1].Value <<= xInteraction;
+        aMediaDescr.realloc( 3 );
+        aMediaDescr[2].Name = "InteractionHandler";
+        aMediaDescr[2].Value <<= xInteraction;
     }
 
     //TODO/LATER: how to cope with creation failure?!
@@ -560,8 +564,8 @@ OUString SvxOle2Shape::GetAndClearInitialFrameURL()
     return OUString();
 }
 
-SvxAppletShape::SvxAppletShape(SdrObject* pObject)
-    : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
+SvxAppletShape::SvxAppletShape(SdrObject* pObject, OUString referer)
+    : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_APPLET), getSvxMapProvider().GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool()))
 {
     SetShapeType( "com.sun.star.drawing.AppletShape" );
 }
@@ -631,8 +635,8 @@ bool SvxAppletShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-SvxPluginShape::SvxPluginShape(SdrObject* pObject)
-    : SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
+SvxPluginShape::SvxPluginShape(SdrObject* pObject, OUString referer)
+    : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_PLUGIN), getSvxMapProvider().GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()))
 {
     SetShapeType( "com.sun.star.drawing.PluginShape" );
 }
@@ -702,9 +706,8 @@ bool SvxPluginShape::getPropertyValueImpl( const OUString& rName, const SfxItemP
     }
 }
 
-
-SvxFrameShape::SvxFrameShape(SdrObject* pObject)
-: SvxOle2Shape( pObject, getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
+SvxFrameShape::SvxFrameShape(SdrObject* pObject, OUString referer)
+    : SvxOle2Shape(pObject, std::move(referer), getSvxMapProvider().GetMap(SVXMAP_FRAME), getSvxMapProvider().GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool()))
 {
     SetShapeType( "com.sun.star.drawing.FrameShape" );
 }
@@ -785,6 +788,7 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
         return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
+
 SvxMediaShape::SvxMediaShape(SdrObject* pObj, OUString const & referer)
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
     referer_(referer)
