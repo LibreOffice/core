@@ -144,12 +144,13 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="autoupdate">
-                <property name="label" translatable="yes" context="managestylepage|autoupdate">_AutoUpdate</property>
+                <property name="label" translatable="yes" context="managestylepage|autoupdate">_Automatic update from document</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="no-show-all">True</property>
                 <property name="use-underline">True</property>
                 <property name="draw-indicator">True</property>
+                <property name="tooltip-text" translatable="yes" context="managestylepage|autoupdate|tooltip_text">Any paragraph formatting changes in the document to a paragraph with this style are applied automatically to modify the paragraph style.</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
