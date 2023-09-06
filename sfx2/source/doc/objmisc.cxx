@@ -77,6 +77,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <ucbhelper/simpleinteractionrequest.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <sfx2/signaturestate.hxx>
@@ -1098,6 +1099,54 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
         bHasName = true; // the document is loaded, so the name should already available
         GetTitle( SFX_TITLE_DETECT );
         InitOwnModel_Impl();
+
+        if (IsLoadReadonly())
+        {
+            OUString aFilterName;
+            if (const SfxStringItem* pFilterNameItem =
+                pMedium->GetItemSet().GetItem(SID_FILTER_NAME, false))
+                aFilterName = pFilterNameItem->GetValue();
+
+            OUString aFileName;
+            if (const SfxStringItem* pFileNameItem =
+                pMedium->GetItemSet().GetItem(SID_FILE_NAME, false))
+            {
+                const INetURLObject aURL(pFileNameItem->GetValue());
+                aFileName = aURL.getBase(INetURLObject::LAST_SEGMENT, true,
+                                         INetURLObject::DecodeMechanism::WithCharset);
+            }
+
+            bool bSilent = false;
+            if (const SfxBoolItem* pSilentNameItem =
+                pMedium->GetItemSet().GetItem(SID_SILENT, false))
+                bSilent = pSilentNameItem->GetValue();
+
+            if (!bSilent && aFilterName.indexOf("Excel") != -1)
+            {
+                Reference<task::XInteractionHandler> xHandler(pMedium->GetInteractionHandler());
+                if (xHandler.is())
+                {
+                    beans::NamedValue aLoadReadOnlyRequest;
+                    aLoadReadOnlyRequest.Name = "LoadReadOnlyRequest";
+                    aLoadReadOnlyRequest.Value <<= aFileName;
+
+                    Any aRequest(aLoadReadOnlyRequest);
+                    rtl::Reference<ucbhelper::SimpleInteractionRequest> xRequest
+                        = new ucbhelper::SimpleInteractionRequest(aRequest,
+                                                                  ContinuationFlags::Approve |
+                                                                  ContinuationFlags::Disapprove);
+
+                    xHandler->handle(xRequest);
+
+                    if (xRequest->getResponse() == ContinuationFlags::Disapprove)
+                    {
+                        SetSecurityOptOpenReadOnly(false);
+                        pMedium->GetItemSet().Put(SfxBoolItem(SID_DOC_READONLY, false));
+                    }
+                }
+            }
+        }
+
         pImpl->nFlagsInProgress &= ~SfxLoadedFlags::MAINDOCUMENT;
     }
 
