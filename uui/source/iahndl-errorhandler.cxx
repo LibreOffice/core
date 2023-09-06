@@ -94,7 +94,6 @@ executeErrorDialog(
             break;
     }
 
-
     switch (nButtonMask)
     {
         case MessageBoxStyle::NONE:
