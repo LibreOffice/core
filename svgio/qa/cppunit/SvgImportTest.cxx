@@ -1840,7 +1840,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156837)
     // - Actual  : 103
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "y", "94");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "10");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "3");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", " 3");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf156271)
