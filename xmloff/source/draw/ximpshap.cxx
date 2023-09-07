@@ -2159,7 +2159,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
     // add, set style and properties from base shape
 
     // #86163# take into account which type of PageShape needs to
-    // be constructed. It's a pres shape if presentation:XML_CLASS == XML_PAGE.
+    // be constructed. It's a presentation shape if presentation:XML_CLASS == XML_PAGE.
     bool bIsPresentation = !maPresentationClass.isEmpty() &&
            GetImport().GetShapeImport()->IsPresentationShapesSupported();
 
