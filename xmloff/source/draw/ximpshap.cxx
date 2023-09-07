@@ -1627,7 +1627,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
 //A     if(!bIsPresShape || mbIsUserTransformed)
 //A     {
 //A         // set pos and size on shape, this should remove binding
-//A         // to pres object on masterpage
+//A         // to presentation object on masterpage
 //A         SetSizeAndPosition();
 //A     }
 
