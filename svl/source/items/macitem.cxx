@@ -233,6 +233,10 @@ bool SvxMacroItem::GetPresentation
 
 void SvxMacroItem::SetMacro( SvMacroItemId nEvent, const SvxMacro& rMacro )
 {
+    // tdf#141123: emplace doesn't replace the element in the map if already exists
+    // see https://en.cppreference.com/w/cpp/container/map/emplace
+    // so first erase the macro if there's one for this event
+    aMacroTable.Erase(nEvent);
     aMacroTable.Insert( nEvent, rMacro);
 }
 
