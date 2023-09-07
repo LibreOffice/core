@@ -734,7 +734,7 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->mpPostIt = pPostIt;
                             if (mpAnswer)
                             {
-                                if (static_cast<bool>(pPostIt->CalcParent())) //do we really have another note in front of this one
+                                if (pPostIt->GetPostItField()->GetParentPostItId() != 0) //do we really have another note in front of this one
                                     pPostIt->InitAnswer(*mpAnswer);
                                 mpAnswer.reset();
                             }
@@ -744,7 +744,9 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->mLayoutStatus,
                             GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
                         pPostIt->SetSidebarPosition(pPage->eSidebarPosition);
-                        pPostIt->SetFollow(static_cast<bool>(pPostIt->CalcParent()));
+
+                        if (pPostIt->GetPostItField()->GetParentPostItId() != 0)
+                            pPostIt->SetFollow(true);
 
                         tools::Long aPostItHeight = 0;
                         if (bShowNotes)

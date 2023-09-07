@@ -374,20 +374,6 @@ sal_uInt32 SwAnnotationWin::MoveCaret()
            : 1 + CountFollowing();
 }
 
-// returns a non-zero postit parent id, if exists, otherwise 0 for root comments
-sal_uInt32 SwAnnotationWin::CalcParent()
-{
-    SwTextField* pTextField = mpFormatField->GetTextField();
-    if (SwPosition aPosition(pTextField->GetTextNode(), pTextField->GetStart());
-        aPosition.GetContentIndex() > 0)
-        if (const SwTextAttr* pTextAttr = pTextField->GetTextNode().GetTextAttrForCharAt(
-                aPosition.GetContentIndex() - 1, RES_TXTATR_ANNOTATION))
-            if (const SwField* pField = pTextAttr->GetFormatField().GetField())
-                if (pField->Which() == SwFieldIds::Postit)
-                    return static_cast<const SwPostItField*>(pField)->GetPostItId();
-    return 0;
-}
-
 // counts how many SwPostItField we have right after the current one
 sal_uInt32 SwAnnotationWin::CountFollowing()
 {
