@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-// so_activex.cpp : Implementation of DLL Exports.
+// so_activex.cxx : Implementation of DLL Exports.
 
 // Note: Proxy/Stub Information
 //      To build a separate proxy/stub DLL,

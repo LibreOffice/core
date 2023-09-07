@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-// stdafx1.cpp : source file that includes just the standard includes
+// stdafx1.cxx : source file that includes just the standard includes
 //  stdafx1.pch will be the pre-compiled header
 //  stdafx1.obj will contain the pre-compiled type information
 
@@ -41,9 +41,9 @@
 
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
-#include <statreg.cpp>
+#include <statreg.cxx>
 #endif
 
-#include <atlimpl.cpp>
+#include <atlimpl.cxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

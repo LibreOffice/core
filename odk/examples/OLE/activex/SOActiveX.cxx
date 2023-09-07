@@ -33,7 +33,7 @@
  *
  *************************************************************************/
 
-// SOActiveX.cpp : Implementation of CSOActiveX
+// SOActiveX.cxx : Implementation of CSOActiveX
 
 #include "stdafx2.h"
 #include "so_activex.h"

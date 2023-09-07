@@ -6871,7 +6871,7 @@ odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilterDetection/
 odk/examples/DevelopersGuide/OfficeDev/FilterDevelopment/FlatXmlFilter_cpp/FlatXml.cxx
 odk/examples/DevelopersGuide/ProfUNO/CppBinding/office_connect.cxx
 odk/examples/DevelopersGuide/ProfUNO/SimpleBootstrap_cpp/SimpleBootstrap_cpp.cxx
-odk/examples/OLE/activex/SOActiveX.cpp
+odk/examples/OLE/activex/SOActiveX.cxx
 odk/examples/OLE/activex/SOActiveX.h
 odk/examples/OLE/activex/SOComWindowPeer.h
 odk/examples/OLE/activex/resource.h

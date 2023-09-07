@@ -50,12 +50,12 @@ OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
 
 MIDLFILES = so_activex.idl
 
-CXXFILES = SOActiveX.cpp \
-	 SOComWindowPeer.cpp \
-	 so_activex.cpp \
-	 StdAfx2.cpp
+CXXFILES = SOActiveX.cxx \
+	 SOComWindowPeer.cxx \
+	 so_activex.cxx \
+	 StdAfx2.cxx
 
-SLOFILES = $(patsubst %.cpp,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
+SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
 # Targets
 .PHONY: ALL
@@ -76,7 +76,7 @@ $(OUT_COMP_GEN)/so_activex.res : so_activex.rc $(OUT_COMP_INC)/so_activex.h
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	rc $(CC_INCLUDES) /R /FO$@ so_activex.rc			       
 
-$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cpp
+$(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
