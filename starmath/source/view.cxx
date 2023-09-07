@@ -718,13 +718,13 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
     switch (rKEvt.GetKeyCode().GetFunction())
     {
     case KeyFuncType::COPY:
-        rCursor.Copy();
+        rCursor.Copy(&mrGraphicWindow);
         break;
     case KeyFuncType::CUT:
-        rCursor.Cut();
+        rCursor.Cut(&mrGraphicWindow);
         break;
     case KeyFuncType::PASTE:
-        rCursor.Paste();
+        rCursor.Paste(&mrGraphicWindow);
         break;
     case KeyFuncType::UNDO:
         GetDoc()->Execute(o3tl::temporary(SfxRequest(*GetView().GetFrame(), SID_UNDO)));
@@ -1770,7 +1770,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_CUT:
             if (IsInlineEditEnabled())
             {
-                GetDoc()->GetCursor().Cut();
+                GetDoc()->GetCursor().Cut(&GetGraphicWindow());
                 GetGraphicWidget().GrabFocus();
             }
             else if (pWin)
@@ -1780,7 +1780,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         case SID_COPY:
             if (IsInlineEditEnabled())
             {
-                GetDoc()->GetCursor().Copy();
+                GetDoc()->GetCursor().Copy(&GetGraphicWindow());
                 GetGraphicWidget().GrabFocus();
             }
             else if (pWin)
@@ -1800,7 +1800,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             {
                 if (IsInlineEditEnabled())
                 {
-                    GetDoc()->GetCursor().Paste();
+                    GetDoc()->GetCursor().Paste(&GetGraphicWindow());
                     GetGraphicWidget().GrabFocus();
                     break;
                 }

@@ -158,15 +158,15 @@ public:
     void InsertBrackets(SmBracketType eBracketType);
 
     /** Copy the current selection */
-    void Copy();
+    void Copy(vcl::Window* pWindow = nullptr);
     /** Cut the current selection */
-    void Cut()
+    void Cut(vcl::Window* pWindow = nullptr)
     {
-        Copy();
+        Copy(pWindow);
         Delete();
     }
     /** Paste the clipboard */
-    void Paste();
+    void Paste(vcl::Window* pWindow = nullptr);
 
     /** Returns true if more than one node is selected
      *
@@ -201,8 +201,6 @@ private:
     SmDocShell* mpDocShell;
     /** Graph over caret position in the current tree */
     std::unique_ptr<SmCaretPosGraph> mpGraph;
-    /** Clipboard holder */
-    SmClipboard maClipboard;
 
     /** Returns a node that is selected, if any could be found */
     SmNode* FindSelectedNode(SmNode* pNode);

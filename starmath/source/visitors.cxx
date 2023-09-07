@@ -2583,6 +2583,8 @@ void SmNodeToTextVisitor::Visit( SmBlankNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmErrorNode* )
 {
+    // Add something for error nodes so that we can parse this back.
+    Append(u"{}");
 }
 
 void SmNodeToTextVisitor::Visit( SmLineNode* pNode )

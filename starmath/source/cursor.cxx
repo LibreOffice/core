@@ -16,6 +16,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <osl/diagnose.h>
 #include <sfx2/lokhelper.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/unohelp2.hxx>
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = nullptr;
@@ -1047,7 +1049,8 @@ void SmCursor::InsertCommandText(const OUString& aCommandText) {
     EndEdit();
 }
 
-void SmCursor::Copy(){
+void SmCursor::Copy(vcl::Window* pWindow)
+{
     if(!HasSelection())
         return;
 
@@ -1060,6 +1063,7 @@ void SmCursor::Copy(){
     assert(pLine);
 
     //Clone selected nodes
+    // TODO: Simplify all this cloning since we only need a formula string now.
     SmClipboard aClipboard;
     if(IsLineCompositionNode(pLine))
         CloneLineToClipboard(static_cast<SmStructureNode*>(pLine), &aClipboard);
@@ -1079,17 +1083,37 @@ void SmCursor::Copy(){
         }
     }
 
+    // Parse list of nodes to a tree
+    SmNodeListParser parser;
+    SmNode* pTree(parser.Parse(CloneList(aClipboard).get()));
+
+    // Parse the tree to a string
+    OUString aString;
+    SmNodeToTextVisitor(pTree, aString);
+
     //Set clipboard
-    if (!aClipboard.empty())
-        maClipboard = std::move(aClipboard);
+    auto xClipboard(pWindow ? pWindow->GetClipboard() : GetSystemClipboard());
+    vcl::unohelper::TextDataObject::CopyStringTo(aString, xClipboard);
 }
 
-void SmCursor::Paste() {
+void SmCursor::Paste(vcl::Window* pWindow)
+{
     BeginEdit();
     Delete();
 
-    if (!maClipboard.empty())
-        InsertNodes(CloneList(maClipboard));
+    auto xClipboard(pWindow ? pWindow->GetClipboard() : GetSystemClipboard());
+    auto aDataHelper(TransferableDataHelper::CreateFromClipboard(xClipboard));
+    if (aDataHelper.GetTransferable().is())
+    {
+        // TODO: Suppport MATHML
+        auto nId = SotClipboardFormatId::STRING;
+        if (aDataHelper.HasFormat(nId))
+        {
+            OUString aString;
+            if (aDataHelper.GetString(nId, aString))
+                InsertCommandText(aString);
+        }
+    }
 
     EndEdit();
 }
