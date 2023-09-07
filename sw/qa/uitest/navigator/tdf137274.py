@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
+import time
 
 class tdf137274(UITestCase):
 
@@ -59,7 +60,11 @@ class tdf137274(UITestCase):
             self.ui_test.wait_until_child_is_available('Comment2')
 
             # xComments needs reassigned after content tree change
-            xComments = self.get_item(xContentTree, 'Comments')
+            while True:
+                xComments = self.get_item(xContentTree, 'Comments')
+                if '1' in xComments.getChildren():
+                    break
+                time.sleep(self.ui_test.get_default_sleep())
             self.assertEqual('Comments', get_state_as_dict(xComments)['Text'])
 
             xComments.executeAction("EXPAND", tuple())

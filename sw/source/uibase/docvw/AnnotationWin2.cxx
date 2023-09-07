@@ -1118,6 +1118,8 @@ void SwAnnotationWin::ExecuteCommand(sal_uInt16 nSlot)
                 // Get newly created SwPostItField and set its paraIdParent
                 auto pPostItField = mrMgr.GetLatestPostItField();
                 pPostItField->SetParentId(GetTopReplyNote()->GetParaId());
+                pPostItField->SetParentPostItId(GetTopReplyNote()->GetPostItField()->GetPostItId());
+                pPostItField->SetParentName(GetTopReplyNote()->GetPostItField()->GetName());
             }
             break;
         }

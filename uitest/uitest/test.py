@@ -43,6 +43,9 @@ class UITest(object):
             if component is not None:
                 return component
 
+    def get_default_sleep(self):
+        return DEFAULT_SLEEP
+
     def wait_for_top_focus_window(self, id):
         while True:
             win = self._xUITest.getTopFocusWindow()
