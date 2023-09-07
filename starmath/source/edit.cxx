@@ -160,10 +160,7 @@ void SmEditTextWindow::StartCursorMove()
 
 void SmEditWindow::InvalidateSlots()
 {
-    SfxBindings& rBind = GetView()->GetViewFrame().GetBindings();
-    rBind.Invalidate(SID_COPY);
-    rBind.Invalidate(SID_CUT);
-    rBind.Invalidate(SID_DELETE);
+    GetView()->InvalidateSlots();
 }
 
 SmViewShell * SmEditWindow::GetView()

@@ -321,6 +321,8 @@ public:
 
     void SendCaretToLOK() const;
 
+    void InvalidateSlots();
+
 private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();

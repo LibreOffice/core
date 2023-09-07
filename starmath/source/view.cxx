@@ -371,10 +371,8 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     SmEditWindow* pEdit = GetView().GetEditWindow();
 
     if (SmViewShell::IsInlineEditEnabled()) {
-        SmCursor& rCursor = GetCursor();
-        rCursor.MoveTo(&rDevice, aPos, !rMEvt.IsShift());
-        if (pEdit)
-            pEdit->SetSelection(rCursor.GetSelection());
+        GetCursor().MoveTo(&rDevice, aPos, !rMEvt.IsShift());
+        GetView().InvalidateSlots();
         // 'on grab' window events are missing in lok, do it explicitly
         if (comphelper::LibreOfficeKit::isActive())
             SetIsCursorVisible(true);
@@ -715,7 +713,6 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         return GetView().KeyInput(rKEvt);
 
     bool bConsumed = true;
-    bool bSetSelection = false;
 
     SmCursor& rCursor = GetCursor();
     switch (rKEvt.GetKeyCode().GetFunction())
@@ -740,32 +737,24 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         {
             case KEY_LEFT:
                 rCursor.Move(&GetOutputDevice(), MoveLeft, !rKEvt.GetKeyCode().IsShift());
-                bSetSelection = true;
                 break;
             case KEY_RIGHT:
                 rCursor.Move(&GetOutputDevice(), MoveRight, !rKEvt.GetKeyCode().IsShift());
-                bSetSelection = true;
                 break;
             case KEY_UP:
                 rCursor.Move(&GetOutputDevice(), MoveUp, !rKEvt.GetKeyCode().IsShift());
-                bSetSelection = true;
                 break;
             case KEY_DOWN:
                 rCursor.Move(&GetOutputDevice(), MoveDown, !rKEvt.GetKeyCode().IsShift());
-                bSetSelection = true;
                 break;
             case KEY_RETURN:
                 if (!rKEvt.GetKeyCode().IsShift())
-                {
                     rCursor.InsertRow();
-                    bSetSelection = true;
-                }
                 break;
             case KEY_DELETE:
                 if (!rCursor.HasSelection())
                 {
                     rCursor.Move(&GetOutputDevice(), MoveRight, false);
-                    bSetSelection = true;
                     if (rCursor.HasComplexSelection())
                         break;
                 }
@@ -773,7 +762,6 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
                 break;
             case KEY_BACKSPACE:
                 rCursor.DeletePrev(&GetOutputDevice());
-                bSetSelection = true;
                 break;
             default:
                 if (!CharInput(rKEvt.GetCharCode(), rCursor, GetOutputDevice()))
@@ -781,9 +769,7 @@ bool SmGraphicWidget::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    SmEditWindow* pEdit = GetView().GetEditWindow();
-    if (pEdit && bSetSelection)
-        pEdit->SetSelection(rCursor.GetSelection());
+    GetView().InvalidateSlots();
     CaretBlinkStop();
     CaretBlinkStart();
     SetIsCursorVisible(true);
@@ -2509,6 +2495,14 @@ void SmViewShell::SendCaretToLOK() const
     {
         libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, *payload);
     }
+}
+
+void SmViewShell::InvalidateSlots()
+{
+    auto& rBind = GetViewFrame().GetBindings();
+    rBind.Invalidate(SID_COPY);
+    rBind.Invalidate(SID_CUT);
+    rBind.Invalidate(SID_DELETE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
