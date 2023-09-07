@@ -43,7 +43,7 @@ namespace drawinglayer::unorenderer
         namespace {
 
         class XPrimitive2DRenderer:
-            public cppu::WeakAggImplHelper2<
+            public cppu::WeakImplHelper<
                 css::graphic::XPrimitive2DRenderer, css::lang::XServiceInfo>
         {
         public:
