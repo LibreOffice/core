@@ -5268,10 +5268,12 @@ static bool lcl_ArrangeLowers( SwLayoutFrame *pLay, tools::Long lYStart, bool bI
                         // on the object positioning.
                         // #i52904# - no direct move of objects,
                         // whose vertical position doesn't depend on anchor frame.
+                        // Also move split flys directly, otherwise the follows would not be moved
+                        // at all.
                         const bool bDirectMove =
                                 FAR_AWAY != pFly->getFrameArea().Top() &&
                                 bVertPosDepOnAnchor &&
-                                !pFly->ConsiderObjWrapInfluenceOnObjPos();
+                                (!pFly->ConsiderObjWrapInfluenceOnObjPos() || pFly->IsFlySplitAllowed());
                         if ( bDirectMove )
                         {
                             {

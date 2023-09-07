@@ -1060,6 +1060,14 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     CPPUNIT_ASSERT(pPage2Fly1);
     CPPUNIT_ASSERT(pPage2Fly1->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage2Fly1->GetPrecede());
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 6204
+    // - Actual  : 1725
+    // i.e. the inner follow fly had a bad position, it was outside the page rectangle, it was not
+    // rendered and this way the inner anchor had no fly portion, either.
+    CPPUNIT_ASSERT_GREATER(pPage2->getFrameArea().Top(), pPage2Fly1->getFrameArea().Top());
+
     auto pPage2Fly2 = rPage2Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly2);
     CPPUNIT_ASSERT(!pPage2Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
