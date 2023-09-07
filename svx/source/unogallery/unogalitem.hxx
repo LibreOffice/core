@@ -26,7 +26,7 @@
 #include <com/sun/star/gallery/XGalleryItem.hpp>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <cppuhelper/weakagg.hxx>
+#include <comphelper/compbase.hxx>
 
 class GalleryTheme;
 struct GalleryObject;
@@ -34,12 +34,10 @@ namespace unogallery { class GalleryTheme; }
 
 namespace unogallery {
 
+typedef ::comphelper::WeakComponentImplHelper<css::lang::XServiceInfo, css::gallery::XGalleryItem> GalleryItem_Base;
 
-class GalleryItem final : public ::cppu::OWeakAggObject,
-                    public css::lang::XServiceInfo,
-                    public css::lang::XTypeProvider,
-                    public css::gallery::XGalleryItem,
-                    public ::comphelper::PropertySetHelper
+class GalleryItem final : public GalleryItem_Base,
+                          public ::comphelper::PropertySetHelper
 {
     friend class ::unogallery::GalleryTheme;
 
@@ -53,7 +51,6 @@ public:
 private:
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
