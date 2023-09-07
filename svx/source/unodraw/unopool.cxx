@@ -40,7 +40,7 @@ using namespace ::com::sun::star;
 using namespace ::cppu;
 
 SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, rtl::Reference<comphelper::PropertySetInfo> const & xDefaults)
-: PropertySetHelper( xDefaults ), mpModel( pModel )
+: SvxUnoDrawPool_Base(), PropertySetHelper( xDefaults ), mpModel( pModel )
 {
     init();
 }
@@ -308,11 +308,6 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
 
 uno::Any SAL_CALL SvxUnoDrawPool::queryInterface( const uno::Type & rType )
 {
-    return OWeakAggObject::queryInterface( rType );
-}
-
-uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
-{
     uno::Any aAny;
 
     if( rType == cppu::UnoType<lang::XServiceInfo>::get())
@@ -326,7 +321,7 @@ uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
     else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
         aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
     else
-        aAny = OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakObject::queryInterface( rType );
 
     return aAny;
 }
@@ -334,7 +329,6 @@ uno::Any SAL_CALL SvxUnoDrawPool::queryAggregation( const uno::Type & rType )
 uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawPool::getTypes()
 {
     static const uno::Sequence aTypes {
-        cppu::UnoType<uno::XAggregation>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<beans::XPropertySet>::get(),

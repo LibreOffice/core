@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <comphelper/propertysethelper.hxx>
-#include <cppuhelper/weakagg.hxx>
+#include <comphelper/compbase.hxx>
 #include <svx/svxdllapi.h>
 #include <svl/itempool.hxx>
 
@@ -36,9 +36,9 @@ class SfxItemPool;
     The class can work in a read only mode without a model. Derivated
     classes can set a model on demand by overriding getModelPool().
 */
-class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
-                        public css::lang::XServiceInfo,
-                        public css::lang::XTypeProvider,
+typedef ::comphelper::WeakComponentImplHelper<css::lang::XServiceInfo> SvxUnoDrawPool_Base;
+
+class SVX_DLLPUBLIC SvxUnoDrawPool : public SvxUnoDrawPool_Base,
                         public comphelper::PropertySetHelper
 {
 public:
@@ -60,12 +60,11 @@ public:
     virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override
-    { OWeakAggObject::acquire(); }
+    { OWeakObject::acquire(); }
     virtual void SAL_CALL release() noexcept override
-    { OWeakAggObject::release(); }
+    { OWeakObject::release(); }
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
