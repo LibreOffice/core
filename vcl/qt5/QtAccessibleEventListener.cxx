@@ -216,16 +216,8 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             }
             if (aEvent.OldValue >>= xChild)
             {
-                // Forwarding as QAccessible::ObjectDestroyed event currently results in crashes on close
-                // e.g. after using the character font color popup in the Writer toolbar, which
-                // needs further investigation, so don't send the event for now.
-                /*
-                QAccessible::updateAccessibility(
-                    new QAccessibleEvent(QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectDestroyed));
-                */
-                SAL_WARN("vcl.qt",
-                         "Not forwarding AccessibleEventId::CHILD event for removed child "
-                         "since it may cause crashes.");
+                QAccessible::updateAccessibility(new QAccessibleEvent(
+                    QtAccessibleRegistry::getQObject(xChild), QAccessible::ObjectDestroyed));
                 return;
             }
             SAL_WARN("vcl.qt",
