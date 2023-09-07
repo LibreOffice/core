@@ -75,9 +75,11 @@ void SwView::ExecDlgExt(SfxRequest const& rReq)
         {
             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
             const uno::Reference<frame::XModel> xModel(GetCurrentDocument());
-            ScopedVclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
+            VclPtr<AbstractQrCodeGenDialog> pDialog(pFact->CreateQrCodeGenDialog(
                 GetFrameWeld(), xModel, rReq.GetSlot() == SID_EDIT_QRCODE));
-            pDialog->Execute();
+            pDialog->StartExecuteAsync([pDialog](sal_Int32) {
+                pDialog->disposeOnce();
+            });
             break;
         }
         case SID_ADDITIONS_DIALOG:

@@ -231,6 +231,33 @@ short QrCodeGenDialog::run()
 #endif
 }
 
+bool QrCodeGenDialog::runAsync(const std::shared_ptr<QrCodeGenDialog>& rController,
+                               const std::function<void(sal_Int32)>& rFunc)
+{
+#if ENABLE_ZXING
+
+    weld::GenericDialogController::runAsync(rController, [rController, rFunc](sal_Int32 nResult) {
+        if (nResult == RET_OK)
+        {
+            try
+            {
+                rController->Apply();
+            }
+            catch (const std::exception&)
+            {
+                std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                    rController->GetParent(), VclMessageType::Warning, VclButtonsType::Ok,
+                    CuiResId(RID_CUISTR_QRCODEDATALONG)));
+                xBox->run();
+            }
+        }
+
+        rFunc(nResult);
+    });
+#endif
+    return true;
+}
+
 void QrCodeGenDialog::Apply()
 {
 #if ENABLE_ZXING

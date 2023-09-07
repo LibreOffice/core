@@ -406,7 +406,7 @@ DECL_ABSTDLG_CLASS(AbstractSignatureLineDialog,SignatureLineDialog)
 };
 
 // AbstractQrCodeGenDialog_Impl
-DECL_ABSTDLG_CLASS(AbstractQrCodeGenDialog,QrCodeGenDialog)
+DECL_ABSTDLG_CLASS_ASYNC(AbstractQrCodeGenDialog,QrCodeGenDialog)
 };
 
 // AbstractSignSignatureLineDialog_Impl

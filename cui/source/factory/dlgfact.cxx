@@ -113,7 +113,6 @@ IMPL_ABSTDLG_CLASS(AbstractGraphicFilterDialog)
 IMPL_ABSTDLG_CLASS(AbstractHangulHanjaConversionDialog)
 IMPL_ABSTDLG_CLASS(AbstractInsertObjectDialog)
 IMPL_ABSTDLG_CLASS(AbstractLinksDialog)
-IMPL_ABSTDLG_CLASS(AbstractQrCodeGenDialog)
 IMPL_ABSTDLG_CLASS(AbstractScreenshotAnnotationDlg)
 IMPL_ABSTDLG_CLASS(AbstractSignatureLineDialog)
 IMPL_ABSTDLG_CLASS(AbstractSignSignatureLineDialog)
@@ -132,6 +131,7 @@ IMPL_ABSTDLG_CLASS(AbstractSvxZoomDialog)
 IMPL_ABSTDLG_CLASS(AbstractTitleDialog)
 IMPL_ABSTDLG_CLASS(AbstractURLDlg)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasswordToOpenModifyDialog,weld::DialogController)
+IMPL_ABSTDLG_CLASS_ASYNC(AbstractQrCodeGenDialog,QrCodeGenDialog)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractPasteDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractScriptSelectorDialog,SfxDialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(AbstractSpellDialog,SfxDialogController)
@@ -1490,7 +1490,7 @@ VclPtr<AbstractQrCodeGenDialog> AbstractDialogFactory_Impl::CreateQrCodeGenDialo
     weld::Window* pParent, const Reference<XModel> xModel, bool bEditExisting)
 {
     return VclPtr<AbstractQrCodeGenDialog_Impl>::Create(
-        std::make_unique<QrCodeGenDialog>(pParent, xModel, bEditExisting));
+        std::make_shared<QrCodeGenDialog>(pParent, xModel, bEditExisting));
 }
 
 VclPtr<AbstractAdditionsDialog> AbstractDialogFactory_Impl::CreateAdditionsDialog(
