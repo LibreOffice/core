@@ -236,8 +236,11 @@ void AccessibilityIssue::quickFixIssue() const
         case IssueObject::DOCUMENT_TITLE:
         {
             OUString aDesc = SwResId(STR_ENTER_DOCUMENT_TITLE);
-            SvxNameDialog aNameDialog(m_pParent, "", aDesc);
-            if (aNameDialog.run() == RET_OK)
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(
+                pFact->CreateSvxNameDialog(pWrtShell->GetView().GetFrameWeld(), "", aDesc));
+            if (aNameDialog->Execute() == RET_OK)
             {
                 SwDocShell* pShell = m_pDoc->GetDocShell();
                 if (!pShell)
@@ -247,7 +250,9 @@ void AccessibilityIssue::quickFixIssue() const
                     pShell->GetModel(), uno::UNO_QUERY_THROW);
                 const uno::Reference<document::XDocumentProperties> xDocumentProperties(
                     xDPS->getDocumentProperties());
-                xDocumentProperties->setTitle(aNameDialog.GetName());
+                OUString sName;
+                aNameDialog->GetName(sName);
+                xDocumentProperties->setTitle(sName);
 
                 m_pDoc->getOnlineAccessibilityCheck()->resetAndQueueDocumentLevel();
             }
