@@ -1964,7 +1964,7 @@ void SdXMLConnectorShapeContext::startFastElement (sal_Int32 nElement,
         if ( bApplySVGD )
         {
             // tdf#83360 use path data only when redundant data of start and end point coordinates of
-            // path start/end and connector start/end is equal. This is to avoid using erraneous
+            // path start/end and connector start/end is equal. This is to avoid using erroneous
             // or inconsistent path data at import of foreign formats. Office itself always
             // writes out a consistent data set. Not using it when there is inconsistency
             // is okay since the path data is redundant, buffered data just to avoid recalculation
