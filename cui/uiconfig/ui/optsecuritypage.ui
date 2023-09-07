@@ -528,7 +528,6 @@ Do you want to delete password list and reset master password?</property>
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
-                <property name="image-position">right</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
