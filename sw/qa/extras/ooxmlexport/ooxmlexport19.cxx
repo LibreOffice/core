@@ -17,6 +17,8 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 
 #include <tools/UnitConversion.hxx>
@@ -1093,6 +1095,61 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf156548)
                                                                         "Bookmark");
         CPPUNIT_ASSERT_EQUAL(OUString("A_bookmark_name_longer_than_forty_chara1"),
                              xBookmark->getName());
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
+{
+    // Given a document with two content controls - one block, one inline
+    createSwDoc("tdf157136_TwoContentControls.docx");
+
+    // Both of them must import with the correct character style
+
+    {
+        // 1st paragraph - block content control
+        auto xRun = getRun(getParagraph(1), 1);
+        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text.\r"), xRun->getString());
+        // Without the fix in place, this would fail with
+        // - Expected: Placeholder Text
+        // - Actual  :
+        CPPUNIT_ASSERT_EQUAL(OUString("Placeholder Text"),
+                             getProperty<OUString>(xRun, "CharStyleName"));
+    }
+
+    {
+        // 2nd paragraph - inline content control
+        auto xRun = getRun(getParagraph(2), 1);
+        auto xContentControl
+            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, "ContentControl");
+        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text."),
+                             xContentControl->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("Placeholder Text"),
+                             getProperty<OUString>(xRun, "CharStyleName"));
+    }
+
+    // Test the same after round-trip
+    saveAndReload("Office Open XML Text");
+
+    {
+        // 1st paragraph - becomes inline content control after roundtrip
+        auto xRun = getRun(getParagraph(1), 1);
+        auto xContentControl
+            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, "ContentControl");
+        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text."),
+                             xContentControl->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("Placeholder Text"),
+                             getProperty<OUString>(xRun, "CharStyleName"));
+    }
+
+    {
+        // 2nd paragraph - inline content control
+        auto xRun = getRun(getParagraph(2), 1);
+        auto xContentControl
+            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, "ContentControl");
+        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text."),
+                             xContentControl->getString());
+        CPPUNIT_ASSERT_EQUAL(OUString("Placeholder Text"),
+                             getProperty<OUString>(xRun, "CharStyleName"));
     }
 }
 
