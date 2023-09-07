@@ -2189,7 +2189,7 @@ void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
     const SmNode *pParent = pNode->GetParent();
-    bool bBraceNeeded = pParent && pParent->GetType() == SmNodeType::Font;
+    bool bBraceNeeded = pParent;
     SmNode *pLeft  = pNode->LeftOperand(),
            *pOper  = pNode->Symbol(),
            *pRight = pNode->RightOperand();
@@ -2598,7 +2598,7 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == SmNodeType::BinHor;
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1;
     if (!bracketsNeeded)
     {
         const SmNode *pParent = pNode->GetParent();

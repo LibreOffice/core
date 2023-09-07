@@ -528,7 +528,7 @@ void Test::testBinomInBinHor()
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-    sExpected += "{ { binom a b + c } + d }";
+    sExpected += "{ { binom a { b + c } } + d }";
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
 }
 
@@ -623,7 +623,7 @@ void Test::testUnaryInMixedNumberAsNumerator()
     aCursor.InsertText("4");
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator",
-                                 OUString("{ 2 { - 1 over 2 } + 4 }"), xDocShRef->GetText());
+                                 OUString("{ 2 { { - 1 over 2 } + 4 } }"), xDocShRef->GetText());
 }
 
 void Test::testMiscEquivalent()
