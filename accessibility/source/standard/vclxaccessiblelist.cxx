@@ -251,6 +251,12 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         }
     }
 
+    // since an active descendant is the UI element with keyboard focus, only send
+    // ACTIVE_DESCENDANT_CHANGED if the listbox/combobox has focus
+    vcl::Window* pWindow = GetWindow();
+    assert(pWindow);
+    const bool bFocused = pWindow->HasChildPathFocus();
+
     if (m_aBoxType == COMBOBOX)
     {
         //VCLXAccessibleDropDownComboBox
@@ -259,10 +265,13 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
         {
             if ( aNewValue.hasValue() || aOldValue.hasValue() )
             {
-                NotifyAccessibleEvent(
-                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                    aOldValue,
-                    aNewValue );
+                if (bFocused)
+                {
+                    NotifyAccessibleEvent(
+                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                        aOldValue,
+                        aNewValue );
+                }
 
                 NotifyListItem(aNewValue);
             }
@@ -277,10 +286,13 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     {
         if ( aNewValue.hasValue() || aOldValue.hasValue() )
         {
-            NotifyAccessibleEvent(
-                    AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-                    aOldValue,
-                    aNewValue );
+            if (bFocused)
+            {
+                NotifyAccessibleEvent(
+                        AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
+                        aOldValue,
+                        aNewValue );
+            }
 
             NotifyListItem(aNewValue);
         }
