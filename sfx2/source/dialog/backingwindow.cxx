@@ -81,7 +81,7 @@ public:
         OutputDevice& rDevice = pDrawingArea->get_ref_device();
         rDevice.SetBackground(Wallpaper(rStyleSettings.GetWindowColor()));
 
-        SetPointer(PointerStyle::RefHand);
+        // SetPointer(PointerStyle::RefHand);
     }
 
     virtual void Resize() override
@@ -120,22 +120,6 @@ public:
         if (bIsDark != mbIsDark)
             LoadImageForWidth(GetOutputSizePixel().Width());
         weld::CustomWidgetController::StyleUpdated();
-    }
-
-    virtual bool MouseButtonUp(const MouseEvent& rMEvt) override
-    {
-        if (rMEvt.IsLeft())
-        {
-            OUString sURL = officecfg::Office::Common::Menus::ReleaseNotesURL::get();
-            // localizeWebserviceURI(sURL);
-
-            Reference<css::system::XSystemShellExecute> const xSystemShellExecute(
-                css::system::SystemShellExecute::create(
-                    ::comphelper::getProcessComponentContext()));
-            xSystemShellExecute->execute(sURL, OUString(),
-                                         css::system::SystemShellExecuteFlags::URIS_ONLY);
-        }
-        return true;
     }
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override
