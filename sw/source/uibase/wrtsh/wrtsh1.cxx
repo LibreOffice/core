@@ -2643,12 +2643,19 @@ bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos) const
 
 bool SwWrtShell::HasFoldedOutlineContentSelected() const
 {
+    // No need to check for selection over folded outline content when there are no outline nodes.
+    if (GetDoc()->GetNodes().GetOutLineNds().empty())
+        return false;
     for(const SwPaM& rPaM : GetCursor()->GetRingContainer())
     {
         SwPaM aPaM(*rPaM.GetMark(), *rPaM.GetPoint());
         aPaM.Normalize();
         SwNodeIndex aPointIdx(aPaM.GetPoint()->GetNode());
         SwNodeIndex aMarkIdx(aPaM.GetMark()->GetNode());
+        // Prevent crash in the for loop below by adjusting the mark if it is set to the end of
+        // content node.
+        if (aMarkIdx.GetNode() == GetDoc()->GetNodes().GetEndOfContent())
+            --aMarkIdx;
         if (aPointIdx == aMarkIdx)
             continue;
         // Return true if any nodes in PaM are folded outline content nodes.
