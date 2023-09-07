@@ -499,16 +499,16 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkGrid">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="row-spacing">8</property>
-            <property name="column-spacing">24</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="row-spacing">8</property>
+            <property name="column-spacing">24</property>
             <child>
               <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes" context="optsecuritypage|label9">Select custom certificate manager executable. Note that LibreOffice tries to locate installed ones automatically.</property>
+                <property name="label" translatable="yes" context="optsecuritypage|label11">Select custom certificate manager executable. Note that LibreOffice tries to locate installed ones automatically.</property>
                 <property name="wrap">True</property>
                 <property name="width-chars">56</property>
                 <property name="max-width-chars">56</property>
@@ -521,7 +521,7 @@ Do you want to delete password list and reset master password?</property>
             </child>
             <child>
               <object class="GtkButton" id="browse">
-                <property name="label" translatable="yes" context="stock1">_Browse...</property>
+                <property name="label" translatable="yes" context="optsecuritypage|browse">_Browse...</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="can-default">True</property>
