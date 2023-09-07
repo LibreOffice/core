@@ -514,8 +514,7 @@ namespace svgio::svgreader
                     if(pPreviousCharacterNode->mpParentLine != mpParentLine)
                         bAddGap = false;
 
-                    // add in-between whitespace (single space) to last
-                    // known character node
+                    // add in-between whitespace (single space) to the beginning of the current character node
                     if(bAddGap)
                     {
                         maText = " " + maText;
