@@ -1839,6 +1839,8 @@ void Edit::ImplInvalidateOutermostBorder( vcl::Window* pWin )
 
 void Edit::GetFocus()
 {
+    Control::GetFocus();
+
     if ( mpSubEdit )
         mpSubEdit->ImplGrabFocus( GetGetFocusFlags() );
     else if ( !mbActivePopup )
@@ -1882,8 +1884,6 @@ void Edit::GetFocus()
 
         SetInputContext( InputContext( GetFont(), !IsReadOnly() ? InputContextFlags::Text|InputContextFlags::ExtText : InputContextFlags::NONE ) );
     }
-
-    Control::GetFocus();
 }
 
 void Edit::LoseFocus()
