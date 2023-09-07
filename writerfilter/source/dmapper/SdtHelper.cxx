@@ -349,8 +349,11 @@ void SdtHelper::createPlainTextControl()
 
     xPropertySet->setPropertyValue("Content", uno::Any(aDefaultText));
 
+    PropertyMap aMap;
+    aMap.InsertProps(m_rDM_Impl.GetTopContext());
+
     // add it into document
-    m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
+    m_rDM_Impl.appendTextContent(xControlModel, aMap.GetPropertyValues());
 
     // Store all unused sdt parameters from grabbag
     xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
