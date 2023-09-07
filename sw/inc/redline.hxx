@@ -157,6 +157,8 @@ public:
     void SetSeqNo( sal_uInt16 nNo )                 { m_nSeqNo = nNo; }
 
     OUString GetDescr() const;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 class SW_DLLPUBLIC SwRangeRedline final : public SwPaM

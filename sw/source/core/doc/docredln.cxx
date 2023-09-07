@@ -1141,6 +1141,37 @@ OUString SwRedlineData::GetDescr() const
     return SwResId(STR_REDLINE_ARY[static_cast<int>(GetType())]);
 }
 
+void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRedlineData"));
+
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(GetDescr().toUtf8().getStr()));
+
+    OString sRedlineType;
+    switch (GetType())
+    {
+        case RedlineType::Insert:
+            sRedlineType = "REDLINE_INSERT";
+            break;
+        case RedlineType::Delete:
+            sRedlineType = "REDLINE_DELETE";
+            break;
+        case RedlineType::Format:
+            sRedlineType = "REDLINE_FORMAT";
+            break;
+        default:
+            sRedlineType = "UNKNOWN";
+            break;
+    }
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 sal_uInt32 SwRangeRedline::s_nLastId = 1;
 
 SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
@@ -2073,28 +2104,13 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwRangeRedline"));
 
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("descr"), BAD_CAST(const_cast<SwRangeRedline*>(this)->GetDescr().toUtf8().getStr()));
 
-    OString sRedlineType;
-    switch (GetType())
+    const SwRedlineData* pRedlineData = m_pRedlineData;
+    while (pRedlineData)
     {
-        case RedlineType::Insert:
-            sRedlineType = "REDLINE_INSERT";
-            break;
-        case RedlineType::Delete:
-            sRedlineType = "REDLINE_DELETE";
-            break;
-        case RedlineType::Format:
-            sRedlineType = "REDLINE_FORMAT";
-            break;
-        default:
-            sRedlineType = "UNKNOWN";
-            break;
+        pRedlineData->dumpAsXml(pWriter);
+        pRedlineData = pRedlineData->Next();
     }
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
 
     SwPaM::dumpAsXml(pWriter);
 
