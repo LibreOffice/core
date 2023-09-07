@@ -679,6 +679,23 @@ bool SwTextFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
         bool bEvade = !mpCurrAnchoredObj ||
                           Is_Lower_Of( mpCurrAnchoredObj->DynCastFlyFrame(), pNew);
 
+        auto pFly = _pAnchoredObj->DynCastFlyFrame();
+        if (pFly && pFly->IsFlySplitAllowed())
+        {
+            // Check if _pAnchoredObj is a split fly inside an other split fly. Always collect such
+            // flys, otherwise the inner anchor text will overlap with the inner fly.
+            SwFrame* pFlyAnchor = const_cast<SwAnchoredObject*>(_pAnchoredObj)
+                ->GetAnchorFrameContainingAnchPos();
+            if (pFlyAnchor && pFlyAnchor->IsInFly())
+            {
+                auto pOuterFly = pFlyAnchor->FindFlyFrame();
+                if (pOuterFly && pOuterFly->IsFlySplitAllowed())
+                {
+                    return true;
+                }
+            }
+        }
+
         if ( !bEvade )
         {
             // We are currently inside a fly frame and pNew is not
