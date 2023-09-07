@@ -238,11 +238,8 @@ DeactivateRC SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
             {
                 XFillStyleItem aStyleItem( drawing::FillStyle_NONE );
                 _pSet->Put( aStyleItem );
-                if (_pSet->HasItem(XATTR_FILLUSESLIDEBACKGROUND))
-                {
-                    XFillUseSlideBackgroundItem aFillBgItem( false );
-                    _pSet->Put( aFillBgItem );
-                }
+                XFillUseSlideBackgroundItem aFillBgItem( false );
+                _pSet->Put( aFillBgItem );
             }
             break;
         }
