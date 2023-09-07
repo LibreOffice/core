@@ -21,7 +21,7 @@
 
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
-#include <svx/fmdpage.hxx>
+#include <svx/unopage.hxx>
 #include "frmfmt.hxx"
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
@@ -42,7 +42,7 @@ class SwXShape;
 
 typedef cppu::ImplInheritanceHelper
 <
-    SvxFmDrawPage,
+    SvxDrawPage,
     css::container::XEnumerationAccess,
     css::beans::XPropertySet>
         SwFmDrawPage_Base;

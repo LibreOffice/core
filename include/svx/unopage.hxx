@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XShapes3.hpp>
 #include <com/sun/star/drawing/XShapeGrouper.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <svx/svxdllapi.h>
 #include <svx/svdobjkind.hxx>
@@ -54,7 +55,8 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
                                                css::drawing::XShapes3,
                                                css::lang::XServiceInfo,
                                                css::lang::XUnoTunnel,
-                                               css::lang::XComponent>
+                                               css::lang::XComponent,
+                                               css::form::XFormsSupplier2>
 
 {
  protected:
@@ -129,6 +131,12 @@ class SVXCORE_DLLPUBLIC SvxDrawPage : protected cppu::BaseMutex,
     virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+
+    // XFormsSupplier
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getForms() override;
+
+    // XFormsSupplier2
+    virtual sal_Bool SAL_CALL hasForms() override;
 };
 
 #endif

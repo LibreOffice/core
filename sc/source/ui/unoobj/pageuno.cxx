@@ -25,7 +25,7 @@
 using namespace ::com::sun::star;
 
 ScPageObj::ScPageObj( SdrPage* pPage ) :
-    SvxFmDrawPage( pPage )
+    SvxDrawPage( pPage )
 {
 }
 
@@ -35,7 +35,7 @@ ScPageObj::~ScPageObj() noexcept
 
 uno::Reference<drawing::XShape > ScPageObj::CreateShape( SdrObject *pObj ) const
 {
-    uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::CreateShape( pObj ));
+    uno::Reference<drawing::XShape> xShape(SvxDrawPage::CreateShape( pObj ));
 
     new ScShapeObj( xShape );       // aggregates object and modifies xShape
 

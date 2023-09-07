@@ -29,7 +29,6 @@
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 
 #include <svx/unopage.hxx>
-#include <svx/fmdpage.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -40,7 +39,7 @@
 class SdrObject;
 class SdXImpressDocument;
 
-class SdGenericDrawPage : public SvxFmDrawPage,
+class SdGenericDrawPage : public SvxDrawPage,
                           public SdUnoSearchReplaceShape,
                           public css::drawing::XShapeCombiner,
                           public css::drawing::XShapeBinder,
@@ -105,7 +104,7 @@ public:
     // this is called whenever a SdrObject must be created for an empty api shape wrapper
     virtual rtl::Reference<SdrObject> CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
-    // SvxFmDrawPage
+    // SvxDrawPage
     virtual css::uno::Reference<css::drawing::XShape>  CreateShape(SdrObject *pObj) const override;
 
     // XInterface

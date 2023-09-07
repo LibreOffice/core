@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/form/XForms.hpp>
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/classids.hxx>
@@ -30,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include <svx/fmpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
@@ -53,6 +55,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/globname.hxx>
 #include <sal/log.hxx>
+#include <fmobj.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -490,6 +493,15 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 
 rtl::Reference<SdrObject> SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
 {
+    OUString aShapeType( xShape->getShapeType() );
+
+    if  (   aShapeType == "com.sun.star.drawing.ShapeControl"   // compatibility
+        ||  aShapeType == "com.sun.star.drawing.ControlShape"
+        )
+    {
+        return new FmFormObj(GetSdrPage()->getSdrModelFromSdrPage());
+    }
+
     SdrObjKind nType = SdrObjKind::NONE;
     SdrInventor nInventor;
 
@@ -610,6 +622,10 @@ rtl::Reference<SvxShape> SvxDrawPage::CreateShapeByTypeAndInventor( SdrObjKind n
 
     switch( nInventor )
     {
+        case SdrInventor::FmForm:
+        {
+            return new SvxShapeControl( pObj );
+        }
         case SdrInventor::E3d:
         {
             switch( nType )
@@ -891,6 +907,32 @@ SdrPage* GetSdrPageFromXDrawPage( const uno::Reference< drawing::XDrawPage >& xD
     }
 
     return nullptr;
+}
+
+// XFormsSupplier
+css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxDrawPage::getForms()
+{
+    SolarMutexGuard g;
+
+    css::uno::Reference< css::container::XNameContainer >  xForms;
+
+    FmFormPage *pFmPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
+    if( pFmPage )
+        xForms.set( pFmPage->GetForms(), css::uno::UNO_QUERY_THROW );
+
+    return xForms;
+}
+
+// XFormsSupplier2
+sal_Bool SAL_CALL SvxDrawPage::hasForms()
+{
+    SolarMutexGuard g;
+
+    bool bHas = false;
+    FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );
+    if ( pFormPage )
+        bHas = pFormPage->GetForms( false ).is();
+    return bHas;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -359,7 +359,7 @@ uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) c
         // own block - temporary object has to be destroyed before
         // the delegator is set #81670#
         {
-            xRet = SvxFmDrawPage::CreateShape( pObj );
+            xRet = SvxDrawPage::CreateShape( pObj );
         }
         uno::Reference< XUnoTunnel > xShapeTunnel(xRet, uno::UNO_QUERY);
         //don't create an SwXShape if it already exists
@@ -616,7 +616,7 @@ sal_Bool SwFmDrawPage::hasElements()
         throw uno::RuntimeException();
     if(!m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return false;
-    return SvxFmDrawPage::hasElements();
+    return SvxDrawPage::hasElements();
 }
 
 void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
@@ -645,7 +645,7 @@ void SwFmDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
             return;
         }
     }
-    SvxFmDrawPage::add(xShape);
+    SvxDrawPage::add(xShape);
 
     OSL_ENSURE(pSvxShape, "Why is here no SvxShape?");
     // this position is definitely in 1/100 mm

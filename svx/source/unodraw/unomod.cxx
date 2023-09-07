@@ -35,7 +35,6 @@
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <sfx2/event.hxx>
-#include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/unoapi.hxx>
@@ -556,11 +555,7 @@ uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
 
             if( !xPage.is() )
             {
-                if( dynamic_cast<FmFormModel*>( mrModel.mpDoc )  )
-                    xPage = static_cast<drawing::XDrawPage*>(new SvxFmDrawPage( pPage ));
-                else
-                    xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
-
+                xPage = static_cast<drawing::XDrawPage*>(new SvxDrawPage( pPage ));
                 pPage->mxUnoPage = xPage;
             }
 

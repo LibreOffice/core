@@ -24,6 +24,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/unopage.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <string.h>
@@ -44,7 +45,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/fmdpage.hxx>
 #include <svx/ColorSets.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
@@ -1767,7 +1767,7 @@ uno::Reference< uno::XInterface > const & SdrPage::getUnoPage()
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
-    return cppu::getXWeak(new SvxFmDrawPage(this));
+    return cppu::getXWeak(new SvxDrawPage(this));
 }
 
 SfxStyleSheet* SdrPage::GetTextStyleSheetForObject( SdrObject* pObj ) const

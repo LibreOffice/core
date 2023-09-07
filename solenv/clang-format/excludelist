@@ -5797,7 +5797,6 @@ include/svx/extedit.hxx
 include/svx/fillctrl.hxx
 include/svx/flagsdef.hxx
 include/svx/float3d.hxx
-include/svx/fmdpage.hxx
 include/svx/fmgridcl.hxx
 include/svx/fmgridif.hxx
 include/svx/fmmodel.hxx
@@ -11458,7 +11457,6 @@ svx/source/form/fmcontrolbordermanager.cxx
 svx/source/form/fmcontrollayout.cxx
 svx/source/form/fmdmod.cxx
 svx/source/form/fmdocumentclassification.cxx
-svx/source/form/fmdpage.cxx
 svx/source/form/fmexch.cxx
 svx/source/form/fmexpl.cxx
 svx/source/form/fmmodel.cxx

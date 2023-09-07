@@ -24,7 +24,7 @@
 #include <tools/poly.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <svx/fmdpage.hxx>
+#include <svx/unopage.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -872,7 +872,7 @@ bool ImplEESdrWriter::ImplInitPage( const SdrPage& rPage )
         Reference<css::lang::XComponent> xOldDrawPage(mXDrawPage, UNO_QUERY);
         if (xOldDrawPage.is())
             xOldDrawPage->dispose();
-        mXDrawPage = pSvxDrawPage = new SvxFmDrawPage( const_cast<SdrPage*>(&rPage) );
+        mXDrawPage = pSvxDrawPage = new SvxDrawPage( const_cast<SdrPage*>(&rPage) );
         mXShapes = mXDrawPage;
         if ( !mXShapes.is() )
             return false;

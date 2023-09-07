@@ -39,10 +39,9 @@ namespace reportdesign
         <   css::report::XSection
         ,   css::lang::XServiceInfo
         ,   css::lang::XUnoTunnel
-        // SvxDrawPage forward
+        // SvxDrawPage forwards
         ,   css::drawing::XDrawPage
         ,   css::drawing::XShapeGrouper
-        // SvxFmDrawPage forward
         ,   css::form::XFormsSupplier2
         > SectionBase;
     typedef ::cppu::PropertySetMixin<css::report::XSection> SectionPropertySet;

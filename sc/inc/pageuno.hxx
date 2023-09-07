@@ -19,11 +19,11 @@
 
 #pragma once
 
-#include <svx/fmdpage.hxx>
+#include <svx/unopage.hxx>
 
-//  SvxFmDrawPage subclass to create ScShapeObj for shapes
+//  SvxDrawPage subclass to create ScShapeObj for shapes
 
-class ScPageObj final : public SvxFmDrawPage
+class ScPageObj final : public SvxDrawPage
 {
 public:
     ScPageObj(SdrPage* pPage);
