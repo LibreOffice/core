@@ -35,9 +35,10 @@ namespace comphelper
 }
 
 
-//  SvNumberFormatsSupplierObj: aggregate to document,
-//  construct with SvNumberFormatter
-
+/**
+ * Factory for XNumberFormats objects.
+ * Implements XAggregation because it is aggregated to ScModelObj
+ */
 class SVL_DLLPUBLIC SvNumberFormatsSupplierObj : public cppu::WeakAggImplHelper2<
                                     css::util::XNumberFormatsSupplier,
                                     css::lang::XUnoTunnel>
