@@ -214,9 +214,9 @@ void EscherPropertyContainer::AddOpt(
     std::vector<sal_uInt8> aBuf;
     aBuf.reserve(rString.size() * 2 + 2);
 
-    for(size_t i(0); i < rString.size(); i++)
+    for(const auto& nChar: rString)
     {
-        const sal_Unicode nUnicode(rString[i]);
+        const sal_Unicode nUnicode(nChar);
         aBuf.push_back(static_cast<sal_uInt8>(nUnicode));
         aBuf.push_back(static_cast<sal_uInt8>(nUnicode >> 8));
     }
