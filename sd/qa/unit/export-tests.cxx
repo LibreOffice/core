@@ -1577,6 +1577,20 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf140714)
     CPPUNIT_ASSERT_EQUAL(OUString{ "com.sun.star.drawing.CustomShape" }, xShape->getShapeType());
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf156649)
+{
+    createSdImpressDoc("pptx/tdf156649.pptx");
+    saveAndReload("Impress Office Open XML");
+
+    auto xShapeProps(getShapeFromPage(0, 0));
+    // Without the fix in place, this test would have failed with
+    //- Expected: 55
+    //- Actual  : 0
+    // i.e. alphaModFix wasn't imported as fill transparency for the custom shape
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(55),
+                         xShapeProps->getPropertyValue("FillTransparence").get<sal_Int16>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdExportTest, testMasterPageBackgroundFullSize)
 {
     createSdImpressDoc("odp/background.odp");

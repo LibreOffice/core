@@ -866,7 +866,9 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
 
         if ( maBlipProps.moAlphaModFix.has_value() )
         {
-            rPropMap.setProperty(PROP_Transparency, static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.value() / PER_PERCENT)));
+            rPropMap.setProperty(
+                mbIsCustomShape ? PROP_FillTransparence : PROP_Transparency,
+                static_cast<sal_Int16>(100 - (maBlipProps.moAlphaModFix.value() / PER_PERCENT)));
         }
     }
     rPropMap.setProperty(PROP_GraphicColorMode, eColorMode);
