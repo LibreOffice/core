@@ -235,11 +235,11 @@ void AccessibilityIssue::quickFixIssue() const
         break;
         case IssueObject::DOCUMENT_TITLE:
         {
-            OUString aDesc = SwResId(STR_ENTER_DOCUMENT_TITLE);
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
-            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(
-                pFact->CreateSvxNameDialog(pWrtShell->GetView().GetFrameWeld(), "", aDesc));
+            ScopedVclPtr<AbstractSvxNameDialog> aNameDialog(pFact->CreateSvxNameDialog(
+                pWrtShell->GetView().GetFrameWeld(), OUString(),
+                SwResId(STR_DOCUMENT_TITLE_DLG_DESC), SwResId(STR_DOCUMENT_TITLE_DLG_TITLE)));
             if (aNameDialog->Execute() == RET_OK)
             {
                 SwDocShell* pShell = m_pDoc->GetDocShell();

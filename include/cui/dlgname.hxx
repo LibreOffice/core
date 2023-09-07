@@ -36,7 +36,8 @@ private:
     DECL_LINK(ModifyHdl, weld::Entry&, void);
 
 public:
-    SvxNameDialog(weld::Window* pWindow, const OUString& rName, const OUString& rDesc);
+    SvxNameDialog(weld::Window* pWindow, const OUString& rName, const OUString& rDesc,
+                  const OUString& rTitle = "");
 
     OUString GetName() const { return m_xEdtName->get_text(); }
 

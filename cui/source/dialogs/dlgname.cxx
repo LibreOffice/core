@@ -25,7 +25,8 @@
 |*
 \************************************************************************/
 
-SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const OUString& rDesc)
+SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const OUString& rDesc,
+                             const OUString& rTitle)
     : GenericDialogController(pParent, "cui/ui/namedialog.ui", "NameDialog")
     , m_xEdtName(m_xBuilder->weld_entry("name_entry"))
     , m_xFtDescription(m_xBuilder->weld_label("description_label"))
@@ -36,6 +37,8 @@ SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const
     m_xEdtName->select_region(0, -1);
     ModifyHdl(*m_xEdtName);
     m_xEdtName->connect_changed(LINK(this, SvxNameDialog, ModifyHdl));
+    if (!rTitle.isEmpty())
+        set_title(rTitle);
 }
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
