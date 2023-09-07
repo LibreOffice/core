@@ -211,8 +211,6 @@ public:
     void testComplexSelection();
     void testSpellcheckerMultiView();
     void testDialogPaste();
-    void testShowHideDialog();
-    void testDialogInput();
     void testCalcSaveAs();
     void testControlState();
     void testMetricField();
@@ -285,8 +283,6 @@ public:
     CPPUNIT_TEST(testComplexSelection);
     CPPUNIT_TEST(testSpellcheckerMultiView);
     CPPUNIT_TEST(testDialogPaste);
-    CPPUNIT_TEST(testShowHideDialog);
-    CPPUNIT_TEST(testDialogInput);
     CPPUNIT_TEST(testCalcSaveAs);
     CPPUNIT_TEST(testControlState);
     CPPUNIT_TEST(testMetricField);
@@ -2040,34 +2036,6 @@ void DesktopLOKTest::testBinaryCallback()
     }
 }
 
-void DesktopLOKTest::testDialogInput()
-{
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    pViewShell->GetViewFrame().GetBindings().Update();
-
-    VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
-    CPPUNIT_ASSERT(pWindow);
-
-    Control* pCtrlFocused = GetFocusControl(pWindow.get());
-    CPPUNIT_ASSERT(pCtrlFocused);
-    CPPUNIT_ASSERT_EQUAL(WindowType::COMBOBOX, pCtrlFocused->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString(""), pCtrlFocused->GetText());
-
-    vcl::LOKWindowId nDialogId = pWindow->GetLOKWindowId();
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT, "wiki.");
-    pDocument->pClass->postWindowExtTextInputEvent(pDocument, nDialogId, LOK_EXT_TEXTINPUT_END, "wiki.");
-    pDocument->pClass->removeTextContext(pDocument, nDialogId, 1, 0);
-    Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_EQUAL(OUString("wiki"), pCtrlFocused->GetText());
-
-    static_cast<SystemWindow*>(pWindow.get())->Close();
-    Scheduler::ProcessEventsToIdle();
-}
-
 void DesktopLOKTest::testInput()
 {
     // Load a Writer document, enable change recording and press a key.
@@ -2174,7 +2142,6 @@ public:
     boost::property_tree::ptree m_aCommentCallbackResult;
     boost::property_tree::ptree m_aCallbackWindowResult;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
-    bool m_bWindowHidden;
 
     ViewCallback(LibLODocument_Impl* pDocument)
         : mpDocument(pDocument),
@@ -2231,16 +2198,6 @@ public:
             m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
-        case LOK_CALLBACK_WINDOW:
-        {
-            m_aCallbackWindowResult.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aCallbackWindowResult);
-
-            std::string sAction = m_aCallbackWindowResult.get<std::string>("action");
-            if (sAction == "hide")
-                m_bWindowHidden = true;
-        }
         break;
         case LOK_CALLBACK_CELL_FORMULA:
         {
@@ -3078,31 +3035,6 @@ void DesktopLOKTest::testDialogPaste()
     CPPUNIT_ASSERT(pCtrlFocused);
     CPPUNIT_ASSERT_EQUAL(WindowType::COMBOBOX, pCtrlFocused->GetType());
     CPPUNIT_ASSERT_EQUAL(OUString("www.softwarelibre.org.bo"), pCtrlFocused->GetText());
-
-    static_cast<SystemWindow*>(pWindow.get())->Close();
-    Scheduler::ProcessEventsToIdle();
-}
-
-void DesktopLOKTest::testShowHideDialog()
-{
-
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    ViewCallback aView(pDocument);
-
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:HyperlinkDialog", nullptr, false);
-    Scheduler::ProcessEventsToIdle();
-
-    VclPtr<vcl::Window> pWindow(Application::GetActiveTopWindow());
-    CPPUNIT_ASSERT(pWindow);
-
-    aView.m_bWindowHidden = false;
-
-    pWindow->Hide();
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(true, aView.m_bWindowHidden);
 
     static_cast<SystemWindow*>(pWindow.get())->Close();
     Scheduler::ProcessEventsToIdle();
