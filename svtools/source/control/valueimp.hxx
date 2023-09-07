@@ -97,6 +97,9 @@ public:
     */
     void LoseFocus();
 
+    /** Called by the corresponding ValueSet when it gets destroyed. */
+    void Invalidate();
+
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) override;
 
@@ -167,9 +170,12 @@ private:
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
+        @param bCheckValueSet
+            Whether to also check that the ValueSet (parent)
+            is non-null.
         @throws css::lang::DisposedException
     */
-    void ThrowIfDisposed();
+    void ThrowIfDisposed(bool bCheckParent = true);
 
     /** Check whether the value set has a 'none' field, i.e. a field (button)
         that deselects any items (selects none of them).

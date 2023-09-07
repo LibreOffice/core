@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace ::com::sun::star;
 
@@ -470,7 +471,8 @@ void ValueSetAcc::LoseFocus()
 
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSetAcc::getAccessibleContext()
 {
-    ThrowIfDisposed();
+    // still allow retrieving a11y context when not disposed yet, but ValueSet is unset
+    ThrowIfDisposed(false);
     return this;
 }
 
@@ -886,15 +888,15 @@ void SAL_CALL ValueSetAcc::deselectAccessibleChild( sal_Int64 nChildIndex )
         mpParent->SetNoSelection();
 }
 
+void ValueSetAcc::Invalidate()
+{
+    mpParent = nullptr;
+}
 
 void ValueSetAcc::disposing(std::unique_lock<std::mutex>& rGuard)
 {
     // Make a copy of the list and clear the original.
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy = std::move(mxEventListeners);
-
-    // Reset the pointer to the parent.  It has to be the one who has
-    // disposed us because he is dying.
-    mpParent = nullptr;
 
     if (aListenerListCopy.empty())
         return;
@@ -946,7 +948,7 @@ ValueSetItem* ValueSetAcc::getItem (sal_uInt16 nIndex) const
 }
 
 
-void ValueSetAcc::ThrowIfDisposed()
+void ValueSetAcc::ThrowIfDisposed(bool bCheckParent)
 {
     if (m_bDisposed)
     {
@@ -955,9 +957,11 @@ void ValueSetAcc::ThrowIfDisposed()
             "object has been already disposed",
             getXWeak());
     }
-    else
+
+    if (bCheckParent && !mpParent)
     {
-        DBG_ASSERT (mpParent!=nullptr, "ValueSetAcc not disposed but mpParent == NULL");
+        assert(false && "ValueSetAcc not disposed but mpParent == NULL");
+        throw css::uno::RuntimeException("ValueSetAcc not disposed but mpParent == NULL");
     }
 }
 

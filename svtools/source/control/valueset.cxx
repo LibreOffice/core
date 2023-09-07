@@ -124,7 +124,7 @@ Reference<XAccessible> ValueSet::CreateAccessible()
 ValueSet::~ValueSet()
 {
     if (mxAccessible)
-        mxAccessible->dispose();
+        mxAccessible->Invalidate();
 
     ImplDeleteItems();
 }
