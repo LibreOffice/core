@@ -2627,7 +2627,7 @@ bool PDFWriterImpl::emitType3Font(const vcl::font::PhysicalFontFace* pFace,
 
             "/FirstChar 0\n"
             "/LastChar "
-            + OString::number(nGlyphs)
+            + OString::number(nGlyphs - 1)
             + "\n"
 
             "/Widths[");
