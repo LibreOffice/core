@@ -652,8 +652,7 @@ public:
     rtl::Reference<SdrObject> CreateTable(
                                 SdrObject* pGroupObject,
                                 const sal_uInt32* pTableArry,
-                                SvxMSDffSolverContainer* pSolverContainer,
-                                std::vector<rtl::Reference<SdrObject>>& rBackgroundColoredObjects
+                                SvxMSDffSolverContainer* pSolverContainer
                             );
     virtual bool ReadFormControl( tools::SvRef<SotStorage>& rSrc1, css::uno::Reference< css::form::XFormComponent > & rFormComp ) const = 0;
 };

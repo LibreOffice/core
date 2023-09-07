@@ -1295,13 +1295,6 @@ rtl::Reference<SdrObject> SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData
                     maFidcls[ nSec ].dgid = rPersistEntry.nDrawingDgId; // insert the correct drawing id;
             }
         }
-        if ( GetPropertyValue( DFF_Prop_fNoFillHitTest, 0 ) & 0x10 )
-        {
-            if (GetPropertyValue(DFF_Prop_fillType, mso_fillSolid) == mso_fillBackground)
-            {
-                rData.aBackgroundColoredObjects.push_back( pRet );
-            }
-        }
     }
     return pRet;
 }
@@ -2903,7 +2896,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 if ( pObj )
                                                 {
                                                     if ( aProcessData.pTableRowProperties )
-                                                        pObj = CreateTable(pObj.get(), aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.xSolverContainer.get(), aProcessData.aBackgroundColoredObjects);
+                                                        pObj = CreateTable(pObj.get(), aProcessData.pTableRowProperties.get(), aProcessData.rPersistEntry.xSolverContainer.get());
 
                                                     pRet->NbcInsertObject( pObj.get() );
 
@@ -2923,23 +2916,6 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                 break;
                             if (!aEscherObjListHd.SeekToEndOfRecord(rStCtrl))
                                 break;
-                        }
-
-                        // Handle shapes where the fill matches the background
-                        // fill (mso_fillBackground).
-                        if (rSlidePersist.ePageKind == PPT_SLIDEPAGE)
-                        {
-                            if (!aProcessData.aBackgroundColoredObjects.empty())
-                            {
-                                for (auto const & pObject : aProcessData.aBackgroundColoredObjects)
-                                {
-                                    SfxItemSet aNewSet(*pObject->GetMergedItemSet().GetPool());
-                                    aNewSet.Put(XFillStyleItem(css::drawing::FillStyle_NONE));
-                                    XFillUseSlideBackgroundItem aFillBgItem(true);
-                                    aNewSet.Put(aFillBgItem);
-                                    pObject->SetMergedItemSet(aNewSet);
-                                }
-                            }
                         }
 
                         if ( rSlidePersist.pBObj )
@@ -7500,8 +7476,7 @@ static void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >
 
 rtl::Reference<SdrObject> SdrPowerPointImport::CreateTable(
         SdrObject* pGroup, const sal_uInt32* pTableArry,
-        SvxMSDffSolverContainer* pSolverContainer,
-        std::vector<rtl::Reference<SdrObject>>& rBackgroundColoredObjects)
+        SvxMSDffSolverContainer* pSolverContainer)
 {
     rtl::Reference<SdrObject> pRet = pGroup;
 
@@ -7655,8 +7630,6 @@ rtl::Reference<SdrObject> SdrPowerPointImport::CreateTable(
         {
             SdrObject* pPartObj = aIter.Next();
             removeShapeId(pPartObj);
-            // ofz#41510 make sure rBackgroundColoredObjects doesn't contain deleted objects
-            std::replace(rBackgroundColoredObjects.begin(), rBackgroundColoredObjects.end(), pPartObj, pRet.get());
         }
     }
     catch( const Exception& )

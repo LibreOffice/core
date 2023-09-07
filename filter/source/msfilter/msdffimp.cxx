@@ -1471,7 +1471,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
                 }
             }
         }
-        else if (eXFill == drawing::FillStyle_BITMAP && bUseSlideBackground)
+        else if (eXFill == drawing::FillStyle_NONE && bUseSlideBackground)
         {
             rSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
             XFillUseSlideBackgroundItem aFillBgItem(true);
