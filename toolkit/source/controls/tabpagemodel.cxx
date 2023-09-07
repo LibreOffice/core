@@ -186,15 +186,6 @@ css::uno::Sequence<OUString> SAL_CALL UnoControlTabPage::getSupportedServiceName
     return { "com.sun.star.awt.tab.UnoControlTabPage" };
 }
 
-void UnoControlTabPage::dispose()
-{
-    SolarMutexGuard aSolarGuard;
-
-    lang::EventObject aEvt;
-    aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
-    ControlContainerBase::dispose();
-}
-
 void SAL_CALL UnoControlTabPage::disposing( const lang::EventObject& Source )
 {
      ControlContainerBase::disposing( Source );
