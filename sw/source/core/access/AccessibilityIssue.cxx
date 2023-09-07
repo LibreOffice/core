@@ -91,6 +91,8 @@ void AccessibilityIssue::gotoIssue() const
         case IssueObject::SHAPE:
         {
             SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+            if (pWrtShell->IsFrameSelected())
+                pWrtShell->LeaveSelFrameMode();
             pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
