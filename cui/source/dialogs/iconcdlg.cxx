@@ -18,6 +18,7 @@
  */
 
 #include <iconcdlg.hxx>
+#include <comphelper/lok.hxx>
 #include <cuihyperdlg.hxx>
 
 #include <cassert>
@@ -148,7 +149,8 @@ void SvxHpLinkDlg::ActivatePageImpl()
         pData->xPage->ActivatePage( *pExampleSet );
     m_xDialog->set_help_id(pData->xPage->GetHelpId());
 
-    m_xResetBtn->show();
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_xResetBtn->show();
 }
 
 void SvxHpLinkDlg::DeActivatePageImpl ()

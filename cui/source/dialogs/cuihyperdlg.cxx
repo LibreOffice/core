@@ -106,10 +106,20 @@ SvxHpLinkDlg::SvxHpLinkDlg(SfxBindings* pBindings, SfxChildWindow* pChild, weld:
 
     // Buttons
     m_xOKBtn->show();
-    m_xApplyBtn->show();
     m_xCancelBtn->show();
-    m_xHelpBtn->show();
-    m_xResetBtn->show();
+
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        m_xApplyBtn->hide();
+        m_xHelpBtn->hide();
+        m_xResetBtn->hide();
+    }
+    else
+    {
+        m_xApplyBtn->show();
+        m_xHelpBtn->show();
+        m_xResetBtn->show();
+    }
 
     mbGrabFocus = true;
 
