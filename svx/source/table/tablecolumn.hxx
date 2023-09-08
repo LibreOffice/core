@@ -30,7 +30,7 @@
 
 namespace sdr::table {
 
-typedef ::cppu::AggImplInheritanceHelper2< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;
+typedef ::cppu::ImplInheritanceHelper2< FastPropertySet, css::table::XCellRange, css::container::XNamed > TableColumnBase;
 
 class TableColumn : public TableColumnBase
 {
