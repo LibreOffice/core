@@ -1105,7 +1105,7 @@ void SmCursor::Paste(vcl::Window* pWindow)
     auto aDataHelper(TransferableDataHelper::CreateFromClipboard(xClipboard));
     if (aDataHelper.GetTransferable().is())
     {
-        // TODO: Suppport MATHML
+        // TODO: Support MATHML
         auto nId = SotClipboardFormatId::STRING;
         if (aDataHelper.HasFormat(nId))
         {
