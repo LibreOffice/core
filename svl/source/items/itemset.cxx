@@ -432,7 +432,7 @@ const SfxPoolItem* SfxItemSet::PutImpl(const SfxPoolItem& rItem, sal_uInt16 nWhi
     sal_uInt16 nOffset(INVALID_WHICHPAIR_OFFSET);
 
 #ifdef _WIN32
-    // Win build *insists* for initialzation, triggers warning C4701:
+    // Win build *insists* for initialization, triggers warning C4701:
     // "potentially uninitialized local variable 'aEntry' used" for
     // lines below. This is not the case here, but I know of no way
     // to silence the warning in another way
