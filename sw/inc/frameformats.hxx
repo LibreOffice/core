@@ -237,7 +237,4 @@ typedef FrameFormats<::SwTableFormat*> TableFrameFormats;
 typedef FrameFormats<sw::SpzFrameFormat*> SpzFrameFormats;
 }
 
-template class SW_DLLPUBLIC sw::FrameFormats<SwTableFormat*>;
-template class SW_DLLPUBLIC sw::FrameFormats<sw::SpzFrameFormat*>;
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
