@@ -5968,6 +5968,44 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     pDoc->resetSelection();
 }
 
+static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
+{
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+    if (!pDocument)
+        return nullptr;
+
+    SfxBaseModel* pBaseModel = dynamic_cast<SfxBaseModel*>(pDocument->mxComponent.get());
+    if (!pBaseModel)
+        return nullptr;
+
+    SfxObjectShell* pObjectShell = pBaseModel->GetObjectShell();
+    if (!pObjectShell)
+        return nullptr;
+
+    SfxMedium* pMedium = pObjectShell->GetMedium();
+    if (!pMedium)
+        return nullptr;
+
+    bool bDocReadOnly = false;
+    if (const SfxBoolItem* pReadOnlyItem =
+        pMedium->GetItemSet().GetItem(SID_DOC_READONLY, false))
+        bDocReadOnly = pReadOnlyItem->GetValue();
+
+    boost::property_tree::ptree aTree;
+    aTree.put("commandName", ".uno:ReadOnly");
+    aTree.put("success", bDocReadOnly);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    char* pJson = static_cast<char*>(malloc(aStream.str().size() + 1));
+    if (!pJson)
+        return nullptr;
+
+    strcpy(pJson, aStream.str().c_str());
+    pJson[aStream.str().size()] = '\0';
+    return pJson;
+}
+
 static char* getLanguages(LibreOfficeKitDocument* pThis, const char* pCommand)
 {
     css::uno::Sequence< css::lang::Locale > aLocales;
@@ -6345,7 +6383,11 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         return nullptr;
     }
 
-    if (!strcmp(pCommand, ".uno:LanguageStatus"))
+    if (!strcmp(pCommand, ".uno:ReadOnly"))
+    {
+        return getDocReadOnly(pThis);
+    }
+    else if (!strcmp(pCommand, ".uno:LanguageStatus"))
     {
         return getLanguages(pThis, pCommand);
     }
