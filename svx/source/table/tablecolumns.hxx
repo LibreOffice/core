@@ -21,14 +21,14 @@
 #define INCLUDED_SVX_SOURCE_TABLE_TABLECOLUMNS_HXX
 
 #include <com/sun/star/table/XTableColumns.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <celltypes.hxx>
 
 
 namespace sdr::table {
 
-class TableColumns : public ::cppu::WeakAggImplHelper1< css::table::XTableColumns >
+class TableColumns : public ::cppu::WeakImplHelper< css::table::XTableColumns >
 {
 public:
     explicit TableColumns( TableModelRef xTableModel );
