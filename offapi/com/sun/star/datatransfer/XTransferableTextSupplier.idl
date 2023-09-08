@@ -11,7 +11,7 @@
 
 module com { module sun { module star { module datatransfer {
 
-/** @since LO 7.2
+/** @since LibreOffice 7.2
  */
 interface XTransferableTextSupplier
 {

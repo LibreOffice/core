@@ -129,70 +129,70 @@ published constants DataType
 
     /** indicates a type representing an SQL DATALINK.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long DATALINK                   =   70;
 
 
     /** indicates a type representing an SQL ROWID.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long ROWID                      =   -8;
 
 
     /** indicates a type representing an SQL NCHAR.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long NCHAR                      =  -15;
 
 
     /** indicates a type representing an SQL NVARCHAR.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long NVARCHAR                   =   -9;
 
 
     /** indicates a type representing an SQL LONGNVARCHAR.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long LONGNVARCHAR               =  -16;
 
 
     /** indicates a type representing an SQL NCLOB.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long NCLOB                      = 2011;
 
 
     /** indicates a type representing an SQL XML.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long SQLXML                     = 2009;
 
 
     /** indicates a type representing an SQL REF CURSOR.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long REF_CURSOR                 = 2012;
 
 
     /** indicates a type representing an SQL TIME WITH TIMEZONE.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long TIME_WITH_TIMEZONE         = 2013;
 
 
     /** indicates a type representing an SQL TIMESTAMP WITH TIMEZONE.
      *
-     * @since LO 24.02
+     * @since LibreOffice 24.2
      */
     const long TIMESTAMP_WITH_TIMEZONE    = 2014;
 

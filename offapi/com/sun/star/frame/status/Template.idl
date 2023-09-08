@@ -41,7 +41,7 @@ struct Template
 
     /** specifies an identifier name in English (only for standard style).
 
-        @since LO 7.2
+        @since LibreOffice 7.2
      */
     string StyleNameIdentifier;
 };

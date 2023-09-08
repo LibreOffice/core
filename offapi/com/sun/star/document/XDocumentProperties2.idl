@@ -11,7 +11,7 @@ module com {   module sun {   module star {   module document {
 
 /** Extends XDocumentProperties interface to provide additional attributes
 
-    @since LibreOffice 24.02
+    @since LibreOffice 24.2
 */
 interface XDocumentProperties2: com::sun::star::document::XDocumentProperties
 {
