@@ -1233,7 +1233,7 @@ void SfxItemSet::InvalidateItem_ForOffset(sal_uInt16 nOffset)
     {
         // entry is set
         if (IsInvalidItem(*aFoundOne))
-            // already inivalid item, done
+            // already invalid item, done
             return;
 
         // cleanup entry
