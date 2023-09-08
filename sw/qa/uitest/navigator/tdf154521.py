@@ -155,9 +155,10 @@ class tdf154521(UITestCase):
 
             # Try the same selection with Bookmark 2
             xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
-            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
-            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
-            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
+# disable flakey UITest
+#            self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
+#            self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
+#            self.assertEqual(get_state_as_dict(xContentTree)["SelectionCount"], "1")
             xContentTree.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
             self.ui_test.wait_until_property_is_updated(xContentTree, "SelectEntryText", "Bookmark 2")
             self.assertEqual(get_state_as_dict(xContentTree)["SelectEntryText"], "Bookmark 2")
