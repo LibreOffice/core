@@ -1068,6 +1068,13 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     // rendered and this way the inner anchor had no fly portion, either.
     CPPUNIT_ASSERT_GREATER(pPage2->getFrameArea().Top(), pPage2Fly1->getFrameArea().Top());
 
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected less than: 12523
+    // - Actual  : 15312
+    // i.e. the inner follow fly was not "moved back" to its place to have the wanted 4400 position,
+    // which makes the "Inner A2" text visible.
+    CPPUNIT_ASSERT_LESS(pPage2->getFrameArea().Right(), pPage2Fly1->getFrameArea().Right());
+
     auto pPage2Fly2 = rPage2Objs[1]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
     CPPUNIT_ASSERT(pPage2Fly2);
     CPPUNIT_ASSERT(!pPage2Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
