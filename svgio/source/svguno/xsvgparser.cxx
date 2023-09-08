@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -43,7 +43,7 @@ namespace svgio::svgreader
 {
         namespace {
 
-        class XSvgParser : public ::cppu::WeakAggImplHelper2< graphic::XSvgParser, lang::XServiceInfo >
+        class XSvgParser : public ::cppu::WeakImplHelper< graphic::XSvgParser, lang::XServiceInfo >
         {
         private:
             std::shared_ptr<SvgDrawVisitor> mpVisitor;
