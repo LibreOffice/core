@@ -727,13 +727,13 @@ void SfxItemSet::RecreateRanges_Impl(const WhichRangesContainer& rNewRanges)
                         nNewCount++;
                     }
 
-                    // reset entry, since it got transfered it should not be cleaned-up
+                    // reset entry, since it got transferred it should not be cleaned-up
                     *aSourceEntry = nullptr;
                 }
             }
         }
 
-        // free old items: only necessary when not all Items were transfered
+        // free old items: only necessary when not all Items were transferred
         if (nNewCount != Count())
         {
             ClearAllItemsImpl();
