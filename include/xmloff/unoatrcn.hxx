@@ -31,12 +31,12 @@
 
 #include <xmloff/xmlcnimp.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 extern css::uno::Reference< css::uno::XInterface >  SvUnoAttributeContainer_CreateInstance();
 
 class XMLOFF_DLLPUBLIC SvUnoAttributeContainer final :
-    public ::cppu::WeakAggImplHelper2<
+    public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::container::XNameContainer >
 {
