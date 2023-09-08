@@ -195,14 +195,6 @@ public:
         SetOptionalPropertyValue(rPropSet, rPropName, any);
     }
 
-    template<typename ValueType>
-    static css::uno::Sequence<ValueType> VectorToSequence( const std::vector<ValueType>& rVector )
-    {
-        if (rVector.empty())
-            return css::uno::Sequence<ValueType>();
-
-        return css::uno::Sequence<ValueType>(&rVector[0], static_cast<sal_Int32>(rVector.size()));
-    }
 private:
     static sal_Int32        GetEnumPropertyImpl( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName, sal_Int32 nDefault );

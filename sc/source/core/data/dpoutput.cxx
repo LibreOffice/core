@@ -501,7 +501,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
         // All members are visible.  Return empty result.
         return uno::Sequence<sheet::MemberResult>();
 
-    return ScUnoHelpFunctions::VectorToSequence(aRes);
+    return comphelper::containerToSequence(aRes);
 }
 
 }
