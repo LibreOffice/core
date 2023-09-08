@@ -75,7 +75,7 @@ void XMLIndexSimpleEntryContext::startFastElement(
                 m_bCharStyleNameOK = false;
         }
         else
-            XMLOFF_WARN_UNKNOWN("xmloff", aIter);
+            XMLOFF_INFO_UNKNOWN("xmloff", aIter);
     }
 
     // if we have a style name, set it!
