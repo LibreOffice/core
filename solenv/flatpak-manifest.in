@@ -682,6 +682,13 @@
                     "dest-filename": "@FROZEN_TARBALL@"
                 },
                 {
+                    "url": "https://dev-www.libreoffice.org/src/@JAVA_WEBSOCKET_TARBALL@",
+                    "sha256": "@JAVA_WEBSOCKET_SHA256SUM@",
+                    "type": "file",
+                    "dest": "external/tarballs",
+                    "dest-filename": "@JAVA_WEBSOCKET_TARBALL@"
+                },
+                {
                     "url": "https://dev-www.libreoffice.org/extern/@OPENSYMBOL_TTF@",
                     "sha256": "@OPENSYMBOL_SHA256SUM@",
                     "type": "file",
