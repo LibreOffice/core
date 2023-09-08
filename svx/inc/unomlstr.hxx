@@ -20,13 +20,11 @@
 #define INCLUDED_SVX_INC_UNOMLSTR_HXX
 
 #include <com/sun/star/util/XModifyListener.hpp>
-
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SdrObject;
 
-class SvxUnoShapeModifyListener final
-    : public ::cppu::WeakAggImplHelper1<css::util::XModifyListener>
+class SvxUnoShapeModifyListener final : public ::cppu::WeakImplHelper<css::util::XModifyListener>
 {
     SdrObject* mpObj;
 
