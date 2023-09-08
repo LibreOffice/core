@@ -22,7 +22,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
@@ -45,7 +45,7 @@ class MutableTreeDataModel;
 
 typedef std::vector< rtl::Reference< MutableTreeNode > > TreeNodeVector;
 
-class MutableTreeDataModel : public ::cppu::WeakAggImplHelper2< XMutableTreeDataModel, XServiceInfo >
+class MutableTreeDataModel : public ::cppu::WeakImplHelper< XMutableTreeDataModel, XServiceInfo >
 {
 public:
     MutableTreeDataModel();
@@ -81,7 +81,7 @@ private:
     Reference< XTreeNode > mxRootNode;
 };
 
-class MutableTreeNode: public ::cppu::WeakAggImplHelper2< XMutableTreeNode, XServiceInfo >
+class MutableTreeNode: public ::cppu::WeakImplHelper< XMutableTreeNode, XServiceInfo >
 {
     friend class MutableTreeDataModel;
 
