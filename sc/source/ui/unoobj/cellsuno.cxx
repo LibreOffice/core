@@ -3931,14 +3931,17 @@ void ScCellRangesObj::RefChanged()
 
 uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XSheetCellRangeContainer )
-    SC_QUERYINTERFACE( sheet::XSheetCellRanges )
-    SC_QUERYINTERFACE( container::XIndexAccess )
-    SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
-    SC_QUERYINTERFACE( container::XEnumerationAccess )
-    SC_QUERYINTERFACE( container::XNameContainer )
-    SC_QUERYINTERFACE( container::XNameReplace )
-    SC_QUERYINTERFACE( container::XNameAccess )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XSheetCellRangeContainer*>(this),
+                    static_cast<sheet::XSheetCellRanges*>(this),
+                    static_cast<container::XIndexAccess*>(this),
+                    static_cast<container::XElementAccess*>(static_cast<container::XIndexAccess*>(this)),
+                    static_cast<container::XEnumerationAccess*>(this),
+                    static_cast<container::XNameContainer*>(this),
+                    static_cast<container::XNameReplace*>(this),
+                    static_cast<container::XNameAccess*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangesBase::queryInterface( rType );
 }
@@ -4504,25 +4507,28 @@ void ScCellRangeObj::RefChanged()
 
 uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XCellRangeAddressable )
-    SC_QUERYINTERFACE( table::XCellRange )
-    SC_QUERYINTERFACE( sheet::XSheetCellRange )
-    SC_QUERYINTERFACE( sheet::XArrayFormulaRange )
-    SC_QUERYINTERFACE( sheet::XArrayFormulaTokens )
-    SC_QUERYINTERFACE( sheet::XCellRangeData )
-    SC_QUERYINTERFACE( sheet::XCellRangeFormula )
-    SC_QUERYINTERFACE( sheet::XMultipleOperation )
-    SC_QUERYINTERFACE( util::XMergeable )
-    SC_QUERYINTERFACE( sheet::XCellSeries )
-    SC_QUERYINTERFACE( table::XAutoFormattable )
-    SC_QUERYINTERFACE( util::XSortable )
-    SC_QUERYINTERFACE( sheet::XSheetFilterableEx )
-    SC_QUERYINTERFACE( sheet::XSheetFilterable )
-    SC_QUERYINTERFACE( sheet::XSubTotalCalculatable )
-    SC_QUERYINTERFACE( table::XColumnRowRange )
-    SC_QUERYINTERFACE( util::XImportable )
-    SC_QUERYINTERFACE( sheet::XCellFormatRangesSupplier )
-    SC_QUERYINTERFACE( sheet::XUniqueCellFormatRangesSupplier )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XCellRangeAddressable*>(this),
+                    static_cast<table::XCellRange*>(this),
+                    static_cast<sheet::XSheetCellRange*>(this),
+                    static_cast<sheet::XArrayFormulaRange*>(this),
+                    static_cast<sheet::XArrayFormulaTokens*>(this),
+                    static_cast<sheet::XCellRangeData*>(this),
+                    static_cast<sheet::XCellRangeFormula*>(this),
+                    static_cast<sheet::XMultipleOperation*>(this),
+                    static_cast<util::XMergeable*>(this),
+                    static_cast<sheet::XCellSeries*>(this),
+                    static_cast<table::XAutoFormattable*>(this),
+                    static_cast<util::XSortable*>(this),
+                    static_cast<sheet::XSheetFilterableEx*>(this),
+                    static_cast<sheet::XSheetFilterable*>(this),
+                    static_cast<sheet::XSubTotalCalculatable*>(this),
+                    static_cast<table::XColumnRowRange*>(this),
+                    static_cast<util::XImportable*>(this),
+                    static_cast<sheet::XCellFormatRangesSupplier*>(this),
+                    static_cast<sheet::XUniqueCellFormatRangesSupplier*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangesBase::queryInterface( rType );
 }
@@ -5741,18 +5747,21 @@ void ScCellObj::RefChanged()
 
 uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( table::XCell )
-    SC_QUERYINTERFACE( table::XCell2 )
-    SC_QUERYINTERFACE( sheet::XFormulaTokens )
-    SC_QUERYINTERFACE( sheet::XCellAddressable )
-    SC_QUERYINTERFACE( text::XText )
-    SC_QUERYINTERFACE( text::XSimpleText )
-    SC_QUERYINTERFACE( text::XTextRange )
-    SC_QUERYINTERFACE( container::XEnumerationAccess )
-    SC_QUERYINTERFACE( container::XElementAccess )
-    SC_QUERYINTERFACE( sheet::XSheetAnnotationAnchor )
-    SC_QUERYINTERFACE( text::XTextFieldsSupplier )
-    SC_QUERYINTERFACE( document::XActionLockable )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<table::XCell*>(this),
+                    static_cast<table::XCell2*>(this),
+                    static_cast<sheet::XFormulaTokens*>(this),
+                    static_cast<sheet::XCellAddressable*>(this),
+                    static_cast<text::XText*>(this),
+                    static_cast<text::XSimpleText*>(this),
+                    static_cast<text::XTextRange*>(this),
+                    static_cast<container::XEnumerationAccess*>(this),
+                    static_cast<container::XElementAccess*>(this),
+                    static_cast<sheet::XSheetAnnotationAnchor*>(this),
+                    static_cast<text::XTextFieldsSupplier*>(this),
+                    static_cast<document::XActionLockable*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -6496,25 +6505,28 @@ void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
 
 uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XSpreadsheet )
-    SC_QUERYINTERFACE( container::XNamed )
-    SC_QUERYINTERFACE( sheet::XSheetPageBreak )
-    SC_QUERYINTERFACE( sheet::XCellRangeMovement )
-    SC_QUERYINTERFACE( table::XTableChartsSupplier )
-    SC_QUERYINTERFACE( sheet::XDataPilotTablesSupplier )
-    SC_QUERYINTERFACE( sheet::XScenariosSupplier )
-    SC_QUERYINTERFACE( sheet::XSheetAnnotationsSupplier )
-    SC_QUERYINTERFACE( drawing::XDrawPageSupplier )
-    SC_QUERYINTERFACE( sheet::XPrintAreas )
-    SC_QUERYINTERFACE( sheet::XSheetAuditing )
-    SC_QUERYINTERFACE( sheet::XSheetOutline )
-    SC_QUERYINTERFACE( util::XProtectable )
-    SC_QUERYINTERFACE( sheet::XScenario )
-    SC_QUERYINTERFACE( sheet::XScenarioEnhanced )
-    SC_QUERYINTERFACE( sheet::XSheetLinkable )
-    SC_QUERYINTERFACE( sheet::XExternalSheetName )
-    SC_QUERYINTERFACE( document::XEventsSupplier )
-    SC_QUERYINTERFACE( table::XTablePivotChartsSupplier )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XSpreadsheet*>(this),
+                    static_cast<container::XNamed*>(this),
+                    static_cast<sheet::XSheetPageBreak*>(this),
+                    static_cast<sheet::XCellRangeMovement*>(this),
+                    static_cast<table::XTableChartsSupplier*>(this),
+                    static_cast<sheet::XDataPilotTablesSupplier*>(this),
+                    static_cast<sheet::XScenariosSupplier*>(this),
+                    static_cast<sheet::XSheetAnnotationsSupplier*>(this),
+                    static_cast<drawing::XDrawPageSupplier*>(this),
+                    static_cast<sheet::XPrintAreas*>(this),
+                    static_cast<sheet::XSheetAuditing*>(this),
+                    static_cast<sheet::XSheetOutline*>(this),
+                    static_cast<util::XProtectable*>(this),
+                    static_cast<sheet::XScenario*>(this),
+                    static_cast<sheet::XScenarioEnhanced*>(this),
+                    static_cast<sheet::XSheetLinkable*>(this),
+                    static_cast<sheet::XExternalSheetName*>(this),
+                    static_cast<document::XEventsSupplier*>(this),
+                    static_cast<table::XTablePivotChartsSupplier*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -8229,7 +8241,10 @@ ScTableColumnObj::~ScTableColumnObj()
 
 uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( container::XNamed )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<container::XNamed*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangeObj::queryInterface( rType );
 }

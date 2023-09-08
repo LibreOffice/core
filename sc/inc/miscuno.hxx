@@ -83,16 +83,6 @@ css::uno::Sequence< OUString >                                                  
                             const uno::Reference<beans::XVetoableChangeListener>&)  \
     { OSL_FAIL("not implemented"); }
 
-#define SC_QUERYINTERFACE(x)    \
-    if (rType == cppu::UnoType<x>::get())  \
-    { return uno::Any(uno::Reference<x>(this)); }
-
-// SC_QUERY_MULTIPLE( XElementAccess, XIndexAccess ):
-//  use if interface is used several times in one class
-
-#define SC_QUERY_MULTIPLE(x,y)  \
-    if (rType == cppu::UnoType<x>::get())  \
-    { uno::Any aR; aR <<= uno::Reference<x>(static_cast<y*>(this)); return aR; }
 
 class ScIndexEnumeration final : public cppu::WeakImplHelper<
                                 css::container::XEnumeration,

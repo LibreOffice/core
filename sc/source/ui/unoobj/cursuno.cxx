@@ -20,7 +20,7 @@
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <cppuhelper/queryinterface.hxx>
 #include <cursuno.hxx>
 #include <cellsuno.hxx>
 #include <docsh.hxx>
@@ -43,9 +43,12 @@ ScCellCursorObj::~ScCellCursorObj()
 
 uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XSheetCellCursor )
-    SC_QUERYINTERFACE( sheet::XUsedAreaCursor )
-    SC_QUERYINTERFACE( table::XCellCursor )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XSheetCellCursor*>(this),
+                    static_cast<sheet::XUsedAreaCursor*>(this),
+                    static_cast<table::XCellCursor*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScCellRangeObj::queryInterface( rType );
 }

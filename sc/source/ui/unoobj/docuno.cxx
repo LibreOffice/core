@@ -1318,23 +1318,26 @@ void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XSpreadsheetDocument )
-    SC_QUERYINTERFACE( document::XActionLockable )
-    SC_QUERYINTERFACE( sheet::XCalculatable )
-    SC_QUERYINTERFACE( util::XProtectable )
-    SC_QUERYINTERFACE( drawing::XDrawPagesSupplier )
-    SC_QUERYINTERFACE( sheet::XGoalSeek )
-    SC_QUERYINTERFACE( sheet::XConsolidatable )
-    SC_QUERYINTERFACE( sheet::XDocumentAuditing )
-    SC_QUERYINTERFACE( style::XStyleFamiliesSupplier )
-    SC_QUERYINTERFACE( view::XRenderable )
-    SC_QUERYINTERFACE( document::XLinkTargetSupplier )
-    SC_QUERYINTERFACE( beans::XPropertySet )
-    SC_QUERYINTERFACE( lang::XMultiServiceFactory )
-    SC_QUERYINTERFACE( lang::XServiceInfo )
-    SC_QUERYINTERFACE( util::XChangesNotifier )
-    SC_QUERYINTERFACE( sheet::opencl::XOpenCLSelection )
-    SC_QUERYINTERFACE( chart2::XDataProviderAccess )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                static_cast< sheet::XSpreadsheetDocument *>(this),
+                static_cast< document::XActionLockable *>(this),
+                static_cast< sheet::XCalculatable *>(this),
+                static_cast< util::XProtectable *>(this),
+                static_cast< drawing::XDrawPagesSupplier *>(this),
+                static_cast< sheet::XGoalSeek *>(this),
+                static_cast< sheet::XConsolidatable *>(this),
+                static_cast< sheet::XDocumentAuditing *>(this),
+                static_cast< style::XStyleFamiliesSupplier *>(this),
+                static_cast< view::XRenderable *>(this),
+                static_cast< document::XLinkTargetSupplier *>(this),
+                static_cast< beans::XPropertySet *>(this),
+                static_cast< lang::XMultiServiceFactory *>(this),
+                static_cast< lang::XServiceInfo *>(this),
+                static_cast< util::XChangesNotifier *>(this),
+                static_cast< sheet::opencl::XOpenCLSelection *>(this),
+                static_cast< chart2::XDataProviderAccess *>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue()

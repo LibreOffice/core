@@ -989,9 +989,12 @@ Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
 {
     // since we manually do resolve the query for XDataPilotTable2
     // we also need to do the same for XDataPilotTable
-    SC_QUERYINTERFACE( XDataPilotTable )
-    SC_QUERYINTERFACE( XDataPilotTable2 )
-    SC_QUERYINTERFACE( XModifyBroadcaster )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<XDataPilotTable*>(this),
+                    static_cast<XDataPilotTable2*>(this),
+                    static_cast<XModifyBroadcaster*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return ScDataPilotDescriptorBase::queryInterface( rType );
 }

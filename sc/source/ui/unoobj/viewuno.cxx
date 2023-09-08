@@ -40,6 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
 
@@ -146,12 +147,15 @@ void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 uno::Any SAL_CALL ScViewPaneBase::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XViewPane )
-    SC_QUERYINTERFACE( sheet::XCellRangeReferrer )
-    SC_QUERYINTERFACE( view::XFormLayerAccess )
-    SC_QUERYINTERFACE( view::XControlAccess )
-    SC_QUERYINTERFACE( lang::XServiceInfo )
-    SC_QUERYINTERFACE( lang::XTypeProvider )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XViewPane*>(this),
+                    static_cast<sheet::XCellRangeReferrer*>(this),
+                    static_cast<view::XFormLayerAccess*>(this),
+                    static_cast<view::XControlAccess*>(this),
+                    static_cast<lang::XServiceInfo*>(this),
+                    static_cast<lang::XTypeProvider*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     return uno::Any();          // OWeakObject is in derived objects
 }
@@ -469,19 +473,22 @@ ScTabViewObj::~ScTabViewObj()
 
 uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
 {
-    SC_QUERYINTERFACE( sheet::XSpreadsheetView )
-    SC_QUERYINTERFACE( sheet::XEnhancedMouseClickBroadcaster )
-    SC_QUERYINTERFACE( sheet::XActivationBroadcaster )
-    SC_QUERYINTERFACE( container::XEnumerationAccess )
-    SC_QUERYINTERFACE( container::XIndexAccess )
-    SC_QUERY_MULTIPLE( container::XElementAccess, container::XIndexAccess )
-    SC_QUERYINTERFACE( view::XSelectionSupplier )
-    SC_QUERYINTERFACE( beans::XPropertySet )
-    SC_QUERYINTERFACE( sheet::XViewSplitable )
-    SC_QUERYINTERFACE( sheet::XViewFreezable )
-    SC_QUERYINTERFACE( sheet::XRangeSelection )
-    SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
-    SC_QUERYINTERFACE( sheet::XSelectedSheetsSupplier )
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XSpreadsheetView*>(this),
+                    static_cast<sheet::XEnhancedMouseClickBroadcaster*>(this),
+                    static_cast<sheet::XActivationBroadcaster*>(this),
+                    static_cast<container::XEnumerationAccess*>(this),
+                    static_cast<container::XIndexAccess*>(this),
+                    static_cast<container::XElementAccess*>(static_cast<container::XIndexAccess*>(this)),
+                    static_cast<view::XSelectionSupplier*>(this),
+                    static_cast<beans::XPropertySet*>(this),
+                    static_cast<sheet::XViewSplitable*>(this),
+                    static_cast<sheet::XViewFreezable*>(this),
+                    static_cast<sheet::XRangeSelection*>(this),
+                    static_cast<sheet::XSelectedSheetsSupplier*>(this),
+                    static_cast<datatransfer::XTransferableSupplier*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
 
     uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
@@ -2186,7 +2193,10 @@ ScPreviewObj::~ScPreviewObj()
 
 uno::Any ScPreviewObj::queryInterface(const uno::Type& rType)
 {
-    SC_QUERYINTERFACE(sheet::XSelectedSheetsSupplier)
+    uno::Any aReturn = ::cppu::queryInterface(rType,
+                    static_cast<sheet::XSelectedSheetsSupplier*>(this));
+    if ( aReturn.hasValue() )
+        return aReturn;
     return SfxBaseController::queryInterface(rType);
 }
 
