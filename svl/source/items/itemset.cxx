@@ -569,7 +569,7 @@ void SfxItemSet::PutExtended
     SfxItemState        eDefaultAs      // What will happen to the Default Items
 )
 {
-    // don't "optimize" with "if( rSource.Count()" because of dont-care + defaults
+    // don't "optimize" with "if( rSource.Count()" because of dontcare + defaults
     const_iterator aSource(rSource.begin());
     const bool bSamePool(GetPool() == rSource.GetPool());
 
