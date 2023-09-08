@@ -18,6 +18,7 @@
  */
 
 #include <iconcdlg.hxx>
+#include <comphelper/lok.hxx>
 #include <cuihyperdlg.hxx>
 
 #include <cassert>
@@ -151,7 +152,8 @@ void SvxHpLinkDlg::ActivatePageImpl()
     // tdf#90496 - remember last used view in hyperlink dialog
     msRememberedPageId = msCurrentPageId;
 
-    m_xResetBtn->show();
+    if (!comphelper::LibreOfficeKit::isActive())
+        m_xResetBtn->show();
 }
 
 void SvxHpLinkDlg::DeActivatePageImpl ()
