@@ -21,7 +21,6 @@
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ref.hxx>
 
@@ -41,7 +40,7 @@ using namespace osl;
 
 namespace {
 
-class NestedRegistryImpl    : public WeakAggImplHelper4 < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
+class NestedRegistryImpl : public WeakImplHelper < XSimpleRegistry, XInitialization, XServiceInfo, XEnumerationAccess >
 {
 public:
     NestedRegistryImpl( );
