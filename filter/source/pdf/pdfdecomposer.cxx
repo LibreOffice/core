@@ -40,6 +40,11 @@ public:
     XPdfDecomposer(const XPdfDecomposer&) = delete;
     XPdfDecomposer& operator=(const XPdfDecomposer&) = delete;
 
+    void SAL_CALL setDelegator(css::uno::Reference<css::uno::XInterface> const&) final
+    {
+        assert(false);
+    }
+
     // XPdfDecomposer
     uno::Sequence<uno::Reference<graphic::XPrimitive2D>> SAL_CALL
     getDecomposition(const uno::Reference<util::XBinaryDataContainer>& xDataContainer,
