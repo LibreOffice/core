@@ -390,7 +390,12 @@ bool SwObjectFormatter::FormatObjsAtFrame_( SwTextFrame* _pMasterTextFrame )
                 pAnchorCharFrame != pAnchoredObj->GetAnchorFrame() &&
                 pAnchorCharFrame->FindBodyFrame() ==
                     static_cast<SwTextFrame*>(pAnchoredObj->AnchorFrame())->FindBodyFrame();
-        if ( bAnchoredAtFollowInSameBodyAsMaster )
+        // Make sure that in case nested split flys are moved "out of range" in
+        // lcl_InvalidateLowerObjs(), then we moved them back here.
+        SwFlyFrame* pFly = pAnchoredObj->DynCastFlyFrame();
+        bool bSplitFly = pFly && pFly->IsFlySplitAllowed();
+        bool bNestedSplitFly = bSplitFly && pAnchorCharFrame && pAnchorCharFrame->IsInFly();
+        if (bAnchoredAtFollowInSameBodyAsMaster && !bNestedSplitFly)
         {
             continue;
         }
