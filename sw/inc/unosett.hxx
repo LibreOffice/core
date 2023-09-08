@@ -29,8 +29,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "unobaseclass.hxx"
 
 class SwDoc;
@@ -41,7 +40,7 @@ class SwNumFormat;
 class SfxItemPropertySet;
 namespace com::sun::star::beans { struct PropertyValue; }
 
-class SwXFootnoteProperties final : public cppu::WeakAggImplHelper2
+class SwXFootnoteProperties final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -71,7 +70,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXEndnoteProperties final : public cppu::WeakAggImplHelper2
+class SwXEndnoteProperties final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -101,7 +100,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXLineNumberingProperties final : public cppu::WeakAggImplHelper2
+class SwXLineNumberingProperties final : public cppu::WeakImplHelper
 <
     css::beans::XPropertySet,
     css::lang::XServiceInfo
@@ -131,7 +130,7 @@ public:
     void            Invalidate() {m_pDoc = nullptr;}
 };
 
-class SwXNumberingRules : public cppu::WeakAggImplHelper4
+class SwXNumberingRules : public cppu::WeakImplHelper
 <
     css::container::XIndexReplace,
     css::beans::XPropertySet,
