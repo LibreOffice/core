@@ -86,8 +86,6 @@ private:
     css::uno::Reference< css::uno::XComponentContext >
                                     m_aContext;
 
-    css::uno::Reference< css::uno::XAggregation >
-                                    m_xDBRegistrationAggregate;
     css::uno::Reference< css::sdb::XDatabaseRegistrations >
                                     m_xDatabaseRegistrations;
 

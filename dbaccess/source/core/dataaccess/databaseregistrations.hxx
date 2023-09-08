@@ -20,11 +20,11 @@
 #pragma once
 
 #include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/sdb/XDatabaseRegistrations.hpp>
 
 namespace dbaccess
 {
-css::uno::Reference<css::uno::XAggregation>
+css::uno::Reference<css::sdb::XDatabaseRegistrations>
 createDataSourceRegistrations(const css::uno::Reference<css::uno::XComponentContext>& _rxContext);
 
 } // namespace dbaccess

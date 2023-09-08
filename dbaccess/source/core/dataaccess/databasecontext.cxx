@@ -177,12 +177,7 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 #endif
 
     osl_atomic_increment( &m_refCount );
-    {
-        m_xDBRegistrationAggregate.set( createDataSourceRegistrations( m_aContext ), UNO_SET_THROW );
-        m_xDatabaseRegistrations.set( m_xDBRegistrationAggregate, UNO_QUERY_THROW );
-
-        m_xDBRegistrationAggregate->setDelegator( *this );
-    }
+    m_xDatabaseRegistrations =  createDataSourceRegistrations( m_aContext );
     osl_atomic_decrement( &m_refCount );
 }
 
@@ -193,8 +188,6 @@ ODatabaseContext::~ODatabaseContext()
 #endif
 
     m_xDatabaseDocumentLoader.clear();
-    m_xDBRegistrationAggregate->setDelegator( nullptr );
-    m_xDBRegistrationAggregate.clear();
     m_xDatabaseRegistrations.clear();
 }
 

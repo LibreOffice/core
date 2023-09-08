@@ -27,7 +27,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
@@ -67,8 +67,8 @@ namespace dbaccess
     }
 
     // DatabaseRegistrations - declaration
-    typedef ::cppu::WeakAggImplHelper1  <   XDatabaseRegistrations
-                                        >   DatabaseRegistrations_Base;
+    typedef ::cppu::WeakImplHelper<   XDatabaseRegistrations
+                                   >   DatabaseRegistrations_Base;
 
     namespace {
 
@@ -359,7 +359,7 @@ namespace dbaccess
     }
 
     // DatabaseRegistrations - factory
-    Reference< XAggregation > createDataSourceRegistrations( const Reference<XComponentContext> & _rxContext )
+    Reference< XDatabaseRegistrations > createDataSourceRegistrations( const Reference<XComponentContext> & _rxContext )
     {
         return new DatabaseRegistrations( _rxContext );
     }
