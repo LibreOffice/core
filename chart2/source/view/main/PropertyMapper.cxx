@@ -119,7 +119,7 @@ void PropertyMapper::setMappedProperties(
         }
         catch( const uno::Exception& )
         {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
+            TOOLS_WARN_EXCEPTION("chart2", "exception mapping property from " << rSource << " to " << rTarget);
         }
     }
     if (nN == 0)
