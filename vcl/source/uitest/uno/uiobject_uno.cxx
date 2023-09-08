@@ -56,6 +56,7 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = mpObj->get_child(rID);
+    SAL_WARN_IF(!pObj, "vcl", "child " << rID << " of parent " << mpObj->dumpState() << " does not exist");
     return new UIObjectUnoObj(std::move(pObj));
 }
 
