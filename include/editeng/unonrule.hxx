@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/ucb/XAnyCompare.hpp>
 #include <editeng/editengdllapi.h>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <editeng/numitem.hxx>
@@ -36,7 +36,7 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule();
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() noexcept;
 
-class SvxUnoNumberingRules final : public ::cppu::WeakAggImplHelper4< css::container::XIndexReplace, css::ucb::XAnyCompare,
+class SvxUnoNumberingRules final : public ::cppu::WeakImplHelper< css::container::XIndexReplace, css::ucb::XAnyCompare,
     css::util::XCloneable, css::lang::XServiceInfo >
 {
 private:
