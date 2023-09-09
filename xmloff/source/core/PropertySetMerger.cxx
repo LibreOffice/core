@@ -19,18 +19,17 @@
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <PropertySetMerger.hxx>
+#include <comphelper/sequence.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#include <comphelper/sequence.hxx>
-#include <cppuhelper/implbase3.hxx>
-
 namespace {
 
-class PropertySetMergerImpl : public ::cppu::WeakAggImplHelper3< XPropertySet, XPropertyState, XPropertySetInfo >
+class PropertySetMergerImpl : public ::cppu::WeakImplHelper< XPropertySet, XPropertyState, XPropertySetInfo >
 {
 private:
     Reference< XPropertySet > mxPropSet1;
