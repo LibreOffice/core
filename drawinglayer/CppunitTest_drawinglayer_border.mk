@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,drawinglayer_border, \
 
 $(eval $(call gb_CppunitTest_use_externals,drawinglayer_border,\
 	boost_headers \
-	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,drawinglayer_border, \

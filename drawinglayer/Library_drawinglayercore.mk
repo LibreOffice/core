@@ -24,7 +24,6 @@ $(eval $(call gb_Library_use_sdk_api,drawinglayercore))
 
 $(eval $(call gb_Library_use_externals,drawinglayercore,\
     boost_headers \
-    libxml2 \
 ))
 
 $(eval $(call gb_Library_use_libraries,drawinglayercore,\

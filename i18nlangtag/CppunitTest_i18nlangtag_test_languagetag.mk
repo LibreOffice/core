@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_externals,i18nlangtag_test_languagetag,\
 	icu_headers \
 	icuuc \
 	liblangtag \
-	libxml2 \
 ))
 
 ifneq ($(SYSTEM_LIBLANGTAG),)

@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_odffeatures, \
 
 $(eval $(call gb_CppunitTest_use_externals,sw_odffeatures,\
 	boost_headers \
-    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_odffeatures,\

@@ -20,10 +20,6 @@ $(eval $(call gb_Executable_use_libraries,uno,\
     salhelper \
 ))
 
-$(eval $(call gb_Executable_use_externals,uno,\
-    libxml2 \
-))
-
 $(eval $(call gb_Executable_add_exception_objects,uno,\
     cpputools/source/unoexe/unoexe \
 ))

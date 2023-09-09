@@ -39,7 +39,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_screenshots, \
 
 $(eval $(call gb_CppunitTest_use_externals,sc_screenshots,\
     boost_headers \
-    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_screenshots,\

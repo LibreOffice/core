@@ -31,10 +31,6 @@ $(eval $(call gb_CppunitTest_use_libraries,writerfilter_misc, \
 	salhelper \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,writerfilter_misc,\
-	libxml2 \
-))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_misc, \
 	writerfilter/qa/cppunittests/misc/misc \
 ))

@@ -31,7 +31,6 @@ $(eval $(call gb_CppunitTest_use_library_objects,ucb_webdav_core, \
 
 $(eval $(call gb_CppunitTest_use_externals,ucb_webdav_core,\
 	boost_headers \
-	libxml2 \
 	curl \
 ))
 

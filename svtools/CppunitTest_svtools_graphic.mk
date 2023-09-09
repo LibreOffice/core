@@ -11,7 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,svtools_graphic))
 
 $(eval $(call gb_CppunitTest_use_externals,svtools_graphic,\
 	boost_headers \
-    libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,svtools_graphic,\
