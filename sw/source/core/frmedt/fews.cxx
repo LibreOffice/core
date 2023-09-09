@@ -725,7 +725,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     }
     else
     {
-        pFly = GetSelectedFlyFrame();
+        pFly = GetSelectedOrCurrFlyFrame();
         pFrame = pFly ? pFly->GetAnchorFrame() : GetCurrFrame();
     }
 
