@@ -33,7 +33,7 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -46,7 +46,7 @@ namespace vcl
 
 namespace {
 
-class FontIdentificator : public ::cppu::WeakAggImplHelper3< XMaterialHolder, XInitialization, XServiceInfo >
+class FontIdentificator : public ::cppu::WeakImplHelper< XMaterialHolder, XInitialization, XServiceInfo >
 {
     Font        m_aFont;
 public:
