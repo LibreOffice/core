@@ -632,7 +632,7 @@ lang::Locale SAL_CALL ValueSetAcc::getLocale()
 
 void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    ThrowIfDisposed();
+    ThrowIfDisposed(false);
     std::unique_lock aGuard (m_aMutex);
 
     if( !rxListener.is() )
@@ -656,7 +656,7 @@ void SAL_CALL ValueSetAcc::addAccessibleEventListener( const uno::Reference< acc
 
 void SAL_CALL ValueSetAcc::removeAccessibleEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
 {
-    ThrowIfDisposed();
+    ThrowIfDisposed(false);
     std::unique_lock aGuard (m_aMutex);
 
     if( rxListener.is() )
