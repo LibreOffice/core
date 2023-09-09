@@ -23,7 +23,7 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <osl/diagnose.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <algorithm>
 
@@ -111,7 +111,7 @@ namespace xmloff
         }
 
         //= OMergedPropertySetInfo
-        typedef ::cppu::WeakAggImplHelper1  <   XPropertySetInfo
+        typedef ::cppu::WeakImplHelper  <   XPropertySetInfo
                                             >   OMergedPropertySetInfo_Base;
         class OMergedPropertySetInfo : public OMergedPropertySetInfo_Base
         {
