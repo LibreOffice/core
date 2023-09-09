@@ -33,6 +33,7 @@
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <sfx2/viewsh.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -313,7 +314,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(vcl::Window* pParent,
                                          const uno::Reference<frame::XFrame>& rFrame,
                                          FontHeightToolBoxControl& rCtrl)
-    : InterimItemWindow(pParent, "svx/ui/fontsizebox.ui", "FontSizeBox")
+    : InterimItemWindow(pParent, "svx/ui/fontsizebox.ui", "FontSizeBox", true, reinterpret_cast<sal_uInt64>(SfxViewShell::Current()))
     , SvxFontSizeBox_Base(m_xBuilder->weld_combo_box("fontsizecombobox"), rFrame, rCtrl)
 {
 }
