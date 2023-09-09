@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,libwpd))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libwpd,\
 	external/libwpd/libwpd-vs2013.patch.1 \
+	external/libwpd/tdf153034_3_WrongGreekCharactersWP5Import.patch \
 	$(if $(SYSTEM_REVENGE),,external/libwpd/rpath.patch) \
 	external/libwpd/include.patch \
 ))
