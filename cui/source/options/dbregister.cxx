@@ -280,7 +280,10 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& sOldName, const O
     ODocumentLinkDialog aDlg(GetFrameWeld(), nEntry == -1);
 
     aDlg.setLink(sOldName, sOldLocation);
-    aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
+
+    // tdf#149195: control the name (ie check duplicate) only if new entry case
+    if (nEntry == -1)
+        aDlg.setNameValidator(LINK( this, DbRegistrationOptionsPage, NameValidator ) );
 
     if (aDlg.run() != RET_OK)
         return;
