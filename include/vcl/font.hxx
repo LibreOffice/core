@@ -108,6 +108,8 @@ public:
     tools::Long                GetFontHeight() const;
     void                SetAverageFontWidth( tools::Long nWidth );
     tools::Long                GetAverageFontWidth() const;
+    const Size&         GetAverageFontSize() const;
+    const FontFamily&   GetFontFamily() const;
 
     // tdf#127471 for corrections on EMF/WMF we need the AvgFontWidth in Windows-specific notation
     tools::Long         GetOrCalculateAverageFontWidth() const;
