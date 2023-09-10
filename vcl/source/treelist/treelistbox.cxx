@@ -1452,6 +1452,9 @@ void SvTreeListBox::SetTabs()
             else
                 nStartPos += nContextWidthDIV2;
             AddTab( nStartPos, TABFLAGS_CONTEXTBMP );
+            // add an indent if the context bitmap can't be centered without touching the expander
+            if (nContextBmpWidthMax > nIndent + (nNodeWidthPixel / 2))
+                nStartPos += nIndent;
             nStartPos += nContextWidthDIV2;  // right edge of context bitmap
             // only set a distance if there are bitmaps
             if( nContextBmpWidthMax )
@@ -2584,6 +2587,10 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     SvViewDataEntry* pViewDataEntry = GetViewDataEntry( &rEntry );
     const bool bSeparator(rEntry.GetFlags() & SvTLEntryFlags::IS_SEPARATOR);
 
+    const auto nMaxContextBmpWidthBeforeIndentIsNeeded =
+            nIndent + GetExpandedNodeBmp().GetSizePixel().Width() / 2;
+    const bool bHasButtonsAtRoot = nWindowStyle & WB_HASBUTTONSATROOT;
+
     const size_t nTabCount = aTabs.size();
     const size_t nItemCount = rEntry.ItemCount();
     size_t nCurTab = 0;
@@ -2617,6 +2624,13 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), (nNextTabPos - SV_TAB_BORDER - 1) - nTabPos);
         else
             nX = nTabPos + pTab->CalcOffset(aSize.Width(), nNextTabPos - nTabPos);
+
+        // add an indent if the context bitmap can't be centered without touching the expander
+        if (nCurTab == 0 && !(nTreeFlags & SvTreeFlags::CHKBTN) && bHasButtonsAtRoot &&
+                pTab->nFlags & SvLBoxTabFlags::ADJUST_CENTER &&
+                !(pTab->nFlags & SvLBoxTabFlags::FORCE) &&
+                aSize.Width() > nMaxContextBmpWidthBeforeIndentIsNeeded)
+            nX += nIndent;
 
         aEntryPos.setX( nX );
         aEntryPos.setY( nLine );
