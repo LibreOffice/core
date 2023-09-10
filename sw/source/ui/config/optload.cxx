@@ -51,10 +51,10 @@
 
 #include <doc.hxx>
 #include <svl/cjkoptions.hxx>
+#include <svl/eitem.hxx>
 
 using namespace ::com::sun::star;
 
-#include <svl/eitem.hxx>
 
 sal_uInt32 SwFieldUnitTable::Count()
 {

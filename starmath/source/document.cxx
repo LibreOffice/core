@@ -83,12 +83,12 @@
 #include <ElementsDockingWindow.hxx>
 #include <smediteng.hxx>
 
+#define ShellClass_SmDocShell
+#include <smslots.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
-
-#define ShellClass_SmDocShell
-#include <smslots.hxx>
 
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SmDocShell, SfxObjectShell)

@@ -62,13 +62,13 @@
 #include <swslots.hxx>
 #include <PostItMgr.hxx>
 
-using namespace ::com::sun::star;
-
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/viewfac.hxx>
 
 #include <memory>
 #include <swabstdlg.hxx>
+
+using namespace ::com::sun::star;
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {

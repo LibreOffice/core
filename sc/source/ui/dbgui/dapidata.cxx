@@ -29,10 +29,10 @@
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-using namespace com::sun::star;
-
 #include <dapidata.hxx>
 #include <dpsdbtab.hxx>
+
+using namespace com::sun::star;
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0

@@ -47,8 +47,6 @@
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <config_fonts.h>
 
-using namespace psp;
-
 #include <fontconfig/fontconfig.h>
 
 #include <cstdio>
@@ -62,6 +60,7 @@ using namespace psp;
 #include <utility>
 #include <algorithm>
 
+using namespace psp;
 using namespace osl;
 
 namespace

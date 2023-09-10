@@ -23,8 +23,6 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 
-using namespace ::com::sun::star;
-
 #include <scitems.hxx>
 #include <editeng/flstitem.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -114,6 +112,8 @@ using namespace ::com::sun::star;
 #include <editeng/langitem.hxx>
 
 #include <svx/xdef.hxx>
+
+using namespace ::com::sun::star;
 
 void ScDocShell::SetInitialLinkUpdate( const SfxMedium* pMed )
 {

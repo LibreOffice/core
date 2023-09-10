@@ -18,6 +18,8 @@
  */
 #include "mysqlc_driver.hxx"
 #include "mysqlc_connection.hxx"
+#include <cppuhelper/supportsservice.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace css::uno;
 using namespace css::lang;
@@ -25,9 +27,6 @@ using namespace css::beans;
 using namespace css::sdbc;
 using namespace css::sdbcx;
 using namespace connectivity::mysqlc;
-
-#include <cppuhelper/supportsservice.hxx>
-#include <comphelper/servicehelper.hxx>
 
 MysqlCDriver::MysqlCDriver(const Reference<XMultiServiceFactory>& _rxFactory)
     : ODriver_BASE(m_aMutex)

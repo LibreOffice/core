@@ -112,16 +112,15 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#define ShellClass_SfxViewShell
+#include <sfxslots.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
-
-#define ShellClass_SfxViewShell
-#include <sfxslots.hxx>
-
 
 class SfxClipboardChangeListener : public ::cppu::WeakImplHelper<
     datatransfer::clipboard::XClipboardListener >

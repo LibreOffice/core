@@ -100,17 +100,6 @@
 
 #include <commandpopup/CommandPopup.hxx>
 
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::lang;
-using ::com::sun::star::awt::XWindow;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::document::XViewDataSupplier;
-using ::com::sun::star::container::XIndexContainer;
-
 // Due to ViewFrame::Current
 #include <appdata.hxx>
 #include <sfx2/app.hxx>
@@ -142,6 +131,16 @@ using ::com::sun::star::container::XIndexContainer;
 
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::container::XIndexContainer;
 
 constexpr OUStringLiteral CHANGES_STR = u"private:resource/toolbar/changes";
 

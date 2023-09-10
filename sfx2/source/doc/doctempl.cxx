@@ -57,19 +57,6 @@
 #include "doctemplateslocal.hxx"
 #include <sfxurlrelocator.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::document;
-using namespace ::rtl;
-using namespace ::ucbhelper;
-
-
 #include <sfx2/doctempl.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxresid.hxx>
@@ -81,6 +68,18 @@ using namespace ::ucbhelper;
 #include <utility>
 #include <vector>
 
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::document;
+using namespace ::rtl;
+using namespace ::ucbhelper;
 
 constexpr OUStringLiteral TITLE = u"Title";
 constexpr OUStringLiteral TARGET_URL = u"TargetURL";

@@ -57,11 +57,12 @@
 #include <Window.hxx>
 #include <OutlineView.hxx>
 
-using namespace sd;
-using namespace ::com::sun::star;
 
 #define ShellClass_TextObjectBar
+using namespace sd;
 #include <sdslots.hxx>
+
+using namespace ::com::sun::star;
 
 namespace sd {
 

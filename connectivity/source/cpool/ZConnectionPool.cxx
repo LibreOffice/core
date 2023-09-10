@@ -24,6 +24,7 @@
 #include "ZPoolCollection.hxx"
 #include <connectivity/ConnectionWrapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <algorithm>
 
 
 using namespace ::com::sun::star::uno;
@@ -34,7 +35,6 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace connectivity;
 
-#include <algorithm>
 
 void SAL_CALL OPoolTimer::onShot()
 {

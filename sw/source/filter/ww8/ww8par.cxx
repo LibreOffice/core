@@ -142,11 +142,6 @@
 #include <unordered_set>
 #include <memory>
 
-using namespace ::com::sun::star;
-using namespace sw::util;
-using namespace sw::types;
-using namespace nsHdFtFlags;
-
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/pathoptions.hxx>
@@ -159,6 +154,11 @@ using namespace nsHdFtFlags;
 #include <comphelper/storagehelper.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 #include <comphelper/diagnose_ex.hxx>
+
+using namespace ::com::sun::star;
+using namespace sw::util;
+using namespace sw::types;
+using namespace nsHdFtFlags;
 
 static SwMacroInfo* GetMacroInfo( SdrObject* pObj )
 {

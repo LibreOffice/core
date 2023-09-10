@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <o3tl/any.hxx>
 #include <uno/lbnames.h>
+#include "base.hxx"
 
 using namespace css;
 using namespace css::uno;
@@ -35,10 +36,6 @@ using namespace css::lang;
 using namespace css::reflection;
 using namespace cppu;
 using namespace osl;
-
-
-#include "base.hxx"
-
 
 namespace stoc_corefl
 {

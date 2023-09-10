@@ -20,13 +20,12 @@
 #include "filtask.hxx"
 #include "prov.hxx"
 #include "filprp.hxx"
+#include "filinl.hxx"
 
 using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
-
-#include "filinl.hxx"
 
 XPropertySetInfo_impl::XPropertySetInfo_impl( TaskManager* pMyShell,const OUString& aUnqPath )
     : m_pMyShell( pMyShell ),

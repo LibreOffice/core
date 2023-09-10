@@ -51,10 +51,10 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
-using namespace ::com::sun::star;
-
 #include <salframe.hxx>
 #include <svdata.hxx>
+
+using namespace ::com::sun::star;
 
 struct ImplMouseData
 {

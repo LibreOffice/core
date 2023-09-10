@@ -47,15 +47,6 @@
 #include <cppuhelper/weak.hxx>
 #include <memory>
 
-using namespace ::cppu;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::registry;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::xml::sax;
-
 #include <assert.h>
 
 #include <unotools/mediadescriptor.hxx>
@@ -67,6 +58,15 @@ using namespace ::com::sun::star::xml::sax;
 #include "hstream.hxx"
 #include "drawdef.h"
 #include "attributes.hxx"
+
+using namespace ::cppu;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::xml::sax;
 
 inline constexpr OUStringLiteral WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter";
 

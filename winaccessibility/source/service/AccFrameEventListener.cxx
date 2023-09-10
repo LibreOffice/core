@@ -29,12 +29,12 @@
 #include <AccObjectWinManager.hxx>
 #include <unomsaaevent.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::accessibility;
-
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <vcl/sysdata.hxx>
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::accessibility;
 
 AccFrameEventListener::AccFrameEventListener(css::accessibility::XAccessible* pAcc, AccObjectWinManager* pManager)
         :AccEventListener(pAcc, pManager)

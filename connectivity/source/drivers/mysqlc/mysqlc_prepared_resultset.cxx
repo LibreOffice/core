@@ -31,10 +31,10 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <sal/log.hxx>
 
-using namespace rtl;
-
 #include <cstdlib>
+#include <typeindex>
 
+using namespace rtl;
 using namespace connectivity::mysqlc;
 using namespace connectivity;
 using namespace cppu;
@@ -48,8 +48,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using namespace ::comphelper;
 using ::osl::MutexGuard;
-
-#include <typeindex>
 
 namespace
 {

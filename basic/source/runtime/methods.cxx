@@ -74,14 +74,6 @@
 #include <unotools/textsearch.hxx>
 #include <svl/numformat.hxx>
 
-
-
-using namespace comphelper;
-using namespace osl;
-using namespace com::sun::star;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::uno;
-
 #include <date.hxx>
 #include <sbstdobj.hxx>
 #include <rtlproto.hxx>
@@ -110,6 +102,12 @@ using namespace com::sun::star::uno;
 #endif
 
 #include <vcl/TypeSerializer.hxx>
+
+using namespace comphelper;
+using namespace osl;
+using namespace com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uno;
 
 static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 

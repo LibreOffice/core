@@ -46,8 +46,6 @@
 #include <svl/sharedstring.hxx>
 #include <scmatrix.hxx>
 
-using ::std::vector;
-
 #include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FormulaToken.hpp>
@@ -57,6 +55,7 @@ using ::std::vector;
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
 
+using ::std::vector;
 using namespace formula;
 using namespace com::sun::star;
 

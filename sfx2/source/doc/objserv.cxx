@@ -111,6 +111,9 @@
 
 #include <boost/property_tree/json_parser.hpp>
 
+#define ShellClass_SfxObjectShell
+#include <sfxslots.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -122,9 +125,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::security;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::graphic;
-
-#define ShellClass_SfxObjectShell
-#include <sfxslots.hxx>
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxObjectShell, SfxShell)
 

@@ -41,6 +41,7 @@
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/script/XScriptListener.hpp>
 
 #include <svx/fmtools.hxx>
 #include <tools/debug.hxx>
@@ -52,6 +53,9 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -66,10 +70,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::svxform;
 using namespace ::dbtools;
 
-
-#include <com/sun/star/script/XScriptListener.hpp>
-#include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase.hxx>
 
 namespace {
 

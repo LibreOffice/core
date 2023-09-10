@@ -32,8 +32,6 @@
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-using namespace ::com::sun::star;
-
 #if defined _WIN32
 #include <prewin.h>
 #include <oleidl.h>
@@ -42,6 +40,8 @@ using namespace ::com::sun::star;
 typedef Size SIZEL;
 typedef Point POINTL;
 #endif
+
+using namespace ::com::sun::star;
 
 // this struct conforms to the Microsoft
 // OBJECTDESCRIPTOR -> see oleidl.h

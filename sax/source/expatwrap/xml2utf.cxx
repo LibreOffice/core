@@ -26,13 +26,13 @@
 #include <rtl/tencinfo.h>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <xml2utf.hxx>
+#include <memory>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-
-#include <xml2utf.hxx>
-#include <memory>
 
 namespace sax_expatwrap {
 

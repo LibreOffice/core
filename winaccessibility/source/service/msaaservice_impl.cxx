@@ -35,13 +35,13 @@
 #include <prewin.h>
 #include <postwin.h>
 
+#include <AccTopWindowListener.hxx>
+
 using namespace ::com::sun::star; // for odk interfaces
 using namespace ::com::sun::star::uno; // for basic types
 using namespace ::com::sun::star::accessibility;
 
 using namespace ::com::sun::star::awt;
-
-#include <AccTopWindowListener.hxx>
 
 namespace my_sc_impl
 {

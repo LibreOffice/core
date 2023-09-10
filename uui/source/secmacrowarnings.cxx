@@ -27,10 +27,9 @@
 #include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 
-using namespace ::com::sun::star::security;
-
 #include "secmacrowarnings.hxx"
 
+using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
 
 

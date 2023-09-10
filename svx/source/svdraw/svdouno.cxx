@@ -23,6 +23,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
@@ -40,16 +42,6 @@
 
 using namespace ::com::sun::star;
 using namespace sdr::contact;
-
-
-//   Defines
-
-
-//   Helper class SdrControlEventListenerImpl
-
-#include <com/sun/star/lang/XEventListener.hpp>
-
-#include <cppuhelper/implbase.hxx>
 
 
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper< css::lang::XEventListener >

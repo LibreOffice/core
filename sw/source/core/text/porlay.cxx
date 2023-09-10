@@ -75,12 +75,12 @@
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 
-using namespace ::com::sun::star;
-using namespace i18n::ScriptType;
-
 #include <unicode/ubidi.h>
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
+
+using namespace ::com::sun::star;
+using namespace i18n::ScriptType;
 
 /*
    https://www.khtt.net/en/page/1821/the-big-kashida-secret

@@ -82,15 +82,14 @@
 
 #include <memory>
 
+#define ShellClass_OutlineViewShell
+using namespace sd;
+#include <sdslots.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
-
-using namespace sd;
-
-#define ShellClass_OutlineViewShell
-#include <sdslots.hxx>
 
 namespace sd {
 

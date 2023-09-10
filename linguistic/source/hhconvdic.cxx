@@ -25,6 +25,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/i18n/UnicodeScript.hpp>
 
 #include "hhconvdic.hxx"
 #include <linguistic/misc.hxx>
@@ -35,14 +36,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+using namespace i18n;
 
 
 constexpr OUStringLiteral SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanjaConversionDictionary";
 
 
-#include <com/sun/star/i18n/UnicodeScript.hpp>
-
-using namespace i18n;
 
 #define SCRIPT_OTHERS   0
 #define SCRIPT_HANJA    1

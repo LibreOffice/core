@@ -30,10 +30,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/charclass.hxx>
 
-using namespace ::com::sun::star;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Any;
-
 #include <nameuno.hxx>
 #include <miscuno.hxx>
 #include <cellsuno.hxx>
@@ -47,6 +43,10 @@ using ::com::sun::star::uno::Any;
 #include <unonames.hxx>
 
 #include <scui_def.hxx>
+
+using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
 
 static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangeMap()
 {

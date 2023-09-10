@@ -37,6 +37,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <iosys.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -44,7 +45,6 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::io;
 using namespace com::sun::star::bridge;
 
-#include <iosys.hxx>
 
 namespace {
 

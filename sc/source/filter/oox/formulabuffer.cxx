@@ -24,12 +24,11 @@
 #include <svl/sharedstringpool.hxx>
 #include <svl/numformat.hxx>
 #include <sal/log.hxx>
+#include <memory>
+#include <utility>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sheet;
-
-#include <memory>
-#include <utility>
 
 namespace oox::xls {
 

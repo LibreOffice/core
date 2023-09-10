@@ -45,14 +45,14 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
+#define ShellClass_SfxApplication
+#include <sfxslots.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-
-#define ShellClass_SfxApplication
-#include <sfxslots.hxx>
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell)
 

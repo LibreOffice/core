@@ -31,14 +31,12 @@
 #include <vcl/help.hxx>
 #include <vcl/window.hxx>
 #include <osl/diagnose.h>
-
-
 #include <fmprop.hxx>
 #include <fmundo.hxx>
-using namespace ::svxform;
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 
+using namespace ::svxform;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 

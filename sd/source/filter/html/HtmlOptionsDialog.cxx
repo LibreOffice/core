@@ -28,15 +28,15 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
+#include <pres.hxx>
+#include <sdabstdlg.hxx>
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::ui::dialogs;
-
-#include <pres.hxx>
-#include <sdabstdlg.hxx>
 
 namespace {
 

@@ -39,6 +39,8 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <utility>
 
 using namespace utl;
 using namespace com::sun::star::uno;
@@ -47,9 +49,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::configuration;
-
-#include <cppuhelper/implbase.hxx>
-#include <utility>
 
 /*
     The ConfigChangeListener_Impl receives notifications from the configuration about changes that

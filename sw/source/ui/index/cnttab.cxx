@@ -63,6 +63,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <toxwrap.hxx>
 #include <chpfld.hxx>
+#include <svtools/editbrowsebox.hxx>
 
 #include <cmath>
 #include <memory>
@@ -76,7 +77,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
-#include <svtools/editbrowsebox.hxx>
 
 const sal_Unicode aDeliStart = '['; // for the form
 const sal_Unicode aDeliEnd    = ']'; // for the form

@@ -80,8 +80,6 @@
 #include <SwRewriter.hxx>
 #include <SwCapObjType.hxx>
 
-using namespace ::com::sun::star;
-
 #include <svx/svxdlg.hxx>
 #include <swabstdlg.hxx>
 #include <IDocumentDrawModelAccess.hxx>
@@ -92,6 +90,8 @@ using namespace ::com::sun::star;
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <IDocumentUndoRedo.hxx>
 #include <formatcontentcontrol.hxx>
+
+using namespace ::com::sun::star;
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 

@@ -30,14 +30,14 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 
-using namespace com::sun::star;
-
 #include <tabvwsh.hxx>
 #include <document.hxx>
 #include <drawview.hxx>
 #include <globstr.hrc>
 #include <gridwin.hxx>
 #include <avmedia/mediawindow.hxx>
+
+using namespace com::sun::star;
 
 void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rURL,
                                         const OUString& rTarget,

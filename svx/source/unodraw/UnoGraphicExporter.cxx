@@ -68,6 +68,8 @@
 #include <comphelper/sequence.hxx>
 #include "UnoGraphicExporter.hxx"
 #include <memory>
+// #i102251#
+#include <editeng/editstat.hxx>
 
 #define MAX_EXT_PIX         2048
 
@@ -82,9 +84,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
-
-// #i102251#
-#include <editeng/editstat.hxx>
 
 namespace {
 
