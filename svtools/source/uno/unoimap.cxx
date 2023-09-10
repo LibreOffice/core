@@ -28,7 +28,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
@@ -64,7 +63,7 @@ const sal_Int32 HANDLE_TITLE = 10;
 
 namespace {
 
-class SvUnoImageMapObject : public OWeakAggObject,
+class SvUnoImageMapObject : public OWeakObject,
                             public XEventsSupplier,
                             public XServiceInfo,
                             public PropertySetHelper,
@@ -83,7 +82,6 @@ public:
     virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) override;
 
     // XInterface
-    virtual Any SAL_CALL queryAggregation( const Type & rType ) override;
     virtual Any SAL_CALL queryInterface( const Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
@@ -294,11 +292,6 @@ std::unique_ptr<IMapObject> SvUnoImageMapObject::createIMapObject() const
 
 Any SAL_CALL SvUnoImageMapObject::queryInterface( const Type & rType )
 {
-    return OWeakAggObject::queryInterface( rType );
-}
-
-Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
-{
     Any aAny;
 
     if( rType == cppu::UnoType<XServiceInfo>::get())
@@ -312,25 +305,24 @@ Any SAL_CALL SvUnoImageMapObject::queryAggregation( const Type & rType )
     else if( rType == cppu::UnoType<XMultiPropertySet>::get())
         aAny <<= Reference< XMultiPropertySet >(this);
     else
-        aAny = OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakObject::queryInterface( rType );
 
     return aAny;
 }
 
 void SAL_CALL SvUnoImageMapObject::acquire() noexcept
 {
-    OWeakAggObject::acquire();
+    OWeakObject::acquire();
 }
 
 void SAL_CALL SvUnoImageMapObject::release() noexcept
 {
-    OWeakAggObject::release();
+    OWeakObject::release();
 }
 
 uno::Sequence< uno::Type > SAL_CALL SvUnoImageMapObject::getTypes()
 {
     static const uno::Sequence< uno::Type > aTypes {
-        cppu::UnoType<XAggregation>::get(),
         cppu::UnoType<XEventsSupplier>::get(),
         cppu::UnoType<XServiceInfo>::get(),
         cppu::UnoType<XPropertySet>::get(),
