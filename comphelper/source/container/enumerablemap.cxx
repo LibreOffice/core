@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <typelib/typedescription.hxx>
@@ -143,7 +143,7 @@ namespace comphelper
 
     // EnumerableMap
 
-    typedef ::cppu::WeakAggComponentImplHelper3 <   XInitialization
+    typedef ::cppu::WeakComponentImplHelper <   XInitialization
                                                 ,   XEnumerableMap
                                                 ,   XServiceInfo
                                                 > Map_IFace;
