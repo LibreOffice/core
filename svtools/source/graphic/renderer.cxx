@@ -30,7 +30,6 @@
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/weakagg.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/GraphicObject.hxx>
 #include <vcl/outdev.hxx>
@@ -43,7 +42,7 @@ using namespace ::com::sun::star;
 
 namespace {
 
-class GraphicRendererVCL : public ::cppu::OWeakAggObject,
+class GraphicRendererVCL : public ::cppu::OWeakObject,
                            public css::lang::XServiceInfo,
                            public css::lang::XTypeProvider,
                            public ::comphelper::PropertySetHelper,
@@ -56,7 +55,6 @@ public:
     GraphicRendererVCL();
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() noexcept override;
     virtual void SAL_CALL release() noexcept override;
@@ -92,7 +90,7 @@ GraphicRendererVCL::GraphicRendererVCL() :
 {
 }
 
-uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType )
+uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
 {
     uno::Any aAny;
 
@@ -109,29 +107,23 @@ uno::Any SAL_CALL GraphicRendererVCL::queryAggregation( const uno::Type & rType 
     else if( rType == cppu::UnoType<graphic::XGraphicRenderer>::get())
         aAny <<= uno::Reference< graphic::XGraphicRenderer >(this);
     else
-        aAny = OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakObject::queryInterface( rType );
 
     return aAny;
-}
-
-
-uno::Any SAL_CALL GraphicRendererVCL::queryInterface( const uno::Type & rType )
-{
-    return OWeakAggObject::queryInterface( rType );
 }
 
 
 void SAL_CALL GraphicRendererVCL::acquire()
     noexcept
 {
-    OWeakAggObject::acquire();
+    OWeakObject::acquire();
 }
 
 
 void SAL_CALL GraphicRendererVCL::release()
     noexcept
 {
-    OWeakAggObject::release();
+    OWeakObject::release();
 }
 
 
@@ -155,7 +147,6 @@ uno::Sequence< OUString > SAL_CALL GraphicRendererVCL::getSupportedServiceNames(
 uno::Sequence< uno::Type > SAL_CALL GraphicRendererVCL::getTypes()
 {
     static const uno::Sequence< uno::Type >  aTypes {
-        cppu::UnoType<uno::XAggregation>::get(),
         cppu::UnoType<lang::XServiceInfo>::get(),
         cppu::UnoType<lang::XTypeProvider>::get(),
         cppu::UnoType<beans::XPropertySet>::get(),
