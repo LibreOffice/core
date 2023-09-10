@@ -293,7 +293,7 @@ SfxItemState SfxControllerItem::GetItemState
                 ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
                     ? SfxItemState::DONTCARE
-                    : pState->IsVoidItem() && !pState->Which()
+                    : pState->isVoidItem() && !pState->Which()
                         ? SfxItemState::UNKNOWN
                         : SfxItemState::DEFAULT;
 }

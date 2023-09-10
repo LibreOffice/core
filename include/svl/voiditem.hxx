@@ -26,11 +26,12 @@ class SVL_DLLPUBLIC SfxVoidItem final : public SfxPoolItem
 {
 public:
     static SfxPoolItem* CreateDefault();
+
     explicit SfxVoidItem(sal_uInt16 nWhich);
+    SfxVoidItem(const SfxVoidItem& rCopy);
+    SfxVoidItem(SfxVoidItem&& rOrig);
     virtual ~SfxVoidItem() override;
 
-    SfxVoidItem(SfxVoidItem const&) = default;
-    SfxVoidItem(SfxVoidItem&&) = default;
     SfxVoidItem& operator=(SfxVoidItem const&) = delete; // due to SfxPoolItem
     SfxVoidItem& operator=(SfxVoidItem&&) = delete; // due to SfxPoolItem
 
@@ -43,9 +44,6 @@ public:
 
     // create a copy of itself
     virtual SfxVoidItem* Clone(SfxItemPool* pPool = nullptr) const override;
-
-    /** Always returns true as this is an SfxVoidItem. */
-    virtual bool IsVoidItem() const override;
 };
 
 #endif

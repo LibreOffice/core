@@ -48,7 +48,7 @@ SwBookmarkControl::~SwBookmarkControl()
 void SwBookmarkControl::StateChangedAtStatusBarControl(
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( eState != SfxItemState::DEFAULT || pState->IsVoidItem() )
+    if (eState != SfxItemState::DEFAULT || SfxItemState::DISABLED == eState)
     {
         GetStatusBar().SetItemText(GetId(), OUString());
         GetStatusBar().SetQuickHelpText(GetId(), OUString());

@@ -36,6 +36,13 @@
 
 #include <items_helper.hxx>
 
+#ifdef DBG_UTIL
+static size_t nAllocatedSfxItemSetCount(0);
+static size_t nUsedSfxItemSetCount(0);
+size_t getAllocatedSfxItemSetCount() { return nAllocatedSfxItemSetCount; }
+size_t getUsedSfxItemSetCount() { return nUsedSfxItemSetCount; }
+#endif
+
 /**
  * Ctor for a SfxItemSet with exactly the Which Ranges, which are known to
  * the supplied SfxItemPool.
@@ -55,6 +62,10 @@ SfxItemSet::SfxItemSet(SfxItemPool& rPool)
     , m_pWhichRanges(rPool.GetFrozenIdRanges())
     , m_aCallback()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
 
@@ -68,6 +79,10 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, SfxAllItemSetFlag )
     , m_pWhichRanges()
     , m_aCallback()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
 }
 
 /** special constructor for SfxItemSetFixed */
@@ -81,6 +96,10 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, WhichRangesContainer&& ranges, SfxPo
     , m_pWhichRanges(std::move(ranges))
     , m_aCallback()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
     assert(ppItems);
     assert(m_pWhichRanges.size() > 0);
     assert(svl::detail::validRanges2(m_pWhichRanges));
@@ -96,6 +115,10 @@ SfxItemSet::SfxItemSet(SfxItemPool& pool, WhichRangesContainer wids)
     , m_pWhichRanges(std::move(wids))
     , m_aCallback()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
     assert(svl::detail::CountRanges(m_pWhichRanges) != 0);
     assert(svl::detail::validRanges2(m_pWhichRanges));
 }
@@ -186,6 +209,10 @@ SfxItemSet::SfxItemSet( const SfxItemSet& rASet )
     , m_pWhichRanges( rASet.m_pWhichRanges )
     , m_aCallback(rASet.m_aCallback)
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
     if (rASet.GetRanges().empty())
     {
         return;
@@ -217,6 +244,10 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
     , m_pWhichRanges( std::move(rASet.m_pWhichRanges) )
     , m_aCallback(rASet.m_aCallback)
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount++;
+    nUsedSfxItemSetCount++;
+#endif
     if (rASet.m_bItemsFixed)
     {
         // have to make a copy
@@ -242,6 +273,9 @@ SfxItemSet::SfxItemSet(SfxItemSet&& rASet) noexcept
 
 SfxItemSet::~SfxItemSet()
 {
+#ifdef DBG_UTIL
+    nAllocatedSfxItemSetCount--;
+#endif
     // cleanup items. No std::fill needed, we are done with this ItemSet.
     // the callback is not set in destructor, so no worries about that
     ClearAllItemsImpl();
@@ -289,7 +323,7 @@ sal_uInt16 SfxItemSet::ClearSingleItem_ForOffset( sal_uInt16 nOffset )
 {
     assert(nOffset < TotalCount());
     const_iterator aEntry(begin() + nOffset);
-    assert(nullptr == *aEntry || IsInvalidItem(*aEntry) || (*aEntry)->IsVoidItem() || 0 != (*aEntry)->Which());
+    assert(nullptr == *aEntry || IsInvalidItem(*aEntry) || (*aEntry)->isVoidItem() || 0 != (*aEntry)->Which());
 
     if (nullptr == *aEntry)
         // no entry, done
@@ -399,7 +433,7 @@ SfxItemState SfxItemSet::GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPo
         // Different ones are present
         return SfxItemState::DONTCARE;
 
-    if (pCandidate->IsVoidItem())
+    if (pCandidate->isVoidItem())
         // Item is Disabled
         return SfxItemState::DISABLED;
 
@@ -864,7 +898,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
             }
 #ifdef DBG_UTIL
             const SfxPoolItem *pItem = *aFoundOne;
-            if ( pItem->IsVoidItem() || !pItem->Which() )
+            if ( pItem->isVoidItem() || !pItem->Which() )
                 SAL_INFO("svl.items", "SFX_WARNING: Getting disabled Item");
 #endif
             return **aFoundOne;

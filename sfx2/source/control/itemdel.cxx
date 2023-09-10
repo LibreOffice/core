@@ -31,7 +31,7 @@ class SfxItemDisruptor_Impl
 public:
     static void DeleteItemOnIdle(std::unique_ptr<SfxPoolItem> pItem)
     {
-        pItem->SetKind(SfxItemKind::DeleteOnIdle);
+        pItem->setDeleteOnIdle();
         Application::PostUserEvent(LINK(nullptr, SfxItemDisruptor_Impl, Delete), pItem.release());
         // coverity[leaked_storage] - pDisruptor takes care of its own destruction at idle time
     }

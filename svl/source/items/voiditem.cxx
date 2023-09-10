@@ -25,6 +25,19 @@ SfxPoolItem* SfxVoidItem::CreateDefault() { return new SfxVoidItem(0); }
 SfxVoidItem::SfxVoidItem(sal_uInt16 which)
     : SfxPoolItem(which)
 {
+    setVoidItem();
+}
+
+SfxVoidItem::SfxVoidItem(const SfxVoidItem& rCopy)
+    : SfxPoolItem(rCopy.Which())
+{
+    setVoidItem();
+}
+
+SfxVoidItem::SfxVoidItem(SfxVoidItem&& rOrig)
+    : SfxPoolItem(rOrig)
+{
+    setVoidItem();
 }
 
 bool SfxVoidItem::operator==(const SfxPoolItem& rCmp) const
@@ -51,8 +64,6 @@ void SfxVoidItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 SfxVoidItem* SfxVoidItem::Clone(SfxItemPool*) const { return new SfxVoidItem(*this); }
-
-bool SfxVoidItem::IsVoidItem() const { return true; }
 
 SfxVoidItem::~SfxVoidItem() {}
 

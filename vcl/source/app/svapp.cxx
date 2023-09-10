@@ -77,6 +77,7 @@
 
 #ifdef DBG_UTIL
 #include <svl/poolitem.hxx>
+#include <svl/itemset.hxx>
 #endif
 
 #include <cassert>
@@ -193,6 +194,10 @@ Application::~Application()
     // would show in dramatically higher numbers then immediately
     SAL_WARN("vcl", "ITEM: " << getAllocatedSfxPoolItemCount() << " SfxPoolItems still allocated at shutdown");
     SAL_WARN("vcl", "ITEM: " << getUsedSfxPoolItemCount() << " SfxPoolItems were incarnated during office usage");
+
+    // Same mechanism for SfxItemSet(s)
+    SAL_WARN("vcl", "ITEM: " << getAllocatedSfxItemSetCount() << " SfxItemSets still allocated at shutdown");
+    SAL_WARN("vcl", "ITEM: " << getUsedSfxItemSetCount() << " SfxItemSets were incarnated during office usage");
 #endif
 }
 

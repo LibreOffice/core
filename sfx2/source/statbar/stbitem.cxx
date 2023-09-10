@@ -376,7 +376,7 @@ void SfxStatusBarControl::StateChangedAtStatusBarControl
         pBar->SetItemText( nSID, pStr->GetValue() );
     else
     {
-        DBG_ASSERT( eState != SfxItemState::DEFAULT || pState->IsVoidItem(),
+        DBG_ASSERT( eState != SfxItemState::DEFAULT || pState->isVoidItem(),
                     "wrong SfxPoolItem subclass in SfxStatusBarControl" );
         pBar->SetItemText( nSID, OUString() );
     }

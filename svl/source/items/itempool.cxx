@@ -281,7 +281,7 @@ SfxItemPool::SfxItemPool
         for ( sal_uInt16 n = 0; n <= pImpl->mnEnd - pImpl->mnStart; ++n )
         {
             (*ppDefaults)[n] = (*rPool.pImpl->mpStaticDefaults)[n]->Clone(this);
-            (*ppDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
+            (*ppDefaults)[n]->setStaticDefault();
         }
 
         SetDefaults( ppDefaults );
@@ -294,7 +294,7 @@ SfxItemPool::SfxItemPool
         if (rPool.pImpl->maPoolDefaults[n])
         {
             pImpl->maPoolDefaults[n] = rPool.pImpl->maPoolDefaults[n]->Clone(this); //resets kind
-            pImpl->maPoolDefaults[n]->SetKind(SfxItemKind::PoolDefault);
+            pImpl->maPoolDefaults[n]->setPoolDefault();
         }
 
     // Repair linkage
@@ -318,7 +318,7 @@ void SfxItemPool::SetDefaults( std::vector<SfxPoolItem*>* pDefaults )
         {
             assert(  ((*pImpl->mpStaticDefaults)[n]->Which() == n + pImpl->mnStart)
                         && "items ids in pool-ranges and in static-defaults do not match" );
-            (*pImpl->mpStaticDefaults)[n]->SetKind(SfxItemKind::StaticDefault);
+            (*pImpl->mpStaticDefaults)[n]->setStaticDefault();
             DBG_ASSERT( pImpl->maPoolItemArrays[n].empty(), "defaults with setitems with items?!" );
         }
     }
@@ -589,7 +589,7 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
         auto& rOldDefault =
             pImpl->maPoolDefaults[GetIndex_Impl(rItem.Which())];
         SfxPoolItem *pNewDefault = rItem.Clone(this);
-        pNewDefault->SetKind(SfxItemKind::PoolDefault);
+        pNewDefault->setPoolDefault();
         if (rOldDefault)
         {
             rOldDefault->SetRefCount(0);
@@ -650,7 +650,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
     if (bSID)
     {
         assert((rItem.Which() != nWhich ||
-            !IsDefaultItem(&rItem) || rItem.GetKind() == SfxItemKind::DeleteOnIdle)
+            !IsDefaultItem(&rItem) || rItem.isDeleteOnIdle())
                 && "a non Pool Item is Default?!");
         SfxPoolItem *pPoolItem = rItem.Clone(pImpl->mpMaster);
         pPoolItem->SetWhich(nWhich);
@@ -776,13 +776,15 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
         return;
     }
 
-    assert(rItem.GetRefCount() && "RefCount == 0, Remove impossible");
-
     const sal_uInt16 nIndex = GetIndex_Impl(nWhich);
     // Static Defaults are just there
     if ( IsStaticDefaultItem(&rItem) &&
          &rItem == (*pImpl->mpStaticDefaults)[nIndex])
         return;
+
+    // moved below StaticDefaultItem detection - StaticDefaultItems
+    // do not need a RefCnt of SFX_ITEMS_SPECIAL (0xffffffff) anymore
+    assert(rItem.GetRefCount() && "RefCount == 0, Remove impossible");
 
     // Find Item in own Pool
     SfxPoolItemArray_Impl& rItemArr = pImpl->maPoolItemArrays[nIndex];

@@ -63,7 +63,7 @@ SwViewLayoutControl::~SwViewLayoutControl()
 
 void SwViewLayoutControl::StateChangedAtStatusBarControl( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( SfxItemState::DEFAULT != eState || pState->IsVoidItem() )
+    if (SfxItemState::DEFAULT != eState || SfxItemState::DISABLED == eState)
     {
         GetStatusBar().SetItemText( GetId(), OUString() );
         mpImpl->mnState = 4; //tdf#148441 switch off, if disabled

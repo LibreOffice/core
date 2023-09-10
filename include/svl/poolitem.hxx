@@ -35,17 +35,8 @@
 
 class IntlWrapper;
 
-enum class SfxItemKind : sal_Int8
-{
-   NONE,
-   DeleteOnIdle,
-   StaticDefault,
-   PoolDefault
-};
-
 #define SFX_ITEMS_OLD_MAXREF                0xffef
 #define SFX_ITEMS_MAXREF                    0xfffffffe
-#define SFX_ITEMS_SPECIAL                   0xffffffff
 
 #define CONVERT_TWIPS                       0x80    // Uno conversion for measurement (for MemberId)
 
@@ -124,15 +115,51 @@ friend class SfxItemSet;
 
     mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
-    SfxItemKind  m_nKind;
+
+    // bitfield for flags (instead of SfxItemKind)
+    bool        m_bIsVoidItem : 1;
+    bool        m_bDeleteOnIdle : 1;
+    bool        m_bStaticDefault : 1;
+    bool        m_bPoolDefault : 1;
+#ifdef DBG_UTIL
+    // this flag will make debugging item stuff much simpler
+    bool        m_bDeleted : 1;
+#endif
 
 private:
-    inline void              SetRefCount(sal_uInt32 n);
-    inline void              SetKind( SfxItemKind n );
+    inline void SetRefCount(sal_uInt32 n)
+    {
+        m_nRefCount = n;
+        m_bStaticDefault = m_bPoolDefault = false;
+    }
+
+protected:
+    void setVoidItem() { m_bIsVoidItem = true; }
+    void setDeleteOnIdle() { m_bDeleteOnIdle = true; }
+    void setStaticDefault() { m_bStaticDefault = true; }
+    void setPoolDefault() { m_bPoolDefault = true; }
+
 public:
-    inline void              AddRef(sal_uInt32 n = 1) const;
+    inline void AddRef(sal_uInt32 n = 1) const
+    {
+        assert(m_nRefCount <= SFX_ITEMS_MAXREF && "AddRef with non-Pool-Item");
+        assert(n <= SFX_ITEMS_MAXREF - m_nRefCount && "AddRef: refcount overflow");
+        m_nRefCount += n;
+    }
+
+    bool isVoidItem() const { return m_bIsVoidItem; }
+    bool isDeleteOnIdle() const { return m_bDeleteOnIdle; }
+    bool isStaticDefault() const { return m_bStaticDefault; }
+    bool isPoolDefault() const { return m_bPoolDefault; }
+
 private:
-    inline sal_uInt32        ReleaseRef(sal_uInt32 n = 1) const;
+    inline sal_uInt32 ReleaseRef(sal_uInt32 n = 1) const
+    {
+        assert(m_nRefCount <= SFX_ITEMS_MAXREF && "ReleaseRef with non-Pool-Item");
+        assert(n <= m_nRefCount);
+        m_nRefCount -= n;
+        return m_nRefCount;
+    }
 
 protected:
                              explicit SfxPoolItem( sal_uInt16 nWhich = 0 );
@@ -226,61 +253,28 @@ public:
     }
 
     sal_uInt32               GetRefCount() const { return m_nRefCount; }
-    SfxItemKind       GetKind() const { return m_nKind; }
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
     virtual boost::property_tree::ptree dumpAsJSON() const;
-
-    /** Only SfxVoidItem shall and must return true for this.
-
-        This avoids costly calls to dynamic_cast<const SfxVoidItem*>()
-        specifically in SfxItemSet::GetItemState()
-     */
-    virtual bool             IsVoidItem() const;
 
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& ) = delete;
 };
 
-inline void SfxPoolItem::SetRefCount(sal_uInt32 n)
-{
-    m_nRefCount = n;
-    m_nKind = SfxItemKind::NONE;
-}
 
-inline void SfxPoolItem::SetKind( SfxItemKind n )
-{
-    m_nRefCount = SFX_ITEMS_SPECIAL;
-    m_nKind = n;
-}
-
-inline void SfxPoolItem::AddRef(sal_uInt32 n) const
-{
-    assert(m_nRefCount <= SFX_ITEMS_MAXREF && "AddRef with non-Pool-Item");
-    assert(n <= SFX_ITEMS_MAXREF - m_nRefCount && "AddRef: refcount overflow");
-    m_nRefCount += n;
-}
-
-inline sal_uInt32 SfxPoolItem::ReleaseRef(sal_uInt32 n) const
-{
-    assert(m_nRefCount <= SFX_ITEMS_MAXREF && "ReleaseRef with non-Pool-Item");
-    assert(n <= m_nRefCount);
-    m_nRefCount -= n;
-    return m_nRefCount;
-}
 
 inline bool IsPoolDefaultItem(const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetKind() == SfxItemKind::PoolDefault;
+    return pItem && pItem->isPoolDefault();
 }
 
 inline bool IsStaticDefaultItem(const SfxPoolItem *pItem )
 {
-    return pItem && pItem->GetKind() == SfxItemKind::StaticDefault;
+    return pItem && pItem->isStaticDefault();
 }
 
 inline bool IsDefaultItem( const SfxPoolItem *pItem )
 {
-    return pItem && (pItem->GetKind() == SfxItemKind::StaticDefault || pItem->GetKind() == SfxItemKind::PoolDefault);
+    return pItem && (pItem->isPoolDefault() || pItem->isStaticDefault());
 }
 
 inline bool IsPooledItem( const SfxPoolItem *pItem )

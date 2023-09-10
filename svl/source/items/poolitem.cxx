@@ -471,7 +471,13 @@ size_t getUsedSfxPoolItemCount() { return nUsedSfxPoolItemCount; }
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
-    , m_nKind(SfxItemKind::NONE)
+    , m_bIsVoidItem(false)
+    , m_bDeleteOnIdle(false)
+    , m_bStaticDefault(false)
+    , m_bPoolDefault(false)
+#ifdef DBG_UTIL
+    , m_bDeleted(false)
+#endif
 {
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount++;
@@ -484,6 +490,7 @@ SfxPoolItem::~SfxPoolItem()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount--;
+    m_bDeleted = true;
 #endif
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
 }
@@ -573,8 +580,6 @@ std::unique_ptr<SfxPoolItem> SfxPoolItem::CloneSetWhich(sal_uInt16 nNewWhich) co
     pItem->SetWhich(nNewWhich);
     return pItem;
 }
-
-bool SfxPoolItem::IsVoidItem() const { return false; }
 
 void SfxPoolItem::ScaleMetrics(tools::Long /*lMult*/, tools::Long /*lDiv*/) {}
 

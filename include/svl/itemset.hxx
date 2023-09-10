@@ -33,6 +33,11 @@
 
 class SfxItemPool;
 
+#ifdef DBG_UTIL
+SVL_DLLPUBLIC size_t getAllocatedSfxItemSetCount();
+SVL_DLLPUBLIC size_t getUsedSfxItemSetCount();
+#endif
+
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;

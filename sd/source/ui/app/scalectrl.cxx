@@ -47,8 +47,9 @@ SdScaleControl::~SdScaleControl() {}
 void SdScaleControl::StateChangedAtStatusBarControl(sal_uInt16 /*nSID*/, SfxItemState eState,
                                                     const SfxPoolItem* pState)
 {
-    if (eState != SfxItemState::DEFAULT || pState->IsVoidItem())
+    if (eState != SfxItemState::DEFAULT || SfxItemState::DISABLED == eState)
         return;
+
     auto pStringItem = dynamic_cast<const SfxStringItem*>(pState);
     if (!pStringItem)
     {
