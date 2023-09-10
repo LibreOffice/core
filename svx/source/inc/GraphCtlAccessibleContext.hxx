@@ -21,7 +21,7 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_GRAPHCTLACCESSIBLECONTEXT_HXX
 #define INCLUDED_SVX_SOURCE_INC_GRAPHCTLACCESSIBLECONTEXT_HXX
 
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -57,7 +57,7 @@ class SdrView;
         <code>AccessibleContext</code> service.
 */
 
-typedef ::cppu::WeakAggComponentImplHelper7<
+typedef ::cppu::WeakComponentImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleContext,
