@@ -594,7 +594,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
             SolarMutexReleaser aReleaser;
 
             pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
-                            untilDate: nil
+                            untilDate: [NSDate distantPast]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )
