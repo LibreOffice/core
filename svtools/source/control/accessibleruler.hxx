@@ -27,7 +27,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/vclptr.hxx>
 
@@ -35,7 +35,7 @@ namespace tools { class Rectangle; }
 class Ruler;
 
 
-typedef ::cppu::WeakAggComponentImplHelper5<
+typedef ::cppu::WeakComponentImplHelper<
             css::accessibility::XAccessible,
             css::accessibility::XAccessibleComponent,
             css::accessibility::XAccessibleContext,
