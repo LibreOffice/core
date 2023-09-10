@@ -44,7 +44,7 @@ namespace comphelper
 {
     namespace {
 
-    class GenericPropertySet :  public OWeakAggObject,
+    class GenericPropertySet :  public OWeakObject,
                                 public XServiceInfo,
                                 public XTypeProvider,
                                 public PropertySetHelper
@@ -62,7 +62,6 @@ namespace comphelper
         explicit GenericPropertySet( PropertySetInfo* pInfo ) noexcept;
 
         // XInterface
-        virtual  Any SAL_CALL queryAggregation( const  Type & rType ) override;
         virtual  Any SAL_CALL queryInterface( const  Type & rType ) override;
         virtual void SAL_CALL acquire() noexcept override;
         virtual void SAL_CALL release() noexcept override;
@@ -176,11 +175,6 @@ void GenericPropertySet::_getPropertyValues( const comphelper::PropertyMapEntry*
 
 Any SAL_CALL GenericPropertySet::queryInterface( const Type & rType )
 {
-    return OWeakAggObject::queryInterface( rType );
-}
-
-Any SAL_CALL GenericPropertySet::queryAggregation( const Type & rType )
-{
     Any aAny;
 
     if( rType == cppu::UnoType<XServiceInfo>::get())
@@ -192,19 +186,19 @@ Any SAL_CALL GenericPropertySet::queryAggregation( const Type & rType )
     else if( rType == cppu::UnoType<XMultiPropertySet>::get())
         aAny <<= Reference< XMultiPropertySet >(this);
     else
-        aAny = OWeakAggObject::queryAggregation( rType );
+        aAny = OWeakObject::queryInterface( rType );
 
     return aAny;
 }
 
 void SAL_CALL GenericPropertySet::acquire() noexcept
 {
-    OWeakAggObject::acquire();
+    OWeakObject::acquire();
 }
 
 void SAL_CALL GenericPropertySet::release() noexcept
 {
-    OWeakAggObject::release();
+    OWeakObject::release();
 }
 
 uno::Sequence< uno::Type > SAL_CALL GenericPropertySet::getTypes()
