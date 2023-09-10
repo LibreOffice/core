@@ -732,7 +732,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
     if( !bool(nType) )
         return false;
 
-    NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: nil
+    NSEvent* pEvent = [NSApp nextEventMatchingMask: nEventMask untilDate: [NSDate distantPast]
                             inMode: NSDefaultRunLoopMode dequeue: NO];
     return (pEvent != nullptr);
 }
