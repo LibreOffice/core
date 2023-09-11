@@ -703,8 +703,10 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     {
         rLabelData.maSortInfo.Field =
             ScDPUtil::createDuplicateDimensionName(aFieldName.maName, aFieldName.mnDupCount);
-        rLabelData.maSortInfo.IsAscending = m_xRbSortAsc->get_active();
     }
+
+    if (rLabelData.maSortInfo.Mode != DataPilotFieldSortMode::MANUAL)
+        rLabelData.maSortInfo.IsAscending = m_xRbSortAsc->get_active();
 
     // *** LAYOUT MODE ***
 
@@ -769,11 +771,6 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
     }
     m_xLbSortBy->set_active(nSortPos);
 
-    // sorting mode
-    m_xRbSortAsc->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_xRbSortDesc->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-    m_xRbSortMan->connect_toggled( LINK( this, ScDPSubtotalOptDlg, RadioClickHdl ) );
-
     weld::RadioButton* pRBtn = nullptr;
     switch( nSortMode )
     {
@@ -785,7 +782,6 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
             pRBtn = maLabelData.maSortInfo.IsAscending ? m_xRbSortAsc.get() : m_xRbSortDesc.get();
     }
     pRBtn->set_active(true);
-    RadioClickHdl(*pRBtn);
 
     // *** LAYOUT MODE ***
 
@@ -877,14 +873,6 @@ IMPL_LINK(ScDPSubtotalOptDlg, ButtonClicked, weld::Button&, rButton, void)
         response(RET_OK);
     else
         response(RET_CANCEL);
-}
-
-IMPL_LINK(ScDPSubtotalOptDlg, RadioClickHdl, weld::Toggleable&, rBtn, void)
-{
-    if (!rBtn.get_active())
-        return;
-
-    m_xLbSortBy->set_sensitive(m_xRbSortMan->get_active());
 }
 
 IMPL_LINK(ScDPSubtotalOptDlg, CheckHdl, weld::Toggleable&, rCBox, void)
