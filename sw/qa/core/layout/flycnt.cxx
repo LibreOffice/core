@@ -1080,6 +1080,29 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNested)
     CPPUNIT_ASSERT(!pPage2Fly2->GetAnchorFrameContainingAnchPos()->IsInFly());
     CPPUNIT_ASSERT(pPage2Fly2->GetPrecede());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNestedOverlap)
+{
+    // Given a document with a nested, multi-page floating table, enabling the "don't overlap" logic:
+    // When calculating the layout:
+    createSwDoc("floattable-nested-overlap.odt");
+    calcLayout();
+
+    // Then make sure we get 2 pages (2 flys on each page):
+    // Without the accompanying fix in place, this test would have failed with a layout loop.
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(pPage1->GetSortedObjs());
+    SwSortedObjs& rPage1Objs = *pPage1->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage1Objs.size());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
