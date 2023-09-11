@@ -165,6 +165,13 @@ private:
     SparklineDataRangeDialogWrapper() = delete;
 };
 
+/** Wrapper for the easy conditional format dialog */
+class ConditionalFormatEasyDialogWrapper :
+    public ChildControllerWrapper<SID_EASY_CONDITIONAL_FORMAT_DIALOG>
+{
+private:
+    ConditionalFormatEasyDialogWrapper() = delete;
+};
 }
 
 class ScAcceptChgDlgWrapper : public SfxChildWindow

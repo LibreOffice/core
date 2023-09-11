@@ -209,6 +209,7 @@ struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 struct ScSheetLimits;
 struct ScDataAreaExtras;
+enum class ScConditionMode;
 
 
 namespace sc {
@@ -424,6 +425,7 @@ private:
     std::unique_ptr<ScExtDocOptions> pExtDocOptions;    // for import etc.
     std::unique_ptr<ScClipOptions> mpClipOptions;       // clipboard options
     std::unique_ptr<ScConsolidateParam> pConsolidateDlgData;
+    std::unique_ptr<ScConditionMode> pConditionalFormatDialogMode;
 
     std::unique_ptr<ScAutoNameCache> pAutoNameCache;    // for automatic name lookup during CompileXML
 
@@ -651,6 +653,8 @@ public:
 
     void                        SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pData );
     const ScConsolidateParam*   GetConsolidateDlgData() const { return pConsolidateDlgData.get(); }
+    void                        SetEasyConditionalFormatDialogData(std::unique_ptr<ScConditionMode> pMode);
+    const ScConditionMode*      GetEasyConditionalFormatDialogData() const { return pConditionalFormatDialogMode.get(); }
 
     void                        Clear( bool bFromDestructor = false );
 

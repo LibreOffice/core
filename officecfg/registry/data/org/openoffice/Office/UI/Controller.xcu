@@ -548,6 +548,20 @@
           <value>distributebar</value>
         </prop>
       </node>
+      <node oor:name="ConditionalFormatCondition" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConditionalFormatConditionMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>conditional_easy</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="lo.writer.ScrollToPrevious" oor:op="replace">

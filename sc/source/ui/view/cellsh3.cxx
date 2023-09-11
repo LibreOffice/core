@@ -44,6 +44,7 @@
 #include <funcdesc.hxx>
 #include <markdata.hxx>
 #include <scabstdlg.hxx>
+#include <condformateasydlg.hxx>
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -445,6 +446,25 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd == nullptr );
+            }
+            break;
+
+        case SID_EASY_CONDITIONAL_FORMAT_DIALOG:
+            {
+                if (pReqArgs != nullptr)
+                {
+                    const SfxPoolItem* pFormat;
+                    if (pReqArgs->HasItem( FN_PARAM_1, &pFormat))
+                    {
+                        sal_Int16 nFormat = static_cast<const SfxInt16Item*>(pFormat)->GetValue();
+                        sal_uInt16 nId = sc::ConditionalFormatEasyDialogWrapper::GetChildWindowId();
+                        SfxViewFrame* rViewFrame = pTabViewShell->GetViewFrame();
+                        SfxChildWindow* pWindow = rViewFrame->GetChildWindow( nId );
+                        GetViewData().GetDocument().SetEasyConditionalFormatDialogData(std::make_unique<ScConditionMode>(static_cast<ScConditionMode>(nFormat)));
+
+                        pScMod->SetRefDialog( nId, pWindow == nullptr );
+                    }
+                }
             }
             break;
 

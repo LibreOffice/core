@@ -115,6 +115,7 @@ IMPL_CONTROLLER_CHILD_CTOR( ScPrintAreasDlgWrapper, SID_OPENDLG_EDIT_PRINTAREA )
 
 IMPL_CONTROLLER_CHILD_CTOR( ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 
+
 // ScSimpleRefDlgWrapper
 
 static bool         bScSimpleRefFlag;

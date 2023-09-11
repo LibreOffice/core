@@ -21,6 +21,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/colheader \
 	sc/uiconfig/scalc/popupmenu/column_operations \
 	sc/uiconfig/scalc/popupmenu/conditional \
+	sc/uiconfig/scalc/popupmenu/conditional_easy \
 	sc/uiconfig/scalc/popupmenu/draw \
 	sc/uiconfig/scalc/popupmenu/drawtext \
 	sc/uiconfig/scalc/popupmenu/form \
@@ -99,6 +100,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/colorrowdialog \
 	sc/uiconfig/scalc/ui/colwidthdialog \
 	sc/uiconfig/scalc/ui/condformatmanager \
+	sc/uiconfig/scalc/ui/conditionaleasydialog \
 	sc/uiconfig/scalc/ui/conditionalformatdialog \
 	sc/uiconfig/scalc/ui/conditionalentry \
 	sc/uiconfig/scalc/ui/conditionaliconset \
