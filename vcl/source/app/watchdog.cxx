@@ -25,9 +25,11 @@
 #include <valgrind/memcheck.h>
 #endif
 
+#include <atomic>
+
 namespace
 {
-volatile bool gbWatchdogFiring = false;
+std::atomic<bool> gbWatchdogFiring = false;
 osl::Condition* gpWatchdogExit = nullptr;
 rtl::Reference<WatchdogThread> gxWatchdog;
 
