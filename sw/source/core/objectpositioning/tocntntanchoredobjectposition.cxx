@@ -1212,6 +1212,14 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         // At least for split flys we need to consider objects on the same page, but anchored in
         // different text frames.
         bSplitFly = true;
+
+        SwFrame* pFlyFrameAnchor = pFlyFrame->GetAnchorFrameContainingAnchPos();
+        if (pFlyFrameAnchor && pFlyFrameAnchor->IsInFly())
+        {
+            // An inner fly overlapping with its outer fly is fine.
+            return;
+        }
+
         const SwPageFrame* pPageFrame = pAnchorFrameForVertPos->FindPageFrame();
         if (pPageFrame)
         {
@@ -1239,10 +1247,20 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
         }
 
         SwFlyFrame* pAnchoredObjFly = pAnchoredObj->DynCastFlyFrame();
-        if (bSplitFly && !pAnchoredObjFly)
+        if (bSplitFly)
         {
-            // This is a split fly, then overlap is only checked against other split flys.
-            continue;
+            if (!pAnchoredObjFly)
+            {
+                // This is a split fly, then overlap is only checked against other split flys.
+                continue;
+            }
+
+            SwFrame* pAnchoredObjFlyAnchor = pAnchoredObjFly->GetAnchorFrameContainingAnchPos();
+            if (pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->IsInFly())
+            {
+                // An inner fly overlapping with its outer fly is fine.
+                continue;
+            }
         }
 
         css::text::WrapTextMode eWrap = pAnchoredObj->GetFrameFormat().GetSurround().GetSurround();
