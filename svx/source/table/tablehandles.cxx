@@ -108,7 +108,7 @@ void TableEdgeHdl::getPolyPolygon(basegfx::B2DPolyPolygon& rVisible, basegfx::B2
 {
     // changed method to create visible and invisible partial polygons in one run in
     // separate PolyPolygons; both kinds are used
-    basegfx::B2DPoint aOffset(aPos.X(), aPos.Y());
+    basegfx::B2DPoint aOffset(m_aPos.X(), m_aPos.Y());
     rVisible.clear();
     rInvisible.clear();
 
@@ -145,10 +145,10 @@ void TableEdgeHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if(!pHdlList || !pHdlList->GetView() || pHdlList->GetView()->areMarkHandlesHidden())
+    if(!m_pHdlList || !m_pHdlList->GetView() || m_pHdlList->GetView()->areMarkHandlesHidden())
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
     SdrPageView* pPageView = pView->GetSdrPageView();
 
     if(!pPageView)
@@ -262,10 +262,10 @@ void TableBorderHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
 
-    if (!pHdlList || !pHdlList->GetView() || pHdlList->GetView()->areMarkHandlesHidden())
+    if (!m_pHdlList || !m_pHdlList->GetView() || m_pHdlList->GetView()->areMarkHandlesHidden())
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
     SdrPageView* pPageView = pView->GetSdrPageView();
 
     if (!pPageView)

@@ -267,37 +267,37 @@ const BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, sal
 
 
 SdrHdl::SdrHdl():
-    pObj(nullptr),
-    pPV(nullptr),
-    pHdlList(nullptr),
-    eKind(SdrHdlKind::Move),
-    nRotationAngle(0),
-    nObjHdlNum(0),
-    nPolyNum(0),
-    nPPntNum(0),
-    nSourceHdlNum(0),
-    bSelect(false),
-    b1PixMore(false),
-    bPlusHdl(false),
+    m_pObj(nullptr),
+    m_pPV(nullptr),
+    m_pHdlList(nullptr),
+    m_eKind(SdrHdlKind::Move),
+    m_nRotationAngle(0),
+    m_nObjHdlNum(0),
+    m_nPolyNum(0),
+    m_nPPntNum(0),
+    m_nSourceHdlNum(0),
+    m_bSelect(false),
+    m_b1PixMore(false),
+    m_bPlusHdl(false),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
 }
 
 SdrHdl::SdrHdl(const Point& rPnt, SdrHdlKind eNewKind):
-    pObj(nullptr),
-    pPV(nullptr),
-    pHdlList(nullptr),
-    aPos(rPnt),
-    eKind(eNewKind),
-    nRotationAngle(0),
-    nObjHdlNum(0),
-    nPolyNum(0),
-    nPPntNum(0),
-    nSourceHdlNum(0),
-    bSelect(false),
-    b1PixMore(false),
-    bPlusHdl(false),
+    m_pObj(nullptr),
+    m_pPV(nullptr),
+    m_pHdlList(nullptr),
+    m_aPos(rPnt),
+    m_eKind(eNewKind),
+    m_nRotationAngle(0),
+    m_nObjHdlNum(0),
+    m_nPolyNum(0),
+    m_nPPntNum(0),
+    m_nSourceHdlNum(0),
+    m_bSelect(false),
+    m_b1PixMore(false),
+    m_bPlusHdl(false),
     mbMoveOutside(false),
     mbMouseOver(false)
 {
@@ -310,9 +310,9 @@ SdrHdl::~SdrHdl()
 
 void SdrHdl::Set1PixMore(bool bJa)
 {
-    if(b1PixMore != bJa)
+    if(m_b1PixMore != bJa)
     {
-        b1PixMore = bJa;
+        m_b1PixMore = bJa;
 
         // create new display
         Touch();
@@ -332,9 +332,9 @@ void SdrHdl::SetMoveOutside( bool bMoveOutside )
 
 void SdrHdl::SetRotationAngle(Degree100 n)
 {
-    if(nRotationAngle != n)
+    if(m_nRotationAngle != n)
     {
-        nRotationAngle = n;
+        m_nRotationAngle = n;
 
         // create new display
         Touch();
@@ -343,10 +343,10 @@ void SdrHdl::SetRotationAngle(Degree100 n)
 
 void SdrHdl::SetPos(const Point& rPnt)
 {
-    if(aPos != rPnt)
+    if(m_aPos != rPnt)
     {
         // remember new position
-        aPos = rPnt;
+        m_aPos = rPnt;
 
         // create new display
         Touch();
@@ -355,10 +355,10 @@ void SdrHdl::SetPos(const Point& rPnt)
 
 void SdrHdl::SetSelected(bool bJa)
 {
-    if(bSelect != bJa)
+    if(m_bSelect != bJa)
     {
         // remember new value
-        bSelect = bJa;
+        m_bSelect = bJa;
 
         // create new display
         Touch();
@@ -367,10 +367,10 @@ void SdrHdl::SetSelected(bool bJa)
 
 void SdrHdl::SetHdlList(SdrHdlList* pList)
 {
-    if(pHdlList != pList)
+    if(m_pHdlList != pList)
     {
         // remember list
-        pHdlList = pList;
+        m_pHdlList = pList;
 
         // now it's possible to create graphic representation
         Touch();
@@ -379,10 +379,10 @@ void SdrHdl::SetHdlList(SdrHdlList* pList)
 
 void SdrHdl::SetObj(SdrObject* pNewObj)
 {
-    if(pObj != pNewObj)
+    if(m_pObj != pNewObj)
     {
         // remember new object
-        pObj = pNewObj;
+        m_pObj = pNewObj;
 
         // graphic representation may have changed
         Touch();
@@ -407,29 +407,29 @@ void SdrHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList || !pHdlList->GetView() || pHdlList->GetView()->areMarkHandlesHidden())
+    if(!m_pHdlList || !m_pHdlList->GetView() || m_pHdlList->GetView()->areMarkHandlesHidden())
         return;
 
     BitmapColorIndex eColIndex = BitmapColorIndex::LightGreen;
     BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
-    bool bRot = pHdlList->IsRotateShear();
-    if(pObj)
-        eColIndex = bSelect ? BitmapColorIndex::Cyan : BitmapColorIndex::LightCyan;
+    bool bRot = m_pHdlList->IsRotateShear();
+    if(m_pObj)
+        eColIndex = m_bSelect ? BitmapColorIndex::Cyan : BitmapColorIndex::LightCyan;
     if(bRot)
     {
         // red rotation handles
-        if(pObj && bSelect)
+        if(m_pObj && m_bSelect)
             eColIndex = BitmapColorIndex::Red;
         else
             eColIndex = BitmapColorIndex::LightRed;
     }
 
-    switch(eKind)
+    switch(m_eKind)
     {
         case SdrHdlKind::Move:
         {
-            eKindOfMarker = b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
+            eKindOfMarker = m_b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
             break;
         }
         case SdrHdlKind::UpperLeft:
@@ -480,11 +480,11 @@ void SdrHdl::CreateB2dIAObject()
         {
             if(bRot)
             {
-                eKindOfMarker = b1PixMore ? BitmapMarkerKind::Circ_9x9 : BitmapMarkerKind::Circ_7x7;
+                eKindOfMarker = m_b1PixMore ? BitmapMarkerKind::Circ_9x9 : BitmapMarkerKind::Circ_7x7;
             }
             else
             {
-                eKindOfMarker = b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
+                eKindOfMarker = m_b1PixMore ? BitmapMarkerKind::Rect_9x9 : BitmapMarkerKind::Rect_7x7;
             }
             break;
         }
@@ -528,7 +528,7 @@ void SdrHdl::CreateB2dIAObject()
         // for SJ and the CustomShapeHandles:
         case SdrHdlKind::CustomShape1:
         {
-            eKindOfMarker = b1PixMore ? BitmapMarkerKind::Customshape_9x9 : BitmapMarkerKind::Customshape_7x7;
+            eKindOfMarker = m_b1PixMore ? BitmapMarkerKind::Customshape_9x9 : BitmapMarkerKind::Customshape_7x7;
             eColIndex = BitmapColorIndex::Yellow;
             break;
         }
@@ -536,7 +536,7 @@ void SdrHdl::CreateB2dIAObject()
             break;
     }
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
     SdrPageView* pPageView = pView->GetSdrPageView();
 
     if(!pPageView)
@@ -553,24 +553,24 @@ void SdrHdl::CreateB2dIAObject()
             OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
 
             // add offset if necessary
-            if(pHdlList->IsMoveOutside() || mbMoveOutside)
+            if(m_pHdlList->IsMoveOutside() || mbMoveOutside)
             {
                 Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
-                if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Upper || eKind == SdrHdlKind::UpperRight)
+                if(m_eKind == SdrHdlKind::UpperLeft || m_eKind == SdrHdlKind::Upper || m_eKind == SdrHdlKind::UpperRight)
                     aMoveOutsideOffset.AdjustY( -(aOffset.Width()) );
-                if(eKind == SdrHdlKind::LowerLeft || eKind == SdrHdlKind::Lower || eKind == SdrHdlKind::LowerRight)
+                if(m_eKind == SdrHdlKind::LowerLeft || m_eKind == SdrHdlKind::Lower || m_eKind == SdrHdlKind::LowerRight)
                     aMoveOutsideOffset.AdjustY(aOffset.Height() );
-                if(eKind == SdrHdlKind::UpperLeft || eKind == SdrHdlKind::Left  || eKind == SdrHdlKind::LowerLeft)
+                if(m_eKind == SdrHdlKind::UpperLeft || m_eKind == SdrHdlKind::Left  || m_eKind == SdrHdlKind::LowerLeft)
                     aMoveOutsideOffset.AdjustX( -(aOffset.Width()) );
-                if(eKind == SdrHdlKind::UpperRight || eKind == SdrHdlKind::Right || eKind == SdrHdlKind::LowerRight)
+                if(m_eKind == SdrHdlKind::UpperRight || m_eKind == SdrHdlKind::Right || m_eKind == SdrHdlKind::LowerRight)
                     aMoveOutsideOffset.AdjustX(aOffset.Height() );
             }
 
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject;
                 if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == BitmapMarkerKind::Rect_7x7 || eKindOfMarker == BitmapMarkerKind::Rect_9x9 || eKindOfMarker == BitmapMarkerKind::Rect_11x11))
                 {
@@ -791,7 +791,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
     // support bigger sizes
     bool bForceBiggerSize(false);
 
-    if (pHdlList && pHdlList->GetHdlSize() > 3)
+    if (m_pHdlList && m_pHdlList->GetHdlSize() > 3)
     {
         switch(eKindOfMarker)
         {
@@ -822,7 +822,7 @@ std::unique_ptr<sdr::overlay::OverlayObject> SdrHdl::CreateOverlayObject(
     }
 
     // This handle has the focus, visualize it
-    if(IsFocusHdl() && pHdlList && pHdlList->GetFocusHdl() == this)
+    if(IsFocusHdl() && m_pHdlList && m_pHdlList->GetFocusHdl() == this)
     {
         // create animated handle
         BitmapMarkerKind eNextBigger = GetNextBigger(eKindOfMarker);
@@ -954,11 +954,11 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 PointerStyle SdrHdl::GetPointer() const
 {
     PointerStyle ePtr=PointerStyle::Move;
-    const bool bSize=eKind>=SdrHdlKind::UpperLeft && eKind<=SdrHdlKind::LowerRight;
-    const bool bRot=pHdlList!=nullptr && pHdlList->IsRotateShear();
-    const bool bDis=pHdlList!=nullptr && pHdlList->IsDistortShear();
-    if (bSize && pHdlList!=nullptr && (bRot || bDis)) {
-        switch (eKind) {
+    const bool bSize=m_eKind>=SdrHdlKind::UpperLeft && m_eKind<=SdrHdlKind::LowerRight;
+    const bool bRot=m_pHdlList!=nullptr && m_pHdlList->IsRotateShear();
+    const bool bDis=m_pHdlList!=nullptr && m_pHdlList->IsDistortShear();
+    if (bSize && m_pHdlList!=nullptr && (bRot || bDis)) {
+        switch (m_eKind) {
             case SdrHdlKind::UpperLeft: case SdrHdlKind::UpperRight:
             case SdrHdlKind::LowerLeft: case SdrHdlKind::LowerRight: ePtr=bRot ? PointerStyle::Rotate : PointerStyle::RefHand; break;
             case SdrHdlKind::Left : case SdrHdlKind::Right: ePtr=PointerStyle::VShear; break;
@@ -968,9 +968,9 @@ PointerStyle SdrHdl::GetPointer() const
         }
     } else {
         // When resizing rotated rectangles, rotate the mouse cursor slightly, too
-        if (bSize && nRotationAngle!=0_deg100) {
+        if (bSize && m_nRotationAngle!=0_deg100) {
             Degree100 nHdlAngle(0);
-            switch (eKind) {
+            switch (m_eKind) {
                 case SdrHdlKind::LowerRight: nHdlAngle=31500_deg100; break;
                 case SdrHdlKind::Lower: nHdlAngle=27000_deg100; break;
                 case SdrHdlKind::LowerLeft: nHdlAngle=22500_deg100; break;
@@ -983,7 +983,7 @@ PointerStyle SdrHdl::GetPointer() const
                     break;
             }
             // a little bit more (for rounding)
-            nHdlAngle = NormAngle36000(nHdlAngle + nRotationAngle + 2249_deg100);
+            nHdlAngle = NormAngle36000(nHdlAngle + m_nRotationAngle + 2249_deg100);
             nHdlAngle/=4500_deg100;
             switch (static_cast<sal_uInt8>(nHdlAngle.get())) {
                 case 0: ePtr=PointerStyle::ESize;  break;
@@ -996,7 +996,7 @@ PointerStyle SdrHdl::GetPointer() const
                 case 7: ePtr=PointerStyle::SESize; break;
             } // switch
         } else {
-            switch (eKind) {
+            switch (m_eKind) {
                 case SdrHdlKind::UpperLeft: ePtr=PointerStyle::NWSize;  break;
                 case SdrHdlKind::Upper: ePtr=PointerStyle::NSize;     break;
                 case SdrHdlKind::UpperRight: ePtr=PointerStyle::NESize;  break;
@@ -1022,7 +1022,7 @@ PointerStyle SdrHdl::GetPointer() const
 
 bool SdrHdl::IsFocusHdl() const
 {
-    switch(eKind)
+    switch(m_eKind)
     {
         case SdrHdlKind::UpperLeft:
         case SdrHdlKind::Upper:
@@ -1034,7 +1034,7 @@ bool SdrHdl::IsFocusHdl() const
         case SdrHdlKind::LowerRight:
         {
             // if it's an activated TextEdit, it's moved to extended points
-            return !pHdlList || !pHdlList->IsMoveOutside();
+            return !m_pHdlList || !m_pHdlList->IsMoveOutside();
         }
 
         case SdrHdlKind::Move:      // handle to move object
@@ -1131,10 +1131,10 @@ void SdrHdlColor::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1154,7 +1154,7 @@ void SdrHdlColor::CreateB2dIAObject()
             if (xManager.is())
             {
                 BitmapEx aBmpCol(CreateColorDropper(aMarkerColor));
-                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
                     sdr::overlay::OverlayBitmapEx(
                         aPosition,
@@ -1283,10 +1283,10 @@ void SdrHdlGradient::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1306,17 +1306,17 @@ void SdrHdlGradient::CreateB2dIAObject()
             if (xManager.is())
             {
                 // striped line in between
-                basegfx::B2DVector aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
+                basegfx::B2DVector aVec(a2ndPos.X() - m_aPos.X(), a2ndPos.Y() - m_aPos.Y());
                 double fVecLen = aVec.getLength();
                 double fLongPercentArrow = (1.0 - 0.05) * fVecLen;
                 double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
                 aVec.normalize();
                 basegfx::B2DVector aPerpend(-aVec.getY(), aVec.getX());
-                sal_Int32 nMidX = static_cast<sal_Int32>(aPos.X() + aVec.getX() * fLongPercentArrow);
-                sal_Int32 nMidY = static_cast<sal_Int32>(aPos.Y() + aVec.getY() * fLongPercentArrow);
+                sal_Int32 nMidX = static_cast<sal_Int32>(m_aPos.X() + aVec.getX() * fLongPercentArrow);
+                sal_Int32 nMidY = static_cast<sal_Int32>(m_aPos.Y() + aVec.getY() * fLongPercentArrow);
                 Point aMidPoint(nMidX, nMidY);
 
-                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 basegfx::B2DPoint aMidPos(aMidPoint.X(), aMidPoint.Y());
 
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
@@ -1414,7 +1414,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
             rModel.EndUndo();
         }
 
-        pObj->SetMergedItemSetAndBroadcast(aNewSet);
+        m_pObj->SetMergedItemSetAndBroadcast(aNewSet);
     }
 
     // back transformation, set values on pIAOHandle
@@ -1442,10 +1442,10 @@ void SdrHdlLine::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!(pView && !pView->areMarkHandlesHidden() && pHdl1 && pHdl2))
         return;
@@ -1500,10 +1500,10 @@ void SdrHdlBezWgt::CreateB2dIAObject()
     SdrHdl::CreateB2dIAObject();
 
     // create lines
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1523,7 +1523,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
             if (xManager.is())
             {
                 basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
-                basegfx::B2DPoint aPosition2(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition2(m_aPos.X(), m_aPos.Y());
 
                 if(!aPosition1.equal(aPosition2))
                 {
@@ -1559,10 +1559,10 @@ E3dVolumeMarker::E3dVolumeMarker(const basegfx::B2DPolyPolygon& rWireframePoly)
 void E3dVolumeMarker::CreateB2dIAObject()
 {
     // create lines
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1604,7 +1604,7 @@ ImpEdgeHdl::~ImpEdgeHdl()
 
 void ImpEdgeHdl::CreateB2dIAObject()
 {
-    if(nObjHdlNum <= 1 && pObj)
+    if(m_nObjHdlNum <= 1 && m_pObj)
     {
         // first throw away old one
         GetRidOfIAObject();
@@ -1612,18 +1612,18 @@ void ImpEdgeHdl::CreateB2dIAObject()
         BitmapColorIndex eColIndex = BitmapColorIndex::LightCyan;
         BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_7x7;
 
-        if(pHdlList)
+        if(m_pHdlList)
         {
-            SdrMarkView* pView = pHdlList->GetView();
+            SdrMarkView* pView = m_pHdlList->GetView();
 
             if(pView && !pView->areMarkHandlesHidden())
             {
-                const SdrEdgeObj* pEdge = static_cast<SdrEdgeObj*>(pObj);
+                const SdrEdgeObj* pEdge = static_cast<SdrEdgeObj*>(m_pObj);
 
-                if(pEdge->GetConnectedNode(nObjHdlNum == 0) != nullptr)
+                if(pEdge->GetConnectedNode(m_nObjHdlNum == 0) != nullptr)
                     eColIndex = BitmapColorIndex::LightRed;
 
-                if(nPPntNum < 2)
+                if(m_nPPntNum < 2)
                 {
                     // Handle with plus sign inside
                     eKindOfMarker = BitmapMarkerKind::Circ_7x7;
@@ -1642,7 +1642,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
                             if (xManager.is())
                             {
-                                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(CreateOverlayObject(
                                     aPosition,
                                     eColIndex,
@@ -1681,10 +1681,10 @@ void ImpEdgeHdl::SetLineCode(SdrEdgeLineCode eCode)
 
 PointerStyle ImpEdgeHdl::GetPointer() const
 {
-    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
+    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( m_pObj );
     if (pEdge==nullptr)
         return SdrHdl::GetPointer();
-    if (nObjHdlNum<=1)
+    if (m_nObjHdlNum<=1)
         return PointerStyle::MovePoint;
     if (IsHorzDrag())
         return PointerStyle::ESize;
@@ -1694,10 +1694,10 @@ PointerStyle ImpEdgeHdl::GetPointer() const
 
 bool ImpEdgeHdl::IsHorzDrag() const
 {
-    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( pObj );
+    SdrEdgeObj* pEdge=dynamic_cast<SdrEdgeObj*>( m_pObj );
     if (pEdge==nullptr)
         return false;
-    if (nObjHdlNum<=1)
+    if (m_nObjHdlNum<=1)
         return false;
 
     SdrEdgeKind eEdgeKind = pEdge->GetObjectItem(SDRATTR_EDGEKIND).GetValue();
@@ -1709,7 +1709,7 @@ bool ImpEdgeHdl::IsHorzDrag() const
     }
     else if (eEdgeKind==SdrEdgeKind::ThreeLines)
     {
-        tools::Long nAngle=nObjHdlNum==2 ? rInfo.m_nAngle1 : rInfo.m_nAngle2;
+        tools::Long nAngle=m_nObjHdlNum==2 ? rInfo.m_nAngle1 : rInfo.m_nAngle2;
         return nAngle==0 || nAngle==18000;
     }
     return false;
@@ -1725,10 +1725,10 @@ void ImpMeasureHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1736,12 +1736,12 @@ void ImpMeasureHdl::CreateB2dIAObject()
     BitmapColorIndex eColIndex = BitmapColorIndex::LightCyan;
     BitmapMarkerKind eKindOfMarker = BitmapMarkerKind::Rect_9x9;
 
-    if(nObjHdlNum > 1)
+    if(m_nObjHdlNum > 1)
     {
         eKindOfMarker = BitmapMarkerKind::Rect_7x7;
     }
 
-    if(bSelect)
+    if(m_bSelect)
     {
         eColIndex = BitmapColorIndex::Cyan;
     }
@@ -1760,7 +1760,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(CreateOverlayObject(
                     aPosition,
                     eColIndex,
@@ -1778,7 +1778,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
 PointerStyle ImpMeasureHdl::GetPointer() const
 {
-    switch (nObjHdlNum)
+    switch (m_nObjHdlNum)
     {
         case 0: case 1: return PointerStyle::Hand;
         case 2: case 3: return PointerStyle::MovePoint;
@@ -1799,10 +1799,10 @@ void ImpTextframeHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;
@@ -1833,7 +1833,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                     fTransparence,
                     3.0,
                     3.0,
-                    -toRadians(nRotationAngle),
+                    -toRadians(m_nRotationAngle),
                     true)); // allow animation; the Handle is not shown at text edit time
 
                 pNewOverlayObject->setHittable(false);
@@ -2363,7 +2363,7 @@ BitmapEx SdrCropHdl::GetBitmapForHandle( const BitmapEx& rBitmap, int nSize )
         nOffset = 90;
     }
 
-    switch( eKind )
+    switch( m_eKind )
     {
         case SdrHdlKind::UpperLeft: nX = 0; nY = 0; break;
         case SdrHdlKind::Upper: nX = 1; nY = 0; break;
@@ -2389,14 +2389,14 @@ void SdrCropHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    SdrMarkView* pView = pHdlList ? pHdlList->GetView() : nullptr;
+    SdrMarkView* pView = m_pHdlList ? m_pHdlList->GetView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
 
     if( !pPageView || pView->areMarkHandlesHidden() )
         return;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    int nHdlSize = pHdlList->GetHdlSize();
+    int nHdlSize = m_pHdlList->GetHdlSize();
 
     const BitmapEx aHandlesBitmap(SIP_SA_CROP_MARKERS);
     BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
@@ -2410,12 +2410,12 @@ void SdrCropHdl::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
+                basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
 
                 std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
                 // animate focused handles
-                if(IsFocusHdl() && (pHdlList->GetFocusHdl() == this))
+                if(IsFocusHdl() && (m_pHdlList->GetFocusHdl() == this))
                 {
                     if( nHdlSize >= 2 )
                         nHdlSize = 1;
@@ -2503,7 +2503,7 @@ void translateRotationToMirroring(basegfx::B2DVector & scale, double * rotate) {
 void SdrCropViewHdl::CreateB2dIAObject()
 {
     GetRidOfIAObject();
-    SdrMarkView* pView = pHdlList ? pHdlList->GetView() : nullptr;
+    SdrMarkView* pView = m_pHdlList ? m_pHdlList->GetView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
 
     if(!pPageView || pView->areMarkHandlesHidden())

@@ -194,17 +194,17 @@ void AnnotationHdl::CreateB2dIAObject()
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-    const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
+    const bool bFocused = IsFocusHdl() && m_pHdlList && (m_pHdlList->GetFocusHdl() == this);
 
     BitmapEx aBitmapEx( mxTag->CreateAnnotationBitmap(mxTag->isSelected()) );
     BitmapEx aBitmapEx2;
     if( bFocused )
         aBitmapEx2 = mxTag->CreateAnnotationBitmap(!mxTag->isSelected() );
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;

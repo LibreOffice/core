@@ -358,7 +358,7 @@ void DiagramFrameHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;

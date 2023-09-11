@@ -184,10 +184,10 @@ void ImageButtonHdl::HideTip()
 
 void ImageButtonHdl::ShowTip()
 {
-    if (!pHdlList || !pHdlList->GetView() || mnHighlightId == -1)
+    if (!m_pHdlList || !m_pHdlList->GetView() || mnHighlightId == -1)
         return;
 
-    OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
+    OutputDevice* pDev = m_pHdlList->GetView()->GetFirstOutputDevice();
     if( pDev == nullptr )
         pDev = Application::GetDefaultDevice();
 
@@ -200,7 +200,7 @@ void ImageButtonHdl::ShowTip()
     else if (mnHighlightId == 3)
         aHelpPos.Move(maImageSize.Width(), maImageSize.Height());
     ::tools::Rectangle aLogicPix(aHelpPos, maImageSize);
-    vcl::Window* pWindow = pHdlList->GetView()->GetFirstOutputDevice()->GetOwnerWindow();
+    vcl::Window* pWindow = m_pHdlList->GetView()->GetFirstOutputDevice()->GetOwnerWindow();
     ::tools::Rectangle aScreenRect(pWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                                    pWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
     Help::ShowQuickHelp(pWindow, aScreenRect, aHelpText);
@@ -213,11 +213,11 @@ void ImageButtonHdl::onHelpRequest()
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
-    if( !(pHdlList && pHdlList->GetView()))
+    if( !(m_pHdlList && m_pHdlList->GetView()))
         return;
 
     int nHighlightId = 0;
-    OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
+    OutputDevice* pDev = m_pHdlList->GetView()->GetFirstOutputDevice();
     if( pDev == nullptr )
         pDev = Application::GetDefaultDevice();
 
@@ -259,10 +259,10 @@ void ImageButtonHdl::CreateB2dIAObject()
     maImageSize.setWidth( maImageSize.Width() >> 1 );
     maImageSize.setHeight( maImageSize.Height() >> 1 );
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;

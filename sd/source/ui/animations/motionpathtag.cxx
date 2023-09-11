@@ -278,10 +278,10 @@ void SdPathHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    if(!pHdlList)
+    if(!m_pHdlList)
         return;
 
-    SdrMarkView* pView = pHdlList->GetView();
+    SdrMarkView* pView = m_pHdlList->GetView();
 
     if(!pView || pView->areMarkHandlesHidden())
         return;

@@ -75,7 +75,7 @@ public:
 
 bool SwSdrHdl::IsFocusHdl() const
 {
-    if( SdrHdlKind::Anchor == eKind || SdrHdlKind::Anchor_TR == eKind )
+    if( SdrHdlKind::Anchor == m_eKind || SdrHdlKind::Anchor_TR == m_eKind )
         return true;
     return SdrHdl::IsFocusHdl();
 }
