@@ -21,6 +21,7 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
+#include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>

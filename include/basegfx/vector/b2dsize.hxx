@@ -23,7 +23,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {

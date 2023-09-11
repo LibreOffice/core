@@ -25,7 +25,6 @@
 
 #include <sal/types.h>
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/matrix/hommatrixtemplate.hxx>
 #include <array>
 
 namespace basegfx

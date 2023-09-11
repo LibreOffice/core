@@ -320,11 +320,6 @@ excludelist:
     include/vcl/mtfxmldump.hxx:
     # Full definition needed for o3tl::enumarray
     - vcl/metaactiontypes.hxx
-    include/vcl/outdevstate.hxx:
-    # Full definition needed for boost::optional
-    - vcl/mapmod.hxx
-    - tools/color.hxx
-    - tools/gen.hxx
     include/vcl/transfer.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/XTransferable2.hpp
@@ -394,11 +389,6 @@ excludelist:
     # Needed for macros
     - comphelper/servicehelper.hxx
     - comphelper/diagnose_ex.hxx
-    include/xmloff/attrlist.hxx:
-    # base class has to be a complete type
-    - com/sun/star/lang/XUnoTunnel.hpp
-    - com/sun/star/util/XCloneable.hpp
-    - com/sun/star/xml/sax/XAttributeList.hpp
     include/xmloff/unointerfacetouniqueidentifiermapper.hxx:
     # base class has to be a complete type
     - com/sun/star/uno/XInterface.hpp
@@ -557,35 +547,11 @@ excludelist:
     - com/sun/star/sdbcx/XDrop.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/beans/XPropertySet.hpp
-    include/connectivity/sdbcx/VCatalog.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sdbcx/XTablesSupplier.hpp
-    - com/sun/star/sdbcx/XViewsSupplier.hpp
-    - com/sun/star/sdbcx/XUsersSupplier.hpp
-    - com/sun/star/sdbcx/XGroupsSupplier.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
     include/connectivity/sdbcx/VColumn.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    include/connectivity/sdbcx/VGroup.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sdbcx/XAuthorizable.hpp
-    - com/sun/star/sdbcx/XUsersSupplier.hpp
-    include/connectivity/sdbcx/VIndex.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    include/connectivity/sdbcx/VKey.hxx:
-    # base class has to be a complete type
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
-    include/connectivity/sdbcx/VTypeDef.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sdbcx/XColumnsSupplier.hpp
     include/connectivity/sdbcx/VTable.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
@@ -596,11 +562,6 @@ excludelist:
     - com/sun/star/sdbcx/XIndexesSupplier.hpp
     - com/sun/star/sdbcx/XKeysSupplier.hpp
     - com/sun/star/sdbcx/XRename.hpp
-    include/connectivity/sdbcx/VUser.hxx:
-    # base class has to be a complete type
-    - com/sun/star/container/XNamed.hpp
-    - com/sun/star/sdbcx/XGroupsSupplier.hpp
-    - com/sun/star/sdbcx/XUser.hpp
     include/connectivity/sdbcx/VView.hxx:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
@@ -711,9 +672,6 @@ excludelist:
     include/sfx2/sidebar/Theme.hxx:
     # base class has to be a complete type
     - com/sun/star/beans/XPropertySet.hpp
-    include/sfx2/sidebar/UnoSidebar.hxx:
-    # base class has to be a complete type
-    - com/sun/star/ui/XSidebarProvider.hpp
     include/sfx2/viewsh.hxx:
     # Needed for macro 
     - class SfxViewFactory

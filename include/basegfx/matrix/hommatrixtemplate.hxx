@@ -22,9 +22,6 @@
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
 #include <cmath>
-#include <string.h>
-
-#include <memory>
 
 namespace basegfx::internal
     {

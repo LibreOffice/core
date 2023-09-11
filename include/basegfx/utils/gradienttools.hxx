@@ -26,13 +26,9 @@
 #include <basegfx/color/bcolor.hxx>
 #include <utility>
 #include <basegfx/basegfxdllapi.h>
-#include <vector>
-#include <com/sun/star/awt/ColorStopSequence.hdl>
 #include <basegfx/utils/bgradient.hxx>
 #include <osl/endian.h>
 
-namespace com { namespace sun { namespace star { namespace uno { class Any; } } } }
-namespace com { namespace sun { namespace star { namespace awt { struct Gradient2; } } } }
 namespace basegfx { class B2DRange; }
 
 namespace

@@ -23,8 +23,8 @@
 
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/point/b2ipoint.hxx>
-#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <basegfx/tuple/Size2D.hxx>
 
 namespace basegfx
 {

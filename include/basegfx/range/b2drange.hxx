@@ -25,7 +25,6 @@
 #include <basegfx/basegfxdllapi.h>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/range/Range2D.hxx>
 

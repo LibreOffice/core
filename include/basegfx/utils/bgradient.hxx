@@ -9,27 +9,12 @@
 
 #pragma once
 
-#include <config_options.h>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/basegfxdllapi.h>
 #include <vector>
 #include <com/sun/star/awt/GradientStyle.hpp>
 #include <tools/degree.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
-
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace uno
-{
-class Any;
-}
-}
-}
-}
 
 namespace basegfx
 {

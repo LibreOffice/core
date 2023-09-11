@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <basegfx/basegfxdllapi.h>
 #include <basegfx/range/basicrange.hxx>
 #include <basegfx/tuple/Tuple2D.hxx>
 

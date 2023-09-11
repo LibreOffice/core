@@ -24,6 +24,7 @@
 
 #include <canvas/canvastools.hxx>
 #include <cppcanvas/customsprite.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <comphelper/diagnose_ex.hxx>
 

@@ -23,6 +23,7 @@
 
 #include <drawinglayer/primitive2d/BufferedDecompositionGroupPrimitive2D.hxx>
 #include <basegfx/color/bcolor.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 namespace drawinglayer::primitive2d
 {

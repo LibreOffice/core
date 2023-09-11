@@ -23,7 +23,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <list>
 #include <utility>
-#include <algorithm>
 
 
 namespace basegfx

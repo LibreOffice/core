@@ -23,6 +23,7 @@
 #include <cppcanvas/customsprite.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>

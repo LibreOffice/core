@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b1drange.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/vector/b2dsize.hxx>
 
 #include "tests.hxx"
 #include <view.hxx>

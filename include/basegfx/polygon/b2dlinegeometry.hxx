@@ -24,7 +24,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <basegfx/basegfxdllapi.h>
-#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 
 namespace basegfx::utils
 {
