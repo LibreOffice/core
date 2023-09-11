@@ -630,8 +630,14 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents)
         {
             SolarMutexReleaser aReleaser;
 
+            // attempt to fix macos jenkins hangs - part 3
+            // oox::xls::WorkbookFragment::finalizeImport() calls
+            // AquaSalInstance::DoYield() with bWait set to true. But
+            // since unit tests generally have no expected user generated
+            // events, we can end up blocking and waiting forever so
+            // don't block and wait when running unit tests.
             pEvent = [NSApp nextEventMatchingMask: NSEventMaskAny
-                            untilDate: [NSDate distantFuture]
+                            untilDate: SalInstance::IsRunningUnitTest() ? [NSDate distantPast] : [NSDate distantFuture]
                             inMode: NSDefaultRunLoopMode
                             dequeue: YES];
             if( pEvent )
