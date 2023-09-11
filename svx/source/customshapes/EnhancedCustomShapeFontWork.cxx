@@ -230,6 +230,7 @@ static void CalculateHorizontalScalingFactor(
     ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
     pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
     pVirDev->SetFont( aFont );
+    pVirDev->SetAntialiasing( AntialiasingFlags::DisableText );
 
     if ( nOutlinesCount2d & 1 )
         bSingleLineMode = true;
@@ -343,6 +344,8 @@ static void GetTextAreaOutline(
             ScopedVclPtrInstance< VirtualDevice > pVirDev(DeviceFormat::WITHOUT_ALPHA);
             pVirDev->SetMapMode(MapMode(MapUnit::Map100thMM));
             pVirDev->SetFont( aFont );
+            pVirDev->SetAntialiasing( AntialiasingFlags::DisableText );
+
             pVirDev->EnableRTL();
             if ( rParagraph.nFrameDirection == SvxFrameDirection::Horizontal_RL_TB )
                 pVirDev->SetLayoutMode( vcl::text::ComplexTextLayoutFlags::BiDiRtl );
