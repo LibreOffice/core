@@ -95,7 +95,8 @@ namespace sw {
 }
 
 
-// ATT_FLD
+/// SfxPoolItem subclass that is a wrapper around an SwField, i.e. one inserted field into paragraph
+/// text. Typically owned by an SwTextField.
 class SW_DLLPUBLIC SwFormatField final
     : public SfxPoolItem
     , public sw::BroadcastingModify
