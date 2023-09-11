@@ -1477,7 +1477,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testScriptinfosurrogatePairs)
     // - Actual  : 11◌
     assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
     assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
-                u"\u25CC\U00010EFD");
+                u"\u25CC\U00010A01");
 
     // Without the fix this would crash because we got a lone surrogate that
     // can’t be converted to UTF-8, but if it were not for that it might fail
