@@ -39,12 +39,14 @@ public:
     void testCopySelectPaste();
     void testCutPaste();
     void testCutSelectPaste();
+    void testSelectSurrogatePairs();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopySelectPaste);
     CPPUNIT_TEST(testCutPaste);
     CPPUNIT_TEST(testCutSelectPaste);
+    CPPUNIT_TEST(testSelectSurrogatePairs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -169,6 +171,24 @@ void Test::testCutSelectPaste()
 
 #ifndef _WIN32 // FIXME: on Windows clipboard does not work in tests for some reason
     CPPUNIT_ASSERT_EQUAL(OUString("{ b + { c * {} } }"), xDocShRef->GetText());
+#endif
+}
+
+void Test::testSelectSurrogatePairs()
+{
+    auto xTree = SmParser5().Parse(u"\U0001EE4E");
+    xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
+
+    SmCursor aCursor(xTree.get(), xDocShRef.get());
+    ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
+
+    // selct the first character, cut, then paste
+    aCursor.Move(pOutputDevice, MoveRight, false);
+    aCursor.Cut();
+    aCursor.Paste();
+
+#ifndef _WIN32 // FIXME: on Windows clipboard does not work in tests for some reason
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001EE4E"), xDocShRef->GetText());
 #endif
 }
 

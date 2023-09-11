@@ -1040,8 +1040,11 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
 {
     SAL_WARN_IF( pNode->GetText().isEmpty(), "starmath", "Empty SmTextNode is bad" );
 
-    int size = pNode->GetText().getLength();
-    for( int i = 1; i <= size; i++ ){
+    OUString& aText = pNode->GetText();
+    sal_Int32 i = 0;
+    while (i < aText.getLength())
+    {
+        aText.iterateCodePoints(&i);
         SmCaretPosGraphEntry* pRight = mpRightMost;
         mpRightMost = mpGraph->Add( SmCaretPos( pNode, i ), pRight );
         pRight->SetRight( mpRightMost );
