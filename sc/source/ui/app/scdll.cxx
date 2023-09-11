@@ -210,6 +210,7 @@ void ScDLL::Init()
     ScFourierAnalysisDialogWrapper      ::RegisterChildWindow(false, pMod);
     sc::SparklineDialogWrapper          ::RegisterChildWindow(false, pMod);
     sc::SparklineDataRangeDialogWrapper ::RegisterChildWindow(false, pMod);
+    sc::ConditionalFormatEasyDialogWrapper          ::RegisterChildWindow(false, pMod);
 
     // Redlining Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);

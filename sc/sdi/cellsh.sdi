@@ -212,6 +212,15 @@ interface CellSelection
     SID_START_FORMULA                   [ ExecMethod = Execute; ]
     SID_TOGGLE_REL                      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_POPUP_CONDFRMT                  []
+    SID_POPUP_EASY_CONDITIONAL_FORMAT   []
+    SfxVoidItem ConditionalFormatEasy SID_EASY_CONDITIONAL_FORMAT_DIALOG
+    (
+        SfxInt16Item FormatRule FN_PARAM_1
+    )
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_COLUMN_OPERATIONS               [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_ROW_OPERATIONS                  [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_OPENDLG_CURRENTCONDFRMT         [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]

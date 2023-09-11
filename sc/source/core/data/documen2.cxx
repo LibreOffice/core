@@ -1172,6 +1172,11 @@ void ScDocument::SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam> pDat
     pConsolidateDlgData = std::move(pData);
 }
 
+void ScDocument::SetEasyConditionalFormatDialogData(std::unique_ptr<ScConditionMode> pMode)
+{
+    pConditionalFormatDialogMode = std::move(pMode);
+}
+
 void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
 {
     if (pChangeViewSettings==nullptr)

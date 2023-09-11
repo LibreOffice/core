@@ -719,6 +719,37 @@ SfxVoidItem ConditionalFormatMenu SID_POPUP_CONDFRMT
     GroupId = SfxGroupId::Format;
 ]
 
+SfxVoidItem ConditionalFormatConditionMenu SID_POPUP_EASY_CONDITIONAL_FORMAT
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    NoRecord;
+
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxVoidItem ConditionalFormatEasy SID_EASY_CONDITIONAL_FORMAT_DIALOG
+(SfxInt16Item FormatRule FN_PARAM_1)
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
 
 SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
 ()

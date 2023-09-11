@@ -48,6 +48,7 @@
 #include <markdata.hxx>
 #include <reffact.hxx>
 #include <condformatdlg.hxx>
+#include <condformateasydlg.hxx>
 #include <xmlsourcedlg.hxx>
 #include <condformatdlgitem.hxx>
 #include <formdata.hxx>
@@ -320,6 +321,11 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 aArgSet.Put( ScConsolidateItem( SCITEM_CONSOLIDATEDATA, pDlgData ) );
             }
             xResult = std::make_shared<ScConsolidateDlg>(pB, pCW, pParent, aArgSet);
+            break;
+        }
+        case SID_EASY_CONDITIONAL_FORMAT_DIALOG:
+        {
+            xResult = std::make_shared<sc::ConditionalFormatEasyDialog>(pB, pCW, pParent, &GetViewData());
             break;
         }
         case SID_FILTER:
