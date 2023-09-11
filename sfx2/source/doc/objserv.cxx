@@ -1016,6 +1016,17 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                      aDispatchArgs );
 
                 bool bForceSaveAs = nId == SID_SAVEDOC && IsReadOnlyMedium();
+
+                if (comphelper::LibreOfficeKit::isActive() && bForceSaveAs)
+                {
+                    // Don't force save as in LOK but report that file cannot be written
+                    // to avoid confusion with exporting for file download purpose
+
+                    throw task::ErrorCodeIOException(
+                        "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_CANTWRITE",
+                        uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_CANTWRITE));
+                }
+
                 const SfxSlot* pSlot = GetModule()->GetSlotPool()->GetSlot( bForceSaveAs ? SID_SAVEASDOC : nId );
                 if ( !pSlot )
                     throw uno::Exception("no slot", nullptr);
