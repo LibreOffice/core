@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_PARAMWRAPPER_HXX
 
-#include <config_options.h>
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/FValue.hxx>
 

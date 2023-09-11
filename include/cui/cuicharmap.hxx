@@ -31,9 +31,7 @@
 #include <cui/cuidllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#include <deque>
 #include <memory>
-#include <utility>
 
 using namespace ::com::sun::star;
 class SubsetMap;

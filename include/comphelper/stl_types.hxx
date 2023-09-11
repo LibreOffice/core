@@ -25,11 +25,8 @@
 #include <memory>
 #include <string_view>
 
-#include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/string_view.hxx>
-
-namespace com::sun::star::uno { template <typename > class Reference; }
 
 namespace comphelper
 {

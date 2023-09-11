@@ -31,6 +31,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 

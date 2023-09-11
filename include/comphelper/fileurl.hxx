@@ -23,7 +23,8 @@
 #include <sal/config.h>
 
 #include <comphelper/comphelperdllapi.h>
-#include <rtl/ustring.hxx>
+
+#include <string_view>
 
 namespace comphelper
 {

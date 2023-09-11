@@ -22,7 +22,6 @@
 
 #include <config_options.h>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/lang/XEventListener.hpp>

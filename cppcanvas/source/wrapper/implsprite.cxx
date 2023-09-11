@@ -21,6 +21,7 @@
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <canvas/canvastools.hxx>
+#include <osl/diagnose.h>
 #include <utility>
 
 #include "implsprite.hxx"

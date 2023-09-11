@@ -28,7 +28,6 @@
 #include <salhelper/thread.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <memory>
-#include <utility>
 
 namespace comphelper
 {

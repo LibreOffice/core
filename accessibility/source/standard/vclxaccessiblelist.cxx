@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>

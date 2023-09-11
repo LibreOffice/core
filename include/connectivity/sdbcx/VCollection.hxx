@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VCOLLECTION_HXX
 
-#include <config_options.h>
 #include <cppuhelper/implbase10.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

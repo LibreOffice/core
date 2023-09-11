@@ -45,6 +45,7 @@
 #include <svl/zformat.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <float.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/UnitConversion.hxx>
 

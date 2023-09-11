@@ -18,6 +18,7 @@
  */
 
 #include <standard/vclxaccessibletextfield.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

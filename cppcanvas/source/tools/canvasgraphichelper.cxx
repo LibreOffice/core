@@ -25,6 +25,7 @@
 #include <canvas/canvastools.hxx>
 #include <basegfx/utils/canvastools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <osl/diagnose.h>
 #include <utility>
 
 

@@ -22,6 +22,7 @@
 #include <cassert>
 
 #include <rtl/character.hxx>
+#include <rtl/ustring.hxx>
 #include <unicode/uchar.h>
 #include <comphelper/syntaxhighlight.hxx>
 #include <o3tl/typed_flags_set.hxx>

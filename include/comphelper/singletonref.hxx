@@ -20,7 +20,6 @@
 
 #include <sal/config.h>
 #include <osl/diagnose.h>
-#include <cstddef>
 #include <mutex>
 
 namespace comphelper

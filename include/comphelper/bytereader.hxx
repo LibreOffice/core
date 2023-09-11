@@ -10,7 +10,6 @@
 
 #include <sal/types.h>
 #include <comphelper/comphelperdllapi.h>
-#include <com/sun/star/uno/Sequence.hxx>
 
 namespace comphelper
 {

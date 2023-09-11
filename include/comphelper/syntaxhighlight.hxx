@@ -19,10 +19,9 @@
 #ifndef INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 #define INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 
-#include <rtl/ustring.hxx>
-
 #include <comphelper/comphelperdllapi.h>
 
+#include <string_view>
 #include <vector>
 #include <memory>
 

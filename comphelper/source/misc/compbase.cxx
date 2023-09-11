@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/compbase.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
