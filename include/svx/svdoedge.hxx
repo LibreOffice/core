@@ -42,14 +42,14 @@ class SdrObjConnection final
     friend class                ImpEdgeHdl;
     friend class                SdrCreateView;
 
-    Point                       aObjOfs;       // set during dragging of a node
-    SdrObject*                  pObj;          // referenced object
-    sal_uInt16                  nConId;        // connector number
+    Point                       m_aObjOfs;       // set during dragging of a node
+    SdrObject*                  m_pSdrObj;          // referenced object
+    sal_uInt16                  m_nConId;        // connector number
 
-    bool                        bBestConn : 1;   // true -> the best-matching connector is searched for
-    bool                        bBestVertex : 1; // true -> the best-matching vertex to connect is searched for
-    bool                        bAutoVertex : 1; // autoConnector at apex nCon
-    bool                        bAutoCorner : 1; // autoConnector at corner nCon
+    bool                        m_bBestConn : 1;   // true -> the best-matching connector is searched for
+    bool                        m_bBestVertex : 1; // true -> the best-matching vertex to connect is searched for
+    bool                        m_bAutoVertex : 1; // autoConnector at apex nCon
+    bool                        m_bAutoCorner : 1; // autoConnector at corner nCon
 
 public:
     SdrObjConnection() { ResetVars(); }
@@ -57,15 +57,15 @@ public:
     void ResetVars();
     bool TakeGluePoint(SdrGluePoint& rGP) const;
 
-    void SetBestConnection( bool rB ) { bBestConn = rB; };
-    void SetBestVertex( bool rB ) { bBestVertex = rB; };
-    void SetAutoVertex( bool rB ) { bAutoVertex = rB; };
-    void SetConnectorId( sal_uInt16 nId ) { nConId = nId; };
+    void SetBestConnection( bool rB ) { m_bBestConn = rB; };
+    void SetBestVertex( bool rB ) { m_bBestVertex = rB; };
+    void SetAutoVertex( bool rB ) { m_bAutoVertex = rB; };
+    void SetConnectorId( sal_uInt16 nId ) { m_nConId = nId; };
 
-    bool IsBestConnection() const { return bBestConn; };
-    bool IsAutoVertex() const { return bAutoVertex; };
-    sal_uInt16 GetConnectorId() const { return nConId; };
-    SdrObject* GetObject() const { return pObj; }
+    bool IsBestConnection() const { return m_bBestConn; };
+    bool IsAutoVertex() const { return m_bAutoVertex; };
+    sal_uInt16 GetConnectorId() const { return m_nConId; };
+    SdrObject* GetSdrObject() const { return m_pSdrObj; }
 };
 
 

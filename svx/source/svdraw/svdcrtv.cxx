@@ -267,7 +267,7 @@ bool SdrCreateView::CheckEdgeMode()
 
 void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon)
 {
-    SdrObject* pTargetObject = rCon.pObj;
+    SdrObject* pTargetObject = rCon.m_pSdrObj;
 
     if(pTargetObject)
     {

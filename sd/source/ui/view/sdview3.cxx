@@ -533,7 +533,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                             // test first connection
                                             SdrObjConnection& rConn0 = pOrigEdge->GetConnection(false);
-                                            SdrObject* pConnObj = rConn0.GetObject();
+                                            SdrObject* pConnObj = rConn0.GetSdrObject();
                                             if(pConnObj)
                                             {
                                                 SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);
@@ -565,7 +565,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                             // test second connection
                                             SdrObjConnection& rConn1 = pOrigEdge->GetConnection(true);
-                                            pConnObj = rConn1.GetObject();
+                                            pConnObj = rConn1.GetSdrObject();
                                             if(pConnObj)
                                             {
                                                 SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);

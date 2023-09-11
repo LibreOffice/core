@@ -607,14 +607,14 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     {
                         if(0 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(true).GetObject())
+                            if(pEdgeObj->GetConnection(true).GetSdrObject())
                             {
                                 bIsMoveOfConnectedHandle = true;
                             }
                         }
                         if(1 == pHdl->GetPointNum())
                         {
-                            if(pEdgeObj->GetConnection(false).GetObject())
+                            if(pEdgeObj->GetConnection(false).GetSdrObject())
                             {
                                 bIsMoveOfConnectedHandle = true;
                             }
