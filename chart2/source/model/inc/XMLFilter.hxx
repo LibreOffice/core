@@ -123,8 +123,6 @@ private:
     css::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
 
     OUString                                m_sDocumentHandler; // when set it will be set as doc handler
-
-    volatile bool                                  m_bCancelOperation;
     ::osl::Mutex                                   m_aMutex;
 };
 

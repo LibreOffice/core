@@ -186,8 +186,7 @@ namespace chart
 {
 
 XMLFilter::XMLFilter( Reference< uno::XComponentContext > const & xContext ) :
-        m_xContext( xContext ),
-        m_bCancelOperation( false )
+        m_xContext( xContext )
 {}
 
 XMLFilter::~XMLFilter()
@@ -200,11 +199,6 @@ sal_Bool SAL_CALL XMLFilter::filter(
     bool bResult = false;
 
     MutexGuard aGuard( m_aMutex );
-
-    // ignore cancel flag at start of function
-    // note: is currently ignored during import/export
-    if( m_bCancelOperation )
-        m_bCancelOperation = false;
 
     if( m_xSourceDoc.is())
     {
@@ -235,12 +229,6 @@ sal_Bool SAL_CALL XMLFilter::filter(
 
 void SAL_CALL XMLFilter::cancel()
 {
-    // if mutex is locked set "cancel state"
-    // note: is currently ignored in filter-method
-    if( ! m_aMutex.tryToAcquire())
-    {
-        m_bCancelOperation = true;
-    }
 }
 
 // ____ XImporter ____
