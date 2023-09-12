@@ -1902,7 +1902,7 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_PAR4:
         rAny <<= m_sName;
         break;
-    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file convertion.
+    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file conversion.
         rAny <<= m_sParentName;
         break;
     case FIELD_PROP_BOOL1:
@@ -1971,7 +1971,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     case FIELD_PROP_PAR4:
         rAny >>= m_sName;
         break;
-    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file convertion.
+    case FIELD_PROP_PAR7: // PAR5 (Parent Para Id) and PAR6 (Para Id) are skipped - they are not written into xml. Used for file conversion.
         rAny >>= m_sParentName;
         break;
     case FIELD_PROP_BOOL1:
