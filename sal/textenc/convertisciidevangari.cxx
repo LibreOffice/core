@@ -12,7 +12,6 @@
 #include <cassert>
 
 #include "converter.hxx"
-#include "unichars.hxx"
 #include "convertisciidevangari.hxx"
 #include "convertsinglebytetobmpunicode.hxx"
 

@@ -17,17 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "alloc_impl.hxx"
 #include <rtl/alloc.h>
 #include <sal/log.hxx>
-#include <sal/macros.h>
 
-#include <algorithm>
-#include <cassert>
-#include <string.h>
-#include <stdio.h>
-
-#include <rtllifecycle.h>
 #include <oslmemory.h>
 
 void* SAL_CALL rtl_allocateMemory(sal_Size n) SAL_THROW_EXTERN_C()

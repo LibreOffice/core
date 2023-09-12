@@ -22,20 +22,15 @@
 #include <cassert>
 #include <cstdlib>
 #include <limits>
-#include <stdexcept>
-#include <string>
 
 #include <config_options.h>
 #include <o3tl/intcmp.hxx>
-#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/mutex.h>
 #include <rtl/tencinfo.h>
 
-#include <string.h>
-#include <sal/alloca.h>
 #include <sal/log.hxx>
 
 #include "hash.hxx"

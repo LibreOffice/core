@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+
 #include <sal/log.hxx>
 #include <osl/module.h>
 #include <osl/module.hxx>

@@ -16,25 +16,20 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include <config_features.h>
 #include <config_folders.h>
 
 #include <rtl/bootstrap.h>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
-#include <osl/module.h>
 #include <osl/process.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/profile.hxx>
 #include <osl/security.hxx>
-#include <rtl/alloc.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
-#include <rtl/malformeduriexception.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <o3tl/lru_map.hxx>
 #include <o3tl/string_view.hxx>

@@ -28,7 +28,6 @@
 #include "converter.hxx"
 #include "convertiso2022jp.hxx"
 #include "tenchelp.hxx"
-#include "unichars.hxx"
 
 namespace {
 

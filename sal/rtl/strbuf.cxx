@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
-#include <osl/interlck.h>
-#include <rtl/strbuf.hxx>
-#include "strimp.hxx"
+#include <config_probes.h>
+#include <rtl/strbuf.h>
 
 #if USE_SDT_PROBES
 #define RTL_LOG_STRING_BITS 8

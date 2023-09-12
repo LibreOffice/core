@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <cstring>
 
 #include <rtl/tencinfo.h>

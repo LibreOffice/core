@@ -22,7 +22,6 @@
 #include <cassert>
 #include <cstdlib>
 
-#include <osl/interlck.h>
 #include <osl/diagnose.h>
 #include <rtl/tencinfo.h>
 

@@ -18,6 +18,12 @@ excludelist:
     sal/android/uthash.h:
     # needed for defines to work / somehow on Linux there is a warning about android-related file
     - string.h
+    sal/cppunittester/cppunittester.cxx:
+    # Actually used
+    - boost/algorithm/string.hpp
+    sal/emscripten/lo-bootstrap.c:
+    # Actually needed for lo_get_app_data_dir
+    - osl/detail/emscripten-bootstrap.h
     sal/qa/osl/security/osl_Security.cxx:
     # Needed on _WIN32
     - o3tl/char16_t2wchar_t.hxx
@@ -66,3 +72,28 @@ excludelist:
     sal/osl/unx/uunxapi.cxx:
     # Needed for macxp_resolveAlias on MACOSX
     - system.hxx
+    sal/rtl/bootstrap.cxx:
+    # Needed on MACOSX
+    - config_folders.h
+    sal/textenc/tables.cxx:
+    # Needed for the .tab files to work
+    - cstddef
+    - iterator
+    - rtl/tencinfo.h
+    # Needed for other .tab files to work
+    - tcvtjp1.tab
+    - tcvtjp2.tab
+    - tcvtjp3.tab
+    - tcvtjp4.tab
+    - tcvtjp5.tab
+    - tcvtkr1.tab
+    - tcvtkr2.tab
+    - tcvtkr4.tab
+    - tcvtkr5.tab
+    - tcvtscn1.tab
+    - tcvtscn2.tab
+    - tcvtscn3.tab
+    - tcvtscn4.tab
+    - tcvtscn5.tab
+    - tcvttcn1.tab
+    - tcvttcn2.tab

@@ -29,7 +29,6 @@
 #include "convertbig5hkscs.hxx"
 #include "converter.hxx"
 #include "tenchelp.hxx"
-#include "unichars.hxx"
 
 namespace {
 

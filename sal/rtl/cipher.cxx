@@ -19,14 +19,10 @@
 
 #include <string.h>
 
-#include <o3tl/safeint.hxx>
 #include <sal/types.h>
 #include <rtl/alloc.h>
 #include <rtl/cipher.h>
 #include <algorithm>
-#include <cassert>
-#include <cstring>
-#include <limits>
 
 #if defined LIBO_CIPHER_OPENSSL_BACKEND
 #include <openssl/evp.h>

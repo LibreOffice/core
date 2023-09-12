@@ -27,8 +27,6 @@
 
 #include "converter.hxx"
 #include "tcvtutf8.hxx"
-#include "tenchelp.hxx"
-#include "unichars.hxx"
 
 namespace {
 

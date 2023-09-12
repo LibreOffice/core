@@ -28,8 +28,6 @@
 #include "context.hxx"
 #include "converter.hxx"
 #include "converteuctw.hxx"
-#include "tenchelp.hxx"
-#include "unichars.hxx"
 
 namespace {
 

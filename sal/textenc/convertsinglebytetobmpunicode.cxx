@@ -29,7 +29,6 @@
 #include "context.hxx"
 #include "converter.hxx"
 #include "convertsinglebytetobmpunicode.hxx"
-#include "unichars.hxx"
 
 sal_Size rtl_textenc_convertSingleByteToBmpUnicode(
     void const * data, SAL_UNUSED_PARAMETER void *, char const * srcBuf,

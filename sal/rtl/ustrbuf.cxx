@@ -17,12 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <string.h>
-
 #include <osl/interlck.h>
-#include <osl/diagnose.h>
 #include <rtl/character.hxx>
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustrbuf.h>
 #include "strimp.hxx"
 
 #if USE_SDT_PROBES

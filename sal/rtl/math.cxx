@@ -19,7 +19,6 @@
 
 #include <rtl/math.h>
 
-#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
@@ -30,8 +29,6 @@
 #include <cmath>
 #include <float.h>
 #include <limits>
-#include <limits.h>
-#include <math.h>
 #include <memory>
 #include <stdlib.h>
 

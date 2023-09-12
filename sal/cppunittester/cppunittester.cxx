@@ -30,11 +30,9 @@
 #endif
 
 #ifdef UNX
-#include <sys/time.h>
 #include <sys/resource.h>
 #endif
 
-#include <stdlib.h>
 #include <cstdlib>
 #include <iostream>
 #include <string>
@@ -43,13 +41,11 @@
 #include <cppunittester/protectorfactory.hxx>
 #include <osl/module.h>
 #include <osl/module.hxx>
+#include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/character.hxx>
-#include <rtl/process.h>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/textcvt.h>
 #include <rtl/ustring.hxx>
 #include <sal/main.h>
 
@@ -64,7 +60,6 @@
 #include <cppunit/plugin/DynamicLibraryManagerException.h>
 #include <cppunit/portability/Stream.h>
 
-#include <memory>
 #include <boost/algorithm/string.hpp>
 
 #include <algorithm>

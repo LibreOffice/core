@@ -24,7 +24,6 @@
 #include "hash.hxx"
 #include "strimp.hxx"
 #include <osl/diagnose.h>
-#include <sal/macros.h>
 
 namespace {
 
