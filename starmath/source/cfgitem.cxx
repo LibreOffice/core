@@ -434,8 +434,6 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         if (pFntFmt)
             aFont = pFntFmt->GetFont();
     }
-    else
-        bOK = false;
     ++pValue;
 
     if (bOK)
