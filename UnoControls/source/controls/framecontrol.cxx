@@ -175,7 +175,25 @@ Reference< XControlModel > SAL_CALL FrameControl::getModel()
 
 void SAL_CALL FrameControl::dispose()
 {
-    impl_deleteFrame();
+    Reference< XFrame2 >  xOldFrame;
+    {
+        // do not dispose the frame in this guarded section (deadlock?)
+        MutexGuard aGuard( m_aMutex );
+        xOldFrame = std::move(m_xFrame);
+    }
+
+    // notify the listeners
+    sal_Int32 nFrameId = PropertyHandle::Frame;
+    Reference< XFrame2 >  xNullFrame;
+    Any aNewFrame( &xNullFrame, cppu::UnoType<XFrame2>::get());
+    Any aOldFrame( &xOldFrame, cppu::UnoType<XFrame2>::get());
+    fire( &nFrameId, &aNewFrame, &aOldFrame, 1, false );
+
+    // dispose the frame
+    if( xOldFrame.is() )
+        xOldFrame->dispose();
+
+    m_aConnectionPointContainer.clear();
     BaseControl::dispose();
 }
 
@@ -401,32 +419,6 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
         xOldFrame->dispose ();
     }
 }
-
-//  private method
-
-void FrameControl::impl_deleteFrame()
-{
-    Reference< XFrame2 >  xOldFrame;
-    Reference< XFrame2 >  xNullFrame;
-
-    {
-        // do not dispose the frame in this guarded section (deadlock?)
-        MutexGuard aGuard( m_aMutex );
-        xOldFrame = m_xFrame;
-        m_xFrame.clear();
-    }
-
-    // notify the listeners
-    sal_Int32 nFrameId = PropertyHandle::Frame;
-    Any aNewFrame( &xNullFrame, cppu::UnoType<XFrame2>::get());
-    Any aOldFrame( &xOldFrame, cppu::UnoType<XFrame2>::get());
-    fire( &nFrameId, &aNewFrame, &aOldFrame, 1, false );
-
-    // dispose the frame
-    if( xOldFrame.is() )
-        xOldFrame->dispose();
-}
-
 
 }   // namespace unocontrols
 

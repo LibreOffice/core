@@ -155,8 +155,6 @@ private:
                             const OUString&                                         sURL            ,
                             const css::uno::Sequence< css::beans::PropertyValue >&    seqArguments    );
 
-    void impl_deleteFrame();
-
     css::uno::Reference< css::frame::XFrame2 >              m_xFrame;
     OUString                                                m_sComponentURL;
     css::uno::Sequence< css::beans::PropertyValue >         m_seqLoaderArguments;

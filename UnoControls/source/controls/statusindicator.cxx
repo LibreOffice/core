@@ -288,6 +288,8 @@ void SAL_CALL StatusIndicator::dispose ()
     // when other hold a reference at this object !!!
     xTextControl->dispose();
     m_xProgressBar->dispose();
+    m_xProgressBar.clear();
+    m_xText.clear();
     BaseContainerControl::dispose();
 }
 

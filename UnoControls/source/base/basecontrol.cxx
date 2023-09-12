@@ -171,6 +171,7 @@ void SAL_CALL BaseControl::dispose()
     {
         // to all other paint, focus, etc.
         m_xMultiplexer->disposeAndClear();
+        m_xMultiplexer.clear();
     }
 
     // set the service manager to disposed
