@@ -138,9 +138,8 @@ sal_uInt16 SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvStream & rOutStm )
 {
     sal_uInt16 nCount = 0;
-    for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
+    for ( const auto& pAttr : rSlotList )
     {
-        SvMetaSlot *pAttr = rSlotList[ i ];
         nCount = nCount + pAttr->WriteSlotParamArray( rBase, rOutStm );
     }
 
@@ -169,18 +168,14 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uInt32>
                             const OString& rPrefix, SvIdlDataBase& rBase)
 {
     // was this class already written?
-    for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
-        if ( rClassList[ i ] == this )
-            return;
+    if ( std::find( rClassList.begin(), rClassList.end(), this ) != rClassList.end() )
+        return;
 
     rClassList.push_back( this );
 
     // write all direct attributes
-    size_t n;
-    for( n = 0; n < aAttrList.size(); n++ )
+    for( const auto& pAttr : aAttrList )
     {
-        SvMetaAttribute * pAttr = aAttrList[n];
-
         sal_uInt32 nId = pAttr->GetSlotId().GetValue();
 
         std::vector<sal_uInt32>::iterator iter = std::find(rSuperList.begin(),
@@ -204,9 +199,8 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uInt32>
 
     // Write all attributes of the imported classes, as long as they have
     // not already been imported by the superclass.
-    for( n = 0; n < aClassElementList.size(); n++ )
+    for( auto& rElement : aClassElementList )
     {
-        SvClassElement& rElement = aClassElementList[n];
         SvMetaClass * pCl = rElement.GetClass();
         OStringBuffer rPre(rPrefix.getLength() + 1 + rElement.GetPrefix().getLength());
         rPre.append(rPrefix);
@@ -226,26 +220,24 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uInt32>
     }
 }
 
-void SvMetaClass::FillClasses( SvMetaClassList & rList )
+void SvMetaClass::FillClasses( SvMetaClassList & rClassList )
 {
     // Am I not yet in?
-    for ( size_t i = 0, n = rList.size(); i < n; ++i )
-        if ( rList[ i ] == this )
-            return;
+    if ( std::find( rClassList.begin(), rClassList.end(), this ) != rClassList.end() )
+        return;
 
-    rList.push_back( this );
+    rClassList.push_back( this );
 
     // my imports
-    for( size_t n = 0; n < aClassElementList.size(); n++ )
+    for( auto& rElement : aClassElementList )
     {
-        SvClassElement& rElement = aClassElementList[n];
         SvMetaClass * pCl = rElement.GetClass();
-        pCl->FillClasses( rList );
+        pCl->FillClasses( rClassList );
     }
 
     // my superclass
     if( aSuperClass.is() )
-        aSuperClass->FillClasses( rList );
+        aSuperClass->FillClasses( rClassList );
 }
 
 
@@ -255,9 +247,8 @@ void SvMetaClass::WriteSlotStubs( std::string_view rShellName,
                                 SvStream & rOutStm )
 {
     // write all attributes
-    for ( size_t i = 0, n = rSlotList.size(); i < n; ++i )
+    for ( const auto& pAttr : rSlotList )
     {
-        SvMetaSlot *pAttr = rSlotList[ i ];
         pAttr->WriteSlotStubs( rShellName, rList, rOutStm );
     }
 }
@@ -334,9 +325,8 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
     rOutStm.WriteOString( "};" ) << endl;
     rOutStm.WriteOString( "#endif" ) << endl << endl;
 
-    for( size_t i = 0, n = aSlotList.size(); i < n; ++i )
+    for( auto& pAttr : aSlotList )
     {
-        SvMetaSlot* pAttr = aSlotList[ i ];
         pAttr->ResetSlotPointer();
     }
 

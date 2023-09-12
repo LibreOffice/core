@@ -80,7 +80,7 @@ public:
     virtual void            ReadContextSvIdl( SvIdlDataBase &,
                                      SvTokenStream & rInStm ) override;
 
-    void                    FillClasses( SvMetaClassList & rList );
+    void                    FillClasses( SvMetaClassList & rClassList );
 
     virtual void            WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm ) override;
 };
