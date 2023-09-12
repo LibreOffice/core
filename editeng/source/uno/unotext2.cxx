@@ -239,7 +239,10 @@ void SAL_CALL SvxUnoTextContent::dispose()
     }
 
     if( mxParentText.is() )
+    {
         mxParentText->removeTextContent( this );
+        mxParentText.clear();
+    }
 }
 
 void SAL_CALL SvxUnoTextContent::addEventListener( const uno::Reference< lang::XEventListener >& xListener )

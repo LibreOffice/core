@@ -163,6 +163,8 @@ namespace pcr
         m_xConnection.clear();
         m_xContext.clear();
         m_xORB.clear();
+        m_xDesigner.clear();
+        m_xObjectAdapter.clear();
     }
 
 

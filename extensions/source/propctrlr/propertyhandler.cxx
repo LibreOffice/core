@@ -242,7 +242,22 @@ namespace pcr
         return true;
     }
 
-    IMPLEMENT_FORWARD_XCOMPONENT( PropertyHandler, PropertyHandler_Base )
+    void SAL_CALL PropertyHandler::dispose(  )
+    {
+        PropertyHandler_Base::WeakComponentImplHelperBase::dispose();
+        m_xComponent.clear();
+        m_xComponentPropertyInfo.clear();
+        m_xTypeConverter.clear();
+    }
+    void SAL_CALL PropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    {
+        PropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
+    }
+    void SAL_CALL PropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    {
+        PropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
+    }
+
 
     void SAL_CALL PropertyHandler::disposing()
     {

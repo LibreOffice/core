@@ -650,6 +650,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextField::getAnchor()
 void SAL_CALL SvxUnoTextField::dispose()
 {
     OComponentHelper::dispose();
+    mxAnchor.clear();
 }
 
 void SAL_CALL SvxUnoTextField::addEventListener( const uno::Reference< lang::XEventListener >& xListener )

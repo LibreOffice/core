@@ -605,7 +605,22 @@ namespace pcr
             // at this handler instance
     }
 
-    IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
+    void SAL_CALL GenericPropertyHandler::dispose(  )
+    {
+        GenericPropertyHandler_Base::WeakComponentImplHelperBase::dispose();
+        m_xComponentIntrospectionAccess.clear();
+        m_xComponent.clear();
+        m_xTypeConverter.clear();
+        m_xPropertyState.clear();
+    }
+    void SAL_CALL GenericPropertyHandler::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    {
+        GenericPropertyHandler_Base::WeakComponentImplHelperBase::addEventListener( Listener );
+    }
+    void SAL_CALL GenericPropertyHandler::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
+    {
+        GenericPropertyHandler_Base::WeakComponentImplHelperBase::removeEventListener( Listener );
+    }
 
 }   // namespace pcr
 

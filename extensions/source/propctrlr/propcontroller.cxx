@@ -490,6 +490,9 @@ namespace pcr
 
         m_aInspectedObjects.clear();
         impl_bindToNewModel_nothrow( nullptr );
+        m_xModel.clear();
+        m_xInteractiveHandler.clear();
+        m_xFrame.clear();
     }
 
     void SAL_CALL OPropertyBrowserController::addEventListener( const Reference< XEventListener >& _rxListener )

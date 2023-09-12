@@ -228,12 +228,15 @@ void BibFrameController_Impl::dispose()
 
     if (xFrame.is())
         xFrame->removeFrameActionListener( m_xImpl );
+    m_xFrame.clear();
 
     aObject.Source = static_cast<XController*>(this);
     m_xImpl->aLC.disposeAndClear(aObject);
     m_xDatMan.clear();
     m_aStatusListeners.clear();
     m_xLastQueriedFocusWin.clear();
+    m_xWindow.clear();
+    m_xImpl.clear();
 }
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )

@@ -289,6 +289,15 @@ void OleEmbeddedObject::Dispose()
     }
 
     m_xParentStorage.clear();
+    m_xClientSite.clear();
+    m_xClosePreventer.clear();
+    m_xNewCachedVisRepl.clear();
+    m_xNewParentStorage.clear();
+    m_xNewObjectStream.clear();
+    m_xCachedVisualRepresentation.clear();
+    m_xWrappedObject.clear();
+    m_xParent.clear();
+    m_pOleComponent.clear();
 
     m_bDisposed = true;
 }
