@@ -287,6 +287,7 @@ void AccessibleBrowseBoxAccess::dispose()
         m_xContext->dispose();
         m_xContext.clear();
     }
+    m_xParent.clear();
 }
 
 
