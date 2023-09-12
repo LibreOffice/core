@@ -161,13 +161,13 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         // Let's figure out what is really going on here
         {
                 fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
-                for ( int i = 0; i < nGPR; ++i )
+                for ( sal_uInt32 i = 0; i < nGPR; ++i )
                         fprintf( stderr, "0x%lx, ", pGPR[i] );
                 fprintf( stderr, "\nFPR's (%d): ", nFPR );
-                for ( int i = 0; i < nFPR; ++i )
-                        fprintf( stderr, "0x%lx (%f), ", pFPR[i], pFPR[i] );
+                for ( sal_uInt32 i = 0; i < nFPR; ++i )
+                        fprintf( stderr, "0x%lx (%lf), ", (sal_Int64)pFPR[i], pFPR[i] );
                 fprintf( stderr, "\nStack (%d): ", nStack );
-                for ( int i = 0; i < nStack; ++i )
+                for ( sal_uInt32 i = 0; i < nStack; ++i )
                         fprintf( stderr, "0x%lx, ", pStack[i] );
                 fprintf( stderr, "\n" );
         }
@@ -294,6 +294,10 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
+#if OSL_DEBUG_LEVEL > 2
+    fprintf( stderr, "= cpp_call() =\n" );
+#endif
+
       // max space for: [complex ret ptr], values|ptr ...
       sal_uInt64 * pStack = (sal_uInt64 *)alloca( (nParams+3) * sizeof(sal_Int64) );
       sal_uInt64 * pStackStart = pStack;
@@ -333,7 +337,7 @@ static void cpp_call(
             pCppReturn = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
                    ? alloca( pReturnTypeDescr->nSize ) : pUnoReturn);
 #if OSL_DEBUG_LEVEL > 2
-            fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
+            fprintf(stderr, "pCppReturn/pUnoReturn is %p/%p\n", pCppReturn, pUnoReturn);
 #endif
             INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
         }
@@ -378,7 +382,7 @@ static void cpp_call(
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
 #if OSL_DEBUG_LEVEL > 2
-                                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
+                                fprintf(stderr, "hyper is 0x%lx\n", *(sal_Int64 *)pCppArgs[nPos]);
 #endif
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
@@ -386,7 +390,7 @@ static void cpp_call(
                         case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
 #if OSL_DEBUG_LEVEL > 2
-                                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
+                                fprintf(stderr, "long is 0x%x\n", *(sal_Int32 *)pCppArgs[nPos]);
 #endif
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
@@ -448,7 +452,7 @@ static void cpp_call(
                         else // direct way
                         {
 #if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "that one, passing %lx through\n", pUnoArgs[nPos]);
+                fprintf(stderr, "that one, passing %p through\n", pUnoArgs[nPos]);
 #endif
                                 pCppArgs[nPos] = pUnoArgs[nPos];
                                 // no longer needed
