@@ -3492,7 +3492,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XCellSeries \
 	XColorScaleEntry \
 	XCompatibilityNames \
-	XConditionEntry \
 	XConditionalFormat \
 	XConditionalFormats \
 	XConditionEntry \
