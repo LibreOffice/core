@@ -865,7 +865,12 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
             for (const auto& pTable : maTabs)
             {
                 if (pTable)
+                {
                     pTable->SetStreamValid( false );
+                    // tdf#156815 Reset solver settings so next time they're loaded they come with
+                    // the updated sheet name
+                    pTable->ResetSolverSettings();
+                }
             }
 
             if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())

@@ -147,7 +147,7 @@ public:
                                        bool bCut, bool bRecord, bool bPaint, bool bApi );
 
     SC_DLLPUBLIC bool InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
-    bool            RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
+    SC_DLLPUBLIC bool RenameTable( SCTAB nTab, const OUString& rName, bool bRecord, bool bApi );
     bool            DeleteTable( SCTAB nTab, bool bRecord );
 
     bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );

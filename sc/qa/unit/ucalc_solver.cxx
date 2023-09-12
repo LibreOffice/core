@@ -10,6 +10,7 @@
 #include <sal/config.h>
 #include "helper/qahelper.hxx"
 #include <document.hxx>
+#include <docfunc.hxx>
 #include <table.hxx>
 #include <SolverSettings.hxx>
 
@@ -128,6 +129,38 @@ CPPUNIT_TEST_FIXTURE(SolverTest, testSingleModel)
     // Test if the constraints remain correct after saving
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pSettings->GetParameter(SP_CONSTR_COUNT).toInt32());
     TestConstraintsModelA(pSettings.get());
+}
+
+// Tests if references remain valid after a sheet is renamed
+CPPUNIT_TEST_FIXTURE(SolverTest, tdf156815)
+{
+    createScDoc("ods/tdf156815.ods");
+    ScDocument* pDoc = getScDoc();
+    ScTable* pTable = pDoc->FetchTable(0);
+    std::shared_ptr<sc::SolverSettings> pSettings = pTable->GetSolverSettings();
+    CPPUNIT_ASSERT(pSettings);
+
+    // Check current values in the solver model
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$1"), pSettings->GetParameter(SP_OBJ_CELL));
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$3:$B$3"), pSettings->GetParameter(SP_VAR_CELLS));
+
+    std::vector<ModelConstraint> aConstraints = pSettings->GetConstraints();
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$A$2"), aConstraints[0].aLeftStr);
+    CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$B$2"), aConstraints[0].aRightStr);
+
+    // Rename Sheet2 to NewName
+    ScDocFunc& rDocFunc = getScDocShell()->GetDocFunc();
+    rDocFunc.RenameTable(1, "NewName", false, true);
+
+    // Check whether the ranges where updated
+    pSettings = pTable->GetSolverSettings();
+    CPPUNIT_ASSERT(pSettings);
+    CPPUNIT_ASSERT_EQUAL(OUString("$NewName.$A$1"), pSettings->GetParameter(SP_OBJ_CELL));
+    CPPUNIT_ASSERT_EQUAL(OUString("$NewName.$A$3:$B$3"), pSettings->GetParameter(SP_VAR_CELLS));
+
+    aConstraints = pSettings->GetConstraints();
+    CPPUNIT_ASSERT_EQUAL(OUString("$NewName.$A$2"), aConstraints[0].aLeftStr);
+    CPPUNIT_ASSERT_EQUAL(OUString("$NewName.$B$2"), aConstraints[0].aRightStr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -451,6 +451,10 @@ public:
 
     SC_DLLPUBLIC std::shared_ptr<sc::SolverSettings> GetSolverSettings();
 
+    // tdf#156815 Sets the solver settings object to nullptr to force reloading Solver settings the
+    // next time the dialog is opened. This is required when sheets are renamed
+    void ResetSolverSettings() { m_pSolverSettings.reset(); }
+
     /**
      * Takes ownership of pCell
      *
