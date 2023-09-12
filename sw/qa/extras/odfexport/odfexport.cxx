@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMathObjectFlatExport)
 
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(!xModifiable->isModified());
-    // see preTest(), set the OLE cache to 1 for this test
+    // see above, set the OLE cache to 1 for this test
     // and the problem was that the formulas that were in the cache
     // (the second one) were lost
     OUString formula1(getFormula(getRun(getParagraph(1), 1)));
