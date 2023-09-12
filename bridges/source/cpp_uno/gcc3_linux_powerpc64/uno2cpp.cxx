@@ -257,6 +257,14 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
 #define INSERT_INT64( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
+                pGPR[nr++] = *reinterpret_cast<sal_Int64 *>( pSV ); \
+        else \
+        bOverflow = true; \
+    if (bOverflow) \
+                *pDS++ = *reinterpret_cast<sal_Int64 *>( pSV );
+
+#define INSERT_UINT64( pSV, nr, pGPR, pDS, bOverflow ) \
+        if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
         else \
         bOverflow = true; \
@@ -264,6 +272,14 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                 *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
 
 #define INSERT_INT32( pSV, nr, pGPR, pDS, bOverflow ) \
+        if ( nr < ppc64::MAX_GPR_REGS ) \
+                pGPR[nr++] = *reinterpret_cast<sal_Int32 *>( pSV ); \
+        else \
+                bOverflow = true; \
+        if (bOverflow) \
+                *pDS++ = *reinterpret_cast<sal_Int32 *>( pSV );
+
+#define INSERT_UINT32( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
         else \
@@ -273,6 +289,14 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
 #define INSERT_INT16( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
+                pGPR[nr++] = *reinterpret_cast<sal_Int16 *>( pSV ); \
+        else \
+                bOverflow = true; \
+        if (bOverflow) \
+                *pDS++ = *reinterpret_cast<sal_Int16 *>( pSV );
+
+#define INSERT_UINT16( pSV, nr, pGPR, pDS, bOverflow ) \
+        if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
         else \
                 bOverflow = true; \
@@ -280,6 +304,14 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                 *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
 
 #define INSERT_INT8( pSV, nr, pGPR, pDS, bOverflow ) \
+        if ( nr < ppc64::MAX_GPR_REGS ) \
+                pGPR[nr++] = *reinterpret_cast<sal_Int8 *>( pSV ); \
+        else \
+                bOverflow = true; \
+        if (bOverflow) \
+                *pDS++ = *reinterpret_cast<sal_Int8 *>( pSV );
+
+#define INSERT_UINT8( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < ppc64::MAX_GPR_REGS ) \
                 pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
         else \
@@ -335,7 +367,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
             fprintf(stderr, "pCppReturn/pUnoReturn is %lx/%lx", pCppReturn, pUnoReturn);
 #endif
-            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
+            INSERT_UINT64( &pCppReturn, nGPR, pGPR, pStack, bOverflow );
         }
     }
     // push "this" pointer
@@ -343,7 +375,7 @@ static void cpp_call(
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "this pointer is %p\n", pAdjustedThisPtr);
 #endif
-    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverflow );
+    INSERT_UINT64( &pAdjustedThisPtr, nGPR, pGPR, pStack, bOverflow );
 
         // Args
         void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
@@ -376,26 +408,40 @@ static void cpp_call(
                 switch (pParamTypeDescr->eTypeClass)
                         {
                         case typelib_TypeClass_HYPER:
-                        case typelib_TypeClass_UNSIGNED_HYPER:
 #if OSL_DEBUG_LEVEL > 2
                                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
+                        case typelib_TypeClass_UNSIGNED_HYPER:
+#if OSL_DEBUG_LEVEL > 2
+                                fprintf(stderr, "uhyper is 0x%lx\n", *(sal_Int64 *)pCppArgs[nPos]);
+#endif
+                                INSERT_UINT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
+                                break;
                         case typelib_TypeClass_LONG:
-                        case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
 #if OSL_DEBUG_LEVEL > 2
                                 fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
+                        case typelib_TypeClass_UNSIGNED_LONG:
+#if OSL_DEBUG_LEVEL > 2
+                                fprintf(stderr, "ulong is 0x%x\n", *(sal_Int32 *)pCppArgs[nPos]);
+#endif
+                                INSERT_UINT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
+                                break;
                         case typelib_TypeClass_SHORT:
-                        case typelib_TypeClass_CHAR:
-                        case typelib_TypeClass_UNSIGNED_SHORT:
                                 INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
+                        case typelib_TypeClass_CHAR:
+                        case typelib_TypeClass_UNSIGNED_SHORT:
+                                INSERT_UINT16( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
+                                break;
                         case typelib_TypeClass_BOOLEAN:
+                                INSERT_UINT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
+                                break;
                         case typelib_TypeClass_BYTE:
                                 INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
@@ -454,7 +500,7 @@ static void cpp_call(
                                 // no longer needed
                                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
                         }
-                        INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack, bOverflow );
+                        INSERT_UINT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack, bOverflow );
         }
     }
 
