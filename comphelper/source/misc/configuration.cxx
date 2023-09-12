@@ -295,6 +295,7 @@ void comphelper::ConfigurationListener::dispose()
         listener->dispose();
     }
     maListeners.clear();
+    mxConfig.clear();
     mbDisposed = true;
 }
 

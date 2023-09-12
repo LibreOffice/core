@@ -101,7 +101,10 @@ void OSelectionChangeMultiplexer::dispose()
     {
         Reference< XSelectionChangeListener> xPreventDelete(this);
         if(m_xSet.is())
+        {
             m_xSet->removeSelectionChangeListener(xPreventDelete);
+            m_xSet.clear();
+        }
     }
     osl_atomic_decrement(&m_refCount);
 }

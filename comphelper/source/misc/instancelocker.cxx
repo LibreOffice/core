@@ -216,6 +216,7 @@ void OLockListener::Dispose()
         return;
 
     auto xInstance = std::move(m_xInstance);
+    auto xApproval = std::move(m_xApproval);
     auto nMode = m_nMode;
     m_bDisposed = true;
     aGuard.unlock();
