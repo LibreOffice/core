@@ -24,11 +24,13 @@ class BitmapExTest : public CppUnit::TestFixture
     void testGetPixelColor24_8();
     void testGetPixelColor32();
     void testTransformBitmapEx();
+    void testAlphaBlendWith();
 
     CPPUNIT_TEST_SUITE(BitmapExTest);
     CPPUNIT_TEST(testGetPixelColor24_8);
     CPPUNIT_TEST(testGetPixelColor32);
     CPPUNIT_TEST(testTransformBitmapEx);
+    CPPUNIT_TEST(testAlphaBlendWith);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -104,6 +106,65 @@ void BitmapExTest::testTransformBitmapEx()
             CPPUNIT_ASSERT_MESSAGE(ss.str(), aColor == COL_WHITE || aColor == COL_BLACK);
         }
     }
+}
+
+void BitmapExTest::testAlphaBlendWith()
+{
+    AlphaMask alpha(Size(1, 1));
+    AlphaMask bitmap(Size(1, 1));
+
+    // Just test a handful of combinations to make sure the algorithm doesn't
+    // change (as happened when I did some 32-bit alpha changes)
+
+    // Note that Erase() takes a transparency value, but we get alpha values in GetPixelIndex.
+
+    alpha.Erase(64);
+    bitmap.Erase(64);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 112),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(12);
+    bitmap.Erase(64);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 73),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(12);
+    bitmap.Erase(12);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 24),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(127);
+    bitmap.Erase(13);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 134),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(255);
+    bitmap.Erase(255);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(0);
+    bitmap.Erase(255);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(255);
+    bitmap.Erase(0);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 255),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+
+    alpha.Erase(0);
+    bitmap.Erase(0);
+    alpha.BlendWith(bitmap);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 0),
+                         AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
 }
 
 } // namespace
