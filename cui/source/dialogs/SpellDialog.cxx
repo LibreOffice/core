@@ -1705,6 +1705,8 @@ void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_Int32 nStart, sal_Int32 nEnd, 
     if (!bCurrentSelectionInRange)
     {
         m_xEditView->SetSelection(ESelection(0, nStart));
+        // tdf#157148 ensure current location is auto-scrolled to be visible
+        m_xEditView->ShowCursor();
     }
 
     Invalidate();
