@@ -434,6 +434,9 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     //Save data here and restore when out of scope
     ExportDataSaveRestore aDataGuard(GetExport(), nStt, nEnd, pParentFrame);
 
+    // Stash away info about the current table, so m_tableReference is clean.
+    DocxTableExportContext aTableExportContext(*this);
+
     // set a floatingTableFrame AND unset parent frame,
     // otherwise exporter thinks we are still in a frame
     m_rExport.SetFloatingTableFrame(pParentFrame);
@@ -515,7 +518,7 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
 
     // look ahead for floating tables that were put into a frame during import
     // floating tables in shapes are not supported: exclude this case
-    if (!pTextNodeInfo && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
+    if (!m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
     {
         checkAndWriteFloatingTables(*this);
     }

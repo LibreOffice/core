@@ -158,6 +158,23 @@ DECLARE_OOXMLEXPORT_TEST(testWpsOnly, "wps-only.docx")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(getShape(2), "Opaque"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedDOCXExport)
+{
+    // Given a document with nested floating tables:
+    createSwDoc("floattable-nested.odt");
+
+    // When exporting to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure both floating table is exported:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the inner floating table was lost.
+    assertXPath(pXmlDoc, "//w:tblpPr", 2);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
