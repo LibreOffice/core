@@ -45,6 +45,12 @@
         <value>true</value>
       </prop>
     </node>
+    <!-- SID_CMDBOXWINDOW -->
+    <node oor:name="smath/30378" oor:op="replace">
+      <prop oor:name="Visible" oor:type="xs:boolean">
+        <value>false</value>
+      </prop>
+    </node>
     <node oor:name="swriter/10336" oor:op="replace">
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value>true</value>

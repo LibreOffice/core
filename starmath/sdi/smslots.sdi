@@ -265,8 +265,8 @@ interface FormulaView
     //idlpp no menu entry, so no texts
     SID_CMDBOXWINDOW //idlpp ole : no , status : no
     [
-        ExecMethod = NoExec ;
-        StateMethod = NoState ;
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_ELEMENTSDOCKINGWINDOW
     [

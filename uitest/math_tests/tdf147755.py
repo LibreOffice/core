@@ -22,11 +22,13 @@ class Tdf147755(UITestCase):
                 xOk = xDialog.getChild("ok")
                 xOk.executeAction("CLICK", tuple())
 
+            self.xUITest.executeCommand(".uno:CommandWindow")
             xMathDoc = self.xUITest.getTopFocusWindow()
             xEditView = xMathDoc.getChild("editview")
 
             # Without the fix in place, this test would have failed with
             # AssertionError: '%ALPHA' != ''
             self.assertEqual("%ALPHA", get_state_as_dict(xEditView)["Text"])
+            self.xUITest.executeCommand(".uno:CommandWindow")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

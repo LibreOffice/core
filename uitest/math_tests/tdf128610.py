@@ -20,6 +20,7 @@ class Tdf128610(UITestCase):
 
         with self.ui_test.load_empty_file("math"):
 
+            self.xUITest.executeCommand(".uno:CommandWindow")
             self.xUITest.executeCommand('.uno:ImportMathMLClipboard')
 
             xMathDoc = self.xUITest.getTopFocusWindow()
@@ -28,5 +29,6 @@ class Tdf128610(UITestCase):
             # Without the fix in place, this test would have failed with
             # AssertionError: '{ f _ c = frac { 1 } { K _ m } }' != ''
             self.assertEqual("{ f _ c = { frac { 1 } { K _ m } } }", get_state_as_dict(xEditView)["Text"])
+            self.xUITest.executeCommand(".uno:CommandWindow")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

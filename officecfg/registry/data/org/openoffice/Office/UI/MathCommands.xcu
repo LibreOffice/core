@@ -128,6 +128,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:CommandWindow" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Command Window</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ElementsDockingWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Elements</value>

@@ -2039,6 +2039,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
         break;
 
+        case SID_CMDBOXWINDOW:
+        {
+            GetViewFrame().ToggleChildWindow(SID_CMDBOXWINDOW);
+            GetViewFrame().GetBindings().Invalidate(SID_CMDBOXWINDOW);
+        }
+        break;
+
         case SID_UNICODE_NOTATION_TOGGLE:
         {
             EditEngine* pEditEngine = nullptr;
@@ -2200,6 +2207,15 @@ void SmViewShell::GetState(SfxItemSet &rSet)
                 const bool bState = sfx2::sidebar::Sidebar::IsPanelVisible(
                     u"MathElementsPanel", GetViewFrame().GetFrame().GetFrameInterface());
                 rSet.Put(SfxBoolItem(SID_ELEMENTSDOCKINGWINDOW, bState));
+            }
+            break;
+        case SID_CMDBOXWINDOW:
+            {
+                bool bState = false;
+                auto pCmdWin = GetViewFrame().GetChildWindow(SID_CMDBOXWINDOW);
+                if (pCmdWin)
+                    bState = pCmdWin->IsVisible();
+                rSet.Put(SfxBoolItem(SID_CMDBOXWINDOW, bState));
             }
             break;
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
