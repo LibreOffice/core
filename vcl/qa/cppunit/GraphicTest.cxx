@@ -1294,6 +1294,18 @@ CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf156016)
     CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
 }
 
+CPPUNIT_TEST_FIXTURE(GraphicTest, testTdf149545)
+{
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0x0(Error Area:Io Class:NONE Code:0)
+    // - Actual  : 0x8203(Error Area:Vcl Class:General Code:3)
+    Graphic aGraphic = loadGraphic(u"tdf149545.svg");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    const auto[scalingX, scalingY] = getDPIScaling();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
+}
+
 CPPUNIT_TEST_FIXTURE(GraphicTest, testAvailableThreaded)
 {
     Graphic jpgGraphic1 = importUnloadedGraphic(u"TypeDetectionExample.jpg");
