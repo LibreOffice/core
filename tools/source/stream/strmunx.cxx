@@ -321,10 +321,7 @@ bool SvFileStream::LockFile()
 
     if( !lockFile( this ) )
     {
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "InternalLock on %s failed\n",
-                 OUStringToOString(aFilename, osl_getThreadTextEncoding()).getStr() );
-#endif
+        SAL_WARN("tools.stream", "InternalLock on " << aFilename << "failed");
         return false;
     }
 
@@ -403,14 +400,9 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nOpenMode )
                 if (osl::File::remove( aFileURL ) == osl::FileBase::E_None )
                 {
                     File::copy( aStatus.getLinkTargetURL(), aFileURL );
-#if OSL_DEBUG_LEVEL > 0
-                    fprintf( stderr,
-                             "Removing link and replacing with file contents (%s) -> (%s).\n",
-                             OUStringToOString( aStatus.getLinkTargetURL(),
-                                                     RTL_TEXTENCODING_UTF8).getStr(),
-                             OUStringToOString( aFileURL,
-                                                     RTL_TEXTENCODING_UTF8).getStr() );
-#endif
+                    SAL_INFO("tools.stream",
+                        "Removing link and replacing with file contents (" <<
+                        aStatus.getLinkTargetURL() << ") -> (" << aFileURL << ").");
                 }
             }
         }
