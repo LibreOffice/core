@@ -46,6 +46,7 @@ struct SpellErrorDescription;
 class SentenceEditWindow_Impl : public WeldEditView
 {
 private:
+    std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::set<sal_Int32> m_aIgnoreErrorsAt;
     SpellDialog*        m_pSpellDialog;
     weld::Toolbar*      m_pToolbar;
@@ -61,14 +62,20 @@ private:
 
     bool GetErrorDescription(SpellErrorDescription& rSpellErrorDescription, sal_Int32 nPosition);
 
+    DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
+    DECL_LINK(EditStatusHdl, EditStatus&, void);
     DECL_LINK(ToolbarHdl, const OUString&, void);
+
+    void DoScroll();
+    void SetScrollBarRange();
 
 protected:
     virtual bool    KeyInput( const KeyEvent& rKEvt ) override;
 
 public:
-    SentenceEditWindow_Impl();
+    SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
+    virtual void EditViewScrollStateChange() override;
     void SetSpellDialog(SpellDialog* pDialog) { m_pSpellDialog = pDialog; }
     virtual ~SentenceEditWindow_Impl() override;
 
