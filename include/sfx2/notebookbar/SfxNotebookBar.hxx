@@ -77,6 +77,8 @@ private:
     static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
         m_pNotebookBarWeldedWrapper;
 
+    static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
+
     DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };
 
