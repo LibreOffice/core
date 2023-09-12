@@ -112,12 +112,12 @@ public:
 class SdrEdgeObjGeoData final : public SdrTextObjGeoData
 {
 public:
-    SdrObjConnection            aCon1;  // connection status of the beginning of the line
-    SdrObjConnection            aCon2;  // connection status of the end of the line
-    std::optional<XPolygon>     pEdgeTrack;
-    bool                        bEdgeTrackDirty; // true -> connector track needs to be recalculated
-    bool                        bEdgeTrackUserDefined;
-    SdrEdgeInfoRec              aEdgeInfo;
+    SdrObjConnection            m_aCon1;  // connection status of the beginning of the line
+    SdrObjConnection            m_aCon2;  // connection status of the end of the line
+    std::optional<XPolygon>     m_pEdgeTrack;
+    bool                        m_bEdgeTrackDirty; // true -> connector track needs to be recalculated
+    bool                        m_bEdgeTrackUserDefined;
+    SdrEdgeInfoRec              m_aEdgeInfo;
 
 public:
     SdrEdgeObjGeoData();

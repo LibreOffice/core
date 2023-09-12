@@ -2478,9 +2478,9 @@ void SdrEdgeObj::NbcSetPoint(const Point& rPnt, sal_uInt32 i)
 }
 
 SdrEdgeObjGeoData::SdrEdgeObjGeoData()
-    : pEdgeTrack(std::in_place)
-    , bEdgeTrackDirty(false)
-    , bEdgeTrackUserDefined(false)
+    : m_pEdgeTrack(std::in_place)
+    , m_bEdgeTrackDirty(false)
+    , m_bEdgeTrackUserDefined(false)
 {
 }
 
@@ -2497,38 +2497,38 @@ void SdrEdgeObj::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData(rGeo);
     SdrEdgeObjGeoData& rEGeo=static_cast<SdrEdgeObjGeoData&>(rGeo);
-    rEGeo.aCon1          =m_aCon1;
-    rEGeo.aCon2          =m_aCon2;
-    *rEGeo.pEdgeTrack    =*m_pEdgeTrack;
-    rEGeo.bEdgeTrackDirty=m_bEdgeTrackDirty;
-    rEGeo.bEdgeTrackUserDefined=m_bEdgeTrackUserDefined;
-    rEGeo.aEdgeInfo      =m_aEdgeInfo;
+    rEGeo.m_aCon1          =m_aCon1;
+    rEGeo.m_aCon2          =m_aCon2;
+    *rEGeo.m_pEdgeTrack    =*m_pEdgeTrack;
+    rEGeo.m_bEdgeTrackDirty=m_bEdgeTrackDirty;
+    rEGeo.m_bEdgeTrackUserDefined=m_bEdgeTrackUserDefined;
+    rEGeo.m_aEdgeInfo      =m_aEdgeInfo;
 }
 
 void SdrEdgeObj::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestoreGeoData(rGeo);
     const SdrEdgeObjGeoData& rEGeo=static_cast<const SdrEdgeObjGeoData&>(rGeo);
-    if (m_aCon1.m_pSdrObj!=rEGeo.aCon1.m_pSdrObj) {
+    if (m_aCon1.m_pSdrObj!=rEGeo.m_aCon1.m_pSdrObj) {
         if (m_aCon1.m_pSdrObj!=nullptr) m_aCon1.m_pSdrObj->RemoveListener(*this);
-        m_aCon1=rEGeo.aCon1;
+        m_aCon1=rEGeo.m_aCon1;
         if (m_aCon1.m_pSdrObj!=nullptr) m_aCon1.m_pSdrObj->AddListener(*this);
     }
     else
-        m_aCon1=rEGeo.aCon1;
+        m_aCon1=rEGeo.m_aCon1;
 
-    if (m_aCon2.m_pSdrObj!=rEGeo.aCon2.m_pSdrObj) {
+    if (m_aCon2.m_pSdrObj!=rEGeo.m_aCon2.m_pSdrObj) {
         if (m_aCon2.m_pSdrObj!=nullptr) m_aCon2.m_pSdrObj->RemoveListener(*this);
-        m_aCon2=rEGeo.aCon2;
+        m_aCon2=rEGeo.m_aCon2;
         if (m_aCon2.m_pSdrObj!=nullptr) m_aCon2.m_pSdrObj->AddListener(*this);
     }
     else
-        m_aCon2=rEGeo.aCon2;
+        m_aCon2=rEGeo.m_aCon2;
 
-    *m_pEdgeTrack    =*rEGeo.pEdgeTrack;
-    m_bEdgeTrackDirty=rEGeo.bEdgeTrackDirty;
-    m_bEdgeTrackUserDefined=rEGeo.bEdgeTrackUserDefined;
-    m_aEdgeInfo      =rEGeo.aEdgeInfo;
+    *m_pEdgeTrack    =*rEGeo.m_pEdgeTrack;
+    m_bEdgeTrackDirty=rEGeo.m_bEdgeTrackDirty;
+    m_bEdgeTrackUserDefined=rEGeo.m_bEdgeTrackUserDefined;
+    m_aEdgeInfo      =rEGeo.m_aEdgeInfo;
 }
 
 Point SdrEdgeObj::GetTailPoint( bool bTail ) const
