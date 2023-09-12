@@ -1427,6 +1427,11 @@ MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
 
 void MetaTextLineAction::Execute( OutputDevice* pOut )
 {
+    if (mnWidth < 0)
+    {
+        SAL_WARN("vcl", "skipping line with negative width: " << mnWidth);
+        return;
+    }
     pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
