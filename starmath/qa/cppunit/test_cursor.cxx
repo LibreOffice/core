@@ -182,7 +182,7 @@ void Test::testSelectSurrogatePairs()
     SmCursor aCursor(xTree.get(), xDocShRef.get());
     ScopedVclPtrInstance<VirtualDevice> pOutputDevice;
 
-    // selct the first character, cut, then paste
+    // select the first character, cut, then paste
     aCursor.Move(pOutputDevice, MoveRight, false);
     aCursor.Cut();
     aCursor.Paste();
