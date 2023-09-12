@@ -1853,6 +1853,11 @@ void ODatabaseDocument::disposing()
 void SAL_CALL ODatabaseDocument::dispose(  )
 {
     ::cppu::WeakComponentImplHelperBase::dispose();
+    m_xTitleHelper.clear();
+    m_xModuleManager.clear();
+    m_pEventExecutor.clear();
+    m_xCurrentController.clear();
+    m_xUIConfigurationManager.clear();
 }
 
 void SAL_CALL ODatabaseDocument::addEventListener( const Reference< lang::XEventListener >& _xListener )

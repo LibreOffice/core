@@ -1165,6 +1165,11 @@ void SAL_CALL OGenericUnoController::dispose()
 {
     SolarMutexGuard aSolarGuard;
     OGenericUnoController_Base::dispose();
+    m_xUrlTransformer.clear();
+    m_xSlaveDispatcher.clear();
+    m_xMasterDispatcher.clear();
+    m_xDatabaseContext.clear();
+    m_xTitleHelper.clear();
 }
 
 weld::Window* OGenericUnoController::getFrameWeld() const

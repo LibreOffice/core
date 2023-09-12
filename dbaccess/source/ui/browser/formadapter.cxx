@@ -1273,6 +1273,8 @@ void SAL_CALL SbaXFormAdapter::dispose()
             xComp->dispose();
     }
     m_aChildren.clear();
+    m_xMainForm.clear();
+    m_xParent.clear();
 }
 
 void SAL_CALL SbaXFormAdapter::addEventListener(const Reference< css::lang::XEventListener >& xListener)

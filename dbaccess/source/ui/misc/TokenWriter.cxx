@@ -136,6 +136,7 @@ void ODatabaseImportExport::dispose()
     m_xRow.clear();
     m_xRowLocate.clear();
     m_xFormatter.clear();
+    m_xRowSetColumns.clear();
 }
 
 void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source )
