@@ -86,6 +86,7 @@ private:
     void testLoadWEBP();
     void testLoadSVGZ();
 
+    void testTdf149545();
     void testAvailableThreaded();
     void testColorChangeToTransparent();
 
@@ -126,6 +127,7 @@ private:
     CPPUNIT_TEST(testLoadWEBP);
     CPPUNIT_TEST(testLoadSVGZ);
 
+    CPPUNIT_TEST(testTdf149545);
     CPPUNIT_TEST(testAvailableThreaded);
     CPPUNIT_TEST(testColorChangeToTransparent);
 
@@ -1329,6 +1331,18 @@ void GraphicTest::testLoadWEBP()
 void GraphicTest::testLoadSVGZ()
 {
     Graphic aGraphic = loadGraphic(u"TypeDetectionExample.svgz");
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
+    const auto[scalingX, scalingY] = getDPIScaling();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingY), aGraphic.GetSizePixel().Height());
+}
+
+void GraphicTest::testTdf149545()
+{
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0x0(Error Area:Io Class:NONE Code:0)
+    // - Actual  : 0x8203(Error Area:Vcl Class:General Code:3)
+    Graphic aGraphic = loadGraphic(u"tdf149545.svg");
     CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, aGraphic.GetType());
     const auto[scalingX, scalingY] = getDPIScaling();
     CPPUNIT_ASSERT_EQUAL(tools::Long(100 * scalingX), aGraphic.GetSizePixel().Width());

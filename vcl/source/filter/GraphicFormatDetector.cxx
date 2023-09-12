@@ -31,7 +31,7 @@
 #include <vcl/outdev.hxx>
 #include <utility>
 
-constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
+constexpr sal_uInt32 SVG_CHECK_SIZE = 8192;
 constexpr sal_uInt32 WMF_EMF_CHECK_SIZE = 44;
 
 namespace
