@@ -279,7 +279,7 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     mnCol = -1;
 
     aModel.mfHeight       = rAttribs.getDouble( XML_ht, -1.0 );
-    aModel.mnXfId         = rAttribs.getInteger( XML_s, -1 );
+    aModel.mnXfId = rAttribs.getInteger(XML_s, 0); // default style index is 0
     aModel.mnLevel        = rAttribs.getInteger( XML_outlineLevel, 0 );
     aModel.mbCustomHeight = rAttribs.getBool( XML_customHeight, false );
     aModel.mbCustomFormat = rAttribs.getBool( XML_customFormat, false );
