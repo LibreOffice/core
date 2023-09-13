@@ -1057,8 +1057,6 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     }
     else if (TOX_ILLUSTRATIONS == aCurType.eType || TOX_TABLES == aCurType.eType)
     {
-        m_xFromObjectNamesRB->set_active(rDesc.IsCreateFromObjectNames());
-        m_xFromCaptionsRB->set_active(!rDesc.IsCreateFromObjectNames());
         OUString sName(rDesc.GetSequenceName());
         int nIndex = m_xCaptionSequenceLB->find_text(sName);
         if (nIndex != -1)
@@ -1066,6 +1064,8 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
         m_xDisplayTypeLB->set_active(static_cast<sal_Int32>(rDesc.GetCaptionDisplay()));
         if (m_xDisplayTypeLB->get_active() == -1)
             m_xDisplayTypeLB->set_active(0);
+        m_xFromObjectNamesRB->set_active(rDesc.IsCreateFromObjectNames());
+        m_xFromCaptionsRB->set_active(!rDesc.IsCreateFromObjectNames());
         RadioButtonHdl(*m_xFromCaptionsRB);
     }
     else if(TOX_OBJECTS == aCurType.eType)
