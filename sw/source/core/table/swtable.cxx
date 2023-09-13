@@ -2262,7 +2262,7 @@ bool SwTableBox::IsEmpty( bool bWithRemainingNestedTable ) const
 
         // tdf#157011 OOXML w:std cell content is imported with terminating 0x01 characters,
         // i.e. an empty box can contain double 0x01: handle it to avoid losing change tracking
-        // FIXME regression since LibreOffice 7.3?
+        // FIXME regression since commit b5c616d10bff3213840d4893d13b4493de71fa56
         if ( pCNd && pCNd->Len() == 2 && pCNd->GetTextNode() )
         {
             const OUString &rText = pCNd->GetTextNode()->GetText();
