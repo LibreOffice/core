@@ -10,20 +10,9 @@
 $(eval $(call gb_ExternalProject_ExternalProject,curl))
 
 $(eval $(call gb_ExternalProject_use_externals,curl,\
+	$(if $(ENABLE_OPENSSL),openssl) \
 	zlib \
 ))
-
-ifeq ($(TLS),NSS)
-$(eval $(call gb_ExternalProject_use_externals,curl,\
-	nss3 \
-))
-else
-ifeq ($(TLS),OPENSSL)
-$(eval $(call gb_ExternalProject_use_externals,curl,\
-	openssl \
-))
-endif
-endif
 
 $(eval $(call gb_ExternalProject_register_targets,curl,\
 	build \
@@ -41,18 +30,14 @@ curl_LDFLAGS += -L$(SYSBASE)/usr/lib
 endif
 endif
 
-# there are 2 include paths, the other one is passed to --with-nss below
-ifeq ($(SYSTEM_NSS),)
-curl_CPPFLAGS += -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss
-endif
-
 # use --with-secure-transport on macOS >10.5 and iOS to get a native UI for SSL certs for CMIS usage
-# use --with-nss/--with-openssl only on platforms other than macOS and iOS
+# use --with-openssl only on platforms other than macOS and iOS
 $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_Trace_StartRange,curl,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(gb_RUN_CONFIGURE) ./configure \
-			--without-nss --without-openssl --without-gnutls --without-mbedtls \
+			--without-amissl --without-bearssl --without-gnutls \
+			--without-mbedtls --without-rustls --without-wolfssl \
 			--enable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-nghttp2 \
@@ -66,8 +51,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--disable-tftp  \
 			$(if $(filter iOS MACOSX,$(OS)),\
 				--with-secure-transport,\
-				$(if $(filter NSS,$(TLS)),--with-nss$(if $(SYSTEM_NSS),,="$(call gb_UnpackedTarball_get_dir,nss)/dist/out") --with-nss-deprecated)) \
-				$(if $(filter OPENSSL,$(TLS)),--with-openssl$(if $(SYSTEM_OPENSSL),,="$(call gb_UnpackedTarball_get_dir,openssl)")) \
+				$(if $(ENABLE_OPENSSL),--with-openssl$(if $(SYSTEM_OPENSSL),,="$(call gb_UnpackedTarball_get_dir,openssl)"))) \
 			$(if $(filter LINUX,$(OS)),--without-ca-bundle --without-ca-path) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
