@@ -40,6 +40,7 @@
 #include <memory>
 #include <set>
 
+class RepaintInIdle;
 class ScFormulaCell;
 class ScTokenArray;
 struct ScRefCellValue;
@@ -442,6 +443,8 @@ private:
     };
 
     mutable std::unique_ptr<ScConditionEntryCache> mpCache;
+
+    std::unique_ptr<RepaintInIdle> mpRepaintTask;
 };
 
 //  single condition entry for conditional formatting
@@ -603,6 +606,23 @@ public:
 
     // Forced recalculation for formulas
     void CalcAll();
+};
+
+class RepaintInIdle final : public Idle
+{
+    ScConditionalFormat* mpCondFormat;
+
+public:
+    RepaintInIdle(ScConditionalFormat* pCondFormat)
+    : Idle("Contitional Format Repaint Idle")
+    , mpCondFormat(pCondFormat)
+    {}
+
+    void Invoke() override
+    {
+        if (mpCondFormat)
+            mpCondFormat->DoRepaint();
+    }
 };
 
 struct CompareScConditionalFormat

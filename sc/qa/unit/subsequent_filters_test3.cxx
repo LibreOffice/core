@@ -19,6 +19,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <vcl/scheduler.hxx>
 #include <editeng/borderline.hxx>
 #include <editeng/lineitem.hxx>
 #include <dbdata.hxx>
@@ -419,6 +420,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testCondFormatFormulaListenerXLSX)
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 2.0);
 
+    Scheduler::ProcessEventsToIdle();
+
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
 
@@ -438,6 +441,8 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf131471)
     CPPUNIT_ASSERT(pFormat);
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 1.0);
+
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
