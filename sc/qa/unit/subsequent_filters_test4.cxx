@@ -26,6 +26,8 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <dbdata.hxx>
 #include <dbdocfun.hxx>
 #include <inputopt.hxx>
@@ -69,19 +71,19 @@ using namespace ::com::sun::star::uno;
 class ScFiltersTest4 : public ScModelTestBase
 {
 public:
-    ScFiltersTest4();
+    ScFiltersTest4()
+        : ScModelTestBase("sc/qa/unit/data")
+    {
+    }
 
 protected:
-    void testImportCrash(const char* rFileName);
+    void testImportCrash(const char* rFileName)
+    {
+        createScDoc(rFileName);
+        ScDocument* pDoc = getScDoc();
+        pDoc->CalcAll(); // perform hard re-calculation.
+    }
 };
-
-void ScFiltersTest4::testImportCrash(const char* rFileName)
-{
-    createScDoc(rFileName);
-
-    ScDocument* pDoc = getScDoc();
-    pDoc->CalcAll(); // perform hard re-calculation.
-}
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testPasswordNew)
 {
@@ -1944,9 +1946,32 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf142905)
     CPPUNIT_ASSERT_EQUAL(OUString("     3M   "), pDoc->GetString(2, 0, 0));
 }
 
-ScFiltersTest4::ScFiltersTest4()
-    : ScModelTestBase("sc/qa/unit/data")
+CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testRowImportCellStyleIssue)
 {
+    // Test checks that the correct cell style is imported for the first 6 rows and then the rest of the rows.
+    // Row 1 to 6 have no background color, after that light2 (background2) theme color.
+
+    createScDoc("xlsx/RowImportCellStyleIssue.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Check cell A6 - should have no background color set
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, 5, 0); // A6
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(false, rBackground.isUsed());
+    }
+
+    // Check cell A7 - should have light2 (background2) theme color set
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, 6, 0); // A7
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(true, rBackground.isUsed());
+        CPPUNIT_ASSERT_EQUAL(Color(0xe7e6e6), rBackground.GetColor());
+        auto const& rComplexColor = rBackground.getComplexColor();
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light2, rComplexColor.getThemeColorType());
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
