@@ -1061,30 +1061,26 @@ Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
     if (TextFrameIndex(1) == rInf.GetLen()
         && CH_TXT_ATR_FIELDSTART == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
-        assert(!"this is presumably dead code");
+        SAL_WARN("sw", "this is meant to be dead code");
         TextFrameIndex const nOldIdx(rInf.GetIdx());
         TextFrameIndex const nOldLen(rInf.GetLen());
+        OUString aOldText(rInf.GetText());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDSTART);
-        rInf.SetText( aNewText );
-        rInf.SetIdx( TextFrameIndex(0) );
-        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+        rInf.SetTextIdxLen(aNewText, TextFrameIndex(0), TextFrameIndex(aNewText.getLength()));
         aTextSize = pLastFont->GetTextSize( rInf );
-        rInf.SetIdx( nOldIdx );
-        rInf.SetLen( nOldLen );
+        rInf.SetTextIdxLen(aOldText, nOldIdx, nOldLen);
     }
     else if (TextFrameIndex(1) == rInf.GetLen()
             && CH_TXT_ATR_FIELDEND == rInf.GetText()[sal_Int32(rInf.GetIdx())])
     {
-        assert(!"this is presumably dead code");
+        SAL_WARN("sw", "this is meant to be dead code");
         TextFrameIndex const nOldIdx(rInf.GetIdx());
         TextFrameIndex const nOldLen(rInf.GetLen());
+        OUString aOldText(rInf.GetText());
         const OUString aNewText(CH_TXT_ATR_SUBST_FIELDEND);
-        rInf.SetText( aNewText );
-        rInf.SetIdx( TextFrameIndex(0) );
-        rInf.SetLen( TextFrameIndex(aNewText.getLength()) );
+        rInf.SetTextIdxLen(aNewText, TextFrameIndex(0), TextFrameIndex(aNewText.getLength()));
         aTextSize = pLastFont->GetTextSize( rInf );
-        rInf.SetIdx( nOldIdx );
-        rInf.SetLen( nOldLen );
+        rInf.SetTextIdxLen(aOldText, nOldIdx, nOldLen);
     }
 
     return aTextSize;
