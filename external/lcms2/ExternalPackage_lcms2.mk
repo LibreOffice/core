@@ -14,15 +14,11 @@ $(eval $(call gb_ExternalPackage_use_external_project,lcms2,lcms2))
 ifeq ($(DISABLE_DYNLOADING),)
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.2.dylib,src/.libs/liblcms2.2.dylib))
-else ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2-2.dll,src/.libs/liblcms2-2.dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/lcms2.dll,bin/lcms2.dll))
-endif # $(COM)
-else  # $(OS) != WNT/MACOSX
-$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.12))
-endif # $(OS)
+else
+$(eval $(call gb_ExternalPackage_add_file,lcms2,$(LIBO_LIB_FOLDER)/liblcms2.so.2,src/.libs/liblcms2.so.2.0.15))
+endif
 endif # $(DISABLE_DYNLOADING)
 
 # vim: set noet sw=4 ts=4:
