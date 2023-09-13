@@ -96,7 +96,7 @@ static bool Decompress(SvStream* pCompressed, SvStream*& pOutDecompressed)
     LwpSvStream aLwpStream(pCompressed);
     std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
     {
-        sal_uInt8 ulRet = BenOpenContainer(&aLwpStream, &pBentoContainer);
+        BenError ulRet = BenOpenContainer(&aLwpStream, &pBentoContainer);
         if (ulRet != BenErr_OK)
             return false;
     }

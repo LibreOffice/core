@@ -71,7 +71,7 @@ const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 *   @param  pointer to pointer of Bento Container object
 *   @return error code
 */
-sal_uInt8 BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer)
+BenError BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer)
 {
     *ppContainer = nullptr;
 

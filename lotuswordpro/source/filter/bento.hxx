@@ -135,7 +135,7 @@ typedef sal_uInt32 BenContainerPos;
 typedef sal_uInt32 BenObjectID;
 typedef sal_uInt32 BenGeneration;
 
-sal_uInt8 BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer);
+BenError BenOpenContainer(LwpSvStream * pStream, std::unique_ptr<LtcBenContainer>* ppContainer);
 
 class CBenIDListElmt : public CUtListElmt
 {
