@@ -133,6 +133,33 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHiddenAnchor)
     // hidden.
     CPPUNIT_ASSERT(!bCharHidden);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNested)
+{
+    // Given a document with nested, multi-page floating tables:
+    // When loading that document:
+    loadFromURL(u"floattable-nested.docx");
+
+    // Then make sure that both floating tables are allowed to split:
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), xFrames->getCount());
+    // Outer frame:
+    uno::Reference<beans::XPropertySet> xFrame1;
+    xFrames->getByIndex(0) >>= xFrame1;
+    bool bIsSplitAllowed = false;
+    xFrame1->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    CPPUNIT_ASSERT(bIsSplitAllowed);
+    // Inner frame:
+    uno::Reference<beans::XPropertySet> xFrame2;
+    xFrames->getByIndex(1) >>= xFrame2;
+    bIsSplitAllowed = false;
+    xFrame2->getPropertyValue("IsSplitAllowed") >>= bIsSplitAllowed;
+    // Without the accompanying fix in place, this test would have failed, the inner frame could not
+    // split.
+    CPPUNIT_ASSERT(bIsSplitAllowed);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

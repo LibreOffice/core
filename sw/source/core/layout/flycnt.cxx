@@ -1611,10 +1611,11 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
                 }
             }
 
-            if (bLeftFly && pFlyAnchor && pFlyAnchor->IsInFly()
-                && FindFlyFrame() == pLayLeaf->FindFlyFrame())
+            if (bLeftFly && pFlyAnchor && pFlyAnchor->IsInTab()
+                && FindTabFrame() == pLayLeaf->FindTabFrame())
             {
-                // This is an inner fly, then the follow anchor will be just next to us.
+                // This is an inner fly (parent is an inline or a floating table), then the follow
+                // anchor will be just next to us.
                 SwLayoutFrame* pFlyAnchorUpper = pFlyAnchor->GetUpper();
                 pOldLayLeaf = pLayLeaf;
                 pLayLeaf = pFlyAnchorUpper;
