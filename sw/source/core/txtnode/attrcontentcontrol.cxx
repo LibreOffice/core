@@ -219,6 +219,7 @@ SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
     SetId(pOther->m_nId);
     SetTabIndex(pOther->m_nTabIndex);
     SetLock(pOther->m_aLock);
+    SetMultiLine(pOther->m_aMultiLine);
 }
 
 SwContentControl::~SwContentControl() {}
@@ -604,6 +605,8 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(OString::number(m_nTabIndex).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("lock"),
                                       BAD_CAST(m_aLock.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("multiline"),
+                                      BAD_CAST(m_aMultiLine.toUtf8().getStr()));
 
     if (!m_aListItems.empty())
     {

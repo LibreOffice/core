@@ -636,7 +636,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtCompanyMultipara)
     // Here is just a simple text node, so there should be either one or zero paragraph
     // (in this case sdt element is inside paragraph)
     assertXPath(pXmlDoc, "//w:sdtContent/w:p", 0);
-    assertXPath(pXmlDoc, "//w:sdtContent/w:r", 1);
+    assertXPath(pXmlDoc, "//w:sdtContent/w:r", 2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")

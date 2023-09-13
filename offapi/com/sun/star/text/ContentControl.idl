@@ -147,6 +147,12 @@ service ContentControl
         @since LibreOffice 7.6
     */
     [optional, property] string Lock;
+
+    /** Indicates if the control accepts soft breaks.
+
+        @since LibreOffice 24.2
+    */
+    [optional, property] string MultiLine;
 };
 
 

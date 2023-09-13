@@ -82,6 +82,7 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
     : m_rDM_Impl(rDM_Impl)
     , m_xComponentContext(std::move(xContext))
     , m_aControlType(SdtControlType::unknown)
+    , m_bHasUnusedText(false)
     , m_bHasElements(false)
     , m_bOutsideAParagraph(false)
     , m_bPropertiesXMLsLoaded(false)
@@ -333,31 +334,101 @@ void SdtHelper::createPlainTextControl()
 {
     assert(getControlType() == SdtControlType::plainText);
 
-    OUString aDefaultText = m_aSdtTexts.makeStringAndClear();
+    if (!m_xFieldStartRange.is())
+        return;
 
-    // create field
-    uno::Reference<css::text::XTextField> xControlModel(
-        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.TextField.Input"),
-        uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> xCrsr;
+    uno::Reference<text::XText> xText;
+    if (m_rDM_Impl.HasTopText())
+    {
+        uno::Reference<text::XTextAppend> xTextAppend = m_rDM_Impl.GetTopTextAppend();
+        if (xTextAppend.is())
+        {
+            xText = m_rDM_Impl.GetTopTextAppend()->getEnd()->getText();
+            xCrsr = xText->createTextCursorByRange(m_xFieldStartRange);
+        }
+    }
+    if (!xCrsr.is())
+        return;
 
-    // set properties
-    uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
+    try
+    {
+        bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
+                              != (m_rDM_Impl.m_nTableDepth > 0)
+                          && m_rDM_Impl.GetIsDummyParaAddedForTableInSection();
+        if (bIsInTable)
+            xCrsr->goRight(1, false);
+        xCrsr->gotoEnd(true);
+    }
+    catch (uno::Exception&)
+    {
+        OSL_ENSURE(false, "Cannot get the right text range for text control");
+        return;
+    }
 
     std::optional<OUString> oData = getValueFromDataBinding();
     if (oData.has_value())
-        aDefaultText = *oData;
+        xCrsr->setString(*oData);
 
-    xPropertySet->setPropertyValue("Content", uno::Any(aDefaultText));
+    uno::Reference<text::XTextContent> xContentControl(
+        m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.text.ContentControl"),
+        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
 
-    PropertyMap aMap;
-    aMap.InsertProps(m_rDM_Impl.GetTopContext());
+    for (const beans::PropertyValue& prop : getInteropGrabBagAndClear())
+    {
+        OUString sPropertyName;
+        if (prop.Name == "ooxml:CT_SdtPr_showingPlcHdr")
+            sPropertyName = "ShowingPlaceHolder";
+        else if (prop.Name == "ooxml:CT_SdtPr_alias")
+            sPropertyName = "Alias";
+        else if (prop.Name == "ooxml:CT_SdtPr_tag")
+            sPropertyName = "Tag";
+        else if (prop.Name == "ooxml:CT_SdtPr_id")
+            sPropertyName = "Id";
+        else if (prop.Name == "ooxml:CT_SdtPr_tabIndex")
+            sPropertyName = "TabIndex";
+        else if (prop.Name == "ooxml:CT_SdtPr_lock")
+            sPropertyName = "Lock";
+        else if (prop.Name == "ooxml:CT_SdtPlaceholder_docPart"
+                 || prop.Name == "ooxml:CT_SdtPr_dataBinding" || prop.Name == "ooxml:CT_SdtPr_color"
+                 || prop.Name == "ooxml:CT_SdtPr_appearance" || prop.Name == "ooxml:CT_SdtPr_text")
+        {
+            uno::Sequence<beans::PropertyValue> aInternalGrabBag;
+            prop.Value >>= aInternalGrabBag;
+            for (const beans::PropertyValue& internalProp : aInternalGrabBag)
+            {
+                if (internalProp.Name == "ooxml:CT_SdtPlaceholder_docPart_val")
+                    sPropertyName = "PlaceholderDocPart";
+                else if (internalProp.Name == "ooxml:CT_DataBinding_prefixMappings")
+                    sPropertyName = "DataBindingPrefixMappings";
+                else if (internalProp.Name == "ooxml:CT_DataBinding_xpath")
+                    sPropertyName = "DataBindingXpath";
+                else if (internalProp.Name == "ooxml:CT_DataBinding_storeItemID")
+                    sPropertyName = "DataBindingStoreItemID";
+                else if (internalProp.Name == "ooxml:CT_SdtAppearance_val")
+                    sPropertyName = "Appearance";
+                else if (internalProp.Name == "ooxml:CT_SdtColor_val")
+                    sPropertyName = "Color";
+                else if (internalProp.Name == "ooxml:CT_SdtText_multiLine")
+                    sPropertyName = "MultiLine";
+                if (!sPropertyName.isEmpty())
+                {
+                    xContentControlProps->setPropertyValue(sPropertyName, internalProp.Value);
+                }
+                sPropertyName.clear();
+            }
+        }
 
-    // add it into document
-    m_rDM_Impl.appendTextContent(xControlModel, aMap.GetPropertyValues());
+        if (!sPropertyName.isEmpty())
+        {
+            xContentControlProps->setPropertyValue(sPropertyName, prop.Value);
+        }
+    }
 
-    // Store all unused sdt parameters from grabbag
-    xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
-                                   uno::Any(getInteropGrabBagAndClear()));
+    xContentControlProps->setPropertyValue("PlainText", uno::Any(true));
+
+    xText->insertTextContent(xCrsr, xContentControl, /*bAbsorb=*/true);
 
     // clean up
     clear();
@@ -365,7 +436,7 @@ void SdtHelper::createPlainTextControl()
 
 void SdtHelper::createDateContentControl()
 {
-    if (!m_xDateFieldStartRange.is())
+    if (!m_xFieldStartRange.is())
         return;
 
     uno::Reference<text::XTextCursor> xCrsr;
@@ -382,7 +453,7 @@ void SdtHelper::createDateContentControl()
 
     try
     {
-        xCrsr->gotoRange(m_xDateFieldStartRange, false);
+        xCrsr->gotoRange(m_xFieldStartRange, false);
         // tdf#138093: Date selector reset, if placed inside table
         // Modified to XOR relationship and adding dummy paragraph conditions
         bool bIsInTable = (m_rDM_Impl.hasTableManager() && m_rDM_Impl.getTableManager().isInTable())
@@ -518,6 +589,7 @@ void SdtHelper::clear()
     m_sDataBindingXPath.clear();
     m_sDataBindingStoreItemID.clear();
     m_aGrabBag.clear();
+    m_bHasUnusedText = false;
     m_bShowingPlcHdr = false;
     m_bChecked = false;
     m_aCheckedState.clear();

@@ -741,28 +741,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
 {
-    if (isExported())
-    {
-        // Block SDT is turned into run SDT on export, so the next import will have this as content
-        // control, not as a field.
-        OUString aActual = getParagraph(1)->getString();
-        // This was "itadmin".
-        CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), aActual);
-    }
-    else
-    {
-        // Refresh fields and ensure cross-reference to numbered para is okay
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    // Plain text Block SDT is imported as content control
+    OUString aActual = getParagraph(1)->getString();
+    // This was "itadmin".
+    CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), aActual);
 
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        CPPUNIT_ASSERT(xFields->hasMoreElements());
-
-        uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
-    }
-
-    OUString aActual = getParagraph(2)->getString();
+    aActual = getParagraph(2)->getString();
     // This was "itadmin".
     CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), aActual);
 }
@@ -994,12 +978,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 
     // Ensure that we have <w:text/>
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:text");
-
-    // Ensure that we have no <w:text/> (not quite correct case, but to ensure import/export are okay)
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
-                           static_cast<sal_Int32>(xmlXPathNodeSetGetLength(pXmlObj->nodesetval)));
-    xmlXPathFreeObject(pXmlObj);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:sdt/w:sdtPr/w:text");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139948, "tdf139948.docx")

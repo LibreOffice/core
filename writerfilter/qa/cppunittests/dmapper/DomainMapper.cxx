@@ -119,6 +119,36 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableThenTable)
     // Make sure the anchor text is the body text, not some cell.
     CPPUNIT_ASSERT_EQUAL(xBodyText, xAnchor->getText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSdtBlockText)
+{
+    // Given a document with a block SDT that only contains text:
+    loadFromURL(u"sdt-block-text.docx");
+
+    // Then make sure that the text inside the SDT is imported as a content control:
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortionEnum = xPara->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
+    OUString aTextPortionType;
+    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ContentControl
+    // - Actual  : TextField
+    // i.e. the SDT was imported as a text field, not as a content control.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aTextPortionType);
+
+    // Make sure the properties are imported
+    uno::Reference<text::XTextContent> xContentControl;
+    xPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    OUString aAlias;
+    xContentControlProps->getPropertyValue("Alias") >>= aAlias;
+    CPPUNIT_ASSERT_EQUAL(OUString("myalias"), aAlias);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

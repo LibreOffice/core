@@ -83,12 +83,14 @@ class SdtHelper final : public virtual SvRefBase
     /// <w:dataBinding w:storeItemID="">
     OUString m_sDataBindingStoreItemID;
 
-    /// Start range of the date field
-    css::uno::Reference<css::text::XTextRange> m_xDateFieldStartRange;
+    /// Start range of the date or plain text field
+    css::uno::Reference<css::text::XTextRange> m_xFieldStartRange;
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
     /// Grab bag to store unsupported SDTs, aiming to save them back on export.
     std::vector<css::beans::PropertyValue> m_aGrabBag;
+    /// Has inserted texts for plain text control
+    bool m_bHasUnusedText;
 
     bool m_bHasElements;
     /// The last stored SDT element is outside paragraphs.
@@ -169,9 +171,9 @@ public:
     void setDataBindingStoreItemID(const OUString& sValue) { m_sDataBindingStoreItemID = sValue; }
     const OUString& GetDataBindingStoreItemID() const { return m_sDataBindingStoreItemID; }
 
-    void setDateFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
+    void setFieldStartRange(const css::uno::Reference<css::text::XTextRange>& xStartRange)
     {
-        m_xDateFieldStartRange = xStartRange;
+        m_xFieldStartRange = xStartRange;
     }
 
     OUStringBuffer& getLocale() { return m_sLocale; }
@@ -203,6 +205,9 @@ public:
     bool isInteropGrabBagEmpty() const;
     bool containedInInteropGrabBag(const OUString& rValueName);
     sal_Int32 getInteropGrabBagSize() const;
+
+    void setHasUnusedText(bool bHasUnusedText) { m_bHasUnusedText = bHasUnusedText; }
+    bool hasUnusedText() const { return m_bHasUnusedText; }
 
     void SetShowingPlcHdr();
     bool GetShowingPlcHdr() const;

@@ -173,7 +173,7 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
     /// The appearance: just remembered.
     OUString m_aAppearance;
 
-    /// The alias: just remembered.
+    /// The alias.
     OUString m_aAlias;
 
     /// The tag: just remembered.
@@ -187,6 +187,9 @@ class SW_DLLPUBLIC SwContentControl : public sw::BroadcastingModify
 
     /// The control and content locks: mostly just remembered.
     OUString m_aLock;
+
+    /// The multiline property: just remembered.
+    OUString m_aMultiLine;
 
     /// Stores a list item index, in case the doc model is not yet updated.
     // i.e. temporarily store the selected item until the text is inserted by GotoContentControl.
@@ -388,6 +391,10 @@ public:
 
     // At the implementation level, define whether the user can directly modify the contents.
     bool GetReadWrite() const { return m_bReadWrite; }
+
+    void SetMultiLine(const OUString& rMultiline) { m_aMultiLine = rMultiline; }
+
+    const OUString& GetMultiLine() const { return m_aMultiLine; }
 
     SwContentControlType GetType() const;
 };

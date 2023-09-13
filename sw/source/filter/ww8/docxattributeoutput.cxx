@@ -2679,7 +2679,11 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->endElementNS(XML_w, XML_date);
     }
 
-    if (m_pContentControl->GetPlainText())
+    if (!m_pContentControl->GetMultiLine().isEmpty())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_text, FSNS(XML_w, XML_multiLine), m_pContentControl->GetMultiLine());
+    }
+    else if (m_pContentControl->GetPlainText())
     {
         m_pSerializer->singleElementNS(XML_w, XML_text);
     }

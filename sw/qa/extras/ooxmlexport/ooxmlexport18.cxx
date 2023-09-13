@@ -670,7 +670,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
     {
         // 1st paragraph - block content control
         auto xRun = getRun(getParagraph(1), 1);
-        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text.\r"), xRun->getString());
+        auto xContentControl
+            = getProperty<css::uno::Reference<css::text::XTextRange>>(xRun, "ContentControl");
+        CPPUNIT_ASSERT_EQUAL(OUString("Click or tap here to enter text."),
+                             xContentControl->getString());
         // Without the fix in place, this would fail with
         // - Expected: Placeholder Text
         // - Actual  :

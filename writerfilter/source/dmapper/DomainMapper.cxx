@@ -1132,7 +1132,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
             {
-                if (m_pImpl->GetSdtStarts().empty() && !m_pImpl->m_pSdtHelper->getSdtTexts().isEmpty())
+                if (m_pImpl->GetSdtStarts().empty() && m_pImpl->m_pSdtHelper->hasUnusedText())
                 {
                     // A non-inline SDT is already started, first convert that to a field and only
                     // then map the inline SDT to a content control.
@@ -1190,6 +1190,9 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->PushSdt();
                 break;
             }
+            if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText
+                && GetCurrentTextRange().is())
+                m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
             m_pImpl->SetSdt(true);
         }
         break;
@@ -2968,7 +2971,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     {
         m_pImpl->m_pSdtHelper->setControlType(SdtControlType::datePicker);
         resolveSprmProps(*this, rSprm);
-        m_pImpl->m_pSdtHelper->setDateFieldStartRange(GetCurrentTextRange()->getEnd());
+        m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
     }
     break;
     case NS_ooxml::LN_CT_SdtDate_dateFormat:
@@ -4108,13 +4111,13 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
     else if (m_pImpl->m_pSdtHelper->GetSdtType() != NS_ooxml::LN_CT_SdtRun_sdtContent && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText)
     {
-        m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
         if (bNewLine)
         {
             m_pImpl->m_pSdtHelper->createPlainTextControl();
             finishParagraph();
+            m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+            return;
         }
-        return;
     }
     else if (!m_pImpl->m_pSdtHelper->isInteropGrabBagEmpty())
     {
@@ -4366,6 +4369,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->clearDeferredBreaks();
             }
 
+            bool bSdtBlockUnusedText
+                = m_pImpl->m_pSdtHelper->GetSdtType() != NS_ooxml::LN_CT_SdtRun_sdtContent
+                  && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText
+                  && m_pImpl->m_pSdtHelper->hasUnusedText();
             if (pContext && pContext->GetFootnote().is())
             {
                 pContext->GetFootnote()->setLabel( sText );
@@ -4375,18 +4382,33 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             }
             else if (m_pImpl->IsOpenFieldCommand() && !m_pImpl->IsForceGenericFields())
             {
+                if (bSdtBlockUnusedText)
+                    m_pImpl->m_pSdtHelper->createPlainTextControl();
                 m_pImpl->AppendFieldCommand(sText);
+                if (bSdtBlockUnusedText)
+                    m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
             }
             else if( m_pImpl->IsOpenField() && m_pImpl->IsFieldResultAsString())
+            {
+                if (bSdtBlockUnusedText)
+                    m_pImpl->m_pSdtHelper->createPlainTextControl();
                 /*depending on the success of the field insert operation this result will be
                   set at the field or directly inserted into the text*/
                 m_pImpl->AppendFieldResult(sText);
+                if (bSdtBlockUnusedText)
+                    m_pImpl->m_pSdtHelper->setFieldStartRange(GetCurrentTextRange()->getEnd());
+            }
             else
             {
                 if (pContext == nullptr)
                     pContext = new PropertyMap();
 
                 m_pImpl->appendTextPortion( sText, pContext );
+
+                if (m_pImpl->m_pSdtHelper->GetSdtType() == NS_ooxml::LN_CT_SdtBlock_sdtContent
+                    && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::plainText
+                    && !sText.isEmpty())
+                    m_pImpl->m_pSdtHelper->setHasUnusedText(true);
             }
 
         }
