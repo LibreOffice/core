@@ -1335,6 +1335,10 @@ DECLARE_OOXMLEXPORT_TEST(testTdf157011, "tdf157011_ins_del_empty_cols.docx")
 
         // This was 4 (missing tracked table cell deletions)
         assertXPath(pXmlDoc, "//w:del", 6);
+
+        // tdf#157187 This was false (dummy w:tc/w:p/w:sdt/w:sdtContent content box)
+        assertXPath(pXmlDoc, "//w:tc/w:p/w:del", 6);
+        assertXPath(pXmlDoc, "//w:tc/w:p/w:ins", 3);
     }
 }
 

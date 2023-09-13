@@ -113,12 +113,16 @@ struct TableReference
     /// If paragraph sdt got opened in this table cell.
     bool m_bTableCellParaSdtOpen;
 
+    /// Remember if we are in a deleted/inserted cell, or not.
+    bool m_bTableCellChanged;
+
     /// Remember the current table depth.
     sal_uInt32 m_nTableDepth;
 
     TableReference()
         : m_bTableCellOpen(false),
         m_bTableCellParaSdtOpen(false),
+        m_bTableCellChanged(false),
         m_nTableDepth(0)
     {
     }

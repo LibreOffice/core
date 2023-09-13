@@ -2013,7 +2013,10 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
         {
             auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
             m_pContentControl = pTextContentControl->GetContentControl().GetContentControl();
-            WriteContentControlStart();
+            if (!m_tableReference.m_bTableCellChanged)
+            {
+                WriteContentControlStart();
+            }
         }
     }
 
@@ -2039,7 +2042,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, sal_In
     {
         sal_Int32 nEnd = nPos + nLen;
         SwTextAttr* pAttr = pNode->GetTextAttrAt(nPos, RES_TXTATR_CONTENTCONTROL, ::sw::GetTextAttrMode::Default);
-        if (pAttr && *pAttr->GetEnd() == nEnd)
+        if (pAttr && *pAttr->GetEnd() == nEnd && !m_tableReference.m_bTableCellChanged)
         {
             WriteContentControlEnd();
         }
@@ -4725,6 +4728,12 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     InitTableHelper( pTableTextNodeInfoInner );
 
+    // check tracked table column deletion or insertion
+    const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
+    SwRedlineTable::size_type nChange = pTabBox->GetRedline();
+    if (nChange != SwRedlineTable::npos)
+        m_tableReference.m_bTableCellChanged = true;
+
     m_pSerializer->startElementNS(XML_w, XML_tc);
 
     // Write the cell properties here
@@ -4745,6 +4754,7 @@ void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
 
     m_tableReference.m_bTableCellOpen = false;
     m_tableReference.m_bTableCellParaSdtOpen = false;
+    m_tableReference.m_bTableCellChanged = false;
 }
 
 void DocxAttributeOutput::StartStyles()
