@@ -83,8 +83,6 @@ public:
     void                FireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
     bool                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static ValueSetAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
-
 public:
 
     /** Called by the corresponding ValueSet when it gets the focus.

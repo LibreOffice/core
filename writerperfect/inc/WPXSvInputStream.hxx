@@ -51,7 +51,6 @@ public:
 
 private:
     tools::Long tellImpl();
-    const unsigned char* readImpl(unsigned long numBytes, unsigned long& numBytesRead);
     int seek(tools::Long offset);
     void invalidateReadBuffer();
     bool isOLE();

@@ -52,7 +52,6 @@ private:
     OUString                GetItemName();
     void                    SetItemText( const OUString& sItemText );
     OUString                GetItemText();
-    sal_uInt16              GetItemId() const { return m_nItemId; }
 
     void            FillAccessibleStateSet( sal_Int64& rStateSet );
 

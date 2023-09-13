@@ -127,14 +127,6 @@ namespace
         std::vector<PaMEntry> m_aUnoCursorEntries;
         std::vector<PaMEntry> m_aShellCursorEntries;
         typedef std::function<void (SwPosition& rPos, sal_Int32 nContent)> updater_t;
-        virtual void Clear() override
-        {
-            m_aBkmkEntries.clear();
-            m_aRedlineEntries.clear();
-            m_aFlyEntries.clear();
-            m_aUnoCursorEntries.clear();
-            m_aShellCursorEntries.clear();
-        }
         virtual bool Empty() override
         {
             return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aFlyEntries.empty() && m_aUnoCursorEntries.empty() && m_aShellCursorEntries.empty();

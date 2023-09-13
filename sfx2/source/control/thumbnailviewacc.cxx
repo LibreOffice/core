@@ -44,12 +44,6 @@ ThumbnailViewAcc::~ThumbnailViewAcc()
 {
 }
 
-ThumbnailViewAcc* ThumbnailViewAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    noexcept
-{
-    return dynamic_cast<ThumbnailViewAcc*>(rxData.get());
-}
-
 uno::Reference< accessibility::XAccessibleContext > SAL_CALL ThumbnailViewAcc::getAccessibleContext()
 {
     ThrowIfDisposed();
@@ -537,12 +531,6 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
         {
         }
     }
-}
-
-ThumbnailViewItemAcc* ThumbnailViewItemAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    noexcept
-{
-    return dynamic_cast<ThumbnailViewItemAcc*>(rxData.get());
 }
 
 void ThumbnailViewAcc::GetFocus()

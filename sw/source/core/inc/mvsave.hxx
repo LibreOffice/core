@@ -76,8 +76,6 @@ namespace sw::mark
     class ContentIdxStore
     {
     public:
-
-            virtual void Clear() =0;
             virtual bool Empty() =0;
             virtual void Save(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
             virtual void Restore(SwDoc& rDoc, SwNodeOffset nNode, sal_Int32 nOffset=0, bool bAuto = false, bool bAtStart = false, RestoreMode = RestoreMode::All) =0;

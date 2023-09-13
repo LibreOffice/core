@@ -243,7 +243,6 @@ public:
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return m_pImpl.get();}
     SwFrameFormat* GetFrameFormat() const;
-    const css::uno::Reference< css::uno::XAggregation >& GetAggregationInterface() const {return m_xShapeAgg;}
     SvxShape*               GetSvxShape();
 
     // helper

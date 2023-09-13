@@ -264,12 +264,6 @@ sal_uInt32 SwAnnotationWin::GetParaId()
     return nParaId;
 }
 
-sal_uInt32 SwAnnotationWin::GetPostItId()
-{
-    auto pField = static_cast<SwPostItField*>(mpFormatField->GetField());
-    return pField->GetPostItId();
-}
-
 sal_uInt32 SwAnnotationWin::CreateUniqueParaId()
 {
     return comphelper::rng::uniform_uint_distribution(0, std::numeric_limits<sal_uInt32>::max());

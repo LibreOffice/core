@@ -54,8 +54,6 @@ namespace accessibility
         void                    SetSelected( bool bSelected );
         void                    SetPageText( const OUString& sPageText );
 
-        sal_uInt16              GetPageId() const { return m_nPageId; }
-
         void                    FillAccessibleStateSet( sal_Int64& rStateSet );
 
         // OCommonAccessibleComponent

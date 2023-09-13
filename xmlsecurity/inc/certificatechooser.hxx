@@ -83,7 +83,6 @@ private:
     void ImplShowCertificateDetails();
     void ImplInitialize(bool mbSearch = false);
     void ImplReloadCertificates();
-    void ImplSecCtxToCerts(SvtUserOptions &aUserOpts, bool bOnlyReload);
     static void HandleOneUsageBit(OUString& string, int& bits, int bit, TranslateId name);
 
 public:

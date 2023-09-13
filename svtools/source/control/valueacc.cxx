@@ -436,13 +436,6 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
     }
 }
 
-ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
-    noexcept
-{
-    return dynamic_cast<ValueSetAcc*>(rxData.get());
-}
-
-
 void ValueSetAcc::GetFocus()
 {
     mbIsFocused = true;

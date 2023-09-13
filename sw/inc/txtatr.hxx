@@ -41,7 +41,6 @@ public:
     virtual ~SwTextCharFormat( ) override;
 
     void TriggerNodeUpdate(const sw::LegacyModifyHint&);
-    bool GetInfo( SfxPoolItem const & rInfo ) const;
 
     // get and set TextNode pointer
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }

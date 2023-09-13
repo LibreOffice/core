@@ -194,7 +194,6 @@ class SAL_DLLPUBLIC_RTTI SwAnnotationWin final : public InterimItemWindow
 
         // Get annotation paraId or generate one if it doesn't exist
         sal_uInt32 GetParaId();
-        sal_uInt32 GetPostItId();
         // Used to generate a unique paraId
         static sal_uInt32 CreateUniqueParaId();
 

@@ -56,8 +56,6 @@ public:
 
     bool HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
-    static ThumbnailViewAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
-
 public:
     /** Called by the corresponding ValueSet when it gets the focus.
         Stores the new focus state and broadcasts a state change event.
@@ -163,8 +161,6 @@ public:
     virtual ~ThumbnailViewItemAcc() override;
 
     void    ParentDestroyed();
-
-    static ThumbnailViewItemAcc* getImplementation( const css::uno::Reference< css::uno::XInterface >& rxData ) noexcept;
 
 public:
 

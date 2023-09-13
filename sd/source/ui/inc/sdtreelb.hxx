@@ -176,15 +176,6 @@ public:
 
     bool IsEditingActive() const {return m_bEditing;}
 
-    void start_editing()
-    {
-        std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
-        if (m_xTreeView->get_cursor(xIter.get()))
-        {
-            m_xTreeView->start_editing(*xIter);
-        }
-    }
-
     void set_sensitive(bool bSensitive)
     {
         m_xTreeView->set_sensitive(bSensitive);

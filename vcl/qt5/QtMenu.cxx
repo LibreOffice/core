@@ -621,15 +621,6 @@ void QtMenu::ShowMenuBar(bool bVisible)
         lcl_force_menubar_layout_update(*mpQMenuBar);
 }
 
-const QtFrame* QtMenu::GetFrame() const
-{
-    SolarMutexGuard aGuard;
-    const QtMenu* pMenu = this;
-    while (pMenu && !pMenu->mpFrame)
-        pMenu = pMenu->mpParentSalMenu;
-    return pMenu ? pMenu->mpFrame : nullptr;
-}
-
 void QtMenu::slotMenuHovered(QtMenuItem* pItem)
 {
     const OUString sHelpId = pItem->mpParentMenu->GetMenu()->GetHelpId(pItem->mnId);

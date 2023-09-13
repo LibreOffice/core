@@ -80,7 +80,6 @@ public:
     virtual void RemoveItem(unsigned nPos) override;
     virtual void SetSubMenu(SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos) override;
     virtual void SetFrame(const SalFrame* pFrame) override;
-    const QtFrame* GetFrame() const;
     virtual void ShowMenuBar(bool bVisible) override;
     virtual bool ShowNativePopupMenu(FloatingWindow* pWin, const tools::Rectangle& rRect,
                                      FloatWinPopupFlags nFlags) override;

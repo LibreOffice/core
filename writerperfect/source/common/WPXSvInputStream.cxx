@@ -761,67 +761,6 @@ void WPXSvInputStream::ensureZipIsInitialized()
 
 WPXSvInputStream::~WPXSvInputStream() {}
 
-#define BUFFER_MAX 65536
-
-const unsigned char* WPXSvInputStream::readImpl(unsigned long numBytes, unsigned long& numBytesRead)
-{
-    numBytesRead = 0;
-
-    if (numBytes == 0 || numBytes > std::numeric_limits<unsigned long>::max() / 2)
-        return nullptr;
-
-    if (mpReadBuffer)
-    {
-        if ((mnReadBufferPos + numBytes > mnReadBufferPos)
-            && (mnReadBufferPos + numBytes <= mnReadBufferLength))
-        {
-            const unsigned char* pTmp = mpReadBuffer + mnReadBufferPos;
-            mnReadBufferPos += numBytes;
-            numBytesRead = numBytes;
-            return pTmp;
-        }
-
-        invalidateReadBuffer();
-    }
-
-    unsigned long curpos = static_cast<unsigned long>(tellImpl());
-    if (curpos == static_cast<unsigned long>(-1)) // returned ERROR
-        return nullptr;
-
-    if ((curpos + numBytes < curpos) /*overflow*/
-        || (curpos + numBytes >= o3tl::make_unsigned(mnLength))) /*reading more than available*/
-    {
-        numBytes = mnLength - curpos;
-    }
-
-    if (numBytes < BUFFER_MAX)
-    {
-        if (BUFFER_MAX < mnLength - curpos)
-            mnReadBufferLength = BUFFER_MAX;
-        else /* BUFFER_MAX >= mnLength - curpos */
-            mnReadBufferLength = mnLength - curpos;
-    }
-    else
-        mnReadBufferLength = numBytes;
-
-    unsigned long tmpNumBytes(0);
-    mpReadBuffer = readImpl(mnReadBufferLength, tmpNumBytes);
-    if (tmpNumBytes != mnReadBufferLength)
-        mnReadBufferLength = tmpNumBytes;
-
-    mnReadBufferPos = 0;
-    if (!mnReadBufferLength)
-        return nullptr;
-
-    if (numBytes <= mnReadBufferLength)
-        numBytesRead = numBytes;
-    else
-        numBytesRead = mnReadBufferLength;
-
-    mnReadBufferPos += numBytesRead;
-    return mpReadBuffer;
-}
-
 long WPXSvInputStream::tell()
 {
     tools::Long retVal = tellImpl();
