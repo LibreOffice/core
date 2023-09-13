@@ -19,6 +19,7 @@
 
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <vcl/scheduler.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editobj.hxx>
@@ -2139,6 +2140,8 @@ void ScFiltersTest2::testCondFormatFormulaListenerXLSX()
     CPPUNIT_ASSERT(pFormat);
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 2.0);
+
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
