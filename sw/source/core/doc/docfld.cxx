@@ -213,7 +213,8 @@ void SetGetExpField::SetBodyPos( const SwContentFrame& rFrame )
         bool const bResult = ::GetBodyTextNode( rDoc, aPos, rFrame );
         OSL_ENSURE(bResult, "Where is the field?");
         m_nNode = aPos.GetNodeIndex();
-        m_nContent = aPos.GetContentIndex();
+        // tdf#106663 - use the starting position of the frame
+        m_nContent = 0;
     }
 }
 
