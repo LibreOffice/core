@@ -146,7 +146,7 @@ private:
 
 public:
     // (Data members must be public so that OStringLiteral is a structural type that can be used as
-    // a non-type template parameter type for rtl::detail::OStringHolder:)
+    // a non-type template parameter type for operator ""_ostr and rtl::detail::OStringHolder:)
     union {
         rtl_String str;
         Data more = {};
@@ -2405,15 +2405,7 @@ constexpr
     rtlunittest::
 #endif
     OString
-operator ""_ostr() {
-    return
-#if defined RTL_STRING_UNITTEST
-        rtlunittest
-#else
-        rtl
-#endif
-        ::detail::OStringHolder<L>::literal;
-}
+operator ""_ostr() { return L; }
 
 template<
 #if defined RTL_STRING_UNITTEST

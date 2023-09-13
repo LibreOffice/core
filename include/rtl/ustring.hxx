@@ -128,7 +128,7 @@ private:
 
 public:
     // (Data members must be public so that OUStringLiteral is a structural type that can be used as
-    // a non-type template parameter type for rtl::detail::OUStringHolder:)
+    // a non-type template parameter type for operator ""_ustr:)
     union {
         rtl_uString str;
         Data more = {};
@@ -174,18 +174,6 @@ public:
 private:
     rtl_uString* pData;
 };
-
-#if __cplusplus >= 202002L
-
-namespace detail {
-
-template<OUStringLiteral L> struct OUStringHolder {
-    static constexpr auto & literal = L;
-};
-
-}
-
-#endif
 
 /// @endcond
 #endif
@@ -3614,15 +3602,7 @@ constexpr
     rtlunittest::
 #endif
     OUString
-operator ""_ustr() {
-    return
-#if defined RTL_STRING_UNITTEST
-        rtlunittest
-#else
-        rtl
-#endif
-        ::detail::OUStringHolder<L>::literal;
-}
+operator ""_ustr() { return L; }
 
 #endif
 
