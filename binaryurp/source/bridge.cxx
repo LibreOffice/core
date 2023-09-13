@@ -920,8 +920,6 @@ void Bridge::dispose() {
     // from within an incoming or outgoing remote call, as passive_.wait() would
     // otherwise deadlock:
     passive_.wait();
-    connection_.clear();
-    provider_.clear();
 }
 
 void Bridge::addEventListener(
