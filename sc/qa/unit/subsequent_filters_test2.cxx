@@ -29,6 +29,8 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/lineitem.hxx>
 #include <editeng/colritem.hxx>
+#include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/theme/ThemeColorType.hxx>
 #include <dbdata.hxx>
 #include <validat.hxx>
 #include <formulacell.hxx>
@@ -193,6 +195,7 @@ public:
     void testTdf82984_zip64XLSXImport();
     void testSingleLine();
     void testNamedTableRef();
+    void testRowImportCellStyleIssue();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -316,6 +319,7 @@ public:
     CPPUNIT_TEST(testTdf82984_zip64XLSXImport);
     CPPUNIT_TEST(testSingleLine);
     CPPUNIT_TEST(testNamedTableRef);
+    CPPUNIT_TEST(testRowImportCellStyleIssue);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -3092,6 +3096,34 @@ void ScFiltersTest2::testNamedTableRef()
         CPPUNIT_ASSERT_EQUAL(FormulaError::NONE, pFC->GetErrCode());
         // Without the fix value will be 0 (FALSE).
         CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(6, nRow, 0)));
+    }
+}
+
+void ScFiltersTest2::testRowImportCellStyleIssue()
+{
+    // Test checks that the correct cell style is imported for the first 6 rows and then the rest of the rows.
+    // Row 1 to 6 have no background color, after that light2 (background2) theme color.
+
+    createScDoc("xlsx/RowImportCellStyleIssue.xlsx");
+    ScDocument* pDoc = getScDoc();
+
+    // Check cell A6 - should have no background color set
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, 5, 0); // A6
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(false, rBackground.isUsed());
+    }
+
+    // Check cell A7 - should have light2 (background2) theme color set
+    {
+        const ScPatternAttr* pAttr = pDoc->GetPattern(0, 6, 0); // A7
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        CPPUNIT_ASSERT_EQUAL(true, rBackground.isUsed());
+        CPPUNIT_ASSERT_EQUAL(Color(0xe7e6e6), rBackground.GetColor());
+        auto const& rComplexColor = rBackground.getComplexColor();
+        CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Light2, rComplexColor.getThemeColorType());
     }
 }
 
