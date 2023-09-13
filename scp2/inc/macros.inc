@@ -286,7 +286,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(CONCAT2(ZetaOffice.,name)); \
         Name = STRING(AppUserModelID); \
-        Value = STRING(CONCAT2(TheDocumentFoundation.ZetaOffice.,doc_type)); \
+        Value = STRING(CONCAT2(Allotropia.ZetaOffice.,doc_type)); \
     End
 
 #define REGISTRY_ENTRY_ICON(name,modid,icon_id) \
