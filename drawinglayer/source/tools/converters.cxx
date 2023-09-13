@@ -156,7 +156,7 @@ AlphaMask createAlphaMask(drawinglayer::primitive2d::Primitive2DContainer&& rSeq
 BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSeq,
                            const geometry::ViewInformation2D& rViewInformation2D,
                            sal_uInt32 nDiscreteWidth, sal_uInt32 nDiscreteHeight,
-                           sal_uInt32 nMaxSquarePixels)
+                           sal_uInt32 nMaxSquarePixels, bool bForceAlphaMaskCreation)
 {
     drawinglayer::primitive2d::Primitive2DContainer aSequence(std::move(rSeq));
 
@@ -261,7 +261,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
     }
 #endif
 
-    if (aAlpha.hasAlpha())
+    if (bForceAlphaMaskCreation || aAlpha.hasAlpha())
     {
         // Need to correct content using known alpha to get to background-free
         // RGBA result, usable e.g. in PNG export(s) or convert-to-bitmap.

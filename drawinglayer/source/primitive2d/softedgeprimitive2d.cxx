@@ -166,9 +166,14 @@ void SoftEdgePrimitive2D::create2DDecomposition(
         const sal_uInt32 nDiscreteClippedHeight(ceil(aDiscreteClippedSize.getY()));
         const geometry::ViewInformation2D aViewInformation2D;
         const sal_uInt32 nMaximumQuadraticPixels(250000);
+        // tdf#156808 force an alpha mask to be created even if it has no alpha
+        // We need an alpha mask, even if it is totally opaque, so that
+        // drawinglayer::primitive2d::ProcessAndBlurAlphaMask() can be called.
+        // Otherwise, blurring of edges will fail in cases like running in a
+        // slideshow or exporting to PDF.
         const BitmapEx aBitmapEx(::drawinglayer::convertToBitmapEx(
             std::move(xEmbedSeq), aViewInformation2D, nDiscreteClippedWidth, nDiscreteClippedHeight,
-            nMaximumQuadraticPixels));
+            nMaximumQuadraticPixels, true));
 
         if (aBitmapEx.IsEmpty())
             break;
