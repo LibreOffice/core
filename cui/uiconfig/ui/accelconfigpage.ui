@@ -118,7 +118,7 @@
                     </child>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="shortcuts-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|shortcuts">Lists the shortcut keys and the associated commands. To assign or modify the shortcut key for the command selected in the Function list, click a shortcut in this list, and then click Modify.
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|shortcuts">Lists the shortcut keys and the associated commands. To assign or modify the shortcut key for the command selected in the Function list, click a shortcut in this list, and then click Assign.
 To quickly find a shortcut in this list, simply press the key combination.</property>
                       </object>
                     </child>
@@ -213,7 +213,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                 <property name="layout-style">start</property>
                 <child>
                   <object class="GtkButton" id="change">
-                    <property name="label" translatable="yes" context="accelconfigpage|change">_Modify</property>
+                    <property name="label" translatable="yes" context="accelconfigpage|change">_Assign</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -496,7 +496,7 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                         </child>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="function-atkobject">
-                            <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|function">Select a function that you want to assign a shortcut key to, click a key combination in the Shortcut keys list, and then click Modify. If the selected function already has a shortcut key, it is displayed in the Keys list.</property>
+                            <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|function">Select a function that you want to assign a shortcut key to, click a key combination in the Shortcut keys list, and then click Assign. If the selected function already has a shortcut key, it is displayed in the Keys list.</property>
                           </object>
                         </child>
                       </object>
