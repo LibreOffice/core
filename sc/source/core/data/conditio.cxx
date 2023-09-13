@@ -160,12 +160,13 @@ void ScConditionEntry::StartListening()
     if (!pCondFormat)
         return;
 
+    mpRepaintTask = std::make_unique<RepaintInIdle>(pCondFormat);
     const ScRangeList& rRanges = pCondFormat->GetRange();
     mpListener->stopListening();
     start_listen_to(*mpListener, pFormula1.get(), rRanges);
     start_listen_to(*mpListener, pFormula2.get(), rRanges);
 
-    mpListener->setCallback([&]() { pCondFormat->DoRepaint();});
+    mpListener->setCallback([&]() { mpRepaintTask->Start();});
 }
 
 void ScConditionEntry::SetParent(ScConditionalFormat* pParent)
@@ -195,7 +196,8 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     bFirstRun(true),
     mpListener(new ScFormulaListener(*r.mpDoc)),
     eConditionType( r.eConditionType ),
-    pCondFormat(r.pCondFormat)
+    pCondFormat(r.pCondFormat),
+    mpRepaintTask()
 {
     // ScTokenArray copy ctor creates a flat copy
     if (r.pFormula1)
@@ -228,7 +230,8 @@ ScConditionEntry::ScConditionEntry( ScDocument& rDocument, const ScConditionEntr
     bFirstRun(true),
     mpListener(new ScFormulaListener(rDocument)),
     eConditionType( r.eConditionType),
-    pCondFormat(r.pCondFormat)
+    pCondFormat(r.pCondFormat),
+    mpRepaintTask()
 {
     // Real copy of the formulas (for Ref Undo)
     if (r.pFormula1)
@@ -262,7 +265,8 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bFirstRun(true),
     mpListener(new ScFormulaListener(rDocument)),
     eConditionType(eType),
-    pCondFormat(nullptr)
+    pCondFormat(nullptr),
+    mpRepaintTask()
 {
     Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, false );
 
@@ -287,7 +291,8 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bFirstRun(true),
     mpListener(new ScFormulaListener(rDocument)),
     eConditionType(ScFormatEntry::Type::Condition),
-    pCondFormat(nullptr)
+    pCondFormat(nullptr),
+    mpRepaintTask()
 {
     if ( pArr1 )
     {

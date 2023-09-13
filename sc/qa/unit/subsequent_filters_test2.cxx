@@ -29,6 +29,7 @@
 #include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoole2.hxx>
+#include <vcl/scheduler.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -2318,6 +2319,8 @@ void ScFiltersTest2::testCondFormatFormulaListenerXLSX()
     CPPUNIT_ASSERT(pFormat);
     rDoc.SetDocVisible(true);
     rDoc.SetValue(0, 0, 0, 2.0);
+
+    Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 
