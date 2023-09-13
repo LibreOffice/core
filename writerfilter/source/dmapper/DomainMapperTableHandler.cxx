@@ -1590,12 +1590,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
             }
 
-            if (nestedTableLevel <= 1)
-            {
-                // A text frame created for floating tables is allowed to split if it's a toplevel
-                // table.
-                aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
-            }
+            // A text frame created for floating tables is always allowed to split.
+            aFrameProperties.push_back(comphelper::makePropertyValue("IsSplitAllowed", true));
 
             sal_Int32 nTableWidth = 0;
             m_aTableProperties->getValue(TablePropertyMap::TABLE_WIDTH, nTableWidth);
