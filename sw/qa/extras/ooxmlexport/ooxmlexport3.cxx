@@ -1003,7 +1003,8 @@ CPPUNIT_TEST_FIXTURE(Test, testGlossaryWithEmail)
 
     // preserve the ShowingPlaceholder setting on both block SDTs.
     pXmlDoc = parseExport("word/document.xml");
-    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 2);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:showingPlcHdr", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:sdt/w:sdtPr/w:showingPlcHdr", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo71785, "fdo71785.docx")

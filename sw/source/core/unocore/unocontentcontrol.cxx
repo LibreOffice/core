@@ -176,6 +176,7 @@ public:
     sal_Int32 m_nId;
     sal_uInt32 m_nTabIndex;
     OUString m_aLock;
+    OUString m_aMultiLine;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          css::uno::Reference<SwXText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
@@ -475,6 +476,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetId(m_pImpl->m_nId);
     pContentControl->SetTabIndex(m_pImpl->m_nTabIndex);
     pContentControl->SetLock(m_pImpl->m_aLock);
+    pContentControl->SetMultiLine(m_pImpl->m_aMultiLine);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -1010,6 +1012,21 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_MULTILINE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aMultiLine = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetMultiLine(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -1303,6 +1320,17 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetLock();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_MULTILINE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aMultiLine;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetMultiLine();
         }
     }
     else
