@@ -27,21 +27,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,curl,\
 	external/curl/configurable-z-option.patch.0 \
 ))
 
-ifeq ($(SYSTEM_NSS),)
-$(eval $(call gb_UnpackedTarball_add_patches,curl,\
-	external/curl/curl-nss.patch.1 \
-))
-endif
-
 ifeq ($(OS)-$(COM_IS_CLANG),WNT-TRUE)
 $(eval $(call gb_UnpackedTarball_add_patches,curl, \
     external/curl/clang-cl.patch.0 \
-))
-endif
-
-ifneq ($(filter -fsanitize=%,$(CC)),)
-$(eval $(call gb_UnpackedTarball_add_patches,curl, \
-    external/curl/asan-poison-nsspem.patch.0 \
 ))
 endif
 
