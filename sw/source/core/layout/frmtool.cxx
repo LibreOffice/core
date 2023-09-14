@@ -1404,7 +1404,7 @@ void AppendAllObjs(const sw::FrameFormats<sw::SpzFrameFormat*>* pTable, const Sw
     const SwFrameFormat* pFirstRequeued(nullptr);
     while(!vFormatsToConnect.empty())
     {
-        auto& pFormat = vFormatsToConnect.front();
+        SwFrameFormat* pFormat = vFormatsToConnect.front();
         bool isConnected(false);
         pFormat->CallSwClientNotify(sw::GetObjectConnectedHint(isConnected, pRoot));
         if(!isConnected)
