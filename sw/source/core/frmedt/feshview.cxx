@@ -3359,8 +3359,11 @@ bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
             if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
             {
                 // determine page frame of the frame the shape is anchored.
-                const SwFrame* pAnchorFrame =
-                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrame( pSdrObj );
+                const SwContact* pContact = GetUserCall(pSdrObj);
+                OSL_ENSURE( pContact, "<SwFEShell::IsShapeDefaultHoriTextDirR2L(..)> - missing contact!" );
+                if (!pContact)
+                    return false;
+                const SwFrame* pAnchorFrame = static_cast<const SwDrawContact*>(pContact)->GetAnchorFrame( pSdrObj );
                 OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
                 if ( pAnchorFrame )
                 {
