@@ -25,10 +25,12 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 ))
 endif
 
+ifeq ($(ENABLE_CURL),TRUE)
 ifneq ($(ENABLE_WASM_STRIP_LANGUAGETOOL),TRUE)
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_LanguageTool \
 ))
+endif
 endif
 
 $(eval $(call gb_Module_add_targets,lingucomponent,\

@@ -10791,6 +10791,13 @@ AC_SUBST(ICU_RECLASSIFIED_HEBREW_LETTER)
 AC_SUBST(ICU_UCHAR_TYPE)
 
 dnl ==================================================================
+dnl CURL
+dnl ==================================================================
+if test "$enable_curl" == "yes"; then
+    AC_DEFINE([HAVE_FEATURE_CURL])
+fi
+
+dnl ==================================================================
 dnl Breakpad
 dnl ==================================================================
 DEFAULT_CRASHDUMP_VALUE="true"
@@ -10798,6 +10805,9 @@ AC_MSG_CHECKING([whether to enable breakpad])
 if test "$enable_breakpad" != yes; then
     AC_MSG_RESULT([no])
 else
+    if test "$enable_curl" != "yes"; then
+        AC_MSG_ERROR([--disable-breakpad must be used when --disable-curl is used])
+    fi
     AC_MSG_RESULT([yes])
     ENABLE_BREAKPAD="TRUE"
     AC_DEFINE(ENABLE_BREAKPAD)
@@ -10825,6 +10835,15 @@ else
 fi
 AC_SUBST(ENABLE_BREAKPAD)
 AC_SUBST(DEFAULT_CRASHDUMP_VALUE)
+
+dnl ==================================================================
+dnl libcmis
+dnl ==================================================================
+if test "$enable_libcmis" == "yes"; then
+    if test "$enable_curl" != "yes"; then
+        AC_MSG_ERROR([--disable-libcmis must be used when --disable-curl is used])
+    fi
+fi
 
 dnl ===================================================================
 dnl Orcus
@@ -10981,7 +11000,7 @@ no)
     AC_MSG_RESULT([yes])
     # curl is already mandatory (almost) and checked elsewhere
     if test "$enable_curl" = "no"; then
-        AC_MSG_ERROR(["--with-webdav conflicts with --disable-curl"])
+        AC_MSG_ERROR(["--without-webdav must be used when --disable-curl is used"])
     fi
     WITH_WEBDAV=TRUE
     ;;

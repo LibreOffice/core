@@ -17,6 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #pragma once
+
+#include <sal/config.h>
+
+#include <config_features.h>
+#include <config_wasm_strip.h>
+
 #include <swtypes.hxx>
 
 class SwWrtShell;
@@ -35,8 +41,10 @@ struct SW_DLLPUBLIC TranslateAPIConfig final
 SW_DLLPUBLIC OString ExportPaMToHTML(SwPaM* pCursor, bool bReplacePTag);
 SW_DLLPUBLIC void PasteHTMLToPaM(SwWrtShell& rWrtSh, SwPaM* pCursor, const OString& rData,
                                  bool bSetSelection);
+#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
 SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const TranslateAPIConfig& rConfig);
 SW_DLLPUBLIC void TranslateDocumentCancellable(SwWrtShell& rWrtSh,
                                                const TranslateAPIConfig& rConfig,
                                                bool& rCancelTranslation);
+#endif
 }

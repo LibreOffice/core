@@ -830,7 +830,7 @@ sal_uInt16 AbstractMailMergeWizard_Impl::GetRestartPage() const
 
 std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
 {
-#if !ENABLE_WASM_STRIP_EXTRA
+#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
     SwTranslateLangSelectDlg* pDlg = dynamic_cast<SwTranslateLangSelectDlg*>(m_xDlg.get());
     return pDlg->GetSelectedLanguage();
 #else
@@ -899,7 +899,7 @@ std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakD
 
 std::shared_ptr<AbstractSwTranslateLangSelectDlg> SwAbstractDialogFactory_Impl::CreateSwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
-#if !ENABLE_WASM_STRIP_EXTRA
+#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
     return std::make_shared<AbstractSwTranslateLangSelectDlg_Impl>(std::make_unique<SwTranslateLangSelectDlg>(pParent, rSh));
 #else
     (void) pParent;

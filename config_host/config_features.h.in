@@ -77,6 +77,11 @@
 #define HAVE_FEATURE_READONLY_INSTALLSET 0
 
 /*
+ * Whether curl is available
+ */
+#define HAVE_FEATURE_CURL 0
+
+/*
  * Whether we support breakpad as crash reporting lib.
  */
 #define HAVE_FEATURE_BREAKPAD 0
