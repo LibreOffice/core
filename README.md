@@ -41,8 +41,8 @@ run and compile LibreOffice, also used by the TDF builds:
     * Runtime: 10.15
     * Build: 12 (13 for aarch64) + Xcode 14
 * Linux:
-    * Runtime: RHEL 7 or CentOS 7
-    * Build: either GCC 7.0.0; or Clang 8.0.1 with libstdc++ 7.3.0
+    * Runtime: RHEL 8 or CentOS 8 and comparable
+    * Build: either GCC 12; or Clang 12 with libstdc++ 8.5
 * iOS (only for LibreOfficeKit):
     * Runtime: 11.4 (only support for newer i devices == 64 bit)
     * Build: Xcode 9.3 and iPhone SDK 11.4
@@ -57,7 +57,7 @@ Java is required for building many parts of LibreOffice. In TDF Wiki article
 [Development/Java](https://wiki.documentfoundation.org/Development/Java), the
 exact modules that depend on Java are listed.
 
-The baseline for Java is Java Development Kit (JDK) Version 11 or later. It is
+The baseline for Java is Java Development Kit (JDK) Version 17 or later. It is
 possible to build LibreOffice with JDK version 9, but it is no longer supported
 by the JDK vendors, thus it should be avoided.
 
