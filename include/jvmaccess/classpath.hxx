@@ -32,7 +32,8 @@
 #endif
 
 #include <jvmaccess/jvmaccessdllapi.h>
-#include <rtl/ustring.hxx>
+
+#include <string_view>
 
 namespace com::sun::star::uno
 {

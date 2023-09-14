@@ -19,6 +19,7 @@
 #pragma once
 
 #include <editeng/editengdllapi.h>
+#include <rtl/ustring.hxx>
 
 /*************************************************************************
  *                      class SvxDoCapitals

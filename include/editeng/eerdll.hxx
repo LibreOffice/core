@@ -24,7 +24,6 @@
 #include <rtl/ustring.hxx>
 #include <unotools/resmgr.hxx>
 #include <memory>
-#include <mutex>
 
 class GlobalEditData;
 namespace editeng

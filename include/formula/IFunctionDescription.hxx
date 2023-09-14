@@ -25,7 +25,6 @@
 
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/uno/Reference.hxx>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

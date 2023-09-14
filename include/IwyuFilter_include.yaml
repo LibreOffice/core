@@ -754,6 +754,7 @@ excludelist:
     - com/sun/star/awt/FontDescriptor.hpp
     - com/sun/star/style/LineSpacing.hpp
     - com/sun/star/style/TabStop.hpp
+    - com/sun/star/util/XComplexColor.hpp
     - editeng/eeitem.hxx
     include/formula/FormulaOpCodeMapperObj.hxx:
     # base class has to be a complete type

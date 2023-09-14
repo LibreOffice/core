@@ -20,7 +20,6 @@
 #ifndef INCLUDED_FORMULA_FORMULAHELPER_HXX
 #define INCLUDED_FORMULA_FORMULAHELPER_HXX
 
-#include <memory>
 #include <vector>
 
 #include <formula/formuladllapi.h>

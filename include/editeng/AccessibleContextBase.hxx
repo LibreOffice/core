@@ -28,7 +28,6 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <editeng/editengdllapi.h>
-#include <rtl/ref.hxx>
 
 namespace com::sun::star::accessibility { class XAccessibleRelationSet; }
 namespace com::sun::star::accessibility { struct AccessibleEventObject; }

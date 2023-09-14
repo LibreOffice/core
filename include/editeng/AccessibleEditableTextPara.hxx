@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 
 #include <config_options.h>
-#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/compbase.hxx>

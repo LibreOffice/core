@@ -44,7 +44,6 @@
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
 #include <o3tl/span.hxx>
