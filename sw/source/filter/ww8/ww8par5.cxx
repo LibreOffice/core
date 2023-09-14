@@ -969,8 +969,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bHasHandler = aWW8FieldTab[aF.nId] != nullptr;
     if (aF.nId == 10) // STYLEREF
     {
-        // STYLEREF, by default these are not handled.
-        bHasHandler = false;
+        bool bHandledByChapter = false;
         sal_uInt64 nOldPos = m_pStrm->Tell();
         OUString aStr;
         aF.nLCode = m_xSBase->WW8ReadString(*m_pStrm, aStr, m_xPlcxMan->GetCpOfs() + aF.nSCode, aF.nLCode, m_eTextCharSet);
@@ -980,9 +979,9 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         sal_Int32 nRet = aReadParam.SkipToNextToken();
         if (nRet == -2 && !aReadParam.GetResult().isEmpty())
             // Single numeric argument: this can be handled by SwChapterField.
-            bHasHandler = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
+            bHandledByChapter = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
 
-        if (bHasHandler)
+        if (bHandledByChapter)
         {
             nRet = aReadParam.SkipToNextToken();
             // Handle using SwChapterField only in case there is no \[a-z]

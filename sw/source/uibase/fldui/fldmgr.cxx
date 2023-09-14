@@ -66,6 +66,8 @@
 #include <authfld.hxx>
 #include <flddat.hxx>
 #include <fldmgr.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
 #include <flddropdown.hxx>
 #include <strings.hrc>
 #include <tox.hxx>
@@ -1132,6 +1134,7 @@ bool SwFieldMgr::InsertField(
                 }
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
+
             pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId));
             bExp = true;
             break;

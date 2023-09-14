@@ -31,6 +31,7 @@ const TranslateId FLD_REF_PAGE_TYPES[] =
     NC_("fldrefpage|liststore1", "Endnotes"),
     NC_("fldrefpage|liststore1", "Headings"),
     NC_("fldrefpage|liststore1", "Numbered Paragraphs"),
+    NC_("fldrefpage|liststore1", "Styles"),
 };
 
 #endif

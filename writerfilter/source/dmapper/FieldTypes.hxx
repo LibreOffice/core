@@ -209,8 +209,9 @@ enum FieldId
      */
     ,FIELD_SKIPIF
     /* STYLEREF stylename \* MERGEFORMAT ->
-     not imported in old ww8 filter
-     todo: add an equivalent field type
+     implemented using GetReference, but some switches are not implemented yet
+     \l isn't implemented
+     \t isn't implemented
      */
     ,FIELD_STYLEREF
     /* SUBJECT subject \* Defaultswitch \* MERGEFORMAT ->

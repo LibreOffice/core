@@ -26,8 +26,10 @@
 class SfxPoolItem;
 class SwDoc;
 class SwTextNode;
+class SwContentFrame;
 class SwTextField;
 class SwRootFrame;
+class SwFrame;
 
 bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos );
@@ -39,7 +41,8 @@ enum REFERENCESUBTYPE
     REF_BOOKMARK,
     REF_OUTLINE,
     REF_FOOTNOTE,
-    REF_ENDNOTE
+    REF_ENDNOTE,
+    REF_STYLE
 };
 
 enum REFERENCEMARK
@@ -80,7 +83,8 @@ public:
     static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_Int32* pStt, sal_Int32* pEnd = nullptr,
-                                        SwRootFrame const* pLayout = nullptr);
+                                        SwRootFrame const* pLayout = nullptr,
+                                        SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
     void UpdateGetReferences();
 };
 
@@ -111,11 +115,13 @@ public:
     // #i81002#
     /** The <SwTextField> instance, which represents the text attribute for the
        <SwGetRefField> instance, has to be passed to the method.
-       This <SwTextField> instance is needed for the reference format type REF_UPDOWN
-       and REF_NUMBER.
+       This <SwTextField> instance is needed for the reference format type REF_UPDOWN, REF_NUMBER
+       and REF_STYLE.
        Note: This instance may be NULL (field in Undo/Redo). This will cause
        no update for these reference format types. */
-    void                UpdateField( const SwTextField* pFieldTextAttr );
+    void                UpdateField( const SwTextField* pFieldTextAttr, SwFrame* pFrame );
+    void                UpdateField( const SwTextField* pFieldTextAttr, SwFrame* pFrame,
+                                     const SwRootFrame* const pLayout, OUString& rText );
 
     void                SetExpand( const OUString& rStr );
 
@@ -126,9 +132,9 @@ public:
     // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
-    const SwTextNode* GetReferencedTextNode() const;
+    const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
     // #i85090#
-    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
+    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }
@@ -137,6 +143,8 @@ public:
     // Name of reference.
     virtual OUString    GetPar1() const override;
     virtual void        SetPar1(const OUString& rStr) override;
+
+    void SetText(OUString sText, SwRootFrame* pLayout);
 
     virtual OUString    GetPar2() const override;
     virtual bool        QueryValue( css::uno::Any& rVal, sal_uInt16 nWhichId ) const override;
