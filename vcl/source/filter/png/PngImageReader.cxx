@@ -699,9 +699,12 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
         }
         for (sal_uInt32 i = 0; i < nFrames; i++)
         {
-            // Guaranteed to be fcTL chunk here because it was checked earlier
             fcTLChunk* aFctlChunk
-                = static_cast<fcTLChunk*>(aAPNGInfo.maFrameData[nSequenceIndex++].get());
+                = nSequenceIndex < aAPNGInfo.maFrameData.size()
+                      ? dynamic_cast<fcTLChunk*>(aAPNGInfo.maFrameData[nSequenceIndex++].get())
+                      : nullptr;
+            if (!aFctlChunk)
+                return false;
             Disposal aDisposal = static_cast<Disposal>(aFctlChunk->dispose_op);
             Blend aBlend = static_cast<Blend>(aFctlChunk->blend_op);
             if (i == 0 && aDisposal == Disposal::Back)
@@ -710,7 +713,9 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
             getImportantChunks(rStream, aFrameStream, aFctlChunk->width, aFctlChunk->height);
             // A single frame can have multiple fdAT chunks
             while (fdATChunk* pFdatChunk
-                   = dynamic_cast<fdATChunk*>(aAPNGInfo.maFrameData[nSequenceIndex].get()))
+                   = nSequenceIndex < aAPNGInfo.maFrameData.size()
+                         ? dynamic_cast<fdATChunk*>(aAPNGInfo.maFrameData[nSequenceIndex].get())
+                         : nullptr)
             {
                 // Write fdAT chunks as IDAT chunks
                 auto nDataSize = pFdatChunk->frame_data.size();
@@ -719,8 +724,6 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
                 sal_uInt32 nCrc = rtl_crc32(0, pFdatChunk->frame_data.data(), nDataSize);
                 aFrameStream.WriteUInt32(nCrc);
                 nSequenceIndex++;
-                if (nSequenceIndex >= aAPNGInfo.maFrameData.size())
-                    break;
             }
             aFrameStream.WriteUInt32(PNG_IEND_SIZE);
             aFrameStream.WriteUInt32(PNG_IEND_SIGNATURE);
