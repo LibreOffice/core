@@ -175,6 +175,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedDOCXExport)
     assertXPath(pXmlDoc, "//w:tblpPr", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedCellStartDOCXExport)
+{
+    // Given a document with a nested floating table at cell start:
+    createSwDoc("floattable-nested-cell-start.odt");
+
+    // When exporting to DOCX:
+    save("Office Open XML Text");
+
+    // Then make sure both floating table is exported at the right position:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the inner <w:tbl> was between the two <w:tr>, not inside the C1 cell.
+    assertXPath(pXmlDoc, "//w:tc/w:tbl/w:tblPr/w:tblpPr", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testWpgOnly, "wpg-only.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);

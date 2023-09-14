@@ -516,13 +516,6 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
     if ( !m_aFramesOfParagraph.size() || !m_nTextFrameLevel )
         m_aFramesOfParagraph.push(std::vector<ww8::Frame>());
 
-    // look ahead for floating tables that were put into a frame during import
-    // floating tables in shapes are not supported: exclude this case
-    if (!m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
-    {
-        checkAndWriteFloatingTables(*this);
-    }
-
     if ( m_nColBreakStatus == COLBRK_POSTPONE )
         m_nColBreakStatus = COLBRK_WRITE;
 
@@ -568,6 +561,15 @@ sal_Int32 DocxAttributeOutput::StartParagraph(ww8::WW8TableNodeInfo::Pointer_t p
                 m_tableReference->m_nTableDepth = nCurrentDepth;
             }
         }
+    }
+
+    // look ahead for floating tables that were put into a frame during import
+    // floating tables in shapes are not supported: exclude this case
+    if (!m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen())
+    {
+        // Do this after opening table/row/cell, so floating tables anchored at cell start go inside
+        // the cell, not outside.
+        checkAndWriteFloatingTables(*this);
     }
 
     // Look up the "sdt end before this paragraph" property early, when it
