@@ -106,6 +106,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			PKG_CONFIG_LIBDIR="$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)$${PKG_CONFIG_LIBDIR:+:$$PKG_CONFIG_LIBDIR}" \
 		) \
 		CC="$(strip $(CC) \
+			$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 			$(if $(SYSTEM_EXPAT),,-I$(call gb_UnpackedTarball_get_dir,expat)/lib) \
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \

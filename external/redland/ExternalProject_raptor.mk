@@ -19,6 +19,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_Trace_StartRange,raptor,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter iOS,$(OS)),LIBS="-liconv") \
+		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		CFLAGS="$(CFLAGS) \
 			$(call gb_ExternalProject_get_build_flags,raptor) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \

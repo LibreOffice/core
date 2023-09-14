@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-png \
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 			CFLAGS="$(CFLAGS) \
 				$(call gb_ExternalProject_get_build_flags,freetype) \
 				$(call gb_ExternalProject_get_link_flags,freetype) \

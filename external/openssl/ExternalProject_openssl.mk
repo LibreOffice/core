@@ -86,6 +86,7 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) build_libs \
 			CC="$(CC) -fPIC \
+				$(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) \
 				$(if $(filter TRUE, $(ENABLE_DBGUTIL)), -DPURIFY,) \
 				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
 		&& ln -s . lib \

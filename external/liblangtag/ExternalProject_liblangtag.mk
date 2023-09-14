@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 			--enable-shared --disable-static) \
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
+		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		CFLAGS='$(CFLAGS) -pthread \
 			$(call gb_ExternalProject_get_build_flags,liblangtag)' \
 		$(gb_CONFIGURE_PLATFORMS) \

@@ -74,7 +74,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			RANLIB="$(RANLIB)" \
 			NMEDIT="$(NM)edit" \
 			COMMA=$(COMMA) \
-			CC="$(CC)$(if $(filter iOS,$(OS)), -DNSS_STATIC_SOFTOKEN=1 -DNSS_STATIC_FREEBL=1 -DNSS_STATIC_PKCS11=1)$(if $(filter ANDROID,$(OS)), -D_PR_NO_LARGE_FILES=1 -DSQLITE_DISABLE_LFS=1)" CCC="$(CXX)" \
+			CC="$(CC) $(if $(filter -fsanitize=undefined,$(CC)),-fno-sanitize=function) $(if $(filter iOS,$(OS)), -DNSS_STATIC_SOFTOKEN=1 -DNSS_STATIC_FREEBL=1 -DNSS_STATIC_PKCS11=1)$(if $(filter ANDROID,$(OS)), -D_PR_NO_LARGE_FILES=1 -DSQLITE_DISABLE_LFS=1)" CCC="$(CXX)" \
 			$(if $(CROSS_COMPILING),NSINSTALL="$(if $(filter MACOSX,$(OS_FOR_BUILD)),xcrun python3,$(call gb_ExternalExecutable_get_command,python)) $(SRCDIR)/external/nss/nsinstall.py") \
 			$(if $(filter ANDROID,$(OS)),OS_TARGET=Android OS_TARGET_RELEASE=$(ANDROID_API_LEVEL) ARCHFLAG="" DEFAULT_COMPILER=clang ANDROID_NDK=$(ANDROID_NDK_DIR) ANDROID_TOOLCHAIN_VERSION=$(ANDROID_GCC_TOOLCHAIN_VERSION) ANDROID_PREFIX=$(HOST_PLATFORM) ANDROID_SYSROOT=$(ANDROID_NDK_DIR)/sysroot) \
 			NSS_DISABLE_GTESTS=1 \

@@ -76,6 +76,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter MACOSX,$(OS)),CFLAGS='$(CFLAGS) \
 				-mmacosx-version-min=$(MACOSX_DEPLOYMENT_TARGET)') \
+			$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 			CPPFLAGS='$(curl_CPPFLAGS)' \
 			CFLAGS="$(gb_CFLAGS) $(call gb_ExternalProject_get_build_flags,curl)" \
 			LDFLAGS='$(call gb_ExternalProject_get_link_flags,curl) $(curl_LDFLAGS)' \

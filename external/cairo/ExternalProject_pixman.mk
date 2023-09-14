@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,pixman,build) :
 		$(gb_CONFIGURE_PLATFORMS) \
 		$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 		$(if $(filter EMSCRIPTEN,$(OS)),CFLAGS="-O3 -pthread -msimd128") \
+		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,pixman,EXTERNAL)

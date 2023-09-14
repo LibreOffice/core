@@ -24,6 +24,7 @@ fontconfig_add_fonts=/usr/share/X11/fonts/Type1,/usr/share/X11/fonts/TTF,/usr/lo
 $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 	$(call gb_Trace_StartRange,fontconfig,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
+		$(if $(filter -fsanitize=undefined,$(CC)),CC='$(CC) -fno-sanitize=function') \
 		CFLAGS="$(CFLAGS) \
 			$(call gb_ExternalProject_get_build_flags,fontconfig) \
 			$(gb_VISIBILITY_FLAGS) \

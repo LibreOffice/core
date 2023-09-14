@@ -19,16 +19,3 @@ float-divide-by-zero:/sc/source/core/tool/interpr3.cxx$
 float-divide-by-zero:/sc/source/core/tool/interpr8.cxx$
 float-divide-by-zero:/scaddins/source/analysis/analysis.cxx$
 float-divide-by-zero:/scaddins/source/analysis/financial.cxx$
-
-#
-#SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior lt-mem.c:248:4 in
-#lt-mem.c:190:6: runtime error: call to function lt_string_unref through pointer to incorrect function type 'void (*)(void *)'
-#workdir/UnpackedTarball/liblangtag/liblangtag/lt-string.c:127: note: lt_string_unref defined here
-function:lt_mem_unref
-function:lt_mem_delete_ref
-function:raptor_avltree_delete_internal
-function:raptor_free_sequence
-function:raptor_avltree_sprout
-function:raptor_avltree_search_internal
-function:librdf_stream_free_stream_map
-function:xmlSecPtrListEmpty
