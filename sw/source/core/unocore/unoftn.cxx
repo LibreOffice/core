@@ -497,9 +497,7 @@ SwXFootnote::getPropertyValue(const OUString& rPropertyName)
         }
         else
         {
-            beans::UnknownPropertyException aExcept;
-            aExcept.Message = rPropertyName;
-            throw aExcept;
+            throw beans::UnknownPropertyException(rPropertyName);
         }
     }
     return aRet;

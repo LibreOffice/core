@@ -1886,9 +1886,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
                     SwFrameFormat* pFlyFormat = pAnchorNode ? pAnchorNode->GetFlyFormat() : nullptr;
                     if(!pFlyFormat || pFlyFormat->Which() == RES_DRAWFRMFMT)
                     {
-                        lang::IllegalArgumentException aExcept;
-                        aExcept.Message = "Anchor to frame: no frame found";
-                        throw aExcept;
+                        throw lang::IllegalArgumentException("Anchor to frame: no frame found", nullptr, 0);
                     }
                     else
                     {
@@ -2961,9 +2959,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
             {
                 if( !aClassName.MakeId( aCLSID ) )
                 {
-                    lang::IllegalArgumentException aExcept;
-                    aExcept.Message = "CLSID invalid";
-                    throw aExcept;
+                    throw lang::IllegalArgumentException("CLSID invalid", nullptr, 0);
                 }
 
                 pCnt.reset( new comphelper::EmbeddedObjectContainer );
@@ -3183,16 +3179,12 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
 
 awt::Point SwXFrame::getPosition()
 {
-    uno::RuntimeException aRuntime;
-    aRuntime.Message = "position cannot be determined with this method";
-    throw aRuntime;
+    throw uno::RuntimeException("position cannot be determined with this method");
 }
 
 void SwXFrame::setPosition(const awt::Point& /*aPosition*/)
 {
-    uno::RuntimeException aRuntime;
-    aRuntime.Message = "position cannot be changed with this method";
-    throw aRuntime;
+    throw uno::RuntimeException("position cannot be changed with this method");
 }
 
 awt::Size SwXFrame::getSize()
@@ -3315,9 +3307,7 @@ rtl::Reference<SwXTextCursor>  SwXTextFrame::createXTextCursor()
         aPam.GetPointNode().FindSttNodeByType(SwFlyStartNode);
     if(!pNewStartNode || pNewStartNode != pOwnStartNode)
     {
-        uno::RuntimeException aExcept;
-        aExcept.Message = "no text available";
-        throw aExcept;
+        throw uno::RuntimeException("no text available");
     }
 
     return new SwXTextCursor(

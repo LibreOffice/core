@@ -2083,9 +2083,7 @@ OUString SwXNumberingRules::getName()
 
 void SwXNumberingRules::setName(const OUString& /*rName*/)
 {
-    RuntimeException aExcept;
-    aExcept.Message = "readonly";
-    throw aExcept;
+    throw RuntimeException("readonly");
 }
 
 void SwXNumberingRules::Impl::Notify(const SfxHint& rHint)

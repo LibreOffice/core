@@ -148,9 +148,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     //check for non-ASCII characters
     if(aGroupName.isEmpty())
     {
-        lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = "group name must not be empty";
-        throw aIllegal;
+        throw lang::IllegalArgumentException("group name must not be empty", nullptr, 0);
     }
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
     {
@@ -162,9 +160,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
         {
             continue;
         }
-        lang::IllegalArgumentException aIllegal;
-        aIllegal.Message = "group name must contain a-z, A-z, '_', ' ' only";
-        throw aIllegal;
+        throw lang::IllegalArgumentException("group name must contain a-z, A-z, '_', ' ' only", nullptr, 0);
     }
     OUString sGroup(aGroupName);
     if (sGroup.indexOf(GLOS_DELIM)<0)

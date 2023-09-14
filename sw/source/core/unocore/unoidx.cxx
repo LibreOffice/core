@@ -2778,10 +2778,7 @@ SwXDocumentIndex::TokenAccess_Impl::replaceByIndex(
                 pProperties[j].Value >>= nType;
                 if(nType < 0 || nType > text::BibliographyDataField::LOCAL_URL)
                 {
-                    lang::IllegalArgumentException aExcept;
-                    aExcept.Message = "BibliographyDataField - wrong value";
-                    aExcept.ArgumentPosition = static_cast< sal_Int16 >(j);
-                    throw aExcept;
+                    throw lang::IllegalArgumentException("BibliographyDataField - wrong value", nullptr, j);
                 }
                 aToken.nAuthorityField = nType;
             }

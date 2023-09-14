@@ -226,9 +226,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                     aSz.SetWidthPercent(0);
                 else
                 {
-                    lang::IllegalArgumentException aExcept;
-                    aExcept.Message = "relative width cannot be switched on with this property";
-                    throw aExcept;
+                    throw lang::IllegalArgumentException("relative width cannot be switched on with this property", nullptr, 0);
                 }
             }
             pFormat->GetDoc()->SetAttr(aSz, *pFormat);

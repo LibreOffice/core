@@ -237,9 +237,7 @@ uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
 
     if (rPropertyName != UNO_NAME_CLEAR)
     {
-        beans::UnknownPropertyException aExcept;
-        aExcept.Message = rPropertyName;
-        throw aExcept;
+        throw beans::UnknownPropertyException(rPropertyName);
     }
 
     if (m_pImpl->m_bIsDescriptor)

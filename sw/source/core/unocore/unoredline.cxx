@@ -119,11 +119,9 @@ rtl::Reference< SwXTextCursor > SwXRedlineText::createXTextCursor()
         // We have gone too far and have left our own redline. This means that
         // no content node outside of a table could be found, and therefore we
         // except.
-        uno::RuntimeException aExcept;
-        aExcept.Message =
+        throw uno::RuntimeException(
             "No content node found that is inside this change section "
-            "but outside of a table";
-        throw aExcept;
+            "but outside of a table");
     }
 
     return pXCursor;
