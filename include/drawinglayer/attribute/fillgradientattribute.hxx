@@ -22,7 +22,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <com/sun/star/awt/GradientStyle.hpp>
-#include <vector>
 
 namespace basegfx
 {

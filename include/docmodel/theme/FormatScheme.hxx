@@ -11,7 +11,6 @@
 #pragma once
 
 #include <docmodel/dllapi.h>
-#include <tools/color.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 

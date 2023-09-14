@@ -11,7 +11,6 @@
 #pragma once
 
 #include <docmodel/dllapi.h>
-#include <vector>
 #include <o3tl/hash_combine.hxx>
 
 namespace model

@@ -10,14 +10,10 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <utility>
 #include <docmodel/dllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
 

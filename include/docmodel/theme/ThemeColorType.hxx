@@ -10,6 +10,8 @@
 
 #pragma once
 
+#include <sal/types.h>
+
 namespace model
 {
 /// Offsets into the color list of a theme.

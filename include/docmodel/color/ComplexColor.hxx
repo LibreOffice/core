@@ -16,6 +16,8 @@
 #include <docmodel/color/Transformation.hxx>
 #include <o3tl/hash_combine.hxx>
 
+#include <vector>
+
 namespace model
 {
 enum class ColorType

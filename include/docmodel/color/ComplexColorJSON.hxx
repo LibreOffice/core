@@ -12,7 +12,7 @@
 
 #include <docmodel/dllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
-#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree_fwd.hpp>
 
 namespace model::color
 {

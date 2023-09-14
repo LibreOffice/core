@@ -15,7 +15,6 @@
 
 #include <rtl/ustring.hxx>
 #include <docmodel/theme/ThemeColorType.hxx>
-#include <docmodel/theme/Theme.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 #include <tools/color.hxx>

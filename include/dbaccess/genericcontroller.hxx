@@ -58,7 +58,6 @@
 #include <dbaccess/controllerframe.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <dbaccess/IController.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>

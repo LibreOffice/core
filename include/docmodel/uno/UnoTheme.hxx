@@ -10,14 +10,9 @@
 #pragma once
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <comphelper/servicehelper.hxx>
 
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XTheme.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <utility>
 #include <docmodel/dllapi.h>
 
 namespace model

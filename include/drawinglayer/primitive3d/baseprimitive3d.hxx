@@ -22,7 +22,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/graphic/XPrimitive3D.hpp>
 #include <basegfx/range/b3drange.hxx>
 #include <deque>

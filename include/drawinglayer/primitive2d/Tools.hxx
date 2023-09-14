@@ -22,7 +22,6 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/CommonTypes.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
 
 namespace drawinglayer::primitive2d
