@@ -120,7 +120,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Skip(ULONG cElements)
 
 
 /**
-   * reset the enumaration position to initial value
+   * reset the enumeration position to initial value
    * @param
    * @return Result.
    */
@@ -135,7 +135,7 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Reset()
 
 /**
    *create a new IEnumVariant object,
-   *copy current enumaration container and its state to
+   *copy current enumeration container and its state to
    *the new object
    *AT will use the copy object to get elements
    * @param ppenum On return, pointer to the location of the clone enumerator
