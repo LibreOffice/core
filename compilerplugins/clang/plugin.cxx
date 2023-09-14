@@ -94,10 +94,14 @@ bool structurallyIdentical(Stmt const * stmt1, Stmt const * stmt2) {
         break;
     case Stmt::MaterializeTemporaryExprClass:
     case Stmt::CXXBindTemporaryExprClass:
+    case Stmt::CXXDefaultArgExprClass:
     case Stmt::ParenExprClass:
         break;
     case Stmt::CXXNullPtrLiteralExprClass:
         return true;
+    case Stmt::StringLiteralClass:
+        return cast<clang::StringLiteral>(stmt1)->getBytes()
+            == cast<clang::StringLiteral>(stmt2)->getBytes();
     default:
         // Conservatively assume non-identical for expressions that don't happen for us in practice
         // when compiling the LO code base (and for which the above set of supported classes would
