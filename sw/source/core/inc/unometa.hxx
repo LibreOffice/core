@@ -42,6 +42,7 @@ typedef std::deque<
 
 class SwPaM;
 class SwTextNode;
+class SwXText;
 
 namespace sw {
     class Meta;
@@ -81,7 +82,7 @@ protected:
 
     /// @param pDoc and pMeta != 0, but not & because of ImplInheritanceHelper
     SwXMeta(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference< css::text::XText> const&  xParentText,
+        css::uno::Reference<SwXText> const&  xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions);
 
     SwXMeta(SwDoc *const pDoc);
@@ -91,7 +92,7 @@ public:
     static rtl::Reference<SwXMeta>
         CreateXMeta(
             ::sw::Meta & rMeta,
-            css::uno::Reference< css::text::XText> const& xParentText = nullptr,
+            css::uno::Reference<SwXText> xParentText,
             std::unique_ptr<TextRangeList_t const> && pPortions = std::unique_ptr<TextRangeList_t const>());
 
     static rtl::Reference<SwXMeta>
@@ -99,7 +100,7 @@ public:
 
     /// init params with position of the attribute content (w/out CH_TXTATR)
     bool SetContentRange( SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
-    css::uno::Reference< css::text::XText > const & GetParentText() const;
+    css::uno::Reference< SwXText > const & GetParentText() const;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
@@ -192,11 +193,11 @@ private:
 
     friend rtl::Reference<SwXMeta>
         SwXMeta::CreateXMeta(::sw::Meta &,
-            css::uno::Reference< css::text::XText> const&,
+            css::uno::Reference<SwXText>,
             std::unique_ptr<TextRangeList_t const> && pPortions);
 
     SwXMetaField(SwDoc *const pDoc, ::sw::Meta *const pMeta,
-        css::uno::Reference< css::text::XText> const& xParentText,
+        css::uno::Reference<SwXText> const& xParentText,
         std::unique_ptr<TextRangeList_t const> pPortions);
 
     friend rtl::Reference<SwXMeta>

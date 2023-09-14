@@ -2725,7 +2725,7 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
             pOldAnchorNode = static_cast<const SwFormatAnchor*>(pLegacy->m_pOld)->GetAnchorNode();
             break;
         case RES_REMOVE_UNO_OBJECT:
-            SetXObject(uno::Reference<uno::XInterface>(nullptr));
+            SetXObject(nullptr);
             break;
     }
 

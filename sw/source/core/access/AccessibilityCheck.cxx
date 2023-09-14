@@ -41,6 +41,7 @@
 #include <svx/swframetypes.hxx>
 #include <fmtanchr.hxx>
 #include <dcontact.hxx>
+#include <unotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdasitm.hxx>
 
@@ -380,13 +381,12 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
-        uno::Reference<text::XTextContent> xParagraph
-            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
+        rtl::Reference<SwXParagraph> xParagraph
+            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
         if (!xParagraph.is())
             return;
 
-        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        uno::Reference<container::XEnumeration> xRunEnum = xParagraph->createEnumeration();
         sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {
@@ -571,13 +571,12 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
-        uno::Reference<text::XTextContent> xParagraph;
-        xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
+        rtl::Reference<SwXParagraph> xParagraph
+            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
         if (!xParagraph.is())
             return;
 
-        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        uno::Reference<container::XEnumeration> xRunEnum = xParagraph->createEnumeration();
         sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {
@@ -1072,13 +1071,12 @@ public:
             return;
 
         SwTextNode* pTextNode = pCurrent->GetTextNode();
-        uno::Reference<text::XTextContent> xParagraph;
-        xParagraph = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode);
+        rtl::Reference<SwXParagraph> xParagraph
+            = SwXParagraph::CreateXParagraph(pTextNode->GetDoc(), pTextNode, nullptr);
         if (!xParagraph.is())
             return;
 
-        uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+        uno::Reference<container::XEnumeration> xRunEnum = xParagraph->createEnumeration();
         sal_Int32 nStart = 0;
         while (xRunEnum->hasMoreElements())
         {

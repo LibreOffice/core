@@ -378,24 +378,30 @@ static bool containsStaticTypeMethod(const CXXRecordDecl* x)
 
 void RefCounting::checkUnoReference(QualType qt, const Decl* decl, const RecordDecl* parent, const std::string& rDeclName)
 {
-    if (loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
-        const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
-        const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
-        const TemplateArgument& rArg = pTemplate->getTemplateArgs()[0];
-        const CXXRecordDecl* templateParam = rArg.getAsType()->getAsCXXRecordDecl()->getDefinition();
-        if (templateParam && !containsStaticTypeMethod(templateParam)) {
-            report(
-                DiagnosticsEngine::Warning,
-                ("uno::Reference %0 with template parameter that does not"
-                 " contain ::static_type() %1%select{|, parent is %3,}2 should"
-                 " probably be using rtl::Reference instead"),
-                decl->getLocation())
-              << rDeclName << qt << (parent != nullptr)
-              << (parent != nullptr
-                  ? parent->getQualifiedNameAsString() : std::string())
-              << decl->getSourceRange();
-        }
-    }
+    if (!loplugin::TypeCheck(qt).Class("Reference").Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace())
+        return;
+    const CXXRecordDecl* pRecordDecl = qt->getAsCXXRecordDecl();
+    const ClassTemplateSpecializationDecl* pTemplate = dyn_cast<ClassTemplateSpecializationDecl>(pRecordDecl);
+    const TemplateArgument& rArg = pTemplate->getTemplateArgs()[0];
+    const CXXRecordDecl* templateParam = rArg.getAsType()->getAsCXXRecordDecl()->getDefinition();
+    if (!templateParam)
+        return;
+    // SwXText is a special case. It is a mixin class that does not inherit from OWeakObject, so
+    // we cannot use rtl::Reference.
+    if (loplugin::DeclCheck(templateParam).Class("SwXText"))
+        return;
+    if (containsStaticTypeMethod(templateParam))
+        return;
+    report(
+        DiagnosticsEngine::Warning,
+        ("uno::Reference %0 with template parameter that does not"
+         " contain ::static_type() %1%select{|, parent is %3,}2 should"
+         " probably be using rtl::Reference instead"),
+        decl->getLocation())
+      << rDeclName << qt << (parent != nullptr)
+      << (parent != nullptr
+          ? parent->getQualifiedNameAsString() : std::string())
+      << decl->getSourceRange();
 }
 
 bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {

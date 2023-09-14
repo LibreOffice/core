@@ -82,7 +82,7 @@ SwXContentControlText::SwXContentControlText(SwDoc& rDoc, SwXContentControl& rCo
 
 const SwStartNode* SwXContentControlText::GetStartNode() const
 {
-    auto pParent = dynamic_cast<SwXText*>(m_rContentControl.GetParentText().get());
+    SwXText* pParent = m_rContentControl.GetParentText().get();
     return pParent ? pParent->GetStartNode() : nullptr;
 }
 
@@ -148,7 +148,7 @@ public:
     // 3 possible states: not attached, attached, disposed
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
-    uno::Reference<text::XText> m_xParentText;
+    css::uno::Reference<SwXText> m_xParentText;
     rtl::Reference<SwXContentControlText> m_xText;
     SwContentControl* m_pContentControl;
     bool m_bShowingPlaceHolder;
@@ -178,7 +178,7 @@ public:
     OUString m_aLock;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
-         uno::Reference<text::XText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
+         css::uno::Reference<SwXText> xParentText, std::unique_ptr<const TextRangeList_t> pPortions)
         : m_pTextPortions(std::move(pPortions))
         , m_bIsDisposed(false)
         , m_bIsDescriptor(pContentControl == nullptr)
@@ -236,13 +236,13 @@ void SwXContentControl::Impl::Notify(const SfxHint& rHint)
     m_EventListeners.disposeAndClear(aGuard, aEvent);
 }
 
-const uno::Reference<text::XText>& SwXContentControl::GetParentText() const
+const css::uno::Reference<SwXText>& SwXContentControl::GetParentText() const
 {
     return m_pImpl->m_xParentText;
 }
 
 SwXContentControl::SwXContentControl(SwDoc* pDoc, SwContentControl* pContentControl,
-                                     const uno::Reference<text::XText>& xParentText,
+                                     const css::uno::Reference<SwXText>& xParentText,
                                      std::unique_ptr<const TextRangeList_t> pPortions)
     : m_pImpl(new SwXContentControl::Impl(*this, *pDoc, pContentControl, xParentText,
                                           std::move(pPortions)))
@@ -265,7 +265,7 @@ rtl::Reference<SwXContentControl> SwXContentControl::CreateXContentControl(SwDoc
 
 rtl::Reference<SwXContentControl>
 SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
-                                         const uno::Reference<text::XText>& xParent,
+                                         const css::uno::Reference<SwXText>& xParent,
                                          std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
     // re-use existing SwXContentControl
@@ -281,7 +281,7 @@ SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
             if (xContentControl->m_pImpl->m_xParentText.get() != xParent.get())
             {
                 SAL_WARN("sw.uno", "SwXContentControl with different parent");
-                xContentControl->m_pImpl->m_xParentText.set(xParent);
+                xContentControl->m_pImpl->m_xParentText = xParent;
             }
         }
         return xContentControl;
@@ -294,7 +294,7 @@ SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
         SAL_WARN("sw.uno", "CreateXContentControl: no text node");
         return nullptr;
     }
-    uno::Reference<text::XText> xParentText(xParent);
+    css::uno::Reference<SwXText> xParentText(xParent);
     if (!xParentText.is())
     {
         SwTextContentControl* pTextAttr = rContentControl.GetTextAttr();
@@ -304,7 +304,7 @@ SwXContentControl::CreateXContentControl(SwContentControl& rContentControl,
             return nullptr;
         }
         SwPosition aPos(*pTextNode, pTextAttr->GetStart());
-        xParentText.set(sw::CreateParentXText(pTextNode->GetDoc(), aPos));
+        xParentText = sw::CreateParentXText(pTextNode->GetDoc(), aPos);
     }
     if (!xParentText.is())
     {

@@ -105,7 +105,7 @@ class SwXHeadFootText final
 
 public:
 
-    static css::uno::Reference< css::text::XText >
+    static rtl::Reference< SwXHeadFootText >
         CreateXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader);
 
     rtl::Reference< SwXTextCursor > CreateTextCursor(const bool bIgnoreTables = false);

@@ -19,6 +19,7 @@
 
 #include <memory>
 #include <unosection.hxx>
+#include <unotext.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -391,7 +392,7 @@ SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 static_cast< ::cppu::OWeakObject*>(this), 0);
     }
     m_pImpl->Attach(pRet->GetFormat());
-    pRet->GetFormat()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
+    pRet->GetFormat()->SetXObject(static_cast<cppu::OWeakObject*>(this));
 
     // XML import must hide sections depending on their old
     //         condition status
@@ -451,8 +452,8 @@ SwXTextSection::getAnchor()
             }
             if (isMoveIntoTable)
             {
-                uno::Reference<text::XText> const xParentText(
-                    ::sw::CreateParentXText(*pSectFormat->GetDoc(), SwPosition(*pIdx)));
+                css::uno::Reference<SwXText> const xParentText =
+                    ::sw::CreateParentXText(*pSectFormat->GetDoc(), SwPosition(*pIdx));
                 xRet = new SwXTextRange(*pSectFormat);
             }
             else // for compatibility, keep the old way in this case

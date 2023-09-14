@@ -45,6 +45,7 @@ namespace com::sun::star::text { class XFootnote; }
 class SwFrameFormat;
 class SwRangeRedline;
 class SwTextRuby;
+class SwXText;
 
 typedef std::deque<
     css::uno::Reference< css::text::XTextRange > >
@@ -257,7 +258,7 @@ class SwXTextPortionEnumeration final
 public:
     /// @param bOnlyTextFields tries to return less data, but may return more than just text fields
     SwXTextPortionEnumeration(SwPaM& rParaCursor,
-            css::uno::Reference< css::text::XText > const & xParent,
+            css::uno::Reference< SwXText > const & xParent,
             const sal_Int32 nStart, const sal_Int32 nEnd, bool bOnlyTextFields = false );
 
     SwXTextPortionEnumeration(SwPaM& rParaCursor,

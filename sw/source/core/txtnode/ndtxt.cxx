@@ -78,6 +78,7 @@
 #include <attrhint.hxx>
 #include <memory>
 #include <unoparagraph.hxx>
+#include <unotext.hxx>
 #include <wrtsh.hxx>
 #include <fmtpdsc.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -5535,7 +5536,7 @@ uno::Reference< rdf::XMetadatable >
 SwTextNode::MakeUnoObject()
 {
     const uno::Reference<rdf::XMetadatable> xMeta(
-            SwXParagraph::CreateXParagraph(GetDoc(), this));
+            SwXParagraph::CreateXParagraph(GetDoc(), this, nullptr));
     return xMeta;
 }
 

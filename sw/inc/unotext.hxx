@@ -83,6 +83,10 @@ public:
     const SwDoc*    GetDoc() const;
           SwDoc*    GetDoc();
 
+    // declare these here to resolve ambiguity when we declared rtl::Reference<subtype-of-SwXText>
+    virtual void SAL_CALL acquire() override = 0;
+    virtual void SAL_CALL release() override = 0;
+
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
             const css::uno::Type& rType) override;

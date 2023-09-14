@@ -41,6 +41,7 @@ class SwPaM;
 class SwTextNode;
 class SwFormatContentControl;
 class SwContentControl;
+class SwXText;
 
 /**
  * UNO API wrapper around an SwContentControl, exposed as the com.sun.star.text.ContentControl
@@ -64,7 +65,7 @@ protected:
     SwXContentControl& operator=(const SwXContentControl&) = delete;
 
     SwXContentControl(SwDoc* pDoc, SwContentControl* pContentControl,
-                      const css::uno::Reference<css::text::XText>& xParentText,
+                      const css::uno::Reference<SwXText>& xParentText,
                       std::unique_ptr<const TextRangeList_t> pPortions);
 
     SwXContentControl(SwDoc* pDoc);
@@ -72,7 +73,7 @@ protected:
 public:
     static rtl::Reference<SwXContentControl>
     CreateXContentControl(SwContentControl& rContentControl,
-                          const css::uno::Reference<css::text::XText>& xParentText = nullptr,
+                          const css::uno::Reference<SwXText>& xParentText = nullptr,
                           std::unique_ptr<const TextRangeList_t>&& pPortions
                           = std::unique_ptr<const TextRangeList_t>());
 
@@ -80,7 +81,7 @@ public:
 
     /// Initializes params with position of the attribute content (without CH_TXTATR).
     bool SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart, sal_Int32& rEnd) const;
-    const css::uno::Reference<css::text::XText>& GetParentText() const;
+    const css::uno::Reference<SwXText>& GetParentText() const;
 
     // XServiceInfo
     OUString SAL_CALL getImplementationName() override;

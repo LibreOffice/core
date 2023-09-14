@@ -1250,10 +1250,10 @@ SwXTextRange::CreateXTextRange(
 
 namespace sw {
 
-uno::Reference< text::XText >
+css::uno::Reference< SwXText >
 CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
 {
-    uno::Reference< text::XText > xParentText;
+    css::uno::Reference< SwXText > xParentText;
     SwStartNode* pSttNode = rPos.GetNode().StartOfSectionNode();
     while(pSttNode && pSttNode->IsSectionNode())
     {
@@ -1332,8 +1332,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 if (pSttNode == pTextFootnote->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
-                    xParentText.set(SwXFootnote::CreateXFootnote(rDoc,
-                            &const_cast<SwFormatFootnote&>(rFootnote)));
+                    xParentText = SwXFootnote::CreateXFootnote(rDoc,
+                            &const_cast<SwFormatFootnote&>(rFootnote));
                     break;
                 }
             }
@@ -1347,7 +1347,7 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 const uno::Reference<frame::XModel> xModel = pDocSh->GetBaseModel();
                 const uno::Reference< text::XTextDocument > xDoc(
                     xModel, uno::UNO_QUERY);
-                xParentText = xDoc->getText();
+                xParentText = dynamic_cast<SwXText*>(xDoc->getText().get());
             }
         }
     }

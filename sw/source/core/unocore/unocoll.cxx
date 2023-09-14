@@ -789,7 +789,7 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         }
         break;
         case SwServiceType::Paragraph:
-            xRet = static_cast<cppu::OWeakObject*>(SwXParagraph::CreateXParagraph(rDoc, nullptr).get());
+            xRet = static_cast<cppu::OWeakObject*>(SwXParagraph::CreateXParagraph(rDoc, nullptr, nullptr).get());
         break;
         case SwServiceType::NumberingRules:
             xRet = static_cast<cppu::OWeakObject*>(new SwXNumberingRules(rDoc));

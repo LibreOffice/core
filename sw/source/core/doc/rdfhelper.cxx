@@ -21,6 +21,7 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <unoparagraph.hxx>
+#include <unotext.hxx>
 
 using namespace com::sun::star;
 
@@ -201,13 +202,13 @@ void SwRDFHelper::cloneStatements(const css::uno::Reference<css::frame::XModel>&
 
 std::map<OUString, OUString> SwRDFHelper::getTextNodeStatements(const OUString& rType, SwTextNode& rTextNode)
 {
-    uno::Reference<rdf::XResource> xTextNode(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode));
+    uno::Reference<rdf::XResource> xTextNode(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     return getStatements(rTextNode.GetDoc().GetDocShell()->GetBaseModel(), rType, xTextNode);
 }
 
 void SwRDFHelper::addTextNodeStatement(const OUString& rType, const OUString& rPath, SwTextNode& rTextNode, const OUString& rKey, const OUString& rValue)
 {
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode));
+    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     addStatement(rTextNode.GetDoc().GetDocShell()->GetBaseModel(), rType, rPath, xSubject, rKey, rValue);
 }
 
@@ -222,7 +223,7 @@ void SwRDFHelper::removeTextNodeStatement(const OUString& rType, SwTextNode& rTe
 
     uno::Reference<rdf::XURI> xGraphName = aGraphNames[0];
     uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode));
+    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
     uno::Reference<rdf::XLiteral> xValue = rdf::Literal::create(xComponentContext, rValue);
     xGraph->removeStatements(xSubject, xKey, xValue);
@@ -246,7 +247,7 @@ void SwRDFHelper::updateTextNodeStatement(const OUString& rType, const OUString&
     }
 
     uno::Reference<rdf::XNamedGraph> xGraph = xDocumentMetadataAccess->getRDFRepository()->getGraph(xGraphName);
-    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode));
+    uno::Reference<rdf::XResource> xSubject(SwXParagraph::CreateXParagraph(rTextNode.GetDoc(), &rTextNode, nullptr));
     uno::Reference<rdf::XURI> xKey = rdf::URI::create(xComponentContext, rKey);
 
     if (aGraphNames.hasElements())

@@ -1,4 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -23,6 +24,7 @@
 #include <utility>
 
 #include <unoport.hxx>
+#include <unotext.hxx>
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
@@ -74,7 +76,7 @@ typedef std::stack< PortionList_t > PortionStack_t;
 
 static void lcl_CreatePortions(
     TextRangeList_t & i_rPortions,
-    uno::Reference< text::XText > const& i_xParentText,
+    css::uno::Reference< SwXText > const& i_xParentText,
     SwUnoCursor* pUnoCursor,
     FrameClientSortList_t & i_rFrames,
     const sal_Int32 i_nStartPos, const sal_Int32 i_nEndPos, bool bOnlyTextFields );
@@ -296,7 +298,7 @@ Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames()
 
 SwXTextPortionEnumeration::SwXTextPortionEnumeration(
         SwPaM& rParaCursor,
-        uno::Reference< XText > const & xParentText,
+        css::uno::Reference< SwXText > const & xParentText,
         const sal_Int32 nStart,
         const sal_Int32 nEnd,
         bool bOnlyTextFields)
@@ -516,7 +518,7 @@ lcl_CreateTOXMarkPortion(
 
 static uno::Reference<text::XTextRange>
 lcl_CreateMetaPortion(
-    uno::Reference<text::XText> const& xParent,
+    css::uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
     SwTextAttr & rAttr, std::unique_ptr<TextRangeList_t const> && pPortions)
 {
@@ -542,7 +544,7 @@ lcl_CreateMetaPortion(
 
 /// Creates a text portion that has a non-empty ContentControl property.
 static uno::Reference<text::XTextRange>
-lcl_CreateContentControlPortion(const uno::Reference<text::XText>& xParent,
+lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
                                 const SwUnoCursor* pUnoCursor, SwTextAttr& rAttr,
                                 std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
@@ -701,7 +703,7 @@ SwXRedlinePortion_ImplList;
 static Reference<XTextRange>
 lcl_ExportHints(
     PortionStack_t & rPortionStack,
-    const Reference<XText> & xParent,
+    const css::uno::Reference<SwXText> & xParent,
     SwUnoCursor * const pUnoCursor,
     SwpHints const * const pHints,
     const sal_Int32 i_nStartPos,
@@ -1330,7 +1332,7 @@ static sal_Int32 lcl_GetNextIndex(
 
 static void lcl_CreatePortions(
         TextRangeList_t & i_rPortions,
-        uno::Reference< text::XText > const & i_xParentText,
+        css::uno::Reference< SwXText > const & i_xParentText,
         SwUnoCursor * const pUnoCursor,
         FrameClientSortList_t & i_rFrames,
         const sal_Int32 i_nStartPos,

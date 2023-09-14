@@ -2535,17 +2535,17 @@ class SwXHeadFootText::Impl
         }
 };
 
-uno::Reference<text::XText> SwXHeadFootText::CreateXHeadFootText(
+rtl::Reference<SwXHeadFootText> SwXHeadFootText::CreateXHeadFootText(
         SwFrameFormat& rHeadFootFormat,
         const bool bIsHeader)
 {
     // re-use existing SwXHeadFootText
     // #i105557#: do not iterate over the registered clients: race condition
-    uno::Reference<text::XText> xText(rHeadFootFormat.GetXObject(), uno::UNO_QUERY);
+    rtl::Reference<SwXHeadFootText> xText = dynamic_cast<SwXHeadFootText*>(rHeadFootFormat.GetXObject().get().get());
     if(!xText.is())
     {
         xText = new SwXHeadFootText(rHeadFootFormat, bIsHeader);
-        rHeadFootFormat.SetXObject(xText);
+        rHeadFootFormat.SetXObject(static_cast<cppu::OWeakObject*>(xText.get()));
     }
     return xText;
 }

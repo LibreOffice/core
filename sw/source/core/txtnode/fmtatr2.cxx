@@ -46,6 +46,7 @@
 #include <ndtxt.hxx>
 #include <doc.hxx>
 #include <unometa.hxx>
+#include <unotext.hxx>
 #include <docsh.hxx>
 #include <osl/diagnose.h>
 
@@ -735,7 +736,7 @@ bool Meta::IsInContent() const
 
 css::uno::Reference< css::rdf::XMetadatable > Meta::MakeUnoObject()
 {
-    return SwXMeta::CreateXMeta(*this);
+    return SwXMeta::CreateXMeta(*this, {});
 }
 
 MetaField::MetaField(SwFormatMeta * const i_pFormat,

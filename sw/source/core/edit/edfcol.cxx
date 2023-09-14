@@ -1286,7 +1286,7 @@ void SwEditShell::ApplyParagraphClassification(std::vector<svx::ClassificationRe
     });
 
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
-    rtl::Reference<SwXParagraph> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
+    rtl::Reference<SwXParagraph> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode, nullptr);
     lcl_ApplyParagraphClassification(GetDoc(), xModel, xParent, css::uno::Reference<css::rdf::XResource>(xParent), std::move(aResults));
 }
 
@@ -1360,7 +1360,7 @@ std::vector<svx::ClassificationResult> SwEditShell::CollectParagraphClassificati
     if (pNode == nullptr)
         return aResult;
 
-    uno::Reference<text::XTextContent> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
+    rtl::Reference<SwXParagraph> xParent = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode, nullptr);
     uno::Reference<frame::XModel> xModel = pDocShell->GetBaseModel();
     return lcl_CollectParagraphClassification(xModel, xParent);
 }
@@ -1779,7 +1779,7 @@ void SwEditShell::SignParagraph()
         return;
 
     // 1. Get the text (without fields).
-    const uno::Reference<text::XTextContent> xParagraph = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode);
+    const rtl::Reference<SwXParagraph> xParagraph = SwXParagraph::CreateXParagraph(pNode->GetDoc(), pNode, nullptr);
     const OString utf8Text = lcl_getParagraphBodyText(xParagraph);
     if (utf8Text.isEmpty())
         return;
@@ -1849,7 +1849,7 @@ void SwEditShell::ValidateParagraphSignatures(SwTextNode* pNode, bool updateDont
             SetParagraphSignatureValidation(bOldValidationFlag);
         });
 
-    uno::Reference<text::XTextContent> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode);
+    rtl::Reference<SwXParagraph> xParentText = SwXParagraph::CreateXParagraph(*GetDoc(), pNode, nullptr);
     lcl_ValidateParagraphSignatures(*GetDoc(), xParentText, updateDontRemove);
 }
 

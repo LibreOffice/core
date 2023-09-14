@@ -125,11 +125,11 @@ public:
     sal_Int32 m_nSelectionStartPos;
     sal_Int32 m_nSelectionEndPos;
     OUString m_sText;
-    uno::Reference<text::XText> m_xParentText;
+    css::uno::Reference<SwXText> m_xParentText;
     SwTextNode* m_pTextNode;
 
     Impl(SwXParagraph& rThis,
-            SwTextNode* const pTextNode = nullptr, uno::Reference<text::XText> xParent = nullptr,
+            SwTextNode* const pTextNode = nullptr, css::uno::Reference<SwXText> xParent = nullptr,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = -1)
         : m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
@@ -219,7 +219,7 @@ SwXParagraph::SwXParagraph()
 }
 
 SwXParagraph::SwXParagraph(
-        uno::Reference< text::XText > const & xParent,
+        css::uno::Reference< SwXText > const & xParent,
         SwTextNode & rTextNode,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
     : m_pImpl(
@@ -243,7 +243,7 @@ bool SwXParagraph::IsDescriptor() const
 
 rtl::Reference<SwXParagraph>
 SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
-        uno::Reference< text::XText> const& i_xParent,
+        css::uno::Reference< SwXText> const& i_xParent,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
 {
     // re-use existing SwXParagraph
@@ -259,11 +259,11 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTextNode *const pTextNode,
     }
 
     // create new SwXParagraph
-    uno::Reference<text::XText> xParentText(i_xParent);
+    css::uno::Reference<SwXText> xParentText(i_xParent);
     if (!xParentText.is() && pTextNode)
     {
         SwPosition Pos(*pTextNode);
-        xParentText.set(::sw::CreateParentXText( rDoc, Pos ));
+        xParentText = ::sw::CreateParentXText( rDoc, Pos );
     }
     SwXParagraph *const pXPara( pTextNode
             ? new SwXParagraph(xParentText, *pTextNode, nSelStart, nSelEnd)

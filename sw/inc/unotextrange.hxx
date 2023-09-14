@@ -37,6 +37,7 @@
 class SwDoc;
 class SwUnoCursor;
 class SwFrameFormat;
+class SwXText;
 
 class SW_DLLPUBLIC SwUnoInternalPaM final
     : public SwPaM
@@ -66,7 +67,7 @@ namespace sw {
             const css::uno::Reference<css::text::XTextRange> & xTextRange,
             TextRangeMode eMode = TextRangeMode::RequireTextNode);
 
-    css::uno::Reference< css::text::XText >
+    css::uno::Reference< SwXText >
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
     bool GetDefaultTextContentValue(css::uno::Any& rAny,

@@ -70,7 +70,7 @@ private:
 
     virtual ~SwXParagraph() override;
 
-    SwXParagraph(css::uno::Reference< css::text::XText > const & xParent,
+    SwXParagraph(css::uno::Reference< SwXText > const & xParent,
             SwTextNode & rTextNode,
             const sal_Int32 nSelStart, const sal_Int32 nSelEnd);
 
@@ -81,8 +81,7 @@ public:
 
     static rtl::Reference<SwXParagraph>
         CreateXParagraph(SwDoc & rDoc, SwTextNode * pTextNode,
-            css::uno::Reference< css::text::XText>
-            const& xParentText = nullptr,
+            css::uno::Reference<SwXText> const& xParentText,
             const sal_Int32 nSelStart = -1, const sal_Int32 nSelEnd = - 1);
 
     const SwTextNode * GetTextNode() const;
