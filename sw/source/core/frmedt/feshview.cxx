@@ -3181,45 +3181,44 @@ Color SwFEShell::GetShapeBackground() const
 */
 bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
 {
-    bool bRet = false;
-
     // check, if a draw view exists
-    OSL_ENSURE( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackground - no draw view!");
-    if( Imp()->GetDrawView() )
-    {
-        // determine list of selected objects
-        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
-        // check, if exactly one object is selected.
-        OSL_ENSURE( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackground - no selected object!");
-        if ( pMrkList->GetMarkCount() == 1)
-        {
-            // get selected object
-            const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
-            // check, if selected object is a shape (drawing object)
-            OSL_ENSURE( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
-            if ( dynamic_cast<const SwVirtFlyDrawObj*>( pSdrObj) ==  nullptr )
-            {
-                // determine page frame of the frame the shape is anchored.
-                const SwContact* pContact = GetUserCall(pSdrObj);
-                OSL_ENSURE( pContact, "<SwFEShell::IsShapeDefaultHoriTextDirR2L(..)> - missing contact!" );
-                if (!pContact)
-                    return false;
-                const SwFrame* pAnchorFrame = static_cast<const SwDrawContact*>(pContact)->GetAnchorFrame( pSdrObj );
-                OSL_ENSURE( pAnchorFrame, "inconsistent model - no anchor at shape!");
-                if ( pAnchorFrame )
-                {
-                    const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
-                    OSL_ENSURE( pPageFrame, "inconsistent model - no page!");
-                    if ( pPageFrame )
-                    {
-                        bRet = pPageFrame->IsRightToLeft();
-                    }
-                }
-            }
-        }
-    }
+    OSL_ENSURE(Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackground - no draw view!");
+    if (!Imp()->GetDrawView())
+        return false;
 
-    return bRet;
+    // determine list of selected objects
+    const SdrMarkList& rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+
+    // check, if exactly one object is selected.
+    OSL_ENSURE(rMrkList.GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackground - no selected object!");
+    if (rMrkList.GetMarkCount() != 1)
+        return false;
+
+    // get selected object
+    const SdrObject *pSdrObj = rMrkList.GetMark(0)->GetMarkedSdrObj();
+
+    // check, if selected object is a shape (drawing object)
+    OSL_ENSURE(dynamic_cast<const SwVirtFlyDrawObj*>(pSdrObj) == nullptr, "wrong usage of SwFEShell::GetShapeBackground - selected object is not a drawing object!");
+    if (dynamic_cast<const SwVirtFlyDrawObj*>(pSdrObj) != nullptr)
+        return false;
+
+    // determine page frame of the frame the shape is anchored.
+    const SwContact* pContact = GetUserCall(pSdrObj);
+    OSL_ENSURE(pContact, "<SwFEShell::IsShapeDefaultHoriTextDirR2L(..)> - missing contact!");
+    if (!pContact)
+        return false;
+
+    const SwFrame* pAnchorFrame = static_cast<const SwDrawContact*>(pContact)->GetAnchorFrame(pSdrObj);
+    OSL_ENSURE(pAnchorFrame, "inconsistent model - no anchor at shape!");
+    if (!pAnchorFrame)
+        return false;
+
+    const SwPageFrame* pPageFrame = pAnchorFrame->FindPageFrame();
+    OSL_ENSURE(pPageFrame, "inconsistent model - no page!");
+    if (!pPageFrame)
+        return false;
+
+    return pPageFrame->IsRightToLeft();
 }
 
 Point SwFEShell::GetRelativePagePosition(const Point& rDocPos)
