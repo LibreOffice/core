@@ -50,17 +50,12 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
     , m_pWrtShell(nullptr)
     , m_pImpl(new SwCompatibilityOptPage_Impl)
     , m_nSavedOptions(0)
-    , m_bSavedMSFormsMenuOption(false)
     , m_xMain(m_xBuilder->weld_frame("compatframe"))
-    , m_xGlobalOptionsFrame(m_xBuilder->weld_frame("globalcompatframe"))
     , m_xFormattingLB(m_xBuilder->weld_combo_box("format"))
-    , m_xGlobalOptionsLB(m_xBuilder->weld_combo_box("globaloptions"))
     , m_xOptionsLB(m_xBuilder->weld_tree_view("options"))
-    , m_xGlobalOptionsCLB(m_xBuilder->weld_tree_view("globaloptioncheckbox"))
     , m_xDefaultPB(m_xBuilder->weld_button("default"))
 {
     m_xOptionsLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
-    m_xGlobalOptionsCLB->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     int nPos = 0;
     for (int i = static_cast<int>(SvtCompatibilityEntry::Index::Module) + 1;
@@ -79,21 +74,6 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(weld::Container* pPage, weld::Dia
     m_sUserEntry = m_xFormattingLB->get_text(m_xFormattingLB->get_count() - 1);
 
     m_xFormattingLB->clear();
-
-    // Set MSOCompatibleFormsMenu entry attributes
-    const bool bReadOnly = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::isReadOnly();
-    m_xGlobalOptionsCLB->set_sensitive(!bReadOnly);
-
-    m_xGlobalOptionsCLB->append();
-    const bool bChecked = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::get();
-    m_xGlobalOptionsCLB->set_toggle(0, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
-    m_xGlobalOptionsCLB->set_text(0, m_xGlobalOptionsLB->get_text(0), 0);
-
-    m_xGlobalOptionsLB->clear();
-
-    // tdf#125799, we let only the doc options grow/shrink but give this one more than its bare
-    // min request height because there's only one row in it and that looks somewhat abrupt
-    m_xGlobalOptionsCLB->set_size_request(-1, m_xGlobalOptionsCLB->get_preferred_size().Height() * 2);
 
     InitControls( rSet );
 
@@ -196,7 +176,6 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     else
     {
         m_xMain->set_sensitive(false);
-        m_xGlobalOptionsFrame->set_sensitive(false);
     }
     const OUString& rText = m_xMain->get_label();
     m_xMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
@@ -472,27 +451,6 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     if ( bModified )
         WriteOptions();
 
-    bool bNewMSFormsMenuOption = m_xGlobalOptionsCLB->get_toggle(0);
-    if (m_bSavedMSFormsMenuOption != bNewMSFormsMenuOption)
-    {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::set(bNewMSFormsMenuOption, batch);
-        batch->commit();
-
-        m_bSavedMSFormsMenuOption = bNewMSFormsMenuOption;
-        bModified = true;
-
-        // Show a message about that the option needs a restart to be applied
-        {
-            SolarMutexGuard aGuard;
-            if (svtools::executeRestartDialog(comphelper::getProcessComponentContext(),
-                                              GetFrameWeld(), svtools::RESTART_REASON_MSCOMPATIBLE_FORMS_MENU))
-            {
-                GetDialogController()->response(RET_OK);
-            }
-        }
-    }
-
     return bModified;
 }
 
@@ -503,9 +461,6 @@ void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
     sal_uInt32 nOptions = GetDocumentOptions();
     SetCurrentOptions( nOptions );
     m_nSavedOptions = nOptions;
-
-    m_bSavedMSFormsMenuOption = officecfg::Office::Compatibility::View::MSCompatibleFormsMenu::get();
-    m_xGlobalOptionsCLB->set_toggle(0, m_bSavedMSFormsMenuOption ? TRISTATE_TRUE : TRISTATE_FALSE);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
