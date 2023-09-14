@@ -795,7 +795,9 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
         const bool bIsGroup(nullptr != pChildren);
         if(!bIsGroup)
         {
-            if (pSdrObject->GetObjIdentifier() == SdrObjKind::Edge)
+            // Check IsVirtualObj because sometimes we get SwDrawVirtObj here
+            if (pSdrObject->GetObjIdentifier() == SdrObjKind::Edge
+               && !pSdrObject->IsVirtualObj())
             {
                 SdrEdgeObj* pSdrEdgeObj = static_cast< SdrEdgeObj* >(pSdrObject);
                 pSdrEdgeObj->Reformat();
