@@ -84,7 +84,7 @@ def collect_all_attribute(usedstyles, attribute):
         usedstyles.add(element.get(attribute))
 
 def remove_unused(root):
-    # 1) find all elements that may reference page styles - this gets rid of some paragaraphs
+    # 1) find all elements that may reference page styles - this gets rid of some paragraphs
     usedpstyles = get_used_p_styles(root)
     print(usedpstyles)
     usedtstyles = set()
