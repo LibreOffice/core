@@ -119,6 +119,7 @@ enum FieldIdEnum {
     FIELD_ID_REF_BOOKMARK,          // get reference field (bookmark)
     FIELD_ID_REF_FOOTNOTE,          // get reference field (footnote)
     FIELD_ID_REF_ENDNOTE,           // get reference field (endnote)
+    FIELD_ID_REF_STYLE,             // styleref field
     FIELD_ID_DDE,                   // DDE field
 
     FIELD_ID_BIBLIOGRAPHY,          // bibliography index entry

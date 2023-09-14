@@ -1229,6 +1229,9 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
                     case REF_SEQUENCEFLD:
                         sEntry = static_cast<const SwGetRefField*>(pField)->GetSetRefName();
                         break;
+                    case REF_STYLE:
+                        sEntry = "StyleRef";
+                        break;
                     }
                     //Get format string
                     strTypeName = sEntry;

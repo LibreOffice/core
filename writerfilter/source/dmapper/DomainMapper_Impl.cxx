@@ -5707,7 +5707,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"SEQ",             {"SetExpression",           FIELD_SEQ           }},
         {"SET",             {"SetExpression",           FIELD_SET           }},
 //      {"SKIPIF",          {"",                        FIELD_SKIPIF        }},
-//      {"STYLEREF",        {"",                        FIELD_STYLEREF      }},
+        {"STYLEREF",        {"GetReference",            FIELD_STYLEREF      }},
         {"SUBJECT",         {"DocInfo.Subject",         FIELD_SUBJECT       }},
         {"SYMBOL",          {"",                        FIELD_SYMBOL        }},
         {"TEMPLATE",        {"TemplateName",            FIELD_TEMPLATE      }},
@@ -7373,9 +7373,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_PAGEREF:
                 case FIELD_REF:
+                case FIELD_STYLEREF:
                 if (xFieldProperties.is() && !IsInTOC())
                 {
                     bool bPageRef = aIt->second.eFieldId == FIELD_PAGEREF;
+                    bool bStyleRef = aIt->second.eFieldId == FIELD_STYLEREF;
 
                     // Do we need a GetReference (default) or a GetExpression field?
                     uno::Reference< text::XTextFieldsSupplier > xFieldsSupplier( GetTextDocument(), uno::UNO_QUERY );
@@ -7385,12 +7387,50 @@ void DomainMapper_Impl::CloseFieldCommand()
                             "com.sun.star.text.FieldMaster.SetExpression."
                             + sFirstParam))
                     {
-                        xFieldProperties->setPropertyValue(
-                            getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
-                            uno::Any( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
-                        xFieldProperties->setPropertyValue(
-                            getPropertyName(PROP_SOURCE_NAME),
-                            uno::Any(sFirstParam) );
+                        if (bStyleRef)
+                        {
+                            xFieldProperties->setPropertyValue(
+                                getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
+                                uno::Any(sal_Int16(text::ReferenceFieldSource::STYLE)));
+
+                            OUString sStyleSheetName
+                                = GetStyleSheetTable()->ConvertStyleName(sFirstParam, true);
+
+                            uno::Any aStyleDisplayName;
+
+                            uno::Reference<style::XStyleFamiliesSupplier> xStylesSupplier(
+                                GetTextDocument(), uno::UNO_QUERY_THROW);
+                            uno::Reference<container::XNameAccess> xStyleFamilies
+                                = xStylesSupplier->getStyleFamilies();
+                            uno::Reference<container::XNameAccess> xStyles;
+                            xStyleFamilies->getByName(getPropertyName(PROP_PARAGRAPH_STYLES))
+                                >>= xStyles;
+                            uno::Reference<css::beans::XPropertySet> xStyle;
+
+                            try
+                            {
+                                xStyles->getByName(sStyleSheetName) >>= xStyle;
+                                aStyleDisplayName = xStyle->getPropertyValue("DisplayName");
+                            }
+                            catch (css::container::NoSuchElementException)
+                            {
+                                aStyleDisplayName = uno::Any(sStyleSheetName);
+                            }
+
+                            xFieldProperties->setPropertyValue(
+                                getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+                        }
+                        else
+                        {
+                            xFieldProperties->setPropertyValue(
+                                getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
+                                uno::Any( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
+
+                            xFieldProperties->setPropertyValue(
+                                getPropertyName(PROP_SOURCE_NAME),
+                                uno::Any(sFirstParam));
+                        }
+
                         sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
                         OUString sValue;
                         if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
@@ -7485,7 +7525,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                     handleFieldSet(pContext, xFieldInterface, xFieldProperties);
                 break;
                 case FIELD_SKIPIF       : break;
-                case FIELD_STYLEREF     : break;
                 case FIELD_SUBJECT      :
                 {
                     if (!sFirstParam.isEmpty())

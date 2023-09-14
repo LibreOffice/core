@@ -953,8 +953,7 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bHasHandler = aWW8FieldTab[aF.nId] != nullptr;
     if (aF.nId == 10) // STYLEREF
     {
-        // STYLEREF, by default these are not handled.
-        bHasHandler = false;
+        bool bHandledByChapter = false;
         sal_uInt64 nOldPos = m_pStrm->Tell();
         OUString aStr;
         aF.nLCode = m_xSBase->WW8ReadString(*m_pStrm, aStr, m_xPlcxMan->GetCpOfs() + aF.nSCode, aF.nLCode, m_eTextCharSet);
@@ -964,9 +963,9 @@ tools::Long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         sal_Int32 nRet = aReadParam.SkipToNextToken();
         if (nRet == -2 && !aReadParam.GetResult().isEmpty())
             // Single numeric argument: this can be handled by SwChapterField.
-            bHasHandler = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
+            bHandledByChapter = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
 
-        if (bHasHandler)
+        if (bHandledByChapter)
         {
             nRet = aReadParam.SkipToNextToken();
             // Handle using SwChapterField only in case there is no \[a-z]
@@ -2158,7 +2157,7 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, OUString& rStr )
 
     SwGetRefField aField(
         static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-        sBkmName,"",REF_BOOKMARK,0,eFormat);
+        sBkmName,"",REF_BOOKMARK,0,eFormat,nullptr,nullptr);
 
     if (eFormat == REF_CONTENT)
     {
@@ -2214,14 +2213,14 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, OUString& rStr )
     // (will be corrected in
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(
         m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )), aBkmName, "", REF_FOOTNOTE, 0,
-        REF_ONLYNUMBER );
+        REF_ONLYNUMBER, nullptr, nullptr );
     m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField));
     m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     if (bAboveBelow)
     {
         SwGetRefField aField2( static_cast<SwGetRefFieldType*>(
             m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),aBkmName, "", REF_FOOTNOTE, 0,
-            REF_UPDOWN );
+            REF_UPDOWN, nullptr, nullptr );
         m_xReffingStck->NewAttr(*m_pPaM->GetPoint(), SwFormatField(aField2));
         m_xReffingStck->SetAttr(*m_pPaM->GetPoint(), RES_TXTATR_FIELD);
     }
@@ -2293,7 +2292,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
         sPageRefBookmarkName = sName;
     }
     SwGetRefField aField( static_cast<SwGetRefFieldType*>(m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::GetRef )),
-                        sPageRefBookmarkName, "", REF_BOOKMARK, 0, REF_PAGE );
+                        sPageRefBookmarkName, "", REF_BOOKMARK, 0, REF_PAGE, nullptr, nullptr );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
 
     return eF_ResT::OK;

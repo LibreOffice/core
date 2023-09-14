@@ -357,7 +357,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 if ( pRefField->IsRefToHeadingCrossRefBookmark() ||
                                      pRefField->IsRefToNumItemCrossRefBookmark() )
                                 {
-                                    sText = pRefField->GetExpandedTextOfReferencedTextNode(*rSh.GetLayout());
+                                    sText = pRefField->GetExpandedTextOfReferencedTextNode(*rSh.GetLayout(), nullptr);
                                     if ( sText.getLength() > 80  )
                                     {
                                         sText = OUString::Concat(sText.subView(0, 80)) + "...";

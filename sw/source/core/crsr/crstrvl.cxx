@@ -1409,8 +1409,14 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
     SwCursorSaveState aSaveState( *m_pCurrentCursor );
 
     sal_Int32 nPos = -1;
-    SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor( GetDoc(), rRefMark,
-                                nSubType, nSeqNo, &nPos, nullptr, GetLayout());
+
+    SwPaM* pCursor = GetCursor();
+    SwPosition* pPos = pCursor->GetPoint();
+    SwTextNode* pRefTextNd = pPos->GetNode().GetTextNode();
+    SwContentFrame* pRefFrame = GetCurrFrame();
+
+    SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor(GetDoc(), rRefMark,
+                                nSubType, nSeqNo, &nPos, nullptr, GetLayout(), pRefTextNd, pRefFrame);
     if( !pTextNd || !pTextNd->GetNodes().IsDocNodes() )
         return false;
 

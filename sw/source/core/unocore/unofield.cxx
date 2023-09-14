@@ -1529,6 +1529,8 @@ void SAL_CALL SwXTextField::attach(
                             m_pImpl->m_pProps->sPar4,
                             0,
                             0,
+                            0,
+                            0,
                             0));
                 if (!m_pImpl->m_pProps->sPar3.isEmpty())
                     static_cast<SwGetRefField*>(xField.get())->SetExpand(m_pImpl->m_pProps->sPar3);

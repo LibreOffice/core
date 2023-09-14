@@ -128,6 +128,7 @@
 #include <fmthdft.hxx>
 #include <authfld.hxx>
 #include <dbfld.hxx>
+#include <docsh.hxx>
 
 #include "sprmids.hxx"
 
@@ -1043,6 +1044,18 @@ OUString MSWordExportBase::GetBookmarkName( sal_uInt16 nTyp, const OUString* pNa
             break;
     }
     return BookmarkToWord( sRet ); // #i43956# - encode bookmark accordingly
+}
+
+OUString MSWordExportBase::GetStyleRefName(const OUString& rName)
+{
+    SwTextFormatColls* pTextFormatColls = m_rDoc.GetTextFormatColls();
+    SwTextFormatColl* pTextFormat = pTextFormatColls->FindFormatByName(rName);
+
+    if (pTextFormat == nullptr)
+        return "\"" + rName + "\"";
+    // Didn't find the style, just keep the original name
+
+    return "\"" + m_pStyles->GetStyleWWName(pTextFormat) + "\"";
 }
 
 /* File CHRATR.HXX: */
@@ -3293,26 +3306,45 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     sStr = FieldString(eField)
                            + GetExport().GetBookmarkName(nSubType, nullptr, rRField.GetSeqNo());
                     break;
+                case REF_STYLE:
+                    sStr = FieldString(ww::eSTYLEREF)
+                           + GetExport().GetStyleRefName(pField->GetPar1());
+                    eField = ww::eSTYLEREF;
+                    break;
             }
 
-            if (eField != ww::eNONE)
+            OUString sExtraFlags = "\\h "; // by default, include a hyperlink
+
+            switch (eField)
             {
-                switch (pField->GetFormat())
-                {
-                    case REF_UPDOWN:
-                        sStr += " \\p \\h ";   // with hyperlink
-                        break;
-                    case REF_CHAPTER:
-                        sStr += " \\n \\h ";   // with hyperlink
-                        break;
-                    default:
-                        sStr += " \\h ";       // insert hyperlink
-                        break;
-                }
-                GetExport().OutputField(pField, eField, sStr);
+                case ww::eNONE:
+                    bWriteExpand = true;
+                    break;
+                case ww::eSTYLEREF:
+                    sExtraFlags = ""; // styleref fields do not work if they have a hyperlink
+                    [[fallthrough]];
+                default:
+                    switch (pField->GetFormat())
+                    {
+                        case REF_NUMBER:
+                            sStr += " \\r " + sExtraFlags;
+                            break;
+                        case REF_NUMBER_FULL_CONTEXT:
+                            sStr += " \\w " + sExtraFlags;
+                            break;
+                        case REF_UPDOWN:
+                            sStr += " \\p " + sExtraFlags;
+                            break;
+                        case REF_NUMBER_NO_CONTEXT:
+                        case REF_CHAPTER:
+                            sStr += " \\n " + sExtraFlags;
+                            break;
+                        default:
+                            sStr += " " + sExtraFlags;
+                            break;
+                    }
+                    GetExport().OutputField(pField, eField, sStr);
             }
-            else
-                bWriteExpand = true;
         }
         break;
     case SwFieldIds::CombinedChars:
@@ -3362,7 +3394,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::Chapter:
         bWriteExpand = true;
-        if (GetExport().m_bOutKF && rField.GetTextField())
+
+        if (rField.GetTextField())
         {
             const SwTextNode *pTextNd = GetExport().GetHdFtPageRoot();
             if (!pTextNd)
@@ -3374,10 +3407,22 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             {
                 SwChapterField aCopy(*static_cast<const SwChapterField*>(pField));
                 aCopy.ChangeExpansion(*pTextNd, false);
-                const OUString sStr = FieldString(ww::eSTYLEREF)
-                    + " "
-                    + OUString::number(aCopy.GetLevel() + 1)
-                    + " \\* MERGEFORMAT ";
+
+                OUString sStr;
+                if (GetExport().m_bOutKF) {
+                    // In headers and footers, use the chapter number as the style name
+                    sStr = FieldString(ww::eSTYLEREF)
+                        + " "
+                        + OUString::number(aCopy.GetLevel() + 1)
+                        + " \\* MERGEFORMAT ";
+                } else {
+                    // Otherwise, get the style of the text and use it as the style name
+                    const SwTextNode* pOutlineNd = pTextNd->FindOutlineNodeOfLevel(aCopy.GetLevel());
+
+                    sStr = FieldString(ww::eSTYLEREF)
+                         + GetExport().GetStyleRefName(pOutlineNd->GetFormatColl()->GetName());
+                }
+
                 GetExport().OutputField(pField, ww::eSTYLEREF, sStr);
                 bWriteExpand = false;
             }

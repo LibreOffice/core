@@ -2062,6 +2062,29 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+    <!-- TODO no proposal -->
+  <rng:define name="loext-style-reference">
+    <rng:element name="loext:style-ref">
+      <rng:interleave>
+        <rng:ref name="text-common-ref-content"/>
+        <rng:optional>
+          <rng:attribute name="text:reference-format">
+            <rng:choice>
+              <rng:value>text</rng:value>
+              <rng:value>direction</rng:value>
+              <rng:value>number</rng:value>
+              <rng:value>number-no-superior</rng:value>
+              <rng:value>number-all-superior</rng:value>
+            </rng:choice>
+          </rng:attribute>
+        </rng:optional>
+      </rng:interleave>
+    </rng:element>
+  </rng:define>
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:ref name="loext-style-reference"/>
+  </rng:define>
+
   <rng:define name="loext-qrcode">
     <rng:element name="loext:qrcode">
       <rng:attribute name="office:string-value">

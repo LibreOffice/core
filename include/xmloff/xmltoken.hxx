@@ -1898,6 +1898,7 @@ namespace xmloff::token {
         XML_STRUCTURE_PROTECTED,
         XML_STYLE,
         XML_STYLE_NAME,
+        XML_STYLE_REF,
         XML_STYLES,
         XML_STYLESHEET,
         XML_SUB_TABLE,

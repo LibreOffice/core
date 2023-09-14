@@ -1811,6 +1811,7 @@ stroke-width
 structure-protected
 style
 style-name
+style-ref
 styles
 stylesheet
 sub-table

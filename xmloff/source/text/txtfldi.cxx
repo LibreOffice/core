@@ -407,6 +407,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
         case XML_ELEMENT(TEXT, XML_NOTE_REF):
         case XML_ELEMENT(TEXT, XML_SEQUENCE_REF):
+        case XML_ELEMENT(TEXT, XML_STYLE_REF):
             pContext = new XMLReferenceFieldImportContext( rImport, rHlp, nToken );
             break;
 
@@ -2509,6 +2510,9 @@ void XMLReferenceFieldImportContext::startFastElement(
         case XML_ELEMENT(TEXT, XML_SEQUENCE_REF):
             nSource = ReferenceFieldSource::SEQUENCE_FIELD;
             break;
+        case XML_ELEMENT(TEXT, XML_STYLE_REF):
+            nSource = ReferenceFieldSource::STYLE;
+            break;
         default:
             XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElementToken);
             bTypeOK = false;
@@ -2577,6 +2581,7 @@ void XMLReferenceFieldImportContext::PrepareField(
     {
         case XML_ELEMENT(TEXT, XML_REFERENCE_REF):
         case XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
+        case XML_ELEMENT(LO_EXT, XML_STYLE_REF):
             xPropertySet->setPropertyValue("SourceName", Any(sName));
             break;
 

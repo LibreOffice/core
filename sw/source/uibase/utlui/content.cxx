@@ -704,7 +704,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     {
                         OUString sExpandedTextOfReferencedTextNode =
                                 pRefField->GetExpandedTextOfReferencedTextNode(
-                                    *m_pWrtShell->GetLayout());
+                                    *m_pWrtShell->GetLayout(), nullptr);
                         if (sExpandedTextOfReferencedTextNode.getLength() > 80)
                         {
                             sExpandedTextOfReferencedTextNode = OUString::Concat(

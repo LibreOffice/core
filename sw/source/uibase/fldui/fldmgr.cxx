@@ -66,6 +66,8 @@
 #include <authfld.hxx>
 #include <flddat.hxx>
 #include <fldmgr.hxx>
+#include <ndtxt.hxx>
+#include <cntfrm.hxx>
 #include <flddropdown.hxx>
 #include <strings.hrc>
 #include <tox.hxx>
@@ -1129,7 +1131,19 @@ bool SwFieldMgr::InsertField(
                 }
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
-            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId));
+
+            SwPaM* pCursor = nullptr;
+            SwPosition* pPos = nullptr;
+            SwTextNode* pTextNode = nullptr;
+            SwContentFrame* pFrame = nullptr;
+            if (nSubType == REF_STYLE) {
+                pCursor = pCurShell->GetCursor();
+                pPos = pCursor->GetPoint();
+                pTextNode = pPos->GetNode().GetTextNode();
+                pFrame = pCurShell->GetCurrFrame();
+            }
+
+            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId, pTextNode, pFrame));
             bExp = true;
             break;
         }

@@ -34,6 +34,7 @@ class SwFieldRefPage : public SwFieldPage
     // #i83479#
     OUString    m_sHeadingText;
     OUString    m_sNumItemText;
+    OUString    m_sStyleText;
 
     IDocumentOutlineNodes::tSortedOutlineNodeList maOutlineNodes;
     IDocumentListItems::tSortedNodeNumList maNumItems;

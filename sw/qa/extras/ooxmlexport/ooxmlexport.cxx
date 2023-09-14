@@ -602,7 +602,7 @@ DECLARE_OOXMLEXPORT_TEST(testMultiPageToc, "multi-page-toc.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Table of Contents1"), xTextSection->getName());
     // There should be a field in the header as well.
     uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Standard"), "HeaderText");
-    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStart"), getProperty<OUString>(getRun(getParagraphOfText(1, xHeaderText), 1), "TextPortionType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(getRun(getParagraphOfText(1, xHeaderText), 1), "TextPortionType"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextboxTable, "textbox-table.docx")
