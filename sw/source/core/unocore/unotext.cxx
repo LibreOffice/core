@@ -1651,23 +1651,22 @@ SwXText::convertToTextFrame(
     }
     oAnchorCheckPam.reset(); // clear SwIndex before deleting nodes
 
-    const uno::Reference<text::XTextFrame> xNewFrame(
-            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr));
-    SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame);
+    const rtl::Reference<SwXTextFrame> xNewFrame =
+            SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, nullptr);
     try
     {
         for (const beans::PropertyValue& rValue : rFrameProperties)
         {
-            rNewFrame.SwXFrame::setPropertyValue(rValue.Name, rValue.Value);
+            xNewFrame->SwXFrame::setPropertyValue(rValue.Name, rValue.Value);
         }
 
         {   // has to be in a block to remove the SwIndexes before
             // DelFullPara is called
             const uno::Reference< text::XTextRange> xInsertTextRange =
                 new SwXTextRange(*pStartPam, this);
-            assert(rNewFrame.IsDescriptor());
-            rNewFrame.attachToRange(xInsertTextRange, pStartPam.get());
-            assert(!rNewFrame.getName().isEmpty());
+            assert(xNewFrame->IsDescriptor());
+            xNewFrame->attachToRange(xInsertTextRange, pStartPam.get());
+            assert(!xNewFrame->getName().isEmpty());
         }
 
         SwTextNode *const pTextNode(pStartPam->GetPointNode().GetTextNode());
@@ -1680,10 +1679,10 @@ SwXText::convertToTextFrame(
                 if (aMovePam.Move( fnMoveForward, GoInContent ))
                 {
                     // move the anchor to the next paragraph
-                    SwFormatAnchor aNewAnchor(rNewFrame.GetFrameFormat()->GetAnchor());
+                    SwFormatAnchor aNewAnchor(xNewFrame->GetFrameFormat()->GetAnchor());
                     aNewAnchor.SetAnchor( aMovePam.Start() );
                     m_pImpl->m_pDoc->SetAttr(
-                        aNewAnchor, *rNewFrame.GetFrameFormat() );
+                        aNewAnchor, *xNewFrame->GetFrameFormat() );
 
                     // also move frames anchored to us
                     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrameFormats()->size(); ++i)
@@ -1736,11 +1735,11 @@ SwXText::convertToTextFrame(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    xRet = xNewFrame;
+    xRet = static_cast<SwXFrame*>(xNewFrame.get());
     if (bParaBeforeInserted || bParaAfterInserted)
     {
         const rtl::Reference<SwXTextCursor> xFrameTextCursor =
-            rNewFrame.createXTextCursor();
+            xNewFrame->createXTextCursor();
         if (bParaBeforeInserted)
         {
             // todo: remove paragraph before frame
