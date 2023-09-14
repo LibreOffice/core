@@ -1168,6 +1168,7 @@ void SwRedlineData::dumpAsXml(xmlTextWriterPtr pWriter) const
             break;
     }
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("moved"), BAD_CAST(OString::boolean(m_bMoved).getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }
