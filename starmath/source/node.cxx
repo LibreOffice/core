@@ -769,6 +769,12 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
     pRootSym->Arrange(rDev, rFormat);
 
+    // Set the top and bottom of the root symbol to the top and bottom of its glyph bounding rect,
+    // to get accurate position of the root symbol.
+    SmRect rRootSymRect = pRootSym->AsGlyphRect();
+    pRootSym->SetTop(rRootSymRect.GetTop());
+    pRootSym->SetBottom(rRootSymRect.GetBottom());
+
     Point  aPos = pRootSym->AlignTo(*pBody, RectPos::Left, RectHorAlign::Center, RectVerAlign::Baseline);
     //! override calculated vertical position
     aPos.setY( pRootSym->GetTop() + pBody->GetBottom() - pRootSym->GetBottom() );
