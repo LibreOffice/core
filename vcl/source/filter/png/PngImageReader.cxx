@@ -676,6 +676,8 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
         sal_uInt32 nFrames
             = aAPNGInfo.maACTLChunk.num_frames - static_cast<sal_uInt32>(bFctlBeforeIDAT);
         {
+            if (aAPNGInfo.maFrameData.empty())
+                return false;
             fcTLChunk* aFctlChunk = dynamic_cast<fcTLChunk*>(aAPNGInfo.maFrameData[0].get());
             if (!aFctlChunk)
                 return false;
