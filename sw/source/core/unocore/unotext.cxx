@@ -2377,18 +2377,12 @@ SwXText::copyText(
 {
     SolarMutexGuard aGuard;
 
-    SwXText const* const pSource(dynamic_cast<SwXText*>(xSource.get()));
-
-    uno::Reference< text::XText > const xText(xSource, uno::UNO_QUERY_THROW);
-    uno::Reference< text::XTextCursor > const xCursor =
-        xText->createTextCursor();
-    xCursor->gotoEnd( true );
-
-    OTextCursorHelper *const pCursor = dynamic_cast<OTextCursorHelper*>(xCursor.get());
-    if (!pCursor)
-    {
+    SwXText* const pSource(dynamic_cast<SwXText*>(xSource.get()));
+    if (!pSource)
         throw uno::RuntimeException();
-    }
+
+    rtl::Reference< SwXTextCursor > const xCursor = pSource->createXTextCursor();
+    xCursor->gotoEnd( true );
 
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
@@ -2421,7 +2415,7 @@ SwXText::copyText(
     }
     else
     {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*pCursor->GetPaM(), rPos, SwCopyFlags::CheckPosInFly);
+        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*xCursor->GetPaM(), rPos, SwCopyFlags::CheckPosInFly);
     }
 
 }
