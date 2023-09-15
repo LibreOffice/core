@@ -18,6 +18,7 @@
  */
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <scerrors.hxx>
 #include <fprogressbar.hxx>
 #include <globstr.hrc>

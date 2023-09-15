@@ -21,6 +21,7 @@
 #include <compiler.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <dociter.hxx>
 #include <global.hxx>
 #include <scmod.hxx>
@@ -2166,7 +2167,7 @@ void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, Config
         //  (Has to be done in the Notify handler, to be sure
         //  the user collection has already been updated)
 
-        SfxObjectShell* pDocSh = rDoc.GetDocumentShell();
+        ScDocShell* pDocSh = rDoc.GetDocumentShell();
         if (pDocSh)
             pDocSh->Broadcast( ScPaintHint( ScRange(0,0,0,rDoc.MaxCol(),rDoc.MaxRow(),MAXTAB), PaintPartFlags::Grid ) );
     }

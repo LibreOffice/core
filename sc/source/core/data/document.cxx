@@ -562,7 +562,7 @@ bool ScDocument::InsertTab(
 
         if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
         {
-            ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
+            ScModelObj* pModel = GetDocumentShell()->GetModel();
             SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
         }
     }
@@ -734,7 +734,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
 
             if (comphelper::LibreOfficeKit::isActive())
             {
-                ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
+                ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
@@ -824,7 +824,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
             if (comphelper::LibreOfficeKit::isActive())
             {
-                ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
+                ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
 
@@ -870,7 +870,7 @@ bool ScDocument::RenameTab( SCTAB nTab, const OUString& rName, bool bExternalDoc
 
             if (comphelper::LibreOfficeKit::isActive() && GetDrawLayer())
             {
-                ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(this->GetDocumentShell()->GetModel());
+                ScModelObj* pModel = GetDocumentShell()->GetModel();
                 SfxLokHelper::notifyDocumentSizeChangedAllViews(pModel);
             }
         }
@@ -6615,7 +6615,7 @@ void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScP
     {
         pTable->SetNote(nCol, nRow, std::move(pNote));
 
-        if (ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(GetDocumentShell()))
+        if (ScDocShell* pDocSh = GetDocumentShell())
         {
             HelperNotifyChanges::NotifyIfChangesListeners(
                 *pDocSh, ScRange(nCol, nRow, nTab), "note");

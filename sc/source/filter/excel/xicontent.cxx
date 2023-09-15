@@ -41,6 +41,7 @@
 #include <validat.hxx>
 #include <patattr.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <rangenam.hxx>
 #include <arealink.hxx>
 #include <stlsheet.hxx>

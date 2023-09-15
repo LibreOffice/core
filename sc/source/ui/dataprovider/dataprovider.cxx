@@ -242,7 +242,7 @@ void ScDBDataManager::WriteToDoc(ScDocument& rDoc)
     ScMarkData aMark(mpDoc->GetSheetLimits());
     aMark.SelectTable(0, true);
     mpDoc->CopyFromClip(aDestRange, aMark, InsertDeleteFlags::CONTENTS, nullptr, &rDoc);
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
+    ScDocShell* pDocShell = mpDoc->GetDocumentShell();
     if (pDocShell)
         pDocShell->PostPaint(aDestRange, PaintPartFlags::All);
 }

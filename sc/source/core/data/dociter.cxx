@@ -23,6 +23,7 @@
 #include <global.hxx>
 #include <dociter.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <table.hxx>
 #include <column.hxx>
 #include <formulacell.hxx>

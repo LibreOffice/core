@@ -19,6 +19,7 @@
 
 #include <dif.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <formulacell.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

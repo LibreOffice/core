@@ -85,6 +85,7 @@
 
 #include <document.hxx>
 #include <drwlayer.hxx>
+#include <docsh.hxx>
 #include <tokenarray.hxx>
 #include <compiler.hxx>
 #include <reftokenhelper.hxx>
@@ -270,7 +271,7 @@ void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, c
     if( xChartDoc.is() )
         xChartDoc->lockControllers();
 
-    SfxObjectShell* pDocShell = GetDocShell();
+    ScDocShell* pDocShell = GetDocShell();
     Reference< XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );
     if( pDocShell && xDataRec.is() )
     {
@@ -280,7 +281,7 @@ void XclImpChRoot::InitConversion( const Reference<XChartDocument>& xChartDoc, c
         if( xDataProv.is() )
             xDataRec->attachDataProvider( xDataProv );
         // attach the number formatter
-        Reference< XNumberFormatsSupplier > xNumFmtSupp( pDocShell->GetModel(), UNO_QUERY );
+        Reference< XNumberFormatsSupplier > xNumFmtSupp( static_cast<cppu::OWeakObject*>(pDocShell->GetModel()), UNO_QUERY );
         if( xNumFmtSupp.is() )
             xDataRec->attachNumberFormatsSupplier( xNumFmtSupp );
     }

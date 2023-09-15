@@ -51,6 +51,7 @@
 #include <addincol.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
+#include <docsh.hxx>
 #include <docoptio.hxx>
 #include <scmatrix.hxx>
 #include <adiasync.hxx>
@@ -2753,7 +2754,7 @@ void ScInterpreter::ScExternal()
 
         if ( aCall.NeedsCaller() && GetError() == FormulaError::NONE )
         {
-            SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+            ScDocShell* pShell = mrDoc.GetDocumentShell();
             if (pShell)
                 aCall.SetCallerFromObjectShell( pShell );
             else
@@ -3228,7 +3229,7 @@ void ScInterpreter::ScMacro()
     sal_uInt8 nParamCount = GetByte();
     OUString aMacro( pCur->GetExternal() );
 
-    SfxObjectShell* pDocSh = mrDoc.GetDocumentShell();
+    ScDocShell* pDocSh = mrDoc.GetDocumentShell();
     if ( !pDocSh )
     {
         PushNoValue();      // without DocShell no CallBasic

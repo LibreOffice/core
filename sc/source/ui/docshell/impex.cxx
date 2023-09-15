@@ -110,7 +110,7 @@ enum class SylkVersion
 
 // Whole document without Undo
 ScImportExport::ScImportExport( ScDocument& r )
-    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+    : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
@@ -124,7 +124,7 @@ ScImportExport::ScImportExport( ScDocument& r )
 
 // Insert am current cell without range(es)
 ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
-    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+    : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       aRange( rPt ),
       nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
@@ -140,7 +140,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScAddress& rPt )
 //  ctor with a range is only used for export
 //! ctor with a string (and bSingle=true) is also used for DdeSetData
 ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
-    : pDocSh( dynamic_cast<ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+    : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       aRange( rRange ),
       nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
@@ -158,7 +158,7 @@ ScImportExport::ScImportExport( ScDocument& r, const ScRange& rRange )
 // Evaluate input string - either range, cell or the whole document (when error)
 // If a View exists, the TabNo of the view will be used.
 ScImportExport::ScImportExport( ScDocument& r, const OUString& rPos )
-    : pDocSh( dynamic_cast< ScDocShell* >(r.GetDocumentShell()) ), rDoc( r ),
+    : pDocSh( r.GetDocumentShell() ), rDoc( r ),
       nSizeLimit( 0 ), nMaxImportRow(!utl::ConfigManager::IsFuzzing() ? rDoc.MaxRow() : SCROWS32K),
       cSep( '\t' ), cStr( '"' ),
       bFormulas( false ), bIncludeFiltered( true ),
@@ -456,7 +456,7 @@ bool ScImportExport::ExportStream( SvStream& rStrm, const OUString& rBaseURL, So
             aDocName = ScGlobal::GetClipDocName();
         else
         {
-            SfxObjectShell* pShell = rDoc.GetDocumentShell();
+            ScDocShell* pShell = rDoc.GetDocumentShell();
             if (pShell)
                 aDocName = pShell->GetTitle( SFX_TITLE_FULLNAME );
         }

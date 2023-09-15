@@ -34,6 +34,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
 #include <docuno.hxx>
+#include <docsh.hxx>
 
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -169,7 +170,7 @@ void ImportExcel::ReadFileSharing()
 
     GetMedium().GetItemSet().Put( SfxBoolItem( SID_DOC_READONLY, true ) );
 
-    if( SfxObjectShell* pShell = GetDocShell() )
+    if( ScDocShell* pShell = GetDocShell() )
     {
         if( nRecommendReadOnly != 0 )
             pShell->SetLoadReadonly( true );
@@ -1294,7 +1295,7 @@ void ImportExcel::PostDocLoad()
     GetObjectManager().ConvertObjects();
 
     // visible area (used if this document is an embedded OLE object)
-    if( SfxObjectShell* pDocShell = GetDocShell() )
+    if( ScDocShell* pDocShell = GetDocShell() )
     {
         // visible area if embedded
         const ScExtDocSettings& rDocSett = GetExtDocOptions().GetDocSettings();

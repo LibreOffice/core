@@ -37,6 +37,7 @@
 #include <unotools/localedatawrapper.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
 #include <globalnames.hxx>
@@ -320,7 +321,7 @@ void ImportExcel8::Feat()
 
 void ImportExcel8::ReadBasic()
 {
-    SfxObjectShell* pShell = GetDocShell();
+    ScDocShell* pShell = GetDocShell();
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( !pShell || !xRootStrg.is() )
@@ -407,7 +408,7 @@ void ImportExcel8::PostDocLoad()
     }
 
     // read doc info (no docshell while pasting from clipboard)
-    SfxObjectShell* pShell = GetDocShell();
+    ScDocShell* pShell = GetDocShell();
     if(!pShell)
         return;
 
@@ -415,7 +416,7 @@ void ImportExcel8::PostDocLoad()
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     if( xRootStrg.is() ) try
     {
-        uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< document::XDocumentPropertiesSupplier > xDPS( static_cast<cppu::OWeakObject*>(pShell->GetModel()), uno::UNO_QUERY_THROW );
         uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
         sfx2::LoadOlePropertySet( xDocProps, xRootStrg.get() );
     }

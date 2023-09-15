@@ -32,6 +32,7 @@
 #include <global.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <patattr.hxx>
 #include <stlsheet.hxx>
 #include <stlpool.hxx>

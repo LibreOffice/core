@@ -91,13 +91,13 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getForeground()
     sal_Int32 nColor(0);
     if (mpDoc)
     {
-        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        ScDocShell* pObjSh = mpDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
@@ -131,13 +131,13 @@ sal_Int32 SAL_CALL ScAccessibleCellBase::getBackground()
 
     if (mpDoc)
     {
-        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        ScDocShell* pObjSh = mpDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
@@ -240,7 +240,7 @@ sal_Bool SAL_CALL
         }
         if (IsEditable(nParentStates))
         {
-            ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
+            ScDocShell* pDocShell = mpDoc->GetDocumentShell();
             bResult = pDocShell->GetDocFunc().SetValueCell(maCellAddress, fValue, false);
         }
     }
@@ -298,13 +298,13 @@ OUString ScAccessibleCellBase::GetNote() const
     OUString sNote;
     if (mpDoc)
     {
-        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        ScDocShell* pObjSh = mpDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
@@ -344,13 +344,13 @@ OUString ScAccessibleCellBase::getShadowAttrs() const
     table::ShadowFormat aShadowFmt;
     if (mpDoc)
     {
-        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        ScDocShell* pObjSh = mpDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
@@ -427,13 +427,13 @@ OUString ScAccessibleCellBase::getBorderAttrs()
     table::BorderLine aRightBorder;
     if (mpDoc)
     {
-        SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+        ScDocShell* pObjSh = mpDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {

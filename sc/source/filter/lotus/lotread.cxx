@@ -19,6 +19,7 @@
 
 #include <document.hxx>
 #include <docoptio.hxx>
+#include <docsh.hxx>
 
 #include <scdll.hxx>
 #include <scerrors.hxx>

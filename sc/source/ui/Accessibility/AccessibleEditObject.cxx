@@ -413,13 +413,13 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
     sal_Int32 nColor(0);
     if (m_pScDoc)
     {
-        SfxObjectShell* pObjSh = m_pScDoc->GetDocumentShell();
+        ScDocShell* pObjSh = m_pScDoc->GetDocumentShell();
         if ( pObjSh )
         {
-            uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( pObjSh->GetModel(), uno::UNO_QUERY );
-            if ( xSpreadDoc.is() )
+            ScModelObj* pSpreadDoc = pObjSh->GetModel();
+            if ( pSpreadDoc )
             {
-                uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+                uno::Reference<sheet::XSpreadsheets> xSheets = pSpreadDoc->getSheets();
                 uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {

@@ -4701,7 +4701,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //  as in PasteDDE
             //  (external references might be used instead?)
 
-            SfxObjectShell* pSourceSh = pSourceDoc->GetDocumentShell();
+            ScDocShell* pSourceSh = pSourceDoc->GetDocumentShell();
             OSL_ENSURE(pSourceSh, "drag document has no shell");
             if (pSourceSh)
             {

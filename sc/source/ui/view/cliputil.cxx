@@ -36,7 +36,7 @@ bool lcl_checkClassification(ScDocument* pSourceDoc, const ScDocument& rDestinat
         return true;
 
     ScClipOptions* pSourceOptions = pSourceDoc->GetClipOptions();
-    SfxObjectShell* pDestinationShell = rDestinationDoc.GetDocumentShell();
+    ScDocShell* pDestinationShell = rDestinationDoc.GetDocumentShell();
     if (!pSourceOptions || !pDestinationShell)
         return true;
 

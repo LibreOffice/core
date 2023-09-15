@@ -41,6 +41,7 @@
 #include <eeimport.hxx>
 #include <global.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <editutil.hxx>
 #include <docpool.hxx>
 #include <attrib.hxx>

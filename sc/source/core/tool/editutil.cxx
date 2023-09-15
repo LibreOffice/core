@@ -43,6 +43,7 @@
 #include <attrib.hxx>
 #include <document.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <patattr.hxx>
 #include <scmod.hxx>
 #include <inputopt.hxx>
@@ -269,7 +270,7 @@ OUString ScEditUtil::GetCellFieldValue(
         {
             if (pDoc)
             {
-                SfxObjectShell* pDocShell = pDoc->GetDocumentShell();
+                ScDocShell* pDocShell = pDoc->GetDocumentShell();
                 if (pDocShell)
                 {
                     aRet = pDocShell->getDocProperties()->getTitle();

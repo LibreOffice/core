@@ -106,7 +106,7 @@ bool ExcelFilter::importDocument()
             rtl::Reference<WorkbookFragment> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
 
             ScDocument& rDoc = xWorkbookFragment->getScDocument();
-            ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+            ScDocShell* pDocSh = rDoc.GetDocumentShell();
             assert( pDocSh );
             pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
 

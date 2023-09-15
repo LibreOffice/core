@@ -20,6 +20,7 @@
 #include <utility>
 #include <xilink.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <scextopt.hxx>
 #include <xistream.hxx>
 #include <xihelper.hxx>

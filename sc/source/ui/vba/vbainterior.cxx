@@ -29,6 +29,7 @@
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
 #include <document.hxx>
+#include <docsh.hxx>
 #include <utility>
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
@@ -129,7 +130,7 @@ ScVbaInterior::getPalette() const
 {
     if ( !m_pScDoc )
         throw uno::RuntimeException();
-    SfxObjectShell* pShell = m_pScDoc->GetDocumentShell();
+    ScDocShell* pShell = m_pScDoc->GetDocumentShell();
     ScVbaPalette aPalette( pShell );
     return aPalette.getPalette();
 }

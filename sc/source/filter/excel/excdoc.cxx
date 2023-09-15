@@ -21,6 +21,7 @@
 #include <rtl/ustring.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <scextopt.hxx>
 #include <docoptio.hxx>
 #include <tabprotection.hxx>
@@ -155,7 +156,7 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
-    SfxObjectShell* pShell = GetDocShell();
+    ScDocShell* pShell = GetDocShell();
     sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
     bool bRecommendReadOnly = pShell && pShell->IsLoadReadonly();
 
@@ -808,10 +809,10 @@ void ExcDocument::Write( SvStream& rSvStrm )
 
 void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
 {
-    SfxObjectShell* pDocShell = GetDocShell();
+    ScDocShell* pDocShell = GetDocShell();
 
     using namespace ::com::sun::star;
-    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( static_cast<cppu::OWeakObject*>(pDocShell->GetModel()), uno::UNO_QUERY_THROW );
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
     OUString sUserName = GetUserName();

@@ -684,7 +684,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
         if (pThisMed)
             aThisFile = pThisMed->GetName();
         OUString aOtherFile;
-        SfxObjectShell* pOtherSh = rOtherDoc.GetDocumentShell();
+        ScDocShell* pOtherSh = rOtherDoc.GetDocumentShell();
         if (pOtherSh)
         {
             const SfxMedium* pOtherMed = pOtherSh->GetMedium();

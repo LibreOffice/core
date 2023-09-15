@@ -1760,7 +1760,7 @@ OUString SAL_CALL
     if (!pScDoc)
         return aName;
 
-    SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+    ScDocShell* pObjSh = pScDoc->GetDocumentShell();
     if (!pObjSh)
         return aName;
 

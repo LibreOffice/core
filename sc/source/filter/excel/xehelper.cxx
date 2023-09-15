@@ -48,6 +48,7 @@
 
 #include <document.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <editutil.hxx>
 #include <patattr.hxx>
 #include <scmatrix.hxx>

@@ -28,6 +28,7 @@
 #include <patattr.hxx>
 #include <table.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <drwlayer.hxx>
 #include <olinetab.hxx>
 #include <global.hxx>

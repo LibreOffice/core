@@ -642,7 +642,7 @@ void ScDrawView::UpdateUserViewOptions()
 
 SdrObject* ScDrawView::GetObjectByName(std::u16string_view rName)
 {
-    SfxObjectShell* pShell = rDoc.GetDocumentShell();
+    ScDocShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel& rDrawLayer = GetModel();
@@ -675,7 +675,7 @@ void ScDrawView::SelectCurrentViewObject( std::u16string_view rName )
 {
     sal_uInt16 nObjectTab = 0;
     SdrObject* pFound = nullptr;
-    SfxObjectShell* pShell = rDoc.GetDocumentShell();
+    ScDocShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel& rDrawLayer = GetModel();
@@ -729,7 +729,7 @@ bool ScDrawView::SelectObject( std::u16string_view rName )
     SCTAB nObjectTab = 0;
     SdrObject* pFound = nullptr;
 
-    SfxObjectShell* pShell = rDoc.GetDocumentShell();
+    ScDocShell* pShell = rDoc.GetDocumentShell();
     if (pShell)
     {
         SdrModel& rDrawLayer = GetModel();

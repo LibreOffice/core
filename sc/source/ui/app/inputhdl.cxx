@@ -3617,7 +3617,7 @@ void ScInputHandler::SetReference( const ScRange& rRef, const ScDocument& rDoc )
         // Always 3D and absolute.
         OUString aTmp(rRef.Format(rDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D, aAddrDetails));
 
-        SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
+        ScDocShell* pObjSh = rDoc.GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
         OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 

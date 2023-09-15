@@ -971,7 +971,7 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 {
     ScDocShell* pDocSh = nullptr;
     if (pViewShell)
-        pDocSh = static_cast<ScDocShell*>( pViewShell->GetDocument().GetDocumentShell());
+        pDocSh = pViewShell->GetDocument().GetDocumentShell();
     return pDocSh;
 }
 
@@ -1071,7 +1071,7 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
 {
     ScDocShell* pDocSh = nullptr;
     if (pViewShell)
-        pDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
+        pDocSh = pViewShell->GetDocument().GetDocumentShell();
     return pDocSh;
 }
 
@@ -1085,7 +1085,7 @@ ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShel
     meAdjust(eAdjust)
 {
     if (pViewShell)
-        mpDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
+        mpDocSh = pViewShell->GetDocument().GetDocumentShell();
     if (mpDocSh)
         mpDocSh->GetDocument().AddUnoObject(*this);
 }
@@ -1192,7 +1192,7 @@ ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
     mbDataValid(false)
 {
     if (pViewShell)
-        mpDocSh = static_cast<ScDocShell*>(pViewShell->GetDocument().GetDocumentShell());
+        mpDocSh = pViewShell->GetDocument().GetDocumentShell();
     if (mpDocSh)
         mpDocSh->GetDocument().AddUnoObject(*this);
 }

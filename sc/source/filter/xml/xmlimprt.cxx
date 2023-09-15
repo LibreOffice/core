@@ -1126,7 +1126,7 @@ void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::la
     if (!pDoc)
         throw lang::IllegalArgumentException();
 
-    if (ScDocShell* pDocSh = static_cast<ScDocShell*>(pDoc->GetDocumentShell()))
+    if (ScDocShell* pDocSh = pDoc->GetDocumentShell())
         pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
 
     mpDocImport.reset(new ScDocumentImport(*pDoc));
@@ -1439,7 +1439,7 @@ void SAL_CALL ScXMLImport::endDocument()
                 pDoc->UnlockAdjustHeight();
             }
 
-            ScSizeDeviceProvider aProv(static_cast<ScDocShell*>(pDoc->GetDocumentShell()));
+            ScSizeDeviceProvider aProv(pDoc->GetDocumentShell());
             ScDocRowHeightUpdater aUpdater(*pDoc, aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), &maRecalcRowRanges);
             aUpdater.update();
 

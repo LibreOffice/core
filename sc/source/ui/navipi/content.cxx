@@ -831,7 +831,7 @@ void ScContentTree::GetDrawNames( ScContentId nType )
     if (!pDrawLayer)
         return;
 
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    ScDocShell* pShell = pDoc->GetDocumentShell();
     if (!pShell)
         return;
 
@@ -1021,7 +1021,7 @@ bool ScContentTree::DrawNamesChanged( ScContentId nType )
 
     bool bEqual = true;
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
-    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    ScDocShell* pShell = pDoc->GetDocumentShell();
     if (pDrawLayer && pShell)
     {
         SCTAB nTabCount = pDoc->GetTableCount();

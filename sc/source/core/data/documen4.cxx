@@ -27,6 +27,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <table.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

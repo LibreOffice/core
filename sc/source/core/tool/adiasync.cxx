@@ -26,6 +26,7 @@
 #include <adiasync.hxx>
 #include <brdcst.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 

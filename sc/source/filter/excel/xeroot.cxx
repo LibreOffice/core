@@ -44,6 +44,7 @@
 #include <excrecds.hxx>
 #include <tabprotection.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 
 #include <formulabase.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
@@ -229,7 +230,7 @@ void XclExpRoot::InitializeGlobals()
             // instantiated instead of a ScFormulaOpCodeMapperObj and the
             // ScCompiler virtuals not be called! Which would be the case with
             // the current (2013-01-24) rDoc.GetServiceManager()
-            const SfxObjectShell* pShell = rDoc.GetDocumentShell();
+            const ScDocShell* pShell = rDoc.GetDocumentShell();
             if (!pShell)
             {
                 SAL_WARN( "sc", "XclExpRoot::InitializeGlobals - no object shell");

@@ -38,6 +38,7 @@
 
 #include <document.hxx>
 #include <docoptio.hxx>
+#include <docsh.hxx>
 #include <table.hxx>
 #include <drwlayer.hxx>
 #include <markdata.hxx>
@@ -102,7 +103,7 @@ void ScDocument::TransferDrawPage(const ScDocument& rSrcDoc, SCTAB nSrcPos, SCTA
     ScChartHelper::UpdateChartsOnDestinationPage(*this, nDestPos);
 }
 
-void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
+void ScDocument::InitDrawLayer( ScDocShell* pDocShell )
 {
     if (pDocShell && !mpShell)
     {

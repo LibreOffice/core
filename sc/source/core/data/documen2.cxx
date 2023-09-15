@@ -111,7 +111,7 @@ ScSheetLimits ScSheetLimits::CreateDefault()
         return ScSheetLimits(MAXCOL, MAXROW);
 }
 
-ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
+ScDocument::ScDocument( ScDocumentMode eMode, ScDocShell* pDocShell ) :
         mpCellStringPool(std::make_shared<svl::SharedStringPool>(ScGlobal::getCharClass())),
         mpDocLinkMgr(new sc::DocumentLinkManager(pDocShell)),
         mbFormulaGroupCxtBlockDiscard(false),
@@ -1090,7 +1090,7 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
 
     if ( bVbaEnabled  )
     {
-        SfxObjectShell* pSrcShell = rSrcDoc.GetDocumentShell();
+        ScDocShell* pSrcShell = rSrcDoc.GetDocumentShell();
         if ( pSrcShell )
         {
             OUString aLibName("Standard");

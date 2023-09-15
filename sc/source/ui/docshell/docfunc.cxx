@@ -3197,7 +3197,7 @@ static script::ModuleInfo lcl_InitModuleInfo( const SfxObjectShell& rDocSh, cons
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const OUString& sSource )
 {
-    SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
+    ScDocShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     OSL_ENSURE( xLibContainer.is(), "No BasicContainer!" );
 

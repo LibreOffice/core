@@ -487,7 +487,7 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
                                        aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                                        aDestRange.aEnd.Col(), aDestRange.aEnd.Row() ));
         rDoc.SetAnonymousDBData( aDestRange.aStart.Tab() , std::move(pNewDBData) );
-        ScDocShell* pDocSh = static_cast< ScDocShell* >(rDoc.GetDocumentShell());
+        ScDocShell* pDocSh = rDoc.GetDocumentShell();
         xDatabaseRange.set(new ScDatabaseRangeObj(pDocSh, aDestRange.aStart.Tab()));
     }
     catch( Exception& )

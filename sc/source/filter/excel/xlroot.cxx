@@ -48,6 +48,7 @@
 #include <document.hxx>
 #include <docpool.hxx>
 #include <docuno.hxx>
+#include <docsh.hxx>
 #include <editutil.hxx>
 #include <drwlayer.hxx>
 #include <scextopt.hxx>
@@ -290,15 +291,15 @@ ScDocument& XclRoot::GetDoc() const
     return mrData.mrDoc;
 }
 
-SfxObjectShell* XclRoot::GetDocShell() const
+ScDocShell* XclRoot::GetDocShell() const
 {
     return GetDoc().GetDocumentShell();
 }
 
 ScModelObj* XclRoot::GetDocModelObj() const
 {
-    SfxObjectShell* pDocShell = GetDocShell();
-    return pDocShell ? comphelper::getFromUnoTunnel<ScModelObj>( pDocShell->GetModel() ) : nullptr;
+    ScDocShell* pDocShell = GetDocShell();
+    return pDocShell ? pDocShell->GetModel() : nullptr;
 }
 
 OutputDevice* XclRoot::GetPrinter(bool bForceVirtDev) const

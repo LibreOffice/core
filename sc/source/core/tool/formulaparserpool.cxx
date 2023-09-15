@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/objsh.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -126,11 +127,11 @@ Reference< XFormulaParser > ScFormulaParserPool::getFormulaParser( const OUStrin
     Reference< XFormulaParser >& rxParser = maParsers[ rNamespace ];
 
     // try to create a new parser object
-    if( SfxObjectShell* pDocShell = mrDoc.GetDocumentShell() ) try
+    if( ScDocShell* pDocShell = mrDoc.GetDocumentShell() ) try
     {
         static ScParserFactoryMap theScParserFactoryMap;
 
-        Reference< XComponent > xComponent( pDocShell->GetModel(), UNO_QUERY_THROW );
+        Reference< XComponent > xComponent( pDocShell->GetModel() );
         rxParser = theScParserFactoryMap.createFormulaParser( xComponent, rNamespace );
     }
     catch( Exception& )

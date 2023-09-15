@@ -23,6 +23,7 @@
 #include <dif.hxx>
 #include <docpool.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <fprogressbar.hxx>
 #include <ftools.hxx>
 #include <patattr.hxx>

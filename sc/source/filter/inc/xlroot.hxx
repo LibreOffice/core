@@ -33,6 +33,7 @@ namespace comphelper { class IDocPasswordVerifier; }
 class DateTime;
 class SotStorage;
 class SotStorageStream;
+class ScDocShell;
 
 // Global data ================================================================
 
@@ -200,7 +201,7 @@ public:
     ScDocument& GetDoc() const;
 
     /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
-    SfxObjectShell*     GetDocShell() const;
+    ScDocShell*         GetDocShell() const;
     /** Returns the object model of the Calc document. */
     ScModelObj*         GetDocModelObj() const;
     /** Returns pointer to the printer of the Calc document. */

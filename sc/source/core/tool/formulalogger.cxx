@@ -9,6 +9,7 @@
 #include <formulacell.hxx>
 #include <tokenarray.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <tokenstringcontext.hxx>
 #include <address.hxx>
 #include <interpre.hxx>
@@ -329,7 +330,7 @@ FormulaLogger::GroupScope FormulaLogger::enterGroup(
     const ScDocument& rDoc, const ScFormulaCell& rCell )
 {
     // Get the file name if available.
-    const SfxObjectShell* pShell = rDoc.GetDocumentShell();
+    const ScDocShell* pShell = rDoc.GetDocumentShell();
     const SfxMedium* pMedium = pShell ? pShell->GetMedium() : nullptr;
     OUString aName;
     if (pMedium)

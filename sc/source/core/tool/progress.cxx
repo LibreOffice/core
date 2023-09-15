@@ -31,6 +31,7 @@
 #define SC_PROGRESS_CXX
 #include <progress.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 

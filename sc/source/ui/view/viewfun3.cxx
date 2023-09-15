@@ -251,7 +251,7 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     // and lose the 'if' above
     aClipParam.setSourceDocID( rDoc.GetDocumentID() );
 
-    if (SfxObjectShell* pObjectShell = rDoc.GetDocumentShell())
+    if (ScDocShell* pObjectShell = rDoc.GetDocumentShell())
     {
         // Copy document properties from pObjectShell to pClipDoc (to its clip options, as it has no object shell).
         uno::Reference<util::XCloneable> xCloneable(pObjectShell->getDocProperties(), uno::UNO_QUERY_THROW);

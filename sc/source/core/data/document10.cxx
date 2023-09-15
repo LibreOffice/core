@@ -952,7 +952,7 @@ bool ScDocument::CopyAdjustRangeName( SCTAB& rSheet, sal_uInt16& rIndex, ScRange
 
         if (rpRangeData && !rNewDoc.IsClipOrUndo())
         {
-            ScDocShell* pDocSh = static_cast<ScDocShell*>(rNewDoc.GetDocumentShell());
+            ScDocShell* pDocSh = rNewDoc.GetDocumentShell();
             if (pDocSh)
                 pDocSh->SetAreasChangedNeedBroadcast();
         }

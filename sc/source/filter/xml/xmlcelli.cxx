@@ -26,6 +26,7 @@
 #include <cellvalue.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
+#include <docsh.hxx>
 #include <postit.hxx>
 #include <sheetdata.hxx>
 #include <cellform.hxx>

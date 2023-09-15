@@ -1395,7 +1395,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 
     aNewData.InitFromStyle(pStyleSheet);
 
-    ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+    ScDocShell* pDocSh = rDoc.GetDocumentShell();
     pDocSh->GetUndoManager()->AddUndoAction(
         std::make_unique<ScUndoModifyStyle>(pDocSh, pStyleSheet->GetFamily(), aOldData, aNewData));
 }

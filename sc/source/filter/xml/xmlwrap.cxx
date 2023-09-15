@@ -584,7 +584,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
 
 static bool lcl_HasValidStream(const ScDocument& rDoc)
 {
-    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
+    ScDocShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh->IsDocShared() )
         return false;                       // never copy stream from shared file
 
@@ -740,7 +740,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     OUString sFileName;
     if (pMedium)
         sFileName = pMedium->GetName();
-    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
+    ScDocShell* pObjSh = rDoc.GetDocumentShell();
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
             { "FileName", uno::Any(sFileName) }
         }));

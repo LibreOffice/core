@@ -74,6 +74,7 @@
 #include <drawpage.hxx>
 #include <global.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <userdat.hxx>
 #include <markdata.hxx>
 #include <globstr.hrc>
@@ -259,7 +260,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, OUString _aName ) :
 
     pGlobalDrawPersist = nullptr;          // Only use once
 
-    SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : nullptr;
+    ScDocShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : nullptr;
     XColorListRef pXCol = XColorList::GetStdColorList();
     if ( pObjSh )
     {
@@ -2941,7 +2942,7 @@ css::uno::Reference< css::uno::XInterface > ScDrawLayer::createUnoModel()
 {
     css::uno::Reference< css::uno::XInterface > xRet;
     if( pDoc && pDoc->GetDocumentShell() )
-        xRet = pDoc->GetDocumentShell()->GetModel();
+        xRet = static_cast<cppu::OWeakObject*>(pDoc->GetDocumentShell()->GetModel());
 
     return xRet;
 }

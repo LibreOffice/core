@@ -37,6 +37,7 @@
 #include <formulacell.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
+#include <docsh.hxx>
 #include <unitconv.hxx>
 #include <hints.hxx>
 #include <dpobject.hxx>
@@ -2659,7 +2660,7 @@ void ScInterpreter::ScStyle()
     // Execute request to apply style
     if ( !mrDoc.IsClipOrUndo() )
     {
-        SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+        ScDocShell* pShell = mrDoc.GetDocumentShell();
         if (pShell)
         {
             // Normalize style names right here, making sure that character case is correct,

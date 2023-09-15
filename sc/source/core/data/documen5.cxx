@@ -30,6 +30,7 @@
 #include <svtools/embedhlp.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <table.hxx>
 #include <drwlayer.hxx>
 #include <chartlis.hxx>
@@ -313,7 +314,7 @@ void ScDocument::UpdateChartArea( const OUString& rChartName,
                         uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( this );
                         xReceiver->attachDataProvider( xDataProvider );
                         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
-                                mpShell->GetModel(), uno::UNO_QUERY );
+                                static_cast<cppu::OWeakObject*>(mpShell->GetModel()), uno::UNO_QUERY );
                         xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
                     }
 

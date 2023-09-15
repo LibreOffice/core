@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <brdcst.hxx>
 #include <bcaslot.hxx>
 #include <scerrors.hxx>
@@ -73,7 +74,7 @@ ScDocument::HardRecalcState ScBroadcastAreaSlot::CheckHardRecalcStateCondition()
     {
         if (aBroadcastAreaTbl.size() >= aBroadcastAreaTbl.max_size())
         {   // this is more hypothetical now, check existed for old SV_PTRARR_SORT
-            SfxObjectShell* pShell = pDoc->GetDocumentShell();
+            ScDocShell* pShell = pDoc->GetDocumentShell();
             OSL_ENSURE( pShell, "Missing DocShell :-/" );
 
             if ( pShell )

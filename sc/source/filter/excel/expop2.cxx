@@ -23,7 +23,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-
+#include <docsh.hxx>
 #include <oox/ole/vbaexport.hxx>
 
 #include <scerrors.hxx>
@@ -69,7 +69,7 @@ ExportBiff5::~ExportBiff5()
 
 ErrCode ExportBiff5::Write()
 {
-    SfxObjectShell* pDocShell = GetDocShell();
+    ScDocShell* pDocShell = GetDocShell();
     OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
@@ -112,7 +112,7 @@ ErrCode ExportBiff5::Write()
     {
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+                static_cast<cppu::OWeakObject*>(pDocShell->GetModel()), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
                 = xDPS->getDocumentProperties();
         if ( SvtFilterOptions::Get().IsEnableCalcPreview() )

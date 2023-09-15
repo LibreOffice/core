@@ -102,6 +102,7 @@
 
 #include <document.hxx>
 #include <drwlayer.hxx>
+#include <docsh.hxx>
 #include <userdat.hxx>
 #include <unonames.hxx>
 #include <convuno.hxx>
@@ -523,7 +524,7 @@ void XclImpDrawObjBase::NotifyMacroEventRead()
 {
     if (mbNotifyMacroEventRead)
         return;
-    SfxObjectShell* pDocShell = GetDocShell();
+    ScDocShell* pDocShell = GetDocShell();
     if (!pDocShell)
         return;
     comphelper::DocumentInfo::notifyMacroEventRead(pDocShell->GetModel());
@@ -1760,7 +1761,7 @@ std::size_t XclImpChartObj::DoGetProgressSize() const
 rtl::Reference<SdrObject> XclImpChartObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const tools::Rectangle& rAnchorRect ) const
 {
     rtl::Reference<SdrObject> xSdrObj;
-    SfxObjectShell* pDocShell = GetDocShell();
+    ScDocShell* pDocShell = GetDocShell();
     if( rDffConv.SupportsOleObjects() && SvtModuleOptions().IsChart() && pDocShell && mxChart && !mxChart->IsPivotChart() )
     {
         // create embedded chart object
@@ -1914,12 +1915,12 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         return;
 
    // sheet links
-    SfxObjectShell* pDocShell = mrRoot.GetDocShell();
+    ScDocShell* pDocShell = mrRoot.GetDocShell();
     if(!pDocShell)
         return;
 
-    Reference< XMultiServiceFactory > xFactory( pDocShell->GetModel(), UNO_QUERY );
-    if( !xFactory.is() )
+    ScModelObj* pModelObj = pDocShell->GetModel();
+    if( !pModelObj )
         return;
 
     // cell link
@@ -1945,7 +1946,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
             case EXC_CTRL_BINDPOSITION: aServiceName = SC_SERVICENAME_LISTCELLBIND;  break;
         }
         Reference< XValueBinding > xBinding(
-            xFactory->createInstanceWithArguments( aServiceName, aArgs ), UNO_QUERY_THROW );
+            pModelObj->createInstanceWithArguments( aServiceName, aArgs ), UNO_QUERY_THROW );
         xBindable->setValueBinding( xBinding );
     }
     catch( const Exception& )
@@ -1971,7 +1972,7 @@ void XclImpControlHelper::ApplySheetLinkProps() const
         Sequence< Any > aArgs{ Any(aValue) };
 
         // create the EntrySource instance and set at the control model
-        Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
+        Reference< XListEntrySource > xEntrySource( pModelObj->createInstanceWithArguments(
             SC_SERVICENAME_LISTSOURCE, aArgs ), UNO_QUERY_THROW );
         xEntrySink->setListEntrySource( xEntrySource );
     }

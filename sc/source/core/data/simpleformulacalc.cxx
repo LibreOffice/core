@@ -10,6 +10,7 @@
 #include <memory>
 #include <simpleformulacalc.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <tokenarray.hxx>
 #include <interpre.hxx>
 #include <compiler.hxx>

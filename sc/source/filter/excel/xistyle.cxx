@@ -52,6 +52,7 @@
 #include <document.hxx>
 #include <documentimport.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <stlpool.hxx>
@@ -123,7 +124,7 @@ private:
 void
 XclImpPalette::ExportPalette()
 {
-    SfxObjectShell* pDocShell = mrRoot.GetDocShell();
+    ScDocShell* pDocShell = mrRoot.GetDocShell();
     if(!pDocShell)
         return;
 
@@ -134,11 +135,11 @@ XclImpPalette::ExportPalette()
     for( sal_uInt16 nIndex = 0; nIndex < nColors; ++nIndex )
         aColors[ nIndex ] = GetColor( nIndex );
 
-    uno::Reference< beans::XPropertySet > xProps( pDocShell->GetModel(), uno::UNO_QUERY );
-    if ( xProps.is() )
+    ScModelObj* pModel = pDocShell->GetModel();
+    if ( pModel )
     {
         uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( std::move(aColors) ) );
-        xProps->setPropertyValue( "ColorPalette", uno::Any( xIndex ) );
+        pModel->setPropertyValue( "ColorPalette", uno::Any( xIndex ) );
     }
 
 }
@@ -218,7 +219,7 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
     mbHasCharSet = bHasCharSet;
     if( !maData.maStyle.isEmpty() )
     {
-        if( SfxObjectShell* pDocShell = GetDocShell() )
+        if( ScDocShell* pDocShell = GetDocShell() )
         {
             if( const SvxFontListItem* pInfoItem = static_cast< const SvxFontListItem* >(
                 pDocShell->GetItem( SID_ATTR_CHAR_FONTLIST ) ) )

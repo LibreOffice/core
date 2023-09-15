@@ -47,13 +47,13 @@
 #include <clipparam.hxx>
 
 
-ScAreaLink::ScAreaLink( SfxObjectShell* pShell, OUString aFile,
+ScAreaLink::ScAreaLink( ScDocShell* pShell, OUString aFile,
                         OUString aFilter, OUString aOpt,
                         OUString aArea, const ScRange& rDest,
                         sal_Int32 nRefreshDelaySeconds ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
     ScRefreshTimer  ( nRefreshDelaySeconds ),
-    m_pDocSh(static_cast<ScDocShell*>(pShell)),
+    m_pDocSh(pShell),
     aFileName       (std::move(aFile)),
     aFilterName     (std::move(aFilter)),
     aOptions        (std::move(aOpt)),
@@ -63,7 +63,6 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, OUString aFile,
     bInCreate       (false),
     bDoInsert       (true)
 {
-    OSL_ENSURE(dynamic_cast< const ScDocShell *>( pShell ) !=  nullptr, "ScAreaLink with wrong ObjectShell");
     SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
     SetRefreshControl( &m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
 }

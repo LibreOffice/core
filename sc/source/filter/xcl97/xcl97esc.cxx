@@ -48,6 +48,7 @@
 #include <unotools/streamwrap.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <sfx2/objsh.hxx>
+#include <docsh.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;

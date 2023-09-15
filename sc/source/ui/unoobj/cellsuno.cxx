@@ -4473,8 +4473,7 @@ uno::Sequence<OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames()
 
 uno::Reference<table::XCellRange> ScCellRangeObj::CreateRangeFromDoc( const ScDocument& rDoc, const ScRange& rR )
 {
-    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
-    if ( auto pDocShell = dynamic_cast<ScDocShell*>( pObjSh) )
+    if ( ScDocShell* pDocShell = rDoc.GetDocumentShell() )
         return new ScCellRangeObj( pDocShell, rR );
     return nullptr;
 }

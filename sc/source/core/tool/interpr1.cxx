@@ -47,6 +47,7 @@
 #include <global.hxx>
 #include <document.hxx>
 #include <dociter.hxx>
+#include <docsh.hxx>
 #include <formulacell.hxx>
 #include <scmatrix.hxx>
 #include <docoptio.hxx>
@@ -2340,7 +2341,7 @@ void ScInterpreter::ScCell()
                     mrDoc.GetName( nTab, aFuncResult );
                 else
                 {
-                    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+                    ScDocShell* pShell = mrDoc.GetDocumentShell();
                     if( pShell && pShell->GetMedium() )
                     {
                         const INetURLObject& rURLObj = pShell->GetMedium()->GetURLObject();

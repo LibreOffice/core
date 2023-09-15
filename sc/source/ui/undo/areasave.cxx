@@ -23,6 +23,7 @@
 #include <arealink.hxx>
 #include <document.hxx>
 #include <documentlinkmgr.hxx>
+#include <docsh.hxx>
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aFileName   ( rSource.GetFile() ),
@@ -59,7 +60,7 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
     // (see ScUndoRemoveAreaLink::Undo)
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
-    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
+    ScDocShell* pObjSh = pDoc->GetDocumentShell();
 
     if ( pLinkManager && pObjSh )
     {

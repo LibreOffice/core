@@ -57,6 +57,7 @@
 #include <htmlpars.hxx>
 #include <global.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <rangelst.hxx>
 
 #include <orcus/css_parser.hpp>
@@ -252,7 +253,7 @@ ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
     Link<HtmlImportInfo&,void> aOldLink = pEdit->GetHtmlImportHdl();
     pEdit->SetHtmlImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
 
-    SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+    ScDocShell* pObjSh = mpDoc->GetDocumentShell();
     bool bLoading = pObjSh && pObjSh->IsLoading();
 
     SvKeyValueIteratorRef xValues;
@@ -1470,7 +1471,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
         {
             HTMLParser* pParser = static_cast<HTMLParser*>(pInfo->pParser);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+                static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
             pParser->ParseMetaOptions(
                 xDPS->getDocumentProperties(),
                 mpDoc->GetDocumentShell()->GetHeaderAttributes() );
@@ -1489,7 +1490,7 @@ void ScHTMLLayoutParser::ProcToken( HtmlImportInfo* pInfo )
                 // Remove blanks from line breaks
                 aString = aString.trim();
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                    mpDoc->GetDocumentShell()->GetModel(),
+                    static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()),
                     uno::UNO_QUERY_THROW);
                 xDPS->getDocumentProperties()->setTitle(aString);
             }
@@ -2788,7 +2789,7 @@ ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = nullptr;
 
-    SfxObjectShell* pObjSh = mpDoc->GetDocumentShell();
+    ScDocShell* pObjSh = mpDoc->GetDocumentShell();
     if( pObjSh && pObjSh->IsLoading() )
     {
         pAttributes = pObjSh->GetHeaderAttributes();
@@ -2967,7 +2968,7 @@ void ScHTMLQueryParser::MetaOn( const HtmlImportInfo& rInfo )
         HTMLParser* pParser = static_cast< HTMLParser* >( rInfo.pParser );
 
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+            static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
         pParser->ParseMetaOptions(
             xDPS->getDocumentProperties(),
             mpDoc->GetDocumentShell()->GetHeaderAttributes() );
@@ -2989,7 +2990,7 @@ void ScHTMLQueryParser::TitleOff( const HtmlImportInfo& rInfo )
     if (!aTitle.isEmpty() && mpDoc->GetDocumentShell())
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            mpDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+            static_cast<cppu::OWeakObject*>(mpDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
 
         xDPS->getDocumentProperties()->setTitle(aTitle);
     }

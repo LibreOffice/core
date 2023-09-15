@@ -330,8 +330,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
 
                 if ( pDoc )
                 {
-                    SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                    if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+                    if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
                     {
                         SCTAB nTab = 0;
                         if ( lcl_GetPageNum( pPage, rModel, nTab ) )
@@ -483,8 +482,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                         ScDocument* pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
-                            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                            if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+                            if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
                             {
                                 uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                 if (xShape.is())
@@ -583,8 +581,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(const OUString& aPropertyName, const 
                         ScDocument* pDoc = rModel.GetDocument();
                         if ( pDoc )
                         {
-                            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                            if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+                            if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
                             {
                                 uno::Reference<drawing::XShape> xShape( mxShapeAgg, uno::UNO_QUERY );
                                 if (xShape.is())
@@ -697,8 +694,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                     SCTAB nTab = 0;
                     if ( lcl_GetPageNum( pPage, rModel, nTab ) )
                     {
-                        SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-                        if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+                        if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
                         {
                             uno::Reference< uno::XInterface > xAnchor;
                             if (ScDrawObjData *pAnchor = ScDrawLayer::GetObjDataTab(pObj, nTab))
@@ -871,7 +867,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const OUString& aPropertyName )
                 ScDrawLayer& rModel(static_cast< ScDrawLayer& >(pObj->getSdrModelFromSdrObject()));
                 ScDocument* pDoc = rModel.GetDocument();
                 aAny <<= uno::Reference<style::XStyle>(new ScStyleObj(
-                    static_cast<ScDocShell*>(pDoc ? pDoc->GetDocumentShell() : nullptr),
+                    pDoc ? pDoc->GetDocumentShell() : nullptr,
                     SfxStyleFamily::Frame, pStyleSheet->GetName()));
             }
         }
@@ -1045,8 +1041,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor()
 
         if ( pPage && pDoc )
         {
-            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-            if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+            if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
             {
                 SCTAB nTab = 0;
                 if ( lcl_GetPageNum( pPage, rModel, nTab ) )
@@ -1284,8 +1279,7 @@ uno::Reference< uno::XInterface > SAL_CALL ScShapeObj::getParent()
 
         if ( pPage && pDoc )
         {
-            SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-            if ( auto pDocSh = dynamic_cast<ScDocShell*>( pObjSh) )
+            if ( ScDocShell* pDocSh = pDoc->GetDocumentShell() )
             {
                 SCTAB nTab = 0;
                 if ( lcl_GetPageNum( pPage, rModel, nTab ) )

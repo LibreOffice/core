@@ -158,7 +158,7 @@ void CSVDataProvider::ImportFinished()
 
 void CSVDataProvider::Refresh()
 {
-    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDocument->GetDocumentShell());
+    ScDocShell* pDocShell = mpDocument->GetDocumentShell();
     if (pDocShell)
         pDocShell->SetDocumentModified();
 }

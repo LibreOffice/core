@@ -25,6 +25,7 @@
 #include <global.hxx>
 #include <compiler.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <externalrefmgr.hxx>
 
 #include <osl/diagnose.h>

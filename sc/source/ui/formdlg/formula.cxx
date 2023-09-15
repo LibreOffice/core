@@ -87,12 +87,12 @@ ScFormulaDlg::ScFormulaDlg(SfxBindings* pB, SfxChildWindow* pCW,
 
     m_pDoc = &rViewData.GetDocument();
     m_xParser.set(ScServiceProvider::MakeInstance(ScServiceProvider::Type::FORMULAPARS,
-                                                  static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
+                                                  m_pDoc->GetDocumentShell()), uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
     xSet->setPropertyValue(SC_UNO_COMPILEFAP, uno::Any(true));
 
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(ScServiceProvider::Type::OPCODEMAPPER,
-                                                        static_cast<ScDocShell*>(m_pDoc->GetDocumentShell())),uno::UNO_QUERY);
+                                                        m_pDoc->GetDocumentShell()), uno::UNO_QUERY);
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl(m_pViewShell);
 
@@ -425,7 +425,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument& rRefDoc )
         // Sheet always 3D and absolute.
         OUString aTmp( rRef.Format(rRefDoc, ScRefFlags::VALID | ScRefFlags::TAB_ABS_3D | eRangeFlags));
 
-        SfxObjectShell* pObjSh = rRefDoc.GetDocumentShell();
+        ScDocShell* pObjSh = rRefDoc.GetDocumentShell();
 
         // #i75893# convert escaped URL of the document to something user friendly
 //           OUString aFileName = pObjSh->GetMedium()->GetName();

@@ -19,7 +19,7 @@
 
 #include <macromgr.hxx>
 #include <document.hxx>
-
+#include <docsh.hxx>
 #include <basic/basmgr.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <sfx2/objsh.hxx>
@@ -134,7 +134,7 @@ void ScMacroManager::InitUserFuncData()
     OUString sProjectName("Standard");
 
     Reference< container::XContainer > xModuleContainer;
-    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+    ScDocShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)
         return;
 #if HAVE_FEATURE_SCRIPTING

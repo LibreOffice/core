@@ -36,6 +36,7 @@
 #include <scitems.hxx>
 #include <editeng/flditem.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <validat.hxx>
 #include <unonames.hxx>
 #include <convuno.hxx>
@@ -2142,7 +2143,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
 XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 {
     SCTAB nScTab = rRoot.GetCurrScTab();
-    SfxObjectShell* pShell = rRoot.GetDocShell();
+    ScDocShell* pShell = rRoot.GetDocShell();
     if( !pShell ) return;
     ScfPropertySet aModelProp( pShell->GetModel() );
     if( !aModelProp.Is() ) return;

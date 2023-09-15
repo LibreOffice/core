@@ -27,6 +27,7 @@
 #include <chart2uno.hxx>
 #include <miscuno.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <formulacell.hxx>
 #include <unonames.hxx>
 #include <globstr.hrc>
@@ -128,7 +129,7 @@ OUString lcl_createTableNumberList( const ::std::vector< SCTAB > & rTableVector 
 uno::Reference< frame::XModel > lcl_GetXModel( const ScDocument * pDoc )
 {
     uno::Reference< frame::XModel > xModel;
-    SfxObjectShell * pObjSh( pDoc ? pDoc->GetDocumentShell() : nullptr );
+    ScDocShell * pObjSh( pDoc ? pDoc->GetDocumentShell() : nullptr );
     if( pObjSh )
         xModel.set( pObjSh->GetModel());
     return xModel;

@@ -1663,7 +1663,7 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument& rDoc,
 namespace {
 bool isLinkUpdateAllowedInDoc(const ScDocument& rDoc)
 {
-    SfxObjectShell* pDocShell = rDoc.GetDocumentShell();
+    ScDocShell* pDocShell = rDoc.GetDocumentShell();
     if (!pDocShell)
         return rDoc.IsFunctionAccess();
 
@@ -1934,7 +1934,7 @@ void initDocInCache(ScExternalRefCache& rRefCache, const ScDocument* pSrcDoc, sa
     OUString aBaseName;
     if (nTabCount == 1)
     {
-        const SfxObjectShell* pShell = pSrcDoc->GetDocumentShell();
+        const ScDocShell* pShell = pSrcDoc->GetDocumentShell();
         if (pShell && pShell->GetMedium())
         {
             OUString aName = pShell->GetMedium()->GetName();
@@ -2575,7 +2575,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // to update as well. When loading the document ScDocShell::Load() will
     // check through ScDocShell::GetLinkUpdateModeState() if its location is
     // trusted.
-    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+    ScDocShell* pShell = mrDoc.GetDocumentShell();
     if (pShell)
     {
         SfxMedium* pMedium = pShell->GetMedium();
@@ -2758,7 +2758,7 @@ OUString ScExternalRefManager::getOwnDocumentName() const
     if (utl::ConfigManager::IsFuzzing())
         return "file:///tmp/document";
 
-    SfxObjectShell* pShell = mrDoc.GetDocumentShell();
+    ScDocShell* pShell = mrDoc.GetDocumentShell();
     if (!pShell)
         // This should not happen!
         return OUString();
@@ -2787,7 +2787,7 @@ void ScExternalRefManager::convertToAbsName(OUString& rFile) const
         pShell = static_cast<ScDocShell*>(SfxObjectShell::GetNext(*pShell, checkSfxObjectShell<ScDocShell>, false));
     }
 
-    SfxObjectShell* pDocShell = mrDoc.GetDocumentShell();
+    ScDocShell* pDocShell = mrDoc.GetDocumentShell();
     rFile = ScGlobal::GetAbsDocName(rFile, pDocShell);
 }
 

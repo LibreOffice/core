@@ -45,8 +45,6 @@ private:
 public:
     ScTableLink( ScDocShell* pDocSh, OUString aFile,
                     OUString aFilter, OUString aOpt, sal_Int32 nRefreshDelaySeconds );
-    ScTableLink( SfxObjectShell* pShell, OUString aFile,
-                    OUString aFilter, OUString aOpt, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScTableLink() override;
     virtual void Closed() override;
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(

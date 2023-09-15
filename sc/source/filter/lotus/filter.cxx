@@ -23,6 +23,7 @@
 
 #include <filter.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <scerrors.hxx>
 
 #include <optab.h>

@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <formulacell.hxx>
 #include <patattr.hxx>
 #include <globstr.hrc>
@@ -187,7 +188,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
                                 ScFormulaCell* pCell, weld::Window* pParent ) const
 {
     ScDocument* pDocument = GetDocument();
-    SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
+    ScDocShell* pDocSh = pDocument->GetDocumentShell();
     if ( !pDocSh )
         return false;
 
@@ -266,7 +267,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     }
 
     ScDocument* pDocument = GetDocument();
-    SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
+    ScDocShell* pDocSh = pDocument->GetDocumentShell();
     if ( !pDocSh )
         return false;
 

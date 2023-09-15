@@ -21,6 +21,7 @@
 
 #include <document.hxx>
 #include <documentimport.hxx>
+#include <docsh.hxx>
 #include <xltracer.hxx>
 #include <xistream.hxx>
 #include <xihelper.hxx>

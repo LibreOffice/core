@@ -1550,7 +1550,7 @@ OUString ScAccessibleDocumentPagePreview::getAccessibleName()
     OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
     ScDocument& rScDoc = mpViewShell->GetDocument();
 
-    SfxObjectShell* pObjSh = rScDoc.GetDocumentShell();
+    ScDocShell* pObjSh = rScDoc.GetDocumentShell();
     if (!pObjSh)
         return aName;
 

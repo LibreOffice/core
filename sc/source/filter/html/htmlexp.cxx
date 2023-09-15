@@ -55,6 +55,7 @@
 #include <global.hxx>
 #include <postit.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
 #include <stlpool.hxx>
@@ -321,7 +322,7 @@ void ScHTMLExport::WriteHeader()
     else
     {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDoc->GetDocumentShell()->GetModel(), uno::UNO_QUERY_THROW);
+            static_cast<cppu::OWeakObject*>(pDoc->GetDocumentShell()->GetModel()), uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentProperties> xDocProps
             = xDPS->getDocumentProperties();
         SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, xDocProps,

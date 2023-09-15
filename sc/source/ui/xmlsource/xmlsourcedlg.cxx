@@ -534,7 +534,7 @@ void ScXMLSourceDlg::OkPressed()
     mpXMLContext->importXML(aParam);
 
     // Don't forget to broadcast the change.
-    SfxObjectShell* pShell = mpDoc->GetDocumentShell();
+    ScDocShell* pShell = mpDoc->GetDocumentShell();
     pShell->Broadcast(SfxHint(SfxHintId::ScDataChanged));
 
     // Repaint the grid to force repaint the cell values.

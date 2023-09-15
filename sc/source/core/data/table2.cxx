@@ -1327,7 +1327,7 @@ void ScTable::CopyToTable(
         pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
         if (!pDestTab->rDocument.IsClipOrUndo())
         {
-            ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->rDocument.GetDocumentShell());
+            ScDocShell* pDocSh = pDestTab->rDocument.GetDocumentShell();
             if (pDocSh)
                 pDocSh->SetAreasChangedNeedBroadcast();
         }
@@ -1513,7 +1513,7 @@ void ScTable::UndoToTable(
         pDestTab->SetRangeName( std::unique_ptr<ScRangeName>( new ScRangeName( *GetRangeName())));
         if (!pDestTab->rDocument.IsClipOrUndo())
         {
-            ScDocShell* pDocSh = static_cast<ScDocShell*>(pDestTab->rDocument.GetDocumentShell());
+            ScDocShell* pDocSh = pDestTab->rDocument.GetDocumentShell();
             if (pDocSh)
                 pDocSh->SetAreasChangedNeedBroadcast();
         }

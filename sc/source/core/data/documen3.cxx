@@ -36,6 +36,7 @@
 #include <rangenam.hxx>
 #include <dbdata.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <poolhelp.hxx>
 #include <rangelst.hxx>
 #include <chartlock.hxx>

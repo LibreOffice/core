@@ -20,6 +20,7 @@
 #include "XMLTableSourceContext.hxx"
 #include "xmlimprt.hxx"
 #include <document.hxx>
+#include <docsh.hxx>
 #include "xmlsubti.hxx"
 #include <tablink.hxx>
 #include <xmloff/xmltoken.hxx>

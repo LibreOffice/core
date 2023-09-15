@@ -20,6 +20,7 @@
 #include <namebuff.hxx>
 
 #include <document.hxx>
+#include <docsh.hxx>
 #include <scextopt.hxx>
 #include <tokenarray.hxx>
 

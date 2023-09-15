@@ -368,7 +368,7 @@ private:
     ScUndoManager*     mpUndoManager;
     std::unique_ptr<ScFieldEditEngine>  mpEditEngine;                   // uses pEditPool from xPoolHelper
     std::unique_ptr<ScNoteEditEngine>   mpNoteEngine;                   // uses pEditPool from xPoolHelper
-    SfxObjectShell*     mpShell;
+    ScDocShell*     mpShell;
     VclPtr<SfxPrinter>  mpPrinter;
     VclPtr<VirtualDevice> mpVirtualDevice_100th_mm;
     std::unique_ptr<ScDrawLayer> mpDrawLayer;           // SdrModel
@@ -602,7 +602,7 @@ public:
                                                                 // number formatter
 public:
     SC_DLLPUBLIC                ScDocument( ScDocumentMode eMode = SCDOCMODE_DOCUMENT,
-                                            SfxObjectShell* pDocShell = nullptr );
+                                            ScDocShell* pDocShell = nullptr );
     SC_DLLPUBLIC                ~ScDocument();
 
     void              SetName( const OUString& r ) { aDocName = r; }
@@ -612,7 +612,7 @@ public:
 
     void              GetDocStat( ScDocStat& rDocStat );
 
-    SC_DLLPUBLIC void  InitDrawLayer( SfxObjectShell* pDocShell = nullptr );
+    SC_DLLPUBLIC void  InitDrawLayer( ScDocShell* pDocShell = nullptr );
 
     ScInterpreterContext& GetNonThreadedContext() const
     {
@@ -1080,7 +1080,7 @@ public:
     bool            SetDdeLinkResultMatrix( size_t nDdePos, const ScMatrixRef& pResults );
 
     SfxBindings*                    GetViewBindings();
-    SfxObjectShell*                 GetDocumentShell() const    { return mpShell; }
+    ScDocShell*                     GetDocumentShell() const    { return mpShell; }
     SC_DLLPUBLIC ScDrawLayer*       GetDrawLayer() { return mpDrawLayer.get();  }
     SC_DLLPUBLIC const ScDrawLayer* GetDrawLayer() const { return mpDrawLayer.get();  }
     SfxBroadcaster*                 GetDrawBroadcaster();       // to avoid header

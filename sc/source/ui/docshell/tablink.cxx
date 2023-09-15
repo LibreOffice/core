@@ -61,8 +61,7 @@ struct TableLink_Impl
     TableLink_Impl() : m_pDocSh( nullptr ) {}
 };
 
-
-ScTableLink::ScTableLink(ScDocShell* pDocSh, OUString aFile,
+ScTableLink::ScTableLink(ScDocShell* pShell, OUString aFile,
                             OUString aFilter, OUString aOpt,
                             sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
@@ -75,25 +74,7 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, OUString aFile,
     bInEdit( false ),
     bAddUndo( true )
 {
-    pImpl->m_pDocSh = pDocSh;
-}
-
-ScTableLink::ScTableLink(SfxObjectShell* pShell, OUString aFile,
-                            OUString aFilter, OUString aOpt,
-                            sal_Int32 nRefreshDelaySeconds ):
-    ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
-    ScRefreshTimer( nRefreshDelaySeconds ),
-    pImpl( new TableLink_Impl ),
-    aFileName(std::move(aFile)),
-    aFilterName(std::move(aFilter)),
-    aOptions(std::move(aOpt)),
-    bInCreate( false ),
-    bInEdit( false ),
-    bAddUndo( true )
-{
-    pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
-    SetRefreshHandler( LINK( this, ScTableLink, RefreshHdl ) );
-    SetRefreshControl( &pImpl->m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
+    pImpl->m_pDocSh = pShell;
 }
 
 ScTableLink::~ScTableLink()

@@ -53,6 +53,7 @@
 #include <rangenam.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>
+#include <docsh.hxx>
 #include <callform.hxx>
 #include <addincol.hxx>
 #include <refupdat.hxx>
@@ -3554,7 +3555,7 @@ bool ScCompiler::ParseMacro( const OUString& rName )
 
     OUString aName( rName);
     StarBASIC* pObj = nullptr;
-    SfxObjectShell* pDocSh = rDoc.GetDocumentShell();
+    ScDocShell* pDocSh = rDoc.GetDocumentShell();
 
     try
     {

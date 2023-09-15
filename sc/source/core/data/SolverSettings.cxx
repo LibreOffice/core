@@ -20,7 +20,7 @@ namespace sc
 SolverSettings::SolverSettings(ScTable& rTable)
     : m_rTable(rTable)
     , m_rDoc(m_rTable.GetDoc())
-    , m_pDocShell(dynamic_cast<ScDocShell*>(m_rDoc.GetDocumentShell()))
+    , m_pDocShell(m_rDoc.GetDocumentShell())
 {
     // Get the named range manager for this tab
     std::map<OUString, ScRangeName*> rRangeMap;

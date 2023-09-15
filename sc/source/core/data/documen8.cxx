@@ -51,6 +51,7 @@
 #include <column.hxx>
 #include <poolhelp.hxx>
 #include <docpool.hxx>
+#include <docsh.hxx>
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <docoptio.hxx>
@@ -690,7 +691,7 @@ void ScDocument::RepaintRange( const ScRange& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>( mpShell->GetModel() );
+        ScModelObj* pModel = mpShell->GetModel();
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
@@ -700,7 +701,7 @@ void ScDocument::RepaintRange( const ScRangeList& rRange )
 {
     if ( bIsVisible && mpShell )
     {
-        ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>( mpShell->GetModel() );
+        ScModelObj* pModel = mpShell->GetModel();
         if ( pModel )
             pModel->RepaintRange( rRange );     // locked repaints are checked there
     }
