@@ -1412,11 +1412,16 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                         xContextMenu->remove("paste");
                     if (!IsDeleteAllowed())
                         xContextMenu->remove("delete");
-                    if (!IsPrimaryKeyAllowed())
-                        xContextMenu->remove("primarykey");
                     if (!IsInsertNewAllowed(nRow))
                         xContextMenu->remove("insert");
-                    xContextMenu->set_active("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
+                    if (IsPrimaryKeyAllowed())
+                    {
+                        xContextMenu->set_active("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
+                    }
+                    else
+                    {
+                        xContextMenu->remove("primarykey");
+                    }
 
                     if( SetDataPtr(m_nDataPos) )
                         pDescrWin->SaveData( pActRow->GetActFieldDescr() );
