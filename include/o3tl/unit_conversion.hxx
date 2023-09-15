@@ -10,7 +10,6 @@
 #pragma once
 
 #include <o3tl/safeint.hxx>
-#include <sal/macros.h>
 #include <sal/types.h>
 
 #include <array>

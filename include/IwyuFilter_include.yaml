@@ -218,25 +218,35 @@ excludelist:
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/rendering/XBezierPolyPolygon2D.hpp
     - com/sun/star/rendering/XLinePolyPolygon2D.hpp
+    include/o3tl/char16_t2wchar_t.hxx:
+    # Needed on WIN32
+    - string_view
     include/o3tl/deleter.hxx:
     # Needed for __COVERITY__
     - com/sun/star/uno/Exception.hpp
     - sal/log.hxx
-    include/o3tl/lru_map.hxx:
-    # Needed for std::min
-    - algorithm
+    include/o3tl/intcmp.hxx:
+    # Needed for C++20 mode
+    - type_traits
+    - utility
     include/o3tl/make_shared.hxx:
     # Needed for __COVERITY__
     - o3tl/deleter.hxx
     include/o3tl/safeint.hxx:
     # Needed for std::min
     - algorithm
+    include/o3tl/unreachable.hxx:
+    # Needed for C++23 mode
+    - utility
+    include/o3tl/vector_pool.hxx:
+    # Needed for std::move
+    - utility
+    include/o3tl/vector_utils.hxx:
+    # Needed for std::copy_if
+    - algorithm
     include/sot/exchange.hxx:
     # Used in a macro #define
     - com/sun/star/datatransfer/dnd/DNDConstants.hpp
-    include/tools/color.hxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     include/tools/debug.hxx:
     # Used behind #ifndef
     - tools/toolsdllapi.h
@@ -882,9 +892,6 @@ excludelist:
     include/svx/svdtext.hxx:
     # TODO too many replacements would be needed
     - tools/weakbase.hxx
-    include/oox/helper/helper.hxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     include/codemaker/global.hxx:
     # Don't propose hxx -> h change in URE libs
     - osl/file.hxx

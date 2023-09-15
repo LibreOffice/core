@@ -11,12 +11,10 @@
 #ifndef INCLUDED_O3TL_LRU_MAP_HXX
 #define INCLUDED_O3TL_LRU_MAP_HXX
 
-#include <algorithm>
 #include <cassert>
 #include <list>
 #include <unordered_map>
 #include <cstddef>
-#include <type_traits>
 
 namespace o3tl
 {
