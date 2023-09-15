@@ -371,6 +371,7 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
         m_pRoot->ResetTurboFlag();
         m_bActionInProgress = false;
         m_pRoot->DeleteEmptySct();
+        m_pRoot->DeleteEmptyFlys();
         return;
     }
     else if ( m_pRoot->GetTurbo() )
@@ -397,6 +398,7 @@ void SwLayAction::Action(OutputDevice* pRenderContext)
             SetAgain(true);
     }
     m_pRoot->DeleteEmptySct();
+    m_pRoot->DeleteEmptyFlys();
 
     m_pWait.reset();
 
