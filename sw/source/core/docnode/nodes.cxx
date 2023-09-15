@@ -346,6 +346,9 @@ void SwNodes::ChgNode( SwNodeIndex const & rDelPos, SwNodeOffset nSz,
                     if( pCNd->IsNoTextNode() && bRestPersData )
                         static_cast<SwNoTextNode*>(pCNd)->RestorePersistentData();
                 }
+
+                // reset Accessibility issue state
+                pCNd->resetAndQueueAccessibilityCheck();
             }
         }
     }
