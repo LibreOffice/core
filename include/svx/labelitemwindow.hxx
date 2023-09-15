@@ -12,14 +12,23 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <svx/svxdllapi.h>
 
+enum class LabelItemWindowType
+{
+    Text,
+    Info,
+};
+
 class SVXCORE_DLLPUBLIC LabelItemWindow final : public InterimItemWindow
 {
 private:
+    std::unique_ptr<weld::Box> m_xBox;
     std::unique_ptr<weld::Label> m_xLabel;
+    std::unique_ptr<weld::Image> m_xImage;
 
 public:
     LabelItemWindow(vcl::Window* pParent, const OUString& rLabel);
-    void set_label(const OUString& rLabel);
+    void set_label(const OUString& rLabel,
+                   const LabelItemWindowType eType = LabelItemWindowType::Text);
     OUString get_label() const;
 
     void SetOptimalSize();

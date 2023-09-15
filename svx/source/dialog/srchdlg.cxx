@@ -285,6 +285,8 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
     , m_xSearchTmplLB(m_xBuilder->weld_combo_box("searchlist"))
     , m_xSearchAttrText(m_xBuilder->weld_label("searchdesc"))
     , m_xSearchLabel(m_xBuilder->weld_label("searchlabel"))
+    , m_xSearchIcon(m_xBuilder->weld_image("searchicon"))
+    , m_xSearchBox(m_xBuilder->weld_box("searchbox"))
     , m_xReplaceFrame(m_xBuilder->weld_frame("replaceframe"))
     , m_xReplaceLB(m_xBuilder->weld_combo_box("replaceterm"))
     , m_xReplaceTmplLB(m_xBuilder->weld_combo_box("replacelist"))
@@ -339,6 +341,9 @@ SvxSearchDialog::SvxSearchDialog(weld::Window* pParent, SfxChildWindow* pChildWi
 
     m_xSearchTmplLB->make_sorted();
     m_xSearchAttrText->hide();
+
+    m_xSearchLabel->set_font_color(Color(0x00, 0x47, 0x85));
+    this->SetSearchLabel(""); // hide the message but keep the box height
 
     m_xReplaceTmplLB->make_sorted();
     m_xReplaceAttrText->hide();
@@ -581,14 +586,18 @@ void SvxSearchDialog::SetSearchLabel(const OUString& rStr)
     m_xSearchLabel->set_label(rStr);
     if (!rStr.isEmpty())
     {
-        // hide/show to fire SHOWING state change event so search label text
-        // is announced by screen reader
-        m_xSearchLabel->hide();
         m_xSearchLabel->show();
+        m_xSearchIcon->show();
+        m_xSearchBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
     }
-
-    if (rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND))
-        m_xSearchLB->set_entry_message_type(weld::EntryMessageType::Error);
+    else
+    {
+        const Size aSize = m_xSearchBox->get_preferred_size();
+        m_xSearchLabel->hide();
+        m_xSearchIcon->hide();
+        m_xSearchBox->set_size_request(-1, aSize.Height());
+        m_xSearchBox->set_background(COL_TRANSPARENT);
+    }
 }
 
 void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
@@ -2360,8 +2369,6 @@ SfxChildWinInfo SvxSearchDialogWrapper::GetInfo() const
 
 static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFrame)
 {
-    bool bNotFound = rStr == SvxResId(RID_SVXSTR_SEARCH_NOT_FOUND);
-
     css::uno::Reference< css::beans::XPropertySet > xPropSet(
             rViewFrame.GetFrame().GetFrameInterface(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
@@ -2380,21 +2387,8 @@ static void lcl_SetSearchLabelWindow(const OUString& rStr, SfxViewFrame& rViewFr
         {
             LabelItemWindow* pSearchLabel = dynamic_cast<LabelItemWindow*>(pToolBox->GetItemWindow(id));
             assert(pSearchLabel);
-            pSearchLabel->set_label(rStr);
-            if (rStr.isEmpty())
-                pSearchLabel->SetSizePixel(Size(16, pSearchLabel->GetSizePixel().Height()));
-            else
-                pSearchLabel->SetOptimalSize();
-        }
-
-        if (pToolBox->GetItemCommand(id) == ".uno:FindText")
-        {
-            FindTextFieldControl* pFindText = dynamic_cast<FindTextFieldControl*>(pToolBox->GetItemWindow(id));
-            assert(pFindText);
-            if (bNotFound)
-                pFindText->set_entry_message_type(weld::EntryMessageType::Error);
-            else
-                pFindText->set_entry_message_type(weld::EntryMessageType::Normal);
+            pSearchLabel->set_label(rStr, LabelItemWindowType::Info);
+            pSearchLabel->SetOptimalSize();
         }
     }
     xLayoutManager->doLayout();

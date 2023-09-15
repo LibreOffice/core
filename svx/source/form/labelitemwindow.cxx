@@ -11,11 +11,14 @@
 
 LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
     : InterimItemWindow(pParent, "svx/ui/labelbox.ui", "LabelBox")
+    , m_xBox(m_xBuilder->weld_box("LabelBox"))
     , m_xLabel(m_xBuilder->weld_label("label"))
+    , m_xImage(m_xBuilder->weld_image("image"))
 {
     InitControlBase(m_xLabel.get());
 
     m_xLabel->set_label(rLabel);
+    m_xImage->hide();
 
     SetOptimalSize();
 
@@ -24,13 +27,30 @@ LabelItemWindow::LabelItemWindow(vcl::Window* pParent, const OUString& rLabel)
 
 void LabelItemWindow::SetOptimalSize()
 {
-    Size aSize(m_xLabel->get_preferred_size());
+    Size aSize(m_xBox->get_preferred_size());
     aSize.AdjustWidth(12);
 
     SetSizePixel(aSize);
 }
 
-void LabelItemWindow::set_label(const OUString& rLabel) { m_xLabel->set_label(rLabel); }
+void LabelItemWindow::set_label(const OUString& rLabel, const LabelItemWindowType eType)
+{
+    m_xLabel->set_visible(false); // a11y announcement
+    m_xLabel->set_label(rLabel);
+    if ((eType == LabelItemWindowType::Text) || rLabel.isEmpty())
+    {
+        m_xImage->hide();
+        m_xLabel->set_font_color(COL_AUTO);
+        m_xBox->set_background(COL_AUTO);
+    }
+    else if (eType == LabelItemWindowType::Info)
+    {
+        m_xImage->show();
+        m_xLabel->set_font_color(Color(0x00, 0x47, 0x85));
+        m_xBox->set_background(Color(0xBD, 0xE5, 0xF8)); // same as InfobarType::INFO
+    }
+    m_xLabel->set_visible(!rLabel.isEmpty());
+}
 
 OUString LabelItemWindow::get_label() const { return m_xLabel->get_label(); }
 

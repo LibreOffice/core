@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.40.0 -->
 <interface domain="svx">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkDialog" id="FindReplaceDialog">
@@ -172,26 +172,6 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="searchlabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="no-show-all">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                        <property name="ellipsize">end</property>
-                        <property name="xalign">0</property>
-                        <child internal-child="accessible">
-                          <object class="AtkObject" id="searchlabel-atkobject">
-                            <property name="AtkObject::accessible-role" translatable="no">notification</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkBox" id="checkboxrow">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
@@ -299,6 +279,64 @@
                       <packing>
                         <property name="left-attach">1</property>
                         <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="searchbox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">start</property>
+                        <child>
+                          <object class="GtkImage" id="searchicon">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="margin-start">6</property>
+                            <property name="margin-end">3</property>
+                            <property name="margin-top">3</property>
+                            <property name="margin-bottom">3</property>
+                            <property name="icon-name">res/info.png</property>
+                            <child internal-child="accessible">
+                                <object class="AtkObject" id="searchicon-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes" context="findreplacedialog|searchicon">Search icon</property>
+                                </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="searchlabel">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="halign">start</property>
+                            <property name="margin-start">3</property>
+                            <property name="margin-end">6</property>
+                            <property name="margin-top">3</property>
+                            <property name="margin-bottom">3</property>
+                            <property name="hexpand">True</property>
+                            <property name="wrap">True</property>
+                            <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
+                            <child internal-child="accessible">
+                              <object class="AtkObject" id="searchlabel-atkobject">
+                                  <property name="AtkObject::accessible-role">notification</property>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
                       </packing>
                     </child>
                     <child>
