@@ -3241,11 +3241,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_tblStart:
     {
-        if (m_pImpl->hasTableManager())
-        {
-            bool bTableStartsAtCellStart = m_pImpl->m_nTableDepth > 0 && m_pImpl->m_nTableCellDepth > m_pImpl->m_nLastTableCellParagraphDepth + 1;
-            m_pImpl->getTableManager().setTableStartsAtCellStart(bTableStartsAtCellStart);
-        }
         /*
          * Hack for Importing Section Properties
          * LO is not able to import section properties if first element in the

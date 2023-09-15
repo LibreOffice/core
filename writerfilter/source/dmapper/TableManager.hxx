@@ -298,11 +298,9 @@ private:
 
        for each level of nested tables there is one frame in the stack
      */
-    std::stack<TableData::Pointer_t> mTableDataStack;
+    std::vector<TableData::Pointer_t> mTableDataStack;
     RowData::Pointer_t mpUnfinishedRow;
     bool mbKeepUnfinishedRow;
-    /// If this is a nested table, does it start at cell start?
-    bool m_bTableStartsAtCellStart;
 
     bool m_bCellLastParaAfterAutospacing;
 
@@ -518,7 +516,6 @@ public:
     /// Given a zero-based row/col, return the zero-based cell describing that grid, or SAL_MAX_UINT16 for invalid.
     sal_uInt32 findColumnCell( const sal_uInt32 nRow, const sal_uInt32 nCol );
 
-    void setTableStartsAtCellStart(bool bTableStartsAtCellStart);
     void setCellLastParaAfterAutospacing(bool bIsAfterAutospacing);
     bool isCellLastParaAfterAutospacing() const {return m_bCellLastParaAfterAutospacing;}
 };
