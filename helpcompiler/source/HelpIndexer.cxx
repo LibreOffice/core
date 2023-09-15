@@ -35,8 +35,11 @@ HelpIndexer::HelpIndexer(OUString lang, OUString module,
     : d_lang(std::move(lang)), d_module(std::move(module))
 {
     d_indexDir = outDir + OUStringChar('/') + d_module + ".idxl";
+    osl_getAbsoluteFileURL(nullptr, d_indexDir.pData, &d_indexDir.pData);
     d_captionDir = OUString::Concat(srcDir) + "/caption";
+    osl_getAbsoluteFileURL(nullptr, d_captionDir.pData, &d_captionDir.pData);
     d_contentDir = OUString::Concat(srcDir) + "/content";
+    osl_getAbsoluteFileURL(nullptr, d_contentDir.pData, &d_contentDir.pData);
 }
 
 #if defined _WIN32
