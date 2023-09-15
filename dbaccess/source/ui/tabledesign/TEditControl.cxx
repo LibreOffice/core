@@ -1412,8 +1412,17 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                         xContextMenu->remove("paste");
                     if (!IsDeleteAllowed())
                         xContextMenu->remove("delete");
-                    if (!IsInsertNewAllowed(nRow))
+                    // tdf#71224: WORKAROUND for the moment, we don't implement insert field at specific position
+                    // It's not SQL standard and each database has made its choice (some use "BEFORE", other "FIRST" and "AFTER")
+                    // and some, like Postgresql, don't allow this.
+                    // So for the moment, test if the table already exists (and so it's an edition), in this case only
+                    // we remove "Insert Fields" entry. Indeed, in case of new table, there's no pb.
+                    //
+                    // The real fix is to implement the insert for each database + error message for those which don't support this
+                    //if (!IsInsertNewAllowed(nRow))
+                    if ( GetView()->getController().getTable().is() )
                         xContextMenu->remove("insert");
+
                     if (IsPrimaryKeyAllowed())
                     {
                         xContextMenu->set_active("primarykey", IsRowSelected(GetCurRow()) && IsPrimaryKey());
