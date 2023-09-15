@@ -1286,23 +1286,27 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
     // Parse the export result with pdfium.
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
 
-    // The document has one page.
-    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
-    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
-    CPPUNIT_ASSERT(pPdfPage);
+    // Non-NULL pPdfDocument means pdfium is available.
+    if (pPdfDocument != nullptr)
+    {
+        // The document has one page.
+        CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+        std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+        CPPUNIT_ASSERT(pPdfPage);
 
-    std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
-    CPPUNIT_ASSERT(pPdfTextPage);
+        std::unique_ptr<vcl::pdf::PDFiumTextPage> pPdfTextPage = pPdfPage->getTextPage();
+        CPPUNIT_ASSERT(pPdfTextPage);
 
-    int nChars = pPdfTextPage->countChars();
-    CPPUNIT_ASSERT_EQUAL(22, nChars);
+        int nChars = pPdfTextPage->countChars();
+        CPPUNIT_ASSERT_EQUAL(22, nChars);
 
-    // Check that the label strings were exported correctly
-    std::vector<sal_uInt32> aChars(nChars);
-    for (int i = 0; i < nChars; i++)
-        aChars[i] = pPdfTextPage->getUnicode(i);
-    OUString aText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0623\r\n.\r\n\u0623.\u0623\r\n.\r\n\u0623.\u0623.\u0623\r\n."), aText);
+        // Check that the label strings were exported correctly
+        std::vector<sal_uInt32> aChars(nChars);
+        for (int i = 0; i < nChars; i++)
+            aChars[i] = pPdfTextPage->getUnicode(i);
+        OUString aText(aChars.data(), aChars.size());
+        CPPUNIT_ASSERT_EQUAL(OUString(u"\u0623\r\n.\r\n\u0623.\u0623\r\n.\r\n\u0623.\u0623.\u0623\r\n."), aText);
+    }
 
     // Parse the document again to get its raw content
     // TODO: get the content from PDFiumPage somehow
