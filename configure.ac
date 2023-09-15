@@ -3048,7 +3048,7 @@ fi
 # also work with the default gtk3 plugin.
 if test "$enable_wasm_strip" = "yes"; then
     enable_avmedia=no
-    enable_cmis=no
+    enable_libcmis=no
     enable_coinmp=no
     enable_cups=no
     test "$_os" = Emscripten && enable_curl=no

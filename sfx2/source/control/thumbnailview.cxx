@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_wasm_strip.h>
+
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 
@@ -40,7 +42,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 
 #include <memory>
+#if !ENABLE_WASM_STRIP_RECENT
 #include "recentdocsviewitem.hxx"
+#endif
 
 using namespace basegfx;
 using namespace basegfx::utils;
@@ -416,6 +420,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
     {
         ThumbnailViewItem *const pItem = mFilteredItemList[i];
 
+#if !ENABLE_WASM_STRIP_RECENT
         // tdf#38742 - show pinned items in a separate line
         if (auto const pRecentDocsItem = dynamic_cast<RecentDocsViewItem*>(pItem))
         {
@@ -431,6 +436,7 @@ void ThumbnailView::CalculateItemPositions(bool bScrollBarUsed)
                 nCurCount = 0;
             }
         }
+#endif
 
         if ((nCurCount >= nFirstItem) && (nCurCount < nLastItem))
         {
