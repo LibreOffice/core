@@ -1,0 +1,11 @@
+--- src/core/CLucene/store/IndexOutput.h
++++ src/core/CLucene/store/IndexOutput.h
+@@ -159,7 +159,7 @@
+ 	* @param b the bytes to write
+ 	* @param len the number of bytes to write
+ 	*/
+-	virtual void flushBuffer(const uint8_t* b, const int32_t len) = 0;
++	virtual void flushBuffer(const uint8_t* /*b*/, const int32_t /*len*/) {}
+ };
+ 
+ CL_NS_END
