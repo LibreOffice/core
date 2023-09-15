@@ -307,8 +307,11 @@ void OnlineAccessibilityCheck::resetAndQueue(SwNode* pNode, bool bIssueObjectNam
 
     pNode->getAccessibilityCheckStatus().reset();
     m_aNodes.erase(pNode);
-    runAccessibilityCheck(pNode);
-    updateNodeStatus(pNode, bIssueObjectNameChanged);
+    if (&pNode->GetNodes() == &m_rDocument.GetNodes()) // don't add undo array
+    {
+        runAccessibilityCheck(pNode);
+        updateNodeStatus(pNode, bIssueObjectNameChanged);
+    }
     updateStatusbar();
 }
 
