@@ -26,7 +26,6 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
-#include <oox/helper/helper.hxx>
 #include <oox/vml/vmlformatting.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

@@ -32,7 +32,6 @@
 #include <sal/macros.h>
 #include <sal/types.h>
 #include <tools/color.hxx>
-#include <utility>
 
 namespace oox {
 

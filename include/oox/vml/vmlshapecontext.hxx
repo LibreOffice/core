@@ -22,9 +22,10 @@
 
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/contexthandler2.hxx>
-#include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+
+#include <optional>
 
 namespace oox { class AttributeList; }
 

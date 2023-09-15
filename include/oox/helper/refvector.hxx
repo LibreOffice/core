@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
-#include <utility>
 #include <vector>
 
 #include <sal/types.h>

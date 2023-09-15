@@ -24,7 +24,6 @@
 #include <functional>
 #include <map>
 #include <memory>
-#include <utility>
 
 namespace oox {
 

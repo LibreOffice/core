@@ -36,7 +36,6 @@
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

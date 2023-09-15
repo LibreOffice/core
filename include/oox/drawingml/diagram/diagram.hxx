@@ -23,10 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <svx/svdobj.hxx>
-
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/xml/dom/XDocument.hpp>
 
 namespace oox::drawingml {
 

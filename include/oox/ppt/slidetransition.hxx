@@ -23,7 +23,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
-#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 namespace com::sun::star {

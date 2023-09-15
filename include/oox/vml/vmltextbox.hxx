@@ -21,11 +21,11 @@
 #define INCLUDED_OOX_VML_VMLTEXTBOX_HXX
 
 #include <cstddef>
+#include <optional>
 #include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
-#include <oox/helper/helper.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

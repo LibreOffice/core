@@ -33,7 +33,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sax/fshelper.hxx>
-#include <vcl/checksum.hxx>
 #include <rtl/ref.hxx>
 
 namespace com::sun::star {

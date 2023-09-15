@@ -27,7 +27,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>

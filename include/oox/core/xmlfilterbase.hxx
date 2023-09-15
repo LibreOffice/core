@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <string_view>
-#include <vector>
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/core/filterbase.hxx>
