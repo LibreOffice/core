@@ -15,6 +15,7 @@
 #include <set>
 
 #include "plugin.hxx"
+#include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 /**
@@ -69,7 +70,11 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
         return true;
 
     int noWeakBases = 0;
-    std::string basePaths;
+    int noWeakObjects = 0;
+    bool foundVirtualWeakBase = false;
+    bool foundVirtualOWeakObject = false;
+    std::string basePaths1;
+    std::string basePaths2;
     auto BaseMatchesCallback = [&](const CXXBaseSpecifier* cxxBaseSpecifier, CXXBasePath& Paths) {
         if (!cxxBaseSpecifier->getType().getTypePtr())
             return false;
@@ -78,9 +83,30 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
             return false;
         if (baseCXXRecordDecl->isInvalidDecl())
             return false;
-        if (baseCXXRecordDecl->getName() != "WeakBase")
+        bool isWeakBase(loplugin::DeclCheck(baseCXXRecordDecl)
+                            .Struct("WeakBase")
+                            .Namespace("tools")
+                            .GlobalNamespace());
+        bool isOWeakObject(loplugin::DeclCheck(baseCXXRecordDecl)
+                               .Class("OWeakObject")
+                               .Namespace("cppu")
+                               .GlobalNamespace());
+        if (isWeakBase)
+        {
+            if (cxxBaseSpecifier->isVirtual())
+                foundVirtualWeakBase = true;
+            else
+                ++noWeakBases;
+        }
+        else if (isOWeakObject)
+        {
+            if (cxxBaseSpecifier->isVirtual())
+                foundVirtualOWeakObject = true;
+            else
+                ++noWeakObjects;
+        }
+        else
             return false;
-        ++noWeakBases;
         std::string sPath;
         for (CXXBasePathElement const& pathElement : Paths)
         {
@@ -95,22 +121,48 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
         }
         sPath += "->";
         sPath += baseCXXRecordDecl->getNameAsString();
-        if (!basePaths.empty())
-            basePaths += ", ";
-        basePaths += sPath;
+        if (isWeakBase)
+        {
+            if (!basePaths1.empty())
+                basePaths1 += ", ";
+            basePaths1 += sPath;
+        }
+        else
+        {
+            if (!basePaths2.empty())
+                basePaths2 += ", ";
+            basePaths2 += sPath;
+        }
         return false;
     };
 
     CXXBasePaths aPaths;
     recordDecl->lookupInBases(BaseMatchesCallback, aPaths);
 
-    if (noWeakBases > 1)
-    {
+    if (foundVirtualWeakBase && noWeakBases > 0)
         report(DiagnosticsEngine::Warning,
-               "multiple copies of WeakBase, through inheritance paths %0",
+               "found one virtual base and one or more normal bases of tools::WeakBase, through "
+               "inheritance paths %0",
                recordDecl->getBeginLoc())
-            << basePaths << recordDecl->getSourceRange();
-    }
+            << basePaths1;
+    else if (!foundVirtualWeakBase && noWeakBases > 1)
+        report(DiagnosticsEngine::Warning,
+               "found multiple copies of tools::WeakBase, through inheritance paths %0",
+               recordDecl->getBeginLoc())
+            << basePaths1;
+
+    if (foundVirtualOWeakObject && noWeakObjects > 0)
+        report(DiagnosticsEngine::Warning,
+               "found one virtual base and one or more normal bases of cppu::OWeakObject, through "
+               "inheritance paths %0",
+               recordDecl->getBeginLoc())
+            << basePaths2;
+    else if (!foundVirtualOWeakObject && noWeakObjects > 1)
+        report(DiagnosticsEngine::Warning,
+               "found multiple copies of cppu::OWeakObject, through inheritance paths %0",
+               recordDecl->getBeginLoc())
+            << basePaths2;
+
     return true;
 }
 

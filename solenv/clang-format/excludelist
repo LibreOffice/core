@@ -1602,7 +1602,6 @@ compilerplugins/clang/unusedvariablecheck.cxx
 compilerplugins/clang/unusedvariablecheck.hxx
 compilerplugins/clang/useuniqueptr.cxx
 compilerplugins/clang/vclwidgets.cxx
-compilerplugins/clang/weakobject.cxx
 configmgr/qa/unit/test.cxx
 configmgr/source/access.cxx
 configmgr/source/access.hxx

@@ -117,7 +117,6 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/useuniqueptr \
     compilerplugins/clang/test/vclwidgets \
     compilerplugins/clang/test/weakbase \
-    compilerplugins/clang/test/weakobject \
     compilerplugins/clang/test/writeonlyvars \
     compilerplugins/clang/test/xmlimport \
 ))

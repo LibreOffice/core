@@ -25,10 +25,59 @@ struct Foo2 : public tools::WeakBase
     virtual ~Foo2();
 };
 
-// expected-error@+1 {{multiple copies of WeakBase, through inheritance paths Bar->Foo1->WeakBase, Bar->Foo2->WeakBase [loplugin:weakbase]}}
+// expected-error@+1 {{found multiple copies of tools::WeakBase, through inheritance paths Bar->Foo1->WeakBase, Bar->Foo2->WeakBase [loplugin:weakbase]}}
 struct Bar : public Foo1, public Foo2
 {
     virtual ~Bar();
 };
+
+namespace cppu
+{
+class OWeakObject
+{
+};
+}
+
+namespace test2
+{
+class Foo1 : public cppu::OWeakObject
+{
+};
+class Foo2 : public cppu::OWeakObject
+{
+};
+// expected-error@+1 {{found multiple copies of cppu::OWeakObject, through inheritance paths Foo3->Foo1->OWeakObject, Foo3->Foo2->OWeakObject [loplugin:weakbase]}}
+class Foo3 : public Foo1, public Foo2
+{
+};
+}
+
+namespace test3
+{
+class Foo1 : public virtual cppu::OWeakObject
+{
+};
+class Foo2 : public virtual cppu::OWeakObject
+{
+};
+// no warning expected
+class Foo3 : public Foo1, public Foo2
+{
+};
+}
+
+namespace test4
+{
+class Foo1 : public cppu::OWeakObject
+{
+};
+class Foo2 : public virtual cppu::OWeakObject
+{
+};
+// expected-error@+1 {{found one virtual base and one or more normal bases of cppu::OWeakObject, through inheritance paths Foo3->Foo1->OWeakObject, Foo3->Foo2->OWeakObject [loplugin:weakbase]}}
+class Foo3 : public Foo1, public Foo2
+{
+};
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
