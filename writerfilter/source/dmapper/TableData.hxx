@@ -101,6 +101,10 @@ public:
 
     sal_uInt32 getGridSpan() const { return m_nGridSpan; }
     void setGridSpan( sal_uInt32 nSpan ) { m_nGridSpan = nSpan; }
+
+    void SetStart(const css::uno::Reference<css::text::XTextRange>& xStart) { mStart = xStart; }
+
+    bool IsValid() const;
 };
 
 /**
@@ -168,6 +172,21 @@ public:
     bool isCellOpen() const
     {
         return mCells.size() > 0 && mCells.back()->isOpen();
+    }
+
+    void SetCellStart(const css::uno::Reference<css::text::XTextRange>& xStart)
+    {
+        if (mCells.empty())
+        {
+            return;
+        }
+
+        mCells.back()->SetStart(xStart);
+    }
+
+    bool IsCellValid() const
+    {
+        return !mCells.empty() && mCells.back()->IsValid();
     }
 
     /**
@@ -341,6 +360,16 @@ public:
     bool isCellOpen() const
     {
         return mpRow->isCellOpen();
+    }
+
+    void SetCellStart(const css::uno::Reference<css::text::XTextRange>& xStart)
+    {
+        mpRow->SetCellStart(xStart);
+    }
+
+    bool IsCellValid() const
+    {
+        return mpRow->IsCellValid();
     }
 
     /**

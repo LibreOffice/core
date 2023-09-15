@@ -26,6 +26,8 @@
 
 #include <comphelper/diagnose_ex.hxx>
 
+using namespace com::sun::star;
+
 namespace writerfilter::dmapper
 {
 void TableManager::clearData() {}
@@ -41,7 +43,7 @@ void TableManager::openCell(const css::uno::Reference<css::text::XTextRange>& rH
 
     if (!mTableDataStack.empty())
     {
-        TableData::Pointer_t pTableData = mTableDataStack.top();
+        TableData::Pointer_t pTableData = mTableDataStack.back();
 
         pTableData->addCell(rHandle, pProps);
     }
@@ -56,19 +58,19 @@ sal_uInt32 TableManager::getGridBefore(sal_uInt32 nRow)
         SAL_WARN("writerfilter", "TableManager::getGridBefore called while not in table");
         return 0;
     }
-    if (nRow >= mTableDataStack.top()->getRowCount())
+    if (nRow >= mTableDataStack.back()->getRowCount())
         return 0;
-    return mTableDataStack.top()->getRow(nRow)->getGridBefore();
+    return mTableDataStack.back()->getRow(nRow)->getGridBefore();
 }
 
 sal_uInt32 TableManager::getCurrentGridBefore()
 {
-    return mTableDataStack.top()->getCurrentRow()->getGridBefore();
+    return mTableDataStack.back()->getCurrentRow()->getGridBefore();
 }
 
 void TableManager::setCurrentGridBefore(sal_uInt32 nSkipGrids)
 {
-    mTableDataStack.top()->getCurrentRow()->setGridBefore(nSkipGrids);
+    mTableDataStack.back()->getCurrentRow()->setGridBefore(nSkipGrids);
 }
 
 sal_uInt32 TableManager::getGridAfter(sal_uInt32 nRow)
@@ -78,33 +80,33 @@ sal_uInt32 TableManager::getGridAfter(sal_uInt32 nRow)
         SAL_WARN("writerfilter", "TableManager::getGridAfter called while not in table");
         return 0;
     }
-    if (nRow >= mTableDataStack.top()->getRowCount())
+    if (nRow >= mTableDataStack.back()->getRowCount())
         return 0;
-    return mTableDataStack.top()->getRow(nRow)->getGridAfter();
+    return mTableDataStack.back()->getRow(nRow)->getGridAfter();
 }
 
 void TableManager::setCurrentGridAfter(sal_uInt32 nSkipGrids)
 {
     assert(isInTable());
-    mTableDataStack.top()->getCurrentRow()->setGridAfter(nSkipGrids);
+    mTableDataStack.back()->getCurrentRow()->setGridAfter(nSkipGrids);
 }
 
 std::vector<sal_uInt32> TableManager::getCurrentGridSpans()
 {
-    return mTableDataStack.top()->getCurrentRow()->getGridSpans();
+    return mTableDataStack.back()->getCurrentRow()->getGridSpans();
 }
 
 void TableManager::setCurrentGridSpan(sal_uInt32 nGridSpan, bool bFirstCell)
 {
-    mTableDataStack.top()->getCurrentRow()->setCurrentGridSpan(nGridSpan, bFirstCell);
+    mTableDataStack.back()->getCurrentRow()->setCurrentGridSpan(nGridSpan, bFirstCell);
 }
 
 sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCell)
 {
-    if (nRow >= mTableDataStack.top()->getRowCount())
+    if (nRow >= mTableDataStack.back()->getRowCount())
         return SAL_MAX_UINT32;
 
-    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    RowData::Pointer_t pRow = mTableDataStack.back()->getRow(nRow);
     if (!pRow || nCell < pRow->getGridBefore()
         || nCell >= pRow->getCellCount() - pRow->getGridAfter())
     {
@@ -121,10 +123,10 @@ sal_uInt32 TableManager::findColumn(const sal_uInt32 nRow, const sal_uInt32 nCel
 
 sal_uInt32 TableManager::findColumnCell(const sal_uInt32 nRow, const sal_uInt32 nCol)
 {
-    if (nRow >= mTableDataStack.top()->getRowCount())
+    if (nRow >= mTableDataStack.back()->getRowCount())
         return SAL_MAX_UINT32;
 
-    RowData::Pointer_t pRow = mTableDataStack.top()->getRow(nRow);
+    RowData::Pointer_t pRow = mTableDataStack.back()->getRow(nRow);
     if (!pRow || nCol < pRow->getGridBefore())
         return SAL_MAX_UINT32;
 
@@ -288,7 +290,7 @@ void TableManager::closeCell(const css::uno::Reference<css::text::XTextRange>& r
 
     if (!mTableDataStack.empty())
     {
-        TableData::Pointer_t pTableData = mTableDataStack.top();
+        TableData::Pointer_t pTableData = mTableDataStack.back();
 
         pTableData->endCell(rHandle);
 
@@ -305,7 +307,7 @@ void TableManager::ensureOpenCell(const TablePropertyMapPtr& pProps)
 
     if (!mTableDataStack.empty())
     {
-        TableData::Pointer_t pTableData = mTableDataStack.top();
+        TableData::Pointer_t pTableData = mTableDataStack.back();
 
         if (pTableData != nullptr)
         {
@@ -348,7 +350,7 @@ void TableManager::endParagraphGroup()
     if (isRowEnd())
     {
         endOfRowAction();
-        mTableDataStack.top()->endRow(getRowProps());
+        mTableDataStack.back()->endRow(getRowProps());
         mState.resetRowProps();
     }
 
@@ -381,7 +383,7 @@ void TableManager::resolveCurrentTable()
     {
         try
         {
-            TableData::Pointer_t pTableData = mTableDataStack.top();
+            TableData::Pointer_t pTableData = mTableDataStack.back();
 
             unsigned int nRows = pTableData->getRowCount();
 
@@ -406,7 +408,7 @@ void TableManager::resolveCurrentTable()
                 mpTableDataHandler->endRow();
             }
 
-            mpTableDataHandler->endTable(mTableDataStack.size() - 1, m_bTableStartsAtCellStart);
+            mpTableDataHandler->endTable(mTableDataStack.size() - 1);
         }
         catch (css::uno::Exception const&)
         {
@@ -423,27 +425,78 @@ void TableManager::resolveCurrentTable()
 
 void TableManager::endLevel()
 {
+    uno::Reference<text::XTextCursor> xCursor;
     if (mpTableDataHandler != nullptr)
+    {
+        if (mTableDataStack.size() > 1)
+        {
+            // This is an inner table: create a cursor from the outer cell's start position, in case
+            // that would become invalid during the current table resolution.
+            TableData::Pointer_t pUpperTableData = mTableDataStack[mTableDataStack.size() - 2];
+            RowData::Pointer_t pRow = pUpperTableData->getCurrentRow();
+            unsigned int nCells = pRow->getCellCount();
+            if (nCells > 0)
+            {
+                uno::Reference<text::XTextRange> xCellStart = pRow->getCellStart(nCells - 1);
+                if (xCellStart.is())
+                {
+                    try
+                    {
+                        xCursor = xCellStart->getText()->createTextCursorByRange(
+                            xCellStart->getStart());
+                        xCursor->goLeft(1, false);
+                    }
+                    catch (const uno::RuntimeException&)
+                    {
+                        TOOLS_WARN_EXCEPTION(
+                            "writerfilter",
+                            "TableManager::endLevel: createTextCursorByRange() failed");
+                    }
+                }
+            }
+        }
         resolveCurrentTable();
+    }
 
     // Store the unfinished row as it will be used for the next table
     if (mbKeepUnfinishedRow)
-        mpUnfinishedRow = mTableDataStack.top()->getCurrentRow();
+        mpUnfinishedRow = mTableDataStack.back()->getCurrentRow();
     mState.endLevel();
-    mTableDataStack.pop();
+    mTableDataStack.pop_back();
 
-#ifdef DBG_UTIL
     TableData::Pointer_t pTableData;
 
     if (!mTableDataStack.empty())
-        pTableData = mTableDataStack.top();
+        pTableData = mTableDataStack.back();
 
+#ifdef DBG_UTIL
     TagLogger::getInstance().startElement("tablemanager.endLevel");
     TagLogger::getInstance().attribute("level", mTableDataStack.size());
+#endif
 
     if (pTableData != nullptr)
+    {
+#ifdef DBG_UTIL
         TagLogger::getInstance().attribute("openCell", pTableData->isCellOpen() ? "yes" : "no");
+#endif
+        if (pTableData->isCellOpen() && !pTableData->IsCellValid() && xCursor.is())
+        {
+            // The inner table is resolved and we have an outer table, but the currently opened
+            // cell's start position is no longer valid. Try to move the cursor back to where it was
+            // and update the cell start position accordingly.
+            try
+            {
+                xCursor->goRight(1, false);
+                pTableData->SetCellStart(xCursor->getStart());
+            }
+            catch (const uno::RuntimeException&)
+            {
+                TOOLS_WARN_EXCEPTION("writerfilter", "TableManager::endLevel: goRight() failed");
+            }
+        }
+    }
 
+#ifdef DBG_UTIL
     TagLogger::getInstance().endElement();
 #endif
 }
@@ -454,7 +507,7 @@ void TableManager::startLevel()
     TableData::Pointer_t pTableData;
 
     if (!mTableDataStack.empty())
-        pTableData = mTableDataStack.top();
+        pTableData = mTableDataStack.back();
 
     TagLogger::getInstance().startElement("tablemanager.startLevel");
     TagLogger::getInstance().attribute("level", mTableDataStack.size());
@@ -482,7 +535,7 @@ void TableManager::startLevel()
         mpUnfinishedRow.clear();
     }
 
-    mTableDataStack.push(pTableData2);
+    mTableDataStack.push_back(pTableData2);
     mState.startLevel();
 }
 
@@ -490,7 +543,7 @@ bool TableManager::isInTable()
 {
     bool bInTable = false;
     if (!mTableDataStack.empty())
-        bInTable = mTableDataStack.top()->getDepth() > 0;
+        bInTable = mTableDataStack.back()->getDepth() > 0;
     return bInTable;
 }
 
@@ -515,7 +568,7 @@ void TableManager::endRow()
 #ifdef DBG_UTIL
     TagLogger::getInstance().element("tablemanager.endRow");
 #endif
-    TableData::Pointer_t pTableData = mTableDataStack.top();
+    TableData::Pointer_t pTableData = mTableDataStack.back();
 
     // Add borderless w:gridBefore cell(s) to the row
     sal_uInt32 nGridBefore = getCurrentGridBefore();
@@ -589,11 +642,6 @@ void TableManager::cellDepth(sal_uInt32 nDepth)
     mnTableDepthNew = nDepth;
 }
 
-void TableManager::setTableStartsAtCellStart(bool bTableStartsAtCellStart)
-{
-    m_bTableStartsAtCellStart = bTableStartsAtCellStart;
-}
-
 void TableManager::setCellLastParaAfterAutospacing(bool bIsAfterAutospacing)
 {
     m_bCellLastParaAfterAutospacing = bIsAfterAutospacing;
@@ -603,7 +651,6 @@ TableManager::TableManager()
     : mnTableDepthNew(0)
     , mnTableDepth(0)
     , mbKeepUnfinishedRow(false)
-    , m_bTableStartsAtCellStart(false)
 {
     setRowEnd(false);
     setInCell(false);
@@ -612,6 +659,25 @@ TableManager::TableManager()
 }
 
 TableManager::~TableManager() = default;
+
+bool CellData::IsValid() const
+{
+    if (!mStart.is())
+    {
+        return false;
+    }
+
+    try
+    {
+        mStart->getStart();
+    }
+    catch (const uno::RuntimeException&)
+    {
+        return false;
+    }
+
+    return true;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
