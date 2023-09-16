@@ -272,6 +272,7 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(m_xTreeView.get(), "modules/swriter/ui/mastercontextmenu.ui"));
         std::unique_ptr<weld::Menu> xPopup = xBuilder->weld_menu("navmenu");
+        std::unique_ptr<weld::Menu> xSubPopup = xBuilder->weld_menu("insertmenu");
 
         const MenuEnableFlags nEnableFlags = GetEnableFlags();
 
@@ -280,10 +281,10 @@ IMPL_LINK(SwGlobalTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPopup->set_sensitive("editlink", bool(nEnableFlags & MenuEnableFlags::EditLink));
 
         //disabling if applicable
-        xPopup->set_sensitive("insertindex", bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
-        xPopup->set_sensitive("insertfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xPopup->set_sensitive("insertnewfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
-        xPopup->set_sensitive("inserttext", bool(nEnableFlags & MenuEnableFlags::InsertText));
+        xSubPopup->set_sensitive("insertindex", bool(nEnableFlags & MenuEnableFlags::InsertIdx ));
+        xSubPopup->set_sensitive("insertfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        xSubPopup->set_sensitive("insertnewfile", bool(nEnableFlags & MenuEnableFlags::InsertFile));
+        xSubPopup->set_sensitive("inserttext", bool(nEnableFlags & MenuEnableFlags::InsertText));
 
         xPopup->set_sensitive("update", bool(nEnableFlags & MenuEnableFlags::Update));
         xPopup->set_sensitive("insert", bool(nEnableFlags & MenuEnableFlags::InsertIdx));
