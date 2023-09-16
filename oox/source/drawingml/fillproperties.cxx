@@ -49,6 +49,11 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::graphic;
@@ -992,101 +997,64 @@ OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
     return OUString();
 }
 
-sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
+constexpr auto constEffectTokenForEffectNameMap = frozen::make_unordered_map<std::u16string_view, sal_Int32>(
 {
     // effects
-    if( sName == "artisticBlur" )
-        return XML_artisticBlur;
-    else if( sName == "artisticCement" )
-        return XML_artisticCement;
-    else if( sName == "artisticChalkSketch" )
-        return XML_artisticChalkSketch;
-    else if( sName == "artisticCrisscrossEtching" )
-        return XML_artisticCrisscrossEtching;
-    else if( sName == "artisticCutout" )
-        return XML_artisticCutout;
-    else if( sName == "artisticFilmGrain" )
-        return XML_artisticFilmGrain;
-    else if( sName == "artisticGlass" )
-        return XML_artisticGlass;
-    else if( sName == "artisticGlowDiffused" )
-        return XML_artisticGlowDiffused;
-    else if( sName == "artisticGlowEdges" )
-        return XML_artisticGlowEdges;
-    else if( sName == "artisticLightScreen" )
-        return XML_artisticLightScreen;
-    else if( sName == "artisticLineDrawing" )
-        return XML_artisticLineDrawing;
-    else if( sName == "artisticMarker" )
-        return XML_artisticMarker;
-    else if( sName == "artisticMosiaicBubbles" )
-        return XML_artisticMosiaicBubbles;
-    else if( sName == "artisticPaintStrokes" )
-        return XML_artisticPaintStrokes;
-    else if( sName == "artisticPaintBrush" )
-        return XML_artisticPaintBrush;
-    else if( sName == "artisticPastelsSmooth" )
-        return XML_artisticPastelsSmooth;
-    else if( sName == "artisticPencilGrayscale" )
-        return XML_artisticPencilGrayscale;
-    else if( sName == "artisticPencilSketch" )
-        return XML_artisticPencilSketch;
-    else if( sName == "artisticPhotocopy" )
-        return XML_artisticPhotocopy;
-    else if( sName == "artisticPlasticWrap" )
-        return XML_artisticPlasticWrap;
-    else if( sName == "artisticTexturizer" )
-        return XML_artisticTexturizer;
-    else if( sName == "artisticWatercolorSponge" )
-        return XML_artisticWatercolorSponge;
-    else if( sName == "brightnessContrast" )
-        return XML_brightnessContrast;
-    else if( sName == "colorTemperature" )
-        return XML_colorTemperature;
-    else if( sName == "saturation" )
-        return XML_saturation;
-    else if( sName == "sharpenSoften" )
-        return XML_sharpenSoften;
+    { u"artisticBlur", XML_artisticBlur },
+    { u"artisticCement", XML_artisticCement },
+    { u"artisticChalkSketch", XML_artisticChalkSketch },
+    { u"artisticCrisscrossEtching", XML_artisticCrisscrossEtching },
+    { u"artisticCutout", XML_artisticCutout },
+    { u"artisticFilmGrain", XML_artisticFilmGrain },
+    { u"artisticGlass", XML_artisticGlass },
+    { u"artisticGlowDiffused", XML_artisticGlowDiffused },
+    { u"artisticGlowEdges", XML_artisticGlowEdges },
+    { u"artisticLightScreen", XML_artisticLightScreen },
+    { u"artisticLineDrawing", XML_artisticLineDrawing },
+    { u"artisticMarker", XML_artisticMarker },
+    { u"artisticMosiaicBubbles", XML_artisticMosiaicBubbles },
+    { u"artisticPaintStrokes", XML_artisticPaintStrokes },
+    { u"artisticPaintBrush", XML_artisticPaintBrush },
+    { u"artisticPastelsSmooth", XML_artisticPastelsSmooth },
+    { u"artisticPencilGrayscale", XML_artisticPencilGrayscale },
+    { u"artisticPencilSketch", XML_artisticPencilSketch },
+    { u"artisticPhotocopy", XML_artisticPhotocopy },
+    { u"artisticPlasticWrap", XML_artisticPlasticWrap },
+    { u"artisticTexturizer", XML_artisticTexturizer },
+    { u"artisticWatercolorSponge", XML_artisticWatercolorSponge },
+    { u"brightnessContrast", XML_brightnessContrast },
+    { u"colorTemperature", XML_colorTemperature },
+    { u"saturation", XML_saturation },
+    { u"sharpenSoften", XML_sharpenSoften },
 
     // attributes
-    else if( sName == "visible" )
-        return XML_visible;
-    else if( sName == "trans" )
-        return XML_trans;
-    else if( sName == "crackSpacing" )
-        return XML_crackSpacing;
-    else if( sName == "pressure" )
-        return XML_pressure;
-    else if( sName == "numberOfShades" )
-        return XML_numberOfShades;
-    else if( sName == "grainSize" )
-        return XML_grainSize;
-    else if( sName == "intensity" )
-        return XML_intensity;
-    else if( sName == "smoothness" )
-        return XML_smoothness;
-    else if( sName == "gridSize" )
-        return XML_gridSize;
-    else if( sName == "pencilSize" )
-        return XML_pencilSize;
-    else if( sName == "size" )
-        return XML_size;
-    else if( sName == "brushSize" )
-        return XML_brushSize;
-    else if( sName == "scaling" )
-        return XML_scaling;
-    else if( sName == "detail" )
-        return XML_detail;
-    else if( sName == "bright" )
-        return XML_bright;
-    else if( sName == "contrast" )
-        return XML_contrast;
-    else if( sName == "colorTemp" )
-        return XML_colorTemp;
-    else if( sName == "sat" )
-        return XML_sat;
-    else if( sName == "amount" )
-        return XML_amount;
+    { u"visible", XML_visible },
+    { u"trans", XML_trans },
+    { u"crackSpacing", XML_crackSpacing },
+    { u"pressure", XML_pressure },
+    { u"numberOfShades", XML_numberOfShades },
+    { u"grainSize", XML_grainSize },
+    { u"intensity", XML_intensity },
+    { u"smoothness", XML_smoothness },
+    { u"gridSize", XML_gridSize },
+    { u"pencilSize", XML_pencilSize },
+    { u"size", XML_size },
+    { u"brushSize", XML_brushSize },
+    { u"scaling", XML_scaling },
+    { u"detail", XML_detail },
+    { u"bright", XML_bright },
+    { u"contrast", XML_contrast },
+    { u"colorTemp", XML_colorTemp },
+    { u"sat", XML_sat },
+    { u"amount", XML_amount }
+});
+
+sal_Int32 ArtisticEffectProperties::getEffectToken(const OUString& sName)
+{
+    auto const aIterator = constEffectTokenForEffectNameMap.find(sName);
+
+    if (aIterator != constEffectTokenForEffectNameMap.end())
+        return aIterator->second;
 
     SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectToken - unexpected token name: " << sName );
     return XML_none;
