@@ -53,6 +53,7 @@
 #include <editeng/justifyitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <sal/log.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 

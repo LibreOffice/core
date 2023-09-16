@@ -26,7 +26,6 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <o3tl/string_view.hxx>
-#include <rtl/math.h>
 #include <sax/saxdllapi.h>
 
 #include <string_view>

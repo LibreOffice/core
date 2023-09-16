@@ -29,7 +29,6 @@
 #include <svx/svdview.hxx>
 #include <optional>
 #include <unotools/weakref.hxx>
-#include <memory>
 
 struct ImplSVEvent;
 class SdrView;

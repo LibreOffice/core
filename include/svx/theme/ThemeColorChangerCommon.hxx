@@ -10,9 +10,7 @@
 #pragma once
 
 #include <svx/svxdllapi.h>
-#include <svx/theme/IThemeColorChanger.hxx>
 #include <docmodel/theme/ColorSet.hxx>
-#include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svl/undo.hxx>

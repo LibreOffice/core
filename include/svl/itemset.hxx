@@ -21,9 +21,7 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstddef>
 #include <memory>
-#include <optional>
 #include <utility>
 
 #include <svl/svldllapi.h>

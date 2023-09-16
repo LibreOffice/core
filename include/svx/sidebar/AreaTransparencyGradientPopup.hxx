@@ -19,15 +19,14 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_AREATRANSPARENCYGRADIENTPOPUP_HXX
 
+#include <basegfx/utils/bgradient.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <basegfx/utils/gradienttools.hxx>
 
 class XFillFloatTransparenceItem;
 
 namespace svx::sidebar
 {
-class AreaTransparencyGradientControl;
 class AreaPropertyPanelBase;
 
 class AreaTransparencyGradientPopup final : public WeldToolbarPopup

@@ -20,7 +20,6 @@
 #define INCLUDED_SFX2_MSG_HXX
 
 #include <sfx2/shell.hxx>
-#include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include <sfx2/dllapi.h>

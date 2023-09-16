@@ -20,7 +20,6 @@
 #pragma once
 
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <sfx2/tabdlg.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <vcl/svapp.hxx>
 

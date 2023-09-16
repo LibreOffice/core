@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/dllapi.h>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svditer.hxx>
@@ -24,8 +22,6 @@
 #include <com/sun/star/awt/XView.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/UnitConversion.hxx>
-
-#include <sal/log.hxx>
 
 #include <optional>
 

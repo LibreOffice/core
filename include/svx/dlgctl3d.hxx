@@ -24,6 +24,7 @@
 #include <vcl/weld.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/obj3d.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <memory>
 

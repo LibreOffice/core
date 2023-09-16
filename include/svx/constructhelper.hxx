@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/long.hxx>
 #include <unotools/resmgr.hxx>

@@ -38,6 +38,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
+#include <osl/diagnose.h>
 
 namespace {
 

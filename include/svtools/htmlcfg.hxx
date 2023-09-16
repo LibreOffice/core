@@ -19,7 +19,6 @@
 #pragma once
 
 #include <svtools/svtdllapi.h>
-#include <rtl/textenc.h>
 
 #define HTML_FONT_COUNT 7
 

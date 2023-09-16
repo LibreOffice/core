@@ -19,11 +19,7 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
-
-namespace rtl {
-  class OUString;
-};
+#include <string_view>
 
 // search the TokenID for the token
 int GetRTFToken( std::u16string_view rSearch );

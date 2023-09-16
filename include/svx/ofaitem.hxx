@@ -22,6 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/xtable.hxx>
 
 class SVX_DLLPUBLIC OfaPtrItem final : public SfxPoolItem
 {
@@ -37,7 +38,6 @@ public:
     void*                    GetValue() const { return pPtr; }
 };
 
-class XColorList;
 class SVX_DLLPUBLIC OfaXColorListItem final : public SfxPoolItem
 {
  private:

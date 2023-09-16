@@ -20,6 +20,7 @@
 #pragma once
 
 #include <svx/svdobj.hxx>
+#include <unotools/weakref.hxx>
 
 #include "pres.hxx"
 #include <sal/types.h>

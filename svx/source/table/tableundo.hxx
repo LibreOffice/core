@@ -27,6 +27,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/sdrobjectuser.hxx>
+#include <unotools/weakref.hxx>
 
 #include <celltypes.hxx>
 

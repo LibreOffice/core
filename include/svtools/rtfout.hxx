@@ -21,8 +21,9 @@
 
 #include <svtools/svtdllapi.h>
 
-#include <rtl/ustring.hxx>
 #include <rtl/textenc.h>
+
+#include <string_view>
 
 class SvStream;
 

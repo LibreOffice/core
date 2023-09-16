@@ -49,6 +49,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 

@@ -24,7 +24,6 @@
 #include <string_view>
 
 #include <svtools/svtdllapi.h>
-#include <rtl/textenc.h>
 #include <rtl/string.hxx>
 #include <svl/macitem.hxx>
 

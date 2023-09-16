@@ -12,10 +12,8 @@
 #include <svx/svxdllapi.h>
 #include <vcl/weld.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/theme/IThemeColorChanger.hxx>
 #include <svx/dialog/ThemeColorEditDialog.hxx>
 #include <svx/dialog/ThemeColorValueSet.hxx>
-#include <functional>
 
 namespace model
 {

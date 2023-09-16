@@ -51,10 +51,10 @@
 #include <editeng/unotext.hxx>
 
 #include <svx/svdobj.hxx>
+#include <unotools/weakref.hxx>
 
 #include <comphelper/servicehelper.hxx>
 
-#include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase12.hxx>
 
 class SfxItemSet;

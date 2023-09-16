@@ -10,6 +10,8 @@
 #ifndef INCLUDED_SFX2_LOKHELPER_HXX
 #define INCLUDED_SFX2_LOKHELPER_HXX
 
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+
 #include <vcl/IDialogRenderable.hxx>
 #include <vcl/ITiledRenderable.hxx>
 #include <vcl/event.hxx>
@@ -23,7 +25,6 @@
 #include <rtl/string.hxx>
 #include <optional>
 #include <string_view>
-#include <sfx2/app.hxx>
 
 struct SFX2_DLLPUBLIC LokMouseEventData
 {

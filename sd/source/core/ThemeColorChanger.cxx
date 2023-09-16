@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <editeng/colritem.hxx>
 #include <theme/ThemeColorChanger.hxx>
 #include <svx/theme/ThemeColorChangerCommon.hxx>
 #include <svx/svdmodel.hxx>

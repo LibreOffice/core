@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/long.hxx>
 
 namespace com::sun::star
 {

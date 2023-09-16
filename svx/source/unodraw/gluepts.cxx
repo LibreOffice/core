@@ -26,6 +26,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <tools/weakbase.hxx>
+#include <unotools/weakref.hxx>
 
 #include <svx/svdobj.hxx>
 #include <svx/svdglue.hxx>

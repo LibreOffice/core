@@ -11,6 +11,7 @@
 #define INCLUDED_SVX_EXTEDIT_HXX
 
 #include <svx/svxdllapi.h>
+#include <svx/svdograf.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>

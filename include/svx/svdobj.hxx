@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
@@ -33,9 +34,6 @@
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <unotools/resmgr.hxx>
-#include <unotools/weakref.hxx>
-#include <osl/diagnose.h>
-#include <typeinfo>
 
 #include <unordered_set>
 

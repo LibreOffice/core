@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_XCOLIT_HXX
 
 #include <tools/color.hxx>
-#include <editeng/colritem.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 
 #include <svx/svxdllapi.h>

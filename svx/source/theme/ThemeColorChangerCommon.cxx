@@ -10,6 +10,7 @@
 #include <svx/theme/ThemeColorChangerCommon.hxx>
 
 #include <sal/config.h>
+#include <editeng/colritem.hxx>
 #include <editeng/unoprnms.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>

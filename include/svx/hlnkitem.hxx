@@ -26,7 +26,6 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <memory>
-#include <rtl/ustrbuf.hxx>
 
 enum class HyperDialogEvent {
     NONE                = 0x0000,

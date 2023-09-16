@@ -23,8 +23,6 @@
 #include <drawinglayer/primitive2d/BufferedDecompositionPrimitive2D.hxx>
 #include <svx/framelink.hxx>
 
-#include <memory>
-
 // predefines
 
 namespace drawinglayer::primitive2d
