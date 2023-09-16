@@ -5460,6 +5460,9 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
             if ( !xDecks.is() )
                 break;
 
+            if (!xDecks->hasByName("NavigatorDeck"))
+                break;
+
             Reference<ui::XDeck> xDeck ( xDecks->getByName("NavigatorDeck"), uno::UNO_QUERY);
             if ( !xDeck.is() )
                 break;
