@@ -21,7 +21,6 @@
 #define INCLUDED_UNOTOOLS_SYSLOCALE_HXX
 
 #include <unotools/unotoolsdllapi.h>
-#include <rtl/textenc.h>
 
 #include <memory>
 

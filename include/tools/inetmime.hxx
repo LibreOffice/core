@@ -23,7 +23,6 @@
 #include <rtl/character.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 
 #include <unordered_map>
 

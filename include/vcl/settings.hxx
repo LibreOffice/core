@@ -20,6 +20,8 @@
 #ifndef INCLUDED_VCL_SETTINGS_HXX
 #define INCLUDED_VCL_SETTINGS_HXX
 
+#include <config_options.h>
+
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>

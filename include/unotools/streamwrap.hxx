@@ -26,7 +26,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/bytereader.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>

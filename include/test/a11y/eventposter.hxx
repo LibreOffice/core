@@ -12,7 +12,6 @@
 #include <test/testdllapi.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

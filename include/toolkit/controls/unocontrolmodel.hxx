@@ -28,7 +28,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/weakagg.hxx>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 
 #include <comphelper/propshlp.hxx>

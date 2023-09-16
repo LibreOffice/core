@@ -23,7 +23,6 @@
 #include <memory>
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XFont2.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <mutex>
 #include <vcl/font.hxx>

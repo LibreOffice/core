@@ -29,7 +29,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ref.hxx>
-#include <type_traits>
 
 namespace unotools
 {

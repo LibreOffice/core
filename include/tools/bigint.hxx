@@ -19,9 +19,11 @@
 #ifndef INCLUDED_TOOLS_BIGINT_HXX
 #define INCLUDED_TOOLS_BIGINT_HXX
 
-#include <rtl/ustring.hxx>
 #include <tools/toolsdllapi.h>
 #include <tools/long.hxx>
+
+#include <cassert>
+#include <string_view>
 
 #define MAX_DIGITS 8
 

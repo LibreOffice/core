@@ -26,7 +26,6 @@
 #include <limits.h>
 #include <algorithm>
 #include <ostream>
-#include <config_options.h>
 #include <o3tl/unit_conversion.hxx>
 
 class SvStream;

@@ -21,7 +21,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
-#include <rtl/ustring.hxx>
 
 #include <cstddef>
 #include <vector>

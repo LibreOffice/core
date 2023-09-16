@@ -21,6 +21,7 @@
 
 #include <array>
 
+#include <tools/debug.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/inetmime.hxx>
 #include <o3tl/string_view.hxx>

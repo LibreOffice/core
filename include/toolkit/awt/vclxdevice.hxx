@@ -22,7 +22,6 @@
 
 #include <toolkit/dllapi.h>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/vclptr.hxx>

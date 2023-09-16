@@ -13,11 +13,8 @@
 #include <tools/toolsdllapi.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 
-#include <string>
 #include <string_view>
-#include <utility>
 
 /** Simple JSON encoder designed specifically for LibreOfficeKit purposes.
  *

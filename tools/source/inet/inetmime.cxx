@@ -27,6 +27,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
 #include <rtl/character.hxx>
 
