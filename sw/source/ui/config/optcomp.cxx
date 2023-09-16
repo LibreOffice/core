@@ -337,11 +337,7 @@ std::unique_ptr<SfxTabPage> SwCompatibilityOptPage::Create(weld::Container* pPag
 
 OUString SwCompatibilityOptPage::GetAllStrings()
 {
-    OUString sAllStrings;
-    OUString labels[] = { "label2", "label11" };
-
-    for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    OUString sAllStrings = m_xBuilder->weld_label(u"label11")->get_label() + " ";
 
     sAllStrings += m_xDefaultPB->get_label() + " ";
 
