@@ -57,6 +57,8 @@
 #include <string_view>
 #include <vector>
 
+#include <officecfg/Office/Common.hxx>
+
 namespace vcl
 {
 
@@ -2872,8 +2874,12 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
             nMenuFlags &= ~MenuFlags::HideDisabledEntries;
     }
     else
-        // #102790# context menus shall never show disabled entries
-        nMenuFlags |= MenuFlags::HideDisabledEntries;
+    {
+         if (officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get())
+             nMenuFlags &= ~MenuFlags::HideDisabledEntries;
+         else
+             nMenuFlags |= MenuFlags::HideDisabledEntries;
+    }
 
     sal_uInt16 nVisibleEntries = ImplGetVisibleItemCount();
     if ( !nVisibleEntries )
