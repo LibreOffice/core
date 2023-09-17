@@ -112,10 +112,11 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
         if (!aPos.GetContentNode()->IsTextNode())
             return false;
 
-        uno::Reference<text::XTextRange> xRange(
+        rtl::Reference<SwXTextRange> xRange(
                     SwXTextRange::CreateXTextRange(*(rView.GetDocShell()->GetDoc()),
                                                    aPos, &aPos));
-        uno::Reference<beans::XPropertySet> xPropertySet(xRange, uno::UNO_QUERY_THROW);
+        if (!xRange)
+            throw uno::RuntimeException();
 
         SwContentFrame* pContentFrame = aPos.GetContentNode()->GetTextNode()->getLayoutFrame(
                             rSh.GetLayout());
@@ -139,7 +140,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
             {
                 // check if in CS formatting highlighted area
                 OUString sCharStyle;
-                xPropertySet->getPropertyValue("CharStyleName") >>= sCharStyle;
+                xRange->getPropertyValue("CharStyleName") >>= sCharStyle;
                 if (!sCharStyle.isEmpty())
                     sText = SwStyleNameMapper::GetUIName(sCharStyle, SwGetPoolIdFromName::ChrFmt);
             }
@@ -166,9 +167,8 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                             *aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE));
                 SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
 
-                uno::Reference<beans::XPropertyState> xPropertiesState(xRange, uno::UNO_QUERY_THROW);
                 const uno::Sequence<beans::Property> aProperties
-                        = xPropertySet->getPropertySetInfo()->getProperties();
+                        = xRange->getPropertySetInfo()->getProperties();
 
                 for (const beans::Property& rProperty : aProperties)
                 {
@@ -181,10 +181,10 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                             != aHiddenProperties.end())
                         continue;
 
-                    if (xPropertiesState->getPropertyState(rPropName)
+                    if (xRange->getPropertyState(rPropName)
                             == beans::PropertyState_DIRECT_VALUE)
                     {
-                        const uno::Any aAny = xPropertySet->getPropertyValue(rPropName);
+                        const uno::Any aAny = xRange->getPropertyValue(rPropName);
                         if (HasValidPropertyValue(aAny))
                         {
                             sText = SwResId(STR_CHARACTER_DIRECT_FORMATTING);
@@ -215,7 +215,7 @@ bool PSCSDFPropsQuickHelp(const HelpEvent &rEvt, SwWrtShell& rSh)
                 if (aFrameAreaRect.Contains(aPt))
                 {
                     OUString sParaStyle;
-                    xPropertySet->getPropertyValue("ParaStyleName") >>= sParaStyle;
+                    xRange->getPropertyValue("ParaStyleName") >>= sParaStyle;
                     sText = SwStyleNameMapper::GetUIName(sParaStyle, SwGetPoolIdFromName::TxtColl);
                     // check for paragraph direct formatting
                     if (SwDoc::HasParagraphDirectFormatting(aPos))

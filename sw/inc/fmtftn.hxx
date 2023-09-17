@@ -36,6 +36,7 @@ class SwDoc;
 class SwTextFootnote;
 class SwRootFrame;
 class SwXFootnote;
+class SwXTextRange;
 
 // ATT_FTN
 
@@ -93,7 +94,7 @@ public:
     OUString GetViewNumStr(const SwDoc& rDoc, SwRootFrame const* pLayout,
             bool bInclStrings = false) const;
 
-    css::uno::Reference<css::text::XTextRange> getAnchor(SwDoc& rDoc) const;
+    rtl::Reference<SwXTextRange> getAnchor(SwDoc& rDoc) const;
 
     unotools::WeakReference<SwXFootnote> const& GetXFootnote() const
         { return m_wXFootnote; }

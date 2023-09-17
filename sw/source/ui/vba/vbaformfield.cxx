@@ -123,7 +123,7 @@ uno::Reference<word::XRange> SwVbaFormField::Range()
     SwDoc* pDoc = word::getDocShell(m_xTextDocument)->GetDoc();
     if (pDoc)
     {
-        uno::Reference<text::XTextRange> xText(SwXTextRange::CreateXTextRange(
+        rtl::Reference<SwXTextRange> xText(SwXTextRange::CreateXTextRange(
             *pDoc, m_rFormField.GetMarkStart(), &m_rFormField.GetMarkEnd()));
         if (xText.is())
             xRet = new SwVbaRange(mxParent, mxContext, m_xTextDocument, xText->getStart(),

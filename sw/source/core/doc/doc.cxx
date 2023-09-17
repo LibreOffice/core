@@ -1878,10 +1878,9 @@ void SwDoc::SetLanguage(const LanguageType eLang, const sal_uInt16 nId)
 
 bool SwDoc::HasParagraphDirectFormatting(const SwPosition& rPos)
 {
-    uno::Reference<text::XTextRange> xRange(SwXTextRange::CreateXTextRange(rPos.GetDoc(), rPos,
+    rtl::Reference<SwXTextRange> xRange(SwXTextRange::CreateXTextRange(rPos.GetDoc(), rPos,
                                                                            &rPos));
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumeration> xParaEnum = xRange->createEnumeration();
     uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(), uno::UNO_QUERY);
     if (xThisParagraphRange.is())
     {

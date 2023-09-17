@@ -560,9 +560,10 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
     aFieldsNode.NodeType = svx::sidebar::TreeNode::Category;
     aTextSectionsNode.NodeType = svx::sidebar::TreeNode::Category;
 
-    uno::Reference<text::XTextRange> xRange(
+    rtl::Reference<SwXTextRange> xRange(
         SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-    uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
+    if (!xRange)
+        throw uno::RuntimeException();
     std::unordered_map<OUString, bool> aIsDefined;
 
     const std::vector<OUString> aHiddenProperties{ UNO_NAME_RSID,
@@ -583,7 +584,8 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
     const std::vector<OUString> aHiddenCharacterProperties{ UNO_NAME_CHAR_COLOR_THEME,
                                                             UNO_NAME_CHAR_COLOR_TINT_OR_SHADE };
 
-    InsertValues(xRange, aIsDefined, aCharDFNode, false, aHiddenProperties, aFieldsNode);
+    InsertValues(static_cast<cppu::OWeakObject*>(xRange.get()), aIsDefined, aCharDFNode, false,
+                 aHiddenProperties, aFieldsNode);
 
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(rDocSh.GetBaseModel(),
                                                                          uno::UNO_QUERY);
@@ -593,12 +595,13 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
 
     uno::Reference<container::XNameAccess> xStyleFamily(
         xStyleFamilies->getByName("CharacterStyles"), uno::UNO_QUERY_THROW);
-    xPropertiesSet->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
-    xPropertiesSet->getPropertyValue("ParaStyleName") >>= sCurrentParaStyle;
+    xRange->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
+    xRange->getPropertyValue("ParaStyleName") >>= sCurrentParaStyle;
 
     if (!sCurrentCharStyle.isEmpty())
     {
-        xPropertiesSet.set(xStyleFamily->getByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropertiesSet(
+            xStyleFamily->getByName(sCurrentCharStyle), css::uno::UNO_QUERY_THROW);
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
         svx::sidebar::TreeNode aCurrentChild;
         aCurrentChild.sNodeName = sDisplayName;
@@ -611,8 +614,7 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
     }
 
     // Collect paragraph direct formatting
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xRange, uno::UNO_QUERY_THROW);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumeration> xParaEnum = xRange->createEnumeration();
     uno::Reference<text::XTextRange> xThisParagraphRange(xParaEnum->nextElement(), uno::UNO_QUERY);
     if (xThisParagraphRange.is())
     {
@@ -628,7 +630,8 @@ static void UpdateTree(SwDocShell& rDocSh, SwEditShell& rEditSh,
     {
         uno::Reference<style::XStyle> xPropertiesStyle(xStyleFamily->getByName(sCurrentParaStyle),
                                                        uno::UNO_QUERY_THROW);
-        xPropertiesSet.set(xPropertiesStyle, css::uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropertiesSet(xPropertiesStyle,
+                                                           css::uno::UNO_QUERY_THROW);
         xPropertiesSet->getPropertyValue("DisplayName") >>= sDisplayName;
         OUString aParentParaStyle = xPropertiesStyle->getParentStyle();
         svx::sidebar::TreeNode aCurrentChild;

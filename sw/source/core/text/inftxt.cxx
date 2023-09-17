@@ -1358,12 +1358,11 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
     SwPosition aPosition(pFrame->MapViewToModelPos(GetIdx()));
     SwPosition aMarkPosition(pFrame->MapViewToModelPos(GetIdx() + GetLen()));
 
-    uno::Reference<text::XTextRange> xRange(
+    rtl::Reference<SwXTextRange> xRange(
                 SwXTextRange::CreateXTextRange(pFrame->GetDoc(), aPosition, &aMarkPosition));
-    uno::Reference<beans::XPropertySet> xPropertiesSet(xRange, uno::UNO_QUERY_THROW);
 
     OUString sCurrentCharStyle;
-    xPropertiesSet->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
+    xRange->getPropertyValue("CharStyleName") >>= sCurrentCharStyle;
 
     std::optional<OUString> sCSNumberOrDF; // CS number or "df" or not used
     std::optional<Color> aFillColor;
@@ -1408,9 +1407,8 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
         SfxItemPropertyMap const& rMap(rPropSet.getPropertyMap());
 
 
-        uno::Reference<beans::XPropertyState> xPropertiesState(xRange, uno::UNO_QUERY_THROW);
         const uno::Sequence<beans::Property> aProperties
-                = xPropertiesSet->getPropertySetInfo()->getProperties();
+                = xRange->getPropertySetInfo()->getProperties();
 
         for (const beans::Property& rProperty : aProperties)
         {
@@ -1423,9 +1421,9 @@ void SwTextPaintInfo::DrawCSDFHighlighting(const SwLinePortion &rPor) const
                     != aHiddenProperties.end())
                 continue;
 
-            if (xPropertiesState->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
+            if (xRange->getPropertyState(rPropName) == beans::PropertyState_DIRECT_VALUE)
             {
-                const uno::Any aAny = xPropertiesSet->getPropertyValue(rPropName);
+                const uno::Any aAny = xRange->getPropertyValue(rPropName);
                 if (HasValidPropertyValue(aAny))
                 {
                     sCSNumberOrDF = SwResId(STR_CHARACTER_DIRECT_FORMATTING_TAG);

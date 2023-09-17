@@ -64,7 +64,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf119081)
 
     SwDoc* pDoc = pDocShell->GetDoc();
     SwPaM& rCursor = pWrtShell->GetCurrentShellCursor();
-    uno::Reference<text::XTextRange> xInsertPosition
+    rtl::Reference<SwXTextRange> xInsertPosition
         = SwXTextRange::CreateXTextRange(*pDoc, *rCursor.GetPoint(), nullptr);
     uno::Reference<text::XTextAppend> xTextAppend(xInsertPosition->getText(), uno::UNO_QUERY);
     // Without the accompanying fix in place, this test would have failed with:

@@ -972,16 +972,15 @@ SwNumberPortion *SwTextFormatter::NewFootnoteNumPortion( SwTextFormatInfo const 
     pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CJK );
     pNumFnt->SetWeight( WEIGHT_NORMAL, SwFontScript::CTL );
 
-    const auto xAnchor = rFootnote.getAnchor(*pDoc);
-    uno::Reference<beans::XPropertySet> xAnchorProps(xAnchor, uno::UNO_QUERY);
-    if (xAnchorProps.is())
+    const rtl::Reference<SwXTextRange> xAnchor = rFootnote.getAnchor(*pDoc);
+    if (xAnchor.is())
     {
-        auto aAny = xAnchorProps->getPropertyValue("CharFontCharSet");
+        auto aAny = xAnchor->getPropertyValue("CharFontCharSet");
         sal_Int16 eCharSet;
         if ((aAny >>= eCharSet) && eCharSet == awt::CharSet::SYMBOL)
         {
             OUString aFontName;
-            aAny = xAnchorProps->getPropertyValue("CharFontName");
+            aAny = xAnchor->getPropertyValue("CharFontName");
             if (aAny  >>= aFontName)
             {
                 pNumFnt->SetName(aFontName, SwFontScript::Latin);

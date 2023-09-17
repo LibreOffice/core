@@ -30,6 +30,7 @@
 class SwDoc;
 class SwTextLineBreak;
 class SwXLineBreak;
+class SwXTextRange;
 
 /// Defines the location of a line break text wrapping restart.
 enum class SwLineBreakClear
@@ -69,7 +70,7 @@ public:
 
     sal_uInt16 GetValueCount() const override;
 
-    css::uno::Reference<css::text::XTextRange> GetAnchor() const;
+    rtl::Reference<SwXTextRange> GetAnchor() const;
 
     void SetTextLineBreak(SwTextLineBreak* pTextAttr) { m_pTextAttr = pTextAttr; }
 

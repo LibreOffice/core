@@ -266,15 +266,15 @@ OUString SwFormatFootnote::GetViewNumStr(const SwDoc& rDoc,
     return sRet;
 }
 
-uno::Reference<text::XTextRange> SwFormatFootnote::getAnchor(SwDoc& rDoc) const
+rtl::Reference<SwXTextRange> SwFormatFootnote::getAnchor(SwDoc& rDoc) const
 {
     SolarMutexGuard aGuard;
     if (!m_pTextAttr)
-        return uno::Reference<text::XTextRange>();
+        return {};
     SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
     aPam.SetMark();
     aPam.GetMark()->AdjustContent(+1);
-    const rtl::Reference<SwXTextRange> xRet =
+    rtl::Reference<SwXTextRange> xRet =
         SwXTextRange::CreateXTextRange(rDoc, *aPam.Start(), aPam.End());
     return xRet;
 }

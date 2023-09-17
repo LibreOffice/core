@@ -68,7 +68,7 @@ struct SpellState
     std::unique_ptr<SwPaM>
                         pOtherCursor; // position where the spelling inside the _other_ area started
     bool                m_bDrawingsSpelled; // all drawings spelled
-    Reference<XTextRange> m_xStartRange; // text range that marks the start of spelling
+    rtl::Reference<SwXTextRange> m_xStartRange; // text range that marks the start of spelling
     const SdrObject*    m_pStartDrawing; // draw text object spelling started in
     ESelection          m_aStartDrawingSelection; // draw text start selection
     bool                m_bRestartDrawing; // the first selected drawing object is found again

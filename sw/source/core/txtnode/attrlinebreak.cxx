@@ -74,19 +74,17 @@ sal_uInt16 SwFormatLineBreak::GetValueCount() const
     return static_cast<sal_uInt16>(SwLineBreakClear::LAST) + 1;
 }
 
-uno::Reference<text::XTextRange> SwFormatLineBreak::GetAnchor() const
+rtl::Reference<SwXTextRange> SwFormatLineBreak::GetAnchor() const
 {
     SolarMutexGuard aGuard;
 
     if (!m_pTextAttr)
-    {
-        return uno::Reference<text::XTextRange>();
-    }
+        return {};
 
     SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
     aPam.SetMark();
     aPam.GetMark()->AdjustContent(+1);
-    uno::Reference<text::XTextRange> xRet
+    rtl::Reference<SwXTextRange> xRet
         = SwXTextRange::CreateXTextRange(aPam.GetDoc(), *aPam.Start(), aPam.End());
     return xRet;
 }
