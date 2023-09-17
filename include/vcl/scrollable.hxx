@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <tools/gen.hxx>
 #include <tools/long.hxx>
 #include <vcl/dllapi.h>
 

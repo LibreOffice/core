@@ -19,7 +19,6 @@
 #ifndef INCLUDED_VCL_PDFWRITER_HXX
 #define INCLUDED_VCL_PDFWRITER_HXX
 
-#include <config_options.h>
 #include <sal/types.h>
 
 #include <tools/gen.hxx>

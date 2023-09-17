@@ -11,7 +11,6 @@
 #ifndef INCLUDED_VCL_IDIALOGRENDERABLE_HXX
 #define INCLUDED_VCL_IDIALOGRENDERABLE_HXX
 
-#include <config_options.h>
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 

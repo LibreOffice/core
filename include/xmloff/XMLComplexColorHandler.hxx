@@ -10,9 +10,9 @@
 #pragma once
 
 #include <xmloff/dllapi.h>
+#include <xmloff/xmlprhdl.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 
-using namespace ::xmloff::token;
 using namespace css;
 
 class XMLOFF_DLLPUBLIC XMLComplexColorHandler : public XMLPropertyHandler

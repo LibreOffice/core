@@ -20,6 +20,9 @@
 #ifndef INCLUDED_VCL_WINDOWSTATE_HXX
 #define INCLUDED_VCL_WINDOWSTATE_HXX
 
+#include <o3tl/typed_flags_set.hxx>
+#include <rtl/ustring.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/WindowPosSize.hxx>
 
 namespace vcl

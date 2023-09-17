@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 #define INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 
-#include <span>
 #include <vector>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>

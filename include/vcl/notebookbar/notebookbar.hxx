@@ -13,7 +13,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/notebookbar/NotebookBarAddonsMerger.hxx>
 #include <vcl/settings.hxx>
-#include <set>
 #include <vector>
 
 namespace com::sun::star::ui { class XContextChangeEventListener; }

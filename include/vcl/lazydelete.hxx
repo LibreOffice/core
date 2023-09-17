@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <optional>
-#include <utility>
 
 namespace vcl
 {

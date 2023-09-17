@@ -11,7 +11,6 @@
 
 #include <xmloff/dllapi.h>
 
-#include <memory>
 #include <xmloff/XMLElementPropertyContext.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <docmodel/color/ComplexColor.hxx>

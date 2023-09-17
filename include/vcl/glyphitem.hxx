@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_GLYPHITEM_HXX
 #define INCLUDED_VCL_GLYPHITEM_HXX
 
-#include <sal/types.h>
 #include <vcl/dllapi.h>
 
 #include <vector>

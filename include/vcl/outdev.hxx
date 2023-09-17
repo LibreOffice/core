@@ -50,6 +50,7 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/vclenum.hxx>
 #include <vcl/vclreferencebase.hxx>
 
 #include <basegfx/numeric/ftools.hxx>

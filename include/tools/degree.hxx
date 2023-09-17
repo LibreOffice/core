@@ -15,7 +15,6 @@
 #include <o3tl/strong_int.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <cstdlib>
-#include <math.h>
 #include <numeric>
 
 template <int N> struct FractionTag;

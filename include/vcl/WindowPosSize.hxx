@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_FRAMEPOSSIZE_HXX
 
 #include <vcl/dllapi.h>
-#include <o3tl/typed_flags_set.hxx>
-#include <rtl/string.hxx>
 #include <sal/types.h>
 #include <tools/gen.hxx>
 

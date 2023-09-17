@@ -27,7 +27,6 @@
 #include <o3tl/cow_wrapper.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/vclenum.hxx>
 #include <com/sun/star/awt/GradientStyle.hpp>
 
 namespace tools { class Rectangle; }

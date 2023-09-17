@@ -27,7 +27,6 @@
 #include <exception>
 #include <optional>
 #include <memory>
-#include <utility>
 
 namespace vcl
 {

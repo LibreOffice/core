@@ -21,7 +21,6 @@
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <cppuhelper/weak.hxx>
-#include <rtl/ustring.hxx>
 #include <vcl/dllapi.h>
 
 namespace vcl::unohelper

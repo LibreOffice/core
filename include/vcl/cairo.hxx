@@ -21,9 +21,7 @@
 
 #include <sal/config.h>
 #include <osl/endian.h>
-#include <vcl/Scanline.hxx>
 #include <vcl/vclptr.hxx>
-#include <config_features.h>
 #include <config_cairo_rgba.h>
 #include <memory>
 

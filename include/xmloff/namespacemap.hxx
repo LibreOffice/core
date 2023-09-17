@@ -28,8 +28,6 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
-#include <salhelper/simplereferenceobject.hxx>
 
 #include <limits.h>
 

@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <config_options.h>
-
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/poly.hxx>

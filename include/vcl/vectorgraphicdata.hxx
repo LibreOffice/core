@@ -21,12 +21,10 @@
 #define INCLUDED_VCL_VECTORGRAPHICDATA_HXX
 
 #include <basegfx/range/b2drange.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/BinaryDataContainer.hxx>
 #include <rtl/ustring.hxx>
 #include <deque>
-#include <memory>
 #include <algorithm>
 #include <optional>
 

@@ -45,7 +45,6 @@
 
 #include <xmloff/XMLPageExport.hxx>
 #include <comphelper/attributelist.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
 #include <comphelper/errcode.hxx>

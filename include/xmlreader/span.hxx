@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <cstring>
 
 #include <sal/types.h>

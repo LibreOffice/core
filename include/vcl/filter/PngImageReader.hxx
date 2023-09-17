@@ -13,9 +13,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
-#include <vector>
-
 #include <vcl/dllapi.h>
 #include <vcl/BinaryDataContainer.hxx>
 

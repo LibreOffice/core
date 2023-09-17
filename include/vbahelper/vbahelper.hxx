@@ -19,14 +19,13 @@
 #ifndef INCLUDED_VBAHELPER_VBAHELPER_HXX
 #define INCLUDED_VBAHELPER_VBAHELPER_HXX
 
-#include <memory>
 #include <string_view>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <basic/sbxmeth.hxx>
+#include <basic/sbxvar.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/color.hxx>

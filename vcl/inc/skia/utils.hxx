@@ -22,6 +22,7 @@
 
 #include <vcl/skia/SkiaHelper.hxx>
 
+#include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <driverblocklist.hxx>
 #include <vcl/bitmap.hxx>

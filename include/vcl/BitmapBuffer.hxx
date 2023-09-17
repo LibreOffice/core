@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <memory>
 #include <optional>
 
 #include <vcl/dllapi.h>

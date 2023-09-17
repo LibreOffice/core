@@ -15,6 +15,8 @@
 #include <comphelper/seqstream.hxx>
 #include <sal/log.hxx>
 
+#include <vector>
+
 struct BinaryDataContainer::Impl
 {
     // temp file to store the data out of RAM if necessary

@@ -21,7 +21,6 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/idle.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/window.hxx>
 #include <vcl/windowstate.hxx>
 #include <com/sun/star/frame/XFrame.hpp>

@@ -14,11 +14,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <unotools/tempfile.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dllapi.h>
 
-#include <vector>
 #include <memory>
 
 /** Container for the binary data, whose responsibility is to manage the

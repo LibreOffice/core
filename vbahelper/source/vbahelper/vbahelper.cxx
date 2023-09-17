@@ -59,6 +59,7 @@
 
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
+#include <basic/sbxmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sberrors.hxx>

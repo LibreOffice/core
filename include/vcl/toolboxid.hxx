@@ -10,6 +10,10 @@
 #pragma once
 
 #include <o3tl/strong_int.hxx>
+#include <sal/types.h>
+
+#include <cstddef>
+#include <string_view>
 
 typedef o3tl::strong_int<sal_uInt16, struct ToolBoxItemIdTag> ToolBoxItemId;
 namespace std

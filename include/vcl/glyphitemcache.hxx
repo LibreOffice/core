@@ -24,12 +24,10 @@
 #include <vcl/dllapi.h>
 
 #include <o3tl/lru_map.hxx>
-#include <o3tl/hash_combine.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/vclptr.hxx>
-#include <tools/gen.hxx>
 
 #include <optional>
 

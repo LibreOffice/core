@@ -21,14 +21,11 @@
 #define INCLUDED_VCL_ERRINF_HXX
 
 #include <rtl/ustring.hxx>
-#include <utility>
 #include <comphelper/errcode.hxx>
 #include <vcl/dllapi.h>
 
 #include <vector>
 #include <memory>
-
-#include <limits.h>
 
 namespace weld { class Window; }
 
