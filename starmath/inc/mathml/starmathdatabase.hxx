@@ -207,51 +207,53 @@ extern const SmColorTokenTableEntry aColorTokenTableERROR[1];
 
 /**
   * Identifies operator chars tokens for importing mathml.
-  * Identifies from char cChar
+  * Identifies from rText
   *
   * While loading MO or MI elements might find an unicode16 symbol.
   * This code allows to generate appropriate token for them.
   *
-  * @param cChar
+  * @param rText
   * @return closing fences' token
   */
-SmToken Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy = true);
+SmToken Identify_SmXMLOperatorContext_Impl(std::u16string_view rText, bool bIsStretchy = true,
+                                           sal_Int32 nIndex = 0);
 
 /**
   * Identifies opening / closing brace tokens for importing mathml.
-  * Identifies from char cChar
+  * Identifies from rText
   *
   * While loading MO fenced elements might find braces symbols.
   * This code allows to generate appropriate token for them.
   *
-  * @param cChar
+  * @param rText
   * @return closing fences' token
   */
-SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_PrefixPostfix_SmXMLOperatorContext_Impl(std::u16string_view rText,
+                                                         sal_Int32 nIndex = 0);
 
 /**
   * Identifies opening brace tokens for importing mathml.
-  * Identifies from char cChar
+  * Identifies from rText
   *
   * While loading MO elements ( with prefix value for form attribute ) might find braces symbols.
   * This code allows to generate appropriate token for them.
   *
-  * @param cChar
+  * @param rText
   * @return closing fences' token
   */
-SmToken Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_Prefix_SmXMLOperatorContext_Impl(std::u16string_view rText, sal_Int32 nIndex = 0);
 
 /**
   * Identifies closing brace tokens for importing mathml.
-  * Identifies from char cChar
+  * Identifies from rText
   *
   * While loading MO elements ( with postfix value for form attribute ) might find braces symbols.
   * This code allows to generate appropriate token for them.
   *
-  * @param cChar
+  * @param rText
   * @return closing fences' token
   */
-SmToken Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar);
+SmToken Identify_Postfix_SmXMLOperatorContext_Impl(std::u16string_view rText, sal_Int32 nIndex = 0);
 
 /**
   * Identifies color from color code cColor.

@@ -1006,8 +1006,8 @@ namespace
 class SmXMLFencedContext_Impl : public SmXMLRowContext_Impl
 {
 protected:
-    sal_Unicode cBegin;
-    sal_Unicode cEnd;
+    OUString cBegin;
+    OUString cEnd;
     bool bIsStretchy;
 
 public:
@@ -1034,10 +1034,10 @@ void SmXMLFencedContext_Impl::startFastElement(
         {
             //temp, starmath cannot handle multichar brackets (I think)
             case XML_OPEN:
-                cBegin = aIter.toString()[0];
+                cBegin = aIter.toString();
                 break;
             case XML_CLOSE:
-                cEnd = aIter.toString()[0];
+                cEnd = aIter.toString();
                 break;
             case XML_STRETCHY:
                 bIsStretchy = IsXMLToken(aIter, XML_TRUE);
@@ -1377,25 +1377,23 @@ public:
 
 void SmXMLOperatorContext_Impl::TCharacters(const OUString& rChars)
 {
-    aToken.setChar(rChars[0]);
+    aToken.setChar(rChars);
     SmToken bToken;
     if (bIsFenced)
     {
         if (isPrefix)
-            bToken
-                = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar[0]);
+            bToken = starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(aToken.cMathChar);
         else if (isInfix)
             bToken = SmToken(TMLINE, MS_VERTLINE, "mline", TG::NONE, 0);
         else if (isPostfix)
-            bToken
-                = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(aToken.cMathChar[0]);
+            bToken = starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(aToken.cMathChar);
         else
             bToken = starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(
-                aToken.cMathChar[0]);
+                aToken.cMathChar);
     }
     else
-        bToken = starmathdatabase::Identify_SmXMLOperatorContext_Impl(aToken.cMathChar[0],
-                                                                      bIsStretchy);
+        bToken
+            = starmathdatabase::Identify_SmXMLOperatorContext_Impl(aToken.cMathChar, bIsStretchy);
     if (bToken.eType != TERROR)
         aToken = bToken;
 }

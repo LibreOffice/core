@@ -36,6 +36,7 @@ public:
     void testTdf137008();
     void testTdf151842();
     void testMathmlEntities();
+    void testMaj();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testColor);
@@ -49,6 +50,7 @@ public:
     CPPUNIT_TEST(testTdf137008);
     CPPUNIT_TEST(testTdf151842);
     CPPUNIT_TEST(testMathmlEntities);
+    CPPUNIT_TEST(testMaj);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -175,6 +177,18 @@ void Test::testMathmlEntities()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT_EQUAL(OUString(u"{ \u03C3 \u221E \u221E \u03C3 }"), pDocShell->GetText());
+}
+
+void Test::testMaj()
+{
+    loadFromURL(u"maj.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModel);
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT(pDocShell);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"{ maj csup \u0661 csub { nitalic \U0001EE0A = \u0660 } { frac "
+                                  u"{ \u0661 } { nitalic \U0001EE0A } } }"),
+                         pDocShell->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

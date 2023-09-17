@@ -153,6 +153,7 @@ const SmTokenTableEntry aTokenTable[]
         { u"lsub", TLSUB, '\0', TG::Power, 0 },
         { u"lsup", TLSUP, '\0', TG::Power, 0 },
         { u"lt", TLT, MS_LT, TG::Relation, 0 },
+        { u"maj", TSUM, MS_MAJ, TG::Oper, 5 },
         { u"matrix", TMATRIX, '\0', TG::NONE, 5 },
         { u"minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5 },
         { u"mline", TMLINE, MS_VERTLINE, TG::NONE, 0 }, //! not in TG::RBrace, Level 0

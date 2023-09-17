@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+ <mrow>
+  <munderover>
+   <mo stretchy="false">𞻰</mo>
+   <mrow>
+    <mi>𞸊</mi>
+    <mo stretchy="false">=</mo>
+    <mn>٠</mn>
+   </mrow>
+   <mn>١</mn>
+  </munderover>
+  <mfrac>
+   <mn>١</mn>
+   <mi>𞸊</mi>
+  </mfrac>
+ </mrow>
+</math>

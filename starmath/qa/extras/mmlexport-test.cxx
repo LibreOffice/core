@@ -31,11 +31,13 @@ public:
     void testBlank();
     void testTdf97049();
     void testTdf101022();
+    void testMaj();
 
     CPPUNIT_TEST_SUITE(MathMLExportTest);
     CPPUNIT_TEST(testBlank);
     CPPUNIT_TEST(testTdf97049);
     CPPUNIT_TEST(testTdf101022);
+    CPPUNIT_TEST(testMaj);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -114,6 +116,20 @@ void MathMLExportTest::testTdf101022()
 
     pDocShell->SetGreekCharStyle(0); // mode 0
     checkMathVariant(*pDocShell, false, false);
+}
+
+void MathMLExportTest::testMaj()
+{
+    mxComponent = loadFromDesktop("private:factory/smath");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    pDocShell->SetText(
+        u"maj to { \u0661 } from { \U0001EE0A = \u0660 } { \u0661 over \U0001EE0A }");
+    save("MathML XML (Math)");
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", "stretchy", "false");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", u"\U0001EEF0");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);

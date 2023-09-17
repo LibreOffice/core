@@ -152,7 +152,7 @@ struct SmTokenTableEntry
 {
     OUString aIdent;
     SmTokenType eType;
-    sal_Unicode cMathChar;
+    sal_uInt32 cMathChar;
     TG nGroup;
     sal_uInt16 nLevel;
 };
@@ -225,11 +225,11 @@ struct SmToken
     {
     }
 
-    SmToken(SmTokenType eTokenType, sal_Unicode cMath, OUString rText, TG nTokenGroup = TG::NONE,
+    SmToken(SmTokenType eTokenType, sal_uInt32 cMath, OUString rText, TG nTokenGroup = TG::NONE,
             sal_uInt16 nTokenLevel = 0)
         : aText(std::move(rText))
         , eType(eTokenType)
-        , cMathChar(cMath)
+        , cMathChar(&cMath, 1)
         , nGroup(nTokenGroup)
         , nLevel(nTokenLevel)
     {
@@ -280,7 +280,8 @@ struct SmToken
         nLevel = 0;
     }
 
-    void setChar(sal_Unicode cChar) { cMathChar = OUString(&cChar, 1); }
+    void setChar(sal_uInt32 cChar) { cMathChar = OUString(&cChar, 1); }
+    void setChar(const OUString& rText) { cMathChar = rText; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

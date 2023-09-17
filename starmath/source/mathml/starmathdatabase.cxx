@@ -20,8 +20,10 @@
 #include <starmathdatabase.hxx>
 #include <types.hxx>
 
-SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy)
+SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(std::u16string_view rText,
+                                                             bool bIsStretchy, sal_Int32 nIndex)
 {
+    auto cChar = o3tl::iterateCodePoints(rText, &nIndex);
     switch (cChar)
     {
         case MS_COPROD:
@@ -45,6 +47,8 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
             return SmToken(TPROD, MS_PROD, "prod", TG::Oper, 5);
         case MS_SUM:
             return SmToken(TSUM, MS_SUM, "sum", TG::Oper, 5);
+        case MS_MAJ:
+            return SmToken(TSUM, MS_MAJ, "maj", TG::Oper, 5);
         case MS_FACT:
             return SmToken(TFACT, MS_FACT, "!", TG::UnOper, 5);
         case MS_NEG:
@@ -217,8 +221,10 @@ SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, 
     }
 }
 
-SmToken starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode cChar)
+SmToken starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(std::u16string_view rText,
+                                                                    sal_Int32 nIndex)
 {
+    auto cChar = o3tl::iterateCodePoints(rText, &nIndex);
     switch (cChar)
     {
         case MS_VERTLINE:
@@ -264,8 +270,10 @@ SmToken starmathdatabase::Identify_Prefix_SmXMLOperatorContext_Impl(sal_Unicode 
     }
 }
 
-SmToken starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode cChar)
+SmToken starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(std::u16string_view rText,
+                                                                     sal_Int32 nIndex)
 {
+    auto cChar = o3tl::iterateCodePoints(rText, &nIndex);
     switch (cChar)
     {
         case MS_VERTLINE:
@@ -311,8 +319,11 @@ SmToken starmathdatabase::Identify_Postfix_SmXMLOperatorContext_Impl(sal_Unicode
     }
 }
 
-SmToken starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(sal_Unicode cChar)
+SmToken
+starmathdatabase::Identify_PrefixPostfix_SmXMLOperatorContext_Impl(std::u16string_view rText,
+                                                                   sal_Int32 nIndex)
 {
+    auto cChar = o3tl::iterateCodePoints(rText, &nIndex);
     switch (cChar)
     {
         case MS_VERTLINE:

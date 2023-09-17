@@ -74,12 +74,12 @@ using namespace ::xmloff::token;
 
 namespace
 {
-bool IsInPrivateUseArea(sal_Unicode cChar) { return 0xE000 <= cChar && cChar <= 0xF8FF; }
+bool IsInPrivateUseArea(sal_uInt32 cChar) { return 0xE000 <= cChar && cChar <= 0xF8FF; }
 
-sal_Unicode ConvertMathToMathML(sal_Unicode cChar)
+sal_uInt32 ConvertMathToMathML(std::u16string_view rText, sal_Int32 nIndex = 0)
 {
-    sal_Unicode cRes = cChar;
-    if (IsInPrivateUseArea(cChar))
+    auto cRes = o3tl::iterateCodePoints(rText, &nIndex);
+    if (IsInPrivateUseArea(cRes))
     {
         SAL_WARN("starmath", "Error: private use area characters should no longer be in use!");
         cRes = u'@'; // just some character that should easily be notice as odd in the context
@@ -749,12 +749,9 @@ void SmXMLExport::ExportMath(const SmNode* pNode)
         AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
         pMath.reset(new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, true, false));
     }
-    sal_Unicode nArse = pTemp->GetText()[0];
-    sal_Unicode cTmp = ConvertMathToMathML(nArse);
-    if (cTmp != 0)
-        nArse = cTmp;
+    auto nArse = ConvertMathToMathML(pTemp->GetText());
     OSL_ENSURE(nArse != 0xffff, "Non existent symbol");
-    GetDocHandler()->characters(OUString(nArse));
+    GetDocHandler()->characters(OUString(&nArse, 1));
 }
 
 void SmXMLExport::ExportText(const SmNode* pNode)
@@ -1350,11 +1347,8 @@ void SmXMLExport::ExportNodes(const SmNode* pNode, int nLevel)
         case SmNodeType::GlyphSpecial:
         case SmNodeType::Math:
         {
-            sal_Unicode cTmp = 0;
             const SmTextNode* pTemp = static_cast<const SmTextNode*>(pNode);
-            if (!pTemp->GetText().isEmpty())
-                cTmp = ConvertMathToMathML(pTemp->GetText()[0]);
-            if (cTmp == 0)
+            if (pTemp->GetText().isEmpty())
             {
                 // no conversion to MathML implemented -> export it as text
                 // thus at least it will not vanish into nothing
