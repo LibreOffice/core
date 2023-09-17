@@ -5690,7 +5690,8 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             if (nType == ContentTypeId::OUTLINE)
             {
                 BringTypesWithFlowFramesToAttention({m_pActiveShell->GetNodes().
-                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]});
+                        GetOutLineNds()[static_cast<SwOutlineContent*>(pCnt)->GetOutlinePos()]},
+                                                    /*bIncludeTopMargin*/ false);
             }
             else if (nType == ContentTypeId::TABLE)
             {
@@ -5786,7 +5787,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 std::vector<const SwNode*> aNodesArr(
                             m_pActiveShell->GetNodes().GetOutLineNds().begin(),
                             m_pActiveShell->GetNodes().GetOutLineNds().end());
-                BringTypesWithFlowFramesToAttention(aNodesArr);
+                BringTypesWithFlowFramesToAttention(aNodesArr, /*bIncludeTopMargin*/ false);
             }
             else if (nType == ContentTypeId::TABLE)
             {
@@ -6031,8 +6032,8 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
     OverlayObject(std::move(aRanges));
 }
 
-void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes)
-{
+void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes,
+                                                        const bool bIncludeTopMargin){
     std::vector<basegfx::B2DRange> aRanges;
     for (const auto* pNode : rNodes)
     {
@@ -6044,8 +6045,10 @@ void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const 
         {
             const SwRect& rFrameRect = pFrame->getFrameArea();
             if (!rFrameRect.IsEmpty())
-                aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(), rFrameRect.Right(),
-                                     rFrameRect.Bottom());
+                aRanges.emplace_back(rFrameRect.Left(),
+                                     bIncludeTopMargin ? rFrameRect.Top() :
+                                                         rFrameRect.Top() + pFrame->GetTopMargin(),
+                                     rFrameRect.Right(), rFrameRect.Bottom());
             if (!pFrame->IsFlowFrame())
                 break;
             SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
