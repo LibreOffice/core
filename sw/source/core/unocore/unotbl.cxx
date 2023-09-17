@@ -2158,7 +2158,7 @@ uno::Reference<table::XCell>  SwXTextTable::getCellByPosition(sal_Int32 nColumn,
 
 namespace {
 
-uno::Reference<table::XCellRange> GetRangeByName(
+rtl::Reference<SwXCellRange> GetRangeByName(
         SwFrameFormat* pFormat, SwTable const * pTable,
         const OUString& rTLName, const OUString& rBRName,
         SwRangeDescriptor const & rDesc)
@@ -3207,7 +3207,7 @@ SwXCellRange::getCellRangeByPosition(
         sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
 {
     SolarMutexGuard aGuard;
-    uno::Reference< table::XCellRange >  aRet;
+    rtl::Reference< SwXCellRange >  aRet;
     SwFrameFormat *const pFormat = m_pImpl->GetFrameFormat();
     if  (pFormat && m_pImpl->GetColumnCount() > nRight
         && m_pImpl->GetRowCount() > nBottom &&
