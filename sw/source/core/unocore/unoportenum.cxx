@@ -519,20 +519,18 @@ lcl_CreateMetaPortion(
     const SwUnoCursor * const pUnoCursor,
     SwTextAttr & rAttr, std::unique_ptr<TextRangeList_t const> && pPortions)
 {
-    const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
+    const rtl::Reference<SwXMeta> xMeta( SwXMeta::CreateXMeta(
             *static_cast<SwFormatMeta &>(rAttr.GetAttr()).GetMeta(),
             xParent, std::move(pPortions)));
     rtl::Reference<SwXTextPortion> pPortion;
     if (RES_TXTATR_META == rAttr.Which())
     {
-        const uno::Reference<text::XTextContent> xContent(xMeta,
-                uno::UNO_QUERY);
         pPortion = new SwXTextPortion(pUnoCursor, xParent, PORTION_META);
-        pPortion->SetMeta(xContent);
+        pPortion->SetMeta(xMeta);
     }
     else
     {
-        const uno::Reference<text::XTextField> xField(xMeta, uno::UNO_QUERY);
+        const uno::Reference<text::XTextField> xField(static_cast<cppu::OWeakObject*>(xMeta.get()), uno::UNO_QUERY);
         pPortion = new SwXTextPortion(pUnoCursor, xParent, PORTION_FIELD);
         pPortion->SetTextField(xField);
     }
