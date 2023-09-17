@@ -19,7 +19,6 @@ class SimpleMathTest(UITestCase):
     def test_math_unoCommand(self):
         with self.ui_test.create_doc_in_start_center("math"):
 
-            self.xUITest.executeCommand(".uno:CommandWindow")
             xMathDoc = self.xUITest.getTopFocusWindow()
 
             # tdf#140386
@@ -28,12 +27,10 @@ class SimpleMathTest(UITestCase):
             xEditView = xMathDoc.getChild("editview")
 
             self.assertEqual("backepsilon", get_state_as_dict(xEditView)["Text"])
-            self.xUITest.executeCommand(".uno:CommandWindow")
 
     def test_math_edit(self):
         with self.ui_test.create_doc_in_start_center("math"):
 
-            self.xUITest.executeCommand(".uno:CommandWindow")
             xMathDoc = self.xUITest.getTopFocusWindow()
 
             xEditView = xMathDoc.getChild("editview")
@@ -41,12 +38,10 @@ class SimpleMathTest(UITestCase):
             type_text(xEditView, "E=mc^2")
 
             self.assertEqual("E=mc^2", get_state_as_dict(xEditView)["Text"])
-            self.xUITest.executeCommand(".uno:CommandWindow")
 
     def test_complete_math(self):
         with self.ui_test.create_doc_in_start_center("math"):
 
-            self.xUITest.executeCommand(".uno:CommandWindow")
             xMathDoc = self.xUITest.getTopFocusWindow()
 
             xList = xMathDoc.getChild("categorylist")
@@ -68,6 +63,5 @@ class SimpleMathTest(UITestCase):
             type_text(xEditView, "2")
 
             self.assertEqual("{ 1 <> 2 }", get_state_as_dict(xEditView)["Text"])
-            self.xUITest.executeCommand(".uno:CommandWindow")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
