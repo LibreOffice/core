@@ -543,7 +543,7 @@ lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
                                 const SwUnoCursor* pUnoCursor, SwTextAttr& rAttr,
                                 std::unique_ptr<const TextRangeList_t>&& pPortions)
 {
-    uno::Reference<text::XTextContent> xContentControl = SwXContentControl::CreateXContentControl(
+    rtl::Reference<SwXContentControl> xContentControl = SwXContentControl::CreateXContentControl(
         *static_cast<SwFormatContentControl&>(rAttr.GetAttr()).GetContentControl(), xParent,
         std::move(pPortions));
     rtl::Reference<SwXTextPortion> pPortion;
@@ -995,7 +995,7 @@ lcl_ExportHints(
                         if (*pUnoCursor->GetMark() == *pUnoCursor->GetPoint())
                             break;
                         pPortion = new SwXTextPortion(pUnoCursor, xParent, PORTION_LINEBREAK);
-                        uno::Reference<text::XTextContent> xLineBreak
+                        rtl::Reference<SwXLineBreak> xLineBreak
                             = SwXLineBreak::CreateXLineBreak(
                                 &const_cast<SwFormatLineBreak&>(pAttr->GetLineBreak()));
                         pPortion->SetLineBreak(xLineBreak);
