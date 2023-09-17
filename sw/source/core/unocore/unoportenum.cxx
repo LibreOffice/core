@@ -371,13 +371,13 @@ lcl_FillFieldMarkArray(std::deque<sal_Int32> & rFieldMarks, SwUnoCursor const & 
     }
 }
 
-static uno::Reference<text::XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_ExportFieldMark(
         uno::Reference< text::XText > const & i_xParentText,
         SwUnoCursor * const pUnoCursor,
         const SwTextNode * const pTextNode )
 {
-    uno::Reference<text::XTextRange> xRef;
+    rtl::Reference<SwXTextPortion> pPortion;
     SwDoc& rDoc = pUnoCursor->GetDoc();
     // maybe it's a good idea to add a special hint to the hints array and rely on the hint segmentation...
     const sal_Int32 start = pUnoCursor->Start()->GetContentIndex();
@@ -397,9 +397,8 @@ lcl_ExportFieldMark(
         ::sw::mark::IFieldmark* pFieldmark = nullptr;
         pFieldmark = rDoc.getIDocumentMarkAccess()->
             getFieldmarkAt(*pUnoCursor->GetMark());
-        rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion(
+        pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_START);
-        xRef = pPortion;
         if (pFieldmark)
         {
             pPortion->SetBookmark(
@@ -409,7 +408,7 @@ lcl_ExportFieldMark(
     else if (CH_TXT_ATR_FIELDSEP == Char)
     {
         // TODO how to get the field?
-        xRef = new SwXTextPortion(
+        pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_SEP);
     }
     else if (CH_TXT_ATR_FIELDEND == Char)
@@ -417,9 +416,8 @@ lcl_ExportFieldMark(
         ::sw::mark::IFieldmark* pFieldmark = nullptr;
         pFieldmark = rDoc.getIDocumentMarkAccess()->
             getFieldmarkAt(*pUnoCursor->GetMark());
-        rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion(
+        pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_END);
-        xRef = pPortion;
         if (pFieldmark)
         {
             pPortion->SetBookmark(
@@ -430,9 +428,8 @@ lcl_ExportFieldMark(
     {
         ::sw::mark::IFieldmark* pFieldmark =
             rDoc.getIDocumentMarkAccess()->getFieldmarkAt(*pUnoCursor->GetMark());
-        rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion(
+        pPortion = new SwXTextPortion(
             pUnoCursor, i_xParentText, PORTION_FIELD_START_END);
-        xRef = pPortion;
         if (pFieldmark)
         {
             pPortion->SetBookmark(
@@ -443,10 +440,10 @@ lcl_ExportFieldMark(
     {
         OSL_FAIL("no fieldmark found?");
     }
-    return xRef;
+    return pPortion;
 }
 
-static Reference<XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_CreateRefMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
@@ -489,7 +486,7 @@ lcl_InsertRubyPortion(
     pPortion->SetCollapsed(rAttr.End() == nullptr);
 }
 
-static Reference<XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
@@ -700,7 +697,7 @@ struct RedlineCompareStruct
 typedef std::multiset < SwXRedlinePortion_ImplSharedPtr, RedlineCompareStruct >
 SwXRedlinePortion_ImplList;
 
-static Reference<XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_ExportHints(
     PortionStack_t & rPortionStack,
     const css::uno::Reference<SwXText> & xParent,
@@ -715,7 +712,7 @@ lcl_ExportHints(
 {
     // if the attribute has a dummy character, then xRef is set (except META and CONTENT_CONTROL)
     // otherwise, the portion for the attribute is inserted into rPortions!
-    Reference<XTextRange> xRef;
+    rtl::Reference<SwXTextPortion> pPortion;
     SwDoc& rDoc = pUnoCursor->GetDoc();
     //search for special text attributes - first some ends
     size_t nEndIndex = 0;
@@ -854,10 +851,8 @@ lcl_ExportHints(
                         pUnoCursor->Right(1);
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
-                        rtl::Reference<SwXTextPortion> pPortion =
-                            new SwXTextPortion(
+                        pPortion = new SwXTextPortion(
                                 pUnoCursor, xParent, PORTION_FIELD);
-                        xRef = pPortion;
                         Reference<XTextField> const xField =
                             SwXTextField::CreateXTextField(&rDoc,
                                     &pAttr->GetFormatField());
@@ -876,19 +871,17 @@ lcl_ExportHints(
                         ::sw::mark::IMark* pAnnotationMark = pTextAnnotationField ? pTextAnnotationField->GetAnnotationMark() : nullptr;
                         if ( pAnnotationMark != nullptr )
                         {
-                            rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION_END );
+                            pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION_END );
                             pPortion->SetBookmark(SwXBookmark::CreateXBookmark(
                                         rDoc, pAnnotationMark));
-                            xRef = pPortion;
                         }
                         else
                         {
-                            rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
+                            pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_ANNOTATION );
                             Reference<XTextField> xField =
                                 SwXTextField::CreateXTextField(&rDoc,
                                         &pAttr->GetFormatField());
                             pPortion->SetTextField(xField);
-                            xRef = pPortion;
                         }
                     }
                     break;
@@ -901,9 +894,7 @@ lcl_ExportHints(
                             pAttr->GetFormatField().GetField()->ExpandField(true, nullptr).getLength() + 2 );
                         if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                             break;
-                        rtl::Reference<SwXTextPortion> pPortion =
-                            new SwXTextPortion( pUnoCursor, xParent, PORTION_FIELD);
-                        xRef = pPortion;
+                        pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_FIELD);
                         Reference<XTextField> xField =
                             SwXTextField::CreateXTextField(&rDoc,
                                     &pAttr->GetFormatField());
@@ -923,7 +914,7 @@ lcl_ExportHints(
                             break;
 
                         pUnoCursor->Exchange();
-                        xRef = new SwXTextPortion( pUnoCursor, xParent, PORTION_FRAME);
+                        pPortion = new SwXTextPortion( pUnoCursor, xParent, PORTION_FRAME);
                     }
                     break;
 
@@ -934,9 +925,8 @@ lcl_ExportHints(
                             pUnoCursor->Right(1);
                             if( *pUnoCursor->GetMark() == *pUnoCursor->GetPoint() )
                                 break;
-                            rtl::Reference<SwXTextPortion> pPortion = new SwXTextPortion(
+                            pPortion = new SwXTextPortion(
                                 pUnoCursor, xParent, PORTION_FOOTNOTE);
-                            xRef = pPortion;
                             Reference<XFootnote> xContent =
                                 SwXFootnotes::GetObject(rDoc, pAttr->GetFootnote());
                             pPortion->SetFootnote(xContent);
@@ -954,7 +944,7 @@ lcl_ExportHints(
                         {
                             pUnoCursor->Right(1);
                         }
-                        Reference<XTextRange> xTmp =
+                        rtl::Reference<SwXTextPortion> xTmp =
                                 (RES_TXTATR_REFMARK == nAttrWhich)
                             ? lcl_CreateRefMarkPortion(
                                 xParent, pUnoCursor, *pAttr, false)
@@ -964,7 +954,7 @@ lcl_ExportHints(
                         {
                             pUnoCursor->Normalize(false);
                             pUnoCursor->DeleteMark();
-                            xRef = xTmp;
+                            pPortion = xTmp;
                         }
                         else // just insert it
                         {
@@ -1006,9 +996,7 @@ lcl_ExportHints(
                         pUnoCursor->Right(1);
                         if (*pUnoCursor->GetMark() == *pUnoCursor->GetPoint())
                             break;
-                        rtl::Reference<SwXTextPortion> pPortion
-                            = new SwXTextPortion(pUnoCursor, xParent, PORTION_LINEBREAK);
-                        xRef = pPortion;
+                        pPortion = new SwXTextPortion(pUnoCursor, xParent, PORTION_LINEBREAK);
                         uno::Reference<text::XTextContent> xLineBreak
                             = SwXLineBreak::CreateXLineBreak(
                                 &const_cast<SwFormatLineBreak&>(pAttr->GetLineBreak()));
@@ -1027,7 +1015,7 @@ lcl_ExportHints(
         nStartIndex++;
     }
 
-    if (xRef.is()) // implies that we have moved the cursor
+    if (pPortion.is()) // implies that we have moved the cursor
     {
         o_rbCursorMoved = true;
     }
@@ -1056,7 +1044,7 @@ lcl_ExportHints(
             o_rNextAttrPosition = nNextPos;
         }
     }
-    return xRef;
+    return pPortion;
 }
 
 static void lcl_MoveCursor( SwUnoCursor * const pUnoCursor,
@@ -1400,7 +1388,7 @@ static void lcl_CreatePortions(
             pUnoCursor->GetPoint()->GetContentIndex();
         // this contains the portion which consumes the character in the
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration
-        uno::Reference< XTextRange > xRef;
+        rtl::Reference<SwXTextPortion> xRef;
 
         SwUnoCursorHelper::SelectPam(*pUnoCursor, true); // set mark
 
