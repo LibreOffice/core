@@ -20,6 +20,7 @@
 #pragma once
 
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace comphelper::string
 {

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_CONNECTIVITY_SDBCX_VVIEW_HXX
 #define INCLUDED_CONNECTIVITY_SDBCX_VVIEW_HXX
 
-#include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/CommonTools.hxx>

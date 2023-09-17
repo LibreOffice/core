@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SAX_FSHELPER_HXX
 #define INCLUDED_SAX_FSHELPER_HXX
 
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>

@@ -281,9 +281,6 @@ excludelist:
     - com/sun/star/io/XOutputStream.hpp
     - com/sun/star/io/XStream.hpp
     - com/sun/star/io/XTruncate.hpp
-    include/sax/fshelper.hxx:
-    # base class has to be a complete type
-    - com/sun/star/xml/sax/XFastAttributeList.hpp
     include/sax/fastattribs.hxx:
     # base class has to be a complete type
     - com/sun/star/xml/sax/XFastAttributeList.hpp
@@ -424,13 +421,8 @@ excludelist:
     - com/sun/star/lang/XInitialization.hpp
     - com/sun/star/lang/XServiceInfo.hpp
     - com/sun/star/lang/XUnoTunnel.hpp
-    - com/sun/star/xml/sax/XExtendedDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastDocumentHandler.hpp
     - com/sun/star/xml/sax/XFastParser.hpp
-    include/svtools/asynclink.hxx:
-    # unique_ptr needs complete type
-    - osl/mutex.hxx
-    - vcl/idle.hxx
     include/svtools/cliplistener.hxx:
     # base class has to be a complete type
     - com/sun/star/datatransfer/clipboard/XClipboardListener.hpp
@@ -572,7 +564,6 @@ excludelist:
     # base class has to be a complete type
     - com/sun/star/container/XNamed.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    - com/sun/star/sdbcx/XDataDescriptorFactory.hpp
     include/drawinglayer/primitive2d/baseprimitive2d.hxx:
     # base class has to be a complete type
     - com/sun/star/graphic/XPrimitive2D.hpp
@@ -618,7 +609,6 @@ excludelist:
     - com/sun/star/rdf/XDocumentMetadataAccess.hpp
     - com/sun/star/document/XDocumentRecovery.hpp
     - com/sun/star/document/XUndoManagerSupplier.hpp
-    - com/sun/star/document/XEventBroadcaster.hpp
     - com/sun/star/document/XDocumentEventBroadcaster.hpp
     - com/sun/star/lang/XEventListener.hpp
     - com/sun/star/document/XEventsSupplier.hpp
