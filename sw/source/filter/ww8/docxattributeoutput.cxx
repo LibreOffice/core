@@ -5209,7 +5209,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
             aGraphic = *pOLENode->GetGraphic();
 
         m_rDrawingML.SetFS(m_pSerializer); // to be sure that we write to the right stream
-        OUString aImageId = m_rDrawingML.WriteImage(aGraphic, false);
+        OUString aImageId = m_rDrawingML.writeGraphicToStorage(aGraphic, false);
         aRelId = OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8);
 
         nImageType = XML_embed;
@@ -5840,7 +5840,7 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
     // write preview image
     const Graphic* pGraphic = rNode.GetGraphic();
     m_rDrawingML.SetFS(m_pSerializer);
-    OUString sImageId = m_rDrawingML.WriteImage( *pGraphic );
+    OUString sImageId = m_rDrawingML.writeGraphicToStorage(*pGraphic);
 
     if ( sDrawAspect == "Content" )
     {
@@ -10211,7 +10211,7 @@ void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Siz
             XML_style, aStyle,
             FSNS(XML_o, XML_bullet), "t");
 
-    OUString aRelId = m_rDrawingML.WriteImage(rGraphic);
+    OUString aRelId = m_rDrawingML.writeGraphicToStorage(rGraphic);
     m_pSerializer->singleElementNS( XML_v, XML_imagedata,
             FSNS(XML_r, XML_id), aRelId,
             FSNS(XML_o, XML_title), "");

@@ -726,7 +726,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         const uno::Reference<graphic::XGraphic>& xGraphic
                             = pSdrGrafObj->getSignatureLineUnsignedGraphic();
                         Graphic aGraphic(xGraphic);
-                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false);
+                        OUString aImageId = m_pTextExport->GetDrawingML().writeGraphicToStorage(aGraphic, false);
                         pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
@@ -740,7 +740,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         aStream.Seek(0);
                         Graphic aGraphic;
                         GraphicConverter::Import(aStream, aGraphic);
-                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false);
+                        OUString aImageId = m_pTextExport->GetDrawingML().writeGraphicToStorage(aGraphic, false);
                         pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
