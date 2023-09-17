@@ -37,6 +37,7 @@ public:
     void testTdf151842();
     void testMathmlEntities();
     void testMaj();
+    void testHadd();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testColor);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testTdf151842);
     CPPUNIT_TEST(testMathmlEntities);
     CPPUNIT_TEST(testMaj);
+    CPPUNIT_TEST(testHadd);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -188,6 +190,18 @@ void Test::testMaj()
     CPPUNIT_ASSERT(pDocShell);
     CPPUNIT_ASSERT_EQUAL(OUString(u"{ maj csup \u0661 csub { nitalic \U0001EE0A = \u0660 } { frac "
                                   u"{ \u0661 } { nitalic \U0001EE0A } } }"),
+                         pDocShell->GetText());
+}
+
+void Test::testHadd()
+{
+    loadFromURL(u"hadd.mml");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModel);
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    CPPUNIT_ASSERT(pDocShell);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"{ nitalic \U0001EEF1 csup nitalic \U0001EE4E csub nitalic "
+                                  u"\U0001EE4E nitalic \U0001EE4E }"),
                          pDocShell->GetText());
 }
 

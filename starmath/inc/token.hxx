@@ -84,6 +84,7 @@ enum SmTokenType
     TIM,            TRE,            THBAR,          TLAMBDABAR,     // Complex and constants
     TPLUSMINUS,     TMINUSPLUS,     TSIM,           TSIMEQ,         // +- -+ ~ ~=
     TLIM,           TLIMSUP,        TLIMINF,        TTOWARD,        // Limits
+    THADD,
     TOVER,          TTIMES,         TCDOT,          TDIV,           // Product type
     TSLASH,         TBACKSLASH,     TWIDESLASH,     TWIDEBACKSLASH, //Slash
     TFRAC,          TIT,                                            // mathml related

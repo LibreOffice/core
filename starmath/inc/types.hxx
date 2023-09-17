@@ -126,6 +126,7 @@ sal_Unicode const MS_PROD = 0x220F;
 sal_Unicode const MS_COPROD = 0x2210;
 sal_Unicode const MS_SUM = 0x2211;
 sal_uInt32 const MS_MAJ = 0x1EEF0;
+sal_uInt32 const MS_HADD = 0x1EEF1;
 sal_Unicode const MS_SQRT = 0x221A;
 sal_Unicode const MS_INT = 0x222B;
 sal_Unicode const MS_IINT = 0x222C;

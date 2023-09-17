@@ -110,6 +110,7 @@ const SmTokenTableEntry aTokenTable[]
         { u"gg", TGG, MS_GG, TG::Relation, 0 },
         { u"grave", TGRAVE, MS_GRAVE, TG::Attribute, 5 },
         { u"gt", TGT, MS_GT, TG::Relation, 0 },
+        { u"hadd", THADD, MS_HADD, TG::Oper, 5 },
         { u"harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5 },
         { u"hat", THAT, MS_HAT, TG::Attribute, 5 },
         { u"hbar", THBAR, MS_HBAR, TG::Standalone, 5 },
@@ -1897,8 +1898,15 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
         case TLIM:
         case TLIMSUP:
         case TLIMINF:
-            m_aCurToken.aText
-                = eType == TLIMSUP ? u"lim sup" : eType == TLIMINF ? u"lim inf" : u"lim";
+        case THADD:
+            if (eType == TLIMSUP)
+                m_aCurToken.aText = u"lim sup";
+            else if (eType == TLIMINF)
+                m_aCurToken.aText = u"lim inf";
+            else if (eType == THADD)
+                m_aCurToken.aText = OUString(&MS_HADD, 1);
+            else
+                m_aCurToken.aText = u"lim";
             pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
             pNode->SetSelection(m_aCurESelection);
             break;

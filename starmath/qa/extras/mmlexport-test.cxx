@@ -32,12 +32,14 @@ public:
     void testTdf97049();
     void testTdf101022();
     void testMaj();
+    void testHadd();
 
     CPPUNIT_TEST_SUITE(MathMLExportTest);
     CPPUNIT_TEST(testBlank);
     CPPUNIT_TEST(testTdf97049);
     CPPUNIT_TEST(testTdf101022);
     CPPUNIT_TEST(testMaj);
+    CPPUNIT_TEST(testHadd);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -130,6 +132,18 @@ void MathMLExportTest::testMaj()
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", "stretchy", "false");
     assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", u"\U0001EEF0");
+}
+
+void MathMLExportTest::testHadd()
+{
+    mxComponent = loadFromDesktop("private:factory/smath");
+    SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
+    SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
+    pDocShell->SetText(u"hadd to { \U0001EE4E } from { \U0001EE4E } \U0001EE4E");
+    save("MathML XML (Math)");
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mi", u"\U0001EEF1");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);
