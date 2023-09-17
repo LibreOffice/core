@@ -261,6 +261,10 @@ def tidy(compileCommands, paths, dontstop, noexclude):
             if isInUnoIncludeFile(path):
                 continue
 
+            # IWYU fails on these with #error: don't use this in new code
+            if path.startswith("include/vcl/toolkit"):
+                continue
+
             moduleName = path.split("/")[0]
 
             rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
