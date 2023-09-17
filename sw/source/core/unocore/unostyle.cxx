@@ -3065,7 +3065,7 @@ void SwXPageStyle::setPropertyValues(const uno::Sequence<OUString>& rPropertyNam
     }
 }
 
-static uno::Reference<text::XText> lcl_makeHeaderFooter(const sal_uInt16 nRes, const bool bHeader, SwFrameFormat const*const pFrameFormat)
+static rtl::Reference<SwXHeadFootText> lcl_makeHeaderFooter(const sal_uInt16 nRes, const bool bHeader, SwFrameFormat const*const pFrameFormat)
 {
     if (!pFrameFormat)
         return nullptr;
