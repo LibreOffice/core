@@ -107,6 +107,10 @@
 #include <set>
 #include <unordered_set>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/unordered_map.h>
+
 #include <o3tl/temporary.hxx>
 #include <o3tl/sorted_vector.hxx>
 
@@ -440,41 +444,41 @@ static ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< ch
     return aResult;
 }
 
-static sal_Int32 lcl_getChartType( std::u16string_view sChartType )
+namespace
 {
-    chart::TypeId eChartTypeId = chart::TYPEID_UNKNOWN;
-    if( sChartType == u"com.sun.star.chart.BarDiagram"
-        || sChartType == u"com.sun.star.chart2.ColumnChartType" )
-        eChartTypeId = chart::TYPEID_BAR;
-    else if( sChartType == u"com.sun.star.chart.AreaDiagram"
-             || sChartType == u"com.sun.star.chart2.AreaChartType" )
-        eChartTypeId = chart::TYPEID_AREA;
-    else if( sChartType == u"com.sun.star.chart.LineDiagram"
-             || sChartType == u"com.sun.star.chart2.LineChartType" )
-        eChartTypeId = chart::TYPEID_LINE;
-    else if( sChartType == u"com.sun.star.chart.PieDiagram"
-             || sChartType == u"com.sun.star.chart2.PieChartType" )
-        eChartTypeId = chart::TYPEID_PIE;
-    else if( sChartType == u"com.sun.star.chart.DonutDiagram"
-             || sChartType == u"com.sun.star.chart2.DonutChartType" )
-        eChartTypeId = chart::TYPEID_DOUGHNUT;
-    else if( sChartType == u"com.sun.star.chart.XYDiagram"
-             || sChartType == u"com.sun.star.chart2.ScatterChartType" )
-        eChartTypeId = chart::TYPEID_SCATTER;
-    else if( sChartType == u"com.sun.star.chart.NetDiagram"
-             || sChartType == u"com.sun.star.chart2.NetChartType" )
-        eChartTypeId = chart::TYPEID_RADARLINE;
-    else if( sChartType == u"com.sun.star.chart.FilledNetDiagram"
-             || sChartType == u"com.sun.star.chart2.FilledNetChartType" )
-        eChartTypeId = chart::TYPEID_RADARAREA;
-    else if( sChartType == u"com.sun.star.chart.StockDiagram"
-             || sChartType == u"com.sun.star.chart2.CandleStickChartType" )
-        eChartTypeId = chart::TYPEID_STOCK;
-    else if( sChartType == u"com.sun.star.chart.BubbleDiagram"
-             || sChartType == u"com.sun.star.chart2.BubbleChartType" )
-        eChartTypeId = chart::TYPEID_BUBBLE;
 
-    return eChartTypeId;
+constexpr auto constChartTypeMap = frozen::make_unordered_map<std::u16string_view, chart::TypeId>(
+{
+    { u"com.sun.star.chart.BarDiagram", chart::TYPEID_BAR },
+    { u"com.sun.star.chart2.ColumnChartType",  chart::TYPEID_BAR },
+    { u"com.sun.star.chart.AreaDiagram",  chart::TYPEID_AREA },
+    { u"com.sun.star.chart2.AreaChartType",  chart::TYPEID_AREA },
+    { u"com.sun.star.chart.LineDiagram",  chart::TYPEID_LINE },
+    { u"com.sun.star.chart2.LineChartType",  chart::TYPEID_LINE },
+    { u"com.sun.star.chart.PieDiagram",  chart::TYPEID_PIE },
+    { u"com.sun.star.chart2.PieChartType",  chart::TYPEID_PIE },
+    { u"com.sun.star.chart.DonutDiagram",  chart::TYPEID_DOUGHNUT },
+    { u"com.sun.star.chart2.DonutChartType",  chart::TYPEID_DOUGHNUT },
+    { u"com.sun.star.chart.XYDiagram",  chart::TYPEID_SCATTER },
+    { u"com.sun.star.chart2.ScatterChartType",  chart::TYPEID_SCATTER },
+    { u"com.sun.star.chart.NetDiagram",  chart::TYPEID_RADARLINE },
+    { u"com.sun.star.chart2.NetChartType",  chart::TYPEID_RADARLINE },
+    { u"com.sun.star.chart.FilledNetDiagram",  chart::TYPEID_RADARAREA },
+    { u"com.sun.star.chart2.FilledNetChartType",  chart::TYPEID_RADARAREA },
+    { u"com.sun.star.chart.StockDiagram",  chart::TYPEID_STOCK },
+    { u"com.sun.star.chart2.CandleStickChartType",  chart::TYPEID_STOCK },
+    { u"com.sun.star.chart.BubbleDiagram",  chart::TYPEID_BUBBLE },
+    { u"com.sun.star.chart2.BubbleChartType",  chart::TYPEID_BUBBLE },
+});
+
+} // end anonymous namespace
+
+static sal_Int32 lcl_getChartType(std::u16string_view sChartType)
+{
+    auto aIterator = constChartTypeMap.find(sChartType);
+    if (aIterator == constChartTypeMap.end())
+        return chart::TYPEID_UNKNOWN;
+    return aIterator->second;
 }
 
 static sal_Int32 lcl_generateRandomValue()

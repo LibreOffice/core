@@ -85,6 +85,12 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <oox/export/DMLPresetShapeExport.hxx>
 
+#include <frozen/bits/defines.h>
+#include <frozen/bits/elsa_std.h>
+#include <frozen/set.h>
+#include <frozen/unordered_map.h>
+
+
 using namespace ::css;
 using namespace ::css::beans;
 using namespace ::css::uno;
@@ -551,82 +557,88 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
     pFS->endElementNS(mnXmlNamespace, nGroupShapeToken);
     return *this;
 }
+namespace
+{
+
+constexpr auto constDenySet = frozen::make_set<std::u16string_view>(
+{
+    u"block-arc",
+    u"rectangle",
+    u"ellipse",
+    u"ring",
+    u"can",
+    u"cube",
+    u"paper",
+    u"frame",
+    u"forbidden",
+    u"smiley",
+    u"sun",
+    u"flower",
+    u"bracket-pair",
+    u"brace-pair",
+    u"quad-bevel",
+    u"round-rectangular-callout",
+    u"rectangular-callout",
+    u"round-callout",
+    u"cloud-callout",
+    u"line-callout-1",
+    u"line-callout-2",
+    u"line-callout-3",
+    u"paper",
+    u"vertical-scroll",
+    u"horizontal-scroll",
+    u"mso-spt34",
+    u"mso-spt75",
+    u"mso-spt164",
+    u"mso-spt180",
+    u"flowchart-process",
+    u"flowchart-alternate-process",
+    u"flowchart-decision",
+    u"flowchart-data",
+    u"flowchart-predefined-process",
+    u"flowchart-internal-storage",
+    u"flowchart-document",
+    u"flowchart-multidocument",
+    u"flowchart-terminator",
+    u"flowchart-preparation",
+    u"flowchart-manual-input",
+    u"flowchart-manual-operation",
+    u"flowchart-connector",
+    u"flowchart-off-page-connector",
+    u"flowchart-card",
+    u"flowchart-punched-tape",
+    u"flowchart-summing-junction",
+    u"flowchart-or",
+    u"flowchart-collate",
+    u"flowchart-sort",
+    u"flowchart-extract",
+    u"flowchart-merge",
+    u"flowchart-stored-data",
+    u"flowchart-delay",
+    u"flowchart-sequential-access",
+    u"flowchart-magnetic-disk",
+    u"flowchart-direct-access-storage",
+    u"flowchart-display"
+});
+
+constexpr auto constAllowSet = frozen::make_set<std::u16string_view>(
+{
+    u"heart",
+    u"puzzle",
+    u"col-60da8460",
+    u"col-502ad400"
+});
+
+} // end anonymous namespace
 
 static bool lcl_IsOnDenylist(OUString const & rShapeType)
 {
-    static const std::initializer_list<std::u16string_view> vDenylist = {
-        u"block-arc",
-        u"rectangle",
-        u"ellipse",
-        u"ring",
-        u"can",
-        u"cube",
-        u"paper",
-        u"frame",
-        u"forbidden",
-        u"smiley",
-        u"sun",
-        u"flower",
-        u"bracket-pair",
-        u"brace-pair",
-        u"quad-bevel",
-        u"round-rectangular-callout",
-        u"rectangular-callout",
-        u"round-callout",
-        u"cloud-callout",
-        u"line-callout-1",
-        u"line-callout-2",
-        u"line-callout-3",
-        u"paper",
-        u"vertical-scroll",
-        u"horizontal-scroll",
-        u"mso-spt34",
-        u"mso-spt75",
-        u"mso-spt164",
-        u"mso-spt180",
-        u"flowchart-process",
-        u"flowchart-alternate-process",
-        u"flowchart-decision",
-        u"flowchart-data",
-        u"flowchart-predefined-process",
-        u"flowchart-internal-storage",
-        u"flowchart-document",
-        u"flowchart-multidocument",
-        u"flowchart-terminator",
-        u"flowchart-preparation",
-        u"flowchart-manual-input",
-        u"flowchart-manual-operation",
-        u"flowchart-connector",
-        u"flowchart-off-page-connector",
-        u"flowchart-card",
-        u"flowchart-punched-tape",
-        u"flowchart-summing-junction",
-        u"flowchart-or",
-        u"flowchart-collate",
-        u"flowchart-sort",
-        u"flowchart-extract",
-        u"flowchart-merge",
-        u"flowchart-stored-data",
-        u"flowchart-delay",
-        u"flowchart-sequential-access",
-        u"flowchart-magnetic-disk",
-        u"flowchart-direct-access-storage",
-        u"flowchart-display"
-    };
-
-    return std::find(vDenylist.begin(), vDenylist.end(), rShapeType) != vDenylist.end();
+    return constDenySet.find(rShapeType) != constDenySet.end();
 }
 
 static bool lcl_IsOnAllowlist(OUString const & rShapeType)
 {
-    static const std::initializer_list<std::u16string_view> vAllowlist = {
-        u"heart",
-        u"puzzle",
-        u"col-60da8460",
-        u"col-502ad400"
-    };
-
-    return std::find(vAllowlist.begin(), vAllowlist.end(), rShapeType) != vAllowlist.end();
+    return constAllowSet.find(rShapeType) != constAllowSet.end();
 }
 
 static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParameter &rParam, const Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
@@ -2026,51 +2038,47 @@ ShapeExport& ShapeExport::WriteRectangleShape( const Reference< XShape >& xShape
     return *this;
 }
 
+
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( const Reference< XShape >& );
 typedef std::unordered_map< const char*, ShapeConverter, rtl::CStringHash, rtl::CStringEqual> NameToConvertMapType;
 
-static const NameToConvertMapType& lcl_GetConverters()
+namespace
 {
-    static NameToConvertMapType const shape_converters
-    {
-        // tdf#98736 export CaptionShape as TextShape, because it is non-ooxml shape and
-        //           we can't export this shape as CustomShape
-        // TODO: WriteCaptionShape
-        { "com.sun.star.drawing.CaptionShape"              , &ShapeExport::WriteTextShape },
 
-        { "com.sun.star.drawing.ClosedBezierShape"         , &ShapeExport::WriteClosedPolyPolygonShape },
-        { "com.sun.star.drawing.ConnectorShape"            , &ShapeExport::WriteConnectorShape },
-        { "com.sun.star.drawing.CustomShape"               , &ShapeExport::WriteCustomShape },
-        { "com.sun.star.drawing.EllipseShape"              , &ShapeExport::WriteEllipseShape },
-        { "com.sun.star.drawing.GraphicObjectShape"        , &ShapeExport::WriteGraphicObjectShape },
-        { "com.sun.star.drawing.LineShape"                 , &ShapeExport::WriteLineShape },
-        { "com.sun.star.drawing.MediaShape"                , &ShapeExport::WriteGraphicObjectShape },
-        { "com.sun.star.drawing.OpenBezierShape"           , &ShapeExport::WriteOpenPolyPolygonShape },
-        { "com.sun.star.drawing.PolyPolygonShape"          , &ShapeExport::WriteClosedPolyPolygonShape },
-        { "com.sun.star.drawing.PolyLineShape"             , &ShapeExport::WriteOpenPolyPolygonShape },
-        { "com.sun.star.drawing.RectangleShape"            , &ShapeExport::WriteRectangleShape },
-        { "com.sun.star.drawing.OLE2Shape"                 , &ShapeExport::WriteOLE2Shape },
-        { "com.sun.star.drawing.TableShape"                , &ShapeExport::WriteTableShape },
-        { "com.sun.star.drawing.TextShape"                 , &ShapeExport::WriteTextShape },
-        { "com.sun.star.drawing.GroupShape"                , &ShapeExport::WriteGroupShape },
+constexpr auto constMap = frozen::make_unordered_map<std::u16string_view, ShapeConverter>(
+{
+    { u"com.sun.star.drawing.CaptionShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.drawing.ClosedBezierShape", &ShapeExport::WriteClosedPolyPolygonShape },
+    { u"com.sun.star.drawing.ConnectorShape", &ShapeExport::WriteConnectorShape },
+    { u"com.sun.star.drawing.CustomShape", &ShapeExport::WriteCustomShape },
+    { u"com.sun.star.drawing.EllipseShape", &ShapeExport::WriteEllipseShape },
+    { u"com.sun.star.drawing.GraphicObjectShape", &ShapeExport::WriteGraphicObjectShape },
+    { u"com.sun.star.drawing.LineShape", &ShapeExport::WriteLineShape },
+    { u"com.sun.star.drawing.MediaShape", &ShapeExport::WriteGraphicObjectShape },
+    { u"com.sun.star.drawing.OpenBezierShape", &ShapeExport::WriteOpenPolyPolygonShape },
+    { u"com.sun.star.drawing.PolyPolygonShape", &ShapeExport::WriteClosedPolyPolygonShape },
+    { u"com.sun.star.drawing.PolyLineShape", &ShapeExport::WriteOpenPolyPolygonShape },
+    { u"com.sun.star.drawing.RectangleShape", &ShapeExport::WriteRectangleShape },
+    { u"com.sun.star.drawing.OLE2Shape", &ShapeExport::WriteOLE2Shape },
+    { u"com.sun.star.drawing.TableShape", &ShapeExport::WriteTableShape },
+    { u"com.sun.star.drawing.TextShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.drawing.GroupShape", &ShapeExport::WriteGroupShape },
+    { u"com.sun.star.presentation.GraphicObjectShape", &ShapeExport::WriteGraphicObjectShape },
+    { u"com.sun.star.presentation.MediaShape", &ShapeExport::WriteGraphicObjectShape },
+    { u"com.sun.star.presentation.ChartShape", &ShapeExport::WriteOLE2Shape },
+    { u"com.sun.star.presentation.OLE2Shape", &ShapeExport::WriteOLE2Shape },
+    { u"com.sun.star.presentation.TableShape", &ShapeExport::WriteTableShape },
+    { u"com.sun.star.presentation.TextShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.DateTimeShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.FooterShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.HeaderShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.NotesShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.OutlinerShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.SlideNumberShape", &ShapeExport::WriteTextShape },
+    { u"com.sun.star.presentation.TitleTextShape", &ShapeExport::WriteTextShape },
+});
 
-        { "com.sun.star.presentation.GraphicObjectShape"   , &ShapeExport::WriteGraphicObjectShape },
-        { "com.sun.star.presentation.MediaShape"           , &ShapeExport::WriteGraphicObjectShape },
-        { "com.sun.star.presentation.ChartShape"           , &ShapeExport::WriteOLE2Shape },
-        { "com.sun.star.presentation.OLE2Shape"            , &ShapeExport::WriteOLE2Shape },
-        { "com.sun.star.presentation.TableShape"           , &ShapeExport::WriteTableShape },
-        { "com.sun.star.presentation.TextShape"            , &ShapeExport::WriteTextShape },
-
-        { "com.sun.star.presentation.DateTimeShape"        , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.FooterShape"          , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.HeaderShape"          , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.NotesShape"           , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.OutlinerShape"        , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.SlideNumberShape"     , &ShapeExport::WriteTextShape },
-        { "com.sun.star.presentation.TitleTextShape"       , &ShapeExport::WriteTextShape },
-    };
-    return shape_converters;
-}
+} // end anonymous namespace
 
 ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 {
@@ -2079,9 +2087,8 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
 
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
-    NameToConvertMapType::const_iterator aConverter
-        = lcl_GetConverters().find(sShapeType.toUtf8().getStr());
-    if (aConverter == lcl_GetConverters().end())
+    auto aConverterIterator = constMap.find(sShapeType);
+    if (aConverterIterator == constMap.end())
     {
         SAL_INFO("oox.shape", "unknown shape");
         return WriteUnknownShape( xShape );
@@ -2096,7 +2103,7 @@ ShapeExport& ShapeExport::WriteShape( const Reference< XShape >& xShape )
             mbPlaceholder = xShapeProperties->getPropertyValue("IsPresentationObject").get<bool>();
     }
 
-    (this->*(aConverter->second))( xShape );
+    (this->*(aConverterIterator->second))(xShape);
 
     return *this;
 }
