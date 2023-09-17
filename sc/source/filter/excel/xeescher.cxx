@@ -439,7 +439,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetCurrentStream();
 
     DrawingML aDML(pWorksheet, &rStrm, drawingml::DOCUMENT_XLSX);
-    OUString rId = aDML.WriteImage( maGraphic );
+    OUString rId = aDML.writeGraphicToStorage(maGraphic);
     pWorksheet->singleElement(XML_picture, FSNS(XML_r, XML_id), rId);
 }
 

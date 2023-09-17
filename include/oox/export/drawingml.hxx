@@ -265,7 +265,7 @@ public:
     {}
 
     OUString writeToStorage(Graphic const& rGraphic, bool bRelPathToMedia = false);
-    OUString writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia = false);
+    void writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia = false);
 };
 
 class OOX_DLLPUBLIC DrawingML
@@ -349,7 +349,7 @@ public:
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
-    OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false );
+    OUString writeGraphicToStorage( const Graphic &rGraphic , bool bRelPathToMedia = false );
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
@@ -419,7 +419,7 @@ public:
 
     void WriteLinespacing(const css::style::LineSpacing& rLineSpacing, float fFirstCharHeight);
 
-    OUString WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
+    void WriteXGraphicBlip(css::uno::Reference<css::beans::XPropertySet> const & rXPropSet,
                                css::uno::Reference<css::graphic::XGraphic> const & rxGraphic,
                                bool bRelPathToMedia);
 

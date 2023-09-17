@@ -1266,11 +1266,9 @@ const char* DrawingML::GetRelationCompPrefix() const
     return getRelationCompPrefix(meDocumentType);
 }
 
-OUString GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia)
+void GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::BlipEffect> const& rEffects, bool bRelPathToMedia)
 {
-    OUString sRelId;
-
-    sRelId = writeToStorage(rGraphic, bRelPathToMedia);
+    OUString sRelId = writeToStorage(rGraphic, bRelPathToMedia);
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
@@ -1384,8 +1382,6 @@ OUString GraphicExport::writeBlip(Graphic const& rGraphic, std::vector<model::Bl
     }
 
     mpFS->endElementNS(XML_a, XML_blip);
-
-    return sRelId;
 }
 
 OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathToMedia)
@@ -1522,10 +1518,10 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathTo
     return sRelId;
 }
 
-OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
+OUString DrawingML::writeGraphicToStorage( const Graphic& rGraphic , bool bRelPathToMedia )
 {
-    GraphicExport exporter(mpFS, mpFB, meDocumentType);
-    return exporter.writeToStorage(rGraphic, bRelPathToMedia);
+    GraphicExport aExporter(mpFS, mpFB, meDocumentType);
+    return aExporter.writeToStorage(rGraphic, bRelPathToMedia);
 }
 
 void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::drawing::XShape>& xShape)
@@ -1683,17 +1679,17 @@ void DrawingML::WriteImageBrightnessContrastTransparence(uno::Reference<beans::X
     }
 }
 
-OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rXPropSet,
+void DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const & rXPropSet,
                                       uno::Reference<graphic::XGraphic> const & rxGraphic,
                                       bool bRelPathToMedia)
 {
     OUString sRelId;
 
     if (!rxGraphic.is())
-        return sRelId;
+        return;
 
     Graphic aGraphic(rxGraphic);
-    sRelId = WriteImage(aGraphic, bRelPathToMedia);
+    sRelId = writeGraphicToStorage(aGraphic, bRelPathToMedia);
 
     mpFS->startElementNS(XML_a, XML_blip, FSNS(XML_r, XML_embed), sRelId);
 
@@ -1702,8 +1698,6 @@ OUString DrawingML::WriteXGraphicBlip(uno::Reference<beans::XPropertySet> const 
     WriteArtisticEffect(rXPropSet);
 
     mpFS->endElementNS(XML_a, XML_blip);
-
-    return sRelId;
 }
 
 void DrawingML::WriteXGraphicBlipMode(uno::Reference<beans::XPropertySet> const & rXPropSet,
@@ -3155,12 +3149,12 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             BitmapEx aDestBitmap(Bitmap(aDestSize, vcl::PixelFormat::N24_BPP), aMask);
             aDestBitmap.CopyPixel(aDestRect, aSourceRect, &aSourceBitmap);
             Graphic aDestGraphic(aDestBitmap);
-            sRelationId = WriteImage(aDestGraphic);
+            sRelationId = writeGraphicToStorage(aDestGraphic);
             fBulletSizeRel = 1.0f;
         }
         else
         {
-            sRelationId = WriteImage(aGraphic);
+            sRelationId = writeGraphicToStorage(aGraphic);
         }
 
         mpFS->singleElementNS( XML_a, XML_buSzPct,
