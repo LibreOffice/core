@@ -909,9 +909,9 @@ static Color getBookmarkColor(const SwTextNode& rNode, const sw::mark::IBookmark
     try
     {
         SwDoc& rDoc = const_cast<SwDoc&>(rNode.GetDoc());
-        const uno::Reference< text::XTextContent > xRef = SwXBookmark::CreateXBookmark(rDoc,
+        const rtl::Reference< SwXBookmark > xRef = SwXBookmark::CreateXBookmark(rDoc,
                 const_cast<sw::mark::IMark*>(static_cast<const sw::mark::IMark*>(pBookmark)));
-        const css::uno::Reference<css::rdf::XResource> xSubject(xRef, uno::UNO_QUERY);
+        const css::uno::Reference<css::rdf::XResource> xSubject(xRef);
         uno::Reference<frame::XModel> xModel = rDoc.GetDocShell()->GetBaseModel();
 
         static uno::Reference< uno::XComponentContext > xContext(
