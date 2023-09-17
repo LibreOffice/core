@@ -99,7 +99,7 @@ public:
 
     /// @throws lang::IllegalArgumentException
     /// @throws uno::RuntimeException
-    uno::Reference< text::XTextRange >
+    rtl::Reference<SwXParagraph>
         finishOrAppendParagraph(
             const uno::Sequence< beans::PropertyValue >&
                 rCharacterAndParagraphProperties,
@@ -1151,7 +1151,7 @@ SwXText::finishParagraphInsert(
     return m_pImpl->finishOrAppendParagraph(rProperties, xInsertPosition);
 }
 
-uno::Reference< text::XTextRange >
+rtl::Reference<SwXParagraph>
 SwXText::Impl::finishOrAppendParagraph(
         const uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
@@ -1167,7 +1167,7 @@ SwXText::Impl::finishOrAppendParagraph(
         throw  uno::RuntimeException();
     }
 
-    uno::Reference< text::XTextRange > xRet;
+    rtl::Reference<SwXParagraph> xRet;
     bool bIllegalException = false;
     bool bRuntimeException = false;
     OUString sMessage;
