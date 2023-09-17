@@ -36,17 +36,19 @@
 
 #include <unobaseclass.hxx>
 
-typedef std::deque<
-    css::uno::Reference< css::text::XTextRange > >
-    TextRangeList_t;
-
+class SwXTextPortion;
 class SwPaM;
 class SwTextNode;
 class SwXText;
-
 namespace sw {
     class Meta;
 }
+
+typedef std::deque<
+    rtl::Reference<SwXTextPortion> >
+    TextRangeList_t;
+
+
 
 typedef ::cppu::ImplInheritanceHelper
 <   ::sfx2::MetadatableMixin
@@ -93,7 +95,7 @@ public:
         CreateXMeta(
             ::sw::Meta & rMeta,
             css::uno::Reference<SwXText> xParentText,
-            std::unique_ptr<TextRangeList_t const> && pPortions = std::unique_ptr<TextRangeList_t const>());
+            std::unique_ptr<TextRangeList_t const> && pPortions);
 
     static rtl::Reference<SwXMeta>
         CreateXMeta(SwDoc & rDoc, bool isField);

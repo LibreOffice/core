@@ -31,6 +31,7 @@
 #include <textcontentcontrol.hxx>
 #include <doc.hxx>
 #include <unocontentcontrol.hxx>
+#include <unoport.hxx>
 #include <wrtsh.hxx>
 
 using namespace com::sun::star;

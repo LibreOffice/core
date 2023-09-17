@@ -46,9 +46,10 @@ class SwFrameFormat;
 class SwRangeRedline;
 class SwTextRuby;
 class SwXText;
+class SwXTextPortion;
 
 typedef std::deque<
-    css::uno::Reference< css::text::XTextRange > >
+    rtl::Reference<SwXTextPortion> >
     TextRangeList_t;
 
 enum SwTextPortionType

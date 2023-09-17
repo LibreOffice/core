@@ -32,6 +32,7 @@
 #include <fmtruby.hxx>
 #include <charfmt.hxx>
 #include <unoevent.hxx>
+#include <unoport.hxx>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/RubyPosition.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -736,7 +737,7 @@ bool Meta::IsInContent() const
 
 css::uno::Reference< css::rdf::XMetadatable > Meta::MakeUnoObject()
 {
-    return SwXMeta::CreateXMeta(*this, {});
+    return SwXMeta::CreateXMeta(*this, {}, {});
 }
 
 MetaField::MetaField(SwFormatMeta * const i_pFormat,

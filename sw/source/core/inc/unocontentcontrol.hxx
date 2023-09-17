@@ -35,13 +35,14 @@
 #include <unobaseclass.hxx>
 #include <unocoll.hxx>
 
-typedef std::deque<css::uno::Reference<css::text::XTextRange>> TextRangeList_t;
-
 class SwPaM;
 class SwTextNode;
 class SwFormatContentControl;
 class SwContentControl;
 class SwXText;
+class SwXTextPortion;
+
+typedef std::deque<rtl::Reference<SwXTextPortion>> TextRangeList_t;
 
 /**
  * UNO API wrapper around an SwContentControl, exposed as the com.sun.star.text.ContentControl

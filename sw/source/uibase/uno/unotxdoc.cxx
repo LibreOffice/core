@@ -172,6 +172,7 @@
 #include <SearchResultLocator.hxx>
 #include <textcontentcontrol.hxx>
 #include <unocontentcontrol.hxx>
+#include <unoport.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;

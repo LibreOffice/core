@@ -348,7 +348,7 @@ uno::Any SwXTextPortionEnumeration::nextElement()
         throw container::NoSuchElementException();
 
     Any any;
-    any <<= m_Portions.front();
+    any <<= uno::Reference<XTextRange>(m_Portions.front());
     m_Portions.pop_front();
     return any;
 }
@@ -513,7 +513,7 @@ lcl_CreateTOXMarkPortion(
     return pPortion;
 }
 
-static uno::Reference<text::XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_CreateMetaPortion(
     css::uno::Reference<SwXText> const& xParent,
     const SwUnoCursor * const pUnoCursor,
@@ -540,7 +540,7 @@ lcl_CreateMetaPortion(
 }
 
 /// Creates a text portion that has a non-empty ContentControl property.
-static uno::Reference<text::XTextRange>
+static rtl::Reference<SwXTextPortion>
 lcl_CreateContentControlPortion(const css::uno::Reference<SwXText>& xParent,
                                 const SwUnoCursor* pUnoCursor, SwTextAttr& rAttr,
                                 std::unique_ptr<const TextRangeList_t>&& pPortions)
@@ -736,14 +736,14 @@ lcl_ExportHints(
                 {
                     case RES_TXTATR_TOXMARK:
                     {
-                        Reference<XTextRange> xTmp = lcl_CreateTOXMarkPortion(
+                        rtl::Reference<SwXTextPortion> xTmp = lcl_CreateTOXMarkPortion(
                                 xParent, pUnoCursor, *pAttr, true);
                         rPortionStack.top().first->push_back(xTmp);
                     }
                     break;
                     case RES_TXTATR_REFMARK:
                     {
-                        Reference<XTextRange> xTmp = lcl_CreateRefMarkPortion(
+                        rtl::Reference<SwXTextPortion> xTmp = lcl_CreateRefMarkPortion(
                                 xParent, pUnoCursor, *pAttr, true);
                         rPortionStack.top().first->push_back(xTmp);
                     }
@@ -787,7 +787,7 @@ lcl_ExportHints(
                             std::unique_ptr<const TextRangeList_t>
                                 pCurrentPortions(Top.first);
                             rPortionStack.pop();
-                            const uno::Reference<text::XTextRange> xPortion(
+                            rtl::Reference<SwXTextPortion> xPortion(
                                 lcl_CreateMetaPortion(xParent, pUnoCursor,
                                                       *pAttr, std::move(pCurrentPortions)));
                             rPortionStack.top().first->push_back(xPortion);
@@ -820,7 +820,7 @@ lcl_ExportHints(
                         {
                             std::unique_ptr<const TextRangeList_t> pCurrentPortions(Top.first);
                             rPortionStack.pop();
-                            uno::Reference<text::XTextRange> xPortion(
+                            rtl::Reference<SwXTextPortion> xPortion(
                                 lcl_CreateContentControlPortion(xParent, pUnoCursor, *pAttr,
                                                                 std::move(pCurrentPortions)));
                             rPortionStack.top().first->push_back(xPortion);

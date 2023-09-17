@@ -45,6 +45,7 @@
 #include <textboxhelper.hxx>
 #include <unofootnote.hxx>
 #include <unolinebreak.hxx>
+#include <unoport.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtcntnt.hxx>
 #include <authfld.hxx>

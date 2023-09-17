@@ -38,6 +38,7 @@
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
+#include <unoport.hxx>
 #include <swundo.hxx>
 #include <rootfrm.hxx>
 #include <paratr.hxx>
