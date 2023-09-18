@@ -112,7 +112,7 @@
                   <item translatable="yes" context="optcompatpage|format">Expand word space on lines with manual line breaks in justified paragraphs</item>
                   <item translatable="yes" context="optcompatpage|format">Protect form (no longer protects whole document. Insert write protected section instead)</item>
                   <item translatable="yes" context="optcompatpage|format">Word-compatible trailing blanks</item>
-                  <item translatable="yes" context="optcompatpage|format">Tolerate white lines of PDF page backgrounds for compatibility with old documents</item>
+                  <item translatable="yes" context="optcompatpage|format">Tolerate white lines that may appear in PDF page backgrounds</item>
                   <item translatable="yes" context="optcompatpage|format">Hide paragraphs of database fields (e.g., mail merge) with an empty value</item>
                   <item translatable="yes" context="optcompatpage|format">Render non-breaking spaces (NBSP) as standard-space-width (off for fixed size)</item>
                   <item translatable="yes" context="optcompatpage|format">&lt;User settings&gt;</item>
