@@ -1522,7 +1522,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
+                basegfx::B2DPoint aPosition1(m_pHdl1->GetPos().X(), m_pHdl1->GetPos().Y());
                 basegfx::B2DPoint aPosition2(m_aPos.X(), m_aPos.Y());
 
                 if(!aPosition1.equal(aPosition2))

@@ -359,14 +359,14 @@ class SdrHdlBezWgt final : public SdrHdl
 {
 public:
     // this is not a Copy-Ctor!!!
-    SdrHdlBezWgt(const SdrHdl* pRefHdl1, SdrHdlKind eNewKind=SdrHdlKind::BezierWeight) { m_eKind=eNewKind; pHdl1=pRefHdl1; }
+    SdrHdlBezWgt(const SdrHdl* pRefHdl1, SdrHdlKind eNewKind=SdrHdlKind::BezierWeight) { m_eKind=eNewKind; m_pHdl1=pRefHdl1; }
     virtual ~SdrHdlBezWgt() override;
 
 private:
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
-    const SdrHdl* pHdl1;
+    const SdrHdl* m_pHdl1;
 };
 
 
