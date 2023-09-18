@@ -17,7 +17,7 @@ class Tdf147755(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:SymbolCatalogue", close_button="close") as xDialog:
                 xSymbolset = xDialog.getChild("symbolset")
-                self.assertEqual("Greek", get_state_as_dict(xSymbolset)["DisplayText"])
+                self.assertEqual("Arabic", get_state_as_dict(xSymbolset)["DisplayText"])
 
                 xOk = xDialog.getChild("ok")
                 xOk.executeAction("CLICK", tuple())
@@ -26,7 +26,7 @@ class Tdf147755(UITestCase):
             xEditView = xMathDoc.getChild("editview")
 
             # Without the fix in place, this test would have failed with
-            # AssertionError: '%ALPHA' != ''
-            self.assertEqual("%ALPHA", get_state_as_dict(xEditView)["Text"])
+            # AssertionError: '%arRay' != ''
+            self.assertEqual("%arRay", get_state_as_dict(xEditView)["Text"])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

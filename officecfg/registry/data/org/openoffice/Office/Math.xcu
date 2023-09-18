@@ -788,5 +788,1611 @@
         <value>true</value>
       </prop>
     </node>
+    <node oor:name="arAlef" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126464</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126465</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126466</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126467</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arWaw" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126469</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arZain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126470</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126471</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arTah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126472</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126473</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arKaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126474</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arLam" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126475</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arMeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126476</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126477</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126478</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126479</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126480</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126481</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126482</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arReh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126483</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126484</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arTeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126485</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arTheh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126486</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126487</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arThal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126488</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126489</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arZah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126490</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126491</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDotlessBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126492</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDotlessNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126493</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDotlessFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126494</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDotlessQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126495</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126497</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126498</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initHeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126500</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126503</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126505</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initKaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126506</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initLam" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126507</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initMeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126508</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126509</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126510</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126511</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126512</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126513</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126514</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126516</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initTeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126517</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initTheh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126518</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126519</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126521</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="initGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126523</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126530</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126535</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126537</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailLam" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126539</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126541</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126542</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126543</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126545</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126546</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126548</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126551</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126553</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126555</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailDotlessNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126557</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="tailDotlessQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126559</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126561</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126562</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchHeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126564</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126567</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchTah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126568</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126569</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchKaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126570</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchMeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126572</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126573</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126574</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126575</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126576</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126577</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126578</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126580</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchTeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126581</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchTheh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126582</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126583</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126585</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchZah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126586</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126587</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchDotlessBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126588</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="stretchDotlessFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126590</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopAlef" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126592</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126593</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126594</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopDal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126595</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopHeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126596</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopWaw" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126597</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopZain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126598</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126599</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopTah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126600</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126601</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopLam" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126603</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopMeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126604</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126605</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126606</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126607</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126608</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126609</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126610</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopReh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126611</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126612</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopTeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126613</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopTheh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126614</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126615</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopThal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126616</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126617</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopZah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126618</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="loopGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126619</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbBeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126625</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbJeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126626</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbDal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126627</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbWaw" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126629</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbZain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126630</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbHah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126631</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbTah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126632</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbYeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126633</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbLam" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126635</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbMeem" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126636</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbNoon" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126637</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbSeen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126638</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbAin" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126639</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbFeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126640</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbSad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126641</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbQaf" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126642</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbReh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126643</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbSheen" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126644</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbTeh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126645</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbTheh" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126646</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbKhah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126647</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbThal" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126648</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbDad" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126649</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbZah" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126650</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="bbGhain" oor:op="replace">
+      <prop oor:name="Char">
+        <value>126651</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arRay" oor:op="replace">
+      <prop oor:name="Char">
+        <value>1544</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arPerthousand" oor:op="replace">
+      <prop oor:name="Char">
+        <value>1545</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arPertenthousand" oor:op="replace">
+      <prop oor:name="Char">
+        <value>1546</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arDecimalseparator" oor:op="replace">
+      <prop oor:name="Char">
+        <value>1643</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
+    <node oor:name="arThousandsseparator" oor:op="replace">
+      <prop oor:name="Char">
+        <value>1644</value>
+      </prop>
+      <prop oor:name="Set">
+        <value>Arabic</value>
+      </prop>
+      <prop oor:name="Predefined">
+        <value>true</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
