@@ -614,7 +614,7 @@ class RepaintInIdle final : public Idle
 
 public:
     RepaintInIdle(ScConditionalFormat* pCondFormat)
-    : Idle("Contitional Format Repaint Idle")
+    : Idle("Conditional Format Repaint Idle")
     , mpCondFormat(pCondFormat)
     {}
 
