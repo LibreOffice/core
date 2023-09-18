@@ -1621,8 +1621,10 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
     if (mpParserState->GetFloatingTableEnded())
     {
         // We're starting a new table, but the previous table was floating. Insert a dummy paragraph
-        // to ensure that the floating table has a suitable anchor.
+        // to ensure that the floating table has a suitable anchor. The function calls here are a
+        // subset of '<resource name="CT_P" resource="Stream">' in model.xml:
         startParagraphGroup();
+        sendTableDepth();
         endOfParagraph();
     }
 
