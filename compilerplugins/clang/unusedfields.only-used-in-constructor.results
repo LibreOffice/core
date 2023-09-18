@@ -140,7 +140,7 @@ cppu/source/uno/check.cxx:267
     (anonymous namespace)::Char4 chars Char3
 cui/source/dialogs/colorpicker.cxx:748
     cui::(anonymous namespace)::ColorPickerDialog m_aColorPrevious ColorPreviewControl
-cui/source/factory/dlgfact.cxx:1245
+cui/source/factory/dlgfact.cxx:1244
     (anonymous namespace)::SvxMacroAssignDialog_Impl m_aItems SfxItemSet
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion OUString
@@ -184,6 +184,8 @@ dbaccess/source/core/dataaccess/connection.hxx:101
     dbaccess::OConnection m_nInAppend std::atomic<std::size_t>
 dbaccess/source/core/inc/databasecontext.hxx:82
     dbaccess::ODatabaseContext m_aBasicDLL BasicDLL
+dbaccess/source/core/inc/SingleSelectQueryComposer.hxx:79
+    dbaccess::OSingleSelectQueryComposer m_aNeutralContext ::svxform::ONeutralParseContext
 drawinglayer/inc/texture/texture3d.hxx:54
     drawinglayer::texture::GeoTexSvxBitmapEx maBitmapEx BitmapEx
 drawinglayer/inc/texture/texture3d.hxx:55
@@ -194,7 +196,7 @@ drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:199
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:530
+editeng/source/editeng/impedit.hxx:532
     ImpEditEngine aSelFuncSet EditSelFunctionSet
 embeddedobj/source/msole/olecomponent.hxx:51
     OleComponent m_pInterfaceContainer comphelper::OMultiTypeInterfaceContainerHelper2 *
@@ -238,17 +240,17 @@ include/basic/basmgr.hxx:59
     BasicError nReason BasicErrorReason
 include/comphelper/seqstream.hxx:76
     comphelper::SequenceInputStream m_aData const css::uno::Sequence<sal_Int8>
-include/docmodel/theme/FormatScheme.hxx:375
+include/docmodel/theme/FormatScheme.hxx:374
     model::DashStop mnDashLength sal_Int32
-include/docmodel/theme/FormatScheme.hxx:376
+include/docmodel/theme/FormatScheme.hxx:375
     model::DashStop mnStopLength sal_Int32
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:64
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard SolarMutexGuard
-include/filter/msfilter/svdfppt.hxx:889
+include/filter/msfilter/svdfppt.hxx:888
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:890
+include/filter/msfilter/svdfppt.hxx:889
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:891
+include/filter/msfilter/svdfppt.hxx:890
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/formula/formulahelper.hxx:40
     formula::FormulaHelper m_aSysLocale SvtSysLocale
@@ -386,7 +388,7 @@ include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
-include/svl/itemset.hxx:281
+include/svl/itemset.hxx:326
     SfxItemSetFixed m_aItems const SfxPoolItem *[NITEMS]
 include/svx/ClassificationDialog.hxx:35
     svx::ClassificationDialog maInternationalHelper SfxClassificationHelper
@@ -506,25 +508,25 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:241
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
-sal/qa/osl/condition/osl_Condition.cxx:72
+sal/qa/osl/condition/osl_Condition.cxx:78
     osl_Condition::ctors bRes1 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:202
+sal/qa/osl/condition/osl_Condition.cxx:208
     osl_Condition::wait bRes2 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:273
+sal/qa/osl/condition/osl_Condition.cxx:279
     osl_Condition::check bRes2 _Bool
-sal/qa/osl/file/osl_File.cxx:1387
+sal/qa/osl/file/osl_File.cxx:1383
     osl_FileStatus::isValid rItem_link DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1564
+sal/qa/osl/file/osl_File.cxx:1560
     osl_FileStatus::getFileType m_aFifoItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1564
+sal/qa/osl/file/osl_File.cxx:1560
     osl_FileStatus::getFileType m_aVolumeItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aLinkItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aSocketItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aSpecialItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:2057
+sal/qa/osl/file/osl_File.cxx:2053
     osl_FileStatus::getLinkTargetURL rItem DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:70
     osl_Module::ctors bRes1 _Bool
@@ -536,31 +538,31 @@ sal/qa/osl/module/osl_Module.cxx:201
     osl_Module::unload bRes1 _Bool
 sal/qa/osl/module/osl_Module.cxx:342
     osl_Module::getFunctionSymbol bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:358
+sal/qa/osl/pipe/osl_Pipe.cxx:353
     osl_Pipe::clear bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:523
+sal/qa/osl/pipe/osl_Pipe.cxx:518
     osl_Pipe::getError bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:523
+sal/qa/osl/pipe/osl_Pipe.cxx:518
     osl_Pipe::getError bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:561
+sal/qa/osl/pipe/osl_Pipe.cxx:556
     osl_Pipe::getHandle bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:848
+sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:848
+sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes1 _Bool
-sal/qa/osl/process/osl_process.cxx:151
+sal/qa/osl/process/osl_process.cxx:141
     Test_osl_executeProcess env_param_ const OUString
-sal/qa/osl/security/osl_Security.cxx:59
+sal/qa/osl/security/osl_Security.cxx:57
     osl_Security::ctors bRes _Bool
-sal/qa/osl/security/osl_Security.cxx:59
+sal/qa/osl/security/osl_Security.cxx:57
     osl_Security::ctors bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:124
+sal/qa/osl/security/osl_Security.cxx:122
     osl_Security::getUserIdent bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:154
+sal/qa/osl/security/osl_Security.cxx:152
     osl_Security::getUserName bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:188
+sal/qa/osl/security/osl_Security.cxx:186
     osl_Security::getConfigDir bRes1 _Bool
-sal/textenc/textenc.cxx:405
+sal/textenc/textenc.cxx:406
     (anonymous namespace)::FullTextEncodingData module_ osl::Module
 sc/inc/compiler.hxx:267
     ScCompiler::AddInMap pODFF const char *
@@ -728,7 +730,7 @@ sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell SfxObjectShellLock
 sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle Idle
-sfx2/source/doc/doctempl.cxx:106
+sfx2/source/doc/doctempl.cxx:105
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell SfxObjectShellLock
 sfx2/source/inc/templdgi.hxx:92
     SfxCommonTemplateDialog_Impl m_aStyleListUpdateFamily Link<void *, void>
@@ -772,7 +774,7 @@ starmath/inc/mathml/mathmlMo.hxx:69
     moOperatorData m_properties moOpDP
 starmath/inc/view.hxx:249
     SmViewShell maGraphicController SmGraphicController
-svgio/inc/svgcharacternode.hxx:84
+svgio/inc/svgtextposition.hxx:36
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
 svl/source/crypto/cryptosign.cxx:111
     (anonymous namespace)::Extension extnID SECItem
@@ -828,7 +830,7 @@ svx/source/xml/xmleohlp.cxx:71
     OutputStorageWrapper_Impl aTempFile TempFileFast
 svx/source/xml/xmlgrhlp.cxx:93
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFileFast
-sw/inc/unosett.hxx:144
+sw/inc/unosett.hxx:143
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType SwChapterFieldType
@@ -864,7 +866,7 @@ sw/source/uibase/docvw/romenu.hxx:51
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:327
+sw/source/uibase/inc/conttree.hxx:328
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:78
     SwSpellPopup m_aBuilder VclBuilder
@@ -888,11 +890,11 @@ ucb/source/ucp/gio/gio_mount.hxx:78
     OOoMountOperationClass _gtk_reserved3 void (*)(void)
 ucb/source/ucp/gio/gio_mount.hxx:79
     OOoMountOperationClass _gtk_reserved4 void (*)(void)
-vcl/inc/graphic/Manager.hxx:42
+vcl/inc/graphic/Manager.hxx:41
     vcl::graphic::Manager maSwapOutTimer Timer
 vcl/inc/headless/BitmapHelper.hxx:32
     BitmapHelper aTmpBmp SvpSalBitmap
-vcl/inc/jsdialog/jsdialogbuilder.hxx:716
+vcl/inc/jsdialog/jsdialogbuilder.hxx:714
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -900,18 +902,18 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
-vcl/inc/salprn.hxx:45
+vcl/inc/salprn.hxx:48
     SalPrinterQueueInfo moPortName std::optional<OUString>
-vcl/inc/salvtables.hxx:616
+vcl/inc/salvtables.hxx:617
     SalInstanceEntry m_aTextFilter WeldTextFilter
-vcl/inc/salvtables.hxx:1007
+vcl/inc/salvtables.hxx:1008
     SalInstanceComboBoxWithEdit m_aTextFilter WeldTextFilter
-vcl/inc/sft.hxx:177
+vcl/inc/sft.hxx:178
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
-vcl/inc/svimpbox.hxx:118
+vcl/inc/svimpbox.hxx:117
     SvImpLBox m_aFctSet ImpLBSelEng
-vcl/inc/unx/glyphcache.hxx:146
-    FreetypeFont mnLoadFlags FT_Int
+vcl/inc/unx/genpspgraphics.h:52
+    GenPspGraphics m_aCairoCommon CairoCommon
 vcl/inc/unx/i18n_ic.hxx:40
     SalI18N_InputContext maPreeditStartCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:41
@@ -926,11 +928,11 @@ vcl/inc/unx/i18n_ic.hxx:45
     SalI18N_InputContext maSwitchIMCallback XIMCallback
 vcl/inc/unx/i18n_ic.hxx:46
     SalI18N_InputContext maDestroyCallback XIMCallback
-vcl/inc/unx/saldisp.hxx:104
+vcl/inc/unx/saldisp.hxx:102
     SalColormap m_aPalette std::vector<Color>
-vcl/inc/unx/saldisp.hxx:109
+vcl/inc/unx/saldisp.hxx:107
     SalColormap m_nUsed Pixel
-vcl/source/app/salvtables.cxx:246
+vcl/source/app/salvtables.cxx:247
     SalFlashAttention m_aOrigBackground Wallpaper
 vcl/source/fontsubset/ttcr.hxx:40
     vcl::longHorMetrics aw sal_uInt16
@@ -956,19 +958,19 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/glomenu.cxx:16
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:7379
+vcl/unx/gtk3/gtkinst.cxx:7380
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:11035
+vcl/unx/gtk3/gtkinst.cxx:11036
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:11037
+vcl/unx/gtk3/gtkinst.cxx:11038
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:20917
+vcl/unx/gtk3/gtkinst.cxx:20964
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:20923
+vcl/unx/gtk3/gtkinst.cxx:20970
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:220
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32
-xmloff/inc/XMLThemeContext.hxx:46
+xmloff/inc/XMLThemeContext.hxx:47
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
 xmloff/source/text/XMLTextListBlockContext.hxx:40
     XMLTextListBlockContext mbSetDefaults _Bool

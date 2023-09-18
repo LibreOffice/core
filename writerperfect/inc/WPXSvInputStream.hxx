@@ -52,7 +52,6 @@ public:
 private:
     tools::Long tellImpl();
     int seek(tools::Long offset);
-    void invalidateReadBuffer();
     bool isOLE();
     void ensureOLEIsInitialized();
     bool isZip();
@@ -68,7 +67,6 @@ private:
     std::unique_ptr<OLEStorageImpl> mpOLEStorage;
     std::unique_ptr<ZipStorageImpl> mpZipStorage;
     sal_Int64 mnLength;
-    const unsigned char* mpReadBuffer;
     unsigned long mnReadBufferLength;
     unsigned long mnReadBufferPos;
     bool mbCheckedOLE;

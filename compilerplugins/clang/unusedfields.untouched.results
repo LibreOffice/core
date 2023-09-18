@@ -88,14 +88,16 @@ include/basegfx/DrawCommands.hxx:143
     gfx::DrawPath mpFillGradient std::shared_ptr<GradientInfo>
 include/comphelper/seqstream.hxx:76
     comphelper::SequenceInputStream m_aData const css::uno::Sequence<sal_Int8>
-include/docmodel/theme/FormatScheme.hxx:375
+include/docmodel/theme/FormatScheme.hxx:374
     model::DashStop mnDashLength sal_Int32
-include/docmodel/theme/FormatScheme.hxx:376
+include/docmodel/theme/FormatScheme.hxx:375
     model::DashStop mnStopLength sal_Int32
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:64
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard SolarMutexGuard
-include/editeng/unotext.hxx:618
+include/editeng/unotext.hxx:619
     SvxUnoTextRangeEnumeration mxParentText css::uno::Reference<css::text::XText>
+include/filter/msfilter/svdfppt.hxx:545
+    ProcessData aBackgroundColoredObjects ::std::vector<rtl::Reference<SdrObject> >
 include/LibreOfficeKit/LibreOfficeKitGtk.h:40
     _LOKDocView aDrawingArea GtkDrawingArea
 include/LibreOfficeKit/LibreOfficeKitGtk.h:45
@@ -330,25 +332,25 @@ pyuno/source/module/pyuno_impl.hxx:237
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/ui/inc/ReportWindow.hxx:52
     rptui::OReportWindow m_pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
-sal/qa/osl/condition/osl_Condition.cxx:72
+sal/qa/osl/condition/osl_Condition.cxx:78
     osl_Condition::ctors bRes1 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:202
+sal/qa/osl/condition/osl_Condition.cxx:208
     osl_Condition::wait bRes2 _Bool
-sal/qa/osl/condition/osl_Condition.cxx:273
+sal/qa/osl/condition/osl_Condition.cxx:279
     osl_Condition::check bRes2 _Bool
-sal/qa/osl/file/osl_File.cxx:1387
+sal/qa/osl/file/osl_File.cxx:1383
     osl_FileStatus::isValid rItem_link DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1564
+sal/qa/osl/file/osl_File.cxx:1560
     osl_FileStatus::getFileType m_aFifoItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1564
+sal/qa/osl/file/osl_File.cxx:1560
     osl_FileStatus::getFileType m_aVolumeItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aLinkItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aSocketItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:1565
+sal/qa/osl/file/osl_File.cxx:1561
     osl_FileStatus::getFileType m_aSpecialItem DirectoryItem
-sal/qa/osl/file/osl_File.cxx:2057
+sal/qa/osl/file/osl_File.cxx:2053
     osl_FileStatus::getLinkTargetURL rItem DirectoryItem
 sal/qa/osl/module/osl_Module.cxx:70
     osl_Module::ctors bRes1 _Bool
@@ -360,27 +362,27 @@ sal/qa/osl/module/osl_Module.cxx:201
     osl_Module::unload bRes1 _Bool
 sal/qa/osl/module/osl_Module.cxx:342
     osl_Module::getFunctionSymbol bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:358
+sal/qa/osl/pipe/osl_Pipe.cxx:353
     osl_Pipe::clear bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:523
+sal/qa/osl/pipe/osl_Pipe.cxx:518
     osl_Pipe::getError bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:523
+sal/qa/osl/pipe/osl_Pipe.cxx:518
     osl_Pipe::getError bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:561
+sal/qa/osl/pipe/osl_Pipe.cxx:556
     osl_Pipe::getHandle bRes1 _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:848
+sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes _Bool
-sal/qa/osl/pipe/osl_Pipe.cxx:848
+sal/qa/osl/pipe/osl_Pipe.cxx:843
     osl_StreamPipe::recv bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:59
+sal/qa/osl/security/osl_Security.cxx:57
     osl_Security::ctors bRes _Bool
-sal/qa/osl/security/osl_Security.cxx:59
+sal/qa/osl/security/osl_Security.cxx:57
     osl_Security::ctors bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:124
+sal/qa/osl/security/osl_Security.cxx:122
     osl_Security::getUserIdent bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:154
+sal/qa/osl/security/osl_Security.cxx:152
     osl_Security::getUserName bRes1 _Bool
-sal/qa/osl/security/osl_Security.cxx:188
+sal/qa/osl/security/osl_Security.cxx:186
     osl_Security::getConfigDir bRes1 _Bool
 sc/inc/editutil.hxx:111
     ScEnginePoolHelper pEnginePool rtl::Reference<SfxItemPool>
@@ -430,7 +432,7 @@ sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell SfxObjectShellLock
 sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle Idle
-sfx2/source/doc/doctempl.cxx:106
+sfx2/source/doc/doctempl.cxx:105
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell SfxObjectShellLock
 sfx2/source/inc/sfxpicklist.hxx:33
     SfxPickList mxImpl std::unique_ptr<SfxPickListImpl>
@@ -476,13 +478,15 @@ svx/source/inc/datanavi.hxx:194
     svxform::XFormsPage m_aDropHelper DataTreeDropTarget
 svx/source/sidebar/fontwork/FontworkPropertyPanel.hxx:41
     svx::sidebar::FontworkPropertyPanel m_xToolbar std::unique_ptr<ToolbarUnoDispatcher>
+svx/source/svdraw/svdmodel.cxx:93
+    SdrModelImpl mpThemeColorChanger std::shared_ptr<svx::IThemeColorChanger>
 svx/source/tbxctrls/layctrl.cxx:432
     (anonymous namespace)::ColumnsWindow mxControl rtl::Reference<SvxColumnsToolBoxControl>
 sw/qa/extras/uiwriter/uiwriter5.cxx:66
     SwUiWriterTest5 m_aSavedSettings AllSettings
 sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState SwCursorSaveState
-sw/source/core/frmedt/fetab.cxx:78
+sw/source/core/frmedt/fetab.cxx:80
     (anonymous namespace)::TableWait m_pWait const std::unique_ptr<SwWait>
 sw/source/core/inc/ftnboss.hxx:34
     SwSaveFootnoteHeight aGuard SwFrameDeleteGuard
@@ -494,7 +498,7 @@ sw/source/ui/envelp/swuilabimp.hxx:32
     SwLabPage m_xAddressFrame std::unique_ptr<weld::Widget>
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:327
+sw/source/uibase/inc/conttree.hxx:328
     SwGlobalTree m_aDropTargetHelper SwGlobalTreeDropTarget
 sw/source/uibase/inc/frmpage.hxx:94
     SwFramePage m_xAnchorFrame std::unique_ptr<weld::Widget>
@@ -522,7 +526,7 @@ unoidl/source/unoidlprovider.cxx:676
     unoidl::detail::(anonymous namespace)::UnoidlCursor reference2_ rtl::Reference<UnoidlModuleEntity>
 uui/source/openlocked.hxx:36
     vcl::OpenLockedQueryBox mxQuestionMarkImage std::unique_ptr<weld::Image>
-vcl/inc/jsdialog/jsdialogbuilder.hxx:716
+vcl/inc/jsdialog/jsdialogbuilder.hxx:714
     JSToolbar m_pPopovers std::map<sal_uInt16, weld::Widget *>
 vcl/inc/pdf/pdfbuildin_fonts.hxx:34
     vcl::pdf::BuildinFont m_nAscent const int
@@ -530,11 +534,11 @@ vcl/inc/pdf/pdfbuildin_fonts.hxx:35
     vcl::pdf::BuildinFont m_nDescent const int
 vcl/inc/pdf/pdfbuildin_fonts.hxx:42
     vcl::pdf::BuildinFont m_aWidths const int[256]
-vcl/inc/salprn.hxx:45
+vcl/inc/salprn.hxx:48
     SalPrinterQueueInfo moPortName std::optional<OUString>
-vcl/inc/sft.hxx:177
+vcl/inc/sft.hxx:178
     vcl::TTGlobalFontInfo_ fsSelection sal_uInt16
-vcl/source/app/salvtables.cxx:246
+vcl/source/app/salvtables.cxx:247
     SalFlashAttention m_aOrigBackground Wallpaper
 vcl/source/fontsubset/ttcr.hxx:40
     vcl::longHorMetrics aw sal_uInt16
@@ -544,9 +548,9 @@ vcl/source/gdi/jobset.cxx:39
     (anonymous namespace)::ImplOldJobSetupData cDeviceName char[32]
 vcl/source/gdi/jobset.cxx:40
     (anonymous namespace)::ImplOldJobSetupData cPortName char[32]
-vcl/source/graphic/BinaryDataContainer.cxx:110
+vcl/source/graphic/BinaryDataContainer.cxx:109
     (anonymous namespace)::ReferencedMemoryStream mpData std::shared_ptr<std::vector<sal_uInt8> >
-vcl/source/graphic/BinaryDataContainer.cxx:122
+vcl/source/graphic/BinaryDataContainer.cxx:121
     (anonymous namespace)::ReferencedXInputStream mpData std::shared_ptr<std::vector<sal_uInt8> >
 vcl/unx/generic/print/prtsetup.hxx:71
     RTSPaperPage m_xContainer std::unique_ptr<weld::Widget>
@@ -562,7 +566,7 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 writerfilter/source/ooxml/OOXMLStreamImpl.hxx:41
     writerfilter::ooxml::OOXMLStreamImpl mxFastParser css::uno::Reference<css::xml::sax::XFastParser>
-xmloff/inc/XMLThemeContext.hxx:46
+xmloff/inc/XMLThemeContext.hxx:47
     XMLThemeColorsContext m_aColorScheme std::vector<css::util::Color>
 xmlscript/source/xmldlg_imexp/imp_share.hxx:537
     xmlscript::BulletinBoardElement mxDialogImport rtl::Reference<DialogImport>

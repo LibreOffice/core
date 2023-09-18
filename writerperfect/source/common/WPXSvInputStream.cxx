@@ -391,7 +391,6 @@ WPXSvInputStream::WPXSvInputStream(Reference<XInputStream> const& xStream)
     , mxSeekable(xStream, UNO_QUERY)
     , maData(0)
     , mnLength(0)
-    , mpReadBuffer(nullptr)
     , mnReadBufferLength(0)
     , mnReadBufferPos(0)
     , mbCheckedOLE(false)
@@ -475,8 +474,6 @@ int WPXSvInputStream::seek(tools::Long offset)
 
 bool WPXSvInputStream::isStructured()
 {
-    invalidateReadBuffer();
-
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return false;
 
@@ -493,8 +490,6 @@ bool WPXSvInputStream::isStructured()
 
 unsigned WPXSvInputStream::subStreamCount()
 {
-    invalidateReadBuffer();
-
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return 0;
 
@@ -522,8 +517,6 @@ unsigned WPXSvInputStream::subStreamCount()
 
 const char* WPXSvInputStream::subStreamName(const unsigned id)
 {
-    invalidateReadBuffer();
-
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return nullptr;
 
@@ -557,8 +550,6 @@ const char* WPXSvInputStream::subStreamName(const unsigned id)
 
 bool WPXSvInputStream::existsSubStream(const char* const name)
 {
-    invalidateReadBuffer();
-
     if (!name)
         return false;
 
@@ -589,8 +580,6 @@ bool WPXSvInputStream::existsSubStream(const char* const name)
 
 librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamByName(const char* const name)
 {
-    invalidateReadBuffer();
-
     if (!name)
         return nullptr;
 
@@ -629,8 +618,6 @@ librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamByName(const char* co
 
 librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamById(const unsigned id)
 {
-    invalidateReadBuffer();
-
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return nullptr;
 
@@ -666,18 +653,6 @@ librevenge::RVNGInputStream* WPXSvInputStream::getSubStreamById(const unsigned i
         }
     }
     return nullptr;
-}
-
-void WPXSvInputStream::invalidateReadBuffer()
-{
-    if (mpReadBuffer)
-    {
-        seek(tell() + static_cast<tools::Long>(mnReadBufferPos)
-             - static_cast<tools::Long>(mnReadBufferLength));
-        mpReadBuffer = nullptr;
-        mnReadBufferPos = 0;
-        mnReadBufferLength = 0;
-    }
 }
 
 librevenge::RVNGInputStream*
@@ -796,8 +771,6 @@ int WPXSvInputStream::seek(long offset, librevenge::RVNG_SEEK_TYPE seekType)
             tmpOffset + static_cast<tools::Long>(mnReadBufferLength) - tellImpl());
         return retVal;
     }
-
-    invalidateReadBuffer();
 
     if (seek(tmpOffset))
         return -1;
