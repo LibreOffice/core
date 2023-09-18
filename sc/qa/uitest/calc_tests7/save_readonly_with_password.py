@@ -8,6 +8,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from com.sun.star.beans import PropertyValue
 from org.libreoffice.unotest import systemPathToFileUrl
 from uitest.uihelper.common import select_by_text
 from tempfile import TemporaryDirectory
@@ -48,7 +49,7 @@ class save_readonly_with_password(UITestCase):
 
             self.ui_test.wait_until_file_is_available(xFilePath)
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath), [PropertyValue(Name="Silent", Value=True)]) as document:
 
                 self.assertTrue(document.isReadonly())
 
@@ -84,7 +85,7 @@ class save_readonly_with_password(UITestCase):
 
             self.ui_test.wait_until_file_is_available(xFilePath)
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath), [PropertyValue(Name="Silent", Value=True)]) as document:
 
                 self.assertTrue(document.isReadonly())
 

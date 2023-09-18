@@ -1113,7 +1113,13 @@ void SfxObjectShell::FinishedLoading( SfxLoadedFlags nFlags )
                                          INetURLObject::DecodeMechanism::WithCharset);
             }
 
-            if (aFilterName.indexOf("Excel") != -1)
+            bool bSilent = false;
+            if (const SfxBoolItem* pSilentNameItem =
+                SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(),
+                                                 SID_SILENT, false))
+                bSilent = pSilentNameItem->GetValue();
+
+            if (!bSilent && aFilterName.indexOf("Excel") != -1)
             {
                 Reference<task::XInteractionHandler> xHandler(pMedium->GetInteractionHandler());
                 if (xHandler.is())

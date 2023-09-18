@@ -10,7 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
-
+from com.sun.star.beans import PropertyValue
 
 class tdf144996(UITestCase):
 
@@ -20,7 +20,7 @@ class tdf144996(UITestCase):
         # so using save doesn't affect the original file
         xFilePath = get_url_for_data_file("tdf144996.xlsx")
 
-        with self.ui_test.load_file(xFilePath) as document:
+        with self.ui_test.load_file(xFilePath, [PropertyValue(Name="Silent", Value=True)]) as document:
 
             self.assertTrue(document.isReadonly())
 
@@ -34,7 +34,7 @@ class tdf144996(UITestCase):
                 # Confirm file format popup
                 pass
 
-        with self.ui_test.load_file(xFilePath) as document:
+        with self.ui_test.load_file(xFilePath, [PropertyValue(Name="Silent", Value=True)]) as document:
 
             self.assertTrue(document.isReadonly())
 
