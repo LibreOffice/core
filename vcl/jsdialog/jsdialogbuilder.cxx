@@ -29,29 +29,10 @@
 #include <vcl/jsdialog/executor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <jsdialog/jsdialogbuilder.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <memory>
-#include <messagedialog.hxx>
-#include <o3tl/deleter.hxx>
-#include <sal/log.hxx>
-
-#include <tools/json_writer.hxx>
 #include <tools/stream.hxx>
 
-#include <utility>
-
 #include <vcl/cvtgrf.hxx>
-#include <vcl/jsdialog/executor.hxx>
-#include <vcl/tabpage.hxx>
-#include <vcl/toolbox.hxx>
-#include <vcl/toolkit/button.hxx>
-#include <vcl/toolkit/combobox.hxx>
-#include <vcl/toolkit/dialog.hxx>
-#include <vcl/toolkit/treelistentry.hxx>
-#include <vcl/toolkit/vclmedit.hxx>
 
-#include <verticaltabctrl.hxx>
 #include <wizdlg.hxx>
 
 static std::map<OUString, vcl::Window*>& GetLOKPopupsMap()
