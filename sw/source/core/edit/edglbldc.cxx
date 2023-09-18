@@ -153,7 +153,6 @@ void SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         pMyDoc->GetIDocumentUndoRedo().StartUndo( SwUndoId::START, nullptr );
         rPos.Adjust(SwNodeOffset(-1));
         pMyDoc->getIDocumentContentOperations().AppendTextNode( rPos );
-        pCursor->SetMark();
     }
 
     InsertSection( rNew );
