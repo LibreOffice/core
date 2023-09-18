@@ -1103,8 +1103,6 @@ public:
     sal_Int32 m_nTableDepth;
     /// Raw table cell depth.
     sal_Int32 m_nTableCellDepth;
-    /// Table cell depth of the last finished paragraph.
-    sal_Int32 m_nLastTableCellParagraphDepth;
 
     /// If the current section has footnotes.
     bool m_bHasFtn;

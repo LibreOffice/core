@@ -3296,7 +3296,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     break;
     case NS_ooxml::LN_tcEnd:
         m_pImpl->m_nTableCellDepth--;
-        m_pImpl->m_nLastTableCellParagraphDepth = 0;
     break;
     case NS_ooxml::LN_glow_glow:
     case NS_ooxml::LN_shadow_shadow:

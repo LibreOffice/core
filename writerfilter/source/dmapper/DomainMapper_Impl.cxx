@@ -392,7 +392,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsReadGlossaries(rMediaDesc.getUnpackedValueOrDefault("ReadGlossaries", false)),
         m_nTableDepth(0),
         m_nTableCellDepth(0),
-        m_nLastTableCellParagraphDepth(0),
         m_bHasFtn(false),
         m_bHasFtnSep(false),
         m_bCheckFirstFootnoteTab(false),
@@ -2132,7 +2131,6 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
     TagLogger::getInstance().startElement("finishParagraph");
 #endif
 
-    m_nLastTableCellParagraphDepth = m_nTableCellDepth;
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     if (m_aTextAppendStack.empty())
         return;
