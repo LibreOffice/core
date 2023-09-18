@@ -368,7 +368,7 @@ namespace svt
             int nStartPos, nEndPos;
             weld::Entry& rEntry = m_rEdit.get_widget();
             rEntry.get_selection_bounds(nStartPos, nEndPos);
-            return rEntry.get_text().copy(nStartPos, nEndPos - nStartPos);
+            return rEntry.get_text().copy(std::min(nStartPos, nEndPos), std::abs(nEndPos - nStartPos));
         }
 
         virtual bool IsValueChangedFromSaved() const override
