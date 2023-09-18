@@ -21,6 +21,7 @@
 #include <utility.hxx>
 #include <cfgitem.hxx>
 #include <smmod.hxx>
+#include <format.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
@@ -78,6 +79,13 @@ bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
     return  m_aName == rSymbol.m_aName &&
             m_aFace == rSymbol.m_aFace &&
             m_cChar == rSymbol.m_cChar;
+}
+
+const vcl::Font& SmSym::GetFace() const
+{
+    if (m_aFace.GetFamilyName().isEmpty())
+        return SM_MOD()->GetConfig()->GetStandardFormat().GetFont(FNT_MATH);
+    return m_aFace;
 }
 
 /**************************************************************************/

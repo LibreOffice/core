@@ -51,7 +51,7 @@ public:
 
     SmSym&      operator = (const SmSym& rSymbol);
 
-    const vcl::Font&  GetFace() const { return m_aFace; }
+    const vcl::Font&  GetFace() const;
     sal_UCS4        GetCharacter() const { return m_cChar; }
     const OUString&   GetName() const { return m_aName; }
 
