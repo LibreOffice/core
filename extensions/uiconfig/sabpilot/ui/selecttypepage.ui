@@ -139,7 +139,7 @@ This wizard helps you create the data source.</property>
         </child>
         <child>
           <object class="GtkRadioButton" id="macosx">
-            <property name="label" translatable="yes" context="selecttypepage|macosx">Mac OS X address book</property>
+            <property name="label" translatable="yes" context="selecttypepage|macosx">macOS address book</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">False</property>

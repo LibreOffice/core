@@ -23,7 +23,7 @@
         <value>com.sun.star.comp.sdbc.macab.Driver</value>
       </prop>
       <prop oor:name="DriverTypeDisplayName" oor:type="xs:string">
-        <value xml:lang="en-US">Mac OS X Address Book</value>
+        <value xml:lang="en-US">macOS Address Book</value>
       </prop>
       <node oor:name="Properties">
         <node oor:name="EscapeDateTime" oor:op="replace">
