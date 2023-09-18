@@ -64,6 +64,10 @@ enum SwColLineAdj
     COLADJ_BOTTOM
 };
 
+/// This pool item subclass can appear in the item set of an SwPageDesc, and contains settings
+/// visible on the UI via Format -> Page Style -> Columns tab.
+/// It can also appear in the item set of an SwSectionFormat, and then contains settings visible on
+/// the UI via Format -> Sections -> Options -> Columns tab.
 class SW_DLLPUBLIC SwFormatCol final : public SfxPoolItem
 {
     SvxBorderLineStyle m_eLineStyle;     ///< style of the separator line
