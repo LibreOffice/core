@@ -560,7 +560,7 @@ ShapeExport& ShapeExport::WriteGroupShape(const uno::Reference<drawing::XShape>&
 namespace
 {
 
-constexpr auto constDenySet = frozen::make_set<std::u16string_view>(
+constexpr frozen::set<std::u16string_view, 57> constDenySet(
 {
     u"block-arc",
     u"rectangle",
@@ -621,7 +621,7 @@ constexpr auto constDenySet = frozen::make_set<std::u16string_view>(
     u"flowchart-display"
 });
 
-constexpr auto constAllowSet = frozen::make_set<std::u16string_view>(
+constexpr frozen::set<std::u16string_view, 4> constAllowSet(
 {
     u"heart",
     u"puzzle",
