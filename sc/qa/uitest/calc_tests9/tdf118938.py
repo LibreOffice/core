@@ -9,6 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from com.sun.star.beans import PropertyValue
 
 #Bug 118938 - FILESAVE to Microsoft Excel 2007-2013 XML (.xlsx) files as read-only
 #             with additional password protection for editing not working (Calc)
@@ -16,7 +17,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf118938(UITestCase):
 
     def test_tdf118938(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf118938.xlsx"), [PropertyValue(Name="Silent", Value=True)]):
             #The document was created in Calc after this fix.
             document = self.ui_test.get_component()
 

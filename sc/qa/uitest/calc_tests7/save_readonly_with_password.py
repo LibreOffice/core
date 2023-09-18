@@ -8,6 +8,7 @@
 #
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from com.sun.star.beans import PropertyValue
 from org.libreoffice.unotest import systemPathToFileUrl
 from uitest.uihelper.common import select_by_text
 from tempfile import TemporaryDirectory
@@ -46,8 +47,7 @@ class save_readonly_with_password(UITestCase):
                         with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
                             pass
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
-
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath), [PropertyValue(Name="Silent", Value=True)]) as document:
                 self.assertTrue(document.isReadonly())
 
                 with self.ui_test.execute_dialog_through_command(".uno:EditDoc") as xDialog:
@@ -80,7 +80,7 @@ class save_readonly_with_password(UITestCase):
                         xConfirmPassword = xPasswordDialog.getChild("confirmropassEntry")
                         xConfirmPassword.executeAction("TYPE", mkPropertyValues({"TEXT": "password"}))
 
-            with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
+            with self.ui_test.load_file(systemPathToFileUrl(xFilePath), [PropertyValue(Name="Silent", Value=True)]) as document:
 
                 self.assertTrue(document.isReadonly())
 

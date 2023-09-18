@@ -8,6 +8,7 @@
 #
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file
+from com.sun.star.beans import PropertyValue
 from libreoffice.uno.propertyvalue import mkPropertyValues
 
 #Bug 115933 - XLSX <fileSharing> password protected with algorithmName, hashValue, saltValue and spinCount
@@ -15,7 +16,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 class tdf115933(UITestCase):
 
     def test_tdf115933(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf115933.xlsx")):
+        with self.ui_test.load_file(get_url_for_data_file("tdf115933.xlsx"), [PropertyValue(Name="Silent", Value=True)]):
             #The document was created in Excel.
             calcDoc = self.xUITest.getTopFocusWindow()
             gridwin = calcDoc.getChild("grid_window")
