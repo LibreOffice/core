@@ -153,8 +153,9 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/schart/ui/smoothlinesdlg.ui"
         || rUIFile == u"modules/schart/ui/steppedlinesdlg.ui"
         || rUIFile == u"modules/schart/ui/tp_ChartType.ui"
-        || rUIFile == u"modules/schart/ui/tp_RangeChooser.ui"
         || rUIFile == u"modules/schart/ui/tp_DataSource.ui"
+        || rUIFile == u"modules/schart/ui/tp_RangeChooser.ui"
+        || rUIFile == u"modules/schart/ui/tp_Trendline.ui"
         || rUIFile == u"modules/schart/ui/wizelementspage.ui"
         // sdraw
         || rUIFile == u"modules/sdraw/ui/drawchardialog.ui"
