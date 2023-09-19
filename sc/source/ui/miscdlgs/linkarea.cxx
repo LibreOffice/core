@@ -215,7 +215,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         if (nErr)
             ErrorHandler::HandleError( nErr );              // including warnings
 
-        if (!m_pSourceShell->GetError())                    // only errors
+        if (!m_pSourceShell->GetErrorIgnoreWarning())                    // only errors
         {
             m_xCbUrl->set_entry_text(pMed->GetName());
         }

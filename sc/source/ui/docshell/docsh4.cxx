@@ -838,7 +838,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (nErr)
                     ErrorHandler::HandleError( nErr );          // also warnings
 
-                if ( !pOtherDocSh->GetError() )                 // only errors
+                if ( !pOtherDocSh->GetErrorIgnoreWarning() )                 // only errors
                 {
                     bool bHadTrack = ( m_pDocument->GetChangeTrack() != nullptr );
 #if HAVE_FEATURE_MULTIUSER_ENVIRONMENT

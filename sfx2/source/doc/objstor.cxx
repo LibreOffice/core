@@ -635,7 +635,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     EnableSetModified( false );
 
     pMedium->LockOrigFileOnDemand( true, false );
-    if ( GetError() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) ) )
+    if ( GetErrorIgnoreWarning() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
         if ( pMedium->GetError() == ERRCODE_NONE )
@@ -675,7 +675,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             }
 
             // Load
-            if ( !GetError() )
+            if ( !GetErrorIgnoreWarning() )
             {
                 pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
                 pImpl->bModelInitialized = false;
@@ -694,7 +694,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             SetError(pMed->GetLastStorageCreationState());
     }
-    else if ( GetError() == ERRCODE_NONE && InitNew(nullptr) )
+    else if ( GetErrorIgnoreWarning() == ERRCODE_NONE && InitNew(nullptr) )
     {
         // set name before ConvertFrom, so that GetSbxObject() already works
         bHasName = true;
@@ -705,7 +705,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             pMedium->GetStorage();
 
-        if ( GetError() == ERRCODE_NONE )
+        if ( GetErrorIgnoreWarning() == ERRCODE_NONE )
         {
             // Experimental PDF importing using PDFium. This is currently enabled for LOK only and
             // we handle it not via XmlFilterAdaptor but a new SdPdfFiler.
@@ -1928,7 +1928,7 @@ bool SfxObjectShell::DoSaveAs( SfxMedium& rMedium )
     // here only root storages are included, which are stored via temp file
     rMedium.CreateTempFileNoCopy();
     SetError(rMedium.GetErrorCode());
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
         return false;
 
     // copy version list from "old" medium to target medium, so it can be used on saving
@@ -2621,7 +2621,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         pMediumTmp->DisableFileSync(true);
 
     bool bSaved = false;
-    if( !GetError() && SaveTo_Impl( *pMediumTmp, pArgs ) )
+    if( !GetErrorIgnoreWarning() && SaveTo_Impl( *pMediumTmp, pArgs ) )
     {
         bSaved = true;
 

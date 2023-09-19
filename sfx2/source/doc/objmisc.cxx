@@ -217,7 +217,7 @@ void SfxObjectShell::SetError(ErrCode lErr)
     }
 }
 
-ErrCode SfxObjectShell::GetError() const
+ErrCode SfxObjectShell::GetErrorIgnoreWarning() const
 {
     return GetErrorCode().IgnoreWarning();
 }

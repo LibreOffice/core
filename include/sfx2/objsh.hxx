@@ -290,7 +290,7 @@ public:
     SAL_DLLPRIVATE void         SetMacroMode_Impl(bool bModal=true);
 
     void                        ResetError();
-    ErrCode                     GetError() const;
+    ErrCode                     GetErrorIgnoreWarning() const;
     ErrCode                     GetErrorCode() const;
     void                        SetError(ErrCode rErr);
 

@@ -1697,7 +1697,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
     pParams.reset();
 
-    ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
+    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ? m_pData->m_pObjectShell->GetErrorIgnoreWarning()
                                                            : ERRCODE_IO_CANTWRITE;
     m_pData->m_pObjectShell->ResetError();
 
@@ -1882,8 +1882,8 @@ void SAL_CALL SfxBaseModel::initNew()
         throw frame::DoubleInitializationException();
 
     bool bRes = m_pData->m_pObjectShell->DoInitNew();
-    ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ?
-                       m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
+    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ?
+                       m_pData->m_pObjectShell->GetErrorIgnoreWarning() : ERRCODE_IO_CANTCREATE;
     m_pData->m_pObjectShell->ResetError();
 
     if ( !bRes )

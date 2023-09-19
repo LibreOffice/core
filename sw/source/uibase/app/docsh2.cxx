@@ -632,7 +632,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     aOpt.SetMerge( !bMerge );
 
                     SetError(LoadStylesFromFile(aFileName, aOpt, false));
-                    if ( !GetError() )
+                    if ( !GetErrorIgnoreWarning() )
                         rReq.Done();
                 }
             }

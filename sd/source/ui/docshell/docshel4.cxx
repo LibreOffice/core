@@ -583,7 +583,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     if( bRet )
         bRet = SdXMLFilter( rMedium, *this, SdXMLFilterMode::Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
 
-    if( GetError() == ERRCODE_NONE )
+    if( GetErrorIgnoreWarning() == ERRCODE_NONE )
         SetError(ERRCODE_NONE);
 
     return bRet;
