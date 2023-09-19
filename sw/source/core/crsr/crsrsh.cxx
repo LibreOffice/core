@@ -1770,8 +1770,8 @@ void SwCursorShell::VisPortChgd( const SwRect & rRect )
 
 /** Set the cursor back into content.
 
-    This should only be called if the cursor was move somewhere else (e.g. when
-    deleting a border). The new position is calculated from its current position
+    This should only be called if the cursor was moved (e.g. when deleting a
+    text frame). The new position is calculated from its current position
     in the layout.
 */
 void SwCursorShell::UpdateCursorPos()
@@ -1783,7 +1783,7 @@ void SwCursorShell::UpdateCursorPos()
 
     if (isInHiddenTextFrame(pShellCursor) && !ExtendedSelectedAll())
     {
-        SwCursorMoveState aTmpState( CursorMoveState::NONE );
+        SwCursorMoveState aTmpState(CursorMoveState::SetOnlyText);
         aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
         GetLayout()->GetModelPositionForViewPoint( pShellCursor->GetPoint(), pShellCursor->GetPtPos(),
                                      &aTmpState );
