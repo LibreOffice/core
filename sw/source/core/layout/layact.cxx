@@ -1701,8 +1701,46 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
     while ( pContent && pPage->IsAnLower( pContent ) )
     {
         // If the content didn't change, we can use a few shortcuts.
-        const bool bFull = !pContent->isFrameAreaDefinitionValid() || pContent->IsCompletePaint() ||
+        bool bFull = !pContent->isFrameAreaDefinitionValid() || pContent->IsCompletePaint() ||
                            pContent->IsRetouche() || pContent->GetDrawObjs();
+
+        auto pText = pContent->DynCastTextFrame();
+        if (!bFull && !pContent->GetDrawObjs() && pContent->IsFollow() && pText)
+        {
+            // This content frame doesn't have to-para anchored objects, but it's a follow, check
+            // the master.
+            const SwTextFrame* pMaster = pText;
+            while (pMaster->IsFollow())
+            {
+                pMaster = pMaster->FindMaster();
+            }
+            if (pMaster && pMaster->GetDrawObjs())
+            {
+                for (SwAnchoredObject* pDrawObj : *pMaster->GetDrawObjs())
+                {
+                    auto pFly = pDrawObj->DynCastFlyFrame();
+                    if (!pFly)
+                    {
+                        continue;
+                    }
+
+                    if (!pFly->IsFlySplitAllowed())
+                    {
+                        continue;
+                    }
+
+                    if (pFly->GetAnchorFrameContainingAnchPos() != pContent)
+                    {
+                        continue;
+                    }
+
+                    // This fly is effectively anchored to pContent, still format pContent.
+                    bFull = true;
+                    break;
+                }
+            }
+        }
+
         if ( bFull )
         {
             // We do this so we don't have to search later on.
