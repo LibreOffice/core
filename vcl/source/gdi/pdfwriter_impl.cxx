@@ -9008,6 +9008,16 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     sal_Int32 nWrappedFormObject = 0;
     if (!m_aContext.UseReferenceXObject)
     {
+#ifdef MACOSX
+        // tdf#156842 increase scale for external PDF data
+        // For some unknown reason, the scale is 8 times larger than for
+        // non-external PDF XObjects.
+        // This fix also allows the CppunitTest_vcl_pdfexport to run
+        // successfully on macOS.
+        fScaleX = 8.0 / aSize.Width();
+        fScaleY = 8.0 / aSize.Height();
+#endif
+
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
         if (rEmit.m_nExternalPDFDataIndex < 0)

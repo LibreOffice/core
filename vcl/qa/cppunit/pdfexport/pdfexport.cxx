@@ -4174,10 +4174,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
     // - Expected: 0.0012626264
     // - Actual  : 0.00126
     // i.e. the rounded reciprocal was 794 points, not the original 792.
-    // FIXME macOS actual value is 0.0001578282, for unknown reasons.
-#if !defined MACOSX
     CPPUNIT_ASSERT_EQUAL(0.0012626264, rtl::math::round(aScale.getY(), 10));
-#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
