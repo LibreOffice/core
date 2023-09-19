@@ -2522,6 +2522,26 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf146178)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pCursor->GetPoint()->GetContentIndex());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106663HeaderTextFrameGoToNextPlacemarker)
+{
+    createSwDoc("testTdf106663.odt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Move the cursor into the fly frame of the document's header
+    pWrtShell->GotoFly("FrameInHeader", FLYCNTTYPE_FRM, false);
+
+    // Check that GoToNextPlacemarker highlights the first field instead of the second one
+    dispatchCommand(mxComponent, ".uno:GoToNextPlacemarker", {});
+    // Without the fix in place, this test would have failed with
+    // - Expected: Heading
+    // - Actual  : Some other marker
+    // i.e. the GoToNextPlacemarker command skipped the first field
+    CPPUNIT_ASSERT(pCursor->GetPoint()->GetNode().GetTextNode()->GetText().startsWith("Heading"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
 {
     createSwDoc();
