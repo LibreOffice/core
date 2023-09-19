@@ -289,8 +289,7 @@ public:
  */
 class TableData : public virtual SvRefBase
 {
-    typedef RowData::Pointer_t RowPointer_t;
-    typedef ::std::vector<RowPointer_t> Rows;
+    typedef ::std::vector<RowData::Pointer_t> Rows;
 
     /**
        the data of the rows of the table
@@ -300,7 +299,7 @@ class TableData : public virtual SvRefBase
     /**
         pointer to the data of the current row (while building up the table data).
     */
-    RowPointer_t mpRow;
+    RowData::Pointer_t mpRow;
 
     /**
        depth of the current table in a hierarchy of tables
@@ -310,7 +309,7 @@ class TableData : public virtual SvRefBase
     /**
        initialize mpRow
      */
-    void newRow() { mpRow = RowPointer_t(new RowData()); }
+    void newRow() { mpRow = RowData::Pointer_t(new RowData()); }
 
 public:
     typedef tools::SvRef<TableData> Pointer_t;
@@ -403,12 +402,12 @@ public:
 
        @param i     index of the row
     */
-    RowPointer_t const & getRow(unsigned int i) const
+    RowData::Pointer_t const & getRow(unsigned int i) const
     {
         return mRows[i];
     }
 
-    const RowPointer_t& getCurrentRow() const
+    const RowData::Pointer_t& getCurrentRow() const
     {
         return mpRow;
     }
