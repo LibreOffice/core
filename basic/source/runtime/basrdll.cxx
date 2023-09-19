@@ -37,12 +37,11 @@ struct BasicDLLImpl : public SvRefBase
     bool        bDebugMode;
     bool        bBreakEnabled;
 
-    std::unique_ptr<SbxAppData> xSbxAppData;
+    SbxAppData aSbxAppData;
 
     BasicDLLImpl()
         : bDebugMode(false)
         , bBreakEnabled(true)
-        , xSbxAppData(new SbxAppData)
     { }
 
     static BasicDLLImpl* BASIC_DLL;
@@ -69,7 +68,7 @@ BasicDLL::~BasicDLL()
     std::scoped_lock aGuard(BasicDLLImpl::getMutex());
     const bool bLastRef = m_xImpl->GetRefCount() == 1;
     if (bLastRef) {
-        BasicDLLImpl::BASIC_DLL->xSbxAppData->m_aGlobErr.clear();
+        BasicDLLImpl::BASIC_DLL->aSbxAppData.m_aGlobErr.clear();
     }
     m_xImpl.clear();
     // only reset BASIC_DLL after the object had been destroyed
@@ -122,12 +121,12 @@ void BasicDLL::BasicBreak()
 
 SbxAppData& GetSbxData_Impl()
 {
-    return *BasicDLLImpl::BASIC_DLL->xSbxAppData;
+    return BasicDLLImpl::BASIC_DLL->aSbxAppData;
 }
 
 bool IsSbxData_Impl()
 {
-    return BasicDLLImpl::BASIC_DLL && BasicDLLImpl::BASIC_DLL->xSbxAppData;
+    return BasicDLLImpl::BASIC_DLL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
