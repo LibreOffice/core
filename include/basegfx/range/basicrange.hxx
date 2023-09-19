@@ -271,7 +271,7 @@ namespace basegfx
 
 #if defined _MSC_VER && defined(_M_ARM64)
 #pragma warning(push)
-#pragma warning(disable: 4723) /* ignore: warning for C4723 on windows arm64 build */
+#pragma warning(disable: 4723) /* ignore: warning for (C4723) potential divide by 0 on windows arm64 build */
 #endif
         typename Traits::DifferenceType getRange() const
         {
