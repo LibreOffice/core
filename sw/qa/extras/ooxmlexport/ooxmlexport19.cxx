@@ -1156,6 +1156,62 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157136)
     }
 }
 
+//Tests for support of fallback for ECMA-376 1st ed to merge the title value with descr attribute
+CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2007)
+{
+    //Given a document with 1 image (with name, alt title and description field populated) in odt format
+    createSwDoc("tdf148952.odt");
+
+    OUString rFilterName = "MS Word 2007 XML";
+
+    //Export it to MS word 2007(.docx) format
+    saveAndReload(rFilterName);
+
+    // Checks the number of images in the docx file
+    const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+
+    // Check if alt title value is appended to description
+    OUString descr;
+    xImage->getPropertyValue("Description") >>= descr;
+    CPPUNIT_ASSERT_EQUAL(OUString("Black\nShapes"), descr);
+
+    // Check if alt title field is empty
+    OUString title;
+    xImage->getPropertyValue("Title") >>= title;
+    CPPUNIT_ASSERT_EQUAL(OUString(""), title);
+}
+
+//Tests for support of title attribute for ECMA-376 2nd ed and above
+CPPUNIT_TEST_FIXTURE(Test, testTdf148952_2010)
+{
+    //Given a document with 1 image (with name, alt title and description field populated) in odt format
+    createSwDoc("tdf148952.odt");
+
+    OUString rFilterName = "Office Open XML Text";
+
+    //Export it to MS word 2010-365 (.docx) format
+    saveAndReload(rFilterName);
+
+    // Checks the number of images in the docx file
+    const OString sFailedMessage = OString::Concat("Failed on filter: ") + rFilterName.toUtf8();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+
+    uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
+
+    // Check if description field contains same value after export
+    OUString descr;
+    xImage->getPropertyValue("Description") >>= descr;
+    CPPUNIT_ASSERT_EQUAL(OUString("Shapes"), descr);
+
+    // Check if alt title field contains same value after export
+    OUString title;
+    xImage->getPropertyValue("Title") >>= title;
+    CPPUNIT_ASSERT_EQUAL(OUString("Black"), title);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
