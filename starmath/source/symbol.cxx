@@ -81,10 +81,14 @@ bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
             m_cChar == rSymbol.m_cChar;
 }
 
-const vcl::Font& SmSym::GetFace() const
+const vcl::Font& SmSym::GetFace(const SmFormat* pFormat) const
 {
     if (m_aFace.GetFamilyName().isEmpty())
-        return SM_MOD()->GetConfig()->GetStandardFormat().GetFont(FNT_MATH);
+    {
+        if (!pFormat)
+            pFormat = &SM_MOD()->GetConfig()->GetStandardFormat();
+        return pFormat->GetFont(FNT_VARIABLE);
+    }
     return m_aFace;
 }
 

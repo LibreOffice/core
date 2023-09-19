@@ -2192,10 +2192,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );
         SetText( aTmp );
-        if (pSym->GetFace().GetFamilyName().isEmpty())
-            GetFont() = rFormat.GetFont(FNT_VARIABLE);
-        else
-            GetFont() = pSym->GetFace();
+        GetFont() = pSym->GetFace(&rFormat);
     }
     else
     {

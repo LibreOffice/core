@@ -28,6 +28,7 @@
 #include <vector>
 #include <set>
 
+#include "format.hxx"
 #include "utility.hxx"
 
 
@@ -51,7 +52,7 @@ public:
 
     SmSym&      operator = (const SmSym& rSymbol);
 
-    const vcl::Font&  GetFace() const;
+    const vcl::Font&  GetFace(const SmFormat* pFormat = nullptr) const;
     sal_UCS4        GetCharacter() const { return m_cChar; }
     const OUString&   GetName() const { return m_aName; }
 
