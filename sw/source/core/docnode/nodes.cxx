@@ -2250,7 +2250,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         {
             pFrameNd = GoPrevSection( &aIdx, true, false );
             // did we move *into* a table?
-            if (pFrameNd)
+            if (pFrameNd && ::CheckNodesRange(aIdx.GetNode(), rFrameNd, true))
             {
                 for (SwTableNode * pTable = pFrameNd->FindTableNode();
                     pTable && pTable->EndOfSectionIndex() < rFrameNd.GetIndex();
@@ -2328,7 +2328,7 @@ SwNode* SwNodes::FindPrvNxtFrameNode( const SwNode& rFrameNd,
         {
             pFrameNd = GoNextSection( &aIdx, true, false );
             // did we move *into* a table?
-            if (pFrameNd)
+            if (pFrameNd && ::CheckNodesRange(aIdx.GetNode(), rFrameNd, true))
             {
                 for (SwTableNode * pTable = pFrameNd->FindTableNode();
                     pTable && pEnd->GetIndex() < pTable->GetIndex();
