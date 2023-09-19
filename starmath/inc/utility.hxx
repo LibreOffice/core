@@ -22,7 +22,6 @@
 #include <sal/config.h>
 #include "smdllapi.hxx"
 
-#include <comphelper/lok.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sal/log.hxx>
 #include <vcl/font.hxx>
@@ -117,14 +116,15 @@ public:
     virtual void    Insert(const vcl::Font &rFont) override;
 };
 
-// Math uses 100ths of MM by default, but lok needs twips everywhere
+// Math used to use 100ths of MM by default, but now uses twips
+// which seems to improve (subpixel) positioning.
 inline MapUnit SmMapUnit()
 {
-    return comphelper::LibreOfficeKit::isActive() ? MapUnit::MapTwip : MapUnit::Map100thMM;
+    return MapUnit::MapTwip;
 }
 inline o3tl::Length SmO3tlLengthUnit()
 {
-    return comphelper::LibreOfficeKit::isActive() ? o3tl::Length::twip : o3tl::Length::mm100;
+    return o3tl::Length::twip;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

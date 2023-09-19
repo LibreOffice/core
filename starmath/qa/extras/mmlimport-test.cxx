@@ -168,9 +168,9 @@ void Test::testTdf151842()
     SmFormat aFormat = pDocShell->GetFormat();
 
     // Without the fix in place, this test would have failed with
-    // - Expected: 4233
+    // - Expected: 2400
     // - Actual  : 423
-    CPPUNIT_ASSERT_EQUAL(tools::Long(4233), aFormat.GetBaseSize().Height());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2400), aFormat.GetBaseSize().Height());
 }
 
 void Test::testMathmlEntities()

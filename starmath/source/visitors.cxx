@@ -441,13 +441,6 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     if (mrFormat.IsRightToLeft() && mrDev.GetOutDevType() != OUTDEV_WINDOW)
         mrDev.ReMirror(aBar);
 
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting its output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
-    Point  aDrawPos( mrDev.PixelToLogic( mrDev.LogicToPixel( aBar.TopLeft( ) ) ) );
-    aBar.SetPos( aDrawPos );
-
     mrDev.DrawRect( aBar );
 }
 
@@ -500,13 +493,6 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     if (mrFormat.IsRightToLeft() && mrDev.GetOutDevType() != OUTDEV_WINDOW)
         mrDev.ReMirror(aTmp);
 
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting its output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
-    Point  aPos ( mrDev.PixelToLogic( mrDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
-    aTmp.SetPos( aPos );
-
     mrDev.DrawRect( aTmp );
 }
 
@@ -523,9 +509,6 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 
     if (mrFormat.IsRightToLeft() && mrDev.GetOutDevType() != OUTDEV_WINDOW)
         mrDev.ReMirror(aPos);
-
-    // round to pixel coordinate
-    aPos = mrDev.PixelToLogic( mrDev.LogicToPixel( aPos ) );
 
     mrDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
 }
