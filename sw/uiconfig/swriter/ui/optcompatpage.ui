@@ -109,7 +109,7 @@
                   <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 object positioning</item>
                   <item translatable="yes" context="optcompatpage|format">Use OpenOffice.org 1.1 text wrapping around objects</item>
                   <item translatable="yes" context="optcompatpage|format">Consider wrapping style when positioning objects</item>
-                  <item translatable="yes" context="optcompatpage|format">Expand word space on lines with manual line breaks in justified paragraphs</item>
+                  <item translatable="yes" context="optcompatpage|format">Justify lines with a manual line break in justified paragraphs</item>
                   <item translatable="yes" context="optcompatpage|format">Protect form (no longer protects whole document. Insert write protected section instead)</item>
                   <item translatable="yes" context="optcompatpage|format">Word-compatible trailing blanks</item>
                   <item translatable="yes" context="optcompatpage|format">Tolerate white lines that may appear in PDF page backgrounds</item>
