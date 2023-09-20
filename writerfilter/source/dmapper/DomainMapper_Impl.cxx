@@ -3640,19 +3640,20 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
     }
 }
 
-void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType)
+void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, SectionPropertyMap::PageType eType)
 {
     m_bSaveParaHadField = m_bParaHadField;
     m_StreamStateStack.emplace();
 
-    const PropertyIds ePropIsOn = bHeader? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
-    const PropertyIds ePropShared = bHeader? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
-    const PropertyIds ePropTextLeft = bHeader? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
-    const PropertyIds ePropText = bHeader? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
+    bool bHeader = ePagePartType == PagePartType::Header;
+
+    const PropertyIds ePropIsOn = bHeader ? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
+    const PropertyIds ePropShared = bHeader ? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
+    const PropertyIds ePropTextLeft = bHeader ? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
+    const PropertyIds ePropText = bHeader ? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
     m_bDiscardHeaderFooter = true;
-    m_eInHeaderFooterImport
-        = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
+    m_eInHeaderFooterImport = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
 
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
@@ -3738,12 +3739,12 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
 
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
-    PushPageHeaderFooter(/* bHeader = */ true, eType);
+    PushPageHeaderFooter(PagePartType::Header, eType);
 }
 
 void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 {
-    PushPageHeaderFooter(/* bHeader = */ false, eType);
+    PushPageHeaderFooter(PagePartType::Footer, eType);
 }
 
 void DomainMapper_Impl::PopPageHeaderFooter()

@@ -463,6 +463,12 @@ struct SymbolData
     { }
 };
 
+enum class PagePartType
+{
+    Header,
+    Footer
+};
+
 class DomainMapper;
 class DomainMapper_Impl final
 {
@@ -1230,7 +1236,7 @@ public:
     OUString getFontNameForTheme(const Id id);
 
 private:
-    void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
+    void PushPageHeaderFooter(PagePartType ePagePartType, SectionPropertyMap::PageType eType);
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
