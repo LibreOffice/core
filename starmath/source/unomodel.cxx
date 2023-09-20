@@ -674,6 +674,9 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
     for (sal_uInt16 nFontDesc = FNT_BEGIN; nFontDesc <= FNT_END; ++nFontDesc)
     {
         const SmFace& rFont = maFonts[nFontDesc];
+        if (rFont.GetFamilyName().isEmpty())
+            continue;
+
         if (aFormat.GetFont(nFontDesc).GetFamilyName() != rFont.GetFamilyName())
         {
             const SmFace rOld = aFormat.GetFont(nFontDesc);
