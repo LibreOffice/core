@@ -2107,6 +2107,31 @@ void SmViewShell::Execute(SfxRequest& rReq)
         }
         break;
 
+        case SID_CHARMAP:
+        {
+            const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxStringItem* pItem = nullptr;
+            if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_CHARMAP, true, &pItem))
+            {
+                if (IsInlineEditEnabled())
+                    GetDoc()->GetCursor().InsertText(pItem->GetValue());
+                else if (pWin)
+                    pWin->InsertText(pItem->GetValue());
+                break;
+            }
+
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            SfxAllItemSet aSet(GetViewFrame().GetObjectShell()->GetPool());
+            aSet.Put(SfxBoolItem(FN_PARAM_1, false));
+            aSet.Put(SfxStringItem(SID_FONT_NAME,
+                                   GetDoc()->GetFormat().GetFont(FNT_VARIABLE).GetFamilyName()));
+            ScopedVclPtr<SfxAbstractDialog> pDialog(
+                pFact->CreateCharMapDialog(pWin ? pWin->GetFrameWeld() : nullptr, aSet,
+                                           GetViewFrame().GetFrame().GetFrameInterface()));
+            pDialog->Execute();
+        }
+        break;
+
         case SID_ATTR_PARA_LEFT_TO_RIGHT:
         case SID_ATTR_PARA_RIGHT_TO_LEFT:
         {

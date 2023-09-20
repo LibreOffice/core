@@ -282,6 +282,11 @@ interface FormulaView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
+    SID_CHARMAP //idlpp ole : no , status : no
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     SID_ATTR_PARA_LEFT_TO_RIGHT
     [
         ExecMethod = Execute ;
