@@ -88,9 +88,9 @@ class UITest(object):
                     return
                 time.sleep(DEFAULT_SLEEP)
 
-    def load_component_from_url(self, url, eventName="OnLoad"):
+    def load_component_from_url(self, url, eventName="OnLoad", load_props=()):
         with EventListener(self._xContext, eventName) as event:
-            component =  self.get_desktop().loadComponentFromURL(url, "_default", 0, tuple())
+            component =  self.get_desktop().loadComponentFromURL(url, "_default", 0, load_props)
             while True:
                 if event.executed:
                     frames = self.get_frames()
@@ -101,9 +101,9 @@ class UITest(object):
 
     # Calls UITest.close_doc at exit
     @contextmanager
-    def load_file(self, url):
+    def load_file(self, url, load_props=()):
         try:
-            yield self.load_component_from_url(url)
+            yield self.load_component_from_url(url, "OnLoad", load_props)
         finally:
             self.close_doc()
 
