@@ -11,6 +11,8 @@ import android.graphics.PointF;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.StrictMath;
+
 public final class PointUtils {
     public static PointF add(PointF one, PointF two) {
         return new PointF(one.x + two.x, one.y + two.y);
@@ -30,7 +32,7 @@ public final class PointUtils {
 
    /* Computes the magnitude of the given vector. */
    public static float distance(PointF point) {
-        return (float)Math.sqrt(point.x * point.x + point.y * point.y);
+        return (float)StrictMath.hypot(point.x, point.y);
    }
 
     /** Computes the scalar distance between two points. */

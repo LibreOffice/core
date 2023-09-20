@@ -21,6 +21,7 @@ import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.lang.StrictMath;
 
 /*
  * Handles the kinetic scrolling and zooming physics for a layer controller.
@@ -543,7 +544,7 @@ class JavaPanZoomController
     private float getVelocity() {
         float xvel = mX.getRealVelocity();
         float yvel = mY.getRealVelocity();
-        return (float) Math.sqrt(xvel * xvel + yvel * yvel);
+        return (float) StrictMath.hypot(xvel, yvel);
     }
 
     public PointF getVelocityVector() {
