@@ -803,6 +803,8 @@ void SwGlobalTree::UpdateTracking()
             pSection = pParent;
         m_xTreeView->select_text(pSection->GetSectionName());
     }
+
+    Select();
 }
 
 void SwGlobalTree::GotoContent(const SwGlblDocContent* pCont)
