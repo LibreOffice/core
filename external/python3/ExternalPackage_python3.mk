@@ -27,6 +27,7 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYT
 endif
 python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_asyncio$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+	PCbuild/$(python_arch_subdir)_bz2$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_elementtree$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -65,6 +66,7 @@ python3_EXTENSION_MODULES= \
 	LO_lib/binascii.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_bisect.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_blake2.$(python3_EXTENSION_MODULE_SUFFIX).so \
+	LO_lib/_bz2.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/cmath.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_codecs_cn.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_codecs_hk.$(python3_EXTENSION_MODULE_SUFFIX).so \

@@ -27,6 +27,7 @@ $(call gb_ExternalProject_get_state_target,bzip2,build):
 	$(call gb_Trace_StartRange,bzip2,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(MAKE) \
+		CC="$(CC) -fPIC" \
 	)
 	$(call gb_Trace_EndRange,bzip2,EXTERNAL)
 endif

@@ -1,0 +1,49 @@
+Disable bzip2 tests when cross compiling on Windows to avoid this error:
+
+> Doing 6 tests (3 compress, 3 uncompress) ...
+> If there's a problem, things might stop at this point.
+> 
+> 	.\\bzip2 -1  < sample1.ref > sample1.rb2
+> This version of C:\sources\libo-core\workdir\UnpackedTarball\bzip2\bzip2.exe is not compatible with the version of Windows you're running.
+> Check your computer's system information and then contact the software publisher.
+> NMAKE : fatal error U1077: '.\\bzip2' : return code '0x1'
+> Stop.
+
+--- makefile.msc.orig	2019-07-14 02:50:05.000000000 +0900
++++ makefile.msc	2023-09-20 20:00:14.124370100 +0900
+@@ -14,7 +14,7 @@
+       decompress.obj \
+       bzlib.obj
+ 
+-all: lib bzip2 test
++all: lib bzip2
+ 
+ bzip2: lib
+ 	$(CC) $(CFLAGS) -o bzip2 bzip2.c libbz2.lib setargv.obj
+@@ -23,26 +23,6 @@
+ lib: $(OBJS)
+ 	lib /out:libbz2.lib $(OBJS)
+ 
+-test: bzip2
+-	type words1
+-	.\\bzip2 -1  < sample1.ref > sample1.rb2
+-	.\\bzip2 -2  < sample2.ref > sample2.rb2
+-	.\\bzip2 -3  < sample3.ref > sample3.rb2
+-	.\\bzip2 -d  < sample1.bz2 > sample1.tst
+-	.\\bzip2 -d  < sample2.bz2 > sample2.tst
+-	.\\bzip2 -ds < sample3.bz2 > sample3.tst
+-	@echo All six of the fc's should find no differences.
+-	@echo If fc finds an error on sample3.bz2, this could be
+-	@echo because WinZip's 'TAR file smart CR/LF conversion'
+-	@echo is too clever for its own good.  Disable this option.
+-	@echo The correct size for sample3.ref is 120,244.  If it
+-	@echo is 150,251, WinZip has messed it up.
+-	fc sample1.bz2 sample1.rb2 
+-	fc sample2.bz2 sample2.rb2
+-	fc sample3.bz2 sample3.rb2
+-	fc sample1.tst sample1.ref
+-	fc sample2.tst sample2.ref
+-	fc sample3.tst sample3.ref
+ 
+ 
+ 
