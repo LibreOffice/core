@@ -343,7 +343,10 @@ OUString SvxProxyTabPage::GetAllStrings()
                           "noproxyft", "httpportft", "httpsportft", "ftpportft", "noproxydesc" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -857,20 +860,28 @@ OUString SvxSecurityTabPage::GetAllStrings()
                           "label11" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "savepassword", "usemasterpassword" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     // TODO: Should we exclude button strings from the search?
     // button id: "browse" is excluded
-    OUString buttons[]
-        = { "options", "connections", "masterpassword", "macro", "cert", "tsas" };
+    OUString buttons[] = { "options", "connections", "masterpassword", "macro", "cert", "tsas" };
 
     for (const auto& btn : buttons)
-        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_button(btn))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -964,7 +975,10 @@ OUString SvxEMailTabPage::GetAllStrings()
     OUString labels[] = { "label1", "label2", "browsetitle", "suppress" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

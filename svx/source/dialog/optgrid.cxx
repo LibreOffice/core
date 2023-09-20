@@ -157,14 +157,20 @@ OUString SvxGridTabPage::GetAllStrings()
             "divisionx", "label4", "divisiony", "label5",   "label8", "label9" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[]
         = { "usegridsnap", "gridvisible", "synchronize", "snaphelplines", "snapborder",
             "snapframe",   "snappoints",  "ortho",       "bigortho",      "rotate" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

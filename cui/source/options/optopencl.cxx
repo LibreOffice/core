@@ -56,7 +56,10 @@ OUString SvxOpenCLTabPage::GetAllStrings()
     OUString labels[] = { "label1", "openclnotused", "openclused" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += mxUseOpenCL->get_label() + " ";
 

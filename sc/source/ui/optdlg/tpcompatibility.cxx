@@ -38,7 +38,10 @@ OUString ScTpCompatOptions::GetAllStrings()
     OUString labels[] = { "label1", "label2" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     // id "keybindings" GtkComboBoxText is not included
 

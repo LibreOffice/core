@@ -146,12 +146,18 @@ OUString SvxFontSubstTabPage::GetAllStrings()
     OUString labels[] = { "label4", "label2", "label3", "label1", "label8", "label9" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "usetable", "nonpropfontonly" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

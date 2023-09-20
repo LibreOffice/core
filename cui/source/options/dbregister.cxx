@@ -133,7 +133,10 @@ std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( weld::Container* 
 
 OUString DbRegistrationOptionsPage::GetAllStrings()
 {
-    OUString sAllStrings = m_xBuilder->weld_label("label1")->get_label() + " ";
+    OUString sAllStrings;
+
+    if (const auto& pString = m_xBuilder->weld_label("label1"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }

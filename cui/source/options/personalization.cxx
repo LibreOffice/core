@@ -61,9 +61,13 @@ OUString SvxPersonalizationTabPage::GetAllStrings()
     OUString radioButton[] = { "no_persona", "default_persona" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
-    sAllStrings += m_xBuilder->weld_label("personas_label")->get_label() + " ";
+    if (const auto& pString = m_xBuilder->weld_label("personas_label"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }

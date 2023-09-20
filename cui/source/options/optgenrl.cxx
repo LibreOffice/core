@@ -351,7 +351,10 @@ OUString SvxGeneralTabPage::GetAllStrings()
             "faxft",      "cryptographylabel", "signingkeylabel", "encryptionkeylabel" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xUseDataCB->get_label() + " " + m_xEncryptToSelfCB->get_label() + " ";
 

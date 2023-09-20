@@ -64,7 +64,10 @@ OUString ScRedlineOptionsTabPage::GetAllStrings()
     OUString labels[] = { "label1", "label2", "label3", "label4", "label5" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

@@ -285,7 +285,10 @@ OUString SvxAreaTabPage::GetAllStrings()
                                 "btnpattern", "btnhatch", "btnusebackground" };
 
     for (const auto& toggle : toggleButton)
-        sAllStrings += m_xBuilder->weld_toggle_button(toggle)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_toggle_button(toggle))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

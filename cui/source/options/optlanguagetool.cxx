@@ -91,14 +91,21 @@ OUString OptLanguageToolTabPage::GetAllStrings()
                           "apikeydesc",       "restlbl",     "restdesc" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "activate", "verifyssl" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
-    sAllStrings += m_xBuilder->weld_link_button("policy")->get_label() + " ";
+    if (const auto& pString = m_xBuilder->weld_link_button("policy"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }

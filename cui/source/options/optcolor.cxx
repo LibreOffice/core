@@ -807,7 +807,10 @@ OUString SvxColorOptionsTabPage::GetAllStrings()
     OUString labels[] = { "label2", "label3", "autocolor", "uielements", "colorsetting" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

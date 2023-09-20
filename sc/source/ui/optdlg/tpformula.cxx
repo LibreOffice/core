@@ -268,17 +268,26 @@ OUString ScTpFormulaOptions::GetAllStrings()
                           "label9", "label10" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "calcdefault", "calccustom" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString buttons[] = { "reset", "details" };
 
     for (const auto& btn : buttons)
-        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_button(btn))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     // check button
     sAllStrings += mxCbEnglishFuncName->get_label() + " ";

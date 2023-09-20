@@ -220,7 +220,10 @@ OUString SwContentOptPage::GetAllStrings()
             "hruler",      "settingslabel", "measureunitlabel", "outlinelabel" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "helplines",
                                "graphics",
@@ -239,7 +242,10 @@ OUString SwContentOptPage::GetAllStrings()
                                "suboutlinelevelsascontent" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -390,19 +396,28 @@ OUString SwAddPrinterTabPage::GetAllStrings()
     OUString labels[] = { "label2", "label10", "label1", "label5", "4" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[]
         = { "graphics",  "formcontrols", "background", "inblack", "hiddentext", "textplaceholder",
             "leftpages", "rightpages",   "brochure",   "rtl",     "blankpages", "papertray" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "none", "only", "end", "endpage", "inmargins" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -636,7 +651,10 @@ OUString SwStdFontTabPage::GetAllStrings()
                           "heading_label", "list_label", "caption_label", "index_label" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xStandardPB->get_label() + " ";
 
@@ -1088,18 +1106,27 @@ OUString SwTableOptionsTabPage::GetAllStrings()
             "label14", "label15", "label16", "label11", "label12", "label13" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "header",        "repeatheader",     "dontsplit",   "border",
                                "numformatting", "numfmtformatting", "numalignment" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "fix", "fixprop", "var" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -1342,14 +1369,20 @@ OUString SwShdwCursorOptionsTabPage::GetAllStrings()
                           "fillmode",  "lbImage",   "lbDefaultAnchor" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[]
         = { "mathbaseline", "paragraph",  "hyphens",   "spaces",       "nonbreak",   "tabs",
             "break",        "hiddentext", "bookmarks", "cursorinprot", "cursoronoff" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -1727,7 +1760,10 @@ OUString SwRedlineOptionsTabPage::GetAllStrings()
                           "label5", "markpos_label", "markcolor_label" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -2124,17 +2160,26 @@ OUString SwCompareOptionsTabPage::GetAllStrings()
     OUString labels[] = { "label1", "setting" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "useRSID", "ignore", "storeRSID" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "auto", "byword", "bycharacter" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -2284,9 +2329,13 @@ OUString SwTestTabPage::GetAllStrings()
                                "AutoFormatByInput" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
-    sAllStrings += m_xBuilder->weld_label("label1")->get_label() + " ";
+    if (const auto& pString = m_xBuilder->weld_label("label1"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }

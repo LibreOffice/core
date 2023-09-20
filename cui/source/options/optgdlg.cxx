@@ -225,16 +225,23 @@ OUString OfaMiscTabPage::GetAllStrings()
                           "toyear", "label7", "label8", "label9" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[]
         = { "exthelp",   "popupnohelp", "cbShowTipOfTheDay", "filedlg",
             "docstatus", "crashreport", "quicklaunch",       "cbPerformFileExtCheck" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
-    sAllStrings += m_xBuilder->weld_button("assocfiles")->get_label() + " ";
+    if (const auto& pString = m_xBuilder->weld_button("assocfiles"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -712,13 +719,19 @@ OUString OfaViewTabPage::GetAllStrings()
                           "label2",  "skiaenabled", "skiadisabled", "label5", "aafrom" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[]
         = { "useaccel", "useaa", "useskia", "forceskiaraster", "showfontpreview", "aafont" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xSkiaLog->get_label() + " " + m_xRunGPTests->get_label() + " ";
 
@@ -1257,13 +1270,19 @@ OUString OfaLanguagesTabPage::GetAllStrings()
             "label6", "dataaccpatterns", "label2", "western",         "label3" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "decimalseparator", "asiansupport", "ctlsupport", "currentdoc",
                                "ignorelanguagechange" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

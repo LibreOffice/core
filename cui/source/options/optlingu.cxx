@@ -927,7 +927,10 @@ OUString SvxLinguTabPage::GetAllStrings()
     OUString labels[] = { "lingumodulesft", "lingudictsft", "label4" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xMoreDictsLink->get_label() + " ";
 

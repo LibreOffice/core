@@ -149,12 +149,18 @@ OUString SvxDefaultColorOptPage::GetAllStrings()
     OUString labels[] = { "label20", "label1" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString buttons[] = { "add", "delete", "default" };
 
     for (const auto& btn : buttons)
-        sAllStrings += m_xBuilder->weld_button(btn)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_button(btn))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

@@ -197,17 +197,26 @@ OUString SvxOnlineUpdateTabPage::GetAllStrings()
                           "destpathlabel", "labelagent",  "useragent_label", "useragent_changed" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "autocheck", "autodownload", "extrabits" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "everyday", "everyweek", "everymonth" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     // some buttons are not included
     sAllStrings += m_xPrivacyPolicyButton->get_label() + " ";

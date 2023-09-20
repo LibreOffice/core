@@ -49,9 +49,13 @@ OUString OptDeeplTabPage::GetAllStrings()
     OUString labels[] = { "label1", "label2", "label3" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
-    sAllStrings += m_xBuilder->weld_link_button("privacy")->get_label() + " ";
+    if (const auto& pString = m_xBuilder->weld_link_button("privacy"))
+        sAllStrings += pString->get_label() + " ";
 
     return sAllStrings.replaceAll("_", "");
 }

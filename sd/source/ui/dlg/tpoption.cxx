@@ -125,12 +125,18 @@ OUString SdTpOptionsContents::GetAllStrings()
     OUString labels[] = { "label1" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "ruler", "dragstripes", "handlesbezier", "moveoutline" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }
@@ -350,7 +356,10 @@ OUString SdTpOptionsMisc::GetAllStrings()
             "label5",    "label8", "widthlbl", "info1",        "heightlbl", "info2" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
                                "objalwymov",      "distortcb",    "cbCompatibility",
@@ -358,7 +367,10 @@ OUString SdTpOptionsMisc::GetAllStrings()
                                "qickedit",        "textselected" };
 
     for (const auto& check : checkButton)
-        sAllStrings += m_xBuilder->weld_check_button(check)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_check_button(check))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     return sAllStrings.replaceAll("_", "");
 }

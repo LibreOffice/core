@@ -46,7 +46,10 @@ OUString ScTpDefaultsOptions::GetAllStrings()
     OUString labels[] = { "label1", "textsheetsnumber", "textsheetprefix" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xEdJumboSheets->get_label() + " ";
 

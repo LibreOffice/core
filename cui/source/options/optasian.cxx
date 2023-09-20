@@ -148,13 +148,19 @@ OUString SvxAsianLayoutPage::GetAllStrings()
         = { "label1", "label2", "label3", "languageft", "startft", "endft", "hintft" };
 
     for (const auto& label : labels)
-        sAllStrings += m_xBuilder->weld_label(label)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_label(label))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     OUString radioButton[] = { "charkerning", "charpunctkerning", "nocompression",
                                "punctcompression", "punctkanacompression" };
 
     for (const auto& radio : radioButton)
-        sAllStrings += m_xBuilder->weld_radio_button(radio)->get_label() + " ";
+    {
+        if (const auto& pString = m_xBuilder->weld_radio_button(radio))
+            sAllStrings += pString->get_label() + " ";
+    }
 
     sAllStrings += m_xStandardCB->get_label() + " ";
 
