@@ -1076,8 +1076,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
         }
 
         // draw items
-        sal_uLong nFirstItem = static_cast<sal_uLong>(mnFirstLine) * mnCols;
-        sal_uLong nLastItem = nFirstItem + (mnVisLines * mnCols);
+        size_t nFirstItem = static_cast<size_t>(mnFirstLine) * mnCols;
+        size_t nLastItem = nFirstItem + (mnVisLines * mnCols);
 
         maItemListRect.SetLeft( x );
         maItemListRect.SetTop( y );

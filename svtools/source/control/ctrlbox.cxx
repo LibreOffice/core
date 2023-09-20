@@ -1186,8 +1186,8 @@ void FontSizeBox::Fill( const FontList* pList )
         if ( pAry == FontList::GetStdSizeAry() )
         {
             // for scalable fonts all font size names
-            sal_uLong nCount = aFontSizeNames.Count();
-            for( sal_uLong i = 0; i < nCount; i++ )
+            sal_uInt32 nCount = aFontSizeNames.Count();
+            for( sal_uInt32 i = 0; i < nCount; i++ )
             {
                 OUString aSizeName = aFontSizeNames.GetIndexName( i );
                 int nSize = aFontSizeNames.GetIndexSize( i );
