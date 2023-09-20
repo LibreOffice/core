@@ -209,7 +209,7 @@
               <object class="GtkLabel" id="label16">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="borderpage|label16">_Width:</property>
+                <property name="label" translatable="yes" context="borderpage|label16">_Thickness:</property>
                 <property name="use-underline">True</property>
                 <property name="xalign">0</property>
                 <accessibility>

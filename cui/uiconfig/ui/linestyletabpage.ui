@@ -248,7 +248,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="CBX_SYNCHRONIZE">
-                        <property name="label" translatable="yes" context="linestyletabpage|CBX_SYNCHRONIZE">_Fit to line width</property>
+                        <property name="label" translatable="yes" context="linestyletabpage|CBX_SYNCHRONIZE">_Fit to line thickness</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>

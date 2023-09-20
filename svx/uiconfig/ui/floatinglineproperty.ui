@@ -55,7 +55,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="floatinglineproperty|label1">Custom Line Width:</property>
+                <property name="label" translatable="yes" context="floatinglineproperty|label1">Custom Line Thickness:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">spin</property>
                 <property name="ellipsize">end</property>
