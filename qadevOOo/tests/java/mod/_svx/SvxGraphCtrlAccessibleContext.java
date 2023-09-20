@@ -100,7 +100,7 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
 
         //Opening ImageMapDialog
         try {
-            String aSlotID = "slot:10371";
+            String aSlotID = ".uno:ImageMapDialog";
             XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, xController );
             XURLTransformer xParser = UnoRuntime.queryInterface(XURLTransformer.class,
          Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
