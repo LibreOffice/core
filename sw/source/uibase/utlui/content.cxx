@@ -6040,8 +6040,15 @@ void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const 
     {
         if (!pNode)
             continue;
-        SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
-        SwFrame* pFrame = aTmp.NextFrame();
+        const SwFrame* pFrame;
+        if (pNode->IsContentNode())
+            pFrame = pNode->GetContentNode()->getLayoutFrame(m_pActiveShell->GetLayout());
+        else
+        {
+            // section and table nodes
+            SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
+            pFrame = aTmp.NextFrame();
+        }
         while (pFrame)
         {
             const SwRect& rFrameRect = pFrame->getFrameArea();
@@ -6052,7 +6059,7 @@ void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const 
                                      rFrameRect.Right(), rFrameRect.Bottom());
             if (!pFrame->IsFlowFrame())
                 break;
-            SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+            const SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
             if (!pFollow)
                 break;
             pFrame = &pFollow->GetFrame();
