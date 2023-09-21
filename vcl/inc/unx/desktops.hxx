@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
-#define INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
+#pragma once
 
 #include <sal/config.h>
 
@@ -36,7 +35,5 @@ enum SAL_DLLPUBLIC_RTTI DesktopType
     DESKTOP_PLASMA6,
     DESKTOP_LXQT
 }; // keep in sync with desktop_strings[] in salplug.cxx
-
-#endif // INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
