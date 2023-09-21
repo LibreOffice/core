@@ -72,7 +72,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XWeak;
 using ::com::sun::star::uno::Type;
