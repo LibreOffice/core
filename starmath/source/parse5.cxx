@@ -29,6 +29,7 @@
 #include <parse5.hxx>
 #include <strings.hrc>
 #include <smmod.hxx>
+#include <symbol.hxx>
 #include <cfgitem.hxx>
 #include <starmathdatabase.hxx>
 
@@ -2632,13 +2633,22 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
     {
         if (IsImportSymbolNames())
         {
-            aNewName = SmLocalizedSymbolData::GetUiSymbolName(rName.subView(1));
-            bReplace = true;
+            const SmSym* pSym
+                = SM_MOD()->GetSymbolManager().GetSymbolByExportName(rName.subView(1));
+            if (pSym)
+            {
+                aNewName = pSym->GetName();
+                bReplace = true;
+            }
         }
         else if (IsExportSymbolNames())
         {
-            aNewName = SmLocalizedSymbolData::GetExportSymbolName(rName.subView(1));
-            bReplace = true;
+            const SmSym* pSym = SM_MOD()->GetSymbolManager().GetSymbolByUiName(rName.subView(1));
+            if (pSym)
+            {
+                aNewName = pSym->GetExportName();
+                bReplace = true;
+            }
         }
     }
     if (!aNewName.isEmpty())

@@ -2155,8 +2155,7 @@ static bool lcl_IsFromGreekSymbolSet( std::u16string_view aTokenText )
     // valid symbol name needs to have a '%' at pos 0 and at least an additional char
     if (aTokenText.size() > 2 && aTokenText[0] == u'%')
     {
-        OUString aName( aTokenText.substr(1) );
-        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
+        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName(aTokenText.substr(1));
         if (pSymbol && SmLocalizedSymbolData::GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
             bRes = true;
     }
@@ -2186,8 +2185,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
 
-    OUString aName(GetToken().aText.copy(1));
-    if (nullptr != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
+    if (nullptr != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1))))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );

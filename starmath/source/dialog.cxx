@@ -1544,7 +1544,7 @@ void SmSymDefineDialog::FillStyles()
 SmSym* SmSymDefineDialog::GetSymbol(const weld::ComboBox& rComboBox)
 {
     assert((&rComboBox == m_xOldSymbols.get() || &rComboBox == m_xSymbols.get()) && "Sm : wrong combobox");
-    return m_aSymbolMgrCopy.GetSymbolByName(rComboBox.get_active_text());
+    return m_aSymbolMgrCopy.GetSymbolByUiName(rComboBox.get_active_text());
 }
 
 IMPL_LINK(SmSymDefineDialog, OldSymbolChangeHdl, weld::ComboBox&, rComboBox, void)
@@ -1652,7 +1652,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, weld::Button&, rButton, void )
     // add symbol
     const SmSym aNewSymbol(m_xSymbols->get_active_text(), m_xCharsetDisplay->GetFont(),
             m_xCharsetDisplay->GetSelectCharacter(), m_xSymbolSets->get_active_text());
-    //OSL_ENSURE( m_aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
+    //OSL_ENSURE( m_aSymbolMgrCopy.GetSymbolByUiName(aTmpSymbolName) == NULL, "symbol already exists" );
     m_aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
@@ -1750,7 +1750,7 @@ void SmSymDefineDialog::UpdateButtons()
                     && m_xCharsetDisplay->GetSelectCharacter() == m_xOrigSymbol->GetCharacter();
 
         // only add it if there isn't already a symbol with the same name
-        bAdd    = m_aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == nullptr;
+        bAdd    = m_aSymbolMgrCopy.GetSymbolByUiName(aTmpSymbolName) == nullptr;
 
         // only delete it if all settings are equal
         bDelete = bool(m_xOrigSymbol);
@@ -1982,7 +1982,7 @@ bool SmSymDefineDialog::SelectSymbol(weld::ComboBox& rComboBox,
         OUString     aTmpOldSymbolSetName;
         if (nPos != -1)
         {
-            pOldSymbol        = m_aSymbolMgrCopy.GetSymbolByName(aNormName);
+            pOldSymbol        = m_aSymbolMgrCopy.GetSymbolByUiName(aNormName);
             aTmpOldSymbolSetName = m_xOldSymbolSets->get_active_text();
         }
         SetOrigSymbol(pOldSymbol, aTmpOldSymbolSetName);

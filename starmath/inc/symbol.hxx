@@ -93,11 +93,9 @@ public:
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const OUString & rSymbolName );
 
-    SmSym       *   GetSymbolByName(const OUString& rSymbolName);
-    const SmSym *   GetSymbolByName(const OUString& rSymbolName) const
-    {
-        return const_cast<SmSymbolManager *>(this)->GetSymbolByName(rSymbolName);
-    }
+    SmSym* GetSymbolByName(std::u16string_view rSymbolName);
+    SmSym* GetSymbolByUiName(std::u16string_view rSymbolName);
+    SmSym* GetSymbolByExportName(std::u16string_view rSymbolName);
 
     bool        IsModified() const          { return m_bModified; }
     void        SetModified(bool bModify)   { m_bModified = bModify; }

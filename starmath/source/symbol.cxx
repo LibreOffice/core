@@ -120,23 +120,35 @@ SmSymbolManager& SmSymbolManager::operator = (const SmSymbolManager& rSymbolSetM
     return *this;
 }
 
-
-SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
+SmSym* SmSymbolManager::GetSymbolByName(std::u16string_view rSymbolName)
 {
+    SmSym* pRes = GetSymbolByUiName(rSymbolName);
+    if (!pRes)
+        pRes = GetSymbolByExportName(rSymbolName);
+    return pRes;
+}
+
+SmSym *SmSymbolManager::GetSymbolByUiName(std::u16string_view rSymbolName)
+{
+    OUString aSymbolName(rSymbolName);
     SmSym *pRes = nullptr;
-    SymbolMap_t::iterator aIt( m_aSymbols.find( rSymbolName ) );
+    SymbolMap_t::iterator aIt( m_aSymbols.find( aSymbolName ) );
     if (aIt != m_aSymbols.end())
         pRes = &aIt->second;
-    else
+    return pRes;
+}
+
+SmSym* SmSymbolManager::GetSymbolByExportName(std::u16string_view rSymbolName)
+{
+    OUString aSymbolName(rSymbolName);
+    SmSym* pRes = nullptr;
+    for (auto& rPair : m_aSymbols)
     {
-        for (auto& rPair : m_aSymbols)
+        SmSym& rSymbol = rPair.second;
+        if (rSymbol.GetExportName() == aSymbolName)
         {
-            SmSym& rSymbol = rPair.second;
-            if (rSymbol.GetExportName() == rSymbolName)
-            {
-                pRes = &rSymbol;
-                break;
-            }
+            pRes = &rSymbol;
+            break;
         }
     }
     return pRes;
@@ -161,7 +173,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
     const OUString& aSymbolName( rSymbol.GetName() );
     if (!aSymbolName.isEmpty() && !rSymbol.GetSymbolSetName().isEmpty())
     {
-        const SmSym *pFound = GetSymbolByName( aSymbolName );
+        const SmSym *pFound = GetSymbolByUiName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
 
         // avoid having the same symbol name twice but with different symbols in use
@@ -263,6 +275,7 @@ void SmSymbolManager::Load()
         OUString aSymbolName = "i" + rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );
+        aSymbol.SetExportName("i" + rSym.GetExportName());
 
         AddOrReplaceSymbol( aSymbol );
     }
