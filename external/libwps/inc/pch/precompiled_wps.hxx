@@ -13,13 +13,14 @@
  manual changes will be rewritten by the next run of update_pch.sh (which presumably
  also fixes all possible problems, so it's usually better to use it).
 
- Generated on 2019-10-13 10:00:18 using:
+ Generated on 2023-09-21 20:32:22 using:
  ./bin/update_pch external/libwps wps --cutoff=1 --exclude:system --include:module --include:local
 
  If after updating build fails, use the following command to locate conflicting headers:
  ./bin/update_pch_bisect ./external/libwps/inc/pch/precompiled_wps.hxx "make external/libwps.build" --find-conflicts
 */
 
+#include <sal/config.h>
 #if PCH_LEVEL >= 1
 #include <algorithm>
 #include <cassert>
