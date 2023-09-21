@@ -792,7 +792,7 @@ public:
 
     /// This text frame may have a split fly frames anchored to it. Is any of them a frame that has
     /// a follow, i.e. not the last in a master -> follow 1 -> ... -> last follow chain?
-    bool HasNonLastSplitFlyDrawObj() const;
+    SwFlyAtContentFrame* HasNonLastSplitFlyDrawObj() const;
 
     /// This text frame has a follow and the text frame don't contain text. Additionally one split
     /// fly is anchored to the text frame.

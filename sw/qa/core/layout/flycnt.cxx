@@ -1103,6 +1103,48 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNestedOverlap)
     SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rPage2Objs.size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
+{
+    // Given a document with a multi-page floating table on pages 1 -> 2 -> 3:
+    createSwDoc("floattable-move-master.docx");
+
+    // When adding an empty para before the table, so the table gets shifted to pages 2 -> 3:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/4);
+    pWrtShell->SplitNode();
+
+    // Then make sure page 1 has no flys, page 2 and 3 has the split fly and no flys on page 4:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    // Without the accompanying fix in place, this test would have failed, the start of the fly was
+    // still on page 1 instead of page 2.
+    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage2Fly = rPage2Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage2Fly);
+    CPPUNIT_ASSERT(!pPage2Fly->GetPrecede());
+    CPPUNIT_ASSERT(pPage2Fly->HasFollow());
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    SwSortedObjs& rPage3Objs = *pPage3->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage3Objs.size());
+    auto pPage3Fly = rPage3Objs[0]->DynCastFlyFrame()->DynCastFlyAtContentFrame();
+    CPPUNIT_ASSERT(pPage3Fly);
+    CPPUNIT_ASSERT(pPage3Fly->GetPrecede());
+    CPPUNIT_ASSERT(!pPage3Fly->GetFollow());
+    auto pPage4 = pPage3->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage4);
+    CPPUNIT_ASSERT(!pPage4->GetSortedObjs());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

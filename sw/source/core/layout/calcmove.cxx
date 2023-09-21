@@ -162,6 +162,19 @@ bool SwContentFrame::ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool & )
                      !pNewUpper->GetUpper()->GetNext() ) ) ) )
                 nSpace += pNewUpper->Grow( LONG_MAX, true );
 
+            auto pTextFrame = DynCastTextFrame();
+            if (pTextFrame)
+            {
+                // This is a text frame. Check if it's an anchor for a non-last element in a split
+                // fly chain. If so, we can only move back in case not only the text frame itself,
+                // but also its fly fits nSpace.
+                SwFlyAtContentFrame* pFly = pTextFrame->HasNonLastSplitFlyDrawObj();
+                if (pFly && pFly->getFrameArea().Height() > nSpace)
+                {
+                    return false;
+                }
+            }
+
             if ( nMoveAnyway < 3 )
             {
                 if ( nSpace )
