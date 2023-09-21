@@ -395,6 +395,7 @@ public:
 #ifdef DBG_UTIL
     bool IsInDelList( SwSectionFrame* pSct ) const;
 #endif
+    bool IsInFlyDelList( SwFlyFrame* pFly ) const;
 
     void SetCallbackActionEnabled( bool b ) { mbCallbackActionEnabled = b; }
     bool IsCallbackActionEnabled() const    { return mbCallbackActionEnabled; }

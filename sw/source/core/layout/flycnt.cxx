@@ -1554,6 +1554,12 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     assert(pFly && "GetNextFlyLeaf: missing fly frame");
     assert(pFly->IsFlySplitAllowed() && "GetNextFlyLeaf: fly split not allowed");
 
+    if (pFly->HasFollow())
+    {
+        // If we already have a follow, then no need to create a new one, just use it.
+        return pFly->GetFollow();
+    }
+
     SwTextFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
 
     if (!pFlyAnchor)
@@ -1701,6 +1707,16 @@ void SwRootFrame::DeleteEmptyFlys_()
     }
 }
 
+bool SwRootFrame::IsInFlyDelList( SwFlyFrame* pFly ) const
+{
+    if (!mpFlyDestroy)
+    {
+        return false;
+    }
+
+    return mpFlyDestroy->find(pFly) != mpFlyDestroy->end();
+}
+
 const SwFlyAtContentFrame* SwFlyAtContentFrame::GetPrecede() const
 {
     return static_cast<const SwFlyAtContentFrame*>(SwFlowFrame::GetPrecede());
@@ -1720,6 +1736,17 @@ void SwFlyAtContentFrame::DelEmpty()
         {
             // The anchor has a precede: invalidate it so that JoinFrame() is called on it.
             pAnchorPrecede->GetFrame().InvalidateSize();
+        }
+        else if (SwTextFrame* pAnchorFollow = pAnchor->GetFollow())
+        {
+            // No precede, but has a follow. Then move the master just before the follow and join.
+            // This way the anchor chain and the fly chain will match even after clearing this
+            // frame's follow pointer.
+            if (pAnchorFollow != pAnchor->GetNext())
+            {
+                pAnchor->MoveSubTree(pAnchorFollow->GetUpper(), pAnchorFollow);
+                pAnchor->JoinFrame();
+            }
         }
     }
 
