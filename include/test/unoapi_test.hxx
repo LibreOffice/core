@@ -36,12 +36,14 @@ public:
     OUString createFileURL(std::u16string_view aFileBase);
     OUString createFilePath(std::u16string_view aFileBase);
     void load(const OUString& rURL, const char* pPassword = nullptr);
+    void loadWithParams(const OUString& rURL, const css::uno::Sequence<css::beans::PropertyValue>& rParams);
     OUString loadFromURL(std::u16string_view aFileBase, const char* pPassword = nullptr);
 
     css::uno::Any executeMacro(const OUString& rScriptURL,
                                const css::uno::Sequence<css::uno::Any>& rParams = {});
 
     void save(const OUString& rFilter, const char* pPassword = nullptr);
+    void saveWithParams(const css::uno::Sequence<css::beans::PropertyValue>& rParams);
     void saveAndReload(const OUString& rFilter, const char* pPassword = nullptr);
 
     std::unique_ptr<vcl::pdf::PDFiumDocument> parsePDFExport(const OString& rPassword = OString());

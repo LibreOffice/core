@@ -121,6 +121,18 @@ void UnoApiTest::load(OUString const& rURL, const char* pPassword)
     }
 }
 
+void UnoApiTest::loadWithParams(OUString const& rURL, const uno::Sequence<beans::PropertyValue>& rParams)
+{
+    if (mxComponent.is())
+    {
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+
+    mxComponent
+        = loadFromDesktop(rURL, OUString(), rParams);
+}
+
 OUString UnoApiTest::loadFromURL(std::u16string_view aFileBase, const char* pPassword)
 {
     OUString aFileName = createFileURL(aFileBase);
@@ -198,6 +210,12 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
         else if (rFilter == "MS PowerPoint 97")
             validate(maTempFile.GetFileName(), test::MSBINARY);
     }
+}
+
+void UnoApiTest::saveWithParams(const uno::Sequence<beans::PropertyValue>& rParams)
+{
+    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
+    xStorable->storeToURL(maTempFile.GetURL(), rParams);
 }
 
 void UnoApiTest::saveAndReload(const OUString& rFilter, const char* pPassword)

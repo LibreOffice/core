@@ -33,6 +33,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <formula/grammar.hxx>
 #include <tools/fldunit.hxx>
@@ -983,10 +984,15 @@ void ScExportTest2::testHyperlinkTargetFrameODS()
 
 void ScExportTest2::testOpenDocumentAsReadOnly()
 {
-    createScDoc("xlsx/open-as-read-only.xlsx");
+    uno::Sequence<beans::PropertyValue> aParams = {comphelper::makePropertyValue("Silent", true) };
+
+    loadWithParams(createFileURL(OUString::createFromAscii("xlsx/open-as-read-only.xlsx")), aParams);
     ScDocShell* pDocSh = getScDocShell();
     CPPUNIT_ASSERT(pDocSh->IsSecurityOptOpenReadOnly());
-    saveAndReload("Calc Office Open XML");
+
+    saveWithParams(uno::Sequence<beans::PropertyValue>());
+    loadWithParams(maTempFile.GetURL(), aParams);
+
     pDocSh = getScDocShell();
     CPPUNIT_ASSERT(pDocSh->IsSecurityOptOpenReadOnly());
 }
