@@ -1255,6 +1255,12 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
                 continue;
             }
 
+            if (pAnchoredObjFly->getRootFrame()->IsInFlyDelList(pAnchoredObjFly))
+            {
+                // A fly overlapping with a to-be-deleted fly is fine.
+                continue;
+            }
+
             SwFrame* pAnchoredObjFlyAnchor = pAnchoredObjFly->GetAnchorFrameContainingAnchPos();
             if (pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->IsInFly())
             {
