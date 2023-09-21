@@ -5700,7 +5700,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                     {
                         SwTable* pTable = SwTable::FindTable(pFrameFormat);
                         if (pTable)
-                            BringTypesWithFlowFramesToAttention({pTable->GetTableNode()});
+                            BringTypesWithFlowFramesToAttention({pTable->GetTableNode()}, false);
                     }
             }
             else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
@@ -5804,7 +5804,7 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                                 aNodesArr.push_back(pTable->GetTableNode());
                         }
                 }
-                BringTypesWithFlowFramesToAttention(aNodesArr);
+                BringTypesWithFlowFramesToAttention(aNodesArr, false);
             }
             else if (nType == ContentTypeId::FRAME || nType == ContentTypeId::GRAPHIC ||
                      nType == ContentTypeId::OLE)
@@ -6033,7 +6033,8 @@ void SwContentTree::BringBookmarksToAttention(const std::vector<OUString>& rName
 }
 
 void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const SwNode*>& rNodes,
-                                                        const bool bIncludeTopMargin){
+                                                        const bool bIncludeTopMargin)
+{
     std::vector<basegfx::B2DRange> aRanges;
     for (const auto* pNode : rNodes)
     {
