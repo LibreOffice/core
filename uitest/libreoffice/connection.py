@@ -16,9 +16,9 @@ try:
     import pyuno
     import uno
 except ImportError:
-    print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables")
-    print("PYTHONPATH=/installation/opt/program")
-    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
+    print("pyuno not found: try to set PYTHONPATH and URE_BOOTSTRAP variables", flush=True)
+    print("PYTHONPATH=/installation/opt/program", flush=True)
+    print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc", flush=True)
     raise
 
 def signal_handler(signal_num, frame):
@@ -104,7 +104,7 @@ class OfficeConnection:
         xUnoResolver = xLocalContext.ServiceManager.createInstanceWithContext(
                 "com.sun.star.bridge.UnoUrlResolver", xLocalContext)
         url = "uno:" + socket + ";urp;StarOffice.ComponentContext"
-        print("OfficeConnection: connecting to: " + url)
+        print("OfficeConnection: connecting to: " + url, flush=True)
         while True:
             if self.soffice and self.soffice.poll() is not None:
                 raise Exception("soffice has stopped.")
@@ -113,7 +113,7 @@ class OfficeConnection:
                 xContext = xUnoResolver.resolve(url)
                 return xContext
             except pyuno.getClass("com.sun.star.connection.NoConnectException"):
-                print("NoConnectException: sleeping...")
+                print("NoConnectException: sleeping...", flush=True)
                 time.sleep(1)
 
     def tearDown(self):
@@ -126,17 +126,17 @@ class OfficeConnection:
         if self.soffice:
             if self.xContext:
                 try:
-                    print("tearDown: calling terminate()...")
+                    print("tearDown: calling terminate()...", flush=True)
                     xMgr = self.xContext.ServiceManager
                     xDesktop = xMgr.createInstanceWithContext(
                             "com.sun.star.frame.Desktop", self.xContext)
                     xDesktop.terminate()
-                    print("...done")
+                    print("...done", flush=True)
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
-                    print("caught while TearDown:\n", traceback.format_exc())
+                    print("caught while TearDown:\n", traceback.format_exc(), flush=True)
                     pass  # ignore, also means disposed
                 except pyuno.getClass("com.sun.star.lang.DisposedException"):
-                    print("caught while TearDown:\n", traceback.format_exc())
+                    print("caught while TearDown:\n", traceback.format_exc(), flush=True)
                     pass  # ignore
             else:
                 self.soffice.terminate()
