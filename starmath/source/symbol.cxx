@@ -140,12 +140,11 @@ SmSym *SmSymbolManager::GetSymbolByUiName(std::u16string_view rSymbolName)
 
 SmSym* SmSymbolManager::GetSymbolByExportName(std::u16string_view rSymbolName)
 {
-    OUString aSymbolName(rSymbolName);
     SmSym* pRes = nullptr;
     for (auto& rPair : m_aSymbols)
     {
         SmSym& rSymbol = rPair.second;
-        if (rSymbol.GetExportName() == aSymbolName)
+        if (rSymbol.GetExportName() == rSymbolName)
         {
             pRes = &rSymbol;
             break;
