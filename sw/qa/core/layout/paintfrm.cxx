@@ -68,6 +68,47 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitTableBorder)
     // missing.
     CPPUNIT_ASSERT_EQUAL(4, nHorizontalBorders);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testRTLBorderMerge)
+{
+    // Given a document with an RTL table:
+    createSwDoc("rtl-table.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDocShell* pShell = pTextDoc->GetDocShell();
+
+    // When rendering that document:
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+
+    // Then make sure the 5 columns all have left and right vertical borders:
+    MetafileXmlDump aDumper;
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//polyline[@style='solid']/point");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    int nVerticalBorders = 0;
+    // Count the vertical borders:
+    for (int i = 0; i < xmlXPathNodeSetGetLength(pXmlNodes); i += 2)
+    {
+        xmlNodePtr pStart = pXmlNodes->nodeTab[i];
+        xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
+        xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
+        xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
+        if (nStartY == nEndY)
+        {
+            // Horizontal border.
+            continue;
+        }
+
+        ++nVerticalBorders;
+    }
+    xmlXPathFreeObject(pXmlObj);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6
+    // - Actual  : 4
+    // i.e. the 2nd and 5th vertical border was missing.
+    CPPUNIT_ASSERT_EQUAL(6, nVerticalBorders);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

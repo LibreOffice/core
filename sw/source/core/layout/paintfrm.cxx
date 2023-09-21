@@ -3123,11 +3123,13 @@ void SwTabFramePainter::Insert( SwLineEntry& rNew, bool bHori )
         const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
         bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
     }
+    bool bR2L = mrTabFrame.IsRightToLeft();
     while ( aIter != pLineSet->end() && rNew.mnStartPos < rNew.mnEndPos )
     {
         const SwLineEntry& rOld = *aIter;
 
-        if (rOld.mnLimitedEndPos || (bWordTableCell && (rOld.mbOuter != rNew.mbOuter)))
+        // The bWordTableCell code only works for LTR at the moment, avoid it for RTL.
+        if (rOld.mnLimitedEndPos || (bWordTableCell && (rOld.mbOuter != rNew.mbOuter) && !bR2L))
         {
             // Don't merge with this line entry as it ends sooner than mnEndPos.
             ++aIter;
