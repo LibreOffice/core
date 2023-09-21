@@ -2637,7 +2637,7 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
                 = SM_MOD()->GetSymbolManager().GetSymbolByExportName(rName.subView(1));
             if (pSym)
             {
-                aNewName = pSym->GetName();
+                aNewName = pSym->GetUiName();
                 bReplace = true;
             }
         }

@@ -27,12 +27,12 @@
 
 
 SmSym::SmSym() :
-    m_aName(OUString("unknown")),
+    m_aUiName(OUString("unknown")),
     m_aSetName(OUString("unknown")),
     m_cChar('\0'),
     m_bPredefined(false)
 {
-    m_aExportName = m_aName;
+    m_aExportName = m_aUiName;
     m_aFace.SetTransparent(true);
     m_aFace.SetAlignment(ALIGN_BASELINE);
 }
@@ -47,7 +47,7 @@ SmSym::SmSym(const SmSym& rSymbol)
 SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
              const OUString& rSet, bool bIsPredefined)
 {
-    m_aName     = m_aExportName   = rName;
+    m_aUiName   = m_aExportName   = rName;
 
     m_aFace     = rFont;
     m_aFace.SetTransparent(true);
@@ -61,7 +61,7 @@ SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
 
 SmSym& SmSym::operator = (const SmSym& rSymbol)
 {
-    m_aName         = rSymbol.m_aName;
+    m_aUiName       = rSymbol.m_aUiName;
     m_aExportName   = rSymbol.m_aExportName;
     m_cChar         = rSymbol.m_cChar;
     m_aFace         = rSymbol.m_aFace;
@@ -76,7 +76,7 @@ SmSym& SmSym::operator = (const SmSym& rSymbol)
 
 bool SmSym::IsEqualInUI( const SmSym& rSymbol ) const
 {
-    return  m_aName == rSymbol.m_aName &&
+    return  m_aUiName == rSymbol.m_aUiName &&
             m_aFace == rSymbol.m_aFace &&
             m_cChar == rSymbol.m_cChar;
 }
@@ -170,7 +170,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
 {
     bool bAdded = false;
 
-    const OUString& aSymbolName( rSymbol.GetName() );
+    const OUString& aSymbolName( rSymbol.GetUiName() );
     if (!aSymbolName.isEmpty() && !rSymbol.GetSymbolSetName().isEmpty())
     {
         const SmSym *pFound = GetSymbolByUiName( aSymbolName );
@@ -248,8 +248,8 @@ void SmSymbolManager::Load()
     for (size_t i = 0;  i < nSymbolCount;  ++i)
     {
         const SmSym &rSym = aSymbols[i];
-        OSL_ENSURE( !rSym.GetName().isEmpty(), "symbol without name!" );
-        if (!rSym.GetName().isEmpty())
+        OSL_ENSURE( !rSym.GetUiName().isEmpty(), "symbol without name!" );
+        if (!rSym.GetUiName().isEmpty())
             AddOrReplaceSymbol( rSym );
     }
     m_bModified = true;
@@ -272,7 +272,7 @@ void SmSymbolManager::Load()
         vcl::Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
-        OUString aSymbolName = "i" + rSym.GetName();
+        OUString aSymbolName = "i" + rSym.GetUiName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );
         aSymbol.SetExportName("i" + rSym.GetExportName());

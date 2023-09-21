@@ -1325,7 +1325,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, GetClickHdl, weld::Button&, void)
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
-        OUString aText = "%" + pSym->GetName() + " ";
+        OUString aText = "%" + pSym->GetUiName() + " ";
 
         rViewSh.GetViewFrame().GetDispatcher()->ExecuteList(
                 SID_INSERTSPECIAL, SfxCallMode::RECORD,
@@ -1409,7 +1409,7 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 
     m_xSymbolSetDisplay->SelectSymbol(nSymbolNo);
     m_aSymbolDisplay.SetSymbol(pSym);
-    m_xSymbolName->set_label(pSym ? pSym->GetName() : OUString());
+    m_xSymbolName->set_label(pSym ? pSym->GetUiName() : OUString());
 }
 
 const SmSym* SmSymbolDialog::GetSymbol() const
@@ -1491,7 +1491,7 @@ void SmSymDefineDialog::FillSymbols(weld::ComboBox& rComboBox, bool bDeleteText)
     weld::ComboBox& rBox = &rComboBox == m_xOldSymbols.get() ? *m_xOldSymbolSets : *m_xSymbolSets;
     SymbolPtrVec_t aSymSet(m_aSymbolMgrCopy.GetSymbolSet(rBox.get_active_text()));
     for (const SmSym* i : aSymSet)
-        rComboBox.append_text(i->GetName());
+        rComboBox.append_text(i->GetUiName());
 }
 
 void SmSymDefineDialog::FillSymbolSets(weld::ComboBox& rComboBox, bool bDeleteText)
@@ -1657,7 +1657,7 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, weld::Button&, rButton, void )
 
     // update display of new symbol
     m_aSymbolDisplay.SetSymbol( &aNewSymbol );
-    m_xSymbolName->set_label(aNewSymbol.GetName());
+    m_xSymbolName->set_label(aNewSymbol.GetUiName());
     m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
     // update list box entries
@@ -1693,7 +1693,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, weld::Button&, rButton, void )
 
     // update display of new symbol
     m_aSymbolDisplay.SetSymbol(&aNewSymbol);
-    m_xSymbolName->set_label(aNewSymbol.GetName());
+    m_xSymbolName->set_label(aNewSymbol.GetUiName());
     m_xSymbolSetName->set_label(aNewSymbol.GetSymbolSetName());
 
     // update list box entries
@@ -1713,7 +1713,7 @@ IMPL_LINK(SmSymDefineDialog, DeleteClickHdl, weld::Button&, rButton, void)
 
     if (m_xOrigSymbol)
     {
-        m_aSymbolMgrCopy.RemoveSymbol(m_xOrigSymbol->GetName());
+        m_aSymbolMgrCopy.RemoveSymbol(m_xOrigSymbol->GetUiName());
 
         // clear display for original symbol
         SetOrigSymbol(nullptr, OUString());
@@ -1742,7 +1742,7 @@ void SmSymDefineDialog::UpdateButtons()
         //! (Font-, Style- and SymbolSet name comparison is not case sensitive)
         bool bEqual = m_xOrigSymbol
                     && aTmpSymbolSetName.equalsIgnoreAsciiCase(m_xOldSymbolSetName->get_label())
-                    && aTmpSymbolName == m_xOrigSymbol->GetName()
+                    && aTmpSymbolName == m_xOrigSymbol->GetUiName()
                     && m_xFonts->get_active_text().equalsIgnoreAsciiCase(
                             m_xOrigSymbol->GetFace().GetFamilyName())
                     && m_xStyles->get_active_text().equalsIgnoreAsciiCase(
@@ -1912,7 +1912,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
         // set new symbol
         m_xOrigSymbol.reset(new SmSym(*pSymbol));
 
-        aSymName    = pSymbol->GetName();
+        aSymName    = pSymbol->GetUiName();
         aSymSetName = rSymbolSetName;
         m_aOldSymbolDisplay.SetSymbol( pSymbol );
     }
@@ -1966,7 +1966,7 @@ bool SmSymDefineDialog::SelectSymbol(weld::ComboBox& rComboBox,
 
                 // since SelectChar will also set the unicode point as text in the
                 // symbols box, we have to set the symbol name again to get that one displayed
-                m_xSymbols->set_entry_text(pSymbol->GetName());
+                m_xSymbols->set_entry_text(pSymbol->GetUiName());
             }
         }
 

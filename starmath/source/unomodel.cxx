@@ -867,7 +867,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 {
                     if (pSymbol && !pSymbol->IsPredefined() &&
                         (!bUsedSymbolsOnly ||
-                         rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end()))
+                         rUsedSymbols.find( pSymbol->GetUiName() ) != rUsedSymbols.end()))
                         aVector.push_back ( pSymbol );
                 }
                 Sequence < SymbolDescriptor > aSequence ( aVector.size() );
@@ -875,7 +875,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
 
                 for (const SmSym* pSymbol : aVector)
                 {
-                    pDescriptor->sName = pSymbol->GetName();
+                    pDescriptor->sName = pSymbol->GetUiName();
                     pDescriptor->sExportName = pSymbol->GetExportName();
                     pDescriptor->sSymbolSet = pSymbol->GetSymbolSetName();
                     pDescriptor->nCharacter = static_cast < sal_Int32 > (pSymbol->GetCharacter());

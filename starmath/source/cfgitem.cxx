@@ -740,7 +740,7 @@ void SmMathConfig::StripFontFormatList( const std::vector< SmSym > &rSymbols )
     SmFontFormatList aUsedList;
     for (i = 0;  i < rSymbols.size();  ++i)
     {
-        OSL_ENSURE( rSymbols[i].GetName().getLength() > 0, "non named symbol" );
+        OSL_ENSURE( !rSymbols[i].GetUiName().isEmpty(), "non named symbol" );
         aUsedList.GetFontFormatId( SmFontFormat( rSymbols[i].GetFace() ) , true );
     }
     const SmFormat & rStdFmt = GetStandardFormat();
