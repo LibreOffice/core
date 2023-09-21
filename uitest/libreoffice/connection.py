@@ -10,6 +10,7 @@ import time
 import traceback
 import uuid
 import os
+import signal
 
 try:
     import pyuno
@@ -20,6 +21,9 @@ except ImportError:
     print("URE_BOOTSTRAP=file:///installation/opt/program/fundamentalrc")
     raise
 
+def signal_handler(signal_num, frame):
+    signal_name = signal.Signals(signal_num).name
+    print(f'Signal handler called with signal {signal_name} ({signal_num})', flush=True)
 
 class OfficeConnection:
     def __init__(self, args):
@@ -33,6 +37,9 @@ class OfficeConnection:
         If the connection method is path the instance will be created as a
         new subprocess. If the connection method is connect the instance tries
         to connect to an existing instance with the specified socket string """
+        signal.signal(signal.SIGCHLD, signal_handler)
+        signal.signal(signal.SIGPIPE, signal_handler)
+
         (method, sep, rest) = self.args["--soffice"].partition(":")
         if sep != ":":
             raise Exception("soffice parameter does not specify method")
