@@ -28,19 +28,19 @@ using namespace ::com::sun::star::beans;
 
 CharacterAttributesHelper::CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor )
 {
-    m_aAttributeMap.emplace( OUString( "CharBackColor" ),     Any( nBackColor ) );
-    m_aAttributeMap.emplace( OUString( "CharColor" ),         Any( nColor ) );
-    m_aAttributeMap.emplace( OUString( "CharFontCharSet" ),   Any( static_cast<sal_Int16>(rFont.GetCharSet()) ) );
-    m_aAttributeMap.emplace( OUString( "CharFontFamily" ),    Any( static_cast<sal_Int16>(rFont.GetFamilyType()) ) );
-    m_aAttributeMap.emplace( OUString( "CharFontName" ),      Any( rFont.GetFamilyName() ) );
-    m_aAttributeMap.emplace( OUString( "CharFontPitch" ),     Any( static_cast<sal_Int16>(rFont.GetPitch()) ) );
-    m_aAttributeMap.emplace( OUString( "CharFontStyleName" ), Any( rFont.GetStyleName() ) );
-    m_aAttributeMap.emplace( OUString( "CharHeight" ),        Any( static_cast<sal_Int16>(rFont.GetFontSize().Height()) ) );
-    m_aAttributeMap.emplace( OUString( "CharScaleWidth" ),    Any( static_cast<sal_Int16>(rFont.GetFontSize().Width()) ) );
-    m_aAttributeMap.emplace( OUString( "CharStrikeout" ),     Any( static_cast<sal_Int16>(rFont.GetStrikeout()) ) );
-    m_aAttributeMap.emplace( OUString( "CharUnderline" ),     Any( static_cast<sal_Int16>(rFont.GetUnderline()) ) );
-    m_aAttributeMap.emplace( OUString( "CharWeight" ),        Any( static_cast<float>(rFont.GetWeight()) ) );
-    m_aAttributeMap.emplace( OUString( "CharPosture" ),       Any( vcl::unohelper::ConvertFontSlant(rFont.GetItalic()) ) );
+    m_aAttributeMap.emplace( u"CharBackColor"_ustr,     Any( nBackColor ) );
+    m_aAttributeMap.emplace( u"CharColor"_ustr,         Any( nColor ) );
+    m_aAttributeMap.emplace( u"CharFontCharSet"_ustr,   Any( static_cast<sal_Int16>(rFont.GetCharSet()) ) );
+    m_aAttributeMap.emplace( u"CharFontFamily"_ustr,    Any( static_cast<sal_Int16>(rFont.GetFamilyType()) ) );
+    m_aAttributeMap.emplace( u"CharFontName"_ustr,      Any( rFont.GetFamilyName() ) );
+    m_aAttributeMap.emplace( u"CharFontPitch"_ustr,     Any( static_cast<sal_Int16>(rFont.GetPitch()) ) );
+    m_aAttributeMap.emplace( u"CharFontStyleName"_ustr, Any( rFont.GetStyleName() ) );
+    m_aAttributeMap.emplace( u"CharHeight"_ustr,        Any( static_cast<sal_Int16>(rFont.GetFontSize().Height()) ) );
+    m_aAttributeMap.emplace( u"CharScaleWidth"_ustr,    Any( static_cast<sal_Int16>(rFont.GetFontSize().Width()) ) );
+    m_aAttributeMap.emplace( u"CharStrikeout"_ustr,     Any( static_cast<sal_Int16>(rFont.GetStrikeout()) ) );
+    m_aAttributeMap.emplace( u"CharUnderline"_ustr,     Any( static_cast<sal_Int16>(rFont.GetUnderline()) ) );
+    m_aAttributeMap.emplace( u"CharWeight"_ustr,        Any( static_cast<float>(rFont.GetWeight()) ) );
+    m_aAttributeMap.emplace( u"CharPosture"_ustr,       Any( vcl::unohelper::ConvertFontSlant(rFont.GetItalic()) ) );
 }
 
 
