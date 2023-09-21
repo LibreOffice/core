@@ -2083,6 +2083,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/configuration,\
 	InstallationIncompleteException \
 	InvalidBootstrapFileException \
 	MissingBootstrapFileException \
+    XDocumentation \
     XReadWriteAccess \
 	XTemplateContainer \
 	XTemplateInstance \

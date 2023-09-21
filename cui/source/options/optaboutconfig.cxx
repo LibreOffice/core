@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
+#include <com/sun/star/configuration/XDocumentation.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
@@ -70,13 +71,15 @@ struct UserData
     bool bIsPropertyPath;
     bool bIsReadOnly;
     OUString sPropertyPath;
+    OUString sTooltip;
     int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
-    explicit UserData( OUString aPropertyPath, bool isReadOnly )
+    explicit UserData( OUString aPropertyPath, OUString aTooltip, bool isReadOnly )
         : bIsPropertyPath( true )
         , bIsReadOnly( isReadOnly )
         , sPropertyPath(std::move(aPropertyPath))
+        , sTooltip(std::move(aTooltip))
         , aLineage(0)
     {}
 
@@ -186,12 +189,19 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
 IMPL_LINK(CuiAboutConfigTabPage, QueryTooltip, const weld::TreeIter&, rIter, OUString)
 {
     UserData *pUserData = weld::fromId<UserData*>(m_xPrefBox->get_id(rIter));
+    OUStringBuffer ret;
     if (pUserData && pUserData->bIsReadOnly)
     {
-        return CuiResId(RID_CUISTR_OPT_READONLY);
+        ret.append(CuiResId(RID_CUISTR_OPT_READONLY));
+    }
+    if (pUserData && !pUserData->sTooltip.isEmpty())
+    {
+        if (pUserData->bIsReadOnly)
+            ret.append("\n\n");
+        ret.append(pUserData->sTooltip);
     }
 
-    return OUString();
+    return ret.makeStringAndClear();
 }
 
 IMPL_LINK(CuiAboutConfigTabPage, HeaderBarClick, int, nColumn, void)
@@ -230,10 +240,11 @@ CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUString& rProp, const OUString& rStatus,
-                                        const OUString& rType, const OUString& rValue, const weld::TreeIter* pParentEntry,
+                                        const OUString& rType, const OUString& rValue, const OUString& rTooltip,
+                                        const weld::TreeIter* pParentEntry,
                                         bool bInsertToPrefBox, bool bIsReadOnly)
 {
-    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath, bIsReadOnly));
+    m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath, rTooltip, bIsReadOnly));
     if (bInsertToPrefBox)
     {
         OUString sId(weld::toId(m_vectorUserData.back().get()));
@@ -355,6 +366,16 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             catch (css::beans::UnknownPropertyException)
             {
                 SAL_WARN("cui.options", "unknown property: " << sPath + "/" + sPropertyName);
+            }
+
+            OUString sTooltip;
+            try
+            {
+                Reference<configuration::XDocumentation> xObjProp(xNameAccess, UNO_QUERY_THROW);
+                sTooltip = xObjProp->getDescriptionByHierarchicalName(sPath + "/" + sPropertyName);
+            }
+            catch (css::container::NoSuchElementException)
+            {
             }
 
             OUString sType = aNode.getValueTypeName();
@@ -518,7 +539,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             for(int j = 1; j < lineage; ++j)
                 index = sPath.indexOf("/", index + 1);
 
-            InsertEntry(sPath, sPath.copy(index + 1), item, sType, sValue.makeStringAndClear(),
+            InsertEntry(sPath, sPath.copy(index + 1), item, sType, sValue.makeStringAndClear(), sTooltip,
                         pParentEntry, !bLoadAll, bReadOnly);
         }
     }

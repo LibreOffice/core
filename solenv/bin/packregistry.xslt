@@ -56,7 +56,7 @@
   </xsl:template>
   <xsl:template
      match="oor:component-schema|oor:component-data|templates|component|group|
-            set|node-ref|prop|item|value|it|unicode|node">
+            set|node-ref|prop|item|value|it|unicode|node|info">
     <xsl:copy copy-namespaces="no">
       <!-- prune oor:component-data xmlns:install="..." namespaces (would only
            work in XSLT 2.0, however) -->
@@ -71,7 +71,7 @@
         <!-- ignore text elements (which must be whitespace only) -->
     </xsl:copy>
   </xsl:template>
-  <xsl:template match="info|import|uses|constraints"/>
+  <xsl:template match="import|uses|constraints"/>
     <!-- TODO: no longer strip elements when they are eventually read by
          configmgr implementation -->
   <xsl:template match="@*">

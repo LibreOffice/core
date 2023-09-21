@@ -54,7 +54,7 @@
   <xsl:template match = "label[../deprecated]"/>
 
   <!-- copy all other documentation with content -->
-  <xsl:template match="desc|label">
+  <xsl:template match="info|desc|label">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
       <xsl:value-of select="."/>

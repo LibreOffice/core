@@ -59,7 +59,6 @@ void Node::setFinalized(int layer) {
     finalized_ = layer;
 }
 
-
 rtl::Reference< Node > Node::getMember(OUString const & name) {
     NodeMap const & members = getMembers();
     NodeMap::const_iterator i(members.find(name));

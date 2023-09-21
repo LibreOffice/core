@@ -216,6 +216,8 @@ css::uno::Sequence< css::uno::Type > Access::getTypes()
     } else {
         types.push_back(
             cppu::UnoType< css::container::XHierarchicalNameAccess >::get());
+        types.push_back(
+            cppu::UnoType< css::configuration::XDocumentation >::get());
     }
     addTypes(&types);
     return comphelper::containerToSequence(types);
@@ -438,6 +440,19 @@ css::uno::Any Access::getByHierarchicalName(OUString const & aName)
             aName, getXWeak());
     }
     return child->asValue();
+}
+
+OUString Access::getDescriptionByHierarchicalName(OUString const & aName)
+{
+    assert(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    rtl::Reference< ChildAccess > child(getSubChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, getXWeak());
+    }
+    return child->getNode()->getDescription();
 }
 
 sal_Bool Access::hasByHierarchicalName(OUString const & aName)
@@ -1300,6 +1315,7 @@ css::uno::Any Access::queryInterface(css::uno::Type const & aType)
         static_cast< css::lang::XServiceInfo * >(this),
         static_cast< css::lang::XComponent * >(this),
         static_cast< css::container::XHierarchicalNameAccess * >(this),
+        static_cast< css::configuration::XDocumentation * >(this),
         static_cast< css::container::XContainer * >(this),
         static_cast< css::beans::XExactName * >(this),
         static_cast< css::container::XHierarchicalName * >(this),

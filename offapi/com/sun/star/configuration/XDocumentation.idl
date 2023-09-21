@@ -1,0 +1,34 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module com { module sun { module star { module configuration {
+
+/* Is used to deliver documentation for the configuration.
+
+   <p>This interface is still unpublished and unstable.</p>
+
+   @since LibreOffice 24.2
+*/
+interface XDocumentation {
+    /** @returns
+            the description for the requested object
+
+        @param aName
+            the hierarchical name of the object.
+
+        @throws NoSuchElementException
+            if an element under aName does not exist.
+     */
+    string getDescriptionByHierarchicalName( [in] string aName )
+            raises( com::sun::star::container::NoSuchElementException );
+};
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

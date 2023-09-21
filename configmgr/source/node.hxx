@@ -23,7 +23,9 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <xmlreader/span.hxx>
 
 namespace configmgr {
 
@@ -51,6 +53,9 @@ public:
     void setFinalized(int layer);
     int getFinalized() const { return finalized_;}
 
+    void setDescription(OUString const& description) { description_ = description; };
+    OUString getDescription() { return description_; }
+
     rtl::Reference< Node > getMember(OUString const & name);
 
 protected:
@@ -61,6 +66,7 @@ protected:
 private:
     int layer_;
     int finalized_;
+    OUString description_;
 };
 
 }

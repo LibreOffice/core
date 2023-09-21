@@ -94,6 +94,8 @@ private:
     State state_;
     long ignoring_;
     ElementStack elements_;
+    bool bIsParsingInfo_;
+    OUStringBuffer description_;
 };
 
 }
