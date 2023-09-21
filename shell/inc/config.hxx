@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
-#define INCLUDED_SHELL_INC_INTERNAL_CONFIG_HXX
+#pragma once
 
 #define COLUMN_HANDLER_DESCRIPTIVE_NAME    L"LibreOffice Column Handler"
 #define INFOTIP_HANDLER_DESCRIPTIVE_NAME   L"LibreOffice Infotip Handler"
@@ -74,7 +73,5 @@
 #define CONTENT_STYLE_PROPERTIES_COUNTRY         L"country"
 #define CONTENT_STYLE_PROPERTIES_LANGUAGEASIAN   L"language-asian"
 #define CONTENT_STYLE_PROPERTIES_COUNTRYASIAN    L"country-asian"
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
