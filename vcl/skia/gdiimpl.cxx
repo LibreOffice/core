@@ -254,7 +254,13 @@ public:
     {
         mpGraphics->performFlush();
         Stop();
-        SetPriority(TaskPriority::HIGHEST);
+        // tdf#157312 Don't change priority
+        // Instances of this class are constructed with
+        // TaskPriority::POST_PAINT, but then it was set to
+        // TaskPriority::HIGHEST when reused. Flushing
+        // seems to be expensive (at least with Skia/Metal) so keep the
+        // existing priority when reused.
+        SetPriority(TaskPriority::POST_PAINT);
     }
 };
 
