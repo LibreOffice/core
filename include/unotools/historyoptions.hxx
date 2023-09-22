@@ -44,7 +44,7 @@ namespace SvtHistoryOptions
 
         @param      eHistory select right history.
     */
-    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory);
+    UNOTOOLS_DLLPUBLIC void Clear(EHistoryType eHistory, const bool bClearPinnedItems = true);
 
     /** Return the complete specified history list.
 
@@ -81,7 +81,8 @@ namespace SvtHistoryOptions
 
     /** Delete item from the specified list.
     */
-    UNOTOOLS_DLLPUBLIC void DeleteItem(EHistoryType eHistory, const OUString& sURL);
+    UNOTOOLS_DLLPUBLIC void DeleteItem(EHistoryType eHistory, const OUString& sURL,
+                                       const bool bClearPinned = true);
 
     // tdf#38742 - toggle pinned state of an item
     UNOTOOLS_DLLPUBLIC void TogglePinItem(EHistoryType eHistory, const OUString& sURL);

@@ -383,7 +383,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
 
     if ( aCommand == CMD_CLEAR_LIST )
     {
-        SvtHistoryOptions::Clear( EHistoryType::PickList );
+        SvtHistoryOptions::Clear( EHistoryType::PickList, false );
         dispatchCommand(
             "vnd.org.libreoffice.recentdocs:ClearRecentFileList",
             css::uno::Sequence< css::beans::PropertyValue >() );

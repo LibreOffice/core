@@ -191,7 +191,7 @@ void RecentDocsView::clearUnavailableFiles(){
     {
         const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
         if ( !comphelper::DirectoryHelper::fileExists(rPickListEntry.sURL) ){
-            SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL);
+            SvtHistoryOptions::DeleteItem(EHistoryType::PickList,rPickListEntry.sURL, false);
         }
     }
     Reload();
