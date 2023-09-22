@@ -23,6 +23,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/document/BrokenPackageRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
@@ -371,6 +372,23 @@ bool LOKInteractionHandler::handleLoadReadOnlyRequest(const uno::Reference<task:
     return false;
 }
 
+bool LOKInteractionHandler::handlePackageReparationRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
+{
+    uno::Any const request(xRequest->getRequest());
+
+    document::BrokenPackageRequest aBrokenPackageRequest;
+    if (request >>= aBrokenPackageRequest)
+    {
+        auto xInteraction(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
+
+        if (xInteraction.is())
+            xInteraction->handleInteractionRequest(xRequest);
+
+        return true;
+    }
+    return false;
+}
+
 bool LOKInteractionHandler::handleFilterOptionsRequest(const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     document::FilterOptionsRequest aFilterOptionsRequest;
@@ -411,6 +429,9 @@ sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
         return true;
 
     if (handleLoadReadOnlyRequest(xRequest))
+        return true;
+
+    if (handlePackageReparationRequest(xRequest))
         return true;
 
     // TODO: perform more interactions 'for real' like the above

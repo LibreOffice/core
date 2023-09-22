@@ -1956,9 +1956,11 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
                 xHandler->handle( aRequest.GetRequest() );
                 if( aRequest.isApproved() )
                 {
+                    // lok: we want to overwrite file in jail, so don't use template flag
+                    bool bIsLOK = comphelper::LibreOfficeKit::isActive();
                     // broken package: try second loading and allow repair
                     pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, true ) );
-                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, true ) );
+                    pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, !bIsLOK ) );
                     pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
 
                     // the error must be reset and the storage must be reopened in new mode

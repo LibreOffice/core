@@ -79,6 +79,7 @@ private:
     static bool handleFilterOptionsRequest(const ::com::sun::star::uno::Reference<::com::sun::star::task::XInteractionRequest>& Request);
 
     static bool handleLoadReadOnlyRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
+    static bool handlePackageReparationRequest(const css::uno::Reference<css::task::XInteractionRequest>& xRequest);
 
 public:
     void SetPassword(char const* pPassword);
