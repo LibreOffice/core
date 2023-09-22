@@ -53,10 +53,6 @@
       constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog"
-      constructor="com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation">
-    <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>
-  </implementation>
   <implementation name="com.sun.star.comp.sd.InsertSlideController"
       constructor="com_sun_star_comp_sd_InsertSlideController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>

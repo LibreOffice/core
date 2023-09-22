@@ -754,9 +754,6 @@ sd/source/filter/html/htmlex.hxx:117
 sd/source/ui/inc/CustomAnimationPane.hxx:144
     sd::CustomAnimationPane maIdle
     sd idle treeview select
-sd/source/ui/inc/pubdlg.hxx:157
-    SdPublishingDlg aAssistentFunc
-    6
 sd/source/ui/inc/View.hxx:271
     sd::View maDropErrorIdle
     sd View DropError

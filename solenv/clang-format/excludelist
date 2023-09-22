@@ -9543,13 +9543,11 @@ sd/source/filter/eppt/pptx-stylesheet.cxx
 sd/source/filter/eppt/pptx-text.cxx
 sd/source/filter/eppt/text.hxx
 sd/source/filter/grf/sdgrffilter.cxx
-sd/source/filter/html/HtmlOptionsDialog.cxx
 sd/source/filter/html/buttonset.cxx
 sd/source/filter/html/htmlattr.cxx
 sd/source/filter/html/htmlattr.hxx
 sd/source/filter/html/htmlex.cxx
 sd/source/filter/html/htmlex.hxx
-sd/source/filter/html/pubdlg.cxx
 sd/source/filter/ppt/ppt97animations.cxx
 sd/source/filter/ppt/ppt97animations.hxx
 sd/source/filter/ppt/pptanimations.hxx

@@ -158,7 +158,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
 	sd/uiconfig/simpress/ui/pmsummarypage \
 	sd/uiconfig/simpress/ui/presentationdialog \
 	sd/uiconfig/simpress/ui/prntopts \
-	sd/uiconfig/simpress/ui/publishingdialog \
 	sd/uiconfig/simpress/ui/remotedialog \
 	sd/uiconfig/simpress/ui/rotatemenu \
 	sd/uiconfig/simpress/ui/scalemenu \

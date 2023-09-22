@@ -36,7 +36,6 @@ modules/sdraw/ui/drawparadialog.ui
 modules/sdraw/ui/drawprtldialog.ui
 modules/sdraw/ui/vectorize.ui
 
-modules/simpress/ui/publishingdialog.ui
 modules/simpress/ui/customslideshows.ui
 modules/simpress/ui/dlgfield.ui
 modules/simpress/ui/presentationdialog.ui

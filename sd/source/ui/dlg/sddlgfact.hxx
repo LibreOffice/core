@@ -34,7 +34,6 @@
 #include <dlgfield.hxx>
 #include <sdpreslt.hxx>
 #include <prltempl.hxx>
-#include <pubdlg.hxx>
 #include <dlgsnap.hxx>
 #include <present.hxx>
 #include <vectdlg.hxx>
@@ -364,23 +363,6 @@ public:
     virtual OUString GetScreenshotId() const override;
 };
 
-class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
-{
-private:
-    std::unique_ptr<SdPublishingDlg> m_xDlg;
-public:
-    AbstractSdPublishingDlg_Impl(std::unique_ptr<SdPublishingDlg> pDlg)
-        : m_xDlg(std::move(pDlg))
-    {
-    }
-    virtual short Execute() override;
-    virtual void GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams ) override;
-
-    // screenshotting
-    virtual BitmapEx createScreenshot() const override;
-    virtual OUString GetScreenshotId() const override;
-};
-
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 {
 private:
@@ -426,7 +408,6 @@ public:
     virtual VclPtr<SfxAbstractTabDialog>       CreateSdTabTemplateDlg(weld::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView ) override;
     virtual VclPtr<SfxAbstractDialog>          CreatSdActionDialog(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView) override;
     virtual VclPtr<AbstractSdVectorizeDlg>     CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell) override;
-    virtual VclPtr<AbstractSdPublishingDlg>    CreateSdPublishingDlg(weld::Window* pWindow, DocumentType eDocType) override;
 
     virtual VclPtr<VclAbstractDialog>          CreateSdPhotoAlbumDialog(weld::Window* pWindow, SdDrawDocument* pDoc) override;
 

@@ -764,7 +764,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_drawgraphics_f
 	draw_emz_Export \
 	draw_eps_Export \
 	draw_gif_Export \
-	draw_html_Export \
 	draw_jpg_Export \
 	draw_png_Export \
 	draw_svg_Export \
@@ -809,7 +808,6 @@ $(eval $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impressgraphic
 	impress_emf_Export \
 	impress_eps_Export \
 	impress_gif_Export \
-	impress_html_Export \
 	impress_jpg_Export \
 	impress_png_Export \
 	impress_svg_Export \

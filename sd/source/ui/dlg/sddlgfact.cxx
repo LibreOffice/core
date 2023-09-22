@@ -39,7 +39,6 @@
 #include <vectdlg.hxx>
 #include <tpoption.hxx>
 #include <prntopts.hxx>
-#include <pubdlg.hxx>
 #include <masterlayoutdlg.hxx>
 #include <headerfooterdlg.hxx>
 #include "PhotoAlbumDialog.hxx"
@@ -142,11 +141,6 @@ short SdAbstractSfxDialog_Impl::Execute()
 }
 
 short AbstractSdVectorizeDlg_Impl::Execute()
-{
-    return m_xDlg->run();
-}
-
-short AbstractSdPublishingDlg_Impl::Execute()
 {
     return m_xDlg->run();
 }
@@ -568,22 +562,6 @@ OUString AbstractSdVectorizeDlg_Impl::GetScreenshotId() const
     return m_xDlg->get_help_id();
 }
 
-void AbstractSdPublishingDlg_Impl::GetParameterSequence( css::uno::Sequence< css::beans::PropertyValue >& rParams )
-{
-    m_xDlg->GetParameterSequence( rParams );
-}
-
-BitmapEx AbstractSdPublishingDlg_Impl::createScreenshot() const
-{
-    VclPtr<VirtualDevice> xDialogSurface(m_xDlg->getDialog()->screenshot());
-    return xDialogSurface->GetBitmapEx(Point(), xDialogSurface->GetOutputSizePixel());
-}
-
-OUString AbstractSdPublishingDlg_Impl::GetScreenshotId() const
-{
-    return m_xDlg->get_help_id();
-}
-
 //-------------- SdAbstractDialogFactory implementation--------------
 
 VclPtr<AbstractSvxBulletAndPositionDlg> SdAbstractDialogFactory_Impl::CreateSvxBulletAndPositionDlg(weld::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView)
@@ -692,11 +670,6 @@ VclPtr<SfxAbstractDialog> SdAbstractDialogFactory_Impl::CreatSdActionDialog(weld
 VclPtr<AbstractSdVectorizeDlg>  SdAbstractDialogFactory_Impl::CreateSdVectorizeDlg(weld::Window* pParent, const Bitmap& rBmp, ::sd::DrawDocShell* pDocShell)
 {
     return VclPtr<AbstractSdVectorizeDlg_Impl>::Create(std::make_unique<SdVectorizeDlg>(pParent, rBmp, pDocShell));
-}
-
-VclPtr<AbstractSdPublishingDlg>  SdAbstractDialogFactory_Impl::CreateSdPublishingDlg(weld::Window* pParent, DocumentType eDocType)
-{
-    return VclPtr<AbstractSdPublishingDlg_Impl>::Create(std::make_unique<SdPublishingDlg>(pParent, eDocType));
 }
 
 // Factories for TabPages

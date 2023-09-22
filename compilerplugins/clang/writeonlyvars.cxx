@@ -415,8 +415,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/filter/xml/sdxmlwrp.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/sd/source/filter/html/pubdlg.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/txtnode/thints.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sw/source/core/doc/docbm.cxx"))

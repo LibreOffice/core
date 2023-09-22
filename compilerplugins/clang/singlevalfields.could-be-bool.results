@@ -181,9 +181,6 @@ sd/qa/unit/tiledrendering/tiledrendering.cxx:895
 sd/source/filter/html/htmlex.hxx:142
     HtmlExport meScript
     PublishingScript
-sd/source/filter/html/HtmlOptionsDialog.cxx:54
-    (anonymous namespace)::SdHtmlOptionsDialog meDocType
-    DocumentType
 sd/source/ui/slideshow/slideshowimpl.hxx:304
     sd::SlideshowImpl meAnimationMode
     AnimationMode
