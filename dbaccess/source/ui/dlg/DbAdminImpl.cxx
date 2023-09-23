@@ -539,7 +539,8 @@ OUString ODbDataSourceAdministrationHelper::getConnectionURL() const
                     hostname = "'" + hostname + "'";
                     rURL += " host=" + hostname;
                 }
-                if (pPortNumber && pPortNumber->GetValue())
+                // tdf#157260: if port is already in the URL, don't add another one
+                if (pPortNumber && pPortNumber->GetValue() && (rURL.indexOf("port=") == -1))
                 {
                     OUString port = "'" + OUString::number(pPortNumber->GetValue()) + "'";
                     rURL += " port=" + port;
