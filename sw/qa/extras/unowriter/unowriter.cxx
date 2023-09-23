@@ -965,7 +965,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
     uno::Reference<beans::XPropertySet> xStyle(
         xDoc->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
-    xStyle->setPropertyValue("CharColor", uno::Any(sal_Int32(0x00FF0000)));
+    xStyle->setPropertyValue("CharColor", uno::Any(COL_LIGHTRED));
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
         xSFS->getStyleFamilies()->getByName("CharacterStyles"), uno::UNO_QUERY);
@@ -1189,13 +1189,13 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTdf129841)
         xTableCellRange->getCellRangeByName("A1:A1"), css::uno::UNO_QUERY_THROW);
     static constexpr OUStringLiteral sBackColor = u"BackColor";
     // Apply background color to table cursor, and read background color from cell range
-    css::uno::Any aRefColor(sal_Int32(0x00FF0000));
+    css::uno::Any aRefColor(COL_LIGHTRED);
     xTableCursor->setPropertyValue(sBackColor, aRefColor);
     css::uno::Any aColor = xCellRange->getPropertyValue(sBackColor);
     // This failed
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
     // Now the other way round
-    aRefColor <<= sal_Int32(0x0000FF00);
+    aRefColor <<= COL_LIGHTGREEN;
     xCellRange->setPropertyValue(sBackColor, aRefColor);
     aColor = xTableCursor->getPropertyValue(sBackColor);
     CPPUNIT_ASSERT_EQUAL(aRefColor, aColor);
