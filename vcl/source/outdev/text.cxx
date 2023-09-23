@@ -1641,7 +1641,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
                             aLastLineBuffer[ i ] = ' ';
                     }
                     aLastLine = aLastLineBuffer.makeStringAndClear();
-                    aLastLine = ImplGetEllipsisString( rTargetDevice, aLastLine, nWidth, nStyle, _rLayout );
+                    aLastLine = ImplGetEllipsisString( aLastLine, nWidth, nStyle, _rLayout );
                     nStyle &= ~DrawTextFlags(DrawTextFlags::VCenter | DrawTextFlags::Bottom);
                     nStyle |= DrawTextFlags::Top;
                 }
@@ -1728,7 +1728,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         {
             if ( nStyle & TEXT_DRAW_ELLIPSIS )
             {
-                aStr = ImplGetEllipsisString( rTargetDevice, aStr, nWidth, nStyle, _rLayout );
+                aStr = ImplGetEllipsisString( aStr, nWidth, nStyle, _rLayout );
                 nStyle &= ~DrawTextFlags(DrawTextFlags::Center | DrawTextFlags::Right);
                 nStyle |= DrawTextFlags::Left;
                 nTextWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
@@ -2018,10 +2018,10 @@ OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, tools::Long 
                                         DrawTextFlags nStyle ) const
 {
     vcl::DefaultTextLayout aTextLayout( *const_cast< OutputDevice* >( this ) );
-    return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
+    return ImplGetEllipsisString( rOrigStr, nMaxWidth, nStyle, aTextLayout );
 }
 
-OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rOrigStr, tools::Long nMaxWidth,
+OUString OutputDevice::ImplGetEllipsisString( const OUString& rOrigStr, tools::Long nMaxWidth,
                                                DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout )
 {
     OUString aStr = rOrigStr;
@@ -2085,7 +2085,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             OUString aLastStr = aStr.copy(nLastContent);
             OUString aTempLastStr1 = "..." + aLastStr;
             if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
-                aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+                aStr = OutputDevice::ImplGetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
             else
             {
                 sal_Int32 nFirstContent = 0;
@@ -2100,7 +2100,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                     nFirstContent++;
                 // MEM continue here
                 if ( nFirstContent >= nLastContent )
-                    aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+                    aStr = OutputDevice::ImplGetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
                 else
                 {
                     if ( nFirstContent > 4 )
@@ -2108,7 +2108,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
                     OUString aFirstStr = OUString::Concat(aStr.subView( 0, nFirstContent )) + "...";
                     OUString aTempStr = aFirstStr + aLastStr;
                     if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                        aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
+                        aStr = OutputDevice::ImplGetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis, _rLayout );
                     else
                     {
                         do

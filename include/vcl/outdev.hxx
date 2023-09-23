@@ -1201,7 +1201,7 @@ private:
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
 
     static
-    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
+    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OUString& rStr,
                                                        tools::Long nMaxWidth, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
 
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, tools::Long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
