@@ -111,6 +111,14 @@
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>
 
+#include <svx/sdr/overlay/overlayselection.hxx>
+#include <svx/sdr/overlay/overlayobject.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/sdrpaintwindow.hxx>
+#include <svx/svdview.hxx>
+#include <node2lay.hxx>
+#include <cntfrm.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -795,7 +803,9 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
     m_bIsPreviewDoubleClick(false),
     m_bMakeSelectionVisible(false),
     m_bForceChangesToolbar(true),
-    m_nLOKPageUpDownOffset(0)
+    m_nLOKPageUpDownOffset(0),
+    m_aBringToAttentionBlinkTimer("SwView m_aBringToAttentionBlinkTimer"),
+    m_nBringToAttentionBlinkTimeOutsRemaining(0)
 {
     static bool bRequestDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_ENABLE");
     if (bRequestDoubleBuffering)
@@ -1099,6 +1109,10 @@ SwView::SwView(SfxViewFrame& _rFrame, SfxViewShell* pOldSh)
 
     if (!bFuzzing)
         GetViewFrame().GetWindow().AddChildEventListener(LINK(this, SwView, WindowChildEventListener));
+
+    m_aBringToAttentionBlinkTimer.SetInvokeHandler(
+                LINK(this, SwView, BringToAttentionBlinkTimerHdl));
+    m_aBringToAttentionBlinkTimer.SetTimeout(350);
 }
 
 SwViewGlueDocShell::SwViewGlueDocShell(SwView& rView, SwDocShell& rDocSh)
@@ -1989,6 +2003,94 @@ bool SwView::IsDataSourceAvailable(const OUString sDataSourceName)
     Reference< XDatabaseContext> xDatabaseContext = DatabaseContext::create(xContext);
 
     return xDatabaseContext->hasByName(sDataSourceName);
+}
+
+void SwView::BringToAttention(std::vector<basegfx::B2DRange>&& aRanges)
+{
+    m_nBringToAttentionBlinkTimeOutsRemaining = 0;
+    m_aBringToAttentionBlinkTimer.Stop();
+    if (aRanges.empty())
+        m_xBringToAttentionOverlayObject.reset();
+    else
+    {
+        m_xBringToAttentionOverlayObject.reset(
+                    new sdr::overlay::OverlaySelection(sdr::overlay::OverlayType::Invert,
+                                                       Color(), std::move(aRanges),
+                                                       true /*unused for Invert type*/));
+        m_nBringToAttentionBlinkTimeOutsRemaining = 4;
+        m_aBringToAttentionBlinkTimer.Start();
+    }
+}
+
+void SwView::BringToAttention(const tools::Rectangle& rRect)
+{
+    std::vector<basegfx::B2DRange> aRanges{ basegfx::B2DRange(rRect.Left(), rRect.Top(),
+                                                              rRect.Right(), rRect.Bottom()) };
+    BringToAttention(std::move(aRanges));
+}
+
+void SwView::BringToAttention(const SwNode* pNode)
+{
+    if (!pNode)
+        return;
+
+    std::vector<basegfx::B2DRange> aRanges;
+    const SwFrame* pFrame;
+    if (pNode->IsContentNode())
+    {
+        pFrame = pNode->GetContentNode()->getLayoutFrame(GetWrtShell().GetLayout());
+    }
+    else
+    {
+        // section and table nodes
+        SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
+        pFrame = aTmp.NextFrame();
+    }
+    while (pFrame)
+    {
+        const SwRect& rFrameRect = pFrame->getFrameArea();
+        if (!rFrameRect.IsEmpty())
+            aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top() + pFrame->GetTopMargin(),
+                                 rFrameRect.Right(), rFrameRect.Bottom());
+        if (!pFrame->IsFlowFrame())
+            break;
+        const SwFlowFrame* pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+        if (!pFollow)
+            break;
+        pFrame = &pFollow->GetFrame();
+    }
+    BringToAttention(std::move(aRanges));
+}
+
+IMPL_LINK_NOARG(SwView, BringToAttentionBlinkTimerHdl, Timer*, void)
+{
+    if (GetDrawView() && m_xBringToAttentionOverlayObject)
+    {
+        if (SdrView* pView = GetDrawView())
+        {
+            if (SdrPaintWindow* pPaintWindow = pView->GetPaintWindow(0))
+            {
+                const rtl::Reference<sdr::overlay::OverlayManager>& xOverlayManager
+                    = pPaintWindow->GetOverlayManager();
+                if (m_nBringToAttentionBlinkTimeOutsRemaining % 2 == 0)
+                    xOverlayManager->add(*m_xBringToAttentionOverlayObject);
+                else
+                    xOverlayManager->remove(*m_xBringToAttentionOverlayObject);
+                --m_nBringToAttentionBlinkTimeOutsRemaining;
+            }
+            else
+                m_nBringToAttentionBlinkTimeOutsRemaining = 0;
+        }
+        else
+            m_nBringToAttentionBlinkTimeOutsRemaining = 0;
+    }
+    else
+        m_nBringToAttentionBlinkTimeOutsRemaining = 0;
+    if (m_nBringToAttentionBlinkTimeOutsRemaining == 0)
+    {
+        m_xBringToAttentionOverlayObject.reset();
+        m_aBringToAttentionBlinkTimer.Stop();
+    }
 }
 
 namespace sw {

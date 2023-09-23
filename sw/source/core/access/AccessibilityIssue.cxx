@@ -28,6 +28,11 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxdlg.hxx>
 
+#include <svx/svdview.hxx>
+#include <flyfrm.hxx>
+#include <txatbase.hxx>
+#include <txtfrm.hxx>
+
 namespace sw
 {
 AccessibilityIssue::AccessibilityIssue(sfx::AccessibilityIssueID eIssueID)
@@ -75,6 +80,21 @@ void AccessibilityIssue::gotoIssue() const
         {
             SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             bool bSelected = pWrtShell->GotoFly(TempIssueObject.m_sObjectID, FLYCNTTYPE_ALL, true);
+
+            // bring issue to attention
+            if (bSelected)
+            {
+                if (const SwFlyFrameFormat* pFlyFormat
+                    = m_pDoc->FindFlyByName(TempIssueObject.m_sObjectID, SwNodeType::NONE))
+                {
+                    if (SwFlyFrame* pFlyFrame
+                        = SwIterator<SwFlyFrame, SwFormat>(*pFlyFormat).First())
+                    {
+                        pWrtShell->GetView().BringToAttention(pFlyFrame->getFrameArea().SVRect());
+                    }
+                }
+            }
+
             if (bSelected && pWrtShell->IsFrameSelected())
             {
                 pWrtShell->HideCursor();
@@ -82,8 +102,19 @@ void AccessibilityIssue::gotoIssue() const
             }
 
             if (!bSelected && TempIssueObject.m_eIssueObject == IssueObject::TEXTFRAME)
+            {
                 pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
 
+                // bring issue to attention
+                if (SdrPage* pPage
+                    = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0))
+                {
+                    if (SdrObject* pObj = pPage->GetObjByName(TempIssueObject.m_sObjectID))
+                    {
+                        pWrtShell->GetView().BringToAttention(pObj->GetLogicRect());
+                    }
+                }
+            }
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
@@ -94,6 +125,17 @@ void AccessibilityIssue::gotoIssue() const
             if (pWrtShell->IsFrameSelected())
                 pWrtShell->LeaveSelFrameMode();
             pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
+
+            // bring issue to attention
+            if (SdrPage* pPage
+                = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0))
+            {
+                if (SdrObject* pObj = pPage->GetObjByName(TempIssueObject.m_sObjectID))
+                {
+                    pWrtShell->GetView().BringToAttention(pObj->GetLogicRect());
+                }
+            }
+
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
@@ -107,6 +149,17 @@ void AccessibilityIssue::gotoIssue() const
                 if (!bIsDesignMode)
                     pWrtShell->GetView().GetFormShell()->SetDesignMode(true);
                 pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
+
+                // bring issue to attention
+                if (SdrPage* pPage
+                    = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0))
+                {
+                    if (SdrObject* pObj = pPage->GetObjByName(TempIssueObject.m_sObjectID))
+                    {
+                        pWrtShell->GetView().BringToAttention(pObj->GetLogicRect());
+                    }
+                }
+
                 if (comphelper::LibreOfficeKit::isActive())
                     pWrtShell->ShowCursor();
             }
@@ -116,6 +169,17 @@ void AccessibilityIssue::gotoIssue() const
         {
             SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             pWrtShell->GotoTable(TempIssueObject.m_sObjectID);
+
+            // bring issue to attention
+            if (SwTable* pTmpTable = SwTable::FindTable(
+                    TempIssueObject.m_pDoc->FindTableFormatByName(TempIssueObject.m_sObjectID)))
+            {
+                if (SwTableNode* pTableNode = pTmpTable->GetTableNode())
+                {
+                    pWrtShell->GetView().BringToAttention(pTableNode);
+                }
+            }
+
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
@@ -133,6 +197,10 @@ void AccessibilityIssue::gotoIssue() const
             pPaM->SetMark();
             *pPaM->GetMark() = aMark;
             pWrtShell->EndAllAction();
+
+            // bring issue to attention
+            pWrtShell->GetView().BringToAttention(pContentNode);
+
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }
@@ -141,7 +209,25 @@ void AccessibilityIssue::gotoIssue() const
         {
             SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             if (TempIssueObject.m_pTextFootnote)
+            {
                 pWrtShell->GotoFootnoteAnchor(*TempIssueObject.m_pTextFootnote);
+
+                // bring issue to attention
+                const SwTextNode& rTextNode = TempIssueObject.m_pTextFootnote->GetTextNode();
+                if (SwTextFrame* pFrame
+                    = static_cast<SwTextFrame*>(rTextNode.getLayoutFrame(pWrtShell->GetLayout())))
+                {
+                    auto nStart = TempIssueObject.m_pTextFootnote->GetStart();
+                    auto nEnd = nStart + 1;
+                    SwPosition aStartPos(rTextNode, nStart), aEndPos(rTextNode, nEnd);
+                    SwRect aStartCharRect, aEndCharRect;
+                    pFrame->GetCharRect(aStartCharRect, aStartPos);
+                    pFrame->GetCharRect(aEndCharRect, aEndPos);
+                    tools::Rectangle aRect(aStartCharRect.Left() - 50, aStartCharRect.Top(),
+                                           aEndCharRect.Right() + 50, aStartCharRect.Bottom());
+                    pWrtShell->GetView().BringToAttention(aRect);
+                }
+            }
             if (comphelper::LibreOfficeKit::isActive())
                 pWrtShell->ShowCursor();
         }

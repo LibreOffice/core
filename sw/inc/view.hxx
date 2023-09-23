@@ -32,6 +32,8 @@
 #include "swtypes.hxx"
 #include "shellid.hxx"
 
+#include <svx/sdr/overlay/overlayobject.hxx>
+
 class SwTextFormatColl;
 class SwPageDesc;
 class SwFrameFormat;
@@ -68,6 +70,7 @@ enum class SotExchangeDest;
 class SwCursorShell;
 enum class SvxSearchCmd;
 enum class SelectionType : sal_Int32;
+class SwNode;
 
 namespace com::sun::star::view { class XSelectionSupplier; }
 namespace sfx2 { class FileDialogHelper; }
@@ -716,6 +719,19 @@ public:
     virtual std::optional<OString> getLOKPayload(int nType, int nViewId) const override;
 
     bool IsHighlightCharDF() { return m_bIsHighlightCharDF; }
+
+private:
+    AutoTimer m_aBringToAttentionBlinkTimer;
+    size_t m_nBringToAttentionBlinkTimeOutsRemaining;
+
+    std::unique_ptr<sdr::overlay::OverlayObject> m_xBringToAttentionOverlayObject;
+
+    DECL_LINK(BringToAttentionBlinkTimerHdl, Timer*, void);
+
+public:
+    void BringToAttention(std::vector<basegfx::B2DRange>&& aRanges = {});
+    void BringToAttention(const tools::Rectangle& rRect);
+    void BringToAttention(const SwNode* pNode);
 };
 
 inline tools::Long SwView::GetXScroll() const
