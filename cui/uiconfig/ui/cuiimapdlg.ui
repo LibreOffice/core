@@ -242,7 +242,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="cuiimapdlg|label4">_Text Alternative:</property>
+                    <property name="label" translatable="yes" context="cuiimapdlg|label4">Alt _Text:</property>
                     <property name="tooltip_text" translatable="yes" context="cuiimapdlg|label4">Enter a short description of essential features of the image map for persons who do not see the image.</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">textentry</property>

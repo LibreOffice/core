@@ -12,7 +12,7 @@
   <object class="GtkDialog" id="ObjectTitleDescDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="objecttitledescdialog|ObjectTitleDescDialog">Description</property>
+    <property name="title" translatable="yes" context="objecttitledescdialog|ObjectTitleDescDialog">Alt Text</property>
     <property name="modal">True</property>
     <property name="default-width">0</property>
     <property name="default-height">0</property>
@@ -90,7 +90,7 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="tooltip-text" translatable="yes" context="objecttitledescdialog|object_title_label|tooltip_text">Give a short description of non-text content for users who do not see this object.</property>
-                <property name="label" translatable="yes" context="objecttitledescdialog|object_title_label">_Text Alternative:</property>
+                <property name="label" translatable="yes" context="objecttitledescdialog|object_title_label">Text:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">object_title_entry</property>
                 <property name="xalign">0</property>
