@@ -909,8 +909,6 @@ Bitmap OutputDevice::BlendBitmap(
     if( !pP || !pA )
         return aBmp;
 
-    Bitmap      res;
-
     if( GetBitCount() <= 8 )
     {
         Bitmap aDither(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP);
@@ -949,53 +947,47 @@ Bitmap OutputDevice::BlendBitmap(
 
         pB.reset();
         pW.reset();
-        res = aDither;
+        return aDither;
     }
-    else
+
+    BitmapScopedWriteAccess pB(aBmp);
+
+    bool bFastBlend = false;
+    if (!bHMirr && !bVMirr)
     {
-        BitmapScopedWriteAccess pB(aBmp);
+        SalTwoRect aTR(aBmpRect.Left(), aBmpRect.Top(), aBmpRect.GetWidth(), aBmpRect.GetHeight(),
+                        nOffX, nOffY, aOutSz.Width(), aOutSz.Height());
 
-        bool bFastBlend = false;
-        if( !bHMirr && !bVMirr )
+        bFastBlend = ImplFastBitmapBlending(*pB, *pP, *pA, aTR);
+    }
+
+    if (!bFastBlend)
+    {
+        for (int nY = 0; nY < nDstHeight; nY++)
         {
-            SalTwoRect aTR(aBmpRect.Left(), aBmpRect.Top(), aBmpRect.GetWidth(), aBmpRect.GetHeight(),
-                            nOffX, nOffY, aOutSz.Width(), aOutSz.Height());
+            tools::Long  nMapY = pMapY[nY];
 
-            bFastBlend = ImplFastBitmapBlending( *pB,*pP,*pA, aTR );
-        }
+            if (bVMirr)
+                nMapY = aBmpRect.Bottom() - nMapY;
 
-        if( !bFastBlend )
-        {
-            for( int nY = 0; nY < nDstHeight; nY++ )
+            Scanline pAScan = pA->GetScanline(nMapY);
+            Scanline pBScan = pB->GetScanline(nY);
+            for(int nX = 0; nX < nDstWidth; nX++)
             {
-                tools::Long  nMapY = pMapY[ nY ];
+                tools::Long nMapX = pMapX[nX];
 
-                if ( bVMirr )
-                {
-                    nMapY = aBmpRect.Bottom() - nMapY;
-                }
-                Scanline pAScan = pA->GetScanline( nMapY );
-                Scanline pBScan = pB->GetScanline(nY);
-                for( int nX = 0; nX < nDstWidth; nX++ )
-                {
-                    tools::Long nMapX = pMapX[ nX ];
+                if (bHMirr)
+                    nMapX = aBmpRect.Right() - nMapX;
 
-                    if ( bHMirr )
-                    {
-                        nMapX = aBmpRect.Right() - nMapX;
-                    }
-                    BitmapColor aDstCol = pB->GetPixelFromData( pBScan, nX );
-                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pAScan[ nMapX ] );
-                    pB->SetPixelOnData( pBScan, nX, aDstCol );
-                }
+                BitmapColor aDstCol = pB->GetPixelFromData(pBScan, nX);
+                aDstCol.Merge(pP->GetColor(nMapY, nMapX), pAScan[nMapX]);
+                pB->SetPixelOnData(pBScan, nX, aDstCol);
             }
         }
-
-        pB.reset();
-        res = aBmp;
     }
 
-    return res;
+    pB.reset();
+    return aBmp;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
