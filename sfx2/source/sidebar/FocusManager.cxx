@@ -284,34 +284,6 @@ void FocusManager::MoveFocusInsidePanel (
     }
 }
 
-bool FocusManager::MoveFocusInsideDeckTitle (
-    const FocusLocation& rFocusLocation,
-    const sal_Int32 nDirection)
-{
-    bool bConsumed = false;
-    // Note that when the title bar of the first (and only) panel is
-    // not visible then the deck title takes its place and the focus
-    // is moved between a) deck closer and b) content of panel 0.
-    switch (rFocusLocation.meComponent)
-    {
-        case PC_DeckToolBox:
-            if (nDirection>0 && ! IsPanelTitleVisible(0))
-            {
-                FocusPanelContent(0);
-                bConsumed = true;
-            }
-            else if (nDirection < 0)
-            {
-                FocusButton(0);
-                bConsumed = true;
-            }
-            break;
-
-        default: break;
-    }
-    return bConsumed;
-}
-
 bool FocusManager::HandleKeyEvent(
     const vcl::KeyCode& rKeyCode,
     const FocusLocation& aLocation)

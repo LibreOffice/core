@@ -125,8 +125,6 @@ private:
     void FocusButton(const sal_Int32 nButtonIndex);
     void MoveFocusInsidePanel(const FocusLocation& rLocation,
                               const sal_Int32 nDirection);
-    bool MoveFocusInsideDeckTitle(const FocusLocation& rLocation,
-                                  const sal_Int32 nDirection);
 
     bool HandleKeyEvent(const vcl::KeyCode& rKeyCode,
                         const FocusLocation& rLocation);
