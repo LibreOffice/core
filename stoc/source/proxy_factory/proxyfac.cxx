@@ -292,7 +292,8 @@ Any ProxyRoot::queryAggregation( Type const & rType )
             OSL_ASSERT( cpp_env != nullptr );
 
             // mind a new delegator, calculate current root:
-            Reference< XInterface > xRoot(getXWeak());
+            Reference< XInterface > xRoot(
+                static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
             OUString oid;
             (*cpp_env->getObjectIdentifier)( cpp_env, &oid.pData, xRoot.get() );
             OSL_ASSERT( !oid.isEmpty() );
