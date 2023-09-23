@@ -160,8 +160,8 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
     }
-    else
-        return BitmapEx(GetBitmap( rSrcPt, rSize ));
+
+    return BitmapEx(GetBitmap( rSrcPt, rSize ));
 }
 
 void OutputDevice::DrawDeviceBitmapEx( const Point& rDestPt, const Size& rDestSize,
