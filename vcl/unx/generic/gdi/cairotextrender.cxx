@@ -311,14 +311,17 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
                 cairo_font_options_set_antialias(pOptions, CAIRO_ANTIALIAS_NONE);
             if (!bAllowedHintStyle)
                 cairo_font_options_set_hint_style(pOptions, CAIRO_HINT_STYLE_SLIGHT);
-            // Disable private CAIRO_ROUND_GLYPH_POS_ON by merging with font options known to have
-            // CAIRO_ROUND_GLYPH_POS_OFF
             if (bResolutionIndependentLayoutEnabled)
             {
+                // Disable private CAIRO_ROUND_GLYPH_POS_ON by merging with
+                // font options known to have CAIRO_ROUND_GLYPH_POS_OFF
                 cairo_font_options_merge(pOptions, CairoFontOptions::get());
-                // tdf#153699 skip this with cairo 1.17.8 as it has a problem
+
+                // a) tdf#153699 skip this with cairo 1.17.8 as it has a problem
                 // See: https://gitlab.freedesktop.org/cairo/cairo/-/issues/643
-                if (cairo_version() != CAIRO_VERSION_ENCODE(1,17,8))
+                // b) tdf#152675 a similar report for cairo: 1.16.0-4ubuntu1,
+                // assume that everything <= 1.17.8 is unsafe to disable this
+                if (cairo_version() <= CAIRO_VERSION_ENCODE(1, 17, 8))
                     cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             }
             cairo_set_font_options(cr, pOptions);
