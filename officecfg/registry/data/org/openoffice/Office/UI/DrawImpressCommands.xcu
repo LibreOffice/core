@@ -2159,7 +2159,7 @@
       </node>
       <node oor:name=".uno:TextAutoFitToSize" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Autofit Text</value>
+          <value xml:lang="en-US">Shrink text on overflow</value>
         </prop>
       </node>
       <node oor:name=".uno:TaskPaneInsertPage" oor:op="replace">
