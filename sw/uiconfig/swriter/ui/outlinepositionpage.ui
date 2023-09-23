@@ -133,7 +133,7 @@
               <object class="GtkLabel" id="numalign">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="outlinepositionpage|numalign">Numbering alignment:</property>
+                <property name="label" translatable="yes" context="outlinepositionpage|numalign">Alignment:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">numalignlb</property>
                 <property name="xalign">0</property>
@@ -324,7 +324,7 @@ numbering and text:</property>
               <object class="GtkLabel" id="num2align">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="outlinepositionpage|num2align">Numbering alignment:</property>
+                <property name="label" translatable="yes" context="outlinepositionpage|num2align">Alignment:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">num2alignlb</property>
                 <property name="xalign">0</property>
@@ -444,7 +444,7 @@ numbering and text:</property>
               <object class="GtkLabel" id="numfollowedby">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="outlinepositionpage|numfollowedby">Numbering followed by:</property>
+                <property name="label" translatable="yes" context="outlinepositionpage|numfollowedby">Followed by:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">numfollowedbylb</property>
                 <property name="xalign">0</property>

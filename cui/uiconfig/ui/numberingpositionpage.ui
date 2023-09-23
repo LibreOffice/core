@@ -141,7 +141,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="hexpand">True</property>
-                    <property name="label" translatable="yes" context="numberingpositionpage|numfollowedby">Numbering followed by:</property>
+                    <property name="label" translatable="yes" context="numberingpositionpage|numfollowedby">Followed by:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numfollowedbylb</property>
                     <property name="xalign">1</property>
@@ -155,7 +155,7 @@
                   <object class="GtkLabel" id="num2align">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="numberingpositionpage|num2align">N_umbering alignment:</property>
+                    <property name="label" translatable="yes" context="numberingpositionpage|num2align">Alignment:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">num2alignlb</property>
                     <property name="xalign">1</property>
@@ -410,7 +410,7 @@ numbering and text:</property>
                   <object class="GtkLabel" id="numalign">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="numberingpositionpage|numalign">N_umbering alignment:</property>
+                    <property name="label" translatable="yes" context="numberingpositionpage|numalign">Alignment:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">numalignlb</property>
                     <property name="xalign">1</property>
