@@ -24,6 +24,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/skia/SkiaHelper.hxx>
 
 #include <salgdi.hxx>
 
@@ -159,15 +160,32 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
     const bool  bOldOutput = IsOutputEnabled();
 
     EnableOutput( false );
-    Push( vcl::PushFlags::RASTEROP );
-    SetRasterOp( RasterOp::Xor );
-    DrawGradient( aBoundRect, rGradient );
-    SetFillColor( COL_BLACK );
-    SetRasterOp( RasterOp::N0 );
-    DrawPolyPolygon( rPolyPoly );
-    SetRasterOp( RasterOp::Xor );
-    DrawGradient( aBoundRect, rGradient );
-    Pop();
+#if HAVE_FEATURE_SKIA
+    // tdf#156539 Draw the gradient with polypolygonal clip when using Skia
+    // For some unkown reason, the previous "draw gradient with XOR, draw
+    // polygon with N0, and draw gradient again with XOR" does not work
+    // with Skia/Raster (at least on macOS). Fortunately, Skia supports
+    // polypolygonal clipping so just clip and draw the gradient.
+    if ( SkiaHelper::isVCLSkiaEnabled() )
+    {
+        Push( vcl::PushFlags::CLIPREGION );
+        SetClipRegion( vcl::Region( rPolyPoly ) );
+        DrawGradient( aBoundRect, rGradient );
+        Pop();
+    }
+    else
+#endif
+    {
+        Push( vcl::PushFlags::RASTEROP );
+        SetRasterOp( RasterOp::Xor );
+        DrawGradient( aBoundRect, rGradient );
+        SetFillColor( COL_BLACK );
+        SetRasterOp( RasterOp::N0 );
+        DrawPolyPolygon( rPolyPoly );
+        SetRasterOp( RasterOp::Xor );
+        DrawGradient( aBoundRect, rGradient );
+        Pop();
+    }
     EnableOutput( bOldOutput );
 }
 
