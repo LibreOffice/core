@@ -388,11 +388,6 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     return true;
 }
 
-IMPL_LINK_NOARG(ScTableLink, RefreshHdl, Timer *, void)
-{
-    Refresh( aFileName, aFilterName, nullptr, GetRefreshDelaySeconds() );
-}
-
 IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )
 {
     pImpl->m_aEndEditLink.Call( rLink );

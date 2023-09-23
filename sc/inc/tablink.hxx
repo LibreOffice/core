@@ -63,7 +63,6 @@ public:
 
     bool    IsUsed() const;
 
-    DECL_LINK( RefreshHdl, Timer*, void );
     DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink&, void );
 };
 

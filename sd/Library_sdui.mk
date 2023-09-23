@@ -66,7 +66,6 @@ $(eval $(call gb_Library_use_libraries,sdui,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sdui,\
-    sd/source/filter/html/htmlattr \
     sd/source/ui/dlg/brkdlg \
     sd/source/ui/dlg/copydlg \
     sd/source/ui/dlg/custsdlg \
