@@ -653,8 +653,8 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap,
     BitmapScopedReadAccess pBitmapReadAccess(rBitmap);
     BitmapScopedReadAccess pAlphaReadAccess(rAlpha);
 
-    DBG_ASSERT( pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal,
-                "OutputDevice::ImplDrawAlpha(): non-8bit alpha no longer supported!" );
+    SAL_WARN_IF(pAlphaReadAccess->GetScanlineFormat() != ScanlineFormat::N8BitPal, "vcl.gdi", "non-8bit alpha no longer supported!");
+    assert(pAlphaReadAccess->GetScanlineFormat() == ScanlineFormat::N8BitPal);
 
     // #i38887# reading from screen may sometimes fail
     if (aBmp.ImplGetSalBitmap())
