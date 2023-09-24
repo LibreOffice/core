@@ -162,7 +162,7 @@ void OutputDevice::ClipAndDrawGradientMetafile ( const Gradient &rGradient, cons
     EnableOutput( false );
 #if HAVE_FEATURE_SKIA
     // tdf#156539 Draw the gradient with polypolygonal clip when using Skia
-    // For some unkown reason, the previous "draw gradient with XOR, draw
+    // For some unknown reason, the previous "draw gradient with XOR, draw
     // polygon with N0, and draw gradient again with XOR" does not work
     // with Skia/Raster (at least on macOS). Fortunately, Skia supports
     // polypolygonal clipping so just clip and draw the gradient.
