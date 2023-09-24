@@ -68,9 +68,7 @@ namespace cppcanvas
         Canvas(Canvas const &) = default;
         Canvas(Canvas &&) = default;
         Canvas & operator =(Canvas const &) = default;
-#if !(defined __GNUC__ && !defined __clang__ && __GNUC__ == 8) // bogus -Werror=virtual-move-assign
         Canvas & operator =(Canvas &&) = default;
-#endif
 
         virtual ~Canvas() {}
 

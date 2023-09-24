@@ -61,9 +61,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataSeries
-#if !defined __GNUC__ || __GNUC__ >= 12 || defined __clang__
     final
-#endif
     : public impl::DataSeries_Base
     , public ::property::OPropertySet
 {

@@ -292,12 +292,12 @@ namespace sw
                 : m_rRoot(rModify)
             {
                 MoveTo(s_pClientIters);
-#if defined __GNUC__ && __GNUC__ >= 12 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdangling-pointer"
 #endif
                 s_pClientIters = this;
-#if defined __GNUC__ && __GNUC__ >= 12 && !defined __clang__
+#if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop
 #endif
                 m_pCurrent = m_pPosition = m_rRoot.m_pWriterListeners;

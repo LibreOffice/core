@@ -20,9 +20,6 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 
-// gcc 11.2.0 triggers a spurious -Werror=stringop-overread
-#if !(defined __GNUC__ && __GNUC__ == 11 && __GNUC_MINOR__ == 2)
-
 template <>
 inline std::string
 CppUnit::assertion_traits<std::u16string_view>::toString(std::u16string_view const& x)
@@ -752,6 +749,5 @@ private:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 }
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

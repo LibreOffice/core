@@ -73,9 +73,7 @@ typedef ::cppu::WeakImplHelper<
 }
 
 class OOO_DLLPUBLIC_CHARTTOOLS Diagram
-#if !defined __GNUC__ || __GNUC__ >= 12 || defined __clang__
     final
-#endif
     : public impl::Diagram_Base
     , public ::property::OPropertySet
 {

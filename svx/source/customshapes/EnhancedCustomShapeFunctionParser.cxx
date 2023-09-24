@@ -467,7 +467,7 @@ public:
         mpSecondArg(std::move( xSecondArg ))
     {
     }
-#if defined(__clang__) || (defined (__GNUC__) && __GNUC__ >= 8)
+#if defined(__clang__) || defined (__GNUC__)
     //GetEquationValueAsDouble calls isFinite on the result
     __attribute__((no_sanitize("float-divide-by-zero")))
 #endif
