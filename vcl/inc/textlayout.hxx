@@ -26,6 +26,10 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
+
 class Control;
 
 namespace vcl
@@ -44,10 +48,30 @@ namespace vcl
         ~ITextLayout() COVERITY_NOEXCEPT_FALSE {}
     };
 
+    class TextLayoutCommon : public ITextLayout
+    {
+    public:
+        OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
+
+        sal_Int32 BreakLinesWithIterator(const tools::Long nWidth, OUString const& rStr,
+                        css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
+                        css::uno::Reference<css::i18n::XBreakIterator> const& xBI,
+                        const bool bHyphenate,
+                        const sal_Int32 nPos, sal_Int32 nBreakPos);
+
+        sal_Int32 BreakLinesSimple(const tools::Long nWidth, OUString const& rStr,
+                                  const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth);
+
+        tools::Long GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
+                                 ImplMultiTextLineInfo& rLineInfo,
+                                 tools::Long nWidth, OUString const& rStr,
+                                 DrawTextFlags nStyle);
+    };
+
     /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
         methods of an OutputDevice instance, without any inbetween magic.
     */
-    class DefaultTextLayout final : public ITextLayout
+    class DefaultTextLayout final : public TextLayoutCommon
     {
     public:
         DefaultTextLayout( OutputDevice& _rTargetDevice )

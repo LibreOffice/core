@@ -200,7 +200,7 @@ Size Window::LogicToLogic(const Size& rSzSource, const MapMode* pMapModeSource,
 
 tools::Rectangle Window::GetTextRect(const tools::Rectangle& rRect, const OUString& rStr,
                                      DrawTextFlags nStyle, TextRectInfo* pInfo,
-                                     const vcl::ITextLayout* _pTextLayout) const
+                                     const vcl::TextLayoutCommon* _pTextLayout) const
 {
     return GetOutDev()->GetTextRect(rRect, rStr, nStyle, pInfo, _pTextLayout);
 }

@@ -102,7 +102,7 @@ class SalLayoutGlyphs;
 namespace vcl
 {
     class ExtOutDevData;
-    class ITextLayout;
+    class TextLayoutCommon;
     struct FontCapabilities;
     class Window;
     class WindowOutputDevice;
@@ -869,11 +869,11 @@ public:
     void                        DrawText( const tools::Rectangle& rRect,
                                           const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::NONE,
                                           std::vector< tools::Rectangle >* pVector = nullptr, OUString* pDisplayText = nullptr,
-                                          vcl::ITextLayout* _pTextLayout = nullptr );
+                                          vcl::TextLayoutCommon* _pTextLayout = nullptr );
 
     static void                 ImplDrawText( OutputDevice& rTargetDevice, const tools::Rectangle& rRect,
                                               const OUString& rOrigStr, DrawTextFlags nStyle,
-                                              std::vector< tools::Rectangle >* pVector, OUString* pDisplayText, vcl::ITextLayout& _rLayout );
+                                              std::vector< tools::Rectangle >* pVector, OUString* pDisplayText, vcl::TextLayoutCommon& _rLayout );
 
     void                        ImplDrawText( SalLayout& );
 
@@ -904,7 +904,7 @@ public:
     tools::Rectangle                   GetTextRect( const tools::Rectangle& rRect,
                                              const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
                                              TextRectInfo* pInfo = nullptr,
-                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
+                                             const vcl::TextLayoutCommon* _pTextLayout = nullptr ) const;
 
     /** Return the exact bounding rectangle of rStr.
 
@@ -1073,17 +1073,6 @@ public:
 protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
-    static
-    SAL_DLLPRIVATE tools::Long  ImplGetTextLines( const tools::Rectangle& rRect, tools::Long nTextHeight, ImplMultiTextLineInfo& rLineInfo, tools::Long nWidth, const OUString& rStr, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
-    static
-    SAL_DLLPRIVATE sal_Int32    ImplBreakLinesWithIterator(const tools::Long nWidth, const OUString& rStr, const vcl::ITextLayout& _rLayout,
-                                    const css::uno::Reference<css::linguistic2::XHyphenator>& xHyph,
-                                    const css::uno::Reference<css::i18n::XBreakIterator>& xBI,
-                                    const bool bHyphenate,
-                                    const sal_Int32 nPos, sal_Int32 nBreakPos);
-    static
-    SAL_DLLPRIVATE sal_Int32    ImplBreakLinesSimple( const tools::Long nWidth, const OUString& rStr,
-                                    const vcl::ITextLayout& _rLayout, const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth );
     SAL_DLLPRIVATE float        approximate_char_width() const;
 
     virtual bool shouldDrawWavePixelAsRect(tools::Long nLineWidth) const;
@@ -1199,10 +1188,6 @@ private:
     typedef void ( OutputDevice::* FontUpdateHandler_t )( bool );
 
     SAL_DLLPRIVATE static void  ImplUpdateFontDataForAllFrames( FontUpdateHandler_t pHdl, bool bNewFontLists );
-
-    static
-    SAL_DLLPRIVATE OUString     ImplGetEllipsisString( const OUString& rStr,
-                                                       tools::Long nMaxWidth, DrawTextFlags nStyle, const vcl::ITextLayout& _rLayout );
 
     SAL_DLLPRIVATE void         ImplDrawEmphasisMark( tools::Long nBaseX, tools::Long nX, tools::Long nY, const tools::PolyPolygon& rPolyPoly, bool bPolyLine, const tools::Rectangle& rRect1, const tools::Rectangle& rRect2 );
     SAL_DLLPRIVATE void         ImplDrawEmphasisMarks( SalLayout& );

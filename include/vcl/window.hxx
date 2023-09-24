@@ -1494,7 +1494,7 @@ public:
     tools::Rectangle            GetTextRect( const tools::Rectangle& rRect,
                                              const OUString& rStr, DrawTextFlags nStyle = DrawTextFlags::WordBreak,
                                              TextRectInfo* pInfo = nullptr,
-                                             const vcl::ITextLayout* _pTextLayout = nullptr ) const;
+                                             const vcl::TextLayoutCommon* _pTextLayout = nullptr ) const;
     float                       GetDPIScaleFactor() const;
     tools::Long                 GetOutOffXPixel() const;
     tools::Long                 GetOutOffYPixel() const;
