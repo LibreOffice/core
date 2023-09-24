@@ -335,12 +335,6 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         mrOutputDev.DrawRect(aRectangle);
     }
 
-    if (maFontColor != COL_AUTO)
-        mrOutputDev.SetTextColor(maFontColor);
-
-    if (maHighlightColor != COL_AUTO)
-        mrOutputDev.SetTextFillColor(maHighlightColor);
-
     Point aFontDrawPosition = aRectangle.TopLeft();
     aFontDrawPosition.AdjustY(mnBaseLine);
     if (eRenderAlign == RenderAlign::CENTER)
@@ -376,10 +370,16 @@ bool CommonStylePreviewRenderer::render(const tools::Rectangle& aRectangle, Rend
         mrOutputDev.Push(vcl::PushFlags::FONT);
 
         if (oFont)
-        {
             mrOutputDev.SetFont(*oFont);
+
+        if (maFontColor != COL_AUTO)
+            mrOutputDev.SetTextColor(maFontColor);
+
+        if (maHighlightColor != COL_AUTO)
+            mrOutputDev.SetTextFillColor(maHighlightColor);
+
+        if (oFont)
             oFont->QuickDrawText(&mrOutputDev, aFontDrawPosition, rText, nStart, nEnd - nStart, {});
-        }
         else
             mrOutputDev.DrawText(aFontDrawPosition, rText, nStart, nEnd - nStart);
 
