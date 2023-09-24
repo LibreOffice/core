@@ -5719,12 +5719,23 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
             {
                 BringBookmarksToAttention(std::vector<OUString> {pCnt->GetName()});
             }
-            else if (nType == ContentTypeId::REGION|| nType == ContentTypeId::INDEX)
+            else if (nType == ContentTypeId::REGION || nType == ContentTypeId::INDEX)
             {
-                const SwSectionFormats& rFormats = m_pActiveShell->GetDoc()->GetSections();
-                const SwSectionFormat* pFormat = rFormats.FindFormatByName(pCnt->GetName());
-                if (pFormat)
-                    BringTypesWithFlowFramesToAttention({pFormat->GetSectionNode()});
+                size_t nSectionFormatCount = m_pActiveShell->GetSectionFormatCount();
+                for (size_t i = 0; i < nSectionFormatCount; ++i)
+                {
+                    const SwSectionFormat& rSectionFormat = m_pActiveShell->GetSectionFormat(i);
+                    if (!rSectionFormat.IsInNodesArr())
+                        continue;
+                    const SwSection* pSection = rSectionFormat.GetSection();
+                    if (!pSection)
+                        continue;
+                    if (pCnt->GetName() == pSection->GetSectionName())
+                    {
+                        BringTypesWithFlowFramesToAttention({rSectionFormat.GetSectionNode()});
+                        break;
+                    }
+                }
             }
             else if (nType == ContentTypeId::URLFIELD)
             {
