@@ -3017,10 +3017,8 @@ void ExceptionType::dumpHdlFile(
     if (name_ == "com.sun.star.uno.Exception")
     {
         // LIBO_INTERNAL_ONLY implies GCC >= 7, which we need for this
-        // Merely checking __has_include is not enough because some systems have the header,
-        // but do not have a new enough Clang 9 supporting __builtin_FILE/LINE/FUNCTION as used by
-        // that libstdc++ header.
-        includes.addCustom("#if defined LIBO_INTERNAL_ONLY && ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __clang_major__ >= 9)) && __has_include(<experimental/source_location>)");
+        // libstdc++ header.
+        includes.addCustom("#if defined LIBO_INTERNAL_ONLY && (defined __GNUC__ || defined __clang__) && __has_include(<experimental/source_location>)");
         includes.addCustom("#define LIBO_USE_SOURCE_LOCATION");
         includes.addCustom("#endif");
         includes.addCustom("#if defined LIBO_USE_SOURCE_LOCATION");
