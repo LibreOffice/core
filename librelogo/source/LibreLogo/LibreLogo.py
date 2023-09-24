@@ -194,7 +194,7 @@ class __Doc__:
         self.fontstyle = 0
         self.points = []
 
-from math import pi, sin, cos, asin, log10, hypot
+from math import pi, sin, cos, asin, log10, hypot, sqrt
 
 from com.sun.star.awt import Point as __Point__
 from com.sun.star.awt import Gradient as __Gradient__
