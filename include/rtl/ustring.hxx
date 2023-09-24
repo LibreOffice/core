@@ -440,7 +440,7 @@ public:
     /// @endcond
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     // For operator ""_tstr:
     template<OStringLiteral L> OUString(detail::OStringHolder<L> const & holder) {
         pData = nullptr;
@@ -545,12 +545,12 @@ public:
     /**
       Release the string data.
     */
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     constexpr
 #endif
     ~OUString()
     {
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
         if (std::is_constant_evaluated()) {
            //TODO: We would want to
            //
@@ -3590,7 +3590,7 @@ using ::rtl::OUStringChar;
 using ::rtl::Concat2View;
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
 
 template<
 #if defined RTL_STRING_UNITTEST

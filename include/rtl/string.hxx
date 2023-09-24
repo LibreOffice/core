@@ -186,7 +186,7 @@ private:
     rtl_String* pData;
 };
 
-#if __cplusplus >= 202002L
+#if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
 
 namespace detail {
 
@@ -396,7 +396,7 @@ public:
     /// @endcond
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     // For operator ""_tstr:
     template<OStringLiteral L> constexpr OString(detail::OStringHolder<L> const & holder):
         pData(const_cast<rtl_String *>(&holder.literal.str)) {}
@@ -472,12 +472,12 @@ public:
     /**
       Release the string data.
     */
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
     constexpr
 #endif
     ~OString()
     {
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
         if (std::is_constant_evaluated()) {
            //TODO: We would want to
            //
@@ -2393,7 +2393,7 @@ using ::rtl::OStringHash;
 using ::rtl::OStringLiteral;
 #endif
 
-#if defined LIBO_INTERNAL_ONLY && __cplusplus >= 202002L
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
 
 template<
 #if defined RTL_STRING_UNITTEST

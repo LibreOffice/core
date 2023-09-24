@@ -122,10 +122,7 @@ void test::oustring::StringLiterals::testcall( const char str[] )
 
 void test::oustring::StringLiterals::checkConstexprCtor()
 {
-#if __cplusplus >= 202002L
-    static constinit
-#endif
-    rtl::OUString s(dummy);
+    static constinit rtl::OUString s(dummy);
     CPPUNIT_ASSERT_EQUAL(oslInterlockedCount(0x40000000), s.pData->refCount);
         // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), s.getLength());
@@ -417,13 +414,13 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
     CPPUNIT_ASSERT(s.startsWith(a));
     CPPUNIT_ASSERT(s.startsWith(p));
     CPPUNIT_ASSERT(s.startsWith(u"foo\0hidden"));
-    // For Clang against libstdc++ with C++20 and greater, this would hit not-yet-fixed
+    // For Clang against libstdc++, this would hit not-yet-fixed
     // <https://github.com/llvm/llvm-project/issues/24502> "eagerly-instantiated entities whose
     // templates are defined after the first point of instantiation don't get instantiated at all"
     // (see the mailing list thread starting at
     // <https://gcc.gnu.org/pipermail/libstdc++/2021-November/053548.html> "std::basic_string<_Tp>
     // constructor point of instantiation woes?"):
-#if !(defined __clang__ && defined __GLIBCXX__ && __cplusplus >= 202002L)
+#if !(defined __clang__ && defined __GLIBCXX__)
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"s));
 #endif
     CPPUNIT_ASSERT(!s.startsWith(u"foo\0hidden"sv));
@@ -434,7 +431,6 @@ void test::oustring::StringLiterals::checkEmbeddedNul() {
 }
 
 void test::oustring::StringLiterals::checkOstr() {
-#if __cplusplus >= 202002L
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), u""_ustr.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), u"foobar"_ustr.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7), u"foo\0bar"_ustr.getLength());
@@ -443,7 +439,6 @@ void test::oustring::StringLiterals::checkOstr() {
     // Unlike in a OString context, the below "foo\0bar"_tstr in a OUString context would trigger
     // the assert(c!='\0') in Copy in sal/rtl/strtmpl.hxx:
     // CPPUNIT_ASSERT_EQUAL(u"foo\0bar"_ustr, rtl::OUString("foo\0bar"_tstr));
-#endif
 }
 
 } // namespace

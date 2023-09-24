@@ -3632,15 +3632,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf97369)
     auto lExpectedinE = [=](SCROW) { return SHIFT1 + SHIFT2; };
     columnTest(4, "=SUM(A$1:C$1)", lExpectedinE);
 
-    auto lExpectedinF =
-        [
-#if defined _MSC_VER && !defined __clang__ && __cplusplus <= 201703L
-            // see <https://developercommunity2.visualstudio.com/t/
-            // Lambdas-require-capturing-constant-value/907628> "Lambdas require capturing constant
-            // values"
-            ROW_RANGE
-#endif
-    ](SCROW n) { return ((2 * n + 1 - ROW_RANGE) * ROW_RANGE) / 2.0; };
+    auto lExpectedinF = [](SCROW n) { return ((2 * n + 1 - ROW_RANGE) * ROW_RANGE) / 2.0; };
     columnTest(5, "=SUM(A1:A10)", lExpectedinF);
 
     auto lExpectedinG = [](SCROW n) { return ((n + 1) * n) / 2.0; };
