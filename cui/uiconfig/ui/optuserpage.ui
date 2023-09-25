@@ -28,7 +28,7 @@
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="optuserpage|companyft">_Company:</property>
+                <property name="label" translatable="yes" context="optuserpage|companyft">Co_mpany:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">company</property>
                 <property name="xalign">0</property>
@@ -452,7 +452,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="usefordocprop">
-                <property name="label" translatable="yes" context="optuserpage|usefordocprop">Use data for document properties</property>
+                <property name="label" translatable="yes" context="optuserpage|usefordocprop">_Use data for document properties</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -929,7 +929,7 @@
               <object class="GtkLabel" id="signingkeylabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optuserpage|signingkeylabel">OpenPGP signing key:</property>
+                <property name="label" translatable="yes" context="optuserpage|signingkeylabel">_OpenPGP signing key:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">signingkey</property>
                 <property name="xalign">0</property>
@@ -943,7 +943,7 @@
               <object class="GtkLabel" id="encryptionkeylabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes" context="optuserpage|encryptionkeylabel">OpenPGP encryption key:</property>
+                <property name="label" translatable="yes" context="optuserpage|encryptionkeylabel">OpenPGP encryption _key:</property>
                 <property name="use-underline">True</property>
                 <property name="mnemonic-widget">encryptionkey</property>
                 <property name="xalign">0</property>
@@ -993,7 +993,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="encrypttoself">
-                <property name="label" translatable="yes" context="optuserpage|encrypttoself">When encrypting documents, always encrypt to self</property>
+                <property name="label" translatable="yes" context="optuserpage|encrypttoself">When _encrypting documents, always encrypt to self</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
