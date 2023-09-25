@@ -28,7 +28,9 @@ public:
                          const std::function<void(sal_Int32)>& rFunc);
 
     void Apply();
+#if ENABLE_ZXING
     weld::Widget* GetParent() { return mpParent; }
+#endif
 
 private:
     css::uno::Reference<css::frame::XModel> m_xModel;
