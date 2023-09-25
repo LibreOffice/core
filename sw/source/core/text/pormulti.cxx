@@ -2383,6 +2383,11 @@ bool SwTextFormatter::BuildMultiPortion( SwTextFormatInfo &rInf,
     return bRet;
 }
 
+static bool IsIncompleteRuby(const SwMultiPortion& rHelpMulti)
+{
+    return rHelpMulti.IsRuby() && static_cast<const SwRubyPortion&>(rHelpMulti).GetRubyOffset() < TextFrameIndex(COMPLETE_STRING);
+}
+
 // When a fieldportion at the end of line breaks and needs a following
 // fieldportion in the next line, then the "restportion" of the formatinfo
 // has to be set. Normally this happens during the formatting of the first
@@ -2491,19 +2496,19 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
     if (!pCreate)
         return pRest;
 
-    if( pRest || nMultiPos > nPosition || ( pHelpMulti->IsRuby() &&
-        static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset() < TextFrameIndex(COMPLETE_STRING)))
+    if( pRest || nMultiPos > nPosition || IsIncompleteRuby(*pHelpMulti))
     {
         SwMultiPortion* pTmp;
         if( pHelpMulti->IsDouble() )
             pTmp = new SwDoubleLinePortion( *pCreate, nMultiPos );
         else if( pHelpMulti->IsBidi() )
             pTmp = new SwBidiPortion( nMultiPos, pCreate->nLevel );
-        else if( pHelpMulti->IsRuby() )
+        else if (IsIncompleteRuby(*pHelpMulti))
         {
+            TextFrameIndex nRubyOffset = static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset();
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
                                        m_pFrame->GetDoc().getIDocumentSettingAccess(),
-                                       nMultiPos, static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset(),
+                                       nMultiPos, nRubyOffset,
                                        GetInfo() );
         }
         else if( pHelpMulti->HasRotation() )
