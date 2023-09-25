@@ -366,7 +366,7 @@ ContextHandlerRef BlipContext::onCreateContext(
             return new DuotoneContext( *this, mrBlipProps );
 
         case A_TOKEN( extLst ):
-            return new BlipExtensionContext( *this, mrBlipProps );
+            return new BlipExtensionContext(*this, mrBlipProps, mpBlipFill);
 
         case A_TOKEN( lum ):
         {
@@ -595,9 +595,10 @@ SimpleFillPropertiesContext::~SimpleFillPropertiesContext()
     mrColor = getBestSolidColor();
 }
 
-BlipExtensionContext::BlipExtensionContext( ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps ) :
-    ContextHandler2( rParent ),
-    mrBlipProps( rBlipProps )
+BlipExtensionContext::BlipExtensionContext(ContextHandler2Helper const & rParent, BlipFillProperties& rBlipProps, model::BlipFill* pBlipFill)
+    : ContextHandler2(rParent)
+    , mrBlipProps(rBlipProps)
+    , mpBlipFill(pBlipFill)
 {
 }
 
@@ -605,16 +606,36 @@ BlipExtensionContext::~BlipExtensionContext()
 {
 }
 
-ContextHandlerRef BlipExtensionContext::onCreateContext(
-        sal_Int32 nElement, const AttributeList& )
+ContextHandlerRef BlipExtensionContext::onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs)
 {
     switch( nElement )
     {
-        case A_TOKEN( ext ):
-            return new BlipExtensionContext( *this, mrBlipProps );
+        case A_TOKEN(ext):
+            return new BlipExtensionContext(*this, mrBlipProps, mpBlipFill);
 
-        case OOX_TOKEN( a14, imgProps ):
-            return new ArtisticEffectContext( *this, mrBlipProps.maEffect );
+        case OOX_TOKEN(a14, imgProps):
+            return new ArtisticEffectContext(*this, mrBlipProps.maEffect);
+
+        // Import the SVG Blip
+        case OOX_TOKEN(asvg, svgBlip):
+        {
+            if (rAttribs.hasAttribute(R_TOKEN(embed)))
+            {
+                OUString aFragmentPath = getFragmentPathFromRelId(rAttribs.getStringDefaulted(R_TOKEN(embed)));
+                if (!aFragmentPath.isEmpty())
+                {
+                    // Read the graphic from the fragment path
+                    auto xGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic(aFragmentPath);
+
+                    // Overwrite the fill graphic with the one contining SVG
+                    mrBlipProps.mxFillGraphic = xGraphic;
+                    if (mpBlipFill)
+                        mpBlipFill->mxGraphic = xGraphic;
+                }
+            }
+            // TODO - link
+        }
+        break;
     }
     return nullptr;
 }

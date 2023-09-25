@@ -41,7 +41,10 @@
 class Test : public SwModelTestBase
 {
 public:
-    Test() : SwModelTestBase("/sw/qa/extras/globalfilter/data/") {}
+    Test() : SwModelTestBase("/sw/qa/extras/globalfilter/data/")
+    {
+        skipValidation();
+    }
 
     void testEmbeddedGraphicRoundtrip();
     void testLinkedGraphicRT();
@@ -67,6 +70,7 @@ public:
     void testDropDownFormField();
     void testDateFormField();
     void testDateFormFieldCharacterFormatting();
+    void testSvgImageSupport();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -90,6 +94,7 @@ public:
     CPPUNIT_TEST(testDropDownFormField);
     CPPUNIT_TEST(testDateFormField);
     CPPUNIT_TEST(testDateFormFieldCharacterFormatting);
+    CPPUNIT_TEST(testSvgImageSupport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1764,6 +1769,50 @@ void Test::testDateFormFieldCharacterFormatting()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(xTextPortion, "CharWeight"));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(xTextPortion, "CharColor"));
         }
+    }
+}
+
+void Test::testSvgImageSupport()
+{
+    OUString aFilterNames[] = {
+        "writer8",
+        "Office Open XML Text",
+    };
+
+    for (OUString const & rFilterName : aFilterNames)
+    {
+        // Use case to import a document containing a SVG image, export in target format, import and check if the
+        // SVG image is present and as expected in the document
+
+        // Import ODT file
+        createSwDoc("SvgImageTest.odt");
+
+        // Export the document in target format and import again
+        saveAndReload(rFilterName);
+
+        // Prepare fail message (writing which import/export filter was used)
+        const OString sFailedMessage = "Failed on filter: " + rFilterName.toUtf8();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+
+        // Get the image
+        uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
+
+        // Convert to a XGraphic
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+
+        // Access the Graphic
+        Graphic aGraphic(xGraphic);
+
+        // Check if it contian a VectorGraphicData struct
+        auto pVectorGraphic = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+
+        // Which should be of type SVG, which means we have a SVG file
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg, pVectorGraphic->getType());
     }
 }
 
