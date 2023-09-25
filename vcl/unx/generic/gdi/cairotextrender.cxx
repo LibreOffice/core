@@ -321,7 +321,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
                 // See: https://gitlab.freedesktop.org/cairo/cairo/-/issues/643
                 // b) tdf#152675 a similar report for cairo: 1.16.0-4ubuntu1,
                 // assume that everything <= 1.17.8 is unsafe to disable this
-                if (cairo_version() <= CAIRO_VERSION_ENCODE(1, 17, 8))
+                if (cairo_version() > CAIRO_VERSION_ENCODE(1, 17, 8))
                     cairo_font_options_set_hint_metrics(pOptions, CAIRO_HINT_METRICS_OFF);
             }
             cairo_set_font_options(cr, pOptions);
