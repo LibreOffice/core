@@ -19,9 +19,9 @@ disable freetype dependent code
 -#include FT_FREETYPE_H
 +//#include <ft2build.h>
 +//#include FT_FREETYPE_H
+ #include <unordered_set>
  
  // helper for using std::visit to get a dependent false for static_asserts
- // to help get compile errors if one ever extends variants
 @@ -2760,6 +2760,8 @@
  
  Form::AddFontResult Form::addFontToDefaultResources(const std::string &filepath, int faceIndex, const std::string &fontFamily, const std::string &fontStyle, bool forceName)
