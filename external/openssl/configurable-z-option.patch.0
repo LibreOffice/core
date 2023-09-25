@@ -18,7 +18,7 @@
                                 asflags   => "/Cp /coff /c /Cx",
                                 asoutflag => "/Fo",
                                 perlasm_scheme => "win32" };
-@@ -1252,10 +1252,10 @@
+@@ -1231,10 +1231,10 @@
                                  "UNICODE", "_UNICODE",
                                  "_CRT_SECURE_NO_DEPRECATE",
                                  "_WINSOCK_DEPRECATED_NO_WARNINGS"),
