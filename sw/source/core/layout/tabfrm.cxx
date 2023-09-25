@@ -2825,6 +2825,15 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             if ( GetFollow() )
                 Join();
         }
+        else if (!GetNext() && !HasFollowFlowLine() && GetFollow()
+                 && (getFrameArea().Bottom() + GetFollow()->getFrameArea().Height())
+                        < GetUpper()->getFrameArea().Bottom())
+        {
+            // We're the last lower of the upper, no split row and we have a follow.  That follow
+            // fits our upper, still.  Prefer joining that follow in the next iteration, instead of
+            // trying to split the current table.
+            bSplit = false;
+        }
 
         if ( bMovedBwd && GetUpper() )
         {

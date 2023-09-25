@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_core_layout, \
     sw/qa/core/layout/layact \
     sw/qa/core/layout/layout \
     sw/qa/core/layout/paintfrm \
+    sw/qa/core/layout/tabfrm \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_core_layout, \
