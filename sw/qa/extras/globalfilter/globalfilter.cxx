@@ -68,6 +68,7 @@ public:
     void testDropDownFormField();
     void testDateFormField();
     void testDateFormFieldCharacterFormatting();
+    void testSvgImageSupport();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testEmbeddedGraphicRoundtrip);
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testDropDownFormField);
     CPPUNIT_TEST(testDateFormField);
     CPPUNIT_TEST(testDateFormFieldCharacterFormatting);
+    CPPUNIT_TEST(testSvgImageSupport);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2211,6 +2213,41 @@ void Test::testDateFormFieldCharacterFormatting()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(xTextPortion, "CharWeight"));
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(xTextPortion, "CharColor"));
         }
+    }
+}
+
+void Test::testSvgImageSupport()
+{
+    OUString aFilterNames[] = {
+        "writer8",
+        "Office Open XML Text",
+    };
+
+    for (OUString const & rFilterName : aFilterNames)
+    {
+        // Check whether the export code swaps in the image which was swapped out before by auto mechanism
+
+        createSwDoc("SvgImageTest.odt");
+
+        // Export the document and import again for a check
+        saveAndReload(rFilterName);
+
+        // Check whether graphic exported well after it was swapped out
+        const OString sFailedMessage = "Failed on filter: "_ostr + rFilterName.toUtf8();
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), 1, getShapes());
+
+        // First image
+        uno::Reference<drawing::XShape> xImage(getShape(1), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
+
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        Graphic aGraphic(xGraphic);
+        auto pVectorGraphic = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg, pVectorGraphic->getType());
     }
 }
 

@@ -1927,6 +1927,37 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testTdf153179)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getPage(0)->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SdExportTest, testSvgImageSupport)
+{
+    for (OUString const& rFormat : { u"impress8"_ustr, u"Impress Office Open XML"_ustr })
+    {
+        // Load the original file
+        createSdImpressDoc("odp/SvgImageTest.odp");
+        const OString sFailedMessage = "Failed on filter: " + rFormat.toUtf8();
+        saveAndReload(rFormat);
+
+        // Check whether graphic was exported well
+        uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1),
+                                     xDrawPagesSupplier->getDrawPages()->getCount());
+        uno::Reference<drawing::XDrawPage> xDrawPage(
+            xDrawPagesSupplier->getDrawPages()->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xDrawPage.is());
+        uno::Reference<drawing::XShape> xImage(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xImage, uno::UNO_QUERY_THROW);
+
+        uno::Reference<graphic::XGraphic> xGraphic;
+        xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), xGraphic.is());
+        Graphic aGraphic(xGraphic);
+        auto pVectorGraphic = aGraphic.getVectorGraphicData();
+        CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pVectorGraphic);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), VectorGraphicDataType::Svg,
+                                     pVectorGraphic->getType());
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -102,7 +102,8 @@ class BlipExtensionContext final : public ::oox::core::ContextHandler2
 public:
     explicit            BlipExtensionContext(
                             ::oox::core::ContextHandler2Helper const & rParent,
-                            BlipFillProperties& rBlipProps );
+                                BlipFillProperties& rBlipProps,
+                                model::BlipFill* pBlipFill);
     virtual             ~BlipExtensionContext() override;
 
     virtual ::oox::core::ContextHandlerRef
@@ -112,6 +113,7 @@ public:
 
 private:
     BlipFillProperties& mrBlipProps;
+    model::BlipFill* mpBlipFill;
 };
 
 
