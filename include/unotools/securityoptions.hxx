@@ -92,7 +92,7 @@ namespace SvtSecurityOptions
     UNOTOOLS_DLLPUBLIC void SetSecureURLs( std::vector< OUString >&& seqURLList );
 
     /*-****************************************************************************************************
-            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/StarOfficeBasic"
+            @short      interface methods to get and set value of config key "org.openoffice.Office.Common/Security/Scripting/MacroSecurityLevel"
             @descr      These value determines how StarOffice Basic scripts should be handled.
                         It exist 3 different modes:
                             0 = never execute
