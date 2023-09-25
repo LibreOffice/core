@@ -9,6 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
+#include <pagefrm.hxx>
+#include <tabfrm.hxx>
+
+namespace
+{
 /// Covers sw/source/core/layout/tabfrm.cxx fixes.
 class Test : public SwModelTestBase
 {
@@ -33,6 +40,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTablePrintAreaLeft)
     // - Actual  : 10646
     // i.e. the table was shifted outside the page, was invisible.
     CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(5), nTablePrintLeft);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTableMissingJoin)
+{
+    // Given a document with a table on page 2:
+    // When laying out that document:
+    createSwDoc("table-missing-join.docx");
+
+    // Then make sure that the table fits page 2:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    SwFrame* pBody = pPage2->FindBodyCont();
+    auto pTab = pBody->GetLower()->DynCastTabFrame();
+    // Without the accompanying fix in place, this test would have failed, the table continued on
+    // page 3.
+    CPPUNIT_ASSERT(!pTab->HasFollow());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
