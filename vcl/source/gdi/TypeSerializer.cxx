@@ -435,6 +435,10 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
 {
     if (!rScale.IsValid())
         return true;
+    // ofz#62439 negative numbers are multiplied by -1, MIN_INT32 * -1
+    // cannot be expressed as an int
+    if (rScale.GetNumerator() == std::numeric_limits<sal_Int32>::min())
+        return true;
     if (static_cast<double>(rScale) < 0.0)
         return true;
     return false;
