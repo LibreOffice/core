@@ -1112,14 +1112,14 @@ void SdrHdl::insertNewlyCreatedOverlayObjectForSdrHdl(
 
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
 :   SdrHdl(rRef, SdrHdlKind::Color),
-    aMarkerSize(rSize),
-    bUseLuminance(bLum)
+    m_aMarkerSize(rSize),
+    m_bUseLuminance(bLum)
 {
     if(IsUseLuminance())
         aCol = GetLuminance(aCol);
 
     // remember color
-    aMarkerColor = aCol;
+    m_aMarkerColor = aCol;
 }
 
 SdrHdlColor::~SdrHdlColor()
@@ -1153,7 +1153,7 @@ void SdrHdlColor::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                BitmapEx aBmpCol(CreateColorDropper(aMarkerColor));
+                BitmapEx aBmpCol(CreateColorDropper(m_aMarkerColor));
                 basegfx::B2DPoint aPosition(m_aPos.X(), m_aPos.Y());
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
                     sdr::overlay::OverlayBitmapEx(
@@ -1177,13 +1177,13 @@ BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
 {
     // get the Bitmap
     VclPtr<VirtualDevice> pWrite(VclPtr<VirtualDevice>::Create());
-    pWrite->SetOutputSizePixel(aMarkerSize);
+    pWrite->SetOutputSizePixel(m_aMarkerSize);
     pWrite->SetBackground(aCol);
     pWrite->Erase();
 
     // draw outer border
-    sal_Int32 nWidth = aMarkerSize.Width();
-    sal_Int32 nHeight = aMarkerSize.Height();
+    sal_Int32 nWidth = m_aMarkerSize.Width();
+    sal_Int32 nHeight = m_aMarkerSize.Height();
 
     pWrite->SetLineColor(COL_LIGHTGRAY);
     pWrite->DrawLine(Point(0, 0), Point(0, nHeight - 1));
@@ -1210,7 +1210,7 @@ BitmapEx SdrHdlColor::CreateColorDropper(Color aCol)
     pWrite->DrawLine(Point(2, nHeight - 2), Point(nWidth - 2, nHeight - 2));
     pWrite->DrawLine(Point(nWidth - 2, 2), Point(nWidth - 2, nHeight - 3));
 
-    return pWrite->GetBitmapEx(Point(0,0), aMarkerSize);
+    return pWrite->GetBitmapEx(Point(0,0), m_aMarkerSize);
 }
 
 Color SdrHdlColor::GetLuminance(const Color& rCol)
@@ -1225,26 +1225,26 @@ void SdrHdlColor::SetColor(Color aNew, bool bCallLink)
     if(IsUseLuminance())
         aNew = GetLuminance(aNew);
 
-    if(aMarkerColor != aNew)
+    if(m_aMarkerColor != aNew)
     {
         // remember new color
-        aMarkerColor = aNew;
+        m_aMarkerColor = aNew;
 
         // create new display
         Touch();
 
         // tell about change
         if(bCallLink)
-            aColorChangeHdl.Call(this);
+            m_aColorChangeHdl.Call(this);
     }
 }
 
 void SdrHdlColor::SetSize(const Size& rNew)
 {
-    if(rNew != aMarkerSize)
+    if(rNew != m_aMarkerSize)
     {
         // remember new size
-        aMarkerSize = rNew;
+        m_aMarkerSize = rNew;
 
         // create new display
         Touch();
