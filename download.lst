@@ -325,8 +325,8 @@ LIBNUMBERTEXT_TARBALL := libnumbertext-1.0.11.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-LIBTOMMATH_SHA256SUM := b7c75eecf680219484055fcedd686064409254ae44bc31a96c5032843c0e18b1
-LIBTOMMATH_TARBALL := ltm-1.2.0.tar.xz
+LIBTOMMATH_SHA256SUM := 986025d7b374276fee2e30e99f3649e4ac0db8a02257a37ee10eae72abed0d1f
+LIBTOMMATH_TARBALL := ltm-1.2.1.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
