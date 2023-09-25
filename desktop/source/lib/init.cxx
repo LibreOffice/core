@@ -5954,19 +5954,9 @@ static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
     if (!pObjectShell)
         return nullptr;
 
-    SfxMedium* pMedium = pObjectShell->GetMedium();
-    if (!pMedium)
-        return nullptr;
-
-    bool bDocReadOnly = false;
-    if (const SfxBoolItem* pReadOnlyItem =
-        SfxItemSet::GetItem<SfxBoolItem>(pMedium->GetItemSet(),
-                                         SID_DOC_READONLY, false))
-        bDocReadOnly = pReadOnlyItem->GetValue();
-
     boost::property_tree::ptree aTree;
     aTree.put("commandName", ".uno:ReadOnly");
-    aTree.put("success", bDocReadOnly);
+    aTree.put("success", pObjectShell->IsLoadReadonly());
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
