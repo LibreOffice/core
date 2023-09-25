@@ -1208,23 +1208,20 @@ void InterfaceType::dumpDeclaration(FileStream & out)
         << ("static inline ::css::uno::Type const & SAL_CALL"
             " static_type(void * = 0);\n\n");
     dec();
-#ifdef EMSCRIPTEN
-    out << "#ifndef EMSCRIPTEN\n";
-#endif
     out << "protected:\n";
     inc();
     out << indent() << "~" << id_
         << ("() SAL_NOEXCEPT {} // avoid warnings about virtual members and"
             " non-virtual dtor\n");
-#ifdef EMSCRIPTEN
-    out << "#endif\n";
-#endif
     dec();
     out << "};\n\n";
 }
 
 void InterfaceType::dumpEmbindDeclaration(FileStream & out)
 {
+    // TODO: This is a temporary workaround that likely causes the Embind UNO
+    // bindings to leak memory. Reference counting and cloning mechanisms of
+    // Embind should be investigated to figure out what exactly we need here.
     out << "namespace emscripten { namespace internal { \n"
            "template<> void raw_destructor<" << codemaker::cpp::scopedCppName(u2b(name_))
         << ">(" << codemaker::cpp::scopedCppName(u2b(name_)) << "*){}\n"
