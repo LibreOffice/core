@@ -13,7 +13,10 @@ $(eval $(call gb_StaticLibrary_use_unpacked,poppler,poppler))
 
 $(eval $(call gb_StaticLibrary_set_precompiled_header,poppler,external/poppler/inc/pch/precompiled_poppler))
 
-$(eval $(call gb_StaticLibrary_use_external,poppler,libjpeg))
+$(eval $(call gb_StaticLibrary_use_externals,poppler,\
+	libjpeg \
+	zlib \
+))
 
 $(eval $(call gb_StaticLibrary_set_warnings_disabled,poppler))
 
@@ -92,6 +95,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,poppler,\
 	UnpackedTarball/poppler/poppler/FDPDFDocBuilder \
 	UnpackedTarball/poppler/poppler/FILECacheLoader \
 	UnpackedTarball/poppler/poppler/FileSpec \
+	UnpackedTarball/poppler/poppler/FlateEncoder \
 	UnpackedTarball/poppler/poppler/FontEncodingTables \
 	UnpackedTarball/poppler/poppler/FontInfo \
 	UnpackedTarball/poppler/poppler/Form \
