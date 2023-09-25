@@ -2389,10 +2389,7 @@ void SvxCharEffectsPage::PageCreated(const SfxAllItemSet& aSet)
     if (pDisableCtlItem)
         DisableControls(pDisableCtlItem->GetValue());
 
-    if (!pFlagItem)
-        return;
-
-    sal_uInt32 nFlags=pFlagItem->GetValue();
+    sal_uInt32 nFlags = pFlagItem ? pFlagItem->GetValue() : 0;
     if ( ( nFlags & SVX_PREVIEW_CHARACTER ) == SVX_PREVIEW_CHARACTER )
         // the writer uses SID_ATTR_BRUSH as font background
         m_bPreviewBackgroundToCharacter = true;

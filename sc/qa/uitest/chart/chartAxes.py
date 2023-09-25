@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
 from libreoffice.uno.propertyvalue import mkPropertyValues
+from uitest.uihelper.common import select_pos
 
 
 # Chart Enable Axes dialog
@@ -54,6 +55,18 @@ class chartAxes(UITestCase):
             self.assertEqual(get_state_as_dict(primaryY)["Selected"], "false")
             self.assertEqual(get_state_as_dict(secondaryX)["Selected"], "true")
             self.assertEqual(get_state_as_dict(secondaryY)["Selected"], "true")
+
+        # Test Format -> Axis -> X Axis...: the child name is generated in
+        # lcl_getAxisCIDForCommand().
+        xAxisX = xChartMain.getChild("CID/D=0:CS=0:Axis=0,0")
+        with self.ui_test.execute_dialog_through_action(xAxisX, "COMMAND", mkPropertyValues({"COMMAND": "DiagramAxisX"})) as xDialog:
+            xTabs = xDialog.getChild("tabcontrol")
+            # Select RID_SVXPAGE_CHAR_EFFECTS, see the SchAttribTabDlg ctor.
+            select_pos(xTabs, "6")
+            xFontTransparency = xDialog.getChild("fonttransparencymtr")
+            # Without the accompanying fix in place, this test would have failed, the
+            # semi-transparent text UI was visible, but then it was lost on save.
+            self.assertEqual(get_state_as_dict(xFontTransparency)["Visible"], "false")
 
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
