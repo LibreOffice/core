@@ -36,6 +36,7 @@
 #include <comphelper/hash.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <tools/stream.hxx>
 #include <memory>
 #include <utility>
 #include <string.h>
@@ -469,6 +470,40 @@ bool checkDocChecksum( const OUString& rInPDFFileURL,
         && (0 == memcmp(nChecksum.data(), nTestChecksum, nChecksum.size()));
 }
 
+/* https://github.com/CollaboraOnline/online/issues/7307
+
+   Light-weight detection to determine if this is a hybrid
+   pdf document worth parsing to get its AdditionalStream
+   and mimetype.
+
+   TODO: a) do we really ignore the contents of the AdditionalStream
+   and re-parse to get it in the final importer?
+         b) in which case we could presumably parse the mimetype in
+   AdditionalStream here and drop the extraction of the stream.
+*/
+static bool detectHasAdditionalStreams(const OUString& rSysUPath)
+{
+    SvFileStream aHybridDetect(rSysUPath, StreamMode::READ);
+    std::vector<OString> aTrailingLines;
+    const sal_uInt64 nLen = aHybridDetect.remainingSize();
+    aHybridDetect.Seek(nLen - std::min<sal_uInt64>(nLen, 4096));
+    OString aLine;
+    while (aHybridDetect.ReadLine(aLine))
+        aTrailingLines.push_back(aLine);
+    bool bAdditionalStreams(false);
+    for (auto it = aTrailingLines.rbegin(); it != aTrailingLines.rend(); ++it)
+    {
+        if (*it == "trailer")
+            break;
+        if (it->startsWith("/AdditionalStreams "))
+        {
+            bAdditionalStreams = true;
+            break;
+        }
+    }
+    return bAdditionalStreams;
+}
+
 uno::Reference< io::XStream > getAdditionalStream( const OUString&                          rInPDFFileURL,
                                                    OUString&                                rOutMimetype,
                                                    OUString&                                io_rPwd,
@@ -481,6 +516,10 @@ uno::Reference< io::XStream > getAdditionalStream( const OUString&              
     OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rInPDFFileURL.pData, &aSysUPath.pData ) != osl_File_E_None )
         return xEmbed;
+
+    if (!detectHasAdditionalStreams(aSysUPath))
+        return xEmbed;
+
     aPDFFile = OUStringToOString( aSysUPath, osl_getThreadTextEncoding() );
 
     std::unique_ptr<pdfparse::PDFEntry> pEntry( pdfparse::PDFReader::read( aPDFFile.getStr() ));
