@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <DocumentContentOperationsManager.hxx>
+#include <DocumentRedlineManager.hxx>
+#include <wrtsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentMarkAccess.hxx>
@@ -3000,6 +3002,38 @@ void DocumentContentOperationsManager::TransliterateText(
             }
         } else {
             /* Cursor is not inside of a word. Nothing should happen. */
+            /* Except in the case of change tracking, when the cursor is at the end of the change */
+            /* Recognize and reject the previous deleted and inserted words to allow to cycle */
+            IDocumentRedlineAccess& rIDRA = m_rDoc.getIDocumentRedlineAccess();
+            if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) &&
+                            pStt->GetContentIndex() > 0 )
+            {
+                SwPosition aPos(*pStt->GetContentNode(), pStt->GetContentIndex() - 1);
+                SwRedlineTable::size_type n = 0;
+
+                const SwRangeRedline* pFnd =
+                                    rIDRA.GetRedlineTable().FindAtPosition( aPos, n );
+                if ( pFnd && RedlineType::Insert == pFnd->GetType() && n > 0 )
+                {
+                    const SwRangeRedline* pFnd2 = rIDRA.GetRedlineTable()[n-1];
+                    if ( RedlineType::Delete == pFnd2->GetType() &&
+                          m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
+                          *pFnd2->End() == *pFnd->Start() &&
+                          pFnd->GetAuthor() == pFnd2->GetAuthor() )
+                    {
+                        SwPosition aPos2(*pFnd2->End());
+                        rIDRA.RejectRedline(*pFnd, true);
+                        rIDRA.RejectRedline(*pFnd2, true);
+                        // positionate the text cursor inside the changed word to allow to cycle
+                        if ( SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
+                                m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
+                        {
+                            pWrtShell->GetCursor()->GetPoint()->
+                                    Assign(*aPos2.GetContentNode(), aPos2.GetContentIndex() - 1);
+                        }
+                    }
+                }
+            }
             return;
         }
     }
