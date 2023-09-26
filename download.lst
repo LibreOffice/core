@@ -162,6 +162,11 @@ FONT_NOTO_TARBALL := noto-fonts-20171024.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_NOTO_SANS_SHA256SUM := efef2f66ed2c5e005472cba156bd2afb68063a51bb628c6ee14143edc019d293
+FONT_NOTO_SANS_TARBALL := NotoSans-v2.012.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_CULMUS_SHA256SUM := c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
 FONT_CULMUS_TARBALL := culmus-0.133.tar.gz
 # three static lines

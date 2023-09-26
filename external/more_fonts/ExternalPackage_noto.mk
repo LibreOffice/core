@@ -23,23 +23,13 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansArabicUI-Regular.ttf \
 	NotoSansArmenian-Bold.ttf \
 	NotoSansArmenian-Regular.ttf \
-	NotoSans-Bold.ttf \
-	NotoSans-BoldItalic.ttf \
-	NotoSans-Condensed.ttf \
-	NotoSans-CondensedBold.ttf \
-	NotoSans-CondensedBoldItalic.ttf \
-	NotoSans-CondensedItalic.ttf \
 	NotoSansGeorgian-Bold.ttf \
 	NotoSansGeorgian-Regular.ttf \
 	NotoSansHebrew-Bold.ttf \
 	NotoSansHebrew-Regular.ttf \
-	NotoSans-Italic.ttf \
 	NotoSansLao-Bold.ttf \
 	NotoSansLao-Regular.ttf \
-	NotoSans-Light.ttf \
-	NotoSans-LightItalic.ttf \
 	NotoSansLisu-Regular.ttf \
-	NotoSans-Regular.ttf \
 	NotoSerifArmenian-Bold.ttf \
 	NotoSerifArmenian-Regular.ttf \
 	NotoSerif-Bold.ttf \
