@@ -455,6 +455,15 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     const sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
                 rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
                 rRange.aStart.Row() + 1));
+
+    // tdf#157299 avoid handling a large amount of cells for performance reasons
+    if (nCount > 1000)
+    {
+        SAL_WARN("sc", "ScAccessibleCell::AddRelation: Not setting relations "
+                       "for cell range with more than 1000 cells for performance reasons.");
+        return;
+    }
+
     uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
     uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
     sal_uInt32 nPos(0);
