@@ -219,7 +219,14 @@ public:
                         }
                         else if ('7' == loVersion[0])
                         {
-                            mnGeneratorVersion = SvXMLImport::LO_7x;
+                            if (loVersion.getLength() > 2 && loVersion[2] == '6')
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_76; // 7.6
+                            }
+                            else
+                            {
+                                mnGeneratorVersion = SvXMLImport::LO_7x;
+                            }
                         }
                         else
                         {
