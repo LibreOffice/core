@@ -2067,15 +2067,16 @@ void DbNumericField::updateFromModel( Reference< XPropertySet > _rxModel )
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbNumericField::updateFromModel: invalid call!" );
 
     FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    Formatter& rFormatter = pControl->get_formatter();
 
     double dValue = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
-    {
-        Formatter& rFormatter = pControl->get_formatter();
         rFormatter.SetValue(dValue);
-    }
     else
+    {
         pControl->get_widget().set_text(OUString());
+        rFormatter.InvalidateValueState();
+    }
 }
 
 bool DbNumericField::commitControl()
@@ -2187,15 +2188,16 @@ void DbCurrencyField::updateFromModel( Reference< XPropertySet > _rxModel )
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbCurrencyField::updateFromModel: invalid call!" );
 
     FormattedControlBase* pControl = static_cast<FormattedControlBase*>(m_pWindow.get());
+    Formatter& rFormatter = pControl->get_formatter();
 
     double dValue = 0;
     if ( _rxModel->getPropertyValue( FM_PROP_VALUE ) >>= dValue )
-    {
-        Formatter& rFormatter = pControl->get_formatter();
         rFormatter.SetValue(dValue);
-    }
     else
+    {
         pControl->get_widget().set_text(OUString());
+        rFormatter.InvalidateValueState();
+    }
 }
 
 bool DbCurrencyField::commitControl()
