@@ -1003,8 +1003,40 @@ static bool lcl_HasListStyle( const OUString& sStyleName,
 
     return bRet;
 }
+
+namespace {
+
+auto IsPropertySet(uno::Reference<container::XNameContainer> const& rxParaStyles,
+        uno::Reference<beans::XPropertySet> const& rxPropSet,
+        OUString const& rProperty)
+{
+    uno::Reference<beans::XPropertyState> const xPropState(rxPropSet, uno::UNO_QUERY);
+    // note: this is true only if it is set in automatic style
+    if (xPropState->getPropertyState(rProperty) == beans::PropertyState_DIRECT_VALUE)
+    {
+        return true;
+    }
+    // check if it is set by any parent common style
+    OUString style;
+    rxPropSet->getPropertyValue("ParaStyleName") >>= style;
+    while (!style.isEmpty() && rxParaStyles.is() && rxParaStyles->hasByName(style))
+    {
+        uno::Reference<style::XStyle> const xStyle(rxParaStyles->getByName(style), uno::UNO_QUERY);
+        assert(xStyle.is());
+        uno::Reference<beans::XPropertyState> const xStyleProps(xStyle, uno::UNO_QUERY);
+        if (xStyleProps->getPropertyState(rProperty) == beans::PropertyState_DIRECT_VALUE)
+        {
+            return true;
+        }
+        style = xStyle->getParentStyle();
+    }
+    return false;
+};
+
+} // namespace
+
 OUString XMLTextImportHelper::SetStyleAndAttrs(
-        SvXMLImport const & rImport,
+        SvXMLImport & rImport,
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
         bool bPara,
@@ -1086,13 +1118,16 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         bool bNumberingIsNumber(true);
         // Assure that list style of automatic paragraph style is applied at paragraph. (#i101349#)
         bool bApplyNumRules(pStyle && pStyle->IsListStyleSet());
+        bool bApplyNumRulesFix(false);
 
         if (pListBlock) {
             // the xNumRules is always created, even without a list-style-name
-            if (pListBlock->HasListStyleName()
-                || (pListItem != nullptr && pListItem->HasNumRulesOverride()))
+            if (!bApplyNumRules
+                && (pListBlock->HasListStyleName()
+                    || (pListItem != nullptr && pListItem->HasNumRulesOverride())))
             {
                 bApplyNumRules = true; // tdf#114287
+                bApplyNumRulesFix = rImport.isGeneratorVersionOlderThan(SvXMLImport::AOO_4x, SvXMLImport::LO_76);
             }
 
             if (!pListItem) {
@@ -1125,7 +1160,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
         if (pListBlock || pNumberedParagraph)
         {
-            if ( !bApplyNumRules )
+            if (!bApplyNumRules || bApplyNumRulesFix)
             {
                 bool bSameNumRules = xNewNumRules == xNumRules;
                 if( !bSameNumRules && xNewNumRules.is() && xNumRules.is() )
@@ -1149,7 +1184,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         }
                     }
                 }
-                bApplyNumRules = !bSameNumRules;
+                if (!bApplyNumRules)
+                {
+                    bApplyNumRules = !bSameNumRules;
+                }
+                if (!bSameNumRules)
+                {
+                    bApplyNumRulesFix = false;
+                }
             }
 
             if ( bApplyNumRules )
@@ -1163,6 +1205,19 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     xPropSet->setPropertyValue(
                         s_NumberingRules, Any(xNewNumRules) );
+                    if (bApplyNumRulesFix)
+                    {   // tdf#156146 override list margins for bug compatibility
+                        if (IsPropertySet(m_xImpl->m_xParaStyles, xPropSet, "ParaLeftMargin"))
+                        {
+                            uno::Any const left(xPropSet->getPropertyValue("ParaLeftMargin"));
+                            xPropSet->setPropertyValue("ParaLeftMargin", left);
+                        }
+                        if (IsPropertySet(m_xImpl->m_xParaStyles, xPropSet, "ParaFirstLineIndent"))
+                        {
+                            uno::Any const first(xPropSet->getPropertyValue("ParaFirstLineIndent"));
+                            xPropSet->setPropertyValue("ParaFirstLineIndent", first);
+                        }
+                    }
                 }
                 catch(const Exception&)
                 {
