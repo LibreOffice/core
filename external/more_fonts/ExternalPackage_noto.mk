@@ -12,7 +12,6 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto))
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
 	NotoKufiArabic-Bold.ttf \
 	NotoKufiArabic-Regular.ttf \
-	NotoMono-Regular.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
