@@ -7,12 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto))
+$(eval $(call gb_UnpackedTarball_UnpackedTarball,font_noto_naskh_arabic))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	NotoKufiArabic-Bold.ttf \
-	NotoKufiArabic-Regular.ttf \
-	NotoMono-Regular.ttf \
-))
+$(eval $(call gb_UnpackedTarball_set_tarball,font_noto_naskh_arabic,$(FONT_NOTO_NASKH_ARABIC_TARBALL),0))
 
 # vim: set noet sw=4 ts=4:

@@ -326,15 +326,15 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 
     // A. RTL text
     // Set font size to its UPEM to decrease rounding issues
-    aFont = vcl::Font("Noto Naskh Arabic", "Regular", Size(0, 2048));
+    aFont = vcl::Font("Noto Sans Arabic", "Regular", Size(0, 1000));
     pOutDev->SetFont(aFont);
 
     aText = u"لا بلا";
 
     // 1) Regular DX array, the ligature width is given to the first components
     // and the next ones are all zero width.
-    nRefTextWidth = 3325;
-    aRefCharWidths= { 1060, 1060, 1512, 2076, 3325, 3325 };
+    nRefTextWidth = 1710;
+    aRefCharWidths= { 582, 582, 842, 1111, 1710, 1710 };
     nTextWidth = pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/false);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 
     // 2) Caret placement DX array, ligature width is distributed over its
     // components.
-    aRefCharWidths = { 530, 1060, 1512, 2076, 2701, 3325 };
+    aRefCharWidths = { 291, 582, 842, 1111, 1410, 1710 };
     nTextWidth = pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/true);
     CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
     CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     // 3) caret placement with combining marks, they should not add to ligature
     // component count.
     aText = u"لَاَ بلَاَ";
-    aRefCharWidths = { 530, 530, 1060, 1060, 1512, 2076, 2701, 2701, 3325, 3325 };
+    aRefCharWidths = { 291, 291, 582, 582, 842, 1111, 1410, 1410, 1710, 1710 };
     nTextWidth2 = pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/true);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[0], aCharWidths[1]);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[2], aCharWidths[3]);
@@ -401,8 +401,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
     pOutDev->SetFont(aFont);
 
     // get an compare the default text array
-    std::vector<sal_Int32> aRefCharWidths{ 933, 2340, 2340, 3687, 4646, 5493 };
-    tools::Long nRefTextWidth(5493);
+    std::vector<sal_Int32> aRefCharWidths{ 934, 2341, 2341, 3689, 4647, 5495 };
+    tools::Long nRefTextWidth(5495);
 
     KernArray aCharWidths;
     tools::Long nTextWidth = pOutDev->GetTextArray(aText, &aCharWidths);

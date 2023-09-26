@@ -183,6 +183,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SERIF_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_ARABIC_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_NASKH_ARABIC_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_HEBREW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SERIF_HEBREW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_ARMENIAN_TARBALL) \
