@@ -1446,6 +1446,10 @@ OUString GraphicExport::writeToStorage(const Graphic& rGraphic , bool bRelPathTo
                 sMediaType = "image/png";
                 pExtension = ".png";
                 break;
+            case GfxLinkType::NativeSvg:
+                sMediaType = "image/svg";
+                pExtension = ".svg";
+                break;
             case GfxLinkType::NativeTif:
                 sMediaType = "image/tiff";
                 pExtension = ".tif";
