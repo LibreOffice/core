@@ -172,6 +172,11 @@ FONT_NOTO_SERIF_TARBALL := NotoSerif-v2.012.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_NOTO_SANS_ARABIC_SHA256SUM := a5a34ac1ea01d0d71c083f99440ebfb1f64224474a0d88bb7ef0e2f8d9a996d2
+FONT_NOTO_SANS_ARABIC_TARBALL := NotoSansArabic-v2.010.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_CULMUS_SHA256SUM := c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
 FONT_CULMUS_TARBALL := culmus-0.133.tar.gz
 # three static lines
