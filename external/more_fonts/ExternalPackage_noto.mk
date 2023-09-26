@@ -28,8 +28,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSerifArmenian-Regular.ttf \
 	NotoSerifGeorgian-Bold.ttf \
 	NotoSerifGeorgian-Regular.ttf \
-	NotoSerifHebrew-Bold.ttf \
-	NotoSerifHebrew-Regular.ttf \
 	NotoSerifLao-Bold.ttf \
 	NotoSerifLao-Regular.ttf \
 ))
