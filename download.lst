@@ -197,6 +197,11 @@ FONT_NOTO_SERIF_ARMENIAN_TARBALL := NotoSerifArmenian-v2.008.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_NOTO_SANS_GEORGIAN_SHA256SUM := bd75d1f0b9ef619b5ded0018d6258eeab2f9e976d8f8074bb7890f4e301648bf
+FONT_NOTO_SANS_GEORGIAN_TARBALL := NotoSansGeorgian-v2.003.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_CULMUS_SHA256SUM := c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
 FONT_CULMUS_TARBALL := culmus-0.133.tar.gz
 # three static lines

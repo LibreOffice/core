@@ -17,8 +17,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoNaskhArabic-Regular.ttf \
 	NotoNaskhArabicUI-Bold.ttf \
 	NotoNaskhArabicUI-Regular.ttf \
-	NotoSansGeorgian-Bold.ttf \
-	NotoSansGeorgian-Regular.ttf \
 	NotoSansLao-Bold.ttf \
 	NotoSansLao-Regular.ttf \
 	NotoSansLisu-Regular.ttf \

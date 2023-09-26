@@ -25,6 +25,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_sans \
 	ExternalPackage_noto_sans_arabic \
 	ExternalPackage_noto_sans_armenian \
+	ExternalPackage_noto_sans_georgian \
 	ExternalPackage_noto_sans_hebrew \
 	ExternalPackage_noto_serif \
 	ExternalPackage_noto_serif_armenian \
@@ -46,6 +47,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_sans \
 	UnpackedTarball_noto_sans_arabic \
 	UnpackedTarball_noto_sans_armenian \
+	UnpackedTarball_noto_sans_georgian \
 	UnpackedTarball_noto_sans_hebrew \
 	UnpackedTarball_noto_serif \
 	UnpackedTarball_noto_serif_armenian \
