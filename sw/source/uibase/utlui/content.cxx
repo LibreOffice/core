@@ -116,6 +116,8 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <node2lay.hxx>
 
+#include <sectfrm.hxx>
+
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
 
@@ -6052,28 +6054,102 @@ void SwContentTree::BringTypesWithFlowFramesToAttention(const std::vector<const 
         if (!pNode)
             continue;
         const SwFrame* pFrame;
-        if (pNode->IsContentNode())
-            pFrame = pNode->GetContentNode()->getLayoutFrame(m_pActiveShell->GetLayout());
-        else
+        if (pNode->IsContentNode() || pNode->IsTableNode())
         {
-            // section and table nodes
-            SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
-            pFrame = aTmp.NextFrame();
+            if (pNode->IsContentNode())
+                pFrame = pNode->GetContentNode()->getLayoutFrame(m_pActiveShell->GetLayout());
+            else // table node
+            {
+                SwNode2Layout aTmp(*pNode, pNode->GetIndex() - 1);
+                pFrame = aTmp.NextFrame();
+            }
+            while (pFrame)
+            {
+                const SwRect& rFrameRect = pFrame->getFrameArea();
+                if (!rFrameRect.IsEmpty())
+                    aRanges.emplace_back(rFrameRect.Left(), bIncludeTopMargin ? rFrameRect.Top() :
+                                         rFrameRect.Top() + pFrame->GetTopMargin(),
+                                         rFrameRect.Right(), rFrameRect.Bottom());
+                if (!pFrame->IsFlowFrame())
+                    break;
+                const SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+                if (!pFollow)
+                    break;
+                pFrame = &pFollow->GetFrame();
+            }
         }
-        while (pFrame)
+        else if (pNode->IsSectionNode())
         {
-            const SwRect& rFrameRect = pFrame->getFrameArea();
-            if (!rFrameRect.IsEmpty())
-                aRanges.emplace_back(rFrameRect.Left(),
-                                     bIncludeTopMargin ? rFrameRect.Top() :
-                                                         rFrameRect.Top() + pFrame->GetTopMargin(),
-                                     rFrameRect.Right(), rFrameRect.Bottom());
-            if (!pFrame->IsFlowFrame())
-                break;
-            const SwFlowFrame *pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
-            if (!pFollow)
-                break;
-            pFrame = &pFollow->GetFrame();
+            const SwNode* pEndOfSectionNode = pNode->EndOfSectionNode();
+            SwNodeIndex aIdx(*pNode);
+            while (&aIdx.GetNode() != pEndOfSectionNode)
+            {
+                if (aIdx.GetNode().IsContentNode())
+                {
+                    if ((pFrame = aIdx.GetNode().GetContentNode()->
+                         getLayoutFrame(m_pActiveShell->GetLayout())))
+                    {
+                        if (pFrame->IsInSct())
+                            pFrame = pFrame->FindSctFrame();
+                        if (pFrame)
+                        {
+                            const SwRect& rFrameRect = pFrame->getFrameArea();
+                            if (!rFrameRect.IsEmpty())
+                                aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(),
+                                                     rFrameRect.Right(), rFrameRect.Bottom());
+                        }
+                    }
+                    ++aIdx;
+                    while (!aIdx.GetNode().IsEndNode() && !aIdx.GetNode().IsSectionNode())
+                        ++aIdx;
+                    continue;
+                }
+                if (!aIdx.GetNode().IsSectionNode())
+                {
+                    ++aIdx;
+                    continue;
+                }
+                SwNode2Layout aTmp(aIdx.GetNode(), aIdx.GetNode().GetIndex() - 1);
+                pFrame = aTmp.NextFrame();
+                if (pFrame)
+                {
+                    if (!pFrame->getFrameArea().IsEmpty())
+                    {
+                        const SwRect& rFrameRect = pFrame->getFrameArea();
+                        aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(),
+                                             rFrameRect.Right(), rFrameRect.Bottom());
+                    }
+                    if (pFrame->IsSctFrame())
+                    {
+                        const SwSectionFrame* pSectionFrame
+                                = static_cast<const SwSectionFrame*>(pFrame);
+                        if (pSectionFrame->HasFollow())
+                        {
+                            const SwFlowFrame *pFollow
+                                    = SwFlowFrame::CastFlowFrame(pSectionFrame)->GetFollow();
+                            while (pFollow)
+                            {
+                                pFrame = &pFollow->GetFrame();
+                                if (!pFrame->getFrameArea().IsEmpty())
+                                {
+                                    const SwRect& rFrameRect = pFrame->getFrameArea();
+                                    aRanges.emplace_back(rFrameRect.Left(), rFrameRect.Top(),
+                                                         rFrameRect.Right(), rFrameRect.Bottom());
+                                }
+                                pFollow = SwFlowFrame::CastFlowFrame(pFrame)->GetFollow();
+                            }
+                        }
+                    }
+                }
+                ++aIdx;
+                while (!aIdx.GetNode().IsEndNode() && !aIdx.GetNode().IsSectionNode())
+                    ++aIdx;
+            }
+            // Remove nested sections. This wouldn't be needed if the overlay wasn't invert type.
+            auto end = aRanges.end();
+            for (auto it = aRanges.begin(); it != end; ++it)
+                end = std::remove_if(it + 1, end, [&it](auto itt){ return it->isInside(itt); });
+            aRanges.erase(end, aRanges.end());
         }
     }
     OverlayObject(std::move(aRanges));
