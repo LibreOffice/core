@@ -22,8 +22,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansLao-Bold.ttf \
 	NotoSansLao-Regular.ttf \
 	NotoSansLisu-Regular.ttf \
-	NotoSerifArmenian-Bold.ttf \
-	NotoSerifArmenian-Regular.ttf \
 	NotoSerifGeorgian-Bold.ttf \
 	NotoSerifGeorgian-Regular.ttf \
 	NotoSerifLao-Bold.ttf \
