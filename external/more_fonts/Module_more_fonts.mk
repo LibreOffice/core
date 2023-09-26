@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_noto_sans_hebrew \
 	ExternalPackage_noto_serif \
 	ExternalPackage_noto_serif_armenian \
+	ExternalPackage_noto_serif_georgian \
 	ExternalPackage_noto_serif_hebrew \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
@@ -51,6 +52,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_noto_sans_hebrew \
 	UnpackedTarball_noto_serif \
 	UnpackedTarball_noto_serif_armenian \
+	UnpackedTarball_noto_serif_georgian \
 	UnpackedTarball_noto_serif_hebrew \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \

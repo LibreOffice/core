@@ -7,21 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto))
+$(eval $(call gb_ExternalPackage_ExternalPackage,fonts_noto,font_noto_serif_georgian))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLDER)/fonts/truetype,\
-	NotoKufiArabic-Bold.ttf \
-	NotoKufiArabic-Regular.ttf \
-	NotoMono-Regular.ttf \
-	NotoNaskhArabic-Bold.ttf \
-	NotoNaskhArabic-Regular.ttf \
-	NotoNaskhArabicUI-Bold.ttf \
-	NotoNaskhArabicUI-Regular.ttf \
-	NotoSansLao-Bold.ttf \
-	NotoSansLao-Regular.ttf \
-	NotoSansLisu-Regular.ttf \
-	NotoSerifLao-Bold.ttf \
-	NotoSerifLao-Regular.ttf \
+	NotoSerifGeorgian/full/ttf/NotoSerifGeorgian-Bold.ttf \
+	NotoSerifGeorgian/full/ttf/NotoSerifGeorgian-Regular.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
