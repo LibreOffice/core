@@ -186,6 +186,12 @@ public:
     // If the current String is invalid, GetValue() returns this value
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
+    // Make the formatter recreate the output text from the value on the next
+    // format attempt even if the value is the same as the current value.
+    // Needed if the associated widget had its text changed by something other
+    // that this Formatter (typically blanked out) since the last formatting
+    void    InvalidateValueState()    { m_ValueState = valueDirty; }
+
     void SetLastSelection(const Selection& rSelection) { m_aLastSelection = rSelection; }
 
     // Settings for the format
