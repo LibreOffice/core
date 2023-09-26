@@ -243,6 +243,7 @@ bool PieChart::shouldSnapRectToUsedArea()
 }
 
 rtl::Reference<SvxShape> PieChart::createDataPoint(
+    const SubPieType e_subType,
     const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
     const uno::Reference<beans::XPropertySet>& xObjectProperties,
     const ShapeParam& rParam,
@@ -286,12 +287,28 @@ rtl::Reference<SvxShape> PieChart::createDataPoint(
             drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
             aOffset = aNewOrigin - aOrigin;
         }
-    } else if (m_eSubType != PieChartSubType_NONE) {
-        // Draw the main pie for bar-of-pie/pie-of-pie smaller and to the left
-        drawing::Position3D aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
-        drawing::Position3D aNewOrigin = m_aPosHelper.transformUnitCircleToScene(180, 1.0, rParam.mfLogicZ);
-        aOffset = aNewOrigin - aOrigin;
-        fExplodedOuterRadius *= 2.0/3;
+    } else {
+        drawing::Position3D aOrigin, aNewOrigin;
+        switch (e_subType) {
+            case SubPieType::LEFT:
+                // Draw the main pie for bar-of-pie/pie-of-pie smaller and to the left
+                aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+                aNewOrigin = m_aPosHelper.transformUnitCircleToScene(180, 0.75, rParam.mfLogicZ);
+                aOffset = aNewOrigin - aOrigin;
+                fExplodedOuterRadius *= 2.0/3;
+                break;
+            case SubPieType::RIGHT:
+                // Draw the sub-pie for pie-of-pie much smaller and to the right
+                aOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+                aNewOrigin = m_aPosHelper.transformUnitCircleToScene(0, 0.75, rParam.mfLogicZ);
+                aOffset = aNewOrigin - aOrigin;
+                fExplodedOuterRadius *= 1.0/3;
+                break;
+            case SubPieType::NONE:
+            default:
+                // no change
+                break;
+        }
     }
 
 
@@ -847,10 +864,11 @@ void PieChart::createShapes()
             createOneRing(SubPieType::NONE, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
             break;
         case PieChartSubType_BAR:
-            createOneRing(SubPieType::LEFT, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
             break;
         case PieChartSubType_PIE:
-            createOneRing(SubPieType::LEFT, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            createOneRing(SubPieType::RIGHT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
             break;
         default:
             assert(false); // this shouldn't happen
@@ -949,8 +967,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             // Do concentric explosion if it's a donut chart with more than one series
             const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
             rtl::Reference<SvxShape> xPointShape =
-                createDataPoint(
-                    xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
+                createDataPoint(eType, xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
                     bConcentricExplosion);
 
             ///point color:

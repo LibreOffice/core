@@ -84,6 +84,7 @@ public:
 private: //methods
     rtl::Reference<SvxShape>
         createDataPoint(
+            enum SubPieType eType,
             const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
             const css::uno::Reference<css::beans::XPropertySet>& xObjectProperties,
             const ShapeParam& rParam,
