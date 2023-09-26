@@ -23,6 +23,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_libre_hebrew \
 	ExternalPackage_noto \
 	ExternalPackage_noto_sans \
+	ExternalPackage_noto_serif \
 	ExternalPackage_reem \
 	ExternalPackage_scheherazade \
 	UnpackedTarball_alef \
@@ -38,6 +39,7 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	UnpackedTarball_libre_hebrew \
 	UnpackedTarball_noto \
 	UnpackedTarball_noto_sans \
+	UnpackedTarball_noto_serif \
 	UnpackedTarball_reem \
 	UnpackedTarball_scheherazade \
 ))

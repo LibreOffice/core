@@ -32,22 +32,12 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,fonts_noto,$(LIBO_SHARE_FOLD
 	NotoSansLisu-Regular.ttf \
 	NotoSerifArmenian-Bold.ttf \
 	NotoSerifArmenian-Regular.ttf \
-	NotoSerif-Bold.ttf \
-	NotoSerif-BoldItalic.ttf \
-	NotoSerif-Condensed.ttf \
-	NotoSerif-CondensedBold.ttf \
-	NotoSerif-CondensedBoldItalic.ttf \
-	NotoSerif-CondensedItalic.ttf \
 	NotoSerifGeorgian-Bold.ttf \
 	NotoSerifGeorgian-Regular.ttf \
 	NotoSerifHebrew-Bold.ttf \
 	NotoSerifHebrew-Regular.ttf \
-	NotoSerif-Italic.ttf \
 	NotoSerifLao-Bold.ttf \
 	NotoSerifLao-Regular.ttf \
-	NotoSerif-Light.ttf \
-	NotoSerif-LightItalic.ttf \
-	NotoSerif-Regular.ttf \
 ))
 
 # vim: set noet sw=4 ts=4:
