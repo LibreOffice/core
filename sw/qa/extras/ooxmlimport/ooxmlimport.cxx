@@ -1370,9 +1370,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo87488)
 {
     // The shape on the right (index 0, CustomShape within a
     // GroupShape) is rotated 90 degrees clockwise and contains text
-    // rotated 90 degrees anticlockwise.  Must be read with SmartArt
-    // enabled in preTest above, otherwise it gets converted to a
-    // StarView MetaFile.
+    // rotated 90 degrees anticlockwise.
     SvtFilterOptions::Get().SetSmartArt2Shape(true);
     comphelper::ScopeGuard g([] { SvtFilterOptions::Get().SetSmartArt2Shape(false); });
     createSwDoc("fdo87488.docx");
