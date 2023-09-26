@@ -1450,6 +1450,30 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101237)
     assertXPath(pDocument, "/primitive2D/transform/polypolygonstroke/line", "width", "5");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf97710)
+{
+    Primitive2DSequence aSequence = parseSvg(u"/svgio/qa/cppunit/data/tdf97710.svg");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+
+    CPPUNIT_ASSERT (pDocument);
+
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[1]", "color", "#000000");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 100
+    // - Actual  : 0
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[1]/polypolygon", "width", "100");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[1]/polypolygon", "height", "100");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[2]", "color", "#008000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[2]/polypolygon", "width", "100");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygoncolor[2]/polypolygon", "height", "100");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "color", "#000000");
+    assertXPath(pDocument, "/primitive2D/transform/mask/polypolygonstroke/line", "width", "1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf94765)
 {
     Primitive2DSequence aSequenceTdf94765 = parseSvg(u"/svgio/qa/cppunit/data/tdf94765.svg");

@@ -1127,8 +1127,7 @@ namespace svgio::svgreader
                 // create fill
                 basegfx::B2DPolyPolygon aPath(rPath);
 
-                if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType()
-                        || SVGToken::Polyline == mrOwner.getType())
+                if(SVGToken::Path == mrOwner.getType() || SVGToken::Polygon == mrOwner.getType())
                 {
                     if(FillRule::evenodd != getClipRule() && FillRule::evenodd != getFillRule())
                     {
