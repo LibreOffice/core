@@ -27,6 +27,23 @@
 #include <svl/languageoptions.hxx>
 #include <optional>
 
+namespace
+{
+    const OUString& getNumDecimalSep(const SvNumberformat& rFormat)
+    {
+        LanguageType nFormatLang = rFormat.GetLanguage();
+        if (nFormatLang == LANGUAGE_SYSTEM)
+            return ScGlobal::getLocaleData().getNumDecimalSep();
+        // LocaleDataWrapper can be expensive to construct, so cache the result for
+        // repeated calls
+        static std::optional<LocaleDataWrapper> localeCache;
+        if (!localeCache || localeCache->getLanguageTag().getLanguageType() != nFormatLang)
+            localeCache.emplace(
+                comphelper::getProcessComponentContext(), LanguageTag(nFormatLang));
+        return localeCache->getNumDecimalSep();
+    }
+}
+
 namespace sc {
 
 bool NumFmtUtil::isLatinScript( const ScPatternAttr& rPat, ScDocument& rDoc )
@@ -45,23 +62,7 @@ bool NumFmtUtil::isLatinScript( sal_uLong nFormat, ScDocument& rDoc )
 
     // The standard format is all-latin if the decimal separator doesn't
     // have a different script type
-
-    OUString aDecSep;
-    LanguageType nFormatLang = pFormat->GetLanguage();
-    if (nFormatLang == LANGUAGE_SYSTEM)
-        aDecSep = ScGlobal::getLocaleData().getNumDecimalSep();
-    else
-    {
-        // LocaleDataWrapper can be expensive to construct, so cache the result for
-        // repeated calls
-        static std::optional<LocaleDataWrapper> localeCache;
-        if (!localeCache || localeCache->getLanguageTag().getLanguageType() != nFormatLang)
-            localeCache.emplace(
-                comphelper::getProcessComponentContext(), LanguageTag(nFormatLang));
-        aDecSep = localeCache->getNumDecimalSep();
-    }
-
-    SvtScriptType nScript = rDoc.GetStringScriptType(aDecSep);
+    SvtScriptType nScript = rDoc.GetStringScriptType(getNumDecimalSep(*pFormat));
     return (nScript == SvtScriptType::NONE || nScript == SvtScriptType::LATIN);
 }
 
