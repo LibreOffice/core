@@ -212,6 +212,11 @@ FONT_NOTO_SANS_LAO_TARBALL := NotoSansLao-v2.003.zip
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
+FONT_NOTO_SERIF_LAO_SHA256SUM := e96a303d3347790b0ef3db274971a989a736ce766ec9ea1bea0e1458568a80b2
+FONT_NOTO_SERIF_LAO_TARBALL := NotoSerifLao-v2.003.zip
+# three static lines
+# so that git cherry-pick
+# will not run into conflicts
 FONT_CULMUS_SHA256SUM := c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
 FONT_CULMUS_TARBALL := culmus-0.133.tar.gz
 # three static lines

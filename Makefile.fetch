@@ -190,6 +190,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_GEORGIAN_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SERIF_GEORGIAN_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SANS_LAO_TARBALL) \
+		$(call fetch_Optional,MORE_FONTS,FONT_NOTO_SERIF_LAO_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_CULMUS_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_LIBRE_HEBREW_TARBALL) \
 		$(call fetch_Optional,MORE_FONTS,FONT_ALEF_TARBALL) \
