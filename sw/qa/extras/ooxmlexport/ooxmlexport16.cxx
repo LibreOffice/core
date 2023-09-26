@@ -211,6 +211,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142486_LeftMarginShadowLeft, "tdf142486_LeftMarg
     CPPUNIT_ASSERT_DOUBLES_EQUAL(sal_Int32(953), getProperty<sal_Int32>(xFrame, "LeftMargin"), 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf151384Hyperlink, "151384Hyperlink.odt")
+{
+    loadAndSave("151384Hyperlink.odt");
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    xmlDocUniquePtr pXmlStyles = parseExport("word/styles.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:hyperlink/w:r/w:rPr/w:rStyle", "val", "Hyperlink");
+    assertXPath(pXmlStyles, "/w:styles/w:style[@w:styleId='Hyperlink']/w:name", "val", "Hyperlink");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf66039, "tdf66039.docx")
 {
     // This bugdoc has a groupshape (WPG) with a table inside its each member shape.
