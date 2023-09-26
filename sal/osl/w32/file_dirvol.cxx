@@ -1553,6 +1553,10 @@ oslFileError SAL_CALL osl_getFileStatus(
     pStatus->uValidFields |= osl_FileStatus_Mask_Type;
 
     pStatus->uAttributes = pItemImpl->FindData.dwFileAttributes;
+    // tdf#157448: RO attribute is ignored for directories on Windows:
+    // https://learn.microsoft.com/en-us/windows/desktop/FileIO/file-attribute-constants
+    if (pStatus->uAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        pStatus->uAttributes &= ~sal_uInt64(FILE_ATTRIBUTE_READONLY);
     pStatus->uValidFields |= osl_FileStatus_Mask_Attributes;
 
     pStatus->uFileSize = static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeLow) + (static_cast<sal_uInt64>(pItemImpl->FindData.nFileSizeHigh) << 32);
