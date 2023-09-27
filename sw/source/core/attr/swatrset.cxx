@@ -222,6 +222,14 @@ std::unique_ptr<SfxItemSet> SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool 
                 : new SwAttrSet( *GetPool(), GetRanges() ));
 }
 
+SwAttrSet SwAttrSet::CloneAsValue( bool bItems ) const
+{
+    if (bItems)
+        return *this;
+    else
+        return SwAttrSet( *GetPool(), GetRanges() );
+}
+
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
