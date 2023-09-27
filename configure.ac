@@ -12632,6 +12632,7 @@ if test "$with_java" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_JAVA_WEBSOCKET=TRUE
     BUILD_TYPE="$BUILD_TYPE JAVA_WEBSOCKET"
+    NEED_ANT=TRUE
 else
     AC_MSG_RESULT([no])
     ENABLE_JAVA_WEBSOCKET=
