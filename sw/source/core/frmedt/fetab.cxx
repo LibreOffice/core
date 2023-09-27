@@ -425,8 +425,10 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
     // tracked deletion: remove only textbox content,
     // and set HasTextChangesOnly table line property to false
+    SwEditShell* pEditShell = nullptr;
     if ( bRecordChanges )
     {
+        pEditShell = GetDoc()->GetEditShell();
         SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
         GetDoc()->SetRowNotTracked( *getShellCursor( false ), aHasTextChangesOnly );
 
@@ -436,7 +438,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
         // don't need to remove the row frames in Show Changes mode
         if ( !bRecordAndHideChanges )
         {
-            if (SwEditShell* pEditShell = GetDoc()->GetEditShell())
+            if ( pEditShell )
                 pEditShell->Delete(false);
 
             EndAllActionAndCall();
@@ -540,36 +542,30 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
             }
 
             // delete row content in Hide Changes mode
-            if ( bRecordAndHideChanges )
+            if ( pEditShell && bRecordAndHideChanges )
             {
-                SwEditShell* pEditShell = GetDoc()->GetEditShell();
-
-                // select the rows deleted with change tracking
-                if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                // select the row deleted with change tracking cell by cell to handle
+                // the already deleted cells
+                SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this);
+                for (SwSelBoxes::size_type nBox = 0; pWrtShell && nBox < aBoxes.size(); ++nBox)
                 {
                     pWrtShell->SelectTableRow();
                     SwCursor* pTableCursor = static_cast<SwCursor*>(GetTableCursor());
-                    auto pStt = aBoxes[0];
-                    auto pEnd = aBoxes.back();
-                    if ( pTableCursor )
-                        pTableCursor->DeleteMark();
-                    else
+                    auto pStt = aBoxes[nBox];
+                    if ( !pTableCursor )
                         pTableCursor = GetCursor(true);
 
                     if ( pTableCursor )
                     {
                         // set start and end of the selection
-                        pTableCursor->GetPoint()->Assign( *pEnd->GetSttNd()->EndOfSectionNode() );
-                        pTableCursor->Move( fnMoveBackward, GoInContent );
-                        pTableCursor->SetMark();
+                        pTableCursor->DeleteMark();
                         pTableCursor->GetPoint()->Assign( *pStt->GetSttNd()->EndOfSectionNode() );
                         pTableCursor->Move( fnMoveBackward, GoInContent );
                         pWrtShell->UpdateCursor();
                     }
-                }
 
-                if (pEditShell)
                     pEditShell->Delete(false);
+                }
             }
 
             SwNodeOffset nIdx;
