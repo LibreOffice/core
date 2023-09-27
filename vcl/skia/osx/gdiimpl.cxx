@@ -37,6 +37,13 @@
 
 using namespace SkiaHelper;
 
+static void releaseInstalledPixels(void* pAddr, void* pContext)
+{
+    (void)pContext;
+    if (pAddr)
+        delete[] static_cast<sal_uInt8*>(pAddr);
+}
+
 AquaSkiaSalGraphicsImpl::AquaSkiaSalGraphicsImpl(AquaSalGraphics& rParent,
                                                  AquaSharedAttributes& rShared)
     : SkiaSalGraphicsImpl(rParent, rShared.mpFrame)
@@ -232,10 +239,10 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     const tools::Long width = boundingRegion.GetWidth() * mScaling;
     const tools::Long height = boundingRegion.GetHeight() * mScaling;
     const size_t bytes = width * height * 4;
-    std::unique_ptr<sal_uInt8[]> data(new sal_uInt8[bytes]);
-    memset(data.get(), 0, bytes);
+    sal_uInt8* data = new sal_uInt8[bytes];
+    memset(data, 0, bytes);
     CGContextRef context = CGBitmapContextCreate(
-        data.get(), width, height, 8, width * 4, GetSalData()->mxRGBSpace,
+        data, width, height, 8, width * 4, GetSalData()->mxRGBSpace,
         SkiaToCGBitmapType(mSurface->imageInfo().colorType(), kPremul_SkAlphaType));
     if (!context)
     {
@@ -271,12 +278,16 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
     CGContextRelease(context);
     if (bOK)
     {
+        // Let SkBitmap determine when it is safe to delete the pixel buffer
         SkBitmap bitmap;
         if (!bitmap.installPixels(SkImageInfo::Make(width, height,
                                                     mSurface->imageInfo().colorType(),
                                                     kPremul_SkAlphaType),
-                                  data.get(), width * 4))
+                                  data, width * 4, releaseInstalledPixels, nullptr))
             abort();
+
+        // Make bitmap immutable to avoid making a copy in bitmap.asImage()
+        bitmap.setImmutable();
 
         preDraw();
         SAL_INFO("vcl.skia.trace", "drawnativecontrol(" << this << "): " << rControlRegion << ":"
@@ -292,6 +303,8 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                            boundingRegion.GetWidth(), boundingRegion.GetHeight());
         assert(drawRect.width() * mScaling == bitmap.width()); // no scaling should be needed
         getDrawCanvas()->drawImageRect(bitmap.asImage(), drawRect, SkSamplingOptions());
+        // Related: tdf#156881 flush the canvas after drawing the pixel buffer
+        getDrawCanvas()->flush();
         ++pendingOperationsToFlush; // tdf#136369
         postDraw();
     }
