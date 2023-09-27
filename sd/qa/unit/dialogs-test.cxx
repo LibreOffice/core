@@ -580,7 +580,6 @@ void SdDialogsTest::openAnyDialog()
     {
         // example for SfxTabDialog: 5 -> "modules/sdraw/ui/drawpagedialog.ui"
         // example for TabDialog: 22 -> "modules/simpress/ui/headerfooterdialog.ui"
-        // example for self-adapted wizard: 0 -> "modules/simpress/ui/publishingdialog.ui"
         ScopedVclPtr<VclAbstractDialog> pDlg(createDialogByID(5));
 
         if (pDlg)

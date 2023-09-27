@@ -12,12 +12,32 @@
 
 using namespace css;
 
-class SdXHTMLFilterTest : public UnoApiXmlTest, public HtmlTestTools
+class SdHTMLFilterTest : public UnoApiXmlTest, public HtmlTestTools
 {
 public:
-    SdXHTMLFilterTest()
+    SdHTMLFilterTest()
         : UnoApiXmlTest("/sd/qa/unit/data/")
     {
+    }
+
+    void testHTMLExport()
+    {
+        loadFromURL(u"HtmlExportTestDocument.odp");
+        save("impress_html_Export");
+        htmlDocUniquePtr htmlDoc = parseHtml(maTempFile);
+
+        assertXPath(htmlDoc, "/html", 1);
+        assertXPath(htmlDoc, "/html/body", 1);
+        assertXPath(htmlDoc, "/html/body/h1", 4);
+        assertXPath(htmlDoc, "/html/body/table", 1);
+        assertXPath(htmlDoc, "/html/body/table/tr", 5);
+        assertXPath(htmlDoc, "/html/body/ul", 1);
+        assertXPath(htmlDoc, "/html/body/ul/li", 2);
+
+        assertXPath(htmlDoc, "/html/head/meta[1]", "content", "text/html; charset=utf-8");
+        assertXPath(htmlDoc, "/html/head/meta[2]", "name", "generator");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "name", "created");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "content", "2014-04-09T17:05:41.987922038");
     }
 
     void testTdf154989()
@@ -43,12 +63,13 @@ public:
             pXmlDoc, "/xhtml:html/xhtml:body/xhtml:div[1]/xhtml:div[4]/xhtml:div/xhtml:p", "below");
     }
 
-    CPPUNIT_TEST_SUITE(SdXHTMLFilterTest);
+    CPPUNIT_TEST_SUITE(SdHTMLFilterTest);
+    CPPUNIT_TEST(testHTMLExport);
     CPPUNIT_TEST(testTdf154989);
     CPPUNIT_TEST_SUITE_END();
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(SdXHTMLFilterTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SdHTMLFilterTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

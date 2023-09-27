@@ -70,6 +70,7 @@
 #include <sdpptwrp.hxx>
 #include <sdcgmfilter.hxx>
 #include <sdgrffilter.hxx>
+#include <sdhtmlfilter.hxx>
 #include <sdpdffilter.hxx>
 #include <framework/FrameworkHelper.hxx>
 #include <o3tl/string_view.hxx>
@@ -601,7 +602,11 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
         const OUString aTypeName( pMediumFilter->GetTypeName() );
         std::unique_ptr<SdFilter> xFilter;
 
-        if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
+        if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
+        {
+            xFilter = std::make_unique<SdHTMLFilter>(rMedium, *this);
+        }
+        else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
             xFilter = std::make_unique<SdPPTFilter>(rMedium, *this);
             static_cast<SdPPTFilter*>(xFilter.get())->PreSaveBasic();

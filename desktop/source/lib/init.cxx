@@ -335,6 +335,7 @@ const ExtensionMap aCalcExtensionMap[] =
 const ExtensionMap aImpressExtensionMap[] =
 {
     { "fodp",  "OpenDocument Presentation Flat XML" },
+    { "html",  "impress_html_Export" },
     { "odg",   "impress8_draw" },
     { "odp",   "impress8" },
     { "otp",   "impress8_template" },
@@ -354,6 +355,7 @@ const ExtensionMap aImpressExtensionMap[] =
 const ExtensionMap aDrawExtensionMap[] =
 {
     { "fodg",  "draw_ODG_FlatXML" },
+    { "html",  "draw_html_Export" },
     { "odg",   "draw8" },
     { "pdf",   "draw_pdf_Export" },
     { "svg",   "draw_svg_Export" },
