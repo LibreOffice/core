@@ -3489,6 +3489,21 @@ if test $_os = Darwin; then
     my_xcode_ver3=$(printf %s "$my_xcode_ver2" | $AWK -F. '{ print $1*100+($2<100?$2:99) }')
     if test "$my_xcode_ver3" -ge 1205; then
         AC_MSG_RESULT([yes ($my_xcode_ver2)])
+        if test $MAC_OS_X_VERSION_MIN_REQUIRED -lt 120000; then
+            if test "$my_xcode_ver3" -ge 1600; then
+                dnl the Xcode 15 relnotes state that the classic linker will disappear in the next version, but nothing about
+                dnl fixing the problem with weak symbols/macOS 11 compatibility, so assume for now that Xcode 16 will break it...
+                AC_MSG_ERROR([Check that Xcode 16 still supports the old linker/that it doesn't break macOS 11 compatibility, then remove this check]);
+            fi
+            if test "$my_xcode_ver3" -ge 1500; then
+                AC_MSG_WARN([Xcode 15 has a new linker that causes runtime crashes on macOS 11])
+                add_warning "Xcode 15 has a new linker that causes runtime crashes on macOS 11, forcing the old linker."
+                add_warning "see https://developer.apple.com/documentation/xcode-release-notes/xcode-15-release-notes#Linking"
+                LDFLAGS="$LDFLAGS -Wl,-ld_classic"
+                # if LDFLAGS weren't set already, a check above sets x_LDFLAGS=[#] to comment-out the export LDFLAGS line in config_host.mk
+                x_LDFLAGS=
+            fi
+        fi
     else
         AC_MSG_ERROR(["$my_xcode_ver1" is too old or unrecognized, must be at least Xcode 12.5])
     fi
