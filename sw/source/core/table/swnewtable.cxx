@@ -653,7 +653,7 @@ insertion behind (true) or before (false) the selected boxes
 */
 
 bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
-    sal_uInt16 nCnt, bool bBehind )
+    sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
     if( m_aLines.empty() || !nCnt )
         return false;
@@ -749,14 +749,18 @@ bool SwTable::NewInsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes,
             SwTableBox *pCurrBox = pLine->GetTabBoxes()[nInsPos+j];
 
             // set tracked insertion by inserting a dummy redline
+            // drag & drop: no need to insert dummy character
             if ( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
             {
                 SwPosition aPos(*pCurrBox->GetSttNd());
                 SwCursor aCursor( aPos, nullptr );
-                SwNodeIndex aInsDummyPos(*pCurrBox->GetSttNd(), 1 );
-                SwPaM aPaM(aInsDummyPos);
-                rDoc.getIDocumentContentOperations().InsertString( aPaM,
+                if ( bInsertDummy )
+                {
+                    SwNodeIndex aInsDummyPos(*pCurrBox->GetSttNd(), 1 );
+                    SwPaM aPaM(aInsDummyPos);
+                    rDoc.getIDocumentContentOperations().InsertString( aPaM,
                         OUStringChar(CH_TXT_TRACKED_DUMMY_CHAR) );
+                }
                 SvxPrintItem aHasTextChangesOnly(RES_PRINT, false);
                 rDoc.SetBoxAttr( aCursor, aHasTextChangesOnly );
             }

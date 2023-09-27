@@ -975,6 +975,88 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155846_MovingColumn)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Create a table
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    (void)&pWrtShell->InsertTable(TableOpt, 4, 3);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    // fill table with data
+    for (int i = 0; i < 4; ++i)
+    {
+        pWrtShell->Insert("x");
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    }
+
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextRange> xCellA1(xTable1->getCellByName("A1"), uno::UNO_QUERY);
+    xCellA1->setString("A1");
+    uno::Reference<text::XTextRange> xCellA2(xTable1->getCellByName("A2"), uno::UNO_QUERY);
+    xCellA2->setString("A2");
+    uno::Reference<text::XTextRange> xCellA3(xTable1->getCellByName("A3"), uno::UNO_QUERY);
+    xCellA3->setString("A3");
+    uno::Reference<text::XTextRange> xCellA4(xTable1->getCellByName("A4"), uno::UNO_QUERY);
+    xCellA4->setString("A4");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt", "A1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[2]/cell[1]/txt", "A2");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[3]/cell[1]/txt", "A3");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[4]/cell[1]/txt", "A4");
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // Move first column of the table before the third column by drag & drop
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower();
+    SwFrame* pRow1 = pTable->GetLower();
+    SwFrame* pCellA1 = pRow1->GetLower();
+    SwFrame* pCellC1 = pCellA1->GetNext()->GetNext();
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    const SwRect& rCellC1Rect = pCellC1->getFrameArea();
+    Point ptTo(rCellC1Rect.Left() + rCellC1Rect.Width() / 2,
+               rCellC1Rect.Top() + rCellC1Rect.Height() / 2);
+    // select first table column by using the middle point of the top border of column A
+    Point ptColumn(rCellA1Rect.Left() + rCellA1Rect.Width() / 2, rCellA1Rect.Top() - 5);
+    pWrtShell->SelectTableRowCol(ptColumn);
+
+    // This crashed here before the fix.
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+
+    // reject changes results 3 columns again, not 4
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable2(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable2->getRows()->getCount());
+    // This was 4 (moving column without change tracking)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getColumns()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154771_MovingMultipleColumns)
 {
     createSwDoc();

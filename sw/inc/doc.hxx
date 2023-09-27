@@ -1204,7 +1204,7 @@ public:
     void InsertCol( const SwCursor& rCursor,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     bool InsertCol( const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt = 1, bool bBehind = true );
+                    sal_uInt16 nCnt = 1, bool bBehind = true, bool bInsertDummy = true );
     void InsertRow( const SwCursor& rCursor,
                     sal_uInt16 nCnt = 1, bool bBehind = true );
     bool InsertRow( const SwSelBoxes& rBoxes,
