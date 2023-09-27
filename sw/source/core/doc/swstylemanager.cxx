@@ -72,6 +72,9 @@ public:
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
                                                                IStyleAccess::SwAutoStyleFamily eFamily,
                                                                const OUString* pParentName = nullptr ) override;
+    virtual std::shared_ptr<SwAttrSet> getAutomaticStyle( const SwAttrSet& rSet,
+                                                               IStyleAccess::SwAutoStyleFamily eFamily,
+                                                               const OUString* pParentName = nullptr ) override;
     virtual std::shared_ptr<SfxItemSet> getByName( const OUString& rName,
                                                                IStyleAccess::SwAutoStyleFamily eFamily ) override;
     virtual void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles,
@@ -102,6 +105,18 @@ std::shared_ptr<SfxItemSet> SwStyleManager::getAutomaticStyle( const SfxItemSet&
     StylePool& rAutoPool
         = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
     return rAutoPool.insertItemSet( rSet, pParentName );
+}
+
+std::shared_ptr<SwAttrSet> SwStyleManager::getAutomaticStyle( const SwAttrSet& rSet,
+                                                                   IStyleAccess::SwAutoStyleFamily eFamily,
+                                                                   const OUString* pParentName )
+{
+    StylePool& rAutoPool
+        = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? m_aAutoCharPool : m_aAutoParaPool;
+    std::shared_ptr<SfxItemSet> pItemSet = rAutoPool.insertItemSet( rSet, pParentName );
+    std::shared_ptr<SwAttrSet> pAttrSet = std::dynamic_pointer_cast<SwAttrSet>(pItemSet);
+    assert(bool(pItemSet) == bool(pAttrSet) && "types do not match");
+    return pAttrSet;
 }
 
 std::shared_ptr<SfxItemSet> SwStyleManager::cacheAutomaticStyle( const SfxItemSet& rSet,

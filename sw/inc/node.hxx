@@ -410,7 +410,7 @@ protected:
 
     /**  Attribute-set for all auto attributes of a ContentNode.
       (e.g. TextNode or NoTextNode). */
-    std::shared_ptr<const SfxItemSet> mpAttrSet;
+    std::shared_ptr<const SwAttrSet> mpAttrSet;
 
     /// Make respective nodes create the specific AttrSets.
     virtual void NewAttrSet( SwAttrPool& ) = 0;
@@ -490,7 +490,7 @@ public:
     /** Does node has already its own auto-attributes?
      Access to SwAttrSet. */
     inline const SwAttrSet &GetSwAttrSet() const;
-    const SwAttrSet *GetpSwAttrSet() const { return static_cast<const SwAttrSet*>(mpAttrSet.get()); }
+    const SwAttrSet *GetpSwAttrSet() const { return mpAttrSet.get(); }
     bool  HasSwAttrSet() const { return mpAttrSet != nullptr; }
 
     virtual SwFormatColl* ChgFormatColl( SwFormatColl* );

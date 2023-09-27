@@ -96,36 +96,34 @@ void AccessibilityCheckStatus::reset()
 namespace AttrSetHandleHelper
 {
 
-static void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static void GetNewAutoStyle( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                       const SwContentNode& rNode,
                       SwAttrSet const & rNewAttrSet )
 {
-    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(rpAttrSet.get());
     if( rNode.GetModifyAtAttr() )
-        const_cast<SwAttrSet*>(pAttrSet)->SetModifyAtAttr( nullptr );
-    IStyleAccess& rSA = pAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
+        const_cast<SwAttrSet*>(rpAttrSet.get())->SetModifyAtAttr( nullptr );
+    IStyleAccess& rSA = rpAttrSet->GetPool()->GetDoc()->GetIStyleAccess();
     rpAttrSet = rSA.getAutomaticStyle( rNewAttrSet, rNode.IsTextNode() ?
                                                      IStyleAccess::AUTO_STYLE_PARA :
                                                      IStyleAccess::AUTO_STYLE_NOTXT );
-    const bool bSetModifyAtAttr = const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(rpAttrSet.get()))->SetModifyAtAttr( &rNode );
+    const bool bSetModifyAtAttr = const_cast<SwAttrSet*>(rpAttrSet.get())->SetModifyAtAttr( &rNode );
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
-static void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static void SetParent( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                 const SwContentNode& rNode,
                 const SwFormat* pParentFormat,
                 const SwFormat* pConditionalFormat )
 {
-    const SwAttrSet* pAttrSet = static_cast<const SwAttrSet*>(rpAttrSet.get());
-    OSL_ENSURE( pAttrSet, "no SwAttrSet" );
+    OSL_ENSURE( rpAttrSet, "no SwAttrSet" );
     OSL_ENSURE( pParentFormat || !pConditionalFormat, "ConditionalFormat without ParentFormat?" );
 
     const SwAttrSet* pParentSet = pParentFormat ? &pParentFormat->GetAttrSet() : nullptr;
 
-    if ( pParentSet == pAttrSet->GetParent() )
+    if ( pParentSet == rpAttrSet->GetParent() )
         return;
 
-    SwAttrSet aNewSet( *pAttrSet );
+    SwAttrSet aNewSet( *rpAttrSet );
     aNewSet.SetParent( pParentSet );
     aNewSet.ClearItem( RES_FRMATR_STYLE_NAME );
     aNewSet.ClearItem( RES_FRMATR_CONDITIONAL_STYLE_NAME );
@@ -147,21 +145,21 @@ static void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
 }
 
-static const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static const SfxPoolItem* Put( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                         const SwContentNode& rNode,
                         const SfxPoolItem& rAttr )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
     const SfxPoolItem* pRet = aNewSet.Put( rAttr );
     if ( pRet )
         GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
     return pRet;
 }
 
-static bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNode& rNode,
+static bool Put( std::shared_ptr<const SwAttrSet>& rpAttrSet, const SwContentNode& rNode,
          const SfxItemSet& rSet )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
 
     // #i76273# Robust
     std::optional<SfxItemSetFixed<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>> pStyleNames;
@@ -185,11 +183,11 @@ static bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwContentNo
     return bRet;
 }
 
-static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static bool Put_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,
             const SwContentNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
 
     // for a correct broadcast, we need to do a SetModifyAtAttr with the items
     // from aNewSet. The 'regular' SetModifyAtAttr is done in GetNewAutoStyle
@@ -204,11 +202,11 @@ static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return bRet;
 }
 
-static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static bool Put_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,
             const SwContentNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
 
     // #i76273# Robust
     std::optional<SfxItemSetFixed<RES_FRMATR_STYLE_NAME, RES_FRMATR_CONDITIONAL_STYLE_NAME>> pStyleNames;
@@ -237,11 +235,11 @@ static bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return bRet;
 }
 
-static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static sal_uInt16 ClearItem_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                      const SwContentNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich, pOld, pNew );
@@ -250,12 +248,12 @@ static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return nRet;
 }
 
-static sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+static sal_uInt16 ClearItem_BC( std::shared_ptr<const SwAttrSet>& rpAttrSet,
                      const SwContentNode& rNode,
                      sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    SwAttrSet aNewSet( *rpAttrSet );
     if( rNode.GetModifyAtAttr() )
         aNewSet.SetModifyAtAttr( &rNode );
     const sal_uInt16 nRet = aNewSet.ClearItem_BC( nWhich1, nWhich2, pOld, pNew );
@@ -1108,7 +1106,7 @@ SwContentNode::~SwContentNode()
     m_pCondColl = nullptr;
 
     if ( mpAttrSet && mbSetModifyAtAttr )
-        const_cast<SwAttrSet*>(static_cast<const SwAttrSet*>(mpAttrSet.get()))->SetModifyAtAttr( nullptr );
+        const_cast<SwAttrSet*>(mpAttrSet.get())->SetModifyAtAttr( nullptr );
     InvalidateInSwCache(RES_OBJECTDYING);
 }
 void SwContentNode::UpdateAttr(const SwUpdateAttr& rUpdate)
@@ -1627,7 +1625,9 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
         }
         else
         {
-            mpAttrSet = pFnd->GetStyleHandle();
+            std::shared_ptr<SfxItemSet> pItemSet = pFnd->GetStyleHandle();
+            mpAttrSet = std::dynamic_pointer_cast<SwAttrSet>(pItemSet);
+            assert(bool(pItemSet) == bool(mpAttrSet) && "types do not match");
         }
 
         if ( bSetParent )
@@ -1645,7 +1645,7 @@ bool SwContentNode::SetAttr( const SfxItemSet& rSet )
                  pNameItem->GetValue().isEmpty() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFormatColl(), GetFormatColl() );
             else
-                const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFormatColl()->GetAttrSet() );
+                const_cast<SwAttrSet*>(mpAttrSet.get())->SetParent( &GetFormatColl()->GetAttrSet() );
         }
 
         return true;

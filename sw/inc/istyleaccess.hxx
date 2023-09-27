@@ -23,6 +23,8 @@
 #include <memory>
 #include <vector>
 
+class SwAttrSet;
+
 // Management of (automatic) styles
 class IStyleAccess
 {
@@ -38,6 +40,9 @@ public:
     virtual ~IStyleAccess() {}
 
     virtual std::shared_ptr<SfxItemSet> getAutomaticStyle( const SfxItemSet& rSet,
+                                                               SwAutoStyleFamily eFamily,
+                                                               const OUString* pParentName = nullptr ) = 0;
+    virtual std::shared_ptr<SwAttrSet> getAutomaticStyle( const SwAttrSet& rSet,
                                                                SwAutoStyleFamily eFamily,
                                                                const OUString* pParentName = nullptr ) = 0;
     virtual void getAllStyles( std::vector<std::shared_ptr<SfxItemSet>> &rStyles,
