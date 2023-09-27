@@ -2495,8 +2495,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
         case SID_ATTR_PAGE_HATCH:
         case SID_ATTR_PAGE_BITMAP:
         {
-            SfxItemSet aSet = rDesc.GetMaster().GetAttrSet();
-            if (const auto pFillStyleItem = aSet.GetItem(XATTR_FILLSTYLE))
+            const SfxItemSet& rMasterSet = rDesc.GetMaster().GetAttrSet();
+            if (const auto pFillStyleItem = rMasterSet.GetItem(XATTR_FILLSTYLE))
             {
                 drawing::FillStyle eXFS = pFillStyleItem->GetValue();
                 XFillStyleItem aFillStyleItem( eXFS );
@@ -2507,7 +2507,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     case drawing::FillStyle_SOLID:
                     {
-                        if (const auto pItem = aSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false))
+                        if (const auto pItem = rMasterSet.GetItem<XFillColorItem>(XATTR_FILLCOLOR, false))
                         {
                             Color aColor = pItem->GetColorValue();
                             XFillColorItem aFillColorItem( OUString(), aColor );
@@ -2519,7 +2519,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     case drawing::FillStyle_GRADIENT:
                     {
-                        const basegfx::BGradient& aBGradient = aSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
+                        const basegfx::BGradient& aBGradient = rMasterSet.GetItem<XFillGradientItem>( XATTR_FILLGRADIENT )->GetGradientValue();
                         XFillGradientItem aFillGradientItem( OUString(), aBGradient, SID_ATTR_PAGE_GRADIENT  );
                         rSet.Put( aFillGradientItem );
                     }
@@ -2527,7 +2527,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     case drawing::FillStyle_HATCH:
                     {
-                        const XFillHatchItem *pFillHatchItem( aSet.GetItem<XFillHatchItem>( XATTR_FILLHATCH ) );
+                        const XFillHatchItem *pFillHatchItem( rMasterSet.GetItem<XFillHatchItem>( XATTR_FILLHATCH ) );
                         XFillHatchItem aFillHatchItem( pFillHatchItem->GetName(), pFillHatchItem->GetHatchValue());
                         aFillHatchItem.SetWhich( SID_ATTR_PAGE_HATCH );
                         rSet.Put( aFillHatchItem );
@@ -2536,7 +2536,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
 
                     case drawing::FillStyle_BITMAP:
                     {
-                        const XFillBitmapItem *pFillBitmapItem = aSet.GetItem<XFillBitmapItem>( XATTR_FILLBITMAP );
+                        const XFillBitmapItem *pFillBitmapItem = rMasterSet.GetItem<XFillBitmapItem>( XATTR_FILLBITMAP );
                         XFillBitmapItem aFillBitmapItem( pFillBitmapItem->GetName(), pFillBitmapItem->GetGraphicObject() );
                         aFillBitmapItem.SetWhich( SID_ATTR_PAGE_BITMAP );
                         rSet.Put( aFillBitmapItem );
