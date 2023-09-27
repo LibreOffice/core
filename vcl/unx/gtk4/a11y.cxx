@@ -93,7 +93,11 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_WIDGET;
                 break;
             case css::accessibility::AccessibleRole::PARAGRAPH:
+#if GTK_CHECK_VERSION(4, 13, 1)
+                eRole = GTK_ACCESSIBLE_ROLE_PARAGRAPH;
+#else
                 eRole = GTK_ACCESSIBLE_ROLE_GROUP;
+#endif
                 break;
             case css::accessibility::AccessibleRole::FILLER:
                 eRole = GTK_ACCESSIBLE_ROLE_GENERIC;
