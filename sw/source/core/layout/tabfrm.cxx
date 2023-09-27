@@ -2321,6 +2321,50 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         // when the upper has no space, but the follow is
                         // empty.
                         bFits = aRectFnSet.BottomDist(getFrameArea(), nDeadLine) >= 0;
+
+                    if (bFits)
+                    {
+                        // The follow table's wants to move backwards, see if the first row has a
+                        // split fly anchored in it that would have more space than what we have:
+                        SwRowFrame* pRow = GetFollow()->GetFirstNonHeadlineRow();
+                        if (pRow)
+                        {
+                            SwPageFrame* pPage = GetFollow()->FindPageFrame();
+                            SwSortedObjs* pPageObjs = pPage->GetSortedObjs();
+                            if (pPageObjs)
+                            {
+                                bool bSplitFly = false;
+                                for (size_t i = 0; i < pPageObjs->size(); ++i)
+                                {
+                                    SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
+                                    auto pFly = pAnchoredObj->DynCastFlyFrame();
+                                    if (!pFly || !pFly->IsFlySplitAllowed())
+                                    {
+                                        continue;
+                                    }
+
+                                    SwFrame* pFlyAnchor = pFly->FindAnchorCharFrame();
+                                    if (!pFlyAnchor || !pRow->IsAnLower(pFlyAnchor))
+                                    {
+                                        continue;
+                                    }
+
+                                    bSplitFly = true;
+                                    break;
+                                }
+                                SwTwips nFollowFirstRowHeight = aRectFnSet.GetHeight(pRow->getFrameArea());
+                                SwTwips nSpace = aRectFnSet.BottomDist(getFrameArea(), nDeadLine);
+                                if (bSplitFly && nFollowFirstRowHeight > 0 && nSpace < nFollowFirstRowHeight)
+                                {
+                                    // The row has at least one split fly and the row would not fit
+                                    // to our remaining space, when also taking flys into account,
+                                    // so that's not a fit.
+                                    bFits = false;
+                                }
+                            }
+                        }
+                    }
+
                     if (bFits)
                     {
                         // First, we remove an existing follow flow line.
