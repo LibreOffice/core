@@ -1635,7 +1635,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             // (without setting the rows to tracked table row insertion here, do that at the end
             // to avoid layout problems and unnecessary insertion of dummy characters for empty rows)
             RedlineFlags eOld = rSh.GetDoc()->getIDocumentRedlineAccess().GetRedlineFlags();
-            if ( eOld & RedlineFlags::On )
+            if ( eOld & RedlineFlags::On && bRowMode )
                 rSh.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld | RedlineFlags::Ignore );
 
             const sal_uInt16 nDispatchSlot = bRowMode ? FN_TABLE_INSERT_ROW_BEFORE : FN_TABLE_INSERT_COL_BEFORE;
@@ -1652,7 +1652,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                     { &aCountItem, &aAfter });
             }
 
-            if ( eOld & RedlineFlags::On )
+            if ( eOld & RedlineFlags::On && bRowMode )
                 rSh.GetDoc()->getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
             // paste rows
@@ -1660,7 +1660,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
                                         nDestination, false, false, nullptr, 0, false, nAnchorType, bIgnoreComments, &aPasteContext );
 
             // set tracked insertion, if it's not in a drag & drop action
-            if ( !rSh.ActionPend() && ( eOld & RedlineFlags::On) )
+            if ( !rSh.ActionPend() && ( eOld & RedlineFlags::On) && bRowMode )
             {
                 SvxPrintItem aTracked(RES_PRINT, false);
                 rSh.GetDoc()->SetRowNotTracked( *rSh.GetCursor(), aTracked );

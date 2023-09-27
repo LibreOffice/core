@@ -168,7 +168,7 @@ private:
     std::optional<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
     bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
-    bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool );
+    bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool, bool bInsertDummy );
     void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const tools::Long nOld, const tools::Long nNew );
     void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
@@ -252,7 +252,7 @@ public:
     void PrepareDeleteCol( tools::Long nMin, tools::Long nMax );
 
     bool InsertCol( SwDoc&, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt, bool bBehind );
+                    sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );

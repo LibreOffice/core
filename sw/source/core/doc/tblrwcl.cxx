@@ -452,7 +452,8 @@ static SwRowFrame* GetRowFrame( SwTableLine& rLine )
     return nullptr;
 }
 
-bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
+bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
+    bool bBehind, bool bInsertDummy )
 {
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box List" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -461,7 +462,7 @@ bool SwTable::InsertCol( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
 
     bool bRes = true;
     if( IsNewModel() )
-        bRes = NewInsertCol( rDoc, rBoxes, nCnt, bBehind );
+        bRes = NewInsertCol( rDoc, rBoxes, nCnt, bBehind, bInsertDummy );
     else
     {
         // Find all Boxes/Lines

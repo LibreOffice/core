@@ -233,6 +233,9 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
         return;
     }
 
+    // pending drag & drop?
+    bool bAction = ActionPend();
+
     StartAllAction();
     // search boxes via the layout
     SwSelBoxes aBoxes;
@@ -241,7 +244,7 @@ void SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     TableWait aWait( nCnt, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     if( !aBoxes.empty() )
-        GetDoc()->InsertCol( aBoxes, nCnt, bBehind );
+        GetDoc()->InsertCol( aBoxes, nCnt, bBehind, /*bInsertDummy=*/!bAction );
 
     EndAllActionAndCall();
 }

@@ -1705,7 +1705,7 @@ void SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, bool bBehind )
         InsertCol( aBoxes, nCnt, bBehind );
 }
 
-bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
+bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTableNd = const_cast<SwTableNode*>(rBoxes[0]->GetSttNd()->FindTableNode());
@@ -1730,7 +1730,7 @@ bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool bBehind )
         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         rTable.SwitchFormulasToInternalRepresentation();
-        bRet = rTable.InsertCol(*this, rBoxes, nCnt, bBehind);
+        bRet = rTable.InsertCol(*this, rBoxes, nCnt, bBehind, bInsertDummy);
         if (bRet)
         {
             getIDocumentState().SetModified();
