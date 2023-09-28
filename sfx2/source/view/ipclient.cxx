@@ -970,7 +970,7 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
 
                     m_xImp->m_xObject->doVerb( nVerb );
                 }
-                catch ( embed::UnreachableStateException& )
+                catch ( embed::UnreachableStateException& e )
                 {
                     if (nVerb == embed::EmbedVerbs::MS_OLEVERB_PRIMARY || nVerb == embed::EmbedVerbs::MS_OLEVERB_OPEN || nVerb == embed::EmbedVerbs::MS_OLEVERB_SHOW)
                     {
@@ -997,6 +997,7 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                         {
                             TOOLS_WARN_EXCEPTION("embeddedobj", "SfxInPlaceClient::DoVerb: -9 fallback path");
                             nError = ERRCODE_SO_GENERALERROR;
+                            aEc.SetExtendedMessage(ERRCODE_SO_GENERALERROR, e.Message);
                         }
                     }
                 }

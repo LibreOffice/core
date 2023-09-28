@@ -293,7 +293,19 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
         }
     }
 
+    if (bRet)
+        if (auto it = m_extMessages.find(sal_uInt32(nErrId)); it != m_extMessages.end())
+            rStr += "\n" + it->second;
+
     return bRet;
+}
+
+void SfxErrorContext::SetExtendedMessage(ErrCode nErrId, const OUString& rStr)
+{
+    if (rStr.isEmpty())
+        m_extMessages.erase(sal_uInt32(nErrId));
+    else
+        m_extMessages[sal_uInt32(nErrId)] = rStr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

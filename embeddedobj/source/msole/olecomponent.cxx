@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/embed/UnreachableStateException.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/TempFile.hpp>
@@ -883,10 +884,29 @@ void OleComponent::RunObject()
 
         if ( FAILED( hr ) )
         {
+            OUString error = WindowsErrorStringFromHRESULT(hr);
             if ( hr == REGDB_E_CLASSNOTREG )
-                throw embed::UnreachableStateException(); // the object server is not installed
+            {
+                if (auto pOleObj
+                    = m_pNativeImpl->m_pObj.QueryInterface<IOleObject>(sal::systools::COM_QUERY))
+                {
+                    LPOLESTR lpUserType = nullptr;
+                    if (SUCCEEDED(pOleObj->GetUserType(USERCLASSTYPE_FULL, &lpUserType)))
+                    {
+                        error += OUString::Concat("\n") + o3tl::toU(lpUserType);
+                        sal::systools::COMReference<IMalloc> pMalloc;
+                        hr = CoGetMalloc(1, &pMalloc); // if fails there will be a memory leak
+                        SAL_WARN_IF(FAILED(hr) || !pMalloc, "embeddedobj.ole", "CoGetMalloc() failed");
+                        if (pMalloc)
+                            pMalloc->Free(lpUserType);
+                    }
+                }
+                throw embed::UnreachableStateException(
+                    error, getXWeak(), -1,
+                    css::embed::EmbedStates::RUNNING); // the object server is not installed
+            }
             else
-                throw io::IOException();
+                throw io::IOException(error, getXWeak());
         }
     }
 }
