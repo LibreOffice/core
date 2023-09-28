@@ -144,7 +144,7 @@ public:
     void                SetDoneLink( const Link<void*,void>& rLink );
 
     ErrCode             GetErrorCode() const;
-    ErrCode             GetError() const
+    ErrCode             GetErrorIgnoreWarning() const
                         { return GetErrorCode().IgnoreWarning(); }
     ErrCode             GetWarningError() const;
     ErrCode const &     GetLastStorageCreationState() const;

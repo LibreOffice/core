@@ -691,7 +691,7 @@ SvStream* SfxMedium::GetInStream()
 
     GetMedium_Impl();
 
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
         return nullptr;
 
     return pImpl->m_pInStream.get();
@@ -845,13 +845,13 @@ bool SfxMedium::Commit()
     else if( pImpl->m_pInStream  )
         pImpl->m_pInStream->FlushBuffer();
 
-    if ( GetError() == ERRCODE_NONE )
+    if ( GetErrorIgnoreWarning() == ERRCODE_NONE )
     {
         // does something only in case there is a temporary file ( means aName points to different location than aLogicName )
         Transfer_Impl();
     }
 
-    bool bResult = ( GetError() == ERRCODE_NONE );
+    bool bResult = ( GetErrorIgnoreWarning() == ERRCODE_NONE );
 
     if ( bResult && DocNeedsFileDateCheck() )
         GetInitFileDate( true );
@@ -948,7 +948,7 @@ OUString const & SfxMedium::GetBackup_Impl()
 
 uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 {
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
         return uno::Reference< embed::XStorage >();
 
     // if the medium was constructed with a Storage: use this one, not a temp. storage
@@ -1420,7 +1420,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 
             pImpl->m_bLocked = bResult;
 
-            if ( !bResult && GetError() == ERRCODE_NONE )
+            if ( !bResult && GetErrorIgnoreWarning() == ERRCODE_NONE )
             {
                 // the error should be set in case it is storing process
                 // or the document has been opened for editing explicitly
@@ -1503,7 +1503,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                     {
                         // let the stream be opened to check the system file locking
                         GetMedium_Impl();
-                        if (GetError() != ERRCODE_NONE) {
+                        if (GetErrorIgnoreWarning() != ERRCODE_NONE) {
                             return eResult;
                         }
                     }
@@ -1671,7 +1671,7 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
             }
         }
 
-        if ( !bResult && GetError() == ERRCODE_NONE )
+        if ( !bResult && GetErrorIgnoreWarning() == ERRCODE_NONE )
         {
             // the error should be set in case it is storing process
             // or the document has been opened for editing explicitly
@@ -1717,7 +1717,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 
     GetMedium_Impl();
 
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
         return pImpl->xStorage;
 
     const SfxBoolItem* pRepairItem = GetItemSet().GetItem(SID_REPAIRPACKAGE, false);
@@ -1786,7 +1786,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         // impossibility to create the storage is no error
     }
 
-    if( ( pImpl->nLastStorageError = GetError() ) != ERRCODE_NONE )
+    if( ( pImpl->nLastStorageError = GetErrorIgnoreWarning() ) != ERRCODE_NONE )
     {
         pImpl->xStorage = nullptr;
         if ( pImpl->m_pInStream )
@@ -1877,7 +1877,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
 
 uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( bool bReadOnly )
 {
-    if ( !GetError() && !pImpl->m_xZipStorage.is() )
+    if ( !GetErrorIgnoreWarning() && !pImpl->m_xZipStorage.is() )
     {
         GetMedium_Impl();
 
@@ -1899,7 +1899,7 @@ uno::Reference< embed::XStorage > const & SfxMedium::GetZipStorageToSign_Impl( b
             SAL_WARN( "sfx.doc", "No possibility to get readonly version of storage from medium!" );
         }
 
-        if ( GetError() ) // do not remove warnings
+        if ( GetErrorIgnoreWarning() ) // do not remove warnings
             ResetError();
     }
 
@@ -2009,7 +2009,7 @@ bool SfxMedium::StorageCommit_Impl()
 
     if ( pImpl->xStorage.is() )
     {
-        if ( !GetError() )
+        if ( !GetErrorIgnoreWarning() )
         {
             uno::Reference < embed::XTransactedObject > xTrans( pImpl->xStorage, uno::UNO_QUERY );
             if ( xTrans.is() )
@@ -2044,7 +2044,7 @@ bool SfxMedium::StorageCommit_Impl()
                         }
                     }
 
-                    if (!GetError())
+                    if (!GetErrorIgnoreWarning())
                         SetError(ERRCODE_IO_GENERAL);
                 }
                 catch ( const uno::Exception& )
@@ -2205,7 +2205,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
 
 bool SfxMedium::TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTargetSet )
 {
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
         return false;
 
     // if the document had no password it should be stored without password
@@ -2894,10 +2894,10 @@ void SfxMedium::GetMedium_Impl()
     }
 
     //TODO/MBA: ErrorHandling - how to transport error from MediaDescriptor
-    if ( !GetError() && !pImpl->xStream.is() && !pImpl->xInputStream.is() )
+    if ( !GetErrorIgnoreWarning() && !pImpl->xStream.is() && !pImpl->xInputStream.is() )
         SetError(ERRCODE_IO_ACCESSDENIED);
 
-    if ( !GetError() && !pImpl->m_pInStream )
+    if ( !GetErrorIgnoreWarning() && !pImpl->m_pInStream )
     {
         if ( pImpl->xStream.is() )
             pImpl->m_pInStream = utl::UcbStreamHelper::CreateStream( pImpl->xStream );
@@ -2907,7 +2907,7 @@ void SfxMedium::GetMedium_Impl()
 
     pImpl->bDownloadDone = true;
     pImpl->aDoneLink.ClearPendingCall();
-    ErrCode nError = GetError();
+    ErrCode nError = GetErrorIgnoreWarning();
     pImpl->aDoneLink.Call( reinterpret_cast<void*>(sal_uInt32(nError)) );
 }
 
@@ -3405,7 +3405,7 @@ void SfxMedium::CompleteReOpen()
 
     GetMedium_Impl();
 
-    if ( GetError() )
+    if ( GetErrorIgnoreWarning() )
     {
         if ( pImpl->pTempFile )
         {
@@ -4017,7 +4017,7 @@ bool SfxMedium::SignDocumentContentUsingCertificate(
 {
     bool bChanges = false;
 
-    if (IsOpen() || GetError())
+    if (IsOpen() || GetErrorIgnoreWarning())
     {
         SAL_WARN("sfx.doc", "The medium must be closed by the signer!");
         return bChanges;
@@ -4148,7 +4148,7 @@ bool SfxMedium::SignContents_Impl(weld::Window* pDialogParent,
 {
     bool bChanges = false;
 
-    if (IsOpen() || GetError())
+    if (IsOpen() || GetErrorIgnoreWarning())
     {
         SAL_WARN("sfx.doc", "The medium must be closed by the signer!");
         return bChanges;

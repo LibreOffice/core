@@ -1377,7 +1377,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
     aMedium.Close();
     aMedium.Commit();
 
-    bRet = ERRCODE_NONE == aMedium.GetError();
+    bRet = ERRCODE_NONE == aMedium.GetErrorIgnoreWarning();
 
     if( bRet )
     {

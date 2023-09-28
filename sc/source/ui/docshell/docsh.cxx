@@ -651,11 +651,11 @@ bool ScDocShell::Load( SfxMedium& rMedium )
         }
     }
 
-    if (!bRet && !rMedium.GetError())
+    if (!bRet && !rMedium.GetErrorIgnoreWarning())
         rMedium.SetError(SVSTREAM_FILEFORMAT_ERROR);
 
-    if (rMedium.GetError())
-        SetError(rMedium.GetError());
+    if (rMedium.GetErrorIgnoreWarning())
+        SetError(rMedium.GetErrorIgnoreWarning());
 
     InitItems();
     CalcOutputFactor();
@@ -2580,7 +2580,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 bRet = true;
 
                 if (m_pDocument->GetTableCount() > 1)
-                    if (!rMed.GetError())
+                    if (!rMed.GetErrorIgnoreWarning())
                         rMed.SetError(SCWARN_EXPORT_ASCII);
             }
         }
@@ -2679,7 +2679,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = true;
 
             if (m_pDocument->GetTableCount() > 1)
-                if (!rMed.GetError())
+                if (!rMed.GetErrorIgnoreWarning())
                     rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }

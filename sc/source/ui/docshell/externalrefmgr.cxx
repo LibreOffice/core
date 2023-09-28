@@ -2591,7 +2591,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     }
 
     unique_ptr<SfxMedium> pMedium(new SfxMedium(aFile, StreamMode::STD_READ, pFilter, std::move(pSet)));
-    if (pMedium->GetError() != ERRCODE_NONE)
+    if (pMedium->GetErrorIgnoreWarning() != ERRCODE_NONE)
         return nullptr;
 
     // To load encrypted documents with password, user interaction needs to be enabled.

@@ -2127,7 +2127,7 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
     const bool bOk = aMedium.Commit();
     aMedium.Close();
     if ( !bOk ) {
-        ErrCode nError = aMedium.GetError();
+        ErrCode nError = aMedium.GetErrorIgnoreWarning();
         if ( nError == ERRCODE_NONE ) {
             nError = ERRCODE_IO_GENERAL;
         }

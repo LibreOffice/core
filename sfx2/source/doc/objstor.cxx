@@ -638,7 +638,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     if ( GetErrorIgnoreWarning() == ERRCODE_NONE && bOwnStorageFormat && ( !pFilter || !( pFilter->GetFilterFlags() & SfxFilterFlags::STARONEFILTER ) ) )
     {
         uno::Reference< embed::XStorage > xStorage;
-        if ( pMedium->GetError() == ERRCODE_NONE )
+        if ( pMedium->GetErrorIgnoreWarning() == ERRCODE_NONE )
             xStorage = pMedium->GetStorage();
 
         if( xStorage.is() && pMedium->GetLastStorageCreationState() == ERRCODE_NONE )
@@ -1247,7 +1247,7 @@ bool SfxObjectShell::SaveTo_Impl
         if ( bDoBackup )
         {
             rMedium.DoBackup_Impl(/*bForceUsingBackupPath=*/false);
-            if ( rMedium.GetError() )
+            if ( rMedium.GetErrorIgnoreWarning() )
             {
                 SetError(rMedium.GetErrorCode());
                 rMedium.ResetError();
@@ -1947,7 +1947,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed, bool bRegisterRecent )
     bool bOk = true;
     bool bMedChanged = pNewMed && pNewMed!=pMedium;
 
-    DBG_ASSERT( !pNewMed || pNewMed->GetError() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
+    DBG_ASSERT( !pNewMed || pNewMed->GetErrorIgnoreWarning() == ERRCODE_NONE, "DoSaveCompleted: Medium has error!" );
 
     // delete Medium (and Storage!) after all notifications
     SfxMedium* pOld = pMedium;
@@ -2596,7 +2596,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
     {
-        SetError(pMediumTmp->GetError());
+        SetError(pMediumTmp->GetErrorIgnoreWarning());
         delete pMediumTmp;
         return false;
     }
@@ -2640,7 +2640,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     else
     {
         // transfer error code from medium to objectshell
-        ErrCode errCode = pMediumTmp->GetError();
+        ErrCode errCode = pMediumTmp->GetErrorIgnoreWarning();
         SetError(errCode);
 
         if (errCode == ERRCODE_ABORT)
@@ -2965,7 +2965,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
     if ( pNewFile->GetErrorCode() != ERRCODE_NONE )
     {
         // creating temporary file failed ( f.e. floppy disk not inserted! )
-        SetError(pNewFile->GetError());
+        SetError(pNewFile->GetErrorIgnoreWarning());
         delete pNewFile;
         return false;
     }

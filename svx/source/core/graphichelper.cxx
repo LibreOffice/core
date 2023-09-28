@@ -287,11 +287,11 @@ OUString GraphicHelper::ExportGraphic(weld::Window* pParent, const Graphic& rGra
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         aOut.GetOutStream()->WriteStream( *aIn.GetInStream() );
-                        if ( ERRCODE_NONE == aIn.GetError() )
+                        if ( ERRCODE_NONE == aIn.GetErrorIgnoreWarning() )
                         {
                             aOut.Close();
                             aOut.Commit();
-                            if ( ERRCODE_NONE == aOut.GetError() )
+                            if ( ERRCODE_NONE == aOut.GetErrorIgnoreWarning() )
                                 return sPath;
                         }
                     }

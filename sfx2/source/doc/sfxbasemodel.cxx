@@ -2028,7 +2028,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
     }
 
     if ( !nError )
-        nError = pMedium->GetError();
+        nError = pMedium->GetErrorIgnoreWarning();
 
     m_pData->m_pObjectShell->ResetError();
 

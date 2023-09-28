@@ -210,7 +210,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
             rGraphic.getVectorGraphicData()->getBinaryDataContainer().writeToStream(*pOStm);
             aMedium.Commit();
 
-            if (!aMedium.GetError())
+            if (!aMedium.GetErrorIgnoreWarning())
                 return ERRCODE_NONE;
         }
     }
@@ -239,7 +239,7 @@ ErrCode XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileName,
                 pOStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
                 aMedium.Commit();
 
-                if( !aMedium.GetError() )
+                if( !aMedium.GetErrorIgnoreWarning() )
                     return ERRCODE_NONE;
             }
         }
@@ -417,7 +417,7 @@ ErrCode XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject&
 
         aMedium.Commit();
 
-        if( aMedium.GetError() && ( ERRCODE_NONE == nRet  ) )
+        if( aMedium.GetErrorIgnoreWarning() && ( ERRCODE_NONE == nRet  ) )
             nRet = ERRCODE_GRFILTER_IOERROR;
     }
 

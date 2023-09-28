@@ -442,7 +442,7 @@ void ModulWindow::LoadBasic()
         GetEditorWindow().PaintImmediately();
         GetEditorWindow().ForceSyntaxTimeout();
         GetEditorWindow().DestroyProgress();
-        ErrCode nError = aMedium.GetError();
+        ErrCode nError = aMedium.GetErrorIgnoreWarning();
         if ( nError )
             ErrorHandler::HandleError( nError );
     }
@@ -484,7 +484,7 @@ void ModulWindow::SaveBasicSource()
         GetEditEngine()->Write( *pStream );
         aMedium.Commit();
         LeaveWait();
-        ErrCode nError = aMedium.GetError();
+        ErrCode nError = aMedium.GetErrorIgnoreWarning();
         if ( nError )
             ErrorHandler::HandleError( nError );
     }

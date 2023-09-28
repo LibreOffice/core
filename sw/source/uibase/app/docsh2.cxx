@@ -1760,7 +1760,7 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
         xMed->Download(); // Touch the medium (download it)
 
     std::shared_ptr<const SfxFilter> pSfxFlt;
-    if (!xMed->GetError())
+    if (!xMed->GetErrorIgnoreWarning())
     {
         SfxFilterMatcher aMatcher( rFilter == "writerglobal8"
             ? SwGlobalDocShell::Factory().GetFactoryName()

@@ -295,7 +295,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     if ( !aMedium.GetStorage( false ).is() )
         aMedium.GetInStream();
 
-    if ( aMedium.GetError() )
+    if ( aMedium.GetErrorIgnoreWarning() )
     {
         return aMedium.GetErrorCode();
     }
