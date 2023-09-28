@@ -278,20 +278,4 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer ) const
     (void)xmlTextWriterEndElement( writer );
 }
 
-void SwFont::dumpAsXml(xmlTextWriterPtr writer) const
-{
-    (void)xmlTextWriterStartElement(writer, BAD_CAST("SwFont"));
-    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", this);
-    // do not use Color::AsRGBHexString() as that omits the transparency
-    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("color"), "%08" SAL_PRIxUINT32, sal_uInt32(GetColor()));
-    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("height"), BAD_CAST(OString::number(GetSize(GetActual()).Height()).getStr()));
-    (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("width"), BAD_CAST(OString::number(GetSize(GetActual()).Width()).getStr()));
-    {
-        std::stringstream ss;
-        ss << GetWeight();
-        (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("weight"), BAD_CAST(ss.str().c_str()));
-    }
-    (void)xmlTextWriterEndElement(writer);
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
