@@ -520,8 +520,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
     uno::Reference<sheet::XHierarchiesSupplier> xHierSupp( xDim, uno::UNO_QUERY );
     if ( xHierSupp.is() )
     {
-        uno::Reference<container::XNameAccess> xHiersName = xHierSupp->getHierarchies();
-        xHiers = new ScNameToIndexAccess( xHiersName );
+        xHiers = new ScNameToIndexAccess(xHierSupp->getHierarchies());
         nHierCount = xHiers->getCount();
     }
 
