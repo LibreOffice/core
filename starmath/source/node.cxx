@@ -28,6 +28,8 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <basegfx/numeric/ftools.hxx>
+#include <unicode/uchar.h>
+#include <unicode/uscript.h>
 
 namespace {
 
@@ -2148,32 +2150,14 @@ void SmMathSymbolNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
 
 /**************************************************************************/
 
-static bool lcl_IsFromGreekSymbolSet( std::u16string_view aTokenText )
-{
-    bool bRes = false;
-
-    // valid symbol name needs to have a '%' at pos 0 and at least an additional char
-    if (aTokenText.size() > 2 && aTokenText[0] == u'%')
-    {
-        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName(aTokenText.substr(1));
-        if (pSymbol && SmLocalizedSymbolData::GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
-            bRes = true;
-    }
-
-    return bRes;
-}
-
-
 SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc)
     : SmTextNode(eNodeType, rNodeToken, _nFontDesc)
-    , mbIsFromGreekSymbolSet(lcl_IsFromGreekSymbolSet( rNodeToken.aText ))
 {
 }
 
 
 SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken)
-    : SmTextNode(SmNodeType::Special, rNodeToken, FNT_MATH)  // default Font isn't always correct!
-    , mbIsFromGreekSymbolSet(lcl_IsFromGreekSymbolSet( rNodeToken.aText ))
+    : SmTextNode(SmNodeType::Special, rNodeToken, FNT_VARIABLE)  // default Font isn't always correct!
 {
 }
 
@@ -2185,12 +2169,24 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
 
+    bool bIsGreekSymbol = false;
+    bool bIsSpecialSymbol = false;
+    bool bIsArabic = false;
+
     if (nullptr != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText.subView(1))))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
         OUString aTmp( &cChar, 1 );
         SetText( aTmp );
         GetFont() = pSym->GetFace(&rFormat);
+
+        OUString aSymbolSetName = SmLocalizedSymbolData::GetExportSymbolSetName(pSym->GetSymbolSetName());
+        if (aSymbolSetName == "Greek")
+            bIsGreekSymbol = true;
+        else if (aSymbolSetName == "Special")
+            bIsSpecialSymbol = true;
+        else if (aSymbolSetName == "Arabic")
+            bIsArabic = true;
     }
     else
     {
@@ -2212,23 +2208,31 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     Flags() |= FontChangeMask::Face;
 
-    if (!mbIsFromGreekSymbolSet)
+    sal_uInt32 cChar = 0;
+    if (!GetText().isEmpty())
+    {
+        sal_Int32 nIndex = 0;
+        cChar = GetText().iterateCodePoints(&nIndex);
+        if (!bIsArabic)
+            bIsArabic = u_getIntPropertyValue(cChar, UCHAR_SCRIPT) == USCRIPT_ARABIC;
+    }
+
+    if (!bIsGreekSymbol && !bIsSpecialSymbol && !bIsArabic)
         return;
 
-    OSL_ENSURE( GetText().getLength() == 1, "a symbol should only consist of 1 char!" );
+    // Arabic and special symbols should not be italic,
+    // Greek is italic only in some cases.
     bool bItalic = false;
-    sal_Int16 nStyle = rFormat.GetGreekCharStyle();
-    OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
-    if (nStyle == 1)
-        bItalic = true;
-    else if (nStyle == 2)
+    if (bIsGreekSymbol)
     {
-        const OUString& rTmp(GetText());
-        if (!rTmp.isEmpty())
+        sal_Int16 nStyle = rFormat.GetGreekCharStyle();
+        OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
+        if (nStyle == 1)
+            bItalic = true;
+        else if (nStyle == 2)
         {
             static const sal_Unicode cUppercaseAlpha = 0x0391;
             static const sal_Unicode cUppercaseOmega = 0x03A9;
-            sal_Unicode cChar = rTmp[0];
             // uppercase letters should be straight and lowercase letters italic
             bItalic = cUppercaseAlpha > cChar || cChar > cUppercaseOmega;
         }

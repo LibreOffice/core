@@ -17,6 +17,7 @@ $(eval $(call gb_CppunitTest_set_include,starmath_export,\
 $(eval $(call gb_CppunitTest_use_externals,starmath_export,\
     boost_headers \
     libxml2 \
+    icuuc \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,starmath_export))

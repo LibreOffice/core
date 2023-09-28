@@ -876,8 +876,6 @@ public:
  */
 class SmSpecialNode : public SmTextNode
 {
-    bool mbIsFromGreekSymbolSet;
-
 protected:
     SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);
 
