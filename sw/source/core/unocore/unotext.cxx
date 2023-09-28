@@ -2316,37 +2316,29 @@ SwXText::copyText(
     SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
     SwPosition rPos( rNdIndex );
     // tdf#112202 need SwXText because cursor cannot select table at the start
-    if (pSource)
+    SwTextNode * pFirstNode;
     {
-        SwTextNode * pFirstNode;
+        SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), SwNodeOffset(+1), SwNodeOffset(-1));
+        pFirstNode = temp.GetMark()->GetNode().GetTextNode();
+        if (pFirstNode)
         {
-            SwPaM temp(*pSource->GetStartNode(), *pSource->GetStartNode()->EndOfSectionNode(), SwNodeOffset(+1), SwNodeOffset(-1));
-            pFirstNode = temp.GetMark()->GetNode().GetTextNode();
-            if (pFirstNode)
-            {
-                temp.GetMark()->AssignStartIndex(*pFirstNode);
-            }
-            if (SwTextNode *const pNode = temp.GetPoint()->GetNode().GetTextNode())
-            {
-                temp.GetPoint()->AssignEndIndex(*pNode);
-            }
-            // Explicitly request copy text mode, so
-            // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to
-            // us, even if we have only a single paragraph.
-            m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, SwCopyFlags::CheckPosInFly);
+            temp.GetMark()->AssignStartIndex(*pFirstNode);
         }
-        if (!pFirstNode)
-        {   // the node at rPos was split; get rid of the first empty one so
-            // that the pasted table is first
-            auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(*GetStartNode(), SwNodeOffset(1))));
-            m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pDelCursor);
+        if (SwTextNode *const pNode = temp.GetPoint()->GetNode().GetTextNode())
+        {
+            temp.GetPoint()->AssignEndIndex(*pNode);
         }
+        // Explicitly request copy text mode, so
+        // sw::DocumentContentOperationsManager::CopyFlyInFlyImpl() will copy shapes anchored to
+        // us, even if we have only a single paragraph.
+        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(temp, rPos, SwCopyFlags::CheckPosInFly);
     }
-    else
-    {
-        m_pImpl->m_pDoc->getIDocumentContentOperations().CopyRange(*xCursor->GetPaM(), rPos, SwCopyFlags::CheckPosInFly);
+    if (!pFirstNode)
+    {   // the node at rPos was split; get rid of the first empty one so
+        // that the pasted table is first
+        auto pDelCursor(m_pImpl->m_pDoc->CreateUnoCursor(SwPosition(*GetStartNode(), SwNodeOffset(1))));
+        m_pImpl->m_pDoc->getIDocumentContentOperations().DelFullPara(*pDelCursor);
     }
-
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
