@@ -247,6 +247,7 @@ public:
 
 class SmShowSymbolSet final : public weld::CustomWidgetController
 {
+    SmViewShell &m_rViewShell;
     Size m_aOldSize;
     SymbolPtrVec_t aSymbolSet;
     Link<SmShowSymbolSet&,void> aSelectHdlLink;
@@ -268,7 +269,7 @@ class SmShowSymbolSet final : public weld::CustomWidgetController
     DECL_LINK(ScrollHdl, weld::ScrolledWindow&, void);
 
 public:
-    SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow);
+    SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, SmViewShell &rViewShell);
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {
@@ -291,6 +292,7 @@ public:
 class SmShowSymbol final : public weld::CustomWidgetController
 {
 private:
+    SmViewShell &m_rViewShell;
     vcl::Font m_aFont;
     OUString m_aText;
 
@@ -302,7 +304,7 @@ private:
     void setFontSize(vcl::Font &rFont) const;
 
 public:
-    SmShowSymbol();
+    SmShowSymbol(SmViewShell &rViewShell);
 
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override
     {

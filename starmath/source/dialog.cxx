@@ -85,6 +85,24 @@ public:
     const OUString& GetStyleName(sal_uInt16 nIdx) const;
 };
 
+vcl::Font lclGetSymbolFont(const SmViewShell& rViewShell, const SmSym &rSymbol)
+{
+    const SmDocShell* pDoc = rViewShell.GetDoc();
+    if (pDoc)
+    {
+        // If we have a document, we want to render the symbol useing the font and style used in
+        // the documnet, so we do that by creating a node and preparing it, then get the resolved
+        // font and style from it.
+        SmToken token(TSPECIAL, '\0', "%" + rSymbol.GetUiName());
+        SmSpecialNode aNode(token);
+        aNode.Prepare(pDoc->GetFormat(), *pDoc, 1);
+        aNode.PrepareAttributes();
+        return aNode.GetFont();
+    }
+
+    return rSymbol.GetFace();
+}
+
 } // end anonymous namespace
 
 SmFontStyles::SmFontStyles()
@@ -985,8 +1003,9 @@ void SmAlignDialog::WriteTo(SmFormat &rFormat) const
     rFormat.RequestApplyChanges();
 }
 
-SmShowSymbolSet::SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow)
-    : nLen(0)
+SmShowSymbolSet::SmShowSymbolSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, SmViewShell &rViewShell)
+    : m_rViewShell(rViewShell)
+    , nLen(0)
     , nRows(0)
     , nColumns(0)
     , nXOffset(0)
@@ -1034,7 +1053,7 @@ void SmShowSymbolSet::Paint(vcl::RenderContext& rRenderContext, const tools::Rec
     for (size_t i = v; i < nSymbols ; i++)
     {
         SmSym aSymbol(*aSymbolSet[i]);
-        vcl::Font aFont(aSymbol.GetFace());
+        vcl::Font aFont(lclGetSymbolFont(m_rViewShell, aSymbol));
         aFont.SetAlignment(ALIGN_TOP);
 
         // taking a FontSize which is a bit smaller (compared to nLen) in order to have a buffer
@@ -1198,7 +1217,8 @@ IMPL_LINK_NOARG(SmShowSymbolSet, ScrollHdl, weld::ScrolledWindow&, void)
     Invalidate();
 }
 
-SmShowSymbol::SmShowSymbol()
+SmShowSymbol::SmShowSymbol(SmViewShell& rViewShell)
+    : m_rViewShell(rViewShell)
 {
 }
 
@@ -1239,7 +1259,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
     if (pSymbol)
     {
-        vcl::Font aFont(pSymbol->GetFace());
+        vcl::Font aFont(lclGetSymbolFont(m_rViewShell, *pSymbol));
         aFont.SetAlignment(ALIGN_BASELINE);
         SetFont(aFont);
 
@@ -1348,8 +1368,9 @@ SmSymbolDialog::SmSymbolDialog(weld::Window *pParent, OutputDevice *pFntListDevi
     , rViewSh(rViewShell)
     , rSymbolMgr(rMgr)
     , pFontListDev(pFntListDevice)
+    , m_aSymbolDisplay(rViewShell)
     , m_xSymbolSets(m_xBuilder->weld_combo_box("symbolset"))
-    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow", true)))
+    , m_xSymbolSetDisplay(new SmShowSymbolSet(m_xBuilder->weld_scrolled_window("scrolledwindow", true), rViewShell))
     , m_xSymbolSetDisplayArea(new weld::CustomWeld(*m_xBuilder, "symbolsetdisplay", *m_xSymbolSetDisplay))
     , m_xSymbolName(m_xBuilder->weld_label("symbolname"))
     , m_xSymbolDisplay(new weld::CustomWeld(*m_xBuilder, "preview", m_aSymbolDisplay))
