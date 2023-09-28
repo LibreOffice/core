@@ -2888,11 +2888,11 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     }
     else if (rInfos.eType == ww::eFILLIN)
     {
-        SwInputField const& rField(*static_cast<SwInputField const*>(rInfos.pField.get()));
-        if (rField.getGrabBagParams().hasElements())
+        const SwInputField* pField = static_cast<SwInputField const*>(rInfos.pField.get());
+        if (pField && pField->getGrabBagParams().hasElements())
         {
-            WriteSdtPlainText(rField.GetPar1(), rField.getGrabBagParams());
-            m_sRawText = rField.GetPar1();  // Write field content also as a fallback
+            WriteSdtPlainText(pField->GetPar1(), pField->getGrabBagParams());
+            m_sRawText = pField->GetPar1();  // Write field content also as a fallback
             return;
         }
     }
