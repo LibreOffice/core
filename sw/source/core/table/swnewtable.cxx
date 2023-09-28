@@ -1205,7 +1205,7 @@ void SwTable::InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nRowIdx, sal_uInt16 nCnt
         aFSz.SetHeight( nNewHeight );
         pFrameFormat->SetFormatAttr( aFSz );
     }
-    InsertRow_( &rDoc, aBoxes, nCnt, true );
+    InsertRow_( &rDoc, aBoxes, nCnt, true, true );
     const size_t nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -1510,7 +1510,7 @@ bool SwTable::NewSplitRow( SwDoc& rDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
 */
 
 bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-                        sal_uInt16 nCnt, bool bBehind )
+                        sal_uInt16 nCnt, bool bBehind, bool bInsertDummy )
 {
     bool bRet = false;
     if( IsNewModel() )
@@ -1527,7 +1527,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             SwTableLine *pLine = GetTabLines()[ nRowIdx ];
             SwSelBoxes aLineBoxes;
             lcl_FillSelBoxes( aLineBoxes, *pLine );
-            InsertRow_( pDoc, aLineBoxes, nCnt, bBehind );
+            InsertRow_( pDoc, aLineBoxes, nCnt, bBehind, bInsertDummy );
             const size_t nBoxCount = pLine->GetTabBoxes().size();
             sal_uInt16 nOfs = bBehind ? 0 : 1;
             for( sal_uInt16 n = 0; n < nCnt; ++n )
@@ -1577,7 +1577,7 @@ bool SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         CHECK_TABLE( *this )
     }
     else
-        bRet = InsertRow_( pDoc, rBoxes, nCnt, bBehind );
+        bRet = InsertRow_( pDoc, rBoxes, nCnt, bBehind, bInsertDummy );
     return bRet;
 }
 

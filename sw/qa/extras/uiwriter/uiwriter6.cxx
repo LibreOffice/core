@@ -930,6 +930,85 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf147181_TrackedMovingOfMultipleTable
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2b->getRows()->getCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157492_TrackedMovingRow)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Create a table
+    SwInsertTableOptions TableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    (void)&pWrtShell->InsertTable(TableOpt, 4, 3);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable1->getColumns()->getCount());
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+
+    // fill table with data
+    for (int i = 0; i < 3; ++i)
+    {
+        pWrtShell->Insert("x");
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    }
+
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextRange> xCellA1(xTable1->getCellByName("A1"), uno::UNO_QUERY);
+    xCellA1->setString("A1");
+    uno::Reference<text::XTextRange> xCellB1(xTable1->getCellByName("B1"), uno::UNO_QUERY);
+    xCellB1->setString("B1");
+    uno::Reference<text::XTextRange> xCellC1(xTable1->getCellByName("C1"), uno::UNO_QUERY);
+    xCellC1->setString("C1");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[1]/txt", "A1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[2]/txt", "B1");
+    assertXPathContent(pXmlDoc, "/root/page/body/tab/row[1]/cell[3]/txt", "C1");
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // Move first column of the table before the third column by drag & drop
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    SwFrame* pPage = pLayout->Lower();
+    SwFrame* pBody = pPage->GetLower();
+    SwFrame* pTable = pBody->GetLower();
+    SwFrame* pRow1 = pTable->GetLower();
+    SwFrame* pCellA1 = pRow1->GetLower();
+    SwFrame* pRow3 = pRow1->GetNext()->GetNext();
+    SwFrame* pCellA3 = pRow3->GetLower();
+    const SwRect& rCellA1Rect = pCellA1->getFrameArea();
+    const SwRect& rCellA3Rect = pCellA3->getFrameArea();
+    Point ptTo(rCellA3Rect.Left() + rCellA3Rect.Width() / 2,
+               rCellA3Rect.Top() + rCellA3Rect.Height() / 2);
+    // select first table row by using the middle point of the left border of row 1
+    Point ptRow(rCellA1Rect.Left() - 5, rCellA1Rect.Top() + rCellA1Rect.Height() / 2);
+    pWrtShell->SelectTableRowCol(ptRow);
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+
+    // reject changes results 4 rows again, not 5
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+
+    xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable2(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getColumns()->getCount());
+    // This was 5 (moving row without change tracking)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable2->getRows()->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf154599_MovingColumn)
 {
     createSwDoc();

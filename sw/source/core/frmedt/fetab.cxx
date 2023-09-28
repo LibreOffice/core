@@ -186,6 +186,9 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
         return;
     }
 
+    // pending drag & drop?
+    bool bAction = ActionPend();
+
     CurrShell aCurr( this );
     StartAllAction();
 
@@ -205,7 +208,7 @@ void SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     TableWait aWait( nCnt, pFrame, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     if ( !aBoxes.empty() )
-        GetDoc()->InsertRow( aBoxes, nCnt, bBehind );
+        GetDoc()->InsertRow( aBoxes, nCnt, bBehind, /*bInsertDummy=*/!bAction );
 
     EndAllActionAndCall();
 }
