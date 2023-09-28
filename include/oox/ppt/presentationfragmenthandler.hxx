@@ -54,8 +54,8 @@ private:
     void importSlide(sal_uInt32 nSlide, bool bFirstSlide, bool bImportNotes);
     oox::ppt::SlidePersistPtr importMasterSlide(const ::com::sun::star::uno::Reference<::com::sun::star::frame::XModel>& xModel,
                                                 ::oox::ppt::PowerPointImport& rFilter,
-                                                const OUString& rLayoutFragmentPath,
-                                                const OUString& rMasterFragmentPath);
+                                                std::u16string_view rLayoutFragmentPath,
+                                                std::u16string_view rMasterFragmentPath);
     void saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr, sal_Int32 nThemeIdx);
     void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);
     static void importSlideNames(::oox::core::XmlFilterBase& rFilter, const std::vector<SlidePersistPtr>& rSlidePersist);
