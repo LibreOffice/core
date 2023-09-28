@@ -207,70 +207,70 @@ void WmfTest::testSetTextAlignWmf()
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[2]/text", "textalignment:default");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[3]", "align", "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "x", "12700");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[3]", "x", 12700, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[3]", "y", "212");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[3]/text", "textalignment:0x00");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[4]", "align", "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[4]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[4]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[4]", "y", "423");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[4]/text", "textalignment:0x02");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[5]", "align", "top");
     // Fails without the fix: Expected: 12026, Actual: 12350
-    assertXPath(pDoc, "/metafile/push[2]/textarray[5]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[5]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[5]", "y", "635");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[5]/text", "textalignment:0x04");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[6]", "align", "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[6]", "x", "12363");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[6]", "x", 12363, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[6]", "y", "847");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[6]/text", "textalignment:0x06");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[7]", "align", "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[7]", "x", "12700");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[7]", "x", 12700, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[7]", "y", "1058");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[7]/text", "textalignment:0x08");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[8]", "align", "top");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[8]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[8]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[8]", "y", "1270");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[8]/text", "textalignment:0x0A");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[9]", "align", "bottom");
     // Fails without the fix: Expected: 12026, Actual: 12350
-    assertXPath(pDoc, "/metafile/push[2]/textarray[9]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[9]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[9]", "y", "1482");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[9]/text", "textalignment:0x0C");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[10]", "align", "bottom");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[10]", "x", "12363");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[10]", "x", 12363, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[10]", "y", "1693");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[10]/text", "textalignment:0x0E");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[11]", "align", "bottom");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[11]", "x", "12700");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[11]", "x", 12700, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[11]", "y", "1905");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[11]/text", "textalignment:0x10");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[12]", "align", "bottom");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[12]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[12]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[12]", "y", "2117");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[12]/text", "textalignment:0x12");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[13]", "align", "bottom");
     // Fails without the fix: Expected: 12026, Actual: 12350
-    assertXPath(pDoc, "/metafile/push[2]/textarray[13]", "x", "12026");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[13]", "x", 12026, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[13]", "y", "2328");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[13]/text", "textalignment:0x14");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[14]", "align", "bottom");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[14]", "x", "12363");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[14]", "x", 12363, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[14]", "y", "2540");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[14]/text", "textalignment:0x16");
 
     assertXPath(pDoc, "/metafile/push[2]/textalign[15]", "align", "bottom");
-    assertXPath(pDoc, "/metafile/push[2]/textarray[15]", "x", "12700");
+    assertXPathDoubleValue(pDoc, "/metafile/push[2]/textarray[15]", "x", 12700, 30);
     assertXPath(pDoc, "/metafile/push[2]/textarray[15]", "y", "2752");
     assertXPathContent(pDoc, "/metafile/push[2]/textarray[15]/text", "textalignment:0x18");
 }
