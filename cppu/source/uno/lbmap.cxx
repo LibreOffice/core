@@ -715,7 +715,7 @@ void SAL_CALL uno_revokeMapping(
     ClearableMutexGuard aGuard( rData.aMappingsMutex );
 
     const t_Mapping2Entry::const_iterator iFind( rData.aMapping2Entry.find( pMapping ) );
-    OSL_ASSERT( iFind != rData.aMapping2Entry.end() );
+    assert(iFind != rData.aMapping2Entry.end() && "pMapping must be registered to be removed");
     MappingEntry * pEntry = (*iFind).second;
     if (! --pEntry->nRef)
     {
