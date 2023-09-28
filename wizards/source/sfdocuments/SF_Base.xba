@@ -415,10 +415,10 @@ Const cstSubArgs = &quot;FormDocument&quot;
 	bLoaded = False
 
 Check:
+	If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		&apos;	Build list of available FormDocuments recursively with _CollectFormDocuments
-		If IsNull(_FormDocuments) Then Set _FormDocuments = _Component.getFormDocuments()
 		vFormNames = Split(_CollectFormDocuments(_FormDocuments), cstToken)
 		If Not ScriptForge.SF_Utils._Validate(FormDocument, &quot;FormDocument&quot;, V_STRING, vFormNames) Then GoTo Finally
 	End If
