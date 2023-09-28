@@ -468,11 +468,9 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
         m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
     m_sHelpRoot += "/";
 
-    OUString sUri = sUIDir + sUIFile;
-
     try
     {
-        xmlreader::XmlReader reader(sUri);
+        xmlreader::XmlReader reader(sUIDir + sUIFile);
 
         handleChild(pParent, nullptr, reader);
     }
