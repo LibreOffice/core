@@ -1020,12 +1020,8 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
                 if (LinguMgr::GetIgnoreAllList() == xDic)
                     bChecked = true;
                 xDic->setActive( bChecked );
-
                 if (bChecked)
-                {
-                    OUString aDicName( xDic->getName() );
-                    pActiveDic[ nActiveDics++ ] = aDicName;
-                }
+                    pActiveDic[nActiveDics++] = xDic->getName();
             }
         }
     }
