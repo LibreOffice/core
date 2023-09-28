@@ -167,7 +167,7 @@ private:
     bool NewSplitRow( SwDoc&, const SwSelBoxes&, sal_uInt16, bool );
     std::optional<SwBoxSelection> CollectBoxSelection( const SwPaM& rPam ) const;
     void InsertSpannedRow( SwDoc& rDoc, sal_uInt16 nIdx, sal_uInt16 nCnt );
-    bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind );
+    bool InsertRow_( SwDoc*, const SwSelBoxes&, sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
     bool NewInsertCol( SwDoc&, const SwSelBoxes& rBoxes, sal_uInt16 nCnt, bool, bool bInsertDummy );
     void FindSuperfluousRows_( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
     void AdjustWidths( const tools::Long nOld, const tools::Long nNew );
@@ -254,7 +254,7 @@ public:
     bool InsertCol( SwDoc&, const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt, bool bBehind, bool bInsertDummy );
     bool InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
-                    sal_uInt16 nCnt, bool bBehind );
+                    sal_uInt16 nCnt, bool bBehind, bool bInsertDummy = true );
     void PrepareDelBoxes( const SwSelBoxes& rBoxes );
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrames, const bool bCorrBorder );
