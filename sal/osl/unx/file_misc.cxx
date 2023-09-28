@@ -318,10 +318,7 @@ oslFileError SAL_CALL osl_getNextDirectoryItem(oslDirectory pDirectory,
 
     DirectoryItem_Impl* pImpl = static_cast< DirectoryItem_Impl* >(*pItem);
     if (pImpl)
-    {
         pImpl->release();
-        pImpl = nullptr;
-    }
 #ifdef _DIRENT_HAVE_D_TYPE
     pImpl = new DirectoryItem_Impl(strFilePath, pEntry->d_type);
 #else
