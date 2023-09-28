@@ -1,0 +1,50 @@
+Fix
+
+  error C2398: Element '2': conversion from 'int' to 'const std::basic_string_view<char,std::char_traits<char>>::size_type'
+  requires a narrowing conversion
+
+diff --git a/src/liborcus/gnumeric_value_format_parser.cpp b/src/liborcus/gnumeric_value_format_parser.cpp
+index 822c1ba1..014068e9 100644
+--- a/src/liborcus/gnumeric_value_format_parser.cpp
++++ b/src/liborcus/gnumeric_value_format_parser.cpp
+@@ -12,6 +12,10 @@
+ #include <cassert>
+ #include <sstream>
+
++#include <boost/numeric/conversion/cast.hpp>
++
++using boost::numeric_cast;
++
+ namespace orcus {
+
+ std::size_t gnumeric_value_format_parser::get_pos() const
+@@ -41,7 +45,8 @@ void gnumeric_value_format_parser::segment()
+                 if (pos != 2)
+                     throw parse_error("value format segment is not formatted properly", get_pos());
+
+-                std::string_view s{p0, std::distance(p0, m_cur)};
++                auto n = std::distance(p0, m_cur);
++                std::string_view s{p0, numeric_cast<std::size_t>(n)};
+                 if (s.empty())
+                     throw parse_error("segment value is empty", get_pos());
+
+@@ -51,7 +56,8 @@ void gnumeric_value_format_parser::segment()
+             }
+             case '=':
+             {
+-                std::string_view s{p0, std::distance(p0, m_cur)};
++                auto n = std::distance(p0, m_cur);
++                std::string_view s{p0, numeric_cast<std::size_t>(n)};
+                 seg.type = to_gnumeric_value_format_type(s);
+                 if (seg.type == gnumeric_value_format_type::unknown)
+                 {
+@@ -65,7 +71,8 @@ void gnumeric_value_format_parser::segment()
+             }
+             case ':':
+             {
+-                std::string_view s{p0, std::distance(p0, m_cur)};
++                auto n = std::distance(p0, m_cur);
++                std::string_view s{p0, numeric_cast<std::size_t>(n)};
+
+                 switch (pos)
+                 {

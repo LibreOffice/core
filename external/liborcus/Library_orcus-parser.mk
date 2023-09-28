@@ -54,7 +54,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus-parser,\
 	UnpackedTarball/liborcus/src/parser/json_parser_thread \
 	UnpackedTarball/liborcus/src/parser/parser_base \
 	UnpackedTarball/liborcus/src/parser/parser_global \
-	UnpackedTarball/liborcus/src/parser/pstring \
 	UnpackedTarball/liborcus/src/parser/sax_parser_base \
 	UnpackedTarball/liborcus/src/parser/sax_token_parser \
 	UnpackedTarball/liborcus/src/parser/sax_token_parser_thread \

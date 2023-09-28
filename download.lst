@@ -498,8 +498,8 @@ OPENSSL_TARBALL := openssl-3.0.10.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-ORCUS_SHA256SUM := 6006b9f1576315e313df715a7e72a17f3e0b17d7b6bd119cfa8a0b608ce971eb
-ORCUS_TARBALL := liborcus-0.18.1.tar.xz
+ORCUS_SHA256SUM := 1b68f54bb08face4c3dc83c912d921373c44aed817b37d879b7a4e47f2f15e09
+ORCUS_TARBALL := liborcus-0.19.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
@@ -577,7 +577,7 @@ RHINO_TARBALL := 798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip
 # so that git cherry-pick
 # will not run into conflicts
 SKIA_SHA256SUM := 2223ebce534458a37826e8fe4f24635b0712cde7ed1bd3208f089f6fdd796e01
-SKIA_TARBALL := skia-m116-2ddcf183eb260f63698aa74d1bb380f247ad7ccd.tar.xz 
+SKIA_TARBALL := skia-m116-2ddcf183eb260f63698aa74d1bb380f247ad7ccd.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts

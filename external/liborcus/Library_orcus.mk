@@ -62,11 +62,15 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_cell_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_detection_handler \
+	UnpackedTarball/liborcus/src/liborcus/gnumeric_filter_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_handler \
-	UnpackedTarball/liborcus/src/liborcus/gnumeric_helper \
+	UnpackedTarball/liborcus/src/liborcus/gnumeric_names_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_namespace_types \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_sheet_context \
+	UnpackedTarball/liborcus/src/liborcus/gnumeric_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/gnumeric_tokens \
+	UnpackedTarball/liborcus/src/liborcus/gnumeric_types \
+	UnpackedTarball/liborcus/src/liborcus/gnumeric_value_format_parser \
 	UnpackedTarball/liborcus/src/liborcus/info \
 	UnpackedTarball/liborcus/src/liborcus/interface \
 	UnpackedTarball/liborcus/src/liborcus/json_document_tree \
@@ -75,6 +79,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/json_structure_tree \
 	UnpackedTarball/liborcus/src/liborcus/json_util \
 	UnpackedTarball/liborcus/src/liborcus/measurement \
+	UnpackedTarball/liborcus/src/liborcus/number_utils \
 	UnpackedTarball/liborcus/src/liborcus/odf_document_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/odf_helper \
 	UnpackedTarball/liborcus/src/liborcus/odf_namespace_types \
@@ -114,7 +119,6 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/string_helper \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_autofilter_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_conditional_format_context \
-	UnpackedTarball/liborcus/src/liborcus/xlsx_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_drawing_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_handler \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_helper \
@@ -126,7 +130,9 @@ $(eval $(call gb_Library_add_generated_exception_objects,orcus,\
 	UnpackedTarball/liborcus/src/liborcus/xlsx_pivot_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_revision_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_session_data \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_shared_strings_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_sheet_context \
+	UnpackedTarball/liborcus/src/liborcus/xlsx_styles_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_table_context \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_types \
 	UnpackedTarball/liborcus/src/liborcus/xlsx_workbook_context \
