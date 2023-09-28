@@ -207,8 +207,8 @@ namespace basegfx::utils
         BASEGFX_DLLPUBLIC void applyLineDashing(
             const B2DPolygon& rCandidate,
             const std::vector<double>& rDotDashArray,
-            std::function<void(const basegfx::B2DPolygon& rSnippet)> aLineTargetCallback,
-            std::function<void(const basegfx::B2DPolygon& rSnippet)> aGapTargetCallback = std::function<void(const basegfx::B2DPolygon&)>(),
+            const std::function<void(const basegfx::B2DPolygon& rSnippet)>& rLineTargetCallback,
+            const std::function<void(const basegfx::B2DPolygon& rSnippet)>& rGapTargetCallback = std::function<void(const basegfx::B2DPolygon&)>(),
             double fDotDashLength = 0.0);
         BASEGFX_DLLPUBLIC void applyLineDashing(
             const B2DPolygon& rCandidate,

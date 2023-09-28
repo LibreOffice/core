@@ -1232,8 +1232,8 @@ namespace basegfx::utils
         void applyLineDashing(
             const B2DPolygon& rCandidate,
             const std::vector<double>& rDotDashArray,
-            std::function<void(const basegfx::B2DPolygon& rSnippet)> aLineTargetCallback,
-            std::function<void(const basegfx::B2DPolygon& rSnippet)> aGapTargetCallback,
+            const std::function<void(const basegfx::B2DPolygon& rSnippet)>& rLineTargetCallback,
+            const std::function<void(const basegfx::B2DPolygon& rSnippet)>& rGapTargetCallback,
             double fDotDashLength)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
@@ -1244,18 +1244,14 @@ namespace basegfx::utils
                 fDotDashLength = std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
-            if(fTools::lessOrEqual(fDotDashLength, 0.0) || (!aLineTargetCallback && !aGapTargetCallback) || !nPointCount)
+            if(fTools::lessOrEqual(fDotDashLength, 0.0) || (!rLineTargetCallback && !rGapTargetCallback) || !nPointCount)
             {
                 // parameters make no sense, just add source to targets
-                if(aLineTargetCallback)
-                {
-                    aLineTargetCallback(rCandidate);
-                }
+                if (rLineTargetCallback)
+                    rLineTargetCallback(rCandidate);
 
-                if(aGapTargetCallback)
-                {
-                    aGapTargetCallback(rCandidate);
-                }
+                if (rGapTargetCallback)
+                    rGapTargetCallback(rCandidate);
 
                 return;
             }
@@ -1326,8 +1322,8 @@ namespace basegfx::utils
                         while(fTools::less(fDotDashMovingLength, fEdgeLength))
                         {
                             // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
-                            const bool bHandleLine(bIsLine && aLineTargetCallback);
-                            const bool bHandleGap(!bIsLine && aGapTargetCallback);
+                            const bool bHandleLine(bIsLine && rLineTargetCallback);
+                            const bool bHandleGap(!bIsLine && rGapTargetCallback);
 
                             if(bHandleLine || bHandleGap)
                             {
@@ -1344,12 +1340,12 @@ namespace basegfx::utils
 
                                 if(bHandleLine)
                                 {
-                                    implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
+                                    implHandleSnippet(aSnippet, rLineTargetCallback, aFirstLine, aLastLine);
                                 }
 
                                 if(bHandleGap)
                                 {
-                                    implHandleSnippet(aSnippet, aGapTargetCallback, aFirstGap, aLastGap);
+                                    implHandleSnippet(aSnippet, rGapTargetCallback, aFirstGap, aLastGap);
                                 }
 
                                 aSnippet.clear();
@@ -1362,8 +1358,8 @@ namespace basegfx::utils
                         }
 
                         // append closing snippet [fLastDotDashMovingLength, fEdgeLength]
-                        const bool bHandleLine(bIsLine && aLineTargetCallback);
-                        const bool bHandleGap(!bIsLine && aGapTargetCallback);
+                        const bool bHandleLine(bIsLine && rLineTargetCallback);
+                        const bool bHandleGap(!bIsLine && rGapTargetCallback);
 
                         if(bHandleLine || bHandleGap)
                         {
@@ -1394,8 +1390,8 @@ namespace basegfx::utils
                         while(fTools::less(fDotDashMovingLength, fEdgeLength))
                         {
                             // new split is inside edge, create and append snippet [fLastDotDashMovingLength, fDotDashMovingLength]
-                            const bool bHandleLine(bIsLine && aLineTargetCallback);
-                            const bool bHandleGap(!bIsLine && aGapTargetCallback);
+                            const bool bHandleLine(bIsLine && rLineTargetCallback);
+                            const bool bHandleGap(!bIsLine && rGapTargetCallback);
 
                             if(bHandleLine || bHandleGap)
                             {
@@ -1408,12 +1404,12 @@ namespace basegfx::utils
 
                                 if(bHandleLine)
                                 {
-                                    implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
+                                    implHandleSnippet(aSnippet, rLineTargetCallback, aFirstLine, aLastLine);
                                 }
 
                                 if(bHandleGap)
                                 {
-                                    implHandleSnippet(aSnippet, aGapTargetCallback, aFirstGap, aLastGap);
+                                    implHandleSnippet(aSnippet, rGapTargetCallback, aFirstGap, aLastGap);
                                 }
 
                                 aSnippet.clear();
@@ -1426,8 +1422,8 @@ namespace basegfx::utils
                         }
 
                         // append snippet [fLastDotDashMovingLength, fEdgeLength]
-                        const bool bHandleLine(bIsLine && aLineTargetCallback);
-                        const bool bHandleGap(!bIsLine && aGapTargetCallback);
+                        const bool bHandleLine(bIsLine && rLineTargetCallback);
+                        const bool bHandleGap(!bIsLine && rGapTargetCallback);
 
                         if(bHandleLine || bHandleGap)
                         {
@@ -1451,28 +1447,28 @@ namespace basegfx::utils
             // append last intermediate results (if exists)
             if(aSnippet.count())
             {
-                const bool bHandleLine(bIsLine && aLineTargetCallback);
-                const bool bHandleGap(!bIsLine && aGapTargetCallback);
+                const bool bHandleLine(bIsLine && rLineTargetCallback);
+                const bool bHandleGap(!bIsLine && rGapTargetCallback);
 
                 if(bHandleLine)
                 {
-                    implHandleSnippet(aSnippet, aLineTargetCallback, aFirstLine, aLastLine);
+                    implHandleSnippet(aSnippet, rLineTargetCallback, aFirstLine, aLastLine);
                 }
 
                 if(bHandleGap)
                 {
-                    implHandleSnippet(aSnippet, aGapTargetCallback, aFirstGap, aLastGap);
+                    implHandleSnippet(aSnippet, rGapTargetCallback, aFirstGap, aLastGap);
                 }
             }
 
-            if(bIsClosed && aLineTargetCallback)
+            if(bIsClosed && rLineTargetCallback)
             {
-                implHandleFirstLast(aLineTargetCallback, aFirstLine, aLastLine);
+                implHandleFirstLast(rLineTargetCallback, aFirstLine, aLastLine);
             }
 
-            if(bIsClosed && aGapTargetCallback)
+            if(bIsClosed && rGapTargetCallback)
             {
-                implHandleFirstLast(aGapTargetCallback, aFirstGap, aLastGap);
+                implHandleFirstLast(rGapTargetCallback, aFirstGap, aLastGap);
             }
         }
 

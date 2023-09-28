@@ -64,7 +64,7 @@ namespace basegfx::utils
         void applyLineDashing(
             const B3DPolygon& rCandidate,
             const std::vector<double>& rDotDashArray,
-            std::function<void(const basegfx::B3DPolygon& rSnippet)> aLineTargetCallback,
+            const std::function<void(const basegfx::B3DPolygon& rSnippet)>& rLineTargetCallback,
             double fDotDashLength = 0.0);
         BASEGFX_DLLPUBLIC void applyLineDashing(
             const B3DPolygon& rCandidate,
