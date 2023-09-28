@@ -1868,8 +1868,24 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
     // special handling for ':' where it is a token on its own and is likely
     // to be used for mathematical notations. (E.g. a:b = 2:3)
     // In that case it should not be displayed in italic.
-    if (GetToken().aText.getLength() == 1 && GetToken().aText[0] == ':')
+    if (maText.getLength() == 1 && GetToken().aText[0] == ':')
         Attributes() &= ~FontAttribute::Italic;
+
+    // Arabic text should not be italic, so we check for any charcter in Arabic script and
+    // remove italic attribute.
+    if (!maText.isEmpty())
+    {
+        sal_Int32 nIndex = 0;
+        while (nIndex < maText.getLength())
+        {
+            sal_uInt32 cChar = maText.iterateCodePoints(&nIndex);
+            if (u_getIntPropertyValue(cChar, UCHAR_SCRIPT) == USCRIPT_ARABIC)
+            {
+                Attributes() &= ~FontAttribute::Italic;
+                break;
+            }
+        }
+    }
 };
 
 
