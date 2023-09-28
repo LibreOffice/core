@@ -121,6 +121,15 @@ friend class SfxItemSet;
     bool        m_bDeleteOnIdle : 1;
     bool        m_bStaticDefault : 1;
     bool        m_bPoolDefault : 1;
+
+protected:
+    // Defines if the Item can be shared/RefCounted else it will be cloned.
+    // Default is true - as it should be for all Items. It is needed by some
+    // SW items, so protected to let them set it in constructor. If this could
+    // be fixed at that Items we may remove this again.
+    bool        m_bShareable : 1;
+
+private:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
     bool        m_bDeleted : 1;
@@ -151,6 +160,7 @@ public:
     bool isDeleteOnIdle() const { return m_bDeleteOnIdle; }
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
+    bool isShareable() const { return m_bShareable; }
 
 private:
     inline sal_uInt32 ReleaseRef(sal_uInt32 n = 1) const

@@ -44,6 +44,9 @@ SwFormatDrop::SwFormatDrop()
     m_nChars( 0 ),
     m_bWholeWord( false )
 {
+    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
+    // info see comment @SwAttrSet::SetModifyAtAttr
+    m_bShareable = false;
 }
 
 SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
@@ -55,6 +58,9 @@ SwFormatDrop::SwFormatDrop( const SwFormatDrop &rCpy )
     m_nChars( rCpy.GetChars() ),
     m_bWholeWord( rCpy.GetWholeWord() )
 {
+    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
+    // info see comment @SwAttrSet::SetModifyAtAttr
+    m_bShareable = false;
 }
 
 SwFormatDrop::~SwFormatDrop()

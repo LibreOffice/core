@@ -475,6 +475,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     , m_bDeleteOnIdle(false)
     , m_bStaticDefault(false)
     , m_bPoolDefault(false)
+    , m_bShareable(true)
 #ifdef DBG_UTIL
     , m_bDeleted(false)
 #endif

@@ -634,6 +634,9 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
     m_oNumOffset( rCpy.m_oNumOffset ),
     m_pDefinedIn( nullptr )
 {
+    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
+    // info see comment @SwAttrSet::SetModifyAtAttr
+    m_bShareable = false;
 }
 
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
@@ -641,6 +644,9 @@ SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
     m_pDefinedIn( nullptr )
 {
+    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
+    // info see comment @SwAttrSet::SetModifyAtAttr
+    m_bShareable = false;
 }
 
 SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)

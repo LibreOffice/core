@@ -159,7 +159,7 @@ SfxPoolItem const* SfxItemSet::implCreateItemEntry(SfxPoolItem const* pSource, s
         // these need to be cloned
         return pSource->Clone();
 
-    if (bItemIsSetMember && IsPooledItem(pSource))//!IsPoolDefaultItem(pSource) && GetPool()->IsItemPoolable(*pSource))
+    if (pSource->isShareable() && bItemIsSetMember && IsPooledItem(pSource))//!IsPoolDefaultItem(pSource) && GetPool()->IsItemPoolable(*pSource))
     {
         // shortcut: if we know that the Item is already a member
         // of another SfxItemSet we can just copy the pointer and increase RefCount

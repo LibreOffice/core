@@ -95,6 +95,10 @@ SwAttrPool::~SwAttrPool()
 /// Notification callback
 void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew) const
 {
+    // will have no effect, return
+    if (nullptr == m_pOldSet && nullptr == m_pNewSet)
+        return;
+
     // at least one SfxPoolItem has to be provided, else this is an error
     assert(nullptr != pOld || nullptr != pNew);
     sal_uInt16 nWhich(0);
@@ -233,6 +237,10 @@ SwAttrSet SwAttrSet::CloneAsValue( bool bItems ) const
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
+    // direct call when neither pOld nor pNew is set, no need for callback
+    if (nullptr == pOld && nullptr == pNew)
+        return nullptr != SfxItemSet::Put( rAttr );
+
     m_pNewSet = pNew;
     m_pOldSet = pOld;
     setCallback(m_aCallbackHolder);
@@ -245,6 +253,10 @@ bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
 bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {
+    // direct call when neither pOld nor pNew is set, no need for callback
+    if (nullptr == pOld && nullptr == pNew)
+        return SfxItemSet::Put( rSet );
+
     m_pNewSet = pNew;
     m_pOldSet = pOld;
     setCallback(m_aCallbackHolder);
@@ -257,6 +269,10 @@ bool SwAttrSet::Put_BC( const SfxItemSet& rSet,
 sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich,
                                     SwAttrSet* pOld, SwAttrSet* pNew )
 {
+    // direct call when neither pOld nor pNew is set, no need for callback
+    if (nullptr == pOld && nullptr == pNew)
+        return SfxItemSet::ClearItem( nWhich );
+
     m_pNewSet = pNew;
     m_pOldSet = pOld;
     setCallback(m_aCallbackHolder);
@@ -270,10 +286,19 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                                     SwAttrSet* pOld, SwAttrSet* pNew )
 {
     OSL_ENSURE( nWhich1 <= nWhich2, "no valid range" );
+    sal_uInt16 nRet = 0;
+
+    // direct call when neither pOld nor pNew is set, no need for callback
+    if (nullptr == pOld && nullptr == pNew)
+    {
+        for( ; nWhich1 <= nWhich2; ++nWhich1 )
+            nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
+        return nRet;
+    }
+
     m_pNewSet = pNew;
     m_pOldSet = pOld;
     setCallback(m_aCallbackHolder);
-    sal_uInt16 nRet = 0;
     for( ; nWhich1 <= nWhich2; ++nWhich1 )
         nRet = nRet + SfxItemSet::ClearItem( nWhich1 );
     clearCallback();
@@ -284,6 +309,13 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
 int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
                              SwAttrSet* pOld, SwAttrSet* pNew )
 {
+    // direct call when neither pOld nor pNew is set, no need for callback
+    if (nullptr == pOld && nullptr == pNew)
+    {
+        SfxItemSet::Intersect( rSet );
+        return 0; // as below when neither pOld nor pNew is set
+    }
+
     m_pNewSet = pNew;
     m_pOldSet = pOld;
     setCallback(m_aCallbackHolder);
@@ -304,6 +336,33 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
 bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
 {
     bool bSet = false;
+
+    // ITEM: At ths place the paradigm of Item/Set/Pool gets broken:
+    // The three Items in Writer
+    // - SwFormatPageDesc
+    // - SwFormatDrop
+    // - SwTableBoxFormula
+    // contain a unique ptr to SwFormat (or: sw::BroadcastingModify
+    // if you wish), so the Item *cannot* be shared or re-used.
+    // But that is the intended nature of Items:
+    // - they are read-only (note the bad const_cast's below)
+    // - they are ref-counted to be re-usable in as many Sets as
+    //   possible
+    // Thus if we need to change that ptr @ Item we *need* to make
+    // sure that Item is *unique*. This is now done by using the
+    // 'm_bShareable' at the Item (see where that gets set).
+    // This was done in the past using the 'poolable' flag, but that
+    // flag was/is for a completely different purpose - uniqueness is
+    // a side-effect. It already leaded to massively cloning that Item.
+    // That something is not 'clean' here can also be seen by using
+    // const_cast to *change* values at Items *in* the Set - these
+    // are returned by const reference for a purpose.
+    // If info/data at an Item has to be changed, the official/clean
+    // way is to create a new one (e.g. Clone), set the values (if
+    // not given to the constructor) and then set that Item at the Set.
+    // NOTE: I do not know if and how it would be possible, but holding
+    //       a SwFormat*/sw::BroadcastingModify* at those Items should
+    //       be fixed/removed ASAP
 
     const SwFormatPageDesc* pPageDescItem = GetItemIfSet( RES_PAGEDESC, false );
     if( pPageDescItem &&
