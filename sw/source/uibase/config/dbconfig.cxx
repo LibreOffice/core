@@ -52,13 +52,10 @@ SwDBConfig::~SwDBConfig()
 void SwDBConfig::Load()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
-    if(!m_pAdrImpl)
-    {
+    if (!m_pAdrImpl)
         m_pAdrImpl.reset(new SwDBData);
-        m_pAdrImpl->nCommandType = 0;
+    if (!m_pBibImpl)
         m_pBibImpl.reset(new SwDBData);
-        m_pBibImpl->nCommandType = 0;
-    }
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
     OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
