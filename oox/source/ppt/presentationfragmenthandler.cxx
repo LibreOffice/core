@@ -204,72 +204,84 @@ SlidePersistPtr PresentationFragmentHandler::importMasterSlide(const Reference<f
                                                                const OUString& rLayoutFragmentPath,
                                                                const OUString& rMasterFragmentPath)
 {
-    SlidePersistPtr pMasterPersistPtr;
+    OUString aLayoutFragmentPath;
+    SlidePersistPtr pMasterPersistPtr, pMasterPtr;
     Reference< drawing::XDrawPage > xMasterPage;
     Reference< drawing::XMasterPagesSupplier > xMPS( xModel, uno::UNO_QUERY_THROW );
     Reference< drawing::XDrawPages > xMasterPages( xMPS->getMasterPages(), uno::UNO_SET_THROW );
+    RelationsRef xMasterRelations = rFilter.importRelations( rMasterFragmentPath );
 
-    sal_Int32 nIndex;
-    if( rFilter.getMasterPages().empty() )
+    for (const auto& rEntry : *xMasterRelations)
     {
-        nIndex = 0;
-        xMasterPages->getByIndex( nIndex ) >>= xMasterPage;
-    }
-    else
-    {
-        nIndex = xMasterPages->getCount();
-        xMasterPage = xMasterPages->insertNewByIndex( nIndex );
-    }
+        aLayoutFragmentPath = xMasterRelations->getFragmentPathFromRelation(rEntry.second);
 
-    pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, false, xMasterPage,
-                                                        std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
-    pMasterPersistPtr->setLayoutPath( rLayoutFragmentPath );
-    rFilter.getMasterPages().push_back( pMasterPersistPtr );
-    rFilter.setActualSlidePersist( pMasterPersistPtr );
-    FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, rMasterFragmentPath, pMasterPersistPtr, Master ) );
-
-    // set the correct theme
-    OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
-    if( !aThemeFragmentPath.isEmpty() )
-    {
-        std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
-        std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
-        if( aIter2 == rThemes.end() )
+        sal_Int32 nIndex;
+        if( rFilter.getMasterPages().empty() )
         {
-            oox::drawingml::ThemePtr pThemePtr = std::make_shared<oox::drawingml::Theme>();
-            pMasterPersistPtr->setTheme( pThemePtr );
-            Reference<xml::dom::XDocument> xDoc=
-                rFilter.importFragment(aThemeFragmentPath);
-
-            auto pTheme = std::make_shared<model::Theme>();
-            pThemePtr->setTheme(pTheme);
-
-            rFilter.importFragment(
-                new ThemeFragmentHandler(rFilter, aThemeFragmentPath, *pThemePtr, *pTheme),
-                Reference<xml::sax::XFastSAXSerializable>(
-                    xDoc,
-                    UNO_QUERY_THROW));
-            rThemes[ aThemeFragmentPath ] = pThemePtr;
-            pThemePtr->setFragment(xDoc);
-            saveThemeToGrabBag(pThemePtr, nIndex + 1);
+            nIndex = 0;
+            xMasterPages->getByIndex( nIndex ) >>= xMasterPage;
         }
         else
         {
-            pMasterPersistPtr->setTheme( (*aIter2).second );
+            nIndex = xMasterPages->getCount();
+            xMasterPage = xMasterPages->insertNewByIndex( nIndex );
+        }
+
+        pMasterPersistPtr = std::make_shared<SlidePersist>( rFilter, true, false, xMasterPage,
+                                                            std::make_shared<PPTShape>( Master, "com.sun.star.drawing.GroupShape" ), mpTextListStyle );
+        pMasterPersistPtr->setLayoutPath( aLayoutFragmentPath );
+        rFilter.getMasterPages().push_back( pMasterPersistPtr );
+        rFilter.setActualSlidePersist( pMasterPersistPtr );
+        FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, rMasterFragmentPath, pMasterPersistPtr, Master ) );
+
+        // set the correct theme
+        OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( u"theme" );
+        if( !aThemeFragmentPath.isEmpty() )
+        {
+            std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
+            std::map< OUString, oox::drawingml::ThemePtr >::iterator aIter2( rThemes.find( aThemeFragmentPath ) );
+            if( aIter2 == rThemes.end() )
+            {
+                oox::drawingml::ThemePtr pThemePtr = std::make_shared<oox::drawingml::Theme>();
+                pMasterPersistPtr->setTheme( pThemePtr );
+                Reference<xml::dom::XDocument> xDoc=
+                    rFilter.importFragment(aThemeFragmentPath);
+
+                auto pTheme = std::make_shared<model::Theme>();
+                pThemePtr->setTheme(pTheme);
+
+                rFilter.importFragment(
+                    new ThemeFragmentHandler(rFilter, aThemeFragmentPath, *pThemePtr, *pTheme),
+                    Reference<xml::sax::XFastSAXSerializable>(
+                        xDoc,
+                        UNO_QUERY_THROW));
+                rThemes[ aThemeFragmentPath ] = pThemePtr;
+                pThemePtr->setFragment(xDoc);
+                saveThemeToGrabBag(pThemePtr, nIndex + 1);
+            }
+            else
+            {
+                pMasterPersistPtr->setTheme( (*aIter2).second );
+            }
+        }
+        importSlide( xMasterFragmentHandler, pMasterPersistPtr );
+        rFilter.importFragment( new LayoutFragmentHandler( rFilter, aLayoutFragmentPath, pMasterPersistPtr ) );
+        pMasterPersistPtr->createBackground( rFilter );
+        pMasterPersistPtr->createXShapes( rFilter );
+
+        oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
+        if (pTheme)
+        {
+            pTheme->addTheme(pMasterPersistPtr->getPage());
+        }
+
+        if (pMasterPersistPtr->getLayoutPath() == rLayoutFragmentPath)
+        {
+            pMasterPtr = pMasterPersistPtr;
         }
     }
-    importSlide( xMasterFragmentHandler, pMasterPersistPtr );
-    rFilter.importFragment( new LayoutFragmentHandler( rFilter, rLayoutFragmentPath, pMasterPersistPtr ) );
-    pMasterPersistPtr->createBackground( rFilter );
-    pMasterPersistPtr->createXShapes( rFilter );
 
-    oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
-    if (pTheme)
-    {
-        pTheme->addTheme(pMasterPersistPtr->getPage());
-    }
-
-    return pMasterPersistPtr;
+    return pMasterPtr;
 }
 
 void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr,
