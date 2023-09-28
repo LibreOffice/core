@@ -44,7 +44,7 @@
 namespace
 {
 // element, element help, element visual, element visual's translatable
-typedef std::tuple<std::string_view, TranslateId, std::u16string_view, TranslateId> SmElementDescr;
+typedef std::tuple<std::u16string_view, TranslateId, std::u16string_view, TranslateId> SmElementDescr;
 
 // SmParser 5 elements
 
@@ -158,6 +158,7 @@ const SmElementDescr s_a5FunctionsList[] =
     {RID_LNX, RID_LNX_HELP, {}, {}},
     {RID_EXPX, RID_EXPX_HELP, {}, {}},
     {RID_LOGX, RID_LOGX_HELP, {}, {}},
+    {RID_ARALOGX, RID_SINX_HELP, {}, {}},
     {},
     {RID_SINX, RID_SINX_HELP, {}, {}},
     {RID_COSX, RID_COSX_HELP, {}, {}},
@@ -167,6 +168,32 @@ const SmElementDescr s_a5FunctionsList[] =
     {RID_COSHX, RID_COSHX_HELP, {}, {}},
     {RID_TANHX, RID_TANHX_HELP, {}, {}},
     {RID_COTHX, RID_COTHX_HELP, {}, {}},
+    {},
+    {RID_ARASINX, RID_SINX_HELP, {}, {}},
+    {RID_ARACOSX, RID_COSX_HELP, {}, {}},
+    {RID_ARATANX, RID_TANX_HELP, {}, {}},
+    {RID_ARACOTX, RID_COTX_HELP, {}, {}},
+    {RID_ARASECX, RID_COTX_HELP, {}, {}},
+    {RID_ARACSCX, RID_COTX_HELP, {}, {}},
+    {RID_ARASINHX, RID_SINHX_HELP, {}, {}},
+    {RID_ARACOSHX, RID_COSHX_HELP, {}, {}},
+    {RID_ARATANHX, RID_TANHX_HELP, {}, {}},
+    {RID_ARACOTHX, RID_COTHX_HELP, {}, {}},
+    {RID_ARASECHX, RID_COTX_HELP, {}, {}},
+    {RID_ARACSCHX, RID_COTX_HELP, {}, {}},
+    {},
+    {RID_ARASIN2X, RID_SINX_HELP, {}, {}},
+    {RID_ARACOS2X, RID_COSX_HELP, {}, {}},
+    {RID_ARATAN2X, RID_TANX_HELP, {}, {}},
+    {RID_ARACOT2X, RID_COTX_HELP, {}, {}},
+    {RID_ARASEC2X, RID_COTX_HELP, {}, {}},
+    {RID_ARACSC2X, RID_COTX_HELP, {}, {}},
+    {RID_ARASINH2X, RID_SINHX_HELP, {}, {}},
+    {RID_ARACOSH2X, RID_COSHX_HELP, {}, {}},
+    {RID_ARATANH2X, RID_TANHX_HELP, {}, {}},
+    {RID_ARACOTH2X, RID_COTHX_HELP, {}, {}},
+    {RID_ARASECH2X, RID_COTX_HELP, {}, {}},
+    {RID_ARACSCH2X, RID_COTX_HELP, {}, {}},
     {},
     {RID_ARCSINX, RID_ARCSINX_HELP, {}, {}},
     {RID_ARCCOSX, RID_ARCCOSX_HELP, {}, {}},
@@ -408,18 +435,18 @@ const SmElementDescr s_a5OthersList[] =
 
 const SmElementDescr s_a5ExamplesList[] =
 {
-    {"{func e}^{i %pi} + 1 = 0", RID_EXAMPLE_EULER_IDENTITY_HELP, {}, {}},
-    {"C = %pi cdot d = 2 cdot %pi cdot r", RID_EXAMPLE_CIRCUMFERENCE_HELP, {}, {}},
-    {"c = sqrt{ a^2 + b^2 }", RID_EXAMPLE_PYTHAGOREAN_THEO_HELP, {}, {}},
-    {"vec F = m times vec a", RID_EXAMPLE_2NEWTON, {}, {}},
-    {"E = m c^2", RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP, {}, {}},
-    {"G_{%mu %nu} + %LAMBDA g_{%mu %nu}= frac{8 %pi G}{c^4} T_{%mu %nu}", RID_EXAMPLE_GENERAL_RELATIVITY_HELP, {}, {}},
-    {"%DELTA t' = { %DELTA t } over sqrt{ 1 - v^2 over c^2 }", RID_EXAMPLE_SPECIAL_RELATIVITY_HELP, {}, {}},
-    {"d over dt left( {partial L}over{partial dot q} right) = {partial L}over{partial q}", RID_EXAMPLE_EULER_LAGRANGE_HELP, {}, {}},
-    {"int from a to b f'(x) dx = f(b) - f(a)", RID_EXAMPLE_FTC_HELP, {}, {}},
-    {"ldline %delta bold{r}(t) rdline approx e^{%lambda t} ldline %delta { bold{r} }_0 rdline", RID_EXAMPLE_CHAOS_HELP, {}, {}},
-    {"f(x) = sum from { n=0 } to { infinity } { {f^{(n)}(x_0) } over { fact{n} } (x-x_0)^n }", RID_EXAMPLE_A_TAYLOR_SERIES_HELP, {}, {}},
-    {"f(x) = {1} over { %sigma sqrt{2 %pi} } func e^-{ {(x-%mu)^2} over {2 %sigma^2} }", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP, {}, {}},
+    {u"{func e}^{i %pi} + 1 = 0", RID_EXAMPLE_EULER_IDENTITY_HELP, {}, {}},
+    {u"C = %pi cdot d = 2 cdot %pi cdot r", RID_EXAMPLE_CIRCUMFERENCE_HELP, {}, {}},
+    {u"c = sqrt{ a^2 + b^2 }", RID_EXAMPLE_PYTHAGOREAN_THEO_HELP, {}, {}},
+    {u"vec F = m times vec a", RID_EXAMPLE_2NEWTON, {}, {}},
+    {u"E = m c^2", RID_EXAMPLE_MASS_ENERGY_EQUIV_HELP, {}, {}},
+    {u"G_{%mu %nu} + %LAMBDA g_{%mu %nu}= frac{8 %pi G}{c^4} T_{%mu %nu}", RID_EXAMPLE_GENERAL_RELATIVITY_HELP, {}, {}},
+    {u"%DELTA t' = { %DELTA t } over sqrt{ 1 - v^2 over c^2 }", RID_EXAMPLE_SPECIAL_RELATIVITY_HELP, {}, {}},
+    {u"d over dt left( {partial L}over{partial dot q} right) = {partial L}over{partial q}", RID_EXAMPLE_EULER_LAGRANGE_HELP, {}, {}},
+    {u"int from a to b f'(x) dx = f(b) - f(a)", RID_EXAMPLE_FTC_HELP, {}, {}},
+    {u"ldline %delta bold{r}(t) rdline approx e^{%lambda t} ldline %delta { bold{r} }_0 rdline", RID_EXAMPLE_CHAOS_HELP, {}, {}},
+    {u"f(x) = sum from { n=0 } to { infinity } { {f^{(n)}(x_0) } over { fact{n} } (x-x_0)^n }", RID_EXAMPLE_A_TAYLOR_SERIES_HELP, {}, {}},
+    {u"f(x) = {1} over { %sigma sqrt{2 %pi} } func e^-{ {(x-%mu)^2} over {2 %sigma^2} }", RID_EXAMPLE_GAUSS_DISTRIBUTION_HELP, {}, {}},
 };
 
 const std::vector<TranslateId> s_a5Categories{
@@ -603,7 +630,7 @@ void SmElementsControl::addElements(int nCategory)
         }
         else
         {
-            OUString aElement(OUString::createFromAscii(element));
+            OUString aElement(element);
             OUString aVisual(elementVisual.empty() ? aElement : OUString(elementVisual));
             if (visualTranslatable)
                 aVisual = aVisual.replaceFirst("$1", SmResId(visualTranslatable));
