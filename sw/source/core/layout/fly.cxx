@@ -1442,7 +1442,7 @@ void SwFlyFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderA
                 SwTwips nDeadline = GetFlyAnchorBottom(this, *pAnchor);
                 SwTwips nTop = aRectFnSet.GetTop(getFrameArea());
                 SwTwips nBottom = aRectFnSet.GetTop(getFrameArea()) + nRemaining;
-                if (nBottom > nDeadline)
+                if (nBottom > nDeadline && nDeadline > nTop)
                 {
                     nRemaining = nDeadline - nTop;
                 }
