@@ -84,7 +84,7 @@ enum SmTokenType
     TIM,            TRE,            THBAR,          TLAMBDABAR,     // Complex and constants
     TPLUSMINUS,     TMINUSPLUS,     TSIM,           TSIMEQ,         // +- -+ ~ ~=
     TLIM,           TLIMSUP,        TLIMINF,        TTOWARD,        // Limits
-    THADD,
+    THADD,          TNAHA,
     TOVER,          TTIMES,         TCDOT,          TDIV,           // Product type
     TSLASH,         TBACKSLASH,     TWIDESLASH,     TWIDEBACKSLASH, //Slash
     TFRAC,          TIT,                                            // mathml related
@@ -139,6 +139,7 @@ enum SmTokenType
     // Function
     TFUNC,          TLN,            TLOG,           TEXP,           // Exp - Log
     TSIN,           TCOS,           TTAN,           TCOT,           // Trigo
+    TSEC,           TCSC,           TSECH,          TCSCH,
     TSINH,          TCOSH,          TTANH,          TCOTH,          // Trigo hyperbolic
     TASIN,          TACOS,          TATAN,          TACOT,          // Arctrigo
     TASINH,         TACOSH,         TATANH,         TACOTH,         // Arctrigo hyperbolic

@@ -259,7 +259,35 @@ const SmTokenTableEntry aTokenTable[]
         { u"wideslash", TWIDESLASH, MS_SLASH, TG::Product, 0 },
         { u"widetilde", TWIDETILDE, MS_TILDE, TG::Attribute, 5 },
         { u"widevec", TWIDEVEC, MS_VEC, TG::Attribute, 5 },
-        { u"wp", TWP, MS_WP, TG::Standalone, 5 } };
+        { u"wp", TWP, MS_WP, TG::Standalone, 5 },
+        { u"جا", TSIN, '\0', TG::Function, 5 },
+        { u"جاز", TSINH, '\0', TG::Function, 5 },
+        { u"جتا", TCOS, '\0', TG::Function, 5 },
+        { u"جتاز", TCOSH, '\0', TG::Function, 5 },
+        { u"حا", TSIN, '\0', TG::Function, 5 },
+        { u"حاز", TSINH, '\0', TG::Function, 5 },
+        { u"حتا", TCOS, '\0', TG::Function, 5 },
+        { u"حتاز", TCOSH, '\0', TG::Function, 5 },
+        { u"حد", THADD, MS_HADD, TG::Oper, 5 },
+        { u"طا", TTAN, '\0', TG::Function, 5 },
+        { u"طاز", TTANH, '\0', TG::Function, 5 },
+        { u"طتا", TCOT, '\0', TG::Function, 5 },
+        { u"طتاز", TCOTH, '\0', TG::Function, 5 },
+        { u"ظا", TTAN, '\0', TG::Function, 5 },
+        { u"ظاز", TTANH, '\0', TG::Function, 5 },
+        { u"ظتا", TCOT, '\0', TG::Function, 5 },
+        { u"ظتاز", TCOTH, '\0', TG::Function, 5 },
+        { u"قا", TSEC, '\0', TG::Function, 5 },
+        { u"قاز", TSECH, '\0', TG::Function, 5 },
+        { u"قتا", TCSC, '\0', TG::Function, 5 },
+        { u"قتاز", TCSCH, '\0', TG::Function, 5 },
+        { u"لو", TLOG, '\0', TG::Function, 5 },
+        { u"مجـ", TSUM, MS_MAJ, TG::Oper, 5 },
+        { u"نها", TNAHA, '\0', TG::Oper, 5 },
+        { u"ٯا", TSEC, '\0', TG::Function, 5 },
+        { u"ٯاز", TSECH, '\0', TG::Function, 5 },
+        { u"ٯتا", TCSC, '\0', TG::Function, 5 },
+        { u"ٯتاز", TCSCH, '\0', TG::Function, 5 } };
 
 // First character may be any alphabetic
 const sal_Int32 coStartFlags = KParseTokens::ANY_LETTER | KParseTokens::IGNORE_LEADING_WS;
@@ -1900,10 +1928,13 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
         case TLIMSUP:
         case TLIMINF:
         case THADD:
+        case TNAHA:
             if (eType == TLIMSUP)
                 m_aCurToken.aText = u"lim sup";
             else if (eType == TLIMINF)
                 m_aCurToken.aText = u"lim inf";
+            else if (eType == TNAHA)
+                m_aCurToken.aText = u"نها";
             else if (eType == THADD)
                 m_aCurToken.aText = OUString(&MS_HADD, 1);
             else
