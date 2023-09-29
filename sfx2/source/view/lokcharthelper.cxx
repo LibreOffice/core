@@ -175,7 +175,7 @@ bool LokChartHelper::HitAny(const Point& aPos, bool bNegativeX)
     SfxViewShell* pViewShell = SfxViewShell::GetFirst();
     while (pViewShell)
     {
-        if (pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
+        if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
             LokChartHelper aChartHelper(pViewShell, bNegativeX);
             if (aChartHelper.Hit(aPos))
