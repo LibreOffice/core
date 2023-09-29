@@ -3061,6 +3061,13 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:Forward</value>
+            <value xml:lang="de">.uno:SubScript</value>
+          </prop>
+        </node>
+        <node oor:name="MULTIPLY_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:SuperScript</value>
           </prop>
         </node>
         <node oor:name="ADD_SHIFT_MOD1" oor:op="replace">
@@ -3113,6 +3120,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="de">.uno:Dismantle</value>
           </prop>
         </node>
+        <node oor:name="D_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:CopyObjects</value>
+          </prop>
+        </node>
         <node oor:name="DELETE" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3162,6 +3175,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US" install:module="unxwnt">.uno:DesignerDialog</value>
           </prop>
         </node>
+        <node oor:name="F12" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:SaveAs</value>
+          </prop>
+        </node>
         <node oor:name="F2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3184,6 +3203,7 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:CopyObjects</value>
+            <value xml:lang="de">.uno:ChangeCaseRotateCase</value>
           </prop>
         </node>
         <node oor:name="F4" oor:op="replace">
@@ -3252,6 +3272,18 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
             <value xml:lang="en-US">.uno:TextFitToSize</value>
           </prop>
         </node>
+        <node oor:name="F9_SHIFT" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:GridVisible</value>
+          </prop>
+        </node>
+        <node oor:name="F9_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:ShowRuler</value>
+          </prop>
+        </node>
         <node oor:name="F_MOD1_MOD2" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
@@ -3288,6 +3320,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="de" install:module="unxwnt">.uno:SuperScript</value>
+          </prop>
+        </node>
+        <node oor:name="H_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:FormatUngroup</value>
           </prop>
         </node>
         <node oor:name="HOME_SHIFT_MOD2" oor:op="replace">
@@ -3439,6 +3477,12 @@ Ctrl+Shift+e aka E_SHIFT_MOD1 under GTK/IBUS is for some emoji thing
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:ShowRuler</value>
+          </prop>
+        </node>
+        <node oor:name="SPACE_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="de">.uno:RemoveDirectCharFormats</value>
           </prop>
         </node>
         <node oor:name="SPACE_SHIFT_MOD1" oor:op="replace">
