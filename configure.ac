@@ -998,7 +998,7 @@ darwin*) # macOS
     INSTROOTCONTENTSUFFIX=/Contents
     SDKDIRNAME=${PRODUCTNAME_WITHOUT_SPACES}${PRODUCTVERSION}_SDK
     # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
-    LINKFLAGSSHL="-dynamiclib -single_module"
+    LINKFLAGSSHL="-dynamiclib"
 
     # -fPIC is default
     PICSWITCH=""
@@ -1039,7 +1039,7 @@ ios*) # iOS
         host=x86_64-apple-darwin
     fi
     # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
-    LINKFLAGSSHL="-dynamiclib -single_module"
+    LINKFLAGSSHL="-dynamiclib"
 
     # -fPIC is default
     PICSWITCH=""
