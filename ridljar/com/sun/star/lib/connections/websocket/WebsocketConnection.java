@@ -279,7 +279,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
     public void onMessage(ByteBuffer message) {
         byte[] prefixedMessageBytes = message.array();
 
-        String messageType = "";
+        StringBuffer messageTypeBuf = new StringBuffer();
         boolean hasType = false;
         int i;
         for (i = 0; i < prefixedMessageBytes.length - 1; i++) {
@@ -287,13 +287,15 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
                 hasType = true;
                 break;  // The type ends with ": ", so if we find this sequence we found the end of our type
             }
-            messageType += (char)prefixedMessageBytes[i];
+            messageTypeBuf.append((char)prefixedMessageBytes[i]);
         }
 
         if(!hasType) {
             notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: ' or 'urp:\\n'", message))));
             return;
         }
+
+        String messageType = messageTypeBuf.toString();
 
         int messageStartIndex = i + 2;
 
