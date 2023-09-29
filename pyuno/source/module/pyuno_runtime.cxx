@@ -239,14 +239,17 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         *ppFile = stderr;
     else
     {
-        oslProcessInfo data;
-        data.Size = sizeof( data );
-        osl_getProcessInfo(
-            nullptr , osl_Process_IDENTIFIER , &data );
         osl_getSystemPathFromFileURL( str.pData, &str.pData);
         OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-        o += ".";
-        o += OString::number( data.Ident );
+
+        oslProcessInfo data;
+        data.Size = sizeof( data );
+        if (osl_getProcessInfo(
+            nullptr , osl_Process_IDENTIFIER , &data ) == osl_Process_E_None)
+        {
+            o += ".";
+            o += OString::number(data.Ident);
+        }
 
         *ppFile = fopen( o.getStr() , "w" );
         if ( *ppFile )
