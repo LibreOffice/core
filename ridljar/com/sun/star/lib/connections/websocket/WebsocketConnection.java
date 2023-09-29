@@ -282,7 +282,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         boolean hasType = false;
         int i;
         for (i = 0; i < prefixedMessageBytes.length - 1; i++) {
-            if (prefixedMessageBytes[i] == ':' && (prefixedMessageBytes[i+1] == ' ' || prefixedMessageBytes[i+1] == '\n')) {
+            if (prefixedMessageBytes[i] == ':' && prefixedMessageBytes[i+1] == ' ') {
                 hasType = true;
                 break;  // The type ends with ": ", so if we find this sequence we found the end of our type
             }
@@ -290,7 +290,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
         }
 
         if(!hasType) {
-            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: ' or 'urp:\\n'", message))));
+            notifyListeners_error(new com.sun.star.uno.Exception(new ProtocolException(String.format("Received URP/WS message (%s) without a type specifier. Binary messages must be proceeded by 'urp: '", message))));
             return;
         }
 
