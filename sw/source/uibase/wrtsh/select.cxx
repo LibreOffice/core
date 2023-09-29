@@ -697,7 +697,7 @@ void SwWrtShell::SetInsMode( bool bOn )
 
         std::shared_ptr<comphelper::ConfigurationChanges> xChanges(
             comphelper::ConfigurationChanges::create());
-        officecfg::Office::Common::Misc::QuerySetInsMode::set(xCheckBox->get_active(), xChanges);
+        officecfg::Office::Common::Misc::QuerySetInsMode::set(!xCheckBox->get_active(), xChanges);
         xChanges->commit();
 
         if ( nResult == static_cast<int>(RET_NO) )

@@ -23,12 +23,11 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkCheckButton" id="cbDontShowAgain">
-                <property name="label" translatable="yes" context="SetInsModeDialog|Checkbox">Don't show again</property>
+                <property name="label" translatable="yes" context="SetInsModeDialog|Checkbox">Do not show again</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
                 <property name="hexpand">True</property>
-                <property name="active">True</property>
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
