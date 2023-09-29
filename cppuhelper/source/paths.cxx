@@ -38,12 +38,11 @@ namespace {
 OUString get_this_libpath() {
     static OUString s_uri = []() {
         OUString uri;
-        osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(get_this_libpath), uri);
-        sal_Int32 i = uri.lastIndexOf('/');
+        sal_Int32 i = -1;
+        if (osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(get_this_libpath), uri))
+            i = uri.lastIndexOf('/');
         if (i == -1)
-        {
             throw css::uno::DeploymentException("URI " + uri + " is expected to contain a slash");
-        }
         return uri.copy(0, i);
     }();
 
