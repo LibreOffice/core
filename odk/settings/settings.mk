@@ -469,7 +469,7 @@ CC_OUTPUT_SWITCH=-o
 
 LIBO_SDK_LDFLAGS_STDLIBS =
 
-LIBRARY_LINK_FLAGS=-dynamiclib -single_module -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
+LIBRARY_LINK_FLAGS=-dynamiclib -Wl,-multiply_defined,suppress $(GCC_ARCH_OPTION)
 
 # install_name '@executable_path$/(@:f)'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS)
