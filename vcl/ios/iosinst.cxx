@@ -26,16 +26,17 @@
 #include "headless/svpdata.hxx"
 #include "headless/svpdummies.hxx"
 #include "quartz/utils.h"
+#include "quartz/SystemFontList.hxx"
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 // Totally wrong of course but doesn't seem to harm much in the iOS app.
 static int viewWidth = 1, viewHeight = 1;
 
-void IosSalInstance::GetWorkArea( tools::Rectangle& rRect )
+void IosSalInstance::GetWorkArea( AbsoluteScreenPixelRectangle& rRect )
 {
-    rRect = tools::Rectangle( Point( 0, 0 ),
-                       Size( viewWidth, viewHeight ) );
+    rRect = AbsoluteScreenPixelRectangle( AbsoluteScreenPixelPoint( 0, 0 ),
+                       AbsoluteScreenPixelSize( viewWidth, viewHeight ) );
 }
 
 IosSalInstance *IosSalInstance::getInstance()
@@ -80,7 +81,7 @@ public:
             SetPosSize(0, 0, viewWidth, viewHeight, SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT);
     }
 
-    virtual void GetWorkArea( tools::Rectangle& rRect ) override
+    virtual void GetWorkArea( AbsoluteScreenPixelRectangle& rRect ) override
     {
         IosSalInstance::getInstance()->GetWorkArea( rRect );
     }

@@ -33,6 +33,9 @@
 #include <postmac.h>
 
 #include <font/PhysicalFontFace.hxx>
+#ifdef IOS
+#include <font/PhysicalFontCollection.hxx>
+#endif
 
 #include <unordered_map>
 
