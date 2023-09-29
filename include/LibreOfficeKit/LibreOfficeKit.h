@@ -133,10 +133,10 @@ struct _LibreOfficeKitClass
     void (*trimMemory) (LibreOfficeKit* pThis, int nTarget);
 
     /// @see lok::Office::startURP
-    int (*startURP)(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext,
-                    void** ppSendURPToLOContext,
+    void* (*startURP)(LibreOfficeKit* pThis,
+                    void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
                     int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-                    int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen));
+                    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
 
     /// @see lok::Office::stopURP
     void (*stopURP)(LibreOfficeKit* pThis, void* pSendURPToLOContext);

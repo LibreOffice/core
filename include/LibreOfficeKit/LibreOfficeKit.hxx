@@ -1170,26 +1170,26 @@ public:
      * Start a UNO acceptor using the function pointers provides to read and write data to/from the acceptor.
      *
      * @param pReceiveURPFromLOContext A pointer that will be passed to your fnRecieveURPFromLO function
-     * @param ppSendURPToLOContext A pointer to a pointer that you should give to the function passing URP to LO will be stored in this.
+     * @param pSendURPToLOContext A pointer that will be passed to your fnSendURPToLO function
      * @param fnReceiveURPFromLO A function pointer that LO should use to pass URP back to the caller
-     * @param pfnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO will be stored in this.
+     * @param fnSendURPToLO A function pointer pointer that the caller should use to pass URP to LO
      */
-    bool startURP(void* pReceiveURPFromLOContext, void** ppSendURPToLOContext,
-                  int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-                  int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen))
+    void* startURP(void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
+                   int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+                   int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
     {
-        return mpThis->pClass->startURP(mpThis, pReceiveURPFromLOContext, ppSendURPToLOContext,
-                                        fnReceiveURPFromLO, pfnSendURPToLO);
+        return mpThis->pClass->startURP(mpThis, pReceiveURPFromLOContext, pSendURPToLOContext,
+                                        fnReceiveURPFromLO, fnSendURPToLO);
     }
 
     /**
      * Stop a function based URP connection you previously started with startURP
      *
-     * @param pSendURPToLOContext the context you got back in the ppSendURPToLOContext argument when starting the connection
+     * @param pURPContext the context returned by startURP  when starting the connection
      */
-    void stopURP(void* pSendURPToLOContext)
+    void stopURP(void* pURPContext)
     {
-        mpThis->pClass->stopURP(mpThis, pSendURPToLOContext);
+        mpThis->pClass->stopURP(mpThis, pURPContext);
     }
 };
 

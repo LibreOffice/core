@@ -2584,10 +2584,10 @@ static char* lo_extractRequest(LibreOfficeKit* pThis,
 
 static void lo_trimMemory(LibreOfficeKit* pThis, int nTarget);
 
-static int
-lo_startURP(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext, void** pSendURPToLOContext,
+static void*
+lo_startURP(LibreOfficeKit* pThis, void* pReceiveURPFromLOContext, void* pSendURPToLOContext,
             int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-            int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen));
+            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen));
 
 static void lo_stopURP(LibreOfficeKit* pThis, void* pSendURPToLOContext);
 
@@ -3273,39 +3273,39 @@ Reference<XInterface> FunctionBasedURPInstanceProvider::getInstance(const OUStri
 class FunctionBasedURPConnection : public cppu::WeakImplHelper<css::connection::XConnection>
 {
 public:
-    explicit FunctionBasedURPConnection(void*, int (*)(void* pContext, const signed char* pBuffer,
-                                                       int nLen));
+    explicit FunctionBasedURPConnection(void*, int (*)(void* pContext, const signed char* pBuffer, int nLen),
+                                        void*, int (*)(void* pContext, signed char* pBuffer, int nLen));
     ~FunctionBasedURPConnection();
 
     // These overridden member functions use "read" and "write" from the point of view of LO,
     // i.e. the opposite to how startURP() uses them.
-    virtual sal_Int32 SAL_CALL read(Sequence<sal_Int8>& aReadBytes,
+    virtual sal_Int32 SAL_CALL read(Sequence<sal_Int8>& rReadBytes,
                                     sal_Int32 nBytesToRead) override;
     virtual void SAL_CALL write(const Sequence<sal_Int8>& aData) override;
     virtual void SAL_CALL flush() override;
     virtual void SAL_CALL close() override;
     virtual OUString SAL_CALL getDescription() override;
     void setBridge(Reference<XBridge>);
-    int addClientURPToBuffer(const signed char* pBuffer, int nLen);
     void* getContext();
     inline static int g_connectionCount = 0;
 
 private:
-    std::shared_ptr<std::deque<signed char>> m_pBuffer;
     void* m_pRecieveFromLOContext;
+    void* m_pSendURPToLOContext;
     int (*m_fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen);
+    int (*m_fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen);
     Reference<XBridge> m_URPBridge;
-    std::atomic<bool> m_closed = false;
-    std::condition_variable m_URPInBuffer;
-    std::mutex m_bufferMutex;
 };
 
 FunctionBasedURPConnection::FunctionBasedURPConnection(
     void* pRecieveFromLOContext,
-    int (*fnRecieveFromLO)(void* pContext, const signed char* pBuffer, int nLen))
-    : m_pBuffer(std::make_shared<std::deque<signed char>>())
-    , m_pRecieveFromLOContext(pRecieveFromLOContext)
-    , m_fnReceiveURPFromLO(fnRecieveFromLO)
+    int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
+    void* pSendURPToLOContext,
+    int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
+    : m_pRecieveFromLOContext(pRecieveFromLOContext)
+    , m_pSendURPToLOContext(pSendURPToLOContext)
+    , m_fnReceiveURPFromLO(fnReceiveURPFromLO)
+    , m_fnSendURPToLO(fnSendURPToLO)
 {
     g_connectionCount++;
 }
@@ -3316,62 +3316,23 @@ FunctionBasedURPConnection::~FunctionBasedURPConnection()
     xComp->dispose(); // TODO: check this doesn't deadlock
 }
 
-int sendURPToLO(void* pContext /* FunctionBasedURPConnection* */, const signed char* pBuffer,
-                int nLen)
-{
-    return static_cast<FunctionBasedURPConnection*>(pContext)->addClientURPToBuffer(pBuffer, nLen);
-}
-
-int FunctionBasedURPConnection::addClientURPToBuffer(const signed char* pBuffer, int nLen)
-{
-    {
-        std::scoped_lock lock(m_bufferMutex);
-
-        if (m_closed)
-        {
-            // We can't write URP to a closed connection
-            SAL_WARN("lok.urp", "A client attempted to write URP to a closed "
-                            "FunctionBasedURPConnection... ignoring");
-            return 0;
-        }
-        m_pBuffer->insert(m_pBuffer->end(), pBuffer, pBuffer + nLen);
-    }
-    m_URPInBuffer.notify_one();
-    return nLen;
-}
-
 void* FunctionBasedURPConnection::getContext() { return this; }
 
-sal_Int32 FunctionBasedURPConnection::read(Sequence<sal_Int8>& aReadBytes, sal_Int32 nBytesToRead)
+sal_Int32 FunctionBasedURPConnection::read(Sequence<sal_Int8>& rReadBytes, sal_Int32 nBytesToRead)
 {
-    if (aReadBytes.getLength() != nBytesToRead)
-    {
-        aReadBytes.realloc(nBytesToRead);
-    }
+    if (nBytesToRead < 0)
+        return 0;
 
-    sal_Int8* result = aReadBytes.getArray();
+    if (rReadBytes.getLength() != nBytesToRead)
+        rReadBytes.realloc(nBytesToRead);
+
     // As with osl::StreamPipe, we must always read nBytesToRead...
-
-    {
-        std::unique_lock lock(m_bufferMutex);
-
-        if (nBytesToRead < 0)
-        {
-            return 0;
-        }
-        m_URPInBuffer.wait(
-            lock, [this, nBytesToRead] { return static_cast<sal_Int32>(m_pBuffer->size()) >= nBytesToRead; });
-
-        std::copy(m_pBuffer->begin(), m_pBuffer->begin() + nBytesToRead, result);
-        m_pBuffer->erase(m_pBuffer->begin(), m_pBuffer->begin() + nBytesToRead);
-    }
-
-    return nBytesToRead;
+    return m_fnSendURPToLO(m_pSendURPToLOContext, rReadBytes.getArray(), nBytesToRead);
 }
 
-void FunctionBasedURPConnection::write(const Sequence<sal_Int8>& aData)
+void FunctionBasedURPConnection::write(const Sequence<sal_Int8>& rData)
 {
-    m_fnReceiveURPFromLO(m_pRecieveFromLOContext, aData.getConstArray(), aData.getLength());
+    m_fnReceiveURPFromLO(m_pRecieveFromLOContext, rData.getConstArray(), rData.getLength());
 }
 
 void FunctionBasedURPConnection::flush() {}
@@ -3379,7 +3340,6 @@ void FunctionBasedURPConnection::flush() {}
 void FunctionBasedURPConnection::close()
 {
     SAL_INFO("lok.urp", "Requested to close FunctionBasedURPConnection");
-    m_closed = true;
 }
 
 OUString FunctionBasedURPConnection::getDescription() { return ""; }
@@ -3387,20 +3347,19 @@ OUString FunctionBasedURPConnection::getDescription() { return ""; }
 void FunctionBasedURPConnection::setBridge(Reference<XBridge> xBridge) { m_URPBridge = xBridge; }
 }
 
-static int
-lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void** ppSendToLOContext,
+static void*
+lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void* pSendToLOContext,
             int (*fnReceiveURPFromLO)(void* pContext, const signed char* pBuffer, int nLen),
-            int (**pfnSendURPToLO)(void* pContext, const signed char* pBuffer, int nLen))
+            int (*fnSendURPToLO)(void* pContext, signed char* pBuffer, int nLen))
 {
     // Here we will roughly do what desktop LO does when one passes a command-line switch like
     // --accept=socket,port=nnnn;urp;StarOffice.ServiceManager. Except that no listening socket will
-    // be created. The communication to the URP will be through the fnReceiveURPFromLO and pfnSendURPToLO functions.
+    // be created. The communication to the URP will be through the nReceiveURPFromLO and nSendURPToLO
+    // functions.
 
     rtl::Reference<FunctionBasedURPConnection> connection(
-        new FunctionBasedURPConnection(pRecieveFromLOContext, fnReceiveURPFromLO));
-
-    *pfnSendURPToLO = sendURPToLO;
-    *ppSendToLOContext = connection->getContext();
+        new FunctionBasedURPConnection(pRecieveFromLOContext, fnReceiveURPFromLO,
+                                       pSendToLOContext, fnSendURPToLO));
 
     Reference<XBridgeFactory> xBridgeFactory = css::bridge::BridgeFactory::create(xContext);
 
@@ -3412,17 +3371,17 @@ lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void** ppS
 
     connection->setBridge(std::move(xBridge));
 
-    return true;
+    return connection->getContext();
 }
 
 /**
  * Stop a function based URP connection that you started with lo_startURP above
  *
- * @param pSendToLOContext a pointer to the context you got back using your ppSendToLOContext before */
+ * @param pSendToLOContext a pointer to the context returned by lo_startURP */
 static void lo_stopURP(LibreOfficeKit* /* pThis */,
-                       void* pSendToLOContext /* FunctionBasedURPConnection* */)
+                       void* pFunctionBasedURPConnection/* FunctionBasedURPConnection* */)
 {
-    static_cast<FunctionBasedURPConnection*>(pSendToLOContext)->close();
+    static_cast<FunctionBasedURPConnection*>(pFunctionBasedURPConnection)->close();
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
