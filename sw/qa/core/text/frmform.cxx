@@ -116,6 +116,36 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableAvoidLastManipOfst)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0),
                          static_cast<sal_Int32>(pAnchorText->GetOffset()));
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableBadFlyPos)
+{
+    // Given a document with an inner floating table on page 2 -> 4:
+    // When laying out that document:
+    createSwDoc("floattable-bad-fly-pos.docx");
+
+    // Then make sure that pages 2 -> 4 get the 3 fly frames:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage2->GetSortedObjs()->size());
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the fly on page 4 was still on page 3.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage3->GetSortedObjs()->size());
+    auto pPage4 = pPage3->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage4);
+    CPPUNIT_ASSERT(pPage4->GetSortedObjs());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage4->GetSortedObjs()->size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
