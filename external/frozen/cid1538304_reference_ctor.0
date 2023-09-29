@@ -14,3 +14,20 @@
        : map{items, Compare{}} {}
  
    constexpr map(std::initializer_list<value_type> items, Compare const &compare)
+--- include/frozen/set.h	2023-09-29 09:19:22.208195458 +0100
++++ include/frozen/set.h	2023-09-29 09:20:21.175291240 +0100
+@@ -59,12 +59,12 @@
+   /* constructors */
+   constexpr set(const set &other) = default;
+ 
+-  constexpr set(container_type keys, Compare const & comp)
++  constexpr set(const container_type& keys, Compare const & comp)
+       : less_than_{comp}
+       , keys_(bits::quicksort(keys, less_than_)) {
+       }
+ 
+-  explicit constexpr set(container_type keys)
++  explicit constexpr set(const container_type& keys)
+       : set{keys, Compare{}} {}
+ 
+   constexpr set(std::initializer_list<Key> keys, Compare const & comp)
