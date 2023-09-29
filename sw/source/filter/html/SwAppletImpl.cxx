@@ -123,7 +123,7 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
 
     // create Applet; it will be in running state
     m_xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
-    ::svt::EmbeddedObjectRef::TryRunningState( m_xApplet );
+    (void)::svt::EmbeddedObjectRef::TryRunningState( m_xApplet );
 
     INetURLObject aUrlBase(rDocumentBaseURL);
     aUrlBase.removeSegment();

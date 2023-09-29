@@ -944,7 +944,7 @@ OOle2Obj::OOle2Obj(SdrModel& rSdrModel, OOle2Obj const & rSource)
     m_bIsListening = true;
 
     OReportModel& rRptModel(static_cast< OReportModel& >(getSdrModelFromSdrObject()));
-    svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
+    (void)svt::EmbeddedObjectRef::TryRunningState( GetObjRef() );
     impl_createDataProvider_nothrow(rRptModel.getReportDefinition());
 
     uno::Reference< chart2::data::XDatabaseDataProvider > xSource( lcl_getDataProvider(rSource.GetObjRef()) );

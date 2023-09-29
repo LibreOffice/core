@@ -317,7 +317,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             OUString aName;
             xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ),
                         embed::Aspects::MSOLE_CONTENT );
-            svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
+            (void)svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {

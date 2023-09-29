@@ -2994,7 +2994,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                     sal_Int64 nAspect = m_nDrawAspect;
 
                     // TODO/LEAN: VisualArea still needs running state
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                    (void)svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
                     // set parent to get correct VisArea(in case of object needing parent printer)
                     uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
