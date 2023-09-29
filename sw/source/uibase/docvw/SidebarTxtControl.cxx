@@ -284,7 +284,9 @@ void SidebarTextControl::MakeVisible()
 
 bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 {
-    if (getenv("SW_DEBUG") && rKeyEvt.GetKeyCode().GetCode() == KEY_F12)
+    const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+    const sal_uInt16 nKey = rKeyCode.GetCode();
+    if (nKey == KEY_F12 && getenv("SW_DEBUG"))
     {
         if (rKeyEvt.GetKeyCode().IsShift())
         {
@@ -295,8 +297,6 @@ bool SidebarTextControl::KeyInput( const KeyEvent& rKeyEvt )
 
     bool bDone = false;
 
-    const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-    sal_uInt16 nKey = rKeyCode.GetCode();
     if ( ( rKeyCode.IsMod1() && rKeyCode.IsMod2() ) &&
          ( (nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN) ) )
     {

@@ -1381,22 +1381,25 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         }
     }
 
-    if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
-        m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard )
+    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
+
+    if (nKey == KEY_ESCAPE)
     {
-        m_pApplyTempl->m_pFormatClipboard->Erase();
-        SetApplyTemplate(SwApplyTemplate());
-        m_rView.GetViewFrame().GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
-    }
-    else if ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
-            rSh.IsHeaderFooterEdit( ) )
-    {
-        bool bHeader = bool(FrameTypeFlags::HEADER & rSh.GetFrameType(nullptr,false));
-        if ( bHeader )
-            rSh.SttPg();
-        else
-            rSh.EndPg();
-        rSh.ToggleHeaderFooterEdit();
+        if (m_pApplyTempl && m_pApplyTempl->m_pFormatClipboard)
+        {
+            m_pApplyTempl->m_pFormatClipboard->Erase();
+            SetApplyTemplate(SwApplyTemplate());
+            m_rView.GetViewFrame().GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+        }
+        else if (rSh.IsHeaderFooterEdit())
+        {
+            bool bHeader = bool(FrameTypeFlags::HEADER & rSh.GetFrameType(nullptr, false));
+            if (bHeader)
+                rSh.SttPg();
+            else
+                rSh.EndPg();
+            rSh.ToggleHeaderFooterEdit();
+        }
     }
 
     SfxObjectShell *pObjSh = m_rView.GetViewFrame().GetObjectShell();
@@ -1447,27 +1450,24 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     bool bAppendSpace = s_pQuickHlpData->m_bAppendSpace;
     s_pQuickHlpData->m_bAppendSpace = false;
 
-    if ( getenv("SW_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 )
+    if (nKey == KEY_F12 && getenv("SW_DEBUG"))
     {
         if( rKEvt.GetKeyCode().IsShift())
         {
             GetView().GetDocShell()->GetDoc()->dumpAsXml();
-            return;
         }
         else
         {
             SwRootFrame* pLayout = GetView().GetDocShell()->GetWrtShell()->GetLayout();
             pLayout->dumpAsXml( );
-            return;
         }
+        return;
     }
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
     if( !bIsDocReadOnly && !rSh.IsSelFrameMode() && !rSh.IsObjSelected() )
     {
-        sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
-
         if( KEY_UP == nKey || KEY_DOWN == nKey ||
             KEY_LEFT == nKey || KEY_RIGHT == nKey )
         {
@@ -2817,7 +2817,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     }
 
     // update the page number in the statusbar
-    sal_uInt16 nKey = rKEvt.GetKeyCode().GetCode();
+    nKey = rKEvt.GetKeyCode().GetCode();
     if( KEY_UP == nKey || KEY_DOWN == nKey || KEY_PAGEUP == nKey || KEY_PAGEDOWN == nKey )
         GetView().GetViewFrame().GetBindings().Update( FN_STAT_PAGE );
 
