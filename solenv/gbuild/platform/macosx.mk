@@ -177,7 +177,7 @@ endef
 # Library class
 
 gb_Library_DEFS :=
-gb_Library_TARGETTYPEFLAGS := -dynamiclib -single_module
+gb_Library_TARGETTYPEFLAGS := -dynamiclib
 gb_Bundle_TARGETTYPEFLAGS := -bundle
 gb_Library_UDK_MAJORVER := 3
 gb_Library_SYSPRE := lib
