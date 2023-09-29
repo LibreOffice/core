@@ -593,13 +593,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mbIsWriter = pParent->mbIsWriter;
     mbIsSpreadsheet = pParent->mbIsSpreadsheet;
 
-    mxCbExportNotesInMargin->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportNotesInMargin"));
-    mxCbExportEmptyPages->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("IsSkipEmptyPages"));
-    mxCbExportPlaceholders->set_sensitive(
-        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportPlaceholders"));
-
     mxRbLosslessCompression->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const bool bUseLosslessCompression = pParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
@@ -678,7 +671,10 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
 
     mxCbExportNotes->set_active( pParent->mbExportNotes );
-    mxCbExportNotesInMargin->set_active( pParent->mbExportNotesInMargin );
+    mxCbExportNotesInMargin->set_active(mbIsWriter && pParent->mbExportNotesInMargin);
+    mxCbExportNotesInMargin->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportNotesInMargin"));
+
     if (comphelper::LibreOfficeKit::isActive())
     {
         mxCbViewPDF->hide();
@@ -733,14 +729,14 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxCbSinglePageSheets->set_active(false);
     }
 
-    mxCbExportPlaceholders->set_visible(mbIsWriter);
-    if( !mbIsWriter )
-    {
-        mxCbExportPlaceholders->set_active(false);
-        mxCbExportNotesInMargin->set_active(false);
-    }
     mxCbExportEmptyPages->set_active(!pParent->mbIsSkipEmptyPages);
+    mxCbExportEmptyPages->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("IsSkipEmptyPages"));
+
+    mxCbExportPlaceholders->set_visible(mbIsWriter);
     mxCbExportPlaceholders->set_active(pParent->mbIsExportPlaceholders);
+    mxCbExportPlaceholders->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportPlaceholders"));
 
     mxCbAddStream->show();
     mxCbAddStream->set_active(pParent->mbAddStream);
