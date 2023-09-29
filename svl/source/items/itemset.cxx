@@ -1284,7 +1284,7 @@ sal_uInt16 SfxItemSet::GetWhichByOffset( sal_uInt16 nOffset ) const
 
     // 1st try to get a set SfxPoolItem and fetch the WhichID from there.
     const SfxPoolItem* pItem(nullptr);
-    GetItemState_ForOffset(nOffset, &pItem);
+    (void)GetItemState_ForOffset(nOffset, &pItem);
 
     if (nullptr != pItem && 0 != pItem->Which())
         return pItem->Which();
