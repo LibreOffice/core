@@ -24,6 +24,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -245,6 +246,19 @@ bool FilterConfigItem::WritePropertyValue( Sequence< PropertyValue >& rPropSeq, 
         bRet = true;
     }
     return bRet;
+}
+
+bool FilterConfigItem::IsReadOnly(const OUString& rName)
+{
+    if (!xPropSet.is())
+        return false;
+
+    const Reference<XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+    if (!xInfo.is() || !xInfo->hasPropertyByName(rName))
+        return false;
+
+    const css::beans::Property aProp(xInfo->getPropertyByName(rName));
+    return (aProp.Attributes & PropertyAttribute::READONLY);
 }
 
 bool FilterConfigItem::ReadBool( const OUString& rKey, bool bDefault )

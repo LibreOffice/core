@@ -593,9 +593,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     mbIsWriter = pParent->mbIsWriter;
     mbIsSpreadsheet = pParent->mbIsSpreadsheet;
 
-    mxCbExportNotesInMargin->set_sensitive( mbIsWriter );
-    mxCbExportEmptyPages->set_sensitive( mbIsWriter );
-    mxCbExportPlaceholders->set_sensitive( mbIsWriter );
+    mxCbExportNotesInMargin->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportNotesInMargin"));
+    mxCbExportEmptyPages->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("IsSkipEmptyPages"));
+    mxCbExportPlaceholders->set_sensitive(
+        mbIsWriter && !pParent->maConfigItem.IsReadOnly("ExportPlaceholders"));
 
     mxRbLosslessCompression->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const bool bUseLosslessCompression = pParent->mbUseLosslessCompression;
@@ -603,16 +606,24 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxRbLosslessCompression->set_active(true);
     else
         mxRbJPEGCompression->set_active(true);
+    const bool bReadOnlyCompression = !pParent->maConfigItem.IsReadOnly("UseLosslessCompression");
+    mxRbLosslessCompression->set_sensitive(bReadOnlyCompression);
+    mxRbJPEGCompression->set_sensitive(bReadOnlyCompression);
 
     mxNfQuality->set_value( pParent->mnQuality, FieldUnit::PERCENT );
-    mxQualityFrame->set_sensitive(!bUseLosslessCompression);
+    mxQualityFrame->set_sensitive(
+        !bUseLosslessCompression && !pParent->maConfigItem.IsReadOnly("Quality"));
 
     mxCbReduceImageResolution->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl));
     const bool  bReduceImageResolution = pParent->mbReduceImageResolution;
     mxCbReduceImageResolution->set_active( bReduceImageResolution );
+    mxCbReduceImageResolution->set_sensitive(
+        !pParent->maConfigItem.IsReadOnly("ReduceImageResolution"));
     OUString aStrRes = OUString::number( pParent->mnMaxImageResolution ) + " DPI";
     mxCoReduceImageResolution->set_entry_text(aStrRes);
-    mxCoReduceImageResolution->set_sensitive( bReduceImageResolution );
+    mxCoReduceImageResolution->set_sensitive(
+        bReduceImageResolution && !pParent->maConfigItem.IsReadOnly("MaxImageResolution"));
+
     mxCbWatermark->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleWatermarkHdl ) );
     mxFtWatermark->set_sensitive(false );
     mxEdWatermark->set_sensitive( false );
@@ -637,6 +648,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     const bool bIsPDFUA = pParent->mbPDFUACompliance;
     mxCbPDFUA->set_active(bIsPDFUA);
     mxCbPDFUA->connect_toggled(LINK(this, ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHandle));
+    mxCbPDFUA->set_sensitive(!pParent->maConfigItem.IsReadOnly("PDFUACompliance"));
 
     // the TogglePDFVersionOrUniversalAccessibilityHandle handler will read or write the *UserSelection based
     // on the mxCbPDFA (= bIsPDFA) state, so we have to prepare the correct input state.
@@ -644,15 +656,25 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxCbTaggedPDF->set_active(pParent->mbUseTaggedPDFUserSelection);
     else
         mbUseTaggedPDFUserSelection = pParent->mbUseTaggedPDFUserSelection;
+
     mxCbExportBookmarks->set_active(pParent->mbExportBookmarksUserSelection);
     TogglePDFVersionOrUniversalAccessibilityHandle(*mxCbPDFA);
 
     mxCbExportFormFields->set_active(pParent->mbExportFormFields);
     mxCbExportFormFields->connect_toggled( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
+    mxCbExportFormFields->set_sensitive(!pParent->maConfigItem.IsReadOnly("ExportFormFields"));
 
     mxLbFormsFormat->set_active(static_cast<sal_uInt16>(pParent->mnFormsType));
     mxCbAllowDuplicateFieldNames->set_active( pParent->mbAllowDuplicateFieldNames );
+    // FormsFrame contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
     mxFormsFrame->set_sensitive(pParent->mbExportFormFields);
+    if (pParent->mbExportFormFields)
+    {
+        if (pParent->maConfigItem.IsReadOnly("FormsType"))
+            mxLbFormsFormat->set_sensitive(false);
+        if (pParent->maConfigItem.IsReadOnly("AllowDuplicateFieldNames"))
+            mxCbAllowDuplicateFieldNames->set_sensitive(false);
+    }
 
 
     mxCbExportNotes->set_active( pParent->mbExportNotes );
@@ -665,6 +687,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
     else
     {
        mxCbViewPDF->set_active(pParent->mbViewPDF);
+       mxCbViewPDF->set_sensitive(!pParent->maConfigItem.IsReadOnly("ViewPDFAfterExport"));
     }
 
     if ( mbIsPresentation )
@@ -673,12 +696,16 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
         mxCbExportNotesPages->show();
         mxCbExportNotesPages->set_active(pParent->mbExportNotesPages);
         mxCbExportNotesPages->connect_toggled( LINK(this, ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl ) );
+        mxCbExportNotesPages->set_sensitive(!pParent->maConfigItem.IsReadOnly("ExportNotesPages"));
         mxCbExportOnlyNotesPages->show();
         mxCbExportOnlyNotesPages->set_active(pParent->mbExportOnlyNotesPages);
         // tdf#116473 Initially enable Export only note pages option depending on the checked state of Export notes pages option
-        mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
+        mxCbExportOnlyNotesPages->set_sensitive(
+            mxCbExportNotesPages->get_active() && !pParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
         mxCbExportHiddenSlides->show();
         mxCbExportHiddenSlides->set_active(pParent->mbExportHiddenSlides);
+        mxCbExportHiddenSlides->set_sensitive(
+            !pParent->maConfigItem.IsReadOnly("ExportHiddenSlides"));
     }
     else
     {
@@ -698,6 +725,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
         mxCbSinglePageSheets->show();
         mxCbSinglePageSheets->set_active(pParent->mbSinglePageSheets);
+        mxCbSinglePageSheets->set_sensitive(!pParent->maConfigItem.IsReadOnly("SinglePageSheets"));
     }
     else
     {
@@ -716,6 +744,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem(ImpPDFTabDialog* pParent)
 
     mxCbAddStream->show();
     mxCbAddStream->set_active(pParent->mbAddStream);
+    mxCbAddStream->set_sensitive(!pParent->maConfigItem.IsReadOnly("IsAddStream"));
 
     mxCbAddStream->connect_toggled(LINK(this, ImpPDFTabGeneralPage, ToggleAddStreamHdl));
     ToggleAddStreamHdl(*mxCbAddStream); // init addstream dependencies
@@ -833,29 +862,46 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
 {
     if ( mbIsPresentation )
     {
-        mxCbExportNotesPages->set_sensitive( !mxRbSelection->get_active() );
-        mxCbExportOnlyNotesPages->set_sensitive( !mxRbSelection->get_active() && mxCbExportNotesPages->get_active() );
+        mxCbExportNotesPages->set_sensitive(
+            !mxRbSelection->get_active() && !mpParent->maConfigItem.IsReadOnly("ExportNotesPages"));
+        mxCbExportOnlyNotesPages->set_sensitive(
+            !mxRbSelection->get_active() && mxCbExportNotesPages->get_active()
+            && !mpParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
     }
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::Toggleable&, void)
 {
-    mxFormsFrame->set_sensitive(mxCbExportFormFields->get_active());
+    const bool bExportFormFields = mxCbExportFormFields->get_active();
+    // FormsFrame contains (and thus sets_sensitive) FormsFormat and AllowDuplicateFieldNames
+    mxFormsFrame->set_sensitive(bExportFormFields);
+    if (bExportFormFields)
+    {
+        if (mpParent->maConfigItem.IsReadOnly("FormsType"))
+            mxLbFormsFormat->set_sensitive(false);
+        if (mpParent->maConfigItem.IsReadOnly("AllowDuplicateFieldNames"))
+            mxCbAllowDuplicateFieldNames->set_sensitive(false);
+    }
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::Toggleable&, void)
 {
-    mxCbExportOnlyNotesPages->set_sensitive(mxCbExportNotesPages->get_active());
+    mxCbExportOnlyNotesPages->set_sensitive(
+        mxCbExportNotesPages->get_active()
+        && !mpParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::Toggleable&, void)
 {
-    mxQualityFrame->set_sensitive(mxRbJPEGCompression->get_active());
+    mxQualityFrame->set_sensitive(
+        mxRbJPEGCompression->get_active() && !mpParent->maConfigItem.IsReadOnly("Quality"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::Toggleable&, void)
 {
-    mxCoReduceImageResolution->set_sensitive(mxCbReduceImageResolution->get_active());
+    mxCoReduceImageResolution->set_sensitive(
+        mxCbReduceImageResolution->get_active()
+        && !mpParent->maConfigItem.IsReadOnly("MaxImageResolution"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::Toggleable&, void)
@@ -897,8 +943,10 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
     if (pSecPage)
         pSecPage->ImplPDFASecurityControl(!bIsPDFA);
 
-    mxCbTaggedPDF->set_sensitive(!bIsPDFA && !bIsPDFUA);
-    mxRbPDFAVersion->set_sensitive(bIsPDFA);
+    mxCbTaggedPDF->set_sensitive(
+        !bIsPDFA && !bIsPDFUA && !mpParent->maConfigItem.IsReadOnly("UseTaggedPDF"));
+    mxRbPDFAVersion->set_sensitive(
+        bIsPDFA && !mpParent->maConfigItem.IsReadOnly("SelectPdfVersion"));
 
     if (bIsPDFA || bIsPDFUA)
     {
@@ -946,7 +994,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         mxCbExportBookmarks->set_active(mpParent->mbExportBookmarksUserSelection);
         mxCbUseReferenceXObject->set_active(mpParent->mbUseReferenceXObjectUserSelection);
     }
-    mxCbExportBookmarks->set_sensitive(!bIsPDFUA);
+    mxCbExportBookmarks->set_sensitive(
+        !bIsPDFUA && !mpParent->maConfigItem.IsReadOnly("ExportBookmarks"));
     mxCbUseReferenceXObject->set_sensitive(!bIsPDFUA);
 
     ImpPDFTabOpnFtrPage *const pOpenPage(mpParent ? mpParent->getOpenPage() : nullptr);

@@ -69,6 +69,8 @@ public:
     /// Writes config and sets unmodified state again.
     void WriteModifiedConfig();
 
+    bool IsReadOnly(const OUString& rPropName);
+
     // all read methods are trying to return values in following order:
     // 1. FilterData PropertySequence
     // 2. configuration
