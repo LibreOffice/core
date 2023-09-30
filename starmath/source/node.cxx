@@ -1871,7 +1871,7 @@ void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell, i
     if (maText.getLength() == 1 && GetToken().aText[0] == ':')
         Attributes() &= ~FontAttribute::Italic;
 
-    // Arabic text should not be italic, so we check for any charcter in Arabic script and
+    // Arabic text should not be italic, so we check for any character in Arabic script and
     // remove italic attribute.
     if (!maText.isEmpty())
     {
