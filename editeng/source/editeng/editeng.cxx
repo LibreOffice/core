@@ -588,7 +588,7 @@ sal_Int32 EditEngine::GetTextLen() const
 
 sal_Int32 EditEngine::GetParagraphCount() const
 {
-    return pImpEditEngine->aEditDoc.Count();
+    return pImpEditEngine->maEditDoc.Count();
 }
 
 sal_Int32 EditEngine::GetLineCount( sal_Int32 nParagraph ) const
@@ -994,7 +994,7 @@ const EditSelectionEngine& EditEngine::GetSelectionEngine() const
 
 void EditEngine::SetInSelectionMode(bool b)
 {
-    pImpEditEngine->bInSelection = b;
+    pImpEditEngine->mbInSelection = b;
 }
 
 bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, vcl::Window const * pFrameWin )
@@ -1863,28 +1863,28 @@ void EditEngine::SetFlatMode( bool bFlat)
 
 bool EditEngine::IsFlatMode() const
 {
-    return !( pImpEditEngine->aStatus.UseCharAttribs() );
+    return !( pImpEditEngine->GetStatus().UseCharAttribs() );
 }
 
 void EditEngine::SetSingleLine(bool bValue)
 {
-    if (bValue == pImpEditEngine->aStatus.IsSingleLine())
+    if (bValue == pImpEditEngine->GetStatus().IsSingleLine())
         return;
 
     if (bValue)
-        pImpEditEngine->aStatus.TurnOnFlags(EEControlBits::SINGLELINE);
+        pImpEditEngine->GetStatus().TurnOnFlags(EEControlBits::SINGLELINE);
     else
-        pImpEditEngine->aStatus.TurnOffFlags(EEControlBits::SINGLELINE);
+        pImpEditEngine->GetStatus().TurnOffFlags(EEControlBits::SINGLELINE);
 }
 
 void EditEngine::SetControlWord( EEControlBits nWord )
 {
 
-    if ( nWord == pImpEditEngine->aStatus.GetControlWord() )
+    if ( nWord == pImpEditEngine->GetStatus().GetControlWord() )
         return;
 
-    EEControlBits nPrev = pImpEditEngine->aStatus.GetControlWord();
-    pImpEditEngine->aStatus.GetControlWord() = nWord;
+    EEControlBits nPrev = pImpEditEngine->GetStatus().GetControlWord();
+    pImpEditEngine->GetStatus().GetControlWord() = nWord;
 
     EEControlBits nChanges = nPrev ^ nWord;
     if ( pImpEditEngine->IsFormatted() )
@@ -1952,7 +1952,7 @@ void EditEngine::SetControlWord( EEControlBits nWord )
 
 EEControlBits EditEngine::GetControlWord() const
 {
-    return pImpEditEngine->aStatus.GetControlWord();
+    return pImpEditEngine->GetStatus().GetControlWord();
 }
 
 tools::Long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
@@ -2437,7 +2437,7 @@ EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
     EditPaM aPaM = const_cast<EditEngine*>(this)->pImpEditEngine->GetPaM( rDocPos, false );
     if ( aPaM.GetNode() )
     {
-        aPos.nPara = pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
+        aPos.nPara = pImpEditEngine->maEditDoc.GetPos( aPaM.GetNode() );
         aPos.nIndex = aPaM.GetIndex();
     }
     return aPos;

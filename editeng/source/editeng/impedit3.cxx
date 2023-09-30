@@ -402,7 +402,7 @@ void ImpEditEngine::FormatDoc()
     if (!IsUpdateLayout() || IsFormatting())
         return;
 
-    bIsFormatting = true;
+    mbIsFormatting = true;
 
     // Then I can also start the spell-timer...
     if ( GetStatus().DoOnlineSpelling() )
@@ -466,14 +466,14 @@ void ImpEditEngine::FormatDoc()
         if ( nDiff )
         {
             aInvalidRect.Union(tools::Rectangle::Normalize(
-                { 0, nNewHeight }, { getWidthDirectionAware(aPaperSize), nCurTextHeight }));
-            aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
+                { 0, nNewHeight }, { getWidthDirectionAware(maPaperSize), nCurTextHeight }));
+            maStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
         }
 
         nCurTextHeight = nNewHeight;
         nCurTextHeightNTP = nNewHeightNTP;
 
-        if ( aStatus.AutoPageSize() )
+        if ( maStatus.AutoPageSize() )
             CheckAutoPageSize();
         else if ( nDiff )
         {
@@ -483,10 +483,10 @@ void ImpEditEngine::FormatDoc()
                 if ( pImpView->DoAutoHeight() )
                 {
                     Size aSz( pImpView->GetOutputArea().GetWidth(), nCurTextHeight );
-                    if ( aSz.Height() > aMaxAutoPaperSize.Height() )
-                        aSz.setHeight( aMaxAutoPaperSize.Height() );
-                    else if ( aSz.Height() < aMinAutoPaperSize.Height() )
-                        aSz.setHeight( aMinAutoPaperSize.Height() );
+                    if ( aSz.Height() > maMaxAutoPaperSize.Height() )
+                        aSz.setHeight( maMaxAutoPaperSize.Height() );
+                    else if ( aSz.Height() < maMinAutoPaperSize.Height() )
+                        aSz.setHeight( maMinAutoPaperSize.Height() );
                     pImpView->ResetOutputArea( tools::Rectangle(
                         pImpView->GetOutputArea().TopLeft(), aSz ) );
                 }
@@ -504,8 +504,8 @@ void ImpEditEngine::FormatDoc()
         }
     }
 
-    bIsFormatting = false;
-    bFormatted = true;
+    mbIsFormatting = false;
+    mbFormatted = true;
 
     if ( bMapChanged )
         GetRefDevice()->Pop();
@@ -517,7 +517,7 @@ bool ImpEditEngine::ImpCheckRefMapMode()
 {
     bool bChange = false;
 
-    if ( aStatus.DoFormat100() )
+    if ( maStatus.DoFormat100() )
     {
         MapMode aMapMode( GetRefDevice()->GetMapMode() );
         if ( aMapMode.GetScaleX().GetNumerator() != aMapMode.GetScaleX().GetDenominator() )
@@ -542,20 +542,20 @@ void ImpEditEngine::CheckAutoPageSize()
 {
     Size aPrevPaperSize( GetPaperSize() );
     if ( GetStatus().AutoPageWidth() )
-        aPaperSize.setWidth( !IsEffectivelyVertical() ? CalcTextWidth( true ) : GetTextHeight() );
+        maPaperSize.setWidth( !IsEffectivelyVertical() ? CalcTextWidth( true ) : GetTextHeight() );
     if ( GetStatus().AutoPageHeight() )
-        aPaperSize.setHeight( !IsEffectivelyVertical() ? GetTextHeight() : CalcTextWidth( true ) );
+        maPaperSize.setHeight( !IsEffectivelyVertical() ? GetTextHeight() : CalcTextWidth( true ) );
 
-    SetValidPaperSize( aPaperSize );    // consider Min, Max
+    SetValidPaperSize( maPaperSize );    // consider Min, Max
 
-    if ( aPaperSize == aPrevPaperSize )
+    if ( maPaperSize == aPrevPaperSize )
         return;
 
-    if ( ( !IsEffectivelyVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
-         || ( IsEffectivelyVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
+    if ( ( !IsEffectivelyVertical() && ( maPaperSize.Width() != aPrevPaperSize.Width() ) )
+         || ( IsEffectivelyVertical() && ( maPaperSize.Height() != aPrevPaperSize.Height() ) ) )
     {
         // If ahead is centered / right or tabs...
-        aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
+        maStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TEXTWIDTHCHANGED : EditStatusFlags::TextHeightChanged;
         for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
         {
             // Only paragraphs which are not aligned to the left need to be
@@ -570,10 +570,10 @@ void ImpEditEngine::CheckAutoPageSize()
         }
     }
 
-    Size aInvSize = aPaperSize;
-    if ( aPaperSize.Width() < aPrevPaperSize.Width() )
+    Size aInvSize = maPaperSize;
+    if ( maPaperSize.Width() < aPrevPaperSize.Width() )
         aInvSize.setWidth( aPrevPaperSize.Width() );
-    if ( aPaperSize.Height() < aPrevPaperSize.Height() )
+    if ( maPaperSize.Height() < aPrevPaperSize.Height() )
         aInvSize.setHeight( aPrevPaperSize.Height() );
 
     Size aSz( aInvSize );
@@ -593,7 +593,7 @@ void ImpEditEngine::CheckAutoPageSize()
 
 void ImpEditEngine::CheckPageOverflow()
 {
-    SAL_INFO("editeng.chaining", "[CONTROL_STATUS] AutoPageSize is " << (( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON" : "OFF") );
+    SAL_INFO("editeng.chaining", "[CONTROL_STATUS] AutoPageSize is " << (( maStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON" : "OFF") );
 
     tools::Long nBoxHeight = GetMaxAutoPaperSize().Height();
     SAL_INFO("editeng.chaining", "[OVERFLOW-CHECK] Current MaxAutoPaperHeight is " << nBoxHeight);
@@ -611,12 +611,12 @@ void ImpEditEngine::CheckPageOverflow()
     {
         // which paragraph is the first to cause higher size of the box?
         ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
-        //aStatus.SetPageOverflow(true);
+        //maStatus.SetPageOverflow(true);
         mbNeedsChainingHandling = true;
     } else
     {
         // No overflow if within box boundaries
-        //aStatus.SetPageOverflow(false);
+        //maStatus.SetPageOverflow(false);
         mbNeedsChainingHandling = false;
     }
 
@@ -666,7 +666,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     // bail out to avoid possibly formatting a lot of text that will not be used. For the first
     // paragraph still format at least a bit.
     if( mbSkipOutsideFormat && nPara != 0
-        && !aStatus.AutoPageHeight() && aPaperSize.Height() < nCurrentPosY )
+        && !maStatus.AutoPageHeight() && maPaperSize.Height() < nCurrentPosY )
     {
         return false;
     }
@@ -830,8 +830,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        const bool bAutoSize = IsEffectivelyVertical() ? aStatus.AutoPageHeight() : aStatus.AutoPageWidth();
-        tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? aMaxAutoPaperSize : aPaperSize);
+        const bool bAutoSize = IsEffectivelyVertical() ? maStatus.AutoPageHeight() : maStatus.AutoPageWidth();
+        tools::Long nMaxLineWidth = GetColumnWidth(bAutoSize ? maMaxAutoPaperSize : maPaperSize);
 
         nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
         nMaxLineWidth -= nStartX;
@@ -839,7 +839,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         // If PaperSize == long_max, one cannot take away any negative
         // first line indent. (Overflow)
         if ( ( nMaxLineWidth < 0 ) && ( nStartX < 0 ) )
-            nMaxLineWidth = GetColumnWidth(aPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
+            nMaxLineWidth = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight());
 
         // If still less than 0, it may be just the right edge.
         if ( nMaxLineWidth <= 0 )
@@ -1011,11 +1011,11 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         // Search for Tab-Pos...
                         tools::Long nCurPos = nTmpWidth + nStartX;
                         // consider scaling
-                        if (aStatus.DoStretch() && (mfFontScaleX != 100.0))
+                        if (maStatus.DoStretch() && (mfFontScaleX != 100.0))
                             nCurPos = basegfx::fround(double(nCurPos) * 100.0 / std::max(mfFontScaleX, 1.0));
 
                         short nAllSpaceBeforeText = static_cast< short >(rLRItem.GetTextLeft()/* + rLRItem.GetTextLeft()*/ + nSpaceBeforeAndMinLabelWidth);
-                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, aEditDoc.GetDefTab() );
+                        aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - nAllSpaceBeforeText /*rLRItem.GetTextLeft()*/, maEditDoc.GetDefTab() );
                         aCurrentTab.nTabPos = scaleXFontValue(tools::Long(aCurrentTab.aTabStop.GetTabPos() + nAllSpaceBeforeText/*rLRItem.GetTextLeft()*/));
                         aCurrentTab.bValid = false;
 
@@ -1051,7 +1051,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         nTmpWidth = aCurrentTab.nTabPos-nStartX;
 
                         // If this is the first token on the line,
-                        // and nTmpWidth > aPaperSize.Width, => infinite loop!
+                        // and nTmpWidth > maPaperSize.Width, => infinite loop!
                         if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
                         {
                             // What now?
@@ -1166,7 +1166,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         rArray.insert(rArray.begin()+nPos, pPortion->GetSize().Width());
                         pPortion->SetKind(PortionKind::FIELD);
                         // If this is the first token on the line,
-                        // and nTmpWidth > aPaperSize.Width, => infinite loop!
+                        // and nTmpWidth > maPaperSize.Width, => infinite loop!
                         if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
                         {
                             nTmpWidth = nXWidth-1;
@@ -1298,7 +1298,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             nTmpPos = nTmpPos + nPortionLen;
             nPortionEnd = nTmpPos;
             nTmpPortion++;
-            if ( aStatus.OneCharPerLine() )
+            if (maStatus.OneCharPerLine())
                 bEOL = true;
         }
 
@@ -1310,7 +1310,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
         // this was possibly a portion too far:
         bool bFixedEnd = false;
-        if ( aStatus.OneCharPerLine() )
+        if (maStatus.OneCharPerLine())
         {
             // State before Portion (apart from nTmpWidth):
             nTmpPos -= pPortion ? nPortionLen : 0;
@@ -1374,7 +1374,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             pLine->SetEndPortion( pParaPortion->GetTextPortions().Count() - 1 );
         }
 
-        if ( aStatus.OneCharPerLine() )
+        if (maStatus.OneCharPerLine())
         {
             pLine->SetEnd( nPortionEnd );
             pLine->SetEndPortion( nTmpPortion-1 );
@@ -1393,7 +1393,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         else if ( !bEOL && !bContinueLastPortion )
         {
             DBG_ASSERT( pPortion && ((nPortionEnd-nPortionStart) == pPortion->GetLen()), "However, another portion?!" );
-            tools::Long nRemainingWidth = !aStatus.IsSingleLine() ?
+            tools::Long nRemainingWidth = !maStatus.IsSingleLine() ?
                 nMaxLineWidth - nTmpWidth : pLine->GetCharPosArray()[pLine->GetCharPosArray().size() - 1] + 1;
             bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
             if ( bCompressedChars && pPortion && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
@@ -1458,7 +1458,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             bSameLineAgain = true;
         }
 
-        if ( !bSameLineAgain && !aStatus.IsOutliner() )
+        if (!bSameLineAgain && !maStatus.IsOutliner())
         {
             if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
             {
@@ -1534,14 +1534,14 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
         }
 
-        if ( ( !IsEffectivelyVertical() && aStatus.AutoPageWidth() ) ||
-             ( IsEffectivelyVertical() && aStatus.AutoPageHeight() ) )
+        if ( ( !IsEffectivelyVertical() && maStatus.AutoPageWidth() ) ||
+             ( IsEffectivelyVertical() && maStatus.AutoPageHeight() ) )
         {
             // If the row fits within the current paper width, then this width
             // has to be used for the Alignment. If it does not fit or if it
             // will change the paper width, it will be formatted again for
             // Justification! = LEFT anyway.
-            tools::Long nMaxLineWidthFix = GetColumnWidth(aPaperSize) - scaleXSpacingValue(rLRItem.GetRight()) - nStartX;
+            tools::Long nMaxLineWidthFix = GetColumnWidth(maPaperSize) - scaleXSpacingValue(rLRItem.GetRight()) - nStartX;
             if ( aTextSize.Width() < nMaxLineWidthFix )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
@@ -1698,7 +1698,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             // Format at least two lines though, in case something detects whether
             // the text has been wrapped or something similar.
             if( mbSkipOutsideFormat && nLine > 2
-                && !aStatus.AutoPageHeight() && aPaperSize.Height() < nCurrentPosY )
+                && !maStatus.AutoPageHeight() && maPaperSize.Height() < nCurrentPosY )
             {
                 if ( pLine && ( nIndex >= pNode->Len()) )
                     nDelFromLine = nLine;
@@ -1805,11 +1805,11 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
     if ( nLineHeight > pTmpLine->GetHeight() )
         pTmpLine->SetHeight( nLineHeight );
 
-    if ( !aStatus.IsOutliner() )
+    if (!maStatus.IsOutliner())
     {
         sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
         SvxAdjust eJustification = GetJustification( nPara );
-        tools::Long nMaxLineWidth = GetColumnWidth(aPaperSize);
+        tools::Long nMaxLineWidth = GetColumnWidth(maPaperSize);
         nMaxLineWidth -= scaleXSpacingValue(rLRItem.GetRight());
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
@@ -1821,7 +1821,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion )
 
     pTmpLine->SetStartPosX( nStartX );
 
-    if ( !aStatus.IsOutliner() )
+    if (!maStatus.IsOutliner())
     {
         if ( rLSItem.GetLineSpaceRule() == SvxLineSpaceRule::Min )
         {
@@ -1970,7 +1970,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             aUserOptions.allowPunctuationOutsideMargin = bAllowPunctuationOutsideMargin;
             aUserOptions.allowHyphenateEnglish = false;
 
-            if (!aStatus.IsSingleLine())
+            if (!maStatus.IsSingleLine())
             {
                 i18n::LineBreakResults aLBR = _xBI->getLineBreak(
                     pNode->GetString(), nMaxBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
@@ -2799,7 +2799,7 @@ void ImpEditEngine::SetVertical( bool bVertical)
     if ( IsEffectivelyVertical() != bVertical)
     {
         GetEditDoc().SetVertical(bVertical);
-        bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
+        bool bUseCharAttribs = bool(maStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
         GetEditDoc().CreateDefFont( bUseCharAttribs );
         if ( IsFormatted() )
         {
@@ -2814,7 +2814,7 @@ void ImpEditEngine::SetRotation(TextRotation nRotation)
     if (GetEditDoc().GetRotation() == nRotation)
         return; // not modified
     GetEditDoc().SetRotation(nRotation);
-    bool bUseCharAttribs = bool(aStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
+    bool bUseCharAttribs = bool(maStatus.GetControlWord() & EEControlBits::USECHARATTRIBS);
     GetEditDoc().CreateDefFont( bUseCharAttribs );
     if ( IsFormatted() )
     {
@@ -2913,7 +2913,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     /*
      * Scan through char attributes of pNode
     */
-    if ( aStatus.UseCharAttribs() )
+    if (maStatus.UseCharAttribs())
     {
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
         size_t nAttr = 0;
@@ -2957,12 +2957,12 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
     if ( (rFont.GetKerning() != FontKerning::NONE) && IsKernAsianPunctuation() && ( nScriptTypeI18N == i18n::ScriptType::ASIAN ) )
         rFont.SetKerning( rFont.GetKerning() | FontKerning::Asian );
 
-    if ( aStatus.DoNotUseColors() )
+    if (maStatus.DoNotUseColors())
     {
         rFont.SetColor( /* rColorItem.GetValue() */ COL_BLACK );
     }
 
-    if ( aStatus.DoStretch() || ( nRelWidth != 100 ) )
+    if (maStatus.DoStretch() || ( nRelWidth != 100 ))
     {
         // For the current Output device, because otherwise if RefDev=Printer its looks
         // ugly on the screen!
@@ -2981,7 +2981,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
         Size aRealSz( aMetric.GetFontSize() );
         rFont.SetPropr( 100 );
 
-        if ( aStatus.DoStretch() )
+        if (maStatus.DoStretch())
         {
             if (mfFontScaleY != 100.0)
             {
@@ -3261,10 +3261,10 @@ Point ImpEditEngine::MoveToNextLine(
     // Move the point by the requested distance in Y direction
     adjustYDirectionAware(rMovePos, nLineHeight);
     // Check if the resulting position has moved beyond the limits, and more columns left.
-    // The limits are defined by a rectangle starting from aOrigin with width of aPaperSize
+    // The limits are defined by a rectangle starting from aOrigin with width of maPaperSize
     // and height of nCurTextHeight
     Point aOtherCorner = aOrigin;
-    adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(aPaperSize));
+    adjustXDirectionAware(aOtherCorner, getWidthDirectionAware(maPaperSize));
     adjustYDirectionAware(aOtherCorner, nCurTextHeight);
     tools::Long nNeeded
         = getYOverflowDirectionAware(rMovePos, tools::Rectangle::Normalize(aOrigin, aOtherCorner));
@@ -3282,7 +3282,7 @@ Point ImpEditEngine::MoveToNextLine(
             // Move the point by the requested distance in Y direction
             adjustYDirectionAware(rMovePos, nLineHeight);
             // Move the point by the column+spacing distance in X direction
-            adjustXDirectionAware(rMovePos, GetColumnWidth(aPaperSize) + mnColumnSpacing);
+            adjustXDirectionAware(rMovePos, GetColumnWidth(maPaperSize) + mnColumnSpacing);
         }
     }
 
@@ -3482,7 +3482,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                      * (U+200B ZERO WIDTH SPACE and U+2060 WORD
                                      * JOINER) it is assumed to be not relevant
                                      * for MarkUrlFields(). */
-                                    if ( aStatus.MarkNonUrlFields() )
+                                    if (maStatus.MarkNonUrlFields())
                                     {
                                         sal_Int32 nTmpIdx;
                                         const sal_Int32 nTmpEnd = nTextStart + rTextPortion.GetLen();
@@ -4009,7 +4009,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                     }
                 }
 
-                if ( ( nLine != nLastLine ) && !aStatus.IsOutliner() )
+                if ((nLine != nLastLine ) && !maStatus.IsOutliner())
                 {
                     adjustYDirectionAware(aStartPos, nSBL);
                 }
@@ -4019,7 +4019,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                     break;
             }
 
-            if ( !aStatus.IsOutliner() )
+            if (!maStatus.IsOutliner())
             {
                 const SvxULSpaceItem& rULItem = pPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_ULSPACE );
                 tools::Long nUL = scaleYSpacingValue(rULItem.GetLower());
@@ -4119,14 +4119,14 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_Int32 nPos )
     DBG_ASSERT( pNode, "NULL-Pointer in InsertContent! " );
     DBG_ASSERT( IsInUndo(), "InsertContent only for Undo()!" );
     GetParaPortions().Insert(nPos, std::make_unique<ParaPortion>( pNode ));
-    aEditDoc.Insert(nPos, pNode);
+    maEditDoc.Insert(nPos, pNode);
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos );
 }
 
 EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_Int32 nSepPos )
 {
-    ContentNode* pNode = aEditDoc.GetObject( nNode );
+    ContentNode* pNode = maEditDoc.GetObject( nNode );
     DBG_ASSERT( pNode, "Invalid Node in SplitContent" );
     DBG_ASSERT( IsInUndo(), "SplitContent only for Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->Len(), "Index out of range: SplitContent" );
@@ -4136,8 +4136,8 @@ EditPaM ImpEditEngine::SplitContent( sal_Int32 nNode, sal_Int32 nSepPos )
 
 EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
 {
-    ContentNode* pLeftNode = aEditDoc.GetObject( nLeftNode );
-    ContentNode* pRightNode = aEditDoc.GetObject( nLeftNode+1 );
+    ContentNode* pLeftNode = maEditDoc.GetObject( nLeftNode );
+    ContentNode* pRightNode = maEditDoc.GetObject( nLeftNode+1 );
     DBG_ASSERT( pLeftNode, "Invalid left node in ConnectContents ");
     DBG_ASSERT( pRightNode, "Invalid right node in ConnectContents ");
     return ImpConnectParagraphs( pLeftNode, pRightNode, bBackward );
@@ -4145,8 +4145,8 @@ EditPaM ImpEditEngine::ConnectContents( sal_Int32 nLeftNode, bool bBackward )
 
 bool ImpEditEngine::SetUpdateLayout( bool bUp, EditView* pCurView, bool bForceUpdate )
 {
-    const bool bPrevUpdateLayout = bUpdateLayout;
-    const bool bChanged = (bUpdateLayout != bUp);
+    const bool bPrevUpdateLayout = mbUpdateLayout;
+    const bool mbChanged = (mbUpdateLayout != bUp);
 
     // When switching from true to false, all selections were visible,
     // => paint over
@@ -4154,8 +4154,8 @@ bool ImpEditEngine::SetUpdateLayout( bool bUp, EditView* pCurView, bool bForceUp
     // If !bFormatted, e.g. after SetText, then if UpdateMode=true
     // formatting is not needed immediately, probably because more text is coming.
     // At latest it is formatted at a Paint/CalcTextWidth.
-    bUpdateLayout = bUp;
-    if ( bUpdateLayout && ( bChanged || bForceUpdate ) )
+    mbUpdateLayout = bUp;
+    if ( mbUpdateLayout && ( mbChanged || bForceUpdate ) )
         FormatAndLayout( pCurView );
     return bPrevUpdateLayout;
 }
@@ -4236,7 +4236,7 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_Int32 nNew
         {
             aInvalidRect = tools::Rectangle();  // make empty
             aInvalidRect.SetLeft( 0 );
-            aInvalidRect.SetRight(GetColumnWidth(aPaperSize));
+            aInvalidRect.SetRight(GetColumnWidth(maPaperSize));
             aInvalidRect.SetTop( GetParaPortions().GetYOffset( pUpperPortion ) );
             aInvalidRect.SetBottom( GetParaPortions().GetYOffset( pLowerPortion ) + pLowerPortion->GetHeight() );
 
@@ -4277,12 +4277,12 @@ IMPL_LINK_NOARG(ImpEditEngine, StatusTimerHdl, Timer *, void)
 
 void ImpEditEngine::CallStatusHdl()
 {
-    if ( aStatusHdlLink.IsSet() && bool(aStatus.GetStatusWord()) )
+    if ( aStatusHdlLink.IsSet() && bool(maStatus.GetStatusWord()) )
     {
         // The Status has to be reset before the Call,
         // since other Flags might be set in the handler...
-        EditStatus aTmpStatus( aStatus );
-        aStatus.Clear();
+        EditStatus aTmpStatus( maStatus );
+        maStatus.Clear();
         aStatusHdlLink.Call( aTmpStatus );
         aStatusTimer.Stop();    // If called by hand...
     }
@@ -4366,7 +4366,7 @@ tools::Long ImpEditEngine::CalcVertLineSpacing(Point& rStartPos) const
         }
     }
 
-    tools::Long nTotalSpace = getHeightDirectionAware(aPaperSize);
+    tools::Long nTotalSpace = getHeightDirectionAware(maPaperSize);
     nTotalSpace -= nTotalOccupiedHeight;
     if (nTotalSpace <= 0 || nTotalLineCount <= 1)
         return 0;
@@ -4411,8 +4411,8 @@ std::optional<EditSelection> ImpEditEngine::SelectParagraph( sal_Int32 nPara )
 
 void ImpEditEngine::FormatAndLayout( EditView* pCurView, bool bCalledFromUndo )
 {
-    if ( bDowning )
-        return ;
+    if (mbDowning)
+        return;
 
     if ( IsInUndo() )
         IdleFormatAndLayout( pCurView );
@@ -4432,15 +4432,15 @@ void ImpEditEngine::FormatAndLayout( EditView* pCurView, bool bCalledFromUndo )
 
 void ImpEditEngine::SetFlatMode( bool bFlat )
 {
-    if ( bFlat != aStatus.UseCharAttribs() )
+    if ( bFlat != maStatus.UseCharAttribs() )
         return;
 
     if ( !bFlat )
-        aStatus.TurnOnFlags( EEControlBits::USECHARATTRIBS );
+        maStatus.TurnOnFlags( EEControlBits::USECHARATTRIBS );
     else
-        aStatus.TurnOffFlags( EEControlBits::USECHARATTRIBS );
+        maStatus.TurnOffFlags( EEControlBits::USECHARATTRIBS );
 
-    aEditDoc.CreateDefFont( !bFlat );
+    maEditDoc.CreateDefFont( !bFlat );
 
     FormatFullDoc();
     UpdateViews();
@@ -4471,7 +4471,7 @@ void ImpEditEngine::setScale(double fFontScaleX, double fFontScaleY, double fSpa
         mfSpacingScaleY = fSpacingScaleX;
     }
 
-    if (bChanged && aStatus.DoStretch())
+    if (bChanged && maStatus.DoStretch())
     {
         FormatFullDoc();
         // (potentially) need everything redrawn
@@ -4533,7 +4533,7 @@ sal_Int32 ImpEditEngine::GetSpaceBeforeAndMinLabelWidth(
 
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 {
-    return pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
+    return pNode->GetContentAttribs().GetItem( maStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
 }
 
 // select a representative text language for the digit type according to the
