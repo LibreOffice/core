@@ -91,7 +91,7 @@ vcl::Font lclGetSymbolFont(const SmViewShell& rViewShell, const SmSym &rSymbol)
     if (pDoc)
     {
         // If we have a document, we want to render the symbol using the font and style used in
-        // the documnet, so we do that by creating a node and preparing it, then get the resolved
+        // the document, so we do that by creating a node and preparing it, then get the resolved
         // font and style from it.
         SmToken token(TSPECIAL, '\0', "%" + rSymbol.GetUiName());
         SmSpecialNode aNode(token);
