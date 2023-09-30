@@ -3251,9 +3251,22 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if (aPos.Col() >= 0 && (aSpellCheckCell.getType() == CELLTYPE_STRING || aSpellCheckCell.getType() == CELLTYPE_EDIT))
                 nColSpellError = aPos.Col();
 
-            // Is there a misspelled word somewhere in the cell?
+            // Is there possibly a misspelled word somewhere in the cell?
             // A "yes" does not mean that the word under the mouse pointer is wrong though.
             bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
+            // Avoid situations where selecting the cell-with-wrong-spelling would be bad
+            if (bSpellError)
+            {
+                // When the mouse is over an empty cell, text with spelling errors
+                // potentially could have overflowed underneath the mouse pointer
+                if (nColSpellError != nCellX)
+                {
+                    // If the mouse is over a selected cell, only consider spell-checking
+                    // if the cell with the misspelling is also selected. tdf#157038
+                    if (mrViewData.GetMarkData().IsCellMarked(nCellX, nCellY))
+                        bSpellError = mrViewData.GetMarkData().IsCellMarked(nColSpellError, nCellY);
+                }
+            }
         }
 
         //  #i18735# First select the item under the mouse pointer.
