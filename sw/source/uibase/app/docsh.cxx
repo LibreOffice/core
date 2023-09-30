@@ -129,7 +129,7 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
     Reader *const pRead = StartConvertFrom(rMedium, pReader, nullptr, &aPam);
     if (!pRead)
         return false;
-    ErrCode const nError = pReader->Read(*pRead);
+    ErrCodeMsg const nError = pReader->Read(*pRead);
     return ERRCODE_NONE == nError;
 }
 
@@ -221,7 +221,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     // Restore the pool default if reading a saved document.
     m_xDoc->RemoveAllFormatLanguageDependencies();
 
-    ErrCode nErr = pRdr->Read( *pRead );
+    ErrCodeMsg nErr = pRdr->Read( *pRead );
 
     // Maybe put away one old Doc
     if (m_xDoc.get() != &pRdr->GetDoc())
@@ -273,7 +273,8 @@ bool SwDocShell::Save()
         m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    ErrCode nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    ErrCodeMsg nErr = ERR_SWG_WRITE_ERROR;
+    ErrCode nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
     {
         switch( GetCreateMode() )
@@ -483,7 +484,8 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    ErrCode nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    ErrCodeMsg nErr = ERR_SWG_WRITE_ERROR;
+    ErrCode nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
@@ -752,7 +754,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
     // Span Context in order to suppress the Selection's View
-    ErrCode nErrno;
+    ErrCodeMsg nErrno;
     const OUString aFileName( rMedium.GetName() );
 
     bool bSelection = false;

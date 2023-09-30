@@ -45,13 +45,13 @@ namespace
 /// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
 class SwRTFReader : public Reader
 {
-    ErrCode Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam,
-                 const OUString& rFileName) override;
+    ErrCodeMsg Read(SwDoc& rDoc, const OUString& rBaseURL, SwPaM& rPam,
+                    const OUString& rFileName) override;
 };
 }
 
-ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam,
-                          const OUString& /*rFileName*/)
+ErrCodeMsg SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam,
+                             const OUString& /*rFileName*/)
 {
     if (!m_pStream)
         return ERR_SWG_READ_ERROR;

@@ -409,8 +409,8 @@ IMPL_STATIC_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBas
     if (comphelper::LibreOfficeKit::isActive())
     {
         OUString aError;
-        std::unique_ptr<ErrorInfo> pErrorInfo = ErrorInfo::GetErrorInfo(StarBASIC::GetErrorCode());
-        if (ErrorStringFactory::CreateString(pErrorInfo.get(), aError))
+        ErrCodeMsg nErr = StarBASIC::GetErrorCode();
+        if (ErrorStringFactory::CreateString(nErr, aError))
         {
             const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             std::shared_ptr<weld::MessageDialog> xBox;

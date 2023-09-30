@@ -2327,13 +2327,13 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             io::WrongFormatException e;
             if (rWrapped.TargetException >>= e)
             {
-                SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
+                SetError(ErrCodeMsg(ERRCODE_SFX_FORMAT_ROWCOL,
                     e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
             }
         }
         catch (const css::io::IOException& e)
         {
-            SetError(*new StringErrorInfo(ERRCODE_SFX_FORMAT_ROWCOL,
+            SetError(ErrCodeMsg(ERRCODE_SFX_FORMAT_ROWCOL,
                 e.Message, DialogMask::ButtonsOk | DialogMask::MessageError ));
         }
         catch (const std::exception& e)
@@ -2341,7 +2341,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             const char *msg = e.what();
             const OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
             SAL_WARN("sfx.doc", "exception importing " << sError);
-            SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
+            SetError(ErrCodeMsg(ERRCODE_SFX_DOLOADFAILED,
                 sError, DialogMask::ButtonsOk | DialogMask::MessageError));
         }
         catch (...)
@@ -2640,7 +2640,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     else
     {
         // transfer error code from medium to objectshell
-        ErrCode errCode = pMediumTmp->GetErrorIgnoreWarning();
+        ErrCodeMsg errCode = pMediumTmp->GetErrorIgnoreWarning();
         SetError(errCode);
 
         if (errCode == ERRCODE_ABORT)

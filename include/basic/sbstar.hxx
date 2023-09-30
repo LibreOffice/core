@@ -25,6 +25,7 @@
 #include <basic/sbmod.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
+#include <comphelper/errcode.hxx>
 
 #include <basic/sbdef.hxx>
 #include <basic/basicdllapi.h>
@@ -111,13 +112,13 @@ public:
     static sal_uInt16 GetLine();
     static sal_uInt16 GetCol1();
     static sal_uInt16 GetCol2();
-    static void     SetErrorData( ErrCode nCode, sal_uInt16 nLine,
+    static void     SetErrorData( const ErrCodeMsg& nCode, sal_uInt16 nLine,
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
     static void     MakeErrorText( ErrCode, std::u16string_view aMsg );
     static const    OUString& GetErrorText();
-    static ErrCode const & GetErrorCode();
+    static ErrCodeMsg const & GetErrorCode();
     static sal_uInt16 GetVBErrorCode( ErrCode nError );
     static ErrCode  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }

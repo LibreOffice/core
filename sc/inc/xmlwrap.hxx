@@ -65,7 +65,7 @@ class ScXMLImportWrapper
 
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator() const;
 
-    ErrCode ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    ErrCodeMsg ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::frame::XModel>& xModel,
         css::xml::sax::InputSource& aParserInput,
         const OUString& sComponentName, const OUString& sDocName,
@@ -85,7 +85,7 @@ public:
     ScXMLImportWrapper(
         ScDocShell& rDocSh, SfxMedium* pM, css::uno::Reference<css::embed::XStorage> xStor );
 
-    bool Import( ImportFlags nMode, ErrCode& rError );
+    bool Import( ImportFlags nMode, ErrCodeMsg& rError );
     bool Export(bool bStylesOnly);
 
     const sc::ImportPostProcessData& GetImportPostProcessData() const { return maPostProcessData;}

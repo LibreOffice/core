@@ -769,7 +769,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
-                    ErrCode eErr = aWrt.Write( xWrt );
+                    ErrCodeMsg eErr = aWrt.Write( xWrt );
                     if( !eErr.IgnoreWarning() )
                     {
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -827,7 +827,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 std::unique_ptr<SvMemoryStream> pStrm (new SvMemoryStream());
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );
-                ErrCode eErr = aWrt.Write( xWrt );
+                ErrCodeMsg eErr = aWrt.Write( xWrt );
                 EnableSetModified( bEnable );
                 if( !eErr.IgnoreWarning() )
                 {
@@ -1604,9 +1604,9 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         m_xDoc->getIDocumentState().ResetModified();
 }
 
-ErrCode SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall)
+ErrCodeMsg SwDocShell::LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall)
 {
-    ErrCode nErr = ERRCODE_NONE;
+    ErrCodeMsg nErr = ERRCODE_NONE;
 
     // Set filter:
     SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );

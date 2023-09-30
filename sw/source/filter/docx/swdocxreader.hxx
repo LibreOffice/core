@@ -32,7 +32,7 @@ public:
     virtual bool ReadGlossaries(SwTextBlocks& rBlocks, bool bSaveRelFiles) const override;
 
 private:
-    virtual ErrCode Read(SwDoc&, const OUString&, SwPaM&, const OUString&) override;
+    virtual ErrCodeMsg Read(SwDoc&, const OUString&, SwPaM&, const OUString&) override;
 
     static bool MakeEntries(SwDoc* pD, SwTextBlocks& rBlocks);
 };

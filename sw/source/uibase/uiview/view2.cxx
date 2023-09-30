@@ -2827,7 +2827,7 @@ tools::Long SwView::InsertMedium( sal_uInt16 nSlotId, std::unique_ptr<SfxMedium>
                 SwDoc *pDoc = pDocSh->GetDoc();
                 if( pRead && pDocSh->GetDoc() )
                     nUndoCheck = lcl_PageDescWithHeader( *pDoc );
-                ErrCode nErrno;
+                ErrCodeMsg nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
                     SwWait aWait( *GetDocShell(), true );

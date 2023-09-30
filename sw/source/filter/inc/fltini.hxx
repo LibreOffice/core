@@ -42,12 +42,12 @@ class HTMLReader final : public Reader
 
 public:
     HTMLReader();
-    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
+    virtual ErrCodeMsg Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 };
 
 class XMLReader final : public Reader
 {
-    virtual ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
+    virtual ErrCodeMsg Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 
 public:
     virtual SwReaderType GetReaderType() override;

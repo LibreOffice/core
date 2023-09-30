@@ -754,7 +754,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testImportRTF)
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
     Reader* pRTFReader = SwReaderWriter::GetRtfReader();
     CPPUNIT_ASSERT(pRTFReader != nullptr);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader).GetCode());
 
     SwNodeOffset nIndex = pWrtShell->GetCursor()->GetPointNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());

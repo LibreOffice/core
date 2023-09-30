@@ -108,7 +108,7 @@ bool MacroSnippet::Compile()
 
 bool MacroSnippet::HasError() const { return mbError; }
 
-const ErrCode& MacroSnippet::getError() const { return maErrCode; }
+const ErrCodeMsg& MacroSnippet::getError() const { return maErrCode; }
 
 IMPL_LINK( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)
 {

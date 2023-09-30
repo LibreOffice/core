@@ -1429,7 +1429,7 @@ sal_uInt16 StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
 sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
 // Specific to error handler
-ErrCode const & StarBASIC::GetErrorCode() { return GetSbData()->nCode; }
+ErrCodeMsg const & StarBASIC::GetErrorCode() { return GetSbData()->nCode; }
 const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 
 // From 1996-03-29:
@@ -1531,7 +1531,7 @@ ErrCode StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
 }
 
 // set Error- / Break-data
-void StarBASIC::SetErrorData( ErrCode nCode, sal_uInt16 nLine,
+void StarBASIC::SetErrorData( const ErrCodeMsg& nCode, sal_uInt16 nLine,
                               sal_uInt16 nCol1, sal_uInt16 nCol2 )
 {
     SbiGlobals& aGlobals = *GetSbData();
@@ -1620,11 +1620,12 @@ bool StarBASIC::CError( ErrCode code, const OUString& rMsg,
     MakeErrorText( code, rMsg );
 
     // Implementation of the code for the string transport to SFX-Error
+    ErrCodeMsg nErr = code;
     if( !rMsg.isEmpty() )
     {
-        code = *new StringErrorInfo( code, rMsg );
+        nErr = ErrCodeMsg( code, rMsg );
     }
-    SetErrorData( code, l, c1, c2 );
+    SetErrorData( nErr, l, c1, c2 );
     GetSbData()->bCompilerError = true;
     bool bRet;
     if( GetSbData()->aErrHdl.IsSet() )
@@ -1651,6 +1652,7 @@ bool StarBASIC::RTError( ErrCode code, const OUString& rMsg, sal_Int32 l, sal_In
     MakeErrorText( c, rMsg );
 
     // Implementation of the code for the string transport to SFX-Error
+    ErrCodeMsg nErr = code;
     if( !rMsg.isEmpty() )
     {
         // very confusing, even though MakeErrorText sets up the error text
@@ -1661,15 +1663,15 @@ bool StarBASIC::RTError( ErrCode code, const OUString& rMsg, sal_Int32 l, sal_In
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
                             "\'\n" + (!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
-            code = *new StringErrorInfo( code, aTmp );
+            nErr = ErrCodeMsg( code, aTmp );
         }
         else
         {
-            code = *new StringErrorInfo( code, rMsg );
+            nErr = ErrCodeMsg( code, rMsg );
         }
     }
 
-    SetErrorData( code, l, c1, c2 );
+    SetErrorData( nErr, l, c1, c2 );
     if( GetSbData()->aErrHdl.IsSet() )
     {
         return GetSbData()->aErrHdl.Call( this );

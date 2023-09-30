@@ -1225,7 +1225,7 @@ bool ErrorResource::getString(ErrCode nErrorCode, OUString &rString) const
 {
     for (const std::pair<TranslateId, ErrCode>* pStringArray = m_pStringArray; pStringArray->first; ++pStringArray)
     {
-        if (nErrorCode.StripWarningAndDynamic() == pStringArray->second.StripWarningAndDynamic())
+        if (nErrorCode.StripWarning() == pStringArray->second.StripWarning())
         {
             rString = Translate::get(pStringArray->first, m_rResLocale);
             return true;

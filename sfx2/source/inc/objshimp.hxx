@@ -94,7 +94,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
                         m_bMacroCallsSeenWhileLoading:1; // whether or not the user options are checked after the Options dialog is closed.
 
     IndexBitSet         aBitSet;
-    ErrCode             lErr;
+    ErrCodeMsg          lErr;
     SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
     std::unique_ptr<AutoReloadTimer_Impl> pReloadTimer;

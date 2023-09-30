@@ -67,6 +67,7 @@
 #include <memory>
 
 class ErrCode;
+class ErrCodeMsg;
 class SfxMedium;
 class   SfxObjectShell                      ;
 class   SfxViewFrame;
@@ -738,7 +739,7 @@ private:
 
     SAL_DLLPRIVATE void loadCmisProperties();
 
-    SAL_DLLPRIVATE SfxMedium* handleLoadError( ErrCode nError, SfxMedium* pMedium );
+    SAL_DLLPRIVATE SfxMedium* handleLoadError( const ErrCodeMsg& nError, SfxMedium* pMedium );
 
 
 //  private variables and methods

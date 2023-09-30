@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl, weld::Button&, void)
         // error: couldn't create new dictionary
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, OUString(),
             m_xDialog.get(), RID_SVXERRCTX, SvxResLocale() );
-        ErrorHandler::HandleError( *new StringErrorInfo(
+        ErrorHandler::HandleError( ErrCodeMsg(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
         m_xDialog->response(RET_CANCEL);
     }

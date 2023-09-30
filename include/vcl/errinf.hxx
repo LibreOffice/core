@@ -24,7 +24,6 @@
 #include <utility>
 #include <comphelper/errcode.hxx>
 #include <vcl/dllapi.h>
-#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 #include <memory>
@@ -35,15 +34,12 @@ namespace weld { class Window; }
 
 class ErrorHandler;
 class ErrorContext;
-class ErrorInfo;
-class DynamicErrorInfo;
-class ImplDynamicErrorInfo;
 enum class DialogMask;
 
 class VCL_DLLPUBLIC ErrorStringFactory
 {
 public:
-    static bool CreateString(const ErrorInfo*, OUString&);
+    static bool CreateString(const ErrCodeMsg&, OUString&);
 };
 
 typedef void (* DisplayFnPtr)();
@@ -59,7 +55,6 @@ class VCL_DLLPUBLIC ErrorRegistry
     friend class ErrorHandler;
     friend class ErrorContext;
     friend class ErrorStringFactory;
-    friend class ImplDynamicErrorInfo;
 
 public:
                                 ErrorRegistry();
@@ -78,39 +73,9 @@ private:
 
     bool m_bLock;
 
-    sal_uInt16                  nNextError;
-
     std::vector<ErrorHandler*>  errorHandlers;
     std::vector<ErrorContext*>  contexts;
-
-    DynamicErrorInfo*           ppDynErrInfo[ERRCODE_DYNAMIC_COUNT];
 };
-
-enum class DialogMask
-{
-    NONE                    = 0x0000,
-    ButtonsOk               = 0x0001,
-    ButtonsCancel           = 0x0002,
-    ButtonsRetry            = 0x0004,
-    ButtonsNo               = 0x0008,
-    ButtonsYes              = 0x0010,
-    ButtonsYesNo            = 0x0018,
-
-    ButtonDefaultsOk        = 0x0100,
-    ButtonDefaultsCancel    = 0x0200,
-    ButtonDefaultsYes       = 0x0300,
-    ButtonDefaultsNo        = 0x0400,
-
-    MessageError            = 0x1000,
-    MessageWarning          = 0x2000,
-    MessageInfo             = 0x3000,
-
-    MAX                     = USHRT_MAX,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
-}
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorHandler
 {
@@ -136,72 +101,11 @@ public:
 
         @return what sort of dialog to use, with what buttons
     */
-    static DialogMask       HandleError(ErrCode nId, weld::Window* pParent = nullptr, DialogMask nMask = DialogMask::MAX);
-    static bool             GetErrorString(ErrCode nId, OUString& rStr);
+    static DialogMask       HandleError(const ErrCodeMsg& nId, weld::Window* pParent = nullptr, DialogMask nMask = DialogMask::MAX);
+    static bool             GetErrorString(const ErrCodeMsg& nId, OUString& rStr);
 
 protected:
-    virtual bool            CreateString(const ErrorInfo*, OUString &) const = 0;
-
-};
-
-class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
-{
-public:
-                            ErrorInfo(ErrCode nArgUserId) :
-                                nUserId(nArgUserId) {}
-    virtual                 ~ErrorInfo();
-
-    ErrCode const &         GetErrorCode() const { return nUserId; }
-
-    static std::unique_ptr<ErrorInfo> GetErrorInfo(ErrCode);
-
-private:
-    ErrCode                 nUserId;
-};
-
-class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
-{
-    friend class ImplDynamicErrorInfo;
-
-public:
-                            DynamicErrorInfo(ErrCode nUserId, DialogMask nMask);
-    virtual                 ~DynamicErrorInfo() override;
-
-    operator                ErrCode() const;
-    DialogMask              GetDialogMask() const;
-
-private:
-    std::unique_ptr<ImplDynamicErrorInfo> pImpl;
-
-};
-
-class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo final : public DynamicErrorInfo
-{
-public:
-                            StringErrorInfo(ErrCode nUserId,
-                                            OUString aStringP,
-                                            DialogMask nMask = DialogMask::NONE);
-
-    const OUString&         GetErrorString() const { return aString; }
-
-private:
-    OUString                aString;
-
-};
-
-class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo final : public DynamicErrorInfo
-{
-public:
-    TwoStringErrorInfo(ErrCode nUserID, OUString aTheArg1,
-                       OUString aTheArg2, DialogMask nMask):
-        DynamicErrorInfo(nUserID, nMask), aArg1(std::move(aTheArg1)), aArg2(std::move(aTheArg2)) {}
-
-    const OUString& GetArg1() const { return aArg1; }
-    const OUString& GetArg2() const { return aArg2; }
-
-private:
-    OUString aArg1;
-    OUString aArg2;
+    virtual bool            CreateString(const ErrCodeMsg&, OUString &) const = 0;
 
 };
 
@@ -215,7 +119,7 @@ public:
                             ErrorContext(weld::Window *pWin);
     virtual                 ~ErrorContext();
 
-    virtual bool            GetString(ErrCode nErrId, OUString& rCtxStr) = 0;
+    virtual bool            GetString(const ErrCodeMsg& nErrId, OUString& rCtxStr) = 0;
     weld::Window*           GetParent();
 
     static ErrorContext*    GetContext();

@@ -317,7 +317,7 @@ ErrCode SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rL
 
 ErrCode SwXMLTextBlocks::PutBlock()
 {
-    ErrCode nRes = ERRCODE_NONE; // dead variable, this always returns 0
+    ErrCodeMsg nRes = ERRCODE_NONE; // dead variable, this always returns 0
     SwXmlFlags nCommitFlags = m_nFlags;
 
     WriterRef xWrt;

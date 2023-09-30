@@ -129,7 +129,7 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    ErrCode                     LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, std::unique_ptr<SfxItemSet> pArgs );
+    ErrCodeMsg                  LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, std::unique_ptr<SfxItemSet> pArgs );
     weld::Window*               GetTopWindow() const;
 
     // members

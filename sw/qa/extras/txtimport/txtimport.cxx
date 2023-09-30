@@ -38,8 +38,8 @@ public:
         SvMemoryStream aMemoryStream;
 
         SwWriter aWriter(aMemoryStream, rPaM);
-        ErrCode nError = aWriter.Write(rAsciiWriter);
-        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, nError);
+        ErrCodeMsg nError = aWriter.Write(rAsciiWriter);
+        CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, nError.GetCode());
 
         const char* pData = static_cast<const char*>(aMemoryStream.GetData());
         OString aResult(pData, aMemoryStream.GetSize());

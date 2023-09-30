@@ -130,7 +130,7 @@ namespace
 {
 
 /// read a component (file + filter version)
-ErrCode ReadThroughComponent(
+ErrCodeMsg ReadThroughComponent(
     uno::Reference<io::XInputStream> const & xInputStream,
     uno::Reference<XComponent> const & xModelComponent,
     const OUString& rStreamName,
@@ -219,7 +219,7 @@ ErrCode ReadThroughComponent(
 
         if( !rStreamName.isEmpty() )
         {
-            return *new TwoStringErrorInfo(
+            return ErrCodeMsg(
                             (bMustBeSuccessful ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
@@ -228,7 +228,7 @@ ErrCode ReadThroughComponent(
         else
         {
             OSL_ENSURE( bMustBeSuccessful, "Warnings are not supported" );
-            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+            return ErrCodeMsg( ERR_FORMAT_ROWCOL, sErr,
                              DialogMask::ButtonsOk | DialogMask::MessageError );
         }
     }
@@ -266,7 +266,7 @@ ErrCode ReadThroughComponent(
 }
 
 // read a component (storage version)
-ErrCode ReadThroughComponent(
+ErrCodeMsg ReadThroughComponent(
     uno::Reference<embed::XStorage> const & xStorage,
     uno::Reference<XComponent> const & xModelComponent,
     const char* pStreamName,
@@ -464,7 +464,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
     }
 }
 
-ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
+ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
 {
     // needed for relative URLs, but in clipboard copy/paste there may be none
     // and also there is the SwXMLTextBlocks special case
@@ -735,7 +735,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     }
 
     rtl::Reference<SwDoc> aHoldRef(&rDoc); // prevent deletion
-    ErrCode nRet = ERRCODE_NONE;
+    ErrCodeMsg nRet = ERRCODE_NONE;
 
     // save redline mode into import info property set
     static constexpr OUStringLiteral sShowChanges(u"ShowChanges");
@@ -806,13 +806,13 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     // read storage streams
 
     // #i103539#: always read meta.xml for generator
-    ErrCode const nWarn = ReadThroughComponent(
+    ErrCodeMsg const nWarn = ReadThroughComponent(
         xStorage, xModelComp, "meta.xml", xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                 : "com.sun.star.comp.Writer.XMLMetaImporter"),
         aEmptyArgs, rName, false );
 
-    ErrCode nWarn2 = ERRCODE_NONE;
+    ErrCodeMsg nWarn2 = ERRCODE_NONE;
     if( !(IsOrganizerMode() || IsBlockMode() || m_aOption.IsFormatsOnly() ||
           m_bInsertMode) )
     {

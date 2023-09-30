@@ -203,7 +203,7 @@ bool HTMLReader::SetStrmStgPtr()
 }
 
 // Call for the general Reader-Interface
-ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
+ErrCodeMsg HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
     SetupFilterOptions();
 
@@ -228,7 +228,7 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
 
     // so nobody steals the document!
     rtl::Reference<SwDoc> xHoldAlive(&rDoc);
-    ErrCode nRet = ERRCODE_NONE;
+    ErrCodeMsg nRet = ERRCODE_NONE;
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *m_pStream,
                                             rName, rBaseURL, !m_bInsertMode, m_pMedium,
                                             IsReadUTF8(),
@@ -244,7 +244,7 @@ ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, co
             + "," + OUString::number(static_cast<sal_Int32>(xParser->GetLinePos())));
 
         // use the stream as transport for error number
-        nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+        nRet = ErrCodeMsg( ERR_FORMAT_ROWCOL, sErr,
                                     DialogMask::ButtonsOk | DialogMask::MessageError );
     }
 

@@ -347,8 +347,8 @@ class SfxMedium_Impl
 {
 public:
     StreamMode m_nStorOpenMode;
-    ErrCode    m_eError;
-    ErrCode    m_eWarningError;
+    ErrCodeMsg m_eError;
+    ErrCodeMsg m_eWarningError;
 
     ::ucbhelper::Content aContent;
     bool bUpdatePickList:1;
@@ -411,7 +411,7 @@ public:
     uno::Reference<io::XStream> m_xLockingStream;
     uno::Reference<task::XInteractionHandler> xInteraction;
 
-    ErrCode  nLastStorageError;
+    ErrCodeMsg  nLastStorageError;
 
     OUString m_aBackupURL;
 
@@ -489,29 +489,29 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
-ErrCode SfxMedium::GetWarningError() const
+ErrCodeMsg const & SfxMedium::GetWarningError() const
 {
     return pImpl->m_eWarningError;
 }
 
-ErrCode const & SfxMedium::GetLastStorageCreationState() const
+ErrCodeMsg const & SfxMedium::GetLastStorageCreationState() const
 {
     return pImpl->nLastStorageError;
 }
 
-void SfxMedium::SetError(ErrCode nError)
+void SfxMedium::SetError(ErrCodeMsg nError)
 {
     pImpl->m_eError = nError;
 }
 
-void SfxMedium::SetWarningError(ErrCode nWarningError)
+void SfxMedium::SetWarningError(const ErrCodeMsg& nWarningError)
 {
     pImpl->m_eWarningError = nWarningError;
 }
 
-ErrCode SfxMedium::GetErrorCode() const
+ErrCodeMsg SfxMedium::GetErrorCode() const
 {
-    ErrCode lError = pImpl->m_eError;
+    ErrCodeMsg lError = pImpl->m_eError;
     if(!lError && pImpl->m_pInStream)
         lError = pImpl->m_pInStream->GetErrorCode();
     if(!lError && pImpl->m_pOutStream)
@@ -1786,7 +1786,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
         // impossibility to create the storage is no error
     }
 
-    if( ( pImpl->nLastStorageError = GetErrorIgnoreWarning() ) != ERRCODE_NONE )
+    pImpl->nLastStorageError = GetErrorIgnoreWarning();
+    if( pImpl->nLastStorageError != ERRCODE_NONE )
     {
         pImpl->xStorage = nullptr;
         if ( pImpl->m_pInStream )
@@ -2907,8 +2908,8 @@ void SfxMedium::GetMedium_Impl()
 
     pImpl->bDownloadDone = true;
     pImpl->aDoneLink.ClearPendingCall();
-    ErrCode nError = GetErrorIgnoreWarning();
-    pImpl->aDoneLink.Call( reinterpret_cast<void*>(sal_uInt32(nError)) );
+    ErrCodeMsg nError = GetErrorIgnoreWarning();
+    pImpl->aDoneLink.Call( reinterpret_cast<void*>(sal_uInt32(nError.GetCode())) );
 }
 
 bool SfxMedium::IsRemote() const

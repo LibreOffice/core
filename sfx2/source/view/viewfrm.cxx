@@ -533,7 +533,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 if( !bOK )
                 {
-                    ErrCode nErr = pMed->GetErrorCode();
+                    ErrCodeMsg nErr = pMed->GetErrorCode();
                     if ( pVersionItem )
                         nErr = ERRCODE_IO_ACCESSDENIED;
                     else

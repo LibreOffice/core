@@ -209,7 +209,7 @@ std::vector<InfobarData>& SfxObjectShell::getPendingInfobars()
     return Get_Impl()->m_aPendingInfobars;
 }
 
-void SfxObjectShell::SetError(ErrCode lErr)
+void SfxObjectShell::SetError(const ErrCodeMsg& lErr)
 {
     if (pImpl->lErr==ERRCODE_NONE)
     {
@@ -217,14 +217,14 @@ void SfxObjectShell::SetError(ErrCode lErr)
     }
 }
 
-ErrCode SfxObjectShell::GetErrorIgnoreWarning() const
+ErrCodeMsg SfxObjectShell::GetErrorIgnoreWarning() const
 {
     return GetErrorCode().IgnoreWarning();
 }
 
-ErrCode SfxObjectShell::GetErrorCode() const
+ErrCodeMsg SfxObjectShell::GetErrorCode() const
 {
-    ErrCode lError=pImpl->lErr;
+    ErrCodeMsg lError=pImpl->lErr;
     if(!lError && GetMedium())
         lError=GetMedium()->GetErrorCode();
     return lError;
@@ -1693,7 +1693,7 @@ bool SfxObjectShell::IsUIActive() const
 
 bool SfxObjectShell::UseInteractionToHandleError(
                     const uno::Reference< task::XInteractionHandler >& xHandler,
-                    ErrCode nError )
+                    const ErrCodeMsg& nError )
 {
     bool bResult = false;
 
@@ -1709,7 +1709,7 @@ bool SfxObjectShell::UseInteractionToHandleError(
             };
 
             task::ErrorCodeRequest aErrorCode;
-            aErrorCode.ErrCode = sal_uInt32(nError);
+            aErrorCode.ErrCode = sal_uInt32(nError.GetCode());
             aInteraction <<= aErrorCode;
             xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
             bResult = pAbort->wasSelected();

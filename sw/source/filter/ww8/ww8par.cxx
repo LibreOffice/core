@@ -6490,7 +6490,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
     return ERRCODE_NONE;
 }
 
-ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
+ErrCodeMsg WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !m_bInsertMode; // New Doc (no inserting)

@@ -509,7 +509,7 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     ScXMLImportWrapper aImport(*this, pLoadMedium, xStor);
 
     bool bRet = false;
-    ErrCode nError = ERRCODE_NONE;
+    ErrCodeMsg nError = ERRCODE_NONE;
     m_pDocument->LockAdjustHeight();
     if (GetCreateMode() == SfxObjectCreateMode::ORGANIZER)
         bRet = aImport.Import(ImportFlags::Styles, nError);
@@ -2606,7 +2606,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         rMed.CloseOutStream();
         bool bHasMemo = false;
 
-        ErrCode eError = DBaseExport(
+        ErrCodeMsg eError = DBaseExport(
             rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
         INetURLObject aTmpFile( rMed.GetPhysicalName(), INetProtocol::File );
@@ -2717,7 +2717,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SotClipboardFormatId::HTML);
             if (bRet && !aImExport.GetNonConvertibleChars().isEmpty())
             {
-                SetError(*new StringErrorInfo(
+                SetError(ErrCodeMsg(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
                     DialogMask::ButtonsOk | DialogMask::MessageInfo));

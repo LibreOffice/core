@@ -21,6 +21,16 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <ostream>
+#include <o3tl/typed_flags_set.hxx>
+#include <optional>
+
+#if (defined DBG_UTIL) && ((defined __GNUC__ && !defined __clang__) || (defined __clang__ && __clang_major__ >= 9)) && __has_include(<experimental/source_location>)
+#define LIBO_ERRMSG_USE_SOURCE_LOCATION
+#endif
+
+#ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
+#include <experimental/source_location>
+#endif
 
 /*
 
@@ -28,7 +38,7 @@
 ||   ||           ||   ||      |
 Warning           ||   ||      |
  |   ||           ||   ||      |
- Dynamic          ||   ||      |
+ Unused           ||   ||      |
       |           ||   ||      |
       Subsystemarea|   ||      |
                    |   ||      |
@@ -49,9 +59,6 @@ Warning           ||   ||      |
 #define ERRCODE_DYNAMIC_SHIFT            26
 
 #define ERRCODE_CLASS_MASK               (31UL << ERRCODE_CLASS_SHIFT)
-
-#define ERRCODE_DYNAMIC_COUNT            31UL
-#define ERRCODE_DYNAMIC_MASK             (31UL << ERRCODE_DYNAMIC_SHIFT)
 
 enum class ErrCodeArea;
 enum class ErrCodeClass;
@@ -107,20 +114,8 @@ public:
         return m_value && !IsWarning();
     }
 
-    bool IsDynamic() const {
-        return m_value & ERRCODE_DYNAMIC_MASK;
-    }
-
-    sal_uInt32 GetDynamic() const {
-        return (m_value & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT;
-    }
-
-    ErrCode StripDynamic() const {
-        return ErrCode(m_value & ~ERRCODE_DYNAMIC_MASK);
-    }
-
-    constexpr ErrCode StripWarningAndDynamic() const {
-        return ErrCode(m_value & ~(ERRCODE_DYNAMIC_MASK | ERRCODE_WARNING_MASK));
+    constexpr ErrCode StripWarning() const {
+        return ErrCode(m_value & ~ERRCODE_WARNING_MASK);
     }
 
     constexpr ErrCodeArea GetArea() const {
@@ -153,6 +148,101 @@ private:
 };
 
 COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCode& err);
+
+enum class DialogMask
+{
+    NONE                    = 0x0000,
+    ButtonsOk               = 0x0001,
+    ButtonsCancel           = 0x0002,
+    ButtonsRetry            = 0x0004,
+    ButtonsNo               = 0x0008,
+    ButtonsYes              = 0x0010,
+    ButtonsYesNo            = 0x0018,
+
+    ButtonDefaultsOk        = 0x0100,
+    ButtonDefaultsCancel    = 0x0200,
+    ButtonDefaultsYes       = 0x0300,
+    ButtonDefaultsNo        = 0x0400,
+
+    MessageError            = 0x1000,
+    MessageWarning          = 0x2000,
+    MessageInfo             = 0x3000,
+
+    MAX                     = USHRT_MAX,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<DialogMask> : is_typed_flags<DialogMask, 0xffff> {};
+}
+
+/** Wrap up an ErrCode and an explanation and the source location where the error was created,
+    helps with debugging when finding the source of a problem.
+*/
+class SAL_WARN_UNUSED ErrCodeMsg
+{
+public:
+    ErrCodeMsg() : mnCode(0) {}
+#ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
+    ErrCodeMsg(ErrCode code, const OUString& arg, std::experimental::source_location loc = std::experimental::source_location::current())
+        : mnCode(code), maArg1(arg),  mnDialogMask(DialogMask::NONE), moLoc(loc) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, std::experimental::source_location loc = std::experimental::source_location::current())
+        : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(DialogMask::NONE), moLoc(loc) {}
+    ErrCodeMsg(ErrCode code, std::experimental::source_location loc = std::experimental::source_location::current())
+        : mnCode(code), mnDialogMask(DialogMask::NONE), moLoc(loc) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg, DialogMask mask, std::experimental::source_location loc = std::experimental::source_location::current())
+        : mnCode(code), maArg1(arg), mnDialogMask(mask), moLoc(loc) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, DialogMask mask, std::experimental::source_location loc = std::experimental::source_location::current())
+        : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(mask), moLoc(loc) {}
+#else
+    ErrCodeMsg(ErrCode code, const OUString& arg)
+        : mnCode(code), maArg1(arg), mnDialogMask(DialogMask::NONE) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2)
+        : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(DialogMask::NONE) {}
+    ErrCodeMsg(ErrCode code)
+        : mnCode(code), mnDialogMask(DialogMask::NONE) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg, DialogMask mask)
+        : mnCode(code), maArg1(arg), mnDialogMask(mask) {}
+    ErrCodeMsg(ErrCode code, const OUString& arg1, const OUString& arg2, DialogMask mask)
+        : mnCode(code), maArg1(arg1), maArg2(arg2), mnDialogMask(mask) {}
+#endif
+
+    const ErrCode & GetCode() const { return mnCode; }
+    const OUString & GetArg1() const { return maArg1; }
+    const OUString & GetArg2() const { return maArg2; }
+    DialogMask GetDialogMask() const { return mnDialogMask; }
+
+#ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
+    const std::optional<std::experimental::source_location> & GetSourceLocation() const { return moLoc; }
+#endif
+
+    /** convert to ERRCODE_NONE if it's a warning, else return the error */
+    ErrCodeMsg IgnoreWarning() const { return mnCode.IsWarning() ? ErrCodeMsg(ErrCode(0)) : *this; }
+
+    bool IsWarning() const { return mnCode.IsWarning(); }
+    bool IsError() const { return mnCode.IsError(); }
+    explicit operator bool() const { return bool(mnCode); }
+    bool operator==(const ErrCodeMsg& rOther) const { return mnCode == rOther.mnCode; }
+    bool operator!=(const ErrCodeMsg& rOther) const { return mnCode != rOther.mnCode; }
+
+    /// Return a string suitable for debug output, the same as the operator<< function
+    COMPHELPER_DLLPUBLIC OUString toString() const;
+
+private:
+    ErrCode mnCode;
+    OUString maArg1;
+    OUString maArg2;
+    DialogMask mnDialogMask;
+#ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
+    std::optional<std::experimental::source_location> moLoc;
+#endif
+};
+
+COMPHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& os, const ErrCodeMsg& err);
+
+inline bool operator==(const ErrCodeMsg& lhs, ErrCode rhs) { return lhs.GetCode() == rhs; }
+inline bool operator!=(const ErrCodeMsg& lhs, ErrCode rhs) { return lhs.GetCode() != rhs; }
+inline bool operator==(ErrCode lhs, const ErrCodeMsg& rhs) { return lhs == rhs.GetCode(); }
+inline bool operator!=(ErrCode lhs, const ErrCodeMsg& rhs) { return lhs != rhs.GetCode(); }
 
 enum class ErrCodeArea {
     Io                  = 0 ,

@@ -143,14 +143,14 @@ public:
     void                Download( const Link<void*,void>& aLink = Link<void*,void>());
     void                SetDoneLink( const Link<void*,void>& rLink );
 
-    ErrCode             GetErrorCode() const;
-    ErrCode             GetErrorIgnoreWarning() const
+    ErrCodeMsg          GetErrorCode() const;
+    ErrCodeMsg          GetErrorIgnoreWarning() const
                         { return GetErrorCode().IgnoreWarning(); }
-    ErrCode             GetWarningError() const;
-    ErrCode const &     GetLastStorageCreationState() const;
+    ErrCodeMsg const &  GetWarningError() const;
+    ErrCodeMsg const &  GetLastStorageCreationState() const;
 
-    void                SetError(ErrCode nError);
-    void                SetWarningError(ErrCode nWarningError);
+    void                SetError(ErrCodeMsg nError);
+    void                SetWarningError(const ErrCodeMsg& nWarningError);
 
     void                CloseInStream();
     void                CloseOutStream();

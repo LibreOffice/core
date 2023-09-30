@@ -201,11 +201,11 @@ void Writer::SetStream(SvStream *const pStream)
     m_pImpl->m_pStream = pStream;
 }
 
-ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
+ErrCodeMsg Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 {
     if ( IsStgWriter() )
     {
-        ErrCode nResult = ERRCODE_ABORT;
+        ErrCodeMsg nResult = ERRCODE_ABORT;
         try
         {
             tools::SvRef<SotStorage> aRef = new SotStorage( rStrm );
@@ -241,7 +241,7 @@ ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 void Writer::SetupFilterOptions(SfxMedium& /*rMedium*/)
 {}
 
-ErrCode Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
+ErrCodeMsg Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
 {
     SetupFilterOptions(rMedium);
     // This method must be overridden in SwXMLWriter a storage from medium will be used there.
@@ -249,13 +249,13 @@ ErrCode Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileNam
     return Write( rPam, *rMedium.GetOutStream(), pFileName );
 }
 
-ErrCode Writer::Write( SwPaM& /*rPam*/, SotStorage&, const OUString* )
+ErrCodeMsg Writer::Write( SwPaM& /*rPam*/, SotStorage&, const OUString* )
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-ErrCode Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const OUString*, SfxMedium* )
+ErrCodeMsg Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const OUString*, SfxMedium* )
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -453,7 +453,7 @@ ErrCode StgWriter::WriteStream()
     return ERR_SWG_WRITE_ERROR;
 }
 
-ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
+ErrCodeMsg StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
 {
     SetStream(nullptr);
     m_pStg = &rStg;
@@ -467,7 +467,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
     // for comparison secure to the current Pam
     m_pOrigPam = &rPaM;
 
-    ErrCode nRet = WriteStorage();
+    ErrCodeMsg nRet = WriteStorage();
 
     m_pStg = nullptr;
     ResetWriter();
@@ -475,7 +475,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName 
     return nRet;
 }
 
-ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
+ErrCodeMsg StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
 {
     SetStream(nullptr);
     m_pStg = nullptr;
@@ -490,7 +490,7 @@ ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >&
     // for comparison secure to the current Pam
     m_pOrigPam = &rPaM;
 
-    ErrCode nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
+    ErrCodeMsg nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
     m_pStg = nullptr;
     ResetWriter();

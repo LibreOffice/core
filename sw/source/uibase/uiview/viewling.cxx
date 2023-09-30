@@ -348,7 +348,7 @@ void SwView::SpellError(LanguageType eLang)
     if ( LANGUAGE_NONE == eLang )
         ErrorHandler::HandleError( ERRCODE_SVX_LINGU_NOLANGUAGE );
     else
-        ErrorHandler::HandleError( *new StringErrorInfo( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
+        ErrorHandler::HandleError( ErrCodeMsg( ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr ) );
 
     while( nWaitCnt )
     {

@@ -956,8 +956,8 @@ public:
     SwWW8Writer(std::u16string_view rFltName, const OUString& rBaseURL);
     virtual ~SwWW8Writer() override;
 
-    virtual ErrCode WriteStorage() override;
-    virtual ErrCode WriteMedium( SfxMedium& ) override;
+    virtual ErrCodeMsg WriteStorage() override;
+    virtual ErrCodeMsg WriteMedium( SfxMedium& ) override;
 
     // TODO most probably we want to be able to get these in
     // MSExportFilterBase
@@ -989,7 +989,7 @@ public:
     bool InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec );
 
     using StgWriter::Write;
-    virtual ErrCode Write( SwPaM&, SfxMedium&, const OUString* ) override;
+    virtual ErrCodeMsg Write( SwPaM&, SfxMedium&, const OUString* ) override;
     //Seems not an expected to provide method to access the private member
     SfxMedium* GetMedia() { return mpMedium; }
 

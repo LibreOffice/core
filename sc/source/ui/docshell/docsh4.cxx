@@ -834,7 +834,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 ScDocShell* pOtherDocSh = new ScDocShell;
                 SfxObjectShellLock aDocShTablesRef = pOtherDocSh;
                 pOtherDocSh->DoLoad( pMed );
-                ErrCode nErr = pOtherDocSh->GetErrorCode();
+                ErrCodeMsg nErr = pOtherDocSh->GetErrorCode();
                 if (nErr)
                     ErrorHandler::HandleError( nErr );          // also warnings
 

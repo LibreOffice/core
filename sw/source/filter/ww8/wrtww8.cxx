@@ -3789,7 +3789,7 @@ void WW8Export::PrepareStorage()
         sfx2::SaveOlePropertySet( xDocProps, &GetWriter().GetStorage() );
 }
 
-ErrCode SwWW8Writer::WriteStorage()
+ErrCodeMsg SwWW8Writer::WriteStorage()
 {
     tools::SvRef<SotStorage> pOrigStg;
     uno::Reference< packages::XPackageEncryption > xPackageEncryption;
@@ -3923,16 +3923,16 @@ ErrCode SwWW8Writer::WriteStorageImpl()
     return err;
 }
 
-ErrCode SwWW8Writer::WriteMedium( SfxMedium& )
+ErrCodeMsg SwWW8Writer::WriteMedium( SfxMedium& )
 {
     return WriteStorage();
 }
 
-ErrCode SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
+ErrCodeMsg SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
                           const OUString* pFileName )
 {
     mpMedium = &rMed;
-    ErrCode nRet = StgWriter::Write( rPaM, rMed, pFileName );
+    ErrCodeMsg nRet = StgWriter::Write( rPaM, rMed, pFileName );
     mpMedium = nullptr;
     return nRet;
 }

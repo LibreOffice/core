@@ -290,9 +290,9 @@ public:
     SAL_DLLPRIVATE void         SetMacroMode_Impl(bool bModal=true);
 
     void                        ResetError();
-    ErrCode                     GetErrorIgnoreWarning() const;
-    ErrCode                     GetErrorCode() const;
-    void                        SetError(ErrCode rErr);
+    ErrCodeMsg                  GetErrorIgnoreWarning() const;
+    ErrCodeMsg                  GetErrorCode() const;
+    void                        SetError(const ErrCodeMsg& rErr);
 
     /**
      * Initialize bare minimum just enough for unit test runs.
@@ -719,7 +719,7 @@ public:
 
     SAL_DLLPRIVATE static bool UseInteractionToHandleError(
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                    ErrCode nError );
+                    const ErrCodeMsg& nError );
     SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImpl.get(); }
 
     SAL_DLLPRIVATE void SetCreateMode_Impl( SfxObjectCreateMode nMode );

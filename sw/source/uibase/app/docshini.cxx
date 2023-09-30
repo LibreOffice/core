@@ -498,7 +498,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         SwWait aWait( *this, true );
-        ErrCode nErr = ERR_SWG_READ_ERROR;
+        ErrCodeMsg nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
             case SfxObjectCreateMode::ORGANIZER:
@@ -583,7 +583,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     AddLink();      // set Link and update Data!!
 
     do {        // middle check loop
-        ErrCode nErr = ERR_SWG_READ_ERROR;
+        ErrCodeMsg nErr = ERR_SWG_READ_ERROR;
         OUString aStreamName = "styles.xml";
         uno::Reference < container::XNameAccess > xAccess = rMedium.GetStorage();
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )

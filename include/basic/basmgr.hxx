@@ -55,14 +55,14 @@ enum class BasicErrorReason
 class BasicError
 {
 private:
-    ErrCode nErrorId;
+    ErrCodeMsg nErrorId;
     BasicErrorReason  nReason;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( ErrCode nId, BasicErrorReason nR );
+            BasicError( ErrCodeMsg nId, BasicErrorReason nR );
 
-    ErrCode const & GetErrorId() const                  { return nErrorId; }
+    ErrCodeMsg const & GetErrorId() const { return nErrorId; }
 };
 
 class BasicLibInfo;

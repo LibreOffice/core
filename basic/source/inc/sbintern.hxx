@@ -124,7 +124,7 @@ struct SbiGlobals
     short           nInst;          // number of BASICs
     Link<StarBASIC*,bool>            aErrHdl;        // global error handler
     Link<StarBASIC*,BasicDebugFlags> aBreakHdl;      // global break handler
-    ErrCode         nCode;
+    ErrCodeMsg      nCode;
     sal_Int32       nLine;
     sal_Int32       nCol1,nCol2;    // from... to...
     bool            bCompilerError; // flag for compiler error

@@ -40,7 +40,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, OUString aArg1, weld::Window *pWin=nullptr,
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
-    bool GetString(ErrCode nErrId, OUString &rStr) override;
+    bool GetString(const ErrCodeMsg& nErrId, OUString &rStr) override;
 
     void SetExtendedMessage(ErrCode nErrId, const OUString& rStr);
 
@@ -69,7 +69,7 @@ private:
     std::locale aResLocale;
 
     SVT_DLLPRIVATE static void GetClassString(ErrCodeClass lErrId, OUString &);
-    virtual bool          CreateString(const ErrorInfo *, OUString &) const override;
+    virtual bool          CreateString(const ErrCodeMsg&, OUString &) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

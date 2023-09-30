@@ -88,7 +88,7 @@ void SwAsciiOptions::Reset()
     m_bIncludeHidden = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Writer::FilterFlags::ASCII::IncludeHiddenText::get();
 }
 
-ErrCode SwReader::Read( const Reader& rOptions )
+ErrCodeMsg SwReader::Read( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
@@ -109,7 +109,7 @@ ErrCode SwReader::Read( const Reader& rOptions )
         return ERR_SWG_FILE_FORMAT_ERROR;
     }
 
-    ErrCode nError = ERRCODE_NONE;
+    ErrCodeMsg nError = ERRCODE_NONE;
 
     GetDoc();
 
@@ -742,7 +742,7 @@ static bool isFlyNode(const SwPaM& pam)
            && (pam.GetPoint()->GetNode().IsOLENode() || pam.GetPoint()->GetNode().IsGrfNode());
 }
 
-ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileName )
+ErrCodeMsg SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileName )
 {
     // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
@@ -867,7 +867,7 @@ ErrCode SwWriter::Write( WriterRef const & rxWriter, const OUString* pRealFileNa
     std::unique_ptr<PurgeGuard, o3tl::default_delete<PurgeGuard>> xGuard(new PurgeGuard(*pOutDoc));
 
     pOutDoc->SetInWriting(true);
-    ErrCode nError = ERRCODE_NONE;
+    ErrCodeMsg nError = ERRCODE_NONE;
     if( m_pMedium )
         nError = rxWriter->Write( *pPam, *m_pMedium, pRealFileName );
     else if( m_pStrm )

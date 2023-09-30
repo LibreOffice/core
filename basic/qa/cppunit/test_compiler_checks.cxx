@@ -21,7 +21,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testRedefineArgument)
                         "End Sub\n");
     aMacro.Compile();
     CPPUNIT_ASSERT(aMacro.HasError());
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().StripDynamic());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().GetCode());
 }
 
 CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testDoubleArgument)
@@ -30,7 +30,7 @@ CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testDoubleArgument)
                         "End Sub\n");
     aMacro.Compile();
     CPPUNIT_ASSERT(aMacro.HasError());
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().StripDynamic());
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_BASIC_VAR_DEFINED, aMacro.getError().GetCode());
 }
 
 CPPUNIT_TEST_FIXTURE(CppUnit::TestFixture, testTdf149157)

@@ -39,20 +39,20 @@ namespace com::sun::star {
 
 class SwXMLWriter : public StgWriter
 {
-    ErrCode Write_(const SfxItemSet* pMediumItemSet);
+    ErrCodeMsg Write_(const SfxItemSet* pMediumItemSet);
 
     using StgWriter::Write;
 
 protected:
-    virtual ErrCode WriteStorage() override;
-    virtual ErrCode WriteMedium( SfxMedium& aTargetMedium ) override;
+    virtual ErrCodeMsg WriteStorage() override;
+    virtual ErrCodeMsg WriteMedium( SfxMedium& aTargetMedium ) override;
 
 public:
 
     SwXMLWriter( const OUString& rBaseURL );
     virtual ~SwXMLWriter() override;
 
-    virtual ErrCode Write( SwPaM&, SfxMedium&, const OUString* ) override;
+    virtual ErrCodeMsg Write( SwPaM&, SfxMedium&, const OUString* ) override;
 
 private:
 

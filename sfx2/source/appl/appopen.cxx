@@ -287,7 +287,7 @@ ErrCode CheckPasswd_Impl
 }
 
 
-ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, std::unique_ptr<SfxItemSet> pSet )
+ErrCodeMsg SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, std::unique_ptr<SfxItemSet> pSet )
 {
     std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
@@ -348,7 +348,7 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
         SfxMedium *pMedium = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );
         if(!xDoc->DoLoad(pMedium))
         {
-            ErrCode nErrCode = xDoc->GetErrorCode();
+            ErrCodeMsg nErrCode = xDoc->GetErrorCode();
             xDoc->DoClose();
             xDoc.Clear();
             return nErrCode;

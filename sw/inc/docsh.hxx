@@ -289,7 +289,7 @@ public:
 
     void ToggleLayoutMode(SwView* pView);
 
-    ErrCode LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall);
+    ErrCodeMsg LoadStylesFromFile(const OUString& rURL, SwgReaderOption& rOpt, bool bUnoCall);
     void InvalidateModel();
     void ReactivateModel();
 

@@ -1361,13 +1361,13 @@ DocumentMetadataAccess::storeMetadataToMedium(
     const bool bOk = aMedium.Commit();
     aMedium.Close();
     if ( !bOk ) {
-        ErrCode nError = aMedium.GetErrorIgnoreWarning();
+        ErrCodeMsg nError = aMedium.GetErrorIgnoreWarning();
         if ( nError == ERRCODE_NONE ) {
             nError = ERRCODE_IO_GENERAL;
         }
         task::ErrorCodeIOException ex(
             "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toString(),
-            uno::Reference< uno::XInterface >(), sal_uInt32(nError));
+            uno::Reference< uno::XInterface >(), sal_uInt32(nError.GetCode()));
         throw lang::WrappedTargetException(OUString(), *this,
                 uno::Any(ex));
     }

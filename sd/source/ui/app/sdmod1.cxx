@@ -421,7 +421,7 @@ SfxFrame* SdModule::CreateFromTemplate(const OUString& rTemplatePath, const Refe
     std::unique_ptr<SfxItemSet> pSet(new SfxAllItemSet( SfxGetpApp()->GetPool() ));
     pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
 
-    ErrCode lErr = SfxGetpApp()->LoadTemplate( xDocShell, rTemplatePath, std::move(pSet) );
+    ErrCodeMsg lErr = SfxGetpApp()->LoadTemplate( xDocShell, rTemplatePath, std::move(pSet) );
 
     SfxObjectShell* pDocShell = xDocShell;
 

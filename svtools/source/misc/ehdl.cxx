@@ -151,7 +151,7 @@ SfxErrorHandler::~SfxErrorHandler()
 {
 }
 
-bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
+bool SfxErrorHandler::CreateString(const ErrCodeMsg& nErr, OUString &rStr) const
 
 /*  [Description]
 
@@ -160,25 +160,15 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     */
 
 {
-    ErrCode nErrCode(sal_uInt32(pErr->GetErrorCode()) & ERRCODE_ERROR_MASK);
-    if (pErr->GetErrorCode().GetArea() < lStart || lEnd < pErr->GetErrorCode().GetArea())
+    ErrCode nErrCode(sal_uInt32(nErr.GetCode()) & ERRCODE_ERROR_MASK);
+    if (nErr.GetCode().GetArea() < lStart || lEnd < nErr.GetCode().GetArea())
         return false;
     if(GetErrorString(nErrCode, rStr))
     {
-        const StringErrorInfo *pStringInfo = dynamic_cast<const StringErrorInfo *>(pErr);
-        if(pStringInfo)
-        {
-            rStr = rStr.replaceAll("$(ARG1)", pStringInfo->GetErrorString());
-        }
-        else
-        {
-            const TwoStringErrorInfo * pTwoStringInfo = dynamic_cast<const TwoStringErrorInfo* >(pErr);
-            if (pTwoStringInfo)
-            {
-                rStr = rStr.replaceAll("$(ARG1)", pTwoStringInfo->GetArg1());
-                rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
-            }
-        }
+        if(!nErr.GetArg1().isEmpty())
+            rStr = rStr.replaceAll("$(ARG1)", nErr.GetArg1());
+        if(!nErr.GetArg2().isEmpty())
+            rStr = rStr.replaceAll("$(ARG2)", nErr.GetArg2());
         return true;
     }
     return false;
@@ -219,7 +209,7 @@ bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
     for (const ErrMsgCode* pItem = pIds; pItem->second; ++pItem)
     {
-        if (pItem->second.StripWarningAndDynamic() == lErrId.StripWarningAndDynamic())
+        if (pItem->second.StripWarning() == lErrId.StripWarning())
         {
             rStr = rStr.replaceAll("$(ERROR)", Translate::get(pItem->first, aResLocale));
             bRet = true;
@@ -258,7 +248,7 @@ SfxErrorContext::SfxErrorContext(
         pIds = RID_ERRCTX;
 }
 
-bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
+bool SfxErrorContext::GetString(const ErrCodeMsg& nErr, OUString &rStr)
 
 /*  [Description]
 
@@ -282,7 +272,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
 
     if ( bRet )
     {
-        sal_uInt16 nId = nErrId.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
+        sal_uInt16 nId = nErr.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
         for (const ErrMsgCode* pItem = RID_ERRCTX; pItem->second; ++pItem)
         {
             if (sal_uInt32(pItem->second) == nId)
@@ -294,7 +284,7 @@ bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
     }
 
     if (bRet)
-        if (auto it = m_extMessages.find(sal_uInt32(nErrId)); it != m_extMessages.end())
+        if (auto it = m_extMessages.find(sal_uInt32(nErr.GetCode())); it != m_extMessages.end())
             rStr += "\n" + it->second;
 
     return bRet;

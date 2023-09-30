@@ -79,7 +79,7 @@ SwXMLWriter::~SwXMLWriter()
 {
 }
 
-ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
+ErrCodeMsg SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
 {
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
     OUString aDocHierarchicalName;
@@ -445,14 +445,14 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     if( bErr )
     {
         if( !sErrFile.isEmpty() )
-            return *new StringErrorInfo( ERR_WRITE_ERROR_FILE, sErrFile,
+            return ErrCodeMsg( ERR_WRITE_ERROR_FILE, sErrFile,
                                          DialogMask::ButtonsOk | DialogMask::MessageError );
         return ERR_SWG_WRITE_ERROR;
     }
     else if( bWarn )
     {
         if( !sWarnFile.isEmpty() )
-            return *new StringErrorInfo( WARN_WRITE_ERROR_FILE, sWarnFile,
+            return ErrCodeMsg( WARN_WRITE_ERROR_FILE, sWarnFile,
                                          DialogMask::ButtonsOk | DialogMask::MessageError );
         return WARN_SWG_FEATURES_LOST;
     }
@@ -460,17 +460,17 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     return ERRCODE_NONE;
 }
 
-ErrCode SwXMLWriter::WriteStorage()
+ErrCodeMsg SwXMLWriter::WriteStorage()
 {
     return Write_(nullptr);
 }
 
-ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+ErrCodeMsg SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     return Write_(&aTargetMedium.GetItemSet());
 }
 
-ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+ErrCodeMsg SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const OUString* pFileName )
 {
     return IsStgWriter()

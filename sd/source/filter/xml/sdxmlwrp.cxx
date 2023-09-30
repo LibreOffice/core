@@ -166,7 +166,7 @@ SdXMLFilter::~SdXMLFilter()
 namespace
 {
 
-ErrCode ReadThroughComponent(
+ErrCodeMsg ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
     const OUString& rStreamName,
@@ -259,7 +259,7 @@ ErrCode ReadThroughComponent(
 
         if (!rStreamName.isEmpty())
         {
-            return *new TwoStringErrorInfo(
+            return ErrCodeMsg(
                             (bMustBeSuccessful ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
@@ -268,7 +268,7 @@ ErrCode ReadThroughComponent(
         else
         {
             DBG_ASSERT( bMustBeSuccessful, "Warnings are not supported" );
-            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+            return ErrCodeMsg( ERR_FORMAT_ROWCOL, sErr,
                              DialogMask::ButtonsOk | DialogMask::MessageError );
         }
     }
@@ -305,7 +305,7 @@ ErrCode ReadThroughComponent(
     return ERRCODE_NONE;
 }
 
-ErrCode ReadThroughComponent(
+ErrCodeMsg ReadThroughComponent(
     const uno::Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const char* pStreamName,
@@ -442,7 +442,7 @@ static void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
 
 bool SdXMLFilter::Import( ErrCode& nError )
 {
-    ErrCode nRet = ERRCODE_NONE;
+    ErrCodeMsg nRet = ERRCODE_NONE;
 
     // Get service factory
     Reference< uno::XComponentContext > rxContext =
@@ -591,8 +591,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
         XML_SERVICES const * pServices = getServices( true, IsDraw(), mnStoreVer );
 
-        ErrCode nWarn = ERRCODE_NONE;
-        ErrCode nWarn2 = ERRCODE_NONE;
+        ErrCodeMsg nWarn = ERRCODE_NONE;
+        ErrCodeMsg nWarn2 = ERRCODE_NONE;
         // read storage streams
         // #i103539#: always read meta.xml for generator
         nWarn = ReadThroughComponent(
@@ -646,7 +646,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( nRet == ERRCODE_NONE )
         pDoc->UpdateAllLinks();
 
-    if( nRet.anyOf( ERRCODE_NONE, SD_XML_READERROR ) )
+    if( nRet == ERRCODE_NONE || nRet == SD_XML_READERROR )
         ;
     else if( nRet == ERRCODE_IO_BROKENPACKAGE && xStorage.is() )
         nError = ERRCODE_IO_BROKENPACKAGE;

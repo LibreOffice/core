@@ -54,10 +54,10 @@ OString ExportPaMToHTML(SwPaM* pCursor)
     {
         SvMemoryStream aMemoryStream;
         SwWriter aWriter(aMemoryStream, *pCursor);
-        ErrCode nError = aWriter.Write(xWrt);
+        ErrCodeMsg nError = aWriter.Write(xWrt);
         if (nError.IsError())
         {
-            SAL_WARN("sw.ui", "ExportPaMToHTML: failed to export selection to HTML");
+            SAL_WARN("sw.ui", "ExportPaMToHTML: failed to export selection to HTML " << nError);
             return {};
         }
         aResult

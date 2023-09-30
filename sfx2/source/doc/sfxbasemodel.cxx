@@ -1697,7 +1697,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
     pParams.reset();
 
-    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ? m_pData->m_pObjectShell->GetErrorIgnoreWarning()
+    ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ? m_pData->m_pObjectShell->GetErrorIgnoreWarning()
                                                            : ERRCODE_IO_CANTWRITE;
     m_pData->m_pObjectShell->ResetError();
 
@@ -1714,7 +1714,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
         throw task::ErrorCodeIOException(
             "SfxBaseModel::storeSelf: " + nErrCode.toString(),
-            Reference< XInterface >(), sal_uInt32(nErrCode));
+            Reference< XInterface >(), sal_uInt32(nErrCode.GetCode()));
     }
 }
 
@@ -1882,14 +1882,14 @@ void SAL_CALL SfxBaseModel::initNew()
         throw frame::DoubleInitializationException();
 
     bool bRes = m_pData->m_pObjectShell->DoInitNew();
-    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ?
+    ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ?
                        m_pData->m_pObjectShell->GetErrorIgnoreWarning() : ERRCODE_IO_CANTCREATE;
     m_pData->m_pObjectShell->ResetError();
 
     if ( !bRes )
         throw task::ErrorCodeIOException(
             "SfxBaseModel::initNew: " + nErrCode.toString(),
-            Reference< XInterface >(), sal_uInt32(nErrCode));
+            Reference< XInterface >(), sal_uInt32(nErrCode.GetCode()));
 }
 
 namespace {
@@ -1936,7 +1936,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
     SfxMedium* pMedium = new SfxMedium( seqArguments );
 
-    ErrCode nError = ERRCODE_NONE;
+    ErrCodeMsg nError = ERRCODE_NONE;
     if (!getFilterProvider(*pMedium).isEmpty())
     {
         if (!m_pData->m_pObjectShell->DoLoadExternal(pMedium))
@@ -2793,14 +2793,15 @@ void SfxBaseModel::loadCmisProperties( )
     }
 }
 
-SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
+SfxMedium* SfxBaseModel::handleLoadError( const ErrCodeMsg& rError, SfxMedium* pMedium )
 {
-    if (!nError)
+    if (!rError)
     {
         // No error condition.
         return pMedium;
     }
 
+    ErrCodeMsg nError = rError;
     bool bSilent = false;
     const SfxBoolItem* pSilentItem = pMedium->GetItemSet().GetItem(SID_SILENT, false);
     if( pSilentItem )
@@ -2830,7 +2831,7 @@ SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
             "SfxBaseModel::handleLoadError: 0x" + nError.toString(),
-            Reference< XInterface >(), sal_uInt32(nError));
+            Reference< XInterface >(), sal_uInt32(nError.GetCode()));
     }
     else
         pMedium->SetWarningError(nError);
@@ -3204,7 +3205,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
     pItemSet.reset();
 
-    ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorCode();
+    ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorCode();
     if ( !bRet && !nErrCode )
     {
         SAL_WARN("sfx.doc", "Storing has failed, no error is set!");
@@ -3223,7 +3224,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
                 task::ErrorCodeRequest aErrorCode;
-                aErrorCode.ErrCode = sal_uInt32(nErrCode);
+                aErrorCode.ErrCode = sal_uInt32(nErrCode.GetCode());
                 SfxMedium::CallApproveHandler( xHandler, Any( aErrorCode ), false );
             }
         }
@@ -3259,7 +3260,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
         aErrCode << nErrCode;
         throw task::ErrorCodeIOException(
             "SfxBaseModel::impl_store <" + sURL + "> failed: " + OUString::fromUtf8(aErrCode.str()),
-            Reference< XInterface >(), sal_uInt32(nErrCode));
+            Reference< XInterface >(), sal_uInt32(nErrCode.GetCode()));
     }
 }
 
@@ -3828,11 +3829,11 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
     {
-        ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
+        ErrCodeMsg nError = m_pData->m_pObjectShell->GetErrorCode();
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
             "SfxBaseModel::loadFromStorage: " + nError.toString(),
-            Reference< XInterface >(), sal_uInt32(nError));
+            Reference< XInterface >(), sal_uInt32(nError.GetCode()));
     }
     loadCmisProperties( );
 }
@@ -3881,7 +3882,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         }
     }
 
-    ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
+    ErrCodeMsg nError = m_pData->m_pObjectShell->GetErrorCode();
     m_pData->m_pObjectShell->ResetError();
 
     // the warnings are currently not transported
@@ -3890,7 +3891,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         nError = nError ? nError : ERRCODE_IO_GENERAL;
         throw task::ErrorCodeIOException(
             "SfxBaseModel::storeToStorage: " + nError.toString(),
-            Reference< XInterface >(), sal_uInt32(nError));
+            Reference< XInterface >(), sal_uInt32(nError.GetCode()));
     }
 }
 
@@ -3906,11 +3907,11 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
     {
         if ( !m_pData->m_pObjectShell->SwitchPersistence( xStorage ) )
         {
-            ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
+            ErrCodeMsg nError = m_pData->m_pObjectShell->GetErrorCode();
             nError = nError ? nError : ERRCODE_IO_GENERAL;
             throw task::ErrorCodeIOException(
                 "SfxBaseModel::switchToStorage: " + nError.toString(),
-                Reference< XInterface >(), sal_uInt32(nError));
+                Reference< XInterface >(), sal_uInt32(nError.GetCode()));
         }
         else
         {

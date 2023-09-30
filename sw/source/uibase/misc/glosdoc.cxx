@@ -391,7 +391,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
             m_aInvalidPaths = aInvalidPaths;
             // wrong path, that means AutoText directory doesn't exist
 
-            ErrorHandler::HandleError( *new StringErrorInfo(
+            ErrorHandler::HandleError( ErrCodeMsg(
                                     ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
                                     DialogMask::ButtonsOk | DialogMask::MessageError ) );
             m_bError = true;
@@ -411,8 +411,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 
 void SwGlossaries::ShowError()
 {
-    ErrCode nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
-                                            lcl_makePath(m_aInvalidPaths), DialogMask::ButtonsOk );
+    ErrCodeMsg nPathError(ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths), DialogMask::ButtonsOk );
     ErrorHandler::HandleError( nPathError );
 }
 

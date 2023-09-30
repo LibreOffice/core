@@ -726,7 +726,7 @@ void lcl_getLongVarCharString(
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 
-ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
+ErrCodeMsg ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rFullFileName;
@@ -739,7 +739,7 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
     INetURLObject aDeleteObj( rFullFileName, INetProtocol::File );
     KillFile( aDeleteObj );
 
-    ErrCode nErr = ERRCODE_NONE;
+    ErrCodeMsg nErr = ERRCODE_NONE;
 
     SCCOL nFirstCol, nLastCol;
     SCROW  nFirstRow, nLastRow;
@@ -1060,12 +1060,12 @@ ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding
             }
             OUString sPosition(ScAddress(nDocCol, nDocRow, nTab).GetColRowString());
             OUString sEncoding(SvxTextEncodingTable::GetTextString(eCharSet));
-            nErr = *new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
+            nErr = ErrCodeMsg( (bEncErr ? SCERR_EXPORT_ENCODING :
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
                     DialogMask::ButtonsOk | DialogMask::MessageError);
         }
         else if ( !aException.Message.isEmpty() )
-            nErr = *new StringErrorInfo( SCERR_EXPORT_SQLEXCEPTION, aException.Message, DialogMask::ButtonsOk | DialogMask::MessageError);
+            nErr = ErrCodeMsg( SCERR_EXPORT_SQLEXCEPTION, aException.Message, DialogMask::ButtonsOk | DialogMask::MessageError);
         else
             nErr = SCERR_EXPORT_DATA;
     }

@@ -447,9 +447,9 @@ uno::Reference<security::XCertificate> SfxObjectShell::GetSignPDFCertificate() c
     return uno::Reference<security::XCertificate>(it->second, uno::UNO_QUERY);
 }
 
-static void sendErrorToLOK(ErrCode error)
+static void sendErrorToLOK(ErrCodeMsg error)
 {
-    if (error.GetClass() == ErrCodeClass::NONE)
+    if (error.GetCode().GetClass() == ErrCodeClass::NONE)
         return;
 
     boost::property_tree::ptree aTree;
@@ -457,9 +457,8 @@ static void sendErrorToLOK(ErrCode error)
     aTree.put("kind", "");
     aTree.put("cmd", "");
 
-    std::unique_ptr<ErrorInfo> pInfo = ErrorInfo::GetErrorInfo(error);
     OUString aErr;
-    if (ErrorStringFactory::CreateString(pInfo.get(), aErr))
+    if (ErrorStringFactory::CreateString(error, aErr))
         aTree.put("message", aErr.toUtf8());
 
     std::stringstream aStream;
@@ -937,7 +936,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // at the end of the method
             aModelGuard.Init_Impl( uno::Reference< util::XCloseable >( GetModel(), uno::UNO_QUERY ) );
 
-            ErrCode nErrorCode = ERRCODE_NONE;
+            ErrCodeMsg nErrorCode = ERRCODE_NONE;
 
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be set accordingly
@@ -1120,7 +1119,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be reset to guarantee this
             pImpl->bPreserveVersions = true;
-            ErrCode lErr=GetErrorCode();
+            ErrCodeMsg lErr=GetErrorCode();
 
             if ( !lErr && nErrorCode )
                 lErr = nErrorCode;
@@ -1309,7 +1308,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             SetModified( false );
-            ErrCode lErr = GetErrorCode();
+            ErrCodeMsg lErr = GetErrorCode();
 
             if (comphelper::LibreOfficeKit::isActive())
                 sendErrorToLOK(lErr);

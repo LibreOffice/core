@@ -23,7 +23,7 @@ class MacroSnippet
 {
 private:
     bool mbError;
-    ErrCode maErrCode;
+    ErrCodeMsg maErrCode;
     BasicDLL maDll; // we need a dll instance for resource manager etc.
     SbModuleRef mpMod;
     StarBASICRef mpBasic;
@@ -46,7 +46,7 @@ public:
     DECL_LINK(BasicErrorHdl, StarBASIC*, bool);
 
     bool HasError() const;
-    const ErrCode& getError() const;
+    const ErrCodeMsg& getError() const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

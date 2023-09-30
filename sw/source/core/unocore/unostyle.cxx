@@ -962,7 +962,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 
         }
     }
-    const ErrCode nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
+    const ErrCodeMsg nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
     if(nErr)
         throw io::IOException();
 }

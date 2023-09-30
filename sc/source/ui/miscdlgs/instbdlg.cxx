@@ -325,7 +325,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
                 pDocShTables->DoLoad(pMed.release());
             }
 
-            ErrCode nErr = pDocShTables->GetErrorCode();
+            ErrCodeMsg nErr = pDocShTables->GetErrorCode();
             if ( nErr )
                 ErrorHandler::HandleError(nErr, m_xDialog.get()); // warnings, too
 

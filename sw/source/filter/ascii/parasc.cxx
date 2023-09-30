@@ -78,7 +78,7 @@ public:
 }
 
 // Call for the general reader interface
-ErrCode AsciiReader::Read( SwDoc& rDoc, const OUString&, SwPaM &rPam, const OUString & )
+ErrCodeMsg AsciiReader::Read( SwDoc& rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
     if( !m_pStream )
     {
