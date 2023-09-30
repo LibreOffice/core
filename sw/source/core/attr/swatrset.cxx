@@ -353,7 +353,7 @@ bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
     // 'm_bShareable' at the Item (see where that gets set).
     // This was done in the past using the 'poolable' flag, but that
     // flag was/is for a completely different purpose - uniqueness is
-    // a side-effect. It already leaded to massively cloning that Item.
+    // a side-effect. It already led to massively cloning that Item.
     // That something is not 'clean' here can also be seen by using
     // const_cast to *change* values at Items *in* the Set - these
     // are returned by const reference for a purpose.
