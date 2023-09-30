@@ -30,6 +30,7 @@ import java.net.ProtocolException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -260,7 +261,7 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
             return;
         }
 
-        byte[] messageBytes = messageParts[1].getBytes();
+        byte[] messageBytes = messageParts[1].getBytes(StandardCharsets.UTF_8);
 
         try {
             _inputStreamWriter.write(messageBytes);
