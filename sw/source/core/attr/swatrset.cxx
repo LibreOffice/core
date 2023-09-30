@@ -337,7 +337,7 @@ bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
 {
     bool bSet = false;
 
-    // ITEM: At ths place the paradigm of Item/Set/Pool gets broken:
+    // ITEM: At this place the paradigm of Item/Set/Pool gets broken:
     // The three Items in Writer
     // - SwFormatPageDesc
     // - SwFormatDrop
