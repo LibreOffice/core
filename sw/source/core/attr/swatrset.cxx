@@ -322,7 +322,7 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
     SfxItemSet::Intersect( rSet );
     clearCallback();
     m_pOldSet = m_pNewSet = nullptr;
-    return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
+    return pNew ? pNew->Count() : pOld->Count();
 }
 
 /** special treatment for some attributes
