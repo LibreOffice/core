@@ -1,15 +1,15 @@
---- Configurations/10-main.conf.sav	2021-08-24 13:38:47.000000000 +0000
-+++ Configurations/10-main.conf	2021-11-02 22:20:44.377653700 +0000
-@@ -13,7 +13,7 @@
+--- Configurations/10-main.conf.sav	2023-09-19 22:02:31.000000000 +0900
++++ Configurations/10-main.conf	2023-09-30 23:47:49.734377000 +0900
+@@ -14,7 +14,7 @@
          } elsif ($disabled{asm}) {
              # assembler is still used to compile uplink shim
              $vc_win64a_info = { AS        => "ml64",
 -                                ASFLAGS   => "/nologo /Zi",
 +                                ASFLAGS   => "/nologo $$(DEBUG_FLAGS_VALUE)",
                                  asflags   => "/c /Cp /Cx",
-                                 asoutflag => "/Fo" };
-         } else {
-@@ -41,7 +41,7 @@
+                                 asoutflag => "/Fo",
+                                 perlasm_scheme => "masm" };
+@@ -44,7 +44,7 @@
          } elsif ($disabled{asm}) {
              # not actually used, uplink shim is inlined into C code
              $vc_win32_info = { AS        => "ml",
@@ -18,7 +18,7 @@
                                 asflags   => "/Cp /coff /c /Cx",
                                 asoutflag => "/Fo",
                                 perlasm_scheme => "win32" };
-@@ -1323,10 +1323,10 @@
+@@ -1333,10 +1333,10 @@
                                  "UNICODE", "_UNICODE",
                                  "_CRT_SECURE_NO_DEPRECATE",
                                  "_WINSOCK_DEPRECATED_NO_WARNINGS"),
