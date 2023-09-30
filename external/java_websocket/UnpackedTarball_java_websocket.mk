@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,java_websocket,1))
 $(eval $(call gb_UnpackedTarball_add_patches,java_websocket,\
 	external/java_websocket/patches/ant-build.patch \
 	external/java_websocket/patches/no-slf4j.patch \
+	external/java_websocket/patches/0001-cid-1546192-SIC-Inner-class-could-be-made-static.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
