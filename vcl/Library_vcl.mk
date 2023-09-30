@@ -714,6 +714,7 @@ $(eval $(call gb_Library_add_objcxxobjects,vcl,\
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     Cocoa \
     CoreFoundation \
+    Metal \
 ))
 endif
 

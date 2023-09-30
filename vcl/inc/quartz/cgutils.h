@@ -31,4 +31,8 @@ CGImageRef VCL_DLLPUBLIC CreateWithSalBitmapAndMask(const SalBitmap& rBitmap,
                                                     const SalBitmap& rMask, int nX, int nY,
                                                     int nWidth, int nHeight);
 
+#ifdef MACOSX
+bool VCL_DLLPUBLIC DefaultMTLDeviceIsSupported();
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
