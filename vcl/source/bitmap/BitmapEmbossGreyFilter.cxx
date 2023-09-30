@@ -50,7 +50,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
     const sal_Int32 nLx = FRound(cos(fAzim) * cos(fElev) * 255.0);
     const sal_Int32 nLy = FRound(sin(fAzim) * cos(fElev) * 255.0);
     const sal_Int32 nLz = FRound(sin(fElev) * 255.0);
-    const auto nZ2 = ((6 * 255) / 4) * ((6 * 255) / 4);
+    const auto nZ2 = (6 * 255) / 4;
     const sal_Int32 nNzLz = ((6 * 255) / 4) * nLz;
     const sal_uInt8 cLz = static_cast<sal_uInt8>(std::clamp(nLz, sal_Int32(0), sal_Int32(255)));
 
@@ -101,7 +101,7 @@ BitmapEx BitmapEmbossGreyFilter::execute(BitmapEx const& rBitmapEx) const
             }
             else
             {
-                const double fGrey = nDotL / sqrt(static_cast<double>(nNx * nNx + nNy * nNy + nZ2));
+                const double fGrey = nDotL / std::hypot(nNx, nNy, nZ2);
                 aGrey.SetIndex(static_cast<sal_uInt8>(std::clamp(fGrey, 0.0, 255.0)));
             }
 
