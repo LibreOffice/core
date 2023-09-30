@@ -201,11 +201,9 @@ public class WebsocketConnection extends WebSocketClient implements XConnection,
     public void flush() throws com.sun.star.io.IOException,
         com.sun.star.uno.RuntimeException {
 
-        byte[] accumulatedBytes;
-        synchronized (_outputStream) {
-            accumulatedBytes = _outputStream.toByteArray();
-            _outputStream.reset();
-        }
+        byte[] accumulatedBytes = _outputStream.toByteArray();
+        _outputStream.reset();
+
         byte[] outputBytes = new byte[accumulatedBytes.length + outgoingPrefix.length];
         System.arraycopy(outgoingPrefix, 0, outputBytes, 0, outgoingPrefix.length);
         System.arraycopy(accumulatedBytes, 0, outputBytes, outgoingPrefix.length, accumulatedBytes.length);
