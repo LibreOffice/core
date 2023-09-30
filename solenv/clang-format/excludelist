@@ -14764,7 +14764,6 @@ vcl/source/gdi/salgdilayout.cxx
 vcl/source/gdi/sallayout.cxx
 vcl/source/gdi/salmisc.cxx
 vcl/source/gdi/scrptrun.cxx
-vcl/source/gdi/textlayout.cxx
 vcl/source/gdi/vectorgraphicdata.cxx
 vcl/source/gdi/virdev.cxx
 vcl/source/gdi/wall.cxx
@@ -14817,6 +14816,7 @@ vcl/source/outdev/transparent.cxx
 vcl/source/outdev/vclreferencebase.cxx
 vcl/source/outdev/wallpaper.cxx
 vcl/source/text/ImplLayoutRuns.cxx
+vcl/source/text/textlayout.cxx
 vcl/source/toolkit/group.cxx
 vcl/source/toolkit/morebtn.cxx
 vcl/source/treelist/headbar.cxx

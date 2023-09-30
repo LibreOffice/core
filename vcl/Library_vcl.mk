@@ -244,6 +244,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/outdev/map \
     vcl/source/text/ImplLayoutArgs \
     vcl/source/text/TextLayoutCache \
+    vcl/source/text/textlayout \
     vcl/source/treelist/headbar \
     vcl/source/treelist/iconview \
     vcl/source/treelist/iconviewimpl \
@@ -303,7 +304,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/sallayout \
     vcl/source/gdi/salmisc \
     vcl/source/gdi/vectorgraphicdata \
-    vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
     vcl/source/gdi/scrptrun \
