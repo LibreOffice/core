@@ -54,6 +54,12 @@ bool isAlphaMaskBlendingEnabled() { return false; }
 #include <tools/sk_app/MetalWindowContext.h>
 #include <fstream>
 
+#ifdef SK_METAL
+#ifdef MACOSX
+#include <quartz/cgutils.h>
+#endif
+#endif
+
 namespace SkiaHelper
 {
 static OUString getCacheFolder()
@@ -245,10 +251,19 @@ static void checkDeviceDenylisted(bool blockDisable = false)
             }
             if (grDirectContext) // Metal was initialized properly
             {
-                // Try to assume Metal always works, given that Mac doesn't have such as wide range of HW vendors as PC.
-                // If there turns out to be problems, handle it similarly to Vulkan.
-                SAL_INFO("vcl.skia", "Using Skia Metal mode");
-                writeSkiaMetalInfo();
+#ifdef MACOSX
+                if (!blockDisable && !DefaultMTLDeviceIsSupported())
+                {
+                    SAL_INFO("vcl.skia", "Metal default device not supported");
+                    disableRenderMethod(RenderMetal);
+                    useRaster = true;
+                }
+                else
+#endif
+                {
+                    SAL_INFO("vcl.skia", "Using Skia Metal mode");
+                    writeSkiaMetalInfo();
+                }
             }
             else
             {

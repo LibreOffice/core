@@ -26,6 +26,12 @@
 #include <ios/iosinst.hxx>
 #endif
 
+#ifdef MACOSX
+#include <premac.h>
+#include <Metal/Metal.h>
+#include <postmac.h>
+#endif
+
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {
     std::free( const_cast<void*>(data) );
@@ -73,5 +79,42 @@ CGImageRef CreateWithSalBitmapAndMask( const SalBitmap& rBitmap, const SalBitmap
     CFRelease( xImage );
     return xMaskedImage;
 }
+
+#ifdef MACOSX
+
+bool DefaultMTLDeviceIsSupported()
+{
+    id<MTLDevice> pMetalDevice = MTLCreateSystemDefaultDevice();
+    if (!pMetalDevice || !pMetalDevice.name)
+    {
+        SAL_WARN("vcl.skia", "MTLCreateSystemDefaultDevice() returned nil");
+        return false;
+    }
+
+    SAL_WARN("vcl.skia", "Default MTLDevice is \"" << [pMetalDevice.name UTF8String] << "\"");
+
+    bool bRet = true;
+
+    // tdf#156881 Disable Metal with AMD Radeon Pro 5XXX GPUs on macOS Catalina
+    // When running macOS Catalina on a 2019 MacBook Pro, unexpected drawing
+    // artifacts are drawn so disable Metal for the AMD Radeon Pro GPUs listed
+    // for that model in https://support.apple.com/kb/SP809.
+    if (@available(macOS 11, *))
+    {
+        // No known problems with macOS Big Sur or later
+    }
+    else
+    {
+       static NSString* pAMDRadeonPro5300Prefix = @"AMD Radeon Pro 5300M";
+       static NSString* pAMDRadeonPro5500Prefix = @"AMD Radeon Pro 5500M";
+       if ([pMetalDevice.name hasPrefix:pAMDRadeonPro5300Prefix] || [pMetalDevice.name hasPrefix:pAMDRadeonPro5500Prefix])
+           bRet = false;
+    }
+
+    [pMetalDevice release];
+    return bRet;
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
