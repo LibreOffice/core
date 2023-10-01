@@ -141,7 +141,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
     AddTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGN_PARAGRAPH ), nullptr );
     AddTabPage( "RID_SVXPAGE_BKG", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BKG ), nullptr);
 
-    if( !SvtCJKOptions::IsAsianTypographyEnabled() )
+    if (!SvtCJKOptions::IsAsianTypographyEnabled() || bBackground)
         RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
 
     if (bBackground)
@@ -160,7 +160,6 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg(SfxObjectShell const * pDocSh,
         RemoveTabPage( "RID_SVXPAGE_NUM_OPTIONS");
         RemoveTabPage( "RID_SVXPAGE_TABULATOR");
         RemoveTabPage( "RID_SVXPAGE_ALIGN_PARAGRAPH");
-        RemoveTabPage( "RID_SVXPAGE_PARA_ASIAN" );
         RemoveTabPage( "RID_SVXPAGE_BKG" );
     }
 
