@@ -24,7 +24,6 @@
 #include <tablemodel.hxx>
 #include "tablecolumn.hxx"
 #include "tableundo.hxx"
-#include <sdr/properties/cellproperties.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdotable.hxx>
 #include <utility>

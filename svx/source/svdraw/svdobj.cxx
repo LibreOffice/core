@@ -21,9 +21,7 @@
 #include <config_features.h>
 
 #include <sal/config.h>
-#include <sal/log.hxx>
 
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
@@ -44,7 +42,6 @@
 #include <math.h>
 #include <svl/grabbagitem.hxx>
 #include <tools/bigint.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <tools/helpers.hxx>
 #include <comphelper/configuration.hxx>
 #include <vcl/canvastools.hxx>
@@ -112,8 +109,6 @@
 #include <svx/svdsob.hxx>
 #include <svdobjplusdata.hxx>
 #include <svdobjuserdatalist.hxx>
-
-#include <unordered_set>
 
 #include <optional>
 #include <libxml/xmlwriter.h>

@@ -34,7 +34,6 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/flditem.hxx>
-#include <svx/obj3d.hxx>
 #include <svx/svddrgmt.hxx>
 #include <svx/svdotable.hxx>
 #include <tools/debug.hxx>

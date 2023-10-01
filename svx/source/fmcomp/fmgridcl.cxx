@@ -70,7 +70,6 @@
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>
-#include <string_view>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;

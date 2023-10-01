@@ -24,7 +24,6 @@
 #include <vcl/window.hxx>
 #include <tools/fract.hxx>
 #include <vcl/cursor.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 
 
 namespace sdr::overlay

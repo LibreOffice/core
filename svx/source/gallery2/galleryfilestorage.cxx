@@ -24,7 +24,6 @@
 #include <galleryfilestorage.hxx>
 #include <svx/galleryobjectcollection.hxx>
 #include <svx/gallery1.hxx>
-#include <osl/thread.hxx>
 #include "codec.hxx"
 #include "gallerydrawmodel.hxx"
 #include <vcl/cvtgrf.hxx>

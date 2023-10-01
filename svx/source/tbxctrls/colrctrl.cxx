@@ -39,7 +39,6 @@
 #include <editeng/colritem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
-#include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <helpids.h>
 #include <vcl/virdev.hxx>

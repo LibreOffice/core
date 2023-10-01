@@ -62,7 +62,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/GraphicLoader.hxx>
 #include <basegfx/range/b2drange.hxx>
-#include <basegfx/utils/gradienttools.hxx>
 #include <svx/svx3ditems.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>

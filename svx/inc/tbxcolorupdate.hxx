@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <sfx2/namedcolor.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
@@ -26,7 +27,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/toolboxid.hxx>
 #include <svl/lstner.hxx>
-#include <svx/Palette.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

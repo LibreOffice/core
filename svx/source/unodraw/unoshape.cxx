@@ -29,7 +29,6 @@
 #include <editeng/unotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
-#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/multiinterfacecontainer4.hxx>
@@ -39,6 +38,7 @@
 #include <svx/sdangitm.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdopage.hxx>
+#include <svx/svx3ditems.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
 #include <svx/xlnstit.hxx>
@@ -78,8 +78,6 @@
 #include "shapeimpl.hxx"
 #include <sal/log.hxx>
 
-#include <svx/lathe3d.hxx>
-#include <extrud3d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <drawinglayer/converters.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SVX_SOURCE_ACCESSIBILITY_CHILDRENMANAGERIMPL_HXX
 #define INCLUDED_SVX_SOURCE_ACCESSIBILITY_CHILDRENMANAGERIMPL_HXX
 
+#include <svx/AccessibleShape.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
@@ -34,8 +35,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
 namespace accessibility {
-
-class AccessibleShape;
 
 class ChildDescriptor; // See below for declaration.
 typedef ::std::vector<ChildDescriptor> ChildDescriptorListType;

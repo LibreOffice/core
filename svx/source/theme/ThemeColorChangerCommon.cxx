@@ -11,15 +11,7 @@
 
 #include <sal/config.h>
 #include <editeng/colritem.hxx>
-#include <editeng/unoprnms.hxx>
-#include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/theme/ColorSet.hxx>
-
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/container/XEnumeration.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/util/XComplexColor.hpp>
 
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>

@@ -19,7 +19,6 @@
 
 
 #include <svx/svdsnpv.hxx>
-#include <math.h>
 
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>

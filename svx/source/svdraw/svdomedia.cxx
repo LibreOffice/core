@@ -29,10 +29,6 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <vcl/svapp.hxx>
 

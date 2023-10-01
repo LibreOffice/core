@@ -27,7 +27,6 @@
 #include <editeng/outlobj.hxx>
 #include <tools/color.hxx>
 #include <sdr/attribute/sdrformtextattribute.hxx>
-#include <tools/weakbase.h>
 #include <svx/sdtaitm.hxx>
 #include <rtl/ref.hxx>
 #include <unotools/weakref.hxx>

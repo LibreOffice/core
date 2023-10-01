@@ -52,7 +52,6 @@
 #include <sal/log.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/configuration.hxx>
-#include <comphelper/string.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

@@ -19,6 +19,7 @@
 
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>

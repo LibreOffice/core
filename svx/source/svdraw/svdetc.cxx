@@ -21,7 +21,9 @@
 
 #include <algorithm>
 
+#if defined _WIN32 && !defined _WIN64
 #include <officecfg/Office/Common.hxx>
+#endif
 #include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdedxv.hxx>
@@ -38,7 +40,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/itempool.hxx>
-#include <unotools/configmgr.hxx>
+#include <comphelper/configuration.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <svx/xflbckit.hxx>

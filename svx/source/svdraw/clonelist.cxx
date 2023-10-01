@@ -23,7 +23,7 @@
 // re-creating the connections for contained connectors
 #include <clonelist.hxx>
 #include <svx/svdoedge.hxx>
-#include <svx/scene3d.hxx>
+#include <svx/svdpage.hxx>
 
 void CloneList::AddPair(const SdrObject* pOriginal, SdrObject* pClone)
 {

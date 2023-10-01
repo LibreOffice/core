@@ -24,8 +24,6 @@
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
-#include <svl/cjkoptions.hxx>
-#include <svl/ctloptions.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <inspectorvalues.hrc>

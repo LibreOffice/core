@@ -21,7 +21,6 @@
 
 #include <math.h>
 #include <vector>
-#include <set>
 #include <unordered_set>
 #include <algorithm>
 #include <o3tl/hash_combine.hxx>

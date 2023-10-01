@@ -29,7 +29,6 @@
 #include <svx/sdrpagewindow.hxx>
 
 #include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

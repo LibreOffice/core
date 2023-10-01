@@ -22,11 +22,11 @@
 
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <editeng/unoipset.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/unopool.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/unoprov.hxx>
 #include <svx/unoshprp.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>

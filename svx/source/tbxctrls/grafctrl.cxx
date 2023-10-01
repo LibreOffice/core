@@ -22,7 +22,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
-#include <vcl/idle.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>

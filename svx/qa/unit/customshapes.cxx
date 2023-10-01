@@ -16,7 +16,6 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <editeng/unoprnms.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -29,7 +28,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/BitmapReadAccess.hxx>
@@ -40,11 +38,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 
 using namespace ::com::sun::star;
 

@@ -33,6 +33,7 @@
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <drawinglayer/geometry/viewinformation3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
+#include <svx/view3d.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <comphelper/lok.hxx>
 

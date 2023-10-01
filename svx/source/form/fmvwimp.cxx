@@ -63,7 +63,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
-#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>

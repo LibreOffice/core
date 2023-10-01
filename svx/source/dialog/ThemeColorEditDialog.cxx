@@ -8,7 +8,6 @@
  */
 
 #include <svx/dialog/ThemeColorEditDialog.hxx>
-#include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
 
 namespace svx

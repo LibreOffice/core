@@ -25,7 +25,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
-#include <o3tl/safeint.hxx>
 #include <svtools/imagemgr.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>

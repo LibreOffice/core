@@ -43,7 +43,6 @@
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdtmfitm.hxx>
 #include <svx/xtextit0.hxx>
-#include <svx/compatflags.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <sdr/contact/viewcontactoftextobj.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>

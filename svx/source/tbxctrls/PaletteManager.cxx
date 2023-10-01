@@ -19,7 +19,6 @@
 
 #include <svx/PaletteManager.hxx>
 
-#include <basegfx/color/bcolortools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -42,8 +41,6 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <docmodel/color/ComplexColor.hxx>
 #include <docmodel/color/ComplexColorJSON.hxx>
-#include <editeng/colritem.hxx>
-#include <editeng/memberids.h>
 
 #include <palettes.hxx>
 

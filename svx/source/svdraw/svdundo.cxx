@@ -30,7 +30,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
-#include <svx/scene3d.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <sdr/properties/itemsettools.hxx>
@@ -41,13 +40,13 @@
 #include <svx/svdviter.hxx>
 #include <svx/svdotable.hxx> // #i124389#
 #include <utility>
-#include <vcl/svapp.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svx/svdoashp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <svx/diagram/datamodel.hxx>
 #include <svx/diagram/IDiagramHelper.hxx>
+#include <tools/debug.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked

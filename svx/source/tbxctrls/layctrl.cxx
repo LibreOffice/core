@@ -29,7 +29,6 @@
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <svtools/colorcfg.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

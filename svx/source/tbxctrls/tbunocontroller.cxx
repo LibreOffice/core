@@ -39,7 +39,6 @@
 #include <svtools/toolboxcontroller.hxx>
 #include <tools/json_writer.hxx>
 #include <vcl/toolbox.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <memory>

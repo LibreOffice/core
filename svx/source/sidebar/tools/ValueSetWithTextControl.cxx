@@ -19,7 +19,6 @@
 #include <svx/sidebar/ValueSetWithTextControl.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>

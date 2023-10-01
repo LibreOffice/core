@@ -34,7 +34,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <tools/fldunit.hxx>
-#include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/sequence.hxx>
 #include <svx/dialmgr.hxx>

@@ -27,7 +27,6 @@
 #include <vcl/customweld.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
-#include <sfx2/objsh.hxx>
 
 #include <officecfg/Office/Common.hxx>
 

@@ -25,7 +25,6 @@
 #if HAVE_FEATURE_DBCONNECTIVITY
 #include <dbcharsethelper.hxx>
 #endif
-#include <unotools/syslocale.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <txenctab.hrc>

@@ -38,7 +38,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/textdata.hxx>
-#include <vcl/unohelp.hxx>
 
 
 // Project-local header

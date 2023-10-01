@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/itemwin.hxx>

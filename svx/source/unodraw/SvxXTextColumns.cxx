@@ -35,7 +35,6 @@
 #include <o3tl/safeint.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/SvxXTextColumns.hxx>
-#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 
 #include <numeric>

@@ -46,7 +46,6 @@
 #include <editeng/colritem.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <bitmaps.hlst>
 

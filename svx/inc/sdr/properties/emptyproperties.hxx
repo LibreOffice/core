@@ -22,8 +22,6 @@
 
 #include <sal/config.h>
 
-#include <optional>
-
 #include <svx/sdr/properties/properties.hxx>
 #include <svl/itemset.hxx>
 

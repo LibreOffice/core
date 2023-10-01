@@ -30,7 +30,6 @@
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
 #include "svddrgm1.hxx"
-#include <svx/obj3d.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

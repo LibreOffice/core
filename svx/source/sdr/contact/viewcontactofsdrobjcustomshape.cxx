@@ -23,7 +23,6 @@
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <svx/obj3d.hxx>
 #include <vcl/canvastools.hxx>
 
 

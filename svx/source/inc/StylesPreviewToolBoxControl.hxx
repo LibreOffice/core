@@ -24,7 +24,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "StylesPreviewWindow.hxx"
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 class StylesPreviewToolBoxControl final
     : public cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>

@@ -11,7 +11,6 @@
 #include <svx/ColorSets.hxx>
 
 #include <optional>
-#include <utility>
 #include <unordered_set>
 #include <docmodel/theme/ColorSet.hxx>
 

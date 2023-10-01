@@ -12,7 +12,6 @@
 #include <docmodel/theme/Theme.hxx>
 #include <svx/ColorSets.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/colorbox.hxx>
 #include <comphelper/lok.hxx>
 
 namespace svx

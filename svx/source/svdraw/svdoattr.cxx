@@ -25,7 +25,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlnwtit.hxx>
-#include <sdr/properties/attributeproperties.hxx>
+#include <svx/sdr/properties/properties.hxx>
 
 using namespace com::sun::star;
 

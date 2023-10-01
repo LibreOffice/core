@@ -19,7 +19,6 @@
 
 #include <svx/svdmodel.hxx>
 #include <cassert>
-#include <math.h>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/lang/XComponent.hpp>

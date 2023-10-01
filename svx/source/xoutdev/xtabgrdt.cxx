@@ -35,7 +35,6 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/utils/gradienttools.hxx>
 #include <memory>
 
 using namespace com::sun::star;

@@ -22,7 +22,6 @@
 
 #include <svx/def3d.hxx>
 #include <svx/svddrgmt.hxx>
-#include <svx/view3d.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 

@@ -23,7 +23,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/vectorgraphicdata.hxx>
 
-#include <math.h>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/wghtitem.hxx>

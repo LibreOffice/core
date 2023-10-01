@@ -23,7 +23,6 @@
 #include <svx/galtheme.hxx>
 #include "galleryfilestorage.hxx"
 #include "gallerystoragelocations.hxx"
-#include "galleryfilestorageentry.hxx"
 
 class GalleryObjectCollection;
 

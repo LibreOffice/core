@@ -8,7 +8,6 @@
  *
  */
 
-#include <memory>
 #include <CommonStylePreviewRenderer.hxx>
 
 #include <sfx2/objsh.hxx>

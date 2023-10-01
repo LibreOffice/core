@@ -1,6 +1,12 @@
 ---
 assumeFilename: svx/source/svdraw/svdobj.cxx
 excludelist:
+    svx/inc/getallcharpropids.hxx:
+    # Actually used
+    - o3tl/span.hxx
+    svx/source/accessibility/AccessibleTextEventQueue.hxx:
+    # Needed for std::for_each
+    - algorithm
     svx/source/accessibility/ChildrenManagerImpl.cxx:
     # Actually used
     - com/sun/star/beans/XPropertySet.hpp
@@ -10,6 +16,12 @@ excludelist:
     svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:
     # Boost wrapper is needed
     - boost/spirit/include/classic_core.hpp
+    svx/source/customshapes/EnhancedCustomShapeEngine.cxx:
+    # Needed for SvxShape
+    - svx/unoshape.hxx
+    svx/source/engine3d/float3d.cxx:
+    # Needed for E3dObject instantiation
+    - svx/obj3d.hxx
     svx/source/dialog/ClassificationCommon.cxx:
     # Actually used
     - com/sun/star/beans/XPropertyContainer.hpp
@@ -19,6 +31,9 @@ excludelist:
     svx/source/dialog/srchdlg.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
+    svx/source/form/fmmodel.cxx:
+    # Actually used
+    - com/sun/star/form/XForms.hpp
     svx/source/fmcomp/dbaobjectex.cxx:
     # Actually used
     - com/sun/star/ucb/XContent.hpp
@@ -29,9 +44,6 @@ excludelist:
     svx/source/fmcomp/gridcell.cxx:
     # Needed to avoid mysterious linking error on WIN32 no-pch
     - toolkit/helper/listenermultiplexer.hxx
-    svx/source/gallery2/gallerybinaryengine.cxx:
-    # Don't propose hxx -> h change in URE libs
-    - osl/thread.hxx
     svx/source/gallery2/galtheme.cxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx

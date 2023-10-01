@@ -34,7 +34,6 @@
 
 #include <AffineMatrixItem.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <svx/obj3d.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdooitm.hxx>

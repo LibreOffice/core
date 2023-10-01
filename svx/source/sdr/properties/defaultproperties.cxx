@@ -25,8 +25,6 @@
 #include <svl/whiter.hxx>
 #include <vector>
 #include <svx/svdobj.hxx>
-#include <svx/svddef.hxx>
-#include <editeng/eeitem.hxx>
 #include <libxml/xmlwriter.h>
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>

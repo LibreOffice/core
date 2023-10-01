@@ -23,7 +23,6 @@
 #include <unordered_set>
 
 #include <svx/svdpage.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 
 #include <o3tl/safeint.hxx>
@@ -31,7 +30,6 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
-#include <comphelper/lok.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svx/svdetc.hxx>
@@ -45,7 +43,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/ColorSets.hxx>
 
 #include <sdr/contact/viewcontactofsdrpage.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>

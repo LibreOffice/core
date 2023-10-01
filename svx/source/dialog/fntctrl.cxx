@@ -27,7 +27,6 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <vector>
-#include <deque>
 #include <optional>
 #include <svtools/colorcfg.hxx>
 #include <svtools/sampletext.hxx>

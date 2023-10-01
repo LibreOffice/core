@@ -17,7 +17,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 
 using namespace ::com::sun::star;
 

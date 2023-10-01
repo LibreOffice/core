@@ -26,7 +26,6 @@
 #include <svl/whiter.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/svddef.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnstit.hxx>

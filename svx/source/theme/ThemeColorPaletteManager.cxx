@@ -11,7 +11,6 @@
 
 #include <basegfx/color/bcolortools.hxx>
 #include <tools/color.hxx>
-#include <unotools/resmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <docmodel/theme/ColorSet.hxx>

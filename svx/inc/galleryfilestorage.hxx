@@ -23,7 +23,6 @@
 #include <svx/svxdllapi.h>
 #include <svx/fmmodel.hxx>
 #include "gallerystoragelocations.hxx"
-#include "galleryfilestorage.hxx"
 #include <tools/urlobj.hxx>
 #include <sot/storage.hxx>
 #include <vcl/salctype.hxx>

@@ -22,7 +22,6 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/unoevent.hxx>

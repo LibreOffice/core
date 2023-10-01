@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
-#include <comphelper/anycompare.hxx>
 #include <comphelper/anytohash.hxx>
 #include <svx/sdasitm.hxx>
 
