@@ -1,0 +1,64 @@
+From 83e8f4ee244e2616032dc0b8b260fda30ca1105b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Sun, 1 Oct 2023 19:52:37 +0100
+Subject: [PATCH] cid#1546264 Dm: Dubious method used
+
+and
+
+cid#1546494 Dm: Dubious method used
+---
+ src/main/java/org/java_websocket/SSLSocketChannel2.java    | 7 ++++---
+ .../java/org/java_websocket/framing/FramedataImpl1.java    | 3 ++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/java/org/java_websocket/SSLSocketChannel2.java b/src/main/java/org/java_websocket/SSLSocketChannel2.java
+index c0ea28e..2d3a279 100644
+--- a/src/main/java/org/java_websocket/SSLSocketChannel2.java
++++ b/src/main/java/org/java_websocket/SSLSocketChannel2.java
+@@ -34,6 +34,7 @@
+ import java.nio.channels.SelectableChannel;
+ import java.nio.channels.SelectionKey;
+ import java.nio.channels.SocketChannel;
++import java.nio.charset.StandardCharsets;
+ import java.util.ArrayList;
+ import java.util.Iterator;
+ import java.util.List;
+@@ -257,12 +258,12 @@
+       }
+     }
+     if (inData.remaining() != 0 && log.isLoggable(Level.FINE)) {
+-      log.fine(new String(inData.array(), inData.position(), inData.remaining()));
++      log.fine(new String(inData.array(), inData.position(), inData.remaining(), StandardCharsets.US_ASCII));
+     }
+     inData.rewind();
+     inData.flip();
+     if (inCrypt.remaining() != 0 && log.isLoggable(Level.FINE)) {
+-      log.fine(new String(inCrypt.array(), inCrypt.position(), inCrypt.remaining()));
++      log.fine(new String(inCrypt.array(), inCrypt.position(), inCrypt.remaining(), StandardCharsets.US_ASCII));
+     }
+     inCrypt.rewind();
+     inCrypt.flip();
+diff --git a/src/main/java/org/java_websocket/framing/FramedataImpl1.java b/src/main/java/org/java_websocket/framing/FramedataImpl1.java
+index fc74f7a..6ff1af2 100644
+--- a/src/main/java/org/java_websocket/framing/FramedataImpl1.java
++++ b/src/main/java/org/java_websocket/framing/FramedataImpl1.java
+@@ -26,6 +26,7 @@
+ package org.java_websocket.framing;
+ 
+ import java.nio.ByteBuffer;
++import java.nio.charset.StandardCharsets;
+ import org.java_websocket.enums.Opcode;
+ import org.java_websocket.exceptions.InvalidDataException;
+ import org.java_websocket.util.ByteBufferUtils;
+@@ -162,7 +163,7 @@ public abstract class FramedataImpl1 implements Framedata {
+         + ", rsv2:" + isRSV2() + ", rsv3:" + isRSV3() + ", payload length:[pos:" + unmaskedpayload
+         .position() + ", len:" + unmaskedpayload.remaining() + "], payload:" + (
+         unmaskedpayload.remaining() > 1000 ? "(too big to display)"
+-            : new String(unmaskedpayload.array())) + '}';
++            : new String(unmaskedpayload.array(), StandardCharsets.US_ASCII)) + '}';
+   }
+ 
+   /**
+-- 
+2.41.0
+
