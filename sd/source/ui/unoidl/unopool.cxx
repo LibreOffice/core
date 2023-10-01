@@ -44,7 +44,7 @@ static LanguageType SdUnoGetLanguage( const lang::Locale& rLocale )
 
 namespace {
 
-class SdUnoDrawPool : public SvxUnoDrawPool
+class SdUnoDrawPool final : public SvxUnoDrawPool
 {
 public:
     explicit SdUnoDrawPool(SdDrawDocument* pModel);

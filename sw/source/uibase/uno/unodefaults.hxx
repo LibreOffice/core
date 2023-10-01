@@ -22,7 +22,7 @@
 
 class SwDoc;
 
-class SwSvxUnoDrawPool : public SvxUnoDrawPool
+class SwSvxUnoDrawPool final : public SvxUnoDrawPool
 {
     SwDoc& m_rDoc;
 
