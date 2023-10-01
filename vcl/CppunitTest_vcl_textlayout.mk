@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_components,vcl_textlayout,\
 	configmgr/source/configmgr \
 	i18npool/util/i18npool \
 	ucb/source/core/ucb1 \
+	linguistic/source/lng \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_textlayout))

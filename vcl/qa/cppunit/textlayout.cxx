@@ -12,6 +12,8 @@
 
 #include <test/bootstrapfixture.hxx>
 
+#include <comphelper/processfactory.hxx>
+
 #include <vcl/unohelp.hxx>
 #include <vcl/virdev.hxx>
 
@@ -28,7 +30,7 @@ public:
 
 #if HAVE_MORE_FONTS
 
-CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLinesWithIterator_invalid_softbreak)
+CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_invalid_softbreak)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(1000, 1000));
@@ -46,9 +48,63 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLinesWithIterator_invalid_softb
 
     const auto nTextLen = 13;
 
-    CPPUNIT_ASSERT_EQUAL(
-        static_cast<sal_Int32>(13),
-        aTextLayout.BreakLinesWithIterator(nTextWidth, sTestStr, xHyph, xBI, false, nTextLen, 15));
+    auto[nBreakPos, nLineWidth]
+        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, false, nTextWidth, nTextLen, 15);
+
+    const sal_Int32 nExpectedBreakPos = 13;
+    CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphens)
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    vcl::DefaultTextLayout aTextLayout(*device);
+
+    const OUString sTestStr = u"textline text-moretext"_ustr;
+    const auto nTextWidth = device->GetTextWidth("textline text-moretex");
+
+    css::uno::Reference<css::uno::XComponentContext> xContext(
+        comphelper::getProcessComponentContext());
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
+        = css::linguistic2::LinguServiceManager::create(xContext);
+
+    css::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
+    css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
+
+    auto[nBreakPos, nLineWidth]
+        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 13, 12);
+
+    const sal_Int32 nExpectedBreakPos = 13;
+    CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphen_word_under_two_chars)
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    vcl::DefaultTextLayout aTextLayout(*device);
+
+    const OUString sTestStr = u"textline text-moretext"_ustr;
+    const auto nTextWidth = device->GetTextWidth("te-moretex");
+
+    css::uno::Reference<css::uno::XComponentContext> xContext(
+        comphelper::getProcessComponentContext());
+    css::uno::Reference<css::linguistic2::XLinguServiceManager2> xLinguMgr
+        = css::linguistic2::LinguServiceManager::create(xContext);
+
+    css::uno::Reference<css::linguistic2::XHyphenator> xHyph = xLinguMgr->getHyphenator();
+    css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
+
+    auto[nBreakPos, nLineWidth]
+        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 2, 10);
+
+    const sal_Int32 nExpectedBreakPos = 2;
+    CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);
 }
 
 #endif
