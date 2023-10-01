@@ -3915,6 +3915,11 @@ const SvxMSDffTextRectangles mso_sptStarTextRect[] =
 {
     { { 6722, 8256 }, { 14878, 15460 } }
 };
+
+const SvxMSDffVertPair mso_sptStarGluePoints[] =
+{
+    { 10800, 0 }, { 0, 8259 }, { 4200, 21600 }, { 17400, 21600 }, { 21600, 8259 }
+};
 const mso_CustomShape msoStar =
 {
     const_cast<SvxMSDffVertPair*>(mso_sptStarVert), SAL_N_ELEMENTS( mso_sptStarVert ),
@@ -3924,7 +3929,7 @@ const mso_CustomShape msoStar =
     const_cast<SvxMSDffTextRectangles*>(mso_sptStarTextRect), SAL_N_ELEMENTS( mso_sptStarTextRect ),
     21600, 21600,
     MIN_INT32, MIN_INT32,
-    nullptr, 0,
+    const_cast<SvxMSDffVertPair*>(mso_sptStarGluePoints), SAL_N_ELEMENTS(mso_sptStarGluePoints),
     nullptr, 0     // handles
 };
 

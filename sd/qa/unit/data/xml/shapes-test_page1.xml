@@ -314,6 +314,7 @@
        <EnhancedCustomShapeSegment command="5" count="0"/>
       </Segments>
      </PropertyValue>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
    <PropertyValue name="AdjustmentValues">
