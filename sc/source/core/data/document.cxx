@@ -6417,6 +6417,12 @@ void ScDocument::ClearPrintRanges( SCTAB nTab )
         maTabs[nTab]->ClearPrintRanges();
 }
 
+void ScDocument::ClearPrintNamedRanges( SCTAB nTab )
+{
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->ClearPrintNamedRanges();
+}
+
 void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])

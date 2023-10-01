@@ -1062,7 +1062,10 @@ void ScViewFunc::SetPrintRanges( bool bEntireSheet, const OUString* pPrint,
         //  print ranges
 
         if( !bAddPrint )
+        {
             rDoc.ClearPrintRanges( nTab );
+            rDoc.ClearPrintNamedRanges(nTab);
+        }
 
         if( bEntireSheet )
         {

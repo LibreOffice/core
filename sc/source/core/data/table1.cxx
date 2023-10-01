@@ -2311,6 +2311,26 @@ void ScTable::ClearPrintRanges()
     InvalidatePageBreaks();     // #i117952# forget page breaks for an old print range
 }
 
+void ScTable::ClearPrintNamedRanges()
+{
+    // tdf#100034 Clearing print ranges also requires to remove all print named ranges
+    // Iterate over all named ranges to determine which are print areas to be removed
+    if (mpRangeName)
+    {
+        std::vector<ScRangeData*> aRangesToRemove;
+        for (auto it = mpRangeName->begin(); it != mpRangeName->end(); it++)
+        {
+            ScRangeData* pData = it->second.get();
+            if (pData->HasType(ScRangeData::Type::PrintArea))
+                aRangesToRemove.push_back(pData);
+        }
+
+        // Effectively remove all named ranges that refer to print ranges
+        for (auto pItem : aRangesToRemove)
+            mpRangeName->erase(*pItem);
+    }
+}
+
 void ScTable::AddPrintRange( const ScRange& rNew )
 {
     bPrintEntireSheet = false;
