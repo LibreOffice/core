@@ -236,6 +236,11 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     std::shared_ptr<weld::MessageDialog> mxPasswordUnusedWarnDialog;
 
+    bool IsReadOnlyProperty(const OUString& rPropertyName) const
+    {
+        return mpParent && mpParent->maConfigItem.IsReadOnly(rPropertyName);
+    }
+
 public:
 
     ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);

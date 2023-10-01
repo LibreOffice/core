@@ -413,7 +413,6 @@ void ImpPDFTabDialog::PageCreated(const OUString& rId, SfxTabPage& rPage)
     }
 }
 
-
 Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 {
     // updating the FilterData sequence and storing FilterData to configuration
@@ -859,10 +858,10 @@ void ImpPDFTabGeneralPage::EnableExportNotesPages()
     if ( mbIsPresentation )
     {
         mxCbExportNotesPages->set_sensitive(
-            !mxRbSelection->get_active() && !mpParent->maConfigItem.IsReadOnly("ExportNotesPages"));
+            !mxRbSelection->get_active() && !IsReadOnlyProperty("ExportNotesPages"));
         mxCbExportOnlyNotesPages->set_sensitive(
             !mxRbSelection->get_active() && mxCbExportNotesPages->get_active()
-            && !mpParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
+            && !IsReadOnlyProperty("ExportOnlyNotesPages"));
     }
 }
 
@@ -873,9 +872,9 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, weld::Toggleabl
     mxFormsFrame->set_sensitive(bExportFormFields);
     if (bExportFormFields)
     {
-        if (mpParent->maConfigItem.IsReadOnly("FormsType"))
+        if (IsReadOnlyProperty("FormsType"))
             mxLbFormsFormat->set_sensitive(false);
-        if (mpParent->maConfigItem.IsReadOnly("AllowDuplicateFieldNames"))
+        if (IsReadOnlyProperty("AllowDuplicateFieldNames"))
             mxCbAllowDuplicateFieldNames->set_sensitive(false);
     }
 }
@@ -884,20 +883,20 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportNotesPagesHdl, weld::Toggleabl
 {
     mxCbExportOnlyNotesPages->set_sensitive(
         mxCbExportNotesPages->get_active()
-        && !mpParent->maConfigItem.IsReadOnly("ExportOnlyNotesPages"));
+        && !IsReadOnlyProperty("ExportOnlyNotesPages"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleCompressionHdl, weld::Toggleable&, void)
 {
     mxQualityFrame->set_sensitive(
-        mxRbJPEGCompression->get_active() && !mpParent->maConfigItem.IsReadOnly("Quality"));
+        mxRbJPEGCompression->get_active() && !IsReadOnlyProperty("Quality"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, weld::Toggleable&, void)
 {
     mxCoReduceImageResolution->set_sensitive(
         mxCbReduceImageResolution->get_active()
-        && !mpParent->maConfigItem.IsReadOnly("MaxImageResolution"));
+        && !IsReadOnlyProperty("MaxImageResolution"));
 }
 
 IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleWatermarkHdl, weld::Toggleable&, void)
@@ -940,9 +939,9 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         pSecPage->ImplPDFASecurityControl(!bIsPDFA);
 
     mxCbTaggedPDF->set_sensitive(
-        !bIsPDFA && !bIsPDFUA && !mpParent->maConfigItem.IsReadOnly("UseTaggedPDF"));
+        !bIsPDFA && !bIsPDFUA && !IsReadOnlyProperty("UseTaggedPDF"));
     mxRbPDFAVersion->set_sensitive(
-        bIsPDFA && !mpParent->maConfigItem.IsReadOnly("SelectPdfVersion"));
+        bIsPDFA && !IsReadOnlyProperty("SelectPdfVersion"));
 
     if (bIsPDFA || bIsPDFUA)
     {
@@ -991,7 +990,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, TogglePDFVersionOrUniversalAccessibilityHa
         mxCbUseReferenceXObject->set_active(mpParent->mbUseReferenceXObjectUserSelection);
     }
     mxCbExportBookmarks->set_sensitive(
-        !bIsPDFUA && !mpParent->maConfigItem.IsReadOnly("ExportBookmarks"));
+        !bIsPDFUA && !IsReadOnlyProperty("ExportBookmarks"));
     mxCbUseReferenceXObject->set_sensitive(!bIsPDFUA);
 
     ImpPDFTabOpnFtrPage *const pOpenPage(mpParent ? mpParent->getOpenPage() : nullptr);
