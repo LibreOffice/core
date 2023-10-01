@@ -1725,8 +1725,8 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf100034)
     createScDoc("xlsx/tdf100034.xlsx");
     ScDocument* pDoc = getScDoc();
 
-    // Clear print ranges
-    pDoc->ClearPrintRanges(0);
+    // Clear print ranges (Format - Print Ranges - Clear)
+    dispatchCommand(mxComponent, ".uno:DeletePrintArea", {});
 
     // Save and load back
     saveAndReload("Calc Office Open XML");
@@ -1734,6 +1734,25 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf100034)
     // Check if the same print ranges are present
     pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), pDoc->GetPrintRangeCount(0));
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testTdf157318)
+{
+    // This document has 2 named ranges; Test1 is global; Test2 is linked to Sheet1)
+    createScDoc("ods/tdf157318.ods");
+    ScDocument* pDoc = getScDoc();
+
+    // Save as XLSX and load back
+    saveAndReload("Calc Office Open XML");
+    pDoc = getScDoc();
+
+    // Check if there is one global named range
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1),
+                         static_cast<sal_uInt16>(pDoc->GetRangeName()->size()));
+
+    // Check if there is one named range in the first sheet
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1),
+                         static_cast<sal_uInt16>(pDoc->GetRangeName(0)->size()));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

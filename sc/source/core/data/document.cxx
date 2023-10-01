@@ -6302,6 +6302,12 @@ void ScDocument::ClearPrintRanges( SCTAB nTab )
         pTable->ClearPrintRanges();
 }
 
+void ScDocument::ClearPrintNamedRanges( SCTAB nTab )
+{
+    if (ScTable* pTable = FetchTable(nTab))
+        pTable->ClearPrintNamedRanges();
+}
+
 void ScDocument::AddPrintRange( SCTAB nTab, const ScRange& rNew )
 {
     if (ScTable* pTable = FetchTable(nTab))

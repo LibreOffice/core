@@ -2118,6 +2118,8 @@ public:
     SC_DLLPUBLIC void            ClearPrintRanges( SCTAB nTab );
     /** Adds a new print ranges. */
     SC_DLLPUBLIC void            AddPrintRange( SCTAB nTab, const ScRange& rNew );
+    // Removes all named ranges used for print ranges in a given tab
+    SC_DLLPUBLIC void            ClearPrintNamedRanges( SCTAB nTab );
     /** Marks the specified sheet to be printed completely. Deletes old print ranges on the sheet! */
     SC_DLLPUBLIC void            SetPrintEntireSheet( SCTAB nTab );
     SC_DLLPUBLIC void            SetRepeatColRange( SCTAB nTab, std::optional<ScRange> oNew );

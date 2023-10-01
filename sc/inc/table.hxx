@@ -833,6 +833,10 @@ public:
     void            ClearPrintRanges();
     /** Adds a new print ranges. */
     void            AddPrintRange( const ScRange& rNew );
+
+    // Removes all named ranges used for print ranges
+    void            ClearPrintNamedRanges();
+
     /** Marks the specified sheet to be printed completely. Deletes old print ranges! */
     void            SetPrintEntireSheet();
 
