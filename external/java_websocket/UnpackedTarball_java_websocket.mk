@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,java_websocket,\
 	external/java_websocket/patches/0002-cid-1545284-UR-Uninitialized-read-of-field-in-constr.patch \
 	external/java_websocket/patches/0001-cid-1546292-DLS-Dead-local-store.patch \
 	external/java_websocket/patches/0001-cid-1545227-Dm-Dubious-method-used.patch \
+	external/java_websocket/patches/0001-cid-1545515-Dm-Dubious-method-used.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
