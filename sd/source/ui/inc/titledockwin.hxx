@@ -76,6 +76,8 @@ namespace sd
         */
         Orientation GetOrientation() const;
 
+        void SetTitle(const OUString& i_rText);
+
     private:
         // Window overridables
         virtual void Paint(vcl::RenderContext& rRenderContext, const ::tools::Rectangle& i_rArea) override;

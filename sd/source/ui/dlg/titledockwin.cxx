@@ -68,6 +68,12 @@ namespace sd
         SfxDockingWindow::dispose();
     }
 
+    void TitledDockingWindow::SetTitle(const OUString& i_rText)
+    {
+        m_sTitle = i_rText;
+        Invalidate();
+    }
+
     void TitledDockingWindow::SetText( const OUString& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );

@@ -71,6 +71,9 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
+#include <titledockwin.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 using namespace com::sun::star;
 
@@ -393,6 +396,16 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
     ConfigureAppBackgroundColor();
 
+    // tdf#87638 - change slide pane title according to the edit mode
+    auto setLeftPaneTitleIfPaneExists
+        = [pViewShell = GetViewFrame()](sal_uInt16 nId, TranslateId aId)
+    {
+        if (auto* pChildWindow = pViewShell->GetChildWindow(nId))
+            if (auto* pTitledDockingWindow
+                = static_cast<TitledDockingWindow*>(pChildWindow->GetWindow()))
+                pTitledDockingWindow->SetTitle(SdResId(aId));
+    };
+
     if (meEditMode == EditMode::Page)
     {
         /******************************************************************
@@ -400,6 +413,10 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         ******************************************************************/
 
         maTabControl->Clear();
+
+        // tdf#87638 - change slide pane title according to the edit mode
+        setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_DRAW, STR_LEFT_PANE_DRAW_TITLE);
+        setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_IMPRESS, STR_LEFT_PANE_IMPRESS_TITLE);
 
         SdPage* pPage;
         sal_uInt16 nPageCnt = GetDoc()->GetSdPageCount(mePageKind);
@@ -430,6 +447,10 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         ******************************************************************/
         GetViewFrame()->SetChildWindow(
             AnimationChildWindow::GetChildWindowId(), false );
+
+        // tdf#87638 - change slide pane title according to the edit mode
+        setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_DRAW, STR_LEFT_PANE_DRAW_TITLE_MASTER);
+        setLeftPaneTitleIfPaneExists(SID_LEFT_PANE_IMPRESS, STR_LEFT_PANE_IMPRESS_TITLE_MASTER);
 
         if (comphelper::LibreOfficeKit::isActive())
             GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED,
