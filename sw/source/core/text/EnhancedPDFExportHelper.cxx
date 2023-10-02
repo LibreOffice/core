@@ -67,6 +67,7 @@
 #include <rowfrm.hxx>
 #include <cellfrm.hxx>
 #include <sectfrm.hxx>
+#include <ftnfrm.hxx>
 #include <flyfrm.hxx>
 #include <notxtfrm.hxx>
 #include "porfld.hxx"
@@ -266,25 +267,29 @@ bool lcl_IsInNonStructEnv( const SwFrame& rFrame )
 }
 
 // Generate key from frame for reopening tags:
-void* lcl_GetKeyFromFrame( const SwFrame& rFrame )
+void const* lcl_GetKeyFromFrame( const SwFrame& rFrame )
 {
-    void* pKey = nullptr;
+    void const* pKey = nullptr;
 
     if ( rFrame.IsPageFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(&(static_cast<const SwPageFrame&>(rFrame).GetFormat()->getIDocumentSettingAccess())));
+        pKey = static_cast<void const *>(&(static_cast<const SwPageFrame&>(rFrame).GetFormat()->getIDocumentSettingAccess()));
     else if ( rFrame.IsTextFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTextFrame&>(rFrame).GetTextNodeFirst()));
+        pKey = static_cast<void const *>(static_cast<const SwTextFrame&>(rFrame).GetTextNodeFirst());
     else if ( rFrame.IsSctFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwSectionFrame&>(rFrame).GetSection()));
+        pKey = static_cast<void const *>(static_cast<const SwSectionFrame&>(rFrame).GetSection());
     else if ( rFrame.IsTabFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTabFrame&>(rFrame).GetTable()));
+        pKey = static_cast<void const *>(static_cast<const SwTabFrame&>(rFrame).GetTable());
     else if ( rFrame.IsRowFrame() )
-        pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwRowFrame&>(rFrame).GetTabLine()));
+        pKey = static_cast<void const *>(static_cast<const SwRowFrame&>(rFrame).GetTabLine());
     else if ( rFrame.IsCellFrame() )
     {
         const SwTabFrame* pTabFrame = rFrame.FindTabFrame();
         const SwTable* pTable = pTabFrame->GetTable();
-        pKey = const_cast<void*>(static_cast<void const *>(& static_cast<const SwCellFrame&>(rFrame).GetTabBox()->FindStartOfRowSpan( *pTable )));
+        pKey = static_cast<void const *>(& static_cast<const SwCellFrame&>(rFrame).GetTabBox()->FindStartOfRowSpan(*pTable));
+    }
+    else if (rFrame.IsFootnoteFrame())
+    {
+        pKey = static_cast<void const*>(static_cast<SwFootnoteFrame const&>(rFrame).GetAttr());
     }
 
     return pKey;
@@ -420,6 +425,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         // - rFrame is a cell frame in a follow flow row (reopen TableData tag)
         if ( ( rFrame.IsPageFrame() && static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
              ( rFrame.IsFlowFrame() && SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() ) ||
+             (rFrame.IsFootnoteFrame() && static_cast<SwFootnoteFrame const&>(rFrame).GetMaster()) ||
              ( rFrame.IsRowFrame() && rFrame.IsInFollowFlowRow() ) ||
              ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetPrevCellLeaf() ) )
         {
@@ -511,6 +517,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
         if ( ( rFrame.IsPageFrame() && !static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
              ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
              ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
+             (rFrame.IsFootnoteFrame() && static_cast<SwFootnoteFrame const&>(rFrame).GetFollow()) ||
              ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
              ( rFrame.IsCellFrame() && const_cast<SwFrame&>(rFrame).GetNextCellLeaf() ) )
         {
