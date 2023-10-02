@@ -105,6 +105,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf155685)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf157131)
+{
+    createSwDoc("tdf157131.docx");
+
+    CPPUNIT_ASSERT_EQUAL(9, getShapes());
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    CPPUNIT_ASSERT_GREATER(9, getShapes());
+    CPPUNIT_ASSERT_GREATER(6, getPages());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(9, getShapes());
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
 {
     createSwDoc("tdf145731.odt");
