@@ -33,11 +33,6 @@ namespace comphelper{
 class UNLESS_MERGELIBS(COMPHELPER_DLLPUBLIC) StillReadWriteInteraction final : public ::ucbhelper::InterceptedInteraction
 {
 private:
-    static const sal_Int32 HANDLE_INTERACTIVEIOEXCEPTION       = 0;
-    static const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
-    static const sal_Int32 HANDLE_AUTHENTICATIONREQUESTEXCEPTION = 2;
-    static const sal_Int32 HANDLE_CERTIFICATEVALIDATIONREQUESTEXCEPTION = 3;
-
     bool m_bUsed;
     bool m_bHandledByMySelf;
 
@@ -45,7 +40,6 @@ public:
     StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
                               css::uno::Reference< css::task::XInteractionHandler > xAuxiliaryHandler);
 
-    void resetInterceptions();
     void resetErrorStates();
     bool wasWriteError() const { return (m_bUsed && m_bHandledByMySelf);}
 

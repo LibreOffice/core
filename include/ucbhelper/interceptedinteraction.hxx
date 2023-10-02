@@ -26,6 +26,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <o3tl/span.hxx>
 
 namespace com::sun::star::task { class XInteractionRequest; }
 
@@ -129,7 +130,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
 
         /** @short  these list contains the requests, which should be intercepted.
          */
-        ::std::vector< InterceptedRequest > m_lInterceptions;
+        o3tl::span< const InterceptedRequest > m_lInterceptions;
 
 
     // native interface
@@ -139,6 +140,17 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
         /** @short  initialize a new instance with default values.
          */
         InterceptedInteraction();
+
+        /** @short  initialise with a list of intercepted interactions.
+
+            @attention  If the interface method handle() will be overwritten by
+                        a derived class, the functionality behind these static list
+                        can't be used.
+
+            @param  lInterceptions
+                    the list of intercepted requests.
+         */
+        InterceptedInteraction(o3tl::span< const InterceptedRequest > m_lInterceptions);
 
 
         /** @short  initialize a new instance with the interaction handler,
@@ -153,18 +165,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
                     be intercepted here.
          */
         void setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler);
-
-
-        /** @short  set a new list of intercepted interactions.
-
-            @attention  If the interface method handle() will be overwritten by
-                        a derived class, the functionality behind these static list
-                        can't be used.
-
-            @param  lInterceptions
-                    the list of intercepted requests.
-         */
-        void setInterceptions(::std::vector< InterceptedRequest >&& lInterceptions);
 
 
         /** @short  extract a requested continuation from the list of available ones.

@@ -27,14 +27,14 @@ InterceptedInteraction::InterceptedInteraction()
 {
 }
 
+InterceptedInteraction::InterceptedInteraction(o3tl::span< const InterceptedRequest > lInterceptions)
+    : m_lInterceptions(lInterceptions)
+{
+}
+
 void InterceptedInteraction::setInterceptedHandler(const css::uno::Reference< css::task::XInteractionHandler >& xInterceptedHandler)
 {
     m_xInterceptedHandler = xInterceptedHandler;
-}
-
-void InterceptedInteraction::setInterceptions(::std::vector< InterceptedRequest >&& lInterceptions)
-{
-    m_lInterceptions = std::move(lInterceptions);
 }
 
 InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
