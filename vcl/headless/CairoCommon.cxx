@@ -775,10 +775,21 @@ void CairoCommon::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, to
     releaseCairoContext(cr, false, extents);
 }
 
+// true if we have a fill color and the line color is the same or non-existant
+static bool onlyFillRect(const std::optional<Color>& rFillColor,
+                         const std::optional<Color>& rLineColor)
+{
+    if (!rFillColor)
+        return false;
+    if (!rLineColor)
+        return true;
+    return *rFillColor == *rLineColor;
+}
+
 void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, bool bAntiAlias)
 {
     // fast path for the common case of simply creating a solid block of color
-    if (m_oFillColor && m_oLineColor && m_oFillColor == m_oLineColor)
+    if (onlyFillRect(m_oFillColor, m_oLineColor))
     {
         double fTransparency = 0;
         // don't bother trying to draw stuff which is effectively invisible
@@ -828,7 +839,7 @@ void CairoCommon::drawRect(double nX, double nY, double nWidth, double nHeight, 
     if (aOrigLineColor)
     {
         // need -1 hack to exclude the bottom and right edges to act like wingdi "Rectangle"
-        // function which is what this was probably the ultimate origin of this behavior
+        // function which is what was probably the ultimate origin of this behavior
         basegfx::B2DPolygon aRect = basegfx::utils::createPolygonFromRect(
             basegfx::B2DRectangle(nX, nY, nX + nWidth - 1, nY + nHeight - 1));
 
