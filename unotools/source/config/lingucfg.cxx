@@ -116,12 +116,10 @@ SvtLinguOptions::SvtLinguOptions()
     , bROIsIgnoreControlCharacters(false)
     , bIsSpellWithDigits(false)
     , bIsSpellUpperCase(false)
-    , bIsSpellCapitalization(true)
     , bIsSpellClosedCompound(true)
     , bIsSpellHyphenatedCompound(true)
     , bROIsSpellWithDigits(false)
     , bROIsSpellUpperCase(false)
-    , bROIsSpellCapitalization(false)
     , bROIsSpellClosedCompound(false)
     , bROIsSpellHyphenatedCompound(false)
     , bIsIgnorePostPositionalWord(true)
@@ -239,33 +237,32 @@ NamesToHdl const aNamesToHdl[] =
 
 {/*  7 */    "SpellChecking/IsSpellUpperCase",                UPN_IS_SPELL_UPPER_CASE,               UPH_IS_SPELL_UPPER_CASE},
 {/*  8 */    "SpellChecking/IsSpellWithDigits",               UPN_IS_SPELL_WITH_DIGITS,              UPH_IS_SPELL_WITH_DIGITS},
-{/*  9 */    "SpellChecking/IsSpellCapitalization",           UPN_IS_SPELL_CAPITALIZATION,           UPH_IS_SPELL_CAPITALIZATION},
-{/* 10 */    "SpellChecking/IsSpellAuto",                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
-{/* 11 */    "SpellChecking/IsSpellSpecial",                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
-{/* 12 */    "SpellChecking/IsSpellClosedCompound",           UPN_IS_SPELL_CLOSED_COMPOUND,          UPH_IS_SPELL_CLOSED_COMPOUND},
-{/* 13 */    "SpellChecking/IsSpellHyphenatedCompound",       UPN_IS_SPELL_HYPHENATED_COMPOUND,      UPH_IS_SPELL_HYPHENATED_COMPOUND},
-{/* 14 */    "SpellChecking/IsReverseDirection",              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
+{/*  9 */    "SpellChecking/IsSpellAuto",                     UPN_IS_SPELL_AUTO,                     UPH_IS_SPELL_AUTO},
+{/* 10 */    "SpellChecking/IsSpellSpecial",                  UPN_IS_SPELL_SPECIAL,                  UPH_IS_SPELL_SPECIAL},
+{/* 11 */    "SpellChecking/IsSpellClosedCompound",           UPN_IS_SPELL_CLOSED_COMPOUND,          UPH_IS_SPELL_CLOSED_COMPOUND},
+{/* 12 */    "SpellChecking/IsSpellHyphenatedCompound",       UPN_IS_SPELL_HYPHENATED_COMPOUND,      UPH_IS_SPELL_HYPHENATED_COMPOUND},
+{/* 13 */    "SpellChecking/IsReverseDirection",              UPN_IS_WRAP_REVERSE,                   UPH_IS_WRAP_REVERSE},
 
-{/* 15 */    "Hyphenation/MinLeading",                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
-{/* 16 */    "Hyphenation/MinTrailing",                       UPN_HYPH_MIN_TRAILING,                 UPH_HYPH_MIN_TRAILING},
-{/* 17 */    "Hyphenation/MinWordLength",                     UPN_HYPH_MIN_WORD_LENGTH,              UPH_HYPH_MIN_WORD_LENGTH},
-{/* 18 */    "Hyphenation/IsHyphSpecial",                     UPN_IS_HYPH_SPECIAL,                   UPH_IS_HYPH_SPECIAL},
-{/* 19 */    "Hyphenation/IsHyphAuto",                        UPN_IS_HYPH_AUTO,                      UPH_IS_HYPH_AUTO},
+{/* 14 */    "Hyphenation/MinLeading",                        UPN_HYPH_MIN_LEADING,                  UPH_HYPH_MIN_LEADING},
+{/* 15 */    "Hyphenation/MinTrailing",                       UPN_HYPH_MIN_TRAILING,                 UPH_HYPH_MIN_TRAILING},
+{/* 16 */    "Hyphenation/MinWordLength",                     UPN_HYPH_MIN_WORD_LENGTH,              UPH_HYPH_MIN_WORD_LENGTH},
+{/* 17*/    "Hyphenation/IsHyphSpecial",                     UPN_IS_HYPH_SPECIAL,                   UPH_IS_HYPH_SPECIAL},
+{/* 18 */    "Hyphenation/IsHyphAuto",                        UPN_IS_HYPH_AUTO,                      UPH_IS_HYPH_AUTO},
 
-{/* 20 */    "TextConversion/ActiveConversionDictionaries",   UPN_ACTIVE_CONVERSION_DICTIONARIES,        UPH_ACTIVE_CONVERSION_DICTIONARIES},
-{/* 21 */    "TextConversion/IsIgnorePostPositionalWord",     UPN_IS_IGNORE_POST_POSITIONAL_WORD,        UPH_IS_IGNORE_POST_POSITIONAL_WORD},
-{/* 22 */    "TextConversion/IsAutoCloseDialog",              UPN_IS_AUTO_CLOSE_DIALOG,                  UPH_IS_AUTO_CLOSE_DIALOG},
-{/* 23 */    "TextConversion/IsShowEntriesRecentlyUsedFirst", UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST,   UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST},
-{/* 24 */    "TextConversion/IsAutoReplaceUniqueEntries",     UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES,        UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES},
-{/* 25 */    "TextConversion/IsDirectionToSimplified",        UPN_IS_DIRECTION_TO_SIMPLIFIED,            UPH_IS_DIRECTION_TO_SIMPLIFIED},
-{/* 26 */    "TextConversion/IsUseCharacterVariants",         UPN_IS_USE_CHARACTER_VARIANTS,             UPH_IS_USE_CHARACTER_VARIANTS},
-{/* 27 */    "TextConversion/IsTranslateCommonTerms",         UPN_IS_TRANSLATE_COMMON_TERMS,             UPH_IS_TRANSLATE_COMMON_TERMS},
-{/* 28 */    "TextConversion/IsReverseMapping",               UPN_IS_REVERSE_MAPPING,                    UPH_IS_REVERSE_MAPPING},
+{/* 19 */    "TextConversion/ActiveConversionDictionaries",   UPN_ACTIVE_CONVERSION_DICTIONARIES,        UPH_ACTIVE_CONVERSION_DICTIONARIES},
+{/* 20 */    "TextConversion/IsIgnorePostPositionalWord",     UPN_IS_IGNORE_POST_POSITIONAL_WORD,        UPH_IS_IGNORE_POST_POSITIONAL_WORD},
+{/* 21 */    "TextConversion/IsAutoCloseDialog",              UPN_IS_AUTO_CLOSE_DIALOG,                  UPH_IS_AUTO_CLOSE_DIALOG},
+{/* 22 */    "TextConversion/IsShowEntriesRecentlyUsedFirst", UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST,   UPH_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST},
+{/* 23 */    "TextConversion/IsAutoReplaceUniqueEntries",     UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES,        UPH_IS_AUTO_REPLACE_UNIQUE_ENTRIES},
+{/* 24 */    "TextConversion/IsDirectionToSimplified",        UPN_IS_DIRECTION_TO_SIMPLIFIED,            UPH_IS_DIRECTION_TO_SIMPLIFIED},
+{/* 25 */    "TextConversion/IsUseCharacterVariants",         UPN_IS_USE_CHARACTER_VARIANTS,             UPH_IS_USE_CHARACTER_VARIANTS},
+{/* 26 */    "TextConversion/IsTranslateCommonTerms",         UPN_IS_TRANSLATE_COMMON_TERMS,             UPH_IS_TRANSLATE_COMMON_TERMS},
+{/* 27 */    "TextConversion/IsReverseMapping",               UPN_IS_REVERSE_MAPPING,                    UPH_IS_REVERSE_MAPPING},
 
-{/* 29 */    "ServiceManager/DataFilesChangedCheckValue",     UPN_DATA_FILES_CHANGED_CHECK_VALUE,        UPH_DATA_FILES_CHANGED_CHECK_VALUE},
+{/* 28 */    "ServiceManager/DataFilesChangedCheckValue",     UPN_DATA_FILES_CHANGED_CHECK_VALUE,        UPH_DATA_FILES_CHANGED_CHECK_VALUE},
 
-{/* 30 */    "GrammarChecking/IsAutoCheck",                   UPN_IS_GRAMMAR_AUTO,                      UPH_IS_GRAMMAR_AUTO},
-{/* 31 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
+{/* 29 */    "GrammarChecking/IsAutoCheck",                   UPN_IS_GRAMMAR_AUTO,                      UPH_IS_GRAMMAR_AUTO},
+{/* 30 */    "GrammarChecking/IsInteractiveCheck",            UPN_IS_GRAMMAR_INTERACTIVE,               UPH_IS_GRAMMAR_INTERACTIVE},
 
             /* similar to entry 0 (thus no own configuration entry) but with different property name and type */
 {            nullptr,                                         UPN_DEFAULT_LANGUAGE,                      UPH_DEFAULT_LANGUAGE},
@@ -353,7 +350,6 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial;  break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse;  break;
         case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage; break;
-        case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;       break;
         case UPH_IS_SPELL_CLOSED_COMPOUND:  pbVal = &rOpt.bIsSpellClosedCompound;       break;
         case UPH_IS_SPELL_HYPHENATED_COMPOUND:  pbVal = &rOpt.bIsSpellHyphenatedCompound;    break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;   break;
@@ -450,7 +446,6 @@ bool SvtLinguConfigItem::SetProperty( sal_Int32 nPropertyHandle, const uno::Any 
         case UPH_IS_SPELL_SPECIAL :         pbVal = &rOpt.bIsSpellSpecial; break;
         case UPH_IS_WRAP_REVERSE :          pbVal = &rOpt.bIsSpellReverse; break;
         case UPH_DEFAULT_LANGUAGE :         plVal = &rOpt.nDefaultLanguage;    break;
-        case UPH_IS_SPELL_CAPITALIZATION :  pbVal = &rOpt.bIsSpellCapitalization;      break;
         case UPH_IS_SPELL_CLOSED_COMPOUND:  pbVal = &rOpt.bIsSpellClosedCompound;      break;
         case UPH_IS_SPELL_HYPHENATED_COMPOUND:  pbVal = &rOpt.bIsSpellHyphenatedCompound;    break;
         case UPH_IS_SPELL_WITH_DIGITS :     pbVal = &rOpt.bIsSpellWithDigits;  break;
@@ -611,8 +606,6 @@ void SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
                     { rOpt.bROIsSpellUpperCase = pROStates[i]; rVal >>= rOpt.bIsSpellUpperCase; } break;
                 case UPH_IS_SPELL_WITH_DIGITS :
                     { rOpt.bROIsSpellWithDigits = pROStates[i]; rVal >>= rOpt.bIsSpellWithDigits;    } break;
-                case UPH_IS_SPELL_CAPITALIZATION :
-                    { rOpt.bROIsSpellCapitalization = pROStates[i]; rVal >>= rOpt.bIsSpellCapitalization;    } break;
                 case UPH_IS_SPELL_CLOSED_COMPOUND :
                     { rOpt.bROIsSpellClosedCompound = pROStates[i]; rVal >>= rOpt.bIsSpellClosedCompound;    } break;
                 case UPH_IS_SPELL_HYPHENATED_COMPOUND :
@@ -719,34 +712,33 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
 
         *pValue++ <<= rOpt.bIsSpellUpperCase;          //   7
         *pValue++ <<= rOpt.bIsSpellWithDigits;         //   8
-        *pValue++ <<= rOpt.bIsSpellCapitalization;     //   9
-        *pValue++ <<= rOpt.bIsSpellAuto;               //  10
-        *pValue++ <<= rOpt.bIsSpellSpecial;            //  11
-        *pValue++ <<= rOpt.bIsSpellClosedCompound;     //  12
-        *pValue++ <<= rOpt.bIsSpellHyphenatedCompound; //  13
-        *pValue++ <<= rOpt.bIsSpellReverse;            //  14
+        *pValue++ <<= rOpt.bIsSpellAuto;               //   9
+        *pValue++ <<= rOpt.bIsSpellSpecial;            //  10
+        *pValue++ <<= rOpt.bIsSpellClosedCompound;     //  11
+        *pValue++ <<= rOpt.bIsSpellHyphenatedCompound; //  12
+        *pValue++ <<= rOpt.bIsSpellReverse;            //  13
 
-        *pValue++ <<= rOpt.nHyphMinLeading;            //  15
-        *pValue++ <<= rOpt.nHyphMinTrailing;           //  16
-        *pValue++ <<= rOpt.nHyphMinWordLength;         //  17
-        *pValue++ <<= rOpt.bIsHyphSpecial;             //  18
-        *pValue++ <<= rOpt.bIsHyphAuto;                //  19
+        *pValue++ <<= rOpt.nHyphMinLeading;            //  14
+        *pValue++ <<= rOpt.nHyphMinTrailing;           //  15
+        *pValue++ <<= rOpt.nHyphMinWordLength;         //  16
+        *pValue++ <<= rOpt.bIsHyphSpecial;             //  17
+        *pValue++ <<= rOpt.bIsHyphAuto;                //  18
 
-        *pValue++ <<= rOpt.aActiveConvDics;               //   20
+        *pValue++ <<= rOpt.aActiveConvDics;               //   19
 
-        *pValue++ <<= rOpt.bIsIgnorePostPositionalWord; //  21
-        *pValue++ <<= rOpt.bIsAutoCloseDialog;          //  22
-        *pValue++ <<= rOpt.bIsShowEntriesRecentlyUsedFirst; //  23
-        *pValue++ <<= rOpt.bIsAutoReplaceUniqueEntries; //  24
+        *pValue++ <<= rOpt.bIsIgnorePostPositionalWord; //  20
+        *pValue++ <<= rOpt.bIsAutoCloseDialog;          //  21
+        *pValue++ <<= rOpt.bIsShowEntriesRecentlyUsedFirst; //  22
+        *pValue++ <<= rOpt.bIsAutoReplaceUniqueEntries; //  23
 
-        *pValue++ <<= rOpt.bIsDirectionToSimplified; //  25
-        *pValue++ <<= rOpt.bIsUseCharacterVariants; //  26
-        *pValue++ <<= rOpt.bIsTranslateCommonTerms; //  27
-        *pValue++ <<= rOpt.bIsReverseMapping; //  28
+        *pValue++ <<= rOpt.bIsDirectionToSimplified; //  24
+        *pValue++ <<= rOpt.bIsUseCharacterVariants; //  25
+        *pValue++ <<= rOpt.bIsTranslateCommonTerms; //  26
+        *pValue++ <<= rOpt.bIsReverseMapping; //  27
 
-        *pValue++ <<= rOpt.nDataFilesChangedCheckValue; //  29
-        *pValue++ <<= rOpt.bIsGrammarAuto; //  30
-        *pValue++ <<= rOpt.bIsGrammarInteractive; // 31
+        *pValue++ <<= rOpt.nDataFilesChangedCheckValue; //  28
+        *pValue++ <<= rOpt.bIsGrammarAuto; //  29
+        *pValue++ <<= rOpt.bIsGrammarInteractive; // 30
 
         bRet |= PutProperties( rProperyNames, aValues );
     }
@@ -783,7 +775,6 @@ bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
         case UPH_IS_SPELL_SPECIAL               : bReadOnly = rOpt.bROIsSpellSpecial; break;
         case UPH_IS_WRAP_REVERSE                : bReadOnly = rOpt.bROIsSpellReverse; break;
         case UPH_DEFAULT_LANGUAGE               : bReadOnly = rOpt.bRODefaultLanguage; break;
-        case UPH_IS_SPELL_CAPITALIZATION        : bReadOnly = rOpt.bROIsSpellCapitalization; break;
         case UPH_IS_SPELL_CLOSED_COMPOUND       : bReadOnly = rOpt.bROIsSpellClosedCompound; break;
         case UPH_IS_SPELL_HYPHENATED_COMPOUND   : bReadOnly = rOpt.bROIsSpellHyphenatedCompound; break;
         case UPH_IS_SPELL_WITH_DIGITS           : bReadOnly = rOpt.bROIsSpellWithDigits; break;

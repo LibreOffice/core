@@ -311,15 +311,6 @@
         </info>
         <value>false</value>
       </prop>
-      <prop oor:name="IsSpellCapitalization" oor:type="xs:boolean" oor:nillable="false">
-        <!-- UIHints: Tools - Options - General - Language -->
-        <info>
-          <deprecated/>
-          <desc>Checks the correct use of capitalization.</desc>
-          <label>Check capitalization</label>
-        </info>
-        <value>true</value>
-      </prop>
       <prop oor:name="IsSpellAuto" oor:type="xs:boolean" oor:nillable="false">
         <!-- UIHints: Tools - Options - General - Language -->
         <info>
