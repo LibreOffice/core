@@ -40,7 +40,6 @@ namespace {
     constexpr OUString s_sHistoryItemRef = u"HistoryItemRef"_ustr;
     constexpr OUString s_sFilter = u"Filter"_ustr;
     constexpr OUString s_sTitle = u"Title"_ustr;
-    constexpr OUString s_sPassword = u"Password"_ustr;
     constexpr OUString s_sThumbnail = u"Thumbnail"_ustr;
     constexpr OUString s_sReadOnly = u"ReadOnly"_ustr;
     constexpr OUString s_sPinned = u"Pinned"_ustr;
@@ -153,7 +152,6 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
                 aItem.sURL = sUrl;
                 xSet->getPropertyValue(s_sFilter) >>= aItem.sFilter;
                 xSet->getPropertyValue(s_sTitle) >>= aItem.sTitle;
-                xSet->getPropertyValue(s_sPassword) >>= aItem.sPassword;
                 xSet->getPropertyValue(s_sThumbnail) >>= aItem.sThumbnail;
                 xSet->getPropertyValue(s_sReadOnly) >>= aItem.isReadOnly;
                 if (xSet->getPropertySetInfo()->hasPropertyByName(s_sPinned))
@@ -285,7 +283,6 @@ void AppendItem(EHistoryType eHistory, const OUString& sURL, const OUString& sFi
             xSet.set(xInst, uno::UNO_QUERY);
             xSet->setPropertyValue(s_sFilter, uno::Any(sFilter));
             xSet->setPropertyValue(s_sTitle, uno::Any(sTitle));
-            xSet->setPropertyValue(s_sPassword, uno::Any(OUString()));
             xSet->setPropertyValue(s_sThumbnail, uno::Any(sThumbnail.value_or(OUString())));
             if (oIsReadOnly)
             {

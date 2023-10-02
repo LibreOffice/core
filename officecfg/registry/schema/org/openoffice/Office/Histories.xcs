@@ -36,12 +36,6 @@
           <desc>Indicates the title of the URL that is displayed on the user-interface.</desc>
         </info>
       </prop>
-      <prop oor:name="Password" oor:type="xs:string">
-        <info>
-          <deprecated>Not used anymore</deprecated>
-          <desc>Contains an encoded password used to open the document.</desc>
-        </info>
-      </prop>
       <prop oor:name="Thumbnail" oor:type="xs:string">
         <info>
           <desc>Contains a base64 encoded thumbnail of the document.</desc>
