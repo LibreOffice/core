@@ -202,6 +202,13 @@ protected:
     }
 };
 
+enum class PageType
+{
+    FIRST,
+    LEFT,
+    RIGHT
+};
+
 class SectionPropertyMap : public PropertyMap
 {
 public:
@@ -331,13 +338,6 @@ private:
     void HandleIncreasedAnchoredObjectSpacing(DomainMapper_Impl& rDM_Impl);
 
 public:
-    enum PageType
-    {
-        PAGE_FIRST,
-        PAGE_LEFT,
-        PAGE_RIGHT
-    };
-
     explicit SectionPropertyMap( bool bIsFirstSection );
 
     bool IsFirstSection() const { return m_bIsFirstSection; }

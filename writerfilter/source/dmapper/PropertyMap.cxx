@@ -1871,9 +1871,9 @@ void SectionPropertyMap::ClearHeaderFooterLinkToPrevious( bool bHeader, PageType
     {
         switch ( eType )
         {
-            case PAGE_FIRST: m_bFirstPageHeaderLinkToPrevious = false; break;
-            case PAGE_LEFT:  m_bEvenPageHeaderLinkToPrevious = false; break;
-            case PAGE_RIGHT: m_bDefaultHeaderLinkToPrevious = false; break;
+            case PageType::FIRST: m_bFirstPageHeaderLinkToPrevious = false; break;
+            case PageType::LEFT:  m_bEvenPageHeaderLinkToPrevious = false; break;
+            case PageType::RIGHT: m_bDefaultHeaderLinkToPrevious = false; break;
                 // no default case as all enumeration values have been covered
         }
     }
@@ -1881,9 +1881,9 @@ void SectionPropertyMap::ClearHeaderFooterLinkToPrevious( bool bHeader, PageType
     {
         switch ( eType )
         {
-            case PAGE_FIRST: m_bFirstPageFooterLinkToPrevious = false; break;
-            case PAGE_LEFT:  m_bEvenPageFooterLinkToPrevious = false; break;
-            case PAGE_RIGHT: m_bDefaultFooterLinkToPrevious = false; break;
+            case PageType::FIRST: m_bFirstPageFooterLinkToPrevious = false; break;
+            case PageType::LEFT:  m_bEvenPageFooterLinkToPrevious = false; break;
+            case PageType::RIGHT: m_bDefaultFooterLinkToPrevious = false; break;
         }
     }
 }

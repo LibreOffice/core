@@ -3640,7 +3640,7 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
     }
 }
 
-void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, SectionPropertyMap::PageType eType)
+void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageType eType)
 {
     m_bSaveParaHadField = m_bParaHadField;
     m_StreamStateStack.emplace();
@@ -3671,22 +3671,17 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, Section
         return; // TODO sw cannot Undo insert header/footer without crashing
     }
 
-    uno::Reference< beans::XPropertySet > xPageStyle =
-        pSectionContext->GetPageStyle(
-            *this,
-            eType == SectionPropertyMap::PAGE_FIRST );
+    uno::Reference<beans::XPropertySet> xPageStyle = pSectionContext->GetPageStyle(*this, eType == PageType::FIRST);
     if (!xPageStyle.is())
         return;
     try
     {
-        bool bLeft = eType == SectionPropertyMap::PAGE_LEFT;
-        bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
+        bool bLeft = eType == PageType::LEFT;
+        bool bFirst = eType == PageType::FIRST;
         if (!bLeft || GetSettingsTable()->GetEvenAndOddHeaders())
         {
             //switch on header/footer use
-            xPageStyle->setPropertyValue(
-                    getPropertyName(ePropIsOn),
-                    uno::Any(true));
+            xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
 
             // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
             // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
@@ -3737,12 +3732,12 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, Section
     }
 }
 
-void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
+void DomainMapper_Impl::PushPageHeader(PageType eType)
 {
     PushPageHeaderFooter(PagePartType::Header, eType);
 }
 
-void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
+void DomainMapper_Impl::PushPageFooter(PageType eType)
 {
     PushPageHeaderFooter(PagePartType::Footer, eType);
 }
@@ -9477,22 +9472,22 @@ void DomainMapper_Impl::substream(Id rName,
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
-            PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+            PushPageHeader(PageType::LEFT);
         break;
     case NS_ooxml::LN_headerr:
-            PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+            PushPageHeader(PageType::RIGHT);
         break;
     case NS_ooxml::LN_headerf:
-            PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+            PushPageHeader(PageType::FIRST);
         break;
     case NS_ooxml::LN_footerl:
-            PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+            PushPageFooter(PageType::LEFT);
         break;
     case NS_ooxml::LN_footerr:
-            PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+            PushPageFooter(PageType::RIGHT);
         break;
     case NS_ooxml::LN_footerf:
-            PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+            PushPageFooter(PageType::FIRST);
         break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
