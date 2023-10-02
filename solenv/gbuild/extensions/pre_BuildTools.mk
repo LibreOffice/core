@@ -48,6 +48,7 @@ gb_BUILD_TOOLS = \
     $(foreach executable,$(gb_BUILD_TOOLS_executables),$(call gb_Executable_get_runtime_dependencies,$(executable))) \
     $(foreach executable,$(gb_BUILD_TOOLS_executables_extern),$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
 	$(INSTROOT)/$(LIBO_URE_ETC_FOLDER)/$(call gb_Helper_get_rcfile,uno) \
+	$(call gb_ExternalProject_get_target_for_build,zxcvbn-c) \
 
 endif
 
