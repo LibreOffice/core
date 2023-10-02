@@ -19,7 +19,14 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="TypeDetection" oor:package="org.openoffice.Office" xml:lang="en-US">
   <info>
-    <desc>Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.</desc>
+    <desc>
+        Deprecated.
+        Use the new configuration schema org.openoffice.TypeDetection/ and its related sub structures.
+        This schema is only kept for compatibility.
+
+        Old description:
+        Contains common content types, filters, deep detection services, as well as the frame loader and the content handler for Office.
+    </desc>
   </info>
   <templates>
     <group oor:name="Type">
