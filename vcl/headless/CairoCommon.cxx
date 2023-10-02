@@ -885,11 +885,16 @@ bool CairoCommon::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDevice,
         return true;
     }
 
-    // don't bother trying to draw stuff which is effectively invisible
-    basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
-    aPolygonRange.transform(rObjectToDevice);
-    if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
-        return true;
+    if (!bHasLine)
+    {
+        // don't bother trying to draw stuff which is effectively invisible, speeds up
+        // drawing some complex drawings. This optimisation is not valid when we do
+        // the pixel offset thing (i.e. bHasLine)
+        basegfx::B2DRange aPolygonRange = rPolyPolygon.getB2DRange();
+        aPolygonRange.transform(rObjectToDevice);
+        if (aPolygonRange.getWidth() < 0.1 || aPolygonRange.getHeight() < 0.1)
+            return true;
+    }
 
     cairo_t* cr = getCairoContext(true, bAntiAlias);
     if (cairo_status(cr) != CAIRO_STATUS_SUCCESS)
