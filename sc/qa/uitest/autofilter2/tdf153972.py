@@ -9,7 +9,7 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from libreoffice.calc.document import get_cell_by_position, is_row_hidden
+from libreoffice.calc.document import is_row_hidden
 
 class tdf153972(UITestCase):
     def test_tdf153972(self):
