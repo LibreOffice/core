@@ -366,7 +366,7 @@ void BrowseBox::DrawCursor()
 }
 
 
-sal_uLong BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
+tools::Long BrowseBox::GetColumnWidth( sal_uInt16 nId ) const
 {
 
     sal_uInt16 nItemPos = GetColumnPos( nId );
@@ -1382,7 +1382,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     sal_uInt16 nX = 0;
     for ( size_t nCol = 0;
           nCol < mvCols.size() &&
-            ( nX + mvCols[ nCol ]->Width() ) < o3tl::make_unsigned(GetOutputSizePixel().Width());
+            ( nX + mvCols[ nCol ]->Width() ) < GetOutputSizePixel().Width();
           ++nCol )
         // is this column visible?
         if ( mvCols[ nCol ]->IsFrozen() || nCol >= nFirstCol )
@@ -1405,7 +1405,7 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
                     nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
                     tools::Long nDeltaX = nDragX - nResizeX;
                     sal_uInt16 nId = GetColumnId(nResizeCol);
-                    sal_uLong nOldWidth = GetColumnWidth(nId);
+                    tools::Long nOldWidth = GetColumnWidth(nId);
                     nDragX = nOldWidth + nDeltaX + nResizeX - nOldWidth;
 
                     // draw new auxiliary line
@@ -1433,7 +1433,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 
         // width changed?
         nDragX = std::max( rEvt.GetPosPixel().X(), nMinResizeX );
-        if ( (nDragX - nResizeX) != static_cast<tools::Long>(mvCols[ nResizeCol ]->Width()) )
+        if ( (nDragX - nResizeX) != mvCols[ nResizeCol ]->Width() )
         {
             // resize column
             tools::Long nMaxX = pDataWin->GetSizePixel().Width();

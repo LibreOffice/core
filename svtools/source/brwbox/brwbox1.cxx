@@ -272,13 +272,13 @@ const vcl::Font& BrowseBox::GetFont() const
     return pDataWin->GetFont();
 }
 
-sal_uLong BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
+tools::Long BrowseBox::GetDefaultColumnWidth( const OUString& _rText ) const
 {
     return pDataWin->GetTextWidth( _rText ) + pDataWin->GetTextWidth(OUString('0')) * 4;
 }
 
 
-void BrowseBox::InsertHandleColumn( sal_uLong nWidth )
+void BrowseBox::InsertHandleColumn( tools::Long nWidth )
 {
 
 #if OSL_DEBUG_LEVEL > 0
@@ -570,7 +570,7 @@ void BrowseBox::SetColumnTitle( sal_uInt16 nItemId, const OUString& rTitle )
 }
 
 
-void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
+void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, tools::Long nWidth )
 {
 
     // get the position in the current array
@@ -591,7 +591,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         nMaxWidth -= pDataWin->bAutoSizeLastCol
                 ? GetFieldRect(nItemId).Left()
                 : GetFrozenWidth();
-        if ( pDataWin->bAutoSizeLastCol || nWidth > o3tl::make_unsigned(nMaxWidth) )
+        if ( pDataWin->bAutoSizeLastCol || nWidth > nMaxWidth )
         {
             nWidth = nMaxWidth > 16 ? nMaxWidth : nOldWidth;
         }
@@ -600,7 +600,7 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
     // OV
     // In AutoSizeLastColumn(), we call SetColumnWidth with nWidth==0xffff.
     // Thus, check here, if the width has actually changed.
-    if( static_cast<sal_uLong>(nOldWidth) == nWidth )
+    if( nOldWidth == nWidth )
         return;
 
     // do we want to display the change immediately?
@@ -638,13 +638,13 @@ void BrowseBox::SetColumnWidth( sal_uInt16 nItemId, sal_uLong nWidth )
         if( GetBackground().IsScrollable() )
         {
 
-            tools::Rectangle aScrRect( nX + std::min( static_cast<sal_uLong>(nOldWidth), nWidth ), 0,
+            tools::Rectangle aScrRect( nX + std::min( nOldWidth, nWidth ), 0,
                                 GetSizePixel().Width() , // the header is longer than the datawin
                                 pDataWin->GetPosPixel().Y() - 1 );
             Control::Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
             aScrRect.SetBottom( pDataWin->GetSizePixel().Height() );
             pDataWin->Scroll( nWidth-nOldWidth, 0, aScrRect, SCROLL_FLAGS );
-            tools::Rectangle aInvRect( nX, 0, nX + std::max( nWidth, static_cast<sal_uLong>(nOldWidth) ), USHRT_MAX );
+            tools::Rectangle aInvRect( nX, 0, nX + std::max( nWidth, nOldWidth ), USHRT_MAX );
             Control::Invalidate( aInvRect, InvalidateFlags::NoChildren );
             pDataWin->Invalidate( aInvRect );
         }

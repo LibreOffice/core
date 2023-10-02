@@ -929,7 +929,7 @@ void notifySystemWindow(vcl::Window const * _pWindow, vcl::Window* _pToRegister,
 void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
 {
     sal_Int32 nColSize = -1;
-    sal_uInt32 nDefaultWidth = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
+    ::tools::Long nDefaultWidth = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
     if ( nDefaultWidth != _pBox->GetColumnWidth( _nColId ) )
     {
         Size aSizeMM = _pBox->PixelToLogic( Size( _pBox->GetColumnWidth( _nColId ), 0 ), MapMode( MapUnit::MapMM ) );

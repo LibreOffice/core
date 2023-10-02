@@ -53,19 +53,19 @@ public:
 class BrowserColumn final
 {
     sal_uInt16          _nId;
-    sal_uLong           _nOriginalWidth;
-    sal_uLong           _nWidth;
+    tools::Long         _nOriginalWidth;
+    tools::Long         _nWidth;
     OUString            _aTitle;
     bool                _bFrozen;
 
 public:
                         BrowserColumn( sal_uInt16 nItemId,
-                                        OUString aTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom );
+                                        OUString aTitle, tools::Long nWidthPixel, const Fraction& rCurrentZoom );
                         ~BrowserColumn();
 
     sal_uInt16          GetId() const { return _nId; }
 
-    sal_uLong           Width() const { return _nWidth; }
+    tools::Long         Width() const { return _nWidth; }
     OUString&           Title() { return _aTitle; }
 
     bool                IsFrozen() const { return _bFrozen; }
@@ -74,7 +74,7 @@ public:
     void                Draw( BrowseBox const & rBox, OutputDevice& rDev,
                               const Point& rPos  );
 
-    void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
+    void                SetWidth(tools::Long nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);
 };
 

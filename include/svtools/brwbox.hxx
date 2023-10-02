@@ -510,12 +510,12 @@ public:
                         { Control::SetFont( rNewFont ); }
 
     // inserting, changing, removing and freezing of columns
-    void            InsertHandleColumn( sal_uLong nWidth );
+    void            InsertHandleColumn( tools::Long nWidth );
     void            InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
                                     tools::Long nSize, HeaderBarItemBits nBits = HeaderBarItemBits::STDSTYLE,
                                     sal_uInt16 nPos = HEADERBAR_APPEND );
     void            SetColumnTitle( sal_uInt16 nColumnId, const OUString &rTitle );
-    void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
+    void            SetColumnWidth( sal_uInt16 nColumnId, tools::Long nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
     void            FreezeColumn( sal_uInt16 nColumnId );
     void            RemoveColumn( sal_uInt16 nColumnId );
@@ -530,7 +530,7 @@ public:
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
     tools::Rectangle       GetFieldRect( sal_uInt16 nColumnId ) const;
-    sal_uLong       GetColumnWidth( sal_uInt16 nColumnId ) const;
+    tools::Long     GetColumnWidth( sal_uInt16 nColumnId ) const;
     sal_uInt16      GetColumnId( sal_uInt16 nPos ) const;
     sal_uInt16      GetColumnPos( sal_uInt16 nColumnId ) const;
     bool            IsFrozen( sal_uInt16 nColumnId ) const;
@@ -619,7 +619,7 @@ public:
 
         The width is calculated so that the text fits completely, plus some margin.
     */
-    sal_uLong         GetDefaultColumnWidth( const OUString& _rText ) const;
+    tools::Long       GetDefaultColumnWidth( const OUString& _rText ) const;
 
     /** GetCellText returns the text at the given position
         @param  _nRow

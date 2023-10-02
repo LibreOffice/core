@@ -88,7 +88,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
 }
 
 BrowserColumn::BrowserColumn( sal_uInt16 nItemId,
-                              OUString aTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom )
+                              OUString aTitle, tools::Long nWidthPixel, const Fraction& rCurrentZoom )
 :   _nId( nItemId ),
     _nWidth( nWidthPixel ),
     _aTitle(std::move( aTitle )),
@@ -106,7 +106,7 @@ BrowserColumn::~BrowserColumn()
 {
 }
 
-void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
+void BrowserColumn::SetWidth(tools::Long nNewWidthPixel, const Fraction& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
     // Avoid overflow when called with LONG_MAX from

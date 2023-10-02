@@ -65,7 +65,7 @@ namespace svt
         sal_uInt16 nColId = GetCurItemId();
         if (nColId)
         {
-            sal_uInt32 nAutoWidth = static_cast<EditBrowseBox*>(GetParent())->GetAutoColumnWidth(nColId);
+            tools::Long nAutoWidth = static_cast<EditBrowseBox*>(GetParent())->GetAutoColumnWidth(nColId);
             if (nAutoWidth != static_cast<EditBrowseBox*>(GetParent())->GetColumnWidth(nColId))
             {
                 static_cast<EditBrowseBox*>(GetParent())->SetColumnWidth(nColId, nAutoWidth);
