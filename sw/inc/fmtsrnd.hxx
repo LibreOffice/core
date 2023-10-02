@@ -27,7 +27,9 @@
 
 class IntlWrapper;
 
-// SwFormatSurround: How document content under the frame shall behave.
+/// Defines the way you want text to wrap around an object. This pool item can appear in a frame
+/// styles and in the item set of an sw::SpzFrameFormat. It's Format -> Image -> Properties -> Wrap
+/// on the UI.
 class SW_DLLPUBLIC SwFormatSurround final : public SfxEnumItem<css::text::WrapTextMode>
 {
     bool    m_bAnchorOnly :1;
