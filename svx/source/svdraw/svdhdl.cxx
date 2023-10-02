@@ -1253,12 +1253,12 @@ void SdrHdlColor::SetSize(const Size& rNew)
 
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad)
     : SdrHdl(rRef1, bGrad ? SdrHdlKind::Gradient : SdrHdlKind::Transparence)
-    , pColHdl1(nullptr)
-    , pColHdl2(nullptr)
-    , a2ndPos(rRef2)
-    , bGradient(bGrad)
-    , bMoveSingleHandle(false)
-    , bMoveFirstHandle(false)
+    , m_pColHdl1(nullptr)
+    , m_pColHdl2(nullptr)
+    , m_a2ndPos(rRef2)
+    , m_bGradient(bGrad)
+    , m_bMoveSingleHandle(false)
+    , m_bMoveFirstHandle(false)
 {
 }
 
@@ -1268,10 +1268,10 @@ SdrHdlGradient::~SdrHdlGradient()
 
 void SdrHdlGradient::Set2ndPos(const Point& rPnt)
 {
-    if(a2ndPos != rPnt)
+    if(m_a2ndPos != rPnt)
     {
         // remember new position
-        a2ndPos = rPnt;
+        m_a2ndPos = rPnt;
 
         // create new display
         Touch();
@@ -1306,7 +1306,7 @@ void SdrHdlGradient::CreateB2dIAObject()
             if (xManager.is())
             {
                 // striped line in between
-                basegfx::B2DVector aVec(a2ndPos.X() - m_aPos.X(), a2ndPos.Y() - m_aPos.Y());
+                basegfx::B2DVector aVec(m_a2ndPos.X() - m_aPos.X(), m_a2ndPos.Y() - m_aPos.Y());
                 double fVecLen = aVec.getLength();
                 double fLongPercentArrow = (1.0 - 0.05) * fVecLen;
                 double fHalfArrowWidth = (0.05 * 0.5) * fVecLen;
@@ -1340,7 +1340,7 @@ void SdrHdlGradient::CreateB2dIAObject()
 
                 basegfx::B2DPoint aPositionLeft(aLeft.X(), aLeft.Y());
                 basegfx::B2DPoint aPositionRight(aRight.X(), aRight.Y());
-                basegfx::B2DPoint aPosition2(a2ndPos.X(), a2ndPos.Y());
+                basegfx::B2DPoint aPosition2(m_a2ndPos.X(), m_a2ndPos.Y());
 
                 pNewOverlayObject.reset(new
                     sdr::overlay::OverlayTriangle(
@@ -1377,10 +1377,10 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
 
     aGradTransVector.maPositionA = basegfx::B2DPoint(GetPos().X(), GetPos().Y());
     aGradTransVector.maPositionB = basegfx::B2DPoint(Get2ndPos().X(), Get2ndPos().Y());
-    if(pColHdl1)
-        aGradTransVector.aCol1 = pColHdl1->GetColor();
-    if(pColHdl2)
-        aGradTransVector.aCol2 = pColHdl2->GetColor();
+    if(m_pColHdl1)
+        aGradTransVector.aCol1 = m_pColHdl1->GetColor();
+    if(m_pColHdl2)
+        aGradTransVector.aCol2 = m_pColHdl2->GetColor();
 
     if(IsGradient())
         aOldGradTransGradient.aGradient = rSet.Get(XATTR_FILLGRADIENT).GetGradientValue();
@@ -1388,7 +1388,7 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
         aOldGradTransGradient.aGradient = rSet.Get(XATTR_FILLFLOATTRANSPARENCE).GetGradientValue();
 
     // transform vector data to gradient
-    GradTransformer::VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, bMoveSingleHandle, bMoveFirstHandle);
+    GradTransformer::VecToGrad(aGradTransVector, aGradTransGradient, aOldGradTransGradient, _pObj, m_bMoveSingleHandle, m_bMoveFirstHandle);
 
     if(bSetItemOnObject)
     {
@@ -1422,15 +1422,15 @@ void SdrHdlGradient::FromIAOToItem(SdrObject* _pObj, bool bSetItemOnObject, bool
 
     SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
     Set2ndPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
-    if(pColHdl1)
+    if(m_pColHdl1)
     {
-        pColHdl1->SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
-        pColHdl1->SetColor(aGradTransVector.aCol1);
+        m_pColHdl1->SetPos(Point(FRound(aGradTransVector.maPositionA.getX()), FRound(aGradTransVector.maPositionA.getY())));
+        m_pColHdl1->SetColor(aGradTransVector.aCol1);
     }
-    if(pColHdl2)
+    if(m_pColHdl2)
     {
-        pColHdl2->SetPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
-        pColHdl2->SetColor(aGradTransVector.aCol2);
+        m_pColHdl2->SetPos(Point(FRound(aGradTransVector.maPositionB.getX()), FRound(aGradTransVector.maPositionB.getY())));
+        m_pColHdl2->SetColor(aGradTransVector.aCol2);
     }
 }
 

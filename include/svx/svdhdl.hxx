@@ -292,18 +292,18 @@ class SdrHdlGradient final : public SdrHdl
 {
 private:
     // pointer to used color handles
-    SdrHdlColor*                pColHdl1;
-    SdrHdlColor*                pColHdl2;
+    SdrHdlColor*                m_pColHdl1;
+    SdrHdlColor*                m_pColHdl2;
 
     // 2nd position
-    Point                       a2ndPos;
+    Point                       m_a2ndPos;
 
     // is this a gradient or a transparence
-    bool                        bGradient : 1;
+    bool                        m_bGradient : 1;
 
     // select which handle to move
-    bool                        bMoveSingleHandle : 1;
-    bool                        bMoveFirstHandle : 1;
+    bool                        m_bMoveSingleHandle : 1;
+    bool                        m_bMoveFirstHandle : 1;
 
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
@@ -312,14 +312,14 @@ public:
     SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad);
     virtual ~SdrHdlGradient() override;
 
-    bool IsGradient() const { return bGradient; }
+    bool IsGradient() const { return m_bGradient; }
 
     // set the associated color handles
-    void SetColorHandles(SdrHdlColor* pL1, SdrHdlColor* pL2) { pColHdl1 = pL1; pColHdl2 = pL2; }
-    SdrHdlColor* GetColorHdl1() const { return pColHdl1; }
-    SdrHdlColor* GetColorHdl2() const { return pColHdl2; }
+    void SetColorHandles(SdrHdlColor* pL1, SdrHdlColor* pL2) { m_pColHdl1 = pL1; m_pColHdl2 = pL2; }
+    SdrHdlColor* GetColorHdl1() const { return m_pColHdl1; }
+    SdrHdlColor* GetColorHdl2() const { return m_pColHdl2; }
 
-    const Point& Get2ndPos() const { return a2ndPos; }
+    const Point& Get2ndPos() const { return m_a2ndPos; }
     void Set2ndPos(const Point& rPnt);
 
     // the link called by the color handles
@@ -329,10 +329,10 @@ public:
     void FromIAOToItem(SdrObject* pObj, bool bSetItemOnObject, bool bUndo);
 
     // selection flags for interaction
-    bool IsMoveSingleHandle() const { return bMoveSingleHandle; }
-    void SetMoveSingleHandle(bool bNew) { bMoveSingleHandle = bNew; }
-    bool IsMoveFirstHandle() const { return bMoveFirstHandle; }
-    void SetMoveFirstHandle(bool bNew) { bMoveFirstHandle = bNew; }
+    bool IsMoveSingleHandle() const { return m_bMoveSingleHandle; }
+    void SetMoveSingleHandle(bool bNew) { m_bMoveSingleHandle = bNew; }
+    bool IsMoveFirstHandle() const { return m_bMoveFirstHandle; }
+    void SetMoveFirstHandle(bool bNew) { m_bMoveFirstHandle = bNew; }
 };
 
 
