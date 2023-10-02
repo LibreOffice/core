@@ -84,7 +84,6 @@ class SwFootnoteFrame final : public SwLayoutFrame
 {
     // Pointer to FootnoteFrame in which the footnote will be continued:
     //  - 0     no following existent
-    //  - this  for the last one
     //  - otherwise the following FootnoteFrame
     SwFootnoteFrame     *mpFollow;
     SwFootnoteFrame     *mpMaster;      // FootnoteFrame from which I am the following
