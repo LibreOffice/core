@@ -17,7 +17,7 @@ index b402450..760f643 100644
    public SSLSocketChannel(SocketChannel inputSocketChannel, SSLEngine inputEngine,
        ExecutorService inputExecutor, SelectionKey key) throws IOException {
 -    if (inputSocketChannel == null || inputEngine == null || executor == inputExecutor) {
-+    if (inputSocketChannel == null || inputEngine == null || executor == null) {
++    if (inputSocketChannel == null || inputEngine == null || inputExecutor == null) {
        throw new IllegalArgumentException("parameter must not be null");
      }
  
