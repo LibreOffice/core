@@ -649,7 +649,7 @@ Check:
 	If IsMissing(EditMessage) Or IsEmpty(EditMessage) Then EditMessage = True
 
 	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not SF_Utils._Validate(Cc, &quot;Recipient&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._Validate(Recipient, &quot;Recipient&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Cc, &quot;Cc&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Bcc, &quot;Bcc&quot;, V_STRING) Then GoTo Finally
 		If Not SF_Utils._Validate(Subject, &quot;Subject&quot;, V_STRING) Then GoTo Finally
