@@ -851,25 +851,24 @@ sal_Int32 PDFExtOutDevData::WrapBeginStructureElement(
 
 void PDFExtOutDevData::EndStructureElement()
 {
+    assert(mpGlobalSyncData->mCurrentStructElement != 0); // underflow?
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::EndStructureElement );
     mpGlobalSyncData->mCurrentStructElement = mpGlobalSyncData->mStructParents[ mpGlobalSyncData->mCurrentStructElement ];
 }
-bool PDFExtOutDevData::SetCurrentStructureElement( sal_Int32 nStructId )
+
+void PDFExtOutDevData::SetCurrentStructureElement(sal_Int32 const nStructId)
 {
-    bool bSuccess = false;
-    if( o3tl::make_unsigned(nStructId) < mpGlobalSyncData->mStructParents.size() )
-    {
-        mpGlobalSyncData->mCurrentStructElement = nStructId;
-        mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetCurrentStructureElement );
-        mpPageSyncData->mParaInts.push_back( nStructId );
-        bSuccess = true;
-    }
-    return bSuccess;
+    assert(o3tl::make_unsigned(nStructId) < mpGlobalSyncData->mStructParents.size());
+    mpGlobalSyncData->mCurrentStructElement = nStructId;
+    mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetCurrentStructureElement );
+    mpPageSyncData->mParaInts.push_back( nStructId );
 }
+
 sal_Int32 PDFExtOutDevData::GetCurrentStructureElement() const
 {
     return mpGlobalSyncData->mCurrentStructElement;
 }
+
 void PDFExtOutDevData::SetStructureAttribute( PDFWriter::StructAttribute eAttr, PDFWriter::StructAttributeValue eVal )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::SetStructureAttribute );

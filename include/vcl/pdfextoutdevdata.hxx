@@ -405,14 +405,9 @@ public:
     </p>
 
     @param nElement
-    the id of the new current structure element
-
-    @returns
-    True if the current structure element could be set successfully
-    False if the current structure element could not be changed
-    (e.g. if the passed element id is invalid)
+    the id of the new current structure element, which must be valid
      */
-    bool SetCurrentStructureElement( sal_Int32 nElement );
+    void SetCurrentStructureElement( sal_Int32 nElement );
     /** get the current structure element id
 
     @returns
