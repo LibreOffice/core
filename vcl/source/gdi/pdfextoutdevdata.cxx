@@ -830,6 +830,9 @@ void PDFExtOutDevData::InitStructureElement(sal_Int32 const id,
     mpPageSyncData->mParaInts.push_back(id);
     mpPageSyncData->mParaStructElements.push_back( eType );
     mpPageSyncData->mParaOUStrings.push_back( rAlias );
+    // update parent: required for hell fly anchor frames in sw, so that on the actual
+    // anchor frame EndStructureElement() resets mCurrentStructElement properly.
+    mpGlobalSyncData->mStructParents[id] = mpGlobalSyncData->mCurrentStructElement;
 }
 
 void PDFExtOutDevData::BeginStructureElement(sal_Int32 const id)

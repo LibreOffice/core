@@ -2525,7 +2525,7 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     // structured tag primitive
     const vcl::PDFWriter::StructElement& rTagElement(rStructureTagCandidate.getStructureElement());
     bool bTagUsed((vcl::PDFWriter::NonStructElement != rTagElement));
-    bool bNeedEndAnchor(false);
+    ::std::optional<sal_Int32> oAnchorParent;
 
     if (!rStructureTagCandidate.isTaggedSdrObject())
     {
@@ -2541,8 +2541,8 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
             {
                 sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(
                     rStructureTagCandidate.GetAnchorStructureElementKey());
-                mpPDFExtOutDevData->BeginStructureElement(id);
-                bNeedEndAnchor = true;
+                oAnchorParent.emplace(mpPDFExtOutDevData->GetCurrentStructureElement());
+                mpPDFExtOutDevData->SetCurrentStructureElement(id);
             }
             mpPDFExtOutDevData->WrapBeginStructureElement(rTagElement);
             switch (rTagElement)
@@ -2618,9 +2618,9 @@ void VclMetafileProcessor2D::processStructureTagPrimitive2D(
     {
         // write end tag
         mpPDFExtOutDevData->EndStructureElement();
-        if (bNeedEndAnchor)
+        if (oAnchorParent)
         {
-            mpPDFExtOutDevData->EndStructureElement();
+            mpPDFExtOutDevData->SetCurrentStructureElement(*oAnchorParent);
         }
     }
 }

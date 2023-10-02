@@ -3733,7 +3733,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpans)
                 CPPUNIT_ASSERT(pKids1);
                 // assume there are no MCID ref at this level
                 auto vKids1 = pKids1->GetElements();
-                CPPUNIT_ASSERT_EQUAL(size_t(1), vKids1.size());
+                CPPUNIT_ASSERT_EQUAL(size_t(2), vKids1.size());
                 auto pRefKid10 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids1[0]);
                 CPPUNIT_ASSERT(pRefKid10);
                 auto pObject10 = pRefKid10->LookupObject();
@@ -3868,8 +3868,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpans)
                 CPPUNIT_ASSERT(pKids1011);
                 // assume there are no MCID ref at this level
                 auto vKids1011 = pKids1011->GetElements();
-                //CPPUNIT_ASSERT_EQUAL(size_t(1), vKids1011.size());
-                //FIXME Div ???
+                CPPUNIT_ASSERT_EQUAL(size_t(1), vKids1011.size());
 
                 auto pRefKid10110 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids1011[0]);
                 CPPUNIT_ASSERT(pRefKid10110);
@@ -4076,6 +4075,78 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpans)
                                      dynamic_cast<vcl::filter::PDFNameElement*>(
                                          pDictA103101->LookupElement("TextDecorationType"))
                                          ->GetValue());
+
+                // now the footnote container - following the list
+                auto pRefKid11 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids1[1]);
+                CPPUNIT_ASSERT(pRefKid11);
+                auto pObject11 = pRefKid11->LookupObject();
+                CPPUNIT_ASSERT(pObject11);
+                auto pType11
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11->GetValue());
+                auto pS11 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Div"), pS11->GetValue());
+
+                auto pKids11 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject11->Lookup("K"));
+                CPPUNIT_ASSERT(pKids11);
+                // assume there are no MCID ref at this level
+                auto vKids11 = pKids11->GetElements();
+                CPPUNIT_ASSERT_EQUAL(size_t(1), vKids11.size());
+
+                auto pRefKid110 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids11[0]);
+                CPPUNIT_ASSERT(pRefKid110);
+                auto pObject110 = pRefKid110->LookupObject();
+                CPPUNIT_ASSERT(pObject110);
+                auto pType110
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject110->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType110->GetValue());
+                auto pS110 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject110->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Note"), pS110->GetValue());
+
+                auto pKids110
+                    = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject110->Lookup("K"));
+                CPPUNIT_ASSERT(pKids110);
+                // assume there are no MCID ref at this level
+                auto vKids110 = pKids110->GetElements();
+                CPPUNIT_ASSERT_EQUAL(size_t(2), vKids110.size());
+
+                auto pRefKid1100 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids110[0]);
+                CPPUNIT_ASSERT(pRefKid1100);
+                auto pObject1100 = pRefKid1100->LookupObject();
+                CPPUNIT_ASSERT(pObject1100);
+                auto pType1100
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1100->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1100->GetValue());
+                auto pS1100 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1100->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pS1100->GetValue());
+
+                auto pKids1100
+                    = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject1100->Lookup("K"));
+                CPPUNIT_ASSERT(pKids1100);
+                // assume there are no MCID ref at this level
+                auto vKids1100 = pKids1100->GetElements();
+                CPPUNIT_ASSERT_EQUAL(size_t(1), vKids1100.size());
+
+                auto pRefKid11000 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids1100[0]);
+                CPPUNIT_ASSERT(pRefKid11000);
+                auto pObject11000 = pRefKid11000->LookupObject();
+                CPPUNIT_ASSERT(pObject11000);
+                auto pType11000
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11000->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType11000->GetValue());
+                auto pS11000
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject11000->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pS11000->GetValue());
+
+                auto pRefKid1101 = dynamic_cast<vcl::filter::PDFReferenceElement*>(vKids110[1]);
+                CPPUNIT_ASSERT(pRefKid1101);
+                auto pObject1101 = pRefKid1101->LookupObject();
+                CPPUNIT_ASSERT(pObject1101);
+                auto pType1101
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1101->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType1101->GetValue());
+                auto pS1101 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1101->Lookup("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("Footnote"), pS1101->GetValue());
 
                 ++nDoc;
             }
