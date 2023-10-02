@@ -158,14 +158,21 @@ void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nW
     implDrawRect(nX, nY, nWidth, nHeight);
 }
 
+// true if we have a fill color and the line color is the same or non-existant
+static bool onlyFillRect(const Color& rFillColor, const Color& rLineColor)
+{
+    if (rFillColor == SALCOLOR_NONE)
+        return false;
+    if (rLineColor == SALCOLOR_NONE)
+        return true;
+    return rFillColor == rLineColor;
+}
+
 void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, double nHeight)
 {
     // fast path for the common case of simply creating a solid block of color
-    if (m_rCairoCommon.m_aFillColor != SALCOLOR_NONE && m_rCairoCommon.m_aLineColor != SALCOLOR_NONE
-        && m_rCairoCommon.m_aFillColor == m_rCairoCommon.m_aLineColor)
+    if (onlyFillRect(m_rCairoCommon.m_aFillColor, m_rCairoCommon.m_aLineColor))
     {
-        double fTransparency = 0;
-
         // don't bother trying to draw stuff which is effectively invisible
         if (nWidth < 0.1 || nHeight < 0.1)
             return;
@@ -173,10 +180,7 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
         cairo_t* cr = m_rCairoCommon.getCairoContext(true, getAntiAlias());
         m_rCairoCommon.clipRegion(cr);
 
-        // To make releaseCairoContext work, use empty extents
-        basegfx::B2DRange extents;
-
-        bool bPixelSnap = !getAntiAlias();
+        const bool bPixelSnap = !getAntiAlias();
         if (bPixelSnap)
         {
             // snap by rounding
@@ -188,9 +192,9 @@ void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, doubl
 
         cairo_rectangle(cr, nX, nY, nWidth, nHeight);
 
-        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, fTransparency);
-        // Get FillDamage (will be extended for LineDamage below)
-        extents = getClippedFillDamage(cr);
+        m_rCairoCommon.applyColor(cr, m_rCairoCommon.m_aFillColor, 0.0);
+
+        basegfx::B2DRange extents = getClippedFillDamage(cr);
 
         cairo_fill(cr);
 
