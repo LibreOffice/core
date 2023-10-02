@@ -876,8 +876,8 @@ public:
     /// Get the first pending shape, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
 
-    void PushPageHeader(SectionPropertyMap::PageType eType);
-    void PushPageFooter(SectionPropertyMap::PageType eType);
+    void PushPageHeader(PageType eType);
+    void PushPageFooter(PageType eType);
 
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }
@@ -1220,7 +1220,7 @@ public:
     OUString ConvertTOCStyleName(OUString const&);
 
 private:
-    void PushPageHeaderFooter(PagePartType ePagePartType, SectionPropertyMap::PageType eType);
+    void PushPageHeaderFooter(PagePartType ePagePartType, PageType eType);
     // Start a new index section; if needed, finish current paragraph
     css::uno::Reference<css::beans::XPropertySet> StartIndexSectionChecked(const OUString& sServiceName);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;
