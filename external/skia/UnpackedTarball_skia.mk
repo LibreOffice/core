@@ -18,7 +18,6 @@ skia_patches := \
     no-trace-resources-on-exit.patch.1 \
     fix-alpha-difference-copy.patch.1 \
     share-grcontext.patch.1 \
-    clang11-flax-vector-conversion.patch.0 \
     clang-attributes-warning.patch.1 \
     fontconfig-get-typeface.patch.0 \
     windows-do-not-modify-logfont.patch.0 \
