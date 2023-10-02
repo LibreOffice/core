@@ -458,7 +458,15 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
     if (pReopenKey)
     {
-        OpenTagImpl(pReopenKey);
+        // note: it would be possible to get rid of the SetCurrentStructureElement()
+        // - which is quite ugly - for most cases by recreating the parents until the
+        // current ancestor, but there are special cases cell frame rowspan > 1 follow
+        // and footnote frame follow where the parent of the follow is different from
+        // the parent of the first one, and so in PDFExtOutDevData the wrong parent
+        // would be restored and used for next elements.
+        m_nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
+        sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(pReopenKey);
+        mpPDFExtOutDevData->SetCurrentStructureElement(id);
 
         bRet = true;
     }
