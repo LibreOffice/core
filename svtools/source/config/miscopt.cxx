@@ -296,7 +296,7 @@ void SvtMiscOptions_Impl::ImplCommit()
         else {
             value = GetIconTheme();
         }
-        seqValuesRange[1] <<= value;
+        seqValuesRange[0] <<= value;
         // Set properties in configuration.
         PutProperties( seqNames, seqValues );
     }
