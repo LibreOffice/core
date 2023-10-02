@@ -19,10 +19,6 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -37,7 +33,6 @@
 #include <sot/storage.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/fileformat.h>
-#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -81,36 +76,6 @@ static OUString GetStorageType( const SvGlobalName& aEmbName )
     else if ( aEmbName == SvGlobalName( SO3_SCH_OLE_EMBED_CLASSID_8 ) )
         return "LibreOffice.ChartDocument.1";
     return OUString();
-}
-
-static bool UseOldMSExport()
-{
-    uno::Reference< lang::XMultiServiceFactory > xProvider(
-        configuration::theDefaultProvider::get(
-            comphelper::getProcessComponentContext()));
-    try {
-        uno::Sequence< uno::Any > aArg{ uno::Any(
-            OUString( "/org.openoffice.Office.Common/InternalMSExport" )) };
-        uno::Reference< container::XNameAccess > xNameAccess(
-            xProvider->createInstanceWithArguments(
-                "com.sun.star.configuration.ConfigurationUpdateAccess",
-                aArg ),
-            uno::UNO_QUERY );
-        if ( xNameAccess.is() )
-        {
-            uno::Any aResult = xNameAccess->getByName( "UseOldExport" );
-
-            bool bResult;
-            if ( aResult >>= bResult )
-                return bResult;
-        }
-    }
-    catch( const uno::Exception& )
-    {
-    }
-
-    OSL_FAIL( "Could not get access to configuration entry!" );
-    return false;
 }
 
 void SvxMSExportOLEObjects::ExportOLEObject( const css::uno::Reference < css::embed::XEmbeddedObject>& rObj, SotStorage& rDestStg )
@@ -217,7 +182,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
     {
         // own format, maybe SO6 format or lower
         SvGlobalName aEmbName = GetEmbeddedVersion( aOwnGlobalName );
-        if ( aEmbName != SvGlobalName() && !UseOldMSExport() )
+        if ( aEmbName != SvGlobalName() )
         {
             // this is a SO6 embedded object, save in old binary format
             rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );

@@ -706,20 +706,6 @@
         <value>15</value>
       </prop>
     </group>
-    <group oor:name="InternalMSExport">
-      <info>
-        <desc>Contains internal MSExport settings that are common for all
-        apps.</desc>
-      </info>
-      <prop oor:name="UseOldExport" oor:type="xs:boolean" oor:nillable="false">
-        <info>
-          <desc>Specifies if an old (5.0 format) way instead of a new one (6.0
-          OLE embedded document) should be used for export of inplace objects in
-          case MS-filters are not used for them.</desc>
-        </info>
-        <value>false</value>
-      </prop>
-    </group>
     <group oor:name="Passwords">
       <info>
         <desc>Contains a description of the persistent password
