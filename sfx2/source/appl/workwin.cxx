@@ -1858,7 +1858,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
     }
 
 #ifdef DBG_UTIL
-    if (SfxChildWin_Impl* pCW = Get_BySaveId(aChildWins, nId))
+    if (Get_BySaveId(aChildWins, nId))
     {
         OSL_FAIL("The ChildWindow is not in context!");
     }
@@ -1987,7 +1987,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
     }
 
 #ifdef DBG_UTIL
-    if (SfxChildWin_Impl* pCW = Get_BySaveId(aChildWins, nId))
+    if (Get_BySaveId(aChildWins, nId))
     {
         OSL_FAIL("The ChildWindow is not in context!");
     }
