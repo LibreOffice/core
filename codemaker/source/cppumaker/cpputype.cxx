@@ -3013,13 +3013,16 @@ void ExceptionType::dumpHdlFile(
 {
     if (name_ == "com.sun.star.uno.Exception")
     {
-        // LIBO_INTERNAL_ONLY implies GCC >= 7, which we need for this
-        // libstdc++ header.
-        includes.addCustom("#if defined LIBO_INTERNAL_ONLY && (defined __GNUC__ || defined __clang__) && __has_include(<experimental/source_location>)");
-        includes.addCustom("#define LIBO_USE_SOURCE_LOCATION");
+        includes.addCustom("#if defined(LIBO_INTERNAL_ONLY)");
+        includes.addCustom("#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907");
+        includes.addCustom("#include <source_location>");
+        includes.addCustom("#define LIBO_USE_SOURCE_LOCATION std");
+        includes.addCustom("#elif __has_include(<experimental/source_location>)");
+        includes.addCustom("#include <experimental/source_location>");
+        includes.addCustom("#define LIBO_USE_SOURCE_LOCATION std::experimental");
+        includes.addCustom("#endif");
         includes.addCustom("#endif");
         includes.addCustom("#if defined LIBO_USE_SOURCE_LOCATION");
-        includes.addCustom("#include <experimental/source_location>");
         includes.addCustom("#include <o3tl/runtimetooustring.hxx>");
         includes.addCustom("#endif");
     }
@@ -3059,7 +3062,7 @@ void ExceptionType::dumpHppFile(
     // default constructor
     out << "\ninline " << id_ << "::" << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "    std::experimental::source_location location\n";
+    out << "    LIBO_USE_SOURCE_LOCATION::source_location location\n";
     out << "#endif\n";
     out << "    )\n";
     inc();
@@ -3114,7 +3117,7 @@ void ExceptionType::dumpHppFile(
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << "    " << (bFirst ? "" : ", ") << "std::experimental::source_location location\n";
+        out << "    " << (bFirst ? "" : ", ") << "LIBO_USE_SOURCE_LOCATION::source_location location\n";
         out << "#endif\n";
         out << ")\n";
         inc();
@@ -3375,7 +3378,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
     // default constructor
     out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(\n";
     out << "#if defined LIBO_USE_SOURCE_LOCATION\n";
-    out << "    std::experimental::source_location location = std::experimental::source_location::current()\n";
+    out << "    LIBO_USE_SOURCE_LOCATION::source_location location = LIBO_USE_SOURCE_LOCATION::source_location::current()\n";
     out << "#endif\n\n";
     out << "    );\n";
 
@@ -3393,7 +3396,7 @@ void ExceptionType::dumpDeclaration(FileStream & out)
             bFirst = false;
         }
         out << "\n#if defined LIBO_USE_SOURCE_LOCATION\n";
-        out << ", std::experimental::source_location location = std::experimental::source_location::current()\n";
+        out << ", LIBO_USE_SOURCE_LOCATION::source_location location = LIBO_USE_SOURCE_LOCATION::source_location::current()\n";
         out << "#endif\n";
         out << "    );\n\n";
     }
