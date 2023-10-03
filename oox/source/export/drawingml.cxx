@@ -4716,8 +4716,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             rCustomShape2d.GetParameter(fY4, rPairs[rnPairIndex + 3].Second, false,
                                         bReplaceGeoHeight);
             // calculate ellipse parameter
-            const double fWR = (fX2 - fX1) / 2.0;
-            const double fHR = (fY2 - fY1) / 2.0;
+            const double fWR = (std::max(fX1, fX2) - std::min(fX1, fX2)) / 2.0;
+            const double fHR = (std::max(fY1, fY2) - std::min(fY1, fY2)) / 2.0;
             const double fCx = (fX1 + fX2) / 2.0;
             const double fCy = (fY1 + fY2) / 2.0;
             // calculate start angle
