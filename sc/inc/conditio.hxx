@@ -538,6 +538,20 @@ private:
     OUString maStyleName;
 };
 
+class ScColorFormatCache final : public SvtListener
+{
+private:
+    ScDocument& mrDoc;
+
+public:
+    explicit ScColorFormatCache(ScDocument& rDoc, const ScRangeList& rRanges);
+    virtual ~ScColorFormatCache() override;
+
+    void Notify( const SfxHint& rHint ) override;
+
+    std::vector<double> maValues;
+};
+
 //  complete conditional formatting
 class SC_DLLPUBLIC ScConditionalFormat
 {
@@ -546,6 +560,8 @@ class SC_DLLPUBLIC ScConditionalFormat
 
     std::vector<std::unique_ptr<ScFormatEntry>> maEntries;
     ScRangeList maRanges;            // Ranges for conditional format
+
+    mutable std::unique_ptr<ScColorFormatCache> mpCache;
 
 public:
     ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
@@ -606,6 +622,10 @@ public:
 
     // Forced recalculation for formulas
     void CalcAll();
+
+    void ResetCache() const;
+    void SetCache(const std::vector<double>& aValues) const;
+    std::vector<double>* GetCache() const;
 };
 
 class RepaintInIdle final : public Idle
