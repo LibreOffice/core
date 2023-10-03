@@ -2756,6 +2756,56 @@ function getElementsByProperty( node, name )
     return elements;
 }
 
+// User can hide / show the presentation content.
+// For that purpose, we change the background color of root node to either black or white.
+// To set it back to its original color (for showing the content back), we should have the initial background color saved somewhere to read back.
+// There may be no initial color at all, so the initial value of the saved initial is undefined.
+var rootNodeInitialBackgroundColor = undefined;
+
+function changeRootNodeBackgroundTo(color) {
+	if (rootNodeInitialBackgroundColor === undefined)
+		rootNodeInitialBackgroundColor = ROOT_NODE.style.backgroundColor;
+
+	if (color === 'initial')
+		ROOT_NODE.style.backgroundColor = rootNodeInitialBackgroundColor;
+	else
+		ROOT_NODE.style.backgroundColor = color;
+}
+
+var isContentHidden = false;
+var contentInitialVisibilityValues = null;
+
+function getInitialVisibilityValues() {
+	var list = ROOT_NODE.querySelectorAll('g');
+	contentInitialVisibilityValues = [];
+	for (var i = 0; i < list.length; i++) {
+		var temp = {};
+		temp.object = list[i];
+		temp.visibility = list[i].style.visibility;
+		contentInitialVisibilityValues.push(temp);
+	}
+}
+
+function hideShowContent(color) {
+	if (contentInitialVisibilityValues === null)
+		getInitialVisibilityValues();
+
+	if (isContentHidden) {
+		for (var i = 0; i < contentInitialVisibilityValues.length; i++)
+			contentInitialVisibilityValues[i].object.style.visibility = contentInitialVisibilityValues[i].visibility;
+
+		changeRootNodeBackgroundTo('initial');
+		isContentHidden = false;
+	}
+	else {
+		for (var i = 0; i < contentInitialVisibilityValues.length; i++)
+			contentInitialVisibilityValues[i].object.style.visibility = 'hidden';
+
+		changeRootNodeBackgroundTo(color);
+		isContentHidden = true;
+	}
+}
+
 /** Event handler for key press.
  *
  *  @param aEvt the event
@@ -2765,7 +2815,7 @@ function onKeyDown( aEvt )
     if ( !aEvt )
         aEvt = window.event;
 
-    var code = aEvt.keyCode || aEvt.charCode;
+    var code = aEvt.keyCode || aEvt.charCode || aEvt.code;
 
     // console.log('===> onKeyDown: ' + code);
 
@@ -2788,6 +2838,20 @@ function onKeyDown( aEvt )
 
         // console.log('     now: ' + code);
     }
+	else if (code === P_KEY) {
+		aEvt.preventDefault();
+		if (ROOT_NODE.style.cursor === 'pointer')
+			ROOT_NODE.style.cursor = 'default';
+		else
+			ROOT_NODE.style.cursor = 'pointer';
+	}
+	else if (code === W_KEY) {
+		hideShowContent('white');
+	}
+	else if (code === B_KEY) {
+		hideShowContent('black');
+	}
+
 
     if( !processingEffect && keyCodeDictionary[currentMode] && keyCodeDictionary[currentMode][code] )
     {
@@ -4505,7 +4569,10 @@ var END_KEY = 35;           // end keycode
 var ENTER_KEY = 13;
 var SPACE_KEY = 32;
 var ESCAPE_KEY = 27;
+var B_KEY = 66;
+var P_KEY = 80;
 var Q_KEY = 81;
+var W_KEY = 87;
 
 // Visibility Values
 var HIDDEN = 0;
