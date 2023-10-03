@@ -224,7 +224,7 @@ public:
     virtual ~ScColorFormat() override;
 
     const ScRangeList& GetRange() const;
-    void SetCache(const std::vector<double>& aValues);
+    void SetCache(const std::vector<double>& aValues) const;
     std::vector<double> GetCache() const;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
@@ -240,14 +240,6 @@ protected:
     double getMaxValue() const;
 
     ScConditionalFormat* mpParent;
-
-private:
-
-    struct ScColorFormatCache
-    {
-        std::vector<double> maValues;
-    };
-    mutable std::unique_ptr<ScColorFormatCache> mpCache;
 };
 
 typedef std::vector<std::unique_ptr<ScColorScaleEntry, o3tl::default_delete<ScColorScaleEntry>>> ScColorScaleEntries;
@@ -265,7 +257,10 @@ private:
 public:
     ScColorScaleFormat(ScDocument* pDoc);
     ScColorScaleFormat(ScDocument* pDoc, const ScColorScaleFormat& rFormat);
+    ScColorScaleFormat(const ScColorScaleFormat&) = delete;
     virtual ~ScColorScaleFormat() override;
+    const ScColorScaleFormat& operator=(const ScColorScaleFormat&) = delete;
+
     virtual ScColorFormat* Clone(ScDocument* pDoc) const override;
 
     virtual void SetParent(ScConditionalFormat* pParent) override;
