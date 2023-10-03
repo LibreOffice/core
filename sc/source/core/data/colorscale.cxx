@@ -462,22 +462,39 @@ const ScRangeList& ScColorFormat::GetRange() const
 
 std::vector<double> ScColorFormat::GetCache() const
 {
-    std::vector<double> empty;
-    return mpCache ? mpCache->maValues : empty;
+    if (!mpParent)
+        return {};
+
+    std::vector<double>* pRes = mpParent->GetCache();
+    if (pRes)
+        return *pRes;
+
+    return {};
 }
 
-void ScColorFormat::SetCache(const std::vector<double>& aValues)
+void ScColorFormat::SetCache(const std::vector<double>& aValues) const
 {
-    mpCache.reset(new ScColorFormatCache);
-    mpCache->maValues = aValues;
+    if (!mpParent)
+        return;
+
+    mpParent->SetCache(aValues);
 }
 
 std::vector<double>& ScColorFormat::getValues() const
 {
-    if(!mpCache)
+    assert(mpParent);
+
+    std::vector<double>* pCache = mpParent->GetCache();
+    if (!pCache || pCache->empty())
     {
-        mpCache.reset(new ScColorFormatCache);
-        std::vector<double>& rValues = mpCache->maValues;
+        if (!pCache)
+        {
+            SetCache({});
+            pCache = mpParent->GetCache();
+            assert(pCache);
+        }
+
+        std::vector<double>& rValues = *pCache;
 
         size_t n = GetRange().size();
         const ScRangeList& aRanges = GetRange();
@@ -515,7 +532,7 @@ std::vector<double>& ScColorFormat::getValues() const
         std::sort(rValues.begin(), rValues.end());
     }
 
-    return mpCache->maValues;
+    return *pCache;
 }
 
 double ScColorFormat::getMinValue() const
@@ -536,12 +553,10 @@ double ScColorFormat::getMaxValue() const
 
 void ScColorFormat::startRendering()
 {
-    mpCache.reset();
 }
 
 void ScColorFormat::endRendering()
 {
-    mpCache.reset();
 }
 
 void ScColorFormat::updateValues()

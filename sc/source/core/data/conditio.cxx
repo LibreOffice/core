@@ -1729,6 +1729,36 @@ void ScCondDateFormatEntry::endRendering()
     mpCache.reset();
 }
 
+ScColorFormatCache::ScColorFormatCache(ScDocument& rDoc, const ScRangeList& rRanges) :
+    mrDoc(rDoc)
+{
+    if (mrDoc.IsClipOrUndo())
+        return;
+
+    for (const ScRange& rRange: rRanges)
+        mrDoc.StartListeningArea(rRange, false, this);
+}
+
+ScColorFormatCache::~ScColorFormatCache()
+{
+    if (mrDoc.IsClipOrUndo())
+        return;
+
+    EndListeningAll();
+}
+
+void ScColorFormatCache::Notify(const SfxHint& rHint)
+{
+    if (rHint.GetId() == SfxHintId::Dying)
+    {
+        EndListeningAll();
+        return;
+    }
+
+    maValues.clear();
+}
+
+
 ScConditionalFormat::ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument) :
     pDoc( pDocument ),
     nKey( nNewKey )
@@ -1777,6 +1807,7 @@ void ScConditionalFormat::SetRange( const ScRangeList& rRanges )
 {
     maRanges = rRanges;
     SAL_WARN_IF(maRanges.empty(), "sc", "the conditional format range is empty! will result in a crash later!");
+    ResetCache();
 }
 
 void ScConditionalFormat::AddEntry( ScFormatEntry* pNew )
@@ -1920,16 +1951,20 @@ void ScConditionalFormat::UpdateReference( sc::RefUpdateContext& rCxt, bool bCop
             rxEntry->UpdateReference(rCxt);
         maRanges.UpdateReference(rCxt.meMode, pDoc, rCxt.maRange, rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
     }
+
+    ResetCache();
 }
 
 void ScConditionalFormat::InsertRow(SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, SCROW nRowPos, SCSIZE nSize)
 {
     maRanges.InsertRow(nTab, nColStart, nColEnd, nRowPos, nSize);
+    ResetCache();
 }
 
 void ScConditionalFormat::InsertCol(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, SCCOL nColPos, SCSIZE nSize)
 {
     maRanges.InsertCol(nTab, nRowStart, nRowEnd, nColPos, nSize);
+    ResetCache();
 }
 
 void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
@@ -1947,6 +1982,8 @@ void ScConditionalFormat::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
         rRange.aStart.IncTab(rCxt.mnSheets);
         rRange.aEnd.IncTab(rCxt.mnSheets);
     }
+
+    ResetCache();
 
     for (auto& rxEntry : maEntries)
         rxEntry->UpdateInsertTab(rCxt);
@@ -1976,6 +2013,8 @@ void ScConditionalFormat::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
         rRange.aStart.IncTab(-1*rCxt.mnSheets);
         rRange.aEnd.IncTab(-1*rCxt.mnSheets);
     }
+
+    ResetCache();
 
     for (auto& rxEntry : maEntries)
         rxEntry->UpdateDeleteTab(rCxt);
@@ -2014,6 +2053,8 @@ void ScConditionalFormat::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
         }
     }
 
+    ResetCache();
+
     for (auto& rxEntry : maEntries)
         rxEntry->UpdateMoveTab(rCxt);
 }
@@ -2025,6 +2066,7 @@ void ScConditionalFormat::DeleteArea( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
 
     SCTAB nTab = maRanges[0].aStart.Tab();
     maRanges.DeleteArea( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+    ResetCache();
 }
 
 void ScConditionalFormat::RenameCellStyle(std::u16string_view rOld, const OUString& rNew)
@@ -2090,6 +2132,27 @@ void ScConditionalFormat::CalcAll()
             rFormat.CalcAll();
         }
     }
+}
+
+void ScConditionalFormat::ResetCache() const
+{
+    if (!maRanges.empty() && pDoc)
+        mpCache = std::make_unique<ScColorFormatCache>(*pDoc, maRanges);
+    else
+        mpCache.reset();
+}
+
+void ScConditionalFormat::SetCache(const std::vector<double>& aValues) const
+{
+    if (!mpCache)
+        ResetCache();
+    if (mpCache)
+        mpCache->maValues = aValues;
+}
+
+std::vector<double>* ScConditionalFormat::GetCache() const
+{
+    return mpCache ? &mpCache->maValues : nullptr;
 }
 
 ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
