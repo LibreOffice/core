@@ -1873,13 +1873,15 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
-        //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-        sal_Int16 nVAnchor = text::RelOrientation::FRAME; // 'text'
-        // vAlign is ignored if vAnchor is set to 'text'. So, if w:y is not defined,
-        // but there is a defined vAlign, then a missing vAnchor should become 'margin'.
-        if (!bValidY && nVertOrient)
+        // Default the anchor in case FramePr_vAnchor is missing.
+        // ECMA 17.3.1.11 says "page",
+        // but errata documentation MS-OE376 2.1.48 Section 2.3.1.11 says "text"
+        // while actual testing usually indicates "margin" tdf#157572 tdf#112287
+        sal_Int16 nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
+        if (!nY && (bValidY || nVertOrient == text::VertOrientation::NONE))
         {
-            nVAnchor = text::RelOrientation::PAGE_PRINT_AREA; // 'margin'
+            // special cases? "auto" position defaults to "paragraph" based on testing when w:y=0
+            nVAnchor = text::RelOrientation::FRAME; // 'text'
         }
         for (const auto pProp : vProps)
         {
