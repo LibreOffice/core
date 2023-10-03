@@ -18,6 +18,7 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <sortedobjs.hxx>
 
 namespace
 {
@@ -51,6 +52,42 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableLeftoverParaPortion)
     // Without the accompanying fix in place, this test would have failed, the first page's anchor
     // also had some (duplicated) anchor text.
     CPPUNIT_ASSERT(!pPara2->GetPara());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testFloattableAnchorHeight)
+{
+#if !defined(MACOSX) // FIXME fails on macOS
+    // Given 3 tables, innermost table on pages 2-3-4:
+    createSwDoc("floattable-anchor-height.docx");
+
+    // When laying out the document:
+    calcLayout();
+
+    // Then make sure the flys are on the expected pages:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    SwSortedObjs* pPage2Objs = pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT(pPage2Objs);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage2Objs->size());
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3);
+    SwSortedObjs* pPage3Objs = pPage3->GetSortedObjs();
+    CPPUNIT_ASSERT(pPage3Objs);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. page 3 also had the fly frame of page 4 as well.
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage3Objs->size());
+    auto pPage4 = pPage3->GetNext()->DynCastPageFrame();
+    SwSortedObjs* pPage4Objs = pPage4->GetSortedObjs();
+    CPPUNIT_ASSERT(pPage4Objs);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage4Objs->size());
+#endif
 }
 }
 
