@@ -1863,12 +1863,16 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), nY));
 
         sal_Int16 nVertOrient = text::VertOrientation::NONE;
-        for (const auto pProp : vProps)
+        // Testing indicates that yAlign should be ignored if there is any specified w:y
+        if (!bValidY)
         {
-            if (pProp->GetyAlign() < 0)
-                continue;
-            nVertOrient = pProp->GetyAlign();
-            break;
+            for (const auto pProp : vProps)
+            {
+                if (pProp->GetyAlign() < 0)
+                    continue;
+                nVertOrient = pProp->GetyAlign();
+                break;
+            }
         }
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));

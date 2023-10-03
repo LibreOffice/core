@@ -285,6 +285,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePr2, "tdf154703_framePr2.rtf")
     assertXPath(pXmlDoc, "//w:body/w:p[1]/w:pPr/w:shd", "fill", "800000");
     assertXPath(pXmlDoc, "//w:body/w:p[2]/w:pPr/w:shd", "fill", "548DD4"); // was blue already, no change
     assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:shd", "fill", "800000");
+    assertXPath(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr", "yAlign", "center");
+    assertXPathNoAttribute(pXmlDoc, "//w:body/w:p[3]/w:pPr/w:framePr", "y");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf154703_framePrWrapSpacing, "tdf154703_framePrWrapSpacing.docx")

@@ -1050,7 +1050,6 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add( FSNS( XML_w, XML_h), OString::number(rSize.Height()));
 
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
-    attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
     OString aXAlign = convertToOOXMLHoriOrient(rHoriOrient.GetHoriOrient(), /*bIsPosToggle=*/false);
     OString aYAlign = convertToOOXMLVertOrient(rVertOrient.GetVertOrient());
@@ -1058,6 +1057,8 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
         attrList->add(FSNS(XML_w, XML_xAlign), aXAlign);
     if (!aYAlign.isEmpty())
         attrList->add(FSNS(XML_w, XML_yAlign), aYAlign);
+    else
+        attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
     sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
     sal_Int16 nRight = pFrameFormat->GetLRSpace().GetRight();
