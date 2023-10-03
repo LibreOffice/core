@@ -784,6 +784,20 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeFontTypeface)
     assertXPath(pXmlDoc, sElement + "a:majorFont/a:ea", "typeface", "");
     assertXPath(pXmlDoc, sElement + "a:minorFont/a:ea", "typeface", "");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf157289CircularArrowExport)
+{
+    // The document has a custom shape of type "circular-arrow". Such uses a B command where
+    // the ellipse bounding box is defined by bottom-right vertex first and then top-left vertex.
+    // When saving to PPTX this had resulted in negative radii for the ellipse.
+    loadFromURL(u"tdf157289_circularArrow_export.fodp");
+    save("Impress Office Open XML");
+
+    // Verify the markup. Both wR and hR must be positive.
+    xmlDocUniquePtr pXmlDoc = parseExport("ppt/slides/slide1.xml");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "wR", "6750");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo[1]", "hR", "6750");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
