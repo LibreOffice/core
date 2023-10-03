@@ -1429,6 +1429,17 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf112287)
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","yAlign","bottom");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf157572_defaultVAnchor)
+{
+    loadAndSave("tdf157572_defaultVAnchor.docx");
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // vAnchor wasn't defined on import. It should default to 'margin' when w:y=non-zero
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","margin");
+    // yAlign=something is not compatible with w:y=non-zero" - don't write anything out
+    // assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
 {
     loadAndSave("tdf112287B.docx");
