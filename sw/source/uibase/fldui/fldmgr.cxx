@@ -1074,7 +1074,10 @@ bool SwFieldMgr::InsertField(
                 const OUString& rRefmarkText = rData.m_sPar2;
                 SwPaM* pCursorPos = pCurShell->GetCursor();
                 pCurShell->StartAction();
-                if (!rRefmarkText.isEmpty())
+                bool bHadMark = pCursorPos->HasMark();
+                // If we have no selection and the refmark text is provided, then the text is
+                // expected to be HTML.
+                if (!bHadMark && !rRefmarkText.isEmpty())
                 {
                     // Split node to remember where the start position is.
                     bool bSuccess = pCurShell->GetDoc()->getIDocumentContentOperations().SplitNode(
@@ -1100,7 +1103,7 @@ bool SwFieldMgr::InsertField(
 
                 pCurShell->SetAttrItem( SwFormatRefMark( rData.m_sPar1 ) );
 
-                if (!rRefmarkText.isEmpty())
+                if (!bHadMark && !rRefmarkText.isEmpty())
                 {
                     pCursorPos->DeleteMark();
                 }

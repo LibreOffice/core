@@ -120,6 +120,30 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertRefmark)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aAttrs.size());
     CPPUNIT_ASSERT_EQUAL(OUString("aaabbbccc"), pTextNode->GetText());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertRefmarkSelection)
+{
+    // Given a document with a single selected word:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert2("myword");
+    pWrtShell->SelAll();
+
+    // When inserting a refmark:
+    SwFieldMgr aMgr(pWrtShell);
+    SwInsertField_Data aData(SwFieldTypesEnum::SetRef, /*nSubType=*/0, "myname", "myword",
+                             /*nFormatId=*/0);
+    aMgr.InsertField(aData);
+
+    // Then make sure the document still just contains that word only once:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: myword
+    // - Actual  : mywordmyword
+    // i.e. the content of the selection was duplicated.
+    CPPUNIT_ASSERT_EQUAL(OUString("myword"), pTextNode->GetText());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
