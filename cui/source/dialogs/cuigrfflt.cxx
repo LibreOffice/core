@@ -431,21 +431,21 @@ GraphicFilterEmboss::~GraphicFilterEmboss()
 Graphic GraphicFilterEmboss::GetFilteredGraphic( const Graphic& rGraphic, double, double )
 {
     Graphic aRet;
-    sal_uInt16  nAzim, nElev;
+    Degree100  nAzim, nElev;
 
     switch (maCtlLight.GetActualRP())
     {
         default:       OSL_FAIL("svx::GraphicFilterEmboss::GetFilteredGraphic(), unknown Reference Point!" );
                        [[fallthrough]];
-        case RectPoint::LT: nAzim = 4500;    nElev = 4500; break;
-        case RectPoint::MT: nAzim = 9000;    nElev = 4500; break;
-        case RectPoint::RT: nAzim = 13500;   nElev = 4500; break;
-        case RectPoint::LM: nAzim = 0;       nElev = 4500; break;
-        case RectPoint::MM: nAzim = 0;       nElev = 9000; break;
-        case RectPoint::RM: nAzim = 18000;   nElev = 4500; break;
-        case RectPoint::LB: nAzim = 31500;   nElev = 4500; break;
-        case RectPoint::MB: nAzim = 27000;   nElev = 4500; break;
-        case RectPoint::RB: nAzim = 22500;   nElev = 4500; break;
+        case RectPoint::LT: nAzim = 4500_deg100;    nElev = 4500_deg100; break;
+        case RectPoint::MT: nAzim = 9000_deg100;    nElev = 4500_deg100; break;
+        case RectPoint::RT: nAzim = 13500_deg100;   nElev = 4500_deg100; break;
+        case RectPoint::LM: nAzim = 0_deg100;       nElev = 4500_deg100; break;
+        case RectPoint::MM: nAzim = 0_deg100;       nElev = 9000_deg100; break;
+        case RectPoint::RM: nAzim = 18000_deg100;   nElev = 4500_deg100; break;
+        case RectPoint::LB: nAzim = 31500_deg100;   nElev = 4500_deg100; break;
+        case RectPoint::MB: nAzim = 27000_deg100;   nElev = 4500_deg100; break;
+        case RectPoint::RB: nAzim = 22500_deg100;   nElev = 4500_deg100; break;
     }
 
     if( rGraphic.IsAnimated() )

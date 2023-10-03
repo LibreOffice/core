@@ -11,6 +11,9 @@
 #ifndef INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
 #define INCLUDED_VCL_BITMAPEMBOSSGREYFILTER_HXX
 
+#include <sal/config.h>
+
+#include <tools/degree.hxx>
 #include <vcl/BitmapFilter.hxx>
 
 class BitmapEx;
@@ -18,17 +21,17 @@ class BitmapEx;
 class VCL_DLLPUBLIC BitmapEmbossGreyFilter final : public BitmapFilter
 {
 public:
-    BitmapEmbossGreyFilter(sal_uInt16 nAzimuthAngle100, sal_uInt16 nElevationAngle100)
-        : mnAzimuthAngle100(nAzimuthAngle100)
-        , mnElevationAngle100(nElevationAngle100)
+    BitmapEmbossGreyFilter(Degree100 nAzimuthAngle, Degree100 nElevationAngle)
+        : mnAzimuthAngle(nAzimuthAngle)
+        , mnElevationAngle(nElevationAngle)
     {
     }
 
     virtual BitmapEx execute(BitmapEx const& rBitmapEx) const override;
 
 private:
-    sal_uInt16 mnAzimuthAngle100;
-    sal_uInt16 mnElevationAngle100;
+    Degree100 mnAzimuthAngle;
+    Degree100 mnElevationAngle;
 };
 
 #endif
