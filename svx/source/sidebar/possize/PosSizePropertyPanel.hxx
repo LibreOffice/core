@@ -128,6 +128,7 @@ private:
     Fraction                                maUIScale;
     MapUnit                                 mePoolUnit;
     FieldUnit                               meDlgUnit;
+    bool                                    mbFieldMetricOutDated;
 
     // Controller Items
     ::sfx2::sidebar::ControllerItem         maTransfPosXControl;
@@ -166,10 +167,10 @@ private:
     void Initialize();
     void executeSize();
 
-    void MetricState( SfxItemState eState, const SfxPoolItem* pState );
+    void MetricState(SfxItemState eState, const SfxPoolItem* pState, const Fraction& rUIScale);
     static FieldUnit GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState );
     void DisableControls();
-    void SetPosSizeMinMax();
+    void SetPosSizeMinMax(const Fraction& rUIScale);
 
     /** Check if the UI scale has changed and handle such a change.
         UI scale is an SD only feature.  The UI scale is represented by items
@@ -181,7 +182,7 @@ private:
         b) check if the UI scale has changed (strangely, the UI scale value is available at the SdrModel.
         c) invalidate the items for position and size to trigger notifications of their current values.
     */
-    void UpdateUIScale();
+    void UpdateUIScale(const Fraction& rUIScale);
 };
 
 
