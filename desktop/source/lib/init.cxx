@@ -7182,7 +7182,7 @@ static void doc_setAccessibilityState(SAL_UNUSED_PARAMETER LibreOfficeKitDocumen
     SolarMutexGuard aGuard;
 
     int nDocType = getDocumentType(pThis);
-    if (nDocType != LOK_DOCTYPE_TEXT)
+    if (!(nDocType == LOK_DOCTYPE_TEXT || nDocType == LOK_DOCTYPE_PRESENTATION))
         return;
 
     SfxLokHelper::setAccessibilityState(nId, nEnabled);

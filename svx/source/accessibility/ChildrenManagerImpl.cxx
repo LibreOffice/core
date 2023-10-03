@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/types.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
@@ -315,8 +316,9 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
         aBoundingBox.SetBottom( aPos.Y + aSize.Height );
 
         // Insert shape if it is visible, i.e. its bounding box overlaps
-        // the visible area.
-        if ( aBoundingBox.Overlaps(aVisibleArea) )
+        // the visible area. In the LOK case we skip the overlap check
+        // since we could remove a shape that is visible on the client.
+        if ( aBoundingBox.Overlaps(aVisibleArea) || comphelper::LibreOfficeKit::isActive())
             raDescriptorList.emplace_back(xShape);
     }
 }
@@ -482,7 +484,7 @@ void ChildrenManagerImpl::AddShape (const Reference<drawing::XShape>& rxShape)
     if (xParent != mxShapeList)
         return;
 
-    if (!aBoundingBox.Overlaps(aVisibleArea))
+    if (!aBoundingBox.Overlaps(aVisibleArea) && !comphelper::LibreOfficeKit::isActive())
         return;
 
     // Add shape to list of visible shapes.
