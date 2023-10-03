@@ -1440,6 +1440,34 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf157572_defaultVAnchor)
     assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf157572_insidiousCombination)
+{
+    loadAndSave("tdf157572_insidiousCombination.docx");
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    // This is a NASTY example. In MS Word, it IMPORTS yAlign=bottom, but positions it as y=0.
+    // although the UI shows "bottom" instead of position 0cm. Clicking -ok- MOVES the textbox.
+    // Seems best to throw away "bottom" in LO, since a round-trip in MS Word keeps the 0cm
+    // position and the vAlign ONLY affects the UI.
+
+    // vAnchor was defined as text.
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","text");
+    // yAlign=something is not compatible with "text" - don't write anything out
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
+    // y is zero - no need to write out the default value
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "y");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf157572_noVAlignAsText)
+{
+    loadAndSave("tdf157572_noVAlignAsText.docx");
+    xmlDocUniquePtr pXmlDocument = parseExport("word/document.xml");
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr","vAnchor","text");
+    // yAlign=something is not compatible with vAnchor="text" - don't write anything out
+    assertXPathNoAttribute(pXmlDocument, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "yAlign");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf112287B)
 {
     loadAndSave("tdf112287B.docx");

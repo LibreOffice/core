@@ -1051,13 +1051,15 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
     attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
 
+    const OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
+    const OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
     OString aXAlign = convertToOOXMLHoriOrient(rHoriOrient.GetHoriOrient(), /*bIsPosToggle=*/false);
     OString aYAlign = convertToOOXMLVertOrient(rVertOrient.GetVertOrient());
     if (!aXAlign.isEmpty())
         attrList->add(FSNS(XML_w, XML_xAlign), aXAlign);
-    if (!aYAlign.isEmpty())
+    if (!aYAlign.isEmpty() && relativeFromV != "text")
         attrList->add(FSNS(XML_w, XML_yAlign), aYAlign);
-    else
+    else if (aPos.Y)
         attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
 
     sal_Int16 nLeft = pFrameFormat->GetLRSpace().GetLeft();
@@ -1074,9 +1076,6 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
     attrList->add(FSNS(XML_w, XML_hSpace), OString::number((nLeft + nRight) / 2));
     attrList->add(FSNS(XML_w, XML_vSpace), OString::number((nUpper + nLower) / 2));
-
-    OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
-    OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
 
     switch (pFrameFormat->GetSurround().GetValue())
     {

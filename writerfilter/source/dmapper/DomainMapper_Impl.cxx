@@ -1874,8 +1874,6 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
                 break;
             }
         }
-        aFrameProperties.push_back(
-            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
         // Default the anchor in case FramePr_vAnchor is missing.
         // ECMA 17.3.1.11 says "page",
@@ -1892,10 +1890,15 @@ DomainMapper_Impl::MakeFrameProperties(const ParagraphProperties& rProps)
             if (pProp->GetvAnchor() < 0)
                 continue;
             nVAnchor = pProp->GetvAnchor();
+            // vAlign is ignored if vAnchor is set to 'text'
+            if (nVAnchor == text::RelOrientation::FRAME)
+                nVertOrient = text::VertOrientation::NONE;
             break;
         }
         aFrameProperties.push_back(
             comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), nVAnchor));
+        aFrameProperties.push_back(
+            comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
         text::WrapTextMode nWrap = text::WrapTextMode_NONE;
         for (const auto pProp : vProps)
