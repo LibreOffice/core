@@ -51,6 +51,8 @@
 #include <crsrsh.hxx>
 #include <swtypes.hxx>
 #include <strings.hrc>
+#include <flyfrms.hxx>
+#include <bodyfrm.hxx>
 
 SwTmpEndPortion::SwTmpEndPortion( const SwLinePortion &rPortion,
                 const FontLineStyle eUL,
@@ -412,7 +414,8 @@ bool SwTextFrame::FormatEmpty()
     // sw_redlinehide: just disable FormatEmpty optimisation for now
     // Split fly frames: non-last parts of the anchor want this optimization to clear the old
     // content.
-    bool bHasNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
+    SwFlyAtContentFrame* pNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
+    bool bHasNonLastSplitFlyDrawObj = pNonLastSplitFlyDrawObj != nullptr;
     if ((HasFollow() && !bHasNonLastSplitFlyDrawObj) || GetMergedPara() || (GetTextNodeFirst()->GetpSwpHints() && !bHasNonLastSplitFlyDrawObj) ||
         nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNodeFirst()->HasHiddenCharAttribute(true) ||
@@ -466,7 +469,26 @@ bool SwTextFrame::FormatEmpty()
     }
 
     SwRectFnSet aRectFnSet(this);
-    const SwTwips nChg = nHeight - aRectFnSet.GetHeight(getFramePrintArea());
+    SwTwips nChg = nHeight - aRectFnSet.GetHeight(getFramePrintArea());
+    const SwBodyFrame* pBody = FindBodyFrame();
+    if (pNonLastSplitFlyDrawObj && pBody)
+    {
+        // See if we need to increase the text frame height due to split flys. This is necessary for
+        // anchors of inner floating tables, where moving to a next page moves indirectly, so we
+        // want a correct text frame height.
+        SwTwips nFrameBottom = aRectFnSet.GetBottom(getFrameArea()) + nChg;
+        SwTwips nFlyBottom = aRectFnSet.GetBottom(pNonLastSplitFlyDrawObj->getFrameArea());
+        SwTwips nBodyBottom = aRectFnSet.GetBottom(pBody->getFrameArea());
+        if (nFlyBottom > nBodyBottom)
+        {
+            // This is the legacy case where flys may overlap with footer frames.
+            nFlyBottom = nBodyBottom;
+        }
+        if (pNonLastSplitFlyDrawObj->isFrameAreaPositionValid() && nFlyBottom > nFrameBottom)
+        {
+            nChg += (nFlyBottom - nFrameBottom);
+        }
+    }
 
     if( !nChg )
         SetUndersized( false );
