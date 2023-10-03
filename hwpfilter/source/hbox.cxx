@@ -422,7 +422,7 @@ hchar_string MailMerge::GetString()
 #define OL_HANGL_JASO   0
 #define OL_HANGL_KANATA 1
 
-static hchar olHanglJaso(int num, int type)
+static hchar olHanglJaso(unsigned int num, int type)
 {
     static const unsigned char han_init[] =
         { 0x88, 0x90, 0x94, 0x9c, 0xa0, 0xa4, 0xac, 0xb4, 0xb8, 0xc0, 0xc4, 0xc8, 0xcc, 0xd0 };
