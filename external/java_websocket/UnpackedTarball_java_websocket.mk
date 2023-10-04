@@ -23,6 +23,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,java_websocket,\
 	external/java_websocket/patches/0001-cid-1545227-Dm-Dubious-method-used.patch \
 	external/java_websocket/patches/0001-cid-1545515-Dm-Dubious-method-used.patch \
 	external/java_websocket/patches/0001-cid-1546264-Dm-Dubious-method-used.patch \
+	external/java_websocket/patches/0001-cid-1546341-Resource-leak-on-an-exceptional-path.patch \
 ))
 
 # vim: set noet sw=4 ts=4:

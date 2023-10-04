@@ -1,0 +1,40 @@
+From 77aac6a0be7a22dc63fd449a8292ff0b83dcb005 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolan.mcnamara@collabora.com>
+Date: Tue, 3 Oct 2023 11:06:35 +0100
+Subject: [PATCH] cid#1546341 Resource leak on an exceptional path
+
+---
+ .../java_websocket/server/WebSocketServer.java  | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
+
+diff --git a/src/main/java/org/java_websocket/server/WebSocketServer.java b/src/main/java/org/java_websocket/server/WebSocketServer.java
+index bb8178c..36e19a7 100644
+--- a/src/main/java/org/java_websocket/server/WebSocketServer.java
++++ b/src/main/java/org/java_websocket/server/WebSocketServer.java
+@@ -473,10 +473,19 @@ public abstract class WebSocketServer extends AbstractWebSocket implements Runna
+     if (channel == null) {
+       return;
+     }
+-    channel.configureBlocking(false);
+-    Socket socket = channel.socket();
+-    socket.setTcpNoDelay(isTcpNoDelay());
+-    socket.setKeepAlive(true);
++    try {
++      channel.configureBlocking(false);
++      Socket socket = channel.socket();
++      socket.setTcpNoDelay(isTcpNoDelay());
++      socket.setKeepAlive(true);
++    } catch (IOException ex) {
++      try {
++        channel.close();
++      } catch (IOException e) {
++        // there is nothing that must be done here
++      }
++      throw ex;
++    }
+     WebSocketImpl w = wsf.createWebSocket(this, drafts);
+     w.setSelectionKey(channel.register(selector, SelectionKey.OP_READ, w));
+     try {
+-- 
+2.41.0
+
