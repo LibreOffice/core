@@ -235,6 +235,7 @@ void SalData::initKeyCodeMap()
     initKey( L';', KEY_SEMICOLON );
     initKey( L'\'', KEY_QUOTERIGHT );
     initKey( L'}', KEY_RIGHTCURLYBRACKET );
+    initKey( L'#', KEY_NUMBERSIGN);
     initKey( L':', KEY_COLON );
 }
 

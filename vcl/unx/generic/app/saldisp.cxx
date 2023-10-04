@@ -905,6 +905,9 @@ OUString SalDisplay::GetKeyName( sal_uInt16 nKeyCode ) const
         case KEY_RIGHTCURLYBRACKET:
             aCustomKeyName = "}";
             break;
+        case KEY_NUMBERSIGN:
+            aCustomKeyName = "#";
+            break;
         case KEY_COLON:
             aCustomKeyName = ":";
             break;
@@ -1257,6 +1260,10 @@ sal_uInt16 SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
         case XK_braceright:
             nKey = KEY_RIGHTCURLYBRACKET;
             *pcPrintable = '\'';
+            break;
+        case XK_numbersign:
+            nKey = KEY_NUMBERSIGN;
+            *pcPrintable = '#';
             break;
         case XK_colon:
             nKey = KEY_COLON;

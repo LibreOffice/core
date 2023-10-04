@@ -137,6 +137,7 @@ KeyMapping::KeyIdentifierInfo const KeyMapping::KeyIdentifierMap[] =
     {css::awt::Key::SEMICOLON     , "KEY_SEMICOLON" },
     {css::awt::Key::QUOTERIGHT    , "KEY_QUOTERIGHT" },
     {css::awt::Key::RIGHTCURLYBRACKET, "KEY_RIGHTCURLYBRACKET" },
+    {css::awt::Key::NUMBERSIGN, "KEY_NUMBERSIGN" },
     {css::awt::Key::COLON         , "KEY_COLON" },
     {0                            , ""               } // mark the end of this array!
 };
