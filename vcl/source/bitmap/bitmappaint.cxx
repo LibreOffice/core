@@ -556,12 +556,12 @@ Bitmap Bitmap::CreateMask(const Color& rTransColor, sal_uInt8 nTol) const
 
     BitmapColor aCol;
     tools::Long nR, nG, nB;
-    const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
-    const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
-    const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
-    const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
-    const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
-    const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
+    const tools::Long nMinR = std::clamp<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
+    const tools::Long nMaxR = std::clamp<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
+    const tools::Long nMinG = std::clamp<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
+    const tools::Long nMaxG = std::clamp<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
+    const tools::Long nMinB = std::clamp<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
+    const tools::Long nMaxB = std::clamp<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
 
     if (pReadAcc->HasPalette())
     {
@@ -724,12 +724,12 @@ AlphaMask Bitmap::CreateAlphaMask(const Color& rTransColor, sal_uInt8 nTol) cons
 
     BitmapColor aCol;
     tools::Long nR, nG, nB;
-    const tools::Long nMinR = MinMax<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
-    const tools::Long nMaxR = MinMax<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
-    const tools::Long nMinG = MinMax<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
-    const tools::Long nMaxG = MinMax<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
-    const tools::Long nMinB = MinMax<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
-    const tools::Long nMaxB = MinMax<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
+    const tools::Long nMinR = std::clamp<tools::Long>(rTransColor.GetRed() - nTol, 0, 255);
+    const tools::Long nMaxR = std::clamp<tools::Long>(rTransColor.GetRed() + nTol, 0, 255);
+    const tools::Long nMinG = std::clamp<tools::Long>(rTransColor.GetGreen() - nTol, 0, 255);
+    const tools::Long nMaxG = std::clamp<tools::Long>(rTransColor.GetGreen() + nTol, 0, 255);
+    const tools::Long nMinB = std::clamp<tools::Long>(rTransColor.GetBlue() - nTol, 0, 255);
+    const tools::Long nMaxB = std::clamp<tools::Long>(rTransColor.GetBlue() + nTol, 0, 255);
 
     if (pReadAcc->HasPalette())
     {
@@ -1019,12 +1019,12 @@ bool Bitmap::Replace(const Color& rSearchColor, const Color& rReplaceColor, sal_
     if (!pAcc)
         return false;
 
-    const tools::Long nMinR = MinMax<tools::Long>(rSearchColor.GetRed() - nTol, 0, 255);
-    const tools::Long nMaxR = MinMax<tools::Long>(rSearchColor.GetRed() + nTol, 0, 255);
-    const tools::Long nMinG = MinMax<tools::Long>(rSearchColor.GetGreen() - nTol, 0, 255);
-    const tools::Long nMaxG = MinMax<tools::Long>(rSearchColor.GetGreen() + nTol, 0, 255);
-    const tools::Long nMinB = MinMax<tools::Long>(rSearchColor.GetBlue() - nTol, 0, 255);
-    const tools::Long nMaxB = MinMax<tools::Long>(rSearchColor.GetBlue() + nTol, 0, 255);
+    const tools::Long nMinR = std::clamp<tools::Long>(rSearchColor.GetRed() - nTol, 0, 255);
+    const tools::Long nMaxR = std::clamp<tools::Long>(rSearchColor.GetRed() + nTol, 0, 255);
+    const tools::Long nMinG = std::clamp<tools::Long>(rSearchColor.GetGreen() - nTol, 0, 255);
+    const tools::Long nMaxG = std::clamp<tools::Long>(rSearchColor.GetGreen() + nTol, 0, 255);
+    const tools::Long nMinB = std::clamp<tools::Long>(rSearchColor.GetBlue() - nTol, 0, 255);
+    const tools::Long nMaxB = std::clamp<tools::Long>(rSearchColor.GetBlue() + nTol, 0, 255);
 
     if (pAcc->HasPalette())
     {

@@ -71,7 +71,7 @@ void ImplCalculateContributions(
             }
 
             // Handling on edges
-            const sal_Int32 aPixelIndex(MinMax(j, 0, aSourceSize - 1));
+            const sal_Int32 aPixelIndex(std::clamp(j, sal_Int32(0), aSourceSize - 1));
             const sal_Int32 nIndex(aIndex + aCurrentCount);
 
             // scale the weight by 255 since we're converting from float to int
@@ -151,9 +151,9 @@ bool ImplScaleConvolutionHor(Bitmap& rSource, Bitmap& rTarget, const double& rSc
                     assert(aSum != 0);
 
                     const BitmapColor aResultColor(
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                        static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueRed / aSum, 0, 255)),
+                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueGreen / aSum, 0, 255)),
+                        static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueBlue / aSum, 0, 255)));
 
                     pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
                 }
@@ -233,9 +233,9 @@ bool ImplScaleConvolutionVer(Bitmap& rSource, Bitmap& rTarget, const double& rSc
             assert(aSum != 0);
 
             const BitmapColor aResultColor(
-                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
-                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
-                static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueRed / aSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueGreen / aSum, 0, 255)),
+                static_cast< sal_uInt8 >(std::clamp< sal_Int32 >(aValueBlue / aSum, 0, 255)));
 
             if(pWriteAcc->HasPalette())
             {

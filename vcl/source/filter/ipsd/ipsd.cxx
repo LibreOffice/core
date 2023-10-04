@@ -691,9 +691,9 @@ bool PSDReader::ImplReadBody()
                         sal_Int32 nDAT = aBlack[ nX + nY * mpFileHeader->nColumns ] * ( nBlackMax - 256 ) / 0x1ff;
 
                         aBitmapColor = mpBitmap->GetPixel( nY, nX );
-                        sal_uInt8 cR = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetRed() - nDAT, 0, 255L ));
-                        sal_uInt8 cG = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetGreen() - nDAT, 0, 255L ));
-                        sal_uInt8 cB = static_cast<sal_uInt8>(MinMax( aBitmapColor.GetBlue() - nDAT, 0, 255L ));
+                        sal_uInt8 cR = static_cast<sal_uInt8>(std::clamp( aBitmapColor.GetRed() - nDAT, sal_Int32(0), sal_Int32(255) ));
+                        sal_uInt8 cG = static_cast<sal_uInt8>(std::clamp( aBitmapColor.GetGreen() - nDAT, sal_Int32(0), sal_Int32(255) ));
+                        sal_uInt8 cB = static_cast<sal_uInt8>(std::clamp( aBitmapColor.GetBlue() - nDAT, sal_Int32(0), sal_Int32(255) ));
                         mpBitmap->SetPixel( nY, nX, Color( cR, cG, cB ) );
                     }
                 }

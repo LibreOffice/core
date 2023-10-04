@@ -51,14 +51,15 @@ BitmapEx BitmapSeparableUnsharpenFilter::execute(BitmapEx const& rBitmapEx) cons
             aColor = pReadAcc->GetColor(y, x);
 
             BitmapColor aResultColor(
-                static_cast<sal_uInt8>(MinMax(
-                    aColor.GetRed() + (aColor.GetRed() - aColorBlur.GetRed()) * aAmount, 0, 255)),
-                static_cast<sal_uInt8>(MinMax(
-                    aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0,
-                    255)),
                 static_cast<sal_uInt8>(
-                    MinMax(aColor.GetBlue() + (aColor.GetBlue() - aColorBlur.GetBlue()) * aAmount,
-                           0, 255)));
+                    std::clamp(aColor.GetRed() + (aColor.GetRed() - aColorBlur.GetRed()) * aAmount,
+                               0.0, 255.0)),
+                static_cast<sal_uInt8>(std::clamp(
+                    aColor.GetGreen() + (aColor.GetGreen() - aColorBlur.GetGreen()) * aAmount, 0.0,
+                    255.0)),
+                static_cast<sal_uInt8>(std::clamp(
+                    aColor.GetBlue() + (aColor.GetBlue() - aColorBlur.GetBlue()) * aAmount, 0.0,
+                    255.0)));
 
             pWriteAcc->SetPixelOnData(pScanline, x, aResultColor);
         }

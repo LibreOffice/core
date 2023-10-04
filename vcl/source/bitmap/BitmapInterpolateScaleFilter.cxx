@@ -82,7 +82,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                     for (sal_Int32 nX = 0, nTemp = nWidth - 2; nX < nNewWidth; nX++)
                     {
                         double fTemp = nX * fRevScaleX;
-                        pLutInt[nX] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
+                        pLutInt[nX]
+                            = std::clamp(static_cast<sal_Int32>(fTemp), sal_Int32(0), nTemp);
                         fTemp -= pLutInt[nX];
                         pLutFrac[nX] = static_cast<sal_Int32>(fTemp * 1024.);
                     }
@@ -176,7 +177,8 @@ BitmapEx BitmapInterpolateScaleFilter::execute(BitmapEx const& rBitmapEx) const
                         for (sal_Int32 nY = 0, nTemp = nHeight - 2; nY < nNewHeight; nY++)
                         {
                             double fTemp = nY * fRevScaleY;
-                            pLutInt[nY] = MinMax(static_cast<sal_Int32>(fTemp), 0, nTemp);
+                            pLutInt[nY]
+                                = std::clamp(static_cast<sal_Int32>(fTemp), sal_Int32(0), nTemp);
                             fTemp -= pLutInt[nY];
                             pLutFrac[nY] = static_cast<sal_Int32>(fTemp * 1024.);
                         }

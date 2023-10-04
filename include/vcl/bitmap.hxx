@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_BITMAP_HXX
 
 #include <tools/degree.hxx>
+#include <tools/helpers.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/mapmod.hxx>
@@ -30,9 +31,13 @@
 
 #include <o3tl/typed_flags_set.hxx>
 
+#include <algorithm>
 #include <memory>
 
-#define GAMMA( _def_cVal, _def_InvGamma )   (static_cast<sal_uInt8>(MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0,255)))
+inline sal_uInt8 GAMMA(double _def_cVal, double _def_InvGamma)
+{
+    return FRound(std::clamp(pow(_def_cVal / 255.0, _def_InvGamma) * 255.0, 0.0, 255.0));
+}
 
 class Color;
 

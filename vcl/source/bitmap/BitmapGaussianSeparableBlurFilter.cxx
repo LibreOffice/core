@@ -124,9 +124,10 @@ bool BitmapGaussianSeparableBlurFilter::convolutionPass(const Bitmap& rBitmap, B
                 aValueBlue += aWeight * aColor.GetBlue();
             }
 
-            BitmapColor aResultColor(static_cast<sal_uInt8>(MinMax(aValueRed / aSum, 0, 255)),
-                                     static_cast<sal_uInt8>(MinMax(aValueGreen / aSum, 0, 255)),
-                                     static_cast<sal_uInt8>(MinMax(aValueBlue / aSum, 0, 255)));
+            BitmapColor aResultColor(
+                static_cast<sal_uInt8>(std::clamp(aValueRed / aSum, 0.0, 255.0)),
+                static_cast<sal_uInt8>(std::clamp(aValueGreen / aSum, 0.0, 255.0)),
+                static_cast<sal_uInt8>(std::clamp(aValueBlue / aSum, 0.0, 255.0)));
 
             int nDestX = nSourceY;
             int nDestY = nSourceX;

@@ -178,10 +178,10 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
-            nPoints = static_cast<sal_uInt16>(MinMax(
+            nPoints = std::clamp(
                 ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
                            sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
-                32, 256 ));
+                32.0, 256.0 );
         }
         else
         {
@@ -244,10 +244,10 @@ ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, co
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
         if (!bOverflow)
         {
-            nPoints = static_cast<sal_uInt16>(MinMax(
+            nPoints = std::clamp(
                 ( M_PI * ( 1.5 * ( nRadX + nRadY ) -
                            sqrt( static_cast<double>(std::abs(nRadXY)) ) ) ),
-                32, 256 ));
+                32.0, 256.0 );
         }
         else
         {

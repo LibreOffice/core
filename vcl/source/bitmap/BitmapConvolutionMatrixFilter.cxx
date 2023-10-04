@@ -141,9 +141,12 @@ BitmapEx BitmapConvolutionMatrixFilter::execute(BitmapEx const& rBitmapEx) const
             // calculate destination color
             pWriteAcc->SetPixelOnData(
                 pScanline, nX,
-                BitmapColor(static_cast<sal_uInt8>(MinMax(nSumR / nDivisor, 0, 255)),
-                            static_cast<sal_uInt8>(MinMax(nSumG / nDivisor, 0, 255)),
-                            static_cast<sal_uInt8>(MinMax(nSumB / nDivisor, 0, 255))));
+                BitmapColor(static_cast<sal_uInt8>(
+                                std::clamp(nSumR / nDivisor, sal_Int32(0), sal_Int32(255))),
+                            static_cast<sal_uInt8>(
+                                std::clamp(nSumG / nDivisor, sal_Int32(0), sal_Int32(255))),
+                            static_cast<sal_uInt8>(
+                                std::clamp(nSumB / nDivisor, sal_Int32(0), sal_Int32(255)))));
         }
 
         if (++nY < nHeight)
