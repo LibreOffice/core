@@ -157,70 +157,72 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
     return bValid;
 }
 
-const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { SID_ATTR_FRAMEDIRECTION, true },         // EE_PARA_WRITINGDIR
-        { 0, true },                               // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, true },   // EE_PARA_HANGINGPUNCTUATION
-        { SID_ATTR_PARA_FORBIDDEN_RULES, true },   // EE_PARA_FORBIDDENRULES
-        { SID_ATTR_PARA_SCRIPTSPACE, true },       // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, true },         // EE_PARA_NUMBULL
-        { 0, true },                               // EE_PARA_HYPHENATE
-        { 0, true },                               // EE_PARA_HYPHENATE_NO_CAPS
-        { 0, true },                               // EE_PARA_HYPHENATE_NO_LAST_WORD
-        { 0, true },                               // EE_PARA_BULLETSTATE
-        { 0, true },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, true },         // EE_PARA_OUTLLEVEL
-        { SID_ATTR_PARA_BULLET, true },            // EE_PARA_BULLET
-        { SID_ATTR_LRSPACE, true },                // EE_PARA_LRSPACE
-        { SID_ATTR_ULSPACE, true },                // EE_PARA_ULSPACE
-        { SID_ATTR_PARA_LINESPACE, true },         // EE_PARA_SBL
-        { SID_ATTR_PARA_ADJUST, true },            // EE_PARA_JUST
-        { SID_ATTR_TABSTOP, true },                // EE_PARA_TABS
-        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, true }, // EE_PARA_JUST_METHOD
-        { SID_ATTR_ALIGN_VER_JUSTIFY, true },      // EE_PARA_VER_JUST
-        { SID_ATTR_CHAR_COLOR, true },         // EE_CHAR_COLOR
-        { SID_ATTR_CHAR_FONT, true },          // EE_CHAR_FONTINFO
-        { SID_ATTR_CHAR_FONTHEIGHT, true },    // EE_CHAR_FONTHEIGHT
-        { SID_ATTR_CHAR_SCALEWIDTH, true },    // EE_CHAR_FONTWIDTH
-        { SID_ATTR_CHAR_WEIGHT, true },        // EE_CHAR_WEIGHT
-        { SID_ATTR_CHAR_UNDERLINE, true },     // EE_CHAR_UNDERLINE
-        { SID_ATTR_CHAR_STRIKEOUT, true },     // EE_CHAR_STRIKEOUT
-        { SID_ATTR_CHAR_POSTURE, true },       // EE_CHAR_ITALIC
-        { SID_ATTR_CHAR_CONTOUR, true },       // EE_CHAR_OUTLINE
-        { SID_ATTR_CHAR_SHADOWED, true },      // EE_CHAR_SHADOW
-        { SID_ATTR_CHAR_ESCAPEMENT, true },    // EE_CHAR_ESCAPEMENT
-        { SID_ATTR_CHAR_AUTOKERN, true },      // EE_CHAR_PAIRKERNING
-        { SID_ATTR_CHAR_KERNING, true },       // EE_CHAR_KERNING
-        { SID_ATTR_CHAR_WORDLINEMODE, true },  // EE_CHAR_WLM
-        { SID_ATTR_CHAR_LANGUAGE, true },      // EE_CHAR_LANGUAGE
-        { SID_ATTR_CHAR_CJK_LANGUAGE, true },  // EE_CHAR_LANGUAGE_CJK
-        { SID_ATTR_CHAR_CTL_LANGUAGE, true },  // EE_CHAR_LANGUAGE_CTL
-        { SID_ATTR_CHAR_CJK_FONT, true },      // EE_CHAR_FONTINFO_CJK
-        { SID_ATTR_CHAR_CTL_FONT, true },      // EE_CHAR_FONTINFO_CTL
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, true }, // EE_CHAR_FONTHEIGHT_CJK
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, true }, // EE_CHAR_FONTHEIGHT_CTL
-        { SID_ATTR_CHAR_CJK_WEIGHT, true },    // EE_CHAR_WEIGHT_CJK
-        { SID_ATTR_CHAR_CTL_WEIGHT, true },    // EE_CHAR_WEIGHT_CTL
-        { SID_ATTR_CHAR_CJK_POSTURE, true },   // EE_CHAR_ITALIC_CJK
-        { SID_ATTR_CHAR_CTL_POSTURE, true },   // EE_CHAR_ITALIC_CTL
-        { SID_ATTR_CHAR_EMPHASISMARK, true },  // EE_CHAR_EMPHASISMARK
-        { SID_ATTR_CHAR_RELIEF, true },        // EE_CHAR_RELIEF
-        { 0, true },                           // EE_CHAR_RUBI_DUMMY
-        { 0, true },                           // EE_CHAR_XMLATTRIBS
-        { SID_ATTR_CHAR_OVERLINE, true },      // EE_CHAR_OVERLINE
-        { SID_ATTR_CHAR_CASEMAP, true },       // EE_CHAR_CASEMAP
-        { SID_ATTR_CHAR_GRABBAG, true },       // EE_CHAR_GRABBAG
-        { SID_ATTR_CHAR_BACK_COLOR, true },    // EE_CHAR_BKGCOLOR
-        { 0, true },                           // EE_FEATURE_TAB
-        { 0, true },                           // EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, true },  // EE_FEATURE_NOTCONV
-        { SID_FIELD, false },                  // EE_FEATURE_FIELD
+const SfxItemInfo aItemInfos[EDITITEMCOUNT] =
+{
+        // _nSID, _bNeedsPoolRegistration, _bShareable
+        { SID_ATTR_FRAMEDIRECTION, false, true },         // EE_PARA_WRITINGDIR
+        { 0, true, true },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, false, true },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_PARA_FORBIDDEN_RULES, false, true },   // EE_PARA_FORBIDDENRULES
+        { SID_ATTR_PARA_SCRIPTSPACE, false, true },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, false, true },         // EE_PARA_NUMBULL
+        { 0, false, true },                               // EE_PARA_HYPHENATE
+        { 0, false, true },                               // EE_PARA_HYPHENATE_NO_CAPS
+        { 0, false, true },                               // EE_PARA_HYPHENATE_NO_LAST_WORD
+        { 0, false, true },                               // EE_PARA_BULLETSTATE
+        { 0, false, true },                               // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_OUTLLEVEL, false, true },         // EE_PARA_OUTLLEVEL
+        { SID_ATTR_PARA_BULLET, false, true },            // EE_PARA_BULLET
+        { SID_ATTR_LRSPACE, false, true },                // EE_PARA_LRSPACE
+        { SID_ATTR_ULSPACE, false, true },                // EE_PARA_ULSPACE
+        { SID_ATTR_PARA_LINESPACE, false, true },         // EE_PARA_SBL
+        { SID_ATTR_PARA_ADJUST, false, true },            // EE_PARA_JUST
+        { SID_ATTR_TABSTOP, false, true },                // EE_PARA_TABS
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, false, true }, // EE_PARA_JUST_METHOD
+        { SID_ATTR_ALIGN_VER_JUSTIFY, false, true },      // EE_PARA_VER_JUST
+        { SID_ATTR_CHAR_COLOR, true, true },         // EE_CHAR_COLOR
+        { SID_ATTR_CHAR_FONT, true, true },          // EE_CHAR_FONTINFO
+        { SID_ATTR_CHAR_FONTHEIGHT, false, true },    // EE_CHAR_FONTHEIGHT
+        { SID_ATTR_CHAR_SCALEWIDTH, false, true },    // EE_CHAR_FONTWIDTH
+        { SID_ATTR_CHAR_WEIGHT, false, true },        // EE_CHAR_WEIGHT
+        { SID_ATTR_CHAR_UNDERLINE, false, true },     // EE_CHAR_UNDERLINE
+        { SID_ATTR_CHAR_STRIKEOUT, false, true },     // EE_CHAR_STRIKEOUT
+        { SID_ATTR_CHAR_POSTURE, false, true },       // EE_CHAR_ITALIC
+        { SID_ATTR_CHAR_CONTOUR, false, true },       // EE_CHAR_OUTLINE
+        { SID_ATTR_CHAR_SHADOWED, false, true },      // EE_CHAR_SHADOW
+        { SID_ATTR_CHAR_ESCAPEMENT, false, true },    // EE_CHAR_ESCAPEMENT
+        { SID_ATTR_CHAR_AUTOKERN, false, true },      // EE_CHAR_PAIRKERNING
+        { SID_ATTR_CHAR_KERNING, false, true },       // EE_CHAR_KERNING
+        { SID_ATTR_CHAR_WORDLINEMODE, false, true },  // EE_CHAR_WLM
+        { SID_ATTR_CHAR_LANGUAGE, false, true },      // EE_CHAR_LANGUAGE
+        { SID_ATTR_CHAR_CJK_LANGUAGE, false, true },  // EE_CHAR_LANGUAGE_CJK
+        { SID_ATTR_CHAR_CTL_LANGUAGE, false, true },  // EE_CHAR_LANGUAGE_CTL
+        { SID_ATTR_CHAR_CJK_FONT, true, true },      // EE_CHAR_FONTINFO_CJK
+        { SID_ATTR_CHAR_CTL_FONT, true, true },      // EE_CHAR_FONTINFO_CTL
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, false, true }, // EE_CHAR_FONTHEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, false, true }, // EE_CHAR_FONTHEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_WEIGHT, false, true },    // EE_CHAR_WEIGHT_CJK
+        { SID_ATTR_CHAR_CTL_WEIGHT, false, true },    // EE_CHAR_WEIGHT_CTL
+        { SID_ATTR_CHAR_CJK_POSTURE, false, true },   // EE_CHAR_ITALIC_CJK
+        { SID_ATTR_CHAR_CTL_POSTURE, false, true },   // EE_CHAR_ITALIC_CTL
+        { SID_ATTR_CHAR_EMPHASISMARK, false, true },  // EE_CHAR_EMPHASISMARK
+        { SID_ATTR_CHAR_RELIEF, false, true },        // EE_CHAR_RELIEF
+        { 0, false, true },                           // EE_CHAR_RUBI_DUMMY
+        { 0, true, true },                           // EE_CHAR_XMLATTRIBS
+        { SID_ATTR_CHAR_OVERLINE, false, true },      // EE_CHAR_OVERLINE
+        { SID_ATTR_CHAR_CASEMAP, false, true },       // EE_CHAR_CASEMAP
+        { SID_ATTR_CHAR_GRABBAG, false, true },       // EE_CHAR_GRABBAG
+        { SID_ATTR_CHAR_BACK_COLOR, false, true },    // EE_CHAR_BKGCOLOR
+        { 0, false, true },                           // EE_FEATURE_TAB
+        { 0, false, true },                           // EE_FEATURE_LINEBR
+        { SID_ATTR_CHAR_CHARSETCOLOR, false, true },  // EE_FEATURE_NOTCONV
+        { SID_FIELD, true, true },                    // EE_FEATURE_FIELD
 };
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
     // Create a new attribute in the pool
-    const SfxPoolItem& rNew = rPool.Put( rAttr );
+    const SfxPoolItem& rNew = rPool.DirectPutItemInPool( rAttr );
 
     EditCharAttrib* pNew = nullptr;
     switch( rNew.Which() )
@@ -813,7 +815,7 @@ ContentAttribsInfo::ContentAttribsInfo( SfxItemSet aParaAttribs ) :
 void ContentAttribsInfo::RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const
 {
     for (const std::unique_ptr<EditCharAttrib>& rAttrib : aPrevCharAttribs)
-        rPool.Remove(*rAttrib->GetItem());
+        rPool.DirectRemoveItemFromPool(*rAttrib->GetItem());
 }
 
 void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
@@ -1328,7 +1330,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
         {
             OSL_FAIL( "Empty Attribute after ExpandAttribs?" );
             bResort = true;
-            rItemPool.Remove( *pAttrib->GetItem() );
+            rItemPool.DirectRemoveItemFromPool( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -1424,7 +1426,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItem
         if ( bDelAttr )
         {
             bResort = true;
-            rItemPool.Remove( *pAttrib->GetItem() );
+            rItemPool.DirectRemoveItemFromPool( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -1969,7 +1971,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
     for (sal_Int32 nAttr = 0; nAttr < rNode.GetCharAttribs().Count(); ++nAttr)
     {
         const EditCharAttrib& rAttr = *rNode.GetCharAttribs().GetAttribs()[nAttr];
-        GetItemPool().Remove(*rAttr.GetItem());
+        GetItemPool().DirectRemoveItemFromPool(*rAttr.GetItem());
     }
 }
 
@@ -2403,7 +2405,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     {
         // Will become a large Attribute.
         pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
-        GetItemPool().Remove( *(pStartingAttrib->GetItem()) );
+        GetItemPool().DirectRemoveItemFromPool( *(pStartingAttrib->GetItem()) );
         pNode->GetCharAttribs().Remove(pStartingAttrib);
     }
     else if ( pStartingAttrib && ( *(pStartingAttrib->GetItem()) == rPoolItem ) )
@@ -2525,7 +2527,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
         {
             DBG_ASSERT( ( pAttr != rpStarting ) && ( pAttr != rpEnding ), "Delete and retain the same attribute?" );
             DBG_ASSERT( !pAttr->IsFeature(), "RemoveAttribs: Remove a feature?!" );
-            GetItemPool().Remove( *pAttr->GetItem() );
+            GetItemPool().DirectRemoveItemFromPool( *pAttr->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
         }
         else
@@ -2822,7 +2824,7 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
                 if (*rNext.GetItem() == *rAttr.GetItem())
                 {
                     rAttr.GetEnd() = rNext.GetEnd();
-                    rItemPool.Remove(*rNext.GetItem());
+                    rItemPool.DirectRemoveItemFromPool(*rNext.GetItem());
                     aAttribs.erase(aAttribs.begin()+nNext);
                 }
                 break;  // only 1 attr with same which can start here.
@@ -2998,7 +3000,7 @@ public:
     void operator() (const std::unique_ptr<EditCharAttrib>& r)
     {
         if (r->IsEmpty())
-            mrItemPool.Remove(*r->GetItem());
+            mrItemPool.DirectRemoveItemFromPool(*r->GetItem());
     }
 };
 

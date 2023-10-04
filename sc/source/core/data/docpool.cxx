@@ -88,96 +88,97 @@ SvxFontItem* getDefaultFontItem(LanguageType eLang, DefaultFontType nFontType, s
 
 SfxItemInfo const  aItemInfos[] =
 {
-    { SID_ATTR_CHAR_FONT,           true },    // ATTR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT,     true },    // ATTR_FONT_HEIGHT
-    { SID_ATTR_CHAR_WEIGHT,         true },    // ATTR_FONT_WEIGHT
-    { SID_ATTR_CHAR_POSTURE,        true },    // ATTR_FONT_POSTURE
-    { SID_ATTR_CHAR_UNDERLINE,      true },    // ATTR_FONT_UNDERLINE
-    { SID_ATTR_CHAR_OVERLINE,       true },    // ATTR_FONT_OVERLINE
-    { SID_ATTR_CHAR_STRIKEOUT,      true },    // ATTR_FONT_CROSSEDOUT
-    { SID_ATTR_CHAR_CONTOUR,        true },    // ATTR_FONT_CONTOUR
-    { SID_ATTR_CHAR_SHADOWED,       true },    // ATTR_FONT_SHADOWED
-    { SID_ATTR_CHAR_COLOR,          true },    // ATTR_FONT_COLOR
-    { SID_ATTR_CHAR_LANGUAGE,       true },    // ATTR_FONT_LANGUAGE
-    { SID_ATTR_CHAR_CJK_FONT,       true },    // ATTR_CJK_FONT            from 614
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },    // ATTR_CJK_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_WEIGHT,     true },    // ATTR_CJK_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CJK_POSTURE,    true },    // ATTR_CJK_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CJK_LANGUAGE,   true },    // ATTR_CJK_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_CTL_FONT,       true },    // ATTR_CTL_FONT            from 614
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },    // ATTR_CTL_FONT_HEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_WEIGHT,     true },    // ATTR_CTL_FONT_WEIGHT     from 614
-    { SID_ATTR_CHAR_CTL_POSTURE,    true },    // ATTR_CTL_FONT_POSTURE    from 614
-    { SID_ATTR_CHAR_CTL_LANGUAGE,   true },    // ATTR_CTL_FONT_LANGUAGE   from 614
-    { SID_ATTR_CHAR_EMPHASISMARK,   true },    // ATTR_FONT_EMPHASISMARK   from 614
-    { 0,                            true },    // ATTR_USERDEF             from 614 / 641c
-    { SID_ATTR_CHAR_WORDLINEMODE,   true },    // ATTR_FONT_WORDLINE       from 632b
-    { SID_ATTR_CHAR_RELIEF,         true },    // ATTR_FONT_RELIEF         from 632b
-    { SID_ATTR_ALIGN_HYPHENATION,   true },    // ATTR_HYPHENATE           from 632b
-    { 0,                            true },    // ATTR_SCRIPTSPACE         from 614d
-    { 0,                            true },    // ATTR_HANGPUNCTUATION     from 614d
-    { SID_ATTR_PARA_FORBIDDEN_RULES,true },    // ATTR_FORBIDDEN_RULES     from 614d
-    { SID_ATTR_ALIGN_HOR_JUSTIFY,   true },    // ATTR_HOR_JUSTIFY
-    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, true }, // ATTR_HOR_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_INDENT,        true },    // ATTR_INDENT          from 350
-    { SID_ATTR_ALIGN_VER_JUSTIFY,   true },    // ATTR_VER_JUSTIFY
-    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, true }, // ATTR_VER_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_STACKED,       true },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
-    { SID_ATTR_ALIGN_DEGREES,       true },    // ATTR_ROTATE_VALUE    from 367
-    { SID_ATTR_ALIGN_LOCKPOS,       true },    // ATTR_ROTATE_MODE     from 367
-    { SID_ATTR_ALIGN_ASIANVERTICAL, true },    // ATTR_VERTICAL_ASIAN  from 642
-    { SID_ATTR_FRAMEDIRECTION,      true },    // ATTR_WRITINGDIR      from 643
-    { SID_ATTR_ALIGN_LINEBREAK,     true },    // ATTR_LINEBREAK
-    { SID_ATTR_ALIGN_SHRINKTOFIT,   true },    // ATTR_SHRINKTOFIT     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_TLBR,    true },    // ATTR_BORDER_TLBR     from 680/dr14
-    { SID_ATTR_BORDER_DIAG_BLTR,    true },    // ATTR_BORDER_BLTR     from 680/dr14
-    { SID_ATTR_ALIGN_MARGIN,        true },    // ATTR_MARGIN
-    { 0,                            true },    // ATTR_MERGE
-    { 0,                            true },    // ATTR_MERGE_FLAG
-    { SID_ATTR_NUMBERFORMAT_VALUE,  true },    // ATTR_VALUE_FORMAT
-    { 0,                            true },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
-    { SID_ATTR_BRUSH,               true },    // ATTR_BACKGROUND
-    { SID_SCATTR_PROTECTION,        true },    // ATTR_PROTECTION
-    { SID_ATTR_BORDER_OUTER,        true },    // ATTR_BORDER
-    { SID_ATTR_BORDER_INNER,        true },    // ATTR_BORDER_INNER
-    { SID_ATTR_BORDER_SHADOW,       true },    // ATTR_SHADOW
-    { 0,                            true },    // ATTR_VALIDDATA
-    { 0,                            true },    // ATTR_CONDITIONAL
-    { 0,                            true },    // ATTR_HYPERLINK
-    { 0,                            true },    // ATTR_PATTERN
-    { SID_ATTR_LRSPACE,             true },    // ATTR_LRSPACE
-    { SID_ATTR_ULSPACE,             true },    // ATTR_ULSPACE
-    { SID_ATTR_PAGE,                true },    // ATTR_PAGE
-    { SID_ATTR_PAGE_PAPERBIN,       true },    // ATTR_PAGE_PAPERBIN
-    { SID_ATTR_PAGE_SIZE,           true },    // ATTR_PAGE_SIZE
-    { SID_ATTR_PAGE_EXT1,           true },    // ATTR_PAGE_HORCENTER
-    { SID_ATTR_PAGE_EXT2,           true },    // ATTR_PAGE_VERCENTER
-    { SID_ATTR_PAGE_ON,             true },    // ATTR_PAGE_ON
-    { SID_ATTR_PAGE_DYNAMIC,        true },    // ATTR_PAGE_DYNAMIC
-    { SID_ATTR_PAGE_SHARED,         true },    // ATTR_PAGE_SHARED
-    { SID_ATTR_PAGE_SHARED_FIRST,   true },    // ATTR_PAGE_SHARED_FIRST
-    { 0,                            true },    // ATTR_PAGE_NOTES aka. SID_SCATTR_PAGE_NOTES
-    { 0,                            true },    // ATTR_PAGE_GRID aka. SID_SCATTR_PAGE_GRID
-    { 0,                            true },    // ATTR_PAGE_HEADERS aka. SID_SCATTR_PAGE_HEADERS
-    { 0,                            true },    // ATTR_PAGE_CHARTS aka. SID_SCATTR_PAGE_CHARTS
-    { 0,                            true },    // ATTR_PAGE_OBJECTS aka. SID_SCATTR_PAGE_OBJECTS
-    { 0,                            true },    // ATTR_PAGE_DRAWINGS aka. SID_SCATTR_PAGE_DRAWINGS
-    { 0,                            true },    // ATTR_PAGE_TOPDOWN aka. SID_SCATTR_PAGE_TOPDOWN
-    { 0,                            true },    // ATTR_PAGE_SCALE aka SID_SCATTR_PAGE_SCALE
-    { 0,                            true },    // ATTR_PAGE_SCALETOPAGES aka SID_SCATTR_PAGE_SCALETOPAGES
-    { 0,                            true },    // ATTR_PAGE_FIRSTPAGENO aka SID_SCATTR_PAGE_FIRSTPAGENO
-    { 0,                            true },    // ATTR_PAGE_HEADERLEFT aka SID_SCATTR_PAGE_HEADERLEFT
-    { 0,                            true },    // ATTR_PAGE_FOOTERLEFT aka SID_SCATTR_PAGE_FOOTERLEFT
-    { 0,                            true },    // ATTR_PAGE_HEADERRIGHT aka SID_SCATTR_PAGE_HEADERRIGHT
-    { 0,                            true },    // ATTR_PAGE_FOOTERRIGHT aka. SID_SCATTR_PAGE_FOOTERRIGHT
-    { 0,                            true },    // ATTR_PAGE_HEADERFIRST aka. SID_SCATTR_PAGE_HEADERFIRST
-    { 0,                            true },    // ATTR_PAGE_FOOTERFIRST aka. SID_SCATTR_PAGE_FOOTERFIRST`
-    { SID_ATTR_PAGE_HEADERSET,      true },    // ATTR_PAGE_HEADERSET
-    { SID_ATTR_PAGE_FOOTERSET,      true },    // ATTR_PAGE_FOOTERSET
-    { 0,                            true },    // ATTR_PAGE_FORMULAS aka. SID_SCATTR_PAGE_FORMULAS
-    { 0,                            true },    // ATTR_PAGE_NULLVALS aka. SID_SCATTR_PAGE_NULLVALS
-    { 0,                            true },    // ATTR_PAGE_SCALETO aka. SID_SCATTR_PAGE_SCALETO
-    { 0,                            true }     // ATTR_HIDDEN
+    // _nSID, _bNeedsPoolRegistration, _bShareable
+    { SID_ATTR_CHAR_FONT,                   true,  true },    // ATTR_FONT
+    { SID_ATTR_CHAR_FONTHEIGHT,             false, true },    // ATTR_FONT_HEIGHT
+    { SID_ATTR_CHAR_WEIGHT,                 false, true },    // ATTR_FONT_WEIGHT
+    { SID_ATTR_CHAR_POSTURE,                false, true },    // ATTR_FONT_POSTURE
+    { SID_ATTR_CHAR_UNDERLINE,              false, true },    // ATTR_FONT_UNDERLINE
+    { SID_ATTR_CHAR_OVERLINE,               false, true },    // ATTR_FONT_OVERLINE
+    { SID_ATTR_CHAR_STRIKEOUT,              false, true },    // ATTR_FONT_CROSSEDOUT
+    { SID_ATTR_CHAR_CONTOUR,                false, true },    // ATTR_FONT_CONTOUR
+    { SID_ATTR_CHAR_SHADOWED,               false, true },    // ATTR_FONT_SHADOWED
+    { SID_ATTR_CHAR_COLOR,                  true,  true },    // ATTR_FONT_COLOR
+    { SID_ATTR_CHAR_LANGUAGE,               false, true },    // ATTR_FONT_LANGUAGE
+    { SID_ATTR_CHAR_CJK_FONT,               true,  true },    // ATTR_CJK_FONT            from 614
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT,         false, true },    // ATTR_CJK_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_WEIGHT,             false, true },    // ATTR_CJK_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CJK_POSTURE,            false, true },    // ATTR_CJK_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CJK_LANGUAGE,           false, true },    // ATTR_CJK_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_CTL_FONT,               true,  true },    // ATTR_CTL_FONT            from 614
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT,         false, true },    // ATTR_CTL_FONT_HEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_WEIGHT,             false, true },    // ATTR_CTL_FONT_WEIGHT     from 614
+    { SID_ATTR_CHAR_CTL_POSTURE,            false, true },    // ATTR_CTL_FONT_POSTURE    from 614
+    { SID_ATTR_CHAR_CTL_LANGUAGE,           false, true },    // ATTR_CTL_FONT_LANGUAGE   from 614
+    { SID_ATTR_CHAR_EMPHASISMARK,           false, true },    // ATTR_FONT_EMPHASISMARK   from 614
+    { 0,                                    true,  true },    // ATTR_USERDEF             from 614 / 641c
+    { SID_ATTR_CHAR_WORDLINEMODE,           false, true },    // ATTR_FONT_WORDLINE       from 632b
+    { SID_ATTR_CHAR_RELIEF,                 false, true },    // ATTR_FONT_RELIEF         from 632b
+    { SID_ATTR_ALIGN_HYPHENATION,           false, true },    // ATTR_HYPHENATE           from 632b
+    { 0,                                    false, true },    // ATTR_SCRIPTSPACE         from 614d
+    { 0,                                    false, true },    // ATTR_HANGPUNCTUATION     from 614d
+    { SID_ATTR_PARA_FORBIDDEN_RULES,        false, true },    // ATTR_FORBIDDEN_RULES     from 614d
+    { SID_ATTR_ALIGN_HOR_JUSTIFY,           false, true },    // ATTR_HOR_JUSTIFY
+    { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD,    false, true }, // ATTR_HOR_JUSTIFY_METHOD
+    { SID_ATTR_ALIGN_INDENT,                false, true },    // ATTR_INDENT          from 350
+    { SID_ATTR_ALIGN_VER_JUSTIFY,           false, true },    // ATTR_VER_JUSTIFY
+    { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD,    false, true }, // ATTR_VER_JUSTIFY_METHOD
+    { SID_ATTR_ALIGN_STACKED,               false, true },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
+    { SID_ATTR_ALIGN_DEGREES,               true,  true },    // ATTR_ROTATE_VALUE    from 367
+    { SID_ATTR_ALIGN_LOCKPOS,               false, true },    // ATTR_ROTATE_MODE     from 367
+    { SID_ATTR_ALIGN_ASIANVERTICAL,         false, true },    // ATTR_VERTICAL_ASIAN  from 642
+    { SID_ATTR_FRAMEDIRECTION,              false, true },    // ATTR_WRITINGDIR      from 643
+    { SID_ATTR_ALIGN_LINEBREAK,             false, true },    // ATTR_LINEBREAK
+    { SID_ATTR_ALIGN_SHRINKTOFIT,           false, true },    // ATTR_SHRINKTOFIT     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_TLBR,            false, true },    // ATTR_BORDER_TLBR     from 680/dr14
+    { SID_ATTR_BORDER_DIAG_BLTR,            false, true },    // ATTR_BORDER_BLTR     from 680/dr14
+    { SID_ATTR_ALIGN_MARGIN,                false, true },    // ATTR_MARGIN
+    { 0,                                    false, true },    // ATTR_MERGE
+    { 0,                                    false, true },    // ATTR_MERGE_FLAG
+    { SID_ATTR_NUMBERFORMAT_VALUE,          false, true },    // ATTR_VALUE_FORMAT
+    { 0,                                    false, true },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
+    { SID_ATTR_BRUSH,                       true,  true },    // ATTR_BACKGROUND
+    { SID_SCATTR_PROTECTION,                false, true },    // ATTR_PROTECTION
+    { SID_ATTR_BORDER_OUTER,                false, true },    // ATTR_BORDER
+    { SID_ATTR_BORDER_INNER,                false, true },    // ATTR_BORDER_INNER
+    { SID_ATTR_BORDER_SHADOW,               false, true },    // ATTR_SHADOW
+    { 0,                                    false, true },    // ATTR_VALIDDATA
+    { 0,                                    false, true },    // ATTR_CONDITIONAL
+    { 0,                                    false, true },    // ATTR_HYPERLINK
+    { 0,                                    true,  true },    // ATTR_PATTERN
+    { SID_ATTR_LRSPACE,                     false, true },    // ATTR_LRSPACE
+    { SID_ATTR_ULSPACE,                     false, true },    // ATTR_ULSPACE
+    { SID_ATTR_PAGE,                        false, true },    // ATTR_PAGE
+    { SID_ATTR_PAGE_PAPERBIN,               false, true },    // ATTR_PAGE_PAPERBIN
+    { SID_ATTR_PAGE_SIZE,                   false, true },    // ATTR_PAGE_SIZE
+    { SID_ATTR_PAGE_EXT1,                   false, true },    // ATTR_PAGE_HORCENTER
+    { SID_ATTR_PAGE_EXT2,                   false, true },    // ATTR_PAGE_VERCENTER
+    { SID_ATTR_PAGE_ON,                     false, true },    // ATTR_PAGE_ON
+    { SID_ATTR_PAGE_DYNAMIC,                false, true },    // ATTR_PAGE_DYNAMIC
+    { SID_ATTR_PAGE_SHARED,                 false, true },    // ATTR_PAGE_SHARED
+    { SID_ATTR_PAGE_SHARED_FIRST,           false, true },    // ATTR_PAGE_SHARED_FIRST
+    { 0,                                    false, true },    // ATTR_PAGE_NOTES aka. SID_SCATTR_PAGE_NOTES
+    { 0,                                    false, true },    // ATTR_PAGE_GRID aka. SID_SCATTR_PAGE_GRID
+    { 0,                                    false, true },    // ATTR_PAGE_HEADERS aka. SID_SCATTR_PAGE_HEADERS
+    { 0,                                    false, true },    // ATTR_PAGE_CHARTS aka. SID_SCATTR_PAGE_CHARTS
+    { 0,                                    false, true },    // ATTR_PAGE_OBJECTS aka. SID_SCATTR_PAGE_OBJECTS
+    { 0,                                    false, true },    // ATTR_PAGE_DRAWINGS aka. SID_SCATTR_PAGE_DRAWINGS
+    { 0,                                    false, true },    // ATTR_PAGE_TOPDOWN aka. SID_SCATTR_PAGE_TOPDOWN
+    { 0,                                    false, true },    // ATTR_PAGE_SCALE aka SID_SCATTR_PAGE_SCALE
+    { 0,                                    false, true },    // ATTR_PAGE_SCALETOPAGES aka SID_SCATTR_PAGE_SCALETOPAGES
+    { 0,                                    false, true },    // ATTR_PAGE_FIRSTPAGENO aka SID_SCATTR_PAGE_FIRSTPAGENO
+    { 0,                                    true,  true },    // ATTR_PAGE_HEADERLEFT aka SID_SCATTR_PAGE_HEADERLEFT
+    { 0,                                    true,  true },    // ATTR_PAGE_FOOTERLEFT aka SID_SCATTR_PAGE_FOOTERLEFT
+    { 0,                                    true,  true },    // ATTR_PAGE_HEADERRIGHT aka SID_SCATTR_PAGE_HEADERRIGHT
+    { 0,                                    true,  true },    // ATTR_PAGE_FOOTERRIGHT aka. SID_SCATTR_PAGE_FOOTERRIGHT
+    { 0,                                    true,  true },    // ATTR_PAGE_HEADERFIRST aka. SID_SCATTR_PAGE_HEADERFIRST
+    { 0,                                    true,  true },    // ATTR_PAGE_FOOTERFIRST aka. SID_SCATTR_PAGE_FOOTERFIRST`
+    { SID_ATTR_PAGE_HEADERSET,              false, true },    // ATTR_PAGE_HEADERSET
+    { SID_ATTR_PAGE_FOOTERSET,              false, true },    // ATTR_PAGE_FOOTERSET
+    { 0,                                    false, true },    // ATTR_PAGE_FORMULAS aka. SID_SCATTR_PAGE_FORMULAS
+    { 0,                                    false, true },    // ATTR_PAGE_NULLVALS aka. SID_SCATTR_PAGE_NULLVALS
+    { 0,                                    false, true },    // ATTR_PAGE_SCALETO aka. SID_SCATTR_PAGE_SCALETO
+    { 0,                                    false, true }     // ATTR_HIDDEN
 };
 static_assert(
     SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
@@ -336,24 +337,20 @@ ScDocumentPool::~ScDocumentPool()
     }
 }
 
-const SfxPoolItem& ScDocumentPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
+void ScDocumentPool::newItem_Callback(const SfxPoolItem& rItem) const
 {
-    if ( rItem.Which() != ATTR_PATTERN ) // Only Pattern is special
-        return SfxItemPool::PutImpl( rItem, nWhich, bPassingOwnership );
-
-    // Don't copy the default pattern of this Pool
-    if (&rItem == mvPoolDefaults[ ATTR_PATTERN - ATTR_STARTINDEX ])
-        return rItem;
-
-    // Else Put must always happen, because it could be another Pool
-    const SfxPoolItem& rNew = SfxItemPool::PutImpl( rItem, nWhich, bPassingOwnership );
-    sal_uInt32 nRef = rNew.GetRefCount();
-    if (nRef == 1)
+    if (ATTR_PATTERN == rItem.Which() && 1 == rItem.GetRefCount())
     {
-        ++mnCurrentMaxKey;
-        const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(rNew)).SetKey(mnCurrentMaxKey);
+        const_cast<ScDocumentPool*>(this)->mnCurrentMaxKey++;
+        const_cast<ScPatternAttr&>(static_cast<const ScPatternAttr&>(rItem)).SetPAKey(mnCurrentMaxKey);
     }
-    return rNew;
+}
+
+bool ScDocumentPool::newItem_UseDirect(const SfxPoolItem& rItem) const
+{
+    // I have evaluated that this is currently needed for ATTR_PATTERN/ScPatternAttr to work,
+    // so this needs to stay at ptr-compare
+    return (ATTR_PATTERN == rItem.Which() && areSfxPoolItemPtrsEqual(&rItem, mvPoolDefaults[ATTR_PATTERN - ATTR_STARTINDEX]));
 }
 
 void ScDocumentPool::StyleDeleted( const ScStyleSheet* pStyle )

@@ -284,7 +284,7 @@ SwXReferenceMark::getAnchor()
     {
         SwFormatRefMark const*const pNewMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
-        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFormat))
+        if (pNewMark && SfxPoolItem::areSame(pNewMark, m_pImpl->m_pMarkFormat))
         {
             SwTextRefMark const*const pTextMark =
                 m_pImpl->m_pMarkFormat->GetTextRefMark();
@@ -315,7 +315,7 @@ void SAL_CALL SwXReferenceMark::dispose()
     {
         SwFormatRefMark const*const pNewMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
-        if (pNewMark && (pNewMark == m_pImpl->m_pMarkFormat))
+        if (pNewMark && SfxPoolItem::areSame(pNewMark, m_pImpl->m_pMarkFormat))
         {
             SwTextRefMark const*const pTextMark =
                 m_pImpl->m_pMarkFormat->GetTextRefMark();
@@ -385,7 +385,7 @@ void SAL_CALL SwXReferenceMark::setName(const OUString& rName)
         SwFormatRefMark const*const pCurMark =
             m_pImpl->m_pDoc->GetRefMark(m_pImpl->m_sMarkName);
         if ((rName != m_pImpl->m_sMarkName)
-            && pCurMark && (pCurMark == m_pImpl->m_pMarkFormat))
+            && pCurMark && SfxPoolItem::areSame(pCurMark, m_pImpl->m_pMarkFormat))
         {
             const UnoActionContext aCont(m_pImpl->m_pDoc);
             SwTextRefMark const*const pTextMark =

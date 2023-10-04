@@ -126,8 +126,12 @@ SdrItemPool::SdrItemPool(
     // init the non-persistent items
     for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
     {
-        mpLocalItemInfos[i - SDRATTR_START]._bPoolable = false;
+        mpLocalItemInfos[i - SDRATTR_START]._bNeedsPoolRegistration = false;
     }
+
+    // these slots need _bNeedsPoolRegistration == true, see
+    // text @svl/source/items/itempool.cxx
+    mpLocalItemInfos[SDRATTR_XMLATTRIBUTES -SDRATTR_START]._bNeedsPoolRegistration = true;
 
     // init own PoolDefaults
     std::vector<SfxPoolItem*>& rPoolDefaults = *mpLocalPoolDefaults;

@@ -634,9 +634,6 @@ SwFormatPageDesc::SwFormatPageDesc( const SwFormatPageDesc &rCpy )
     m_oNumOffset( rCpy.m_oNumOffset ),
     m_pDefinedIn( nullptr )
 {
-    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
-    // info see comment @SwAttrSet::SetModifyAtAttr
-    m_bShareable = false;
 }
 
 SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
@@ -644,14 +641,11 @@ SwFormatPageDesc::SwFormatPageDesc( const SwPageDesc *pDesc )
     SwClient( const_cast<SwPageDesc*>(pDesc) ),
     m_pDefinedIn( nullptr )
 {
-    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
-    // info see comment @SwAttrSet::SetModifyAtAttr
-    m_bShareable = false;
 }
 
 SwFormatPageDesc &SwFormatPageDesc::operator=(const SwFormatPageDesc &rCpy)
 {
-    if(this == &rCpy)
+    if (SfxPoolItem::areSame(this, &rCpy))
         return *this;
 
     if (rCpy.GetPageDesc())
@@ -865,7 +859,7 @@ SwFormatCol::~SwFormatCol() {}
 
 SwFormatCol& SwFormatCol::operator=( const SwFormatCol& rCpy )
 {
-    if (this != &rCpy)
+    if (!SfxPoolItem::areSame(this, &rCpy))
     {
         m_eLineStyle  = rCpy.m_eLineStyle;
         m_nLineWidth  = rCpy.m_nLineWidth;
@@ -1650,7 +1644,7 @@ sal_Int32 SwFormatAnchor::GetAnchorContentOffset() const
 
 SwFormatAnchor& SwFormatAnchor::operator=(const SwFormatAnchor& rAnchor)
 {
-    if (this != &rAnchor)
+    if (!SfxPoolItem::areSame(this, &rAnchor))
     {
         m_eAnchorId  = rAnchor.m_eAnchorId;
         m_nPageNumber   = rAnchor.m_nPageNumber;

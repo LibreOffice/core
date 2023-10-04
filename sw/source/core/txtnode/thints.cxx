@@ -899,7 +899,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     {
                         const SfxPoolItem* pTmpItem = nullptr;
                         if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
-                             pTmpItem == pItem )
+                             SfxPoolItem::areSame(pTmpItem, pItem) )
                         {
                             // Do not clear item if the attribute is set in a character format:
                             if ( !pCurrentCharFormat || nullptr == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
@@ -936,8 +936,9 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     do
                     {
                         const SfxPoolItem* pTmpItem = nullptr;
+                        // here direct SfxPoolItem ptr comp was wrong, found using SfxPoolItem::areSame
                         if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
-                             pTmpItem == pItem )
+                             SfxPoolItem::areSame(pTmpItem, pItem) )
                         {
                             // Do not clear item if the attribute is set in a character format:
                             if ( !pCurrentCharFormat || nullptr == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
@@ -1023,7 +1024,7 @@ SwTextAttr* MakeRedlineTextAttr( SwDoc & rDoc, SfxPoolItem const & rAttr )
     // Put new attribute into pool
     // FIXME: this const_cast is evil!
     SfxPoolItem& rNew =
-        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().Put( rAttr ) );
+        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().DirectPutItemInPool( rAttr ) );
     return new SwTextAttrEnd( rNew, 0, 0 );
 }
 
@@ -1061,7 +1062,7 @@ SwTextAttr* MakeTextAttr(
     // Put new attribute into pool
     // FIXME: this const_cast is evil!
     SfxPoolItem& rNew =
-        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().Put( rAttr ) );
+        const_cast<SfxPoolItem&>( rDoc.GetAttrPool().DirectPutItemInPool( rAttr ) );
 
     SwTextAttr* pNew = nullptr;
     switch( rNew.Which() )
@@ -2981,18 +2982,22 @@ static MergeResult lcl_Compare_Attributes(
                     pItem1 = iter1.NextItem();
                 if (pItem2 && pItem2->Which() == RES_CHRATR_RSID)
                     pItem2 = iter2.NextItem();
-                if (!pItem1 && !pItem2)
+
+                if (nullptr == pItem1 && nullptr == pItem2)
                 {
                     eMerge = DIFFER_ONLY_RSID;
                     break;
                 }
-                if (!pItem1 || !pItem2)
+
+                if (nullptr == pItem1 || nullptr == pItem2)
                 {
+                    // one ptr is nullptr, not both, that would
+                    // have triggered above
                     return DIFFER;
                 }
-                if (pItem1 != pItem2) // all are poolable
+
+                if (!SfxPoolItem::areSame(*pItem1, *pItem2))
                 {
-                    assert(IsInvalidItem(pItem1) || IsInvalidItem(pItem2) || pItem1->Which() != pItem2->Which() || *pItem1 != *pItem2);
                     return DIFFER;
                 }
                 pItem1 = iter1.NextItem();

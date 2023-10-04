@@ -67,7 +67,9 @@ SwFormatContentControl::SwFormatContentControl(
 
 SwFormatContentControl::~SwFormatContentControl()
 {
-    if (m_pContentControl && (m_pContentControl->GetFormatContentControl() == this))
+    if (m_pContentControl
+        // SwFormatContentControl is not shareable, so ptr compare is OK
+        && areSfxPoolItemPtrsEqual(m_pContentControl->GetFormatContentControl(), this))
     {
         NotifyChangeTextNode(nullptr);
         m_pContentControl->SetFormatContentControl(nullptr);
@@ -116,7 +118,8 @@ void SwFormatContentControl::SetTextAttr(SwTextContentControl* pTextAttr)
         {
             m_pContentControl->SetFormatContentControl(this);
         }
-        else if (m_pContentControl->GetFormatContentControl() == this)
+        // SwFormatContentControl is not shareable, so ptr compare is OK
+        else if (areSfxPoolItemPtrsEqual(m_pContentControl->GetFormatContentControl(), this))
         {
             // The text attribute is gone, so de-register from text node.
             NotifyChangeTextNode(nullptr);
@@ -132,7 +135,9 @@ void SwFormatContentControl::NotifyChangeTextNode(SwTextNode* pTextNode)
     {
         SAL_WARN("sw.core", "SwFormatContentControl::NotifyChangeTextNode: no content control?");
     }
-    if (m_pContentControl && (m_pContentControl->GetFormatContentControl() == this))
+    if (m_pContentControl
+        // SwFormatContentControl is not shareable, so ptr compare is OK
+        && areSfxPoolItemPtrsEqual(m_pContentControl->GetFormatContentControl(), this))
     {
         // Not calling Modify, that would call SwXContentControl::SwClientNotify.
         m_pContentControl->NotifyChangeTextNode(pTextNode);

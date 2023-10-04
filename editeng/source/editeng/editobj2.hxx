@@ -74,9 +74,7 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare ) const
 {
     return  (nStart == rCompare.nStart) &&
             (nEnd == rCompare.nEnd) &&
-            ((pItem == rCompare.pItem) ||
-             ((pItem->Which() == rCompare.pItem->Which()) &&
-              (*pItem == *rCompare.pItem)));
+            SfxPoolItem::areSame(pItem, rCompare.pItem);
 }
 
 struct XParaPortion

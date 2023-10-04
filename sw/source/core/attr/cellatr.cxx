@@ -58,9 +58,6 @@ SwTableBoxFormula::SwTableBoxFormula( const OUString& rFormula )
     SwTableFormula( rFormula ),
     m_pDefinedIn( nullptr )
 {
-    // ITEM: mark this Item to be non-shareable/non-RefCountable. For more
-    // info see comment @SwAttrSet::SetModifyAtAttr
-    m_bShareable = false;
 }
 
 bool SwTableBoxFormula::operator==( const SfxPoolItem& rAttr ) const

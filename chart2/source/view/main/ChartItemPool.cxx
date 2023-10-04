@@ -190,8 +190,10 @@ ChartItemPool::ChartItemPool():
     const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
     for( sal_uInt16 i = 0; i < nMax; i++ )
     {
+        // _nSID, _bNeedsPoolRegistration, _bShareable
         pItemInfos[i]._nSID = 0;
-        pItemInfos[i]._bPoolable = true;
+        pItemInfos[i]._bNeedsPoolRegistration = false;
+        pItemInfos[i]._bShareable = true;
     }
 
     // slot ids differing from which ids

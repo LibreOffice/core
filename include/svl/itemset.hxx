@@ -36,10 +36,18 @@ SVL_DLLPUBLIC size_t getAllocatedSfxItemSetCount();
 SVL_DLLPUBLIC size_t getUsedSfxItemSetCount();
 #endif
 
+// ItemSet/ItemPool helpers
+SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bPassingOwnership, bool bPoolDirect);
+void implCleanupItemEntry(SfxItemPool& rPool, SfxPoolItem const* pSource);
+
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
     friend class SfxWhichIter;
+
+    // allow ItemSetTooling to access
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool, bool);
+    friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
@@ -88,7 +96,7 @@ private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;
 
 protected:
-    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bItemIsSetMember, bool bPassingOwnership );
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership );
 
     /** special constructor for SfxAllItemSet */
     enum class SfxAllItemSetFlag { Flag };
@@ -207,9 +215,9 @@ public:
     // add, delete items, work on items
 public:
     const SfxPoolItem*          Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
-    { return PutImpl(rItem, nWhich, /*bItemIsSetMember*/false, /*bPassingOwnership*/false); }
+    { return PutImpl(rItem, nWhich, /*bPassingOwnership*/false); }
     const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich )
-    { return PutImpl(*xItem.release(), nWhich, /*bItemIsSetMember*/false, /*bPassingOwnership*/true); }
+    { return PutImpl(*xItem.release(), nWhich, /*bPassingOwnership*/true); }
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
                                 { return Put(rItem, rItem.Which()); }
     const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem )
@@ -261,7 +269,7 @@ private:
     sal_uInt16 ClearAllItemsImpl();
 
     // Merge two given Item(entries)
-    void MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bItemIsSetMember, bool bIgnoreDefaults);
+    void MergeItem_Impl(const SfxPoolItem **ppFnd1, const SfxPoolItem *pFnd2, bool bIgnoreDefaults);
 
     // split version(s) of InvalidateItem for input types WhichID and Offset
     void InvalidateItem_ForWhichID(sal_uInt16 nWhich);
@@ -270,9 +278,6 @@ private:
     // split version(s) of GetItemStateImpl for input types WhichID and Offset
     SfxItemState GetItemState_ForWhichID( SfxItemState eState, sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem) const;
     SfxItemState GetItemState_ForOffset( sal_uInt16 nOffset, const SfxPoolItem **ppItem) const;
-
-    SfxPoolItem const* implCreateItemEntry(SfxPoolItem const* pSource, sal_uInt16 nWhich, bool bItemIsSetMember, bool bPassingOwnership);
-    void implCleanupItemEntry(SfxPoolItem const* pSource);
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
@@ -292,7 +297,7 @@ public:
 
     virtual std::unique_ptr<SfxItemSet> Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
 private:
-    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bItemIsSetMember,bool bPassingOwnership ) override;
+    virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };
 
 

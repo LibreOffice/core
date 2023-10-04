@@ -2905,7 +2905,7 @@ namespace
         std::vector<ScAttrEntry> aData(rOrigData);
         for (size_t nIdx = 0; nIdx < aData.size(); ++nIdx)
         {
-            aData[nIdx].pPattern = &rDocument.GetPool()->Put(*aData[nIdx].pPattern);
+            aData[nIdx].pPattern = &rDocument.GetPool()->DirectPutItemInPool(*aData[nIdx].pPattern);
         }
         return aData;
     }

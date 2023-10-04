@@ -203,7 +203,7 @@ tools::Long ScColumn::GetNeededSize(
         }
         if (bNumeric)
         {
-            if (!bMayInvalidatePattern || pPattern == pOldPattern)
+            if (!bMayInvalidatePattern || SfxPoolItem::areSame(pPattern, pOldPattern))
                 bBreak = false;
             else
             {
@@ -772,7 +772,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
             // Or again in case there was a leading sep=";" row or two header
             // rows..
             const ScPatternAttr* pNextPattern = GetPattern( ++nRow );
-            if (pNextPattern != pPattern)
+            if (!SfxPoolItem::areSame(pNextPattern, pPattern))
                 nFormat = pNextPattern->GetNumberFormat( pFormatter );
         }
         OUString aLongStr;
@@ -830,7 +830,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
 
                     const ScPatternAttr* pPattern = GetPattern(nRow);
                     aOptions.pPattern = pPattern;
-                    aOptions.bGetFont = (pPattern != pOldPattern || nScript != SvtScriptType::NONE);
+                    aOptions.bGetFont = (!SfxPoolItem::areSame(pPattern, pOldPattern) || nScript != SvtScriptType::NONE);
                     pOldPattern = pPattern;
                     sal_uInt16 nThis = static_cast<sal_uInt16>(GetNeededSize(
                         nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, true, aOptions, &pOldPattern));
@@ -1079,7 +1079,7 @@ void ScColumn::GetOptimalHeight(
                             if (nHeight > rHeights.GetValue(nRow))
                                 rHeights.SetValue(nRow, nRow, nHeight);
                             // Pattern changed due to calculation? => sync.
-                            if (pPattern != pOldPattern)
+                            if (!SfxPoolItem::areSame(pPattern, pOldPattern))
                             {
                                 pPattern = aIter.Resync( nRow, nStart, nEnd);
                                 nNextEnd = 0;

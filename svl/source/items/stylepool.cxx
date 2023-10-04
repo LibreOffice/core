@@ -373,7 +373,7 @@ public:
 
 std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet, const OUString* pParentName )
 {
-    bool bNonPoolable = false;
+    bool bNonShareable(false);
     Node* pCurNode = &maRoot[ rSet.GetParent() ];
     if (pParentName)
         maParentNames[ rSet.GetParent() ] = *pParentName;
@@ -389,8 +389,8 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     }
     while( pItem )
     {
-        if( !rSet.GetPool()->IsItemPoolable(pItem->Which() ) )
-            bNonPoolable = true;
+        if (!rSet.GetPool()->Shareable(pItem->Which()))
+            bNonShareable = true;
         if (!xFoundIgnorableItems || (xFoundIgnorableItems->Put(*pItem) == nullptr))
         {
             pCurNode = pCurNode->findChildNode( *pItem, false );
@@ -403,8 +403,8 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
         pItem = aIgnorableItemsIter.GetCurItem();
         while( pItem )
         {
-            if( !rSet.GetPool()->IsItemPoolable(pItem->Which() ) )
-                bNonPoolable = true;
+            if (!rSet.GetPool()->Shareable(pItem->Which()))
+                bNonShareable = true;
             pCurNode = pCurNode->findChildNode( *pItem, true );
             pItem = aIgnorableItemsIter.NextItem();
         }
@@ -415,13 +415,13 @@ std::shared_ptr<SfxItemSet> StylePoolImpl::insertItemSet( const SfxItemSet& rSet
     if( !pCurNode->hasItemSet( false ) )
     {
         pCurNode->setItemSet( rSet );
-        bNonPoolable = false; // to avoid a double insertion
+        bNonShareable = false; // to avoid a double insertion
 #ifdef DEBUG
         ++mnCount;
 #endif
     }
     // If rSet contains at least one non poolable item, a new itemset has to be inserted
-    if( bNonPoolable )
+    if( bNonShareable )
         pCurNode->setItemSet( rSet );
 #ifdef DEBUG
     {

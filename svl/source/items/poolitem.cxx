@@ -26,6 +26,10 @@
 #include <typeinfo>
 #include <boost/property_tree/ptree.hpp>
 
+#ifdef DBG_UTIL
+#include <unordered_set>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // list of classes derived from SfxPoolItem
 // will not be kept up-to-date, but give a good overview for right now
@@ -466,16 +470,32 @@ static size_t nAllocatedSfxPoolItemCount(0);
 static size_t nUsedSfxPoolItemCount(0);
 size_t getAllocatedSfxPoolItemCount() { return nAllocatedSfxPoolItemCount; }
 size_t getUsedSfxPoolItemCount() { return nUsedSfxPoolItemCount; }
+static std::unordered_set<const SfxPoolItem*> incarnatedSfxPoolItems;
+void listAllocatedSfxPoolItems()
+{
+    SAL_INFO("svl.items", "ITEM: List of still allocated SfxPoolItems:");
+    for (const auto& rCandidate : incarnatedSfxPoolItems)
+    {
+        SAL_INFO("svl.items", "  ITEM: WhichID: " << rCandidate->Which() << "  SerialNumber: "
+                                                  << rCandidate->getSerialNumber()
+                                                  << "  Class: " << typeid(*rCandidate).name());
+    }
+}
 #endif
 
 SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
     : m_nRefCount(0)
     , m_nWhich(nWhich)
+#ifdef DBG_UTIL
+    , m_nSerialNumber(nUsedSfxPoolItemCount)
+#endif
     , m_bIsVoidItem(false)
     , m_bDeleteOnIdle(false)
     , m_bStaticDefault(false)
     , m_bPoolDefault(false)
-    , m_bShareable(true)
+    , m_bRegisteredAtPool(false)
+    , m_bNewItemCallback(false)
+    , m_bIsSetItem(false)
 #ifdef DBG_UTIL
     , m_bDeleted(false)
 #endif
@@ -483,6 +503,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount++;
     nUsedSfxPoolItemCount++;
+    incarnatedSfxPoolItems.insert(this);
 #endif
     assert(nWhich <= SHRT_MAX);
 }
@@ -491,6 +512,7 @@ SfxPoolItem::~SfxPoolItem()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount--;
+    incarnatedSfxPoolItems.erase(this);
     m_bDeleted = true;
 #endif
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
@@ -596,6 +618,70 @@ bool SfxPoolItem::PutValue(const css::uno::Any&, sal_uInt8)
 {
     OSL_FAIL("There is no implementation for PutValue for this item!");
     return false;
+}
+
+bool areSfxPoolItemPtrsEqual(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2)
+{
+#ifdef DBG_UTIL
+    if (nullptr != pItem1 && nullptr != pItem2 && pItem1->Which() == pItem2->Which()
+        && static_cast<const void*>(pItem1) != static_cast<const void*>(pItem2)
+        && typeid(*pItem1) == typeid(*pItem2) && *pItem1 == *pItem2)
+    {
+        SAL_INFO("svl.items", "ITEM: PtrCompare != ContentCompare (!)");
+    }
+#endif
+
+    // cast to void* to not trigger [loplugin:itemcompare]
+    return (static_cast<const void*>(pItem1) == static_cast<const void*>(pItem2));
+}
+
+bool SfxPoolItem::areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2)
+{
+    if (pItem1 == pItem2)
+        // pointer compare, this handles already
+        // nullptr, INVALID_POOL_ITEM, SfxVoidItem
+        // and if any Item is indeed handed over twice
+        return true;
+
+    if (nullptr == pItem1 || nullptr == pItem2)
+        // one ptr is nullptr, not both, that would
+        // have triggered above
+        return false;
+
+    if (pItem1->Which() != pItem2->Which())
+        // WhichIDs differ (fast)
+        return false;
+
+    if (typeid(*pItem1) != typeid(*pItem2))
+        // types differ (fast)
+        // NOTE: we can now use typeid since we do not have (-1)
+        // anymore for Invalid state -> safe
+        return false;
+
+    // return content compare using operator== at last
+    return *pItem1 == *pItem2;
+}
+
+bool SfxPoolItem::areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2)
+{
+    if (&rItem1 == &rItem2)
+        // still use pointer compare, this handles already
+        // nullptr, INVALID_POOL_ITEM, SfxVoidItem
+        // and if any Item is indeed handed over twice
+        return true;
+
+    if (rItem1.Which() != rItem2.Which())
+        // WhichIDs differ (fast)
+        return false;
+
+    if (typeid(rItem1) != typeid(rItem2))
+        // types differ (fast)
+        // NOTE: we can now use typeid since we do not have (-1)
+        // anymore for Invalid state -> safe
+        return false;
+
+    // return content compare using operator== at last
+    return rItem1 == rItem2;
 }
 
 namespace

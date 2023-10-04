@@ -39,8 +39,6 @@ public:
     {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
-    virtual bool operator <(const SfxPoolItem & rItem) const override;
-    virtual bool IsSortable() const override { return true; }
 
     virtual bool GetPresentation(SfxItemPresentation,
                                  MapUnit, MapUnit,

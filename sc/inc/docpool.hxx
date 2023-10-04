@@ -47,7 +47,8 @@ public:
                                   OUString&           rText,
                                   const IntlWrapper& rIntl ) const override;
 private:
-    virtual const SfxPoolItem&  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich = 0, bool bPassingOwnership = false ) override;
+    virtual void newItem_Callback(const SfxPoolItem& rItem) const override;
+    virtual bool newItem_UseDirect(const SfxPoolItem& rItem) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

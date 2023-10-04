@@ -60,7 +60,7 @@ void SwTextAttr::Destroy( SwTextAttr * pToDestroy, SfxItemPool& rPool )
     if (!pToDestroy) return;
     SfxPoolItem * const pAttr = pToDestroy->m_pAttr;
     delete pToDestroy;
-    rPool.Remove( *pAttr );
+    rPool.DirectRemoveItemFromPool( *pAttr );
 }
 
 bool SwTextAttr::operator==( const SwTextAttr& rAttr ) const

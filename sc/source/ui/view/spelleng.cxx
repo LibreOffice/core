@@ -209,7 +209,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
             {
                 // GetPattern may implicitly allocates the column if not exists,
                 pPattern = mrDoc.GetPattern( nNewCol, nNewRow, mnStartTab );
-                if( pPattern && (pPattern != pLastPattern) )
+                if( pPattern && !SfxPoolItem::areSame(pPattern, pLastPattern) )
                 {
                     pPattern->FillEditItemSet( &aEditDefaults );
                     SetDefaults( aEditDefaults );

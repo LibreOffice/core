@@ -2459,7 +2459,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 nPos = MapModelToView(&rNode, nNPos);
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                 {
-                    if( pNew == pOld )
+                    if (SfxPoolItem::areSame( pNew, pOld ))
                     {
                         // only repaint
                         // opt: invalidate window?
@@ -2518,7 +2518,7 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
                 {
                     const SfxPoolItem* pOldItem = pOld ?
                         &(static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Get(RES_TXTATR_FIELD)) : nullptr;
-                    if( pItem == pOldItem )
+                    if (SfxPoolItem::areSame( pItem, pOldItem ))
                     {
                         InvalidatePage();
                         SetCompletePaint();

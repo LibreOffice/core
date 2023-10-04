@@ -47,7 +47,7 @@ using namespace com::sun::star;
 static XEditAttribute MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, sal_Int32 nStart, sal_Int32 nEnd )
 {
     // Create the new attribute in the pool
-    const SfxPoolItem& rNew = rPool.Put( rItem );
+    const SfxPoolItem& rNew = rPool.DirectPutItemInPool( rItem );
 
     return XEditAttribute( rNew, nStart, nEnd );
 }
@@ -122,7 +122,7 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
 ContentInfo::~ContentInfo()
 {
     for (auto const& charAttrib : maCharAttribs)
-        aParaAttribs.GetPool()->Remove(*charAttrib.GetItem());
+        aParaAttribs.GetPool()->DirectRemoveItemFromPool(*charAttrib.GetItem());
     maCharAttribs.clear();
 }
 
@@ -381,7 +381,7 @@ XEditAttribute EditTextObjectImpl::CreateAttrib( const SfxPoolItem& rItem, sal_I
 
 void EditTextObjectImpl::DestroyAttrib( const XEditAttribute& rAttr )
 {
-    mpPool->Remove( *rAttr.GetItem() );
+    mpPool->DirectRemoveItemFromPool( *rAttr.GetItem() );
 }
 
 
@@ -540,7 +540,7 @@ bool EditTextObjectImpl::RemoveCharAttribs( sal_uInt16 _nWhich )
             XEditAttribute& rAttr = rC.maCharAttribs[--nAttr];
             if ( !_nWhich || (rAttr.GetItem()->Which() == _nWhich) )
             {
-                mpPool->Remove(*rAttr.GetItem());
+                mpPool->DirectRemoveItemFromPool(*rAttr.GetItem());
                 rC.maCharAttribs.erase(rC.maCharAttribs.begin()+nAttr);
                 bChanged = true;
             }

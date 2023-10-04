@@ -1050,8 +1050,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
     SfxItemPool*          pNewPool  = rNewSet.GetPool();
 
-    pNewPool->Put(rNewOuter);        // don't delete yet
-    pNewPool->Put(rNewInner);
+    pNewPool->DirectPutItemInPool(rNewOuter);        // don't delete yet
+    pNewPool->DirectPutItemInPool(rNewInner);
     rNewSet.ClearItem( ATTR_BORDER );
     rNewSet.ClearItem( ATTR_BORDER_INNER );
 
@@ -1065,7 +1065,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
                   || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
 
-    if (&rNewOuter == &rOldOuter && &rNewInner == &rOldInner)
+    if (SfxPoolItem::areSame(&rNewOuter, &rOldOuter) && SfxPoolItem::areSame(&rNewInner, &rOldInner))
         bFrame = false;
 
     //  this should be intercepted by the pool: ?!??!??
@@ -1095,8 +1095,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                            bDefNewInner ? &rOldInner : &rNewInner );
     }
 
-    pNewPool->Remove(rNewOuter);         // release
-    pNewPool->Remove(rNewInner);
+    pNewPool->DirectRemoveItemFromPool(rNewOuter);         // release
+    pNewPool->DirectRemoveItemFromPool(rNewInner);
 
     //  adjust height only if needed
     if (bAdjustBlockHeight)

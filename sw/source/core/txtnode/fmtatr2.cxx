@@ -428,7 +428,8 @@ SwFormatRuby::~SwFormatRuby()
 
 SwFormatRuby& SwFormatRuby::operator=( const SwFormatRuby& rAttr )
 {
-    if(this == &rAttr)
+    // SwFormatRuby is not shareable, so ptr compare is OK
+    if (areSfxPoolItemPtrsEqual(this, &rAttr))
         return *this;
 
     m_sRubyText = rAttr.m_sRubyText;
@@ -568,7 +569,8 @@ SwFormatMeta::SwFormatMeta( std::shared_ptr< ::sw::Meta > i_pMeta,
 
 SwFormatMeta::~SwFormatMeta()
 {
-    if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
+    // SwFormatMeta is not shareable, so ptr compare is OK
+    if (m_pMeta && areSfxPoolItemPtrsEqual(m_pMeta->GetFormatMeta(), this))
     {
         NotifyChangeTextNode(nullptr);
         m_pMeta->SetFormatMeta(nullptr);
@@ -603,7 +605,8 @@ void SwFormatMeta::SetTextAttr(SwTextMeta * const i_pTextAttr)
         {
             m_pMeta->SetFormatMeta(this);
         }
-        else if (m_pMeta->GetFormatMeta() == this)
+        // SwFormatMeta is not shareable, so ptr compare is OK
+        else if (areSfxPoolItemPtrsEqual(m_pMeta->GetFormatMeta(), this))
         {   // text attribute gone => de-register from text node!
             NotifyChangeTextNode(nullptr);
             m_pMeta->SetFormatMeta(nullptr);
@@ -616,7 +619,8 @@ void SwFormatMeta::NotifyChangeTextNode(SwTextNode *const pTextNode)
     // N.B.: do not reset m_pTextAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
     OSL_ENSURE(m_pMeta, "SwFormatMeta::NotifyChangeTextNode: no Meta?");
-    if (m_pMeta && (m_pMeta->GetFormatMeta() == this))
+    // SwFormatMeta is not shareable, so ptr compare is OK
+    if (m_pMeta && areSfxPoolItemPtrsEqual(m_pMeta->GetFormatMeta(), this))
     {   // do not call Modify, that would call SwXMeta::SwClientNotify
         m_pMeta->NotifyChangeTextNode(pTextNode);
     }

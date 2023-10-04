@@ -731,7 +731,8 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
         pInfo->setDescription( m_xCommentEd->get_text() );
     }
     rSet->Put( *pInfo );
-    if ( pInfo != m_pInfoItem )
+    // ptr compare OK, pInfo was created above as temporary data holder
+    if ( !areSfxPoolItemPtrsEqual(pInfo, m_pInfoItem) )
     {
         delete pInfo;
     }

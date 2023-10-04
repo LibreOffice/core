@@ -280,8 +280,6 @@ public:
     virtual ~ScCondFormatItem() override;
 
     virtual bool operator==(const SfxPoolItem& rCmp ) const override;
-    virtual bool            operator<(const SfxPoolItem& rCmp) const override;
-    virtual bool            IsSortable() const override { return true; }
     virtual ScCondFormatItem*  Clone( SfxItemPool* = nullptr ) const override;
 
     const ScCondFormatIndexes& GetCondFormatData() const { return maIndex;}

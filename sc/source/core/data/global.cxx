@@ -139,7 +139,7 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
         // Both Items set
         // PoolItems, meaning comparing pointers is valid
         if ( SfxItemState::SET == eOldState )
-            bInvalidate = (pNewItem != pOldItem);
+            bInvalidate = !SfxPoolItem::areSame(pNewItem, pOldItem);
     }
     else
     {

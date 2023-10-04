@@ -239,23 +239,6 @@ bool SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
     return m_aPropSeq == other.m_aPropSeq;
 }
 
-bool SdrCustomShapeGeometryItem::operator<( const SfxPoolItem& rCmp ) const
-{
-    assert(dynamic_cast<const SdrCustomShapeGeometryItem*>( &rCmp ));
-    const SdrCustomShapeGeometryItem& other = static_cast<const SdrCustomShapeGeometryItem&>(rCmp);
-    // Again, try to optimize by checking hashes first (this is operator< for sorting purposes,
-    // so the ordering can be somewhat arbitrary).
-    UpdateHash();
-    other.UpdateHash();
-    if( m_aHashState != other.m_aHashState )
-        return m_aHashState < other.m_aHashState;
-    if( m_aHashState == HashState::Valid )
-        return m_aHash < other.m_aHash;
-
-    return comphelper::anyLess( css::uno::Any( m_aPropSeq ),
-        css::uno::Any( other.m_aPropSeq ));
-}
-
 void SdrCustomShapeGeometryItem::UpdateHash() const
 {
     if( m_aHashState != HashState::Unknown )

@@ -1005,7 +1005,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 if ( bVertical && nISrcStart == nISrcEnd && !bHasFiltered )
                 {
                     //  set all attributes at once (en bloc)
-                    if (pNewPattern || pSrcPattern != rDocument.GetDefPattern())
+                    if (pNewPattern || !SfxPoolItem::areSame(pSrcPattern, rDocument.GetDefPattern()))
                     {
                         //  Default is already present (DeleteArea)
                         SCROW nY1 = static_cast<SCROW>(std::min( nIStart, nIEnd ));
@@ -1036,7 +1036,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     DeleteArea(static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
                             static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), InsertDeleteFlags::AUTOFILL);
 
-                if ( pSrcPattern != aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) )
+                if ( !SfxPoolItem::areSame(pSrcPattern, aCol[nCol].GetPattern( static_cast<SCROW>(nRow) ) ) )
                 {
                     // Transfer template too
                     //TODO: Merge ApplyPattern to AttrArray ??

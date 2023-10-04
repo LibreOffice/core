@@ -84,17 +84,17 @@ ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
     pNewEditData( static_cast<EditTextObject*>(nullptr) )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pNewPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pNewPat ) );
-    pOldPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pOldPat ) );
-    pApplyPattern = const_cast<ScPatternAttr*>( &pPool->Put( *pApplyPat ) );
+    pNewPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pNewPat ) );
+    pOldPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pOldPat ) );
+    pApplyPattern = const_cast<ScPatternAttr*>( &pPool->DirectPutItemInPool( *pApplyPat ) );
 }
 
 ScUndoCursorAttr::~ScUndoCursorAttr()
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pPool->Remove(*pNewPattern);
-    pPool->Remove(*pOldPattern);
-    pPool->Remove(*pApplyPattern);
+    pPool->DirectRemoveItemFromPool(*pNewPattern);
+    pPool->DirectRemoveItemFromPool(*pOldPattern);
+    pPool->DirectRemoveItemFromPool(*pApplyPattern);
 }
 
 OUString ScUndoCursorAttr::GetComment() const

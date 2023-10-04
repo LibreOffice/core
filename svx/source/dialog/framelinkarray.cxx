@@ -269,11 +269,11 @@ static void lclSetMergedRange( SfxItemPool& rPool, CellVec& rCells, sal_Int32 nW
             Cell aTempCell(*pCell);
             aTempCell.mbOverlapX = nCol > nFirstCol;
             aTempCell.mbOverlapY = nRow > nFirstRow;
-            rCells[ nRow * nWidth + nCol ] = &rPool.Put(aTempCell);
+            rCells[ nRow * nWidth + nCol ] = &rPool.DirectPutItemInPool(aTempCell);
         }
     }
     Cell aTempCell(*rCells[ nFirstRow * nWidth + nFirstCol ]);
-    rCells[ nFirstRow * nWidth + nFirstCol ] = &rPool.Put(aTempCell);
+    rCells[ nFirstRow * nWidth + nFirstCol ] = &rPool.DirectPutItemInPool(aTempCell);
 }
 
 
@@ -336,8 +336,10 @@ struct ArrayImpl
     bool                HasCellRotation() const;
 };
 
-const SfxItemInfo maItemInfos[] {
-    {0, true}
+const SfxItemInfo maItemInfos[]
+{
+    // _nSID, _bNeedsPoolRegistration, _bShareable
+    {0, false, true }
 };
 ArrayImpl::ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight ) :
     mxPool(new SfxItemPool("Mine", 10, 10, maItemInfos)),
@@ -351,7 +353,7 @@ ArrayImpl::ArrayImpl( sal_Int32 nWidth, sal_Int32 nHeight ) :
     mbYCoordsDirty( false ),
     mbMayHaveCellRotation( false )
 {
-    const Cell* pDefaultCell = &mxPool->Put(Cell());
+    const Cell* pDefaultCell = &mxPool->DirectPutItemInPool(Cell());
     // default-construct all vectors
     maCells.resize( mnWidth * mnHeight, pDefaultCell );
     maWidths.resize( mnWidth, 0 );
@@ -368,7 +370,7 @@ const Cell& ArrayImpl::GetCell( sal_Int32 nCol, sal_Int32 nRow ) const
 void ArrayImpl::PutCell( sal_Int32 nCol, sal_Int32 nRow, const Cell & rCell )
 {
     if (IsValidPos( nCol, nRow ))
-        maCells[ GetIndex( nCol, nRow ) ] = &mxPool->Put(rCell);
+        maCells[ GetIndex( nCol, nRow ) ] = &mxPool->DirectPutItemInPool(rCell);
 }
 
 sal_Int32 ArrayImpl::GetMergedFirstCol( sal_Int32 nCol, sal_Int32 nRow ) const
@@ -1061,7 +1063,7 @@ void Array::MirrorSelfX()
         {
             Cell aTempCell(CELL(mxImpl->GetMirrorCol( nCol ), nRow));
             aTempCell.MirrorSelfX();
-            aNewCells.push_back( &mxImpl->mxPool->Put(aTempCell) );
+            aNewCells.push_back( &mxImpl->mxPool->DirectPutItemInPool(aTempCell) );
         }
     }
     mxImpl->maCells.swap( aNewCells );

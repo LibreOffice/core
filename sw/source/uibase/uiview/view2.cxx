@@ -2538,7 +2538,8 @@ static auto JumpToTOXMark(SwWrtShell & rSh, std::u16string_view aName) -> bool
     }
     SwTOXMark const* pMark(&tmp->first);
     // hack: check first if one exists
-    if (&tmp->first != &rSh.GetDoc()->GotoTOXMark(tmp->first, TOX_SAME_NXT, rSh.IsReadOnlyAvailable()))
+    // need simple ptr control, else UnitTest CppunitTest_sw_uiwriter3 fails
+    if (!areSfxPoolItemPtrsEqual(&tmp->first, &rSh.GetDoc()->GotoTOXMark(tmp->first, TOX_SAME_NXT, rSh.IsReadOnlyAvailable())))
     {
         for (sal_Int32 i = 0; i < tmp->second; ++i)
         {

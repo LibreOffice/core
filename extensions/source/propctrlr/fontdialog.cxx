@@ -532,26 +532,27 @@ namespace pcr
         // create the pool
         static SfxItemInfo const aItemInfos[FontItemIds::CFID_LAST_ITEM_ID - FontItemIds::CFID_FIRST_ITEM_ID + 1] =
         {
-            { SID_ATTR_CHAR_FONT,               false },
-            { SID_ATTR_CHAR_FONTHEIGHT,         false },
-            { SID_ATTR_CHAR_WEIGHT,             false },
-            { SID_ATTR_CHAR_POSTURE,            false },
-            { SID_ATTR_CHAR_LANGUAGE,           false },
-            { SID_ATTR_CHAR_UNDERLINE,          false },
-            { SID_ATTR_CHAR_STRIKEOUT,          false },
-            { SID_ATTR_CHAR_WORDLINEMODE,       false },
-            { SID_ATTR_CHAR_COLOR,              false },
-            { SID_ATTR_CHAR_RELIEF,             false },
-            { SID_ATTR_CHAR_EMPHASISMARK,       false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { 0,                                false },
-            { SID_ATTR_CHAR_FONTLIST,           false }
+            // _nSID, _bNeedsPoolRegistration, _bShareable
+            { SID_ATTR_CHAR_FONT,               false, false },
+            { SID_ATTR_CHAR_FONTHEIGHT,         false, false },
+            { SID_ATTR_CHAR_WEIGHT,             false, false },
+            { SID_ATTR_CHAR_POSTURE,            false, false },
+            { SID_ATTR_CHAR_LANGUAGE,           false, false },
+            { SID_ATTR_CHAR_UNDERLINE,          false, false },
+            { SID_ATTR_CHAR_STRIKEOUT,          false, false },
+            { SID_ATTR_CHAR_WORDLINEMODE,       false, false },
+            { SID_ATTR_CHAR_COLOR,              false, false },
+            { SID_ATTR_CHAR_RELIEF,             false, false },
+            { SID_ATTR_CHAR_EMPHASISMARK,       false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { 0,                                false, false },
+            { SID_ATTR_CHAR_FONTLIST,           false, false }
         };
 
         _rpPool = new SfxItemPool("PCRControlFontItemPool", FontItemIds::CFID_FIRST_ITEM_ID, FontItemIds::CFID_LAST_ITEM_ID,

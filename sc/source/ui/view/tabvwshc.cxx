@@ -440,7 +440,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
                 xResult = std::make_shared<ScCondFormatDlg>(pB, pCW, pParent, &rViewData, pDlgItem);
 
                 // Remove the pool item stored by Conditional Format Manager Dialog.
-                GetPool().Remove(*pDlgItem);
+                GetPool().DirectRemoveItemFromPool(*pDlgItem);
             }
 
             break;

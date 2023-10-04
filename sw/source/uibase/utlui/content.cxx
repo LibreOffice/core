@@ -5262,7 +5262,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             if(nMode == EditEntryMode::DELETE)
             {
                 const OUString& rName = pCnt->GetName();
-                for (SfxPoolItem* pItem :
+                for (const SfxPoolItem* pItem :
                      m_pActiveShell->GetDoc()->GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK))
                 {
                     assert(dynamic_cast<const SwFormatRefMark*>(pItem));

@@ -143,7 +143,7 @@ sal_uInt16 SwDoc::CallEvent( SvMacroItemId nEvent, const SwCallMouseEvent& rCall
             for (const SfxPoolItem* pItem : GetAttrPool().GetItemSurrogates(RES_TXTATR_INETFMT))
             {
                 auto pFormatItem = dynamic_cast<const SwFormatINetFormat*>(pItem);
-                if( pFormatItem && rCallEvent.PTR.pINetAttr == pFormatItem )
+                if( pFormatItem && SfxPoolItem::areSame(rCallEvent.PTR.pINetAttr, pFormatItem) )
                 {
                     bCheckPtr = false;       // misuse as a flag
                     break;

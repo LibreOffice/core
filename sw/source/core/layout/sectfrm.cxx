@@ -147,7 +147,7 @@ void SwSectionFrame::Init()
     {
         const SwFormatCol *pOld = Lower() ? &rCol : new SwFormatCol;
         ChgColumns( *pOld, rCol, IsAnyNoteAtEnd() );
-        if( pOld != &rCol )
+        if (!SfxPoolItem::areSame( pOld, &rCol ))
             delete pOld;
     }
 }

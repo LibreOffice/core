@@ -3330,7 +3330,7 @@ void MSWordExportBase::AddLinkTarget(std::u16string_view rURL)
             {
                 pMark = &m_rDoc.GotoTOXMark(*pMark, TOX_SAME_NXT, true);
             }
-            if (pMark != &tmp->first)
+            if (!SfxPoolItem::areSame(pMark, &tmp->first))
             {
                 m_TOXMarkBookmarksByURL.emplace(aURL, name);
                 m_TOXMarkBookmarksByTOXMark.emplace(pMark, nameDecoded);

@@ -186,7 +186,7 @@ public:
 
 bool isRotateItemUsed(const ScDocumentPool *pPool)
 {
-    return pPool->GetItemCount2( ATTR_ROTATE_VALUE ) > 0;
+    return pPool->GetItemSurrogates(ATTR_ROTATE_VALUE).size() > 0;
 }
 
 void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow,
@@ -488,11 +488,11 @@ void ScDocument::FillInfo(
                         const SvxLineItem* pBLTRLine = &pPattern->GetItem( ATTR_BORDER_BLTR );
 
                         const SvxShadowItem* pShadowAttr = &pPattern->GetItem(ATTR_SHADOW);
-                        if (pShadowAttr != pDefShadow)
+                        if (!SfxPoolItem::areSame(pShadowAttr, pDefShadow))
                             bAnyShadow = true;
 
                         const ScMergeAttr* pMergeAttr = &pPattern->GetItem(ATTR_MERGE);
-                        bool bMerged = ( pMergeAttr != pDefMerge && *pMergeAttr != *pDefMerge );
+                        bool bMerged = !SfxPoolItem::areSame( pMergeAttr, pDefMerge );
                         ScMF nOverlap = pPattern->GetItemSet().
                                                         Get(ATTR_MERGE_FLAG).GetValue();
                         bool bHOverlapped(nOverlap & ScMF::Hor);
@@ -530,7 +530,7 @@ void ScDocument::FillInfo(
                                 if ( GetPreviewCellStyle( nCol, nCurRow, nTab  ) != nullptr )
                                     bAnyPreview = true;
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-                                if (pBackground != pDefBackground)          // Column background == Default ?
+                                if (!SfxPoolItem::areSame(pBackground, pDefBackground))          // Column background == Default ?
                                     pThisRowInfo->bEmptyBack = false;
                                 if (bContainsCondFormat)
                                     pThisRowInfo->bEmptyBack = false;
@@ -687,7 +687,7 @@ void ScDocument::FillInfo(
                 if( bAnyCondition && pInfo->mxColorScale)
                 {
                     pRowInfo[nArrRow].bEmptyBack = false;
-                    pInfo->pBackground = &pPool->Put(SvxBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND));
+                    pInfo->pBackground = &pPool->DirectPutItemInPool(SvxBrushItem(*pInfo->mxColorScale, ATTR_BACKGROUND));
                 }
             }
         }
@@ -735,7 +735,7 @@ void ScDocument::FillInfo(
                         !(pShadowItem = pStartCond->GetItemIfSet(ATTR_SHADOW)) )
                         pShadowItem = &pStartPattern->GetItem(ATTR_SHADOW);
                     pInfo->pShadowAttr = pShadowItem;
-                    if (pInfo->pShadowAttr != pDefShadow)
+                    if (!SfxPoolItem::areSame(pInfo->pShadowAttr, pDefShadow))
                         bAnyShadow = true;
 
                     const ScCondFormatIndexes& rCondFormatIndex

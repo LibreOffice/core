@@ -2168,7 +2168,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
         // Fill this gap with the default pattern.
         ScAttrEntry aEntry;
         aEntry.nEndRow = nRow1 - 1;
-        aEntry.pPattern = &rDoc.GetPool()->Put(*rAttrs.mpDefPattern);
+        aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(*rAttrs.mpDefPattern);
         rAttrs.maAttrs.push_back(aEntry);
 
         // Check if the default pattern is 'General'.
@@ -2178,7 +2178,7 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
 
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
-    aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+    aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(rPat);
     // Put the allocated pattern to cache
     if (!pCachedPattern)
         rCache.add(nXfId, nNumFmtId, const_cast<ScPatternAttr*>(aEntry.pPattern));

@@ -140,10 +140,13 @@ SwMsgPoolItem::SwMsgPoolItem( sal_uInt16 nWhch )
 {
 }
 
-bool SwMsgPoolItem::operator==( const SfxPoolItem& ) const
+bool SwMsgPoolItem::operator==( const SfxPoolItem& rItem ) const
 {
-    assert( false && "SwMsgPoolItem knows no ==" );
-    return false;
+    assert( SfxPoolItem::operator==(rItem)); (void)rItem;
+    // SwMsgPoolItem now knows operator== due to evtl. deeper
+    // ItemCompares using SfxPoolItem::areSame. No members,
+    // so always equal
+    return true;
 }
 
 SwMsgPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const

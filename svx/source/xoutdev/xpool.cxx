@@ -159,10 +159,24 @@ XOutdevItemPool::XOutdevItemPool(SfxItemPool* _pMaster)
     // create ItemInfos
     for(sal_uInt16 i(GetFirstWhich()); i <= GetLastWhich(); i++)
     {
+        // _nSID, _bNeedsPoolRegistration, _bShareable
         mpLocalItemInfos[i - XATTR_START]._nSID = 0;
-        mpLocalItemInfos[i - XATTR_START]._bPoolable = true;
+        mpLocalItemInfos[i - XATTR_START]._bNeedsPoolRegistration = false;
+        mpLocalItemInfos[i - XATTR_START]._bShareable = true;
     }
 
+    // these slots need _bNeedsPoolRegistration == true, see
+    // text @svl/source/items/itempool.cxx
+    mpLocalItemInfos[XATTR_FILLBITMAP       -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_FILLGRADIENT     -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_FILLHATCH        -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_FILLFLOATTRANSPARENCE - XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_LINEEND          -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_LINESTART        -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._bNeedsPoolRegistration = true;
+    mpLocalItemInfos[XATTR_FILLCOLOR        -XATTR_START]._bNeedsPoolRegistration = true;
+
+    // set the SlotIDs, this is a mapping used by GetWhich()/GetSlotId()
     mpLocalItemInfos[XATTR_LINESTYLE        -XATTR_START]._nSID = SID_ATTR_LINE_STYLE;
     mpLocalItemInfos[XATTR_LINEDASH         -XATTR_START]._nSID = SID_ATTR_LINE_DASH;
     mpLocalItemInfos[XATTR_LINEWIDTH        -XATTR_START]._nSID = SID_ATTR_LINE_WIDTH;

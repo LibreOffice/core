@@ -29,6 +29,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     maSet(rSet)
 {
     assert(!dynamic_cast<const SfxAllItemSet*>(&rSet) && "cannot handle SfxAllItemSet here");
+    setIsSetItem();
 }
 
 
@@ -37,6 +38,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet &&pS) :
     maSet(pS)
 {
     assert(!dynamic_cast<SfxAllItemSet*>(&pS) && "cannot handle SfxAllItemSet here");
+    setIsSetItem();
 }
 
 
@@ -45,6 +47,7 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     maSet(rCopy.maSet.CloneAsValue(true, pPool))
 {
     assert(!dynamic_cast<const SfxAllItemSet*>(&rCopy.maSet) && "cannot handle SfxAllItemSet here");
+    setIsSetItem();
 }
 
 

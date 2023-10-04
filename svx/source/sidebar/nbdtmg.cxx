@@ -666,7 +666,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                 const SvxBrushItem* pBrsh1 = aFmt.GetBrush();
                 const SvxBrushItem* pBrsh2 = _pSet->pBrushItem;
                 bool bIsMatch = false;
-                if (pBrsh1==pBrsh2) bIsMatch = true;
+                if (SfxPoolItem::areSame(pBrsh1,pBrsh2)) bIsMatch = true;
                 if (pBrsh1 && pBrsh2) {
                     const Graphic* pGrf1 = pBrsh1->GetGraphic();
                     const Graphic* pGrf2 = pBrsh2->GetGraphic();

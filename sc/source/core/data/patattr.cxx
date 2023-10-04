@@ -72,30 +72,34 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName 
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pName       ( rStyleName ),
         pStyle      ( nullptr ),
-        mnKey(0)
+        mnPAKey(0)
 {
+    setNewItemCallback();
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
     :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
         pStyle      ( nullptr ),
-        mnKey(0)
+        mnPAKey(0)
 {
+    setNewItemCallback();
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
     :   SfxSetItem  ( ATTR_PATTERN, SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *pItemPool ) ),
         pStyle      ( nullptr ),
-        mnKey(0)
+        mnPAKey(0)
 {
+    setNewItemCallback();
 }
 
 ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
     :   SfxSetItem  ( rPatternAttr ),
         pName       ( rPatternAttr.pName ),
         pStyle      ( rPatternAttr.pStyle ),
-        mnKey(rPatternAttr.mnKey)
+        mnPAKey(rPatternAttr.mnPAKey)
 {
+    setNewItemCallback();
 }
 
 ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
@@ -164,25 +168,6 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
         return false;
     return EqualPatternSets( GetItemSet(), rOther.GetItemSet() ) &&
             StrCmp( GetStyleName(), rOther.GetStyleName() );
-}
-
-SfxPoolItem::lookup_iterator ScPatternAttr::Lookup(lookup_iterator begin, lookup_iterator end ) const
-{
-    if( !mxHashCode )
-        CalcHashCode();
-    for( auto it = begin; it != end; ++it)
-    {
-        const ScPatternAttr* other = static_cast<const ScPatternAttr*>(*it);
-        if( !other->mxHashCode )
-            other->CalcHashCode();
-        if (*mxHashCode == *other->mxHashCode
-            && EqualPatternSets( GetItemSet(), other->GetItemSet())
-            && StrCmp( GetStyleName(), other->GetStyleName()))
-        {
-            return it;
-        }
-    }
-    return end;
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -1027,7 +1012,7 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
             if ( eOldState == SfxItemState::SET )
             {
                 //  item is set in OldAttrs (or its parent) -> compare pointers
-                if ( pThisItem == pOldItem )
+                if (SfxPoolItem::areSame( pThisItem, pOldItem ))
                 {
                     rThisSet.ClearItem( nSubWhich );
                     mxHashCode.reset();
@@ -1194,7 +1179,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
         }
     }
 
-    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->Put(aDestPattern) );
+    ScPatternAttr* pPatternAttr = const_cast<ScPatternAttr*>( &pDestDoc->GetPool()->DirectPutItemInPool(aDestPattern) );
     return pPatternAttr;
 }
 
@@ -1289,7 +1274,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
             if (state1 != state2
                 && (state1 < SfxItemState::DEFAULT || state2 < SfxItemState::DEFAULT))
                 return false;
-            if (pItem1 != pItem2)
+            if (!SfxPoolItem::areSame(pItem1, pItem2))
                 return false;
         }
         nWhich1 = aIter1.NextWhich();
@@ -1494,14 +1479,14 @@ ScRotateDir ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
     return nRet;
 }
 
-void ScPatternAttr::SetKey(sal_uInt64 nKey)
+void ScPatternAttr::SetPAKey(sal_uInt64 nKey)
 {
-    mnKey = nKey;
+    mnPAKey = nKey;
 }
 
-sal_uInt64 ScPatternAttr::GetKey() const
+sal_uInt64 ScPatternAttr::GetPAKey() const
 {
-    return mnKey;
+    return mnPAKey;
 }
 
 void ScPatternAttr::CalcHashCode() const

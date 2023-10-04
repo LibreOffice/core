@@ -83,7 +83,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aColorListItem );
         else
-            mpDrawModel->GetItemPool().Put(aColorListItem,SID_COLOR_TABLE);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aColorListItem,SID_COLOR_TABLE);
         mpColorList = mpDrawModel->GetColorList();
     }
     if( mpNewGradientList != mpDrawModel->GetGradientList() )
@@ -93,7 +93,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem,SID_GRADIENT_LIST);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem,SID_GRADIENT_LIST);
         mpGradientList = mpDrawModel->GetGradientList();
     }
     if( mpNewHatchingList != mpDrawModel->GetHatchList() )
@@ -103,7 +103,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem,SID_HATCH_LIST);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem,SID_HATCH_LIST);
         mpHatchingList = mpDrawModel->GetHatchList();
     }
     if( mpNewBitmapList != mpDrawModel->GetBitmapList() )
@@ -113,7 +113,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem,SID_BITMAP_LIST);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem,SID_BITMAP_LIST);
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
     if( mpNewPatternList != mpDrawModel->GetPatternList() )
@@ -123,7 +123,7 @@ void SvxAreaTabDialog::SavePalettes()
         if( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem,SID_PATTERN_LIST);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem,SID_PATTERN_LIST);
         mpPatternList = mpDrawModel->GetPatternList();
     }
 
@@ -148,7 +148,7 @@ void SvxAreaTabDialog::SavePalettes()
         if ( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
     }
 
     if( mnBitmapListState & ChangeType::MODIFIED )
@@ -162,7 +162,7 @@ void SvxAreaTabDialog::SavePalettes()
             pShell->PutItem( aItem );
         else
         {
-            mpDrawModel->GetItemPool().Put(aItem);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
         }
     }
 
@@ -176,7 +176,7 @@ void SvxAreaTabDialog::SavePalettes()
         if( pShell )
             pShell->PutItem( aItem );
         else
-            mpDrawModel->GetItemPool().Put(aItem);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
     }
 
     if( mnGradientListState & ChangeType::MODIFIED )
@@ -190,7 +190,7 @@ void SvxAreaTabDialog::SavePalettes()
             pShell->PutItem( aItem );
         else
         {
-            mpDrawModel->GetItemPool().Put(aItem);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
         }
     }
 
@@ -202,7 +202,7 @@ void SvxAreaTabDialog::SavePalettes()
             pShell->PutItem( aItem );
         else
         {
-            mpDrawModel->GetItemPool().Put(aItem);
+            mpDrawModel->GetItemPool().DirectPutItemInPool(aItem);
         }
     }
 }

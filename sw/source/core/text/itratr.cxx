@@ -659,9 +659,9 @@ static bool CanSkipOverRedline(
     }
     for (size_t i = 0; i < SAL_N_ELEMENTS(activeCharAttrsStart); ++i)
     {
-        // all of these are poolable
-//        assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->IsItemPoolable(*activeCharAttrsStart[i]));
-        if (activeCharAttrsStart[i] != activeCharAttrsEnd[i])
+        // all of these should be shareable (but we have no SfxItemPool to check it here)
+        // assert(!activeCharAttrsStart[i] || activeCharAttrsStart[i]->GetItemPool()->Shareable(*activeCharAttrsStart[i]));
+        if (!SfxPoolItem::areSame(activeCharAttrsStart[i], activeCharAttrsEnd[i]))
         {
             if (!isTheAnswerYes) return false;
         }

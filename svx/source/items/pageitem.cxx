@@ -256,9 +256,9 @@ SvxSetItem::SvxSetItem( const TypedWhichId<SvxSetItem> nId, const SfxItemSet& rS
 {
 }
 
-SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
+SvxSetItem::SvxSetItem( const SvxSetItem& rItem, SfxItemPool* pPool ) :
 
-    SfxSetItem( rItem )
+    SfxSetItem( rItem, pPool )
 {
 }
 
@@ -268,9 +268,9 @@ SvxSetItem::SvxSetItem( const TypedWhichId<SvxSetItem> nId, SfxItemSet&& _pSet )
 {
 }
 
-SvxSetItem* SvxSetItem::Clone( SfxItemPool * ) const
+SvxSetItem* SvxSetItem::Clone( SfxItemPool * pPool ) const
 {
-    return new SvxSetItem(*this);
+    return new SvxSetItem(*this, pPool);
 }
 
 bool SvxSetItem::GetPresentation

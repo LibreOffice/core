@@ -559,67 +559,68 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     // UNO->ItemSet
     static SfxItemInfo aItemInfos[] =
     {
-        { 0,      true }, // XATTR_FILLSTYLE
-        { 0,      true }, // XATTR_FILLCOLOR
-        { 0,       true }, // XATTR_FILLGRADIENT
-        { 0,      true }, // XATTR_FILLHATCH
-        { 0,     true }, // XATTR_FILLBITMAP
-        { 0,       true }, // XATTR_FILLTRANSPARENCE
-        { 0,      true }, // XATTR_GRADIENTSTEPCOUNT
-        { 0,       true }, // XATTR_FILLBMP_TILE
-        { 0,        true }, // XATTR_FILLBMP_POS
-        { 0,      true }, // XATTR_FILLBMP_SIZEX
-        { 0,      true }, // XATTR_FILLBMP_SIZEY
-        { 0,  true }, // XATTR_FILLFLOATTRANSPARENCE
-        { 0,     true }, // XATTR_SECONDARYFILLCOLOR
-        { 0,        true }, // XATTR_FILLBMP_SIZELOG
-        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETX
-        { 0,    true }, // XATTR_FILLBMP_TILEOFFSETY
-        { 0,        true }, // XATTR_FILLBMP_STRETCH
-        { 0,     true }, // XATTR_FILLBMP_POSOFFSETX
-        { 0,     true }, // XATTR_FILLBMP_POSOFFSETY
-        { 0,     true }, // XATTR_FILLBACKGROUND
+        // _nSID, _bNeedsPoolRegistration, _bShareable
+        { 0, false, true }, // XATTR_FILLSTYLE
+        { 0, true,  true }, // XATTR_FILLCOLOR
+        { 0, false, true }, // XATTR_FILLGRADIENT
+        { 0, false, true }, // XATTR_FILLHATCH
+        { 0, false, true }, // XATTR_FILLBITMAP
+        { 0, false, true }, // XATTR_FILLTRANSPARENCE
+        { 0, false, true }, // XATTR_GRADIENTSTEPCOUNT
+        { 0, false, true }, // XATTR_FILLBMP_TILE
+        { 0, false, true }, // XATTR_FILLBMP_POS
+        { 0, false, true }, // XATTR_FILLBMP_SIZEX
+        { 0, false, true }, // XATTR_FILLBMP_SIZEY
+        { 0, false, true }, // XATTR_FILLFLOATTRANSPARENCE
+        { 0, false, true }, // XATTR_SECONDARYFILLCOLOR
+        { 0, false, true }, // XATTR_FILLBMP_SIZELOG
+        { 0, false, true }, // XATTR_FILLBMP_TILEOFFSETX
+        { 0, false, true }, // XATTR_FILLBMP_TILEOFFSETY
+        { 0, false, true }, // XATTR_FILLBMP_STRETCH
+        { 0, false, true }, // XATTR_FILLBMP_POSOFFSETX
+        { 0, false, true }, // XATTR_FILLBMP_POSOFFSETY
+        { 0, false, true }, // XATTR_FILLBACKGROUND
 
-        { SID_ATTR_CHAR_FONT, true },
-        { SID_ATTR_CHAR_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_LANGUAGE, true },
-        { SID_ATTR_CHAR_POSTURE, true },
-        { SID_ATTR_CHAR_WEIGHT, true },
-        { SID_ATTR_CHAR_SHADOWED, true },
-        { SID_ATTR_CHAR_WORDLINEMODE, true },
-        { SID_ATTR_CHAR_CONTOUR, true },
-        { SID_ATTR_CHAR_STRIKEOUT, true },
-        { SID_ATTR_CHAR_UNDERLINE, true },
-        { SID_ATTR_CHAR_COLOR, true },
-        { SID_ATTR_CHAR_KERNING, true },
-        { SID_ATTR_CHAR_CASEMAP, true },
-        { SID_ATTR_CHAR_ESCAPEMENT, true },
-        { SID_ATTR_CHAR_FONTLIST, true },
-        { SID_ATTR_CHAR_AUTOKERN, true },
-        { SID_COLOR_TABLE, true },
-        { SID_ATTR_FLASH, true },
-        { SID_ATTR_CHAR_EMPHASISMARK, true },
-        { SID_ATTR_CHAR_TWO_LINES, true },
-        { SID_ATTR_CHAR_ROTATED, true },
-        { SID_ATTR_CHAR_SCALEWIDTH, true },
-        { SID_ATTR_CHAR_RELIEF, true },
-        { SID_ATTR_CHAR_HIDDEN, true },
-        { SID_ATTR_BRUSH, true },
-        { SID_ATTR_ALIGN_HOR_JUSTIFY, true },
-        { SID_ATTR_ALIGN_VER_JUSTIFY, true },
+        { SID_ATTR_CHAR_FONT,           false, true },
+        { SID_ATTR_CHAR_FONTHEIGHT,     false, true },
+        { SID_ATTR_CHAR_LANGUAGE,       false, true },
+        { SID_ATTR_CHAR_POSTURE,        false, true },
+        { SID_ATTR_CHAR_WEIGHT,         false, true },
+        { SID_ATTR_CHAR_SHADOWED,       false, true },
+        { SID_ATTR_CHAR_WORDLINEMODE,   false, true },
+        { SID_ATTR_CHAR_CONTOUR,        false, true },
+        { SID_ATTR_CHAR_STRIKEOUT,      false, true },
+        { SID_ATTR_CHAR_UNDERLINE,      false, true },
+        { SID_ATTR_CHAR_COLOR,          false, true },
+        { SID_ATTR_CHAR_KERNING,        false, true },
+        { SID_ATTR_CHAR_CASEMAP,        false, true },
+        { SID_ATTR_CHAR_ESCAPEMENT,     false, true },
+        { SID_ATTR_CHAR_FONTLIST,       false, true },
+        { SID_ATTR_CHAR_AUTOKERN,       false, true },
+        { SID_COLOR_TABLE,              false, true },
+        { SID_ATTR_FLASH,               false, true },
+        { SID_ATTR_CHAR_EMPHASISMARK,   false, true },
+        { SID_ATTR_CHAR_TWO_LINES,      false, true },
+        { SID_ATTR_CHAR_ROTATED,        false, true },
+        { SID_ATTR_CHAR_SCALEWIDTH,     false, true },
+        { SID_ATTR_CHAR_RELIEF,         false, true },
+        { SID_ATTR_CHAR_HIDDEN,         false, true },
+        { SID_ATTR_BRUSH,               false, true },
+        { SID_ATTR_ALIGN_HOR_JUSTIFY,   false, true },
+        { SID_ATTR_ALIGN_VER_JUSTIFY,   false, true },
 
         // Asian
-        { SID_ATTR_CHAR_CJK_FONT, true },
-        { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_CJK_LANGUAGE, true },
-        { SID_ATTR_CHAR_CJK_POSTURE, true },
-        { SID_ATTR_CHAR_CJK_WEIGHT, true },
+        { SID_ATTR_CHAR_CJK_FONT,       false, true },
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, false, true },
+        { SID_ATTR_CHAR_CJK_LANGUAGE,   false, true },
+        { SID_ATTR_CHAR_CJK_POSTURE,    false, true },
+        { SID_ATTR_CHAR_CJK_WEIGHT,     false, true },
         // Complex
-        { SID_ATTR_CHAR_CTL_FONT, true },
-        { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },
-        { SID_ATTR_CHAR_CTL_LANGUAGE, true },
-        { SID_ATTR_CHAR_CTL_POSTURE, true },
-        { SID_ATTR_CHAR_CTL_WEIGHT, true }
+        { SID_ATTR_CHAR_CTL_FONT,       false, true },
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, false, true },
+        { SID_ATTR_CHAR_CTL_LANGUAGE,   false, true },
+        { SID_ATTR_CHAR_CTL_POSTURE,    false, true },
+        { SID_ATTR_CHAR_CTL_WEIGHT,     false, true }
     };
     FontList aFontList(Application::GetDefaultDevice());
     XColorListRef pColorList( XColorList::CreateStdColorList() );

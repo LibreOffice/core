@@ -141,12 +141,12 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pOldSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
+                : GetPool()->GetDefaultItem(nWhich), nWhich, false);
         }
         else if (!IsInvalidItem(pOld))
         {
             // set/remember old value
-            m_pOldSet->PutImpl(*pOld, nWhich, true, false);
+            m_pOldSet->PutImpl(*pOld, nWhich, false);
         }
     }
 
@@ -159,12 +159,12 @@ void SwAttrSet::changeCallback(const SfxPoolItem* pOld, const SfxPoolItem* pNew)
             const SfxItemSet* pParent(GetParent());
             m_pNewSet->PutImpl(nullptr != pParent
                 ? pParent->Get(nWhich)
-                : GetPool()->GetDefaultItem(nWhich), nWhich, false, false);
+                : GetPool()->GetDefaultItem(nWhich), nWhich, false);
         }
         else if (!IsInvalidItem(pNew))
         {
             // set/remember new value
-            m_pNewSet->PutImpl(*pNew, nWhich, true, false);
+            m_pNewSet->PutImpl(*pNew, nWhich, false);
         }
     }
 }
@@ -336,33 +336,6 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
 bool SwAttrSet::SetModifyAtAttr( const sw::BroadcastingModify* pModify )
 {
     bool bSet = false;
-
-    // ITEM: At this place the paradigm of Item/Set/Pool gets broken:
-    // The three Items in Writer
-    // - SwFormatPageDesc
-    // - SwFormatDrop
-    // - SwTableBoxFormula
-    // contain a unique ptr to SwFormat (or: sw::BroadcastingModify
-    // if you wish), so the Item *cannot* be shared or re-used.
-    // But that is the intended nature of Items:
-    // - they are read-only (note the bad const_cast's below)
-    // - they are ref-counted to be re-usable in as many Sets as
-    //   possible
-    // Thus if we need to change that ptr @ Item we *need* to make
-    // sure that Item is *unique*. This is now done by using the
-    // 'm_bShareable' at the Item (see where that gets set).
-    // This was done in the past using the 'poolable' flag, but that
-    // flag was/is for a completely different purpose - uniqueness is
-    // a side-effect. It already led to massively cloning that Item.
-    // That something is not 'clean' here can also be seen by using
-    // const_cast to *change* values at Items *in* the Set - these
-    // are returned by const reference for a purpose.
-    // If info/data at an Item has to be changed, the official/clean
-    // way is to create a new one (e.g. Clone), set the values (if
-    // not given to the constructor) and then set that Item at the Set.
-    // NOTE: I do not know if and how it would be possible, but holding
-    //       a SwFormat*/sw::BroadcastingModify* at those Items should
-    //       be fixed/removed ASAP
 
     const SwFormatPageDesc* pPageDescItem = GetItemIfSet( RES_PAGEDESC, false );
     if( pPageDescItem &&

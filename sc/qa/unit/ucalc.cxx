@@ -1211,7 +1211,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHorizontalAttrIterator)
         size_t nCheckPos = 0;
         for (const ScPatternAttr* pAttr = aIter.GetNext(nCol1, nCol2, nRow); pAttr; pAttr = aIter.GetNext(nCol1, nCol2, nRow))
         {
-            if( pAttr == m_pDoc->GetDefPattern())
+            if (SfxPoolItem::areSame( pAttr, m_pDoc->GetDefPattern()))
                 continue;
             CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
             CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(nCol1));
@@ -1302,7 +1302,7 @@ CPPUNIT_TEST_FIXTURE(Test, testIteratorsDefPattern)
     CPPUNIT_ASSERT_EQUAL(SCCOL(102 + 1), m_pDoc->GetAllocatedColumnsCount(0));
     const ScPatternAttr* pattern = m_pDoc->GetPattern(100, 0, 0);
     const ScPatternAttr* defPattern = m_pDoc->GetDefPattern();
-    CPPUNIT_ASSERT(pattern != defPattern);
+    CPPUNIT_ASSERT(!SfxPoolItem::areSame(pattern, defPattern));
     CPPUNIT_ASSERT_EQUAL(pattern, m_pDoc->GetPattern(102, 0, 0));
     CPPUNIT_ASSERT_EQUAL(defPattern, m_pDoc->GetPattern(101, 0, 0));
     CPPUNIT_ASSERT_EQUAL(defPattern, m_pDoc->GetPattern(103, 0, 0));

@@ -287,19 +287,19 @@ void SwIndexMarkPane::InitControls()
         bool bShow = false;
 
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_PRV );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
         {
             m_pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
             bShow = true;
         }
-        m_xPrevBT->set_sensitive(pMoveMark != pMark);
+        m_xPrevBT->set_sensitive(!SfxPoolItem::areSame(pMoveMark, pMark));
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_NXT );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
         {
             m_pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
             bShow = true;
         }
-        m_xNextBT->set_sensitive(pMoveMark != pMark);
+        m_xNextBT->set_sensitive(!SfxPoolItem::areSame(pMoveMark, pMark));
         if( bShow )
         {
             m_xPrevBT->show();
@@ -308,19 +308,19 @@ void SwIndexMarkPane::InitControls()
         }
 
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
         {
             m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
             bShow = true;
         }
-        m_xPrevSameBT->set_sensitive(pMoveMark != pMark);
+        m_xPrevSameBT->set_sensitive(!SfxPoolItem::areSame(pMoveMark, pMark));
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
         {
             m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
             bShow = true;
         }
-        m_xNextSameBT->set_sensitive(pMoveMark != pMark);
+        m_xNextSameBT->set_sensitive(!SfxPoolItem::areSame(pMoveMark, pMark));
         if( bShow )
         {
             m_xNextSameBT->show();
@@ -894,25 +894,25 @@ void SwIndexMarkPane::UpdateDialog()
     if( m_xPrevBT->get_visible() )
     {
         const SwTOXMark* pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_PRV );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
             m_pSh->GotoTOXMark( *pMoveMark, TOX_NXT );
-        m_xPrevBT->set_sensitive( pMoveMark != pMark );
+        m_xPrevBT->set_sensitive( !SfxPoolItem::areSame(pMoveMark, pMark) );
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_NXT );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
             m_pSh->GotoTOXMark( *pMoveMark, TOX_PRV );
-        m_xNextBT->set_sensitive( pMoveMark != pMark );
+        m_xNextBT->set_sensitive( !SfxPoolItem::areSame(pMoveMark, pMark) );
     }
 
     if (m_xPrevSameBT->get_visible())
     {
         const SwTOXMark* pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_PRV );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
             m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_NXT );
-        m_xPrevSameBT->set_sensitive( pMoveMark != pMark );
+        m_xPrevSameBT->set_sensitive( !SfxPoolItem::areSame(pMoveMark, pMark) );
         pMoveMark = &m_pSh->GotoTOXMark( *pMark, TOX_SAME_NXT );
-        if( pMoveMark != pMark )
+        if (!SfxPoolItem::areSame( pMoveMark, pMark ))
             m_pSh->GotoTOXMark( *pMoveMark, TOX_SAME_PRV );
-        m_xNextSameBT->set_sensitive( pMoveMark != pMark );
+        m_xNextSameBT->set_sensitive( !SfxPoolItem::areSame(pMoveMark, pMark) );
     }
 
     const bool bEnable = !m_pSh->HasReadonlySel();
@@ -1013,7 +1013,7 @@ void SwIndexMarkPane::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark const * pCurTOX
     if(pCurTOXMark)
     {
         for(sal_uInt16 i = 0; i < m_pTOXMgr->GetTOXMarkCount(); i++)
-            if(m_pTOXMgr->GetTOXMark(i) == pCurTOXMark)
+            if (SfxPoolItem::areSame(m_pTOXMgr->GetTOXMark(i), pCurTOXMark))
             {
                 m_pTOXMgr->SetCurTOXMark(i);
                 break;

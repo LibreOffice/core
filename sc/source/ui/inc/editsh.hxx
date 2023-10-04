@@ -29,7 +29,7 @@ class SfxModule;
 class EditView;
 class ScViewData;
 class ScInputHandler;
-class SvxURLField;
+class SvxFieldData;
 class TransferableDataHelper;
 class TransferableClipboardListener;
 
@@ -48,8 +48,14 @@ private:
     // currently happens to be when the menu was dismissed.
     std::optional<bool> moAtContextMenu_DisableEditHyperlink;
 
-    const SvxURLField* GetURLField();
-    const SvxURLField* GetFirstURLFieldFromCell();
+    // These methods did return 'const SvxURLField*' before, but
+    // at least for GetFirstURLFieldFromCell this is not safe: The
+    // SvxFieldItem accessed there and held in the local temporary
+    // SfxItemSet may be deleted with it, so return value can be
+    // corrupted/deleted. To avoid that, return a Clone
+    std::unique_ptr<const SvxFieldData> GetURLField();
+    std::unique_ptr<const SvxFieldData> GetFirstURLFieldFromCell();
+
     ScInputHandler* GetMyInputHdl();
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper*, void );

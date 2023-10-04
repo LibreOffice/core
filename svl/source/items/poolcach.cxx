@@ -28,7 +28,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
     pPool(pItemPool),
     pSetToPut( nullptr ),
-    pItemToPut( &pItemPool->Put(*pPutItem) )
+    pItemToPut( &pItemPool->DirectPutItemInPool(*pPutItem) )
 {
     DBG_ASSERT(pItemPool, "No Pool provided");
 }
@@ -47,12 +47,12 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 SfxItemPoolCache::~SfxItemPoolCache()
 {
     for (const SfxItemModifyImpl & rImpl : m_aCache) {
-        pPool->Remove( *rImpl.pPoolItem );
-        pPool->Remove( *rImpl.pOrigItem );
+        pPool->DirectRemoveItemFromPool( *rImpl.pPoolItem );
+        pPool->DirectRemoveItemFromPool( *rImpl.pOrigItem );
     }
 
     if ( pItemToPut )
-        pPool->Remove( *pItemToPut );
+        pPool->DirectRemoveItemFromPool( *pItemToPut );
 }
 
 
@@ -65,13 +65,14 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     // Find whether this Transformations ever occurred
     for (const SfxItemModifyImpl & rMapEntry : m_aCache)
     {
-        if ( rMapEntry.pOrigItem == &rOrigItem )
+        // use Item PtrCompare OK
+        if ( areSfxPoolItemPtrsEqual(rMapEntry.pOrigItem, &rOrigItem) )
         {
-            // Did anything change at all?
-            if ( rMapEntry.pPoolItem != &rOrigItem )
+            // Did anything change at all? use Item PtrCompare OK
+            if ( !areSfxPoolItemPtrsEqual(rMapEntry.pPoolItem, &rOrigItem) )
             {
                 rMapEntry.pPoolItem->AddRef(2); // One for the cache
-                pPool->Put( rOrigItem );    //FIXME: AddRef?
+                pPool->DirectPutItemInPool( rOrigItem );    //FIXME: AddRef?
             }
             return *rMapEntry.pPoolItem;
         }
@@ -82,16 +83,16 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     if ( pItemToPut )
     {
         pNewItem->GetItemSet().Put( *pItemToPut );
-        DBG_ASSERT( &pNewItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,
+        DBG_ASSERT( areSfxPoolItemPtrsEqual(&pNewItem->GetItemSet().Get( pItemToPut->Which() ), pItemToPut),
                     "wrong item in temporary set" );
     }
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
-    const SfxSetItem* pNewPoolItem = &pPool->Put( std::move(pNewItem) );
+    const SfxSetItem* pNewPoolItem = &pPool->DirectPutItemInPool( std::move(pNewItem) );
 
     // Adapt refcount; one each for the cache
-    pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
-    pPool->Put( rOrigItem );    //FIXME: AddRef?
+    pNewPoolItem->AddRef( !areSfxPoolItemPtrsEqual(pNewPoolItem, &rOrigItem) ? 2 : 1 );
+    pPool->DirectPutItemInPool( rOrigItem );    //FIXME: AddRef?
 
     // Add the transformation to the cache
     SfxItemModifyImpl aModify;
@@ -100,7 +101,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     m_aCache.push_back( aModify );
 
     DBG_ASSERT( !pItemToPut ||
-                &pNewPoolItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,
+                areSfxPoolItemPtrsEqual(&pNewPoolItem->GetItemSet().Get( pItemToPut->Which() ), pItemToPut),
                 "wrong item in resulting set" );
 
     return *pNewPoolItem;

@@ -1405,7 +1405,7 @@ void XclImpXF::ApplyPatternToAttrVector(
 
     ScAttrEntry aEntry;
     aEntry.nEndRow = nRow2;
-    aEntry.pPattern = &rDoc.GetPool()->Put(rPat);
+    aEntry.pPattern = &rDoc.GetPool()->DirectPutItemInPool(rPat);
     rAttrs.push_back(aEntry);
 }
 

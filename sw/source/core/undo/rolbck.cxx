@@ -502,7 +502,7 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
         // set the footnote in the TextNode
         SwFormatFootnote aTemp( m_bEndNote );
         SwFormatFootnote& rNew = const_cast<SwFormatFootnote&>(
-                pDoc->GetAttrPool().Put(aTemp) );
+                pDoc->GetAttrPool().DirectPutItemInPool(aTemp) );
         if ( !m_FootnoteNumber.isEmpty() )
         {
             rNew.SetNumStr( m_FootnoteNumber );
@@ -1382,7 +1382,7 @@ void SwRegHistory::SwClientNotify(const SwModify&, const SfxHint& rHint)
     if (rHint.GetId() != SfxHintId::SwLegacyModify)
         return;
     auto pLegacyHint = static_cast<const sw::LegacyModifyHint*>(&rHint);
-    if ( !(m_pHistory && pLegacyHint->m_pNew && pLegacyHint->m_pOld != pLegacyHint->m_pNew) )
+    if ( !(m_pHistory && pLegacyHint->m_pNew && !areSfxPoolItemPtrsEqual(pLegacyHint->m_pOld, pLegacyHint->m_pNew) ) )
         return;
 
     if ( pLegacyHint->m_pNew->Which() < POOLATTR_END )

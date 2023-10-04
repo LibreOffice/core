@@ -523,7 +523,7 @@ void SheetDataBuffer::finalizeImport()
             ScAttrEntry aEntry;
             aEntry.nEndRow = rDoc.MaxRow();
             aEntry.pPattern = pDefPattern;
-            rDoc.GetPool()->Put(*aEntry.pPattern);
+            rDoc.GetPool()->DirectPutItemInPool(*aEntry.pPattern);
             aAttrs.maAttrs.push_back(aEntry);
 
             if (!sc::NumFmtUtil::isLatinScript(*aEntry.pPattern, rDoc))

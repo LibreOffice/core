@@ -1093,7 +1093,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest const & rReq)
     rSh.GetFlyFrameAttr( aFrameSet );
     const SvxBoxItem& rBoxItem = aFrameSet.Get(RES_BOX);
 
-    if (pPoolBoxItem == &rBoxItem)
+    if (SfxPoolItem::areSame(pPoolBoxItem, &rBoxItem))
         bDefault = true;
 
     std::unique_ptr<SvxBoxItem> aBoxItem(rBoxItem.Clone());

@@ -404,14 +404,7 @@ void SfxStateCache::SetState_Impl
     bool bNotify = bItemDirty;
     if ( !bItemDirty )
     {
-        bool bBothAvailable = pLastItem && pState &&
-                    !IsInvalidItem(pState) && !IsInvalidItem(pLastItem);
-        DBG_ASSERT( !bBothAvailable || pState != pLastItem, "setting state with own item" );
-        if ( bBothAvailable )
-            bNotify = typeid(*pState) != typeid(*pLastItem) ||
-                      *pState != *pLastItem;
-        else
-            bNotify = ( pState != pLastItem ) || ( eState != eLastState );
+        bNotify = !SfxPoolItem::areSame(pLastItem, pState) || (eState != eLastState);
     }
 
     if ( bNotify )

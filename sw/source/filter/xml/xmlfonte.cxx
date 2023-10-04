@@ -39,6 +39,24 @@ public:
 
 }
 
+namespace
+{
+sal_Int32 CompareTo(sal_Int32 nA, sal_Int32 nB)
+{
+    if (nA < nB)
+    {
+        return -1;
+    }
+
+    if (nA > nB)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+}
+
 SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, bool bFontEmbedding)
     : XMLFontAutoStylePool(_rExport, bFontEmbedding)
 {
@@ -60,7 +78,34 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(SwXMLExport& _rExport, 
     }
 
     std::sort(aFonts.begin(), aFonts.end(),
-              [](const SvxFontItem* pA, const SvxFontItem* pB) -> bool { return *pA < *pB; });
+        [](const SvxFontItem* pA, const SvxFontItem* pB) -> bool
+        {
+            sal_Int32 nRet = pA->GetFamilyName().compareTo(pB->GetFamilyName());
+            if (nRet != 0)
+            {
+                return nRet < 0;
+            }
+
+            nRet = pA->GetStyleName().compareTo(pB->GetStyleName());
+            if (nRet != 0)
+            {
+                return nRet < 0;
+            }
+
+            nRet = CompareTo(pA->GetFamily(), pB->GetFamily());
+            if (nRet != 0)
+            {
+                return nRet < 0;
+            }
+
+            nRet = CompareTo(pA->GetPitch(), pB->GetPitch());
+            if (nRet != 0)
+            {
+                return nRet < 0;
+            }
+
+            return pA->GetCharSet() < pB->GetCharSet();
+        });
     for (const auto& pFont : aFonts)
     {
         Add(pFont->GetFamilyName(), pFont->GetStyleName(), pFont->GetFamily(), pFont->GetPitch(),

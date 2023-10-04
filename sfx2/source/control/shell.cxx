@@ -158,7 +158,7 @@ void SfxShell::PutItem
                                   which is stored in the SfxShell in a list. */
 )
 {
-    DBG_ASSERT( dynamic_cast< const SfxSetItem* >( &rItem) ==  nullptr, "SetItems aren't allowed here" );
+    DBG_ASSERT( !rItem.isSetItem(), "SetItems aren't allowed here" );
     DBG_ASSERT( SfxItemPool::IsSlot( rItem.Which() ),
                 "items with Which-Ids aren't allowed here" );
 

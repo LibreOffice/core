@@ -41,8 +41,6 @@ public:
             XFillBitmapItem( const XFillBitmapItem& rItem );
 
     virtual bool            operator==( const SfxPoolItem& rItem ) const override;
-    // no idea why, but this item does not play nice with the sorting optimisation, get failures in sd_import_tests
-    virtual bool            IsSortable() const override { return false; }
     virtual XFillBitmapItem* Clone( SfxItemPool* pPool = nullptr ) const override;
 
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;

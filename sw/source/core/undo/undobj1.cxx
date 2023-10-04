@@ -648,7 +648,7 @@ void SwUndoSetFlyFormat::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoSetFlyFormat::PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem )
 {
-    if( pItem && pItem != GetDfltAttr( nWhich ) )
+    if( pItem && !SfxPoolItem::areSame(pItem, GetDfltAttr( nWhich ) ) )
     {
         // Special treatment for this anchor
         if( RES_ANCHOR == nWhich )

@@ -355,20 +355,20 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
         bMulti      ( bNewMulti )
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pApplyPattern = const_cast<ScPatternAttr*>(&pPool->Put( *pNewApply ));
-    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>( &pPool->Put( *pNewOuter ) ) : nullptr;
-    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>( &pPool->Put( *pNewInner ) ) : nullptr;
+    pApplyPattern = const_cast<ScPatternAttr*>(&pPool->DirectPutItemInPool( *pNewApply ));
+    pLineOuter = pNewOuter ? const_cast<SvxBoxItem*>( &pPool->DirectPutItemInPool( *pNewOuter ) ) : nullptr;
+    pLineInner = pNewInner ? const_cast<SvxBoxInfoItem*>( &pPool->DirectPutItemInPool( *pNewInner ) ) : nullptr;
     aRangeCover = pRangeCover ? *pRangeCover : aRange;
 }
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
 {
     ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
-    pPool->Remove(*pApplyPattern);
+    pPool->DirectRemoveItemFromPool(*pApplyPattern);
     if (pLineOuter)
-        pPool->Remove(*pLineOuter);
+        pPool->DirectRemoveItemFromPool(*pLineOuter);
     if (pLineInner)
-        pPool->Remove(*pLineInner);
+        pPool->DirectRemoveItemFromPool(*pLineInner);
 
     pUndoDoc.reset();
 }

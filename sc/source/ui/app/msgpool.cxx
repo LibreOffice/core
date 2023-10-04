@@ -25,16 +25,17 @@
 
 SfxItemInfo const aMsgItemInfos[] =
 {
-    { 0,                         true },   // SCITEM_STRING
-    { 0,                         true },   // SCITEM_SEARCHDATA - stop using this!
-    { SID_SORT,                  true },   // SCITEM_SORTDATA
-    { SID_QUERY,                 true },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             true },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           true },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           true },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 true },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           true },   // SCITEM_USERLIST
-    { 0,                         false }  // SCITEM_CONDFORMATDLGDATA
+    // _nSID, _bNeedsPoolRegistration, _bShareable
+    { 0,                         false, true },   // SCITEM_STRING
+    { 0,                         false, true },   // SCITEM_SEARCHDATA - stop using this!
+    { SID_SORT,                  false, true },   // SCITEM_SORTDATA
+    { SID_QUERY,                 false, true },   // SCITEM_QUERYDATA
+    { SID_SUBTOTALS,             false, true },   // SCITEM_SUBTDATA
+    { SID_CONSOLIDATE,           false, true },   // SCITEM_CONSOLIDATEDATA
+    { SID_PIVOT_TABLE,           false, true },   // SCITEM_PIVOTDATA
+    { SID_SOLVE,                 false, true },   // SCITEM_SOLVEDATA
+    { SID_SCUSERLISTS,           false, true },   // SCITEM_USERLIST
+    { 0,                         true,  false }  // SCITEM_CONDFORMATDLGDATA
 };
 
 ScMessagePool::ScMessagePool()

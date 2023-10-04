@@ -63,7 +63,7 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, ScAttr
     {
         mvData[nIdx].nEndRow = pDefaultColAttrArray->mvData[nIdx].nEndRow;
         ScPatternAttr aNewPattern( *(pDefaultColAttrArray->mvData[nIdx].pPattern) );
-        mvData[nIdx].pPattern = &rDocument.GetPool()->Put( aNewPattern );
+        mvData[nIdx].pPattern = &rDocument.GetPool()->DirectPutItemInPool( aNewPattern );
         bool bNumFormatChanged = false;
         if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
              mvData[nIdx].pPattern->GetItemSet(), rDocument.GetDefPattern()->GetItemSet() ) )
@@ -83,7 +83,7 @@ ScAttrArray::~ScAttrArray()
 
     ScDocumentPool* pDocPool = rDocument.GetPool();
     for (auto const & rEntry : mvData)
-        pDocPool->Remove(*rEntry.pPattern);
+        pDocPool->DirectRemoveItemFromPool(*rEntry.pPattern);
 }
 
 #if DEBUG_SC_TESTATTRARRAY
@@ -140,14 +140,14 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern )
                 rDocument.InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
             }
         }
-        pDocPool->Remove(*pOldPattern);
+        pDocPool->DirectRemoveItemFromPool(*pOldPattern);
     }
     mvData.resize(0);
 
     rDocument.SetStreamValid(nTab, false);
 
     mvData.resize(1);
-    const ScPatternAttr* pNewPattern = &pDocPool->Put(*pPattern);
+    const ScPatternAttr* pNewPattern = &pDocPool->DirectPutItemInPool(*pPattern);
     mvData[0].nEndRow = rDocument.MaxRow();
     mvData[0].pPattern = pNewPattern;
 }
@@ -159,10 +159,10 @@ bool ScAttrArray::Concat(SCSIZE nPos)
     {
         if (nPos > 0)
         {
-            if (mvData[nPos - 1].pPattern == mvData[nPos].pPattern)
+            if (SfxPoolItem::areSame(mvData[nPos - 1].pPattern, mvData[nPos].pPattern))
             {
                 mvData[nPos - 1].nEndRow = mvData[nPos].nEndRow;
-                rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
                 mvData.erase(mvData.begin() + nPos);
                 nPos--;
                 bRet = true;
@@ -170,10 +170,10 @@ bool ScAttrArray::Concat(SCSIZE nPos)
         }
         if (nPos + 1 < mvData.size())
         {
-            if (mvData[nPos + 1].pPattern == mvData[nPos].pPattern)
+            if (SfxPoolItem::areSame(mvData[nPos + 1].pPattern, mvData[nPos].pPattern))
             {
                 mvData[nPos].nEndRow = mvData[nPos + 1].nEndRow;
-                rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
                 mvData.erase(mvData.begin() + nPos + 1);
                 bRet = true;
             }
@@ -459,9 +459,9 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
         if (bPutToPool)
         {
             if (bPassingOwnership)
-                pPattern = &rDocument.GetPool()->Put(std::unique_ptr<ScPatternAttr>(const_cast<ScPatternAttr*>(pPattern)));
+                pPattern = &rDocument.GetPool()->DirectPutItemInPool(std::unique_ptr<ScPatternAttr>(const_cast<ScPatternAttr*>(pPattern)));
             else
-                pPattern = &rDocument.GetPool()->Put(*pPattern);
+                pPattern = &rDocument.GetPool()->DirectPutItemInPool(*pPattern);
         }
         if ((nStartRow == 0) && (nEndRow == rDocument.MaxRow()))
             Reset(pPattern);
@@ -520,7 +520,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
             if ( nStartRow > 0 )
             {
                 nInsert = rDocument.MaxRow() + 1;
-                if ( mvData[ni].pPattern != pPattern )
+                if ( !SfxPoolItem::areSame(mvData[ni].pPattern, pPattern ) )
                 {
                     if ( ni == 0 || (mvData[ni-1].nEndRow < nStartRow - 1) )
                     {   // may be a split or a simple insert or just a shrink,
@@ -533,7 +533,7 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                     else if (mvData[ni - 1].nEndRow == nStartRow - 1)
                         nInsert = ni;
                 }
-                if ( ni > 0 && mvData[ni-1].pPattern == pPattern )
+                if ( ni > 0 && SfxPoolItem::areSame(mvData[ni-1].pPattern, pPattern) )
                 {   // combine
                     mvData[ni-1].nEndRow = nEndRow;
                     nInsert = rDocument.MaxRow() + 1;
@@ -548,11 +548,11 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
                 nj++;
             if ( !bSplit )
             {
-                if ( nj < mvData.size() && mvData[nj].pPattern == pPattern )
+                if ( nj < mvData.size() && SfxPoolItem::areSame(mvData[nj].pPattern, pPattern ) )
                 {   // combine
                     if ( ni > 0 )
                     {
-                        if ( mvData[ni-1].pPattern == pPattern )
+                        if ( SfxPoolItem::areSame(mvData[ni-1].pPattern, pPattern ) )
                         {   // adjacent entries
                             mvData[ni-1].nEndRow = mvData[nj].nEndRow;
                             nj++;
@@ -569,13 +569,13 @@ const ScPatternAttr* ScAttrArray::SetPatternAreaImpl(SCROW nStartRow, SCROW nEnd
             ScDocumentPool* pDocPool = rDocument.GetPool();
             if ( bSplit )
             {   // duplicate split entry in pool
-                pDocPool->Put( *mvData[ni-1].pPattern );
+                pDocPool->DirectPutItemInPool( *mvData[ni-1].pPattern );
             }
             if ( ni < nj )
             {   // remove middle entries
                 for ( SCSIZE nk=ni; nk<nj; nk++)
                 {   // remove entries from pool
-                    pDocPool->Remove( *mvData[nk].pPattern );
+                    pDocPool->DirectRemoveItemFromPool( *mvData[nk].pPattern );
                 }
                 if ( !bCombined )
                 {   // replace one entry
@@ -681,8 +681,8 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleS
                 }
             }
 
-            rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
-            mvData[nPos].pPattern = &rDocument.GetPool()->Put(*pNewPattern);
+            rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
+            mvData[nPos].pPattern = &rDocument.GetPool()->DirectPutItemInPool(*pNewPattern);
             if (Concat(nPos))
                 Search(nStart, nPos);
             else
@@ -818,9 +818,9 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
             else
             {
                 // remove from pool ?
-                rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
                 mvData[nPos].pPattern =
-                            &rDocument.GetPool()->Put(std::move(pNewPattern));
+                            &rDocument.GetPool()->DirectPutItemInPool(std::move(pNewPattern));
 
                 if (Concat(nPos))
                     Search(nStart, nPos);
@@ -862,7 +862,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
     {
         const ScPatternAttr* pOldPattern = mvData[nPos].pPattern;
         const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &pCache->ApplyTo( *pOldPattern ) );
-        if (pNewPattern != pOldPattern)
+        if (!SfxPoolItem::areSame(pNewPattern, pOldPattern))
         {
             SCROW nY1 = nStart;
             SCROW nY2 = mvData[nPos].nEndRow;
@@ -897,7 +897,7 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                     }
                 }
 
-                rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
                 mvData[nPos].pPattern = pNewPattern;
                 if (Concat(nPos))
                     Search(nStart, nPos);
@@ -924,7 +924,7 @@ void ScAttrArray::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
 {
     ScDocumentPool* pDocPool = rDocument.GetPool();
     for (auto const & rEntry : mvData)
-        pDocPool->Remove(*rEntry.pPattern);
+        pDocPool->DirectRemoveItemFromPool(*rEntry.pPattern);
 
     mvData = std::move(vNewData);
 
@@ -961,7 +961,7 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
             if ( eNewState == SfxItemState::SET )
             {
-                if ( pNewItem != pOldItem ) // Both pulled
+                if ( !SfxPoolItem::areSame(pNewItem, pOldItem) ) // Both pulled
                     rMergeSet.InvalidateItem( nId );
             }
             else // Default
@@ -996,7 +996,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
             pPattern = mvData[nPos].pPattern;
         else
             pPattern = rDocument.GetDefPattern();
-        if ( pPattern != rState.pOld1 && pPattern != rState.pOld2 )
+        if ( !SfxPoolItem::areSame(pPattern, rState.pOld1) && !SfxPoolItem::areSame(pPattern, rState.pOld2) )
         {
             const SfxItemSet& rThisSet = pPattern->GetItemSet();
             if (rState.pItemSet)
@@ -1012,7 +1012,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
                 // first pattern - copied from parent
                 rState.pItemSet.emplace( *rThisSet.GetPool(), rThisSet.GetRanges() );
                 rState.pItemSet->Set( rThisSet, bDeep );
-                rState.mnPatternId = pPattern->GetKey();
+                rState.mnPatternId = pPattern->GetPAKey();
             }
 
             rState.pOld2 = rState.pOld1;
@@ -1585,7 +1585,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = mvData[nIndex].pPattern;
-        if (pOldPattern != pWantedPattern) // FIXME: else-branch?
+        if (!SfxPoolItem::areSame(pOldPattern, pWantedPattern)) // FIXME: else-branch?
         {
             if (nThisRow < nStartRow) nThisRow = nStartRow;
             nRow = mvData[nIndex].nEndRow;
@@ -1610,7 +1610,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                         bFirstUse = false;
                     else
                         // it's in the pool
-                        rDocument.GetPool()->Put( *pWantedPattern );
+                        rDocument.GetPool()->DirectPutItemInPool( *pWantedPattern );
                 }
                 SetPatternArea( nThisRow, nAttrRow, pWantedPattern );
             }
@@ -1843,13 +1843,13 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBo
             if (bReset)
             {
                 ScPatternAttr aNewPattern(*mvData[nPos].pPattern);
-                rDocument.GetPool()->Remove(*mvData[nPos].pPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*mvData[nPos].pPattern);
                 aNewPattern.SetStyleSheet( static_cast<ScStyleSheet*>(
                     rDocument.GetStyleSheetPool()->
                         Find( ScResId(STR_STYLENAME_STANDARD),
                               SfxStyleFamily::Para,
                               SfxStyleSearchBits::Auto | SfxStyleSearchBits::ScStandard ) ) );
-                mvData[nPos].pPattern = &rDocument.GetPool()->Put(aNewPattern);
+                mvData[nPos].pPattern = &rDocument.GetPool()->DirectPutItemInPool(aNewPattern);
 
                 if (Concat(nPos))
                 {
@@ -1904,7 +1904,7 @@ bool ScAttrArray::IsEmpty() const
 
     if (mvData.size() == 1)
     {
-        return mvData[0].pPattern == rDocument.GetDefPattern();
+        return SfxPoolItem::areSame(mvData[0].pPattern, rDocument.GetDefPattern());
     }
     else
         return false;
@@ -2043,7 +2043,7 @@ bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
     {
         const ScPatternAttr* pDefPattern1 = rDocument.GetDefPattern();
         const ScPatternAttr* pDefPattern2 = rOther.rDocument.GetDefPattern();
-        return ( pDefPattern1 == pDefPattern2 || pDefPattern1->IsVisibleEqual( *pDefPattern2 ) );
+        return ( SfxPoolItem::areSame(pDefPattern1, pDefPattern2) || pDefPattern1->IsVisibleEqual( *pDefPattern2 ) );
     }
 
     {
@@ -2073,7 +2073,7 @@ bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
             while ( nPos < pNonDefault->Count() && bEqual )
             {
                 const ScPatternAttr* pNonDefPattern = pNonDefault->mvData[nPos].pPattern;
-                bEqual = ( pNonDefPattern == pDefPattern ||
+                bEqual = ( SfxPoolItem::areSame(pNonDefPattern, pDefPattern) ||
                            pNonDefPattern->IsVisibleEqual( *pDefPattern ) );
 
                 if ( pNonDefault->mvData[nPos].nEndRow >= nEndRow ) break;
@@ -2098,7 +2098,7 @@ bool ScAttrArray::IsVisibleEqual( const ScAttrArray& rOther,
         SCROW nOtherRow = rOther.mvData[nOtherPos].nEndRow;
         const ScPatternAttr* pThisPattern = mvData[nThisPos].pPattern;
         const ScPatternAttr* pOtherPattern = rOther.mvData[nOtherPos].pPattern;
-        bEqual = ( pThisPattern == pOtherPattern ||
+        bEqual = ( SfxPoolItem::areSame(pThisPattern, pOtherPattern) ||
                     pThisPattern->IsVisibleEqual(*pOtherPattern) );
 
         if ( nThisRow >= nOtherRow )
@@ -2123,7 +2123,7 @@ bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW 
     {
         const ScPatternAttr* pDefPattern1 = rDocument.GetDefPattern();
         const ScPatternAttr* pDefPattern2 = rOther.rDocument.GetDefPattern();
-        return ( pDefPattern1 == pDefPattern2 );
+        return SfxPoolItem::areSame(pDefPattern1, pDefPattern2);
     }
 
     {
@@ -2153,7 +2153,7 @@ bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW 
             while ( nPos < pNonDefault->Count() && bEqual )
             {
                 const ScPatternAttr* pNonDefPattern = pNonDefault->mvData[nPos].pPattern;
-                bEqual = ( pNonDefPattern == pDefPattern );
+                bEqual = SfxPoolItem::areSame( pNonDefPattern, pDefPattern );
 
                 if ( pNonDefault->mvData[nPos].nEndRow >= nEndRow ) break;
                 ++nPos;
@@ -2177,7 +2177,7 @@ bool ScAttrArray::IsAllEqual( const ScAttrArray& rOther, SCROW nStartRow, SCROW 
         SCROW nOtherRow = rOther.mvData[nOtherPos].nEndRow;
         const ScPatternAttr* pThisPattern = mvData[nThisPos].pPattern;
         const ScPatternAttr* pOtherPattern = rOther.mvData[nOtherPos].pPattern;
-        bEqual = ( pThisPattern == pOtherPattern );
+        bEqual = SfxPoolItem::areSame( pThisPattern, pOtherPattern );
 
         if ( nThisRow >= nOtherRow )
         {
@@ -2323,7 +2323,7 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         {
             DeleteRange( nStartIndex, nEndIndex );
             if (nStartIndex > 0)
-                if ( mvData[nStartIndex-1].pPattern == mvData[nStartIndex].pPattern )
+                if ( SfxPoolItem::areSame( mvData[nStartIndex-1].pPattern, mvData[nStartIndex].pPattern ) )
                     DeleteRange( nStartIndex-1, nStartIndex-1 );
         }
     }
@@ -2341,7 +2341,7 @@ void ScAttrArray::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex )
     SetDefaultIfNotInit();
     ScDocumentPool* pDocPool = rDocument.GetPool();
     for (SCSIZE i = nStartIndex; i <= nEndIndex; i++)
-        pDocPool->Remove(*mvData[i].pPattern);
+        pDocPool->DirectRemoveItemFromPool(*mvData[i].pPattern);
 
     mvData.erase(mvData.begin() + nStartIndex, mvData.begin() + nEndIndex + 1);
 }
@@ -2468,14 +2468,14 @@ void ScAttrArray::CopyArea(
                     aTmpPattern.GetItemSet().ClearItem( ATTR_MERGE_FLAG );
 
                 if (bSamePool)
-                    pNewPattern = &pDestDocPool->Put(aTmpPattern);
+                    pNewPattern = &pDestDocPool->DirectPutItemInPool(aTmpPattern);
                 else
                     pNewPattern = aTmpPattern.PutInPool( &rAttrArray.rDocument, &rDocument );
             }
             else
             {
                 if (bSamePool)
-                    pNewPattern = &pDestDocPool->Put(*pOldPattern);
+                    pNewPattern = &pDestDocPool->DirectPutItemInPool(*pOldPattern);
                 else
                     pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
             }
@@ -2516,7 +2516,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy,
     {
         const ScPatternAttr* pNewPattern;
         if (bSamePool)
-            pNewPattern = &pDestDocPool->Put(*rDocument.GetDefPattern());
+            pNewPattern = &pDestDocPool->DirectPutItemInPool(*rDocument.GetDefPattern());
         else
             pNewPattern = rDocument.GetDefPattern()->PutInPool( &rAttrArray.rDocument, &rDocument );
 
@@ -2533,7 +2533,7 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, tools::Long nDy,
             const ScPatternAttr* pNewPattern;
 
             if (bSamePool)
-                pNewPattern = &pDestDocPool->Put(*pOldPattern);
+                pNewPattern = &pDestDocPool->DirectPutItemInPool(*pOldPattern);
             else
                 pNewPattern = pOldPattern->PutInPool( &rAttrArray.rDocument, &rDocument );
 

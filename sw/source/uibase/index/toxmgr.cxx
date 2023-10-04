@@ -47,7 +47,7 @@ void SwTOXMgr::DeleteTOXMark()
     if( m_pCurTOXMark )
     {
         pNext = const_cast<SwTOXMark*>(&m_pSh->GotoTOXMark( *m_pCurTOXMark, TOX_NXT ));
-        if( pNext == m_pCurTOXMark )
+        if (SfxPoolItem::areSame( pNext, m_pCurTOXMark ))
             pNext = nullptr;
 
         m_pSh->DeleteTOXMark( m_pCurTOXMark );

@@ -98,7 +98,7 @@ class SVX_DLLPUBLIC SvxSetItem final : public SfxSetItem
 {
 public:
     SvxSetItem( const TypedWhichId<SvxSetItem> nId, const SfxItemSet& rSet );
-    SvxSetItem( const SvxSetItem& rItem );
+    SvxSetItem( const SvxSetItem& rItem, SfxItemPool* pPool = nullptr );
     SvxSetItem( const TypedWhichId<SvxSetItem> nId, SfxItemSet&& pSet );
 
     virtual SvxSetItem* Clone( SfxItemPool *pPool = nullptr ) const override;

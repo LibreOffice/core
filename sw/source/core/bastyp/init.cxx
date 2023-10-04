@@ -264,180 +264,181 @@ SwDfltAttrTab aAttrTab( POOLATTR_END - POOLATTR_BEGIN, nullptr );
 
 SfxItemInfo aSlotTab[] =
 {
-    { SID_ATTR_CHAR_CASEMAP, true },       // RES_CHRATR_CASEMAP
-    { SID_ATTR_CHAR_CHARSETCOLOR, true },  // RES_CHRATR_CHARSETCOLOR
-    { SID_ATTR_CHAR_COLOR, true },         // RES_CHRATR_COLOR
-    { SID_ATTR_CHAR_CONTOUR, true },       // RES_CHRATR_CONTOUR
-    { SID_ATTR_CHAR_STRIKEOUT, true },     // RES_CHRATR_CROSSEDOUT
-    { SID_ATTR_CHAR_ESCAPEMENT, true },    // RES_CHRATR_ESCAPEMENT
-    { SID_ATTR_CHAR_FONT, true },          // RES_CHRATR_FONT
-    { SID_ATTR_CHAR_FONTHEIGHT, true },    // RES_CHRATR_FONTSIZE
-    { SID_ATTR_CHAR_KERNING, true },       // RES_CHRATR_KERNING
-    { SID_ATTR_CHAR_LANGUAGE, true },      // RES_CHRATR_LANGUAGE
-    { SID_ATTR_CHAR_POSTURE, true },       // RES_CHRATR_POSTURE
-    { 0, true },                           // RES_CHRATR_UNUSED1
-    { SID_ATTR_CHAR_SHADOWED, true },      // RES_CHRATR_SHADOWED
-    { SID_ATTR_CHAR_UNDERLINE, true },     // RES_CHRATR_UNDERLINE
-    { SID_ATTR_CHAR_WEIGHT, true },        // RES_CHRATR_WEIGHT
-    { SID_ATTR_CHAR_WORDLINEMODE, true },  // RES_CHRATR_WORDLINEMODE
-    { SID_ATTR_CHAR_AUTOKERN, true },      // RES_CHRATR_AUTOKERN
-    { SID_ATTR_FLASH, true },              // RES_CHRATR_BLINK
-    { 0, true },                           // RES_CHRATR_UNUSED2
-    { 0, true },                           // RES_CHRATR_NOHYPHEN
-    { SID_ATTR_BRUSH_CHAR, true },         // RES_CHRATR_BACKGROUND
-    { SID_ATTR_CHAR_CJK_FONT, true },      // RES_CHRATR_CJK_FONT
-    { SID_ATTR_CHAR_CJK_FONTHEIGHT, true },// RES_CHRATR_CJK_FONTSIZE
-    { SID_ATTR_CHAR_CJK_LANGUAGE, true },  // RES_CHRATR_CJK_LANGUAGE
-    { SID_ATTR_CHAR_CJK_POSTURE, true },   // RES_CHRATR_CJK_POSTURE
-    { SID_ATTR_CHAR_CJK_WEIGHT, true },    // RES_CHRATR_CJK_WEIGHT
-    { SID_ATTR_CHAR_CTL_FONT, true },      // RES_CHRATR_CTL_FONT
-    { SID_ATTR_CHAR_CTL_FONTHEIGHT, true },// RES_CHRATR_CTL_FONTSIZE
-    { SID_ATTR_CHAR_CTL_LANGUAGE, true },  // RES_CHRATR_CTL_LANGUAGE
-    { SID_ATTR_CHAR_CTL_POSTURE, true },   // RES_CHRATR_CTL_POSTURE
-    { SID_ATTR_CHAR_CTL_WEIGHT, true },    // RES_CHRATR_CTL_WEIGHT
-    { SID_ATTR_CHAR_ROTATED, true },       // RES_CHRATR_ROTATE
-    { SID_ATTR_CHAR_EMPHASISMARK, true },  // RES_CHRATR_EMPHASIS_MARK
-    { SID_ATTR_CHAR_TWO_LINES, true },     // RES_CHRATR_TWO_LINES
-    { SID_ATTR_CHAR_SCALEWIDTH, true },    // RES_CHRATR_SCALEW
-    { SID_ATTR_CHAR_RELIEF, true },        // RES_CHRATR_RELIEF
-    { SID_ATTR_CHAR_HIDDEN, true },        // RES_CHRATR_HIDDEN
-    { SID_ATTR_CHAR_OVERLINE, true },      // RES_CHRATR_OVERLINE
-    { 0, true },                           // RES_CHRATR_RSID
-    { SID_ATTR_CHAR_BOX, true },           // RES_CHRATR_BOX
-    { SID_ATTR_CHAR_SHADOW, true },        // RES_CHRATR_SHADOW
-    { 0, true },                           // RES_CHRATR_HIGHLIGHT
-    { SID_ATTR_CHAR_GRABBAG, true },       // RES_CHRATR_GRABBAG
-    { 0, true },                           // RES_CHRATR_BIDIRTL
-    { 0, true },                           // RES_CHRATR_IDCTHINT
+    // _nSID, _bNeedsPoolRegistration, _bShareable
+    { SID_ATTR_CHAR_CASEMAP,            false, true },  // RES_CHRATR_CASEMAP
+    { SID_ATTR_CHAR_CHARSETCOLOR,       false, true },  // RES_CHRATR_CHARSETCOLOR
+    { SID_ATTR_CHAR_COLOR,              true,  true },  // RES_CHRATR_COLOR
+    { SID_ATTR_CHAR_CONTOUR,            false, true },  // RES_CHRATR_CONTOUR
+    { SID_ATTR_CHAR_STRIKEOUT,          false, true },  // RES_CHRATR_CROSSEDOUT
+    { SID_ATTR_CHAR_ESCAPEMENT,         false, true },  // RES_CHRATR_ESCAPEMENT
+    { SID_ATTR_CHAR_FONT,               true,  true },  // RES_CHRATR_FONT
+    { SID_ATTR_CHAR_FONTHEIGHT,         false, true },  // RES_CHRATR_FONTSIZE
+    { SID_ATTR_CHAR_KERNING,            false, true },  // RES_CHRATR_KERNING
+    { SID_ATTR_CHAR_LANGUAGE,           false, true },  // RES_CHRATR_LANGUAGE
+    { SID_ATTR_CHAR_POSTURE,            false, true },  // RES_CHRATR_POSTURE
+    { 0,                                false, true },  // RES_CHRATR_UNUSED1
+    { SID_ATTR_CHAR_SHADOWED,           false, true },  // RES_CHRATR_SHADOWED
+    { SID_ATTR_CHAR_UNDERLINE,          true,  true },  // RES_CHRATR_UNDERLINE
+    { SID_ATTR_CHAR_WEIGHT,             false, true },  // RES_CHRATR_WEIGHT
+    { SID_ATTR_CHAR_WORDLINEMODE,       false, true },  // RES_CHRATR_WORDLINEMODE
+    { SID_ATTR_CHAR_AUTOKERN,           false, true },  // RES_CHRATR_AUTOKERN
+    { SID_ATTR_FLASH,                   false, true },  // RES_CHRATR_BLINK
+    { 0,                                false, true },  // RES_CHRATR_UNUSED2
+    { 0,                                false, true },  // RES_CHRATR_NOHYPHEN
+    { SID_ATTR_BRUSH_CHAR,              true,  true },  // RES_CHRATR_BACKGROUND
+    { SID_ATTR_CHAR_CJK_FONT,           true,  true },  // RES_CHRATR_CJK_FONT
+    { SID_ATTR_CHAR_CJK_FONTHEIGHT,     false, true },  // RES_CHRATR_CJK_FONTSIZE
+    { SID_ATTR_CHAR_CJK_LANGUAGE,       false, true },  // RES_CHRATR_CJK_LANGUAGE
+    { SID_ATTR_CHAR_CJK_POSTURE,        false, true },  // RES_CHRATR_CJK_POSTURE
+    { SID_ATTR_CHAR_CJK_WEIGHT,         false, true },  // RES_CHRATR_CJK_WEIGHT
+    { SID_ATTR_CHAR_CTL_FONT,           true,  true },  // RES_CHRATR_CTL_FONT
+    { SID_ATTR_CHAR_CTL_FONTHEIGHT,     false, true },  // RES_CHRATR_CTL_FONTSIZE
+    { SID_ATTR_CHAR_CTL_LANGUAGE,       false, true },  // RES_CHRATR_CTL_LANGUAGE
+    { SID_ATTR_CHAR_CTL_POSTURE,        false, true },  // RES_CHRATR_CTL_POSTURE
+    { SID_ATTR_CHAR_CTL_WEIGHT,         false, true },  // RES_CHRATR_CTL_WEIGHT
+    { SID_ATTR_CHAR_ROTATED,            false, true },  // RES_CHRATR_ROTATE
+    { SID_ATTR_CHAR_EMPHASISMARK,       false, true },  // RES_CHRATR_EMPHASIS_MARK
+    { SID_ATTR_CHAR_TWO_LINES,          false, true },  // RES_CHRATR_TWO_LINES
+    { SID_ATTR_CHAR_SCALEWIDTH,         false, true },  // RES_CHRATR_SCALEW
+    { SID_ATTR_CHAR_RELIEF,             false, true },  // RES_CHRATR_RELIEF
+    { SID_ATTR_CHAR_HIDDEN,             false, true },  // RES_CHRATR_HIDDEN
+    { SID_ATTR_CHAR_OVERLINE,           true,  true },  // RES_CHRATR_OVERLINE
+    { 0,                                false, true },  // RES_CHRATR_RSID
+    { SID_ATTR_CHAR_BOX,                true,  true },  // RES_CHRATR_BOX
+    { SID_ATTR_CHAR_SHADOW,             false, true },  // RES_CHRATR_SHADOW
+    { 0,                                true,  true },  // RES_CHRATR_HIGHLIGHT
+    { SID_ATTR_CHAR_GRABBAG,            false, true },  // RES_CHRATR_GRABBAG
+    { 0,                                false, true },  // RES_CHRATR_BIDIRTL
+    { 0,                                false, true },  // RES_CHRATR_IDCTHINT
 
-    { 0, false },                               // RES_TXTATR_REFMARK
-    { 0, false },                               // RES_TXTATR_TOXMARK
-    { 0, false },                               // RES_TXTATR_META
-    { 0, false },                               // RES_TXTATR_METAFIELD
-    { 0, true },                           // RES_TXTATR_AUTOFMT
-    { FN_TXTATR_INET, false },                  // RES_TXTATR_INETFMT
-    { 0, false },                               // RES_TXTATR_CHARFMT
-    { SID_ATTR_CHAR_CJK_RUBY, false },          // RES_TXTATR_CJK_RUBY
-    { 0, true },                           // RES_TXTATR_UNKNOWN_CONTAINER
-    { 0, false },                               // RES_TXTATR_INPUTFIELD
-    { 0, false },                               // RES_TXTATR_CONTENTCONTROL
+    { 0,                                true,  false }, // RES_TXTATR_REFMARK
+    { 0,                                true,  false }, // RES_TXTATR_TOXMARK
+    { 0,                                false, false }, // RES_TXTATR_META
+    { 0,                                false, false }, // RES_TXTATR_METAFIELD
+    { 0,                                false, true },  // RES_TXTATR_AUTOFMT
+    { FN_TXTATR_INET,                   true,  false }, // RES_TXTATR_INETFMT
+    { 0,                                false, false }, // RES_TXTATR_CHARFMT
+    { SID_ATTR_CHAR_CJK_RUBY,           true,  false }, // RES_TXTATR_CJK_RUBY
+    { 0,                                true,  true },  // RES_TXTATR_UNKNOWN_CONTAINER
+    { 0,                                true,  false }, // RES_TXTATR_INPUTFIELD
+    { 0,                                false, false }, // RES_TXTATR_CONTENTCONTROL
 
-    { 0, false },                               // RES_TXTATR_FIELD
-    { 0, false },                               // RES_TXTATR_FLYCNT
-    { 0, false },                               // RES_TXTATR_FTN
-    { 0, false },                               // RES_TXTATR_ANNOTATION
-    { 0, false },                               // RES_TXTATR_LINEBREAK
-    { 0, true },                           // RES_TXTATR_DUMMY1
+    { 0,                                true,  false }, // RES_TXTATR_FIELD
+    { 0,                                false, false }, // RES_TXTATR_FLYCNT
+    { 0,                                false, false }, // RES_TXTATR_FTN
+    { 0,                                false, false }, // RES_TXTATR_ANNOTATION
+    { 0,                                false, false }, // RES_TXTATR_LINEBREAK
+    { 0,                                false, true },  // RES_TXTATR_DUMMY1
 
-    { SID_ATTR_PARA_LINESPACE, true },     // RES_PARATR_LINESPACING
-    { SID_ATTR_PARA_ADJUST, true },        // RES_PARATR_ADJUST
-    { SID_ATTR_PARA_SPLIT, true },         // RES_PARATR_SPLIT
-    { SID_ATTR_PARA_ORPHANS, true },       // RES_PARATR_ORPHANS
-    { SID_ATTR_PARA_WIDOWS, true },        // RES_PARATR_WIDOWS
-    { SID_ATTR_TABSTOP, true },            // RES_PARATR_TABSTOP
-    { SID_ATTR_PARA_HYPHENZONE, true },    // RES_PARATR_HYPHENZONE
-    { FN_FORMAT_DROPCAPS, false },              // RES_PARATR_DROP
-    { SID_ATTR_PARA_REGISTER, true },      // RES_PARATR_REGISTER
-    { SID_ATTR_PARA_NUMRULE, true },       // RES_PARATR_NUMRULE
-    { SID_ATTR_PARA_SCRIPTSPACE, true },   // RES_PARATR_SCRIPTSPACE
-    { SID_ATTR_PARA_HANGPUNCTUATION, true },// RES_PARATR_HANGINGPUNCTUATION
+    { SID_ATTR_PARA_LINESPACE,          false, true },  // RES_PARATR_LINESPACING
+    { SID_ATTR_PARA_ADJUST,             false, true },  // RES_PARATR_ADJUST
+    { SID_ATTR_PARA_SPLIT,              false, true },  // RES_PARATR_SPLIT
+    { SID_ATTR_PARA_ORPHANS,            false, true },  // RES_PARATR_ORPHANS
+    { SID_ATTR_PARA_WIDOWS,             false, true },  // RES_PARATR_WIDOWS
+    { SID_ATTR_TABSTOP,                 true,  true },  // RES_PARATR_TABSTOP
+    { SID_ATTR_PARA_HYPHENZONE,         false, true },  // RES_PARATR_HYPHENZONE
+    { FN_FORMAT_DROPCAPS,               false, false }, // RES_PARATR_DROP
+    { SID_ATTR_PARA_REGISTER,           false, true },  // RES_PARATR_REGISTER
+    { SID_ATTR_PARA_NUMRULE,            false, true },  // RES_PARATR_NUMRULE
+    { SID_ATTR_PARA_SCRIPTSPACE,        false, true },  // RES_PARATR_SCRIPTSPACE
+    { SID_ATTR_PARA_HANGPUNCTUATION,    false, true },  // RES_PARATR_HANGINGPUNCTUATION
 
-    { SID_ATTR_PARA_FORBIDDEN_RULES, true },// RES_PARATR_FORBIDDEN_RULES
-    { SID_PARA_VERTALIGN, true },          // RES_PARATR_VERTALIGN
-    { SID_ATTR_PARA_SNAPTOGRID, true },    // RES_PARATR_SNAPTOGRID
-    { SID_ATTR_BORDER_CONNECT, true },     // RES_PARATR_CONNECT_BORDER
+    { SID_ATTR_PARA_FORBIDDEN_RULES,    false, true },  // RES_PARATR_FORBIDDEN_RULES
+    { SID_PARA_VERTALIGN,               false, true },  // RES_PARATR_VERTALIGN
+    { SID_ATTR_PARA_SNAPTOGRID,         false, true },  // RES_PARATR_SNAPTOGRID
+    { SID_ATTR_BORDER_CONNECT,          false, true },  // RES_PARATR_CONNECT_BORDER
 
-    { SID_ATTR_PARA_OUTLINE_LEVEL, true }, // RES_PARATR_OUTLINELEVEL //#outline level
-    { 0, true },                           // RES_PARATR_RSID
-    { SID_ATTR_PARA_GRABBAG, true },       // RES_PARATR_GRABBAG
-    { 0, true },                           // RES_PARATR_LIST_ID
-    { 0, true },                           // RES_PARATR_LIST_LEVEL
-    { 0, true },                           // RES_PARATR_LIST_ISRESTART
-    { 0, true },                           // RES_PARATR_LIST_RESTARTVALUE
-    { 0, true },                           // RES_PARATR_LIST_ISCOUNTED
-    { 0, true },                           // RES_PARATR_LIST_AUTOFMT
+    { SID_ATTR_PARA_OUTLINE_LEVEL,      false, true },  // RES_PARATR_OUTLINELEVEL //#outline level
+    { 0,                                false, true },  // RES_PARATR_RSID
+    { SID_ATTR_PARA_GRABBAG,            false, true },  // RES_PARATR_GRABBAG
+    { 0,                                false, true },  // RES_PARATR_LIST_ID
+    { 0,                                false, true },  // RES_PARATR_LIST_LEVEL
+    { 0,                                false, true },  // RES_PARATR_LIST_ISRESTART
+    { 0,                                false, true },  // RES_PARATR_LIST_RESTARTVALUE
+    { 0,                                false, true },  // RES_PARATR_LIST_ISCOUNTED
+    { 0,                                false, true },  // RES_PARATR_LIST_AUTOFMT
 
-    { 0, true },                           // RES_FILL_ORDER
-    { 0, true },                           // RES_FRM_SIZE
-    { SID_ATTR_PAGE_PAPERBIN, true },      // RES_PAPER_BIN
-    { SID_ATTR_PARA_FIRSTLINESPACE, true }, // RES_MARGIN_FIRSTLINE
-    { SID_ATTR_PARA_LEFTSPACE, true },      // RES_MARGIN_TEXTLEFT
-    { SID_ATTR_PARA_RIGHTSPACE, true },     // RES_MARGIN_RIGHT
-    { 0, true },                            // RES_MARGIN_LEFT
-    { 0, true },                            // RES_MARGIN_GUTTER
-    { 0, true },                            // RES_MARGIN_GUTTER_RIGHT
-    { SID_ATTR_LRSPACE, true },            // RES_LR_SPACE
-    { SID_ATTR_ULSPACE, true },            // RES_UL_SPACE
-    { 0, false },                               // RES_PAGEDESC
-    { SID_ATTR_PARA_PAGEBREAK, true },     // RES_BREAK
-    { 0, false },                               // RES_CNTNT
-    { 0, true },                           // RES_HEADER
-    { 0, true },                           // RES_FOOTER
-    { 0, true },                           // RES_PRINT
-    { FN_OPAQUE, true },                   // RES_OPAQUE
-    { FN_SET_PROTECT, true },              // RES_PROTECT
-    { FN_SURROUND, true },                 // RES_SURROUND
-    { FN_VERT_ORIENT, true },              // RES_VERT_ORIENT
-    { FN_HORI_ORIENT, true },              // RES_HORI_ORIENT
-    { 0, false },                               // RES_ANCHOR
-    { SID_ATTR_BRUSH, true },              // RES_BACKGROUND
-    { SID_ATTR_BORDER_OUTER, true },       // RES_BOX
-    { SID_ATTR_BORDER_SHADOW, true },      // RES_SHADOW
-    { SID_ATTR_MACROITEM, true },          // RES_FRMMACRO
-    { FN_ATTR_COLUMNS, true },             // RES_COL
-    { SID_ATTR_PARA_KEEP, true },          // RES_KEEP
-    { 0, true },                           // RES_URL
-    { 0, true },                           // RES_EDIT_IN_READONLY
+    { 0,                                false, true },  // RES_FILL_ORDER
+    { 0,                                false, true },  // RES_FRM_SIZE
+    { SID_ATTR_PAGE_PAPERBIN,           false, true },  // RES_PAPER_BIN
+    { SID_ATTR_PARA_FIRSTLINESPACE,     false, true },  // RES_MARGIN_FIRSTLINE
+    { SID_ATTR_PARA_LEFTSPACE,          false, true },  // RES_MARGIN_TEXTLEFT
+    { SID_ATTR_PARA_RIGHTSPACE,         false, true },  // RES_MARGIN_RIGHT
+    { 0,                                false, true },  // RES_MARGIN_LEFT
+    { 0,                                false, true },  // RES_MARGIN_GUTTER
+    { 0,                                false, true },  // RES_MARGIN_GUTTER_RIGHT
+    { SID_ATTR_LRSPACE,                 false, true },  // RES_LR_SPACE
+    { SID_ATTR_ULSPACE,                 false, true },  // RES_UL_SPACE
+    { 0,                                true,  false }, // RES_PAGEDESC
+    { SID_ATTR_PARA_PAGEBREAK,          false, true },  // RES_BREAK
+    { 0,                                false, false }, // RES_CNTNT
+    { 0,                                false, true },  // RES_HEADER
+    { 0,                                false, true },  // RES_FOOTER
+    { 0,                                false, true },  // RES_PRINT
+    { FN_OPAQUE,                        false, true },  // RES_OPAQUE
+    { FN_SET_PROTECT,                   false, true },  // RES_PROTECT
+    { FN_SURROUND,                      false, true },  // RES_SURROUND
+    { FN_VERT_ORIENT,                   false, true },  // RES_VERT_ORIENT
+    { FN_HORI_ORIENT,                   false, true },  // RES_HORI_ORIENT
+    { 0,                                false, false }, // RES_ANCHOR
+    { SID_ATTR_BRUSH,                   true,  true },  // RES_BACKGROUND
+    { SID_ATTR_BORDER_OUTER,            true,  true },  // RES_BOX
+    { SID_ATTR_BORDER_SHADOW,           true,  true },  // RES_SHADOW
+    { SID_ATTR_MACROITEM,               false, true },  // RES_FRMMACRO
+    { FN_ATTR_COLUMNS,                  false, true },  // RES_COL
+    { SID_ATTR_PARA_KEEP,               false, true },  // RES_KEEP
+    { 0,                                true,  true },  // RES_URL
+    { 0,                                false, true },  // RES_EDIT_IN_READONLY
 
-    { 0, true },                           // RES_LAYOUT_SPLIT
-    { 0, false },                               // RES_CHAIN
-    { 0, true },                           // RES_TEXTGRID
-    { FN_FORMAT_LINENUMBER, true },        // RES_LINENUMBER
-    { 0, true },                           // RES_FTN_AT_TXTEND
-    { 0, true },                           // RES_END_AT_TXTEND
-    { 0, true },                           // RES_COLUMNBALANCE
+    { 0,                                false, true },  // RES_LAYOUT_SPLIT
+    { 0,                                false, false }, // RES_CHAIN
+    { 0,                                false, true },  // RES_TEXTGRID
+    { FN_FORMAT_LINENUMBER,             false, true },  // RES_LINENUMBER
+    { 0,                                false, true },  // RES_FTN_AT_TXTEND
+    { 0,                                false, true },  // RES_END_AT_TXTEND
+    { 0,                                false, true },  // RES_COLUMNBALANCE
 
-    { SID_ATTR_FRAMEDIRECTION, true },     // RES_FRAMEDIR
+    { SID_ATTR_FRAMEDIRECTION,          false, true },  // RES_FRAMEDIR
 
-    { SID_ATTR_HDFT_DYNAMIC_SPACING, true },// RES_HEADER_FOOTER_EAT_SPACING
-    { FN_TABLE_ROW_SPLIT, true },          // RES_ROW_SPLIT
-    { 0, true }                 ,          // RES_FLY_SPLIT
+    { SID_ATTR_HDFT_DYNAMIC_SPACING,    false, true },  // RES_HEADER_FOOTER_EAT_SPACING
+    { FN_TABLE_ROW_SPLIT,               false, true },  // RES_ROW_SPLIT
+    { 0,                                false, true },  // RES_FLY_SPLIT
     // #i18732# - use slot-id define in svx
-    { SID_SW_FOLLOW_TEXT_FLOW, true },     // RES_FOLLOW_TEXT_FLOW
+    { SID_SW_FOLLOW_TEXT_FLOW,          false, true },  // RES_FOLLOW_TEXT_FLOW
     // #i29550#
-    { SID_SW_COLLAPSING_BORDERS, true },   // RES_COLLAPSING_BORDERS
+    { SID_SW_COLLAPSING_BORDERS,        false, true },  // RES_COLLAPSING_BORDERS
     // #i28701#
-    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, true },// RES_WRAP_INFLUENCE_ON_OBJPOS
-    { 0, false },                               // RES_AUTO_STYLE
-    { 0, true },                           // RES_FRMATR_STYLE_NAME
-    { 0, true },                           // RES_FRMATR_CONDITIONAL_STYLE_NAME
-    { 0, true },                           // RES_FRMATR_GRABBAG
-    { 0, true },                           // RES_TEXT_VERT_ADJUST
-    { 0, true },                           // RES_BACKGROUND_FULL_SIZE
-    { 0, true },                           // RES_RTL_GUTTER
-    { 0, true },                           // RES_DECORATIVE
+    { SID_SW_WRAP_INFLUENCE_ON_OBJPOS,  false, true },  // RES_WRAP_INFLUENCE_ON_OBJPOS
+    { 0,                                false, false }, // RES_AUTO_STYLE
+    { 0,                                false, true },  // RES_FRMATR_STYLE_NAME
+    { 0,                                false, true },  // RES_FRMATR_CONDITIONAL_STYLE_NAME
+    { 0,                                false, true },  // RES_FRMATR_GRABBAG
+    { 0,                                false, true },  // RES_TEXT_VERT_ADJUST
+    { 0,                                false, true },  // RES_BACKGROUND_FULL_SIZE
+    { 0,                                false, true },  // RES_RTL_GUTTER
+    { 0,                                false, true },  // RES_DECORATIVE
 
-    { 0, true },                           // RES_GRFATR_MIRRORGRF
-    { SID_ATTR_GRAF_CROP, true },          // RES_GRFATR_CROPGRF
-    { 0, true },                           // RES_GRFATR_ROTATION,
-    { 0, true },                           // RES_GRFATR_LUMINANCE,
-    { 0, true },                           // RES_GRFATR_CONTRAST,
-    { 0, true },                           // RES_GRFATR_CHANNELR,
-    { 0, true },                           // RES_GRFATR_CHANNELG,
-    { 0, true },                           // RES_GRFATR_CHANNELB,
-    { 0, true },                           // RES_GRFATR_GAMMA,
-    { 0, true },                           // RES_GRFATR_INVERT,
-    { 0, true },                           // RES_GRFATR_TRANSPARENCY,
-    { 0, true },                           // RES_GRFATR_DUMMY3,
-    { 0, true },                           // RES_GRFATR_DUMMY4,
-    { 0, true },                           // RES_GRFATR_DUMMY5,
-    { 0, true },                           // RES_GRFATR_DUMMY6,
+    { 0,                                false, true },  // RES_GRFATR_MIRRORGRF
+    { SID_ATTR_GRAF_CROP,               false, true },  // RES_GRFATR_CROPGRF
+    { 0,                                false, true },  // RES_GRFATR_ROTATION,
+    { 0,                                false, true },  // RES_GRFATR_LUMINANCE,
+    { 0,                                false, true },  // RES_GRFATR_CONTRAST,
+    { 0,                                false, true },  // RES_GRFATR_CHANNELR,
+    { 0,                                false, true },  // RES_GRFATR_CHANNELG,
+    { 0,                                false, true },  // RES_GRFATR_CHANNELB,
+    { 0,                                false, true },  // RES_GRFATR_GAMMA,
+    { 0,                                false, true },  // RES_GRFATR_INVERT,
+    { 0,                                false, true },  // RES_GRFATR_TRANSPARENCY,
+    { 0,                                false, true },  // RES_GRFATR_DUMMY3,
+    { 0,                                false, true },  // RES_GRFATR_DUMMY4,
+    { 0,                                false, true },  // RES_GRFATR_DUMMY5,
+    { 0,                                false, true },  // RES_GRFATR_DUMMY6,
 
-    { 0, true },                           // RES_BOXATR_FORMAT
-    { 0, false },                               // RES_BOXATR_FORMULA,
-    { 0, true },                           // RES_BOXATR_VALUE
+    { 0,                                false, true },  // RES_BOXATR_FORMAT
+    { 0,                                true,  false }, // RES_BOXATR_FORMULA,
+    { 0,                                false, true },  // RES_BOXATR_VALUE
 
-    { 0, true }                            // RES_UNKNOWNATR_CONTAINER
+    { 0,                                true,  true }   // RES_UNKNOWNATR_CONTAINER
 };
 
 std::vector<SvGlobalName> *pGlobalOLEExcludeList = nullptr;

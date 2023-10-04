@@ -2448,7 +2448,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMapEntry* pEntr
             case SC_WID_UNO_FORMATID:
                 {
                     const ScPatternAttr* pPattern = GetCurrentAttrsFlat();
-                    rAny <<= pPattern->GetKey();
+                    rAny <<= pPattern->GetPAKey();
                 }
             break;
         }

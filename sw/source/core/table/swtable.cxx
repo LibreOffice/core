@@ -1630,16 +1630,16 @@ bool SwTable::IsDeleted() const
 
 void SwTable::GatherFormulas(std::vector<SwTableBoxFormula*>& rvFormulas)
 {
-    for(SfxPoolItem* pItem: GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
+    for(const SfxPoolItem* pItem: GetFrameFormat()->GetDoc()->GetAttrPool().GetItemSurrogates(RES_BOXATR_FORMULA))
     {
-        auto pBoxFormula = dynamic_cast<SwTableBoxFormula*>(pItem);
+        auto pBoxFormula = dynamic_cast<const SwTableBoxFormula*>(pItem);
         assert(pBoxFormula); // use StaticWhichCast instead?
         if(!pBoxFormula->GetDefinedIn())
             continue;
         const SwNode* pNd = pBoxFormula->GetNodeOfFormula();
         if(!pNd || &pNd->GetNodes() != &pNd->GetDoc().GetNodes()) // is this ever valid or should we assert here?
             continue;
-        rvFormulas.push_back(pBoxFormula);
+        rvFormulas.push_back(const_cast<SwTableBoxFormula*>(pBoxFormula));
     }
 }
 

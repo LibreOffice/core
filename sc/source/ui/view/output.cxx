@@ -766,14 +766,14 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
             const ScPatternAttr* pPat1 = rFirst.cellInfo(nX).pPatternAttr;
             const ScPatternAttr* pPat2 = rOther.cellInfo(nX).pPatternAttr;
             if ( !pPat1 || !pPat2 ||
-                    &pPat1->GetItem(ATTR_PROTECTION) != &pPat2->GetItem(ATTR_PROTECTION) )
+                    !SfxPoolItem::areSame(&pPat1->GetItem(ATTR_PROTECTION), &pPat2->GetItem(ATTR_PROTECTION) ) )
                 return false;
         }
     }
     else
     {
         for ( nX=nX1; nX<=nX2; nX++ )
-            if ( rFirst.cellInfo(nX).pBackground != rOther.cellInfo(nX).pBackground )
+            if ( !SfxPoolItem::areSame(rFirst.cellInfo(nX).pBackground, rOther.cellInfo(nX).pBackground ) )
                 return false;
     }
 
@@ -970,7 +970,7 @@ void drawCells(vcl::RenderContext& rRenderContext, std::optional<Color> const & 
         rRect.SetLeft( nPosX - nSignedOneX );
     }
 
-    if ( pOldBackground && (pColor ||pBackground != pOldBackground || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo) )
+    if ( pOldBackground && (pColor || !SfxPoolItem::areSame(pBackground, pOldBackground) || pOldDataBarInfo || pDataBarInfo || pIconSetInfo || pOldIconSetInfo) )
     {
         rRect.SetRight( nPosX-nSignedOneX );
         if (pOldBackground)             // ==0 if hidden

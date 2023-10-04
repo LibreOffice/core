@@ -56,7 +56,7 @@ class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
     mutable std::optional<sal_uInt32> mxHashCode;
     mutable std::optional<bool> mxVisible;
     ScStyleSheet*              pStyle;
-    sal_uInt64                 mnKey;
+    sal_uInt64                 mnPAKey;
 public:
                             ScPatternAttr(SfxItemSet&& pItemSet, const OUString& rStyleName);
                             ScPatternAttr(SfxItemSet&& pItemSet);
@@ -66,9 +66,6 @@ public:
     virtual ScPatternAttr*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
-    // Class cannot be IsSortable() because it's mutable, implement at least Lookup().
-    virtual bool            HasLookup() const override { return true; }
-    virtual lookup_iterator Lookup(lookup_iterator begin, lookup_iterator end ) const override;
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
@@ -181,8 +178,8 @@ public:
     Degree100               GetRotateVal( const SfxItemSet* pCondSet ) const;
     ScRotateDir             GetRotateDir( const SfxItemSet* pCondSet ) const;
 
-    void                    SetKey(sal_uInt64 nKey);
-    sal_uInt64              GetKey() const;
+    void                    SetPAKey(sal_uInt64 nKey);
+    sal_uInt64              GetPAKey() const;
 
     static std::optional<bool> FastEqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 );
 

@@ -100,6 +100,7 @@ enum class SfxItemState {
 #ifdef DBG_UTIL
 SVL_DLLPUBLIC size_t getAllocatedSfxPoolItemCount();
 SVL_DLLPUBLIC size_t getUsedSfxPoolItemCount();
+SVL_DLLPUBLIC void listAllocatedSfxPoolItems();
 #endif
 
 class SfxItemPool;
@@ -108,31 +109,40 @@ typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 class SVL_DLLPUBLIC SfxPoolItem
 {
-friend class SfxItemPool;
-friend class SfxItemDisruptor_Impl;
-friend class SfxItemPoolCache;
-friend class SfxItemSet;
+    friend class SfxItemPool;
+    friend class SfxItemDisruptor_Impl;
+    friend class SfxItemPoolCache;
+    friend class SfxItemSet;
+
+    // allow ItemSetTooling to access
+    friend SfxPoolItem const* implCreateItemEntry(SfxItemPool&, SfxPoolItem const*, sal_uInt16, bool, bool);
+    friend void implCleanupItemEntry(SfxItemPool&, SfxPoolItem const*);
 
     mutable sal_uInt32 m_nRefCount;
     sal_uInt16  m_nWhich;
 
+#ifdef DBG_UTIL
+    // for debugging add a serial number, will be set in the constructor
+    // and count up from zero. If you have a deterministic error case and
+    // see the Item involved in the debugger you can  use that number in
+    // the next run to see where that Item gets constructed and how it is
+    // involved/ processed
+    sal_uInt32  m_nSerialNumber;
+#endif
+
     // bitfield for flags (instead of SfxItemKind)
-    bool        m_bIsVoidItem : 1;
-    bool        m_bDeleteOnIdle : 1;
-    bool        m_bStaticDefault : 1;
-    bool        m_bPoolDefault : 1;
+    bool        m_bIsVoidItem : 1;          // bit 0
+    bool        m_bDeleteOnIdle : 1;        // bit 1
+    bool        m_bStaticDefault : 1;       // bit 2
+    bool        m_bPoolDefault : 1;         // bit 3
+    bool        m_bRegisteredAtPool : 1;    // bit 4
+    bool        m_bNewItemCallback : 1;     // bit 5
+    bool        m_bIsSetItem : 1;           // bit 6
 
 protected:
-    // Defines if the Item can be shared/RefCounted else it will be cloned.
-    // Default is true - as it should be for all Items. It is needed by some
-    // SW items, so protected to let them set it in constructor. If this could
-    // be fixed at that Items we may remove this again.
-    bool        m_bShareable : 1;
-
-private:
 #ifdef DBG_UTIL
     // this flag will make debugging item stuff much simpler
-    bool        m_bDeleted : 1;
+    bool        m_bDeleted : 1;             // bit 7
 #endif
 
 private:
@@ -143,10 +153,13 @@ private:
     }
 
 protected:
-    void setVoidItem() { m_bIsVoidItem = true; }
+    void setIsVoidItem() { m_bIsVoidItem = true; }
     void setDeleteOnIdle() { m_bDeleteOnIdle = true; }
     void setStaticDefault() { m_bStaticDefault = true; }
     void setPoolDefault() { m_bPoolDefault = true; }
+    void setRegisteredAtPool(bool bNew) { m_bRegisteredAtPool = bNew; }
+    void setNewItemCallback() { m_bNewItemCallback = true; }
+    void setIsSetItem() { m_bIsSetItem = true; }
 
 public:
     inline void AddRef(sal_uInt32 n = 1) const
@@ -156,11 +169,23 @@ public:
         m_nRefCount += n;
     }
 
+#ifdef DBG_UTIL
+    sal_uInt32 getSerialNumber() const { return m_nSerialNumber; }
+#endif
+
     bool isVoidItem() const { return m_bIsVoidItem; }
     bool isDeleteOnIdle() const { return m_bDeleteOnIdle; }
     bool isStaticDefault() const { return m_bStaticDefault; }
     bool isPoolDefault() const { return m_bPoolDefault; }
-    bool isShareable() const { return m_bShareable; }
+    bool isRegisteredAtPool() const { return m_bRegisteredAtPool; }
+    bool isNewItemCallback() const { return m_bNewItemCallback; }
+    bool isSetItem() const { return m_bIsSetItem; }
+
+    // version that allows nullptrs
+    static bool areSame(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2);
+
+    // if you have the items (not nullptrs) use this version
+    static bool areSame(const SfxPoolItem& rItem1, const SfxPoolItem& rItem2);
 
 private:
     inline sal_uInt32 ReleaseRef(sal_uInt32 n = 1) const
@@ -223,24 +248,6 @@ public:
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
 
-    // Sorting is only used for faster searching in a pool which contains large quantities
-    // of a single kind of pool item.
-    virtual bool             operator<( const SfxPoolItem& ) const { assert(false); return false; }
-    virtual bool             IsSortable() const { return false; }
-
-    // Some item types cannot be IsSortable() (such as because they are modified while stored
-    // in a pool, which would change the ordering position, see e.g. 585e0ac43b9bd8a2f714903034).
-    // To improve performance in such cases it is possible to reimplement Lookup() to do a linear
-    // lookup optimized for the specific class (avoiding virtual functions may allow the compiler
-    // to generate better code and class-specific optimizations such as hashing or caching may
-    // be used.)
-    // If reimplemented, the Lookup() function should search [begin,end) for an item matching
-    // this object and return an iterator pointing to the item or the end iterator.
-    virtual bool             HasLookup() const { return false; }
-    typedef std::vector<SfxPoolItem*>::const_iterator lookup_iterator;
-    virtual lookup_iterator  Lookup(lookup_iterator /*begin*/, lookup_iterator end ) const
-                             { assert( false ); return end; }
-
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
                                     MapUnit eCoreMetric,
@@ -298,6 +305,8 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
     return pItem == INVALID_POOL_ITEM;
 }
+
+SVL_DLLPUBLIC bool areSfxPoolItemPtrsEqual(const SfxPoolItem* pItem1, const SfxPoolItem* pItem2);
 
 class SVL_DLLPUBLIC SfxPoolItemHint final : public SfxHint
 {

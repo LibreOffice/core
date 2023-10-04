@@ -1080,7 +1080,7 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
         return aRet;
     }
     if (pActiveTwoLinesHint ||
-        (pNodeTwoLinesItem && pNodeTwoLinesItem == pActiveTwoLinesItem &&
+        (pNodeTwoLinesItem && SfxPoolItem::areSame(pNodeTwoLinesItem, pActiveTwoLinesItem) &&
          rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a 2-line-attribute,
         // the end of the multiportion depends on the following attributes...
@@ -1228,7 +1228,7 @@ std::optional<SwMultiCreator> SwTextSizeInfo::GetMultiCreator(TextFrameIndex &rP
         return aRet;
     }
     if (pActiveRotateHint ||
-        (pNodeRotateItem && pNodeRotateItem == pActiveRotateItem &&
+        (pNodeRotateItem && SfxPoolItem::areSame(pNodeRotateItem, pActiveRotateItem) &&
          rPos < TextFrameIndex(GetText().getLength())))
     {   // The winner is a rotate-attribute,
         // the end of the multiportion depends on the following attributes...

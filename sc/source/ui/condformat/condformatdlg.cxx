@@ -634,7 +634,7 @@ void ScCondFormatDlg::OkPressed()
             pFormat->SetKey(nKey);
             pList->InsertNew(std::move(pFormat));
         }
-        mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
+        mpViewData->GetViewShell()->GetPool().DirectPutItemInPool(*mpDlgItem);
 
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
@@ -650,7 +650,7 @@ void ScCondFormatDlg::CancelPressed()
 {
     if ( mpDlgItem->IsManaged() )
     {
-        mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
+        mpViewData->GetViewShell()->GetPool().DirectPutItemInPool(*mpDlgItem);
         SetDispatcherLock( false );
         // Queue message to open Conditional Format Manager Dialog
         GetBindings().GetDispatcher()->Execute( SID_OPENDLG_CONDFRMT_MANAGER,

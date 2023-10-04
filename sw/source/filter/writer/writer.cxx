@@ -63,7 +63,7 @@ void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
     for( const auto& rpFontItem : aFontRemoveLst )
     {
-        rDoc.GetAttrPool().Remove( *rpFontItem );
+        rDoc.GetAttrPool().DirectRemoveItemFromPool( *rpFontItem );
     }
 }
 
@@ -379,13 +379,13 @@ void Writer::AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
     {
         SvxFontItem aFont( rFont );
         aFont.SetWhich( RES_CHRATR_FONT );
-        pItem = &rPool.Put( aFont );
+        pItem = &rPool.DirectPutItemInPool( aFont );
     }
     else
-        pItem = &rPool.Put( rFont );
+        pItem = &rPool.DirectPutItemInPool( rFont );
 
     if( 1 < pItem->GetRefCount() )
-        rPool.Remove( *pItem );
+        rPool.DirectRemoveItemFromPool( *pItem );
     else
     {
         m_pImpl->aFontRemoveLst.push_back( pItem );

@@ -247,7 +247,8 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 
     for(SwTOXMark* pTOXMark : aMarks)
     {
-        if ( pTOXMark == &rCurTOXMark )
+        // Item PtrCompare needed here
+        if (areSfxPoolItemPtrsEqual( pTOXMark, &rCurTOXMark ))
             continue;
 
         pMark = pTOXMark->GetTextTOXMark();

@@ -683,7 +683,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
     break;
     case RES_TXTATR_REFMARK:
     {
-        SfxItemPool::Item2Range aRange = rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK);
+        const registeredSfxPoolItems& aRange(rDoc.GetAttrPool().GetItemSurrogates(RES_TXTATR_REFMARK));
         SwHistoryHint* pHistoryHint = GetHistory()[0];
         if (pHistoryHint && HSTRY_SETREFMARKHNT == pHistoryHint->Which())
         {

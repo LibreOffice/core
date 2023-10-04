@@ -189,7 +189,7 @@ void LotAttrCol::SetAttr( const ScDocument* pDoc, const SCROW nRow, const ScPatt
 
     if(iterLast != aEntries.rend())
     {
-        if( ( (*iterLast)->nLastRow == nRow - 1 ) && ( &rAttr == (*iterLast)->pPattAttr ) )
+        if( ( (*iterLast)->nLastRow == nRow - 1 ) && SfxPoolItem::areSame( &rAttr, (*iterLast)->pPattAttr ) )
             (*iterLast)->nLastRow = nRow;
         else
         {

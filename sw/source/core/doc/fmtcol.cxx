@@ -237,7 +237,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     const SvxFirstLineIndentItem *pOldFirstLineIndent(GetItemIfSet(RES_MARGIN_FIRSTLINE, false));
     if (pNewFirstLineIndent && pOldFirstLineIndent)
     {
-        if (pOldFirstLineIndent != pNewFirstLineIndent) // Avoid recursion (SetAttr!)
+        if (!SfxPoolItem::areSame(pOldFirstLineIndent, pNewFirstLineIndent)) // Avoid recursion (SetAttr!)
         {
             bool bChg = false;
             SvxFirstLineIndentItem aNew(*pOldFirstLineIndent);
@@ -263,7 +263,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     const SvxTextLeftMarginItem *pOldTextLeftMargin(GetItemIfSet(RES_MARGIN_TEXTLEFT, false));
     if (pNewTextLeftMargin && pOldTextLeftMargin)
     {
-        if (pOldTextLeftMargin != pNewTextLeftMargin) // Avoid recursion (SetAttr!)
+        if (!SfxPoolItem::areSame(pOldTextLeftMargin, pNewTextLeftMargin)) // Avoid recursion (SetAttr!)
         {
             bool bChg = false;
             SvxTextLeftMarginItem aNew(*pOldTextLeftMargin);
@@ -289,7 +289,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     const SvxRightMarginItem *pOldRightMargin(GetItemIfSet(RES_MARGIN_RIGHT, false));
     if (pNewRightMargin && pOldRightMargin)
     {
-        if (pOldRightMargin != pNewRightMargin) // Avoid recursion (SetAttr!)
+        if (!SfxPoolItem::areSame(pOldRightMargin, pNewRightMargin)) // Avoid recursion (SetAttr!)
         {
             bool bChg = false;
             SvxRightMarginItem aNew(*pOldRightMargin);
@@ -313,7 +313,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
     }
 
     if( pNewULSpace && (pOldULSpace = GetItemIfSet(RES_UL_SPACE, false)) &&
-        pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
+        !SfxPoolItem::areSame(pOldULSpace, pNewULSpace) )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
         bool bChg = false;
@@ -348,7 +348,7 @@ void SwTextFormatColl::SwClientNotify(const SwModify& rModify, const SfxHint& rH
         if( pFSize && (SfxItemState::SET == GetItemState(
             pFSize->Which(), false, reinterpret_cast<const SfxPoolItem**>(&pOldFSize) )) &&
             // Avoid recursion (SetAttr!)
-            pFSize != pOldFSize )
+            !SfxPoolItem::areSame(pFSize, pOldFSize) )
         {
             if( 100 == pOldFSize->GetProp() &&
                 MapUnit::MapRelative == pOldFSize->GetPropUnit() )

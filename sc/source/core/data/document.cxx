@@ -5060,7 +5060,7 @@ std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkD
     {
         std::unique_ptr<ScPatternAttr> pPattern(new ScPatternAttr( std::move(*aState.pItemSet) ));
         if (aState.mbValidPatternId)
-            pPattern->SetKey(aState.mnPatternId);
+            pPattern->SetPAKey(aState.mnPatternId);
 
         return pPattern;
     }

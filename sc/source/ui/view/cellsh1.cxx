@@ -2410,7 +2410,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     // Conditional Format Dialog.
                     ScCondFormatDlgItem aDlgItem(nullptr, nIndex, false);
                     aDlgItem.SetDialogType(eType);
-                    pTabViewShell->GetPool().Put(aDlgItem);
+                    pTabViewShell->GetPool().DirectPutItemInPool(aDlgItem);
 
                     sal_uInt16      nId      = ScCondFormatDlgWrapper::GetChildWindowId();
                     SfxViewFrame& rViewFrm = pTabViewShell->GetViewFrame();
@@ -2878,7 +2878,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         // Put the xml string parameter to initialize the
                         // Conditional Format Dialog. ( add new )
-                        pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
+                        pTabViewShell->GetPool().DirectPutItemInPool(ScCondFormatDlgItem(
                                     std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), -1, true));
                         // Queue message to open Conditional Format Dialog
                         GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
@@ -2889,7 +2889,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         sal_Int32 nIndex = pFormat ? pFormat->GetKey() : -1;
                         // Put the xml string parameter to initialize the
                         // Conditional Format Dialog. ( edit selected conditional format )
-                        pTabViewShell->GetPool().Put(ScCondFormatDlgItem(
+                        pTabViewShell->GetPool().DirectPutItemInPool(ScCondFormatDlgItem(
                                     std::shared_ptr<ScConditionalFormatList>(pCondFormatList.release()), nIndex, true));
 
                         // Queue message to open Conditional Format Dialog
@@ -2899,7 +2899,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         pCondFormatList.reset();
 
                     if (pDlgItem)
-                        pTabViewShell->GetPool().Remove(*pDlgItem);
+                        pTabViewShell->GetPool().DirectRemoveItemFromPool(*pDlgItem);
 
                     pDlg->disposeOnce();
                 });

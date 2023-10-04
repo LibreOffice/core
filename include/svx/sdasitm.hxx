@@ -70,8 +70,6 @@ private:
             SdrCustomShapeGeometryItem & operator =(SdrCustomShapeGeometryItem &&) = delete; // due to SfxPoolItem
 
             virtual bool                operator==( const SfxPoolItem& ) const override;
-            virtual bool                operator<( const SfxPoolItem& ) const override;
-            virtual bool                IsSortable() const override { return true; }
 
             virtual bool GetPresentation(SfxItemPresentation ePresentation,
                                          MapUnit eCoreMetric, MapUnit ePresentationMetric,

@@ -476,7 +476,7 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 
     const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &aCache.ApplyTo( *pPattern ) );
 
-    if (pNewPattern != pPattern)
+    if (!SfxPoolItem::areSame(pNewPattern, pPattern))
       pAttrArray->SetPattern( nRow, pNewPattern );
 }
 
@@ -628,12 +628,12 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     ScPatternAttr aTemp(*pOldPattern);
     aTemp.GetItemSet().Put(rAttr);
-    const ScPatternAttr* pNewPattern = &pDocPool->Put( aTemp );
+    const ScPatternAttr* pNewPattern = &pDocPool->DirectPutItemInPool( aTemp );
 
-    if ( pNewPattern != pOldPattern )
+    if (!SfxPoolItem::areSame( pNewPattern, pOldPattern ))
         pAttrArray->SetPattern( nRow, pNewPattern );
     else
-        pDocPool->Remove( *pNewPattern );       // free up resources
+        pDocPool->DirectRemoveItemFromPool( *pNewPattern );       // free up resources
 }
 
 ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const

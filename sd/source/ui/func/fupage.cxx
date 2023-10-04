@@ -373,7 +373,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
                     if( pTempSet->GetItemState( i ) == SfxItemState::DEFAULT )
                         pTempSet->Put( aMergedAttr.Get( i ) );
                     else
-                        if( aMergedAttr.GetItem( i ) != pTempSet->GetItem( i ) )
+                        if( !SfxPoolItem::areSame(aMergedAttr.GetItem( i ), pTempSet->GetItem( i ) ) )
                             bChanges = true;
                 }
             }

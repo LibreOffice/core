@@ -1424,7 +1424,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             nMinNextEnd = pNextEnd[nPos];
 
         // store positions of ScHorizontalAttrIterator elements (minimizing expensive ScPatternAttr comparisons)
-        if (i > nStartCol && ppPatterns[nThisHead] != ppPatterns[nPos])
+        if (i > nStartCol && !SfxPoolItem::areSame(ppPatterns[nThisHead], ppPatterns[nPos]))
         {
            pHorizEnd[nThisHead] = i - 1;
            nThisHead = nPos; // start position of the next horizontal group

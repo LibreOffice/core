@@ -1192,13 +1192,13 @@ void ScTable::SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol
             for (const auto& rSpan : aSpans)
             {
                 assert(rSpan.mpPattern); // should never be NULL.
-                rDocument.GetPool()->Put(*rSpan.mpPattern);
+                rDocument.GetPool()->DirectPutItemInPool(*rSpan.mpPattern);
             }
 
             for (const auto& rSpan : aSpans)
             {
                 aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                rDocument.GetPool()->Remove(*rSpan.mpPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*rSpan.mpPattern);
             }
         }
 
@@ -1393,13 +1393,13 @@ void ScTable::SortReorderByRowRefUpdate(
             for (const auto& rSpan : aSpans)
             {
                 assert(rSpan.mpPattern); // should never be NULL.
-                rDocument.GetPool()->Put(*rSpan.mpPattern);
+                rDocument.GetPool()->DirectPutItemInPool(*rSpan.mpPattern);
             }
 
             for (const auto& rSpan : aSpans)
             {
                 aCol[nThisCol].SetPatternArea(rSpan.mnRow1, rSpan.mnRow2, *rSpan.mpPattern);
-                rDocument.GetPool()->Remove(*rSpan.mpPattern);
+                rDocument.GetPool()->DirectRemoveItemFromPool(*rSpan.mpPattern);
             }
         }
 

@@ -2815,7 +2815,7 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
         pPattern = pDefPattern;
 
     // special handling for default cell formatting
-    if( (pPattern == pDefPattern) && !bForceLineBreak &&
+    if( SfxPoolItem::areSame(pPattern, pDefPattern) && !bForceLineBreak &&
         (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) &&
         (nForceXclFont == EXC_FONT_NOTFOUND) )
     {

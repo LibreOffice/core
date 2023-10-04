@@ -33,14 +33,6 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
                 m_aValue;
 }
 
-bool CntUnencodedStringItem::operator<(const SfxPoolItem & rItem) const
-{
-    assert(dynamic_cast<const CntUnencodedStringItem*>( &rItem ));
-    return m_aValue
-            < static_cast< const CntUnencodedStringItem * >(&rItem)->
-                m_aValue;
-}
-
 // virtual
 bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, MapUnit,
                                         MapUnit, OUString & rText,

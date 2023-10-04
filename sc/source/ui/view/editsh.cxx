@@ -577,7 +577,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     bool bDone = false;
                     if ( (eMode == HLINK_DEFAULT || eMode == HLINK_FIELD) && !bCellLinksOnly )
                     {
-                        const SvxURLField* pURLField = GetURLField();
+                        std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
+                        const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                         if ( pURLField )
                         {
                             // select old field
@@ -637,7 +638,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
             break;
         case SID_OPEN_HYPERLINK:
             {
-                const SvxURLField* pURLField = GetURLField();
+                std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
+                const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                 if ( pURLField )
                     ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
                 return;
@@ -792,7 +794,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     bool bCellLinksOnly
                         = SC_MOD()->GetAppOptions().GetLinksInsertedLikeMSExcel()
                           && rViewData.GetSfxDocShell()->GetMedium()->GetFilter()->IsMSOFormat();
-                    const SvxURLField* pURLField = GetURLField();
+                    std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
+                    const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
                     if (!bCellLinksOnly)
                     {
                         if (pURLField)
@@ -814,7 +817,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     {
                         if (!pURLField)
                         {
-                            pURLField = GetFirstURLFieldFromCell();
+                            aSvxFieldDataPtr = GetFirstURLFieldFromCell();
+                            pURLField = static_cast<const SvxURLField*>(aSvxFieldDataPtr.get());
                         }
                         if (pURLField)
                         {
@@ -893,21 +897,21 @@ void ScEditShell::GetState( SfxItemSet& rSet )
     }
 }
 
-const SvxURLField* ScEditShell::GetURLField()
+std::unique_ptr<const SvxFieldData> ScEditShell::GetURLField()
 {
     ScInputHandler* pHdl = GetMyInputHdl();
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
     if (!pActiveView)
-        return nullptr;
+        return std::unique_ptr<const SvxFieldData>();
 
     const SvxFieldData* pField = pActiveView->GetFieldAtCursor();
     if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
-        return pURLField;
+        return pURLField->Clone();
 
-    return nullptr;
+    return std::unique_ptr<const SvxFieldData>();
 }
 
-const SvxURLField* ScEditShell::GetFirstURLFieldFromCell()
+std::unique_ptr<const SvxFieldData> ScEditShell::GetFirstURLFieldFromCell()
 {
     EditEngine* pEE = GetEditView()->GetEditEngine();
     sal_Int32 nParaCount = pEE->GetParagraphCount();
@@ -929,14 +933,15 @@ const SvxURLField* ScEditShell::GetFirstURLFieldFromCell()
                     const SvxFieldData* pField = pItem->GetField();
                     if (const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>(pField))
                     {
-                        return pUrlField;
+                        return pUrlField->Clone();
                     }
                 }
             }
             aSel.nStartPos = aSel.nEndPos;
         }
     }
-    return nullptr;
+
+    return std::unique_ptr<const SvxFieldData>();
 }
 
 IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper, void )

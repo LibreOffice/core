@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
     pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
 
     // Apply FontworkSameLetterHeights toggle
-    // Without patch a debug build fails assert in SfxItemPool::PutImpl and so crashes.
+    // Without patch a debug build fails assert in SfxItemPool::DirectPutItemInPoolImpl and so crashes.
     dispatchCommand(mxComponent, ".uno:FontworkSameLetterHeights", {});
 }
 
@@ -167,7 +167,7 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf146866_GeomItemHash)
     pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
 
     // Apply extrusion toggle
-    // Without patch a debug build fails assert in SfxItemPool::PutImpl and so crashes.
+    // Without patch a debug build fails assert in SfxItemPool::DirectPutItemInPoolImpl and so crashes.
     dispatchCommand(mxComponent, ".uno:ExtrusionToggle", {});
 }
 
