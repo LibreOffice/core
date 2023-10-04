@@ -160,7 +160,6 @@
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
-#include <i18nlangtag/mslangid.hxx>
 
 using ::editeng::SvxBorderLine;
 
@@ -7932,8 +7931,6 @@ void DocxAttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
             AddToAttrList( m_pCharLangAttrList, FSNS( XML_w, XML_eastAsia ), aLanguageCode );
             break;
         case RES_CHRATR_CTL_LANGUAGE:
-            if (MsLangId::isRightToLeft(rLanguage.GetLanguage()))
-                m_pSerializer->singleElementNS(XML_w, XML_rtl);
             AddToAttrList( m_pCharLangAttrList, FSNS( XML_w, XML_bidi ), aLanguageCode );
             break;
     }
