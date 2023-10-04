@@ -534,7 +534,7 @@
 #define STR_TABLE_STYLE_SETTINGS                            NC_("STR_TABLE_STYLE_SETTINGS", "Table style settings")
 #define STR_ObjNameSingulTable                              NC_("STR_ObjNameSingulTable", "Table")
 #define STR_ObjNamePluralTable                              NC_("STR_ObjNamePluralTable", "Tables")
-#define STR_ObjNameSingulFONTWORK                           NC_("STR_ObjNameSingulFONTWORK", "Font work")
+#define STR_ObjNameSingulFONTWORK                           NC_("STR_ObjNameSingulFONTWORK", "Fontwork")
 // Strings for the Draw-Dialog --------------------------------------------
 #define RID_SVXSTR_SOLID                                    NC_("RID_SVXSTR_SOLID", "Continuous")
 #define RID_SVXSTR_GRADIENT                                 NC_("RID_SVXSTR_GRADIENT", "Gradient")

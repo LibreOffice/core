@@ -3452,7 +3452,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         AddOpt(DFF_Prop_gtextAlign,gTextAlign);
                     }
                 }
-                if((nTextPathFlags & 0x4000) != 0)  // Is Font work
+                if((nTextPathFlags & 0x4000) != 0)  // Is Fontwork
                 {
                     OutlinerParaObject* pOutlinerParaObject(rSdrObjCustomShape.GetOutlinerParaObject());
                     if ( pOutlinerParaObject && pOutlinerParaObject->IsEffectivelyVertical() )
