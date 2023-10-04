@@ -3030,6 +3030,24 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPilcrowRedlining)
     comphelper::dispatchCommand(".uno:ControlCodes", {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testShowHiddenCharsWhenShowFormatting)
+{
+    // In LOKit, ignore the config setting for
+    // Tools - Options - Writer - Formatting Aids - Display Formatting - Hidden characters
+    // and always show hidden content when showing pilcrow formatting
+
+    createSwDoc("hiddenLoremIpsum.docx");
+
+    // Since LOKit is active in TiledRendering, turning on "Show formatting" will show hidden text.
+    comphelper::dispatchCommand(".uno:ControlCodes", {}); // show format marks
+    Scheduler::ProcessEventsToIdle();
+
+    // Without this patch, no body text would be visible - so only 1 page instead of 3.
+    CPPUNIT_ASSERT_EQUAL(3, getPages());
+
+    comphelper::dispatchCommand(".uno:ControlCodes", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDoubleUnderlineAndStrikeOut)
 {
     // Load a document where the tracked text moving is visible with

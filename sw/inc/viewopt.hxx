@@ -486,10 +486,7 @@ public:
     void SetTreatSubOutlineLevelsAsContent(bool b)
     { m_nCoreOptions.bTreatSubOutlineLevelsAsContent = b; }
 
-    bool IsShowHiddenChar(bool bHard = false) const
-    { return !m_bReadonly && m_nCoreOptions.bCharHidden &&
-                            (m_nCoreOptions.bViewMetachars || bHard); }
-
+    bool IsShowHiddenChar(bool bHard = false) const;
     void SetShowHiddenChar( bool b )
     { m_nCoreOptions.bCharHidden = b; }
 

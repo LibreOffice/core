@@ -186,6 +186,12 @@ bool SwViewOption::IsTreatSubOutlineLevelsAsContent() const
     return m_nCoreOptions.bTreatSubOutlineLevelsAsContent;
 }
 
+bool SwViewOption::IsShowHiddenChar(bool bHard) const
+{
+    bool bCharHidden = comphelper::LibreOfficeKit::isActive() ? true : m_nCoreOptions.bCharHidden;
+    return !m_bReadonly && bCharHidden && (m_nCoreOptions.bViewMetachars || bHard);
+}
+
 void SwViewOption::DrawRect( OutputDevice *pOut,
                              const SwRect &rRect, ::Color nCol )
 {
