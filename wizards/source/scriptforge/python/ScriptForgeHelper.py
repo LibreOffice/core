@@ -24,7 +24,7 @@
 """
 Collection of Python helper functions called from the ScriptForge Basic libraries
 to execute specific services that are not or not easily available from Basic directly.
-When relevant, the methods present in the ScripForge Python module might call the
+When relevant, the methods present in the ScriptForge Python module (scriptforge.py) might call the
 functions below for compatibility reasons.
 """
 

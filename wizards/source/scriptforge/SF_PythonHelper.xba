@@ -783,6 +783,7 @@ Try:
 						Case &quot;SFDocuments.Document&quot;
 							Select Case Script
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
+								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select
 						Case &quot;SFDocuments.Base&quot;
@@ -800,6 +801,7 @@ Try:
 								Case &quot;SetArray&quot;			:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
 								Case &quot;SetFormula&quot;		:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
 								Case &quot;SetValue&quot;			:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select
 						Case &quot;SFDocuments.Form&quot;
@@ -812,6 +814,12 @@ Try:
 						Case &quot;SFDocuments.FormDocument&quot;
 							Select Case Script
 								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
+								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
+							End Select
+						Case &quot;SFDocuments.Writer&quot;
+							Select Case Script
+								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0))
+								Case &quot;Styles&quot;			:	vReturn = vBasicObject.Styles(vArgs(0), vArgs(1), vArgs(2), vArgs(3), vArgs(4), vArgs(5))
 								Case &quot;Toolbars&quot;			:	vReturn = vBasicObject.Toolbars(vArgs(0))
 							End Select
 						Case &quot;SFWidgets.Toolbar&quot;

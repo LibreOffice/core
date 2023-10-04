@@ -2165,7 +2165,8 @@ class SFDocuments:
                                  DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
                                  IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
                                  IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False, XDocumentSettings = False)
+                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
+                                 XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2184,6 +2185,13 @@ class SFDocuments:
 
         def CreateMenu(self, menuheader, before = '', submenuchar = '>'):
             return self.ExecMethod(self.vbMethod, 'CreateMenu', menuheader, before, submenuchar)
+
+        def DeleteStyles(self, family, styleslist):
+            # Exclude Base, FormDocument and Math
+            doctype = self.DocumentType
+            if doctype in ('Calc', 'Writer', 'Draw', 'Impress'):
+                return self.ExecMethod(self.vbMethod, 'DeleteStyles', family, styleslist)
+            raise RuntimeError('The \'DeleteStyles\' method is not applicable to {0} documents'.format(doctype))
 
         def Echo(self, echoon = True, hourglass = False):
             return self.ExecMethod(self.vbMethod, 'Echo', echoon, hourglass)
@@ -2214,8 +2222,27 @@ class SFDocuments:
         def SetPrinter(self, printer = '', orientation = '', paperformat = ''):
             return self.ExecMethod(self.vbMethod, 'SetPrinter', printer, orientation, paperformat)
 
+        def Styles(self, family, namepattern = '', used = ScriptForge.cstSymEmpty,
+                   userdefined = ScriptForge.cstSymEmpty, parentstyle = '', category = ''):
+            # Exclude Base and Math
+            doctype = self.DocumentType
+            if doctype in ('Calc', 'Writer', 'FormDocument', 'Draw', 'Impress'):
+                return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Styles', family, namepattern, used,
+                                       userdefined, parentstyle, category)
+            raise RuntimeError('The \'Styles\' method is not applicable to {0} documents'.format(doctype))
+
         def Toolbars(self, toolbarname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Toolbars', toolbarname)
+
+        def XStyle(self, family, stylename):
+            # Exclude Base and Math
+            doctype = self.DocumentType
+            if doctype in ('Calc', 'Writer', 'FormDocument', 'Draw', 'Impress'):
+                # XStyles() DOES NOT WORK through the socket bridge ?!? Works normally in direct mode.
+                if ScriptForge.port > 0:
+                    return None
+                return self.ExecMethod(self.vbMethod + self.flgUno, 'XStyle', family, stylename)
+            raise RuntimeError('The \'XStyle\' method is not applicable to {0} documents'.format(doctype))
 
     # #########################################################################
     # SF_Base CLASS
@@ -2291,8 +2318,9 @@ class SFDocuments:
                                  DocumentProperties = False, DocumentType = False, ExportFilters = False,
                                  FileSystem = False, ImportFilters = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Keywords = True, Readonly = False, Sheets = False,  Subject = True,
-                                 Title = True, XComponent = False, XDocumentSettings = False)
+                                 IsWriter = False, Keywords = True, Readonly = False, Sheets = False,
+                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
+                                 XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2440,6 +2468,9 @@ class SFDocuments:
             return self.ExecMethod(self.vbMethod, 'ImportFromDatabase', filename, registrationname,
                                    destinationcell, sqlcommand, directsql)
 
+        def ImportStylesFromFile(self, filename = '', families = '', overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ImportStylesFromFile', filename, families, overwrite)
+
         def InsertSheet(self, sheetname, beforesheet = 32768):
             return self.ExecMethod(self.vbMethod, 'InsertSheet', sheetname, beforesheet)
 
@@ -2561,8 +2592,7 @@ class SFDocuments:
                                  OnApproveRowChange = True, OnApproveSubmit = True, OnConfirmDelete = True,
                                  OnCursorMoved = True, OnErrorOccurred = True, OnLoaded = True, OnReloaded = True,
                                  OnReloading = True, OnResetted = True, OnRowChanged = True, OnUnloaded = True,
-                                 OnUnloading = True,
-                                 OrderBy = True, Parent = False, RecordSource = True, XForm = False)
+                                 OnUnloading = True, OrderBy = True, Parent = False, RecordSource = True, XForm = False)
 
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
@@ -2648,7 +2678,8 @@ class SFDocuments:
         servicesynonyms = ('formdocument', 'sfdocuments.formdocument')
         serviceproperties = dict(DocumentType = False, FileSystem = False, IsBase = False, IsCalc = False,
                                  IsDraw = False, IsFormDocument = False, IsImpress = False, IsMath = False,
-                                 IsWriter = False, Readonly = False, XComponent = False, XDocumentSettings = False)
+                                 IsWriter = False, Readonly = False, StyleFamilies = False, XComponent = False,
+                                 XDocumentSettings = False)
 
         @classmethod
         def ReviewServiceArgs(cls, windowname = ''):
@@ -2687,7 +2718,8 @@ class SFDocuments:
                                  DocumentType = False, ExportFilters = False, FileSystem = False, ImportFilters = False,
                                  IsBase = False, IsCalc = False, IsDraw = False, IsFormDocument = False,
                                  IsImpress = False, IsMath = False, IsWriter = False, Keywords = True, Readonly = False,
-                                 Subject = True, Title = True, XComponent = False, XDocumentSettings = False)
+                                 StyleFamilies = False, Subject = True, Title = True, XComponent = False,
+                                 XDocumentSettings = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
 
@@ -2700,6 +2732,9 @@ class SFDocuments:
 
         def Forms(self, form = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', form)
+
+        def ImportStylesFromFile(self, filename = '', families = '', overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ImportStylesFromFile', filename, families, overwrite)
 
         def PrintOut(self, pages = '', copies = 1, printbackground = True, printblankpages = False,
                      printevenpages = True, printoddpages = True, printimages = True):

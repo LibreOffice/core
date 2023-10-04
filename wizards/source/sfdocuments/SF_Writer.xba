@@ -321,6 +321,7 @@ Public Function Properties() As Variant
 					, &quot;IsWriter&quot; _
 					, &quot;Keywords&quot; _
 					, &quot;Readonly&quot; _
+					, &quot;StyleFamilies&quot; _
 					, &quot;Subject&quot; _
 					, &quot;Title&quot; _
 					, &quot;XComponent&quot; _
@@ -475,6 +476,11 @@ Property Get Readonly() As Variant
 End Property	&apos;	SFDocuments.SF_Writer.Readonly
 
 REM -----------------------------------------------------------------------------
+Property Get StyleFamilies() As Variant
+	StyleFamilies = [_Super].GetProperty(&quot;StyleFamilies&quot;)
+End Property	&apos;	SFDocuments.SF_Writer.StyleFamilies
+
+REM -----------------------------------------------------------------------------
 Property Get Subject() As Variant
 	Subject = [_Super].GetProperty(&quot;Subject&quot;)
 End Property	&apos;	SFDocuments.SF_Writer.Subject
@@ -525,6 +531,13 @@ Public Function CreateMenu(Optional ByVal MenuHeader As Variant _
 End Function	&apos;	SFDocuments.SF_Writer.CreateMenu
 
 REM -----------------------------------------------------------------------------
+Public Sub DeleteStyles(Optional ByVal Family As Variant _
+								, Optional ByRef StylesList As Variant _
+								)
+	[_Super].DeleteStyles(Family, StylesList)
+End Sub			&apos;	SFDocuments.SF_Writer.DeleteStyles
+
+REM -----------------------------------------------------------------------------
 Public Sub Echo(Optional ByVal EchoOn As Variant _
 						, Optional ByVal Hourglass As Variant _
 						)
@@ -540,6 +553,14 @@ Public Function ExportAsPDF(Optional ByVal FileName As Variant _
 							) As Boolean
 	ExportAsPDF = [_Super].ExportAsPDF(FileName, Overwrite, Pages, Password, Watermark)
 End Function   &apos;   SFDocuments.SF_Writer.ExportAsPDF
+
+REM -----------------------------------------------------------------------------
+Public Sub ImportStylesFromFile(Optional FileName As Variant _
+								, Optional ByRef Families As Variant _
+								, Optional ByVal Overwrite As variant _
+								) As Variant
+	[_Super]._ImportStylesFromFile(FileName, Families, Overwrite)
+End Sub	&apos;	SFDocuments.SF_Writer.ImportStylesFromFile
 
 REM -----------------------------------------------------------------------------
 Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
@@ -587,9 +608,27 @@ Public Function SetPrinter(Optional ByVal Printer As Variant _
 End Function	&apos;   SFDocuments.SF_Writer.SetPrinter
 
 REM -----------------------------------------------------------------------------
+Public Function Styles(Optional ByVal Family As Variant _
+							, Optional ByVal NamePattern As variant _
+							, Optional ByVal Used As variant _
+							, Optional ByVal UserDefined As Variant _
+							, Optional ByVal ParentStyle As Variant _
+							, Optional ByVal Category As Variant _
+							) As Variant
+	Styles = [_Super].Styles(Family, NamePattern, Used, UserDefined, ParentStyle, Category)
+End Function	&apos;   SFDocuments.SF_Writer.Styles
+
+REM -----------------------------------------------------------------------------
 Public Function Toolbars(Optional ByVal ToolbarName As Variant) As Variant
 	Toolbars = [_Super].Toolbars(ToolbarName)
 End Function	&apos;	SFDocuments.SF_Writer.Toolbars
+
+REM -----------------------------------------------------------------------------
+Public Function XStyle(Optional ByVal Family As Variant _
+							, Optional ByVal StyleName As variant _
+							) As Object
+	Set XStyle = [_Super].XStyle(Family, StyleName)
+End Function	&apos;	SFDocuments.SF_Writer.XStyle
 
 REM =========================================================== PRIVATE FUNCTIONS
 

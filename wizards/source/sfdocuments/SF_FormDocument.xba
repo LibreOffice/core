@@ -335,6 +335,7 @@ Public Function Methods() As Variant
 	Methods = Array( _
 					&quot;CloseDocument&quot; _
 					, &quot;Forms&quot; _
+					, &quot;GetDatabase&quot; _
 					, &quot;PrintOut&quot; _
 					)
 
@@ -429,6 +430,7 @@ Public Function Properties() As Variant
 					, &quot;IsImpress&quot; _
 					, &quot;IsMath&quot; _
 					, &quot;Readonly&quot; _
+					, &quot;StyleFamilies&quot; _
 					, &quot;XComponent&quot; _
 					, &quot;XDocumentSettings&quot; _
 					)
@@ -476,6 +478,11 @@ REM ----------------------------------------------------------------------------
 Property Get Readonly() As Variant
 	Readonly = [_Super].GetProperty(&quot;Readonly&quot;)
 End Property	&apos;	SFDocuments.SF_FormDocument.Readonly
+
+REM -----------------------------------------------------------------------------
+Property Get StyleFamilies() As Variant
+	StyleFamilies = [_Super].GetProperty(&quot;StyleFamilies&quot;)
+End Property	&apos;	SFDocuments.SF_FormDocument.StyleFamilies
 
 REM -----------------------------------------------------------------------------
 Property Get XComponent() As Variant
@@ -550,9 +557,27 @@ Public Function SetPrinter(Optional ByVal Printer As Variant _
 End Function	&apos;   SFDocuments.SF_FormDocument.SetPrinter
 
 REM -----------------------------------------------------------------------------
+Public Function Styles(Optional ByVal Family As Variant _
+							, Optional ByVal NamePattern As variant _
+							, Optional ByVal Used As variant _
+							, Optional ByVal UserDefined As Variant _
+							, Optional ByVal ParentStyle As Variant _
+							, Optional ByVal Category As Variant _
+							) As Variant
+	Styles = [_Super].Styles(Family, NamePattern, Used, UserDefined, ParentStyle, Category)
+End Function	&apos;   SFDocuments.SF_FormDocument.Styles
+
+REM -----------------------------------------------------------------------------
 Public Function Toolbars(Optional ByVal ToolbarName As Variant) As Variant
 	Toolbars = [_Super].Toolbars(ToolbarName)
 End Function	&apos;	SFDocuments.SF_FormDocument.Toolbars
+
+REM -----------------------------------------------------------------------------
+Public Function XStyle(Optional ByVal Family As Variant _
+							, Optional ByVal StyleName As variant _
+							) As Object
+	Set XStyle = [_Super].XStyle(Family, StyleName)
+End Function	&apos;	SFDocuments.SF_FormDocument.XStyle
 
 REM =========================================================== PRIVATE FUNCTIONS
 

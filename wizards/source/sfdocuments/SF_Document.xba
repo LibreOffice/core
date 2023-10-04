@@ -60,6 +60,8 @@ Private Const DOCUMENTREADONLYERROR	=	&quot;DOCUMENTREADONLYERROR&quot;
 
 Private Const FORMDEADERROR			=	&quot;FORMDEADERROR&quot;
 
+Private Const UNKNOWNFILEERROR		=	&quot;UNKNOWNFILEERROR&quot;
+
 REM ============================================================= PRIVATE MEMBERS
 
 Private [Me]					As Object
@@ -84,6 +86,20 @@ Private _CustomProperties		As Object		&apos;	Dictionary of custom properties
 &apos;	Cache for static toolbar descriptions
 Private _Toolbars				As Object		&apos;	SF_Dictionary instance to hold toolbars stored in application or in document
 
+&apos;	Style descriptor
+Type StyleDescriptor
+	Family						As Object
+	StyleName					As String
+	DisplayName					As String
+	IsUsed						As Boolean
+	BuiltIn						As Boolean
+	Category					As String
+	ParentStyle					As String
+	XStyle						As Object
+End Type
+
+Private _StyleFamilies			As Variant		&apos;	Array of available style families
+
 REM ============================================================ MODULE CONSTANTS
 
 Const ISDOCFORM = 1				&apos;	Form is stored in a Writer document
@@ -107,6 +123,7 @@ Private Sub Class_Initialize()
 	Set _DocumentProperties = Nothing
 	Set _CustomProperties = Nothing
 	Set _Toolbars = Nothing
+	_StyleFamilies = Array()
 End Sub		&apos;	SFDocuments.SF_Document Constructor
 
 REM -----------------------------------------------------------------------------
@@ -345,6 +362,12 @@ Property Get Readonly() As Boolean
 End Property	&apos;	SFDocuments.SF_Document.Readonly
 
 REM -----------------------------------------------------------------------------
+Property Get StyleFamilies() As Variant
+&apos;&apos;&apos;	Returns the list of available style families, as an array of strings
+	StyleFamilies = _PropertyGet(&quot;StyleFamilies&quot;)
+End Property	&apos;	SFDocuments.SF_Document.StyleFamilies
+
+REM -----------------------------------------------------------------------------
 Property Get Subject() As Variant
 &apos;&apos;&apos;	Returns the updatable document property Subject
 	Subject = _PropertyGet(&quot;Subject&quot;)
@@ -565,6 +588,62 @@ Catch:
 End Function   &apos;   SFDocuments.SF_Document.CreateMenu
 
 REM -----------------------------------------------------------------------------
+Public Sub DeleteStyles(Optional ByVal Family As Variant _
+								, Optional ByRef StylesList As Variant _
+								)
+&apos;&apos;&apos; Delete a single style or an array of styles given by their name(s)
+&apos;&apos;&apos;	within a specific styles family.
+&apos;&apos;&apos;	Only user-defined styles may be deleted. Built-in styles are ignored.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Family: one of the style families present in the actual document, as a case-sensitive string
+&apos;&apos;&apos;		StylesList: a single style name as a string or an array of style names.
+&apos;&apos;&apos;			The style names may be localized or not.
+&apos;&apos;&apos;			The StylesList is typically the output of the execution of a Styles() method.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		&apos;	Remove all inised styles
+&apos;&apos;&apos;		Const family = &quot;ParagraphStyles&quot;
+&apos;&apos;&apos;		doc.DeleteStyles(family, doc.Styles(family, Used := False, UserDefined := True))
+
+Dim oFamily As Object				&apos;	Style names container
+Dim vStylesList As Variant			&apos;	Alias of StylesList
+Dim sStyle As String				&apos;	A single style name
+Const cstThisSub = &quot;SFDocuments.Document.DeleteStyles&quot;
+Const cstSubArgs = &quot;Family, StylesList&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:	
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = _Component.getStyleFamilies().getElementNames()
+		If Not ScriptForge.SF_Utils._Validate(Family, &quot;Family&quot;, V_STRING, _StyleFamilies) Then GoTo Finally
+		If IsArray(StylesList) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(StylesList, &quot;StylesList&quot;, 1, V_STRING, True)  Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(StylesList, &quot;StylesList&quot;, V_STRING) Then GoTo Finally
+		End If
+	End If
+
+Try:
+	Set oFamily = _GetStyleFamily(Family)
+	If Not IsNull(oFamily) Then
+		With oFamily
+			If Not IsArray(StylesList) Then vStylesList = Array(StylesList) Else vStylesList = StylesList
+			For Each sStyle In vStylesList
+				If .hasByName(sStyle) Then .removeByName(sStyle)
+			Next sStyle
+		End With
+	End If
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub		   &apos;   SFDocuments.SF_Document.DeleteStyles
+
+REM -----------------------------------------------------------------------------
 Public Sub Echo(Optional ByVal EchoOn As Variant _
 						, Optional ByVal Hourglass As Variant _
 						)
@@ -778,7 +857,9 @@ Public Function Methods() As Variant
 					, &quot;CloseDocument&quot; _
 					, &quot;CreateMenu&quot; _
 					, &quot;Echo&quot; _
+					, &quot;DeleteStyles&quot; _
 					, &quot;ExportAsPDF&quot; _
+					, &quot;ImportStylesFromFile&quot; _
 					, &quot;PrintOut&quot; _
 					, &quot;RemoveMenu&quot; _
 					, &quot;RunCommand&quot; _
@@ -786,6 +867,9 @@ Public Function Methods() As Variant
 					, &quot;SaveAs&quot; _
 					, &quot;SaveCopyAs&quot; _
 					, &quot;SetPrinter&quot; _
+					, &quot;Styles&quot; _
+					, &quot;Toolbars&quot; _
+					, &quot;XStyle&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Document.Methods
@@ -866,6 +950,7 @@ Public Function Properties() As Variant
 					, &quot;IsWriter&quot; _
 					, &quot;Keywords&quot; _
 					, &quot;Readonly&quot; _
+					, &quot;StyleFamilies&quot; _
 					, &quot;Subject&quot; _
 					, &quot;Title&quot; _
 					, &quot;XComponent&quot; _
@@ -1386,6 +1471,123 @@ Catch:
 End Function	&apos;	SFDocuments.SF_Document.SetProperty
 
 REM -----------------------------------------------------------------------------
+Public Function Styles(Optional ByVal Family As Variant _
+							, Optional ByVal NamePattern As variant _
+							, Optional ByVal Used As variant _
+							, Optional ByVal UserDefined As Variant _
+							, Optional ByVal ParentStyle As Variant _
+							, Optional ByVal Category As Variant _
+							) As Variant
+&apos;&apos;&apos;	Returns an array of style names matching the filters given in argument
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Family: one of the style families present in the actual document, as a case-sensitive string
+&apos;&apos;&apos;		NamePattern: a filter on the style names, as a case-sensitive string pattern
+&apos;&apos;&apos;			Admitted wildcard are:	the &quot;?&quot; represents any single character
+&apos;&apos;&apos;									the &quot;*&quot; represents zero, one, or multiple characters
+&apos;&apos;&apos;			The names include the internal and localized names.
+&apos;&apos;&apos;		Used: when True, the style must be used in the document
+&apos;&apos;&apos;			When absent, the argument is ignored.
+&apos;&apos;&apos;		UserDefined: when True, the style must have been added by the user, either in the document or its template
+&apos;&apos;&apos;			When absent, the argument is ignored.
+&apos;&apos;&apos;		ParentStyle: when present, only the children of the given, localized or not, parent style name are retained
+&apos;&apos;&apos;		Category: a case-insensitive string: TEXT, CHAPTER, LIST, INDEX, EXTRA, HTML
+&apos;&apos;&apos;			For their respective meanings, read https://api.libreoffice.org/docs/idl/ref/namespacecom_1_1sun_1_1star_1_1style_1_1ParagraphStyleCategory.html
+&apos;&apos;&apos;			The argument is ignored when the Family is not = &quot;ParagraphStyles&quot;.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		An array of style localized names
+&apos;&apos;&apos;		An error is raised when the Family does not exist.
+&apos;&apos;&apos;		The returned array may be empty.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Dim vStyles As Variant
+&apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;)			&apos;	All styles in the family
+&apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;, &quot;H*&quot;)	&apos;	Heading, Heading 1, ...
+&apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;, Used := False, UserDefined := True)
+&apos;&apos;&apos;														&apos;	All user-defined styles that are not used
+&apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;, ParentStyle := &quot;Standard&quot;)
+&apos;&apos;&apos;														&apos;	All styles dervived from the &quot;Default Paragraph Style&quot;
+
+Dim vStyles As Variant			&apos;	Return value
+Dim sStyle As String			&apos;	A single style name
+Dim oFamily As Object			&apos;	Style names container
+Dim oStyle As Object			&apos;	_StyleDescriptor
+Dim oParentStyle As Object		&apos;	_StyleDescriptor
+Dim bValid As Boolean			&apos;	When True, a given style passes the filter
+Dim i As Integer
+Const cstCategories = &quot;TEXT,CHAPTER,LIST,INDEX,EXTRA,HTML&quot;
+
+Const cstThisSub = &quot;SFDocuments.Document.Styles&quot;
+Const cstSubArgs = &quot;Family, [NamePattern=&quot;&quot;*&quot;&quot;], [Used=True|False], [UserDefined=True|False], ParentStyle = &quot;&quot;&quot;&quot;&quot; _
+					&amp; &quot;, [Category=&quot;&quot;&quot;&quot;|&quot;&quot;TEXT&quot;&quot;|&quot;&quot;CHAPTER&quot;&quot;|&quot;&quot;LIST&quot;&quot;|&quot;&quot;INDEX&quot;&quot;|&quot;&quot;EXTRA&quot;&quot;|&quot;&quot;HTML&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	vStyles = Array()
+
+Check:
+	If IsMissing(NamePattern) Or IsEmpty(NamePattern) Then NamePattern = &quot;&quot;
+	If IsMissing(Used) Then Used = Empty
+	If IsMissing(UserDefined) Then UserDefined = Empty
+	If IsMissing(ParentStyle) Or IsEmpty(ParentStyle) Then ParentStyle = &quot;&quot;
+	If IsMissing(Category) Or IsEmpty(Category) Then Category = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = _Component.getStyleFamilies().getElementNames()
+		If Not ScriptForge.SF_Utils._Validate(Family, &quot;Family&quot;, V_STRING, _StyleFamilies) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(NamePattern, &quot;NamePattern&quot;, V_STRING) Then GoTo Finally
+		If Not IsEmpty(Used) Then
+			If Not ScriptForge.SF_Utils._Validate(Used, &quot;Used&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		End If
+		If Not IsEmpty(UserDefined) Then
+			If Not ScriptForge.SF_Utils._Validate(UserDefined, &quot;UserDefined&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		End If
+		If Not ScriptForge.SF_Utils._Validate(ParentStyle, &quot;ParentStyle&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Category, &quot;Category&quot;, V_STRING, Split(&quot;,&quot; &amp; cstCategories, &quot;,&quot;)) Then GoTo Finally
+	End If
+
+Try:
+	Set oFamily = _GetStyleFamily(Family)
+	If Not IsNull(oFamily) Then
+		&apos;	Load it with the complete list of styles in the family
+		vStyles = oFamily.getElementNames()
+		&apos;	Scan the list and retain those passing the filter
+		For i = 0 To UBound(vStyles)
+			With oStyle
+				sStyle = vStyles(i)
+				Set oStyle = _GetStyle(oFamily, sStyle)
+				If Not IsNull(oStyle) Then
+					&apos;	Pattern ?
+					bValid = ( Len(NamePattern) = 0 )
+					If Not bValid Then bValid = ScriptForge.SF_String.IsLike(.DisplayName, NamePattern, CaseSensitive := True)
+					&apos;	Used ?
+					If bValid And Not IsEmpty(Used) Then bValid = ( Used = .IsUsed )
+					&apos;	User defined ?
+					If bValid And Not IsEmpty(UserDefined) Then bValid = ( UserDefined = Not .BuiltIn )
+					&apos;	Parent style ?
+					If bValid And Len(ParentStyle) &gt; 0 Then
+						Set oParentStyle = _GetStyle(oFamily, .ParentStyle)
+						bValid = Not IsNull(oParentStyle)	&apos;	The child has a parent
+						If bValid Then bValid = ( ParentStyle = oParentStyle.DisplayName Or ParentStyle = oParentStyle.StyleName)
+					End If
+					&apos;	Category ?
+					If bValid And Len(Category) &gt; 0 Then bValid = ( UCase(Category) = .Category )
+					If bValid Then vStyles(i) = .DisplayName Else vStyles(i) = &quot;&quot;
+				Else
+					vStyles(i) = &quot;&quot;
+				End If
+			End With
+		Next i
+		&apos;	Reject when not valid
+		vStyles = ScriptForge.SF_Array.TrimArray(vStyles)
+	End If
+
+Finally:
+	Styles = vStyles
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document.Styles
+
+REM -----------------------------------------------------------------------------
 Public Function Toolbars(Optional ByVal ToolbarName As Variant) As Variant
 &apos;&apos;&apos;	Returns either a list of the available toolbar names in the actual document
 &apos;&apos;&apos;	or a Toolbar object instance.
@@ -1427,6 +1629,55 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDocuments.SF_Document.Toolbars
+
+REM -----------------------------------------------------------------------------
+Public Function XStyle(Optional ByVal Family As Variant _
+							, Optional ByVal StyleName As variant _
+							) As Object
+&apos;&apos;&apos;	Returns a com.sun.star.style.Style UNO object corresponding with the arguments
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Family: one of the style families present in the actual document, as a not case-sensitive string
+&apos;&apos;&apos;		StyleName: one of the styles present in the given family, as a case-sensitive string
+&apos;&apos;&apos;			The StyleName may be localized or not.
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A com.sun.star.style.XStyle UNO object or one of its descendants,
+&apos;&apos;&apos;		like com.sun.star.style.CellStyle or com.sun.star.style.ParagraphStyle etc.
+&apos;&apos;&apos;		An error is raised when the Family does not exist.
+&apos;&apos;&apos;		Nothing is returned when the StyleName does not exist in the given Family.
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		Dim oStyle As Object
+&apos;&apos;&apos;		Set oStyle = doc.XStyle(&quot;ParagraphStyle&quot;, &quot;Heading 2&quot;)
+
+Dim oXStyle As Object			&apos;	Return value
+Dim oFamily As Object			&apos;	Style names container
+
+Const cstThisSub = &quot;SFDocuments.Document.XStyle&quot;
+Const cstSubArgs = &quot;Family, StyleName&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oXStyle = Nothing
+
+Check:
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = _Component.getStyleFamilies().getElementNames()
+		If Not ScriptForge.SF_Utils._Validate(Family, &quot;Family&quot;, V_STRING, _StyleFamilies) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(StyleName, &quot;StyleName&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	Set oFamily = _GetStyleFamily(Family)
+	If Not IsNull(oFamily) Then
+		If oFamily.hasByName(StyleName) Then Set oXStyle = oFamily.getByName(StyleName)
+	End If
+
+Finally:
+	Set XStyle = oXStyle
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document.XStyle
 
 REM =========================================================== PRIVATE FUNCTIONS
 
@@ -1501,6 +1752,209 @@ Finally:
 	_GetFilterNames = vFilters
 	Exit Function
 End Function	&apos;	SFDocuments.SF_Document._GetFilterNames
+
+REM -----------------------------------------------------------------------------
+Private Function _GetStyle(ByRef poFamily As Object _
+									, Optional ByVal pvDisplayName As Variant _
+									, Optional ByVal pvStyleIndex As Variant _
+									) As Object
+&apos;&apos;&apos;	Returns the style descriptor of the style passed as argument in the given family
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		poFamily: 	a com.sun.star.container.XNameContainer/XStyleFamily object
+&apos;&apos;&apos;		pvDisplayName:	case-sensitive string, localized style name as visible in the user interface
+&apos;&apos;&apos;		pvStyleIndex: index of the style in the family, as an integer
+&apos;&apos;&apos;			Exactly 1 out of the last 2 arguments must be supplied
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A StyleDescriptor object or Nothing
+
+Dim oStyleDescriptor			&apos;	Return value
+Dim oStyle As Object			&apos;	com.sun.star.style.XStyle and variants
+Dim bFound As Boolean			&apos;	When True, the style has been found in the family
+Dim vCategories As Variant		&apos;	Array of category constants
+Dim iCategory As Integer		&apos;	Index of vCategories
+Dim oSession As Object			:	Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)
+Dim i As Integer
+
+Const cstCAT0 = &quot;TEXT&quot;		&apos;	is applied to styles that are used for common text
+Const cstCAT1 = &quot;CHAPTER&quot;	&apos;	is applied to styles that are used as headings
+Const cstCAT2 = &quot;LIST&quot;		&apos; 	is applied to styles that used in numberings and lists
+Const cstCAT3 = &quot;INDEX&quot;		&apos;	is applied to styles that are used in indexes
+Const cstCAT4 = &quot;EXTRA&quot;		&apos;	is applied to styles that are used in special regions like headers, footers, and footnote text
+Const cstCAT5 = &quot;HTML&quot;		&apos;	is applied to styles that are used to support HTML
+Const cstCAT  = cstCAT0 &amp; &quot;,&quot; &amp; cstCAT1 &amp; &quot;,&quot; &amp; cstCAT2 &amp; &quot;,&quot; &amp; cstCAT3 &amp; &quot;,&quot; &amp; cstCAT4 &amp; &quot;,&quot; &amp; cstCAT5
+	
+	On Local Error GoTo Catch
+	Set oStyleDescriptor = Nothing
+
+Check:
+	If IsNull(poFamily) Then HoTo Vatch
+	If IsMissing(pvDisplayName) Or IsEmpty(pvDisplayName) Then pvDisplayName = &quot;&quot;
+	If IsMissing(pvStyleIndex) Or IsEmpty(pvStyleIndex) Then pvStyleIndex = -1
+Try:
+	&apos;	Find style corresponding with the given display name
+	With poFamily
+		If Len(pvDisplayName) &gt; 0 Then
+			bFound = .hasByName(pvDisplayName)		&apos;	hasByName searches both for Name and DisplayName attributes here
+			If bFound Then Set oStyle = .getByName(pvDisplayName) Else GoTo Catch
+		ElseIf pvStyleIndex &gt;= 0 And pvStyleIndex &lt; .Count Then
+			Set oStyle = .getByIndex(pvStyleIndex)
+		Else
+			GoTo Catch		&apos;	Should not happen
+		End If
+	End With
+
+	&apos;	Setup the style descriptor
+	Set oStyleDescriptor = New StyleDescriptor
+	With oStyleDescriptor
+		Set .Family = poFamily
+		.StyleName = oStyle.Name
+		.DisplayName = oStyle.DisplayName
+		.IsUsed = oStyle.isInUse
+		.BuiltIn = Not oStyle.isUserDefined()
+		.Category = &quot;&quot;
+		If oSession.HasUnoProperty(oStyle, &quot;Category&quot;) Then
+			vCategories = Split(cstCAT, &quot;,&quot;)
+			iCategory = oStyle.Category
+			If iCategory &gt;= 0 And iCategory &lt;= UBound(vCategories) Then .Category = vCategories(iCategory)
+		End If
+		.ParentStyle = oStyle.ParentStyle
+		Set .XStyle = oStyle
+	End With
+
+Finally:
+	Set _GetStyle = oStyleDescriptor
+	Exit Function
+Catch:
+	Set oStyleDescriptor = Nothing
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document._GetStyle
+
+REM -----------------------------------------------------------------------------
+Private Function _GetStyleFamily(ByVal psFamilyName As String) As Object
+&apos;&apos;&apos;	Returns the style names container corresponding with the argument
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		psFamilyName:	CellStyles, CharacterStyles, FrameStyles, GraphicsStyles, ListStyles,
+&apos;&apos;&apos;						NumberingStyles, PageStyles, ParagraphStyles, TableStyles
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A com.sun.star.container.XNameContainer/XStyleFamily object or Nothing
+
+Dim oFamily As Object			&apos;	Return value
+Dim oFamilies As Object			&apos;	com.sun.star.container.XNameAccess
+Dim iIndex As Integer			&apos;	Index in vFamilies of the given argument
+
+	On Local Error GoTo Catch
+	Set oFamily = Nothing
+
+Try:
+	Set oFamilies = _Component.getStyleFamilies()
+	If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = oFamilies.getElementNames()
+	&apos;	oFamilies.hasByName()/getByName() not used here to admit not case-sensitive family names
+	iIndex = ScriptForge.SF_Array.IndexOf(_StyleFamilies, psFamilyName, CaseSensitive := False)
+	If iIndex &gt;= 0 Then Set oFamily = oFamilies.getByName(_StyleFamilies(iIndex))
+
+Finally:
+	Set _GetStyleFamily = oFamily
+	Exit Function
+Catch:
+	Set oFamily = Nothing
+	GoTo Finally
+End Function	&apos;	SFDocuments.SF_Document._GetStyleFamily
+
+REM -----------------------------------------------------------------------------
+Public Sub _ImportStylesFromFile(Optional FileName As Variant _
+								, Optional ByRef Families As Variant _
+								, Optional ByVal Overwrite As variant _
+								) As Variant
+&apos;&apos;&apos;	Load all the styles belonging to one or more style families from a closed file
+&apos;&apos;&apos;	into the actual document. The actual document must be a Calc or a Writer document.
+&apos;&apos;&apos;	Are always imported together:
+&apos;&apos;&apos;		ParagraphStyles and CharacterStyles
+&apos;&apos;&apos;		NumberingStyles and ListStyles
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		FileName: the file from which to load the styles in the FileSystem notation.
+&apos;&apos;&apos;			The file is presumed to be of the same document type as the actual document
+&apos;&apos;&apos;		Families: one of the style families present in the actual document, as a case-sensitive string
+&apos;&apos;&apos;			or an array of such strings. Default = all families
+&apos;&apos;&apos;		Overwrite: when True, the actual styles may be overwritten. Defailt = False
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		UNKNOWNFILEERROR		The fiven file name does not exist
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		oDoc.ImportStylesFromFile(&quot;C:\...\abc.odt&quot;, Families := &quot;ParagraphStyles&quot;, Overwrite := True)
+
+Dim vFamilies As Variant		&apos;	Alias of Families
+Dim oFamilies As Object			&apos;	com.sun.star.container.XNameAccess
+Dim vOptions As Variant			&apos;	Array of property values
+Dim bAll As Boolean				&apos;	When True, ALL style families are considered
+Dim sName As String				&apos;	A single name in vOptions
+Dim FSO As Object				:	Set FSO = ScriptForge.SF_FileSystem
+Dim i As Integer
+Const cstThisSub = &quot;SFDocuments.Document.ImportStylesFromFile&quot;
+Const cstSubArgs = &quot;FileName, [Families], [Overwrite=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If IsMissing(Families) Or IsEmpty(Families) Then Families = &quot;&quot;
+	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
+
+	Set oFamilies = _Component.getStyleFamilies()
+	If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = oFamilies.getElementNames()
+
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;, False) Then GoTo Finally
+		If IsArray(Families) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(Families, &quot;Families&quot;, 1, V_STRING, True)  Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(Families, &quot;Families&quot;, V_STRING, ScriptForge.SF_Array.Append(_StyleFamilies, &quot;&quot;)) Then GoTo Finally
+		End If
+		If Not ScriptForge.SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	If Not FSO.FileExists(FileName) Then GoTo CatchNotExists
+	If IsArray(Families) Then
+		vFamilies = Families
+	Else
+		bAll = ( Len(Families) = 0 )	&apos;	When Families is absent (= &quot;&quot;), all families should be considered
+		vFamilies = Array(Families)
+	End If
+
+Try:
+	With ScriptForge.SF_Utils
+		Set vOptions = _Component.getStyleFamilies().getStyleLoaderOptions
+		&apos;	By default, all style families are imported (True)
+		If Not bAll Then
+			For i = 0 To UBound(vOptions)
+				vOptions(i).Value = False
+			Next i
+			For i = LBound(vFamilies) To UBound(vFamilies)
+				Select Case UCase(vFamilies(i))
+					Case &quot;PARAGRAPHSTYLES&quot;, &quot;CHARACTERSTYLES&quot;		:	sName = &quot;TextStyles&quot;
+					Case &quot;FRAMESTYLES&quot;								:	sName = &quot;FrameStyles&quot;
+					Case &quot;PAGESTYLES&quot;								:	sName = &quot;PageStyles&quot;
+					Case &quot;NUMBERINGSTYLES&quot;, &quot;LISTSTYLES&quot;			:	sName = &quot;NumberingStyles&quot;
+					Case &quot;CELLSTYLES&quot;								:	sName = &quot;PageStyles&quot;
+					Case Else										:	sName = &quot;&quot;
+				End Select
+				If Len(sName) &gt; 0 Then Set vOptions = ._SetPropertyValue(vOptions, &quot;Load&quot; &amp; sName, True)
+			Next i
+		End If
+		vOptions = ._SetPropertyValue(vOptions, &quot;OverwriteStyles&quot;, Overwrite)
+	End With
+
+	&apos;	Finally, import
+	oFamilies.loadStylesFromURL(FSO._ConvertToUrl(FileName), vOptions)
+
+Finally:
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+CatchNotExists:
+	SF_Exception.RaiseFatal(UNKNOWNFILEERROR, &quot;FileName&quot;, FileName)
+	GoTo Finally
+End Sub			&apos;	SFDocuments.SF_Document._ImportStylesFromFile
 
 REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbForUpdate As Boolean _
@@ -1640,6 +2094,9 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = Join(_Component.DocumentProperties.Keywords, &quot;, &quot;)
 		Case &quot;Readonly&quot;
 			_PropertyGet = _Component.isReadonly()
+		Case &quot;StyleFamilies&quot;
+			If UBound(_StyleFamilies) &lt; 0 Then _StyleFamilies = _Component.getStyleFamilies().getElementNames()
+			_PropertyGet = _StyleFamilies
 		Case &quot;Subject&quot;
 			_PropertyGet = _Component.DocumentProperties.Subject
 		Case &quot;Title&quot;
