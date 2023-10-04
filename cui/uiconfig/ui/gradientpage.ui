@@ -254,7 +254,7 @@
                   <object class="GtkLabel" id="incrementft">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="gradientpage|incrementft">Increment:</property>
+                    <property name="label" translatable="yes" context="gradientpage|incrementft">Increments:</property>
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">incrementmtr</property>
                     <property name="xalign">0</property>
