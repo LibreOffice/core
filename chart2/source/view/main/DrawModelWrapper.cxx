@@ -101,8 +101,11 @@ DrawModelWrapper::DrawModelWrapper()
 
 DrawModelWrapper::~DrawModelWrapper()
 {
+    // normally call from ~SdrModel, but do it here explicitly before we clear m_xChartItemPool
+    implDtorClearModel();
+
     //remove m_pChartItemPool from pool chain
-    if(m_xChartItemPool)
+    if (m_xChartItemPool)
     {
         SfxItemPool* pPool = &GetItemPool();
         for (;;)

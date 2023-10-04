@@ -200,7 +200,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, comphelper::IEmbeddedHelper* pEmbeddedHel
     mpImpl->initTheme();
 }
 
-SdrModel::~SdrModel()
+void SdrModel::implDtorClearModel()
 {
     mbInDestruction = true;
 
@@ -216,6 +216,11 @@ SdrModel::~SdrModel()
     m_pCurrentUndoGroup.reset();
 
     ClearModel(true);
+}
+
+SdrModel::~SdrModel()
+{
+    implDtorClearModel();
 
 #ifdef DBG_UTIL
     // SdrObjectLifetimeWatchDog:

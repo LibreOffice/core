@@ -252,6 +252,7 @@ public:
         tools::Long nLower = 0);
 
 protected:
+    void implDtorClearModel();
     virtual css::uno::Reference< css::uno::XInterface > createUnoModel();
 
 private:
