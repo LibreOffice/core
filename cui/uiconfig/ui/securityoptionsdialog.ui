@@ -240,7 +240,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="hexpand">True</property>
-                        <property name="label" translatable="yes" context="securityoptionsdialog|label3">Warn if document contains recorded changes, versions, hidden information or notes:</property>
+                        <property name="label" translatable="yes" context="securityoptionsdialog|label3">Warn if document contains recorded changes, versions or notes:</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
