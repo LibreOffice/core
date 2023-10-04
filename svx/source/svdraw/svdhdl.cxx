@@ -1095,7 +1095,7 @@ void SdrHdl::insertNewlyCreatedOverlayObjectForSdrHdl(
         const sdr::contact::ViewObjectContact& rVOC(GetObj()->GetViewContact().GetViewObjectContact(
             const_cast<sdr::contact::ObjectContact&>(rObjectContact)));
 
-        rObjectContact.calculateGridOffsetForViewOjectContact(aOffset, rVOC);
+        rObjectContact.calculateGridOffsetForViewObjectContact(aOffset, rVOC);
 
         if(!aOffset.equalZero())
         {

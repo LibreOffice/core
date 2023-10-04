@@ -1498,7 +1498,7 @@ namespace
 
         virtual bool supportsGridOffsets() const override { return true; }
 
-        virtual void calculateGridOffsetForViewOjectContact(
+        virtual void calculateGridOffsetForViewObjectContact(
             basegfx::B2DVector& rTarget,
             const sdr::contact::ViewObjectContact& rClient) const override
         {

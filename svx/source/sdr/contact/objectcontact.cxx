@@ -32,7 +32,7 @@ bool ObjectContact::supportsGridOffsets() const
     return false;
 }
 
-void ObjectContact::calculateGridOffsetForViewOjectContact(
+void ObjectContact::calculateGridOffsetForViewObjectContact(
     basegfx::B2DVector& /*rTarget*/,
     const ViewObjectContact& /*rClient*/) const
 {

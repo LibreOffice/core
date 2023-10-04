@@ -607,7 +607,7 @@ const basegfx::B2DVector& ViewObjectContact::getGridOffset() const
         if(0.0 == maGridOffset.getX() && 0.0 == maGridOffset.getY() && GetObjectContact().supportsGridOffsets())
         {
             // create on-demand
-            GetObjectContact().calculateGridOffsetForViewOjectContact(const_cast<ViewObjectContact*>(this)->maGridOffset, *this);
+            GetObjectContact().calculateGridOffsetForViewObjectContact(const_cast<ViewObjectContact*>(this)->maGridOffset, *this);
         }
     }
 

@@ -170,7 +170,7 @@ public:
 
     // interface to support GridOffset for non-linear ViewToDevice transformation (calc)
     virtual bool supportsGridOffsets() const;
-    virtual void calculateGridOffsetForViewOjectContact(
+    virtual void calculateGridOffsetForViewObjectContact(
         basegfx::B2DVector& rTarget,
         const ViewObjectContact& rClient) const;
     virtual void calculateGridOffsetForB2DRange(

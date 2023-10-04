@@ -1168,7 +1168,7 @@ namespace sdr::contact
                 const char* pDebugName);
 
             virtual bool supportsGridOffsets() const override;
-            virtual void calculateGridOffsetForViewOjectContact(
+            virtual void calculateGridOffsetForViewObjectContact(
                 basegfx::B2DVector& rTarget,
                 const ViewObjectContact& rClient) const override;
             virtual void calculateGridOffsetForB2DRange(
@@ -1212,7 +1212,7 @@ namespace sdr::contact
             return true;
         }
 
-        void ObjectContactOfScDrawView::calculateGridOffsetForViewOjectContact(
+        void ObjectContactOfScDrawView::calculateGridOffsetForViewObjectContact(
             basegfx::B2DVector& rTarget,
             const ViewObjectContact& rClient) const
         {

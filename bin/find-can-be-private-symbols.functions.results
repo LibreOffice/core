@@ -21753,7 +21753,7 @@ sdr::contact::ObjectContact::RemoveViewObjectContact(sdr::contact::ViewObjectCon
 sdr::contact::ObjectContact::SetViewObjectContactRedirector(sdr::contact::ViewObjectContactRedirector*)
 sdr::contact::ObjectContact::TryToGetOutputDevice() const
 sdr::contact::ObjectContact::TryToGetSdrPageView() const
-sdr::contact::ObjectContact::calculateGridOffsetForViewOjectContact(basegfx::B2DVector&, sdr::contact::ViewObjectContact const&) const
+sdr::contact::ObjectContact::calculateGridOffsetForViewObjectContact(basegfx::B2DVector&, sdr::contact::ViewObjectContact const&) const
 sdr::contact::ObjectContact::getActiveViewContact() const
 sdr::contact::ObjectContact::isDrawModeGray() const
 sdr::contact::ObjectContact::isDrawModeHighContrast() const
