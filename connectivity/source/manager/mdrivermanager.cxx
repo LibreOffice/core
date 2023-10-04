@@ -51,12 +51,6 @@ using namespace ::osl;
 
 constexpr OUStringLiteral SERVICE_SDBC_DRIVER = u"com.sun.star.sdbc.Driver";
 
-/// @throws NoSuchElementException
-static void throwNoSuchElementException()
-{
-    throw NoSuchElementException();
-}
-
 class ODriverEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
     friend class OSDBCDriverManager;
@@ -98,7 +92,7 @@ sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  )
 Any SAL_CALL ODriverEnumeration::nextElement(  )
 {
     if ( !hasMoreElements() )
-        throwNoSuchElementException();
+        throw NoSuchElementException();
 
     return Any( *m_aPos++ );
 }
@@ -518,7 +512,7 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
     MutexGuard aGuard(m_aMutex);
     DriverCollection::const_iterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
-        throwNoSuchElementException();
+        throw NoSuchElementException();
 
     return aSearch->second;
 }
@@ -560,7 +554,7 @@ void SAL_CALL OSDBCDriverManager::revokeObject( const OUString& _rName )
 
     DriverCollection::iterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
-        throwNoSuchElementException();
+        throw NoSuchElementException();
 
     m_aDriversRT.erase(aSearch); // we already have the iterator so we could use it
 
