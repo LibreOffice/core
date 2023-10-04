@@ -79,22 +79,25 @@ public:
     {
         assert(mpBuffer && "Access is not valid!");
         assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
-        assert(nY < mpBuffer->mnHeight && "y-coordinate out of range!");
 
-        return mFncGetPixel(GetScanline(nY), nX, maColorMask);
+        return GetPixelFromData(GetScanline(nY), nX);
     }
 
     BitmapColor GetPixel(const Point& point) const { return GetPixel(point.Y(), point.X()); }
 
-    BitmapColor GetColor(tools::Long nY, tools::Long nX) const
+    BitmapColor GetColorFromData(sal_uInt8* pData, tools::Long nX) const
     {
         if (HasPalette())
-        {
-            const BitmapBuffer* pBuffer = mpBuffer;
-            return pBuffer->maPalette[GetPixelIndex(nY, nX)];
-        }
+            return GetPaletteColor(GetIndexFromData(pData, nX));
         else
-            return GetPixel(nY, nX);
+            return GetPixelFromData(pData, nX);
+    }
+
+    BitmapColor GetColor(tools::Long nY, tools::Long nX) const
+    {
+        assert(mpBuffer && "Access is not valid!");
+        assert(nX < mpBuffer->mnWidth && "x-coordinate out of range!");
+        return GetColorFromData(GetScanline(nY), nX);
     }
 
     BitmapColor GetColor(const Point& point) const { return GetColor(point.Y(), point.X()); }
