@@ -1393,20 +1393,16 @@ void Bitmap::AdaptBitCount(Bitmap& rNew) const
     }
 }
 
-static sal_Int32* shiftColor(sal_Int32* pColorArray, BitmapColor const& rColor)
+static void shiftColors(sal_Int32* pColorArray, const Bitmap::ScopedReadAccess& pReadAcc)
 {
-    *pColorArray++ = static_cast<sal_Int32>(rColor.GetBlue()) << 12;
-    *pColorArray++ = static_cast<sal_Int32>(rColor.GetGreen()) << 12;
-    *pColorArray++ = static_cast<sal_Int32>(rColor.GetRed()) << 12;
-    return pColorArray;
-}
-static BitmapColor getColor(const BitmapReadAccess *pReadAcc, tools::Long nZ)
-{
-    Scanline pScanlineRead = pReadAcc->GetScanline(0);
-    if (pReadAcc->HasPalette())
-        return pReadAcc->GetPaletteColor(pReadAcc->GetIndexFromData(pScanlineRead, nZ));
-    else
-        return pReadAcc->GetPixelFromData(pScanlineRead, nZ);
+    Scanline pScanlineRead = pReadAcc->GetScanline(0); // Why always 0?
+    for (tools::Long n = 0; n < pReadAcc->Width(); ++n)
+    {
+        const BitmapColor& rColor = pReadAcc->GetColorFromData(pScanlineRead, n);
+        *pColorArray++ = static_cast<sal_Int32>(rColor.GetBlue()) << 12;
+        *pColorArray++ = static_cast<sal_Int32>(rColor.GetGreen()) << 12;
+        *pColorArray++ = static_cast<sal_Int32>(rColor.GetRed()) << 12;
+    }
 }
 
 bool Bitmap::Dither()
@@ -1432,51 +1428,60 @@ bool Bitmap::Dither()
     std::unique_ptr<sal_Int32[]> p2(new sal_Int32[ nW ]);
     sal_Int32* p1T = p1.get();
     sal_Int32* p2T = p2.get();
-    sal_Int32* pTmp = p2T;
-    for (tools::Long nZ = 0; nZ < nWidth; nZ++)
+    shiftColors(p2T, pReadAcc);
+    for( tools::Long nYAcc = 0; nYAcc < nHeight; nYAcc++ )
     {
-        pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
-    }
-    tools::Long nRErr, nGErr, nBErr;
-    tools::Long nRC, nGC, nBC;
-    for( tools::Long nY = 1, nYAcc = 0; nY <= nHeight; nY++, nYAcc++ )
-    {
-        pTmp = p1T;
-        p1T = p2T;
-        p2T = pTmp;
-        if (nY < nHeight)
+        std::swap(p1T, p2T);
+        if (nYAcc < nHeight - 1)
+            shiftColors(p2T, pReadAcc);
+
+        auto CalcError = [](tools::Long n)
         {
-            for (tools::Long nZ = 0; nZ < nWidth; nZ++)
-            {
-                pTmp = shiftColor(pTmp, getColor(pReadAcc.get(), nZ));
-            }
-        }
-        // Examine first Pixel separately
-        tools::Long nX = 0;
-        tools::Long nTemp;
-        CALC_ERRORS;
-        CALC_TABLES7;
-        nX -= 5;
-        CALC_TABLES5;
+            n = std::clamp<tools::Long>(n >> 12, 0, 255);
+            return std::pair(FloydErrMap[n], FloydMap[n]);
+        };
+
+        auto CalcErrors = [&](tools::Long n)
+        { return std::tuple_cat(CalcError(p1T[n]), CalcError(p1T[n + 1]), CalcError(p1T[n + 2])); };
+
+        auto CalcT = [](sal_Int32* dst, const int* src, int b, int g, int r)
+        {
+            dst[0] += src[b];
+            dst[1] += src[g];
+            dst[2] += src[r];
+        };
+
+        auto Calc1 = [&](int x, int b, int g, int r) { CalcT(p2T + x + 3, FloydError1, b, g, r); };
+        auto Calc3 = [&](int x, int b, int g, int r) { CalcT(p2T + x - 3, FloydError3, b, g, r); };
+        auto Calc5 = [&](int x, int b, int g, int r) { CalcT(p2T + x, FloydError5, b, g, r); };
+        auto Calc7 = [&](int x, int b, int g, int r) { CalcT(p1T + x + 3, FloydError7, b, g, r); };
+
         Scanline pScanline = pWriteAcc->GetScanline(nYAcc);
-        pWriteAcc->SetPixelOnData( pScanline, 0, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
-        // Get middle Pixels using a loop
-        tools::Long nXAcc;
-        for ( nX = 3, nXAcc = 1; nX < nW2; nXAcc++ )
+        // Examine first Pixel separately
         {
-            CALC_ERRORS;
-            CALC_TABLES7;
-            nX -= 8;
-            CALC_TABLES3;
-            CALC_TABLES5;
+            auto [nBErr, nBC, nGErr, nGC, nRErr, nRC] = CalcErrors(0);
+            Calc1(0, nBErr, nGErr, nRErr);
+            Calc5(0, nBErr, nGErr, nRErr);
+            Calc7(0, nBErr, nGErr, nRErr);
+            pWriteAcc->SetPixelOnData( pScanline, 0, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
+        }
+        // Get middle Pixels using a loop
+        for ( tools::Long nX = 3, nXAcc = 1; nX < nW2; nX += 3, nXAcc++ )
+        {
+            auto [nBErr, nBC, nGErr, nGC, nRErr, nRC] = CalcErrors(nX);
+            Calc1(nX, nBErr, nGErr, nRErr);
+            Calc3(nX, nBErr, nGErr, nRErr);
+            Calc5(nX, nBErr, nGErr, nRErr);
+            Calc7(nX, nBErr, nGErr, nRErr);
             pWriteAcc->SetPixelOnData( pScanline, nXAcc, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
         }
         // Treat last Pixel separately
-        CALC_ERRORS;
-        nX -= 5;
-        CALC_TABLES3;
-        CALC_TABLES5;
-        pWriteAcc->SetPixelOnData( pScanline, nWidth1, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
+        {
+            auto [nBErr, nBC, nGErr, nGC, nRErr, nRC] = CalcErrors(nW2);
+            Calc3(nW2, nBErr, nGErr, nRErr);
+            Calc5(nW2, nBErr, nGErr, nRErr);
+            pWriteAcc->SetPixelOnData( pScanline, nWidth1, BitmapColor(static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ])) );
+        }
     }
     pReadAcc.reset();
     pWriteAcc.reset();

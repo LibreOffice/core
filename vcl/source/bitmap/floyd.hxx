@@ -19,35 +19,6 @@
 
 #pragma once
 
-#define CALC_ERRORS                                                             \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nBErr = MinMax( nTemp, 0, 255 );                        \
-                        nBErr = nBErr - FloydIndexMap[ nBC = FloydMap[nBErr] ]; \
-                        nTemp = p1T[nX++] >> 12;                              \
-                        nGErr = MinMax( nTemp, 0, 255 );                        \
-                        nGErr = nGErr - FloydIndexMap[ nGC = FloydMap[nGErr] ]; \
-                        nTemp = p1T[nX] >> 12;                                \
-                        nRErr = MinMax( nTemp, 0, 255 );                        \
-                        nRErr = nRErr - FloydIndexMap[ nRC = FloydMap[nRErr] ];
-
-#define CALC_TABLES3                                        \
-                        p2T[nX++] += FloydError3[nBErr];    \
-                        p2T[nX++] += FloydError3[nGErr];    \
-                        p2T[nX++] += FloydError3[nRErr];
-
-#define CALC_TABLES5                                        \
-                        p2T[nX++] += FloydError5[nBErr];    \
-                        p2T[nX++] += FloydError5[nGErr];    \
-                        p2T[nX++] += FloydError5[nRErr];
-
-#define CALC_TABLES7                                        \
-                        p1T[++nX] += FloydError7[nBErr];    \
-                        p2T[nX++] += FloydError1[nBErr];    \
-                        p1T[nX] += FloydError7[nGErr];      \
-                        p2T[nX++] += FloydError1[nGErr];    \
-                        p1T[nX] += FloydError7[nRErr];      \
-                        p2T[nX] += FloydError1[nRErr];
-
 const extern sal_uLong nVCLRLut[ 6 ] = { 16, 17, 18, 19, 20, 21 };
 const extern sal_uLong nVCLGLut[ 6 ] = { 0, 6, 12, 18, 24, 30 };
 const extern sal_uLong nVCLBLut[ 6 ] = { 0, 36, 72, 108, 144, 180 };
@@ -116,7 +87,7 @@ const extern sal_uLong nVCLLut[ 256 ] =
     318928,320214,321500,322786,324072,325358,326644,327930
 };
 
-const tools::Long FloydMap[256] =
+const int FloydMap[256] =
 {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,
@@ -136,7 +107,21 @@ const tools::Long FloydMap[256] =
     5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 };
 
-const tools::Long FloydError1[61] =
+constexpr int FloydErrMap[256]
+    = { 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,
+        52, 53, 54, 55, 5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+        23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+        45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37,
+        38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 5,  6,  7,  8,
+        9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+        31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52,
+        53, 54, 55, 5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45,
+        46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16,
+        17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30 };
+
+constexpr int FloydError1[61] =
 {
     -7680, -7424, -7168, -6912, -6656, -6400, -6144,
     -5888, -5632, -5376, -5120, -4864, -4608, -4352,
@@ -148,7 +133,7 @@ const tools::Long FloydError1[61] =
     5888, 6144, 6400, 6656, 6912, 7168, 7424, 7680
 };
 
-const tools::Long FloydError3[61] =
+constexpr int FloydError3[61] =
 {
     -23040, -22272, -21504, -20736, -19968, -19200,
     -18432, -17664, -16896, -16128, -15360, -14592,
@@ -161,7 +146,7 @@ const tools::Long FloydError3[61] =
     19200, 19968, 20736, 21504, 22272, 23040
 };
 
-const tools::Long FloydError5[61] =
+constexpr int FloydError5[61] =
 {
     -38400, -37120, -35840, -34560, -33280, -32000,
     -30720, -29440, -28160, -26880, -25600, -24320,
@@ -175,7 +160,7 @@ const tools::Long FloydError5[61] =
     38400
 };
 
-const tools::Long FloydError7[61] =
+constexpr int FloydError7[61] =
 {
     -53760, -51968, -50176, -48384, -46592, -44800,
     -43008, -41216, -39424, -37632, -35840, -34048,
@@ -187,11 +172,6 @@ const tools::Long FloydError7[61] =
     28672, 30464, 32256, 34048, 35840, 37632, 39424,
     41216, 43008, 44800, 46592, 48384, 50176, 51968,
     53760
-};
-
-const tools::Long FloydIndexMap[6] =
-{
-    -30,  21, 72, 123, 174, 225
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
