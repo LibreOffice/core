@@ -61,7 +61,7 @@ Confirmation required before executing macros from untrusted sources.</property>
     <child>
       <object class="GtkRadioButton" id="high">
         <property name="label" translatable="yes" context="securitylevelpage|high">H_igh.
-Only signed macros from trusted sources are allowed to run.
+Only signed macros and macros from trusted file sources are executed.
 Unsigned macros are disabled.</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
@@ -72,7 +72,7 @@ Unsigned macros are disabled.</property>
         <property name="draw_indicator">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="high-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|high">Trusted sources can be set on the Trusted Sources tab page. Only signed macros from a trusted source are allowed to run. In addition, any macro from a trusted file location is allowed to run.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|high">Only signed macros or macros from a trusted file location are allowed to run. Trusted file locations can be set on the Trusted Sources tab page.</property>
           </object>
         </child>
       </object>
