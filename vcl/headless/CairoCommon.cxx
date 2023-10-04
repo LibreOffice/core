@@ -775,7 +775,7 @@ void CairoCommon::drawLine(tools::Long nX1, tools::Long nY1, tools::Long nX2, to
     releaseCairoContext(cr, false, extents);
 }
 
-// true if we have a fill color and the line color is the same or non-existant
+// true if we have a fill color and the line color is the same or non-existent
 static bool onlyFillRect(const std::optional<Color>& rFillColor,
                          const std::optional<Color>& rLineColor)
 {
