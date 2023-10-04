@@ -44,6 +44,8 @@
 #include <Window.hxx>
 #include <drawview.hxx>
 #include <sdmod.hxx>
+#include <strings.hrc>
+#include <sdresid.hxx>
 
 #include <memory>
 
@@ -147,7 +149,11 @@ static void InsertTableImpl(const DrawViewShell* pShell,
         aRect,
         nColumns,
         nRows);
-    pObj->NbcSetStyleSheet( pShell->GetDoc()->GetDefaultStyleSheet(), true );
+    //tables must not use default background tango sky blue tdf#156685
+    SfxStyleSheet* pStyleSheet = static_cast<SfxStyleSheet*>(
+        pShell->GetDoc()->GetStyleSheetPool()->Find(
+            SdResId(STR_POOLSHEET_OBJWITHOUTFILL), SfxStyleFamily::Para));
+    pObj->NbcSetStyleSheet( pStyleSheet, true );
     apply_table_style( pObj.get(), pShell->GetDoc(), sTableStyle );
     SdrPageView* pPV = pView->GetSdrPageView();
 
