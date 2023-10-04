@@ -1049,14 +1049,14 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
     attrList->add( FSNS( XML_w, XML_w), OString::number(nAdjustedWidth));
     attrList->add( FSNS( XML_w, XML_h), OString::number(rSize.Height()));
 
-    attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
-
     const OString relativeFromH = convertToOOXMLHoriOrientRel(rHoriOrient.GetRelationOrient());
     const OString relativeFromV = convertToOOXMLVertOrientRel(rVertOrient.GetRelationOrient());
     OString aXAlign = convertToOOXMLHoriOrient(rHoriOrient.GetHoriOrient(), /*bIsPosToggle=*/false);
     OString aYAlign = convertToOOXMLVertOrient(rVertOrient.GetVertOrient());
     if (!aXAlign.isEmpty())
         attrList->add(FSNS(XML_w, XML_xAlign), aXAlign);
+    else if (aPos.X)
+        attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
     if (!aYAlign.isEmpty() && relativeFromV != "text")
         attrList->add(FSNS(XML_w, XML_yAlign), aYAlign);
     else if (aPos.Y)
