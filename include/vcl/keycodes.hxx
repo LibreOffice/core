@@ -155,6 +155,7 @@ constexpr sal_uInt16 KEY_BRACKETRIGHT = css::awt::Key::BRACKETRIGHT;
 constexpr sal_uInt16 KEY_SEMICOLON = css::awt::Key::SEMICOLON;
 constexpr sal_uInt16 KEY_QUOTERIGHT = css::awt::Key::QUOTERIGHT;
 constexpr sal_uInt16 KEY_RIGHTCURLYBRACKET = css::awt::Key::RIGHTCURLYBRACKET;
+constexpr sal_uInt16 KEY_NUMBERSIGN = css::awt::Key::NUMBERSIGN;
 constexpr sal_uInt16 KEY_COLON = css::awt::Key::COLON;
 
 constexpr sal_uInt16 KEY_CAPSLOCK = css::awt::Key::CAPSLOCK;

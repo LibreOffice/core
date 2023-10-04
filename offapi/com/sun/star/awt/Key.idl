@@ -372,6 +372,9 @@ published constants Key
     /** @since LibreOffice 7.6 **/
     const short COLON = 1320;
 
+    /* # sign. @since LibreOffice 24.2 */
+    const short NUMBERSIGN = 191;
+
     /** The following values don't correspond to physical keys on any
         keyboard but are used in the macOS implementation of VCL. They
         correspond to some of the action messages of the NSResponder

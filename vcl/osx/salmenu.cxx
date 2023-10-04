@@ -655,6 +655,9 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
             case KEY_COLON:
                 nCommandKey=':';
                 break;
+            case KEY_NUMBERSIGN:
+                nCommandKey='#';
+                break;
             case KEY_SEMICOLON:
                 nCommandKey=';';
                 break;
