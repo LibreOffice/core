@@ -6277,15 +6277,17 @@ OutputDevice& SalInstanceDrawingArea::get_ref_device() { return *m_xDrawingArea-
 void SalInstanceDrawingArea::click(const Point& rPos)
 {
     MouseEvent aEvent(rPos, 1, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    m_xDrawingArea->MouseButtonDown(aEvent);
-    m_xDrawingArea->MouseButtonUp(aEvent);
+    VclPtr<VclDrawingArea> xDrawingArea(m_xDrawingArea);
+    xDrawingArea->MouseButtonDown(aEvent);
+    xDrawingArea->MouseButtonUp(aEvent);
 }
 
 void SalInstanceDrawingArea::dblclick(const Point& rPos)
 {
     MouseEvent aEvent(rPos, 2, MouseEventModifiers::NONE, MOUSE_LEFT, 0);
-    m_xDrawingArea->MouseButtonDown(aEvent);
-    m_xDrawingArea->MouseButtonUp(aEvent);
+    VclPtr<VclDrawingArea> xDrawingArea(m_xDrawingArea);
+    xDrawingArea->MouseButtonDown(aEvent);
+    xDrawingArea->MouseButtonUp(aEvent);
 }
 
 void SalInstanceDrawingArea::mouse_up(const Point& rPos)
