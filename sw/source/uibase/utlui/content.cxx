@@ -5317,42 +5317,12 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     }
 }
 
-static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
-{
-    // deselect any drawing or frame and leave editing mode
-    if (SdrView* pSdrView = pWrtShell->GetDrawView())
-    {
-        if (pSdrView->IsTextEdit())
-        {
-            bool bLockView = pWrtShell->IsViewLocked();
-            pWrtShell->LockView(true);
-            pWrtShell->EndTextEdit();
-            pWrtShell->LockView(bLockView);
-        }
-        // go out of the frame
-        Point aPt(LONG_MIN, LONG_MIN);
-        pWrtShell->SelectObj(aPt, SW_LEAVE_FRAME);
-    }
-
-    if (pWrtShell->IsSelFrameMode() || pWrtShell->IsObjSelected())
-    {
-        pWrtShell->UnSelectFrame();
-        pWrtShell->LeaveSelFrameMode();
-        pWrtShell->GetView().LeaveDrawCreate();
-        pWrtShell->EnterStdMode();
-        pWrtShell->DrawSelChanged();
-        pWrtShell->GetView().StopShellTimer();
-    }
-    else
-        pWrtShell->EnterStdMode();
-}
-
 void SwContentTree::CopyOutlineSelections()
 {
     m_pActiveShell->LockView(true);
     {
         MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
-        lcl_AssureStdModeAtShell(m_pActiveShell);
+        m_pActiveShell->AssureStdMode();
         m_pActiveShell->EnterAddMode();
         size_t nCount = m_xTreeView->get_selected_rows().size();
         m_xTreeView->selected_foreach([this, &nCount](weld::TreeIter& rEntry){
@@ -5400,7 +5370,8 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
 
     m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
     m_sSelectedItem = "";
-    lcl_AssureStdModeAtShell(m_pActiveShell);
+
+    m_pActiveShell->AssureStdMode();
 
     std::optional<std::unique_ptr<SwPosition>> oPosition;
     if (m_bSelectTo)
@@ -5542,7 +5513,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         m_pActiveShell->EndCursorMove();
 
-        lcl_AssureStdModeAtShell(m_pActiveShell);
+        m_pActiveShell->AssureStdMode();
 
         m_pActiveShell->SetMark();
         m_pActiveShell->GetCursor()->GetMark()->nNode = oPosition.value()->nNode;

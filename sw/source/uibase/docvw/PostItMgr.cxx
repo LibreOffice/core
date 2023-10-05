@@ -2383,26 +2383,7 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const i18nuti
 
 void SwPostItMgr::AssureStdModeAtShell()
 {
-        // deselect any drawing or frame and leave editing mode
-        SdrView* pSdrView = mpWrtShell->GetDrawView();
-        if ( pSdrView && pSdrView->IsTextEdit() )
-        {
-            bool bLockView = mpWrtShell->IsViewLocked();
-            mpWrtShell->LockView( true );
-            mpWrtShell->EndTextEdit();
-            mpWrtShell->LockView( bLockView );
-        }
-
-        if( mpWrtShell->IsSelFrameMode() || mpWrtShell->IsObjSelected())
-        {
-                mpWrtShell->UnSelectFrame();
-                mpWrtShell->LeaveSelFrameMode();
-                mpWrtShell->GetView().LeaveDrawCreate();
-                mpWrtShell->EnterStdMode();
-
-                mpWrtShell->DrawSelChanged();
-                mpView->StopShellTimer();
-        }
+    mpWrtShell->AssureStdMode();
 }
 
 bool SwPostItMgr::HasActiveSidebarWin() const

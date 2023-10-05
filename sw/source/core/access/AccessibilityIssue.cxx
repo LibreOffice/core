@@ -72,13 +72,16 @@ void AccessibilityIssue::gotoIssue() const
     and the vector is being mutated there and so the instance is overwritten with something else. */
     AccessibilityIssue TempIssueObject(*this);
 
+    SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->AssureStdMode();
+
     switch (TempIssueObject.m_eIssueObject)
     {
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         case IssueObject::TEXTFRAME:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             bool bSelected = pWrtShell->GotoFly(TempIssueObject.m_sObjectID, FLYCNTTYPE_ALL, true);
 
             // bring issue to attention
@@ -121,7 +124,6 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::SHAPE:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             if (pWrtShell->IsFrameSelected())
                 pWrtShell->LeaveSelFrameMode();
             pWrtShell->GotoDrawingObject(TempIssueObject.m_sObjectID);
@@ -142,7 +144,6 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::FORM:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             bool bIsDesignMode = pWrtShell->GetView().GetFormShell()->IsDesignMode();
             if (bIsDesignMode || (!bIsDesignMode && pWrtShell->WarnSwitchToDesignModeDialog()))
             {
@@ -167,7 +168,6 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::TABLE:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             pWrtShell->GotoTable(TempIssueObject.m_sObjectID);
 
             // bring issue to attention
@@ -186,11 +186,9 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::TEXT:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             SwContentNode* pContentNode = TempIssueObject.m_pNode->GetContentNode();
             SwPosition aPoint(*pContentNode, TempIssueObject.m_nStart);
             SwPosition aMark(*pContentNode, TempIssueObject.m_nEnd);
-            pWrtShell->EnterStdMode();
             pWrtShell->StartAllAction();
             SwPaM* pPaM = pWrtShell->GetCursor();
             *pPaM->GetPoint() = aPoint;
@@ -207,7 +205,6 @@ void AccessibilityIssue::gotoIssue() const
         break;
         case IssueObject::FOOTENDNOTE:
         {
-            SwWrtShell* pWrtShell = TempIssueObject.m_pDoc->GetDocShell()->GetWrtShell();
             if (TempIssueObject.m_pTextFootnote)
             {
                 pWrtShell->GotoFootnoteAnchor(*TempIssueObject.m_pTextFootnote);
@@ -235,7 +232,7 @@ void AccessibilityIssue::gotoIssue() const
         default:
             break;
     }
-    TempIssueObject.m_pDoc->GetDocShell()->GetView()->GetEditWin().GrabFocus();
+    pWrtShell->GetView().GetEditWin().GrabFocus();
 }
 
 bool AccessibilityIssue::canQuickFixIssue() const

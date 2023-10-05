@@ -47,6 +47,8 @@
 #include <unotools/configmgr.hxx>
 #include <bitmaps.hlst>
 
+#include <svx/svdview.hxx>
+
 namespace com::sun::star::util {
     struct SearchOptions2;
 }
@@ -592,6 +594,35 @@ void SwWrtShell::EnterStdMode()
     }
     Invalidate();
     SwTransferable::ClearSelection( *this );
+}
+
+void SwWrtShell::AssureStdMode()
+{
+    // deselect any drawing or frame and leave editing mode
+    if (SdrView* pSdrView = GetDrawView())
+    {
+        if (pSdrView->IsTextEdit())
+        {
+            bool bLockView = IsViewLocked();
+            LockView(true);
+            EndTextEdit();
+            LockView(bLockView);
+        }
+        // go out of the frame
+        Point aPt(LONG_MIN, LONG_MIN);
+        SelectObj(aPt, SW_LEAVE_FRAME);
+    }
+    if (IsSelFrameMode() || IsObjSelected())
+    {
+        UnSelectFrame();
+        LeaveSelFrameMode();
+        GetView().LeaveDrawCreate();
+        EnterStdMode();
+        DrawSelChanged();
+        GetView().StopShellTimer();
+    }
+    else
+        EnterStdMode();
 }
 
 // Extended Mode

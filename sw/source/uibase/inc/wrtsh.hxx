@@ -152,6 +152,8 @@ public:
     void    EnterStdMode();
     bool    IsStdMode() const { return !m_bExtMode && !m_bAddMode && !m_bBlockMode; }
 
+    void AssureStdMode();
+
     void    EnterExtMode();
     void    LeaveExtMode();
     void    ToggleExtMode();
