@@ -71,15 +71,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 
-namespace
-{
-
-    void lcl_throwIllegalArgumentException()
-    {
-        throw IllegalArgumentException();
-    }
-}
-
 static bool
 lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
 {
@@ -739,17 +730,17 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     // it has to support our element type interface
     Any aCorrectType = _rxObject->queryInterface( m_aElementType );
     if ( !aCorrectType.hasValue() )
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
 
     // it has to have a "Name" property
     if ( !hasProperty( PROPERTY_NAME, _rxObject ) )
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
 
     // it has to be a child, and it must not have a parent already
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
     {
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
     }
 
     // passed all tests. cache the information we have so far
@@ -1107,14 +1098,14 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
         throw NoSuchElementException();
 
     if (Element.getValueType().getTypeClass() != TypeClass_INTERFACE)
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
 
     Reference<XPropertySet> xSet;
     Element >>= xSet;
     if (xSet.is())
     {
         if (!hasProperty(PROPERTY_NAME, xSet))
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
 
         xSet->setPropertyValue(PROPERTY_NAME, Any(Name));
     }
