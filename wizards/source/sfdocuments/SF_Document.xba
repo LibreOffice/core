@@ -1504,7 +1504,7 @@ Public Function Styles(Optional ByVal Family As Variant _
 &apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;, Used := False, UserDefined := True)
 &apos;&apos;&apos;														&apos;	All user-defined styles that are not used
 &apos;&apos;&apos;		vStyles = doc.Styles(&quot;ParagraphStyles&quot;, ParentStyle := &quot;Standard&quot;)
-&apos;&apos;&apos;														&apos;	All styles dervived from the &quot;Default Paragraph Style&quot;
+&apos;&apos;&apos;														&apos;	All styles derived from the &quot;Default Paragraph Style&quot;
 
 Dim vStyles As Variant			&apos;	Return value
 Dim sStyle As String			&apos;	A single style name
@@ -1777,7 +1777,7 @@ Dim i As Integer
 
 Const cstCAT0 = &quot;TEXT&quot;		&apos;	is applied to styles that are used for common text
 Const cstCAT1 = &quot;CHAPTER&quot;	&apos;	is applied to styles that are used as headings
-Const cstCAT2 = &quot;LIST&quot;		&apos; 	is applied to styles that used in numberings and lists
+Const cstCAT2 = &quot;LIST&quot;		&apos; 	is applied to styles that are used in numberings and lists
 Const cstCAT3 = &quot;INDEX&quot;		&apos;	is applied to styles that are used in indexes
 Const cstCAT4 = &quot;EXTRA&quot;		&apos;	is applied to styles that are used in special regions like headers, footers, and footnote text
 Const cstCAT5 = &quot;HTML&quot;		&apos;	is applied to styles that are used to support HTML
@@ -1875,7 +1875,7 @@ Public Sub _ImportStylesFromFile(Optional FileName As Variant _
 &apos;&apos;&apos;			The file is presumed to be of the same document type as the actual document
 &apos;&apos;&apos;		Families: one of the style families present in the actual document, as a case-sensitive string
 &apos;&apos;&apos;			or an array of such strings. Default = all families
-&apos;&apos;&apos;		Overwrite: when True, the actual styles may be overwritten. Defailt = False
+&apos;&apos;&apos;		Overwrite: when True, the actual styles may be overwritten. Default = False
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR		The given file name does not exist
