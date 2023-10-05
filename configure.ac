@@ -2125,6 +2125,13 @@ AC_ARG_WITH(galleries,
          or to disable them ("no")]),
 )
 
+AC_ARG_WITH(templates,
+    AS_HELP_STRING([--with-templates],
+        [Specify we build with or without template files. It is possible either to
+         build with templates ("yes"),
+         or to disable them ("no")]),
+)
+
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
@@ -3073,6 +3080,7 @@ if test "$enable_wasm_strip" = "yes"; then
     test_libzmf=no
     test_webdav=no
     with_galleries=no
+    with_templates=no
     with_webdav=no
     with_x=no
 
@@ -3222,6 +3230,30 @@ else
     fi
 fi
 AC_SUBST(WITH_GALLERY_BUILD)
+
+dnl ===================================================================
+dnl  Sort out various templates compilation options
+dnl ===================================================================
+WITH_TEMPLATES=TRUE
+AC_MSG_CHECKING([build with or without template files])
+if test -n "${with_templates}"; then
+    if test "$with_templates" = "yes"; then
+        AC_MSG_RESULT([enable all templates])
+    elif test "$with_templates" = "no"; then
+        WITH_TEMPLATES=
+        AC_MSG_RESULT([disable non-internal templates])
+    else
+        AC_MSG_ERROR([unknown value --with-templates=$with_templates])
+    fi
+else
+    if test $_os != iOS -a $_os != Android -a $_os != Emscripten; then
+        AC_MSG_RESULT([enable all templates])
+    else
+        WITH_TEMPLATES=
+        AC_MSG_RESULT([disable non-internal templates])
+    fi
+fi
+AC_SUBST(WITH_TEMPLATES)
 
 dnl ===================================================================
 dnl  Checks if ccache is available
@@ -5705,6 +5737,7 @@ if test "$cross_compiling" = "yes"; then
     fi
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_galleries" = "no" -o -z "$WITH_GALLERY_BUILD" && sub_conf_opts="$sub_conf_opts --with-galleries=no --disable-database-connectivity"
+    test "$with_templates" = "no" -o -z "$WITH_TEMPLATES" && sub_conf_opts="$sub_conf_opts --with-templates=no"
     test -n "$with_help" -a "$with_help" != "no" && sub_conf_opts="$sub_conf_opts --with-help=$with_help"
     test "$enable_extensions" = yes || sub_conf_opts="$sub_conf_opts --disable-extensions"
     test "${enable_ld+set}" = set -a "$build_cpu" = "$host_cpu" && sub_conf_opts="$sub_conf_opts --enable-ld=${enable_ld}"
