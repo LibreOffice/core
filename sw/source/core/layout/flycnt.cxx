@@ -1737,17 +1737,6 @@ void SwFlyAtContentFrame::DelEmpty()
             // The anchor has a precede: invalidate it so that JoinFrame() is called on it.
             pAnchorPrecede->GetFrame().InvalidateSize();
         }
-        else if (SwTextFrame* pAnchorFollow = pAnchor->GetFollow())
-        {
-            // No precede, but has a follow. Then move the master just before the follow and join.
-            // This way the anchor chain and the fly chain will match even after clearing this
-            // frame's follow pointer.
-            if (pAnchorFollow != pAnchor->GetNext())
-            {
-                pAnchor->MoveSubTree(pAnchorFollow->GetUpper(), pAnchorFollow);
-                pAnchor->JoinFrame();
-            }
-        }
     }
 
     SwFlyAtContentFrame* pMaster = IsFollow() ? GetPrecede() : nullptr;
