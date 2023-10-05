@@ -1376,7 +1376,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testUndoReorderingMulti)
     // Then make sure view 1's undo action is invoked, out of order:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expression: pTextNode1->GetText().isEmpty()
-    // i.e. out of order undo was not executed, the first paragrph was still "a".
+    // i.e. out of order undo was not executed, the first paragraph was still "a".
     CPPUNIT_ASSERT(pTextNode1->GetText().isEmpty());
     // The top 2 undo actions are not invoked, as they belong to view 2.
     CPPUNIT_ASSERT_EQUAL(OUString("yx"), pTextNode2->GetText());
