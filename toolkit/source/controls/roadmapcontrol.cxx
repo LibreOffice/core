@@ -39,18 +39,6 @@ namespace toolkit
 
 //  helper
 
-
-static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
-    throw IllegalArgumentException();
-}
-
-static void lcl_throwIndexOutOfBoundsException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
-    throw IndexOutOfBoundsException();
-}
-
-
     // = UnoControlRoadmapModel
 
 
@@ -179,7 +167,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     Any SAL_CALL UnoControlRoadmapModel::getByIndex( sal_Int32 Index )
     {
         if ((Index < 0) || ( o3tl::make_unsigned(Index) >= maRoadmapItems.size()))
-            lcl_throwIndexOutOfBoundsException( );
+            throw IndexOutOfBoundsException();
         Any aAny( maRoadmapItems.at( Index ) );
         return aAny;
     }
@@ -188,13 +176,13 @@ static void lcl_throwIndexOutOfBoundsException( )
     void UnoControlRoadmapModel::MakeRMItemValidation( sal_Int32 Index, const Reference< XInterface >& xRoadmapItem )
     {
         if (( Index < 0 ) || (o3tl::make_unsigned(Index) > maRoadmapItems.size()) )
-            lcl_throwIndexOutOfBoundsException( );
+            throw IndexOutOfBoundsException();
         if ( !xRoadmapItem.is() )
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
         Reference< XServiceInfo > xServiceInfo( xRoadmapItem, UNO_QUERY );
         bool bIsRoadmapItem = xServiceInfo->supportsService("com.sun.star.awt.RoadmapItem");
         if ( !bIsRoadmapItem )
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
     }
 
 
@@ -268,7 +256,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     void SAL_CALL UnoControlRoadmapModel::insertByIndex( const sal_Int32 Index, const Any& Element)
     {
         if ( ( Index >= ( static_cast<sal_Int32>(maRoadmapItems.size()) + 1 ) ) || (Index < 0))
-            lcl_throwIndexOutOfBoundsException( );
+            throw IndexOutOfBoundsException();
         Reference< XInterface > xRoadmapItem;
         Element >>= xRoadmapItem;
         MakeRMItemValidation( Index, xRoadmapItem);
@@ -289,7 +277,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     void SAL_CALL UnoControlRoadmapModel::removeByIndex( sal_Int32 Index)
     {
         if ((Index < 0) || ( o3tl::make_unsigned(Index) > maRoadmapItems.size()))
-            lcl_throwIndexOutOfBoundsException( );
+            throw IndexOutOfBoundsException();
         Reference< XInterface > xRoadmapItem;
         maRoadmapItems.erase( maRoadmapItems.begin() + Index );
         ContainerEvent aEvent = GetContainerEvent(Index, xRoadmapItem);
