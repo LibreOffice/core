@@ -1145,6 +1145,18 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyMoveMaster)
     CPPUNIT_ASSERT(pPage4);
     CPPUNIT_ASSERT(!pPage4->GetSortedObjs());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDelEmpty)
+{
+    // Given a document with multiple floating tables and 7 pages:
+    // When loading that document:
+    // Without the accompanying fix in place, this test would have crashed due to a
+    // heap-use-after-free problem (visible with e.g. MALLOC_PERTURB_=153).
+    createSwDoc("floattable-del-empty.docx");
+
+    // Then make sure that the page count matches Word:
+    CPPUNIT_ASSERT_EQUAL(7, getPages());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
