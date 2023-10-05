@@ -150,13 +150,6 @@ namespace svt
                 return m_sLookup.equalsAscii(rProp.pPropertyName);
             }
         };
-
-
-        void lcl_throwIllegalArgumentException( )
-        {
-            throw IllegalArgumentException();
-            // TODO: error message in the exception
-        }
     }
 
     OControlAccess::OControlAccess(IFilePickerController* pController, SvtFileView* pFileView)
@@ -221,11 +214,11 @@ namespace svt
         ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
             // it's a completely unknown property
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
 
         if ( !( nPropertyMask & aPropDesc->nPropertyId ) )
             // it's a property which is known, but not allowed for this control
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
 
         return implGetControlProperty( pControl, aPropDesc->nPropertyId );
     }
@@ -247,7 +240,7 @@ namespace svt
 
         // if not found 'til here, the name is invalid, or we do not have the control in the current mode
         if ( !pControl )
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
 
         // out parameters and outta here
         if ( _pId )
@@ -268,7 +261,7 @@ namespace svt
         // look up the property
         ControlPropertyIterator aPropDesc = ::std::find_if( s_pProperties, s_pPropertiesEnd, ControlPropertyLookup( rControlProperty ) );
         if ( aPropDesc == s_pPropertiesEnd )
-            lcl_throwIllegalArgumentException();
+            throw IllegalArgumentException();
 
         // set the property
         implSetControlProperty( nControlId, pControl, aPropDesc->nPropertyId, rValue, false );
@@ -554,7 +547,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -568,7 +561,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -582,7 +575,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -596,7 +589,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -621,7 +614,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -638,7 +631,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -655,7 +648,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
@@ -672,7 +665,7 @@ namespace svt
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
-                    lcl_throwIllegalArgumentException();
+                    throw IllegalArgumentException();
                 }
             }
             break;
