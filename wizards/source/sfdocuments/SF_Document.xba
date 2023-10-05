@@ -1878,7 +1878,7 @@ Public Sub _ImportStylesFromFile(Optional FileName As Variant _
 &apos;&apos;&apos;		Overwrite: when True, the actual styles may be overwritten. Defailt = False
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Exceptions:
-&apos;&apos;&apos;		UNKNOWNFILEERROR		The fiven file name does not exist
+&apos;&apos;&apos;		UNKNOWNFILEERROR		The given file name does not exist
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		oDoc.ImportStylesFromFile(&quot;C:\...\abc.odt&quot;, Families := &quot;ParagraphStyles&quot;, Overwrite := True)
 
