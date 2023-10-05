@@ -601,7 +601,7 @@ Public Sub DeleteStyles(Optional ByVal Family As Variant _
 &apos;&apos;&apos;			The StylesList is typically the output of the execution of a Styles() method.
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		&apos;	Remove all inised styles
+&apos;&apos;&apos;		&apos;	Remove all unused styles
 &apos;&apos;&apos;		Const family = &quot;ParagraphStyles&quot;
 &apos;&apos;&apos;		doc.DeleteStyles(family, doc.Styles(family, Used := False, UserDefined := True))
 
