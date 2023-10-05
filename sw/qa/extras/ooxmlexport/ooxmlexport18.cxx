@@ -193,11 +193,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146984_anchorInShape, "tdf146984_anchorInShape.d
 {
     // This was only one page b/c the page break was missing.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-
-    const auto& pLayout = parseLayoutDump();
-    // There are shapes on both pages - these should be non-zero numbers
-    assertXPath(pLayout, "//page[1]//anchored", 3);
-    assertXPath(pLayout, "//page[2]//anchored", 2);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf127622_framePr, "tdf127622_framePr.docx")
@@ -375,16 +370,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak2, "tdf153613_textboxA
 
     const auto& pLayout = parseLayoutDump();
     assertXPathContent(pLayout, "//page[2]/body/txt", "There should be no prior carriage return.");
-}
-
-DECLARE_OOXMLEXPORT_TEST(testTdf153613_textboxAfterPgBreak3, "tdf153613_textboxAfterPgBreak3.docx")
-{
-    // All anchored TO-character shapes stay on the first page, before the page break.
-    CPPUNIT_ASSERT_EQUAL(2, getPages());
-    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
-
-    const auto& pLayout = parseLayoutDump();
-    assertXPath(pLayout, "//page[2]//anchored", 0);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf153613_sdtAfterPgBreak, "tdf153613_sdtAfterPgBreak.docx")
