@@ -712,7 +712,7 @@ bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles* pC
             pDetectiveOp->SetCellData( aCell );
 
         HasAnnotation( aCell );
-        bool bIsAutoStyle;
+        bool bIsAutoStyle(false);
         // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
         SCROW nRemoveBeforeRow = aLastAddress.Row();
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.maCellAddress.Tab(),
