@@ -134,24 +134,6 @@ public:
 };
 
 
-static void lcl_throwIllegalArgumentException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
-    throw IllegalArgumentException();
-}
-
-
-static void lcl_throwNoSuchElementException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
-    throw NoSuchElementException();
-}
-
-
-static void lcl_throwElementExistException( )
-{   // throwing is expensive (in terms of code size), thus we hope the compiler does not inline this...
-    throw ElementExistException();
-}
-
-
 static OUString getTabIndexPropertyName( )
 {
     return "TabIndex";
@@ -435,11 +417,11 @@ void ControlModelContainerBase::replaceByName( const OUString& aName, const Any&
     Reference< XControlModel > xNewModel;
     aElement >>= xNewModel;
     if ( !xNewModel.is() )
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
 
     UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
-        lcl_throwNoSuchElementException();
+        throw NoSuchElementException();
     // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
     // With container controls you could have constructed an existing hierarchy and are now
     // add this to an existing container, in this case a name nested in the containment
@@ -478,7 +460,7 @@ Any ControlModelContainerBase::getByName( const OUString& aName )
 {
     UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
-        lcl_throwNoSuchElementException();
+        throw NoSuchElementException();
 
     return Any( aElementPos->first );
 }
@@ -534,11 +516,11 @@ void ControlModelContainerBase::insertByName( const OUString& aName, const Any& 
 
 
     if ( aName.isEmpty() || !xM.is() )
-        lcl_throwIllegalArgumentException();
+        throw IllegalArgumentException();
 
     UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() != aElementPos )
-        lcl_throwElementExistException();
+        throw ElementExistException();
 
     // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
     // With container controls you could have constructed an existing hierarchy and are now
@@ -571,7 +553,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
 
     UnoControlModelHolderVector::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
-        lcl_throwNoSuchElementException();
+        throw NoSuchElementException();
 
     // Dialog behaviour is to have all containee names unique (MSO Userform is the same)
     // With container controls you could have constructed an existing hierarchy and are now
