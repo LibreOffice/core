@@ -62,7 +62,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGraphicObjectResolver)
     OUString aURL = createFileURL(u"GraphicObjectResolverTest.zip");
     uno::Reference<embed::XStorage> xStorage
         = comphelper::OStorageHelper::GetStorageOfFormatFromURL(ZIP_STORAGE_FORMAT_STRING, aURL,
-                                                                embed::ElementModes::READWRITE);
+                                                                embed::ElementModes::READ);
     CPPUNIT_ASSERT(xStorage.is());
 
     rtl::Reference<SvXMLGraphicHelper> xGraphicHelper
