@@ -1787,7 +1787,7 @@ Const cstCAT  = cstCAT0 &amp; &quot;,&quot; &amp; cstCAT1 &amp; &quot;,&quot; &a
 	Set oStyleDescriptor = Nothing
 
 Check:
-	If IsNull(poFamily) Then HoTo Vatch
+	If IsNull(poFamily) Then GoTo Vatch
 	If IsMissing(pvDisplayName) Or IsEmpty(pvDisplayName) Then pvDisplayName = &quot;&quot;
 	If IsMissing(pvStyleIndex) Or IsEmpty(pvStyleIndex) Then pvStyleIndex = -1
 Try:
