@@ -658,7 +658,12 @@ void SidebarController::OpenThenToggleDeck (
         if(mnWidthOnSplitterButtonDown > 0 && mnWidthOnSplitterButtonDown > nRequestedWidth){
             SetChildWindowWidth(mnWidthOnSplitterButtonDown);
         }else{
-            SetChildWindowWidth(nRequestedWidth);
+            // tdf#150639 The mnWidthOnSplitterButtonDown is initialized to 0 at program start.
+            // This makes every call to take the else case until the user manually changes the
+            // width, but some decks such as Master Slides have the mnMinimalWidth too low which
+            // makes them too narrow for the content they should display to the user.
+            SetChildWindowWidth(nRequestedWidth > mnSavedSidebarWidth ? nRequestedWidth
+                                                                      : mnSavedSidebarWidth);
         }
     }
 }
