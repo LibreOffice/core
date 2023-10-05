@@ -133,19 +133,7 @@ public:
     }
 };
 
-
-static OUString getTabIndexPropertyName( )
-{
-    return "TabIndex";
-}
-
-
-static OUString getStepPropertyName( )
-{
-    return "Step";
-}
-
-
+constexpr OUString aTabIndexPropertyNameStr( u"TabIndex"_ustr );
 
 ControlModelContainerBase::ControlModelContainerBase( const Reference< XComponentContext >& rxContext )
     :ControlModelContainer_IBase( rxContext )
@@ -628,8 +616,8 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
             Reference< XPropertySetInfo > xPSI;
             if ( xProps.is() )
                 xPSI = xProps->getPropertySetInfo();
-            if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
-                xProps->setPropertyValue( getTabIndexPropertyName(), Any( nTabIndex++ ) );
+            if ( xPSI.is() && xPSI->hasPropertyByName( aTabIndexPropertyNameStr ) )
+                xProps->setPropertyValue( aTabIndexPropertyNameStr, Any( nTabIndex++ ) );
         }
         mbGroupsUpToDate = false;
     }
@@ -660,10 +648,10 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
         DBG_ASSERT( xPSI.is(), "ControlModelContainerBase::getControlModels: invalid child model!" );
 
         // has it?
-        if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
+        if ( xPSI.is() && xPSI->hasPropertyByName( aTabIndexPropertyNameStr ) )
         {   // yes
             sal_Int32 nTabIndex = -1;
-            xControlProps->getPropertyValue( getTabIndexPropertyName() ) >>= nTabIndex;
+            xControlProps->getPropertyValue( aTabIndexPropertyNameStr ) >>= nTabIndex;
 
             aSortedModels.emplace( nTabIndex, xModel );
         }
@@ -772,7 +760,7 @@ namespace
         try
         {
             Reference< XPropertySet > xModelProps( _rxModel, UNO_QUERY );
-            xModelProps->getPropertyValue( getStepPropertyName() ) >>= nStep;
+            xModelProps->getPropertyValue( u"Step"_ustr ) >>= nStep;
         }
         catch (const Exception&)
         {
@@ -1001,8 +989,8 @@ void ControlModelContainerBase::startControlListening( const Reference< XControl
     if ( xModelProps.is() )
         xPSI = xModelProps->getPropertySetInfo();
 
-    if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
-        xModelProps->addPropertyChangeListener( getTabIndexPropertyName(), this );
+    if ( xPSI.is() && xPSI->hasPropertyByName( aTabIndexPropertyNameStr ) )
+        xModelProps->addPropertyChangeListener( aTabIndexPropertyNameStr, this );
 }
 
 
@@ -1015,8 +1003,8 @@ void ControlModelContainerBase::stopControlListening( const Reference< XControlM
     if ( xModelProps.is() )
         xPSI = xModelProps->getPropertySetInfo();
 
-    if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
-        xModelProps->removePropertyChangeListener( getTabIndexPropertyName(), this );
+    if ( xPSI.is() && xPSI->hasPropertyByName( aTabIndexPropertyNameStr ) )
+        xModelProps->removePropertyChangeListener( aTabIndexPropertyNameStr, this );
 }
 
 
