@@ -420,14 +420,14 @@ void Window::MouseMove( const MouseEvent& rMEvt )
 void Window::MouseButtonDown( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( NotifyEventType::MOUSEBUTTONDOWN, this, &rMEvt );
-    if (!EventNotify(aNEvt))
+    if (!EventNotify(aNEvt) && mpWindowImpl)
         mpWindowImpl->mbMouseButtonDown = true;
 }
 
 void Window::MouseButtonUp( const MouseEvent& rMEvt )
 {
     NotifyEvent aNEvt( NotifyEventType::MOUSEBUTTONUP, this, &rMEvt );
-    if (!EventNotify(aNEvt))
+    if (!EventNotify(aNEvt) && mpWindowImpl)
         mpWindowImpl->mbMouseButtonUp = true;
 }
 
