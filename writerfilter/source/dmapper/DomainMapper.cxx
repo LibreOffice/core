@@ -3741,7 +3741,7 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
     {
         // If there is a deferred page break, handle it now, so that the
         // started shape will be on the correct page.
-        if (m_pImpl->isBreakDeferred(PAGE_BREAK) && !m_pImpl->IsBreakDeferredByAnchor())
+        if (m_pImpl->isBreakDeferred(PAGE_BREAK))
         {
             // RTF doesn't properly report IsFirstRun, so in order to prevent regressions
             // always split the paragraph for RTF since that is the way it has been done lately.
@@ -3751,9 +3751,6 @@ void DomainMapper::lcl_startShape(uno::Reference<drawing::XShape> const& xShape)
                 finishParagraph();
                 lcl_startParagraphGroup();
             }
-            else
-                m_pImpl->SetIsBreakDeferredByAnchor();
-
         }
         m_pImpl->PushShapeContext( xShape );
         lcl_startParagraphGroup();

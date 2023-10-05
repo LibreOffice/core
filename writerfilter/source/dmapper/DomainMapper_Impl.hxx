@@ -472,7 +472,6 @@ private:
     bool                                                                            m_bIsColumnBreakDeferred;
     bool                                                                            m_bIsPageBreakDeferred;
     sal_Int32                                                                       m_nLineBreaksDeferred;
-    bool                                                                            m_bIsBreakDeferredByAnchor;
     /// If we want to set "sdt end" on the next character context.
     bool                                                                            m_bSdtEndDeferred;
     /// If we want to set "paragraph sdt end" on the next paragraph context.
@@ -743,8 +742,6 @@ public:
     bool isBreakDeferred( BreakType deferredBreakType );
     void clearDeferredBreaks();
     void clearDeferredBreak(BreakType deferredBreakType);
-    bool IsBreakDeferredByAnchor();
-    void SetIsBreakDeferredByAnchor();
 
     void setSdtEndDeferred(bool bSdtEndDeferred);
     bool isSdtEndDeferred() const;

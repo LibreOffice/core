@@ -334,7 +334,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
         m_nLineBreaksDeferred( 0 ),
-        m_bIsBreakDeferredByAnchor(false),
         m_bSdtEndDeferred(false),
         m_bParaSdtEndDeferred(false),
         m_bStartTOC(false),
@@ -1592,7 +1591,6 @@ void DomainMapper_Impl::clearDeferredBreak(BreakType deferredBreakType)
         break;
     case PAGE_BREAK:
         m_bIsPageBreakDeferred = false;
-        m_bIsBreakDeferredByAnchor = false;
         break;
     default:
         break;
@@ -1604,17 +1602,6 @@ void DomainMapper_Impl::clearDeferredBreaks()
     m_nLineBreaksDeferred = 0;
     m_bIsColumnBreakDeferred = false;
     m_bIsPageBreakDeferred = false;
-    m_bIsBreakDeferredByAnchor = false;
-}
-
-bool DomainMapper_Impl::IsBreakDeferredByAnchor()
-{
-    return m_bIsBreakDeferredByAnchor;
-}
-
-void DomainMapper_Impl::SetIsBreakDeferredByAnchor()
-{
-    m_bIsBreakDeferredByAnchor = true;
 }
 
 void DomainMapper_Impl::setSdtEndDeferred(bool bSdtEndDeferred)
