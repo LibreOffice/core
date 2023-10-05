@@ -992,12 +992,6 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     if (!pObj->IsInserted()) {
         rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
     }
-    if( IsUndoEnabled())
-    {
-        bool bDontDeleteReally = true;
-        EndTextEditCurrentView(bDontDeleteReally);
-        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
-    }
 
     css::uno::Reference<lang::XServiceInfo> xServices(GetModel().getUnoModel(),
                                                       css::uno::UNO_QUERY);
@@ -1008,6 +1002,13 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         GetModel().EnableUndo(false);
         pObj->MakeNameUnique();
         GetModel().EnableUndo(bUndo);
+    }
+
+    if( IsUndoEnabled())
+    {
+        bool bDontDeleteReally = true;
+        EndTextEditCurrentView(bDontDeleteReally);
+        AddUndo(GetModel().GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     }
 
     if (!(nOptions & SdrInsertFlags::DONTMARK)) {
