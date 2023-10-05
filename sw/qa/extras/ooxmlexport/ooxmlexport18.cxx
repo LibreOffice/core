@@ -531,6 +531,18 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148834_lineNumbering)
                 "//w:style[@w:styleId='0NUMBERED']/w:pPr/w:suppressLineNumbers", "val", "0");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf157598)
+{
+    loadAndSave("tdf157598.docx");
+
+    xmlDocUniquePtr pStylesXml = parseExport("word/styles.xml");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    assertXPath(pStylesXml, "//w:style[@w:styleId='Normal']/w:rPr/w:rtl", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf76022_textboxWrap)
 {
     // Granted, this is an ODT with a bit of an anomaly - tables ignore fly wrapping.
