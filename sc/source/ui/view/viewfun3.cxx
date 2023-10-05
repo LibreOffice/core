@@ -244,6 +244,9 @@ bool ScViewFunc::CopyToClipSingleRange( ScDocument* pClipDoc, const ScRangeList&
     if ( bSysClip && bIncludeObjects )
     {
         bool bAnyOle = rDoc.HasOLEObjectsInArea( aRange );
+        // There are optional paths (e.g. bAnyOle and InputOptions().GetTextWysiwyg true)
+        // which dereference pSysClipDoc->mxPoolHelper so ensure that is set here.
+        pSysClipDoc->SharePooledResources(&rDoc);
         // Update ScGlobal::xDrawClipDocShellRef.
         ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle, pSysClipDoc ) );
     }
