@@ -241,7 +241,7 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
 
 bool ScTabViewShell::HasAccessibilityObjects() const
 {
-    return pAccessibilityBroadcaster != nullptr;
+    return pAccessibilityBroadcaster && pAccessibilityBroadcaster->HasListeners();
 }
 
 bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
