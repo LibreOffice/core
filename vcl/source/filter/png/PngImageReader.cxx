@@ -283,7 +283,11 @@ sal_uInt32 NumDenToTime(sal_uInt16 nNumerator, sal_uInt16 nDenominator)
 bool fcTLbeforeIDAT(SvStream& rStream)
 {
     sal_uInt64 nPos = rStream.Tell();
-    comphelper::ScopeGuard aGuard([&rStream, nPos]() { rStream.Seek(nPos); });
+    SvStreamEndian originalEndian = rStream.GetEndian();
+    comphelper::ScopeGuard aGuard([&rStream, nPos, originalEndian] {
+        rStream.Seek(nPos);
+        rStream.SetEndian(originalEndian);
+    });
     // Skip PNG header and IHDR
     rStream.SetEndian(SvStreamEndian::BIG);
     if (!checkSeek(rStream, PNG_SIGNATURE_SIZE + PNG_TYPE_SIZE + PNG_SIZE_SIZE + PNG_IHDR_SIZE
@@ -859,9 +863,10 @@ bool ImportPNG(SvStream& rInputStream, Graphic& rGraphic, GraphicFilterImportFla
 bool PngImageReader::isAPng(SvStream& rStream)
 {
     auto nStmPos = rStream.Tell();
-    comphelper::ScopeGuard aGuard([&rStream, &nStmPos] {
+    SvStreamEndian originalEndian = rStream.GetEndian();
+    comphelper::ScopeGuard aGuard([&rStream, nStmPos, originalEndian] {
         rStream.Seek(nStmPos);
-        rStream.SetEndian(SvStreamEndian::LITTLE);
+        rStream.SetEndian(originalEndian);
     });
     if (!isPng(rStream))
         return false;
