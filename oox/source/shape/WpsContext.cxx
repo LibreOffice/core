@@ -143,7 +143,8 @@ void lcl_getColorTransformationsFromPropSeq(const uno::Sequence<beans::PropertyV
         {
             uno::Sequence<beans::PropertyValue> aValueSeq;
             sal_Int32 nNumber(0); // dummy value to make compiler happy, "val" should exist
-            if (((*it).Value >>= aValueSeq) && lcl_getAttributeAsNumber(aValueSeq, u"val", nNumber))
+            if (((*it).Value >>= aValueSeq)
+                && lcl_getAttributeAsNumber(aValueSeq, u"val"_ustr, nNumber))
             {
                 // char w14:alpha contains transparency, whereas shape fill a:alpha contains opacity.
                 if ((*it).Name == u"alpha")
@@ -165,10 +166,10 @@ bool lcl_getColorFromPropSeq(const uno::Sequence<beans::PropertyValue>& rPropSeq
     bool bColorFound = false;
     comphelper::SequenceAsHashMap aPropMap(rPropSeq);
     uno::Sequence<beans::PropertyValue> aColorDetailSeq;
-    if (aPropMap.getValue(u"schemeClr") >>= aColorDetailSeq)
+    if (aPropMap.getValue(u"schemeClr"_ustr) >>= aColorDetailSeq)
     {
         OUString sColorString;
-        bColorFound = lcl_getAttributeAsString(aColorDetailSeq, u"val", sColorString);
+        bColorFound = lcl_getAttributeAsString(aColorDetailSeq, u"val"_ustr, sColorString);
         if (bColorFound)
         {
             sal_Int32 nColorToken = oox::AttributeConversion::decodeToken(sColorString);
@@ -176,10 +177,10 @@ bool lcl_getColorFromPropSeq(const uno::Sequence<beans::PropertyValue>& rPropSeq
             rColor.setSchemeName(sColorString);
         }
     }
-    if (!bColorFound && (aPropMap.getValue(u"srgbClr") >>= aColorDetailSeq))
+    if (!bColorFound && (aPropMap.getValue(u"srgbClr"_ustr) >>= aColorDetailSeq))
     {
         OUString sColorString;
-        bColorFound = lcl_getAttributeAsString(aColorDetailSeq, u"val", sColorString);
+        bColorFound = lcl_getAttributeAsString(aColorDetailSeq, u"val"_ustr, sColorString);
         if (bColorFound)
         {
             sal_Int32 nColor = oox::AttributeConversion::decodeIntegerHex(sColorString);
@@ -200,21 +201,21 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
     if (!rTextFillSeq.hasElements())
         return;
     comphelper::SequenceAsHashMap aTextFillMap(rTextFillSeq);
-    if (aTextFillMap.find(u"noFill") != aTextFillMap.end())
+    if (aTextFillMap.find(u"noFill"_ustr) != aTextFillMap.end())
     {
         rFillProperties.moFillType = oox::XML_noFill;
         return;
     }
 
     uno::Sequence<beans::PropertyValue> aPropSeq;
-    if ((aTextFillMap.getValue(u"solidFill") >>= aPropSeq) && aPropSeq.hasElements())
+    if ((aTextFillMap.getValue(u"solidFill"_ustr) >>= aPropSeq) && aPropSeq.hasElements())
     {
         rFillProperties.moFillType = oox::XML_solidFill;
         lcl_getColorFromPropSeq(aPropSeq, rFillProperties.maFillColor);
         return;
     }
 
-    if ((aTextFillMap.getValue(u"gradFill") >>= aPropSeq) && aPropSeq.hasElements())
+    if ((aTextFillMap.getValue(u"gradFill"_ustr) >>= aPropSeq) && aPropSeq.hasElements())
     {
         rFillProperties.moFillType = oox::XML_gradFill;
         // aPropSeq should have two items. One is "gsLst" for the stop colors, the other is
@@ -233,7 +234,7 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
                     // aColorStopSeq should have an item for the color and an item for the position
                     sal_Int32 nPos;
                     oox::drawingml::Color aColor;
-                    if (lcl_getAttributeAsNumber(aColorStopSeq, u"pos", nPos)
+                    if (lcl_getAttributeAsNumber(aColorStopSeq, u"pos"_ustr, nPos)
                         && lcl_getColorFromPropSeq(aColorStopSeq, aColor))
                     {
                         // The position in maGradientStops is relative, thus in range [0.0;1.0].
@@ -274,13 +275,13 @@ void lcl_getFillDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
                 // edge of the bounding box of the shape. This unusual meaning of X1, Y1, X2 and
                 // Y2 is needed for method pushToPropMap() of FillProperties.
                 geometry::IntegerRectangle2D aRect;
-                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"l", aRect.X1))
+                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"l"_ustr, aRect.X1))
                     aRect.X1 = 0;
-                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"t", aRect.Y1))
+                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"t"_ustr, aRect.Y1))
                     aRect.Y1 = 0;
-                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"r", aRect.X2))
+                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"r"_ustr, aRect.X2))
                     aRect.X2 = 0;
-                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"b", aRect.Y2))
+                if (!lcl_getAttributeAsNumber(aFillToRectSeq, u"b"_ustr, aRect.Y2))
                     aRect.Y2 = 0;
                 rFillProperties.maGradientProps.moFillToRect = aRect;
             }
@@ -305,11 +306,11 @@ void lcl_getLineDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
 
     // LineJoint
     comphelper::SequenceAsHashMap aTextOutlineMap(rTextOutlineSeq);
-    if (aTextOutlineMap.find(u"bevel") != aTextOutlineMap.end())
+    if (aTextOutlineMap.find(u"bevel"_ustr) != aTextOutlineMap.end())
         rLineProperties.moLineJoint = oox::XML_bevel;
-    else if (aTextOutlineMap.find(u"round") != aTextOutlineMap.end())
+    else if (aTextOutlineMap.find(u"round"_ustr) != aTextOutlineMap.end())
         rLineProperties.moLineJoint = oox::XML_round;
-    else if (aTextOutlineMap.find(u"miter") != aTextOutlineMap.end())
+    else if (aTextOutlineMap.find(u"miter"_ustr) != aTextOutlineMap.end())
     {
         // LineProperties has no member to store a miter limit. Therefore some heuristic is
         // added here. 0 is default for attribute "lim" in MS Office. It is rendered same as bevel.
@@ -322,25 +323,25 @@ void lcl_getLineDetailsFromPropSeq(const uno::Sequence<beans::PropertyValue>& rT
 
     // Dash
     uno::Sequence<beans::PropertyValue> aDashSeq;
-    if (aTextOutlineMap.getValue(u"prstDash") >>= aDashSeq)
+    if (aTextOutlineMap.getValue(u"prstDash"_ustr) >>= aDashSeq)
     {
         // aDashSeq contains the attribute "val" with the kind of dash, e.g. "sysDot"
         OUString sDashKind;
-        if (lcl_getAttributeAsString(aDashSeq, u"val", sDashKind))
+        if (lcl_getAttributeAsString(aDashSeq, u"val"_ustr, sDashKind))
             rLineProperties.moPresetDash = oox::AttributeConversion::decodeToken(sDashKind);
     }
     OUString sCapKind;
-    if (lcl_getAttributeAsString(rTextOutlineSeq, u"cap", sCapKind))
+    if (lcl_getAttributeAsString(rTextOutlineSeq, u"cap"_ustr, sCapKind))
         rLineProperties.moLineCap = oox::AttributeConversion::decodeToken(sCapKind);
 
     // Width
     sal_Int32 nWidth; // EMU
-    if (lcl_getAttributeAsNumber(rTextOutlineSeq, u"w", nWidth))
+    if (lcl_getAttributeAsNumber(rTextOutlineSeq, u"w"_ustr, nWidth))
         rLineProperties.moLineWidth = nWidth;
 
     // Compound. LineProperties has a member for it, however Fontwork can currently only render "sng".
     OUString sCompoundKind;
-    if (lcl_getAttributeAsString(rTextOutlineSeq, u"cmpd", sCompoundKind))
+    if (lcl_getAttributeAsString(rTextOutlineSeq, u"cmpd"_ustr, sCompoundKind))
         rLineProperties.moLineCompound = oox::AttributeConversion::decodeToken(sCompoundKind);
 
     // Align. LineProperties has no member for attribute "algn".
@@ -356,13 +357,13 @@ lcl_generateLinePropertiesFromTextProps(const comphelper::SequenceAsHashMap& aTe
 
     // Get property "textOutline" from aTextPropMap
     uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
-    if (!(aTextPropMap.getValue(u"CharInteropGrabBag") >>= aCharInteropGrabBagSeq))
+    if (!(aTextPropMap.getValue(u"CharInteropGrabBag"_ustr) >>= aCharInteropGrabBagSeq))
         return aLineProperties;
     if (!aCharInteropGrabBagSeq.hasElements())
         return aLineProperties;
     comphelper::SequenceAsHashMap aCharInteropGrabBagMap(aCharInteropGrabBagSeq);
     beans::PropertyValue aProp;
-    if (!(aCharInteropGrabBagMap.getValue(u"CharTextOutlineTextEffect") >>= aProp))
+    if (!(aCharInteropGrabBagMap.getValue(u"CharTextOutlineTextEffect"_ustr) >>= aProp))
         return aLineProperties;
     uno::Sequence<beans::PropertyValue> aTextOutlineSeq;
     if (!(aProp.Name == "textOutline" && (aProp.Value >>= aTextOutlineSeq)
@@ -382,13 +383,13 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
     // Theme color supersedes direct color. textFill supersedes theme color. Theme color and textFill
     // are in CharInteropGrabBag.
     uno::Sequence<beans::PropertyValue> aCharInteropGrabBagSeq;
-    if ((rTextPropMap.getValue(u"CharInteropGrabBag") >>= aCharInteropGrabBagSeq)
+    if ((rTextPropMap.getValue(u"CharInteropGrabBag"_ustr) >>= aCharInteropGrabBagSeq)
         && aCharInteropGrabBagSeq.hasElements())
     {
         // Handle case textFill
         comphelper::SequenceAsHashMap aCharInteropGrabBagMap(aCharInteropGrabBagSeq);
         beans::PropertyValue aProp;
-        if (aCharInteropGrabBagMap.getValue(u"CharTextFillTextEffect") >>= aProp)
+        if (aCharInteropGrabBagMap.getValue(u"CharTextFillTextEffect"_ustr) >>= aProp)
         {
             uno::Sequence<beans::PropertyValue> aTextFillSeq;
             if (aProp.Name == "textFill" && (aProp.Value >>= aTextFillSeq)
@@ -441,7 +442,7 @@ lcl_generateFillPropertiesFromTextProps(const comphelper::SequenceAsHashMap& rTe
 
     // Neither textFill nor theme color. Look for direct color.
     sal_Int32 aCharColor = 0;
-    if (rTextPropMap.getValue(u"CharColor") >>= aCharColor)
+    if (rTextPropMap.getValue(u"CharColor"_ustr) >>= aCharColor)
         aFillProperties.maFillColor.setSrgbClr(aCharColor);
     else
         aFillProperties.maFillColor.setUnused();

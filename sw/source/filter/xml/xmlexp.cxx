@@ -407,10 +407,10 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
     // the document this is a copy of
     Reference<XPropertySet> rInfoSet = getExportInfo();
 
-    if (!rInfoSet.is() || !rInfoSet->getPropertySetInfo()->hasPropertyByName(u"NoEmbDataSet"))
+    if (!rInfoSet.is() || !rInfoSet->getPropertySetInfo()->hasPropertyByName(u"NoEmbDataSet"_ustr))
         return;
 
-    Any aAny = rInfoSet->getPropertyValue(u"NoEmbDataSet");
+    Any aAny = rInfoSet->getPropertyValue(u"NoEmbDataSet"_ustr);
     bool bNoEmbDataSet = *o3tl::doAccess<bool>(aAny);
     if (!bNoEmbDataSet)
         return;

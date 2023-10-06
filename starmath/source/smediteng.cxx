@@ -27,7 +27,7 @@ SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)
     , m_nDefaultFontSize(0)
     , m_aAllSelection(0, 0, 0, 0)
 {
-    SetText(u"");
+    SetText(u""_ustr);
 
     // Add external text leading
     SetAddExtLeading(true);

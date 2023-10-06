@@ -104,7 +104,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, OUString(u"☒"), /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"☒"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
@@ -112,8 +112,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
     xContentControlProps->setPropertyValue("Checked", uno::Any(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When clicking on that content control:
@@ -130,7 +130,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     // - Expected: ☐
     // - Actual  : ☒
     // i.e. the text node's text was "Ballot Box with X", not just "Ballot Box".
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
+    CPPUNIT_ASSERT_EQUAL(u"☐"_ustr, pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)

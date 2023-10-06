@@ -5004,10 +5004,10 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
             // otherwise loext:writing-mode is used in style export.
             if (!(rExport.getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
             {
-                if (xPropSetInfo->hasPropertyByName(u"WritingMode"))
+                if (xPropSetInfo->hasPropertyByName(u"WritingMode"_ustr))
                 {
                     sal_Int16 nDirection = -1;
-                    xPropSet->getPropertyValue(u"WritingMode") >>= nDirection;
+                    xPropSet->getPropertyValue(u"WritingMode"_ustr) >>= nDirection;
                     if (nDirection == text::WritingMode2::TB_RL90)
                         fTextRotateAngle -= 90;
                     else if (nDirection == text::WritingMode2::BT_LR)

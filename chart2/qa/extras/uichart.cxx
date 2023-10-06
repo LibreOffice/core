@@ -120,7 +120,7 @@ CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf120348)
 CPPUNIT_TEST_FIXTURE(Chart2UiChartTest, testTdf151091)
 {
     std::vector<OUString> aExpected
-        = { u"Ωφέλιμο", u"Επικίνδυνο", u"Απόσταση", u"Μάσκα", u"Εμβόλιο" };
+        = { u"Ωφέλιμο"_ustr, u"Επικίνδυνο"_ustr, u"Απόσταση"_ustr, u"Μάσκα"_ustr, u"Εμβόλιο"_ustr };
 
     loadFromURL(u"ods/tdf151091.ods");
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),

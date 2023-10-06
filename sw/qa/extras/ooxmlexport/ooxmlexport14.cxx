@@ -972,7 +972,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132766)
 
     // Ensure that for list=1 and level=0 we wrote correct bullet char and correct font
     assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:lvlText",
-                "val", u"\uF0B7");
+                "val", u"\uF0B7"_ustr);
     assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",
                 "ascii", "Symbol");
     assertXPath(pXmlDoc, "//w:numbering/w:abstractNum[@w:abstractNumId='1']/w:lvl[@w:ilvl='0']/w:rPr/w:rFonts",

@@ -110,7 +110,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
              Image(StockImage::Yes, RID_SVXBMP_BLOCK_SELECTION)},
     mbFeatureEnabled(false)
 {
-    GetStatusBar().SetQuickHelpText(GetId(), u"");
+    GetStatusBar().SetQuickHelpText(GetId(), u""_ustr);
 }
 
 void SvxSelectionModeControl::StateChangedAtStatusBarControl( sal_uInt16, SfxItemState eState,

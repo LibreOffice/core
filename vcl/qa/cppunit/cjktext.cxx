@@ -104,7 +104,7 @@ static tools::Long getCharacterRightSideHeight(VirtualDevice* device, const Poin
 // IMPORTANT: If you modify this, modify also the void VclTextTest::testSimpleText().
 void VclCjkTextTest::testVerticalText()
 {
-    OUString text(u"\x30e8");
+    OUString text(u"\x30e8"_ustr);
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
     device->SetOutputSizePixel(Size(100, 100));
     device->SetBackground(Wallpaper(COL_WHITE));

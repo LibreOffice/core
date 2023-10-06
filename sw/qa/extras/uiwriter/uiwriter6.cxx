@@ -1855,7 +1855,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 
     // Continue it:
     emulateTyping(*pTextDoc, u"Lorem,... ");
-    sReplaced = u"Lorem,... Lorem,… ";
+    sReplaced = u"Lorem,... Lorem,… "_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
@@ -1872,7 +1872,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
     // without change tracking
     CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
     emulateTyping(*pTextDoc, u":snowman:");
-    OUString sReplaced = u"☃Lorem,";
+    OUString sReplaced = u"☃Lorem,"_ustr;
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // with change tracking (showing redlines)
@@ -1883,7 +1883,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
     emulateTyping(*pTextDoc, u":snowman:");
-    sReplaced = u"☃☃Lorem,";
+    sReplaced = u"☃☃Lorem,"_ustr;
 
     // tdf#140674 This was ":snowman:" instead of autocorrect
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
@@ -1899,7 +1899,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108423)
     // testing autocorrect of i' -> I' on start of first paragraph
     emulateTyping(*pTextDoc, u"i'");
     // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
-    OUString sIApostrophe(u"I\u2019");
+    OUString sIApostrophe(u"I\u2019"_ustr);
     CPPUNIT_ASSERT_EQUAL(sIApostrophe, getParagraph(1)->getString());
     emulateTyping(*pTextDoc, u" i'");
     OUString sText(sIApostrophe + u" " + sIApostrophe);
@@ -1938,7 +1938,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106164)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // testing autocorrect of we're -> We're on start of first paragraph
     emulateTyping(*pTextDoc, u"we're ");
-    CPPUNIT_ASSERT_EQUAL(OUString(u"We\u2019re "), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"We\u2019re "_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf54409)
@@ -1950,7 +1950,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf54409)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // testing autocorrect of "tset -> "test with typographical double quotation mark U+201C
     emulateTyping(*pTextDoc, u"\"test ");
-    OUString sReplaced(u"\u201Ctest ");
+    OUString sReplaced(u"\u201Ctest "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // testing autocorrect of test" -> test" with typographical double quotation mark U+201D
     emulateTyping(*pTextDoc, u"and tset\" ");
@@ -1971,7 +1971,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf38394)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // testing autocorrect of French l'" -> l'« (instead of l'»)
     emulateTyping(*pTextDoc, u"l'\"");
-    OUString sReplaced(u"l\u2019« ");
+    OUString sReplaced(u"l\u2019« "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // tdf#132301 autocorrect of qu'«
     emulateTyping(*pTextDoc, u" qu'\"");
@@ -1988,7 +1988,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf59666)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // testing missing autocorrect of single Greek letters
     emulateTyping(*pTextDoc, u"π ");
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u03C0 "), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\u03C0 "_ustr, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133524)
@@ -2001,7 +2001,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133524)
     // 1. Testing autocorrect of >> and <<
     // Example: »word«
     emulateTyping(*pTextDoc, u">>");
-    OUString sReplaced(u"»");
+    OUString sReplaced(u"»"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // <<
     emulateTyping(*pTextDoc, u"word<<");
@@ -2061,7 +2061,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133524_Romanian)
     // Example: „Sentence and «word».”
     // opening primary level quote
     emulateTyping(*pTextDoc, u"\"");
-    OUString sReplaced(u"„");
+    OUString sReplaced(u"„"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // opening second level quote
     emulateTyping(*pTextDoc, u"Sentence and \"");
@@ -2094,7 +2094,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf128860)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Second level ending quote: ‚word' -> ,word‘
     emulateTyping(*pTextDoc, u",word'");
-    OUString sReplaced(u",word\u2019");
+    OUString sReplaced(u",word\u2019"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // Us apostrophe without preceding starting quote: word' -> word’
     emulateTyping(*pTextDoc, u" word'");
@@ -2123,7 +2123,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf123786)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Second level ending quote: „word' -> „word“
     emulateTyping(*pTextDoc, u"„слово'");
-    OUString sReplaced(u"„слово“");
+    OUString sReplaced(u"„слово“"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // Us apostrophe without preceding starting quote: word' -> word’
     emulateTyping(*pTextDoc, u" слово'");
@@ -2145,7 +2145,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // translitere words to Old Hungarian
     emulateTyping(*pTextDoc, u"székely ");
-    OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 ");
+    OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 "_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // disambiguate consonants: asszony -> asz|szony
     emulateTyping(*pTextDoc, u"asszony ");
@@ -2383,11 +2383,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143176)
     dispatchCommand(mxComponent, ".uno:AutoFormatApply", {});
 
     // This was the original "Lorem ipsum..."
-    CPPUNIT_ASSERT_EQUAL(OUString(u"𐲖𐳛𐳢𐳉𐳘 𐳐𐳠𐳤𐳪𐳘 𐳇𐳛𐳖𐳛𐳢 "
-                                  u"𐳤𐳐𐳦 𐳀𐳘𐳉𐳦⹁"),
+    CPPUNIT_ASSERT_EQUAL(u"𐲖𐳛𐳢𐳉𐳘 𐳐𐳠𐳤𐳪𐳘 𐳇𐳛𐳖𐳛𐳢 "
+                         u"𐳤𐳐𐳦 𐳀𐳘𐳉𐳦⹁"_ustr,
                          getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"𐳄𐳛𐳙𐳤𐳉𐳄𐳦𐳉𐳦𐳪𐳢 "
-                                  u"𐳀𐳇𐳐𐳠𐳐𐳤𐳄𐳐𐳙𐳍 𐳉𐳖𐳐𐳦."),
+    CPPUNIT_ASSERT_EQUAL(u"𐳄𐳛𐳙𐳤𐳉𐳄𐳦𐳉𐳦𐳪𐳢 "
+                         u"𐳀𐳇𐳐𐳠𐳐𐳤𐳄𐳐𐳙𐳍 𐳉𐳖𐳐𐳦."_ustr,
                          getParagraph(2)->getString());
 }
 
@@ -2713,7 +2713,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
         // Without the fix in place, this would fail with
         // - Expected: Foo – 11’—’22
         // - Actual  : Foo – 11’--’22
-        CPPUNIT_ASSERT_EQUAL(OUString(u"Foo – 11’—’22 "), getParagraph(1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Foo – 11’—’22 "_ustr, getParagraph(1)->getString());
     }
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {}); // start again
@@ -2723,7 +2723,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf155407)
         // Without the fix in place, this would fail with
         // - Expected: Bar – 111–222
         // - Actual  : Bar – 111-–22
-        CPPUNIT_ASSERT_EQUAL(OUString(u"Bar – 111–222 "), getParagraph(1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Bar – 111–222 "_ustr, getParagraph(1)->getString());
     }
 }
 

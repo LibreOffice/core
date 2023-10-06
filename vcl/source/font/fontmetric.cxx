@@ -382,7 +382,7 @@ void FontMetricData::ImplInitFlags( const OutputDevice* pDev )
     if (MsLangId::isCJK(rFont.GetLanguage()))
     {
         tools::Rectangle aRect;
-        pDev->GetTextBoundRect( aRect, u"\x3001" ); // Fullwidth fullstop
+        pDev->GetTextBoundRect( aRect, u"\x3001"_ustr ); // Fullwidth fullstop
         const auto nH = rFont.GetFontSize().Height();
         const auto nB = aRect.Left();
         // Use 18.75% as a threshold to define a centered fullwidth fullstop.

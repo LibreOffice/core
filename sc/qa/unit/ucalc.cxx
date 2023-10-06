@@ -514,14 +514,14 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114406)
 CPPUNIT_TEST_FIXTURE(Test, testTdf93951)
 {
     CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
-    m_pDoc->SetString(ScAddress(0,0,0), u"=2*§*2");
+    m_pDoc->SetString(ScAddress(0,0,0), u"=2*§*2"_ustr);
 
     OUString aFormula = m_pDoc->GetFormula(0,0,0);
 
     // Without the fix in place, this test would have failed with
     // - Expected: =2*§*2
     // - Actual  : =2*
-    CPPUNIT_ASSERT_EQUAL(OUString(u"=2*§*2"), aFormula);
+    CPPUNIT_ASSERT_EQUAL(u"=2*§*2"_ustr, aFormula);
 
     m_pDoc->DeleteTab(0);
 }

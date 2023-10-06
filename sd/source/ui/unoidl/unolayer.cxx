@@ -63,12 +63,12 @@ static const SvxItemPropertySet* ImplGetSdLayerPropertySet()
 {
     static const SfxItemPropertyMapEntry aSdLayerPropertyMap_Impl[] =
     {
-        { u"" UNO_NAME_LAYER_LOCKED,      WID_LAYER_LOCKED,   cppu::UnoType<bool>::get(),            0, 0 },
-        { u"" UNO_NAME_LAYER_PRINTABLE,   WID_LAYER_PRINTABLE,cppu::UnoType<bool>::get(),            0, 0 },
-        { u"" UNO_NAME_LAYER_VISIBLE,     WID_LAYER_VISIBLE,  cppu::UnoType<bool>::get(),            0, 0 },
-        { u"" UNO_NAME_LAYER_NAME,        WID_LAYER_NAME,     ::cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"Title",                    WID_LAYER_TITLE,    ::cppu::UnoType<OUString>::get(), 0, 0 },
-        { u"Description",              WID_LAYER_DESC,     ::cppu::UnoType<OUString>::get(), 0, 0 },
+        { u"" UNO_NAME_LAYER_LOCKED ""_ustr,      WID_LAYER_LOCKED,   cppu::UnoType<bool>::get(),            0, 0 },
+        { u"" UNO_NAME_LAYER_PRINTABLE ""_ustr,   WID_LAYER_PRINTABLE,cppu::UnoType<bool>::get(),            0, 0 },
+        { u"" UNO_NAME_LAYER_VISIBLE ""_ustr,     WID_LAYER_VISIBLE,  cppu::UnoType<bool>::get(),            0, 0 },
+        { u"" UNO_NAME_LAYER_NAME ""_ustr,        WID_LAYER_NAME,     ::cppu::UnoType<OUString>::get(), 0, 0 },
+        { u"Title"_ustr,                    WID_LAYER_TITLE,    ::cppu::UnoType<OUString>::get(), 0, 0 },
+        { u"Description"_ustr,              WID_LAYER_DESC,     ::cppu::UnoType<OUString>::get(), 0, 0 },
     };
     static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aSDLayerPropertySet_Impl;

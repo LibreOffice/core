@@ -2319,7 +2319,7 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
         aValue.bIsVisible = true;
         aValue.nColor = aDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Dark");
+        aColorConfig.AddScheme(u"Dark"_ustr);
     }
 
     // Add a minimal light scheme
@@ -2329,7 +2329,7 @@ void DesktopLOKTest::testPaintPartTileDifferentSchemes()
         aValue.bIsVisible = true;
         aValue.nColor = COL_WHITE;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Light");
+        aColorConfig.AddScheme(u"Light"_ustr);
     }
 
     // This view will default to light scheme

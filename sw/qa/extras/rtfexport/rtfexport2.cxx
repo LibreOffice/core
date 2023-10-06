@@ -178,7 +178,7 @@ DECLARE_RTFEXPORT_TEST(testFdo79384, "fdo79384.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Маркеры спискамЫ"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Маркеры спискамЫ"_ustr, xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo47326, "fdo47326.rtf")
@@ -227,7 +227,7 @@ DECLARE_RTFEXPORT_TEST(testFdo45394, "fdo45394.rtf")
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     OUString aActual = xHeaderText->getString();
     // Encoding in the header was wrong.
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u041F\u041A \u0420\u0418\u041A"), aActual);
+    CPPUNIT_ASSERT_EQUAL(u"\u041F\u041A \u0420\u0418\u041A"_ustr, aActual);
 
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
@@ -295,7 +295,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo48023)
 
         // Implicit encoding detection based on locale was missing
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442"),
+            u"\u041F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u0438\u0441\u0442"_ustr,
             xTextRange->getString());
     };
 
@@ -330,7 +330,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo44211)
     auto verify = [this]() {
         uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-        CPPUNIT_ASSERT_EQUAL(OUString(u"\u0105\u010D\u0119"), xTextRange->getString());
+        CPPUNIT_ASSERT_EQUAL(u"\u0105\u010D\u0119"_ustr, xTextRange->getString());
     };
 
     AllSettings aSavedSettings = Application::GetSettings();
@@ -513,7 +513,10 @@ DECLARE_RTFEXPORT_TEST(testFdo36089, "fdo36089.rtf")
                          getProperty<sal_Int16>(getRun(getParagraph(1), 2), "CharEscapement"));
 }
 
-DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf") { getParagraph(1, u"\u0418\u043C\u044F"); }
+DECLARE_RTFEXPORT_TEST(testFdo48446, "fdo48446.rtf")
+{
+    getParagraph(1, u"\u0418\u043C\u044F"_ustr);
+}
 
 DECLARE_RTFEXPORT_TEST(testFdo47495, "fdo47495.rtf")
 {
@@ -715,7 +718,7 @@ DECLARE_RTFEXPORT_TEST(testFdo56512, "fdo56512.rtf")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u05E2\u05D5\u05E1\u05E7 \u05DE\u05D5\u05E8\u05E9\u05D4 "),
+    CPPUNIT_ASSERT_EQUAL(u"\u05E2\u05D5\u05E1\u05E7 \u05DE\u05D5\u05E8\u05E9\u05D4 "_ustr,
                          xTextRange->getString());
 }
 
@@ -872,7 +875,7 @@ DECLARE_RTFEXPORT_TEST(testFdo59638, "fdo59638.rtf")
         if (rProp.Name == "BulletChar")
         {
             // Was '*', should be 'o'.
-            CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0B7"), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(u"\uF0B7"_ustr, rProp.Value.get<OUString>());
             return;
         }
     }

@@ -1329,16 +1329,16 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf153444)
 
     ScDocument* pDoc = getScDoc();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"time, sec"), pDoc->GetString(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Body_Right_Z, g"), pDoc->GetString(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Body_Left_Z, g"), pDoc->GetString(2, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"time, sec"_ustr, pDoc->GetString(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Body_Right_Z, g"_ustr, pDoc->GetString(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Body_Left_Z, g"_ustr, pDoc->GetString(2, 0, 0));
 
     // Without the fix in place, this test would have failed with
     // - Expected: ÄÖÜ, µm/m
     // - Actual  : ���, �m/m
-    CPPUNIT_ASSERT_EQUAL(OUString(u"ÄÖÜ, µm/m"), pDoc->GetString(3, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"äöü, µm/m"), pDoc->GetString(4, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"ß, µm/m"), pDoc->GetString(5, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"ÄÖÜ, µm/m"_ustr, pDoc->GetString(3, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"äöü, µm/m"_ustr, pDoc->GetString(4, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(u"ß, µm/m"_ustr, pDoc->GetString(5, 0, 0));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest4, testTdf151958)

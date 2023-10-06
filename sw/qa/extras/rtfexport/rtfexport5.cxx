@@ -64,7 +64,7 @@ DECLARE_RTFEXPORT_TEST(testFdo42109, "fdo42109.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo62977, "fdo62977.rtf")
 {
     // The middle character was imported as '?' instead of the proper unicode value.
-    getRun(getParagraph(1), 1, OUString(u"\u5E74\uFF14\u6708"));
+    getRun(getParagraph(1), 1, u"\u5E74\uFF14\u6708"_ustr);
 }
 
 DECLARE_RTFEXPORT_TEST(testN818997, "n818997.rtf")
@@ -146,7 +146,7 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_inlineAfterPgBreak2, "tdf153613_inlineAfter
 DECLARE_RTFEXPORT_TEST(testFdo64671, "fdo64671.rtf")
 {
     // Additional '}' was inserted before the special character.
-    getRun(getParagraph(1), 1, OUString(u"\u017D"));
+    getRun(getParagraph(1), 1, u"\u017D"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo62044)
@@ -283,7 +283,7 @@ DECLARE_RTFEXPORT_TEST(testFdo77996, "fdo77996.rtf")
     uno::Reference<document::XDocumentProperties> xProps(
         xDocumentPropertiesSupplier->getDocumentProperties());
     CPPUNIT_ASSERT_EQUAL(OUString("Aln Lin (Bei Jing)"), xProps->getAuthor());
-    OUString aTitle(u"\u53A6\u95E8\u94A8\u4E1A\u80A1\u4EFD\u6709\u9650\u516C\u53F8");
+    OUString aTitle(u"\u53A6\u95E8\u94A8\u4E1A\u80A1\u4EFD\u6709\u9650\u516C\u53F8"_ustr);
     CPPUNIT_ASSERT_EQUAL(aTitle, xProps->getTitle());
     uno::Reference<beans::XPropertySet> xUDProps(xProps->getUserDefinedProperties(),
                                                  uno::UNO_QUERY);
@@ -356,7 +356,7 @@ DECLARE_RTFEXPORT_TEST(testFdo44715, "fdo44715.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo68076, "fdo68076.rtf")
 {
     // Encoding of the last char was wrong (more 'o' than 'y').
-    getParagraph(1, u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443");
+    getParagraph(1, u"\u041E\u0431\u044A\u0435\u043A\u0442 \u2013 \u0443"_ustr);
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo70221, "fdo70221.rtf")
@@ -615,13 +615,14 @@ DECLARE_RTFEXPORT_TEST(testDprectAnchor, "dprect-anchor.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo76628, "fdo76628.rtf")
 {
     // Should be 'SAMPLE' in Russian, was garbage.
-    getParagraph(1, u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426");
+    getParagraph(1, u"\u041E\u0411\u0420\u0410\u0417\u0415\u0426"_ustr);
 
     uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     // Should be 'prepared' in Russian, was garbage.
-    getParagraphOfText(1, xHeaderText,
-                       u"\u041F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u043E");
+    getParagraphOfText(
+        1, xHeaderText,
+        u"\u041F\u043E\u0434\u0433\u043E\u0442\u043E\u0432\u043B\u0435\u043D\u043E"_ustr);
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo77267, "fdo77267.rtf")

@@ -154,7 +154,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     SwDoc* pDoc = getSwDoc();
     sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
     //Getting some paragraph style
-    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(u"Body Text");
+    SwTextFormatColl* pTextFormat = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
     const SwAttrSet& rAttrSet = pTextFormat->GetAttrSet();
     std::unique_ptr<SfxItemSet> pNewSet = rAttrSet.Clone();
     sal_uInt16 initialCount = pNewSet->Count();
@@ -175,7 +175,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     //Setting the updated item set on the style
     pDoc->ChgFormat(*pTextFormat, *pNewSet);
     //Checking the Changes
-    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(u"Body Text");
+    SwTextFormatColl* pTextFormat2 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
     const SwAttrSet& rAttrSet2 = pTextFormat2->GetAttrSet();
     const SvxAdjustItem& rAdjustItem2 = rAttrSet2.GetAdjust();
     SvxAdjust Adjust2 = rAdjustItem2.GetAdjust();
@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust2);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(u"Body Text");
+    SwTextFormatColl* pTextFormat3 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
     const SwAttrSet& rAttrSet3 = pTextFormat3->GetAttrSet();
     const SvxAdjustItem& rAdjustItem3 = rAttrSet3.GetAdjust();
     SvxAdjust Adjust3 = rAdjustItem3.GetAdjust();
@@ -191,7 +191,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Left, Adjust3);
     //Redo the changes
     rUndoManager.Redo();
-    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(u"Body Text");
+    SwTextFormatColl* pTextFormat4 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
     const SwAttrSet& rAttrSet4 = pTextFormat4->GetAttrSet();
     const SvxAdjustItem& rAdjustItem4 = rAttrSet4.GetAdjust();
     SvxAdjust Adjust4 = rAdjustItem4.GetAdjust();
@@ -199,7 +199,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf79236)
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Right, Adjust4);
     //Undo the changes
     rUndoManager.Undo();
-    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(u"Body Text");
+    SwTextFormatColl* pTextFormat5 = pDoc->FindTextFormatCollByName(u"Body Text"_ustr);
     const SwAttrSet& rAttrSet5 = pTextFormat5->GetAttrSet();
     const SvxAdjustItem& rAdjustItem5 = rAttrSet5.GetAdjust();
     SvxAdjust Adjust5 = rAdjustItem5.GetAdjust();
@@ -2076,7 +2076,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf86639)
     createSwDoc("tdf86639.rtf");
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(u"Heading");
+    SwTextFormatColl* pColl = pDoc->FindTextFormatCollByName(u"Heading"_ustr);
     pWrtShell->SetTextFormatColl(pColl);
     OUString aExpected = pColl->GetAttrSet().GetFont().GetFamilyName();
     // This was Calibri, should be Liberation Sans.
@@ -2414,8 +2414,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89954)
     SwNodeIndex aNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
     // Placeholder character for the comment anchor was ^A (CH_TXTATR_BREAKWORD), not <fff9> (CH_TXTATR_INWORD).
     // As a result, autocorrect did not turn the 't' input into 'T'.
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Tes\uFFF9t. Test."),
-                         aNodeIndex.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Tes\uFFF9t. Test."_ustr, aNodeIndex.GetNode().GetTextNode()->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf89720)

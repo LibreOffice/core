@@ -881,10 +881,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf123202)
     createScDoc();
     ScDocument* pDoc = getScDoc();
 
-    insertStringToCell(u"A1", u"1");
-    insertStringToCell(u"A2", u"2");
-    insertStringToCell(u"A3", u"3");
-    insertStringToCell(u"A4", u"4");
+    insertStringToCell(u"A1"_ustr, u"1");
+    insertStringToCell(u"A2"_ustr, u"2");
+    insertStringToCell(u"A3"_ustr, u"3");
+    insertStringToCell(u"A4"_ustr, u"4");
 
     goToCell("A3");
 

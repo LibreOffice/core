@@ -1481,7 +1481,7 @@ void DocxExport::WriteTheme()
     m_rFilter.addRelation(m_pDocumentFS->getOutputStream(), oox::getRelationship(Relationship::THEME), u"theme/theme1.xml" );
 
     oox::ThemeExport aThemeExport(&m_rFilter, oox::drawingml::DOCUMENT_DOCX);
-    aThemeExport.write(u"word/theme/theme1.xml", *pTheme);
+    aThemeExport.write(u"word/theme/theme1.xml"_ustr, *pTheme);
 }
 
 // See OOXMLDocumentImpl::resolveGlossaryStream

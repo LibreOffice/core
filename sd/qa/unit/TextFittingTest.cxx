@@ -50,9 +50,9 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
     {
         OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
         const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
-        CPPUNIT_ASSERT_EQUAL(OUString(u"D1"), aEdit.GetText(0));
-        CPPUNIT_ASSERT_EQUAL(OUString(u"D2"), aEdit.GetText(1));
-        CPPUNIT_ASSERT_EQUAL(OUString(u"D3"), aEdit.GetText(2));
+        CPPUNIT_ASSERT_EQUAL(u"D1"_ustr, aEdit.GetText(0));
+        CPPUNIT_ASSERT_EQUAL(u"D2"_ustr, aEdit.GetText(1));
+        CPPUNIT_ASSERT_EQUAL(u"D3"_ustr, aEdit.GetText(2));
     }
 
     sd::ViewShell* pViewShell1 = pXImpressDocument->GetDocShell()->GetViewShell();
@@ -70,7 +70,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
 
     // Add paragraph 4
     rEditView.SetSelection(ESelection(3, 0, 3, 0));
-    rEditView.InsertText(u"\nD4");
+    rEditView.InsertText(u"\nD4"_ustr);
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), pEditEngine->GetParagraphCount());
 
@@ -79,7 +79,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
 
     // Add paragraph 5
     rEditView.SetSelection(ESelection(4, 0, 4, 0));
-    rEditView.InsertText(u"\nD5");
+    rEditView.InsertText(u"\nD5"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pEditEngine->GetParagraphCount());
 
     CPPUNIT_ASSERT_DOUBLES_EQUAL(54.68, pEditEngine->getGlobalFontScale().getY(), 1E-2);
@@ -87,7 +87,7 @@ CPPUNIT_TEST_FIXTURE(TextFittingTest, testTest)
 
     // Add paragraph 6
     rEditView.SetSelection(ESelection(5, 0, 5, 0));
-    rEditView.InsertText(u"\nD6");
+    rEditView.InsertText(u"\nD6"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), pEditEngine->GetParagraphCount());
 
     // Delete paragraph 6

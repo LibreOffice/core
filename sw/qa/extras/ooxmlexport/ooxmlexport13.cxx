@@ -1171,7 +1171,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf118169, "tdf118169.docx")
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, bool(xServiceInfo->supportsService("com.sun.star.form.component.CheckBox")));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"őőőőőőőőőőőűűűű"), getProperty<OUString>(xPropertySet, "Label"));
+    CPPUNIT_ASSERT_EQUAL(u"őőőőőőőőőőőűűűű"_ustr, getProperty<OUString>(xPropertySet, "Label"));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127116)

@@ -1755,7 +1755,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         aValue.bIsVisible = true;
         aValue.nColor = aDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Dark");
+        aColorConfig.AddScheme(u"Dark"_ustr);
     }
     // Add a minimal light scheme
     {
@@ -1764,7 +1764,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testThemeViewSeparation)
         aValue.bIsVisible = true;
         aValue.nColor = COL_WHITE;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Light");
+        aColorConfig.AddScheme(u"Light"_ustr);
     }
     SwXTextDocument* pXTextDocument = createDoc();
     int nFirstViewId = SfxLokHelper::getView();

@@ -1490,7 +1490,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 {
                     if ( !lcl_HasListStyle( sStyleName,
                                     m_xImpl->m_xParaStyles, GetXMLImport(),
-                                    u"NumberingStyleName",
+                                    u"NumberingStyleName"_ustr,
                                     u"" ) )
                     {
                         // heading not in a list --> apply outline style

@@ -694,13 +694,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf119200)
     createSwDoc("tdf119200.docx");
     auto xPara = getParagraph(1);
     // Check that we import MathType functional symbols as symbols, not functions with missing args
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2208 } {}"), getFormula(getRun(xPara, 1)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2209 } {}"), getFormula(getRun(xPara, 2)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2282 } {}"), getFormula(getRun(xPara, 3)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2283 } {}"), getFormula(getRun(xPara, 4)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2284 } {}"), getFormula(getRun(xPara, 5)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2286 } {}"), getFormula(getRun(xPara, 6)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u" size 12{ func \u2287 } {}"), getFormula(getRun(xPara, 7)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2208 } {}"_ustr, getFormula(getRun(xPara, 1)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2209 } {}"_ustr, getFormula(getRun(xPara, 2)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2282 } {}"_ustr, getFormula(getRun(xPara, 3)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2283 } {}"_ustr, getFormula(getRun(xPara, 4)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2284 } {}"_ustr, getFormula(getRun(xPara, 5)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2286 } {}"_ustr, getFormula(getRun(xPara, 6)));
+    CPPUNIT_ASSERT_EQUAL(u" size 12{ func \u2287 } {}"_ustr, getFormula(getRun(xPara, 7)));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf115094)

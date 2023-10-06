@@ -416,7 +416,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFormulaNumberWithGroupSeparator)
     CPPUNIT_ASSERT_EQUAL(OUString("5000*10%"), pField->GetFormula());
     CPPUNIT_ASSERT_EQUAL(OUString("500"), pField->ExpandField(true, nullptr));
     pWrtShell->Down(false);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"-100,00 €"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"-100,00 €"_ustr, pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
     pWrtShell->GoNextCell();
     // tdf#42518 the problem was that this was 1.900,00 €
     CPPUNIT_ASSERT_EQUAL(OUString("** Expression is faulty **"), pWrtShell->GetCursor()->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
@@ -557,7 +557,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
     SwDoc* pDoc = getSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    pWrtShell->Insert(u"él");
+    pWrtShell->Insert(u"él"_ustr);
 
     // hide and enable
     dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
@@ -572,21 +572,21 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf147220)
     pWrtShell->GoEndSentence();
 
     // this did not remove the original text from the layout
-    pWrtShell->Replace(u"Él", false);
+    pWrtShell->Replace(u"Él"_ustr, false);
 
     // currently the deleted text is before the replacement text, not sure if
     // that is really required
-    CPPUNIT_ASSERT_EQUAL(OUString(u"élÉl"),
+    CPPUNIT_ASSERT_EQUAL(u"élÉl"_ustr,
         pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Él"),
+    CPPUNIT_ASSERT_EQUAL(u"Él"_ustr,
         static_cast<SwTextFrame const*>(pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->getLayoutFrame(nullptr))->GetText());
 
     SwRedlineTable const& rRedlines(pDoc->getIDocumentRedlineAccess().GetRedlineTable());
     CPPUNIT_ASSERT_EQUAL(SwRedlineTable::size_type(2), rRedlines.size());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Delete, rRedlines[0]->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"él"), rRedlines[0]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"él"_ustr, rRedlines[0]->GetText());
     CPPUNIT_ASSERT_EQUAL(RedlineType::Insert, rRedlines[1]->GetType());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Él"), rRedlines[1]->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"Él"_ustr, rRedlines[1]->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)

@@ -21,7 +21,7 @@ class SmMlElement final : public SmRect
 public:
     SmMlElement()
         : m_aElementType(SmMlElementType::NMlEmpty)
-        , m_aText(u"")
+        , m_aText(u""_ustr)
         , m_aESelection(0, 0, 0, 0)
         , m_aAttributeList(0)
         , m_aAttributePosList(0)
@@ -36,7 +36,7 @@ public:
 public:
     SmMlElement(SmMlElementType aElementType)
         : m_aElementType(aElementType)
-        , m_aText(u"\u00B6")
+        , m_aText(u"\u00B6"_ustr)
         , m_aESelection(0, 0, 0, 0)
         , m_aSubElements(0)
         , m_aParentElement(nullptr)

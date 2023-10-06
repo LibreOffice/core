@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_OldToNew)
     // The old properties need to be still available, as they might be used in macros.
     OUString sGradientName;
     xShapeProperties->getPropertyValue("FillGradientName") >>= sGradientName;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"red2yellow"), sGradientName);
+    CPPUNIT_ASSERT_EQUAL(u"red2yellow"_ustr, sGradientName);
     awt::Gradient2 aGradient;
     xShapeProperties->getPropertyValue("FillGradient") >>= aGradient;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);
@@ -488,7 +488,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testMCGR_threeStops)
     // The old properties need to be still available, as they might be used in macros.
     OUString sGradientName;
     xShapeProperties->getPropertyValue("FillGradientName") >>= sGradientName;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"threeStops"), sGradientName);
+    CPPUNIT_ASSERT_EQUAL(u"threeStops"_ustr, sGradientName);
     awt::Gradient2 aGradient;
     xShapeProperties->getPropertyValue("FillGradient") >>= aGradient;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xFF0000), aGradient.StartColor);

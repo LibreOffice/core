@@ -39,7 +39,7 @@ inline OUString GetUnitString(tools::Long nVal_100, FieldUnit eFieldUnit, sal_Un
         aVal.append(" ");
     if (eFieldUnit == FieldUnit::INCH)
     {
-        OUString sDoublePrime = u"\u2033";
+        OUString sDoublePrime = u"\u2033"_ustr;
         if (aSuffix != "\"" && aSuffix != sDoublePrime)
             aVal.append(" ");
         else

@@ -1581,7 +1581,7 @@ const OUString & LanguageTagImpl::getBcp47() const
 
 const OUString & LanguageTag::getBcp47( bool bResolveSystem ) const
 {
-    static const OUString theEmptyBcp47 = u"";
+    static const OUString theEmptyBcp47 = u""_ustr;
 
     if (!bResolveSystem && mbSystemLocale)
         return theEmptyBcp47;

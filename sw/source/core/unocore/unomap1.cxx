@@ -433,7 +433,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetFrameStyl
         { UNO_NAME_ALLOW_OVERLAP, RES_WRAP_INFLUENCE_ON_OBJPOS, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_ALLOW_OVERLAP},
         { UNO_NAME_WRITING_MODE, RES_FRAMEDIR, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_HIDDEN, FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
-        { u"Decorative", RES_DECORATIVE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"Decorative"_ustr, RES_DECORATIVE, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
         { UNO_NAME_TEXT_VERT_ADJUST, RES_TEXT_VERT_ADJUST, cppu::UnoType<css::drawing::TextVerticalAdjust>::get(), PROPERTY_NONE ,0},
 
         // added FillProperties for SW, same as FILL_PROPERTIES in svx
@@ -586,8 +586,8 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPageStyle
         // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
         // This entry is for adding that properties to style import/export
         FILL_PROPERTIES_SW
-        { u"BackgroundFullSize", RES_BACKGROUND_FULL_SIZE,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
-        { u"RtlGutter", RES_RTL_GUTTER, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"BackgroundFullSize"_ustr, RES_BACKGROUND_FULL_SIZE,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"RtlGutter"_ustr, RES_RTL_GUTTER, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
 
         // Added DrawingLayer FillStyle Properties for Header. These need an own unique name,
         // but reuse the same WhichIDs as the regular fill. The implementation will decide to which

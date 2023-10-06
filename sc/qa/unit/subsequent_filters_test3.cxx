@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf60673)
     // Without the fix in place, this test would have failed with
     // - Expected: PL: ĄŚŻŹĆŃŁÓĘ
     // - Actual  : PL:
-    CPPUNIT_ASSERT_EQUAL(OUString(u"PL: ĄŚŻŹĆŃŁÓĘ"), sLabel);
+    CPPUNIT_ASSERT_EQUAL(u"PL: ĄŚŻŹĆŃŁÓĘ"_ustr, sLabel);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testtdf120301_xmlSpaceParsingXLSX)
@@ -519,7 +519,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf70455)
     // Without the fix in place, this test would have failed with
     // - Expected: €780.00
     // - Actual  : Err:509
-    CPPUNIT_ASSERT_EQUAL(OUString(u"€780.00"), pDoc->GetString(ScAddress(7, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"€780.00"_ustr, pDoc->GetString(ScAddress(7, 7, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf62268)
@@ -571,7 +571,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf72470)
     ScDocument* pDoc = getScDoc();
 
     CPPUNIT_ASSERT_EQUAL(OUString("name"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"أسمي walid"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"أسمي walid"_ustr, pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf35636)
@@ -995,13 +995,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf129940)
     ScDocument* pDoc = getScDoc();
     // Pure text within text:ruby-base
     OUString aStr = pDoc->GetString(ScAddress(0, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"小笠原"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"小笠原"_ustr, aStr);
     aStr = pDoc->GetString(ScAddress(1, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"徳彦"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"徳彦"_ustr, aStr);
 
     // Multiple text:span within text:ruby-base
     aStr = pDoc->GetString(ScAddress(2, 0, 0));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
+    CPPUNIT_ASSERT_EQUAL(u"注音符號"_ustr, aStr);
 }
 
 CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf119190)
@@ -1149,32 +1149,32 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"sheetjs"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"sheetjs"_ustr, pDoc->GetString(aPos));
 
     // Row 3
     aPos = ScAddress(0, 2, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"foo    bar"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"foo    bar"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"baz"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(41689.4375, pDoc->GetValue(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"0.3"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"0.3"_ustr, pDoc->GetString(aPos));
 
     // Row 4
     aPos = ScAddress(0, 3, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"baz"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"baz"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"_"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"_"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(3.14159, pDoc->GetValue(aPos));
@@ -1182,7 +1182,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
     // Row 5
     aPos = ScAddress(0, 4, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"hidden"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"hidden"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));
@@ -1196,7 +1196,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testInvalidBareBiff5)
     // Row 6
     aPos = ScAddress(0, 5, 0);
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, pDoc->GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"visible"), pDoc->GetString(aPos));
+    CPPUNIT_ASSERT_EQUAL(u"visible"_ustr, pDoc->GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, pDoc->GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString(), pDoc->GetString(aPos));

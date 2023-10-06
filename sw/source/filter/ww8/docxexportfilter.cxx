@@ -79,7 +79,7 @@ bool DocxExportFilter::exportDocument()
             {
                 uno::Reference<embed::XStorage> xDocumentStorage =
                     xStorageBasedDocument->getDocumentStorage();
-                if (xDocumentStorage.is() && xDocumentStorage->hasByName(u"_MS_VBA_Macros"))
+                if (xDocumentStorage.is() && xDocumentStorage->hasByName(u"_MS_VBA_Macros"_ustr))
                 {
                     // Let user know that macros won't be saved in this format
                     std::unique_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(

@@ -19,23 +19,23 @@ using namespace accessibility;
 // Checks fetching multi-unit characters
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSP)
 {
-    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf");
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf"_ustr);
 
     auto xContext = getDocumentAccessibleContext()->getAccessibleChild(0)->getAccessibleContext();
 
     uno::Reference<XAccessibleText> para(xContext, uno::UNO_QUERY_THROW);
     auto segment = para->getTextAtIndex(0, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001f0a1"), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u"\U0001f0a1"_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), segment.SegmentEnd);
 
     segment = para->getTextBeforeIndex(2, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001f0a1"), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u"\U0001f0a1"_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), segment.SegmentEnd);
 
     segment = para->getTextBehindIndex(0, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001f0ae"), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u"\U0001f0ae"_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), segment.SegmentEnd);
 }
@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSP)
 // Checks getTextBehindIndex() with multi-unit characters
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSPBehindIndex)
 {
-    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf");
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/unicode.fodf"_ustr);
 
     auto xContext = getDocumentAccessibleContext()->getAccessibleChild(0)->getAccessibleContext();
 
@@ -57,17 +57,17 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSPBehindIndex)
                          lang::IndexOutOfBoundsException);
 
     auto segment = para->getTextBehindIndex(nChCount, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentEnd);
 
     segment = para->getTextBehindIndex(nChCount - 2, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentEnd);
 
     segment = para->getTextBehindIndex(nChCount - 4, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001f0ab"), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u"\U0001f0ab"_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(6), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), segment.SegmentEnd);
 
@@ -84,17 +84,17 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestUnicodeSPBehindIndex)
                          lang::IndexOutOfBoundsException);
 
     segment = para->getTextBehindIndex(nChCount, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentEnd);
 
     segment = para->getTextBehindIndex(nChCount - 1, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), segment.SegmentEnd);
 
     segment = para->getTextBehindIndex(nChCount - 2, AccessibleTextType::CHARACTER);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"j"), segment.SegmentText);
+    CPPUNIT_ASSERT_EQUAL(u"j"_ustr, segment.SegmentText);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), segment.SegmentStart);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), segment.SegmentEnd);
 }

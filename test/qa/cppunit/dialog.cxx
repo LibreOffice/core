@@ -16,7 +16,7 @@
  * otherwise block the test potentially indefinitely */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"This Dialog Does Not Exist", [](Dialog&) {
         CPPUNIT_ASSERT_MESSAGE("This code should not be reached", false);
@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestIncorrectDialog)
  * subsequent tests if caught -- especially that DialogWaiter::waitEndDialog() won't timeout. */
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestThrowInDialogCallback)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     class DummyException : public std::exception
     {
@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestThrowInDialogCallback)
 // Checks timeout if dialog does not show up as expected
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, SelfTestNoDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"This Dialog Did Not Show Up", [](Dialog&) {
         CPPUNIT_ASSERT_MESSAGE("This code should not be reached", false);

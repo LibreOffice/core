@@ -183,7 +183,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDocxSymbolFontExport)
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
 
-    xText->insertString(xCursor, u"", true);
+    xText->insertString(xCursor, u""_ustr, true);
 
     uno::Reference<text::XTextRange> xRange = xCursor;
     uno::Reference<beans::XPropertySet> xTextProps(xRange, uno::UNO_QUERY);

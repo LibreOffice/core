@@ -719,7 +719,7 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
                                 {
                                     tempStr = ::comphelper::string::reverseCodePoints(tempStr);
                                     pCur->Text.append(tempStr);
-                                    tempStr = u"";
+                                    tempStr = u""_ustr;
                                 }
                                 bNeedReverse = false;
                             }

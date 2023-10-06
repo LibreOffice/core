@@ -53,7 +53,7 @@ static inline void lcl_force_menubar_layout_update(QMenuBar& rMenuBar)
     rMenuBar.adjustSize();
 }
 
-OUString QtMenu::m_sCurrentHelpId = u"";
+OUString QtMenu::m_sCurrentHelpId = u""_ustr;
 
 QtMenu::QtMenu(bool bMenuBar)
     : mpVCLMenu(nullptr)

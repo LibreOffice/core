@@ -294,7 +294,7 @@ void TestTextSearch::testWildcardSearch()
 void TestTextSearch::testApostropheSearch()
 {
     // A) find typographic apostrophes also by using ASCII apostrophe in searchString
-    OUString str( u"It\u2019s an apostrophe." );
+    OUString str( u"It\u2019s an apostrophe."_ustr );
     sal_Int32 startPos = 0, endPos = str.getLength();
 
     // set options
@@ -355,7 +355,7 @@ void TestTextSearch::testApostropheSearch()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
 
     // C) search typographic apostrophe in a text with ASCII apostrophes (no result)
-    aOptions.searchString = OUString(u"\u2019");
+    aOptions.searchString = u"\u2019"_ustr;
     m_xSearch->setOptions( aOptions );
 
     aRes = m_xSearch->searchForward( str, startPos, endPos );
@@ -380,9 +380,9 @@ void TestTextSearch::testApostropheSearch()
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(2), aRes.endOffset[0] );
 
     // E) search mixed apostrophes in a text with mixed apostrophes:
-    aOptions.searchString = OUString(u"'\u2019");
+    aOptions.searchString = u"'\u2019"_ustr;
     m_xSearch->setOptions( aOptions );
-    str = u"test: \u2019'";
+    str = u"test: \u2019'"_ustr;
 
     // search forward
     aRes = m_xSearch->searchForward( str, startPos, str.getLength());
@@ -393,7 +393,7 @@ void TestTextSearch::testApostropheSearch()
     CPPUNIT_ASSERT( aRes.subRegExpressions > 0 );
 
     // F) search mixed apostrophes in a text with ASCII apostrophes:
-    str = u"test: ''";
+    str = u"test: ''"_ustr;
 
     // search forward
     aRes = m_xSearch->searchForward( str, startPos, str.getLength());
@@ -406,7 +406,7 @@ void TestTextSearch::testApostropheSearch()
 
 void TestTextSearch::testTdf138410()
 {
-    OUString str(u"\u0643\u064f\u062a\u064f\u0628 \u0643\u062a\u0628");
+    OUString str(u"\u0643\u064f\u062a\u064f\u0628 \u0643\u062a\u0628"_ustr);
     sal_Int32 startPos = 0, endPos = str.getLength();
 
     util::SearchOptions aOptions;
@@ -419,7 +419,7 @@ void TestTextSearch::testTdf138410()
     // text or not, and whether IGNORE_DIACRITICS_CTL is set or not.
 
     // set options
-    aOptions.searchString = u"\u0643";
+    aOptions.searchString = u"\u0643"_ustr;
     aOptions.transliterateFlags = 0;
     m_xSearch->setOptions(aOptions);
 
@@ -457,7 +457,7 @@ void TestTextSearch::testTdf138410()
     // not.
 
     // set options
-    aOptions.searchString = u"\u0643\u064f";
+    aOptions.searchString = u"\u0643\u064f"_ustr;
     aOptions.transliterateFlags = 0;
     m_xSearch->setOptions(aOptions);
 
@@ -494,7 +494,7 @@ void TestTextSearch::testTdf138410()
     // set.
 
     // set options
-    aOptions.searchString = u"\u064f";
+    aOptions.searchString = u"\u064f"_ustr;
     aOptions.transliterateFlags = 0;
     m_xSearch->setOptions(aOptions);
 

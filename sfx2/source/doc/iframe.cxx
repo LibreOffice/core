@@ -137,14 +137,14 @@ o3tl::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
 {
     static const SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
     {
-        { u"FrameIsAutoBorder",    WID_FRAME_IS_AUTO_BORDER,   cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameIsAutoScroll",    WID_FRAME_IS_AUTO_SCROLL,   cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameIsBorder",        WID_FRAME_IS_BORDER,        cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameIsScrollingMode", WID_FRAME_IS_SCROLLING_MODE,cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameMarginHeight",    WID_FRAME_MARGIN_HEIGHT,    cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameMarginWidth",     WID_FRAME_MARGIN_WIDTH,     cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameName",            WID_FRAME_NAME,             cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
-        { u"FrameURL",             WID_FRAME_URL,              cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameIsAutoBorder"_ustr,    WID_FRAME_IS_AUTO_BORDER,   cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameIsAutoScroll"_ustr,    WID_FRAME_IS_AUTO_SCROLL,   cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameIsBorder"_ustr,        WID_FRAME_IS_BORDER,        cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameIsScrollingMode"_ustr, WID_FRAME_IS_SCROLLING_MODE,cppu::UnoType<bool>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameMarginHeight"_ustr,    WID_FRAME_MARGIN_HEIGHT,    cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameMarginWidth"_ustr,     WID_FRAME_MARGIN_WIDTH,     cppu::UnoType<sal_Int32>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameName"_ustr,            WID_FRAME_NAME,             cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
+        { u"FrameURL"_ustr,             WID_FRAME_URL,              cppu::UnoType<OUString>::get(), PROPERTY_UNBOUND, 0 },
     };
     return aIFramePropertyMap_Impl;
 }

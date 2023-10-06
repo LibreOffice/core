@@ -18,7 +18,7 @@ using namespace css;
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestBasicStructure)
 {
-    loadFromSrc(u"/sw/qa/python/testdocuments/xtextcontent.odt");
+    loadFromSrc(u"/sw/qa/python/testdocuments/xtextcontent.odt"_ustr);
     auto xContext = getDocumentAccessibleContext();
     CPPUNIT_ASSERT(xContext.is());
 
@@ -38,7 +38,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestBasicStructure)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeSimple)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
     auto xContext = getDocumentAccessibleContext();
     CPPUNIT_ASSERT(xContext.is());
 
@@ -54,7 +54,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeSimple)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeMultiPara)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
     auto xContext = getDocumentAccessibleContext();
     CPPUNIT_ASSERT(xContext.is());
 
@@ -72,14 +72,14 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestTypeMultiPara)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageNumber)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<PARAGRAPH>1</PARAGRAPH>"), collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestMenuInsertPageBreak)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Field", u"Page Number"));
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Page Break"));

@@ -1292,12 +1292,12 @@ void OOXMLFastContextHandlerValue::pushBiDiEmbedLevel()
 {
     const bool bRtl
         = mpValue && mpValue->getInt() == NS_ooxml::LN_Value_ST_Direction_rtl;
-    OOXMLFactory::characters(this, bRtl ? OUString(u"\u202B") : OUString(u"\u202A")); // RLE / LRE
+    OOXMLFactory::characters(this, bRtl ? u"\u202B"_ustr : u"\u202A"_ustr); // RLE / LRE
 }
 
 void OOXMLFastContextHandlerValue::popBiDiEmbedLevel()
 {
-    OOXMLFactory::characters(this, u"\u202C"); // PDF (POP DIRECTIONAL FORMATTING)
+    OOXMLFactory::characters(this, u"\u202C"_ustr); // PDF (POP DIRECTIONAL FORMATTING)
 }
 
 void OOXMLFastContextHandlerValue::handleGridAfter()

@@ -109,7 +109,7 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     // (used from LibreOffice 6.1, and proposed for next ODF)
     OUString const aFieldTexts[] = { "A 2", "Az Isten", "Az 50-esek",
         "A 2018-asok", "Az egyebek", "A fejezetek",
-        u"Az „Őseinket...”", "a 2",
+        u"Az „Őseinket...”"_ustr, "a 2",
         "Az v", "az 1", "Az e)", "az 1",
         "Az (5)", "az 1", "A 2", "az 1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -219,7 +219,7 @@ DECLARE_ODFEXPORT_TEST(testSpellOutNumberingTypes, "spellout-numberingtypes.odt"
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // ordinal indicator, ordinal and cardinal number numbering styles (from LibreOffice 6.1)
-    OUString const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", u"1ᵉʳ", "First", "One" };
+    OUString const aFieldTexts[] = { "1st", "Erste", "Eins",  "1.", "Premier", "Un", u"1ᵉʳ"_ustr, "First", "One" };
     // fallback for old platforms without std::codecvt and std::regex supports
     OUString const aFieldTextFallbacks[] = { "Ordinal-number 1", "Ordinal 1", "1" };
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
@@ -572,7 +572,7 @@ DECLARE_ODFEXPORT_TEST(testTdf52065_centerTabs, "testTdf52065_centerTabs.odt")
     // Without the fix, the text was unseen, with a tabstop width of 64057. It should be 3057
     CPPUNIT_ASSERT(nTabStop < 4000);
     CPPUNIT_ASSERT(3000 < nTabStop);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Pečiatka zamestnávateľa"), parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]", "portion"));
+    CPPUNIT_ASSERT_EQUAL(u"Pečiatka zamestnávateľa"_ustr, parseDump("//body/txt[4]/SwParaPortion/SwLineLayout/child::*[4]", "portion"));
 
     // tdf#149547: __XXX___invalid CharacterStyles should not be imported/exported
     CPPUNIT_ASSERT(!getStyles("CharacterStyles")->hasByName("__XXX___invalid"));

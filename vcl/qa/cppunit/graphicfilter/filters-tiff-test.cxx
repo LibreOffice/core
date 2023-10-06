@@ -235,7 +235,7 @@ void TiffFilterTest::testRoundtrip()
 
     CPPUNIT_ASSERT_EQUAL(true, aDetector.detect());
     CPPUNIT_ASSERT_EQUAL(true, aDetector.checkTIF());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"TIF"),
+    CPPUNIT_ASSERT_EQUAL(u"TIF"_ustr,
                          vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 }
 

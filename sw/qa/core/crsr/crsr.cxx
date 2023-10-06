@@ -48,7 +48,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
     xText->insertString(xText->getEnd(), "foo xxx", /*bAbsorb=*/false);
     xText->insertControlCharacter(xText->getEnd(), text::ControlCharacter::PARAGRAPH_BREAK,
                                   /*bAbsorb=*/false);
-    xText->insertString(xText->getEnd(), OUString(u"foo xxx \xad after"), /*bAbsorb=*/false);
+    xText->insertString(xText->getEnd(), u"foo xxx \xad after"_ustr, /*bAbsorb=*/false);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
         xModel->getCurrentController(), uno::UNO_QUERY);
@@ -150,7 +150,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testContentControlReadOnly)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, u"☐", /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"☐"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(

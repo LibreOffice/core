@@ -160,12 +160,12 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     static constexpr OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
     static constexpr OUStringLiteral sPresetTextWarp(u"PresetTextWarp");
 
-    resetPropertyValueInVec(aGeomPropVec, u"CoordinateSize");
-    resetPropertyValueInVec(aGeomPropVec, u"Equations");
-    resetPropertyValueInVec(aGeomPropVec, u"Path");
+    resetPropertyValueInVec(aGeomPropVec, u"CoordinateSize"_ustr);
+    resetPropertyValueInVec(aGeomPropVec, u"Equations"_ustr);
+    resetPropertyValueInVec(aGeomPropVec, u"Path"_ustr);
     resetPropertyValueInVec(aGeomPropVec, sAdjustmentValues);
-    resetPropertyValueInVec(aGeomPropVec, u"ViewBox");
-    resetPropertyValueInVec(aGeomPropVec, u"Handles");
+    resetPropertyValueInVec(aGeomPropVec, u"ViewBox"_ustr);
+    resetPropertyValueInVec(aGeomPropVec, u"Handles"_ustr);
     resetPropertyValueInVec(aGeomPropVec, sTextPath);
     resetPropertyValueInVec(aGeomPropVec, sPresetTextWarp);
 
@@ -191,7 +191,7 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
         aGeomPropVec.push_back(comphelper::makePropertyValue(sAdjustmentValues, aAdjustment));
     }
 
-    xSet->setPropertyValue(u"CustomShapeGeometry",
+    xSet->setPropertyValue(u"CustomShapeGeometry"_ustr,
                            uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 }
 
@@ -853,8 +853,8 @@ void FontworkHelpers::collectCharColorProps(const uno::Reference<text::XText>& r
 
             // We have found a non-empty run. Collect its simple color properties.
             const std::array<OUString, 6> aNamesArray
-                = { u"CharColor",      u"CharLumMod",       u"CharLumOff",
-                    u"CharColorTheme", u"CharComplexColor", u"CharTransparence" };
+                = { u"CharColor"_ustr,      u"CharLumMod"_ustr,       u"CharLumOff"_ustr,
+                    u"CharColorTheme"_ustr, u"CharComplexColor"_ustr, u"CharTransparence"_ustr };
             for (const auto& propName : aNamesArray)
             {
                 if (xRunPropSetInfo->hasPropertyByName(propName))
@@ -931,18 +931,18 @@ void FontworkHelpers::createCharFillPropsFromShape(
     // CharColor contains the color including all color transformations
     // FillColor contains darken and lighten but not transparency
     sal_Int32 nColorRGB = 0;
-    if (xPropSetInfo->hasPropertyByName(u"FillColor")
-        && (rXPropSet->getPropertyValue(u"FillColor") >>= nColorRGB))
+    if (xPropSetInfo->hasPropertyByName(u"FillColor"_ustr)
+        && (rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nColorRGB))
     {
         ::Color aColor(ColorTransparency, nColorRGB);
         sal_Int16 nTransPercent = 0;
-        if (xPropSetInfo->hasPropertyByName(u"FillTransparence")
-            && (rXPropSet->getPropertyValue(u"FillTransparence") >>= nTransPercent))
+        if (xPropSetInfo->hasPropertyByName(u"FillTransparence"_ustr)
+            && (rXPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nTransPercent))
         {
             sal_uInt8 nAlpha = 255 - sal_uInt8(std::lround(double(nTransPercent) * 2.55));
             aColor.SetAlpha(nAlpha);
         }
-        rCharPropVec.push_back(comphelper::makePropertyValue(u"CharColor", sal_Int32(aColor)));
+        rCharPropVec.push_back(comphelper::makePropertyValue(u"CharColor"_ustr, sal_Int32(aColor)));
     }
 
     for (size_t i = 0; i < 5; i++)
@@ -984,23 +984,23 @@ bool FontworkHelpers::createPrstDashFromLineDash(const drawing::LineDash& rLineD
 
         bIsConverted = true;
         if (nDotLen == 100 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
-            rsPrstDash = u"dot";
+            rsPrstDash = u"dot"_ustr;
         else if (nDotLen == 400 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
-            rsPrstDash = u"dash";
+            rsPrstDash = u"dash"_ustr;
         else if (nDotLen == 400 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
-            rsPrstDash = u"dashDot";
+            rsPrstDash = u"dashDot"_ustr;
         else if (nDotLen == 800 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 300)
-            rsPrstDash = u"lgDash";
+            rsPrstDash = u"lgDash"_ustr;
         else if (nDotLen == 800 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 300)
-            rsPrstDash = u"lgDashDot";
+            rsPrstDash = u"lgDashDot"_ustr;
         else if (nDotLen == 800 && rLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 300)
-            rsPrstDash = u"lgDashDotDot";
+            rsPrstDash = u"lgDashDotDot"_ustr;
         else if (nDotLen == 100 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
-            rsPrstDash = u"sysDot";
+            rsPrstDash = u"sysDot"_ustr;
         else if (nDotLen == 300 && rLineDash.Dashes == 0 && nDashLen == 0 && nDistance == 100)
-            rsPrstDash = u"sysDash";
+            rsPrstDash = u"sysDash"_ustr;
         else if (nDotLen == 300 && rLineDash.Dashes == 1 && nDashLen == 100 && nDistance == 100)
-            rsPrstDash = u"sysDashDot";
+            rsPrstDash = u"sysDashDot"_ustr;
         else if (nDotLen == 300 && rLineDash.Dashes == 2 && nDashLen == 100 && nDistance == 100)
             rsPrstDash = "sysDashDotDot";
         else
@@ -1139,19 +1139,20 @@ void lcl_getGradientsFromShape(const uno::Reference<beans::XPropertySet>& rXProp
 {
     OUString sColorGradientName;
     rbHasColorGradient
-        = rXPropSetInfo->hasPropertyByName(u"FillGradientName")
-          && (rXPropSet->getPropertyValue(u"FillGradientName") >>= sColorGradientName)
-          && !sColorGradientName.isEmpty() && rXPropSetInfo->hasPropertyByName(u"FillGradient")
-          && (rXPropSet->getPropertyValue(u"FillGradient") >>= rColorGradient);
+        = rXPropSetInfo->hasPropertyByName(u"FillGradientName"_ustr)
+          && (rXPropSet->getPropertyValue(u"FillGradientName"_ustr) >>= sColorGradientName)
+          && !sColorGradientName.isEmpty() && rXPropSetInfo->hasPropertyByName(u"FillGradient"_ustr)
+          && (rXPropSet->getPropertyValue(u"FillGradient"_ustr) >>= rColorGradient);
 
     OUString sTransparenceGradientName;
     rbHasTransparenceGradient
-        = rXPropSetInfo->hasPropertyByName(u"FillTransparenceGradientName")
-          && (rXPropSet->getPropertyValue(u"FillTransparenceGradientName")
+        = rXPropSetInfo->hasPropertyByName(u"FillTransparenceGradientName"_ustr)
+          && (rXPropSet->getPropertyValue(u"FillTransparenceGradientName"_ustr)
               >>= sTransparenceGradientName)
           && !sTransparenceGradientName.isEmpty()
-          && rXPropSetInfo->hasPropertyByName(u"FillTransparenceGradient")
-          && (rXPropSet->getPropertyValue(u"FillTransparenceGradient") >>= rTransparenceGradient);
+          && rXPropSetInfo->hasPropertyByName(u"FillTransparenceGradient"_ustr)
+          && (rXPropSet->getPropertyValue(u"FillTransparenceGradient"_ustr)
+              >>= rTransparenceGradient);
 }
 
 ColorMapType lcl_createColorMapFromShapeProps(
@@ -1185,7 +1186,7 @@ ColorMapType lcl_createColorMapFromShapeProps(
     {
         sal_Int32 nFillColor(0);
         if (rXPropSetInfo->hasPropertyByName("FillColor"))
-            rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
+            rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
         aSingleColor = ::Color(ColorTransparency, nFillColor).getBColor().clamp();
     }
 
@@ -1207,8 +1208,8 @@ ColorMapType lcl_createColorMapFromShapeProps(
     else
     {
         sal_Int16 nAPITrans(0);
-        if (rXPropSetInfo->hasPropertyByName(u"FillTransparence"))
-            rXPropSet->getPropertyValue(u"FillTransparence") >>= nAPITrans;
+        if (rXPropSetInfo->hasPropertyByName(u"FillTransparence"_ustr))
+            rXPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nAPITrans;
         // API transparency is in range 0..100, BColor in range [0.0, 1.0].
         aSingleTrans = basegfx::BColor(nAPITrans * 0.01).clamp();
     }
@@ -1270,16 +1271,16 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // CharTextFillTextEffect
     pGrabBagStack.reset(new oox::GrabBagStack("textFill"));
     drawing::FillStyle eFillStyle = drawing::FillStyle_SOLID;
-    if (xPropSetInfo->hasPropertyByName(u"FillStyle"))
-        rXPropSet->getPropertyValue(u"FillStyle") >>= eFillStyle;
+    if (xPropSetInfo->hasPropertyByName(u"FillStyle"_ustr))
+        rXPropSet->getPropertyValue(u"FillStyle"_ustr) >>= eFillStyle;
 
     // We might have a solid fill but a transparency gradient. That needs to be exported as gradFill
     // too, because Word has transparency not separated but in the color stops in a color gradient.
     // A gradient exists, if the GradientName is not empty.
     OUString sTransparenceGradientName;
     if (eFillStyle == drawing::FillStyle_SOLID
-        && xPropSetInfo->hasPropertyByName(u"FillTransparenceGradientName")
-        && (rXPropSet->getPropertyValue(u"FillTransparenceGradientName")
+        && xPropSetInfo->hasPropertyByName(u"FillTransparenceGradientName"_ustr)
+        && (rXPropSet->getPropertyValue(u"FillTransparenceGradientName"_ustr)
             >>= sTransparenceGradientName)
         && !sTransparenceGradientName.isEmpty())
         eFillStyle = drawing::FillStyle_GRADIENT;
@@ -1408,8 +1409,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             {
                 pGrabBagStack->push("srgbClr");
                 sal_Int32 nFillColor(0);
-                if (xPropSetInfo->hasPropertyByName(u"FillColor"))
-                    rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
+                if (xPropSetInfo->hasPropertyByName(u"FillColor"_ustr))
+                    rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
                 pGrabBagStack->push("attributes");
                 ::Color aColor(ColorTransparency, nFillColor);
                 pGrabBagStack->addString("val", aColor.AsRGBHexString());
@@ -1418,8 +1419,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             }
 
             sal_Int16 nFillTransparence(0);
-            if (xPropSetInfo->hasPropertyByName(u"FillTransparence"))
-                rXPropSet->getPropertyValue(u"FillTransparence") >>= nFillTransparence;
+            if (xPropSetInfo->hasPropertyByName(u"FillTransparence"_ustr))
+                rXPropSet->getPropertyValue(u"FillTransparence"_ustr) >>= nFillTransparence;
             if (nFillTransparence != 0)
             {
                 pGrabBagStack->push("alpha");
@@ -1446,29 +1447,29 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     pGrabBagStack->push("attributes");
     // line width
     sal_Int32 nLineWidth(0);
-    if (xPropSetInfo->hasPropertyByName(u"LineWidth"))
-        rXPropSet->getPropertyValue(u"LineWidth") >>= nLineWidth;
+    if (xPropSetInfo->hasPropertyByName(u"LineWidth"_ustr))
+        rXPropSet->getPropertyValue(u"LineWidth"_ustr) >>= nLineWidth;
     pGrabBagStack->addInt32("w", nLineWidth * 360);
     // cap for dashes
     drawing::LineCap eLineCap = drawing::LineCap_BUTT;
-    if (xPropSetInfo->hasPropertyByName(u"LineCap"))
-        rXPropSet->getPropertyValue(u"LineCap") >>= eLineCap;
-    OUString sCap = u"flat";
+    if (xPropSetInfo->hasPropertyByName(u"LineCap"_ustr))
+        rXPropSet->getPropertyValue(u"LineCap"_ustr) >>= eLineCap;
+    OUString sCap = u"flat"_ustr;
     if (eLineCap == drawing::LineCap_ROUND)
-        sCap = u"rnd";
+        sCap = u"rnd"_ustr;
     else if (eLineCap == drawing::LineCap_SQUARE)
-        sCap = u"sq";
+        sCap = u"sq"_ustr;
     pGrabBagStack->addString("cap", sCap);
     // LO has no compound lines and always centers the lines
-    pGrabBagStack->addString("cmpd", u"sng");
-    pGrabBagStack->addString("alng", u"ctr");
+    pGrabBagStack->addString("cmpd", u"sng"_ustr);
+    pGrabBagStack->addString("alng", u"ctr"_ustr);
     pGrabBagStack->pop();
     // maCurrentElement:'textOutline', maPropertyList:'attributes'
 
     // style
     drawing::LineStyle eLineStyle = drawing::LineStyle_NONE;
-    if (xPropSetInfo->hasPropertyByName(u"LineStyle"))
-        rXPropSet->getPropertyValue(u"LineStyle") >>= eLineStyle;
+    if (xPropSetInfo->hasPropertyByName(u"LineStyle"_ustr))
+        rXPropSet->getPropertyValue(u"LineStyle"_ustr) >>= eLineStyle;
     // 'dashed' is not a separate style in Word. Word has a style 'gradFill', but that is not yet
     // implemented in LO. So only 'noFill' and 'solidFill'.
     if (eLineStyle == drawing::LineStyle_NONE)
@@ -1494,8 +1495,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
             pGrabBagStack->push("srgbClr");
             pGrabBagStack->push("attributes");
             sal_Int32 nLineColor(0);
-            if (xPropSetInfo->hasPropertyByName(u"LineColor"))
-                rXPropSet->getPropertyValue(u"LineColor") >>= nLineColor;
+            if (xPropSetInfo->hasPropertyByName(u"LineColor"_ustr))
+                rXPropSet->getPropertyValue(u"LineColor"_ustr) >>= nLineColor;
             ::Color aColor(ColorTransparency, nLineColor);
             pGrabBagStack->addString("val", aColor.AsRGBHexString());
             pGrabBagStack->pop();
@@ -1503,8 +1504,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
         }
 
         sal_Int16 nLineTransparence(0);
-        if (xPropSetInfo->hasPropertyByName(u"LineTransparence"))
-            rXPropSet->getPropertyValue(u"LineTransparence") >>= nLineTransparence;
+        if (xPropSetInfo->hasPropertyByName(u"LineTransparence"_ustr))
+            rXPropSet->getPropertyValue(u"LineTransparence"_ustr) >>= nLineTransparence;
         if (nLineTransparence != 0)
         {
             pGrabBagStack->push("alpha");
@@ -1523,10 +1524,10 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     if (eLineStyle == drawing::LineStyle_DASH)
     {
         pGrabBagStack->push("prstDash");
-        OUString sPrstDash = u"sysDot";
+        OUString sPrstDash = u"sysDot"_ustr;
         drawing::LineDash aLineDash;
-        if (xPropSetInfo->hasPropertyByName(u"LineDash")
-            && (rXPropSet->getPropertyValue(u"LineDash") >>= aLineDash))
+        if (xPropSetInfo->hasPropertyByName(u"LineDash"_ustr)
+            && (rXPropSet->getPropertyValue(u"LineDash"_ustr) >>= aLineDash))
         {
             // The outline of abc-transform in Word is not able to use custDash. But we know the line
             // is dashed. We keep "sysDot" as fallback in case no prstDash is detected.
@@ -1547,8 +1548,8 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
 
     // LineJoint, can be 'round', 'bevel' or 'miter' in Word
     drawing::LineJoint eLineJoint = drawing::LineJoint_NONE;
-    if (xPropSetInfo->hasPropertyByName(u"LineJoint"))
-        rXPropSet->getPropertyValue(u"LineJoint") >>= eLineJoint;
+    if (xPropSetInfo->hasPropertyByName(u"LineJoint"_ustr))
+        rXPropSet->getPropertyValue(u"LineJoint"_ustr) >>= eLineJoint;
     if (eLineJoint == drawing::LineJoint_NONE || eLineJoint == drawing::LineJoint_BEVEL)
         pGrabBagStack->appendElement("bevel", uno::Any());
     else if (eLineJoint == drawing::LineJoint_ROUND)
@@ -1578,7 +1579,7 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     {
         // CharThemeColor
         beans::PropertyValue aCharThemeColor;
-        aCharThemeColor.Name = u"CharThemeColor";
+        aCharThemeColor.Name = u"CharThemeColor"_ustr;
         aCharThemeColor.Value <<= lcl_getWMarkupStringForThemeColor(aComplexColor);
         rUpdatePropVec.push_back(aCharThemeColor);
 
@@ -1611,9 +1612,9 @@ void FontworkHelpers::createCharInteropGrabBagUpdatesFromShapeProps(
     // CharThemeOriginalColor.
     beans::PropertyValue aCharThemeOriginalColor;
     sal_Int32 nFillColor(0);
-    if (xPropSetInfo->hasPropertyByName(u"FillColor"))
-        rXPropSet->getPropertyValue(u"FillColor") >>= nFillColor;
-    aCharThemeOriginalColor.Name = u"CharThemeOriginalColor";
+    if (xPropSetInfo->hasPropertyByName(u"FillColor"_ustr))
+        rXPropSet->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    aCharThemeOriginalColor.Name = u"CharThemeOriginalColor"_ustr;
     ::Color aColor(ColorTransparency, nFillColor);
     aCharThemeOriginalColor.Value <<= aColor.AsRGBHEXString();
     rUpdatePropVec.push_back(aCharThemeOriginalColor);

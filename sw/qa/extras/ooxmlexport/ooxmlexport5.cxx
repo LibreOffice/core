@@ -1380,7 +1380,7 @@ DECLARE_OOXMLEXPORT_TEST(testNonBMPChar, "nonbmpchar.docx")
 {
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U00024b62"), xTextRange1->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\U00024b62"_ustr, xTextRange1->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSpacingGroupShapeText)

@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineMoveInsertInDelete)
     CPPUNIT_ASSERT_EQUAL(OUString(" "),
                          pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
     pWrtShell->SetRedlineFlags(mode); // show again
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u0001 foo"),
+    CPPUNIT_ASSERT_EQUAL(u"\u0001 foo"_ustr,
                          pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode()->GetText());
 }
 

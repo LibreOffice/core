@@ -65,7 +65,7 @@ namespace pdfi
 
         FontAttributes() :
             familyName(),
-            fontWeight(u"normal"),
+            fontWeight(u"normal"_ustr),
             isItalic(false),
             isUnderline(false),
             isOutline(false),

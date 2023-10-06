@@ -143,16 +143,16 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
     CPPUNIT_ASSERT(bChecked);
     OUString aCheckedState;
     xContentControlProps->getPropertyValue("CheckedState") >>= aCheckedState;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), aCheckedState);
+    CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, aCheckedState);
     OUString aUncheckedState;
     xContentControlProps->getPropertyValue("UncheckedState") >>= aUncheckedState;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), aUncheckedState);
+    CPPUNIT_ASSERT_EQUAL(u"☐"_ustr, aUncheckedState);
     uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xContentControlRange->getText();
     uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), xContent->getString());
+    CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, xContent->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)

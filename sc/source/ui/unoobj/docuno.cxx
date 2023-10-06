@@ -188,7 +188,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
         { SC_UNO_ISEXECUTELINKENABLED,    0, cppu::UnoType<bool>::get(),                                             0, 0},
         { SC_UNO_ISCHANGEREADONLYENABLED, 0, cppu::UnoType<bool>::get(),                                             0, 0},
         { SC_UNO_REFERENCEDEVICE,         0, cppu::UnoType<awt::XDevice>::get(),                    beans::PropertyAttribute::READONLY, 0},
-        {u"BuildId",                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
+        {u"BuildId"_ustr,                      0, ::cppu::UnoType<OUString>::get(),                0, 0},
         { SC_UNO_CODENAME,                0, cppu::UnoType<OUString>::get(),                  0, 0},
         { SC_UNO_INTEROPGRABBAG,          0, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get(), 0, 0},
     };

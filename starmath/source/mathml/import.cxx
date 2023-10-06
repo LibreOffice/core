@@ -129,13 +129,13 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
 
     // Create property list
     static const comphelper::PropertyMapEntry aInfoMap[]
-        = { { u"PrivateData", 0, cppu::UnoType<XInterface>::get(),
+        = { { u"PrivateData"_ustr, 0, cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"BaseURI", 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
-              0 },
-            { u"StreamRelPath", 0, ::cppu::UnoType<OUString>::get(),
+            { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"StreamName", 0, ::cppu::UnoType<OUString>::get(),
+            { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
@@ -159,7 +159,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
         // TODO/LATER: handle the case of embedded links gracefully
         if (bEmbedded) // && !rMedium.GetStorage()->IsRoot() )
         {
-            OUString aName(u"dummyObjName");
+            OUString aName(u"dummyObjName"_ustr);
             const SfxStringItem* pDocHierarchItem
                 = rMedium.GetItemSet().GetItem(SID_DOC_HIERARCHICALNAME);
             if (pDocHierarchItem != nullptr)
@@ -325,13 +325,13 @@ ErrCode SmMLImportWrapper::Import(std::u16string_view aSource)
 
     // Create property list
     static const comphelper::PropertyMapEntry aInfoMap[]
-        = { { u"PrivateData", 0, cppu::UnoType<XInterface>::get(),
+        = { { u"PrivateData"_ustr, 0, cppu::UnoType<XInterface>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"BaseURI", 0, ::cppu::UnoType<OUString>::get(), beans::PropertyAttribute::MAYBEVOID,
-              0 },
-            { u"StreamRelPath", 0, ::cppu::UnoType<OUString>::get(),
+            { u"BaseURI"_ustr, 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-            { u"StreamName", 0, ::cppu::UnoType<OUString>::get(),
+            { u"StreamRelPath"_ustr, 0, ::cppu::UnoType<OUString>::get(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+            { u"StreamName"_ustr, 0, ::cppu::UnoType<OUString>::get(),
               beans::PropertyAttribute::MAYBEVOID, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
@@ -1031,7 +1031,8 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
                 if (IsXMLToken(aIter, XML_INFINITY))
                 {
                     aMaxsize.m_aMaxsize = SmMlAttributeValueMaxsize::MlInfinity;
-                    aMaxsize.m_aLengthValue = { SmLengthUnit::MlP, 10000, new OUString(u"10000%") };
+                    aMaxsize.m_aLengthValue
+                        = { SmLengthUnit::MlP, 10000, new OUString(u"10000%"_ustr) };
                 }
                 else
                 {

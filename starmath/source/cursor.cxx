@@ -880,7 +880,7 @@ void SmCursor::InsertText(const OUString& aString)
 
     SmToken token;
     token.eType = TIDENT;
-    token.cMathChar = u"";
+    token.cMathChar = u""_ustr;
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;
@@ -1009,7 +1009,7 @@ void SmCursor::InsertSpecial(std::u16string_view _aString)
     //Create instance of special node
     SmToken token;
     token.eType = TSPECIAL;
-    token.cMathChar = u"";
+    token.cMathChar = u""_ustr;
     token.nGroup = TG::NONE;
     token.nLevel = 5;
     token.aText = aString;

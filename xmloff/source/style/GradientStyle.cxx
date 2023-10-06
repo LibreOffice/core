@@ -342,7 +342,7 @@ void XMLGradientStyleExport::exportXML(
         fPreviousOffset = fOffset;
 
         // As of LO 7.6.0 only color-type="rgb" is implemented.
-        m_rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, u"rgb");
+        m_rExport.AddAttribute(XML_NAMESPACE_LO_EXT, XML_COLOR_TYPE, u"rgb"_ustr);
 
         // Attribute loext:color-value, data type color, that is #rrggbb.
         const basegfx::BColor aDecimalColor(aCandidate.getStopColor());

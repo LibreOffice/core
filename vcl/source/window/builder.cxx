@@ -311,7 +311,7 @@ namespace weld
                 aStr += " ";
             if (m_eSrcUnit == FieldUnit::INCH)
             {
-                OUString sDoublePrime = u"\u2033";
+                OUString sDoublePrime = u"\u2033"_ustr;
                 if (aSuffix != "\"" && aSuffix != sDoublePrime)
                     aStr += " ";
                 else
@@ -319,7 +319,7 @@ namespace weld
             }
             else if (m_eSrcUnit == FieldUnit::FOOT)
             {
-                OUString sPrime = u"\u2032";
+                OUString sPrime = u"\u2032"_ustr;
                 if (aSuffix != "'" && aSuffix != sPrime)
                     aStr += " ";
                 else

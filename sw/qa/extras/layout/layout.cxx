@@ -3566,7 +3566,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf152413)
     // - Actual  : 2
     // - In <>, XPath '/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion' number of nodes is incorrect
     assertXPath(pXmlDoc, "/root/page/body/txt/SwParaPortion/SwLineLayout/SwLinePortion", "portion",
-                u"صِرَ ٰطَ");
+                u"صِرَ ٰطَ"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf125893)

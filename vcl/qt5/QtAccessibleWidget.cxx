@@ -907,77 +907,77 @@ OUString lcl_ConvertFontSlant(awt::FontSlant eFontSlant)
 void lcl_ConvertFontUnderline(sal_Int16 nFontUnderline, OUString& rUnderlineStyle,
                               OUString& rUnderlineType, OUString& rUnderlineWidth)
 {
-    rUnderlineStyle = u"";
-    rUnderlineType = u"single";
-    rUnderlineWidth = u"auto";
+    rUnderlineStyle = u""_ustr;
+    rUnderlineType = u"single"_ustr;
+    rUnderlineWidth = u"auto"_ustr;
 
     switch (nFontUnderline)
     {
         case awt::FontUnderline::BOLD:
-            rUnderlineWidth = u"bold";
+            rUnderlineWidth = u"bold"_ustr;
             return;
         case awt::FontUnderline::BOLDDASH:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"dash";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"dash"_ustr;
             return;
         case awt::FontUnderline::BOLDDASHDOT:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"dot-dash";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"dot-dash"_ustr;
             return;
         case awt::FontUnderline::BOLDDASHDOTDOT:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"dot-dot-dash";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"dot-dot-dash"_ustr;
             return;
         case awt::FontUnderline::BOLDDOTTED:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"dotted";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"dotted"_ustr;
             return;
         case awt::FontUnderline::BOLDLONGDASH:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"long-dash";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"long-dash"_ustr;
             return;
         case awt::FontUnderline::BOLDWAVE:
-            rUnderlineWidth = u"bold";
-            rUnderlineStyle = u"wave";
+            rUnderlineWidth = u"bold"_ustr;
+            rUnderlineStyle = u"wave"_ustr;
             return;
         case awt::FontUnderline::DASH:
-            rUnderlineStyle = u"dash";
+            rUnderlineStyle = u"dash"_ustr;
             return;
         case awt::FontUnderline::DASHDOT:
-            rUnderlineStyle = u"dot-dash";
+            rUnderlineStyle = u"dot-dash"_ustr;
             return;
         case awt::FontUnderline::DASHDOTDOT:
-            rUnderlineStyle = u"dot-dot-dash";
+            rUnderlineStyle = u"dot-dot-dash"_ustr;
             return;
         case awt::FontUnderline::DONTKNOW:
-            rUnderlineWidth = u"";
-            rUnderlineStyle = u"";
-            rUnderlineType = u"";
+            rUnderlineWidth = u""_ustr;
+            rUnderlineStyle = u""_ustr;
+            rUnderlineType = u""_ustr;
             return;
         case awt::FontUnderline::DOTTED:
-            rUnderlineStyle = u"dotted";
+            rUnderlineStyle = u"dotted"_ustr;
             return;
         case awt::FontUnderline::DOUBLE:
-            rUnderlineType = u"double";
+            rUnderlineType = u"double"_ustr;
             return;
         case awt::FontUnderline::DOUBLEWAVE:
-            rUnderlineStyle = u"wave";
-            rUnderlineType = u"double";
+            rUnderlineStyle = u"wave"_ustr;
+            rUnderlineType = u"double"_ustr;
             return;
         case awt::FontUnderline::LONGDASH:
-            rUnderlineStyle = u"long-dash";
+            rUnderlineStyle = u"long-dash"_ustr;
             return;
         case awt::FontUnderline::NONE:
-            rUnderlineWidth = u"none";
-            rUnderlineStyle = u"none";
-            rUnderlineType = u"none";
+            rUnderlineWidth = u"none"_ustr;
+            rUnderlineStyle = u"none"_ustr;
+            rUnderlineType = u"none"_ustr;
             return;
         case awt::FontUnderline::SINGLE:
-            rUnderlineType = u"single";
+            rUnderlineType = u"single"_ustr;
             return;
         case awt::FontUnderline::SMALLWAVE:
         case awt::FontUnderline::WAVE:
-            rUnderlineStyle = u"wave";
+            rUnderlineStyle = u"wave"_ustr;
             return;
         default:
             assert(false && "Unhandled font underline type");

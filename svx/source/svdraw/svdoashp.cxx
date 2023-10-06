@@ -512,7 +512,7 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
         // textPreRotateAngle might be set by macro or diagram (SmartArt) import
         const uno::Any* pAny;
         const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        pAny = rGeometryItem.GetPropertyValueByName(u"TextPreRotateAngle");
+        pAny = rGeometryItem.GetPropertyValueByName(u"TextPreRotateAngle"_ustr);
         if ( pAny )
             *pAny >>= fExtraTextRotateAngle;
 
@@ -528,7 +528,7 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
     {
         const uno::Any* pAny;
         const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
-        pAny = rGeometryItem.GetPropertyValueByName(u"TextRotateAngle");
+        pAny = rGeometryItem.GetPropertyValueByName(u"TextRotateAngle"_ustr);
         if ( pAny )
             *pAny >>= fExtraTextRotateAngle;
     }

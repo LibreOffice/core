@@ -68,12 +68,13 @@ void SmMlAttribute::setDefaultAttributeValue()
             break;
         case SmMlAttributeValueType::MlHref:
             m_aAttributeValue.m_aHref.m_aHref = SmMlAttributeValueHref::NMlEmpty;
-            m_aAttributeValue.m_aHref.m_aLnk = new OUString(u"");
+            m_aAttributeValue.m_aHref.m_aLnk = new OUString(u""_ustr);
             break;
         case SmMlAttributeValueType::MlLspace:
             m_aAttributeValue.m_aLspace.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlEm;
             m_aAttributeValue.m_aLspace.m_aLengthValue.m_aLengthValue = 5.0 / 18;
-            m_aAttributeValue.m_aLspace.m_aLengthValue.m_aOriginalText = new OUString(u"5/18em");
+            m_aAttributeValue.m_aLspace.m_aLengthValue.m_aOriginalText
+                = new OUString(u"5/18em"_ustr);
             break;
         case SmMlAttributeValueType::MlMathbackground:
             m_aAttributeValue.m_aMathbackground.m_aMathbackground
@@ -85,7 +86,8 @@ void SmMlAttribute::setDefaultAttributeValue()
         case SmMlAttributeValueType::MlMathsize:
             m_aAttributeValue.m_aMathsize.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlP;
             m_aAttributeValue.m_aMathsize.m_aLengthValue.m_aLengthValue = 100;
-            m_aAttributeValue.m_aMathsize.m_aLengthValue.m_aOriginalText = new OUString(u"100%");
+            m_aAttributeValue.m_aMathsize.m_aLengthValue.m_aOriginalText
+                = new OUString(u"100%"_ustr);
             break;
         case SmMlAttributeValueType::MlMathvariant:
             m_aAttributeValue.m_aMathvariant.m_aMathvariant = SmMlAttributeValueMathvariant::normal;
@@ -94,12 +96,13 @@ void SmMlAttribute::setDefaultAttributeValue()
             m_aAttributeValue.m_aMaxsize.m_aMaxsize = SmMlAttributeValueMaxsize::MlInfinity;
             m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlP;
             m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aLengthValue = 10000;
-            m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aOriginalText = new OUString(u"10000%");
+            m_aAttributeValue.m_aMaxsize.m_aLengthValue.m_aOriginalText
+                = new OUString(u"10000%"_ustr);
             break;
         case SmMlAttributeValueType::MlMinsize:
             m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlP;
             m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aLengthValue = 1;
-            m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aOriginalText = new OUString(u"1%");
+            m_aAttributeValue.m_aMinsize.m_aLengthValue.m_aOriginalText = new OUString(u"1%"_ustr);
             break;
         case SmMlAttributeValueType::MlMovablelimits:
             m_aAttributeValue.m_aMovablelimits.m_aMovablelimits
@@ -108,7 +111,8 @@ void SmMlAttribute::setDefaultAttributeValue()
         case SmMlAttributeValueType::MlRspace:
             m_aAttributeValue.m_aRspace.m_aLengthValue.m_aLengthUnit = SmLengthUnit::MlEm;
             m_aAttributeValue.m_aRspace.m_aLengthValue.m_aLengthValue = 5.0 / 18;
-            m_aAttributeValue.m_aRspace.m_aLengthValue.m_aOriginalText = new OUString(u"5/18em");
+            m_aAttributeValue.m_aRspace.m_aLengthValue.m_aOriginalText
+                = new OUString(u"5/18em"_ustr);
             break;
         case SmMlAttributeValueType::MlSeparator:
             m_aAttributeValue.m_aSeparator.m_aSeparator = SmMlAttributeValueSeparator::MlFalse;

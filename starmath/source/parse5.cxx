@@ -39,255 +39,255 @@ using namespace ::com::sun::star::i18n;
 
 //Definition of math keywords
 const SmTokenTableEntry aTokenTable[]
-    = { { u"abs", TABS, '\0', TG::UnOper, 13 },
-        { u"acute", TACUTE, MS_ACUTE, TG::Attribute, 5 },
-        { u"aleph", TALEPH, MS_ALEPH, TG::Standalone, 5 },
-        { u"alignb", TALIGNC, '\0', TG::Align, 0 },
-        { u"alignc", TALIGNC, '\0', TG::Align, 0 },
-        { u"alignl", TALIGNL, '\0', TG::Align, 0 },
-        { u"alignm", TALIGNC, '\0', TG::Align, 0 },
-        { u"alignr", TALIGNR, '\0', TG::Align, 0 },
-        { u"alignt", TALIGNC, '\0', TG::Align, 0 },
-        { u"and", TAND, MS_AND, TG::Product, 0 },
-        { u"approx", TAPPROX, MS_APPROX, TG::Relation, 0 },
-        { u"arccos", TACOS, '\0', TG::Function, 5 },
-        { u"arccot", TACOT, '\0', TG::Function, 5 },
-        { u"arcosh", TACOSH, '\0', TG::Function, 5 },
-        { u"arcoth", TACOTH, '\0', TG::Function, 5 },
-        { u"arcsin", TASIN, '\0', TG::Function, 5 },
-        { u"arctan", TATAN, '\0', TG::Function, 5 },
-        { u"arsinh", TASINH, '\0', TG::Function, 5 },
-        { u"artanh", TATANH, '\0', TG::Function, 5 },
-        { u"backepsilon", TBACKEPSILON, MS_BACKEPSILON, TG::Standalone, 5 },
-        { u"bar", TBAR, MS_BAR, TG::Attribute, 5 },
-        { u"binom", TBINOM, '\0', TG::NONE, 5 },
-        { u"bold", TBOLD, '\0', TG::FontAttr, 5 },
-        { u"boper", TBOPER, '\0', TG::Product, 0 },
-        { u"breve", TBREVE, MS_BREVE, TG::Attribute, 5 },
-        { u"bslash", TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
-        { u"cdot", TCDOT, MS_CDOT, TG::Product, 0 },
-        { u"check", TCHECK, MS_CHECK, TG::Attribute, 5 },
-        { u"circ", TCIRC, MS_CIRC, TG::Standalone, 5 },
-        { u"circle", TCIRCLE, MS_CIRCLE, TG::Attribute, 5 },
-        { u"color", TCOLOR, '\0', TG::FontAttr, 5 },
-        { u"coprod", TCOPROD, MS_COPROD, TG::Oper, 5 },
-        { u"cos", TCOS, '\0', TG::Function, 5 },
-        { u"cosh", TCOSH, '\0', TG::Function, 5 },
-        { u"cot", TCOT, '\0', TG::Function, 5 },
-        { u"coth", TCOTH, '\0', TG::Function, 5 },
-        { u"csub", TCSUB, '\0', TG::Power, 0 },
-        { u"csup", TCSUP, '\0', TG::Power, 0 },
-        { u"dddot", TDDDOT, MS_DDDOT, TG::Attribute, 5 },
-        { u"ddot", TDDOT, MS_DDOT, TG::Attribute, 5 },
-        { u"def", TDEF, MS_DEF, TG::Relation, 0 },
-        { u"div", TDIV, MS_DIV, TG::Product, 0 },
-        { u"divides", TDIVIDES, MS_LINE, TG::Relation, 0 },
-        { u"dlarrow", TDLARROW, MS_DLARROW, TG::Standalone, 5 },
-        { u"dlrarrow", TDLRARROW, MS_DLRARROW, TG::Standalone, 5 },
-        { u"dot", TDOT, MS_DOT, TG::Attribute, 5 },
-        { u"dotsaxis", TDOTSAXIS, MS_DOTSAXIS, TG::Standalone, 5 }, // 5 to continue expression
-        { u"dotsdiag", TDOTSDIAG, MS_DOTSUP, TG::Standalone, 5 },
-        { u"dotsdown", TDOTSDOWN, MS_DOTSDOWN, TG::Standalone, 5 },
-        { u"dotslow", TDOTSLOW, MS_DOTSLOW, TG::Standalone, 5 },
-        { u"dotsup", TDOTSUP, MS_DOTSUP, TG::Standalone, 5 },
-        { u"dotsvert", TDOTSVERT, MS_DOTSVERT, TG::Standalone, 5 },
-        { u"downarrow", TDOWNARROW, MS_DOWNARROW, TG::Standalone, 5 },
-        { u"drarrow", TDRARROW, MS_DRARROW, TG::Standalone, 5 },
-        { u"emptyset", TEMPTYSET, MS_EMPTYSET, TG::Standalone, 5 },
-        { u"equiv", TEQUIV, MS_EQUIV, TG::Relation, 0 },
-        { u"evaluate", TEVALUATE, '\0', TG::NONE, 0 },
-        { u"exists", TEXISTS, MS_EXISTS, TG::Standalone, 5 },
-        { u"exp", TEXP, '\0', TG::Function, 5 },
-        { u"fact", TFACT, MS_FACT, TG::UnOper, 5 },
-        { u"fixed", TFIXED, '\0', TG::Font, 0 },
-        { u"font", TFONT, '\0', TG::FontAttr, 5 },
-        { u"forall", TFORALL, MS_FORALL, TG::Standalone, 5 },
-        { u"fourier", TFOURIER, MS_FOURIER, TG::Standalone, 5 },
-        { u"frac", TFRAC, '\0', TG::NONE, 5 },
-        { u"from", TFROM, '\0', TG::Limit, 0 },
-        { u"func", TFUNC, '\0', TG::Function, 5 },
-        { u"ge", TGE, MS_GE, TG::Relation, 0 },
-        { u"geslant", TGESLANT, MS_GESLANT, TG::Relation, 0 },
-        { u"gg", TGG, MS_GG, TG::Relation, 0 },
-        { u"grave", TGRAVE, MS_GRAVE, TG::Attribute, 5 },
-        { u"gt", TGT, MS_GT, TG::Relation, 0 },
-        { u"hadd", THADD, MS_HADD, TG::Oper, 5 },
-        { u"harpoon", THARPOON, MS_HARPOON, TG::Attribute, 5 },
-        { u"hat", THAT, MS_HAT, TG::Attribute, 5 },
-        { u"hbar", THBAR, MS_HBAR, TG::Standalone, 5 },
-        { u"hex", THEX, '\0', TG::NONE, 5 },
-        { u"iiint", TIIINT, MS_IIINT, TG::Oper, 5 },
-        { u"iint", TIINT, MS_IINT, TG::Oper, 5 },
-        { u"im", TIM, MS_IM, TG::Standalone, 5 },
-        { u"in", TIN, MS_IN, TG::Relation, 0 },
-        { u"infinity", TINFINITY, MS_INFINITY, TG::Standalone, 5 },
-        { u"infty", TINFINITY, MS_INFINITY, TG::Standalone, 5 },
-        { u"int", TINT, MS_INT, TG::Oper, 5 },
-        { u"intd", TINTD, MS_INT, TG::Oper, 5 },
-        { u"intersection", TINTERSECT, MS_INTERSECT, TG::Product, 0 },
-        { u"it", TIT, '\0', TG::Product, 0 },
-        { u"ital", TITALIC, '\0', TG::FontAttr, 5 },
-        { u"italic", TITALIC, '\0', TG::FontAttr, 5 },
-        { u"lambdabar", TLAMBDABAR, MS_LAMBDABAR, TG::Standalone, 5 },
-        { u"langle", TLANGLE, MS_LMATHANGLE, TG::LBrace, 5 },
-        { u"laplace", TLAPLACE, MS_LAPLACE, TG::Standalone, 5 },
-        { u"lbrace", TLBRACE, MS_LBRACE, TG::LBrace, 5 },
-        { u"lceil", TLCEIL, MS_LCEIL, TG::LBrace, 5 },
-        { u"ldbracket", TLDBRACKET, MS_LDBRACKET, TG::LBrace, 5 },
-        { u"ldline", TLDLINE, MS_DVERTLINE, TG::LBrace, 5 },
-        { u"le", TLE, MS_LE, TG::Relation, 0 },
-        { u"left", TLEFT, '\0', TG::NONE, 5 },
-        { u"leftarrow", TLEFTARROW, MS_LEFTARROW, TG::Standalone, 5 },
-        { u"leslant", TLESLANT, MS_LESLANT, TG::Relation, 0 },
-        { u"lfloor", TLFLOOR, MS_LFLOOR, TG::LBrace, 5 },
-        { u"lim", TLIM, '\0', TG::Oper, 5 },
-        { u"liminf", TLIMINF, '\0', TG::Oper, 5 },
-        { u"limsup", TLIMSUP, '\0', TG::Oper, 5 },
-        { u"lint", TLINT, MS_LINT, TG::Oper, 5 },
-        { u"ll", TLL, MS_LL, TG::Relation, 0 },
-        { u"lline", TLLINE, MS_VERTLINE, TG::LBrace, 5 },
-        { u"llint", TLLINT, MS_LLINT, TG::Oper, 5 },
-        { u"lllint", TLLLINT, MS_LLLINT, TG::Oper, 5 },
-        { u"ln", TLN, '\0', TG::Function, 5 },
-        { u"log", TLOG, '\0', TG::Function, 5 },
-        { u"lrline", TLRLINE, MS_VERTLINE, TG::LBrace | TG::RBrace, 5 },
-        { u"lrdline", TLRDLINE, MS_VERTLINE, TG::LBrace | TG::RBrace, 5 },
-        { u"lsub", TLSUB, '\0', TG::Power, 0 },
-        { u"lsup", TLSUP, '\0', TG::Power, 0 },
-        { u"lt", TLT, MS_LT, TG::Relation, 0 },
-        { u"maj", TSUM, MS_MAJ, TG::Oper, 5 },
-        { u"matrix", TMATRIX, '\0', TG::NONE, 5 },
-        { u"minusplus", TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5 },
-        { u"mline", TMLINE, MS_VERTLINE, TG::NONE, 0 }, //! not in TG::RBrace, Level 0
-        { u"nabla", TNABLA, MS_NABLA, TG::Standalone, 5 },
-        { u"nbold", TNBOLD, '\0', TG::FontAttr, 5 },
-        { u"ndivides", TNDIVIDES, MS_NDIVIDES, TG::Relation, 0 },
-        { u"neg", TNEG, MS_NEG, TG::UnOper, 5 },
-        { u"neq", TNEQ, MS_NEQ, TG::Relation, 0 },
-        { u"newline", TNEWLINE, '\0', TG::NONE, 0 },
-        { u"ni", TNI, MS_NI, TG::Relation, 0 },
-        { u"nitalic", TNITALIC, '\0', TG::FontAttr, 5 },
-        { u"none", TNONE, '\0', TG::LBrace | TG::RBrace, 0 },
-        { u"nospace", TNOSPACE, '\0', TG::Standalone, 5 },
-        { u"notexists", TNOTEXISTS, MS_NOTEXISTS, TG::Standalone, 5 },
-        { u"notin", TNOTIN, MS_NOTIN, TG::Relation, 0 },
-        { u"nprec", TNOTPRECEDES, MS_NOTPRECEDES, TG::Relation, 0 },
-        { u"nroot", TNROOT, MS_SQRT, TG::UnOper, 5 },
-        { u"nsubset", TNSUBSET, MS_NSUBSET, TG::Relation, 0 },
-        { u"nsubseteq", TNSUBSETEQ, MS_NSUBSETEQ, TG::Relation, 0 },
-        { u"nsucc", TNOTSUCCEEDS, MS_NOTSUCCEEDS, TG::Relation, 0 },
-        { u"nsupset", TNSUPSET, MS_NSUPSET, TG::Relation, 0 },
-        { u"nsupseteq", TNSUPSETEQ, MS_NSUPSETEQ, TG::Relation, 0 },
-        { u"odivide", TODIVIDE, MS_ODIVIDE, TG::Product, 0 },
-        { u"odot", TODOT, MS_ODOT, TG::Product, 0 },
-        { u"ominus", TOMINUS, MS_OMINUS, TG::Sum, 0 },
-        { u"oper", TOPER, '\0', TG::Oper, 5 },
-        { u"oplus", TOPLUS, MS_OPLUS, TG::Sum, 0 },
-        { u"or", TOR, MS_OR, TG::Sum, 0 },
-        { u"ortho", TORTHO, MS_ORTHO, TG::Relation, 0 },
-        { u"otimes", TOTIMES, MS_OTIMES, TG::Product, 0 },
-        { u"over", TOVER, '\0', TG::Product, 0 },
-        { u"overbrace", TOVERBRACE, MS_OVERBRACE, TG::Product, 5 },
-        { u"overline", TOVERLINE, '\0', TG::Attribute, 5 },
-        { u"overstrike", TOVERSTRIKE, '\0', TG::Attribute, 5 },
-        { u"owns", TNI, MS_NI, TG::Relation, 0 },
-        { u"parallel", TPARALLEL, MS_DLINE, TG::Relation, 0 },
-        { u"partial", TPARTIAL, MS_PARTIAL, TG::Standalone, 5 },
-        { u"phantom", TPHANTOM, '\0', TG::FontAttr, 5 },
-        { u"plusminus", TPLUSMINUS, MS_PLUSMINUS, TG::UnOper | TG::Sum, 5 },
-        { u"prec", TPRECEDES, MS_PRECEDES, TG::Relation, 0 },
-        { u"preccurlyeq", TPRECEDESEQUAL, MS_PRECEDESEQUAL, TG::Relation, 0 },
-        { u"precsim", TPRECEDESEQUIV, MS_PRECEDESEQUIV, TG::Relation, 0 },
-        { u"prod", TPROD, MS_PROD, TG::Oper, 5 },
-        { u"prop", TPROP, MS_PROP, TG::Relation, 0 },
-        { u"rangle", TRANGLE, MS_RMATHANGLE, TG::RBrace, 0 }, //! 0 to terminate expression
-        { u"rbrace", TRBRACE, MS_RBRACE, TG::RBrace, 0 },
-        { u"rceil", TRCEIL, MS_RCEIL, TG::RBrace, 0 },
-        { u"rdbracket", TRDBRACKET, MS_RDBRACKET, TG::RBrace, 0 },
-        { u"rdline", TRDLINE, MS_DVERTLINE, TG::RBrace, 0 },
-        { u"re", TRE, MS_RE, TG::Standalone, 5 },
-        { u"rfloor", TRFLOOR, MS_RFLOOR, TG::RBrace, 0 }, //! 0 to terminate expression
-        { u"right", TRIGHT, '\0', TG::NONE, 0 },
-        { u"rightarrow", TRIGHTARROW, MS_RIGHTARROW, TG::Standalone, 5 },
-        { u"rline", TRLINE, MS_VERTLINE, TG::RBrace, 0 }, //! 0 to terminate expression
-        { u"rsub", TRSUB, '\0', TG::Power, 0 },
-        { u"rsup", TRSUP, '\0', TG::Power, 0 },
-        { u"sans", TSANS, '\0', TG::Font, 0 },
-        { u"serif", TSERIF, '\0', TG::Font, 0 },
-        { u"setC", TSETC, MS_SETC, TG::Standalone, 5 },
-        { u"setminus", TSETMINUS, MS_BACKSLASH, TG::Product, 0 },
-        { u"setN", TSETN, MS_SETN, TG::Standalone, 5 },
-        { u"setQ", TSETQ, MS_SETQ, TG::Standalone, 5 },
-        { u"setquotient", TSETQUOTIENT, MS_SLASH, TG::Product, 0 },
-        { u"setR", TSETR, MS_SETR, TG::Standalone, 5 },
-        { u"setZ", TSETZ, MS_SETZ, TG::Standalone, 5 },
-        { u"sim", TSIM, MS_SIM, TG::Relation, 0 },
-        { u"simeq", TSIMEQ, MS_SIMEQ, TG::Relation, 0 },
-        { u"sin", TSIN, '\0', TG::Function, 5 },
-        { u"sinh", TSINH, '\0', TG::Function, 5 },
-        { u"size", TSIZE, '\0', TG::FontAttr, 5 },
-        { u"slash", TSLASH, MS_SLASH, TG::Product, 0 },
-        { u"sqrt", TSQRT, MS_SQRT, TG::UnOper, 5 },
-        { u"stack", TSTACK, '\0', TG::NONE, 5 },
-        { u"sub", TRSUB, '\0', TG::Power, 0 },
-        { u"subset", TSUBSET, MS_SUBSET, TG::Relation, 0 },
-        { u"subseteq", TSUBSETEQ, MS_SUBSETEQ, TG::Relation, 0 },
-        { u"succ", TSUCCEEDS, MS_SUCCEEDS, TG::Relation, 0 },
-        { u"succcurlyeq", TSUCCEEDSEQUAL, MS_SUCCEEDSEQUAL, TG::Relation, 0 },
-        { u"succsim", TSUCCEEDSEQUIV, MS_SUCCEEDSEQUIV, TG::Relation, 0 },
-        { u"sum", TSUM, MS_SUM, TG::Oper, 5 },
-        { u"sup", TRSUP, '\0', TG::Power, 0 },
-        { u"supset", TSUPSET, MS_SUPSET, TG::Relation, 0 },
-        { u"supseteq", TSUPSETEQ, MS_SUPSETEQ, TG::Relation, 0 },
-        { u"tan", TTAN, '\0', TG::Function, 5 },
-        { u"tanh", TTANH, '\0', TG::Function, 5 },
-        { u"tilde", TTILDE, MS_TILDE, TG::Attribute, 5 },
-        { u"times", TTIMES, MS_TIMES, TG::Product, 0 },
-        { u"to", TTO, '\0', TG::Limit, 0 },
-        { u"toward", TTOWARD, MS_RIGHTARROW, TG::Relation, 0 },
-        { u"transl", TTRANSL, MS_TRANSL, TG::Relation, 0 },
-        { u"transr", TTRANSR, MS_TRANSR, TG::Relation, 0 },
-        { u"underbrace", TUNDERBRACE, MS_UNDERBRACE, TG::Product, 5 },
-        { u"underline", TUNDERLINE, '\0', TG::Attribute, 5 },
-        { u"union", TUNION, MS_UNION, TG::Sum, 0 },
-        { u"uoper", TUOPER, '\0', TG::UnOper, 5 },
-        { u"uparrow", TUPARROW, MS_UPARROW, TG::Standalone, 5 },
-        { u"vec", TVEC, MS_VEC, TG::Attribute, 5 },
-        { u"widebslash", TWIDEBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
-        { u"wideharpoon", TWIDEHARPOON, MS_HARPOON, TG::Attribute, 5 },
-        { u"widehat", TWIDEHAT, MS_HAT, TG::Attribute, 5 },
-        { u"wideslash", TWIDESLASH, MS_SLASH, TG::Product, 0 },
-        { u"widetilde", TWIDETILDE, MS_TILDE, TG::Attribute, 5 },
-        { u"widevec", TWIDEVEC, MS_VEC, TG::Attribute, 5 },
-        { u"wp", TWP, MS_WP, TG::Standalone, 5 },
-        { u"جا", TSIN, '\0', TG::Function, 5 },
-        { u"جاز", TSINH, '\0', TG::Function, 5 },
-        { u"جتا", TCOS, '\0', TG::Function, 5 },
-        { u"جتاز", TCOSH, '\0', TG::Function, 5 },
-        { u"حا", TSIN, '\0', TG::Function, 5 },
-        { u"حاز", TSINH, '\0', TG::Function, 5 },
-        { u"حتا", TCOS, '\0', TG::Function, 5 },
-        { u"حتاز", TCOSH, '\0', TG::Function, 5 },
-        { u"حد", THADD, MS_HADD, TG::Oper, 5 },
-        { u"طا", TTAN, '\0', TG::Function, 5 },
-        { u"طاز", TTANH, '\0', TG::Function, 5 },
-        { u"طتا", TCOT, '\0', TG::Function, 5 },
-        { u"طتاز", TCOTH, '\0', TG::Function, 5 },
-        { u"ظا", TTAN, '\0', TG::Function, 5 },
-        { u"ظاز", TTANH, '\0', TG::Function, 5 },
-        { u"ظتا", TCOT, '\0', TG::Function, 5 },
-        { u"ظتاز", TCOTH, '\0', TG::Function, 5 },
-        { u"قا", TSEC, '\0', TG::Function, 5 },
-        { u"قاز", TSECH, '\0', TG::Function, 5 },
-        { u"قتا", TCSC, '\0', TG::Function, 5 },
-        { u"قتاز", TCSCH, '\0', TG::Function, 5 },
-        { u"لو", TLOG, '\0', TG::Function, 5 },
-        { u"مجـ", TSUM, MS_MAJ, TG::Oper, 5 },
-        { u"نها", TNAHA, '\0', TG::Oper, 5 },
-        { u"ٯا", TSEC, '\0', TG::Function, 5 },
-        { u"ٯاز", TSECH, '\0', TG::Function, 5 },
-        { u"ٯتا", TCSC, '\0', TG::Function, 5 },
-        { u"ٯتاز", TCSCH, '\0', TG::Function, 5 } };
+    = { { u"abs"_ustr, TABS, '\0', TG::UnOper, 13 },
+        { u"acute"_ustr, TACUTE, MS_ACUTE, TG::Attribute, 5 },
+        { u"aleph"_ustr, TALEPH, MS_ALEPH, TG::Standalone, 5 },
+        { u"alignb"_ustr, TALIGNC, '\0', TG::Align, 0 },
+        { u"alignc"_ustr, TALIGNC, '\0', TG::Align, 0 },
+        { u"alignl"_ustr, TALIGNL, '\0', TG::Align, 0 },
+        { u"alignm"_ustr, TALIGNC, '\0', TG::Align, 0 },
+        { u"alignr"_ustr, TALIGNR, '\0', TG::Align, 0 },
+        { u"alignt"_ustr, TALIGNC, '\0', TG::Align, 0 },
+        { u"and"_ustr, TAND, MS_AND, TG::Product, 0 },
+        { u"approx"_ustr, TAPPROX, MS_APPROX, TG::Relation, 0 },
+        { u"arccos"_ustr, TACOS, '\0', TG::Function, 5 },
+        { u"arccot"_ustr, TACOT, '\0', TG::Function, 5 },
+        { u"arcosh"_ustr, TACOSH, '\0', TG::Function, 5 },
+        { u"arcoth"_ustr, TACOTH, '\0', TG::Function, 5 },
+        { u"arcsin"_ustr, TASIN, '\0', TG::Function, 5 },
+        { u"arctan"_ustr, TATAN, '\0', TG::Function, 5 },
+        { u"arsinh"_ustr, TASINH, '\0', TG::Function, 5 },
+        { u"artanh"_ustr, TATANH, '\0', TG::Function, 5 },
+        { u"backepsilon"_ustr, TBACKEPSILON, MS_BACKEPSILON, TG::Standalone, 5 },
+        { u"bar"_ustr, TBAR, MS_BAR, TG::Attribute, 5 },
+        { u"binom"_ustr, TBINOM, '\0', TG::NONE, 5 },
+        { u"bold"_ustr, TBOLD, '\0', TG::FontAttr, 5 },
+        { u"boper"_ustr, TBOPER, '\0', TG::Product, 0 },
+        { u"breve"_ustr, TBREVE, MS_BREVE, TG::Attribute, 5 },
+        { u"bslash"_ustr, TBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
+        { u"cdot"_ustr, TCDOT, MS_CDOT, TG::Product, 0 },
+        { u"check"_ustr, TCHECK, MS_CHECK, TG::Attribute, 5 },
+        { u"circ"_ustr, TCIRC, MS_CIRC, TG::Standalone, 5 },
+        { u"circle"_ustr, TCIRCLE, MS_CIRCLE, TG::Attribute, 5 },
+        { u"color"_ustr, TCOLOR, '\0', TG::FontAttr, 5 },
+        { u"coprod"_ustr, TCOPROD, MS_COPROD, TG::Oper, 5 },
+        { u"cos"_ustr, TCOS, '\0', TG::Function, 5 },
+        { u"cosh"_ustr, TCOSH, '\0', TG::Function, 5 },
+        { u"cot"_ustr, TCOT, '\0', TG::Function, 5 },
+        { u"coth"_ustr, TCOTH, '\0', TG::Function, 5 },
+        { u"csub"_ustr, TCSUB, '\0', TG::Power, 0 },
+        { u"csup"_ustr, TCSUP, '\0', TG::Power, 0 },
+        { u"dddot"_ustr, TDDDOT, MS_DDDOT, TG::Attribute, 5 },
+        { u"ddot"_ustr, TDDOT, MS_DDOT, TG::Attribute, 5 },
+        { u"def"_ustr, TDEF, MS_DEF, TG::Relation, 0 },
+        { u"div"_ustr, TDIV, MS_DIV, TG::Product, 0 },
+        { u"divides"_ustr, TDIVIDES, MS_LINE, TG::Relation, 0 },
+        { u"dlarrow"_ustr, TDLARROW, MS_DLARROW, TG::Standalone, 5 },
+        { u"dlrarrow"_ustr, TDLRARROW, MS_DLRARROW, TG::Standalone, 5 },
+        { u"dot"_ustr, TDOT, MS_DOT, TG::Attribute, 5 },
+        { u"dotsaxis"_ustr, TDOTSAXIS, MS_DOTSAXIS, TG::Standalone, 5 }, // 5 to continue expression
+        { u"dotsdiag"_ustr, TDOTSDIAG, MS_DOTSUP, TG::Standalone, 5 },
+        { u"dotsdown"_ustr, TDOTSDOWN, MS_DOTSDOWN, TG::Standalone, 5 },
+        { u"dotslow"_ustr, TDOTSLOW, MS_DOTSLOW, TG::Standalone, 5 },
+        { u"dotsup"_ustr, TDOTSUP, MS_DOTSUP, TG::Standalone, 5 },
+        { u"dotsvert"_ustr, TDOTSVERT, MS_DOTSVERT, TG::Standalone, 5 },
+        { u"downarrow"_ustr, TDOWNARROW, MS_DOWNARROW, TG::Standalone, 5 },
+        { u"drarrow"_ustr, TDRARROW, MS_DRARROW, TG::Standalone, 5 },
+        { u"emptyset"_ustr, TEMPTYSET, MS_EMPTYSET, TG::Standalone, 5 },
+        { u"equiv"_ustr, TEQUIV, MS_EQUIV, TG::Relation, 0 },
+        { u"evaluate"_ustr, TEVALUATE, '\0', TG::NONE, 0 },
+        { u"exists"_ustr, TEXISTS, MS_EXISTS, TG::Standalone, 5 },
+        { u"exp"_ustr, TEXP, '\0', TG::Function, 5 },
+        { u"fact"_ustr, TFACT, MS_FACT, TG::UnOper, 5 },
+        { u"fixed"_ustr, TFIXED, '\0', TG::Font, 0 },
+        { u"font"_ustr, TFONT, '\0', TG::FontAttr, 5 },
+        { u"forall"_ustr, TFORALL, MS_FORALL, TG::Standalone, 5 },
+        { u"fourier"_ustr, TFOURIER, MS_FOURIER, TG::Standalone, 5 },
+        { u"frac"_ustr, TFRAC, '\0', TG::NONE, 5 },
+        { u"from"_ustr, TFROM, '\0', TG::Limit, 0 },
+        { u"func"_ustr, TFUNC, '\0', TG::Function, 5 },
+        { u"ge"_ustr, TGE, MS_GE, TG::Relation, 0 },
+        { u"geslant"_ustr, TGESLANT, MS_GESLANT, TG::Relation, 0 },
+        { u"gg"_ustr, TGG, MS_GG, TG::Relation, 0 },
+        { u"grave"_ustr, TGRAVE, MS_GRAVE, TG::Attribute, 5 },
+        { u"gt"_ustr, TGT, MS_GT, TG::Relation, 0 },
+        { u"hadd"_ustr, THADD, MS_HADD, TG::Oper, 5 },
+        { u"harpoon"_ustr, THARPOON, MS_HARPOON, TG::Attribute, 5 },
+        { u"hat"_ustr, THAT, MS_HAT, TG::Attribute, 5 },
+        { u"hbar"_ustr, THBAR, MS_HBAR, TG::Standalone, 5 },
+        { u"hex"_ustr, THEX, '\0', TG::NONE, 5 },
+        { u"iiint"_ustr, TIIINT, MS_IIINT, TG::Oper, 5 },
+        { u"iint"_ustr, TIINT, MS_IINT, TG::Oper, 5 },
+        { u"im"_ustr, TIM, MS_IM, TG::Standalone, 5 },
+        { u"in"_ustr, TIN, MS_IN, TG::Relation, 0 },
+        { u"infinity"_ustr, TINFINITY, MS_INFINITY, TG::Standalone, 5 },
+        { u"infty"_ustr, TINFINITY, MS_INFINITY, TG::Standalone, 5 },
+        { u"int"_ustr, TINT, MS_INT, TG::Oper, 5 },
+        { u"intd"_ustr, TINTD, MS_INT, TG::Oper, 5 },
+        { u"intersection"_ustr, TINTERSECT, MS_INTERSECT, TG::Product, 0 },
+        { u"it"_ustr, TIT, '\0', TG::Product, 0 },
+        { u"ital"_ustr, TITALIC, '\0', TG::FontAttr, 5 },
+        { u"italic"_ustr, TITALIC, '\0', TG::FontAttr, 5 },
+        { u"lambdabar"_ustr, TLAMBDABAR, MS_LAMBDABAR, TG::Standalone, 5 },
+        { u"langle"_ustr, TLANGLE, MS_LMATHANGLE, TG::LBrace, 5 },
+        { u"laplace"_ustr, TLAPLACE, MS_LAPLACE, TG::Standalone, 5 },
+        { u"lbrace"_ustr, TLBRACE, MS_LBRACE, TG::LBrace, 5 },
+        { u"lceil"_ustr, TLCEIL, MS_LCEIL, TG::LBrace, 5 },
+        { u"ldbracket"_ustr, TLDBRACKET, MS_LDBRACKET, TG::LBrace, 5 },
+        { u"ldline"_ustr, TLDLINE, MS_DVERTLINE, TG::LBrace, 5 },
+        { u"le"_ustr, TLE, MS_LE, TG::Relation, 0 },
+        { u"left"_ustr, TLEFT, '\0', TG::NONE, 5 },
+        { u"leftarrow"_ustr, TLEFTARROW, MS_LEFTARROW, TG::Standalone, 5 },
+        { u"leslant"_ustr, TLESLANT, MS_LESLANT, TG::Relation, 0 },
+        { u"lfloor"_ustr, TLFLOOR, MS_LFLOOR, TG::LBrace, 5 },
+        { u"lim"_ustr, TLIM, '\0', TG::Oper, 5 },
+        { u"liminf"_ustr, TLIMINF, '\0', TG::Oper, 5 },
+        { u"limsup"_ustr, TLIMSUP, '\0', TG::Oper, 5 },
+        { u"lint"_ustr, TLINT, MS_LINT, TG::Oper, 5 },
+        { u"ll"_ustr, TLL, MS_LL, TG::Relation, 0 },
+        { u"lline"_ustr, TLLINE, MS_VERTLINE, TG::LBrace, 5 },
+        { u"llint"_ustr, TLLINT, MS_LLINT, TG::Oper, 5 },
+        { u"lllint"_ustr, TLLLINT, MS_LLLINT, TG::Oper, 5 },
+        { u"ln"_ustr, TLN, '\0', TG::Function, 5 },
+        { u"log"_ustr, TLOG, '\0', TG::Function, 5 },
+        { u"lrline"_ustr, TLRLINE, MS_VERTLINE, TG::LBrace | TG::RBrace, 5 },
+        { u"lrdline"_ustr, TLRDLINE, MS_VERTLINE, TG::LBrace | TG::RBrace, 5 },
+        { u"lsub"_ustr, TLSUB, '\0', TG::Power, 0 },
+        { u"lsup"_ustr, TLSUP, '\0', TG::Power, 0 },
+        { u"lt"_ustr, TLT, MS_LT, TG::Relation, 0 },
+        { u"maj"_ustr, TSUM, MS_MAJ, TG::Oper, 5 },
+        { u"matrix"_ustr, TMATRIX, '\0', TG::NONE, 5 },
+        { u"minusplus"_ustr, TMINUSPLUS, MS_MINUSPLUS, TG::UnOper | TG::Sum, 5 },
+        { u"mline"_ustr, TMLINE, MS_VERTLINE, TG::NONE, 0 }, //! not in TG::RBrace, Level 0
+        { u"nabla"_ustr, TNABLA, MS_NABLA, TG::Standalone, 5 },
+        { u"nbold"_ustr, TNBOLD, '\0', TG::FontAttr, 5 },
+        { u"ndivides"_ustr, TNDIVIDES, MS_NDIVIDES, TG::Relation, 0 },
+        { u"neg"_ustr, TNEG, MS_NEG, TG::UnOper, 5 },
+        { u"neq"_ustr, TNEQ, MS_NEQ, TG::Relation, 0 },
+        { u"newline"_ustr, TNEWLINE, '\0', TG::NONE, 0 },
+        { u"ni"_ustr, TNI, MS_NI, TG::Relation, 0 },
+        { u"nitalic"_ustr, TNITALIC, '\0', TG::FontAttr, 5 },
+        { u"none"_ustr, TNONE, '\0', TG::LBrace | TG::RBrace, 0 },
+        { u"nospace"_ustr, TNOSPACE, '\0', TG::Standalone, 5 },
+        { u"notexists"_ustr, TNOTEXISTS, MS_NOTEXISTS, TG::Standalone, 5 },
+        { u"notin"_ustr, TNOTIN, MS_NOTIN, TG::Relation, 0 },
+        { u"nprec"_ustr, TNOTPRECEDES, MS_NOTPRECEDES, TG::Relation, 0 },
+        { u"nroot"_ustr, TNROOT, MS_SQRT, TG::UnOper, 5 },
+        { u"nsubset"_ustr, TNSUBSET, MS_NSUBSET, TG::Relation, 0 },
+        { u"nsubseteq"_ustr, TNSUBSETEQ, MS_NSUBSETEQ, TG::Relation, 0 },
+        { u"nsucc"_ustr, TNOTSUCCEEDS, MS_NOTSUCCEEDS, TG::Relation, 0 },
+        { u"nsupset"_ustr, TNSUPSET, MS_NSUPSET, TG::Relation, 0 },
+        { u"nsupseteq"_ustr, TNSUPSETEQ, MS_NSUPSETEQ, TG::Relation, 0 },
+        { u"odivide"_ustr, TODIVIDE, MS_ODIVIDE, TG::Product, 0 },
+        { u"odot"_ustr, TODOT, MS_ODOT, TG::Product, 0 },
+        { u"ominus"_ustr, TOMINUS, MS_OMINUS, TG::Sum, 0 },
+        { u"oper"_ustr, TOPER, '\0', TG::Oper, 5 },
+        { u"oplus"_ustr, TOPLUS, MS_OPLUS, TG::Sum, 0 },
+        { u"or"_ustr, TOR, MS_OR, TG::Sum, 0 },
+        { u"ortho"_ustr, TORTHO, MS_ORTHO, TG::Relation, 0 },
+        { u"otimes"_ustr, TOTIMES, MS_OTIMES, TG::Product, 0 },
+        { u"over"_ustr, TOVER, '\0', TG::Product, 0 },
+        { u"overbrace"_ustr, TOVERBRACE, MS_OVERBRACE, TG::Product, 5 },
+        { u"overline"_ustr, TOVERLINE, '\0', TG::Attribute, 5 },
+        { u"overstrike"_ustr, TOVERSTRIKE, '\0', TG::Attribute, 5 },
+        { u"owns"_ustr, TNI, MS_NI, TG::Relation, 0 },
+        { u"parallel"_ustr, TPARALLEL, MS_DLINE, TG::Relation, 0 },
+        { u"partial"_ustr, TPARTIAL, MS_PARTIAL, TG::Standalone, 5 },
+        { u"phantom"_ustr, TPHANTOM, '\0', TG::FontAttr, 5 },
+        { u"plusminus"_ustr, TPLUSMINUS, MS_PLUSMINUS, TG::UnOper | TG::Sum, 5 },
+        { u"prec"_ustr, TPRECEDES, MS_PRECEDES, TG::Relation, 0 },
+        { u"preccurlyeq"_ustr, TPRECEDESEQUAL, MS_PRECEDESEQUAL, TG::Relation, 0 },
+        { u"precsim"_ustr, TPRECEDESEQUIV, MS_PRECEDESEQUIV, TG::Relation, 0 },
+        { u"prod"_ustr, TPROD, MS_PROD, TG::Oper, 5 },
+        { u"prop"_ustr, TPROP, MS_PROP, TG::Relation, 0 },
+        { u"rangle"_ustr, TRANGLE, MS_RMATHANGLE, TG::RBrace, 0 }, //! 0 to terminate expression
+        { u"rbrace"_ustr, TRBRACE, MS_RBRACE, TG::RBrace, 0 },
+        { u"rceil"_ustr, TRCEIL, MS_RCEIL, TG::RBrace, 0 },
+        { u"rdbracket"_ustr, TRDBRACKET, MS_RDBRACKET, TG::RBrace, 0 },
+        { u"rdline"_ustr, TRDLINE, MS_DVERTLINE, TG::RBrace, 0 },
+        { u"re"_ustr, TRE, MS_RE, TG::Standalone, 5 },
+        { u"rfloor"_ustr, TRFLOOR, MS_RFLOOR, TG::RBrace, 0 }, //! 0 to terminate expression
+        { u"right"_ustr, TRIGHT, '\0', TG::NONE, 0 },
+        { u"rightarrow"_ustr, TRIGHTARROW, MS_RIGHTARROW, TG::Standalone, 5 },
+        { u"rline"_ustr, TRLINE, MS_VERTLINE, TG::RBrace, 0 }, //! 0 to terminate expression
+        { u"rsub"_ustr, TRSUB, '\0', TG::Power, 0 },
+        { u"rsup"_ustr, TRSUP, '\0', TG::Power, 0 },
+        { u"sans"_ustr, TSANS, '\0', TG::Font, 0 },
+        { u"serif"_ustr, TSERIF, '\0', TG::Font, 0 },
+        { u"setC"_ustr, TSETC, MS_SETC, TG::Standalone, 5 },
+        { u"setminus"_ustr, TSETMINUS, MS_BACKSLASH, TG::Product, 0 },
+        { u"setN"_ustr, TSETN, MS_SETN, TG::Standalone, 5 },
+        { u"setQ"_ustr, TSETQ, MS_SETQ, TG::Standalone, 5 },
+        { u"setquotient"_ustr, TSETQUOTIENT, MS_SLASH, TG::Product, 0 },
+        { u"setR"_ustr, TSETR, MS_SETR, TG::Standalone, 5 },
+        { u"setZ"_ustr, TSETZ, MS_SETZ, TG::Standalone, 5 },
+        { u"sim"_ustr, TSIM, MS_SIM, TG::Relation, 0 },
+        { u"simeq"_ustr, TSIMEQ, MS_SIMEQ, TG::Relation, 0 },
+        { u"sin"_ustr, TSIN, '\0', TG::Function, 5 },
+        { u"sinh"_ustr, TSINH, '\0', TG::Function, 5 },
+        { u"size"_ustr, TSIZE, '\0', TG::FontAttr, 5 },
+        { u"slash"_ustr, TSLASH, MS_SLASH, TG::Product, 0 },
+        { u"sqrt"_ustr, TSQRT, MS_SQRT, TG::UnOper, 5 },
+        { u"stack"_ustr, TSTACK, '\0', TG::NONE, 5 },
+        { u"sub"_ustr, TRSUB, '\0', TG::Power, 0 },
+        { u"subset"_ustr, TSUBSET, MS_SUBSET, TG::Relation, 0 },
+        { u"subseteq"_ustr, TSUBSETEQ, MS_SUBSETEQ, TG::Relation, 0 },
+        { u"succ"_ustr, TSUCCEEDS, MS_SUCCEEDS, TG::Relation, 0 },
+        { u"succcurlyeq"_ustr, TSUCCEEDSEQUAL, MS_SUCCEEDSEQUAL, TG::Relation, 0 },
+        { u"succsim"_ustr, TSUCCEEDSEQUIV, MS_SUCCEEDSEQUIV, TG::Relation, 0 },
+        { u"sum"_ustr, TSUM, MS_SUM, TG::Oper, 5 },
+        { u"sup"_ustr, TRSUP, '\0', TG::Power, 0 },
+        { u"supset"_ustr, TSUPSET, MS_SUPSET, TG::Relation, 0 },
+        { u"supseteq"_ustr, TSUPSETEQ, MS_SUPSETEQ, TG::Relation, 0 },
+        { u"tan"_ustr, TTAN, '\0', TG::Function, 5 },
+        { u"tanh"_ustr, TTANH, '\0', TG::Function, 5 },
+        { u"tilde"_ustr, TTILDE, MS_TILDE, TG::Attribute, 5 },
+        { u"times"_ustr, TTIMES, MS_TIMES, TG::Product, 0 },
+        { u"to"_ustr, TTO, '\0', TG::Limit, 0 },
+        { u"toward"_ustr, TTOWARD, MS_RIGHTARROW, TG::Relation, 0 },
+        { u"transl"_ustr, TTRANSL, MS_TRANSL, TG::Relation, 0 },
+        { u"transr"_ustr, TTRANSR, MS_TRANSR, TG::Relation, 0 },
+        { u"underbrace"_ustr, TUNDERBRACE, MS_UNDERBRACE, TG::Product, 5 },
+        { u"underline"_ustr, TUNDERLINE, '\0', TG::Attribute, 5 },
+        { u"union"_ustr, TUNION, MS_UNION, TG::Sum, 0 },
+        { u"uoper"_ustr, TUOPER, '\0', TG::UnOper, 5 },
+        { u"uparrow"_ustr, TUPARROW, MS_UPARROW, TG::Standalone, 5 },
+        { u"vec"_ustr, TVEC, MS_VEC, TG::Attribute, 5 },
+        { u"widebslash"_ustr, TWIDEBACKSLASH, MS_BACKSLASH, TG::Product, 0 },
+        { u"wideharpoon"_ustr, TWIDEHARPOON, MS_HARPOON, TG::Attribute, 5 },
+        { u"widehat"_ustr, TWIDEHAT, MS_HAT, TG::Attribute, 5 },
+        { u"wideslash"_ustr, TWIDESLASH, MS_SLASH, TG::Product, 0 },
+        { u"widetilde"_ustr, TWIDETILDE, MS_TILDE, TG::Attribute, 5 },
+        { u"widevec"_ustr, TWIDEVEC, MS_VEC, TG::Attribute, 5 },
+        { u"wp"_ustr, TWP, MS_WP, TG::Standalone, 5 },
+        { u"جا"_ustr, TSIN, '\0', TG::Function, 5 },
+        { u"جاز"_ustr, TSINH, '\0', TG::Function, 5 },
+        { u"جتا"_ustr, TCOS, '\0', TG::Function, 5 },
+        { u"جتاز"_ustr, TCOSH, '\0', TG::Function, 5 },
+        { u"حا"_ustr, TSIN, '\0', TG::Function, 5 },
+        { u"حاز"_ustr, TSINH, '\0', TG::Function, 5 },
+        { u"حتا"_ustr, TCOS, '\0', TG::Function, 5 },
+        { u"حتاز"_ustr, TCOSH, '\0', TG::Function, 5 },
+        { u"حد"_ustr, THADD, MS_HADD, TG::Oper, 5 },
+        { u"طا"_ustr, TTAN, '\0', TG::Function, 5 },
+        { u"طاز"_ustr, TTANH, '\0', TG::Function, 5 },
+        { u"طتا"_ustr, TCOT, '\0', TG::Function, 5 },
+        { u"طتاز"_ustr, TCOTH, '\0', TG::Function, 5 },
+        { u"ظا"_ustr, TTAN, '\0', TG::Function, 5 },
+        { u"ظاز"_ustr, TTANH, '\0', TG::Function, 5 },
+        { u"ظتا"_ustr, TCOT, '\0', TG::Function, 5 },
+        { u"ظتاز"_ustr, TCOTH, '\0', TG::Function, 5 },
+        { u"قا"_ustr, TSEC, '\0', TG::Function, 5 },
+        { u"قاز"_ustr, TSECH, '\0', TG::Function, 5 },
+        { u"قتا"_ustr, TCSC, '\0', TG::Function, 5 },
+        { u"قتاز"_ustr, TCSCH, '\0', TG::Function, 5 },
+        { u"لو"_ustr, TLOG, '\0', TG::Function, 5 },
+        { u"مجـ"_ustr, TSUM, MS_MAJ, TG::Oper, 5 },
+        { u"نها"_ustr, TNAHA, '\0', TG::Oper, 5 },
+        { u"ٯا"_ustr, TSEC, '\0', TG::Function, 5 },
+        { u"ٯاز"_ustr, TSECH, '\0', TG::Function, 5 },
+        { u"ٯتا"_ustr, TCSC, '\0', TG::Function, 5 },
+        { u"ٯتاز"_ustr, TCSCH, '\0', TG::Function, 5 } };
 
 // First character may be any alphabetic
 const sal_Int32 coStartFlags = KParseTokens::ANY_LETTER | KParseTokens::IGNORE_LEADING_WS;
@@ -474,7 +474,7 @@ void SmParser5::NextToken() //Central part of the parser
     if (nRealStart >= nBufLen)
     {
         m_aCurToken.eType = TEND;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 0;
         m_aCurToken.aText.clear();
@@ -491,7 +491,7 @@ void SmParser5::NextToken() //Central part of the parser
         sal_Int32 n = aRes.EndPos - nRealStart;
         assert(n >= 0);
         m_aCurToken.eType = TNUMBER;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 5;
         m_aCurToken.aText = m_aBufferString.copy(nRealStart, n);
@@ -502,7 +502,7 @@ void SmParser5::NextToken() //Central part of the parser
     else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
     {
         m_aCurToken.eType = TTEXT;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 5;
         m_aCurToken.aText = aRes.DequotedNameOrString;
@@ -526,7 +526,7 @@ void SmParser5::NextToken() //Central part of the parser
         else
         {
             m_aCurToken.eType = TIDENT;
-            m_aCurToken.cMathChar = u"";
+            m_aCurToken.cMathChar = u""_ustr;
             m_aCurToken.nGroup = TG::NONE;
             m_aCurToken.nLevel = 5;
             m_aCurToken.aText = aName;
@@ -538,7 +538,7 @@ void SmParser5::NextToken() //Central part of the parser
     else if (aRes.TokenType == 0 && '_' == m_aBufferString[nRealStart])
     {
         m_aCurToken.eType = TRSUB;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::Power;
         m_aCurToken.nLevel = 0;
         m_aCurToken.aText = "_";
@@ -678,7 +678,7 @@ void SmParser5::NextToken() //Central part of the parser
                     // i.e. a valid symbol-name is following the '%'
                     // character
                     m_aCurToken.eType = TTEXT;
-                    m_aCurToken.cMathChar = u"";
+                    m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
                     m_aCurToken.aText = "%";
@@ -713,7 +713,7 @@ void SmParser5::NextToken() //Central part of the parser
                 case '\\':
                 {
                     m_aCurToken.eType = TESCAPE;
-                    m_aCurToken.cMathChar = u"";
+                    m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::NONE;
                     m_aCurToken.nLevel = 5;
                     m_aCurToken.aText = "\\";
@@ -731,7 +731,7 @@ void SmParser5::NextToken() //Central part of the parser
                 case '^':
                 {
                     m_aCurToken.eType = TRSUP;
-                    m_aCurToken.cMathChar = u"";
+                    m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Power;
                     m_aCurToken.nLevel = 0;
                     m_aCurToken.aText = "^";
@@ -740,7 +740,7 @@ void SmParser5::NextToken() //Central part of the parser
                 case '`':
                 {
                     m_aCurToken.eType = TSBLANK;
-                    m_aCurToken.cMathChar = u"";
+                    m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Blank;
                     m_aCurToken.nLevel = 5;
                     m_aCurToken.aText = "`";
@@ -776,7 +776,7 @@ void SmParser5::NextToken() //Central part of the parser
                 case '~':
                 {
                     m_aCurToken.eType = TBLANK;
-                    m_aCurToken.cMathChar = u"";
+                    m_aCurToken.cMathChar = u""_ustr;
                     m_aCurToken.nGroup = TG::Blank;
                     m_aCurToken.nLevel = 5;
                     m_aCurToken.aText = "~";
@@ -787,7 +787,7 @@ void SmParser5::NextToken() //Central part of the parser
                     if (m_aBufferString.match("##", nRealStart))
                     {
                         m_aCurToken.eType = TDPOUND;
-                        m_aCurToken.cMathChar = u"";
+                        m_aCurToken.cMathChar = u""_ustr;
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 0;
                         m_aCurToken.aText = "##";
@@ -797,7 +797,7 @@ void SmParser5::NextToken() //Central part of the parser
                     else
                     {
                         m_aCurToken.eType = TPOUND;
-                        m_aCurToken.cMathChar = u"";
+                        m_aCurToken.cMathChar = u""_ustr;
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 0;
                         m_aCurToken.aText = "#";
@@ -903,7 +903,7 @@ void SmParser5::NextToken() //Central part of the parser
                         // texts like .34 ...56 ... h ...78..90
                         // will be treated as numbers
                         m_aCurToken.eType = TNUMBER;
-                        m_aCurToken.cMathChar = u"";
+                        m_aCurToken.cMathChar = u""_ustr;
                         m_aCurToken.nGroup = TG::NONE;
                         m_aCurToken.nLevel = 5;
 
@@ -953,7 +953,7 @@ void SmParser5::NextToken() //Central part of the parser
     if (!bHandled)
     {
         m_aCurToken.eType = TCHARACTER;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 5;
 
@@ -1038,7 +1038,7 @@ void SmParser5::NextTokenColor(SmTokenType dvipload)
         if (m_aBufferString[nRealStart] == '#' && !m_aBufferString.match("##", nRealStart))
         {
             m_aCurToken.eType = THEX;
-            m_aCurToken.cMathChar = u"";
+            m_aCurToken.cMathChar = u""_ustr;
             m_aCurToken.nGroup = TG::Color;
             m_aCurToken.nLevel = 0;
             m_aCurToken.aText = "hex";
@@ -1153,7 +1153,7 @@ void SmParser5::NextTokenFontSize()
         sal_Int32 n = aRes.EndPos - nRealStart;
         assert(n >= 0);
         m_aCurToken.eType = THEX;
-        m_aCurToken.cMathChar = u"";
+        m_aCurToken.cMathChar = u""_ustr;
         m_aCurToken.nGroup = TG::NONE;
         m_aCurToken.nLevel = 5;
         m_aCurToken.aText = m_aBufferString.copy(nRealStart, n);
@@ -1930,15 +1930,15 @@ std::unique_ptr<SmNode> SmParser5::DoOper()
         case THADD:
         case TNAHA:
             if (eType == TLIMSUP)
-                m_aCurToken.aText = u"lim sup";
+                m_aCurToken.aText = u"lim sup"_ustr;
             else if (eType == TLIMINF)
-                m_aCurToken.aText = u"lim inf";
+                m_aCurToken.aText = u"lim inf"_ustr;
             else if (eType == TNAHA)
-                m_aCurToken.aText = u"نها";
+                m_aCurToken.aText = u"نها"_ustr;
             else if (eType == THADD)
                 m_aCurToken.aText = OUString(&MS_HADD, 1);
             else
-                m_aCurToken.aText = u"lim";
+                m_aCurToken.aText = u"lim"_ustr;
             pNode.reset(new SmTextNode(m_aCurToken, FNT_TEXT));
             pNode->SetSelection(m_aCurESelection);
             break;

@@ -623,7 +623,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
     Reference<XInterface> executed = statement->executeQuery(
         u"SELECT SCHEMA_NAME AS TABLE_SCHEM, CATALOG_NAME AS TABLE_CATALOG FROM INFORMATION_SCHEMA.SCHEMATA \
        WHERE SCHEMA_NAME NOT IN ('information_schema', 'mysql', 'performance_schema') \
-       ORDER BY SCHEMA_NAME");
+       ORDER BY SCHEMA_NAME"_ustr);
     Reference<XResultSet> rs(executed, UNO_QUERY_THROW);
     Reference<XResultSetMetaDataSupplier> supp(executed, UNO_QUERY_THROW);
     Reference<XResultSetMetaData> rs_meta = supp->getMetaData();

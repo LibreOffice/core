@@ -303,7 +303,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf67207_MERGEFIELD, "mailmerge.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextField.Database"));
     OUString sValue;
     xTextField->getPropertyValue("Content") >>= sValue;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"«Name»"), sValue);
+    CPPUNIT_ASSERT_EQUAL(u"«Name»"_ustr, sValue);
 
     uno::Reference<beans::XPropertySet> xFiledMaster = xDependent->getTextFieldMaster();
     uno::Reference<lang::XServiceInfo> xFiledMasterServiceInfo(xFiledMaster, uno::UNO_QUERY_THROW);

@@ -3772,7 +3772,7 @@ we check in the following sequence:
                                                 (m_aContext.BaseURL.getLength() > 0 ?
                                                     m_aContext.BaseURL :
                                                     //use dummy location if empty
-                                                    u"http://ahost.ax"),
+                                                    u"http://ahost.ax"_ustr),
                                                 url));
                     aTargetURL = aNewURL; //reassign the new target URL
 

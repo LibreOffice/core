@@ -868,7 +868,8 @@ CPPUNIT_TEST_FIXTURE(VBAMacroTest, testNonAsciiMacroIRI)
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), rDoc.GetString(ScAddress(0, 1, 0)));
     CPPUNIT_ASSERT_EQUAL(OUString("baz"), rDoc.GetString(ScAddress(0, 2, 0)));
 
-    auto ret = dispatchCommand(mxComponent, u"macro://./Standard.Module1.NonAsciiName_αβγ", {});
+    auto ret
+        = dispatchCommand(mxComponent, u"macro://./Standard.Module1.NonAsciiName_αβγ"_ustr, {});
     css::frame::DispatchResultEvent retEvent;
     CPPUNIT_ASSERT(ret >>= retEvent);
     // tdf#153752: without the fix, this would fail with

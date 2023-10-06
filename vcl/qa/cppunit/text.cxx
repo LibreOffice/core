@@ -226,7 +226,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
 
 CPPUNIT_TEST_FIXTURE(VclTextTest, testTextLayoutCache)
 {
-    OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر";
+    OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر"_ustr;
     vcl::text::TextLayoutCache cache(sTestString.getStr(), sTestString.getLength());
 
     vcl::text::Run run1 = cache.runs[0];
@@ -426,7 +426,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutRuns_PosIsInAnyRun)
 CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiStrong)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
-                           "العاشر";
+                           "العاشر"_ustr;
     vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
                                     SalLayoutFlags::BiDiStrong, LanguageTag(LANGUAGE_NONE),
                                     nullptr);
@@ -453,7 +453,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiStrong)
 CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiRtl)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
-                           "العاشر";
+                           "العاشر"_ustr;
     vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
                                     SalLayoutFlags::BiDiRtl, LanguageTag(LANGUAGE_NONE), nullptr);
 
@@ -485,7 +485,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsBiDiRtl)
 CPPUNIT_TEST_FIXTURE(VclTextTest, testImplLayoutArgsRightAlign)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dog"
-                           "العاشر";
+                           "العاشر"_ustr;
     vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
                                     SalLayoutFlags::RightAlign, LanguageTag(LANGUAGE_NONE),
                                     nullptr);
@@ -564,8 +564,8 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithCenterEllpsis)
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a b c d ...v w x y z"),
-        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z", 100,
+        u"a b c d ...v w x y z"_ustr,
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z"_ustr, 100,
                                   DrawTextFlags::CenterEllipsis));
 }
 
@@ -575,17 +575,17 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithEndEllpsis)
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 10,
-                                                                   DrawTextFlags::EndEllipsis));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, device->GetEllipsisString(u"abcde. f g h i j ..."_ustr, 10,
+                                                              DrawTextFlags::EndEllipsis));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a b c d e f g h i j ..."),
-        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z", 100,
+        u"a b c d e f g h i j ..."_ustr,
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w x y z"_ustr, 100,
                                   DrawTextFlags::EndEllipsis));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 1,
-                                                                   DrawTextFlags::EndEllipsis
-                                                                       | DrawTextFlags::Clip));
+    CPPUNIT_ASSERT_EQUAL(
+        u"a"_ustr, device->GetEllipsisString(u"abcde. f g h i j ..."_ustr, 1,
+                                             DrawTextFlags::EndEllipsis | DrawTextFlags::Clip));
 }
 
 CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithNewsEllpsis)
@@ -594,32 +594,32 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithNewsEllpsis)
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"a"), device->GetEllipsisString(u"abcde. f g h i j ...", 10,
-                                                                   DrawTextFlags::NewsEllipsis));
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, device->GetEllipsisString(u"abcde. f g h i j ..."_ustr, 10,
+                                                              DrawTextFlags::NewsEllipsis));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a b .... x y z"),
-        device->GetEllipsisString(u"a b c d. e f g. h i j k l m n o p q r s t u v w. x y z", 100,
+        u"a b .... x y z"_ustr,
+        device->GetEllipsisString(u"a b c d. e f g. h i j k l m n o p q r s t u v w. x y z"_ustr,
+                                  100, DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        u"a b .... x y z"_ustr,
+        device->GetEllipsisString(u"a b c d. e f g h i j k l m n o p q r s t u v w. x y z"_ustr,
+                                  100, DrawTextFlags::NewsEllipsis));
+
+    CPPUNIT_ASSERT_EQUAL(
+        u"a b c d e f g h i j ..."_ustr,
+        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w. x y z"_ustr, 100,
                                   DrawTextFlags::NewsEllipsis));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a b .... x y z"),
-        device->GetEllipsisString(u"a b c d. e f g h i j k l m n o p q r s t u v w. x y z", 100,
-                                  DrawTextFlags::NewsEllipsis));
+        u"a..... x y z"_ustr,
+        device->GetEllipsisString(u"a. b c d e f g h i j k l m n o p q r s t u v w. x y z"_ustr,
+                                  100, DrawTextFlags::NewsEllipsis));
 
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a b c d e f g h i j ..."),
-        device->GetEllipsisString(u"a b c d e f g h i j k l m n o p q r s t u v w. x y z", 100,
-                                  DrawTextFlags::NewsEllipsis));
-
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"a..... x y z"),
-        device->GetEllipsisString(u"a. b c d e f g h i j k l m n o p q r s t u v w. x y z", 100,
-                                  DrawTextFlags::NewsEllipsis));
-
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"ab. cde..."),
-        device->GetEllipsisString(u"ab. cde. x y z", 50, DrawTextFlags::NewsEllipsis));
+        u"ab. cde..."_ustr,
+        device->GetEllipsisString(u"ab. cde. x y z"_ustr, 50, DrawTextFlags::NewsEllipsis));
 }
 
 CPPUNIT_TEST_FIXTURE(VclTextTest, testGetTextBreak)
@@ -628,7 +628,7 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetTextBreak)
     device->SetOutputSizePixel(Size(1000, 1000));
     device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
 
-    const OUString sTestStr(u"textline_ text_");
+    const OUString sTestStr(u"textline_ text_"_ustr);
     const auto nLen = sTestStr.getLength();
     const auto nTextWidth = device->GetTextWidth("text");
 

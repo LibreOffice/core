@@ -536,9 +536,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testLostPlaceholders)
     uno::Reference<drawing::XShape> xShp(pObj->getUnoShape(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShp);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ShapeType!",
-                                 OUString(u"com.sun.star.presentation.OutlinerShape"),
-                                 xShp->getShapeType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Wrong ShapeType!", u"com.sun.star.presentation.OutlinerShape"_ustr, xShp->getShapeType());
     uno::Reference<beans::XPropertySet> xShpProps(xShp, uno::UNO_QUERY);
     // Without the fix in place there will be the following error:
     // Expected: com.sun.star.presentation.OutlinerShape
@@ -576,7 +575,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPlaceholderFillAndOutlineExport)
         CPPUNIT_ASSERT(xShp);
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong ShapeType!",
-                                     OUString(u"com.sun.star.presentation.OutlinerShape"),
+                                     u"com.sun.star.presentation.OutlinerShape"_ustr,
                                      xShp->getShapeType());
         uno::Reference<beans::XPropertySet> xShpProps(xShp, uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(

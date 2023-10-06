@@ -621,7 +621,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                                  uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, xShape->getString());
 
     insertStringToObject(1, u"one", /*bUseEscape*/ false);
     typeKey(pXImpressDocument, KEY_RETURN);
@@ -635,49 +635,49 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf148620)
     typeKey(pXImpressDocument, KEY_RETURN);
     typeString(pXImpressDocument, u"six");
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nFive\nsix"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nFive\nsix"_ustr, xShape->getString());
 
     uno::Sequence<beans::PropertyValue> aArgs(
         comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(sal_Int32(0)) } }));
     dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nsix\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nsix\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nsix\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nsix\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nsix\nThree\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nsix\nThree\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nsix\nTwo\nThree\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nsix\nTwo\nThree\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineUp", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"six\nOne\nTwo\nThree\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"six\nOne\nTwo\nThree\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nsix\nTwo\nThree\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nsix\nTwo\nThree\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nsix\nThree\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nsix\nThree\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nsix\nFour\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nsix\nFour\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nsix\nFive"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nsix\nFive"_ustr, xShape->getString());
 
     dispatchCommand(mxComponent, ".uno:OutlineDown", aArgs);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"One\nTwo\nThree\nFour\nFive\nsix"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"One\nTwo\nThree\nFour\nFive\nsix"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf141703)
@@ -891,7 +891,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
     // Without the fix in place, this test would have failed with:
     // - Expected: °
     // - Actual  : ㅀ
-    CPPUNIT_ASSERT_EQUAL(OUString(u"°"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"°"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf151417)
@@ -1005,7 +1005,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     {
         uno::Reference<text::XSimpleText> xText = xShape->getText();
-        xText->insertString(xText->getStart(), u"test", false);
+        xText->insertString(xText->getStart(), u"test"_ustr, false);
     }
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),

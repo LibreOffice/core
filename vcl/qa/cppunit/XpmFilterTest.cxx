@@ -23,7 +23,7 @@ public:
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
     XpmFilterTest()
-        : maDataUrl(u"/vcl/qa/cppunit/data/")
+        : maDataUrl(u"/vcl/qa/cppunit/data/"_ustr)
     {
     }
 };

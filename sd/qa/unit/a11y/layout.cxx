@@ -20,7 +20,7 @@ using namespace css;
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestImpressDefaultStructure)
 {
-    load(u"private:factory/simpress");
+    load(u"private:factory/simpress"_ustr);
     Scheduler::ProcessEventsToIdle();
 
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("<SHAPE name=\"PageShape: Slide 1\" description=\" \"/>"
@@ -40,7 +40,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestImpressDefaultStructure)
 // a basic check of the content order for https://bugs.documentfoundation.org/show_bug.cgi?id=150064
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultLayout)
 {
-    load(u"private:factory/simpress");
+    load(u"private:factory/simpress"_ustr);
     Scheduler::ProcessEventsToIdle();
 
     auto xDocumentContext = getDocumentAccessibleContext();
@@ -66,7 +66,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestImpressDefaultLayout)
 // test a11y tree order is stable (https://bugs.documentfoundation.org/show_bug.cgi?id=150064)
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, tdf150064)
 {
-    loadFromSrc(u"/sd/qa/unit/a11y/data/tdf150064.fodp");
+    loadFromSrc(u"/sd/qa/unit/a11y/data/tdf150064.fodp"_ustr);
     Scheduler::ProcessEventsToIdle();
 
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxDocument,

@@ -37,8 +37,8 @@ void SwWordCountStatusBarControl::StateChangedAtStatusBarControl(
     }
     else
     {
-        GetStatusBar().SetItemText(GetId(), u"");
-        GetStatusBar().SetQuickHelpText(GetId(), u"");
+        GetStatusBar().SetItemText(GetId(), u""_ustr);
+        GetStatusBar().SetQuickHelpText(GetId(), u""_ustr);
     }
 }
 

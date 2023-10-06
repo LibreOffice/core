@@ -894,17 +894,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf119143, "tdf119143.docx")
     // The runs inside <w:dir> were ignored
     const OUString sParaText = getParagraph(1)->getString();
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"عندما يريد العالم أن يتكلّم ‬ ، فهو يتحدّث "
-                 u"بلغة "
-                 u"يونيكود. تسجّل الآن لحضور المؤتمر الدولي العاشر "
-                 u"ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 "
-                 u"آذار 1997 بمدينة مَايِنْتْس، ألمانيا. و سيجمع المؤتمر "
-                 u"بين خبراء من كافة قطاعات الصناعة على الشبكة "
-                 u"العالمية انترنيت ويونيكود، حيث ستتم، على الصعيدين "
-                 u"الدولي والمحلي على حد سواء مناقشة سبل استخدام "
-                 u"يونكود في النظم القائمة وفيما يخص التطبيقات "
-                 u"الحاسوبية، الخطوط، تصميم النصوص والحوسبة متعددة "
-                 u"اللغات."),
+        u"عندما يريد العالم أن يتكلّم ‬ ، فهو يتحدّث "
+        u"بلغة "
+        u"يونيكود. تسجّل الآن لحضور المؤتمر الدولي العاشر "
+        u"ليونيكود (Unicode Conference)، الذي سيعقد في 10-12 "
+        u"آذار 1997 بمدينة مَايِنْتْس، ألمانيا. و سيجمع المؤتمر "
+        u"بين خبراء من كافة قطاعات الصناعة على الشبكة "
+        u"العالمية انترنيت ويونيكود، حيث ستتم، على الصعيدين "
+        u"الدولي والمحلي على حد سواء مناقشة سبل استخدام "
+        u"يونكود في النظم القائمة وفيما يخص التطبيقات "
+        u"الحاسوبية، الخطوط، تصميم النصوص والحوسبة متعددة "
+        u"اللغات."_ustr,
         sParaText);
 }
 
@@ -1017,7 +1017,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf94628)
                                ->Value.get<OUString>();
     // Actually for 'BLACK UPPER RIGHT TRIANGLE' is \u25E5
     // But we use Wingdings 3 font here, so code is different
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\uF07B"), sBulletChar);
+    CPPUNIT_ASSERT_EQUAL(u"\uF07B"_ustr, sBulletChar);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf122594, "tdf122594.docx")
@@ -1227,9 +1227,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
 
         // mandatory authors and dates
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author",
-                    u"Tekijä");
+                    u"Tekijä"_ustr);
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
-                    u"Tekijä");
+                    u"Tekijä"_ustr);
         // no date (anonymized change)
         // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
         assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",

@@ -115,7 +115,7 @@ void WmfTest::testNonPlaceableWmf()
 
 void WmfTest::testTdf88163NonPlaceableWmf()
 {
-    OUString fileName(u"tdf88163-non-placeable.wmf");
+    OUString fileName(u"tdf88163-non-placeable.wmf"_ustr);
     SvFileStream aFileStream(getFullUrl(fileName), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
@@ -150,7 +150,7 @@ void WmfTest::testTdf88163NonPlaceableWmf()
 
 void WmfTest::testTdf88163PlaceableWmf()
 {
-    OUString fileName(u"tdf88163-wrong-font-size.wmf");
+    OUString fileName(u"tdf88163-wrong-font-size.wmf"_ustr);
     SvFileStream aFileStream(getFullUrl(fileName), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
@@ -188,7 +188,7 @@ void WmfTest::testTdf88163PlaceableWmf()
 
 void WmfTest::testSetTextAlignWmf()
 {
-    OUString fileName(u"TestSetTextAlign.wmf");
+    OUString fileName(u"TestSetTextAlign.wmf"_ustr);
     SvFileStream aFileStream(getFullUrl(fileName), StreamMode::READ);
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);

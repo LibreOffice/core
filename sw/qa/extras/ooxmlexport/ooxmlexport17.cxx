@@ -47,7 +47,7 @@ public:
 
 DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledNumbering.docx")
 {
-    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, u"TBMM DÖNEMİ"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara(getParagraph(1, u"TBMM DÖNEMİ"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xPara, "ListLabelString"));
 
     xPara.set(getParagraph(2, "Numbering explicitly cancelled"), uno::UNO_QUERY);
@@ -284,7 +284,7 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, OUString(u"☐"), /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"☐"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
@@ -292,8 +292,8 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
     xContentControlProps->setPropertyValue("Checked", uno::Any(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -1008,16 +1008,16 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 CPPUNIT_TEST_FIXTURE(Test, testTdf144668)
 {
     loadAndReload("tdf144668.odt");
-    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1, u"level1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1, u"level1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("[0001]"), getProperty<OUString>(xPara1, "ListLabelString"));
 
-    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2, u"level2"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2, u"level2"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("[001]"), getProperty<OUString>(xPara2, "ListLabelString"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148455_1, "tdf148455_1.docx")
 {
-    uno::Reference<beans::XPropertySet> xPara2(getParagraph(3, u"1.1.1"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(3, u"1.1.1"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("1.1.1."), getProperty<OUString>(xPara2, "ListLabelString"));
 }
 

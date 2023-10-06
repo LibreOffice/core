@@ -567,10 +567,10 @@ namespace
             // This ensures that the imported text contains all of the characters
             OString xpath = "//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span[1]";
             OUString  sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"敏捷的狐狸跨过慵懒的"), sContent);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"敏捷的狐狸跨过慵懒的"_ustr, sContent);
             xpath = "//draw:frame[@draw:z-index='4'][1]/draw:text-box/text:p/text:span[1]";
             sContent = getXPathContent(pXmlDoc, xpath).replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"狗。"), sContent);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"狗。"_ustr, sContent);
 #endif
         }
 
@@ -793,30 +793,30 @@ namespace
             // Test for امُ عَلَيْكَ
             OString xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 14821.9583333333 2159.23861112778)']/draw:text-box/text:p/text:span)";
             OUString sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"امُ عَلَيَْك"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"امُ عَلَيَْك"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for ٱلسََّل . It appears in the 3rd frame, i.e. after the امُ عَلَيَْك which is in the 2nd frame (from left to right)
             // thus these two frames together appear as ٱلسََّل امُ عَلَيْكَ in Draw‬.
             // FIXME: Should be ٱلسَّلَامُ عَلَيْكَ (i.e. the two text frames should be merged into one so that the ل and the ا will show as لَا rather than ل ا)
             xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 17420.1666666667 2159.23861112778)']/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"ٱلسََّل"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"ٱلسََّل"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for "LibreOffice RTL"
             xpath = "string(//draw:frame[@draw:transform='matrix(917.222222222222 0 0 917.222222222222 12779.375 5121.79583335)']/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"LibreOffice RTL"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"LibreOffice RTL"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test for "LibreOffice LTR (test)"
             xpath = "string(//draw:frame[last()-1]/draw:text-box/text:p/text:span[last()])";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"LibreOffice LTR (test)"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"LibreOffice LTR (test)"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             /* Test for Chinese characters */
             // Use last() instead of matrix below, because the matrix may be different on different OS due to fallback of Chinese fonts.
             xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc, xpath);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), OUString(u"中文测试，中文"), sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput.getStr(), u"中文测试，中文"_ustr, sContent.replaceAll("\n\n", " ").replaceAll("\n", ""));
 
             // Test pdf text run in the Writer PDF import filter
             xAdaptor->setTreeVisitorFactory(createWriterTreeVisitorFactory());
@@ -827,13 +827,13 @@ namespace
             xmlDocUniquePtr pXmlDoc2(xmlParseDoc(reinterpret_cast<xmlChar const *>(aOutput2.getStr())));
             xpath = "string(//draw:frame[@draw:z-index='3'][1]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"ٱلسََّل"), sContent);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), u"ٱلسََّل"_ustr, sContent);
             xpath = "string(//draw:frame[@draw:z-index='2'][1]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL(OUString(u"امُ عَلَيَْك"), sContent);
+            CPPUNIT_ASSERT_EQUAL(u"امُ عَلَيَْك"_ustr, sContent);
             xpath = "string(//draw:frame[last()]/draw:text-box/text:p/text:span)";
             sContent = getXPathContent(pXmlDoc2, xpath).replaceAll("\n\n", " ").replaceAll("\n", "");
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), OUString(u"中文测试，中文"), sContent);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aOutput2.getStr(), u"中文测试，中文"_ustr, sContent);
 #endif
         }
 

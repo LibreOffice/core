@@ -2741,7 +2741,7 @@ void Test::testInvalidUtf7() {
          | RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT | RTL_TEXTTOUNICODE_FLAGS_FLUSH),
         &info, &converted);
     CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+    CPPUNIT_ASSERT_EQUAL(u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
     CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
     CPPUNIT_ASSERT_EQUAL(sal_Size(1), converted);
     rtl_destroyTextToUnicodeConverter(converter);
@@ -2766,7 +2766,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD\uFFFD\uFFFD\uFFFD"),
+            u"\uFFFD\uFFFD\uFFFD\uFFFD"_ustr,
             OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), converted);
@@ -2790,7 +2790,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(2), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2833,7 +2833,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(3), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2876,7 +2876,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(2), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD."), OUString(buf, sal_Int32(size)));
+            u"\uFFFD."_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(3), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2900,7 +2900,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(2), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(6), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2923,7 +2923,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2946,7 +2946,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2970,7 +2970,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(5), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -2994,7 +2994,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(6), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -3017,7 +3017,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), converted);
         rtl_destroyTextToUnicodeConverter(converter);
@@ -3041,7 +3041,7 @@ void Test::testInvalidUtf8() {
             &info, &converted);
         CPPUNIT_ASSERT_EQUAL(sal_Size(1), size);
         CPPUNIT_ASSERT_EQUAL(
-            OUString(u"\uFFFD"), OUString(buf, sal_Int32(size)));
+            u"\uFFFD"_ustr, OUString(buf, sal_Int32(size)));
         CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_INVALID, info);
         CPPUNIT_ASSERT_EQUAL(sal_Size(4), converted);
         rtl_destroyTextToUnicodeConverter(converter);

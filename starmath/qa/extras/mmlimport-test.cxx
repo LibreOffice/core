@@ -178,7 +178,7 @@ void Test::testMathmlEntities()
     loadFromURL(u"mthmlentities.mml");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"{ \u03C3 \u221E \u221E \u03C3 }"), pDocShell->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"{ \u03C3 \u221E \u221E \u03C3 }"_ustr, pDocShell->GetText());
 }
 
 void Test::testMaj()
@@ -188,8 +188,8 @@ void Test::testMaj()
     CPPUNIT_ASSERT(pModel);
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT(pDocShell);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"{ maj csup \u0661 csub { nitalic \U0001EE0A = \u0660 } { frac "
-                                  u"{ \u0661 } { nitalic \U0001EE0A } } }"),
+    CPPUNIT_ASSERT_EQUAL(u"{ maj csup \u0661 csub { nitalic \U0001EE0A = \u0660 } { frac "
+                         u"{ \u0661 } { nitalic \U0001EE0A } } }"_ustr,
                          pDocShell->GetText());
 }
 
@@ -200,8 +200,8 @@ void Test::testHadd()
     CPPUNIT_ASSERT(pModel);
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     CPPUNIT_ASSERT(pDocShell);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"{ nitalic \U0001EEF1 csup nitalic \U0001EE4E csub nitalic "
-                                  u"\U0001EE4E nitalic \U0001EE4E }"),
+    CPPUNIT_ASSERT_EQUAL(u"{ nitalic \U0001EEF1 csup nitalic \U0001EE4E csub nitalic "
+                         u"\U0001EE4E nitalic \U0001EE4E }"_ustr,
                          pDocShell->GetText());
 }
 

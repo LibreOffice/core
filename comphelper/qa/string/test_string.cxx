@@ -73,7 +73,7 @@ void TestString::testDecimalStringToNumber()
     s1 += u"\u07C6";
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(12346), comphelper::string::decimalStringToNumber(s1));
     // Codepoints on 2 16bits words
-    s1 = u"\U0001D7FE\U0001D7F7"; // MATHEMATICAL MONOSPACE DIGIT EIGHT and ONE
+    s1 = u"\U0001D7FE\U0001D7F7"_ustr; // MATHEMATICAL MONOSPACE DIGIT EIGHT and ONE
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(81), comphelper::string::decimalStringToNumber(s1));
 }
 
@@ -192,7 +192,7 @@ void TestString::testReverseString()
         comphelper::string::reverseString(u"u\U00010000v\U0010FFFFw"));
     static sal_Unicode const malformed[] = {0xDC00, 0xD800};
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\U00010000"),
+        u"\U00010000"_ustr,
         comphelper::string::reverseString(std::u16string_view(malformed, std::size(malformed))));
 }
 
@@ -200,11 +200,11 @@ void TestString::testReverseCodePoints() {
     CPPUNIT_ASSERT_EQUAL(OUString(), comphelper::string::reverseCodePoints(""));
     CPPUNIT_ASSERT_EQUAL(OUString("cba"), comphelper::string::reverseCodePoints("abc"));
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"w\U0010FFFFv\U00010000u"),
-        comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"));
+        u"w\U0010FFFFv\U00010000u"_ustr,
+        comphelper::string::reverseCodePoints(u"u\U00010000v\U0010FFFFw"_ustr));
     static sal_Unicode const malformed[] = {0xDC00, 0xD800};
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\U00010000"),
+        u"\U00010000"_ustr,
         comphelper::string::reverseCodePoints(OUString(malformed, std::size(malformed))));
 }
 

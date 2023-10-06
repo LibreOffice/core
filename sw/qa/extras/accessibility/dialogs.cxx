@@ -22,7 +22,7 @@ using namespace css;
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Special Characters", [this](Dialog& dialog) {
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
@@ -33,7 +33,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
             getFocusedObject(dialog.getAccessible()));
 
         // search for (c) symbol
-        dialog.postExtTextEventAsync(u"copyright");
+        dialog.postExtTextEventAsync(u"copyright"_ustr);
         Scheduler::ProcessEventsToIdle();
 
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u"©"));
@@ -54,13 +54,13 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSpecialCharactersDialo
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Special Character..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>©</PARAGRAPH>"), collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>©</PARAGRAPH>"_ustr, collectText());
 }
 
 /* checks for the fix from https://gerrit.libreoffice.org/c/core/+/147660 */
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocus)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Special Characters", [](Dialog& dialog) {
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TABLE_CELL, u" "));
@@ -86,12 +86,12 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, TestSpecialCharactersDialogFocu
     CPPUNIT_ASSERT(activateMenuItem(u"Insert", u"Special Character..."));
     CPPUNIT_ASSERT(dialogWaiter->waitEndDialog());
 
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"<PARAGRAPH>!</PARAGRAPH>"), collectText());
+    CPPUNIT_ASSERT_EQUAL(u"<PARAGRAPH>!</PARAGRAPH>"_ustr, collectText());
 }
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Hyperlink", [this](Dialog& dialog) {
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
@@ -99,7 +99,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
         // Focus the URL box (should be default, but make sure we're on it)
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::COMBO_BOX, u"URL:"));
         // Fill in an address
-        dialog.postExtTextEventAsync(u"https://libreoffice.org/");
+        dialog.postExtTextEventAsync(u"https://libreoffice.org/"_ustr);
         // Validate the whole dialog
         dialog.postKeyEventAsync(0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestHyperlinkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Bookmark", [this](Dialog& dialog) {
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
@@ -123,7 +123,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
         CPPUNIT_ASSERT(dialog.tabTo(accessibility::AccessibleRole::TEXT, u"Name:"));
         dialog.postKeyEventAsync(0, awt::Key::SELECT_ALL);
         dialog.postKeyEventAsync(0, awt::Key::DELETE);
-        dialog.postExtTextEventAsync(u"Test Bookmark 1");
+        dialog.postExtTextEventAsync(u"Test Bookmark 1"_ustr);
         // Validate the whole dialog
         dialog.postKeyEventAsync(0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
@@ -139,7 +139,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestBookmarkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Insert Section", [this](Dialog& dialog) {
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
@@ -157,7 +157,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestSectionDialog)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Fontwork Gallery", [this](Dialog& dialog) {
         dumpA11YTree(dialog.getAccessible()->getAccessibleContext());
@@ -178,7 +178,7 @@ CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFontworkDialog)
 
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, BasicTestFrameDialog)
 {
-    load(u"private:factory/swriter");
+    load(u"private:factory/swriter"_ustr);
 
     auto dialogWaiter = awaitDialog(u"Frame", [](Dialog& dialog) {
         // Validate the whole dialog

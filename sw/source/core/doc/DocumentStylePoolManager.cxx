@@ -2184,7 +2184,7 @@ SwNumRule* DocumentStylePoolManager::GetNumRuleFromPool( sal_uInt16 nId )
 
             aFormat.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
             aFormat.SetIncludeUpperLevels( 1 );
-            aFormat.SetListFormat("", u")", 2);
+            aFormat.SetListFormat("", u")"_ustr, 2);
             aFormat.SetNumAdjust( SvxAdjust::Left );
 
             if ( eNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )

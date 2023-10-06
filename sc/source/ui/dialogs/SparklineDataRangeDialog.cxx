@@ -18,7 +18,7 @@ SparklineDataRangeDialog::SparklineDataRangeDialog(SfxBindings* pBindings,
                                                    SfxChildWindow* pChildWindow,
                                                    weld::Window* pWindow, ScViewData& rViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pWindow,
-                            u"modules/scalc/ui/sparklinedatarangedialog.ui",
+                            u"modules/scalc/ui/sparklinedatarangedialog.ui"_ustr,
                             "SparklineDataRangeDialog")
     , mrViewData(rViewData)
     , mrDocument(rViewData.GetDocument())

@@ -38,7 +38,7 @@ private:
 int TheApplication::Main()
 {
     mpWin = VclPtr<WorkWindow>::Create(nullptr, WB_APP | WB_STDWORK);
-    mpWin->SetText(u"Minimum VCL application with a window");
+    mpWin->SetText(u"Minimum VCL application with a window"_ustr);
     mpWin->Show();
     Execute();
     mpWin.disposeAndClear();

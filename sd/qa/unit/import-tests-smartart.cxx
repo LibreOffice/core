@@ -693,7 +693,7 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAccentProcess)
         uno::Reference<container::XIndexAccess> xRules(xPara->getPropertyValue("NumberingRules"),
                                                        uno::UNO_QUERY);
         comphelper::SequenceAsHashMap aRule(xRules->getByIndex(0));
-        CPPUNIT_ASSERT_EQUAL(OUString(u"•"), aRule["BulletChar"].get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(u"•"_ustr, aRule["BulletChar"].get<OUString>());
     }
 
     int nFirstChildTop = xFirstChild->getPosition().Y;
@@ -1279,13 +1279,13 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testBulletList)
     uno::Reference<container::XIndexAccess> xRules1(xPara1->getPropertyValue("NumberingRules"),
                                                     uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aRule1(xRules1->getByIndex(1));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"•"), aRule1["BulletChar"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"•"_ustr, aRule1["BulletChar"].get<OUString>());
 
     uno::Reference<beans::XPropertySet> xPara2(xParas->nextElement(), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xRules2(xPara2->getPropertyValue("NumberingRules"),
                                                     uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aRule2(xRules2->getByIndex(2));
-    CPPUNIT_ASSERT_EQUAL(OUString(u"•"), aRule2["BulletChar"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"•"_ustr, aRule2["BulletChar"].get<OUString>());
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testRecursion)

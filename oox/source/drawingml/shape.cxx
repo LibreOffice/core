@@ -601,13 +601,13 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                 switch (MsLangId::getScriptType(aTag.getLanguageType()))
                 {
                     case css::i18n::ScriptType::LATIN:
-                        xSet->setPropertyValue(u"CharLocale", uno::Any(aLocale));
+                        xSet->setPropertyValue(u"CharLocale"_ustr, uno::Any(aLocale));
                         break;
                     case css::i18n::ScriptType::ASIAN:
-                        xSet->setPropertyValue(u"CharLocaleAsian", uno::Any(aLocale));
+                        xSet->setPropertyValue(u"CharLocaleAsian"_ustr, uno::Any(aLocale));
                         break;
                     case css::i18n::ScriptType::COMPLEX:
-                        xSet->setPropertyValue(u"CharLocaleComplex", uno::Any(aLocale));
+                        xSet->setPropertyValue(u"CharLocaleComplex"_ustr, uno::Any(aLocale));
                         break;
                     default:;
                 }
@@ -642,9 +642,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                     bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
-                        xSet->setPropertyValue(u"CharFontName", uno::Any(sFontName));
-                        xSet->setPropertyValue(u"CharFontPitch", uno::Any(nFontPitch));
-                        xSet->setPropertyValue(u"CharFontFamily", uno::Any(nFontFamily));
+                        xSet->setPropertyValue(u"CharFontName"_ustr, uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitch"_ustr, uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamily"_ustr, uno::Any(nFontFamily));
                     }
                 }
                 // minor Asian
@@ -653,9 +653,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                     bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
-                        xSet->setPropertyValue(u"CharFontNameAsian", uno::Any(sFontName));
-                        xSet->setPropertyValue(u"CharFontPitchAsian", uno::Any(nFontPitch));
-                        xSet->setPropertyValue(u"CharFontFamilyAsian", uno::Any(nFontFamily));
+                        xSet->setPropertyValue(u"CharFontNameAsian"_ustr, uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitchAsian"_ustr, uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamilyAsian"_ustr, uno::Any(nFontFamily));
                     }
                 }
                 // minor Complex
@@ -664,9 +664,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                     bRet = pFont->getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
                     if (bRet)
                     {
-                        xSet->setPropertyValue(u"CharFontNameComplex", uno::Any(sFontName));
-                        xSet->setPropertyValue(u"CharFontPitchComplex", uno::Any(nFontPitch));
-                        xSet->setPropertyValue(u"CharFontFamilyComplex", uno::Any(nFontFamily));
+                        xSet->setPropertyValue(u"CharFontNameComplex"_ustr, uno::Any(sFontName));
+                        xSet->setPropertyValue(u"CharFontPitchComplex"_ustr, uno::Any(nFontPitch));
+                        xSet->setPropertyValue(u"CharFontFamilyComplex"_ustr, uno::Any(nFontFamily));
                     }
                 }
             }
@@ -681,9 +681,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
 
             if (bRet)
             {
-                xSet->setPropertyValue(u"CharFontName", uno::Any(sFontName));
-                xSet->setPropertyValue(u"CharFontPitch", uno::Any(nFontPitch));
-                xSet->setPropertyValue(u"CharFontFamily", uno::Any(nFontFamily));
+                xSet->setPropertyValue(u"CharFontName"_ustr, uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitch"_ustr, uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamily"_ustr, uno::Any(nFontFamily));
             }
             // Asian
             bRet = rCharProps.maAsianFont.getFontData(sFontName, nFontPitch, nFontFamily, nullptr, rFilter);
@@ -693,9 +693,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                                                                rFilter);
             if (bRet)
             {
-                xSet->setPropertyValue(u"CharFontNameAsian", uno::Any(sFontName));
-                xSet->setPropertyValue(u"CharFontPitchAsian", uno::Any(nFontPitch));
-                xSet->setPropertyValue(u"CharFontFamilyAsian", uno::Any(nFontFamily));
+                xSet->setPropertyValue(u"CharFontNameAsian"_ustr, uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitchAsian"_ustr, uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamilyAsian"_ustr, uno::Any(nFontFamily));
             }
             // Complex
             bRet
@@ -706,9 +706,9 @@ static void lcl_copyCharPropsToShape(const uno::Reference<drawing::XShape>& xSha
                                                                  rFilter);
             if (bRet)
             {
-                xSet->setPropertyValue(u"CharFontNameComplex", uno::Any(sFontName));
-                xSet->setPropertyValue(u"CharFontPitchComplex", uno::Any(nFontPitch));
-                xSet->setPropertyValue(u"CharFontFamilyComplex", uno::Any(nFontFamily));
+                xSet->setPropertyValue(u"CharFontNameComplex"_ustr, uno::Any(sFontName));
+                xSet->setPropertyValue(u"CharFontPitchComplex"_ustr, uno::Any(nFontPitch));
+                xSet->setPropertyValue(u"CharFontFamilyComplex"_ustr, uno::Any(nFontFamily));
             }
 
             // LO uses shape properties, MS Office character properties. Copy them from char to shape.

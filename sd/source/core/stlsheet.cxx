@@ -89,10 +89,10 @@ static SvxItemPropertySet& GetStylePropertySet()
 {
     static const SfxItemPropertyMapEntry aFullPropertyMap_Impl[] =
     {
-        { u"Family",                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
-        { u"UserDefinedAttributes",  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
-        { u"DisplayName",            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
-        { u"Hidden",                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
+        { u"Family"_ustr,                 WID_STYLE_FAMILY,       ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
+        { u"UserDefinedAttributes"_ustr,  SDRATTR_XMLATTRIBUTES,  cppu::UnoType<XNameContainer>::get(), 0,     0},
+        { u"DisplayName"_ustr,            WID_STYLE_DISPNAME,     ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY,    0},
+        { u"Hidden"_ustr,                 WID_STYLE_HIDDEN,       cppu::UnoType<bool>::get(),       0,     0},
 
         SVX_UNOEDIT_NUMBERING_PROPERTY,
         SHADOW_PROPERTIES
@@ -103,10 +103,10 @@ static SvxItemPropertySet& GetStylePropertySet()
         TEXT_PROPERTIES_DEFAULTS
         CONNECTOR_PROPERTIES
         SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS
-        { u"TopBorder",                    SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
-        { u"BottomBorder",                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
-        { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
-        { u"RightBorder",                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { u"TopBorder"_ustr,                    SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, TOP_BORDER },
+        { u"BottomBorder"_ustr,                 SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
+        { u"LeftBorder"_ustr,                   SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
+        { u"RightBorder"_ustr,                  SDRATTR_TABLE_BORDER,           ::cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
     };
 
     static SvxItemPropertySet aPropSet( aFullPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );

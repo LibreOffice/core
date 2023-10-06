@@ -152,7 +152,7 @@ namespace
         CPPUNIT_ASSERT_EQUAL(OString("windows-1250"), i->second.m_sCharset);
         CPPUNIT_ASSERT_EQUAL(OString("en-gb"), i->second.m_sLanguage);
         // Euro currency sign, windows-1250 x80 is converted to unicode u20AC:
-        CPPUNIT_ASSERT_EQUAL(OUString(u"value2 \u20AC"), i->second.m_sValue);
+        CPPUNIT_ASSERT_EQUAL(u"value2 \u20AC"_ustr, i->second.m_sValue);
         CPPUNIT_ASSERT(i->second.m_bConverted);
         i = parameters.find("parm3");
         CPPUNIT_ASSERT(i != parameters.end());

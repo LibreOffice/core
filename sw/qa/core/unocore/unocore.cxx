@@ -466,8 +466,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
     // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
     xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
     xContentControlProps->setPropertyValue("Checked", uno::Any(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the specified properties are set:
@@ -480,8 +480,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)
     std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
     CPPUNIT_ASSERT(pContentControl->GetCheckbox());
     CPPUNIT_ASSERT(pContentControl->GetChecked());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), pContentControl->GetCheckedState());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), pContentControl->GetUncheckedState());
+    CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, pContentControl->GetCheckedState());
+    CPPUNIT_ASSERT_EQUAL(u"☐"_ustr, pContentControl->GetUncheckedState());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)

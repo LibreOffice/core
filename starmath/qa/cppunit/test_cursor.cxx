@@ -176,7 +176,7 @@ void Test::testCutSelectPaste()
 
 void Test::testSelectSurrogatePairs()
 {
-    auto xTree = SmParser5().Parse(u"\U0001EE4E");
+    auto xTree = SmParser5().Parse(u"\U0001EE4E"_ustr);
     xTree->Prepare(xDocShRef->GetFormat(), *xDocShRef, 0);
 
     SmCursor aCursor(xTree.get(), xDocShRef.get());
@@ -188,7 +188,7 @@ void Test::testSelectSurrogatePairs()
     aCursor.Paste();
 
 #ifndef _WIN32 // FIXME: on Windows clipboard does not work in tests for some reason
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\U0001EE4E"), xDocShRef->GetText());
+    CPPUNIT_ASSERT_EQUAL(u"\U0001EE4E"_ustr, xDocShRef->GetText());
 #endif
 }
 

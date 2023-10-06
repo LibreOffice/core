@@ -105,7 +105,7 @@ DECLARE_WW8EXPORT_TEST(testTdf90408B, "tdf90408B.doc")
 
     uno::Reference<beans::XPropertySet> xRun(getRun(xPara, 1), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("checkbox is 28pt", 28.f, getProperty<float>(xRun, "CharHeight"));
-    xRun.set(getRun(xPara, 2, u" Κατάψυξη,  "), uno::UNO_QUERY_THROW);
+    xRun.set(getRun(xPara, 2, u" Κατάψυξη,  "_ustr), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("text is 10pt", 10.f, getProperty<float>(xRun, "CharHeight"));
 }
 

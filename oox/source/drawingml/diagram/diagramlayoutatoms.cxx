@@ -1826,7 +1826,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                             = o3tl::convert(-285750, o3tl::Length::emu, o3tl::Length::mm100);
 
                     // It is not possible to change the bullet style for text.
-                    aParagraph->getProperties().getBulletList().setBulletChar(u"•");
+                    aParagraph->getProperties().getBulletList().setBulletChar(u"•"_ustr);
                     aParagraph->getProperties().getBulletList().setSuffixNone();
                     isBulletList = true;
                 }

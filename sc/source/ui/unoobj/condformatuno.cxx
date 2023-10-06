@@ -50,8 +50,8 @@ o3tl::span<const SfxItemPropertyMapEntry> getCondFormatPropset()
 {
     static const SfxItemPropertyMapEntry aCondFormatPropertyMap_Impl[] =
     {
-        {u"ID", ID, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {u"Range", CondFormat_Range, cppu::UnoType<sheet::XSheetCellRanges>::get(), 0, 0},
+        {u"ID"_ustr, ID, cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {u"Range"_ustr, CondFormat_Range, cppu::UnoType<sheet::XSheetCellRanges>::get(), 0, 0},
     };
     return aCondFormatPropertyMap_Impl;
 }
@@ -68,10 +68,10 @@ o3tl::span<const SfxItemPropertyMapEntry> getConditionEntryrPropSet()
 {
     static const SfxItemPropertyMapEntry aConditionEntryPropertyMap_Impl[] =
     {
-        {u"StyleName", StyleName, cppu::UnoType<OUString>::get(), 0, 0},
-        {u"Formula1", Formula1, cppu::UnoType<OUString>::get(), 0, 0},
-        {u"Formula2", Formula2, cppu::UnoType<OUString>::get(), 0, 0},
-        {u"Operator", Operator, cppu::UnoType<decltype(sheet::ConditionFormatOperator::EQUAL)>::get(), 0, 0 },
+        {u"StyleName"_ustr, StyleName, cppu::UnoType<OUString>::get(), 0, 0},
+        {u"Formula1"_ustr, Formula1, cppu::UnoType<OUString>::get(), 0, 0},
+        {u"Formula2"_ustr, Formula2, cppu::UnoType<OUString>::get(), 0, 0},
+        {u"Operator"_ustr, Operator, cppu::UnoType<decltype(sheet::ConditionFormatOperator::EQUAL)>::get(), 0, 0 },
     };
     return aConditionEntryPropertyMap_Impl;
 }
@@ -121,7 +121,7 @@ o3tl::span<const SfxItemPropertyMapEntry> getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
-        {u"ColorScaleEntries", ColorScaleEntries, cppu::UnoType<uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
+        {u"ColorScaleEntries"_ustr, ColorScaleEntries, cppu::UnoType<uno::Sequence< sheet::XColorScaleEntry >>::get(), 0, 0 },
     };
     return aColorScalePropertyMap_Impl;
 }
@@ -160,16 +160,16 @@ o3tl::span<const SfxItemPropertyMapEntry> getDataBarPropSet()
 {
     static const SfxItemPropertyMapEntry aDataBarPropertyMap_Impl[] =
     {
-        {u"AxisPosition", AxisPosition, cppu::UnoType<decltype(sheet::DataBarAxis::AXIS_AUTOMATIC)>::get(), 0, 0 },
-        {u"UseGradient", UseGradient, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"UseNegativeColor", UseNegativeColor, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"ShowValue", DataBar_ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"Color", DataBar_Color, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {u"AxisColor", AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {u"NegativeColor", NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
-        {u"DataBarEntries", DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
-        {u"MinimumLength", MinimumLength, cppu::UnoType<double>::get(), 0, 0 },
-        {u"MaximumLength", MaximumLength, cppu::UnoType<double>::get(), 0, 0 },
+        {u"AxisPosition"_ustr, AxisPosition, cppu::UnoType<decltype(sheet::DataBarAxis::AXIS_AUTOMATIC)>::get(), 0, 0 },
+        {u"UseGradient"_ustr, UseGradient, cppu::UnoType<bool>::get(), 0, 0 },
+        {u"UseNegativeColor"_ustr, UseNegativeColor, cppu::UnoType<bool>::get(), 0, 0 },
+        {u"ShowValue"_ustr, DataBar_ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
+        {u"Color"_ustr, DataBar_Color, cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {u"AxisColor"_ustr, AxisColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {u"NegativeColor"_ustr, NegativeColor, cppu::UnoType<sal_Int32>::get(), 0, 0},
+        {u"DataBarEntries"_ustr, DataBarEntries, cppu::UnoType<uno::Sequence< sheet::XDataBarEntry >>::get(), 0, 0 },
+        {u"MinimumLength"_ustr, MinimumLength, cppu::UnoType<double>::get(), 0, 0 },
+        {u"MaximumLength"_ustr, MaximumLength, cppu::UnoType<double>::get(), 0, 0 },
     };
     return aDataBarPropertyMap_Impl;
 }
@@ -216,10 +216,10 @@ o3tl::span<const SfxItemPropertyMapEntry> getIconSetPropSet()
 {
     static const SfxItemPropertyMapEntry aIconSetPropertyMap_Impl[] =
     {
-        {u"Icons", Icons, cppu::UnoType<decltype(sheet::IconSetType::ICONSET_3SYMBOLS)>::get(), 0, 0 },
-        {u"Reverse", Reverse, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"ShowValue", ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
-        {u"IconSetEntries", IconSetEntries, cppu::UnoType<uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
+        {u"Icons"_ustr, Icons, cppu::UnoType<decltype(sheet::IconSetType::ICONSET_3SYMBOLS)>::get(), 0, 0 },
+        {u"Reverse"_ustr, Reverse, cppu::UnoType<bool>::get(), 0, 0 },
+        {u"ShowValue"_ustr, ShowValue, cppu::UnoType<bool>::get(), 0, 0 },
+        {u"IconSetEntries"_ustr, IconSetEntries, cppu::UnoType<uno::Sequence< sheet::XIconSetEntry >>::get(), 0, 0 },
     };
     return aIconSetPropertyMap_Impl;
 }
@@ -278,8 +278,8 @@ o3tl::span<const SfxItemPropertyMapEntry> getCondDatePropSet()
 {
     static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
     {
-        {u"StyleName", StyleName, cppu::UnoType<OUString>::get(), 0, 0},
-        {u"DateType", Icons, cppu::UnoType<decltype(sheet::DateType::TODAY)>::get(), 0, 0 },
+        {u"StyleName"_ustr, StyleName, cppu::UnoType<OUString>::get(), 0, 0},
+        {u"DateType"_ustr, Icons, cppu::UnoType<decltype(sheet::DateType::TODAY)>::get(), 0, 0 },
     };
     return aCondDatePropertyMap_Impl;
 }

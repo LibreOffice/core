@@ -50,7 +50,7 @@ void AccessibilityStatusBarControl::StateChangedAtStatusBarControl(sal_uInt16 /*
     }
     else
     {
-        GetStatusBar().SetQuickHelpText(GetId(), u"");
+        GetStatusBar().SetQuickHelpText(GetId(), u""_ustr);
     }
 
     GetStatusBar().Invalidate();

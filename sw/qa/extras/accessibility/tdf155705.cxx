@@ -24,7 +24,7 @@ using namespace css;
 /* This test only works if spell checking is available for en_US */
 CPPUNIT_TEST_FIXTURE(test::SwAccessibleTestBase, tdf155705)
 {
-    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/tdf155705.fodt");
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/tdf155705.fodt"_ustr);
 
     /* we need to give it a second to fully set up the XAccessibleTextMarkup, otherwise we get a
      * dysfunctional one that asserts out on m_pTextFrame */

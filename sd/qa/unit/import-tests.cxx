@@ -122,33 +122,33 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testDocumentLayout)
         std::u16string_view sInput, sDump;
         OUString sExportType;
     } aFilesToCompare[]
-        = { { u"odp/shapes-test.odp", u"xml/shapes-test_page", u"" },
-            { u"fdo47434.pptx", u"xml/fdo47434_", u"" },
-            { u"n758621.ppt", u"xml/n758621_", u"" },
-            { u"fdo64586.ppt", u"xml/fdo64586_", u"" },
+        = { { u"odp/shapes-test.odp", u"xml/shapes-test_page", u""_ustr },
+            { u"fdo47434.pptx", u"xml/fdo47434_", u""_ustr },
+            { u"n758621.ppt", u"xml/n758621_", u""_ustr },
+            { u"fdo64586.ppt", u"xml/fdo64586_", u""_ustr },
 
             // needed to adapt this, the border parameter is no longer
             // exported with MCGRs due to oox neither needing nor
             // supporting it with now freely definable gradients
-            { u"n819614.pptx", u"xml/n819614_", u"" },
+            { u"n819614.pptx", u"xml/n819614_", u""_ustr },
 
-            { u"n820786.pptx", u"xml/n820786_", u"" },
-            { u"n762695.pptx", u"xml/n762695_", u"" },
-            { u"n593612.pptx", u"xml/n593612_", u"" },
-            { u"fdo71434.pptx", u"xml/fdo71434_", u"" },
-            { u"n902652.pptx", u"xml/n902652_", u"" },
-            { u"tdf90403.pptx", u"xml/tdf90403_", u"" },
-            { u"tdf90338.odp", u"xml/tdf90338_", u"Impress Office Open XML" },
-            { u"tdf92001.odp", u"xml/tdf92001_", u"Impress Office Open XML" },
+            { u"n820786.pptx", u"xml/n820786_", u""_ustr },
+            { u"n762695.pptx", u"xml/n762695_", u""_ustr },
+            { u"n593612.pptx", u"xml/n593612_", u""_ustr },
+            { u"fdo71434.pptx", u"xml/fdo71434_", u""_ustr },
+            { u"n902652.pptx", u"xml/n902652_", u""_ustr },
+            { u"tdf90403.pptx", u"xml/tdf90403_", u""_ustr },
+            { u"tdf90338.odp", u"xml/tdf90338_", u"Impress Office Open XML"_ustr },
+            { u"tdf92001.odp", u"xml/tdf92001_", u"Impress Office Open XML"_ustr },
 // GCC -mfpmath=387 rounding issues in lclPushMarkerProperties
 // (oox/source/drawingml/lineproperties.cxx); see mail sub-thread starting at
 // <https://lists.freedesktop.org/archives/libreoffice/2016-September/
 // 075211.html> "Re: Test File: sc/qa/unit/data/functions/fods/chiinv.fods:
 // fails with Assertion" for how "-mfpmath=sse -msse2" would fix that:
 #if !(defined LINUX && defined X86)
-            { u"tdf100491.pptx", u"xml/tdf100491_", u"" },
+            { u"tdf100491.pptx", u"xml/tdf100491_", u""_ustr },
 #endif
-            { u"tdf109317.pptx", u"xml/tdf109317_", u"impress8" },
+            { u"tdf109317.pptx", u"xml/tdf109317_", u"impress8"_ustr },
             // { u"pptx/n828390.pptx", u"pptx/xml/n828390_", "Impress Office Open XML" }, // Example
           };
 

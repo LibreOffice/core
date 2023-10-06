@@ -332,7 +332,7 @@ public:
                     rtl_math_StringFormat_Automatic,
                     2,
                     u'٫', aGroups, u'٬', true);
-        CPPUNIT_ASSERT_EQUAL( OUString(u"1٬23٬456٫78"), aRes);
+        CPPUNIT_ASSERT_EQUAL( u"1٬23٬456٫78"_ustr, aRes);
 
         fVal = 4503599627370495.0;
         aRes = rtl::math::doubleToUString( fVal,

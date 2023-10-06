@@ -245,19 +245,19 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
             {
                 static SfxItemPropertyMapEntry const aPageMap_Impl[] =
                 {
-                    { u"BorderBottom", WID_PAGE_BOTTOM, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"BorderLeft", WID_PAGE_LEFT,     ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"BorderRight", WID_PAGE_RIGHT,   ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"BorderTop", WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"Height", WID_PAGE_HEIGHT,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"Width", WID_PAGE_WIDTH,         ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"Number", WID_PAGE_NUMBER,       ::cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"Orientation", WID_PAGE_ORIENT,  ::cppu::UnoType<view::PaperOrientation>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
-                    { u"UserDefinedAttributes", WID_PAGE_USERATTRIBS, ::cppu::UnoType<container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"IsBackgroundDark", WID_PAGE_ISDARK, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
-                    { u"NavigationOrder", WID_NAVORDER,     ::cppu::UnoType<container::XIndexAccess>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"BackgroundFullSize", WID_PAGE_BACKFULL, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID,  0},
-                    { u"Theme", WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), PropertyAttribute::MAYBEVOID,  0}
+                    { u"BorderBottom"_ustr, WID_PAGE_BOTTOM, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderLeft"_ustr, WID_PAGE_LEFT,     ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderRight"_ustr, WID_PAGE_RIGHT,   ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BorderTop"_ustr, WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Height"_ustr, WID_PAGE_HEIGHT,       ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Width"_ustr, WID_PAGE_WIDTH,         ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Number"_ustr, WID_PAGE_NUMBER,       ::cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Orientation"_ustr, WID_PAGE_ORIENT,  ::cppu::UnoType<view::PaperOrientation>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
+                    { u"UserDefinedAttributes"_ustr, WID_PAGE_USERATTRIBS, ::cppu::UnoType<container::XNameContainer>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"IsBackgroundDark"_ustr, WID_PAGE_ISDARK, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,  0},
+                    { u"NavigationOrder"_ustr, WID_NAVORDER,     ::cppu::UnoType<container::XIndexAccess>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"BackgroundFullSize"_ustr, WID_PAGE_BACKFULL, ::cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID,  0},
+                    { u"Theme"_ustr, WID_PAGE_THEME, cppu::UnoType<util::XTheme>::get(), PropertyAttribute::MAYBEVOID,  0}
                 };
                 m_aMapEntriesArr[nPropertyId] = aPageMap_Impl;
             }
@@ -593,7 +593,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                 static SfxItemPropertyMapEntry const aFieldmarkMap_Impl[] =
                 {
                     // FIXME: is this supposed to actually exist as UNO property, or is it supposed to be in the "parameters" of the field?
-                    { u"Checked", 0, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
+                    { u"Checked"_ustr, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE,     0},
                 };
                 m_aMapEntriesArr[nPropertyId] = aFieldmarkMap_Impl;
             }
@@ -666,7 +666,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     { UNO_NAME_APPLY_FORM_DESIGN_MODE,        WID_DOC_APPLY_FORM_DESIGN_MODE,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
                     { UNO_NAME_RUNTIME_UID, WID_DOC_RUNTIME_UID,  cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY, 0},
                     { UNO_NAME_LOCK_UPDATES,        WID_DOC_LOCK_UPDATES,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
-                    { u"UndocumentedWriterfilterHack", WID_DOC_WRITERFILTER,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
+                    { u"UndocumentedWriterfilterHack"_ustr, WID_DOC_WRITERFILTER,     cppu::UnoType<bool>::get(), PROPERTY_NONE,   0},
                     { UNO_NAME_HAS_VALID_SIGNATURES,  WID_DOC_HAS_VALID_SIGNATURES, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY,   0},
                     { UNO_NAME_BUILDID, WID_DOC_BUILDID, cppu::UnoType<OUString>::get(), 0, 0},
                     { UNO_NAME_DOC_INTEROP_GRAB_BAG, WID_DOC_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0 },

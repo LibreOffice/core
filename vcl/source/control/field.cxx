@@ -1283,7 +1283,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
             aStr += " ";
         if (meUnit == FieldUnit::INCH)
         {
-            OUString sDoublePrime = u"\u2033";
+            OUString sDoublePrime = u"\u2033"_ustr;
             if (aSuffix != "\"" && aSuffix != sDoublePrime)
                 aStr += " ";
             else
@@ -1291,7 +1291,7 @@ OUString MetricFormatter::CreateFieldText( sal_Int64 nValue ) const
         }
         else if (meUnit == FieldUnit::FOOT)
         {
-            OUString sPrime = u"\u2032";
+            OUString sPrime = u"\u2032"_ustr;
             if (aSuffix != "'" && aSuffix != sPrime)
                 aStr += " ";
             else

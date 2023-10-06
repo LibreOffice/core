@@ -699,11 +699,11 @@ private:
         }
         {
             CPPUNIT_ASSERT_MESSAGE("compareToAscii",
-                                   OUString(u"aaa").compareToAscii("aa")
+                                   u"aaa"_ustr.compareToAscii("aa")
                                        > 0); // just for comparison to following line
             CPPUNIT_ASSERT_MESSAGE("compareToAscii", o3tl::compareToAscii(u"aaa", "aa") > 0);
 
-            OUString aa(u"aa");
+            OUString aa(u"aa"_ustr);
             CPPUNIT_ASSERT_MESSAGE("compareToAscii",
                                    aa.compareToAscii("aaa")
                                        < 0); // just for comparison to following line

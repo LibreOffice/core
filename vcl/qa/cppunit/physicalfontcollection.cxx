@@ -179,7 +179,7 @@ void VclPhysicalFontCollectionTest::testShouldFindCJKFamily()
     // interestingly, you need to normalize the name still
     vcl::font::PhysicalFontFamily* pFontFamily = aFontCollection.FindOrCreateFontFamily(
         GetEnglishSearchFontName(u"시험")); // Korean for "test"
-    AddNormalFontFace(pFontFamily, u"시험");
+    AddNormalFontFace(pFontFamily, u"시험"_ustr);
 
     vcl::font::PhysicalFontFamily* pCJKFamily = aFontCollection.FindFontFamilyByAttributes(
         ImplFontAttrs::CJK, WEIGHT_NORMAL, WIDTH_NORMAL, ITALIC_NORMAL, u"");
@@ -307,7 +307,7 @@ void VclPhysicalFontCollectionTest::testShouldMatchFamilyName()
     // note that for this test, it is irrelevant what the search name is for PhysicalFontFamily,
     // the font searches the family name and uses the search parameter of FindFontFamilyByAttributes()
     vcl::font::PhysicalFontFamily* pFontFamily
-        = aFontCollection.FindOrCreateFontFamily(u"Matching family name");
+        = aFontCollection.FindOrCreateFontFamily(u"Matching family name"_ustr);
     AddNormalFontFace(pFontFamily, GetEnglishSearchFontName(u"Matching family name"));
 
     CPPUNIT_ASSERT_MESSAGE("No family found",

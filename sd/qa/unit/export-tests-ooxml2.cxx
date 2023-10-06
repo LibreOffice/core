@@ -371,7 +371,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMathObjectPPT2010)
         assertXPathContent(pXmlDocContent,
                            "/p:sld/p:cSld/p:spTree/mc:AlternateContent/mc:Choice/p:sp/p:txBody/a:p/"
                            "a14:m/m:oMath/m:sSup/m:e/m:r[1]/m:t",
-                           u"\U0001D44E"); // non-BMP char
+                           u"\U0001D44E"_ustr); // non-BMP char
 
         const SdrPage* pPage = GetPage(1);
         const SdrObject* pObj = pPage->GetObj(0);

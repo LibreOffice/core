@@ -125,11 +125,11 @@ static void GetOldStyleDicsInDir(
                 if (aLocaleName == u"ar")
                     aDicEntry.aLocaleNames = {
                         aLocaleName,
-                        u"ar-AE", u"ar-BH", u"ar-DJ", u"ar-DZ", u"ar-EG",
-                        u"ar-ER", u"ar-IL", u"ar-IQ", u"ar-JO", u"ar-KM",
-                        u"ar-KW", u"ar-LB", u"ar-LY", u"ar-MA", u"ar-MR",
-                        u"ar-OM", u"ar-PS", u"ar-QA", u"ar-SA", u"ar-SD",
-                        u"ar-SO", u"ar-SY", u"ar-TD", u"ar-TN", u"ar-YE"
+                        u"ar-AE"_ustr, u"ar-BH"_ustr, u"ar-DJ"_ustr, u"ar-DZ"_ustr, u"ar-EG"_ustr,
+                        u"ar-ER"_ustr, u"ar-IL"_ustr, u"ar-IQ"_ustr, u"ar-JO"_ustr, u"ar-KM"_ustr,
+                        u"ar-KW"_ustr, u"ar-LB"_ustr, u"ar-LY"_ustr, u"ar-MA"_ustr, u"ar-MR"_ustr,
+                        u"ar-OM"_ustr, u"ar-PS"_ustr, u"ar-QA"_ustr, u"ar-SA"_ustr, u"ar-SD"_ustr,
+                        u"ar-SO"_ustr, u"ar-SY"_ustr, u"ar-TD"_ustr, u"ar-TN"_ustr, u"ar-YE"_ustr
                     };
                 else
                     aDicEntry.aLocaleNames = { aLocaleName };

@@ -339,7 +339,7 @@ OUString SwCompatibilityOptPage::GetAllStrings()
 {
     OUString sAllStrings;
 
-    if (const auto& pString = m_xBuilder->weld_label(u"label11"))
+    if (const auto& pString = m_xBuilder->weld_label(u"label11"_ustr))
         sAllStrings += pString->get_label() + " ";
 
     sAllStrings += m_xDefaultPB->get_label() + " ";

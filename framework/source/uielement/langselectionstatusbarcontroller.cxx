@@ -344,7 +344,7 @@ void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStat
     else if ( !Event.State.hasValue() )
     {
         m_xStatusbarItem->setText( OUString() );
-        m_xStatusbarItem->setQuickHelpText(u"");
+        m_xStatusbarItem->setQuickHelpText(u""_ustr);
         m_bShowMenu = false;    // no language -> no menu
     }
 }

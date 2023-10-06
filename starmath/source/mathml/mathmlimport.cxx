@@ -605,7 +605,7 @@ void SmXMLContext_Helper::ApplyAttrs()
         return;
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.nLevel = 5;
 
     if (nIsBold != -1)
@@ -795,7 +795,7 @@ void SmXMLTokenAttrHelper::ApplyAttrs(MathMLMathvariantValue eDefaultMv)
     {
         SmToken aToken;
         aToken.eType = eType;
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.nLevel = 5;
         std::unique_ptr<SmFontNode> pFontNode(new SmFontNode(aToken));
         pFontNode->SetSubNodes(nullptr, popOrZero(rNodeStack));
@@ -991,7 +991,7 @@ void SmXMLPhantomContext_Impl::endFastElement(sal_Int32 nElement)
         SmXMLRowContext_Impl::endFastElement(nElement);
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.nLevel = 5;
     aToken.eType = TPHANTOM;
 
@@ -1053,7 +1053,7 @@ void SmXMLFencedContext_Impl::startFastElement(
 void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 {
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.aText = ",";
     aToken.nLevel = 5;
 
@@ -1075,7 +1075,7 @@ void SmXMLFencedContext_Impl::endFastElement(sal_Int32 /*nElement*/)
 
     SmNodeArray aRelationArray;
     SmNodeStack& rNodeStack = GetSmImport().GetNodeStack();
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = TIDENT;
 
     auto i = rNodeStack.size() - nElementCount;
@@ -1143,7 +1143,7 @@ public:
     SmXMLNumberContext_Impl(SmXMLImport& rImport)
         : SmXMLImportContext(rImport)
     {
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.nLevel = 5;
         aToken.eType = TNUMBER;
     }
@@ -1220,7 +1220,7 @@ public:
     SmXMLTextContext_Impl(SmXMLImport& rImport)
         : SmXMLImportContext(rImport)
     {
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
@@ -1249,7 +1249,7 @@ public:
     SmXMLStringContext_Impl(SmXMLImport& rImport)
         : SmXMLImportContext(rImport)
     {
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
@@ -1294,7 +1294,7 @@ public:
         , maTokenAttrHelper(*this)
         , aStyleHelper(*this)
     {
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.nLevel = 5;
         aToken.eType = TIDENT;
     }
@@ -1508,7 +1508,7 @@ void SmXMLSpaceContext_Impl::startFastElement(
     }
     SmToken aToken;
     aToken.eType = TBLANK;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.nGroup = TG::Blank;
     aToken.nLevel = 5;
     std::unique_ptr<SmBlankNode> pBlank(new SmBlankNode(aToken));
@@ -1548,7 +1548,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
         return;
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = eType;
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(aToken));
     SmNodeStack& rNodeStack = GetSmImport().GetNodeStack();
@@ -1602,7 +1602,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup aSub
         return;
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = eType;
     std::unique_ptr<SmSubSupNode> pNode(new SmSubSupNode(aToken));
     SmNodeStack& rNodeStack = GetSmImport().GetNodeStack();
@@ -1660,7 +1660,7 @@ void SmXMLUnderContext_Impl::HandleAccent()
     SmNodeStack& rNodeStack = GetSmImport().GetNodeStack();
     std::unique_ptr<SmNode> pTest = popOrZero(rNodeStack);
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = TUNDERLINE;
 
     std::unique_ptr<SmNode> pFirst;
@@ -1731,7 +1731,7 @@ void SmXMLOverContext_Impl::HandleAccent()
         return;
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = TACUTE;
 
     std::unique_ptr<SmAttributeNode> pNode(new SmAttributeNode(aToken));
@@ -1790,7 +1790,7 @@ public:
 void SmXMLNoneContext_Impl::endFastElement(sal_Int32)
 {
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.aText.clear();
     aToken.nLevel = 5;
     aToken.eType = TIDENT;
@@ -2055,7 +2055,7 @@ void SmXMLFracContext_Impl::endFastElement(sal_Int32)
         return;
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = TFRAC;
     std::unique_ptr<SmStructureNode> pSNode(new SmBinVerNode(aToken));
     std::unique_ptr<SmNode> pOper(new SmRectangleNode(aToken));
@@ -2133,7 +2133,7 @@ void SmXMLRowContext_Impl::endFastElement(sal_Int32)
                 && (aRelationArray[nSize - 1]->GetType() == SmNodeType::Math)))
         {
             SmToken aToken;
-            aToken.cMathChar = u"";
+            aToken.cMathChar = u""_ustr;
             aToken.nLevel = 5;
 
             int nLeft = 0, nRight = 0;
@@ -2144,7 +2144,7 @@ void SmXMLRowContext_Impl::endFastElement(sal_Int32)
                 nLeft = 1;
             }
             else
-                aToken.cMathChar = u"";
+                aToken.cMathChar = u""_ustr;
 
             aToken.eType = TLPARENT;
             std::unique_ptr<SmNode> pLeft(new SmMathSymbolNode(aToken));
@@ -2156,7 +2156,7 @@ void SmXMLRowContext_Impl::endFastElement(sal_Int32)
                 nRight = 1;
             }
             else
-                aToken.cMathChar = u"";
+                aToken.cMathChar = u""_ustr;
 
             aToken.eType = TRPARENT;
             std::unique_ptr<SmNode> pRight(new SmMathSymbolNode(aToken));
@@ -2312,7 +2312,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
     if (nCount % 2 == 0)
     {
         SmToken aToken;
-        aToken.cMathChar = u"";
+        aToken.cMathChar = u""_ustr;
         aToken.eType = bIsPrescript ? TLSUB : TRSUB;
 
         SmNodeStack aReverseStack;
@@ -2420,7 +2420,7 @@ void SmXMLTableContext_Impl::endFastElement(sal_Int32)
     aReverseStack.clear();
 
     SmToken aToken;
-    aToken.cMathChar = u"";
+    aToken.cMathChar = u""_ustr;
     aToken.eType = TMATRIX;
     std::unique_ptr<SmMatrixNode> pSNode(new SmMatrixNode(aToken));
     pSNode->SetSubNodes(std::move(aExpressionArray));

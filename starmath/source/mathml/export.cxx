@@ -136,7 +136,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     xInfoSet->setPropertyValue("UsePrettyPrinting", Any(true));
 
     // Set base URI
-    xInfoSet->setPropertyValue(u"BaseURI", Any(rMedium.GetBaseURL(true)));
+    xInfoSet->setPropertyValue(u"BaseURI"_ustr, Any(rMedium.GetBaseURL(true)));
 
     if (!m_bFlat) //Storage (Package) of Stream
     {
@@ -235,7 +235,7 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
     SAL_WARN_IF(m_xModel == nullptr, "starmath", "Missing model");
     SAL_WARN_IF(xContext == nullptr, "starmath", "Missing context");
     if (m_xModel == nullptr || xContext == nullptr)
-        return u"";
+        return u""_ustr;
 
     //Get model
     uno::Reference<lang::XComponent> xModelComp = m_xModel;
@@ -243,14 +243,14 @@ OUString SmMLExportWrapper::Export(SmMlElement* pElementTree)
     SmModel* pModel = m_xModel.get();
     SAL_WARN_IF(pModel == nullptr, "starmath", "Failed to get threw uno tunnel");
     if (xModelComp == nullptr || pModel == nullptr)
-        return u"";
+        return u""_ustr;
 
     // Get doc shell
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     if (pDocShell == nullptr)
     {
         SAL_WARN("starmath", "Failed to fetch sm document");
-        return u"";
+        return u""_ustr;
     }
 
     // create XPropertySet with three properties for status indicator
@@ -381,7 +381,7 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
 
     // Set stream as text / xml
     uno::Reference<beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
-    xSet->setPropertyValue("MediaType", Any(OUString(u"text/xml")));
+    xSet->setPropertyValue("MediaType", Any(u"text/xml"_ustr));
 
     // all streams must be encrypted in encrypted document
     xSet->setPropertyValue("UseCommonStoragePasswordEncryption", Any(true));
@@ -420,7 +420,7 @@ SmMLExportWrapper::WriteThroughComponentMS(const Reference<XComponent>& xCompone
 
     // We don't want to read uninitialized data
     if (!bOk)
-        return u"";
+        return u""_ustr;
 
     // Recover data and generate string
     OString aString(static_cast<const char*>(aMemoryStream.GetData()),
@@ -501,7 +501,7 @@ ErrCode SmMLExport::exportDoc(enum XMLTokenEnum eClass)
     // make use of a default namespace
     // Math doesn't need namespaces from xmloff, since it now uses default namespaces
     // Because that is common with current MathML usage in the web -> ResetNamespaceMap();
-    GetNamespaceMap_().Add(OUString(u""), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH);
+    GetNamespaceMap_().Add(u""_ustr, GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH);
 
     // Add xmlns line
     if (m_bUseExportTag)

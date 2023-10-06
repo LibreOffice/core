@@ -88,7 +88,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withoutbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf8withbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithoutbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
@@ -127,7 +127,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16lewithbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
@@ -140,7 +140,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf92161_gb18030)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"盖闻天地之数，有十二万九千六百岁为一元。"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"盖闻天地之数，有十二万九千六百岁为一元。"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithoutbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
@@ -166,7 +166,7 @@ CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf60145_utf16bewithbom)
 
     uno::Reference<text::XTextRange> xPara(getParagraph(1));
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"漢a'"), xPara->getString());
+    CPPUNIT_ASSERT_EQUAL(u"漢a'"_ustr, xPara->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(TxtImportTest, testTdf115088)

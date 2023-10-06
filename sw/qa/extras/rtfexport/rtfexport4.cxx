@@ -119,7 +119,7 @@ DECLARE_RTFEXPORT_TEST(test148518, "FORMDROPDOWN.rtf")
 
 DECLARE_RTFEXPORT_TEST(test150269, "hidden-linebreaks.rtf")
 {
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"\n\n\n");
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"\n\n\n"_ustr);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, "CharHidden"));
 }
 
@@ -633,37 +633,37 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
 DECLARE_RTFEXPORT_TEST(testTdf95706, "tdf95706.rtf")
 {
     uno::Reference<text::XTextRange> xRun2
-        = getRun(getParagraph(2), 1, u"\u0104\u012e\u0100\u0106\u00c4");
+        = getRun(getParagraph(2), 1, u"\u0104\u012e\u0100\u0106\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun2, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun3
-        = getRun(getParagraph(3), 1, u"\u0154\u00c1\u00c2\u0102\u00c4");
+        = getRun(getParagraph(3), 1, u"\u0154\u00c1\u00c2\u0102\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun3, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun4
-        = getRun(getParagraph(4), 1, u"\u0410\u0411\u0412\u0413\u0414");
+        = getRun(getParagraph(4), 1, u"\u0410\u0411\u0412\u0413\u0414"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun4, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun5
-        = getRun(getParagraph(5), 1, u"\u0390\u0391\u0392\u0393\u0394");
+        = getRun(getParagraph(5), 1, u"\u0390\u0391\u0392\u0393\u0394"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun5, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun6
-        = getRun(getParagraph(6), 1, u"\u00c0\u00c1\u00c2\u00c3\u00c4");
+        = getRun(getParagraph(6), 1, u"\u00c0\u00c1\u00c2\u00c3\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun6, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun7
-        = getRun(getParagraph(7), 1, u"\u05b0\u05b1\u05b2\u05b3\u05b4");
+        = getRun(getParagraph(7), 1, u"\u05b0\u05b1\u05b2\u05b3\u05b4"_ustr);
     // Do not check font for Hebrew: it can be substituted by smth able to handle these chars
     //CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun7, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun8
-        = getRun(getParagraph(8), 1, u"\u06c1\u0621\u0622\u0623\u0624");
+        = getRun(getParagraph(8), 1, u"\u06c1\u0621\u0622\u0623\u0624"_ustr);
     // Do not check font for Arabic: it can be substituted by smth able to handle these chars
     //CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun8, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun9
-        = getRun(getParagraph(9), 1, u"\u00c0\u00c1\u00c2\u0102\u00c4");
+        = getRun(getParagraph(9), 1, u"\u00c0\u00c1\u00c2\u0102\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun9, "CharFontName"));
 
     // Ensure strange font remains strange. No reason to check content: in this case it can vary on locale
@@ -672,22 +672,22 @@ DECLARE_RTFEXPORT_TEST(testTdf95706, "tdf95706.rtf")
                          getProperty<OUString>(xRun10, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun12
-        = getRun(getParagraph(12), 1, u"\u0390\u0391\u0392\u0393\u0394");
+        = getRun(getParagraph(12), 1, u"\u0390\u0391\u0392\u0393\u0394"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun12, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun13
-        = getRun(getParagraph(13), 1, u"\u0390\u0391\u0392\u0393\u0394");
+        = getRun(getParagraph(13), 1, u"\u0390\u0391\u0392\u0393\u0394"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun13, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun14 = getRun(getParagraph(14), 1);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun14, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun15
-        = getRun(getParagraph(15), 1, u"\u0104\u012e\u0100\u0106\u00c4");
+        = getRun(getParagraph(15), 1, u"\u0104\u012e\u0100\u0106\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun15, "CharFontName"));
 
     uno::Reference<text::XTextRange> xRun16
-        = getRun(getParagraph(16), 1, u"\u0104\u012e\u0100\u0106\u00c4");
+        = getRun(getParagraph(16), 1, u"\u0104\u012e\u0100\u0106\u00c4"_ustr);
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun16, "CharFontName"));
 }
 

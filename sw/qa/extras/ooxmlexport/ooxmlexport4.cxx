@@ -636,7 +636,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDateControl)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date", "fullDate", "2014-03-05T00:00:00Z");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:dateFormat", "val", "dddd, dd' de 'MMMM' de 'yyyy");
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:date/w:lid", "val", "es-ES");
-    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u"mi\u00E9rcoles, 05 de marzo de 2014");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r/w:t", u"mi\u00E9rcoles, 05 de marzo de 2014"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, test_Tdf115030)
@@ -894,7 +894,7 @@ CPPUNIT_TEST_FIXTURE(Test, test_ClosingBrace)
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/m:oMath[1]/m:d[2]/m:dPr[1]/m:endChr[1]","val","");
 
     // tdf#154371 paragraph style Подзаголовок ур3 inherits from Heading 3 (includes list level and list id)
-    uno::Reference<beans::XPropertySet> xParaStyle(getStyles("ParagraphStyles")->getByName(u"Подзаголовок ур3"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xParaStyle(getStyles("ParagraphStyles")->getByName(u"Подзаголовок ур3"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(2), getProperty<sal_Int16>(xParaStyle, "NumberingLevel"));
     CPPUNIT_ASSERT(!getProperty<OUString>(xParaStyle, "NumberingStyleName").isEmpty());
 }

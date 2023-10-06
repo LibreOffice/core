@@ -515,7 +515,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo()
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =
     {
-        { u"BibliographyDataFieldNames", 0, cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::READONLY, 0},
+        { u"BibliographyDataFieldNames"_ustr, 0, cppu::UnoType<Sequence<PropertyValue>>::get(), PropertyAttribute::READONLY, 0},
     };
     static Reference< XPropertySetInfo >  xRet =
         SfxItemPropertySet(aBibProps_Impl).getPropertySetInfo();

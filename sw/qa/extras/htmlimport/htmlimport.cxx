@@ -151,7 +151,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testListStyleType)
         if (rProp.Name == "BulletChar")
         {
             // should be 'o'.
-            CPPUNIT_ASSERT_EQUAL(OUString(u"\uE009"), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(u"\uE009"_ustr, rProp.Value.get<OUString>());
             bBulletFound = true;
             break;
         }
@@ -516,7 +516,7 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testUTF16_nonBMP)
 {
     createSwWebDoc("emojis16BE.html");
     // tdf#146173: non-BMP characters' surrogates didn't combine correctly
-    CPPUNIT_ASSERT_EQUAL(OUString(u"a text with emojis: 🌾 ☀👨🏼‍🌾🏃🏼‍♂️🤙🏽🔍"),
+    CPPUNIT_ASSERT_EQUAL(u"a text with emojis: 🌾 ☀👨🏼‍🌾🏃🏼‍♂️🤙🏽🔍"_ustr,
                          getParagraph(1)->getString());
 }
 

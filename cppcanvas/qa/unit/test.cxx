@@ -120,12 +120,12 @@ CPPUNIT_TEST_FIXTURE(CanvasTest, testTdf155810)
     {
         ScopedVclPtrInstance<VirtualDevice> pDev;
 
-        vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+        vcl::Font aFont(u"Noto Naskh Arabic"_ustr, u"Regular"_ustr, Size(0, 72));
         pDev->SetFont(aFont);
 
         aInputMetaFile.Record(pDev.get());
 
-        OUString aText(u"خالد");
+        OUString aText(u"خالد"_ustr);
         pDev->GetTextArray(aText, &aDXArray);
 
         auto nKashida = 200;

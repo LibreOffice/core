@@ -88,13 +88,13 @@ OUString convertSparklineType(sc::SparklineType eType)
     switch (eType)
     {
         case sc::SparklineType::Line:
-            return u"line";
+            return u"line"_ustr;
         case sc::SparklineType::Column:
-            return u"column";
+            return u"column"_ustr;
         case sc::SparklineType::Stacked:
-            return u"stacked";
+            return u"stacked"_ustr;
     }
-    return u"";
+    return u""_ustr;
 }
 
 OUString convertDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs eType)
@@ -102,13 +102,13 @@ OUString convertDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs eType)
     switch (eType)
     {
         case sc::DisplayEmptyCellsAs::Zero:
-            return u"zero";
+            return u"zero"_ustr;
         case sc::DisplayEmptyCellsAs::Gap:
-            return u"gap";
+            return u"gap"_ustr;
         case sc::DisplayEmptyCellsAs::Span:
-            return u"span";
+            return u"span"_ustr;
     }
-    return u"";
+    return u""_ustr;
 }
 
 OUString convertAxisType(sc::AxisType eType)
@@ -116,13 +116,13 @@ OUString convertAxisType(sc::AxisType eType)
     switch (eType)
     {
         case sc::AxisType::Individual:
-            return u"individual";
+            return u"individual"_ustr;
         case sc::AxisType::Group:
-            return u"group";
+            return u"group"_ustr;
         case sc::AxisType::Custom:
-            return u"custom";
+            return u"custom"_ustr;
     }
-    return u"";
+    return u""_ustr;
 }
 
 } // end anonymous ns

@@ -629,9 +629,9 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             {
                 aActivatorName = aLocation.subView( 0, nPos );
                 if( aActivatorName == u"java" )
-                    aActivatorName = u"com.sun.star.loader.Java";
+                    aActivatorName = u"com.sun.star.loader.Java"_ustr;
                 else if( aActivatorName == u"module" )
-                    aActivatorName = u"com.sun.star.loader.SharedLibrary";
+                    aActivatorName = u"com.sun.star.loader.SharedLibrary"_ustr;
                 aLocation = aLocation.copy( nPos + 3 );
             }
         }

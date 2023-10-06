@@ -840,9 +840,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     auto sModule = vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame().GetFrameInterface());
                     OUString sReloadNotebookBar;
                     if (sModule == "com.sun.star.text.TextDocument")
-                        sReloadNotebookBar = u"modules/swriter/ui/";
+                        sReloadNotebookBar = u"modules/swriter/ui/"_ustr;
                     else if (sModule == "com.sun.star.sheet.SpreadsheetDocument")
-                        sReloadNotebookBar = u"modules/scalc/ui/";
+                        sReloadNotebookBar = u"modules/scalc/ui/"_ustr;
                     else if (sfx2::SfxNotebookBar::IsActive()
                              && sModule != "presentation.PresentationDocument"
                              && sModule != "com.sun.star.drawing.DrawingDocument")

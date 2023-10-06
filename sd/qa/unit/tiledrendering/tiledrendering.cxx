@@ -1598,7 +1598,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf81754)
     uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
                                              uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xShape(xPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Somethingxx"), xShape->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Somethingxx"_ustr, xShape->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
@@ -2447,7 +2447,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
         aValue.bIsVisible = true;
         aValue.nColor = aDarkColor;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Dark");
+        aColorConfig.AddScheme(u"Dark"_ustr);
     }
     // Add a minimal light scheme
     {
@@ -2456,7 +2456,7 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testThemeViewSeparation)
         aValue.bIsVisible = true;
         aValue.nColor = COL_WHITE;
         aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
-        aColorConfig.AddScheme(u"Light");
+        aColorConfig.AddScheme(u"Light"_ustr);
     }
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
     int nFirstViewId = SfxLokHelper::getView();

@@ -44,7 +44,7 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
-    OUString maDataUrl = u"/vcl/qa/cppunit/data/";
+    OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
 
 public:
     OUString getFullUrl(std::u16string_view sFileName)
@@ -70,7 +70,7 @@ public:
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testArabic)
 {
 #if HAVE_MORE_FONTS
-    OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ");
+    OUString aOneTwoThree(u"واحِدْ إثٍنين ثلاثةٌ"_ustr);
 
     vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
 
@@ -231,7 +231,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCachingSubstring)
     // Just something basic.
     testCachedGlyphsSubstring( "test", "Dejavu Sans", false );
     // And complex arabic text, taken from tdf104649.docx .
-    OUString text(u"فصل (پاره 2): درخواست حاجت از ديگران و برآوردن حاجت ديگران 90");
+    OUString text(u"فصل (پاره 2): درخواست حاجت از ديگران و برآوردن حاجت ديگران 90"_ustr);
     testCachedGlyphsSubstring( text, "Dejavu Sans", true );
     // The text is RTL, but Writer will sometimes try to lay it out as LTR, for whatever reason
     // (tdf#149264)./ So make sure that gets handled properly too (SalLayoutGlyphsCache should
@@ -256,7 +256,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     tools::Long nTextWidth, nTextWidth2, nRefTextWidth;
 
     // A. RTL text
-    aText = u"لا بلا";
+    aText = u"لا بلا"_ustr;
 
     // 1) Regular DX array, the ligature width is given to the first components
     // and the next ones are all zero width.
@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
 
     // 3) caret placement with combining marks, they should not add to ligature
     // component count.
-    aText = u"لَاَ بلَاَ";
+    aText = u"لَاَ بلَاَ"_ustr;
     aRefCharWidths = { 584, 584, 1168, 1168, 1819, 2389, 3000, 3000, 3611, 3611 };
     nTextWidth2 = pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/true);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[0], aCharWidths[1]);
@@ -290,7 +290,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testCaret)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
 
     // B. LTR text
-    aText = u"fi fl ffi ffl";
+    aText = u"fi fl ffi ffl"_ustr;
 
     // 1) Regular DX array, the ligature width is given to the first components
     // and the next ones are all zero width.
@@ -329,7 +329,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     aFont = vcl::Font("Noto Sans Arabic", "Regular", Size(0, 1000));
     pOutDev->SetFont(aFont);
 
-    aText = u"لا بلا";
+    aText = u"لا بلا"_ustr;
 
     // 1) Regular DX array, the ligature width is given to the first components
     // and the next ones are all zero width.
@@ -350,7 +350,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 
     // 3) caret placement with combining marks, they should not add to ligature
     // component count.
-    aText = u"لَاَ بلَاَ";
+    aText = u"لَاَ بلَاَ"_ustr;
     aRefCharWidths = { 291, 291, 582, 582, 842, 1111, 1410, 1410, 1710, 1710 };
     nTextWidth2 = pOutDev->GetTextArray(aText, &aCharWidths, 0, -1, /*bCaret*/true);
     CPPUNIT_ASSERT_EQUAL(aCharWidths[0], aCharWidths[1]);
@@ -367,7 +367,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
     aFont = vcl::Font("Amiri", "Regular", Size(0, 1000));
     pOutDev->SetFont(aFont);
 
-    aText = u"fi ffi fl ffl fb ffb";
+    aText = u"fi ffi fl ffl fb ffb"_ustr;
 
     // 1) Regular DX array, the ligature width is given to the first components
     // and the next ones are all zero width.
@@ -393,9 +393,9 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testGdefCaret)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
 {
 #if HAVE_MORE_FONTS
-    OUString aText(u"می‌شود");
+    OUString aText(u"می‌شود"_ustr);
 
-    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 2048));
+    vcl::Font aFont(u"Noto Naskh Arabic"_ustr, u"Regular"_ustr, Size(0, 2048));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
@@ -431,14 +431,14 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048_2)
 {
 #if HAVE_MORE_FONTS
-    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+    vcl::Font aFont(u"Noto Naskh Arabic"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
 
     // get an compare the default text array
     KernArray aCharWidths;
-    auto nTextWidth = pOutDev->GetTextArray(u"ع a ع", &aCharWidths);
+    auto nTextWidth = pOutDev->GetTextArray(u"ع a ع"_ustr, &aCharWidths);
 
     // Text width should always be equal to the width of the last glyph in the
     // kern array.
@@ -452,7 +452,7 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf152048_2)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 {
 #if HAVE_MORE_FONTS
-    vcl::Font aFont(u"Noto Naskh Arabic", u"Regular", Size(0, 72));
+    vcl::Font aFont(u"Noto Naskh Arabic"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
@@ -491,14 +491,14 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 {
 #if !defined _WIN32 // TODO: Fails on jenkins but passes locally
-    vcl::Font aFont(u"Source Han Sans", u"Regular", Size(0, 72));
+    vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
 
     bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
     CPPUNIT_ASSERT_EQUAL(true, bAdded);
 
-    OUString aText(u"\u4E16\u1109\u1168\u11BC\u302E");
+    OUString aText(u"\u4E16\u1109\u1168\u11BC\u302E"_ustr);
     for (bool bVertical : { false, true })
     {
         aFont.SetVertical(bVertical);
@@ -543,12 +543,12 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107612)
 {
 #if HAVE_MORE_FONTS
-    vcl::Font aFont(u"DejaVu Sans", u"Book", Size(0, 72));
+    vcl::Font aFont(u"DejaVu Sans"_ustr, u"Book"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
     pOutDev->SetFont(aFont);
 
-    auto pLayout = pOutDev->ImplLayout(u"a\u202F\u1823", 0, -1, Point(0, 0), 0, {}, {});
+    auto pLayout = pOutDev->ImplLayout(u"a\u202F\u1823"_ustr, 0, -1, Point(0, 0), 0, {}, {});
 
     // If font fallback happened, then the returned layout must be a
     // MultiSalLayout instance.

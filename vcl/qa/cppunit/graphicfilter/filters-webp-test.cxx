@@ -152,7 +152,7 @@ void WebpFilterTest::testRoundtrip(bool lossy)
 
     CPPUNIT_ASSERT_EQUAL(true, aDetector.detect());
     CPPUNIT_ASSERT_EQUAL(true, aDetector.checkWEBP());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"WEBP"),
+    CPPUNIT_ASSERT_EQUAL(u"WEBP"_ustr,
                          vcl::getImportFormatShortName(aDetector.getMetadata().mnFormat));
 }
 

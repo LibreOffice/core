@@ -138,7 +138,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<text::XTextRange> xParagraph(xEnum->nextElement(), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
-        CPPUNIT_ASSERT_EQUAL(OUString(u"Writer template’s first line"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Writer template’s first line"_ustr, xParagraph->getString());
     }
 
     loadFromURL(u"empty.ods");
@@ -148,7 +148,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<text::XTextRange> xC(xRA->getCellByPosition(0, 0, 0), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
-        CPPUNIT_ASSERT_EQUAL(OUString(u"Calc template’s first cell"), xC->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Calc template’s first cell"_ustr, xC->getString());
     }
 
     loadFromURL(u"empty.odp");
@@ -169,7 +169,7 @@ CPPUNIT_TEST_FIXTURE(TextFilterDetectTest, testEmptyFile)
         uno::Reference<text::XTextRange> xParagraph(xEnum->nextElement(), uno::UNO_QUERY_THROW);
 
         // Make sure the template's text was loaded
-        CPPUNIT_ASSERT_EQUAL(OUString(u"Writer template’s first line"), xParagraph->getString());
+        CPPUNIT_ASSERT_EQUAL(u"Writer template’s first line"_ustr, xParagraph->getString());
     }
 }
 }

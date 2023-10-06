@@ -481,39 +481,39 @@ void LineParser::parseFontFamilyName( FontAttributes& rResult )
             SAL_INFO("sdext.pdfimport", rResult.familyName);
             if (fontAttributesSuffix == u"Heavy" || fontAttributesSuffix == u"Black")
             {
-                rResult.fontWeight = u"900";
+                rResult.fontWeight = u"900"_ustr;
             }
             else if (fontAttributesSuffix == u"ExtraBold" || fontAttributesSuffix == u"UltraBold")
             {
-                rResult.fontWeight = u"800";
+                rResult.fontWeight = u"800"_ustr;
             }
             else if (fontAttributesSuffix == u"Bold")
             {
-                rResult.fontWeight = u"bold";
+                rResult.fontWeight = u"bold"_ustr;
             }
             else if (fontAttributesSuffix == u"Semibold")
             {
-                rResult.fontWeight = u"600";
+                rResult.fontWeight = u"600"_ustr;
             }
             else if (fontAttributesSuffix == u"Medium")
             {
-                rResult.fontWeight = u"500";
+                rResult.fontWeight = u"500"_ustr;
             }
             else if (fontAttributesSuffix == u"Normal" || fontAttributesSuffix == u"Regular" || fontAttributesSuffix == u"Book")
             {
-                rResult.fontWeight = u"400";
+                rResult.fontWeight = u"400"_ustr;
             }
             else if (fontAttributesSuffix == u"Light")
             {
-                rResult.fontWeight = u"300";
+                rResult.fontWeight = u"300"_ustr;
             }
             else if (fontAttributesSuffix == u"ExtraLight" || fontAttributesSuffix == u"UltraLight")
             {
-                rResult.fontWeight = u"200";
+                rResult.fontWeight = u"200"_ustr;
             }
             else if (fontAttributesSuffix == u"Thin")
             {
-                rResult.fontWeight = u"100";
+                rResult.fontWeight = u"100"_ustr;
             }
 
             if ( (fontAttributesSuffix == "Italic") or (fontAttributesSuffix == "Oblique") )
@@ -573,23 +573,23 @@ void LineParser::readFont()
     // The font is not yet in the map list - get info and add to map
     OUString sFontWeight; // font weight name per ODF specifications
     if (nFontWeight == 0 or nFontWeight == 4)  // WeightNotDefined or W400, map to normal font
-        sFontWeight = u"normal";
+        sFontWeight = u"normal"_ustr;
     else if (nFontWeight == 1)                 // W100, Thin
-        sFontWeight = u"100";
+        sFontWeight = u"100"_ustr;
     else if (nFontWeight == 2)                 // W200, Extra-Light
-        sFontWeight = u"200";
+        sFontWeight = u"200"_ustr;
     else if (nFontWeight == 3)                 // W300, Light
-        sFontWeight = u"300";
+        sFontWeight = u"300"_ustr;
     else if (nFontWeight == 5)                 // W500, Medium. Is this supported by ODF?
-        sFontWeight = u"500";
+        sFontWeight = u"500"_ustr;
     else if (nFontWeight == 6)                 // W600, Semi-Bold
-        sFontWeight = u"600";
+        sFontWeight = u"600"_ustr;
     else if (nFontWeight == 7)                 // W700, Bold
-        sFontWeight = u"bold";
+        sFontWeight = u"bold"_ustr;
     else if (nFontWeight == 8)                 // W800, Extra-Bold
-        sFontWeight = u"800";
+        sFontWeight = u"800"_ustr;
     else if (nFontWeight == 9)                 // W900, Black
-        sFontWeight = u"900";
+        sFontWeight = u"900"_ustr;
     SAL_INFO("sdext.pdfimport", "Font weight passed from xpdfimport is: " << sFontWeight);
 
     FontAttributes aResult( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ),
@@ -637,22 +637,22 @@ void LineParser::readFont()
 
             // Font weight
             if (aFontReadResult.GetWeight() == WEIGHT_THIN)
-                aResult.fontWeight = u"100";
+                aResult.fontWeight = u"100"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_ULTRALIGHT)
-                aResult.fontWeight = u"200";
+                aResult.fontWeight = u"200"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_LIGHT)
-                aResult.fontWeight = u"300";
+                aResult.fontWeight = u"300"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_SEMILIGHT)
-                aResult.fontWeight = u"350";
+                aResult.fontWeight = u"350"_ustr;
             // no need to check "normal" here as this is default in nFontWeight above
             else if (aFontReadResult.GetWeight() == WEIGHT_SEMIBOLD)
-                aResult.fontWeight = u"600";
+                aResult.fontWeight = u"600"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_BOLD)
-                aResult.fontWeight = u"bold";
+                aResult.fontWeight = u"bold"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_ULTRABOLD)
-                aResult.fontWeight = u"800";
+                aResult.fontWeight = u"800"_ustr;
             else if (aFontReadResult.GetWeight() == WEIGHT_BLACK)
-                aResult.fontWeight = u"900";
+                aResult.fontWeight = u"900"_ustr;
             SAL_INFO("sdext.pdfimport", aResult.fontWeight);
 
             // Italic

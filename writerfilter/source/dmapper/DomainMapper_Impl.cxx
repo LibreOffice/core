@@ -8765,11 +8765,11 @@ void  DomainMapper_Impl::ImportGraphic(const writerfilter::Reference<Properties>
                     uno::Reference< text::XTextCursor > xCrsr = xText->createTextCursor();
                     xCrsr->gotoEnd(false);
                     PropertyMapPtr pEmpty(new PropertyMap());
-                    appendTextPortion(u"​", pEmpty);
+                    appendTextPortion(u"​"_ustr, pEmpty);
                     appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
                     bAppend = false;
                     xCrsr->gotoEnd(false);
-                    appendTextPortion(u"​", pEmpty);
+                    appendTextPortion(u"​"_ustr, pEmpty);
 
                     m_bRedlineImageInPreviousRun = true;
                     m_previousRedline = m_currentRedline;

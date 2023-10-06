@@ -1475,18 +1475,20 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testScriptinfosurrogatePairs)
     // Without the fix it fails with:
     // - Expected: 11
     // - Actual  : 11◌
-    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion",
+                u"11"_ustr);
     assertXPath(pXmlDoc, "//txt[1]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
-                u"\u25CC\U00010A01");
+                u"\u25CC\U00010A01"_ustr);
 
     // Without the fix this would crash because we got a lone surrogate that
     // can’t be converted to UTF-8, but if it were not for that it might fail
     // with something like:
     // - Expected: 11
     // - Actual  : 11𝐀
-    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion",
+                u"11"_ustr);
     assertXPath(pXmlDoc, "//txt[2]/SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
-                u"\U0001D400\u064E");
+                u"\U0001D400\u064E"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
@@ -1500,9 +1502,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTdf112594)
     // - Expected: 11
     // - Actual  : 11\u202F
     // (U+020F is a space, so might not be visible)
-    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", u"11"_ustr);
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion",
-                u"\u202F\u1824");
+                u"\u202F\u1824"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

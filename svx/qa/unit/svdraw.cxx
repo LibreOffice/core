@@ -386,8 +386,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf148000_EOLinCurvedText)
 {
     std::vector<OUString> aFilenames
-        = { u"tdf148000_EOLinCurvedText.pptx", u"tdf148000_EOLinCurvedText_New.odp",
-            u"tdf148000_EOLinCurvedText_Legacy.odp" };
+        = { u"tdf148000_EOLinCurvedText.pptx"_ustr, u"tdf148000_EOLinCurvedText_New.odp"_ustr,
+            u"tdf148000_EOLinCurvedText_Legacy.odp"_ustr };
 
     for (int i = 0; i < 3; i++)
     {

@@ -963,13 +963,13 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf133647_unicode)
     xFields->nextElement();
 
     uno::Reference<text::XTextField> xEnumerationAccess1(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(預期結果)"), xEnumerationAccess1->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"defined(預期結果)"_ustr, xEnumerationAccess1->getPresentation(true).trim());
 
     uno::Reference<text::XTextField> xEnumerationAccess2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(نتيجةمتوقعة)"), xEnumerationAccess2->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"defined(نتيجةمتوقعة)"_ustr, xEnumerationAccess2->getPresentation(true).trim());
 
     uno::Reference<text::XTextField> xEnumerationAccess3(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"defined(ExpectedResult)"), xEnumerationAccess3->getPresentation(true).trim());
+    CPPUNIT_ASSERT_EQUAL(u"defined(ExpectedResult)"_ustr, xEnumerationAccess3->getPresentation(true).trim());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf123389)

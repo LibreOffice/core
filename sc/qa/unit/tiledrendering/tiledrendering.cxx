@@ -3064,8 +3064,8 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testGetViewRenderState)
 {
     // Add a pair of schemes, last added is the default
     svtools::EditableColorConfig aColorConfig;
-    aColorConfig.AddScheme(u"Dark");
-    aColorConfig.AddScheme(u"Light");
+    aColorConfig.AddScheme(u"Dark"_ustr);
+    aColorConfig.AddScheme(u"Light"_ustr);
 
     ScModelObj* pModelObj = createDoc("empty.ods");
     int nFirstViewId = SfxLokHelper::getView();

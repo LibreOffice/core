@@ -658,7 +658,7 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                     res = sal::static_int_cast< short >(-(i+1)); // negative
                     break;  // for
                 }
-                else if (pUpperAbbrevMonthText[i] == "MRZ" && StringContainsWord( u"M\u00C4R", rString, nPos))
+                else if (pUpperAbbrevMonthText[i] == "MRZ" && StringContainsWord( u"M\u00C4R"_ustr, rString, nPos))
                 {   // And vice versa, accept MÄR for MRZ
                     nPos = nPos + 3;
                     res = sal::static_int_cast< short >(-(i+1)); // negative
@@ -711,12 +711,12 @@ short ImpSvNumberInputScan::GetMonth( const OUString& rString, sal_Int32& nPos )
                 {
                     // Locale data has Januar/Jan
                     assert(pUpperMonthText[0] == "JANUAR");
-                    if (StringContainsWord( u"J\u00C4NNER", rString, nPos))
+                    if (StringContainsWord( u"J\u00C4NNER"_ustr, rString, nPos))
                     {
                         nPos += 6;
                         res = 1;
                     }
-                    else if (StringContainsWord( u"J\u00C4N", rString, nPos))
+                    else if (StringContainsWord( u"J\u00C4N"_ustr, rString, nPos))
                     {
                         nPos += 3;
                         res = -1;

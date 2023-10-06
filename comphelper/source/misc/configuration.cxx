@@ -148,7 +148,7 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
             css::uno::Any( css::beans::NamedValue{ "locale", css::uno::Any( OUString("*"))} ) };
 
         css::uno::Reference< css::uno::XInterface > xCfg
-            = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess",
+            = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess"_ustr,
                 params);
 
         maNotifier = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);

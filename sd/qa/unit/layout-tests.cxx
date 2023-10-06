@@ -367,7 +367,8 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf112594)
     // - In <>, attribute 'length' of '/metafile/push[1]/push[1]/textarray[3]' incorrect value.
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "index", "0");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]", "length", "4");
-    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text", u"11\u202f\u1824");
+    assertXPathContent(pXmlDoc, "/metafile/push[1]/push[1]/textarray[3]/text",
+                       u"11\u202f\u1824"_ustr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

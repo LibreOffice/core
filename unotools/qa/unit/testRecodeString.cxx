@@ -33,9 +33,9 @@ void Test::testRecodeString()
 // note, the below won't work with mergelibs as the class is not visible to the linker
 #if !ENABLE_MERGELIBS
     ConvertChar const* pConversion = ConvertChar::GetRecodeData(u"starbats", u"opensymbol");
-    OUString aStr(u"u");
+    OUString aStr(u"u"_ustr);
     pConversion->RecodeString(aStr, 0, 1);
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), aStr);
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aStr);
 #endif
 }
 

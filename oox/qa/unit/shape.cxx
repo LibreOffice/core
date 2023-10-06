@@ -201,15 +201,17 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151008VertAnchor)
         drawing::TextHorizontalAdjust eAnchorHori;
         drawing::TextVerticalAdjust eAnchorVert;
     };
-    anchorDesc aExpected[6] = {
-        { u"Right", drawing::TextHorizontalAdjust_RIGHT, drawing::TextVerticalAdjust_TOP },
-        { u"Center", drawing::TextHorizontalAdjust_CENTER, drawing::TextVerticalAdjust_TOP },
-        { u"Left", drawing::TextHorizontalAdjust_LEFT, drawing::TextVerticalAdjust_TOP },
-        { u"RightMiddle", drawing::TextHorizontalAdjust_RIGHT, drawing::TextVerticalAdjust_CENTER },
-        { u"CenterMiddle", drawing::TextHorizontalAdjust_CENTER,
-          drawing::TextVerticalAdjust_CENTER },
-        { u"LeftMiddle", drawing::TextHorizontalAdjust_LEFT, drawing::TextVerticalAdjust_CENTER }
-    };
+    anchorDesc aExpected[6]
+        = { { u"Right"_ustr, drawing::TextHorizontalAdjust_RIGHT, drawing::TextVerticalAdjust_TOP },
+            { u"Center"_ustr, drawing::TextHorizontalAdjust_CENTER,
+              drawing::TextVerticalAdjust_TOP },
+            { u"Left"_ustr, drawing::TextHorizontalAdjust_LEFT, drawing::TextVerticalAdjust_TOP },
+            { u"RightMiddle"_ustr, drawing::TextHorizontalAdjust_RIGHT,
+              drawing::TextVerticalAdjust_CENTER },
+            { u"CenterMiddle"_ustr, drawing::TextHorizontalAdjust_CENTER,
+              drawing::TextVerticalAdjust_CENTER },
+            { u"LeftMiddle"_ustr, drawing::TextHorizontalAdjust_LEFT,
+              drawing::TextVerticalAdjust_CENTER } };
     // without the fix horizontal and vertical anchor positions were exchanged
     for (size_t i = 0; i < 6; ++i)
     {
@@ -247,10 +249,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf151518VertAnchor)
         sal_Int32 nLowerDistance;
         sal_Int32 nUpperDistance;
     };
-    TextDistance aExpected[4] = { { u"Diagram Target List", 2, 2979, 201 },
-                                  { u"Diagram Nested Target", 1, 3203, 127 },
-                                  { u"Diagram Stacked Venn", 1, 3112, -302 },
-                                  { u"Diagram Grouped List", 1, 4106, 196 } };
+    TextDistance aExpected[4] = { { u"Diagram Target List"_ustr, 2, 2979, 201 },
+                                  { u"Diagram Nested Target"_ustr, 1, 3203, 127 },
+                                  { u"Diagram Stacked Venn"_ustr, 1, 3112, -302 },
+                                  { u"Diagram Grouped List"_ustr, 1, 4106, 196 } };
     // without the fix the observed distances were
     // {4434, -464}, {4674, -751}, {4620, -1399}, {6152, -744}
     for (size_t i = 0; i < 4; ++i)
@@ -346,65 +348,66 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork)
 
     // Is it a Fontwork?
     bool bTextBox = bool();
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextBox") >>= bTextBox);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"TextBox"_ustr) >>= bTextBox);
     CPPUNIT_ASSERT(!bTextBox);
 
     uno::Reference<css::text::XTextFrame> xTextFrame;
-    xShapeProps->getPropertyValue(u"TextBoxContent") >>= xTextFrame;
+    xShapeProps->getPropertyValue(u"TextBoxContent"_ustr) >>= xTextFrame;
     CPPUNIT_ASSERT(!xTextFrame.is());
 
     uno::Sequence<beans::PropertyValue> aGeoPropSeq;
-    xShapeProps->getPropertyValue(u"CustomShapeGeometry") >>= aGeoPropSeq;
+    xShapeProps->getPropertyValue(u"CustomShapeGeometry"_ustr) >>= aGeoPropSeq;
     CPPUNIT_ASSERT(aGeoPropSeq.getLength() > 0);
     comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
 
     uno::Sequence<beans::PropertyValue> aTextPathSeq;
-    aGeoPropMap.getValue(u"TextPath") >>= aTextPathSeq;
+    aGeoPropMap.getValue(u"TextPath"_ustr) >>= aTextPathSeq;
     CPPUNIT_ASSERT(aTextPathSeq.getLength() > 0);
 
     comphelper::SequenceAsHashMap aTextPathPropMap(aTextPathSeq);
     bool bTextPathOn = bool();
-    CPPUNIT_ASSERT(aTextPathPropMap.getValue(u"TextPath") >>= bTextPathOn);
+    CPPUNIT_ASSERT(aTextPathPropMap.getValue(u"TextPath"_ustr) >>= bTextPathOn);
     CPPUNIT_ASSERT(bTextPathOn);
 
     // Is it the correct kind of Fontwork?
     uno::Sequence<drawing::EnhancedCustomShapeAdjustmentValue> aAdjustmentSeq;
-    aGeoPropMap.getValue(u"AdjustmentValues") >>= aAdjustmentSeq;
+    aGeoPropMap.getValue(u"AdjustmentValues"_ustr) >>= aAdjustmentSeq;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aAdjustmentSeq.getLength());
 
     uno::Sequence<uno::Sequence<beans::PropertyValue>> aHandleSeq;
-    aGeoPropMap.getValue(u"Handles") >>= aHandleSeq;
+    aGeoPropMap.getValue(u"Handles"_ustr) >>= aHandleSeq;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aHandleSeq.getLength());
 
     awt::Rectangle aViewBox;
-    aGeoPropMap.getValue(u"ViewBox") >>= aViewBox;
+    aGeoPropMap.getValue(u"ViewBox"_ustr) >>= aViewBox;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21600), aViewBox.Height);
 
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"textDoubleWave1")),
-                         aGeoPropMap.getValue(u"PresetTextWarp"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"textDoubleWave1"_ustr),
+                         aGeoPropMap.getValue(u"PresetTextWarp"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"mso-spt158")), aGeoPropMap.getValue(u"Type"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"mso-spt158"_ustr), aGeoPropMap.getValue(u"Type"_ustr));
 
     // Are properties correctly copied to shape?
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0, 0, 255)), xShapeProps->getPropertyValue(u"FillColor"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(0, 0, 255)),
+                         xShapeProps->getPropertyValue(u"FillColor"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_SOLID),
-                         xShapeProps->getPropertyValue(u"FillStyle"));
+                         xShapeProps->getPropertyValue(u"FillStyle"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString(u"Courier New")),
-                         xShapeProps->getPropertyValue(u"CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(u"Courier New"_ustr),
+                         xShapeProps->getPropertyValue(u"CharFontName"_ustr));
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(float(awt::FontWeight::BOLD)),
                          xShapeProps->getPropertyValue("CharWeight"));
 
     lang::Locale aCharLocale;
-    xShapeProps->getPropertyValue(u"CharLocale") >>= aCharLocale;
+    xShapeProps->getPropertyValue(u"CharLocale"_ustr) >>= aCharLocale;
     CPPUNIT_ASSERT_EQUAL(OUString("en"), aCharLocale.Language);
     CPPUNIT_ASSERT_EQUAL(OUString("US"), aCharLocale.Country);
 
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::TextHorizontalAdjust_RIGHT),
-                         xShapeProps->getPropertyValue(u"TextHorizontalAdjust"));
+                         xShapeProps->getPropertyValue(u"TextHorizontalAdjust"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
@@ -421,35 +424,38 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork2)
 
     // Fill
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(4000)),
-                         xShapeProps->getPropertyValue(u"FillColorLumMod"));
+                         xShapeProps->getPropertyValue(u"FillColorLumMod"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(6000)),
-                         xShapeProps->getPropertyValue(u"FillColorLumOff"));
+                         xShapeProps->getPropertyValue(u"FillColorLumOff"_ustr));
     // ID "6" for the theme "accent3" is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx.
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(6)), xShapeProps->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(6)),
+                         xShapeProps->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(215, 228, 189)),
-                         xShapeProps->getPropertyValue(u"FillColor"));
+                         xShapeProps->getPropertyValue(u"FillColor"_ustr));
 
     // Stroke
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineCap_ROUND),
-                         xShapeProps->getPropertyValue(u"LineCap"));
+                         xShapeProps->getPropertyValue(u"LineCap"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_DASH),
-                         xShapeProps->getPropertyValue(u"LineStyle"));
+                         xShapeProps->getPropertyValue(u"LineStyle"_ustr));
     // Stroke has only the resulted color, but no reference to the used theme color "accent2".
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(149, 55, 53)), xShapeProps->getPropertyValue(u"LineColor"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(149, 55, 53)),
+                         xShapeProps->getPropertyValue(u"LineColor"_ustr));
     drawing::LineDash aLineDash;
-    xShapeProps->getPropertyValue(u"LineDash") >>= aLineDash;
+    xShapeProps->getPropertyValue(u"LineDash"_ustr) >>= aLineDash;
     CPPUNIT_ASSERT_EQUAL(drawing::DashStyle_ROUNDRELATIVE, aLineDash.Style);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aLineDash.Dots);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aLineDash.DotLen);
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aLineDash.Dashes);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLineDash.DashLen);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(199), aLineDash.Distance);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(635)), xShapeProps->getPropertyValue(u"LineWidth"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(635)),
+                         xShapeProps->getPropertyValue(u"LineWidth"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(20)),
-                         xShapeProps->getPropertyValue(u"LineTransparence"));
+                         xShapeProps->getPropertyValue(u"LineTransparence"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineJoint_BEVEL),
-                         xShapeProps->getPropertyValue(u"LineJoint"));
+                         xShapeProps->getPropertyValue(u"LineJoint"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
@@ -467,9 +473,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -491,9 +497,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -515,9 +521,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontwork3)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -552,26 +558,31 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkNonAccentColor)
 
     // background 1 = lt1 = ID 1
     uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)), xShape0Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)),
+                         xShape0Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 204, 153)),
-                         xShape0Props->getPropertyValue(u"FillColor"));
+                         xShape0Props->getPropertyValue(u"FillColor"_ustr));
 
     // text 1 = dk1 = ID 0
     uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)), xShape1Props->getPropertyValue(u"FillColorTheme"));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 0, 0)), xShape1Props->getPropertyValue(u"FillColor"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)),
+                         xShape1Props->getPropertyValue(u"FillColorTheme"_ustr));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(255, 0, 0)),
+                         xShape1Props->getPropertyValue(u"FillColor"_ustr));
 
     // background 2 = lt2 = ID 3
     uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xShape2Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)),
+                         xShape2Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(235, 221, 195)),
-                         xShape2Props->getPropertyValue(u"FillColor"));
+                         xShape2Props->getPropertyValue(u"FillColor"_ustr));
 
     // text 2 = dk2 = ID 2
     uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)), xShape3Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)),
+                         xShape3Props->getPropertyValue(u"FillColorTheme"_ustr));
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(119, 95, 85)),
-                         xShape3Props->getPropertyValue(u"FillColor"));
+                         xShape3Props->getPropertyValue(u"FillColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
@@ -587,13 +598,17 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterShapeFillNonAccentColor)
     // The ID for the theme colors is not yet in API, but defined in enum PredefinedClrSchemeID
     // in drawingml/clrscheme.hxx. Without fix the ID was -1 meaning no theme is used.
     uno::Reference<beans::XPropertySet> xShape0Props(xDrawPage->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)), xShape0Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(3)),
+                         xShape0Props->getPropertyValue(u"FillColorTheme"_ustr));
     uno::Reference<beans::XPropertySet> xShape1Props(xDrawPage->getByIndex(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)), xShape1Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(1)),
+                         xShape1Props->getPropertyValue(u"FillColorTheme"_ustr));
     uno::Reference<beans::XPropertySet> xShape2Props(xDrawPage->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)), xShape2Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(0)),
+                         xShape2Props->getPropertyValue(u"FillColorTheme"_ustr));
     uno::Reference<beans::XPropertySet> xShape3Props(xDrawPage->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)), xShape3Props->getPropertyValue(u"FillColorTheme"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int16(2)),
+                         xShape3Props->getPropertyValue(u"FillColorTheme"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
@@ -614,7 +629,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWriterFontworkDarkenTransparency)
     // Actual: 11897660 (= 0xB58B3C = rgb(181, 139, 60) => luminance 47.25% )
     // The original "Background 2" is 0xEBDDC3 = rgb(235, 221, 195) => luminance 84.31%
     CPPUNIT_ASSERT_EQUAL(uno::Any(Color(208, 175, 114)),
-                         xShapeProps->getPropertyValue(u"FillColor"));
+                         xShapeProps->getPropertyValue(u"FillColor"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
@@ -631,9 +646,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -649,12 +664,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(690), aGradient.Angle);
 
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_SOLID),
-                             xShapeProps->getPropertyValue(u"LineStyle"));
+                             xShapeProps->getPropertyValue(u"LineStyle"_ustr));
         sal_Int32 nOutlineColor;
-        xShapeProps->getPropertyValue(u"LineColor") >>= nOutlineColor;
+        xShapeProps->getPropertyValue(u"LineColor"_ustr) >>= nOutlineColor;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(7384391), nOutlineColor);
         sal_Int16 nLineTransparence;
-        xShapeProps->getPropertyValue(u"LineTransparence") >>= nLineTransparence;
+        xShapeProps->getPropertyValue(u"LineTransparence"_ustr) >>= nLineTransparence;
         CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nLineTransparence);
     }
 
@@ -663,9 +678,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -681,7 +696,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.XOffset);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
 
-        xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aGradient;
         // MCGR: Use the completely imported transparency gradient to check for correctness
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
@@ -697,13 +712,13 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(50), aGradient.YOffset);
 
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_DASH),
-                             xShapeProps->getPropertyValue(u"LineStyle"));
+                             xShapeProps->getPropertyValue(u"LineStyle"_ustr));
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineCap_ROUND),
-                             xShapeProps->getPropertyValue(u"LineCap"));
+                             xShapeProps->getPropertyValue(u"LineCap"_ustr));
         CPPUNIT_ASSERT_EQUAL(uno::Any(sal_Int32(7384391)),
-                             xShapeProps->getPropertyValue(u"LineColor"));
+                             xShapeProps->getPropertyValue(u"LineColor"_ustr));
         drawing::LineDash aLineDash;
-        xShapeProps->getPropertyValue(u"LineDash") >>= aLineDash;
+        xShapeProps->getPropertyValue(u"LineDash"_ustr) >>= aLineDash;
         CPPUNIT_ASSERT_EQUAL(drawing::DashStyle_ROUNDRELATIVE, aLineDash.Style);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aLineDash.Dots);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aLineDash.Dashes);
@@ -715,9 +730,9 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
     {
         uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(2), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_GRADIENT),
-                             xShapeProps->getPropertyValue(u"FillStyle"));
+                             xShapeProps->getPropertyValue(u"FillStyle"_ustr));
         awt::Gradient2 aGradient;
-        xShapeProps->getPropertyValue(u"FillGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillGradient"_ustr) >>= aGradient;
 
         // MCGR: Use the completely imported transparency gradient to check for correctness
         basegfx::BColorStops aColorStops;
@@ -733,7 +748,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(100), aGradient.XOffset);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.YOffset);
 
-        xShapeProps->getPropertyValue(u"FillTransparenceGradient") >>= aGradient;
+        xShapeProps->getPropertyValue(u"FillTransparenceGradient"_ustr) >>= aGradient;
         // MCGR: Use the completely imported transparency gradient to check for correctness
         aColorStops = model::gradient::getColorStopsFromUno(aGradient.ColorStops);
 
@@ -749,7 +764,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testImportWordArtGradient)
         CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aGradient.YOffset);
 
         CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::LineStyle_NONE),
-                             xShapeProps->getPropertyValue(u"LineStyle"));
+                             xShapeProps->getPropertyValue(u"LineStyle"_ustr));
     }
 }
 
@@ -764,14 +779,14 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtBitmapFill)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_BITMAP),
-                         xShapeProps->getPropertyValue(u"FillStyle"));
+                         xShapeProps->getPropertyValue(u"FillStyle"_ustr));
 
     // Test some bitmap properties
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::BitmapMode_REPEAT),
-                         xShapeProps->getPropertyValue(u"FillBitmapMode"));
-    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xShapeProps->getPropertyValue(u"FillBitmapTile"));
+                         xShapeProps->getPropertyValue(u"FillBitmapMode"_ustr));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(true), xShapeProps->getPropertyValue(u"FillBitmapTile"_ustr));
     uno::Reference<awt::XBitmap> xBitmap;
-    xShapeProps->getPropertyValue(u"FillBitmap") >>= xBitmap;
+    xShapeProps->getPropertyValue(u"FillBitmap"_ustr) >>= xBitmap;
 
     uno::Reference<graphic::XGraphic> xGraphic;
     xGraphic.set(xBitmap, uno::UNO_QUERY);
@@ -797,9 +812,10 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testWordArtDefaultColor)
                                                  uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProps(xDrawPage->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(uno::Any(drawing::FillStyle_SOLID),
-                         xShapeProps->getPropertyValue(u"FillStyle"));
+                         xShapeProps->getPropertyValue(u"FillStyle"_ustr));
 
-    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(3, 74, 144)), xShapeProps->getPropertyValue(u"FillColor"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(Color(3, 74, 144)),
+                         xShapeProps->getPropertyValue(u"FillColor"_ustr));
 }
 CPPUNIT_PLUGIN_IMPLEMENT();
 

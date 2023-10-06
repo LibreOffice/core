@@ -49,27 +49,27 @@ DECLARE_RTFEXPORT_TEST(testFdo85889pc, "fdo85889-pc.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00B1\u2265\u2264"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2265\u2264"_ustr, xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo85889pca, "fdo85889-pca.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00B1\u2017\u00BE"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\u00B1\u2017\u00BE"_ustr, xTextRange->getString());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo85889mac, "fdo85889-mac.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u00D2\u00DA\u00DB"), xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(u"\u00D2\u00DA\u00DB"_ustr, xTextRange->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo72031)
 {
     auto verify = [this]() {
-        CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0C5"), getRun(getParagraph(1), 1)->getString());
+        CPPUNIT_ASSERT_EQUAL(u"\uF0C5"_ustr, getRun(getParagraph(1), 1)->getString());
     };
 
     AllSettings aSavedSettings = Application::GetSettings();
@@ -179,14 +179,13 @@ DECLARE_RTFEXPORT_TEST(testTdf151370, "tdf151370.rtf")
     // Here we try to read/write docvar having non-ascii name and value. So it is encoded in Unicode
     OUString sFieldName(u"com.sun.star.text.fieldmaster.User."
                         "LocalChars\u00c1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0054"
-                        "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070");
+                        "\u00fc\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr);
     CPPUNIT_ASSERT_EQUAL(sal_True, xTextFieldMasters->hasByName(sFieldName));
 
     auto xFieldMaster = xTextFieldMasters->getByName(sFieldName);
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"
-                 "\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"),
-        getProperty<OUString>(xFieldMaster, "Content"));
+    CPPUNIT_ASSERT_EQUAL(u"\u00e1\u0072\u0076\u00ed\u007a\u0074\u0075\u0072\u006f\u0074\u00fc"
+                         "\u006b\u00f6\u0072\u0066\u00fa\u0072\u00f3\u0067\u00e9\u0070"_ustr,
+                         getProperty<OUString>(xFieldMaster, "Content"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf108416, "tdf108416.rtf")
@@ -657,7 +656,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144437)
 
 DECLARE_RTFEXPORT_TEST(testTdf131234, "tdf131234.rtf")
 {
-    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, OUString(u"Hello"));
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, u"Hello"_ustr);
 
     // Ensure that text has default font attrs in spite of style referenced
     // E.g. 12pt, Times New Roman, black, no bold, no italic, no underline

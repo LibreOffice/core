@@ -574,7 +574,7 @@ DECLARE_HTMLEXPORT_TEST(testTdf83890, "tdf83890.odt")
 
 DECLARE_HTMLEXPORT_TEST(testExtbChars, "extb.html")
 {
-    OUString aExpected(u"\U00024b62");
+    OUString aExpected(u"\U00024b62"_ustr);
     // Assert that UTF8 encoded non-BMP Unicode character is correct
     uno::Reference<text::XTextRange> xTextRange1 = getRun(getParagraph(1), 1);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange1->getString());
@@ -2208,11 +2208,11 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
     // - Expected: <nbsp><nbsp><space>first
     // - Actual  : <tab><space>first
     // i.e. the leading tab was not replaced by 2 nbsps.
-    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[1]", u"\xa0\xa0 first");
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[1]", u"\xa0\xa0 first"_ustr);
     // Test a leading tab that is not at the start of the paragraph:
-    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[2]", u"\xa0\xa0\xa0\xa0 second");
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[2]", u"\xa0\xa0\xa0\xa0 second"_ustr);
     // Test a tab which is not leading:
-    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[3]", u"thi \t rd");
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[3]", u"thi \t rd"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
@@ -2238,7 +2238,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     // - Expected: <newline><nbsp><nbsp><space>test
     // - Actual  : <newline><tab><space>test
     // i.e. the leading tab was not replaced by 2 nbsps.
-    assertXPathContent(pHtmlDoc, "/html/body/p", SAL_NEWLINE_STRING u"\xa0\xa0 test");
+    assertXPathContent(pHtmlDoc, "/html/body/p", SAL_NEWLINE_STRING u"\xa0\xa0 test"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)

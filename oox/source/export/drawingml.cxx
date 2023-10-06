@@ -511,7 +511,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        if (!WriteSchemeColor(u"FillComplexColor", rXPropSet))
+        if (!WriteSchemeColor(u"FillComplexColor"_ustr, rXPropSet))
         {
             WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
         }
@@ -1076,7 +1076,7 @@ void DrawingML::WriteOutline( const Reference<XPropertySet>& rXPropSet, Referenc
         if( nColor != nOriginalColor )
         {
             // the user has set a different color for the line
-            if (!WriteSchemeColor(u"LineComplexColor", rXPropSet))
+            if (!WriteSchemeColor(u"LineComplexColor"_ustr, rXPropSet))
                 WriteSolidFill(nColor, nColorAlpha);
         }
         else if( !sColorFillScheme.isEmpty() )
@@ -2596,7 +2596,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
                 else
                 {
                     color.SetAlpha(255);
-                    if (!WriteSchemeColor(u"CharComplexColor", rXPropSet))
+                    if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet))
                         WriteSolidFill(color, nTransparency);
                 }
                 mpFS->endElementNS(XML_a, XML_ln);
@@ -2609,7 +2609,7 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             {
                 color.SetAlpha(255);
                 // TODO: special handle embossed/engraved
-                if (!WriteSchemeColor(u"CharComplexColor", rXPropSet))
+                if (!WriteSchemeColor(u"CharComplexColor"_ustr, rXPropSet))
                 {
                     WriteSolidFill(color, nTransparency);
                 }

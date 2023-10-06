@@ -1125,8 +1125,8 @@ namespace sw::mark {
                     dynamic_cast<ICheckboxFieldmark const*>(pBM));
             assert(pCheckboxFm);
             return pCheckboxFm->IsChecked()
-                    ? OUString(u"\u2612")
-                    : OUString(u"\u2610");
+                    ? u"\u2612"_ustr
+                    : u"\u2610"_ustr;
         }
         assert(pBM->GetFieldname() == ODF_FORMDROPDOWN);
         const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();

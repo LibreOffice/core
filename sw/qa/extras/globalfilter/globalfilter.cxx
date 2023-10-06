@@ -1305,7 +1305,7 @@ CPPUNIT_TEST_FIXTURE(Test, testListLabelPDFExport)
         for (int i = 0; i < nChars; i++)
             aChars[i] = pPdfTextPage->getUnicode(i);
         OUString aText(aChars.data(), aChars.size());
-        CPPUNIT_ASSERT_EQUAL(OUString(u"\u0623\r\n.\r\n\u0623.\u0623\r\n.\r\n\u0623.\u0623.\u0623\r\n."), aText);
+        CPPUNIT_ASSERT_EQUAL(u"\u0623\r\n.\r\n\u0623.\u0623\r\n.\r\n\u0623.\u0623.\u0623\r\n."_ustr, aText);
     }
 
     // Parse the document again to get its raw content

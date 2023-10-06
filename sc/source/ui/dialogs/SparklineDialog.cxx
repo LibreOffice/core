@@ -23,7 +23,7 @@ namespace sc
 SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
                                  weld::Window* pWindow, ScViewData& rViewData)
     : ScAnyRefDlgController(pBindings, pChildWindow, pWindow,
-                            u"modules/scalc/ui/sparklinedialog.ui", "SparklineDialog")
+                            u"modules/scalc/ui/sparklinedialog.ui"_ustr, "SparklineDialog")
     , mrViewData(rViewData)
     , mrDocument(rViewData.GetDocument())
     , mpActiveEdit(nullptr)

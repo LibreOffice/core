@@ -261,7 +261,7 @@ void LwpFribPtr::XFConvert()
         }
             break;
         case FRIB_TAG_SOFTHYPHEN:
-            pFrib->ConvertChars(m_pXFPara.get(), u"\x00ad");
+            pFrib->ConvertChars(m_pXFPara.get(), u"\x00ad"_ustr);
             break;
         case FRIB_TAG_FRAME:
         {

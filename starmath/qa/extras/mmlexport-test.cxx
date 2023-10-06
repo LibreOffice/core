@@ -126,12 +126,12 @@ void MathMLExportTest::testMaj()
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
     pDocShell->SetText(
-        u"maj to { \u0661 } from { \U0001EE0A = \u0660 } { \u0661 over \U0001EE0A }");
+        u"maj to { \u0661 } from { \U0001EE0A = \u0660 } { \u0661 over \U0001EE0A }"_ustr);
     save("MathML XML (Math)");
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
     assertXPath(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", "stretchy", "false");
-    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", u"\U0001EEF0");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mo", u"\U0001EEF0"_ustr);
 }
 
 void MathMLExportTest::testHadd()
@@ -139,11 +139,11 @@ void MathMLExportTest::testHadd()
     mxComponent = loadFromDesktop("private:factory/smath");
     SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
     SmDocShell* pDocShell = static_cast<SmDocShell*>(pModel->GetObjectShell());
-    pDocShell->SetText(u"hadd to { \U0001EE4E } from { \U0001EE4E } \U0001EE4E");
+    pDocShell->SetText(u"hadd to { \U0001EE4E } from { \U0001EE4E } \U0001EE4E"_ustr);
     save("MathML XML (Math)");
     xmlDocUniquePtr pDoc = parseXml(maTempFile);
     CPPUNIT_ASSERT(pDoc);
-    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mi", u"\U0001EEF1");
+    assertXPathContent(pDoc, "/m:math/m:semantics/m:mrow/m:munderover/m:mi", u"\U0001EEF1"_ustr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MathMLExportTest);

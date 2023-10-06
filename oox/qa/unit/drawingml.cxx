@@ -351,7 +351,7 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf142605_CurveSize)
     CPPUNIT_ASSERT(xShapeProps.is());
     uno::Reference<container::XNamed> xShapeNamed(xShape, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShapeNamed.is());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Bézier curve 1"), xShapeNamed->getName());
+    CPPUNIT_ASSERT_EQUAL(u"Bézier curve 1"_ustr, xShapeNamed->getName());
 
     css::awt::Rectangle aBoundRect;
     xShapeProps->getPropertyValue("BoundRect") >>= aBoundRect;
@@ -671,11 +671,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontTheme)
     // Without the fix some application defaults were used.
     OUString sFontName;
     xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Noto Serif Hebrew"), sFontName);
+    CPPUNIT_ASSERT_EQUAL(u"Noto Serif Hebrew"_ustr, sFontName);
     css::lang::Locale aLocal;
     xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"IL"), aLocal.Country);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"he"), aLocal.Language);
+    CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocal.Country);
+    CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocal.Language);
 }
 
 CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
@@ -694,11 +694,11 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf125085WordArtFontText)
     // Without the fix some application defaults were used.
     OUString sFontName;
     xShapeProps->getPropertyValue("CharFontNameComplex") >>= sFontName;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Noto Serif Hebrew"), sFontName);
+    CPPUNIT_ASSERT_EQUAL(u"Noto Serif Hebrew"_ustr, sFontName);
     css::lang::Locale aLocal;
     xShapeProps->getPropertyValue("CharLocaleComplex") >>= aLocal;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"IL"), aLocal.Country);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"he"), aLocal.Language);
+    CPPUNIT_ASSERT_EQUAL(u"IL"_ustr, aLocal.Country);
+    CPPUNIT_ASSERT_EQUAL(u"he"_ustr, aLocal.Language);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

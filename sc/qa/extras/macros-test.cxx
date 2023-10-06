@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf89920)
 
 CPPUNIT_TEST_FIXTURE(ScMacrosTest, testPasswordProtectedUnicodeString)
 {
-    const OUString sCorrectString(u"English Русский 中文");
+    const OUString sCorrectString(u"English Русский 中文"_ustr);
     static constexpr OUStringLiteral sMacroURL(
         u"vnd.sun.Star.script:Protected.Module1.TestUnicodeString?language=Basic&location=document");
     static constexpr OUStringLiteral sLibName(u"Protected");
@@ -499,7 +499,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf75263)
         pDoc->CalcAll();
 
         // A1 contains formula with user-defined function, and the function is defined in VBA.
-        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"проба"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
     }
 
     saveAndReload("Calc MS Excel 2007 VBA XML");
@@ -511,7 +511,7 @@ CPPUNIT_TEST_FIXTURE(ScMacrosTest, testTdf75263)
         // Without the accompanying fix in place, this test would have failed with:
         // - Expected: проба (sample)
         // - Actual  : ?????
-        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(u"проба"_ustr, pDoc->GetString(ScAddress(0, 0, 0)));
     }
 }
 

@@ -2625,7 +2625,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf151801)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     // Single starting quote: 'word -> ›word
     emulateTyping(*pTextDoc, u"'word");
-    OUString sReplaced(u"\u203Aword");
+    OUString sReplaced(u"\u203Aword"_ustr);
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // Single ending quote: ›word' -> ›word‹
     emulateTyping(*pTextDoc, u"'");

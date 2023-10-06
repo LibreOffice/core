@@ -1016,20 +1016,20 @@ void StyleSheetTable_Impl::ApplyClonedTOCStylesToXText(uno::Reference<text::XTex
     while (xParaEnum->hasMoreElements())
     {
         uno::Reference<lang::XServiceInfo> const xElem(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
-        if (xElem->supportsService(u"com.sun.star.text.Paragraph"))
+        if (xElem->supportsService(u"com.sun.star.text.Paragraph"_ustr))
         {
             uno::Reference<beans::XPropertySet> const xPara(xElem, uno::UNO_QUERY_THROW);
             OUString styleName;
-            if (xPara->getPropertyValue(u"ParaStyleName") >>= styleName)
+            if (xPara->getPropertyValue(u"ParaStyleName"_ustr) >>= styleName)
             {
                 auto const it(m_ClonedTOCStylesMap.find(styleName));
                 if (it != m_ClonedTOCStylesMap.end())
                 {
-                    xPara->setPropertyValue(u"ParaStyleName", uno::Any(it->second));
+                    xPara->setPropertyValue(u"ParaStyleName"_ustr, uno::Any(it->second));
                 }
             }
         }
-        else if (xElem->supportsService(u"com.sun.star.text.TextTable"))
+        else if (xElem->supportsService(u"com.sun.star.text.TextTable"_ustr))
         {
             uno::Reference<text::XTextTable> const xTable(xElem, uno::UNO_QUERY_THROW);
             uno::Sequence<OUString> const cells(xTable->getCellNames());

@@ -837,7 +837,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testAlternativeText)
             if (pS && pS->GetValue() == "Figure")
             {
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString(u"This is the text alternative - This is the description"),
+                    u"This is the text alternative - This is the description"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                         *dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"))));
             }
@@ -1209,8 +1209,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115117_2a)
     for (int i = 0; i < nChars; i++)
         aChars[i] = pPdfTextPage->getUnicode(i);
     OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(
-        OUString(u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644"), aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"\u0627\u0644 \u0628\u0627\u0644 \u0648\u0642\u0641 \u0627\u0644"_ustr,
+                         aActualText);
 #endif
 }
 
@@ -1243,7 +1243,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154549)
     // Without the fix in place, this test would have failed with
     // - Expected: ִبي
     // - Actual  : بִي
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u05B4\u0628\u064A"), aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"\u05B4\u0628\u064A"_ustr, aActualText);
 #endif
 }
 
@@ -1272,7 +1272,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf150846)
     for (int i = 0; i < nChars; i++)
         aChars[i] = pPdfTextPage->getUnicode(i);
     OUString aActualText(aChars.data(), aChars.size());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"hello"), aActualText);
+    CPPUNIT_ASSERT_EQUAL(u"hello"_ustr, aActualText);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
@@ -1303,7 +1303,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
     for (int i = 0; i < nChars1; i++)
         aChars1[i] = pPdfTextPage1->getUnicode(i);
     OUString aActualText1(aChars1.data(), aChars1.size());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"يوسف My name is"), aActualText1);
+    CPPUNIT_ASSERT_EQUAL(u"يوسف My name is"_ustr, aActualText1);
 
     std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage2 = pPdfDocument->openPage(/*nIndex=*/1);
     CPPUNIT_ASSERT(pPdfPage2);
@@ -1319,7 +1319,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf103492)
     for (int i = 0; i < nChars2; i++)
         aChars2[i] = pPdfTextPage2->getUnicode(i);
     OUString aActualText2(aChars2.data(), aChars2.size());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"My name is يوسف"), aActualText2);
+    CPPUNIT_ASSERT_EQUAL(u"My name is يوسف"_ustr, aActualText2);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
@@ -4190,21 +4190,21 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
                 switch (nFigure)
                 {
                     case 2:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"QR Code - Tells how to get to Mosegaard"),
+                        CPPUNIT_ASSERT_EQUAL(u"QR Code - Tells how to get to Mosegaard"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
                     case 0:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"Title: Arrows - Description:  Explains the "
-                                                      u"different arrow appearances"),
+                        CPPUNIT_ASSERT_EQUAL(u"Title: Arrows - Description:  Explains the "
+                                             u"different arrow appearances"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
                     case 1:
                         CPPUNIT_ASSERT_EQUAL(
-                            OUString(u"My blue triangle - Does not need further description"),
+                            u"My blue triangle - Does not need further description"_ustr,
                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                     pObject->Lookup("Alt"))));
@@ -4215,7 +4215,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
             if (pS && pS->GetValue() == "Formula")
             {
                 CPPUNIT_ASSERT_EQUAL(
-                    OUString(u"Equation 1 - Now we give the full description of eq 1 here"),
+                    u"Equation 1 - Now we give the full description of eq 1 here"_ustr,
                     ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                         *dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"))));
                 ++nFormula;
@@ -4225,7 +4225,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
                 switch (nDiv)
                 {
                     case 0:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"This frame has a description"),
+                        CPPUNIT_ASSERT_EQUAL(u"This frame has a description"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
@@ -4235,14 +4235,14 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
                         CPPUNIT_ASSERT(!pObject->Lookup("Alt"));
                         break;
                     case 2:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"My textbox - Has a light background"),
+                        CPPUNIT_ASSERT_EQUAL(u"My textbox - Has a light background"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
                     case 3:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"Hey!  There is no alternate text for Frame "
-                                                      u"// but maybe not needed?"),
+                        CPPUNIT_ASSERT_EQUAL(u"Hey!  There is no alternate text for Frame "
+                                             u"// but maybe not needed?"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
@@ -4290,14 +4290,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154982)
                 switch (nFigure)
                 {
                     case 0:
-                        CPPUNIT_ASSERT_EQUAL(
-                            OUString(u"Here comes the signature - Please sign here"),
-                            ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                    pObject->Lookup("Alt"))));
+                        CPPUNIT_ASSERT_EQUAL(u"Here comes the signature - Please sign here"_ustr,
+                                             ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                                 *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                     pObject->Lookup("Alt"))));
                         break;
                     case 1:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"Home"),
+                        CPPUNIT_ASSERT_EQUAL(u"Home"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
@@ -4568,13 +4567,13 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf154955)
                 switch (nFigure)
                 {
                     case 0:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"Two rectangles - Grouped"),
+                        CPPUNIT_ASSERT_EQUAL(u"Two rectangles - Grouped"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
                         break;
                     case 1:
-                        CPPUNIT_ASSERT_EQUAL(OUString(u"these ones are green"),
+                        CPPUNIT_ASSERT_EQUAL(u"these ones are green"_ustr,
                                              ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
                                                  *dynamic_cast<vcl::filter::PDFHexStringElement*>(
                                                      pObject->Lookup("Alt"))));
@@ -5130,9 +5129,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
     auto* pFirstD = pFirst->LookupObject()->GetDictionary();
     CPPUNIT_ASSERT(pFirstD);
     //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirstD->LookupElement("Type"))->GetValue());
-    CPPUNIT_ASSERT_EQUAL(OUString(u"Preface"), ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
-                                                   *dynamic_cast<vcl::filter::PDFHexStringElement*>(
-                                                       pFirstD->LookupElement("Title"))));
+    CPPUNIT_ASSERT_EQUAL(u"Preface"_ustr, ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
+                                              *dynamic_cast<vcl::filter::PDFHexStringElement*>(
+                                                  pFirstD->LookupElement("Title"))));
 
     auto* pFirst1
         = dynamic_cast<vcl::filter::PDFReferenceElement*>(pFirstD->LookupElement("First"));
@@ -5143,7 +5142,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
     // there are no outline entries for it
     //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst1D->LookupElement("Type"))->GetValue());
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"Who is this book for?"),
+        u"Who is this book for?"_ustr,
         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
             *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst1D->LookupElement("Title"))));
 
@@ -5153,7 +5152,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
     CPPUNIT_ASSERT(pFirst2D);
     //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst2D->LookupElement("Type"))->GetValue());
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"What\u2019s in this book?"),
+        u"What\u2019s in this book?"_ustr,
         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
             *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst2D->LookupElement("Title"))));
 
@@ -5163,7 +5162,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf142129)
     CPPUNIT_ASSERT(pFirst3D);
     //CPPUNIT_ASSERT_EQUAL(OString("Outlines"), dynamic_cast<vcl::filter::PDFNameElement*>(pFirst3D->LookupElement("Type"))->GetValue());
     CPPUNIT_ASSERT_EQUAL(
-        OUString(u"Minimum requirements for using LibreOffice"),
+        u"Minimum requirements for using LibreOffice"_ustr,
         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(
             *dynamic_cast<vcl::filter::PDFHexStringElement*>(pFirst3D->LookupElement("Title"))));
 
@@ -5635,9 +5634,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf139627)
     // Rendered as (left to right): "reh + mim" - "kasreh" - "jeh + tatweel"
     int rehmim = 0, kasreh = 1, jehtatweel = 2;
 
-    CPPUNIT_ASSERT_EQUAL(OUString(u"رم"), sText[rehmim].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[kasreh].trim());
-    CPPUNIT_ASSERT_EQUAL(OUString(u""), sText[jehtatweel].trim());
+    CPPUNIT_ASSERT_EQUAL(u"رم"_ustr, sText[rehmim].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, sText[kasreh].trim());
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, sText[jehtatweel].trim());
 
     // "Kasreh" should be within "jeh" character
     CPPUNIT_ASSERT_GREATER(aRect[jehtatweel].getMinX(), aRect[kasreh].getMinX());

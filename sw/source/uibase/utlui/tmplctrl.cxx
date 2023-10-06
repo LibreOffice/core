@@ -61,7 +61,7 @@ void SwTemplateControl::StateChangedAtStatusBarControl(
     else
     {
         GetStatusBar().SetItemText(GetId(), OUString());
-        GetStatusBar().SetQuickHelpText(GetId(), u"");
+        GetStatusBar().SetQuickHelpText(GetId(), u""_ustr);
     }
 }
 

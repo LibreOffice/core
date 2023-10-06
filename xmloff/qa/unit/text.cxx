@@ -608,7 +608,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    xText->insertString(xCursor, OUString(u"☐"), /*bAbsorb=*/false);
+    xText->insertString(xCursor, u"☐"_ustr, /*bAbsorb=*/false);
     xCursor->gotoStart(/*bExpand=*/false);
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
@@ -616,8 +616,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
     xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
     xContentControlProps->setPropertyValue("Checked", uno::Any(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(u"☒"_ustr));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(u"☐"_ustr));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
@@ -627,8 +627,8 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     assertXPath(pXmlDoc, "//loext:content-control", "checkbox", "true");
     assertXPath(pXmlDoc, "//loext:content-control", "checked", "true");
-    assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒");
-    assertXPath(pXmlDoc, "//loext:content-control", "unchecked-state", u"☐");
+    assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒"_ustr);
+    assertXPath(pXmlDoc, "//loext:content-control", "unchecked-state", u"☐"_ustr);
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
@@ -661,16 +661,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
     CPPUNIT_ASSERT(bChecked);
     OUString aCheckedState;
     xContentControlProps->getPropertyValue("CheckedState") >>= aCheckedState;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), aCheckedState);
+    CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, aCheckedState);
     OUString aUncheckedState;
     xContentControlProps->getPropertyValue("UncheckedState") >>= aUncheckedState;
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), aUncheckedState);
+    CPPUNIT_ASSERT_EQUAL(u"☐"_ustr, aUncheckedState);
     uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xContentControlRange->getText();
     uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), xContent->getString());
+    CPPUNIT_ASSERT_EQUAL(u"☒"_ustr, xContent->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)

@@ -525,7 +525,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo74357, "fdo74357.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo55187, "fdo55187.docx")
 {
     // 0x010d was imported as a newline.
-    getParagraph(1, OUString(u"lup\u010Dka"));
+    getParagraph(1, u"lup\u010Dka"_ustr);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN780563, "n780563.docx")
@@ -814,7 +814,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo59638, "fdo59638.docx")
         if (rProp.Name == "BulletChar")
         {
             // Was '*', should be 'o'.
-            CPPUNIT_ASSERT_EQUAL(OUString(u"\uF0B7"), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(u"\uF0B7"_ustr, rProp.Value.get<OUString>());
             return;
         }
     }
