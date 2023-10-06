@@ -584,39 +584,38 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // determine value of RULES
     bool bRowsHaveBorder = false;
     bool bRowsHaveBorderOnly = true;
-    SwWriteTableRow *pRow = m_aRows[0].get();
-    for( SwWriteTableRows::size_type nRow=1; nRow < m_aRows.size(); ++nRow )
+    assert(m_aRows.begin() != m_aRows.end());
+    for (auto row = m_aRows.begin(), next = std::next(row); next < m_aRows.end(); ++row, ++next)
     {
-        SwWriteTableRow *pNextRow = m_aRows[nRow].get();
+        SwWriteTableRow* pRow = row->get();
+        SwWriteTableRow* pNextRow = next->get();
         bool bBorder = ( pRow->m_bBottomBorder || pNextRow->m_bTopBorder );
         bRowsHaveBorder |= bBorder;
         bRowsHaveBorderOnly &= bBorder;
 
-        sal_uInt16 nBorder2 = pRow->m_bBottomBorder ? pRow->m_nBottomBorder : USHRT_MAX;
-        if( pNextRow->m_bTopBorder && pNextRow->m_nTopBorder < nBorder2 )
-            nBorder2 = pNextRow->m_nTopBorder;
+        sal_uInt16 nBorder = pRow->m_bBottomBorder ? pRow->m_nBottomBorder : USHRT_MAX;
+        if( pNextRow->m_bTopBorder && pNextRow->m_nTopBorder < nBorder )
+            nBorder = pNextRow->m_nTopBorder;
 
         pRow->m_bBottomBorder = bBorder;
-        pRow->m_nBottomBorder = nBorder2;
+        pRow->m_nBottomBorder = nBorder;
 
         pNextRow->m_bTopBorder = bBorder;
-        pNextRow->m_nTopBorder = nBorder2;
-
-        pRow = pNextRow;
+        pNextRow->m_nTopBorder = nBorder;
     }
 
     bool bColsHaveBorder = false;
     bool bColsHaveBorderOnly = true;
-    SwWriteTableCol *pCol = m_aCols[0].get();
-    for( SwWriteTableCols::size_type nCol=1; nCol<m_aCols.size(); ++nCol )
+    assert(m_aCols.begin() != m_aCols.end());
+    for (auto col = m_aCols.begin(), next = std::next(col); next < m_aCols.end(); ++col, ++next)
     {
-        SwWriteTableCol *pNextCol = m_aCols[nCol].get();
+        SwWriteTableCol* pCol = col->get();
+        SwWriteTableCol* pNextCol = next->get();
         bool bBorder = ( pCol->m_bRightBorder || pNextCol->m_bLeftBorder );
         bColsHaveBorder |= bBorder;
         bColsHaveBorderOnly &= bBorder;
         pCol->m_bRightBorder = bBorder;
         pNextCol->m_bLeftBorder = bBorder;
-        pCol = pNextCol;
     }
 
     // close previous numbering, etc
@@ -726,8 +725,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_caption), false );
     }
 
-    const SwWriteTableCols::size_type nCols = m_aCols.size();
-
     // output <COLGRP>/<COL>: If exporting via layout only when during import
     // some were there, otherwise always.
     bool bColGroups = (bColsHaveBorder && !bColsHaveBorderOnly);
@@ -741,6 +738,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             rWrt.IncIndentLevel(); // indent content of <COLGRP>
         }
 
+        const SwWriteTableCols::size_type nCols = m_aCols.size();
         for( SwWriteTableCols::size_type nCol=0; nCol<nCols; ++nCol )
         {
             rWrt.OutNewLine(); // </COL> in new line
@@ -819,20 +817,20 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     sal_uInt16 nSkipRows = 0;
     for( SwWriteTableRows::size_type nRow = 0; nRow < m_aRows.size(); ++nRow )
     {
-        const SwWriteTableRow *pRow2 = m_aRows[nRow].get();
+        const SwWriteTableRow *pRow = m_aRows[nRow].get();
 
         if (nSkipRows == 0)
         {
-            OutTableCells(rWrt, pRow2->GetCells(), pRow2->GetBackground(), nSkipRows);
+            OutTableCells(rWrt, pRow->GetCells(), pRow->GetBackground(), nSkipRows);
         }
         else
         {
             --nSkipRows;
         }
-        if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->m_bBottomBorder &&
-            pRow2->m_nBottomBorder > SvxBorderLineWidth::Thin )
+        if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow->m_bBottomBorder &&
+            pRow->m_nBottomBorder > SvxBorderLineWidth::Thin )
         {
-            for( auto nCnt = (pRow2->m_nBottomBorder / SvxBorderLineWidth::Thin) - 1; nCnt; --nCnt )
+            for( auto nCnt = (pRow->m_nBottomBorder / SvxBorderLineWidth::Thin) - 1; nCnt; --nCnt )
             {
                 rWrt.OutNewLine();
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
@@ -841,7 +839,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             }
         }
         if( ( (bTHead && nRow==m_nHeadEndRow) ||
-              (bTBody && pRow2->m_bBottomBorder) ) &&
+              (bTBody && pRow->m_bBottomBorder) ) &&
             nRow < m_aRows.size()-1 )
         {
             rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>
