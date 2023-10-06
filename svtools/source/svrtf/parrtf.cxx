@@ -39,6 +39,7 @@ const int MAX_STRING_LEN = 1024;
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser<int>( rIn, nStackSize )
     , nOpenBrackets(0)
+    , nUPRLevel(0)
     , eCodeSet(RTL_TEXTENCODING_MS_1252)
     , nUCharOverread(1)
 {
@@ -160,19 +161,31 @@ int SvRTFParser::GetNextToken_()
                             break;
 
                         case RTF_UPR:
-                            if (!_inSkipGroup) {
-                            // UPR - overread the group with the ansi
-                            //       information
-                            int nNextToken;
-                            do
+                            if (!_inSkipGroup)
                             {
-                                nNextToken = GetNextToken_();
-                            }
-                            while (nNextToken != '{' && nNextToken != sal_Unicode(EOF) && IsParserWorking());
+                                if (nUPRLevel > 256) // fairly sure > 1 is probably an error, but provide some leeway
+                                {
+                                    SAL_WARN("svtools", "urp stack too deep");
+                                    eState = SvParserState::Error;
+                                    break;
+                                }
 
-                            SkipGroup();
-                            GetNextToken_();  // overread the last bracket
-                            nRet = 0;
+                                ++nUPRLevel;
+
+                                // UPR - overread the group with the ansi
+                                //       information
+                                int nNextToken;
+                                do
+                                {
+                                    nNextToken = GetNextToken_();
+                                }
+                                while (nNextToken != '{' && nNextToken != sal_Unicode(EOF) && IsParserWorking());
+
+                                SkipGroup();
+                                GetNextToken_();  // overread the last bracket
+                                nRet = 0;
+
+                                --nUPRLevel;
                             }
                             break;
 

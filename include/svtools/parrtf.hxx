@@ -37,6 +37,7 @@ class SVT_DLLPUBLIC SvRTFParser : public SvParser<int>
 {
     std::stack< RtfParserState_Impl > aParserStates;
     int nOpenBrackets;
+    int nUPRLevel;
     rtl_TextEncoding eCodeSet;
     sal_uInt8        nUCharOverread;
 
