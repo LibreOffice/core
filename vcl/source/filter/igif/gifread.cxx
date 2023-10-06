@@ -666,7 +666,13 @@ void GIFReader::CreateNewBitmaps()
         aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aAlphaMask );
     }
     else
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
+    {
+        // tdf#157576 and tdf#157635 mask out black pixels
+        // Due to the switch from transparency to alpha in commit
+        // 81994cb2b8b32453a92bcb011830fcb884f22ff3, mask out black
+        // pixels in bitmap.
+        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp8 );
+    }
 
     aAnimationFrame.maPositionPixel = Point( nImagePosX, nImagePosY );
     aAnimationFrame.maSizePixel = Size( nImageWidth, nImageHeight );
