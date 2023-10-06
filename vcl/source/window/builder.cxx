@@ -1679,6 +1679,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
             xWindow = VclPtr<VclVBox>::Create(pParent);
         else
             xWindow = VclPtr<VclHBox>::Create(pParent);
+
+        if (name == "GtkStatusbar")
+            xWindow->SetAccessibleRole(css::accessibility::AccessibleRole::STATUS_BAR);
     }
     else if (name == "GtkPaned")
     {
