@@ -341,8 +341,17 @@ rtl::Reference<SdrObject> EnhancedCustomShape3d::Create3DObject(
 
         drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PARALLEL );
         const Any* pAny = rGeometryItem.GetPropertyValueByName( "Extrusion", "ProjectionMode" );
-        if ( pAny )
-            *pAny >>= eProjectionMode;
+        if (pAny)
+        {
+            if(!(*pAny >>= eProjectionMode))
+            {
+                sal_Int32 nEnum = 0;
+                if(*pAny >>= nEnum)
+                {
+                    eProjectionMode = static_cast<drawing::ProjectionMode>(nEnum);
+                }
+            }
+        }
         // pShape2d Convert in scenes which include 3D Objects
         E3dDefaultAttributes a3DDefaultAttr;
         a3DDefaultAttr.SetDefaultLatheCharacterMode( true );
