@@ -286,10 +286,12 @@ bool fcTLbeforeIDAT(SvStream& rStream)
     comphelper::ScopeGuard aGuard([&rStream, nPos]() { rStream.Seek(nPos); });
     // Skip PNG header and IHDR
     rStream.SetEndian(SvStreamEndian::BIG);
-    rStream.Seek(PNG_SIGNATURE_SIZE + PNG_TYPE_SIZE + PNG_SIZE_SIZE + PNG_IHDR_SIZE + PNG_CRC_SIZE);
-    sal_uInt32 nChunkSize, nChunkType;
-    while (rStream.good())
+    if (!checkSeek(rStream, PNG_SIGNATURE_SIZE + PNG_TYPE_SIZE + PNG_SIZE_SIZE + PNG_IHDR_SIZE
+                                + PNG_CRC_SIZE))
+        return false;
+    do
     {
+        sal_uInt32 nChunkSize(0), nChunkType(0);
         rStream.ReadUInt32(nChunkSize);
         rStream.ReadUInt32(nChunkType);
         switch (nChunkType)
@@ -300,11 +302,12 @@ bool fcTLbeforeIDAT(SvStream& rStream)
                 return false;
             default:
             {
-                rStream.SeekRel(nChunkSize + PNG_CRC_SIZE);
+                if (!checkSeek(rStream, rStream.Tell() + nChunkSize + PNG_CRC_SIZE))
+                    return false;
                 break;
             }
         }
-    }
+    } while (rStream.good());
     return false;
 }
 
