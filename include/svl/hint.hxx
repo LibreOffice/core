@@ -155,7 +155,8 @@ enum class SfxHintId {
     SwVirtPageNumHint,
     SwAutoFormatUsedHint,
 
-    ThisIsAnSdrHint
+    ThisIsAnSdrHint,
+    ThisIsAnSfxEventHint
 };
 
 template< typename charT, typename traits >

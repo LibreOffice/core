@@ -161,16 +161,16 @@ void SfxPickListImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pOpenUrlHint->GetDocumentURL() ));
     }
 
-    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( !pEventHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint)
         return;
 
+    const SfxEventHint& rEventHint = static_cast<const SfxEventHint&>(rHint);
     // only ObjectShell-related events with media interest
-    SfxObjectShell* pDocSh = pEventHint->GetObjShell();
+    SfxObjectShell* pDocSh = rEventHint.GetObjShell();
     if( !pDocSh )
         return;
 
-    switch ( pEventHint->GetEventId() )
+    switch (rEventHint.GetEventId())
     {
         case SfxEventHintId::CreateDoc:
         {

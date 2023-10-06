@@ -868,13 +868,14 @@ void SwModule::ExecOther(SfxRequest& rReq)
 // Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( const SfxEventHint* pEvHint = dynamic_cast<const SfxEventHint*>( &rHint) )
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>( pEvHint->GetObjShell()  );
+        const SfxEventHint& rEvHint = static_cast<const SfxEventHint&>(rHint);
+        SwDocShell* pDocSh = dynamic_cast<SwDocShell*>(rEvHint.GetObjShell());
         if( pDocSh )
         {
             SwWrtShell* pWrtSh = pDocSh->GetWrtShell();
-            switch( pEvHint->GetEventId() )
+            switch (rEvHint.GetEventId())
             {
             case SfxEventHintId::LoadFinished:
                 // if it is a new document created from a template,
