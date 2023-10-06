@@ -170,7 +170,6 @@
 #define SCSTR_CONTENT_DRAWING                       NC_("SCSTR_CONTENT_DRAWING", "Drawing objects")
 #define SCSTR_ACTIVE                                NC_("SCSTR_ACTIVE", "active" )
 #define SCSTR_NOTACTIVE                             NC_("SCSTR_NOTACTIVE", "inactive" )
-#define SCSTR_HIDDEN                                NC_("SCSTR_HIDDEN", "hidden" )
 #define SCSTR_ACTIVEWIN                             NC_("SCSTR_ACTIVEWIN", "Active Window" )
 #define SCSTR_QHLP_SCEN_LISTBOX                     NC_("SCSTR_QHLP_SCEN_LISTBOX", "Scenario Name")
 #define SCSTR_QHLP_SCEN_COMMENT                     NC_("SCSTR_QHLP_SCEN_COMMENT", "Comment")

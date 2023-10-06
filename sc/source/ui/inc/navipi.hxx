@@ -111,7 +111,6 @@ private:
 
     OUString        aStrActive;
     OUString        aStrNotActive;
-    OUString        aStrHidden;
     OUString        aStrActiveWin;
 
     std::optional<ScArea> moMarkArea;

@@ -382,7 +382,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, weld::Widget* pParent, SfxNaviga
     m_xLbDocuments->connect_changed(LINK(this, ScNavigatorDlg, DocumentSelectHdl));
     aStrActive    = " (" + ScResId(SCSTR_ACTIVE) + ")";     // " (active)"
     aStrNotActive = " (" + ScResId(SCSTR_NOTACTIVE) + ")";  // " (not active)"
-    aStrHidden    = " (" + ScResId(SCSTR_HIDDEN) + ")";     // " (hidden)"
 
     rBindings.ENTERREGISTRATIONS();
 
