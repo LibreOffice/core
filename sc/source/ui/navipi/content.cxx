@@ -124,8 +124,6 @@ ScContentTree::ScContentTree(std::unique_ptr<weld::TreeView> xTreeView, ScNaviga
     , m_xTransferObj(new ScLinkTransferObj)
     , pParentWindow(pNavigatorDlg)
     , nRootType(ScContentId::ROOT)
-    , bHiddenDoc(false)
-    , pHiddenDocument(nullptr)
     , bIsInNavigatorDlg(false)
     , m_bFreeze(false)
     , m_nAsyncMouseReleaseId(nullptr)
@@ -326,9 +324,6 @@ IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
 
     if (xEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD))
     {
-        if ( bHiddenDoc )
-            return false;               //! later...
-
         OUString aText(m_xTreeView->get_text(*xEntry));
 
         if ( !aManualDoc.isEmpty() )
@@ -471,8 +466,6 @@ IMPL_LINK(ScContentTree, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 
             if (xEntry && (nType != ScContentId::ROOT) && (nChild != SC_CONTENT_NOCHILD))
             {
-                if ( bHiddenDoc )
-                    return true;                //! later...
                 OUString aText(m_xTreeView->get_text(*xEntry));
                 if (!aManualDoc.isEmpty())
                     pParentWindow->SetCurrentDoc( aManualDoc );
@@ -575,7 +568,7 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         ++i;
                         sId = "document" + OUString::number(i);
                         xDocMenu->append_radio(sId, aEntry);
-                        if ( !bHiddenDoc && aName == aManualDoc )
+                        if (aName == aManualDoc)
                             sActive = sId;
                     }
                     pSh = SfxObjectShell::GetNext( *pSh );
@@ -584,7 +577,7 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 ++i;
                 sId = "document" + OUString::number(i);
                 xDocMenu->append_radio(sId, pParentWindow->aStrActiveWin);
-                if (!bHiddenDoc && aManualDoc.isEmpty())
+                if (aManualDoc.isEmpty())
                     sActive = sId;
                 xDocMenu->set_active(sActive, true);
 
@@ -643,25 +636,15 @@ IMPL_LINK(ScContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 ScDocument* ScContentTree::GetSourceDocument()
 {
-    if (bHiddenDoc)
-        return pHiddenDocument;
-    else
-    {
-        ScDocShell* pSh = GetManualOrCurrent();
-        if (pSh)
-            return &pSh->GetDocument();
-
-    }
+    ScDocShell* pSh = GetManualOrCurrent();
+    if (pSh)
+        return &pSh->GetDocument();
     return nullptr;
 }
 
 void ScContentTree::Refresh( ScContentId nType )
 {
-    if ( bHiddenDoc && !pHiddenDocument )
-        return;                                 // other document displayed
-
     //  if nothing has changed the cancel right away (against flicker)
-
     if ( nType == ScContentId::NOTE )
         if (!NoteStringsChanged())
             return;
@@ -1189,8 +1172,6 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
     bool bDisallow = true;
 
-    std::unique_ptr<ScDocumentLoader> pDocLoader;
-
     ScModule* pScMod = SC_MOD();
 
     ScContentId nType;
@@ -1212,18 +1193,13 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 
         ScDocument* pLocalDoc = nullptr;                   // for URL drop
         OUString aDocName;
-        if (bHiddenDoc)
-            aDocName = aHiddenName;
-        else
+        ScDocShell* pDocSh = GetManualOrCurrent();
+        if (pDocSh)
         {
-            ScDocShell* pDocSh = GetManualOrCurrent();
-            if (pDocSh)
-            {
-                if (pDocSh->HasName())
-                    aDocName = pDocSh->GetMedium()->GetName();
-                else
-                    pLocalDoc = &pDocSh->GetDocument();      // drop only in this document
-            }
+            if (pDocSh->HasName())
+                aDocName = pDocSh->GetMedium()->GetName();
+            else
+                pLocalDoc = &pDocSh->GetDocument();      // drop only in this document
         }
 
         bool bDoLinkTrans = false;      // use ScLinkTransferObj
@@ -1276,18 +1252,7 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
                 break;
             case SC_DROPMODE_COPY:
                 {
-                    ScDocShell* pSrcShell = nullptr;
-                    if ( bHiddenDoc )
-                    {
-                        OUString aFilter, aOptions;
-                        OUString aURL = aHiddenName;
-                        pDocLoader.reset(new ScDocumentLoader( aURL, aFilter, aOptions ));
-                        if (!pDocLoader->IsError())
-                            pSrcShell = pDocLoader->GetDocShell();
-                    }
-                    else
-                        pSrcShell = GetManualOrCurrent();
-
+                    ScDocShell* pSrcShell = GetManualOrCurrent();
                     if ( pSrcShell )
                     {
                         ScDocument& rSrcDoc = pSrcShell->GetDocument();
@@ -1379,7 +1344,6 @@ void ScContentTree::ToggleRoot()        // after selection
 void ScContentTree::ResetManualDoc()
 {
     aManualDoc.clear();
-    bHiddenDoc = false;
 
     ActiveDocChanged();
 }
@@ -1388,7 +1352,7 @@ bool ScContentTree::ActiveDocChanged()
 {
     bool bRefreshed = false;
 
-    if ( !bHiddenDoc && aManualDoc.isEmpty() )
+    if (aManualDoc.isEmpty())
     {
         Refresh();                                  // content only if automatic
         bRefreshed = true;
@@ -1397,25 +1361,22 @@ bool ScContentTree::ActiveDocChanged()
         //  if flag active Listbox must be updated
 
     OUString aCurrent;
-    if ( bHiddenDoc )
-        aCurrent = OUString();
+
+    ScDocShell* pSh = GetManualOrCurrent();
+    if (pSh)
+        aCurrent = pSh->GetTitle();
     else
     {
-        ScDocShell* pSh = GetManualOrCurrent();
+        //  document is no longer available
+
+        aManualDoc.clear();             // again automatically
+        Refresh();
+        bRefreshed = true;
+        pSh = GetManualOrCurrent();     // should be active now
         if (pSh)
             aCurrent = pSh->GetTitle();
-        else
-        {
-            //  document is no longer available
-
-            aManualDoc.clear();             // again automatically
-            Refresh();
-            bRefreshed = true;
-            pSh = GetManualOrCurrent();     // should be active now
-            if (pSh)
-                aCurrent = pSh->GetTitle();
-        }
     }
+
     pParentWindow->GetDocNames( &aCurrent );        // select
 
     return bRefreshed;
@@ -1424,11 +1385,8 @@ bool ScContentTree::ActiveDocChanged()
 void ScContentTree::SetManualDoc(const OUString& rName)
 {
     aManualDoc = rName;
-    if (!bHiddenDoc)
-    {
-        Refresh();
-        pParentWindow->GetDocNames( &aManualDoc );      // select
-    }
+    Refresh();
+    pParentWindow->GetDocNames( &aManualDoc );      // select
 }
 
 void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in Menu/Listbox
@@ -1465,7 +1423,6 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
 
     if (bLoaded)
     {
-        bHiddenDoc = false;
         SetManualDoc(aRealName);
     }
     else

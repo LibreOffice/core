@@ -49,9 +49,6 @@ class ScContentTree
     o3tl::enumarray<ScContentId, std::unique_ptr<weld::TreeIter>> m_aRootNodes;
     ScContentId             nRootType;          // set as Root
     OUString                aManualDoc;         // Switched in Navigator (Title)
-    bool                    bHiddenDoc;         // Hidden active?
-    OUString                aHiddenName;        // URL to load
-    ScDocument*             pHiddenDocument;    // temporary
     bool                    bIsInNavigatorDlg;
     bool                    m_bFreeze;
     ImplSVEvent*            m_nAsyncMouseReleaseId;
