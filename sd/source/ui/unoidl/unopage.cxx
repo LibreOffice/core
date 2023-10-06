@@ -115,47 +115,47 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
 {
     static const SfxItemPropertyMapEntry aDrawPagePropertyMap_Impl[] =
     {
-        { u"" UNO_NAME_PAGE_BACKGROUND,       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                  beans::PropertyAttribute::MAYBEVOID,0},
-        { u"" UNO_NAME_PAGE_BOTTOM,           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_LEFT,             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_RIGHT,            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_TOP,              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_CHANGE,           WID_PAGE_CHANGE,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_DURATION,         WID_PAGE_DURATION,  ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_EFFECT,           WID_PAGE_EFFECT,    ::cppu::UnoType<presentation::FadeEffect>::get(),     0,  0},
-        { u"" UNO_NAME_PAGE_HEIGHT,           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_LAYOUT,           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_BACKGROUND ""_ustr,       WID_PAGE_BACK,      cppu::UnoType<beans::XPropertySet>::get(),                  beans::PropertyAttribute::MAYBEVOID,0},
+        { u"" UNO_NAME_PAGE_BOTTOM ""_ustr,           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_LEFT ""_ustr,             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_RIGHT ""_ustr,            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_TOP ""_ustr,              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_CHANGE ""_ustr,           WID_PAGE_CHANGE,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_DURATION ""_ustr,         WID_PAGE_DURATION,  ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_EFFECT ""_ustr,           WID_PAGE_EFFECT,    ::cppu::UnoType<presentation::FadeEffect>::get(),     0,  0},
+        { u"" UNO_NAME_PAGE_HEIGHT ""_ustr,           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_LAYOUT ""_ustr,           WID_PAGE_LAYOUT,    ::cppu::UnoType<sal_Int16>::get(),            0,  0},
         { UNO_NAME_LINKDISPLAYBITMAP,     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                          beans::PropertyAttribute::READONLY, 0},
         { UNO_NAME_LINKDISPLAYNAME,       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_NUMBER,           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_ORIENTATION,      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
-        { u"" UNO_NAME_PAGE_SPEED,            WID_PAGE_SPEED,     ::cppu::UnoType<presentation::AnimationSpeed>::get(), 0,  0},
-        { u"" UNO_NAME_PAGE_WIDTH,            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
-        { u"" UNO_NAME_PAGE_PREVIEW,          WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_PREVIEWBITMAP,    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE,  WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
-        { u"" UNO_NAME_PAGE_VISIBLE,          WID_PAGE_VISIBLE,   cppu::UnoType<bool>::get(),                        0, 0},
-        { u"" UNO_NAME_OBJ_SOUNDFILE,         WID_PAGE_SOUNDFILE, cppu::UnoType<Any>::get(),              0, 0},
+        { u"" UNO_NAME_PAGE_NUMBER ""_ustr,           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_ORIENTATION ""_ustr,      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},
+        { u"" UNO_NAME_PAGE_SPEED ""_ustr,            WID_PAGE_SPEED,     ::cppu::UnoType<presentation::AnimationSpeed>::get(), 0,  0},
+        { u"" UNO_NAME_PAGE_WIDTH ""_ustr,            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},
+        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,          WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr,    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr,  WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},
+        { u"" UNO_NAME_PAGE_VISIBLE ""_ustr,          WID_PAGE_VISIBLE,   cppu::UnoType<bool>::get(),                        0, 0},
+        { u"" UNO_NAME_OBJ_SOUNDFILE ""_ustr,         WID_PAGE_SOUNDFILE, cppu::UnoType<Any>::get(),              0, 0},
         { sUNO_Prop_IsBackgroundVisible,  WID_PAGE_BACKVIS,   cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_IsBackgroundObjectsVisible,   WID_PAGE_BACKOBJVIS,    cppu::UnoType<bool>::get(),                        0, 0},
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},
-        { u"HighResDuration",              WID_PAGE_HIGHRESDURATION,  ::cppu::UnoType<double>::get(),            0,  0},
-        { u"IsBackgroundDark" ,            WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
-        { u"IsFooterVisible",              WID_PAGE_FOOTERVISIBLE, cppu::UnoType<bool>::get(),                    0, 0},
-        { u"FooterText",                   WID_PAGE_FOOTERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},
-        { u"IsPageNumberVisible",          WID_PAGE_PAGENUMBERVISIBLE, cppu::UnoType<bool>::get(),                    0, 0},
-        { u"IsDateTimeVisible",            WID_PAGE_DATETIMEVISIBLE, cppu::UnoType<bool>::get(),                  0, 0},
-        { u"IsDateTimeFixed",              WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},
-        { u"DateTimeText",                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
-        { u"DateTimeFormat",               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
-        { u"TransitionType",               WID_TRANSITION_TYPE, ::cppu::UnoType<sal_Int16>::get(),           0,  0},
-        { u"TransitionSubtype",            WID_TRANSITION_SUBTYPE, ::cppu::UnoType<sal_Int16>::get(),            0,  0},
-        { u"TransitionDirection",          WID_TRANSITION_DIRECTION, ::cppu::UnoType<sal_Bool>::get(),           0,  0},
-        { u"TransitionFadeColor",          WID_TRANSITION_FADE_COLOR, ::cppu::UnoType<sal_Int32>::get(),         0,  0},
-        { u"" UNO_NAME_PAGE_TRANSITION_DURATION, WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
-        { u"LoopSound",                    WID_LOOP_SOUND, cppu::UnoType<bool>::get(),                    0, 0},
-        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
+        { u"HighResDuration"_ustr,              WID_PAGE_HIGHRESDURATION,  ::cppu::UnoType<double>::get(),            0,  0},
+        { u"IsBackgroundDark"_ustr ,            WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},
+        { u"IsFooterVisible"_ustr,              WID_PAGE_FOOTERVISIBLE, cppu::UnoType<bool>::get(),                    0, 0},
+        { u"FooterText"_ustr,                   WID_PAGE_FOOTERTEXT, ::cppu::UnoType<OUString>::get(),                0,  0},
+        { u"IsPageNumberVisible"_ustr,          WID_PAGE_PAGENUMBERVISIBLE, cppu::UnoType<bool>::get(),                    0, 0},
+        { u"IsDateTimeVisible"_ustr,            WID_PAGE_DATETIMEVISIBLE, cppu::UnoType<bool>::get(),                  0, 0},
+        { u"IsDateTimeFixed"_ustr,              WID_PAGE_DATETIMEFIXED, cppu::UnoType<bool>::get(),                    0, 0},
+        { u"DateTimeText"_ustr,                 WID_PAGE_DATETIMETEXT, ::cppu::UnoType<OUString>::get(),              0,  0},
+        { u"DateTimeFormat"_ustr,               WID_PAGE_DATETIMEFORMAT, ::cppu::UnoType<sal_Int32>::get(),           0,  0},
+        { u"TransitionType"_ustr,               WID_TRANSITION_TYPE, ::cppu::UnoType<sal_Int16>::get(),           0,  0},
+        { u"TransitionSubtype"_ustr,            WID_TRANSITION_SUBTYPE, ::cppu::UnoType<sal_Int16>::get(),            0,  0},
+        { u"TransitionDirection"_ustr,          WID_TRANSITION_DIRECTION, ::cppu::UnoType<sal_Bool>::get(),           0,  0},
+        { u"TransitionFadeColor"_ustr,          WID_TRANSITION_FADE_COLOR, ::cppu::UnoType<sal_Int32>::get(),         0,  0},
+        { u"" UNO_NAME_PAGE_TRANSITION_DURATION ""_ustr, WID_TRANSITION_DURATION, ::cppu::UnoType<double>::get(),          0,  0},
+        { u"LoopSound"_ustr,                    WID_LOOP_SOUND, cppu::UnoType<bool>::get(),                    0, 0},
+        { u"NavigationOrder"_ustr,              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0},
     };
 
 #define DRAW_PAGE_NOTES_PROPERTIES \
@@ -195,23 +195,23 @@ static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, Page
     };
 
 #define GRAPHIC_PAGE_PROPERTIES \
-        { u"" UNO_NAME_PAGE_BOTTOM,           WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_LEFT,             WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_RIGHT,            WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_TOP,              WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_HEIGHT,           WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_BOTTOM ""_ustr,   WID_PAGE_BOTTOM,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_LEFT ""_ustr,     WID_PAGE_LEFT,      ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_RIGHT ""_ustr,    WID_PAGE_RIGHT,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_TOP ""_ustr,      WID_PAGE_TOP,       ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_HEIGHT ""_ustr,   WID_PAGE_HEIGHT,    ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
         { UNO_NAME_LINKDISPLAYBITMAP,     WID_PAGE_LDBITMAP,  cppu::UnoType<awt::XBitmap>::get(),                           beans::PropertyAttribute::READONLY, 0},                                             \
         { UNO_NAME_LINKDISPLAYNAME,       WID_PAGE_LDNAME,    ::cppu::UnoType<OUString>::get(),             beans::PropertyAttribute::READONLY, 0},                                             \
-        { u"" UNO_NAME_PAGE_NUMBER,           WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                             \
-        { u"" UNO_NAME_PAGE_ORIENTATION,      WID_PAGE_ORIENT,    ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                             \
-        { u"" UNO_NAME_PAGE_WIDTH,            WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
-        { u"" UNO_NAME_PAGE_PREVIEW,          WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},    \
-        { u"" UNO_NAME_PAGE_PREVIEWBITMAP,    WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
-        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE,  WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
+        { u"" UNO_NAME_PAGE_NUMBER ""_ustr,   WID_PAGE_NUMBER,    ::cppu::UnoType<sal_Int16>::get(),            beans::PropertyAttribute::READONLY, 0},                                             \
+        { u"" UNO_NAME_PAGE_ORIENTATION ""_ustr, WID_PAGE_ORIENT, ::cppu::UnoType<view::PaperOrientation>::get(),0, 0},                                                                             \
+        { u"" UNO_NAME_PAGE_WIDTH ""_ustr,    WID_PAGE_WIDTH,     ::cppu::UnoType<sal_Int32>::get(),            0,  0},                                                                             \
+        { u"" UNO_NAME_PAGE_PREVIEW ""_ustr,  WID_PAGE_PREVIEW,   cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},    \
+        { u"" UNO_NAME_PAGE_PREVIEWBITMAP ""_ustr, WID_PAGE_PREVIEWBITMAP, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
+        { u"" UNO_NAME_PAGE_PREVIEWMETAFILE ""_ustr, WID_PAGE_PREVIEWMETAFILE, cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0},\
         { sUNO_Prop_UserDefinedAttributes,WID_PAGE_USERATTRIBS, cppu::UnoType<css::container::XNameContainer>::get(),         0,     0},                          \
         { sUNO_Prop_BookmarkURL,          WID_PAGE_BOOKMARK,  ::cppu::UnoType<OUString>::get(),             0,  0},                                                                             \
-        { u"IsBackgroundDark",             WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
-        { u"NavigationOrder",              WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
+        { u"IsBackgroundDark"_ustr,        WID_PAGE_ISDARK,    cppu::UnoType<bool>::get(),                        beans::PropertyAttribute::READONLY, 0},                                             \
+        { u"NavigationOrder"_ustr,         WID_NAVORDER, cppu::UnoType<css::container::XIndexAccess>::get(),0,  0}
 
     static const SfxItemPropertyMapEntry aGraphicPagePropertyMap_Impl[] =
     {

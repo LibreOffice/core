@@ -34,7 +34,7 @@ namespace oox::core {
 /** Expands to an OUString containing an 'officeDocument' transitional relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATION_TYPE( ascii ) \
-    ( u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii )
+    ( u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/" ascii ""_ustr )
 
 /** Expands to an OUString containing an 'officeDocument' strict relation type created
     from the passed literal(!) ASCII(!) character array. */

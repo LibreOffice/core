@@ -73,12 +73,12 @@ struct SfxItemPropertyMapEntry;
 #define SVX_UNOEDIT_OUTLINER_PROPERTIES \
     SVX_UNOEDIT_NUMBERING_PROPERTY, \
     { UNO_NAME_NUMBERING_LEVEL,        EE_PARA_OUTLLEVEL,       ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
-    {u"NumberingStartValue",           WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
-    {u"ParaIsNumberingRestart",        WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }
+    {u"NumberingStartValue"_ustr,      WID_NUMBERINGSTARTVALUE, ::cppu::UnoType<sal_Int16>::get(), 0, 0 }, \
+    {u"ParaIsNumberingRestart"_ustr,   WID_PARAISNUMBERINGRESTART, cppu::UnoType<bool>::get(), 0, 0 }
 
 #define SVX_UNOEDIT_CHAR_PROPERTIES \
     { UNO_NAME_EDIT_CHAR_HEIGHT,      EE_CHAR_FONTHEIGHT, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
-    { u"CharScaleWidth",               EE_CHAR_FONTWIDTH,  ::cppu::UnoType<sal_Int16>::get(),    0, 0 }, \
+    { u"CharScaleWidth"_ustr,          EE_CHAR_FONTWIDTH,  ::cppu::UnoType<sal_Int16>::get(),    0, 0 }, \
     { UNO_NAME_EDIT_CHAR_FONTNAME,    EE_CHAR_FONTINFO,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
     { UNO_NAME_EDIT_CHAR_FONTSTYLENAME,EE_CHAR_FONTINFO,  ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
     { UNO_NAME_EDIT_CHAR_FONTFAMILY,  EE_CHAR_FONTINFO,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_FONT_FAMILY }, \
@@ -99,21 +99,21 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_BACKGROUND_TRANSPARENT, EE_CHAR_BKGCOLOR,   ::cppu::UnoType<bool>::get(), 0, MID_GRAPHIC_TRANSPARENT }, \
     { UNO_NAME_EDIT_CHAR_ESCAPEMENT,  EE_CHAR_ESCAPEMENT, ::cppu::UnoType<sal_Int16>::get(),        0, MID_ESC }, \
     { UNO_NAME_EDIT_CHAR_UNDERLINE,   EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
-    { u"CharUnderlineColor",           EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
-    { u"CharUnderlineHasColor",        EE_CHAR_UNDERLINE,  cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
+    { u"CharUnderlineColor"_ustr,      EE_CHAR_UNDERLINE,  ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
+    { u"CharUnderlineHasColor"_ustr,   EE_CHAR_UNDERLINE,  cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
     { UNO_NAME_EDIT_CHAR_OVERLINE,    EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int16>::get(),        0, MID_TL_STYLE }, \
-    { u"CharOverlineColor",            EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
-    { u"CharOverlineHasColor",         EE_CHAR_OVERLINE,   cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
+    { u"CharOverlineColor"_ustr,       EE_CHAR_OVERLINE,   ::cppu::UnoType<sal_Int32>::get(),        0, MID_TL_COLOR }, \
+    { u"CharOverlineHasColor"_ustr,    EE_CHAR_OVERLINE,   cppu::UnoType<bool>::get(),                    0, MID_TL_HASCOLOR } , \
     { UNO_NAME_EDIT_CHAR_CROSSEDOUT,  EE_CHAR_STRIKEOUT,  cppu::UnoType<bool>::get(),                    0, MID_CROSSED_OUT }, \
     { UNO_NAME_EDIT_CHAR_STRIKEOUT,   EE_CHAR_STRIKEOUT,  ::cppu::UnoType<sal_Int16>::get(),        0, MID_CROSS_OUT}, \
     { UNO_NAME_EDIT_CHAR_CASEMAP,     EE_CHAR_CASEMAP,    ::cppu::UnoType<sal_Int16>::get(),        0, 0 }, \
     { UNO_NAME_EDIT_CHAR_SHADOWED,    EE_CHAR_SHADOW,     cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { u"CharContoured",                EE_CHAR_OUTLINE,    cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { u"CharEscapementHeight",         EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int8>::get(),         0, MID_ESC_HEIGHT },\
-    { u"CharAutoKerning",              EE_CHAR_PAIRKERNING,cppu::UnoType<bool>::get(),                    0, 0 } , \
-    { u"CharKerning",                  EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, 0 }, \
-    { u"CharWordMode",                 EE_CHAR_WLM,        cppu::UnoType<bool>::get(),                    0, 0 }, \
-    { u"CharEmphasis",                 EE_CHAR_EMPHASISMARK, ::cppu::UnoType<sal_Int16>::get(),       0, MID_EMPHASIS},\
+    { u"CharContoured"_ustr,           EE_CHAR_OUTLINE,    cppu::UnoType<bool>::get(),                    0, 0 }, \
+    { u"CharEscapementHeight"_ustr,    EE_CHAR_ESCAPEMENT, cppu::UnoType<sal_Int8>::get(),         0, MID_ESC_HEIGHT },\
+    { u"CharAutoKerning"_ustr,         EE_CHAR_PAIRKERNING,cppu::UnoType<bool>::get(),                    0, 0 } , \
+    { u"CharKerning"_ustr,             EE_CHAR_KERNING,    ::cppu::UnoType<sal_Int16>::get()  ,      0, 0 }, \
+    { u"CharWordMode"_ustr,            EE_CHAR_WLM,        cppu::UnoType<bool>::get(),                    0, 0 }, \
+    { u"CharEmphasis"_ustr,            EE_CHAR_EMPHASISMARK, ::cppu::UnoType<sal_Int16>::get(),       0, MID_EMPHASIS},\
     { UNO_NAME_EDIT_CHAR_HEIGHT_ASIAN,        EE_CHAR_FONTHEIGHT_CJK, cppu::UnoType<float>::get(),            0, MID_FONTHEIGHT|CONVERT_TWIPS }, \
     { UNO_NAME_EDIT_CHAR_FONTNAME_ASIAN,      EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_FAMILY_NAME },\
     { UNO_NAME_EDIT_CHAR_FONTSTYLENAME_ASIAN, EE_CHAR_FONTINFO_CJK,   ::cppu::UnoType<OUString>::get(),  0, MID_FONT_STYLE_NAME }, \
@@ -132,8 +132,8 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_CHAR_POSTURE_COMPLEX,     EE_CHAR_ITALIC_CTL,     ::cppu::UnoType<css::awt::FontSlant>::get(),0, MID_POSTURE }, \
     { UNO_NAME_EDIT_CHAR_WEIGHT_COMPLEX,      EE_CHAR_WEIGHT_CTL,     cppu::UnoType<float>::get(),            0, MID_WEIGHT }, \
     { UNO_NAME_EDIT_CHAR_LOCALE_COMPLEX,      EE_CHAR_LANGUAGE_CTL,   ::cppu::UnoType<css::lang::Locale>::get(),0, MID_LANG_LOCALE }, \
-    { u"CharRelief",                           EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
-    { u"CharInteropGrabBag",                   EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0}
+    { u"CharRelief"_ustr,                      EE_CHAR_RELIEF,         ::cppu::UnoType<sal_Int16>::get(),    0, MID_RELIEF }, \
+    { u"CharInteropGrabBag"_ustr,              EE_CHAR_GRABBAG,        cppu::UnoType<css::uno::Sequence<css::beans::PropertyValue >>::get(), 0, 0}
 
 
 #define SVX_UNOEDIT_FONT_PROPERTIES \
@@ -143,8 +143,8 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_PARA_ADJUST,       EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_PARA_ADJUST }, \
     { UNO_NAME_EDIT_PARA_BMARGIN,      EE_PARA_ULSPACE,            ::cppu::UnoType<sal_Int32>::get(),            0, MID_LO_MARGIN, PropertyMoreFlags::METRIC_ITEM }, \
     { UNO_NAME_EDIT_PARA_IS_HYPHEN,    EE_PARA_HYPHENATE,  ::cppu::UnoType<bool>::get(),                0, 0 }, \
-    {u"ParaHyphenationNoCaps",         EE_PARA_HYPHENATE_NO_CAPS, ::cppu::UnoType<bool>::get(),       0, 0 }, \
-    {u"ParaHyphenationNoLastWord",     EE_PARA_HYPHENATE_NO_LAST_WORD, ::cppu::UnoType<bool>::get(),       0, 0 }, \
+    {u"ParaHyphenationNoCaps"_ustr,    EE_PARA_HYPHENATE_NO_CAPS, ::cppu::UnoType<bool>::get(),       0, 0 }, \
+    {u"ParaHyphenationNoLastWord"_ustr, EE_PARA_HYPHENATE_NO_LAST_WORD, ::cppu::UnoType<bool>::get(),       0, 0 }, \
     { UNO_NAME_EDIT_PARA_LASTLINEADJ,  EE_PARA_JUST,               ::cppu::UnoType<sal_Int16>::get(),            0, MID_LAST_LINE_ADJUST }, \
     { UNO_NAME_EDIT_PARA_LMARGIN,      EE_PARA_LRSPACE,    ::cppu::UnoType<sal_Int32>::get(),            0, MID_TXT_LMARGIN, PropertyMoreFlags::METRIC_ITEM }, \
     { UNO_NAME_EDIT_PARA_LINESPACING,  EE_PARA_SBL,                cppu::UnoType<css::style::LineSpacing>::get(),     0, CONVERT_TWIPS}, \
@@ -156,7 +156,7 @@ struct SfxItemPropertyMapEntry;
     { UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION,EE_PARA_HANGINGPUNCTUATION,  cppu::UnoType<bool>::get(),                0 ,0 }, \
     { UNO_NAME_EDIT_PARA_IS_CHARACTER_DISTANCE, EE_PARA_ASIANCJKSPACING,   cppu::UnoType<bool>::get(),                0 ,0 }, \
     { UNO_NAME_EDIT_PARA_IS_FORBIDDEN_RULES,    EE_PARA_FORBIDDENRULES,     cppu::UnoType<bool>::get(),                0 ,0 },\
-    {u"WritingMode",                   EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
+    {u"WritingMode"_ustr,              EE_PARA_WRITINGDIR, ::cppu::UnoType<sal_Int16>::get(),            0, 0 }
 
 class SvxFieldItem;
 class SvxFieldData;

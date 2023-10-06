@@ -105,29 +105,29 @@ using ::com::sun::star::drawing::XShape;
 #define WID_LEGACYFRAGMENT  25
 
 #define IMPRESS_MAP_ENTRIES \
-        { u"" UNO_NAME_OBJ_LEGACYFRAGMENT,WID_LEGACYFRAGMENT,  cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
-        { u"" UNO_NAME_OBJ_ANIMATIONPATH, WID_ANIMPATH,        cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
-        { u"" UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,        cppu::UnoType<OUString>::get(),                        0, 0},\
-        { u"" UNO_NAME_OBJ_DIMCOLOR,      WID_DIMCOLOR,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { u"" UNO_NAME_OBJ_DIMHIDE,       WID_DIMHIDE,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_DIMPREV,       WID_DIMPREV,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_EFFECT,        WID_EFFECT,          cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { u"" UNO_NAME_OBJ_ISEMPTYPRESOBJ,WID_ISEMPTYPRESOBJ,  cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_ISPRESOBJ,     WID_ISPRESOBJ,       cppu::UnoType<bool>::get(),                            css::beans::PropertyAttribute::READONLY, 0},\
-        { u"" UNO_NAME_OBJ_MASTERDEPENDENT,WID_MASTERDEPEND,   cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,     cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
-        { u"" UNO_NAME_OBJ_PLAYFULL,      WID_PLAYFULL,        cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_PRESORDER,     WID_PRESORDER,       cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { u"" UNO_NAME_OBJ_STYLE,         WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                   css::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { u"" UNO_NAME_OBJ_SOUNDFILE,     WID_SOUNDFILE,       cppu::UnoType<OUString>::get(),                        0, 0},\
-        { u"" UNO_NAME_OBJ_SOUNDON,       WID_SOUNDON,         cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"" UNO_NAME_OBJ_SPEED,         WID_SPEED,           cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
-        { u"" UNO_NAME_OBJ_TEXTEFFECT,    WID_TEXTEFFECT,      cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
-        { u"" UNO_NAME_OBJ_BLUESCREEN,    WID_BLUESCREEN,      cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { u"" UNO_NAME_OBJ_VERB,          WID_VERB,            cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { u"IsAnimation",              WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
-        { u"NavigationOrder",          WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
-        { u"PlaceholderText",          WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
+        { u"" UNO_NAME_OBJ_LEGACYFRAGMENT ""_ustr,WID_LEGACYFRAGMENT, cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
+        { u"" UNO_NAME_OBJ_ANIMATIONPATH ""_ustr, WID_ANIMPATH, cppu::UnoType<drawing::XShape>::get(),                 0, 0},\
+        { u"" UNO_NAME_OBJ_BOOKMARK ""_ustr, WID_BOOKMARK,     cppu::UnoType<OUString>::get(),                        0, 0},\
+        { u"" UNO_NAME_OBJ_DIMCOLOR ""_ustr, WID_DIMCOLOR,     cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { u"" UNO_NAME_OBJ_DIMHIDE ""_ustr, WID_DIMHIDE,       cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_DIMPREV ""_ustr, WID_DIMPREV,       cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_EFFECT ""_ustr, WID_EFFECT,         cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
+        { u"" UNO_NAME_OBJ_ISEMPTYPRESOBJ ""_ustr,WID_ISEMPTYPRESOBJ, cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_ISPRESOBJ ""_ustr, WID_ISPRESOBJ,   cppu::UnoType<bool>::get(),                            css::beans::PropertyAttribute::READONLY, 0},\
+        { u"" UNO_NAME_OBJ_MASTERDEPENDENT ""_ustr,WID_MASTERDEPEND, cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_CLICKACTION ""_ustr, WID_CLICKACTION, cppu::UnoType<presentation::ClickAction>::get(),       0, 0},\
+        { u"" UNO_NAME_OBJ_PLAYFULL ""_ustr, WID_PLAYFULL,     cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_PRESORDER ""_ustr, WID_PRESORDER,   cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { u"" UNO_NAME_OBJ_STYLE ""_ustr, WID_STYLE,           cppu::UnoType<style::XStyle>::get(),                   css::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { u"" UNO_NAME_OBJ_SOUNDFILE ""_ustr, WID_SOUNDFILE,   cppu::UnoType<OUString>::get(),                        0, 0},\
+        { u"" UNO_NAME_OBJ_SOUNDON ""_ustr, WID_SOUNDON,       cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"" UNO_NAME_OBJ_SPEED ""_ustr, WID_SPEED,           cppu::UnoType<presentation::AnimationSpeed>::get(),    0, 0},\
+        { u"" UNO_NAME_OBJ_TEXTEFFECT ""_ustr, WID_TEXTEFFECT, cppu::UnoType<presentation::AnimationEffect>::get(),   0, 0},\
+        { u"" UNO_NAME_OBJ_BLUESCREEN ""_ustr, WID_BLUESCREEN, cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { u"" UNO_NAME_OBJ_VERB ""_ustr,  WID_VERB,            cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { u"IsAnimation"_ustr,         WID_ISANIMATION,     cppu::UnoType<bool>::get(),                            0, 0},\
+        { u"NavigationOrder"_ustr,     WID_NAVORDER,        cppu::UnoType<sal_Int32>::get(),                       0, 0},\
+        { u"PlaceholderText"_ustr,     WID_PLACEHOLDERTEXT, cppu::UnoType<OUString>::get(),                        0, 0},\
 
     static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
     {
@@ -149,10 +149,10 @@ using ::com::sun::star::drawing::XShape;
     }
 
     #define DRAW_MAP_ENTRIES\
-        { u"" UNO_NAME_OBJ_BOOKMARK,      WID_BOOKMARK,       cppu::UnoType<OUString>::get(),                 0, 0},\
-        { u"" UNO_NAME_OBJ_CLICKACTION,   WID_CLICKACTION,    cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
-        { u"" UNO_NAME_OBJ_STYLE,         WID_STYLE,          cppu::UnoType<style::XStyle>::get(),            css::beans::PropertyAttribute::MAYBEVOID, 0},\
-        { u"NavigationOrder",          WID_NAVORDER,       cppu::UnoType<sal_Int32>::get(),                0, 0},\
+        { u"" UNO_NAME_OBJ_BOOKMARK ""_ustr, WID_BOOKMARK,    cppu::UnoType<OUString>::get(),                 0, 0},\
+        { u"" UNO_NAME_OBJ_CLICKACTION ""_ustr, WID_CLICKACTION, cppu::UnoType<presentation::ClickAction>::get(),0, 0},\
+        { u"" UNO_NAME_OBJ_STYLE ""_ustr, WID_STYLE,          cppu::UnoType<style::XStyle>::get(),            css::beans::PropertyAttribute::MAYBEVOID, 0},\
+        { u"NavigationOrder"_ustr,     WID_NAVORDER,       cppu::UnoType<sal_Int32>::get(),                0, 0},\
 
     static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
     {

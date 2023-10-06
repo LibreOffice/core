@@ -202,26 +202,26 @@
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
-    { u"FontWorkStyle",            XATTR_FORMTXTSTYLE,         /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
-    { u"FontWorkAdjust",           XATTR_FORMTXTADJUST,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
-    { u"FontWorkDistance",         XATTR_FORMTXTDISTANCE,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"FontWorkStart",            XATTR_FORMTXTSTART,         ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"FontWorkMirror",           XATTR_FORMTXTMIRROR,        cppu::UnoType<bool>::get(),                        0,  0}, \
-    { u"FontWorkOutline",          XATTR_FORMTXTOUTLINE,       cppu::UnoType<bool>::get(),                        0,  0}, \
-    { u"FontWorkShadow",           XATTR_FORMTXTSHADOW,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
-    { u"FontWorkShadowColor",      XATTR_FORMTXTSHDWCOLOR,     ::cppu::UnoType<sal_Int32>::get(),            0,  0}, \
-    { u"FontWorkShadowOffsetX",    XATTR_FORMTXTSHDWXVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"FontWorkShadowOffsetY",    XATTR_FORMTXTSHDWYVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"FontWorkHideForm",         XATTR_FORMTXTHIDEFORM,      cppu::UnoType<bool>::get(),                        0,  0}, \
-    { u"FontWorkShadowTransparence",XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
+    { u"FontWorkStyle"_ustr,       XATTR_FORMTXTSTYLE,         /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
+    { u"FontWorkAdjust"_ustr,      XATTR_FORMTXTADJUST,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
+    { u"FontWorkDistance"_ustr,    XATTR_FORMTXTDISTANCE,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"FontWorkStart"_ustr,       XATTR_FORMTXTSTART,         ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"FontWorkMirror"_ustr,      XATTR_FORMTXTMIRROR,        cppu::UnoType<bool>::get(),                        0,  0}, \
+    { u"FontWorkOutline"_ustr,     XATTR_FORMTXTOUTLINE,       cppu::UnoType<bool>::get(),                        0,  0}, \
+    { u"FontWorkShadow"_ustr,      XATTR_FORMTXTSHADOW,        /*ENUM*/::cppu::UnoType<sal_Int32>::get(),    0,  0}, \
+    { u"FontWorkShadowColor"_ustr, XATTR_FORMTXTSHDWCOLOR,     ::cppu::UnoType<sal_Int32>::get(),            0,  0}, \
+    { u"FontWorkShadowOffsetX"_ustr, XATTR_FORMTXTSHDWXVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"FontWorkShadowOffsetY"_ustr, XATTR_FORMTXTSHDWYVAL,      ::cppu::UnoType<sal_Int32>::get(),            0,  0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"FontWorkHideForm"_ustr,    XATTR_FORMTXTHIDEFORM,      cppu::UnoType<bool>::get(),                        0,  0}, \
+    { u"FontWorkShadowTransparence"_ustr,XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
 
 #define GLOW_PROPERTIES \
-    { u"GlowEffectRadius",               SDRATTR_GLOW_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"GlowEffectColor",                SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
-    { u"GlowEffectTransparency",         SDRATTR_GLOW_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0 },
+    { u"GlowEffectRadius"_ustr,          SDRATTR_GLOW_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
+    { u"GlowEffectColor"_ustr,           SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { u"GlowEffectTransparency"_ustr,    SDRATTR_GLOW_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0 },
 
 #define SOFTEDGE_PROPERTIES \
-    { u"SoftEdgeRadius",           SDRATTR_SOFTEDGE_RADIUS,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},
+    { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE_RADIUS,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},
 
 #define SHADOW_PROPERTIES \
     { UNO_NAME_SHADOW,            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
@@ -250,14 +250,14 @@
 
 #define LINE_PROPERTIES \
     { UNO_NAME_LINEDASH,          XATTR_LINEDASH,         ::cppu::UnoType<css::drawing::LineDash>::get() ,         0,     MID_LINEDASH},   \
-    { u"LineDashName",             XATTR_LINEDASH,         ::cppu::UnoType<OUString>::get() ,         0,     MID_NAME},   \
+    { u"LineDashName"_ustr,        XATTR_LINEDASH,         ::cppu::UnoType<OUString>::get() ,         0,     MID_NAME},   \
     LINE_PROPERTIES_DEFAULTS
 
 #define LINE_PROPERTIES_START_END \
     { UNO_NAME_LINEEND,           XATTR_LINEEND,          ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(),   css::beans::PropertyAttribute::MAYBEVOID,     0}, \
-    { u"LineEndName",              XATTR_LINEEND,          ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
+    { u"LineEndName"_ustr,         XATTR_LINEEND,          ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { UNO_NAME_LINESTART,         XATTR_LINESTART,        ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(),   css::beans::PropertyAttribute::MAYBEVOID,     0},  \
-    { u"LineStartName",            XATTR_LINESTART,        ::cppu::UnoType<OUString>::get(), 0, MID_NAME },
+    { u"LineStartName"_ustr,       XATTR_LINESTART,        ::cppu::UnoType<OUString>::get(), 0, MID_NAME },
 
 #define FILL_PROPERTIES_BMP \
     { UNO_NAME_FILLBMP_LOGICAL_SIZE,      XATTR_FILLBMP_SIZELOG,      cppu::UnoType<bool>::get() ,           0,     0}, \
@@ -330,7 +330,7 @@
     { UNO_NAME_TEXT_WORDWRAP,         SDRATTR_TEXT_WORDWRAP,          cppu::UnoType<bool>::get(),        0,      0}, \
     { UNO_NAME_TEXT_CHAINNEXTNAME,    SDRATTR_TEXT_CHAINNEXTNAME,     ::cppu::UnoType<OUString>::get(),        0,      0}, \
     { UNO_NAME_TEXT_CLIPVERTOVERFLOW, SDRATTR_TEXT_CLIPVERTOVERFLOW,  cppu::UnoType<bool>::get(),              0,      0}, \
-    { u"TextColumns",                     OWN_ATTR_TEXTCOLUMNS,           cppu::UnoType<css::text::XTextColumns>::get(), 0, 0 }, \
+    { u"TextColumns"_ustr,                OWN_ATTR_TEXTCOLUMNS,           cppu::UnoType<css::text::XTextColumns>::get(), 0, 0 }, \
     SVX_UNOEDIT_CHAR_PROPERTIES, \
     SVX_UNOEDIT_PARA_PROPERTIES,
 
@@ -341,13 +341,13 @@
 //  { "HasLevels",                    OWN_ATTR_HASLEVELS,             cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY,      0},
 
 #define MISC_OBJ_PROPERTIES_NO_SHEAR \
-    { u"Transformation",                   OWN_ATTR_TRANSFORMATION,    cppu::UnoType<css::drawing::HomogenMatrix3>::get(), 0, 0 }, \
+    { u"Transformation"_ustr,              OWN_ATTR_TRANSFORMATION,    cppu::UnoType<css::drawing::HomogenMatrix3>::get(), 0, 0 }, \
     { UNO_NAME_MISC_OBJ_ZORDER,           OWN_ATTR_ZORDER,            ::cppu::UnoType<sal_Int32>::get(),        0,      0}, \
     { UNO_NAME_MISC_OBJ_FRAMERECT,        OWN_ATTR_FRAMERECT,         cppu::UnoType<css::awt::Rectangle>::get(), 0,  0 }, \
     { UNO_NAME_MISC_OBJ_ROTATEANGLE,      SDRATTR_ROTATEANGLE,        ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
     { UNO_NAME_BITMAP,                    OWN_ATTR_BITMAP,            cppu::UnoType<css::awt::XBitmap>::get(),   css::beans::PropertyAttribute::READONLY, 0}, \
     { UNO_NAME_OLE2_METAFILE,             OWN_ATTR_METAFILE,          cppu::UnoType<css::uno::Sequence<sal_Int8>>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
-    { u"IsFontwork",                       OWN_ATTR_ISFONTWORK,        cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
+    { u"IsFontwork"_ustr,                  OWN_ATTR_ISFONTWORK,        cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY, 0}, \
     { UNO_NAME_MISC_OBJ_BOUNDRECT,        OWN_ATTR_BOUNDRECT,         cppu::UnoType<css::awt::Rectangle>::get(), css::beans::PropertyAttribute::READONLY, 0},
 
 #define MISC_OBJ_PROPERTIES \
@@ -362,17 +362,17 @@
     { UNO_NAME_MISC_OBJ_MOVEPROTECT,  SDRATTR_OBJMOVEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0}, \
     { UNO_NAME_MISC_OBJ_NAME,         SDRATTR_OBJECTNAME              , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_PRINTABLE,    SDRATTR_OBJPRINTABLE            , cppu::UnoType<bool>::get(),                      0,  0}, \
-    { u"Visible",                      SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0}, \
+    { u"Visible"_ustr,                 SDRATTR_OBJVISIBLE              , cppu::UnoType<bool>::get(),                      0,  0}, \
     { UNO_NAME_MISC_OBJ_SIZEPROTECT,  SDRATTR_OBJSIZEPROTECT          , cppu::UnoType<bool>::get(),                      0,  0},\
-    { u"UINameSingular",               OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
-    { u"UINamePlural",                 OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
-    { u"TextFitToSizeScale", OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<double>::get(), 0, 0}, \
+    { u"UINameSingular"_ustr,          OWN_ATTR_UINAME_SINGULAR        , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
+    { u"UINamePlural"_ustr,            OWN_ATTR_UINAME_PLURAL          , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY,   0}, \
+    { u"TextFitToSizeScale"_ustr, OWN_ATTR_TEXTFITTOSIZESCALE, ::cppu::UnoType<double>::get(), 0, 0}, \
     /* #i68101# */ \
     { UNO_NAME_MISC_OBJ_TITLE,        OWN_ATTR_MISC_OBJ_TITLE         , ::cppu::UnoType<OUString>::get(),    0,  0}, \
     { UNO_NAME_MISC_OBJ_DESCRIPTION,  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::cppu::UnoType<OUString>::get(),    0,  0}, \
-    { u"Decorative", OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0,  0}, \
+    { u"Decorative"_ustr, OWN_ATTR_MISC_OBJ_DECORATIVE, ::cppu::UnoType<bool>::get(), 0, 0}, \
     { UNO_NAME_HYPERLINK, OWN_ATTR_HYPERLINK, ::cppu::UnoType<OUString>::get(), 0,  0}, \
-    { u"WritingMode", SDRATTR_WRITINGMODE2, ::cppu::UnoType<sal_Int16>::get(), 0,  0},
+    { u"WritingMode"_ustr, SDRATTR_WRITINGMODE2, ::cppu::UnoType<sal_Int16>::get(), 0, 0},
 
 #define LINKTARGET_PROPERTIES \
     { UNO_NAME_LINKDISPLAYNAME,   OWN_ATTR_LDNAME             , ::cppu::UnoType<OUString>::get(),    css::beans::PropertyAttribute::READONLY, 0}, \
@@ -391,17 +391,17 @@
     { UNO_NAME_EDGELINE1DELTA,    SDRATTR_EDGELINE1DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     0, PropertyMoreFlags::METRIC_ITEM}, \
     { UNO_NAME_EDGELINE2DELTA,    SDRATTR_EDGELINE2DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     0, PropertyMoreFlags::METRIC_ITEM}, \
     { UNO_NAME_EDGELINE3DELTA,    SDRATTR_EDGELINE3DELTA,     ::cppu::UnoType<sal_Int32>::get(),       0,     0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"StartShape",               OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        css::beans::PropertyAttribute::MAYBEVOID,   0}, \
-    { u"StartGluePointIndex",      OWN_ATTR_GLUEID_HEAD,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
-    { u"StartPosition",            OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<css::awt::Point>::get(),     0,   0}, \
-    { u"EndShape",                 OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     css::beans::PropertyAttribute::MAYBEVOID,   0}, \
-    { u"EndPosition",              OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<css::awt::Point>::get(),     0,   0},\
-    { u"EndGluePointIndex",        OWN_ATTR_GLUEID_TAIL,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
+    { u"StartShape"_ustr,          OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        css::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { u"StartGluePointIndex"_ustr, OWN_ATTR_GLUEID_HEAD,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
+    { u"StartPosition"_ustr,       OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<css::awt::Point>::get(),     0,   0}, \
+    { u"EndShape"_ustr,            OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     css::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { u"EndPosition"_ustr,         OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<css::awt::Point>::get(),     0,   0},\
+    { u"EndGluePointIndex"_ustr,   OWN_ATTR_GLUEID_TAIL,       ::cppu::UnoType<sal_Int32>::get(),       0,     0}, \
 \
-    { u"EdgeStartConnection",      OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        css::beans::PropertyAttribute::MAYBEVOID,   0}, \
-    { u"EdgeStartPoint",           OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<css::awt::Point>::get(),     css::beans::PropertyAttribute::READONLY,    0}, \
-    { u"EdgeEndConnection",        OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     css::beans::PropertyAttribute::MAYBEVOID,   0}, \
-    { u"EdgeEndPoint",             OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<css::awt::Point>::get(),     css::beans::PropertyAttribute::READONLY,    0}, \
+    { u"EdgeStartConnection"_ustr, OWN_ATTR_EDGE_START_OBJ,    cppu::UnoType<css::drawing::XShape>::get(),        css::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { u"EdgeStartPoint"_ustr,      OWN_ATTR_EDGE_START_POS,    ::cppu::UnoType<css::awt::Point>::get(),     css::beans::PropertyAttribute::READONLY,    0}, \
+    { u"EdgeEndConnection"_ustr,   OWN_ATTR_EDGE_END_OBJ,      cppu::UnoType<css::drawing::XShape>::get(),     css::beans::PropertyAttribute::MAYBEVOID,   0}, \
+    { u"EdgeEndPoint"_ustr,        OWN_ATTR_EDGE_END_POS,      ::cppu::UnoType<css::awt::Point>::get(),     css::beans::PropertyAttribute::READONLY,    0}, \
 \
     { UNO_NAME_POLYPOLYGONBEZIER, OWN_ATTR_EDGE_POLYPOLYGONBEZIER,    ::cppu::UnoType<css::drawing::PolyPolygonBezierCoords>::get(),       0,  0},
 
@@ -425,13 +425,13 @@
     { UNO_NAME_MEASURETEXTROTA90,         SDRATTR_MEASURETEXTROTA90,          cppu::UnoType<bool>::get(),        0,  0}, \
     { UNO_NAME_MEASURETEXTUPSIDEDOWN,     SDRATTR_MEASURETEXTUPSIDEDOWN,      cppu::UnoType<bool>::get(),        0,  0}, \
     { UNO_NAME_MEASURETEXTVPOS,           SDRATTR_MEASURETEXTVPOS,            ::cppu::UnoType<css::drawing::MeasureTextVertPos>::get(),    0,  0}, \
-    { u"MeasureDecimalPlaces",             SDRATTR_MEASUREDECIMALPLACES,       ::cppu::UnoType<sal_Int16>::get(),        0,  0},
+    { u"MeasureDecimalPlaces"_ustr,        SDRATTR_MEASUREDECIMALPLACES,       ::cppu::UnoType<sal_Int16>::get(),        0,  0},
 
 
 #define SPECIAL_DIMENSIONING_PROPERTIES \
     SPECIAL_DIMENSIONING_PROPERTIES_DEFAULTS \
-    { u"StartPosition",                    OWN_ATTR_MEASURE_START_POS,         ::cppu::UnoType<css::awt::Point>::get(),     0,   0},\
-    { u"EndPosition",                      OWN_ATTR_MEASURE_END_POS,           ::cppu::UnoType<css::awt::Point>::get(),     0,   0},
+    { u"StartPosition"_ustr,               OWN_ATTR_MEASURE_START_POS,         ::cppu::UnoType<css::awt::Point>::get(),     0,   0},\
+    { u"EndPosition"_ustr,                 OWN_ATTR_MEASURE_END_POS,           ::cppu::UnoType<css::awt::Point>::get(),     0,   0},
 
 #define SPECIAL_CIRCLE_PROPERTIES \
     { UNO_NAME_CIRCENDANGLE,  SDRATTR_CIRCENDANGLE,   ::cppu::UnoType<sal_Int32>::get(),        0,  0}, \
