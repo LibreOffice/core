@@ -181,7 +181,7 @@ namespace o3tl
 class SAL_WARN_UNUSED ErrCodeMsg
 {
 public:
-    ErrCodeMsg() : mnCode(0) {}
+    ErrCodeMsg() : mnCode(0), mnDialogMask(DialogMask::NONE) {}
 #ifdef LIBO_ERRMSG_USE_SOURCE_LOCATION
     ErrCodeMsg(ErrCode code, const OUString& arg, std::experimental::source_location loc = std::experimental::source_location::current())
         : mnCode(code), maArg1(arg),  mnDialogMask(DialogMask::NONE), moLoc(loc) {}
