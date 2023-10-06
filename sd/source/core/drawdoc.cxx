@@ -1010,9 +1010,9 @@ void SdDrawDocument::SetOnlineSpell(bool bIn)
 }
 
 // OnlineSpelling: highlighting on/off
-uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
+uno::Reference< frame::XModel > SdDrawDocument::createUnoModel()
 {
-    uno::Reference< uno::XInterface > xModel;
+    uno::Reference< frame::XModel > xModel;
 
     try
     {

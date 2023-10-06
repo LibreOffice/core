@@ -259,8 +259,8 @@ void SAL_CALL GalleryTheme::update(  )
                     rtl::Reference<SdrPage> pNewPage = pOrigPage->CloneSdrPage(*pTmpModel);
                     pTmpModel->InsertPage(pNewPage.get(), 0);
 
-                    uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pTmpModel ) );
-                    pTmpModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );
+                    rtl::Reference< GalleryDrawingModel > xDrawing( new GalleryDrawingModel( pTmpModel ) );
+                    pTmpModel->setUnoModel( xDrawing );
 
                     nRet = insertDrawingByIndex( xDrawing, nIndex );
                     return nRet;

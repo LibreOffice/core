@@ -66,7 +66,7 @@ public:
 
     SfxItemPool&            GetItemPool();
 
-    SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface >
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel >
         createUnoModel() override;
     SAL_DLLPRIVATE css::uno::Reference< css::frame::XModel >
         getUnoModel();

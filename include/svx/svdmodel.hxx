@@ -22,6 +22,7 @@
 #include <functional>
 #include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/frame/XModel.hpp>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/outliner.hxx>
 #include <rtl/ustring.hxx>
@@ -253,7 +254,7 @@ public:
 
 protected:
     void implDtorClearModel();
-    virtual css::uno::Reference< css::uno::XInterface > createUnoModel();
+    virtual css::uno::Reference< css::frame::XModel > createUnoModel();
 
 private:
     SdrModel(const SdrModel& rSrcModel) = delete;
@@ -267,7 +268,7 @@ private:
     SVX_DLLPRIVATE void ImpCreateTables(bool bDisablePropertyFiles);
 
     // this is a weak reference to a possible living api wrapper for this model
-    css::uno::Reference< css::uno::XInterface > mxUnoModel;
+    css::uno::Reference< css::frame::XModel > mxUnoModel;
 
     // used to disable unique name checking during page move
     bool mbMakePageObjectsNamesUnique = true;
@@ -553,8 +554,8 @@ public:
     bool GetDisableTextEditUsesCommonUndoManager() const { return mbDisableTextEditUsesCommonUndoManager; }
     void SetDisableTextEditUsesCommonUndoManager(bool bNew) { mbDisableTextEditUsesCommonUndoManager = bNew; }
 
-    css::uno::Reference< css::uno::XInterface > const & getUnoModel();
-    void setUnoModel( const css::uno::Reference< css::uno::XInterface >& xModel );
+    css::uno::Reference< css::frame::XModel > const & getUnoModel();
+    void setUnoModel( const css::uno::Reference< css::frame::XModel >& xModel );
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.

@@ -123,16 +123,14 @@ DrawModelWrapper::~DrawModelWrapper()
     m_pRefDevice.disposeAndClear();
 }
 
-uno::Reference< uno::XInterface > DrawModelWrapper::createUnoModel()
+uno::Reference< frame::XModel > DrawModelWrapper::createUnoModel()
 {
-    uno::Reference< lang::XComponent > xComponent = new SvxUnoDrawingModel( this ); //tell Andreas Schluens if SvxUnoDrawingModel is not needed anymore -> remove export from svx to avoid link problems in writer
-    return uno::Reference< uno::XInterface >::query( xComponent );
+    return new SvxUnoDrawingModel( this ); //tell Andreas Schluens if SvxUnoDrawingModel is not needed anymore -> remove export from svx to avoid link problems in writer
 }
 
 uno::Reference< frame::XModel > DrawModelWrapper::getUnoModel()
 {
-    uno::Reference< uno::XInterface > xI = SdrModel::getUnoModel();
-    return uno::Reference<frame::XModel>::query( xI );
+    return SdrModel::getUnoModel();
 }
 
 SdrModel& DrawModelWrapper::getSdrModel()

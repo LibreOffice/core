@@ -1917,8 +1917,7 @@ bool SdrOle2Obj::IsCalc() const
 
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 {
-    uno::Reference< frame::XModel > xDoc(getSdrModelFromSdrObject().getUnoModel(), uno::UNO_QUERY);
-    return xDoc;
+    return getSdrModelFromSdrObject().getUnoModel();
 }
 
 bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )

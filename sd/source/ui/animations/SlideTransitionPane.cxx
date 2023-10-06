@@ -436,7 +436,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     mxVS_TRANSITION_ICONSWin.reset(new weld::CustomWeld(*m_xBuilder, "transitions_icons", *mxVS_TRANSITION_ICONS));
 
     if( pDoc )
-        mxModel.set( pDoc->getUnoModel(), uno::UNO_QUERY );
+        mxModel = pDoc->getUnoModel();
     // TODO: get correct view
     if( mxModel.is())
         mxView.set( mxModel->getCurrentController(), uno::UNO_QUERY );

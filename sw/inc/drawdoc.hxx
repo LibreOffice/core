@@ -43,7 +43,7 @@ public:
 
 private:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
-    virtual css::uno::Reference<css::uno::XInterface> createUnoModel() override;
+    virtual css::uno::Reference<css::frame::XModel> createUnoModel() override;
 };
 
 #endif

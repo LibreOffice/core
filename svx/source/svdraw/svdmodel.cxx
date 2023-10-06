@@ -1579,7 +1579,7 @@ std::shared_ptr<model::Theme> const& SdrModel::getTheme() const
     return mpImpl->mpTheme;
 }
 
-uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
+uno::Reference< frame::XModel > const & SdrModel::getUnoModel()
 {
     if( !mxUnoModel.is() )
         mxUnoModel = createUnoModel();
@@ -1587,7 +1587,7 @@ uno::Reference< uno::XInterface > const & SdrModel::getUnoModel()
     return mxUnoModel;
 }
 
-void SdrModel::setUnoModel(const uno::Reference<uno::XInterface>& xModel)
+void SdrModel::setUnoModel(const uno::Reference<frame::XModel>& xModel)
 {
     mxUnoModel = xModel;
 }
@@ -1604,11 +1604,10 @@ void SdrModel::adaptSizeAndBorderForAllPages(
     // to do this for higher-level (derived) Models (e.g. Draw/Impress)
 }
 
-uno::Reference< uno::XInterface > SdrModel::createUnoModel()
+uno::Reference< frame::XModel > SdrModel::createUnoModel()
 {
     OSL_FAIL( "SdrModel::createUnoModel() - base implementation should not be called!" );
-    uno::Reference<uno::XInterface> xInt;
-    return xInt;
+    return nullptr;
 }
 
 void SdrModel::setLock( bool bLock )

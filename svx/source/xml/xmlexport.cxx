@@ -57,8 +57,9 @@ bool SvxDrawingLayerExport( SdrModel* pModel, const uno::Reference<io::XOutputSt
     {
         if( !xSourceDoc.is() )
         {
-            xSourceDoc = new SvxUnoDrawingModel( pModel );
-            pModel->setUnoModel( Reference< XInterface >::query( xSourceDoc ) );
+            rtl::Reference<SvxUnoDrawingModel> pDrawingModel = new SvxUnoDrawingModel( pModel );
+            xSourceDoc = pDrawingModel;
+            pModel->setUnoModel( pDrawingModel );
         }
 
         uno::Reference< uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
@@ -152,8 +153,9 @@ bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInputStr
     Reference< lang::XComponent > xTargetDocument( xComponent );
     if( !xTargetDocument.is() )
     {
-        xTargetDocument = new SvxUnoDrawingModel( pModel );
-        pModel->setUnoModel( Reference< XInterface >::query( xTargetDocument ) );
+        rtl::Reference<SvxUnoDrawingModel> pDrawingModel = new SvxUnoDrawingModel( pModel );
+        xTargetDocument = pDrawingModel;
+        pModel->setUnoModel( pDrawingModel );
     }
 
     Reference< frame::XModel > xTargetModel( xTargetDocument, UNO_QUERY );

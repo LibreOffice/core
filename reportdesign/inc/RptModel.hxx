@@ -46,7 +46,7 @@ private:
     ::dbaui::DBSubComponentController*  m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
-    virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
+    virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
 
     OReportModel( const OReportModel& ) = delete;
     void operator=(const OReportModel& rSrcModel) = delete;

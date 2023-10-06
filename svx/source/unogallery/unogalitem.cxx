@@ -314,10 +314,10 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
                     if( pGalTheme && pGalTheme->GetModel( pGalTheme->maGalleryObjectCollection.searchPosWithObject( implGetObject() ), *pModel ) )
                     {
-                        uno::Reference< lang::XComponent > xDrawing( new GalleryDrawingModel( pModel ) );
+                        rtl::Reference< GalleryDrawingModel > xDrawing( new GalleryDrawingModel( pModel ) );
 
-                        pModel->setUnoModel( uno::Reference< uno::XInterface >::query( xDrawing ) );
-                        *pValue <<= xDrawing;
+                        pModel->setUnoModel( xDrawing );
+                        *pValue <<= uno::Reference< lang::XComponent >(xDrawing);
                     }
                     else
                         delete pModel;

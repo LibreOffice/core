@@ -191,7 +191,7 @@ private:
 
     sal_Int32 mnImagePreferredDPI;
 
-    SAL_DLLPRIVATE virtual css::uno::Reference< css::uno::XInterface > createUnoModel() override;
+    SAL_DLLPRIVATE virtual css::uno::Reference< css::frame::XModel > createUnoModel() override;
 
 public:
 

@@ -574,8 +574,8 @@ bool SdTransferable::WriteObject( tools::SvRef<SotTempStream>& rxOStm, void* pOb
                     pDoc->BurnInStyleSheetAttributes();
                 rxOStm->SetBufferSize( 16348 );
 
-                Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, true ) );
-                pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
+                rtl::Reference< SdXImpressDocument > xComponent( new SdXImpressDocument( pDoc, true ) );
+                pDoc->setUnoModel( xComponent );
 
                 {
                     css::uno::Reference<css::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );

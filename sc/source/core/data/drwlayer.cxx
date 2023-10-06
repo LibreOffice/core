@@ -2938,11 +2938,11 @@ void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
     FmFormModel::SetChanged( bFlg );
 }
 
-css::uno::Reference< css::uno::XInterface > ScDrawLayer::createUnoModel()
+css::uno::Reference< css::frame::XModel > ScDrawLayer::createUnoModel()
 {
-    css::uno::Reference< css::uno::XInterface > xRet;
+    css::uno::Reference< css::frame::XModel > xRet;
     if( pDoc && pDoc->GetDocumentShell() )
-        xRet = static_cast<cppu::OWeakObject*>(pDoc->GetDocumentShell()->GetModel());
+        xRet = pDoc->GetDocumentShell()->GetModel();
 
     return xRet;
 }

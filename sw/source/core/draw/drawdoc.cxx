@@ -129,9 +129,9 @@ uno::Reference<embed::XStorage> SwDrawModel::GetDocumentStorage() const
     return m_rDoc.GetDocStorage();
 }
 
-uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
+uno::Reference< frame::XModel > SwDrawModel::createUnoModel()
 {
-    uno::Reference< uno::XInterface > xModel;
+    uno::Reference< frame::XModel > xModel;
 
     try
     {
