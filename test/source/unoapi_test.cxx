@@ -72,22 +72,16 @@ void UnoApiTest::setTestInteractionHandler(const char* pPassword,
                                            std::vector<beans::PropertyValue>& rFilterOptions)
 {
     OUString sPassword = OUString::createFromAscii(pPassword);
-    rFilterOptions.emplace_back();
+    auto& rPropertyValue = rFilterOptions.emplace_back();
     xInteractionHandler
         = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
     css::uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler);
-    rFilterOptions[0].Name = "InteractionHandler";
-    rFilterOptions[0].Value <<= xInteraction;
+    rPropertyValue.Name = "InteractionHandler";
+    rPropertyValue.Value <<= xInteraction;
 }
 
 void UnoApiTest::load(OUString const& rURL, const char* pPassword)
 {
-    if (mxComponent.is())
-    {
-        mxComponent->dispose();
-        mxComponent.clear();
-    }
-
     std::vector<beans::PropertyValue> aFilterOptions;
 
     if (pPassword)
@@ -111,8 +105,7 @@ void UnoApiTest::load(OUString const& rURL, const char* pPassword)
         aFilterOptions.push_back(aValue);
     }
 
-    mxComponent
-        = loadFromDesktop(rURL, OUString(), comphelper::containerToSequence(aFilterOptions));
+    loadWithParams(rURL, comphelper::containerToSequence(aFilterOptions));
 
     if (pPassword)
     {
@@ -160,7 +153,6 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
     aMediaDescriptor["FilterName"] <<= rFilter;
     if (!maFilterOptions.isEmpty())
         aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
-    css::uno::Reference<frame::XStorable> xStorable(mxComponent, css::uno::UNO_QUERY_THROW);
 
     if (pPassword)
     {
@@ -183,7 +175,7 @@ void UnoApiTest::save(const OUString& rFilter, const char* pPassword)
         }
     }
 
-    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    saveWithParams(aMediaDescriptor.getAsConstPropertyValueList());
 
     if (!mbSkipValidation)
     {
