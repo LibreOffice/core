@@ -24,9 +24,6 @@
 #include <sallayout.hxx>
 
 std::unique_ptr<SystemFontList> GetCoretextFontList();
-#ifdef IOS
-#include <font/PhysicalFontCollection.hxx>
-#endif
 FontAttributes DevFontFromCTFontDescriptor(CTFontDescriptorRef, bool*);
 
 #endif // INCLUDED_VCL_INC_QUARTZ_CTFONTS_HXX

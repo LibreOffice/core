@@ -40,10 +40,6 @@
 #include <machine/param.h>
 #endif
 
-#ifdef IOS
-#include <signal.h>
-#endif
-
 #include "system.hxx"
 #include "unixerrnostring.hxx"
 #if defined(__sun)
