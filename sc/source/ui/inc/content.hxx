@@ -146,7 +146,6 @@ public:
     bool    ActiveDocChanged();
     void    ResetManualDoc();
     void    SetManualDoc(const OUString& rName);
-    void    LoadFile(const OUString& rUrl);
     void    SelectDoc(const OUString& rName);
     void    SelectEntryByName(const ScContentId nRoot, std::u16string_view rName);
 

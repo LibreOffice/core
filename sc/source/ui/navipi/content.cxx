@@ -1346,33 +1346,6 @@ IMPL_LINK(ScContentTree, DragBeginHdl, bool&, rUnsetDragIcon, bool)
     return bDisallow;
 }
 
-void ScContentTree::LoadFile( const OUString& rUrl )
-{
-    OUString aDocName = rUrl;
-    sal_Int32 nPos = aDocName.indexOf('#');
-    if ( nPos != -1 )
-        aDocName = aDocName.copy(0, nPos);           // only the name without #...
-
-    OUString aURL = aDocName;
-    OUString aFilter, aOptions;
-    ScDocumentLoader aLoader( aURL, aFilter, aOptions );
-    if ( aLoader.IsError() )
-        return;
-
-    bHiddenDoc = true;
-    aHiddenName = aDocName;
-    aHiddenTitle = aLoader.GetTitle();
-    pHiddenDocument = aLoader.GetDocument();
-
-    Refresh();                      // get content from loaded document
-
-    pHiddenDocument = nullptr;
-
-    pParentWindow->GetDocNames( &aHiddenTitle );            // fill list
-
-    //  document is closed again by ScDocumentLoader in dtor
-}
-
 void ScContentTree::SetRootType( ScContentId nNew )
 {
     if ( nNew != nRootType )
@@ -1504,11 +1477,6 @@ void ScContentTree::SelectDoc(const OUString& rName)      // rName like shown in
     {
         bHiddenDoc = false;
         SetManualDoc(aRealName);
-    }
-    else if (!aHiddenTitle.isEmpty())                // hidden selected
-    {
-        if (!bHiddenDoc)
-            LoadFile(aHiddenName);
     }
     else
     {
