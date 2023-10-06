@@ -141,7 +141,16 @@ drawing::ShadeMode GetShadeMode( const SdrCustomShapeGeometryItem& rItem, const 
     drawing::ShadeMode eRet( eDefault );
     const Any* pAny = rItem.GetPropertyValueByName( "Extrusion", "ShadeMode" );
     if ( pAny )
-        *pAny >>= eRet;
+    {
+        if (!(*pAny >>= eRet))
+        {
+            sal_Int32 nEnum = 0;
+            if(*pAny >>= nEnum)
+            {
+                eRet = static_cast<drawing::ShadeMode>(nEnum);
+            }
+        }
+    }
     return eRet;
 }
 
