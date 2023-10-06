@@ -894,10 +894,10 @@ sal_Int64 SfxInPlaceClient::GetAspect() const
     return m_xImp->m_nAspect;
 }
 
-ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
+ErrCodeMsg SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
 {
     SfxErrorContext aEc(ERRCTX_SO_DOVERB, m_pViewSh->GetFrameWeld(), RID_SO_ERRCTX);
-    ErrCode nError = ERRCODE_NONE;
+    ErrCodeMsg nError = ERRCODE_NONE;
 
     if ( m_xImp->m_xObject.is() )
     {
@@ -996,8 +996,7 @@ ErrCode SfxInPlaceClient::DoVerb(sal_Int32 nVerb)
                         catch (uno::Exception const&)
                         {
                             TOOLS_WARN_EXCEPTION("embeddedobj", "SfxInPlaceClient::DoVerb: -9 fallback path");
-                            nError = ERRCODE_SO_GENERALERROR;
-                            aEc.SetExtendedMessage(ERRCODE_SO_GENERALERROR, e.Message);
+                            nError = ErrCodeMsg(ERRCODE_SO_GENERALERROR, e.Message);
                         }
                     }
                 }

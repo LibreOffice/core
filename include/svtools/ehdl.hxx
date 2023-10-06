@@ -23,8 +23,6 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/errinf.hxx>
 
-#include <unordered_map>
-
 typedef std::pair<TranslateId, ErrCode> ErrMsgCode;
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRHDL[];
 SVT_DLLPUBLIC extern const ErrMsgCode RID_ERRCTX[];
@@ -42,14 +40,11 @@ public:
             const ErrMsgCode* pIds = nullptr, const std::locale& rResLocaleP = SvtResLocale());
     bool GetString(const ErrCodeMsg& nErrId, OUString &rStr) override;
 
-    void SetExtendedMessage(ErrCode nErrId, const OUString& rStr);
-
 private:
     sal_uInt16 nCtxId;
     const ErrMsgCode* pIds;
     std::locale aResLocale;
     OUString aArg1;
-    std::unordered_map<sal_uInt32, OUString> m_extMessages;
 };
 
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler

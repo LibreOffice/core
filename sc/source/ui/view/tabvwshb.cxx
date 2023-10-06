@@ -159,7 +159,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
 
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     vcl::Window* pWin = GetActiveWin();
-    ErrCode nErr = ERRCODE_NONE;
+    ErrCodeMsg nErr = ERRCODE_NONE;
     bool bErrorShown = false;
 
     {
@@ -174,7 +174,7 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
         if (bNegativeX)
             pClient->SetNegativeX(true);
 
-        if ( (sal_uInt32(nErr) & ERRCODE_ERROR_MASK) == 0 && xObj.is() )
+        if ( (sal_uInt32(nErr.GetCode()) & ERRCODE_ERROR_MASK) == 0 && xObj.is() )
         {
             tools::Rectangle aRect = pObj->GetLogicRect();
 

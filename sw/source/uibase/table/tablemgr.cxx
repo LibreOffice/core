@@ -252,7 +252,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         m_pSh->CalcAndSetScale( aEmbObjRef );
         //#50270# We don't need to handle errors,
         //this does the DoVerb in the SfxViewShell.
-        ErrCode nErr = pClient->DoVerb(embed::EmbedVerbs::MS_OLEVERB_SHOW);
+        ErrCodeMsg nErr = pClient->DoVerb(embed::EmbedVerbs::MS_OLEVERB_SHOW);
         (void) nErr;
 
         // #i121334#
