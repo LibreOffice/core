@@ -586,16 +586,6 @@ IMPL_LINK(ScContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 xDocMenu->append_radio(sId, pParentWindow->aStrActiveWin);
                 if (!bHiddenDoc && aManualDoc.isEmpty())
                     sActive = sId;
-                //  hidden document
-                if ( !aHiddenTitle.isEmpty() )
-                {
-                    OUString aEntry = aHiddenTitle + pParentWindow->aStrHidden;
-                    ++i;
-                    sId = "document" + OUString::number(i);
-                    xDocMenu->append_radio(sId, aEntry);
-                    if (bHiddenDoc)
-                        sActive = sId;
-                }
                 xDocMenu->set_active(sActive, true);
 
                 OUString sIdent = xPop->popup_at_rect(m_xTreeView.get(), tools::Rectangle(rCEvt.GetMousePosPixel(), Size(1, 1)));
@@ -1408,7 +1398,7 @@ bool ScContentTree::ActiveDocChanged()
 
     OUString aCurrent;
     if ( bHiddenDoc )
-        aCurrent = aHiddenTitle;
+        aCurrent = OUString();
     else
     {
         ScDocShell* pSh = GetManualOrCurrent();

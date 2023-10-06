@@ -51,7 +51,6 @@ class ScContentTree
     OUString                aManualDoc;         // Switched in Navigator (Title)
     bool                    bHiddenDoc;         // Hidden active?
     OUString                aHiddenName;        // URL to load
-    OUString                aHiddenTitle;       // for display
     ScDocument*             pHiddenDocument;    // temporary
     bool                    bIsInNavigatorDlg;
     bool                    m_bFreeze;
@@ -148,8 +147,6 @@ public:
     void    SetManualDoc(const OUString& rName);
     void    SelectDoc(const OUString& rName);
     void    SelectEntryByName(const ScContentId nRoot, std::u16string_view rName);
-
-    const OUString& GetHiddenTitle() const    { return aHiddenTitle; }
 
     /** Applies the navigator settings to the listbox. */
     void ApplyNavigatorSettings();

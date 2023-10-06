@@ -884,16 +884,6 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
 
     m_xLbDocuments->append_text(aStrActiveWin);
 
-    OUString aHidden =  m_xLbEntries->GetHiddenTitle();
-    if (!aHidden.isEmpty())
-    {
-        OUString aEntry = aHidden + aStrHidden;
-        m_xLbDocuments->append_text(aEntry);
-
-        if ( pManualSel && aHidden == *pManualSel )
-            aSelEntry = aEntry;
-    }
-
     m_xLbDocuments->thaw();
 
     m_xLbDocuments->set_active_text(aSelEntry);
