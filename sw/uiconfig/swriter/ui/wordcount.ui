@@ -29,11 +29,6 @@
                 <property name="has-default">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="close-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|close">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -48,11 +43,6 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="use-underline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="help-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|help">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
-                  </object>
-                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
