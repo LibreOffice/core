@@ -2758,6 +2758,20 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf156647_CellPaddingRoundtrip)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf157643_WideHBorder)
+{
+    // Given a document with a table with a wide border between its two rows:
+    createSwDoc("table_with_wide_horizontal_border.fodt");
+    // When exporting to reqif-xhtml:
+    ExportToReqif();
+    // Make sure that there's no extra tr's:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pXmlDoc);
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr", 2);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
