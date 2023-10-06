@@ -377,8 +377,11 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
                 }
                 else if (pViewShell->GetDispatcher() != nullptr)
                 {
+                    // tdf#111737 - add new (master) page depending on the edit mode
                     pViewShell->GetDispatcher()->Execute(
-                        SID_INSERTPAGE,
+                        mrSlideSorter.GetModel().GetEditMode() == EditMode::Page
+                            ? SID_INSERTPAGE
+                            : SID_INSERT_MASTER_PAGE,
                         SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);
                 }
                 bResult = true;
