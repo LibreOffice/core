@@ -3284,12 +3284,10 @@ void ScExternalRefManager::transformUnsavedRefToSavedRef( SfxObjectShell* pShell
 
 void ScExternalRefManager::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( !pEventHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint)
         return;
 
-    SfxEventHintId nEventId = pEventHint->GetEventId();
-    switch ( nEventId )
+    switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
     {
         case SfxEventHintId::PrepareCloseDoc:
             {

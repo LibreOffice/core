@@ -707,9 +707,10 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
         return;
 
 // it's our document
-    if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&_rHint))
+    if (_rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        if (SfxEventHintId::PrepareCloseDoc == pEventHint->GetEventId())
+        const SfxEventHint& rEventHint = static_cast<const SfxEventHint&>(_rHint);
+        if (SfxEventHintId::PrepareCloseDoc == rEventHint.GetEventId())
         {
             implFlushDocument();
             mxBodyText.clear();

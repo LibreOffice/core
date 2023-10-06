@@ -321,9 +321,9 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             default: break;
         }
     }
-    else if (const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint))
+    else if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        switch (pEventHint->GetEventId())
+        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
             case SfxEventHintId::CreateDoc:
             case SfxEventHintId::OpenDoc:

@@ -196,11 +196,13 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
     SfxEventHintId      nEventId;
 
 public:
-    SfxEventHint( SfxEventHintId nId, OUString aName, SfxObjectShell *pObj )
-                        :   pObjShell(pObj),
-                            aEventName(std::move(aName)),
-                            nEventId(nId)
-                        {}
+    SfxEventHint(SfxEventHintId nId, OUString aName, SfxObjectShell *pObj)
+        : SfxHint(SfxHintId::ThisIsAnSfxEventHint)
+        , pObjShell(pObj)
+        , aEventName(std::move(aName))
+        , nEventId(nId)
+    {
+    }
 
     SfxEventHintId      GetEventId() const
                         { return nEventId; }

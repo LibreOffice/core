@@ -145,7 +145,8 @@ enum class SfxHintId {
     SwDeleteChar,
     SwSectionHidden,
 
-    ThisIsAnSdrHint
+    ThisIsAnSdrHint,
+    ThisIsAnSfxEventHint
 };
 
 template< typename charT, typename traits >

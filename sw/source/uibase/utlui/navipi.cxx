@@ -845,9 +845,9 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
     }
     else
     {
-        if (const SfxEventHint* pHint = dynamic_cast<const SfxEventHint*>(&rHint))
+        if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
         {
-            SfxEventHintId eEventId = pHint->GetEventId();
+            SfxEventHintId eEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
             if (eEventId == SfxEventHintId::OpenDoc)
             {
                 SwView *pActView = GetCreateView();

@@ -2406,16 +2406,16 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( bFormulaMode )
         return;
 
+    const SfxHintId nHintId = rHint.GetId();
     // Does the list of range names need updating?
-    if ( auto pEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    if (nHintId == SfxHintId::ThisIsAnSfxEventHint)
     {
-        SfxEventHintId nEventId = pEventHint->GetEventId();
+        SfxEventHintId nEventId = static_cast<const SfxEventHint&>(rHint).GetEventId();
         if ( nEventId == SfxEventHintId::ActivateDoc )
             FillRangeNames();
     }
     else
     {
-        const SfxHintId nHintId = rHint.GetId();
         if (nHintId == SfxHintId::ScAreasChanged || nHintId == SfxHintId::ScNavigatorUpdateAll)
             FillRangeNames();
     }

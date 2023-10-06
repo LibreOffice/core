@@ -339,9 +339,10 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 
 void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        if ( pSfxEventHint->GetEventId() == SfxEventHintId::SwEventLayoutFinished )
+        const SfxEventHint& rSfxEventHint = static_cast<const SfxEventHint&>(rHint);
+        if (rSfxEventHint.GetEventId() == SfxEventHintId::SwEventLayoutFinished)
         {
             if ( !mbWaitingForCalcRects && !mvPostItFields.empty())
             {

@@ -213,12 +213,11 @@ void SwDocShell::DoFlushDocInfo()
 static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
-    const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( !pSfxEventHint )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint)
         return;
 
     uno::Sequence< uno::Any > aArgs;
-    switch( pSfxEventHint->GetEventId() )
+    switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
     {
         case SfxEventHintId::CreateDoc:
             xVbaEvents->processVbaEvent(AUTO_NEW, aArgs);
@@ -245,9 +244,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
-    if ( const SfxEventHint* pSfxEventHint = dynamic_cast<const SfxEventHint*>(&rHint) )
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
     {
-        switch( pSfxEventHint->GetEventId() )
+        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
             case SfxEventHintId::ActivateDoc:
             case SfxEventHintId::CreateDoc:
@@ -261,7 +260,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
 
-        switch( pSfxEventHint->GetEventId() )
+        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
         {
             case SfxEventHintId::CreateDoc:
                 {
@@ -285,8 +284,8 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 
     sal_uInt16 nAction = 0;
-    auto pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if( pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished )
+    if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint &&
+        static_cast<const SfxEventHint&>(rHint).GetEventId() == SfxEventHintId::LoadFinished)
     {
         // #i38126# - own action id
         nAction = 3;

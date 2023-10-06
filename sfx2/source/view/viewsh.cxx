@@ -2614,9 +2614,11 @@ SfxViewShell* SfxViewShell::GetNext
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
 {
-    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
-    if ( !(pEventHint && pEventHint->GetEventId() == SfxEventHintId::LoadFinished) )
+    if (rHint.GetId() != SfxHintId::ThisIsAnSfxEventHint ||
+        static_cast<const SfxEventHint&>(rHint).GetEventId() != SfxEventHintId::LoadFinished)
+    {
         return;
+    }
 
     if ( !GetController().is() )
         return;
