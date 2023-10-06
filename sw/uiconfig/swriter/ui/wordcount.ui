@@ -354,11 +354,6 @@
       <action-widget response="-7">close</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="WordCountDialog-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="wordcount|extended_tip|WordCountDialog">Counts the words and characters, with or without spaces, in the current selection and in the whole document. The count is kept up to date as you type or change the selection.</property>
-      </object>
-    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="ignore-hidden">True</property>
