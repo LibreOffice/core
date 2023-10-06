@@ -864,17 +864,6 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         {
             --nSkipRows;
         }
-        if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->m_bBottomBorder &&
-            pRow2->m_nBottomBorder > SvxBorderLineWidth::Thin )
-        {
-            for( auto nCnt = (pRow2->m_nBottomBorder / SvxBorderLineWidth::Thin) - 1; nCnt; --nCnt )
-            {
-                rWrt.OutNewLine();
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
-                HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow),
-                                            false );
-            }
-        }
         if( ( (bTHead && nRow==m_nHeadEndRow) ||
               (bTBody && pRow2->m_bBottomBorder) ) &&
             nRow < m_aRows.size()-1 )
