@@ -60,7 +60,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::accessibility;
 
 #define DEFAULT_QUERY_COLS  20
-#define DEFAULT_SIZE        GetTextWidth("0") * 30
+#define DEFAULT_SIZE        GetTextWidth(u"0"_ustr) * 30
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WIDTH 70
 #define SORT_COLUMN_NONE    0xFFFFFFFF

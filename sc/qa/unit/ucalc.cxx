@@ -54,6 +54,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/lineitem.hxx>
 
+#include <o3tl/nonstaticstring.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
@@ -119,11 +120,11 @@ CPPUNIT_TEST_FIXTURE(Test, testSharedStringPool)
     size_t extraCountIgnoreCase = rPool.getCountIgnoreCase();
 
     // Strings that are identical.
-    m_pDoc->SetString(ScAddress(0,0,0), "Andy");  // A1
-    m_pDoc->SetString(ScAddress(0,1,0), "Andy");  // A2
-    m_pDoc->SetString(ScAddress(0,2,0), "Bruce"); // A3
-    m_pDoc->SetString(ScAddress(0,3,0), "andy");  // A4
-    m_pDoc->SetString(ScAddress(0,4,0), "BRUCE"); // A5
+    m_pDoc->SetString(ScAddress(0,0,0), o3tl::nonStaticString(u"Andy"));  // A1
+    m_pDoc->SetString(ScAddress(0,1,0), o3tl::nonStaticString(u"Andy"));  // A2
+    m_pDoc->SetString(ScAddress(0,2,0), o3tl::nonStaticString(u"Bruce")); // A3
+    m_pDoc->SetString(ScAddress(0,3,0), o3tl::nonStaticString(u"andy"));  // A4
+    m_pDoc->SetString(ScAddress(0,4,0), o3tl::nonStaticString(u"BRUCE")); // A5
 
     {
         // These two shared string objects must go out of scope before the purge test.

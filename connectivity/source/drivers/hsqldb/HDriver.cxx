@@ -213,14 +213,12 @@ namespace connectivity
                 aProperties.put( "JavaDriverClass",
                     OUString(  "org.hsqldb.jdbcDriver"  ) );
                 aProperties.put( "JavaDriverClassPath",
-                    OUString(
 #ifdef SYSTEM_HSQLDB
-                        HSQLDB_JAR
+                        u"" HSQLDB_JAR
 #else
-                        "vnd.sun.star.expand:$LO_JAVA_DIR/hsqldb.jar"
+                        u"vnd.sun.star.expand:$LO_JAVA_DIR/hsqldb.jar"
 #endif
-                        " vnd.sun.star.expand:$LO_JAVA_DIR/sdbc_hsqldb.jar"
-                        ) );
+                        " vnd.sun.star.expand:$LO_JAVA_DIR/sdbc_hsqldb.jar"_ustr );
 
                 // auto increment handling
                 aProperties.put( "IsAutoRetrievingEnabled", true );

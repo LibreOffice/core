@@ -152,7 +152,7 @@ void ClassName::MethodName( const EventType& evt ) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) override { return "stardiv.Toolkit." #ImplName; } \
+    OUString SAL_CALL getImplementationName(  ) override { return u"stardiv.Toolkit." #ImplName ""_ustr; } \
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
                             { \
                                 css::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \

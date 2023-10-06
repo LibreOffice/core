@@ -90,7 +90,7 @@ namespace {
         catch( const css::uno::Exception &e ) {\
             pThis->bExceptionWasThrown = true; \
             pThis->bRTExceptionWasThrown = true; \
-            pImpl->rtexception = WrappedTargetRuntimeException("Non-runtime UNO exception caught during parse", e.Context, css::uno::Any(e)); \
+            pImpl->rtexception = WrappedTargetRuntimeException(u"Non-runtime UNO exception caught during parse"_ustr, e.Context, css::uno::Any(e)); \
         }\
     }\
     ((void)0)

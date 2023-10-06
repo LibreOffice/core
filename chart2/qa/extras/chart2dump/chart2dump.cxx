@@ -32,7 +32,7 @@
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \
     class TestName : public BaseClass { \
         protected:\
-            virtual OUString getTestName() override { return #TestName; } \
+            virtual OUString getTestName() override { return u"" #TestName ""_ustr; } \
         public:\
             TestName() : BaseClass(DumpMode) {}; \
             CPPUNIT_TEST_SUITE(TestName); \
@@ -46,7 +46,7 @@
 
 #define CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aActual) \
     if(isInDumpMode()) \
-        writeActual(OUString::number(aActual), #aActual); \
+        writeActual(OUString::number(aActual), u"" #aActual ""_ustr); \
     else \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
@@ -55,7 +55,7 @@
 
 #define CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aActual, EPS_) \
     if(isInDumpMode()) \
-        writeActual(OUString::number(aActual), #aActual); \
+        writeActual(OUString::number(aActual), u"" #aActual ""_ustr); \
         else \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
@@ -64,7 +64,7 @@
 
 #define CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(aActual) \
     if(isInDumpMode()) \
-        writeActual(aActual, #aActual); \
+        writeActual(aActual, u"" #aActual ""_ustr); \
     else \
     { \
         OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
@@ -73,7 +73,7 @@
 
 #define CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aActual, EPS_) \
     if(isInDumpMode()) \
-        writeActualTransformation(aActual, #aActual); \
+        writeActualTransformation(aActual, u"" #aActual ""_ustr); \
     else \
     { \
         OUString expectedTransform; \

@@ -114,7 +114,7 @@ class DemoRenderer
         virtual sal_uInt16 getTestRepeatCount() = 0;
 #define RENDER_DETAILS(name,key,repeat) \
         virtual OUString getName() override \
-            { return SAL_STRINGIFY(name); } \
+            { return u"" SAL_STRINGIFY(name) ""_ustr; } \
         virtual sal_uInt16 getAccelerator() override \
             { return key; } \
         virtual sal_uInt16 getTestRepeatCount() override \

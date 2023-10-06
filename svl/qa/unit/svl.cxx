@@ -27,6 +27,7 @@
 
 #include <math.h>
 
+#include <o3tl/nonstaticstring.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -370,9 +371,9 @@ void Test::testSharedStringPoolPurge()
     size_t extraCount = aPool.getCount(); // internal items such as SharedString::getEmptyString()
     size_t extraCountIgnoreCase = aPool.getCountIgnoreCase();
 
-    aPool.intern("Andy");
-    aPool.intern("andy");
-    aPool.intern("ANDY");
+    aPool.intern(o3tl::nonStaticString(u"Andy"));
+    aPool.intern(o3tl::nonStaticString(u"andy"));
+    aPool.intern(o3tl::nonStaticString(u"ANDY"));
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong string count.", 3+extraCount, aPool.getCount());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong case insensitive string count.", 1+extraCountIgnoreCase, aPool.getCountIgnoreCase());
@@ -384,10 +385,10 @@ void Test::testSharedStringPoolPurge()
     CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, aPool.getCountIgnoreCase());
 
     // Now, create string objects using optional so we can clear them
-    std::optional<svl::SharedString> pStr1 = aPool.intern("Andy");
-    std::optional<svl::SharedString> pStr2 = aPool.intern("andy");
-    std::optional<svl::SharedString> pStr3 = aPool.intern("ANDY");
-    std::optional<svl::SharedString> pStr4 = aPool.intern("Bruce");
+    std::optional<svl::SharedString> pStr1 = aPool.intern(o3tl::nonStaticString(u"Andy"));
+    std::optional<svl::SharedString> pStr2 = aPool.intern(o3tl::nonStaticString(u"andy"));
+    std::optional<svl::SharedString> pStr3 = aPool.intern(o3tl::nonStaticString(u"ANDY"));
+    std::optional<svl::SharedString> pStr4 = aPool.intern(o3tl::nonStaticString(u"Bruce"));
 
     CPPUNIT_ASSERT_EQUAL(5+extraCount, aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(2+extraCountIgnoreCase, aPool.getCountIgnoreCase());
@@ -430,8 +431,8 @@ void Test::testSharedStringPoolPurgeBug1()
     svl::SharedStringPool aPool(aSysLocale.GetCharClass());
     size_t extraCount = aPool.getCount(); // internal items such as SharedString::getEmptyString()
     size_t extraCountIgnoreCase = aPool.getCountIgnoreCase();
-    aPool.intern("Andy");
-    aPool.intern("andy");
+    aPool.intern(o3tl::nonStaticString(u"Andy"));
+    aPool.intern(o3tl::nonStaticString(u"andy"));
     aPool.purge();
     CPPUNIT_ASSERT_EQUAL(extraCount, aPool.getCount());
     CPPUNIT_ASSERT_EQUAL(extraCountIgnoreCase, aPool.getCountIgnoreCase());

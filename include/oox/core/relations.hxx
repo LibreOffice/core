@@ -39,7 +39,7 @@ namespace oox::core {
 /** Expands to an OUString containing an 'officeDocument' strict relation type created
     from the passed literal(!) ASCII(!) character array. */
 #define CREATE_OFFICEDOC_RELATION_TYPE_STRICT( ascii ) \
-    ( "http://purl.oclc.org/ooxml/officeDocument/relationships/" ascii )
+    ( u"http://purl.oclc.org/ooxml/officeDocument/relationships/" ascii ""_ustr )
 
 /** Expands to an OUString containing an MS Office specific relation type
     created from the passed literal(!) ASCII(!) character array. */

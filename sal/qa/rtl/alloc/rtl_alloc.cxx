@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/nonstaticstring.hxx>
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
@@ -158,7 +159,7 @@ public:
 
         rtl_alloc_preInit(true);
 
-        OUString aFoo("foo"); // [-loplugin:ostr]
+        OUString aFoo(o3tl::nonStaticString(u"foo"));
 
         // fill some cache bits
         for (int iter = 0; iter < 4; iter++)
