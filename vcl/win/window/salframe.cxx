@@ -2706,6 +2706,13 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         GetThemeColor(hTheme, 0, 0, TMT_FILLCOLOR, &color);
         aStyleSettings.SetFaceColor( ImplWinColorToSal( color ) );
         aStyleSettings.SetWindowColor( ImplWinColorToSal( color ) );
+
+        // tdf#156040 in the absence of a better idea, do like
+        // StyleSettings::Set3DColors does
+        Color aLightColor(ImplWinColorToSal(color));
+        aLightColor.DecreaseLuminance(64);
+        aStyleSettings.SetLightColor(aLightColor);
+
         GetThemeColor(hTheme, 0, 0, TMT_TEXTCOLOR, &color);
         aStyleSettings.SetWindowTextColor( ImplWinColorToSal( color ) );
         aStyleSettings.SetToolTextColor( ImplWinColorToSal( color ) );
@@ -2757,6 +2764,7 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
         aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
         aStyleSettings.SetToolTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+        aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
         aStyleSettings.SetShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DSHADOW ) ) );
         aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
         aControlTextColor = ImplWinColorToSal(GetSysColor(COLOR_BTNTEXT));
@@ -2781,7 +2789,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetMenuBarTextColor( aMenuBarTextColor );
     aStyleSettings.SetMenuBarRolloverTextColor( aMenuBarRolloverTextColor );
 
-    aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
     aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
