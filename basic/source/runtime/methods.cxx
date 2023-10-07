@@ -1046,14 +1046,10 @@ void SbRtl_Log(StarBASIC *, SbxArray & rPar, bool)
 void SbRtl_LTrim(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        OUString aStr(comphelper::string::stripStart(rPar.Get(1)->GetOUString(), ' '));
-        rPar.Get(0)->PutString(aStr);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aStr(comphelper::string::stripStart(rPar.Get(1)->GetOUString(), ' '));
+    rPar.Get(0)->PutString(aStr);
 }
 
 
@@ -1318,14 +1314,10 @@ void SbRtl_RTL(StarBASIC * pBasic, SbxArray & rPar, bool)
 void SbRtl_RTrim(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        OUString aStr(comphelper::string::stripEnd(rPar.Get(1)->GetOUString(), ' '));
-        rPar.Get(0)->PutString(aStr);
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
+    OUString aStr(comphelper::string::stripEnd(rPar.Get(1)->GetOUString(), ' '));
+    rPar.Get(0)->PutString(aStr);
 }
 
 void SbRtl_Sgn(StarBASIC *, SbxArray & rPar, bool)
