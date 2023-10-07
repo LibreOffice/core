@@ -110,7 +110,7 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, Test64BitChildIndices)
 
 CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf157568)
 {
-    load(u"private:factory/scalc");
+    load(u"private:factory/scalc"_ustr);
 
     uno::Reference<accessibility::XAccessibleTable> sheet(
         getDocumentAccessibleContext()->getAccessibleChild(0)->getAccessibleContext(), // sheet 1
