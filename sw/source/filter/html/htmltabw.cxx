@@ -589,12 +589,12 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     {
         SwWriteTableRow* pRow = row->get();
         SwWriteTableRow* pNextRow = next->get();
-        bool bBorder = ( pRow->m_bBottomBorder || pNextRow->m_bTopBorder );
+        bool bBorder = ( pRow->HasBottomBorder() || pNextRow->HasTopBorder() );
         bRowsHaveBorder |= bBorder;
         bRowsHaveBorderOnly &= bBorder;
 
-        pRow->m_bBottomBorder = bBorder;
-        pNextRow->m_bTopBorder = bBorder;
+        pRow->SetBottomBorder(bBorder);
+        pNextRow->SetTopBorder(bBorder);
     }
 
     bool bColsHaveBorder = false;
@@ -792,7 +792,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // can be outputted if there is a line below the cell.
     if( bTHead &&
         (bTSections || bColGroups) &&
-        m_nHeadEndRow<m_aRows.size()-1 && !m_aRows[m_nHeadEndRow]->m_bBottomBorder )
+        m_nHeadEndRow<m_aRows.size()-1 && !m_aRows[m_nHeadEndRow]->HasBottomBorder() )
         bTHead = false;
 
     // Output <TBODY> only if <THEAD> is outputted.
@@ -821,7 +821,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
             --nSkipRows;
         }
         if( ( (bTHead && nRow==m_nHeadEndRow) ||
-              (bTBody && pRow->m_bBottomBorder) ) &&
+              (bTBody && pRow->HasBottomBorder()) ) &&
             nRow < m_aRows.size()-1 )
         {
             rWrt.DecIndentLevel(); // indent content of <THEAD>/<TDATA>

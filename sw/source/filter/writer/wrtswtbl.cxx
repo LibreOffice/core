@@ -688,10 +688,10 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
                     }
 
                     if (!(nBorderMask & 1))
-                        pRow->m_bTopBorder = false;
+                        pRow->SetTopBorder(false);
 
                     if (!(nBorderMask & 2))
-                        pEndRow->m_bBottomBorder = false;
+                        pEndRow->SetBottomBorder(false);
                 }
             }
             else
@@ -842,11 +842,11 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
                 pCol->m_bRightBorder = false;
 
             if( !(nBorderMask & 1) )
-                pRow->m_bTopBorder = false;
+                pRow->SetTopBorder(false);
 
             SwWriteTableRow *pEndRow = m_aRows[nRow+nRowSpan-1].get();
             if( !(nBorderMask & 2) )
-                pEndRow->m_bBottomBorder = false;
+                pEndRow->SetBottomBorder(false);
 
             // The height requires only to be written once
             if( nHeight )

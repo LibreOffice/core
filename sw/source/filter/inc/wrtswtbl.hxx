@@ -101,6 +101,8 @@ class SwWriteTableRow final
 
     tools::Long m_nPos;                       // end position (twips) of the row
     bool mbUseLayoutHeights;
+    bool m_bTopBorder; // which borders are there?
+    bool m_bBottomBorder;
 
     SwWriteTableRow & operator= (const SwWriteTableRow &) = delete;
 
@@ -108,9 +110,6 @@ class SwWriteTableRow final
     SwWriteTableRow( const SwWriteTableRow & );
 
 public:
-
-    bool m_bTopBorder : 1;            // which borders are there?
-    bool m_bBottomBorder : 1;
 
     SwWriteTableRow( tools::Long nPos, bool bUseLayoutHeights );
 
@@ -127,7 +126,9 @@ public:
     const SvxBrushItem *GetBackground() const { return m_pBackground; }
 
     bool HasTopBorder() const                   { return m_bTopBorder; }
+    void SetTopBorder(bool value)               { m_bTopBorder = value; }
     bool HasBottomBorder() const                { return m_bBottomBorder; }
+    void SetBottomBorder(bool value)            { m_bBottomBorder = value; }
 
     const SwWriteTableCells& GetCells() const   { return m_Cells; }
 
