@@ -307,6 +307,17 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
+    else if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
+    {
+        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
+        {
+            case SfxEventHintId::CreateDoc:
+            case SfxEventHintId::OpenDoc:
+                ModeChanged();
+                break;
+            default: break;
+        }
+    }
     else if (rHint.GetId() != SfxHintId::NONE)
     {
         switch (rHint.GetId())
@@ -316,17 +327,6 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rModel.SetObjectShell( nullptr );
                 break;
             case SfxHintId::ModeChanged:
-                ModeChanged();
-                break;
-            default: break;
-        }
-    }
-    else if (rHint.GetId() == SfxHintId::ThisIsAnSfxEventHint)
-    {
-        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
-        {
-            case SfxEventHintId::CreateDoc:
-            case SfxEventHintId::OpenDoc:
                 ModeChanged();
                 break;
             default: break;
