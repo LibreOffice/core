@@ -2662,6 +2662,13 @@ bool SwWrtShell::HasFoldedOutlineContentSelected() const
         SwOutlineNodes::size_type nPos;
         for (SwNodeIndex aIdx = aPointIdx; aIdx <= aMarkIdx; ++aIdx)
         {
+            // To allow delete when the start of the selection is at the start of a
+            // paragraph and the end of the selection is at the start of a paragraph and there
+            // are no folded outline content nodes in between.
+            if (aIdx == aMarkIdx && aPaM.GetPoint()->GetContentIndex() == 0 &&
+                    aPaM.GetMark()->GetContentIndex() == 0)
+                return false;
+
             if (GetDoc()->GetNodes().GetOutLineNds().Seek_Entry(&(aIdx.GetNode()), &nPos) &&
                     !GetAttrOutlineContentVisible(nPos))
                 return true;

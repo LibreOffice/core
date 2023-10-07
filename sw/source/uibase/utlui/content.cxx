@@ -4871,12 +4871,13 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
 
 void SwContentTree::DeleteOutlineSelections()
 {
+    const SwOutlineNodes& rOutlineNodes = m_pActiveShell->GetNodes().GetOutLineNds();
     auto nChapters(0);
 
     m_pActiveShell->StartAction();
 
     m_pActiveShell->EnterAddMode();
-    m_xTreeView->selected_foreach([this, &nChapters](weld::TreeIter& rEntry){
+    m_xTreeView->selected_foreach([this, &rOutlineNodes, &nChapters](weld::TreeIter& rEntry){
         ++nChapters;
         if (m_xTreeView->iter_has_child(rEntry) &&
             !m_xTreeView->get_row_expanded(rEntry)) // only count children if not expanded
@@ -4884,6 +4885,27 @@ void SwContentTree::DeleteOutlineSelections()
             nChapters += m_xTreeView->iter_n_children(rEntry);
         }
         SwOutlineNodes::size_type nActPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rEntry))->GetOutlinePos();
+        if (m_pActiveShell->GetViewOptions()->IsShowOutlineContentVisibilityButton())
+        {
+            // make folded content visible so it can be selected
+            if (!m_pActiveShell->IsOutlineContentVisible(nActPos))
+                m_pActiveShell->MakeOutlineContentVisible(nActPos);
+            if (!m_xTreeView->get_row_expanded(rEntry))
+            {
+                // include children
+                SwNode* pNode = rOutlineNodes[nActPos];
+                const int nLevel = pNode->GetTextNode()->GetAttrOutlineLevel() - 1;
+                for (auto nPos = nActPos + 1; nPos < rOutlineNodes.size(); ++nPos)
+                {
+                    pNode = rOutlineNodes[nPos];
+                    const int nNextLevel = pNode->GetTextNode()->GetAttrOutlineLevel() - 1;
+                    if (nNextLevel <= nLevel)
+                        break;
+                    if (!m_pActiveShell->IsOutlineContentVisible(nNextLevel))
+                        m_pActiveShell->MakeOutlineContentVisible(nNextLevel);
+                }
+            }
+        }
         m_pActiveShell->SttSelect();
         m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !m_xTreeView->get_row_expanded(rEntry), false); // select children if not expanded
         // The outline selection may already be to the start of the following outline paragraph
