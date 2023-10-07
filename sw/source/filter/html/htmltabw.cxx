@@ -593,15 +593,8 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
         bRowsHaveBorder |= bBorder;
         bRowsHaveBorderOnly &= bBorder;
 
-        sal_uInt16 nBorder = pRow->m_bBottomBorder ? pRow->m_nBottomBorder : USHRT_MAX;
-        if( pNextRow->m_bTopBorder && pNextRow->m_nTopBorder < nBorder )
-            nBorder = pNextRow->m_nTopBorder;
-
         pRow->m_bBottomBorder = bBorder;
-        pRow->m_nBottomBorder = nBorder;
-
         pNextRow->m_bTopBorder = bBorder;
-        pNextRow->m_nTopBorder = nBorder;
     }
 
     bool bColsHaveBorder = false;

@@ -109,9 +109,6 @@ class SwWriteTableRow final
 
 public:
 
-    sal_uInt16 m_nTopBorder;          // thickness of upper/lower border
-    sal_uInt16 m_nBottomBorder;
-
     bool m_bTopBorder : 1;            // which borders are there?
     bool m_bBottomBorder : 1;
 

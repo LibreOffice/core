@@ -54,8 +54,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
 
 SwWriteTableRow::SwWriteTableRow( tools::Long nPosition, bool bUseLayoutHeights )
     : m_pBackground(nullptr), m_nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights),
-    m_nTopBorder(USHRT_MAX), m_nBottomBorder(USHRT_MAX), m_bTopBorder(true),
-    m_bBottomBorder(true)
+    m_bTopBorder(true), m_bBottomBorder(true)
 {
 }
 
@@ -690,18 +689,9 @@ void SwWriteTable::FillTableRowsCols( tools::Long nStartRPos, sal_uInt16 nStartR
 
                     if (!(nBorderMask & 1))
                         pRow->m_bTopBorder = false;
-                    else if (!pRow->m_nTopBorder || nTopBorder < pRow->m_nTopBorder)
-                        pRow->m_nTopBorder = nTopBorder;
 
                     if (!(nBorderMask & 2))
                         pEndRow->m_bBottomBorder = false;
-                    else if (
-                                !pEndRow->m_nBottomBorder ||
-                                nBottomBorder < pEndRow->m_nBottomBorder
-                            )
-                    {
-                        pEndRow->m_nBottomBorder = nBottomBorder;
-                    }
                 }
             }
             else
@@ -797,8 +787,6 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
     {
         std::unique_ptr<SwWriteTableRow> pRow(
             new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, m_bUseLayoutHeights ));
-        pRow->m_nTopBorder = 0;
-        pRow->m_nBottomBorder = 0;
         m_aRows.insert( std::move(pRow) );
     }
 
