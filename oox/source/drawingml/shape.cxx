@@ -2026,7 +2026,8 @@ Reference< XShape > const & Shape::createAndInsert(
         }
 
         // Set glow effect properties
-        if ( aEffectProperties.maGlow.moGlowRad.has_value() )
+        if (aEffectProperties.maGlow.moGlowRad.has_value()
+            && aServiceName != "com.sun.star.drawing.GroupShape")
         {
             uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue("GlowEffectRadius", Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.value())));
