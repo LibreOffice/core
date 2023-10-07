@@ -133,8 +133,7 @@ SfxRequest::SfxRequest
 (
     const SfxRequest& rOrig
 )
-:   SfxHint( rOrig ),
-    nSlot(rOrig.nSlot),
+:   nSlot(rOrig.nSlot),
     pArgs(rOrig.pArgs? new SfxAllItemSet(*rOrig.pArgs): nullptr),
     pImpl( new SfxRequest_Impl(this) )
 {

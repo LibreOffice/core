@@ -23,7 +23,6 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <svl/itemset.hxx>
-#include <svl/hint.hxx>
 
 #include <memory>
 
@@ -40,7 +39,7 @@ namespace com::sun::star::frame { class XDispatchRecorder; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace weld { class Window; }
 
-class SFX2_DLLPUBLIC SfxRequest final : public SfxHint
+class SFX2_DLLPUBLIC SfxRequest final
 {
 friend struct SfxRequest_Impl;
 
@@ -63,7 +62,7 @@ public:
                         SfxRequest(sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs);
                         SfxRequest( sal_uInt16 nSlot, SfxCallMode nCallMode, const SfxAllItemSet& rSfxArgs, const SfxAllItemSet& rSfxInternalArgs );
                         SfxRequest( const SfxRequest& rOrig );
-                        virtual ~SfxRequest() override;
+                        ~SfxRequest();
 
     sal_uInt16              GetSlot() const { return nSlot; }
     void                SetSlot(sal_uInt16 nNewSlot) { nSlot = nNewSlot; }
