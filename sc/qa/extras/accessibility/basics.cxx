@@ -108,5 +108,23 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, Test64BitChildIndices)
     CPPUNIT_ASSERT_EQUAL(nCol, xTable->getAccessibleColumn(nChildIndex));
 }
 
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, tdf157568)
+{
+    load(u"private:factory/scalc");
+
+    uno::Reference<accessibility::XAccessibleTable> sheet(
+        getDocumentAccessibleContext()->getAccessibleChild(0)->getAccessibleContext(), // sheet 1
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference<accessibility::XAccessible> xCell = sheet->getAccessibleCellAt(1, 1);
+    CPPUNIT_ASSERT(xCell);
+    uno::WeakReference<accessibility::XAccessible> xCellWeak(xCell);
+    xCell.clear();
+    // Verify that there are no reference cycles and that the ScAccessibleCell object dies after we
+    // are done with it.
+    uno::Reference<accessibility::XAccessible> xCell2(xCellWeak);
+    CPPUNIT_ASSERT(!xCell2.is());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

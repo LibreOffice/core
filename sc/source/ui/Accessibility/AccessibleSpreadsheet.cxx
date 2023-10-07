@@ -927,15 +927,7 @@ rtl::Reference<ScAccessibleCell> ScAccessibleSpreadsheet::GetAccessibleCellAt(sa
         }
         else
         {
-            rtl::Reference<ScAccessibleCell> xCell;
-            auto it = m_mapCells.find(aCellAddress);
-            if (it != m_mapCells.end())
-                xCell = it->second.get();
-            if (xCell)
-                return xCell;
-            xCell = ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
-            m_mapCells.insert(std::make_pair(aCellAddress, xCell));
-            return xCell;
+            return ScAccessibleCell::create(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
         }
     }
 }

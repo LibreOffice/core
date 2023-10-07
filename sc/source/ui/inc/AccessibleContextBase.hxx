@@ -31,6 +31,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 
 namespace tools { class Rectangle; }
 class AbsoluteScreenPixelRectangle;
@@ -39,14 +40,12 @@ class AbsoluteScreenPixelRectangle;
         This base class provides an implementation of the
         <code>AccessibleContext</code> service.
 */
-
 typedef cppu::WeakComponentImplHelper<
                 css::accessibility::XAccessible,
                 css::accessibility::XAccessibleComponent,
                 css::accessibility::XAccessibleContext,
                 css::accessibility::XAccessibleEventBroadcaster,
-                css::lang::XServiceInfo,
-                css::accessibility::XAccessibleEventListener
+                css::lang::XServiceInfo
                 > ScAccessibleContextBaseWeakImpl;
 
 class ScAccessibleContextBase
@@ -54,6 +53,8 @@ class ScAccessibleContextBase
         public ScAccessibleContextBaseWeakImpl,
         public SfxListener
 {
+class ScAccessibleContextBaseEventListener;
+
 public:
     //=====  internal  ========================================================
     ScAccessibleContextBase(
@@ -161,15 +162,6 @@ public:
         removeAccessibleEventListener(
             const css::uno::Reference<css::accessibility::XAccessibleEventListener>& xListener) override;
 
-    ///=====  XAccessibleEventListener  ========================================
-
-    virtual void SAL_CALL
-        disposing( const css::lang::EventObject& Source ) override;
-
-    virtual void SAL_CALL
-        notifyEvent(
-        const css::accessibility::AccessibleEventObject& aEvent ) override;
-
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
@@ -257,6 +249,8 @@ private:
     /** This is the role of this object.
     */
     sal_Int16 maRole;
+
+    rtl::Reference<ScAccessibleContextBaseEventListener> mxEventListener;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
