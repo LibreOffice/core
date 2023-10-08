@@ -443,7 +443,7 @@ static Atspi::Accessible getDescendentAtPath(const Atspi::Accessible& xAcc, int 
 
 CPPUNIT_TEST_FIXTURE(Atspi2TestTree, Test1)
 {
-    loadFromSrc(u"vcl/qa/cppunit/a11y/atspi2/testdocuments/ecclectic.fodt");
+    loadFromSrc(u"vcl/qa/cppunit/a11y/atspi2/testdocuments/ecclectic.fodt"_ustr);
 
     /* FIXME: We zoom out for everything to fit in the view not to have off-screen children
      * that the controller code fails to clean up properly in some situations.
