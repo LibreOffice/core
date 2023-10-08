@@ -91,6 +91,8 @@ public:
 
     virtual std::unique_ptr<weld::ProgressBar> weld_progress_bar(const OUString& id) override;
 
+    virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& id) override;
+
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OUString& id) override;
 
     virtual std::unique_ptr<weld::Image> weld_image(const OUString& id) override;

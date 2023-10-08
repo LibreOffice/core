@@ -55,6 +55,7 @@ public:
             case ControlType::Radiobutton:
             case ControlType::ListNode:
             case ControlType::Slider:
+            case ControlType::LevelBar:
             case ControlType::Progress:
             // FIXME: these guys have complex state hidden in ImplControlValue
             // structs which affects rendering, needs to be a and needs to be

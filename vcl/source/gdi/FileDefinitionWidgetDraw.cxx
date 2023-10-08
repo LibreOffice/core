@@ -188,6 +188,7 @@ bool FileDefinitionWidgetDraw::isNativeControlSupported(ControlType eType, Contr
         case ControlType::MenuPopup:
             return true;
         case ControlType::Progress:
+        case ControlType::LevelBar:
             return true;
         case ControlType::IntroProgress:
             return false;
@@ -750,6 +751,7 @@ bool FileDefinitionWidgetDraw::drawNativeControl(ControlType eType, ControlPart 
         }
         break;
         case ControlType::Progress:
+        case ControlType::LevelBar:
         {
             bOK = resolveDefinition(eType, ePart, eState, rValue, nX, nY, nWidth, nHeight);
         }

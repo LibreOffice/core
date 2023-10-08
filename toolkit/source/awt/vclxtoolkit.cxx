@@ -1781,7 +1781,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( rtl::Reference<VCLXWindow>* ppNewCom
                 }
                 else if (aServiceName == "progressbar")
                 {
-                    pNewWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits );
+                    pNewWindow = VclPtr<ProgressBar>::Create( pParent, nWinBits, ProgressBar::BarStyle::Progress );
                     *ppNewComp = new VCLXProgressBar;
                 }
                 else if (aServiceName == "filecontrol")

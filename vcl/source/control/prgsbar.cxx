@@ -39,12 +39,15 @@ void ProgressBar::ImplInit()
     ImplInitSettings( true, true, true );
 }
 
-static WinBits clearProgressBarBorder( vcl::Window const * pParent, WinBits nOrgStyle )
+static WinBits clearProgressBarBorder( vcl::Window const * pParent, WinBits nOrgStyle, ProgressBar::BarStyle eBarStyle )
 {
     WinBits nOutStyle = nOrgStyle;
     if( pParent && (nOrgStyle & WB_BORDER) != 0 )
     {
-        if( pParent->IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
+        if (pParent->IsNativeControlSupported(eBarStyle == ProgressBar::BarStyle::Progress
+                                                  ? ControlType::Progress
+                                                  : ControlType::LevelBar,
+                                              ControlPart::Entire))
             nOutStyle &= WB_BORDER;
     }
     return nOutStyle;
@@ -52,11 +55,12 @@ static WinBits clearProgressBarBorder( vcl::Window const * pParent, WinBits nOrg
 
 Size ProgressBar::GetOptimalSize() const
 {
-    return Size(150, 20);
+    return meBarStyle == BarStyle::Progress ? Size(150, 20) : Size(150,10);
 }
 
-ProgressBar::ProgressBar( vcl::Window* pParent, WinBits nWinStyle ) :
-    Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
+ProgressBar::ProgressBar( vcl::Window* pParent, WinBits nWinStyle, BarStyle eBarStyle ) :
+        Window( pParent, clearProgressBarBorder( pParent, nWinStyle, eBarStyle ) ),
+        meBarStyle(eBarStyle)
 {
     SetOutputSizePixel( GetOptimalSize() );
     ImplInit();
@@ -74,8 +78,10 @@ void ProgressBar::ImplInitSettings( bool bFont,
 
     if ( bBackground )
     {
-        if( !IsControlBackground() &&
-            IsNativeControlSupported( ControlType::Progress, ControlPart::Entire ) )
+        if (!IsControlBackground()
+            && IsNativeControlSupported(meBarStyle == BarStyle::Progress ? ControlType::Progress
+                                                                         : ControlType::LevelBar,
+                                        ControlPart::Entire))
         {
             if( GetStyle() & WB_BORDER )
                 SetBorderStyle( WindowBorderStyle::REMOVEBORDER );
@@ -144,9 +150,10 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
         maPos.setX( (aSize.Width() - nMaxWidth) / 2 );
     }
 
-    ::DrawProgress(this, rRenderContext, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
-                   /*nPercent1=*/0, nNewPerc * 100, mnPercentCount,
-                   tools::Rectangle(Point(), GetSizePixel()));
+    ::DrawProgress(
+        this, rRenderContext, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
+        /*nPercent1=*/0, nNewPerc * 100, mnPercentCount, tools::Rectangle(Point(), GetSizePixel()),
+        meBarStyle == BarStyle::Progress ? ControlType::Progress : ControlType::LevelBar);
 }
 
 void ProgressBar::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& /*rRect*/)

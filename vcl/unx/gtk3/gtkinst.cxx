@@ -12843,6 +12843,25 @@ public:
     }
 };
 
+class GtkInstanceLevelBar : public GtkInstanceWidget, public virtual weld::LevelBar
+{
+private:
+    GtkLevelBar* m_pLevelBar;
+
+public:
+    GtkInstanceLevelBar(GtkLevelBar* pLevelBar, GtkInstanceBuilder* pBuilder,
+                        bool bTakeOwnership)
+        : GtkInstanceWidget(GTK_WIDGET(pLevelBar), pBuilder, bTakeOwnership)
+        , m_pLevelBar(pLevelBar)
+    {
+    }
+
+    virtual void set_percentage(double fPercentage) override
+    {
+        gtk_level_bar_set_value(m_pLevelBar, fPercentage / 100.0);
+    }
+};
+
 class GtkInstanceSpinner : public GtkInstanceWidget, public virtual weld::Spinner
 {
 private:
@@ -24339,6 +24358,16 @@ public:
             return nullptr;
         auto_add_parentless_widgets_to_container(GTK_WIDGET(pProgressBar));
         return std::make_unique<GtkInstanceProgressBar>(pProgressBar, this, false);
+    }
+
+    virtual std::unique_ptr<weld::LevelBar> weld_level_bar(const OUString& id) override
+    {
+        GtkLevelBar* pLevelBar = GTK_LEVEL_BAR(gtk_builder_get_object(
+            m_pBuilder, OUStringToOString(id, RTL_TEXTENCODING_UTF8).getStr()));
+        if (!pLevelBar)
+            return nullptr;
+        auto_add_parentless_widgets_to_container(GTK_WIDGET(pLevelBar));
+        return std::make_unique<GtkInstanceLevelBar>(pLevelBar, this, false);
     }
 
     virtual std::unique_ptr<weld::Spinner> weld_spinner(const OUString &id) override

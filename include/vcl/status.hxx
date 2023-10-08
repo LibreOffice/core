@@ -36,7 +36,7 @@ struct ImplStatusItem;
 void DrawProgress(vcl::Window* pWindow, vcl::RenderContext& rRenderContext, const Point& rPos,
                                 tools::Long nOffset, tools::Long nPrgsWidth, tools::Long nPrgsHeight,
                                 sal_uInt16 nPercent1, sal_uInt16 nPercent2, sal_uInt16 nPercentCount,
-                                const tools::Rectangle& rFramePosSize);
+                                const tools::Rectangle& rFramePosSize, ControlType eControlType);
 
 
 enum class StatusBarItemBits {

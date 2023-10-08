@@ -160,6 +160,7 @@ bool getControlTypeForXmlString(OString const& rString, ControlType& reType)
         { "slider", ControlType::Slider },
         { "fixedline", ControlType::Fixedline },
         { "progress", ControlType::Progress },
+        { "levelbar", ControlType::LevelBar },
         { "tabitem", ControlType::TabItem },
         { "tabheader", ControlType::TabHeader },
         { "tabpane", ControlType::TabPane },

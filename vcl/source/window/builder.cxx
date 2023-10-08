@@ -2025,7 +2025,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OUString 
     {
         extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
         bVertical = extractOrientation(rMap);
-        xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ);
+        xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ, ProgressBar::BarStyle::Progress);
+    }
+    else if (name == "GtkLevelBar")
+    {
+        extractAdjustmentToMap(id, rMap, m_pParserState->m_aScrollAdjustmentMaps);
+        bVertical = extractOrientation(rMap);
+        xWindow = VclPtr<ProgressBar>::Create(pParent, bVertical ? WB_VERT : WB_HORZ, ProgressBar::BarStyle::Level);
     }
     else if (name == "GtkScrolledWindow")
     {

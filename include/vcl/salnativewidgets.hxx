@@ -92,6 +92,7 @@ enum class ControlType {
 // application but not for the splash
 // screen (used in desktop/)
     IntroProgress      = 132,
+    LevelBar           = 133,
 // tool tips
     Tooltip            = 140,
 // to draw the implemented theme

@@ -1714,6 +1714,14 @@ public:
     virtual void set_text(const OUString& rText) = 0;
 };
 
+class VCL_DLLPUBLIC LevelBar : virtual public Widget
+{
+public:
+    /// Sets LevelBar fill percentage.
+    /// @param fPercentage bar's fill percentage, [0.0, 100.0]
+    virtual void set_percentage(double fPercentage) = 0;
+};
+
 class VCL_DLLPUBLIC Entry : virtual public Widget
 {
 private:
@@ -2622,6 +2630,7 @@ public:
     virtual std::unique_ptr<Entry> weld_entry(const OUString& id) = 0;
     virtual std::unique_ptr<Scale> weld_scale(const OUString& id) = 0;
     virtual std::unique_ptr<ProgressBar> weld_progress_bar(const OUString& id) = 0;
+    virtual std::unique_ptr<LevelBar> weld_level_bar(const OUString& id) = 0;
     virtual std::unique_ptr<Spinner> weld_spinner(const OUString& id) = 0;
     virtual std::unique_ptr<Image> weld_image(const OUString& id) = 0;
     virtual std::unique_ptr<Calendar> weld_calendar(const OUString& id) = 0;

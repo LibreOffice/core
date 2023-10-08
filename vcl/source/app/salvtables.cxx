@@ -3302,6 +3302,24 @@ public:
 
     virtual void set_text(const OUString& rText) override { m_xProgressBar->SetText(rText); }
 };
+
+class SalInstanceLevelBar : public SalInstanceWidget, public virtual weld::LevelBar
+{
+private:
+    VclPtr<::ProgressBar> m_xLevelBar;
+
+public:
+    SalInstanceLevelBar(::ProgressBar* pLevelBar, SalInstanceBuilder* pBuilder, bool bTakeOwnership)
+        : SalInstanceWidget(pLevelBar, pBuilder, bTakeOwnership)
+        , m_xLevelBar(pLevelBar)
+    {
+    }
+
+    virtual void set_percentage(double fPercentage) override
+    {
+        m_xLevelBar->SetValue(static_cast<sal_uInt16>(fPercentage));
+    }
+};
 }
 
 IMPL_LINK_NOARG(SalInstanceCalendar, SelectHdl, ::Calendar*, void)
@@ -7210,6 +7228,12 @@ std::unique_ptr<weld::ProgressBar> SalInstanceBuilder::weld_progress_bar(const O
 {
     ::ProgressBar* pProgress = m_xBuilder->get<::ProgressBar>(id);
     return pProgress ? std::make_unique<SalInstanceProgressBar>(pProgress, this, false) : nullptr;
+}
+
+std::unique_ptr<weld::LevelBar> SalInstanceBuilder::weld_level_bar(const OUString& id)
+{
+    ::ProgressBar* pLevel = m_xBuilder->get<::ProgressBar>(id);
+    return pLevel ? std::make_unique<SalInstanceLevelBar>(pLevel, this, false) : nullptr;
 }
 
 std::unique_ptr<weld::Spinner> SalInstanceBuilder::weld_spinner(const OUString& id)
