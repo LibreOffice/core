@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
+#include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/syslocale.hxx>
@@ -808,8 +809,15 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 fPoint = static_cast<float>(nValue);
             }
-            if(fPoint < 0. || fPoint > 10000.)
-                    return false;
+
+            if (fPoint < 0. || fPoint > 10000.)
+                return false;
+            static bool bFuzzing = utl::ConfigManager::IsFuzzing();
+            if (bFuzzing && fPoint > 500)
+            {
+                SAL_WARN("editeng.items", "SvxFontHeightItem ignoring font size of " << fPoint << " for performance");
+                return false;
+            }
 
             nHeight = static_cast<tools::Long>( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
