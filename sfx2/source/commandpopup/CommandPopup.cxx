@@ -51,6 +51,7 @@ MenuContentHandler::MenuContentHandler(uno::Reference<frame::XFrame> const& xFra
 void MenuContentHandler::gatherMenuContent(
     uno::Reference<container::XIndexAccess> const& xIndexAccess, MenuContent& rMenuContent)
 {
+    std::u16string_view aMenuLabelSeparator = AllSettings::GetLayoutRTL() ? u" ◂ " : u" ▸ ";
     for (sal_Int32 n = 0; n < xIndexAccess->getCount(); n++)
     {
         MenuContent aNewContent;
@@ -85,7 +86,8 @@ void MenuContentHandler::gatherMenuContent(
         aNewContent.m_aMenuLabel = aLabel;
 
         if (!rMenuContent.m_aFullLabelWithPath.isEmpty())
-            aNewContent.m_aFullLabelWithPath = rMenuContent.m_aFullLabelWithPath + " / ";
+            aNewContent.m_aFullLabelWithPath
+                = rMenuContent.m_aFullLabelWithPath + aMenuLabelSeparator;
         aNewContent.m_aFullLabelWithPath += aNewContent.m_aMenuLabel;
         aNewContent.m_aSearchableMenuLabel = toLower(aNewContent.m_aFullLabelWithPath);
 
