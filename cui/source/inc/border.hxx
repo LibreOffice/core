@@ -77,7 +77,6 @@ private:
 class SvxBorderTabPage : public SfxTabPage
 {
     static const WhichRangesContainer pRanges;
-    static const std::vector<int> m_aLineWidths;
 
 public:
     SvxBorderTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs);

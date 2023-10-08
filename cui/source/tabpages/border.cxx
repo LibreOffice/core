@@ -78,21 +78,18 @@ const WhichRangesContainer SvxBorderTabPage::pRanges(
 
 namespace
 {
-int lcl_twipsToPt(sal_Int64 nTwips)
+constexpr int twipsToPt100(sal_Int64 nTwips)
 {
-    return vcl::ConvertDoubleValue(nTwips, 0, FieldUnit::TWIP, MapUnit::MapPoint) * 100;
+    return o3tl::convert(nTwips * 100, o3tl::Length::twip, o3tl::Length::pt);
 }
+constexpr int s_LineWidths[] = { twipsToPt100(SvxBorderLineWidth::Hairline),
+                                 twipsToPt100(SvxBorderLineWidth::VeryThin),
+                                 twipsToPt100(SvxBorderLineWidth::Thin),
+                                 twipsToPt100(SvxBorderLineWidth::Medium),
+                                 twipsToPt100(SvxBorderLineWidth::Thick),
+                                 twipsToPt100(SvxBorderLineWidth::ExtraThick),
+                                 -1 };
 }
-
-const std::vector<int> SvxBorderTabPage::m_aLineWidths = {
-    lcl_twipsToPt(SvxBorderLineWidth::Hairline),
-    lcl_twipsToPt(SvxBorderLineWidth::VeryThin),
-    lcl_twipsToPt(SvxBorderLineWidth::Thin),
-    lcl_twipsToPt(SvxBorderLineWidth::Medium),
-    lcl_twipsToPt(SvxBorderLineWidth::Thick),
-    lcl_twipsToPt(SvxBorderLineWidth::ExtraThick),
-    -1
-};
 
 static void lcl_SetDecimalDigitsTo1(weld::MetricSpinButton& rField)
 {
@@ -1243,10 +1240,10 @@ IMPL_LINK_NOARG(SvxBorderTabPage, ModifyWidthLBHdl_Impl, weld::ComboBox&, void)
     sal_Int32 nPos = m_xLineWidthLB->get_active();
     sal_Int32 nRemovedType = 0;
     if (m_xLineWidthLB->get_values_changed_from_saved()) {
-        nRemovedType = m_aLineWidths.size() - m_xLineWidthLB->get_count();
+        nRemovedType = std::size(s_LineWidths) - m_xLineWidthLB->get_count();
     }
 
-    SetLineWidth(m_aLineWidths[nPos + nRemovedType], nRemovedType);
+    SetLineWidth(s_LineWidths[nPos + nRemovedType], nRemovedType);
 
     // Call the spinner handler to trigger all related modifications
     ModifyWidthMFHdl_Impl(*m_xLineWidthMF);
@@ -1462,19 +1459,18 @@ void SvxBorderTabPage::SetLineWidth( sal_Int64 nWidth, sal_Int32 nRemovedType )
     if ( nWidth >= 0 )
         m_xLineWidthMF->set_value( nWidth, FieldUnit::POINT );
 
-    auto it = std::find_if( m_aLineWidths.begin(), m_aLineWidths.end(),
-                            [nWidth](const int val) -> bool { return val == nWidth; } );
+    auto it = std::find( std::begin(s_LineWidths), std::end(s_LineWidths), nWidth );
 
-    if ( it != m_aLineWidths.end() && *it >= 0 )
+    if ( it != std::end(s_LineWidths) && *it >= 0 )
     {
         // Select predefined value in combobox
         m_xLineWidthMF->hide();
-        m_xLineWidthLB->set_active(std::distance(m_aLineWidths.begin(), it) - nRemovedType);
+        m_xLineWidthLB->set_active(std::distance(std::begin(s_LineWidths), it) - nRemovedType);
     }
     else
     {
         // This is not one of predefined values. Show spinner
-        m_xLineWidthLB->set_active(m_aLineWidths.size() - nRemovedType -1);
+        m_xLineWidthLB->set_active(std::size(s_LineWidths) - nRemovedType -1);
         m_xLineWidthMF->show();
     }
 }
