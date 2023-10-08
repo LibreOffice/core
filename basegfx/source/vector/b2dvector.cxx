@@ -29,8 +29,8 @@ namespace basegfx
 
         if(fTools::equalZero(fLen))
         {
-            mfX = 0.0;
-            mfY = 0.0;
+            mnX = 0.0;
+            mnY = 0.0;
         }
         else
         {
@@ -42,8 +42,8 @@ namespace basegfx
 
                 if(!fTools::equalZero(fLen))
                 {
-                    mfX /= fLen;
-                    mfY /= fLen;
+                    mnX /= fLen;
+                    mnY /= fLen;
                 }
             }
         }
@@ -53,22 +53,22 @@ namespace basegfx
 
     double B2DVector::getLength() const
     {
-        if(fTools::equalZero(mfX))
+        if(fTools::equalZero(mnX))
         {
-            return fabs(mfY);
+            return fabs(mnY);
         }
-        else if(fTools::equalZero(mfY))
+        else if(fTools::equalZero(mnY))
         {
-            return fabs(mfX);
+            return fabs(mnX);
         }
 
-        return hypot( mfX, mfY );
+        return hypot( mnX, mnY );
     }
 
     double B2DVector::angle( const B2DVector& rVec ) const
     {
-        return atan2(mfX * rVec.getY() - mfY * rVec.getX(),
-            mfX * rVec.getX() + mfY * rVec.getY());
+        return atan2(mnX * rVec.getY() - mnY * rVec.getX(),
+            mnX * rVec.getX() + mnY * rVec.getY());
     }
 
     const B2DVector& B2DVector::getEmptyVector()
@@ -78,12 +78,12 @@ namespace basegfx
 
     B2DVector& B2DVector::operator*=( const B2DHomMatrix& rMat )
     {
-        const double fTempX( rMat.get(0,0)*mfX +
-                            rMat.get(0,1)*mfY );
-        const double fTempY( rMat.get(1,0)*mfX +
-                            rMat.get(1,1)*mfY );
-        mfX = fTempX;
-        mfY = fTempY;
+        const double fTempX( rMat.get(0,0)*mnX +
+                            rMat.get(0,1)*mnY );
+        const double fTempY( rMat.get(1,0)*mnX +
+                            rMat.get(1,1)*mnY );
+        mnX = fTempX;
+        mnY = fTempY;
 
         return *this;
     }
@@ -101,8 +101,8 @@ namespace basegfx
                 fLen /= sqrt(fLenNow);
             }
 
-            mfX *= fLen;
-            mfY *= fLen;
+            mnX *= fLen;
+            mnY *= fLen;
         }
 
         return *this;

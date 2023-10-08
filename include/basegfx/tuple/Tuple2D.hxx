@@ -18,19 +18,8 @@ namespace basegfx
 template <typename TYPE> class Tuple2D
 {
 protected:
-    union {
-        // temporary alias mnX with mfX and mnY with mfY
-        struct
-        {
-            TYPE mnX;
-            TYPE mnY;
-        };
-        struct
-        {
-            TYPE mfX;
-            TYPE mfY;
-        };
-    };
+    TYPE mnX;
+    TYPE mnY;
 
 public:
     /** Create a 2D Tuple
@@ -82,13 +71,13 @@ public:
     template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
     bool equal(const Tuple2D<TYPE>& rTup) const
     {
-        return mfX == rTup.mfX && mfY == rTup.mfY;
+        return mnX == rTup.mnX && mnY == rTup.mnY;
     }
 
     template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool equal(const Tuple2D<TYPE>& rTup) const
     {
-        return this == &rTup || (fTools::equal(mfX, rTup.mfX) && fTools::equal(mfY, rTup.mfY));
+        return this == &rTup || (fTools::equal(mnX, rTup.mnX) && fTools::equal(mnY, rTup.mnY));
     }
 
     template <typename T = TYPE, std::enable_if_t<std::is_integral_v<T>, int> = 0>
@@ -100,56 +89,56 @@ public:
     template <typename T = TYPE, std::enable_if_t<std::is_floating_point_v<T>, int> = 0>
     bool equalZero() const
     {
-        return fTools::equalZero(mfX) && fTools::equalZero(mfY);
+        return fTools::equalZero(mnX) && fTools::equalZero(mnY);
     }
 
     // operator overrides
 
     Tuple2D<TYPE>& operator+=(const Tuple2D<TYPE>& rTup)
     {
-        mfX += rTup.mfX;
-        mfY += rTup.mfY;
+        mnX += rTup.mnX;
+        mnY += rTup.mnY;
         return *this;
     }
 
     Tuple2D<TYPE>& operator-=(const Tuple2D<TYPE>& rTup)
     {
-        mfX -= rTup.mfX;
-        mfY -= rTup.mfY;
+        mnX -= rTup.mnX;
+        mnY -= rTup.mnY;
         return *this;
     }
 
     Tuple2D<TYPE>& operator/=(const Tuple2D<TYPE>& rTup)
     {
-        mfX /= rTup.mfX;
-        mfY /= rTup.mfY;
+        mnX /= rTup.mnX;
+        mnY /= rTup.mnY;
         return *this;
     }
 
     Tuple2D<TYPE>& operator*=(const Tuple2D<TYPE>& rTup)
     {
-        mfX *= rTup.mfX;
-        mfY *= rTup.mfY;
+        mnX *= rTup.mnX;
+        mnY *= rTup.mnY;
         return *this;
     }
 
     Tuple2D<TYPE>& operator*=(TYPE t)
     {
-        mfX *= t;
-        mfY *= t;
+        mnX *= t;
+        mnY *= t;
         return *this;
     }
 
     Tuple2D<TYPE>& operator/=(TYPE t)
     {
-        mfX /= t;
-        mfY /= t;
+        mnX /= t;
+        mnY /= t;
         return *this;
     }
 
-    Tuple2D<TYPE> operator-(void) const { return Tuple2D<TYPE>(-mfX, -mfY); }
+    Tuple2D<TYPE> operator-(void) const { return Tuple2D<TYPE>(-mnX, -mnY); }
 
-    bool operator==(const Tuple2D<TYPE>& rTup) const { return mfX == rTup.mfX && mfY == rTup.mfY; }
+    bool operator==(const Tuple2D<TYPE>& rTup) const { return mnX == rTup.mnX && mnY == rTup.mnY; }
 
     bool operator!=(const Tuple2D<TYPE>& rTup) const { return !(*this == rTup); }
 };

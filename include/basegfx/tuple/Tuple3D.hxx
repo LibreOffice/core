@@ -15,21 +15,9 @@ namespace basegfx
 template <typename TYPE> class Tuple3D
 {
 protected:
-    union {
-        // temporary alias mnX with mfX, mnY with mfY and mnZ with mfZ
-        struct
-        {
-            TYPE mnX;
-            TYPE mnY;
-            TYPE mnZ;
-        };
-        struct
-        {
-            TYPE mfX;
-            TYPE mfY;
-            TYPE mfZ;
-        };
-    };
+    TYPE mnX;
+    TYPE mnY;
+    TYPE mnZ;
 
 public:
     /** Create a 3D Tuple
@@ -75,55 +63,55 @@ public:
 
     Tuple3D& operator+=(const Tuple3D& rTup)
     {
-        mfX += rTup.mfX;
-        mfY += rTup.mfY;
-        mfZ += rTup.mfZ;
+        mnX += rTup.mnX;
+        mnY += rTup.mnY;
+        mnZ += rTup.mnZ;
         return *this;
     }
 
     Tuple3D& operator-=(const Tuple3D& rTup)
     {
-        mfX -= rTup.mfX;
-        mfY -= rTup.mfY;
-        mfZ -= rTup.mfZ;
+        mnX -= rTup.mnX;
+        mnY -= rTup.mnY;
+        mnZ -= rTup.mnZ;
         return *this;
     }
 
     Tuple3D& operator/=(const Tuple3D& rTup)
     {
-        mfX /= rTup.mfX;
-        mfY /= rTup.mfY;
-        mfZ /= rTup.mfZ;
+        mnX /= rTup.mnX;
+        mnY /= rTup.mnY;
+        mnZ /= rTup.mnZ;
         return *this;
     }
 
     Tuple3D& operator*=(const Tuple3D& rTup)
     {
-        mfX *= rTup.mfX;
-        mfY *= rTup.mfY;
-        mfZ *= rTup.mfZ;
+        mnX *= rTup.mnX;
+        mnY *= rTup.mnY;
+        mnZ *= rTup.mnZ;
         return *this;
     }
 
     Tuple3D& operator*=(TYPE t)
     {
-        mfX *= t;
-        mfY *= t;
-        mfZ *= t;
+        mnX *= t;
+        mnY *= t;
+        mnZ *= t;
         return *this;
     }
 
     Tuple3D& operator/=(TYPE t)
     {
-        mfX /= t;
-        mfY /= t;
-        mfZ /= t;
+        mnX /= t;
+        mnY /= t;
+        mnZ /= t;
         return *this;
     }
 
     bool operator==(const Tuple3D& rTup) const
     {
-        return mfX == rTup.mfX && mfY == rTup.mfY && mfZ == rTup.mfZ;
+        return mnX == rTup.mnX && mnY == rTup.mnY && mnZ == rTup.mnZ;
     }
 
     bool operator!=(const Tuple3D& rTup) const { return !operator==(rTup); }

@@ -73,9 +73,9 @@ namespace basegfx
         */
         B3DVector& operator*=( const B3DVector& rPnt )
         {
-            mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY;
-            mfZ *= rPnt.mfZ;
+            mnX *= rPnt.mnX;
+            mnY *= rPnt.mnY;
+            mnZ *= rPnt.mnZ;
             return *this;
         }
 
@@ -83,9 +83,9 @@ namespace basegfx
         */
         B3DVector& operator*=(double t)
         {
-            mfX *= t;
-            mfY *= t;
-            mfZ *= t;
+            mnX *= t;
+            mnY *= t;
+            mnZ *= t;
             return *this;
         }
 
@@ -94,9 +94,9 @@ namespace basegfx
         */
         B3DVector& operator=( const ::basegfx::B3DTuple& rVec )
         {
-            mfX = rVec.getX();
-            mfY = rVec.getY();
-            mfZ = rVec.getZ();
+            mnX = rVec.getX();
+            mnY = rVec.getY();
+            mnZ = rVec.getZ();
             return *this;
         }
 
@@ -118,7 +118,7 @@ namespace basegfx
         */
         double getXZLength() const
         {
-            double fLen((mfX * mfX) + (mfZ * mfZ)); // #i73040#
+            double fLen((mnX * mnX) + (mnZ * mnZ)); // #i73040#
             if((0.0 == fLen) || (1.0 == fLen))
                 return fLen;
             return sqrt(fLen);
@@ -130,7 +130,7 @@ namespace basegfx
         */
         double getYZLength() const
         {
-            double fLen((mfY * mfY) + (mfZ * mfZ));
+            double fLen((mnY * mnY) + (mnZ * mnZ));
             if((0.0 == fLen) || (1.0 == fLen))
                 return fLen;
             return sqrt(fLen);
@@ -154,9 +154,9 @@ namespace basegfx
                     fLen /= sqrt(fLenNow);
                 }
 
-                mfX *= fLen;
-                mfY *= fLen;
-                mfZ *= fLen;
+                mnX *= fLen;
+                mnY *= fLen;
+                mnZ *= fLen;
             }
 
             return *this;
@@ -194,7 +194,7 @@ namespace basegfx
         */
         double scalar(const B3DVector& rVec) const
         {
-            return ((mfX * rVec.mfX) + (mfY * rVec.mfY) + (mfZ * rVec.mfZ));
+            return ((mnX * rVec.mnX) + (mnY * rVec.mnY) + (mnZ * rVec.mnZ));
         }
 
         /** Transform vector by given transformation matrix.

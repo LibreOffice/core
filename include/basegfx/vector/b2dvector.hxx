@@ -80,8 +80,8 @@ namespace basegfx
         */
         B2DVector& operator*=( const B2DVector& rPnt )
         {
-            mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY;
+            mnX *= rPnt.mnX;
+            mnY *= rPnt.mnY;
             return *this;
         }
 
@@ -89,8 +89,8 @@ namespace basegfx
         */
         B2DVector& operator*=(double t)
         {
-            mfX *= t;
-            mfY *= t;
+            mnX *= t;
+            mnY *= t;
             return *this;
         }
 
@@ -99,8 +99,8 @@ namespace basegfx
         */
         B2DVector& operator=(Tuple2D<double> const& rVector)
         {
-            mfX = rVector.getX();
-            mfY = rVector.getY();
+            mnX = rVector.getX();
+            mnY = rVector.getY();
             return *this;
         }
 
@@ -131,7 +131,7 @@ namespace basegfx
             @return
             The Scalar value of the two involved 2D Vectors
         */
-        double scalar( const B2DVector& rVec ) const { return((mfX * rVec.mfX) + (mfY * rVec.mfY)); }
+        double scalar( const B2DVector& rVec ) const { return((mnX * rVec.mnX) + (mnY * rVec.mnY)); }
 
         /** Calculate the length of the cross product with another 2D Vector
 
@@ -148,7 +148,7 @@ namespace basegfx
             @return
             The length of the cross product of the two involved 2D Vectors
         */
-        double cross( const B2DVector& rVec ) const { return(mfX * rVec.getY() - mfY * rVec.getX()); }
+        double cross( const B2DVector& rVec ) const { return(mnX * rVec.getY() - mnY * rVec.getX()); }
 
         /** Calculate the Angle with another 2D Vector
 

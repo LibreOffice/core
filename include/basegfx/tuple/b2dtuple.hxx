@@ -76,7 +76,7 @@ namespace basegfx
 
         B2DTuple operator-(void) const
         {
-            return B2DTuple(-mfX, -mfY);
+            return B2DTuple(-mnX, -mnY);
         }
 
         BASEGFX_DLLPUBLIC static const B2DTuple& getEmptyTuple();

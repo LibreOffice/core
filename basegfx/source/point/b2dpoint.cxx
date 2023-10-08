@@ -26,16 +26,16 @@ namespace basegfx
     B2DPoint& B2DPoint::operator*=( const ::basegfx::B2DHomMatrix& rMat )
     {
         double fTempX(
-            rMat.get(0, 0) * mfX +
-            rMat.get(0, 1) * mfY +
+            rMat.get(0, 0) * mnX +
+            rMat.get(0, 1) * mnY +
             rMat.get(0, 2));
         double fTempY(
-            rMat.get(1, 0) * mfX +
-            rMat.get(1, 1) * mfY +
+            rMat.get(1, 0) * mnX +
+            rMat.get(1, 1) * mnY +
             rMat.get(1, 2));
 
-        mfX = fTempX;
-        mfY = fTempY;
+        mnX = fTempX;
+        mnY = fTempY;
 
         return *this;
     }

@@ -34,9 +34,9 @@ namespace basegfx
             {
                 fLen = sqrt(fLen);
 
-                mfX /= fLen;
-                mfY /= fLen;
-                mfZ /= fLen;
+                mnX /= fLen;
+                mnY /= fLen;
+                mnZ /= fLen;
             }
         }
 
@@ -52,12 +52,12 @@ namespace basegfx
 
     B3DVector& B3DVector::operator*=( const ::basegfx::B3DHomMatrix& rMat )
     {
-        const double fTempX( rMat.get(0,0)*mfX + rMat.get(0,1)*mfY + rMat.get(0,2)*mfZ );
-        const double fTempY( rMat.get(1,0)*mfX + rMat.get(1,1)*mfY + rMat.get(1,2)*mfZ );
-        const double fTempZ( rMat.get(2,0)*mfX + rMat.get(2,1)*mfY + rMat.get(2,2)*mfZ );
-        mfX = fTempX;
-        mfY = fTempY;
-        mfZ = fTempZ;
+        const double fTempX( rMat.get(0,0)*mnX + rMat.get(0,1)*mnY + rMat.get(0,2)*mnZ );
+        const double fTempY( rMat.get(1,0)*mnX + rMat.get(1,1)*mnY + rMat.get(1,2)*mnZ );
+        const double fTempZ( rMat.get(2,0)*mnX + rMat.get(2,1)*mnY + rMat.get(2,2)*mnZ );
+        mnX = fTempX;
+        mnY = fTempY;
+        mnZ = fTempZ;
 
         return *this;
     }

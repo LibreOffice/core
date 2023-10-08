@@ -70,8 +70,8 @@ namespace basegfx
         {
             // Here, normally two if(...)'s should be used. In the assumption that
             // both double members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mfX; if(1 == nPos) return mfY; return mfZ;
-            return *((&mfX) + nPos);
+            // if(0 == nPos) return mnX; if(1 == nPos) return mnY; return mnZ;
+            return *((&mnX) + nPos);
         }
 
         /// Array-access to 3D Tuple
@@ -79,8 +79,8 @@ namespace basegfx
         {
             // Here, normally two if(...)'s should be used. In the assumption that
             // both double members can be accessed as an array a shortcut is used here.
-            // if(0 == nPos) return mfX; if(1 == nPos) return mfY; return mfZ;
-            return *((&mfX) + nPos);
+            // if(0 == nPos) return mnX; if(1 == nPos) return mnY; return mnZ;
+            return *((&mnX) + nPos);
         }
 
         // comparators with tolerance
@@ -89,32 +89,32 @@ namespace basegfx
         bool equalZero() const
         {
             return (this == &getEmptyTuple() ||
-                (::basegfx::fTools::equalZero(mfX)
-                && ::basegfx::fTools::equalZero(mfY)
-                && ::basegfx::fTools::equalZero(mfZ)));
+                (::basegfx::fTools::equalZero(mnX)
+                && ::basegfx::fTools::equalZero(mnY)
+                && ::basegfx::fTools::equalZero(mnZ)));
         }
 
         bool equal(const B3DTuple& rTup) const
         {
             return (
                 this == &rTup ||
-                (::basegfx::fTools::equal(mfX, rTup.mfX) &&
-                ::basegfx::fTools::equal(mfY, rTup.mfY) &&
-                ::basegfx::fTools::equal(mfZ, rTup.mfZ)));
+                (::basegfx::fTools::equal(mnX, rTup.mnX) &&
+                ::basegfx::fTools::equal(mnY, rTup.mnY) &&
+                ::basegfx::fTools::equal(mnZ, rTup.mnZ)));
         }
 
         // operators
 
         B3DTuple operator-(void) const
         {
-            return B3DTuple(-mfX, -mfY, -mfZ);
+            return B3DTuple(-mnX, -mnY, -mnZ);
         }
 
         bool operator==(const B3DTuple& rTup) const
         {
-            return ::basegfx::fTools::equal(mfX, rTup.mfX) &&
-                ::basegfx::fTools::equal(mfY, rTup.mfY) &&
-                ::basegfx::fTools::equal(mfZ, rTup.mfZ);
+            return ::basegfx::fTools::equal(mnX, rTup.mnX) &&
+                ::basegfx::fTools::equal(mnY, rTup.mnY) &&
+                ::basegfx::fTools::equal(mnZ, rTup.mnZ);
         }
 
         bool operator!=(const B3DTuple& rTup) const { return !operator==(rTup); }
@@ -123,36 +123,36 @@ namespace basegfx
         {
             if(0.0 == fCompareValue)
             {
-                if(::basegfx::fTools::equalZero(mfX))
+                if(::basegfx::fTools::equalZero(mnX))
                 {
-                    mfX = 0.0;
+                    mnX = 0.0;
                 }
 
-                if(::basegfx::fTools::equalZero(mfY))
+                if(::basegfx::fTools::equalZero(mnY))
                 {
-                    mfY = 0.0;
+                    mnY = 0.0;
                 }
 
-                if(::basegfx::fTools::equalZero(mfZ))
+                if(::basegfx::fTools::equalZero(mnZ))
                 {
-                    mfZ = 0.0;
+                    mnZ = 0.0;
                 }
             }
             else
             {
-                if(::basegfx::fTools::equal(mfX, fCompareValue))
+                if(::basegfx::fTools::equal(mnX, fCompareValue))
                 {
-                    mfX = fCompareValue;
+                    mnX = fCompareValue;
                 }
 
-                if(::basegfx::fTools::equal(mfY, fCompareValue))
+                if(::basegfx::fTools::equal(mnY, fCompareValue))
                 {
-                    mfY = fCompareValue;
+                    mnY = fCompareValue;
                 }
 
-                if(::basegfx::fTools::equal(mfZ, fCompareValue))
+                if(::basegfx::fTools::equal(mnZ, fCompareValue))
                 {
-                    mfZ = fCompareValue;
+                    mnZ = fCompareValue;
                 }
             }
         }

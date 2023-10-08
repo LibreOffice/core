@@ -75,22 +75,22 @@ namespace basegfx
         {}
 
         // data access read
-        double getRed() const { return mfX; }
-        double getGreen() const { return mfY; }
-        double getBlue() const { return mfZ; }
+        double getRed() const { return mnX; }
+        double getGreen() const { return mnY; }
+        double getBlue() const { return mnZ; }
 
         // data access write
-        void setRed(double fNew) { mfX = fNew; }
-        void setGreen(double fNew) { mfY = fNew; }
-        void setBlue(double fNew) { mfZ = fNew; }
+        void setRed(double fNew) { mnX = fNew; }
+        void setGreen(double fNew) { mnY = fNew; }
+        void setBlue(double fNew) { mnZ = fNew; }
 
         /** *=operator to allow usage from BColor, too
         */
         BColor& operator*=( const BColor& rPnt )
         {
-            mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY;
-            mfZ *= rPnt.mfZ;
+            mnX *= rPnt.mnX;
+            mnY *= rPnt.mnY;
+            mnZ *= rPnt.mnZ;
             return *this;
         }
 
@@ -98,9 +98,9 @@ namespace basegfx
         */
         BColor& operator*=(double t)
         {
-            mfX *= t;
-            mfY *= t;
-            mfZ *= t;
+            mnX *= t;
+            mnY *= t;
+            mnZ *= t;
             return *this;
         }
 
@@ -109,9 +109,9 @@ namespace basegfx
         */
         BColor& operator=( const ::basegfx::B3DTuple& rVec )
         {
-            mfX = rVec.getX();
-            mfY = rVec.getY();
-            mfZ = rVec.getZ();
+            mnX = rVec.getX();
+            mnY = rVec.getY();
+            mnZ = rVec.getZ();
             return *this;
         }
 
@@ -122,7 +122,7 @@ namespace basegfx
             const double fGreenWeight(151.0 / 256.0);   // 0.59
             const double fBlueWeight(28.0 / 256.0);     // 0.11
 
-            return (mfX * fRedWeight + mfY * fGreenWeight + mfZ * fBlueWeight);
+            return (mnX * fRedWeight + mnY * fGreenWeight + mnZ * fBlueWeight);
         }
 
         // distances in color space
@@ -152,17 +152,17 @@ namespace basegfx
         // clamp color to [0.0..1.0] values in all three intensity components
         BColor& clamp()
         {
-            mfX = std::clamp(mfX, 0.0, 1.0);
-            mfY = std::clamp(mfY, 0.0, 1.0);
-            mfZ = std::clamp(mfZ, 0.0, 1.0);
+            mnX = std::clamp(mnX, 0.0, 1.0);
+            mnY = std::clamp(mnY, 0.0, 1.0);
+            mnZ = std::clamp(mnZ, 0.0, 1.0);
             return *this;
         }
 
         void invert()
         {
-            mfX = 1.0 - mfX;
-            mfY = 1.0 - mfY;
-            mfZ = 1.0 - mfZ;
+            mnX = 1.0 - mnX;
+            mnY = 1.0 - mnY;
+            mnZ = 1.0 - mnZ;
         }
 
         static const BColor& getEmptyBColor()

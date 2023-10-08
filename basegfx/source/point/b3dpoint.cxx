@@ -26,28 +26,28 @@ namespace basegfx
     B3DPoint& B3DPoint::operator*=( const ::basegfx::B3DHomMatrix& rMat )
     {
         double fTempX(
-            rMat.get(0, 0) * mfX +
-            rMat.get(0, 1) * mfY +
-            rMat.get(0, 2) * mfZ +
+            rMat.get(0, 0) * mnX +
+            rMat.get(0, 1) * mnY +
+            rMat.get(0, 2) * mnZ +
             rMat.get(0, 3));
         double fTempY(
-            rMat.get(1, 0) * mfX +
-            rMat.get(1, 1) * mfY +
-            rMat.get(1, 2) * mfZ +
+            rMat.get(1, 0) * mnX +
+            rMat.get(1, 1) * mnY +
+            rMat.get(1, 2) * mnZ +
             rMat.get(1, 3));
         double fTempZ(
-            rMat.get(2, 0) * mfX +
-            rMat.get(2, 1) * mfY +
-            rMat.get(2, 2) * mfZ +
+            rMat.get(2, 0) * mnX +
+            rMat.get(2, 1) * mnY +
+            rMat.get(2, 2) * mnZ +
             rMat.get(2, 3));
 
         if(!rMat.isLastLineDefault())
         {
             const double fOne(1.0);
             const double fTempM(
-                rMat.get(3, 0) * mfX +
-                rMat.get(3, 1) * mfY +
-                rMat.get(3, 2) * mfZ +
+                rMat.get(3, 0) * mnX +
+                rMat.get(3, 1) * mnY +
+                rMat.get(3, 2) * mnZ +
                 rMat.get(3, 3));
 
             if(!fTools::equalZero(fTempM) && !fTools::equal(fOne, fTempM))
@@ -58,9 +58,9 @@ namespace basegfx
             }
         }
 
-        mfX = fTempX;
-        mfY = fTempY;
-        mfZ = fTempZ;
+        mnX = fTempX;
+        mnY = fTempY;
+        mnZ = fTempZ;
 
         return *this;
     }

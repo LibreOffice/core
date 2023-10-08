@@ -73,9 +73,9 @@ namespace basegfx
         */
         B3DPoint& operator*=( const B3DPoint& rPnt )
         {
-            mfX *= rPnt.mfX;
-            mfY *= rPnt.mfY;
-            mfZ *= rPnt.mfZ;
+            mnX *= rPnt.mnX;
+            mnY *= rPnt.mnY;
+            mnZ *= rPnt.mnZ;
             return *this;
         }
 
@@ -83,9 +83,9 @@ namespace basegfx
         */
         B3DPoint& operator*=(double t)
         {
-            mfX *= t;
-            mfY *= t;
-            mfZ *= t;
+            mnX *= t;
+            mnY *= t;
+            mnZ *= t;
             return *this;
         }
 
@@ -94,9 +94,9 @@ namespace basegfx
         */
         B3DPoint& operator=( const ::basegfx::B3DTuple& rVec )
         {
-            mfX = rVec.getX();
-            mfY = rVec.getY();
-            mfZ = rVec.getZ();
+            mnX = rVec.getX();
+            mnY = rVec.getY();
+            mnZ = rVec.getZ();
             return *this;
         }
 
