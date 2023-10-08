@@ -50,6 +50,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include <officecfg/Office/Common.hxx>
+#include <test/idletask.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -420,7 +421,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testCondFormatFormulaListenerXLSX)
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 2.0);
 
-    Scheduler::ProcessEventsToIdle();
+    IdleTask::waitUntilIdleDispatched();
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
@@ -442,7 +443,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf131471)
     pDoc->SetDocVisible(true);
     pDoc->SetValue(0, 0, 0, 1.0);
 
-    Scheduler::ProcessEventsToIdle();
+    IdleTask::waitUntilIdleDispatched();
 
     CPPUNIT_ASSERT(aListener.mbCalled);
 }
