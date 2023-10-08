@@ -71,6 +71,7 @@
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <officecfg/Office/Writer.hxx>
+#include <test/idletask.hxx>
 
 namespace
 {
@@ -2246,55 +2247,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDde)
 #endif
 }
 
-namespace
-{
-//IdleTask class to add a low priority Idle task
-class IdleTask
-{
-public:
-    bool GetFlag() const;
-    IdleTask();
-    DECL_LINK(FlipFlag, Timer*, void);
-
-private:
-    bool flag;
-    Idle maIdle{ "sw uiwriter IdleTask" };
-};
-}
-
-//constructor of IdleTask Class
-IdleTask::IdleTask()
-    : flag(false)
-{
-    //setting the Priority of Idle task to LOW, LOWEST
-    maIdle.SetPriority(TaskPriority::LOWEST);
-    //set idle for callback
-    maIdle.SetInvokeHandler(LINK(this, IdleTask, FlipFlag));
-    //starting the idle
-    maIdle.Start();
-}
-
-//GetFlag() of IdleTask Class
-bool IdleTask::GetFlag() const
-{
-    //returning the status of current flag
-    return flag;
-}
-
-//Callback function of IdleTask Class
-IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
-{
-    //setting the flag to make sure that low priority idle task has been dispatched
-    flag = true;
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDocModState)
 {
     //creating a new writer document via the XDesktop(to have more shells etc.)
     createSwDoc();
     SwDoc* pDoc = getSwDoc();
-    //creating instance of IdleTask Class
-    IdleTask idleTask;
     //checking the state of the document via IDocumentState
     IDocumentState& rState(pDoc->getIDocumentState());
     //the state should not be modified
@@ -2302,12 +2259,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testDocModState)
     //checking the state of the document via SfxObjectShell
     SwDocShell* pShell(pDoc->GetDocShell());
     CPPUNIT_ASSERT(!(pShell->IsModified()));
-    //looping around yield until low priority idle task is dispatched and flag is flipped
-    while (!idleTask.GetFlag())
-    {
-        //dispatching all the events via VCL main-loop
-        Application::Yield();
-    }
+
+    IdleTask::waitUntilIdleDispatched();
+
     //again checking for the state via IDocumentState
     CPPUNIT_ASSERT(!(rState.IsModified()));
     //again checking for the state via SfxObjectShell
