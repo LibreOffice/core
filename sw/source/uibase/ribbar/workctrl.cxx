@@ -87,15 +87,18 @@ void SwTbxAutoTextCtrl::CreatePopupWindow()
         ScopedVclPtrInstance<PopupMenu> pPopup;
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
+        o3tl::sorted_vector<OUString> titles;
         for(size_t i = 1; i <= nGroupCount; ++i)
         {
             OUString sTitle = pGlossaryList->GetGroupTitle(i - 1);
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i -1);
+            auto const [it, _] = titles.insert(sTitle);
+            size_t const menuIndex(::std::distance(titles.begin(), it));
             if(nBlockCount)
             {
                 sal_uInt16 nIndex = o3tl::narrowing<sal_uInt16>(100*i);
                 // but insert without extension
-                pPopup->InsertItem( i, sTitle);
+                pPopup->InsertItem(i, sTitle, MenuItemBits::NONE, {}, menuIndex);
                 VclPtrInstance<PopupMenu> pSub;
                 pSub->SetSelectHdl(aLnk);
                 pPopup->SetPopupMenu(i, pSub);
