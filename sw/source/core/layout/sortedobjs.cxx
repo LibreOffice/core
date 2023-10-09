@@ -207,6 +207,12 @@ bool SwSortedObjs::is_sorted() const
 
 bool SwSortedObjs::Insert( SwAnchoredObject& _rAnchoredObj )
 {
+    if (!is_sorted())
+    {
+        SAL_WARN("sw.core", "SwSortedObjs::Insert: object list is not sorted");
+        UpdateAll();
+    }
+
     // #i51941#
     if ( Contains( _rAnchoredObj ) )
     {
