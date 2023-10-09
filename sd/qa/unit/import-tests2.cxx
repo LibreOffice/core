@@ -1972,6 +1972,16 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf153012)
     CPPUNIT_ASSERT_EQUAL(Color(0xd9d9d9), aFillColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testMasterSlides)
+{
+    createSdImpressDoc("pptx/master-slides.pptx");
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
+    CPPUNIT_ASSERT(xMasterPages.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xMasterPages->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
