@@ -26,6 +26,7 @@
 #include <config_fonts.h>
 #include <officecfg/Office/Writer.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/scopeguard.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -33,17 +34,6 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 
 protected:
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        if (filename == std::string_view("combobox-control.docx") )
-        {
-            std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);
-            batch->commit();
-        }
-        return nullptr;
-    }
-
     void verifyComboBoxExport(bool aComboBoxAsDropDown);
 };
 
@@ -793,19 +783,23 @@ CPPUNIT_TEST_FIXTURE(Test, testComboBoxControl)
 
 CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_true)
 {
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true, batch);
-    batch->commit();
-
     createSwDoc("combobox-control.docx");
     verifyComboBoxExport(true);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, tdf134043_ImportComboBoxAsDropDown_false)
 {
-    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(false, batch);
     batch->commit();
+    comphelper::ScopeGuard g(
+        [batch]
+        {
+            officecfg::Office::Writer::Filter::Import::DOCX::ImportComboBoxAsDropDown::set(true,
+                                                                                           batch);
+            batch->commit();
+        });
 
     createSwDoc("combobox-control.docx");
     verifyComboBoxExport(false);
