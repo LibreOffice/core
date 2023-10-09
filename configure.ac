@@ -7326,7 +7326,7 @@ dnl Check for system libcmis
 dnl ===================================================================
 # libcmis requires curl and we can't build curl for iOS
 if test "$test_cmis" = "yes" -a "$enable_cmis" = "yes"; then
-    libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2])
+    libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.6 >= 0.6.0])
     ENABLE_LIBCMIS=TRUE
 else
     ENABLE_LIBCMIS=
@@ -7357,27 +7357,11 @@ elif test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
         fi
         save_CXXFLAGS=$CXXFLAGS
         CXXFLAGS="$CXXFLAGS $flag -Werror"
-        if test "$SYSTEM_LIBCMIS" = TRUE; then
-            CXXFLAGS="$CXXFLAGS -DSYSTEM_LIBCMIS $LIBCMIS_CFLAGS"
-        fi
         AC_LANG_PUSH([C++])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
             #include <algorithm>
             #include <functional>
             #include <vector>
-
-            #if defined SYSTEM_LIBCMIS
-            // See ucb/source/ucp/cmis/auth_provider.hxx:
-            #if !defined __clang__
-            #pragma GCC diagnostic push
-            #pragma GCC diagnostic ignored "-Wdeprecated"
-            #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-            #endif
-            #include <libcmis/libcmis.hxx>
-            #if !defined __clang__
-            #pragma GCC diagnostic pop
-            #endif
-            #endif
 
             void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                 std::sort(v.begin(), v.end(), fn);
