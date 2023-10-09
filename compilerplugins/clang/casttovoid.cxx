@@ -425,6 +425,11 @@ private:
                     }
                 }
             } else {
+                if (auto const fun = dyn_cast_or_null<FunctionDecl>(i.first->getDeclContext())) {
+                    if (containsPreprocessingConditionalInclusion(fun->getSourceRange())) {
+                        continue;
+                    }
+                }
                 for (auto const j: i.second.castToVoid) {
                     report(
                         DiagnosticsEngine::Warning, "unnecessary cast to void",
