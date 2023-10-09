@@ -1141,7 +1141,11 @@ bool AquaGraphicsBackend::drawEPS(tools::Long nX, tools::Long nY, tools::Long nW
 {
     // convert the raw data to an NSImageRef
     NSData* xNSData = [NSData dataWithBytes:pEpsData length:static_cast<int>(nByteCount)];
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    // 'NSEPSImageRep' is deprecated: first deprecated in macOS 14.0 - `NSEPSImageRep` instances
+    // cannot be created on macOS 14.0 and later
     NSImageRep* xEpsImage = [NSEPSImageRep imageRepWithData:xNSData];
+    SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!xEpsImage)
     {
         return false;
