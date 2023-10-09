@@ -260,7 +260,9 @@ $(CLANGOUTDIR)/sharedvisitor/sharedvisitor.cxx: $(SHARED_SOURCE_INFOS) $(CLANGOU
 # and it can also cause trouble with finding the proper headers.
 CLANGTOOLDEFS = $(filter-out -stdlib=%,$(CLANGDEFS) -I$(CLANGSYSINCLUDE))
 CLANGTOOLDEFS += -w
-ifneq ($(filter-out MACOSX WNT,$(OS)),)
+ifneq ($(filter MACOSX,$(OS)),)
+CLANGTOOLLIBS += -Wl,-rpath,$(CLANGLIBDIR)
+else ifneq ($(filter-out WNT,$(OS)),)
 ifneq ($(CLANGDIR),/usr)
 # Help the generator find Clang shared libs, if Clang is built so and installed in a non-standard prefix.
 CLANGTOOLLIBS += -Wl,--rpath,$(CLANGLIBDIR)
