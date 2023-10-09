@@ -149,6 +149,7 @@ public:
     void testOverflowBehaviorClip();
     void testShapeMasterText();
     void testIndentDuplication();
+    void testMasterSlides();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -231,6 +232,7 @@ public:
     CPPUNIT_TEST(testOverflowBehaviorClip);
     CPPUNIT_TEST(testShapeMasterText);
     CPPUNIT_TEST(testIndentDuplication);
+    CPPUNIT_TEST(testMasterSlides);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2082,6 +2084,16 @@ void SdImportTest2::testIndentDuplication()
     sal_Int32 nIndent2;
     xParagraph2->getPropertyValue("ParaFirstLineIndent") >>= nIndent2;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nIndent2);
+}
+
+void SdImportTest2::testMasterSlides()
+{
+    createSdImpressDoc("pptx/master-slides.pptx");
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages(xMasterPagesSupplier->getMasterPages());
+    CPPUNIT_ASSERT(xMasterPages.is());
+    CPPUNIT_ASSERT_EQUAL(7, xMasterPages->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdImportTest2);
