@@ -7532,7 +7532,7 @@ AC_SUBST(GPERF)
 dnl ===================================================================
 dnl Check for system libcmis
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.5 >= 0.5.2],enabled)
+libo_CHECK_SYSTEM_MODULE([libcmis],[LIBCMIS],[libcmis-0.6 >= 0.6.0],enabled)
 
 dnl ===================================================================
 dnl C++11
@@ -7558,27 +7558,11 @@ if test -z "${CXXFLAGS_CXX11+x}"; then
             fi
             save_CXXFLAGS=$CXXFLAGS
             CXXFLAGS="$CXXFLAGS $flag -Werror"
-            if test "$SYSTEM_LIBCMIS" = TRUE; then
-                CXXFLAGS="$CXXFLAGS -DSYSTEM_LIBCMIS $LIBCMIS_CFLAGS"
-            fi
             AC_LANG_PUSH([C++])
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
                 #include <algorithm>
                 #include <functional>
                 #include <vector>
-
-                #if defined SYSTEM_LIBCMIS
-                // See ucb/source/ucp/cmis/auth_provider.hxx:
-                #if !defined __clang__
-                #pragma GCC diagnostic push
-                #pragma GCC diagnostic ignored "-Wdeprecated"
-                #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
-                #endif
-                #include <libcmis/libcmis.hxx>
-                #if !defined __clang__
-                #pragma GCC diagnostic pop
-                #endif
-                #endif
 
                 void f(std::vector<int> & v, std::function<bool(int, int)> fn) {
                     std::sort(v.begin(), v.end(), fn);
