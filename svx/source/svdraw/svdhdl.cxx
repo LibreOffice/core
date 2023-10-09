@@ -1447,7 +1447,7 @@ void SdrHdlLine::CreateB2dIAObject()
 
     SdrMarkView* pView = m_pHdlList->GetView();
 
-    if(!(pView && !pView->areMarkHandlesHidden() && pHdl1 && pHdl2))
+    if(!(pView && !pView->areMarkHandlesHidden() && m_pHdl1 && m_pHdl2))
         return;
 
     SdrPageView* pPageView = pView->GetSdrPageView();
@@ -1464,8 +1464,8 @@ void SdrHdlLine::CreateB2dIAObject()
             const rtl::Reference< sdr::overlay::OverlayManager >& xManager = rPageWindow.GetOverlayManager();
             if (xManager.is())
             {
-                basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
-                basegfx::B2DPoint aPosition2(pHdl2->GetPos().X(), pHdl2->GetPos().Y());
+                basegfx::B2DPoint aPosition1(m_pHdl1->GetPos().X(), m_pHdl1->GetPos().Y());
+                basegfx::B2DPoint aPosition2(m_pHdl2->GetPos().X(), m_pHdl2->GetPos().Y());
 
                 std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject(new
                     sdr::overlay::OverlayLineStriped(

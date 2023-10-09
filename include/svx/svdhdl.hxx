@@ -342,11 +342,11 @@ class SdrHdlLine final : public SdrHdl
     // create marker for this kind
     virtual void CreateB2dIAObject() override;
 
-    SdrHdl*                     pHdl1;
-    SdrHdl*                     pHdl2;
+    SdrHdl*                     m_pHdl1;
+    SdrHdl*                     m_pHdl2;
 
 public:
-    SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind) { m_eKind=eNewKind; pHdl1=&rHdl1; pHdl2=&rHdl2; }
+    SdrHdlLine(SdrHdl& rHdl1, SdrHdl& rHdl2, SdrHdlKind eNewKind) { m_eKind=eNewKind; m_pHdl1=&rHdl1; m_pHdl2=&rHdl2; }
     virtual ~SdrHdlLine() override;
 
     virtual PointerStyle GetPointer() const override;
