@@ -801,7 +801,20 @@ void SwGlobalTree::UpdateTracking()
         const SwSection* pSection = pActiveShellCurrSection;
         while (SwSection* pParent = pSection->GetParent())
             pSection = pParent;
-        m_xTreeView->select_text(pSection->GetSectionName());
+        for (const std::unique_ptr<SwGlblDocContent>& rGlblDocContent : *m_pSwGlblDocContents)
+        {
+            if (rGlblDocContent->GetType() == GlobalDocContentType::GLBLDOC_UNKNOWN)
+                continue;
+            if ((pSection->GetType() == SectionType::ToxContent
+                 && rGlblDocContent->GetTOX() == pSection->GetTOXBase())
+                    || (pSection->GetType() != SectionType::ToxContent
+                        && rGlblDocContent->GetSection() == pSection))
+            {
+                const OUString& rId(weld::toId(rGlblDocContent.get()));
+                m_xTreeView->select(m_xTreeView->find_id(rId));
+                break;
+            }
+        }
     }
 
     Select();
