@@ -3981,36 +3981,23 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // hyperlinks
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
-                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
+        // not in ToxContent tdf#148312
+        if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); !pSection
+            || (pSection && pSection->GetType() != SectionType::ToxContent))
         {
-            // There is no need to search for hyperlinks in ToxContent tdf#148312
-            if (const SwTextINetFormat* pTextINetFormat =
-                    static_txtattr_cast<const SwTextINetFormat*>(aContentAtPos.pFndTextAttr))
+            if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos)
+                && (!m_bIsRoot || m_nRootType == ContentTypeId::URLFIELD))
             {
-                if (const SwTextNode* pTextNode = pTextINetFormat->GetpTextNode())
-                {
-                    if (const SwSectionNode* pSectNd = pTextNode->FindSectionNode())
-                    {
-                        SectionType eType = pSectNd->GetSection().GetType();
-                        if (SectionType::ToxContent == eType)
-                        {
-                            m_xTreeView->set_cursor(-1);
-                            Select();
-                            return;
-                        }
-                    }
-                }
+                // Because hyperlink item names do not need to be unique, finding the corresponding
+                // item in the tree by name may result in incorrect selection. Find the item in the
+                // tree by comparing the SwTextINetFormat pointer at the document cursor position to
+                // that stored in the item SwURLFieldContent.
+                if (mTrackContentType[ContentTypeId::URLFIELD])
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
+                                                      aContentAtPos.pFndTextAttr);
+                return;
             }
-            // Because hyperlink item names do not need to be unique, finding the corresponding item
-            // in the tree by name may result in incorrect selection. Find the item in the tree by
-            // comparing the SwTextINetFormat pointer at the document cursor position to that stored
-            // in the item SwURLFieldContent.
-            if (mTrackContentType[ContentTypeId::URLFIELD])
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
-                                                  aContentAtPos.pFndTextAttr);
-            return;
         }
         // fields, comments
         if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
