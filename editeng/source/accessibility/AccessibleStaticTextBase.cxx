@@ -176,8 +176,9 @@ namespace accessibility
     // AccessibleStaticTextBase_Impl implementation
 
 
-    AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
-        mxTextParagraph( new AccessibleEditableTextPara(nullptr) )
+    AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl()
+        : mpThis(nullptr)
+        , mxTextParagraph(new AccessibleEditableTextPara(nullptr))
     {
 
         // TODO: this is still somewhat of a hack, all the more since
