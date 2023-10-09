@@ -37,9 +37,8 @@
 
 using namespace SkiaHelper;
 
-static void releaseInstalledPixels(void* pAddr, void* pContext)
+static void releaseInstalledPixels(void* pAddr, void*)
 {
-    (void)pContext;
     if (pAddr)
         delete[] static_cast<sal_uInt8*>(pAddr);
 }
