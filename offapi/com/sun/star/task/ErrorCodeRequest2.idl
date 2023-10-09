@@ -1,0 +1,42 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
+ module com {  module sun {  module star {  module task {
+
+
+/** represents a general error exception.
+    It can be used to transport the error code information.
+    E.g. that can be useful for interactions.
+
+    This is designed to mesh with tools::ErrCodeMsg
+
+    @since LibreOffice 24.2
+ */
+exception ErrorCodeRequest2 : com::sun::star::task::ErrorCodeRequest
+{
+        string Arg1;
+        string Arg2;
+        short DialogMask;
+};
+
+
+}; }; }; };
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

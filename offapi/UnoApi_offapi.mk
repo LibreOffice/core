@@ -3699,6 +3699,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/task,\
 	DocumentPasswordRequest2 \
 	ErrorCodeIOException \
 	ErrorCodeRequest \
+	ErrorCodeRequest2 \
 	InteractionClassification \
 	MasterPasswordRequest \
 	NoMasterException \

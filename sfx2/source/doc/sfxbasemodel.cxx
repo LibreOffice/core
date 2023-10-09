@@ -30,7 +30,7 @@
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <com/sun/star/task/ErrorCodeRequest2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/view/XPrintJobListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -3220,8 +3220,9 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                 // TODO/LATER: a general way to set the error context should be available
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
-                task::ErrorCodeRequest aErrorCode;
-                aErrorCode.ErrCode = sal_uInt32(nErrCode.GetCode());
+                task::ErrorCodeRequest2 aErrorCode(OUString(), uno::Reference<XInterface>(),
+                    sal_Int32(sal_uInt32(nErrCode.GetCode())), nErrCode.GetArg1(), nErrCode.GetArg2(),
+                    static_cast<sal_Int16>(nErrCode.GetDialogMask()));
                 SfxMedium::CallApproveHandler( xHandler, Any( aErrorCode ), false );
             }
         }

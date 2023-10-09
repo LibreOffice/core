@@ -48,7 +48,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
-#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <com/sun/star/task/ErrorCodeRequest2.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
@@ -1757,8 +1757,9 @@ bool SfxObjectShell::UseInteractionToHandleError(
                 pAbort, pApprove
             };
 
-            task::ErrorCodeRequest aErrorCode;
-            aErrorCode.ErrCode = sal_uInt32(nError.GetCode());
+            task::ErrorCodeRequest2 aErrorCode(OUString(), uno::Reference<XInterface>(),
+                sal_Int32(sal_uInt32(nError.GetCode())), nError.GetArg1(), nError.GetArg2(),
+                static_cast<sal_Int16>(nError.GetDialogMask()));
             aInteraction <<= aErrorCode;
             xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
             bResult = pAbort->wasSelected();

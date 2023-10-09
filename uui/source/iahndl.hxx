@@ -190,7 +190,7 @@ private:
 
     void
     handleGenericErrorRequest(
-        ErrCode nErrorCode,
+        ErrCodeMsg nErrorCode,
         css::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,

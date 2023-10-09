@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
-#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#include <com/sun/star/task/ErrorCodeRequest2.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
@@ -710,6 +710,17 @@ UUIInteractionHelper::handleRequest_impl(
             return true;
         }
 
+        task::ErrorCodeRequest2 aErrorCodeRequest2;
+        if (aAnyRequest >>= aErrorCodeRequest2)
+        {
+            handleGenericErrorRequest(
+                    ErrCodeMsg(ErrCode(aErrorCodeRequest2.ErrCode), aErrorCodeRequest2.Arg1, aErrorCodeRequest2.Arg2, static_cast<DialogMask>(aErrorCodeRequest2.DialogMask)),
+                    rRequest->getContinuations(),
+                    bObtainErrorStringOnly,
+                    bHasErrorString,
+                    rErrorString);
+            return true;
+        }
         task::ErrorCodeRequest aErrorCodeRequest;
         if (aAnyRequest >>= aErrorCodeRequest)
         {
@@ -1047,7 +1058,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(
-    ErrCode nErrorCode,
+    ErrCodeMsg nErrorCode,
     uno::Sequence< uno::Reference<
         task::XInteractionContinuation > > const & rContinuations,
     bool bObtainErrorStringOnly,
@@ -1073,10 +1084,9 @@ UUIInteractionHelper::handleGenericErrorRequest(
         // Note: It's important to convert the transported long to the
         // required  unsigned long value. Otherwise using as flag field
         // can fail ...
-        ErrCode  nError(nErrorCode);
-        bool bWarning = !nError.IgnoreWarning();
+        bool bWarning = !nErrorCode.IgnoreWarning();
 
-        if ( nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
+        if ( nErrorCode == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
             // the security warning box needs a special title
             OUString aErrorString;
