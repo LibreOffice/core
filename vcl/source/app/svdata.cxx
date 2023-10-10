@@ -268,7 +268,7 @@ const FieldUnitStringList& ImplGetFieldUnits()
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maCtrlData.maFieldUnitStrings.empty() )
     {
-        sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
+        sal_uInt32 nUnits = std::size(SV_FUNIT_STRINGS);
         pSVData->maCtrlData.maFieldUnitStrings.reserve( nUnits );
         for (sal_uInt32 i = 0; i < nUnits; i++)
         {
@@ -283,7 +283,7 @@ namespace vcl
 {
     FieldUnit EnglishStringToMetric(std::u16string_view rEnglishMetricString)
     {
-        sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
+        sal_uInt32 nUnits = std::size(SV_FUNIT_STRINGS);
         for (sal_uInt32 i = 0; i < nUnits; ++i)
         {
             if (o3tl::equalsAscii(rEnglishMetricString, SV_FUNIT_STRINGS[i].first.getId()))
