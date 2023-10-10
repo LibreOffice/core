@@ -883,10 +883,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface
         return E_FAIL;
     }
     Reference<XAccessibleText> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
-        pRXText = nullptr;
-    else
-        pRXText = pRXI;
+    pRXText = pRXI;
     return S_OK;
 
     } catch(...) { return E_FAIL; }
