@@ -183,7 +183,7 @@ public:
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
     bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags );
 
-    bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
+    bool    Search( SCROW nRow, SCSIZE& nIndex, std::optional<SCROW> nIndexHint = {} ) const;
 
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
     bool    HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
