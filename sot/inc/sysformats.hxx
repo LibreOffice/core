@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SOT_SYSFORMATS_HXX
 #define INCLUDED_SOT_SYSFORMATS_HXX
 
+#include <sal/config.h>
+
+#include <span>
+
 #ifdef _WIN32
 #include <shlobj.h>
 #endif
@@ -43,7 +47,7 @@ struct SotAction_Impl
 
 namespace sot
 {
-SOT_DLLPUBLIC const SotAction_Impl* GetExchangeDestinationWriterFreeAreaCopy();
+SOT_DLLPUBLIC std::span<const SotAction_Impl> GetExchangeDestinationWriterFreeAreaCopy();
 }
 
 #endif // INCLUDED_SOT_SYSFORMATS_HXX

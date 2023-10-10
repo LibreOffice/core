@@ -18,22 +18,11 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    size_t FindFormatIndex(const SotAction_Impl* pFormats, SotClipboardFormatId eFormat)
+    auto FindFormatIndex(std::span<const SotAction_Impl> pFormats, SotClipboardFormatId eFormat)
     {
-        size_t nRet = 0;
-        SotClipboardFormatId nId = pFormats->nFormatId;
-
-        while (nId != static_cast<SotClipboardFormatId>(0xffff))
-        {
-            if (nId == eFormat)
-                break;
-
-            ++pFormats;
-            ++nRet;
-            nId = pFormats->nFormatId;
-        }
-
-        return nRet;
+        auto it = std::find_if(pFormats.begin(), pFormats.end(),
+                               [eFormat](const auto& item) { return item.nFormatId == eFormat; });
+        return std::distance(pFormats.begin(), it);
     }
 
     class SotTest
@@ -169,7 +158,7 @@ namespace
 
     void SotTest::testClipboard()
     {
-        const SotAction_Impl* pFormats = sot::GetExchangeDestinationWriterFreeAreaCopy();
+        auto pFormats = sot::GetExchangeDestinationWriterFreeAreaCopy();
         // tdf#52547 prefer BITMAP over HTML
         // tdf#78801 prefer image over html over text
         CPPUNIT_ASSERT(FindFormatIndex(pFormats, SotClipboardFormatId::BITMAP) < FindFormatIndex(pFormats, SotClipboardFormatId::HTML));
