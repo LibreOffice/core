@@ -41,6 +41,7 @@
 #include <vcl/window.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <sot/filelist.hxx>
@@ -109,6 +110,43 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
     return rOStm;
 }
 
+static void TryReadTransferableObjectDescriptor(SvStream& rIStm,
+                                                TransferableObjectDescriptor& rObjDesc)
+{
+    auto nStartPos = rIStm.Tell();
+    comphelper::ScopeGuard streamPosRestore([nStartPos, &rIStm] { rIStm.Seek(nStartPos); });
+
+    sal_uInt32 size;
+    rIStm.ReadUInt32(size);
+
+    SvGlobalName className;
+    rIStm >> className;
+
+    sal_uInt32 viewAspect;
+    rIStm.ReadUInt32(viewAspect);
+
+    sal_Int32 width, height;
+    rIStm.ReadInt32(width).ReadInt32(height);
+
+    sal_Int32 dragStartPosX, dragStartPosY;
+    rIStm.ReadInt32(dragStartPosX).ReadInt32(dragStartPosY);
+
+    const OUString typeName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
+    const OUString displayName = rIStm.ReadUniOrByteString(osl_getThreadTextEncoding());
+
+    sal_uInt32 nSig1, nSig2;
+    rIStm.ReadUInt32(nSig1).ReadUInt32(nSig2);
+
+    if (!rIStm.good() || rIStm.Tell() - nStartPos != size || nSig1 != TOD_SIG1 || nSig2 != TOD_SIG2)
+        return;
+
+    rObjDesc.maClassName = className;
+    rObjDesc.mnViewAspect = viewAspect;
+    rObjDesc.maSize = Size(width, height);
+    rObjDesc.maDragStartPos = Point(dragStartPosX, dragStartPosY);
+    rObjDesc.maTypeName = typeName;
+    rObjDesc.maDisplayName = displayName;
+}
 
 // the reading of the parameter is done using the special service css::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
@@ -1279,6 +1317,9 @@ void TransferableDataHelper::InitFormats()
         if( SotClipboardFormatId::OBJECTDESCRIPTOR == format.mnSotId )
         {
             ImplSetParameterString(*mxObjDesc, format);
+            auto data = GetSequence(format, {});
+            SvMemoryStream aSrcStm(data.getArray(), data.getLength(), StreamMode::READ);
+            TryReadTransferableObjectDescriptor(aSrcStm, *mxObjDesc);
             break;
         }
     }
