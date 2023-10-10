@@ -492,9 +492,9 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
     // That would occasionally lead to rounding errors (at least differences that would
     // make checkGlyphsEqual() fail).
     , mapMode(outputDevice->GetMapMode())
-    , rtl(outputDevice->IsRTLEnabled())
-    , layoutMode(outputDevice->GetLayoutMode())
     , digitLanguage(outputDevice->GetDigitLanguage())
+    , layoutMode(outputDevice->GetLayoutMode())
+    , rtl(outputDevice->IsRTLEnabled())
 {
     const LogicalFontInstance* fi = outputDevice->GetFontInstance();
     fi->GetScale(&fontScaleX, &fontScaleY);

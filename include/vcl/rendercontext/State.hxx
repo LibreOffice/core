@@ -72,7 +72,7 @@ namespace vcl::text
 {
 // Layout flags for Complex Text Layout
 // These are flag values, i.e they can be combined
-enum class ComplexTextLayoutFlags
+enum class ComplexTextLayoutFlags : sal_uInt8
 {
     Default = 0x0000,
     BiDiRtl = 0x0001,
