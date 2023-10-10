@@ -3410,6 +3410,264 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
     CPPUNIT_ASSERT_EQUAL(int(4), nDiv);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157397)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    // Enable PDF/UA
+    uno::Sequence<beans::PropertyValue> aFilterData(
+        comphelper::InitPropertySequence({ { "PDFUACompliance", uno::Any(true) } }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+    saveAsPDF(u"PDF_export_with_formcontrol.fodt");
+
+    vcl::filter::PDFDocument aDocument;
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    vcl::filter::PDFObjectElement* pDocument(nullptr);
+    for (const auto& rDocElement : aDocument.GetElements())
+    {
+        auto pObject1 = dynamic_cast<vcl::filter::PDFObjectElement*>(rDocElement.get());
+        if (!pObject1)
+            continue;
+        auto pType1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("Type"));
+        if (pType1 && pType1->GetValue() == "StructElem")
+        {
+            auto pS1 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject1->Lookup("S"));
+            if (pS1 && pS1->GetValue() == "Document")
+            {
+                pDocument = pObject1;
+            }
+        }
+    }
+    CPPUNIT_ASSERT(pDocument);
+
+    auto pKids1 = dynamic_cast<vcl::filter::PDFArrayElement*>(pDocument->Lookup("K"));
+    CPPUNIT_ASSERT(pKids1);
+    // assume there are no MCID ref at this level
+    auto pKids1v = pKids1->GetElements();
+    auto pRefKid12 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[2]);
+    CPPUNIT_ASSERT(pRefKid12);
+    auto pObject12 = pRefKid12->LookupObject();
+    CPPUNIT_ASSERT(pObject12);
+    auto pType12 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject12->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType12->GetValue());
+    auto pS12 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject12->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Text#20body"), pS12->GetValue());
+
+    auto pKids12 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject12->Lookup("K"));
+    CPPUNIT_ASSERT(pKids12);
+    // assume there are no MCID ref at this level
+    auto pKids12v = pKids12->GetElements();
+    auto pRefKid120 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids12v[0]);
+    CPPUNIT_ASSERT(pRefKid120);
+    auto pObject120 = pRefKid120->LookupObject();
+    CPPUNIT_ASSERT(pObject120);
+    auto pType120 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject120->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType120->GetValue());
+    auto pS120 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject120->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Link"), pS120->GetValue());
+
+    {
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject120->Lookup("K"));
+        auto nMCID(0);
+        auto nRef(0);
+        for (size_t i = 0; i < pKids->GetElements().size(); ++i)
+        {
+            auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
+            auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids->GetElement(i));
+            if (pNum)
+            {
+                ++nMCID;
+            }
+            if (pRef)
+            {
+                ++nRef;
+                auto pObjR = pRef->LookupObject();
+                auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("OBJR"), pOType->GetValue());
+                auto pAnnotRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->Lookup("Obj"));
+                auto pAnnot = pAnnotRef->LookupObject();
+                auto pAType = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Annot"), pAType->GetValue());
+                auto pASubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAContents
+                    = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString(u"https://klexikon.zum.de/wiki/Kläranlage"),
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+                CPPUNIT_ASSERT(pAA);
+                auto pAAType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Action"), pAAType->GetValue());
+                auto pAAS = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("URI"), pAAS->GetValue());
+                auto pAAURI = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pAA->LookupElement("URI"));
+                CPPUNIT_ASSERT_EQUAL(OString("https://klexikon.zum.de/wiki/Kl%C3%A4ranlage"),
+                                     pAAURI->GetValue());
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    }
+
+    auto pRefKid13 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[3]);
+    CPPUNIT_ASSERT(pRefKid13);
+    auto pObject13 = pRefKid13->LookupObject();
+    CPPUNIT_ASSERT(pObject13);
+    auto pType13 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject13->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType13->GetValue());
+    auto pS13 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject13->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Text#20body"), pS13->GetValue());
+
+    auto pKids13 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject13->Lookup("K"));
+    CPPUNIT_ASSERT(pKids13);
+    // assume there are no MCID ref at this level
+    auto pKids13v = pKids13->GetElements();
+    auto pRefKid130 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids13v[0]);
+    CPPUNIT_ASSERT(pRefKid130);
+    auto pObject130 = pRefKid130->LookupObject();
+    CPPUNIT_ASSERT(pObject130);
+    auto pType130 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject130->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType130->GetValue());
+    auto pS130 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject130->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Link"), pS130->GetValue());
+
+    {
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject130->Lookup("K"));
+        auto nMCID(0);
+        auto nRef(0);
+        for (size_t i = 0; i < pKids->GetElements().size(); ++i)
+        {
+            auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
+            auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids->GetElement(i));
+            if (pNum)
+            {
+                ++nMCID;
+            }
+            if (pRef)
+            {
+                ++nRef;
+                auto pObjR = pRef->LookupObject();
+                auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("OBJR"), pOType->GetValue());
+                auto pAnnotRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->Lookup("Obj"));
+                auto pAnnot = pAnnotRef->LookupObject();
+                auto pAType = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Annot"), pAType->GetValue());
+                auto pASubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAContents
+                    = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString(u"https://de.wikipedia.org/wiki/Kläranlage#Mechanische_Vorreinigung"),
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+                CPPUNIT_ASSERT(pAA);
+                auto pAAType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Action"), pAAType->GetValue());
+                auto pAAS = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("URI"), pAAS->GetValue());
+                auto pAAURI = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pAA->LookupElement("URI"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OString(
+                        "https://de.wikipedia.org/wiki/Kl%C3%A4ranlage#Mechanische_Vorreinigung"),
+                    pAAURI->GetValue());
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    }
+
+    auto pRefKid14 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids1v[4]);
+    CPPUNIT_ASSERT(pRefKid14);
+    auto pObject14 = pRefKid14->LookupObject();
+    CPPUNIT_ASSERT(pObject14);
+    auto pType14 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject14->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType14->GetValue());
+    auto pS14 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject14->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Text#20body"), pS14->GetValue());
+
+    auto pKids14 = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject14->Lookup("K"));
+    CPPUNIT_ASSERT(pKids14);
+    // assume there are no MCID ref at this level
+    auto pKids14v = pKids14->GetElements();
+    auto pRefKid140 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids14v[0]);
+    CPPUNIT_ASSERT(pRefKid140);
+    auto pObject140 = pRefKid140->LookupObject();
+    CPPUNIT_ASSERT(pObject140);
+    auto pType140 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject140->Lookup("Type"));
+    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType140->GetValue());
+    auto pS140 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject140->Lookup("S"));
+    CPPUNIT_ASSERT_EQUAL(OString("Link"), pS140->GetValue());
+
+    {
+        auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject140->Lookup("K"));
+        auto nMCID(0);
+        auto nRef(0);
+        for (size_t i = 0; i < pKids->GetElements().size(); ++i)
+        {
+            auto pNum = dynamic_cast<vcl::filter::PDFNumberElement*>(pKids->GetElement(i));
+            auto pRef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKids->GetElement(i));
+            if (pNum)
+            {
+                ++nMCID;
+            }
+            if (pRef)
+            {
+                ++nRef;
+                auto pObjR = pRef->LookupObject();
+                auto pOType = dynamic_cast<vcl::filter::PDFNameElement*>(pObjR->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("OBJR"), pOType->GetValue());
+                auto pAnnotRef
+                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObjR->Lookup("Obj"));
+                auto pAnnot = pAnnotRef->LookupObject();
+                auto pAType = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Annot"), pAType->GetValue());
+                auto pASubtype
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAnnot->Lookup("Subtype"));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAContents
+                    = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OUString(
+                        u"https://vr-easy.com/tour/usr/220113-virtuellerschulausflug/#pano=24"),
+                    ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAContents));
+                CPPUNIT_ASSERT_EQUAL(OString("Link"), pASubtype->GetValue());
+                auto pAA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+                CPPUNIT_ASSERT(pAA);
+                auto pAAType
+                    = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("Type"));
+                CPPUNIT_ASSERT_EQUAL(OString("Action"), pAAType->GetValue());
+                auto pAAS = dynamic_cast<vcl::filter::PDFNameElement*>(pAA->LookupElement("S"));
+                CPPUNIT_ASSERT_EQUAL(OString("URI"), pAAS->GetValue());
+                auto pAAURI = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(
+                    pAA->LookupElement("URI"));
+                CPPUNIT_ASSERT_EQUAL(
+                    OString("https://vr-easy.com/tour/usr/220113-virtuellerschulausflug/#pano=24"),
+                    pAAURI->GetValue());
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nMCID)>(1), nMCID);
+        CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nRef)>(1), nRef);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
