@@ -189,9 +189,11 @@ bool ScAttrArray::Concat(SCSIZE nPos)
  *
  * Iterative implementation of Binary Search
  * The same implementation was used inside ScMarkArray::Search().
+ *
+ * @param oIndexHint, hint for the start of the search, useful when searching twice for successive values
  */
 
-bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
+bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex, std::optional<SCROW> oIndexHint ) const
 {
 /*    auto it = std::lower_bound(mvData.begin(), mvData.end(), nRow,
                 [] (const ScAttrEntry &r1, SCROW nRow)
@@ -208,7 +210,8 @@ bool ScAttrArray::Search( SCROW nRow, SCSIZE& nIndex ) const
 
     tools::Long nHi = static_cast<tools::Long>(mvData.size()) - 1;
     tools::Long i = 0;
-    tools::Long nLo = 0;
+    assert((!oIndexHint || *oIndexHint <= nHi) && "bad index hint");
+    tools::Long nLo = oIndexHint ? *oIndexHint : 0;
 
     while ( nLo <= nHi )
     {
@@ -1404,7 +1407,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
     SCSIZE nEndIndex;
     Search( nRow1, nStartIndex );
     if (nRow1 != nRow2)
-        Search( nRow2, nEndIndex );
+        Search( nRow2, nEndIndex, /*hint*/nStartIndex );
     else
         nEndIndex = nStartIndex;
     bool bFound = false;
