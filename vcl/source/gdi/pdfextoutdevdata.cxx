@@ -42,6 +42,7 @@ struct PDFExtOutDevDataSync
 {
     enum Action{    CreateNamedDest,
                     CreateDest,
+                    CreateControlLink,
                     CreateLink,
                     CreateScreen,
                     SetLinkDest,
@@ -95,6 +96,7 @@ struct GlobalSyncData
     std::deque< PDFNote >                       mParaPDFNotes;
     std::deque< PDFWriter::PageTransition >     mParaPageTransitions;
     ::std::map< sal_Int32, PDFLinkDestination > mFutureDestinations;
+    ::std::deque<sal_Int32>                     mControlIds;
 
     sal_Int32 GetMappedId();
 
@@ -169,6 +171,14 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 mParaInts.pop_front();
                 mParaDestAreaTypes.pop_front();
                 rWriter.Pop();
+            }
+            break;
+            case PDFExtOutDevDataSync::CreateControlLink:
+            {
+                // tdf#157397: this must be called *in order* with CreateLink etc.
+                rWriter.SetLinkPropertyID(mControlIds.front(), sal_Int32(mParaIds.size()));
+                mParaIds.push_back(mControlIds.front());
+                mControlIds.pop_front();
             }
             break;
             case PDFExtOutDevDataSync::CreateLink :
@@ -428,10 +438,12 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 {
                     sal_Int32 const n = rWriter.CreateControl(*pControl);
                     // resolve AnnotIds structural attribute
-                    ::std::vector<sal_Int32> const annotIds{ sal_Int32(mpGlobalData->mParaIds.size()) };
+                    ::std::vector<sal_Int32> const annotIds{ sal_Int32(mpGlobalData->mCurId) };
                     rWriter.SetStructureAnnotIds(annotIds);
-                    rWriter.SetLinkPropertyID(n, sal_Int32(mpGlobalData->mParaIds.size()));
-                    mpGlobalData->mParaIds.push_back(n);
+                    // tdf#157397: this must be called *in order* with CreateLink etc.
+                    mpGlobalData->mActions.push_back(PDFExtOutDevDataSync::CreateControlLink);
+                    mpGlobalData->mControlIds.push_back(n);
+                    mpGlobalData->mCurId++;
                 }
                 mControls.pop_front();
             }
@@ -536,6 +548,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             break;
             case PDFExtOutDevDataSync::CreateNamedDest:
             case PDFExtOutDevDataSync::CreateDest:
+            case PDFExtOutDevDataSync::CreateControlLink:
             case PDFExtOutDevDataSync::CreateLink:
             case PDFExtOutDevDataSync::CreateScreen:
             case PDFExtOutDevDataSync::SetLinkDest:
@@ -929,7 +942,6 @@ void PDFExtOutDevData::CreateControl( const PDFWriter::AnyWidget& rControlType )
 
     std::shared_ptr< PDFWriter::AnyWidget > pClone( rControlType.Clone() );
     mpPageSyncData->mControls.push_back( pClone );
-    mpGlobalSyncData->mCurId++;
 }
 
 void PDFExtOutDevData::BeginGroup()
