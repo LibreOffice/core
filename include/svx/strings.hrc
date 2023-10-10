@@ -130,7 +130,7 @@
 #define STR_ObjNameSingulMEASURE                            NC_("STR_ObjNameSingulMEASURE", "Dimension line")
 #define STR_ObjNamePluralMEASURE                            NC_("STR_ObjNamePluralMEASURE", "Dimensioning objects")
 #define STR_ObjNamePlural                                   NC_("STR_ObjNamePlural", "Drawing objects")
-#define STR_ObjNameNoObj                                    NC_("STR_ObjNameNoObj", "No draw object")
+#define STR_ObjNameNoObj                                    NC_("STR_ObjNameNoObj", "No drawing object")
 #define STR_ObjNameSingulPlural                             NC_("STR_ObjNameSingulPlural", "Draw object(s)")
 #define STR_ObjNameSingulCube3d                             NC_("STR_ObjNameSingulCube3d", "3D cube")
 #define STR_ObjNamePluralCube3d                             NC_("STR_ObjNamePluralCube3d", "3D cubes")
