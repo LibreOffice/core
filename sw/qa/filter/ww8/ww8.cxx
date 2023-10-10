@@ -525,6 +525,15 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInInlineTableDOC)
         CPPUNIT_ASSERT(!pTab->GetFollow());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testNullPointerDereference)
+{
+    // Given a document with multiple pages:
+    // When loading that document:
+    // Without the accompanying fix in place, this test would have crashed due to null pointer access
+    createSwDoc("null-pointer-dereference.doc");
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
