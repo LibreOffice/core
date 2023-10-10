@@ -432,12 +432,12 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
 {
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
 
-    const sal_uLong nLinks = aNames.getLength();
+    const sal_Int32 nLinks = aNames.getLength();
     const OUString* pNames = aNames.getConstArray();
     static constexpr OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
     static constexpr OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
     bool bIsTarget = false;
-    for( sal_uLong i = 0; i < nLinks; i++ )
+    for( sal_Int32 i = 0; i < nLinks; i++ )
     {
         uno::Any aAny;
         OUString aLink( *pNames++ );
