@@ -80,12 +80,12 @@ private:
         double fontScaleX;
         double fontScaleY;
         MapMode mapMode;
-        bool rtl;
-        bool disabledLigatures; // because of fixed pitch
-        bool artificialItalic;
-        bool artificialBold;
-        vcl::text::ComplexTextLayoutFlags layoutMode;
         LanguageType digitLanguage;
+        vcl::text::ComplexTextLayoutFlags layoutMode;
+        bool rtl : 1;
+        bool disabledLigatures : 1; // because of fixed pitch
+        bool artificialItalic : 1;
+        bool artificialBold : 1;
         size_t hashValue;
         CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, OUString t, sal_Int32 i, sal_Int32 l,
                         tools::Long w);
