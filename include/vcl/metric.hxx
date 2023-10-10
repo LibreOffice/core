@@ -40,23 +40,23 @@ public:
                         FontMetric(vcl::font::PhysicalFontFace const& rFace);
                         ~FontMetric() override;
 
-    tools::Long                GetAscent() const                           { return mnAscent; }
-    tools::Long                GetDescent() const                          { return mnDescent; }
-    tools::Long                GetInternalLeading() const                  { return mnIntLeading; }
-    tools::Long                GetExternalLeading() const                  { return mnExtLeading; }
-    tools::Long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
-    tools::Long                GetSlant() const                            { return mnSlant; }
-    tools::Long                GetBulletOffset() const                     { return mnBulletOffset; }
-    tools::Long                GetHangingBaseline() const                  { return mnHangingBaseline; }
+    sal_Int32           GetAscent() const                           { return mnAscent; }
+    sal_Int32           GetDescent() const                          { return mnDescent; }
+    sal_Int32           GetInternalLeading() const                  { return mnIntLeading; }
+    sal_Int32           GetExternalLeading() const                  { return mnExtLeading; }
+    sal_Int32           GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
+    sal_Int32           GetSlant() const                            { return mnSlant; }
+    sal_Int32           GetBulletOffset() const                     { return mnBulletOffset; }
+    sal_Int32           GetHangingBaseline() const                  { return mnHangingBaseline; }
 
-    void                SetAscent( tools::Long nAscent )                   { mnAscent = nAscent; }
-    void                SetDescent( tools::Long nDescent )                 { mnDescent = nDescent; }
-    void                SetExternalLeading( tools::Long nExtLeading )      { mnExtLeading = nExtLeading; }
-    void                SetInternalLeading( tools::Long nIntLeading )      { mnIntLeading = nIntLeading; }
-    void                SetLineHeight( tools::Long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
-    void                SetSlant( tools::Long nSlant )                     { mnSlant = nSlant; }
-    void                SetBulletOffset( tools::Long nOffset )             { mnBulletOffset = nOffset; }
-    void                SetHangingBaseline( tools::Long nBaseline )        { mnHangingBaseline = nBaseline; }
+    void                SetAscent( sal_Int32 nAscent )                   { mnAscent = nAscent; }
+    void                SetDescent( sal_Int32 nDescent )                 { mnDescent = nDescent; }
+    void                SetExternalLeading( sal_Int32 nExtLeading )      { mnExtLeading = nExtLeading; }
+    void                SetInternalLeading( sal_Int32 nIntLeading )      { mnIntLeading = nIntLeading; }
+    void                SetLineHeight( sal_Int32 nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
+    void                SetSlant( sal_Int32 nSlant )                     { mnSlant = nSlant; }
+    void                SetBulletOffset( sal_Int32 nOffset )             { mnBulletOffset = nOffset; }
+    void                SetHangingBaseline( sal_Int32 nBaseline )        { mnHangingBaseline = nBaseline; }
 
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
@@ -77,14 +77,14 @@ public:
 private:
     bool                EqualNoBase( const FontMetric& ) const;
     size_t              GetHashValueNoBase() const;
-    tools::Long                mnAscent;                      // Ascent
-    tools::Long                mnDescent;                     // Descent
-    tools::Long                mnIntLeading;                  // Internal Leading
-    tools::Long                mnExtLeading;                  // External Leading
-    tools::Long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
-    tools::Long                mnSlant;                       // Slant
-    tools::Long                mnBulletOffset;                // Offset for non-printing character
-    tools::Long                mnHangingBaseline;             // Offset from Romn baseline to hanging baseline.
+    sal_Int32           mnAscent;                      // Ascent
+    sal_Int32           mnDescent;                     // Descent
+    sal_Int32           mnIntLeading;                  // Internal Leading
+    sal_Int32           mnExtLeading;                  // External Leading
+    sal_Int32           mnLineHeight;                  // Ascent+Descent+EmphasisMark
+    sal_Int32           mnSlant;                       // Slant
+    sal_Int32           mnBulletOffset;                // Offset for non-printing character
+    sal_Int32           mnHangingBaseline;             // Offset from Romn baseline to hanging baseline.
 
     bool                mbFullstopCentered;
 };
