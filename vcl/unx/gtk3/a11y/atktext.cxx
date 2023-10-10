@@ -438,68 +438,65 @@ handle_text_markup_as_run_attribute( css::uno::Reference<css::accessibility::XAc
                                      gint *end_offset )
 {
     const gint nTextMarkupCount( pTextMarkup->getTextMarkupCount( nTextMarkupType ) );
-    if ( nTextMarkupCount > 0 )
+    for ( gint nTextMarkupIndex = 0;
+          nTextMarkupIndex < nTextMarkupCount;
+          ++nTextMarkupIndex )
     {
-        for ( gint nTextMarkupIndex = 0;
-              nTextMarkupIndex < nTextMarkupCount;
-              ++nTextMarkupIndex )
+        accessibility::TextSegment aTextSegment =
+            pTextMarkup->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
+        const gint nStartOffsetTextMarkup = aTextSegment.SegmentStart;
+        const gint nEndOffsetTextMarkup = aTextSegment.SegmentEnd;
+        if ( nStartOffsetTextMarkup <= offset )
         {
-            accessibility::TextSegment aTextSegment =
-                pTextMarkup->getTextMarkup( nTextMarkupIndex, nTextMarkupType );
-            const gint nStartOffsetTextMarkup = aTextSegment.SegmentStart;
-            const gint nEndOffsetTextMarkup = aTextSegment.SegmentEnd;
-            if ( nStartOffsetTextMarkup <= offset )
+            if ( offset < nEndOffsetTextMarkup )
             {
-                if ( offset < nEndOffsetTextMarkup )
+                // text markup at <offset>
+                *start_offset = ::std::max( *start_offset,
+                                            nStartOffsetTextMarkup );
+                *end_offset = ::std::min( *end_offset,
+                                          nEndOffsetTextMarkup );
+                switch ( nTextMarkupType )
                 {
-                    // text markup at <offset>
-                    *start_offset = ::std::max( *start_offset,
-                                                nStartOffsetTextMarkup );
-                    *end_offset = ::std::min( *end_offset,
-                                              nEndOffsetTextMarkup );
-                    switch ( nTextMarkupType )
+                    case css::text::TextMarkupType::SPELLCHECK:
                     {
-                        case css::text::TextMarkupType::SPELLCHECK:
-                        {
-                            pSet = attribute_set_prepend_misspelled( pSet );
-                        }
-                        break;
-                        case css::text::TextMarkupType::TRACK_CHANGE_INSERTION:
-                        {
-                            pSet = attribute_set_prepend_tracked_change_insertion( pSet );
-                        }
-                        break;
-                        case css::text::TextMarkupType::TRACK_CHANGE_DELETION:
-                        {
-                            pSet = attribute_set_prepend_tracked_change_deletion( pSet );
-                        }
-                        break;
-                        case css::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
-                        {
-                            pSet = attribute_set_prepend_tracked_change_formatchange( pSet );
-                        }
-                        break;
-                        default:
-                        {
-                            OSL_ASSERT( false );
-                        }
+                        pSet = attribute_set_prepend_misspelled( pSet );
                     }
-                    break; // no further iteration needed.
+                    break;
+                    case css::text::TextMarkupType::TRACK_CHANGE_INSERTION:
+                    {
+                        pSet = attribute_set_prepend_tracked_change_insertion( pSet );
+                    }
+                    break;
+                    case css::text::TextMarkupType::TRACK_CHANGE_DELETION:
+                    {
+                        pSet = attribute_set_prepend_tracked_change_deletion( pSet );
+                    }
+                    break;
+                    case css::text::TextMarkupType::TRACK_CHANGE_FORMATCHANGE:
+                    {
+                        pSet = attribute_set_prepend_tracked_change_formatchange( pSet );
+                    }
+                    break;
+                    default:
+                    {
+                        OSL_ASSERT( false );
+                    }
                 }
-                else
-                {
-                    *start_offset = ::std::max( *start_offset,
-                                                nEndOffsetTextMarkup );
-                    // continue iteration.
-                }
+                break; // no further iteration needed.
             }
             else
             {
-                *end_offset = ::std::min( *end_offset,
-                                          nStartOffsetTextMarkup );
-                break; // no further iteration.
+                *start_offset = ::std::max( *start_offset,
+                                            nEndOffsetTextMarkup );
+                // continue iteration.
             }
-        } // eof iteration over text markups
+        }
+        else
+        {
+            *end_offset = ::std::min( *end_offset,
+                                      nStartOffsetTextMarkup );
+            break; // no further iteration.
+        }
     }
 
     return pSet;
