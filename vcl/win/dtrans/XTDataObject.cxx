@@ -349,12 +349,6 @@ void CXTDataObject::renderAnyDataAndSetupStgMedium(
         throw UnsupportedFlavorException( );
     }
 
-    // unfortunately not all transferables fulfill the
-    // spec. and do throw an UnsupportedFlavorException
-    // so we must check the any
-    if ( !aAny.hasValue( ) )
-        throw UnsupportedFlavorException( );
-
     Sequence< sal_Int8 > clipDataStream;
     aAny >>= clipDataStream;
 
