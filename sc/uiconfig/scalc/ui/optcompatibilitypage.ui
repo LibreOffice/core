@@ -107,7 +107,7 @@
                 <property name="draw_indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="cellLinkCB-atkobject">
-                   <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cellLinkCB">%PRODUCTNAME can insert multiple hyperlinks in a cell as text fields, but multiple hyperlinks in a cell cannot be saved to Excel file formats. This option prevents inserting multiple hyperlinks in a cell when Excel files are edited, in order to be interoperable with Excel.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|cellLinkCB">Calc can insert multiple hyperlinks in a cell as text fields, but multiple hyperlinks in a cell cannot be saved to Excel file formats. This option prevents inserting multiple hyperlinks in a cell when Excel files are edited, in order to be interoperable with Excel.</property>
                   </object>
                 </child>
               </object>
