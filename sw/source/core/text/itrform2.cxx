@@ -963,8 +963,16 @@ bool SwContentControlPortion::DescribePDFControl(const SwTextPaintInfo& rInf) co
         return false;
     }
 
-    // Check if this is the first content control portion of this content control.
     SwTextNode* pTextNode = pContentControl->GetTextNode();
+    SwDoc& rDoc = pTextNode->GetDoc();
+    if (rDoc.IsInHeaderFooter(*pTextNode))
+    {
+        // Form control in header/footer makes no sense, would allow multiple values for the same
+        // control.
+        return false;
+    }
+
+    // Check if this is the first content control portion of this content control.
     sal_Int32 nStart = m_pTextContentControl->GetStart();
     sal_Int32 nEnd = *m_pTextContentControl->GetEnd();
     TextFrameIndex nViewStart = rInf.GetTextFrame()->MapModelToView(pTextNode, nStart);
