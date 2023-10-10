@@ -1200,7 +1200,7 @@ SotAction_Impl const aEXCHG_DEST_SDDOC_FREE_AREA_Link[] =
 };
 
 /* --- exchange destinations --- */
-SotDestinationEntry_Impl const aDestinationArray[] =
+SotDestinationEntry_Impl constexpr aDestinationArray[] =
 {
     { SotExchangeDest::DOC_OLEOBJ,
         aEXCHG_DEST_DOC_OLEOBJ_Def,
@@ -1304,9 +1304,6 @@ SotDestinationEntry_Impl const aDestinationArray[] =
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy,
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link
     },
-    {
-        static_cast<SotExchangeDest>(0xffff), nullptr, nullptr, nullptr, nullptr
-    }
 };
 
 } // namespace
@@ -1477,19 +1474,14 @@ sal_uInt8 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorE
                                        const Reference< XTransferable >* pxTransferable,
                                        SotExchangeActionFlags* pActionFlags )
 {
-    rFormat = SotClipboardFormatId::STRING;
-
     //Todo: incorporate a binary search
-    const SotDestinationEntry_Impl* pEntry = aDestinationArray;
-    while( static_cast<SotExchangeDest>(0xffff) != pEntry->nDestination )
-    {
-        if( pEntry->nDestination == nDestination )
-            break;
-        ++pEntry;
-    }
+    auto pEntry = std::find_if(std::begin(aDestinationArray), std::end(aDestinationArray),
+                               [nDestination](const auto& entry)
+                               { return entry.nDestination == nDestination; });
 
-    if( static_cast<SotExchangeDest>(0xffff) == pEntry->nDestination )
+    if (pEntry == std::end(aDestinationArray))
     {
+        rFormat = SotClipboardFormatId::STRING;
         return EXCHG_INOUT_ACTION_NONE;
     }
 
@@ -1542,10 +1534,8 @@ sal_uInt8 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorE
                 rDefaultAction = 0;
                 return 0;
             }
-            rDefaultAction = nUserAction;
     }
-    else
-        rDefaultAction = nUserAction;
+    rDefaultAction = nUserAction;
 
     switch( nUserAction )
     {
