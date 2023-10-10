@@ -29,6 +29,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/hangulhanja.hxx>
 #include <i18nutil/transliteration.hxx>
+#include <linguistic/misc.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
@@ -1077,9 +1078,11 @@ bool SwTextNode::Spell(SwSpellArgs* pArgs)
                         const OUString& rActualWord = aScanner.GetPrevWord();
                         bCalledNextWord = true;
                         // check space separated word pairs in the dictionary, e.g. "vice versa"
-                        if ( !((bNextWord && pArgs->xSpeller->isValid( rActualWord + " " + aScanner.GetWord(),
+                        if ( !((bNextWord && !linguistic::HasDigits(aScanner.GetWord()) &&
+                            pArgs->xSpeller->isValid( rActualWord + " " + aScanner.GetWord(),
                                 static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
-                           ( !sPrevWord.isEmpty() && pArgs->xSpeller->isValid( sPrevWord + " " + rActualWord,
+                           ( !sPrevWord.isEmpty() && !linguistic::HasDigits(sPrevWord) &&
+                            pArgs->xSpeller->isValid( sPrevWord + " " + rActualWord,
                                 static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
                         {
                             // make sure the selection build later from the data
@@ -1395,9 +1398,11 @@ SwRect SwTextFrame::AutoSpell_(SwTextNode & rNode, sal_Int32 nActPos)
                     bNextWord = aScanner.NextWord();
                     bCalledNextWord = true;
                     // check space separated word pairs in the dictionary, e.g. "vice versa"
-                    if ( !((bNextWord && xSpell->isValid( aScanner.GetPrevWord() + " " + aScanner.GetWord(),
+                    if ( !((bNextWord && !linguistic::HasDigits(aScanner.GetWord()) &&
+                            xSpell->isValid( aScanner.GetPrevWord() + " " + aScanner.GetWord(),
                                 static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() )) ||
-                           (!sPrevWord.isEmpty() && xSpell->isValid( sPrevWord + " " + aScanner.GetPrevWord(),
+                           (!sPrevWord.isEmpty() && !linguistic::HasDigits(sPrevWord) &&
+                            xSpell->isValid( sPrevWord + " " + aScanner.GetPrevWord(),
                                 static_cast<sal_uInt16>(eActLang), Sequence< PropertyValue >() ))) )
                     {
                         sal_Int32 nSmartTagStt = nBegin;
