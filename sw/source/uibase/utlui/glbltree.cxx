@@ -787,12 +787,12 @@ IMPL_LINK_NOARG(SwGlobalTree, Timeout, Timer *, void)
     }
 }
 
+// track GlobalDocContentType at the cursor position in the document
 void SwGlobalTree::UpdateTracking()
 {
     if (!m_pActiveShell)
         return;
 
-    // track section at cursor position in document
     m_xTreeView->unselect_all();
 
     const SwSection* pActiveShellCurrSection = m_pActiveShell->GetCurrSection();
@@ -813,6 +813,32 @@ void SwGlobalTree::UpdateTracking()
                 const OUString& rId(weld::toId(rGlblDocContent.get()));
                 m_xTreeView->select(m_xTreeView->find_id(rId));
                 break;
+            }
+        }
+    }
+    else
+    {
+        const SwCursor* pCursor = m_pActiveShell->GetCursor();
+        const SwNode& rNode = pCursor->GetPoint()->GetNode();
+        if (rNode.IsTextNode())
+        {
+            // only the first text node in each series of text nodes is stored in the
+            // SwGlblDocContents array
+            SwNodeIndex aIdx(rNode);
+            do
+            {
+                --aIdx;
+            } while (aIdx.GetNode().IsTextNode());
+            ++aIdx;
+            SwNodeOffset aTextNodeIndex(aIdx.GetNode().GetIndex());
+            for (const std::unique_ptr<SwGlblDocContent>& rGlblDocContent : *m_pSwGlblDocContents)
+            {
+                if (rGlblDocContent->GetType() == GlobalDocContentType::GLBLDOC_UNKNOWN
+                        && rGlblDocContent->GetDocPos() == aTextNodeIndex)
+                {
+                    const OUString& rId(weld::toId(rGlblDocContent.get()));
+                    m_xTreeView->select(m_xTreeView->find_id(rId));
+                }
             }
         }
     }
