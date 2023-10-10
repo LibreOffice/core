@@ -1186,7 +1186,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
         // Throw them all away in the absence of a way to reposition them to new positions of
         // their replacements.
         if (aCtx.m_bTransparenciesWereRemoved)
-            rPDFExtOutDevData.ResetSyncData();
+            rPDFExtOutDevData.ResetSyncData(&rWriter);
     }
     else
     {
@@ -1202,7 +1202,7 @@ void PDFExport::ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& 
 
     rWriter.PlayMetafile( aMtf, aCtx, &rPDFExtOutDevData );
 
-    rPDFExtOutDevData.ResetSyncData();
+    rPDFExtOutDevData.ResetSyncData(nullptr);
 
     if (!msWatermark.isEmpty())
     {

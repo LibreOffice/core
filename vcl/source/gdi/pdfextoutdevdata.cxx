@@ -647,8 +647,20 @@ void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {
     mbExportNDests = bExportNDests;
 }
-void PDFExtOutDevData::ResetSyncData()
+void PDFExtOutDevData::ResetSyncData(PDFWriter *const pWriter)
 {
+    if (pWriter != nullptr)
+    {
+        // tdf#157182 HACK: all PDF actions on this page will be deleted; to have
+        // matching SE IDs on the *next* page, replay EnsureStructureElement actions
+        for (auto const& rAction : mpPageSyncData->mActions)
+        {
+            if (rAction.eAct == PDFExtOutDevDataSync::EnsureStructureElement)
+            {
+                pWriter->EnsureStructureElement();
+            }
+        }
+    }
     *mpPageSyncData = PageSyncData( mpGlobalSyncData.get() );
 }
 bool PDFExtOutDevData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rIdx, const GDIMetaFile& rMtf )
