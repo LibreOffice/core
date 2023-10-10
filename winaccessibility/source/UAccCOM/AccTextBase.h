@@ -106,8 +106,6 @@ public:
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleText> pRXText;
-
-    css::accessibility::XAccessibleText* GetXInterface() { return pRXText.get(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

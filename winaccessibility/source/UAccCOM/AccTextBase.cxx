@@ -108,7 +108,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_addSelection(long startOffse
     }
     else
     {
-        GetXInterface()->setSelection(startOffset, endOffset);
+        pRXText->setSelection(startOffset, endOffset);
         return S_OK;
     }
 
@@ -137,12 +137,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         return E_FAIL;
     }
 
-    if( offset < 0 || offset > GetXInterface()->getCharacterCount() )
+    if (offset < 0 || offset > pRXText->getCharacterCount() )
         return E_FAIL;
 
     OUStringBuffer strAttrs("Version:1;");
 
-    Sequence< css::beans::PropertyValue > pValues = GetXInterface()->getCharacterAttributes(offset, Sequence< OUString >());
+    Sequence <css::beans::PropertyValue> pValues = pRXText->getCharacterAttributes(offset, Sequence<OUString>());
     int nCount = pValues.getLength();
 
     sal_Int16 numberingLevel = 0;
@@ -220,9 +220,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         SysFreeString(*textAttributes);
     *textAttributes = SysAllocString(o3tl::toW(strAttrs.makeStringAndClear().getStr()));
 
-    if( offset < GetXInterface()->getCharacterCount() )
+    if (offset < pRXText->getCharacterCount())
     {
-        TextSegment textSeg = GetXInterface()->getTextAtIndex(offset, AccessibleTextType::ATTRIBUTE_RUN);
+        TextSegment textSeg = pRXText->getTextAtIndex(offset, AccessibleTextType::ATTRIBUTE_RUN);
         *startOffset = textSeg.SegmentStart;
         *endOffset = textSeg.SegmentEnd;
     }
@@ -257,7 +257,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
         return S_OK;
     }
 
-    *offset = GetXInterface()->getCaretPosition();
+    *offset = pRXText->getCaretPosition();
     return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -283,7 +283,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterCount(long * nChara
         return S_OK;
     }
 
-    *nCharacters = GetXInterface()->getCharacterCount();
+    *nCharacters = pRXText->getCharacterCount();
     return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -310,11 +310,11 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset
     if(!pRXText.is())
         return E_FAIL;
 
-    if(offset < 0 || offset > GetXInterface()->getCharacterCount() )
+    if (offset < 0 || offset > pRXText->getCharacterCount())
         return E_FAIL;
 
     css::awt::Rectangle rectangle;
-    rectangle = GetXInterface()->getCharacterBounds(offset);
+    rectangle = pRXText->getCharacterBounds(offset);
 
     //IA2Point aPoint;
     css::awt::Point aPoint;
@@ -346,10 +346,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_characterExtents(long offset
     *x = rectangle.X;
     *y = rectangle.Y;
 
-    // GetXInterface()->getCharacterBounds() have different implement in different acc component
+    // pRXText->getCharacterBounds() have different implement in different acc component
     // But we need return the width/height == 1 for every component when offset == text length.
-    // So we ignore the return result of GetXInterface()->getCharacterBounds() when offset == text length.
-    if( offset == GetXInterface()->getCharacterCount() )
+    // So we ignore the return result of pRXText->getCharacterBounds() when offset == text length.
+    if (offset == pRXText->getCharacterCount())
     {
         *width = 1;
         *height = 1;
@@ -395,7 +395,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nSelections(long * nSelectio
         return S_OK;
     }
 
-    long iLength = GetXInterface()->getSelectedText().getLength();
+    long iLength = pRXText->getSelectedText().getLength();
     if( iLength> 0)
     {
         *nSelections = 1;
@@ -445,7 +445,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y
         point.Y -= aObjectPos.Y;
     }
 
-    *offset = GetXInterface()->getIndexAtPoint(point);
+    *offset = pRXText->getIndexAtPoint(point);
     return S_OK;
 
     } catch(...) { return E_FAIL; }
@@ -487,10 +487,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_selection(long selectionInde
         *endOffset = pRExtension->getSeletedPositionEnd(selectionIndex);
         return S_OK;
     }
-    else if(GetXInterface()->getSelectionEnd() > -1)
+    else if (pRXText->getSelectionEnd() > -1)
     {
-        *startOffset = GetXInterface()->getSelectionStart();
-        *endOffset = GetXInterface()->getSelectionEnd();
+        *startOffset = pRXText->getSelectionStart();
+        *endOffset = pRXText->getSelectionEnd();
         return S_OK;
     }
 
@@ -531,12 +531,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_text(long startOffset, long 
         long nLen=0;
         if(SUCCEEDED(get_characterCount(&nLen)))
         {
-            ouStr = GetXInterface()->getTextRange( 0, nLen );
+            ouStr = pRXText->getTextRange(0, nLen);
         }
     }
     else
     {
-        ouStr = GetXInterface()->getTextRange( startOffset, endOffset );
+        ouStr = pRXText->getTextRange(startOffset, endOffset);
     }
 
     SysFreeString(*text);
@@ -580,7 +580,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset
     if (nUnoBoundaryType < 0)
         return E_FAIL;
 
-    TextSegment segment = GetXInterface()->getTextBeforeIndex(offset, nUnoBoundaryType);
+    TextSegment segment = pRXText->getTextBeforeIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -626,7 +626,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset,
     if (nUnoBoundaryType < 0)
         return E_FAIL;
 
-    TextSegment segment = GetXInterface()->getTextBehindIndex(offset, nUnoBoundaryType);
+    TextSegment segment = pRXText->getTextBehindIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -672,7 +672,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA
     if (nUnoBoundaryType < 0)
         return E_FAIL;
 
-    TextSegment segment = GetXInterface()->getTextAtIndex(offset, nUnoBoundaryType);
+    TextSegment segment = pRXText->getTextAtIndex(offset, nUnoBoundaryType);
     OUString ouStr = segment.SegmentText;
     SysFreeString(*text);
     *text = SysAllocString(o3tl::toW(ouStr.getStr()));
@@ -712,7 +712,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::removeSelection(long selectionIn
     }
     else
     {
-        GetXInterface()->setSelection(0, 0);
+        pRXText->setSelection(0, 0);
         return S_OK;
     }
 
@@ -734,7 +734,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
     if(!pRXText.is())
         return E_FAIL;
 
-    GetXInterface()->setCaretPosition( offset);
+    pRXText->setCaretPosition(offset);
 
     return S_OK;
 
@@ -760,7 +760,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::setSelection(long, long startOff
         return E_FAIL;
     }
 
-    GetXInterface()->setSelection( startOffset, endOffset );
+    pRXText->setSelection(startOffset, endOffset);
 
     return S_OK;
 
@@ -787,7 +787,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacte
         return S_OK;
     }
 
-    *nCharacters = GetXInterface()->getCharacterCount();
+    *nCharacters = pRXText->getCharacterCount();
 
     return S_OK;
 
@@ -854,7 +854,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::scrollSubstringTo(long startInde
         return E_NOTIMPL;
     }
 
-    if( GetXInterface()->scrollSubstringTo(startIndex, endIndex, lUnoType) )
+    if (pRXText->scrollSubstringTo(startIndex, endIndex, lUnoType))
         return S_OK;
 
     return E_NOTIMPL;
