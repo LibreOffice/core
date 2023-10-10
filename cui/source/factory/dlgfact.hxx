@@ -439,8 +439,7 @@ public:
                                                                  const SfxItemSet& rAttr,
                                                                  const css::uno::Reference< css::frame::XFrame >& rFrame) override;
     virtual VclPtr<VclAbstractDialog>    CreateFrameDialog(weld::Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
-                                                           sal_uInt32 nResId,
-                                                           const OUString& rParameter ) override;
+                                                           sal_uInt32 nResId, sal_uInt16 nPageId, const OUString& rParameter) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateAutoCorrTabDialog(weld::Window* pParent, const SfxItemSet* pAttrSet) override;
     virtual VclPtr<SfxAbstractTabDialog> CreateCustomizeTabDialog(weld::Window* pParent,
                                             const SfxItemSet* pAttrSet,

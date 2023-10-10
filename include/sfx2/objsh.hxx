@@ -440,7 +440,7 @@ public:
 
     virtual bool                PrepareClose(bool bUI = true);
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
-    sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, weld::Window* pParent );
+    void                        QueryHiddenInformation( HiddenWarningFact eFact );
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly );
 

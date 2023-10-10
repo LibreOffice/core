@@ -65,6 +65,7 @@ class SFX2_DLLPUBLIC SfxViewFrame final : public SfxShell, public SfxListener
     DECL_DLLPRIVATE_LINK(DonationHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(WhatsNewHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(MacroButtonHandler, weld::Button&, void);
+    DECL_DLLPRIVATE_LINK(SecurityButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(EventButtonHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SwitchReadOnlyHandler, weld::Button&, void);
     DECL_DLLPRIVATE_LINK(SignDocumentHandler, weld::Button&, void);
@@ -174,6 +175,7 @@ public:
                                     InfobarType eType);
     bool              HasInfoBarWithID(std::u16string_view sId);
     void AppendReadOnlyInfobar();
+    void HandleSecurityInfobar(const OUString& sSecondaryMessage);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell *pVSh );

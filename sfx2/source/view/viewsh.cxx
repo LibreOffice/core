@@ -1598,11 +1598,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         case SID_MAIL_SENDDOCASFORMAT:
         {
             SfxObjectShell* pDoc = GetObjectShell();
-            if ( pDoc && pDoc->QueryHiddenInformation(
-                             HiddenWarningFact::WhenSaving, GetViewFrame().GetFrameWeld() ) != RET_YES )
+            if (!pDoc)
                 break;
-
-
+            pDoc->QueryHiddenInformation(HiddenWarningFact::WhenSaving);
             SfxMailModel  aModel;
             OUString aDocType;
 
@@ -1658,9 +1656,9 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         {
             SfxBluetoothModel aModel;
             SfxObjectShell* pDoc = GetObjectShell();
-            if ( pDoc && pDoc->QueryHiddenInformation(
-                            HiddenWarningFact::WhenSaving, GetViewFrame().GetFrameWeld() ) != RET_YES )
+            if (!pDoc)
                 break;
+            pDoc->QueryHiddenInformation(HiddenWarningFact::WhenSaving);
             uno::Reference < frame::XFrame > xFrame( rFrame.GetFrame().GetFrameInterface() );
             SfxMailModel::SendMailResult eResult = aModel.SaveAndSend( xFrame );
             if( eResult == SfxMailModel::SEND_MAIL_ERROR )

@@ -27,6 +27,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <sfx2/pageids.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
@@ -1306,6 +1307,38 @@ void SfxViewFrame::AppendReadOnlyInfobar()
     }
 }
 
+void SfxViewFrame::HandleSecurityInfobar(const OUString& sSecondaryMessage)
+{
+    if (!HasInfoBarWithID(u"securitywarn"))
+    {
+        // new info bar
+        if (!sSecondaryMessage.isEmpty())
+        {
+            auto pInfoBar = AppendInfoBar("securitywarn", SfxResId(STR_HIDDENINFO_CONTAINS).replaceAll("\n\n", " "),
+                sSecondaryMessage, InfobarType::WARNING);
+            if (!pInfoBar)
+                return;
+
+            weld::Button& rGetInvolvedButton = pInfoBar->addButton();
+            rGetInvolvedButton.set_label(SfxResId(STR_SECURITY_OPTIONS));
+            rGetInvolvedButton.connect_clicked(LINK(this, SfxViewFrame, SecurityButtonHandler));
+        }
+    }
+    else
+    {
+        // info bar exists already
+        if (sSecondaryMessage.isEmpty())
+        {
+            RemoveInfoBar(u"securitywarn");
+        }
+        else
+        {
+            UpdateInfoBar(u"securitywarn", SfxResId(STR_HIDDENINFO_CONTAINS).replaceAll("\n\n", " "),
+                sSecondaryMessage, InfobarType::WARNING);
+        }
+    }
+}
+
 void SfxViewFrame::AppendContainsMacrosInfobar()
 {
     SfxObjectShell_Impl* pObjImpl = m_xObjSh->Get_Impl();
@@ -1806,6 +1839,13 @@ IMPL_LINK_NOARG(SfxViewFrame, MacroButtonHandler, weld::Button&, void)
     SfxUnoFrameItem aDocFrame(SID_FILLFRAME, GetFrame().GetFrameInterface());
     GetDispatcher()->ExecuteList(SID_MACROORGANIZER, SfxCallMode::ASYNCHRON,
                                  { &aTabItem, &aCurrentDocItem }, { &aDocFrame });
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, SecurityButtonHandler, weld::Button&, void)
+{
+    SfxUInt16Item aPageID(SID_OPTIONS_PAGEID, sal_uInt16(RID_SVXPAGE_INET_SECURITY));
+    GetDispatcher()->ExecuteList(SID_OPTIONS_TREEDIALOG, SfxCallMode::SYNCHRON, { &aPageID });
+    RemoveInfoBar(u"securitywarn");
 }
 
 IMPL_LINK_NOARG(SfxViewFrame, EventButtonHandler, weld::Button&, void)

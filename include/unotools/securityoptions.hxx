@@ -143,6 +143,8 @@ namespace SvtSecurityOptions
     UNOTOOLS_DLLPUBLIC bool        IsOptionSet     ( EOption eOption                   );
     UNOTOOLS_DLLPUBLIC void        SetOption       ( EOption eOption, bool bValue      );
 
+    UNOTOOLS_DLLPUBLIC bool IsInfobarSecurityWarningEnable();
+
 } // namespace SvtSecurityOptions
 
 // map personal info strings, e.g. authors to 1, 2, 3... for removing personal info

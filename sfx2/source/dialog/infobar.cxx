@@ -15,6 +15,7 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <memory>
 #include <officecfg/Office/UI/Infobar.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/infobar.hxx>
@@ -438,6 +439,13 @@ bool SfxInfoBarContainerWindow::isInfobarEnabled(std::u16string_view sId)
         return officecfg::Office::UI::Infobar::Enabled::HiddenTrackChanges::get();
     if (sId == u"macro")
         return officecfg::Office::UI::Infobar::Enabled::MacrosDisabled::get();
+    if (sId == u"securitywarn")
+    {
+        return officecfg::Office::Common::Security::Scripting::WarnSaveOrSendDoc::get()
+               || officecfg::Office::Common::Security::Scripting::WarnSignDoc::get()
+               || officecfg::Office::Common::Security::Scripting::WarnPrintDoc::get()
+               || officecfg::Office::Common::Security::Scripting::WarnCreatePDF::get();
+    }
 
     return true;
 }

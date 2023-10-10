@@ -535,48 +535,47 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     if( SID_SIGNATURE == nId || SID_MACRO_SIGNATURE == nId )
     {
-        if ( QueryHiddenInformation( HiddenWarningFact::WhenSigning, nullptr ) == RET_YES )
+        QueryHiddenInformation(HiddenWarningFact::WhenSigning);
+
+        if (SID_SIGNATURE == nId)
         {
-            if (SID_SIGNATURE == nId)
+            uno::Reference<security::XCertificate> xCertificate = GetSignPDFCertificate();
+            if (xCertificate.is())
             {
-                uno::Reference<security::XCertificate> xCertificate = GetSignPDFCertificate();
-                if (xCertificate.is())
+
+                bHaveWeSigned |= SignDocumentContentUsingCertificate(xCertificate);
+
+                // Reload to show how the PDF actually looks like after signing. This also
+                // changes "finish signing" on the infobar back to "sign document" as a side
+                // effect.
+                SfxViewFrame* pFrame = GetFrame();
+                if (pFrame)
                 {
-
-                    bHaveWeSigned |= SignDocumentContentUsingCertificate(xCertificate);
-
-                    // Reload to show how the PDF actually looks like after signing. This also
-                    // changes "finish signing" on the infobar back to "sign document" as a side
-                    // effect.
-                    SfxViewFrame* pFrame = GetFrame();
-                    if (pFrame)
+                    // Store current page before reload.
+                    SfxAllItemSet aSet(SfxGetpApp()->GetPool());
+                    uno::Reference<drawing::XDrawView> xController(
+                        GetBaseModel()->getCurrentController(), uno::UNO_QUERY);
+                    uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(),
+                                                              uno::UNO_QUERY);
+                    sal_Int32 nPage{};
+                    xPage->getPropertyValue("Number") >>= nPage;
+                    if (nPage > 0)
                     {
-                        // Store current page before reload.
-                        SfxAllItemSet aSet(SfxGetpApp()->GetPool());
-                        uno::Reference<drawing::XDrawView> xController(
-                            GetBaseModel()->getCurrentController(), uno::UNO_QUERY);
-                        uno::Reference<beans::XPropertySet> xPage(xController->getCurrentPage(),
-                                                                  uno::UNO_QUERY);
-                        sal_Int32 nPage{};
-                        xPage->getPropertyValue("Number") >>= nPage;
-                        if (nPage > 0)
-                        {
-                            // nPage is 1-based.
-                            aSet.Put(SfxInt32Item(SID_PAGE_NUMBER, nPage - 1));
-                        }
-                        SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
-                        pFrame->ExecReload_Impl(aReq);
+                        // nPage is 1-based.
+                        aSet.Put(SfxInt32Item(SID_PAGE_NUMBER, nPage - 1));
                     }
-                }
-                else
-                {
-                    bHaveWeSigned |= SignDocumentContent(pDialogParent);
+                    SfxRequest aReq(SID_RELOAD, SfxCallMode::SLOT, aSet);
+                    pFrame->ExecReload_Impl(aReq);
                 }
             }
             else
             {
-                bHaveWeSigned |= SignScriptingContent(pDialogParent);
+                bHaveWeSigned |= SignDocumentContent(pDialogParent);
             }
+        }
+        else
+        {
+            bHaveWeSigned |= SignScriptingContent(pDialogParent);
         }
 
         if ( bHaveWeSigned && HasValidSignatures() )
@@ -1057,13 +1056,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if (bIsAsync && SfxViewShell::Current())
                     SfxViewShell::Current()->SetStoringHelper(xHelper);
 
-                if ( QueryHiddenInformation( bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving, nullptr ) != RET_YES )
-                {
-                    // the user has decided not to store the document
-                    throw task::ErrorCodeIOException(
-                        "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_ABORT",
-                        uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
-                }
+                QueryHiddenInformation(bIsPDFExport ? HiddenWarningFact::WhenCreatingPDF : HiddenWarningFact::WhenSaving);
 
                 const SfxBoolItem *pItem = nId != SID_DIRECTEXPORTDOCASPDF ? nullptr :
                     dynamic_cast<const SfxBoolItem*>( GetSlotState(SID_MAIL_PREPAREEXPORT) );

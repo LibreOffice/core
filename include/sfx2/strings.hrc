@@ -46,10 +46,6 @@
 #define STR_HIDDENINFO_RECORDCHANGES            NC_("STR_HIDDENINFO_RECORDCHANGES", "Recorded changes")
 #define STR_HIDDENINFO_NOTES                    NC_("STR_HIDDENINFO_NOTES", "Notes")
 #define STR_HIDDENINFO_DOCVERSIONS              NC_("STR_HIDDENINFO_DOCVERSIONS", "Document versions")
-#define STR_HIDDENINFO_CONTINUE_SAVING          NC_("STR_HIDDENINFO_CONTINUE_SAVING", "Do you want to continue saving the document?")
-#define STR_HIDDENINFO_CONTINUE_PRINTING        NC_("STR_HIDDENINFO_CONTINUE_PRINTING", "Do you want to continue printing the document?")
-#define STR_HIDDENINFO_CONTINUE_SIGNING         NC_("STR_HIDDENINFO_CONTINUE_SIGNING", "Do you want to continue signing the document?")
-#define STR_HIDDENINFO_CONTINUE_CREATEPDF       NC_("STR_HIDDENINFO_CONTINUE_CREATEPDF", "Do you want to continue creating a PDF file?")
 #define STR_NEW_FILENAME_SAVE                   NC_("STR_NEW_FILENAME_SAVE", "If you do not want to overwrite the original document, you should save your work under a new filename.")
 // Used in the title of a shared document.
 #define STR_SHARED                              NC_("STR_SHARED", " (shared)")
@@ -298,6 +294,7 @@
 #define STR_MACROS_DISABLED                     NC_("STR_MACROS_DISABLED", "Macros are disabled due to the Macro Security settings.")
 #define STR_MACROS_DISABLED_CONTENT_UNSIGNED    NC_("STR_MACROS_DISABLED_CONTENT_UNSIGNED", "Macros are signed, but the document (containing document events) is not signed.")
 #define STR_MACROS                              NC_("STR_MACROS", "Show Macros")
+#define STR_SECURITY_OPTIONS                    NC_("STR_MACROS", "Show Security Options")
 #define STR_EVENTS                              NC_("STR_EVENTS", "Show Events")
 
 // Translators: default Impress template names

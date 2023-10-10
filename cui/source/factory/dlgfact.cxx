@@ -854,16 +854,18 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateVclDialog(weld::Wind
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateFrameDialog(weld::Window* pParent, const Reference< frame::XFrame >& rxFrame,
-    sal_uInt32 nResId, const OUString& rParameter )
+    sal_uInt32 nResId, sal_uInt16 nPageId, const OUString& rParameter)
 {
     std::unique_ptr<OfaTreeOptionsDialog> xDlg;
     if (SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId)
     {
         // only activate last page if we don't want to activate a special page
-        bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() );
+        bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.isEmpty() && !nPageId);
         xDlg = std::make_unique<OfaTreeOptionsDialog>(pParent, rxFrame, bActivateLastSelection);
         if ( nResId == SID_OPTIONS_DATABASES )
             xDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+        else if (nPageId)
+            xDlg->ActivatePage(nPageId);
         else if ( !rParameter.isEmpty() )
             xDlg->ActivatePage( rParameter );
     }

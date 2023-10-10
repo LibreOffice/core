@@ -677,8 +677,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 return;
             }
 
-            if ( !bSilent && pDoc->QueryHiddenInformation( HiddenWarningFact::WhenPrinting, nullptr ) != RET_YES )
-                return;
+            pDoc->QueryHiddenInformation(HiddenWarningFact::WhenPrinting);
 
             // should we print only the selection or the whole document
             const SfxBoolItem* pSelectItem = rReq.GetArg<SfxBoolItem>(SID_SELECTION);

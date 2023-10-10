@@ -110,6 +110,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/event.hxx>
+#include <sfx2/infobar.hxx>
 #include <fltoptint.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "graphhelp.hxx"
@@ -3081,35 +3082,29 @@ HiddenInformation SfxObjectShell::GetHiddenInformationState( HiddenInformation n
     return nState;
 }
 
-sal_Int16 SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact, weld::Window* pParent)
+void SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact)
 {
-    sal_Int16 nRet = RET_YES;
-    TranslateId pResId;
     SvtSecurityOptions::EOption eOption = SvtSecurityOptions::EOption();
 
     switch ( eFact )
     {
         case HiddenWarningFact::WhenSaving :
         {
-            pResId = STR_HIDDENINFO_CONTINUE_SAVING;
             eOption = SvtSecurityOptions::EOption::DocWarnSaveOrSend;
             break;
         }
         case HiddenWarningFact::WhenPrinting :
         {
-            pResId = STR_HIDDENINFO_CONTINUE_PRINTING;
             eOption = SvtSecurityOptions::EOption::DocWarnPrint;
             break;
         }
         case HiddenWarningFact::WhenSigning :
         {
-            pResId = STR_HIDDENINFO_CONTINUE_SIGNING;
             eOption = SvtSecurityOptions::EOption::DocWarnSigning;
             break;
         }
         case HiddenWarningFact::WhenCreatingPDF :
         {
-            pResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
             eOption = SvtSecurityOptions::EOption::DocWarnCreatePdf;
             break;
         }
@@ -3119,40 +3114,30 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation(HiddenWarningFact eFact, weld::
 
     if ( SvtSecurityOptions::IsOptionSet( eOption ) )
     {
-        OUString sMessage( SfxResId(STR_HIDDENINFO_CONTAINS) );
+        OUString sMessage;
         HiddenInformation nWantedStates = HiddenInformation::RECORDEDCHANGES | HiddenInformation::NOTES;
         if ( eFact != HiddenWarningFact::WhenPrinting )
             nWantedStates |= HiddenInformation::DOCUMENTVERSIONS;
         HiddenInformation nStates = GetHiddenInformationState( nWantedStates );
-        bool bWarning = false;
 
         if ( nStates & HiddenInformation::RECORDEDCHANGES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_RECORDCHANGES) + "\n";
-            bWarning = true;
         }
         if ( nStates & HiddenInformation::NOTES )
         {
             sMessage += SfxResId(STR_HIDDENINFO_NOTES) + "\n";
-            bWarning = true;
         }
         if ( nStates & HiddenInformation::DOCUMENTVERSIONS )
         {
             sMessage += SfxResId(STR_HIDDENINFO_DOCVERSIONS) + "\n";
-            bWarning = true;
         }
 
-        if ( bWarning )
-        {
-            sMessage += "\n" + SfxResId(pResId);
-            std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(pParent,
-                                                       VclMessageType::Warning, VclButtonsType::YesNo, sMessage));
-            xWarn->set_default_response(RET_NO);
-            nRet = xWarn->run();
-        }
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst(this);
+        if (pFrame)
+            pFrame->HandleSecurityInfobar(!sMessage.isEmpty() ? sMessage.trim().replaceAll("\n", ", ") : sMessage);
+
     }
-
-    return nRet;
 }
 
 bool SfxObjectShell::IsSecurityOptOpenReadOnly() const

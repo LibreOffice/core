@@ -887,12 +887,15 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         if ( "OptionsTreeDialog" == pSlot->pUnoName )
         {
             auto pProp = std::find_if(rArgs.begin(), rArgs.end(),
-                [](const PropertyValue& rProp) { return rProp.Name == "OptionsPageURL"; });
+                [](const PropertyValue& rProp) { return rProp.Name == "OptionsPageURL" || rProp.Name == "OptionsPageID"; });
             if (pProp != rArgs.end())
             {
                 OUString sURL;
-                if ( pProp->Value >>= sURL )
+                sal_uInt16 nPageID;
+                if ( pProp->Name == "OptionsPageURL" && (pProp->Value >>= sURL) )
                     rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
+                else if ( pProp->Name == "OptionsPageID" && (pProp->Value >>= nPageID) )
+                    rSet.Put( SfxUInt16Item( SID_OPTIONS_PAGEID, nPageID ) );
             }
         }
     }
