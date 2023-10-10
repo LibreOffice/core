@@ -112,6 +112,33 @@ CPPUNIT_TEST_FIXTURE(Test, testFlyMinimalWrap)
     // text frames in the body frame, not 2.
     CPPUNIT_ASSERT(!pPage2Para2->GetNext());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
+{
+    // Given a document with a content control in the header:
+    createSwDoc("content-control-header.docx");
+
+    // When exporting to PDF:
+    save("writer_pdf_Export");
+
+    // Then make sure all the expected text is there on page 2:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage2 = pPdfDocument->openPage(1);
+    int nTextCount = 0;
+    for (int i = 0; i < pPage2->getObjectCount(); ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pPage2->getObject(i);
+        if (pObject->getType() == vcl::pdf::PDFPageObjectType::Text)
+        {
+            ++nTextCount;
+        }
+    }
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 2
+    // i.e. not all of header, heading and body text was there on page 2, content was lost.
+    CPPUNIT_ASSERT_EQUAL(3, nTextCount);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
