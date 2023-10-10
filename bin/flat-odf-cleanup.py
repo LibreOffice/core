@@ -79,9 +79,21 @@ def remove_unused_styles(root, usedstyles, styles, name):
             except ValueError:
                 root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}styles").remove(style)
 
+def remove_unused_drawings(root, useddrawings, drawings, name):
+    for drawing in drawings:
+        print(drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name"))
+        if not(drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name") in useddrawings):
+            print("removing unused " + name + " " + drawing.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}name"))
+            root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}styles").remove(drawing)
+
 def collect_all_attribute(usedstyles, attribute):
     for element in root.findall(".//*[@" + attribute + "]"):
         usedstyles.add(element.get(attribute))
+
+def collect_all_attribute_list(usedstyles, attribute):
+    for element in root.findall(".//*[@" + attribute + "]"):
+        for style in element.get(attribute).split(" "):
+            usedstyles.add(style)
 
 def remove_unused(root):
     # 1) find all elements that may reference page styles - this gets rid of some paragraphs
@@ -215,9 +227,7 @@ def remove_unused(root):
     usedpresentationstyles = set()
 
     collect_all_attribute(usedpresentationstyles, "{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}style-name")
-    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}class-names]"):
-        for style in element.get("{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}class-names").split(" "):
-            usedpresentationstyles.add(style)
+    collect_all_attribute_list(usedpresentationstyles, "{urn:oasis:names:tc:opendocument:xmlns:presentation:1.0}class-names")
 
     presentationstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='presentation']")
     add_parent_styles(usedpresentationstyles, presentationstyles)
@@ -238,9 +248,7 @@ def remove_unused(root):
             useddrawingpagestyles.add(style)
         else:
             usedgraphicstyles.add(style)
-    for element in root.findall(".//*[@{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}class-names]"):
-        for style in element.get("{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}class-names").split(" "):
-            usedgraphicstyles.add(style)
+    collect_all_attribute_list(usedgraphicstyles, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}class-names")
 
     graphicstyles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style[@{urn:oasis:names:tc:opendocument:xmlns:style:1.0}family='graphic']")
     add_parent_styles(usedgraphicstyles, graphicstyles)
@@ -320,6 +328,39 @@ def remove_unused(root):
     remove_unused_styles(root, usedtablerowstyles, tablerowstyles, "table row style")
     remove_unused_styles(root, usedtablecellstyles, tablecellstyles, "table cell style")
 
+    # 13) gradients
+    usedgradients = set()
+    collect_all_attribute(usedgradients, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}fill-gradient-name")
+    collect_all_attribute(usedgradients, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}opacity-name")
+    gradients = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}gradient")
+    remove_unused_drawings(root, usedgradients, gradients, "gradient")
+
+    # 14) hatchs
+    usedhatchs = set()
+    collect_all_attribute(usedhatchs, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}fill-hatch-name")
+    hatchs = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}hatch")
+    remove_unused_drawings(root, usedhatchs, hatchs, "hatch")
+
+    # 15) bitmaps
+    usedbitmaps = set()
+    collect_all_attribute(usedbitmaps, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}fill-image-name")
+    bitmaps = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}bitmap")
+    remove_unused_drawings(root, usedbitmaps, bitmaps, "bitmap")
+
+    # 16) markers
+    usedmarkers = set()
+    collect_all_attribute(usedmarkers, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}marker-start")
+    collect_all_attribute(usedmarkers, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}marker-end")
+    markers = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}marker")
+    remove_unused_drawings(root, usedmarkers, markers, "marker")
+
+    # 17) stroke-dash
+    usedstrokedashs = set()
+    collect_all_attribute(usedstrokedashs, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}stroke-dash")
+    collect_all_attribute_list(usedstrokedashs, "{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}stroke-dash-names")
+    strokedashs = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:drawing:1.0}stroke-dash")
+    remove_unused_drawings(root, usedstrokedashs, strokedashs, "stroke-dash")
+
     # TODO 3 other styles
 
     # 13) unused font-face-decls
@@ -394,22 +435,6 @@ if __name__ == "__main__":
     -> data style
     style:percentage-data-style-name
     -> data style
-
-    draw:stroke-dash-names
-    -> draw:stroke-dash
-
-    draw:fill-gradient-name
-    -> gradient
-    draw:fill-hatch-name
-    -> hatch
-    draw:fill-image-name
-    -> bitmap
-    draw:opacity-name
-    -> gradient
-    draw:stroke-dash
-    -> draw:stroke-dash
-    draw:marker-start
-    draw:marker-end
     """
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
