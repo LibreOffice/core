@@ -1001,6 +1001,23 @@ void ChildrenManagerImpl::UpdateSelection()
         }
     }
 
+    // We need to know when text content is no more edited but shape is still selected.
+    // For instance when ESC is pressed.
+    // The only difference is provided by nSelectedChildCount: on editing is equal to 1.
+    // In the following a shape get selected, but it was already selected, anyway editing is no more active.
+    if (comphelper::LibreOfficeKit::isActive() && pNewFocusedShape && nAddSelect == 0)
+    {
+        sal_Int64 nChildCount = pNewFocusedShape->getAccessibleChildCount();
+        sal_Int64 nSelectedChildCount = pNewFocusedShape->getSelectedAccessibleChildCount();
+        if (nChildCount > 0 && nSelectedChildCount == 0)
+        {
+            Reference< XAccessible > xShape(pNewFocusedShape);
+            uno::Any anyShape;
+            anyShape <<= xShape;
+            mrContext.CommitChange(AccessibleEventId::SELECTION_CHANGED,anyShape,uno::Any());
+        }
+    }
+
     // Remember whether there is a shape that now has the focus.
     mpFocusedShape = pNewFocusedShape;
 }

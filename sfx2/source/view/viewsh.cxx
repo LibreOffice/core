@@ -249,6 +249,29 @@ typedef std::list<uno::Reference<accessibility::XAccessibleTable>> XAccessibleTa
 
 namespace
 {
+constexpr
+bool isText(sal_Int16 nRole)
+{
+    return nRole == accessibility::AccessibleRole::DOCUMENT_TEXT;
+}
+
+constexpr
+bool isSpreadsheet(sal_Int16 nRole)
+{
+    return nRole == accessibility::AccessibleRole::DOCUMENT_SPREADSHEET;
+}
+
+constexpr
+bool isPresentation(sal_Int16 nRole)
+{
+    return nRole == accessibility::AccessibleRole::DOCUMENT_PRESENTATION;
+}
+
+constexpr
+bool isDocument(sal_Int16 nRole)
+{
+    return isText(nRole) || isSpreadsheet(nRole) || isPresentation(nRole);
+}
 
 bool hasState(const accessibility::AccessibleEventObject& aEvent, ::sal_Int64 nState)
 {
@@ -267,26 +290,75 @@ bool isFocused(const accessibility::AccessibleEventObject& aEvent)
     return hasState(aEvent, accessibility::AccessibleStateType::FOCUSED);
 }
 
-sal_Int16 getParentRole(const uno::Reference<accessibility::XAccessible>& xAccObject)
+uno::Reference<accessibility::XAccessibleContext>
+getParentContext(const uno::Reference<accessibility::XAccessibleContext>& xContext)
 {
-    if (!xAccObject.is())
-        return 0;
+    uno::Reference<accessibility::XAccessibleContext> xParentContext;
+    uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
+    if (xParent.is())
+        xParentContext = uno::Reference<accessibility::XAccessibleContext>(xParent, uno::UNO_QUERY);
+    return xParentContext;
+}
 
-    uno::Reference<accessibility::XAccessibleContext> xContext(xAccObject, uno::UNO_QUERY);
+OUString selectionEventTypeToString(sal_Int16 nEventId)
+{
+    using namespace accessibility;
+    switch(nEventId)
+    {
+        case AccessibleEventId::SELECTION_CHANGED:
+            return "create";
+        case AccessibleEventId::SELECTION_CHANGED_ADD:
+            return "add";
+        case AccessibleEventId::SELECTION_CHANGED_REMOVE:
+            return "remove";
+        default:
+            return "";
+    }
+}
+
+bool selectionHasToBeNotified(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    sal_Int16 nRole = xContext->getAccessibleRole();
+    return
+        nRole == accessibility::AccessibleRole::GRAPHIC ||
+        nRole == accessibility::AccessibleRole::EMBEDDED_OBJECT ||
+        nRole == accessibility::AccessibleRole::SHAPE;
+}
+
+bool hasToBeActiveForEditing(sal_Int16 nRole)
+{
+    return
+        nRole == accessibility::AccessibleRole::SHAPE;
+}
+
+sal_Int16 getParentRole(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    sal_Int16 nRole = 0;
     if (xContext.is())
     {
-        uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
-        if (xParent.is())
+        uno::Reference<accessibility::XAccessibleContext> xParentContext = getParentContext(xContext);
+        if (xParentContext.is())
+            nRole = xParentContext->getAccessibleRole();
+    }
+    return nRole;
+}
+
+sal_Int64 getAccessibleSiblingCount(const Reference<accessibility::XAccessibleContext>& xContext)
+{
+    if (!xContext.is())
+        return -1;
+
+    sal_Int64 nChildCount = 0;
+    Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
+    if (xParent.is())
+    {
+        Reference<accessibility::XAccessibleContext> xParentContext = xParent->getAccessibleContext();
+        if (xParentContext.is())
         {
-            uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent,
-                                                                             uno::UNO_QUERY);
-            if (xParentContext.is())
-            {
-                return xParentContext->getAccessibleRole();
-            }
+            nChildCount = xParentContext->getAccessibleChildCount();
         }
     }
-    return 0;
+    return nChildCount - 1;
 }
 
 // Put in rAncestorList all ancestors of xTable up to xAncestorTable or
@@ -322,6 +394,37 @@ bool getAncestorList(XAccessibleTableList& rAncestorList,
     }
 
     return xCurrentTable.is() && xCurrentTable == xAncestorTable;
+}
+
+void lookForParentTable(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+                        uno::Reference<accessibility::XAccessibleTable>& xTable,
+                        sal_Int64& nChildIndex)
+{
+    using namespace accessibility;
+    uno::Reference<XAccessibleContext> xParentContext = getParentContext(xContext);
+    if (xParentContext.is() && xParentContext->getAccessibleRole() == AccessibleRole::TABLE_CELL)
+    {
+        uno::Reference<XAccessible> xCellParent = xParentContext->getAccessibleParent();
+        if (xCellParent.is())
+        {
+            xTable = uno::Reference<XAccessibleTable>(xCellParent, uno::UNO_QUERY);
+            if (xTable.is())
+            {
+                nChildIndex = xParentContext->getAccessibleIndexInParent();
+            }
+        }
+    }
+}
+
+OUString truncateText(const OUString& sText, sal_Int32 nNewLength)
+{
+    // truncate test to given length
+    OUString sNewText = sText.copy(0, nNewLength);
+    // try to truncate at a word
+    nNewLength = sNewText.lastIndexOf(" ");
+    if (nNewLength > 0)
+        sNewText = sNewText.copy(0, nNewLength);
+    return sNewText;
 }
 
 std::string stateSetToString(::sal_Int64 stateSet)
@@ -637,7 +740,8 @@ class LOKDocumentFocusListener :
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
 
     const SfxViewShell* m_pViewShell;
-    std::set< uno::Reference< uno::XInterface > > m_aRefList;
+    sal_Int16 m_nDocumentType;
+    std::set<uno::Reference<uno::XInterface>> m_aRefList;
     OUString m_sFocusedParagraph;
     sal_Int32 m_nCaretPosition;
     sal_Int32 m_nSelectionStart;
@@ -646,10 +750,13 @@ class LOKDocumentFocusListener :
     uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
     bool m_bIsEditingCell;
+    // used for text content of a shape
+    bool m_bIsEditingInSelection;
     OUString m_sSelectedCellAddress;
+    uno::Reference<accessibility::XAccessible> m_xSelectedObject;
 
 public:
-    LOKDocumentFocusListener(const SfxViewShell* pViewShell);
+    explicit LOKDocumentFocusListener(const SfxViewShell* pViewShell);
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
@@ -704,10 +811,12 @@ public:
     // XAccessibleEventListener
     virtual void SAL_CALL notifyEvent( const accessibility::AccessibleEventObject& aEvent ) override;
 
+    void notifyEditingInSelectionState(bool bParagraph = true);
     void notifyFocusedParagraphChanged(bool force = false);
     void notifyCaretChanged();
     void notifyTextSelectionChanged();
     void notifyFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList, sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan);
+    void notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj, const OUString& sAction);
 
     OUString getFocusedParagraph() const;
     int getCaretPosition() const;
@@ -720,15 +829,24 @@ private:
     void updateAndNotifyParagraph(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
                                   bool force, std::string msg = "");
     void resetParagraphInfo();
+    void onFocusedParagraphInWriterTable(const uno::Reference<accessibility::XAccessibleTable>& xTable,
+                                         sal_Int64& nChildIndex,
+                                         const uno::Reference<accessibility::XAccessibleText>& xAccText);
+    uno::Reference< accessibility::XAccessible >
+    getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const;
+    void onShapeSelectionChanged(const Reference<accessibility::XAccessible>& xSelectedObject,
+                                 const OUString& sAction);
 };
 
 LOKDocumentFocusListener::LOKDocumentFocusListener(const SfxViewShell* pViewShell)
     : m_pViewShell(pViewShell)
+    , m_nDocumentType(0)
     , m_nCaretPosition(0)
     , m_nSelectionStart(0)
     , m_nSelectionEnd(0)
     , m_nListPrefixLength(0)
     , m_bIsEditingCell(false)
+    , m_bIsEditingInSelection(false)
 {
 }
 
@@ -772,6 +890,56 @@ int LOKDocumentFocusListener::getCaretPosition() const
     aboutView("LOKDocumentFocusListener::getCaretPosition", this, m_pViewShell);
     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::getCaretPosition: " << m_nCaretPosition);
     return m_nCaretPosition;
+}
+
+// notifyEditingInSelectionState
+// Used for notifying when editing becomes active/disabled for a shape
+// bParagraph: should we append currently focused paragraph ?
+// The problem is that the initially focused paragraph could not be the one user has clicked on,
+// when there are more than a single paragraph.
+// So in some case sending the focused paragraph could be misleading.
+void LOKDocumentFocusListener::notifyEditingInSelectionState(bool bParagraph)
+{
+    aboutView("LOKDocumentFocusListener::notifyEditingInSelectionState", this, m_pViewShell);
+
+    boost::property_tree::ptree aPayloadTree;
+    bool bIsCell = !m_sSelectedCellAddress.isEmpty();
+    aPayloadTree.put("cell", bIsCell ? 1 : 0);
+    if (bIsCell)
+    {
+        aPayloadTree.put("enabled", m_bIsEditingCell ? 1 : 0);
+        if (m_bIsEditingCell)
+        {
+            aPayloadTree.put("selection", m_sSelectedCellAddress);
+            if (bParagraph)
+                aPayloadTree.put("paragraph", m_sFocusedParagraph);
+        }
+    }
+    else
+    {
+        aPayloadTree.put("enabled", m_bIsEditingInSelection ? 1 : 0);
+        if (m_bIsEditingInSelection && m_xSelectedObject.is())
+        {
+            uno::Reference<accessibility::XAccessibleContext> xContext = m_xSelectedObject->getAccessibleContext();
+            if (xContext.is())
+            {
+                OUString sSelectionDescr = xContext->getAccessibleName();
+                sSelectionDescr = sSelectionDescr.trim();
+                aPayloadTree.put("selection", sSelectionDescr);
+                if (bParagraph)
+                    aPayloadTree.put("paragraph", m_sFocusedParagraph);
+            }
+        }
+    }
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aPayloadTree);
+    std::string aPayload = aStream.str();
+    if (m_pViewShell)
+    {
+        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEditingInSelectionState: payload: \n" << aPayload);
+        m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE, aPayload.c_str());
+    }
 }
 
 /// notifyFocusedParagraphChanged
@@ -851,7 +1019,7 @@ void LOKDocumentFocusListener::notifyFocusedCellChanged(
     {
         aPayloadTree.put("outCount", nOutCount);
     }
-    if (aInList.size() > 0)
+    if (!aInList.empty())
     {
         boost::property_tree::ptree aInListNode;
         for (const auto& rTableSize: aInList)
@@ -888,9 +1056,98 @@ void LOKDocumentFocusListener::notifyFocusedCellChanged(
     {
         aboutFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
         aboutParagraph("LOKDocumentFocusListener::notifyFocusedCellChanged: paragraph: ",
-                       m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd, false);
+                       m_sFocusedParagraph, m_nCaretPosition, m_nSelectionStart, m_nSelectionEnd,
+                       m_nListPrefixLength, false);
 
         m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_FOCUSED_CELL_CHANGED, aPayload.c_str());
+    }
+}
+
+void LOKDocumentFocusListener::notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj,
+                                                      const OUString& sAction)
+{
+    using namespace accessibility;
+    if (!xAccObj.is())
+        return;
+
+    aboutView("LOKDocumentFocusListener::notifySelectionChanged", this, m_pViewShell);
+    uno::Reference<XAccessibleContext> xContext = xAccObj->getAccessibleContext();
+    if (xContext.is())
+    {
+        OUString sName = xContext->getAccessibleName();
+        sName = sName.trim();
+        if (sName == "GraphicObjectShape")
+            sName = "Graphic";
+
+        // check for text content and send it with some limitations:
+        // no more than 10 paragraphs, no more than 1000 chars
+        bool bIsCell = xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL;
+        OUString sTextContent;
+        if (sAction == "create" || sAction == "add")
+        {
+            const sal_Int64 nMaxJoinedParagraphs = 10;
+            const sal_Int32 nMaxTextContentLength = 1000;
+            if (bIsCell)
+            {
+                uno::Reference<XAccessibleText> xAccText(xAccObj, uno::UNO_QUERY);
+                if (xAccText.is())
+                {
+                    sTextContent = xAccText->getText();
+                    sal_Int32 nTextLength = sTextContent.getLength();
+                    if (nTextLength > nMaxTextContentLength)
+                    {
+                        sTextContent = truncateText(sTextContent, nMaxTextContentLength);
+                    }
+                }
+            }
+            else
+            {
+                sal_Int32 nTotalTextLength = 0;
+                sal_Int64 nChildCount = xContext->getAccessibleChildCount();
+                if (nChildCount > nMaxJoinedParagraphs)
+                    nChildCount = nMaxJoinedParagraphs;
+                for (sal_Int64 i = 0; i < nChildCount; ++i)
+                {
+                    uno::Reference<XAccessible> xChild = xContext->getAccessibleChild(i);
+                    uno::Reference<XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
+                    if (!xAccText.is())
+                        continue;
+                    OUString sText = xAccText->getText();
+                    sal_Int32 nTextLength = sText.getLength();
+                    if (nTextLength < 1)
+                        continue;
+                    if (nTotalTextLength + nTextLength < nMaxTextContentLength)
+                    {
+                        nTotalTextLength += nTextLength;
+                        sTextContent += sText;
+                        sTextContent += " \n";
+                    }
+                    else
+                    {
+                        // truncate paragraph
+                        sal_Int32 nNewLength = nMaxTextContentLength - nTotalTextLength;
+                        sTextContent += truncateText(sText, nNewLength);
+                        break;
+                    }
+                }
+            }
+        }
+
+        boost::property_tree::ptree aPayloadTree;
+        aPayloadTree.put("cell", bIsCell ? 1 : 0);
+        aPayloadTree.put("action", sAction);
+        aPayloadTree.put("name", sName);
+        if (!sTextContent.isEmpty())
+            aPayloadTree.put("text", sTextContent);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aPayloadTree);
+        std::string aPayload = aStream.str();
+        if (m_pViewShell)
+        {
+            SAL_INFO("lok.a11y",  "LOKDocumentFocusListener::notifySelectionChanged: "
+                                     << "action: " << sAction << ", name: " << sName);
+            m_pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_A11Y_SELECTION_CHANGED, aPayload.c_str());
+        }
     }
 }
 
@@ -929,8 +1186,10 @@ bool LOKDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         // backspace properly.
         if (m_nSelectionStart == m_nSelectionEnd && m_nSelectionStart != -1)
         {
-            uno::Reference<accessibility::XAccessible> xAccObject(xAccText, uno::UNO_QUERY);
-            if (getParentRole(xAccObject) == accessibility::AccessibleRole::SHAPE)
+            uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+            sal_Int16 nParentRole = getParentRole(xContext);
+            if (nParentRole == accessibility::AccessibleRole::SHAPE ||
+                nParentRole == accessibility::AccessibleRole::TEXT_FRAME) // spreadsheet cell editing
                 m_nSelectionStart = m_nSelectionEnd = -1;
         }
 
@@ -972,162 +1231,241 @@ void LOKDocumentFocusListener::resetParagraphInfo()
     m_nListPrefixLength = 0;
 }
 
-void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent )
+// For a presentation document when an accessible event of type SELECTION_CHANGED_XXX occurs
+// the selected (or unselected) object is put in NewValue, instead for a text document
+// the selected object is put in Source.
+// The following function helps to retrieve the selected object independently on where it has been put.
+uno::Reference< accessibility::XAccessible >
+LOKDocumentFocusListener::getSelectedObject(const accessibility::AccessibleEventObject& aEvent) const
 {
+    uno::Reference< accessibility::XAccessible > xSelectedObject;
+    if (isText(m_nDocumentType))
+    {
+        uno::Reference< accessibility::XAccessible > xSource(aEvent.Source, uno::UNO_QUERY);
+        xSelectedObject = xSource;
+    }
+    else
+    {
+        aEvent.NewValue >>= xSelectedObject;
+    }
+    return xSelectedObject;
+}
+
+void LOKDocumentFocusListener::onShapeSelectionChanged(
+    const uno::Reference<accessibility::XAccessible>& xSelectedObject,
+    const OUString& sAction)
+{
+    // when a shape is selected or unselected we could need to notify that text content editing
+    // is no more active, that allows on the client side to prevent default input.
+    resetParagraphInfo();
+    if (m_bIsEditingInSelection)
+    {
+        m_bIsEditingInSelection = false;
+        notifyEditingInSelectionState();
+    }
+    notifySelectionChanged(xSelectedObject, sAction);
+}
+
+void LOKDocumentFocusListener::onFocusedParagraphInWriterTable(
+    const uno::Reference<accessibility::XAccessibleTable>& xTable,
+    sal_Int64& nChildIndex,
+    const uno::Reference<accessibility::XAccessibleText>& xAccText
+)
+{
+    std::vector<TableSizeType> aInList;
+    sal_Int32 nOutCount = 0;
+
+    if (m_xLastTable.is())
+    {
+        if (xTable != m_xLastTable)
+        {
+            // do we get in one or more nested tables ?
+            // check if xTable is a descendant of m_xLastTable
+            XAccessibleTableList newTableAncestorList;
+            bool isLastAncestorOfNew = getAncestorList(newTableAncestorList, xTable, m_xLastTable);
+            bool isNewAncestorOfLast = false;
+            if (!isLastAncestorOfNew)
+            {
+                // do we get out of one or more nested tables ?
+                // check if m_xLastTable is a descendant of xTable
+                XAccessibleTableList lastTableAncestorList;
+                isNewAncestorOfLast = getAncestorList(lastTableAncestorList, m_xLastTable, xTable);
+                // we have to notify "out of table" for all  m_xLastTable ancestors up to xTable
+                // or the first not-a-table ancestor
+                nOutCount = lastTableAncestorList.size();
+            }
+            if (isLastAncestorOfNew || !isNewAncestorOfLast)
+            {
+                // we have to notify row/col count for all xTable ancestors starting from the ancestor
+                // which is a child of m_xLastTable (isLastAncestorOfNew) or the first not-a-table ancestor
+                for (auto ancestor: newTableAncestorList)
+                {
+                    TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
+                                              ancestor->getAccessibleColumnCount()};
+                    aInList.push_back(aTableSize);
+                }
+            }
+        }
+    }
+    else
+    {
+        // cursor was not inside any table and gets inside one or more tables
+        // we have to notify row/col count for all xTable ancestors starting from first not-a-table ancestor
+        XAccessibleTableList newTableAncestorList;
+        getAncestorList(newTableAncestorList, xTable);
+        for (auto ancestor: newTableAncestorList)
+        {
+            TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
+                                      ancestor->getAccessibleColumnCount()};
+            aInList.push_back(aTableSize);
+        }
+    }
+
+    // we have to notify current row/col of xTable and related row/col span
+    sal_Int32 nRow = xTable->getAccessibleRow(nChildIndex);
+    sal_Int32 nCol = xTable->getAccessibleColumn(nChildIndex);
+    sal_Int32 nRowSpan = xTable->getAccessibleRowExtentAt(nRow, nCol);
+    sal_Int32 nColSpan = xTable->getAccessibleColumnExtentAt(nRow, nCol);
+
+    m_xLastTable = xTable;
+    updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+    notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
+}
+
+void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventObject& aEvent)
+{
+    using namespace accessibility;
     aboutView("LOKDocumentFocusListener::notifyEvent", this, m_pViewShell);
 
     try
     {
         aboutEvent("LOKDocumentFocusListener::notifyEvent", aEvent);
 
-        switch( aEvent.EventId )
+        switch (aEvent.EventId)
         {
-            case accessibility::AccessibleEventId::STATE_CHANGED:
+            case AccessibleEventId::STATE_CHANGED:
             {
-                uno::Reference< accessibility::XAccessible > xAccessibleObject = getAccessible(aEvent);
+                // logging
                 sal_Int64 nState = accessibility::AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
                 sal_Int64 nOldState = accessibility::AccessibleStateType::INVALID;
                 aEvent.OldValue >>= nOldState;
-                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: "
-                        << "STATE_CHANGED: nNewState: " << stateSetToString(nState)
-                        << " , STATE_CHANGED: nOldState: " << stateSetToString(nOldState));
+                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: "
+                                     << " New State: " << stateSetToString(nState)
+                                     << ", Old State: " << stateSetToString(nOldState));
 
-                if (accessibility::AccessibleStateType::ACTIVE == nState &&
-                    getParentRole(xAccessibleObject) == accessibility::AccessibleRole::SHAPE)
+                // check validity
+                uno::Reference< XAccessible > xAccessibleObject = getAccessible(aEvent);
+                if (!xAccessibleObject.is())
+                    return;
+                uno::Reference<XAccessibleContext> xContext(aEvent.Source, uno::UNO_QUERY);
+                if (!xContext)
+                    return;
+
+                sal_Int16 nRole = xContext->getAccessibleRole();
+
+                if (nRole == AccessibleRole::PARAGRAPH)
                 {
-                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
-                    updateParagraphInfo(xAccText, true, "STATE_CHANGED: ACTIVE");
-                    notifyFocusedParagraphChanged(true);
-                }
-                else if( accessibility::AccessibleStateType::FOCUSED == nState )
-                {
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: FOCUSED");
-                    uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
+                    uno::Reference<XAccessibleText> xAccText(xAccessibleObject, uno::UNO_QUERY);
+                    if (!xAccText.is())
+                        return;
 
-                    if (m_bIsEditingCell)
+                    switch (nState)
                     {
-                        if (!hasState(aEvent, accessibility::AccessibleStateType::ACTIVE))
+                        case AccessibleStateType::ACTIVE:
                         {
-                            SAL_WARN("lok.a11y",
-                                    "LOKDocumentFocusListener::notifyEvent: FOCUSED: Cell not ACTIVE for editing yet");
-                            return;
-                        }
-                    }
-
-                    // check if we are inside a table: in case notify table and current cell info
-                    bool isInsideTable = false;
-                    uno::Reference<accessibility::XAccessibleContext> xContext(aEvent.Source, uno::UNO_QUERY);
-                    if (xContext.is())
-                    {
-                        uno::Reference<accessibility::XAccessible> xParent = xContext->getAccessibleParent();
-                        if (xParent.is())
-                        {
-                            uno::Reference<accessibility::XAccessibleContext> xParentContext(xParent, uno::UNO_QUERY);
-                            if (xParentContext.is()
-                                    && xParentContext->getAccessibleRole() == accessibility::AccessibleRole::TABLE_CELL)
+                            if (!m_bIsEditingInSelection && hasToBeActiveForEditing(getParentRole(xContext)))
                             {
-                                uno::Reference<accessibility::XAccessible> xCellParent = xParentContext->getAccessibleParent();
-                                if (xCellParent.is())
+                                m_bIsEditingInSelection = true;
+                            }
+                            break;
+                        }
+                        case AccessibleStateType::FOCUSED:
+                        {
+                            if (m_bIsEditingInSelection && m_xSelectedObject.is())
+                            {
+                                updateParagraphInfo(xAccText, true, "STATE_CHANGED: FOCUSED");
+                                notifyEditingInSelectionState(getAccessibleSiblingCount(xContext) == 0);
+                                notifyFocusedParagraphChanged(true);
+                                // we clear selected object so when editing is over but shape is
+                                // still selected, the selection event is notified the same to the client
+                                m_xSelectedObject.clear();
+                                return;
+                            }
+                            if (isText(m_nDocumentType))
+                            {
+                                // check if we are inside a table: in case notify table and current cell info
+                                bool isInsideTable = false;
+                                uno::Reference<XAccessibleTable> xTable;
+                                sal_Int64 nChildIndex;
+                                lookForParentTable(xContext, xTable, nChildIndex);
+                                if (xTable.is())
                                 {
-                                    uno::Reference<accessibility::XAccessibleTable> xTable =
-                                            uno::Reference<accessibility::XAccessibleTable>(xCellParent, uno::UNO_QUERY);
-                                    if (xTable.is())
+                                    onFocusedParagraphInWriterTable(xTable, nChildIndex, xAccText);
+                                    isInsideTable = true;
+                                }
+                                // paragraph is not inside any table
+                                if (!isInsideTable)
+                                {
+                                    if (m_xLastTable.is())
                                     {
+                                        // we get out one or more tables
+                                        // we have to notify "out of table" for all m_xLastTable ancestors
+                                        // up to the first not-a-table ancestor
+                                        XAccessibleTableList lastTableAncestorList;
+                                        getAncestorList(lastTableAncestorList, m_xLastTable);
+                                        sal_Int32 nOutCount = lastTableAncestorList.size();
+                                        // no more inside a table
+                                        m_xLastTable.clear();
+                                        // notify
                                         std::vector<TableSizeType> aInList;
-                                        sal_Int32 nOutCount = 0;
-
-                                        if (m_xLastTable.is())
-                                        {
-                                            if (xTable != m_xLastTable)
-                                            {
-                                                // do we get in one or more nested tables ?
-                                                // check if xTable is a descendant of m_xLastTable
-                                                XAccessibleTableList newTableAncestorList;
-                                                bool isLastAncestorOfNew = getAncestorList(newTableAncestorList, xTable, m_xLastTable);
-                                                bool isNewAncestorOfLast = false;
-                                                if (!isLastAncestorOfNew)
-                                                {
-                                                    // do we get out of one or more nested tables ?
-                                                    // check if m_xLastTable is a descendant of xTable
-                                                    XAccessibleTableList lastTableAncestorList;
-                                                    isNewAncestorOfLast = getAncestorList(lastTableAncestorList, m_xLastTable, xTable);
-                                                    // we have to notify "out of table" for all  m_xLastTable ancestors up to xTable
-                                                    // or the first not-a-table ancestor
-                                                    nOutCount = lastTableAncestorList.size();
-                                                }
-                                                if (isLastAncestorOfNew || !isNewAncestorOfLast)
-                                                {
-                                                    // we have to notify row/col count for all xTable ancestors starting from the ancestor
-                                                    // which is a child of m_xLastTable (isLastAncestorOfNew) or the first not-a-table ancestor
-                                                    for (auto ancestor: newTableAncestorList)
-                                                    {
-                                                        TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
-                                                                                 ancestor->getAccessibleColumnCount()};
-                                                        aInList.push_back(aTableSize);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            // cursor was not inside any table and gets inside one or more tables
-                                            // we have to notify row/col count for all xTable ancestors starting from first not-a-table ancestor
-                                            XAccessibleTableList newTableAncestorList;
-                                            getAncestorList(newTableAncestorList, xTable);
-                                            for (auto ancestor: newTableAncestorList)
-                                            {
-                                                TableSizeType aTableSize{ancestor->getAccessibleRowCount(),
-                                                                         ancestor->getAccessibleColumnCount()};
-                                                aInList.push_back(aTableSize);
-                                            }
-                                        }
-
-                                        // we have to notify current row/col of xTable and related row/col span
-                                        sal_Int64 nChildIndex = xParentContext->getAccessibleIndexInParent();
-                                        sal_Int32 nRow = xTable->getAccessibleRow(nChildIndex);
-                                        sal_Int32 nCol = xTable->getAccessibleColumn(nChildIndex);
-                                        sal_Int32 nRowSpan = xTable->getAccessibleRowExtentAt(nRow, nCol);
-                                        sal_Int32 nColSpan = xTable->getAccessibleColumnExtentAt(nRow, nCol);
-
-                                        m_xLastTable = xTable;
                                         updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
-                                        notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
-                                        isInsideTable = true;
+                                        notifyFocusedCellChanged(nOutCount, aInList, -1, -1, 1, 1);
+                                    }
+                                    else
+                                    {
+                                        updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
                                     }
                                 }
                             }
-                        }
-                    }
+                            else if (isSpreadsheet(m_nDocumentType))
+                            {
+                                if (m_bIsEditingCell)
+                                {
+                                    if (!hasState(aEvent, AccessibleStateType::ACTIVE))
+                                    {
+                                        SAL_WARN("lok.a11y",
+                                                 "LOKDocumentFocusListener::notifyEvent: FOCUSED: "
+                                                 "cell not ACTIVE for editing yet");
+                                        return;
+                                    }
+                                    else if (m_xSelectedObject.is())
+                                    {
+                                        updateParagraphInfo(xAccText, true, "STATE_CHANGED: ACTIVE");
+                                        notifyEditingInSelectionState(getAccessibleSiblingCount(xContext) == 0);
+                                        notifyFocusedParagraphChanged(true);
+                                        m_xSelectedObject.clear();
+                                        return;
+                                    }
 
-                    // paragraph is not inside any table
-                    if (!isInsideTable)
-                    {
-                        if (m_xLastTable.is())
-                        {
-                            // we get out one or more tables
-                            // we have to notify "out of table" for all m_xLastTable ancestors
-                            // up to the first not-a-table ancestor
-                            XAccessibleTableList lastTableAncestorList;
-                            getAncestorList(lastTableAncestorList, m_xLastTable);
-                            sal_Int32 nOutCount = lastTableAncestorList.size();
-                            // no more inside a table
-                            m_xLastTable.clear();
-                            // notify
-                            std::vector<TableSizeType> aInList;
-                            updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
-                            notifyFocusedCellChanged(nOutCount, aInList, -1, -1, 1, 1);
+                                    updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
+                                }
+                            }
+                            else if (isPresentation(m_nDocumentType))
+                            {
+                                updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
+                            }
+                            aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
+
+                            break;
                         }
-                        else
-                        {
-                            updateAndNotifyParagraph(xAccText, false, "STATE_CHANGED: FOCUSED");
-                        }
+                        default:
+                            break;
                     }
-                    aboutTextFormatting("LOKDocumentFocusListener::notifyEvent: STATE_CHANGED: FOCUSED", xAccText);
                 }
                 break;
             }
-            case accessibility::AccessibleEventId::CARET_CHANGED:
+            case AccessibleEventId::CARET_CHANGED:
             {
                 sal_Int32 nNewPos = -1;
                 aEvent.NewValue >>= nNewPos;
@@ -1136,11 +1474,10 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 if (nNewPos >= 0)
                 {
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: " <<
-                            "new pos: " << nNewPos << ", nOldPos: " << nOldPos);
+                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: CARET_CHANGED: "
+                                         << "new pos: " << nNewPos << ", nOldPos: " << nOldPos);
 
-                    uno::Reference<css::accessibility::XAccessibleText>
-                        xAccText(getAccessible(aEvent), uno::UNO_QUERY);
+                    uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
                     if (xAccText.is())
                     {
                         m_nCaretPosition = nNewPos;
@@ -1154,7 +1491,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                         if (!isFocused(aEvent))
                         {
                             if (updateParagraphInfo(xAccText, false, "CARET_CHANGED"))
-                                 notifyFocusedParagraphChanged(true);
+                                notifyFocusedParagraphChanged(true);
                         }
                         else
                         {
@@ -1165,22 +1502,22 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                 }
                 break;
             }
-            case accessibility::AccessibleEventId::TEXT_CHANGED:
+            case AccessibleEventId::TEXT_CHANGED:
             {
-                accessibility::TextSegment aDeletedText;
-                accessibility::TextSegment aInsertedText;
+                TextSegment aDeletedText;
+                TextSegment aInsertedText;
 
                 if (aEvent.OldValue >>= aDeletedText)
                 {
                     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
-                            << "deleted text: >" << aDeletedText.SegmentText << "<");
+                                             << "deleted text: >" << aDeletedText.SegmentText << "<");
                 }
                 if (aEvent.NewValue >>= aInsertedText)
                 {
                     SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_CHANGED: "
-                            << "inserted text: >" << aInsertedText.SegmentText << "<");
+                                             << "inserted text: >" << aInsertedText.SegmentText << "<");
                 }
-                uno::Reference<css::accessibility::XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
+                uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
 
                 // When the change has been performed in another view we need to force
                 // paragraph content updating on the client, even if current editing involves composing.
@@ -1190,124 +1527,106 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 break;
             }
-            case accessibility::AccessibleEventId::TEXT_SELECTION_CHANGED:
+            case AccessibleEventId::TEXT_SELECTION_CHANGED:
             {
                 if (!isFocused(aEvent))
                 {
                     SAL_WARN("lok.a11y",
-                          "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: skip non focused paragraph");
+                             "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: "
+                             "skip non focused paragraph");
                     return;
                 }
 
-                uno::Reference<css::accessibility::XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
+                uno::Reference<XAccessibleText> xAccText(getAccessible(aEvent), uno::UNO_QUERY);
                 if (xAccText.is())
                 {
-                    OUString sText = xAccText->getText();
-                    m_sSelectedText = xAccText->getSelectedText();
-
                     // We send a message to client also when start/end are -1, in this way the client knows
                     // if a text selection object exists or not. That's needed because of the odd behavior
-                    // occurring when <backspace>/<delete> are hit and a text selection is empty but it still exists.
+                    // occurring when <backspace>/<delete> are hit and a text selection is empty,
+                    // but it still exists.
                     // Such keys delete the empty selection instead of the previous/next char.
                     updateParagraphInfo(xAccText, false, "TEXT_SELECTION_CHANGED");
 
+                    m_sSelectedText = xAccText->getSelectedText();
+                    SAL_INFO("lok.a11y",
+                             "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
+                              << m_sSelectedText << "<");
+
                     // Calc: when editing a formula send the update content
-                    if (m_bIsEditingCell && !m_sSelectedCellAddress.isEmpty()
-                            && !m_sSelectedText.isEmpty() && sText.startsWith("="))
+                    if (m_bIsEditingCell)
                     {
-                        notifyFocusedParagraphChanged();
+                        OUString sText = xAccText->getText();
+                        if (!m_sSelectedCellAddress.isEmpty() &&
+                            !m_sSelectedText.isEmpty() && sText.startsWith("="))
+                        {
+                            notifyFocusedParagraphChanged();
+                        }
                     }
                     notifyTextSelectionChanged();
-
-                    aboutParagraph("LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED", xAccText);
-                    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: TEXT_SELECTION_CHANGED: selected text: >"
-                            << m_sSelectedText << "<");
                 }
                 break;
             }
-            case accessibility::AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::SELECTION_CHANGED:
+            case AccessibleEventId::SELECTION_CHANGED_REMOVE:
             {
-                uno::Reference< accessibility::XAccessible > xNewValue;
-                aEvent.NewValue >>= xNewValue;
-                if (xNewValue.is())
-                {
-                    uno::Reference< accessibility::XAccessibleContext > xContext =
-                            xNewValue->getAccessibleContext();
+                uno::Reference< XAccessible > xSelectedObject = getSelectedObject(aEvent);
+                if (!xSelectedObject.is())
+                    return;
+                uno::Reference< XAccessibleContext > xContext = xSelectedObject->getAccessibleContext();
+                if (!xContext.is())
+                    return;
 
-                    if (xContext.is())
+                if (aEvent.EventId == AccessibleEventId::SELECTION_CHANGED_REMOVE)
+                    m_xSelectedObject.clear();
+                else if (m_xSelectedObject.is() && m_xSelectedObject == xSelectedObject)
+                        return; // selecting the same object; note: on editing selected object is cleared
+                else
+                    m_xSelectedObject = xSelectedObject;
+                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                                         << "m_xSelectedObject.is(): " << m_xSelectedObject.is());
+
+                OUString sAction = selectionEventTypeToString(aEvent.EventId);
+                sal_Int16 nRole = xContext->getAccessibleRole();
+                switch(nRole)
+                {
+                    case AccessibleRole::GRAPHIC:
+                    case AccessibleRole::EMBEDDED_OBJECT:
+                    case AccessibleRole::SHAPE:
                     {
-                        OUString sName = xContext->getAccessibleName();
-                        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: this: " << this
-                                << ", selected object: >" << sName << "<"
-                                << ", m_bIsEditingCell: " << m_bIsEditingCell);
-                        if (xContext->getAccessibleRole() == accessibility::AccessibleRole::SHAPE)
+                        onShapeSelectionChanged(xSelectedObject, sAction);
+                        break;
+                    }
+                    case AccessibleRole::TABLE_CELL:
+                    {
+                        notifySelectionChanged(xSelectedObject, sAction);
+
+                        if (aEvent.EventId == AccessibleEventId::SELECTION_CHANGED)
                         {
-                            if (xContext->getAccessibleChildCount() > 0)
+                            m_sSelectedCellAddress = xContext->getAccessibleName();
+                            if (m_bIsEditingCell && !m_sSelectedCellAddress.isEmpty())
                             {
-                                uno::Reference<accessibility::XAccessible> xAccChild =
-                                   xContext->getAccessibleChild(0);
-                                uno::Reference<css::accessibility::XAccessibleText> xAccText(xAccChild, uno::UNO_QUERY);
-                                if (xAccText.is())
+                                // Check cell address: "$Sheet1.A10".
+                                // On cell editing SELECTION_CHANGED is not emitted when selection is expanded.
+                                // So selection can't be a cell range.
+                                sal_Int32 nDotIndex = m_sSelectedText.indexOf('.');
+                                OUString sCellAddress = m_sSelectedText.copy(nDotIndex + 1);
+                                SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
+                                                         << "cell address: >" << sCellAddress << "<");
+                                if (m_sSelectedCellAddress == sCellAddress)
                                 {
-                                    // At present when a shape is selected screen reader reports editable area content
-                                    // on caret navigation even if shape editing is not active
-                                    resetParagraphInfo();
-                                    notifyFocusedParagraphChanged(true);
+                                    notifyFocusedParagraphChanged();
+                                    notifyTextSelectionChanged();
                                 }
                             }
                         }
-                        if (m_bIsEditingCell && !sName.isEmpty())
-                        {
-                            m_sSelectedCellAddress = sName;
-                            // Check cell address: "$Sheet1.A10".
-                            // On cell editing SELECTION_CHANGED is not emitted when selection is expanded.
-                            // So selection can't be a cell range.
-                            sal_Int32 nDotIndex = m_sSelectedText.indexOf('.');
-                            OUString sCellAddress = m_sSelectedText.copy(nDotIndex + 1);
-                            SAL_INFO("lok.a11y", "LOKDocumentFocusListener::notifyEvent: SELECTION_CHANGED: "
-                                    << "cell address: >" << sCellAddress << "<");
-                            if (m_sSelectedCellAddress == sCellAddress)
-                            {
-                                notifyFocusedParagraphChanged();
-                                notifyTextSelectionChanged();
-                            }
-                        }
+                        break;
                     }
+                    default:
+                        break;
                 }
                 break;
             }
-            case accessibility::AccessibleEventId::SELECTION_CHANGED_REMOVE:
-            {
-                uno::Reference< accessibility::XAccessible > xNewValue;
-                aEvent.NewValue >>= xNewValue;
-                if (xNewValue.is())
-                {
-                    uno::Reference<accessibility::XAccessibleContext> xContext
-                        = xNewValue->getAccessibleContext();
-
-                    if (xContext.is())
-                    {
-                        if (xContext->getAccessibleRole() == accessibility::AccessibleRole::SHAPE)
-                        {
-                            if (xContext->getAccessibleChildCount() > 0)
-                            {
-                                uno::Reference<accessibility::XAccessible> xAccChild
-                                    = xContext->getAccessibleChild(0);
-                                uno::Reference<css::accessibility::XAccessibleText> xAccText(
-                                    xAccChild, uno::UNO_QUERY);
-                                if (xAccText.is())
-                                {
-                                    // see SELECTION_CHANGED case
-                                    resetParagraphInfo();
-                                    notifyFocusedParagraphChanged(true);
-                                }
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-            case accessibility::AccessibleEventId::CHILD:
+            case AccessibleEventId::CHILD:
             {
                 uno::Reference< accessibility::XAccessible > xChild;
                 if( (aEvent.OldValue >>= xChild) && xChild.is() )
@@ -1318,17 +1637,19 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
 
                 break;
             }
-            case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            {
                 SAL_INFO("lok.a11y", "Invalidate all children called");
                 break;
-
+            }
             default:
                 break;
         }
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        SAL_WARN("lok.a11y", "Focused object has invalid index in parent");
+        SAL_WARN("lok.a11y",
+                 "LOKDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
     }
 }
 
@@ -1338,6 +1659,9 @@ uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccess
 
     if( xAccessible.is() )
         return xAccessible;
+
+    SAL_WARN("lok.a11y",
+             "LOKDocumentFocusListener::getAccessible: Event source doesn't implement XAccessible.");
 
     uno::Reference< accessibility::XAccessibleContext > xContext(aEvent.Source, uno::UNO_QUERY);
 
@@ -1353,6 +1677,9 @@ uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccess
             }
         }
     }
+
+    SAL_WARN("lok.a11y",
+             "LOKDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
 
     return uno::Reference< accessibility::XAccessible >();
 }
@@ -1421,8 +1748,20 @@ void LOKDocumentFocusListener::attachRecursive(
         SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        if( !(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS) )
+        if (isDocument(xContext->getAccessibleRole()))
         {
+            m_nDocumentType = xContext->getAccessibleRole();
+        }
+
+        if (!(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
+        {
+            if ((nStateSet & accessibility::AccessibleStateType::SELECTED) &&
+                selectionHasToBeNotified(xContext))
+            {
+                uno::Reference< accessibility::XAccessible > xAccObj(xContext, uno::UNO_QUERY);
+                onShapeSelectionChanged(xAccObj, "create");
+            }
+
             sal_Int64 nmax = xContext->getAccessibleChildCount();
             if( nmax > MAX_ATTACHABLE_CHILDREN )
                 nmax = MAX_ATTACHABLE_CHILDREN;
@@ -1446,7 +1785,7 @@ void LOKDocumentFocusListener::attachRecursive(
             // Here we update the paragraph info related to the focused paragraph,
             // later when afterCallbackRegistered is executed we notify the paragraph content.
             sal_Int64 nChildCount = xContext->getAccessibleChildCount();
-            if (nChildCount > 0)
+            if (nChildCount > 0 && nChildCount < 10)
             {
                 for (sal_Int64 n = 0; n < nChildCount; ++n)
                 {
@@ -1520,20 +1859,27 @@ void LOKDocumentFocusListener::detachRecursive(
     uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster =
         uno::Reference< accessibility::XAccessibleEventBroadcaster >(xContext, uno::UNO_QUERY);
 
-    if( xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster) )
+    if (xBroadcaster.is() && 0 < m_aRefList.erase(xBroadcaster))
     {
         xBroadcaster->removeAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
-        if( bForce || !( nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS ) )
+        if ((nStateSet & accessibility::AccessibleStateType::SELECTED) &&
+            selectionHasToBeNotified(xContext))
+        {
+            uno::Reference< accessibility::XAccessible > xAccObj(xContext, uno::UNO_QUERY);
+            onShapeSelectionChanged(xAccObj, "delete");
+        }
+
+        if (bForce || !(nStateSet & accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
         {
             sal_Int64 nmax = xContext->getAccessibleChildCount();
-            if( nmax > MAX_ATTACHABLE_CHILDREN )
+            if (nmax > MAX_ATTACHABLE_CHILDREN)
                 nmax = MAX_ATTACHABLE_CHILDREN;
-            for( sal_Int64 n = 0; n < nmax; n++ )
+            for (sal_Int64 n = 0; n < nmax; n++)
             {
-                uno::Reference< accessibility::XAccessible > xChild( xContext->getAccessibleChild( n ) );
+                uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(n));
 
-                if( xChild.is() )
+                if (xChild.is())
                     detachRecursive(xChild);
             }
         }
