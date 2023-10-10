@@ -1413,11 +1413,6 @@ namespace basegfx
         return (*mpPolygon == *rPolygon.mpPolygon);
     }
 
-    bool B3DPolygon::operator!=(const B3DPolygon& rPolygon) const
-    {
-        return !(*this == rPolygon);
-    }
-
     sal_uInt32 B3DPolygon::count() const
     {
         return mpPolygon->count();

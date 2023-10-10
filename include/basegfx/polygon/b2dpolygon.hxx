@@ -72,7 +72,6 @@ namespace basegfx
 
         /// compare operators
         bool operator==(const B2DPolygon& rPolygon) const;
-        bool operator!=(const B2DPolygon& rPolygon) const;
 
         /// member count
         sal_uInt32 count() const;

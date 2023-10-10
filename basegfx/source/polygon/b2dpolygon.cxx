@@ -1116,11 +1116,6 @@ namespace basegfx
         return ((*mpPolygon) == (*rPolygon.mpPolygon));
     }
 
-    bool B2DPolygon::operator!=(const B2DPolygon& rPolygon) const
-    {
-        return !(*this == rPolygon);
-    }
-
     sal_uInt32 B2DPolygon::count() const
     {
         return mpPolygon->count();
