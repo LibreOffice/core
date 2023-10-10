@@ -155,7 +155,9 @@ class SwTextFly
 
     SwAnchoredObjList* InitAnchoredObjList();
 
+public:
     SwAnchoredObjList* GetAnchoredObjList() const;
+private:
 
     /**
         Look for the first object which overlaps with the rectangle.

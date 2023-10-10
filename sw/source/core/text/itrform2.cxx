@@ -2787,8 +2787,27 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
     {
         // Word style: if there is minimal space remaining, then handle that similar to a full line
         // and put the actual empty paragraph below the fly.
-        bFullLine = std::abs(aLine.Left() - aInter.Left()) < TEXT_MIN_SMALL
-                    && std::abs(aLine.Right() - aInter.Right()) < TEXT_MIN_SMALL;
+        SwTwips nLimit = MINLAY;
+        for (const auto& pObj : *rTextFly.GetAnchoredObjList())
+        {
+            auto pFlyFrame = pObj->DynCastFlyFrame();
+            if (!pFlyFrame)
+            {
+                continue;
+            }
+
+            if (!pFlyFrame->IsFlySplitAllowed())
+            {
+                continue;
+            }
+
+            // We wrap around a floating table, that has a larger minimal wrap distance.
+            nLimit = TEXT_MIN_SMALL;
+            break;
+        }
+
+        bFullLine = std::abs(aLine.Left() - aInter.Left()) < nLimit
+                    && std::abs(aLine.Right() - aInter.Right()) < nLimit;
     }
 
     // Although no text is left, we need to format another line,

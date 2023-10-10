@@ -1011,10 +1011,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testParaUpperMarginFlyIntersect)
         nHeight += getXPath(pXmlDoc, xPath, "height").toInt32();
     }
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 542 (~500)
+    // - Expected: 521 (~500)
     // - Actual  : 857 (~1000)
     // I.e. both upper and lower margin was taken into account.
-    CPPUNIT_ASSERT_EQUAL(542, nHeight);
+    CPPUNIT_ASSERT_EQUAL(521, nHeight);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
