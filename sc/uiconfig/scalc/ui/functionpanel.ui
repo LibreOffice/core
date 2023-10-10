@@ -153,6 +153,7 @@
                     <property name="can-focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="placeholder-text" translatable="yes" context="functionpanel|search">Search all functions</property>
+                    <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="search-atkobject">
                         <property name="AtkObject::accessible-name" translatable="yes" context="functionpanel|accessiblename|search">Search all functions</property>
