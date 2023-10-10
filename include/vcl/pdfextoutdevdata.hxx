@@ -105,7 +105,7 @@ public:
     virtual ~PDFExtOutDevData() override;
 
     bool PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const GDIMetaFile& rMtf );
-    void ResetSyncData();
+    void ResetSyncData(PDFWriter * pWriterIfRemoveTransparencies);
 
     void PlayGlobalActions( PDFWriter& rWriter );
 

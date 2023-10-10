@@ -4155,6 +4155,22 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpans)
     CPPUNIT_ASSERT_EQUAL(static_cast<decltype(nDoc)>(1), nDoc);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157182)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+
+    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+        { "PDFUACompliance", uno::Any(true) },
+        // only happens with PDF/A-1
+        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(1)) },
+    }));
+    aMediaDescriptor["FilterData"] <<= aFilterData;
+
+    saveAsPDF(u"transparentshape.fodp");
+
+    // just check this does not crash or assert
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf57423)
 {
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
