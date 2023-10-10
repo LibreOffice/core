@@ -140,7 +140,7 @@ ScFormatShell::ScFormatShell(ScViewData& rData) :
     SetPool( &pTabViewShell->GetPool() );
     SfxUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !rViewData.GetDocument().IsUndoEnabled() )
+    if (pMgr && !rViewData.GetDocument().IsUndoEnabled())
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
