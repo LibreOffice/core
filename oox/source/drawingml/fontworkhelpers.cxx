@@ -180,8 +180,8 @@ void FontworkHelpers::putCustomShapeIntoTextPathMode(
     // Apply new properties
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         { { sTextPath, uno::Any(true) },
-          { u"TextPathMode", uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
-          { u"ScaleX", uno::Any(bScaleX) } }));
+          { u"TextPathMode"_ustr, uno::Any(drawing::EnhancedCustomShapeTextPathMode_PATH) },
+          { u"ScaleX"_ustr, uno::Any(bScaleX) } }));
     aGeomPropVec.push_back(comphelper::makePropertyValue(sTextPath, aPropertyValues));
 
     aGeomPropVec.push_back(comphelper::makePropertyValue(sPresetTextWarp, sMSPresetType));

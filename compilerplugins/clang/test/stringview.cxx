@@ -173,7 +173,7 @@ void f5(char const* s1, sal_Int32 n1, char16_t const* s2, sal_Int32 n2, OString 
     // expected-error-re@+1 {{instead of an '{{(rtl::)?}}OUString' constructed from a 'const char{{ ?}}[4]', pass a 'std::u16string_view' [loplugin:stringview]}}
     call_view(OUString("foo"));
     // expected-error-re@+1 {{instead of an '{{(rtl::)?}}OUString' constructed from a 'const char16_t{{ ?}}[4]', pass a 'std::u16string_view' [loplugin:stringview]}}
-    call_view(OUString(u"foo"));
+    call_view(OUString(u"foo", 3));
     // expected-error-re@+1 {{instead of an '{{(rtl::)?}}OUString' constructed from a 'const char', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}
     call_view(OUString(*s1));
     // expected-error-re@+1 {{instead of an '{{(rtl::)?}}OUString' constructed from a 'const char16_t', pass a 'std::u16string_view' (or an 'rtl::OUStringChar') [loplugin:stringview]}}

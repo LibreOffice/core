@@ -49,50 +49,10 @@ void f()
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     f((("foo")));
 
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    OUString s5 = u"foo";
-    (void)s5;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    OUString s6 = ((u"foo"));
-    (void)s6;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    OUString s7(u"foo");
-    (void)s7;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    OUString s8(((u"foo")));
-    (void)s8;
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(OUString(u"foo"));
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(((OUString(((u"foo"))))));
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(OUString(u"foo", rtl::libreoffice_internal::Dummy()));
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(((OUString(((u"foo")), rtl::libreoffice_internal::Dummy()))));
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(u"foo");
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    f(((u"foo")));
-
-    OUString s9;
-    // expected-error@+1 {{use a _ustr user-defined string literal instead of assigning from a UTF-16 string literal [loplugin:ostr]}}
-    s9 = u"foo";
-    // expected-error@+1 {{use a _ustr user-defined string literal instead of assigning from a UTF-16 string literal [loplugin:ostr]}}
-    s9 = ((u"foo"));
-    // expected-error@+1 {{use a _ustr user-defined string literal instead of assigning from a UTF-16 string literal [loplugin:ostr]}}
-    s9.operator=(u"foo");
-    // expected-error@+1 {{use a _ustr user-defined string literal instead of assigning from a UTF-16 string literal [loplugin:ostr]}}
-    s9.operator=(((u"foo")));
-
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    S s10 = { u"foo" };
-
     // Only generate one warning here, not two, for a macro argument used twice in the macro's
     // expansion:
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     M("foo");
-    // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from a UTF-16 string literal [loplugin:ostr]}}
-    M(u"foo");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

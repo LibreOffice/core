@@ -28,10 +28,3 @@ void test2()
     static const OUString DATA = "xxx";
     f(DATA.pData);
 }
-
-void test3()
-{
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
-    OUString const literal = u"foo";
-    f(literal);
-}

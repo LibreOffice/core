@@ -2016,7 +2016,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
             {
                 i18n::ForbiddenCharacters aForbidden(OUString(+rTypo.m_rgxchFPunct),
                     OUString(+rTypo.m_rgxchLPunct));
-                    // unary + makes sure not to accidentally call the
+                    // unary + makes sure not to accidentally call the deleted
                     // OUString(ConstCharArrayDetector<...>::TypeUtf16) ctor that takes the full
                     // m_rgxchFPunct, m_rgxchLPunct arrays with embedded NULs, instead of just the
                     // prefix leading up to the first NUL

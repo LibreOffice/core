@@ -139,8 +139,6 @@ int main() {
     OUString().getStr();
     // expected-error-re@+1 {{in call of 'rtl::OUString::getStr', replace '{{(rtl::)?}}OUString' constructed from a string literal directly with a UTF-16 string literal}}
     OUString("foo").getStr();
-    // expected-error-re@+1 {{in call of 'rtl::OUString::getStr', replace '{{(rtl::)?}}OUString' constructed from a string literal directly with the string literal}}
-    OUString(u"foo").getStr();
 }
 
 

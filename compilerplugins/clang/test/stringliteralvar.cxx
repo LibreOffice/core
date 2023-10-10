@@ -39,15 +39,15 @@ struct S3
 void f3()
 {
     // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
-    f(S3::literal);
+    f(OUString(S3::literal, 3));
 }
 
 std::vector<OUString> f4()
 {
     // expected-error-re@+1 {{change type of variable 'literal' from constant character array ('const char16_t{{ ?}}[4]') to OUStringLiteral [loplugin:stringliteralvar]}}
     static constexpr char16_t literal[] = u"foo";
-    // expected-note@+1 {{first passed into a 'rtl::OUString' constructor here [loplugin:stringliteralvar]}}
-    return { literal };
+    // expected-note-re@+1 {{first passed into a '{{(rtl::)?}}OUString' constructor here [loplugin:stringliteralvar]}}
+    return { OUString(literal, 3) };
 }
 
 void f5()

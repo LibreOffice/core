@@ -5265,7 +5265,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf144222)
     CPPUNIT_ASSERT(pTextPage);
 
     int nPageObjectCount = pPdfPage->getObjectCount();
-    const OUString sChar = u"\u4E2D";
+    const OUString sChar = u"\u4E2D"_ustr;
     basegfx::B2DRectangle aRect1, aRect2;
     int nCount = 0;
 

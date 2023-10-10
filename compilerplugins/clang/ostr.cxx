@@ -97,7 +97,7 @@ public:
         {
             return true;
         }
-        if (!(compat::isOrdinary(e2) || e2->isUTF16()))
+        if (!compat::isOrdinary(e2))
         {
             assert(!e2->isUTF8()); //TODO
             return true;
@@ -148,7 +148,7 @@ public:
         {
             return true;
         }
-        if (!(e2->isUTF16() || compiler.getDiagnosticOpts().VerifyDiagnostics))
+        if (!compiler.getDiagnosticOpts().VerifyDiagnostics)
         {
             //TODO: Leave rewriting these uses of ordinary string literals for later (but already
             // cover them when verifying CompilerTest_compilerplugins_clang):
@@ -160,8 +160,7 @@ public:
                 Lexer::MeasureTokenLength(l3, compiler.getSourceManager(), compiler.getLangOpts()));
             l4 = l4.getLocWithOffset(
                 Lexer::MeasureTokenLength(l4, compiler.getSourceManager(), compiler.getLangOpts()));
-            if ((e2->isUTF16() ? removeText(l1, delta(l1, l2))
-                               : replaceText(l1, delta(l1, l2), macroBegin ? "u\"\" " : "u"))
+            if (replaceText(l1, delta(l1, l2), macroBegin ? "u\"\" " : "u")
                 && replaceText(l3, delta(l3, l4), macroEnd ? " \"\"_ustr" : "_ustr"))
             {
                 return true;
@@ -169,88 +168,9 @@ public:
         }
         report(DiagnosticsEngine::Warning,
                "use a _ustr user-defined string literal instead of constructing an instance of %0 "
-               "from %select{an ordinary|a UTF-16}1 string literal",
+               "from an ordinary string literal",
                expr->getExprLoc())
-            << expr->getType().getLocalUnqualifiedType() << e2->isUTF16() << expr->getSourceRange();
-        return true;
-    }
-
-    bool VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* expr)
-    {
-        if (ignoreLocation(expr))
-        {
-            return true;
-        }
-        if (expr->getOperator() != OO_Equal)
-        {
-            return true;
-        }
-        if (!loplugin::TypeCheck(expr->getArg(0)->getType())
-                 .Class("OUString")
-                 .Namespace("rtl")
-                 .GlobalNamespace())
-        {
-            return true;
-        }
-        auto const e2 = dyn_cast<clang::StringLiteral>(expr->getArg(1)->IgnoreParenImpCasts());
-        if (e2 == nullptr)
-        {
-            return true;
-        }
-        if (!e2->isUTF16())
-        {
-            return true;
-        }
-        if (rewriter != nullptr)
-        {
-            if (insertTextAfterToken(e2->getEndLoc(), "_ustr"))
-            {
-                return true;
-            }
-        }
-        report(DiagnosticsEngine::Warning,
-               "use a _ustr user-defined string literal instead of assigning from a UTF-16 string"
-               " literal",
-               expr->getExprLoc())
-            << expr->getSourceRange();
-        return true;
-    }
-
-    bool VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
-    {
-        if (ignoreLocation(expr))
-        {
-            return true;
-        }
-        if (!loplugin::DeclCheck(expr->getMethodDecl()).Operator(OO_Equal))
-        {
-            return true;
-        }
-        if (!loplugin::TypeCheck(expr->getObjectType())
-                 .Class("OUString")
-                 .Namespace("rtl")
-                 .GlobalNamespace())
-        {
-            return true;
-        }
-        auto const e2 = dyn_cast<clang::StringLiteral>(expr->getArg(0)->IgnoreParenImpCasts());
-        if (e2 == nullptr)
-        {
-            return true;
-        }
-        if (!e2->isUTF16())
-        {
-            return true;
-        }
-        if (rewriter != nullptr)
-        {
-            //TODO
-        }
-        report(DiagnosticsEngine::Warning,
-               "use a _ustr user-defined string literal instead of assigning from a UTF-16 string"
-               " literal",
-               expr->getExprLoc())
-            << expr->getSourceRange();
+            << expr->getType().getLocalUnqualifiedType() << expr->getSourceRange();
         return true;
     }
 

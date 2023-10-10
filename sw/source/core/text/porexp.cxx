@@ -219,8 +219,8 @@ void SwBlankPortion::Paint( const SwTextPaintInfo &rInf ) const
             // Draw tilde or degree sign
             OUString aMarker = (rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess()
                                     .get(DocumentSettingId::USE_VARIABLE_WIDTH_NBSP)
-                                  ? u"~"
-                                  : u"°");
+                                  ? u"~"_ustr
+                                  : u"°"_ustr);
 
             SwPosSize aMarkerSize(rInf.GetTextSize(aMarker));
             Point aPos(rInf.GetPos());

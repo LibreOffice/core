@@ -378,26 +378,15 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    // Rather use a u""_ustr literal (but don't remove this entirely, to avoid implicit support for
+    // it via std::u16string_view from kicking in):
     template<typename T> OUString(
-        T & literal,
+        T &,
         typename libreoffice_internal::ConstCharArrayDetector<
             T, libreoffice_internal::Dummy>::TypeUtf16
-                = libreoffice_internal::Dummy()):
-        pData(nullptr)
-    {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
-            rtl_uString_new(&pData);
-        } else {
-            rtl_uString_newFromStr_WithLength(
-                &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
-        }
-    }
+                = libreoffice_internal::Dummy()) = delete;
+
+    OUString(OUStringChar c): pData(nullptr) { rtl_uString_newFromStr_WithLength(&pData, &c.c, 1); }
 #endif
 
 #if defined LIBO_INTERNAL_ONLY && defined RTL_STRING_UNITTEST
@@ -648,20 +637,15 @@ public:
     }
 
 #if defined LIBO_INTERNAL_ONLY
-    /** @overload @since LibreOffice 5.3 */
+    // Rather assign from a u""_ustr literal (but don't remove this entirely, to avoid implicit
+    // support for it via std::u16string_view from kicking in):
     template<typename T>
     typename
         libreoffice_internal::ConstCharArrayDetector<T, OUString &>::TypeUtf16
-    operator =(T & literal) {
-        if (libreoffice_internal::ConstCharArrayDetector<T>::length == 0) {
-            rtl_uString_new(&pData);
-        } else {
-            rtl_uString_newFromStr_WithLength(
-                &pData,
-                libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
-                    literal),
-                libreoffice_internal::ConstCharArrayDetector<T>::length);
-        }
+    operator =(T &) = delete;
+
+    OUString & operator =(OUStringChar c) {
+        rtl_uString_newFromStr_WithLength(&pData, &c.c, 1);
         return *this;
     }
 

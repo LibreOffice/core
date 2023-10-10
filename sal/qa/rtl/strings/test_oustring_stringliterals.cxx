@@ -339,9 +339,9 @@ void test::oustring::StringLiterals::checkOUStringChar()
 }
 
 void test::oustring::StringLiterals::checkUtf16() {
-    rtl::OUString s1(u"abc");
+    rtl::OUString s1(u"abc"_ustr);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);
-    s1 = u"de";
+    s1 = u"de"_ustr;
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("de"), s1);
     s1 += u"fde";
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("defde"), s1);
@@ -351,13 +351,13 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT(s1.matchIgnoreAsciiCase(u"FDE", 2));
     rtl::OUString s2;
     CPPUNIT_ASSERT(s1.startsWith(u"de", &s2));
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"fde"), s2);
+    CPPUNIT_ASSERT_EQUAL(u"fde"_ustr, s2);
     CPPUNIT_ASSERT(s1.startsWithIgnoreAsciiCase(u"DEFD", &s2));
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"e"), s2);
+    CPPUNIT_ASSERT_EQUAL(u"e"_ustr, s2);
     CPPUNIT_ASSERT(s1.endsWith(u"de", &s2));
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"def"), s2);
+    CPPUNIT_ASSERT_EQUAL(u"def"_ustr, s2);
     CPPUNIT_ASSERT(s1.endsWithIgnoreAsciiCase(u"EFDE", &s2));
-    CPPUNIT_ASSERT_EQUAL(rtl::OUString(u"d"), s2);
+    CPPUNIT_ASSERT_EQUAL(u"d"_ustr, s2);
     CPPUNIT_ASSERT(bool(s1 == u"defde"));
     CPPUNIT_ASSERT(bool(u"defde" == s1));
     CPPUNIT_ASSERT(s1 != u"abc");
@@ -366,32 +366,32 @@ void test::oustring::StringLiterals::checkUtf16() {
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), s1.lastIndexOf(u"de"));
     sal_Int32 i = 0;
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfde"),
+        u"abcfde"_ustr,
         s1.replaceFirst(u"de", rtl::OUString("abc"), &i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfde"),
+        u"abcfde"_ustr,
         s1.replaceFirst(rtl::OUString("de"), u"abc", &i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfde"), s1.replaceFirst(u"de", u"abc", &i));
+        u"abcfde"_ustr, s1.replaceFirst(u"de", u"abc", &i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfde"), s1.replaceFirst(u"de", "abc", &i));
+        u"abcfde"_ustr, s1.replaceFirst(u"de", "abc", &i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfde"), s1.replaceFirst("de", u"abc", &i));
+        u"abcfde"_ustr, s1.replaceFirst("de", u"abc", &i));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", rtl::OUString("abc")));
+        u"abcfabc"_ustr, s1.replaceAll(u"de", rtl::OUString("abc")));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfabc"), s1.replaceAll(rtl::OUString("de"), u"abc"));
+        u"abcfabc"_ustr, s1.replaceAll(rtl::OUString("de"), u"abc"));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", u"abc"));
+        u"abcfabc"_ustr, s1.replaceAll(u"de", u"abc"));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfabc"), s1.replaceAll(u"de", "abc"));
+        u"abcfabc"_ustr, s1.replaceAll(u"de", "abc"));
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(u"abcfabc"), s1.replaceAll("de", u"abc"));
+        u"abcfabc"_ustr, s1.replaceAll("de", u"abc"));
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("abcdef"), rtl::OUString(rtl::OUString("abc") + u"def"));
     CPPUNIT_ASSERT_EQUAL(

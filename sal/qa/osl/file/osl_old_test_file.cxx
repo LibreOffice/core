@@ -49,27 +49,27 @@ public:
 };
 
 const std::pair<OUString, OUString> aSource1[] = {
-    { u"a", u"file:///" TEST_VOLUME "bla/a" },
+    { u"a"_ustr, u"file:///" TEST_VOLUME "bla/a"_ustr },
     ///TODO: check if last slash must be omitted in resolved path.
-//    { u"a/", u"file:///" TEST_VOLUME "bla/a" },
-    { u"../a", u"file:///" TEST_VOLUME "a" },
-    { u"a/..", u"file:///" TEST_VOLUME "bla/" },
-    { u"a/../b", u"file:///" TEST_VOLUME "bla/b" },
-    { u"..", u"file:///" TEST_VOLUME "" },
-    { u"a/b/c/d", u"file:///" TEST_VOLUME "bla/a/b/c/d" },
-    { u"a/./c", u"file:///" TEST_VOLUME "bla/a/c" },
-    { u"a/././c", u"file:///" TEST_VOLUME "bla/a/c" },
-    { u"file:///" TEST_VOLUME "bla1/blub", u"file:///" TEST_VOLUME "bla1/blub" },
+//    { u"a/"_ustr, u"file:///" TEST_VOLUME "bla/a"_ustr },
+    { u"../a"_ustr, u"file:///" TEST_VOLUME "a"_ustr },
+    { u"a/.."_ustr, u"file:///" TEST_VOLUME "bla/"_ustr },
+    { u"a/../b"_ustr, u"file:///" TEST_VOLUME "bla/b"_ustr },
+    { u".."_ustr, u"file:///" TEST_VOLUME ""_ustr },
+    { u"a/b/c/d"_ustr, u"file:///" TEST_VOLUME "bla/a/b/c/d"_ustr },
+    { u"a/./c"_ustr, u"file:///" TEST_VOLUME "bla/a/c"_ustr },
+    { u"a/././c"_ustr, u"file:///" TEST_VOLUME "bla/a/c"_ustr },
+    { u"file:///" TEST_VOLUME "bla1/blub"_ustr, u"file:///" TEST_VOLUME "bla1/blub"_ustr },
 };
 
 const std::pair<OUString, OUString> aSource2[] = {
-    { u"a", u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a" },
+    { u"a"_ustr, u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a"_ustr },
     ///TODO: check if last slash must be omitted in resolved path.
-//    { u"a/", u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a" },
-    { u"../a", u"file:///" TEST_VOLUME "bla/blubs/a" },
-    { u"../../a", u"file:///" TEST_VOLUME "bla/a" },
-    { u"../../../a", u"file:///" TEST_VOLUME "a" },
-    { u"../../../a/b/c/d", u"file:///" TEST_VOLUME "a/b/c/d" },
+//    { u"a/"_ustr, u"file:///" TEST_VOLUME "bla/blubs/schnubbel/a"_ustr },
+    { u"../a"_ustr, u"file:///" TEST_VOLUME "bla/blubs/a"_ustr },
+    { u"../../a"_ustr, u"file:///" TEST_VOLUME "bla/a"_ustr },
+    { u"../../../a"_ustr, u"file:///" TEST_VOLUME "a"_ustr },
+    { u"../../../a/b/c/d"_ustr, u"file:///" TEST_VOLUME "a/b/c/d"_ustr },
 };
 
 void oldtestfile::test_file_001()

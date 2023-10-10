@@ -137,7 +137,7 @@ namespace pcr
     {
         #define DESCRIBE_EVENT( map, listener, method, id_postfix ) \
             map.emplace(  \
-                u"" method, \
+                u"" method##_ustr, \
                 EventDescription( ++nEventId, u"com.sun.star." listener, u"" method, RID_STR_EVT_##id_postfix, HID_EVT_##id_postfix, UID_BRWEVT_##id_postfix ) )
 
         bool lcl_getEventDescriptionForMethod( const OUString& _rMethodName, EventDescription& _out_rDescription )
