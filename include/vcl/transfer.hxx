@@ -337,8 +337,8 @@ public:
     bool                        GetImageMap( SotClipboardFormatId nFormat, ImageMap& rIMap ) const;
     bool                        GetImageMap( const css::datatransfer::DataFlavor& rFlavor, ImageMap& rImap ) const;
 
-    bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc );
-    bool                        GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc );
+    bool                        GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc ) const;
+    bool                        GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const;
 
     bool                        GetINetBookmark( SotClipboardFormatId nFormat, INetBookmark& rBmk ) const;
     bool                        GetINetBookmark( const css::datatransfer::DataFlavor& rFlavor, INetBookmark& rBmk ) const;

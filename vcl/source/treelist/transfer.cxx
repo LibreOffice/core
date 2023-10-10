@@ -1774,14 +1774,14 @@ bool TransferableDataHelper::GetImageMap( const css::datatransfer::DataFlavor& r
 }
 
 
-bool TransferableDataHelper::GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( SotClipboardFormatId nFormat, TransferableObjectDescriptor& rDesc ) const
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetTransferableObjectDescriptor( rDesc ) );
 }
 
 
-bool TransferableDataHelper::GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc )
+bool TransferableDataHelper::GetTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc ) const
 {
     rDesc = *mxObjDesc;
     return true;

@@ -85,7 +85,7 @@ void SvPasteObjectDialog::PreGetFormat( const TransferableDataHelper &rHelper )
     TransferableObjectDescriptor aDesc;
     if (rHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
     {
-        (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
+        (void)rHelper.GetTransferableObjectDescriptor(
                                 SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
     }
     const DataFlavorExVector* pFormats = &rHelper.GetDataFlavorExVector();
@@ -204,7 +204,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     TransferableObjectDescriptor aDesc;
     if (rHelper.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
     {
-        (void)const_cast<TransferableDataHelper&>(rHelper).GetTransferableObjectDescriptor(
+        (void)rHelper.GetTransferableObjectDescriptor(
                                 SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
     }
     const DataFlavorExVector* pFormats = &rHelper.GetDataFlavorExVector();

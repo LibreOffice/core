@@ -3550,7 +3550,7 @@ void SwTransferable::FillClipFormatItem( const SwWrtShell& rSh,
         TransferableObjectDescriptor aDesc;
         if (rData.HasFormat(SotClipboardFormatId::OBJECTDESCRIPTOR))
         {
-            (void)const_cast<TransferableDataHelper&>(rData).GetTransferableObjectDescriptor(
+            (void)rData.GetTransferableObjectDescriptor(
                                 SotClipboardFormatId::OBJECTDESCRIPTOR, aDesc);
         }
 
