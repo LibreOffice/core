@@ -1,9 +1,9 @@
 -*- Mode: diff -*-
 diff --git a/core/fpdfapi/font/cpdf_cidfont.cpp b/core/fpdfapi/font/cpdf_cidfont.cpp
-index f5a51b24e..8b308d0a6 100644
+index 7d2d549b8..c4864060a 100644
 --- a/core/fpdfapi/font/cpdf_cidfont.cpp
 +++ b/core/fpdfapi/font/cpdf_cidfont.cpp
-@@ -755,7 +755,7 @@ int CPDF_CIDFont::GlyphFromCharCode(uint32_t charcode, bool* pVertGlyph) {
+@@ -754,7 +754,7 @@ int CPDF_CIDFont::GlyphFromCharCode(uint32_t charcode, bool* pVertGlyph) {
          uint32_t maccode = CharCodeFromUnicodeForFreetypeEncoding(
              FT_ENCODING_APPLE_ROMAN, name_unicode);
          index = maccode ? FT_Get_Char_Index(face, maccode)
@@ -13,10 +13,10 @@ index f5a51b24e..8b308d0a6 100644
        if (index == 0 || index == 0xffff)
          return charcode ? static_cast<int>(charcode) : -1;
 diff --git a/core/fpdfapi/font/cpdf_truetypefont.cpp b/core/fpdfapi/font/cpdf_truetypefont.cpp
-index 0a59b54eb..a96e11759 100644
+index f19ace9d0..562b015f0 100644
 --- a/core/fpdfapi/font/cpdf_truetypefont.cpp
 +++ b/core/fpdfapi/font/cpdf_truetypefont.cpp
-@@ -91,7 +91,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
+@@ -90,7 +90,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
                FT_ENCODING_APPLE_ROMAN,
                m_Encoding.UnicodeFromCharCode(charcode));
            if (!maccode) {
@@ -25,7 +25,7 @@ index 0a59b54eb..a96e11759 100644
            } else {
              m_GlyphIndex[charcode] = FT_Get_Char_Index(face, maccode);
            }
-@@ -105,7 +105,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
+@@ -104,7 +104,7 @@ void CPDF_TrueTypeFont::LoadGlyphMap() {
          m_GlyphIndex[charcode] = FT_Get_Char_Index(face, 32);
          continue;
        }
@@ -57,7 +57,7 @@ index 55510e7d7..2f13f00b8 100644
        continue;
  
 diff --git a/core/fpdfdoc/cpdf_metadata.cpp b/core/fpdfdoc/cpdf_metadata.cpp
-index 228a0c137..bf512beb3 100644
+index 31564f45f..5858549ef 100644
 --- a/core/fpdfdoc/cpdf_metadata.cpp
 +++ b/core/fpdfdoc/cpdf_metadata.cpp
 @@ -87,7 +87,7 @@ std::vector<UnsupportedFeature> CPDF_Metadata::CheckForSharedForm() const {
@@ -70,10 +70,10 @@ index 228a0c137..bf512beb3 100644
    std::vector<UnsupportedFeature> unsupported;
    CheckForSharedFormInternal(/*depth=*/0, doc->GetRoot(), &unsupported);
 diff --git a/core/fxcodec/jpx/cjpx_decoder.cpp b/core/fxcodec/jpx/cjpx_decoder.cpp
-index 9391d61ab..490ce2230 100644
+index 2e7a72aa1..65fb3deaa 100644
 --- a/core/fxcodec/jpx/cjpx_decoder.cpp
 +++ b/core/fxcodec/jpx/cjpx_decoder.cpp
-@@ -75,7 +75,7 @@ absl::optional<OpjImageRgbData> alloc_rgb(size_t size) {
+@@ -74,7 +74,7 @@ absl::optional<OpjImageRgbData> alloc_rgb(size_t size) {
    if (!data.b)
      return absl::nullopt;
  
@@ -82,21 +82,8 @@ index 9391d61ab..490ce2230 100644
  }
  
  void sycc_to_rgb(int offset,
-diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
-index 44c921a14..0152a89b7 100644
---- a/third_party/base/numerics/safe_conversions_impl.h
-+++ b/third_party/base/numerics/safe_conversions_impl.h
-@@ -89,7 +89,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
- 
- // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
- // Alternately, the usage could be restructured for "consteval if" in C++23.
--#define IsConstantEvaluated() (__builtin_is_constant_evaluated())
-+#define IsConstantEvaluated() (false)
- 
- // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
- // some accelerated runtime paths to release builds until this can be forced
 diff --git a/third_party/base/containers/span.h b/third_party/base/containers/span.h
-index ed2a3c8de..87493861c 100644
+index 435fafa85..d8e8bfbc4 100644
 --- a/third_party/base/containers/span.h
 +++ b/third_party/base/containers/span.h
 @@ -211,7 +211,7 @@ class TRIVIAL_ABI GSL_POINTER span {
@@ -116,12 +103,25 @@ index ed2a3c8de..87493861c 100644
 +  span(const span<U>& other) : span(other.data(), other.size()) {}
    span& operator=(const span& other) noexcept {
      if (this != &other) {
-       ReleaseEmptySpan();
+       data_ = other.data_;
+diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
+index 44c921a14..0152a89b7 100644
+--- a/third_party/base/numerics/safe_conversions_impl.h
++++ b/third_party/base/numerics/safe_conversions_impl.h
+@@ -89,7 +89,7 @@ constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+ 
+ // TODO(jschuh): Switch to std::is_constant_evaluated() once C++20 is supported.
+ // Alternately, the usage could be restructured for "consteval if" in C++23.
+-#define IsConstantEvaluated() (__builtin_is_constant_evaluated())
++#define IsConstantEvaluated() (false)
+ 
+ // TODO(jschuh): Debug builds don't reliably propagate constants, so we restrict
+ // some accelerated runtime paths to release builds until this can be forced
 diff --git a/third_party/libopenjpeg/openjpeg.c b/third_party/libopenjpeg/openjpeg.c
-index 29d3ee528..d5c7a1bc9 100644
+index 9dd4256d7..949d65830 100644
 --- a/third_party/libopenjpeg/openjpeg.c
 +++ b/third_party/libopenjpeg/openjpeg.c
-@@ -433,7 +433,7 @@ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
+@@ -358,7 +358,7 @@ OPJ_BOOL OPJ_CALLCONV opj_setup_decoder(opj_codec_t *p_codec,
      return OPJ_FALSE;
  }
  
