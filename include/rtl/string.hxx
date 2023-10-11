@@ -109,7 +109,7 @@ public:
 #else
     constexpr
 #endif
-    explicit OStringLiteral(char8_t const (&literal)[N]) {
+    OStringLiteral(char8_t const (&literal)[N]) {
         assertLayout();
         assert(literal[N - 1] == '\0');
         //TODO: Use C++20 constexpr std::copy_n (P0202R3):
