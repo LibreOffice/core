@@ -46,9 +46,6 @@
 #include <com/sun/star/accessibility/XAccessibleTableSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -56,6 +53,7 @@
 #include <comphelper/AccessibleImplementationHelper.hxx>
 #include <o3tl/any.hxx>
 #include <sal/log.hxx>
+#include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 
 using namespace css;
 using namespace css::accessibility;
@@ -858,140 +856,6 @@ void QtAccessibleWidget::addSelection(int /* startOffset */, int /* endOffset */
     SAL_INFO("vcl.qt", "Unsupported QAccessibleTextInterface::addSelection");
 }
 
-namespace
-{
-OUString lcl_convertFontWeight(double fontWeight)
-{
-    if (fontWeight == awt::FontWeight::THIN || fontWeight == awt::FontWeight::ULTRALIGHT)
-        return "100";
-    if (fontWeight == awt::FontWeight::LIGHT)
-        return "200";
-    if (fontWeight == awt::FontWeight::SEMILIGHT)
-        return "300";
-    if (fontWeight == awt::FontWeight::NORMAL)
-        return "normal";
-    if (fontWeight == awt::FontWeight::SEMIBOLD)
-        return "500";
-    if (fontWeight == awt::FontWeight::BOLD)
-        return "bold";
-    if (fontWeight == awt::FontWeight::ULTRABOLD)
-        return "800";
-    if (fontWeight == awt::FontWeight::BLACK)
-        return "900";
-
-    // awt::FontWeight::DONTKNOW || fontWeight == awt::FontWeight::NORMAL
-    return "normal";
-}
-
-OUString lcl_ConvertFontSlant(awt::FontSlant eFontSlant)
-{
-    switch (eFontSlant)
-    {
-        case awt::FontSlant::FontSlant_NONE:
-            return "normal";
-        case awt::FontSlant::FontSlant_OBLIQUE:
-        case awt::FontSlant::FontSlant_REVERSE_OBLIQUE:
-            return "oblique";
-        case awt::FontSlant::FontSlant_ITALIC:
-        case awt::FontSlant::FontSlant_REVERSE_ITALIC:
-            return "italic";
-        case awt::FontSlant::FontSlant_DONTKNOW:
-        case awt::FontSlant::FontSlant_MAKE_FIXED_SIZE:
-        default:
-            return "";
-    }
-}
-
-// s. https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes
-// for values
-void lcl_ConvertFontUnderline(sal_Int16 nFontUnderline, OUString& rUnderlineStyle,
-                              OUString& rUnderlineType, OUString& rUnderlineWidth)
-{
-    rUnderlineStyle = u""_ustr;
-    rUnderlineType = u"single"_ustr;
-    rUnderlineWidth = u"auto"_ustr;
-
-    switch (nFontUnderline)
-    {
-        case awt::FontUnderline::BOLD:
-            rUnderlineWidth = u"bold"_ustr;
-            return;
-        case awt::FontUnderline::BOLDDASH:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"dash"_ustr;
-            return;
-        case awt::FontUnderline::BOLDDASHDOT:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"dot-dash"_ustr;
-            return;
-        case awt::FontUnderline::BOLDDASHDOTDOT:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"dot-dot-dash"_ustr;
-            return;
-        case awt::FontUnderline::BOLDDOTTED:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"dotted"_ustr;
-            return;
-        case awt::FontUnderline::BOLDLONGDASH:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"long-dash"_ustr;
-            return;
-        case awt::FontUnderline::BOLDWAVE:
-            rUnderlineWidth = u"bold"_ustr;
-            rUnderlineStyle = u"wave"_ustr;
-            return;
-        case awt::FontUnderline::DASH:
-            rUnderlineStyle = u"dash"_ustr;
-            return;
-        case awt::FontUnderline::DASHDOT:
-            rUnderlineStyle = u"dot-dash"_ustr;
-            return;
-        case awt::FontUnderline::DASHDOTDOT:
-            rUnderlineStyle = u"dot-dot-dash"_ustr;
-            return;
-        case awt::FontUnderline::DONTKNOW:
-            rUnderlineWidth = u""_ustr;
-            rUnderlineStyle = u""_ustr;
-            rUnderlineType = u""_ustr;
-            return;
-        case awt::FontUnderline::DOTTED:
-            rUnderlineStyle = u"dotted"_ustr;
-            return;
-        case awt::FontUnderline::DOUBLE:
-            rUnderlineType = u"double"_ustr;
-            return;
-        case awt::FontUnderline::DOUBLEWAVE:
-            rUnderlineStyle = u"wave"_ustr;
-            rUnderlineType = u"double"_ustr;
-            return;
-        case awt::FontUnderline::LONGDASH:
-            rUnderlineStyle = u"long-dash"_ustr;
-            return;
-        case awt::FontUnderline::NONE:
-            rUnderlineWidth = u"none"_ustr;
-            rUnderlineStyle = u"none"_ustr;
-            rUnderlineType = u"none"_ustr;
-            return;
-        case awt::FontUnderline::SINGLE:
-            rUnderlineType = u"single"_ustr;
-            return;
-        case awt::FontUnderline::SMALLWAVE:
-        case awt::FontUnderline::WAVE:
-            rUnderlineStyle = u"wave"_ustr;
-            return;
-        default:
-            assert(false && "Unhandled font underline type");
-    }
-}
-
-/** Converts Color to "rgb(r,g,b)" as specified in https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes. */
-OUString lcl_ConvertColor(Color aColor)
-{
-    return u"rgb(" + OUString::number(aColor.GetRed()) + u"," + OUString::number(aColor.GetGreen())
-           + u"," + OUString::number(aColor.GetBlue()) + u")";
-}
-}
-
 // Text attributes are returned in format specified in IAccessible2 spec, since that
 // is what Qt handles:
 // https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes
@@ -1024,64 +888,8 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
 
     const Sequence<PropertyValue> attribs
         = xText->getCharacterAttributes(offset, Sequence<OUString>());
-    OUString aRet;
-    for (PropertyValue const& prop : attribs)
-    {
-        OUString sAttribute;
-        OUString sValue;
-        if (prop.Name == "CharBackColor")
-        {
-            sAttribute = "background-color";
-            sValue = lcl_ConvertColor(
-                Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
-        }
-        else if (prop.Name == "CharColor")
-        {
-            sAttribute = "color";
-            sValue = lcl_ConvertColor(
-                Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
-        }
-        else if (prop.Name == "CharFontName")
-        {
-            sAttribute = "font-family";
-            sValue = *o3tl::doAccess<OUString>(prop.Value);
-        }
-        else if (prop.Name == "CharHeight")
-        {
-            sAttribute = "font-size";
-            sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
-        }
-        else if (prop.Name == "CharPosture")
-        {
-            sAttribute = "font-style";
-            const awt::FontSlant eFontSlant = *o3tl::doAccess<awt::FontSlant>(prop.Value);
-            sValue = lcl_ConvertFontSlant(eFontSlant);
-        }
-        else if (prop.Name == "CharUnderline")
-        {
-            OUString sUnderlineStyle;
-            OUString sUnderlineType;
-            OUString sUnderlineWidth;
-            const sal_Int16 nUnderline = *o3tl::doAccess<sal_Int16>(prop.Value);
-            lcl_ConvertFontUnderline(nUnderline, sUnderlineStyle, sUnderlineType, sUnderlineWidth);
-
-            // leave 'sAttribute' and 'sName' empty, set all attributes here
-            if (!sUnderlineStyle.isEmpty())
-                aRet += u"text-underline-style:" + sUnderlineStyle + ";";
-            if (!sUnderlineType.isEmpty())
-                aRet += u"text-underline-type:" + sUnderlineType + ";";
-            if (!sUnderlineWidth.isEmpty())
-                aRet += u"text-underline-width:" + sUnderlineWidth + ";";
-        }
-        else if (prop.Name == "CharWeight")
-        {
-            sAttribute = "font-weight";
-            sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
-        }
-
-        if (!sAttribute.isEmpty() && !sValue.isEmpty())
-            aRet += sAttribute + ":" + sValue + ";";
-    }
+    const OUString aRet
+        = AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(attribs);
 
     accessibility::TextSegment aAttributeRun
         = xText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
