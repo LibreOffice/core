@@ -887,11 +887,11 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
 
     m_bOn = false;
 
+    // #i68520#
+    mpAnchoredObjList.reset(new SwAnchoredObjList);
+
     if( nCount && bWrapAllowed )
     {
-        // #i68520#
-        mpAnchoredObjList.reset(new SwAnchoredObjList );
-
         SwRect const aRect(GetFrameArea());
         // Make ourselves a little smaller than we are,
         // so that 1-Twip-overlappings are ignored (#49532)
@@ -979,11 +979,6 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
             if( aRectFnSet.YDiff( m_nMinBottom, nMax ) > 0 )
                 m_nMinBottom = nMax;
         }
-    }
-    else
-    {
-        // #i68520#
-        mpAnchoredObjList.reset( new SwAnchoredObjList );
     }
 
     // #i68520#
