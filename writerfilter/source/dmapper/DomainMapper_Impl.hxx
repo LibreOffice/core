@@ -481,7 +481,8 @@ private:
     std::stack<TextAppendContext>                                                   m_aTextAppendStack;
     std::stack<AnchoredContext>                                                     m_aAnchoredStack;
     std::stack<HeaderFooterContext>                                                 m_aHeaderFooterStack;
-    std::stack<std::pair<TextAppendContext, bool>>                                  m_aHeaderFooterTextAppendStack;
+    std::stack<std::pair<TextAppendContext, PagePartType>> m_aHeaderFooterTextAppendStack;
+
     std::deque<FieldContextPtr> m_aFieldStack;
     bool m_bForceGenericFields;
     /// Type of decimal symbol associated to the document language in Writer locale definition
@@ -875,9 +876,6 @@ public:
     void PushPendingShape(const css::uno::Reference<css::drawing::XShape>& xShape);
     /// Get the first pending shape, if there are any.
     css::uno::Reference<css::drawing::XShape> PopPendingShape();
-
-    void PushPageHeader(PageType eType);
-    void PushPageFooter(PageType eType);
 
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_eInHeaderFooterImport != HeaderFooterImportState::none; }

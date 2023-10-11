@@ -3279,10 +3279,10 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
 {
     while (!m_aHeaderFooterTextAppendStack.empty())
     {
-        auto aFooterHeader = m_aHeaderFooterTextAppendStack.top();
-        if ((aFooterHeader.second && !bDynamicHeightTop) || (!aFooterHeader.second && !bDynamicHeightBottom))
+        auto& [aTextAppendContext, ePagePartType] = m_aHeaderFooterTextAppendStack.top();
+        if ((ePagePartType == PagePartType::Header && !bDynamicHeightTop) || (ePagePartType == PagePartType::Footer && !bDynamicHeightBottom))
         {
-            uno::Reference< text::XTextAppend > xTextAppend = aFooterHeader.first.xTextAppend;
+            uno::Reference< text::XTextAppend > xTextAppend = aTextAppendContext.xTextAppend;
             uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
             uno::Reference< text::XTextRange > xRangeStart, xRangeEnd;
 
@@ -3308,13 +3308,12 @@ void DomainMapper_Impl::ConvertHeaderFooterToTextFrame(bool bDynamicHeightTop, b
             fillEmptyFrameProperties(aFrameProperties, false);
 
             // If it is a footer, then orient the frame to the bottom
-            if (!aFooterHeader.second)
+            if (ePagePartType == PagePartType::Footer)
+            {
                 aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), text::VertOrientation::BOTTOM));
-
-            uno::Reference<text::XTextAppendAndConvert> xBodyText(
-                xRangeStart->getText(), uno::UNO_QUERY);
-            xBodyText->convertToTextFrame(xTextAppend, xRangeEnd,
-                comphelper::containerToSequence(aFrameProperties));
+            }
+            uno::Reference<text::XTextAppendAndConvert> xBodyText(xRangeStart->getText(), uno::UNO_QUERY);
+            xBodyText->convertToTextFrame(xTextAppend, xRangeEnd, comphelper::containerToSequence(aFrameProperties));
         }
         m_aHeaderFooterTextAppendStack.pop();
     }
@@ -3332,7 +3331,7 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     const PropertyIds ePropIsOn = bHeader ? PROP_HEADER_IS_ON: PROP_FOOTER_IS_ON;
     const PropertyIds ePropShared = bHeader ? PROP_HEADER_IS_SHARED: PROP_FOOTER_IS_SHARED;
     const PropertyIds ePropTextLeft = bHeader ? PROP_HEADER_TEXT_LEFT: PROP_FOOTER_TEXT_LEFT;
-    const PropertyIds ePropText = bHeader ? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
+    const PropertyIds ePropTextRight = bHeader ? PROP_HEADER_TEXT: PROP_FOOTER_TEXT;
 
     m_bDiscardHeaderFooter = true;
     m_eInHeaderFooterImport = bHeader ? HeaderFooterImportState::header : HeaderFooterImportState::footer;
@@ -3340,8 +3339,8 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     //get the section context
     PropertyMapPtr pContext = DomainMapper_Impl::GetTopContextOfType(CONTEXT_SECTION);
     //ask for the header/footer name of the given type
-    SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    if(!pSectionContext)
+    SectionPropertyMap* pSectionContext = dynamic_cast<SectionPropertyMap*>(pContext.get());
+    if (!pSectionContext)
         return;
 
     // clear the "Link To Previous" flag so that the header/footer
@@ -3358,31 +3357,24 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
         return;
     try
     {
-        bool bLeft = eType == PageType::LEFT;
-        bool bFirst = eType == PageType::FIRST;
-        if (!bLeft || GetSettingsTable()->GetEvenAndOddHeaders())
+        const PropertyIds ePropText = eType == PageType::LEFT ? ePropTextLeft : ePropTextRight;
+        if (eType != PageType::LEFT || GetSettingsTable()->GetEvenAndOddHeaders())
         {
             //switch on header/footer use
             xPageStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::Any(true));
 
             // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
             // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
-            if (!bFirst && GetSettingsTable()->GetEvenAndOddHeaders())
+            if (eType != PageType::FIRST && GetSettingsTable()->GetEvenAndOddHeaders())
                 xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
 
             //set the interface
-            uno::Reference< text::XText > xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft? ePropTextLeft: ePropText)) >>= xText;
-
-            m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
-                m_bIsNewDoc
-                    ? uno::Reference<text::XTextCursor>()
-                    : xText->createTextCursorByRange(xText->getStart())));
-            m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
-                m_bIsNewDoc
-                    ? uno::Reference<text::XTextCursor>()
-                    : xText->createTextCursorByRange(xText->getStart())),
-                bHeader));
+            uno::Reference<text::XText> xText;
+            xPageStyle->getPropertyValue(getPropertyName(ePropText)) >>= xText;
+            auto xTextCursor = m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xText->createTextCursorByRange(xText->getStart());
+            uno::Reference<text::XTextAppend> xTextAppend(xText, uno::UNO_QUERY_THROW);
+            m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTextCursor));
+            m_aHeaderFooterTextAppendStack.push(std::make_pair(TextAppendContext(xTextAppend, xTextCursor), ePagePartType));
         }
         // If we have *hidden* header footer
         else
@@ -3396,13 +3388,11 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(false));
             // Add the content of the headers footers to the doc
             uno::Reference<text::XText> xText;
-            xPageStyle->getPropertyValue(getPropertyName(bLeft ? ePropTextLeft : ePropText))
-                >>= xText;
+            xPageStyle->getPropertyValue(getPropertyName(ePropText)) >>= xText;
+            auto xTextCursor = m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xText->createTextCursorByRange(xText->getStart());
+            uno::Reference<text::XTextAppend> xTextAppend(xText, uno::UNO_QUERY_THROW);
+            m_aTextAppendStack.push(TextAppendContext(xTextAppend, xTextCursor));
 
-            m_aTextAppendStack.push(
-                TextAppendContext(uno::Reference<text::XTextAppend>(xText, uno::UNO_QUERY_THROW),
-                                  m_bIsNewDoc ? uno::Reference<text::XTextCursor>()
-                                              : xText->createTextCursorByRange(xText->getStart())));
             // Restore the original state of the shared prop after we stored the necessary values.
             xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::Any(bIsShared));
         }
@@ -3412,16 +3402,6 @@ void DomainMapper_Impl::PushPageHeaderFooter(PagePartType ePagePartType, PageTyp
     {
         DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
     }
-}
-
-void DomainMapper_Impl::PushPageHeader(PageType eType)
-{
-    PushPageHeaderFooter(PagePartType::Header, eType);
-}
-
-void DomainMapper_Impl::PushPageFooter(PageType eType)
-{
-    PushPageHeaderFooter(PagePartType::Footer, eType);
 }
 
 void DomainMapper_Impl::PopPageHeaderFooter()
@@ -9215,22 +9195,22 @@ void DomainMapper_Impl::substream(Id rName,
     switch( rName )
     {
     case NS_ooxml::LN_headerl:
-            PushPageHeader(PageType::LEFT);
+            PushPageHeaderFooter(PagePartType::Header, PageType::LEFT);
         break;
     case NS_ooxml::LN_headerr:
-            PushPageHeader(PageType::RIGHT);
+            PushPageHeaderFooter(PagePartType::Header, PageType::RIGHT);
         break;
     case NS_ooxml::LN_headerf:
-            PushPageHeader(PageType::FIRST);
+            PushPageHeaderFooter(PagePartType::Header, PageType::FIRST);
         break;
     case NS_ooxml::LN_footerl:
-            PushPageFooter(PageType::LEFT);
+            PushPageHeaderFooter(PagePartType::Footer, PageType::LEFT);
         break;
     case NS_ooxml::LN_footerr:
-            PushPageFooter(PageType::RIGHT);
+            PushPageHeaderFooter(PagePartType::Footer, PageType::RIGHT);
         break;
     case NS_ooxml::LN_footerf:
-            PushPageFooter(PageType::FIRST);
+            PushPageHeaderFooter(PagePartType::Footer, PageType::FIRST);
         break;
     case NS_ooxml::LN_footnote:
     case NS_ooxml::LN_endnote:
