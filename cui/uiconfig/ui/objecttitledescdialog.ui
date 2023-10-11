@@ -124,8 +124,8 @@
               <object class="GtkLabel" id="desc_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="tooltip-text" translatable="yes" context="objecttitledescdialog|desc_label|tooltip_text">Give longer explanation of non-text content that is too complex to be described briefly in “Text Alternative”</property>
-                <property name="label" translatable="yes" context="objecttitledescdialog|desc_label">_Description:</property>
+                <property name="tooltip-text" translatable="yes" context="objecttitledescdialog|desc_label|tooltip_text">Give longer explanation of non-text content that is too complex to be described briefly in “Text”</property>
+                <property name="label" translatable="yes" context="objecttitledescdialog|desc_label">_Alt Text:</property>
                 <property name="use-underline">True</property>
                 <property name="xalign">0</property>
               </object>
