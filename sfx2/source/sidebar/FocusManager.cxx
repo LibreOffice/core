@@ -193,17 +193,6 @@ bool FocusManager::IsDeckTitleVisible() const
     return mpDeckTitleBar != nullptr && mpDeckTitleBar->GetVisible();
 }
 
-bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
-{
-    if (nPanelIndex<0 || o3tl::make_unsigned(nPanelIndex)>=maPanels.size())
-        return false;
-
-    TitleBar* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
-    if (!pTitleBar)
-        return false;
-    return pTitleBar->GetVisible();
-}
-
 void FocusManager::FocusPanel (
     const sal_Int32 nPanelIndex,
     const bool bFallbackToDeckTitle)

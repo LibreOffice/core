@@ -107,7 +107,6 @@ private:
 
     void FocusDeckTitle();
     bool IsDeckTitleVisible() const;
-    bool IsPanelTitleVisible(const sal_Int32 nPanelIndex) const;
 
     /** Set the focus to the title bar of the panel or, if the
         title bar is not visible, directly to the panel.
