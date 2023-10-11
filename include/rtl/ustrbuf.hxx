@@ -124,9 +124,7 @@ public:
     explicit OUStringBuffer(bool) = delete;
     explicit OUStringBuffer(char) = delete;
     explicit OUStringBuffer(wchar_t) = delete;
-#if defined __cpp_char8_t
     explicit OUStringBuffer(char8_t) = delete;
-#endif
     explicit OUStringBuffer(char16_t) = delete;
     explicit OUStringBuffer(char32_t) = delete;
 #endif

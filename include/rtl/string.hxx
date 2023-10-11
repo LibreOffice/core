@@ -104,7 +104,6 @@ public:
         }
     }
 
-#if defined __cpp_char8_t
 #if HAVE_CPP_CONSTEVAL
     consteval
 #else
@@ -118,7 +117,6 @@ public:
             more.buffer[i] = literal[i];
         }
     }
-#endif
 
     constexpr sal_Int32 getLength() const { return more.length; }
 

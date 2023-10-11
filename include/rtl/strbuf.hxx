@@ -122,9 +122,7 @@ public:
     explicit OStringBuffer(bool) = delete;
     explicit OStringBuffer(char) = delete;
     explicit OStringBuffer(wchar_t) = delete;
-#if defined __cpp_char8_t
     explicit OStringBuffer(char8_t) = delete;
-#endif
     explicit OStringBuffer(char16_t) = delete;
     explicit OStringBuffer(char32_t) = delete;
 #endif
