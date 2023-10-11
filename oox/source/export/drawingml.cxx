@@ -1342,10 +1342,6 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
                 sMediaType = "image/png";
                 pExtension = ".png";
                 break;
-            case GfxLinkType::NativeSvg:
-                sMediaType = "image/svg";
-                pExtension = ".svg";
-                break;
             case GfxLinkType::NativeTif:
                 sMediaType = "image/tiff";
                 pExtension = ".tif";
