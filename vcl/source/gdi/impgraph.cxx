@@ -788,6 +788,17 @@ Size ImpGraphic::getPrefSize() const
                         // svg not yet buffered in maBitmapEx, return size derived from range
                         const basegfx::B2DRange& rRange = maVectorGraphicData->getRange();
 
+#ifdef MACOSX
+                        // tdf#157680 scale down estimated size of embedded PDF
+                        // For some unknown reason, the embedded PDF sizes
+                        // are 20x larger than expected. This only occurs on
+                        // macOS so possibly there is some special conversion
+                        // from MapUnit::MapPoint to MapUnit::MapTwip elsewhere
+                        // in the code.
+                        if (maVectorGraphicData->getType() == VectorGraphicDataType::Pdf)
+                           aSize = Size(basegfx::fround(rRange.getWidth() / 20.0f), basegfx::fround(rRange.getHeight() / 20.0f));
+                        else
+#endif
                         aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
                     }
                     else
