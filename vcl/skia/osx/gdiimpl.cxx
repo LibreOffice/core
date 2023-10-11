@@ -214,6 +214,11 @@ bool AquaSkiaSalGraphicsImpl::drawNativeControl(ControlType nType, ControlPart n
                                                 const tools::Rectangle& rControlRegion,
                                                 ControlState nState, const ImplControlValue& aValue)
 {
+    // tdf#157613 make sure surface is not a nullptr
+    checkSurface();
+    if (!mSurface)
+        return false;
+
     // rControlRegion is not the whole area that the control should be painted to (e.g. highlight
     // around focused lineedit is outside of it). Since we draw to a temporary bitmap, we need tofind out
     // the real size. Using getNativeControlRegion() might seem like the function to call, but we need
