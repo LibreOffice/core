@@ -243,10 +243,12 @@ namespace drawinglayer::primitive2d
             uno::Reference< awt::XControlModel > xControlModel,
             uno::Reference<awt::XControl> xXControl,
             ::std::u16string_view const rTitle,
-            ::std::u16string_view const rDescription)
+            ::std::u16string_view const rDescription,
+            void const*const pAnchorKey)
         :   maTransform(std::move(aTransform)),
             mxControlModel(std::move(xControlModel)),
             mxXControl(std::move(xXControl))
+        , m_pAnchorStructureElementKey(pAnchorKey)
         {
             ::rtl::OUStringBuffer buf(rTitle);
             if (!rTitle.empty() && !rDescription.empty())

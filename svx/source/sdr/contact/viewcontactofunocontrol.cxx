@@ -106,6 +106,12 @@ namespace sdr::contact {
 
         if(xControlModel.is())
         {
+            void const* pAnchorKey(nullptr);
+            if (auto const pUserCall = GetSdrObject().GetUserCall())
+            {
+                pAnchorKey = pUserCall->GetPDFAnchorStructureElementKey(GetSdrObject());
+            }
+
             // create control primitive WITHOUT possibly existing XControl; this would be done in
             // the VOC in createPrimitive2DSequence()
             const drawinglayer::primitive2d::Primitive2DReference xRetval(
@@ -114,7 +120,8 @@ namespace sdr::contact {
                     xControlModel,
                     nullptr,
                     GetSdrObject().GetTitle(),
-                    GetSdrObject().GetDescription()));
+                    GetSdrObject().GetDescription(),
+                    pAnchorKey));
 
             rVisitor.visit(xRetval);
         }
