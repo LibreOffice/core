@@ -1047,9 +1047,14 @@ void PasswordContainer::removeAllPersistent(std::unique_lock<std::mutex>& /*rGua
 
 Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& xHandler )
 {
+    std::unique_lock aGuard( mMutex );
+    return getAllPersistent(aGuard, xHandler);
+}
+
+Sequence< UrlRecord > PasswordContainer::getAllPersistent( std::unique_lock<std::mutex>& /*rGuard*/, const Reference< XInteractionHandler >& xHandler )
+{
     Sequence< UrlRecord > aResult;
 
-    std::unique_lock aGuard( mMutex );
     for( const auto& rEntry : m_aContainer )
     {
         Sequence< UserRecord > aUsers;
@@ -1075,10 +1080,15 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
 
 sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
+    std::unique_lock aGuard( mMutex );
+    return authorizateWithMasterPassword(aGuard, xHandler);
+}
+
+bool PasswordContainer::authorizateWithMasterPassword( std::unique_lock<std::mutex>& /*rGuard*/, const uno::Reference< task::XInteractionHandler >& xHandler )
+{
     bool bResult = false;
     OUString aEncodedMP, aEncodedMPIV;
     uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
-    std::unique_lock aGuard( mMutex );
 
     // the method should fail if there is no master password
     if( m_xStorageFile && m_xStorageFile->useStorage() && m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) )
@@ -1151,7 +1161,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         // if there is already a stored master password it should be entered by the user before the change happen
         OUString aEncodedMP, aEncodedMPIV;
         if( !m_aMasterPassword.isEmpty() || m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) )
-            bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
+            bCanChangePassword = authorizateWithMasterPassword( aGuard, xTmpHandler );
 
         if ( bCanChangePassword )
         {
@@ -1161,10 +1171,10 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
             if ( !aPass.isEmpty() )
             {
                 // get all the persistent entries if it is possible
-                const Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+                const Sequence< UrlRecord > aPersistent = getAllPersistent( aGuard, uno::Reference< task::XInteractionHandler >() );
 
                 // remove the master password and the entries persistence
-                removeMasterPassword();
+                removeMasterPassword(aGuard);
 
                 // store the new master password
                 m_aMasterPassword = aPass;
@@ -1175,7 +1185,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
                 // store all the entries with the new password
                 for ( const auto& rURL : aPersistent )
                     for ( const auto& rUser : rURL.UserList )
-                        addPersistent( rURL.Url, rUser.UserName, rUser.Passwords,
+                        PrivateAdd( rURL.Url, rUser.UserName, rUser.Passwords, PERSISTENT_RECORD,
                                        uno::Reference< task::XInteractionHandler >() );
 
                 bResult = true;
@@ -1261,7 +1271,7 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
         // if there is already a stored nondefault master password it should be entered by the user before the change happen
         OUString aEncodedMP, aEncodedMPIV;
         if( m_xStorageFile->getEncodedMasterPassword( aEncodedMP, aEncodedMPIV ) && !aEncodedMP.isEmpty() )
-            bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
+            bCanChangePassword = authorizateWithMasterPassword( aGuard, xTmpHandler );
 
         if ( bCanChangePassword )
         {
@@ -1270,10 +1280,10 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
             if ( !aPass.isEmpty() )
             {
                 // get all the persistent entries if it is possible
-                const Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+                const Sequence< UrlRecord > aPersistent = getAllPersistent( aGuard, uno::Reference< task::XInteractionHandler >() );
 
                 // remove the master password and the entries persistence
-                removeMasterPassword();
+                removeMasterPassword(aGuard);
 
                 // store the empty string to flag the default master password
                 m_aMasterPassword = aPass;
@@ -1282,8 +1292,8 @@ sal_Bool SAL_CALL PasswordContainer::useDefaultMasterPassword( const uno::Refere
                 // store all the entries with the new password
                 for ( const auto& rURL : aPersistent )
                     for ( const auto& rUser : rURL.UserList )
-                        addPersistent( rURL.Url, rUser.UserName, rUser.Passwords,
-                                       uno::Reference< task::XInteractionHandler >() );
+                        PrivateAdd( rURL.Url, rUser.UserName, rUser.Passwords, PERSISTENT_RECORD,
+                                   uno::Reference< task::XInteractionHandler >() );
 
                 bResult = true;
             }

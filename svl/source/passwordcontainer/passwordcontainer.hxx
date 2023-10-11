@@ -387,6 +387,8 @@ public:
 
     void            Notify();
 private:
+    bool authorizateWithMasterPassword( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
+    css::uno::Sequence< css::task::UrlRecord > getAllPersistent( std::unique_lock<std::mutex>& rGuard, const css::uno::Reference< css::task::XInteractionHandler >& Handler );
     void removeAllPersistent(std::unique_lock<std::mutex>& rGuard);
     void removeMasterPassword(std::unique_lock<std::mutex>& rGuard);
 };
