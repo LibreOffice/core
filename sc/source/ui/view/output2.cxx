@@ -1482,13 +1482,21 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
 {
     bool bOrigIsInLayoutStrings = mpDoc->IsInLayoutStrings();
     mpDoc->SetLayoutStrings(true);
-    comphelper::ScopeGuard g([this, bOrigIsInLayoutStrings] {
-        mpDoc->SetLayoutStrings(bOrigIsInLayoutStrings);
-    });
 
     OSL_ENSURE( mpDev == mpRefDevice ||
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
                 "LayoutStrings: different MapUnits ?!?!" );
+
+    vcl::text::ComplexTextLayoutFlags eTextLayout = mpDev->GetLayoutMode();
+    comphelper::ScopeGuard g([this, bOrigIsInLayoutStrings, eTextLayout] {
+        mpDoc->SetLayoutStrings(bOrigIsInLayoutStrings);
+
+        if (mpDev->GetLayoutMode() != eTextLayout)
+            mpDev->SetLayoutMode(eTextLayout);
+    });
+
+    if (mpDev->GetLayoutMode() != vcl::text::ComplexTextLayoutFlags::Default)
+        mpDev->SetLayoutMode(vcl::text::ComplexTextLayoutFlags::Default);
 
     sc::IdleSwitch aIdleSwitch(*mpDoc, false);
 
