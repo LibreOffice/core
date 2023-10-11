@@ -1157,6 +1157,32 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyDelEmpty)
     // Then make sure that the page count matches Word:
     CPPUNIT_ASSERT_EQUAL(7, getPages());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInTableInSection)
+{
+    // Given a document where page 2 and page 3 has a floating table inside an inline table, inside
+    // a section:
+    // Without the accompanying fix in place, this test would have crashed, we created a follow
+    // anchor which was marked as "in table", but had no table parent.
+    createSwDoc("floattable-in-inltbl-in-sect.docx");
+
+    // Then make sure that the floating table is on page 2 and page 3:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetSortedObjs());
+    auto pPage2 = pPage1->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage2);
+    CPPUNIT_ASSERT(pPage2->GetSortedObjs());
+    SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
+    auto pPage3 = pPage2->GetNext()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage3);
+    CPPUNIT_ASSERT(pPage3->GetSortedObjs());
+    SwSortedObjs& rPage3Objs = *pPage3->GetSortedObjs();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage3Objs.size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

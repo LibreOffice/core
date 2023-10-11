@@ -1579,11 +1579,30 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     SwLayoutFrame *pLayLeaf = nullptr;
     // Look up the first candidate.
     SwSectionFrame* pFlyAnchorSection = pFlyAnchor ? pFlyAnchor->FindSctFrame() : nullptr;
+    bool bNesting = false;
     if (pFlyAnchorSection)
     {
-        // We can't just move the split anchor to the next page, that would be outside the section.
-        // Rather split that section as well.
-        pLayLeaf = pFlyAnchorSection->GetNextSctLeaf(eMakePage);
+        // The anchor is in a section.
+        if (pFlyAnchor)
+        {
+            SwTabFrame* pFlyAnchorTab = pFlyAnchor->FindTabFrame();
+            if (pFlyAnchorTab)
+            {
+                // The anchor is in table as well.
+                if (pFlyAnchorTab->FindSctFrame() == pFlyAnchorSection)
+                {
+                    // We're in a table-in-section, no anchor move in this case, because that would
+                    // mean we're not in a table anymore.
+                    bNesting = true;
+                }
+            }
+        }
+        if (!bNesting)
+        {
+            // We can't just move the split anchor to the next page, that would be outside the section.
+            // Rather split that section as well.
+            pLayLeaf = pFlyAnchorSection->GetNextSctLeaf(eMakePage);
+        }
     }
     else if (IsTabFrame())
     {
@@ -1597,7 +1616,6 @@ SwLayoutFrame *SwFrame::GetNextFlyLeaf( MakePageType eMakePage )
     }
 
     SwLayoutFrame* pOldLayLeaf = nullptr;
-    bool bNesting = false;
     while (true)
     {
         if (pLayLeaf)
