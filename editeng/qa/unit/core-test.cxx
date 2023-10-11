@@ -45,10 +45,20 @@ namespace {
 class Test : public test::BootstrapFixture
 {
 public:
-    Test();
+    Test() {}
 
-    virtual void setUp() override;
-    virtual void tearDown() override;
+    void setUp() override
+    {
+        test::BootstrapFixture::setUp();
+        mpItemPool = new EditEngineItemPool();
+        SfxApplication::GetOrCreate();
+    }
+
+    void tearDown() override
+    {
+        mpItemPool.clear();
+        test::BootstrapFixture::tearDown();
+    }
 
 #if HAVE_MORE_FONTS
     /// Test text portions position when percentage line spacing is set
@@ -134,23 +144,6 @@ public:
 private:
     rtl::Reference<EditEngineItemPool> mpItemPool;
 };
-
-Test::Test() {}
-
-void Test::setUp()
-{
-    test::BootstrapFixture::setUp();
-
-    mpItemPool = new EditEngineItemPool();
-
-    SfxApplication::GetOrCreate();
-}
-
-void Test::tearDown()
-{
-    mpItemPool.clear();
-    test::BootstrapFixture::tearDown();
-}
 
 #if HAVE_MORE_FONTS
 void Test::testLineSpacing()
