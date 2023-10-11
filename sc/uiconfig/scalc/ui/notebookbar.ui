@@ -908,6 +908,26 @@
       </object>
     </child>
     <child>
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaLeftToRight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ParaLeftToRight</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="MenuHome-ParaRightToLeft">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ParaRightToLeft</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuHome-InsertNonBreakingSpace">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -957,7 +977,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuHome-separator4">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator5">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -991,7 +1011,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkSeparatorMenuItem" id="MenuHome-separator5">
+      <object class="GtkSeparatorMenuItem" id="MenuHome-separator6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
       </object>
@@ -3798,6 +3818,17 @@
                                         <property name="homogeneous">True</property>
                                       </packing>
                                     </child>
+                                    <child>
+                                    <object class="GtkToolButton" id="Home-ParaLeftToRight1">
+                                        <property name="visible">False</property>
+                                        <property name="action_name">.uno:ParaLeftToRight</property>
+                                        <property name="use_underline">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
+                                    </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -3868,6 +3899,17 @@
                                       <object class="GtkToolButton" id="Home-WrapText">
                                         <property name="visible">True</property>
                                         <property name="action_name">.uno:WrapText</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="homogeneous">True</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkToolButton" id="Home-ParaRightToLeft1">
+                                        <property name="visible">False</property>
+                                        <property name="action_name">.uno:ParaRightToLeft</property>
+                                        <property name="use_underline">True</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>

@@ -1136,6 +1136,26 @@
       </object>
     </child>
     <child>
+      <object class="GtkRadioMenuItem" id="ParaLeftToRight">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ParaLeftToRight</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkRadioMenuItem" id="ParaRightToLeft">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ParaRightToLeft</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="separator55b">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="InsertNonBreakingSpaceD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
