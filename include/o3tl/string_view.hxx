@@ -265,7 +265,7 @@ template <typename charT, typename traits = std::char_traits<charT>>
 constexpr bool ends_with(std::basic_string_view<charT, traits> sv,
                          std::basic_string_view<charT, traits> x) noexcept
 {
-#if defined __cpp_lib_ends_ends_with
+#if defined __cpp_lib_starts_ends_with
     return sv.ends_with(x);
 #else
     return sv.size() >= x.size()
@@ -275,7 +275,7 @@ constexpr bool ends_with(std::basic_string_view<charT, traits> sv,
 template <typename charT, typename traits = std::char_traits<charT>>
 constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT x) noexcept
 {
-#if defined __cpp_lib_ends_ends_with
+#if defined __cpp_lib_starts_ends_with
     return sv.ends_with(x);
 #else
     return !sv.empty() && traits::eq(sv.back(), x);
@@ -284,7 +284,7 @@ constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT x) noex
 template <typename charT, typename traits = std::char_traits<charT>>
 constexpr bool ends_with(std::basic_string_view<charT, traits> sv, charT const* x)
 {
-#if defined __cpp_lib_ends_ends_with
+#if defined __cpp_lib_starts_ends_with
     return sv.ends_with(x);
 #else
     return ends_with(sv, std::basic_string_view<charT, traits>(x));
