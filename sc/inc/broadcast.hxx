@@ -24,24 +24,10 @@ class FormulaGroupAreaListener;
 
 struct BroadcasterState
 {
-    enum class CellListenerType
-    {
-        FormulaCell,
-        Generic,
-    };
-
-    enum class AreaListenerType
-    {
-        FormulaCell,
-        FormulaGroup,
-        Generic,
-    };
-
     struct CellListener
     {
         using DataType = std::variant<const ScFormulaCell*, const SvtListener*>;
 
-        CellListenerType eType;
         DataType pData;
 
         CellListener(const ScFormulaCell* p);
@@ -53,7 +39,6 @@ struct BroadcasterState
         using DataType = std::variant<const ScFormulaCell*, const sc::FormulaGroupAreaListener*,
                                       const SvtListener*>;
 
-        AreaListenerType eType;
         DataType pData;
 
         AreaListener(const ScFormulaCell* p);

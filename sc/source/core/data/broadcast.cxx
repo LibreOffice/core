@@ -14,32 +14,27 @@
 namespace sc
 {
 BroadcasterState::CellListener::CellListener(const ScFormulaCell* p)
-    : eType(CellListenerType::FormulaCell)
-    , pData(p)
+    : pData(p)
 {
 }
 
 BroadcasterState::CellListener::CellListener(const SvtListener* p)
-    : eType(CellListenerType::Generic)
-    , pData(p)
+    : pData(p)
 {
 }
 
 BroadcasterState::AreaListener::AreaListener(const ScFormulaCell* p)
-    : eType(AreaListenerType::FormulaCell)
-    , pData(p)
+    : pData(p)
 {
 }
 
 BroadcasterState::AreaListener::AreaListener(const sc::FormulaGroupAreaListener* p)
-    : eType(AreaListenerType::FormulaGroup)
-    , pData(p)
+    : pData(p)
 {
 }
 
 BroadcasterState::AreaListener::AreaListener(const SvtListener* p)
-    : eType(AreaListenerType::Generic)
-    , pData(p)
+    : pData(p)
 {
 }
 
@@ -52,7 +47,7 @@ bool BroadcasterState::hasFormulaCellListener(const ScAddress& rBroadcasterPos,
 
     for (const auto& rLis : it->second)
     {
-        if (rLis.eType == CellListenerType::FormulaCell)
+        if (rLis.pData.index() == 0)
         {
             auto pFC = std::get<const ScFormulaCell*>(rLis.pData);
             if (pFC->aPos == rFormulaPos)
@@ -72,7 +67,7 @@ bool BroadcasterState::hasFormulaCellListener(const ScRange& rBroadcasterRange,
 
     for (const auto& rLis : it->second)
     {
-        if (rLis.eType == AreaListenerType::FormulaCell)
+        if (rLis.pData.index() == 0)
         {
             auto pFC = std::get<const ScFormulaCell*>(rLis.pData);
             if (pFC->aPos == rFormulaPos)
@@ -99,16 +94,16 @@ void BroadcasterState::dump(std::ostream& rStrm, const ScDocument* pDoc) const
 
         for (const auto& rLis : rListeners)
         {
-            switch (rLis.eType)
+            switch (rLis.pData.index())
             {
-                case BroadcasterState::CellListenerType::FormulaCell:
+                case 0:
                 {
                     auto* pFC = std::get<const ScFormulaCell*>(rLis.pData);
                     rStrm << "  - type: formula-cell\n";
                     rStrm << "    position: " << pFC->aPos.Format(nPosFlags, pDoc) << std::endl;
                     break;
                 }
-                case BroadcasterState::CellListenerType::Generic:
+                case 1:
                 {
                     rStrm << "  - type: unknown" << std::endl;
                     break;
@@ -127,16 +122,16 @@ void BroadcasterState::dump(std::ostream& rStrm, const ScDocument* pDoc) const
 
         for (const auto& rLis : rListeners)
         {
-            switch (rLis.eType)
+            switch (rLis.pData.index())
             {
-                case BroadcasterState::AreaListenerType::FormulaCell:
+                case 0:
                 {
                     auto* pFC = std::get<const ScFormulaCell*>(rLis.pData);
                     rStrm << "  - type: formula-cell\n";
                     rStrm << "    position: " << pFC->aPos.Format(nPosFlags, pDoc) << std::endl;
                     break;
                 }
-                case BroadcasterState::AreaListenerType::FormulaGroup:
+                case 1:
                 {
                     auto* pFGL = std::get<const sc::FormulaGroupAreaListener*>(rLis.pData);
 
@@ -150,7 +145,7 @@ void BroadcasterState::dump(std::ostream& rStrm, const ScDocument* pDoc) const
                     }
                     break;
                 }
-                case BroadcasterState::AreaListenerType::Generic:
+                case 2:
                 {
                     rStrm << "  - type: unknown" << std::endl;
                     break;
