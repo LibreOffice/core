@@ -493,7 +493,7 @@ void SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     OSL_ENSURE( !m_bTopRule, "DrawTextOpaque: Wrong TopRule" );
 
     // #i68520#
-    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList()->size() : 0 );
+    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList().size() : 0 );
     if (nCount > 0)
     {
         const SdrLayerID nHellId = m_pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
@@ -578,7 +578,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
     SwRegionRects aRegion( rRect );
     OSL_ENSURE( !m_bTopRule, "DrawFlyRect: Wrong TopRule" );
     // #i68520#
-    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList()->size() : 0 );
+    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList().size() : 0 );
     if (nCount > 0)
     {
         const SdrLayerID nHellId = m_pPage->getRootFrame()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
@@ -1024,7 +1024,7 @@ SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextForm
     // Note that m_pCurrFrame is already swapped at this stage, so it's correct to bypass
     // SwRectFnSet here.
     SwTwips nRet = 0;
-    size_t nCount(m_bOn ? GetAnchoredObjList()->size() : 0);
+    size_t nCount(m_bOn ? GetAnchoredObjList().size() : 0);
 
     // Get the horizontal position of the break portion in absolute twips. The frame area is in
     // absolute twips, the frame's print area is relative to the frame area. Finally the portion's
@@ -1101,7 +1101,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 
     bool bRet = false;
     // #i68520#
-    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList()->size() : 0 );
+    const SwAnchoredObjList::size_type nCount( m_bOn ? GetAnchoredObjList().size() : 0 );
     if (nCount > 0)
     {
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
@@ -1180,7 +1180,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
 // #i68520#
 SwAnchoredObjList::size_type SwTextFly::GetPos( const SwAnchoredObject* pAnchoredObj ) const
 {
-    SwAnchoredObjList::size_type nCount = GetAnchoredObjList()->size();
+    SwAnchoredObjList::size_type nCount = GetAnchoredObjList().size();
     SwAnchoredObjList::size_type nRet = 0;
     while ( nRet < nCount && pAnchoredObj != (*mpAnchoredObjList)[ nRet ] )
         ++nRet;

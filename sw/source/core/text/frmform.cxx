@@ -1867,7 +1867,7 @@ void SwTextFrame::FormatImpl(vcl::RenderContext* pRenderContext, SwParaPortion *
     if (aInf.GetTextFly().IsOn())
     {
         SwRect const aRect(aInf.GetTextFly().GetFrameArea());
-        for (SwAnchoredObject *const pObj : *aInf.GetTextFly().GetAnchoredObjList())
+        for (SwAnchoredObject *const pObj : aInf.GetTextFly().GetAnchoredObjList())
         {
             if (!aInf.GetTextFly().AnchoredObjToRect(pObj, aRect).IsEmpty())
             {

@@ -2815,7 +2815,7 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         // Word style: if there is minimal space remaining, then handle that similar to a full line
         // and put the actual empty paragraph below the fly.
         SwTwips nLimit = MINLAY;
-        for (const auto& pObj : *rTextFly.GetAnchoredObjList())
+        for (const auto& pObj : rTextFly.GetAnchoredObjList())
         {
             auto pFlyFrame = pObj->DynCastFlyFrame();
             if (!pFlyFrame)
