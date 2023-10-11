@@ -1447,6 +1447,7 @@ void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
     Bitmap aNewMask = maBitmap.CreateMask( maskColor, nTol );
     if ( IsAlpha() )
          aNewMask.CombineOr( maAlphaMask );
+    aNewMask.Invert();
     maAlphaMask = aNewMask;
 }
 
