@@ -51,6 +51,21 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf150086)
     CPPUNIT_ASSERT_EQUAL(OUString("Content\n"), rTable[6]->GetText());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf156267)
+{
+    createSwDoc("tdf156267.docx");
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    // Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
