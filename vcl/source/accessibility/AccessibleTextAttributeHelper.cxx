@@ -154,8 +154,9 @@ void lcl_ConvertFontUnderline(sal_Int16 nFontUnderline, OUString& rUnderlineStyl
 /** Converts Color to "rgb(r,g,b)" as specified in https://wiki.linuxfoundation.org/accessibility/iaccessible2/textattributes. */
 OUString lcl_ConvertColor(Color aColor)
 {
-    return u"rgb(" + OUString::number(aColor.GetRed()) + u"," + OUString::number(aColor.GetGreen())
-           + u"," + OUString::number(aColor.GetBlue()) + u")";
+    return u"rgb(" + OUString::number(aColor.GetRed()) + u"\\,"
+           + OUString::number(aColor.GetGreen()) + u"\\," + OUString::number(aColor.GetBlue())
+           + u")";
 }
 }
 
