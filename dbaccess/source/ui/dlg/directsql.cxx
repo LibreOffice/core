@@ -31,7 +31,10 @@
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XMultipleResults.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 
 namespace dbaui
 {
@@ -305,6 +308,10 @@ namespace dbaui
 
     void DirectSQLDialog::display(const css::uno::Reference< css::sdbc::XResultSet >& xRS)
     {
+
+        const Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRS,UNO_QUERY_THROW)->getMetaData();
+        const sal_Int32 nColumnsCount = xResultSetMetaData->getColumnCount();
+
         // get a handle for the rows
         css::uno::Reference< css::sdbc::XRow > xRow( xRS, css::uno::UNO_QUERY );
         // work through each of the rows
@@ -315,25 +322,31 @@ namespace dbaui
             // work along the columns until that are none left
             try
             {
-                int i = 1;
-                for (;;)
+                for (sal_Int32 i = 1; i <= nColumnsCount; ++i)
                 {
-                    // be dumb, treat everything as a string unless below
-                    // tdf#153317, at least "Bit" type in Mysql/MariaDB gives: "\000" or "\001"
-                    // so retrieve Sequence from getBytes, test if it has a length of 1 (so we avoid BLOB/CLOB or other complex types)
-                    // and test if the value of first byte is one of those.
-                    // In this case, there's a good chance it's a "Bit" field
-                    // remark: for unknown reason, getByte(i) gives "\000" even if the bit is at 1.
-                    auto seq = xRow->getBytes(i);
-                    if ((seq.getLength() == 1) && (seq[0] >= 0) && (seq[0] <= 1))
+                    switch (xResultSetMetaData->getColumnType(i))
                     {
-                        out.append(OUString::number(static_cast<int>(seq[0])) + ",");
+                        // tdf#153317, at least "Bit" type in Mysql/MariaDB gives: "\000" or "\001"
+                        // so retrieve Sequence from getBytes, test if it has a length of 1 (so we avoid BLOB/CLOB or other complex types)
+                        // and test if the value of first byte is one of those.
+                        // In this case, there's a good chance it's a "Bit" field
+                        case css::sdbc::DataType::BIT:
+                        {
+                            auto seq = xRow->getBytes(i);
+                            if ((seq.getLength() == 1) && (seq[0] >= 0) && (seq[0] <= 1))
+                            {
+                                out.append(OUString::number(static_cast<int>(seq[0])) + ",");
+                            }
+                            else
+                            {
+                                out.append(xRow->getString(i) + ",");
+                            }
+                            break;
+                        }
+                        // for the rest, be dumb, treat everything as a string
+                        default:
+                            out.append(xRow->getString(i) + ",");
                     }
-                    else
-                    {
-                        out.append(xRow->getString(i) + ",");
-                    }
-                    i++;
                 }
             }
             // trap for when we fall off the end of the row
