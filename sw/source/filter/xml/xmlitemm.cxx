@@ -114,14 +114,14 @@ const SvXMLItemMapEntry aTableItemMap[] =
     // RES_COLLAPSING_BORDERS
     MAP_ENTRY( TABLE, BORDER_MODEL, RES_COLLAPSING_BORDERS, 0 )
 };
-const o3tl::span<SvXMLItemMapEntry const> aXMLTableItemMap(aTableItemMap);
+const std::span<SvXMLItemMapEntry const> aXMLTableItemMap(aTableItemMap);
 
 const SvXMLItemMapEntry aTableColItemMap[] =
 {
     M_E_SI( STYLE,  COLUMN_WIDTH,     RES_FRM_SIZE, MID_FRMSIZE_COL_WIDTH ),
     MAP_ENTRY( STYLE,        REL_COLUMN_WIDTH, RES_FRM_SIZE, MID_FRMSIZE_REL_COL_WIDTH ),
 };
-const o3tl::span<SvXMLItemMapEntry const> aXMLTableColItemMap(aTableColItemMap);
+const std::span<SvXMLItemMapEntry const> aXMLTableColItemMap(aTableColItemMap);
 
 const SvXMLItemMapEntry aTableRowItemMap[] =
 {
@@ -194,7 +194,7 @@ const SvXMLItemMapEntry aTableRowItemMap[] =
     // RES_UNKNOWNATR_CONTAINER
     M_E_SE( TEXT, XMLNS, RES_UNKNOWNATR_CONTAINER, 0 )
 };
-const o3tl::span<SvXMLItemMapEntry const> aXMLTableRowItemMap(aTableRowItemMap);
+const std::span<SvXMLItemMapEntry const> aXMLTableRowItemMap(aTableRowItemMap);
 
 const SvXMLItemMapEntry aTableCellItemMap[] =
 {
@@ -281,6 +281,6 @@ const SvXMLItemMapEntry aTableCellItemMap[] =
     MAP_ENTRY( STYLE, WRITING_MODE, RES_FRAMEDIR, 0 ),
     MAP_ENTRY( LO_EXT, WRITING_MODE, RES_FRAMEDIR, 0 ),
 };
-const o3tl::span<SvXMLItemMapEntry const> aXMLTableCellItemMap(aTableCellItemMap);
+const std::span<SvXMLItemMapEntry const> aXMLTableCellItemMap(aTableCellItemMap);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

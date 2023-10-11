@@ -847,7 +847,7 @@ namespace cppcanvas::internal
                                              int                            nIndex,
                                              int                            nLength,
                                              KernArraySpan                pCharWidths,
-                                             o3tl::span<const sal_Bool>     pKashidaArray,
+                                             std::span<const sal_Bool>     pKashidaArray,
                                              const ActionFactoryParameters& rParms,
                                              bool                           bSubsettableActions )
         {

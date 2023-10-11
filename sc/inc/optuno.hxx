@@ -39,7 +39,7 @@
 class ScDocOptionsHelper
 {
 public:
-    static o3tl::span<const SfxItemPropertyMapEntry> GetPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry> GetPropertyMap();
 
     static bool setPropertyValue( ScDocOptions& rOptions,
                                     const SfxItemPropertyMap& rPropMap,

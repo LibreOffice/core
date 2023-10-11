@@ -40,6 +40,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stddef.h>
 #include <string>
 #include <string_view>
@@ -265,7 +266,6 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

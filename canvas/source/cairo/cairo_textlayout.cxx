@@ -279,7 +279,7 @@ namespace cairocanvas
         if (maLogicalAdvancements.hasElements())
         {
             KernArray aOffsets(setupTextOffsets(maLogicalAdvancements, viewState, renderState));
-            o3tl::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
+            std::span<const sal_Bool> aKashidaArray(maKashidaPositions.getConstArray(), maKashidaPositions.getLength());
 
             rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets, aKashidaArray,
                                    ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),

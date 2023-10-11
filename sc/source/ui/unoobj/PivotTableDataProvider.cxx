@@ -61,7 +61,7 @@ constexpr OUStringLiteral constIdCategories(u"categories");
 constexpr OUStringLiteral constIdLabel(u"label");
 constexpr OUStringLiteral constIdData(u"data");
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {

@@ -46,6 +46,7 @@
 #include <numeric>
 #include <optional>
 #include <ostream>
+#include <span>
 #include <sstream>
 #include <stddef.h>
 #include <stdexcept>
@@ -356,7 +357,6 @@
 #include <o3tl/intcmp.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

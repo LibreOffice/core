@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/span.hxx>
 #include <tools/gen.hxx>
 #include <tools/ref.hxx>
 #include <tools/solar.h>
@@ -67,6 +66,7 @@
 
 #include <memory>
 #include <optional>
+#include <span>
 #include <string_view>
 #include <vector>
 
@@ -958,7 +958,7 @@ public:
     bool                        GetTextBoundRect( tools::Rectangle& rRect,
                                                   const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
                                                   sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                  o3tl::span<const sal_Bool> pKashidaArray = {},
+                                                  std::span<const sal_Bool> pKashidaArray = {},
                                                   const SalLayoutGlyphs* pGlyphs = nullptr ) const;
 
     tools::Rectangle            ImplGetTextBoundRect( const SalLayout& ) const;
@@ -970,13 +970,13 @@ public:
                                                  const OUString& rStr, sal_Int32 nBase = 0, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                 o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
+                                                 std::span<const sal_Bool> pKashidaArray = {} ) const;
 
     bool                        GetTextOutlines( basegfx::B2DPolyPolygonVector &rVector,
                                                  const OUString& rStr, sal_Int32 nBase, sal_Int32 nIndex = 0,
                                                  sal_Int32 nLen = -1,
                                                  sal_uLong nLayoutWidth = 0, KernArraySpan aDXArray = KernArraySpan(),
-                                                 o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
+                                                 std::span<const sal_Bool> pKashidaArray = {} ) const;
 
 
     OUString                    GetEllipsisString( const OUString& rStr, tools::Long nMaxWidth,
@@ -1037,7 +1037,7 @@ public:
 
     void                        DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                                KernArraySpan aKernArray,
-                                               o3tl::span<const sal_Bool> pKashidaAry,
+                                               std::span<const sal_Bool> pKashidaAry,
                                                sal_Int32 nIndex,
                                                sal_Int32 nLen,
                                                SalLayoutFlags flags = SalLayoutFlags::NONE,
@@ -1226,7 +1226,7 @@ public:
                                 ImplLayout( const OUString&, sal_Int32 nIndex, sal_Int32 nLen,
                                             const Point& rLogicPos = Point(0,0), tools::Long nLogicWidth=0,
                                             KernArraySpan aKernArray = KernArraySpan(),
-                                            o3tl::span<const sal_Bool> pKashidaArray={},
+                                            std::span<const sal_Bool> pKashidaArray={},
                                             SalLayoutFlags flags = SalLayoutFlags::NONE,
                                             vcl::text::TextLayoutCache const* = nullptr,
                                             const SalLayoutGlyphs* pGlyphs = nullptr) const;

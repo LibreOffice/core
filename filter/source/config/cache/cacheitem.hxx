@@ -19,12 +19,12 @@
 
 #pragma once
 
+#include <span>
 #include <unordered_map>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <vector>
 #include <comphelper/sequenceashashmap.hxx>
-#include <o3tl/span.hxx>
 
 namespace filter::config {
 
@@ -74,7 +74,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @return sal_True if all given properties exists
                     at this item; sal_False otherwise.
          */
-        bool haveProps(o3tl::span< const css::beans::NamedValue > lProps) const;
+        bool haveProps(std::span< const css::beans::NamedValue > lProps) const;
 
 
         /** @short  check, if the given properties don't exist
@@ -90,7 +90,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
             @return sal_False if at least on property exists at this item(!);
                     sal_True otherwise.
          */
-        bool dontHaveProps(o3tl::span< const css::beans::NamedValue > lProps) const;
+        bool dontHaveProps(std::span< const css::beans::NamedValue > lProps) const;
 
 
         /** @short  because we know two UIName properties

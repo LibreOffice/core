@@ -81,7 +81,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
-        void TextProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void TextProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 

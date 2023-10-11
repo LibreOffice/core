@@ -47,7 +47,7 @@ using namespace com::sun::star;
 
 constexpr OUStringLiteral SCSAVEVERSION = u"SaveVersionOnClose";
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetConfigPropertyMap()
 {
     static const SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {

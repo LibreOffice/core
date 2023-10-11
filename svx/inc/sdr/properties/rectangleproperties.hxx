@@ -29,7 +29,7 @@ namespace sdr::properties
         {
         protected:
             // react on ItemSet changes
-            virtual void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich) override;
+            virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich) override;
 
         public:
             // basic constructor

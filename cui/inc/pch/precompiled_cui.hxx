@@ -47,6 +47,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stddef.h>
 #include <stdexcept>
 #include <string.h>
@@ -322,7 +323,6 @@
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

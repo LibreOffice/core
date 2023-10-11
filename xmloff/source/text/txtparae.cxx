@@ -656,7 +656,7 @@ void FieldParamExporter::ExportParameter(const OUString& sKey, const OUString& s
 
 void XMLTextParagraphExport::Add( XmlStyleFamily nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const o3tl::span<const XMLPropertyState> aAddStates,
+                                  const std::span<const XMLPropertyState> aAddStates,
                                   bool bDontSeek )
 {
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;
@@ -881,7 +881,7 @@ OUString XMLTextParagraphExport::Find(
         XmlStyleFamily nFamily,
         const Reference < XPropertySet > & rPropSet,
         const OUString& rParent,
-        const o3tl::span<const XMLPropertyState> aAddStates) const
+        const std::span<const XMLPropertyState> aAddStates) const
 {
     OUString sName( rParent );
     rtl::Reference < SvXMLExportPropertyMapper > xPropMapper;

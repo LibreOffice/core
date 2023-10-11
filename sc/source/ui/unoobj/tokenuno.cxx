@@ -46,7 +46,7 @@
 using namespace ::formula;
 using namespace ::com::sun::star;
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetFormulaParserMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetFormulaParserMap()
 {
     static const SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {

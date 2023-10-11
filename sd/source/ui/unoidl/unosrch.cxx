@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 #define WID_SEARCH_CASE         1
 #define WID_SEARCH_WORDS        2
 
-static o3tl::span<const SfxItemPropertyMapEntry> ImplGetSearchPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> ImplGetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {

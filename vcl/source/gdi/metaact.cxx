@@ -656,7 +656,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           OUString aStr,
                                           KernArraySpan pDXAry,
-                                          o3tl::span<const sal_Bool> pKashidaAry,
+                                          std::span<const sal_Bool> pKashidaAry,
                                           sal_Int32 nIndex,
                                           sal_Int32 nLen ) :
     MetaAction  ( MetaActionType::TEXTARRAY ),

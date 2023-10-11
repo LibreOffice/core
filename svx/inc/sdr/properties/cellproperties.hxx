@@ -65,7 +65,7 @@ public:
 
     void ForceDefaultAttributes() override;
 
-    void ItemSetChanged(o3tl::span<const SfxPoolItem* const> aChangedItems,
+    void ItemSetChanged(std::span<const SfxPoolItem* const> aChangedItems,
                         sal_uInt16 nDeletedWhich) override;
 
     void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;

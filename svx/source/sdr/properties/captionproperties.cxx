@@ -62,7 +62,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new CaptionProperties(*this, rObj));
         }
 
-        void CaptionProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void CaptionProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrCaptionObj& rObj = static_cast<SdrCaptionObj&>(GetSdrObject());
 

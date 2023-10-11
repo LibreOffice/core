@@ -46,7 +46,7 @@ enum CondFormatProperties
     CondFormat_Range
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getCondFormatPropset()
+std::span<const SfxItemPropertyMapEntry> getCondFormatPropset()
 {
     static const SfxItemPropertyMapEntry aCondFormatPropertyMap_Impl[] =
     {
@@ -64,7 +64,7 @@ enum ConditionEntryProperties
     Operator
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getConditionEntryrPropSet()
+std::span<const SfxItemPropertyMapEntry> getConditionEntryrPropSet()
 {
     static const SfxItemPropertyMapEntry aConditionEntryPropertyMap_Impl[] =
     {
@@ -117,7 +117,7 @@ enum ColorScaleProperties
     ColorScaleEntries
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getColorScalePropSet()
+std::span<const SfxItemPropertyMapEntry> getColorScalePropSet()
 {
     static const SfxItemPropertyMapEntry aColorScalePropertyMap_Impl[] =
     {
@@ -156,7 +156,7 @@ enum DataBarProperties
     MaximumLength
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getDataBarPropSet()
+std::span<const SfxItemPropertyMapEntry> getDataBarPropSet()
 {
     static const SfxItemPropertyMapEntry aDataBarPropertyMap_Impl[] =
     {
@@ -212,7 +212,7 @@ enum IconSetProperties
     IconSetEntries
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getIconSetPropSet()
+std::span<const SfxItemPropertyMapEntry> getIconSetPropSet()
 {
     static const SfxItemPropertyMapEntry aIconSetPropertyMap_Impl[] =
     {
@@ -274,7 +274,7 @@ enum DateProperties
     DateType
 };
 
-o3tl::span<const SfxItemPropertyMapEntry> getCondDatePropSet()
+std::span<const SfxItemPropertyMapEntry> getCondDatePropSet()
 {
     static const SfxItemPropertyMapEntry aCondDatePropertyMap_Impl[] =
     {

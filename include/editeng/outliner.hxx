@@ -404,8 +404,8 @@ public:
     sal_Int32           mnTextLen;
     sal_Int32           mnPara;
     const SvxFont&      mrFont;
-    o3tl::span<const sal_Int32> mpDXArray;
-    o3tl::span<const sal_Bool> mpKashidaArray;
+    std::span<const sal_Int32> mpDXArray;
+    std::span<const sal_Bool> mpKashidaArray;
 
     const EEngineData::WrongSpellVector*  mpWrongSpellVector;
     const SvxFieldData* mpFieldData;
@@ -431,8 +431,8 @@ public:
         sal_Int32 nTxtLen,
         const SvxFont& rFnt,
         sal_Int32 nPar,
-        o3tl::span<const sal_Int32> pDXArr,
-        o3tl::span<const sal_Bool> pKashidaArr,
+        std::span<const sal_Int32> pDXArr,
+        std::span<const sal_Bool> pKashidaArr,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         const css::lang::Locale* pLocale,
@@ -828,8 +828,8 @@ public:
 
     void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              o3tl::span<const sal_Int32> pDXArray,
-                              o3tl::span<const sal_Bool> pKashidaArray,
+                              std::span<const sal_Int32> pDXArray,
+                              std::span<const sal_Bool> pKashidaArray,
                               const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,

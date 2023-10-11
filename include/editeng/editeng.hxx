@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_EDITENG_HXX
 
 #include <memory>
+#include <span>
 #include <vector>
 
 #include <optional>
@@ -29,7 +30,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
-#include <o3tl/span.hxx>
 #include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
@@ -507,8 +507,8 @@ public:
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
-                              o3tl::span<const sal_Int32> pDXArray,
-                              o3tl::span<const sal_Bool> pKashidaArray,
+                              std::span<const sal_Int32> pDXArray,
+                              std::span<const sal_Bool> pKashidaArray,
                               const SvxFont& rFont,
                               sal_Int32 nPara, sal_uInt8 nRightToLeft,
                               const EEngineData::WrongSpellVector* pWrongSpellVector,

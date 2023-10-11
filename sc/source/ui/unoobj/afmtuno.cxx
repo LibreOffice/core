@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 
 //  AutoFormat map only for PropertySetInfo without Which-IDs
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetAutoFormatMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetAutoFormatMap()
 {
     static const SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
@@ -65,7 +65,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetAutoFormatMap()
 //! number format (String/Language) ??? (in XNumberFormat only ReadOnly)
 //! table::TableBorder ??!?
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetAutoFieldMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetAutoFieldMap()
 {
     static const SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
     {

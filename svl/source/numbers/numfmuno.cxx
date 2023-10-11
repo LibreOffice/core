@@ -62,7 +62,7 @@ constexpr OUStringLiteral PROPERTYNAME_TWODIGIT = u"TwoDigitDateStart";
 
 // All without a Which-ID, Map only for PropertySetInfo
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNumberFormatPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetNumberFormatPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
@@ -83,7 +83,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNumberFormatPropertyMap(
     return aNumberFormatPropertyMap_Impl;
 }
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNumberSettingsPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetNumberSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {

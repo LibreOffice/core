@@ -174,7 +174,7 @@ namespace SwUnoCursorHelper
     void SetPropertyValues(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
-            o3tl::span< const css::beans::PropertyValue > aPropertyValues,
+            std::span< const css::beans::PropertyValue > aPropertyValues,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT);
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::lang::WrappedTargetException

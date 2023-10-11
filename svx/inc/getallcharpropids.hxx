@@ -22,14 +22,14 @@
 
 #include <sal/config.h>
 #include <sal/types.h>
-#include <o3tl/span.hxx>
+#include <span>
 #include <vector>
 
 class SfxItemSet;
 class SfxPoolItem;
 
 std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet);
-std::vector<sal_uInt16> GetAllCharPropIds(o3tl::span<const SfxPoolItem* const> aChangedItems);
+std::vector<sal_uInt16> GetAllCharPropIds(std::span<const SfxPoolItem* const> aChangedItems);
 
 #endif
 

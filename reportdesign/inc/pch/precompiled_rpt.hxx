@@ -44,6 +44,7 @@
 #include <numeric>
 #include <optional>
 #include <ostream>
+#include <span>
 #include <sstream>
 #include <stddef.h>
 #include <stdexcept>
@@ -251,7 +252,6 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

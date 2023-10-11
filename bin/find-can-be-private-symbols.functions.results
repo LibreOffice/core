@@ -2414,7 +2414,7 @@ OpenGLZone::relaxWatchdogTimings()
 Outliner::Collapse(Paragraph const*)
 Outliner::DepthChangedHdl(Paragraph*, ParaFlag)
 Outliner::DrawingTab(Point const&, long, rtl::OUString const&, SvxFont const&, int, unsigned char, bool, bool, Color const&, Color const&)
-Outliner::DrawingText(Point const&, rtl::OUString const&, int, int, o3tl::span<int const>, SvxFont const&, int, unsigned char, std::vector<EEngineData::WrongSpellClass, std::allocator<EEngineData::WrongSpellClass> > const*, SvxFieldData const*, bool, bool, bool, com::sun::star::lang::Locale const*, Color const&, Color const&)
+Outliner::DrawingText(Point const&, rtl::OUString const&, int, int, std::span<int const>, SvxFont const&, int, unsigned char, std::vector<EEngineData::WrongSpellClass, std::allocator<EEngineData::WrongSpellClass> > const*, SvxFieldData const*, bool, bool, bool, com::sun::star::lang::Locale const*, Color const&, Color const&)
 Outliner::Expand(Paragraph const*)
 Outliner::GetBulletsNumberingStatus(int, int) const
 Outliner::GetDocPos(Point const&) const
@@ -10425,7 +10425,7 @@ SvxFont::DrawCapital(OutputDevice*, Point const&, rtl::OUString const&, int, int
 SvxFont::GetCapitalSize(OutputDevice const*, rtl::OUString const&, int, int) const
 SvxFont::GetPhysTxtSize(OutputDevice const*)
 SvxFont::GetPhysTxtSize(OutputDevice const*, rtl::OUString const&, int, int) const
-SvxFont::QuickDrawText(OutputDevice*, Point const&, rtl::OUString const&, int, int, o3tl::span<int const>) const
+SvxFont::QuickDrawText(OutputDevice*, Point const&, rtl::OUString const&, int, int, std::span<int const>) const
 SvxFont::QuickGetTextSize(OutputDevice const*, rtl::OUString const&, int, int, std::vector<int, std::allocator<int> >*) const
 SvxFont::SetNonAutoEscapement(short, OutputDevice const*)
 SvxFont::SetPhysFont(OutputDevice&) const
@@ -23049,7 +23049,7 @@ vcl::PDFWriter::DrawPolygon(tools::Polygon const&)
 vcl::PDFWriter::DrawRect(tools::Rectangle const&)
 vcl::PDFWriter::DrawRect(tools::Rectangle const&, unsigned long, unsigned long)
 vcl::PDFWriter::DrawStretchText(Point const&, unsigned long, rtl::OUString const&, int, int)
-vcl::PDFWriter::DrawTextArray(Point const&, rtl::OUString const&, o3tl::span<int const>, int, int)
+vcl::PDFWriter::DrawTextArray(Point const&, rtl::OUString const&, std::span<int const>, int, int)
 vcl::PDFWriter::DrawTextLine(Point const&, long, FontStrikeout, FontLineStyle, FontLineStyle)
 vcl::PDFWriter::DrawTransparent(tools::PolyPolygon const&, unsigned short)
 vcl::PDFWriter::DrawWallpaper(tools::Rectangle const&, Wallpaper const&)

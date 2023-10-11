@@ -147,9 +147,9 @@
       </ArrayItems>
     </Expand>
   </Type>
-  <Type Name="o3tl::span &lt; * &gt;">
-    <DisplayString Condition="size_ == 0">o3tl::span (empty)</DisplayString>
-    <DisplayString>o3tl::span of {size_,d} {"$T1",sb}</DisplayString>
+  <Type Name="std::span &lt; * &gt;">
+    <DisplayString Condition="size_ == 0">std::span (empty)</DisplayString>
+    <DisplayString>std::span of {size_,d} {"$T1",sb}</DisplayString>
     <Expand>
       <ArrayItems>
         <Size>size_</Size>

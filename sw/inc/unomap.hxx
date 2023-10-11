@@ -19,9 +19,12 @@
 #ifndef INCLUDED_SW_INC_UNOMAP_HXX
 #define INCLUDED_SW_INC_UNOMAP_HXX
 
+#include <sal/config.h>
+
+#include <span>
+
 #include <sal/types.h>
 #include <svl/itemprop.hxx>
-#include <o3tl/span.hxx>
 
 class SfxItemPropertySet;
 
@@ -333,45 +336,45 @@ class SfxItemPropertySet;
 
 class SwUnoPropertyMapProvider
 {
-    o3tl::span<SfxItemPropertyMapEntry const> m_aMapEntriesArr[PROPERTY_MAP_END];
+    std::span<SfxItemPropertyMapEntry const> m_aMapEntriesArr[PROPERTY_MAP_END];
     SfxItemPropertySet*             m_aPropertySetArr[PROPERTY_MAP_END];
 
 public:
     SwUnoPropertyMapProvider();
 
-    o3tl::span<const SfxItemPropertyMapEntry> GetPropertyMapEntries(sal_uInt16 PropertyId);
+    std::span<const SfxItemPropertyMapEntry> GetPropertyMapEntries(sal_uInt16 PropertyId);
     const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );
 
 private:
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetTextCursorPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetAccessibilityTextAttrPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetParagraphPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetAutoParaStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetCharStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetAutoCharStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetParaStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetConditionalParaStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetFrameStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetPageStylePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetTablePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetRangePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetSectionPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetFramePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetGraphicPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetEmbeddedPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetIndexMarkPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetContentMarkPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetUserMarkPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetTextTableCursorPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetBookmarkPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetParagraphExtensionsPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetTextPortionExtensionPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetFootnotePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetRedlinePropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry>  GetRedlinePortionPropertyMap();
-    static o3tl::span<SfxItemPropertyMapEntry>  GetTextDefaultPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry> GetLineBreakPropertyMap();
-    static o3tl::span<const SfxItemPropertyMapEntry> GetContentControlPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetTextCursorPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetAccessibilityTextAttrPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetParagraphPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetAutoParaStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetCharStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetAutoCharStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetParaStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetConditionalParaStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetFrameStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetPageStylePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetTablePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetRangePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetSectionPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetFramePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetGraphicPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetEmbeddedPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetIndexMarkPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetContentMarkPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetUserMarkPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetTextTableCursorPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetBookmarkPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetParagraphExtensionsPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetTextPortionExtensionPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetFootnotePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetRedlinePropertyMap();
+    static std::span<const SfxItemPropertyMapEntry>  GetRedlinePortionPropertyMap();
+    static std::span<SfxItemPropertyMapEntry>  GetTextDefaultPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry> GetLineBreakPropertyMap();
+    static std::span<const SfxItemPropertyMapEntry> GetContentControlPropertyMap();
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;

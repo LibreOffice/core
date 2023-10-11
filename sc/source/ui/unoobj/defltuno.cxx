@@ -36,7 +36,7 @@
 class SvxFontItem;
 using namespace ::com::sun::star;
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocDefaultsMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetDocDefaultsMap()
 {
     static const SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {

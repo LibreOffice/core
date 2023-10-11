@@ -263,7 +263,7 @@ static bool isSubSet(const css::uno::Any& aSubSet,
 }
 
 
-bool CacheItem::haveProps(o3tl::span< const css::beans::NamedValue > lProps) const
+bool CacheItem::haveProps(std::span< const css::beans::NamedValue > lProps) const
 {
     for (auto const& prop : lProps)
     {
@@ -288,7 +288,7 @@ bool CacheItem::haveProps(o3tl::span< const css::beans::NamedValue > lProps) con
 }
 
 
-bool CacheItem::dontHaveProps(o3tl::span< const css::beans::NamedValue > lProps) const
+bool CacheItem::dontHaveProps(std::span< const css::beans::NamedValue > lProps) const
 {
     for (auto const& prop : lProps)
     {

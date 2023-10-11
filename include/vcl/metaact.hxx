@@ -24,7 +24,6 @@
 
 #include <config_options.h>
 
-#include <o3tl/span.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/poly.hxx>
@@ -46,6 +45,7 @@
 #include <basegfx/utils/bgradient.hxx>
 
 #include <memory>
+#include <span>
 
 class OutputDevice;
 class SvStream;
@@ -525,7 +525,7 @@ public:
                          sal_Int32 nLen );
     MetaTextArrayAction( const Point& rStartPt, OUString aStr,
                          KernArraySpan pDXAry,
-                         o3tl::span<const sal_Bool> pKashidaAry,
+                         std::span<const sal_Bool> pKashidaAry,
                          sal_Int32 nIndex,
                          sal_Int32 nLen );
 

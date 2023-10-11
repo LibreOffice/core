@@ -102,7 +102,7 @@ using ::com::sun::star::table::CellRangeAddress;
 
 namespace {
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotDescriptorBaseMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotDescriptorBaseMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotDescriptorBaseMap_Impl[] =
     {
@@ -120,7 +120,7 @@ o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotDescriptorBaseMap()
     return aDataPilotDescriptorBaseMap_Impl;
 }
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotFieldMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotFieldMap()
 {
     using namespace ::com::sun::star::beans::PropertyAttribute;
     static const SfxItemPropertyMapEntry aDataPilotFieldMap_Impl[] =
@@ -148,7 +148,7 @@ o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotFieldMap()
     return aDataPilotFieldMap_Impl;
 }
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotItemMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataPilotItemMap()
 {
     static const SfxItemPropertyMapEntry aDataPilotItemMap_Impl[] =
     {

@@ -124,7 +124,7 @@ namespace sdr::properties
                 TextProperties::ClearObjectItemDirect( nWhich );
         }
 
-        void CustomShapeProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void CustomShapeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             // call parent
             TextProperties::ItemSetChanged(aChangedItems, nDeletedWhich);

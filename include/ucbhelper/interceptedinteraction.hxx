@@ -20,13 +20,13 @@
 #ifndef INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 #define INCLUDED_UCBHELPER_INTERCEPTEDINTERACTION_HXX
 
+#include <span>
 #include <vector>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
-#include <o3tl/span.hxx>
 
 namespace com::sun::star::task { class XInteractionRequest; }
 
@@ -130,7 +130,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
 
         /** @short  these list contains the requests, which should be intercepted.
          */
-        o3tl::span< const InterceptedRequest > m_lInterceptions;
+        std::span< const InterceptedRequest > m_lInterceptions;
 
 
     // native interface
@@ -150,7 +150,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             @param  lInterceptions
                     the list of intercepted requests.
          */
-        InterceptedInteraction(o3tl::span< const InterceptedRequest > m_lInterceptions);
+        InterceptedInteraction(std::span< const InterceptedRequest > m_lInterceptions);
 
 
         /** @short  initialize a new instance with the interaction handler,

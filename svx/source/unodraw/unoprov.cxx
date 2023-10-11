@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
 using ::com::sun::star::drawing::TextVerticalAdjust;
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aShapePropertyMap_Impl[] =
     {
@@ -77,7 +77,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxShapePropertyMap()
     return aShapePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTextShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTextShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aTextShapePropertyMap_Impl[] =
     {
@@ -101,7 +101,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTextShapePropertyMap(
     return aTextShapePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxConnectorPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxConnectorPropertyMap()
 {
     static SfxItemPropertyMapEntry const aConnectorPropertyMap_Impl[] =
     {
@@ -126,7 +126,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxConnectorPropertyMap(
     return aConnectorPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxDimensioningPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxDimensioningPropertyMap()
 {
     static SfxItemPropertyMapEntry const aDimensioningPropertyMap_Impl[] =
     {
@@ -151,7 +151,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxDimensioningPropertyM
     return aDimensioningPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCirclePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxCirclePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCirclePropertyMap_Impl[] =
     {
@@ -176,7 +176,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCirclePropertyMap()
     return aCirclePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPolyPolygonPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxPolyPolygonPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPolyPolygonPropertyMap_Impl[] =
     {
@@ -203,7 +203,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPolyPolygonPropertyMa
     return aPolyPolygonPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGraphicObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxGraphicObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGraphicObjectPropertyMap_Impl[] =
     {
@@ -235,7 +235,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGraphicObjectProperty
     return aGraphicObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSceneObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSceneObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSceneObjectPropertyMap_Impl[] =
     {
@@ -252,7 +252,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSceneObjectProperty
     return a3DSceneObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DCubeObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DCubeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DCubeObjectPropertyMap_Impl[] =
     {
@@ -272,7 +272,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DCubeObjectPropertyM
     return a3DCubeObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSphereObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSphereObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DSphereObjectPropertyMap_Impl[] =
     {
@@ -291,7 +291,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DSphereObjectPropert
     return a3DSphereObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DLatheObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DLatheObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DLatheObjectPropertyMap_Impl[] =
     {
@@ -316,7 +316,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DLatheObjectProperty
     return a3DLatheObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DExtrudeObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DExtrudeObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DExtrudeObjectPropertyMap_Impl[] =
     {
@@ -341,7 +341,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DExtrudeObjectProper
     return a3DExtrudeObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DPolygonObjectPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvx3DPolygonObjectPropertyMap()
 {
     static SfxItemPropertyMapEntry const a3DPolygonObjectPropertyMap_Impl[] =
     {
@@ -361,7 +361,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvx3DPolygonObjectProper
     return a3DPolygonObjectPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAllPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxAllPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAllPropertyMap_Impl[] =
     {
@@ -404,7 +404,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAllPropertyMap()
     return aAllPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGroupPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxGroupPropertyMap()
 {
     static SfxItemPropertyMapEntry const aGroupPropertyMap_Impl[] =
     {
@@ -416,7 +416,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxGroupPropertyMap()
     return aGroupPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxOle2PropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxOle2PropertyMap()
 {
     static SfxItemPropertyMapEntry const aOle2PropertyMap_Impl[] =
     {
@@ -450,7 +450,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxOle2PropertyMap()
     return aOle2PropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPluginPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxPluginPropertyMap()
 {
     static SfxItemPropertyMapEntry const aPluginPropertyMap_Impl[] =
     {
@@ -481,7 +481,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPluginPropertyMap()
     return aPluginPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
 {
     //TODO/LATER: new properties for ScrollingMode and DefaultBorder
     static SfxItemPropertyMapEntry const aFramePropertyMap_Impl[] =
@@ -516,7 +516,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxFramePropertyMap()
     return aFramePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
 {
     static SfxItemPropertyMapEntry const aAppletPropertyMap_Impl[] =
     {
@@ -550,7 +550,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxAppletPropertyMap()
     return aAppletPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aControlPropertyMap_Impl[] =
     {
@@ -611,7 +611,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxControlShapePropertyM
     return aControlPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPageShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxPageShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aPageShapePropertyMap_Impl[] =
     {
@@ -634,7 +634,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxPageShapePropertyMap(
     return aPageShapePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCaptionPropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxCaptionPropertyMap()
 {
     static SfxItemPropertyMapEntry const aCaptionPropertyMap_Impl[] =
     {
@@ -667,7 +667,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCaptionPropertyMap()
     return aCaptionPropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCustomShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxCustomShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aCustomShapePropertyMap_Impl[] =
     {
@@ -691,7 +691,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxCustomShapePropertyMa
     return aCustomShapePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aMediaShapePropertyMap_Impl[] =
     {
@@ -726,7 +726,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxMediaShapePropertyMap
     return aMediaShapePropertyMap_Impl;
 }
 
-static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap()
+static std::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const  aTableShapePropertyMap_Impl[] =
     {
@@ -759,7 +759,7 @@ static o3tl::span<SfxItemPropertyMapEntry const> ImplGetSvxTableShapePropertyMap
     return aTableShapePropertyMap_Impl;
 }
 
-static o3tl::span<comphelper::PropertyMapEntry const> ImplGetSvxDrawingDefaultsPropertyMap()
+static std::span<comphelper::PropertyMapEntry const> ImplGetSvxDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxDrawingDefaultsPropertyMap_Impl[] =
     {
@@ -780,7 +780,7 @@ static o3tl::span<comphelper::PropertyMapEntry const> ImplGetSvxDrawingDefaultsP
     return aSvxDrawingDefaultsPropertyMap_Impl;
 }
 
-static o3tl::span<comphelper::PropertyMapEntry const> ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
+static std::span<comphelper::PropertyMapEntry const> ImplGetAdditionalWriterDrawingDefaultsPropertyMap()
 {
     static comphelper::PropertyMapEntry const aSvxAdditionalDefaultsPropertyMap_Impl[] =
     {
@@ -883,7 +883,7 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
 }
 
 
-o3tl::span<const SfxItemPropertyMapEntry> SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
+std::span<const SfxItemPropertyMapEntry> SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
     assert(nPropertyId < SVXMAP_END);
     if(aMapArr[nPropertyId].empty()) {

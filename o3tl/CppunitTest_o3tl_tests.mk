@@ -32,7 +32,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,o3tl_tests,\
 	o3tl/qa/test-lru_map \
 	o3tl/qa/test-safeint \
 	o3tl/qa/test-sorted_vector \
-	o3tl/qa/test-span \
 	o3tl/qa/test-string_view \
 	o3tl/qa/test-temporary \
 	o3tl/qa/test-typed_flags \

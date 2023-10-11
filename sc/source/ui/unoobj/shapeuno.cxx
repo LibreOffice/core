@@ -49,7 +49,7 @@
 
 using namespace ::com::sun::star;
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetShapeMap()
 {
     static const SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {

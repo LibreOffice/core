@@ -35,7 +35,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 
-SfxItemPropertyMap::SfxItemPropertyMap( o3tl::span<const SfxItemPropertyMapEntry> pEntries )
+SfxItemPropertyMap::SfxItemPropertyMap( std::span<const SfxItemPropertyMapEntry> pEntries )
 {
     m_aMap.reserve(pEntries.size());
     for (const auto & pEntry : pEntries)
@@ -246,7 +246,7 @@ SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMap &rMap )
 {
 }
 
-SfxItemPropertySetInfo::SfxItemPropertySetInfo(o3tl::span<const SfxItemPropertyMapEntry> pEntries )
+SfxItemPropertySetInfo::SfxItemPropertySetInfo(std::span<const SfxItemPropertyMapEntry> pEntries )
     : m_aOwnMap( pEntries )
 {
 }
@@ -270,7 +270,7 @@ sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rNa
     return m_aOwnMap.hasPropertyByName( rName );
 }
 
-SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( o3tl::span<const SfxItemPropertyMapEntry> pEntries,
+SfxExtItemPropertySetInfo::SfxExtItemPropertySetInfo( std::span<const SfxItemPropertyMapEntry> pEntries,
                                                       const Sequence<Property>& rPropSeq )
 {
     maMap.reserve(pEntries.size() + rPropSeq.getLength());

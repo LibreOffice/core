@@ -39,7 +39,7 @@ const sal_Int32 HANDLE_UNSUPPORTEDDATASINKEXCEPTION = 1;
 const sal_Int32 HANDLE_AUTHENTICATIONREQUESTEXCEPTION = 2;
 const sal_Int32 HANDLE_CERTIFICATEVALIDATIONREQUESTEXCEPTION = 3;
 
-static o3tl::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> getInterceptions()
+static std::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> getInterceptions()
 {
     static const ::ucbhelper::InterceptedInteraction::InterceptedRequest lInterceptions[] {
         {

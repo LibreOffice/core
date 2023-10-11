@@ -19,10 +19,13 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <span>
+
 #include <action.hxx>
 #include <cppcanvas/canvas.hxx>
 #include <cppcanvas/renderer.hxx>
-#include <o3tl/span.hxx>
 
 class VirtualDevice;
 class Point;
@@ -69,7 +72,7 @@ namespace cppcanvas::internal
                                                      sal_Int32                      nStartPos,
                                                      sal_Int32                      nLen,
                                                      KernArraySpan                  pDXArray,
-                                                     o3tl::span<const sal_Bool>     pKashidaArray,
+                                                     std::span<const sal_Bool>     pKashidaArray,
                                                      VirtualDevice&                 rVDev,
                                                      const CanvasSharedPtr&         rCanvas,
                                                      const OutDevState&             rState,

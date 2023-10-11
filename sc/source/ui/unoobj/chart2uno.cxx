@@ -80,7 +80,7 @@ using ::std::shared_ptr;
 
 namespace
 {
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataProviderPropertyMap_Impl[] =
     {
@@ -90,7 +90,7 @@ o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataProviderPropertyMap()
     return aDataProviderPropertyMap_Impl;
 }
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
+std::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {

@@ -81,12 +81,12 @@ public:
 
 class SVXCORE_DLLPUBLIC SvxUnoPropertyMapProvider
 {
-    o3tl::span<SfxItemPropertyMapEntry const> aMapArr[SVXMAP_END];
+    std::span<SfxItemPropertyMapEntry const> aMapArr[SVXMAP_END];
     std::unique_ptr<SvxItemPropertySet> aSetArr[SVXMAP_END];
 public:
     SvxUnoPropertyMapProvider();
     ~SvxUnoPropertyMapProvider();
-    o3tl::span<const SfxItemPropertyMapEntry> GetMap(sal_uInt16 nPropertyId);
+    std::span<const SfxItemPropertyMapEntry> GetMap(sal_uInt16 nPropertyId);
     const SvxItemPropertySet* GetPropertySet(sal_uInt16 nPropertyId, SfxItemPool& rPool);
 };
 

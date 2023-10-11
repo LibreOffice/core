@@ -104,7 +104,7 @@ namespace {
     };
 }
 
-static o3tl::span<const SfxItemPropertyMapEntry> ImplGetPresentationPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
     static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =

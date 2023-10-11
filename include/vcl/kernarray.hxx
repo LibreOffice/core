@@ -9,15 +9,15 @@
 #pragma once
 
 #include <sal/config.h>
-#include <o3tl/span.hxx>
 #include <cmath>
+#include <span>
 #include <vector>
 
 class KernArraySpan final
 {
 private:
     int m_nSubUnitFactor;
-    o3tl::span<const sal_Int32> m_DXArray;
+    std::span<const sal_Int32> m_DXArray;
 
 public:
     KernArraySpan()
@@ -25,7 +25,7 @@ public:
     {
     }
 
-    KernArraySpan(o3tl::span<const sal_Int32> DXArray, int nSubUnitFactor = 1)
+    KernArraySpan(std::span<const sal_Int32> DXArray, int nSubUnitFactor = 1)
         : m_nSubUnitFactor(nSubUnitFactor)
         , m_DXArray(DXArray)
     {

@@ -1048,7 +1048,7 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
     return aCharWhichIds;
 }
 
-std::vector<sal_uInt16> GetAllCharPropIds(o3tl::span< const SfxPoolItem* const > aChangedItems)
+std::vector<sal_uInt16> GetAllCharPropIds(std::span< const SfxPoolItem* const > aChangedItems)
 {
     std::vector<sal_uInt16> aCharWhichIds;
     for (const SfxPoolItem* pItem : aChangedItems)

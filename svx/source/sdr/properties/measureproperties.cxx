@@ -72,7 +72,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new MeasureProperties(*this, rObj));
         }
 
-        void MeasureProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void MeasureProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrMeasureObj& rObj = static_cast<SdrMeasureObj&>(GetSdrObject());
 

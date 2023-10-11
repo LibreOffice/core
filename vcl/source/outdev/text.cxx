@@ -922,7 +922,7 @@ float OutputDevice::approximate_digit_width() const
 
 void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   KernArraySpan pDXAry,
-                                  o3tl::span<const sal_Bool> pKashidaAry,
+                                  std::span<const sal_Bool> pKashidaAry,
                                   sal_Int32 nIndex, sal_Int32 nLen, SalLayoutFlags flags,
                                   const SalLayoutGlyphs* pSalLayoutCache )
 {
@@ -1293,7 +1293,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
                                     sal_Int32 nMinIndex, sal_Int32 nLen,
                                     const Point& rLogicalPos, tools::Long nLogicalWidth,
                                     KernArraySpan pDXArray,
-                                    o3tl::span<const sal_Bool> pKashidaArray,
+                                    std::span<const sal_Bool> pKashidaArray,
                                     SalLayoutFlags flags,
          vcl::text::TextLayoutCache const* pLayoutCache,
          const SalLayoutGlyphs* pGlyphs) const
@@ -2308,7 +2308,7 @@ bool OutputDevice::GetTextBoundRect( tools::Rectangle& rRect,
                                          const OUString& rStr, sal_Int32 nBase,
                                          sal_Int32 nIndex, sal_Int32 nLen,
                                          sal_uLong nLayoutWidth, KernArraySpan pDXAry,
-                                         o3tl::span<const sal_Bool> pKashidaAry,
+                                         std::span<const sal_Bool> pKashidaAry,
                                          const SalLayoutGlyphs* pGlyphs ) const
 {
     bool bRet = false;
@@ -2359,7 +2359,7 @@ bool OutputDevice::GetTextOutlines( basegfx::B2DPolyPolygonVector& rVector,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth,
                                         KernArraySpan pDXArray,
-                                        o3tl::span<const sal_Bool> pKashidaArray ) const
+                                        std::span<const sal_Bool> pKashidaArray ) const
 {
     if (!InitFont())
         return false;
@@ -2440,7 +2440,7 @@ bool OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
                                         const OUString& rStr, sal_Int32 nBase,
                                         sal_Int32 nIndex, sal_Int32 nLen,
                                         sal_uLong nLayoutWidth, KernArraySpan pDXArray,
-                                        o3tl::span<const sal_Bool> pKashidaArray ) const
+                                        std::span<const sal_Bool> pKashidaArray ) const
 {
     rResultVector.clear();
 

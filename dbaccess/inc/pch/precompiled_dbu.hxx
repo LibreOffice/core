@@ -36,6 +36,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <span>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
@@ -192,7 +193,6 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <sfx2/dllapi.h>

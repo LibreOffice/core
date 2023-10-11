@@ -19,8 +19,11 @@
 #ifndef INCLUDED_EDITENG_SVXFONT_HXX
 #define INCLUDED_EDITENG_SVXFONT_HXX
 
+#include <sal/config.h>
+
+#include <span>
+
 #include <editeng/svxenum.hxx>
-#include <o3tl/span.hxx>
 #include <tools/long.hxx>
 #include <vcl/font.hxx>
 #include <editeng/editengdllapi.h>
@@ -79,8 +82,8 @@ public:
     Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt, KernArray* pDXAry,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;
     void DrawCapital( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                      o3tl::span<const sal_Int32> pDXArray,
-                      o3tl::span<const sal_Bool> pKashidaArray,
+                      std::span<const sal_Int32> pDXArray,
+                      std::span<const sal_Bool> pKashidaArray,
                       const sal_Int32 nIdx, const sal_Int32 nLen ) const;
 
     Size GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
@@ -93,8 +96,8 @@ public:
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
                         const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
-                        o3tl::span<const sal_Int32> pDXArray = {},
-                        o3tl::span<const sal_Bool> pKashidaArray = {} ) const;
+                        std::span<const sal_Int32> pDXArray = {},
+                        std::span<const sal_Bool> pKashidaArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
                            const sal_Int32 nIdx, const sal_Int32 nLen,

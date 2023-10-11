@@ -145,7 +145,7 @@ static void lcl_DrawRedLines( OutputDevice& rOutDev,
                               const Point& rPoint,
                               size_t nIndex,
                               size_t nMaxEnd,
-                              o3tl::span<const sal_Int32> pDXArray,
+                              std::span<const sal_Int32> pDXArray,
                               WrongList const * pWrongs,
                               Degree10 nOrientation,
                               const Point& rOrigin,
@@ -3458,8 +3458,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                 OUString aText;
                                 sal_Int32 nTextStart = 0;
                                 sal_Int32 nTextLen = 0;
-                                o3tl::span<const sal_Int32> pDXArray;
-                                o3tl::span<const sal_Bool> pKashidaArray;
+                                std::span<const sal_Int32> pDXArray;
+                                std::span<const sal_Bool> pKashidaArray;
                                 KernArray aTmpDXArray;
 
                                 if ( rTextPortion.GetKind() == PortionKind::TEXT )
@@ -3467,12 +3467,12 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aText = pPortion->GetNode()->GetString();
                                     nTextStart = nIndex;
                                     nTextLen = rTextPortion.GetLen();
-                                    pDXArray = o3tl::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
+                                    pDXArray = std::span(pLine->GetCharPosArray().data() + (nIndex - pLine->GetStart()),
                                                     pLine->GetCharPosArray().size() - (nIndex - pLine->GetStart()));
 
                                     if (!pLine->GetKashidaArray().empty())
                                     {
-                                        pKashidaArray = o3tl::span(pLine->GetKashidaArray().data() + (nIndex - pLine->GetStart()),
+                                        pKashidaArray = std::span(pLine->GetKashidaArray().data() + (nIndex - pLine->GetStart()),
                                                     pLine->GetKashidaArray().size() - (nIndex - pLine->GetStart()));
                                     }
 

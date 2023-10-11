@@ -201,7 +201,7 @@ private:
 
     void                ImplSetClipRegion( vcl::Region const & rRegion );
     void                ImplBmp( Bitmap const *, AlphaMask const *, const Point &, double nWidth, double nHeight );
-    void                ImplText( const OUString& rUniString, const Point& rPos, KernArraySpan pDXArry, o3tl::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
+    void                ImplText( const OUString& rUniString, const Point& rPos, KernArraySpan pDXArry, std::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev );
     void                ImplSetAttrForText( const Point & rPoint );
     void                ImplWriteCharacter( char );
     void                ImplWriteString( const OString&, VirtualDevice const & rVDev, KernArraySpan pDXArry, bool bStretch );
@@ -1988,7 +1988,7 @@ void PSWriter::ImplWriteString( const OString& rString, VirtualDevice const & rV
     }
 }
 
-void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, KernArraySpan pDXArry, o3tl::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
+void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, KernArraySpan pDXArry, std::span<const sal_Bool> pKashidaArry, sal_Int32 nWidth, VirtualDevice const & rVDev )
 {
     if ( rUniString.isEmpty() )
         return;

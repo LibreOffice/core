@@ -7226,7 +7226,7 @@ void PDFWriterImpl::drawText( const Point& rPos, const OUString& rText, sal_Int3
     }
 }
 
-void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, o3tl::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen )
+void PDFWriterImpl::drawTextArray( const Point& rPos, const OUString& rText, KernArraySpan pDXArray, std::span<const sal_Bool> pKashidaArray, sal_Int32 nIndex, sal_Int32 nLen )
 {
     MARK( "drawText with array" );
 

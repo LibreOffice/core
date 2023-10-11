@@ -22,7 +22,6 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
-#include <o3tl/span.hxx>
 #include <tools/stream.hxx>
 #include <utility>
 #include <vcl/metaactiontypes.hxx>
@@ -36,6 +35,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <span>
 #include <vector>
 
 class GDIMetaFile;
@@ -195,7 +195,7 @@ namespace cppcanvas::internal
                                    int                            nIndex,
                                    int                            nLength,
                                    KernArraySpan                pCharWidths,
-                                   o3tl::span<const sal_Bool>     pKashidaArray,
+                                   std::span<const sal_Bool>     pKashidaArray,
                                    const ActionFactoryParameters& rParms,
                                    bool                           bSubsettable );
 

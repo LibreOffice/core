@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_UNOTEXT_HXX
 
 #include <memory>
+#include <span>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -46,7 +47,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/diagnose.hxx>
-#include <o3tl/span.hxx>
 #include <mutex>
 #include <comphelper/servicehelper.hxx>
 #include <svl/itemset.hxx>
@@ -677,9 +677,9 @@ public:
 };
 
 EDITENG_DLLPUBLIC const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet();
-o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+std::span<const SfxItemPropertyMapEntry> ImplGetSvxUnoOutlinerTextCursorPropertyMap();
 const SvxItemPropertySet* ImplGetSvxTextPortionSvxPropertySet();
-o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxTextPortionPropertyMap();
+std::span<const SfxItemPropertyMapEntry> ImplGetSvxTextPortionPropertyMap();
 
 #endif
 

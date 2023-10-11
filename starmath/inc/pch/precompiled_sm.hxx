@@ -37,6 +37,7 @@
 #include <new>
 #include <optional>
 #include <ostream>
+#include <span>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -130,7 +131,6 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>

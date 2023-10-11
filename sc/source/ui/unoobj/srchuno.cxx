@@ -32,7 +32,7 @@ using namespace com::sun::star;
 
 //  SfxItemPropertyMapEntry only for GetPropertySetInfo
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetSearchPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetSearchPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {

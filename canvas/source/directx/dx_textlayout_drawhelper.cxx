@@ -214,7 +214,7 @@ namespace dxcanvas
                 for( sal_Int32 i=0; i<nLen; ++i )
                     DXArray.push_back(basegfx::fround(rLogicalAdvancements[i]));
 
-                o3tl::span<const sal_Bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
+                std::span<const sal_Bool> aKashidaArray(rKashidaPositions.getConstArray(), rKashidaPositions.getLength());
 
                 // draw the String
                 xVirtualDevice->DrawTextArray( aEmptyPoint,

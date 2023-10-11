@@ -42,7 +42,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new RectangleProperties(*this, rObj));
         }
 
-        void RectangleProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void RectangleProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrRectObj& rObj = static_cast<SdrRectObj&>(GetSdrObject());
 

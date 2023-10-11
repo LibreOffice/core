@@ -133,7 +133,7 @@ IFrameWindow_Impl::IFrameWindow_Impl( vcl::Window *pParent, bool bHasBorder )
 #define WID_FRAME_MARGIN_WIDTH          7
 #define WID_FRAME_MARGIN_HEIGHT         8
 
-o3tl::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
+std::span<const SfxItemPropertyMapEntry> lcl_GetIFramePropertyMap_Impl()
 {
     static const SfxItemPropertyMapEntry aIFramePropertyMap_Impl[] =
     {

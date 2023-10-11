@@ -28,7 +28,7 @@ namespace sc
 
 SC_SIMPLE_SERVICE_INFO( PivotTableDataSequence, "PivotTableDataSequence", "com.sun.star.chart2.data.DataSequence")
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetDataSequencePropertyMap()
 {
     static const SfxItemPropertyMapEntry aDataSequencePropertyMap_Impl[] =
     {

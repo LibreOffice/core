@@ -1771,7 +1771,7 @@ void SwAccessibleParagraph::_getSupplementalAttributesImpl(
 
     tAccParaPropValMap aSupplementalAttrSeq;
     {
-        o3tl::span<const SfxItemPropertyMapEntry> pPropMap(
+        std::span<const SfxItemPropertyMapEntry> pPropMap(
                 aSwMapProvider.GetPropertyMapEntries( PROPERTY_MAP_ACCESSIBILITY_TEXT_ATTRIBUTE ) );
         for (const auto & rEntry : pPropMap)
         {

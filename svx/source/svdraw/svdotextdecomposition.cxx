@@ -200,8 +200,8 @@ namespace
                 aDXArray.push_back(m_rInfo.mpDXArray[nStartOffset + i] - nStartX);
 
             auto aKashidaArray = !m_rInfo.mpKashidaArray.empty() ?
-                o3tl::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen) :
-                o3tl::span<const sal_Bool>();
+                std::span<const sal_Bool>(m_rInfo.mpKashidaArray.data() + nStartOffset, nSpanLen) :
+                std::span<const sal_Bool>();
 
             DrawPortionInfo aInfo(aStartPos, rSpanTxt,
                                   nSpanIdx, nSpanLen,

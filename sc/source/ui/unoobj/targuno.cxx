@@ -49,7 +49,7 @@ const TranslateId aTypeResIds[SC_LINKTARGETTYPE_COUNT] =
     SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
 };
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetLinkTargetMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetLinkTargetMap()
 {
     static const SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {

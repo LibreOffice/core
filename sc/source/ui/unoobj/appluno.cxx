@@ -52,7 +52,7 @@ using namespace com::sun::star;
 
 //  everything without Which-ID, map only for PropertySetInfo
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetSettingsPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetSettingsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aSettingsPropertyMap_Impl[] =
     {

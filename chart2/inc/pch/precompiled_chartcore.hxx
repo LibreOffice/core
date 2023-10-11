@@ -37,6 +37,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
@@ -195,7 +196,6 @@
 #include <libxml/xmlwriter.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <officecfg/Office/Compatibility.hxx>

@@ -1892,7 +1892,7 @@ void SwUnoCursorHelper::SetPropertyValue(
     const SetAttrMode nAttrMode)
 {
     beans::PropertyValue aVal { comphelper::makePropertyValue(rPropertyName, rValue) };
-    SetPropertyValues(rPaM, rPropSet, o3tl::span<beans::PropertyValue>(&aVal, 1), nAttrMode);
+    SetPropertyValues(rPaM, rPropSet, std::span<beans::PropertyValue>(&aVal, 1), nAttrMode);
 }
 
 // FN_UNO_PARA_STYLE is known to set attributes for nodes, inside
@@ -1913,13 +1913,13 @@ void SwUnoCursorHelper::SetPropertyValues(
     const SetAttrMode nAttrMode)
 {
     SetPropertyValues(rPaM, rPropSet,
-        o3tl::span<const beans::PropertyValue>(rPropertyValues.getConstArray(), rPropertyValues.getLength()),
+        std::span<const beans::PropertyValue>(rPropertyValues.getConstArray(), rPropertyValues.getLength()),
         nAttrMode);
 }
 
 void SwUnoCursorHelper::SetPropertyValues(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
-    o3tl::span< const beans::PropertyValue > aPropertyValues,
+    std::span< const beans::PropertyValue > aPropertyValues,
     const SetAttrMode nAttrMode)
 {
     if (aPropertyValues.empty())

@@ -201,7 +201,7 @@ namespace sdr::properties
             }
         }
 
-        void DefaultProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
+        void DefaultProperties::ItemSetChanged(std::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
         {
         }
 

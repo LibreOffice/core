@@ -131,7 +131,7 @@ protected:
     /** called from the XActionLockable interface methods on final unlock */
     virtual void unlock();
 
-    o3tl::span<const SfxItemPropertyMapEntry> getPropertyMapEntries() const { return maPropMapEntries; }
+    std::span<const SfxItemPropertyMapEntry> getPropertyMapEntries() const { return maPropMapEntries; }
 
     void updateShapeKind();
     void endSetPropertyValues();
@@ -158,7 +158,7 @@ public:
     /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObj );
     /// @throws css::uno::RuntimeException
-    SvxShape( SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
+    SvxShape( SdrObject* pObject, std::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
     virtual ~SvxShape() noexcept override;
 
     // Internals
@@ -323,7 +323,7 @@ private:
     css::uno::WeakReference< css::container::XIndexContainer > mxGluePoints;
     const SvxItemPropertySet* mpPropSet;
     SvxItemPropertySetUsrAnys maUrsAnys;
-    o3tl::span<const SfxItemPropertyMapEntry> maPropMapEntries;
+    std::span<const SfxItemPropertyMapEntry> maPropMapEntries;
     rtl::Reference< SdrObject > mxSdrObject;
     /** used from the XActionLockable interface */
     sal_uInt16 mnLockCount;
@@ -347,7 +347,7 @@ protected:
 
 public:
     SvxShapeText(SdrObject* pObj);
-    SvxShapeText(SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
+    SvxShapeText(SdrObject* pObject, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxShapeText() noexcept override;
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
@@ -402,7 +402,7 @@ class SVXCORE_DLLPUBLIC SvxShapeGroupAnyD : public SvxShape,
                       public css::drawing::XShapes
 {
 public:
-    SvxShapeGroupAnyD( SdrObject* pObject, o3tl::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
+    SvxShapeGroupAnyD( SdrObject* pObject, std::span<const SfxItemPropertyMapEntry> pEntries, const SvxItemPropertySet* pPropertySet );
     virtual ~SvxShapeGroupAnyD() noexcept override;
 
     virtual void SAL_CALL acquire() noexcept override
@@ -601,7 +601,7 @@ protected:
     SvGlobalName GetClassName_Impl(OUString& rHexCLSID);
 public:
     SvxOle2Shape(SdrObject* pObj, OUString referer);
-    SvxOle2Shape(SdrObject* pObject, OUString referer, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
+    SvxOle2Shape(SdrObject* pObject, OUString referer, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet);
     virtual ~SvxOle2Shape() noexcept override;
 
     bool createObject( const SvGlobalName &aClassName );

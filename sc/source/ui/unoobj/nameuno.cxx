@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangeMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangeMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
@@ -60,7 +60,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangeMap()
     return aNamedRangeMap_Impl;
 }
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangesMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetNamedRangesMap()
 {
     static const SfxItemPropertyMapEntry aNamedRangesMap_Impl[] =
     {

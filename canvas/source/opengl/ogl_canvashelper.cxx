@@ -736,7 +736,7 @@ namespace oglcanvas
                         aDXArray.set(i, basegfx::fround(aLogicalAdvancements[i]));
 
                     uno::Sequence<sal_Bool> aKashidaPositions=xLayoutetText->queryKashidaPositions();
-                    o3tl::span<const sal_Bool> aKashidaArray(aKashidaPositions.getConstArray(), aKashidaPositions.getLength());
+                    std::span<const sal_Bool> aKashidaArray(aKashidaPositions.getConstArray(), aKashidaPositions.getLength());
 
                     // get the glyphs
                     pVDev->GetTextOutlines(rAct.maPolyPolys,

@@ -27,7 +27,7 @@ InterceptedInteraction::InterceptedInteraction()
 {
 }
 
-InterceptedInteraction::InterceptedInteraction(o3tl::span< const InterceptedRequest > lInterceptions)
+InterceptedInteraction::InterceptedInteraction(std::span< const InterceptedRequest > lInterceptions)
     : m_lInterceptions(lInterceptions)
 {
 }

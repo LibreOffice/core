@@ -71,7 +71,7 @@ using namespace ::com::sun::star::beans;
                     { UNO_NAME_IS_FIELD_DISPLAYED, FIELD_PROP_IS_FIELD_DISPLAYED, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::READONLY, 0},\
                     { UNO_NAME_TITLE, FIELD_PROP_TITLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
 
-o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
+std::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {
     OSL_ENSURE(nPropertyId < PROPERTY_MAP_END, "Id ?" );
     if( m_aMapEntriesArr[ nPropertyId ].empty() )
@@ -712,7 +712,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
             break;
             case PROPERTY_MAP_TEXT_DEFAULT :
             {
-                o3tl::span<SfxItemPropertyMapEntry> aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
+                std::span<SfxItemPropertyMapEntry> aTextDefaultMap_Impl = GetTextDefaultPropertyMap();
                 m_aMapEntriesArr[nPropertyId] = aTextDefaultMap_Impl;
                 for( auto & rEntry : aTextDefaultMap_Impl )
                 {

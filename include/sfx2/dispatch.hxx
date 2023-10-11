@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_DISPATCH_HXX
 
 #include <memory>
+#include <span>
 #include <sal/config.h>
 #include <rtl/ref.hxx>
 #include <sfx2/dllapi.h>
@@ -28,7 +29,6 @@
 
 #include <sfx2/bindings.hxx>
 #include <o3tl/typed_flags_set.hxx>
-#include <o3tl/span.hxx>
 
 #include <boost/property_tree/ptree_fwd.hpp>
 #include <initializer_list>
@@ -147,7 +147,7 @@ public:
     void                Lock( bool bLock );
     bool                IsLocked() const;
     void                SetSlotFilter( SfxSlotFilterState nEnable = SfxSlotFilterState::DISABLED,
-                                       o3tl::span<sal_uInt16 const> pSIDs = o3tl::span<sal_uInt16 const>());
+                                       std::span<sal_uInt16 const> pSIDs = std::span<sal_uInt16 const>());
 
     void                HideUI( bool bHide = true );
     ToolbarId           GetObjectBarId( sal_uInt16 nPos ) const;

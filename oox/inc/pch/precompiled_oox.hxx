@@ -41,6 +41,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stack>
 #include <string.h>
 #include <string_view>
@@ -231,7 +232,6 @@
 #include <i18nlangtag/lang.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <o3tl/safeint.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>

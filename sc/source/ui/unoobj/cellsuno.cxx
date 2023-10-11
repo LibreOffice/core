@@ -790,7 +790,7 @@ static const SfxItemPropertySet* lcl_GetSheetPropertySet()
     return &aSheetPropertySet;
 }
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetEditPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetEditPropertyMap()
 {
     static const SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
     {

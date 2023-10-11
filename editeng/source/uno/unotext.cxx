@@ -79,7 +79,7 @@ const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
     return &aTextCursorSvxPropertySet;
 }
 
-o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxTextPortionPropertyMap()
+std::span<const SfxItemPropertyMapEntry> ImplGetSvxTextPortionPropertyMap()
 {
     // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxTextPortionPropertyMap[] =
@@ -107,7 +107,7 @@ static const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
     return &aSvxTextPortionSfxPropertySet;
 }
 
-o3tl::span<const SfxItemPropertyMapEntry> ImplGetSvxUnoOutlinerTextCursorPropertyMap()
+std::span<const SfxItemPropertyMapEntry> ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 {
     // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =

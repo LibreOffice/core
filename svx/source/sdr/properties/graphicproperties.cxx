@@ -94,7 +94,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new GraphicProperties(*this, rObj));
         }
 
-        void GraphicProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void GraphicProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrGrafObj& rObj = static_cast<SdrGrafObj&>(GetSdrObject());
 

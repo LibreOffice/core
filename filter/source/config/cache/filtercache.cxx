@@ -245,8 +245,8 @@ bool FilterCache::isFillState(FilterCache::EFillState eState) const
 
 
 std::vector<OUString> FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
-                                                  o3tl::span< const css::beans::NamedValue > lIProps,
-                                                  o3tl::span< const css::beans::NamedValue > lEProps) const
+                                                  std::span< const css::beans::NamedValue > lIProps,
+                                                  std::span< const css::beans::NamedValue > lEProps) const
 {
     // SAFE ->
     std::unique_lock aGuard(m_aMutex);

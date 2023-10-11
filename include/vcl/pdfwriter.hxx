@@ -787,7 +787,7 @@ The following structure describes the permissions used in PDF security
                                       FontLineStyle eOverline );
     void                DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        KernArraySpan aKernArray,
-                                       o3tl::span<const sal_Bool> pKashidaAry,
+                                       std::span<const sal_Bool> pKashidaAry,
                                        sal_Int32 nIndex,
                                        sal_Int32 nLen );
     void                DrawStretchText( const Point& rStartPt, sal_Int32 nWidth,

@@ -44,7 +44,7 @@ using namespace ::formula;
 
 //  map only for PropertySetInfo
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetValidatePropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetValidatePropertyMap()
 {
     static const SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {

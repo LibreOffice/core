@@ -23,8 +23,8 @@
 #include <sal/types.h>
 #include <tools/ref.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <o3tl/span.hxx>
 #include <memory>
+#include <span>
 
 #define MID_SW_FLAG_MASK                    0x0000ffff
 
@@ -63,10 +63,10 @@ struct SvXMLItemMapEntry
     or export */
 class SvXMLItemMapEntries final : public SvRefBase
 {
-    o3tl::span<SvXMLItemMapEntry const> mpEntries;
+    std::span<SvXMLItemMapEntry const> mpEntries;
 
 public:
-    explicit SvXMLItemMapEntries(o3tl::span<SvXMLItemMapEntry const> pEntries) : mpEntries(pEntries) {}
+    explicit SvXMLItemMapEntries(std::span<SvXMLItemMapEntry const> pEntries) : mpEntries(pEntries) {}
     virtual ~SvXMLItemMapEntries() override;
 
     SvXMLItemMapEntry const * getByName( sal_Int32 nElement ) const;
@@ -77,10 +77,10 @@ public:
 
 typedef tools::SvRef<SvXMLItemMapEntries> SvXMLItemMapEntriesRef;
 
-extern const o3tl::span<SvXMLItemMapEntry const> aXMLTableItemMap;
-extern const o3tl::span<SvXMLItemMapEntry const> aXMLTableColItemMap;
-extern const o3tl::span<SvXMLItemMapEntry const> aXMLTableRowItemMap;
-extern const o3tl::span<SvXMLItemMapEntry const> aXMLTableCellItemMap;
+extern const std::span<SvXMLItemMapEntry const> aXMLTableItemMap;
+extern const std::span<SvXMLItemMapEntry const> aXMLTableColItemMap;
+extern const std::span<SvXMLItemMapEntry const> aXMLTableRowItemMap;
+extern const std::span<SvXMLItemMapEntry const> aXMLTableCellItemMap;
 
 #endif // INCLUDED_SW_SOURCE_FILTER_XML_XMLITMAP_HXX
 

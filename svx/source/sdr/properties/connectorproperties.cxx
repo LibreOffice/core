@@ -63,7 +63,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new ConnectorProperties(*this, rObj));
         }
 
-        void ConnectorProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
+        void ConnectorProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrEdgeObj& rObj = static_cast<SdrEdgeObj&>(GetSdrObject());
 

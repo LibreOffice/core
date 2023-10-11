@@ -52,6 +52,7 @@
 #include <optional>
 #include <ostream>
 #include <set>
+#include <span>
 #include <stack>
 #include <stddef.h>
 #include <string.h>
@@ -290,7 +291,6 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <o3tl/span.hxx>
 #include <o3tl/strong_int.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/underlyingenumvalue.hxx>

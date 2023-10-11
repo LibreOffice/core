@@ -25,8 +25,8 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
-#include <o3tl/span.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <span>
 #include <unordered_map>
 #include <utility>
 
@@ -90,7 +90,7 @@ class COMPHELPER_DLLPUBLIC PropertySetInfo final
 {
 public:
     PropertySetInfo() noexcept;
-    PropertySetInfo( o3tl::span<const PropertyMapEntry> pMap ) noexcept;
+    PropertySetInfo( std::span<const PropertyMapEntry> pMap ) noexcept;
     virtual ~PropertySetInfo() noexcept override;
 
     /** returns a stl map with all PropertyMapEntry pointer.<p>
@@ -101,7 +101,7 @@ public:
     /** adds an array of PropertyMapEntry to this instance.<p>
         The end is marked with a PropertyMapEntry where mpName equals NULL</p>
     */
-    void add( o3tl::span<PropertyMapEntry const> pMap ) noexcept;
+    void add( std::span<PropertyMapEntry const> pMap ) noexcept;
 
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const OUString& aName ) noexcept;

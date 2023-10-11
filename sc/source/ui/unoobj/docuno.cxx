@@ -142,7 +142,7 @@ constexpr OUStringLiteral SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName";
 //  no Which-ID here, map only for PropertySetInfo
 
 //! rename this, those are no longer only options
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
@@ -197,7 +197,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetDocOptPropertyMap()
 
 //! StandardDecimals as property and from NumberFormatter ????????
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetColumnsPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetColumnsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
     {
@@ -210,7 +210,7 @@ static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetColumnsPropertyMap()
     return aColumnsPropertyMap_Impl;
 }
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetRowsPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetRowsPropertyMap()
 {
     static const SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {

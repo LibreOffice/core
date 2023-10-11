@@ -71,7 +71,7 @@ SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer)
 {
 }
 
-SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer, o3tl::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
+SvxOle2Shape::SvxOle2Shape(SdrObject* pObject, OUString referer, std::span<const SfxItemPropertyMapEntry> pPropertyMap, const SvxItemPropertySet* pPropertySet)
     : SvxShapeText(pObject, pPropertyMap, pPropertySet)
     , referer_(std::move(referer))
 {

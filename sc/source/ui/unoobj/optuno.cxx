@@ -29,7 +29,7 @@
 
 using namespace com::sun::star;
 
-o3tl::span<const SfxItemPropertyMapEntry> ScDocOptionsHelper::GetPropertyMap()
+std::span<const SfxItemPropertyMapEntry> ScDocOptionsHelper::GetPropertyMap()
 {
     static const SfxItemPropertyMapEntry aMap[] =
     {

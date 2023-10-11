@@ -29,7 +29,7 @@ const sal_Int32 HANDLE_CERTIFICATEREQUEST = 3;
 /// Will handle com::sun::star::ucb::AuthenticationRequest
 const sal_Int32 HANDLE_AUTHENTICATIONREQUEST = 4;
 
-static o3tl::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> getInterceptions()
+static std::span<const ::ucbhelper::InterceptedInteraction::InterceptedRequest> getInterceptions()
 {
     static const ::ucbhelper::InterceptedInteraction::InterceptedRequest lInterceptions[]{
         { //intercept standard IO error exception (local file and WebDAV)

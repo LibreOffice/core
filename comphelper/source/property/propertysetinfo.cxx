@@ -32,7 +32,7 @@ PropertySetInfo::PropertySetInfo() noexcept
 {
 }
 
-PropertySetInfo::PropertySetInfo( o3tl::span<const PropertyMapEntry> pMap ) noexcept
+PropertySetInfo::PropertySetInfo( std::span<const PropertyMapEntry> pMap ) noexcept
 {
     maPropertyMap.reserve(pMap.size());
     for (const auto & rEntry : pMap)
@@ -51,7 +51,7 @@ PropertySetInfo::~PropertySetInfo() noexcept
 {
 }
 
-void PropertySetInfo::add( o3tl::span<PropertyMapEntry const> pMap ) noexcept
+void PropertySetInfo::add( std::span<PropertyMapEntry const> pMap ) noexcept
 {
     maPropertyMap.reserve(maPropertyMap.size() + pMap.size());
     for (const auto & rEntry : pMap)

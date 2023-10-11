@@ -31,8 +31,8 @@
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLTextListAutoStylePool.hxx>
 #include <o3tl/sorted_vector.hxx>
-#include <o3tl/span.hxx>
 #include <memory>
+#include <span>
 #include <vector>
 
 class XMLTextListsHelper;
@@ -395,14 +395,14 @@ public:
     void Add(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
-        o3tl::span<const XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
+        std::span<const XMLPropertyState> aAddStates = {}, bool bDontSeek = false );
 
     /// find style name for specified family and parent
     OUString Find(
         XmlStyleFamily nFamily,
         const css::uno::Reference< css::beans::XPropertySet > & rPropSet,
         const OUString& rParent,
-        const o3tl::span<const XMLPropertyState> aAddStates = {} ) const;
+        const std::span<const XMLPropertyState> aAddStates = {} ) const;
 
     static SvXMLExportPropertyMapper *CreateShapeExtPropMapper(
                                                 SvXMLExport& rExport );

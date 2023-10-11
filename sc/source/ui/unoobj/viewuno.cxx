@@ -80,7 +80,7 @@ using namespace com::sun::star;
 
 //  no Which-ID here, Map only for PropertySetInfo
 
-static o3tl::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
+static std::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {

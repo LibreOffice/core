@@ -23,11 +23,11 @@
 #include <sal/config.h>
 
 #include <optional>
+#include <span>
 
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svxdllapi.h>
 #include <svl/itemset.hxx>
-#include <o3tl/span.hxx>
 
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -57,7 +57,7 @@ namespace sdr::properties
 
             // Internally react on ItemSet changes. The given span contains changed items.
             // If nDeletedWhich is not 0, it indicates a deleted item.
-            virtual void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich);
+            virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich);
 
             // check if SfxItemSet exists
             bool HasSfxItemSet() const { return bool(mxItemSet); }
