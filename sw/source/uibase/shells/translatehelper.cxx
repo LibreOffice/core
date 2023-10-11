@@ -178,7 +178,7 @@ void TranslateDocumentCancellable(SwWrtShell& rWrtSh, const TranslateAPIConfig& 
                 else if (n == startNode)
                 {
                     cursor->SetMark();
-                    cursor->GetPoint()->nContent = std::min(aPoint.nContent, aMark.nContent);
+                    cursor->GetPoint()->nContent = aPoint.nContent;
                 }
                 else if (n == endNode)
                 {
