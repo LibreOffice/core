@@ -86,7 +86,6 @@ public:
     ScDocument*         GetDocument();
     ScDocShell*         GetDocShell()       { return pDocShell; }
     bool                IsError() const;
-    OUString       GetTitle() const;
 
     void                ReleaseDocRef();    // without calling DoClose
 

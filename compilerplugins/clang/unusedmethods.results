@@ -380,11 +380,11 @@ include/basegfx/tuple/Size2D.hxx:100
     Size2D<type-parameter-?-?> basegfx::operator*(const Size2D<type-parameter-?-?> &,const Size2D<type-parameter-?-?> &)
 include/basegfx/tuple/Size2D.hxx:108
     Size2D<type-parameter-?-?> basegfx::operator/(const Size2D<type-parameter-?-?> &,const Size2D<type-parameter-?-?> &)
-include/basegfx/tuple/Tuple2D.hxx:83
+include/basegfx/tuple/Tuple2D.hxx:72
     _Bool basegfx::Tuple2D::equal(const basegfx::Tuple2D<double> &) const
-include/basegfx/tuple/Tuple2D.hxx:83
+include/basegfx/tuple/Tuple2D.hxx:72
     _Bool basegfx::Tuple2D::equal(const basegfx::Tuple2D<int> &) const
-include/basegfx/tuple/Tuple2D.hxx:83
+include/basegfx/tuple/Tuple2D.hxx:72
     _Bool basegfx::Tuple2D::equal(const basegfx::Tuple2D<long> &) const
 include/basegfx/utils/b2dclipstate.hxx:72
     _Bool basegfx::utils::B2DClipState::operator!=(const basegfx::utils::B2DClipState &) const
@@ -442,14 +442,22 @@ include/comphelper/configuration.hxx:270
     void comphelper::ConfigurationLocalizedProperty::set(const type-parameter-?-? &,const std::shared_ptr<comphelper::ConfigurationChanges> &)
 include/comphelper/configuration.hxx:305
     com::sun::star::uno::Reference<com::sun::star::container::XHierarchicalNameReplace> comphelper::ConfigurationGroup::get(const std::shared_ptr<comphelper::ConfigurationChanges> &)
-include/comphelper/errcode.hxx:84
+include/comphelper/errcode.hxx:91
     _Bool ErrCode::operator<(const ErrCode &) const
-include/comphelper/errcode.hxx:85
+include/comphelper/errcode.hxx:92
     _Bool ErrCode::operator<=(const ErrCode &) const
-include/comphelper/errcode.hxx:86
+include/comphelper/errcode.hxx:93
     _Bool ErrCode::operator>(const ErrCode &) const
-include/comphelper/errcode.hxx:87
+include/comphelper/errcode.hxx:94
     _Bool ErrCode::operator>=(const ErrCode &) const
+include/comphelper/errcode.hxx:188
+     ErrCodeMsg::ErrCodeMsg(ErrCode,const rtl::OUString &,const rtl::OUString &,struct std::experimental::source_location)
+include/comphelper/errcode.hxx:215
+    const std::optional<struct std::experimental::source_location> & ErrCodeMsg::GetSourceLocation() const
+include/comphelper/errcode.hxx:224
+    _Bool ErrCodeMsg::operator==(const ErrCodeMsg &) const
+include/comphelper/errcode.hxx:225
+    _Bool ErrCodeMsg::operator!=(const ErrCodeMsg &) const
 include/comphelper/flagguard.hxx:33
     ValueRestorationGuard_Impl<T> comphelper::<deduction guide for ValueRestorationGuard_Impl>(ValueRestorationGuard_Impl<T>)
 include/comphelper/flagguard.hxx:37
@@ -1060,7 +1068,7 @@ include/oox/export/drawingml.hxx:363
     _Bool oox::drawingml::DrawingML::WriteCharColor(const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> &)
 include/oox/export/drawingml.hxx:504
     Color oox::drawingml::DrawingML::ColorWithIntensity(unsigned int,unsigned int)
-include/oox/helper/attributelist.hxx:69
+include/oox/helper/attributelist.hxx:68
     long oox::AttributeConversion::decodeHyper(std::basic_string_view<char16_t>)
 include/oox/helper/containerhelper.hxx:51
     _Bool oox::ValueRange::operator!=(const struct oox::ValueRange &) const
@@ -1104,10 +1112,10 @@ include/sfx2/infobar.hxx:104
     void SfxInfoBarWindow::SetCommandHandler(weld::Button &,const rtl::OUString &)
 include/sfx2/lokcomponenthelpers.hxx:49
     void LokChartHelper::Invalidate()
-include/sfx2/msg.hxx:120
+include/sfx2/msg.hxx:119
     const std::type_info * SfxType0::Type() const
-include/sfx2/sidebar/FocusManager.hxx:128
-    _Bool sfx2::sidebar::FocusManager::MoveFocusInsideDeckTitle(const sfx2::sidebar::FocusManager::FocusLocation &,const int)
+include/sfx2/sidebar/FocusManager.hxx:110
+    _Bool sfx2::sidebar::FocusManager::IsPanelTitleVisible(const int) const
 include/sfx2/viewsh.hxx:466
     enum LOKDeviceFormFactor SfxViewShell::GetLOKDeviceFormFactor() const
 include/svl/itemiter.hxx:44
@@ -1120,17 +1128,17 @@ include/svl/itempool.hxx:158
     const type-parameter-?-? * SfxItemPool::GetItem2Default(TypedWhichId<type-parameter-?-?>) const
 include/svl/itempool.hxx:199
     void SfxItemPool::dumpAsXml(struct _xmlTextWriter *) const
-include/svl/itemset.hxx:72
+include/svl/itemset.hxx:70
     _Bool SfxItemSet::empty() const
-include/svl/itemset.hxx:73
+include/svl/itemset.hxx:71
     int SfxItemSet::size() const
-include/svl/itemset.hxx:74
+include/svl/itemset.hxx:72
     const SfxPoolItem * SfxItemSet::operator[](int) const
 include/svl/lockfilecommon.hxx:60
     void svt::LockFileCommon::SetURL(const rtl::OUString &)
 include/svl/ondemand.hxx:346
     const CharClass & OnDemandCharClass::operator*() const
-include/svl/poolitem.hxx:198
+include/svl/poolitem.hxx:208
     type-parameter-?-? * SfxPoolItem::DynamicWhichCast(TypedWhichId<type-parameter-?-?>)
 include/svl/typedwhich.hxx:31
      TypedWhichId::TypedWhichId(TypedWhichId<type-parameter-?-?>,typename enable_if<std::is_base_of_v<CntUInt16Item, derived_type>, int>::type)
@@ -2002,7 +2010,7 @@ include/svx/dlgctrl.hxx:263
     void SvxLineEndLB::set_active_text(const rtl::OUString &)
 include/svx/framelink.hxx:168
     _Bool svx::frame::operator>(const svx::frame::Style &,const svx::frame::Style &)
-include/svx/hlnkitem.hxx:104
+include/svx/hlnkitem.hxx:103
     void SvxHyperlinkItem::SetReplacementText(const rtl::OUString &)
 include/svx/langbox.hxx:95
     void SvxLanguageBox::set_size_request(int,int)
@@ -2196,6 +2204,10 @@ include/tools/weakbase.h:151
     struct tools::WeakConnection * tools::WeakBase::getWeakConnection()
 include/tools/XmlWriter.hxx:63
     void tools::XmlWriter::element(const char *)
+include/ucbhelper/interceptedinteraction.hxx:87
+     ucbhelper::InterceptedInteraction::InterceptedRequest::InterceptedRequest()
+include/ucbhelper/interceptedinteraction.hxx:142
+     ucbhelper::InterceptedInteraction::InterceptedInteraction()
 include/unotest/directories.hxx:46
     rtl::OUString test::Directories::getPathFromWorkdir(std::basic_string_view<char16_t>) const
 include/unotools/charclass.hxx:101
@@ -2222,13 +2234,13 @@ include/vcl/animate/Animation.hxx:42
     _Bool Animation::operator!=(const Animation &) const
 include/vcl/animate/AnimationFrame.hxx:77
     _Bool AnimationFrame::operator!=(const struct AnimationFrame &) const
-include/vcl/bitmap.hxx:570
+include/vcl/bitmap.hxx:575
     const basegfx::SystemDependentDataHolder * Bitmap::accessSystemDependentDataHolder() const
 include/vcl/BitmapBasicMorphologyFilter.hxx:63
      BitmapDilateFilter::BitmapDilateFilter(int,unsigned char)
-include/vcl/BitmapReadAccess.hxx:87
+include/vcl/BitmapReadAccess.hxx:86
     BitmapColor BitmapReadAccess::GetPixel(const Point &) const
-include/vcl/BitmapReadAccess.hxx:107
+include/vcl/BitmapReadAccess.hxx:110
     unsigned char BitmapReadAccess::GetPixelIndex(const Point &) const
 include/vcl/builder.hxx:107
     const rtl::OUString & VclBuilder::getUIFile() const
@@ -2662,10 +2674,10 @@ sc/inc/stlalgorithm.hxx:61
     _Bool sc::AlignedAllocator::operator!=(const AlignedAllocator<T, Alignment> &) const
 sc/inc/table.hxx:352
     _Bool ScTable::IsColRowTabValid(const short,const int,const short) const
-sc/inc/table.hxx:752
+sc/inc/table.hxx:756
     const type-parameter-?-? * ScTable::GetAttr(short,int,TypedWhichId<type-parameter-?-?>,int &,int &) const
-sc/inc/tablink.hxx:66
-    void ScTableLink::LinkStubRefreshHdl(void *,Timer *)
+sc/inc/tablink.hxx:89
+    rtl::OUString ScDocumentLoader::GetTitle() const
 sc/qa/unit/helper/qahelper.hxx:77
     std::basic_ostream<char> & operator<<(std::basic_ostream<char> &,const enum OpCode &)
 sc/qa/unit/helper/qahelper.hxx:83
@@ -2788,40 +2800,8 @@ sd/inc/sddll.hxx:47
      SdDLL::SdDLL()
 sd/source/filter/eppt/epptooxml.hxx:93
     void oox::core::PowerPointExport::WriteDefaultColorSchemes(const std::shared_ptr<sax_fastparser::FastSerializerHelper> &)
-sd/source/filter/html/buttonset.hxx:34
-     ButtonSet::ButtonSet()
-sd/source/filter/html/buttonset.hxx:37
-    int ButtonSet::getCount() const
-sd/source/filter/html/buttonset.hxx:39
-    _Bool ButtonSet::getPreview(int,const std::vector<rtl::OUString> &,Image &)
-sd/source/filter/html/buttonset.hxx:40
-    _Bool ButtonSet::exportButton(int,const rtl::OUString &,const rtl::OUString &)
-sd/source/filter/html/htmlattr.hxx:31
-     SdHtmlAttrPreview::SdHtmlAttrPreview()
-sd/source/filter/html/htmlattr.hxx:36
-    void SdHtmlAttrPreview::SetColors(const Color &,const Color &,const Color &,const Color &,const Color &)
 sd/source/filter/ppt/pptinanimations.hxx:107
     void ppt::AnimationImporter::dump(const char *,long)
-sd/source/ui/inc/assclass.hxx:46
-     Assistent::Assistent(int)
-sd/source/ui/inc/assclass.hxx:48
-    _Bool Assistent::IsEnabled(int) const
-sd/source/ui/inc/assclass.hxx:49
-    void Assistent::EnablePage(int)
-sd/source/ui/inc/assclass.hxx:50
-    void Assistent::DisablePage(int)
-sd/source/ui/inc/assclass.hxx:53
-    _Bool Assistent::InsertControl(int,weld::Widget *)
-sd/source/ui/inc/assclass.hxx:55
-    void Assistent::NextPage()
-sd/source/ui/inc/assclass.hxx:57
-    void Assistent::PreviousPage()
-sd/source/ui/inc/assclass.hxx:61
-    _Bool Assistent::IsLastPage() const
-sd/source/ui/inc/assclass.hxx:63
-    _Bool Assistent::IsFirstPage() const
-sd/source/ui/inc/assclass.hxx:65
-    int Assistent::GetCurrentPage() const
 sd/source/ui/inc/filedlg.hxx:54
     _Bool SdOpenSoundFileDialog::IsInsertAsLinkSelected() const
 sd/source/ui/inc/GraphicViewShell.hxx:43
@@ -3026,11 +3006,11 @@ starmath/inc/parse.hxx:31
     AbstractSmParser * starmathdatabase::GetDefaultSmParser()
 starmath/inc/smmod.hxx:55
     rtl::OUString SmLocalizedSymbolData::GetExportSymbolName(std::basic_string_view<char16_t>)
-starmath/inc/token.hxx:180
+starmath/inc/token.hxx:181
      SmColorTokenTableEntry::SmColorTokenTableEntry(const std::unique_ptr<struct SmColorTokenTableEntry>)
-starmath/inc/token.hxx:201
+starmath/inc/token.hxx:202
     _Bool SmColorTokenTableEntry::equals(std::basic_string_view<char16_t>) const
-starmath/inc/token.hxx:208
+starmath/inc/token.hxx:209
     _Bool SmColorTokenTableEntry::equals(Color) const
 svgio/inc/svgstyleattributes.hxx:354
     svgio::svgreader::SvgNumber svgio::svgreader::SvgStyleAttributes::getStrokeDashOffset() const
@@ -3206,7 +3186,7 @@ sw/inc/shellio.hxx:89
     void SwAsciiOptions::SetIncludeHidden(_Bool)
 sw/inc/swabstdlg.hxx:417
     std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg::GetSelectedLanguage()
-sw/inc/swatrset.hxx:236
+sw/inc/swatrset.hxx:237
     const SvxNoHyphenItem & SwAttrSet::GetNoHyphenHere(_Bool) const
 sw/inc/swcrsr.hxx:309
     SwTableCursor * SwTableCursor::GetNext()
@@ -3224,7 +3204,7 @@ sw/inc/swrect.hxx:152
     _Bool SwRect::OverStepTop(long) const
 sw/inc/textboxhelper.hxx:256
     _Bool SwTextBoxNode::IsGroupTextBox() const
-sw/inc/view.hxx:473
+sw/inc/view.hxx:476
     void SwView::LinkStubMoveNavigationHdl(void *,void *)
 sw/inc/viewopt.hxx:311
     const struct SwViewColors & SwViewOption::GetColorConfig() const

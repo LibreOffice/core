@@ -558,12 +558,4 @@ bool ScDocumentLoader::IsError() const
         return true;
 }
 
-OUString ScDocumentLoader::GetTitle() const
-{
-    if ( pDocShell )
-        return pDocShell->GetTitle();
-    else
-        return OUString();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

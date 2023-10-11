@@ -36,7 +36,7 @@ include/basegfx/vector/b3dvector.hxx:144
     basegfx::B3DVector & basegfx::B3DVector::setLength(double)
 include/basegfx/vector/b3dvector.hxx:169
     basegfx::B3DVector & basegfx::B3DVector::normalize()
-include/basic/sbstar.hxx:62
+include/basic/sbstar.hxx:63
     _Bool StarBASIC::RTError(ErrCode,const rtl::OUString &,int,int,int)
 include/comphelper/backupfilehelper.hxx:205
     _Bool comphelper::BackupFileHelper::tryPush_extensionInfo(std::basic_string_view<char16_t>)
@@ -180,9 +180,9 @@ include/unotools/localedatawrapper.hxx:163
     const com::sun::star::uno::Sequence<struct com::sun::star::lang::Locale> & LocaleDataWrapper::getAllInstalledLocaleNames() const
 include/vcl/BinaryDataContainer.hxx:61
     unsigned long BinaryDataContainer::writeToStream(SvStream &) const
-include/vcl/bitmap.hxx:263
+include/vcl/bitmap.hxx:268
     _Bool Bitmap::Blend(const AlphaMask &,const Color &)
-include/vcl/bitmap.hxx:431
+include/vcl/bitmap.hxx:436
     _Bool Bitmap::Replace(const AlphaMask &,const Color &)
 include/vcl/bitmapex.hxx:227
     _Bool BitmapEx::Rotate(struct o3tl::strong_int<short, struct FractionTag<10> >,const Color &)
@@ -190,7 +190,7 @@ include/vcl/filter/SvmReader.hxx:36
     SvStream & SvmReader::Read(GDIMetaFile &,struct ImplMetaReadData *)
 include/vcl/filter/SvmWriter.hxx:37
     SvStream & SvmWriter::Write(const GDIMetaFile &)
-include/vcl/formatter.hxx:219
+include/vcl/formatter.hxx:225
     _Bool Formatter::SetFormat(const rtl::OUString &,struct o3tl::strong_int<unsigned short, struct LanguageTypeTag>)
 include/vcl/graphicfilter.hxx:259
     ErrCode GraphicFilter::ExportGraphic(const Graphic &,const INetURLObject &,unsigned short,const com::sun::star::uno::Sequence<struct com::sun::star::beans::PropertyValue> *)
@@ -280,6 +280,8 @@ sc/source/ui/vba/vbaformat.hxx:151
     com::sun::star::uno::Any ScVbaFormat::getReadingOrder()
 sd/source/filter/eppt/pptx-epptooxml.cxx:136
     oox::drawingml::ShapeExport & oox::core::PowerPointShapeExport::WritePageShape(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape> &,enum PageType,_Bool)
+sd/source/filter/html/htmlex.hxx:74
+    _Bool HtmlExport::WriteHtml(const rtl::OUString &,_Bool,std::basic_string_view<char16_t>)
 sd/source/ui/inc/DrawViewShell.hxx:253
     _Bool sd::DrawViewShell::SelectPage(unsigned short,unsigned short)
 sd/source/ui/inc/navigatr.hxx:120
@@ -340,9 +342,9 @@ sw/source/uibase/inc/fldmgr.hxx:118
     const com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> & SwFieldMgr::GetNumberingInfo() const
 sw/source/uibase/inc/mailmergewizard.hxx:78
     _Bool SwMailMergeWizard::skipUntil(unsigned short)
-sw/source/uibase/inc/wrtsh.hxx:427
+sw/source/uibase/inc/wrtsh.hxx:429
     _Bool SwWrtShell::GotoFieldmark(const sw::mark::IFieldmark *const)
-sw/source/uibase/inc/wrtsh.hxx:435
+sw/source/uibase/inc/wrtsh.hxx:437
     _Bool SwWrtShell::GotoContentControl(const SwFormatContentControl &,_Bool)
 ucb/source/ucp/webdav-curl/ContentProperties.hxx:160
     _Bool http_dav_ucp::CachableContentProperties::containsAllNames(const com::sun::star::uno::Sequence<struct com::sun::star::beans::Property> &,std::vector<rtl::OUString> &) const

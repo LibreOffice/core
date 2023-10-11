@@ -78,16 +78,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
             sal_Int32 Handle;
 
 
-            /** @short  default ctor.
-
-                @descr  Such constructed object can't be used really.
-                        Might it will crash if it's used!
-                        Don't forget to initialize all(!) members...
-             */
-            InterceptedRequest()
-            {
-                Handle     = INVALID_HANDLE;
-            }
             InterceptedRequest(css::uno::Any Request_, css::uno::Type Continuation_, sal_Int32 Handle_)
                 : Request(std::move(Request_)), Continuation(std::move(Continuation_)), Handle(Handle_)
             {
@@ -135,11 +125,6 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public InterceptedInteraction
 
     // native interface
     public:
-
-
-        /** @short  initialize a new instance with default values.
-         */
-        InterceptedInteraction();
 
         /** @short  initialise with a list of intercepted interactions.
 

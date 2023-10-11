@@ -23,10 +23,6 @@
 
 namespace ucbhelper{
 
-InterceptedInteraction::InterceptedInteraction()
-{
-}
-
 InterceptedInteraction::InterceptedInteraction(std::span< const InterceptedRequest > lInterceptions)
     : m_lInterceptions(lInterceptions)
 {
