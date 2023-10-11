@@ -154,13 +154,7 @@ consteval
 #else
 constexpr
 #endif
-auto createUriCharClass(
-#if defined __cpp_lib_char8_t
-    std::u8string_view
-#else
-    std::string_view
-#endif
-        unencoded)
+auto createUriCharClass(std::u8string_view unencoded)
 {
     std::array<sal_Bool, UriCharClassSize> a = {};
     for (auto c: unencoded) {
