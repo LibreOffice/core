@@ -1102,6 +1102,18 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (!bIsPrintableControl)
         return;
 
+    ::std::optional<sal_Int32> oAnchorParent;
+    if (mpPDFExtOutDevData)
+    {
+        if (rControlPrimitive.GetAnchorStructureElementKey())
+        {
+            sal_Int32 const id = mpPDFExtOutDevData->EnsureStructureElement(
+                rControlPrimitive.GetAnchorStructureElementKey());
+            oAnchorParent.emplace(mpPDFExtOutDevData->GetCurrentStructureElement());
+            mpPDFExtOutDevData->SetCurrentStructureElement(id);
+        }
+    }
+
     const bool bPDFExport(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields());
     bool bDoProcessRecursively(true);
 
@@ -1154,6 +1166,10 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             }
             mpPDFExtOutDevData->CreateControl(*pPDFControl);
             mpPDFExtOutDevData->EndStructureElement();
+            if (oAnchorParent)
+            {
+                mpPDFExtOutDevData->SetCurrentStructureElement(*oAnchorParent);
+            }
 
             // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
             // do not process recursively
@@ -1236,6 +1252,10 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
     if (mpPDFExtOutDevData)
     {
         mpPDFExtOutDevData->EndStructureElement();
+        if (oAnchorParent)
+        {
+            mpPDFExtOutDevData->SetCurrentStructureElement(*oAnchorParent);
+        }
     }
 }
 

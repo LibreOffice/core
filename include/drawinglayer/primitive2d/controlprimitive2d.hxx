@@ -58,6 +58,9 @@ private:
     /// yet another special snowflake way to generate PDF Alt text
     OUString m_AltText;
 
+    /// anchor structure element (Writer)
+    void const* const m_pAnchorStructureElementKey;
+
     /** used from getXControl() to create a local awt::XControl which is remembered in mxXControl
                 and from thereon always used and returned by getXControl()
              */
@@ -81,7 +84,8 @@ public:
     ControlPrimitive2D(basegfx::B2DHomMatrix aTransform,
                        css::uno::Reference<css::awt::XControlModel> xControlModel,
                        css::uno::Reference<css::awt::XControl> xXControl,
-                       ::std::u16string_view rTitle, ::std::u16string_view rDescription);
+                       ::std::u16string_view rTitle, ::std::u16string_view rDescription,
+                       void const* pAnchorKey);
 
     /// data read access
     const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
@@ -97,6 +101,8 @@ public:
     const css::uno::Reference<css::awt::XControl>& getXControl() const;
 
     OUString const& GetAltText() const { return m_AltText; }
+
+    void const* GetAnchorStructureElementKey() const { return m_pAnchorStructureElementKey; }
 
     /// compare operator
     virtual bool operator==(const BasePrimitive2D& rPrimitive) const override;
