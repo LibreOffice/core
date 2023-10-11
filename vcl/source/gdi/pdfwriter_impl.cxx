@@ -68,6 +68,7 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/pdfread.hxx>
 #include <vcl/settings.hxx>
 #include <strhelper.hxx>
 #include <vcl/svapp.hxx>
@@ -8970,6 +8971,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     // vcl::ImportPDF() uses getDefaultPdfResolutionDpi to set the desired
     // rendering DPI so we have to take into account that here too.
     static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
+    static const double fMagicScaleFactor = PDF_INSERT_MAGIC_SCALE_FACTOR;
 
     sal_Int32 nOldDPIX = GetDPIX();
     sal_Int32 nOldDPIY = GetDPIY();
@@ -8984,15 +8986,13 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     sal_Int32 nWrappedFormObject = 0;
     if (!m_aContext.UseReferenceXObject)
     {
-#ifdef MACOSX
         // tdf#156842 increase scale for external PDF data
-        // For some unknown reason, the scale is 8 times larger than for
-        // non-external PDF XObjects.
+        // Multiply PDF_INSERT_MAGIC_SCALE_FACTOR for platforms like macOS
+        // that scale all images by this number.
         // This fix also allows the CppunitTest_vcl_pdfexport to run
         // successfully on macOS.
-        fScaleX = 8.0 / aSize.Width();
-        fScaleY = 8.0 / aSize.Height();
-#endif
+        fScaleX = fMagicScaleFactor / aSize.Width();
+        fScaleY = fMagicScaleFactor / aSize.Height();
 
         // Parse the PDF data, we need that to write the PDF dictionary of our
         // object.
@@ -9234,9 +9234,11 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
     appendDouble(fScaleY, aLine);
     aLine.append(" 0 0 ]");
     aLine.append(" /BBox [ 0 0 ");
-    aLine.append(aSize.Width());
+    // tdf#157680 reduce size by magic scale factor in /BBox
+    aLine.append(aSize.Width() / fMagicScaleFactor);
     aLine.append(" ");
-    aLine.append(aSize.Height());
+    // tdf#157680 reduce size by magic scale factor in /BBox
+    aLine.append(aSize.Height() / fMagicScaleFactor);
     aLine.append(" ]\n");
 
     if (m_aContext.UseReferenceXObject && rEmit.m_nEmbeddedObject > 0)
