@@ -863,7 +863,7 @@ SwRect SwTextFly::GetFrameArea() const
 }
 
 // #i68520#
-SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
+SwAnchoredObjList& SwTextFly::InitAnchoredObjList()
 {
     OSL_ENSURE( m_pCurrFrame, "InitFlyList: No Frame, no FlyList" );
     // #i68520#
@@ -982,7 +982,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
     }
 
     // #i68520#
-    return mpAnchoredObjList.get();
+    return *mpAnchoredObjList;
 }
 
 SwTwips SwTextFly::CalcMinBottom() const

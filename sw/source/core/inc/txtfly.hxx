@@ -153,7 +153,7 @@ class SwTextFly
      */
     SwRect GetFrame_( const SwRect &rPortion ) const;
 
-    SwAnchoredObjList* InitAnchoredObjList();
+    SwAnchoredObjList& InitAnchoredObjList();
 
 public:
     SwAnchoredObjList* GetAnchoredObjList() const;
@@ -315,7 +315,7 @@ inline SwAnchoredObjList* SwTextFly::GetAnchoredObjList() const
 {
     return mpAnchoredObjList
            ? mpAnchoredObjList.get()
-           : const_cast<SwTextFly*>(this)->InitAnchoredObjList();
+           : &const_cast<SwTextFly*>(this)->InitAnchoredObjList();
 }
 
 inline void SwTextFly::SetTopRule()
