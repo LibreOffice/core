@@ -184,6 +184,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="deleteregion">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_DELETE_REGION">Delete Section</property>
+        <property name="use-underline">True</property>
+        <accelerator key="Delete" signal="activate"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="deletehyperlink">
         <property name="visible">True</property>
         <property name="can-focus">False</property>

@@ -378,7 +378,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
         case ContentTypeId::REGION:
             m_sTypeToken = "region";
             m_bEdit = true;
-            m_bDelete = false;
+            m_bDelete = true;
         break;
         case ContentTypeId::INDEX:
             m_bEdit = true;
@@ -796,8 +796,10 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         pParentFormat = pParentFormat->GetParent();
                     }
 
-                    std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel, m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode())));
+                    auto pCnt(std::make_unique<SwRegionContent>(this, sSectionName, nLevel,
+                                            m_bAlphabeticSort ? 0 : getYPos(pNodeIndex->GetNode()),
+                                                                pFormat));
+
                     if(!pFormat->IsVisible())
                         pCnt->SetInvisible();
                     m_pMember->insert(std::move(pCnt));
@@ -1661,6 +1663,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
          bRemoveDeleteImageEntry = true,
          bRemoveDeleteOLEObjectEntry = true,
          bRemoveDeleteBookmarkEntry = true,
+         bRemoveDeleteRegionEntry = true,
          bRemoveDeleteHyperlinkEntry = true,
          bRemoveDeleteReferenceEntry = true,
          bRemoveDeleteIndexEntry= true,
@@ -1783,8 +1786,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
             const bool bEditable = pType->IsEditable() &&
                     ((bVisible && !bProtected) || ContentTypeId::REGION == nContentType);
-            const bool bDeletable = pType->IsDeletable() &&
-                    ((bVisible && !bProtected && !bProtectBM) || ContentTypeId::REGION == nContentType);
+            const bool bDeletable = pType->IsDeletable() && bVisible && !bProtected && !bProtectBM;
             const bool bRenamable = bEditable && !bReadonly &&
                     (ContentTypeId::TABLE == nContentType ||
                      ContentTypeId::FRAME == nContentType ||
@@ -1816,6 +1818,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     break;
                     case ContentTypeId::BOOKMARK:
                         bRemoveDeleteBookmarkEntry = false;
+                    break;
+                    case ContentTypeId::REGION:
+                        bRemoveDeleteRegionEntry = false;
                     break;
                     case ContentTypeId::URLFIELD:
                         bRemoveDeleteHyperlinkEntry = false;
@@ -1962,6 +1967,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("deleteoleobject");
     if (bRemoveDeleteBookmarkEntry)
         xPop->remove("deletebookmark");
+    if (bRemoveDeleteRegionEntry)
+        xPop->remove("deleteregion");
     if (bRemoveDeleteHyperlinkEntry)
         xPop->remove("deletehyperlink");
     if (bRemoveDeleteReferenceEntry)
@@ -1982,6 +1989,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveDeleteImageEntry &&
             bRemoveDeleteOLEObjectEntry &&
             bRemoveDeleteBookmarkEntry &&
+            bRemoveDeleteRegionEntry &&
             bRemoveDeleteHyperlinkEntry &&
             bRemoveDeleteReferenceEntry &&
             bRemoveDeleteIndexEntry &&
@@ -4654,6 +4662,7 @@ void SwContentTree::ExecuteContextMenuAction(const OUString& rSelectedPopupEntry
              rSelectedPopupEntry == "deleteimage" ||
              rSelectedPopupEntry == "deleteoleobject" ||
              rSelectedPopupEntry == "deletebookmark" ||
+             rSelectedPopupEntry == "deleteregion" ||
              rSelectedPopupEntry == "deletehyperlink" ||
              rSelectedPopupEntry == "deletereference" ||
              rSelectedPopupEntry == "deleteindex" ||
@@ -5174,7 +5183,15 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
         break;
 
         case ContentTypeId::REGION    :
-            if(nMode == EditEntryMode::RENAME)
+            if (nMode == EditEntryMode::DELETE)
+            {
+                assert(dynamic_cast<SwRegionContent*>(static_cast<SwTypeNumber*>(pCnt)));
+                const SwSectionFormat* pSectionFormat
+                        = static_cast<SwRegionContent*>(pCnt)->GetSectionFormat();
+                m_pActiveShell->GetDoc()->DelSectionFormat(
+                            const_cast<SwSectionFormat*>(pSectionFormat), false);
+            }
+            else if (nMode == EditEntryMode::RENAME)
             {
                 uno::Reference< frame::XModel >  xModel = m_pActiveShell->GetView().GetDocShell()->GetBaseModel();
                 uno::Reference< text::XTextSectionsSupplier >  xSects(xModel, uno::UNO_QUERY);

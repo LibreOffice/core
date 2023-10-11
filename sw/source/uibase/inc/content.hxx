@@ -60,15 +60,18 @@ class SwRegionContent final : public SwContent
 {
 
     sal_uInt8   m_nRegionLevel;
+    const SwSectionFormat* m_pSectionFormat;
 
     public:
         SwRegionContent(    const SwContentType* pCnt,
                             const OUString& rName,
                             sal_uInt8 nLevel,
-                            tools::Long nYPos) :
+                            tools::Long nYPos,
+                            const SwSectionFormat* pSectionFormat) :
             SwContent(pCnt, rName, nYPos),
-                        m_nRegionLevel(nLevel){}
+                        m_nRegionLevel(nLevel), m_pSectionFormat(pSectionFormat){}
     sal_uInt8   GetRegionLevel() const {return m_nRegionLevel;}
+    const SwSectionFormat* GetSectionFormat() const {return m_pSectionFormat;}
 };
 
 class SwURLFieldContent final : public SwContent
