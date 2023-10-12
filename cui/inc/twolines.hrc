@@ -14,7 +14,7 @@
 
 #include <utility>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define CHRDLG_ENCLOSE_NONE                 0
 #define CHRDLG_ENCLOSE_ROUND                1

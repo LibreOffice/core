@@ -268,7 +268,7 @@ void BulletsTypeMgr::Init()
         pActualBullets[i] = new BulletsSettings;
         pActualBullets[i]->cBulletChar = aDefaultBulletTypes[i];
         pActualBullets[i]->aFont = rActBulletFont;
-        OString id = OString::Concat(RID_SVXSTR_BULLET_DESCRIPTION_0.mpId) + OString::number(i);
+        OString id = OString::Concat(RID_SVXSTR_BULLET_DESCRIPTION_0.getId()) + OString::number(i);
         pActualBullets[i]->sDescription = SvxResId( TranslateId(RID_SVXSTR_BULLET_DESCRIPTION_0.mpContext, id.getStr()) );
     }
 }
@@ -593,7 +593,7 @@ void OutlineTypeMgr::Init()
         {
             pOutlineSettingsArrs[ nItem ] = new OutlineSettings_Impl;
             OutlineSettings_Impl* pItemArr = pOutlineSettingsArrs[ nItem ];
-            OString id = OString::Concat(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpId) + OString::number(nItem);
+            OString id = OString::Concat(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.getId()) + OString::number(nItem);
             pItemArr->sDescription = SvxResId( TranslateId(RID_SVXSTR_OUTLINENUM_DESCRIPTION_0.mpContext, id.getStr()) );
             pItemArr->pNumSettingsArr = new NumSettingsArr_Impl;
             Reference<XIndexAccess> xLevel = aOutlineAccess.getConstArray()[nItem];

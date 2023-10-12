@@ -69,7 +69,7 @@ OApplicationIconControl::OApplicationIconControl(std::unique_ptr<weld::ScrolledW
 
 void OApplicationIconControl::Fill()
 {
-    static const struct CategoryDescriptor
+    static constexpr struct CategoryDescriptor
     {
         TranslateId pLabelResId;
         ElementType eType;

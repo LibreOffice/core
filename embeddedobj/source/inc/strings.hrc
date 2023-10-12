@@ -9,7 +9,7 @@
 
 #pragma once
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define BTN_OVERWRITE_TEXT           NC_("BTN_OVERWRITE_TEXT", "Overwrite")
 #define STR_OVERWRITE_LINK           NC_("STR_OVERWRITE_LINK", "You have made changes to the %{filename}, saving will overwrite the data from the inserted object.\n\nDo you still want to overwrite this data?")

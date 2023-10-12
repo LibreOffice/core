@@ -22,7 +22,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/soerr.hxx>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 const ErrMsgCode RID_ERRCTX[] =
 {

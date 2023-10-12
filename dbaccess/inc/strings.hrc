@@ -21,7 +21,7 @@
 
 #include <unotools/resmgr.hxx>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define RID_STR_CONNECTION_INVALID                  NC_("RID_STR_CONNECTION_INVALID", "No connection could be established.")
 #define RID_STR_TABLE_IS_FILTERED                   NC_("RID_STR_TABLE_IS_FILTERED", "The table $name$ already exists. It is not visible because it has been filtered out.")

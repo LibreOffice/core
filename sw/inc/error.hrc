@@ -25,7 +25,7 @@
 
 #include "swerror.h"
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define ERR_CODE( class, err )  ErrCode(ErrCodeArea::Sw, class, err.GetCode())
 #define WARN_CODE( class, err ) ErrCode(ErrCodeArea::Sw, class, err.GetCode())

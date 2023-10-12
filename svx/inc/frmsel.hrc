@@ -24,7 +24,7 @@
 #include <sal/types.h>
 #include <unotools/resmgr.hxx>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 std::pair<TranslateId, sal_uInt16> RID_SVXSTR_FRMSEL_TEXTS[] =
 {

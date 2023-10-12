@@ -22,7 +22,7 @@
 #include <utility>
 #include <unotools/resmgr.hxx>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 #define DI_TITLE                1
 #define DI_FROM                 2

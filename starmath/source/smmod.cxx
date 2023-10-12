@@ -50,7 +50,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolName( std::u16string_view rExportName
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOL_NAMES[i].mpId))
+        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOL_NAMES[i].getId()))
         {
             aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
             break;
@@ -68,7 +68,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolName( std::u16string_view rUiName
     {
         if (rUiName == SmResId(RID_UI_SYMBOL_NAMES[i]))
         {
-            const char *pKey = RID_UI_SYMBOL_NAMES[i].mpId;
+            const char *pKey = RID_UI_SYMBOL_NAMES[i].getId();
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }
@@ -83,7 +83,7 @@ OUString SmLocalizedSymbolData::GetUiSymbolSetName( std::u16string_view rExportN
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOLSET_NAMES[i].mpId))
+        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOLSET_NAMES[i].getId()))
         {
             aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
             break;
@@ -101,7 +101,7 @@ OUString SmLocalizedSymbolData::GetExportSymbolSetName( std::u16string_view rUiN
     {
         if (rUiName == SmResId(RID_UI_SYMBOLSET_NAMES[i]))
         {
-            const char *pKey = RID_UI_SYMBOLSET_NAMES[i].mpId;
+            const char *pKey = RID_UI_SYMBOLSET_NAMES[i].getId();
             aRes = OUString(pKey, strlen(pKey), RTL_TEXTENCODING_UTF8);
             break;
         }

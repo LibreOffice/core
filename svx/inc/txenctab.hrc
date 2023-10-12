@@ -24,7 +24,7 @@
 #include <unotools/resmgr.hxx>
 #include <utility>
 
-#define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
+#define NC_(Context, String) TranslateId(Context, u8##String)
 
 // Encodings for which no conversion exist yet are commented out.
 

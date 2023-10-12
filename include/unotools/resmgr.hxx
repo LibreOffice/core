@@ -31,12 +31,16 @@ typedef OUString (*ResHookProc)(const OUString& rStr);
 struct UNOTOOLS_DLLPUBLIC TranslateId
 {
     const char* mpContext;
-    const char* mpId;
+    const char8_t* mpId;
 
     inline constexpr TranslateId()
         : mpContext(nullptr), mpId(nullptr) {}
-    inline constexpr TranslateId(const char* pContext, const char* pId)
+    inline TranslateId(const char* pContext, const char* pId)
+        : mpContext(pContext), mpId(reinterpret_cast<char8_t const *>(pId)) {}
+    inline constexpr TranslateId(const char* pContext, const char8_t* pId)
         : mpContext(pContext), mpId(pId) {}
+
+    char const * getId() const { return reinterpret_cast<char const *>(mpId); }
 
     inline operator bool() const { return mpId != nullptr; }
 
