@@ -488,18 +488,14 @@ mkException( OUString const & i_rMessage,
     ucb::IOErrorCode const i_ErrorCode,
     OUString const & i_rUri, OUString const & i_rResource)
 {
-    ucb::InteractiveAugmentedIOException iaioe;
-    iaioe.Message = i_rMessage;
-    iaioe.Classification = task::InteractionClassification_ERROR;
-    iaioe.Code = i_ErrorCode;
-
     const beans::PropertyValue uriProp("Uri",
         -1, uno::Any(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
         "ResourceName",
         -1, uno::Any(i_rResource), static_cast<beans::PropertyState>(0));
-    iaioe.Arguments = { uno::Any(uriProp), uno::Any(rnProp) };
-    return iaioe;
+    return ucb::InteractiveAugmentedIOException(i_rMessage, {},
+                                                task::InteractionClassification_ERROR, i_ErrorCode,
+                                                { uno::Any(uriProp), uno::Any(rnProp) });
 }
 
 /** error handling policy.

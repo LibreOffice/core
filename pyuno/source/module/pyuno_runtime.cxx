@@ -943,8 +943,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         {
             buf.append( ", no traceback available\n" );
         }
-        RuntimeException e;
-        e.Message = buf.makeStringAndClear();
+        RuntimeException e(buf.makeStringAndClear());
 #if OSL_DEBUG_LEVEL > 0
         fprintf( stderr, "Python exception: %s\n",
                  OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );

@@ -303,16 +303,13 @@ namespace dbaui
                 OUString sMessage = DBA_RES(STR_COULDNOTOPEN_LINKEDDOC);
                 sMessage = sMessage.replaceFirst("$file$",_rLinkName);
 
-                css::sdbc::SQLException aSQLException;
-                aSQLException.Message = sMessage;
+                css::sdbc::SQLException aSQLException(sMessage, {}, {}, 0, {});
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
             }
         }
         catch(const css::io::WrongFormatException &e)
         {
-            css::sdbc::SQLException aSQLException;
-            aSQLException.Message = e.Message;
-            aSQLException.Context = e.Context;
+            css::sdbc::SQLException aSQLException(e.Message, e.Context, {}, 0, {});
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
             // more like a hack, insert an empty message
@@ -330,9 +327,7 @@ namespace dbaui
             css::sdbc::SQLException a;
             if ( !(aAny >>= a) || (a.ErrorCode != dbtools::ParameterInteractionCancelled) )
             {
-                css::sdbc::SQLException aSQLException;
-                aSQLException.Message = e.Message;
-                aSQLException.Context = e.Context;
+                css::sdbc::SQLException aSQLException(e.Message, e.Context, {}, 0, {});
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
                 // more like a hack, insert an empty message

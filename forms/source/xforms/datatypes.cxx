@@ -243,10 +243,7 @@ namespace xforms
         OUString sErrorMessage;
         if ( !checkPropertySanity( _nHandle, _rConvertedValue, sErrorMessage ) )
         {
-            IllegalArgumentException aException;
-            aException.Message = sErrorMessage;
-            aException.Context = *this;
-            throw aException;
+            throw IllegalArgumentException(sErrorMessage, *this, 0);
         }
 
         return true;

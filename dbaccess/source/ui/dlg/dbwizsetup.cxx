@@ -702,15 +702,12 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             if ( !lcl_handle( xHandler, aError ) )
             {
-                InteractiveIOException aRequest;
-                aRequest.Classification = InteractionClassification_ERROR;
-                if ( aError.isExtractableTo( ::cppu::UnoType< IOException >::get() ) )
-                    // assume saving the document failed
-                    aRequest.Code = IOErrorCode_CANT_WRITE;
-                else
-                    aRequest.Code = IOErrorCode_GENERAL;
-                aRequest.Message = e.Message;
-                aRequest.Context = e.Context;
+                css::ucb::IOErrorCode code
+                    = aError.isExtractableTo(::cppu::UnoType<IOException>::get())
+                          ? IOErrorCode_CANT_WRITE // assume saving the document failed
+                          : IOErrorCode_GENERAL;
+                InteractiveIOException aRequest(e.Message, e.Context,
+                                                InteractionClassification_ERROR, code);
                 lcl_handle( xHandler, Any( aRequest ) );
             }
         }

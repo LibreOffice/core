@@ -1011,24 +1011,20 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
 
     try
     {
-        SQLContext aError;
-        aError.Context = *this;
-        aError.Message = DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING);
-
+        css::uno::Any next;
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )
-            aError.NextException = _rEvent.Error;
+            next = _rEvent.Error;
         else
         {
             // a non-SQL exception happened
             Exception aException;
             OSL_VERIFY( _rEvent.Error >>= aException );
-            SQLContext aContext;
-            aContext.Context = aException.Context;
-            aContext.Message = aException.Message;
-            aContext.Details = _rEvent.Error.getValueTypeName();
-            aError.NextException <<= aContext;
+            SQLContext aContext(aException.Message, aException.Context, {}, 0, {},
+                                _rEvent.Error.getValueTypeName());
+            next <<= aContext;
         }
+        SQLContext aError(DBA_RES(STR_ERROR_OCCURRED_WHILE_COPYING), *this, {}, 0, next, {});
 
         ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( Any( aError ) ) );
 

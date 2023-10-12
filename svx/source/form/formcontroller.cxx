@@ -3524,9 +3524,7 @@ namespace
     void displayErrorSetFocus(const OUString& _rMessage, const Reference<XControl>& _rxFocusControl,
                               const css::uno::Reference<css::awt::XWindow>& rDialogParent)
     {
-        SQLContext aError;
-        aError.Message = SvxResId(RID_STR_WRITEERROR);
-        aError.Details = _rMessage;
+        SQLContext aError(SvxResId(RID_STR_WRITEERROR), {}, {}, 0, {}, _rMessage);
         displayException(aError, rDialogParent);
 
         if ( _rxFocusControl.is() )
@@ -3926,11 +3924,8 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
         rtl::Reference<OInteractionDisapprove> pDisapprove = new OInteractionDisapprove;
 
         // the request
-        SQLWarning aWarning;
-        aWarning.Message = sTitle;
-        SQLWarning aDetails;
-        aDetails.Message = SvxResId(RID_STR_DELETECONFIRM);
-        aWarning.NextException <<= aDetails;
+        SQLWarning aDetails(SvxResId(RID_STR_DELETECONFIRM), {}, {}, 0, {});
+        SQLWarning aWarning(sTitle, {}, {}, 0, css::uno::Any(aDetails));
 
         rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( Any( aWarning ) );
 

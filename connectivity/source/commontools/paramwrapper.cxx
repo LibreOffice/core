@@ -215,11 +215,7 @@ namespace dbtools::param
             }
             catch( SQLException& e )
             {
-                WrappedTargetException aExceptionWrapper;
-                aExceptionWrapper.Context = e.Context;
-                aExceptionWrapper.Message = e.Message;
-                aExceptionWrapper.TargetException <<= e;
-                throw aExceptionWrapper;
+                throw WrappedTargetException(e.Message, e.Context, css::uno::Any(e));
             }
         }
         else

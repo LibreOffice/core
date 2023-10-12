@@ -1074,10 +1074,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( !mxModel.is() )
     {
-        RuntimeException aException;
-        aException.Message = "createPeer: no model!";
-        aException.Context = static_cast<XAggregation*>(static_cast<cppu::OWeakAggObject*>(this));
-        throw aException;
+        throw RuntimeException("createPeer: no model!", getXWeak());
     }
 
     if( getPeer().is() )

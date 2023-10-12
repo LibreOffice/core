@@ -524,12 +524,8 @@ Any SAL_CALL java_sql_Connection::getWarnings(  )
         SQLException aAsException( java_sql_SQLWarning( warn_base, *this ) );
 
         // translate to warning
-        SQLWarning aWarning;
-        aWarning.Context = aAsException.Context;
-        aWarning.Message = aAsException.Message;
-        aWarning.SQLState = aAsException.SQLState;
-        aWarning.ErrorCode = aAsException.ErrorCode;
-        aWarning.NextException = aAsException.NextException;
+        SQLWarning aWarning(aAsException.Message, aAsException.Context, aAsException.SQLState,
+                            aAsException.ErrorCode, aAsException.NextException);
 
         return Any( aWarning );
     }

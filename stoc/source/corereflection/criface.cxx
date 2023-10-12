@@ -603,17 +603,13 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             }
             TYPELIB_DANGER_RELEASE( pReturnType );
 
-            InvocationTargetException aExc;
-            aExc.Context = *o3tl::doAccess<Reference<XInterface>>(rObj);
-            aExc.Message = "exception occurred during invocation!";
-            uno_any_destruct(
-                &aExc.TargetException,
+            uno_any_destruct(&aRet,
                 reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
-            uno_type_copyAndConvertData(
-                &aExc.TargetException, pUnoExc, cppu::UnoType<Any>::get().getTypeLibType(),
+            uno_type_copyAndConvertData(&aRet, pUnoExc, cppu::UnoType<Any>::get().getTypeLibType(),
                 getReflection()->getUno2Cpp().get() );
             uno_any_destruct( pUnoExc, nullptr );
-            throw aExc;
+            throw InvocationTargetException("exception occurred during invocation!",
+                                            *o3tl::doAccess<Reference<XInterface>>(rObj), aRet);
         }
         else
         {

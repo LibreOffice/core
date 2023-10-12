@@ -515,9 +515,7 @@ namespace frm
             if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
             {
                 // display the error and outta here
-                SQLContext aError;
-                aError.Message = ResourceManager::loadString(RID_STR_SYNTAXERROR);
-                aError.Details = sErrorMessage;
+                SQLContext aError(ResourceManager::loadString(RID_STR_SYNTAXERROR), {}, {}, 0, {}, sErrorMessage);
                 displayException( aError );
                 return false;
             }

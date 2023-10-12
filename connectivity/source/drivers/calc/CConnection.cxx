@@ -142,12 +142,11 @@ Reference< XSpreadsheetDocument> const & OCalcConnection::acquireDoc()
             Exception aLoaderError;
             OSL_VERIFY( aLoaderException >>= aLoaderError );
 
-            SQLException aDetailException;
-            aDetailException.Message = m_aResources.getResourceStringWithSubstitution(
-                STR_LOAD_FILE_ERROR_MESSAGE,
-                "$exception_type$", aLoaderException.getValueTypeName(),
-                "$error_message$", aLoaderError.Message
-            );
+            SQLException aDetailException(m_aResources.getResourceStringWithSubstitution(
+                                              STR_LOAD_FILE_ERROR_MESSAGE, "$exception_type$",
+                                              aLoaderException.getValueTypeName(),
+                                              "$error_message$", aLoaderError.Message),
+                                          {}, {}, 0, {});
             aErrorDetails <<= aDetailException;
         }
 

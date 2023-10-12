@@ -126,8 +126,7 @@ void View::rename( const OUString& newName )
         }
         catch( css::sdbc::SQLException &e )
         {
-            OUString buf( e.Message + "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)" );
-            e.Message = buf;
+            e.Message += "(NOTE: Only postgresql server >= V8.1 support changing a table's schema)";
             throw;
         }
 

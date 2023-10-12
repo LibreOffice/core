@@ -682,19 +682,16 @@ void Test_Impl::setValues( sal_Bool bBool,
 
 ::test::testtools::bridgetest::TestDataElements Test_Impl::raiseException( sal_Int16 nArgumentPos, const OUString & rMsg, const Reference< XInterface > & xContext )
 {
-    IllegalArgumentException aExc;
-    aExc.ArgumentPosition = nArgumentPos;
-    aExc.Message          = _aData.String = rMsg;
-    aExc.Context          = _aData.Interface = xContext;
-    throw aExc;
+    _aData.String = rMsg;
+    _aData.Interface = xContext;
+    throw IllegalArgumentException(rMsg, xContext, nArgumentPos);
 }
 
 void Test_Impl::raiseRuntimeExceptionOneway( const OUString & rMsg, const Reference< XInterface > & xContext )
 {
-    RuntimeException aExc;
-    aExc.Message          = _aData.String = rMsg;
-    aExc.Context          = _aData.Interface = xContext;
-    throw aExc;
+    _aData.String = rMsg;
+    _aData.Interface = xContext;
+    throw RuntimeException(rMsg, xContext);
 }
 
 static void dothrow2(const RuntimeException& e)
@@ -745,9 +742,7 @@ sal_Int32 Test_Impl::getRuntimeException()
 
 void Test_Impl::setRuntimeException( sal_Int32 )
 {
-    RuntimeException aExc;
-    aExc.Message          = _aData.String;
-    aExc.Context          = _aData.Interface;
+    RuntimeException aExc(_aData.String, _aData.Interface);
     throwException( Any( aExc ) );
 }
 

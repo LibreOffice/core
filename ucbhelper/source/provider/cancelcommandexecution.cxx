@@ -80,12 +80,8 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
     {
         // Fast path
 
-        ucb::InteractiveAugmentedIOException aRequest;
-        aRequest.Message         = rMessage;
-        aRequest.Context         = xContext;
-        aRequest.Classification  = task::InteractionClassification_ERROR;
-        aRequest.Code            = eError;
-        aRequest.Arguments       = rArgs;
+        ucb::InteractiveAugmentedIOException aRequest(
+            rMessage, xContext, task::InteractionClassification_ERROR, eError, rArgs);
         cppu::throwException( uno::Any( aRequest ) );
     }
     else

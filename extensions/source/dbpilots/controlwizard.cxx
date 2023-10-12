@@ -575,9 +575,8 @@ namespace dbp
         {   // an SQLException (or derivee) was thrown ...
 
             // prepend an extra SQLContext explaining what we were doing
-            SQLContext aContext;
-            aContext.Message = compmodule::ModuleRes(RID_STR_COULDNOTOPENTABLE);
-            aContext.NextException = aSQLException;
+            SQLContext aContext(compmodule::ModuleRes(RID_STR_COULDNOTOPENTABLE), {}, {}, 0,
+                                aSQLException, {});
 
             // create an interaction handler to display this exception
             Reference< XInteractionHandler > xHandler = getInteractionHandler(m_xAssistant.get());

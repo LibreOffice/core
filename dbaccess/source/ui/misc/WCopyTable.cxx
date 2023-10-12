@@ -842,8 +842,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
                     {
 
                         OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
-                        SQLContext aError;
-                        aError.Message = sMsg;
+                        SQLContext aError(sMsg, {}, {}, 0, {}, {});
                         ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( Any( aError ) ) );
                         ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
                         xRequest->addContinuation( xYes );

@@ -1164,15 +1164,11 @@ void OTableController::alterColumns()
                 }
                 catch (const SQLException&)
                 {
+                    const auto caughtException = ::cppu::getCaughtException();
                     OUString sError( DBA_RES( STR_TABLEDESIGN_COULD_NOT_DROP_COL ) );
                     sError = sError.replaceFirst( "$column$", rColumnName );
 
-                    SQLException aNewException;
-                    aNewException.Message = sError;
-                    aNewException.SQLState = "S1000";
-                    aNewException.NextException = ::cppu::getCaughtException();
-
-                    throw aNewException;
+                    throw SQLException(sError, {}, "S1000", 0, caughtException);
                 }
             }
         }

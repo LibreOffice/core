@@ -546,17 +546,13 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
             // Overwrite = false and file exists
         {
-            NameClashException excep;
-            excep.Name = getTitle(aUncPath);
-            excep.Classification = InteractionClassification_ERROR;
-            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
-            excep.Message = "file exists and overwrite forbidden";
+            NameClashException excep("file exists and overwrite forbidden",
+                                     Reference<XInterface>(xComProc, UNO_QUERY),
+                                     InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
             cancelCommandExecution( Any(excep), xEnv );
         }
         else if( errorCode == TASKHANDLING_INVALID_NAME_MKDIR )
         {
-            InteractiveAugmentedIOException excep;
-            excep.Code = IOErrorCode_INVALID_CHARACTER;
             PropertyValue prop;
             prop.Name = "ResourceName";
             prop.Handle = -1;
@@ -566,10 +562,9 @@ namespace fileaccess {
                     rtl_UriDecodeWithCharset,
                     RTL_TEXTENCODING_UTF8));
             prop.Value <<= aClashingName;
-            excep.Arguments = { Any(prop) };
-            excep.Classification = InteractionClassification_ERROR;
-            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
-            excep.Message = "the name contained invalid characters";
+            InteractiveAugmentedIOException excep(
+                "the name contained invalid characters", Reference<XInterface>(xComProc, UNO_QUERY),
+                InteractionClassification_ERROR, IOErrorCode_INVALID_CHARACTER, { Any(prop) });
             if(isHandled)
                 throw excep;
             cancelCommandExecution( Any(excep), xEnv );
@@ -583,11 +578,8 @@ namespace fileaccess {
         }
         else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
         {
-            NameClashException excep;
-            excep.Name = getTitle(aUncPath);
-            excep.Classification = InteractionClassification_ERROR;
-            excep.Context = xComProc;
-            excep.Message = "folder exists and overwrite forbidden";
+            NameClashException excep("folder exists and overwrite forbidden", xComProc,
+                                     InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
             if(isHandled)
                 throw excep;
             cancelCommandExecution( Any(excep), xEnv );
@@ -835,21 +827,18 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NAMECLASH_FOR_COPY   ||
                  errorCode == TASKHANDLING_NAMECLASH_FOR_MOVE )
         {
-            NameClashException excep;
-            excep.Name = getTitle(aUncPath);
-            excep.Classification = InteractionClassification_ERROR;
-            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
-            excep.Message = "name clash during copy or move";
+            NameClashException excep("name clash during copy or move",
+                                     Reference<XInterface>(xComProc, UNO_QUERY),
+                                     InteractionClassification_ERROR, OUString(getTitle(aUncPath)));
 
             cancelCommandExecution(Any(excep), xEnv);
         }
         else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
                  errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
         {
-            UnsupportedNameClashException excep;
-            excep.NameClash = minorCode;
-            excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
-            excep.Message = "name clash value not supported during copy or move";
+            UnsupportedNameClashException excep(
+                "name clash value not supported during copy or move",
+                Reference<XInterface>(xComProc, UNO_QUERY), minorCode);
 
             cancelCommandExecution(Any(excep), xEnv);
         }

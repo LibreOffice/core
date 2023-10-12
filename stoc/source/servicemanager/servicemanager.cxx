@@ -687,8 +687,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     }
     else
     {
-        UnknownPropertyException except;
-        except.Message =  "ServiceManager : unknown property " + PropertyName;
+        UnknownPropertyException except("ServiceManager : unknown property " + PropertyName, {});
         throw except;
     }
 }

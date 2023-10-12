@@ -639,10 +639,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
                     }
                     else
                     {
-                        CannotConvertException aExc;
-                        aExc.Context = *this;
-                        aExc.Message = "invocation type mismatch!";
-                        throw aExc;
+                        throw CannotConvertException("invocation type mismatch!", *this, {}, 0, 0);
                     }
                 }
 
@@ -675,10 +672,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         return aRet;
     }
 
-    RuntimeException aExc;
-    aExc.Context = *this;
-    aExc.Message = "invocation lacking of introspection access!";
-    throw aExc;
+    throw RuntimeException("invocation lacking of introspection access!", *this);
 }
 
 namespace {

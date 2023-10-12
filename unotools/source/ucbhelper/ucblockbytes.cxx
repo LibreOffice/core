@@ -728,14 +728,13 @@ static bool UCBOpenContentSync(
             {
                 Reference<XInteractionRetry> xRet;
                 if(xInteract.is()) {
-                    InteractiveNetworkConnectException aExcep;
                     INetURLObject aURL(
                         xContId.is() ?
                         xContId->getContentIdentifier() :
                         OUString() );
-                    aExcep.Server = aURL.GetHost();
-                    aExcep.Classification = InteractionClassification_ERROR;
-                    aExcep.Message = "server not responding after five seconds";
+                    InteractiveNetworkConnectException aExcep(
+                        "server not responding after five seconds", {},
+                        InteractionClassification_ERROR, aURL.GetHost());
                     Any request;
                     request <<= aExcep;
                     rtl::Reference<ucbhelper::InteractionRequest> xIR =

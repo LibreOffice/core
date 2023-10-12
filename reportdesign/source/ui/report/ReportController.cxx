@@ -2851,9 +2851,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
         dbtools::SQLExceptionInfo aInfo;
         if ( !bEnabled )
         {
-            sdb::SQLContext aFirstMessage;
-            OUString sInfo = RptResId( pErrorId );
-            aFirstMessage.Message = sInfo;
+            sdb::SQLContext aFirstMessage(RptResId(pErrorId), {}, {}, 0, {}, {});
             aInfo = aFirstMessage;
             if ( isEditable() )
             {
@@ -2898,29 +2896,25 @@ uno::Reference<frame::XModel> OReportController::executeReport()
             {
                 uno::Any aCaughtException( ::cppu::getCaughtException() );
 
-                // our first message says: we caught an exception
-                sdb::SQLContext aFirstMessage;
-                OUString sInfo(RptResId(RID_STR_CAUGHT_FOREIGN_EXCEPTION));
-                sInfo = sInfo.replaceAll("$type$", aCaughtException.getValueTypeName());
-                aFirstMessage.Message = sInfo;
-
-                // our second message: the message of the exception we caught
-                sdbc::SQLException aSecondMessage;
-                aSecondMessage.Message = e.Message;
-                aSecondMessage.Context = e.Context;
-
                 // maybe our third message: the message which is wrapped in the exception we caught
-                sdbc::SQLException aThirdMessage;
-                lang::WrappedTargetException aWrapped;
-                if ( aCaughtException >>= aWrapped )
+                css::uno::Any aOptThirdMessage;
+                if (lang::WrappedTargetException aWrapped; aCaughtException >>= aWrapped)
                 {
+                    sdbc::SQLException aThirdMessage;
                     aThirdMessage.Message = aWrapped.Message;
                     aThirdMessage.Context = aWrapped.Context;
+                    if ( !aThirdMessage.Message.isEmpty() )
+                        aOptThirdMessage <<= aThirdMessage;
                 }
 
-                if ( !aThirdMessage.Message.isEmpty() )
-                    aSecondMessage.NextException <<= aThirdMessage;
-                aFirstMessage.NextException <<= aSecondMessage;
+
+                // our second message: the message of the exception we caught
+                sdbc::SQLException aSecondMessage(e.Message, e.Context, {}, 0, aOptThirdMessage);
+
+                // our first message says: we caught an exception
+                OUString sInfo(RptResId(RID_STR_CAUGHT_FOREIGN_EXCEPTION));
+                sInfo = sInfo.replaceAll("$type$", aCaughtException.getValueTypeName());
+                sdb::SQLContext aFirstMessage(sInfo, {}, {}, 0, css::uno::Any(aSecondMessage), {});
 
                 aInfo = aFirstMessage;
             }

@@ -2422,9 +2422,7 @@ namespace pcr
             if ( aParser.GetProtocol() != INetProtocol::NotValid )
                 sDataSourceName = aParser.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );
             OUString sInfo(PcrRes(RID_STR_UNABLETOCONNECT).replaceAll("$name$", sDataSourceName));
-            SQLContext aContext;
-            aContext.Message = sInfo;
-            aContext.NextException = aError.get();
+            SQLContext aContext(sInfo, {}, {}, 0, aError.get(), {});
             impl_displaySQLError_nothrow( aContext );
         }
 

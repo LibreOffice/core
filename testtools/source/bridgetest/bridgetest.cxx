@@ -1005,7 +1005,8 @@ static bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
         bReturn = (
 #if OSL_DEBUG_LEVEL == 0
             // java stack traces trash Message
-            e.Message == STRING_TEST_CONSTANT &&
+            // The message might also contain source location
+            e.Message.indexOf(STRING_TEST_CONSTANT) >= 0 &&
 #endif
             xLBT->getInterface() == e.Context &&
             x == e.Context );

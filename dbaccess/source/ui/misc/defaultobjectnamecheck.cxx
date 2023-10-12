@@ -58,9 +58,8 @@ namespace dbaui
     {
         void lcl_fillNameExistsError( std::u16string_view _rObjectName, SQLExceptionInfo& _out_rErrorToDisplay )
         {
-            SQLException aError;
             OUString sErrorMessage = DBA_RES(STR_NAMED_OBJECT_ALREADY_EXISTS);
-            aError.Message = sErrorMessage.replaceAll("$#$", _rObjectName);
+            SQLException aError(sErrorMessage.replaceAll("$#$", _rObjectName), {}, {}, 0, {});
             _out_rErrorToDisplay = aError;
         }
 

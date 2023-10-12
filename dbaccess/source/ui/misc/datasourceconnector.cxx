@@ -159,9 +159,7 @@ namespace dbaui
                         sMessage = sMessage.replaceFirst( "$buttontext$", GetStandardText( StandardButtonType::More ) );
                         sMessage = removeMnemonicFromString( sMessage );
 
-                        SQLWarning aContext;
-                        aContext.Message = sMessage;
-                        aContext.NextException = aWarnings;
+                        SQLWarning aContext(sMessage, {}, {}, 0, aWarnings);
                         aInfo = aContext;
                     }
                     xConnectionWarnings->clearWarnings();
@@ -176,10 +174,7 @@ namespace dbaui
         {
             if ( !m_sContextInformation.isEmpty() )
             {
-                SQLException aError;
-                aError.Message = m_sContextInformation;
-                aError.NextException = aInfo.get();
-
+                SQLException aError(m_sContextInformation, {}, {}, 0, aInfo.get());
                 aInfo = aError;
             }
         }

@@ -413,17 +413,13 @@ const Sequence< sal_Int8 > & OConnection::getUnoTunnelId()
 
 void OConnection::throwUrlNotValid(const OUString & _rsUrl,const OUString & _rsMessage)
 {
-    SQLException aError;
-    aError.Message = getResources().getResourceStringWithSubstitution(
-                STR_NO_VALID_FILE_URL,
-                "$URL$", _rsUrl
-            );
-
-    aError.SQLState = "S1000";
-    aError.ErrorCode = 0;
-    aError.Context = static_cast< XConnection* >(this);
+    XConnection* context = this;
+    css::uno::Any next;
     if (!_rsMessage.isEmpty())
-        aError.NextException <<= SQLException(_rsMessage, aError.Context, OUString(), 0, Any());
+        next <<= SQLException(_rsMessage, context, OUString(), 0, Any());
+    SQLException aError(
+        getResources().getResourceStringWithSubstitution(STR_NO_VALID_FILE_URL, "$URL$", _rsUrl),
+        context, "S1000", 0, next);
 
     throw aError;
 }

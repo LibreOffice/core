@@ -558,10 +558,10 @@ namespace abp
                 if ( aException.Message.isEmpty() )
                 {
                     // prepend some context info
-                    SQLContext aDetailedError;
-                    aDetailedError.Message = compmodule::ModuleRes(RID_STR_NOCONNECTION);
-                    aDetailedError.Details = compmodule::ModuleRes(RID_STR_PLEASECHECKSETTINGS);
-                    aDetailedError.NextException = aError;
+                    SQLContext aDetailedError(compmodule::ModuleRes(RID_STR_NOCONNECTION), // message
+                                              {}, {}, 0,
+                                              aError, // next exception
+                                              compmodule::ModuleRes(RID_STR_PLEASECHECKSETTINGS)); // details
                     // handle (aka display) the new context info
                     xInteractions->handle( new OInteractionRequest( Any( aDetailedError ) ) );
                 }

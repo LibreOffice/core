@@ -614,11 +614,9 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
 
 void OQueryController::impl_showAutoSQLViewError( const css::uno::Any& _rErrorDetails )
 {
-    SQLContext aErrorContext;
-    aErrorContext.Message = lcl_getObjectResourceString( STR_ERROR_PARSING_STATEMENT, m_nCommandType );
-    aErrorContext.Context = *this;
-    aErrorContext.Details = lcl_getObjectResourceString( STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType );
-    aErrorContext.NextException = _rErrorDetails;
+    SQLContext aErrorContext(
+        lcl_getObjectResourceString(STR_ERROR_PARSING_STATEMENT, m_nCommandType), *this, {}, 0,
+        _rErrorDetails, lcl_getObjectResourceString(STR_INFO_OPENING_IN_SQL_VIEW, m_nCommandType));
     showError( aErrorContext );
 }
 

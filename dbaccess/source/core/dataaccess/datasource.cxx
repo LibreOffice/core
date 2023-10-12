@@ -766,9 +766,9 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         OUString sMessage = DBA_RES(pExceptionMessageId)
             .replaceAll("$name$", m_pImpl->m_sConnectURL);
 
-        SQLContext aContext;
-        aContext.Message = DBA_RES(RID_STR_CONNECTION_REQUEST).
-            replaceFirst("$name$", m_pImpl->m_sConnectURL);
+        SQLContext aContext(
+            DBA_RES(RID_STR_CONNECTION_REQUEST).replaceFirst("$name$", m_pImpl->m_sConnectURL),
+            {}, {}, 0, {}, {});
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), Any( aContext ) );
     }

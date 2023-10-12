@@ -2971,8 +2971,7 @@ bool DbFilterField::commitControl()
             else
             {
 
-                SQLException aError;
-                aError.Message = aErrorMsg;
+                SQLException aError(aErrorMsg, {}, {}, 0, {});
                 displayException(aError, VCLUnoHelper::GetInterface(m_pWindow->GetParent()));
                     // TODO: transport the title
 

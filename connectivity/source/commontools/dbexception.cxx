@@ -66,8 +66,7 @@ SQLExceptionInfo::SQLExceptionInfo(const css::sdb::SQLContext& _rError)
 
 SQLExceptionInfo::SQLExceptionInfo( const OUString& _rSimpleErrorMessage )
 {
-    SQLException aError;
-    aError.Message = _rSimpleErrorMessage;
+    SQLException aError(_rSimpleErrorMessage, {}, {}, 0, {});
     m_aContent <<= aError;
     implDetermineType();
 }
@@ -177,11 +176,7 @@ SQLExceptionInfo::operator const css::sdb::SQLContext*() const
 
 void SQLExceptionInfo::prepend( const OUString& _rErrorMessage )
 {
-    SQLException aException;
-    aException.Message = _rErrorMessage;
-    aException.ErrorCode = 0;
-    aException.SQLState = "S1000";
-    aException.NextException = m_aContent;
+    SQLException aException(_rErrorMessage, {}, "S1000", 0, m_aContent);
     m_aContent <<= aException;
 
     m_eType = TYPE::SQLException;
@@ -194,23 +189,18 @@ Any SQLExceptionInfo::createException(TYPE eType, const OUString& rErrorMessage,
     switch (eType)
     {
         case TYPE::SQLException:
-            aAppend <<= SQLException();
+            aAppend <<= SQLException(rErrorMessage, {}, rSQLState, nErrorCode, {});
             break;
         case TYPE::SQLWarning:
-            aAppend <<= SQLWarning();
+            aAppend <<= SQLWarning(rErrorMessage, {}, rSQLState, nErrorCode, {});
             break;
         case TYPE::SQLContext:
-            aAppend <<= SQLContext();
+            aAppend <<= SQLContext(rErrorMessage, {}, rSQLState, nErrorCode, {}, {});
             break;
         default:
             TOOLS_WARN_EXCEPTION("connectivity.commontools", "SQLExceptionInfo::createException: invalid exception type: this will crash!");
             break;
     }
-
-    SQLException& pAppendException = const_cast<SQLException &>(*o3tl::forceAccess<SQLException>(aAppend));
-    pAppendException.Message = rErrorMessage;
-    pAppendException.SQLState = rSQLState;
-    pAppendException.ErrorCode = nErrorCode;
 
     return aAppend;
 }

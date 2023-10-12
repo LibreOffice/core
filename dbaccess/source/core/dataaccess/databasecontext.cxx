@@ -307,8 +307,9 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
             OUString sErrorMessage( DBA_RES( RID_STR_FILE_DOES_NOT_EXIST ) );
             ::svt::OFileNotation aTransformer( _sURL );
 
-            SQLException aError;
-            aError.Message = sErrorMessage.replaceAll( "$file$", aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
+            SQLException aError(sErrorMessage.replaceAll(
+                                    "$file$", aTransformer.get(::svt::OFileNotation::N_SYSTEM)),
+                                {}, {}, 0, {});
 
             throw WrappedTargetException( _sURL, *this, Any( aError ) );
         }

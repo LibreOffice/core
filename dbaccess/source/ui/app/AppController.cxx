@@ -2520,11 +2520,8 @@ void OApplicationController::OnFirstControllerConnected()
         if ( Reference< XStorable >( m_xModel, UNO_QUERY_THROW )->isReadonly() )
             return;
 
-        SQLWarning aWarning;
-        aWarning.Message = DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS);
-        SQLException aDetail;
-        aDetail.Message = DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS_DETAIL);
-        aWarning.NextException <<= aDetail;
+        SQLException aDetail(DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS_DETAIL), {}, {}, 0, {});
+        SQLWarning aWarning(DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS), {}, {}, 0, css::uno::Any(aDetail));
 
         Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", nullptr, Any( aWarning ) );
         xDialog->execute();

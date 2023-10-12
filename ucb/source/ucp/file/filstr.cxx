@@ -212,9 +212,7 @@ XStream_impl::closeStream()
         osl::FileBase::RC err = m_aFile.close();
 
         if( err != osl::FileBase::E_None ) {
-            io::IOException ex;
-            ex.Message = "could not close file";
-            throw ex;
+            throw io::IOException("could not close file");
         }
 
         m_nIsOpen = false;

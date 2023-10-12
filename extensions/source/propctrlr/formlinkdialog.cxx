@@ -414,9 +414,7 @@ namespace pcr
             sErrorMessage = sErrorMessage.replaceFirst("#", sCommand);
         }
 
-        SQLContext aContext;
-        aContext.Message = sErrorMessage;
-        aContext.NextException = aErrorInfo.get();
+        SQLContext aContext(sErrorMessage, {}, {}, 0, aErrorInfo.get(), {});
         ::dbtools::showError(aContext, m_xDialog->GetXWindow(), m_xContext);
     }
 

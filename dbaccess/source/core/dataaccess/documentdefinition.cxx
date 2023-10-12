@@ -1566,9 +1566,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                     Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                     if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                     {
-                        css::io::WrongFormatException aWFE;
-                        aWFE.Message = DBA_RES( RID_STR_MISSING_EXTENSION );
-                        throw aWFE;
+                        throw css::io::WrongFormatException(DBA_RES(RID_STR_MISSING_EXTENSION));
                     }
                 }
                 if ( !aClassID.hasElements() )
