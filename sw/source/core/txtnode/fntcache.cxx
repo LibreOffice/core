@@ -516,7 +516,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
         {
             // If the Leading on the Window is also 0, then it has to stay
             // that way (see also StarMath).
-            tools::Long nTmpLeading = aWinMet.GetInternalLeading();
+            sal_Int32 nTmpLeading = aWinMet.GetInternalLeading();
             if( nTmpLeading <= 0 )
             {
                 pWin->SetFont( rMet );
@@ -537,7 +537,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
                 // Those who lie about their Leading, may lie about their
                 // Ascent/Descent as well, hence the Font will be lowered a
                 // little without changing its height.
-                tools::Long nDiff = std::min( rMet.GetDescent() - aWinMet.GetDescent(),
+                sal_Int32 nDiff = std::min( rMet.GetDescent() - aWinMet.GetDescent(),
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
                 {
