@@ -9,7 +9,6 @@
 
 #include <sfx2/lokhelper.hxx>
 #include <sal/types.h>
-#include <sfx2/lokhelper.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
