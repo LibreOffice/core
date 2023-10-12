@@ -7551,6 +7551,9 @@ sal/osl/all/loadmodulerelative.cxx
 sal/osl/all/log.cxx
 sal/osl/all/utility.cxx
 sal/osl/unx/backtrace.c
+sal/osl/unx/backtrace_bsd.c
+sal/osl/unx/backtrace_other.c
+sal/osl/unx/backtrace_solaris.c
 sal/osl/unx/backtrace.h
 sal/osl/unx/backtraceapi.cxx
 sal/osl/unx/conditn.cxx

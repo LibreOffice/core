@@ -17,26 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "backtrace.h"
+// This file is #include from backtrace.c
 
-#if ! HAVE_FEATURE_BACKTRACE /* no GNU backtrace implementation available */
+int backtrace( void **buffer, int max_frames )
+{
+    (void)buffer; (void)max_frames;
+    return 0;
+}
 
-#include <sal/types.h>
+char ** backtrace_symbols(void * const * buffer, int size)
+{
+    (void)buffer; (void)size;
+    return NULL; /*TODO*/
+}
 
-#ifdef __sun /* Solaris */
-
-#include "backtrace_solaris.c"
-
-#elif defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
-
-#include "backtrace_bsd.c"
-
-#else /* not GNU/BSD/Solaris */
-
-#include "backtrace_other.c"
-
-#endif /* not GNU/BSD/Solaris */
-
-#endif /* ! HAVE_FEATURE_BACKTRACE */
+void backtrace_symbols_fd( void **buffer, int size, int fd )
+{
+    (void)buffer; (void)size; (void)fd;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
