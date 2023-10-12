@@ -3272,6 +3272,7 @@ void SwContentTree::Notify(SfxBroadcaster & rBC, SfxHint const& rHint)
             break;
         }
         case SfxHintId::DocChanged:
+            OverlayObject();
             if (!m_bIgnoreDocChange)
             {
                 m_bDocHasChanged = true;
