@@ -1011,7 +1011,7 @@ PointerStyle SdrHdl::GetPointer() const
                 case SdrHdlKind::Ref2 : ePtr=PointerStyle::RefHand;   break;
                 case SdrHdlKind::BezierWeight : ePtr=PointerStyle::MoveBezierWeight; break;
                 case SdrHdlKind::Glue : ePtr=PointerStyle::MovePoint; break;
-                case SdrHdlKind::CustomShape1 : ePtr=PointerStyle::Hand; break;
+                case SdrHdlKind::CustomShape1 : ePtr=PointerStyle::RefHand; break;
                 default:
                     break;
             }
