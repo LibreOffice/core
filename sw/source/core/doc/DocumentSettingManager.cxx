@@ -249,6 +249,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::HYPHENATE_URLS: return mbHyphenateURLs;
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
             return mbDoNotBreakWrappedTables;
+        case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
+            return mbAllowTextAfterFloatingTableBreak;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         default:
@@ -435,6 +437,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES:
             mbDoNotBreakWrappedTables = value;
+            break;
+
+        case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
+            mbAllowTextAfterFloatingTableBreak = value;
             break;
 
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY:
@@ -1049,6 +1055,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbDoNotBreakWrappedTables"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbDoNotBreakWrappedTables).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbAllowTextAfterFloatingTableBreak"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbAllowTextAfterFloatingTableBreak).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));

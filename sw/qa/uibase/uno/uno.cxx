@@ -534,6 +534,32 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testDoNotBreakWrappedTables)
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testAllowTextAfterFloatingTableBreak)
+{
+    // Given an empty document:
+    createSwDoc();
+
+    // When checking the state of the AllowTextAfterFloatingTableBreak compat flag:
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bAllowTextAfterFloatingTableBreak{};
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // i.e. the compat flag was not recognized.
+    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+        >>= bAllowTextAfterFloatingTableBreak;
+    // Then make sure it's false by default:
+    CPPUNIT_ASSERT(!bAllowTextAfterFloatingTableBreak);
+
+    // And when setting AllowTextAfterFloatingTableBreak=true:
+    xSettings->setPropertyValue("AllowTextAfterFloatingTableBreak", uno::Any(true));
+    // Then make sure it gets enabled:
+    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+        >>= bAllowTextAfterFloatingTableBreak;
+    CPPUNIT_ASSERT(bAllowTextAfterFloatingTableBreak);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
