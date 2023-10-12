@@ -154,6 +154,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
     HANDLE_HYPHENATE_URLS,
     HANDLE_DO_NOT_BREAK_WRAPPED_TABLES,
+    HANDLE_ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK,
     HANDLE_NO_NUMBERING_SHOW_FOLLOWBY,
     HANDLE_DROP_CAP_PUNCTUATION
 };
@@ -256,6 +257,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("AutoFirstLineIndentDisregardLineSpace"), HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, cppu::UnoType<bool>::get(), 0 },
         { OUString("HyphenateURLs"), HANDLE_HYPHENATE_URLS, cppu::UnoType<bool>::get(), 0 },
         { OUString("DoNotBreakWrappedTables"), HANDLE_DO_NOT_BREAK_WRAPPED_TABLES, cppu::UnoType<bool>::get(), 0 },
+        { OUString("AllowTextAfterFloatingTableBreak"), HANDLE_ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK, cppu::UnoType<bool>::get(), 0 },
         { OUString("NoNumberingShowFollowBy"), HANDLE_NO_NUMBERING_SHOW_FOLLOWBY, cppu::UnoType<bool>::get(), 0 },
         { OUString("DropCapPunctuation"), HANDLE_DROP_CAP_PUNCTUATION, cppu::UnoType<bool>::get(), 0 },
 
@@ -1078,6 +1080,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             }
         }
         break;
+        case HANDLE_ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
+        {
+            bool bTmp;
+            if (rValue >>= bTmp)
+            {
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK, bTmp);
+            }
+        }
+        break;
         case HANDLE_NO_NUMBERING_SHOW_FOLLOWBY:
         {
             bool bTmp;
@@ -1626,6 +1638,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get(
                 DocumentSettingId::DO_NOT_BREAK_WRAPPED_TABLES);
+        }
+        break;
+        case HANDLE_ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
+        {
+            rValue <<= mpDoc->getIDocumentSettingAccess().get(
+                DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK);
         }
         break;
         case HANDLE_NO_NUMBERING_SHOW_FOLLOWBY:
