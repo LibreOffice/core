@@ -552,7 +552,7 @@ OUString SvxWeightItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_WEIGHT_BLACK
     };
 
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_WEIGHTS) - 1 == WEIGHT_BLACK, "must match");
+    static_assert(std::size(RID_SVXITEMS_WEIGHTS) - 1 == WEIGHT_BLACK, "must match");
     assert(nPos <= sal_uInt16(WEIGHT_BLACK) && "enum overflow!" );
     return EditResId(RID_SVXITEMS_WEIGHTS[nPos]);
 }
@@ -1123,7 +1123,7 @@ OUString SvxUnderlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_UL_BOLDDASHDOTDOT,
         RID_SVXITEMS_UL_BOLDWAVE
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_UL) - 1 == LINESTYLE_BOLDWAVE, "must match");
+    static_assert(std::size(RID_SVXITEMS_UL) - 1 == LINESTYLE_BOLDWAVE, "must match");
     assert(nPos <= sal_uInt16(LINESTYLE_BOLDWAVE) && "enum overflow!");
     return EditResId(RID_SVXITEMS_UL[nPos]);
 }
@@ -1164,7 +1164,7 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
         RID_SVXITEMS_OL_BOLDDASHDOTDOT,
         RID_SVXITEMS_OL_BOLDWAVE
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_OL) - 1 == LINESTYLE_BOLDWAVE, "must match");
+    static_assert(std::size(RID_SVXITEMS_OL) - 1 == LINESTYLE_BOLDWAVE, "must match");
     assert(nPos <= sal_uInt16(LINESTYLE_BOLDWAVE) && "enum overflow!");
     return EditResId(RID_SVXITEMS_OL[nPos]);
 }
@@ -1229,7 +1229,7 @@ OUString SvxCrossedOutItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_STRIKEOUT_SLASH,
         RID_SVXITEMS_STRIKEOUT_X
     };
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_STRIKEOUT) - 1 == STRIKEOUT_X, "must match");
+    static_assert(std::size(RID_SVXITEMS_STRIKEOUT) - 1 == STRIKEOUT_X, "must match");
     assert(nPos <= sal_uInt16(STRIKEOUT_X) && "enum overflow!");
     return EditResId(RID_SVXITEMS_STRIKEOUT[nPos]);
 }
@@ -1761,7 +1761,7 @@ OUString SvxCaseMapItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_CASEMAP_SMALLCAPS
     };
 
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_CASEMAP) == size_t(SvxCaseMap::End), "must match");
+    static_assert(std::size(RID_SVXITEMS_CASEMAP) == size_t(SvxCaseMap::End), "must match");
     assert(nPos < sal_uInt16(SvxCaseMap::End) && "enum overflow!");
     return EditResId(RID_SVXITEMS_CASEMAP[nPos]);
 }
@@ -1881,7 +1881,7 @@ OUString SvxEscapementItem::GetValueTextByPos( sal_uInt16 nPos )
         RID_SVXITEMS_ESCAPEMENT_SUB
     };
 
-    static_assert(SAL_N_ELEMENTS(RID_SVXITEMS_ESCAPEMENT) == size_t(SvxEscapement::End), "must match");
+    static_assert(std::size(RID_SVXITEMS_ESCAPEMENT) == size_t(SvxEscapement::End), "must match");
     assert(nPos < sal_uInt16(SvxEscapement::End) && "enum overflow!");
     return EditResId(RID_SVXITEMS_ESCAPEMENT[nPos]);
 }
@@ -2554,13 +2554,13 @@ static TranslateId RID_SVXITEMS_RELIEF[] =
 
 OUString SvxCharReliefItem::GetValueTextByPos(sal_uInt16 nPos)
 {
-    assert(nPos < SAL_N_ELEMENTS(RID_SVXITEMS_RELIEF) && "enum overflow");
+    assert(nPos < std::size(RID_SVXITEMS_RELIEF) && "enum overflow");
     return EditResId(RID_SVXITEMS_RELIEF[nPos]);
 }
 
 sal_uInt16 SvxCharReliefItem::GetValueCount() const
 {
-    return SAL_N_ELEMENTS(RID_SVXITEMS_RELIEF) - 1;
+    return std::size(RID_SVXITEMS_RELIEF) - 1;
 }
 
 bool SvxCharReliefItem::GetPresentation
