@@ -2334,7 +2334,7 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
 
     // no layout frame means outline folding is set to include sub levels and the outline node has
     // a parent outline node with outline content visible attribute false (folded outline content)
-    if (!pOutlineNode->GetTextNode()->getLayoutFrame(nullptr))
+    if (!pOutlineNode->GetTextNode()->getLayoutFrame(GetLayout()))
         return false;
 
     // try the next node to determine if this outline node has visible content
@@ -2357,7 +2357,7 @@ bool SwWrtShell::IsOutlineContentVisible(const size_t nPos)
             return GetAttrOutlineContentVisible(nPos);
 
         if (aIdx.GetNode().IsTextNode())
-            return aIdx.GetNode().GetTextNode()->getLayoutFrame(nullptr);
+            return aIdx.GetNode().GetTextNode()->getLayoutFrame(GetLayout());
         if (aIdx.GetNode().IsTableNode())
         {
             SwTable& rTable = aIdx.GetNode().GetTableNode()->GetTable();
@@ -2592,43 +2592,24 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
     }
     else
     {
-        if (SdrView* pSdrView = GetDrawView(); pSdrView && pSdrView->IsTextEdit() )
-        {
-            bool bLockView = IsViewLocked();
-            LockView(true);
-            EndTextEdit();
-            LockView(bLockView);
-        }
-        if (IsSelFrameMode() || IsObjSelected())
-        {
-            UnSelectFrame();
-            LeaveSelFrameMode();
-            GetView().LeaveDrawCreate();
-            EnterStdMode();
-        }
+        AssureStdMode();
 
-        // Get current frame in which the cursor is positioned for use in placing the cursor.
-        const SwFrame* pCurrFrame = GetCurrFrame(false);
-
+        // Get the outline position of the cursor so the cursor can be place at a visible outline
+        // node if it is not visible after InvalidateOutlineContentVisiblity below.
         SwOutlineNodes::size_type nPos = GetOutlinePos();
 
         StartAction();
         InvalidateOutlineContentVisibility();
         EndAction();
 
-        // If needed, find visible outline node frame to place cursor.
-        if (!pCurrFrame || !pCurrFrame->isFrameAreaDefinitionValid() || pCurrFrame->IsInDtor() ||
-                (nPos != SwOutlineNodes::npos &&
-                 !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr)))
+        // If needed, find a visible outline node to place the cursor.
+        if (nPos != SwOutlineNodes::npos && !IsOutlineContentVisible(nPos))
         {
             while (nPos != SwOutlineNodes::npos &&
-                   !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(nullptr))
+                   !GetNodes().GetOutLineNds()[nPos]->GetTextNode()->getLayoutFrame(GetLayout()))
                 --nPos;
             if (nPos != SwOutlineNodes::npos)
-            {
-                EnterStdMode();
                 GotoOutline(nPos);
-            }
         }
     }
     GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
