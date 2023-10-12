@@ -89,7 +89,8 @@ $(call gb_ExternalProject_get_state_target,openssl,build):
 		&& $(MAKE) build_libs \
 			CC="$(CC) -fPIC \
 				$(if $(filter TRUE, $(ENABLE_DBGUTIL)), -DPURIFY,) \
-				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden)" \
+				$(if $(filter-out WNT MACOSX,$(OS)),-fvisibility=hidden) \
+				$(if $(filter ANDROID,$(OS)),-DBROKEN_CLANG_ATOMICS)" \
 		&& ln -s . lib \
 	)
 	$(call gb_Trace_EndRange,openssl,EXTERNAL)
