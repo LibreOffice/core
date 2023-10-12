@@ -104,6 +104,7 @@ public:
         }
     }
 
+#if !(defined _MSC_VER && _MSC_VER == 1937 && defined _MANAGED)
 #if HAVE_CPP_CONSTEVAL
     consteval
 #else
@@ -117,6 +118,7 @@ public:
             more.buffer[i] = literal[i];
         }
     }
+#endif
 
     constexpr sal_Int32 getLength() const { return more.length; }
 

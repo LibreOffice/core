@@ -122,7 +122,9 @@ public:
     explicit OStringBuffer(bool) = delete;
     explicit OStringBuffer(char) = delete;
     explicit OStringBuffer(wchar_t) = delete;
+#if !(defined _MSC_VER && _MSC_VER == 1937 && defined _MANAGED)
     explicit OStringBuffer(char8_t) = delete;
+#endif
     explicit OStringBuffer(char16_t) = delete;
     explicit OStringBuffer(char32_t) = delete;
 #endif

@@ -246,7 +246,7 @@ struct ConstCharArrayDetector< const char[ 1 ], T >
 };
 #endif
 
-#if defined LIBO_INTERNAL_ONLY
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER == 1937 && defined _MANAGED)
 template<std::size_t N, typename T>
 struct ConstCharArrayDetector<char8_t const [N], T> {
     using Type = T;
