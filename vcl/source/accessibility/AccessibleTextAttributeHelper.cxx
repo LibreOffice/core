@@ -27,6 +27,16 @@
 
 namespace
 {
+OUString lcl_ConvertCharEscapement(sal_Int16 nEscapement)
+{
+    if (nEscapement > 0)
+        return "super";
+    if (nEscapement < 0)
+        return "sub";
+
+    return "baseline";
+}
+
 OUString lcl_convertFontWeight(double fontWeight)
 {
     if (fontWeight == css::awt::FontWeight::THIN || fontWeight == css::awt::FontWeight::ULTRALIGHT)
@@ -179,6 +189,12 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
             sAttribute = "color";
             sValue = lcl_ConvertColor(
                 Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
+        }
+        else if (prop.Name == "CharEscapement")
+        {
+            sAttribute = "text-position";
+            const sal_Int16 nEscapement = *o3tl::doAccess<sal_Int16>(prop.Value);
+            sValue = lcl_ConvertCharEscapement(nEscapement);
         }
         else if (prop.Name == "CharFontName")
         {
