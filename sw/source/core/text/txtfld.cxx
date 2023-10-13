@@ -58,6 +58,7 @@
 #include <editeng/colritem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 static bool lcl_IsInBody( SwFrame const *pFrame )
 {
@@ -721,7 +722,8 @@ SwNumberPortion *SwTextFormatter::NewNumberPortion( SwTextFormatInfo &rInf ) con
 
                     if ( !aText.isEmpty() || !aHiddenText.isEmpty() )
                     {
-                        if (aText != aHiddenText && !aHiddenText.isEmpty())
+                        bool bDisplayChangedParagraphNumbering = officecfg::Office::Writer::Comparison::DisplayChangedParagraphNumbering::get();
+                        if (bDisplayChangedParagraphNumbering && aText != aHiddenText && !aHiddenText.isEmpty())
                         {
                             bHasHiddenNum = true;
                             // show also original number after the actual one enclosed in [ and ],

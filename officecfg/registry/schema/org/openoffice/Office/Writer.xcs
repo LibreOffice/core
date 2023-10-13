@@ -2622,6 +2622,12 @@
           <desc>Specifies whether RSIDs are stored in the document model.</desc>
         </info>
       </prop>
+      <prop oor:name="DisplayChangedParagraphNumbering" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether changed paragraph numbering is displayed.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
     <group oor:name="Insert">
       <info>
