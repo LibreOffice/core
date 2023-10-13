@@ -27,13 +27,6 @@ inline constexpr OUStringLiteral HID_SDOUTLINEVIEWSHELL = u"SD_HID_SDOUTLINEVIEW
 
 inline constexpr OUStringLiteral HID_SD_WIN_PRESENTATION = u"SD_HID_SD_WIN_PRESENTATION";
 
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE1 = u"SD_HID_SD_HTMLEXPORT_PAGE1";
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE2 = u"SD_HID_SD_HTMLEXPORT_PAGE2";
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE3 = u"SD_HID_SD_HTMLEXPORT_PAGE3";
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE4 = u"SD_HID_SD_HTMLEXPORT_PAGE4";
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE5 = u"SD_HID_SD_HTMLEXPORT_PAGE5";
-inline constexpr OUStringLiteral HID_SD_HTMLEXPORT_PAGE6 = u"SD_HID_SD_HTMLEXPORT_PAGE6";
-
 inline constexpr OUStringLiteral HID_SD_TABBAR_PAGES = u"SD_HID_SD_TABBAR_PAGES";
 inline constexpr OUStringLiteral HID_SD_TABBAR_LAYERS = u"SD_HID_SD_TABBAR_LAYERS";
 

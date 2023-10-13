@@ -55,11 +55,6 @@ const sal_uInt16 nMagic = sal_uInt16(0x1977);
 // Key for the soffice.ini
 constexpr OUStringLiteral KEY_QUALITY = u"JPG-EXPORT-QUALITY";
 
-// The Help-IDs of the pages
-constexpr rtl::OUStringConstExpr aPageHelpIds[NOOFPAGES]
-    = { HID_SD_HTMLEXPORT_PAGE1, HID_SD_HTMLEXPORT_PAGE2, HID_SD_HTMLEXPORT_PAGE3,
-        HID_SD_HTMLEXPORT_PAGE4, HID_SD_HTMLEXPORT_PAGE5, HID_SD_HTMLEXPORT_PAGE6 };
-
 static SvStream& operator>>(SvStream& rIn, SdPublishingDesign& rDesign);
 
 static SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign);
