@@ -247,10 +247,23 @@ public:
 
       @param    str         an OString.
     */
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+    constexpr
+#endif
     OString( const OString & str )
     {
         pData = str.pData;
-        rtl_string_acquire( pData );
+#if defined LIBO_INTERNAL_ONLY && !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
+        if (std::is_constant_evaluated()) {
+            //TODO: We would want to
+            //
+            //   assert(SAL_STRING_IS_STATIC(pData));
+            //
+            // here, but that wouldn't work because read of member `str` of OUStringLiteral's
+            // anonymous union with active member `more` is not allowed in a constant expression.
+        } else
+#endif
+            rtl_string_acquire( pData );
     }
 
 #if defined LIBO_INTERNAL_ONLY
