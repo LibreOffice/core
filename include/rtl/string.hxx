@@ -153,39 +153,6 @@ public:
     };
 };
 
-/**
-  This is intended to be used when declaring compile-time-constant structs or arrays
-  that can be initialised from named OStringLiteral e.g.
-
-    constexpr OStringLiteral AAA = u"aaa";
-    constexpr OStringLiteral BBB = u"bbb";
-    constexpr OStringConstExpr FOO[] { AAA, BBB };
-*/
-class OString;
-class OStringConstExpr
-{
-public:
-    template<std::size_t N> constexpr OStringConstExpr(OStringLiteral<N> const & literal):
-        pData(const_cast<rtl_String *>(&literal.str)) {}
-
-    // prevent mis-use
-    template<std::size_t N> constexpr OStringConstExpr(OStringLiteral<N> && literal)
-        = delete;
-
-    // no destructor necessary because we know we are pointing at a compile-time
-    // constant OStringLiteral, which bypasses ref-counting.
-
-    /**
-      make it easier to pass to OStringBuffer and similar without casting/converting
-    */
-    constexpr std::string_view asView() const { return std::string_view(pData->buffer, pData->length); }
-
-    inline operator const OString&() const;
-
-private:
-    rtl_String* pData;
-};
-
 #if !(defined _MSC_VER && _MSC_VER <= 1929 && defined _MANAGED)
 
 namespace detail {
@@ -2285,11 +2252,6 @@ public:
     Concat(T (& value)[N]) { return OStringConcat<OStringConcatMarker, T[N]>(value); }
 #endif
 };
-
-#if defined LIBO_INTERNAL_ONLY
-// Can only define this after we define OString
-inline OStringConstExpr::operator const OString &() const { return OString::unacquired(&pData); }
-#endif
 
 #if defined LIBO_INTERNAL_ONLY
 inline bool operator ==(OString const & lhs, StringConcatenation<char> const & rhs)

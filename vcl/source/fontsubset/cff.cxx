@@ -433,7 +433,7 @@ constexpr OStringLiteral tok_Regular = "Regular";
 constexpr OStringLiteral tok_Roman = "Roman";
 constexpr OStringLiteral tok_Semibold = "Semibold";
 
-constexpr rtl::OStringConstExpr pStringIds[] = {
+constexpr OString pStringIds[] = {
 /*0*/   tok_notdef,       tok_space,            tok_exclam,           tok_quotedbl,
     tok_numbersign,       tok_dollar,           tok_percent,          tok_ampersand,
     tok_quoteright,       tok_parenleft,        tok_parenright,       tok_asterisk,
