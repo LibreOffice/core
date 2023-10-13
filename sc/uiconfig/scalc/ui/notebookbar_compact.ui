@@ -7156,7 +7156,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="svtlo-ManagedMenuButton" id="Data-StatisticsMenu:MenuStatistic">
+                          <object class="svtlo-ManagedMenuButton" id="Data-StatisticsMenu:Menu Statistic">
                             <property name="label" translatable="yes" context="notebookbar_compact|Statistics">_Statistics</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
