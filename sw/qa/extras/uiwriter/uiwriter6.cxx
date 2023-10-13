@@ -715,7 +715,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113481)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf115013)
 {
-    const OUString sColumnName("Name with spaces, \"quotes\" and \\backslashes");
+    constexpr OUString sColumnName(u"Name with spaces, \"quotes\" and \\backslashes"_ustr);
 
     utl::TempFileNamed aTempDir(nullptr, true);
     aTempDir.EnableKillingFile();

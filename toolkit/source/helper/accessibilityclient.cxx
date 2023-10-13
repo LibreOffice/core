@@ -187,13 +187,11 @@ namespace toolkit
         if (!s_pFactory)
         {
 #ifndef DISABLE_DYNLOADING
-            const OUString sModuleName( SVLIBRARY( "acc" ) );
-            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
+            s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, u"" SVLIBRARY( "acc" ) ""_ustr.pData, 0 );
             if ( s_hAccessibleImplementationModule != nullptr )
             {
-                const OUString sFactoryCreationFunc("getStandardAccessibleFactory");
                 s_pAccessibleFactoryFunc = reinterpret_cast<GetStandardAccComponentFactory>(
-                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData ));
+                    osl_getFunctionSymbol( s_hAccessibleImplementationModule, u"getStandardAccessibleFactory"_ustr.pData ));
 
             }
             OSL_ENSURE( s_pAccessibleFactoryFunc, "AccessibilityClient::ensureInitialized: could not load the library, or not retrieve the needed symbol!" );

@@ -9,22 +9,21 @@
 
 #include <rtl/ustring.hxx>
 
-#include "stringstatic.hxx"
-
-// expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+// expected-error@+1 {{rather declare this as constexpr [loplugin:stringstatic]}}
 static const OUString TEST1 = "xxx";
-
-void f(rtl_uString const*);
-void f(const OUString&);
+static constexpr OUString TEST2 = u"xxx"_ustr;
 
 void test2()
 {
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
+    (void)TEST2;
+    // expected-error@+1 {{rather declare this as constexpr [loplugin:stringstatic]}}
     static const OUString XXX = "xxx";
-    // expected-error@+1 {{rather declare this using OUStringLiteral/OStringLiteral/char[] [loplugin:stringstatic]}}
-    static const OUString XXX2 = "xxx";
+    static constexpr OUString XXX2 = u"xxx"_ustr;
     (void)XXX;
     (void)XXX2;
-    static const OUString DATA = "xxx";
-    f(DATA.pData);
+    // expected-error@+1 {{rather declare this as constexpr [loplugin:stringstatic]}}
+    static const OUString A1[1] = { u"xxx"_ustr };
+    static constexpr OUString A2[1] = { u"xxx"_ustr };
+    (void)A1;
+    (void)A2;
 }

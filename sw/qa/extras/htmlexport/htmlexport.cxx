@@ -1115,7 +1115,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testFieldShadeReqIf)
 
 DECLARE_HTMLEXPORT_TEST(testTdf126879, "tdf126879.odt")
 {
-    const OString aExpected("<!DOCTYPE html>");
+    constexpr OString aExpected("<!DOCTYPE html>"_ostr);
     SvStream* pStream = maTempFile.GetStream(StreamMode::READ);
     CPPUNIT_ASSERT(pStream);
     const OString aActual(read_uInt8s_ToOString(*pStream, aExpected.getLength()));

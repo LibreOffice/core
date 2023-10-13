@@ -166,7 +166,7 @@ void GalleryObjTest::TestThemeURLCase()
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
 
     // Mixed Case Theme Name
-    const OUString myThemeName = "AddyTestTheme";
+    constexpr OUString myThemeName = u"AddyTestTheme"_ustr;
 
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
@@ -243,7 +243,7 @@ void GalleryObjTest::TestGalleryThemeEntry()
 
     std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
-    const OUString myThemeName = "addytesttheme";
+    constexpr OUString myThemeName = u"addytesttheme"_ustr;
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
 
@@ -251,8 +251,8 @@ void GalleryObjTest::TestGalleryThemeEntry()
     const GalleryThemeEntry* mpThemeEntry = pGallery->GetThemeInfo(myThemeName);
 
     // Check Theme Name
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme name doesn't match", mpThemeEntry->GetThemeName(),
-                                 myThemeName);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Theme name doesn't match", myThemeName,
+                                 mpThemeEntry->GetThemeName());
 
     // Check URLs
     GalleryStorageLocations& rGalleryStorageLocations = mpThemeEntry->getGalleryStorageLocations();
@@ -458,7 +458,7 @@ void GalleryObjTest::TestGetThemeNameFromGalleryTheme()
 
     std::unique_ptr<Gallery> pGallery(new Gallery(aGalleryURL));
     CPPUNIT_ASSERT_MESSAGE("Could not create gallery instance", (pGallery != nullptr));
-    const OUString myThemeName = "addytesttheme";
+    constexpr OUString myThemeName = u"addytesttheme"_ustr;
     CPPUNIT_ASSERT_MESSAGE("Could not create theme", pGallery->CreateTheme(myThemeName));
     CPPUNIT_ASSERT_MESSAGE("Could not find theme", pGallery->HasTheme(myThemeName));
 

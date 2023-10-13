@@ -414,7 +414,7 @@ OUString const & XMLRedlineExport::ConvertTypeName(
     else
     {
         OSL_FAIL("unknown redline type");
-        static const OUString sUnknownChange("UnknownChange");
+        static constexpr OUString sUnknownChange(u"UnknownChange"_ustr);
         return sUnknownChange;
     }
 }

@@ -1512,7 +1512,7 @@ namespace comphelper
 
     const OUString& BackupFileHelper::getSafeModeName()
     {
-        static const OUString aSafeMode("SafeMode");
+        static constexpr OUString aSafeMode(u"SafeMode"_ustr);
 
         return aSafeMode;
     }

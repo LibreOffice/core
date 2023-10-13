@@ -334,7 +334,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=13494
     {
-        const OUString aBase("xxAAxxBBxxCCxx");
+        constexpr OUString aBase(u"xxAAxxBBxxCCxx"_ustr);
         const sal_Unicode aTests[] =
         {
             '\'', ';', ',', '.', '!', '@', '#', '%', '&', '*',

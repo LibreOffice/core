@@ -1568,7 +1568,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
 
     // click on the links...
     {
-        OUString const tmp("Table of Contents");
+        OUString constexpr tmp(u"Table of Contents"_ustr);
         pWrtShell->GotoNextTOXBase(&tmp);
     }
 
@@ -1603,7 +1603,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     }
 
     {
-        OUString const tmp("User-Defined1");
+        OUString constexpr tmp(u"User-Defined1"_ustr);
         pWrtShell->GotoNextTOXBase(&tmp);
     }
 
@@ -1653,7 +1653,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testToxmarkLinks)
     }
 
     {
-        OUString const tmp("NewUD!|1");
+        OUString constexpr tmp(u"NewUD!|1"_ustr);
         pWrtShell->GotoNextTOXBase(&tmp);
     }
 

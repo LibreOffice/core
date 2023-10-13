@@ -1767,7 +1767,7 @@ void Test::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("One (Two) Three"), editEng.GetText());
 
     using TF = TransliterationFlags;
-    const OUString sText2 = "Mary Jones met joe Smith. Time Passed.";
+    constexpr OUString sText2 = u"Mary Jones met joe Smith. Time Passed."_ustr;
     int selStart = 12;
     int selEnd = 12;
     ESelection esel(0, selStart, 0, selEnd);
@@ -1870,7 +1870,7 @@ void Test::testTransliterate()
     selStart = 0;
     selEnd = 19;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText3("CURRENT IS EQUAL TO 10 A");
+    constexpr OUString sText3(u"CURRENT IS EQUAL TO 10 A"_ustr);
     editEng.SetText(sText3);
     CPPUNIT_ASSERT_EQUAL(OUString("CURRENT IS EQUAL TO"), editEng.GetText(esel));
 
@@ -1898,7 +1898,7 @@ void Test::testTdf148148()
     int selStart = 0;
     int selEnd = 3;
     ESelection esel(0, selStart, 0, selEnd);
-    const OUString sText1("   text");
+    constexpr OUString sText1(u"   text"_ustr);
     editEng.SetText(sText1);
     CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
 
@@ -1910,7 +1910,7 @@ void Test::testTdf148148()
     selStart = 4;
     selEnd = 8;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText2("text    ");
+    constexpr OUString sText2(u"text    "_ustr);
     editEng.SetText(sText2);
     CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
 
@@ -1923,7 +1923,7 @@ void Test::testTdf148148()
     selStart = 0;
     selEnd = 3;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText3("   -1");
+    constexpr OUString sText3(u"   -1"_ustr);
     editEng.SetText(sText3);
     CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
 
@@ -1935,7 +1935,7 @@ void Test::testTdf148148()
     selStart = 2;
     selEnd = 6;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText4("-1    ");
+    constexpr OUString sText4(u"-1    "_ustr);
     editEng.SetText(sText4);
     CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
 
@@ -1948,7 +1948,7 @@ void Test::testTdf148148()
     selStart = 0;
     selEnd = 5;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText5("   -1");
+    constexpr OUString sText5(u"   -1"_ustr);
     editEng.SetText(sText3);
     CPPUNIT_ASSERT_EQUAL(OUString("   -1"), editEng.GetText(esel));
 
@@ -1960,7 +1960,7 @@ void Test::testTdf148148()
     selStart = 0;
     selEnd = 5;
     esel = ESelection(0, selStart, 0, selEnd);
-    const OUString sText6("-1   ");
+    constexpr OUString sText6(u"-1   "_ustr);
     editEng.SetText(sText4);
     CPPUNIT_ASSERT_EQUAL(OUString("-1   "), editEng.GetText(esel));
 

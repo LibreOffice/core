@@ -1504,7 +1504,7 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLanguageStatus)
         const SfxStringItem* pItem2 = dynamic_cast<const SfxStringItem*>(xItem2.get());
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
-        const OUString aLangBolivia("Spanish (Bolivia);es-BO");
+        constexpr OUString aLangBolivia(u"Spanish (Bolivia);es-BO"_ustr);
         CPPUNIT_ASSERT_EQUAL(aLangBolivia, pItem1->GetValue());
         CPPUNIT_ASSERT_EQUAL(aLangBolivia, pItem2->GetValue());
     }

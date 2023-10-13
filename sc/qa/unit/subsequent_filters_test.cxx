@@ -535,14 +535,13 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest, testBooleanFormatXLSX)
     ScDocument* pDoc = getScDoc();
     SvNumberFormatter* pNumFormatter = pDoc->GetFormatTable();
     // Saved as >"TRUE";"TRUE";"FALSE"< but reading converted back to >BOOLEAN<
-    const OUString aBooleanTypeStr = "BOOLEAN";
 
     for (SCROW i = 0; i <= 1; i++)
     {
         sal_uInt32 nNumberFormat = pDoc->GetNumberFormat(0, i, 0);
         const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
         const OUString& rFormatStr = pNumberFormat->GetFormatstring();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", aBooleanTypeStr, rFormatStr);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", u"BOOLEAN"_ustr, rFormatStr);
     }
 }
 

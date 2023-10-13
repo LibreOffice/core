@@ -259,7 +259,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPaste)
     ScRangeData* pLocal5
         = new ScRangeData(*m_pDoc, "local5", "$A$1"); // implicit relative sheet reference
     ScRangeData* pGlobal = new ScRangeData(*m_pDoc, "global", aAdr);
-    const OUString aGlobal2Symbol("$Sheet1.$A$1:$A$23");
+    constexpr OUString aGlobal2Symbol(u"$Sheet1.$A$1:$A$23"_ustr);
     ScRangeData* pGlobal2 = new ScRangeData(*m_pDoc, "global2", aGlobal2Symbol);
     std::unique_ptr<ScRangeName> pGlobalRangeName(new ScRangeName());
     pGlobalRangeName->insert(pGlobal);
@@ -10046,7 +10046,7 @@ CPPUNIT_TEST_FIXTURE(TestCopyPaste, testCopyPasteFormulasExternalDoc)
     m_xDocShell->DoLoad(pMedium);
 
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString const aExtDocName("file:///extdata.fake");
+    OUString constexpr aExtDocName(u"file:///extdata.fake"_ustr);
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",

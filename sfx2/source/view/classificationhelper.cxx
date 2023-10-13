@@ -52,43 +52,43 @@ namespace
 
 const OUString& PROP_BACNAME()
 {
-    static const OUString sProp("BusinessAuthorizationCategory:Name");
+    static constexpr OUString sProp(u"BusinessAuthorizationCategory:Name"_ustr);
     return sProp;
 }
 
 const OUString& PROP_STARTVALIDITY()
 {
-    static const OUString sProp("Authorization:StartValidity");
+    static constexpr OUString sProp(u"Authorization:StartValidity"_ustr);
     return sProp;
 }
 
 const OUString& PROP_NONE()
 {
-    static const OUString sProp("None");
+    static constexpr OUString sProp(u"None"_ustr);
     return sProp;
 }
 
 const OUString& PROP_IMPACTSCALE()
 {
-    static const OUString sProp("Impact:Scale");
+    static constexpr OUString sProp(u"Impact:Scale"_ustr);
     return sProp;
 }
 
 const OUString& PROP_IMPACTLEVEL()
 {
-    static const OUString sProp("Impact:Level:Confidentiality");
+    static constexpr OUString sProp(u"Impact:Level:Confidentiality"_ustr);
     return sProp;
 }
 
 const OUString& PROP_PREFIX_EXPORTCONTROL()
 {
-    static const OUString sProp("urn:bails:ExportControl:");
+    static constexpr OUString sProp(u"urn:bails:ExportControl:"_ustr);
     return sProp;
 }
 
 const OUString& PROP_PREFIX_NATIONALSECURITY()
 {
-    static const OUString sProp("urn:bails:NationalSecurity:");
+    static constexpr OUString sProp(u"urn:bails:NationalSecurity:"_ustr);
     return sProp;
 }
 
@@ -917,25 +917,25 @@ const OUString& SfxClassificationHelper::policyTypeToString(SfxClassificationPol
 
 const OUString& SfxClassificationHelper::PROP_DOCHEADER()
 {
-    static const OUString sProp("Marking:document-header");
+    static constexpr OUString sProp(u"Marking:document-header"_ustr);
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCFOOTER()
 {
-    static const OUString sProp("Marking:document-footer");
+    static constexpr OUString sProp(u"Marking:document-footer"_ustr);
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_DOCWATERMARK()
 {
-    static const OUString sProp("Marking:document-watermark");
+    static constexpr OUString sProp(u"Marking:document-watermark"_ustr);
     return sProp;
 }
 
 const OUString& SfxClassificationHelper::PROP_PREFIX_INTELLECTUALPROPERTY()
 {
-    static const OUString sProp("urn:bails:IntellectualProperty:");
+    static constexpr OUString sProp(u"urn:bails:IntellectualProperty:"_ustr);
     return sProp;
 }
 

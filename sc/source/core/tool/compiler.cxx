@@ -3235,7 +3235,7 @@ bool ScCompiler::ParsePredetectedReference( const OUString& rName )
     // It could also be a broken invalidated reference that contains #REF!
     // (but is not equal to), which we wrote prior to ODFF and also to ODFF
     // between 2013 and 2016 until 5.1.4
-    const OUString aErrRef("#REF!");    // not localized in ODFF
+    constexpr OUString aErrRef(u"#REF!"_ustr);    // not localized in ODFF
     sal_Int32 nPos = rName.indexOf( aErrRef);
     if (nPos != -1)
     {

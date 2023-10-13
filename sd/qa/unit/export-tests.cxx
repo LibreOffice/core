@@ -736,7 +736,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest, testLinkedGraphicRT)
 
         // Check if the graphic has been imported correctly (before doing the export/import run)
         {
-            const OString sFailedImportMessage = "Failed to correctly import the document";
+            constexpr OString sFailedImportMessage = "Failed to correctly import the document"_ostr;
             SdXImpressDocument* pXImpressDocument
                 = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
             CPPUNIT_ASSERT(pXImpressDocument);

@@ -1776,7 +1776,7 @@ CPPUNIT_TEST_FIXTURE(ScFiltersTest3, testTdf108188_pagestyle)
     createScDoc("ods/tdf108188_pagestyle.ods");
 
     // Check if the user defined page style is present
-    const OUString aTestPageStyle = "TestPageStyle";
+    constexpr OUString aTestPageStyle = u"TestPageStyle"_ustr;
     ScDocument* pDoc = getScDoc();
     CPPUNIT_ASSERT_EQUAL(aTestPageStyle, pDoc->GetPageStyle(0));
 

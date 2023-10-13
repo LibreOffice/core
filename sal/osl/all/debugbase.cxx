@@ -35,9 +35,9 @@ const std::vector<OString>& StaticDebugBaseAddressFilter()
     {
         std::vector<OString> vec;
         rtl_uString * pStr = nullptr;
-        OUString const name(
-            "OSL_DEBUGBASE_STORE_ADDRESSES" );
-        if (osl_getEnvironment( name.pData, &pStr ) == osl_Process_E_None) {
+        if (osl_getEnvironment( u"OSL_DEBUGBASE_STORE_ADDRESSES"_ustr.pData, &pStr )
+            == osl_Process_E_None)
+        {
             OUString const str(pStr);
             rtl_uString_release(pStr);
             sal_Int32 nIndex = 0;

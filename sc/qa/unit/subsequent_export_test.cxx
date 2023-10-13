@@ -343,7 +343,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testTdf99856_dataValidationTest)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
 {
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     createScDoc("fods/protection-key1.fods");
 
@@ -369,7 +369,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF16LErtlSHA1)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA1)
 {
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     createScDoc("fods/protection-key2.fods");
 
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA1)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256ODF12)
 {
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     createScDoc("fods/protection-key3.fods");
 
@@ -423,7 +423,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256ODF12)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256W3C)
 {
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     createScDoc("fods/protection-key4.fods");
 
@@ -451,7 +451,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_UTF8SHA256W3C)
 
 CPPUNIT_TEST_FIXTURE(ScExportTest, testProtectionKeyODS_XL_SHA1)
 {
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     createScDoc("fods/protection-key5.fods");
 

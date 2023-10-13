@@ -53,39 +53,39 @@ namespace pdfi
                                       css::uno::XComponentContext >&    xContext,
                                 const OUString&        rFilterOptions );
 
-    const OUString fontAttributesSuffixes[] = {
+    constexpr OUString fontAttributesSuffixes[] = {
         // Note: for performance consideration, each one listed here is evaluated once,
         // and they are checked from the suffix, thus the order matters.
         // e.g. for "TimesNewRomanPS-BoldItalic", to get "TimesNewRoman", you should
         //      first have "Italic", and then "Bold", then "-", and then "PS".
-        "-VKana",
-        "MT",
-        "PS",
-        "PSMT",
-        "Regular",
-        "Normal",
-        "Book",
-        "Medium",
-        "ExtraBold",
-        "UltraBold",
-        "ExtraLight",
-        "UltraLight",
-        "Bold",
-        "Heavy",
-        "Black",
-        "Italic",
-        "Oblique",
-        "Bold", //BoldItalic, BoldOblique
-        "Light",
-        "Thin",
-        "Semibold",
-        "-Roman",
-        "Reg",
-        "VKana",
-        "-",
-        ",",
-        ";",
-        "PS", // e.g. TimesNewRomanPS-BoldMT
+        u"-VKana"_ustr,
+        u"MT"_ustr,
+        u"PS"_ustr,
+        u"PSMT"_ustr,
+        u"Regular"_ustr,
+        u"Normal"_ustr,
+        u"Book"_ustr,
+        u"Medium"_ustr,
+        u"ExtraBold"_ustr,
+        u"UltraBold"_ustr,
+        u"ExtraLight"_ustr,
+        u"UltraLight"_ustr,
+        u"Bold"_ustr,
+        u"Heavy"_ustr,
+        u"Black"_ustr,
+        u"Italic"_ustr,
+        u"Oblique"_ustr,
+        u"Bold"_ustr, //BoldItalic, BoldOblique
+        u"Light"_ustr,
+        u"Thin"_ustr,
+        u"Semibold"_ustr,
+        u"-Roman"_ustr,
+        u"Reg"_ustr,
+        u"VKana"_ustr,
+        u"-"_ustr,
+        u","_ustr,
+        u";"_ustr,
+        u"PS"_ustr, // e.g. TimesNewRomanPS-BoldMT
     };
 }
 

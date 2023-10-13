@@ -1196,7 +1196,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 CPPUNIT_TEST_FIXTURE(Test, testProtectionKey)
 {
     loadAndReload("protection-key.fodt");
-    OUString const password("1012345678901234567890123456789012345678901234567890");
+    OUString constexpr password(u"1012345678901234567890123456789012345678901234567890"_ustr);
 
     // check 1 invalid OOo legacy password and 3 valid ODF 1.2 passwords
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);

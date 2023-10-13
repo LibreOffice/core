@@ -52,7 +52,7 @@ class Test : public CppUnit::TestFixture
                              OUString("foo").startsWithIgnoreAsciiCase(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWith(std::u16string_view()));
         CPPUNIT_ASSERT_EQUAL(true, OUString("foo").endsWithIgnoreAsciiCase(std::u16string_view()));
-        OUString const foo("foo"); // avoid loplugin:stringconstant, loplugin:stringview
+        OUString constexpr foo(u"foo"_ustr); // avoid loplugin:stringconstant, loplugin:stringview
         CPPUNIT_ASSERT_EQUAL(false, foo == std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(true, foo != std::u16string_view());
         CPPUNIT_ASSERT_EQUAL(false, foo < std::u16string_view());

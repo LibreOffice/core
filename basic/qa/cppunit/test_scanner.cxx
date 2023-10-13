@@ -69,12 +69,12 @@ private:
     CPPUNIT_TEST_SUITE_END();
 };
 
-const OUString cr = "\n";
-const OUString rem = "REM";
-const OUString asdf = "asdf";
-const OUString dot = ".";
-const OUString goto_ = "goto";
-const OUString excl = "!";
+constexpr OUString cr = u"\n"_ustr;
+constexpr OUString rem = u"REM"_ustr;
+constexpr OUString asdf = u"asdf"_ustr;
+constexpr OUString dot = u"."_ustr;
+constexpr OUString goto_ = u"goto"_ustr;
+constexpr OUString excl = u"!"_ustr;
 
 std::vector<Symbol> getSymbols(const OUString& source, sal_Int32& errors, bool bCompatible = false)
 {
@@ -160,14 +160,14 @@ void ScannerTest::testBlankLines()
 
 void ScannerTest::testOperators()
 {
-    const OUString sourceE("=");
-    const OUString sourceLT("<");
-    const OUString sourceGT(">");
-    const OUString sourceLTE("<=");
-    const OUString sourceGTE(">=");
-    const OUString sourceNE("<>");
-    const OUString sourceA(":=");
-    const OUString sourceNot("Not");
+    constexpr OUString sourceE(u"="_ustr);
+    constexpr OUString sourceLT(u"<"_ustr);
+    constexpr OUString sourceGT(u">"_ustr);
+    constexpr OUString sourceLTE(u"<="_ustr);
+    constexpr OUString sourceGTE(u">="_ustr);
+    constexpr OUString sourceNE(u"<>"_ustr);
+    constexpr OUString sourceA(u":="_ustr);
+    constexpr OUString sourceNot(u"Not"_ustr);
 
     std::vector<Symbol> symbols;
 
@@ -239,12 +239,12 @@ void ScannerTest::testOperators()
 
 void ScannerTest::testAlphanum()
 {
-    const OUString source1("asdfghefg");
-    const OUString source3("AdfsaAUdsl10987");
-    const OUString source4("asdfa_mnvcnm");
-    const OUString source5("_asdf1");
-    const OUString source6("_6");
-    const OUString source7("joxclk_");
+    constexpr OUString source1(u"asdfghefg"_ustr);
+    constexpr OUString source3(u"AdfsaAUdsl10987"_ustr);
+    constexpr OUString source4(u"asdfa_mnvcnm"_ustr);
+    constexpr OUString source5(u"_asdf1"_ustr);
+    constexpr OUString source6(u"_6"_ustr);
+    constexpr OUString source7(u"joxclk_"_ustr);
 
     std::vector<Symbol> symbols;
 

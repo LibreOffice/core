@@ -284,26 +284,26 @@ void ScfTools::AppendCString( SvStream& rStrm, OUString& rString, rtl_TextEncodi
 
 const OUString& ScfTools::GetHTMLDocName()
 {
-    static const OUString saHTMLDoc( "HTML_all" );
+    static constexpr OUString saHTMLDoc( u"HTML_all"_ustr );
     return saHTMLDoc;
 }
 
 const OUString& ScfTools::GetHTMLTablesName()
 {
-    static const OUString saHTMLTables( "HTML_tables" );
+    static constexpr OUString saHTMLTables( u"HTML_tables"_ustr );
     return saHTMLTables;
 }
 
 const OUString& ScfTools::GetHTMLIndexPrefix()
 {
-    static const OUString saHTMLIndexPrefix( "HTML_" );
+    static constexpr OUString saHTMLIndexPrefix( u"HTML_"_ustr );
     return saHTMLIndexPrefix;
 
 }
 
 const OUString& ScfTools::GetHTMLNamePrefix()
 {
-    static const OUString saHTMLNamePrefix( "HTML__" );
+    static constexpr OUString saHTMLNamePrefix( u"HTML__"_ustr );
     return saHTMLNamePrefix;
 }
 

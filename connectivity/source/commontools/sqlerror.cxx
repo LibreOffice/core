@@ -79,7 +79,7 @@ namespace connectivity
 
     const OUString& SQLError_Impl::getMessagePrefix()
     {
-        static const OUString s_sMessagePrefix( "[OOoBase]" );
+        static constexpr OUString s_sMessagePrefix( u"[OOoBase]"_ustr );
         return s_sMessagePrefix;
     }
 

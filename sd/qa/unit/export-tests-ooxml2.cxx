@@ -727,8 +727,6 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
     save("Impress Office Open XML");
 
     xmlDocUniquePtr pXmlDocCT = parseExport("ppt/slides/slide1.xml");
-    const OString sPattern(
-        "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]");
     static constexpr OStringLiteral sT("_T_");
     static constexpr OStringLiteral sN("_N_");
     static constexpr OStringLiteral sPropertyName("name");
@@ -742,7 +740,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPresetShapesExport)
                            && o3tl::starts_with(sShapeTypeAndValues[i], "adj");
              ++j)
         {
-            OString sXPath = sPattern.replaceFirst(sT, sType).replaceFirst(sN, OString::number(j));
+            OString sXPath
+                = "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:prstGeom[@prst='_T_']/a:avLst/a:gd[_N_]"_ostr
+                      .replaceFirst(sT, sType)
+                      .replaceFirst(sN, OString::number(j));
             assertXPath(pXmlDocCT, sXPath, sPropertyName,
                         OUString::createFromAscii(sShapeTypeAndValues[i++]));
             assertXPath(pXmlDocCT, sXPath, sPropertyFmla,

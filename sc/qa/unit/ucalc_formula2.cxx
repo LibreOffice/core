@@ -1558,8 +1558,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
     rExtDoc.InsertTab(1, aExtSh2Name);
     rExtDoc.InsertTab(2, aExtSh3Name);
 
-    OUString const name("Name");
-    OUString const value("Value");
+    OUString constexpr name(u"Name"_ustr);
+    OUString constexpr value(u"Value"_ustr);
 
     // Sheet 1
     rExtDoc.SetString(0, 0, 0, name);
@@ -1600,7 +1600,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
     m_pDoc->InsertTab(0, "Test Sheet");
     m_pDoc->SetString(0, 0, 0, "='file:///extdata.fake'#Data1.A1");
     OUString test = m_pDoc->GetString(0, 0, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", test, name);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", name, test);
 
     // After the initial access to the external document, the external ref
     // manager should create sheet cache entries for *all* sheets from that
@@ -1617,7 +1617,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
 
     m_pDoc->SetString(1, 0, 0, "='file:///extdata.fake'#Data1.B1");
     test = m_pDoc->GetString(1, 0, 0);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", test, value);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Value is different from the original", value, test);
 
     m_pDoc->SetString(0, 1, 0, "='file:///extdata.fake'#Data1.A2");
     m_pDoc->SetString(0, 2, 0, "='file:///extdata.fake'#Data1.A3");
@@ -1717,7 +1717,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRef)
 CPPUNIT_TEST_FIXTURE(TestFormula2, testExternalRangeName)
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString const aExtDocName("file:///extdata.fake");
+    OUString constexpr aExtDocName(u"file:///extdata.fake"_ustr);
     SfxMedium* pMed = new SfxMedium(aExtDocName, StreamMode::STD_READWRITE);
     xExtDocSh->DoLoad(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -3514,8 +3514,8 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFormulaErrorPropagation)
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
     ScAddress aPos, aPos2;
-    const OUString aTRUE("TRUE");
-    const OUString aFALSE("FALSE");
+    constexpr OUString aTRUE(u"TRUE"_ustr);
+    constexpr OUString aFALSE(u"FALSE"_ustr);
 
     aPos.Set(0, 0, 0); // A1
     m_pDoc->SetValue(aPos, 1.0);

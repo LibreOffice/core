@@ -63,9 +63,8 @@ OUString applicationDirPath()
 OUString findPickerExecutable()
 {
     const auto path = applicationDirPath();
-    const OUString app("lo_kde5filepicker");
     OUString ret;
-    osl_searchFileURL(app.pData, path.pData, &ret.pData);
+    osl_searchFileURL(u"lo_kde5filepicker"_ustr.pData, path.pData, &ret.pData);
     if (ret.isEmpty())
         throw std::system_error(std::make_error_code(std::errc::no_such_file_or_directory),
                                 "could not find lo_kde5filepicker executable");

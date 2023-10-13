@@ -12,16 +12,7 @@
 #include "check.hxx"
 #include "plugin.hxx"
 
-#include "config_clang.h"
-
-#include <unordered_set>
-
-/** Look for static O*String and O*String[], they can be more efficiently declared as:
-
-        static constexpr OUStringLiteral our_aLBEntryMap[] = {u" ", u", "};
-        static constexpr OUStringLiteral sName(u"name");
-
-    which is more efficient at startup time.
+/** Look for static O*String and O*String[] which can be constepxr.
  */
 namespace {
 
@@ -34,17 +25,7 @@ public:
         FilteringPlugin(rData) {}
 
     void run() override;
-    bool preRun() override;
-    void postRun() override;
     bool VisitVarDecl(VarDecl const*);
-    bool VisitReturnStmt(ReturnStmt const*);
-    bool VisitDeclRefExpr(DeclRefExpr const*);
-    bool VisitMemberExpr(MemberExpr const*);
-    bool VisitUnaryOperator(UnaryOperator const*);
-
-private:
-    std::unordered_set<VarDecl const *> potentialVars;
-    std::unordered_set<VarDecl const *> excludeVars;
 };
 
 void StringStatic::run()
@@ -54,51 +35,17 @@ void StringStatic::run()
             postRun();
 }
 
-bool StringStatic::preRun()
-{
-    StringRef fn(handler.getMainFileName());
-    // passing around pointers to global OUString
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/filter/source/svg/"))
-         return false;
-    // call replaceAll on a 'const OUString", for which there is no OUStringLiteral equivalent
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/i18npool/qa/cppunit/test_breakiterator.cxx"))
-         return false;
-    if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sd/qa/unit/export-tests-ooxml2.cxx"))
-         return false;
-    return true;
-}
-
-void StringStatic::postRun()
-{
-    for (auto const & pVarDecl : excludeVars) {
-        potentialVars.erase(pVarDecl);
-    }
-    for (auto const & varDecl : potentialVars) {
-        report(DiagnosticsEngine::Warning,
-                "rather declare this using OUStringLiteral/OStringLiteral/char[]",
-                varDecl->getLocation())
-            << varDecl->getSourceRange();
-    }
-}
-
 bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
 {
     if (ignoreLocation(varDecl))
         return true;
     QualType qt = varDecl->getType();
     if (!varDecl->isThisDeclarationADefinition()
-        || !qt.isConstQualified())
+        || !qt.isConstQualified() || varDecl->isConstexpr())
         return true;
 
     if (varDecl->hasGlobalStorage())
     {
-        if (varDecl->hasGlobalStorage() && !varDecl->isStaticLocal()) {
-            //TODO: For a non-public static member variable from an included file, we could still
-            // examine it further if all its uses must be seen in that included file:
-            if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation())) {
-                return true;
-            }
-        }
         if (qt->isArrayType())
             qt = qt->getAsArrayTypeUnsafe()->getElementType();
 
@@ -154,88 +101,11 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
                 return true;
         }
     }
-    potentialVars.insert(varDecl);
+    report(DiagnosticsEngine::Warning,
+           "rather declare this as constexpr",
+           varDecl->getLocation())
+        << varDecl->getSourceRange();
 
-    return true;
-}
-
-bool StringStatic::VisitReturnStmt(ReturnStmt const * returnStmt)
-{
-    if (ignoreLocation(returnStmt)) {
-        return true;
-    }
-    if (!returnStmt->getRetValue()) {
-        return true;
-    }
-    DeclRefExpr const * declRef = dyn_cast<DeclRefExpr>(returnStmt->getRetValue());
-    if (!declRef) {
-        return true;
-    }
-    VarDecl const * varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-    if (varDecl) {
-        excludeVars.insert(varDecl);
-    }
-    return true;
-}
-
-bool StringStatic::VisitDeclRefExpr(DeclRefExpr const * declRef)
-{
-    if (ignoreLocation(declRef))
-        return true;
-    VarDecl const * varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-    if (!varDecl)
-        return true;
-    if (potentialVars.count(varDecl) == 0)
-        return true;
-    // ignore globals that are used in CPPUNIT_ASSERT expressions, otherwise we can end up
-    // trying to compare an OUStringLiteral and an OUString, and CPPUNIT can't handle that
-    auto loc = declRef->getBeginLoc();
-    if (compiler.getSourceManager().isMacroArgExpansion(loc))
-    {
-        StringRef name { Lexer::getImmediateMacroName(loc, compiler.getSourceManager(), compiler.getLangOpts()) };
-        if (name.startswith("CPPUNIT_ASSERT"))
-            excludeVars.insert(varDecl);
-    }
-    return true;
-}
-
-bool StringStatic::VisitMemberExpr(MemberExpr const * expr)
-{
-    if (ignoreLocation(expr))
-        return true;
-    auto const declRef = dyn_cast<DeclRefExpr>(expr->getBase());
-    if (declRef == nullptr) {
-        return true;
-    }
-    VarDecl const * varDecl = dyn_cast<VarDecl>(declRef->getDecl());
-    if (!varDecl)
-        return true;
-    if (potentialVars.count(varDecl) == 0)
-        return true;
-    auto const id = expr->getMemberDecl()->getIdentifier();
-    if (id == nullptr || id->getName() != "pData") {
-        return true;
-    }
-    excludeVars.insert(varDecl);
-    return true;
-}
-
-bool StringStatic::VisitUnaryOperator(UnaryOperator const * expr)
-{
-    if (ignoreLocation(expr))
-        return true;
-    if (expr->getOpcode() != UO_AddrOf)
-        return true;
-    if (this->ignoreLocation(expr))
-        return true;
-    auto const dre = dyn_cast<DeclRefExpr>(
-        expr->getSubExpr()->IgnoreParenImpCasts());
-    if (!dre)
-        return true;
-    auto const vd = dyn_cast<VarDecl>(dre->getDecl());
-    if (!vd)
-        return true;
-    excludeVars.insert(vd->getCanonicalDecl());
     return true;
 }
 

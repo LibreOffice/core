@@ -62,7 +62,7 @@ constexpr OUStringLiteral m_aMultiClick = u"MultiClick";
 constexpr OUStringLiteral m_aDragMethodEquals = u"DragMethod=";
 constexpr OUStringLiteral m_aDragParameterEquals = u"DragParameter=";
 constexpr OUStringLiteral m_aProtocol = u"CID/";
-const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
+constexpr OUString m_aPieSegmentDragMethodServiceName(u"PieSegmentDragging"_ustr);
 
 namespace
 {

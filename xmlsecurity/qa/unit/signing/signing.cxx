@@ -589,8 +589,8 @@ CPPUNIT_TEST_FIXTURE(SigningTest, testODFDoubleX509Certificate)
 
 CPPUNIT_TEST_FIXTURE(SigningTest, testDNCompatibility)
 {
-    OUString const msDN("CN=\"\"\"ABC\"\".\", O=\"Enterprise \"\"ABC\"\"\"");
-    OUString const nssDN("CN=\\\"ABC\\\".,O=Enterprise \\\"ABC\\\"");
+    OUString constexpr msDN(u"CN=\"\"\"ABC\"\".\", O=\"Enterprise \"\"ABC\"\"\""_ustr);
+    OUString constexpr nssDN(u"CN=\\\"ABC\\\".,O=Enterprise \\\"ABC\\\""_ustr);
     // this is just the status quo, possibly either NSS or CryptoAPI might change
     CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(msDN, nssDN, xmlsecurity::NOCOMPAT));
     CPPUNIT_ASSERT(!xmlsecurity::EqualDistinguishedNames(nssDN, msDN, xmlsecurity::NOCOMPAT));
