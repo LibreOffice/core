@@ -354,17 +354,28 @@ void LanguageToolGrammarChecker::parseProofreadingJSONResponse(ProofreadingResul
     boost::property_tree::ptree root;
     std::stringstream aStream(aJSONBody.data());
     boost::property_tree::read_json(aStream, root);
-    boost::property_tree::ptree& matches = root.get_child("matches");
-    size_t matchSize = matches.size();
+    boost::property_tree::ptree* matches;
+    size_t matchSize;
 
-    if (matchSize <= 0)
+    if (root.find("matches") == root.not_found())
     {
+        SAL_WARN("Language Services", "'matches' property doesn't exist in JSON object.");
         return;
     }
+    else
+    {
+        matches = &root.get_child("matches");
+
+        if (matches->size() <= 0)
+            return;
+        else
+            matchSize = matches->size();
+    }
+
     Sequence<SingleProofreadingError> aErrors(matchSize);
     auto pErrors = aErrors.getArray();
     size_t i = 0;
-    for (auto it1 = matches.begin(); it1 != matches.end(); it1++, i++)
+    for (auto it1 = matches->begin(); it1 != matches->end(); it1++, i++)
     {
         const boost::property_tree::ptree& match = it1->second;
         int offset = match.get<int>("offset");
