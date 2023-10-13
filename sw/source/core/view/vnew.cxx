@@ -42,7 +42,6 @@
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
-#include <comphelper/lok.hxx>
 
 void SwViewShell::Init( const SwViewOption *pNewOpt )
 {
@@ -251,21 +250,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     bool bModified = mxDoc->getIDocumentState().IsModified();
 
     OutputDevice* pOrigOut = mpOut;
-
-    SwViewOption aNewOpt;
-
-    if ( rShell.GetViewOptions() )
-    {
-        aNewOpt = *rShell.GetViewOptions();
-    }
-
-    if ( comphelper::LibreOfficeKit::isActive() )
-    {
-        // Do not copy the color config in tiled rendering
-        aNewOpt.SetThemeName("Default");
-    }
-
-    Init( &aNewOpt ); // might change Outdev (InitPrt())
+    Init( rShell.GetViewOptions() ); // might change Outdev (InitPrt())
     mpOut = pOrigOut;
 
     if ( mbPreview )

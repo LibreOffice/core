@@ -316,20 +316,6 @@ void SwView::NotifyCursor(SfxViewShell* pViewShell) const
     return {};
 }
 
-OUString SwView::GetColorConfigName() const
-{
-    if (const SwViewOption* pViewOptions = GetWrtShell().GetViewOptions())
-    {
-        return pViewOptions->GetThemeName();
-    }
-    else
-    {
-        SAL_WARN("sw", "GetViewOptions() returned nullptr");
-    }
-
-    return {};
-}
-
 // Create page printer/additions for SwView and SwPagePreview
 
 std::unique_ptr<SfxTabPage> CreatePrintOptionsPage(weld::Container* pPage, weld::DialogController* pController,

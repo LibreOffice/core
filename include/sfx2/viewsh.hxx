@@ -409,8 +409,6 @@ public:
     virtual vcl::Window* GetEditWindowForActiveOLEObj() const override;
     /// Get a color config color from this view
     virtual ::Color GetColorConfigColor(svtools::ColorConfigEntry nColorType) const;
-    /// Get the color scheme name of this view
-    virtual OUString GetColorConfigName() const;
 
     /// Set the LibreOfficeKit language of this view.
     void SetLOKLanguageTag(const OUString& rBcp47LanguageTag);
