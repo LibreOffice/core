@@ -17,6 +17,7 @@
 #include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -982,6 +983,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testCollectFrameAtNodeWithLayout)
     xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
     // Also make sure that we don't have multiple <draw:frame> elements in the first place.
     assertXPath(pXmlDoc, "//draw:frame", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testTdf149555)
+{
+    createSwDoc("tdf149555.docx");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+
+    xCursor->jumpToFirstPage();
+    OUString sPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER 1"), xHeaderText->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: HEADER 2
+    // - Actual: HEADER 1
+    xCursor->jumpToPage(2);
+    sPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER 2"), xHeaderText->getString());
+
+    xCursor->jumpToPage(3);
+    sPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER 2"), xHeaderText->getString());
+
+    xCursor->jumpToPage(4);
+    sPageStyleName = getProperty<OUString>(xCursor, "PageStyleName");
+    xHeaderText = getProperty<uno::Reference<text::XText>>(
+        getStyles("PageStyles")->getByName(sPageStyleName), "HeaderText");
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER 2"), xHeaderText->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
