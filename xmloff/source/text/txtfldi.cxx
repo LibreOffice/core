@@ -407,7 +407,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
         case XML_ELEMENT(TEXT, XML_NOTE_REF):
         case XML_ELEMENT(TEXT, XML_SEQUENCE_REF):
-        case XML_ELEMENT(TEXT, XML_STYLE_REF):
+        case XML_ELEMENT(LO_EXT, XML_STYLE_REF):
             pContext = new XMLReferenceFieldImportContext( rImport, rHlp, nToken );
             break;
 
@@ -2510,7 +2510,7 @@ void XMLReferenceFieldImportContext::startFastElement(
         case XML_ELEMENT(TEXT, XML_SEQUENCE_REF):
             nSource = ReferenceFieldSource::SEQUENCE_FIELD;
             break;
-        case XML_ELEMENT(TEXT, XML_STYLE_REF):
+        case XML_ELEMENT(LO_EXT, XML_STYLE_REF):
             nSource = ReferenceFieldSource::STYLE;
             break;
         default:

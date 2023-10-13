@@ -248,13 +248,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             subType = static_cast<SwGetRefField*>(pField)->GetSubType();
             if (!bName && subType == REF_STYLE)
             {
-                SwTextNode* pTextNode = pHint->GetFormatField().GetTextField()->GetpTextNode();
-
-                if (pTextNode)
-                    static_cast<SwGetRefField*>(pField)->ChangeExpansion(
-                        pFrame, static_txtattr_cast<SwTextField const*>(pHint));
                 static_cast<SwGetRefField*>(pField)->UpdateField(
-                    static_txtattr_cast<SwTextField const*>(pHint));
+                    static_txtattr_cast<SwTextField const*>(pHint), pFrame);
             }
 
             {

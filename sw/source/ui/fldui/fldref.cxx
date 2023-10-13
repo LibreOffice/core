@@ -628,7 +628,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr) == maOutlineNodes[nOutlIdx])
+                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maOutlineNodes[nOutlIdx])
                         || mpSavedSelectedTextNode == maOutlineNodes[nOutlIdx])
                     {
                         m_sSelectionToolTipLBId = sId;
@@ -663,7 +663,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()));
                     if ((IsFieldEdit() && pRefField
-                            && pRefField->GetReferencedTextNode(nullptr) == maNumItems[nNumItemIdx]->GetTextNode())
+                            && pRefField->GetReferencedTextNode(nullptr, nullptr) == maNumItems[nNumItemIdx]->GetTextNode())
                         || mpSavedSelectedTextNode == maNumItems[nNumItemIdx]->GetTextNode())
                     {
                         m_sSelectionToolTipLBId = sId;
@@ -1136,7 +1136,7 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                 nSubType = REF_STYLE;
             } else {
-                SAL_WARN("<SwFieldRefPage::FillItemSet(..)>", "no entry selected in selection listbox!");
+                SAL_WARN("sw.ui", "<SwFieldRefPage::FillItemSet(..)> no entry selected in selection listbox!");
             }
         }
         else                                // SequenceFields

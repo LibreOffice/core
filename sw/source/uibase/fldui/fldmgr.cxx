@@ -1132,18 +1132,7 @@ bool SwFieldMgr::InsertField(
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
 
-            SwPaM* pCursor = nullptr;
-            SwPosition* pPos = nullptr;
-            SwTextNode* pTextNode = nullptr;
-            SwContentFrame* pFrame = nullptr;
-            if (nSubType == REF_STYLE) {
-                pCursor = pCurShell->GetCursor();
-                pPos = pCursor->GetPoint();
-                pTextNode = pPos->GetNode().GetTextNode();
-                pFrame = pCurShell->GetCurrFrame();
-            }
-
-            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId, pTextNode, pFrame));
+            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId));
             bExp = true;
             break;
         }

@@ -7414,7 +7414,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             }
                             catch (css::container::NoSuchElementException)
                             {
-                                aStyleDisplayName = uno::Any(sStyleSheetName);
+                                aStyleDisplayName <<= sStyleSheetName;
                             }
 
                             xFieldProperties->setPropertyValue(

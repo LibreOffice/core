@@ -99,21 +99,14 @@ private:
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
 
-    SwTextNode* m_pTextNode; ///< a pointer to the text node which contains the field
-    SwFrame* m_pFrame; ///< a pointer to the frame which contains the field
-    /* m_pTextNode and m_pFrame are used for STYLEREF, for other subtypes these will often be nullptr */
-
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
 public:
     SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat,
-                    SwTextNode* pTextNode, SwFrame* pFrame );
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
 
     virtual ~SwGetRefField() override;
-
-    void ChangeExpansion(SwFrame* pFrame, const SwTextField* pField);
 
     virtual OUString GetFieldName() const override;
 
@@ -126,9 +119,9 @@ public:
        and REF_STYLE.
        Note: This instance may be NULL (field in Undo/Redo). This will cause
        no update for these reference format types. */
-    void                UpdateField( const SwTextField* pFieldTextAttr );
-    void                UpdateField( const SwTextField* pFieldTextAttr, const SwRootFrame* const pLayout,
-                                     OUString& rText );
+    void                UpdateField( const SwTextField* pFieldTextAttr, SwFrame* pFrame );
+    void                UpdateField( const SwTextField* pFieldTextAttr, SwFrame* pFrame,
+                                     const SwRootFrame* const pLayout, OUString& rText );
 
     void                SetExpand( const OUString& rStr );
 
@@ -139,10 +132,9 @@ public:
     // --> #i81002#
     bool IsRefToHeadingCrossRefBookmark() const;
     bool IsRefToNumItemCrossRefBookmark() const;
-    const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode) const;
+    const SwTextNode* GetReferencedTextNode(SwTextNode* pTextNode, SwFrame* pFrame) const;
     // #i85090#
-    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout) const;
-    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode) const;
+    OUString GetExpandedTextOfReferencedTextNode(SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const;
 
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }

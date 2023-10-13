@@ -338,7 +338,7 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
             if( SwFieldIds::GetRef == mpField->GetTyp()->Which() )
             {
                 // #i81002#
-                static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField );
+                static_cast<SwGetRefField*>(mpField.get())->UpdateField( mpTextField, nullptr );
             }
             break;
         case RES_DOCPOS_UPDATE:
