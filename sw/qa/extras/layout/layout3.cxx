@@ -2071,6 +2071,51 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf155611)
     // Also must not crash on close because of a frame that accidentally fell off of the layout
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf152307)
+{
+    // Problem: On a given Writer document a table layout changed
+    // after doing Tools -> Update -> Update All. The last table row on page 13
+    // was bigger than the page size allowed and thus was hidden behind the footer.
+
+    // load the document
+    createSwDoc("tdf152307.odt");
+
+    // do Tools -> Update -> Update All
+    dispatchCommand(mxComponent, ".uno:UpdateAllIndexes", {});
+
+    // XML dump and some basic assertions
+    sal_Int32 nPage = 7, nPages = 0;
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    nPages = countXPathNodes(pXmlDoc, "/root/page");
+    CPPUNIT_ASSERT_MESSAGE("tdf152307.odt / testTdf152307: Not enough pages.", nPage < nPages);
+    assertXPath(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/body/section", 1);
+
+    // Actual test procedure:
+    // On page 7, check:
+    // How much tables do we have? How much rows does the last table have?
+    int nTables
+        = countXPathNodes(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/body/section/tab");
+    int nRowsLastTable
+        = countXPathNodes(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/body/section/tab["
+                                       + OString::number(nTables) + "]/row");
+    // What is the bottom value of the last table row?
+    sal_Int32 nTabBottom = getXPath(pXmlDoc,
+                                    "/root/page[" + OString::number(nPage) + "]/body/section/tab["
+                                        + OString::number(nTables) + "]/row["
+                                        + OString::number(nRowsLastTable) + "]/infos/bounds",
+                                    "bottom")
+                               .toInt32();
+    // Where does the footer start (footer/info/bounds/top)?
+    sal_Int32 nFooterTop
+        = getXPath(pXmlDoc, "/root/page[" + OString::number(nPage) + "]/footer/infos/bounds", "top")
+              .toInt32();
+    // Is the bottom value of the last row above the top value of the footer?
+    OString aMsg = "tdf152307.odt / testTdf152307: Bottom value of last table row on page "
+                   + OString::number(nPage) + " is below top value of footer: "
+                   + OString::number(nTabBottom) + " > " + OString::number(nFooterTop);
+    CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), nTabBottom < nFooterTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
