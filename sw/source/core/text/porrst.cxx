@@ -416,6 +416,13 @@ bool SwTextFrame::FormatEmpty()
     // content.
     SwFlyAtContentFrame* pNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
     bool bHasNonLastSplitFlyDrawObj = pNonLastSplitFlyDrawObj != nullptr;
+
+    if (pNonLastSplitFlyDrawObj && pNonLastSplitFlyDrawObj->IsWrapOnAllPages())
+    {
+        // Split fly: the anchor is non-empty on all pages in the "wrap on all pages" case.
+        bHasNonLastSplitFlyDrawObj = false;
+    }
+
     if ((HasFollow() && !bHasNonLastSplitFlyDrawObj) || GetMergedPara() || (GetTextNodeFirst()->GetpSwpHints() && !bHasNonLastSplitFlyDrawObj) ||
         nullptr != GetTextNodeForParaProps()->GetNumRule() ||
         GetTextNodeFirst()->HasHiddenCharAttribute(true) ||

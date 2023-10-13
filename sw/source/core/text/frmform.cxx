@@ -1213,10 +1213,11 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
             }
             ChangeOffset( GetFollow(), nEnd );
 
-            if (HasNonLastSplitFlyDrawObj())
+            SwFlyAtContentFrame* pNonLastSplitFlyDrawObj = HasNonLastSplitFlyDrawObj();
+            if (pNonLastSplitFlyDrawObj && !pNonLastSplitFlyDrawObj->IsWrapOnAllPages())
             {
                 // Make sure content from the last floating table anchor is not shifted to previous
-                // anchors.
+                // anchors, unless we're in the special "wrap on all pages" mode.
                 nEnd = TextFrameIndex(0);
             }
 

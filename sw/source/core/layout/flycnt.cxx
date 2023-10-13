@@ -1784,6 +1784,24 @@ void SwFlyAtContentFrame::DelEmpty()
     }
 }
 
+bool SwFlyAtContentFrame::IsWrapOnAllPages() const
+{
+    const SwRootFrame* pRootFrame = getRootFrame();
+    if (!pRootFrame)
+    {
+        return false;
+    }
+
+    const SwFrameFormat* pFormat = pRootFrame->GetFormat();
+    if (!pFormat)
+    {
+        return false;
+    }
+
+    const IDocumentSettingAccess& rIDSA = pFormat->getIDocumentSettingAccess();
+    return rIDSA.get(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK);
+}
+
 void SwRootFrame::InsertEmptyFly(SwFlyFrame* pDel)
 {
     if (!mpFlyDestroy)
