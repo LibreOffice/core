@@ -1014,6 +1014,30 @@
     <table:table-row table:style-name="ro4">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>ContinuousEndnotes</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>boolean</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>false</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Default" office:value-type="string" calcext:value-type="string">
+      <text:p>true</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" table:style-name="Default" office:value-type="string" calcext:value-type="string">
+      <text:p>false</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>Word compat:</text:p><text:p>true: endnotes at the end of the document, without a page break</text:p><text:p>false: endnotes at the end of the document, on their own page</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>4814e8caa5f06c4fe438dfd7d7315e4a2410ea18</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1014"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro4">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>ConsiderTextWrapOnObjPos</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
