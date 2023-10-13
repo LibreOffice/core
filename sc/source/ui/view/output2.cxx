@@ -2168,6 +2168,7 @@ std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()
 {
     std::unique_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(mpDoc, mpDoc->GetEnginePool()));
     pEngine->SetUpdateLayout( false );
+    pEngine->EnableUndo( false ); // dont need undo for painting purposes
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );
     EEControlBits nCtrl = pEngine->GetControlWord();
