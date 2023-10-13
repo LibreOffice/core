@@ -104,7 +104,7 @@ public:
         }
     }
 
-#if !(defined _MSC_VER && _MSC_VER == 1937 && defined _MANAGED)
+#if !(defined _MSC_VER && _MSC_VER >= 1937 && _MSC_VER <= 1938 && defined _MANAGED)
 #if HAVE_CPP_CONSTEVAL
     consteval
 #else
