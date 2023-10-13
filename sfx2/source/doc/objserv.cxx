@@ -1109,11 +1109,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             catch( const task::ErrorCodeIOException& aErrorEx )
             {
                 TOOLS_WARN_EXCEPTION_IF(ErrCode(aErrorEx.ErrCode) != ERRCODE_IO_ABORT, "sfx.doc", "Fatal IO error during save");
-                nErrorCode = ErrCode(aErrorEx.ErrCode);
+                nErrorCode = { ErrCode(aErrorEx.ErrCode), aErrorEx.Message };
             }
-            catch( Exception& )
+            catch( Exception& e )
             {
-                nErrorCode = ERRCODE_IO_GENERAL;
+                nErrorCode = { ERRCODE_IO_GENERAL, e.Message };
             }
 
             // by default versions should be preserved always except in case of an explicit

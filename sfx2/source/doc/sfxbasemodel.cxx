@@ -1697,8 +1697,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
     pParams.reset();
 
-    ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ? m_pData->m_pObjectShell->GetErrorIgnoreWarning()
-                                                           : ERRCODE_IO_CANTWRITE;
+    ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning();
     m_pData->m_pObjectShell->ResetError();
 
     if ( bRet )
@@ -1709,6 +1708,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
     }
     else
     {
+        if (!nErrCode)
+            nErrCode = ERRCODE_IO_CANTWRITE;
         // write the contents of the logger to the file
         SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
 
