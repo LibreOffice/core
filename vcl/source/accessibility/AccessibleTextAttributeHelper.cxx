@@ -20,6 +20,7 @@
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <o3tl/any.hxx>
@@ -35,6 +36,53 @@ OUString lcl_ConvertCharEscapement(sal_Int16 nEscapement)
         return "sub";
 
     return "baseline";
+}
+
+OUString lcl_ConverCharStrikeout(sal_Int16 nStrikeout)
+{
+    OUString sTextLineThroughStyle;
+    OUString sTextLineThroughText;
+    OUString sTextLineThroughType;
+    OUString sTextLineThroughWidth;
+
+    switch (nStrikeout)
+    {
+        case css::awt::FontStrikeout::BOLD:
+            sTextLineThroughType = "single";
+            sTextLineThroughWidth = "bold";
+            break;
+        case css::awt::FontStrikeout::DONTKNOW:
+            break;
+        case css::awt::FontStrikeout::DOUBLE:
+            sTextLineThroughType = "double";
+            break;
+        case css::awt::FontStrikeout::NONE:
+            sTextLineThroughStyle = "none";
+            break;
+        case css::awt::FontStrikeout::SINGLE:
+            sTextLineThroughType = "single";
+            break;
+        case css::awt::FontStrikeout::SLASH:
+            sTextLineThroughText = u"/"_ustr;
+            break;
+        case css::awt::FontStrikeout::X:
+            sTextLineThroughText = u"X"_ustr;
+            break;
+        default:
+            assert(false && "Unhandled strikeout type");
+    }
+
+    OUString sResult;
+    if (!sTextLineThroughStyle.isEmpty())
+        sResult += u"text-line-through-style:"_ustr + sTextLineThroughStyle + ";";
+    if (!sTextLineThroughText.isEmpty())
+        sResult += u"text-line-through-text:"_ustr + sTextLineThroughText + ";";
+    if (!sTextLineThroughType.isEmpty())
+        sResult += u"text-line-through-type:"_ustr + sTextLineThroughType + ";";
+    if (!sTextLineThroughWidth.isEmpty())
+        sResult += u"text-line-through-width:"_ustr + sTextLineThroughWidth + ";";
+
+    return sResult;
 }
 
 OUString lcl_convertFontWeight(double fontWeight)
@@ -211,6 +259,11 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
             sAttribute = "font-style";
             const css::awt::FontSlant eFontSlant = *o3tl::doAccess<css::awt::FontSlant>(prop.Value);
             sValue = lcl_ConvertFontSlant(eFontSlant);
+        }
+        else if (prop.Name == "CharStrikeout")
+        {
+            const sal_Int16 nStrikeout = *o3tl::doAccess<sal_Int16>(prop.Value);
+            aRet += lcl_ConverCharStrikeout(nStrikeout);
         }
         else if (prop.Name == "CharUnderline")
         {
