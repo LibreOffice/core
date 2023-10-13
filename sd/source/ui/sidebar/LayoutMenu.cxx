@@ -58,6 +58,7 @@
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 
+#include <string_view>
 #include <vector>
 
 using namespace ::com::sun::star;
@@ -73,7 +74,7 @@ namespace {
 
 struct snew_slide_value_info
 {
-    rtl::OUStringConstExpr msBmpResId;
+    std::u16string_view msBmpResId;
     TranslateId mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
@@ -83,14 +84,14 @@ struct snew_slide_value_info
 
 constexpr OUStringLiteral EMPTY = u"";
 
-const snew_slide_value_info notes[] =
+constexpr snew_slide_value_info notes[] =
 {
     {BMP_SLIDEN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
     {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-const snew_slide_value_info handout[] =
+constexpr snew_slide_value_info handout[] =
 {
     {BMP_SLIDEH_01, STR_AUTOLAYOUT_HANDOUT1, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT1},
@@ -107,7 +108,7 @@ const snew_slide_value_info handout[] =
     {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
-const snew_slide_value_info standard[] =
+constexpr snew_slide_value_info standard[] =
 {
     {BMP_LAYOUT_EMPTY, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
     {BMP_LAYOUT_HEAD03, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
@@ -541,7 +542,7 @@ void LayoutMenu::Fill()
     {
         if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
         {
-            Image aImg("private:graphicrepository/" + static_cast<const OUString &>(pInfo->msBmpResId));
+            Image aImg(OUString::Concat("private:graphicrepository/") + pInfo->msBmpResId);
 
             if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
