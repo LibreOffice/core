@@ -309,12 +309,12 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testTdf54095_SmartArtThemeTextColor)
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPortion(xPara->createEnumeration()->nextElement(),
                                                  uno::UNO_QUERY);
-    sal_Int32 nActualColor{ 0 };
+    Color nActualColor{ 0 };
     xPortion->getPropertyValue("CharColor") >>= nActualColor;
     // Without fix the test would have failed with:
-    // - Expected:  2050429 (0x1F497D)
-    // - Actual  : 16777215 (0xFFFFFF), that is text was white
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x1F497D), nActualColor);
+    // - Expected: rgba[1f497dff]
+    // - Actual  : rgba[ffffffff], that is text was white
+    CPPUNIT_ASSERT_EQUAL(Color(0x1F497D), nActualColor);
 
     // clrScheme. For map between name in docx and index from CharComplexColor see
     // oox::drawingml::Color::getSchemeColorIndex()
