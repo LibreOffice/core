@@ -23,9 +23,11 @@
 #include <ostream>
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
-#include <version>
 
 #if defined(DBG_UTIL)
+#if __has_include(<version>)
+#include <version>
+#endif
 #if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907
 #include <source_location>
 #define LIBO_ERRMSG_USE_SOURCE_LOCATION std

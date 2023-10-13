@@ -3014,6 +3014,9 @@ void ExceptionType::dumpHdlFile(
     if (name_ == "com.sun.star.uno.Exception")
     {
         includes.addCustom("#if defined(LIBO_INTERNAL_ONLY)");
+        includes.addCustom("#if __has_include(<version>)");
+        includes.addCustom("#include <version>");
+        includes.addCustom("#endif");
         includes.addCustom("#if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907");
         includes.addCustom("#include <source_location>");
         includes.addCustom("#define LIBO_USE_SOURCE_LOCATION std");
