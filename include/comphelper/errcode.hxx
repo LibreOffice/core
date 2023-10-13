@@ -23,6 +23,7 @@
 #include <ostream>
 #include <o3tl/typed_flags_set.hxx>
 #include <optional>
+#include <version>
 
 #if defined(DBG_UTIL)
 #if defined(__cpp_lib_source_location) && __cpp_lib_source_location >= 201907
