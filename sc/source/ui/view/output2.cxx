@@ -2177,27 +2177,56 @@ void ScOutputData::LayoutStrings(bool bPixelToLogic)
         ScProgress::DeleteInterpretProgress();
 }
 
-std::unique_ptr<ScFieldEditEngine> ScOutputData::CreateOutputEditEngine()
+void ScOutputData::SetRefDevice( OutputDevice* pRDev )
 {
-    std::unique_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(mpDoc, mpDoc->GetEnginePool()));
-    pEngine->SetUpdateLayout( false );
-    pEngine->EnableUndo( false ); // don't need undo for painting purposes
-    // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
-    pEngine->SetRefDevice( pFmtDevice );
-    EEControlBits nCtrl = pEngine->GetControlWord();
-    if ( bShowSpellErrors )
-        nCtrl |= EEControlBits::ONLINESPELLING;
-    if ( eType == OUTTYPE_PRINTER )
-        nCtrl &= ~EEControlBits::MARKFIELDS;
+    mpRefDevice = pFmtDevice = pRDev;
+    // reset EditEngine because it depends on pFmtDevice and mpRefDevice
+    mxOutputEditEngine.reset();
+}
+
+void ScOutputData::SetFmtDevice( OutputDevice* pRDev )
+{
+    pFmtDevice = pRDev;
+    // reset EditEngine because it depends on pFmtDevice
+    mxOutputEditEngine.reset();
+}
+
+void ScOutputData::SetUseStyleColor( bool bSet )
+{
+    mbUseStyleColor = bSet;
+    // reset EditEngine because it depends on mbUseStyleColor
+    mxOutputEditEngine.reset();
+}
+
+void ScOutputData::InitOutputEditEngine()
+{
+    if (!mxOutputEditEngine)
+    {
+        mxOutputEditEngine = std::make_unique<ScFieldEditEngine>(mpDoc, mpDoc->GetEnginePool());
+        mxOutputEditEngine->SetUpdateLayout( false );
+        mxOutputEditEngine->EnableUndo( false ); // don't need undo for painting purposes
+        // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
+        mxOutputEditEngine->SetRefDevice( pFmtDevice );
+        EEControlBits nCtrl = mxOutputEditEngine->GetControlWord();
+        if ( bShowSpellErrors )
+            nCtrl |= EEControlBits::ONLINESPELLING;
+        if ( eType == OUTTYPE_PRINTER )
+            nCtrl &= ~EEControlBits::MARKFIELDS;
+        else
+            nCtrl &= ~EEControlBits::MARKURLFIELDS;   // URLs not shaded for output
+        if ( eType == OUTTYPE_WINDOW && mpRefDevice == pFmtDevice )
+            nCtrl &= ~EEControlBits::FORMAT100;       // use the actual MapMode
+        mxOutputEditEngine->SetControlWord( nCtrl );
+        mxOutputEditEngine->EnableAutoColor( mbUseStyleColor );
+    }
     else
-        nCtrl &= ~EEControlBits::MARKURLFIELDS;   // URLs not shaded for output
-    if ( eType == OUTTYPE_WINDOW && mpRefDevice == pFmtDevice )
-        nCtrl &= ~EEControlBits::FORMAT100;       // use the actual MapMode
-    pEngine->SetControlWord( nCtrl );
-    mpDoc->ApplyAsianEditSettings( *pEngine );
-    pEngine->EnableAutoColor( mbUseStyleColor );
-    pEngine->SetDefaultHorizontalTextDirection( mpDoc->GetEditTextDirection( nTab ) );
-    return pEngine;
+    {
+        // just in case someone turned it on during the last paint cycle
+        mxOutputEditEngine->SetUpdateLayout( false );
+    }
+    // we don't track changes to these settings, so we have to apply them every time
+    mpDoc->ApplyAsianEditSettings( *mxOutputEditEngine );
+    mxOutputEditEngine->SetDefaultHorizontalTextDirection( mpDoc->GetEditTextDirection( nTab ) );
 }
 
 static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
@@ -4350,7 +4379,8 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
 void ScOutputData::DrawEdit(bool bPixelToLogic)
 {
-    std::unique_ptr<ScFieldEditEngine> pEngine;
+    InitOutputEditEngine();
+
     bool bHyphenatorSet = false;
     const ScPatternAttr* pOldPattern = nullptr;
     const SfxItemSet*    pOldCondSet = nullptr;
@@ -4464,10 +4494,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                             }
                         }
                         SfxItemSet* pPreviewFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab );
-                        if (!pEngine)
-                            pEngine = CreateOutputEditEngine();
-                        else
-                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
+                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(sal_False)
 
                         // fdo#32530: Check if the first character is RTL.
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
@@ -4480,7 +4507,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                                 SvxCellHorJustify::Block : aParam.meHorJustContext;
                         aParam.mbPixelToLogic = bPixelToLogic;
                         aParam.mbHyphenatorSet = bHyphenatorSet;
-                        aParam.mpEngine = pEngine.get();
+                        aParam.mpEngine = mxOutputEditEngine.get();
                         aParam.maCell = aCell;
                         aParam.mnArrY = nArrY;
                         aParam.mnX = nX;
@@ -4531,8 +4558,6 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
         nRowPosY += pRowInfo[nArrY].nHeight;
     }
 
-    pEngine.reset();
-
     if (mrTabInfo.maArray.HasCellRotation())
     {
         DrawRotated(bPixelToLogic);     //! call from outside ?
@@ -4541,6 +4566,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
 
 void ScOutputData::DrawRotated(bool bPixelToLogic)
 {
+    InitOutputEditEngine();
     //! store nRotMax
     SCCOL nRotMax = nX2;
     for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
@@ -4552,7 +4578,6 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    std::unique_ptr<ScFieldEditEngine> pEngine;
     bool bHyphenatorSet = false;
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
@@ -4593,10 +4618,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                     if (!bHidden)
                     {
-                        if (!pEngine)
-                            pEngine = CreateOutputEditEngine();
-                        else
-                            lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
+                        lcl_ClearEdit( *mxOutputEditEngine );      // also calls SetUpdateMode(sal_False)
 
                         tools::Long nPosY = nRowPosY;
 
@@ -4677,7 +4699,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             // StringDiffer doesn't look at hyphenate, language items
                             if ( pPattern != pOldPattern || pCondSet != pOldCondSet )
                             {
-                                auto pSet = std::make_unique<SfxItemSet>( pEngine->GetEmptyItemSet() );
+                                auto pSet = std::make_unique<SfxItemSet>( mxOutputEditEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet.get(), pCondSet );
 
                                                                     // adjustment for EditEngine
@@ -4688,22 +4710,22 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
                                 bool bParaHyphenate = pSet->Get(EE_PARA_HYPHENATE).GetValue();
-                                pEngine->SetDefaults( std::move(pSet) );
+                                mxOutputEditEngine->SetDefaults( std::move(pSet) );
                                 pOldPattern = pPattern;
                                 pOldCondSet = pCondSet;
 
-                                EEControlBits nControl = pEngine->GetControlWord();
+                                EEControlBits nControl = mxOutputEditEngine->GetControlWord();
                                 if (eOrient==SvxCellOrientation::Stacked)
                                     nControl |= EEControlBits::ONECHARPERLINE;
                                 else
                                     nControl &= ~EEControlBits::ONECHARPERLINE;
-                                pEngine->SetControlWord( nControl );
+                                mxOutputEditEngine->SetControlWord( nControl );
 
                                 if ( !bHyphenatorSet && bParaHyphenate )
                                 {
                                     //  set hyphenator the first time it is needed
                                     css::uno::Reference<css::linguistic2::XHyphenator> xXHyphenator( LinguMgr::GetHyphenator() );
-                                    pEngine->SetHyphenator( xXHyphenator );
+                                    mxOutputEditEngine->SetHyphenator( xXHyphenator );
                                     bHyphenatorSet = true;
                                 }
 
@@ -4711,7 +4733,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     pPattern->GetItem( ATTR_BACKGROUND, pCondSet ).GetColor();
                                 if ( mbUseStyleColor && ( aBackCol.IsTransparent() || bCellContrast ) )
                                     aBackCol = nConfBackColor;
-                                pEngine->SetBackgroundColor( aBackCol );
+                                mxOutputEditEngine->SetBackgroundColor( aBackCol );
                             }
 
                             // margins
@@ -4821,16 +4843,16 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     aPaperSize.setWidth( nOutHeight - 1 );
                             }
                             if (bPixelToLogic)
-                                pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
+                                mxOutputEditEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                             else
-                                pEngine->SetPaperSize(aPaperSize);  // scale is always 1
+                                mxOutputEditEngine->SetPaperSize(aPaperSize);  // scale is always 1
 
                             // read data from cell
 
                             if (aCell.getType() == CELLTYPE_EDIT)
                             {
                                 if (aCell.getEditText())
-                                    pEngine->SetTextCurrentDefaults(*aCell.getEditText());
+                                    mxOutputEditEngine->SetTextCurrentDefaults(*aCell.getEditText());
                                 else
                                 {
                                     OSL_FAIL("pData == 0");
@@ -4848,22 +4870,22 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                          mbShowNullValues,
                                                          mbShowFormulas);
 
-                                pEngine->SetTextCurrentDefaults(aString);
+                                mxOutputEditEngine->SetTextCurrentDefaults(aString);
                                 if ( pColor && !mbSyntaxMode && !( mbUseStyleColor && mbForceAutoColor ) )
-                                    lcl_SetEditColor( *pEngine, *pColor );
+                                    lcl_SetEditColor( *mxOutputEditEngine, *pColor );
                             }
 
                             if ( mbSyntaxMode )
                             {
-                                SetEditSyntaxColor(*pEngine, aCell);
+                                SetEditSyntaxColor(*mxOutputEditEngine, aCell);
                             }
                             else if ( mbUseStyleColor && mbForceAutoColor )
-                                lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
+                                lcl_SetEditColor( *mxOutputEditEngine, COL_AUTO );     //! or have a flag at EditEngine
 
-                            pEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
+                            mxOutputEditEngine->SetUpdateLayout( true );     // after SetText, before CalcTextWidth/GetTextHeight
 
-                            tools::Long nEngineWidth  = static_cast<tools::Long>(pEngine->CalcTextWidth());
-                            tools::Long nEngineHeight = pEngine->GetTextHeight();
+                            tools::Long nEngineWidth  = static_cast<tools::Long>(mxOutputEditEngine->CalcTextWidth());
+                            tools::Long nEngineHeight = mxOutputEditEngine->GetTextHeight();
 
                             if (nAttrRotate && bBreak)
                             {
@@ -4897,13 +4919,13 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         // set paper width and get new text height
                                         aPaperSize.setWidth( nNewWidth );
                                         if (bPixelToLogic)
-                                            pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
+                                            mxOutputEditEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                         else
-                                            pEngine->SetPaperSize(aPaperSize);  // Scale is always 1
-                                        //pEngine->QuickFormatDoc( sal_True );
+                                            mxOutputEditEngine->SetPaperSize(aPaperSize);  // Scale is always 1
+                                        //mxOutputEditEngine->QuickFormatDoc( sal_True );
 
-                                        nEngineWidth  = static_cast<tools::Long>(pEngine->CalcTextWidth());
-                                        nEngineHeight = pEngine->GetTextHeight();
+                                        nEngineWidth  = static_cast<tools::Long>(mxOutputEditEngine->CalcTextWidth());
+                                        nEngineHeight = mxOutputEditEngine->GetTextHeight();
                                     }
                                 }
                             }
@@ -4982,22 +5004,22 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     aAreaParam.mbLeftClip = aAreaParam.mbRightClip = true;
 
                                     // always do height
-                                    ShrinkEditEngine( *pEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,
+                                    ShrinkEditEngine( *mxOutputEditEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,
                                         false, eOrient, nAttrRotate, bPixelToLogic,
                                         nEngineWidth, nEngineHeight, nNeededPixel, aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
 
                                     if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
                                     {
                                         // do width only if rotating within the cell (standard mode)
-                                        ShrinkEditEngine( *pEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,
+                                        ShrinkEditEngine( *mxOutputEditEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,
                                             true, eOrient, nAttrRotate, bPixelToLogic,
                                             nEngineWidth, nEngineHeight, nNeededPixel, aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
                                     }
 
                                     // nEngineWidth/nEngineHeight is updated in ShrinkEditEngine
                                     // (but width is only valid for standard mode)
-                                    nRealWidth  = static_cast<tools::Long>(pEngine->CalcTextWidth());
-                                    nRealHeight = pEngine->GetTextHeight();
+                                    nRealWidth  = static_cast<tools::Long>(mxOutputEditEngine->CalcTextWidth());
+                                    nRealHeight = mxOutputEditEngine->GetTextHeight();
 
                                     if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                         nEngineWidth = static_cast<tools::Long>( nRealHeight / fabs( nSin ) );
@@ -5076,21 +5098,21 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         if (eHorJust==SvxCellHorJustify::Right ||
                                             eHorJust==SvxCellHorJustify::Center)
                                         {
-                                            pEngine->SetUpdateLayout( false );
+                                            mxOutputEditEngine->SetUpdateLayout( false );
 
                                             SvxAdjust eSvxAdjust =
                                                 (eHorJust==SvxCellHorJustify::Right) ?
                                                     SvxAdjust::Right : SvxAdjust::Center;
-                                            pEngine->SetDefaultItem(
+                                            mxOutputEditEngine->SetDefaultItem(
                                                 SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
                                             aPaperSize.setWidth( nOutWidth );
                                             if (bPixelToLogic)
-                                                pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
+                                                mxOutputEditEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                             else
-                                                pEngine->SetPaperSize(aPaperSize);
+                                                mxOutputEditEngine->SetPaperSize(aPaperSize);
 
-                                            pEngine->SetUpdateLayout( true );
+                                            mxOutputEditEngine->SetUpdateLayout( true );
                                         }
                                     }
                                     else
@@ -5200,7 +5222,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 //  bSimClip is not used here (because nOriVal is set)
 
-                                pEngine->Draw(*mpDev, aLogicStart, nOriVal);
+                                mxOutputEditEngine->Draw(*mpDev, aLogicStart, nOriVal);
 
                                 if (bMetaFile)
                                     mpDev->Pop();

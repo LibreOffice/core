@@ -61,6 +61,7 @@
 #include <postit.hxx>
 #include <validat.hxx>
 #include <detfunc.hxx>
+#include <editutil.hxx>
 
 #include <SparklineRenderer.hxx>
 #include <colorscale.hxx>
@@ -212,6 +213,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
 
     // always needed, so call at the end of the constructor
     SetCellRotations();
+    InitOutputEditEngine();
 }
 
 ScOutputData::~ScOutputData()
@@ -262,6 +264,8 @@ void ScOutputData::SetShowFormulas( bool bSet )
 void ScOutputData::SetShowSpellErrors( bool bSet )
 {
     bShowSpellErrors = bSet;
+    // reset EditEngine because it depends on bShowSpellErrors
+    mxOutputEditEngine.reset();
 }
 
 void ScOutputData::SetSnapPixel()

@@ -240,6 +240,7 @@ private:
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
     const sc::SpellCheckContext* mpSpellCheckCxt;
+    std::unique_ptr<ScFieldEditEngine> mxOutputEditEngine;
 
                             // private methods
 
@@ -278,7 +279,7 @@ private:
     void DrawEditStacked(DrawEditParam& rParam);
     void DrawEditAsianVertical(DrawEditParam& rParam);
 
-    std::unique_ptr<ScFieldEditEngine> CreateOutputEditEngine();
+    void InitOutputEditEngine();
 
     void SetClipMarks( OutputAreaParam &aAreaParam, ScCellInfo* pClipMarkCell,
                        SvxCellHorJustify eOutHorJust, tools::Long nLayoutSign );
@@ -318,14 +319,14 @@ public:
     void    SetSpellCheckContext( const sc::SpellCheckContext* pCxt );
     void    SetContentDevice( OutputDevice* pContentDev );
 
-    void    SetRefDevice( OutputDevice* pRDev ) { mpRefDevice = pFmtDevice = pRDev; }
-    void    SetFmtDevice( OutputDevice* pRDev ) { pFmtDevice = pRDev; }
+    void    SetRefDevice( OutputDevice* pRDev );
+    void    SetFmtDevice( OutputDevice* pRDev );
     void    SetViewShell( ScTabViewShell* pSh ) { pViewShell = pSh; }
 
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
     void    SetSolidBackground( bool bSet )     { bSolidBackground = bSet; }
-    void    SetUseStyleColor( bool bSet )       { mbUseStyleColor = bSet; }
+    void    SetUseStyleColor( bool bSet );
 
     void    SetEditCell( SCCOL nCol, SCROW nRow );
     void    SetSyntaxMode( bool bNewMode );
