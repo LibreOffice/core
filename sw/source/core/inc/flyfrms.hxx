@@ -202,6 +202,7 @@ public:
     SwFlyAtContentFrame* GetPrecede();
     /// Like Cut(), except that follow chaining is maintained.
     void DelEmpty();
+    bool IsWrapOnAllPages() const;
     void dumpAsXmlAttributes(xmlTextWriterPtr pWriter) const override;
 };
 
