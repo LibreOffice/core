@@ -448,8 +448,6 @@ vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
 vcl/inc/salprn.hxx:116
     enum SalPrinterError SalPrinter::GetErrorCode()
-vcl/inc/salvtables.hxx:1771
-    _Bool SalInstanceTreeView::get_iter_abs_pos(class weld::TreeIter &,int,)const
 vcl/inc/skia/gdiimpl.hxx:230
     void SkiaSalGraphicsImpl::createSurface()
 vcl/inc/skia/gdiimpl.hxx:240
