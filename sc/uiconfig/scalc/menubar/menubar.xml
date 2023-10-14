@@ -433,15 +433,7 @@
           <menu:menuitem menu:id=".uno:ExportAsGraphic"/>
         </menu:menupopup>
       </menu:menu>
-      <menu:menu menu:id=".uno:FormatSparklineMenu">
-        <menu:menupopup>
-          <menu:menuitem menu:id=".uno:EditSparklineGroup"/>
-          <menu:menuitem menu:id=".uno:DeleteSparkline"/>
-          <menu:menuitem menu:id=".uno:DeleteSparklineGroup"/>
-          <menu:menuitem menu:id=".uno:GroupSparklines"/>
-          <menu:menuitem menu:id=".uno:UngroupSparklines"/>
-        </menu:menupopup>
-      </menu:menu>
+      <menu:menu menu:id=".uno:FormatSparklineMenu"/>
       <menu:menu menu:id=".uno:FormatObjectMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:TransformDialog"/>
