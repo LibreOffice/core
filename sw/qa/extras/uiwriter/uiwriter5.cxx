@@ -2255,7 +2255,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_AcceptInsertRedlineCutWithDe
     pEditShell->RejectRedline(6);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
 
-    // Accept insert that splitted into 4 parts, but separeted to 2-2 parts, with another insert.
+    // Accept insert that splitted into 4 parts, but separated to 2-2 parts, with another insert.
     // It will accept only 2 parts, that is not separated. It leave the deletion.
     pEditShell->AcceptRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(5), pEditShell->GetRedlineCount());
@@ -2282,12 +2282,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_RejectInsertRedlineCutWithDe
     SwEditShell* const pEditShell(pDoc->GetEditShell());
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), pEditShell->GetRedlineCount());
 
-    // Reject the insert that splitted into 3 parts .. reject all 3 of them
+    // Reject the insert that splitted into 3 parts. reject all 3 of them
     // it even remove the deletion, that was on the 2. insert...
     pEditShell->RejectRedline(6);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(6), pEditShell->GetRedlineCount());
 
-    // Reject insert that splitted into 4 parts, but separeted to 2-2 parts, with another insert.
+    // Reject insert that splitted into 4 parts, but separated to 2-2 parts, with another insert.
     // It will reject only 2 parts, that is not separated. It remove the deletion.
     pEditShell->RejectRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(4), pEditShell->GetRedlineCount());
