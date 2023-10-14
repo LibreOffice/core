@@ -12,6 +12,7 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,python3))
 $(eval $(call gb_UnpackedTarball_set_tarball,python3,$(PYTHON_TARBALL),,python3))
 
 $(eval $(call gb_UnpackedTarball_fix_end_of_line,python3,\
+	PCbuild/libffi.props \
 	PCbuild/pcbuild.sln \
 ))
 
@@ -19,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \
 	external/python3/python-3.8-msvc-sdk.patch.1 \
+	external/python3/python-3.8-msvc-libffi.patch.1 \
 	external/python3/python-3.7.6-msvc-ssl.patch.1 \
 	external/python3/python-3.5.4-msvc-disable.patch.1 \
 	external/python3/ubsan.patch.0 \
