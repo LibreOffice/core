@@ -19,7 +19,6 @@
 
 #include <extended/accessibletabbarpagelist.hxx>
 #include <svtools/tabbar.hxx>
-#include <extended/accessibletabbarpage.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

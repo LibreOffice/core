@@ -24,14 +24,12 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <extended/accessibletabbarbase.hxx>
+#include <extended/accessibletabbarpage.hxx>
 
 #include <vector>
 
 namespace accessibility
 {
-    class AccessibleTabBarPage;
-
-
     class AccessibleTabBarPageList final : public cppu::ImplInheritanceHelper<
                                                AccessibleTabBarBase,
                                                css::accessibility::XAccessible,
