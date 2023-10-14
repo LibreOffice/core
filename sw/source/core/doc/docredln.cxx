@@ -1110,7 +1110,7 @@ bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
 }
 
 // Check if we could/should accept/reject the 2 redlineData at the same time.
-// No need to check its childs equality
+// No need to check its children equality
 bool SwRedlineData::CanCombineForAcceptReject(const SwRedlineData& rCmp) const
 {
     return m_nAuthor == rCmp.m_nAuthor &&
