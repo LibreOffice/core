@@ -745,17 +745,17 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFile-PrintDefault">
+      <object class="GtkMenuItem" id="MenuFile-Print">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:PrintDefault</property>
+        <property name="action_name">.uno:Print</property>
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="MenuFile-Print">
+      <object class="GtkMenuItem" id="MenuFile-PrintDefault">
         <property name="visible">False</property>
         <property name="can_focus">False</property>
-        <property name="action_name">.uno:Print</property>
+        <property name="action_name">.uno:PrintDefault</property>
       </object>
     </child>
     <child>
@@ -2865,7 +2865,7 @@
                             <property name="toolbar_style">both-horiz</property>
                             <child>
                               <object class="GtkToolButton" id="Files-PrintDefault">
-                                <property name="visible">True</property>
+                                <property name="visible">False</property>
                                 <property name="action_name">.uno:PrintDefault</property>
                               </object>
                               <packing>
@@ -2904,7 +2904,7 @@
                             <property name="show_arrow">False</property>
                             <child>
                               <object class="GtkToolButton" id="PrinterSetup">
-                                <property name="visible">True</property>
+                                <property name="visible">False</property>
                                 <property name="visible_horizontal">False</property>
                                 <property name="action_name">.uno:PrinterSetup</property>
                                 <property name="icon_name">sfx2/res/symphony/open_more.png</property>

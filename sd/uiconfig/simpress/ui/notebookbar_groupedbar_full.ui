@@ -842,8 +842,15 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="PrintDefaultD">
+      <object class="GtkMenuItem" id="MenuFile-Print">
         <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:Print</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="PrintDefaultD">
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintDefault</property>
       </object>

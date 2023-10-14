@@ -798,6 +798,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuFile-WebHtml">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:WebHtml</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="PrintD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -806,7 +813,7 @@
     </child>
     <child>
       <object class="GtkMenuItem" id="PrintDefaultD">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <property name="can_focus">False</property>
         <property name="action_name">.uno:PrintDefault</property>
       </object>
