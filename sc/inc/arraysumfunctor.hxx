@@ -12,29 +12,12 @@
 
 #include <cmath>
 #include "kahan.hxx"
-#include "arraysumfunctor.hxx"
 #include <formula/errorcodes.hxx>
 
 namespace sc::op
 {
-// Checkout available optimization options.
-// Note that it turned out to be problematic to support CPU-specific code
-// that's not guaranteed to be available on that specific platform (see
-// git history). SSE2 is guaranteed on x86_64 and it is our baseline requirement
-// for x86 on Windows, so SSE2 use is hardcoded on those platforms.
-// Whenever we raise baseline to e.g. AVX, this may get
-// replaced with AVX code (get it from git history).
-// Do it similarly with other platforms.
-#if defined(X86_64) || (defined(X86) && defined(_WIN32))
-#define SC_USE_SSE2 1
-KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
-#else
-#define SC_USE_SSE2 0
-#endif
-
 /**
   * If no boosts available, Unrolled KahanSum.
-  * Most likely to use on android.
   */
 static inline KahanSum executeUnrolled(size_t& i, size_t nSize, const double* pCurrent)
 {
