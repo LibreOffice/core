@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libffi))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libffi,$(LIBFFI_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libffi,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libffi, \
+    external/libffi/implicit-function-declaration.patch \
+)) \
+
 # vim: set noet sw=4 ts=4:
