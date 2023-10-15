@@ -8,8 +8,6 @@
  *
  */
 
-#include "arraysum.hxx"
-
 #include <arraysumfunctor.hxx>
 
 #include <tools/simdsupport.hxx>
@@ -106,8 +104,8 @@ KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
 
         // First Kahan & pairwise summation
         // 0+1 -> 0
-        sumNeumanierNormal(sums[0], errs[0], sums[1]);
-        sumNeumanierNormal(sums[0], errs[0], errs[1]);
+        KahanSum::sumNeumaierNormal(sums[0], errs[0], sums[1]);
+        KahanSum::sumNeumaierNormal(sums[0], errs[0], errs[1]);
 
         // Store result
         return { sums[0], errs[0] };

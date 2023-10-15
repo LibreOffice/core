@@ -12,6 +12,26 @@
 #include <rtl/math.hxx>
 #include <cmath>
 
+class KahanSum;
+namespace sc::op
+{
+// Checkout available optimization options.
+// Note that it turned out to be problematic to support CPU-specific code
+// that's not guaranteed to be available on that specific platform (see
+// git commit 2d36e7f5186ba5215f2b228b98c24520bd4f2882). SSE2 is guaranteed on
+// x86_64 and it is our baseline requirement for x86 on Windows, so SSE2 use is
+// hardcoded on those platforms.
+// Whenever we raise baseline to e.g. AVX, this may get
+// replaced with AVX code (get it from mentioned git commit).
+// Do it similarly with other platforms.
+#if defined(X86_64) || (defined(INTEL) && defined(_WIN32))
+#define SC_USE_SSE2 1
+KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent);
+#else
+#define SC_USE_SSE2 0
+#endif
+}
+
 /**
   * This class provides LO with Kahan summation algorithm
   * About this algorithm: https://en.wikipedia.org/wiki/Kahan_summation_algorithm
@@ -42,6 +62,21 @@ public:
 
 public:
     /**
+      * Performs one step of the Neumaier sum of doubles.
+      * Overwrites the summand and error.
+      * T could be double or long double.
+      */
+    template <typename T> static inline void sumNeumaierNormal(T& sum, T& err, const double& value)
+    {
+        T t = sum + value;
+        if (std::abs(sum) >= std::abs(value))
+            err += (sum - t) + value;
+        else
+            err += (value - t) + sum;
+        sum = t;
+    }
+
+    /**
       * Adds a value to the sum using Kahan summation.
       * @param x_i
       */
@@ -71,32 +106,27 @@ public:
       */
     inline void add(const KahanSum& fSum)
     {
-#ifdef _WIN32
-        // For some odd unknown reason WIN32 fails badly with the
-        // sum+compensation value. Continue keeping the old though slightly off
-        // (see tdf#156985) explicit addition of the compensation value.
-        add(fSum.m_fSum);
-        add(fSum.m_fError);
-#else
+#if SC_USE_SSE2
         add(fSum.m_fSum + fSum.m_fError);
-#endif
         add(fSum.m_fMem);
+#else
+        // Without SSE2 the sum+compensation value fails badly. Continue
+        // keeping the old though slightly off (see tdf#156985) explicit
+        // addition of the compensation value.
+        double sum = fSum.m_fSum;
+        double err = fSum.m_fError;
+        if (fSum.m_fMem != 0.0)
+            sumNeumaierNormal(sum, err, fSum.m_fMem);
+        add(sum);
+        add(err);
+#endif
     }
 
     /**
       * Substracts a value to the sum using Kahan summation.
       * @param fSum
       */
-    inline void subtract(const KahanSum& fSum)
-    {
-#ifdef _WIN32
-        add(-fSum.m_fSum);
-        add(-fSum.m_fError);
-#else
-        add(-(fSum.m_fSum + fSum.m_fError));
-#endif
-        add(-fSum.m_fMem);
-    }
+    inline void subtract(const KahanSum& fSum) { add(-fSum); }
 
 public:
     constexpr KahanSum operator-() const
