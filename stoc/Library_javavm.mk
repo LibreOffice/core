@@ -31,4 +31,10 @@ $(eval $(call gb_Library_add_exception_objects,javavm,\
     stoc/source/javavm/jvmargs \
 ))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_use_system_darwin_frameworks,javavm,\
+    CoreFoundation \
+))
+endif
+
 # vim:set noet sw=4 ts=4:
