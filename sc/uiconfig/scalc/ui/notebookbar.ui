@@ -1311,6 +1311,13 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuInsert-RandomNumberGeneratorDialog">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:RandomNumberGeneratorDialog</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="MenuInsert-EditHeaderAndFooter">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
