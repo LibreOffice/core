@@ -79,6 +79,12 @@
 #define TIMEZONE "MET"
 #endif
 
+#ifdef MACOSX
+#include <premac.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <postmac.h>
+#endif
+
 /* Within this implementation of the com.sun.star.java.JavaVirtualMachine
  * service and com.sun.star.java.theJavaVirtualMachine singleton, the method
  * com.sun.star.java.XJavaVM.getJavaVM relies on the following:
@@ -456,6 +462,15 @@ public:
     explicit DetachCurrentThread(JavaVM * jvm): m_jvm(jvm) {}
 
     ~DetachCurrentThread() {
+#ifdef MACOSX
+        // tdf#101376 don't detach thread if it is the main thread on macOS
+        // On macOS, many AWT classes do their work on the main thread
+        // deep in native methods in the java.awt.* classes. The problem
+        // is that Oracle's and OpenJDK's JVMs don't bracket their
+        // "perform on main thread" native calls with "attach/detach
+        // current thread" calls to the JVM.
+        if (CFRunLoopGetCurrent() != CFRunLoopGetMain())
+#endif
         if (m_jvm->DetachCurrentThread() != 0) {
             OSL_ASSERT(false);
         }
