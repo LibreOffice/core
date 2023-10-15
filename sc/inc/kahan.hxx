@@ -91,12 +91,7 @@ public:
             return;
         }
 
-        double t = m_fSum + m_fMem;
-        if (std::abs(m_fSum) >= std::abs(m_fMem))
-            m_fError += (m_fSum - t) + m_fMem;
-        else
-            m_fError += (m_fMem - t) + m_fSum;
-        m_fSum = t;
+        sumNeumaierNormal(m_fSum, m_fError, m_fMem);
         m_fMem = x_i;
     }
 
