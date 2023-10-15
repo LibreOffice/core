@@ -60,7 +60,7 @@ else
 
 # libffi is not all that stable, with 3 different SONAMEs currently, so we
 # have to bundle it; --without-system-ffi does not work any more on Linux.
-# Unfortuantely (as of 3.7) pkg-config is used to locate libffi so we do some
+# Unfortunately (as of 3.7) pkg-config is used to locate libffi so we do some
 # hacks to find the libffi.pc in workdir by overriding PKG_CONFIG_LIBDIR.
 # Also, pkg-config is only used to find the headers, the libdir needs to be
 # passed extra.
