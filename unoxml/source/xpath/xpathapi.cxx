@@ -110,7 +110,7 @@ namespace XPath
             nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
     {
         DOM::CNode *const pCNode(dynamic_cast<DOM::CNode*>(xNamespaceNode.get()));
-        if (!pCNode) { throw RuntimeException(); }
+        if (!pCNode) { throw RuntimeException("Could not use the namespace node in order to collect namespace declarations."); }
 
         ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
 
@@ -274,7 +274,7 @@ namespace XPath
             Reference< XNode > const& xContextNode,
             const OUString& expr)
     {
-        if (!xContextNode.is()) { throw RuntimeException(); }
+        if (!xContextNode.is()) { throw RuntimeException("xContextNode does not exist!"); }
 
         nsmap_t nsmap;
         extensions_t extensions;
@@ -288,15 +288,15 @@ namespace XPath
         // get the node and document
         ::rtl::Reference<DOM::CDocument> const pCDoc(
                 dynamic_cast<DOM::CDocument*>(xContextNode->getOwnerDocument().get()));
-        if (!pCDoc.is()) { throw RuntimeException(); }
+        if (!pCDoc.is()) { throw RuntimeException("Interface pointer for the owner document of the xContextNode does not exist."); }
 
         DOM::CNode *const pCNode = dynamic_cast<DOM::CNode*>(xContextNode.get());
-        if (!pCNode) { throw RuntimeException(); }
+        if (!pCNode) { throw RuntimeException("xContextNode interface pointer does not exist."); }
 
         ::osl::MutexGuard const g(pCDoc->GetMutex()); // lock the document!
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
-        if (!pNode) { throw RuntimeException(); }
+        if (!pNode) { throw RuntimeException("Node pointer for xContextNode does not exist."); }
         xmlDocPtr pDoc = pNode->doc;
 
         /* NB: workaround for #i87252#:
@@ -376,7 +376,7 @@ namespace XPath
             Reference< XXPathExtension> const& xExtension)
     {
         if (!xExtension.is()) {
-            throw RuntimeException();
+            throw RuntimeException("Extension instance xExtension to be used by XPath does not exist.");
         }
         std::scoped_lock const g(m_Mutex);
         m_extensions.push_back( xExtension );
