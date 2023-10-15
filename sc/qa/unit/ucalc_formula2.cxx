@@ -20,6 +20,7 @@
 #include <externalrefmgr.hxx>
 #include <undomanager.hxx>
 #include <broadcast.hxx>
+#include <kahan.hxx>
 
 #include <svl/broadcast.hxx>
 #include <sfx2/docfile.hxx>
@@ -4598,7 +4599,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf147398)
     m_pDoc->DeleteTab(0);
 }
 
-#if !defined(_WIN32)
+#if SC_USE_SSE2
 CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf156985)
 {
     m_pDoc->InsertTab(0, "Test");
