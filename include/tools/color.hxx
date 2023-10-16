@@ -311,8 +311,11 @@ public:
       */
     bool IsDark() const
     {
-        // tdf#156182 
-        return GetLuminance() <= 156;
+        // tdf#156182, and band aid for follow-up issues
+        if (mValue == 0x729fcf) // COL_DEFAULT_SHAPE_FILLING
+            return GetLuminance() <= 62;
+        else
+            return GetLuminance() <= 156;
     }
 
     /** Comparison with luminance thresholds.
