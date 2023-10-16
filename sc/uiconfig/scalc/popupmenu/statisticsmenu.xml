@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:SamplingDialog"/>
+  <menu:menuitem menu:id=".uno:DescriptiveStatisticsDialog"/>
+  <menu:menuitem menu:id=".uno:AnalysisOfVarianceDialog"/>
+  <menu:menuitem menu:id=".uno:CorrelationDialog"/>
+  <menu:menuitem menu:id=".uno:CovarianceDialog"/>
+  <menu:menuitem menu:id=".uno:ExponentialSmoothingDialog"/>
+  <menu:menuitem menu:id=".uno:MovingAverageDialog"/>
+  <menu:menuitem menu:id=".uno:RegressionDialog"/>
+  <menu:menuitem menu:id=".uno:TTestDialog"/>
+  <menu:menuitem menu:id=".uno:FTestDialog"/>
+  <menu:menuitem menu:id=".uno:ZTestDialog"/>
+  <menu:menuitem menu:id=".uno:ChiSquareTestDialog"/>
+  <menu:menuitem menu:id=".uno:FourierAnalysisDialog"/>
+</menu:menupopup>

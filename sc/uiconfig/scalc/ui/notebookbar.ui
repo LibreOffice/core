@@ -281,6 +281,19 @@
         <property name="action_name">.uno:ShowDetail</property>
       </object>
     </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuData-separator8">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="MenuData-Statistics">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:StatisticsMenu</property>
+      </object>
+    </child>
   </object>
   <object class="GtkMenu" id="Menu Draw">
     <property name="visible">True</property>
