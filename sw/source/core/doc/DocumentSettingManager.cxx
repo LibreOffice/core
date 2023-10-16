@@ -255,6 +255,8 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
             return mbDoNotBreakWrappedTables;
         case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
             return mbAllowTextAfterFloatingTableBreak;
+        case DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING:
+            return mbJustifyLinesWithShrinking;
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY: return mbNoNumberingShowFollowBy;
         case DocumentSettingId::DROP_CAP_PUNCTUATION: return mbDropCapPunctuation;
         case DocumentSettingId::USE_VARIABLE_WIDTH_NBSP: return mbUseVariableWidthNBSP;
@@ -446,6 +448,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK:
             mbAllowTextAfterFloatingTableBreak = value;
+            break;
+
+        case DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING:
+            mbJustifyLinesWithShrinking = value;
             break;
 
         case DocumentSettingId::NO_NUMBERING_SHOW_FOLLOWBY:
@@ -1075,6 +1081,11 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbAllowTextAfterFloatingTableBreak"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbAllowTextAfterFloatingTableBreak).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbJustifyLinesWithShrinking"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                BAD_CAST(OString::boolean(mbJustifyLinesWithShrinking).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mnImagePreferredDPI"));

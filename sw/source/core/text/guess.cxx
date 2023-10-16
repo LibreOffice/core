@@ -80,6 +80,14 @@ bool SwTextGuess::Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,
 
     const SvxAdjust& rAdjust = rInf.GetTextFrame()->GetTextNodeForParaProps()->GetSwAttrSet().GetAdjust().GetAdjust();
 
+    // allow shrinking, i.e. more text in justified lines, depending on the justification algorithm
+    if ( rAdjust == SvxAdjust::Block && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                    DocumentSettingId::JUSTIFY_LINES_WITH_SHRINKING))
+    {
+        // allow up to 2% shrinking of the line
+        nLineWidth /= 0.98;
+    }
+
     // tdf#104668 space chars at the end should be cut if the compatibility option is enabled
     // for LTR mode only
     if ( !rInf.GetTextFrame()->IsRightToLeft() )

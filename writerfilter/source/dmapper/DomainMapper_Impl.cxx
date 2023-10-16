@@ -9075,6 +9075,11 @@ void DomainMapper_Impl::ApplySettingsTable()
 
         if (m_pSettingsTable->GetDoNotExpandShiftReturn())
             xSettings->setPropertyValue( "DoNotJustifyLinesWithManualBreak", uno::Any(true) );
+        // new paragraph justification has been introduced in version 15,
+        // breaking text layout interoperability: new line shrinking needs less space
+        // i.e. it typesets the same text with less lines and pages.
+        if (m_pSettingsTable->GetWordCompatibilityMode() >= 15)
+            xSettings->setPropertyValue("JustifyLinesWithShrinking", uno::Any( true ));
         if (m_pSettingsTable->GetUsePrinterMetrics())
             xSettings->setPropertyValue("PrinterIndependentLayout", uno::Any(document::PrinterIndependentLayout::DISABLED));
         if( m_pSettingsTable->GetEmbedTrueTypeFonts())

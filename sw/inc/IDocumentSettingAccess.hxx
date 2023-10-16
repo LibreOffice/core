@@ -94,6 +94,8 @@ enum class DocumentSettingId
     HYPHENATE_URLS, ///< tdf#152952
     DO_NOT_BREAK_WRAPPED_TABLES,
     ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK,
+    // tdf#119908 new paragraph justification
+    JUSTIFY_LINES_WITH_SHRINKING,
     // COMPATIBILITY FLAGS END
     BROWSE_MODE,
     HTML_MODE,
