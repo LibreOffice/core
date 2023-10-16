@@ -54,10 +54,11 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <unotools/configmgr.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
-#include <unotools/configmgr.hxx>
 #include "persistence.hxx"
 
 using namespace ::com::sun::star;
@@ -362,14 +363,8 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     return xDocument;
 }
 
-
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
-    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
-
-    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
-
     sal_Int32 nLen = 2;
     uno::Sequence< beans::PropertyValue > aArgs( nLen );
 
@@ -392,9 +387,21 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     aArgs.realloc( m_aDocMediaDescriptor.getLength() + nLen );
     for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
     {
+        // return early if this document is not trusted to open links
+        if (m_aDocMediaDescriptor[nInd].Name == "Referer")
+        {
+            OUString referer;
+            m_aDocMediaDescriptor[nInd].Value >>= referer;
+            if (SvtSecurityOptions().isUntrustedReferer(referer))
+                return nullptr;
+        }
         aArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
         aArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
     }
+
+    uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
+    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
 
     try
     {
@@ -436,7 +443,6 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     return xDocument;
 
 }
-
 
 OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
 {
