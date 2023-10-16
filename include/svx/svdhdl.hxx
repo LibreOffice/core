@@ -428,13 +428,13 @@ public:
 class SVXCORE_DLLPUBLIC SdrHdlList
 {
     size_t                      mnFocusIndex;
-    SdrMarkView*                pView;
+    SdrMarkView*                m_pView;
     std::deque<std::unique_ptr<SdrHdl>> maList;
-    sal_uInt16                  nHdlSize;
+    sal_uInt16                  m_nHdlSize;
 
-    bool                        bRotateShear : 1;
-    bool                        bDistortShear : 1;
-    bool                        bMoveOutside : 1;      // move handles outwards (for TextEdit)
+    bool                        m_bRotateShear : 1;
+    bool                        m_bDistortShear : 1;
+    bool                        m_bMoveOutside : 1;      // move handles outwards (for TextEdit)
 
     SVX_DLLPRIVATE SdrHdlList(const SdrHdlList&) = delete;
     SVX_DLLPRIVATE void operator=(const SdrHdlList&) = delete;
@@ -450,7 +450,7 @@ public:
     void ResetFocusHdl();
 
     // Access to View
-    SdrMarkView* GetView() const { return pView;}
+    SdrMarkView* GetView() const { return m_pView;}
 
     // Sorting: 1.Level first reference point handle, then normal handles, next Glue, then User then Plushandles
     //          2.Level PageView (Pointer)
@@ -460,13 +460,13 @@ public:
     SdrHdl*  GetHdl(size_t nNum) const { return nNum < maList.size() ? maList[nNum].get() : nullptr; }
     size_t   GetHdlNum(const SdrHdl* pHdl) const;
     void     SetHdlSize(sal_uInt16 nSiz);
-    sal_uInt16   GetHdlSize() const                        { return nHdlSize; }
+    sal_uInt16   GetHdlSize() const                        { return m_nHdlSize; }
     void     SetMoveOutside(bool bOn);
-    bool IsMoveOutside() const                     { return bMoveOutside; }
+    bool IsMoveOutside() const                     { return m_bMoveOutside; }
     void     SetRotateShear(bool bOn);
-    bool IsRotateShear() const                     { return bRotateShear; }
+    bool IsRotateShear() const                     { return m_bRotateShear; }
     void     SetDistortShear(bool bOn);
-    bool IsDistortShear() const                    { return bDistortShear; }
+    bool IsDistortShear() const                    { return m_bDistortShear; }
 
     // AddHdl takes ownership of the handle. It should be on the Heap
     // as Clear() deletes it.

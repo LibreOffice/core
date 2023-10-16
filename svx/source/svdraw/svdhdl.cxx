@@ -2174,12 +2174,12 @@ void SdrHdlList::ResetFocusHdl()
 
 SdrHdlList::SdrHdlList(SdrMarkView* pV)
 :   mnFocusIndex(SAL_MAX_SIZE),
-    pView(pV)
+    m_pView(pV)
 {
-    nHdlSize = 3;
-    bRotateShear = false;
-    bMoveOutside = false;
-    bDistortShear = false;
+    m_nHdlSize = 3;
+    m_bRotateShear = false;
+    m_bMoveOutside = false;
+    m_bDistortShear = false;
 }
 
 SdrHdlList::~SdrHdlList()
@@ -2189,10 +2189,10 @@ SdrHdlList::~SdrHdlList()
 
 void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
 {
-    if(nHdlSize != nSiz)
+    if(m_nHdlSize != nSiz)
     {
         // remember new value
-        nHdlSize = nSiz;
+        m_nHdlSize = nSiz;
 
         // propagate change to IAOs
         for(size_t i=0; i<GetHdlCount(); ++i)
@@ -2205,10 +2205,10 @@ void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
 
 void SdrHdlList::SetMoveOutside(bool bOn)
 {
-    if(bMoveOutside != bOn)
+    if(m_bMoveOutside != bOn)
     {
         // remember new value
-        bMoveOutside = bOn;
+        m_bMoveOutside = bOn;
 
         // propagate change to IAOs
         for(size_t i=0; i<GetHdlCount(); ++i)
@@ -2221,12 +2221,12 @@ void SdrHdlList::SetMoveOutside(bool bOn)
 
 void SdrHdlList::SetRotateShear(bool bOn)
 {
-    bRotateShear = bOn;
+    m_bRotateShear = bOn;
 }
 
 void SdrHdlList::SetDistortShear(bool bOn)
 {
-    bDistortShear = bOn;
+    m_bDistortShear = bOn;
 }
 
 std::unique_ptr<SdrHdl> SdrHdlList::RemoveHdl(size_t nNum)
@@ -2248,8 +2248,8 @@ void SdrHdlList::Clear()
 {
     maList.clear();
 
-    bRotateShear=false;
-    bDistortShear=false;
+    m_bRotateShear=false;
+    m_bDistortShear=false;
 }
 
 void SdrHdlList::Sort()
