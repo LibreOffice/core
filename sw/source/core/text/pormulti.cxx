@@ -2503,7 +2503,7 @@ SwLinePortion* SwTextFormatter::MakeRestPortion( const SwLineLayout* pLine,
             pTmp = new SwDoubleLinePortion( *pCreate, nMultiPos );
         else if( pHelpMulti->IsBidi() )
             pTmp = new SwBidiPortion( nMultiPos, pCreate->nLevel );
-        else if (IsIncompleteRuby(*pHelpMulti))
+        else if (IsIncompleteRuby(*pHelpMulti) && pCreate->pAttr)
         {
             TextFrameIndex nRubyOffset = static_cast<const SwRubyPortion*>(pHelpMulti)->GetRubyOffset();
             pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
