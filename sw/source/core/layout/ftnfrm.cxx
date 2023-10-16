@@ -2558,9 +2558,9 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
     if( pBody )
     {
         SwRectFnSet aRectFnSet(this);
+        nRet = aRectFnSet.GetHeight(pBody->getFrameArea());
         if( IsInSct() )
         {
-            nRet = 0;
             SwTwips nTmp = aRectFnSet.YDiff( aRectFnSet.GetPrtTop(*pBody),
                                                aRectFnSet.GetTop(getFrameArea()) );
             const SwSectionFrame* pSect = FindSctFrame();
@@ -2594,12 +2594,11 @@ SwTwips SwFootnoteBossFrame::GetVarSpace() const
                     }
                 }
             }
-            if( nTmp < nRet )
-                nRet = nTmp;
+            if( nTmp < 0 )
+                nRet += nTmp;
         }
         else
-            nRet = - aRectFnSet.GetHeight(pPg->getFramePrintArea())/5;
-        nRet += aRectFnSet.GetHeight(pBody->getFrameArea());
+            nRet -= aRectFnSet.GetHeight(pPg->getFramePrintArea())/5;
         if( nRet < 0 )
             nRet = 0;
     }
