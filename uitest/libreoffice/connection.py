@@ -10,6 +10,7 @@ import time
 import traceback
 import uuid
 import os
+import platform
 import signal
 
 try:
@@ -37,8 +38,9 @@ class OfficeConnection:
         If the connection method is path the instance will be created as a
         new subprocess. If the connection method is connect the instance tries
         to connect to an existing instance with the specified socket string """
-        signal.signal(signal.SIGCHLD, signal_handler)
-        signal.signal(signal.SIGPIPE, signal_handler)
+        if platform.system() != "Windows":
+            signal.signal(signal.SIGCHLD, signal_handler)
+            signal.signal(signal.SIGPIPE, signal_handler)
 
         (method, sep, rest) = self.args["--soffice"].partition(":")
         if sep != ":":
