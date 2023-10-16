@@ -659,6 +659,21 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="9"/>
     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce29" table:formula="of:=DAY(&quot;1899-12-29T15:26:14&quot;)" office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce31" office:value-type="float" office:value="29" calcext:value-type="float">
+      <text:p>29</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=[.A5]=[.B5]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce33" office:value-type="string" calcext:value-type="string">
+      <text:p>DAY(&quot;1899-12-29T15:26:14&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="10"/>
+    </table:table-row>
     <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="9"/>
      <table:table-cell table:style-name="ce34" table:number-columns-repeated="5"/>
@@ -698,7 +713,7 @@
      <table:table-cell table:number-columns-repeated="14"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C4">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C10">
       <calcext:condition calcext:apply-style-name="Default" calcext:value="=&quot;&quot;" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled1" calcext:value="=0" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="Untitled2" calcext:value="=1" calcext:base-cell-address="Sheet2.C2"/>
