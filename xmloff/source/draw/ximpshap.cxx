@@ -505,6 +505,9 @@ void SdXMLShapeContext::AddShape(OUString const & serviceName)
                  || serviceName == "com.sun.star.drawing.PluginShape"
                  || serviceName == "com.sun.star.presentation.MediaShape")
         {
+            // On adding another entry to this list of service names to pass an argument via the WithArguments variant
+            // you may need to adjust the more obscure OReportDefinition::createInstanceWithArguments as well as the
+            // more obvious SvxUnoDrawMSFactory::createInstanceWithArguments
             xShape.set( xServiceFact->createInstanceWithArguments(serviceName, { css::uno::Any(GetImport().GetDocumentBase()) }),
                         css::uno::UNO_QUERY);
         }
