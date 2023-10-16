@@ -121,21 +121,21 @@ void ScInterpreter::ScGetActTime()
 void ScInterpreter::ScGetYear()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate.AddDays( GetInt32());
+    aDate.AddDays( GetFloor32());
     PushDouble( static_cast<double>(aDate.GetYear()) );
 }
 
 void ScInterpreter::ScGetMonth()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate.AddDays( GetInt32());
+    aDate.AddDays( GetFloor32());
     PushDouble( static_cast<double>(aDate.GetMonth()) );
 }
 
 void ScInterpreter::ScGetDay()
 {
     Date aDate = pFormatter->GetNullDate();
-    aDate.AddDays( GetInt32());
+    aDate.AddDays( GetFloor32());
     PushDouble(static_cast<double>(aDate.GetDay()));
 }
 
@@ -199,7 +199,7 @@ void ScInterpreter::ScGetDayOfWeek()
         nFlag = 1;
 
     Date aDate = pFormatter->GetNullDate();
-    aDate.AddDays( GetInt32());
+    aDate.AddDays( GetFloor32());
     int nVal = static_cast<int>(aDate.GetDayOfWeek());  // MONDAY = 0
     switch (nFlag)
     {
@@ -240,7 +240,7 @@ void ScInterpreter::ScWeeknumOOo()
         sal_Int16 nFlag = GetInt16();
 
         Date aDate = pFormatter->GetNullDate();
-        aDate.AddDays( GetInt32());
+        aDate.AddDays( GetFloor32());
         PushInt( static_cast<int>(aDate.GetWeekOfYear( nFlag == 1 ? SUNDAY : MONDAY )));
     }
 }
@@ -254,7 +254,7 @@ void ScInterpreter::ScGetWeekOfYear()
     sal_Int16 nFlag = ( nParamCount == 1 ) ? 1 : GetInt16();
 
     Date aDate = pFormatter->GetNullDate();
-    aDate.AddDays( GetInt32());
+    aDate.AddDays( GetFloor32());
 
     sal_Int32 nMinimumNumberOfDaysInWeek;
     DayOfWeek eFirstDayOfWeek;
@@ -296,7 +296,7 @@ void ScInterpreter::ScGetIsoWeekOfYear()
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
         Date aDate = pFormatter->GetNullDate();
-        aDate.AddDays( GetInt32());
+        aDate.AddDays( GetFloor32());
         PushInt( static_cast<int>(aDate.GetWeekOfYear()) );
     }
 }
@@ -571,7 +571,7 @@ void ScInterpreter::ScWorkday_MS()
         PushError( nErr );
     else
     {
-        sal_Int32 nDays = GetInt32();
+        sal_Int32 nDays = GetFloor32();
         sal_uInt32 nDate = GetUInt32();
         if (nGlobalError != FormulaError::NONE || (nDate > SAL_MAX_UINT32 - nNullDate))
         {
@@ -701,8 +701,8 @@ void ScInterpreter::ScGetDiffDate360()
         return;
 
     bool bFlag = nParamCount == 3 && GetBool();
-    sal_Int32 nDate2 = GetInt32();
-    sal_Int32 nDate1 = GetInt32();
+    sal_Int32 nDate2 = GetFloor32();
+    sal_Int32 nDate1 = GetFloor32();
     if (nGlobalError != FormulaError::NONE)
         PushError( nGlobalError);
     else
@@ -766,8 +766,8 @@ void ScInterpreter::ScGetDateDif()
         return;
 
     OUString aInterval = GetString().getString();
-    sal_Int32 nDate2 = GetInt32();
-    sal_Int32 nDate1 = GetInt32();
+    sal_Int32 nDate2 = GetFloor32();
+    sal_Int32 nDate1 = GetFloor32();
 
     if (nGlobalError != FormulaError::NONE)
     {

@@ -2217,6 +2217,23 @@ sal_Int32 ScInterpreter::GetInt32WithDefault( sal_Int32 nDefault )
     return double_to_int32(fVal);
 }
 
+sal_Int32 ScInterpreter::GetFloor32()
+{
+    double fVal = GetDouble();
+    if (!std::isfinite(fVal))
+    {
+        SetError( GetDoubleErrorValue( fVal));
+        return SAL_MAX_INT32;
+    }
+    fVal = rtl::math::approxFloor( fVal);
+    if (fVal < SAL_MIN_INT32 || SAL_MAX_INT32 < fVal)
+    {
+        SetError( FormulaError::IllegalArgument);
+        return SAL_MAX_INT32;
+    }
+    return static_cast<sal_Int32>(fVal);
+}
+
 sal_Int16 ScInterpreter::GetInt16()
 {
     double fVal = GetDouble();

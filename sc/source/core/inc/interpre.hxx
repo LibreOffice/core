@@ -427,6 +427,8 @@ private:
     sal_Int32 GetInt32();
     /** if GetDoubleWithDefault() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
     sal_Int32 GetInt32WithDefault( sal_Int32 nDefault );
+    /** if GetDouble() not within int32 limits sets nGlobalError and returns SAL_MAX_INT32 */
+    sal_Int32 GetFloor32();
     /** if GetDouble() not within int16 limits sets nGlobalError and returns SAL_MAX_INT16 */
     sal_Int16 GetInt16();
     /** if GetDouble() not within uint32 limits sets nGlobalError and returns SAL_MAX_UINT32 */
