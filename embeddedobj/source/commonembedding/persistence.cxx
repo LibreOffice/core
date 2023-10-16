@@ -77,7 +77,7 @@ uno::Sequence< beans::PropertyValue > GetValuableArgs_Impl( const uno::Sequence<
           || aMedDescr[nInd].Name == "StartPresentation" || aMedDescr[nInd].Name == "RepairPackage"
           || aMedDescr[nInd].Name == "StatusIndicator" || aMedDescr[nInd].Name == "ViewData"
           || aMedDescr[nInd].Name == "ViewId" || aMedDescr[nInd].Name == "MacroExecutionMode"
-          || aMedDescr[nInd].Name == "UpdateDocMode"
+          || aMedDescr[nInd].Name == "UpdateDocMode" || aMedDescr[nInd].Name == "Referer"
           || (aMedDescr[nInd].Name == "DocumentBaseURL" && bCanUseDocumentBaseURL) )
         {
             aResult.realloc( ++nResLen );

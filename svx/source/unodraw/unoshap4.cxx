@@ -481,7 +481,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
                 awt::Size aSz = xObj->getVisualAreaSize( pOle2Obj->GetAspect() );
                 aRect.SetSize( Size( aSz.Width, aSz.Height ) );
             }
-            catch( embed::NoVisualAreaSizeException& )
+            catch( const uno::Exception& )
             {}
             pOle2Obj->SetLogicRect( aRect );
         }
