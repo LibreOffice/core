@@ -75,6 +75,7 @@
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
 #include <drawinglayer/XShapeDumper.hxx>
+#include <sfx2/objsh.hxx>
 
 #include <time.h>
 
@@ -112,12 +113,9 @@
 #include <memory>
 #include <libxml/xmlwriter.h>
 
-namespace com::sun::star::chart2 { class XChartDocument; }
-
 namespace chart {
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -1413,6 +1411,35 @@ void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
 {
 }
 
+namespace
+{
+// Disables setting the chart's modified state, as well as its parent's (if exists).
+// Painting a chart must not set these states.
+struct ChartModelDisableSetModified
+{
+    ChartModel& mrChartModel;
+    SfxObjectShell* mpParentShell;
+    bool mbWasUnmodified;
+    ChartModelDisableSetModified(ChartModel& rChartModel)
+        : mrChartModel(rChartModel)
+        , mpParentShell(SfxObjectShell::GetShellFromComponent(rChartModel.getParent()))
+        , mbWasUnmodified(!rChartModel.isModified())
+    {
+        if (mpParentShell && mpParentShell->IsEnableSetModified())
+            mpParentShell->EnableSetModified(false);
+        else
+            mpParentShell = nullptr;
+    }
+    ~ChartModelDisableSetModified()
+    {
+        if (mbWasUnmodified && mrChartModel.isModified())
+            mrChartModel.setModified(false);
+        if (mpParentShell)
+            mpParentShell->EnableSetModified(true);
+    }
+};
+}
+
 void ChartView::impl_updateView( bool bCheckLockedCtrler )
 {
     if( !m_pDrawModelWrapper )
@@ -1442,6 +1469,9 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
             SolarMutexGuard aSolarGuard;
             m_pDrawModelWrapper->lockControllers();
         }
+
+        // Rendering the chart must not set its (or its parent) modified status
+        ChartModelDisableSetModified dontSetModified(mrChartModel);
 
         //create chart view
         {

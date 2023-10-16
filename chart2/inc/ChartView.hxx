@@ -115,7 +115,7 @@ public:
 
     // ___ExplicitValueProvider___
     virtual bool getExplicitValuesForAxis(
-        rtl::Reference< ::chart::Axis > xAxis
+        rtl::Reference< Axis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement ) override;
     virtual rtl::Reference< SvxShape >
@@ -205,7 +205,7 @@ private: //member
 
     css::uno::Reference< css::uno::XComponentContext> m_xCC;
 
-    chart::ChartModel& mrChartModel;
+    ChartModel& mrChartModel;
 
     css::uno::Reference< css::lang::XMultiServiceFactory>
             m_xShapeFactory;
