@@ -53,6 +53,15 @@ diff -ru pixman-0.42.2.orig/pixman/pixman-fast-path.c pixman-0.42.2/pixman/pixma
 diff -ru pixman-0.42.2.orig/pixman/pixman-sse2.c pixman-0.42.2/pixman/pixman-sse2.c
 --- misc/pixman-0.42.2/pixman/pixman-sse2.c	2022-02-02 05:51:25.000000000 +0900
 +++ misc/build/pixman-0.42.2/pixman/pixman-sse2.c   2022-11-28 22:11:19.276969466 +0900
+@@ -516,7 +516,7 @@
+ }
+ 
+ static force_inline uint32_t
+-combine1 (const uint32_t *ps, const uint32_t *pm)
++combine1 (const void *ps, const uint32_t *pm)
+ {
+     uint32_t s;
+     memcpy(&s, ps, sizeof(uint32_t));
 @@ -3345,7 +3345,7 @@
  
  	b = filler & 0xff;
