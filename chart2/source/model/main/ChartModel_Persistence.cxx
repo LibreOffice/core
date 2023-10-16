@@ -671,7 +671,8 @@ void SAL_CALL ChartModel::setModified( sal_Bool bModified )
 
     if( m_nControllerLockCount > 0 )
     {
-        m_bUpdateNotificationsPending = true;
+        if (bModified)
+            m_bUpdateNotificationsPending = true; // Maybe !bModified should reset it?
         return;//don't call listeners if controllers are locked
     }
     aGuard.clear();
