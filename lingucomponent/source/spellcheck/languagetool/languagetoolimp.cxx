@@ -444,14 +444,14 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
         = std::min(xRes.nStartOfNextSentencePosition, aText.getLength());
 
     OString langTag(LanguageTag::convertToBcp47(aLocale, false).toUtf8());
-    OString postData = encodeTextForLanguageTool(aText);
+    OString postData;
     const bool bDudenProtocol = LanguageToolCfg::RestProtocol::get().value_or("") == "duden";
     if (bDudenProtocol)
     {
         std::stringstream aStream;
         boost::property_tree::ptree aTree;
         aTree.put("text-language", langTag.getStr());
-        aTree.put("text", postData.getStr());
+        aTree.put("text", aText.toUtf8()); // We don't encode the text in Duden Corrector tool case.
         aTree.put("hyphenation", false);
         aTree.put("spellchecking-level", 3);
         aTree.put("correction-proposals", true);
@@ -460,7 +460,7 @@ ProofreadingResult SAL_CALL LanguageToolGrammarChecker::doProofreading(
     }
     else
     {
-        postData = "text=" + postData + "&language=" + langTag;
+        postData = "text=" + encodeTextForLanguageTool(aText) + "&language=" + langTag;
     }
 
     if (auto cachedResult = mCachedResults.find(postData); cachedResult != mCachedResults.end())
