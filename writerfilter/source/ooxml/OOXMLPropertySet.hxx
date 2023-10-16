@@ -94,6 +94,8 @@ public:
     virtual OOXMLValue* clone() const override;
 };
 
+bool GetBooleanValue(std::string_view pValue);
+
 class OOXMLBooleanValue final : public OOXMLValue
 {
     bool mbValue;

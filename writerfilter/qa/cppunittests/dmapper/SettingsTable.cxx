@@ -41,6 +41,24 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     // set.
     CPPUNIT_ASSERT(bDoNotBreakWrappedTables);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
+{
+    // Given a document with <w:compatSetting w:name="allowTextAfterFloatingTableBreak">:
+    // When importing that document:
+    loadFromURL(u"floattable-wrap-on-all-pages.docx");
+
+    // Then make sure that the matching compat flag is set:
+    uno::Reference<lang::XMultiServiceFactory> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xDocument->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+    bool bAllowTextAfterFloatingTableBreak{};
+    xSettings->getPropertyValue("AllowTextAfterFloatingTableBreak")
+        >>= bAllowTextAfterFloatingTableBreak;
+    // Without the accompanying fix in place, this test would have failed, the compat flag was not
+    // set.
+    CPPUNIT_ASSERT(bAllowTextAfterFloatingTableBreak);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
