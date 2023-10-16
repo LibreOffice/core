@@ -165,6 +165,9 @@ public:
     virtual OUString SAL_CALL getDescriptionByHierarchicalName(
         OUString const & aName) override;
 
+    virtual OUString SAL_CALL getTypeByHierarchicalName(
+        OUString const & aName) override;
+
     virtual sal_Bool SAL_CALL hasByHierarchicalName(OUString const & aName) override;
 
     virtual void SAL_CALL replaceByHierarchicalName(

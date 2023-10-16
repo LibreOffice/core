@@ -56,6 +56,9 @@ public:
     void setDescription(OUString const& description) { description_ = description; };
     OUString getDescription() { return description_; }
 
+    void setType(OUString const& type) { type_ = type; };
+    OUString getType() { return type_; }
+
     rtl::Reference< Node > getMember(OUString const & name);
 
 protected:
@@ -67,6 +70,7 @@ private:
     int layer_;
     int finalized_;
     OUString description_;
+    OUString type_;
 };
 
 }

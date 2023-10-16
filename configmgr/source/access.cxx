@@ -455,6 +455,19 @@ OUString Access::getDescriptionByHierarchicalName(OUString const & aName)
     return child->getNode()->getDescription();
 }
 
+OUString Access::getTypeByHierarchicalName(OUString const & aName)
+{
+    assert(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    rtl::Reference< ChildAccess > child(getSubChild(aName));
+    if (!child.is()) {
+        throw css::container::NoSuchElementException(
+            aName, getXWeak());
+    }
+    return child->getNode()->getType();
+}
+
 sal_Bool Access::hasByHierarchicalName(OUString const & aName)
 {
     assert(thisIs(IS_ANY));

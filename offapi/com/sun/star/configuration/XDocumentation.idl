@@ -27,6 +27,18 @@ interface XDocumentation {
      */
     string getDescriptionByHierarchicalName( [in] string aName )
             raises( com::sun::star::container::NoSuchElementException );
+
+    /** @returns
+            the type for the requested object
+
+        @param aName
+            the hierarchical name of the object.
+
+        @throws NoSuchElementException
+            if an element under aName does not exist.
+     */
+    string getTypeByHierarchicalName( [in] string aName )
+            raises( com::sun::star::container::NoSuchElementException );
 };
 
 }; }; }; };

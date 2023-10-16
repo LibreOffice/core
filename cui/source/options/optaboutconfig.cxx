@@ -357,180 +357,220 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                 ::comphelper::getProcessComponentContext(), "*");
             beans::Property aProperty;
             bool bReadOnly = false;
+            OUString sFullPath(sPath + "/" + sPropertyName);
             try
             {
-                aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(sPath + "/"
-                                                                              + sPropertyName);
-                bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
-            }
+                aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(sFullPath);
+                bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;            }
             catch (css::beans::UnknownPropertyException)
             {
-                SAL_WARN("cui.options", "unknown property: " << sPath + "/" + sPropertyName);
+                SAL_WARN("cui.options", "unknown property: " << sFullPath);
             }
 
             OUString sTooltip;
+            OUString sType;
+            OUString sDynamicType = aNode.getValueTypeName();
             try
             {
-                Reference<configuration::XDocumentation> xObjProp(xNameAccess, UNO_QUERY_THROW);
-                sTooltip = xObjProp->getDescriptionByHierarchicalName(sPath + "/" + sPropertyName);
+                Reference<configuration::XDocumentation> xDocumentation(xNameAccess, UNO_QUERY_THROW);
+                sTooltip = xDocumentation->getDescriptionByHierarchicalName(sPath + "/" + sPropertyName);
+                sType = xDocumentation->getTypeByHierarchicalName(sFullPath);
             }
             catch (css::container::NoSuchElementException)
             {
             }
 
-            OUString sType = aNode.getValueTypeName();
             OUStringBuffer sValue;
+
+            // Fall back to dynamic type when this is empty
+            if (sType.isEmpty())
+            {
+                if (sDynamicType == "boolean")
+                    sType = "xs:boolean";
+                else if (sDynamicType == "short")
+                    sType = "xs:short";
+                else if (sDynamicType == "long")
+                    sType = "xs:int";
+                else if (sDynamicType == "hyper")
+                    sType = "xs:long";
+                else if (sDynamicType == "double")
+                    sType = "xs:double";
+                else if (sDynamicType == "string")
+                    sType = "xs:string";
+                else if (sDynamicType == "[]byte")
+                    sType = "xs:hexBinary";
+                else if (sDynamicType == "[]boolean")
+                    sType = "oor:boolean-list";
+                else if (sDynamicType == "[]short")
+                    sType = "oor:short-list";
+                else if (sDynamicType == "[]long")
+                    sType = "oor:int-list";
+                else if (sDynamicType == "[]hyper")
+                    sType = "oor:long-list";
+                else if (sDynamicType == "[]double")
+                    sType = "oor:double-list";
+                else if (sDynamicType == "[]string")
+                    sType = "oor:string-list";
+                else if (sDynamicType == "[][]byte")
+                    sType = "oor:hexBinary-list";
+            }
 
             if (it != m_modifiedPrefBoxEntries.end())
                 sValue = it->sValue;
             else
             {
-                switch( aNode.getValueType().getTypeClass() )
+                if (aNode.getValueType().getTypeClass() == css::uno::TypeClass_VOID)
                 {
-                case css::uno::TypeClass_VOID:
-                    break;
-
-                case css::uno::TypeClass_BOOLEAN:
-                    sValue = OUString::boolean( aNode.get<bool>() );
-                    break;
-
-                case css::uno::TypeClass_SHORT:
-                case css::uno::TypeClass_LONG:
-                case css::uno::TypeClass_HYPER:
-                    sValue = OUString::number( aNode.get<sal_Int64>() );
-                    break;
-
-                case css::uno::TypeClass_DOUBLE:
-                    sValue = OUString::number( aNode.get<double>() );
-                    break;
-
-                case css::uno::TypeClass_STRING:
+                    // Skip, no value set
+                }
+                else if (sType == "xs:boolean")
+                {
+                    sValue = OUString::boolean(aNode.get<bool>());
+                    sType = "boolean";
+                }
+                else if (sType == "xs:short")
+                {
+                    sValue = OUString::number(aNode.get<sal_Int16>());
+                    sType = "short";
+                }
+                else if (sType == "xs:int" )
+                {
+                    sValue = OUString::number(aNode.get<sal_Int32>());
+                    sType = "int";
+                }
+                else if (sType == "xs:long")
+                {
+                    sValue = OUString::number(aNode.get<sal_Int64>());
+                    sType = "long";
+                }
+                else if (sType == "xs:double" )
+                {
+                    sValue = OUString::number(aNode.get<double>());
+                    sType = "double";
+                }
+                else if (sType == "xs:string")
+                {
                     sValue = aNode.get<OUString>();
-                    break;
-
-                case css::uno::TypeClass_SEQUENCE:
-                    if( sType == "[]boolean" )
+                    sType = "string";
+                }
+                else if (sType == "xs:hexBinary")
+                {
+                    const uno::Sequence<sal_Int8> seq = aNode.get<uno::Sequence<sal_Int8>>();
+                    for (sal_Int8 j : seq)
                     {
-                        uno::Sequence<sal_Bool> seq = aNode.get< uno::Sequence<sal_Bool> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                        OUString s = OUString::number(static_cast<sal_uInt8>(j), 16);
+                        if (s.getLength() == 1)
                         {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append(OUString::boolean( seq[j] ));
+                            sValue.append("0");
                         }
+                        sValue.append(s.toAsciiUpperCase());
                     }
-                    else if( sType == "[]byte" )
+                    sType = "hexBinary";
+                }
+                else if (sType == "oor:boolean-list" )
+                {
+                    uno::Sequence<sal_Bool> seq = aNode.get<uno::Sequence<sal_Bool>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
                     {
-                        const uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
-                        for( sal_Int8 j : seq )
+                        if (j != 0)
                         {
-                            OUString s = OUString::number(
-                                static_cast<sal_uInt8>(j), 16 );
-                            if( s.getLength() == 1 )
+                            sValue.append(",");
+                        }
+                        sValue.append(OUString::boolean(seq[j]));
+                    }
+                    sType = "boolean-list";
+                }
+                else if (sType == "oor:short-list" )
+                {
+                    uno::Sequence<sal_Int16> seq = aNode.get<uno::Sequence<sal_Int16>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        sValue.append(static_cast<sal_Int32>(seq[j]));
+                    }
+                    sType = "short-list";
+                }
+                else if (sType == "oor:int-list")
+                {
+                    uno::Sequence<sal_Int32> seq = aNode.get<uno::Sequence<sal_Int32>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        sValue.append(seq[j]);
+                    }
+                    sType = "int-list";
+                }
+                else if (sType == "oor:long-list")
+                {
+                    uno::Sequence<sal_Int64> seq = aNode.get<uno::Sequence<sal_Int64>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        sValue.append(seq[j]);
+                    }
+                    sType = "long-list";
+                }
+                else if (sType == "oor:double-list")
+                {
+                    uno::Sequence<double> seq = aNode.get<uno::Sequence<double>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        sValue.append(seq[j]);
+                    }
+                    sType = "double-list";
+                }
+                else if (sType == "oor:string-list")
+                {
+                    uno::Sequence<OUString> seq = aNode.get<uno::Sequence<OUString>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        sValue.append(seq[j]);
+                    }
+                    sType = "string-list";
+                }
+                else if (sType == "oor:hexBinary-list" )
+                {
+                    const uno::Sequence<uno::Sequence<sal_Int8>> seq
+                        = aNode.get<uno::Sequence<uno::Sequence<sal_Int8>>>();
+                    for (sal_Int32 j = 0; j != seq.getLength(); ++j)
+                    {
+                        if (j != 0)
+                        {
+                            sValue.append(",");
+                        }
+                        for (sal_Int8 k : seq[j])
+                        {
+                            OUString s = OUString::number(static_cast<sal_uInt8>(k), 16);
+                            if (s.getLength() == 1)
                             {
                                 sValue.append("0");
                             }
                             sValue.append(s.toAsciiUpperCase());
                         }
                     }
-                    else if( sType == "[][]byte" )
-                    {
-                        const uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            for( sal_Int8 k : seq[j] )
-                            {
-                                OUString s = OUString::number(
-                                    static_cast<sal_uInt8>(k), 16 );
-                                if( s.getLength() == 1 )
-                                {
-                                    sValue.append("0");
-                                }
-                                sValue.append(s.toAsciiUpperCase());
-                            }
-                        }
-                    }
-                    else if( sType == "[]short" )
-                    {
-                        uno::Sequence<sal_Int16> seq = aNode.get< uno::Sequence<sal_Int16> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append( static_cast<sal_Int32>(seq[j]) );
-                        }
-                    }
-                    else if( sType == "[]long" )
-                    {
-                        uno::Sequence<sal_Int32> seq = aNode.get< uno::Sequence<sal_Int32> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append( seq[j] );
-                        }
-                    }
-                    else if( sType == "[]hyper" )
-                    {
-                        uno::Sequence<sal_Int64> seq = aNode.get< uno::Sequence<sal_Int64> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append( seq[j] );
-                        }
-                    }
-                    else if( sType == "[]double" )
-                    {
-                        uno::Sequence<double> seq = aNode.get< uno::Sequence<double> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append( seq[j] );
-                        }
-                    }
-                    else if( sType == "[]string" )
-                    {
-                        uno::Sequence<OUString> seq = aNode.get< uno::Sequence<OUString> >();
-                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                        {
-                            if( j != 0 )
-                            {
-                                sValue.append(",");
-                            }
-                            sValue.append(seq[j]);
-                        }
-                    }
-                    else
-                    {
-                        SAL_WARN(
-                            "cui.options",
-                            "path \"" << sPath << "\" member " << item
-                                << " of unsupported type " << sType);
-                    }
-                    break;
-
-                default:
-                    SAL_WARN(
-                        "cui.options",
-                        "path \"" << sPath << "\" member " << item
-                            << " of unsupported type " << sType);
-                    break;
+                    sType = "hexBinary-list";
+                }
+                else
+                {
+                    SAL_WARN("cui.options", "path \"" << sPath << "\" member " << item
+                                                      << " of unsupported type " << sType);
                 }
             }
 
@@ -651,39 +691,6 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
     OUString sPropertyType = m_xPrefBox->get_text(*m_xScratchIter, 2);
     OUString sPropertyValue = m_xPrefBox->get_text(*m_xScratchIter, 3);
 
-    // If the configuration property has a nil value, determine its static type:
-    if (sPropertyType == "void")
-    {
-        css::uno::Reference<css::beans::XPropertySetInfo> info(
-            CuiAboutConfigTabPage::getConfigAccess(pUserData->sPropertyPath, false),
-            css::uno::UNO_QUERY_THROW);
-        css::uno::Type t;
-        try {
-            t = info->getPropertyByName(sPropertyName).Type;
-        } catch (css::beans::UnknownPropertyException &) {
-            TOOLS_WARN_EXCEPTION("cui.options", pUserData->sPropertyPath << " " << sPropertyName);
-        }
-        // If the configuration property is of type any (or an UnknownPropertyException was caught
-        // above), stick to "void" for now (ideally, properties of type any would allow setting
-        // values of arbitrary type, regardless of their current value, in this dialog anyway):
-        if (t != cppu::UnoType<void>::get()) {
-            sPropertyType = t.getTypeName();
-            switch (t.getTypeClass()) {
-            case css::uno::TypeClass_BOOLEAN:
-                sPropertyValue = "false";
-                break;
-            case css::uno::TypeClass_SHORT:
-            case css::uno::TypeClass_LONG:
-            case css::uno::TypeClass_HYPER:
-            case css::uno::TypeClass_DOUBLE:
-                sPropertyValue = "0";
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
     auto pProperty  = std::make_shared<Prop_Impl>( pUserData->sPropertyPath, sPropertyName, Any( sPropertyValue ) );
     bool bSaveChanges = false;
 
@@ -708,10 +715,6 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
         bOpenDialog = false;
         bSaveChanges = true;
     }
-    else if ( sPropertyType == "void" )
-    {
-        bOpenDialog = false;
-    }
     else
     {
         sDialogValue = sPropertyValue;
@@ -726,9 +729,9 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
             int limit=0;
             if( sPropertyType == "short" )
                 limit = SHORT_LEN_LIMIT;
-            else if( sPropertyType == "long" )
+            else if( sPropertyType == "int" )
                 limit = LONG_LEN_LIMIT;
-            else if( sPropertyType == "hyper" )
+            else if( sPropertyType == "long" )
                 limit = HYPER_LEN_LIMIT;
 
             CuiAboutConfigValueDialog aValueDialog(m_xDialog.get(), sDialogValue, limit);
@@ -748,18 +751,18 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                     nShort = static_cast<sal_Int16>(nNumb);
                     pProperty->Value <<= nShort;
                 }
-                else if( sPropertyType == "long" )
+                else if( sPropertyType == "int" )
                 {
                     sal_Int32 nLong = sNewValue.toInt32();
                     if( nLong==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range long", nullptr);
+                        throw uno::Exception("out of range int", nullptr);
                     pProperty->Value <<= nLong;
                 }
-                else if( sPropertyType == "hyper")
+                else if( sPropertyType == "long")
                 {
                     sal_Int64 nHyper = sNewValue.toInt64();
                     if( nHyper==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range hyper", nullptr);
+                        throw uno::Exception("out of range long", nullptr);
                     pProperty->Value <<= nHyper;
                 }
                 else if( sPropertyType == "double")
@@ -769,18 +772,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                         throw uno::Exception("out of range double", nullptr);
                     pProperty->Value <<= nDoub;
                 }
-                else if( sPropertyType == "float")
-                {
-                    float nFloat = sNewValue.toFloat();
-                    if( nFloat ==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range float", nullptr);
-                    pProperty->Value <<= nFloat;
-                }
                 else if( sPropertyType == "string" )
                 {
                     pProperty->Value <<= sNewValue;
                 }
-                else if( sPropertyType == "[]short" )
+                else if( sPropertyType == "short-list" )
                 {
                     //create string sequence from comma separated string
                     //uno::Sequence< OUString > seqStr;
@@ -794,7 +790,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                                    { return static_cast<sal_Int16>(str.toInt32()); });
                     pProperty->Value <<= seqShort;
                 }
-                else if( sPropertyType == "[]long" )
+                else if( sPropertyType == "int-list" )
                 {
                     std::vector< OUString > seqStrLong = commaStringToSequence( sNewValue );
 
@@ -803,7 +799,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                         [](const auto& str) { return str.toInt32(); });
                     pProperty->Value <<= seqLong;
                 }
-                else if( sPropertyType == "[]hyper" )
+                else if( sPropertyType == "long-list" )
                 {
                     std::vector< OUString > seqStrHyper = commaStringToSequence( sNewValue );
                     uno::Sequence< sal_Int64 > seqHyper( seqStrHyper.size() );
@@ -811,7 +807,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                         [](const auto& str) { return str.toInt64(); });
                     pProperty->Value <<= seqHyper;
                 }
-                else if( sPropertyType == "[]double" )
+                else if( sPropertyType == "double-list" )
                 {
                     std::vector< OUString > seqStrDoub = commaStringToSequence( sNewValue );
                     uno::Sequence< double > seqDoub( seqStrDoub.size() );
@@ -819,15 +815,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
                         [](const auto& str) { return str.toDouble(); });
                     pProperty->Value <<= seqDoub;
                 }
-                else if( sPropertyType == "[]float" )
-                {
-                    std::vector< OUString > seqStrFloat = commaStringToSequence( sNewValue );
-                    uno::Sequence< sal_Int16 > seqFloat( seqStrFloat.size() );
-                    std::transform(seqStrFloat.begin(), seqStrFloat.end(), seqFloat.getArray(),
-                        [](const auto& str) { return str.toFloat(); });
-                    pProperty->Value <<= seqFloat;
-                }
-                else if( sPropertyType == "[]string" )
+                else if( sPropertyType == "string-list" )
                 {
                     pProperty->Value <<= comphelper::containerToSequence( commaStringToSequence( sNewValue ));
                 }
