@@ -274,6 +274,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     int m_nMaxOutlineLevelShown = 10;
 
     bool m_bIsHighlightCharDF = false;
+    bool m_bIsSpotlightParaStyles = false;
+    bool m_bIsSpotlightCharStyles = false;
 
     static constexpr sal_uInt16 MAX_ZOOM_PERCENT = 600;
     static constexpr sal_uInt16 MIN_ZOOM_PERCENT = 20;

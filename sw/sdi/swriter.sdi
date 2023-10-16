@@ -4102,7 +4102,39 @@ SfxBoolItem HighlightCharDF FN_HIGHLIGHT_CHAR_DF
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::View;
+    GroupId = SfxGroupId::Format;
+]
+
+SfxBoolItem SpotlightParaStyles SID_SPOTLIGHT_PARASTYLES
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
+]
+
+SfxBoolItem SpotlightCharStyles SID_SPOTLIGHT_CHARSTYLES
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Format;
 ]
 
 SfxVoidItem MergeCells FN_TABLE_MERGE_CELLS

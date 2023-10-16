@@ -107,17 +107,6 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, OnAsyncExecuteDrop, void*, pStyleList, v
         ActionSelect("new", m_aStyleList);
 }
 
-SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent)
-    : PanelLayout(pParent, "TemplatePanel", "sfx/ui/templatepanel.ui")
-    , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
-{
-    OSL_ASSERT(pBindings!=nullptr);
-}
-
-SfxTemplatePanelControl::~SfxTemplatePanelControl()
-{
-}
-
 namespace SfxTemplate
 {
     // converts from SFX_STYLE_FAMILY Ids to 1-6
@@ -154,6 +143,61 @@ namespace SfxTemplate
             default:
                 return SfxStyleFamily::All;
         }
+    }
+}
+
+SfxTemplatePanelControl::SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent)
+    : PanelLayout(pParent, "TemplatePanel", "sfx/ui/templatepanel.ui")
+    , m_aSpotlightParaStyles(SID_SPOTLIGHT_PARASTYLES, *pBindings, *this)
+    , m_aSpotlightCharStyles(SID_SPOTLIGHT_CHARSTYLES, *pBindings, *this)
+    , pImpl(new SfxTemplateDialog_Impl(pBindings, this))
+{
+    OSL_ASSERT(pBindings!=nullptr);
+}
+
+SfxTemplatePanelControl::~SfxTemplatePanelControl()
+{
+    m_aSpotlightParaStyles.dispose();
+    m_aSpotlightCharStyles.dispose();
+}
+
+void SfxTemplatePanelControl::NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
+                                               const SfxPoolItem* pState)
+{
+    switch (nSId)
+    {
+        case SID_SPOTLIGHT_PARASTYLES:
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                const SfxBoolItem* pItem = dynamic_cast<const SfxBoolItem*>(pState);
+                if (pItem)
+                {
+                    bool bValue = pItem->GetValue();
+                    if (bValue || (!bValue && pImpl->m_aStyleList.IsHighlightParaStyles()))
+                    {
+                        pImpl->m_aStyleList.SetHighlightParaStyles(bValue);
+                        pImpl->FamilySelect(SfxTemplate::SfxFamilyIdToNId(SfxStyleFamily::Para),
+                                            pImpl->m_aStyleList, true);
+                    }
+                }
+            }
+            break;
+        case SID_SPOTLIGHT_CHARSTYLES:
+            if (eState >= SfxItemState::DEFAULT)
+            {
+                const SfxBoolItem* pItem = dynamic_cast<const SfxBoolItem*>(pState);
+                if (pItem)
+                {
+                    bool bValue = pItem->GetValue();
+                    if (bValue || (!bValue && pImpl->m_aStyleList.IsHighlightCharStyles()))
+                    {
+                        pImpl->m_aStyleList.SetHighlightCharStyles(bValue);
+                        pImpl->FamilySelect(SfxTemplate::SfxFamilyIdToNId(SfxStyleFamily::Char),
+                                            pImpl->m_aStyleList, true);
+                    }
+                }
+            }
+            break;
     }
 }
 
@@ -348,6 +392,21 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, UpdateStyles_Hdl, StyleFlags, nFlags, vo
 
 SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
 {
+    // Set the UNO's in an 'off' state. FN_PARAM_1 is used to prevent the sidebar from trying to
+    // reopen while it is being closed here.
+    if (m_aStyleList.IsHighlightParaStyles())
+    {
+        SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
+        SfxFlagItem aParam(FN_PARAM_1);
+        rDispatcher.ExecuteList(SID_SPOTLIGHT_PARASTYLES, SfxCallMode::SYNCHRON, { &aParam });
+    }
+    if (m_aStyleList.IsHighlightCharStyles())
+    {
+        SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
+        SfxFlagItem aParam(FN_PARAM_1);
+        rDispatcher.ExecuteList(SID_SPOTLIGHT_CHARSTYLES, SfxCallMode::SYNCHRON, { &aParam });
+    }
+
     if ( bIsWater )
         Execute_Impl(SID_STYLE_WATERCAN, "", "", 0, m_aStyleList);
     m_aStyleListClear.Call(nullptr);
@@ -677,13 +736,12 @@ IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, PreviewHdl, weld::Toggleable&, voi
 
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, HighlightHdl, weld::Toggleable&, void)
 {
-    bool bActive = mxHighlightCheckbox->get_active();
+    SfxDispatcher &rDispatcher = *SfxGetpApp()->GetDispatcher_Impl();
     SfxStyleFamily eFam = SfxTemplate::NIdToSfxFamilyId(nActFamily);
     if (eFam == SfxStyleFamily::Para)
-        m_aStyleList.SetHighlightParaStyles(bActive);
+       rDispatcher.Execute(SID_SPOTLIGHT_PARASTYLES, SfxCallMode::SYNCHRON);
     else if (eFam == SfxStyleFamily::Char)
-        m_aStyleList.SetHighlightCharStyles(bActive);
-    FamilySelect(nActFamily, m_aStyleList, true);
+       rDispatcher.Execute(SID_SPOTLIGHT_CHARSTYLES, SfxCallMode::SYNCHRON);
 }
 
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, UpdateStyleDependents_Hdl, void*, void)

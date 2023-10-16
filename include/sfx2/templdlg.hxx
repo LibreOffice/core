@@ -24,11 +24,14 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <sfx2/sidebar/ControllerItem.hxx>
 
 class SfxBindings;
 class SfxTemplateDialog_Impl;
 
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final : public PanelLayout
+class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxTemplatePanelControl final
+    : public PanelLayout,
+      public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {
 public:
     SfxTemplatePanelControl(SfxBindings* pBindings, weld::Widget* pParent);
@@ -37,7 +40,16 @@ public:
     weld::Builder* get_builder() { return m_xBuilder.get(); }
     weld::Container* get_container() { return m_xContainer.get(); }
 
+    virtual void NotifyItemUpdate(const sal_uInt16 nSId, const SfxItemState eState,
+                                  const SfxPoolItem* pState) override;
+
+    virtual void GetControlState(const sal_uInt16 /*nSId*/,
+                                 boost::property_tree::ptree& /*rState*/) override{};
+
 private:
+    ::sfx2::sidebar::ControllerItem m_aSpotlightParaStyles;
+    ::sfx2::sidebar::ControllerItem m_aSpotlightCharStyles;
+
     std::unique_ptr<SfxTemplateDialog_Impl> pImpl;
 };
 

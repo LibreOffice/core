@@ -361,6 +361,12 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
             case FN_HIGHLIGHT_CHAR_DF:
               aBool.SetValue(m_bIsHighlightCharDF);
             break;
+            case SID_SPOTLIGHT_PARASTYLES:
+                aBool.SetValue(m_bIsSpotlightParaStyles);
+            break;
+            case SID_SPOTLIGHT_CHARSTYLES:
+                aBool.SetValue(m_bIsSpotlightCharStyles);
+            break;
         }
 
         if( nWhich )
@@ -555,6 +561,28 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         if (STATE_TOGGLE == eState)
             bFlag = !m_bIsHighlightCharDF;
         m_bIsHighlightCharDF = bFlag;
+        break;
+
+    case SID_SPOTLIGHT_PARASTYLES:
+        if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
+        {
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "StyleListDeck");
+            GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+        }
+        if (STATE_TOGGLE == eState)
+            bFlag = !m_bIsSpotlightParaStyles;
+        m_bIsSpotlightParaStyles = bFlag;
+        break;
+
+    case SID_SPOTLIGHT_CHARSTYLES:
+        if (!pArgs || (pArgs && !pArgs->HasItem(FN_PARAM_1)))
+        {
+            const SfxStringItem sDeckName(SID_SIDEBAR_DECK, "StyleListDeck");
+            GetDispatcher().ExecuteList(SID_SIDEBAR_DECK, SfxCallMode::SYNCHRON, { &sDeckName });
+        }
+        if (STATE_TOGGLE == eState)
+            bFlag = !m_bIsSpotlightCharStyles;
+        m_bIsSpotlightCharStyles = bFlag;
         break;
 
     case FN_VIEW_META_CHARS:

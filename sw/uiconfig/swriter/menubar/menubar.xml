@@ -426,7 +426,13 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FormatPaintbrush"/>
       <menu:menuitem menu:id=".uno:ResetAttributes"/>
-      <menu:menuitem menu:id=".uno:HighlightCharDF"/>
+      <menu:menu menu:id=".uno:SpotlightMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:HighlightCharDF"/>
+          <menu:menuitem menu:id=".uno:SpotlightParaStyles"/>
+          <menu:menuitem menu:id=".uno:SpotlightCharStyles"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:FontDialog"/>
       <menu:menuitem menu:id=".uno:ParagraphDialog"/>
