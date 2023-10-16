@@ -2009,6 +2009,12 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
         m_pImpl->m_pObjectContainer->SwitchPersistence(xStorage);
         xRet = static_cast< ::cppu::OWeakObject* >(SvXMLEmbeddedObjectHelper::Create( xStorage,*this, SvXMLEmbeddedObjectHelperMode::Read ).get());
     }
+    else if (aServiceSpecifier == "com.sun.star.drawing.OLE2Shape")
+    {
+        uno::Reference<drawing::XShape> xShape(SvxUnoDrawMSFactory::createInstanceWithArguments(aServiceSpecifier, _aArgs), uno::UNO_QUERY_THROW);
+        xRet = m_pImpl->m_pReportModel->createShape(aServiceSpecifier, xShape);
+    }
+
     return xRet;
 }
 
