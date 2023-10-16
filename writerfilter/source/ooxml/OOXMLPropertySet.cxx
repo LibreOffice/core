@@ -203,7 +203,7 @@ OOXMLValue * OOXMLBinaryValue::clone() const
   class OOXMLBooleanValue
 */
 
-static bool GetBooleanValue(std::string_view pValue)
+bool GetBooleanValue(std::string_view pValue)
 {
     return pValue == "true"
            || pValue == "True"

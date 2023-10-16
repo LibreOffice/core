@@ -307,6 +307,29 @@ CPPUNIT_TEST_FIXTURE(Test, testDoNotBreakWrappedTables)
     assertXPath(pXmlDoc, "/w:settings/w:compat/w:doNotBreakWrappedTables", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
+{
+    // Given a document with the ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK compat mode enabled:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    IDocumentSettingAccess& rIDSA = pDoc->getIDocumentSettingAccess();
+    rIDSA.set(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK, true);
+
+    // When saving to docx:
+    save("Office Open XML Text");
+
+    // Then make sure the compat flag is serialized:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/settings.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']' number of nodes is incorrect
+    // i.e. the compat flag was lost on export.
+    assertXPath(pXmlDoc,
+                "/w:settings/w:compat/w:compatSetting[@w:name='allowTextAfterFloatingTableBreak']",
+                "val", "1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDOCfDontBreakWrappedTables)
 {
     // Given a document with fDontBreakWrappedTables:

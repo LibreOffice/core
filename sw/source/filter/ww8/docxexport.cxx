@@ -1433,6 +1433,18 @@ void DocxExport::WriteSettings()
             FSNS( XML_w, XML_name ), "compatibilityMode",
             FSNS( XML_w, XML_uri ),  "http://schemas.microsoft.com/office/word",
             FSNS( XML_w, XML_val ),  OString::number(nTargetCompatibilityMode));
+
+        const IDocumentSettingAccess& rIDSA = m_rDoc.getIDocumentSettingAccess();
+        if (rIDSA.get(DocumentSettingId::ALLOW_TEXT_AFTER_FLOATING_TABLE_BREAK))
+        {
+            // AllowTextAfterFloatingTableBreak doesn't have its own XML element, it's a
+            // <w:compatSetting> with a specific name.
+            pFS->singleElementNS(XML_w, XML_compatSetting,
+                    FSNS(XML_w, XML_name), "allowTextAfterFloatingTableBreak",
+                    FSNS(XML_w, XML_uri), "http://schemas.microsoft.com/office/word",
+                    FSNS(XML_w, XML_val), "1");
+        }
+
         pFS->endElementNS( XML_w, XML_compat );
     }
 

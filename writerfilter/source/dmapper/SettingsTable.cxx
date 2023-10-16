@@ -37,6 +37,8 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+
+#include <ooxml/OOXMLPropertySet.hxx>
 #include "ConversionHelper.hxx"
 #include "DomainMapper.hxx"
 #include "util.hxx"
@@ -103,12 +105,16 @@ struct SettingsTable_Impl
 
     std::vector<beans::PropertyValue> m_aCompatSettings;
     uno::Sequence<beans::PropertyValue> m_pCurrentCompatSetting;
+    OUString m_aCurrentCompatSettingName;
+    OUString m_aCurrentCompatSettingUri;
+    OUString m_aCurrentCompatSettingValue;
     OUString            m_sCurrentDatabaseDataSource;
 
     std::shared_ptr<DocumentProtection> m_pDocumentProtection;
     std::shared_ptr<WriteProtection> m_pWriteProtection;
     bool m_bGutterAtTop = false;
     bool m_bDoNotBreakWrappedTables = false;
+    bool m_bAllowTextAfterFloatingTableBreak = false;
 
     SettingsTable_Impl() :
       m_nDefaultTabStop( 720 ) //default is 1/2 in
@@ -198,14 +204,17 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         m_pImpl->m_aDocVars.back().second = sStringValue;
         break;
     case NS_ooxml::LN_CT_CompatSetting_name:
+        m_pImpl->m_aCurrentCompatSettingName = sStringValue;
         m_pImpl->m_pCurrentCompatSetting.getArray()[0]
             = comphelper::makePropertyValue("name", sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_uri:
+        m_pImpl->m_aCurrentCompatSettingUri = sStringValue;
         m_pImpl->m_pCurrentCompatSetting.getArray()[1]
             = comphelper::makePropertyValue("uri", sStringValue);
         break;
     case NS_ooxml::LN_CT_CompatSetting_val:
+        m_pImpl->m_aCurrentCompatSettingValue = sStringValue;
         m_pImpl->m_pCurrentCompatSetting.getArray()[2]
             = comphelper::makePropertyValue("val", sStringValue);
         break;
@@ -349,6 +358,15 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
             aValue.Name = "compatSetting";
             aValue.Value <<= m_pImpl->m_pCurrentCompatSetting;
             m_pImpl->m_aCompatSettings.push_back(aValue);
+
+            OString aCompatSettingValue = rtl::OUStringToOString(
+                m_pImpl->m_aCurrentCompatSettingValue, RTL_TEXTENCODING_UTF8);
+            if (m_pImpl->m_aCurrentCompatSettingName == "allowTextAfterFloatingTableBreak"
+                && m_pImpl->m_aCurrentCompatSettingUri == "http://schemas.microsoft.com/office/word"
+                && ooxml::GetBooleanValue(aCompatSettingValue))
+            {
+                m_pImpl->m_bAllowTextAfterFloatingTableBreak = true;
+            }
         }
     }
     break;
@@ -637,6 +655,11 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     {
         // Map <w:doNotBreakWrappedTables> to the DoNotBreakWrappedTables compat flag.
         xDocumentSettings->setPropertyValue("DoNotBreakWrappedTables", uno::Any(true));
+    }
+
+    if (m_pImpl->m_bAllowTextAfterFloatingTableBreak)
+    {
+        xDocumentSettings->setPropertyValue("AllowTextAfterFloatingTableBreak", uno::Any(true));
     }
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
