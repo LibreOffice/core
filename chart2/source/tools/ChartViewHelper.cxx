@@ -21,8 +21,7 @@
 #include <ChartModel.hxx>
 #include <servicenames.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <comphelper/diagnose_ex.hxx>
 
@@ -50,6 +49,13 @@ void ChartViewHelper::setViewToDirtyState(const rtl::Reference<::chart::ChartMod
     {
         DBG_UNHANDLED_EXCEPTION("chart2");
     }
+}
+
+void ChartViewHelper::setViewToDirtyState_UNO(
+    const css::uno::Reference<css::chart2::XChartDocument>& xChartModel)
+{
+    if (auto pChartModel = dynamic_cast<ChartModel*>(xChartModel.get()))
+        setViewToDirtyState(rtl::Reference(pChartModel));
 }
 } //namespace chart
 

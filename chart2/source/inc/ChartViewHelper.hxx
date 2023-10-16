@@ -21,14 +21,22 @@
 #include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 
+#include <com/sun/star/uno/Reference.hxx>
+
+namespace com::sun::star::chart2
+{
+class XChartDocument;
+}
+
 namespace chart
 {
 class ChartModel;
 
-class OOO_DLLPUBLIC_CHARTTOOLS ChartViewHelper
+namespace ChartViewHelper
 {
-public:
-    static void setViewToDirtyState(const rtl::Reference<::chart::ChartModel>& xChartModel);
+OOO_DLLPUBLIC_CHARTTOOLS void setViewToDirtyState(const rtl::Reference<ChartModel>& xChartModel);
+OOO_DLLPUBLIC_CHARTTOOLS void
+setViewToDirtyState_UNO(const css::uno::Reference<css::chart2::XChartDocument>& xChartModel);
 };
 
 } //namespace chart

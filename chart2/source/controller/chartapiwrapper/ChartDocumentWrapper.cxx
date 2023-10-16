@@ -19,6 +19,7 @@
 
 #include <ChartDocumentWrapper.hxx>
 #include <ChartView.hxx>
+#include <ChartViewHelper.hxx>
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <servicenames.hxx>
@@ -1364,6 +1365,20 @@ void ChartDocumentWrapper::_disposing( const lang::EventObject& rSource )
         m_xAddIn.clear();
     else if( rSource.Source == static_cast<cppu::OWeakObject*>(m_xChartView.get()) )
         m_xChartView.clear();
+}
+
+// ____ XPropertySet ____
+void SAL_CALL ChartDocumentWrapper::setPropertyValue(const OUString& rPropertyName, const css::uno::Any& rValue)
+{
+    if (rPropertyName == u"ODFImport_UpdateView")
+    {
+        // A hack used at load time to notify the view that it needs an update
+        // See SchXMLImport::~SchXMLImport
+        if (auto xChartModel = rValue.query<css::chart2::XChartDocument>())
+            ChartViewHelper::setViewToDirtyState_UNO(xChartModel);
+        return;
+    }
+    ChartDocumentWrapper_Base::setPropertyValue(rPropertyName, rValue);
 }
 
 // WrappedPropertySet

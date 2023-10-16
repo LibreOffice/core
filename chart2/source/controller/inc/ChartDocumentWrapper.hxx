@@ -139,6 +139,10 @@ protected:
     virtual std::vector< std::unique_ptr<WrappedProperty> > createWrappedProperties() override;
     virtual css::uno::Reference< css::beans::XPropertySet > getInnerPropertySet() override;
 
+    // ____ XPropertySet ____
+    virtual void SAL_CALL setPropertyValue(const OUString& rPropertyName,
+                                           const css::uno::Any& rValue) override;
+
 private: //methods
     void impl_resetAddIn();
 

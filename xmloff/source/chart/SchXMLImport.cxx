@@ -253,8 +253,26 @@ SchXMLImport::SchXMLImport(
 SchXMLImport::~SchXMLImport() noexcept
 {
     uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
-    if( xChartDoc.is() && xChartDoc->hasControllersLocked() )
-        xChartDoc->unlockControllers();
+    if (xChartDoc.is())
+    {
+        if (xChartDoc->hasControllersLocked())
+            xChartDoc->unlockControllers();
+        if (auto xPropSet = xChartDoc.query<beans::XPropertySet>())
+        {
+            try
+            {
+                // The view of the chart might not received a notification about the updates,
+                // which is only sent when the chart model is set modified; during the load,
+                // setting modified is disabled. So, the view needs an explicit notification.
+                // See ChartDocumentWrapper::setPropertyValue
+                xPropSet->setPropertyValue(u"ODFImport_UpdateView"_ustr, css::uno::Any(xChartDoc));
+            }
+            catch (css::beans::UnknownPropertyException&)
+            {
+                // That's absolutely fine!
+            }
+        }
+    }
 }
 
 // create the main context (subcontexts are created
