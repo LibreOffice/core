@@ -13,7 +13,7 @@ $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += SAL_USE_VC
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : gb_TEST_ENV_VARS += GDK_BACKEND=x11
 ifeq (,$(VCL_GTK3_TESTS_NO_XVFB))
 $(call gb_CppunitTest_get_target,vcl_gtk3_a11y) : \
-	ICECREAM_RUN += $(XVFB_RUN) $(DBUS_LAUNCH) --exit-with-session
+	ICECREAM_RUN += $(XVFB_RUN) --auto-servernum $(DBUS_LAUNCH) --exit-with-session
 endif
 
 $(eval $(call gb_CppunitTest_CppunitTest,vcl_gtk3_a11y))
