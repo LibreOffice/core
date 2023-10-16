@@ -382,12 +382,12 @@ bool SwEditShell::ReplaceKeepComments( const OUString& rNewStr)
             OUString aSelectedText = pCursor->GetText();
             sal_Int32 nCommentPos(aSelectedText.lastIndexOf(CH_TXTATR_INWORD));
             // go sure that we have a valid selection and a comment has been found
-            while((nCommentPos > -1) && (aSelectedText.getLength() > 0) && (pCursor->HasMark()))
+            while (nCommentPos > -1)
             {
                 // select the part of the text after the last found comment
                 // selection start:
                 pCursor->GetPoint()->AdjustContent(nCommentPos + 1);
-                // selection end ist left where it is -> will be adjusted later on
+                // selection end is left where it is -> will be adjusted later on
                 // delete the part of the word after the last found comment
                 Replace(OUString(), false);
                 // put the selection start back to the beginning of the word
