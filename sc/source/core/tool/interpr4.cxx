@@ -180,7 +180,9 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, ScRefCellValue& rCell
     FormulaError nErr = nGlobalError;
     nGlobalError = FormulaError::NONE;
     double nVal = GetCellValueOrZero(rPos, rCell);
-    if ( nGlobalError == FormulaError::NONE || nGlobalError == FormulaError::CellNoValue )
+    // Propagate previous error, if any; nGlobalError==CellNoValue is not an
+    // error here, preserve previous error or non-error.
+    if (nErr != FormulaError::NONE || nGlobalError == FormulaError::CellNoValue)
         nGlobalError = nErr;
     return nVal;
 }
