@@ -121,8 +121,12 @@ SwTextRefMark::SwTextRefMark( SwFormatRefMark& rAttr,
     }
     SetDontMoveAttr( true );
     SetOverlapAllowedAttr( true );
-    SetDontExpand( true );  // like hyperlinks, reference markers shouldn't expand
-    SetLockExpandFlag( true ); // protect the flag
+  /* FIXME: Setting the DontExpand flag would solve tdf#81720,
+   * but old behavior was restored due to regressions; see tdf#157287.
+   * After applying a proper fix, remember to restore testDontExpandRefmark!
+   *SetDontExpand( true );  // like hyperlinks, reference markers shouldn't expand
+   *SetLockExpandFlag( true ); // protect the flag
+   */
 }
 
 SwTextRefMark::~SwTextRefMark()
@@ -169,8 +173,10 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString
     const SwTextNode& rTextNode = this->GetTextNode();
     SwPaM aMarkers(SwPosition(rTextNode, *this->End()));
     IDocumentContentOperations& rIDCO = pDoc->getIDocumentContentOperations();
-    this->SetLockExpandFlag(false);
-    this->SetDontExpand(false);
+  /* FIXME: see above re: expanding behavior
+   *this->SetLockExpandFlag(false);
+   *this->SetDontExpand(false);
+   */
     if (rIDCO.InsertString(aMarkers, "XY"))
     {
         SwPaM aPasteEnd(SwPosition(rTextNode, *this->End()));
@@ -200,8 +206,10 @@ void SwTextRefMark::UpdateFieldContent(SwDoc* pDoc, SwWrtShell& rWrtSh, OUString
         rIDCO.DeleteAndJoin(aEndMarker);
     }
     // Restore flags.
-    this->SetDontExpand(true);
-    this->SetLockExpandFlag(true);
+  /* FIXME: see above re: expanding behavior
+   *this->SetDontExpand(true);
+   *this->SetLockExpandFlag(true);
+   */
 }
 
 
