@@ -1718,11 +1718,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 if path:
                     headers_list.append(lopath(path))
 
-            cxxflags_list = []
+            cxxstdversionflag = ''
             for cxxflag in lib.cxxflags:
                 # extract flag for C++ standard version
                 if cxxflag.startswith('-std'):
-                    cxxflags_list.append(cxxflag)
+                    cxxstdversionflag = cxxflag
 
             # List all include paths
             for hdir in (lib.include + lib.include_sys):
@@ -1749,14 +1749,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
                 self.data_libs[lib_folder]['headers'] |= set(headers_list)
-                self.data_libs[lib_folder]['cxxflags'] |= set(cxxflags_list)
+                self.data_libs[lib_folder]['cxxstdversionflag'] = cxxstdversionflag
                 self.data_libs[lib_folder]['includepath'] |= set(includepath_list)
                 self.data_libs[lib_folder]['defines'] |= set(defines_list)
             else:
                 self.data_libs[lib_folder] = {
                     'sources': set(sources_list),
                     'headers': set(headers_list),
-                    'cxxflags': set(cxxflags_list),
+                    'cxxstdversionflag': cxxstdversionflag,
                     'includepath': set(includepath_list),
                     'defines': set(defines_list),
                     'loc': lib.location,
@@ -1779,7 +1779,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         for lib_folder in subdirs_list:
             sources_list = sorted(self.data_libs[lib_folder]['sources'])
             headers_list = sorted(self.data_libs[lib_folder]['headers'])
-            cxxflags_list = sorted(self.data_libs[lib_folder]['cxxflags'])
+            cxxstdversionflag = self.data_libs[lib_folder]['cxxstdversionflag']
             includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
             defines_list = sorted(self.data_libs[lib_folder]['defines'])
             lib_loc = self.data_libs[lib_folder]['loc']
@@ -1787,16 +1787,18 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
             sources = " \\\n".join(sources_list)
             headers = " \\\n".join(headers_list)
-            cxxflags = " \\\n".join(cxxflags_list)
             includepath = " \\\n".join(includepath_list)
             defines = " \\\n".join(defines_list)
+            # strip '-std=' or '-std:' prefix
+            assert(isinstance(cxxstdversionflag, str) and cxxstdversionflag.startswith('-std'))
+            cxxstdversion = cxxstdversionflag[5:]
 
             # create .pro file
             subdirs_meta_pro.append(lib_name)
             qt_pro_file = os.path.join(self.base_folder, lib_name, lib_name + '.pro')
             try:
-                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers,
-                                                                        'cxxflags': cxxflags, 'includepath': includepath, 'defines': defines}
+                content = QtCreatorIntegrationGenerator.pro_template % {'sources': sources, 'headers': headers, 'cxxstdversionflag': cxxstdversionflag,
+                                                                        'cxxstdversion': cxxstdversion, 'includepath': includepath, 'defines': defines}
                 with open(qt_pro_file, mode) as fpro:
                     fpro.write(content)
                 self._log("created %s\n" % qt_pro_file)
@@ -1857,8 +1859,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
+CONFIG += %(cxxstdversion)s
 
-QMAKE_CXXFLAGS += %(cxxflags)s
+QMAKE_CXXFLAGS += %(cxxstdversionflag)s
 
 INCLUDEPATH += %(includepath)s
 
