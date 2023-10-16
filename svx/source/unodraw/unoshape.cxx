@@ -264,15 +264,23 @@ void SvxShape::notifyPropertyChange(const OUString& rPropName)
             mpImpl->maPropertyChangeListeners.getContainer( g, OUString() );
     if (pPropListeners || pAllListeners)
     {
-        // Handle/OldValue not supported
-        beans::PropertyChangeEvent aEvt;
-        aEvt.Source = static_cast<cppu::OWeakObject*>(this);
-        aEvt.PropertyName = rPropName;
-        aEvt.NewValue = getPropertyValue(rPropName);
-        if (pPropListeners)
-            pPropListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
-        if (pAllListeners)
-            pAllListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
+        try
+        {
+            // Handle/OldValue not supported
+            beans::PropertyChangeEvent aEvt;
+            aEvt.Source = static_cast<cppu::OWeakObject*>(this);
+            aEvt.PropertyName = rPropName;
+            aEvt.NewValue = getPropertyValue(rPropName);
+            if (pPropListeners)
+                pPropListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
+            if (pAllListeners)
+                pAllListeners->notifyEach( g, &beans::XPropertyChangeListener::propertyChange, aEvt );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION("svx");
+        }
+
     }
 }
 
