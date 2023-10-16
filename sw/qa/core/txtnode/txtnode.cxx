@@ -250,44 +250,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
     CPPUNIT_ASSERT(!aSet.HasItem(RES_CHRATR_ESCAPEMENT));
 }
 
-CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDontExpandRefmark)
-{
-    // Given a document with a refmark:
-    createSwDoc();
-
-    uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
-        comphelper::makePropertyValue(
-            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
-        comphelper::makePropertyValue("Content", uno::Any(OUString("foo"))),
-    };
-    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
-
-    SwDoc* pDoc = getSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
-    SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
-    std::vector<SwTextAttr*> aAttrs
-        = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
-
-    auto& rRefmark = const_cast<SwFormatRefMark&>(aAttrs[0]->GetRefMark());
-    auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());
-
-    // When typing after the refmark...
-    pWrtShell->SttEndDoc(/*bStt=*/true);
-    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
-    pWrtShell->Insert(" bar");
-
-    // and skipping back to insert a comma after the refmark
-    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 4, /*bBasicCall=*/false);
-    pWrtShell->Insert(",");
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 3
-    // - Actual  : 4
-    // i.e. the reference mark expanded
-    CPPUNIT_ASSERT_EQUAL(3, static_cast<int>(*pTextRefMark->End()));
-}
+/* FIXME: behavior change reverted due to regression;
+ * see sw/source/core/txtnode/atrref.cxx
+ *CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testDontExpandRefmark)
+ *{
+ *    // Given a document with a refmark:
+ *    createSwDoc();
+ *
+ *    uno::Sequence<css::beans::PropertyValue> aArgs = {
+ *        comphelper::makePropertyValue("TypeName", uno::Any(OUString("SetRef"))),
+ *        comphelper::makePropertyValue(
+ *            "Name", uno::Any(OUString("ZOTERO_ITEM CSL_CITATION {} RNDpyJknp173F"))),
+ *        comphelper::makePropertyValue("Content", uno::Any(OUString("foo"))),
+ *    };
+ *    dispatchCommand(mxComponent, ".uno:InsertField", aArgs);
+ *
+ *    SwDoc* pDoc = getSwDoc();
+ *    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+ *    SwPosition& rCursor = *pWrtShell->GetCursor()->GetPoint();
+ *    SwTextNode* pTextNode = rCursor.GetNode().GetTextNode();
+ *    std::vector<SwTextAttr*> aAttrs
+ *        = pTextNode->GetTextAttrsAt(rCursor.GetContentIndex(), RES_TXTATR_REFMARK);
+ *
+ *    auto& rRefmark = const_cast<SwFormatRefMark&>(aAttrs[0]->GetRefMark());
+ *    auto pTextRefMark = const_cast<SwTextRefMark*>(rRefmark.GetTextRefMark());
+ *
+ *    // When typing after the refmark...
+ *    pWrtShell->SttEndDoc(true);
+ *    pWrtShell->Right(SwCursorSkipMode::Chars, false, 3, false);
+ *    pWrtShell->Insert(" bar");
+ *
+ *    // and skipping back to insert a comma after the refmark
+ *    pWrtShell->Left(SwCursorSkipMode::Chars, false, 4, false);
+ *    pWrtShell->Insert(",");
+ *
+ *    // Without the accompanying fix in place, this test would have failed with:
+ *    // - Expected: 3
+ *    // - Actual  : 4
+ *    // i.e. the reference mark expanded
+ *    CPPUNIT_ASSERT_EQUAL(3, static_cast<int>(*pTextRefMark->End()));
+ *}
+ */
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testInsertDropDownContentControlTwice)
 {
