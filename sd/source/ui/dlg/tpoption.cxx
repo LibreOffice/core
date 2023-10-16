@@ -210,6 +210,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xCbxEnablePresenterScreen(m_xBuilder->weld_check_button("enprsntcons"))
     , m_xCbxPresenterScreenFullScreen(m_xBuilder->weld_check_button("enprsntconsfullscreen"))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
+    , m_xCbxShowNavigationPanel(m_xBuilder->weld_check_button("shwnavpan"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
     , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
     , m_xNewDocLb(m_xBuilder->weld_label("newdoclbl"))
@@ -364,7 +365,7 @@ OUString SdTpOptionsMisc::GetAllStrings()
     OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
                                "objalwymov",      "distortcb",    "cbCompatibility",
                                "enremotcont",     "enprsntcons",  "enprsntconsfullscreen",
-                               "qickedit",        "textselected" };
+                               "qickedit",        "textselected", "shwnavpan" };
 
     for (const auto& check : checkButton)
     {
@@ -389,7 +390,8 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxEnablePresenterScreen->get_state_changed_from_saved()     ||
         m_xCbxPresenterScreenFullScreen->get_state_changed_from_saved() ||
         m_xCbxCompatibility->get_state_changed_from_saved()             ||
-        m_xCbxDistort->get_state_changed_from_saved())
+        m_xCbxDistort->get_state_changed_from_saved()                   ||
+        m_xCbxShowNavigationPanel->get_state_changed_from_saved())
     {
         SdOptionsMiscItem aOptsItem;
 
@@ -404,6 +406,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         aOptsItem.GetOptionsMisc().SetPresenterScreenFullScreen( m_xCbxPresenterScreenFullScreen->get_active() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_xCbxCompatibility->get_active() );
         aOptsItem.GetOptionsMisc().SetCrookNoContortion( m_xCbxDistort->get_active() );
+        aOptsItem.GetOptionsMisc().SetShowNavigationPanel( m_xCbxShowNavigationPanel->get_active() );
         rAttrs->Put( aOptsItem );
 
         bModified = true;
@@ -454,6 +457,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxPresenterScreenFullScreen->set_active( aOptsItem.GetOptionsMisc().IsPresenterScreenFullScreen() );
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
+    m_xCbxShowNavigationPanel->set_active( aOptsItem.GetOptionsMisc().IsShowNavigationPanel() );
     m_xCbxStartWithTemplate->save_state();
     m_xCbxMarkedHitMovesAlways->save_state();
     m_xCbxQuickEdit->save_state();
@@ -466,6 +470,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxPresenterScreenFullScreen->save_state();
     m_xCbxCompatibility->save_state();
     m_xCbxDistort->save_state();
+    m_xCbxShowNavigationPanel->save_state();
 
     // metric
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
@@ -563,6 +568,7 @@ void SdTpOptionsMisc::SetDrawMode()
     m_xMtrFldOriginalHeight->show();
     m_xCbxDistort->show();
     m_xCbxCompatibility->hide();
+    m_xCbxShowNavigationPanel->hide();
 }
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )

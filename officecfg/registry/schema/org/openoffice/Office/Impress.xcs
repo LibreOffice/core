@@ -584,6 +584,13 @@
          </info>
          <value>true</value>
        </prop>
+       <prop oor:name="ShowNavigationPanel" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+         <desc>Indicates whether to show navigation panel for presentations.</desc>
+         <label>Show navigation panel</label>
+       </info>
+       <value>false</value>
+     </prop>
       </group>
       <group oor:name="Compatibility">
         <info>

@@ -105,7 +105,6 @@ namespace sd
         bool mbMouseAsPen;
         bool mbLockedPages;
         bool mbAlwaysOnTop;
-        bool mbUseNavigation;
         bool mbFullScreen;
         bool mbAnimationAllowed;
         sal_Int32 mnPauseTimeout;

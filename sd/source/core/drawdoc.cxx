@@ -105,7 +105,6 @@ PresentationSettings::PresentationSettings()
     mbMouseAsPen( false ),
     mbLockedPages( false ),
     mbAlwaysOnTop( false ),
-    mbUseNavigation( false ),
     mbFullScreen( true ),
     mbAnimationAllowed( true ),
     mnPauseTimeout( 0 ),

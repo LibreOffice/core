@@ -757,7 +757,6 @@ bool SlideshowImpl::startPreview(
         maPresSettings.mbMouseAsPen = false;
         maPresSettings.mbLockedPages = false;
         maPresSettings.mbAlwaysOnTop = false;
-        maPresSettings.mbUseNavigation = false;
         maPresSettings.mbFullScreen = false;
         maPresSettings.mbAnimationAllowed = true;
         maPresSettings.mnPauseTimeout = 0;
@@ -878,7 +877,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx const * pPresSettings )
             maPresSettings.mbMouseAsPen = false;
             maPresSettings.mnPauseTimeout = 0;
             maPresSettings.mbShowPauseLogo = false;
-            maPresSettings.mbUseNavigation = false;
         }
 
         if( pStartPage )
@@ -1080,8 +1078,8 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         Any( xPointerBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
-
-            if (maPresSettings.mbUseNavigation)
+            SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
+            if (pOptions->IsShowNavigationPanel())
             {
                 BitmapEx prevSlideBm(BMP_PREV_SLIDE);
                 const Reference<rendering::XBitmap> xPrevSBitmap(

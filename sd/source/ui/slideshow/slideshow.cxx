@@ -114,7 +114,6 @@ static std::span<const SfxItemPropertyMapEntry> ImplGetPresentationPropertyMap()
         { u"Display"_ustr,                  ATTR_PRESENT_DISPLAY,                 ::cppu::UnoType<sal_Int32>::get(),    0, 0 },
         { u"FirstPage"_ustr,                ATTR_PRESENT_DIANAME,                 ::cppu::UnoType<OUString>::get(),     0, 0 },
         { u"IsAlwaysOnTop"_ustr,            ATTR_PRESENT_ALWAYS_ON_TOP,           cppu::UnoType<bool>::get(),                0, 0 },
-        { u"IsShowNavigationButtons"_ustr,  ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS, cppu::UnoType<bool>::get(),                0, 0 },
         { u"IsAutomatic"_ustr,              ATTR_PRESENT_MANUEL,                  cppu::UnoType<bool>::get(),                0, 0 },
         { u"IsEndless"_ustr,                ATTR_PRESENT_ENDLESS,                 cppu::UnoType<bool>::get(),                0, 0 },
         { u"IsFullScreen"_ustr,             ATTR_PRESENT_FULLSCREEN,              cppu::UnoType<bool>::get(),                0, 0 },
@@ -440,22 +439,6 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         }
         break;
     }
-    case ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS:
-    {
-        bool bVal = false;
-
-        if (aValue >>= bVal)
-        {
-            bIllegalArgument = false;
-
-            if (rPresSettings.mbUseNavigation != bVal)
-            {
-                bValuesChanged = true;
-                rPresSettings.mbUseNavigation = bVal;
-            }
-        }
-        break;
-    }
     case ATTR_PRESENT_NAVIGATOR:
         bIllegalArgument = false;
         //ignored, but exists in some older documents
@@ -582,8 +565,6 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
         return Any( rPresSettings.mbMouseVisible );
     case ATTR_PRESENT_ALWAYS_ON_TOP:
         return Any( rPresSettings.mbAlwaysOnTop );
-    case ATTR_PRESENT_SHOW_NAVIGATION_BUTTONS:
-        return Any(rPresSettings.mbUseNavigation);
     case ATTR_PRESENT_NAVIGATOR:
         return Any( false );
     case ATTR_PRESENT_PEN:
