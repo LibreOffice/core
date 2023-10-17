@@ -254,7 +254,7 @@ namespace vcl
         css::i18n::Boundary aBoundary = xBI->getWordBoundary( rStr, nBreakPos, rDefLocale, css::i18n::WordType::DICTIONARY_WORD, true );
         sal_Int32 nWordStart = nPos;
         sal_Int32 nWordEnd = aBoundary.endPos;
-        SAL_WARN_IF( nWordEnd <= nWordStart, "vcl", "ImpBreakLine: Start >= End?" );
+        SAL_WARN_IF(nWordEnd <= nWordStart, "vcl", "Start >= End?");
 
         sal_Int32 nWordLen = nWordEnd - nWordStart;
         if ( ( nWordEnd < nSoftBreak ) || ( nWordLen <= 3 ) )
