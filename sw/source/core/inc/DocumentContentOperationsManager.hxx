@@ -36,7 +36,7 @@ public:
     DocumentContentOperationsManager( SwDoc& i_rSwdoc );
 
     //Interface methods:
-    bool CopyRange(SwPaM&, SwPosition&, SwCopyFlags) const override;
+    bool CopyRange(SwPaM&, SwPosition&, SwCopyFlags, sal_uInt32 nMovedID = 0) const override;
 
     void DeleteSection(SwNode* pNode) override;
 

@@ -188,6 +188,7 @@ public:
     OUString sAuthor;               // change author string
     OUString sComment;              // change comment string
     util::DateTime aDateTime;       // change DateTime
+    OUString sMovedID;              // change move id string
     bool bMergeLastParagraph;   // the SwRangeRedline::IsDelLastPara flag
 
     // each position can may be either empty, an XTextRange, or an SwNodeIndex
@@ -369,6 +370,7 @@ void XMLRedlineImportHelper::Add(
     const OUString& rAuthor,
     const OUString& rComment,
     const util::DateTime& rDateTime,
+    const OUString& rMovedID,
     bool bMergeLastPara)
 {
     // we need to do the following:
@@ -406,7 +408,16 @@ void XMLRedlineImportHelper::Add(
     pInfo->sAuthor = rAuthor;
     pInfo->sComment = rComment;
     pInfo->aDateTime = rDateTime;
+    pInfo->sMovedID = rMovedID;
     pInfo->bMergeLastParagraph = bMergeLastPara;
+
+    //reserve MoveID so it wont be reused by others
+    if (!rMovedID.isEmpty())
+    {
+        SwDoc* const pDoc(static_cast<SwXMLImport&>(m_rImport).getDoc());
+        assert(pDoc);
+        pDoc->GetDocumentRedlineManager().GetRedlineTable().setMovedIDIfNeeded(rMovedID.toInt32());
+    }
 
     // ad 3)
     auto itPair = m_aRedlineMap.emplace(rId, pInfo);
@@ -791,6 +802,8 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
     aDT.SetSec(     pRedlineInfo->aDateTime.Seconds );
     aDT.SetNanoSec( pRedlineInfo->aDateTime.NanoSeconds );
 
+    sal_uInt32 nMovedID = pRedlineInfo->sMovedID.toInt32();
+
     // 3) recursively convert next redline
     //    ( check presence and sanity of hierarchical redline info )
     SwRedlineData* pNext = nullptr;
@@ -803,7 +816,7 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
 
     // create redline data
     SwRedlineData* pData = new SwRedlineData(pRedlineInfo->eType,
-                                             nAuthorId, aDT,
+                                             nAuthorId, aDT, nMovedID,
                                              pRedlineInfo->sComment,
                                              pNext); // next data (if available)
 

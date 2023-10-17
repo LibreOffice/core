@@ -81,6 +81,7 @@ public:
         const OUString& rAuthor,     // name of the author
         const OUString& rComment,    // redline comment
         const css::util::DateTime& rDateTime, // date+time
+        const OUString& rMovedID,     // redline move id
         bool bMergeLastParagraph);      // merge last paragraph?
 
     // create a text section for the redline, and return an

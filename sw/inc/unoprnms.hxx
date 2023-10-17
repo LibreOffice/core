@@ -580,6 +580,7 @@ inline constexpr OUString UNO_NAME_GRAPHIC_IS_INVERTED = u"GraphicIsInverted"_us
 inline constexpr OUString UNO_NAME_TRANSPARENCY = u"Transparency"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_AUTHOR = u"RedlineAuthor"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_DATE_TIME = u"RedlineDateTime"_ustr;
+inline constexpr OUString UNO_NAME_REDLINE_MOVED_ID = u"RedlineMovedID"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_COMMENT = u"RedlineComment"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_DESCRIPTION = u"RedlineDescription"_ustr;
 inline constexpr OUString UNO_NAME_REDLINE_TYPE = u"RedlineType"_ustr;

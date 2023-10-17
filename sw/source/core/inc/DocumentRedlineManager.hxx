@@ -141,12 +141,14 @@ public:
 
 private:
 
-    void FindRangeToAcceptReject(SwRedlineTable::size_type nPos, SwPosition** pPamStart,
-                                 SwPosition** pPamEnd, SwRedlineTable::size_type& nPosEnd) const;
-    bool RejectRedlineRange(SwRedlineTable::size_type nPos, bool bCallDelete, SwPosition* pPamStart,
-                            SwPosition* pPamEnd, SwRedlineTable::size_type& nPosEnd);
-    bool AcceptRedlineRange(SwRedlineTable::size_type nPos, bool bCallDelete, SwPosition* pPamStart,
-                            SwPosition* pPamEnd, SwRedlineTable::size_type& nPosEnd);
+    bool RejectRedlineRange(SwRedlineTable::size_type nPosOrigin,
+                            SwRedlineTable::size_type& nPosStart,
+                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete);
+    bool AcceptRedlineRange(SwRedlineTable::size_type nPosOrigin,
+                            SwRedlineTable::size_type& nPosStart,
+                            SwRedlineTable::size_type& nPosEnd, bool bCallDelete);
+    bool AcceptMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
+    bool RejectMovedRedlines(sal_uInt32 nMovedID, bool bCallDelete);
 
     DocumentRedlineManager(DocumentRedlineManager const&) = delete;
     DocumentRedlineManager& operator=(DocumentRedlineManager const&) = delete;

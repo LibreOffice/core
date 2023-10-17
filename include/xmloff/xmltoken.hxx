@@ -1346,6 +1346,7 @@ namespace xmloff::token {
         XML_MOVE_FROM_LEFT,
         XML_MOVE_FROM_RIGHT,
         XML_MOVE_FROM_TOP,
+        XML_MOVE_ID,
         XML_MOVE_PROTECT,
         XML_MOVE_SHORT,
         XML_MOVEMENT,

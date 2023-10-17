@@ -704,6 +704,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwRedlineData aData(rFltRedline.m_eType,
                                     rFltRedline.m_nAutorNo,
                                     rFltRedline.m_aStamp,
+                                    0,
                                     OUString(),
                                     nullptr
                                     );

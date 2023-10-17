@@ -381,6 +381,8 @@ public:
             const OUString& rComment,
             /// date+time
             const css::util::DateTime& rDateTime,
+            /// move id, to find other parts (moveFrom/MoveTo)
+            const OUString& rMoveId,
             /// merge last paras
             bool bMergeLastParagraph);
 

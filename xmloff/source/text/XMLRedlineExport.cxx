@@ -455,6 +455,15 @@ void XMLRedlineExport::ExportChangeInfo(
                 : sTmp );
     }
 
+    aAny = rPropSet->getPropertyValue("RedlineMovedID");
+    sal_uInt32 nTmp(0);
+    aAny >>= nTmp;
+    if (nTmp > 1)
+    {
+        SvXMLElementExport aCreatorElem(rExport, XML_NAMESPACE_LO_EXT, XML_MOVE_ID, true, false);
+        rExport.Characters( OUString::number( nTmp ) );
+    }
+
     aAny = rPropSet->getPropertyValue("RedlineDateTime");
     util::DateTime aDateTime;
     aAny >>= aDateTime;
