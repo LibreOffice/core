@@ -30,7 +30,7 @@
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
 
-static bool ImplIsCharIn(sal_Unicode c, const char* pStr)
+static bool lcl_IsCharIn(sal_Unicode c, const char* pStr)
 {
     while ( *pStr )
     {
@@ -124,11 +124,11 @@ namespace vcl
         {
             nLastContent--;
 
-            if (ImplIsCharIn(aStr[nLastContent], pSepChars))
+            if (lcl_IsCharIn(aStr[nLastContent], pSepChars))
                 break;
         }
 
-        while (nLastContent && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
+        while (nLastContent && lcl_IsCharIn(aStr[nLastContent-1], pSepChars))
         {
             nLastContent--;
         }
@@ -143,11 +143,11 @@ namespace vcl
         while (nFirstContent < nLastContent)
         {
             nFirstContent++;
-            if (ImplIsCharIn(aStr[nFirstContent], pSepChars))
+            if (lcl_IsCharIn(aStr[nFirstContent], pSepChars))
                 break;
         }
 
-        while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nFirstContent], pSepChars))
+        while ((nFirstContent < nLastContent) && lcl_IsCharIn(aStr[nFirstContent], pSepChars))
         {
             nFirstContent++;
         }
@@ -174,12 +174,12 @@ namespace vcl
             while (nFirstContent < nLastContent)
             {
                 nLastContent--;
-                if (ImplIsCharIn(aStr[nLastContent], pSepChars))
+                if (lcl_IsCharIn(aStr[nLastContent], pSepChars))
                     break;
 
             }
 
-            while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
+            while ((nFirstContent < nLastContent) && lcl_IsCharIn(aStr[nLastContent-1], pSepChars))
             {
                 nLastContent--;
             }
