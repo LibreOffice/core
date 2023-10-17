@@ -1199,7 +1199,6 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyWrapOnAllPages)
 
     // Then make sure that the anchor text is also split between page 1 and page 2:
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    pLayout->dumpAsXml();
     auto pPage1 = pLayout->Lower()->DynCastPageFrame();
     CPPUNIT_ASSERT(pPage1);
     auto pPage1Anchor = pPage1->FindLastBodyContent()->DynCastTextFrame();
