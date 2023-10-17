@@ -2138,15 +2138,11 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_xHyphenBox->save_state();
     m_xHyphenNoCapsBox->save_state();
     m_xHyphenNoLastWordBox->save_state();
-    m_xExtHyphenBeforeBox->set_value(m_xExtHyphenBeforeBox->get_value());
-    m_xExtHyphenAfterBox->set_value(m_xExtHyphenAfterBox->get_value());
-    m_xMaxHyphenEdit->set_value(m_xMaxHyphenEdit->get_value());
-    m_xMinWordLength->set_value(m_xMinWordLength->get_value());
-    SfxItemPool* pPool = GetItemSet().GetPool();
-    DBG_ASSERT( pPool, "Where is the pool?" );
-    FieldUnit eUnit =
-           MapToFieldUnit( pPool->GetMetric( GetWhich( SID_ATTR_PARA_HYPHENZONE ) ) );
-    m_aHyphenZone.set_value(m_aHyphenZone.get_value(eUnit), eUnit);
+    m_xExtHyphenBeforeBox->save_value();
+    m_xExtHyphenAfterBox->save_value();
+    m_xMaxHyphenEdit->save_value();
+    m_xMinWordLength->save_value();
+    m_aHyphenZone.save_value();
     m_xPageBreakBox->save_state();
     m_xBreakPositionLB->save_value();
     m_xBreakTypeLB->save_value();
