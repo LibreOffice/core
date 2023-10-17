@@ -1689,6 +1689,56 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
 }
 
 #if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf45949)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    uno::Sequence<beans::PropertyValue> params
+        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    // Automatic Spell Checking is enabled
+    CPPUNIT_ASSERT(pOpt->IsOnlineSpell());
+
+    // check available en_US dictionary and test spelling with it
+    uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
+    uno::Reference<XSpellChecker1> xSpell;
+    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("en", "US", OUString()));
+    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    {
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        emulateTyping(*pTextDoc, u"baaad http://www.baaad.org baaad");
+        SwCursorShell* pShell(pDoc->GetEditShell());
+        SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
+
+        // tdf#152492: Without the fix in place, this test would have failed with
+        // - Expected: 1
+        // - Actual  : 3
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 10, /*bBasicCall=*/false);
+        emulateTyping(*pTextDoc, u" ");
+
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pNode->GetWrong()->Count());
+
+        pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+        emulateTyping(*pTextDoc, u" ");
+
+        // Move down to trigger spell checking
+        pWrtShell->Down(/*bSelect=*/false, 1);
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 3
+        // - Actual  : 2
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(3), pNode->GetWrong()->Count());
+    }
+}
+#endif
+
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
 {
     createSwDoc();
