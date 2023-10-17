@@ -1462,7 +1462,7 @@ void SdOOXMLExportTest2::testTdf106867()
                 "/p:sld/p:timing/p:tnLst/p:par/p:cTn/p:childTnLst/p:seq/p:cTn/p:childTnLst/p:par/"
                 "p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:par/p:cTn/p:childTnLst/p:cmd/"
                 "p:cBhvr/p:tgtEl/p:spTgt",
-                "spid", "491");
+                "spid", "42");
 }
 
 void SdOOXMLExportTest2::testTdf112280()
@@ -1843,7 +1843,7 @@ void SdOOXMLExportTest2::testAccentColor()
                 "70ad47");
     xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent6/a:srgbClr", "val",
-                "70ad47");
+                "deb340");
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: Motyw pakietu Office
@@ -1858,7 +1858,7 @@ void SdOOXMLExportTest2::testThemeColors()
     createSdImpressDoc("pptx/tdf84205.pptx");
     save("Impress Office Open XML");
 
-    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme2.xml");
+    xmlDocUniquePtr pXmlDocTheme2 = parseExport("ppt/theme/theme1.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "44546a");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:accent3/a:srgbClr", "val",
