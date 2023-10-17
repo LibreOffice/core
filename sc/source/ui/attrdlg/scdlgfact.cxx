@@ -214,6 +214,11 @@ short AbstractScMoveTableDlg_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractScMoveTableDlg_Impl::StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 BitmapEx AbstractScMoveTableDlg_Impl::createScreenshot() const
 {
     VclPtr<VirtualDevice> xDialogSurface(m_xDlg->getDialog()->screenshot());
@@ -1161,7 +1166,7 @@ VclPtr<AbstractScMetricInputDlg> ScAbstractDialogFactory_Impl::CreateScMetricInp
 VclPtr<AbstractScMoveTableDlg> ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(weld::Window* pParent,
     const OUString& rDefault)
 {
-    return VclPtr<AbstractScMoveTableDlg_Impl>::Create(std::make_unique<ScMoveTableDlg>(pParent, rDefault));
+    return VclPtr<AbstractScMoveTableDlg_Impl>::Create(std::make_shared<ScMoveTableDlg>(pParent, rDefault));
 }
 
 VclPtr<AbstractScNameCreateDlg> ScAbstractDialogFactory_Impl::CreateScNameCreateDlg(weld::Window * pParent, CreateNameFlags nFlags)

@@ -271,7 +271,8 @@ public:
     void            DeleteTables(SCTAB nTab, SCTAB nSheets);
 
     bool            RenameTable( const OUString& rName, SCTAB nTabNr );
-    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = nullptr );
+    void            MoveTable( sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName = nullptr,
+                               bool bContextMenu = false, SCTAB nContextMenuSourceTab = -1 );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     bool bLink,SCTAB nTab);
