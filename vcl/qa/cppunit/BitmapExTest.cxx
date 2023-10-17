@@ -25,12 +25,16 @@ class BitmapExTest : public CppUnit::TestFixture
     void testGetPixelColor32();
     void testTransformBitmapEx();
     void testAlphaBlendWith();
+    void testCreateMask();
+    void testCombineMaskOr();
 
     CPPUNIT_TEST_SUITE(BitmapExTest);
     CPPUNIT_TEST(testGetPixelColor24_8);
     CPPUNIT_TEST(testGetPixelColor32);
     CPPUNIT_TEST(testTransformBitmapEx);
     CPPUNIT_TEST(testAlphaBlendWith);
+    CPPUNIT_TEST(testCreateMask);
+    CPPUNIT_TEST(testCombineMaskOr);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -165,6 +169,79 @@ void BitmapExTest::testAlphaBlendWith()
     alpha.BlendWith(bitmap);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(255 - 0),
                          AlphaMask::ScopedReadAccess(alpha)->GetPixelIndex(0, 0));
+}
+
+void BitmapExTest::testCreateMask()
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 3; ++i)
+            pWriteAccess->SetPixel(i, i, COL_RED);
+    }
+    aBitmap = aBitmap.CreateMask(COL_RED, 1);
+    Bitmap::ScopedReadAccess pAccess(aBitmap);
+    // the output is a greyscale palette bitmap
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(0, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(0, 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(1, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 2));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(2, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(2, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 2));
+}
+
+void BitmapExTest::testCombineMaskOr()
+{
+    Bitmap aBitmap(Size(3, 3), vcl::PixelFormat::N24_BPP);
+    {
+        BitmapScopedWriteAccess pWriteAccess(aBitmap);
+        pWriteAccess->Erase(COL_WHITE);
+        for (int i = 0; i < 3; ++i)
+            pWriteAccess->SetPixel(1, i, COL_RED);
+    }
+    AlphaMask aAlphaBitmap(Size(3, 3));
+    {
+        BitmapScopedWriteAccess pWriteAccess(aAlphaBitmap);
+        pWriteAccess->Erase(Color(0xff, 0xff, 0xff));
+        for (int i = 1; i < 3; ++i)
+        {
+            pWriteAccess->SetPixel(i, 0, Color(0x00, 0x00, 0x00));
+            pWriteAccess->SetPixel(i, 1, Color(0x80, 0x80, 0x80));
+            pWriteAccess->SetPixel(i, 0, Color(0xef, 0xef, 0xef));
+        }
+    }
+
+    {
+        AlphaMask aMask = aBitmap.CreateAlphaMask(COL_RED, 1);
+        Bitmap::ScopedReadAccess pAccess(aMask);
+        // the output is a greyscale palette bitmap
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(0, 2));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0x00), pAccess->GetPixelIndex(1, 2));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 1));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(0xff), pAccess->GetPixelIndex(2, 2));
+    }
+
+    BitmapEx aBitmapEx(aBitmap, aAlphaBitmap);
+    aBitmapEx.CombineMaskOr(COL_RED, 1);
+
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(0, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(0, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(0, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(1, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(1, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(1, 2));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(2, 0));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0x00, 0x80, 0x00, 0x00), aBitmapEx.GetPixelColor(2, 1));
+    CPPUNIT_ASSERT_EQUAL(Color(ColorAlpha, 0xff, 0xff, 0xff, 0xff), aBitmapEx.GetPixelColor(2, 2));
 }
 
 } // namespace

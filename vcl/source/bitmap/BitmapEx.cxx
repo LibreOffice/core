@@ -1444,10 +1444,9 @@ void BitmapEx::AdjustTransparency(sal_uInt8 cTrans)
 
 void BitmapEx::CombineMaskOr(Color maskColor, sal_uInt8 nTol)
 {
-    Bitmap aNewMask = maBitmap.CreateMask( maskColor, nTol );
+    AlphaMask aNewMask = maBitmap.CreateAlphaMask( maskColor, nTol );
     if ( IsAlpha() )
-         aNewMask.CombineOr( maAlphaMask );
-    aNewMask.Invert();
+         aNewMask.AlphaCombineOr( maAlphaMask );
     maAlphaMask = aNewMask;
 }
 

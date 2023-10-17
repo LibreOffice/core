@@ -51,6 +51,15 @@ public:
     void        Erase( sal_uInt8 cTransparency );
     void        BlendWith(const AlphaMask& rOther);
 
+    /** Perform boolean OR operation with another alpha-mask
+
+        @param rMask
+        The mask bitmap in the selected combine operation
+
+        @return true, if the operation was completed successfully.
+     */
+    bool        AlphaCombineOr( const AlphaMask& rMask );
+
     // check if alpha is used, returns true if at least one pixel has transparence
     bool        hasAlpha() const;
 

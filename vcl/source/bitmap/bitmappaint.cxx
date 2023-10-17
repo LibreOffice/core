@@ -1164,6 +1164,9 @@ bool Bitmap::Replace(const Color* pSearchColors, const Color* pReplaceColors, si
 
 bool Bitmap::CombineOr(const Bitmap& rMask)
 {
+    assert(!dynamic_cast<AlphaMask*>(this) && "should rather be calling AlphaMask::AlphaCombineOr");
+    assert(!dynamic_cast<const AlphaMask*>(&rMask)
+           && "should rather be calling AlphaMask::AlphaCombineOr");
     ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
     BitmapScopedWriteAccess pAcc(*this);
 

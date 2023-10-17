@@ -182,4 +182,35 @@ void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
     assert( HasGreyPalette8Bit() && "alpha bitmap should have greyscale palette" );
 }
 
+bool AlphaMask::AlphaCombineOr(const AlphaMask& rMask)
+{
+    ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
+    AlphaScopedWriteAccess pAcc(*this);
+
+    if (!pMaskAcc || !pAcc)
+        return false;
+
+    assert (pMaskAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8);
+
+    const tools::Long nWidth = std::min(pMaskAcc->Width(), pAcc->Width());
+    const tools::Long nHeight = std::min(pMaskAcc->Height(), pAcc->Height());
+
+    for (tools::Long nY = 0; nY < nHeight; nY++)
+    {
+        Scanline pScanline = pAcc->GetScanline(nY);
+        ConstScanline pScanlineMask = pMaskAcc->GetScanline(nY);
+        for (tools::Long nX = 0; nX < nWidth; nX++)
+        {
+            if (*pScanlineMask != 255 || *pScanline != 255)
+                *pScanline = 0;
+            else
+                *pScanline = 255;
+            ++pScanline;
+            ++pScanlineMask;
+        }
+    }
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
