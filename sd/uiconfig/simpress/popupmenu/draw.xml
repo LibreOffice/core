@@ -25,17 +25,7 @@
   <menu:menuitem menu:id=".uno:FormatLine"/>
   <menu:menuitem menu:id=".uno:FormatArea"/>
   <menu:menuseparator/>
-  <menu:menu menu:id=".uno:ObjectAlign">
-    <menu:menupopup>
-      <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
-      <menu:menuitem menu:id=".uno:AlignCenter"/>
-      <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
-      <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:AlignUp"/>
-      <menu:menuitem menu:id=".uno:AlignMiddle"/>
-      <menu:menuitem menu:id=".uno:AlignDown"/>
-    </menu:menupopup>
-  </menu:menu>
+  <menu:menu menu:id=".uno:ObjectAlign"/>
   <menu:menu menu:id=".uno:ArrangeMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:BringToFront"/>

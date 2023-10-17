@@ -2543,6 +2543,19 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="MenuTable-ObjectAlign">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="action_name">.uno:ObjectAlign</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="MenuTable-separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="HeadingRowsRepeatD">
         <property name="visible">True</property>
         <property name="can_focus">False</property>

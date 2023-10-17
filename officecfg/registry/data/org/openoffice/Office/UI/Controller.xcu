@@ -537,6 +537,20 @@
           <value>printranges</value>
         </prop>
       </node>
+      <node oor:name="c43" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectAlign</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>objectalign</value>
+        </prop>
+      </node>
       <node oor:name="c44" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FormatSparklineMenu</value>
