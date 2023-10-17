@@ -69,6 +69,154 @@ void ImplMultiTextLineInfo::Clear()
 
 namespace vcl
 {
+    OUString TextLayoutCommon::GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth)
+    {
+        OUStringBuffer aTmpStr(rOrigStr);
+
+        // speed it up by removing all but 1.33x as many as the break pos.
+        sal_Int32 nEraseChars = std::max<sal_Int32>(4, rOrigStr.getLength() - (nIndex*4)/3);
+        while(nEraseChars < rOrigStr.getLength() && GetTextWidth(aTmpStr.toString(), 0, aTmpStr.getLength()) > nMaxWidth)
+        {
+            aTmpStr = rOrigStr;
+            sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
+            aTmpStr.remove(i, nEraseChars++);
+            aTmpStr.insert(i, "...");
+        }
+
+        return aTmpStr.makeStringAndClear();
+    }
+
+    OUString TextLayoutCommon::GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText)
+    {
+        OUString aStr = rOrigStr;
+        aStr = aStr.copy(0, nIndex);
+
+        if (nIndex > 1)
+        {
+            aStr += "...";
+            while (!aStr.isEmpty() && (GetTextWidth(aStr, 0, aStr.getLength()) > nMaxWidth))
+            {
+                if ((nIndex > 1) || (nIndex == aStr.getLength()))
+                    nIndex--;
+
+                aStr = aStr.replaceAt(nIndex, 1, u"");
+            }
+        }
+
+        if (aStr.isEmpty() && bClipText)
+            aStr += OUStringChar(rOrigStr[0]);
+
+        return aStr;
+    }
+
+    namespace
+    {
+        OUString lcl_GetPathEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex)
+        {
+            OUString aPath(rOrigStr);
+            OUString aAbbreviatedPath;
+            osl_abbreviateSystemPath(aPath.pData, &aAbbreviatedPath.pData, nIndex, nullptr);
+            return aAbbreviatedPath;
+        }
+    }
+
+    OUString TextLayoutCommon::GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle)
+    {
+        OUString aStr = rOrigStr;
+        static char const pSepChars[] = ".";
+
+        // Determine last section
+        sal_Int32 nLastContent = aStr.getLength();
+        while (nLastContent)
+        {
+            nLastContent--;
+
+            if (ImplIsCharIn(aStr[nLastContent], pSepChars))
+                break;
+        }
+
+        while (nLastContent && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
+        {
+            nLastContent--;
+        }
+
+        OUString aLastStr = aStr.copy(nLastContent);
+        OUString aTempLastStr1 = "..." + aLastStr;
+
+        if (GetTextWidth(aTempLastStr1, 0, aTempLastStr1.getLength()) > nMaxWidth)
+        {
+            aStr = GetEllipsisString(aStr, nMaxWidth, DrawTextFlags::EndEllipsis);
+        }
+        else
+        {
+            sal_Int32 nFirstContent = 0;
+            while (nFirstContent < nLastContent)
+            {
+                nFirstContent++;
+                if (ImplIsCharIn( aStr[nFirstContent], pSepChars))
+                    break;
+            }
+
+            while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nFirstContent], pSepChars))
+            {
+                nFirstContent++;
+            }
+
+            // MEM continue here
+            if (nFirstContent >= nLastContent)
+            {
+                aStr = GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
+            }
+            else
+            {
+                if (nFirstContent > 4)
+                    nFirstContent = 4;
+
+                OUString aFirstStr = OUString::Concat(aStr.subView(0, nFirstContent)) + "...";
+                OUString aTempStr = aFirstStr + aLastStr;
+
+                if (GetTextWidth(aTempStr, 0, aTempStr.getLength() ) > nMaxWidth)
+                {
+                    aStr = GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
+                }
+                else
+                {
+                    do
+                    {
+                        aStr = aTempStr;
+
+                        if (nLastContent > aStr.getLength())
+                            nLastContent = aStr.getLength();
+
+                        while (nFirstContent < nLastContent)
+                        {
+                            nLastContent--;
+                            if (ImplIsCharIn(aStr[nLastContent], pSepChars))
+                                break;
+
+                        }
+
+                        while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
+                        {
+                            nLastContent--;
+                        }
+
+                        if (nFirstContent < nLastContent)
+                        {
+                            std::u16string_view aTempLastStr = aStr.subView(nLastContent);
+                            aTempStr = aFirstStr + aTempLastStr;
+
+                            if (GetTextWidth(aTempStr, 0, aTempStr.getLength()) > nMaxWidth)
+                                break;
+                        }
+                    }
+                    while (nFirstContent < nLastContent);
+                }
+            }
+        }
+
+        return aStr;
+    }
 
     OUString TextLayoutCommon::GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle)
     {
@@ -78,128 +226,14 @@ namespace vcl
         if (nIndex == -1)
             return aStr;
 
-        if( (nStyle & DrawTextFlags::CenterEllipsis) == DrawTextFlags::CenterEllipsis )
-        {
-            OUStringBuffer aTmpStr( aStr );
-            // speed it up by removing all but 1.33x as many as the break pos.
-            sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
-            while( nEraseChars < aStr.getLength() && GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
-            {
-                aTmpStr = aStr;
-                sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
-                aTmpStr.remove(i, nEraseChars++);
-                aTmpStr.insert(i, "...");
-            }
-            aStr = aTmpStr.makeStringAndClear();
-        }
-        else if ( nStyle & DrawTextFlags::EndEllipsis )
-        {
-            aStr = aStr.copy(0, nIndex);
-            if ( nIndex > 1 )
-            {
-                aStr += "...";
-                while ( !aStr.isEmpty() && ( GetTextWidth( aStr, 0, aStr.getLength() ) > nMaxWidth) )
-                {
-                    if ( (nIndex > 1) || (nIndex == aStr.getLength()) )
-                        nIndex--;
-                    aStr = aStr.replaceAt( nIndex, 1, u"");
-                }
-            }
-
-            if ( aStr.isEmpty() && (nStyle & DrawTextFlags::Clip) )
-                aStr += OUStringChar(rOrigStr[ 0 ]);
-        }
-        else if ( nStyle & DrawTextFlags::PathEllipsis )
-        {
-            OUString aPath( rOrigStr );
-            OUString aAbbreviatedPath;
-            osl_abbreviateSystemPath( aPath.pData, &aAbbreviatedPath.pData, nIndex, nullptr );
-            aStr = aAbbreviatedPath;
-        }
+        if ((nStyle & DrawTextFlags::CenterEllipsis) == DrawTextFlags::CenterEllipsis)
+            aStr = GetCenterEllipsisString(rOrigStr, nIndex, nMaxWidth);
+        else if (nStyle & DrawTextFlags::EndEllipsis)
+            aStr = GetEndEllipsisString(rOrigStr, nIndex, nMaxWidth, (nStyle & DrawTextFlags::Clip) == DrawTextFlags::Clip);
+        else if (nStyle & DrawTextFlags::PathEllipsis)
+            aStr = lcl_GetPathEllipsisString(rOrigStr, nIndex);
         else if ( nStyle & DrawTextFlags::NewsEllipsis )
-        {
-            static char const   pSepChars[] = ".";
-            // Determine last section
-            sal_Int32 nLastContent = aStr.getLength();
-            while ( nLastContent )
-            {
-                nLastContent--;
-                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
-                    break;
-            }
-            while ( nLastContent &&
-                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
-                nLastContent--;
-
-            OUString aLastStr = aStr.copy(nLastContent);
-            OUString aTempLastStr1 = "..." + aLastStr;
-            if ( GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
-            {
-                aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis );
-            }
-            else
-            {
-                sal_Int32 nFirstContent = 0;
-                while ( nFirstContent < nLastContent )
-                {
-                    nFirstContent++;
-                    if ( ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
-                        break;
-                }
-
-                while ( (nFirstContent < nLastContent) &&
-                        ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
-                {
-                    nFirstContent++;
-                }
-
-                // MEM continue here
-                if ( nFirstContent >= nLastContent )
-                {
-                    aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis );
-                }
-                else
-                {
-                    if ( nFirstContent > 4 )
-                        nFirstContent = 4;
-                    OUString aFirstStr = OUString::Concat(aStr.subView( 0, nFirstContent )) + "...";
-                    OUString aTempStr = aFirstStr + aLastStr;
-                    if ( GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                        aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis );
-                    else
-                    {
-                        do
-                        {
-                            aStr = aTempStr;
-                            if( nLastContent > aStr.getLength() )
-                                nLastContent = aStr.getLength();
-                            while ( nFirstContent < nLastContent )
-                            {
-                                nLastContent--;
-                                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
-                                    break;
-
-                            }
-                            while ( (nFirstContent < nLastContent) &&
-                                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
-                            {
-                                nLastContent--;
-                            }
-
-                            if ( nFirstContent < nLastContent )
-                            {
-                                std::u16string_view aTempLastStr = aStr.subView( nLastContent );
-                                aTempStr = aFirstStr + aTempLastStr;
-
-                                if ( GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
-                                    break;
-                            }
-                        }
-                        while ( nFirstContent < nLastContent );
-                    }
-                }
-            }
-        }
+            aStr = GetNewsEllipsisString(rOrigStr, nMaxWidth, nStyle);
 
         return aStr;
     }

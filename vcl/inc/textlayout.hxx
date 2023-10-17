@@ -66,6 +66,11 @@ namespace vcl
                                  ImplMultiTextLineInfo& rLineInfo,
                                  tools::Long nWidth, OUString const& rStr,
                                  DrawTextFlags nStyle);
+
+    private:
+        OUString GetCenterEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth);
+        OUString GetEndEllipsisString(OUString const& rOrigStr, sal_Int32 nIndex, tools::Long nMaxWidth, bool bClipText);
+        OUString GetNewsEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
     };
 
     /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
