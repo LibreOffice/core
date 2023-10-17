@@ -463,10 +463,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
                 SCTAB nTab = rViewData.GetTabNo();
+                SCTAB nContextMenuTab = -1;
+                bool bFromContextMenu = false;
+                bool bFromMoveOrCopySheetDialog = false; // FN_PARAM_6
                 bool bCpy = false, bUseCurrentDocument = false;
                 OUString aDocName;
                 OUString aTabName;
 
+                // if FID_TAB_MOVE has parameters
                 if( pReqArgs != nullptr )
                 {
                     SCTAB nTableCount = rDoc.GetTableCount();
@@ -483,6 +487,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
+                        // nTab is the target tab.
+                        // source tab is either the active tab or the tab that context menu opened on.
                         //  table is 1-based
                         nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue() - 1;
                         if ( nTab >= nTableCount )
@@ -491,42 +497,142 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if( pReqArgs->HasItem( FN_PARAM_2, &pItem ) )
                         bCpy = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-                    if (!aDocName.isEmpty())
+                    if (pReqArgs->HasItem(FN_PARAM_4, &pItem))
                     {
-                        SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
-                        ScDocShell*     pScSh   = nullptr;
-                        sal_uInt16          i=0;
+                        bFromContextMenu = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-                        while ( pSh )
+                        if (bFromContextMenu)
                         {
-                            pScSh = dynamic_cast<ScDocShell*>( pSh  );
+                            // source tab: the tab that context menu opened on
+                            if (pReqArgs->HasItem(FN_PARAM_5, &pItem))
+                                nContextMenuTab
+                                    = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
 
-                            if( pScSh )
-                            {
-                                pScSh->GetTitle();
-
-                                if (aDocName == pScSh->GetTitle())
-                                {
-                                    nDoc = i;
-                                    ScDocument& rDestDoc = pScSh->GetDocument();
-                                    nTableCount = rDestDoc.GetTableCount();
-                                    bDoIt = rDestDoc.IsDocEditable();
-                                    break;
-                                }
-
-                                i++;        // only count ScDocShell
-                            }
-                            pSh = SfxObjectShell::GetNext( *pSh );
+                            if (pReqArgs->HasItem(FN_PARAM_6, &pItem))
+                                bFromMoveOrCopySheetDialog
+                                    = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                         }
                     }
-                    else // no doc-name -> new doc
-                    {
-                        nDoc = SC_DOC_NEW;
-                        bDoIt = true;
-                    }
 
-                    if ( bDoIt && nTab >= nTableCount )     // if necessary append
-                        nTab = SC_TAB_APPEND;
+                    if (bFromMoveOrCopySheetDialog)
+                    {
+                        OUString aDefaultName;
+                        rDoc.GetName(nContextMenuTab, aDefaultName);
+
+                        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+
+                        VclPtr<AbstractScMoveTableDlg> pDlg(
+                            pFact->CreateScMoveTableDlg(GetFrameWeld(), aDefaultName));
+
+                        ScMarkData& rMark = GetViewData().GetMarkData();
+                        SCTAB nTabSelCount = rMark.GetSelectCount();
+
+                        if (nTableCount == nTabSelCount)
+                        {
+                            pDlg->SetForceCopyTable();
+                        }
+
+                        // We support direct renaming of sheet only when one sheet
+                        // is selected.
+                        pDlg->EnableRenameTable(nTabSelCount == 1);
+
+                        std::shared_ptr<SfxRequest> pReq = std::make_shared<SfxRequest>(rReq);
+                        pDlg->StartExecuteAsync([this, pDlg, pReq,
+                                                 nContextMenuTab](sal_Int32 nResult) {
+
+                            OUString aTableName;
+                            sal_uInt16 nDocument = 0;
+                            SCTAB nTargetIndex = -1;
+                            bool bCopy = false;
+                            bool bDoItAsync = false;
+
+                            if (RET_OK == nResult)
+                            {
+                                nDocument = pDlg->GetSelectedDocument();
+                                nTargetIndex = pDlg->GetSelectedTable();
+                                bCopy = pDlg->GetCopyTable();
+                                bool bRna = pDlg->GetRenameTable();
+                                // Leave aTabName string empty, when Rename is FALSE.
+                                if (bRna)
+                                    pDlg->GetTabNameString(aTableName);
+
+                                bDoItAsync = true;
+
+                                OUString aFoundDocName;
+                                if (nDocument != SC_DOC_NEW)
+                                {
+                                    ScDocShell* pSh = ScDocShell::GetShellByNum(nDocument);
+                                    if (pSh)
+                                    {
+                                        aFoundDocName = pSh->GetTitle();
+                                        if (!pSh->GetDocument().IsDocEditable())
+                                        {
+                                            ErrorMessage(STR_READONLYERR);
+                                            bDoItAsync = false;
+                                        }
+                                    }
+                                }
+                                pReq->AppendItem(SfxStringItem(FID_TAB_MOVE, aFoundDocName));
+                                // 1-based table, if not APPEND
+                                SCTAB nBasicTab = (nContextMenuTab <= MAXTAB)
+                                                      ? (nContextMenuTab + 1)
+                                                      : nContextMenuTab;
+                                pReq->AppendItem(
+                                    SfxUInt16Item(FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab)));
+                                pReq->AppendItem(SfxBoolItem(FN_PARAM_2, bCopy));
+
+                                if (bDoItAsync)
+                                {
+                                    pReq->Done();
+
+                                    // send move or copy request
+                                    MoveTable(nDocument, nTargetIndex, bCopy, &aTableName, true,
+                                              nContextMenuTab);
+                                }
+                            }
+                            pDlg->disposeOnce();
+                        });
+                        rReq.Ignore();
+                    }
+                    else
+                    {
+                        if (!aDocName.isEmpty())
+                        {
+                            SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
+                            ScDocShell*     pScSh   = nullptr;
+                            sal_uInt16          i=0;
+
+                            while ( pSh )
+                            {
+                                pScSh = dynamic_cast<ScDocShell*>( pSh  );
+
+                                if( pScSh )
+                                {
+                                    pScSh->GetTitle();
+
+                                    if (aDocName == pScSh->GetTitle())
+                                    {
+                                        nDoc = i;
+                                        ScDocument& rDestDoc = pScSh->GetDocument();
+                                        nTableCount = rDestDoc.GetTableCount();
+                                        bDoIt = rDestDoc.IsDocEditable();
+                                        break;
+                                    }
+
+                                    i++;        // only count ScDocShell
+                                }
+                                pSh = SfxObjectShell::GetNext( *pSh );
+                            }
+                        }
+                        else // no doc-name -> new doc
+                        {
+                            nDoc = SC_DOC_NEW;
+                            bDoIt = true;
+                        }
+
+                        if ( bDoIt && nTab >= nTableCount )     // if necessary append
+                            nTab = SC_TAB_APPEND;
+                    }
                 }
                 else
                 {
@@ -590,7 +696,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     rReq.Done();        // record, while doc is active
 
-                    MoveTable( nDoc, nTab, bCpy, &aTabName );
+                    if (bFromContextMenu)
+                        MoveTable(nDoc, nTab, bCpy, &aTabName, true,
+                                  nContextMenuTab);
+                    else
+                        MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
             }
             break;

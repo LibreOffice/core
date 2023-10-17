@@ -361,13 +361,14 @@ public:
 
 class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
 {
-    std::unique_ptr<ScMoveTableDlg> m_xDlg;
+    std::shared_ptr<ScMoveTableDlg> m_xDlg;
 public:
-    explicit AbstractScMoveTableDlg_Impl(std::unique_ptr<ScMoveTableDlg> p)
+    explicit AbstractScMoveTableDlg_Impl(std::shared_ptr<ScMoveTableDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(VclAbstractDialog::AsyncContext& rCtx) override;
     virtual sal_uInt16  GetSelectedDocument     () const override;
     virtual sal_uInt16  GetSelectedTable        () const override;
     virtual bool    GetCopyTable            () const override;

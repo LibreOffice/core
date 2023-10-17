@@ -2862,8 +2862,9 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
 //  Move/Copy table to another document
 
-void ScViewFunc::MoveTable(
-    sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy, const OUString* pNewTabName )
+void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
+                           const OUString* pNewTabName, bool bContextMenu,
+                           SCTAB nContextMenuSourceTab)
 {
     ScDocument& rDoc       = GetViewData().GetDocument();
     ScDocShell* pDocShell  = GetViewData().GetDocShell();
@@ -3092,23 +3093,32 @@ void ScViewFunc::MoveTable(
         pTabNames->reserve(nTabCount);
         OUString aDestName;
 
-        for(SCTAB i=0;i<nTabCount;i++)
+        if (bContextMenu)
         {
-            if(rMark.GetTableSelect(i))
+            OUString aTabName;
+            rDoc.GetName(nContextMenuSourceTab, aTabName);
+            pTabNames->push_back(aTabName);
+        }
+        else
+        {
+            for(SCTAB i=0;i<nTabCount;i++)
             {
-                OUString aTabName;
-                rDoc.GetName( i, aTabName);
-                pTabNames->push_back(aTabName);
-
-                for(SCTAB j=i+1;j<nTabCount;j++)
+                if(rMark.GetTableSelect(i))
                 {
-                    if((!rDoc.IsVisible(j)) && rDoc.IsScenario(j))
+                    OUString aTabName;
+                    rDoc.GetName( i, aTabName);
+                    pTabNames->push_back(aTabName);
+
+                    for(SCTAB j=i+1;j<nTabCount;j++)
                     {
-                        rDoc.GetName( j, aTabName);
-                        pTabNames->push_back(aTabName);
-                        i=j;
+                        if((!rDoc.IsVisible(j)) && rDoc.IsScenario(j))
+                        {
+                            rDoc.GetName( j, aTabName);
+                            pTabNames->push_back(aTabName);
+                            i=j;
+                        }
+                        else break;
                     }
-                    else break;
                 }
             }
         }
@@ -3208,13 +3218,24 @@ void ScViewFunc::MoveTable(
             }
         }
 
-        SCTAB nNewTab = nDestTab;
-        if (nNewTab == SC_TAB_APPEND)
-            nNewTab = rDoc.GetTableCount()-1;
-        else if (!bCopy && nTab<nDestTab)
-            nNewTab--;
+        if (bContextMenu)
+        {
+            for (SCTAB i = 0; i < nTabCount; i++)
+            {
+                if (rMark.GetTableSelect(i))
+                    SetTabNo(i, true);
+            }
+        }
+        else
+        {
+            SCTAB nNewTab = nDestTab;
+            if (nNewTab == SC_TAB_APPEND)
+                nNewTab = rDoc.GetTableCount() - 1;
+            else if (!bCopy && nTab < nDestTab)
+                nNewTab--;
 
-        SetTabNo( nNewTab, true );
+            SetTabNo(nNewTab, true);
+        }
     }
 }
 
