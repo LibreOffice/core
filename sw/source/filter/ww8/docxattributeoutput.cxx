@@ -5118,7 +5118,7 @@ void DocxAttributeOutput::WriteSrcRect(
         nCropB -= pBoxItem->GetDistance( SvxBoxItemLine::BOTTOM );
     }
 
-    if ( !((0 != nCropL) || (0 != nCropT) || (0 != nCropR) || (0 != nCropB)) )
+    if (nCropL == 0 && nCropT == 0 && nCropR == 0 && nCropB == 0)
         return;
 
     double  widthMultiplier  = 100000.0/aOriginalSize.Width();
