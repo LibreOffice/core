@@ -61,6 +61,9 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLChangeInfoContext::
         case XML_ELEMENT(DC, XML_DATE):
             xContext = new XMLStringBufferImportContext(GetImport(), sDateTimeBuffer);
             break;
+        case XML_ELEMENT(LO_EXT, XML_MOVE_ID):
+            xContext = new XMLStringBufferImportContext(GetImport(), sMovedIDBuffer);
+            break;
         case XML_ELEMENT(TEXT, XML_P):
         case XML_ELEMENT(LO_EXT, XML_P):
             xContext = new XMLStringBufferImportContext(GetImport(), sCommentBuffer);
@@ -76,8 +79,8 @@ void XMLChangeInfoContext::endFastElement(sal_Int32 )
 {
     // set values at changed region context
     rChangedRegion.SetChangeInfo(rType, sAuthorBuffer.makeStringAndClear(),
-                                 sCommentBuffer.makeStringAndClear(),
-                                 sDateTimeBuffer);
+                                 sCommentBuffer.makeStringAndClear(), sDateTimeBuffer,
+                                 sMovedIDBuffer.makeStringAndClear());
     sDateTimeBuffer.setLength(0);
 }
 

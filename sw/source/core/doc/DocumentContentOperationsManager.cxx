@@ -2005,9 +2005,9 @@ static bool IsEmptyRange(const SwPosition& rStart, const SwPosition& rEnd,
 }
 
 // Copy an area into this document or into another document
-bool
-DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos,
-        SwCopyFlags const flags) const
+bool DocumentContentOperationsManager::CopyRange(SwPaM& rPam, SwPosition& rPos,
+                                                 SwCopyFlags const flags,
+                                                 sal_uInt32 nMovedID) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -2075,7 +2075,8 @@ DocumentContentOperationsManager::CopyRange( SwPaM& rPam, SwPosition& rPos,
     if( pRedlineRange )
     {
         if( rDoc.getIDocumentRedlineAccess().IsRedlineOn() )
-            rDoc.getIDocumentRedlineAccess().AppendRedline( new SwRangeRedline( RedlineType::Insert, *pRedlineRange ), true);
+            rDoc.getIDocumentRedlineAccess().AppendRedline(
+                new SwRangeRedline(RedlineType::Insert, *pRedlineRange, nMovedID), true);
         else
             rDoc.getIDocumentRedlineAccess().SplitRedline( *pRedlineRange );
         delete pRedlineRange;

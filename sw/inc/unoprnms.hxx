@@ -594,6 +594,7 @@ inline constexpr OUStringLiteral UNO_NAME_GRAPHIC_IS_INVERTED = u"GraphicIsInver
 inline constexpr OUStringLiteral UNO_NAME_TRANSPARENCY = u"Transparency";
 inline constexpr OUStringLiteral UNO_NAME_REDLINE_AUTHOR = u"RedlineAuthor";
 inline constexpr OUStringLiteral UNO_NAME_REDLINE_DATE_TIME = u"RedlineDateTime";
+inline constexpr OUStringLiteral UNO_NAME_REDLINE_MOVED_ID = u"RedlineMovedID";
 inline constexpr OUStringLiteral UNO_NAME_REDLINE_COMMENT = u"RedlineComment";
 inline constexpr OUStringLiteral UNO_NAME_REDLINE_DESCRIPTION = u"RedlineDescription";
 inline constexpr OUStringLiteral UNO_NAME_REDLINE_TYPE = u"RedlineType";

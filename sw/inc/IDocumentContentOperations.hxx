@@ -133,7 +133,7 @@ public:
         rPam. If false, then no such check will be performed, and it is assumed
         that the caller took care of verifying this constraint already.
      */
-    virtual bool CopyRange(SwPaM& rPam, SwPosition& rPos, SwCopyFlags flags) const = 0;
+    virtual bool CopyRange(SwPaM& rPam, SwPosition& rPos, SwCopyFlags flags, sal_uInt32 nMovedID = 0) const = 0;
 
     /** Delete section containing the node.
     */

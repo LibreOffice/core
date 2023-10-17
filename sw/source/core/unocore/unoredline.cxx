@@ -257,7 +257,9 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( std::u16string_view rPropertyName
     {
         aRet <<= rRedline.GetTimeStamp().GetUNODateTime();
     }
-    else if(rPropertyName == UNO_NAME_REDLINE_COMMENT)
+    else if (rPropertyName == UNO_NAME_REDLINE_MOVED_ID)
+        aRet <<= rRedline.GetMovedID();
+    else if (rPropertyName == UNO_NAME_REDLINE_COMMENT)
         aRet <<= rRedline.GetComment();
     else if(rPropertyName == UNO_NAME_REDLINE_DESCRIPTION)
         aRet <<= const_cast<SwRangeRedline&>(rRedline).GetDescr();

@@ -2316,6 +2316,7 @@ void XMLTextImportHelper::RedlineAdd( const OUString& /*rType*/,
                                       const OUString& /*rAuthor*/,
                                       const OUString& /*rComment*/,
                                       const util::DateTime& /*rDateTime*/,
+                                      const OUString& /*rMovedID*/,
                                       bool /*bMergeLastPara*/)
 {
     // dummy implementation: do nothing

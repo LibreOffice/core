@@ -140,13 +140,14 @@ void XMLChangedRegionImportContext::SetChangeInfo(
     const OUString& rType,
     const OUString& rAuthor,
     const OUString& rComment,
-    std::u16string_view rDate)
+    std::u16string_view rDate,
+    const OUString& rMovedID)
 {
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime, rDate))
     {
         GetImport().GetTextImport()->RedlineAdd(
-            rType, sID, rAuthor, rComment, aDateTime, bMergeLastPara);
+            rType, sID, rAuthor, rComment, aDateTime, rMovedID, bMergeLastPara);
     }
 }
 

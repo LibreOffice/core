@@ -90,6 +90,7 @@ public:
         const OUString& rAuthor,     /// name of the author
         const OUString& rComment,    /// redline comment
         const css::util::DateTime& rDateTime,  /// date+time
+        const OUString& rMovedID,    /// redline move id, to find moveFrom/MoveTo parts
         bool bMergeLastPara) override;           /// merge last paragraph
     virtual css::uno::Reference<css::text::XTextCursor> RedlineCreateText(
             css::uno::Reference<css::text::XTextCursor> & rOldCursor, /// needed to get the document

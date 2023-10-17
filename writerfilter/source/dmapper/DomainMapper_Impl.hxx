@@ -501,6 +501,10 @@ private:
     bool                                                                            m_bTextInserted;
     LineNumberSettings                                                              m_aLineNumberSettings;
 
+    std::vector<OUString>                                                           m_aRedlineMoveIDs;
+    // Remember the last used redline MoveID. To avoid regression, because of wrong docx export
+    sal_uInt32                                                                      m_nLastRedlineMovedID;
+
     BookmarkMap_t                                                                   m_aBookmarkMap;
     OUString                                                                        m_sCurrentBkmkId;
     OUString                                                                        m_sCurrentBkmkName;

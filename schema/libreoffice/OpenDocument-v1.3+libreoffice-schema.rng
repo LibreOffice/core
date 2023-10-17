@@ -3648,6 +3648,15 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:optional>
   </rng:define>
 
+  <!-- TODO(aszucs) no proposal - unique identifier for move redline -->
+  <rng:define name="office-change-info" combine="interleave">
+    <rng:optional>
+      <rng:attribute name="loext:move-id">
+        <rng:ref name="integer"/>
+      </rng:attribute>
+    </rng:optional>
+  </rng:define>
+
   <!-- Belongs to project MCGR (Armin Le Grand) LO 7.6
        Intended to be used for theme colors too  -->
   <rng:define name="common-complex-color-attributes">

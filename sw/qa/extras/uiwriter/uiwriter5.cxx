@@ -52,6 +52,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <redline.hxx>
 
 /// Second set of tests asserting the behavior of Writer user interface shells.
 class SwUiWriterTest5 : public SwModelTestBase
@@ -2312,6 +2313,139 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157662_RejectInsertRedlineCutWithDe
     // It will reject only 2 parts, that is not separated. It remove the deletion.
     pEditShell->RejectRedline(0);
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(4), pEditShell->GetRedlineCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157663_RedlineMoveRecognition)
+{
+    createSwDoc("tdf157663_redlineMove.odt");
+    SwDoc* pDoc = getSwDoc();
+
+    // turn on red-lining and show changes
+    pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowDelete
+                                                      | RedlineFlags::ShowInsert);
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(23), pEditShell->GetRedlineCount());
+
+    // Check if move redlines are recognised as moved, during import
+    SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+    bool vMovedRedlines[23]
+        = { false, true,  true, true,  true, true,  true,  true,  true,  true,  true, true,
+            true,  false, true, false, true, false, false, false, false, false, false };
+    // 20. and 22. redline is a delete/insert redline with the same text "three".
+    // they are not recognised as a move, because 22. redline is not a whole paragraph.
+    // Note: delete/insert redlines that are just a part of a paragraph decided to be part of
+    // a move, only if it is at least 6 character long and conatin a space "" character.
+    for (SwRedlineTable::size_type i = 0; i < rTable.size(); i++)
+    {
+        CPPUNIT_ASSERT_EQUAL(vMovedRedlines[i], rTable[i]->GetMoved() > 0);
+    }
+
+    // Check if accepting move redlines accept its pairs as well.
+    pEditShell->AcceptRedline(3);   // "9 3/4"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(19), pEditShell->GetRedlineCount());
+
+    pEditShell->AcceptRedline(1);   // "sqrt(10)"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(17), pEditShell->GetRedlineCount());
+
+    pEditShell->AcceptRedline(1);   // "four"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(13), pEditShell->GetRedlineCount());
+
+    pEditShell->AcceptRedline(3);   // "six"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(11), pEditShell->GetRedlineCount());
+
+    pEditShell->AcceptRedline(4);   // "sqrt(17)"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(9), pEditShell->GetRedlineCount());
+
+    // Undo back all the 5 redline accepts
+    for (int i = 0; i < 5; i++)
+    {
+        dispatchCommand(mxComponent, ".uno:Undo", {});
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(23), pEditShell->GetRedlineCount());
+
+    // Check if rejecting redlines reject its pairs as well.
+    pEditShell->RejectRedline(3);   // "9 3/4"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(20), pEditShell->GetRedlineCount());
+
+    pEditShell->RejectRedline(2);   // "sqrt(10)"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(18), pEditShell->GetRedlineCount());
+
+    pEditShell->RejectRedline(2);   // "four"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(15), pEditShell->GetRedlineCount());
+
+    pEditShell->RejectRedline(2);   // "sqrt(17)"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+
+    pEditShell->RejectRedline(2);   // "six"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(12), pEditShell->GetRedlineCount());
+
+    // Check if there are no more move redlines
+    for (SwRedlineTable::size_type i = 0; i < rTable.size(); i++)
+    {
+        CPPUNIT_ASSERT(rTable[i]->GetMoved() == 0);
+    }
+
+    // Check if Moveing Paragraps generate move redlines
+
+    // move a paragraph that has delete redlines inside of it
+    // original text: "Seve ent teen"
+    // deleted texts: "e " and " t"
+    // moved new text: "Seventeen"
+    pEditShell->GotoRedline(6, true);
+    pEditShell->UpdateCursor();
+    pEditShell->MoveParagraph(SwNodeOffset(1));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(16), pEditShell->GetRedlineCount());
+
+    sal_uInt32 nMovedID = rTable[6]->GetMoved();
+    //moved text from here
+    CPPUNIT_ASSERT(nMovedID > 0);                       // "Sev"
+    CPPUNIT_ASSERT(rTable[7]->GetMoved() == 0);         // "e " deleted text not moved
+    CPPUNIT_ASSERT(rTable[8]->GetMoved() == nMovedID);  // "ent"
+    CPPUNIT_ASSERT(rTable[9]->GetMoved() == 0);         // " t"
+    CPPUNIT_ASSERT(rTable[10]->GetMoved() == nMovedID); // "teen"
+    // moved text to here
+    CPPUNIT_ASSERT(rTable[11]->GetMoved() == nMovedID); // "Seventeen"
+
+    // move paragraph that has an insert redline inside of it
+    // original text: "Eigen"
+    // inserted text: "hte"
+    // moved new text :"Eighteen"
+    pEditShell->GotoRedline(12, true);
+    pEditShell->UpdateCursor();
+    pEditShell->MoveParagraph(SwNodeOffset(-2));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(19), pEditShell->GetRedlineCount());
+
+    nMovedID = rTable[12]->GetMoved();
+    // moved text to here
+    CPPUNIT_ASSERT(nMovedID > 0);                        // "Eighteen"
+    // moved text from here
+    CPPUNIT_ASSERT(rTable[13]->GetMoved() == nMovedID);  // "Eigen"
+    CPPUNIT_ASSERT(rTable[14]->GetMoved() == nMovedID);  // "hte"
+    CPPUNIT_ASSERT(rTable[15]->GetMoved() == nMovedID);  // "en"
+
+    //Check if accept work on both side of the redlines made by manual move paragraphs
+    pEditShell->AcceptRedline(13); // "Eigen"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(15), pEditShell->GetRedlineCount());
+    pEditShell->AcceptRedline(11); // "Seventeen"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(10), pEditShell->GetRedlineCount());
+
+    //undo back the last 2 accept
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(19), pEditShell->GetRedlineCount());
+
+    //Check if reject work on both side of the redlines made by manual move paragraphs
+    pEditShell->RejectRedline(13); // "Eigen"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(16), pEditShell->GetRedlineCount());
+    pEditShell->RejectRedline(11); // "Seventeen"
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(12), pEditShell->GetRedlineCount());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf143215)

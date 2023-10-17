@@ -226,6 +226,7 @@ private:
     /// Sometimes we load bad data, and we need to know if we can use
     /// fast binary search, or if we have to fall back to a linear search
     bool m_bHasOverlappingElements = false;
+    mutable sal_uInt32 m_nMaxMovedID = 1;   //every move-redline pair get a unique ID, so they can find each other.
 public:
     ~SwRedlineTable();
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline*>(p)) != maVector.end(); }
@@ -262,6 +263,13 @@ public:
     // is there a redline with the same text content from the same author (near the redline),
     // but with the opposite type (Insert or Delete). It's used to recognize tracked text moving.
     bool isMoved(size_type tableIndex) const;
+    bool isMovedImpl(size_type tableIndex, bool bTryCombined) const;
+    sal_uInt32 getNewMovedID() const { return ++m_nMaxMovedID; }
+    void setMovedIDIfNeeded(sal_uInt32 nMax);
+    void getConnectedArea(size_type nPosOrigin, size_type& rPosStart, size_type& rPosEnd,
+                          bool bCheckChilds) const;
+    OUString getTextOfArea(size_type rPosStart, size_type rPosEnd) const;
+
 
     bool                        empty() const { return maVector.empty(); }
     size_type                   size() const { return maVector.size(); }

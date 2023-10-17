@@ -352,6 +352,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartBibliography(false),
         m_nStartGenericField(0),
         m_bTextInserted(false),
+        m_nLastRedlineMovedID(1),
         m_sCurrentPermId(0),
         m_bFrameDirectionSet(false),
         m_bInDocDefaultsImport(false),
@@ -3563,8 +3564,42 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         pRedlineProperties[1].Value <<= aDateTime;
         pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
         pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
+
+        sal_uInt32 nRedlineMovedID = 0;
+        if (bRedlineMoved)
+        {
+            if (!m_sCurrentBkmkId.isEmpty())
+            {
+                nRedlineMovedID = 1;
+                BookmarkMap_t::iterator aBookmarkIter = m_aBookmarkMap.find(m_sCurrentBkmkId);
+                if (aBookmarkIter != m_aBookmarkMap.end())
+                {
+                    OUString sMoveID = aBookmarkIter->second.m_sBookmarkName;
+                    auto aIter = m_aRedlineMoveIDs.end();
+
+                    if (sMoveID.indexOf("__RefMoveFrom__") >= 0)
+                    {
+                        aIter = std::find(m_aRedlineMoveIDs.begin(), m_aRedlineMoveIDs.end(),
+                                          sMoveID.subView(15));
+                    }
+                    else if (sMoveID.indexOf("__RefMoveTo__") >= 0)
+                    {
+                        aIter = std::find(m_aRedlineMoveIDs.begin(), m_aRedlineMoveIDs.end(),
+                                          sMoveID.subView(13));
+                    };
+
+                    if (aIter != m_aRedlineMoveIDs.end())
+                    {
+                        nRedlineMovedID = aIter - m_aRedlineMoveIDs.begin() + 2;
+                        m_nLastRedlineMovedID = nRedlineMovedID;
+                    }
+                }
+            }
+            else
+                nRedlineMovedID = m_nLastRedlineMovedID;
+        }
         pRedlineProperties[3].Name = "RedlineMoved";
-        pRedlineProperties[3].Value <<= bRedlineMoved;
+        pRedlineProperties[3].Value <<= nRedlineMovedID;
 
         if (!m_bIsActualParagraphFramed)
         {
@@ -8276,6 +8311,14 @@ void DomainMapper_Impl::SetBookmarkName( const OUString& rBookmarkName )
                 m_aBookmarkMap.erase(aBookmarkIter);
                 return;
             }
+        }
+
+        if ((m_sCurrentBkmkPrefix.equals("__RefMoveFrom__")
+             || m_sCurrentBkmkPrefix.equals("__RefMoveTo__"))
+            && std::find(m_aRedlineMoveIDs.begin(), m_aRedlineMoveIDs.end(), rBookmarkName)
+                   == m_aRedlineMoveIDs.end())
+        {
+            m_aRedlineMoveIDs.push_back(rBookmarkName);
         }
 
         aBookmarkIter->second.m_sBookmarkName = m_sCurrentBkmkPrefix + rBookmarkName;

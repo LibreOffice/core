@@ -812,7 +812,7 @@ namespace sw
                     (pEntry->m_pAttr.get());
 
                 SwRedlineData aData(pFltRedline->m_eType, pFltRedline->m_nAutorNo,
-                        pFltRedline->m_aStamp, OUString(), nullptr);
+                        pFltRedline->m_aStamp, 0, OUString(), nullptr);
 
                 SwRangeRedline *const pNewRedline(new SwRangeRedline(aData, aRegion));
                 // the point node may be deleted in AppendRedline, so park

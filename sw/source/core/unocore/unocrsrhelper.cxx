@@ -1263,7 +1263,7 @@ void makeRedline( SwPaM const & rPaM,
     OUString sComment;
     ::util::DateTime aStamp;
     uno::Sequence< beans::PropertyValue > aRevertProperties;
-    bool bIsMoved = false;
+    sal_uInt32 nMovedID = 0;
     bool bFoundComment = false;
     bool bFoundStamp = false;
     bool bFoundRevertProperties = false;
@@ -1281,7 +1281,7 @@ void makeRedline( SwPaM const & rPaM,
         else if (rProp.Name == "RedlineRevertProperties")
             bFoundRevertProperties = rProp.Value >>= aRevertProperties;
         else if (rProp.Name == "RedlineMoved")
-            rProp.Value >>= bIsMoved;
+            rProp.Value >>= nMovedID;
     }
 
     SwRedlineData aRedlineData( eType, nAuthor );
@@ -1401,8 +1401,11 @@ void makeRedline( SwPaM const & rPaM,
     SwRangeRedline* pRedline = new SwRangeRedline( aRedlineData, rPaM );
 
     // set IsMoved bit of the redline to show and handle moved text
-    if( bIsMoved )
-        pRedline->SetMoved();
+    if ( nMovedID > 0 )
+    {
+        pRedline->SetMoved( nMovedID );
+        rRedlineAccess.GetRedlineTable().setMovedIDIfNeeded(nMovedID);
+    }
 
     RedlineFlags nPrevMode = rRedlineAccess.GetRedlineFlags( );
     // xRedlineExtraData is copied here

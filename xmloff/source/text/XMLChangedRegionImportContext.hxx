@@ -70,7 +70,8 @@ public:
     void SetChangeInfo(const OUString& rType,
                        const OUString& rAuthor,
                        const OUString& rComment,
-                       std::u16string_view rDate);
+                       std::u16string_view rDate,
+                       const OUString& rMovedId);
 
     /// create redline XText/XTextCursor on demand and register with
     /// XMLTextImportHelper

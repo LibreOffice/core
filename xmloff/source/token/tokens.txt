@@ -1257,6 +1257,7 @@ move-from-bottom
 move-from-left
 move-from-right
 move-from-top
+move-id
 move-protect
 move-short
 movement

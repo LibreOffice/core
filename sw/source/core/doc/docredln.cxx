@@ -339,6 +339,12 @@ bool lcl_LOKRedlineNotificationEnabled()
 
 } // anonymous namespace
 
+void SwRedlineTable::setMovedIDIfNeeded(sal_uInt32 nMax)
+{
+    if (nMax > m_nMaxMovedID)
+        m_nMaxMovedID = nMax;
+}
+
 /// Emits LOK notification about one addition / removal of a redline item.
 void SwRedlineTable::LOKRedlineNotification(RedlineNotification nType, SwRangeRedline* pRedline)
 {
@@ -753,7 +759,128 @@ const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
     return pFnd;
 }
 
-bool SwRedlineTable::isMoved( size_type rPos ) const
+namespace
+{
+bool lcl_CanCombineWithRange(SwRangeRedline* pOrigin, SwRangeRedline* pActual,
+                             SwRangeRedline* pOther, bool bReverseDir, bool bCheckChilds)
+{
+    if (pOrigin->IsVisible() != pOther->IsVisible())
+        return false;
+
+    if (bReverseDir)
+    {
+        if (*(pOther->End()) != *(pActual->Start()))
+            return false;
+    }
+    else
+    {
+        if (*(pActual->End()) != *(pOther->Start()))
+            return false;
+    }
+
+    if (!pOrigin->GetRedlineData(0).CanCombineForAcceptReject(pOther->GetRedlineData(0)))
+    {
+        if (!bCheckChilds || pOther->GetStackCount() <= 1
+            || !pOrigin->GetRedlineData(0).CanCombineForAcceptReject(pOther->GetRedlineData(1)))
+            return false;
+    }
+    if (pOther->Start()->GetNode().StartOfSectionNode()
+        != pActual->Start()->GetNode().StartOfSectionNode())
+        return false;
+
+    return true;
+}
+}
+
+void SwRedlineTable::getConnectedArea(size_type nPosOrigin, size_type& rPosStart,
+                                      size_type& rPosEnd, bool bCheckChilds) const
+{
+    // Keep the original redline .. else we should memorize witch children was checked
+    // at the last combined redline.
+    SwRangeRedline* pOrigin = (*this)[nPosOrigin];
+    rPosStart = nPosOrigin;
+    rPosEnd = nPosOrigin;
+    SwRangeRedline* pRedline = pOrigin;
+    SwRangeRedline* pOther;
+
+    // connection info is already here..only the actual text is missing at import time
+    // so no need to check Redline->GetContentIdx() here yet.
+    while (rPosStart > 0 && (pOther = (*this)[rPosStart - 1])
+           && lcl_CanCombineWithRange(pOrigin, pRedline, pOther, true, bCheckChilds))
+    {
+        rPosStart--;
+        pRedline = pOther;
+    }
+    while (rPosEnd + 1 < size() && (pOther = (*this)[rPosEnd + 1])
+           && lcl_CanCombineWithRange(pOrigin, pRedline, pOther, false, bCheckChilds))
+    {
+        rPosEnd++;
+        pRedline = pOther;
+    }
+}
+
+OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) const
+{
+    // Normally a SwPaM::GetText() would be enought with rPosStart-start and rPosEnd-end
+    // But at import time some text is not present there yet
+    // we have to collect them 1 by 1
+
+    OUString sRet = "";
+
+    for (size_type nIdx = rPosStart; nIdx <= rPosEnd; ++nIdx)
+    {
+        SwRangeRedline* pRedline = (*this)[nIdx];
+        bool bStartWithNonTextNode = false;
+
+        SwPaM *pPaM;
+        bool bDeletePaM = false;
+        if (nullptr == pRedline->GetContentIdx())
+        {
+            pPaM = pRedline;
+        }
+        else // otherwise it is saved in pContentSect, e.g. during ODT import
+        {
+            pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(),
+                              *pRedline->GetContentIdx()->GetNode().EndOfSectionNode());
+            if (!pPaM->Start()->nNode.GetNode().GetTextNode())
+            {
+                bStartWithNonTextNode = true;
+            }
+            bDeletePaM = true;
+        }
+        const OUString sNew = pPaM->GetText();
+
+        if (bStartWithNonTextNode &&
+            sNew[0] == CH_TXTATR_NEWLINE)
+        {
+            sRet += pPaM->GetText().subView(1);
+        }
+        else
+            sRet += pPaM->GetText();
+        if (bDeletePaM)
+            delete pPaM;
+    }
+
+    return sRet;
+}
+
+bool SwRedlineTable::isMoved(size_type rPos) const
+{
+    // If it is already a part of a movement, then dont check it.
+    if ((*this)[rPos]->GetMoved() != 0)
+        return false;
+    // First try with single redline. then try with combined redlines
+    if (isMovedImpl(rPos, false))
+        return true;
+    else
+    {
+        // Commented out because of probably performance issue
+        //return isMovedImpl(rPos, true);
+        return false;
+    }
+}
+
+bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
 {
     bool bRet = false;
     auto constexpr nLookahead = 20;
@@ -770,74 +897,133 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
         return false;
 
     bool bDeletePaM = false;
-    SwPaM* pPaM;
+    SwPaM* pPaM = nullptr;
+    OUString sTrimmed;
+    SwRedlineTable::size_type nPosStart = rPos;
+    SwRedlineTable::size_type nPosEnd = rPos;
 
-    // if this redline is visible the content is in this PaM
-    if ( nullptr == pRedline->GetContentIdx() )
+    if (bTryCombined)
     {
-        pPaM = pRedline;
-    }
-    else // otherwise it is saved in pContentSect, e.g. during ODT import
-    {
-        pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(), *pRedline->GetContentIdx()->GetNode().EndOfSectionNode() );
-        bDeletePaM = true;
+        getConnectedArea(rPos, nPosStart, nPosEnd, false);
+        if (nPosStart != nPosEnd)
+            sTrimmed = getTextOfArea(nPosStart, nPosEnd).trim();
     }
 
-    const OUString sTrimmed = pPaM->GetText().trim();
+    if (sTrimmed.isEmpty())
+    {
+        // if this redline is visible the content is in this PaM
+        if (nullptr == pRedline->GetContentIdx())
+        {
+            pPaM = pRedline;
+        }
+        else // otherwise it is saved in pContentSect, e.g. during ODT import
+        {
+            pPaM = new SwPaM(pRedline->GetContentIdx()->GetNode(),
+                             *pRedline->GetContentIdx()->GetNode().EndOfSectionNode());
+            bDeletePaM = true;
+        }
+
+        sTrimmed = pPaM->GetText().trim();
+    }
+
     // detection of move needs at least 6 characters with an inner
     // space after stripping white spaces of the redline to skip
     // frequent deleted and inserted articles or other common
     // word parts, e.g. 'the' and 'of a' to detect as text moving
-    if ( sTrimmed.getLength() < 6 || sTrimmed.indexOf(' ') == -1 )
+    if (sTrimmed.getLength() < 6 || sTrimmed.indexOf(' ') == -1)
     {
-        if ( bDeletePaM )
+        if (bDeletePaM)
             delete pPaM;
         return false;
     }
+
+    // Todo: lessen the previous condition..:
+    // if the source / destination is a whole node change then maybe space is not needed
 
     // search pair around the actual redline
     size_type nEnd = rPos + nLookahead < size()
         ? rPos + nLookahead
         : size();
-    rPos = rPos > nLookahead ? rPos - nLookahead : 0;
-    for ( ; rPos < nEnd && !bRet ; ++rPos )
+    size_type nStart = rPos > nLookahead ? rPos - nLookahead : 0;
+    // first, try to compare to single redlines
+    // next, try to compare to combined redlines
+    for (int nPass = 0; nPass < (bTryCombined ? 2 : 1) && !bRet; nPass++)
     {
-        SwRangeRedline* pPair = (*this)[ rPos ];
-
-        // redline must be the requested type and from the same author
-        if ( nPairType != pPair->GetType() ||
-             pRedline->GetAuthor() != pPair->GetAuthor() )
+        for (size_type nPosAct = nStart; nPosAct < nEnd && !bRet; ++nPosAct)
         {
-            continue;
-        }
+            SwRangeRedline* pPair = (*this)[nPosAct];
 
-        bool bDeletePairPaM = false;
-        SwPaM* pPairPaM;
+            // redline must be the requested type and from the same author
+            if (nPairType != pPair->GetType() || pRedline->GetAuthor() != pPair->GetAuthor())
+            {
+                continue;
+            }
 
-        // if this redline is visible the content is in this PaM
-        if ( nullptr == pPair->GetContentIdx() )
-        {
-            pPairPaM = pPair;
-        }
-        else // otherwise it is saved in pContentSect, e.g. during ODT import
-        {
-            // saved in pContentSect, e.g. during ODT import
-            pPairPaM = new SwPaM(pPair->GetContentIdx()->GetNode(), *pPair->GetContentIdx()->GetNode().EndOfSectionNode() );
-            bDeletePairPaM = true;
-        }
+            bool bDeletePairPaM = false;
+            SwPaM* pPairPaM = nullptr;
 
-        // pair at tracked moving: same text by trimming trailing white spaces
-        if ( abs(pPaM->GetText().getLength() - pPairPaM->GetText().getLength()) <= 2 &&
-            sTrimmed == o3tl::trim(pPairPaM->GetText()) )
-        {
-            pRedline->SetMoved();
-            pPair->SetMoved();
-            pPair->InvalidateRange(SwRangeRedline::Invalidation::Add);
-            bRet = true;
-        }
+            OUString sPairTrimmed = "";
+            SwRedlineTable::size_type nPairStart = nPosAct;
+            SwRedlineTable::size_type nPairEnd = nPosAct;
 
-        if ( bDeletePairPaM )
-            delete pPairPaM;
+            if (nPass == 0)
+            {
+                // if this redline is visible the content is in this PaM
+                if (nullptr == pPair->GetContentIdx())
+                {
+                    pPairPaM = pPair;
+                }
+                else // otherwise it is saved in pContentSect, e.g. during ODT import
+                {
+                    // saved in pContentSect, e.g. during ODT import
+                    pPairPaM = new SwPaM(pPair->GetContentIdx()->GetNode(),
+                                         *pPair->GetContentIdx()->GetNode().EndOfSectionNode());
+                    bDeletePairPaM = true;
+                }
+
+                sPairTrimmed = o3tl::trim(pPairPaM->GetText());
+            }
+            else
+            {
+                getConnectedArea(nPosAct, nPairStart, nPairEnd, false);
+                if (nPairStart != nPairEnd)
+                    sPairTrimmed = getTextOfArea(nPairStart, nPairEnd).trim();
+            }
+
+            // pair at tracked moving: same text by trimming trailing white spaces
+            if (abs(sTrimmed.getLength() - sPairTrimmed.getLength()) <= 2
+                && sTrimmed == sPairTrimmed)
+            {
+                sal_uInt32 nMID = getNewMovedID();
+                if (nPosStart != nPosEnd)
+                {
+                    for (size_type nIdx = nPosStart; nIdx <= nPosEnd; ++nIdx)
+                    {
+                        (*this)[nIdx]->SetMoved(nMID);
+                        if (nIdx != rPos)
+                            (*this)[nIdx]->InvalidateRange(SwRangeRedline::Invalidation::Add);
+                    }
+                }
+                else
+                    pRedline->SetMoved(nMID);
+
+                //in (nPass == 0) it will only call once .. as nPairStart == nPairEnd == nPosAct
+                for (size_type nIdx = nPairStart; nIdx <= nPairEnd; ++nIdx)
+                {
+                    (*this)[nIdx]->SetMoved(nMID);
+                    (*this)[nIdx]->InvalidateRange(SwRangeRedline::Invalidation::Add);
+                }
+
+                bRet = true;
+            }
+
+            if (bDeletePairPaM)
+                delete pPairPaM;
+
+            //we can skip the combined redlines
+            if (nPass == 1)
+                nPosAct = nPairEnd;
+        }
     }
 
     if ( bDeletePaM )
@@ -1010,10 +1196,10 @@ bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) c
     return true;
 }
 
-SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut )
+SwRedlineData::SwRedlineData( RedlineType eT, std::size_t nAut, sal_uInt32 nMovedID )
     : m_pNext( nullptr ), m_pExtraData( nullptr ),
     m_aStamp( DateTime::SYSTEM ),
-    m_nAuthor( nAut ), m_eType( eT ), m_nSeqNo( 0 ), m_bAutoFormat(false), m_bMoved(false)
+    m_nAuthor( nAut ), m_eType( eT ), m_nSeqNo( 0 ), m_bAutoFormat(false), m_nMovedID(nMovedID)
 {
     m_aStamp.SetNanoSec( 0 );
 }
@@ -1029,15 +1215,15 @@ SwRedlineData::SwRedlineData(
     , m_eType( rCpy.m_eType )
     , m_nSeqNo( rCpy.m_nSeqNo )
     , m_bAutoFormat(false)
-    , m_bMoved( rCpy.m_bMoved )
+    , m_nMovedID( rCpy.m_nMovedID )
 {
 }
 
 // For sw3io: We now own pNext!
 SwRedlineData::SwRedlineData(RedlineType eT, std::size_t nAut, const DateTime& rDT,
-    OUString aCmnt, SwRedlineData *pNxt)
+    sal_uInt32 nMovedID, OUString aCmnt, SwRedlineData *pNxt)
     : m_pNext(pNxt), m_pExtraData(nullptr), m_sComment(std::move(aCmnt)), m_aStamp(rDT),
-    m_nAuthor(nAut), m_eType(eT), m_nSeqNo(0), m_bAutoFormat(false), m_bMoved(false)
+    m_nAuthor(nAut), m_eType(eT), m_nSeqNo(0), m_bAutoFormat(false), m_nMovedID(nMovedID)
 {
 }
 
@@ -1065,7 +1251,7 @@ bool SwRedlineData::CanCombine(const SwRedlineData& rCmp) const
             m_eType == rCmp.m_eType &&
             m_sComment == rCmp.m_sComment &&
             deltaOneMinute(GetTimeStamp(), rCmp.GetTimeStamp()) &&
-            m_bMoved == rCmp.m_bMoved &&
+            m_nMovedID == rCmp.m_nMovedID &&
             (( !m_pNext && !rCmp.m_pNext ) ||
                 ( m_pNext && rCmp.m_pNext &&
                 m_pNext->CanCombine( *rCmp.m_pNext ))) &&
@@ -1082,7 +1268,7 @@ bool SwRedlineData::CanCombineForAcceptReject(const SwRedlineData& rCmp) const
             m_eType == rCmp.m_eType &&
             m_sComment == rCmp.m_sComment &&
             deltaOneMinute(GetTimeStamp(), rCmp.GetTimeStamp()) &&
-            m_bMoved == rCmp.m_bMoved &&
+            m_nMovedID == rCmp.m_nMovedID &&
             (( !m_pExtraData && !rCmp.m_pExtraData ) ||
                 ( m_pExtraData && rCmp.m_pExtraData &&
                     *m_pExtraData == *rCmp.m_pExtraData ));
@@ -1122,9 +1308,10 @@ OUString SwRedlineData::GetDescr() const
 
 sal_uInt32 SwRangeRedline::s_nLastId = 1;
 
-SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
-    : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
-    m_pRedlineData( new SwRedlineData( eTyp, GetDoc().getIDocumentRedlineAccess().GetRedlineAuthor() ) ),
+SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam, sal_uInt32 nMovedID )
+    : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ), m_pRedlineData(
+          new SwRedlineData(eTyp, GetDoc().getIDocumentRedlineAccess().GetRedlineAuthor(), nMovedID ) )
+    ,
     m_nId( s_nLastId++ )
 {
     GetBound().SetRedline(this);
@@ -1967,7 +2154,12 @@ OUString const & SwRangeRedline::GetAuthorString( sal_uInt16 nPos ) const
     return SW_MOD()->GetRedlineAuthor(GetRedlineData(nPos).m_nAuthor);
 }
 
-const DateTime& SwRangeRedline::GetTimeStamp( sal_uInt16 nPos ) const
+sal_uInt32 SwRangeRedline::GetMovedID(sal_uInt16 nPos) const
+{
+    return GetRedlineData(nPos).m_nMovedID;
+}
+
+const DateTime& SwRangeRedline::GetTimeStamp(sal_uInt16 nPos) const
 {
     return GetRedlineData(nPos).m_aStamp;
 }

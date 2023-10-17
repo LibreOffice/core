@@ -165,7 +165,7 @@ public:
         READONLY    = (1 << 3)      ///< make visible in spite of Readonly
     };
 
-    SAL_DLLPRIVATE void UpdateCursor(
+    void UpdateCursor(
         sal_uInt16 eFlags = SwCursorShell::SCROLLWIN|SwCursorShell::CHKRANGE,
         bool bIdleEnd = false );
 

@@ -755,10 +755,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // text and numbering colors show moving of the list item
-    // tdf#145719: the moved text item "It" is not detected as text moving,
-    // because it consists of less than 6 characters after stripping its spaces
-    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 0);
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 0);
+    // tdf#157663: the moved text item "It" is detected as text moving again!
+    assertXPath(pXmlDoc, "/metafile/push/push/push/textcolor[@color='#008000']", 5);
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[@color='#008000']", 11);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving2)

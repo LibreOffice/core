@@ -43,6 +43,7 @@ class XMLChangeInfoContext : public SvXMLImportContext
 
     OUStringBuffer sAuthorBuffer;
     OUStringBuffer sDateTimeBuffer;
+    OUStringBuffer sMovedIDBuffer;
     OUStringBuffer sCommentBuffer;
 
     XMLChangedRegionImportContext& rChangedRegion;

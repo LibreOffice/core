@@ -95,14 +95,14 @@ class SW_DLLPUBLIC SwRedlineData
     RedlineType m_eType;
     sal_uInt16 m_nSeqNo;
     bool m_bAutoFormat;
-    bool m_bMoved;
+    sal_uInt32 m_nMovedID;  // 0 == not moved, 1 == moved, but dont have its pair, 2+ == unique ID
 
 public:
-    SwRedlineData( RedlineType eT, std::size_t nAut );
+    SwRedlineData( RedlineType eT, std::size_t nAut, sal_uInt32 nMoveID = 0 );
     SwRedlineData( const SwRedlineData& rCpy, bool bCpyNext = true );
 
     // For sw3io: pNext/pExtraData are taken over.
-    SwRedlineData( RedlineType eT, std::size_t nAut, const DateTime& rDT,
+    SwRedlineData( RedlineType eT, std::size_t nAut, const DateTime& rDT, sal_uInt32 nMovedID,
                    OUString aCmnt, SwRedlineData* pNxt );
 
     ~SwRedlineData();
@@ -112,7 +112,7 @@ public:
             return m_nAuthor == rCmp.m_nAuthor &&
                     m_eType == rCmp.m_eType &&
                     m_bAutoFormat == rCmp.m_bAutoFormat &&
-                    m_bMoved == rCmp.m_bMoved &&
+                    m_nMovedID == rCmp.m_nMovedID &&
                     m_sComment == rCmp.m_sComment &&
                     (( !m_pNext && !rCmp.m_pNext ) ||
                         ( m_pNext && rCmp.m_pNext && *m_pNext == *rCmp.m_pNext )) &&
@@ -141,8 +141,9 @@ public:
 
     void SetAutoFormat() { m_bAutoFormat = true; }
     bool IsAutoFormat() const { return m_bAutoFormat; }
-    void SetMoved() { m_bMoved = true; }
-    bool IsMoved() const { return m_bMoved; }
+    void SetMoved( sal_uInt32 nMoveID ) { m_nMovedID = nMoveID; }
+    sal_uInt32 GetMoved() const { return m_nMovedID; }
+    bool IsMoved() const { return m_nMovedID != 0; }
     bool CanCombine( const SwRedlineData& rCmp ) const;
     bool CanCombineForAcceptReject( const SwRedlineData& rCmp ) const;
 
@@ -177,7 +178,7 @@ class SW_DLLPUBLIC SwRangeRedline final : public SwPaM
 public:
     static sal_uInt32 s_nLastId;
 
-    SwRangeRedline( RedlineType eType, const SwPaM& rPam );
+    SwRangeRedline( RedlineType eType, const SwPaM& rPam, sal_uInt32 nMoveID = 0 );
     SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRangeRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // For sw3io: pData is taken over!
@@ -216,7 +217,8 @@ public:
     sal_uInt16 GetStackCount() const;
     std::size_t GetAuthor( sal_uInt16 nPos = 0) const;
     OUString const & GetAuthorString( sal_uInt16 nPos = 0 ) const;
-    const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
+    sal_uInt32 GetMovedID(sal_uInt16 nPos = 0) const;
+    const DateTime& GetTimeStamp(sal_uInt16 nPos = 0) const;
     RedlineType GetType( sal_uInt16 nPos = 0 ) const;
     // text content of the redline is only an annotation placeholder
     // (i.e. a comment, but don't confuse it with comment of the redline)
@@ -280,8 +282,9 @@ public:
 
     void MaybeNotifyRedlinePositionModification(tools::Long nTop);
 
-    void SetMoved() {  m_pRedlineData->SetMoved(); }
+    void SetMoved(sal_uInt32 nMoveID = 1) { m_pRedlineData->SetMoved(nMoveID); }
     bool IsMoved() const { return m_pRedlineData->IsMoved(); }
+    sal_uInt32 GetMoved(sal_uInt16 nPos = 0) const { return GetRedlineData(nPos).GetMoved(); }
 };
 
 void MaybeNotifyRedlineModification(SwRangeRedline& rRedline, SwDoc& rDoc);

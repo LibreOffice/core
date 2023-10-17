@@ -1357,6 +1357,7 @@ namespace xmloff::token {
         TOKEN( "move-from-left",                  XML_MOVE_FROM_LEFT ),
         TOKEN( "move-from-right",                 XML_MOVE_FROM_RIGHT ),
         TOKEN( "move-from-top",                   XML_MOVE_FROM_TOP ),
+        TOKEN( "move-id",                         XML_MOVE_ID ),
         TOKEN( "move-protect",                    XML_MOVE_PROTECT ),
         TOKEN( "move-short",                      XML_MOVE_SHORT ),
         TOKEN( "movement",                        XML_MOVEMENT ),
