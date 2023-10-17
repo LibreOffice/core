@@ -882,15 +882,8 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
         return QString();
     }
 
-    const Sequence<PropertyValue> attribs
-        = xText->getCharacterAttributes(offset, Sequence<OUString>());
-    const OUString aRet
-        = AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(attribs);
-
-    accessibility::TextSegment aAttributeRun
-        = xText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
-    *startOffset = aAttributeRun.SegmentStart;
-    *endOffset = aAttributeRun.SegmentEnd;
+    const OUString aRet = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
+        xText, offset, *startOffset, *endOffset);
     return toQString(aRet);
 }
 

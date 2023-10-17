@@ -19,6 +19,7 @@
 
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -292,6 +293,24 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
     }
 
     return aRet;
+}
+
+OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
+    css::uno::Reference<css::accessibility::XAccessibleText> xText, sal_Int32 nOffset,
+    sal_Int32& rStartOffset, sal_Int32& rEndOffset)
+{
+    assert(xText.is());
+
+    const css::uno::Sequence<css::beans::PropertyValue> attribs
+        = xText->getCharacterAttributes(nOffset, css::uno::Sequence<OUString>());
+    const OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs);
+
+    css::accessibility::TextSegment aAttributeRun
+        = xText->getTextAtIndex(nOffset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+    rStartOffset = aAttributeRun.SegmentStart;
+    rEndOffset = aAttributeRun.SegmentEnd;
+
+    return sAttributes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

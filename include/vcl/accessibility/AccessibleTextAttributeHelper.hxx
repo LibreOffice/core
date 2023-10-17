@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/beans/PropertyValue.hdl>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
@@ -34,6 +35,19 @@ public:
      */
     static OUString ConvertUnoToIAccessible2TextAttributes(
         const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes);
+
+    /**
+     * Get the IAccessible2 text attributes and the span of the attributes at the given index.
+     * @param xText The interace to query for the information.
+     * @param nOffset Character offset for which to retrieve the information.
+     * @param rStartOffset Out param that is set to the start index of the attribute run.
+     * @param rEndOffset Out param that is set to the end index of the attribute run.
+     * @return IAccessible2 text attributes at the given character offset.
+     */
+    static OUString
+    GetIAccessible2TextAttributes(css::uno::Reference<css::accessibility::XAccessibleText> xText,
+                                  sal_Int32 nOffset, sal_Int32& rStartOffset,
+                                  sal_Int32& rEndOffset);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
