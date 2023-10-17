@@ -2218,7 +2218,6 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
 {
     // fix column widths
-    std::vector<ColumnWidthInfo>::iterator colIter;
     sal_uInt32 nCols = GetColumnCount();
 
     // If there are empty rows (because of some row span of previous rows)
@@ -2316,7 +2315,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
         {
             double n = static_cast<double>(m_nWidth) / static_cast<double>(nRelWidth);
             nRelWidth = 0;
-            for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end() - 1; ++colIter)
+            for( auto colIter = m_aColumnWidths.begin(); colIter != (m_aColumnWidths.end() - 1); ++colIter)
             {
                 sal_Int32 nW = static_cast<sal_Int32>( colIter->width * n);
                 colIter->width = o3tl::narrowing<sal_uInt16>(nW);
@@ -2417,7 +2416,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
                 // column widths, every column get some extra width.
                 sal_Int32 nExtraAbs = m_nWidth - nAbsWidth;
                 sal_Int32 nAbsLastCol = m_aColumnWidths.back().width + nExtraAbs;
-                for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end()-1; ++colIter )
+                for( auto colIter = m_aColumnWidths.begin(); colIter != (m_aColumnWidths.end() - 1); ++colIter )
                 {
                     sal_Int32 nAbsCol = colIter->width;
                     sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
@@ -2435,7 +2434,7 @@ void SwXMLTableContext::MakeTable_( SwTableBox *pBox )
                 // Every column gets the minimum width plus some extra width.
                 sal_Int32 nExtraAbs = m_nWidth - (nCols * MINLAY);
                 sal_Int32 nAbsLastCol = MINLAY + nExtraAbs;
-                for( colIter = m_aColumnWidths.begin(); colIter < m_aColumnWidths.end()-1; ++colIter )
+                for( auto colIter = m_aColumnWidths.begin(); colIter != (m_aColumnWidths.end() - 1); ++colIter )
                 {
                     sal_Int32 nAbsCol = colIter->width;
                     sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
