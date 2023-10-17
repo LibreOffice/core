@@ -17,8 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_TEXTLAYOUT_HXX
-#define INCLUDED_VCL_INC_TEXTLAYOUT_HXX
+#pragma once
 
 #include <tools/long.hxx>
 #include <vcl/outdev.hxx>
@@ -140,7 +139,5 @@ namespace vcl
     };
 
 } // namespace vcl
-
-#endif // INCLUDED_VCL_INC_TEXTLAYOUT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
