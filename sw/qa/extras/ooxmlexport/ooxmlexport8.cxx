@@ -30,7 +30,6 @@
 #include <com/sun/star/table/TableBorder2.hpp>
 
 #include <tools/UnitConversion.hxx>
-#include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <xmloff/odffields.hxx>
@@ -46,21 +45,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        if (filename == std::string_view("smartart.docx")
-            || filename == std::string_view("strict-smartart.docx") )
-        {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [] () {
-                    SvtFilterOptions::Get().SetSmartArt2Shape(false);
-                }));
-            SvtFilterOptions::Get().SetSmartArt2Shape(true);
-            return pResetter;
-        }
-        return nullptr;
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
