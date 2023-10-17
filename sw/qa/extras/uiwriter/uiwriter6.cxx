@@ -46,6 +46,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/swafopt.hxx>
+#include <editeng/unolingu.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
@@ -1687,9 +1688,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf124603)
     }
 }
 
+#if !defined(MACOSX)
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157442)
+{
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const SwViewOption* pOpt = pWrtShell->GetViewOptions();
+    uno::Sequence<beans::PropertyValue> params
+        = comphelper::InitPropertySequence({ { "Enable", uno::Any(true) } });
+    dispatchCommand(mxComponent, ".uno:SpellOnline", params);
+
+    // Automatic Spell Checking is enabled
+    CPPUNIT_ASSERT(pOpt->IsOnlineSpell());
+
+    // check available en_US dictionary and test spelling with it
+    uno::Reference<XLinguServiceManager2> xLngSvcMgr(GetLngSvcMgr_Impl());
+    uno::Reference<XSpellChecker1> xSpell;
+    xSpell.set(xLngSvcMgr->getSpellChecker(), UNO_QUERY);
+    LanguageType eLang = LanguageTag::convertToLanguageType(lang::Locale("en", "US", OUString()));
+    if (xSpell.is() && xSpell->hasLanguage(static_cast<sal_uInt16>(eLang)))
+    {
+        uno::Reference<linguistic2::XLinguProperties> xLinguProperties(
+            LinguMgr::GetLinguPropertySet());
+
+        // Spell with digits is disabled by default
+        CPPUNIT_ASSERT_EQUAL(sal_False, xLinguProperties->getIsSpellWithDigits());
+
+        SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+        emulateTyping(*pTextDoc, u"ErrorError Treee2 ");
+        SwCursorShell* pShell(pDoc->GetEditShell());
+        SwTextNode* pNode = pShell->GetCursor()->GetPointNode().GetTextNode();
+
+        // Without the fix in place, this test would have crashed because GetWrong() returns nullptr
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pNode->GetWrong()->Count());
+    }
+}
+#endif
+
+#if !defined(MACOSX)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
 {
-#if !defined(MACOSX)
     createSwDoc("tdf65535.fodt");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
@@ -1755,8 +1794,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf65535)
     }
     // This was false (lost comment with spelling replacement)
     CPPUNIT_ASSERT_EQUAL(OString("with comment"), sCommentText);
-#endif
 }
+#endif
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
 {
