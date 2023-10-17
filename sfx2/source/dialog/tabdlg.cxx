@@ -457,13 +457,12 @@ IMPL_LINK_NOARG(SfxTabDialogController, ResetHdl, weld::Button&, void)
             if (SfxItemState::SET == m_pSet->GetItemState(nWh, false, &pItem))
             {
                 m_xExampleSet->Put(*pItem);
-                m_pOutSet->Put(*pItem);
             }
             else
             {
                 m_xExampleSet->ClearItem(nWh);
-                m_pOutSet->ClearItem(nWh);
             }
+            m_pOutSet->ClearItem(nWh);
             nTmp++;
         }
     }
