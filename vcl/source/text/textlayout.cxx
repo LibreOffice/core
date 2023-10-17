@@ -17,6 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <osl/file.h>
+#include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
+#include <tools/fract.hxx>
+#include <comphelper/processfactory.hxx>
+#include <i18nlangtag/languagetag.hxx>
+
 #include <vcl/ctrl.hxx>
 #include <vcl/kernarray.hxx>
 #include <vcl/outdev.hxx>
@@ -25,14 +32,6 @@
 
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-
-#include <osl/diagnose.h>
-#include <osl/file.h>
-#include <rtl/ustrbuf.hxx>
-#include <tools/fract.hxx>
-#include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
-#include <i18nlangtag/languagetag.hxx>
 
 #include <memory>
 #include <iterator>
@@ -523,7 +522,7 @@ namespace vcl
         m_rTargetDevice.Push( PushFlags::MAPMODE | PushFlags::FONT | PushFlags::TEXTLAYOUTMODE );
 
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
-        OSL_ENSURE( aTargetMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
+        SAL_WARN_IF(aTargetMapMode.GetOrigin() != Point(), "vcl", "uhm, the code below won't work here ...");
 
         // normally, controls simulate "zoom" by "zooming" the font. This is responsible for (part of) the discrepancies
         // between text in Writer and text in controls in Writer, though both have the same font.
@@ -534,13 +533,11 @@ namespace vcl
 
         // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
         // translating coordinates between the reference device and the target device.
-        OSL_ENSURE( aTargetMapMode.GetMapUnit() == MapUnit::MapPixel,
-            "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: this class is not expected to work with such target devices!" );
+        SAL_WARN_IF(aTargetMapMode.GetMapUnit() != MapUnit::MapPixel, "vcl", "this class is not expected to work with such target devices!");
             // we *could* adjust all the code in this class to handle this case, but at the moment, it's not necessary
         const MapUnit eTargetMapUnit = m_rReferenceDevice.GetMapMode().GetMapUnit();
         aTargetMapMode.SetMapUnit( eTargetMapUnit );
-        OSL_ENSURE( aTargetMapMode.GetMapUnit() != MapUnit::MapPixel,
-            "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: a reference device which has map mode PIXEL?!" );
+        SAL_WARN_IF(aTargetMapMode.GetMapUnit() == MapUnit::MapPixel, "vcl", "a reference device which has map mode PIXEL?!");
 
         m_rTargetDevice.SetMapMode( aTargetMapMode );
 
