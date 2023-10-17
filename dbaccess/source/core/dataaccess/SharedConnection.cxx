@@ -38,8 +38,8 @@ OSharedConnection::~OSharedConnection() {}
 
 void SAL_CALL OSharedConnection::disposing()
 {
-    OSharedConnection_BASE::disposing();
     OConnectionWrapper::disposing();
+    OSharedConnection_BASE::disposing();
 }
 
 Reference<XStatement> SAL_CALL OSharedConnection::createStatement()
