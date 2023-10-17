@@ -20,21 +20,15 @@
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
-#include <tools/fract.hxx>
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/ctrl.hxx>
-#include <vcl/kernarray.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-
-#include <memory>
-#include <iterator>
 
 static bool ImplIsCharIn(sal_Unicode c, const char* pStr)
 {
