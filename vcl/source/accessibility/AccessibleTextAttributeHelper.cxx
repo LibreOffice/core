@@ -20,10 +20,12 @@
 #include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/TextMarkupType.hpp>
 #include <o3tl/any.hxx>
 #include <tools/color.hxx>
 
@@ -303,12 +305,52 @@ OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
 
     const css::uno::Sequence<css::beans::PropertyValue> attribs
         = xText->getCharacterAttributes(nOffset, css::uno::Sequence<OUString>());
-    const OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs);
+    OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs);
 
     css::accessibility::TextSegment aAttributeRun
         = xText->getTextAtIndex(nOffset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
     rStartOffset = aAttributeRun.SegmentStart;
     rEndOffset = aAttributeRun.SegmentEnd;
+
+    // report spelling error as "invalid:spelling;" IA2 text attribute and
+    // adapt start/end index as necessary
+    css::uno::Reference<css::accessibility::XAccessibleTextMarkup> xTextMarkup(xText,
+                                                                               css::uno::UNO_QUERY);
+    if (xTextMarkup.is())
+    {
+        bool bInvalidSpelling = false;
+        const sal_Int32 nMarkupCount(
+            xTextMarkup->getTextMarkupCount(css::text::TextMarkupType::SPELLCHECK));
+        for (sal_Int32 nMarkupIndex = 0; nMarkupIndex < nMarkupCount; ++nMarkupIndex)
+        {
+            const css::accessibility::TextSegment aTextSegment
+                = xTextMarkup->getTextMarkup(nMarkupIndex, css::text::TextMarkupType::SPELLCHECK);
+            const sal_Int32 nStartOffsetTextMarkup = aTextSegment.SegmentStart;
+            const sal_Int32 nEndOffsetTextMarkup = aTextSegment.SegmentEnd;
+            if (nStartOffsetTextMarkup <= nOffset)
+            {
+                if (nOffset < nEndOffsetTextMarkup)
+                {
+                    // offset is inside invalid spelling
+                    rStartOffset = ::std::max(rStartOffset, nStartOffsetTextMarkup);
+                    rEndOffset = ::std::min(rEndOffset, nEndOffsetTextMarkup);
+                    bInvalidSpelling = true;
+                    break;
+                }
+                else
+                {
+                    rStartOffset = ::std::max(rStartOffset, nEndOffsetTextMarkup);
+                }
+            }
+            else
+            {
+                rEndOffset = ::std::min(rEndOffset, nStartOffsetTextMarkup);
+            }
+        }
+
+        if (bInvalidSpelling)
+            sAttributes += u"invalid:spelling;"_ustr;
+    }
 
     return sAttributes;
 }
