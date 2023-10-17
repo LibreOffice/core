@@ -144,76 +144,63 @@ namespace vcl
         OUString aTempLastStr1 = "..." + aLastStr;
 
         if (GetTextWidth(aTempLastStr1, 0, aTempLastStr1.getLength()) > nMaxWidth)
+            return GetEllipsisString(aStr, nMaxWidth, DrawTextFlags::EndEllipsis);
+
+        sal_Int32 nFirstContent = 0;
+        while (nFirstContent < nLastContent)
         {
-            aStr = GetEllipsisString(aStr, nMaxWidth, DrawTextFlags::EndEllipsis);
+            nFirstContent++;
+            if (ImplIsCharIn(aStr[nFirstContent], pSepChars))
+                break;
         }
-        else
+
+        while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nFirstContent], pSepChars))
         {
-            sal_Int32 nFirstContent = 0;
+            nFirstContent++;
+        }
+
+        if (nFirstContent >= nLastContent)
+            return GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
+
+        if (nFirstContent > 4)
+            nFirstContent = 4;
+
+        OUString aFirstStr = OUString::Concat(aStr.subView(0, nFirstContent)) + "...";
+        OUString aTempStr = aFirstStr + aLastStr;
+
+        if (GetTextWidth(aTempStr, 0, aTempStr.getLength() ) > nMaxWidth)
+            return GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
+
+        do
+        {
+            aStr = aTempStr;
+
+            if (nLastContent > aStr.getLength())
+                nLastContent = aStr.getLength();
+
             while (nFirstContent < nLastContent)
             {
-                nFirstContent++;
-                if (ImplIsCharIn( aStr[nFirstContent], pSepChars))
+                nLastContent--;
+                if (ImplIsCharIn(aStr[nLastContent], pSepChars))
+                    break;
+
+            }
+
+            while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
+            {
+                nLastContent--;
+            }
+
+            if (nFirstContent < nLastContent)
+            {
+                std::u16string_view aTempLastStr = aStr.subView(nLastContent);
+                aTempStr = aFirstStr + aTempLastStr;
+
+                if (GetTextWidth(aTempStr, 0, aTempStr.getLength()) > nMaxWidth)
                     break;
             }
-
-            while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nFirstContent], pSepChars))
-            {
-                nFirstContent++;
-            }
-
-            // MEM continue here
-            if (nFirstContent >= nLastContent)
-            {
-                aStr = GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
-            }
-            else
-            {
-                if (nFirstContent > 4)
-                    nFirstContent = 4;
-
-                OUString aFirstStr = OUString::Concat(aStr.subView(0, nFirstContent)) + "...";
-                OUString aTempStr = aFirstStr + aLastStr;
-
-                if (GetTextWidth(aTempStr, 0, aTempStr.getLength() ) > nMaxWidth)
-                {
-                    aStr = GetEllipsisString(aStr, nMaxWidth, nStyle | DrawTextFlags::EndEllipsis);
-                }
-                else
-                {
-                    do
-                    {
-                        aStr = aTempStr;
-
-                        if (nLastContent > aStr.getLength())
-                            nLastContent = aStr.getLength();
-
-                        while (nFirstContent < nLastContent)
-                        {
-                            nLastContent--;
-                            if (ImplIsCharIn(aStr[nLastContent], pSepChars))
-                                break;
-
-                        }
-
-                        while ((nFirstContent < nLastContent) && ImplIsCharIn(aStr[nLastContent-1], pSepChars))
-                        {
-                            nLastContent--;
-                        }
-
-                        if (nFirstContent < nLastContent)
-                        {
-                            std::u16string_view aTempLastStr = aStr.subView(nLastContent);
-                            aTempStr = aFirstStr + aTempLastStr;
-
-                            if (GetTextWidth(aTempStr, 0, aTempStr.getLength()) > nMaxWidth)
-                                break;
-                        }
-                    }
-                    while (nFirstContent < nLastContent);
-                }
-            }
         }
+        while (nFirstContent < nLastContent);
 
         return aStr;
     }
