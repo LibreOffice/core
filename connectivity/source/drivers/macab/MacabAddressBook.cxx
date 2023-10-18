@@ -113,8 +113,8 @@ MacabAddressBook::~MacabAddressBook()
 const OUString & MacabAddressBook::getDefaultTableName()
 {
     /* This string probably needs to be localized. */
-    static const OUString aDefaultTableName
-        (OUString("Address Book"));
+    static constexpr OUString aDefaultTableName
+        (u"Address Book"_ustr);
 
     return aDefaultTableName;
 }
