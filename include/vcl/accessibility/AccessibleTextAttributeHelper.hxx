@@ -38,7 +38,7 @@ public:
 
     /**
      * Get the IAccessible2 text attributes and the span of the attributes at the given index.
-     * @param xText The interace to query for the information.
+     * @param xText The interface to query for the information.
      * @param nOffset Character offset for which to retrieve the information.
      * @param rStartOffset Out param that is set to the start index of the attribute run.
      * @param rEndOffset Out param that is set to the end index of the attribute run.
