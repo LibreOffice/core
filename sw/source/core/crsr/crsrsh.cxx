@@ -1769,6 +1769,22 @@ void SwCursorShell::UpdateCursorPos()
         GetLayout()->GetCursorOfst( pShellCursor->GetPoint(), pShellCursor->GetPtPos(),
                                      &aTmpState );
         pShellCursor->DeleteMark();
+        // kde45196-1.html: try to get to a non-hidden paragraph, there must
+        // be one in the document body
+        while (isInHiddenTextFrame(pShellCursor))
+        {
+            if (!pShellCursor->MovePara(GoNextPara, fnParaStart))
+            {
+                break;
+            }
+        }
+        while (isInHiddenTextFrame(pShellCursor))
+        {
+            if (!pShellCursor->MovePara(GoPrevPara, fnParaStart))
+            {
+                break;
+            }
+        }
     }
     IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : nullptr;
     if( pGrammarContact )
