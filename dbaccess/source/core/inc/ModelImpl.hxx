@@ -27,10 +27,13 @@
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -38,6 +41,7 @@
 #include <sfx2/docmacromode.hxx>
 #include <sfx2/docstoragemodifylistener.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <rtl/digest.h>
 #include <rtl/ref.hxx>
 #include <o3tl/enumarray.hxx>
 
@@ -90,7 +94,67 @@ typedef ::utl::SharedUNOComponent< css::embed::XStorage >  SharedStorage;
 
 class ODatabaseContext;
 class DocumentStorageAccess;
-class OSharedConnectionManager;
+class ODatabaseSource;
+
+
+/** The class OSharedConnectionManager implements a structure to share connections.
+    It owns the master connections which will be disposed when the last connection proxy is gone.
+*/
+// need to hold the digest
+struct TDigestHolder
+{
+    sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
+    TDigestHolder()
+    {
+        m_pBuffer[0] = 0;
+    }
+
+};
+
+class OSharedConnectionManager : public ::cppu::WeakImplHelper< css::lang::XEventListener >
+{
+    // contains the currently used master connections
+    struct TConnectionHolder
+    {
+        css::uno::Reference< css::sdbc::XConnection >    xMasterConnection;
+        oslInterlockedCount         nALiveCount;
+    };
+
+    // the less-compare functor, used for the stl::map
+    struct TDigestLess
+    {
+        bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
+        {
+            sal_uInt32 i;
+            for(i=0;i < RTL_DIGEST_LENGTH_SHA1 && (x.m_pBuffer[i] >= y.m_pBuffer[i]); ++i)
+                ;
+            return i < RTL_DIGEST_LENGTH_SHA1;
+        }
+    };
+
+    typedef std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
+    typedef std::map< css::uno::Reference< css::sdbc::XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+
+    ::osl::Mutex                m_aMutex;
+    TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
+    TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
+    css::uno::Reference< css::reflection::XProxyFactory >  m_xProxyFactory;
+
+protected:
+    virtual ~OSharedConnectionManager() override;
+
+public:
+    explicit OSharedConnectionManager(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
+
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    css::uno::Reference< css::sdbc::XConnection > getConnection(   const OUString& url,
+                                            const OUString& user,
+                                            const OUString& password,
+                                            const css::uno::Sequence< css::beans::PropertyValue >& _aInfo,
+                                            ODatabaseSource* _pDataSource);
+    void addEventListener(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection, TConnectionMap::iterator const & _rIter);
+};
+
 
 class ODatabaseModelImpl    :public ::sfx2::IMacroDocumentAccess
                             ,public ::sfx2::IModifiableDocument
@@ -188,9 +252,7 @@ public:
                                                         m_xSettings;
     css::uno::Sequence< OUString >                      m_aTableFilter;
     css::uno::Sequence< OUString >                      m_aTableTypeFilter;
-    OSharedConnectionManager*                           m_pSharedConnectionManager;
-    css::uno::Reference< css::lang::XEventListener >
-                                                        m_xSharedConnectionManager;
+    rtl::Reference< OSharedConnectionManager >          m_xSharedConnectionManager;
     css::uno::Reference<css::awt::XWindow>
                                                         m_xDialogParent;
     sal_uInt16                                          m_nControllerLockCount;

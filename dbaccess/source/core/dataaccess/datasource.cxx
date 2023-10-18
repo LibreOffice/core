@@ -62,7 +62,6 @@
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <rtl/digest.h>
 
 #include <algorithm>
 #include <iterator>
@@ -249,69 +248,6 @@ void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentic
 {
     SAL_WARN("dbaccess","OAuthenticationContinuation::setRememberAccount: not supported!");
 }
-
-namespace {
-
-/** The class OSharedConnectionManager implements a structure to share connections.
-    It owns the master connections which will be disposed when the last connection proxy is gone.
-*/
-// need to hold the digest
-struct TDigestHolder
-{
-    sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
-    TDigestHolder()
-    {
-        m_pBuffer[0] = 0;
-    }
-
-};
-
-}
-
-class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
-{
-
-     // contains the currently used master connections
-    struct TConnectionHolder
-    {
-        Reference< XConnection >    xMasterConnection;
-        oslInterlockedCount         nALiveCount;
-    };
-
-    // the less-compare functor, used for the stl::map
-    struct TDigestLess
-    {
-        bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
-        {
-            sal_uInt32 i;
-            for(i=0;i < RTL_DIGEST_LENGTH_SHA1 && (x.m_pBuffer[i] >= y.m_pBuffer[i]); ++i)
-                ;
-            return i < RTL_DIGEST_LENGTH_SHA1;
-        }
-    };
-
-    typedef std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
-    typedef std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
-
-    ::osl::Mutex                m_aMutex;
-    TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
-    TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
-    Reference< XProxyFactory >  m_xProxyFactory;
-
-protected:
-    virtual ~OSharedConnectionManager() override;
-
-public:
-    explicit OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
-
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
-    Reference<XConnection> getConnection(   const OUString& url,
-                                            const OUString& user,
-                                            const OUString& password,
-                                            const Sequence< PropertyValue >& _aInfo,
-                                            ODatabaseSource* _pDataSource);
-    void addEventListener(const Reference<XConnection>& _rxConnection, TConnectionMap::iterator const & _rIter);
-};
 
 OSharedConnectionManager::OSharedConnectionManager(const Reference< XComponentContext >& _rxContext)
 {
@@ -1234,14 +1170,9 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
     { // create a new proxy for the connection
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
-            // TODO ideally we could just have one field, but to make that work
-            // we'd need to move OSharedConnectionManager into its own file and header
-            rtl::Reference<OSharedConnectionManager> manager =
-                new OSharedConnectionManager( m_pImpl->m_aContext );
-            m_pImpl->m_pSharedConnectionManager = manager.get();
-            m_pImpl->m_xSharedConnectionManager = m_pImpl->m_pSharedConnectionManager;
+            m_pImpl->m_xSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
         }
-        xConn = m_pImpl->m_pSharedConnectionManager->getConnection(
+        xConn = m_pImpl->m_xSharedConnectionManager->getConnection(
             m_pImpl->m_sConnectURL, user, password, m_pImpl->m_xSettings->getPropertyValues(), this );
     }
 
