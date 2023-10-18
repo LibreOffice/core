@@ -3080,7 +3080,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     bInOwnChange = true; // disable ModifyHdl (reset below)
     mbPartialPrefix = false;
 
-    ImplCreateEditEngine();
+    if (pActiveViewSh)
+        ImplCreateEditEngine();
 
     bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
 
