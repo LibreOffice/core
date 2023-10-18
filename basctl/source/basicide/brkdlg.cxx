@@ -28,15 +28,11 @@
 
 namespace basctl
 {
-// FIXME  Why does BreakPointDialog allow only sal_uInt16 for break-point line
-// numbers, whereas BreakPoint supports sal_uLong?
-
 namespace
 {
 bool lcl_ParseText(OUString const& rText, size_t& rLineNr)
 {
-    // aText should look like "# n" where
-    // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
+    // aText should look like "# n" where n > 0
     // All spaces are ignored, so there can even be spaces within the
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
@@ -48,7 +44,6 @@ bool lcl_ParseText(OUString const& rText, size_t& rLineNr)
         return false;
     if (cFirst == '#')
         aText = aText.copy(1);
-    // XXX Assumes that sal_uInt16 is contained within sal_Int32:
     sal_Int32 n = aText.toInt32();
     if (n <= 0)
         return false;
