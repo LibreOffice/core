@@ -292,7 +292,7 @@ int INetURLObject::SubString::compare(SubString const & rOther,
 
 struct INetURLObject::SchemeInfo
 {
-    rtl::OUStringConstExpr m_sScheme;
+    OUString m_sScheme;
     char const * m_pPrefix;
     bool m_bAuthority;
     bool m_bUser;
@@ -347,7 +347,7 @@ INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
     static constexpr OUStringLiteral SFTP = u"sftp";
     static constexpr OUStringLiteral VND_CMIS = u"vnd.libreoffice.cmis";
 
-    static o3tl::enumarray<INetProtocol, SchemeInfo> const map = {
+    static o3tl::enumarray<INetProtocol, SchemeInfo> constexpr map = {
         // [-loplugin:redundantfcast]:
         SchemeInfo{
             EMPTY, "", false, false, false, false, false, false, false, false},
@@ -916,7 +916,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
         }
 
         if (m_eScheme != INetProtocol::Generic) {
-            aSynScheme = static_cast<const OUString&>(getSchemeInfo().m_sScheme);
+            aSynScheme = getSchemeInfo().m_sScheme;
         }
         m_aScheme.set(m_aAbsURIRef, aSynScheme, m_aAbsURIRef.getLength());
         m_aAbsURIRef.append(':');
@@ -1669,7 +1669,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
     if (m_eScheme != INetProtocol::Generic)
     {
-        aSynAbsURIRef.append(getSchemeInfo().m_sScheme.asView());
+        aSynAbsURIRef.append(getSchemeInfo().m_sScheme);
     }
     else
     {
@@ -3546,7 +3546,7 @@ INetURLObject::getAbbreviated(
     // is empty ("") in that case, so take the scheme from m_aAbsURIRef
     if (m_eScheme != INetProtocol::Generic)
     {
-        aBuffer.append(getSchemeInfo().m_sScheme.asView());
+        aBuffer.append(getSchemeInfo().m_sScheme);
     }
     else
     {
@@ -3775,7 +3775,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     if (HasError() || m_eScheme == INetProtocol::Generic)
         return false;
     m_aAbsURIRef.setLength(0);
-    m_aAbsURIRef.append(getSchemeInfo().m_sScheme.asView());
+    m_aAbsURIRef.append(getSchemeInfo().m_sScheme);
     m_aAbsURIRef.append(':');
     if (getSchemeInfo().m_bAuthority)
     {

@@ -62,7 +62,7 @@ class ImageButtonHdl;
 const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 const TranslateId gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-constexpr rtl::OUStringConstExpr aSmallPlaceHolders[] =
+constexpr OUString aSmallPlaceHolders[] =
 {
     BMP_PLACEHOLDER_TABLE_SMALL,
     BMP_PLACEHOLDER_CHART_SMALL,
@@ -74,7 +74,7 @@ constexpr rtl::OUStringConstExpr aSmallPlaceHolders[] =
     BMP_PLACEHOLDER_MOVIE_SMALL_HOVER
 };
 
-constexpr rtl::OUStringConstExpr aBigPlaceHolders[] =
+constexpr OUString aBigPlaceHolders[] =
 {
     BMP_PLACEHOLDER_TABLE_LARGE,
     BMP_PLACEHOLDER_CHART_LARGE,
@@ -97,8 +97,8 @@ static BitmapEx* getButtonImage( int index, bool large )
     {
         for (size_t i = 0; i < SAL_N_ELEMENTS(aSmallPlaceHolders); i++ )
         {
-            gSmallButtonImages[i].set(OUString(aSmallPlaceHolders[i]));
-            gLargeButtonImages[i].set(OUString(aBigPlaceHolders[i]));
+            gSmallButtonImages[i].set(aSmallPlaceHolders[i]);
+            gLargeButtonImages[i].set(aBigPlaceHolders[i]);
         }
     }
 

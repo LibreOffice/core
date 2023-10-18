@@ -505,7 +505,7 @@ namespace xmloff
                 CCAFlags::Label, CCAFlags::Title
             };
             // the names of all properties which are expected to be of type string
-            static const rtl::OUStringConstExpr aStringPropertyNames[] =
+            static constexpr OUString aStringPropertyNames[] =
             {
                 PROPERTY_LABEL, PROPERTY_TITLE
             };
@@ -534,7 +534,7 @@ namespace xmloff
             {   // attribute flags
                 CCAFlags::CurrentSelected, CCAFlags::Disabled, CCAFlags::Dropdown, CCAFlags::Printable, CCAFlags::ReadOnly, CCAFlags::Selected, CCAFlags::TabStop, CCAFlags::EnableVisible
             };
-            static const rtl::OUStringConstExpr pBooleanPropertyNames[] =
+            static constexpr OUString pBooleanPropertyNames[] =
             {   // property names
                 PROPERTY_STATE, PROPERTY_ENABLED,
                 PROPERTY_DROPDOWN, PROPERTY_PRINTABLE,
@@ -574,7 +574,7 @@ namespace xmloff
             {   // attribute flags
                 CCAFlags::Size, CCAFlags::TabIndex
             };
-            static const rtl::OUStringConstExpr pIntegerPropertyNames[] =
+            static constexpr OUString pIntegerPropertyNames[] =
             {   // property names
                 PROPERTY_LINECOUNT, PROPERTY_TABINDEX
             };
@@ -934,7 +934,7 @@ namespace xmloff
                 SCAFlags::Validation, SCAFlags::MultiLine, SCAFlags::AutoCompletion, SCAFlags::Multiple, SCAFlags::DefaultButton, SCAFlags::IsTristate,
                 SCAFlags::Toggle, SCAFlags::FocusOnClick
             };
-            static const rtl::OUStringConstExpr pBooleanPropertyNames[] =
+            static constexpr OUString pBooleanPropertyNames[] =
             {   // property names
                 PROPERTY_STRICTFORMAT, PROPERTY_MULTILINE,
                 PROPERTY_AUTOCOMPLETE,
@@ -973,7 +973,7 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::PageStepSize
             };
-            static const rtl::OUStringConstExpr pIntegerPropertyNames[] =
+            static constexpr OUString pIntegerPropertyNames[] =
             {   // property names
                 PROPERTY_BLOCK_INCREMENT
             };
@@ -1124,7 +1124,7 @@ namespace xmloff
             {   // attribute flags
                 SCAFlags::GroupName
             };
-            static const rtl::OUStringConstExpr pStringPropertyNames[] =
+            static constexpr OUString pStringPropertyNames[] =
             {   // property names
                 PROPERTY_GROUP_NAME
             };
@@ -1141,7 +1141,7 @@ namespace xmloff
                     exportStringPropertyAttribute(
                         OAttributeMetaData::getSpecialAttributeNamespace( nStringPropertyAttributeIds[i] ),
                         OAttributeMetaData::getSpecialAttributeName( nStringPropertyAttributeIds[i] ),
-                        OUString(pStringPropertyNames[i])
+                        pStringPropertyNames[i]
                     );
             #if OSL_DEBUG_LEVEL > 0
                     //  reset the bit for later checking
@@ -2046,7 +2046,7 @@ namespace xmloff
             {
                 faName, /*faAction,*/ faCommand, faFilter, faOrder
             };
-            static const rtl::OUStringConstExpr aStringPropertyNames[] =
+            static constexpr OUString aStringPropertyNames[] =
             {
                 PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_FILTER, PROPERTY_ORDER
             };
@@ -2090,7 +2090,7 @@ namespace xmloff
             {
                 faAllowDeletes, faAllowInserts, faAllowUpdates, faApplyFilter, faEscapeProcessing, faIgnoreResult
             };
-            static const rtl::OUStringConstExpr pBooleanPropertyNames[] =
+            static constexpr OUString pBooleanPropertyNames[] =
             {
                 PROPERTY_ALLOWDELETES,
                 PROPERTY_ALLOWINSERTS,

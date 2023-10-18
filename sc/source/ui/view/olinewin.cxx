@@ -602,7 +602,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-constexpr rtl::OUStringConstExpr aLevelBmps[]=
+constexpr OUString aLevelBmps[]=
 {
     RID_BMP_LEVEL1,
     RID_BMP_LEVEL2,
@@ -638,7 +638,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
     {
         tools::Long nEntryPos = GetHeaderEntryPos();
         for ( size_t nLevel = 0; nLevel < nLevelCount; ++nLevel )
-            DrawImageRel(GetLevelPos(nLevel), nEntryPos, OUString(aLevelBmps[nLevel]));
+            DrawImageRel(GetLevelPos(nLevel), nEntryPos, aLevelBmps[nLevel]);
 
         GetOutDev()->SetLineColor( maLineColor );
         tools::Long nLinePos = mnHeaderPos + (mbMirrorEntries ? 0 : (mnHeaderSize - 1));

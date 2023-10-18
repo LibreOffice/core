@@ -31,7 +31,7 @@
 */
 struct XMLPropertyMapEntry
 {
-    rtl::OUStringConstExpr  msApiName;      /// Property-Name
+    OUString  msApiName;      /// Property-Name
     enum ::xmloff::token::XMLTokenEnum meXMLName;       /// XML-Name
     sal_uInt16      mnNameSpace;    /** declares the Namespace in which this
                                         property exists */

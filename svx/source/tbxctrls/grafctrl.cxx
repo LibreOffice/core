@@ -156,7 +156,7 @@ namespace {
 struct CommandToRID
 {
     const char* pCommand;
-    rtl::OUStringConstExpr sResId;
+    OUString sResId;
 };
 
 }
@@ -164,7 +164,7 @@ struct CommandToRID
 static OUString ImplGetRID( std::u16string_view aCommand )
 {
     static constexpr OUStringLiteral EMPTY = u"";
-    static const CommandToRID aImplCommandToResMap[] =
+    static constexpr CommandToRID aImplCommandToResMap[] =
     {
         { ".uno:GrafRed",           RID_SVXBMP_GRAF_RED             },
         { ".uno:GrafGreen",         RID_SVXBMP_GRAF_GREEN           },

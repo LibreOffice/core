@@ -75,7 +75,7 @@ const ScContentId pTypeList[int(ScContentId::LAST) + 1] =
     ScContentId::DRAWING
 };
 
-constexpr rtl::OUStringConstExpr aContentBmps[]=
+constexpr OUString aContentBmps[]=
 {
     RID_BMP_CONTENT_TABLE,
     RID_BMP_CONTENT_RANGENAME,
@@ -185,13 +185,13 @@ void ScContentTree::InitRoot( ScContentId nType )
         return;
     }
 
-    auto const aImage(aContentBmps[static_cast<int>(nType) - 1]);
+    auto const & aImage = aContentBmps[static_cast<int>(nType) - 1];
     OUString aName(ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]));
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     m_aRootNodes[nType] = m_xTreeView->make_iterator();
     m_xTreeView->insert(nullptr, nPos, &aName, nullptr, nullptr, nullptr, false, m_aRootNodes[nType].get());
-    m_xTreeView->set_image(*m_aRootNodes[nType], OUString(aImage));
+    m_xTreeView->set_image(*m_aRootNodes[nType], aImage);
 }
 
 void ScContentTree::ClearAll()

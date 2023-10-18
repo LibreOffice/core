@@ -391,8 +391,8 @@ void aqua_init_systray()
             {
                 SvtModuleOptions::EModule   eModuleIdentifier;
                 int                         nMenuTag;
-                rtl::OUStringConstExpr      sURLDescription;
-            } static const aMenuItems[] =
+                OUString                    sURLDescription;
+            } static constexpr aMenuItems[] =
             {
                 { SvtModuleOptions::EModule::WRITER,    MI_WRITER,  WRITER_URL },
                 { SvtModuleOptions::EModule::CALC,      MI_CALC,    CALC_URL },

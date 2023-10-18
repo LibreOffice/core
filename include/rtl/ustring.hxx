@@ -142,39 +142,6 @@ template<std::size_t N> struct ExceptCharArrayDetector<OUStringLiteral<N>> {};
 }
 #endif
 
-/**
-  This is intended to be used when declaring compile-time-constant structs or arrays
-  that can be initialised from named OUStringLiteral e.g.
-
-    constexpr OUStringLiteral AAA = u"aaa";
-    constexpr OUStringLiteral BBB = u"bbb";
-    constexpr OUStringConstExpr FOO[] { AAA, BBB };
-*/
-class OUString;
-class OUStringConstExpr
-{
-public:
-    template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> const & literal):
-        pData(const_cast<rtl_uString *>(&literal.str)) {}
-
-    // prevent mis-use
-    template<std::size_t N> constexpr OUStringConstExpr(OUStringLiteral<N> && literal)
-        = delete;
-
-    // no destructor necessary because we know we are pointing at a compile-time
-    // constant OUStringLiteral, which bypasses ref-counting.
-
-    /**
-      make it easier to pass to OUStringBuffer and similar without casting/converting
-    */
-    constexpr std::u16string_view asView() const { return std::u16string_view(pData->buffer, pData->length); }
-
-    inline operator const OUString&() const;
-
-private:
-    rtl_uString* pData;
-};
-
 /// @endcond
 #endif
 
@@ -3406,11 +3373,6 @@ private:
     }
 
 };
-
-#if defined LIBO_INTERNAL_ONLY
-// Can only define this after we define OUString
-inline OUStringConstExpr::operator const OUString &() const { return OUString::unacquired(&pData); }
-#endif
 
 #if defined LIBO_INTERNAL_ONLY
 // Prevent the operator ==/!= overloads with 'sal_Unicode const *' parameter from

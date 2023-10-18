@@ -1551,7 +1551,7 @@ Reference< XIndexContainer >  FmXGridPeer::getColumns()
 
 void FmXGridPeer::addColumnListeners(const Reference< XPropertySet >& xCol)
 {
-    static const rtl::OUStringConstExpr aPropsListenedTo[] =
+    static constexpr OUString aPropsListenedTo[] =
     {
         FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
         FM_PROP_FORMATKEY
@@ -1576,7 +1576,7 @@ void FmXGridPeer::removeColumnListeners(const Reference< XPropertySet >& xCol)
 {
     // the same props as in addColumnListeners... linux has problems with global static UStrings, so
     // we have to do it this way...
-    static const rtl::OUStringConstExpr aPropsListenedTo[] =
+    static constexpr OUString aPropsListenedTo[] =
     {
         FM_PROP_LABEL, FM_PROP_WIDTH, FM_PROP_HIDDEN, FM_PROP_ALIGN,
         FM_PROP_FORMATKEY
@@ -2648,7 +2648,7 @@ Sequence< css::util::URL>& FmXGridPeer::getSupportedURLs()
 {
     static Sequence< css::util::URL> aSupported = []()
     {
-        static const rtl::OUStringConstExpr sSupported[] = {
+        static constexpr OUString sSupported[] = {
             FMURL_RECORD_MOVEFIRST,
             FMURL_RECORD_MOVEPREV,
             FMURL_RECORD_MOVENEXT,

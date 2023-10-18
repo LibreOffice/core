@@ -157,8 +157,8 @@ static HMENU createSystrayMenu( )
         SvtModuleOptions::EModule   eModuleIdentifier;
         UINT                        nMenuItemID;
         UINT                        nMenuIconID;
-        rtl::OUStringConstExpr      sURLDescription;
-    } static const aMenuItems[] =
+        OUString                    sURLDescription;
+    } static constexpr aMenuItems[] =
     {
         { SvtModuleOptions::EModule::WRITER,    IDM_WRITER, ICON_TEXT_DOCUMENT,         WRITER_URL },
         { SvtModuleOptions::EModule::CALC,      IDM_CALC,   ICON_SPREADSHEET_DOCUMENT,  CALC_URL },
@@ -181,7 +181,7 @@ static HMENU createSystrayMenu( )
             continue;
 
         addMenuItem( hMenu, nMenuItemID, nMenuIconID,
-            ShutdownIcon::GetUrlDescription( sURL.asView() ), pos, true, "" );
+            ShutdownIcon::GetUrlDescription( sURL ), pos, true, "" );
     }
 
 

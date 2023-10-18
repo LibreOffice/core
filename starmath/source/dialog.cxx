@@ -734,7 +734,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     // 0 is used in case of unused combinations.
     assert(NOCATEGORIES == 10 && "Sm : array doesn't fit into the number of categories");
     static constexpr OUStringLiteral EMPTY(u"");
-    static constexpr rtl::OUStringConstExpr aCatMf2Hid[10][4] =
+    static constexpr OUString aCatMf2Hid[10][4] =
     {
         { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, EMPTY },
         { HID_SMA_SUP_DIST,             HID_SMA_SUB_DIST ,          EMPTY, EMPTY },
@@ -784,7 +784,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
 
         // To determine which Controls should be active, the existence
         // of an associated HelpID is checked
-        bActive = !aCatMf2Hid[nCategory][i].asView().empty();
+        bActive = !aCatMf2Hid[nCategory][i].isEmpty();
 
         pFT->set_visible(bActive);
         pFT->set_sensitive(bActive);

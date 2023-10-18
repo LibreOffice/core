@@ -87,7 +87,7 @@ static TranslateId aLabels[] =
     RID_STR_PROPTITLE_NAVBAR
 };
 
-const rtl::OUStringConstExpr aImgIds[]
+constexpr OUString aImgIds[]
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,
@@ -193,7 +193,7 @@ void ControlMenuController::updateImagesPopupMenu(Reference<awt::XPopupMenu> con
         sal_Int16 nItemId = i + 1;
         if (m_bShowMenuImages)
         {
-            Image aImage(StockImage::Yes, OUString(aImgIds[i]));
+            Image aImage(StockImage::Yes, aImgIds[i]);
             Graphic aGraphic(aImage);
             rPopupMenu->setItemImage(nItemId, aGraphic.GetXGraphic(), false);
         }

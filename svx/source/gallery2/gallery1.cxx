@@ -53,7 +53,7 @@
 using namespace ::com::sun::star;
 
 
-const std::pair<sal_uInt16, rtl::OUStringConstExpr> aUnlocalized[] =
+constexpr std::pair<sal_uInt16, OUString> aUnlocalized[] =
 {
     { GALLERY_THEME_HOMEPAGE, RID_GALLERYSTR_THEME_HTMLBUTTONS },
     { GALLERY_THEME_POWERPOINT, RID_GALLERYSTR_THEME_POWERPOINT },

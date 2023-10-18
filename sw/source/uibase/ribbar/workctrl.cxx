@@ -185,7 +185,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_FIELD_BYTYPE
 };
 
-rtl::OUStringConstExpr constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
+OUString constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
 {
     RID_BMP_RIBBAR_TBL,
     RID_BMP_RIBBAR_FRM,
@@ -604,7 +604,7 @@ NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox
     m_xComboBox->freeze();
     for (sal_uInt16 i = 0; i < NID_COUNT; i++)
          m_xComboBox->append(OUString::number(aNavigationInsertIds[i]),
-                             SwResId(aNavigationStrIds[i]), OUString(aNavigationImgIds[i]));
+                             SwResId(aNavigationStrIds[i]), aNavigationImgIds[i]);
     m_xComboBox->thaw();
 
     m_xComboBox->connect_changed(LINK(this, NavElementBox_Base, SelectHdl));

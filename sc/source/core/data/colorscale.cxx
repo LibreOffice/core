@@ -1316,102 +1316,102 @@ size_t ScIconSetFormat::size() const
 
 namespace {
 
-constexpr rtl::OUStringConstExpr a3TrafficLights1[] = {
+constexpr OUString a3TrafficLights1[] = {
     BMP_ICON_SET_CIRCLES1_RED, BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-constexpr rtl::OUStringConstExpr a3TrafficLights2[] = {
+constexpr OUString a3TrafficLights2[] = {
     BMP_ICON_SET_TRAFFICLIGHTS_RED, BMP_ICON_SET_TRAFFICLIGHTS_YELLOW, BMP_ICON_SET_TRAFFICLIGHTS_GREEN
 };
 
-constexpr rtl::OUStringConstExpr a3Arrows[] = {
+constexpr OUString a3Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a3ArrowsGray[] = {
+constexpr OUString a3ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a3Flags[] = {
+constexpr OUString a3Flags[] = {
     BMP_ICON_SET_FLAGS_RED, BMP_ICON_SET_FLAGS_YELLOW, BMP_ICON_SET_FLAGS_GREEN
 };
 
-constexpr rtl::OUStringConstExpr a3Smilies[] = {
+constexpr OUString a3Smilies[] = {
     BMP_ICON_SET_POSITIVE_YELLOW_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_YELLOW_SMILIE
 };
 
-constexpr rtl::OUStringConstExpr a3ColorSmilies[] = {
+constexpr OUString a3ColorSmilies[] = {
     BMP_ICON_SET_POSITIVE_GREEN_SMILIE, BMP_ICON_SET_NEUTRAL_YELLOW_SMILIE, BMP_ICON_SET_NEGATIVE_RED_SMILIE
 };
 
-constexpr rtl::OUStringConstExpr a3Stars[] = {
+constexpr OUString a3Stars[] = {
     BMP_ICON_SET_STARS_EMPTY, BMP_ICON_SET_STARS_HALF, BMP_ICON_SET_STARS_FULL
 };
 
-constexpr rtl::OUStringConstExpr a3Triangles[] = {
+constexpr OUString a3Triangles[] = {
     BMP_ICON_SET_TRIANGLES_DOWN, BMP_ICON_SET_TRIANGLES_SAME, BMP_ICON_SET_TRIANGLES_UP
 };
 
-constexpr rtl::OUStringConstExpr a4Arrows[] = {
+constexpr OUString a4Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a4ArrowsGray[] = {
+constexpr OUString a4ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a5Arrows[] = {
+constexpr OUString a5Arrows[] = {
     BMP_ICON_SET_COLORARROWS_DOWN, BMP_ICON_SET_COLORARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_COLORARROWS_SAME, BMP_ICON_SET_COLORARROWS_SLIGHTLY_UP, BMP_ICON_SET_COLORARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a5ArrowsGray[] = {
+constexpr OUString a5ArrowsGray[] = {
     BMP_ICON_SET_GRAYARROWS_DOWN, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_DOWN,
     BMP_ICON_SET_GRAYARROWS_SAME, BMP_ICON_SET_GRAYARROWS_SLIGHTLY_UP, BMP_ICON_SET_GRAYARROWS_UP
 };
 
-constexpr rtl::OUStringConstExpr a4TrafficLights[] = {
+constexpr OUString a4TrafficLights[] = {
     BMP_ICON_SET_CIRCLES1_GRAY, BMP_ICON_SET_CIRCLES1_RED,
     BMP_ICON_SET_CIRCLES1_YELLOW, BMP_ICON_SET_CIRCLES1_GREEN
 };
 
-constexpr rtl::OUStringConstExpr a5Quarters[] = {
+constexpr OUString a5Quarters[] = {
     BMP_ICON_SET_PIES_EMPTY, BMP_ICON_SET_PIES_ONE_QUARTER, BMP_ICON_SET_PIES_HALF,
     BMP_ICON_SET_PIES_THREE_QUARTER, BMP_ICON_SET_PIES_FULL,
 };
 
-constexpr rtl::OUStringConstExpr a5Boxes[] = {
+constexpr OUString a5Boxes[] = {
     BMP_ICON_SET_SQUARES_EMPTY, BMP_ICON_SET_SQUARES_ONE_QUARTER,
     BMP_ICON_SET_SQUARES_HALF, BMP_ICON_SET_SQUARES_THREE_QUARTER,
     BMP_ICON_SET_SQUARES_FULL
 };
 
-constexpr rtl::OUStringConstExpr a3Symbols1[] = {
+constexpr OUString a3Symbols1[] = {
     BMP_ICON_SET_SYMBOLS1_CROSS, BMP_ICON_SET_SYMBOLS1_EXCLAMATION_MARK, BMP_ICON_SET_SYMBOLS1_CHECK
 };
 
-constexpr rtl::OUStringConstExpr a3Signs[] = {
+constexpr OUString a3Signs[] = {
     BMP_ICON_SET_SHAPES_DIAMOND, BMP_ICON_SET_SHAPES_TRIANGLE, BMP_ICON_SET_SHAPES_CIRCLE
 };
 
-constexpr rtl::OUStringConstExpr a4RedToBlack[] = {
+constexpr OUString a4RedToBlack[] = {
     BMP_ICON_SET_CIRCLES2_DARK_GRAY, BMP_ICON_SET_CIRCLES2_LIGHT_GRAY,
     BMP_ICON_SET_CIRCLES2_LIGHT_RED, BMP_ICON_SET_CIRCLES2_DARK_RED
 };
 
-constexpr rtl::OUStringConstExpr a4Ratings[] = {
+constexpr OUString a4Ratings[] = {
     BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
-constexpr rtl::OUStringConstExpr a5Ratings[] = {
+constexpr OUString a5Ratings[] = {
     BMP_ICON_SET_BARS_EMPTY, BMP_ICON_SET_BARS_ONE_QUARTER, BMP_ICON_SET_BARS_HALF,
     BMP_ICON_SET_BARS_THREE_QUARTER, BMP_ICON_SET_BARS_FULL
 };
 
 struct ScIconSetBitmapMap {
     ScIconSetType eType;
-    const rtl::OUStringConstExpr* pBitmaps;
+    const OUString* pBitmaps;
 };
 
 const ScIconSetBitmapMap aBitmapMap[] = {

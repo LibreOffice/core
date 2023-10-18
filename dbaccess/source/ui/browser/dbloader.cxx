@@ -116,7 +116,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     static constexpr struct ServiceNameToImplName
     {
-        rtl::OUStringConstExpr     sServiceName;
+        OUString     sServiceName;
         const char*     pAsciiImplementationName;
     } aImplementations[] = {
         { URL_COMPONENT_FORMGRIDVIEW,      "org.openoffice.comp.dbu.OFormGridView"        },

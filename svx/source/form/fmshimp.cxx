@@ -204,7 +204,7 @@ static std::u16string_view aConvertSlots[] =
     u"ConvertToNavigationBar"
 };
 
-constexpr rtl::OUStringConstExpr aImgIds[] =
+constexpr OUString aImgIds[] =
 {
     RID_SVXBMP_EDITBOX,
     RID_SVXBMP_BUTTON,

@@ -193,7 +193,7 @@ typedef std::vector< unsigned long > NetWmIconData;
 
 namespace
 {
-    constexpr rtl::OUStringConstExpr SV_ICON_SIZE48[] =
+    constexpr OUString SV_ICON_SIZE48[] =
     {
         MAINAPP_48_8,
         MAINAPP_48_8,
@@ -211,7 +211,7 @@ namespace
         ODF_48_8
     };
 
-    constexpr rtl::OUStringConstExpr SV_ICON_SIZE32[] =
+    constexpr OUString SV_ICON_SIZE32[] =
     {
         MAINAPP_32_8,
         MAINAPP_32_8,
@@ -229,7 +229,7 @@ namespace
         ODF_32_8
     };
 
-    constexpr rtl::OUStringConstExpr SV_ICON_SIZE16[] =
+    constexpr OUString SV_ICON_SIZE16[] =
     {
         MAINAPP_16_8,
         MAINAPP_16_8,

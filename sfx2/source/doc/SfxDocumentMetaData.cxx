@@ -373,7 +373,7 @@ constexpr OUStringLiteral sMetaNonWhitespaceCharacterCount = u"meta:non-whitespa
 constexpr OUStringLiteral sMetaCellCount = u"meta:cell-count";
 
 // NB: keep these two arrays in sync!
-constexpr rtl::OUStringConstExpr s_stdStatAttrs[] = {
+constexpr OUString s_stdStatAttrs[] = {
     sMetaPageCount,
     sMetaTableCount,
     sMetaDrawCount,
@@ -442,7 +442,7 @@ constexpr OUStringLiteral sMetaUserDefined = u"meta:user-defined";
 constexpr OUStringLiteral sDCContributor = u"dc:contributor";
 constexpr OUStringLiteral sDCPublisher = u"dc:publisher";
 constexpr OUStringLiteral sDCRelation = u"dc:relation";
-constexpr rtl::OUStringConstExpr s_stdMetaList[] {
+constexpr OUString s_stdMetaList[] {
     sMetaKeyword,             // string*
     sMetaUserDefined,        // ...*
     sDCContributor, // string*
@@ -1226,7 +1226,7 @@ void SfxDocumentMetaData::init(
     // select nodes for elements of which we handle all occurrences
     for (const auto & name : s_stdMetaList) {
         std::vector<css::uno::Reference<css::xml::dom::XNode> > nodes =
-            getChildNodeListByName(m_xParent, OUString(name));
+            getChildNodeListByName(m_xParent, name);
         m_metaList[name] = nodes;
     }
 

@@ -615,7 +615,7 @@ void LngSvcMgr::UpdateAll()
     SvtLinguConfig aCfg;
 
     const int nNumServices = 4;
-    static constexpr rtl::OUStringConstExpr apServices[nNumServices] =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
+    static constexpr OUString apServices[nNumServices] =  { SN_SPELLCHECKER, SN_GRAMMARCHECKER, SN_HYPHENATOR, SN_THESAURUS };
     const char * const apCurLists[nNumServices]       =  { "ServiceManager/SpellCheckerList",       "ServiceManager/GrammarCheckerList",       "ServiceManager/HyphenatorList",       "ServiceManager/ThesaurusList" };
     const char * const apLastFoundLists[nNumServices] =  { "ServiceManager/LastFoundSpellCheckers", "ServiceManager/LastFoundGrammarCheckers", "ServiceManager/LastFoundHyphenators", "ServiceManager/LastFoundThesauri" };
 
@@ -625,7 +625,7 @@ void LngSvcMgr::UpdateAll()
 
     for (int k = 0;  k < nNumServices;  ++k)
     {
-        OUString aService( apServices[k] );
+        OUString const & aService = apServices[k];
         OUString aActiveList( OUString::createFromAscii( apCurLists[k] ) );
         OUString aLastFoundList( OUString::createFromAscii( apLastFoundLists[k] ) );
 

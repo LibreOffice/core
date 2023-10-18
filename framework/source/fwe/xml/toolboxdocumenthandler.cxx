@@ -82,7 +82,7 @@ namespace {
 struct ToolboxStyleItem
 {
     sal_Int16 nBit;
-    rtl::OUStringConstExpr attrName;
+    OUString attrName;
 };
 
 }
@@ -671,7 +671,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
             {
                 if ( !aValue.isEmpty() )
                     aValue.append(" ");
-                aValue.append( OUString(pStyle->attrName) );
+                aValue.append( pStyle->attrName );
             }
         }
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_ITEMSTYLE,

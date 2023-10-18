@@ -78,7 +78,7 @@ private:
 
 struct snew_slide_value_info_layout
 {
-    rtl::OUStringConstExpr msBmpResId;
+    OUString msBmpResId;
     TranslateId mpStrResId;
     AutoLayout maAutoLayout;
 };
@@ -87,13 +87,13 @@ struct snew_slide_value_info_layout
 
 constexpr OUStringLiteral EMPTY = u"";
 
-const snew_slide_value_info_layout notes[] =
+constexpr snew_slide_value_info_layout notes[] =
 {
     {BMP_SLIDEN_01, STR_AUTOLAYOUT_NOTES, AUTOLAYOUT_NOTES},
     {EMPTY, {}, AUTOLAYOUT_NONE},
 };
 
-const snew_slide_value_info_layout handout[] =
+constexpr snew_slide_value_info_layout handout[] =
 {
     {BMP_SLIDEH_01, STR_AUTOLAYOUT_HANDOUT1, AUTOLAYOUT_HANDOUT1},
     {BMP_SLIDEH_02, STR_AUTOLAYOUT_HANDOUT2, AUTOLAYOUT_HANDOUT2},
@@ -104,7 +104,7 @@ const snew_slide_value_info_layout handout[] =
     {EMPTY, {}, AUTOLAYOUT_NONE},
 };
 
-const snew_slide_value_info_layout standard[] =
+constexpr snew_slide_value_info_layout standard[] =
 {
     {BMP_LAYOUT_EMPTY,    STR_AUTOLAYOUT_NONE,                 AUTOLAYOUT_NONE         },
     {BMP_LAYOUT_HEAD03,   STR_AUTOLAYOUT_TITLE,                AUTOLAYOUT_TITLE        },
@@ -121,7 +121,7 @@ const snew_slide_value_info_layout standard[] =
     {EMPTY, {}, AUTOLAYOUT_NONE}
 };
 
-const snew_slide_value_info_layout v_standard[] =
+constexpr snew_slide_value_info_layout v_standard[] =
 {
     // vertical
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT   },

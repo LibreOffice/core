@@ -462,7 +462,7 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( std::u16string
 */
 OUString SfxDocumentTemplates::ConvertResourceString(const OUString& rString)
 {
-    static constexpr rtl::OUStringConstExpr aTemplateNames[] =
+    static constexpr OUString aTemplateNames[] =
     {
         STR_TEMPLATE_NAME1_DEF,
         STR_TEMPLATE_NAME2_DEF,

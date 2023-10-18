@@ -1812,7 +1812,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
 namespace {
     constexpr struct {
         SfxFilterFlags eFlag;
-        rtl::OUStringConstExpr aName;
+        OUString aName;
     } flagFilterSwitcher[] = {
         { SfxFilterFlags::STARONEFILTER, FLAGNAME_3RDPARTYFILTER },
         { SfxFilterFlags::ALIEN, FLAGNAME_ALIEN },

@@ -267,7 +267,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
     }
     else
         of.writeOUStringLiteralParameter("Variant", std::u16string_view());
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCInfoArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
     of.writeAsciiString("\tcountryID,\n");
@@ -482,7 +482,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     sepNode = findNode("MeasurementSystem");
     of.writeOUStringLiteralParameter("measurementSystem", sepNode->getValue());
 
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCType[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCType[] = {\n");
     of.writeAsciiString("\tLC_CTYPE_Unoid,\n");
     of.writeAsciiString("\tdateSeparator,\n");
     of.writeAsciiString("\tthousandSeparator,\n");
@@ -917,7 +917,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(" = ");
     of.writeInt( formatCount - mnFormats);
     of.writeAsciiString(";\n");
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr ");
+    of.writeAsciiString("static constexpr OUString ");
     of.writeAsciiString("FormatElementsArray");
     of.writeInt(mnSection);
     of.writeAsciiString("[] = {\n");
@@ -1239,7 +1239,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         of.writeInt( nbOfDateAcceptancePatterns);
         of.writeAsciiString(";\n");
 
-        of.writeAsciiString("static constexpr rtl::OUStringConstExpr DateAcceptancePatternsArray[] = {\n");
+        of.writeAsciiString("static constexpr OUString DateAcceptancePatternsArray[] = {\n");
         for (sal_Int16 i = 0; i < nbOfDateAcceptancePatterns; ++i)
         {
             of.writeAsciiString("\t");
@@ -1300,7 +1300,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfCollations);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCCollatorArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCCollatorArray[] = {\n");
     for(sal_Int16 j = 0; j < nbOfCollations; j++) {
         of.writeAsciiString("\tCollatorID");
         of.writeInt(j);
@@ -1316,7 +1316,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     }
     of.writeAsciiString("};\n\n");
 
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr collationOptions[] = {");
+    of.writeAsciiString("static constexpr OUString collationOptions[] = {");
     for( sal_Int16 j=0; j<nbOfCollationOptions; j++ )
     {
         if (j)
@@ -1357,7 +1357,7 @@ void LCSearchNode::generateCode (const OFileWriter &of) const
     of.writeInt( sal::static_int_cast<sal_Int16>( nSearchOptions ) );
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr searchOptions[] = {");
+    of.writeAsciiString("static constexpr OUString searchOptions[] = {");
     for( i=0; i<nSearchOptions; i++ )
     {
         if (i)
@@ -1417,7 +1417,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfIndexs);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr IndexArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString IndexArray[] = {\n");
     for(sal_Int16 i = 0; i < nbOfIndexs; i++) {
         of.writeAsciiString("\tIndexID");
         of.writeInt(i);
@@ -1445,7 +1445,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeInt( nbOfUnicodeScripts );
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr UnicodeScriptArray[] = {");
+    of.writeAsciiString("static constexpr OUString UnicodeScriptArray[] = {");
     for( sal_Int16 i=0; i<nbOfUnicodeScripts; i++ )
     {
         if (i)
@@ -1464,11 +1464,11 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     {
         // generate dummy array, reuse unicodeScript0 for dummy entry
         of.writeAsciiString("//dummy array, we have zero entries\n");
-        of.writeAsciiString("static constexpr rtl::OUStringConstExpr FollowPageWordArray[] = { unicodeScript0 };\n\n");
+        of.writeAsciiString("static constexpr OUString FollowPageWordArray[] = { unicodeScript0 };\n\n");
     }
     else
     {
-        of.writeAsciiString("static constexpr rtl::OUStringConstExpr FollowPageWordArray[] = {\n");
+        of.writeAsciiString("static constexpr OUString FollowPageWordArray[] = {\n");
         for(sal_Int16 i = 0; i < nbOfPageWords; i++) {
             if (i)
                 of.writeAsciiString(",\n");
@@ -1873,7 +1873,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("\";\n");
 
 
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr calendars[] = {\n");
+    of.writeAsciiString("static constexpr OUString calendars[] = {\n");
     of.writeAsciiString("\tnbOfDays,\n");
     of.writeAsciiString("\tnbOfMonths,\n");
     of.writeAsciiString("\tnbOfGenitiveMonths,\n");
@@ -1979,7 +1979,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("static const sal_Int16 currencyCount = ");
     of.writeInt(nbOfCurrencies);
     of.writeAsciiString(";\n\n");
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr currencies[] = {\n");
+    of.writeAsciiString("static constexpr OUString currencies[] = {\n");
     for(sal_Int16 i = 0; i < nbOfCurrencies; i++) {
         of.writeAsciiString("\tcurrencyID");
         of.writeInt(i);
@@ -2030,7 +2030,7 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfModules);
     of.writeAsciiString(";\n\n");
 
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCTransliterationsArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCTransliterationsArray[] = {\n");
     for( sal_Int16 i = 0; i < nbOfModules; i++) {
         of.writeAsciiString("\tTransliteration");
         of.writeInt(i);
@@ -2112,7 +2112,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("static const sal_Int16 nbOfReservedWords = ");
     of.writeInt(nbOfWords);
     of.writeAsciiString(";\n\n");
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCReservedWordsArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCReservedWordsArray[] = {\n");
     for( i = 0; i < nbOfWords; i++) {
         of.writeAsciiString("\tReservedWord");
         of.writeInt(i);
@@ -2130,7 +2130,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeOUStringLiteralParameter( "forbiddenEnd", std::u16string_view());
          of.writeOUStringLiteralParameter( "hangingChars", std::u16string_view());
     }
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCForbiddenCharactersArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
     of.writeAsciiString("\tforbiddenEnd,\n");
     of.writeAsciiString("\thangingChars\n");
@@ -2150,7 +2150,7 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeOUStringLiteralParameter( "CharacterMode", std::u16string_view());
          of.writeOUStringLiteralParameter( "LineMode", std::u16string_view());
     }
-    of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr LCBreakIteratorRulesArray[] = {\n");
+    of.writeAsciiString("\nstatic constexpr OUString LCBreakIteratorRulesArray[] = {\n");
     of.writeAsciiString("\tEditMode,\n");
     of.writeAsciiString("\tDictionaryMode,\n");
     of.writeAsciiString("\tWordCountMode,\n");
@@ -2202,7 +2202,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
     // generate code. (intermediate arrays)
     for( i=0; i<nStyles; i++ )
     {
-        of.writeAsciiString("\nstatic constexpr rtl::OUStringConstExpr continuousStyle" );
+        of.writeAsciiString("\nstatic constexpr OUString continuousStyle" );
         of.writeInt( sal::static_int_cast<sal_Int16>(i) );
         of.writeAsciiString("[] = {\n");
         for( sal_Int32 j=0; j<nAttributes; j++)
@@ -2218,7 +2218,7 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of) const
 
     // generate code. (top-level array)
     of.writeAsciiString("\n");
-    of.writeAsciiString("static const rtl::OUStringConstExpr* LCContinuousNumberingLevelsArray[] = {\n" );
+    of.writeAsciiString("static const OUString* LCContinuousNumberingLevelsArray[] = {\n" );
     for( i=0; i<nStyles; i++ )
     {
         of.writeAsciiString( "\t" );
@@ -2316,7 +2316,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     {
         for( sal_Int32 j=0; j<nLevels.back(); j++ )
         {
-            of.writeAsciiString("static constexpr rtl::OUStringConstExpr outline");
+            of.writeAsciiString("static constexpr OUString outline");
             of.writeAsciiString("Style");
             of.writeInt( sal::static_int_cast<sal_Int16>(i) );
             of.writeAsciiString("Level");
@@ -2340,7 +2340,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
 
     for( sal_Int32 i=0; i<nStyles; i++ )
     {
-        of.writeAsciiString("static constexpr rtl::OUStringConstExpr const * outlineStyle" );
+        of.writeAsciiString("static constexpr OUString const * outlineStyle" );
         of.writeInt( sal::static_int_cast<sal_Int16>(i) );
         of.writeAsciiString("[] = { ");
 
@@ -2356,7 +2356,7 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of) const
     }
     of.writeAsciiString("\n");
 
-    of.writeAsciiString("static constexpr rtl::OUStringConstExpr const * const * LCOutlineNumberingLevelsArray[] = {\n" );
+    of.writeAsciiString("static constexpr OUString const * const * LCOutlineNumberingLevelsArray[] = {\n" );
     for( sal_Int32 i=0; i<nStyles; i++ )
     {
         of.writeAsciiString( "\t" );

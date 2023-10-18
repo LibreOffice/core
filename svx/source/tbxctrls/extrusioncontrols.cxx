@@ -47,7 +47,7 @@ constexpr OUStringLiteral g_sExtrusionDirection = u".uno:ExtrusionDirection";
 constexpr OUStringLiteral g_sExtrusionProjection = u".uno:ExtrusionProjection";
 constexpr OUStringLiteral EMPTY = u"";
 
-constexpr rtl::OUStringConstExpr aLightOffBmps[] =
+constexpr OUString aLightOffBmps[] =
 {
     RID_SVXBMP_LIGHT_OFF_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_OFF_FROM_TOP,
@@ -60,7 +60,7 @@ constexpr rtl::OUStringConstExpr aLightOffBmps[] =
     RID_SVXBMP_LIGHT_OFF_FROM_BOTTOM_RIGHT
 };
 
-constexpr rtl::OUStringConstExpr aLightOnBmps[] =
+constexpr OUString aLightOnBmps[] =
 {
     RID_SVXBMP_LIGHT_ON_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_ON_FROM_TOP,
@@ -73,7 +73,7 @@ constexpr rtl::OUStringConstExpr aLightOnBmps[] =
     RID_SVXBMP_LIGHT_ON_FROM_BOTTOM_RIGHT
 };
 
-constexpr rtl::OUStringConstExpr aLightPreviewBmps[] =
+constexpr OUString aLightPreviewBmps[] =
 {
     RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP_LEFT,
     RID_SVXBMP_LIGHT_PREVIEW_FROM_TOP,
@@ -86,7 +86,7 @@ constexpr rtl::OUStringConstExpr aLightPreviewBmps[] =
     RID_SVXBMP_LIGHT_PREVIEW_FROM_BOTTOM_RIGHT
 };
 
-constexpr rtl::OUStringConstExpr aDirectionBmps[] =
+constexpr OUString aDirectionBmps[] =
 {
     RID_SVXBMP_DIRECTION_DIRECTION_NW,
     RID_SVXBMP_DIRECTION_DIRECTION_N,
@@ -126,7 +126,7 @@ ExtrusionDirectionWindow::ExtrusionDirectionWindow(
 
     for (sal_uInt16 i = DIRECTION_NW; i <= DIRECTION_SE; ++i)
     {
-        maImgDirection[i] = Image(StockImage::Yes, OUString(aDirectionBmps[i]));
+        maImgDirection[i] = Image(StockImage::Yes, aDirectionBmps[i]);
     }
 
     mxDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectValueSetHdl ) );
@@ -604,10 +604,10 @@ ExtrusionLightingWindow::ExtrusionLightingWindow(svt::PopupWindowController* pCo
     {
         if( i != FROM_FRONT )
         {
-            maImgLightingOff[i] = Image(StockImage::Yes, OUString(aLightOffBmps[i]));
-            maImgLightingOn[i] = Image(StockImage::Yes, OUString(aLightOnBmps[i]));
+            maImgLightingOff[i] = Image(StockImage::Yes, aLightOffBmps[i]);
+            maImgLightingOn[i] = Image(StockImage::Yes, aLightOnBmps[i]);
         }
-        maImgLightingPreview[i] = Image(StockImage::Yes, OUString(aLightPreviewBmps[i]));
+        maImgLightingPreview[i] = Image(StockImage::Yes, aLightPreviewBmps[i]);
     }
 
     mxLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );

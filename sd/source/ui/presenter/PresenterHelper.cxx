@@ -185,7 +185,7 @@ namespace {
 
 struct IdMapEntry {
     char const * sid;
-    rtl::OUStringConstExpr bmpid;
+    OUString bmpid;
 };
 
 }
@@ -197,7 +197,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterHelper::loadBitmap (
     if ( ! rxCanvas.is())
         return nullptr;
 
-    static IdMapEntry const map[] = {
+    static IdMapEntry constexpr map[] = {
         { "bitmaps/Background.png", BMP_PRESENTERSCREEN_BACKGROUND },
         { "bitmaps/Animation.png",
           BMP_PRESENTERSCREEN_ANIMATION },

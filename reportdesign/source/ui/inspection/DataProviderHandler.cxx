@@ -348,7 +348,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
     {
         rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
         beans::Property aValue;
-        static const rtl::OUStringConstExpr s_pProperties[] =
+        static constexpr OUString s_pProperties[] =
         {
              PROPERTY_CHARTTYPE
             ,PROPERTY_MASTERFIELDS

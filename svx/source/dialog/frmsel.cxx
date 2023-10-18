@@ -313,7 +313,7 @@ void FrameSelectorImpl::InitColors()
     maHCLineCol = COL_BLACK;
 }
 
-constexpr rtl::OUStringConstExpr aImageIds[] =
+constexpr OUString aImageIds[] =
 {
     RID_SVXBMP_FRMSEL_ARROW1,
     RID_SVXBMP_FRMSEL_ARROW2,
@@ -350,7 +350,7 @@ void FrameSelectorImpl::InitArrowImageList()
     assert(SAL_N_ELEMENTS(aImageIds) == 16);
     for (size_t i = 0; i < SAL_N_ELEMENTS(aImageIds); ++i)
     {
-        BitmapEx aBmpEx { OUString(aImageIds[i]) };
+        BitmapEx aBmpEx { aImageIds[i] };
         aBmpEx.Replace(pColorAry1, pColorAry2, 3);
         maArrows.emplace_back(aBmpEx);
     }

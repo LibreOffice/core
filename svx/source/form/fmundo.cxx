@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <map>
+#include <string_view>
 
 #include <sal/macros.h>
 #include <fmundo.hxx>
@@ -536,11 +537,11 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             return;
 
         // if it's a "default value" property of a control model, set the according "value" property
-        static constexpr rtl::OUStringConstExpr pDefaultValueProperties[] = {
+        static constexpr std::u16string_view pDefaultValueProperties[] = {
             FM_PROP_DEFAULT_TEXT, FM_PROP_DEFAULTCHECKED, FM_PROP_DEFAULT_DATE, FM_PROP_DEFAULT_TIME,
             FM_PROP_DEFAULT_VALUE, FM_PROP_DEFAULT_SELECT_SEQ, FM_PROP_EFFECTIVE_DEFAULT
         };
-        static constexpr rtl::OUStringConstExpr aValueProperties[] = {
+        static constexpr OUString aValueProperties[] = {
             FM_PROP_TEXT, FM_PROP_STATE, FM_PROP_DATE, FM_PROP_TIME,
             FM_PROP_VALUE, FM_PROP_SELECT_SEQ, FM_PROP_EFFECTIVE_VALUE
         };

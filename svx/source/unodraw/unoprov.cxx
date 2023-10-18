@@ -1006,7 +1006,7 @@ bool SvxFieldUnitToMeasureUnit( const FieldUnit eVcl, short& eApi ) noexcept
     return true;
 }
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_BMP_DEF[] =
+constexpr OUString RID_SVXSTR_BMP_DEF[] =
 {
     RID_SVXSTR_BMP0_DEF,
     RID_SVXSTR_BMP1_DEF,
@@ -1200,7 +1200,7 @@ const TranslateId RID_SVXSTR_BMP[] =
     RID_SVXSTR_BMP92
 };
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_DASH_DEF[] =
+constexpr OUString RID_SVXSTR_DASH_DEF[] =
 {
     RID_SVXSTR_DASH0_DEF,
     RID_SVXSTR_DASH1_DEF,
@@ -1271,7 +1271,7 @@ const TranslateId RID_SVXSTR_DASH[] =
     RID_SVXSTR_DASH30
 };
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_LEND_DEF[] =
+constexpr OUString RID_SVXSTR_LEND_DEF[] =
 {
     RID_SVXSTR_LEND0_DEF,
     RID_SVXSTR_LEND1_DEF,
@@ -1343,7 +1343,7 @@ const TranslateId RID_SVXSTR_LEND[] =
     RID_SVXSTR_LEND31
 };
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_GRDT_DEF[] =
+constexpr OUString RID_SVXSTR_GRDT_DEF[] =
 {
     RID_SVXSTR_GRDT0_DEF,
     RID_SVXSTR_GRDT1_DEF,
@@ -1521,7 +1521,7 @@ const TranslateId RID_SVXSTR_GRDT[] =
     RID_SVXSTR_GRDT84
 };
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_HATCHS_DEF[] =
+constexpr OUString RID_SVXSTR_HATCHS_DEF[] =
 {
     RID_SVXSTR_HATCH0_DEF,
     RID_SVXSTR_HATCH1_DEF,
@@ -1561,7 +1561,7 @@ const TranslateId RID_SVXSTR_HATCHS[] =
     RID_SVXSTR_HATCH15
 };
 
-constexpr rtl::OUStringConstExpr RID_SVXSTR_TRASNGR_DEF[] =
+constexpr OUString RID_SVXSTR_TRASNGR_DEF[] =
 {
     RID_SVXSTR_TRASNGR0_DEF
 };
@@ -1571,7 +1571,7 @@ const TranslateId RID_SVXSTR_TRASNGR[] =
     RID_SVXSTR_TRASNGR0
 };
 
-static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const rtl::OUStringConstExpr*& pApiResIds, const TranslateId*& pIntResIds, int& nCount ) noexcept
+static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const OUString*& pApiResIds, const TranslateId*& pIntResIds, int& nCount ) noexcept
 {
     switch( nWhich )
     {
@@ -1618,7 +1618,7 @@ static bool SvxUnoGetResourceRanges( const sal_uInt16 nWhich, const rtl::OUStrin
 }
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, const rtl::OUStringConstExpr* pDestResIds, int nCount, OUString& rString)
+static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, const OUString* pDestResIds, int nCount, OUString& rString)
 {
     // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
@@ -1651,7 +1651,7 @@ static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, c
         const OUString & aCompare = SvxResId(pSourceResIds[i]);
         if( aShortString == aCompare )
         {
-            rString = rString.replaceAt( 0, aShortString.size(), OUString(pDestResIds[i]) );
+            rString = rString.replaceAt( 0, aShortString.size(), pDestResIds[i] );
             return true;
         }
         else if( rString == aCompare )
@@ -1664,7 +1664,7 @@ static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, c
     return false;
 }
 
-static bool SvxUnoConvertResourceStringFromApi(const rtl::OUStringConstExpr* pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
+static bool SvxUnoConvertResourceStringFromApi(const OUString* pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
 {
     // first, calculate the search string length without an optional number after the name
     sal_Int32 nLength = rString.getLength();
@@ -1694,8 +1694,8 @@ static bool SvxUnoConvertResourceStringFromApi(const rtl::OUStringConstExpr* pSo
 
     for (int i = 0; i < nCount; ++i)
     {
-        auto pCompare = pSourceResIds[i];
-        if( aShortString == pCompare.asView() )
+        auto const & pCompare = pSourceResIds[i];
+        if( aShortString == pCompare )
         {
             rString = rString.replaceAt( 0, aShortString.size(), SvxResId(pDestResIds[i]) );
             return true;
@@ -1721,7 +1721,7 @@ static bool SvxUnoConvertResourceStringFromApi(const rtl::OUStringConstExpr* pSo
 //   the possibility to define it wrong
 // - change the compare to also work when a shorter name is in front of a longer one
 
-constexpr rtl::OUStringConstExpr SvxUnoColorNameDefResId[] =
+constexpr OUString SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_COLOR_BLUEGREY_DEF,
     RID_SVXSTR_COLOR_BLACK_DEF,
@@ -1930,7 +1930,7 @@ const TranslateId SvxUnoColorNameResId[] =
 };
 
 /// @throws std::exception
-static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceResIds, rtl::OUStringConstExpr const *pDestResIds, int nCount, OUString& rString)
+static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceResIds, OUString const *pDestResIds, int nCount, OUString& rString)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1949,7 +1949,7 @@ static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceRe
         OUString aStrDefName = SvxResId(pSourceResIds[i]);
         if( sStr == aStrDefName )
         {
-            OUString aReplace = pDestResIds[i];
+            OUString const & aReplace = pDestResIds[i];
             rString = rString.replaceAt( 0, aStrDefName.getLength(), aReplace );
             return true;
         }
@@ -1958,7 +1958,7 @@ static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceRe
     return false;
 }
 
-static bool SvxUnoConvertResourceStringBuiltInFromApi(rtl::OUStringConstExpr const *pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
+static bool SvxUnoConvertResourceStringBuiltInFromApi(OUString const *pSourceResIds, const TranslateId* pDestResIds, int nCount, OUString& rString)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1974,10 +1974,10 @@ static bool SvxUnoConvertResourceStringBuiltInFromApi(rtl::OUStringConstExpr con
 
     for(int i = 0; i < nCount; ++i )
     {
-        if( sStr == pSourceResIds[i].asView() )
+        if( sStr == pSourceResIds[i] )
         {
             OUString aReplace = SvxResId(pDestResIds[i]);
-            rString = aReplace + rString.subView( pSourceResIds[i].asView().size() );
+            rString = aReplace + rString.subView( pSourceResIds[i].getLength() );
             return true;
         }
     }
@@ -2001,7 +2001,7 @@ OUString SvxUnogetApiNameForItem(const sal_uInt16 nWhich, const OUString& rInter
     }
     else
     {
-        const rtl::OUStringConstExpr* pApiResIds;
+        const OUString* pApiResIds;
         const TranslateId* pIntResIds;
         int nCount;
 
@@ -2034,7 +2034,7 @@ OUString SvxUnogetInternalNameForItem(const sal_uInt16 nWhich, const OUString& r
     }
     else
     {
-        const rtl::OUStringConstExpr* pApiResIds;
+        const OUString* pApiResIds;
         const TranslateId* pIntResIds;
         int nCount;
 
