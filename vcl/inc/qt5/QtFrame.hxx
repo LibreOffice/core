@@ -132,8 +132,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
 
-    void fixICCCMwindowGroup();
-
 private Q_SLOTS:
     void screenChanged(QScreen*);
 

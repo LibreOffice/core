@@ -66,10 +66,6 @@
 
 #include <unx/fontmanager.hxx>
 
-#if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
-static bool g_bNeedsWmHintsWindowGroup = true;
-#endif
-
 static void SvpDamageHandler(void* handle, sal_Int32 nExtentsX, sal_Int32 nExtentsY,
                              sal_Int32 nExtentsWidth, sal_Int32 nExtentsHeight)
 {
@@ -192,8 +188,6 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     }
 
     SetIcon(SV_ICON_ID_OFFICE);
-
-    fixICCCMwindowGroup();
 }
 
 void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
@@ -219,23 +213,6 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidge
     rData.toolkit = SystemEnvData::Toolkit::Qt;
     rData.aShellWindow = pWindow;
     rData.pWidget = pWidget;
-}
-
-void QtFrame::fixICCCMwindowGroup()
-{
-#if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
-    if (!g_bNeedsWmHintsWindowGroup)
-        return;
-    g_bNeedsWmHintsWindowGroup = false;
-
-    assert(m_aSystemData.platform != SystemEnvData::Platform::Invalid);
-    if (m_aSystemData.platform != SystemEnvData::Platform::Xcb)
-        return;
-
-    g_bNeedsWmHintsWindowGroup = QtX11Support::fixICCCMwindowGroup(asChild()->winId());
-#else
-    (void)this; // avoid loplugin:staticmethods
-#endif
 }
 
 QtFrame::~QtFrame()
