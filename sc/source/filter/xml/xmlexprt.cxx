@@ -3693,16 +3693,22 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
     if (xCurrentShape.get()!=xShape.get())
         return;
 
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo) && !SvtSecurityOptions::IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
+
     const OUString& sAuthor(pNote->GetAuthor());
     if (!sAuthor.isEmpty())
     {
         SvXMLElementExport aCreatorElem( *this, XML_NAMESPACE_DC,
                                             XML_CREATOR, true,
                                             false );
-        Characters(sAuthor);
+        Characters( bRemovePersonalInfo
+            ? "Author" + OUString::number(SvXMLExport::GetInfoID(sAuthor))
+            : sAuthor );
     }
 
-    const OUString& aDate(pNote->GetDate());
+    const OUString& aDate(bRemovePersonalInfo ? OUString("1970-01-01") : pNote->GetDate()); // Epoch time
     if (pDoc)
     {
         SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
