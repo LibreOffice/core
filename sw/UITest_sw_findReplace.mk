@@ -14,3 +14,7 @@ $(eval $(call gb_UITest_add_modules,sw_findReplace,$(SRCDIR)/sw/qa/uitest,\
 $(eval $(call gb_UITest_set_defs,sw_findReplace, \
     TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
+
+$(eval $(call gb_UITest_avoid_oneprocess,sw_findReplace))
+
+# vim: set noet sw=4 ts=4:
