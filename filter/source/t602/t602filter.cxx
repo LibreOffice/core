@@ -872,7 +872,7 @@ bool T602ImportFilterDialog::OptionsDlg()
     any <<= _val;\
     _prop->setPropertyValue(_nam, any);
 #define propString_(_prop,_nam,_val) \
-    any <<= OUString(_val);\
+    any <<= _val;\
     _prop->setPropertyValue(_nam, any);
 #define propStringFromResId_(_prop,_nam,_val) \
     any <<= FilterResId(_val);\
@@ -898,13 +898,13 @@ bool T602ImportFilterDialog::OptionsDlg()
     propInt_(xPSetDialog,"Height",90);
     propStringFromResId_(xPSetDialog,"Title", T602FILTER_STR_IMPORT_DIALOG_TITLE);
 
-    static constexpr OUStringLiteral T602DLG_OK_BUTTON = u"ok_button";
-    static constexpr OUStringLiteral T602DLG_CANCEL_BUTTON = u"cancel_button";
-    static constexpr OUStringLiteral T602DLG_CODE_LB = u"code_lb";
-    static constexpr OUStringLiteral T602DLG_AZBUKA_CB = u"azbuka_cb";
-    static constexpr OUStringLiteral T602DLG_COMMENT_CB = u"comment_cb";
-    static constexpr OUStringLiteral T602DLG_REFORMAT_CB = u"reformat_cb";
-    static constexpr OUStringLiteral T602DLG_CODE_TXT = u"code_txt";
+    static constexpr OUString T602DLG_OK_BUTTON = u"ok_button"_ustr;
+    static constexpr OUString T602DLG_CANCEL_BUTTON = u"cancel_button"_ustr;
+    static constexpr OUString T602DLG_CODE_LB = u"code_lb"_ustr;
+    static constexpr OUString T602DLG_AZBUKA_CB = u"azbuka_cb"_ustr;
+    static constexpr OUString T602DLG_COMMENT_CB = u"comment_cb"_ustr;
+    static constexpr OUString T602DLG_REFORMAT_CB = u"reformat_cb"_ustr;
+    static constexpr OUString T602DLG_CODE_TXT = u"code_txt"_ustr;
 
     Reference < XInterface > TextModel = Inst_("com.sun.star.awt.UnoControlFixedTextModel");
     Reference < XPropertySet > xPSetText( TextModel, UNO_QUERY );
