@@ -229,6 +229,8 @@ public:
 
     SdrObjectDeque::const_iterator begin() const { return maList.begin(); }
     SdrObjectDeque::const_iterator end() const { return maList.end(); }
+    SdrObjectDeque::const_reverse_iterator rbegin() const { return maList.rbegin(); }
+    SdrObjectDeque::const_reverse_iterator rend() const { return maList.rend(); }
 
 private:
     tools::Rectangle    maSdrObjListOutRect;

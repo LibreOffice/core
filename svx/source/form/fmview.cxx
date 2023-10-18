@@ -497,10 +497,9 @@ bool FmFormView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
     {
         if (FmFormPage* pCurPage = GetCurPage())
         {
-            for (size_t a = 0; a < pCurPage->GetObjCount(); ++a)
+            for (const rtl::Reference<SdrObject>& pObj : *pCurPage)
             {
-                SdrObject* pObj = pCurPage->GetObj(a);
-                FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj);
+                FmFormObj* pFormObject = FmFormObj::GetFormObject(pObj.get());
                 if (!pFormObject)
                     continue;
 

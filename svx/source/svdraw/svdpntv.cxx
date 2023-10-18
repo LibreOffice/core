@@ -808,12 +808,10 @@ void SdrPaintView::GlueInvalidate() const
             if(mpPageView)
             {
                 const SdrObjList* pOL=mpPageView->GetObjList();
-                const size_t nObjCount = pOL->GetObjCount();
-                for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
-                    const SdrObject* pObj=pOL->GetObj(nObjNum);
+                for (const rtl::Reference<SdrObject>& pObj : *pOL) {
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     if (pGPL!=nullptr && pGPL->GetCount()!=0) {
-                        pGPL->Invalidate(*rOutDev.GetOwnerWindow(), pObj);
+                        pGPL->Invalidate(*rOutDev.GetOwnerWindow(), pObj.get());
                     }
                 }
             }

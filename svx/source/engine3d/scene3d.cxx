@@ -645,9 +645,9 @@ void E3dScene::RecalcSnapRect()
         // call parent
         E3dObject::RecalcSnapRect();
 
-        for(size_t a = 0; a < GetObjCount(); ++a)
+        for (const rtl::Reference<SdrObject>& pObj : *this)
         {
-            E3dObject* pCandidate(DynCastE3dObject(GetObj(a)));
+            E3dObject* pCandidate(DynCastE3dObject(pObj.get()));
 
             if(pCandidate)
             {
@@ -723,9 +723,9 @@ void E3dScene::SetSelected(bool bNew)
     // call parent
     E3dObject::SetSelected(bNew);
 
-    for(size_t a(0); a < GetObjCount(); a++)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        E3dObject* pCandidate(DynCastE3dObject(GetObj(a)));
+        E3dObject* pCandidate(DynCastE3dObject(pObj.get()));
 
         if(pCandidate)
         {
@@ -799,9 +799,9 @@ void E3dScene::SetBoundAndSnapRectsDirty(bool bNotMyself, bool bRecursive)
     // call parent
     E3dObject::SetBoundAndSnapRectsDirty(bNotMyself, bRecursive);
 
-    for(size_t a = 0; a < GetObjCount(); ++a)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(pObj.get());
 
         if(pCandidate)
         {
@@ -815,9 +815,9 @@ void E3dScene::NbcSetLayer(SdrLayerID nLayer)
     // call parent
     E3dObject::NbcSetLayer(nLayer);
 
-    for(size_t a = 0; a < GetObjCount(); ++a)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(pObj.get());
 
         if(pCandidate)
         {
@@ -834,9 +834,9 @@ void E3dScene::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     // call parent
     E3dObject::handlePageChange(pOldPage, pNewPage);
 
-    for(size_t a(0); a < GetObjCount(); a++)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(pObj.get());
 
         if(pCandidate)
         {
@@ -857,11 +857,10 @@ SdrObjList* E3dScene::GetSubList() const
 basegfx::B3DRange E3dScene::RecalcBoundVolume() const
 {
     basegfx::B3DRange aRetval;
-    const size_t nObjCnt(GetObjCount());
 
-    for(size_t a = 0; a < nObjCnt; ++a)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        const E3dObject* p3DObject = DynCastE3dObject(GetObj(a));
+        const E3dObject* p3DObject = DynCastE3dObject(pObj.get());
 
         if(p3DObject)
         {
@@ -879,9 +878,9 @@ void E3dScene::SetTransformChanged()
     // call parent
     E3dObject::SetTransformChanged();
 
-    for(size_t a = 0; a < GetObjCount(); ++a)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        E3dObject* pCandidate = DynCastE3dObject(GetObj(a));
+        E3dObject* pCandidate = DynCastE3dObject(pObj.get());
 
         if(pCandidate)
         {

@@ -83,8 +83,8 @@ static void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& r
     else if(pObj->IsGroupObject())
     {
         SdrObjList* pList = pObj->GetSubList();
-        for(size_t a = 0; a < pList->GetObjCount(); ++a)
-            Imp_E3dView_InorderRun3DObjects(pList->GetObj(a), rMask);
+        for (const rtl::Reference<SdrObject>& pChildObj : *pList)
+            Imp_E3dView_InorderRun3DObjects(pChildObj.get(), rMask);
     }
 }
 

@@ -741,10 +741,9 @@ namespace svxform
         if ( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObject) )
         {   // descend recursively
             const SdrObjList *pChildren = pObjGroup->GetSubList();
-            for ( size_t i=0; i<pChildren->GetObjCount(); ++i )
+            for (const rtl::Reference<SdrObject>& pCurrent : *pChildren)
             {
-                SdrObject* pCurrent = pChildren->GetObj(i);
-                if (!InsertFormComponent(rHint, pCurrent))
+                if (!InsertFormComponent(rHint, pCurrent.get()))
                     return false;
             }
         }

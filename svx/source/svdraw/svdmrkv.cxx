@@ -571,12 +571,9 @@ bool SdrMarkView::MarkableObjectsExceed( int n ) const
         return false;
 
     SdrObjList* pOL=pPV->GetObjList();
-    const size_t nObjCount = pOL->GetObjCount();
-    for (size_t nObjNum=0; nObjNum<nObjCount; ++nObjNum) {
-        SdrObject* pObj=pOL->GetObj(nObjNum);
-        if (IsObjMarkable(pObj,pPV) && --n<0)
+    for (const rtl::Reference<SdrObject>& pObj : *pOL)
+        if (IsObjMarkable(pObj.get(),pPV) && --n<0)
             return true;
-    }
 
     return false;
 }
@@ -711,11 +708,9 @@ bool SdrMarkView::dumpGluePointsToJSON(boost::property_tree::ptree& rTree)
         const SdrObjList* pOL = mpMarkedPV->GetObjList();
         if (!pOL)
             return false;
-        const size_t nObjCount = pOL->GetObjCount();
         boost::property_tree::ptree elements;
-        for (size_t nObjNum = 0; nObjNum < nObjCount; ++nObjNum)
+        for (const rtl::Reference<SdrObject>& pObj : *pOL)
         {
-            SdrObject* pObj = pOL->GetObj(nObjNum);
             if (!pObj)
                 continue;
             if (pObj == GetMarkedObjectByIndex(0))
@@ -2128,19 +2123,17 @@ void SdrMarkView::MarkObj(const tools::Rectangle& rRect, bool bUnmark)
     {
         pObjList=pPV->GetObjList();
         tools::Rectangle aFrm1(aR);
-        const size_t nObjCount = pObjList->GetObjCount();
-        for (size_t nO=0; nO<nObjCount; ++nO) {
-            SdrObject* pObj=pObjList->GetObj(nO);
+        for (const rtl::Reference<SdrObject>& pObj : *pObjList) {
             tools::Rectangle aRect(pObj->GetCurrentBoundRect());
             if (aFrm1.Contains(aRect)) {
                 if (!bUnmark) {
-                    if (IsObjMarkable(pObj,pPV))
+                    if (IsObjMarkable(pObj.get(),pPV))
                     {
-                        GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj,pPV));
+                        GetMarkedObjectListWriteAccess().InsertEntry(SdrMark(pObj.get(),pPV));
                         bFnd=true;
                     }
                 } else {
-                    const size_t nPos=TryToFindMarkedObject(pObj);
+                    const size_t nPos=TryToFindMarkedObject(pObj.get());
                     if (nPos!=SAL_MAX_SIZE)
                     {
                         GetMarkedObjectListWriteAccess().DeleteMark(nPos);

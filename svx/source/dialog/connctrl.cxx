@@ -211,14 +211,9 @@ void SvxXConnectionPreview::Paint(vcl::RenderContext& rRenderContext, const tool
 
         // New stuff: Use an ObjectContactOfObjListPainter.
         sdr::contact::SdrObjectVector aObjectVector;
-
-        for (size_t a = 0; a < mxSdrPage->GetObjCount(); ++a)
-        {
-            SdrObject* pObject = mxSdrPage->GetObj(a);
-            DBG_ASSERT(pObject,
-                "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
-            aObjectVector.push_back(pObject);
-        }
+        aObjectVector.reserve(mxSdrPage->GetObjCount());
+        for (const rtl::Reference<SdrObject>& pObject : *mxSdrPage)
+            aObjectVector.push_back(pObject.get());
 
         sdr::contact::ObjectContactOfObjListPainter aPainter(rRenderContext, std::move(aObjectVector), nullptr);
         sdr::contact::DisplayInfo aDisplayInfo;

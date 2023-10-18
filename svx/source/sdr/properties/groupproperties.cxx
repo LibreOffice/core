@@ -67,11 +67,11 @@ namespace sdr::properties
             // collect all ItemSets in mpItemSet
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
+            if (!pSub)
+                return *moMergedItemSet;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
             {
-                const SfxItemSet& rSet = pSub->GetObj(a)->GetMergedItemSet();
+                const SfxItemSet& rSet = pObj->GetMergedItemSet();
                 SfxWhichIter aIter(rSet);
                 sal_uInt16 nWhich(aIter.FirstWhich());
 
@@ -100,18 +100,11 @@ namespace sdr::properties
             // iterate over contained SdrObjects
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                SdrObject* pObj = pSub->GetObj(a);
-
-                if(pObj)
-                {
-                    // Set merged ItemSet at contained object
-                    pObj->SetMergedItemSet(rSet, bClearAllItems);
-                }
-            }
+            if (!pSub)
+                return;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
+                // Set merged ItemSet at contained object
+                pObj->SetMergedItemSet(rSet, bClearAllItems);
 
             // Do not call parent here. Group objects do not have local ItemSets
             // where items need to be set.
@@ -132,17 +125,10 @@ namespace sdr::properties
             // iterate over contained SdrObjects
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                SdrObject* pObj = pSub->GetObj(a);
-
-                if(pObj)
-                {
-                    pObj->GetProperties().ClearObjectItem(nWhich);
-                }
-            }
+            if (!pSub)
+                return;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
+                pObj->GetProperties().ClearObjectItem(nWhich);
         }
 
         void GroupProperties::ClearObjectItemDirect(const sal_uInt16 /*nWhich*/)
@@ -154,24 +140,20 @@ namespace sdr::properties
         {
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                pSub->GetObj(a)->GetProperties().SetMergedItem(rItem);
-            }
+            if (!pSub)
+                return;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
+                pObj->GetProperties().SetMergedItem(rItem);
         }
 
         void GroupProperties::ClearMergedItem(const sal_uInt16 nWhich)
         {
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                pSub->GetObj(a)->GetProperties().ClearMergedItem(nWhich);
-            }
+            if (!pSub)
+                return;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
+                pObj->GetProperties().ClearMergedItem(nWhich);
         }
 
         void GroupProperties::SetObjectItemSet(const SfxItemSet& /*rSet*/)
@@ -185,17 +167,18 @@ namespace sdr::properties
 
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
+            if (!pSub)
+                return pRetval;
 
-            for(size_t a = 0; a < nCount; ++a)
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
             {
-                SfxStyleSheet* pCandidate = pSub->GetObj(a)->GetStyleSheet();
+                SfxStyleSheet* pCandidate = pObj->GetStyleSheet();
 
                 if(pRetval)
                 {
                     if(pCandidate != pRetval)
                     {
-                        // different StyleSheelts, return none
+                        // different StyleSheets, return none
                         return nullptr;
                     }
                 }
@@ -213,14 +196,15 @@ namespace sdr::properties
         {
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
+            if (!pSub)
+                return;
 
-            for(size_t a = 0; a < nCount; ++a)
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
             {
                 if(bBroadcast)
-                    pSub->GetObj(a)->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                    pObj->SetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
                 else
-                    pSub->GetObj(a)->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
+                    pObj->NbcSetStyleSheet(pNewStyleSheet, bDontRemoveHardAttr);
             }
         }
 
@@ -228,12 +212,10 @@ namespace sdr::properties
         {
             const SdrObjList* pSub(static_cast<const SdrObjGroup&>(GetSdrObject()).GetSubList());
             OSL_ENSURE(nullptr != pSub, "Children of SdrObject expected (!)");
-            const size_t nCount(nullptr == pSub ? 0 : pSub->GetObjCount());
-
-            for(size_t a = 0; a < nCount; ++a)
-            {
-                pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes();
-            }
+            if (!pSub)
+                return;
+            for (const rtl::Reference<SdrObject>& pObj : *pSub)
+                pObj->GetProperties().ForceStyleToHardAttributes();
         }
 } // end of namespace
 

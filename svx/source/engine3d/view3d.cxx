@@ -397,13 +397,10 @@ std::unique_ptr<SdrModel> E3dView::CreateMarkedObjModel() const
         for(sal_uInt16 nPg(0); nPg < pNewModel->GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=pNewModel->GetPage(nPg);
-            const size_t nObjCount(pSrcPg->GetObjCount());
 
-            for(size_t nOb = 0; nOb < nObjCount; ++nOb)
+            for (const rtl::Reference<SdrObject>& pSrcOb : *pSrcPg)
             {
-                const SdrObject* pSrcOb=pSrcPg->GetObj(nOb);
-
-                if(const E3dScene* p3dscene = DynCastE3dScene( pSrcOb))
+                if(const E3dScene* p3dscene = DynCastE3dScene( pSrcOb.get()))
                 {
                     pScene = const_cast<E3dScene*>(p3dscene);
 
@@ -451,17 +448,15 @@ bool E3dView::Paste(
         for(sal_uInt16 nPg(0); nPg < rMod.GetPageCount(); nPg++)
         {
             const SdrPage* pSrcPg=rMod.GetPage(nPg);
-            const size_t nObjCount(pSrcPg->GetObjCount());
 
             // calculate offset for paste
             tools::Rectangle aR = pSrcPg->GetAllObjBoundRect();
             Point aDist(aPos - aR.Center());
 
             // Insert sub-objects for scenes
-            for(size_t nOb = 0; nOb < nObjCount; ++nOb)
+            for (const rtl::Reference<SdrObject>& pSrcOb : *pSrcPg)
             {
-                const SdrObject* pSrcOb = pSrcPg->GetObj(nOb);
-                if(const E3dScene* p3dscene = DynCastE3dScene(pSrcOb))
+                if(const E3dScene* p3dscene = DynCastE3dScene(pSrcOb.get()))
                 {
                     E3dScene* pSrcScene = const_cast<E3dScene*>(p3dscene);
                     ImpCloneAll3DObjectsToDestScene(pSrcScene, pDstScene, aDist);
@@ -486,9 +481,9 @@ bool E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene const * pSrcScene, E3dSce
 
     if(pSrcScene && pDstScene)
     {
-        for(size_t i = 0; i < pSrcScene->GetSubList()->GetObjCount(); ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *pSrcScene->GetSubList())
         {
-            E3dCompoundObject* pCompoundObj = dynamic_cast< E3dCompoundObject* >(pSrcScene->GetSubList()->GetObj(i));
+            E3dCompoundObject* pCompoundObj = dynamic_cast< E3dCompoundObject* >(pObj.get());
 
             if(pCompoundObj)
             {

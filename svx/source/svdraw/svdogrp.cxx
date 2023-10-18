@@ -118,8 +118,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     rInfo.bNoContortion=false;
     const size_t nObjCount(GetObjCount());
-    for (size_t i=0; i<nObjCount; ++i) {
-        SdrObject* pObj(GetObj(i));
+    for (const rtl::Reference<SdrObject>& pObj : *this) {
         SdrObjTransformInfoRec aInfo;
         pObj->TakeObjInfo(aInfo);
         if (!aInfo.bMoveAllowed            ) rInfo.bMoveAllowed            =false;
@@ -188,10 +187,8 @@ SdrLayerID SdrObjGroup::GetLayer() const
 void SdrObjGroup::NbcSetLayer(SdrLayerID nLayer)
 {
     SdrObject::NbcSetLayer(nLayer);
-    const size_t nObjCount(GetObjCount());
-    for (size_t i=0; i<nObjCount; ++i) {
-        GetObj(i)->NbcSetLayer(nLayer);
-    }
+    for (const rtl::Reference<SdrObject>& pObj : *this)
+        pObj->NbcSetLayer(nLayer);
 }
 
 void SdrObjGroup::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
@@ -199,10 +196,8 @@ void SdrObjGroup::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
     // call parent
     SdrObject::handlePageChange(pOldPage, pNewPage);
 
-    for(size_t i(0); i < GetObjCount(); i++)
-    {
-        GetObj(i)->handlePageChange(pOldPage, pNewPage);
-    }
+    for (const rtl::Reference<SdrObject>& pObj : *this)
+        pObj->handlePageChange(pOldPage, pNewPage);
 }
 
 SdrObjList* SdrObjGroup::GetSubList() const
@@ -314,13 +309,9 @@ void SdrObjGroup::RecalcSnapRect()
 basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
 {
     basegfx::B2DPolyPolygon aRetval;
-    const size_t nObjCount(GetObjCount());
 
-    for(size_t a = 0; a < nObjCount; ++a)
-    {
-        SdrObject* pObj(GetObj(a));
+    for (const rtl::Reference<SdrObject>& pObj : *this)
         aRetval.append(pObj->TakeXorPoly());
-    }
 
     if(!aRetval.count())
     {
@@ -406,11 +397,8 @@ void SdrObjGroup::NbcMove(const Size& rSize)
 
     if(0 != nObjCount)
     {
-        for (size_t i=0; i<nObjCount; ++i)
-        {
-            SdrObject* pObj(GetObj(i));
+        for (const rtl::Reference<SdrObject>& pObj : *this)
             pObj->NbcMove(rSize);
-        }
     }
     else
     {
@@ -443,11 +431,8 @@ void SdrObjGroup::NbcResize(const Point& rRef, const Fraction& xFact, const Frac
     const size_t nObjCount(GetObjCount());
     if(0 != nObjCount)
     {
-        for (size_t i=0; i<nObjCount; ++i)
-        {
-            SdrObject* pObj(GetObj(i));
+        for (const rtl::Reference<SdrObject>& pObj : *this)
             pObj->NbcResize(rRef,xFact,yFact);
-        }
     }
     else
     {
@@ -464,13 +449,9 @@ void SdrObjGroup::NbcRotate(const Point& rRef, Degree100 nAngle, double sn, doub
 {
     SetGlueReallyAbsolute(true);
     RotatePoint(maRefPoint, rRef, sn, cs);
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
-    {
-        SdrObject* pObj(GetObj(i));
+    for (const rtl::Reference<SdrObject>& pObj : *this)
         pObj->NbcRotate(rRef,nAngle,sn,cs);
-    }
 
     NbcRotateGluePoints(rRef,nAngle,sn,cs);
     SetGlueReallyAbsolute(false);
@@ -481,13 +462,9 @@ void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
     MirrorPoint(maRefPoint, rRef1, rRef2); // implementation missing in SvdEtc!
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
-    {
-        SdrObject* pObj(GetObj(i));
+    for (const rtl::Reference<SdrObject>& pObj : *this)
         pObj->NbcMirror(rRef1,rRef2);
-    }
 
     NbcMirrorGluePoints(rRef1,rRef2);
     SetGlueReallyAbsolute(false);
@@ -498,11 +475,9 @@ void SdrObjGroup::NbcShear(const Point& rRef, Degree100 nAngle, double tn, bool 
 {
     SetGlueReallyAbsolute(true);
     ShearPoint(maRefPoint, rRef, tn);
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         pObj->NbcShear(rRef,nAngle,tn,bVShear);
     }
 
@@ -516,13 +491,9 @@ void SdrObjGroup::NbcSetAnchorPos(const Point& rPnt)
     m_aAnchor=rPnt;
     Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
     maRefPoint.Move(aSiz);
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
-    {
-        SdrObject* pObj(GetObj(i));
+    for (const rtl::Reference<SdrObject>& pObj : *this)
         pObj->NbcSetAnchorPos(rPnt);
-    }
 }
 
 
@@ -578,16 +549,14 @@ void SdrObjGroup::Move(const Size& rSiz)
     if(0 != nObjCount)
     {
         // first move the connectors, then everything else
-        for (size_t i=0; i<nObjCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *this)
         {
-            SdrObject* pObj(GetObj(i));
             if (pObj->IsEdgeObj())
                 pObj->Move(rSiz);
         }
 
-        for (size_t i=0; i<nObjCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *this)
         {
-            SdrObject* pObj(GetObj(i));
             if (!pObj->IsEdgeObj())
                 pObj->Move(rSiz);
         }
@@ -631,16 +600,14 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
     if(0 != nObjCount)
     {
         // move the connectors first, everything else afterwards
-        for (size_t i=0; i<nObjCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *this)
         {
-            SdrObject* pObj(GetObj(i));
             if (pObj->IsEdgeObj())
                 pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
         }
 
-        for (size_t i=0; i<nObjCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *this)
         {
-            SdrObject* pObj(GetObj(i));
             if (!pObj->IsEdgeObj())
                 pObj->Resize(rRef,xFact,yFact,bUnsetRelative);
         }
@@ -669,18 +636,15 @@ void SdrObjGroup::Rotate(const Point& rRef, Degree100 nAngle, double sn, double 
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     RotatePoint(maRefPoint, rRef, sn, cs);
     // move the connectors first, everything else afterwards
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (pObj->IsEdgeObj())
             pObj->Rotate(rRef,nAngle,sn,cs);
     }
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (!pObj->IsEdgeObj())
             pObj->Rotate(rRef,nAngle,sn,cs);
     }
@@ -699,18 +663,15 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     MirrorPoint(maRefPoint, rRef1, rRef2); // implementation missing in SvdEtc!
     // move the connectors first, everything else afterwards
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (pObj->IsEdgeObj())
             pObj->Mirror(rRef1,rRef2);
     }
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (!pObj->IsEdgeObj())
             pObj->Mirror(rRef1,rRef2);
     }
@@ -732,18 +693,15 @@ void SdrObjGroup::Shear(const Point& rRef, Degree100 nAngle, double tn, bool bVS
     tools::Rectangle aBoundRect0; if (m_pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     ShearPoint(maRefPoint, rRef, tn);
     // move the connectors first, everything else afterwards
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (pObj->IsEdgeObj())
             pObj->Shear(rRef,nAngle,tn,bVShear);
     }
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (!pObj->IsEdgeObj())
             pObj->Shear(rRef,nAngle,tn,bVShear);
     }
@@ -765,18 +723,15 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     Size aSiz(rPnt.X()-m_aAnchor.X(),rPnt.Y()-m_aAnchor.Y());
     maRefPoint.Move(aSiz);
     // move the connectors first, everything else afterwards
-    const size_t nObjCount(GetObjCount());
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (pObj->IsEdgeObj())
             pObj->SetAnchorPos(rPnt);
     }
 
-    for (size_t i=0; i<nObjCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(i));
         if (!pObj->IsEdgeObj())
             pObj->SetAnchorPos(rPnt);
     }
@@ -812,11 +767,9 @@ void SdrObjGroup::NbcReformatText()
 rtl::Reference<SdrObject> SdrObjGroup::DoConvertToPolyObj(bool bBezier, bool bAddText) const
 {
     rtl::Reference<SdrObject> pGroup( new SdrObjGroup(getSdrModelFromSdrObject()) );
-    const size_t nObjCount(GetObjCount());
 
-    for(size_t a=0; a < nObjCount; ++a)
+    for (const rtl::Reference<SdrObject>& pIterObj : *this)
     {
-        SdrObject* pIterObj(GetObj(a));
         rtl::Reference<SdrObject> pResult(pIterObj->DoConvertToPolyObj(bBezier, bAddText));
 
         // pResult can be NULL e.g. for empty objects

@@ -283,11 +283,9 @@ namespace
 
                 basegfx::B2DPolyPolygon aPolyB;
 
-                for(sal_uInt32 a(1); a < rPageView.GetPage()->GetObjCount(); a++)
+                for (const rtl::Reference<SdrObject>& pObjB : *rPageView.GetPage())
                 {
-                    SdrObject* pObjB = pPage->GetObj(a);
-
-                    if(dynamic_cast<const SdrPathObj*>( pObjB))
+                    if(dynamic_cast<const SdrPathObj*>( pObjB.get()))
                     {
                         basegfx::B2DPolyPolygon aCandidate(pObjB->GetPathPoly());
                         aCandidate = basegfx::utils::correctOrientations(aCandidate);

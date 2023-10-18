@@ -1985,14 +1985,9 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 static SdrObject *ImpGetObjByName(SdrObjList const *pObjList, std::u16string_view aObjName)
 {
     // scan the whole list
-    size_t nObjCount = pObjList->GetObjCount();
-    for (size_t i = 0; i < nObjCount; i++) {
-        SdrObject *pCurObj = pObjList->GetObj(i);
-
-        if (pCurObj->GetName() == aObjName) {
-            return pCurObj;
-        }
-    }
+    for (const rtl::Reference<SdrObject>& pCurObj : *pObjList)
+        if (pCurObj->GetName() == aObjName)
+            return pCurObj.get();
     // not found
     return nullptr;
 }

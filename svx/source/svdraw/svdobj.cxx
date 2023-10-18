@@ -653,9 +653,8 @@ bool SdrObject::isVisibleOnAnyOfTheseLayers(const SdrLayerIDSet& rSet) const
     SdrObjList* pOL=GetSubList();
     if (!pOL)
         return false;
-    const size_t nObjCount = pOL->GetObjCount();
-    for (size_t nObjNum = 0; nObjNum<nObjCount; ++nObjNum)
-        if (pOL->GetObj(nObjNum)->isVisibleOnAnyOfTheseLayers(rSet))
+    for (const rtl::Reference<SdrObject>& pObject : *pOL)
+        if (pObject->isVisibleOnAnyOfTheseLayers(rSet))
             return true;
     return false;
 }
@@ -2585,11 +2584,8 @@ rtl::Reference<SdrObject> SdrObject::ConvertToContourObj(SdrObject* pRet1, bool 
         SdrObjList* pObjList2 = pRet->GetSubList();
         rtl::Reference<SdrObject> pGroup = new SdrObjGroup(getSdrModelFromSdrObject());
 
-        for(size_t a=0; a<pObjList2->GetObjCount(); ++a)
-        {
-            SdrObject* pIterObj = pObjList2->GetObj(a);
-            pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj, bForceLineDash).get());
-        }
+        for (const rtl::Reference<SdrObject>& pIterObj : *pObjList2)
+            pGroup->GetSubList()->NbcInsertObject(ConvertToContourObj(pIterObj.get(), bForceLineDash).get());
 
         pRet = pGroup;
     }

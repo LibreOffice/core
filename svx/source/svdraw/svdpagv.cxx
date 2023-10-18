@@ -606,11 +606,10 @@ bool SdrPageView::IsObjMarkable(SdrObject const * pObj) const
 
         if (pObjList && pObjList->GetObjCount())
         {
-            for (size_t a = 0; a < pObjList->GetObjCount(); ++a)
+            for (const rtl::Reference<SdrObject>& pCandidate : *pObjList)
             {
-                SdrObject* pCandidate = pObjList->GetObj(a);
                 // call recursively
-                if (IsObjMarkable(pCandidate))
+                if (IsObjMarkable(pCandidate.get()))
                     return true;
             }
             return false;

@@ -142,7 +142,6 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
 #ifdef DBG_UTIL
     size_t nCloneErrCnt(0);
 #endif
-    const size_t nCount(rSrcList.GetObjCount());
 
     if(nullptr == getSdrObjectFromSdrObjList() && nullptr == getSdrPageFromSdrObjList())
     {
@@ -154,15 +153,14 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         ? getSdrPageFromSdrObjList()->getSdrModelFromSdrPage()
         : getSdrObjectFromSdrObjList()->getSdrModelFromSdrObject());
 
-    for (size_t no(0); no < nCount; ++no)
+    for (const rtl::Reference<SdrObject>& pSO : rSrcList)
     {
-        SdrObject* pSO(rSrcList.GetObj(no));
         rtl::Reference<SdrObject> pDO(pSO->CloneSdrObject(rTargetSdrModel));
 
         if(pDO)
         {
             NbcInsertObject(pDO.get(), SAL_MAX_SIZE);
-            aCloneList.AddPair(pSO, pDO.get());
+            aCloneList.AddPair(pSO.get(), pDO.get());
         }
 #ifdef DBG_UTIL
         else
@@ -206,10 +204,9 @@ void SdrObjList::RecalcRects()
 {
     maSdrObjListOutRect=tools::Rectangle();
     maSdrObjListSnapRect=maSdrObjListOutRect;
-    const size_t nCount = GetObjCount();
-    for (size_t i=0; i<nCount; ++i) {
-        SdrObject* pObj=GetObj(i);
-        if (i==0) {
+    for (auto it = begin(), itEnd = end(); it != itEnd; ++it) {
+        SdrObject* pObj = it->get();
+        if (it == begin()) {
             maSdrObjListOutRect=pObj->GetCurrentBoundRect();
             maSdrObjListSnapRect=pObj->GetSnapRect();
         } else {
@@ -771,10 +768,8 @@ void SdrObjList::ImplReformatAllEdgeObjects(const SdrObjList& rObjList)
 
 void SdrObjList::BurnInStyleSheetAttributes()
 {
-    for(size_t a = 0; a < GetObjCount(); ++a)
-    {
-        GetObj(a)->BurnInStyleSheetAttributes();
-    }
+    for (const rtl::Reference<SdrObject>& pObj : *this)
+        pObj->BurnInStyleSheetAttributes();
 }
 
 size_t SdrObjList::GetObjCount() const
@@ -793,11 +788,10 @@ SdrObject* SdrObjList::GetObj(size_t nNum) const
 
 SdrObject* SdrObjList::GetObjByName(std::u16string_view sName) const
 {
-    for (size_t i = 0; i < GetObjCount(); ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj = GetObj(i);
         if (pObj->GetName() == sName)
-            return pObj;
+            return pObj.get();
     }
     return nullptr;
 }
@@ -1092,12 +1086,8 @@ void SdrObjList::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*this).name()));
 
-    size_t nObjCount = GetObjCount();
-    for (size_t i = 0; i < nObjCount; ++i)
-    {
-        if (const SdrObject* pObject = GetObj(i))
-            pObject->dumpAsXml(pWriter);
-    }
+    for (const rtl::Reference<SdrObject>& pObject : *this)
+        pObject->dumpAsXml(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -1684,24 +1674,20 @@ void SdrPage::TRG_ImpMasterPageRemoved(const SdrPage& rRemovedPage)
 void SdrPage::MakePageObjectsNamesUnique()
 {
     std::unordered_set<OUString> aNameSet;
-    for (size_t no(0); no < GetObjCount(); ++no)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        SdrObject* pObj(GetObj(no));
-        if(nullptr != pObj)
+        if (!pObj->GetName().isEmpty())
         {
-            if (!pObj->GetName().isEmpty())
+            pObj->MakeNameUnique(aNameSet);
+            SdrObjList* pSdrObjList = pObj->GetSubList(); // group
+            if (pSdrObjList)
             {
-                pObj->MakeNameUnique(aNameSet);
-                SdrObjList* pSdrObjList = pObj->GetSubList(); // group
-                if (pSdrObjList)
+                SdrObject* pListObj;
+                SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
+                while (aIter.IsMore())
                 {
-                    SdrObject* pListObj;
-                    SdrObjListIter aIter(pSdrObjList, SdrIterMode::DeepWithGroups);
-                    while (aIter.IsMore())
-                    {
-                        pListObj = aIter.Next();
-                        pListObj->MakeNameUnique(aNameSet);
-                    }
+                    pListObj = aIter.Next();
+                    pListObj->MakeNameUnique(aNameSet);
                 }
             }
         }

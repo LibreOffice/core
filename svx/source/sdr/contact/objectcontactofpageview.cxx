@@ -244,10 +244,8 @@ namespace sdr::contact
             {
                 // Not empty? Then not doing a full redraw, check if
                 // getPrimitive2DSequenceHierarchy() is still needed.
-                sal_Int32 nObjCount = GetSdrPage()->GetObjCount();
-                for (sal_Int32 i = 0; i < nObjCount; ++i)
+                for (const rtl::Reference<SdrObject>& pObject : *GetSdrPage())
                 {
-                    SdrObject* pObject = GetSdrPage()->GetObj(i);
                     if (rRedrawArea.Overlaps(pObject->GetCurrentBoundRect()))
                     {
                         bGetHierarchy = true;
