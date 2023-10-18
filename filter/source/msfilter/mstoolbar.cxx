@@ -303,7 +303,7 @@ void TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                             // according to the spec:
                             // "the iconMask is white in all the areas in which the icon is
                             // displayed as transparent and is black in all other areas."
-                            aBitEx = BitmapEx(aBitEx.GetBitmap(), rMaskBase.CreateMask(COL_WHITE));
+                            aBitEx = BitmapEx(aBitEx.GetBitmap(), rMaskBase.CreateAlphaMask(COL_WHITE));
                         }
                     }
 

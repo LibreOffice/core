@@ -321,7 +321,7 @@ bool GraphicObject::ImplDrawTiled(OutputDevice& rOut, const tools::Rectangle& rA
                                                 AlphaMask( aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ) ) );
                     else
                         aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
-                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateMask( COL_WHITE ) );
+                                                aVDev->GetBitmap( Point(0,0), aVDev->GetOutputSize() ).CreateAlphaMask( COL_WHITE ) );
                 }
             }
 

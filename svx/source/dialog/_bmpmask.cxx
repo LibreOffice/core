@@ -612,10 +612,10 @@ BitmapEx SvxBmpMask::ImpMaskTransparent( const BitmapEx& rBitmapEx, const Color&
     EnterWait();
 
     BitmapEx    aBmpEx;
-    Bitmap      aMask( rBitmapEx.GetBitmap().CreateMask( rColor, nTol ) );
+    AlphaMask   aMask( rBitmapEx.GetBitmap().CreateAlphaMask( rColor, nTol ) );
 
     if( rBitmapEx.IsAlpha() )
-        aMask.CombineOr( rBitmapEx.GetAlphaMask() );
+        aMask.AlphaCombineOr( rBitmapEx.GetAlphaMask() );
 
     aBmpEx = BitmapEx( rBitmapEx.GetBitmap(), aMask );
     LeaveWait();

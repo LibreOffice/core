@@ -631,10 +631,10 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
         {
             const tools::Long  nTol = static_cast<tools::Long>(m_xMtfTolerance->get_value(FieldUnit::PERCENT) * 255 / 100);
 
-            Bitmap aMask = aGraphic.GetBitmapEx().GetBitmap().CreateMask( rColor, nTol );
+            AlphaMask aMask = aGraphic.GetBitmapEx().GetBitmap().CreateAlphaMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
-                aMask.CombineOr( aGraphic.GetBitmapEx().GetAlphaMask() );
+                aMask.AlphaCombineOr( aGraphic.GetBitmapEx().GetAlphaMask() );
 
             if( !aMask.IsEmpty() )
             {
