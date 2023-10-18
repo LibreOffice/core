@@ -54,6 +54,25 @@ SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent)
     , m_xCtrlHyperlinkImg(m_xBuilder->weld_widget("lockctrlclick"))
     , m_xBlockUntrustedRefererLinksCB(m_xBuilder->weld_check_button("blockuntrusted"))
     , m_xBlockUntrustedRefererLinksImg(m_xBuilder->weld_widget("lockblockuntrusted"))
+    , m_xRedlineinfoCB(m_xBuilder->weld_check_button("redlineinfo"))
+    , m_xRedlineinfoImg(m_xBuilder->weld_widget("lockredlineinfo"))
+    , m_xDocPropertiesCB(m_xBuilder->weld_check_button("docproperties"))
+    , m_xDocPropertiesImg(m_xBuilder->weld_widget("lockdocproperties"))
+    , m_xNoteAuthorCB(m_xBuilder->weld_check_button("noteauthor"))
+    , m_xNoteAuthorImg(m_xBuilder->weld_widget("locknoteauthor"))
+    , m_xDocumentVersionCB(m_xBuilder->weld_check_button("documentversion"))
+    , m_xDocumentVersionImg(m_xBuilder->weld_widget("lockdocumentversion"))
+{
+    m_xRemovePersInfoCB->connect_toggled(LINK(this, SecurityOptionsDialog, ShowPersonalInfosToggle));
+    init();
+}
+
+IMPL_LINK_NOARG(SecurityOptionsDialog, ShowPersonalInfosToggle, weld::Toggleable&, void)
+{
+    changeKeepSecurityInfosEnabled();
+}
+
+void SecurityOptionsDialog::init()
 {
     enableAndSet(SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_xSaveOrSendDocsCB,
         *m_xSaveOrSendDocsImg);
@@ -65,12 +84,32 @@ SecurityOptionsDialog::SecurityOptionsDialog(weld::Window* pParent)
         *m_xCreatePdfImg);
     enableAndSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_xRemovePersInfoCB,
         *m_xRemovePersInfoImg);
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo, *m_xRedlineinfoCB,
+        *m_xRedlineinfoImg);
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo, *m_xDocPropertiesCB,
+        *m_xDocPropertiesImg);
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo, *m_xNoteAuthorCB,
+        *m_xNoteAuthorImg);
+    enableAndSet(SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, *m_xDocumentVersionCB,
+        *m_xDocumentVersionImg);
     enableAndSet(SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_xRecommPasswdCB,
         *m_xRecommPasswdImg);
     enableAndSet(SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_xCtrlHyperlinkCB,
         *m_xCtrlHyperlinkImg);
     enableAndSet(SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_xBlockUntrustedRefererLinksCB,
         *m_xBlockUntrustedRefererLinksImg);
+
+    if (!SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo))
+        changeKeepSecurityInfosEnabled();
+}
+
+void SecurityOptionsDialog::changeKeepSecurityInfosEnabled()
+{
+    bool bEnable = m_xRemovePersInfoCB->get_active();
+    m_xRedlineinfoCB->set_sensitive(bEnable);
+    m_xDocPropertiesCB->set_sensitive(bEnable);
+    m_xNoteAuthorCB->set_sensitive(bEnable);
+    m_xDocumentVersionCB->set_sensitive(bEnable);
 }
 
 }

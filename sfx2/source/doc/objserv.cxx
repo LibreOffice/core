@@ -55,6 +55,7 @@
 #include <basic/sberrors.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/saveopt.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svtools/DocumentToGraphicRenderer.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/svapp.hxx>
@@ -926,6 +927,15 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be set accordingly
             pImpl->bPreserveVersions = (nId == SID_SAVEDOC);
+
+            // do not save version infos --> (see 'Tools - Options - LibreOffice - Security')
+            if (SvtSecurityOptions::IsOptionSet(
+                SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo) && !SvtSecurityOptions::IsOptionSet(
+                    SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo))
+            {
+                pImpl->bPreserveVersions = false;
+            }
+
             try
             {
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???

@@ -22,7 +22,6 @@
 
 namespace svx
 {
-
     class SecurityOptionsDialog : public weld::GenericDialogController
     {
     private:
@@ -44,17 +43,36 @@ namespace svx
         std::unique_ptr<weld::CheckButton> m_xBlockUntrustedRefererLinksCB;
         std::unique_ptr<weld::Widget> m_xBlockUntrustedRefererLinksImg;
 
+        std::unique_ptr<weld::CheckButton> m_xRedlineinfoCB;
+        std::unique_ptr<weld::Widget> m_xRedlineinfoImg;
+        std::unique_ptr<weld::CheckButton> m_xDocPropertiesCB;
+        std::unique_ptr<weld::Widget> m_xDocPropertiesImg;
+        std::unique_ptr<weld::CheckButton> m_xNoteAuthorCB;
+        std::unique_ptr<weld::Widget> m_xNoteAuthorImg;
+        std::unique_ptr<weld::CheckButton> m_xDocumentVersionCB;
+        std::unique_ptr<weld::Widget> m_xDocumentVersionImg;
+
     public:
         SecurityOptionsDialog(weld::Window* pParent);
+
+        void init();
 
         bool IsSaveOrSendDocsChecked() const { return m_xSaveOrSendDocsCB->get_active(); }
         bool IsSignDocsChecked() const { return m_xSignDocsCB->get_active(); }
         bool IsPrintDocsChecked() const { return m_xPrintDocsCB->get_active(); }
         bool IsCreatePdfChecked() const { return m_xCreatePdfCB->get_active(); }
         bool IsRemovePersInfoChecked() const { return m_xRemovePersInfoCB->get_active(); }
+        bool IsRemoveRedlineInfoChecked() const { return m_xRedlineinfoCB->get_active(); }
+        bool IsRemoveDocUserInfoChecked() const { return m_xDocPropertiesCB->get_active(); }
+        bool IsRemoveNoteAuthorInfoChecked() const { return m_xNoteAuthorCB->get_active(); }
+        bool IsRemoveDocVersionInfoChecked() const { return m_xDocumentVersionCB->get_active(); }
         bool IsRecommPasswdChecked() const { return m_xRecommPasswdCB->get_active(); }
         bool IsCtrlHyperlinkChecked() const { return m_xCtrlHyperlinkCB->get_active(); }
         bool IsBlockUntrustedRefererLinksChecked() const { return m_xBlockUntrustedRefererLinksCB->get_active(); }
+
+        DECL_LINK(ShowPersonalInfosToggle, weld::Toggleable&, void);
+
+        void changeKeepSecurityInfosEnabled();
     };
 }
 

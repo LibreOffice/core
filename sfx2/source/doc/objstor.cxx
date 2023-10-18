@@ -2609,7 +2609,8 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     }
 
     // copy version list from "old" medium to target medium, so it can be used on saving
-    pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
+    if (pImpl->bPreserveVersions)
+        pMediumTmp->TransferVersionList_Impl( *pRetrMedium );
 
     // an interaction handler here can acquire only in case of GUI Saving
     // and should be removed after the saving is done

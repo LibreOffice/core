@@ -71,6 +71,18 @@ bool IsReadOnly( EOption eOption )
         case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
             bReadonly = officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::isReadOnly();
             break;
+        case SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo:
+            bReadonly = officecfg::Office::Common::Security::Scripting::KeepRedlineInfoOnSaving::isReadOnly();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo:
+            bReadonly = officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::isReadOnly();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo:
+            bReadonly = officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::isReadOnly();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
+            bReadonly = officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::isReadOnly();
+            break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             bReadonly = officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::isReadOnly();
             break;
@@ -301,6 +313,18 @@ bool IsOptionSet( EOption eOption )
         case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
             bSet = officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::get();
             break;
+        case SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo:
+            bSet = officecfg::Office::Common::Security::Scripting::KeepRedlineInfoOnSaving::get();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo:
+            bSet = officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::get();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo:
+            bSet = officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::get();
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
+            bSet = officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::get();
+            break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             bSet = officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::get();
             break;
@@ -337,6 +361,18 @@ void SetOption( EOption eOption, bool bValue )
             break;
         case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
              officecfg::Office::Common::Security::Scripting::RemovePersonalInfoOnSaving::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo:
+             officecfg::Office::Common::Security::Scripting::KeepRedlineInfoOnSaving::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo:
+             officecfg::Office::Common::Security::Scripting::KeepDocUserInfoOnSaving::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo:
+             officecfg::Office::Common::Security::Scripting::KeepNoteAuthorDateInfoOnSaving::set(bValue, xChanges);
+            break;
+        case SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo:
+             officecfg::Office::Common::Security::Scripting::KeepDocVersionInfoOnSaving::set(bValue, xChanges);
             break;
         case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
              officecfg::Office::Common::Security::Scripting::RecommendPasswordProtection::set(bValue, xChanges);
