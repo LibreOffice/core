@@ -26,6 +26,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 
@@ -140,97 +141,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
     if (offset < 0 || offset > pRXText->getCharacterCount() )
         return E_FAIL;
 
-    OUStringBuffer strAttrs("Version:1;");
 
-    Sequence <css::beans::PropertyValue> pValues = pRXText->getCharacterAttributes(offset, Sequence<OUString>());
-    int nCount = pValues.getLength();
-
-    sal_Int16 numberingLevel = 0;
-    OUString numberingPrefix;
-    Any anyNumRule;
-    bool bHaveNumberingPrefixAttr = false;
-    bool bHaveNumberingLevel = false;
-    bool bHaveNumberingRules = false;
-    for(int i =0; i<nCount; i++)
-    {
-
-        const css::beans::PropertyValue &pValue = pValues[i];
-        if(pValue.Name == "NumberingLevel")
-        {
-            if (pValue.Value != Any())
-                pValue.Value >>= numberingLevel;
-            else
-                numberingLevel = -1;
-            bHaveNumberingLevel = true;
-            continue;
-        }
-        if(pValue.Name == "NumberingPrefix")
-        {
-            pValue.Value >>=numberingPrefix;
-            bHaveNumberingPrefixAttr = true;
-            continue;
-        }
-        if(pValue.Name == "NumberingRules")
-        {
-            bHaveNumberingRules = true;
-            anyNumRule = pValue.Value;
-            continue;
-        }
-        if (bHaveNumberingLevel && bHaveNumberingRules && bHaveNumberingPrefixAttr)
-        {
-            strAttrs.append(';');
-            numberingPrefix = numberingPrefix.replaceAll(u"\\", u"\\\\")
-                                  .replaceAll(u";", u"\\;")
-                                  .replaceAll(u"=", u"\\=")
-                                  .replaceAll(u",", u"\\,")
-                                  .replaceAll(u":", u"\\:");
-
-            strAttrs.append(CMAccessible::get_String4Numbering(anyNumRule,numberingLevel,numberingPrefix));
-            bHaveNumberingLevel = false;
-            bHaveNumberingRules = false;
-        }
-        if( (bHaveNumberingPrefixAttr && i > 1 ) ||
-            (!bHaveNumberingPrefixAttr && i > 0 ) ) //element 0 is NumberingPrefix, not write alone
-        {
-            strAttrs.append(';');
-        }
-        strAttrs.append(pValue.Name + ":");
-
-        if (pValue.Name == "CharBackColor" ||
-                pValue.Name == "CharColor" ||
-                pValue.Name == "CharUnderlineColor" )
-        {
-            unsigned long nColor;
-            pValue.Value >>= nColor;
-            strAttrs.append('#');
-            OUString const hex = OUString::number(nColor, 16).toAsciiUpperCase();
-            for (sal_Int32 j = hex.getLength(); j < 8; ++j) {
-                strAttrs.append('0');
-            }
-            strAttrs.append(hex);
-        }
-        else
-        {
-            strAttrs.append(CMAccessible::get_StringFromAny(pValue.Value));
-        }
-    }
-    strAttrs.append(';');
+    const OUString sAttrs = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(pRXText, offset, *startOffset, *endOffset);
 
     if(*textAttributes)
         SysFreeString(*textAttributes);
-    *textAttributes = SysAllocString(o3tl::toW(strAttrs.makeStringAndClear().getStr()));
-
-    if (offset < pRXText->getCharacterCount())
-    {
-        TextSegment textSeg = pRXText->getTextAtIndex(offset, AccessibleTextType::ATTRIBUTE_RUN);
-        *startOffset = textSeg.SegmentStart;
-        *endOffset = textSeg.SegmentEnd;
-    }
-    else
-    {
-        *startOffset = offset;
-        *endOffset = offset;
-    }
+    *textAttributes = SysAllocString(o3tl::toW(sAttrs.getStr()));
 
     return S_OK;
 
