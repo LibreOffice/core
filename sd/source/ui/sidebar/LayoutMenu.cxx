@@ -82,7 +82,7 @@ struct snew_slide_value_info
 
 }
 
-constexpr OUStringLiteral EMPTY = u"";
+constexpr std::u16string_view EMPTY = u"";
 
 constexpr snew_slide_value_info notes[] =
 {
