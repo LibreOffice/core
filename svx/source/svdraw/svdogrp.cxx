@@ -174,11 +174,11 @@ SdrObjKind SdrObjGroup::GetObjIdentifier() const
 
 SdrLayerID SdrObjGroup::GetLayer() const
 {
-    bool b1st = true;
     SdrLayerID nLay = SdrObject::GetLayer();
-    const size_t nObjCount(GetObjCount());
-    for (size_t i=0; i<nObjCount; ++i) {
-        SdrLayerID nLay1(GetObj(i)->GetLayer());
+    bool b1st = true;
+    for (const rtl::Reference<SdrObject>& pObject : *this)
+    {
+        SdrLayerID nLay1(pObject->GetLayer());
         if (b1st) { nLay=nLay1; b1st = false; }
         else if (nLay1!=nLay) return SdrLayerID(0);
     }

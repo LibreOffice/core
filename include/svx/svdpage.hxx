@@ -225,10 +225,15 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 
+    typedef std::deque<rtl::Reference<SdrObject>> SdrObjectDeque;
+
+    SdrObjectDeque::const_iterator begin() const { return maList.begin(); }
+    SdrObjectDeque::const_iterator end() const { return maList.end(); }
+
 private:
     tools::Rectangle    maSdrObjListOutRect;
     tools::Rectangle    maSdrObjListSnapRect;
-    std::deque<rtl::Reference<SdrObject>> maList;
+    SdrObjectDeque maList;
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
     std::optional<std::vector<unotools::WeakReference<SdrObject>>> mxNavigationOrder;
