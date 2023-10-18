@@ -331,6 +331,7 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
     if( pNd->IsContentNode() && !dynamic_cast<SwUnoCursor*>(this) )
     {
         const SwContentFrame* pFrame = static_cast<const SwContentNode*>(pNd)->getLayoutFrame( rDoc.getIDocumentLayoutAccess().GetCurrentLayout() );
+        // ^ null
         if ( (SwCursorSelOverFlags::ChangePos & eFlags)   //allowed to change position if it's a bad one
             && pFrame && pFrame->isFrameAreaDefinitionValid()
             && !pFrame->getFrameArea().Height()     //a bad zero height position
@@ -400,9 +401,16 @@ bool SwCursor::IsSelOvr(SwCursorSelOverFlags const eFlags)
 
         if( !pFrame )
         {
-            DeleteMark();
-            RestoreSavePos();
-            return true; // we need a frame
+            assert(!m_vSavePos.empty());
+            SwContentNode const*const pSaveNode(rNds[m_vSavePos.back().nNode]->GetContentNode());
+            // if the old position already didn't have a frame, allow moving
+            // anyway, hope the caller can handle that
+            if (pSaveNode && pSaveNode->getLayoutFrame(rDoc.getIDocumentLayoutAccess().GetCurrentLayout()))
+            {
+                DeleteMark();
+                RestoreSavePos();
+                return true; // we need a frame
+            }
         }
     }
 
