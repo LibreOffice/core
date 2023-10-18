@@ -690,11 +690,9 @@ bool SwView::HasOnlyObj(SdrObject const *pSdrObj, SdrInventor eObjInventor) cons
     if (pSdrObj->IsGroupObject())
     {
         SdrObjList* pList = pSdrObj->GetSubList();
-        const size_t nCnt = pList->GetObjCount();
-
-        for (size_t i = 0; i < nCnt; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *pList)
         {
-            bRet = HasOnlyObj(pList->GetObj(i), eObjInventor);
+            bRet = HasOnlyObj(pObj.get(), eObjInventor);
             if (!bRet)
                 break;
         }

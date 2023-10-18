@@ -1380,14 +1380,15 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
             if ( bRet )
             {
                 const SdrPage* pPage = rIDDMA.GetDrawModel()->GetPage(0);
-                for(size_t a = pObj->GetOrdNum()+1; bRet && a < pPage->GetObjCount(); ++a)
+                for(auto it = pPage->begin() + pObj->GetOrdNum() + 1; it != pPage->end(); ++it)
                 {
-                    SdrObject *pCandidate = pPage->GetObj(a);
+                    SdrObject *pCandidate = it->get();
 
                     SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pCandidate);
                     if (pDrawObj && pDrawObj->GetCurrentBoundRect().Contains(rPt))
                     {
                         bRet = false;
+                        break;
                     }
                 }
             }
@@ -1412,8 +1413,8 @@ static bool lcl_IsControlGroup( const SdrObject *pObj )
     {
         bRet = true;
         const SdrObjList *pLst = pObjGroup->GetSubList();
-        for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
-            if( !::lcl_IsControlGroup( pLst->GetObj( i ) ) )
+        for (const rtl::Reference<SdrObject>& pChildObj : *pLst)
+            if( !::lcl_IsControlGroup( pChildObj.get() ) )
                 return false;
     }
     return bRet;

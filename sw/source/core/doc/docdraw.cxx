@@ -307,8 +307,8 @@ static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, std
                                                SdrObject* pSourceObjs)
 {
     if (auto pChildrenObjs = pSourceObjs->getChildrenOfSdrObject())
-        for (size_t i = 0; i < pChildrenObjs->GetObjCount(); ++i)
-            lcl_CollectTextBoxesForSubGroupObj(pTargetFormat, pTextBoxNode, pChildrenObjs->GetObj(i));
+        for (const rtl::Reference<SdrObject>& pSubObj : *pChildrenObjs)
+            lcl_CollectTextBoxesForSubGroupObj(pTargetFormat, pTextBoxNode, pSubObj.get());
     else
     {
         if (auto pTextBox = pTextBoxNode->GetTextBox(pSourceObjs))

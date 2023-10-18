@@ -4268,14 +4268,14 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
                     if (pModel)
                     {
                         SdrPage* pPage = pModel->GetPage(0);
-                        for (size_t i = 0; i < pPage->GetObjCount() && !bFound; ++i)
+                        for (const rtl::Reference<SdrObject>& pObj : *pPage)
                         {
-                            SdrObject* pObj = pPage->GetObj(i);
                             if (sParam == pObj->GetName())
                             {
                                 Reference<XPropertySet> xDrawingObject = new SwXDrawingObjectTarget(sParam);
                                 aRet <<= xDrawingObject;
                                 bFound = true;
+                                break;
                             }
                         }
                     }
@@ -4328,9 +4328,8 @@ Sequence< OUString > SwXLinkNameAccessWrapper::getElementNames()
                 aRet.realloc(nObjCount);
                 OUString* pResArr = aRet.getArray();
                 auto j = 0;
-                for (size_t i = 0; i < nObjCount; ++i)
+                for (const rtl::Reference<SdrObject>& pObj : *pPage)
                 {
-                    SdrObject* pObj = pPage->GetObj(i);
                     if (!pObj->GetName().isEmpty())
                         pResArr[j++] = pObj->GetName() + "|drawingobject";
                 }
@@ -4381,11 +4380,13 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
                     if (pModel)
                     {
                         SdrPage* pPage = pModel->GetPage(0);
-                        const size_t nObjCount = pPage->GetObjCount();
-                        for (size_t i = 0; i < nObjCount && !bRet; ++i)
+                        for (const rtl::Reference<SdrObject>& pObj : *pPage)
                         {
-                            if (sParam == pPage->GetObj(i)->GetName())
+                            if (sParam == pObj->GetName())
+                            {
                                 bRet = true;
+                                break;
+                            }
                         }
                     }
                 }

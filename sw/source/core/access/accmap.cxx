@@ -1998,13 +1998,12 @@ void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj)
     // but also by visibility checks in svx, then it doesn't return children.
     if (mpShapeMap && pParentObj && pParentObj->IsGroupObject())
     {
-        SdrObjList *const pChildren(pParentObj->GetSubList());
-        for (size_t i = 0; pChildren && i < pChildren->GetObjCount(); ++i)
-        {
-            SdrObject *const pChild(pChildren->GetObj(i));
-            assert(pChild);
-            RemoveContext(pChild);
-        }
+        if (SdrObjList *const pChildren = pParentObj->GetSubList())
+            for (const rtl::Reference<SdrObject>& pChild : *pChildren)
+            {
+                assert(pChild);
+                RemoveContext(pChild.get());
+            }
     }
 }
 //End

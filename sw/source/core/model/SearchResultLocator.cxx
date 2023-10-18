@@ -58,19 +58,15 @@ void SearchResultLocator::findOne(LocationResult& rResult, SearchIndexData const
         for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
         {
             SdrPage* pPage = pModel->GetPage(nPage);
-            for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+            for (const rtl::Reference<SdrObject>& pObject : *pPage)
             {
-                SdrObject* pObject = pPage->GetObj(nObject);
-                if (pObject)
+                if (pObject->GetName() == rSearchIndexData.maObjectName)
                 {
-                    if (pObject->GetName() == rSearchIndexData.maObjectName)
-                    {
-                        auto aRect = pObject->GetLogicRect();
-                        rResult.mbFound = true;
-                        rResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
-                                                          aRect.Left() + aRect.GetWidth(),
-                                                          aRect.Top() + aRect.GetHeight());
-                    }
+                    auto aRect = pObject->GetLogicRect();
+                    rResult.mbFound = true;
+                    rResult.maRectangles.emplace_back(aRect.Left(), aRect.Top(),
+                                                      aRect.Left() + aRect.GetWidth(),
+                                                      aRect.Top() + aRect.GetHeight());
                 }
             }
         }

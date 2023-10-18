@@ -617,12 +617,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                         if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
                             pObj))
                         {
-                            if (pObj->getChildrenOfSdrObject())
+                            if (SdrObjList* pObjList = pObj->getChildrenOfSdrObject())
                             {
-                                for (size_t i = 0;
-                                     i < pObj->getChildrenOfSdrObject()->GetObjCount(); ++i)
-                                    SwTextBoxHelper::changeAnchor(
-                                        &rFormat, pObj->getChildrenOfSdrObject()->GetObj(i));
+                                for (const rtl::Reference<SdrObject>& pChild : *pObjList)
+                                    SwTextBoxHelper::changeAnchor(&rFormat, pChild.get());
                             }
                             else
                                 SwTextBoxHelper::syncFlyFrameAttr(

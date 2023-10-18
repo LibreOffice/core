@@ -42,15 +42,11 @@ void ModelTraverser::traverse()
     for (sal_uInt16 nPage = 0; nPage < pModel->GetPageCount(); ++nPage)
     {
         SdrPage* pPage = pModel->GetPage(nPage);
-        for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+        for (const rtl::Reference<SdrObject>& pObject : *pPage)
         {
-            SdrObject* pObject = pPage->GetObj(nObject);
-            if (pObject)
+            for (auto& pNodeHandler : mpNodeHandler)
             {
-                for (auto& pNodeHandler : mpNodeHandler)
-                {
-                    pNodeHandler->handleSdrObject(pObject);
-                }
+                pNodeHandler->handleSdrObject(pObject.get());
             }
         }
     }

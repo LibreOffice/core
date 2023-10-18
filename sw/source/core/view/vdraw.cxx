@@ -212,14 +212,12 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
 
     OSL_ENSURE( m_pShell->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = m_pShell->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
-    const size_t nObjs = pPage->GetObjCount();
-    for( size_t nObj = 0; nObj < nObjs; ++nObj )
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        SdrObject *pObj = pPage->GetObj( nObj );
-        if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr )
+        if( dynamic_cast<const SwVirtFlyDrawObj*>( pObj.get()) ==  nullptr )
         {
             // Objects not anchored to the frame, do not need to be adjusted
-            const SwContact *pCont = GetUserCall(pObj);
+            const SwContact *pCont = GetUserCall(pObj.get());
             // this function might be called by the InsertDocument, when
             // a PageDesc-Attribute is set on a node. Then the SdrObject
             // must not have an UserCall.

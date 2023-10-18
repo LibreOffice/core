@@ -677,16 +677,14 @@ bool SwWrtShell::GotoDrawingObject(std::u16string_view rName)
         pDrawView->SdrEndTextEdit();
         pDrawView->UnmarkAll();
         SdrPage* pPage = getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
-        const size_t nCount = pPage->GetObjCount();
-        for (size_t i = 0; i < nCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *pPage)
         {
-            SdrObject* pObj = pPage->GetObj(i);
             if (pObj->GetName() == rName)
             {
                 SdrPageView* pPageView = pDrawView->GetSdrPageView();
                 if(pPageView)
                 {
-                    pDrawView->MarkObj(pObj, pPageView);
+                    pDrawView->MarkObj(pObj.get(), pPageView);
                     m_aNavigationMgr.addEntry(aPos);
                     EnterStdMode();
                     HideCursor();

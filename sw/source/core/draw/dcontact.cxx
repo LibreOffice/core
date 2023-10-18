@@ -320,9 +320,9 @@ void SwContact::MoveObjToLayer( const bool _bToVisible,
                 static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
         if ( pLst )
         {
-            for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
+            for (const rtl::Reference<SdrObject>& pObj : *pLst)
             {
-                MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
+                MoveObjToLayer( _bToVisible, pObj.get() );
             }
         }
     }
@@ -686,9 +686,9 @@ bool CheckControlLayer( const SdrObject *pObj )
     if (const SdrObjGroup *pObjGroup = dynamic_cast<const SdrObjGroup*>(pObj))
     {
         const SdrObjList *pLst = pObjGroup->GetSubList();
-        for ( size_t i = 0; i < pLst->GetObjCount(); ++i )
+        for (const rtl::Reference<SdrObject>& pChildObj : *pLst)
         {
-            if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
+            if ( ::CheckControlLayer( pChildObj.get() ) )
             {
                 // #i18447# - return correct value ;-)
                 return true;

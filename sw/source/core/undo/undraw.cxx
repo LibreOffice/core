@@ -203,12 +203,10 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
     {
         if (auto pChildren = pObj->getChildrenOfSdrObject())
         {
-            for (size_t idx = 0; idx < pChildren->GetObjCount(); idx++)
+            for (const rtl::Reference<SdrObject>& pChild : *pChildren)
             {
-                auto pChild = pChildren->GetObj(idx);
-
-                if (auto pTextBox = pOldTextBoxNode->GetTextBox(pChild))
-                    vTextBoxes.push_back(std::pair(pChild, pTextBox));
+                if (auto pTextBox = pOldTextBoxNode->GetTextBox(pChild.get()))
+                    vTextBoxes.push_back(std::pair(pChild.get(), pTextBox));
             }
         }
     }
@@ -407,11 +405,10 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 if (auto pChildren = pGroupObj->getChildrenOfSdrObject())
                 {
-                    for (size_t idx = 0; idx < pChildren->GetObjCount(); idx++)
+                    for (const rtl::Reference<SdrObject>& pChild : *pChildren)
                     {
-                        auto pChild = pChildren->GetObj(idx);
-                        if (auto pTextBox = pTxBxNd->GetTextBox(pChild))
-                            vTextBoxes.push_back(std::pair(pChild, pTextBox));
+                        if (auto pTextBox = pTxBxNd->GetTextBox(pChild.get()))
+                            vTextBoxes.push_back(std::pair(pChild.get(), pTextBox));
                     }
                 }
             }
@@ -471,9 +468,9 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         auto pMasterObj = m_pObjArray[0].pObj;
 
         if (auto pObjList = pMasterObj->getChildrenOfSdrObject())
-            for (size_t idx = 0; idx < pObjList->GetObjCount(); idx++)
+            for (const rtl::Reference<SdrObject>& pObj : *pObjList)
             {
-                vTextBoxes.push_back(std::pair(pObjList->GetObj(idx), pTextBoxNode->GetTextBox(pObjList->GetObj(idx))));
+                vTextBoxes.push_back(std::pair(pObj.get(), pTextBoxNode->GetTextBox(pObj.get())));
             }
     }
 

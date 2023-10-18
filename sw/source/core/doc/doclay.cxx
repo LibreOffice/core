@@ -1303,12 +1303,8 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
 
     const SdrObjList* pSub(rObj.GetSubList());
     assert(pSub && "IsGroupObject is implemented as GetSubList != nullptr");
-    const size_t nCount = pSub->GetObjCount();
-    for (size_t i = 0; i < nCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *pSub)
     {
-        SdrObject* pObj = pSub->GetObj(i);
-        if (!pObj)
-            continue;
         lcl_collectUsedNums(rSetFlags, nNmLen, *pObj, rCmpName);
     }
 }

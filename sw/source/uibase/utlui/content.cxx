@@ -984,10 +984,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
-                const size_t nCount = pPage->GetObjCount();
-                for( size_t i=0; i<nCount; ++i )
+                for (const rtl::Reference<SdrObject>& pTemp : *pPage)
                 {
-                    SdrObject* pTemp = pPage->GetObj(i);
                     // #i51726# - all drawing objects can be named now
                     if (!pTemp->GetName().isEmpty())
                     {
@@ -2258,14 +2256,12 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
             {
                 SwDrawModel* pDrawModel = m_pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                 SdrPage* pPage = pDrawModel->GetPage(0);
-                const size_t nCount = pPage->GetObjCount();
 
-                for( size_t i=0; i<nCount; ++i )
+                for (const rtl::Reference<SdrObject>& pTemp : *pPage)
                 {
-                    SdrObject* pTemp = pPage->GetObj(i);
                     if( pTemp->GetName() == pCnt->GetName())
                     {
-                        pRetObj = pTemp;
+                        pRetObj = pTemp.get();
                         break;
                     }
                 }
@@ -4443,7 +4439,6 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
                         SwDrawModel* pDrawModel = m_pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                         SdrPage* pPage = pDrawModel->GetPage(0);
-                        const size_t nCount = pPage->GetObjCount();
                         bool hasObjectMarked = false;
 
                         if (SdrObject* pObject = GetDrawingObjectsByContent(pCnt))
@@ -4456,10 +4451,9 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
 
                             }
                         }
-                        for( size_t i=0; i<nCount; ++i )
+                        for (const rtl::Reference<SdrObject>& pTemp : *pPage)
                         {
-                            SdrObject* pTemp = pPage->GetObj(i);
-                            bool bMark = pDrawView->IsObjMarked(pTemp);
+                            bool bMark = pDrawView->IsObjMarked(pTemp.get());
                             switch( pTemp->GetObjIdentifier() )
                             {
                                 case SdrObjKind::Group:
@@ -4489,7 +4483,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                                         SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
                                         if (pPV)
                                         {
-                                            pDrawView->MarkObj(pTemp, pPV, true);
+                                            pDrawView->MarkObj(pTemp.get(), pPV, true);
                                         }
                                     }
                             }
@@ -5975,15 +5969,14 @@ void SwContentTree::BringEntryToAttention(const weld::TreeIter& rEntry)
                 {
                     if (const SdrPage* pPage = pModel->GetPage(0))
                     {
-                        if (const size_t nCount = pPage->GetObjCount())
+                        if (pPage->GetObjCount())
                         {
                             std::vector<const SdrObject*> aSdrObjectArr;
-                            for (size_t i = 0; i < nCount; ++i)
+                            for (const rtl::Reference<SdrObject>& pObject : *pPage)
                             {
-                                const SdrObject* pObject = pPage->GetObj(i);
                                 if (pObject && !pObject->GetName().isEmpty() &&
                                         rIDDMA.IsVisibleLayerId(pObject->GetLayer()))
-                                    aSdrObjectArr.push_back(pObject);
+                                    aSdrObjectArr.push_back(pObject.get());
                             }
                             BringDrawingObjectsToAttention(aSdrObjectArr);
                         }
