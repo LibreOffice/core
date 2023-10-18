@@ -1942,9 +1942,13 @@ void StarBASIC::DetachAllDocBasicItems()
 // #118116 Implementation Collection object
 
 
+// [-loplugin:ostr]
 constexpr OUStringLiteral pCountStr = u"Count";
+// [-loplugin:ostr]
 constexpr OUStringLiteral pAddStr = u"Add";
+// [-loplugin:ostr]
 constexpr OUStringLiteral pItemStr = u"Item";
+// [-loplugin:ostr]
 constexpr OUStringLiteral pRemoveStr = u"Remove";
 constexpr sal_uInt16 nCountHash = SbxVariable::MakeHashCode(pCountStr);
 constexpr sal_uInt16 nAddHash = SbxVariable::MakeHashCode(pAddStr);
