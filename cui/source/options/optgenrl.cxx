@@ -79,6 +79,8 @@ namespace Lang
 
 struct
 {
+    // id of the lockimage
+    OUString pLockId;
     // id of the text
     OUString pTextId;
     // language flags (see Lang above):
@@ -87,18 +89,18 @@ struct
 }
 const vRowInfo[] =
 {
-    { "companyft",   Lang::All },
-    { "nameft",      Lang::All & ~Lang::Russian & ~Lang::Eastern },
-    { "rusnameft",   Lang::Russian },
-    { "eastnameft",  Lang::Eastern },
-    { "streetft",    Lang::All & ~Lang::Russian },
-    { "russtreetft", Lang::Russian },
-    { "icityft",     Lang::All & ~Lang::US },
-    { "cityft",      Lang::US },
-    { "countryft",   Lang::All },
-    { "titleft",     Lang::All },
-    { "phoneft",     Lang::All },
-    { "faxft",       Lang::All },
+    { "lockcompanyft",  "companyft",   Lang::All },
+    { "locknameft",     "nameft",      Lang::All & ~Lang::Russian & ~Lang::Eastern },
+    { "lockrusnameft",  "rusnameft",   Lang::Russian },
+    { "lockeastnameft", "eastnameft",  Lang::Eastern },
+    { "lockstreetft",   "streetft",    Lang::All & ~Lang::Russian },
+    { "lockrusstreetft","russtreetft", Lang::Russian },
+    { "lockicityft",    "icityft",     Lang::All & ~Lang::US },
+    { "lockcityft",     "cityft",      Lang::US },
+    { "lockcountryft",  "countryft",   Lang::All },
+    { "locktitleft",    "titleft",     Lang::All },
+    { "lockphoneft",    "phoneft",     Lang::All },
+    { "lockfaxft",      "faxft",       Lang::All },
 };
 
 
@@ -166,14 +168,17 @@ const vFieldInfo[] =
 
 struct SvxGeneralTabPage::Row
 {
+    // row lockdown icon
+    std::unique_ptr<weld::Widget> xLockImg;
     // row label
     std::unique_ptr<weld::Label> xLabel;
     // first and last field in the row (last is exclusive)
     unsigned nFirstField, nLastField;
 
 public:
-    explicit Row (std::unique_ptr<weld::Label> xLabel_)
-        : xLabel(std::move(xLabel_))
+    explicit Row (std::unique_ptr<weld::Widget> xLockImg_, std::unique_ptr<weld::Label> xLabel_)
+        : xLockImg(std::move(xLockImg_))
+        , xLabel(std::move(xLabel_))
         , nFirstField(0)
         , nLastField(0)
     {
@@ -210,10 +215,16 @@ public:
 SvxGeneralTabPage::SvxGeneralTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "cui/ui/optuserpage.ui", "OptUserPage", &rCoreSet)
     , m_xUseDataCB(m_xBuilder->weld_check_button("usefordocprop"))
+    , m_xUseDataImg(m_xBuilder->weld_widget("lockusefordocprop"))
     , m_xCryptoFrame(m_xBuilder->weld_widget( "cryptography"))
     , m_xSigningKeyLB(m_xBuilder->weld_combo_box("signingkey"))
+    , m_xSigningKeyFT(m_xBuilder->weld_label("signingkeylabel"))
+    , m_xSigningKeyImg(m_xBuilder->weld_widget("locksigningkey"))
     , m_xEncryptionKeyLB(m_xBuilder->weld_combo_box("encryptionkey"))
+    , m_xEncryptionKeyFT(m_xBuilder->weld_label("encryptionkeylabel"))
+    , m_xEncryptionKeyImg(m_xBuilder->weld_widget("lockencryptionkey"))
     , m_xEncryptToSelfCB(m_xBuilder->weld_check_button("encrypttoself"))
+    , m_xEncryptToSelfImg(m_xBuilder->weld_widget("lockencrypttoself"))
 {
     InitControls();
 #if HAVE_FEATURE_GPGME
@@ -258,7 +269,7 @@ void SvxGeneralTabPage::InitControls ()
         if (!(vRowInfo[iRow].nLangFlags & LangBit))
             continue;
         // creating row
-        vRows.push_back(std::make_shared<Row>(
+        vRows.push_back(std::make_shared<Row>(m_xBuilder->weld_widget(vRowInfo[iRow].pLockId),
             m_xBuilder->weld_label(vRowInfo[iRow].pTextId)));
         Row& rRow = *vRows.back();
         // fields in the row
@@ -497,13 +508,33 @@ void SvxGeneralTabPage::SetData_Impl()
             bEnableLabel = bEnableLabel || bEnableEdit;
         }
         rRow.xLabel->set_sensitive(bEnableLabel);
+        rRow.xLockImg->set_visible(!bEnableLabel);
     }
 
     // saving
     for (auto const & i: vFields)
         i->xEdit->save_value();
 
+    //enabling and disabling remaining fields
+    bool bEnable = !officecfg::Office::Common::Save::Document::UseUserData::isReadOnly();
+    m_xUseDataCB->set_sensitive(bEnable);
+    m_xUseDataImg->set_visible(!bEnable);
+
 #if HAVE_FEATURE_GPGME
+    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::SigningKey);
+    m_xSigningKeyLB->set_sensitive(bEnable);
+    m_xSigningKeyFT->set_sensitive(bEnable);
+    m_xSigningKeyImg->set_visible(!bEnable);
+
+    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::EncryptionKey);
+    m_xEncryptionKeyLB->set_sensitive(bEnable);
+    m_xEncryptionKeyFT->set_sensitive(bEnable);
+    m_xEncryptionKeyImg->set_visible(!bEnable);
+
+    bEnable = !aUserOpt.IsTokenReadonly(UserOptToken::EncryptToSelf);
+    m_xEncryptToSelfCB->set_sensitive(bEnable);
+    m_xEncryptToSelfImg->set_visible(!bEnable);
+
     OUString aSK = aUserOpt.GetToken(UserOptToken::SigningKey);
     aSK.isEmpty() ? m_xSigningKeyLB->set_active( 0 ) //i.e. 'No Key'
                   : m_xSigningKeyLB->set_active_text( aSK );
