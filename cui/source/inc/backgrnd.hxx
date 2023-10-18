@@ -37,23 +37,28 @@ class SvxBrushItem;
 
 class SvxBkgTabPage : public SvxAreaTabPage
 {
-    static const WhichRangesContainer pPageRanges;
+    static const WhichRangesContainer pBkgRanges;
 
     std::unique_ptr<weld::ComboBox> m_xTblLBox;
-    bool        bHighlighting       : 1;
-    bool        bCharBackColor      : 1;
-    SfxItemSet maSet;
-    std::unique_ptr<SfxItemSet> m_pResetSet;
+    bool m_bHighlighting = false;
+    bool m_bCharBackColor = false;
+
+    // m_aAttrSet is used to convert between SvxBrushItem and XFILL item attributes and also to
+    // allow for cell, row, and table backgrounds to be set in one Table dialog opening.
+    SfxItemSet m_aAttrSet;
 
     sal_Int32 m_nActPos = -1;
 
     DECL_LINK(TblDestinationHdl_Impl, weld::ComboBox&, void);
+
+    void SetActiveTableDestinationBrushItem();
+
 public:
     SvxBkgTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);
     virtual ~SvxBkgTabPage() override;
 
     // returns the area of the which-values
-    static WhichRangesContainer GetRanges() { return pPageRanges; }
+    static WhichRangesContainer GetRanges() { return pBkgRanges; }
 
     static std::unique_ptr<SfxTabPage> Create( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) override;

@@ -143,7 +143,6 @@ static void sw_CharDialog(SwWrtShell& rWrtSh, bool bUseDialog, bool bApplyToPara
             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
             RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
             RES_BACKGROUND, RES_SHADOW,
-            XATTR_FILLSTYLE, XATTR_FILLCOLOR,
             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
             SID_HTML_MODE, SID_HTML_MODE,
             SID_ATTR_CHAR_WIDTH_FIT_TO_LINE, SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,

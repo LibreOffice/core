@@ -253,7 +253,6 @@ protected:
     void SetOptimalSize(weld::DialogController* pController);
 
     void SelectFillType( weld::Toggleable& rButton, const SfxItemSet* _pSet = nullptr );
-    SfxTabPage* GetFillTabPage() { return m_xFillTabPage.get(); }
 
     bool IsBtnClicked() const { return m_bBtnClicked; }
 
