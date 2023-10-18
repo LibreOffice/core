@@ -2455,6 +2455,26 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="PasswordPolicy" oor:type="xs:string">
+          <info>
+            <desc>Specifies the password policy regular expression to be forced
+            when a password is being entered. If the password doesn't match the
+            regular expression it is denied.
+
+            For example a policy that enforces minimum eight characters, at
+            least one uppercase, one lowercase letter and one number would be:
+            ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$
+            </desc>
+          </info>
+        </prop>
+        <prop oor:name="PasswordPolicyErrorMessage" oor:type="xs:string" oor:localized="true" oor:nillable="false">
+          <info>
+            <desc>Specifies the displayed error message when the entered
+            password doesn't meet the password policy. Should describe the
+            password policy.</desc>
+          </info>
+          <value>Password does not meet the password policy.</value>
+        </prop>
         <prop oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether ctrl-click is required to follow

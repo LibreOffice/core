@@ -25,6 +25,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
 {
     std::unique_ptr<weld::Entry> m_xPasswdToOpenED;
     std::unique_ptr<weld::Label> m_xPasswdToOpenInd;
+    std::unique_ptr<weld::LevelBar> m_xPasswdToOpenBar;
     std::unique_ptr<weld::Entry> m_xReenterPasswdToOpenED;
     std::unique_ptr<weld::Label> m_xReenterPasswdToOpenInd;
     std::unique_ptr<weld::Expander> m_xOptionsExpander;
@@ -33,6 +34,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     std::unique_ptr<weld::Label> m_xPasswdToModifyFT;
     std::unique_ptr<weld::Entry> m_xPasswdToModifyED;
     std::unique_ptr<weld::Label> m_xPasswdToModifyInd;
+    std::unique_ptr<weld::LevelBar> m_xPasswdToModifyBar;
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyFT;
     std::unique_ptr<weld::Entry> m_xReenterPasswdToModifyED;
     std::unique_ptr<weld::Label> m_xReenterPasswdToModifyInd;
@@ -42,6 +44,7 @@ class PasswordToOpenModifyDialog : public SfxDialogController
     OUString                    m_aTwoMismatch;
     OUString                    m_aInvalidStateForOkButton;
     OUString                    m_aInvalidStateForOkButton_v2;
+    std::optional<OUString>     m_oPasswordPolicy;
 
     int                         m_nMaxPasswdLen;
     bool                        m_bIsPasswordToModify;
