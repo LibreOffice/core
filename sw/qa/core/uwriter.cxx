@@ -762,7 +762,7 @@ void SwDocTest::testSwScanner()
         aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 5);   //set end of selection to fifth char of current node
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         //"real underlying text should be the same"
-        CPPUNIT_ASSERT_EQUAL(pTextNode->GetText(), OUString(aString));
+        CPPUNIT_ASSERT_EQUAL(OUString(aString), pTextNode->GetText());
 
         aDocStat.Reset();
         pTextNode->SetWordCountDirty(true);
