@@ -85,9 +85,6 @@ struct AsciiPropertyValue
     }
 };
 
-class ODatabaseContext;
-class OSharedConnectionManager;
-
 // ODatabaseModelImpl
 typedef ::utl::SharedUNOComponent< css::embed::XStorage >  SharedStorage;
 
