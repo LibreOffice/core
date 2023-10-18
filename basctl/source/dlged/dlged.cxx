@@ -516,16 +516,13 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle
                 pDlgEdForm->StartListening();
 
                 // set position and size of controls
-                if (const size_t nObjCount = pDlgEdPage->GetObjCount())
+                for (const rtl::Reference<SdrObject>& pObj : *pDlgEdPage)
                 {
-                    for (size_t i = 0 ; i < nObjCount ; ++i)
+                    if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj.get()))
                     {
-                        if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pDlgEdPage->GetObj(i)))
+                        if (!dynamic_cast<DlgEdForm*>(pDlgEdObj))
                         {
-                            if (!dynamic_cast<DlgEdForm*>(pDlgEdObj))
-                            {
-                                pDlgEdObj->SetRectFromProps();
-                            }
+                            pDlgEdObj->SetRectFromProps();
                         }
                     }
                 }

@@ -85,11 +85,10 @@ AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWin
         return;
 
     SdrPage& rPage = m_pDialogWindow->GetPage();
-    const size_t nCount = rPage.GetObjCount();
 
-    for ( size_t i = 0; i < nCount; ++i )
+    for (const rtl::Reference<SdrObject>& pObj : rPage)
     {
-        if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
+        if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj.get()))
         {
             ChildDescriptor aDesc( pDlgEdObj );
             if ( IsChildVisible( aDesc ) )
@@ -267,8 +266,8 @@ void AccessibleDialogWindow::UpdateChildren()
     if ( m_pDialogWindow )
     {
         SdrPage& rPage = m_pDialogWindow->GetPage();
-        for ( size_t i = 0, nCount = rPage.GetObjCount(); i < nCount; ++i )
-            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(rPage.GetObj(i)))
+        for (const rtl::Reference<SdrObject>& pObj : rPage)
+            if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj.get()))
                 UpdateChild( ChildDescriptor( pDlgEdObj ) );
     }
 }

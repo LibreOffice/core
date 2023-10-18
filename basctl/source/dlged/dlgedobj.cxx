@@ -1406,10 +1406,9 @@ void DlgEdForm::UpdateStep()
 
     if ( pSdrPage )
     {
-        const size_t nObjCount = pSdrPage->GetObjCount();
-        for ( size_t i = 0 ; i < nObjCount ; i++ )
+        for (const rtl::Reference<SdrObject>& pObj : *pSdrPage)
         {
-            DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pSdrPage->GetObj(i));
+            DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj.get());
             if (pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj))
                 pDlgEdObj->UpdateStep();
         }

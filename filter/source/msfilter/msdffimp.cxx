@@ -5181,9 +5181,8 @@ void SvxMSDffManager::NotifyFreeObj(SvxMSDffClientData& rData, SdrObject* pObj)
     if (SdrObjGroup* pGroup = dynamic_cast<SdrObjGroup*>(pObj))
     {
         SdrObjList* pSubList = pGroup->GetSubList();
-        size_t nObjCount = pSubList->GetObjCount();
-        for (size_t i = 0; i < nObjCount; ++i)
-            NotifyFreeObj(rData, pSubList->GetObj(i));
+        for (const rtl::Reference<SdrObject>& pChildObj : *pSubList)
+            NotifyFreeObj(rData, pChildObj.get());
     }
 
     rData.NotifyFreeObj(pObj);

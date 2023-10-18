@@ -293,17 +293,13 @@ SdrObject* DrawModelWrapper::getNamedSdrObject( const OUString& rObjectCID, SdrO
 {
     if(!pSearchList || rObjectCID.isEmpty())
         return nullptr;
-    const size_t nCount = pSearchList->GetObjCount();
-    for( size_t nN=0; nN<nCount; ++nN )
+    for (const rtl::Reference<SdrObject>& pObj : *pSearchList)
     {
-        SdrObject* pObj = pSearchList->GetObj(nN);
-        if(!pObj)
-            continue;
         if( ObjectIdentifier::areIdenticalObjects( rObjectCID, pObj->GetName() ) )
-            return pObj;
-        pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, pObj->GetSubList() );
-        if(pObj)
-            return pObj;
+            return pObj.get();
+        SdrObject* pNamedObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, pObj->GetSubList() );
+        if(pNamedObj)
+            return pNamedObj;
     }
     return nullptr;
 }
