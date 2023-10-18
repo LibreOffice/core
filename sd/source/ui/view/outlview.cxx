@@ -857,16 +857,14 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
  */
 SdrTextObj* OutlineView::GetTitleTextObject(SdrPage const * pPage)
 {
-    const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
 
-    for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
     {
-        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
             pObject->GetObjIdentifier() == SdrObjKind::TitleText)
         {
-            pResult = static_cast<SdrTextObj*>(pObject);
+            pResult = static_cast<SdrTextObj*>(pObject.get());
             break;
         }
     }
@@ -878,16 +876,14 @@ SdrTextObj* OutlineView::GetTitleTextObject(SdrPage const * pPage)
  */
 SdrTextObj* OutlineView::GetOutlineTextObject(SdrPage const * pPage)
 {
-    const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
 
-    for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
     {
-        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
             pObject->GetObjIdentifier() == SdrObjKind::OutlineText)
         {
-            pResult = static_cast<SdrTextObj*>(pObject);
+            pResult = static_cast<SdrTextObj*>(pObject.get());
             break;
         }
     }

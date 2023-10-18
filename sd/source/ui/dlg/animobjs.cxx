@@ -759,9 +759,8 @@ void AnimationWindow::AddObj (::sd::View& rView )
             // several objects
             SdrObjList* pObjList = static_cast<SdrObjGroup*>(pObject)->GetSubList();
 
-            for( size_t nObject = 0; nObject < pObjList->GetObjCount(); ++nObject )
+            for (const rtl::Reference<SdrObject>& pSnapShot : *pObjList)
             {
-                SdrObject* pSnapShot(pObjList->GetObj(nObject));
                 BitmapEx aBitmapEx(SdrExchangeView::GetObjGraphic(*pSnapShot).GetBitmapEx());
                 size_t nIndex = m_nCurrentFrame + 1;
                 m_FrameList.insert(

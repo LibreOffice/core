@@ -411,13 +411,11 @@ void box2DWorld::initiateAllShapesAsStaticBodies(
             {
                 // if it is a group object iterate over its children and flag them
                 SdrObjList* aObjList = pTemp->GetSubList();
-                const size_t nObjCount(aObjList->GetObjCount());
 
-                for (size_t nObjIndex = 0; nObjIndex < nObjCount; ++nObjIndex)
+                for (const rtl::Reference<SdrObject>& pGroupMember : *aObjList)
                 {
-                    SdrObject* pGroupMember(aObjList->GetObj(nObjIndex));
                     aXShapeBelongsToAGroup.insert(
-                        std::make_pair(GetXShapeForSdrObject(pGroupMember), true));
+                        std::make_pair(GetXShapeForSdrObject(pGroupMember.get()), true));
                 }
             }
         }

@@ -139,12 +139,8 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
     std::vector<StyleReplaceData> aReplList;
     bool bListsFilled = false;
 
-    const size_t nObjCount = GetObjCount();
-
-    for (size_t nObj = 0; nObj < nObjCount; ++nObj)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
-        auto pObj = GetObj(nObj);
-
         if (pObj->GetObjInventor() == SdrInventor::Default &&
             pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
         {
@@ -233,7 +229,7 @@ void SdPage::SetPresentationLayout(std::u16string_view rLayoutName,
         }
         else
         {
-            SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj));
+            SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj.get()));
 
             if (pSheet)
                 pObj->SetStyleSheet(pSheet, true);
@@ -610,10 +606,9 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
 
 void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const
 {
-    for( size_t i = 0; i < GetObjCount(); ++i)
+    for (const rtl::Reference<SdrObject>& obj : *this)
     {
-        SdrObject* obj = GetObj(i);
-        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(obj))
+        if( SdrGrafObj* grafObj = dynamic_cast<SdrGrafObj*>(obj.get()))
             if(!grafObj->GetGraphic().isAvailable())
                 graphics.push_back( const_cast<Graphic*>(&grafObj->GetGraphic()));
         if( const Graphic* fillGraphic = obj->getFillGraphic())

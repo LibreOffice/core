@@ -316,11 +316,8 @@ void SdTransferable::CreateData()
         Point   aOrigin( maVisArea.TopLeft() );
         Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
-        for( size_t nObj = 0, nObjCount = pPage->GetObjCount(); nObj < nObjCount; ++nObj )
-        {
-            SdrObject* pObj = pPage->GetObj( nObj );
+        for (const rtl::Reference<SdrObject>& pObj : *pPage)
             pObj->NbcMove( aVector );
-        }
     }
     else
         maVisArea.SetSize( pPage->GetSize() );

@@ -2595,10 +2595,8 @@ SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage const * pPage )
 {
     if( pPage )
     {
-        const size_t nCount = pPage->GetObjCount();
-        for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
+        for (const rtl::Reference<SdrObject>& pObj : *pPage)
         {
-            SdrObject* pObj = pPage->GetObj( nIndex );
             sal_uInt32 nNavPos = pObj->GetNavigationPosition();
             DBG_ASSERT( !maShapes[nNavPos].is(), "sd::SdNavigationOrderAccess::SdNavigationOrderAccess(), duplicate navigation positions from core!" );
             maShapes[nNavPos].set( pObj->getUnoShape(), UNO_QUERY );

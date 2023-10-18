@@ -338,10 +338,9 @@ public:
         for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
         {
             SdPage* pMasterPage = m_rDrawViewShell.GetDoc()->GetMasterSdPage(nPageIndex, PageKind::Standard);
-            for (size_t nObject = 0; nObject < pMasterPage->GetObjCount(); ++nObject)
+            for (const rtl::Reference<SdrObject>& pObject : *pMasterPage)
             {
-                SdrObject* pObject = pMasterPage->GetObj(nObject);
-                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
+                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject.get());
                 if (pRectObject && pRectObject->GetTextKind() == SdrObjKind::Text)
                 {
                     OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();
@@ -377,10 +376,9 @@ private:
         for (sal_uInt16 nPageIndex = 0; nPageIndex < nCount; ++nPageIndex)
         {
             SdPage* pMasterPage = m_rDrawViewShell.GetDoc()->GetMasterSdPage(nPageIndex, PageKind::Standard);
-            for (size_t nObject = 0; nObject < pMasterPage->GetObjCount(); ++nObject)
+            for (const rtl::Reference<SdrObject>& pObject : *pMasterPage)
             {
-                SdrObject* pObject = pMasterPage->GetObj(nObject);
-                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject);
+                SdrRectObj* pRectObject = dynamic_cast<SdrRectObj*>(pObject.get());
                 if (pRectObject && pRectObject->GetTextKind() == SdrObjKind::Text)
                 {
                     OutlinerParaObject* pOutlinerParagraphObject = pRectObject->GetOutlinerParaObject();

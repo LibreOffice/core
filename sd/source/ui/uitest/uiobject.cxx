@@ -58,13 +58,9 @@ SdrObject* getObject(const VclPtr<sd::Window>& xWindow, std::u16string_view rNam
     if (!pPage)
         return nullptr;
 
-    size_t nObjs = pPage->GetObjCount();
-    for (size_t i = 0; i < nObjs; ++i)
-    {
-        SdrObject* pObj = pPage->GetObj(i);
-        if (rName == getObjectName(pObj))
-            return pObj;
-    }
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
+        if (rName == getObjectName(pObj.get()))
+            return pObj.get();
 
     return nullptr;
 }
@@ -162,12 +158,8 @@ std::set<OUString> ImpressWindowUIObject::get_children() const
     if (!pPage)
         return aRet;
 
-    size_t nObjs = pPage->GetObjCount();
-    for (size_t i = 0; i < nObjs; ++i)
-    {
-        SdrObject* pObject = pPage->GetObj(i);
-        aRet.insert(getObjectName(pObject));
-    }
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
+        aRet.insert(getObjectName(pObject.get()));
 
     return aRet;
 }

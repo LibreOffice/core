@@ -1067,10 +1067,8 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         {
             pPage->SetLayoutName(aPageLayoutName);
 
-            for (size_t nObj = 0; nObj < pPage->GetObjCount(); ++nObj)
+            for (const rtl::Reference<SdrObject>& pObj : *pPage)
             {
-                SdrObject* pObj = pPage->GetObj(nObj);
-
                 if (pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     switch( pObj->GetObjIdentifier() )
@@ -1079,7 +1077,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case SdrObjKind::OutlineText:
                         case SdrObjKind::TitleText:
                         {
-                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
+                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj.get())->GetOutlinerParaObject();
 
                             if (pOPO)
                             {
@@ -1109,10 +1107,8 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
             pPage->SetLayoutName(aPageLayoutName);
             pPage->SetName(rNewName);
 
-            for (size_t nObj = 0; nObj < pPage->GetObjCount(); ++nObj)
+            for (const rtl::Reference<SdrObject>& pObj : *pPage)
             {
-                SdrObject* pObj = pPage->GetObj(nObj);
-
                 if (pObj->GetObjInventor() == SdrInventor::Default)
                 {
                     switch(pObj->GetObjIdentifier())
@@ -1121,7 +1117,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case SdrObjKind::OutlineText:
                         case SdrObjKind::TitleText:
                         {
-                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
+                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj.get())->GetOutlinerParaObject();
 
                             if (pOPO)
                             {

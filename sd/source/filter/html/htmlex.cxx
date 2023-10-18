@@ -534,16 +534,14 @@ void WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup const * pObjectGroup, Sd
 // get SdrTextObject with layout text of this page
 SdrTextObj* GetLayoutTextObject(SdrPage const * pPage)
 {
-    const size_t nObjectCount = pPage->GetObjCount();
     SdrTextObj*     pResult      = nullptr;
 
-    for (size_t nObject = 0; nObject < nObjectCount; ++nObject)
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
     {
-        SdrObject* pObject = pPage->GetObj(nObject);
         if (pObject->GetObjInventor() == SdrInventor::Default &&
             pObject->GetObjIdentifier() == SdrObjKind::OutlineText)
         {
-            pResult = static_cast<SdrTextObj*>(pObject);
+            pResult = static_cast<SdrTextObj*>(pObject.get());
             break;
         }
     }
@@ -579,10 +577,9 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
 {
     OUStringBuffer aStr;
 
-    for (size_t i = 0; i <pPage->GetObjCount(); ++i )
+    for (const rtl::Reference<SdrObject>& pObject : *pPage)
     {
-        SdrObject* pObject = pPage->GetObj(i);
-        PresObjKind eKind = pPage->GetPresObjKind(pObject);
+        PresObjKind eKind = pPage->GetPresObjKind(pObject.get());
 
         switch (eKind)
         {
@@ -590,12 +587,12 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
             {
                 if (pObject->GetObjIdentifier() == SdrObjKind::Group)
                 {
-                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject);
+                    SdrObjGroup* pObjectGroup = static_cast<SdrObjGroup*>(pObject.get());
                     WriteObjectGroup(aStr, pObjectGroup, pOutliner, false);
                 }
                 else if (pObject->GetObjIdentifier() == SdrObjKind::Table)
                 {
-                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
+                    SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
                     WriteTable(aStr, pTableObject, pOutliner);
                 }
                 else
@@ -610,7 +607,7 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
 
             case PresObjKind::Table:
             {
-                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject);
+                SdrTableObj* pTableObject = static_cast<SdrTableObj*>(pObject.get());
                 WriteTable(aStr, pTableObject, pOutliner);
             }
             break;
@@ -618,7 +615,7 @@ OUString CreateTextForPage(SdrOutliner* pOutliner, SdPage const * pPage,
             case PresObjKind::Text:
             case PresObjKind::Outline:
             {
-                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
+                SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject.get());
                 if (pTextObject->IsEmptyPresObj())
                     continue;
                 WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), bHeadLine);

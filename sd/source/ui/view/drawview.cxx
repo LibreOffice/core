@@ -117,24 +117,16 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
         SdrPage& rMasterPage = rPage.TRG_GetMasterPage();
-        size_t nObjCount = rMasterPage.GetObjCount();
-        for (size_t nObj = 0; nObj < nObjCount; ++nObj)
-        {
-            SdrObject* pObject = rMasterPage.GetObj(nObj);
-            SetMasterAttributes(pObject, rPage, rSet, pStShPool, bOk, bMaster, bSlide);
-        }
+        for (const rtl::Reference<SdrObject>& pObject : rMasterPage)
+            SetMasterAttributes(pObject.get(), rPage, rSet, pStShPool, bOk, bMaster, bSlide);
         return bOk;
     }
     if (mpDrawViewShell && bSlide)
     {
         SfxStyleSheetBasePool* pStShPool = mrDoc.GetStyleSheetPool();
         SdPage& rPage = *mpDrawViewShell->getCurrentPage();
-        size_t nObjCount = rPage.GetObjCount();
-        for (size_t nObj = 0; nObj < nObjCount; ++nObj)
-        {
-            SdrObject* pObject = rPage.GetObj(nObj);
-            SetMasterAttributes(pObject, rPage, rSet, pStShPool, bOk, bMaster, bSlide);
-        }
+        for (const rtl::Reference<SdrObject>& pObject : rPage)
+            SetMasterAttributes(pObject.get(), rPage, rSet, pStShPool, bOk, bMaster, bSlide);
         return bOk;
     }
 

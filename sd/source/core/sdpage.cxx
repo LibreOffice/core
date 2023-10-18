@@ -1809,7 +1809,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
     mbScaleObjects = bScaleAllObj;
-    SdrObject* pObj = nullptr;
     Point aRefPnt(0, 0);
     Size aNewPageSize(rNewPageSize);
     sal_Int32 nLeft  = rNewBorderRect.Left();
@@ -1859,16 +1858,16 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
     Fraction aFractX(aNewPageSize.Width(), nOldWidth);
     Fraction aFractY(aNewPageSize.Height(), nOldHeight);
 
-    const size_t nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
+    if (!mbScaleObjects)
+        return;
 
-    for (size_t nObj = 0; nObj < nObjCnt; ++nObj)
+    for (const rtl::Reference<SdrObject>& pObj : *this)
     {
         bool bIsPresObjOnMaster = false;
 
         // all Objects
-        pObj = GetObj(nObj);
 
-        if (mbMaster && IsPresObj(pObj))
+        if (mbMaster && IsPresObj(pObj.get()))
         {
             // There is a presentation object on the master page
             bIsPresObjOnMaster = true;
@@ -2012,7 +2011,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const ::tools::Rectangle& rN
                     }
                     else if ( eObjKind != SdrObjKind::TitleText   &&
                               eObjKind != SdrObjKind::OutlineText &&
-                              DynCastSdrTextObj( pObj ) !=  nullptr       &&
+                              DynCastSdrTextObj( pObj.get() ) !=  nullptr       &&
                               pObj->GetOutlinerParaObject() )
                     {
                         /******************************************************

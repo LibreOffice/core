@@ -62,15 +62,11 @@ public:
             SdrPage* pPage = m_pDocument->GetPage(nPage);
             if (pPage)
             {
-                for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
+                for (const rtl::Reference<SdrObject>& pObject : *pPage)
                 {
-                    SdrObject* pObject = pPage->GetObj(nObject);
-                    if (pObject)
+                    for (auto& pNodeHandler : m_pNodeHandler)
                     {
-                        for (auto& pNodeHandler : m_pNodeHandler)
-                        {
-                            pNodeHandler->handleSdrObject(pObject);
-                        }
+                        pNodeHandler->handleSdrObject(pObject.get());
                     }
                 }
             }

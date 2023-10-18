@@ -1634,15 +1634,15 @@ private:
                     continue;
 
                 SdrTextObj* pTextObj = nullptr;
-                size_t nObj (0);
 
-                while (pTextObj==nullptr && nObj < pPage->GetObjCount())
+                for (const rtl::Reference<SdrObject>& pObj : *pPage)
                 {
-                    SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == SdrObjKind::TitleText)
                     {
-                        pTextObj = DynCastSdrTextObj(pObj);
+                        pTextObj = DynCastSdrTextObj(pObj.get());
+                        if (pTextObj)
+                            break;
                     }
                 }
 
@@ -1658,15 +1658,15 @@ private:
                     pOutliner->Insert(OUString());
 
                 pTextObj = nullptr;
-                nObj = 0;
 
-                while (pTextObj==nullptr && nObj<pPage->GetObjCount())
+                for (const rtl::Reference<SdrObject>& pObj : *pPage)
                 {
-                    SdrObject* pObj = pPage->GetObj(nObj++);
                     if (pObj->GetObjInventor() == SdrInventor::Default
                         && pObj->GetObjIdentifier() == SdrObjKind::OutlineText)
                     {
-                        pTextObj = DynCastSdrTextObj(pObj);
+                        pTextObj = DynCastSdrTextObj(pObj.get());
+                        if (pTextObj)
+                            break;
                     }
                 }
 

@@ -154,13 +154,8 @@ void SdTransformOOo2xDocument::transformStyle( SfxStyleSheetBase& rSheet )
 
 void SdTransformOOo2xDocument::transformShapes( SdrObjList const & rShapes )
 {
-    const size_t nShapeCount = rShapes.GetObjCount();
-    for( size_t nShape = 0; nShape < nShapeCount; ++nShape )
-    {
-        SdrObject* pObj = rShapes.GetObj( nShape );
-        if( pObj )
-            transformShape( *pObj );
-    }
+    for (const rtl::Reference<SdrObject>& pObj : rShapes)
+        transformShape( *pObj );
 }
 
 void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )

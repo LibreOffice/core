@@ -244,10 +244,8 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
         // number
         if (pPage && pPage->GetPageKind() == PageKind::Notes)
         {
-            const size_t nObjCount = pPage->GetObjCount();
-            for (size_t nObj = 0; nObj < nObjCount; ++nObj)
+            for (const rtl::Reference<SdrObject>& pObj : *pPage)
             {
-                SdrObject* pObj = pPage->GetObj(nObj);
                 if (pObj->GetObjIdentifier() == SdrObjKind::Page &&
                     pObj->GetObjInventor() == SdrInventor::Default)
                 {
@@ -257,7 +255,7 @@ void SdDrawDocument::UpdatePageObjectsInNotes(sal_uInt16 nStartPos)
                     SAL_WARN_IF(nPage <= 1, "sd", "Page object must not be a handout.");
 
                     if (nStartPos > 0 && nPage > 1)
-                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetPage(nPage - 1));
+                        static_cast<SdrPageObj*>(pObj.get())->SetReferencedPage(GetPage(nPage - 1));
                 }
             }
         }
