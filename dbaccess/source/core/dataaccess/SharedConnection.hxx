@@ -34,11 +34,10 @@ namespace dbaccess
     // datasource is asked for not isolated connection.
     typedef ::cppu::WeakComponentImplHelper< css::sdbc::XConnection
                                            > OSharedConnection_BASE;
-    typedef ::connectivity::OConnectionWrapper  OSharedConnection_BASE2;
 
     class OSharedConnection :   public ::cppu::BaseMutex
                               , public OSharedConnection_BASE
-                              , public OSharedConnection_BASE2
+                              , public ::connectivity::OConnectionWrapper
     {
     protected:
         virtual void SAL_CALL disposing() override;
@@ -54,7 +53,7 @@ namespace dbaccess
         {
             return ::comphelper::concatSequences(
                 OSharedConnection_BASE::getTypes(),
-                OSharedConnection_BASE2::getTypes()
+                ::connectivity::OConnectionWrapper::getTypes()
             );
         }
 
@@ -62,7 +61,7 @@ namespace dbaccess
         {
             css::uno::Any aReturn = OSharedConnection_BASE::queryInterface(_rType);
             if ( !aReturn.hasValue() )
-                aReturn = OSharedConnection_BASE2::queryInterface(_rType);
+                aReturn = ::connectivity::OConnectionWrapper::queryInterface(_rType);
             return aReturn;
         }
 
