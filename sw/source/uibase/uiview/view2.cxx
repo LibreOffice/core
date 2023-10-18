@@ -441,11 +441,22 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 
     const SfxStringItem* pName = rReq.GetArg<SfxStringItem>(SID_INSERT_GRAPHIC);
     bool bShowError = !pName;
-    if( pName
+
+    bool bHaveName = pName != nullptr;
 #if HAVE_FEATURE_DESKTOP
-        || (!Application::IsHeadlessModeEnabled() && ERRCODE_NONE == pFileDlg->Execute())
+    if (!bHaveName && !Application::IsHeadlessModeEnabled())
+    {
+        // execute file dialog, without capturing mouse (tdf#156033)
+        vcl::Window* pWin = GetWindow();
+        const bool bMouseCaptured = pWin && pWin->IsMouseCaptured();
+        if (bMouseCaptured)
+            pWin->ReleaseMouse();
+        bHaveName =  ERRCODE_NONE == pFileDlg->Execute();
+        if (bMouseCaptured)
+            pWin->CaptureMouse();
+    }
 #endif
-        )
+    if (bHaveName)
     {
 
         OUString aFileName, aFilterName;
