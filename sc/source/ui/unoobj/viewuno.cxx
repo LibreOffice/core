@@ -1119,15 +1119,12 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
 
                 double fHitLog = pActiveWin->PixelToLogic(Size(pDrawView->GetHitTolerancePixel(),0)).Width();
 
-                const size_t nCount(pDrawPage->GetObjCount());
-                bool bFound(false);
-                for (size_t i = 0; i < nCount && !bFound; ++i)
+                for (const rtl::Reference<SdrObject>& pObj : *pDrawPage)
                 {
-                    SdrObject* pObj = pDrawPage->GetObj(i);
-                    if (pObj && SdrObjectPrimitiveHit(*pObj, aPos, {fHitLog, fHitLog}, *pDrawView->GetSdrPageView(), nullptr, false))
+                    if (SdrObjectPrimitiveHit(*pObj, aPos, {fHitLog, fHitLog}, *pDrawView->GetSdrPageView(), nullptr, false))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
-                        bFound = true;
+                        break;
                     }
                 }
             }

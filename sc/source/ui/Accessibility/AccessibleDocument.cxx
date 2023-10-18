@@ -499,14 +499,10 @@ sal_Int32 ScChildrenShapes::GetCount() const
     {
         size_t nSdrObjCount = pDrawPage->GetObjCount();
         maZOrderedShapes.reserve(nSdrObjCount + 1); // the table is always in
-        for (size_t i = 0; i < nSdrObjCount; ++i)
+        for (const rtl::Reference<SdrObject>& pObj : *pDrawPage)
         {
-            SdrObject* pObj = pDrawPage->GetObj(i);
-            if (pObj/* && (pObj->GetLayer() != SC_LAYER_INTERN)*/)
-            {
-                uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                AddShape(xShape, false); //inserts in the correct order
-            }
+            uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+            AddShape(xShape, false); //inserts in the correct order
         }
     }
     return maZOrderedShapes.size();

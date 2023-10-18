@@ -1018,41 +1018,36 @@ void ScShapeChildren::FillShapes(const tools::Rectangle& aPixelPaintRect, const 
     }
     ScIAccessibleViewForwarder aViewForwarder(mpViewShell, mpAccDoc, aMapMode);
     maShapeRanges[nRangeId].maViewForwarder = aViewForwarder;
-    const size_t nCount(pPage->GetObjCount());
-    for (size_t i = 0; i < nCount; ++i)
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        SdrObject* pObj = pPage->GetObj(i);
-        if (pObj)
+        uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
+        if (xShape.is())
         {
-            uno::Reference< drawing::XShape > xShape(pObj->getUnoShape(), uno::UNO_QUERY);
-            if (xShape.is())
+            tools::Rectangle aRect(pWin->LogicToPixel(
+                tools::Rectangle(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize())), aMapMode));
+            if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
             {
-                tools::Rectangle aRect(pWin->LogicToPixel(
-                    tools::Rectangle(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize())), aMapMode));
-                if(!aClippedPixelPaintRect.GetIntersection(aRect).IsEmpty())
+                ScShapeChild aShape;
+                aShape.mxShape = xShape;
+                aShape.mnRangeId = nRangeId;
+                if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
                 {
-                    ScShapeChild aShape;
-                    aShape.mxShape = xShape;
-                    aShape.mnRangeId = nRangeId;
-                    if (pObj->GetLayer().anyOf(SC_LAYER_INTERN, SC_LAYER_FRONT))
-                    {
-                        maShapeRanges[nRangeId].maForeShapes.push_back(std::move(aShape));
-                        bForeAdded = true;
-                    }
-                    else if (pObj->GetLayer() == SC_LAYER_BACK)
-                    {
-                        maShapeRanges[nRangeId].maBackShapes.push_back(std::move(aShape));
-                        bBackAdded = true;
-                    }
-                    else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
-                    {
-                        maShapeRanges[nRangeId].maControls.push_back(std::move(aShape));
-                        bControlAdded = true;
-                    }
-                    else
-                    {
-                        OSL_FAIL("I don't know this layer.");
-                    }
+                    maShapeRanges[nRangeId].maForeShapes.push_back(std::move(aShape));
+                    bForeAdded = true;
+                }
+                else if (pObj->GetLayer() == SC_LAYER_BACK)
+                {
+                    maShapeRanges[nRangeId].maBackShapes.push_back(std::move(aShape));
+                    bBackAdded = true;
+                }
+                else if (pObj->GetLayer() == SC_LAYER_CONTROLS)
+                {
+                    maShapeRanges[nRangeId].maControls.push_back(std::move(aShape));
+                    bControlAdded = true;
+                }
+                else
+                {
+                    OSL_FAIL("I don't know this layer.");
                 }
             }
         }

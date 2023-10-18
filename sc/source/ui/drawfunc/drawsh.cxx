@@ -458,10 +458,9 @@ void ScDrawShell::ExecuteMacroAssign(SdrObject* pObj, weld::Window* pWin)
     if ( pObj->IsGroupObject() )
     {
         SdrObjList* pOL = pObj->GetSubList();
-        const size_t nObj = pOL->GetObjCount();
-        for ( size_t index=0; index<nObj; ++index )
+        for (const rtl::Reference<SdrObject>& pChildObj : *pOL)
         {
-            pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), true );
+            pInfo = ScDrawLayer::GetMacroInfo( pChildObj.get(), true );
             pInfo->SetMacro( sMacro );
         }
     }

@@ -339,13 +339,9 @@ void ScDrawView::RecalcScale()
 
     if ( SdrPage* pPage = pPV->GetPage() )
     {
-        const size_t nCount = pPage->GetObjCount();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            SdrObject* pObj = pPage->GetObj( i );
+        for (const rtl::Reference<SdrObject>& pObj : *pPage)
             // Align objects to nearest grid position
-            SyncForGrid( pObj );
-        }
+            SyncForGrid( pObj.get() );
     }
 }
 
@@ -921,8 +917,8 @@ void ScDrawView::SyncForGrid( SdrObject* pObj )
     if ( auto pObjGroup = dynamic_cast<const SdrObjGroup*>( pObj) )
     {
         SdrObjList *pLst = pObjGroup->GetSubList();
-        for ( size_t i = 0, nCount = pLst->GetObjCount(); i < nCount; ++i )
-            SyncForGrid( pLst->GetObj( i ) );
+        for (const rtl::Reference<SdrObject>& pChild : *pLst)
+            SyncForGrid( pChild.get() );
     }
 
     ScSplitPos eWhich = pViewData->GetActivePart();

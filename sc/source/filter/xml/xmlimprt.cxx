@@ -1464,19 +1464,17 @@ void SAL_CALL ScXMLImport::endDocument()
                 if (!pPage)
                     continue;
                 bool bNegativePage = pDoc->IsNegativePage(nTab);
-                const size_t nCount = pPage->GetObjCount();
-                for (size_t i = 0; i < nCount; ++i)
+                for (const rtl::Reference<SdrObject>& pObj : *pPage)
                 {
-                    SdrObject* pObj = pPage->GetObj(i);
                     ScDrawObjData* pData
-                        = ScDrawLayer::GetObjDataTab(pObj, nTab);
+                        = ScDrawLayer::GetObjDataTab(pObj.get(), nTab);
                     // Existence of pData means, that it is a cell anchored object
                     if (pData)
                     {
                         // Finish and correct import based on full size (no hidden row/col) and LTR
-                        pDrawLayer->InitializeCellAnchoredObj(pObj, *pData);
+                        pDrawLayer->InitializeCellAnchoredObj(pObj.get(), *pData);
                         // Adapt object to hidden row/col and RTL
-                        pDrawLayer->RecalcPos(pObj, *pData, bNegativePage,
+                        pDrawLayer->RecalcPos(pObj.get(), *pData, bNegativePage,
                                               true /*bUpdateNoteCaptionPos*/);
                     }
                 }

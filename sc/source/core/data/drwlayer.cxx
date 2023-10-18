@@ -590,11 +590,9 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
 
     bool bNegativePage = pDoc && pDoc->IsNegativePage( nTab );
 
-    const size_t nCount = pPage->GetObjCount();
-    for ( size_t i = 0; i < nCount; ++i )
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        SdrObject* pObj = pPage->GetObj( i );
-        ScDrawObjData* pData = GetObjDataTab( pObj, nTab );
+        ScDrawObjData* pData = GetObjDataTab( pObj.get(), nTab );
         if( pData )
         {
             const ScAddress aOldStt = pData->maStart;
@@ -614,11 +612,11 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
             }
             if (bChange)
             {
-                if ( dynamic_cast<const SdrRectObj*>( pObj) !=  nullptr && pData->maStart.IsValid() && pData->maEnd.IsValid() )
+                if ( dynamic_cast<const SdrRectObj*>( pObj.get()) !=  nullptr && pData->maStart.IsValid() && pData->maEnd.IsValid() )
                     pData->maStart.PutInOrder( pData->maEnd );
 
                 // Update also an untransformed anchor that's what we stored ( and still do ) to xml
-                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj );
+                ScDrawObjData* pNoRotatedAnchor = GetNonRotatedObjData( pObj.get() );
                 if ( pNoRotatedAnchor )
                 {
                     const ScAddress aOldSttNoRotatedAnchor = pNoRotatedAnchor->maStart;
@@ -635,8 +633,8 @@ void ScDrawLayer::MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SC
                     }
                 }
 
-                AddCalcUndo( std::make_unique<ScUndoObjData>( pObj, aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
-                RecalcPos( pObj, *pData, bNegativePage, bUpdateNoteCaptionPos );
+                AddCalcUndo( std::make_unique<ScUndoObjData>( pObj.get(), aOldStt, aOldEnd, pData->maStart, pData->maEnd ) );
+                RecalcPos( pObj.get(), *pData, bNegativePage, bUpdateNoteCaptionPos );
             }
         }
     }
@@ -671,11 +669,9 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
     bool bWasLocked = isLocked();
     setLock(true);
 
-    const size_t nCount = pPage->GetObjCount();
-    for ( size_t i = 0; i < nCount; ++i )
+    for (const rtl::Reference<SdrObject>& pObj : *pPage)
     {
-        SdrObject* pObj = pPage->GetObj( i );
-        ScDrawObjData* pData = GetObjDataTab( pObj, static_cast<SCTAB>(nPageNo) );
+        ScDrawObjData* pData = GetObjDataTab( pObj.get(), static_cast<SCTAB>(nPageNo) );
         if( pData ) // cell anchored
         {
             if (pData->meType == ScDrawObjData::DrawingObject
@@ -684,28 +680,28 @@ void ScDrawLayer::SetPageSize(sal_uInt16 nPageNo, const Size& rSize, bool bUpdat
                 switch (eObjectHandling)
                 {
                     case ScObjectHandling::RecalcPosMode:
-                        RecalcPos(pObj, *pData, bNegativePage, bUpdateNoteCaptionPos);
+                        RecalcPos(pObj.get(), *pData, bNegativePage, bUpdateNoteCaptionPos);
                         break;
                     case ScObjectHandling::MoveRTLMode:
-                        MoveRTL(pObj);
+                        MoveRTL(pObj.get());
                         break;
                     case ScObjectHandling::MirrorRTLMode:
-                        MirrorRTL(pObj);
+                        MirrorRTL(pObj.get());
                         break;
                 }
             }
             else // DetectiveArrow and CellNote
-                RecalcPos(pObj, *pData, bNegativePage, bUpdateNoteCaptionPos);
+                RecalcPos(pObj.get(), *pData, bNegativePage, bUpdateNoteCaptionPos);
         }
         else // page anchored
         {
             switch (eObjectHandling)
             {
                 case ScObjectHandling::MoveRTLMode:
-                    MoveRTL(pObj);
+                    MoveRTL(pObj.get());
                     break;
                 case ScObjectHandling::MirrorRTLMode:
-                    MirrorRTL(pObj);
+                    MirrorRTL(pObj.get());
                     break;
                 case ScObjectHandling::RecalcPosMode: // does not occur for page anchored shapes
                     break;
