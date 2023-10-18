@@ -692,7 +692,9 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
     // Paragraph tag - if there is a list label, opening should be delayed.
     ::std::optional<SwTaggedPDFHelper> oTaggedParagraph;
 
-    if (isPDFTaggingEnabled && !GetPara()->HasNumberingPortion(SwParaPortion::FootnoteToo))
+    if (isPDFTaggingEnabled
+        && (GetTextNodeForParaProps()->IsOutline()
+            || !GetPara()->HasNumberingPortion(SwParaPortion::FootnoteToo)))
     {   // no Lbl needed => open paragraph tag now
         Frame_Info aFrameInfo(*this, false);
         oTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, rRenderContext);

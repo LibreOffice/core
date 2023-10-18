@@ -153,7 +153,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     bool bSkippedNumPortions(false);
     SwLinePortion *pPor = bEndPor ? m_pCurr->GetFirstPortion() : CalcPaintOfst(rPaint, bSkippedNumPortions);
 
-    if (bSkippedNumPortions) // ugly but hard to check earlier in PaintSwFrame:
+    if (bSkippedNumPortions // ugly but hard to check earlier in PaintSwFrame:
+        && !GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline())
     {   // there is a num portion but it is outside of the frame area and not painted
         assert(!roTaggedLabel);
         assert(!roTaggedParagraph);
@@ -411,6 +412,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if ((pPor->InNumberGrp() // also footnote label
                 // weird special case, bullet with soft hyphen
              || (pPor->InHyphGrp() && pNext && pNext->InNumberGrp()))
+            && !GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline()
             && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
             assert(isPDFTaggingEnabled);
@@ -434,11 +436,18 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // note: numbering portion may be split if it has multiple scripts
             && !static_cast<SwNumberPortion const*>(pPor)->HasFollow()) // so wait for the last one
         {
-            assert(roTaggedLabel);
-            roTaggedLabel.reset(); // close Lbl
-            assert(!roTaggedParagraph);
-            Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
-            roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *pOut);
+            if (!GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline())
+            {
+                assert(roTaggedLabel);
+                roTaggedLabel.reset(); // close Lbl
+                assert(!roTaggedParagraph);
+                Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
+                roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *pOut);
+            }
+            else
+            {
+                assert(!roTaggedLabel);
+            }
         }
 
         // reset underline font
@@ -461,7 +470,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                  pNext && pNext->IsHolePortion() ) ?
                pNext :
                nullptr;
-        if (!pPor && isPDFTaggingEnabled && !roTaggedParagraph)
+        if (!pPor && isPDFTaggingEnabled && (roTaggedLabel || !roTaggedParagraph))
         {   // check if the end of the list label is off-screen
             auto FindEndOfNumbering = [&](SwLinePortion const* pP) {
                 while (pP)
@@ -473,8 +482,11 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                         {
                             roTaggedLabel.reset();
                         } // else, if the numbering isn't visible at all, no Lbl
-                        Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
-                        roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
+                        if (!GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline())
+                        {
+                            Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
+                            roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
+                        }
                         return true;
                     }
                     pP = pP->GetNextPortion();

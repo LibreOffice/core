@@ -1318,7 +1318,8 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 const SwTextNode *const pTextNd(rTextFrame.GetTextNodeForParaProps());
 
                 // lazy open LBody after Lbl
-                if (rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
+                if (!pTextNd->IsOutline()
+                    && rTextFrame.GetPara()->HasNumberingPortion(SwParaPortion::OnlyNumbering))
                 {
                     sal_Int32 const nId = BeginTagImpl(nullptr, vcl::PDFWriter::LIBody, aListBodyString);
                     SwNodeNum const*const pNodeNum(pTextNd->GetNum(rTextFrame.getRootFrame()));
