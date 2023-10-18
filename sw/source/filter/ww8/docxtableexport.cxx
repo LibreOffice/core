@@ -628,7 +628,8 @@ void DocxAttributeOutput::TableRowRedline(
     const SwTableLine* pTabLine = pTabBox->GetUpper();
 
     bool bRemovePersonalInfo
-        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     // check table row property "HasTextChangesOnly"
     SwRedlineTable::size_type nPos(0);
@@ -703,7 +704,8 @@ void DocxAttributeOutput::TableCellRedline(
     const SwTableBox* pTabBox = pTableTextNodeInfoInner->getTableBox();
 
     bool bRemovePersonalInfo
-        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo);
+        = SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo)
+          && !SvtSecurityOptions::IsOptionSet(SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     // check table row property "HasTextChangesOnly"
     SwRedlineTable::size_type nChange = pTabBox->GetRedline();

@@ -1720,7 +1720,8 @@ void XMLTextFieldExport::ExportFieldHelper(
                    "Unexpected presentation for annotation field");
 
         bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+                SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
 
         // annotation element + content
         OUString aName;

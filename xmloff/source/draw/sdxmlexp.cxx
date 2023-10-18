@@ -2549,7 +2549,8 @@ void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
         if( xAnnotationEnumeration.is() && xAnnotationEnumeration->hasMoreElements() )
         {
             bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-                SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+                SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+                    SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo);
 
             OUStringBuffer sStringBuffer;
             do
