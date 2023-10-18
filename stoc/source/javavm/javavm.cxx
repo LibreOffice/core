@@ -474,9 +474,9 @@ public:
         // current thread" calls to the JVM.
         if (CFRunLoopGetCurrent() != CFRunLoopGetMain())
 #endif
-        if (m_jvm->DetachCurrentThread() != 0) {
-            OSL_ASSERT(false);
-        }
+            if (m_jvm->DetachCurrentThread() != 0) {
+                OSL_ASSERT(false);
+            }
     }
 
     DetachCurrentThread(const DetachCurrentThread&) = delete;
