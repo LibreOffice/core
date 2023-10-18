@@ -2432,6 +2432,42 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="KeepRedlineInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>
+              Specifies whether to keep track changed information on
+              saving if RemovePersonalInfoOnSaving is true.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="KeepDocUserInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>
+              Specifies whether to keep document user information on
+              saving if RemovePersonalInfoOnSaving is true.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="KeepNoteAuthorDateInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>
+              Specifies whether to keep note author and date information on
+              saving if RemovePersonalInfoOnSaving is true.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
+        <prop oor:name="KeepDocVersionInfoOnSaving" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>
+              Specifies whether to keep document version information on
+              saving if RemovePersonalInfoOnSaving is true.
+            </desc>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="RecommendPasswordProtection" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to recommend password protection when saving

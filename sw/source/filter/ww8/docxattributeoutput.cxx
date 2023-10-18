@@ -2192,7 +2192,8 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(std::u16string_view bookmarkN
     bool bFrom, const SwRedlineData* pRedlineData)
 {
     bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     const DateTime aDateTime = pRedlineData->GetTimeStamp();
@@ -3985,7 +3986,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         return;
 
     bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
@@ -4142,7 +4144,8 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData, bool
     OString aId( OString::number( m_nRedlineId++ ) );
 
     bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
     OString aAuthor( OUStringToOString( bRemovePersonalInfo
@@ -8294,7 +8297,8 @@ void DocxAttributeOutput::WritePostitFieldReference()
 DocxAttributeOutput::hasProperties DocxAttributeOutput::WritePostitFields()
 {
     bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
-        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) && !SvtSecurityOptions::IsOptionSet(
+            SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo);
 
     hasProperties eResult = hasProperties::no;
     for (auto& [f1, data1] : m_postitFields)

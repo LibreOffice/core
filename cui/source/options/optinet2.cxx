@@ -798,6 +798,10 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnPrint, m_xSecOptDlg->IsPrintDocsChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnCreatePdf, m_xSecOptDlg->IsCreatePdfChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, m_xSecOptDlg->IsRemovePersInfoChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepRedlineInfo, m_xSecOptDlg->IsRemoveRedlineInfoChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepDocUserInfo, m_xSecOptDlg->IsRemoveDocUserInfoChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepNoteAuthorDateInfo, m_xSecOptDlg->IsRemoveNoteAuthorInfoChecked(), bModified );
+        CheckAndSave( SvtSecurityOptions::EOption::DocWarnKeepDocVersionInfo, m_xSecOptDlg->IsRemoveDocVersionInfoChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::DocWarnRecommendPassword, m_xSecOptDlg->IsRecommPasswdChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::CtrlClickHyperlink, m_xSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
         CheckAndSave( SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, m_xSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
