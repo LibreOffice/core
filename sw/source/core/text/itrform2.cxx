@@ -2760,13 +2760,42 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
 
     aLine.Left( rInf.X() + nLeftMar );
     bool bForced = false;
+    bool bSplitFly = false;
+    for (const auto& pObj : *rTextFly.GetAnchoredObjList())
+    {
+        auto pFlyFrame = pObj->DynCastFlyFrame();
+        if (!pFlyFrame)
+        {
+            continue;
+        }
+
+        if (!pFlyFrame->IsFlySplitAllowed())
+        {
+            continue;
+        }
+
+        bSplitFly = true;
+        break;
+    }
     if( aInter.Left() <= nLeftMin )
     {
         SwTwips nFrameLeft = GetTextFrame()->getFrameArea().Left();
-        if( GetTextFrame()->getFramePrintArea().Left() < 0 )
+        SwTwips nFramePrintAreaLeft = GetTextFrame()->getFramePrintArea().Left();
+        if( nFramePrintAreaLeft < 0 )
             nFrameLeft += GetTextFrame()->getFramePrintArea().Left();
         if( aInter.Left() < nFrameLeft )
+        {
             aInter.Left( nFrameLeft );
+            if (bSplitFly && nFramePrintAreaLeft > 0 && nFramePrintAreaLeft < aInter.Width())
+            {
+                // We wrap around a split fly, the fly portion is on the
+                // left of the paragraph and we have a positive
+                // paragraph margin. Don't take space twice in this case
+                // (margin, fly portion), decrease the width of the fly
+                // portion accordingly.
+                aInter.Right(aInter.Right() - nFramePrintAreaLeft);
+            }
+        }
 
         tools::Long nAddMar = 0;
         if ( m_pFrame->IsRightToLeft() )
@@ -2796,22 +2825,10 @@ void SwTextFormatter::CalcFlyWidth( SwTextFormatInfo &rInf )
         // Word style: if there is minimal space remaining, then handle that similar to a full line
         // and put the actual empty paragraph below the fly.
         SwTwips nLimit = MINLAY;
-        for (const auto& pObj : *rTextFly.GetAnchoredObjList())
+        if (bSplitFly)
         {
-            auto pFlyFrame = pObj->DynCastFlyFrame();
-            if (!pFlyFrame)
-            {
-                continue;
-            }
-
-            if (!pFlyFrame->IsFlySplitAllowed())
-            {
-                continue;
-            }
-
             // We wrap around a floating table, that has a larger minimal wrap distance.
             nLimit = TEXT_MIN_SMALL;
-            break;
         }
 
         bFullLine = std::abs(aLine.Left() - aInter.Left()) < nLimit

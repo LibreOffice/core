@@ -2349,25 +2349,6 @@ tools::Long SwBorderAttrs::CalcRight( const SwFrame* pCaller ) const
     return nRight;
 }
 
-/// Tries to detect if this paragraph has a floating table attached.
-static bool lcl_hasTabFrame(const SwTextFrame* pTextFrame)
-{
-    if (pTextFrame->GetDrawObjs())
-    {
-        const SwSortedObjs* pSortedObjs = pTextFrame->GetDrawObjs();
-        if (pSortedObjs->size() > 0)
-        {
-            SwAnchoredObject* pObject = (*pSortedObjs)[0];
-            if (auto pFly = pObject->DynCastFlyFrame())
-            {
-                if (pFly->Lower() && pFly->Lower()->IsTabFrame())
-                    return true;
-            }
-        }
-    }
-    return false;
-}
-
 tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
 {
     tools::Long nLeft=0;
@@ -2387,22 +2368,7 @@ tools::Long SwBorderAttrs::CalcLeft( const SwFrame *pCaller ) const
         nLeft += m_xLR->GetRight();
     else
     {
-        bool bIgnoreMargin = false;
-        if (pCaller->IsTextFrame())
-        {
-            const SwTextFrame* pTextFrame = static_cast<const SwTextFrame*>(pCaller);
-            if (pTextFrame->GetDoc().GetDocumentSettingManager().get(DocumentSettingId::FLOATTABLE_NOMARGINS))
-            {
-                // If this is explicitly requested, ignore the margins next to the floating table.
-                if (lcl_hasTabFrame(pTextFrame))
-                    bIgnoreMargin = true;
-                // TODO here we only handle the first two paragraphs, would be nice to generalize this.
-                else if (pTextFrame->FindPrev() && pTextFrame->FindPrev()->IsTextFrame() && lcl_hasTabFrame(static_cast<const SwTextFrame*>(pTextFrame->FindPrev())))
-                    bIgnoreMargin = true;
-            }
-        }
-        if (!bIgnoreMargin)
-            nLeft += m_xLR->GetLeft();
+        nLeft += m_xLR->GetLeft();
     }
 
     // correction: do not retrieve left margin for numbering in R2L-layout
