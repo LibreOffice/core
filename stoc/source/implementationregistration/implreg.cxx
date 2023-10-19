@@ -57,28 +57,28 @@ using namespace osl;
 
 namespace {
 
-constexpr OUStringLiteral slash_UNO_slash_REGISTRY_LINKS
-        = u"/UNO/REGISTRY_LINKS";
-constexpr OUStringLiteral slash_IMPLEMENTATIONS
-        =  u"/IMPLEMENTATIONS";
-constexpr OUStringLiteral slash_UNO
-        = u"/UNO";
-constexpr OUStringLiteral slash_UNO_slash_SERVICES
-        = u"/UNO/SERVICES";
-constexpr OUStringLiteral slash_UNO_slash_SINGLETONS
-        = u"/UNO/SINGLETONS";
-constexpr OUStringLiteral slash_SERVICES
-        = u"/SERVICES/";
-constexpr OUStringLiteral slash_UNO_slash_LOCATION
-        = u"/UNO/LOCATION";
-constexpr OUStringLiteral slash_UNO_slash_ACTIVATOR
-        = u"/UNO/ACTIVATOR";
-constexpr OUStringLiteral colon_old
-        = u":old";
+constexpr OUString slash_UNO_slash_REGISTRY_LINKS
+        = u"/UNO/REGISTRY_LINKS"_ustr;
+constexpr OUString slash_IMPLEMENTATIONS
+        =  u"/IMPLEMENTATIONS"_ustr;
+constexpr OUString slash_UNO
+        = u"/UNO"_ustr;
+constexpr OUString slash_UNO_slash_SERVICES
+        = u"/UNO/SERVICES"_ustr;
+constexpr OUString slash_UNO_slash_SINGLETONS
+        = u"/UNO/SINGLETONS"_ustr;
+constexpr OUString slash_SERVICES
+        = u"/SERVICES/"_ustr;
+constexpr OUString slash_UNO_slash_LOCATION
+        = u"/UNO/LOCATION"_ustr;
+constexpr OUString slash_UNO_slash_ACTIVATOR
+        = u"/UNO/ACTIVATOR"_ustr;
+constexpr OUString colon_old
+        = u":old"_ustr;
 constexpr OUStringLiteral com_sun_star_registry_SimpleRegistry
         = u"com.sun.star.registry.SimpleRegistry";
-constexpr OUStringLiteral Registry
-        = u"Registry";
+constexpr OUString Registry
+        = u"Registry"_ustr;
 
 //  static deleteAllLinkReferences()
 

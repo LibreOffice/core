@@ -40,7 +40,7 @@
 #include <unordered_map>
 #include <utility>
 
-constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.security.comp.stoc.FilePolicy";
+constexpr OUString IMPL_NAME = u"com.sun.star.security.comp.stoc.FilePolicy"_ustr;
 
 using namespace ::osl;
 using namespace ::cppu;

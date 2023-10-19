@@ -50,7 +50,7 @@
 
 #include <memory>
 
-constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.security.AccessController";
+constexpr OUString SERVICE_NAME = u"com.sun.star.security.AccessController"_ustr;
 constexpr OUStringLiteral USER_CREDS  = u"access-control.user-credentials.id";
 
 
@@ -64,7 +64,7 @@ namespace {
 
 // static stuff initialized when loading lib
 OUString s_envType = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-constexpr OUStringLiteral s_acRestriction = u"access-control.restriction";
+constexpr OUString s_acRestriction = u"access-control.restriction"_ustr;
 
 
 /** ac context intersects permissions of two ac contexts
