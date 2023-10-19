@@ -1342,12 +1342,12 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
 
 void Shell::ManageToolbars()
 {
-    static constexpr OUStringLiteral aMacroBarResName = u"private:resource/toolbar/macrobar";
-    static constexpr OUStringLiteral aDialogBarResName = u"private:resource/toolbar/dialogbar";
-    static constexpr OUStringLiteral aInsertControlsBarResName
-        = u"private:resource/toolbar/insertcontrolsbar";
-    static constexpr OUStringLiteral aFormControlsBarResName
-        = u"private:resource/toolbar/formcontrolsbar";
+    static constexpr OUString aMacroBarResName = u"private:resource/toolbar/macrobar"_ustr;
+    static constexpr OUString aDialogBarResName = u"private:resource/toolbar/dialogbar"_ustr;
+    static constexpr OUString aInsertControlsBarResName
+        = u"private:resource/toolbar/insertcontrolsbar"_ustr;
+    static constexpr OUString aFormControlsBarResName
+        = u"private:resource/toolbar/formcontrolsbar"_ustr;
 
     if( !pCurWin )
         return;

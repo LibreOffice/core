@@ -58,8 +58,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-constexpr OUStringLiteral aResourceResolverPropName = u"ResourceResolver";
-constexpr OUStringLiteral aDecorationPropName = u"Decoration";
+constexpr OUString aResourceResolverPropName = u"ResourceResolver"_ustr;
+constexpr OUString aDecorationPropName = u"Decoration"_ustr;
 
 
 // DlgEdHint

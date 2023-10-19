@@ -77,8 +77,8 @@
 
 namespace basctl
 {
-constexpr OUStringLiteral BASIC_IDE_EDITOR_WINDOW = u"BasicIDEEditorWindow";
-constexpr OUStringLiteral BASIC_IDE_CURRENT_ZOOM = u"CurrentZoom";
+constexpr OUString BASIC_IDE_EDITOR_WINDOW = u"BasicIDEEditorWindow"_ustr;
+constexpr OUString BASIC_IDE_CURRENT_ZOOM = u"CurrentZoom"_ustr;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

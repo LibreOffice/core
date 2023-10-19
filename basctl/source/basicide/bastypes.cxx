@@ -54,7 +54,7 @@ namespace basctl
 {
 
 // ID used for the read-only infobar
-constexpr OUStringLiteral BASIC_IDE_READONLY_INFOBAR = u"readonly";
+constexpr OUString BASIC_IDE_READONLY_INFOBAR = u"readonly"_ustr;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;

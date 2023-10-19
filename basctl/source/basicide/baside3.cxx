@@ -72,7 +72,7 @@ using namespace ::com::sun::star::ui::dialogs;
 #ifdef _WIN32
 OUStringLiteral const FilterMask_All = u"*.*";
 #else
-constexpr OUStringLiteral FilterMask_All = u"*";
+constexpr OUString FilterMask_All = u"*"_ustr;
 #endif
 
 DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rDocument,

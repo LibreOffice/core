@@ -53,9 +53,9 @@ using namespace ::com::sun::star::resource;
 namespace
 {
 
-constexpr OUStringLiteral aDot(u".");
-constexpr OUStringLiteral aEsc(u"&");
-constexpr OUStringLiteral aSemi(u";");
+constexpr OUString aDot(u"."_ustr);
+constexpr OUString aEsc(u"&"_ustr);
+constexpr OUString aSemi(u";"_ustr);
 
 } // namespace
 
@@ -80,7 +80,7 @@ bool LocalizationMgr::isLibraryLocalized ()
 
 void LocalizationMgr::handleTranslationbar ()
 {
-    static constexpr OUStringLiteral aToolBarResName = u"private:resource/toolbar/translationbar";
+    static constexpr OUString aToolBarResName = u"private:resource/toolbar/translationbar"_ustr;
 
     Reference< beans::XPropertySet > xFrameProps
         ( m_pShell->GetViewFrame().GetFrame().GetFrameInterface(), uno::UNO_QUERY );
