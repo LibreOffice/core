@@ -24,7 +24,7 @@
 
 namespace comphelper{
 
-constexpr OUStringLiteral ERRMSG_INVALID_COMPONENT_PARAM = u"NULL as component reference not allowed.";
+constexpr OUString ERRMSG_INVALID_COMPONENT_PARAM = u"NULL as component reference not allowed."_ustr;
 
 
 NumberedCollection::NumberedCollection()

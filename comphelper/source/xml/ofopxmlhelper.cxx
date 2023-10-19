@@ -193,11 +193,11 @@ void WriteContentSequence(
 
     xWriter->setOutputStream( xOutStream );
 
-    static constexpr OUStringLiteral aTypesElement(u"Types");
-    static constexpr OUStringLiteral aDefaultElement(u"Default");
-    static constexpr OUStringLiteral aOverrideElement(u"Override");
-    static constexpr OUStringLiteral aContentTypeAttr(u"ContentType");
-    static constexpr OUStringLiteral aWhiteSpace(u" ");
+    static constexpr OUString aTypesElement(u"Types"_ustr);
+    static constexpr OUString aDefaultElement(u"Default"_ustr);
+    static constexpr OUString aOverrideElement(u"Override"_ustr);
+    static constexpr OUString aContentTypeAttr(u"ContentType"_ustr);
+    static constexpr OUString aWhiteSpace(u" "_ustr);
 
     // write the namespace
     rtl::Reference<AttributeList> pRootAttrList = new AttributeList;
@@ -262,10 +262,10 @@ uno::Sequence< uno::Sequence< beans::StringPair > > ReadSequence_Impl(
 // Relations info related strings
 constexpr OUStringLiteral g_aRelListElement(u"Relationships");
 constexpr OUStringLiteral g_aRelElement( u"Relationship" );
-constexpr OUStringLiteral g_aIDAttr( u"Id" );
-constexpr OUStringLiteral g_aTypeAttr( u"Type" );
-constexpr OUStringLiteral g_aTargetModeAttr( u"TargetMode" );
-constexpr OUStringLiteral g_aTargetAttr( u"Target" );
+constexpr OUString g_aIDAttr( u"Id"_ustr );
+constexpr OUString g_aTypeAttr( u"Type"_ustr );
+constexpr OUString g_aTargetModeAttr( u"TargetMode"_ustr );
+constexpr OUString g_aTargetAttr( u"Target"_ustr );
 
 // ContentType related strings
 constexpr OUStringLiteral g_aTypesElement( u"Types" );
@@ -273,7 +273,7 @@ constexpr OUStringLiteral g_aDefaultElement( u"Default" );
 constexpr OUStringLiteral g_aOverrideElement( u"Override" );
 constexpr OUStringLiteral g_aExtensionAttr( u"Extension" );
 constexpr OUStringLiteral g_aPartNameAttr( u"PartName" );
-constexpr OUStringLiteral g_aContentTypeAttr( u"ContentType" );
+constexpr OUString g_aContentTypeAttr( u"ContentType"_ustr );
 
 OFOPXMLHelper_Impl::OFOPXMLHelper_Impl( sal_uInt16 nFormat )
 : m_nFormat( nFormat )
