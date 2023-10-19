@@ -393,8 +393,8 @@ sal_Bool SmModel::supportsService(const OUString& rServiceName)
 
 uno::Sequence< OUString > SmModel::getSupportedServiceNames()
 {
-    static constexpr OUStringLiteral service1 = u"com.sun.star.document.OfficeDocument";
-    static constexpr OUStringLiteral service2 = u"com.sun.star.formula.FormulaProperties";
+    static constexpr OUString service1 = u"com.sun.star.document.OfficeDocument"_ustr;
+    static constexpr OUString service2 = u"com.sun.star.formula.FormulaProperties"_ustr;
     return uno::Sequence<OUString>{ service1, service2 };
 }
 

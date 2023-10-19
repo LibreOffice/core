@@ -124,10 +124,10 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
         }
     }
 
-    static constexpr OUStringLiteral sUsePrettyPrinting(u"UsePrettyPrinting");
-    static constexpr OUStringLiteral sBaseURI(u"BaseURI");
-    static constexpr OUStringLiteral sStreamRelPath(u"StreamRelPath");
-    static constexpr OUStringLiteral sStreamName(u"StreamName");
+    static constexpr OUString sUsePrettyPrinting(u"UsePrettyPrinting"_ustr);
+    static constexpr OUString sBaseURI(u"BaseURI"_ustr);
+    static constexpr OUString sStreamRelPath(u"StreamRelPath"_ustr);
+    static constexpr OUString sStreamName(u"StreamName"_ustr);
 
     // create XPropertySet with three properties for status indicator
     static const comphelper::PropertyMapEntry aInfoMap[] = {

@@ -733,7 +733,7 @@ void SmDistanceDialog::SetCategory(sal_uInt16 nCategory)
     // array to convert category- and metricfield-number in help ids.
     // 0 is used in case of unused combinations.
     assert(NOCATEGORIES == 10 && "Sm : array doesn't fit into the number of categories");
-    static constexpr OUStringLiteral EMPTY(u"");
+    static constexpr OUString EMPTY(u""_ustr);
     static constexpr OUString aCatMf2Hid[10][4] =
     {
         { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, EMPTY },

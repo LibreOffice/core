@@ -42,8 +42,8 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-constexpr OUStringLiteral SYMBOL_LIST = u"SymbolList";
-constexpr OUStringLiteral FONT_FORMAT_LIST = u"FontFormatList";
+constexpr OUString SYMBOL_LIST = u"SymbolList"_ustr;
+constexpr OUString FONT_FORMAT_LIST = u"FontFormatList"_ustr;
 
 static Sequence< OUString > lcl_GetFontPropertyNames()
 {
