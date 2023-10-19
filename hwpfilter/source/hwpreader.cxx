@@ -45,7 +45,7 @@
 #include <sal/log.hxx>
 
 // xmloff/xmlkyd.hxx
-constexpr OUStringLiteral sXML_CDATA = u"CDATA";
+constexpr OUString sXML_CDATA = u"CDATA"_ustr;
 
 namespace
 {
@@ -53,7 +53,7 @@ double WTI(double x) { return x / 1800.; } // unit => inch
 double WTMM(double x) { return x / 1800. * 25.4; } // unit => mm
 int WTSM(double x) { return x / 1800. * 2540; } // unit ==> 1/100 mm
 
-constexpr OUStringLiteral sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]");
+constexpr OUString sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]"_ustr);
     // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
     // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
     // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
@@ -4719,8 +4719,8 @@ namespace
 {
 
 constexpr OUStringLiteral IMPLEMENTATION_NAME = u"com.sun.comp.hwpimport.HwpImportFilter";
-constexpr OUStringLiteral SERVICE_NAME1 = u"com.sun.star.document.ImportFilter";
-constexpr OUStringLiteral SERVICE_NAME2 = u"com.sun.star.document.ExtendedTypeDetection";
+constexpr OUString SERVICE_NAME1 = u"com.sun.star.document.ImportFilter"_ustr;
+constexpr OUString SERVICE_NAME2 = u"com.sun.star.document.ExtendedTypeDetection"_ustr;
 
 class HwpImportFilter : public WeakImplHelper< XFilter, XImporter, XServiceInfo, XExtendedFilterDetection >
 {
