@@ -62,15 +62,15 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
-constexpr OUStringLiteral BASICFORMAT_GENERALNUMBER = u"General Number";
-constexpr OUStringLiteral BASICFORMAT_CURRENCY = u"Currency";
-constexpr OUStringLiteral BASICFORMAT_FIXED = u"Fixed";
-constexpr OUStringLiteral BASICFORMAT_STANDARD = u"Standard";
-constexpr OUStringLiteral BASICFORMAT_PERCENT = u"Percent";
-constexpr OUStringLiteral BASICFORMAT_SCIENTIFIC = u"Scientific";
-constexpr OUStringLiteral BASICFORMAT_YESNO = u"Yes/No";
-constexpr OUStringLiteral BASICFORMAT_TRUEFALSE = u"True/False";
-constexpr OUStringLiteral BASICFORMAT_ONOFF = u"On/Off";
+constexpr OUString BASICFORMAT_GENERALNUMBER = u"General Number"_ustr;
+constexpr OUString BASICFORMAT_CURRENCY = u"Currency"_ustr;
+constexpr OUString BASICFORMAT_FIXED = u"Fixed"_ustr;
+constexpr OUString BASICFORMAT_STANDARD = u"Standard"_ustr;
+constexpr OUString BASICFORMAT_PERCENT = u"Percent"_ustr;
+constexpr OUString BASICFORMAT_SCIENTIFIC = u"Scientific"_ustr;
+constexpr OUString BASICFORMAT_YESNO = u"Yes/No"_ustr;
+constexpr OUString BASICFORMAT_TRUEFALSE = u"True/False"_ustr;
+constexpr OUString BASICFORMAT_ONOFF = u"On/Off"_ustr;
 
 // Comment: Visual-Basic has a maximum of 12 positions after the
 //          decimal point for floating-point-numbers.

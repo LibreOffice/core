@@ -363,8 +363,8 @@ rtl::Reference<SfxLibraryContainer> SfxDialogLibraryContainer::createInstanceImp
     return new SfxDialogLibraryContainer();
 }
 
-constexpr OUStringLiteral aResourceFileNameBase = u"DialogStrings";
-constexpr OUStringLiteral aResourceFileCommentBase = u"# Strings for Dialog Library ";
+constexpr OUString aResourceFileNameBase = u"DialogStrings"_ustr;
+constexpr OUString aResourceFileCommentBase = u"# Strings for Dialog Library "_ustr;
 
 // Resource handling
 Reference< css::resource::XStringResourcePersistence >

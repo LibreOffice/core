@@ -382,7 +382,7 @@ namespace basic
         try
         {
             // ensure there's a standard library in the basic container
-            static constexpr OUStringLiteral aStdLibName( u"Standard" );
+            static constexpr OUString aStdLibName( u"Standard"_ustr );
             if ( !_rxBasicLibraries->hasByName( aStdLibName ) )
             {
                 _rxBasicLibraries->createLibrary( aStdLibName );

@@ -100,9 +100,9 @@ using namespace cppu;
 
 
 // Identifiers for creating the strings for dbg_Properties
-constexpr OUStringLiteral ID_DBG_SUPPORTEDINTERFACES = u"Dbg_SupportedInterfaces";
-constexpr OUStringLiteral ID_DBG_PROPERTIES = u"Dbg_Properties";
-constexpr OUStringLiteral ID_DBG_METHODS = u"Dbg_Methods";
+constexpr OUString ID_DBG_SUPPORTEDINTERFACES = u"Dbg_SupportedInterfaces"_ustr;
+constexpr OUString ID_DBG_PROPERTIES = u"Dbg_Properties"_ustr;
+constexpr OUString ID_DBG_METHODS = u"Dbg_Methods"_ustr;
 
 char const aSeqLevelStr[] = "[]";
 
@@ -2743,15 +2743,15 @@ void SbUnoObject::implCreateDbgProperties()
     Property aProp;
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
-    auto xVarRef = tools::make_ref<SbUnoProperty>( OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
+    auto xVarRef = tools::make_ref<SbUnoProperty>( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, SbxSTRING, aProp, -1, false, false );
     QuickInsert( xVarRef.get() );
 
     // Id == -2: output the properties
-    xVarRef = tools::make_ref<SbUnoProperty>( OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
+    xVarRef = tools::make_ref<SbUnoProperty>( ID_DBG_PROPERTIES, SbxSTRING, SbxSTRING, aProp, -2, false, false );
     QuickInsert( xVarRef.get() );
 
     // Id == -3: output the Methods
-    xVarRef = tools::make_ref<SbUnoProperty>( OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
+    xVarRef = tools::make_ref<SbUnoProperty>( ID_DBG_METHODS, SbxSTRING, SbxSTRING, aProp, -3, false, false );
     QuickInsert( xVarRef.get() );
 }
 

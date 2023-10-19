@@ -55,7 +55,7 @@
 
 using namespace ::com::sun::star::script;
 
-constexpr OUStringLiteral SB_RTLNAME = u"@SBRTL";
+constexpr OUString SB_RTLNAME = u"@SBRTL"_ustr;
 //  i#i68894#
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1306,7 +1306,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
             }
         }
     }
-    static constexpr OUStringLiteral aMainStr(u"Main");
+    static constexpr OUString aMainStr(u"Main"_ustr);
     if( !pRes && pNamed && ( t == SbxClassType::Method || t == SbxClassType::DontCare ) &&
         !pNamed->GetName().equalsIgnoreAsciiCase( aMainStr ) )
     {

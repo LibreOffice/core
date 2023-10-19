@@ -488,7 +488,7 @@ const VbaFormatInfo* getFormatInfo( std::u16string_view rFmt )
 constexpr OUStringLiteral VBAFORMAT_GENERALDATE = u"General Date";
 constexpr OUStringLiteral VBAFORMAT_C = u"c";
 constexpr OUStringLiteral VBAFORMAT_N = u"n";
-constexpr OUStringLiteral VBAFORMAT_NN = u"nn";
+constexpr OUString VBAFORMAT_NN = u"nn"_ustr;
 constexpr OUStringLiteral VBAFORMAT_W = u"w";
 constexpr OUStringLiteral VBAFORMAT_Y = u"y";
 constexpr OUStringLiteral VBAFORMAT_LOWERCASE = u"<";

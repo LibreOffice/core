@@ -1800,7 +1800,7 @@ void removeDimAsNewRecoverItem( SbxVariable* pVar )
 // saving object variable
 // not-object variables will cause errors
 
-constexpr OUStringLiteral pCollectionStr = u"Collection";
+constexpr OUString pCollectionStr = u"Collection"_ustr;
 
 void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
