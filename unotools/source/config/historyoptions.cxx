@@ -35,15 +35,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 namespace {
-    constexpr OUStringLiteral s_sItemList = u"ItemList";
-    constexpr OUStringLiteral s_sOrderList = u"OrderList";
-    constexpr OUStringLiteral s_sHistoryItemRef = u"HistoryItemRef";
-    constexpr OUStringLiteral s_sFilter = u"Filter";
-    constexpr OUStringLiteral s_sTitle = u"Title";
-    constexpr OUStringLiteral s_sPassword = u"Password";
-    constexpr OUStringLiteral s_sThumbnail = u"Thumbnail";
-    constexpr OUStringLiteral s_sReadOnly = u"ReadOnly";
-    constexpr OUStringLiteral s_sPinned = u"Pinned";
+    constexpr OUString s_sItemList = u"ItemList"_ustr;
+    constexpr OUString s_sOrderList = u"OrderList"_ustr;
+    constexpr OUString s_sHistoryItemRef = u"HistoryItemRef"_ustr;
+    constexpr OUString s_sFilter = u"Filter"_ustr;
+    constexpr OUString s_sTitle = u"Title"_ustr;
+    constexpr OUString s_sPassword = u"Password"_ustr;
+    constexpr OUString s_sThumbnail = u"Thumbnail"_ustr;
+    constexpr OUString s_sReadOnly = u"ReadOnly"_ustr;
+    constexpr OUString s_sPinned = u"Pinned"_ustr;
 }
 
 static uno::Reference<container::XNameAccess> GetConfig();

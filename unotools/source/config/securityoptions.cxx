@@ -36,10 +36,10 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral PROPERTYNAME_MACRO_TRUSTEDAUTHORS = u"TrustedAuthors";
-constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME = u"SubjectName";
-constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER = u"SerialNumber";
-constexpr OUStringLiteral PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA = u"RawData";
+constexpr OUString PROPERTYNAME_MACRO_TRUSTEDAUTHORS = u"TrustedAuthors"_ustr;
+constexpr OUString PROPERTYNAME_TRUSTEDAUTHOR_SUBJECTNAME = u"SubjectName"_ustr;
+constexpr OUString PROPERTYNAME_TRUSTEDAUTHOR_SERIALNUMBER = u"SerialNumber"_ustr;
+constexpr OUString PROPERTYNAME_TRUSTEDAUTHOR_RAWDATA = u"RawData"_ustr;
 
 
 namespace SvtSecurityOptions

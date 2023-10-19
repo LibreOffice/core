@@ -111,12 +111,12 @@ public:
 
 constexpr OUStringLiteral ROOTNODE_SYSLOCALE = u"Setup/L10N";
 
-constexpr OUStringLiteral PROPERTYNAME_LOCALE = u"ooSetupSystemLocale";
-constexpr OUStringLiteral PROPERTYNAME_UILOCALE = u"ooLocale";
-constexpr OUStringLiteral PROPERTYNAME_CURRENCY = u"ooSetupCurrency";
-constexpr OUStringLiteral PROPERTYNAME_DECIMALSEPARATOR = u"DecimalSeparatorAsLocale";
-constexpr OUStringLiteral PROPERTYNAME_DATEPATTERNS = u"DateAcceptancePatterns";
-constexpr OUStringLiteral PROPERTYNAME_IGNORELANGCHANGE = u"IgnoreLanguageChange";
+constexpr OUString PROPERTYNAME_LOCALE = u"ooSetupSystemLocale"_ustr;
+constexpr OUString PROPERTYNAME_UILOCALE = u"ooLocale"_ustr;
+constexpr OUString PROPERTYNAME_CURRENCY = u"ooSetupCurrency"_ustr;
+constexpr OUString PROPERTYNAME_DECIMALSEPARATOR = u"DecimalSeparatorAsLocale"_ustr;
+constexpr OUString PROPERTYNAME_DATEPATTERNS = u"DateAcceptancePatterns"_ustr;
+constexpr OUString PROPERTYNAME_IGNORELANGCHANGE = u"IgnoreLanguageChange"_ustr;
 
 #define PROPERTYHANDLE_LOCALE           0
 #define PROPERTYHANDLE_UILOCALE         1

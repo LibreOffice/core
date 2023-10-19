@@ -39,10 +39,10 @@ constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TITLE = u"Title";
 constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER = u"ImageIdentifier";
 constexpr OUStringLiteral DYNAMICMENU_PROPERTYNAME_TARGETNAME = u"TargetName";
 
-constexpr OUStringLiteral PATHDELIMITER = u"/";
+constexpr OUString PATHDELIMITER = u"/"_ustr;
 
-constexpr OUStringLiteral SETNODE_NEWMENU = u"New";
-constexpr OUStringLiteral SETNODE_WIZARDMENU = u"Wizard";
+constexpr OUString SETNODE_NEWMENU = u"New"_ustr;
+constexpr OUString SETNODE_WIZARDMENU = u"Wizard"_ustr;
 
 #define PROPERTYNAME_URL                                DYNAMICMENU_PROPERTYNAME_URL
 #define PROPERTYNAME_TITLE                              DYNAMICMENU_PROPERTYNAME_TITLE

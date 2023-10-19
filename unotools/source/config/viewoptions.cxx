@@ -31,10 +31,10 @@
 #include <comphelper/diagnose_ex.hxx>
 
 constexpr OUStringLiteral PACKAGE_VIEWS = u"org.openoffice.Office.Views";
-constexpr OUStringLiteral PROPERTY_WINDOWSTATE = u"WindowState";
-constexpr OUStringLiteral PROPERTY_PAGEID = u"PageID";
-constexpr OUStringLiteral PROPERTY_VISIBLE = u"Visible";
-constexpr OUStringLiteral PROPERTY_USERDATA = u"UserData";
+constexpr OUString PROPERTY_WINDOWSTATE = u"WindowState"_ustr;
+constexpr OUString PROPERTY_PAGEID = u"PageID"_ustr;
+constexpr OUString PROPERTY_VISIBLE = u"Visible"_ustr;
+constexpr OUString PROPERTY_USERDATA = u"UserData"_ustr;
 
 
 SvtViewOptions::SvtViewOptions( EViewType eType, OUString sViewName )

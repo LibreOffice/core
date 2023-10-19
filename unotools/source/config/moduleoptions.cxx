@@ -73,17 +73,17 @@ constexpr OUStringLiteral ROOTNODE_FACTORIES = u"Setup/Office/Factories";
 
 #define PROPERTYCOUNT                       6
 
-constexpr OUStringLiteral FACTORYNAME_WRITER = u"com.sun.star.text.TextDocument";
-constexpr OUStringLiteral FACTORYNAME_WRITERWEB = u"com.sun.star.text.WebDocument";
-constexpr OUStringLiteral FACTORYNAME_WRITERGLOBAL = u"com.sun.star.text.GlobalDocument";
-constexpr OUStringLiteral FACTORYNAME_CALC = u"com.sun.star.sheet.SpreadsheetDocument";
-constexpr OUStringLiteral FACTORYNAME_DRAW = u"com.sun.star.drawing.DrawingDocument";
-constexpr OUStringLiteral FACTORYNAME_IMPRESS = u"com.sun.star.presentation.PresentationDocument";
-constexpr OUStringLiteral FACTORYNAME_MATH = u"com.sun.star.formula.FormulaProperties";
-constexpr OUStringLiteral FACTORYNAME_CHART = u"com.sun.star.chart2.ChartDocument";
-constexpr OUStringLiteral FACTORYNAME_DATABASE = u"com.sun.star.sdb.OfficeDatabaseDocument";
-constexpr OUStringLiteral FACTORYNAME_STARTMODULE = u"com.sun.star.frame.StartModule";
-constexpr OUStringLiteral FACTORYNAME_BASIC = u"com.sun.star.script.BasicIDE";
+constexpr OUString FACTORYNAME_WRITER = u"com.sun.star.text.TextDocument"_ustr;
+constexpr OUString FACTORYNAME_WRITERWEB = u"com.sun.star.text.WebDocument"_ustr;
+constexpr OUString FACTORYNAME_WRITERGLOBAL = u"com.sun.star.text.GlobalDocument"_ustr;
+constexpr OUString FACTORYNAME_CALC = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
+constexpr OUString FACTORYNAME_DRAW = u"com.sun.star.drawing.DrawingDocument"_ustr;
+constexpr OUString FACTORYNAME_IMPRESS = u"com.sun.star.presentation.PresentationDocument"_ustr;
+constexpr OUString FACTORYNAME_MATH = u"com.sun.star.formula.FormulaProperties"_ustr;
+constexpr OUString FACTORYNAME_CHART = u"com.sun.star.chart2.ChartDocument"_ustr;
+constexpr OUString FACTORYNAME_DATABASE = u"com.sun.star.sdb.OfficeDatabaseDocument"_ustr;
+constexpr OUString FACTORYNAME_STARTMODULE = u"com.sun.star.frame.StartModule"_ustr;
+constexpr OUString FACTORYNAME_BASIC = u"com.sun.star.script.BasicIDE"_ustr;
 
 #define FACTORYCOUNT                        11
 
