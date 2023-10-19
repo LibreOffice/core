@@ -440,7 +440,7 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
         // as close as possible (discussion see documentation in task),
         // so calculate it. For discussion of method used, see task
         // buffer measure string creation, will always use the same
-        static constexpr OUStringLiteral aMeasureString
+        static constexpr OUString aMeasureString
             = u"\u0020\u0021\u0022\u0023\u0024\u0025\u0026\u0027"
                "\u0028\u0029\u002A\u002B\u002C\u002D\u002E\u002F"
                "\u0030\u0031\u0032\u0033\u0034\u0035\u0036\u0037"
@@ -452,7 +452,7 @@ tools::Long Font::GetOrCalculateAverageFontWidth() const
                "\u0060\u0061\u0062\u0063\u0064\u0065\u0066\u0067"
                "\u0068\u0069\u006A\u006B\u006C\u006D\u006E\u006F"
                "\u0070\u0071\u0072\u0073\u0074\u0075\u0076\u0077"
-               "\u0078\u0079\u007A\u007B\u007C\u007D\u007E";
+               "\u0078\u0079\u007A\u007B\u007C\u007D\u007E"_ustr;
 
         const double fAverageFontWidth(
             pTempVirtualDevice->GetTextWidth(aMeasureString) /

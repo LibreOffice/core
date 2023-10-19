@@ -92,7 +92,7 @@ namespace toolkitform
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    constexpr OUStringLiteral FM_PROP_NAME = u"Name";
+    constexpr OUString FM_PROP_NAME = u"Name"_ustr;
 
     namespace
     {
@@ -101,7 +101,7 @@ namespace toolkitform
         */
         sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel )
         {
-            static constexpr OUStringLiteral FM_PROP_CLASSID = u"ClassId";
+            static constexpr OUString FM_PROP_CLASSID = u"ClassId"_ustr;
             sal_Int16 nControlType = FormComponentType::CONTROL;
 
             Reference< XPropertySetInfo > xPSI;
@@ -346,9 +346,9 @@ namespace toolkitform
                 SAL_INFO("toolkit.helper", "describePDFControl: unable to get property HelpText");
             }
             Any aText;
-            static constexpr OUStringLiteral FM_PROP_TEXT = u"Text";
-            static constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
-            static constexpr OUStringLiteral FM_PROP_VALUE = u"Value";
+            static constexpr OUString FM_PROP_TEXT = u"Text"_ustr;
+            static constexpr OUString FM_PROP_LABEL = u"Label"_ustr;
+            static constexpr OUString FM_PROP_VALUE = u"Value"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_TEXT ) )
                 aText = xModelProps->getPropertyValue( FM_PROP_TEXT );
             else if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
@@ -368,7 +368,7 @@ namespace toolkitform
 
 
             // readonly
-            static constexpr OUStringLiteral FM_PROP_READONLY = u"ReadOnly";
+            static constexpr OUString FM_PROP_READONLY = u"ReadOnly"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_READONLY ) )
                 if( ! (xModelProps->getPropertyValue( FM_PROP_READONLY ) >>= Descriptor->ReadOnly) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_READONLY);
@@ -376,7 +376,7 @@ namespace toolkitform
 
             // border
             {
-                static constexpr OUStringLiteral FM_PROP_BORDER = u"Border";
+                static constexpr OUString FM_PROP_BORDER = u"Border"_ustr;
                 if ( xPSI->hasPropertyByName( FM_PROP_BORDER ) )
                 {
                     sal_Int16 nBorderType = 0;
@@ -398,7 +398,7 @@ namespace toolkitform
 
 
             // background color
-            static constexpr OUStringLiteral FM_PROP_BACKGROUNDCOLOR = u"BackgroundColor";
+            static constexpr OUString FM_PROP_BACKGROUNDCOLOR = u"BackgroundColor"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_BACKGROUNDCOLOR ) )
             {
                 Color nBackColor = COL_TRANSPARENT;
@@ -409,7 +409,7 @@ namespace toolkitform
 
 
             // text color
-            static constexpr OUStringLiteral FM_PROP_TEXTCOLOR = u"TextColor";
+            static constexpr OUString FM_PROP_TEXTCOLOR = u"TextColor"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_TEXTCOLOR ) )
             {
                 Color nTextColor = COL_TRANSPARENT;
@@ -424,7 +424,7 @@ namespace toolkitform
             // multi line and word break
             // The MultiLine property of the control is mapped to both the "MULTILINE" and
             // "WORDBREAK" style flags
-            static constexpr OUStringLiteral FM_PROP_MULTILINE = u"MultiLine";
+            static constexpr OUString FM_PROP_MULTILINE = u"MultiLine"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
             {
                 bool bMultiLine = false;
@@ -435,7 +435,7 @@ namespace toolkitform
             }
 
             // horizontal alignment
-            static constexpr OUStringLiteral FM_PROP_ALIGN = u"Align";
+            static constexpr OUString FM_PROP_ALIGN = u"Align"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_ALIGN ) )
             {
                 sal_Int16 nAlign = awt::TextAlign::LEFT;
@@ -471,7 +471,7 @@ namespace toolkitform
             }
 
             // font
-            static constexpr OUStringLiteral FM_PROP_FONT = u"FontDescriptor";
+            static constexpr OUString FM_PROP_FONT = u"FontDescriptor"_ustr;
             if ( xPSI->hasPropertyByName( FM_PROP_FONT ) )
             {
                 FontDescriptor aUNOFont;
@@ -515,7 +515,7 @@ namespace toolkitform
                     pEditWidget->FileSelect = true;
 
                 // maximum text length
-                static constexpr OUStringLiteral FM_PROP_MAXTEXTLEN = u"MaxTextLen";
+                static constexpr OUString FM_PROP_MAXTEXTLEN = u"MaxTextLen"_ustr;
                 if ( xPSI->hasPropertyByName( FM_PROP_MAXTEXTLEN ) )
                 {
                     sal_Int16 nMaxTextLength = 0;
@@ -535,7 +535,7 @@ namespace toolkitform
 
                         pEditWidget->Format = vcl::PDFWriter::Number;
 
-                        static constexpr OUStringLiteral FM_PROP_CURRENCYSYMBOL = u"CurrencySymbol";
+                        static constexpr OUString FM_PROP_CURRENCYSYMBOL = u"CurrencySymbol"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_CURRENCYSYMBOL ) )
                         {
                             OUString sCurrencySymbol;
@@ -544,7 +544,7 @@ namespace toolkitform
                             pEditWidget->CurrencySymbol = sCurrencySymbol;
                         }
 
-                        static constexpr OUStringLiteral FM_PROP_DECIMALACCURACY = u"DecimalAccuracy";
+                        static constexpr OUString FM_PROP_DECIMALACCURACY = u"DecimalAccuracy"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_DECIMALACCURACY ) )
                         {
                             sal_Int32 nDecimalAccuracy = 0;
@@ -553,7 +553,7 @@ namespace toolkitform
                             pEditWidget->DecimalAccuracy = nDecimalAccuracy;
                         }
 
-                        static constexpr OUStringLiteral FM_PROP_PREPENDCURRENCYSYMBOL = u"PrependCurrencySymbol";
+                        static constexpr OUString FM_PROP_PREPENDCURRENCYSYMBOL = u"PrependCurrencySymbol"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_PREPENDCURRENCYSYMBOL ) )
                         {
                             bool bPrependCurrencySymbol = true;
@@ -566,7 +566,7 @@ namespace toolkitform
                     {
                         pEditWidget->Format = vcl::PDFWriter::Time;
 
-                        static constexpr OUStringLiteral FM_PROP_TIMEFORMAT = u"TimeFormat";
+                        static constexpr OUString FM_PROP_TIMEFORMAT = u"TimeFormat"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_TIMEFORMAT ) )
                         {
                             sal_Int32 nTimeFormat = 0;
@@ -594,7 +594,7 @@ namespace toolkitform
                     {
                         pEditWidget->Format = vcl::PDFWriter::Date;
 
-                        static constexpr OUStringLiteral FM_PROP_DATEFORMAT = u"DateFormat";
+                        static constexpr OUString FM_PROP_DATEFORMAT = u"DateFormat"_ustr;
                         if ( xPSI->hasPropertyByName( FM_PROP_DATEFORMAT ) )
                         {
                             sal_Int32 nDateFormat = 0;
@@ -648,7 +648,7 @@ namespace toolkitform
                 FormButtonType eButtonType = FormButtonType_PUSH;
                 if( ! (xModelProps->getPropertyValue("ButtonType") >>= eButtonType) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property ButtonType");
-                static constexpr OUStringLiteral FM_PROP_TARGET_URL = u"TargetURL";
+                static constexpr OUString FM_PROP_TARGET_URL = u"TargetURL"_ustr;
                 if ( eButtonType == FormButtonType_SUBMIT )
                 {
                     // if a button is a submit button, then it uses the URL at its parent form
@@ -710,7 +710,7 @@ namespace toolkitform
 
 
             // check boxes
-            static constexpr OUStringLiteral FM_PROP_STATE = u"State";
+            static constexpr OUString FM_PROP_STATE = u"State"_ustr;
             if ( Descriptor->getType() == vcl::PDFWriter::CheckBox )
             {
                 vcl::PDFWriter::CheckBoxWidget* pCheckBoxWidget = static_cast< vcl::PDFWriter::CheckBoxWidget* >( Descriptor.get() );

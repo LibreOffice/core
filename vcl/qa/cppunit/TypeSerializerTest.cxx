@@ -34,7 +34,7 @@
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
+constexpr OUString DATA_DIRECTORY = u"/vcl/qa/cppunit/data/"_ustr;
 
 std::vector<unsigned char> calculateHash(SvStream& rStream)
 {

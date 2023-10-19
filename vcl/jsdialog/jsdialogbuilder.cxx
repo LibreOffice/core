@@ -1818,7 +1818,7 @@ JSMessageDialog::~JSMessageDialog()
 
 void JSMessageDialog::RememberMessageDialog()
 {
-    static constexpr OUStringLiteral sWidgetName = u"__DIALOG__";
+    static constexpr OUString sWidgetName = u"__DIALOG__"_ustr;
     OUString sWindowId = OUString::number(m_xMessageDialog->GetLOKWindowId());
     if (JSInstanceBuilder::FindWeldWidgetsMap(sWindowId, sWidgetName) != nullptr)
         return;

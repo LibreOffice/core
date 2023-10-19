@@ -34,9 +34,9 @@
 #include <o3tl/string_view.hxx>
 
 // filename of configuration files
-constexpr OUStringLiteral PRINT_FILENAME = u"psprint.conf";
+constexpr OUString PRINT_FILENAME = u"psprint.conf"_ustr;
 // the group of the global defaults
-constexpr OStringLiteral GLOBAL_DEFAULTS_GROUP = "__Global_Printer_Defaults__";
+constexpr OString GLOBAL_DEFAULTS_GROUP = "__Global_Printer_Defaults__"_ostr;
 
 #include <cstddef>
 #include <mutex>

@@ -146,8 +146,8 @@ bool checkBitmap(Graphic& rGraphic)
     return bResult;
 }
 
-constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/data/";
-constexpr OUStringLiteral PDFEXPORT_DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/";
+constexpr OUString DATA_DIRECTORY = u"/vcl/qa/cppunit/data/"_ustr;
+constexpr OUString PDFEXPORT_DATA_DIRECTORY = u"/vcl/qa/cppunit/pdfexport/data/"_ustr;
 
 Graphic loadGraphic(std::u16string_view const& rFilename)
 {

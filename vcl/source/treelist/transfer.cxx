@@ -203,14 +203,14 @@ static void ImplSetParameterString( TransferableObjectDescriptor& rObjDesc, cons
 
         if( xMimeType.is() )
         {
-            static constexpr OUStringLiteral aClassNameString( u"classname" );
-            static constexpr OUStringLiteral aTypeNameString( u"typename" );
-            static constexpr OUStringLiteral aDisplayNameString( u"displayname" );
-            static constexpr OUStringLiteral aViewAspectString( u"viewaspect" );
-            static constexpr OUStringLiteral aWidthString( u"width" );
-            static constexpr OUStringLiteral aHeightString( u"height" );
-            static constexpr OUStringLiteral aPosXString( u"posx" );
-            static constexpr OUStringLiteral aPosYString( u"posy" );
+            static constexpr OUString aClassNameString( u"classname"_ustr );
+            static constexpr OUString aTypeNameString( u"typename"_ustr );
+            static constexpr OUString aDisplayNameString( u"displayname"_ustr );
+            static constexpr OUString aViewAspectString( u"viewaspect"_ustr );
+            static constexpr OUString aWidthString( u"width"_ustr );
+            static constexpr OUString aHeightString( u"height"_ustr );
+            static constexpr OUString aPosXString( u"posx"_ustr );
+            static constexpr OUString aPosYString( u"posy"_ustr );
 
             if( xMimeType->hasParameter( aClassNameString ) )
             {
@@ -1212,7 +1212,7 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
         Reference< XComponentContext >          xContext( ::comphelper::getProcessComponentContext() );
         Reference< XMimeContentTypeFactory >    xMimeFact = MimeContentTypeFactory::create( xContext );
         DataFlavorEx                            aFlavorEx;
-        static constexpr OUStringLiteral        aCharsetStr( u"charset" );
+        static constexpr OUString        aCharsetStr( u"charset"_ustr );
 
 
         for (auto const& rFlavor : rDataFlavorSeq)
@@ -2220,7 +2220,7 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
                 if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "text/plain" ) )
                 {
                     // special handling for text/plain media types
-                    static constexpr OUStringLiteral aCharsetString( u"charset" );
+                    static constexpr OUString aCharsetString( u"charset"_ustr );
 
                     if( !xRequestType2->hasParameter( aCharsetString ) ||
                         xRequestType2->getParameterValue( aCharsetString ).equalsIgnoreAsciiCase( "utf-16" ) ||
@@ -2232,7 +2232,7 @@ bool TransferableDataHelper::IsEqual( const css::datatransfer::DataFlavor& rInte
                 else if( xRequestType1->getFullMediaType().equalsIgnoreAsciiCase( "application/x-openoffice" ) )
                 {
                     // special handling for application/x-openoffice media types
-                    static constexpr OUStringLiteral aFormatString( u"windows_formatname" );
+                    static constexpr OUString aFormatString( u"windows_formatname"_ustr );
 
                     if( xRequestType1->hasParameter( aFormatString ) &&
                         xRequestType2->hasParameter( aFormatString ) &&

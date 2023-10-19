@@ -60,11 +60,11 @@ void VclMnemonicTest::testMnemonic()
     }
 
     {
-        static constexpr OUStringLiteral TEST = u"\u4E00";
+        static constexpr OUString TEST = u"\u4E00"_ustr;
         OUString sResult = aGenerator.CreateMnemonic(TEST);
         CPPUNIT_ASSERT_EQUAL(OUString("(~C)"), sResult.copy(sResult.getLength() - 4));
         sResult = MnemonicGenerator::EraseAllMnemonicChars(sResult);
-        CPPUNIT_ASSERT_EQUAL(OUString(TEST), sResult);
+        CPPUNIT_ASSERT_EQUAL(TEST, sResult);
     }
 }
 
