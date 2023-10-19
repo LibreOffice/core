@@ -92,7 +92,7 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
        OUString const& rObjectName, OUString const*const pOldObjectName,
        OUString const& rProgId)
 {
-    static constexpr OUStringLiteral sEmbeddingsPropName = u"EmbeddedObjects";
+    static constexpr OUString sEmbeddingsPropName = u"EmbeddedObjects"_ustr;
 
     // get interop grab bag from document
     uno::Reference<beans::XPropertySet> const xDocProps(xModel, uno::UNO_QUERY);

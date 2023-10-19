@@ -134,7 +134,7 @@ void CustomShapeProperties::pushToPropSet(
 
         if ( !maAdjustmentGuideList.empty() )
         {
-            static constexpr OUStringLiteral sCustomShapeGeometry(u"CustomShapeGeometry");
+            static constexpr OUString sCustomShapeGeometry(u"CustomShapeGeometry"_ustr);
             static constexpr OUStringLiteral sAdjustmentValues(u"AdjustmentValues");
             uno::Any aGeoPropSet = xPropSet->getPropertyValue( sCustomShapeGeometry );
             uno::Sequence< beans::PropertyValue > aGeoPropSeq;

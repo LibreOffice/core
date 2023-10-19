@@ -242,7 +242,7 @@ void SlidePersist::applyTextStyles( const XmlFilterBase& rFilterBase )
             OUString aFamily;
 
             static constexpr OUStringLiteral sOutline( u"outline1" );
-            static constexpr OUStringLiteral sTitle( u"title" );
+            static constexpr OUString sTitle( u"title"_ustr );
             static constexpr OUStringLiteral sStandard( u"standard" );
             static constexpr OUStringLiteral sSubtitle( u"subtitle" );
 

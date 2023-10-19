@@ -90,8 +90,8 @@ void ObjectContainer::createContainer() const
 }
 
 constexpr OUStringLiteral gaDashNameBase(      u"msLineDash " );      ///< Base name for all named line dashes.
-constexpr OUStringLiteral gaGradientNameBase(  u"msFillGradient " );  ///< Base name for all named fill gradients.
-constexpr OUStringLiteral gaTransGradNameBase( u"msTransGradient " ); ///< Base name for all named fill gradients.
+constexpr OUString gaGradientNameBase(  u"msFillGradient "_ustr );  ///< Base name for all named fill gradients.
+constexpr OUString gaTransGradNameBase( u"msTransGradient "_ustr ); ///< Base name for all named fill gradients.
 constexpr OUStringLiteral gaBitmapUrlNameBase( u"msFillBitmap " );    ///< Base name for all named fill bitmap URLs.
 constexpr OUStringLiteral gaHatchNameBase(     u"msFillHatch " );     ///< Base name for all named fill hatches.
 

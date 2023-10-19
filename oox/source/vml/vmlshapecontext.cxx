@@ -295,7 +295,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
     {
         mrTypeModel.maShapeName = rAttribs.getXString( XML_id, OUString() );
         // get ShapeType and ShapeId from name for compatibility
-        static constexpr OUStringLiteral sShapeTypePrefix = u"shapetype_";
+        static constexpr OUString sShapeTypePrefix = u"shapetype_"_ustr;
         OUString tmp;
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
