@@ -346,7 +346,7 @@ void ExportDocumentHandler::exportTableRows()
     const OUString sRElement(lcl_createAttribute(XML_NP_RPT,XML_REPORT_ELEMENT) );
     const OUString sRComponent( lcl_createAttribute(XML_NP_RPT,XML_REPORT_COMPONENT) ) ;
     const OUString sFormulaAttrib( lcl_createAttribute(XML_NP_RPT,XML_FORMULA) );
-    static constexpr OUStringLiteral s_sFloat = u"float";
+    static constexpr OUString s_sFloat = u"float"_ustr;
 
     rtl::Reference<comphelper::AttributeList> pCellAtt = new comphelper::AttributeList();
     pCellAtt->AddAttribute(sValueType, "string");
