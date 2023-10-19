@@ -408,8 +408,8 @@ public:
 //some helping variables ( names for my special properties )
 const char16_t g_sPropertyNameForCount[] = u"RowCount";
 const char16_t g_sPropertyNameForFinalCount[] = u"IsRowCountFinal";
-constexpr OUStringLiteral g_sPropertyNameForFetchSize(u"FetchSize");
-constexpr OUStringLiteral g_sPropertyNameForFetchDirection(u"FetchDirection");
+constexpr OUString g_sPropertyNameForFetchSize(u"FetchSize"_ustr);
+constexpr OUString g_sPropertyNameForFetchDirection(u"FetchDirection"_ustr);
 
 CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         Reference< XPropertySetInfo > const & xInfo )

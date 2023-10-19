@@ -28,9 +28,9 @@
 
 using namespace hierarchy_ucp;
 
-constexpr OUStringLiteral HIERARCHY_URL_SCHEME = u"vnd.sun.star.hier";
-constexpr OUStringLiteral DEFAULT_DATA_SOURCE_SERVICE =
-                    u"com.sun.star.ucb.DefaultHierarchyDataSource";
+constexpr OUString HIERARCHY_URL_SCHEME = u"vnd.sun.star.hier"_ustr;
+constexpr OUString DEFAULT_DATA_SOURCE_SERVICE =
+                    u"com.sun.star.ucb.DefaultHierarchyDataSource"_ustr;
 
 
 // HierarchyUri Implementation.

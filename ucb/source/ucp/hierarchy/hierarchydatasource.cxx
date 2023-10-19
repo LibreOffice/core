@@ -49,12 +49,12 @@ using namespace hierarchy_ucp;
 
 
 // describe path of cfg entry
-constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
+constexpr OUString CFGPROPERTY_NODEPATH = u"nodepath"_ustr;
 
-constexpr OUStringLiteral READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess";
-constexpr OUStringLiteral READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess";
+constexpr OUString READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess"_ustr;
+constexpr OUString READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess"_ustr;
 
-constexpr OUStringLiteral CONFIG_DATA_ROOT_KEY =  u"/org.openoffice.ucb.Hierarchy/Root";
+constexpr OUString CONFIG_DATA_ROOT_KEY =  u"/org.openoffice.ucb.Hierarchy/Root"_ustr;
 
 
 namespace hcp_impl
@@ -265,7 +265,7 @@ HierarchyDataSource::createInstance( const OUString & aServiceSpecifier )
     // Create view to root node.
 
     beans::PropertyValue aProp = comphelper::makePropertyValue(CFGPROPERTY_NODEPATH,
-                                                               OUString( CONFIG_DATA_ROOT_KEY  ));
+                                                               CONFIG_DATA_ROOT_KEY);
 
     uno::Sequence< uno::Any > aArguments{ uno::Any(aProp) };
 

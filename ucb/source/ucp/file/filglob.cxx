@@ -501,11 +501,11 @@ namespace fileaccess {
         else if( errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND ||
                  errorCode == TASKHANDLING_NOCONTENTTYPE_INSERT_COMMAND )
         {
-            static constexpr OUStringLiteral sTitle = u"Title";
-            static constexpr OUStringLiteral sContentType = u"ContentType";
+            static constexpr OUString sTitle = u"Title"_ustr;
+            static constexpr OUString sContentType = u"ContentType"_ustr;
             Sequence< OUString > aSeq{ (errorCode == TASKHANDLING_NONAMESET_INSERT_COMMAND)
-                                           ? OUString(sTitle)
-                                           : OUString(sContentType) };
+                                           ? sTitle
+                                           : sContentType };
 
             aAny <<= MissingPropertiesException(
                 "a property is missing, necessary to create a content",

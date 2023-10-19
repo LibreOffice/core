@@ -26,15 +26,15 @@ using namespace ::com::sun::star;
 
 
 // static
-constexpr OUStringLiteral aTypeString = u"string";
-constexpr OUStringLiteral aTypeLong = u"long";
-constexpr OUStringLiteral aTypeShort = u"short";
-constexpr OUStringLiteral aTypeBoolean = u"boolean";
-constexpr OUStringLiteral aTypeChar = u"char";
-constexpr OUStringLiteral aTypeByte = u"byte";
-constexpr OUStringLiteral aTypeHyper = u"hyper";
-constexpr OUStringLiteral aTypeFloat = u"float";
-constexpr OUStringLiteral aTypeDouble = u"double";
+constexpr OUString aTypeString = u"string"_ustr;
+constexpr OUString aTypeLong = u"long"_ustr;
+constexpr OUString aTypeShort = u"short"_ustr;
+constexpr OUString aTypeBoolean = u"boolean"_ustr;
+constexpr OUString aTypeChar = u"char"_ustr;
+constexpr OUString aTypeByte = u"byte"_ustr;
+constexpr OUString aTypeHyper = u"hyper"_ustr;
+constexpr OUString aTypeFloat = u"float"_ustr;
+constexpr OUString aTypeDouble = u"double"_ustr;
 
 // static
 bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )

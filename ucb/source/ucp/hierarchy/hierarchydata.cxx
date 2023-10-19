@@ -87,10 +87,10 @@ static void makeXMLName( std::u16string_view rIn, OUStringBuffer & rBuffer  )
 
 
 constexpr OUStringLiteral READ_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadAccess";
-constexpr OUStringLiteral READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess";
+constexpr OUString READWRITE_SERVICE_NAME = u"com.sun.star.ucb.HierarchyDataReadWriteAccess"_ustr;
 
 // describe path of cfg entry
-constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
+constexpr OUString CFGPROPERTY_NODEPATH = u"nodepath"_ustr;
 
 
 HierarchyEntry::HierarchyEntry(

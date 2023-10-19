@@ -99,10 +99,10 @@ static OUString makeHierarchalNameSegment( std::u16string_view rIn  )
     return aBuffer.makeStringAndClear();
 }
 
-constexpr OUStringLiteral STORE_CONTENTPROPERTIES_KEY = u"/org.openoffice.ucb.Store/ContentProperties";
+constexpr OUString STORE_CONTENTPROPERTIES_KEY = u"/org.openoffice.ucb.Store/ContentProperties"_ustr;
 
 // describe path of cfg entry
-constexpr OUStringLiteral CFGPROPERTY_NODEPATH = u"nodepath";
+constexpr OUString CFGPROPERTY_NODEPATH = u"nodepath"_ustr;
 
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
@@ -878,7 +878,7 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccessImpl(std::un
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
+                    {CFGPROPERTY_NODEPATH,  Any(STORE_CONTENTPROPERTIES_KEY)}
                 }));
 
                 m_bTriedToGetRootReadAccess = true;
@@ -939,7 +939,7 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccessImpl(std::uniqu
             {
                 Sequence<Any> aArguments(comphelper::InitAnyPropertySequence(
                 {
-                    {CFGPROPERTY_NODEPATH,  Any(OUString( STORE_CONTENTPROPERTIES_KEY ))}
+                    {CFGPROPERTY_NODEPATH,  Any(STORE_CONTENTPROPERTIES_KEY)}
                 }));
 
                 m_bTriedToGetRootWriteAccess = true;

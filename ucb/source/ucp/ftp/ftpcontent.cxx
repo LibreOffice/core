@@ -573,9 +573,9 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
     }
 }
 
-constexpr OUStringLiteral FTP_FILE = u"application/vnd.sun.staroffice.ftp-file";
+constexpr OUString FTP_FILE = u"application/vnd.sun.staroffice.ftp-file"_ustr;
 
-constexpr OUStringLiteral FTP_FOLDER = u"application/vnd.sun.staroffice.ftp-folder";
+constexpr OUString FTP_FOLDER = u"application/vnd.sun.staroffice.ftp-folder"_ustr;
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
@@ -751,8 +751,8 @@ Reference< XRow > FTPContent::getPropertyValues(
             if(Name == "ContentType")
                 xRow->appendString(rProp,
                                    (aDirEntry.m_nMode & INETCOREFTP_FILEMODE_ISDIR)
-                                   ? OUString(FTP_FOLDER)
-                                   : OUString(FTP_FILE) );
+                                   ? FTP_FOLDER
+                                   : FTP_FILE );
             else if(Name == "IsReadOnly")
                 xRow->appendBoolean(rProp,
                                     (aDirEntry.m_nMode

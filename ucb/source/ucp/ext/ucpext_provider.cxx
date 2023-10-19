@@ -93,7 +93,7 @@ namespace ucb::ucp::ext
     Reference< XContent > SAL_CALL ContentProvider::queryContent( const Reference< XContentIdentifier  >& i_rIdentifier )
     {
         // Check URL scheme...
-        static constexpr OUStringLiteral sScheme( u"vnd.sun.star.extension" );
+        static constexpr OUString sScheme( u"vnd.sun.star.extension"_ustr );
         if ( !i_rIdentifier->getContentProviderScheme().equalsIgnoreAsciiCase( sScheme ) )
             throw IllegalIdentifierException();
 
