@@ -3073,6 +3073,9 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
         && pActiveViewSh != SfxViewShell::Current())
         return;
 
+    if (!pActiveViewSh)
+        return;
+
     // Macro calls for validity can cause a lot of problems, so inhibit
     // nested calls of EnterHandler().
     if (bInEnterHandler) return;
@@ -3080,8 +3083,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     bInOwnChange = true; // disable ModifyHdl (reset below)
     mbPartialPrefix = false;
 
-    if (pActiveViewSh)
-        ImplCreateEditEngine();
+    ImplCreateEditEngine();
 
     bool bMatrix = ( nBlockMode == ScEnterMode::MATRIX );
 
@@ -3103,7 +3105,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
             lcl_SelectionToEnd(pTableView);
         }
 
-        vcl::Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : nullptr;
+        vcl::Window* pFrameWin = pActiveViewSh->GetFrameWin();
 
         if (pTopView)
             pTopView->CompleteAutoCorrect(); // CompleteAutoCorrect for both Views
@@ -3115,7 +3117,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     lcl_RemoveTabs(aPreAutoCorrectString);
 
     // Test if valid (always with simple string)
-    if (bModified && nValidation && pActiveViewSh)
+    if (bModified && nValidation)
     {
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
         const ScValidationData* pData = rDoc.GetValidationEntry( nValidation );
@@ -3165,7 +3167,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     }
 
     // Check for input into DataPilot table
-    if ( bModified && pActiveViewSh && !bForget )
+    if ( bModified && !bForget )
     {
         ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
         ScDPObject* pDPObj = rDoc.GetDPAtCursor( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
@@ -3187,21 +3189,18 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     {
         //  #i3820# If the spell checker flags numerical input as error,
         //  it still has to be treated as number, not EditEngine object.
-        if ( pActiveViewSh )
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
+        // #i67990# don't use pLastPattern in EnterHandler
+        const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
+        if (pPattern)
         {
-            ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocument();
-            // #i67990# don't use pLastPattern in EnterHandler
-            const ScPatternAttr* pPattern = rDoc.GetPattern( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab() );
-            if (pPattern)
+            SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+            // without conditional format, as in ScColumn::SetString
+            sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
+            double nVal;
+            if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
             {
-                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-                // without conditional format, as in ScColumn::SetString
-                sal_uInt32 nFormat = pPattern->GetNumberFormat( pFormatter );
-                double nVal;
-                if ( pFormatter->IsNumberFormat( aString, nFormat, nVal ) )
-                {
-                    bSpellErrors = false;       // ignore the spelling errors
-                }
+                bSpellErrors = false;       // ignore the spelling errors
             }
         }
     }
@@ -3235,7 +3234,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
         const SfxPoolItem* pItem = nullptr;
 
         // Find common (cell) attributes before RemoveAdjust
-        if ( pActiveViewSh && bUniformAttribs )
+        if ( bUniformAttribs )
         {
             std::optional<SfxItemSet> pCommonAttrs;
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
