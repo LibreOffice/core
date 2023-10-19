@@ -34,25 +34,34 @@ private:
     OUString             m_aStrDateInfo;
 
     std::unique_ptr<weld::CheckButton> m_xExtHelpCB;
+    std::unique_ptr<weld::Widget> m_xExtHelpImg;
     std::unique_ptr<weld::CheckButton> m_xPopUpNoHelpCB;
+    std::unique_ptr<weld::Widget> m_xPopUpNoHelpImg;
     std::unique_ptr<weld::CheckButton> m_xShowTipOfTheDay;
+    std::unique_ptr<weld::Widget> m_xShowTipOfTheDayImg;
     std::unique_ptr<weld::Widget> m_xFileDlgFrame;
     std::unique_ptr<weld::Widget> m_xFileDlgROImage;
     std::unique_ptr<weld::CheckButton> m_xFileDlgCB;
     std::unique_ptr<weld::CheckButton> m_xDocStatusCB;
+    std::unique_ptr<weld::Widget> m_xDocStatusImg;
     std::unique_ptr<weld::Widget> m_xYearFrame;
+    std::unique_ptr<weld::Label> m_xYearLabel;
     std::unique_ptr<weld::SpinButton> m_xYearValueField;
     std::unique_ptr<weld::Label> m_xToYearFT;
+    std::unique_ptr<weld::Widget> m_xYearFrameImg;
 #if HAVE_FEATURE_BREAKPAD
     std::unique_ptr<weld::Widget> m_xPrivacyFrame;
     std::unique_ptr<weld::CheckButton> m_xCrashReport;
+    std::unique_ptr<weld::Widget> m_xCrashReportImg;
 #endif
 #if defined(_WIN32)
     std::unique_ptr<weld::Widget> m_xQuickStarterFrame;
     std::unique_ptr<weld::CheckButton> m_xQuickLaunchCB;
+    std::unique_ptr<weld::Widget> m_xQuickLaunchImg;
     std::unique_ptr<weld::Widget> m_xFileAssocFrame;
     std::unique_ptr<weld::Button> m_xFileAssocBtn;
     std::unique_ptr<weld::CheckButton> m_xPerformFileExtCheck;
+    std::unique_ptr<weld::Widget> m_xPerformFileExtImg;
 #endif
 
     DECL_LINK(TwoFigureHdl, weld::SpinButton&, void);

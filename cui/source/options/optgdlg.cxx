@@ -160,35 +160,36 @@ bool lcl_HasSystemFilePicker()
 OfaMiscTabPage::OfaMiscTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optgeneralpage.ui", "OptGeneralPage", &rSet)
     , m_xExtHelpCB(m_xBuilder->weld_check_button("exthelp"))
+    , m_xExtHelpImg(m_xBuilder->weld_widget("lockexthelp"))
     , m_xPopUpNoHelpCB(m_xBuilder->weld_check_button("popupnohelp"))
+    , m_xPopUpNoHelpImg(m_xBuilder->weld_widget("lockpopupnohelp"))
     , m_xShowTipOfTheDay(m_xBuilder->weld_check_button("cbShowTipOfTheDay"))
+    , m_xShowTipOfTheDayImg(m_xBuilder->weld_widget("lockcbShowTipOfTheDay"))
     , m_xFileDlgFrame(m_xBuilder->weld_widget("filedlgframe"))
     , m_xFileDlgROImage(m_xBuilder->weld_widget("lockimage"))
     , m_xFileDlgCB(m_xBuilder->weld_check_button("filedlg"))
     , m_xDocStatusCB(m_xBuilder->weld_check_button("docstatus"))
+    , m_xDocStatusImg(m_xBuilder->weld_widget("lockdocstatus"))
     , m_xYearFrame(m_xBuilder->weld_widget("yearframe"))
+    , m_xYearLabel(m_xBuilder->weld_label("yearslabel"))
     , m_xYearValueField(m_xBuilder->weld_spin_button("year"))
     , m_xToYearFT(m_xBuilder->weld_label("toyear"))
+    , m_xYearFrameImg(m_xBuilder->weld_widget("lockyears"))
 #if HAVE_FEATURE_BREAKPAD
     , m_xPrivacyFrame(m_xBuilder->weld_widget("privacyframe"))
     , m_xCrashReport(m_xBuilder->weld_check_button("crashreport"))
+    , m_xCrashReportImg(m_xBuilder->weld_widget("lockcrashreport"))
 #endif
 #if defined(_WIN32)
     , m_xQuickStarterFrame(m_xBuilder->weld_widget("quickstarter"))
     , m_xQuickLaunchCB(m_xBuilder->weld_check_button("quicklaunch"))
+    , m_xQuickLaunchImg(m_xBuilder->weld_widget("lockquicklaunch"))
     , m_xFileAssocFrame(m_xBuilder->weld_widget("fileassoc"))
     , m_xFileAssocBtn(m_xBuilder->weld_button("assocfiles"))
     , m_xPerformFileExtCheck(m_xBuilder->weld_check_button("cbPerformFileExtCheck"))
+    , m_xPerformFileExtImg(m_xBuilder->weld_widget("lockcbPerformFileExtCheck"))
 #endif
 {
-    if (!lcl_HasSystemFilePicker())
-        m_xFileDlgFrame->hide();
-    else if (officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly())
-    {
-        m_xFileDlgROImage->show();
-        m_xFileDlgCB->set_sensitive(false);
-    }
-
 #if HAVE_FEATURE_BREAKPAD
     m_xPrivacyFrame->show();
 #endif
@@ -221,7 +222,7 @@ std::unique_ptr<SfxTabPage> OfaMiscTabPage::Create( weld::Container* pPage, weld
 OUString OfaMiscTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1", "label2", "label4", "label5", "label6",
+    OUString labels[] = { "label1", "label2", "label4", "label5", "yearslabel",
                           "toyear", "label7", "label8", "label9" };
 
     for (const auto& label : labels)
@@ -313,18 +314,47 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
 void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
+    bool bEnable = !officecfg::Office::Common::Help::ExtendedTip::isReadOnly();
     m_xExtHelpCB->set_active( officecfg::Office::Common::Help::Tip::get() &&
             officecfg::Office::Common::Help::ExtendedTip::get() );
+    m_xExtHelpCB->set_sensitive(bEnable);
+    m_xExtHelpImg->set_visible(!bEnable);
     m_xExtHelpCB->save_state();
+
+    bEnable = !officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::isReadOnly();
     m_xPopUpNoHelpCB->set_active( officecfg::Office::Common::Help::BuiltInHelpNotInstalledPopUp::get() );
+    m_xPopUpNoHelpCB->set_sensitive(bEnable);
+    m_xPopUpNoHelpImg->set_visible(!bEnable);
     m_xPopUpNoHelpCB->save_state();
+
+    bEnable = !officecfg::Office::Common::Misc::ShowTipOfTheDay::isReadOnly();
     m_xShowTipOfTheDay->set_active( officecfg::Office::Common::Misc::ShowTipOfTheDay::get() );
+    m_xShowTipOfTheDay->set_sensitive(bEnable);
+    m_xShowTipOfTheDayImg->set_visible(!bEnable);
     m_xShowTipOfTheDay->save_state();
-    m_xFileDlgCB->set_active( !officecfg::Office::Common::Misc::UseSystemFileDialog::get() );
+
+    if (!lcl_HasSystemFilePicker())
+        m_xFileDlgFrame->hide();
+    else
+    {
+        bEnable = !officecfg::Office::Common::Misc::UseSystemFileDialog::isReadOnly();
+        m_xFileDlgCB->set_sensitive(bEnable);
+        m_xFileDlgROImage->set_visible(!bEnable);
+    }
+    m_xFileDlgCB->set_active(!officecfg::Office::Common::Misc::UseSystemFileDialog::get());
     m_xFileDlgCB->save_state();
 
+    bEnable = !officecfg::Office::Common::Print::PrintingModifiesDocument::isReadOnly();
     m_xDocStatusCB->set_active(officecfg::Office::Common::Print::PrintingModifiesDocument::get());
+    m_xDocStatusCB->set_sensitive(bEnable);
+    m_xDocStatusImg->set_visible(!bEnable);
     m_xDocStatusCB->save_state();
+
+    bEnable = !officecfg::Office::Common::DateFormat::TwoDigitYear::isReadOnly();
+    m_xYearLabel->set_sensitive(bEnable);
+    m_xYearValueField->set_sensitive(bEnable);
+    m_xToYearFT->set_sensitive(bEnable);
+    m_xYearFrameImg->set_visible(!bEnable);
 
     if ( const SfxUInt16Item* pYearItem = rSet->GetItemIfSet( SID_ATTR_YEAR2000, false ) )
     {
@@ -337,6 +367,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 #if HAVE_FEATURE_BREAKPAD
     m_xCrashReport->set_active(officecfg::Office::Common::Misc::CrashReport::get() && CrashReporter::IsDumpEnable());
     m_xCrashReport->set_sensitive(!officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
+    m_xCrashReportImg->set_visible(officecfg::Office::Common::Misc::CrashReport::isReadOnly() && CrashReporter::IsDumpEnable());
     m_xCrashReport->save_state();
 #endif
 
@@ -357,6 +388,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
         officecfg::Office::Common::Misc::PerformFileExtCheck::get());
     m_xPerformFileExtCheck->save_state();
     m_xPerformFileExtCheck->set_sensitive(!officecfg::Office::Common::Misc::PerformFileExtCheck::isReadOnly());
+    m_xPerformFileExtImg->set_visible(officecfg::Office::Common::Misc::PerformFileExtCheck::isReadOnly());
 #endif
 }
 
