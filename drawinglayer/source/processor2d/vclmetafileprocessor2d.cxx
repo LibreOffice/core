@@ -1083,7 +1083,7 @@ void VclMetafileProcessor2D::processControlPrimitive2D(
             uno::Reference<beans::XPropertySetInfo> xPropertyInfo(
                 xModelProperties.is() ? xModelProperties->getPropertySetInfo()
                                       : uno::Reference<beans::XPropertySetInfo>());
-            static constexpr OUStringLiteral sPrintablePropertyName(u"Printable");
+            static constexpr OUString sPrintablePropertyName(u"Printable"_ustr);
 
             if (xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(sPrintablePropertyName))
             {
@@ -1264,7 +1264,7 @@ void VclMetafileProcessor2D::processTextHierarchyFieldPrimitive2D(
 {
     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
     // thus do the MetafileAction embedding stuff but just handle recursively.
-    static constexpr OStringLiteral aCommentStringCommon("FIELD_SEQ_BEGIN");
+    static constexpr OString aCommentStringCommon("FIELD_SEQ_BEGIN"_ostr);
     OUString aURL;
 
     switch (rFieldPrimitive.getType())
@@ -1358,7 +1358,7 @@ void VclMetafileProcessor2D::processTextHierarchyBulletPrimitive2D(
 void VclMetafileProcessor2D::processTextHierarchyParagraphPrimitive2D(
     const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive)
 {
-    static constexpr OStringLiteral aCommentString("XTEXT_EOP");
+    static constexpr OString aCommentString("XTEXT_EOP"_ostr);
     static bool bSuppressPDFExtOutDevDataSupport(false); // loplugin:constvars:ignore
 
     if (nullptr == mpPDFExtOutDevData || bSuppressPDFExtOutDevDataSupport)
