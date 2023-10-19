@@ -727,7 +727,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 && !bPdfiumImport)
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
-                static constexpr OUStringLiteral sLockUpdates(u"LockUpdates");
+                static constexpr OUString sLockUpdates(u"LockUpdates"_ustr);
                 bool bSetProperty = true;
                 try
                 {
@@ -777,9 +777,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
-                static constexpr OUStringLiteral aAuthor( u"Author" );
-                static constexpr OUStringLiteral aKeywords( u"Keywords" );
-                static constexpr OUStringLiteral aSubject( u"Subject" );
+                static constexpr OUString aAuthor( u"Author"_ustr );
+                static constexpr OUString aKeywords( u"Keywords"_ustr );
+                static constexpr OUString aSubject( u"Subject"_ustr );
                 Any aAny;
                 OUString aValue;
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1045,8 +1045,8 @@ bool SfxObjectShell::DoSave()
                     if ( !xTmpStorage.is() )
                         throw uno::RuntimeException();
 
-                    static constexpr OUStringLiteral aBasicStorageName( u"Basic"  );
-                    static constexpr OUStringLiteral aDialogsStorageName( u"Dialogs"  );
+                    static constexpr OUString aBasicStorageName( u"Basic"_ustr  );
+                    static constexpr OUString aDialogsStorageName( u"Dialogs"_ustr  );
                     if ( GetMedium()->GetStorage()->hasByName( aBasicStorageName ) )
                         GetMedium()->GetStorage()->copyElementTo( aBasicStorageName, xTmpStorage, aBasicStorageName );
                     if ( GetMedium()->GetStorage()->hasByName( aDialogsStorageName ) )
@@ -1119,7 +1119,7 @@ private:
 
 static OUString lcl_strip_template(const OUString &aString)
 {
-    static constexpr OUStringLiteral sPostfix(u"_template");
+    static constexpr OUString sPostfix(u"_template"_ustr);
     OUString sRes(aString);
     if (sRes.endsWith(sPostfix))
         sRes = sRes.copy(0, sRes.getLength() - sPostfix.getLength());
@@ -1484,7 +1484,7 @@ bool SfxObjectShell::SaveTo_Impl
                     if ( aVersions.hasElements() )
                     {
                         // copy the version streams
-                        static constexpr OUStringLiteral aVersionsName( u"Versions"  );
+                        static constexpr OUString aVersionsName( u"Versions"_ustr  );
                         uno::Reference< embed::XStorage > xNewVerStor = xMedStorage->openStorageElement(
                                                         aVersionsName,
                                                         embed::ElementModes::READWRITE );
@@ -1721,9 +1721,9 @@ bool SfxObjectShell::SaveTo_Impl
             css::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
-                static constexpr OUStringLiteral aAuthor( u"Author" );
-                static constexpr OUStringLiteral aKeywords( u"Keywords" );
-                static constexpr OUStringLiteral aSubject( u"Subject" );
+                static constexpr OUString aAuthor( u"Author"_ustr );
+                static constexpr OUString aKeywords( u"Keywords"_ustr );
+                static constexpr OUString aSubject( u"Subject"_ustr );
 
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                     GetModel(), uno::UNO_QUERY_THROW);
@@ -2225,7 +2225,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
             css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
             css::beans::PropertyValue * pNewValue = aArgs.getArray();
             const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
-            static constexpr OUStringLiteral sInputStream ( u"InputStream"  );
+            static constexpr OUString sInputStream ( u"InputStream"_ustr  );
 
             bool bHasInputStream = false;
             bool bHasBaseURL = false;
@@ -2404,8 +2404,8 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         css::beans::PropertyValue * pNewValue = aArgs.getArray();
 
         // put in the REAL file name, and copy all PropertyValues
-        static constexpr OUStringLiteral sOutputStream ( u"OutputStream"  );
-        static constexpr OUStringLiteral sStream ( u"StreamForOutput"  );
+        static constexpr OUString sOutputStream ( u"OutputStream"_ustr  );
+        static constexpr OUString sStream ( u"StreamForOutput"_ustr  );
         bool bHasOutputStream = false;
         bool bHasStream = false;
         bool bHasBaseURL = false;
@@ -3431,7 +3431,7 @@ static bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embe
             if ( xSource->isStorageElement( rSubElement ) )
             {
                 OUString aMediaType;
-                static constexpr OUStringLiteral aMediaTypePropName( u"MediaType"  );
+                static constexpr OUString aMediaTypePropName( u"MediaType"_ustr  );
                 bool bGotMediaType = false;
 
                 try
@@ -3574,7 +3574,7 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType(const uno::Reference< embed:
             else if (xSource->isStorageElement(rSubElement))
             {
                 OUString aMediaType;
-                static constexpr OUStringLiteral aMediaTypePropName( u"MediaType"  );
+                static constexpr OUString aMediaTypePropName( u"MediaType"_ustr  );
                 bool bGotMediaType = false;
 
                 try

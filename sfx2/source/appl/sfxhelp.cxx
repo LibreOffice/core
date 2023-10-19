@@ -207,7 +207,7 @@ static OUString const & HelpLocaleString()
     if (!aLocaleStr.isEmpty())
         return aLocaleStr;
 
-    static constexpr OUStringLiteral aEnglish(u"en-US");
+    static constexpr OUString aEnglish(u"en-US"_ustr);
     // detect installed locale
     aLocaleStr = utl::ConfigManager::getUILocale();
 
@@ -709,7 +709,7 @@ bool SfxHelp::Start(const OUString& rURL, weld::Widget* pWidget)
 /// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp(const OUString& rURL, weld::Widget* pDialogParent)
 {
-    static constexpr OUStringLiteral aInternal(u"vnd.sun.star.help://");
+    static constexpr OUString aInternal(u"vnd.sun.star.help://"_ustr);
     if ( rURL.getLength() <= aInternal.getLength() || !rURL.startsWith(aInternal) )
         return false;
 
@@ -866,7 +866,7 @@ bool rewriteFlatpakHelpRootUrl(OUString * helpRootUrl) {
             //   /.../runtime/org.libreoffice.LibreOffice.Help/<arch>/<branch>/<sha>/files
             // because the extension's files are stored at a different place than the app's files,
             // so use this hack until flatpak itself provides a better solution:
-            static constexpr OUStringLiteral segments = u"/app/org.libreoffice.LibreOffice/";
+            static constexpr OUString segments = u"/app/org.libreoffice.LibreOffice/"_ustr;
             auto const i1 = path.lastIndexOf(segments);
                 // use lastIndexOf instead of indexOf, in case the user-controlled prefix /.../
                 // happens to contain such segments

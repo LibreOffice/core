@@ -464,7 +464,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             sal_Int32 nNumArgs(1);
-            static constexpr OUStringLiteral aPasswordPropName( u"Password" );
+            static constexpr OUString aPasswordPropName( u"Password"_ustr );
             css::uno::Sequence< css::beans::PropertyValue > aArgs{ comphelper::makePropertyValue(
                 "FilterName", aFilterName) };
 

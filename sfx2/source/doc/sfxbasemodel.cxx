@@ -2778,7 +2778,7 @@ void SfxBaseModel::loadCmisProperties( )
             utl::UCBContentHelper::getDefaultCommandEnvironment(),
             comphelper::getProcessComponentContext() );
         Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-        static constexpr OUStringLiteral aCmisProps( u"CmisProperties" );
+        static constexpr OUString aCmisProps( u"CmisProperties"_ustr );
         if ( xProps->hasPropertyByName( aCmisProps ) )
         {
             Sequence< document::CmisProperty> aCmisProperties;
@@ -2885,7 +2885,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
               && m_pData->m_pObjectShell->GetCreateMode() != SfxObjectCreateMode::EMBEDDED )
             {
                 Reference< embed::XStorage > xConfigStorage;
-                static constexpr OUStringLiteral aUIConfigFolderName( u"Configurations2" );
+                static constexpr OUString aUIConfigFolderName( u"Configurations2"_ustr );
 
                 xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
                 if ( !xConfigStorage.is() )
@@ -3055,7 +3055,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
-        static constexpr OUStringLiteral aFilterString( u"FilterName"  );
+        static constexpr OUString aFilterString( u"FilterName"_ustr  );
         const OUString aFilterName( aArgHash.getUnpackedValueOrDefault( aFilterString, OUString() ) );
         if ( !aFilterName.isEmpty() )
         {
@@ -3657,7 +3657,7 @@ Reference< ui::XUIConfigurationManager2 > SfxBaseModel::getUIConfigurationManage
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
-            static constexpr OUStringLiteral aMediaTypeProp( u"MediaType" );
+            static constexpr OUString aMediaTypeProp( u"MediaType"_ustr );
             OUString aMediaType;
             Reference< beans::XPropertySet > xPropSet( xConfigStorage, UNO_QUERY );
             Any a = xPropSet->getPropertyValue( aMediaTypeProp );
@@ -4033,7 +4033,7 @@ OUString SAL_CALL SfxBaseModel::getTitle()
                      = aContent.getProperties();
                 if ( xProps.is() )
                 {
-                    static constexpr OUStringLiteral aServerTitle( u"TitleOnServer" );
+                    static constexpr OUString aServerTitle( u"TitleOnServer"_ustr );
                     if ( xProps->hasPropertyByName( aServerTitle ) )
                     {
                         Any aAny = aContent.getPropertyValue( aServerTitle );

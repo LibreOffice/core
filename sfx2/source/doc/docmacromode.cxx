@@ -396,8 +396,8 @@ namespace sfx2
         {
             try
             {
-                static constexpr OUStringLiteral s_sBasicStorageName( u"Basic" );
-                static constexpr OUStringLiteral s_sScriptsStorageName( u"Scripts" );
+                static constexpr OUString s_sBasicStorageName( u"Basic"_ustr );
+                static constexpr OUString s_sScriptsStorageName( u"Scripts"_ustr );
 
                 bHasMacros =(   (   rxStorage->hasByName( s_sBasicStorageName )
                                 &&  rxStorage->isStorageElement( s_sBasicStorageName )

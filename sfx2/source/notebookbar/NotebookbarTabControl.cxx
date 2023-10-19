@@ -39,7 +39,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #define ICON_SIZE 25
-constexpr OUStringLiteral TOOLBAR_STR = u"private:resource/toolbar/notebookbarshortcuts";
+constexpr OUString TOOLBAR_STR = u"private:resource/toolbar/notebookbarshortcuts"_ustr;
 
 using namespace css::uno;
 using namespace css::ui;

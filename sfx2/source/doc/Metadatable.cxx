@@ -113,8 +113,8 @@ using ::sfx2::isValidXmlId;
 
 namespace sfx2 {
 
-constexpr OUStringLiteral s_content = u"content.xml";
-constexpr OUStringLiteral s_styles  = u"styles.xml";
+constexpr OUString s_content = u"content.xml"_ustr;
+constexpr OUString s_styles  = u"styles.xml"_ustr;
 
 static bool isContentFile(std::u16string_view i_rPath)
 {
@@ -724,7 +724,7 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
     const bool isInContent( i_rObject.IsInContent() );
     const OUString stream(
-        isInContent ? OUString(s_content) : OUString(s_styles) );
+        isInContent ? s_content : s_styles );
     // check if we have a latent xmlid, and if yes, remove it
     OUString old_path;
     OUString old_idref;
@@ -1138,7 +1138,7 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
 
     bool isInContent( i_rObject.IsInContent() );
     OUString stream(
-        isInContent ? OUString(s_content) : OUString(s_styles) );
+        isInContent ? s_content : s_styles );
 
     OUString old_path;
     OUString old_idref;
@@ -1296,7 +1296,7 @@ void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rRefere
         {
             // handle empty stream name as auto-detect.
             // necessary for importing flat file format.
-            streamName = IsInContent() ? OUString(s_content) : OUString(s_styles);
+            streamName = IsInContent() ? s_content : s_styles;
         }
         XmlIdRegistry & rReg( dynamic_cast<XmlIdRegistry&>( GetRegistry() ) );
         if (!rReg.TryRegisterMetadatable(*this, streamName, i_rReference.Second))

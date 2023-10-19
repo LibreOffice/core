@@ -143,7 +143,7 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::document::XViewDataSupplier;
 using ::com::sun::star::container::XIndexContainer;
 
-constexpr OUStringLiteral CHANGES_STR = u"private:resource/toolbar/changes";
+constexpr OUString CHANGES_STR = u"private:resource/toolbar/changes"_ustr;
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)
 
@@ -3137,7 +3137,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         case SID_RECORDMACRO :
         {
             // try to find any active recorder on this frame
-            static constexpr OUStringLiteral sProperty(u"DispatchRecorderSupplier");
+            static constexpr OUString sProperty(u"DispatchRecorderSupplier"_ustr);
             css::uno::Reference< css::frame::XFrame > xFrame =
                     GetFrame().GetFrameInterface();
 
@@ -3199,7 +3199,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
         {
             if ( auto xLayoutManager = getLayoutManager(GetFrame()) )
             {
-                static constexpr OUStringLiteral aStatusbarResString( u"private:resource/statusbar/statusbar" );
+                static constexpr OUString aStatusbarResString( u"private:resource/statusbar/statusbar"_ustr );
                 // Evaluate parameter.
                 const SfxBoolItem* pShowItem = rReq.GetArg<SfxBoolItem>(rReq.GetSlot());
                 bool bShow( true );

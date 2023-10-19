@@ -53,21 +53,21 @@
 #include <sfx2/strings.hrc>
 #include <bitmaps.hlst>
 
-constexpr OUStringLiteral TM_SETTING_MANAGER = u"TemplateManager";
-constexpr OUStringLiteral TM_SETTING_LASTFOLDER = u"LastFolder";
-constexpr OUStringLiteral TM_SETTING_LASTAPPLICATION = u"LastApplication";
-constexpr OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
+constexpr OUString TM_SETTING_MANAGER = u"TemplateManager"_ustr;
+constexpr OUString TM_SETTING_LASTFOLDER = u"LastFolder"_ustr;
+constexpr OUString TM_SETTING_LASTAPPLICATION = u"LastApplication"_ustr;
+constexpr OUString TM_SETTING_VIEWMODE = u"ViewMode"_ustr;
 
-constexpr OUStringLiteral MNI_ACTION_NEW_FOLDER = u"new";
-constexpr OUStringLiteral MNI_ACTION_RENAME_FOLDER = u"rename";
-constexpr OUStringLiteral MNI_ACTION_DELETE_FOLDER = u"delete";
-constexpr OUStringLiteral MNI_ACTION_DEFAULT   = u"default";
-constexpr OUStringLiteral MNI_ACTION_DEFAULT_WRITER   = u"default_writer";
-constexpr OUStringLiteral MNI_ACTION_DEFAULT_CALC   = u"default_calc";
-constexpr OUStringLiteral MNI_ACTION_DEFAULT_IMPRESS   = u"default_impress";
-constexpr OUStringLiteral MNI_ACTION_DEFAULT_DRAW   = u"default_draw";
-constexpr OUStringLiteral MNI_ACTION_IMPORT   = u"import_template";
-constexpr OUStringLiteral MNI_ACTION_EXTENSIONS = u"extensions";
+constexpr OUString MNI_ACTION_NEW_FOLDER = u"new"_ustr;
+constexpr OUString MNI_ACTION_RENAME_FOLDER = u"rename"_ustr;
+constexpr OUString MNI_ACTION_DELETE_FOLDER = u"delete"_ustr;
+constexpr OUString MNI_ACTION_DEFAULT   = u"default"_ustr;
+constexpr OUString MNI_ACTION_DEFAULT_WRITER   = u"default_writer"_ustr;
+constexpr OUString MNI_ACTION_DEFAULT_CALC   = u"default_calc"_ustr;
+constexpr OUString MNI_ACTION_DEFAULT_IMPRESS   = u"default_impress"_ustr;
+constexpr OUString MNI_ACTION_DEFAULT_DRAW   = u"default_draw"_ustr;
+constexpr OUString MNI_ACTION_IMPORT   = u"import_template"_ustr;
+constexpr OUString MNI_ACTION_EXTENSIONS = u"extensions"_ustr;
 #define MNI_ALL_APPLICATIONS 0
 #define MNI_WRITER           1
 #define MNI_CALC             2

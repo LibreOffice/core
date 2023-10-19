@@ -37,8 +37,8 @@
 
 
 // stream names
-constexpr OUStringLiteral STREAM_SUMMARYINFO = u"\005SummaryInformation";
-constexpr OUStringLiteral STREAM_DOCSUMMARYINFO = u"\005DocumentSummaryInformation";
+constexpr OUString STREAM_SUMMARYINFO = u"\005SummaryInformation"_ustr;
+constexpr OUString STREAM_DOCSUMMARYINFO = u"\005DocumentSummaryInformation"_ustr;
 
 // usings
 using namespace ::com::sun::star;

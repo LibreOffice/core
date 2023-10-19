@@ -20,8 +20,8 @@
 #include <utility>
 
 
-constexpr OUStringLiteral AnyApplicationName = u"any";
-constexpr OUStringLiteral AnyContextName = u"any";
+constexpr OUString AnyApplicationName = u"any"_ustr;
+constexpr OUString AnyContextName = u"any"_ustr;
 
 namespace sfx2::sidebar {
 

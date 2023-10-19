@@ -127,7 +127,7 @@ const ResIdToResName pToolBarResToName[] =
 // Sort the Children according their alignment
 // The order corresponds to the enum SfxChildAlignment (->CHILDWIN.HXX).
 
-constexpr OUStringLiteral g_aLayoutManagerPropName = u"LayoutManager";
+constexpr OUString g_aLayoutManagerPropName = u"LayoutManager"_ustr;
 
 // Help to make changes to the alignment compatible!
 LayoutManagerListener::LayoutManagerListener(
@@ -436,9 +436,9 @@ void SfxWorkWindow::Sort_Impl()
     bSorted = true;
 }
 
-constexpr OUStringLiteral g_aStatusBarResName( u"private:resource/statusbar/statusbar" );
-constexpr OUStringLiteral g_aTbxTypeName( u"private:resource/toolbar/" );
-constexpr OUStringLiteral g_aProgressBarResName( u"private:resource/progressbar/progressbar" );
+constexpr OUString g_aStatusBarResName( u"private:resource/statusbar/statusbar"_ustr );
+constexpr OUString g_aTbxTypeName( u"private:resource/toolbar/"_ustr );
+constexpr OUString g_aProgressBarResName( u"private:resource/progressbar/progressbar"_ustr );
 
 // constructor for workwin of a Frame
 

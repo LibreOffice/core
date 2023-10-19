@@ -36,7 +36,7 @@ using namespace css::uno;
 using namespace css::ui;
 using namespace css;
 
-constexpr OUStringLiteral MENUBAR_STR = u"private:resource/menubar/menubar";
+constexpr OUString MENUBAR_STR = u"private:resource/menubar/menubar"_ustr;
 
 const char MERGE_NOTEBOOKBAR_URL[] = "URL";
 

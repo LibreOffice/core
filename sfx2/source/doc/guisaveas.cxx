@@ -119,9 +119,9 @@
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
 
-constexpr OUStringLiteral aFilterNameString = u"FilterName";
-constexpr OUStringLiteral aFilterOptionsString = u"FilterOptions";
-constexpr OUStringLiteral aFilterDataString = u"FilterData";
+constexpr OUString aFilterNameString = u"FilterName"_ustr;
+constexpr OUString aFilterOptionsString = u"FilterOptions"_ustr;
+constexpr OUString aFilterDataString = u"FilterData"_ustr;
 
 using namespace ::com::sun::star;
 using namespace css::system;
@@ -443,7 +443,7 @@ OUString ModelData_Impl::GetDocServiceName()
 
 void ModelData_Impl::CheckInteractionHandler()
 {
-    static constexpr OUStringLiteral sInteractionHandler {u"InteractionHandler"};
+    static constexpr OUString sInteractionHandler {u"InteractionHandler"_ustr};
     ::comphelper::SequenceAsHashMap::const_iterator aInteractIter =
             m_aMediaDescrHM.find( sInteractionHandler );
 
@@ -726,13 +726,13 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     // check acceptable entries for media descriptor
     ::comphelper::SequenceAsHashMap aAcceptedArgs;
 
-    static constexpr OUStringLiteral aVersionCommentString(u"VersionComment");
-    static constexpr OUStringLiteral aAuthorString(u"Author");
-    static constexpr OUStringLiteral aDontTerminateEdit(u"DontTerminateEdit");
-    static constexpr OUStringLiteral aInteractionHandlerString(u"InteractionHandler");
-    static constexpr OUStringLiteral aStatusIndicatorString(u"StatusIndicator");
-    static constexpr OUStringLiteral aFailOnWarningString(u"FailOnWarning");
-    static constexpr OUStringLiteral aNoFileSync(u"NoFileSync");
+    static constexpr OUString aVersionCommentString(u"VersionComment"_ustr);
+    static constexpr OUString aAuthorString(u"Author"_ustr);
+    static constexpr OUString aDontTerminateEdit(u"DontTerminateEdit"_ustr);
+    static constexpr OUString aInteractionHandlerString(u"InteractionHandler"_ustr);
+    static constexpr OUString aStatusIndicatorString(u"StatusIndicator"_ustr);
+    static constexpr OUString aFailOnWarningString(u"FailOnWarning"_ustr);
+    static constexpr OUString aNoFileSync(u"NoFileSync"_ustr);
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aVersionCommentString ] = GetMediaDescr()[ aVersionCommentString ];

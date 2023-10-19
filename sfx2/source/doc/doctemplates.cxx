@@ -92,25 +92,25 @@
 constexpr OUStringLiteral SERVICENAME_TYPEDETECTION = u"com.sun.star.document.TypeDetection";
 
 constexpr OUStringLiteral TEMPLATE_ROOT_URL = u"vnd.sun.star.hier:/templates";
-constexpr OUStringLiteral TITLE = u"Title";
-constexpr OUStringLiteral IS_FOLDER = u"IsFolder";
-constexpr OUStringLiteral IS_DOCUMENT = u"IsDocument";
-constexpr OUStringLiteral TARGET_URL = u"TargetURL";
+constexpr OUString TITLE = u"Title"_ustr;
+constexpr OUString IS_FOLDER = u"IsFolder"_ustr;
+constexpr OUString IS_DOCUMENT = u"IsDocument"_ustr;
+constexpr OUString TARGET_URL = u"TargetURL"_ustr;
 constexpr OUStringLiteral TEMPLATE_VERSION = u"TemplateComponentVersion";
 constexpr OUStringLiteral TEMPLATE_VERSION_VALUE = u"2";
 constexpr OUStringLiteral TYPE_FOLDER = u"application/vnd.sun.star.hier-folder";
 constexpr OUStringLiteral TYPE_LINK = u"application/vnd.sun.star.hier-link";
-constexpr OUStringLiteral TYPE_FSYS_FOLDER = u"application/vnd.sun.staroffice.fsys-folder";
+constexpr OUString TYPE_FSYS_FOLDER = u"application/vnd.sun.staroffice.fsys-folder"_ustr;
 constexpr OUStringLiteral TYPE_FSYS_FILE = u"application/vnd.sun.staroffice.fsys-file";
 
-constexpr OUStringLiteral PROPERTY_DIRLIST = u"DirectoryList";
-constexpr OUStringLiteral PROPERTY_NEEDSUPDATE = u"NeedsUpdate";
-constexpr OUStringLiteral PROPERTY_TYPE = u"TypeDescription";
+constexpr OUString PROPERTY_DIRLIST = u"DirectoryList"_ustr;
+constexpr OUString PROPERTY_NEEDSUPDATE = u"NeedsUpdate"_ustr;
+constexpr OUString PROPERTY_TYPE = u"TypeDescription"_ustr;
 
-constexpr OUStringLiteral TARGET_DIR_URL = u"TargetDirURL";
+constexpr OUString TARGET_DIR_URL = u"TargetDirURL"_ustr;
 constexpr OUStringLiteral COMMAND_DELETE = u"delete";
 
-constexpr OUStringLiteral STANDARD_FOLDER = u"standard";
+constexpr OUString STANDARD_FOLDER = u"standard"_ustr;
 
 #define C_DELIM                 ';'
 
@@ -1950,7 +1950,7 @@ sal_Bool SfxDocTplService::addTemplate( const OUString& rGroupName,
         Content aResultContent;
         if ( Content::create( aNewTemplateTargetURL, xEnv, comphelper::getProcessComponentContext(), aResultContent ) )
         {
-            static constexpr OUStringLiteral aPropertyName( u"IsReadOnly" );
+            static constexpr OUString aPropertyName( u"IsReadOnly"_ustr );
             uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )

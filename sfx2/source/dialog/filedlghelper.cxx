@@ -108,9 +108,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
 
-constexpr OUStringLiteral IODLG_CONFIGNAME = u"FilePicker_Save";
-constexpr OUStringLiteral IMPGRF_CONFIGNAME = u"FilePicker_Graph";
-constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
+constexpr OUString IODLG_CONFIGNAME = u"FilePicker_Save"_ustr;
+constexpr OUString IMPGRF_CONFIGNAME = u"FilePicker_Graph"_ustr;
+constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 
 namespace sfx2
 {
@@ -1947,7 +1947,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 }
 
 constexpr OUStringLiteral GRF_CONFIG_STR = u"   ";
-constexpr OUStringLiteral STD_CONFIG_STR = u"1 ";
+constexpr OUString STD_CONFIG_STR = u"1 "_ustr;
 
 static void SetToken( OUString& rOrigStr, sal_Int32 nToken, sal_Unicode cTok, std::u16string_view rStr)
 {

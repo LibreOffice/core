@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
+constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 
 class SfxModelessDialog_Impl : public SfxListener
 {

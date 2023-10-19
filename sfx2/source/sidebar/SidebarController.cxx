@@ -66,7 +66,7 @@ using namespace css::uno;
 
 namespace
 {
-    constexpr OUStringLiteral gsReadOnlyCommandName = u".uno:EditDoc";
+    constexpr OUString gsReadOnlyCommandName = u".uno:EditDoc"_ustr;
     const sal_Int32 gnWidthCloseThreshold (70);
     const sal_Int32 gnWidthOpenThreshold (40);
 
@@ -104,7 +104,7 @@ namespace {
 
     /** When in doubt, show this deck.
     */
-    constexpr OUStringLiteral gsDefaultDeckId(u"PropertyDeck");
+    constexpr OUString gsDefaultDeckId(u"PropertyDeck"_ustr);
 }
 
 SidebarController::SidebarController (

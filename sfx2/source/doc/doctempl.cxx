@@ -81,8 +81,8 @@ using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::ucbhelper;
 
-constexpr OUStringLiteral TITLE = u"Title";
-constexpr OUStringLiteral TARGET_URL = u"TargetURL";
+constexpr OUString TITLE = u"Title"_ustr;
+constexpr OUString TARGET_URL = u"TargetURL"_ustr;
 
 constexpr OUStringLiteral COMMAND_TRANSFER = u"transfer";
 

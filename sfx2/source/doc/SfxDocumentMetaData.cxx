@@ -356,21 +356,21 @@ public:
     }
 };
 
-constexpr OUStringLiteral sMetaPageCount = u"meta:page-count";
-constexpr OUStringLiteral sMetaTableCount = u"meta:table-count";
-constexpr OUStringLiteral sMetaDrawCount = u"meta:draw-count";
-constexpr OUStringLiteral sMetaImageCount = u"meta:image-count";
-constexpr OUStringLiteral sMetaObjectCount = u"meta:object-count";
-constexpr OUStringLiteral sMetaOleObjectCount = u"meta:ole-object-count";
-constexpr OUStringLiteral sMetaParagraphCount = u"meta:paragraph-count";
-constexpr OUStringLiteral sMetaWordCount = u"meta:word-count";
-constexpr OUStringLiteral sMetaCharacterCount = u"meta:character-count";
-constexpr OUStringLiteral sMetaRowCount = u"meta:row-count";
-constexpr OUStringLiteral sMetaFrameCount = u"meta:frame-count";
-constexpr OUStringLiteral sMetaSentenceCount = u"meta:sentence-count";
-constexpr OUStringLiteral sMetaSyllableCount = u"meta:syllable-count";
-constexpr OUStringLiteral sMetaNonWhitespaceCharacterCount = u"meta:non-whitespace-character-count";
-constexpr OUStringLiteral sMetaCellCount = u"meta:cell-count";
+constexpr OUString sMetaPageCount = u"meta:page-count"_ustr;
+constexpr OUString sMetaTableCount = u"meta:table-count"_ustr;
+constexpr OUString sMetaDrawCount = u"meta:draw-count"_ustr;
+constexpr OUString sMetaImageCount = u"meta:image-count"_ustr;
+constexpr OUString sMetaObjectCount = u"meta:object-count"_ustr;
+constexpr OUString sMetaOleObjectCount = u"meta:ole-object-count"_ustr;
+constexpr OUString sMetaParagraphCount = u"meta:paragraph-count"_ustr;
+constexpr OUString sMetaWordCount = u"meta:word-count"_ustr;
+constexpr OUString sMetaCharacterCount = u"meta:character-count"_ustr;
+constexpr OUString sMetaRowCount = u"meta:row-count"_ustr;
+constexpr OUString sMetaFrameCount = u"meta:frame-count"_ustr;
+constexpr OUString sMetaSentenceCount = u"meta:sentence-count"_ustr;
+constexpr OUString sMetaSyllableCount = u"meta:syllable-count"_ustr;
+constexpr OUString sMetaNonWhitespaceCharacterCount = u"meta:non-whitespace-character-count"_ustr;
+constexpr OUString sMetaCellCount = u"meta:cell-count"_ustr;
 
 // NB: keep these two arrays in sync!
 constexpr OUString s_stdStatAttrs[] = {
@@ -437,11 +437,11 @@ const char* s_stdMeta[] = {
     nullptr
 };
 
-constexpr OUStringLiteral sMetaKeyword = u"meta:keyword";
-constexpr OUStringLiteral sMetaUserDefined = u"meta:user-defined";
-constexpr OUStringLiteral sDCContributor = u"dc:contributor";
-constexpr OUStringLiteral sDCPublisher = u"dc:publisher";
-constexpr OUStringLiteral sDCRelation = u"dc:relation";
+constexpr OUString sMetaKeyword = u"meta:keyword"_ustr;
+constexpr OUString sMetaUserDefined = u"meta:user-defined"_ustr;
+constexpr OUString sDCContributor = u"dc:contributor"_ustr;
+constexpr OUString sDCPublisher = u"dc:publisher"_ustr;
+constexpr OUString sDCRelation = u"dc:relation"_ustr;
 constexpr OUString s_stdMetaList[] {
     sMetaKeyword,             // string*
     sMetaUserDefined,        // ...*
@@ -451,12 +451,12 @@ constexpr OUString s_stdMetaList[] {
 };
 
 constexpr OUStringLiteral s_nsXLink = u"http://www.w3.org/1999/xlink";
-constexpr OUStringLiteral s_nsDC = u"http://purl.org/dc/elements/1.1/";
-constexpr OUStringLiteral s_nsODF = u"urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-constexpr OUStringLiteral s_nsODFMeta = u"urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
+constexpr OUString s_nsDC = u"http://purl.org/dc/elements/1.1/"_ustr;
+constexpr OUString s_nsODF = u"urn:oasis:names:tc:opendocument:xmlns:office:1.0"_ustr;
+constexpr OUString s_nsODFMeta = u"urn:oasis:names:tc:opendocument:xmlns:meta:1.0"_ustr;
 // constexpr OUStringLiteral s_nsOOo = "http://openoffice.org/2004/office"; // not used (yet?)
 
-constexpr OUStringLiteral s_meta = u"meta.xml";
+constexpr OUString s_meta = u"meta.xml"_ustr;
 
 bool isValidDate(const css::util::Date & i_rDate)
 {
@@ -632,7 +632,7 @@ SfxDocumentMetaData::getURLProperties(
         }
         xPropArg->addProperty("StreamName",
                 css::beans::PropertyAttribute::MAYBEVOID,
-                css::uno::Any(OUString(s_meta)));
+                css::uno::Any(s_meta));
     } catch (const css::uno::Exception &) {
         // ignore
     }
@@ -880,7 +880,7 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         const css::uno::Type & type = any.getValueType();
         std::vector<std::pair<OUString, OUString> > as;
         as.emplace_back("meta:name", name);
-        static constexpr OUStringLiteral vt = u"meta:value-type";
+        static constexpr OUString vt = u"meta:value-type"_ustr;
 
         // convert according to type
         if (type == ::cppu::UnoType<bool>::get()) {
@@ -1231,8 +1231,8 @@ void SfxDocumentMetaData::init(
     }
 
     // initialize members corresponding to attributes from DOM nodes
-    static constexpr OUStringLiteral sMetaTemplate = u"meta:template";
-    static constexpr OUStringLiteral sMetaAutoReload = u"meta:auto-reload";
+    static constexpr OUString sMetaTemplate = u"meta:template"_ustr;
+    static constexpr OUString sMetaAutoReload = u"meta:auto-reload"_ustr;
     static constexpr OUStringLiteral sMetaHyperlinkBehaviour = u"meta:hyperlink-behaviour";
     m_TemplateName  = getMetaAttr(sMetaTemplate, "xlink:title");
     m_TemplateURL   = getMetaAttr(sMetaTemplate, "xlink:href");

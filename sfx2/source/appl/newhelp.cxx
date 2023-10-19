@@ -110,23 +110,23 @@ using namespace ::comphelper;
 
 // defines ---------------------------------------------------------------
 
-constexpr OUStringLiteral CONFIGNAME_HELPWIN = u"OfficeHelp";
-constexpr OUStringLiteral CONFIGNAME_INDEXWIN = u"OfficeHelpIndex";
-constexpr OUStringLiteral CONFIGNAME_SEARCHPAGE = u"OfficeHelpSearch";
-constexpr OUStringLiteral IMAGE_URL = u"private:factory/";
+constexpr OUString CONFIGNAME_HELPWIN = u"OfficeHelp"_ustr;
+constexpr OUString CONFIGNAME_INDEXWIN = u"OfficeHelpIndex"_ustr;
+constexpr OUString CONFIGNAME_SEARCHPAGE = u"OfficeHelpSearch"_ustr;
+constexpr OUString IMAGE_URL = u"private:factory/"_ustr;
 
-constexpr OUStringLiteral PROPERTY_KEYWORDLIST = u"KeywordList";
-constexpr OUStringLiteral PROPERTY_KEYWORDREF = u"KeywordRef";
-constexpr OUStringLiteral PROPERTY_ANCHORREF = u"KeywordAnchorForRef";
-constexpr OUStringLiteral PROPERTY_TITLEREF = u"KeywordTitleForRef";
-constexpr OUStringLiteral PROPERTY_TITLE = u"Title";
-constexpr OUStringLiteral HELP_URL = u"vnd.sun.star.help://";
+constexpr OUString PROPERTY_KEYWORDLIST = u"KeywordList"_ustr;
+constexpr OUString PROPERTY_KEYWORDREF = u"KeywordRef"_ustr;
+constexpr OUString PROPERTY_ANCHORREF = u"KeywordAnchorForRef"_ustr;
+constexpr OUString PROPERTY_TITLEREF = u"KeywordTitleForRef"_ustr;
+constexpr OUString PROPERTY_TITLE = u"Title"_ustr;
+constexpr OUString HELP_URL = u"vnd.sun.star.help://"_ustr;
 constexpr OUStringLiteral HELP_SEARCH_TAG = u"/?Query=";
-constexpr OUStringLiteral USERITEM_NAME = u"UserItem";
+constexpr OUString USERITEM_NAME = u"UserItem"_ustr;
 
 constexpr OUStringLiteral PACKAGE_SETUP = u"/org.openoffice.Setup";
-constexpr OUStringLiteral PATH_OFFICE_FACTORIES = u"Office/Factories/";
-constexpr OUStringLiteral KEY_HELP_ON_OPEN = u"ooSetupFactoryHelpOnOpen";
+constexpr OUString PATH_OFFICE_FACTORIES = u"Office/Factories/"_ustr;
+constexpr OUString KEY_HELP_ON_OPEN = u"ooSetupFactoryHelpOnOpen"_ustr;
 constexpr OUStringLiteral KEY_UI_NAME = u"ooSetupFactoryUIName";
 
 namespace sfx2
