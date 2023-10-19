@@ -854,14 +854,14 @@ double UserFormGeometryHelper::getOffsetY() const
     return mfOffsetY;
 }
 
-constexpr OUStringLiteral saPosXName = u"PositionX";
-constexpr OUStringLiteral saPosYName = u"PositionY";
-constexpr OUStringLiteral saWidthName = u"Width";
-constexpr OUStringLiteral saHeightName = u"Height";
+constexpr OUString saPosXName = u"PositionX"_ustr;
+constexpr OUString saPosYName = u"PositionY"_ustr;
+constexpr OUString saWidthName = u"Width"_ustr;
+constexpr OUString saHeightName = u"Height"_ustr;
 
 double UserFormGeometryHelper::implGetPos( bool bPosY ) const
 {
-    sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName) ).get< sal_Int32 >();
+    sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? saPosYName : saPosXName ).get< sal_Int32 >();
     // appfont to pixel
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosAppFont, nPosAppFont ), util::MeasureUnit::APPFONT );
     // pixel to VBA points
@@ -876,12 +876,12 @@ void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosPixel, nPosPixel ), util::MeasureUnit::POINT );
     // pixel to appfont
     awt::Point aPosAppFont = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName), uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
+    mxModelProps->setPropertyValue( bPosY ? saPosYName : saPosXName, uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
 }
 
 double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
 {
-    sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName) ).get< sal_Int32 >();
+    sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? saHeightName : saWidthName ).get< sal_Int32 >();
     // appfont to pixel
     awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSizeAppFont, nSizeAppFont ), util::MeasureUnit::APPFONT );
 
@@ -929,7 +929,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     }
 
     awt::Size aSizeAppFont = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::APPFONT );
-    mxModelProps->setPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
+    mxModelProps->setPropertyValue( bHeight ? saHeightName : saWidthName, uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
 

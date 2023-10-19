@@ -25,7 +25,7 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-constexpr OUStringLiteral SVALUE( u"MultiPageValue" );
+constexpr OUString SVALUE( u"MultiPageValue"_ustr );
 
 namespace {
 
