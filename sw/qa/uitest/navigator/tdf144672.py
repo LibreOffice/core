@@ -40,21 +40,21 @@ class tdf144672(UITestCase):
             # tdf#129625: Without the fix in place, this test would have failed with
             # AssertionError: 'true' != 'false'
             self.assertEqual('true', get_state_as_dict(xReferences)['IsSemiTransparent'])
-# disable flakey UITest
-#            xIndexes = self.get_item(xContentTree, 'Indexes')
-#            self.assertEqual('Indexes', get_state_as_dict(xIndexes)['Text'])
-#            self.assertEqual('false', get_state_as_dict(xIndexes)['IsSemiTransparent'])
-#
-#            xIndexes.executeAction("EXPAND", tuple())
-#
-#            self.assertEqual('3', get_state_as_dict(xIndexes)['Children'])
-#
-#            for i in range(3):
-#                # Without the fix in place, this test would have failed here with
-#                # AssertionError: 'false' != 'true'
-#                self.assertEqual('false', get_state_as_dict(xIndexes.getChild(i))['IsSemiTransparent'])
-#
-#            xIndexes.executeAction("COLLAPSE", tuple())
+
+            xIndexes = self.get_item(xContentTree, 'Indexes')
+            self.assertEqual('Indexes', get_state_as_dict(xIndexes)['Text'])
+            self.assertEqual('false', get_state_as_dict(xIndexes)['IsSemiTransparent'])
+
+            xIndexes.executeAction("EXPAND", tuple())
+
+            self.assertEqual('3', get_state_as_dict(xIndexes)['Children'])
+
+            for i in range(3):
+                # Without the fix in place, this test would have failed here with
+                # AssertionError: 'false' != 'true'
+                self.assertEqual('false', get_state_as_dict(xIndexes.getChild(i))['IsSemiTransparent'])
+
+            xIndexes.executeAction("COLLAPSE", tuple())
 
             self.xUITest.executeCommand(".uno:Sidebar")
 
