@@ -49,15 +49,15 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-constexpr OUStringLiteral CONFIG_ROOT_KEY = u"org.openoffice.Inet/Settings";
-constexpr OUStringLiteral PROXY_TYPE_KEY = u"ooInetProxyType";
-constexpr OUStringLiteral NO_PROXY_LIST_KEY = u"ooInetNoProxy";
-constexpr OUStringLiteral HTTP_PROXY_NAME_KEY = u"ooInetHTTPProxyName";
-constexpr OUStringLiteral HTTP_PROXY_PORT_KEY = u"ooInetHTTPProxyPort";
-constexpr OUStringLiteral HTTPS_PROXY_NAME_KEY = u"ooInetHTTPSProxyName";
-constexpr OUStringLiteral HTTPS_PROXY_PORT_KEY = u"ooInetHTTPSProxyPort";
-constexpr OUStringLiteral FTP_PROXY_NAME_KEY = u"ooInetFTPProxyName";
-constexpr OUStringLiteral FTP_PROXY_PORT_KEY = u"ooInetFTPProxyPort";
+constexpr OUString CONFIG_ROOT_KEY = u"org.openoffice.Inet/Settings"_ustr;
+constexpr OUString PROXY_TYPE_KEY = u"ooInetProxyType"_ustr;
+constexpr OUString NO_PROXY_LIST_KEY = u"ooInetNoProxy"_ustr;
+constexpr OUString HTTP_PROXY_NAME_KEY = u"ooInetHTTPProxyName"_ustr;
+constexpr OUString HTTP_PROXY_PORT_KEY = u"ooInetHTTPProxyPort"_ustr;
+constexpr OUString HTTPS_PROXY_NAME_KEY = u"ooInetHTTPSProxyName"_ustr;
+constexpr OUString HTTPS_PROXY_PORT_KEY = u"ooInetHTTPSProxyPort"_ustr;
+constexpr OUString FTP_PROXY_NAME_KEY = u"ooInetFTPProxyName"_ustr;
+constexpr OUString FTP_PROXY_PORT_KEY = u"ooInetFTPProxyPort"_ustr;
 
 
 namespace ucbhelper
@@ -303,7 +303,7 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         uno::Reference< lang::XMultiServiceFactory > xConfigProv =
                 configuration::theDefaultProvider::get( rxContext );
 
-        uno::Sequence< uno::Any > aArguments{ uno::Any(OUString( CONFIG_ROOT_KEY )) };
+        uno::Sequence< uno::Any > aArguments{ uno::Any(CONFIG_ROOT_KEY) };
         uno::Reference< uno::XInterface > xInterface(
                     xConfigProv->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationAccess",
