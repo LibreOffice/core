@@ -34,14 +34,14 @@ namespace ucb = ::com::sun::star::ucb;
 namespace lang = ::com::sun::star::lang;
 namespace uri = ::com::sun::star::uri;
 
-constexpr OUStringLiteral SHARE = u"share";
+constexpr OUString SHARE = u"share"_ustr;
 
 constexpr OUStringLiteral SHARE_UNO_PACKAGES_URI =
     u"vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE";
 
-constexpr OUStringLiteral USER = u"user";
-constexpr OUStringLiteral USER_URI =
-    u"vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+constexpr OUString USER = u"user"_ustr;
+constexpr OUString USER_URI =
+    u"vnd.sun.star.expand:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}"_ustr;
 
 
 

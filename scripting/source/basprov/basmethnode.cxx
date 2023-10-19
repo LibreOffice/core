@@ -45,7 +45,7 @@ using namespace ::sf_misc;
 #define BASPROV_PROPERTY_ID_EDITABLE    2
 
 constexpr OUStringLiteral BASPROV_PROPERTY_URI = u"URI";
-constexpr OUStringLiteral BASPROV_PROPERTY_EDITABLE = u"Editable";
+constexpr OUString BASPROV_PROPERTY_EDITABLE = u"Editable"_ustr;
 
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 

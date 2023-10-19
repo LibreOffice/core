@@ -665,7 +665,7 @@ Sequence< OUString > StringResourcePersistenceImpl::getSupportedServiceNames(  )
 // XInitialization base functionality for derived classes
 
 
-constexpr OUStringLiteral aNameBaseDefaultStr = u"strings";
+constexpr OUString aNameBaseDefaultStr = u"strings"_ustr;
 
 void StringResourcePersistenceImpl::implInitializeCommonParameters
     ( std::unique_lock<std::mutex>& rGuard, const Sequence< Any >& aArguments )
