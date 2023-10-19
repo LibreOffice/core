@@ -34,7 +34,7 @@
 using namespace com::sun::star;
 
 const char cURLInsertColumns[] = ".uno:DataSourceBrowser/InsertColumns"; //data into text
-constexpr OUStringLiteral cURLDocDataSource = u".uno:DataSourceBrowser/DocumentDataSource";
+constexpr OUString cURLDocDataSource = u".uno:DataSourceBrowser/DocumentDataSource"_ustr;
 
 static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( const SfxViewShell* pViewShell )
 {

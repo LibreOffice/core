@@ -1334,9 +1334,9 @@ SdrObject* ScShapeObj::GetSdrObject() const noexcept
     return nullptr;
 }
 
-constexpr OUStringLiteral SC_EVENTACC_ONCLICK = u"OnClick";
-constexpr OUStringLiteral SC_EVENTACC_SCRIPT = u"Script";
-constexpr OUStringLiteral SC_EVENTACC_EVENTTYPE = u"EventType";
+constexpr OUString SC_EVENTACC_ONCLICK = u"OnClick"_ustr;
+constexpr OUString SC_EVENTACC_SCRIPT = u"Script"_ustr;
+constexpr OUString SC_EVENTACC_EVENTTYPE = u"EventType"_ustr;
 
 class ShapeUnoEventAccessImpl : public ::cppu::WeakImplHelper< container::XNameReplace >
 {
@@ -1397,7 +1397,7 @@ public:
         if ( pInfo && !pInfo->GetMacro().isEmpty() )
         {
             aProperties = { comphelper::makePropertyValue(SC_EVENTACC_EVENTTYPE,
-                                                          OUString(SC_EVENTACC_SCRIPT)),
+                                                          SC_EVENTACC_SCRIPT),
                             comphelper::makePropertyValue(SC_EVENTACC_SCRIPT, pInfo->GetMacro()) };
         }
 

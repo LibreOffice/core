@@ -118,8 +118,8 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetViewOptPropertyMap()
     return aViewOptPropertyMap_Impl;
 }
 
-constexpr OUStringLiteral SCTABVIEWOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetView";
-constexpr OUStringLiteral SCVIEWSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetViewSettings";
+constexpr OUString SCTABVIEWOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetView"_ustr;
+constexpr OUString SCVIEWSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetViewSettings"_ustr;
 
 SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, "ScViewPaneObj", "com.sun.star.sheet.SpreadsheetViewPane" )
 

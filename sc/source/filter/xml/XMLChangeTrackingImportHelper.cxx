@@ -28,7 +28,7 @@
 #include <sax/tools/converter.hxx>
 #include <utility>
 
-constexpr OStringLiteral SC_CHANGE_ID_PREFIX = "ct";
+constexpr OString SC_CHANGE_ID_PREFIX = "ct"_ostr;
 
 ScMyCellInfo::ScMyCellInfo(
     ScCellValue aCell, OUString aFormulaAddress, OUString aFormula,

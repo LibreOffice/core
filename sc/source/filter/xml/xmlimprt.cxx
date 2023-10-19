@@ -101,7 +101,7 @@
 #include <memory>
 #include <utility>
 
-constexpr OUStringLiteral SC_LOCALE = u"Locale";
+constexpr OUString SC_LOCALE = u"Locale"_ustr;
 constexpr OUStringLiteral SC_CURRENCYSYMBOL = u"CurrencySymbol";
 constexpr OUStringLiteral SC_REPEAT_ROW = u"repeat-row";
 constexpr OUStringLiteral SC_FILTER = u"filter";
@@ -1171,7 +1171,7 @@ void SAL_CALL ScXMLImport::startDocument()
             xImportInfo.is() ? xImportInfo->getPropertySetInfo() : nullptr);
     if (xPropertySetInfo.is())
     {
-        static constexpr OUStringLiteral sOrganizerMode(u"OrganizerMode");
+        static constexpr OUString sOrganizerMode(u"OrganizerMode"_ustr);
         if (xPropertySetInfo->hasPropertyByName(sOrganizerMode))
         {
             bool bStyleOnly(false);

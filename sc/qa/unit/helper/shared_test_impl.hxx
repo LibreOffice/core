@@ -286,7 +286,7 @@ void testCeilingFloor_Impl( ScDocument& rDoc )
 {
     // Original test case document is ceiling-floor.xlsx
     // Sheet1.K1 has =AND(K3:K81) to evaluate all results.
-    static constexpr OUStringLiteral pORef = u"Sheet1.K1";
+    static constexpr OUString pORef = u"Sheet1.K1"_ustr;
     ScAddress aPos;
     aPos.Parse(pORef, rDoc);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula.", OUString("=AND(K3:K81)"), rDoc.GetFormula(aPos.Col(), aPos.Row(), aPos.Tab()));

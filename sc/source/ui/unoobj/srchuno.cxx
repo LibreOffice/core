@@ -53,8 +53,8 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetSearchPropertyMap()
     return aSearchPropertyMap_Impl;
 }
 
-constexpr OUStringLiteral SCSEARCHDESCRIPTOR_SERVICE = u"com.sun.star.util.SearchDescriptor";
-constexpr OUStringLiteral SCREPLACEDESCRIPTOR_SERVICE = u"com.sun.star.util.ReplaceDescriptor";
+constexpr OUString SCSEARCHDESCRIPTOR_SERVICE = u"com.sun.star.util.SearchDescriptor"_ustr;
+constexpr OUString SCREPLACEDESCRIPTOR_SERVICE = u"com.sun.star.util.ReplaceDescriptor"_ustr;
 
 ScCellSearchObj::ScCellSearchObj() :
     aPropSet(lcl_GetSearchPropertyMap()),

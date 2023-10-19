@@ -1912,7 +1912,7 @@ bool XclExpChSeries::ConvertDataSeries(
                     if( xColorScheme.is() )
                     {
                         static constexpr OUStringLiteral aFillStyleName = u"FillStyle";
-                        static constexpr OUStringLiteral aColorName = u"Color";
+                        static constexpr OUString aColorName = u"Color"_ustr;
                         namespace cssd = ::com::sun::star::drawing;
                         for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
                         {

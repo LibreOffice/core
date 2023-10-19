@@ -384,7 +384,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         // and the property name is "MacroName".
                         bool bScriptURL = SfxApplication::IsXScriptURL( rValidation.sErrorTitle );
 
-                        static constexpr OUStringLiteral sScript(u"Script");
+                        static constexpr OUString sScript(u"Script"_ustr);
                         uno::Sequence<beans::PropertyValue> aSeq( comphelper::InitPropertySequence({
                                 { "EventType", uno::Any(bScriptURL ? sScript : OUString("StarBasic")) },
                                 { "Library", uno::Any(OUString()) },

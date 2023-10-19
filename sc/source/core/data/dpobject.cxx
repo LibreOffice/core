@@ -101,7 +101,7 @@ constexpr OUStringLiteral SC_DBPROP_DATASOURCENAME = u"DataSourceName";
 constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
 constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
 
-constexpr OUStringLiteral SCDPSOURCE_SERVICE = u"com.sun.star.sheet.DataPilotSource";
+constexpr OUString SCDPSOURCE_SERVICE = u"com.sun.star.sheet.DataPilotSource"_ustr;
 
 namespace {
 

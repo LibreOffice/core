@@ -49,7 +49,7 @@ const TranslateId lclAnovaLabels[] =
     {}
 };
 
-constexpr OUStringLiteral strWildcardRange = u"%RANGE%";
+constexpr OUString strWildcardRange = u"%RANGE%"_ustr;
 
 OUString lclCreateMultiParameterFormula(
             ScRangeList&        aRangeList, const OUString& aFormulaTemplate,

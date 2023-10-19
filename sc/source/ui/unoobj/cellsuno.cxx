@@ -809,15 +809,15 @@ static const SvxItemPropertySet* lcl_GetEditPropertySet()
     return &aEditPropertySet;
 }
 
-constexpr OUStringLiteral SCCHARPROPERTIES_SERVICE = u"com.sun.star.style.CharacterProperties";
-constexpr OUStringLiteral SCPARAPROPERTIES_SERVICE = u"com.sun.star.style.ParagraphProperties";
-constexpr OUStringLiteral SCCELLPROPERTIES_SERVICE = u"com.sun.star.table.CellProperties";
-constexpr OUStringLiteral SCCELLRANGE_SERVICE = u"com.sun.star.table.CellRange";
-constexpr OUStringLiteral SCCELL_SERVICE = u"com.sun.star.table.Cell";
-constexpr OUStringLiteral SCSHEETCELLRANGES_SERVICE = u"com.sun.star.sheet.SheetCellRanges";
-constexpr OUStringLiteral SCSHEETCELLRANGE_SERVICE = u"com.sun.star.sheet.SheetCellRange";
-constexpr OUStringLiteral SCSPREADSHEET_SERVICE = u"com.sun.star.sheet.Spreadsheet";
-constexpr OUStringLiteral SCSHEETCELL_SERVICE = u"com.sun.star.sheet.SheetCell";
+constexpr OUString SCCHARPROPERTIES_SERVICE = u"com.sun.star.style.CharacterProperties"_ustr;
+constexpr OUString SCPARAPROPERTIES_SERVICE = u"com.sun.star.style.ParagraphProperties"_ustr;
+constexpr OUString SCCELLPROPERTIES_SERVICE = u"com.sun.star.table.CellProperties"_ustr;
+constexpr OUString SCCELLRANGE_SERVICE = u"com.sun.star.table.CellRange"_ustr;
+constexpr OUString SCCELL_SERVICE = u"com.sun.star.table.Cell"_ustr;
+constexpr OUString SCSHEETCELLRANGES_SERVICE = u"com.sun.star.sheet.SheetCellRanges"_ustr;
+constexpr OUString SCSHEETCELLRANGE_SERVICE = u"com.sun.star.sheet.SheetCellRange"_ustr;
+constexpr OUString SCSPREADSHEET_SERVICE = u"com.sun.star.sheet.Spreadsheet"_ustr;
+constexpr OUString SCSHEETCELL_SERVICE = u"com.sun.star.sheet.SheetCell"_ustr;
 
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsEnumeration, "ScCellFormatsEnumeration", "com.sun.star.sheet.CellFormatRangesEnumeration" )
 SC_SIMPLE_SERVICE_INFO( ScCellFormatsObj, "ScCellFormatsObj", "com.sun.star.sheet.CellFormatRanges" )

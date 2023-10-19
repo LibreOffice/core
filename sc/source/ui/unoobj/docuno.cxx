@@ -137,7 +137,7 @@
 using namespace com::sun::star;
 
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
-constexpr OUStringLiteral SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName";
+constexpr OUString SC_UNO_VBAGLOBNAME = u"VBAGlobalConstantName"_ustr;
 
 //  no Which-ID here, map only for PropertySetInfo
 
@@ -227,9 +227,9 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetRowsPropertyMap()
     return aRowsPropertyMap_Impl;
 }
 
-constexpr OUStringLiteral SCMODELOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetDocument";
-constexpr OUStringLiteral SCDOCSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetDocumentSettings";
-constexpr OUStringLiteral SCDOC_SERVICE = u"com.sun.star.document.OfficeDocument";
+constexpr OUString SCMODELOBJ_SERVICE = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
+constexpr OUString SCDOCSETTINGS_SERVICE = u"com.sun.star.sheet.SpreadsheetDocumentSettings"_ustr;
+constexpr OUString SCDOC_SERVICE = u"com.sun.star.document.OfficeDocument"_ustr;
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationsObj, "ScAnnotationsObj", "com.sun.star.sheet.CellAnnotations" )
 SC_SIMPLE_SERVICE_INFO( ScDrawPagesObj, "ScDrawPagesObj", "com.sun.star.drawing.DrawPages" )

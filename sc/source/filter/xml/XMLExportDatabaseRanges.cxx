@@ -50,7 +50,7 @@
 #include <map>
 
 //! not found in unonames.hxx
-constexpr OUStringLiteral SC_USERLIST = u"UserList";
+constexpr OUString SC_USERLIST = u"UserList"_ustr;
 
 using namespace com::sun::star;
 using namespace xmloff::token;

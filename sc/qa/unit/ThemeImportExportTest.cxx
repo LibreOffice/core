@@ -78,7 +78,7 @@ CPPUNIT_TEST_FIXTURE(ThemeImportExportTest, testThemeExportAndImport)
 
     {
         xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-        static constexpr OStringLiteral sThemePath = "//office:styles/loext:theme";
+        static constexpr OString sThemePath = "//office:styles/loext:theme"_ostr;
         assertXPath(pXmlDoc, sThemePath, 1);
         assertXPath(pXmlDoc, sThemePath + "[@loext:name='MyTheme']");
         const OString sThemeColorsPath = sThemePath + "/loext:theme-colors";

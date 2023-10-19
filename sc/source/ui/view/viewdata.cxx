@@ -77,7 +77,7 @@ using namespace com::sun::star;
 #define SC_GROWY_SMALL_EXTRA    100
 #define SC_GROWY_BIG_EXTRA      200
 
-constexpr OUStringLiteral TAG_TABBARWIDTH = u"tw:";
+constexpr OUString TAG_TABBARWIDTH = u"tw:"_ustr;
 
 namespace {
 

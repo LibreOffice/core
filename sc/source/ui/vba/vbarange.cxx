@@ -670,15 +670,15 @@ public:
 
 }
 
-constexpr OUStringLiteral ISVISIBLE = u"IsVisible";
+constexpr OUString ISVISIBLE = u"IsVisible"_ustr;
 const char EQUALS[] = "=";
 const char NOTEQUALS[] = "<>";
 const char GREATERTHAN[] = ">";
 const char GREATERTHANEQUALS[] = ">=";
 const char LESSTHAN[] = "<";
 const char LESSTHANEQUALS[] = "<=";
-constexpr OUStringLiteral STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY(u"The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again");
-constexpr OUStringLiteral CELLSTYLE = u"CellStyle";
+constexpr OUString STR_ERRORMESSAGE_APPLIESTOSINGLERANGEONLY(u"The command you chose cannot be performed with multiple selections.\nSelect a single range and click the command again"_ustr);
+constexpr OUString CELLSTYLE = u"CellStyle"_ustr;
 
 namespace {
 
@@ -982,7 +982,7 @@ public:
 
 }
 
-constexpr OUStringLiteral sNA = u"#N/A";
+constexpr OUString sNA = u"#N/A"_ustr;
 
 namespace {
 
@@ -1002,7 +1002,7 @@ public:
         if ( y < nColCount )
             mCellValueSetter.processValue( aMatrix[ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::Any( OUString(sNA) ), xCell );
+            mCellValueSetter.processValue( uno::Any( sNA ), xCell );
     }
 };
 
@@ -1025,7 +1025,7 @@ public:
         if ( x < nRowCount && y < nColCount )
             mCellValueSetter.processValue( aMatrix[ x ][ y ], xCell );
         else
-            mCellValueSetter.processValue( uno::Any( OUString(sNA) ), xCell );
+            mCellValueSetter.processValue( uno::Any( sNA ), xCell );
 
     }
 };

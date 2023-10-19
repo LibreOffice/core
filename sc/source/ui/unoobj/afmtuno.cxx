@@ -120,7 +120,7 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetAutoFieldMap()
     return aAutoFieldMap_Impl;
 }
 
-constexpr OUStringLiteral SCAUTOFORMATSOBJ_SERVICE = u"com.sun.star.sheet.TableAutoFormats";
+constexpr OUString SCAUTOFORMATSOBJ_SERVICE = u"com.sun.star.sheet.TableAutoFormats"_ustr;
 
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatFieldObj, "ScAutoFormatFieldObj", "com.sun.star.sheet.TableAutoFormatField" )
 SC_SIMPLE_SERVICE_INFO( ScAutoFormatObj, "ScAutoFormatObj", "com.sun.star.sheet.TableAutoFormat" )

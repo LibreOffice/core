@@ -39,9 +39,9 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlPattern;
 
-constexpr OUStringLiteral BACKCOLOR = u"CellBackColor";
-constexpr OUStringLiteral PATTERN = u"Pattern";
-constexpr OUStringLiteral PATTERNCOLOR = u"PatternColor";
+constexpr OUString BACKCOLOR = u"CellBackColor"_ustr;
+constexpr OUString PATTERN = u"Pattern"_ustr;
+constexpr OUString PATTERNCOLOR = u"PatternColor"_ustr;
 
 constexpr auto aPatternMap = frozen::make_map<sal_Int32, sal_Int32>({
     { xlPatternAutomatic, 0 },

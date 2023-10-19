@@ -52,20 +52,20 @@ using namespace ::ooo::vba::excel::XlAxisGroup;
 constexpr OUStringLiteral CHART_NAME(u"Name");
 // #TODO move this constant to vbaseries.[ch]xx ( when it exists )
 constexpr OUStringLiteral DEFAULTSERIESPREFIX(u"Series");
-constexpr OUStringLiteral DATAROWSOURCE(u"DataRowSource");
-constexpr OUStringLiteral UPDOWN(u"UpDown");
-constexpr OUStringLiteral VOLUME(u"Volume");
-constexpr OUStringLiteral LINES(u"Lines");
-constexpr OUStringLiteral SPLINETYPE(u"SplineType");
-constexpr OUStringLiteral SYMBOLTYPE(u"SymbolType");
-constexpr OUStringLiteral DEEP(u"Deep");
-constexpr OUStringLiteral SOLIDTYPE(u"SolidType");
-constexpr OUStringLiteral VERTICAL(u"Vertical");
-constexpr OUStringLiteral PERCENT(u"Percent");
-constexpr OUStringLiteral STACKED(u"Stacked");
-constexpr OUStringLiteral DIM3D(u"Dim3D");
-constexpr OUStringLiteral HASMAINTITLE(u"HasMainTitle");
-constexpr OUStringLiteral HASLEGEND(u"HasLegend");
+constexpr OUString DATAROWSOURCE(u"DataRowSource"_ustr);
+constexpr OUString UPDOWN(u"UpDown"_ustr);
+constexpr OUString VOLUME(u"Volume"_ustr);
+constexpr OUString LINES(u"Lines"_ustr);
+constexpr OUString SPLINETYPE(u"SplineType"_ustr);
+constexpr OUString SYMBOLTYPE(u"SymbolType"_ustr);
+constexpr OUString DEEP(u"Deep"_ustr);
+constexpr OUString SOLIDTYPE(u"SolidType"_ustr);
+constexpr OUString VERTICAL(u"Vertical"_ustr);
+constexpr OUString PERCENT(u"Percent"_ustr);
+constexpr OUString STACKED(u"Stacked"_ustr);
+constexpr OUString DIM3D(u"Dim3D"_ustr);
+constexpr OUString HASMAINTITLE(u"HasMainTitle"_ustr);
+constexpr OUString HASLEGEND(u"HasLegend"_ustr);
 
 ScVbaChart::ScVbaChart( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::lang::XComponent >& _xChartComponent, css::uno::Reference< css::table::XTableChart >  _xTableChart ) : ChartImpl_BASE( _xParent, _xContext ), mxTableChart(std::move( _xTableChart ))
 {

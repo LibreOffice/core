@@ -78,9 +78,9 @@ static std::span<const SfxItemPropertyMapEntry> lcl_GetSettingsPropertyMap()
     return aSettingsPropertyMap_Impl;
 }
 
-constexpr OUStringLiteral SCFUNCTIONLISTOBJ_SERVICE = u"com.sun.star.sheet.FunctionDescriptions";
-constexpr OUStringLiteral SCRECENTFUNCTIONSOBJ_SERVICE = u"com.sun.star.sheet.RecentFunctions";
-constexpr OUStringLiteral SCSPREADSHEETSETTINGS_SERVICE = u"com.sun.star.sheet.GlobalSheetSettings";
+constexpr OUString SCFUNCTIONLISTOBJ_SERVICE = u"com.sun.star.sheet.FunctionDescriptions"_ustr;
+constexpr OUString SCRECENTFUNCTIONSOBJ_SERVICE = u"com.sun.star.sheet.RecentFunctions"_ustr;
+constexpr OUString SCSPREADSHEETSETTINGS_SERVICE = u"com.sun.star.sheet.GlobalSheetSettings"_ustr;
 
 SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "stardiv.StarCalc.ScFunctionListObj", SCFUNCTIONLISTOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "stardiv.StarCalc.ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )

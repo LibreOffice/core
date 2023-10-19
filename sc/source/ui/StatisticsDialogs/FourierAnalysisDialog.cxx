@@ -210,7 +210,7 @@ void ScFourierAnalysisDialog::getDataLabel(OUString& rLabel)
 
 void ScFourierAnalysisDialog::genFormula(OUString& rFormula)
 {
-    static constexpr OUStringLiteral aSep(u";");
+    static constexpr OUString aSep(u";"_ustr);
 
     if (!mbPolar)
     {

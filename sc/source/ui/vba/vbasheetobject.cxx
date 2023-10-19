@@ -37,8 +37,8 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-constexpr OUStringLiteral gaListenerType = u"XActionListener";
-constexpr OUStringLiteral gaEventMethod = u"actionPerformed";
+constexpr OUString gaListenerType = u"XActionListener"_ustr;
+constexpr OUString gaEventMethod = u"actionPerformed"_ustr;
 
 static double HmmToPoints(double nHmm)
 {

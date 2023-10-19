@@ -84,21 +84,21 @@ using ::std::vector;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
 
-constexpr OUStringLiteral SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet";
+constexpr OUString SC_SERVICE_ROWSET = u"com.sun.star.sdb.RowSet"_ustr;
 
 //! move to a header file?
-constexpr OUStringLiteral SC_DBPROP_ACTIVECONNECTION = u"ActiveConnection";
-constexpr OUStringLiteral SC_DBPROP_COMMAND = u"Command";
-constexpr OUStringLiteral SC_DBPROP_COMMANDTYPE = u"CommandType";
+constexpr OUString SC_DBPROP_ACTIVECONNECTION = u"ActiveConnection"_ustr;
+constexpr OUString SC_DBPROP_COMMAND = u"Command"_ustr;
+constexpr OUString SC_DBPROP_COMMANDTYPE = u"CommandType"_ustr;
 constexpr OUStringLiteral SC_DBPROP_PROPCHANGE_NOTIFY = u"PropertyChangeNotificationEnabled";
 
-constexpr OUStringLiteral SC_DBPROP_NAME = u"Name";
+constexpr OUString SC_DBPROP_NAME = u"Name"_ustr;
 constexpr OUStringLiteral SC_DBPROP_TYPE = u"Type";
 constexpr OUStringLiteral SC_DBPROP_PRECISION = u"Precision";
 constexpr OUStringLiteral SC_DBPROP_SCALE = u"Scale";
 
-constexpr OUStringLiteral SC_DBPROP_EXTENSION = u"Extension";
-constexpr OUStringLiteral SC_DBPROP_CHARSET = u"CharSet";
+constexpr OUString SC_DBPROP_EXTENSION = u"Extension"_ustr;
+constexpr OUString SC_DBPROP_CHARSET = u"CharSet"_ustr;
 
 namespace
 {

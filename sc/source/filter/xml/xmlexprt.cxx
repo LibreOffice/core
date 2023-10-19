@@ -167,7 +167,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 
 //! not found in unonames.hxx
-constexpr OUStringLiteral SC_LAYERID = u"LayerID";
+constexpr OUString SC_LAYERID = u"LayerID"_ustr;
 
 #define SC_VIEWCHANGES_COUNT                        13
 #define SC_SHOW_CHANGES                             0
@@ -895,7 +895,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
     // Export each unique number format used in the external ref cache.
     vector<sal_uInt32> aNumFmts;
     pRefMgr->getAllCachedNumberFormats(aNumFmts);
-    static constexpr OUStringLiteral aDefaultStyle(u"Default");
+    static constexpr OUString aDefaultStyle(u"Default"_ustr);
     for (const auto& rNumFmt : aNumFmts)
     {
         sal_Int32 nNumFmt = static_cast<sal_Int32>(rNumFmt);
@@ -905,7 +905,7 @@ void ScXMLExport::ExportExternalRefCacheStyles()
         uno::Any aVal;
         aVal <<= nNumFmt;
         vector<XMLPropertyState> aProps;
-        aVal <<= OUString(aDefaultStyle);
+        aVal <<= aDefaultStyle;
         aProps.emplace_back(nEntryIndex, aVal);
 
         OUString aName;
@@ -1828,7 +1828,7 @@ void ScXMLExport::CopySourceStream( sal_Int64 nStartOffset, sal_Int64 nEndOffset
 
     if ( getExportFlags() & SvXMLExportFlags::PRETTY )
     {
-        static constexpr OStringLiteral aOutStr("\n   ");
+        static constexpr OString aOutStr("\n   "_ostr);
         uno::Sequence<sal_Int8> aOutSeq( reinterpret_cast<sal_Int8 const *>(aOutStr.getStr()), aOutStr.getLength() );
         xDestStream->writeBytes( aOutSeq );
     }

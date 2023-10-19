@@ -47,19 +47,19 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace connectivity::dbase;
 
-constexpr OUStringLiteral SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog";
+constexpr OUString SCFILTEROPTIONSOBJ_SERVICE = u"com.sun.star.ui.dialogs.FilterOptionsDialog"_ustr;
 constexpr OUStringLiteral SCFILTEROPTIONSOBJ_IMPLNAME = u"com.sun.star.comp.Calc.FilterOptionsDialog";
 
 SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTEROPTIONSOBJ_SERVICE )
 
 constexpr OUStringLiteral SC_UNONAME_FILENAME = u"URL";
 constexpr OUStringLiteral SC_UNONAME_FILTERNAME = u"FilterName";
-constexpr OUStringLiteral SC_UNONAME_FILTEROPTIONS = u"FilterOptions";
+constexpr OUString SC_UNONAME_FILTEROPTIONS = u"FilterOptions"_ustr;
 constexpr OUStringLiteral SC_UNONAME_INPUTSTREAM = u"InputStream";
 
-constexpr OUStringLiteral DBF_CHAR_SET = u"CharSet";
-constexpr OUStringLiteral DBF_SEP_PATH_IMPORT = u"Office.Calc/Dialogs/DBFImport";
-constexpr OUStringLiteral DBF_SEP_PATH_EXPORT = u"Office.Calc/Dialogs/DBFExport";
+constexpr OUString DBF_CHAR_SET = u"CharSet"_ustr;
+constexpr OUString DBF_SEP_PATH_IMPORT = u"Office.Calc/Dialogs/DBFImport"_ustr;
+constexpr OUString DBF_SEP_PATH_EXPORT = u"Office.Calc/Dialogs/DBFExport"_ustr;
 
 namespace
 {

@@ -30,9 +30,9 @@ using namespace ::ooo::vba::excel::XlAxisCrosses;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlScaleType;
 
-constexpr OUStringLiteral ORIGIN(u"Origin");
-constexpr OUStringLiteral AUTOORIGIN(u"AutoOrigin");
-constexpr OUStringLiteral VBA_MIN(u"Max");
+constexpr OUString ORIGIN(u"Origin"_ustr);
+constexpr OUString AUTOORIGIN(u"AutoOrigin"_ustr);
+constexpr OUString VBA_MIN(u"Max"_ustr);
 constexpr OUStringLiteral VBA_MAX(u"Min");
 ScVbaChart*
 ScVbaAxis::getChartPtr()

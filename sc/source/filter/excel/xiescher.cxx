@@ -476,7 +476,7 @@ rtl::Reference<SdrObject> XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter
             {
                 const Reference< XControlModel >& xCtrlModel = pSdrUnoObj->GetUnoControlModel();
                 Reference< XPropertySet > xPropSet(xCtrlModel,UNO_QUERY);
-                static constexpr OUStringLiteral sPropertyName(u"ControlTypeinMSO");
+                static constexpr OUString sPropertyName(u"ControlTypeinMSO"_ustr);
 
                 enum { eCreateFromOffice = 0, eCreateFromMSTBXControl, eCreateFromMSOCXControl };
 
@@ -3341,7 +3341,7 @@ XclImpDffConverter::XclImpDffConvData::XclImpDffConvData(
 {
 }
 
-constexpr OUStringLiteral gaStdFormName( u"Standard" ); /// Standard name of control forms.
+constexpr OUString gaStdFormName( u"Standard"_ustr ); /// Standard name of control forms.
 
 XclImpDffConverter::XclImpDffConverter( const XclImpRoot& rRoot, SvStream& rDffStrm ) :
     XclImpSimpleDffConverter( rRoot, rDffStrm ),

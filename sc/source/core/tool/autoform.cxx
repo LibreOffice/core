@@ -65,7 +65,7 @@
  * be synchronized with Writer's SwTableAutoFmtTbl sw/source/core/doc/tblafmt.cxx
  */
 
-constexpr OUStringLiteral sAutoTblFmtName = u"autotbl.fmt";
+constexpr OUString sAutoTblFmtName = u"autotbl.fmt"_ustr;
 
 // till SO5PF
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;

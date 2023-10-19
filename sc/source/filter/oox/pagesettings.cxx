@@ -473,8 +473,8 @@ const char* const sppcItalicNames[] =
 constexpr OUStringLiteral gaPageNumberService( u"com.sun.star.text.TextField.PageNumber" );
 constexpr OUStringLiteral gaPageCountService( u"com.sun.star.text.TextField.PageCount" );
 constexpr OUStringLiteral gaSheetNameService( u"com.sun.star.text.TextField.SheetName" );
-constexpr OUStringLiteral gaFileNameService( u"com.sun.star.text.TextField.FileName" );
-constexpr OUStringLiteral gaDateTimeService( u"com.sun.star.text.TextField.DateTime" );
+constexpr OUString gaFileNameService( u"com.sun.star.text.TextField.FileName"_ustr );
+constexpr OUString gaDateTimeService( u"com.sun.star.text.TextField.DateTime"_ustr );
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),

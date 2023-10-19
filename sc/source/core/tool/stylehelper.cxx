@@ -115,7 +115,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
 //  programmatic name suffix for display names that match other programmatic names
 //  is " (user)" including a space
 
-constexpr OUStringLiteral SC_SUFFIX_USER = u" (user)";
+constexpr OUString SC_SUFFIX_USER = u" (user)"_ustr;
 
 static bool lcl_EndsWithUser( std::u16string_view rString )
 {

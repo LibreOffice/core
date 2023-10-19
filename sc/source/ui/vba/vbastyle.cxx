@@ -25,7 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral DISPLAYNAME = u"DisplayName";
+constexpr OUString DISPLAYNAME = u"DisplayName"_ustr;
 
 uno::Reference< container::XNameAccess >
 ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel )

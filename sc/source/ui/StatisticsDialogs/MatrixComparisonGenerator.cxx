@@ -71,7 +71,7 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     output.writeString(getLabel());
     output.nextColumn();
 
-    static constexpr OUStringLiteral strWildcardNumber(u"%NUMBER%");
+    static constexpr OUString strWildcardNumber(u"%NUMBER%"_ustr);
 
     // write labels to columns
     for (size_t i = 0; i < aRangeList.size(); i++)

@@ -346,9 +346,9 @@ constexpr OUStringLiteral CFGSTR_ADDINFUNCTIONS = u"AddInFunctions";
 #define CFG_FUNCPROP_DESCRIPTION    1
 #define CFG_FUNCPROP_CATEGORY       2
 #define CFG_FUNCPROP_COUNT          3
-constexpr OUStringLiteral CFGSTR_DISPLAYNAME = u"DisplayName";
-constexpr OUStringLiteral CFGSTR_DESCRIPTION = u"Description";
-constexpr OUStringLiteral CFGSTR_CATEGORY = u"Category";
+constexpr OUString CFGSTR_DISPLAYNAME = u"DisplayName"_ustr;
+constexpr OUString CFGSTR_DESCRIPTION = u"Description"_ustr;
+constexpr OUString CFGSTR_CATEGORY = u"Category"_ustr;
 // CategoryDisplayName is ignored for now
 
 constexpr OUStringLiteral CFGSTR_COMPATIBILITYNAME = u"CompatibilityName";

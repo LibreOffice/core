@@ -1074,7 +1074,7 @@ bool XclExpXmlStream::exportDocument()
         }
     }
 
-    static constexpr OUStringLiteral workbook = u"xl/workbook.xml";
+    static constexpr OUString workbook = u"xl/workbook.xml"_ustr;
     const char* pWorkbookContentType = nullptr;
     if (mbExportVBA)
     {
