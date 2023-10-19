@@ -162,8 +162,8 @@ public:
 
 }
 
-constexpr OUStringLiteral g_sXMLNS_PREFIX_UNKNOWN( u"<<< unknown prefix >>>" );
-constexpr OUStringLiteral g_sXMLNS( u"xmlns" );
+constexpr OUString g_sXMLNS_PREFIX_UNKNOWN( u"<<< unknown prefix >>>"_ustr );
+constexpr OUString g_sXMLNS( u"xmlns"_ustr );
 
 
 DocumentHandlerImpl::DocumentHandlerImpl(
