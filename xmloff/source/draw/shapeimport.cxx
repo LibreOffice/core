@@ -341,7 +341,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
             return new SdXMLShapeLinkContext( rImport, xAttrList, rShapes );
         // add other shapes here...
         default:
-            XMLOFF_WARN_UNKNOWN_ELEMENT("xmloff", nElement);
+            XMLOFF_INFO_UNKNOWN_ELEMENT("xmloff", nElement);
             return new SvXMLShapeContext( rImport, bTemporaryShape );
     }
 
