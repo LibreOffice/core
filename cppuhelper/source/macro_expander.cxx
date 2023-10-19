@@ -34,8 +34,8 @@
 #include "macro_expander.hxx"
 #include "paths.hxx"
 
-constexpr OUStringLiteral SERVICE_NAME_A = u"com.sun.star.lang.MacroExpander";
-constexpr OUStringLiteral SERVICE_NAME_B = u"com.sun.star.lang.BootstrapMacroExpander";
+constexpr OUString SERVICE_NAME_A = u"com.sun.star.lang.MacroExpander"_ustr;
+constexpr OUString SERVICE_NAME_B = u"com.sun.star.lang.BootstrapMacroExpander"_ustr;
 constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.lang.comp.cppuhelper.BootstrapMacroExpander";
 
 using namespace ::osl;

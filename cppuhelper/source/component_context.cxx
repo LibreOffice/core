@@ -47,7 +47,7 @@
 #include <memory>
 #include <utility>
 
-constexpr OUStringLiteral SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager";
+constexpr OUString SMGR_SINGLETON = u"/singletons/com.sun.star.lang.theServiceManager"_ustr;
 constexpr OUStringLiteral TDMGR_SINGLETON = u"/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 constexpr OUStringLiteral AC_SINGLETON = u"/singletons/com.sun.star.security.theAccessController";
 
