@@ -90,7 +90,7 @@ const char arUsingText[] =
 static bool readOption( OUString * pValue, const char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
 {
-    static constexpr OUStringLiteral dash(u"-");
+    static constexpr OUString dash(u"-"_ustr);
     if(!aArg.startsWith(dash))
         return false;
 
