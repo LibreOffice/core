@@ -6228,7 +6228,7 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     {
         boost::property_tree::ptree aChild;
         boost::property_tree::ptree aChildren;
-        static constexpr OUStringLiteral sPageStyles(u"PageStyles");
+        static constexpr OUString sPageStyles(u"PageStyles"_ustr);
         uno::Reference<beans::XPropertySet> xProperty;
         uno::Reference<container::XNameContainer> xContainer;
 
@@ -6398,10 +6398,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     SetLastExceptionMsg();
 
     const std::string_view aCommand(pCommand);
-    static constexpr OStringLiteral aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
-    static constexpr OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
+    static constexpr OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders"_ostr);
+    static constexpr OString aSheetGeometryData(".uno:SheetGeometryData"_ostr);
     static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
-    static constexpr OStringLiteral aFontSubset(".uno:FontSubset&name=");
+    static constexpr OString aFontSubset(".uno:FontSubset&name="_ostr);
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)

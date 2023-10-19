@@ -33,7 +33,7 @@ namespace uno = com::sun::star::uno;
 
 using ::com::sun::star::uno::Reference;
 
-constexpr OUStringLiteral PROP_SUPPRESS_LICENSE = u"SUPPRESS_LICENSE";
+constexpr OUString PROP_SUPPRESS_LICENSE = u"SUPPRESS_LICENSE"_ustr;
 constexpr OUStringLiteral PROP_EXTENSION_UPDATE = u"EXTENSION_UPDATE";
 
 namespace dp_manager {

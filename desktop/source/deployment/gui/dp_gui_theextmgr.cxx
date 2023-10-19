@@ -41,7 +41,7 @@
 #include <dp_update.hxx>
 
 constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
-constexpr OUStringLiteral SHARED_PACKAGE_MANAGER = u"shared";
+constexpr OUString SHARED_PACKAGE_MANAGER = u"shared"_ustr;
 
 using namespace ::com::sun::star;
 

@@ -77,7 +77,7 @@ using namespace ::com::sun::star::system;
 namespace dp_gui {
 
 constexpr OUStringLiteral USER_PACKAGE_MANAGER = u"user";
-constexpr OUStringLiteral SHARED_PACKAGE_MANAGER = u"shared";
+constexpr OUString SHARED_PACKAGE_MANAGER = u"shared"_ustr;
 constexpr OUStringLiteral BUNDLED_PACKAGE_MANAGER = u"bundled";
 
 // ExtBoxWithBtns_Impl

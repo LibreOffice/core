@@ -70,9 +70,9 @@ using namespace com::sun::star;
 namespace desktop
 {
 
-constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
+constexpr OUString ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_LABEL = u"Label"_ustr;
 
 static OUString mapModuleShortNameToIdentifier(std::u16string_view sShortName)
 {
@@ -190,7 +190,7 @@ bool MigrationImpl::doMigration()
 
         copyFiles();
 
-        static constexpr OUStringLiteral sMenubarResourceURL(u"private:resource/menubar/menubar");
+        static constexpr OUString sMenubarResourceURL(u"private:resource/menubar/menubar"_ustr);
         static constexpr OUStringLiteral sToolbarResourcePre(u"private:resource/toolbar/");
         for (MigrationModuleInfo & i : vModulesInfo) {
             OUString sModuleIdentifier = mapModuleShortNameToIdentifier(i.sModuleShortName);

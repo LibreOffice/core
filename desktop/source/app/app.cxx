@@ -581,7 +581,7 @@ bool Desktop::QueryExit()
     {
     }
 
-    static constexpr OUStringLiteral SUSPEND_QUICKSTARTVETO = u"SuspendQuickstartVeto";
+    static constexpr OUString SUSPEND_QUICKSTARTVETO = u"SuspendQuickstartVeto"_ustr;
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( ::comphelper::getProcessComponentContext() );
     Reference< XPropertySet > xPropertySet(xDesktop, UNO_QUERY_THROW);

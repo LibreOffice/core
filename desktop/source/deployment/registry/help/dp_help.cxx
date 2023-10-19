@@ -421,7 +421,7 @@ void BackendImpl::implProcessHelp(
                             &langFolderContent,
                             langFolderDest, xCmdEnv);
 
-                        static constexpr OUStringLiteral aHelpStr(u"help");
+                        static constexpr OUString aHelpStr(u"help"_ustr);
 
                         OUString aJarFile(
                             makeURL(sHelpFolder, langFolderURLSegment + "/" + aHelpStr + ".jar"));

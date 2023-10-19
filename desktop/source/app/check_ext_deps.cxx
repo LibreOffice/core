@@ -208,7 +208,7 @@ void SilentCommandEnv::pop()
 } // end namespace
 
 
-constexpr OUStringLiteral aAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdateAccess";
+constexpr OUString aAccessSrvc = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
 
 static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContext > const &xContext )
 {

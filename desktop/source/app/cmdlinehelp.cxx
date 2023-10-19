@@ -35,9 +35,9 @@
 
 namespace desktop
 {
-    constexpr OUStringLiteral aCmdLineHelp_version =
+    constexpr OUString aCmdLineHelp_version =
         u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION %BUILDID\n"
-        "\n";
+        "\n"_ustr;
     constexpr OUStringLiteral aCmdLineHelp =
         u"Usage: %CMDNAME [argument...]\n"
         "       argument - switches, switch parameters and document URIs (filenames).   \n\n"

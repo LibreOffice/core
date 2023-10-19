@@ -40,7 +40,7 @@
 
 #include <osl/diagnose.h>
 
-constexpr OUStringLiteral SERVICE_NAME = u"com.sun.star.migration.Java";
+constexpr OUString SERVICE_NAME = u"com.sun.star.migration.Java"_ustr;
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"
 
 #define ENABLE_JAVA     1
