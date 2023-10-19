@@ -67,10 +67,10 @@ using namespace com::sun::star::bridge;
 using namespace test::testtools::bridgetest;
 
 
-constexpr OUStringLiteral SERVICENAME = u"com.sun.star.test.bridge.BridgeTest";
-constexpr OUStringLiteral IMPLNAME = u"com.sun.star.comp.bridge.BridgeTest";
+constexpr OUString SERVICENAME = u"com.sun.star.test.bridge.BridgeTest"_ustr;
+constexpr OUString IMPLNAME = u"com.sun.star.comp.bridge.BridgeTest"_ustr;
 
-constexpr OUStringLiteral STRING_TEST_CONSTANT  = u"\" paco\' chorizo\\\' \"\'";
+constexpr OUString STRING_TEST_CONSTANT  = u"\" paco\' chorizo\\\' \"\'"_ustr;
 
 namespace bridge_test
 {

@@ -61,8 +61,8 @@ using namespace test::testtools::bridgetest;
 #pragma warning (disable : 4503) // irrelevant for test code
 #endif
 
-constexpr OUStringLiteral SERVICENAME = u"com.sun.star.test.bridge.CppTestObject";
-constexpr OUStringLiteral IMPLNAME = u"com.sun.star.comp.bridge.CppTestObject";
+constexpr OUString SERVICENAME = u"com.sun.star.test.bridge.CppTestObject"_ustr;
+constexpr OUString IMPLNAME = u"com.sun.star.comp.bridge.CppTestObject"_ustr;
 
 namespace bridge_object
 {

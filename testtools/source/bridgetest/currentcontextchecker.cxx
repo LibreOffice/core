@@ -36,8 +36,8 @@
 
 namespace {
 
-constexpr OUStringLiteral KEY = u"testtools.bridgetest.Key";
-constexpr OUStringLiteral VALUE = u"good";
+constexpr OUString KEY = u"testtools.bridgetest.Key"_ustr;
+constexpr OUString VALUE = u"good"_ustr;
 
 class CurrentContext:
     public ::osl::DebugBase< CurrentContext >,
@@ -56,7 +56,7 @@ CurrentContext::CurrentContext() {}
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
 {
-    return Name == KEY ? css::uno::Any(OUString(VALUE)) : css::uno::Any();
+    return Name == KEY ? css::uno::Any(VALUE) : css::uno::Any();
 }
 
 }
