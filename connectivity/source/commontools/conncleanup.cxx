@@ -35,7 +35,7 @@ namespace dbtools
     using namespace css::sdbc;
     using namespace css::lang;
 
-    constexpr OUStringLiteral ACTIVE_CONNECTION_PROPERTY_NAME = u"ActiveConnection";
+    constexpr OUString ACTIVE_CONNECTION_PROPERTY_NAME = u"ActiveConnection"_ustr;
 
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
         :m_xRowSet( _rxRowSet )

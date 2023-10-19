@@ -2458,7 +2458,7 @@ void OSQLParseNode::parseLeaf(OUStringBuffer& rString, const SQLParseNodeParamet
         case SQLNodeType::ApproxNum:
             {
                 OUString aTmp = m_aNodeValue;
-                static constexpr OUStringLiteral strPoint(u".");
+                static constexpr OUString strPoint(u"."_ustr);
                 if (rParam.bInternational && rParam.bPredicate && rParam.sDecSep != strPoint)
                     aTmp = aTmp.replaceAll(strPoint, rParam.sDecSep);
 

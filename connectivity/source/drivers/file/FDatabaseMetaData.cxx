@@ -167,7 +167,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static constexpr OUStringLiteral aTable = u"TABLE";
+    static constexpr OUString aTable = u"TABLE"_ustr;
 
     bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
@@ -299,7 +299,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         if(bNewRow)
         {
-            aRow.push_back(new ORowSetValueDecorator(OUString(aTable)));
+            aRow.push_back(new ORowSetValueDecorator(aTable));
             aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
 
             aRows.push_back(aRow);

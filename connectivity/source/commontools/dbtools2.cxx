@@ -1004,7 +1004,7 @@ bool isAggregateColumn( const Reference< XPropertySet > &_xColumn )
 {
     bool bAgg(false);
 
-    static constexpr OUStringLiteral sAgg = u"AggregateFunction";
+    static constexpr OUString sAgg = u"AggregateFunction"_ustr;
     if ( _xColumn->getPropertySetInfo()->hasPropertyByName(sAgg) )
         _xColumn->getPropertyValue(sAgg) >>= bAgg;
 

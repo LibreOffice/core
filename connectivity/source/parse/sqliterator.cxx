@@ -266,7 +266,7 @@ namespace
     {
         OUString sComposedName;
 
-        static constexpr OUStringLiteral s_sWildcard = u"%" ;
+        static constexpr OUString s_sWildcard = u"%"_ustr ;
 
         // we want all catalogues, all schemas, all tables
         Sequence< OUString > sTableTypes { "VIEW", "TABLE", s_sWildcard }; // this last one just to be sure to include anything else...

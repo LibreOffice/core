@@ -389,7 +389,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
 
         // build a connection with its current settings (4. data source name, or 5. URL)
 
-        static constexpr OUStringLiteral sUserProp( u"User" );
+        static constexpr OUString sUserProp( u"User"_ustr );
         OUString sDataSourceName;
         xRowSetProps->getPropertyValue("DataSourceName") >>= sDataSourceName;
         OUString sURL;
@@ -913,7 +913,7 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     // ask the parent of the connection (should be a DatabaseAccess)
     Reference< XNumberFormatsSupplier> xReturn;
     Reference< XChild> xConnAsChild(_rxConn, UNO_QUERY);
-    static constexpr OUStringLiteral sPropFormatsSupplier( u"NumberFormatsSupplier" );
+    static constexpr OUString sPropFormatsSupplier( u"NumberFormatsSupplier"_ustr );
     if (xConnAsChild.is())
     {
         Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
@@ -945,20 +945,20 @@ try
     const Sequence< Property> aOldProperties = xOldInfo->getProperties();
     const Sequence< Property> aNewProperties = xNewInfo->getProperties();
 
-    static constexpr OUStringLiteral sPropFormatsSupplier(u"FormatsSupplier");
-    static constexpr OUStringLiteral sPropCurrencySymbol(u"CurrencySymbol");
-    static constexpr OUStringLiteral sPropDecimals(u"Decimals");
-    static constexpr OUStringLiteral sPropEffectiveMin(u"EffectiveMin");
-    static constexpr OUStringLiteral sPropEffectiveMax(u"EffectiveMax");
-    static constexpr OUStringLiteral sPropEffectiveDefault(u"EffectiveDefault");
-    static constexpr OUStringLiteral sPropDefaultText(u"DefaultText");
-    static constexpr OUStringLiteral sPropDefaultDate(u"DefaultDate");
-    static constexpr OUStringLiteral sPropDefaultTime(u"DefaultTime");
-    static constexpr OUStringLiteral sPropValueMin(u"ValueMin");
-    static constexpr OUStringLiteral sPropValueMax(u"ValueMax");
-    static constexpr OUStringLiteral sPropDecimalAccuracy(u"DecimalAccuracy");
-    static constexpr OUStringLiteral sPropClassId(u"ClassId");
-    static constexpr OUStringLiteral sFormattedServiceName( u"com.sun.star.form.component.FormattedField" );
+    static constexpr OUString sPropFormatsSupplier(u"FormatsSupplier"_ustr);
+    static constexpr OUString sPropCurrencySymbol(u"CurrencySymbol"_ustr);
+    static constexpr OUString sPropDecimals(u"Decimals"_ustr);
+    static constexpr OUString sPropEffectiveMin(u"EffectiveMin"_ustr);
+    static constexpr OUString sPropEffectiveMax(u"EffectiveMax"_ustr);
+    static constexpr OUString sPropEffectiveDefault(u"EffectiveDefault"_ustr);
+    static constexpr OUString sPropDefaultText(u"DefaultText"_ustr);
+    static constexpr OUString sPropDefaultDate(u"DefaultDate"_ustr);
+    static constexpr OUString sPropDefaultTime(u"DefaultTime"_ustr);
+    static constexpr OUString sPropValueMin(u"ValueMin"_ustr);
+    static constexpr OUString sPropValueMax(u"ValueMax"_ustr);
+    static constexpr OUString sPropDecimalAccuracy(u"DecimalAccuracy"_ustr);
+    static constexpr OUString sPropClassId(u"ClassId"_ustr);
+    static constexpr OUString sFormattedServiceName( u"com.sun.star.form.component.FormattedField"_ustr );
 
     for (const Property& rOldProp : aOldProperties)
     {

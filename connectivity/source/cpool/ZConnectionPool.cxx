@@ -41,7 +41,7 @@ void SAL_CALL OPoolTimer::onShot()
     m_pPool->invalidatePooledConnections();
 }
 
-constexpr OUStringLiteral TIMEOUT_NODENAME = u"Timeout";
+constexpr OUString TIMEOUT_NODENAME = u"Timeout"_ustr;
 
 OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
                                  const Reference< XInterface >& _xDriverNode,

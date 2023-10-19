@@ -45,9 +45,9 @@ using namespace connectivity::firebird;
 
 // Static const variables
 namespace {
-constexpr OUStringLiteral our_sFirebirdTmpVar = u"FIREBIRD_TMP";
-constexpr OUStringLiteral our_sFirebirdLockVar = u"FIREBIRD_LOCK";
-constexpr OUStringLiteral our_sFirebirdMsgVar = u"FIREBIRD_MSG";
+constexpr OUString our_sFirebirdTmpVar = u"FIREBIRD_TMP"_ustr;
+constexpr OUString our_sFirebirdLockVar = u"FIREBIRD_LOCK"_ustr;
+constexpr OUString our_sFirebirdMsgVar = u"FIREBIRD_MSG"_ustr;
 #ifdef MACOSX
 constexpr OUStringLiteral our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB";
 #endif
@@ -66,10 +66,10 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     m_firebirdLockDirectory.EnableKillingFile(true);
 
     // Overrides firebird's default of /tmp or c:\temp
-    osl_setEnvironment(OUString(our_sFirebirdTmpVar).pData, m_firebirdTMPDirectory.GetFileName().pData);
+    osl_setEnvironment(our_sFirebirdTmpVar.pData, m_firebirdTMPDirectory.GetFileName().pData);
 
     // Overrides firebird's default of /tmp/firebird or c:\temp\firebird
-    osl_setEnvironment(OUString(our_sFirebirdLockVar).pData, m_firebirdLockDirectory.GetFileName().pData);
+    osl_setEnvironment(our_sFirebirdLockVar.pData, m_firebirdLockDirectory.GetFileName().pData);
 
 #ifndef SYSTEM_FIREBIRD
     // Overrides firebird's hardcoded default of /usr/local/firebird on *nix,
@@ -78,7 +78,7 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     ::rtl::Bootstrap::expandMacros(sMsgURL);
     OUString sMsgPath;
     ::osl::FileBase::getSystemPathFromFileURL(sMsgURL, sMsgPath);
-    osl_setEnvironment(OUString(our_sFirebirdMsgVar).pData, sMsgPath.pData);
+    osl_setEnvironment(our_sFirebirdMsgVar.pData, sMsgPath.pData);
 #ifdef MACOSX
     // Set an env. variable to specify library location
     // for dlopen used in fbclient.
@@ -105,11 +105,11 @@ void FirebirdDriver::disposing()
     }
     m_xConnections.clear();
 
-    osl_clearEnvironment(OUString(our_sFirebirdTmpVar).pData);
-    osl_clearEnvironment(OUString(our_sFirebirdLockVar).pData);
+    osl_clearEnvironment(our_sFirebirdTmpVar.pData);
+    osl_clearEnvironment(our_sFirebirdLockVar.pData);
 
 #ifndef SYSTEM_FIREBIRD
-    osl_clearEnvironment(OUString(our_sFirebirdMsgVar).pData);
+    osl_clearEnvironment(our_sFirebirdMsgVar.pData);
 #ifdef MACOSX
     osl_clearEnvironment(OUString(our_sFirebirdLibVar).pData);
 #endif /*MACOSX*/

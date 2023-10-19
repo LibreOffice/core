@@ -71,7 +71,7 @@ namespace connectivity
     using namespace css::util;
     using namespace css::reflection;
 
-    constexpr OUStringLiteral IMPL_NAME = u"com.sun.star.sdbcx.comp.hsqldb.Driver";
+    constexpr OUString IMPL_NAME = u"com.sun.star.sdbcx.comp.hsqldb.Driver"_ustr;
 
 
 
@@ -243,7 +243,7 @@ namespace connectivity
                 OUString sMessage;
                 try
                 {
-                    static constexpr OUStringLiteral sProperties(  u"properties"  );
+                    static constexpr OUString sProperties(  u"properties"_ustr  );
                     if ( !bIsNewDatabase && xStorage->isStreamElement(sProperties) )
                     {
                         Reference<XStream > xStream = xStorage->openStreamElement(sProperties,ElementModes::READ);
@@ -297,7 +297,7 @@ namespace connectivity
                     //
                     // hsqldb 2.6.0 release notes have: added system role SCRIPT_OPS for export / import of database structure and data
                     // which seems to provide a builtin way to do this with contemporary hsqldb
-                    static constexpr OUStringLiteral sScript(u"script");
+                    static constexpr OUString sScript(u"script"_ustr);
                     if (!bIsNewDatabase && xStorage->isStreamElement(sScript))
                     {
                         Reference<XStream > xStream = xStorage->openStreamElement(sScript, ElementModes::READ);
