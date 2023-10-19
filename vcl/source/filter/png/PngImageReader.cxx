@@ -329,6 +329,8 @@ bool reader(SvStream& rStream, Graphic& rGraphic,
 
     APNGInfo aAPNGInfo;
     png_set_read_user_chunk_fn(pPng, &aAPNGInfo, &handle_unknown_chunk);
+    // don't complain about vpAg and exIf chunks
+    png_set_keep_unknown_chunks(pPng, 2, nullptr, 0);
 
     png_infop pInfo = png_create_info_struct(pPng);
     if (!pInfo)
