@@ -53,6 +53,23 @@ void f()
     // expansion:
     // expected-error-re@+1 {{use a _ustr user-defined string literal instead of constructing an instance of '{{(rtl::)?}}OUString' from an ordinary string literal [loplugin:ostr]}}
     M("foo");
+
+    // expected-note@+1 {{intermediary variable l1 declared here [loplugin:ostr]}}
+    constexpr OStringLiteral l1("foo");
+    // expected-error@+1 {{directly use a _ostr user-defined string literal instead of introducing the intermediary 'OStringLiteral' variable l1 [loplugin:ostr]}}
+    (void)l1;
+    // expected-error@+1 {{use 'OString', created from a _ostr user-defined string literal, instead of 'OStringLiteral' for the variable l2 [loplugin:ostr]}}
+    constexpr OStringLiteral l2("foo");
+    (void)l2;
+    (void)l2;
+    // expected-note@+1 {{intermediary variable l3 declared here [loplugin:ostr]}}
+    OUStringLiteral l3(u"foo");
+    // expected-error@+1 {{directly use a _ustr user-defined string literal instead of introducing the intermediary 'OUStringLiteral' variable l3 [loplugin:ostr]}}
+    (void)l3;
+    // expected-error@+1 {{use 'OUString', created from a _ustr user-defined string literal, instead of 'OUStringLiteral' for the variable l4 [loplugin:ostr]}}
+    OUStringLiteral l4(u"foo");
+    (void)l4;
+    (void)l4;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

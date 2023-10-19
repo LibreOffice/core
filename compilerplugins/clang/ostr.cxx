@@ -37,9 +37,125 @@ public:
 
     void run() override
     {
-        if (compiler.getLangOpts().CPlusPlus)
+        if (compiler.getLangOpts().CPlusPlus
+            && TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()))
         {
-            TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+            for (auto const& i : vars_)
+            {
+                auto const utf16
+                    = bool(loplugin::TypeCheck(i.first->getType()).Class("OUStringLiteral"));
+                if (i.second.singleUse == nullptr)
+                {
+                    if (!(i.first->getDeclContext()->isFunctionOrMethod()
+                          || compiler.getSourceManager().isInMainFile(i.first->getLocation())
+                          || compiler.getDiagnosticOpts().VerifyDiagnostics))
+                    {
+                        //TODO, rewriting these in include files could trigger
+                        // loplugin:redundantfcast in other translation units:
+                        continue;
+                    }
+                    if (rewriter != nullptr)
+                    {
+                        auto e = i.first->getInit()->IgnoreParenImpCasts();
+                        if (auto const e2 = dyn_cast<ConstantExpr>(e))
+                        {
+                            e = e2->getSubExpr()->IgnoreParenImpCasts();
+                        }
+                        if (auto const e2 = dyn_cast<CXXConstructExpr>(e))
+                        {
+                            assert(e2->getNumArgs() == 1);
+                            e = e2->getArg(0)->IgnoreParenImpCasts();
+                        }
+                        e = dyn_cast<clang::StringLiteral>(e);
+                        // e is null when this OUStringLiteral is initialized with another
+                        // OUStringLiteral:
+                        if (e == nullptr
+                            || insertTextAfterToken(e->getEndLoc(), utf16 ? "_ustr" : "_ostr"))
+                        {
+                            auto ok = true;
+                            for (auto d = i.first->getMostRecentDecl(); d != nullptr;
+                                 d = d->getPreviousDecl())
+                            {
+                                auto const l1 = d->getTypeSpecStartLoc();
+                                auto l2 = d->getTypeSpecEndLoc();
+                                l2 = l2.getLocWithOffset(Lexer::MeasureTokenLength(
+                                    l2, compiler.getSourceManager(), compiler.getLangOpts()));
+                                if (!replaceText(l1, delta(l1, l2), utf16 ? "OUString" : "OString"))
+                                {
+                                    ok = false;
+                                }
+                            }
+                            for (auto const i : i.second.explicitConversions)
+                            {
+                                auto const e2 = i->getArg(0);
+                                auto l1 = i->getBeginLoc();
+                                auto l2 = e2->getBeginLoc();
+                                auto l3 = e2->getEndLoc();
+                                auto l4 = i->getEndLoc();
+                                while (compiler.getSourceManager().isMacroArgExpansion(l1)
+                                       && compiler.getSourceManager().isMacroArgExpansion(l2)
+                                       && compiler.getSourceManager().isMacroArgExpansion(l3)
+                                       && compiler.getSourceManager().isMacroArgExpansion(l4))
+                                //TODO: check all four locations are part of the same macro argument
+                                // expansion
+                                {
+                                    l1 = compiler.getSourceManager().getImmediateMacroCallerLoc(l1);
+                                    l2 = compiler.getSourceManager().getImmediateMacroCallerLoc(l2);
+                                    l3 = compiler.getSourceManager().getImmediateMacroCallerLoc(l3);
+                                    l4 = compiler.getSourceManager().getImmediateMacroCallerLoc(l4);
+                                }
+                                l3 = l3.getLocWithOffset(Lexer::MeasureTokenLength(
+                                    l3, compiler.getSourceManager(), compiler.getLangOpts()));
+                                l4 = l4.getLocWithOffset(Lexer::MeasureTokenLength(
+                                    l4, compiler.getSourceManager(), compiler.getLangOpts()));
+                                removeText(l1, delta(l1, l2));
+                                removeText(l3, delta(l3, l4));
+                            }
+                            if (ok)
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    report(DiagnosticsEngine::Warning,
+                           "use '%select{OString|OUString}0', created from a %select{_ostr|_ustr}0 "
+                           "user-defined string literal, instead of "
+                           "'%select{OStringLiteral|OUStringLiteral}0' for the variable %1",
+                           i.first->getLocation())
+                        << utf16 << i.first->getName() << i.first->getSourceRange();
+                    for (auto d = i.first->getMostRecentDecl(); d != nullptr;
+                         d = d->getPreviousDecl())
+                    {
+                        if (d != i.first)
+                        {
+                            report(DiagnosticsEngine::Note, "variable %0 declared here",
+                                   d->getLocation())
+                                << d->getName() << d->getSourceRange();
+                        }
+                    }
+                }
+                else
+                {
+                    if (!compiler.getDiagnosticOpts().VerifyDiagnostics)
+                    {
+                        //TODO, left for later:
+                        continue;
+                    }
+                    report(DiagnosticsEngine::Warning,
+                           "directly use a %select{_ostr|_ustr}0 user-defined string literal "
+                           "instead of introducing the intermediary "
+                           "'%select{OStringLiteral|OUStringLiteral}0' variable %1",
+                           i.second.singleUse->getExprLoc())
+                        << utf16 << i.first->getName() << i.second.singleUse->getSourceRange();
+                    for (auto d = i.first->getMostRecentDecl(); d != nullptr;
+                         d = d->getPreviousDecl())
+                    {
+                        report(DiagnosticsEngine::Note, "intermediary variable %0 declared here",
+                               d->getLocation())
+                            << d->getName() << d->getSourceRange();
+                    }
+                }
+            }
         }
     }
 
@@ -67,16 +183,117 @@ public:
         return ret;
     }
 
+    bool VisitVarDecl(VarDecl const* decl)
+    {
+        if (ignoreLocation(decl))
+        {
+            return true;
+        }
+        if (!decl->isThisDeclarationADefinition())
+        {
+            return true;
+        }
+        loplugin::TypeCheck const tc(decl->getType());
+        if (!(tc.Class("OStringLiteral").Namespace("rtl").GlobalNamespace()
+              || tc.Class("OUStringLiteral").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        if (suppressWarningAt(decl->getLocation()))
+        {
+            return true;
+        }
+        vars_[decl].multipleUses
+            = decl->getDeclContext()->isFileContext()
+                  ? !compiler.getSourceManager().isInMainFile(decl->getLocation())
+                  : decl->isExternallyVisible();
+        return true;
+    }
+
+    bool VisitDeclRefExpr(DeclRefExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        auto const d1 = dyn_cast<VarDecl>(expr->getDecl());
+        if (d1 == nullptr)
+        {
+            return true;
+        }
+        auto const d2 = d1->getDefinition();
+        if (d2 == nullptr)
+        {
+            return true;
+        }
+        auto const i = vars_.find(d2);
+        if (i == vars_.end())
+        {
+            return true;
+        }
+        if (!i->second.multipleUses)
+        {
+            if (i->second.singleUse == nullptr)
+            {
+                i->second.singleUse = expr;
+            }
+            else
+            {
+                i->second.multipleUses = true;
+                i->second.singleUse = nullptr;
+            }
+        }
+        return true;
+    }
+
     bool VisitCXXConstructExpr(CXXConstructExpr const* expr)
     {
         if (ignoreLocation(expr))
         {
             return true;
         }
-        if (!loplugin::DeclCheck(expr->getConstructor()->getParent())
-                 .Class("OUString")
-                 .Namespace("rtl")
-                 .GlobalNamespace())
+        auto const dc = expr->getConstructor()->getParent();
+        auto const utf16
+            = bool(loplugin::DeclCheck(dc).Class("OUString").Namespace("rtl").GlobalNamespace());
+        if (!(utf16 || loplugin::DeclCheck(dc).Class("OString").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        if (expr->getNumArgs() == 1
+            && loplugin::TypeCheck(expr->getArg(0)->getType())
+                   .Class(utf16 ? "OUStringLiteral" : "OStringLiteral")
+                   .Namespace("rtl")
+                   .GlobalNamespace())
+        {
+            if (functionalCasts_.empty()
+                || functionalCasts_.top()->getSubExpr()->IgnoreImplicit() != expr)
+            {
+                return true;
+            }
+            auto const e = dyn_cast<DeclRefExpr>(expr->getArg(0)->IgnoreParenImpCasts());
+            if (e == nullptr)
+            {
+                return true;
+            }
+            auto const d1 = dyn_cast<VarDecl>(e->getDecl());
+            if (d1 == nullptr)
+            {
+                return true;
+            }
+            auto const d2 = d1->getDefinition();
+            if (d2 == nullptr)
+            {
+                return true;
+            }
+            auto const i = vars_.find(d2);
+            if (i == vars_.end())
+            {
+                return true;
+            }
+            i->second.explicitConversions.insert(expr);
+            return true;
+        }
+        if (!utf16)
         {
             return true;
         }
@@ -195,9 +412,17 @@ private:
                - compiler.getSourceManager().getDecomposedLoc(loc1).second;
     }
 
+    struct Var
+    {
+        bool multipleUses = false;
+        DeclRefExpr const* singleUse = nullptr;
+        std::set<CXXConstructExpr const*> explicitConversions;
+    };
+
     std::set<Expr const*> defaultArgs_;
     std::stack<CXXFunctionalCastExpr const*> functionalCasts_;
     std::set<SourceLocation> locs_;
+    std::map<VarDecl const*, Var> vars_;
 };
 
 loplugin::Plugin::Registration<Ostr> X("ostr", true);
