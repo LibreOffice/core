@@ -482,9 +482,9 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
         xShow->displaySlide( xSlide, xDrawPages, xAnimNode, comphelper::containerToSequence(aProperties) );
 }
 
-constexpr OUStringLiteral gsOnClick( u"OnClick" );
-constexpr OUStringLiteral gsBookmark( u"Bookmark" );
-constexpr OUStringLiteral gsVerb( u"Verb" );
+constexpr OUString gsOnClick( u"OnClick"_ustr );
+constexpr OUString gsBookmark( u"Bookmark"_ustr );
+constexpr OUString gsVerb( u"Verb"_ustr );
 
 SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc, vcl::Window* pParentWindow )
 : mxModel(pDoc->getUnoModel())

@@ -2022,8 +2022,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                         // exporting transition effects to pdf
                         if ( mbImpressDoc && !pPDFExtOutDevData->GetIsExportNotesPages() && pPDFExtOutDevData->GetIsExportTransitionEffects() )
                         {
-                            static constexpr OUStringLiteral sEffect( u"Effect" );
-                            static constexpr OUStringLiteral sSpeed ( u"Speed" );
+                            static constexpr OUString sEffect( u"Effect"_ustr );
+                            static constexpr OUString sSpeed ( u"Speed"_ustr );
                             sal_Int32 nTime = 800;
                             presentation::AnimationSpeed aAs;
                             if ( xPagePropSet->getPropertySetInfo( )->hasPropertyByName( sSpeed ) )

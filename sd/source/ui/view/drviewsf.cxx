@@ -122,13 +122,13 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                         uno::Reference< beans::XPropertySetInfo > xPropInfo( xPropSet->getPropertySetInfo(), uno::UNO_SET_THROW );
 
                         form::FormButtonType eButtonType = form::FormButtonType_URL;
-                        static constexpr OUStringLiteral sButtonType( u"ButtonType" );
+                        static constexpr OUString sButtonType( u"ButtonType"_ustr );
                         if(xPropInfo->hasPropertyByName( sButtonType ) && (xPropSet->getPropertyValue( sButtonType ) >>= eButtonType ) )
                         {
                             OUString aString;
 
                             // Label
-                            static constexpr OUStringLiteral sLabel( u"Label" );
+                            static constexpr OUString sLabel( u"Label"_ustr );
                             if(xPropInfo->hasPropertyByName(sLabel))
                             {
                                 if( xPropSet->getPropertyValue(sLabel) >>= aString )
@@ -136,7 +136,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // URL
-                            static constexpr OUStringLiteral sTargetURL( u"TargetURL" );
+                            static constexpr OUString sTargetURL( u"TargetURL"_ustr );
                             if(xPropInfo->hasPropertyByName(sTargetURL))
                             {
                                 if( xPropSet->getPropertyValue(sTargetURL) >>= aString )
@@ -144,7 +144,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                             }
 
                             // Target
-                            static constexpr OUStringLiteral sTargetFrame( u"TargetFrame" );
+                            static constexpr OUString sTargetFrame( u"TargetFrame"_ustr );
                             if(xPropInfo->hasPropertyByName(sTargetFrame) )
                             {
                                 if( xPropSet->getPropertyValue(sTargetFrame) >>= aString )

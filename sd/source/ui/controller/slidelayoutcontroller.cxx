@@ -85,7 +85,7 @@ struct snew_slide_value_info_layout
 
 }
 
-constexpr OUStringLiteral EMPTY = u"";
+constexpr OUString EMPTY = u""_ustr;
 
 constexpr snew_slide_value_info_layout notes[] =
 {

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-constexpr OUStringLiteral TITLE = u"Title";
+constexpr OUString TITLE = u"Title"_ustr;
 
 class FolderDescriptor
 {

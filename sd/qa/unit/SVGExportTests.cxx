@@ -263,7 +263,7 @@ public:
 
     void testSVGPlaceholderLocale()
     {
-        static constexpr OUStringLiteral aLangISO(u"it-IT");
+        static constexpr OUString aLangISO(u"it-IT"_ustr);
         SvtSysLocaleOptions aSysLocaleOptions;
         aSysLocaleOptions.SetLocaleConfigString(aLangISO);
         aSysLocaleOptions.SetUILocaleConfigString(aLangISO);

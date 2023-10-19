@@ -1050,21 +1050,21 @@ uno::Reference< container::XNameReplace > SAL_CALL SdXShape::getEvents(  )
     return new SdUnoEventsAccess( this );
 }
 
-constexpr OUStringLiteral gaStrOnClick( u"OnClick" );
-constexpr OUStringLiteral gaStrServiceName( u"com.sun.star.documents.Events" );
-constexpr OUStringLiteral gaStrEventType( u"EventType" );
-constexpr OUStringLiteral gaStrPresentation( u"Presentation" );
-constexpr OUStringLiteral gaStrLibrary(u"Library");
-constexpr OUStringLiteral gaStrMacroName(u"MacroName");
-constexpr OUStringLiteral gaStrClickAction( u"ClickAction" );
-constexpr OUStringLiteral gaStrBookmark( u"Bookmark" );
-constexpr OUStringLiteral gaStrEffect( u"Effect" );
-constexpr OUStringLiteral gaStrPlayFull( u"PlayFull" );
-constexpr OUStringLiteral gaStrVerb( u"Verb" );
-constexpr OUStringLiteral gaStrSoundURL( u"SoundURL" );
-constexpr OUStringLiteral gaStrSpeed( u"Speed" );
+constexpr OUString gaStrOnClick( u"OnClick"_ustr );
+constexpr OUString gaStrServiceName( u"com.sun.star.documents.Events"_ustr );
+constexpr OUString gaStrEventType( u"EventType"_ustr );
+constexpr OUString gaStrPresentation( u"Presentation"_ustr );
+constexpr OUString gaStrLibrary(u"Library"_ustr);
+constexpr OUString gaStrMacroName(u"MacroName"_ustr);
+constexpr OUString gaStrClickAction( u"ClickAction"_ustr );
+constexpr OUString gaStrBookmark( u"Bookmark"_ustr );
+constexpr OUString gaStrEffect( u"Effect"_ustr );
+constexpr OUString gaStrPlayFull( u"PlayFull"_ustr );
+constexpr OUString gaStrVerb( u"Verb"_ustr );
+constexpr OUString gaStrSoundURL( u"SoundURL"_ustr );
+constexpr OUString gaStrSpeed( u"Speed"_ustr );
 constexpr OUStringLiteral gaStrStarBasic( u"StarBasic" );
-constexpr OUStringLiteral gaStrScript( u"Script" );
+constexpr OUString gaStrScript( u"Script"_ustr );
 
 SdUnoEventsAccess::SdUnoEventsAccess( SdXShape* pShape ) noexcept
   : mpShape( pShape )
@@ -1420,7 +1420,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
         if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
         {
             // Scripting Framework URL
-            aAny <<= OUString(gaStrScript);
+            aAny <<= gaStrScript;
             pProperties->Name = gaStrEventType;
             pProperties->Handle = -1;
             pProperties->Value = aAny;
@@ -1476,7 +1476,7 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
     }
     else
     {
-        aAny <<= OUString(gaStrPresentation);
+        aAny <<= gaStrPresentation;
         pProperties->Name = gaStrEventType;
         pProperties->Handle = -1;
         pProperties->Value = aAny;

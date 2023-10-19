@@ -669,7 +669,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            static constexpr OUStringLiteral sPropName( u"BuildId" );
+            static constexpr OUString sPropName( u"BuildId"_ustr );
 
             OUString sBuildId;
             xInfoSet->getPropertyValue(sPropName) >>= sBuildId;

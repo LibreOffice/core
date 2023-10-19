@@ -134,13 +134,13 @@ OUString getShapeDescription( const Reference< XShape >& xShape, bool bWithText 
         Reference<XPropertySetInfo> xInfo(xSet->getPropertySetInfo());
         if (xInfo.is())
         {
-            static constexpr OUStringLiteral aPropName1(u"Name");
+            static constexpr OUString aPropName1(u"Name"_ustr);
             if(xInfo->hasPropertyByName(aPropName1))
                 xSet->getPropertyValue(aPropName1) >>= aDescription;
 
             bAppendIndex = aDescription.isEmpty();
 
-            static constexpr OUStringLiteral aPropName2(u"UINameSingular");
+            static constexpr OUString aPropName2(u"UINameSingular"_ustr);
             if(xInfo->hasPropertyByName(aPropName2))
                 xSet->getPropertyValue(aPropName2) >>= aDescription;
         }

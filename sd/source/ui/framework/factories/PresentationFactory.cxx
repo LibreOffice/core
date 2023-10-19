@@ -68,7 +68,7 @@ private:
 
 //===== PresentationFactory ===================================================
 
-constexpr OUStringLiteral gsPresentationViewURL = u"private:resource/view/Presentation";
+constexpr OUString gsPresentationViewURL = u"private:resource/view/Presentation"_ustr;
 
 PresentationFactory::PresentationFactory (
     const rtl::Reference<::sd::DrawController>& rxController)

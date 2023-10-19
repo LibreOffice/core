@@ -194,8 +194,8 @@ OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
     else
         return "";
 
-    static constexpr OUStringLiteral sNotesShapeName (
-        u"com.sun.star.presentation.NotesShape" );
+    static constexpr OUString sNotesShapeName (
+        u"com.sun.star.presentation.NotesShape"_ustr );
     static constexpr OUStringLiteral sTextShapeName (
         u"com.sun.star.drawing.TextShape" );
 

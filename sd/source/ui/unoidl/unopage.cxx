@@ -108,7 +108,7 @@ enum WID_PAGE
 
 }
 
-constexpr OUStringLiteral sEmptyPageName = u"page";
+constexpr OUString sEmptyPageName = u"page"_ustr;
 
 // this function stores the property maps for draw pages in impress and draw
 static const SvxItemPropertySet* ImplGetDrawPagePropertySet( bool bImpress, PageKind ePageKind )
@@ -399,7 +399,7 @@ rtl::Reference<SdrObject> SdGenericDrawPage::CreateSdrObject_( const Reference< 
         return nullptr;
 
     OUString aType( xShape->getShapeType() );
-    static constexpr OUStringLiteral aPrefix( u"com.sun.star.presentation." );
+    static constexpr OUString aPrefix( u"com.sun.star.presentation."_ustr );
     if( !aType.startsWith( aPrefix ) )
     {
         return SvxDrawPage::CreateSdrObject_( xShape );
