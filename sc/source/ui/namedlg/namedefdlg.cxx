@@ -125,7 +125,7 @@ bool ScNameDefDlg::IsNameValid()
     ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
-        pRangeName = maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
+        pRangeName = maRangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
     }
     else
     {
@@ -186,7 +186,7 @@ void ScNameDefDlg::AddPushed()
     ScRangeName* pRangeName = nullptr;
     if(aScope == maGlobalNameStr)
     {
-        pRangeName = maRangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
+        pRangeName = maRangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
     }
     else
     {

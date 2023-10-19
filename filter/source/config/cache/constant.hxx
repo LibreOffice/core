@@ -24,58 +24,58 @@
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-inline constexpr OUStringLiteral PROPNAME_NAME = u"Name";
+inline constexpr OUString PROPNAME_NAME = u"Name"_ustr;
 
 /** @short  used to identify a type item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-inline constexpr OUStringLiteral PROPNAME_UINAME = u"UIName";
-inline constexpr OUStringLiteral PROPNAME_UINAMES = u"UINames";
-inline constexpr OUStringLiteral PROPNAME_PREFERRED = u"Preferred";
-inline constexpr OUStringLiteral PROPNAME_PREFERREDFILTER = u"PreferredFilter";
-inline constexpr OUStringLiteral PROPNAME_DETECTSERVICE = u"DetectService";
-inline constexpr OUStringLiteral PROPNAME_MEDIATYPE = u"MediaType";
-inline constexpr OUStringLiteral PROPNAME_CLIPBOARDFORMAT = u"ClipboardFormat";
-inline constexpr OUStringLiteral PROPNAME_URLPATTERN = u"URLPattern";
-inline constexpr OUStringLiteral PROPNAME_EXTENSIONS = u"Extensions";
+inline constexpr OUString PROPNAME_UINAME = u"UIName"_ustr;
+inline constexpr OUString PROPNAME_UINAMES = u"UINames"_ustr;
+inline constexpr OUString PROPNAME_PREFERRED = u"Preferred"_ustr;
+inline constexpr OUString PROPNAME_PREFERREDFILTER = u"PreferredFilter"_ustr;
+inline constexpr OUString PROPNAME_DETECTSERVICE = u"DetectService"_ustr;
+inline constexpr OUString PROPNAME_MEDIATYPE = u"MediaType"_ustr;
+inline constexpr OUString PROPNAME_CLIPBOARDFORMAT = u"ClipboardFormat"_ustr;
+inline constexpr OUString PROPNAME_URLPATTERN = u"URLPattern"_ustr;
+inline constexpr OUString PROPNAME_EXTENSIONS = u"Extensions"_ustr;
 
 /** @short  used to identify a filter item property against the
             configuration API and can be used at all name containers
             (based on this filtercache) too.
  */
-inline constexpr OUStringLiteral PROPNAME_TYPE = u"Type";
-inline constexpr OUStringLiteral PROPNAME_DOCUMENTSERVICE = u"DocumentService";
-inline constexpr OUStringLiteral PROPNAME_FILTERSERVICE = u"FilterService";
-inline constexpr OUStringLiteral PROPNAME_UICOMPONENT = u"UIComponent";
-inline constexpr OUStringLiteral PROPNAME_FLAGS = u"Flags";
-inline constexpr OUStringLiteral PROPNAME_USERDATA = u"UserData";
-inline constexpr OUStringLiteral PROPNAME_TEMPLATENAME = u"TemplateName";
-inline constexpr OUStringLiteral PROPNAME_FILEFORMATVERSION = u"FileFormatVersion";
-inline constexpr OUStringLiteral PROPNAME_EXPORTEXTENSION = u"ExportExtension";
-inline constexpr OUStringLiteral PROPNAME_ENABLED = u"Enabled";
+inline constexpr OUString PROPNAME_TYPE = u"Type"_ustr;
+inline constexpr OUString PROPNAME_DOCUMENTSERVICE = u"DocumentService"_ustr;
+inline constexpr OUString PROPNAME_FILTERSERVICE = u"FilterService"_ustr;
+inline constexpr OUString PROPNAME_UICOMPONENT = u"UIComponent"_ustr;
+inline constexpr OUString PROPNAME_FLAGS = u"Flags"_ustr;
+inline constexpr OUString PROPNAME_USERDATA = u"UserData"_ustr;
+inline constexpr OUString PROPNAME_TEMPLATENAME = u"TemplateName"_ustr;
+inline constexpr OUString PROPNAME_FILEFORMATVERSION = u"FileFormatVersion"_ustr;
+inline constexpr OUString PROPNAME_EXPORTEXTENSION = u"ExportExtension"_ustr;
+inline constexpr OUString PROPNAME_ENABLED = u"Enabled"_ustr;
 
 /** @short  used to identify a frame loader or detect service item
             property against the configuration API and can be used
             at all name containers (based on this filtercache) too.
  */
-inline constexpr OUStringLiteral PROPNAME_TYPES = u"Types";
+inline constexpr OUString PROPNAME_TYPES = u"Types"_ustr;
 
 /** @short  used to identify the list of sorted filters for a specific
             office module
  */
-inline constexpr OUStringLiteral PROPNAME_SORTEDFILTERLIST = u"SortedFilterList";
+inline constexpr OUString PROPNAME_SORTEDFILTERLIST = u"SortedFilterList"_ustr;
 
 /** @short  implicit properties. which are used at the container interface only.
  */
-inline constexpr OUStringLiteral PROPNAME_FINALIZED = u"Finalized";
-inline constexpr OUStringLiteral PROPNAME_MANDATORY = u"Mandatory";
+inline constexpr OUString PROPNAME_FINALIZED = u"Finalized"_ustr;
+inline constexpr OUString PROPNAME_MANDATORY = u"Mandatory"_ustr;
 
 /** @short  used to identify a set of items against the configuration API. */
-inline constexpr OUStringLiteral CFGSET_TYPES = u"Types";
-inline constexpr OUStringLiteral CFGSET_FILTERS = u"Filters";
-inline constexpr OUStringLiteral CFGSET_FRAMELOADERS = u"FrameLoaders";
-inline constexpr OUStringLiteral CFGSET_CONTENTHANDLERS = u"ContentHandlers";
+inline constexpr OUString CFGSET_TYPES = u"Types"_ustr;
+inline constexpr OUString CFGSET_FILTERS = u"Filters"_ustr;
+inline constexpr OUString CFGSET_FRAMELOADERS = u"FrameLoaders"_ustr;
+inline constexpr OUString CFGSET_CONTENTHANDLERS = u"ContentHandlers"_ustr;
 
 /** @short  used to address some configuration keys directly.
 
@@ -84,8 +84,8 @@ inline constexpr OUStringLiteral CFGSET_CONTENTHANDLERS = u"ContentHandlers";
 
     @TODO   define these direct keys ...
  */
-inline constexpr OUStringLiteral CFGDIRECTKEY_OFFICELOCALE = u"/org.openoffice.Setup/L10N/ooLocale";
-inline constexpr OUStringLiteral CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader";
+inline constexpr OUString CFGDIRECTKEY_OFFICELOCALE = u"/org.openoffice.Setup/L10N/ooLocale"_ustr;
+inline constexpr OUString CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openoffice.TypeDetection.Misc/Defaults/DefaultFrameLoader"_ustr;
 #define  CFGDIRECTKEY_PRODUCTNAME           "/org.openoffice.Setup/Product/ooName"
 
 // Note that these flag bits have parallel names in
@@ -93,55 +93,55 @@ inline constexpr OUStringLiteral CFGDIRECTKEY_DEFAULTFRAMELOADER = u"/org.openof
 // documentation on their meaning.
 
 /** @short  names of filter flags, sorted in alphabetical order */
-inline constexpr OUStringLiteral FLAGNAME_3RDPARTYFILTER = u"3RDPARTYFILTER";
-inline constexpr OUStringLiteral FLAGNAME_ALIEN = u"ALIEN";
-inline constexpr OUStringLiteral FLAGNAME_CONSULTSERVICE = u"CONSULTSERVICE";
-inline constexpr OUStringLiteral FLAGNAME_DEFAULT = u"DEFAULT";
-inline constexpr OUStringLiteral FLAGNAME_ENCRYPTION = u"ENCRYPTION";
-inline constexpr OUStringLiteral FLAGNAME_EXPORT = u"EXPORT";
-inline constexpr OUStringLiteral FLAGNAME_GPGENCRYPTION = u"GPGENCRYPTION";
-inline constexpr OUStringLiteral FLAGNAME_IMPORT = u"IMPORT";
-inline constexpr OUStringLiteral FLAGNAME_INTERNAL = u"INTERNAL";
-inline constexpr OUStringLiteral FLAGNAME_NOTINFILEDIALOG = u"NOTINFILEDIALOG";
-inline constexpr OUStringLiteral FLAGNAME_NOTINSTALLED = u"NOTINSTALLED";
-inline constexpr OUStringLiteral FLAGNAME_OWN = u"OWN";
-inline constexpr OUStringLiteral FLAGNAME_PACKED = u"PACKED";
-inline constexpr OUStringLiteral FLAGNAME_PASSWORDTOMODIFY = u"PASSWORDTOMODIFY";
-inline constexpr OUStringLiteral FLAGNAME_PREFERRED = u"PREFERRED";
-inline constexpr OUStringLiteral FLAGNAME_STARTPRESENTATION = u"STARTPRESENTATION";
-inline constexpr OUStringLiteral FLAGNAME_READONLY = u"READONLY";
-inline constexpr OUStringLiteral FLAGNAME_SUPPORTSSELECTION = u"SUPPORTSSELECTION";
-inline constexpr OUStringLiteral FLAGNAME_TEMPLATE = u"TEMPLATE";
-inline constexpr OUStringLiteral FLAGNAME_TEMPLATEPATH = u"TEMPLATEPATH";
-inline constexpr OUStringLiteral FLAGNAME_COMBINED = u"COMBINED";
-inline constexpr OUStringLiteral FLAGNAME_SUPPORTSSIGNING = u"SUPPORTSSIGNING";
-inline constexpr OUStringLiteral FLAGNAME_EXOTIC = u"EXOTIC";
+inline constexpr OUString FLAGNAME_3RDPARTYFILTER = u"3RDPARTYFILTER"_ustr;
+inline constexpr OUString FLAGNAME_ALIEN = u"ALIEN"_ustr;
+inline constexpr OUString FLAGNAME_CONSULTSERVICE = u"CONSULTSERVICE"_ustr;
+inline constexpr OUString FLAGNAME_DEFAULT = u"DEFAULT"_ustr;
+inline constexpr OUString FLAGNAME_ENCRYPTION = u"ENCRYPTION"_ustr;
+inline constexpr OUString FLAGNAME_EXPORT = u"EXPORT"_ustr;
+inline constexpr OUString FLAGNAME_GPGENCRYPTION = u"GPGENCRYPTION"_ustr;
+inline constexpr OUString FLAGNAME_IMPORT = u"IMPORT"_ustr;
+inline constexpr OUString FLAGNAME_INTERNAL = u"INTERNAL"_ustr;
+inline constexpr OUString FLAGNAME_NOTINFILEDIALOG = u"NOTINFILEDIALOG"_ustr;
+inline constexpr OUString FLAGNAME_NOTINSTALLED = u"NOTINSTALLED"_ustr;
+inline constexpr OUString FLAGNAME_OWN = u"OWN"_ustr;
+inline constexpr OUString FLAGNAME_PACKED = u"PACKED"_ustr;
+inline constexpr OUString FLAGNAME_PASSWORDTOMODIFY = u"PASSWORDTOMODIFY"_ustr;
+inline constexpr OUString FLAGNAME_PREFERRED = u"PREFERRED"_ustr;
+inline constexpr OUString FLAGNAME_STARTPRESENTATION = u"STARTPRESENTATION"_ustr;
+inline constexpr OUString FLAGNAME_READONLY = u"READONLY"_ustr;
+inline constexpr OUString FLAGNAME_SUPPORTSSELECTION = u"SUPPORTSSELECTION"_ustr;
+inline constexpr OUString FLAGNAME_TEMPLATE = u"TEMPLATE"_ustr;
+inline constexpr OUString FLAGNAME_TEMPLATEPATH = u"TEMPLATEPATH"_ustr;
+inline constexpr OUString FLAGNAME_COMBINED = u"COMBINED"_ustr;
+inline constexpr OUString FLAGNAME_SUPPORTSSIGNING = u"SUPPORTSSIGNING"_ustr;
+inline constexpr OUString FLAGNAME_EXOTIC = u"EXOTIC"_ustr;
 
 /** @short  some uno service names.
  */
-inline constexpr OUStringLiteral SERVICE_CONFIGURATIONUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess";
-inline constexpr OUStringLiteral SERVICE_CONFIGURATIONACCESS = u"com.sun.star.configuration.ConfigurationAccess";
+inline constexpr OUString SERVICE_CONFIGURATIONUPDATEACCESS = u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
+inline constexpr OUString SERVICE_CONFIGURATIONACCESS = u"com.sun.star.configuration.ConfigurationAccess"_ustr;
 
 /** @short  some configuration paths.
  */
-inline constexpr OUStringLiteral CFGPACKAGE_TD_TYPES = u"/org.openoffice.TypeDetection.Types";
-inline constexpr OUStringLiteral CFGPACKAGE_TD_FILTERS = u"/org.openoffice.TypeDetection.Filter";
-inline constexpr OUStringLiteral CFGPACKAGE_TD_OTHERS = u"/org.openoffice.TypeDetection.Misc";
-inline constexpr OUStringLiteral CFGPACKAGE_TD_OLD = u"/org.openoffice.Office.TypeDetection";
+inline constexpr OUString CFGPACKAGE_TD_TYPES = u"/org.openoffice.TypeDetection.Types"_ustr;
+inline constexpr OUString CFGPACKAGE_TD_FILTERS = u"/org.openoffice.TypeDetection.Filter"_ustr;
+inline constexpr OUString CFGPACKAGE_TD_OTHERS = u"/org.openoffice.TypeDetection.Misc"_ustr;
+inline constexpr OUString CFGPACKAGE_TD_OLD = u"/org.openoffice.Office.TypeDetection"_ustr;
 
 /** @short  some default values.
  */
-inline constexpr OUStringLiteral DEFAULT_OFFICELOCALE = u"en-US";
+inline constexpr OUString DEFAULT_OFFICELOCALE = u"en-US"_ustr;
 
 /** @short  used for the queries of the FilterFactory service.
  */
-inline constexpr OUStringLiteral QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE = u"matchByDocumentService";
-inline constexpr OUStringLiteral QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE = u"getDefaultFilterForType";
-inline constexpr OUStringLiteral QUERY_IDENTIFIER_GET_SORTED_FILTERLIST = u"getSortedFilterList()";
+inline constexpr OUString QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE = u"matchByDocumentService"_ustr;
+inline constexpr OUString QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE = u"getDefaultFilterForType"_ustr;
+inline constexpr OUString QUERY_IDENTIFIER_GET_SORTED_FILTERLIST = u"getSortedFilterList()"_ustr;
 
-inline constexpr OUStringLiteral QUERY_PARAM_IFLAGS = u"iflags";
-inline constexpr OUStringLiteral QUERY_PARAM_EFLAGS = u"eflags";
-inline constexpr OUStringLiteral QUERY_PARAM_MODULE = u"module";
+inline constexpr OUString QUERY_PARAM_IFLAGS = u"iflags"_ustr;
+inline constexpr OUString QUERY_PARAM_EFLAGS = u"eflags"_ustr;
+inline constexpr OUString QUERY_PARAM_MODULE = u"module"_ustr;
 #define  QUERY_CONSTVALUE_ALL                       "all"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

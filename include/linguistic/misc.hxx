@@ -46,10 +46,10 @@ class CharClass;
 class LocaleDataWrapper;
 
 
-inline constexpr OUStringLiteral SN_GRAMMARCHECKER = u"com.sun.star.linguistic2.Proofreader";
-inline constexpr OUStringLiteral SN_SPELLCHECKER = u"com.sun.star.linguistic2.SpellChecker";
-inline constexpr OUStringLiteral SN_HYPHENATOR = u"com.sun.star.linguistic2.Hyphenator";
-inline constexpr OUStringLiteral SN_THESAURUS = u"com.sun.star.linguistic2.Thesaurus";
+inline constexpr OUString SN_GRAMMARCHECKER = u"com.sun.star.linguistic2.Proofreader"_ustr;
+inline constexpr OUString SN_SPELLCHECKER = u"com.sun.star.linguistic2.SpellChecker"_ustr;
+inline constexpr OUString SN_HYPHENATOR = u"com.sun.star.linguistic2.Hyphenator"_ustr;
+inline constexpr OUString SN_THESAURUS = u"com.sun.star.linguistic2.Thesaurus"_ustr;
 
 
 namespace linguistic

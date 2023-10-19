@@ -142,10 +142,10 @@ OUString VCLXAccessibleScrollBar::getAccessibleActionDescription ( sal_Int32 nIn
 
     switch ( nIndex )
     {
-        case 0:     sDescription = OUString(RID_STR_ACC_ACTION_DECLINE);      break;
-        case 1:     sDescription = OUString(RID_STR_ACC_ACTION_INCLINE);      break;
-        case 2:     sDescription = OUString(RID_STR_ACC_ACTION_DECBLOCK);     break;
-        case 3:     sDescription = OUString(RID_STR_ACC_ACTION_INCBLOCK);     break;
+        case 0:     sDescription = RID_STR_ACC_ACTION_DECLINE;      break;
+        case 1:     sDescription = RID_STR_ACC_ACTION_INCLINE;      break;
+        case 2:     sDescription = RID_STR_ACC_ACTION_DECBLOCK;     break;
+        case 3:     sDescription = RID_STR_ACC_ACTION_INCBLOCK;     break;
         default:                                                              break;
     }
 

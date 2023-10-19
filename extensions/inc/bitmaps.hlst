@@ -10,39 +10,39 @@
 #ifndef INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
 #define INCLUDED_EXTENSIONS_INC_BITMAPS_HRC
 
-inline constexpr OUStringLiteral RID_EXTBMP_CONTROL = u"res/sx10144.png";
-inline constexpr OUStringLiteral RID_EXTBMP_BUTTON = u"res/sx10594.png";
-inline constexpr OUStringLiteral RID_EXTBMP_RADIOBUTTON = u"res/sx10595.png";
-inline constexpr OUStringLiteral RID_EXTBMP_CHECKBOX = u"res/sx10596.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FIXEDTEXT = u"res/sx10597.png";
-inline constexpr OUStringLiteral RID_EXTBMP_GROUPBOX = u"res/sx10598.png";
-inline constexpr OUStringLiteral RID_EXTBMP_EDITBOX = u"res/sx10599.png";
-inline constexpr OUStringLiteral RID_EXTBMP_LISTBOX = u"res/sx10600.png";
-inline constexpr OUStringLiteral RID_EXTBMP_COMBOBOX = u"res/sx10601.png";
-inline constexpr OUStringLiteral RID_EXTBMP_GRID = u"res/sx10603.png";
-inline constexpr OUStringLiteral RID_EXTBMP_IMAGEBUTTON = u"res/sx10604.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FILECONTROL = u"res/sx10605.png";
-inline constexpr OUStringLiteral RID_EXTBMP_DATEFIELD = u"res/sx10704.png";
-inline constexpr OUStringLiteral RID_EXTBMP_TIMEFIELD = u"res/sx10705.png";
-inline constexpr OUStringLiteral RID_EXTBMP_NUMERICFIELD = u"res/sx10706.png";
-inline constexpr OUStringLiteral RID_EXTBMP_CURRENCYFIELD = u"res/sx10707.png";
-inline constexpr OUStringLiteral RID_EXTBMP_PATTERNFIELD = u"res/sx10708.png";
-inline constexpr OUStringLiteral RID_EXTBMP_IMAGECONTROL = u"res/sx10710.png";
-inline constexpr OUStringLiteral RID_EXTBMP_HIDDEN = u"res/sx18022.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FORMS = u"res/sx18013.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FORM = u"res/sx10593.png";
-inline constexpr OUStringLiteral RID_EXTBMP_SCROLLBAR = u"res/sx10768.png";
-inline constexpr OUStringLiteral RID_EXTBMP_SPINBUTTON = u"res/sx10769.png";
-inline constexpr OUStringLiteral RID_EXTBMP_NAVIGATIONBAR = u"res/sx10607.png";
-inline constexpr OUStringLiteral RID_SCANNER_HANDLE = u"extensions/res/scanner/handle.png";
-inline constexpr OUStringLiteral BMP_TABLE = u"res/sx03188.png";
-inline constexpr OUStringLiteral BMP_QUERY = u"res/sx03202.png";
-inline constexpr OUStringLiteral RID_EXTBMP_AUTOFILTER_SC = u"res/sc10716.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FILTERCRIT_SC = u"res/sc10715.png";
-inline constexpr OUStringLiteral RID_EXTBMP_REMOVE_FILTER_SORT_SC = u"res/sc10711.png";
-inline constexpr OUStringLiteral RID_EXTBMP_AUTOFILTER_LC = u"res/lc10716.png";
-inline constexpr OUStringLiteral RID_EXTBMP_FILTERCRIT_LC = u"res/lc10715.png";
-inline constexpr OUStringLiteral RID_EXTBMP_REMOVE_FILTER_SORT_LC = u"res/lc10711.png";
+inline constexpr OUString RID_EXTBMP_CONTROL = u"res/sx10144.png"_ustr;
+inline constexpr OUString RID_EXTBMP_BUTTON = u"res/sx10594.png"_ustr;
+inline constexpr OUString RID_EXTBMP_RADIOBUTTON = u"res/sx10595.png"_ustr;
+inline constexpr OUString RID_EXTBMP_CHECKBOX = u"res/sx10596.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FIXEDTEXT = u"res/sx10597.png"_ustr;
+inline constexpr OUString RID_EXTBMP_GROUPBOX = u"res/sx10598.png"_ustr;
+inline constexpr OUString RID_EXTBMP_EDITBOX = u"res/sx10599.png"_ustr;
+inline constexpr OUString RID_EXTBMP_LISTBOX = u"res/sx10600.png"_ustr;
+inline constexpr OUString RID_EXTBMP_COMBOBOX = u"res/sx10601.png"_ustr;
+inline constexpr OUString RID_EXTBMP_GRID = u"res/sx10603.png"_ustr;
+inline constexpr OUString RID_EXTBMP_IMAGEBUTTON = u"res/sx10604.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FILECONTROL = u"res/sx10605.png"_ustr;
+inline constexpr OUString RID_EXTBMP_DATEFIELD = u"res/sx10704.png"_ustr;
+inline constexpr OUString RID_EXTBMP_TIMEFIELD = u"res/sx10705.png"_ustr;
+inline constexpr OUString RID_EXTBMP_NUMERICFIELD = u"res/sx10706.png"_ustr;
+inline constexpr OUString RID_EXTBMP_CURRENCYFIELD = u"res/sx10707.png"_ustr;
+inline constexpr OUString RID_EXTBMP_PATTERNFIELD = u"res/sx10708.png"_ustr;
+inline constexpr OUString RID_EXTBMP_IMAGECONTROL = u"res/sx10710.png"_ustr;
+inline constexpr OUString RID_EXTBMP_HIDDEN = u"res/sx18022.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FORMS = u"res/sx18013.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FORM = u"res/sx10593.png"_ustr;
+inline constexpr OUString RID_EXTBMP_SCROLLBAR = u"res/sx10768.png"_ustr;
+inline constexpr OUString RID_EXTBMP_SPINBUTTON = u"res/sx10769.png"_ustr;
+inline constexpr OUString RID_EXTBMP_NAVIGATIONBAR = u"res/sx10607.png"_ustr;
+inline constexpr OUString RID_SCANNER_HANDLE = u"extensions/res/scanner/handle.png"_ustr;
+inline constexpr OUString BMP_TABLE = u"res/sx03188.png"_ustr;
+inline constexpr OUString BMP_QUERY = u"res/sx03202.png"_ustr;
+inline constexpr OUString RID_EXTBMP_AUTOFILTER_SC = u"res/sc10716.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FILTERCRIT_SC = u"res/sc10715.png"_ustr;
+inline constexpr OUString RID_EXTBMP_REMOVE_FILTER_SORT_SC = u"res/sc10711.png"_ustr;
+inline constexpr OUString RID_EXTBMP_AUTOFILTER_LC = u"res/lc10716.png"_ustr;
+inline constexpr OUString RID_EXTBMP_FILTERCRIT_LC = u"res/lc10715.png"_ustr;
+inline constexpr OUString RID_EXTBMP_REMOVE_FILTER_SORT_LC = u"res/lc10711.png"_ustr;
 #define SV_RESID_BITMAP_INFOBOX             "vcl/res/infobox.png"
 
 #endif

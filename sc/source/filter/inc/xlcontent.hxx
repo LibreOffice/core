@@ -150,7 +150,7 @@ const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
 
 // web queries ================================================================
 
-inline constexpr OUStringLiteral EXC_WEBQRY_FILTER = u"calc_HTML_WebQuery";
+inline constexpr OUString EXC_WEBQRY_FILTER = u"calc_HTML_WebQuery"_ustr;
 
 // (0x00CD) WQSTRING
 const sal_uInt16 EXC_ID_WQSTRING            = 0x00CD;

@@ -32,7 +32,7 @@ namespace com::sun::star::lang { struct Locale; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
-inline constexpr OUStringLiteral XML_WRITTENNUMBERSTYLES = u"WrittenNumberStyles";
+inline constexpr OUString XML_WRITTENNUMBERSTYLES = u"WrittenNumberStyles"_ustr;
 
 class Color;
 class LocaleDataWrapper;

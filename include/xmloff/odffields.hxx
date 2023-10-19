@@ -22,26 +22,26 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral ODF_FORMTEXT = u"vnd.oasis.opendocument.field.FORMTEXT";
+inline constexpr OUString ODF_FORMTEXT = u"vnd.oasis.opendocument.field.FORMTEXT"_ustr;
 #define ODF_FORMFIELD_DEFAULT_LENGTH 5
 
-inline constexpr OUStringLiteral ODF_FORMCHECKBOX = u"vnd.oasis.opendocument.field.FORMCHECKBOX";
-inline constexpr OUStringLiteral ODF_FORMCHECKBOX_HELPTEXT = u"Checkbox_HelpText";
-inline constexpr OUStringLiteral ODF_FORMCHECKBOX_RESULT = u"Checkbox_Checked";
+inline constexpr OUString ODF_FORMCHECKBOX = u"vnd.oasis.opendocument.field.FORMCHECKBOX"_ustr;
+inline constexpr OUString ODF_FORMCHECKBOX_HELPTEXT = u"Checkbox_HelpText"_ustr;
+inline constexpr OUString ODF_FORMCHECKBOX_RESULT = u"Checkbox_Checked"_ustr;
 
-inline constexpr OUStringLiteral ODF_FORMDROPDOWN = u"vnd.oasis.opendocument.field.FORMDROPDOWN";
-inline constexpr OUStringLiteral ODF_FORMDROPDOWN_LISTENTRY = u"Dropdown_ListEntry";
-inline constexpr OUStringLiteral ODF_FORMDROPDOWN_RESULT = u"Dropdown_Selected";
+inline constexpr OUString ODF_FORMDROPDOWN = u"vnd.oasis.opendocument.field.FORMDROPDOWN"_ustr;
+inline constexpr OUString ODF_FORMDROPDOWN_LISTENTRY = u"Dropdown_ListEntry"_ustr;
+inline constexpr OUString ODF_FORMDROPDOWN_RESULT = u"Dropdown_Selected"_ustr;
 #define ODF_FORMDROPDOWN_ENTRY_COUNT_LIMIT 25
 
-inline constexpr OUStringLiteral ODF_FORMDATE = u"vnd.oasis.opendocument.field.FORMDATE";
-inline constexpr OUStringLiteral ODF_FORMDATE_DATEFORMAT
-    = u"DateField_DateFormat"; // e.g. "MM.DD.YY";
-inline constexpr OUStringLiteral ODF_FORMDATE_DATEFORMAT_LANGUAGE
-    = u"DateField_DateFormat_Language"; // e.g. "en-US", "hu-HU";
-inline constexpr OUStringLiteral ODF_FORMDATE_CURRENTDATE
-    = u"DateField_CurrentDate"; // date string in a specific format
-inline constexpr OUStringLiteral ODF_FORMDATE_CURRENTDATE_FORMAT = u"YYYY-MM-DD"; // Coming from MSO
+inline constexpr OUString ODF_FORMDATE = u"vnd.oasis.opendocument.field.FORMDATE"_ustr;
+inline constexpr OUString ODF_FORMDATE_DATEFORMAT
+    = u"DateField_DateFormat"_ustr; // e.g. "MM.DD.YY";
+inline constexpr OUString ODF_FORMDATE_DATEFORMAT_LANGUAGE
+    = u"DateField_DateFormat_Language"_ustr; // e.g. "en-US", "hu-HU";
+inline constexpr OUString ODF_FORMDATE_CURRENTDATE
+    = u"DateField_CurrentDate"_ustr; // date string in a specific format
+inline constexpr OUString ODF_FORMDATE_CURRENTDATE_FORMAT = u"YYYY-MM-DD"_ustr; // Coming from MSO
 #define ODF_FORMDATE_CURRENTDATE_LANGUAGE LANGUAGE_ENGLISH_US
 
 #define ODF_TOC "vnd.oasis.opendocument.field.TOC"
@@ -50,10 +50,10 @@ inline constexpr OUStringLiteral ODF_FORMDATE_CURRENTDATE_FORMAT = u"YYYY-MM-DD"
 
 #define ODF_PAGEREF "vnd.oasis.opendocument.field.PAGEREF"
 
-inline constexpr OUStringLiteral ODF_UNHANDLED = u"vnd.oasis.opendocument.field.UNHANDLED";
-inline constexpr OUStringLiteral ODF_OLE_PARAM = u"vnd.oasis.opendocument.field.ole";
-inline constexpr OUStringLiteral ODF_ID_PARAM = u"vnd.oasis.opendocument.field.id";
-inline constexpr OUStringLiteral ODF_CODE_PARAM = u"vnd.oasis.opendocument.field.code";
+inline constexpr OUString ODF_UNHANDLED = u"vnd.oasis.opendocument.field.UNHANDLED"_ustr;
+inline constexpr OUString ODF_OLE_PARAM = u"vnd.oasis.opendocument.field.ole"_ustr;
+inline constexpr OUString ODF_ID_PARAM = u"vnd.oasis.opendocument.field.id"_ustr;
+inline constexpr OUString ODF_CODE_PARAM = u"vnd.oasis.opendocument.field.code"_ustr;
 
 #endif // INCLUDED_XMLOFF_ODFFIELDS_HXX
 

@@ -42,7 +42,7 @@ class SmCursor;
 namespace oox::formulaimport { class XmlStream; }
 
 #define STAROFFICE_XML  "StarOffice XML (Math)"
-inline constexpr OUStringLiteral MATHML_XML = u"MathML XML (Math)";
+inline constexpr OUString MATHML_XML = u"MathML XML (Math)"_ustr;
 
 /* Access to printer should happen through this class only
  * ==========================================================================

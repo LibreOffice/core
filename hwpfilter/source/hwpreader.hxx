@@ -68,7 +68,7 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 
-inline constexpr OUStringLiteral WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter";
+inline constexpr OUString WRITER_IMPORTER_NAME = u"com.sun.star.comp.Writer.XMLImporter"_ustr;
 
 struct HwpReaderPrivate;
 /**

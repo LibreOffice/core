@@ -21,12 +21,12 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral HID_SCH_WIN_DOCUMENT = u"CHART2_HID_SCH_WIN_DOCUMENT";
-inline constexpr OUStringLiteral HID_SCH_ERROR_BARS_FROM_DATA = u"CHART2_SCH_ERROR_BARS_FROM_DATA";
+inline constexpr OUString HID_SCH_WIN_DOCUMENT = u"CHART2_HID_SCH_WIN_DOCUMENT"_ustr;
+inline constexpr OUString HID_SCH_ERROR_BARS_FROM_DATA = u"CHART2_SCH_ERROR_BARS_FROM_DATA"_ustr;
 
 
 
-inline constexpr OUStringLiteral HID_SCH_WIZARD_ROADMAP = u"CHART2_HID_SCH_WIZARD_ROADMAP";
-inline constexpr OUStringLiteral HID_SCH_DATA_SERIES_LABEL = u"CHART2_HID_SCH_DATA_SERIES_LABEL";
+inline constexpr OUString HID_SCH_WIZARD_ROADMAP = u"CHART2_HID_SCH_WIZARD_ROADMAP"_ustr;
+inline constexpr OUString HID_SCH_DATA_SERIES_LABEL = u"CHART2_HID_SCH_DATA_SERIES_LABEL"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

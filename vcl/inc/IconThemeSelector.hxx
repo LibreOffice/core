@@ -78,8 +78,8 @@ private:
     ReturnFallback(const std::vector<IconThemeInfo>& installedThemes);
 
     /** The name of the icon themes which are used as fallbacks */
-    static constexpr OUStringLiteral FALLBACK_LIGHT_ICON_THEME_ID = u"colibre";
-    static constexpr OUStringLiteral FALLBACK_DARK_ICON_THEME_ID = u"colibre_dark";
+    static constexpr OUString FALLBACK_LIGHT_ICON_THEME_ID = u"colibre"_ustr;
+    static constexpr OUString FALLBACK_DARK_ICON_THEME_ID = u"colibre_dark"_ustr;
 
     static OUString
     GetIconThemeForDesktopEnvironment(const OUString& desktopEnvironment, bool bPreferDarkIconTheme);

@@ -148,7 +148,7 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
         return xBinding;
 
     xBinding.set(createDocumentDependentInstance(
-        _bUseIntegerBinding ? OUString(SERVICE_LISTINDEXCELLBINDING) : OUString(SERVICE_CELLVALUEBINDING),
+        _bUseIntegerBinding ? SERVICE_LISTINDEXCELLBINDING : SERVICE_CELLVALUEBINDING,
         PROPERTY_BOUND_CELL,
         Any( aAddress )
     ), css::uno::UNO_QUERY);
@@ -404,7 +404,7 @@ bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rI
 
     Reference< XPropertySet > xConverter(
         createDocumentDependentInstance(
-            _bIsRange ? OUString(SERVICE_RANGEADDRESS_CONVERSION) : OUString(SERVICE_ADDRESS_CONVERSION),
+            _bIsRange ? SERVICE_RANGEADDRESS_CONVERSION : SERVICE_ADDRESS_CONVERSION,
             OUString(),
             Any()
         ),

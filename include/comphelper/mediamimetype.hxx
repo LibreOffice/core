@@ -17,7 +17,7 @@
 
 #include <comphelper/comphelperdllapi.h>
 
-inline constexpr OUStringLiteral AVMEDIA_MIMETYPE_COMMON = u"application/vnd.sun.star.media";
+inline constexpr OUString AVMEDIA_MIMETYPE_COMMON = u"application/vnd.sun.star.media"_ustr;
 
 namespace comphelper
 {

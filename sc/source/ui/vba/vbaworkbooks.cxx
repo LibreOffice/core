@@ -255,7 +255,7 @@ ScVbaWorkbooks::Open( const OUString& rFileName, const uno::Any& /*UpdateLinks*/
         sFormat = OUString::number( nDelim ) + ",34,0,1";
 
         sProps = { comphelper::makePropertyValue("FilterOptions", sFormat),
-                   comphelper::makePropertyValue("FilterName", OUString( SC_TEXT_CSV_FILTER_NAME )),
+                   comphelper::makePropertyValue("FilterName", SC_TEXT_CSV_FILTER_NAME),
                    // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
                    // csv is forced for deep detected 'writerxxx' types
                    comphelper::makePropertyValue(

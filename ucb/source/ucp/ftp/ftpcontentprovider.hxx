@@ -29,8 +29,8 @@
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
 
-inline constexpr OUStringLiteral FTP_CONTENT_PROVIDER_SERVICE_NAME  = u"com.sun.star.ucb.FTPContentProvider";
-inline constexpr OUStringLiteral FTP_CONTENT_TYPE  = u"application/ftp-content";
+inline constexpr OUString FTP_CONTENT_PROVIDER_SERVICE_NAME  = u"com.sun.star.ucb.FTPContentProvider"_ustr;
+inline constexpr OUString FTP_CONTENT_TYPE  = u"application/ftp-content"_ustr;
 
 /**
  *  Definition of ftpcontentprovider

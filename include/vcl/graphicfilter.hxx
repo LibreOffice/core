@@ -113,19 +113,19 @@ namespace o3tl
 #define EXP_WEBP                "SVEWEBP"
 
 
-inline constexpr OUStringLiteral BMP_SHORTNAME = u"BMP";
-inline constexpr OUStringLiteral GIF_SHORTNAME = u"GIF";
-inline constexpr OUStringLiteral JPG_SHORTNAME = u"JPG";
-inline constexpr OUStringLiteral MET_SHORTNAME = u"MET";
-inline constexpr OUStringLiteral PCT_SHORTNAME = u"PCT";
-inline constexpr OUStringLiteral PNG_SHORTNAME = u"PNG";
-inline constexpr OUStringLiteral SVM_SHORTNAME = u"SVM";
-inline constexpr OUStringLiteral TIF_SHORTNAME = u"TIF";
-inline constexpr OUStringLiteral WMF_SHORTNAME = u"WMF";
-inline constexpr OUStringLiteral EMF_SHORTNAME = u"EMF";
-inline constexpr OUStringLiteral SVG_SHORTNAME = u"SVG";
-inline constexpr OUStringLiteral PDF_SHORTNAME = u"PDF";
-inline constexpr OUStringLiteral WEBP_SHORTNAME = u"WEBP";
+inline constexpr OUString BMP_SHORTNAME = u"BMP"_ustr;
+inline constexpr OUString GIF_SHORTNAME = u"GIF"_ustr;
+inline constexpr OUString JPG_SHORTNAME = u"JPG"_ustr;
+inline constexpr OUString MET_SHORTNAME = u"MET"_ustr;
+inline constexpr OUString PCT_SHORTNAME = u"PCT"_ustr;
+inline constexpr OUString PNG_SHORTNAME = u"PNG"_ustr;
+inline constexpr OUString SVM_SHORTNAME = u"SVM"_ustr;
+inline constexpr OUString TIF_SHORTNAME = u"TIF"_ustr;
+inline constexpr OUString WMF_SHORTNAME = u"WMF"_ustr;
+inline constexpr OUString EMF_SHORTNAME = u"EMF"_ustr;
+inline constexpr OUString SVG_SHORTNAME = u"SVG"_ustr;
+inline constexpr OUString PDF_SHORTNAME = u"PDF"_ustr;
+inline constexpr OUString WEBP_SHORTNAME = u"WEBP"_ustr;
 
 class VCL_DLLPUBLIC GraphicDescriptor final
 {

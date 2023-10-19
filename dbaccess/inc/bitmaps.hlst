@@ -10,24 +10,24 @@
 #ifndef INCLUDED_DBACCESS_INC_BITMAPS_HRC
 #define INCLUDED_DBACCESS_INC_BITMAPS_HRC
 
-inline constexpr OUStringLiteral BMP_FORMFOLDER_TREE_L = u"dbaccess/res/forms_32.png";
-inline constexpr OUStringLiteral BMP_REPORTFOLDER_TREE_L = u"dbaccess/res/reports_32.png";
-inline constexpr OUStringLiteral BMP_QUERYFOLDER_TREE_L = u"dbaccess/res/queries_32.png";
-inline constexpr OUStringLiteral BMP_TABLEFOLDER_TREE_L = u"dbaccess/res/tables_32.png";
-inline constexpr OUStringLiteral DATABASE_TREE_ICON = u"dbaccess/res/db.png";
-inline constexpr OUStringLiteral TABLE_TREE_ICON = u"res/sx03188.png";
-inline constexpr OUStringLiteral TABLEFOLDER_TREE_ICON = u"res/sx03187.png";
-inline constexpr OUStringLiteral VIEW_TREE_ICON = u"res/sx16670.png";
-inline constexpr OUStringLiteral QUERY_TREE_ICON = u"res/sx03202.png";
-inline constexpr OUStringLiteral QUERYFOLDER_TREE_ICON = u"res/sx03201.png";
-inline constexpr OUStringLiteral FORM_TREE_ICON = u"dbaccess/res/form_16.png";
-inline constexpr OUStringLiteral FORMFOLDER_TREE_ICON = u"dbaccess/res/forms_16.png";
-inline constexpr OUStringLiteral REPORT_TREE_ICON = u"dbaccess/res/report_16.png";
-inline constexpr OUStringLiteral REPORTFOLDER_TREE_ICON = u"dbaccess/res/reports_16.png";
-inline constexpr OUStringLiteral BMP_PRIMARY_KEY = u"dbaccess/res/jo01.png";
-inline constexpr OUStringLiteral BMP_PKEYICON = u"dbaccess/res/pkey.png";
-inline constexpr OUStringLiteral BMP_UP = u"dbaccess/res/sortup.png";
-inline constexpr OUStringLiteral BMP_DOWN = u"dbaccess/res/sortdown.png";
+inline constexpr OUString BMP_FORMFOLDER_TREE_L = u"dbaccess/res/forms_32.png"_ustr;
+inline constexpr OUString BMP_REPORTFOLDER_TREE_L = u"dbaccess/res/reports_32.png"_ustr;
+inline constexpr OUString BMP_QUERYFOLDER_TREE_L = u"dbaccess/res/queries_32.png"_ustr;
+inline constexpr OUString BMP_TABLEFOLDER_TREE_L = u"dbaccess/res/tables_32.png"_ustr;
+inline constexpr OUString DATABASE_TREE_ICON = u"dbaccess/res/db.png"_ustr;
+inline constexpr OUString TABLE_TREE_ICON = u"res/sx03188.png"_ustr;
+inline constexpr OUString TABLEFOLDER_TREE_ICON = u"res/sx03187.png"_ustr;
+inline constexpr OUString VIEW_TREE_ICON = u"res/sx16670.png"_ustr;
+inline constexpr OUString QUERY_TREE_ICON = u"res/sx03202.png"_ustr;
+inline constexpr OUString QUERYFOLDER_TREE_ICON = u"res/sx03201.png"_ustr;
+inline constexpr OUString FORM_TREE_ICON = u"dbaccess/res/form_16.png"_ustr;
+inline constexpr OUString FORMFOLDER_TREE_ICON = u"dbaccess/res/forms_16.png"_ustr;
+inline constexpr OUString REPORT_TREE_ICON = u"dbaccess/res/report_16.png"_ustr;
+inline constexpr OUString REPORTFOLDER_TREE_ICON = u"dbaccess/res/reports_16.png"_ustr;
+inline constexpr OUString BMP_PRIMARY_KEY = u"dbaccess/res/jo01.png"_ustr;
+inline constexpr OUString BMP_PKEYICON = u"dbaccess/res/pkey.png"_ustr;
+inline constexpr OUString BMP_UP = u"dbaccess/res/sortup.png"_ustr;
+inline constexpr OUString BMP_DOWN = u"dbaccess/res/sortdown.png"_ustr;
 
 #endif
 

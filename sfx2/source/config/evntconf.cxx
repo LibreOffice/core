@@ -142,7 +142,7 @@ static uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
             beans::PropertyValue *pValues = aProperties.getArray();
 
             pValues[ 0 ].Name = PROP_EVENT_TYPE;
-            pValues[ 0 ].Value <<= OUString(SVX_MACRO_LANGUAGE_JAVASCRIPT);
+            pValues[ 0 ].Value <<= SVX_MACRO_LANGUAGE_JAVASCRIPT;
 
             pValues[ 1 ].Name = PROP_MACRO_NAME;
             pValues[ 1 ].Value <<= pMacro->GetMacName();

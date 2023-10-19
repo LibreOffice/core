@@ -89,7 +89,7 @@ bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< 
         switch( nFormat )
         {
             case excel::XlFileFormat::xlCSV:
-                pProp->Value <<= OUString(SC_TEXT_CSV_FILTER_NAME);
+                pProp->Value <<= SC_TEXT_CSV_FILTER_NAME;
                 break;
             case excel::XlFileFormat::xlDBF4:
                 pProp->Value <<= OUString("DBF");

@@ -25,12 +25,12 @@ namespace framework{
 
 /** properties for "Frame" class */
 
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER = u"DispatchRecorderSupplier";
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_ISHIDDEN = u"IsHidden";
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_LAYOUTMANAGER = u"LayoutManager";
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_TITLE = u"Title";
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION = u"IndicatorInterception";
-inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_URL = u"URL";
+inline constexpr OUString FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER = u"DispatchRecorderSupplier"_ustr;
+inline constexpr OUString FRAME_PROPNAME_ASCII_ISHIDDEN = u"IsHidden"_ustr;
+inline constexpr OUString FRAME_PROPNAME_ASCII_LAYOUTMANAGER = u"LayoutManager"_ustr;
+inline constexpr OUString FRAME_PROPNAME_ASCII_TITLE = u"Title"_ustr;
+inline constexpr OUString FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION = u"IndicatorInterception"_ustr;
+inline constexpr OUString FRAME_PROPNAME_ASCII_URL = u"URL"_ustr;
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
@@ -43,13 +43,13 @@ inline constexpr OUStringLiteral FRAME_PROPNAME_ASCII_URL = u"URL";
 
 /** properties for "LayoutManager" class */
 
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER = u"MenuBarCloser";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS = u"AutomaticToolbars";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY = u"RefreshContextToolbarVisibility";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI = u"HideCurrentUI";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT = u"LockCount";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE = u"PreserveContentSize";
-inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP = u"RefreshContextToolbarToolTip";
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER = u"MenuBarCloser"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS = u"AutomaticToolbars"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY = u"RefreshContextToolbarVisibility"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI = u"HideCurrentUI"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT = u"LockCount"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE = u"PreserveContentSize"_ustr;
+inline constexpr OUString LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP = u"RefreshContextToolbarToolTip"_ustr;
 
 #define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER
 
@@ -62,18 +62,18 @@ inline constexpr OUStringLiteral LAYOUTMANAGER_PROPNAME_ASCII_REFRESHTOOLTIP = u
 #define LAYOUTMANAGER_PROPHANDLE_REFRESHTOOLTIP         6
 
 /** properties for "UICommandDescription" class */
-inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST = u"private:resource/image/commandimagelist";
-inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST = u"private:resource/image/commandrotateimagelist";
-inline constexpr OUStringLiteral UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST = u"private:resource/image/commandmirrorimagelist";
+inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST = u"private:resource/image/commandimagelist"_ustr;
+inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST = u"private:resource/image/commandrotateimagelist"_ustr;
+inline constexpr OUString UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST = u"private:resource/image/commandmirrorimagelist"_ustr;
 
 
 #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON            8
 
 /** properties for "AutoRecovery" class */
 
-inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA = u"ExistsRecoveryData";
-inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA = u"ExistsSessionData";
-inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed";
+inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA = u"ExistsRecoveryData"_ustr;
+inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA = u"ExistsSessionData"_ustr;
+inline constexpr OUString AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed"_ustr;
 
 #define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA
 #define AUTORECOVERY_PROPNAME_EXISTS_SESSIONDATA        AUTORECOVERY_PROPNAME_ASCII_EXISTS_SESSIONDATA
@@ -85,12 +85,12 @@ inline constexpr OUStringLiteral AUTORECOVERY_PROPNAME_ASCII_CRASHED = u"Crashed
 
 /** properties for Filter config */
 
-inline constexpr OUStringLiteral FILTER_PROPNAME_ASCII_DOCUMENTSERVICE = u"DocumentService";
+inline constexpr OUString FILTER_PROPNAME_ASCII_DOCUMENTSERVICE = u"DocumentService"_ustr;
 
 /** properties for office module config (Setup.xcu) */
 
-inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_UINAME = u"ooSetupFactoryUIName";
-inline constexpr OUStringLiteral OFFICEFACTORY_PROPNAME_ASCII_ICON = u"ooSetupFactoryIcon";
+inline constexpr OUString OFFICEFACTORY_PROPNAME_ASCII_UINAME = u"ooSetupFactoryUIName"_ustr;
+inline constexpr OUString OFFICEFACTORY_PROPNAME_ASCII_ICON = u"ooSetupFactoryIcon"_ustr;
 
 /** provides some helper methods to implement property sets. */
 

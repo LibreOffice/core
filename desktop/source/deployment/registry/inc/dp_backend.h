@@ -38,7 +38,7 @@ namespace dp_registry::backend
 
 class PackageRegistryBackend;
 
-inline constexpr OUStringLiteral BACKEND_SERVICE_NAME  = u"com.sun.star.deployment.PackageRegistryBackend";
+inline constexpr OUString BACKEND_SERVICE_NAME  = u"com.sun.star.deployment.PackageRegistryBackend"_ustr;
 
 typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackage > t_PackageBase;

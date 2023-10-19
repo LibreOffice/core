@@ -1026,7 +1026,7 @@ DECLARE_OOXMLEXPORT_TEST(testN820509, "n820509.docx")
         ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
 
         CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
         const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
         OUString sDateFormat;

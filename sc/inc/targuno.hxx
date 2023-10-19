@@ -38,7 +38,7 @@ class ScDocShell;
 
 #define SC_LINKTARGETTYPE_COUNT     3
 
-inline constexpr OUStringLiteral SCLINKTARGET_SERVICE = u"com.sun.star.document.LinkTarget";
+inline constexpr OUString SCLINKTARGET_SERVICE = u"com.sun.star.document.LinkTarget"_ustr;
 
 //! Graphic / OleObject (need separate collections!)
 

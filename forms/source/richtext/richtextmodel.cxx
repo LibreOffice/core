@@ -500,7 +500,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_DEFAULTCONTROL:
-            aDefault <<= OUString(FRM_SUN_CONTROL_RICHTEXTCONTROL);
+            aDefault <<= FRM_SUN_CONTROL_RICHTEXTCONTROL;
             break;
 
         case PROPERTY_ID_HELPTEXT:

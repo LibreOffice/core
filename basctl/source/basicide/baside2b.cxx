@@ -1466,7 +1466,7 @@ void BreakPointWindow::ShowMarker(vcl::RenderContext& rRenderContext)
     Size const aOutSz = GetOutDev()->GetOutputSize();
     tools::Long const nLineHeight = GetTextHeight();
 
-    Image aMarker = GetImage(bErrorMarker ? OUString(RID_BMP_ERRORMARKER) : OUString(RID_BMP_STEPMARKER));
+    Image aMarker = GetImage(bErrorMarker ? RID_BMP_ERRORMARKER : RID_BMP_STEPMARKER);
 
     Size aMarkerSz(aMarker.GetSizePixel());
     aMarkerSz = rRenderContext.PixelToLogic(aMarkerSz);

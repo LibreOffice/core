@@ -309,7 +309,7 @@ sal_Bool BackendImpl::supportsService(OUString const & ServiceName)
 
 Sequence<OUString> BackendImpl::getSupportedServiceNames()
 {
-    return { OUString(BACKEND_SERVICE_NAME) };
+    return { BACKEND_SERVICE_NAME };
 }
 
 // XPackageRegistry

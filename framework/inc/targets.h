@@ -25,13 +25,13 @@ namespace framework{
 
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()
 
-inline constexpr OUStringLiteral SPECIALTARGET_SELF = u"_self";                   // The frame himself is searched.
+inline constexpr OUString SPECIALTARGET_SELF = u"_self"_ustr;                   // The frame himself is searched.
 #define SPECIALTARGET_PARENT          u"_parent"                           // The direct parent frame is searched.
-inline constexpr OUStringLiteral SPECIALTARGET_TOP = u"_top";                     // Search at our parents for the first task (if any exist) or a frame without a parent.
-inline constexpr OUStringLiteral SPECIALTARGET_BLANK = u"_blank";                 // Create a new task.
-inline constexpr OUStringLiteral SPECIALTARGET_DEFAULT = u"_default";             // Create a new task or recycle an existing one
-inline constexpr OUStringLiteral SPECIALTARGET_BEAMER = u"_beamer";               // special frame in hierarchy
-inline constexpr OUStringLiteral SPECIALTARGET_HELPTASK = u"OFFICE_HELP_TASK";    // special name for our help task
+inline constexpr OUString SPECIALTARGET_TOP = u"_top"_ustr;                     // Search at our parents for the first task (if any exist) or a frame without a parent.
+inline constexpr OUString SPECIALTARGET_BLANK = u"_blank"_ustr;                 // Create a new task.
+inline constexpr OUString SPECIALTARGET_DEFAULT = u"_default"_ustr;             // Create a new task or recycle an existing one
+inline constexpr OUString SPECIALTARGET_BEAMER = u"_beamer"_ustr;               // special frame in hierarchy
+inline constexpr OUString SPECIALTARGET_HELPTASK = u"OFFICE_HELP_TASK"_ustr;    // special name for our help task
 
 }       //  namespace framework
 

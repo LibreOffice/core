@@ -11,14 +11,14 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral STR_APPL_NAME_WRITER = u"%PRODUCTNAME Writer (.sxw)";
-inline constexpr OUStringLiteral STR_APPL_NAME_CALC = u"%PRODUCTNAME Calc (.sxc)";
-inline constexpr OUStringLiteral STR_APPL_NAME_IMPRESS = u"%PRODUCTNAME Impress (.sxi)";
-inline constexpr OUStringLiteral STR_APPL_NAME_DRAW = u"%PRODUCTNAME Draw (.sxd)";
-inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_WRITER = u"%PRODUCTNAME Writer (.odt)";
-inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_CALC = u"%PRODUCTNAME Calc (.ods)";
-inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_IMPRESS = u"%PRODUCTNAME Impress (.odp)";
-inline constexpr OUStringLiteral STR_APPL_NAME_OASIS_DRAW = u"%PRODUCTNAME Draw (.odg)";
-inline constexpr OUStringLiteral STR_DEFAULT_EXTENSION = u"xml";
+inline constexpr OUString STR_APPL_NAME_WRITER = u"%PRODUCTNAME Writer (.sxw)"_ustr;
+inline constexpr OUString STR_APPL_NAME_CALC = u"%PRODUCTNAME Calc (.sxc)"_ustr;
+inline constexpr OUString STR_APPL_NAME_IMPRESS = u"%PRODUCTNAME Impress (.sxi)"_ustr;
+inline constexpr OUString STR_APPL_NAME_DRAW = u"%PRODUCTNAME Draw (.sxd)"_ustr;
+inline constexpr OUString STR_APPL_NAME_OASIS_WRITER = u"%PRODUCTNAME Writer (.odt)"_ustr;
+inline constexpr OUString STR_APPL_NAME_OASIS_CALC = u"%PRODUCTNAME Calc (.ods)"_ustr;
+inline constexpr OUString STR_APPL_NAME_OASIS_IMPRESS = u"%PRODUCTNAME Impress (.odp)"_ustr;
+inline constexpr OUString STR_APPL_NAME_OASIS_DRAW = u"%PRODUCTNAME Draw (.odg)"_ustr;
+inline constexpr OUString STR_DEFAULT_EXTENSION = u"xml"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

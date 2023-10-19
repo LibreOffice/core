@@ -607,7 +607,7 @@ void OReportDefinition::init()
             OUString sMediaType;
             xStorProps->getPropertyValue("MediaType") >>= sMediaType;
             if ( sMediaType.isEmpty() )
-                xStorProps->setPropertyValue("MediaType",uno::Any(OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)));
+                xStorProps->setPropertyValue("MediaType",uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII));
         }
         m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , getXWeak() );
     }
@@ -1307,7 +1307,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
         if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::Any(OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)) );
+            xProp->setPropertyValue( sPropName, uno::Any(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) );
     }
 
     /** property map for export info set */

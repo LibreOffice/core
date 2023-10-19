@@ -85,10 +85,10 @@ public:
 };
 
 
-inline constexpr OUStringLiteral PROP_EVENT_TYPE = u"EventType";
-inline constexpr OUStringLiteral PROP_LIBRARY = u"Library";
-inline constexpr OUStringLiteral PROP_SCRIPT = u"Script";
-inline constexpr OUStringLiteral PROP_MACRO_NAME = u"MacroName";
+inline constexpr OUString PROP_EVENT_TYPE = u"EventType"_ustr;
+inline constexpr OUString PROP_LIBRARY = u"Library"_ustr;
+inline constexpr OUString PROP_SCRIPT = u"Script"_ustr;
+inline constexpr OUString PROP_MACRO_NAME = u"MacroName"_ustr;
 #define STAR_BASIC          "StarBasic"
 
 class SFX2_DLLPUBLIC SfxEventConfiguration

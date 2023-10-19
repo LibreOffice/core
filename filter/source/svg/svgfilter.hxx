@@ -55,9 +55,9 @@ using namespace ::com::sun::star::xml::sax;
 
 
 // Placeholder tag used into the ImplWriteActions method to filter text placeholder fields
-inline constexpr OUStringLiteral sPlaceholderTag = u"<[:isPlaceholder:]>";
+inline constexpr OUString sPlaceholderTag = u"<[:isPlaceholder:]>"_ustr;
 // This tag is used for exporting a slide background made of tiled bitmaps
-inline constexpr OStringLiteral sTiledBackgroundTag = "SLIDE_BACKGROUND";
+inline constexpr OString sTiledBackgroundTag = "SLIDE_BACKGROUND"_ostr;
 
 class SVGExport : public SvXMLExport
 {

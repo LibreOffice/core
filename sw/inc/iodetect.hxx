@@ -29,22 +29,22 @@
 #include <tools/solar.h>
 #include "swdllapi.h"
 
-inline constexpr OUStringLiteral FILTER_RTF = u"RTF";       ///< RTF filter
-inline constexpr OUStringLiteral sRtfWH = u"WH_RTF";
-inline constexpr OUStringLiteral FILTER_TEXT = u"TEXT"; ///< text filter with default codeset
-inline constexpr OUStringLiteral FILTER_BAS = u"BAS";       ///< StarBasic (identical to ANSI)
-inline constexpr OUStringLiteral FILTER_WW8 = u"CWW8";      ///< WinWord 97 filter
-inline constexpr OUStringLiteral FILTER_TEXT_DLG = u"TEXT_DLG";  ///< text filter with encoding dialog
-inline constexpr OUStringLiteral FILTER_XML = u"CXML";      ///< XML filter
+inline constexpr OUString FILTER_RTF = u"RTF"_ustr;       ///< RTF filter
+inline constexpr OUString sRtfWH = u"WH_RTF"_ustr;
+inline constexpr OUString FILTER_TEXT = u"TEXT"_ustr; ///< text filter with default codeset
+inline constexpr OUString FILTER_BAS = u"BAS"_ustr;       ///< StarBasic (identical to ANSI)
+inline constexpr OUString FILTER_WW8 = u"CWW8"_ustr;      ///< WinWord 97 filter
+inline constexpr OUString FILTER_TEXT_DLG = u"TEXT_DLG"_ustr;  ///< text filter with encoding dialog
+inline constexpr OUString FILTER_XML = u"CXML"_ustr;      ///< XML filter
 #define FILTER_XMLV     "CXMLV"     ///< XML filter
 #define FILTER_XMLVW    "CXMLVWEB"  ///< XML filter
-inline constexpr OUStringLiteral FILTER_DOCX = u"OXML";
-inline constexpr OUStringLiteral sHTML = u"HTML";
-inline constexpr OUStringLiteral sWW5 = u"WW6";
-inline constexpr OUStringLiteral sWW6 = u"CWW6";
+inline constexpr OUString FILTER_DOCX = u"OXML"_ustr;
+inline constexpr OUString sHTML = u"HTML"_ustr;
+inline constexpr OUString sWW5 = u"WW6"_ustr;
+inline constexpr OUString sWW6 = u"CWW6"_ustr;
 
-inline constexpr OUStringLiteral sSWRITER = u"swriter";
-inline constexpr OUStringLiteral sSWRITERWEB = u"swriter/web";
+inline constexpr OUString sSWRITER = u"swriter"_ustr;
+inline constexpr OUString sSWRITERWEB = u"swriter/web"_ustr;
 
 class SfxFilter;
 class SfxFilterContainer;

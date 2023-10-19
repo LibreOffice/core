@@ -81,7 +81,7 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                    TextFrameIndex& nOffset) const override;
 
-    static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
+    static constexpr OUString S_NOBREAK_FOR_REDLINE = u"\u00A0"_ustr;
     void SetRedline( const RedlineType eRedline ) { m_eRedline = eRedline; }
 
     SwLineBreakClear GetClear() const;

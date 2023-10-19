@@ -291,7 +291,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 
 OUString ScAccessiblePageHeader::createAccessibleDescription()
 {
-    OUString sDesc(mbHeader ? OUString(STR_ACC_HEADER_DESCR) : OUString(STR_ACC_FOOTER_DESCR));
+    OUString sDesc(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR);
     return sDesc.replaceFirst("%1", ScResId(SCSTR_UNKNOWN));
 }
 

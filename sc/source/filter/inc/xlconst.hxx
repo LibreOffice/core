@@ -77,11 +77,11 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 
 #define EXC_STORAGE_OLE_LINKED              "LNK"
 #define EXC_STORAGE_OLE_EMBEDDED            "MBD"
-inline constexpr OUStringLiteral EXC_STORAGE_VBA_PROJECT = u"_VBA_PROJECT_CUR";
+inline constexpr OUString EXC_STORAGE_VBA_PROJECT = u"_VBA_PROJECT_CUR"_ustr;
 
-inline constexpr OUStringLiteral EXC_STREAM_BOOK = u"Book";
-inline constexpr OUStringLiteral EXC_STREAM_WORKBOOK = u"Workbook";
-inline constexpr OUStringLiteral EXC_STREAM_CTLS = u"Ctls";
+inline constexpr OUString EXC_STREAM_BOOK = u"Book"_ustr;
+inline constexpr OUString EXC_STREAM_WORKBOOK = u"Workbook"_ustr;
+inline constexpr OUString EXC_STREAM_CTLS = u"Ctls"_ustr;
 
 // Encoded URLs ---------------------------------------------------------------
 

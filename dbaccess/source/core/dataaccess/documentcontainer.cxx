@@ -157,7 +157,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ODocumentContainer
 
 Sequence< OUString > SAL_CALL ODocumentContainer::getSupportedServiceNames(  )
 {
-    return { m_bFormsContainer ? OUString(SERVICE_NAME_FORM_COLLECTION) : OUString(SERVICE_NAME_REPORT_COLLECTION) };
+    return { m_bFormsContainer ? SERVICE_NAME_FORM_COLLECTION : SERVICE_NAME_REPORT_COLLECTION };
 }
 
 OUString ODocumentContainer::determineContentType() const

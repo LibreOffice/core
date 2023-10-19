@@ -69,12 +69,12 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     // max row number as string
     OUString MaxRowAsString() const
     {
-        return mnMaxRow == MAXROW ? OUString(MAXROW_STRING) : OUString(MAXROW_JUMBO_STRING);
+        return mnMaxRow == MAXROW ? MAXROW_STRING : MAXROW_JUMBO_STRING;
     }
     // mac col as string ("AMJ" or "XFD")
     OUString MaxColAsString() const
     {
-        return mnMaxCol == MAXCOL ? OUString(MAXCOL_STRING) : OUString(MAXCOL_JUMBO_STRING);
+        return mnMaxCol == MAXCOL ? MAXCOL_STRING : MAXCOL_JUMBO_STRING;
     }
 };
 

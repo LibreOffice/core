@@ -345,11 +345,11 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
             if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
             {
-                xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_013_TEXT)));
+                xProps->setPropertyValue("Version", uno::Any(ODFVER_013_TEXT));
             }
             else
             {
-                xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_012_TEXT)));
+                xProps->setPropertyValue("Version", uno::Any(ODFVER_012_TEXT));
             }
         }
         catch( uno::Exception& )
@@ -998,11 +998,11 @@ bool SfxObjectShell::DoSave()
                     SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
                     if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
                     {
-                        xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_013_TEXT)));
+                        xProps->setPropertyValue("Version", uno::Any(ODFVER_013_TEXT));
                     }
                     else
                     {
-                        xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_012_TEXT)));
+                        xProps->setPropertyValue("Version", uno::Any(ODFVER_012_TEXT));
                     }
                 }
                 catch (uno::Exception&)

@@ -122,7 +122,7 @@ ScTablePage::ScTablePage(weld::Container* pPage, weld::DialogController* pContro
 
 void ScTablePage::ShowImage()
 {
-    OUString aImg(m_xBtnLeftRight->get_active() ? OUString(BMP_LEFTRIGHT) : OUString(BMP_TOPDOWN));
+    OUString aImg(m_xBtnLeftRight->get_active() ? BMP_LEFTRIGHT : BMP_TOPDOWN);
     m_xBmpPageDir->set_from_icon_name(aImg);
 }
 

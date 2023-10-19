@@ -9,9 +9,9 @@
 
 #pragma once
 
-inline constexpr OUStringLiteral RID_BMP_WARNING = u"desktop/res/caution_16.png";
-inline constexpr OUStringLiteral RID_BMP_LOCKED = u"desktop/res/lock_16.png";
-inline constexpr OUStringLiteral RID_BMP_SHARED = u"desktop/res/shared_16.png";
-inline constexpr OUStringLiteral RID_BMP_EXTENSION = u"desktop/res/extension_32.png";
+inline constexpr OUString RID_BMP_WARNING = u"desktop/res/caution_16.png"_ustr;
+inline constexpr OUString RID_BMP_LOCKED = u"desktop/res/lock_16.png"_ustr;
+inline constexpr OUString RID_BMP_SHARED = u"desktop/res/shared_16.png"_ustr;
+inline constexpr OUString RID_BMP_EXTENSION = u"desktop/res/extension_32.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

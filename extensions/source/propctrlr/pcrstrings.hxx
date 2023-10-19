@@ -26,7 +26,7 @@ namespace pcr
 
 
     // properties
-    constexpr OUStringLiteral PROPERTY_TABBINGMODEL = u"TabbingModel";
+    constexpr OUString PROPERTY_TABBINGMODEL = u"TabbingModel"_ustr;
 
 
 } // namespace pcr

@@ -1046,7 +1046,7 @@ void PrintDialog::checkControlDependencies()
         mxSingleJobsBox->set_sensitive( false );
     }
 
-    OUString aImg(mxCollateBox->get_active() ? OUString(SV_PRINT_COLLATE_BMP) : OUString(SV_PRINT_NOCOLLATE_BMP));
+    OUString aImg(mxCollateBox->get_active() ? SV_PRINT_COLLATE_BMP : SV_PRINT_NOCOLLATE_BMP);
 
     mxCollateImage->set_from_icon_name(aImg);
 

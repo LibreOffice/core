@@ -99,11 +99,10 @@ struct XMLPropertyMapEntry
      */
     bool            mbImportOnly;
 
-    static constexpr OUStringLiteral EMPTY{u""};
+    static constexpr OUString EMPTY{u""_ustr};
 
-    template<std::size_t N>
     constexpr XMLPropertyMapEntry(
-            const OUStringLiteral<N>& sApiName,
+            const OUString& sApiName,
             sal_uInt16      nNameSpace,
             enum ::xmloff::token::XMLTokenEnum eXMLName,
             sal_uInt32 nType,

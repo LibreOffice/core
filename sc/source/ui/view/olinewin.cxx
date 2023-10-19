@@ -552,7 +552,7 @@ void ScOutlineWindow::DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed
     Point aPos;
     if ( GetImagePos( nLevel, nEntry, aPos ) )
     {
-        OUString sId = bPressed ? OUString(RID_BMP_PRESSED) : OUString(RID_BMP_NOTPRESSED);
+        OUString sId = bPressed ? RID_BMP_PRESSED : RID_BMP_NOTPRESSED;
         bool bClip = (nEntry != SC_OL_HEADERENTRY);
         if ( bClip )
             SetEntryAreaClipRegion();
@@ -710,7 +710,7 @@ void ScOutlineWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
             // draw, if not hidden by higher levels
             if ( bDraw )
             {
-                OUString sImageId = pEntry->IsHidden() ? OUString(RID_BMP_PLUS) : OUString(RID_BMP_MINUS);
+                OUString sImageId = pEntry->IsHidden() ? RID_BMP_PLUS : RID_BMP_MINUS;
                 DrawImageRel(nLevelPos, nImagePos, sImageId);
             }
         }

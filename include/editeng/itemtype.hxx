@@ -30,7 +30,7 @@ class Color;
 class IntlWrapper;
 // static and prototypes -------------------------------------------------
 
-inline constexpr OUStringLiteral cpDelim = u", ";
+inline constexpr OUString cpDelim = u", "_ustr;
 
 EDITENG_DLLPUBLIC OUString GetMetricText( tools::Long nVal, MapUnit eSrcUnit, MapUnit eDestUnit, const IntlWrapper * pIntl );
 OUString GetColorString( const Color& rCol );

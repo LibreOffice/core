@@ -750,7 +750,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTextFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMTEXT, pFieldmark->GetFieldname());
 
     // The text form field has the placeholder text in it
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
@@ -789,7 +789,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMCHECKBOX, pFieldmark->GetFieldname());
     // The checkbox is not checked by default
     ::sw::mark::ICheckboxFieldmark* pCheckBox
         = dynamic_cast<::sw::mark::ICheckboxFieldmark*>(pFieldmark);
@@ -807,7 +807,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testCheckboxFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMCHECKBOX, pFieldmark->GetFieldname());
 
     // tdf#147008 this would crash
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
@@ -838,7 +838,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDropDownFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
     // Check drop down field's parameters. By default these params are not set
     const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
     auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
@@ -857,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDropDownFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testMixedFormFieldInsertion)
@@ -1501,7 +1501,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
     // The date form field has the placeholder text in it
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
@@ -1518,7 +1518,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldInsertion)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
@@ -1539,7 +1539,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldContentOperations)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
     // Check the default content added by insertion
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
@@ -1573,7 +1573,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateHandling)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
     // The default content is not a valid date
     uno::Reference<text::XTextRange> xPara = getParagraph(1);
@@ -1628,7 +1628,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDateFormFieldCurrentDateInvalidation)
     CPPUNIT_ASSERT(aIter != pMarkAccess->getAllMarksEnd());
     ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
 
     // Set a date first
     sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();

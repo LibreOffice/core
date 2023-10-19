@@ -24,7 +24,7 @@
 
 // maximal number of suggestions to be returned in spelling  context-menu
 // (may not include results added by looking up user dictionaries)
-inline constexpr OUStringLiteral UPN_MAX_NUMBER_OF_SUGGESTIONS = u"MaxNumberOfSuggestions";
+inline constexpr OUString UPN_MAX_NUMBER_OF_SUGGESTIONS = u"MaxNumberOfSuggestions"_ustr;
 
 #endif
 

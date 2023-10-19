@@ -822,7 +822,7 @@ void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent 
 {
     bool bLinkToSource = ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT );
     sal_uInt32 nScNumFmt = bLinkToSource ? GetNumFmtBuffer().GetScFormat( maData.mnNumFmtIdx ) : NUMBERFORMAT_ENTRY_NOT_FOUND;
-    OUString aPropName = bPercent ? OUString( EXC_CHPROP_PERCENTAGENUMFMT ) : OUString( EXC_CHPROP_NUMBERFORMAT );
+    OUString aPropName = bPercent ? EXC_CHPROP_PERCENTAGENUMFMT : EXC_CHPROP_NUMBERFORMAT;
     if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
         rPropSet.SetProperty( aPropName, static_cast< sal_Int32 >( nScNumFmt ) );
     else

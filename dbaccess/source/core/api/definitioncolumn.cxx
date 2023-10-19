@@ -90,7 +90,7 @@ OUString OTableColumnDescriptor::getImplementationName(  )
 
 Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  )
 {
-    return { m_bActAsDescriptor? OUString(SERVICE_SDBCX_COLUMNDESCRIPTOR) : OUString(SERVICE_SDBCX_COLUMN),
+    return { m_bActAsDescriptor? SERVICE_SDBCX_COLUMNDESCRIPTOR : SERVICE_SDBCX_COLUMN,
         SERVICE_SDB_COLUMNSETTINGS };
 }
 
@@ -208,10 +208,10 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     };
     const PropertyDescriptor aProps[] =
     {
-        { OUString(PROPERTY_CATALOGNAME),      PROPERTY_ID_CATALOGNAME },
-        { OUString(PROPERTY_SCHEMANAME),       PROPERTY_ID_SCHEMANAME },
-        { OUString(PROPERTY_TABLENAME),        PROPERTY_ID_TABLENAME },
-        { OUString(PROPERTY_REALNAME),         PROPERTY_ID_REALNAME }
+        { PROPERTY_CATALOGNAME,      PROPERTY_ID_CATALOGNAME },
+        { PROPERTY_SCHEMANAME,       PROPERTY_ID_SCHEMANAME },
+        { PROPERTY_TABLENAME,        PROPERTY_ID_TABLENAME },
+        { PROPERTY_REALNAME,         PROPERTY_ID_REALNAME }
     };
     for (const auto & aProp : aProps)
     {

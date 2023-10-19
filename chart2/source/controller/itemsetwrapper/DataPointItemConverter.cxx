@@ -109,7 +109,7 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_VALUE) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
+    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_VALUE) ? CHART_UNONAME_NUMFMT : OUString( "PercentageNumberFormat" );
     sal_uInt16 nSourceWhich = (nWhichId==SID_ATTR_NUMBERFORMAT_VALUE) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
     if( rItemSet.GetItemState( nSourceWhich ) != SfxItemState::SET )
@@ -156,7 +156,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_SOURCE) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
+    OUString aPropertyName = (nWhichId==SID_ATTR_NUMBERFORMAT_SOURCE) ? CHART_UNONAME_NUMFMT : OUString( "PercentageNumberFormat" );
     sal_uInt16 nFormatWhich = (nWhichId==SID_ATTR_NUMBERFORMAT_SOURCE) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
     if( rItemSet.GetItemState( nWhichId ) != SfxItemState::SET )

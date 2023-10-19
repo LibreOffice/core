@@ -292,7 +292,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
                             case GfxLinkType::NativeJpg: aMimeType = MIMETYPE_JPG; break;
                             case GfxLinkType::NativePng: aMimeType = MIMETYPE_PNG; break;
                             case GfxLinkType::NativeTif: aMimeType = MIMETYPE_TIF; break;
-                            case GfxLinkType::NativeWmf: aMimeType = aLink.IsEMF() ? OUString(MIMETYPE_EMF) : OUString(MIMETYPE_WMF); break;
+                            case GfxLinkType::NativeWmf: aMimeType = aLink.IsEMF() ? MIMETYPE_EMF : MIMETYPE_WMF; break;
                             case GfxLinkType::NativeMet: aMimeType = MIMETYPE_MET; break;
                             case GfxLinkType::NativePct: aMimeType = MIMETYPE_PCT; break;
                             case GfxLinkType::NativeWebp: aMimeType = MIMETYPE_WEBP; break;

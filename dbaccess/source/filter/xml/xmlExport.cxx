@@ -183,27 +183,27 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
 
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::TABLE_TABLE,
-        OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
+        XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME,
         m_xExportHelper.get(),
-        OUString(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
+        XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX);
 
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::TABLE_COLUMN,
-        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
+        XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME,
         m_xColumnExportHelper.get(),
-        OUString(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
+        XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX);
 
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::TABLE_CELL,
-        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
+        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME,
         m_xCellExportHelper.get(),
-        OUString(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
+        XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX);
 
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::TABLE_ROW,
-        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
+        XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME,
         m_xRowExportHelper.get(),
-        OUString(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
+        XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX);
 }
 
 void ODBExport::exportDataSource()
@@ -862,15 +862,15 @@ void ODBExport::exportStyleName(const ::xmloff::token::XMLTokenEnum _eToken,cons
 void ODBExport::exportTableName(XPropertySet* _xProp,bool _bUpdate)
 {
     OUString sValue;
-    _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_TABLENAME) : OUString(PROPERTY_NAME)) >>= sValue;
+    _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_TABLENAME : PROPERTY_NAME) >>= sValue;
     if ( sValue.isEmpty() )
         return;
 
     AddAttribute(XML_NAMESPACE_DB, XML_NAME,sValue);
-    _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_SCHEMANAME) : OUString(PROPERTY_SCHEMANAME)) >>= sValue;
+    _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_SCHEMANAME : PROPERTY_SCHEMANAME) >>= sValue;
     if ( !sValue.isEmpty() )
         AddAttribute(XML_NAMESPACE_DB, XML_SCHEMA_NAME,sValue);
-    _xProp->getPropertyValue(_bUpdate ? OUString(PROPERTY_UPDATE_CATALOGNAME) : OUString(PROPERTY_CATALOGNAME)) >>= sValue;
+    _xProp->getPropertyValue(_bUpdate ? PROPERTY_UPDATE_CATALOGNAME : PROPERTY_CATALOGNAME) >>= sValue;
     if ( !sValue.isEmpty() )
         AddAttribute(XML_NAMESPACE_DB, XML_CATALOG_NAME,sValue);
 

@@ -42,23 +42,23 @@ namespace com::sun::star::xml::crypto { class XXMLSignature; }
 namespace com::sun::star::xml::crypto:: sax { class XReferenceResolvedListener; }
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 
-inline constexpr OUStringLiteral NS_XMLDSIG = u"http://www.w3.org/2000/09/xmldsig#";
-inline constexpr OUStringLiteral NS_DC = u"http://purl.org/dc/elements/1.1/";
-inline constexpr OUStringLiteral NS_XD = u"http://uri.etsi.org/01903/v1.3.2#";
-inline constexpr OUStringLiteral NS_MDSSI = u"http://schemas.openxmlformats.org/package/2006/digital-signature";
-inline constexpr OUStringLiteral NS_LOEXT = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0";
+inline constexpr OUString NS_XMLDSIG = u"http://www.w3.org/2000/09/xmldsig#"_ustr;
+inline constexpr OUString NS_DC = u"http://purl.org/dc/elements/1.1/"_ustr;
+inline constexpr OUString NS_XD = u"http://uri.etsi.org/01903/v1.3.2#"_ustr;
+inline constexpr OUString NS_MDSSI = u"http://schemas.openxmlformats.org/package/2006/digital-signature"_ustr;
+inline constexpr OUString NS_LOEXT = u"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"_ustr;
 
-inline constexpr OUStringLiteral ALGO_C14N = u"http://www.w3.org/TR/2001/REC-xml-c14n-20010315";
-inline constexpr OUStringLiteral ALGO_RSASHA1 = u"http://www.w3.org/2000/09/xmldsig#rsa-sha1";
-inline constexpr OUStringLiteral ALGO_RSASHA256 = u"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
-inline constexpr OUStringLiteral ALGO_RSASHA512 = u"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512";
-inline constexpr OUStringLiteral ALGO_ECDSASHA1 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1";
-inline constexpr OUStringLiteral ALGO_ECDSASHA256 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256";
-inline constexpr OUStringLiteral ALGO_ECDSASHA512 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512";
-inline constexpr OUStringLiteral ALGO_XMLDSIGSHA1 = u"http://www.w3.org/2000/09/xmldsig#sha1";
-inline constexpr OUStringLiteral ALGO_XMLDSIGSHA256 = u"http://www.w3.org/2001/04/xmlenc#sha256";
-inline constexpr OUStringLiteral ALGO_XMLDSIGSHA512 = u"http://www.w3.org/2001/04/xmlenc#sha512";
-inline constexpr OUStringLiteral ALGO_RELATIONSHIP = u"http://schemas.openxmlformats.org/package/2006/RelationshipTransform";
+inline constexpr OUString ALGO_C14N = u"http://www.w3.org/TR/2001/REC-xml-c14n-20010315"_ustr;
+inline constexpr OUString ALGO_RSASHA1 = u"http://www.w3.org/2000/09/xmldsig#rsa-sha1"_ustr;
+inline constexpr OUString ALGO_RSASHA256 = u"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"_ustr;
+inline constexpr OUString ALGO_RSASHA512 = u"http://www.w3.org/2001/04/xmldsig-more#rsa-sha512"_ustr;
+inline constexpr OUString ALGO_ECDSASHA1 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha1"_ustr;
+inline constexpr OUString ALGO_ECDSASHA256 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256"_ustr;
+inline constexpr OUString ALGO_ECDSASHA512 = u"http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha512"_ustr;
+inline constexpr OUString ALGO_XMLDSIGSHA1 = u"http://www.w3.org/2000/09/xmldsig#sha1"_ustr;
+inline constexpr OUString ALGO_XMLDSIGSHA256 = u"http://www.w3.org/2001/04/xmlenc#sha256"_ustr;
+inline constexpr OUString ALGO_XMLDSIGSHA512 = u"http://www.w3.org/2001/04/xmlenc#sha512"_ustr;
+inline constexpr OUString ALGO_RELATIONSHIP = u"http://schemas.openxmlformats.org/package/2006/RelationshipTransform"_ustr;
 
 class XMLDocumentWrapper_XmlSecImpl;
 class SAXEventKeeperImpl;

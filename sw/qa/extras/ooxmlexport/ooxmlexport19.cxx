@@ -952,7 +952,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138093, "tdf138093.docx")
         ::sw::mark::IDateFieldmark* pFieldmark
             = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
         CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
         CPPUNIT_ASSERT_EQUAL(OUString("2017"), pFieldmark->GetContent());
     }
 }
@@ -1008,7 +1008,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf131722, "tdf131722.docx")
             ::sw::mark::IDateFieldmark* pFieldmark
                 = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
             CPPUNIT_ASSERT(pFieldmark);
-            CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
             CPPUNIT_ASSERT_EQUAL(OUString("Enter a date here!"), pFieldmark->GetContent());
         }
     }

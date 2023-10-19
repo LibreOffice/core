@@ -26,7 +26,7 @@
 
 namespace com :: sun :: star :: task { class XInteractionRequest; }
 
-inline constexpr OUStringLiteral JAVA_INTERACTION_HANDLER_NAME = u"java-vm.interaction-handler";
+inline constexpr OUString JAVA_INTERACTION_HANDLER_NAME = u"java-vm.interaction-handler"_ustr;
 
 namespace svt
 {

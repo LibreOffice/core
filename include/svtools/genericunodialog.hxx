@@ -44,8 +44,8 @@ namespace svt
 #define     UNODIALOG_PROPERTY_ID_TITLE     1
 #define     UNODIALOG_PROPERTY_ID_PARENT    2
 
-inline constexpr OUStringLiteral UNODIALOG_PROPERTY_TITLE = u"Title";
-inline constexpr OUStringLiteral UNODIALOG_PROPERTY_PARENT = u"ParentWindow";
+inline constexpr OUString UNODIALOG_PROPERTY_TITLE = u"Title"_ustr;
+inline constexpr OUString UNODIALOG_PROPERTY_PARENT = u"ParentWindow"_ustr;
 
     typedef cppu::WeakImplHelper< css::ui::dialogs::XExecutableDialog,
                                   css::lang::XServiceInfo,

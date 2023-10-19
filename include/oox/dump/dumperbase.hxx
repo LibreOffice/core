@@ -61,13 +61,13 @@ namespace oox::core {
 namespace oox::dump {
 
 
-inline constexpr OUStringLiteral OOX_DUMP_UNUSED = u"unused";
-inline constexpr OUStringLiteral OOX_DUMP_UNKNOWN = u"?unknown";
+inline constexpr OUString OOX_DUMP_UNUSED = u"unused"_ustr;
+inline constexpr OUString OOX_DUMP_UNKNOWN = u"?unknown"_ustr;
 
 #define OOX_DUMP_ERRASCII( ascii )          "?err:" ascii
 
 #define OOX_DUMP_ERR_NOMAP                  "no-map"
-inline constexpr OUStringLiteral OOX_DUMP_ERR_NONAME = u"no-name";
+inline constexpr OUString OOX_DUMP_ERR_NONAME = u"no-name"_ustr;
 #define OOX_DUMP_ERR_STREAM                 "stream-error"
 
 #define OOX_DUMP_DUMPEXT                    ".dump"
@@ -1393,8 +1393,8 @@ protected:
     void                dumpRemainingStream();
 
     void                dumpArray( const String& rName, sal_Int32 nBytes, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    void                dumpUnused( sal_Int32 nBytes ) { dumpArray( OUString(OOX_DUMP_UNUSED), nBytes ); }
-    void                dumpUnknown( sal_Int32 nBytes ) { dumpArray( OUString(OOX_DUMP_UNKNOWN), nBytes ); }
+    void                dumpUnused( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNUSED, nBytes ); }
+    void                dumpUnknown( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNKNOWN, nBytes ); }
 
     sal_Unicode         dumpUnicode( const String& rName );
 

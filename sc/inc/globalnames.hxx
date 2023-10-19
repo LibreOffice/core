@@ -11,10 +11,10 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral STR_DB_LOCAL_NONAME = u"__Anonymous_Sheet_DB__";
-inline constexpr OUStringLiteral STR_DB_GLOBAL_NONAME = u"__Anonymous_DB__";
+inline constexpr OUString STR_DB_LOCAL_NONAME = u"__Anonymous_Sheet_DB__"_ustr;
+inline constexpr OUString STR_DB_GLOBAL_NONAME = u"__Anonymous_DB__"_ustr;
 
-inline constexpr OUStringLiteral STR_GLOBAL_RANGE_NAME = u"__Global_Range_Name__";
+inline constexpr OUString STR_GLOBAL_RANGE_NAME = u"__Global_Range_Name__"_ustr;
 
 #define TEXTWIDTH_DIRTY 0xffff
 

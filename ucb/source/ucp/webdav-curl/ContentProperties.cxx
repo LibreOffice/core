@@ -474,8 +474,8 @@ void ContentProperties::addProperty( const OUString & rName,
             = PropertyValue( uno::Any( bool( !bFolder ) ), true );
         (*m_xProps)[ OUString( "ContentType" ) ]
             = PropertyValue( uno::Any( bFolder
-                ? OUString( WEBDAV_COLLECTION_TYPE )
-                : OUString( WEBDAV_CONTENT_TYPE ) ), true );
+                ? WEBDAV_COLLECTION_TYPE
+                : WEBDAV_CONTENT_TYPE ), true );
     }
     //  else if ( rName.equals( DAVProperties::SUPPORTEDLOCK ) )
     //  {

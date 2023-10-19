@@ -525,7 +525,7 @@ public:
     **/
     bool getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const;
 
-    static constexpr OUStringLiteral aNamespaceSeparator = u":";
+    static constexpr OUString aNamespaceSeparator = u":"_ustr;
 
     static const sal_uInt16 OOo_1x = 10;
     static const sal_uInt16 OOo_2x = 20;

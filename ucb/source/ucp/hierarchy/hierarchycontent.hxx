@@ -51,14 +51,14 @@ public:
     explicit HierarchyContentProperties( const HierarchyEntryData::Type & rType )
     : m_aData( rType ),
       m_aContentType( rType == HierarchyEntryData::FOLDER
-        ? OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? HIERARCHY_FOLDER_CONTENT_TYPE
+        : HIERARCHY_LINK_CONTENT_TYPE ) {}
 
     explicit HierarchyContentProperties( const HierarchyEntryData & rData )
     : m_aData( rData ),
       m_aContentType( rData.getType() == HierarchyEntryData::FOLDER
-        ? OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : OUString( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+        ? HIERARCHY_FOLDER_CONTENT_TYPE
+        : HIERARCHY_LINK_CONTENT_TYPE ) {}
 
     const OUString & getName() const { return m_aData.getName(); }
     void setName( const OUString & rName ) { m_aData.setName( rName ); };

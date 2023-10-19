@@ -33,7 +33,7 @@
     detailed BCP 47 language tag use LanguageTag::isIsoLocale() instead.
  */
 #define I18NLANGTAG_QLT_ASCII "qlt"
-inline constexpr OUStringLiteral I18NLANGTAG_QLT = u"qlt";
+inline constexpr OUString I18NLANGTAG_QLT = u"qlt"_ustr;
 
 
 class LanguageTagImpl;

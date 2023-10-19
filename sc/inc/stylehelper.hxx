@@ -27,19 +27,19 @@
 //  the api is required to use programmatic names for default styles
 //  these programmatic names must never change!
 
-inline constexpr OUStringLiteral SC_STYLE_PROG_STANDARD = u"Default";
-inline constexpr OUStringLiteral SC_STYLE_PROG_RESULT = u"Result";
-inline constexpr OUStringLiteral SC_STYLE_PROG_RESULT1 = u"Result2";
-inline constexpr OUStringLiteral SC_STYLE_PROG_HEADING = u"Heading";
-inline constexpr OUStringLiteral SC_STYLE_PROG_HEADING1 = u"Heading1";
-inline constexpr OUStringLiteral SC_STYLE_PROG_REPORT = u"Report";
+inline constexpr OUString SC_STYLE_PROG_STANDARD = u"Default"_ustr;
+inline constexpr OUString SC_STYLE_PROG_RESULT = u"Result"_ustr;
+inline constexpr OUString SC_STYLE_PROG_RESULT1 = u"Result2"_ustr;
+inline constexpr OUString SC_STYLE_PROG_HEADING = u"Heading"_ustr;
+inline constexpr OUString SC_STYLE_PROG_HEADING1 = u"Heading1"_ustr;
+inline constexpr OUString SC_STYLE_PROG_REPORT = u"Report"_ustr;
 
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_INNER = u"Pivot Table Value";
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_RESULT = u"Pivot Table Result";
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_CATEGORY = u"Pivot Table Category";
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TITLE = u"Pivot Table Title";
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_FIELDNAME = u"Pivot Table Field";
-inline constexpr OUStringLiteral SC_PIVOT_STYLE_PROG_TOP = u"Pivot Table Corner";
+inline constexpr OUString SC_PIVOT_STYLE_PROG_INNER = u"Pivot Table Value"_ustr;
+inline constexpr OUString SC_PIVOT_STYLE_PROG_RESULT = u"Pivot Table Result"_ustr;
+inline constexpr OUString SC_PIVOT_STYLE_PROG_CATEGORY = u"Pivot Table Category"_ustr;
+inline constexpr OUString SC_PIVOT_STYLE_PROG_TITLE = u"Pivot Table Title"_ustr;
+inline constexpr OUString SC_PIVOT_STYLE_PROG_FIELDNAME = u"Pivot Table Field"_ustr;
+inline constexpr OUString SC_PIVOT_STYLE_PROG_TOP = u"Pivot Table Corner"_ustr;
 
 enum class SfxStyleFamily;
 

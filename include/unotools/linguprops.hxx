@@ -26,53 +26,53 @@
 #endif
 
 // UNO property names for general options
-inline constexpr OUStringLiteral UPN_IS_GERMAN_PRE_REFORM            = u"IsGermanPreReform";     /*! deprecated #i91949 !*/
-inline constexpr OUStringLiteral UPN_IS_USE_DICTIONARY_LIST          = u"IsUseDictionaryList";
-inline constexpr OUStringLiteral UPN_IS_IGNORE_CONTROL_CHARACTERS    = u"IsIgnoreControlCharacters";
-inline constexpr OUStringLiteral UPN_ACTIVE_DICTIONARIES             = u"ActiveDictionaries";
+inline constexpr OUString UPN_IS_GERMAN_PRE_REFORM            = u"IsGermanPreReform"_ustr;     /*! deprecated #i91949 !*/
+inline constexpr OUString UPN_IS_USE_DICTIONARY_LIST          = u"IsUseDictionaryList"_ustr;
+inline constexpr OUString UPN_IS_IGNORE_CONTROL_CHARACTERS    = u"IsIgnoreControlCharacters"_ustr;
+inline constexpr OUString UPN_ACTIVE_DICTIONARIES             = u"ActiveDictionaries"_ustr;
 
 // UNO property names for SpellChecker
-inline constexpr OUStringLiteral UPN_IS_SPELL_UPPER_CASE             = u"IsSpellUpperCase";
-inline constexpr OUStringLiteral UPN_IS_SPELL_WITH_DIGITS            = u"IsSpellWithDigits";
-inline constexpr OUStringLiteral UPN_IS_SPELL_CAPITALIZATION         = u"IsSpellCapitalization";
+inline constexpr OUString UPN_IS_SPELL_UPPER_CASE             = u"IsSpellUpperCase"_ustr;
+inline constexpr OUString UPN_IS_SPELL_WITH_DIGITS            = u"IsSpellWithDigits"_ustr;
+inline constexpr OUString UPN_IS_SPELL_CAPITALIZATION         = u"IsSpellCapitalization"_ustr;
 
 // UNO property names for Hyphenator
-inline constexpr OUStringLiteral UPN_HYPH_MIN_LEADING                = u"HyphMinLeading";
-inline constexpr OUStringLiteral UPN_HYPH_MIN_TRAILING               = u"HyphMinTrailing";
-inline constexpr OUStringLiteral UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLength";
-inline constexpr OUStringLiteral UPN_HYPH_NO_CAPS                    = u"HyphNoCaps";
-inline constexpr OUStringLiteral UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord";
-inline constexpr OUStringLiteral UPN_HYPH_ZONE                       = u"HyphZone";
+inline constexpr OUString UPN_HYPH_MIN_LEADING                = u"HyphMinLeading"_ustr;
+inline constexpr OUString UPN_HYPH_MIN_TRAILING               = u"HyphMinTrailing"_ustr;
+inline constexpr OUString UPN_HYPH_MIN_WORD_LENGTH            = u"HyphMinWordLength"_ustr;
+inline constexpr OUString UPN_HYPH_NO_CAPS                    = u"HyphNoCaps"_ustr;
+inline constexpr OUString UPN_HYPH_NO_LAST_WORD               = u"HyphNoLastWord"_ustr;
+inline constexpr OUString UPN_HYPH_ZONE                       = u"HyphZone"_ustr;
 
 // UNO property names for Lingu
 // (those not covered by the SpellChecker and Hyphenator
 // properties and more likely to be used in other modules only)
-inline constexpr OUStringLiteral UPN_DEFAULT_LANGUAGE                = u"DefaultLanguage";
-inline constexpr OUStringLiteral UPN_DEFAULT_LOCALE                  = u"DefaultLocale";
-inline constexpr OUStringLiteral UPN_DEFAULT_LOCALE_CJK              = u"DefaultLocale_CJK";
-inline constexpr OUStringLiteral UPN_DEFAULT_LOCALE_CTL              = u"DefaultLocale_CTL";
-inline constexpr OUStringLiteral UPN_IS_HYPH_AUTO                    = u"IsHyphAuto";
-inline constexpr OUStringLiteral UPN_IS_HYPH_SPECIAL                 = u"IsHyphSpecial";
-inline constexpr OUStringLiteral UPN_IS_SPELL_AUTO                   = u"IsSpellAuto";
-inline constexpr OUStringLiteral UPN_IS_SPELL_CLOSED_COMPOUND        = u"IsSpellClosedCompound";
-inline constexpr OUStringLiteral UPN_IS_SPELL_HYPHENATED_COMPOUND    = u"IsSpellHyphenatedCompound";
-inline constexpr OUStringLiteral UPN_IS_SPELL_SPECIAL                = u"IsSpellSpecial";
-inline constexpr OUStringLiteral UPN_IS_WRAP_REVERSE                 = u"IsWrapReverse";
-inline constexpr OUStringLiteral UPN_DATA_FILES_CHANGED_CHECK_VALUE  = u"DataFilesChangedCheckValue";
+inline constexpr OUString UPN_DEFAULT_LANGUAGE                = u"DefaultLanguage"_ustr;
+inline constexpr OUString UPN_DEFAULT_LOCALE                  = u"DefaultLocale"_ustr;
+inline constexpr OUString UPN_DEFAULT_LOCALE_CJK              = u"DefaultLocale_CJK"_ustr;
+inline constexpr OUString UPN_DEFAULT_LOCALE_CTL              = u"DefaultLocale_CTL"_ustr;
+inline constexpr OUString UPN_IS_HYPH_AUTO                    = u"IsHyphAuto"_ustr;
+inline constexpr OUString UPN_IS_HYPH_SPECIAL                 = u"IsHyphSpecial"_ustr;
+inline constexpr OUString UPN_IS_SPELL_AUTO                   = u"IsSpellAuto"_ustr;
+inline constexpr OUString UPN_IS_SPELL_CLOSED_COMPOUND        = u"IsSpellClosedCompound"_ustr;
+inline constexpr OUString UPN_IS_SPELL_HYPHENATED_COMPOUND    = u"IsSpellHyphenatedCompound"_ustr;
+inline constexpr OUString UPN_IS_SPELL_SPECIAL                = u"IsSpellSpecial"_ustr;
+inline constexpr OUString UPN_IS_WRAP_REVERSE                 = u"IsWrapReverse"_ustr;
+inline constexpr OUString UPN_DATA_FILES_CHANGED_CHECK_VALUE  = u"DataFilesChangedCheckValue"_ustr;
 
 // UNO property names for text conversion options
-inline constexpr OUStringLiteral UPN_ACTIVE_CONVERSION_DICTIONARIES  = u"ActiveConversionDictionaries";
-inline constexpr OUStringLiteral UPN_IS_IGNORE_POST_POSITIONAL_WORD  = u"IsIgnorePostPositionalWord";
-inline constexpr OUStringLiteral UPN_IS_AUTO_CLOSE_DIALOG            = u"IsAutoCloseDialog";
-inline constexpr OUStringLiteral UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST = u"IsShowEntriesRecentlyUsedFirst";
-inline constexpr OUStringLiteral UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES  = u"IsAutoReplaceUniqueEntries";
-inline constexpr OUStringLiteral UPN_IS_DIRECTION_TO_SIMPLIFIED      = u"IsDirectionToSimplified";
-inline constexpr OUStringLiteral UPN_IS_USE_CHARACTER_VARIANTS       = u"IsUseCharacterVariants";
-inline constexpr OUStringLiteral UPN_IS_TRANSLATE_COMMON_TERMS       = u"IsTranslateCommonTerms";
-inline constexpr OUStringLiteral UPN_IS_REVERSE_MAPPING              = u"IsReverseMapping";
+inline constexpr OUString UPN_ACTIVE_CONVERSION_DICTIONARIES  = u"ActiveConversionDictionaries"_ustr;
+inline constexpr OUString UPN_IS_IGNORE_POST_POSITIONAL_WORD  = u"IsIgnorePostPositionalWord"_ustr;
+inline constexpr OUString UPN_IS_AUTO_CLOSE_DIALOG            = u"IsAutoCloseDialog"_ustr;
+inline constexpr OUString UPN_IS_SHOW_ENTRIES_RECENTLY_USED_FIRST = u"IsShowEntriesRecentlyUsedFirst"_ustr;
+inline constexpr OUString UPN_IS_AUTO_REPLACE_UNIQUE_ENTRIES  = u"IsAutoReplaceUniqueEntries"_ustr;
+inline constexpr OUString UPN_IS_DIRECTION_TO_SIMPLIFIED      = u"IsDirectionToSimplified"_ustr;
+inline constexpr OUString UPN_IS_USE_CHARACTER_VARIANTS       = u"IsUseCharacterVariants"_ustr;
+inline constexpr OUString UPN_IS_TRANSLATE_COMMON_TERMS       = u"IsTranslateCommonTerms"_ustr;
+inline constexpr OUString UPN_IS_REVERSE_MAPPING              = u"IsReverseMapping"_ustr;
 
-inline constexpr OUStringLiteral UPN_IS_GRAMMAR_AUTO                 = u"IsAutoGrammarCheck";
-inline constexpr OUStringLiteral UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInteractiveGrammarCheck";
+inline constexpr OUString UPN_IS_GRAMMAR_AUTO                 = u"IsAutoGrammarCheck"_ustr;
+inline constexpr OUString UPN_IS_GRAMMAR_INTERACTIVE          = u"IsInteractiveGrammarCheck"_ustr;
 
 // uno property handles
 #define UPH_IS_GERMAN_PRE_REFORM             0

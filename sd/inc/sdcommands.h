@@ -20,7 +20,7 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral CMD_SID_HANDOUT_MASTER_MODE = u".uno:HandoutMode";
-inline constexpr OUStringLiteral CMD_SID_NOTES_MODE = u".uno:NotesMode";
+inline constexpr OUString CMD_SID_HANDOUT_MASTER_MODE = u".uno:HandoutMode"_ustr;
+inline constexpr OUString CMD_SID_NOTES_MODE = u".uno:NotesMode"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

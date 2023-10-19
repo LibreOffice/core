@@ -124,8 +124,8 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 OUString SAL_CALL Content::getContentType()
 {
     return isFolder(css::uno::Reference< css::ucb::XCommandEnvironment >())
-        ? OUString( GIO_FOLDER_TYPE )
-        : OUString( GIO_FILE_TYPE );
+        ? GIO_FOLDER_TYPE
+        : GIO_FILE_TYPE;
 }
 
 #define EXCEPT(aExcept) \

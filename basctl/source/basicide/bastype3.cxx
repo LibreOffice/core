@@ -101,7 +101,7 @@ IMPL_LINK(SbTreeListBox, RequestingChildrenHdl, const weld::TreeIter&, rEntry, b
 
                 // exchange image
                 const bool bDlgMode = (nMode & BrowseMode::Dialogs) && !(nMode & BrowseMode::Modules);
-                auto const aImage(bDlgMode ? OUString(RID_BMP_DLGLIB) : OUString(RID_BMP_MODLIB));
+                auto const aImage(bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB);
                 SetEntryBitmaps(rEntry, aImage);
             }
             else

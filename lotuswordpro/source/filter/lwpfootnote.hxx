@@ -87,13 +87,13 @@
 #define FN_DIVISIONGROUP_SEPARATE   (FN_BASE_DIVISIONGROUP | FN_MASK_SEPARATE)
 #define FN_DOCUMENT                 (FN_BASE_DOCUMENT)
 #define FN_DOCUMENT_SEPARATE        (FN_BASE_DOCUMENT | FN_MASK_SEPARATE)
-inline constexpr OUStringLiteral STRID_FOOTCONTINUEDFROM = u"Continued from previous page...";
-inline constexpr OUStringLiteral STRID_FOOTCONTINUEDON = u"Continued on next page...";
+inline constexpr OUString STRID_FOOTCONTINUEDFROM = u"Continued from previous page..."_ustr;
+inline constexpr OUString STRID_FOOTCONTINUEDON = u"Continued on next page..."_ustr;
 //Footnote table types, the string may have to do with local language
-inline constexpr OUStringLiteral STR_DivisionFootnote = u"DivisionFootnote";
-inline constexpr OUStringLiteral STR_DivisionEndnote = u"DivisionEndnote";
-inline constexpr OUStringLiteral STR_DivisionGroupEndnote = u"DivisionGroupEndnote";
-inline constexpr OUStringLiteral STR_DocumentEndnote = u"DocumentEndnote";
+inline constexpr OUString STR_DivisionFootnote = u"DivisionFootnote"_ustr;
+inline constexpr OUString STR_DivisionEndnote = u"DivisionEndnote"_ustr;
+inline constexpr OUString STR_DivisionGroupEndnote = u"DivisionGroupEndnote"_ustr;
+inline constexpr OUString STR_DocumentEndnote = u"DocumentEndnote"_ustr;
 
 /**
  * @brief   Footnote frib object

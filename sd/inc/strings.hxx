@@ -12,12 +12,12 @@
 #include <rtl/ustring.hxx>
 
 /* do not translate */
-inline constexpr OUStringLiteral STR_LAYOUT_TITLE = u"Titel";
-inline constexpr OUStringLiteral STR_LAYOUT_OUTLINE = u"Gliederung";
-inline constexpr OUStringLiteral STR_LAYOUT_BACKGROUND = u"Hintergrund";
-inline constexpr OUStringLiteral STR_LAYOUT_BACKGROUNDOBJECTS = u"Hintergrundobjekte";
-inline constexpr OUStringLiteral STR_LAYOUT_NOTES = u"Notizen";
-inline constexpr OUStringLiteral STR_LAYOUT_SUBTITLE = u"Untertitel";
+inline constexpr OUString STR_LAYOUT_TITLE = u"Titel"_ustr;
+inline constexpr OUString STR_LAYOUT_OUTLINE = u"Gliederung"_ustr;
+inline constexpr OUString STR_LAYOUT_BACKGROUND = u"Hintergrund"_ustr;
+inline constexpr OUString STR_LAYOUT_BACKGROUNDOBJECTS = u"Hintergrundobjekte"_ustr;
+inline constexpr OUString STR_LAYOUT_NOTES = u"Notizen"_ustr;
+inline constexpr OUString STR_LAYOUT_SUBTITLE = u"Untertitel"_ustr;
 #define STR_HTMLEXP_DEFAULT_EXTENSION   ".html"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

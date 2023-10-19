@@ -221,27 +221,27 @@ namespace pcr
         std::vector< OUString > aSuperfluous;
         if (m_pHelper)
         {
-            aSuperfluous.push_back(  OUString(PROPERTY_CONTROLSOURCE) );
-            aSuperfluous.push_back(  OUString(PROPERTY_EMPTY_IS_NULL) );
-            aSuperfluous.push_back(  OUString(PROPERTY_FILTERPROPOSAL) );
-            aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCETYPE) );
-            aSuperfluous.push_back(  OUString(PROPERTY_LISTSOURCE) );
-            aSuperfluous.push_back(  OUString(PROPERTY_BOUNDCOLUMN) );
+            aSuperfluous.push_back(  PROPERTY_CONTROLSOURCE );
+            aSuperfluous.push_back(  PROPERTY_EMPTY_IS_NULL );
+            aSuperfluous.push_back(  PROPERTY_FILTERPROPOSAL );
+            aSuperfluous.push_back(  PROPERTY_LISTSOURCETYPE );
+            aSuperfluous.push_back(  PROPERTY_LISTSOURCE );
+            aSuperfluous.push_back(  PROPERTY_BOUNDCOLUMN );
 
             bool bAllowBinding = m_pHelper->canBindToAnyDataType();
 
             if ( bAllowBinding )
             {
-                aSuperfluous.push_back(  OUString(PROPERTY_MAXTEXTLEN) );
-                aSuperfluous.push_back(  OUString(PROPERTY_VALUEMIN) );
-                aSuperfluous.push_back(  OUString(PROPERTY_VALUEMAX) );
-                aSuperfluous.push_back(  OUString(PROPERTY_DECIMAL_ACCURACY) );
-                aSuperfluous.push_back(  OUString(PROPERTY_TIMEMIN) );
-                aSuperfluous.push_back(  OUString(PROPERTY_TIMEMAX) );
-                aSuperfluous.push_back(  OUString(PROPERTY_DATEMIN) );
-                aSuperfluous.push_back(  OUString(PROPERTY_DATEMAX) );
-                aSuperfluous.push_back(  OUString(PROPERTY_EFFECTIVE_MIN) );
-                aSuperfluous.push_back(  OUString(PROPERTY_EFFECTIVE_MAX) );
+                aSuperfluous.push_back(  PROPERTY_MAXTEXTLEN );
+                aSuperfluous.push_back(  PROPERTY_VALUEMIN );
+                aSuperfluous.push_back(  PROPERTY_VALUEMAX );
+                aSuperfluous.push_back(  PROPERTY_DECIMAL_ACCURACY );
+                aSuperfluous.push_back(  PROPERTY_TIMEMIN );
+                aSuperfluous.push_back(  PROPERTY_TIMEMAX );
+                aSuperfluous.push_back(  PROPERTY_DATEMIN );
+                aSuperfluous.push_back(  PROPERTY_DATEMAX );
+                aSuperfluous.push_back(  PROPERTY_EFFECTIVE_MIN );
+                aSuperfluous.push_back(  PROPERTY_EFFECTIVE_MAX );
             }
         }
 
@@ -255,8 +255,8 @@ namespace pcr
         std::vector< OUString > aInterestedInActuations;
         if (m_pHelper)
         {
-            aInterestedInActuations.push_back(  OUString(PROPERTY_XSD_DATA_TYPE) );
-            aInterestedInActuations.push_back(  OUString(PROPERTY_XML_DATA_MODEL) );
+            aInterestedInActuations.push_back(  PROPERTY_XSD_DATA_TYPE );
+            aInterestedInActuations.push_back(  PROPERTY_XML_DATA_MODEL );
         }
         return comphelper::containerToSequence( aInterestedInActuations );
     }
@@ -575,29 +575,29 @@ namespace pcr
 
             // show the facets which are available at the data type
             OUString aFacets[] = {
-                OUString(PROPERTY_XSD_WHITESPACES), OUString(PROPERTY_XSD_PATTERN),
-                OUString(PROPERTY_XSD_LENGTH), OUString(PROPERTY_XSD_MIN_LENGTH), OUString(PROPERTY_XSD_MAX_LENGTH), OUString(PROPERTY_XSD_TOTAL_DIGITS),
-                OUString(PROPERTY_XSD_FRACTION_DIGITS),
-                OUString(PROPERTY_XSD_MAX_INCLUSIVE_INT),
-                OUString(PROPERTY_XSD_MAX_EXCLUSIVE_INT),
-                OUString(PROPERTY_XSD_MIN_INCLUSIVE_INT),
-                OUString(PROPERTY_XSD_MIN_EXCLUSIVE_INT),
-                OUString(PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE),
-                OUString(PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE),
-                OUString(PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE),
-                OUString(PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE),
-                OUString(PROPERTY_XSD_MAX_INCLUSIVE_DATE),
-                OUString(PROPERTY_XSD_MAX_EXCLUSIVE_DATE),
-                OUString(PROPERTY_XSD_MIN_INCLUSIVE_DATE),
-                OUString(PROPERTY_XSD_MIN_EXCLUSIVE_DATE),
-                OUString(PROPERTY_XSD_MAX_INCLUSIVE_TIME),
-                OUString(PROPERTY_XSD_MAX_EXCLUSIVE_TIME),
-                OUString(PROPERTY_XSD_MIN_INCLUSIVE_TIME),
-                OUString(PROPERTY_XSD_MIN_EXCLUSIVE_TIME),
-                OUString(PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME),
-                OUString(PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME),
-                OUString(PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME),
-                OUString(PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME)
+                PROPERTY_XSD_WHITESPACES, PROPERTY_XSD_PATTERN,
+                PROPERTY_XSD_LENGTH, PROPERTY_XSD_MIN_LENGTH, PROPERTY_XSD_MAX_LENGTH, PROPERTY_XSD_TOTAL_DIGITS,
+                PROPERTY_XSD_FRACTION_DIGITS,
+                PROPERTY_XSD_MAX_INCLUSIVE_INT,
+                PROPERTY_XSD_MAX_EXCLUSIVE_INT,
+                PROPERTY_XSD_MIN_INCLUSIVE_INT,
+                PROPERTY_XSD_MIN_EXCLUSIVE_INT,
+                PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MAX_INCLUSIVE_DATE,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DATE,
+                PROPERTY_XSD_MIN_INCLUSIVE_DATE,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DATE,
+                PROPERTY_XSD_MAX_INCLUSIVE_TIME,
+                PROPERTY_XSD_MAX_EXCLUSIVE_TIME,
+                PROPERTY_XSD_MIN_INCLUSIVE_TIME,
+                PROPERTY_XSD_MIN_EXCLUSIVE_TIME,
+                PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME
             };
 
             size_t i=0;

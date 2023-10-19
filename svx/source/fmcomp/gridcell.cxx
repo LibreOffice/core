@@ -809,7 +809,7 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
     bool bReadOnly = m_rColumn.IsReadOnly();
     if ( !bReadOnly )
     {
-        _rxModel->getPropertyValue( i_bReadOnly ? OUString(FM_PROP_READONLY) : OUString(FM_PROP_ISREADONLY)) >>= bReadOnly;
+        _rxModel->getPropertyValue( i_bReadOnly ? FM_PROP_READONLY : FM_PROP_ISREADONLY) >>= bReadOnly;
     }
     m_pWindow->SetEditableReadOnly(bReadOnly);
 }

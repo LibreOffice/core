@@ -26,14 +26,14 @@
 #include <memory>
 #include <string_view>
 
-inline constexpr OUStringLiteral PACKAGE_STORAGE_FORMAT_STRING = u"PackageFormat";
-inline constexpr OUStringLiteral ZIP_STORAGE_FORMAT_STRING = u"ZipFormat";
-inline constexpr OUStringLiteral OFOPXML_STORAGE_FORMAT_STRING = u"OFOPXMLFormat";
+inline constexpr OUString PACKAGE_STORAGE_FORMAT_STRING = u"PackageFormat"_ustr;
+inline constexpr OUString ZIP_STORAGE_FORMAT_STRING = u"ZipFormat"_ustr;
+inline constexpr OUString OFOPXML_STORAGE_FORMAT_STRING = u"OFOPXMLFormat"_ustr;
 
-inline constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA256UTF8 = u"PackageSHA256UTF8EncryptionKey";
-inline constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1UTF8 = u"PackageSHA1UTF8EncryptionKey";
-inline constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1MS1252  = u"PackageSHA1MS1252EncryptionKey";
-inline constexpr OUStringLiteral PACKAGE_ENCRYPTIONDATA_SHA1CORRECT  = u"PackageSHA1CorrectEncryptionKey";
+inline constexpr OUString PACKAGE_ENCRYPTIONDATA_SHA256UTF8 = u"PackageSHA256UTF8EncryptionKey"_ustr;
+inline constexpr OUString PACKAGE_ENCRYPTIONDATA_SHA1UTF8 = u"PackageSHA1UTF8EncryptionKey"_ustr;
+inline constexpr OUString PACKAGE_ENCRYPTIONDATA_SHA1MS1252  = u"PackageSHA1MS1252EncryptionKey"_ustr;
+inline constexpr OUString PACKAGE_ENCRYPTIONDATA_SHA1CORRECT  = u"PackageSHA1CorrectEncryptionKey"_ustr;
 
 namespace com::sun::star {
     namespace beans { struct NamedValue; }

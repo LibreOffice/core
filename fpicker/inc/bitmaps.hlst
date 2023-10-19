@@ -9,8 +9,8 @@
 
 #pragma once
 
-inline constexpr OUStringLiteral BMP_FILEDLG_PLACE_LOCAL = u"fpicker/res/fp015.png";
-inline constexpr OUStringLiteral BMP_FILEDLG_PLACE_REMOTE = u"fpicker/res/fp016.png";
-inline constexpr OUStringLiteral RID_BMP_FOLDER = u"svtools/res/folder.png";
+inline constexpr OUString BMP_FILEDLG_PLACE_LOCAL = u"fpicker/res/fp015.png"_ustr;
+inline constexpr OUString BMP_FILEDLG_PLACE_REMOTE = u"fpicker/res/fp016.png"_ustr;
+inline constexpr OUString RID_BMP_FOLDER = u"svtools/res/folder.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -1080,16 +1080,16 @@ SchXMLExportHelper_Impl::SchXMLExportHelper_Impl(
     // register chart auto-style family
     mrAutoStylePool.AddFamily(
         XmlStyleFamily::SCH_CHART_ID,
-        OUString( XML_STYLE_FAMILY_SCH_CHART_NAME ),
+        XML_STYLE_FAMILY_SCH_CHART_NAME,
         mxExpPropMapper.get(),
-        OUString( XML_STYLE_FAMILY_SCH_CHART_PREFIX ));
+        XML_STYLE_FAMILY_SCH_CHART_PREFIX);
 
     // register shape family
     mrAutoStylePool.AddFamily(
         XmlStyleFamily::SD_GRAPHICS_ID,
-        OUString( XML_STYLE_FAMILY_SD_GRAPHICS_NAME ),
+        XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
         mxExpPropMapper.get(),
-        OUString( XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX ));
+        XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
     // register paragraph family also for shapes
     mrAutoStylePool.AddFamily(
         XmlStyleFamily::TEXT_PARAGRAPH,

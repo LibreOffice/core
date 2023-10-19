@@ -41,7 +41,7 @@ namespace com::sun::star::ucb { class XCommandEnvironment; }
 namespace ucbhelper {
 
 
-inline constexpr OUStringLiteral RESULTSET_SERVICE_NAME = u"com.sun.star.ucb.ContentResultSet";
+inline constexpr OUString RESULTSET_SERVICE_NAME = u"com.sun.star.ucb.ContentResultSet"_ustr;
 
 
 class ResultSetDataSupplier;

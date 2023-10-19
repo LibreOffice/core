@@ -653,7 +653,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             aReturn <<= WritingMode2::CONTEXT;
             break;
         case PROPERTY_ID_DEFAULTCONTROL:
-            aReturn <<= OUString( STARDIV_ONE_FORM_CONTROL_GRID  );
+            aReturn <<= STARDIV_ONE_FORM_CONTROL_GRID;
             break;
         case PROPERTY_ID_PRINTABLE:
         case PROPERTY_ID_HASNAVIGATION:

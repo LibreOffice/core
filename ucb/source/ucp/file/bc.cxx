@@ -652,8 +652,8 @@ BaseContent::getPropertyValues(
 
             if ( rProp.Name == "ContentType" )
             {
-                rValue <<= (m_bFolder ? OUString(TaskManager::FolderContentType)
-                    : OUString(TaskManager::FileContentType));
+                rValue <<= (m_bFolder ? TaskManager::FolderContentType
+                    : TaskManager::FileContentType);
             }
             else if ( rProp.Name == "IsFolder" )
             {

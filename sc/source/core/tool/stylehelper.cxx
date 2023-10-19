@@ -69,18 +69,18 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
             { ScResId( STR_STYLENAME_ACCENT_3 ),  "Accent 3" },
             { ScResId( STR_STYLENAME_RESULT ),    "Result" },
             // API compatibility programmatic names after.
-            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
-            { ScResId( STR_STYLENAME_RESULT ), OUString(SC_STYLE_PROG_RESULT) },
-            { ScResId( STR_STYLENAME_RESULT1 ), OUString(SC_STYLE_PROG_RESULT1) },
-            { ScResId( STR_STYLENAME_HEADING ), OUString(SC_STYLE_PROG_HEADING) },
-            { ScResId( STR_STYLENAME_HEADING_1 ), OUString(SC_STYLE_PROG_HEADING1) },
+            { ScResId( STR_STYLENAME_STANDARD ), SC_STYLE_PROG_STANDARD },
+            { ScResId( STR_STYLENAME_RESULT ), SC_STYLE_PROG_RESULT },
+            { ScResId( STR_STYLENAME_RESULT1 ), SC_STYLE_PROG_RESULT1 },
+            { ScResId( STR_STYLENAME_HEADING ), SC_STYLE_PROG_HEADING },
+            { ScResId( STR_STYLENAME_HEADING_1 ), SC_STYLE_PROG_HEADING1 },
             // Pivot table styles.
-            { ScResId( STR_PIVOT_STYLENAME_INNER ), OUString(SC_PIVOT_STYLE_PROG_INNER) },
-            { ScResId( STR_PIVOT_STYLENAME_RESULT ), OUString(SC_PIVOT_STYLE_PROG_RESULT) },
-            { ScResId( STR_PIVOT_STYLENAME_CATEGORY ), OUString(SC_PIVOT_STYLE_PROG_CATEGORY) },
-            { ScResId( STR_PIVOT_STYLENAME_TITLE ), OUString(SC_PIVOT_STYLE_PROG_TITLE) },
-            { ScResId( STR_PIVOT_STYLENAME_FIELDNAME ), OUString(SC_PIVOT_STYLE_PROG_FIELDNAME) },
-            { ScResId( STR_PIVOT_STYLENAME_TOP ), OUString(SC_PIVOT_STYLE_PROG_TOP) },
+            { ScResId( STR_PIVOT_STYLENAME_INNER ), SC_PIVOT_STYLE_PROG_INNER },
+            { ScResId( STR_PIVOT_STYLENAME_RESULT ), SC_PIVOT_STYLE_PROG_RESULT },
+            { ScResId( STR_PIVOT_STYLENAME_CATEGORY ), SC_PIVOT_STYLE_PROG_CATEGORY },
+            { ScResId( STR_PIVOT_STYLENAME_TITLE ), SC_PIVOT_STYLE_PROG_TITLE },
+            { ScResId( STR_PIVOT_STYLENAME_FIELDNAME ), SC_PIVOT_STYLE_PROG_FIELDNAME },
+            { ScResId( STR_PIVOT_STYLENAME_TOP ), SC_PIVOT_STYLE_PROG_TOP },
             //  last entry remains empty
             { OUString(), OUString() },
         };
@@ -90,8 +90,8 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     {
         static ScDisplayNameMap const aPageMap[]
         {
-            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
-            { ScResId( STR_STYLENAME_REPORT ),   OUString(SC_STYLE_PROG_REPORT) },
+            { ScResId( STR_STYLENAME_STANDARD ), SC_STYLE_PROG_STANDARD },
+            { ScResId( STR_STYLENAME_REPORT ),   SC_STYLE_PROG_REPORT },
             //  last entry remains empty
             { OUString(), OUString() },
         };
@@ -101,7 +101,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( SfxStyleFamily nType )
     {
         static ScDisplayNameMap const aGraphicMap[]
         {
-            { ScResId( STR_STYLENAME_STANDARD ), OUString(SC_STYLE_PROG_STANDARD) },
+            { ScResId( STR_STYLENAME_STANDARD ), SC_STYLE_PROG_STANDARD },
             { ScResId( STR_STYLENAME_NOTE ), "Note" },
             //  last entry remains empty
             { OUString(), OUString() },

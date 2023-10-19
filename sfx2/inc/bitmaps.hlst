@@ -10,21 +10,21 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_INDEX_ON = u"sfx2/res/indexon_small.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_INDEX_OFF = u"sfx2/res/indexoff_small.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_START = u"res/sc06303.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_PREV = u"res/sc06301.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_NEXT = u"res/sc06300.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_PRINT = u"res/sc05504.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_BOOKMARKS = u"sfx2/res/favourite.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_SEARCHDIALOG = u"sfx2/res/sc05961.png";
-inline constexpr OUStringLiteral BMP_HELP_TOOLBOX_COPY = u"sfx2/res/sc05711.png";
-inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_OPEN = u"sfx2/res/hlpbookopen.png";
-inline constexpr OUStringLiteral BMP_HELP_CONTENT_BOOK_CLOSED = u"sfx2/res/hlpbookclosed.png";
-inline constexpr OUStringLiteral BMP_HELP_CONTENT_DOC = u"sfx2/res/hlpdoc.png";
+inline constexpr OUString BMP_HELP_TOOLBOX_INDEX_ON = u"sfx2/res/indexon_small.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_INDEX_OFF = u"sfx2/res/indexoff_small.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_START = u"res/sc06303.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_PREV = u"res/sc06301.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_NEXT = u"res/sc06300.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_PRINT = u"res/sc05504.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_BOOKMARKS = u"sfx2/res/favourite.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_SEARCHDIALOG = u"sfx2/res/sc05961.png"_ustr;
+inline constexpr OUString BMP_HELP_TOOLBOX_COPY = u"sfx2/res/sc05711.png"_ustr;
+inline constexpr OUString BMP_HELP_CONTENT_BOOK_OPEN = u"sfx2/res/hlpbookopen.png"_ustr;
+inline constexpr OUString BMP_HELP_CONTENT_BOOK_CLOSED = u"sfx2/res/hlpbookclosed.png"_ustr;
+inline constexpr OUString BMP_HELP_CONTENT_DOC = u"sfx2/res/hlpdoc.png"_ustr;
 
 //start, sfx2/source/sidebar/Theme.cxx
-inline constexpr OUStringLiteral CLOSEDOC = u"sfx2/res/closedoc.png";
+inline constexpr OUString CLOSEDOC = u"sfx2/res/closedoc.png"_ustr;
 #define GRIP                                "sfx2/res/grip.png"
 #define OPEN_MORE                           "sfx2/res/symphony/open_more.png"
 #define MOREBUTTON                          "sfx2/res/symphony/morebutton.png"
@@ -41,58 +41,58 @@ inline constexpr OUStringLiteral CLOSEDOC = u"sfx2/res/closedoc.png";
 #define SIDEBAR_FUNCTIONS_LARGE             "sfx2/res/symphony/sidebar-functions-large.png"
 //end, sfx2/source/sidebar/Theme.cxx
 
-inline constexpr OUStringLiteral SFX_THUMBNAIL_TEXT = u"res/ott_96_8.png";
-inline constexpr OUStringLiteral SFX_THUMBNAIL_SHEET = u"res/ots_96_8.png";
-inline constexpr OUStringLiteral SFX_THUMBNAIL_PRESENTATION = u"res/otp_96_8.png";
-inline constexpr OUStringLiteral SFX_THUMBNAIL_DRAWING = u"res/otg_96_8.png";
+inline constexpr OUString SFX_THUMBNAIL_TEXT = u"res/ott_96_8.png"_ustr;
+inline constexpr OUString SFX_THUMBNAIL_SHEET = u"res/ots_96_8.png"_ustr;
+inline constexpr OUString SFX_THUMBNAIL_PRESENTATION = u"res/otp_96_8.png"_ustr;
+inline constexpr OUString SFX_THUMBNAIL_DRAWING = u"res/otg_96_8.png"_ustr;
 
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_TEXT = u"res/writer128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_SHEET = u"res/calc128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_PRESENTATION = u"res/impress128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DRAWING = u"res/draw128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DATABASE = u"res/base128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_MATH = u"res/math128.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DEFAULT = u"res/main128.png";
+inline constexpr OUString SFX_FILE_THUMBNAIL_TEXT = u"res/writer128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_SHEET = u"res/calc128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_PRESENTATION = u"res/impress128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_DRAWING = u"res/draw128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_DATABASE = u"res/base128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_MATH = u"res/math128.png"_ustr;
+inline constexpr OUString SFX_FILE_THUMBNAIL_DEFAULT = u"res/main128.png"_ustr;
 
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_TEXT = u"res/odt_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_SHEET = u"res/ods_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_PRESENTATION = u"res/odp_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DRAWING = u"res/odg_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DATABASE = u"res/odb_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_MATH = u"res/odf_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DEFAULT = u"res/mainapp_48_8.png";
+inline constexpr OUString SFX_FILE_OVERLAY_TEXT = u"res/odt_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_SHEET = u"res/ods_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_PRESENTATION = u"res/odp_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_DRAWING = u"res/odg_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_DATABASE = u"res/odb_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_MATH = u"res/odf_48_8.png"_ustr;
+inline constexpr OUString SFX_FILE_OVERLAY_DEFAULT = u"res/mainapp_48_8.png"_ustr;
 
-inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_192 = u"res/base_thumbnail_192.png";
-inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_256 = u"res/base_thumbnail_256.png";
+inline constexpr OUString SFX_THUMBNAIL_BASE_192 = u"res/base_thumbnail_192.png"_ustr;
+inline constexpr OUString SFX_THUMBNAIL_BASE_256 = u"res/base_thumbnail_256.png"_ustr;
 
-inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE = u"res/recentdoc_remove.png";
-inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE_HIGHLIGHTED = u"res/recentdoc_remove_highlighted.png";
-inline constexpr OUStringLiteral BMP_PIN_DOC = u"res/recentdoc_pin.png";
-inline constexpr OUStringLiteral BMP_PIN_DOC_HIGHLIGHTED = u"res/recentdoc_pin_highlighted.png";
-inline constexpr OUStringLiteral BMP_DEFAULT = u"res/templatestar.png";
+inline constexpr OUString BMP_RECENTDOC_REMOVE = u"res/recentdoc_remove.png"_ustr;
+inline constexpr OUString BMP_RECENTDOC_REMOVE_HIGHLIGHTED = u"res/recentdoc_remove_highlighted.png"_ustr;
+inline constexpr OUString BMP_PIN_DOC = u"res/recentdoc_pin.png"_ustr;
+inline constexpr OUString BMP_PIN_DOC_HIGHLIGHTED = u"res/recentdoc_pin_highlighted.png"_ustr;
+inline constexpr OUString BMP_DEFAULT = u"res/templatestar.png"_ustr;
 
-inline constexpr OUStringLiteral BMP_128X128_CALC_DOC = u"sfx2/res/128x128_calc_doc-p.png";
-inline constexpr OUStringLiteral BMP_128X128_DRAW_DOC = u"sfx2/res/128x128_draw_doc-p.png";
-inline constexpr OUStringLiteral BMP_128X128_IMPRESS_DOC = u"sfx2/res/128x128_impress_doc-p.png";
-inline constexpr OUStringLiteral BMP_128X128_MATH_DOC = u"sfx2/res/128x128_math_doc-p.png";
-inline constexpr OUStringLiteral BMP_128X128_WRITER_DOC = u"sfx2/res/128x128_writer_doc-p.png";
+inline constexpr OUString BMP_128X128_CALC_DOC = u"sfx2/res/128x128_calc_doc-p.png"_ustr;
+inline constexpr OUString BMP_128X128_DRAW_DOC = u"sfx2/res/128x128_draw_doc-p.png"_ustr;
+inline constexpr OUString BMP_128X128_IMPRESS_DOC = u"sfx2/res/128x128_impress_doc-p.png"_ustr;
+inline constexpr OUString BMP_128X128_MATH_DOC = u"sfx2/res/128x128_math_doc-p.png"_ustr;
+inline constexpr OUString BMP_128X128_WRITER_DOC = u"sfx2/res/128x128_writer_doc-p.png"_ustr;
 
-inline constexpr OUStringLiteral SIDEBAR_CLOSE_INDICATOR = u"cmd/lc_decrementlevel.png";
-inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_WRITER = u"res/odt_16_8.png";
-inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_CALC = u"res/ods_16_8.png";
-inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_IMPRESS = u"res/odp_16_8.png";
-inline constexpr OUStringLiteral BMP_ACTION_DEFAULT_DRAW = u"res/odg_16_8.png";
-inline constexpr OUStringLiteral BMP_ACTION_IMPORT = u"cmd/sc_dataimport.png";
-inline constexpr OUStringLiteral BMP_ACTION_EXTENSIONS = u"cmd/sc_additionsdialog.png";
-inline constexpr OUStringLiteral BMP_ACTION_DELETE_CATEGORY = u"cmd/sc_delete.png";
-inline constexpr OUStringLiteral BMP_ACTION_NEW_CATEGORY = u"cmd/sc_add.png";
-inline constexpr OUStringLiteral BMP_ACTION_RENAME = u"cmd/sc_editdoc.png";
+inline constexpr OUString SIDEBAR_CLOSE_INDICATOR = u"cmd/lc_decrementlevel.png"_ustr;
+inline constexpr OUString BMP_ACTION_DEFAULT_WRITER = u"res/odt_16_8.png"_ustr;
+inline constexpr OUString BMP_ACTION_DEFAULT_CALC = u"res/ods_16_8.png"_ustr;
+inline constexpr OUString BMP_ACTION_DEFAULT_IMPRESS = u"res/odp_16_8.png"_ustr;
+inline constexpr OUString BMP_ACTION_DEFAULT_DRAW = u"res/odg_16_8.png"_ustr;
+inline constexpr OUString BMP_ACTION_IMPORT = u"cmd/sc_dataimport.png"_ustr;
+inline constexpr OUString BMP_ACTION_EXTENSIONS = u"cmd/sc_additionsdialog.png"_ustr;
+inline constexpr OUString BMP_ACTION_DELETE_CATEGORY = u"cmd/sc_delete.png"_ustr;
+inline constexpr OUString BMP_ACTION_NEW_CATEGORY = u"cmd/sc_add.png"_ustr;
+inline constexpr OUString BMP_ACTION_RENAME = u"cmd/sc_editdoc.png"_ustr;
 
-inline constexpr OUStringLiteral BMP_MENU_OPEN = u"cmd/sc_opentemplate.png";
-inline constexpr OUStringLiteral BMP_MENU_EDIT = u"cmd/sc_opentemplate.png";
-inline constexpr OUStringLiteral BMP_MENU_MOVE = u"cmd/sc_move.png";
-inline constexpr OUStringLiteral BMP_MENU_RENAME = u"cmd/sc_editdoc.png";
-inline constexpr OUStringLiteral BMP_MENU_DELETE = u"cmd/sc_delete.png";
-inline constexpr OUStringLiteral BMP_MENU_EXPORT = u"cmd/sc_exportto.png";
+inline constexpr OUString BMP_MENU_OPEN = u"cmd/sc_opentemplate.png"_ustr;
+inline constexpr OUString BMP_MENU_EDIT = u"cmd/sc_opentemplate.png"_ustr;
+inline constexpr OUString BMP_MENU_MOVE = u"cmd/sc_move.png"_ustr;
+inline constexpr OUString BMP_MENU_RENAME = u"cmd/sc_editdoc.png"_ustr;
+inline constexpr OUString BMP_MENU_DELETE = u"cmd/sc_delete.png"_ustr;
+inline constexpr OUString BMP_MENU_EXPORT = u"cmd/sc_exportto.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

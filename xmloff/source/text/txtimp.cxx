@@ -380,7 +380,7 @@ namespace
         {
             Sequence<OUString> vListEntriesSeq(vListEntries.size());
             copy(vListEntries.begin(), vListEntries.end(), vListEntriesSeq.getArray());
-            vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] <<= vListEntriesSeq;
+            vOutParams[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntriesSeq;
         }
         for(const auto& rCurrent : vOutParams)
         {

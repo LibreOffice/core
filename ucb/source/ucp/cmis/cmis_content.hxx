@@ -55,8 +55,8 @@ namespace ucbhelper
 namespace cmis
 {
 
-inline constexpr OUStringLiteral CMIS_FILE_TYPE = u"application/vnd.libreoffice.cmis-file";
-inline constexpr OUStringLiteral CMIS_FOLDER_TYPE = u"application/vnd.libreoffice.cmis-folder";
+inline constexpr OUString CMIS_FILE_TYPE = u"application/vnd.libreoffice.cmis-file"_ustr;
+inline constexpr OUString CMIS_FOLDER_TYPE = u"application/vnd.libreoffice.cmis-folder"_ustr;
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper,

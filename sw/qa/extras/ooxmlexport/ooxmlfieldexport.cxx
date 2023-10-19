@@ -534,7 +534,7 @@ DECLARE_OOXMLEXPORT_TEST(testSdtDateDuplicate, "sdt-date-duplicate.docx")
         ::sw::mark::IDateFieldmark* pFieldmark
             = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
         CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
         CPPUNIT_ASSERT_EQUAL(OUString("4/26/2012"), pFieldmark->GetContent());
     }
 }
@@ -735,7 +735,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldInShape, "date_field_in_shape.docx" )
         ::sw::mark::IDateFieldmark* pFieldmark
             = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
         CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
         CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
     }
 }
@@ -771,7 +771,7 @@ DECLARE_OOXMLEXPORT_TEST( testDateFieldAtEndOfParagraph, "date_field_at_end_of_p
         ::sw::mark::IDateFieldmark* pFieldmark
             = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
         CPPUNIT_ASSERT(pFieldmark);
-        CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+        CPPUNIT_ASSERT_EQUAL(ODF_FORMDATE, pFieldmark->GetFieldname());
         CPPUNIT_ASSERT_EQUAL(OUString("Click here to enter a date."), pFieldmark->GetContent());
     }
 }
@@ -792,7 +792,7 @@ CPPUNIT_TEST_FIXTURE(Test, testDropDownFieldEntryLimit)
     ::sw::mark::IFieldmark* pFieldmark
           = dynamic_cast<::sw::mark::IFieldmark*>(*pMarkAccess->getAllMarksBegin());
     CPPUNIT_ASSERT(pFieldmark);
-    CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+    CPPUNIT_ASSERT_EQUAL(ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
 
     const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
     auto pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);

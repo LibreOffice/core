@@ -30,8 +30,8 @@
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
 
-inline constexpr OUStringLiteral UIRESOURCE_URL = u"private:resource";
-inline constexpr OUStringLiteral UIRESOURCETYPE_TOOLBAR = u"toolbar";
+inline constexpr OUString UIRESOURCE_URL = u"private:resource"_ustr;
+inline constexpr OUString UIRESOURCETYPE_TOOLBAR = u"toolbar"_ustr;
 #define UIRESOURCETYPE_MENUBAR          "menubar"
 
 namespace framework

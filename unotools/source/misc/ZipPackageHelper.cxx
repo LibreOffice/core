@@ -60,7 +60,7 @@ ZipPackageHelper::ZipPackageHelper(
     Sequence< Any > aArguments{
         Any(sPackageURL),
         // let ZipPackage be used
-        Any(beans::NamedValue("StorageFormat", Any(OUString(ZIP_STORAGE_FORMAT_STRING))))
+        Any(beans::NamedValue("StorageFormat", Any(ZIP_STORAGE_FORMAT_STRING)))
     };
 
     Reference< XHierarchicalNameAccess > xHNameAccess(

@@ -97,32 +97,32 @@ public:
 
     /** The set of tool bars that are handled by this manager class.
     */
-    constexpr static OUStringLiteral msToolBar = u"toolbar"; // Draw_Toolbox_Sd, 23011
-    constexpr static OUStringLiteral msOptionsToolBar = u"optionsbar";
+    constexpr static OUString msToolBar = u"toolbar"_ustr; // Draw_Toolbox_Sd, 23011
+    constexpr static OUString msOptionsToolBar = u"optionsbar"_ustr;
         // Draw_Options_Toolbox, 23020
-    constexpr static OUStringLiteral msCommonTaskToolBar = u"commontaskbar";
+    constexpr static OUString msCommonTaskToolBar = u"commontaskbar"_ustr;
         // Draw_CommonTask_Toolbox, 23021
-    constexpr static OUStringLiteral msViewerToolBar = u"viewerbar"; // Draw_Viewer_Toolbox, 23023
-    constexpr static OUStringLiteral msSlideSorterToolBar = u"slideviewtoolbar";
+    constexpr static OUString msViewerToolBar = u"viewerbar"_ustr; // Draw_Viewer_Toolbox, 23023
+    constexpr static OUString msSlideSorterToolBar = u"slideviewtoolbar"_ustr;
         // Slide_Toolbox, 23012
-    constexpr static OUStringLiteral msSlideSorterObjectBar = u"slideviewobjectbar";
+    constexpr static OUString msSlideSorterObjectBar = u"slideviewobjectbar"_ustr;
         // Slide_Obj_Toolbox, 23014
-    constexpr static OUStringLiteral msOutlineToolBar = u"outlinetoolbar"; // Outline_Toolbox, 23017
-    constexpr static OUStringLiteral msMasterViewToolBar = u"masterviewtoolbar";
+    constexpr static OUString msOutlineToolBar = u"outlinetoolbar"_ustr; // Outline_Toolbox, 23017
+    constexpr static OUString msMasterViewToolBar = u"masterviewtoolbar"_ustr;
         // SID_MASTERPAGE, 27053
-    constexpr static OUStringLiteral msDrawingObjectToolBar = u"drawingobjectbar";
+    constexpr static OUString msDrawingObjectToolBar = u"drawingobjectbar"_ustr;
         // Draw_Obj_Toolbox, 23013
-    constexpr static OUStringLiteral msGluePointsToolBar = u"gluepointsobjectbar";
+    constexpr static OUString msGluePointsToolBar = u"gluepointsobjectbar"_ustr;
         // Gluepoints_Toolbox, 23019
-    constexpr static OUStringLiteral msTextObjectBar = u"textobjectbar";
+    constexpr static OUString msTextObjectBar = u"textobjectbar"_ustr;
         // Draw_Text_Toolbox_Sd, 23016
-    constexpr static OUStringLiteral msBezierObjectBar = u"bezierobjectbar";
+    constexpr static OUString msBezierObjectBar = u"bezierobjectbar"_ustr;
         // Bezier_Toolbox_Sd, 23015
-    constexpr static OUStringLiteral msGraphicObjectBar = u"graphicobjectbar";
+    constexpr static OUString msGraphicObjectBar = u"graphicobjectbar"_ustr;
         // Draw_Graf_Toolbox, 23030
-    constexpr static OUStringLiteral msMediaObjectBar = u"mediaobjectbar";
+    constexpr static OUString msMediaObjectBar = u"mediaobjectbar"_ustr;
         // Draw_Media_Toolbox, 23031
-    constexpr static OUStringLiteral msTableObjectBar = u"tableobjectbar";
+    constexpr static OUString msTableObjectBar = u"tableobjectbar"_ustr;
         // Draw_Table_Toolbox, 23018
 
     /** The set of tool bar groups.

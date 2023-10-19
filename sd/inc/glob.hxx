@@ -46,7 +46,7 @@
 // SVX_IMAPINFO_ID = 2
 
 // Separator between layout name and template name of presentation templates
-inline constexpr OUStringLiteral SD_LT_SEPARATOR = u"~LT~";
+inline constexpr OUString SD_LT_SEPARATOR = u"~LT~"_ustr;
 
 // option-stream identifier
 #define SD_OPTION_MORPHING  u"Morph"

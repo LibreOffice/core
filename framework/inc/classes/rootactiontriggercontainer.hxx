@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.RootActionTriggerContainer";
+inline constexpr OUString IMPLEMENTATIONNAME_ROOTACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.RootActionTriggerContainer"_ustr;
 
 namespace framework
 {

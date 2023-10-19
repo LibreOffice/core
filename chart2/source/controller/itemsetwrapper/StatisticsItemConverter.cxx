@@ -50,7 +50,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
     if( xProp.is())
         try
         {
-        ( xProp->getPropertyValue( bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X) ) >>= xResult );
+        ( xProp->getPropertyValue( bYError ? CHART_UNONAME_ERRORBAR_Y : CHART_UNONAME_ERRORBAR_X ) >>= xResult );
         }
         catch( const uno::Exception & )
         {
@@ -308,7 +308,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( !xErrorBarProp.is() )
                 {
                     xErrorBarProp = lcl_GetDefaultErrorBar();
-                    GetPropertySet()->setPropertyValue( bYError ? OUString(CHART_UNONAME_ERRORBAR_Y) : OUString(CHART_UNONAME_ERRORBAR_X),
+                    GetPropertySet()->setPropertyValue( bYError ? CHART_UNONAME_ERRORBAR_Y : CHART_UNONAME_ERRORBAR_X,
                                                         uno::Any( xErrorBarProp ));
                 }
 

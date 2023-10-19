@@ -160,7 +160,7 @@ namespace dbaui
     // QueryDesigner
     QueryDesigner::QueryDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? OUString(URL_COMPONENT_VIEWDESIGN) : OUString(URL_COMPONENT_QUERYDESIGN) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? URL_COMPONENT_VIEWDESIGN : URL_COMPONENT_QUERYDESIGN )
         ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
     {
     }
@@ -189,7 +189,7 @@ namespace dbaui
 
     // TableDesigner
     TableDesigner::TableDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_TABLEDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, URL_COMPONENT_TABLEDESIGN )
     {
     }
 
@@ -243,7 +243,7 @@ namespace dbaui
     // ResultSetBrowser
     ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             bool _bTable )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, URL_COMPONENT_DATASOURCEBROWSER )
         ,m_bTable(_bTable)
     {
     }
@@ -273,7 +273,7 @@ namespace dbaui
 
     // RelationDesigner
     RelationDesigner::RelationDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
-        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_RELATIONDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, URL_COMPONENT_RELATIONDESIGN )
     {
     }
 }   // namespace dbaui

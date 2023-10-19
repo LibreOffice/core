@@ -35,7 +35,7 @@ enum class ScGeneralFunction;
 
 // misc -----------------------------------------------------------------------
 
-inline constexpr OUStringLiteral EXC_STORAGE_PTCACHE = u"_SX_DB_CUR";
+inline constexpr OUString EXC_STORAGE_PTCACHE = u"_SX_DB_CUR"_ustr;
 
 // strings
 const sal_uInt16 EXC_PT_NOSTRING            = 0xFFFF;

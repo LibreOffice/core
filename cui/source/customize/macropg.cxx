@@ -296,7 +296,7 @@ namespace
             return OUString();
         size_t nIndex = rURL.find(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
-        return bUNO ? OUString(RID_SVXBMP_COMPONENT) : OUString(RID_SVXBMP_MACRO);
+        return bUNO ? RID_SVXBMP_COMPONENT : RID_SVXBMP_MACRO;
     }
 }
 

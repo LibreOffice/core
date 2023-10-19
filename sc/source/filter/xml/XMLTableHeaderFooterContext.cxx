@@ -48,12 +48,12 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     bContainsRight(false),
     bContainsCenter(false)
 {
-    OUString sOn( bFooter ? OUString(SC_UNO_PAGE_FTRON) : OUString(SC_UNO_PAGE_HDRON) );
-    OUString sContent( bFooter ? OUString(SC_UNO_PAGE_RIGHTFTRCON) : OUString(SC_UNO_PAGE_RIGHTHDRCON) );
-    OUString sContentLeft( bFooter ? OUString(SC_UNO_PAGE_LEFTFTRCONT) : OUString(SC_UNO_PAGE_LEFTHDRCONT) );
-    OUString sContentFirst( bFooter ? OUString(SC_UNO_PAGE_FIRSTFTRCONT) : OUString(SC_UNO_PAGE_FIRSTHDRCONT) );
-    OUString sShareContent( bFooter ? OUString(SC_UNO_PAGE_FTRSHARED) : OUString(SC_UNO_PAGE_HDRSHARED) );
-    OUString sShareFirstContent( bFooter ? OUString(SC_UNO_PAGE_FIRSTFTRSHARED) : OUString(SC_UNO_PAGE_FIRSTHDRSHARED) );
+    OUString sOn( bFooter ? SC_UNO_PAGE_FTRON : SC_UNO_PAGE_HDRON );
+    OUString sContent( bFooter ? SC_UNO_PAGE_RIGHTFTRCON : SC_UNO_PAGE_RIGHTHDRCON );
+    OUString sContentLeft( bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT );
+    OUString sContentFirst( bFooter ? SC_UNO_PAGE_FIRSTFTRCONT : SC_UNO_PAGE_FIRSTHDRCONT );
+    OUString sShareContent( bFooter ? SC_UNO_PAGE_FTRSHARED : SC_UNO_PAGE_HDRSHARED );
+    OUString sShareFirstContent( bFooter ? SC_UNO_PAGE_FIRSTFTRSHARED : SC_UNO_PAGE_FIRSTHDRSHARED );
     bool bDisplay( true );
     for( auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ) )
     {

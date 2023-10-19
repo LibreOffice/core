@@ -419,19 +419,19 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     // add family name
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::SD_GRAPHICS_ID,
-        OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME),
+        XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
           GetPropertySetMapper(),
-          OUString(XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX));
+          XML_STYLE_FAMILY_SD_GRAPHICS_PREFIX);
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::SD_PRESENTATION_ID,
-        OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+        XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
           GetPropertySetMapper(),
-          OUString(XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX));
+          XML_STYLE_FAMILY_SD_PRESENTATION_PREFIX);
     GetAutoStylePool()->AddFamily(
         XmlStyleFamily::SD_DRAWINGPAGE_ID,
-        OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME),
+        XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME,
           GetPresPagePropsMapper(),
-          OUString(XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX));
+          XML_STYLE_FAMILY_SD_DRAWINGPAGE_PREFIX);
     // prepare access to styles
     Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), UNO_QUERY );
     if(xFamSup.is())
@@ -1598,7 +1598,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                 OUString aPrefix( xNamed->getName() + "-" );
 
                 aStEx->exportStyleFamily(xNamed->getName(),
-                    OUString(XML_STYLE_FAMILY_SD_PRESENTATION_NAME),
+                    XML_STYLE_FAMILY_SD_PRESENTATION_NAME,
                     aMapperRef, false,
                     XmlStyleFamily::SD_PRESENTATION_ID, &aPrefix);
             }

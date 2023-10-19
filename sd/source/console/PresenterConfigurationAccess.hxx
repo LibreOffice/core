@@ -52,8 +52,8 @@ public:
     typedef ::std::function<bool (
         const OUString&,
         const css::uno::Reference<css::beans::XPropertySet>&)> Predicate;
-    static constexpr OUStringLiteral msPresenterScreenRootName =
-        u"/org.openoffice.Office.PresenterScreen/";
+    static constexpr OUString msPresenterScreenRootName =
+        u"/org.openoffice.Office.PresenterScreen/"_ustr;
 
     /** Create a new object to access the configuration entries below the
         given root.

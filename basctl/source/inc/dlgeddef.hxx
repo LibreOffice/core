@@ -26,20 +26,20 @@ namespace basctl
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR   "BackgroundColor"
-inline constexpr OUStringLiteral DLGED_PROP_DROPDOWN = u"Dropdown";
-inline constexpr OUStringLiteral DLGED_PROP_FORMATSSUPPLIER = u"FormatsSupplier";
-inline constexpr OUStringLiteral DLGED_PROP_HEIGHT = u"Height";
-inline constexpr OUStringLiteral DLGED_PROP_LABEL = u"Label";
-inline constexpr OUStringLiteral DLGED_PROP_NAME = u"Name";
-inline constexpr OUStringLiteral DLGED_PROP_ORIENTATION = u"Orientation";
-inline constexpr OUStringLiteral DLGED_PROP_POSITIONX = u"PositionX";
-inline constexpr OUStringLiteral DLGED_PROP_POSITIONY = u"PositionY";
-inline constexpr OUStringLiteral DLGED_PROP_STEP = u"Step";
-inline constexpr OUStringLiteral DLGED_PROP_TABINDEX = u"TabIndex";
+inline constexpr OUString DLGED_PROP_DROPDOWN = u"Dropdown"_ustr;
+inline constexpr OUString DLGED_PROP_FORMATSSUPPLIER = u"FormatsSupplier"_ustr;
+inline constexpr OUString DLGED_PROP_HEIGHT = u"Height"_ustr;
+inline constexpr OUString DLGED_PROP_LABEL = u"Label"_ustr;
+inline constexpr OUString DLGED_PROP_NAME = u"Name"_ustr;
+inline constexpr OUString DLGED_PROP_ORIENTATION = u"Orientation"_ustr;
+inline constexpr OUString DLGED_PROP_POSITIONX = u"PositionX"_ustr;
+inline constexpr OUString DLGED_PROP_POSITIONY = u"PositionY"_ustr;
+inline constexpr OUString DLGED_PROP_STEP = u"Step"_ustr;
+inline constexpr OUString DLGED_PROP_TABINDEX = u"TabIndex"_ustr;
 #define DLGED_PROP_TEXTCOLOR         "TextColor"
 #define DLGED_PROP_TEXTLINECOLOR     "TextLineColor"
-inline constexpr OUStringLiteral DLGED_PROP_WIDTH = u"Width";
-inline constexpr OUStringLiteral DLGED_PROP_DECORATION = u"Decoration";
+inline constexpr OUString DLGED_PROP_WIDTH = u"Width"_ustr;
+inline constexpr OUString DLGED_PROP_DECORATION = u"Decoration"_ustr;
 
 
 } // namespace basctl

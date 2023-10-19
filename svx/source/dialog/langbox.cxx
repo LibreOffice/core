@@ -391,7 +391,7 @@ weld::ComboBoxEntry SvxLanguageBox::BuildEntry(const LanguageType nLangType, sal
 
         bool bFound = m_xSpellUsedLang && lcl_SeqHasLang(*m_xSpellUsedLang, static_cast<sal_uInt16>(nRealLang));
 
-        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLang)), bFound ? OUString(RID_SVXBMP_CHECKED) : OUString(RID_SVXBMP_NOTCHECKED));
+        return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLang)), bFound ? RID_SVXBMP_CHECKED : RID_SVXBMP_NOTCHECKED);
     }
     else
         return weld::ComboBoxEntry(aStrEntry, OUString::number(static_cast<sal_uInt16>(nLang)));

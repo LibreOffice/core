@@ -26,7 +26,7 @@
 
 namespace com::sun::star::uno { class XComponentContext; }
 
-inline constexpr OUStringLiteral NSS_SERVICE_NAME = u"com.sun.star.xml.crypto.NSSInitializer";
+inline constexpr OUString NSS_SERVICE_NAME = u"com.sun.star.xml.crypto.NSSInitializer"_ustr;
 
 class ONSSInitializer : public cppu::WeakImplHelper
 <

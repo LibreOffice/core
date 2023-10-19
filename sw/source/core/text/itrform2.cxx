@@ -1143,7 +1143,7 @@ namespace sw::mark {
         if(pResult != pParameters->end())
             pResult->second >>= nCurrentIdx;
 
-        const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(OUString(ODF_FORMDROPDOWN_LISTENTRY));
+        const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if (pListEntries != pParameters->end())
         {
             uno::Sequence< OUString > vListEntries;

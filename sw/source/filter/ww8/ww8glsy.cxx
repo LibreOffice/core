@@ -45,7 +45,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
     if (aWwFib.m_nFibBack >= 0x6A)   //Word97
     {
         m_xTableStream = pStg->OpenSotStream(
-            aWwFib.m_fWhichTableStm ? OUString(SL::a1Table) : OUString(SL::a0Table),
+            aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table,
             StreamMode::STD_READ);
 
         if (m_xTableStream.is() && ERRCODE_NONE == m_xTableStream->GetError())

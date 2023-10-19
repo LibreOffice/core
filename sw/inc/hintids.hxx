@@ -182,8 +182,8 @@ class SfxVoidItem;
 #define CH_TXT_ATR_FIELDSTART u'\x0007'
 #define CH_TXT_ATR_FIELDSEP u'\x0003'
 #define CH_TXT_ATR_FIELDEND u'\x0008'
-inline constexpr OUStringLiteral CH_TXT_ATR_SUBST_FIELDSTART = u"[";
-inline constexpr OUStringLiteral CH_TXT_ATR_SUBST_FIELDEND = u"]";
+inline constexpr OUString CH_TXT_ATR_SUBST_FIELDSTART = u"["_ustr;
+inline constexpr OUString CH_TXT_ATR_SUBST_FIELDEND = u"]"_ustr;
 
 // a non-visible dummy character to track deleted tables,
 // table rows, and images anchored to characters

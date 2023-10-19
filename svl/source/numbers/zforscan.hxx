@@ -175,7 +175,7 @@ public:
     /// Get type scanned (so far).
     SvNumFormatType GetScannedType() const { return eScannedType; }
 
-    static constexpr OUStringLiteral sErrStr = u"#FMT"; // String for error output
+    static constexpr OUString sErrStr = u"#FMT"_ustr; // String for error output
 
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords

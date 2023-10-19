@@ -39,7 +39,7 @@ namespace accessibility {
     class AccessibleShape;
 }
 
-inline constexpr OUStringLiteral sAccessibleServiceName = u"com.sun.star.accessibility.Accessible";
+inline constexpr OUString sAccessibleServiceName = u"com.sun.star.accessibility.Accessible"_ustr;
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper<

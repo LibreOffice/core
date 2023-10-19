@@ -29,11 +29,11 @@
 
 #include "format.hxx"
 
-inline constexpr OUStringLiteral PRTUIOPT_TITLE_ROW = u"TitleRow";
-inline constexpr OUStringLiteral PRTUIOPT_FORMULA_TEXT = u"FormulaText";
-inline constexpr OUStringLiteral PRTUIOPT_BORDER = u"Border";
-inline constexpr OUStringLiteral PRTUIOPT_PRINT_FORMAT = u"PrintFormat";
-inline constexpr OUStringLiteral PRTUIOPT_PRINT_SCALE = u"PrintScale";
+inline constexpr OUString PRTUIOPT_TITLE_ROW = u"TitleRow"_ustr;
+inline constexpr OUString PRTUIOPT_FORMULA_TEXT = u"FormulaText"_ustr;
+inline constexpr OUString PRTUIOPT_BORDER = u"Border"_ustr;
+inline constexpr OUString PRTUIOPT_PRINT_FORMAT = u"PrintFormat"_ustr;
+inline constexpr OUString PRTUIOPT_PRINT_SCALE = u"PrintScale"_ustr;
 
 class SmPrintUIOptions : public vcl::PrinterOptionsHelper
 {

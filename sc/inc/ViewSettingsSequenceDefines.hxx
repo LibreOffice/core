@@ -75,31 +75,31 @@
 #define SC_FORMULA_BAR_HEIGHT_VALUE         14
 #define SC_TABLE_SHOWGRID                   15
 
-inline constexpr OUStringLiteral SC_CURSORPOSITIONX = u"CursorPositionX";
-inline constexpr OUStringLiteral SC_CURSORPOSITIONY = u"CursorPositionY";
-inline constexpr OUStringLiteral SC_HORIZONTALSPLITMODE = u"HorizontalSplitMode";
-inline constexpr OUStringLiteral SC_VERTICALSPLITMODE = u"VerticalSplitMode";
-inline constexpr OUStringLiteral SC_HORIZONTALSPLITPOSITION = u"HorizontalSplitPosition";
-inline constexpr OUStringLiteral SC_VERTICALSPLITPOSITION = u"VerticalSplitPosition";
+inline constexpr OUString SC_CURSORPOSITIONX = u"CursorPositionX"_ustr;
+inline constexpr OUString SC_CURSORPOSITIONY = u"CursorPositionY"_ustr;
+inline constexpr OUString SC_HORIZONTALSPLITMODE = u"HorizontalSplitMode"_ustr;
+inline constexpr OUString SC_VERTICALSPLITMODE = u"VerticalSplitMode"_ustr;
+inline constexpr OUString SC_HORIZONTALSPLITPOSITION = u"HorizontalSplitPosition"_ustr;
+inline constexpr OUString SC_VERTICALSPLITPOSITION = u"VerticalSplitPosition"_ustr;
 #define SC_HORIZONTALSPLITPOSITION_TWIPS    "HorizontalSplitPositionTwips"
 #define SC_VERTICALSPLITPOSITION_TWIPS      "VerticalSplitPositionTwips"
-inline constexpr OUStringLiteral SC_ACTIVESPLITRANGE = u"ActiveSplitRange";
-inline constexpr OUStringLiteral SC_POSITIONLEFT = u"PositionLeft";
-inline constexpr OUStringLiteral SC_POSITIONRIGHT = u"PositionRight";
-inline constexpr OUStringLiteral SC_POSITIONTOP = u"PositionTop";
-inline constexpr OUStringLiteral SC_POSITIONBOTTOM = u"PositionBottom";
+inline constexpr OUString SC_ACTIVESPLITRANGE = u"ActiveSplitRange"_ustr;
+inline constexpr OUString SC_POSITIONLEFT = u"PositionLeft"_ustr;
+inline constexpr OUString SC_POSITIONRIGHT = u"PositionRight"_ustr;
+inline constexpr OUString SC_POSITIONTOP = u"PositionTop"_ustr;
+inline constexpr OUString SC_POSITIONBOTTOM = u"PositionBottom"_ustr;
 #define SC_TABLESELECTED                    "TableSelected"
 
-inline constexpr OUStringLiteral SC_TABLES = u"Tables";
-inline constexpr OUStringLiteral SC_ACTIVETABLE = u"ActiveTable";
-inline constexpr OUStringLiteral SC_HORIZONTALSCROLLBARWIDTH = u"HorizontalScrollbarWidth";
+inline constexpr OUString SC_TABLES = u"Tables"_ustr;
+inline constexpr OUString SC_ACTIVETABLE = u"ActiveTable"_ustr;
+inline constexpr OUString SC_HORIZONTALSCROLLBARWIDTH = u"HorizontalScrollbarWidth"_ustr;
 #define SC_RELHORIZONTALTABBARWIDTH         "RelativeHorizontalTabbarWidth"
-inline constexpr OUStringLiteral SC_ZOOMTYPE = u"ZoomType";
-inline constexpr OUStringLiteral SC_ZOOMVALUE = u"ZoomValue";
-inline constexpr OUStringLiteral SC_PAGEVIEWZOOMVALUE = u"PageViewZoomValue";
-inline constexpr OUStringLiteral SC_SHOWPAGEBREAKPREVIEW = u"ShowPageBreakPreview";
-inline constexpr OUStringLiteral SC_FORMULABARHEIGHT = u"FormulaBarHeight";
-inline constexpr OUStringLiteral SC_VIEWID = u"ViewId";
+inline constexpr OUString SC_ZOOMTYPE = u"ZoomType"_ustr;
+inline constexpr OUString SC_ZOOMVALUE = u"ZoomValue"_ustr;
+inline constexpr OUString SC_PAGEVIEWZOOMVALUE = u"PageViewZoomValue"_ustr;
+inline constexpr OUString SC_SHOWPAGEBREAKPREVIEW = u"ShowPageBreakPreview"_ustr;
+inline constexpr OUString SC_FORMULABARHEIGHT = u"FormulaBarHeight"_ustr;
+inline constexpr OUString SC_VIEWID = u"ViewId"_ustr;
 #define SC_VIEW                             "view"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

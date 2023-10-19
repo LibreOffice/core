@@ -276,7 +276,7 @@ OUString OGroupSectionUndo::GetComment() const
 
 void OGroupSectionUndo::implReInsert( )
 {
-    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON));
+    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? PROPERTY_HEADERON : PROPERTY_FOOTERON);
     uno::Sequence< beans::PropertyValue > aArgs{
         comphelper::makePropertyValue(aHeaderFooterOnName, true),
         comphelper::makePropertyValue(PROPERTY_GROUP, m_aGroupHelper.getGroup())
@@ -294,7 +294,7 @@ void OGroupSectionUndo::implReRemove( )
     if( m_eAction == Removed )
         collectControls(m_pMemberFunction(&m_aGroupHelper));
 
-    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? OUString(PROPERTY_HEADERON) : OUString(PROPERTY_FOOTERON));
+    const OUString aHeaderFooterOnName(SID_GROUPHEADER_WITHOUT_UNDO == m_nSlot? PROPERTY_HEADERON : PROPERTY_FOOTERON);
     uno::Sequence< beans::PropertyValue > aArgs{
         comphelper::makePropertyValue(aHeaderFooterOnName, false),
         comphelper::makePropertyValue(PROPERTY_GROUP, m_aGroupHelper.getGroup())

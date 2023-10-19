@@ -331,7 +331,7 @@ private:
     void init_Impl( const OUString& rInitialDocumentURL,
                     const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions();
-    static constexpr OUStringLiteral sVBATextEncodingPropName = u"VBATextEncoding";
+    static constexpr OUString sVBATextEncodingPropName = u"VBATextEncoding"_ustr;
 
 public:
     SfxLibraryContainer();

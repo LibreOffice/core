@@ -320,22 +320,22 @@ OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uI
     {
         case RedlineType::Insert:  return bTableChanges
             ? bRowChanges
-                ? OUString(BMP_REDLINE_ROW_INSERTION)
-                : OUString(BMP_REDLINE_COL_INSERTION)
+                ? BMP_REDLINE_ROW_INSERTION
+                : BMP_REDLINE_COL_INSERTION
             : rRedln.IsMoved()
-                ? OUString(BMP_REDLINE_MOVED_INSERTION)
+                ? BMP_REDLINE_MOVED_INSERTION
                 : rRedln.IsAnnotation()
-                    ? OUString(BMP_REDLINE_COMMENT_INSERTION)
-                    : OUString(BMP_REDLINE_INSERTED);
+                    ? BMP_REDLINE_COMMENT_INSERTION
+                    : BMP_REDLINE_INSERTED;
         case RedlineType::Delete:  return bTableChanges
             ? bRowChanges
-                 ? OUString(BMP_REDLINE_ROW_DELETION)
-                 : OUString(BMP_REDLINE_COL_DELETION)
+                 ? BMP_REDLINE_ROW_DELETION
+                 : BMP_REDLINE_COL_DELETION
             : rRedln.IsMoved()
-                ? OUString(BMP_REDLINE_MOVED_DELETION)
+                ? BMP_REDLINE_MOVED_DELETION
                 : rRedln.IsAnnotation()
-                    ? OUString(BMP_REDLINE_COMMENT_DELETION)
-                    : OUString(BMP_REDLINE_DELETED);
+                    ? BMP_REDLINE_COMMENT_DELETION
+                    : BMP_REDLINE_DELETED;
         case RedlineType::Format:  return BMP_REDLINE_FORMATTED;
         case RedlineType::ParagraphFormat: return BMP_REDLINE_FORMATTED;
         case RedlineType::Table:   return BMP_REDLINE_TABLECHG;

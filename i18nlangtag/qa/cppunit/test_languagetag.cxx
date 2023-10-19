@@ -146,7 +146,7 @@ void TestLanguageTag::testAllTags()
         LanguageTag sh_RS( "sh-RS", true );
         lang::Locale aLocale = sh_RS.getLocale();
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-RS"), sh_RS.getBcp47() );
-        CPPUNIT_ASSERT_EQUAL( OUString(I18NLANGTAG_QLT) , aLocale.Language);
+        CPPUNIT_ASSERT_EQUAL( I18NLANGTAG_QLT , aLocale.Language);
         CPPUNIT_ASSERT_EQUAL( OUString("RS"), aLocale.Country );
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-RS"), aLocale.Variant );
         CPPUNIT_ASSERT_EQUAL( LANGUAGE_USER_SERBIAN_LATIN_SERBIA, sh_RS.getLanguageType() );
@@ -252,7 +252,7 @@ void TestLanguageTag::testAllTags()
         LanguageTag ca_XV( "ca-XV", true );
         lang::Locale aLocale = ca_XV.getLocale();
         CPPUNIT_ASSERT_EQUAL( s_ca_ES_valencia, ca_XV.getBcp47() );
-        CPPUNIT_ASSERT_EQUAL( OUString(I18NLANGTAG_QLT) , aLocale.Language);
+        CPPUNIT_ASSERT_EQUAL( I18NLANGTAG_QLT , aLocale.Language);
         CPPUNIT_ASSERT_EQUAL( OUString("ES"), aLocale.Country );
         CPPUNIT_ASSERT_EQUAL( s_ca_ES_valencia, aLocale.Variant );
         CPPUNIT_ASSERT_EQUAL( LANGUAGE_CATALAN_VALENCIAN, ca_XV.getLanguageType() );

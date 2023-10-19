@@ -62,7 +62,7 @@ static OUString lcl_getImageId(const uno::Reference< report::XReportComponent>& 
     if ( uno::Reference< report::XFixedText>(_xElement,uno::UNO_QUERY).is() )
         sId = RID_SVXBMP_FM_FIXEDTEXT;
     else if ( xFixedLine.is() )
-        sId = xFixedLine->getOrientation() ? OUString(RID_SVXBMP_INSERT_VFIXEDLINE) : OUString(RID_SVXBMP_INSERT_HFIXEDLINE);
+        sId = xFixedLine->getOrientation() ? RID_SVXBMP_INSERT_VFIXEDLINE : RID_SVXBMP_INSERT_HFIXEDLINE;
     else if ( uno::Reference< report::XFormattedField>(_xElement,uno::UNO_QUERY).is() )
         sId = RID_SVXBMP_FM_EDIT;
     else if ( uno::Reference< report::XImageControl>(_xElement,uno::UNO_QUERY).is() )
@@ -615,7 +615,7 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
         if ( xProp.is() )
             sName = lcl_getName(xProp);
         std::unique_ptr<weld::TreeIter> xScratch = m_xTreeView->make_iterator();
-        insertEntry(sName, xEntry.get(), (!xElement.is() ? OUString(RID_SVXBMP_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),
+        insertEntry(sName, xEntry.get(), (!xElement.is() ? RID_SVXBMP_RPT_NEW_FUNCTION : lcl_getImageId(xElement)),
                     -1, new UserData(this,xProp), *xScratch);
     }
     if (bEntry && !m_xTreeView->get_row_expanded(*xEntry))
@@ -743,7 +743,7 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
             {
                 if ( bFooterOn )
                     ++nPos;
-                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),xEntry.get(),bFooterOn ? OUString(RID_SVXBMP_GROUPFOOTER) : OUString(RID_SVXBMP_GROUPHEADER),nPos);
+                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),xEntry.get(),bFooterOn ? RID_SVXBMP_GROUPFOOTER : RID_SVXBMP_GROUPHEADER,nPos);
             }
         }
         else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)

@@ -1606,7 +1606,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 true );
             xProps->addProperty(
                 "ContentType",
-                uno::Any( OUString(WEBDAV_CONTENT_TYPE) ),
+                uno::Any( WEBDAV_CONTENT_TYPE ),
                 true );
         }
     }

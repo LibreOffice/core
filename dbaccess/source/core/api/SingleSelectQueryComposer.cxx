@@ -245,7 +245,7 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     {
         Any aValue;
         Reference<XInterface> xDs = dbaccess::getDataSource(_xConnection);
-        if ( dbtools::getDataSourceSetting(xDs,static_cast <OUString> (PROPERTY_BOOLEANCOMPARISONMODE),aValue) )
+        if ( dbtools::getDataSourceSetting(xDs,PROPERTY_BOOLEANCOMPARISONMODE,aValue) )
         {
             OSL_VERIFY( aValue >>= m_nBoolCompareMode );
         }

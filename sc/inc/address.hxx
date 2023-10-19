@@ -81,10 +81,10 @@ const SCROW       MAXTILEDROW    = MAXROW;
 const SCTAB       MAXINITTAB = 1024;
 const SCTAB       MININITTAB = 1;
 
-inline constexpr OUStringLiteral MAXROW_STRING(u"1048575");
-inline constexpr OUStringLiteral MAXCOL_STRING(u"XFD");
-inline constexpr OUStringLiteral MAXROW_JUMBO_STRING(u"16777215");
-inline constexpr OUStringLiteral MAXCOL_JUMBO_STRING(u"XFD");
+inline constexpr OUString MAXROW_STRING(u"1048575"_ustr);
+inline constexpr OUString MAXCOL_STRING(u"XFD"_ustr);
+inline constexpr OUString MAXROW_JUMBO_STRING(u"16777215"_ustr);
+inline constexpr OUString MAXCOL_JUMBO_STRING(u"XFD"_ustr);
 
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;

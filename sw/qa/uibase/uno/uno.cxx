@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     for (int i = 0; i < 2; ++i)
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
             comphelper::makePropertyValue("FieldCommand",
                                           uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
             comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),
@@ -217,7 +217,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormFields)
     }
     {
         uno::Sequence<css::beans::PropertyValue> aArgs = {
-            comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+            comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
             comphelper::makePropertyValue("FieldCommand",
                                           uno::Any(OUString("ADDIN ZOTERO_BIBL foo bar"))),
             comphelper::makePropertyValue("FieldResult",
@@ -380,7 +380,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUnoTest, testGetTextFormField)
     // Given a document with a fieldmark:
     createSwDoc();
     uno::Sequence<css::beans::PropertyValue> aArgs = {
-        comphelper::makePropertyValue("FieldType", uno::Any(OUString(ODF_UNHANDLED))),
+        comphelper::makePropertyValue("FieldType", uno::Any(ODF_UNHANDLED)),
         comphelper::makePropertyValue("FieldCommand",
                                       uno::Any(OUString("ADDIN ZOTERO_ITEM foo bar"))),
         comphelper::makePropertyValue("FieldResult", uno::Any(OUString("result"))),

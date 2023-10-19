@@ -547,7 +547,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
             &&  (getString(aDefaultControl) == STARDIV_ONE_FORM_CONTROL_TEXTFIELD )
             )
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, Any( OUString(STARDIV_ONE_FORM_CONTROL_EDIT) ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, Any( STARDIV_ONE_FORM_CONTROL_EDIT ) );
             // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
             // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
         }

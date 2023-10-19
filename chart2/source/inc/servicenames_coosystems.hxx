@@ -20,7 +20,7 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.CartesianView";
-inline constexpr OUStringLiteral CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.PolarView";
+inline constexpr OUString CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.CartesianView"_ustr;
+inline constexpr OUString CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME = u"com.sun.star.chart2.CoordinateSystems.PolarView"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,8 +70,8 @@ namespace {
 OUString BuildBitmap(bool bProtect, bool bHidden)
 {
     if (bProtect)
-        return bHidden ? OUString(RID_BMP_PROT_HIDE) : OUString(RID_BMP_PROT_NO_HIDE);
-    return bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE);
+        return bHidden ? RID_BMP_PROT_HIDE : RID_BMP_PROT_NO_HIDE;
+    return bHidden ? RID_BMP_HIDE : RID_BMP_NO_HIDE;
 }
 
 OUString CollapseWhiteSpaces(std::u16string_view sName)

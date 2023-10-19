@@ -166,7 +166,7 @@ public:
 
     void RegisterToTOXType( SwTOXType& rMark );
 
-    static constexpr OUStringLiteral S_PAGE_DELI = u", ";
+    static constexpr OUString S_PAGE_DELI = u", "_ustr;
 };
 
 // index types

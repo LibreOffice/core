@@ -475,7 +475,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
                                           StopSendMails ), this );
     }
-    OUString sInsertImg(bResult ? OUString(RID_BMP_FORMULA_APPLY) : OUString(RID_BMP_FORMULA_CANCEL));
+    OUString sInsertImg(bResult ? RID_BMP_FORMULA_APPLY : RID_BMP_FORMULA_CANCEL);
 
     OUString sMessage = m_sSendingTo;
     m_xStatus->append();

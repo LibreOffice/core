@@ -24,8 +24,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 
-inline constexpr OUStringLiteral SERVICENAME_ACTIONTRIGGERCONTAINER = u"com.sun.star.ui.ActionTriggerContainer";
-inline constexpr OUStringLiteral IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.ActionTriggerContainer";
+inline constexpr OUString SERVICENAME_ACTIONTRIGGERCONTAINER = u"com.sun.star.ui.ActionTriggerContainer"_ustr;
+inline constexpr OUString IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER = u"com.sun.star.comp.ui.ActionTriggerContainer"_ustr;
 
 namespace framework
 {

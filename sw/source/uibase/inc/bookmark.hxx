@@ -61,7 +61,7 @@ public:
     int get_sort_column() const { return m_xControl->get_sort_column(); }
     void set_sort_column(int nColumn) { m_xControl->set_sort_column(nColumn); }
 
-    static constexpr OUStringLiteral aForbiddenChars = u"/\\@*?\",#";
+    static constexpr OUString aForbiddenChars = u"/\\@*?\",#"_ustr;
     static const char     s_cSeparator;
 };
 

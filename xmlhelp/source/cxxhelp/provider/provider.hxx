@@ -35,7 +35,7 @@ namespace chelp {
 // contents ) according to this scheme.
 
 #define MYUCP_URL_SCHEME        "vnd.sun.star.help"
-inline constexpr OUStringLiteral MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhelp";    // UCB Content Type.
+inline constexpr OUString MYUCP_CONTENT_TYPE = u"application/vnd.sun.star.xmlhelp"_ustr;    // UCB Content Type.
 
     class Databases;
 

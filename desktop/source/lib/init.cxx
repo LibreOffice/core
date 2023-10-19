@@ -7703,7 +7703,6 @@ void setLanguageToolConfig()
                 if (xSpell.is())
                 {
                     Sequence<OUString> aEmpty;
-                    static constexpr OUStringLiteral cSpell(SN_SPELLCHECKER);
                     Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
 
                     uno::Reference<linguistic2::XProofreader> xGC(
@@ -7715,7 +7714,8 @@ void setLanguageToolConfig()
                     {
                         // turn off spell checker if LanguageTool supports the locale already
                         if (xSuppLoc->hasLocale(aLocales[itLocale]))
-                            xLangSrv->setConfiguredServices(cSpell, aLocales[itLocale], aEmpty);
+                            xLangSrv->setConfiguredServices(
+                                SN_SPELLCHECKER, aLocales[itLocale], aEmpty);
                     }
                 }
             }

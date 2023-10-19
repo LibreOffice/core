@@ -708,7 +708,7 @@ void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDes
 }
 OUString XMLFilter::getMediaType(bool _bOasis)
 {
-    return _bOasis ? OUString(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII) : OUString(MIMETYPE_VND_SUN_XML_CHART_ASCII);
+    return _bOasis ? MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII : MIMETYPE_VND_SUN_XML_CHART_ASCII;
 }
 
 OUString SAL_CALL XMLFilter::getImplementationName()

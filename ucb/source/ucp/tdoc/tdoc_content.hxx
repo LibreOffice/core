@@ -52,12 +52,12 @@ public:
     ContentProperties( const ContentType & rType, OUString aTitle )
     : m_eType( rType ),
       m_aContentType( rType == STREAM
-        ? OUString( TDOC_STREAM_CONTENT_TYPE )
+        ? TDOC_STREAM_CONTENT_TYPE
         : rType == FOLDER
-            ? OUString( TDOC_FOLDER_CONTENT_TYPE )
+            ? TDOC_FOLDER_CONTENT_TYPE
             : rType == DOCUMENT
-                ? OUString( TDOC_DOCUMENT_CONTENT_TYPE )
-                : OUString( TDOC_ROOT_CONTENT_TYPE ) ),
+                ? TDOC_DOCUMENT_CONTENT_TYPE
+                : TDOC_ROOT_CONTENT_TYPE ),
       m_aTitle(std::move( aTitle ))
     {}
 

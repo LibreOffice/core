@@ -78,15 +78,15 @@ class PresenterViewFactory
       public PresenterViewFactoryInterfaceBase
 {
 public:
-    static constexpr OUStringLiteral msCurrentSlidePreviewViewURL
-        = u"private:resource/view/Presenter/CurrentSlidePreview";
-    static constexpr OUStringLiteral msNextSlidePreviewViewURL
-        = u"private:resource/view/Presenter/NextSlidePreview";
-    static constexpr OUStringLiteral msNotesViewURL = u"private:resource/view/Presenter/Notes";
-    static constexpr OUStringLiteral msToolBarViewURL = u"private:resource/view/Presenter/ToolBar";
-    static constexpr OUStringLiteral msSlideSorterURL
-        = u"private:resource/view/Presenter/SlideSorter";
-    static constexpr OUStringLiteral msHelpViewURL = u"private:resource/view/Presenter/Help";
+    static constexpr OUString msCurrentSlidePreviewViewURL
+        = u"private:resource/view/Presenter/CurrentSlidePreview"_ustr;
+    static constexpr OUString msNextSlidePreviewViewURL
+        = u"private:resource/view/Presenter/NextSlidePreview"_ustr;
+    static constexpr OUString msNotesViewURL = u"private:resource/view/Presenter/Notes"_ustr;
+    static constexpr OUString msToolBarViewURL = u"private:resource/view/Presenter/ToolBar"_ustr;
+    static constexpr OUString msSlideSorterURL
+        = u"private:resource/view/Presenter/SlideSorter"_ustr;
+    static constexpr OUString msHelpViewURL = u"private:resource/view/Presenter/Help"_ustr;
 
     /** Create a new instance of this class and register it as resource
         factory in the drawing framework of the given controller.

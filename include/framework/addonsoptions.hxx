@@ -33,14 +33,14 @@ namespace osl { class Mutex; }
     @descr          The method GetAddonsMenu() returns a list of property values.
                     Use follow defines to separate values by names.
 *//*-*************************************************************************************************************/
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_URL = u"URL";
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_TITLE = u"Title";
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_TARGET = u"Target";
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_IMAGEIDENTIFIER = u"ImageIdentifier";
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_CONTEXT = u"Context";
-inline constexpr OUStringLiteral ADDONSMENUITEM_STRING_SUBMENU = u"Submenu";
+inline constexpr OUString ADDONSMENUITEM_STRING_URL = u"URL"_ustr;
+inline constexpr OUString ADDONSMENUITEM_STRING_TITLE = u"Title"_ustr;
+inline constexpr OUString ADDONSMENUITEM_STRING_TARGET = u"Target"_ustr;
+inline constexpr OUString ADDONSMENUITEM_STRING_IMAGEIDENTIFIER = u"ImageIdentifier"_ustr;
+inline constexpr OUString ADDONSMENUITEM_STRING_CONTEXT = u"Context"_ustr;
+inline constexpr OUString ADDONSMENUITEM_STRING_SUBMENU = u"Submenu"_ustr;
 
-inline constexpr OUStringLiteral ADDONSPOPUPMENU_URL_PREFIX_STR = u"private:menu/Addon";
+inline constexpr OUString ADDONSPOPUPMENU_URL_PREFIX_STR = u"private:menu/Addon"_ustr;
 
 namespace framework
 {

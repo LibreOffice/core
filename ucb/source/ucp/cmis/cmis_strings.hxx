@@ -14,10 +14,10 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral CMIS_TYPE_STRING = u"String";
-inline constexpr OUStringLiteral CMIS_TYPE_INTEGER = u"Integer";
-inline constexpr OUStringLiteral CMIS_TYPE_DECIMAL = u"Decimal";
-inline constexpr OUStringLiteral CMIS_TYPE_DATETIME = u"Datetime";
-inline constexpr OUStringLiteral CMIS_TYPE_BOOL = u"Bool";
+inline constexpr OUString CMIS_TYPE_STRING = u"String"_ustr;
+inline constexpr OUString CMIS_TYPE_INTEGER = u"Integer"_ustr;
+inline constexpr OUString CMIS_TYPE_DECIMAL = u"Decimal"_ustr;
+inline constexpr OUString CMIS_TYPE_DATETIME = u"Datetime"_ustr;
+inline constexpr OUString CMIS_TYPE_BOOL = u"Bool"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

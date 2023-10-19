@@ -309,8 +309,8 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCodeMsg& rError )
         { OUString("ScriptConfiguration"), 0, cppu::UnoType<container::XNameAccess>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0},
         { OUString("OrganizerMode"), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
         { OUString("SourceStorage"), 0, cppu::UnoType<embed::XStorage>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_LOCK_SOLAR_MUTEX), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
-        { OUString(SC_UNO_ODS_IMPORT_STYLES), 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { SC_UNO_ODS_LOCK_SOLAR_MUTEX, 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
+        { SC_UNO_ODS_IMPORT_STYLES, 0, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::MAYBEVOID, 0 },
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 

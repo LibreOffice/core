@@ -41,8 +41,8 @@ namespace reportdesign
 static uno::Sequence< OUString> lcl_getGroupAbsent()
 {
     const OUString pProps[] = {
-                OUString(PROPERTY_CANGROW)
-                ,OUString(PROPERTY_CANSHRINK)
+                PROPERTY_CANGROW
+                ,PROPERTY_CANSHRINK
         };
 
     return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
@@ -54,20 +54,20 @@ static uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
     if ( _bPageSection )
     {
         const OUString pProps[] = {
-                OUString(PROPERTY_FORCENEWPAGE)
-                ,OUString(PROPERTY_NEWROWORCOL)
-                ,OUString(PROPERTY_KEEPTOGETHER)
-                ,OUString(PROPERTY_CANGROW)
-                ,OUString(PROPERTY_CANSHRINK)
-                ,OUString(PROPERTY_REPEATSECTION)
+                PROPERTY_FORCENEWPAGE
+                ,PROPERTY_NEWROWORCOL
+                ,PROPERTY_KEEPTOGETHER
+                ,PROPERTY_CANGROW
+                ,PROPERTY_CANSHRINK
+                ,PROPERTY_REPEATSECTION
         };
         return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));
     }
 
     const OUString pProps[] = {
-                OUString(PROPERTY_CANGROW)
-                ,OUString(PROPERTY_CANSHRINK)
-                ,OUString(PROPERTY_REPEATSECTION)
+                PROPERTY_CANGROW
+                ,PROPERTY_CANSHRINK
+                ,PROPERTY_REPEATSECTION
         };
 
     return uno::Sequence< OUString >(pProps,SAL_N_ELEMENTS(pProps));

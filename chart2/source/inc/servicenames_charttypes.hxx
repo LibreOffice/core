@@ -20,25 +20,25 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_AREA
-    = u"com.sun.star.chart2.AreaChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_BAR
-    = u"com.sun.star.chart2.BarChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_COLUMN
-    = u"com.sun.star.chart2.ColumnChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_LINE
-    = u"com.sun.star.chart2.LineChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_SCATTER
-    = u"com.sun.star.chart2.ScatterChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_PIE
-    = u"com.sun.star.chart2.PieChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_NET
-    = u"com.sun.star.chart2.NetChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET
-    = u"com.sun.star.chart2.FilledNetChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK
-    = u"com.sun.star.chart2.CandleStickChartType";
-inline constexpr OUStringLiteral CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE
-    = u"com.sun.star.chart2.BubbleChartType";
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_AREA
+    = u"com.sun.star.chart2.AreaChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BAR
+    = u"com.sun.star.chart2.BarChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_COLUMN
+    = u"com.sun.star.chart2.ColumnChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_LINE
+    = u"com.sun.star.chart2.LineChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_SCATTER
+    = u"com.sun.star.chart2.ScatterChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_PIE
+    = u"com.sun.star.chart2.PieChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_NET
+    = u"com.sun.star.chart2.NetChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET
+    = u"com.sun.star.chart2.FilledNetChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK
+    = u"com.sun.star.chart2.CandleStickChartType"_ustr;
+inline constexpr OUString CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE
+    = u"com.sun.star.chart2.BubbleChartType"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

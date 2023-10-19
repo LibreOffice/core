@@ -1708,8 +1708,8 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
 
         // a number of properties is plain copied
         const OUString aPropertyNames[] = {
-            OUString(PROPERTY_ALIGN), OUString(PROPERTY_RELATIVEPOSITION), OUString(PROPERTY_WIDTH), OUString(PROPERTY_HIDDEN), OUString(PROPERTY_CONTROLMODEL),
-            OUString(PROPERTY_HELPTEXT), OUString(PROPERTY_CONTROLDEFAULT)
+            PROPERTY_ALIGN, PROPERTY_RELATIVEPOSITION, PROPERTY_WIDTH, PROPERTY_HIDDEN, PROPERTY_CONTROLMODEL,
+            PROPERTY_HELPTEXT, PROPERTY_CONTROLDEFAULT
         };
         for (const auto & aPropertyName : aPropertyNames)
         {

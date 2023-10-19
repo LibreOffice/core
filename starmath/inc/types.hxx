@@ -22,7 +22,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral FONTNAME_MATH = u"OpenSymbol";
+inline constexpr OUString FONTNAME_MATH = u"OpenSymbol"_ustr;
 
 enum SmPrintSize
 {

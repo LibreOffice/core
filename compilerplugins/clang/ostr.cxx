@@ -46,14 +46,6 @@ public:
                     = bool(loplugin::TypeCheck(i.first->getType()).Class("OUStringLiteral"));
                 if (i.second.singleUse == nullptr)
                 {
-                    if (!(i.first->getDeclContext()->isFunctionOrMethod()
-                          || compiler.getSourceManager().isInMainFile(i.first->getLocation())
-                          || compiler.getDiagnosticOpts().VerifyDiagnostics))
-                    {
-                        //TODO, rewriting these in include files could trigger
-                        // loplugin:redundantfcast in other translation units:
-                        continue;
-                    }
                     if (rewriter != nullptr)
                     {
                         auto e = i.first->getInit()->IgnoreParenImpCasts();

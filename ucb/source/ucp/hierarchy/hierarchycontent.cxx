@@ -1567,8 +1567,8 @@ void HierarchyContent::transfer(
 
 
     OUString aType = xSource->isFolder()
-        ? OUString( HIERARCHY_FOLDER_CONTENT_TYPE )
-        : OUString( HIERARCHY_LINK_CONTENT_TYPE );
+        ? HIERARCHY_FOLDER_CONTENT_TYPE
+        : HIERARCHY_LINK_CONTENT_TYPE;
     ucb::ContentInfo aContentInfo;
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;

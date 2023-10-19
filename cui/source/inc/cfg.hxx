@@ -40,24 +40,24 @@
 #include "cfgutil.hxx"
 #include "CommandCategoryListBox.hxx"
 
-inline constexpr OUStringLiteral notebookbarTabScope = u"notebookbarTabScope";
+inline constexpr OUString notebookbarTabScope = u"notebookbarTabScope"_ustr;
 
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL  = u"CommandURL";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_RESOURCEURL = u"ResourceURL";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
+inline constexpr OUString ITEM_DESCRIPTOR_COMMANDURL  = u"CommandURL"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_LABEL = u"Label"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_TYPE = u"Type"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_STYLE = u"Style"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_RESOURCEURL = u"ResourceURL"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_UINAME = u"UIName"_ustr;
 
-inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
-inline constexpr OUStringLiteral ITEM_TOOLBAR_URL = u"private:resource/toolbar/";
-inline constexpr OUStringLiteral ITEM_EVENT_URL = u"private:resource/event/";
+inline constexpr OUString ITEM_MENUBAR_URL = u"private:resource/menubar/menubar"_ustr;
+inline constexpr OUString ITEM_TOOLBAR_URL = u"private:resource/toolbar/"_ustr;
+inline constexpr OUString ITEM_EVENT_URL = u"private:resource/event/"_ustr;
 
-inline constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
+inline constexpr OUString CUSTOM_TOOLBAR_STR = u"custom_toolbar_"_ustr;
 
-inline constexpr OUStringLiteral aMenuSeparatorStr = u" | ";
+inline constexpr OUString aMenuSeparatorStr = u" | "_ustr;
 
 class SvxConfigEntry;
 class SvxConfigPage;

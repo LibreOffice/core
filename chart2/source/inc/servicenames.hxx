@@ -20,34 +20,34 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral CHART_MODEL_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartModel";
-inline constexpr OUStringLiteral CHART_MODEL_SERVICE_NAME = u"com.sun.star.chart2.ChartDocument";
+inline constexpr OUString CHART_MODEL_SERVICE_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.ChartModel"_ustr;
+inline constexpr OUString CHART_MODEL_SERVICE_NAME = u"com.sun.star.chart2.ChartDocument"_ustr;
 //@todo create your own service containing the service com.sun.star.document.OfficeDocument
 
-inline constexpr OUStringLiteral CHART_VIEW_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartView";
-inline constexpr OUStringLiteral CHART_VIEW_SERVICE_NAME = u"com.sun.star.chart2.ChartView";
+inline constexpr OUString CHART_VIEW_SERVICE_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.ChartView"_ustr;
+inline constexpr OUString CHART_VIEW_SERVICE_NAME = u"com.sun.star.chart2.ChartView"_ustr;
 
-inline constexpr OUStringLiteral CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartFrameLoader";
-inline constexpr OUStringLiteral CHART_FRAMELOADER_SERVICE_NAME
-    = u"com.sun.star.frame.SynchronousFrameLoader";
+inline constexpr OUString CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.ChartFrameLoader"_ustr;
+inline constexpr OUString CHART_FRAMELOADER_SERVICE_NAME
+    = u"com.sun.star.frame.SynchronousFrameLoader"_ustr;
 
-inline constexpr OUStringLiteral CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.WizardDialog";
-inline constexpr OUStringLiteral CHART_WIZARD_DIALOG_SERVICE_NAME
-    = u"com.sun.star.chart2.WizardDialog";
+inline constexpr OUString CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.WizardDialog"_ustr;
+inline constexpr OUString CHART_WIZARD_DIALOG_SERVICE_NAME
+    = u"com.sun.star.chart2.WizardDialog"_ustr;
 
-inline constexpr OUStringLiteral CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartTypeDialog";
-inline constexpr OUStringLiteral CHART_TYPE_DIALOG_SERVICE_NAME
-    = u"com.sun.star.chart2.ChartTypeDialog";
+inline constexpr OUString CHART_TYPE_DIALOG_SERVICE_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.ChartTypeDialog"_ustr;
+inline constexpr OUString CHART_TYPE_DIALOG_SERVICE_NAME
+    = u"com.sun.star.chart2.ChartTypeDialog"_ustr;
 
 // wrapper for old UNO API (com.sun.star.chart)
-inline constexpr OUStringLiteral CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME
-    = u"com.sun.star.comp.chart2.ChartDocumentWrapper";
-inline constexpr OUStringLiteral CHART_CHARTAPIWRAPPER_SERVICE_NAME
-    = u"com.sun.star.chart2.ChartDocumentWrapper";
+inline constexpr OUString CHART_CHARTAPIWRAPPER_IMPLEMENTATION_NAME
+    = u"com.sun.star.comp.chart2.ChartDocumentWrapper"_ustr;
+inline constexpr OUString CHART_CHARTAPIWRAPPER_SERVICE_NAME
+    = u"com.sun.star.chart2.ChartDocumentWrapper"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

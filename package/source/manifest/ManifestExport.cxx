@@ -220,60 +220,60 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
                 if (aPgpKeyID.hasElements() && aCipherValue.hasElements() )
                 {
                     // ==== manifest:encrypted-key & children - one for each recipient
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_ENCRYPTEDKEY13) : OUString(ELEMENT_ENCRYPTEDKEY), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_ENCRYPTEDKEY13 : ELEMENT_ENCRYPTEDKEY, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     rtl::Reference<::comphelper::AttributeList> pNewAttrList = new ::comphelper::AttributeList;
                     // TODO: the algorithm should rather be configurable
                     pNewAttrList->AddAttribute(
-                        isODF13 ? OUString(ATTRIBUTE_ALGORITHM13) : OUString(ATTRIBUTE_ALGORITHM),
+                        isODF13 ? ATTRIBUTE_ALGORITHM13 : ATTRIBUTE_ALGORITHM,
                                                  "http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p" );
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_ENCRYPTIONMETHOD13) : OUString(ELEMENT_ENCRYPTIONMETHOD), pNewAttrList);
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_ENCRYPTIONMETHOD13) : OUString(ELEMENT_ENCRYPTIONMETHOD));
+                    xHandler->startElement(isODF13 ? ELEMENT_ENCRYPTIONMETHOD13 : ELEMENT_ENCRYPTIONMETHOD, pNewAttrList);
+                    xHandler->endElement(isODF13 ? ELEMENT_ENCRYPTIONMETHOD13 : ELEMENT_ENCRYPTIONMETHOD);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     // note: the mismatch here corresponds to ODF 1.3 cs01 schema
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_MANIFEST13_KEYINFO) : OUString(ELEMENT_MANIFEST_KEYINFO), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_MANIFEST13_KEYINFO : ELEMENT_MANIFEST_KEYINFO, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPDATA13) : OUString(ELEMENT_PGPDATA), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_PGPDATA13 : ELEMENT_PGPDATA, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPKEYID13) : OUString(ELEMENT_PGPKEYID), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_PGPKEYID13 : ELEMENT_PGPKEYID, nullptr);
                     ::comphelper::Base64::encode(aBuffer, aPgpKeyID);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPKEYID13) : OUString(ELEMENT_PGPKEYID));
+                    xHandler->endElement(isODF13 ? ELEMENT_PGPKEYID13 : ELEMENT_PGPKEYID);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
                     // key packet is optional
                     if (aPgpKeyPacket.hasElements())
                     {
-                        xHandler->startElement(isODF13 ? OUString(ELEMENT_PGPKEYPACKET13) : OUString(ELEMENT_PGPKEYPACKET), nullptr);
+                        xHandler->startElement(isODF13 ? ELEMENT_PGPKEYPACKET13 : ELEMENT_PGPKEYPACKET, nullptr);
                         ::comphelper::Base64::encode(aBuffer, aPgpKeyPacket);
                         xHandler->characters( aBuffer.makeStringAndClear() );
-                        xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPKEYPACKET13) : OUString(ELEMENT_PGPKEYPACKET));
+                        xHandler->endElement(isODF13 ? ELEMENT_PGPKEYPACKET13 : ELEMENT_PGPKEYPACKET);
                         xHandler->ignorableWhitespace ( sWhiteSpace );
                     }
 
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_PGPDATA13) : OUString(ELEMENT_PGPDATA));
+                    xHandler->endElement(isODF13 ? ELEMENT_PGPDATA13 : ELEMENT_PGPDATA);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_MANIFEST13_KEYINFO) : OUString(ELEMENT_MANIFEST_KEYINFO));
+                    xHandler->endElement(isODF13 ? ELEMENT_MANIFEST13_KEYINFO : ELEMENT_MANIFEST_KEYINFO);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_CIPHERDATA13) : OUString(ELEMENT_CIPHERDATA), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_CIPHERDATA13 : ELEMENT_CIPHERDATA, nullptr);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->startElement(isODF13 ? OUString(ELEMENT_CIPHERVALUE13) : OUString(ELEMENT_CIPHERVALUE), nullptr);
+                    xHandler->startElement(isODF13 ? ELEMENT_CIPHERVALUE13 : ELEMENT_CIPHERVALUE, nullptr);
                     ::comphelper::Base64::encode(aBuffer, aCipherValue);
                     xHandler->characters( aBuffer.makeStringAndClear() );
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_CIPHERVALUE13) : OUString(ELEMENT_CIPHERVALUE));
+                    xHandler->endElement(isODF13 ? ELEMENT_CIPHERVALUE13 : ELEMENT_CIPHERVALUE);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_CIPHERDATA13) : OUString(ELEMENT_CIPHERDATA));
+                    xHandler->endElement(isODF13 ? ELEMENT_CIPHERDATA13 : ELEMENT_CIPHERDATA);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
 
-                    xHandler->endElement(isODF13 ? OUString(ELEMENT_ENCRYPTEDKEY13) : OUString(ELEMENT_ENCRYPTEDKEY));
+                    xHandler->endElement(isODF13 ? ELEMENT_ENCRYPTEDKEY13 : ELEMENT_ENCRYPTEDKEY);
                     xHandler->ignorableWhitespace ( sWhiteSpace );
                 }
             }

@@ -594,7 +594,7 @@ namespace sw::mark
             return;
 
         OUString fieldCommand;
-        (*GetParameters())[OUString(ODF_CODE_PARAM)] >>= fieldCommand;
+        (*GetParameters())[ODF_CODE_PARAM] >>= fieldCommand;
         tools::JsonWriter aJson;
         aJson.put("commandName", ".uno:DeleteTextFormField");
         aJson.put("success", true);
@@ -715,7 +715,7 @@ namespace sw::mark
     {
         if ( IsChecked() != checked )
         {
-            (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] <<= checked;
+            (*GetParameters())[ODF_FORMCHECKBOX_RESULT] <<= checked;
             // mark document as modified
             SwDoc& rDoc( GetMarkPos().GetDoc() );
             rDoc.getIDocumentState().SetModified();
@@ -725,7 +725,7 @@ namespace sw::mark
     bool CheckboxFieldmark::IsChecked() const
     {
         bool bResult = false;
-        parameter_map_t::const_iterator pResult = GetParameters()->find(OUString(ODF_FORMCHECKBOX_RESULT));
+        parameter_map_t::const_iterator pResult = GetParameters()->find(ODF_FORMCHECKBOX_RESULT);
         if(pResult != GetParameters()->end())
             pResult->second >>= bResult;
         return bResult;

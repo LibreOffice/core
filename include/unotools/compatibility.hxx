@@ -75,8 +75,8 @@ class SvtCompatibilityEntry
 
         static OUString getName( const Index rIdx );
 
-        static constexpr OUStringLiteral USER_ENTRY_NAME = u"_user";
-        static constexpr OUStringLiteral DEFAULT_ENTRY_NAME = u"_default";
+        static constexpr OUString USER_ENTRY_NAME = u"_user"_ustr;
+        static constexpr OUString DEFAULT_ENTRY_NAME = u"_default"_ustr;
 
         static size_t getElementCount()
         {

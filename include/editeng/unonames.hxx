@@ -13,39 +13,39 @@
 #include <rtl/ustring.hxx>
 
 // Common across fields
-inline constexpr OUStringLiteral UNO_TC_PROP_ANCHOR = u"Anchor";
-inline constexpr OUStringLiteral UNO_TC_PROP_TEXTFIELD_TYPE = u"TextFieldType";
-inline constexpr OUStringLiteral UNO_TC_PROP_IS_FIXED = u"IsFixed";
-inline constexpr OUStringLiteral UNO_TC_PROP_CURRENT_PRESENTATION = u"CurrentPresentation";
-inline constexpr OUStringLiteral UNO_TC_PROP_NAME = u"Name";
-inline constexpr OUStringLiteral UNO_TC_PROP_IS_FIXED_LANGUAGE = u"IsFixedLanguage";
-inline constexpr OUStringLiteral UNO_TC_PROP_NUMFORMAT = u"NumberFormat";
+inline constexpr OUString UNO_TC_PROP_ANCHOR = u"Anchor"_ustr;
+inline constexpr OUString UNO_TC_PROP_TEXTFIELD_TYPE = u"TextFieldType"_ustr;
+inline constexpr OUString UNO_TC_PROP_IS_FIXED = u"IsFixed"_ustr;
+inline constexpr OUString UNO_TC_PROP_CURRENT_PRESENTATION = u"CurrentPresentation"_ustr;
+inline constexpr OUString UNO_TC_PROP_NAME = u"Name"_ustr;
+inline constexpr OUString UNO_TC_PROP_IS_FIXED_LANGUAGE = u"IsFixedLanguage"_ustr;
+inline constexpr OUString UNO_TC_PROP_NUMFORMAT = u"NumberFormat"_ustr;
 
 // Date & Time
-inline constexpr OUStringLiteral UNO_TC_PROP_IS_DATE = u"IsDate";
-inline constexpr OUStringLiteral UNO_TC_PROP_DATE_TIME = u"DateTime";
+inline constexpr OUString UNO_TC_PROP_IS_DATE = u"IsDate"_ustr;
+inline constexpr OUString UNO_TC_PROP_DATE_TIME = u"DateTime"_ustr;
 
 // URL
-inline constexpr OUStringLiteral UNO_TC_PROP_URL_FORMAT = u"Format";
-inline constexpr OUStringLiteral UNO_TC_PROP_URL_REPRESENTATION = u"Representation";
-inline constexpr OUStringLiteral UNO_TC_PROP_URL_TARGET = u"TargetFrame";
-inline constexpr OUStringLiteral UNO_TC_PROP_URL = u"URL";
+inline constexpr OUString UNO_TC_PROP_URL_FORMAT = u"Format"_ustr;
+inline constexpr OUString UNO_TC_PROP_URL_REPRESENTATION = u"Representation"_ustr;
+inline constexpr OUString UNO_TC_PROP_URL_TARGET = u"TargetFrame"_ustr;
+inline constexpr OUString UNO_TC_PROP_URL = u"URL"_ustr;
 
 // Table
-inline constexpr OUStringLiteral UNO_TC_PROP_TABLE_POSITION = u"TablePosition";
+inline constexpr OUString UNO_TC_PROP_TABLE_POSITION = u"TablePosition"_ustr;
 
 // File
-inline constexpr OUStringLiteral UNO_TC_PROP_FILE_FORMAT = u"FileFormat";
+inline constexpr OUString UNO_TC_PROP_FILE_FORMAT = u"FileFormat"_ustr;
 
 // Author
-inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_CONTENT = u"Content";
-inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_FORMAT = u"AuthorFormat";
-inline constexpr OUStringLiteral UNO_TC_PROP_AUTHOR_FULLNAME = u"FullName";
+inline constexpr OUString UNO_TC_PROP_AUTHOR_CONTENT = u"Content"_ustr;
+inline constexpr OUString UNO_TC_PROP_AUTHOR_FORMAT = u"AuthorFormat"_ustr;
+inline constexpr OUString UNO_TC_PROP_AUTHOR_FULLNAME = u"FullName"_ustr;
 
 // Measure
-inline constexpr OUStringLiteral UNO_TC_PROP_MEASURE_KIND = u"Kind";
+inline constexpr OUString UNO_TC_PROP_MEASURE_KIND = u"Kind"_ustr;
 
-inline constexpr OUStringLiteral UNO_TR_PROP_SELECTION = u"Selection";
+inline constexpr OUString UNO_TR_PROP_SELECTION = u"Selection"_ustr;
 
 #endif // INCLUDED_EDITENG_UNONAMES_HXX
 

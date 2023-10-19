@@ -81,7 +81,7 @@ struct XclRootData
     OUString            maDocUrl;           /// Document URL of imported/exported file.
     OUString            maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
     OUString            maUserName;         /// Current user name.
-    static constexpr OUStringLiteral gaDefPassword = u"VelvetSweatshop"; /// The default password used for stream encryption.
+    static constexpr OUString gaDefPassword = u"VelvetSweatshop"_ustr; /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).

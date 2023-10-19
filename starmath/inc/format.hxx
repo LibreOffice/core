@@ -26,9 +26,9 @@
 #include "types.hxx"
 
 
-inline constexpr OUStringLiteral FNTNAME_TIMES = u"Times New Roman";
-inline constexpr OUStringLiteral FNTNAME_HELV = u"Helvetica";
-inline constexpr OUStringLiteral FNTNAME_COUR = u"Courier";
+inline constexpr OUString FNTNAME_TIMES = u"Times New Roman"_ustr;
+inline constexpr OUString FNTNAME_HELV = u"Helvetica"_ustr;
+inline constexpr OUString FNTNAME_COUR = u"Courier"_ustr;
 #define FNTNAME_MATH    FONTNAME_MATH
 
 

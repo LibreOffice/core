@@ -480,10 +480,10 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
 
         const OUString aTransferProperties[] =
         {
-            OUString(PROPERTY_APPLYFILTER),
-            OUString(PROPERTY_FILTER),
-            OUString(PROPERTY_HAVING_CLAUSE),
-            OUString(PROPERTY_ORDER)
+            PROPERTY_APPLYFILTER,
+            PROPERTY_FILTER,
+            PROPERTY_HAVING_CLAUSE,
+            PROPERTY_ORDER
         };
         for (const auto & aTransferProperty : aTransferProperties)
         {

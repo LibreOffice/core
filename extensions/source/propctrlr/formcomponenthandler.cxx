@@ -1000,8 +1000,8 @@ namespace pcr
             aDescriptor.Control = pControl;
 
             aDescriptor.PrimaryButtonId = PROPERTY_ID_TARGET_URL == nPropId
-                ? OUString(UID_PROP_DLG_ATTR_TARGET_URL)
-                : OUString(UID_PROP_DLG_IMAGE_URL);
+                ? UID_PROP_DLG_ATTR_TARGET_URL
+                : UID_PROP_DLG_IMAGE_URL;
             break;
         }
 
@@ -1671,7 +1671,7 @@ namespace pcr
         // ----- TriState -----
         case PROPERTY_ID_TRISTATE:
             if ( !_bFirstTimeInit )
-                _rxInspectorUI->rebuildPropertyUI( m_eComponentClass == eFormControl ? OUString(PROPERTY_DEFAULT_STATE) : OUString(PROPERTY_STATE) );
+                _rxInspectorUI->rebuildPropertyUI( m_eComponentClass == eFormControl ? PROPERTY_DEFAULT_STATE : PROPERTY_STATE );
             break;  // case PROPERTY_ID_TRISTATE
 
         // ----- DecimalAccuracy -----
@@ -1694,7 +1694,7 @@ namespace pcr
             }
 
             // propagate the changes to the min/max/default fields
-            OUString aAffectedProps[] = { OUString(PROPERTY_VALUE), OUString(PROPERTY_DEFAULT_VALUE), OUString(PROPERTY_VALUEMIN), OUString(PROPERTY_VALUEMAX) };
+            OUString aAffectedProps[] = { PROPERTY_VALUE, PROPERTY_DEFAULT_VALUE, PROPERTY_VALUEMIN, PROPERTY_VALUEMAX };
             for (const OUString & aAffectedProp : aAffectedProps)
             {
                 Reference< XPropertyControl > xControl;
@@ -1739,7 +1739,7 @@ namespace pcr
 
                 // give each control which has to know this an own copy of the description
                 OUString aFormattedPropertyControls[] = {
-                    OUString(PROPERTY_EFFECTIVE_MIN), OUString(PROPERTY_EFFECTIVE_MAX), OUString(PROPERTY_EFFECTIVE_DEFAULT), OUString(PROPERTY_EFFECTIVE_VALUE)
+                    PROPERTY_EFFECTIVE_MIN, PROPERTY_EFFECTIVE_MAX, PROPERTY_EFFECTIVE_DEFAULT, PROPERTY_EFFECTIVE_VALUE
                 };
                 for (const OUString & aFormattedPropertyControl : aFormattedPropertyControls)
                 {
@@ -3033,10 +3033,10 @@ namespace pcr
         OUString* FormSQLCommandUI::getPropertiesToDisable()
         {
             static OUString s_aCommandProps[] = {
-                OUString(PROPERTY_DATASOURCE),
-                OUString(PROPERTY_COMMAND),
-                OUString(PROPERTY_COMMANDTYPE),
-                OUString(PROPERTY_ESCAPE_PROCESSING),
+                PROPERTY_DATASOURCE,
+                PROPERTY_COMMAND,
+                PROPERTY_COMMANDTYPE,
+                PROPERTY_ESCAPE_PROCESSING,
                 OUString()
             };
             return s_aCommandProps;
@@ -3128,8 +3128,8 @@ namespace pcr
         OUString* ValueListCommandUI::getPropertiesToDisable()
         {
             static OUString s_aListSourceProps[] = {
-                OUString(PROPERTY_LISTSOURCETYPE),
-                OUString(PROPERTY_LISTSOURCE),
+                PROPERTY_LISTSOURCETYPE,
+                PROPERTY_LISTSOURCE,
                 OUString()
             };
             return s_aListSourceProps;

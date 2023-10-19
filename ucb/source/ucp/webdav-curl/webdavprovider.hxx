@@ -39,7 +39,7 @@ namespace http_dav_ucp {
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
-inline constexpr OUStringLiteral WEBDAV_CONTENT_PROVIDER_SERVICE_NAME = u"com.sun.star.ucb.WebDAVContentProvider";
+inline constexpr OUString WEBDAV_CONTENT_PROVIDER_SERVICE_NAME = u"com.sun.star.ucb.WebDAVContentProvider"_ustr;
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
@@ -53,10 +53,10 @@ inline constexpr OUStringLiteral WEBDAV_CONTENT_PROVIDER_SERVICE_NAME = u"com.su
 #define WEBDAV_URL_SCHEME            u"webdav"
 #define WEBDAVS_URL_SCHEME           u"webdavs"
 
-inline constexpr OUStringLiteral HTTP_CONTENT_TYPE = u"application/" HTTP_URL_SCHEME "-content";
+inline constexpr OUString HTTP_CONTENT_TYPE = u"application/" HTTP_URL_SCHEME "-content"_ustr;
 
 #define WEBDAV_CONTENT_TYPE    HTTP_CONTENT_TYPE
-inline constexpr OUStringLiteral WEBDAV_COLLECTION_TYPE = u"application/" VNDSUNSTARWEBDAV_URL_SCHEME "-collection";
+inline constexpr OUString WEBDAV_COLLECTION_TYPE = u"application/" VNDSUNSTARWEBDAV_URL_SCHEME "-collection"_ustr;
 
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper

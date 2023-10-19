@@ -27,21 +27,21 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <memory>
 
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_HELPURL = u"HelpURL";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_UINAME = u"UIName";
-inline constexpr OUStringLiteral ITEM_DESCRIPTOR_ENABLED = u"Enabled";
+inline constexpr OUString ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_HELPURL = u"HelpURL"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_LABEL = u"Label"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_TYPE = u"Type"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_STYLE = u"Style"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_ISVISIBLE = u"IsVisible"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_UINAME = u"UIName"_ustr;
+inline constexpr OUString ITEM_DESCRIPTOR_ENABLED = u"Enabled"_ustr;
 
-inline constexpr OUStringLiteral ITEM_MENUBAR_URL = u"private:resource/menubar/menubar";
+inline constexpr OUString ITEM_MENUBAR_URL = u"private:resource/menubar/menubar"_ustr;
 constexpr char16_t ITEM_TOOLBAR_URL[] = u"private:resource/toolbar/";
 
-inline constexpr OUStringLiteral CUSTOM_TOOLBAR_STR = u"custom_toolbar_";
-inline constexpr OUStringLiteral CUSTOM_MENU_STR = u"vnd.openoffice.org:CustomMenu";
+inline constexpr OUString CUSTOM_TOOLBAR_STR = u"custom_toolbar_"_ustr;
+inline constexpr OUString CUSTOM_MENU_STR = u"vnd.openoffice.org:CustomMenu"_ustr;
 
 class VbaCommandBarHelper;
 typedef std::shared_ptr< VbaCommandBarHelper > VbaCommandBarHelperRef;

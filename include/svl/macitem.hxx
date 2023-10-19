@@ -30,9 +30,9 @@
 class SvStream;
 enum class SvMacroItemId : sal_uInt16;
 
-inline constexpr OUStringLiteral SVX_MACRO_LANGUAGE_JAVASCRIPT  = u"JavaScript";
-inline constexpr OUStringLiteral SVX_MACRO_LANGUAGE_STARBASIC = u"StarBasic";
-inline constexpr OUStringLiteral SVX_MACRO_LANGUAGE_SF = u"Script";
+inline constexpr OUString SVX_MACRO_LANGUAGE_JAVASCRIPT  = u"JavaScript"_ustr;
+inline constexpr OUString SVX_MACRO_LANGUAGE_STARBASIC = u"StarBasic"_ustr;
+inline constexpr OUString SVX_MACRO_LANGUAGE_SF = u"Script"_ustr;
 
 enum ScriptType
 {

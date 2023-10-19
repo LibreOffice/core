@@ -84,7 +84,7 @@ namespace xmloff
         m_rContext.GetAutoStylePool()->AddFamily(
             XmlStyleFamily::CONTROL_ID, token::GetXMLToken(token::XML_PARAGRAPH),
             m_xStyleExportMapper.get(),
-            OUString(  XML_STYLE_FAMILY_CONTROL_PREFIX )
+            XML_STYLE_FAMILY_CONTROL_PREFIX
         );
 
         // add our event translation table

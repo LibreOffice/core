@@ -29,17 +29,17 @@ typedef struct { const char *nspace, *name; } SerfPropName;
 
 struct DAVProperties
 {
-    static constexpr OUStringLiteral CREATIONDATE = u"DAV:creationdate";
-    static constexpr OUStringLiteral DISPLAYNAME = u"DAV:displayname";
-    static constexpr OUStringLiteral GETCONTENTLANGUAGE = u"DAV:getcontentlanguage";
-    static constexpr OUStringLiteral GETCONTENTLENGTH = u"DAV:getcontentlength";
-    static constexpr OUStringLiteral GETCONTENTTYPE = u"DAV:getcontenttype";
-    static constexpr OUStringLiteral GETETAG = u"DAV:getetag";
-    static constexpr OUStringLiteral GETLASTMODIFIED = u"DAV:getlastmodified";
-    static constexpr OUStringLiteral LOCKDISCOVERY = u"DAV:lockdiscovery";
-    static constexpr OUStringLiteral RESOURCETYPE = u"DAV:resourcetype";
-    static constexpr OUStringLiteral SUPPORTEDLOCK = u"DAV:supportedlock";
-    static constexpr OUStringLiteral EXECUTABLE = u"http://apache.org/dav/props/executable";
+    static constexpr OUString CREATIONDATE = u"DAV:creationdate"_ustr;
+    static constexpr OUString DISPLAYNAME = u"DAV:displayname"_ustr;
+    static constexpr OUString GETCONTENTLANGUAGE = u"DAV:getcontentlanguage"_ustr;
+    static constexpr OUString GETCONTENTLENGTH = u"DAV:getcontentlength"_ustr;
+    static constexpr OUString GETCONTENTTYPE = u"DAV:getcontenttype"_ustr;
+    static constexpr OUString GETETAG = u"DAV:getetag"_ustr;
+    static constexpr OUString GETLASTMODIFIED = u"DAV:getlastmodified"_ustr;
+    static constexpr OUString LOCKDISCOVERY = u"DAV:lockdiscovery"_ustr;
+    static constexpr OUString RESOURCETYPE = u"DAV:resourcetype"_ustr;
+    static constexpr OUString SUPPORTEDLOCK = u"DAV:supportedlock"_ustr;
+    static constexpr OUString EXECUTABLE = u"http://apache.org/dav/props/executable"_ustr;
 
     static void createSerfPropName( ::std::u16string_view rFullName,
                                     SerfPropName & rName );

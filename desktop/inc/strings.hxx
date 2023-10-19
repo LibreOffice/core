@@ -11,6 +11,6 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral RID_APPTITLE = u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION";
+inline constexpr OUString RID_APPTITLE = u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

@@ -21,21 +21,21 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_LOCKED = u"Locked";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKED = u"Docked";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_VISIBLE = u"Visible";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKINGAREA = u"DockingArea";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKPOS = u"DockPos";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_DOCKSIZE = u"DockSize";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_POS = u"Pos";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SIZE = u"Size";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_UINAME = u"UIName";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_INTERNALSTATE = u"InternalState";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_STYLE = u"Style";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXT = u"ContextSensitive";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_HIDEFROMENU = u"HideFromToolbarMenu";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_NOCLOSE = u"NoClose";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_SOFTCLOSE = u"SoftClose";
-inline constexpr OUStringLiteral WINDOWSTATE_PROPERTY_CONTEXTACTIVE = u"ContextActive";
+inline constexpr OUString WINDOWSTATE_PROPERTY_LOCKED = u"Locked"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_DOCKED = u"Docked"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_VISIBLE = u"Visible"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_DOCKINGAREA = u"DockingArea"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_DOCKPOS = u"DockPos"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_DOCKSIZE = u"DockSize"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_POS = u"Pos"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_SIZE = u"Size"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_UINAME = u"UIName"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_INTERNALSTATE = u"InternalState"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_STYLE = u"Style"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_CONTEXT = u"ContextSensitive"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_HIDEFROMENU = u"HideFromToolbarMenu"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_NOCLOSE = u"NoClose"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_SOFTCLOSE = u"SoftClose"_ustr;
+inline constexpr OUString WINDOWSTATE_PROPERTY_CONTEXTACTIVE = u"ContextActive"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -74,7 +74,7 @@ namespace {
 
 struct snew_slide_value_info
 {
-    std::u16string_view msBmpResId;
+    OUString msBmpResId;
     TranslateId mpStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;

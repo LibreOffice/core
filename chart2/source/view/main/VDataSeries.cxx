@@ -525,7 +525,7 @@ double VDataSeries::getBubble_Size( sal_Int32 index ) const
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : CHART_UNONAME_NUMFMT;
     bool bHasNumberFormat = false;
     bool bLinkToSource = true;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
@@ -539,7 +539,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : CHART_UNONAME_NUMFMT;
     sal_Int32 nNumberFormat = -1;
     uno::Reference< beans::XPropertySet > xPointProp( getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )

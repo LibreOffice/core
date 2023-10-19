@@ -1813,7 +1813,7 @@ void Test::testTextFormField()
         {
             ::sw::mark::IFieldmark* pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMTEXT), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMTEXT, pFieldmark->GetFieldname());
         }
 
         // In the first paragraph we have an empty text form field with the placeholder spaces
@@ -1873,7 +1873,7 @@ void Test::testCheckBoxFormField()
             }
 
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMCHECKBOX, pFieldmark->GetFieldname());
             ::sw::mark::ICheckboxFieldmark* pCheckBox = dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pCheckBox);
 
@@ -1922,7 +1922,7 @@ void Test::testDropDownFormField()
                 continue;
 
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDROPDOWN), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDROPDOWN, pFieldmark->GetFieldname());
 
             // Check drop down field's parameters.
             const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
@@ -1995,7 +1995,7 @@ void Test::testDateFormField()
             {
                 ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*aIter);
                 CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDATE, pFieldmark->GetFieldname());
 
                 // Check date form field's parameters.
                 const sw::mark::IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
@@ -2176,7 +2176,7 @@ void Test::testDateFormFieldCharacterFormatting()
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(1), pMarkAccess->getAllMarksCount());
             ::sw::mark::IDateFieldmark* pFieldmark = dynamic_cast<::sw::mark::IDateFieldmark*>(*pMarkAccess->getAllMarksBegin());
             CPPUNIT_ASSERT_MESSAGE(sFailedMessage.getStr(), pFieldmark);
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), OUString(ODF_FORMDATE), pFieldmark->GetFieldname());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), ODF_FORMDATE, pFieldmark->GetFieldname());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(0), pFieldmark->GetMarkStart().GetContentIndex());
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), sal_Int32(11), pFieldmark->GetMarkEnd().GetContentIndex());
 

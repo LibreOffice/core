@@ -14,7 +14,7 @@
 // no need to translate this
 // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
 // field label list of the dialog
-inline constexpr OUStringLiteral STR_LOGICAL_FIELD_NAMES = u"FirstName;LastName;Company;Department;Street;Zip;City;State;Country;PhonePriv;PhoneComp;PhoneOffice;PhoneCell;PhoneOther;Pager;Fax;EMail;URL;Title;Position;Code;AddrForm;AddrFormMail;Id;CalendarURL;InviteParticipant;Note;Altfield1;Altfield2;Altfield3;Altfield4";
+inline constexpr OUString STR_LOGICAL_FIELD_NAMES = u"FirstName;LastName;Company;Department;Street;Zip;City;State;Country;PhonePriv;PhoneComp;PhoneOffice;PhoneCell;PhoneOther;Pager;Fax;EMail;URL;Title;Position;Code;AddrForm;AddrFormMail;Id;CalendarURL;InviteParticipant;Note;Altfield1;Altfield2;Altfield3;Altfield4"_ustr;
 
 #define STR_DESCRIPTION_SMATH_DOC       "StarMath 2.0 - 5.0"
 #define STR_DESCRIPTION_SCHART_DOC      "StarChart 3.0 - 5.0"

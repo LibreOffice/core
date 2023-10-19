@@ -9,19 +9,19 @@
 
 #pragma once
 
-inline constexpr OUStringLiteral RID_BMP_BRKENABLED = u"res/im30838.png";
-inline constexpr OUStringLiteral RID_BMP_BRKDISABLED = u"res/im30839.png";
-inline constexpr OUStringLiteral RID_BMP_STEPMARKER = u"res/im30840.png";
-inline constexpr OUStringLiteral RID_BMP_ERRORMARKER = u"res/im30841.png";
-inline constexpr OUStringLiteral RID_BMP_LOCKED = u"res/lock.png";
-inline constexpr OUStringLiteral RID_BMP_INSTALLATION = u"res/harddisk_16.png";
-inline constexpr OUStringLiteral RID_BMP_DOCUMENT = u"res/im30826.png";
-inline constexpr OUStringLiteral RID_BMP_MODLIB = u"res/im30820.png";
-inline constexpr OUStringLiteral RID_BMP_MODLIBNOTLOADED = u"res/im30827.png";
-inline constexpr OUStringLiteral RID_BMP_MODULE = u"res/im30821.png";
-inline constexpr OUStringLiteral RID_BMP_MACRO = u"res/im30822.png";
-inline constexpr OUStringLiteral RID_BMP_DLGLIB = u"res/dialogfolder_16.png";
-inline constexpr OUStringLiteral RID_BMP_DLGLIBNOTLOADED = u"res/dialogfoldernot_16.png";
-inline constexpr OUStringLiteral RID_BMP_DIALOG = u"res/im30823.png";
+inline constexpr OUString RID_BMP_BRKENABLED = u"res/im30838.png"_ustr;
+inline constexpr OUString RID_BMP_BRKDISABLED = u"res/im30839.png"_ustr;
+inline constexpr OUString RID_BMP_STEPMARKER = u"res/im30840.png"_ustr;
+inline constexpr OUString RID_BMP_ERRORMARKER = u"res/im30841.png"_ustr;
+inline constexpr OUString RID_BMP_LOCKED = u"res/lock.png"_ustr;
+inline constexpr OUString RID_BMP_INSTALLATION = u"res/harddisk_16.png"_ustr;
+inline constexpr OUString RID_BMP_DOCUMENT = u"res/im30826.png"_ustr;
+inline constexpr OUString RID_BMP_MODLIB = u"res/im30820.png"_ustr;
+inline constexpr OUString RID_BMP_MODLIBNOTLOADED = u"res/im30827.png"_ustr;
+inline constexpr OUString RID_BMP_MODULE = u"res/im30821.png"_ustr;
+inline constexpr OUString RID_BMP_MACRO = u"res/im30822.png"_ustr;
+inline constexpr OUString RID_BMP_DLGLIB = u"res/dialogfolder_16.png"_ustr;
+inline constexpr OUString RID_BMP_DLGLIBNOTLOADED = u"res/dialogfoldernot_16.png"_ustr;
+inline constexpr OUString RID_BMP_DIALOG = u"res/im30823.png"_ustr;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

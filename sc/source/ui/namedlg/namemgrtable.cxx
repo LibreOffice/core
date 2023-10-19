@@ -83,7 +83,7 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 {
     const ScRangeName* pRangeName;
     if (rLine.aScope == maGlobalString)
-        pRangeName = &m_RangeMap.find(OUString(STR_GLOBAL_RANGE_NAME))->second;
+        pRangeName = &m_RangeMap.find(STR_GLOBAL_RANGE_NAME)->second;
     else
         pRangeName = &m_RangeMap.find(rLine.aScope)->second;
 

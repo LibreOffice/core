@@ -56,14 +56,14 @@ class FrameworkHelper final
 {
 public:
     // URLs of frequently used panes.
-    static constexpr OUStringLiteral msPaneURLPrefix = u"private:resource/pane/";
+    static constexpr OUString msPaneURLPrefix = u"private:resource/pane/"_ustr;
     static const OUString msCenterPaneURL;
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
 
     // URLs of frequently used views.
-    static constexpr OUStringLiteral msViewURLPrefix = u"private:resource/view/";
+    static constexpr OUString msViewURLPrefix = u"private:resource/view/"_ustr;
     static const OUString msImpressViewURL;
     static const OUString msDrawViewURL;
     static const OUString msOutlineViewURL;
@@ -74,19 +74,19 @@ public:
     static const OUString msSidebarViewURL;
 
     // URLs of frequently used tool bars.
-    static constexpr OUStringLiteral msToolBarURLPrefix = u"private:resource/toolbar/";
+    static constexpr OUString msToolBarURLPrefix = u"private:resource/toolbar/"_ustr;
     static const OUString msViewTabBarURL;
 
     // Names of frequently used events.
-    static constexpr OUStringLiteral msResourceActivationRequestEvent
-        = u"ResourceActivationRequested";
-    static constexpr OUStringLiteral msResourceDeactivationRequestEvent
-        = u"ResourceDeactivationRequest";
-    static constexpr OUStringLiteral msResourceActivationEvent = u"ResourceActivation";
-    static constexpr OUStringLiteral msResourceDeactivationEvent = u"ResourceDeactivation";
-    static constexpr OUStringLiteral msResourceDeactivationEndEvent = u"ResourceDeactivationEnd";
-    static constexpr OUStringLiteral msConfigurationUpdateStartEvent = u"ConfigurationUpdateStart";
-    static constexpr OUStringLiteral msConfigurationUpdateEndEvent = u"ConfigurationUpdateEnd";
+    static constexpr OUString msResourceActivationRequestEvent
+        = u"ResourceActivationRequested"_ustr;
+    static constexpr OUString msResourceDeactivationRequestEvent
+        = u"ResourceDeactivationRequest"_ustr;
+    static constexpr OUString msResourceActivationEvent = u"ResourceActivation"_ustr;
+    static constexpr OUString msResourceDeactivationEvent = u"ResourceDeactivation"_ustr;
+    static constexpr OUString msResourceDeactivationEndEvent = u"ResourceDeactivationEnd"_ustr;
+    static constexpr OUString msConfigurationUpdateStartEvent = u"ConfigurationUpdateStart"_ustr;
+    static constexpr OUString msConfigurationUpdateEndEvent = u"ConfigurationUpdateEnd"_ustr;
 
     /** Return the FrameworkHelper object that is associated with the given
         ViewShellBase.  If such an object does not yet exist, a new one is

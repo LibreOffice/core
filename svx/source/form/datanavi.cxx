@@ -711,7 +711,7 @@ namespace svxform
         std::unique_ptr<weld::TreeIter> xParent(m_xItemList->make_iterator());
         if (!m_xItemList->get_selected(xParent.get()))
             xParent.reset();
-        OUString aImage(_bIsElement ? OUString(RID_SVXBMP_ELEMENT) : OUString(RID_SVXBMP_ATTRIBUTE));
+        OUString aImage(_bIsElement ? RID_SVXBMP_ELEMENT : RID_SVXBMP_ATTRIBUTE);
         OUString sName;
         try
         {

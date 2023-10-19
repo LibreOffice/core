@@ -117,7 +117,7 @@ private:
     store::OStoreFile   m_file;
     KeyMap              m_openKeyTable;
 
-    static constexpr OUStringLiteral ROOT { u"/" };
+    static constexpr OUString ROOT { u"/"_ustr };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

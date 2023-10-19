@@ -139,28 +139,28 @@ public:
 private:
 
     // Implement Title/Description Elements UI (#i73249#)
-    static constexpr OUStringLiteral gsAnchorCharStyleName = u"AnchorCharStyleName";
-    static constexpr OUStringLiteral gsBeginNotice = u"BeginNotice";
-    static constexpr OUStringLiteral gsCategory = u"Category";
-    static constexpr OUStringLiteral gsCharStyleName = u"CharStyleName";
-    static constexpr OUStringLiteral gsCharStyleNames = u"CharStyleNames";
-    static constexpr OUStringLiteral gsEndNotice = u"EndNotice";
-    static constexpr OUStringLiteral gsFootnote = u"Footnote";
-    static constexpr OUStringLiteral gsFootnoteCounting = u"FootnoteCounting";
-    static constexpr OUStringLiteral gsNumberingType = u"NumberingType";
-    static constexpr OUStringLiteral gsPageDescName = u"PageDescName";
-    static constexpr OUStringLiteral gsPageStyleName = u"PageStyleName";
-    static constexpr OUStringLiteral gsParaStyleName = u"ParaStyleName";
-    static constexpr OUStringLiteral gsPositionEndOfDoc = u"PositionEndOfDoc";
-    static constexpr OUStringLiteral gsPrefix = u"Prefix";
-    static constexpr OUStringLiteral gsReferenceId = u"ReferenceId";
-    static constexpr OUStringLiteral gsStartAt = u"StartAt";
-    static constexpr OUStringLiteral gsSuffix = u"Suffix";
-    static constexpr OUStringLiteral gsTextEndnoteService = u"com.sun.star.text.Endnote";
-    static constexpr OUStringLiteral gsTextSection = u"TextSection";
+    static constexpr OUString gsAnchorCharStyleName = u"AnchorCharStyleName"_ustr;
+    static constexpr OUString gsBeginNotice = u"BeginNotice"_ustr;
+    static constexpr OUString gsCategory = u"Category"_ustr;
+    static constexpr OUString gsCharStyleName = u"CharStyleName"_ustr;
+    static constexpr OUString gsCharStyleNames = u"CharStyleNames"_ustr;
+    static constexpr OUString gsEndNotice = u"EndNotice"_ustr;
+    static constexpr OUString gsFootnote = u"Footnote"_ustr;
+    static constexpr OUString gsFootnoteCounting = u"FootnoteCounting"_ustr;
+    static constexpr OUString gsNumberingType = u"NumberingType"_ustr;
+    static constexpr OUString gsPageDescName = u"PageDescName"_ustr;
+    static constexpr OUString gsPageStyleName = u"PageStyleName"_ustr;
+    static constexpr OUString gsParaStyleName = u"ParaStyleName"_ustr;
+    static constexpr OUString gsPositionEndOfDoc = u"PositionEndOfDoc"_ustr;
+    static constexpr OUString gsPrefix = u"Prefix"_ustr;
+    static constexpr OUString gsReferenceId = u"ReferenceId"_ustr;
+    static constexpr OUString gsStartAt = u"StartAt"_ustr;
+    static constexpr OUString gsSuffix = u"Suffix"_ustr;
+    static constexpr OUString gsTextEndnoteService = u"com.sun.star.text.Endnote"_ustr;
+    static constexpr OUString gsTextSection = u"TextSection"_ustr;
 
 protected:
-    static constexpr OUStringLiteral gsFrameStyleName = u"FrameStyleName";
+    static constexpr OUString gsFrameStyleName = u"FrameStyleName"_ustr;
     SinglePropertySetInfoCache m_aCharStyleNamesPropInfoCache;
 
     SvXMLAutoStylePoolP& GetAutoStylePool() { return m_rAutoStylePool; }

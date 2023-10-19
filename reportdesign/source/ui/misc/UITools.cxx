@@ -494,9 +494,9 @@ namespace
                 TypedWhichId<SvxLanguageItem> nWhich;
                 OUString sPropertyName;
         };
-        const Items pItems[] = { {ITEMID_LANGUAGE,OUString(PROPERTY_CHARLOCALE)}
-                                ,{ITEMID_LANGUAGE_ASIAN,OUString(PROPERTY_CHARLOCALEASIAN)}
-                                ,{ITEMID_LANGUAGE_COMPLEX,OUString(PROPERTY_CHARLOCALECOMPLEX)}
+        const Items pItems[] = { {ITEMID_LANGUAGE,PROPERTY_CHARLOCALE}
+                                ,{ITEMID_LANGUAGE_ASIAN,PROPERTY_CHARLOCALEASIAN}
+                                ,{ITEMID_LANGUAGE_COMPLEX,PROPERTY_CHARLOCALECOMPLEX}
         };
         for(const auto & k : pItems)
         {
