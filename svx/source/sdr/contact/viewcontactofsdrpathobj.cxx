@@ -90,15 +90,13 @@ namespace sdr::contact
             if(bIsLine)
             {
                 // special handling for single line mode (2 points)
-                const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
-                const basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0));
-                const basegfx::B2DPoint aEnd(aSubPolygon.getB2DPoint(1));
+                const basegfx::B2DPolygon & rSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
+                const basegfx::B2DPoint aStart(rSubPolygon.getB2DPoint(0));
+                const basegfx::B2DPoint aEnd(rSubPolygon.getB2DPoint(1));
                 const basegfx::B2DVector aLine(aEnd - aStart);
 
                 // #i102548# create new unit polygon for line (horizontal)
-                basegfx::B2DPolygon aNewPolygon;
-                aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
-                aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
+                static const basegfx::B2DPolygon aNewPolygon{basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint(1.0, 0.0)};
                 aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
 
                 // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
