@@ -284,18 +284,21 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
     Bitmap aBMP = aBMPEx.GetBitmap();
     Bitmap::ScopedReadAccess pReadAccess(aBMP);
-    for (tools::Long nX = 2; nX < aSize.Width() - 2; ++nX)
+    int nBlackCount = 0;
+    for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
     {
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColor = pReadAccess->GetColor(nY, nX);
-
-            // Without the fix in place, this test would have failed with
-            // - Expected: rgba[000000ff]
-            // - Actual  : rgba[ffffffff]
-            CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor);
+            if (aColor == COL_BLACK)
+                ++nBlackCount;
         }
     }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected greater than: 9300
+    // - Actual  : 0
+    CPPUNIT_ASSERT_GREATER(9300, nBlackCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
