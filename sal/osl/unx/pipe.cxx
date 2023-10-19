@@ -37,8 +37,8 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-constexpr OStringLiteral PIPEDEFAULTPATH = "/tmp";
-constexpr OStringLiteral PIPEALTERNATEPATH = "/var/tmp";
+constexpr OString PIPEDEFAULTPATH = "/tmp"_ostr;
+constexpr OString PIPEALTERNATEPATH = "/var/tmp"_ostr;
 
 static oslPipe osl_psz_createPipe(const char *pszPipeName, oslPipeOptions Options, oslSecurity Security);
 

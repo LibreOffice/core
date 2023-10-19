@@ -80,41 +80,41 @@ void createMessage(
 void test::oustringbuffer::Utf32::appendUtf32() {
     int const str1Len = 3;
     sal_Unicode const str1[str1Len] = { 'a', 'b', 'c' };
-    static constexpr OUStringLiteral str2 = u"abcd";
-    static constexpr OUStringLiteral str3 = u"abcd\U00010000";
+    static constexpr OUString str2 = u"abcd"_ustr;
+    static constexpr OUString str3 = u"abcd\U00010000"_ustr;
     OStringBuffer message;
     OUStringBuffer buf1(std::u16string_view(str1, str1Len));
     buf1.appendUtf32('d');
     OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, str2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), OUString(str2), res1);
+        message.getStr(), str2, res1);
     OUStringBuffer buf2(str2);
     buf2.appendUtf32(0x10000);
     OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, str3);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), OUString(str3), res2);
+        message.getStr(), str3, res2);
 }
 
 void test::oustringbuffer::Utf32::insertUtf32() {
     int const str1Len = 3;
     sal_Unicode const str1[str1Len] = { 'a', 'b', 'c' };
-    static constexpr OUStringLiteral str2 = u"abdc";
-    static constexpr OUStringLiteral str3 = u"ab\U0010FFFFdc";
+    static constexpr OUString str2 = u"abdc"_ustr;
+    static constexpr OUString str3 = u"ab\U0010FFFFdc"_ustr;
     OStringBuffer message;
     OUStringBuffer buf1(std::u16string_view(str1, str1Len));
     buf1.insertUtf32(2, 'd');
     OUString res1(buf1.makeStringAndClear());
     createMessage(message, res1, str2);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), OUString(str2), res1);
+        message.getStr(), str2, res1);
     OUStringBuffer buf2(str2);
     buf2.insertUtf32(2, 0x10FFFF);
     OUString res2(buf2.makeStringAndClear());
     createMessage(message, res2, str3);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        message.getStr(), OUString(str3), res2);
+        message.getStr(), str3, res2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

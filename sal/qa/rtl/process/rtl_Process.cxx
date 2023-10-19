@@ -69,7 +69,7 @@ public:
 #if defined(_WIN32)
         static constexpr OUStringLiteral EXECUTABLE_NAME(u"child_process.exe");
 #else
-        static constexpr OUStringLiteral EXECUTABLE_NAME(u"child_process");
+        static constexpr OUString EXECUTABLE_NAME(u"child_process"_ustr);
 #endif
         OUString suCWD = getModulePath();
         // OUString suCWD2 = getExecutableDirectory();
@@ -198,7 +198,7 @@ public:
 #if defined(_WIN32)
         static constexpr OUStringLiteral EXEC_NAME(u"child_process_id.exe");
 #else
-        static constexpr OUStringLiteral EXEC_NAME(u"child_process_id");
+        static constexpr OUString EXEC_NAME(u"child_process_id"_ustr);
 #endif
         sal_uInt8 pTargetUUID1[16];
         rtl_getGlobalProcessId( pTargetUUID1 );
