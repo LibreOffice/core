@@ -215,8 +215,8 @@ KeynoteImportFilter::detect(css::uno::Sequence<css::beans::PropertyValue>& Descr
     if (bUCBContentChanged)
         pDescriptor[nUCBContentLocation].Value <<= xContent;
 
-    static constexpr OUStringLiteral sTypeName(u"impress_AppleKeynote");
-    pDescriptor[nTypeNameLocation].Value <<= OUString(sTypeName);
+    static constexpr OUString sTypeName(u"impress_AppleKeynote"_ustr);
+    pDescriptor[nTypeNameLocation].Value <<= sTypeName;
 
     return sTypeName;
 }

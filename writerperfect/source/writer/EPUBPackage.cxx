@@ -43,7 +43,7 @@ EPUBPackage::EPUBPackage(uno::Reference<uno::XComponentContext> xContext,
     mxOutputStream.set(
         mxStorage->openStreamElementByHierarchicalName("mimetype", embed::ElementModes::READWRITE),
         uno::UNO_QUERY);
-    static constexpr OStringLiteral aMimeType("application/epub+zip");
+    static constexpr OString aMimeType("application/epub+zip"_ostr);
     uno::Sequence<sal_Int8> aData(reinterpret_cast<const sal_Int8*>(aMimeType.getStr()),
                                   aMimeType.getLength());
     mxOutputStream->writeBytes(aData);
