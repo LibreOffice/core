@@ -77,7 +77,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-constexpr OUStringLiteral STATUS_BAR_ALIAS = u"private:resource/statusbar/statusbar";
+constexpr OUString STATUS_BAR_ALIAS = u"private:resource/statusbar/statusbar"_ustr;
 
 namespace framework
 {

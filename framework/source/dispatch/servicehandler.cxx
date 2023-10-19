@@ -30,7 +30,7 @@
 
 namespace framework{
 
-constexpr OUStringLiteral PROTOCOL_VALUE = u"service:";
+constexpr OUString PROTOCOL_VALUE = u"service:"_ustr;
 
 // XInterface, XTypeProvider, XServiceInfo
 

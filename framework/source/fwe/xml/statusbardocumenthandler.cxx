@@ -38,12 +38,12 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
-constexpr OUStringLiteral XMLNS_STATUSBAR = u"http://openoffice.org/2001/statusbar";
-constexpr OUStringLiteral XMLNS_XLINK = u"http://www.w3.org/1999/xlink";
+constexpr OUString XMLNS_STATUSBAR = u"http://openoffice.org/2001/statusbar"_ustr;
+constexpr OUString XMLNS_XLINK = u"http://www.w3.org/1999/xlink"_ustr;
 constexpr OUStringLiteral XMLNS_STATUSBAR_PREFIX = u"statusbar:";
 constexpr OUStringLiteral XMLNS_XLINK_PREFIX = u"xlink:";
 
-constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
+constexpr OUString XMLNS_FILTER_SEPARATOR = u"^"_ustr;
 
 #define ELEMENT_STATUSBAR           "statusbar"
 #define ELEMENT_STATUSBARITEM       "statusbaritem"
@@ -58,22 +58,22 @@ constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
 #define ATTRIBUTE_HELPURL           "helpid"
 #define ATTRIBUTE_MANDATORY         "mandatory"
 
-constexpr OUStringLiteral ELEMENT_NS_STATUSBAR = u"statusbar:statusbar";
-constexpr OUStringLiteral ELEMENT_NS_STATUSBARITEM = u"statusbar:statusbaritem";
+constexpr OUString ELEMENT_NS_STATUSBAR = u"statusbar:statusbar"_ustr;
+constexpr OUString ELEMENT_NS_STATUSBARITEM = u"statusbar:statusbaritem"_ustr;
 
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_STATUSBAR = u"xmlns:statusbar";
 constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 
-constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_TRUE = u"true";
-constexpr OUStringLiteral ATTRIBUTE_BOOLEAN_FALSE = u"false";
+constexpr OUString ATTRIBUTE_BOOLEAN_TRUE = u"true"_ustr;
+constexpr OUString ATTRIBUTE_BOOLEAN_FALSE = u"false"_ustr;
 
-constexpr OUStringLiteral ATTRIBUTE_ALIGN_LEFT = u"left";
-constexpr OUStringLiteral ATTRIBUTE_ALIGN_RIGHT = u"right";
-constexpr OUStringLiteral ATTRIBUTE_ALIGN_CENTER = u"center";
+constexpr OUString ATTRIBUTE_ALIGN_LEFT = u"left"_ustr;
+constexpr OUString ATTRIBUTE_ALIGN_RIGHT = u"right"_ustr;
+constexpr OUString ATTRIBUTE_ALIGN_CENTER = u"center"_ustr;
 
 constexpr OUStringLiteral ATTRIBUTE_STYLE_IN = u"in";
-constexpr OUStringLiteral ATTRIBUTE_STYLE_OUT = u"out";
-constexpr OUStringLiteral ATTRIBUTE_STYLE_FLAT = u"flat";
+constexpr OUString ATTRIBUTE_STYLE_OUT = u"out"_ustr;
+constexpr OUString ATTRIBUTE_STYLE_FLAT = u"flat"_ustr;
 
 constexpr OUStringLiteral STATUSBAR_DOCTYPE = u"<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">";
 
@@ -81,12 +81,12 @@ namespace framework
 {
 
 // Property names of a menu/menu item ItemDescriptor
-constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL  = u"CommandURL";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_HELPURL     = u"HelpURL";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_OFFSET      = u"Offset";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE       = u"Style";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_WIDTH       = u"Width";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE        = u"Type";
+constexpr OUString ITEM_DESCRIPTOR_COMMANDURL  = u"CommandURL"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_HELPURL     = u"HelpURL"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_OFFSET      = u"Offset"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_STYLE       = u"Style"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_WIDTH       = u"Width"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_TYPE        = u"Type"_ustr;
 
 static void ExtractStatusbarItemParameters(
     const Sequence< PropertyValue >& rProp,

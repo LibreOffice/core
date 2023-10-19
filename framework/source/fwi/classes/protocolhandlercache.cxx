@@ -31,7 +31,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 
-constexpr OUStringLiteral SETNAME_HANDLER = u"HandlerSet"; // name of configuration set inside package
+constexpr OUString SETNAME_HANDLER = u"HandlerSet"_ustr; // name of configuration set inside package
 
 namespace framework{
 

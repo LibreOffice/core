@@ -121,7 +121,7 @@ void MacrosMenuController::addScriptItems(const Reference<css::awt::XPopupMenu>&
 {
     static constexpr OUStringLiteral aCmdBase(u".uno:ScriptOrganizer?ScriptOrganizer.Language:string=");
     static constexpr OUStringLiteral ellipsis( u"..." );
-    static constexpr OUStringLiteral providerKey(u"com.sun.star.script.provider.ScriptProviderFor");
+    static constexpr OUString providerKey(u"com.sun.star.script.provider.ScriptProviderFor"_ustr);
     sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess( m_xContext->getServiceManager(), UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( "com.sun.star.script.provider.LanguageScriptProvider" );

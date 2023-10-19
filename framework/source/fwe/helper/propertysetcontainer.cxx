@@ -23,7 +23,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
 
-constexpr OUStringLiteral WRONG_TYPE_EXCEPTION = u"Only XPropertSet allowed!";
+constexpr OUString WRONG_TYPE_EXCEPTION = u"Only XPropertSet allowed!"_ustr;
 
 using namespace cppu;
 using namespace com::sun::star::uno;

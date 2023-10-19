@@ -52,7 +52,7 @@ using namespace ::com::sun::star;
 
 constexpr OUStringLiteral ROOTNODE_ADDONMENU = u"Office.Addons";
 constexpr OUStringLiteral PATHDELIMITER = u"/";
-constexpr OUStringLiteral SEPARATOR_URL = u"private:separator";
+constexpr OUString SEPARATOR_URL = u"private:separator"_ustr;
 
 #define PROPERTYNAME_URL                                ADDONSMENUITEM_STRING_URL
 #define PROPERTYNAME_TITLE                              ADDONSMENUITEM_STRING_TITLE
@@ -928,7 +928,7 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 
 void AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
 {
-    static constexpr OUStringLiteral aMenuMergeRootName( u"AddonUI/OfficeMenuBarMerging/" );
+    static constexpr OUString aMenuMergeRootName( u"AddonUI/OfficeMenuBarMerging/"_ustr );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
 
@@ -1000,7 +1000,7 @@ void AddonsOptions_Impl::ReadMergeMenuData( std::u16string_view aMergeAddonInstr
 
 void AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
 {
-    static constexpr OUStringLiteral aToolbarMergeRootName( u"AddonUI/OfficeToolbarMerging/" );
+    static constexpr OUString aToolbarMergeRootName( u"AddonUI/OfficeToolbarMerging/"_ustr );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
     sal_uInt32           nCount = aAddonMergeNodesSeq.getLength();
@@ -1072,7 +1072,7 @@ void AddonsOptions_Impl::ReadMergeToolbarData( std::u16string_view aMergeAddonIn
 void AddonsOptions_Impl::ReadNotebookBarMergeInstructions(
     NotebookBarMergingInstructions& rCachedNotebookBarMergingInstructions)
 {
-    static constexpr OUStringLiteral aNotebookBarMergeRootName(u"AddonUI/OfficeNotebookBarMerging/");
+    static constexpr OUString aNotebookBarMergeRootName(u"AddonUI/OfficeNotebookBarMerging/"_ustr);
 
     Sequence<OUString> aAddonMergeNodesSeq = GetNodeNames(aNotebookBarMergeRootName);
     sal_uInt32 nCount = aAddonMergeNodesSeq.getLength();
@@ -1147,7 +1147,7 @@ void AddonsOptions_Impl::ReadMergeNotebookBarData(
 
 void AddonsOptions_Impl::ReadStatusbarMergeInstructions( MergeStatusbarInstructionContainer& aContainer )
 {
-    static constexpr OUStringLiteral aStatusbarMergeRootName( u"AddonUI/OfficeStatusbarMerging/" );
+    static constexpr OUString aStatusbarMergeRootName( u"AddonUI/OfficeStatusbarMerging/"_ustr );
 
     Sequence< OUString > aAddonMergeNodesSeq = GetNodeNames( aStatusbarMergeRootName );
     sal_uInt32  nCount = aAddonMergeNodesSeq.getLength();

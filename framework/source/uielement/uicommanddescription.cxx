@@ -55,7 +55,7 @@ using namespace ::com::sun::star::frame;
 const char CONFIGURATION_ROOT_ACCESS[]           = "/org.openoffice.Office.UI.";
 
 // Special resource URLs to retrieve additional information
-constexpr OUStringLiteral PRIVATE_RESOURCE_URL       = u"private:";
+constexpr OUString PRIVATE_RESOURCE_URL       = u"private:"_ustr;
 
 const sal_Int32   COMMAND_PROPERTY_IMAGE                = 1;
 const sal_Int32   COMMAND_PROPERTY_ROTATE               = 2;
@@ -266,13 +266,13 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
         if ( !pIter->second.bCommandNameCreated )
             fillInfoFromResult( pIter->second, pIter->second.aLabel );
 
-        static constexpr OUStringLiteral sLabel = u"Label";
-        static constexpr OUStringLiteral sName = u"Name";
-        static constexpr OUStringLiteral sPopup = u"Popup";
-        static constexpr OUStringLiteral sPopupLabel = u"PopupLabel";
-        static constexpr OUStringLiteral sTooltipLabel = u"TooltipLabel";
-        static constexpr OUStringLiteral sTargetURL = u"TargetURL";
-        static constexpr OUStringLiteral sIsExperimental = u"IsExperimental";
+        static constexpr OUString sLabel = u"Label"_ustr;
+        static constexpr OUString sName = u"Name"_ustr;
+        static constexpr OUString sPopup = u"Popup"_ustr;
+        static constexpr OUString sPopupLabel = u"PopupLabel"_ustr;
+        static constexpr OUString sTooltipLabel = u"TooltipLabel"_ustr;
+        static constexpr OUString sTargetURL = u"TargetURL"_ustr;
+        static constexpr OUString sIsExperimental = u"IsExperimental"_ustr;
         Sequence< PropertyValue > aPropSeq{
             comphelper::makePropertyValue(sLabel, !pIter->second.aContextLabel.isEmpty()
                                                        ? Any(pIter->second.aContextLabel)

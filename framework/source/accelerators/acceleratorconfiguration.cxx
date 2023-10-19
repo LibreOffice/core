@@ -53,13 +53,13 @@
 #include <rtl/ustrbuf.hxx>
 #include <o3tl/string_view.hxx>
 
-constexpr OUStringLiteral PRESET_DEFAULT = u"default";
-constexpr OUStringLiteral TARGET_CURRENT = u"current";
+constexpr OUString PRESET_DEFAULT = u"default"_ustr;
+constexpr OUString TARGET_CURRENT = u"current"_ustr;
 
 namespace framework
 {
-    constexpr OUStringLiteral CFG_ENTRY_SECONDARY = u"SecondaryKeys";
-    constexpr OUStringLiteral CFG_PROP_COMMAND = u"Command";
+    constexpr OUString CFG_ENTRY_SECONDARY = u"SecondaryKeys"_ustr;
+    constexpr OUString CFG_PROP_COMMAND = u"Command"_ustr;
 
     static OUString lcl_getKeyString(const css::awt::KeyEvent& aKeyEvent)
     {

@@ -42,7 +42,7 @@ namespace framework{
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  ///< static counter for rescheduling
 
-constexpr OUStringLiteral PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar";
+constexpr OUString PROGRESS_RESOURCE = u"private:resource/progressbar/progressbar"_ustr;
 
 StatusIndicatorFactory::StatusIndicatorFactory(css::uno::Reference< css::uno::XComponentContext >  xContext)
     : m_xContext          (std::move(xContext ))

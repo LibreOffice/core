@@ -36,9 +36,9 @@ using namespace ::com::sun::star::xml::sax;
 #define ELEMENT_EXTERNALIMAGES      "externalimages"
 #define ELEMENT_EXTERNALENTRY       "externalentry"
 
-constexpr OUStringLiteral ELEMENT_NS_IMAGESCONTAINER = u"image:imagescontainer";
-constexpr OUStringLiteral ELEMENT_NS_IMAGES = u"image:images";
-constexpr OUStringLiteral ELEMENT_NS_ENTRY = u"image:entry";
+constexpr OUString ELEMENT_NS_IMAGESCONTAINER = u"image:imagescontainer"_ustr;
+constexpr OUString ELEMENT_NS_IMAGES = u"image:images"_ustr;
+constexpr OUString ELEMENT_NS_ENTRY = u"image:entry"_ustr;
 
 #define ATTRIBUTE_HREF                  "href"
 #define ATTRIBUTE_MASKCOLOR             "maskcolor"
@@ -55,8 +55,8 @@ constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
 constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE = u"xlink:type";
 constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE_VALUE = u"simple";
 
-constexpr OUStringLiteral XMLNS_IMAGE = u"http://openoffice.org/2001/image";
-constexpr OUStringLiteral XMLNS_XLINK = u"http://www.w3.org/1999/xlink";
+constexpr OUString XMLNS_IMAGE = u"http://openoffice.org/2001/image"_ustr;
+constexpr OUString XMLNS_XLINK = u"http://www.w3.org/1999/xlink"_ustr;
 constexpr OUStringLiteral XMLNS_IMAGE_PREFIX = u"image:";
 
 constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";

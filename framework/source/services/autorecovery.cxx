@@ -1048,16 +1048,16 @@ const char CFG_ENTRY_AUTOSAVE_USERAUTOSAVE_ENABLED[] = "AutoSave/UserAutoSaveEna
 
 constexpr OUStringLiteral CFG_ENTRY_REALDEFAULTFILTER = u"ooSetupFactoryActualFilter";
 
-constexpr OUStringLiteral CFG_ENTRY_PROP_TEMPURL = u"TempURL";
-constexpr OUStringLiteral CFG_ENTRY_PROP_ORIGINALURL = u"OriginalURL";
-constexpr OUStringLiteral CFG_ENTRY_PROP_TEMPLATEURL = u"TemplateURL";
+constexpr OUString CFG_ENTRY_PROP_TEMPURL = u"TempURL"_ustr;
+constexpr OUString CFG_ENTRY_PROP_ORIGINALURL = u"OriginalURL"_ustr;
+constexpr OUString CFG_ENTRY_PROP_TEMPLATEURL = u"TemplateURL"_ustr;
 constexpr OUStringLiteral CFG_ENTRY_PROP_FACTORYURL = u"FactoryURL";
-constexpr OUStringLiteral CFG_ENTRY_PROP_MODULE = u"Module";
-constexpr OUStringLiteral CFG_ENTRY_PROP_DOCUMENTSTATE = u"DocumentState";
-constexpr OUStringLiteral CFG_ENTRY_PROP_FILTER = u"Filter";
-constexpr OUStringLiteral CFG_ENTRY_PROP_TITLE = u"Title";
+constexpr OUString CFG_ENTRY_PROP_MODULE = u"Module"_ustr;
+constexpr OUString CFG_ENTRY_PROP_DOCUMENTSTATE = u"DocumentState"_ustr;
+constexpr OUString CFG_ENTRY_PROP_FILTER = u"Filter"_ustr;
+constexpr OUString CFG_ENTRY_PROP_TITLE = u"Title"_ustr;
 constexpr OUStringLiteral CFG_ENTRY_PROP_ID = u"ID";
-constexpr OUStringLiteral CFG_ENTRY_PROP_VIEWNAMES = u"ViewNames";
+constexpr OUString CFG_ENTRY_PROP_VIEWNAMES = u"ViewNames"_ustr;
 
 constexpr OUStringLiteral FILTER_PROP_TYPE = u"Type";
 constexpr OUStringLiteral TYPE_PROP_EXTENSIONS = u"Extensions";
@@ -1080,7 +1080,7 @@ const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
 const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
 const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
 
-constexpr OUStringLiteral RECOVERY_ITEM_BASE_IDENTIFIER = u"recovery_item_";
+constexpr OUString RECOVERY_ITEM_BASE_IDENTIFIER = u"recovery_item_"_ustr;
 
 const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
 
@@ -1104,9 +1104,9 @@ constexpr OUStringLiteral PROP_SAVEPATH = u"SavePath";
 constexpr OUStringLiteral PROP_ENTRY_ID = u"EntryID";
 constexpr OUStringLiteral PROP_AUTOSAVE_STATE = u"AutoSaveState";
 
-constexpr OUStringLiteral OPERATION_START = u"start";
-constexpr OUStringLiteral OPERATION_STOP = u"stop";
-constexpr OUStringLiteral OPERATION_UPDATE = u"update";
+constexpr OUString OPERATION_START = u"start"_ustr;
+constexpr OUString OPERATION_STOP = u"stop"_ustr;
+constexpr OUString OPERATION_UPDATE = u"update"_ustr;
 
 const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]

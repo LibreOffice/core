@@ -66,10 +66,10 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui;
 
-constexpr OUStringLiteral CMD_RESTOREVISIBILITY = u".cmd:RestoreVisibility";
+constexpr OUString CMD_RESTOREVISIBILITY = u".cmd:RestoreVisibility"_ustr;
 constexpr OUStringLiteral CMD_LOCKTOOLBARS = u".uno:ToolbarLock";
 
-constexpr OUStringLiteral STATIC_CMD_PART    = u".uno:AvailableToolbars?Toolbar:string=";
+constexpr OUString STATIC_CMD_PART    = u".uno:AvailableToolbars?Toolbar:string="_ustr;
 const char STATIC_INTERNAL_CMD_PART[]    = ".cmd:";
 
 namespace framework
@@ -139,8 +139,8 @@ css::uno::Sequence< OUString > SAL_CALL ToolbarsMenuController::getSupportedServ
     return { SERVICENAME_POPUPMENUCONTROLLER };
 }
 
-constexpr OUStringLiteral g_aPropUIName( u"UIName" );
-constexpr OUStringLiteral g_aPropResourceURL( u"ResourceURL" );
+constexpr OUString g_aPropUIName( u"UIName"_ustr );
+constexpr OUString g_aPropResourceURL( u"ResourceURL"_ustr );
 
 ToolbarsMenuController::ToolbarsMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
     svt::PopupMenuControllerBase( xContext ),

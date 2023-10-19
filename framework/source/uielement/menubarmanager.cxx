@@ -76,7 +76,7 @@ const sal_uInt16 ITEMID_ADDONLIST             = 6678; // used to be a SID in sfx
 namespace framework
 {
 
-constexpr OUStringLiteral aCmdHelpIndex = u".uno:HelpIndex";
+constexpr OUString aCmdHelpIndex = u".uno:HelpIndex"_ustr;
 constexpr OUStringLiteral aCmdToolsMenu = u".uno:ToolsMenu";
 constexpr OUStringLiteral aCmdHelpMenu = u".uno:HelpMenu";
 constexpr OUStringLiteral aSpecialWindowCommand = u".uno:WindowList";

@@ -34,7 +34,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
 const int PROPHANDLE_UINAME     = 1;
-constexpr OUStringLiteral PROPNAME_UINAME = u"UIName";
+constexpr OUString PROPNAME_UINAME = u"UIName"_ustr;
 
 namespace framework
 {

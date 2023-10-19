@@ -52,8 +52,8 @@ namespace framework{
 #endif
 namespace fpf = ::framework::pattern::frame;
 
-constexpr OUStringLiteral URL_CLOSEDOC = u".uno:CloseDoc";
-constexpr OUStringLiteral URL_CLOSEWIN = u".uno:CloseWin";
+constexpr OUString URL_CLOSEDOC = u".uno:CloseDoc"_ustr;
+constexpr OUString URL_CLOSEWIN = u".uno:CloseWin"_ustr;
 const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
 CloseDispatcher::CloseDispatcher(css::uno::Reference< css::uno::XComponentContext >        xContext ,

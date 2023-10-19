@@ -64,8 +64,8 @@ using namespace ::cppu;
 
 const sal_Int16 MAX_IMAGETYPE_VALUE       = css::ui::ImageType::SIZE_32;
 
-constexpr OUStringLiteral IMAGE_FOLDER = u"images";
-constexpr OUStringLiteral BITMAPS_FOLDER = u"Bitmaps";
+constexpr OUString IMAGE_FOLDER = u"images"_ustr;
+constexpr OUString BITMAPS_FOLDER = u"Bitmaps"_ustr;
 
 const o3tl::enumarray<vcl::ImageType, const char*> IMAGELIST_XML_FILE =
 {

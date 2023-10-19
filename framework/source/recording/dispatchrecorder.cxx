@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 namespace framework{
 
 // used to mark a dispatch as comment (mostly it indicates an error) Changing of this define will impact all using of such comments...
-constexpr OUStringLiteral REM_AS_COMMENT = u"rem ";
+constexpr OUString REM_AS_COMMENT = u"rem "_ustr;
 
 //  XInterface, XTypeProvider, XServiceInfo
 

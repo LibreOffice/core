@@ -30,7 +30,7 @@
 
 #include <algorithm>
 
-constexpr OUStringLiteral PATH_SEPARATOR = u"/";
+constexpr OUString PATH_SEPARATOR = u"/"_ustr;
 #define PATH_SEPARATOR_UNICODE      u'/'
 
 namespace framework

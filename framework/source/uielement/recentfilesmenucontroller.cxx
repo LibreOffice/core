@@ -50,9 +50,9 @@ using namespace com::sun::star::util;
 
 namespace {
 
-constexpr OUStringLiteral CMD_CLEAR_LIST = u".uno:ClearRecentFileList";
-constexpr OUStringLiteral CMD_OPEN_AS_TEMPLATE = u".uno:OpenTemplate";
-constexpr OUStringLiteral CMD_OPEN_REMOTE = u".uno:OpenRemote";
+constexpr OUString CMD_CLEAR_LIST = u".uno:ClearRecentFileList"_ustr;
+constexpr OUString CMD_OPEN_AS_TEMPLATE = u".uno:OpenTemplate"_ustr;
+constexpr OUString CMD_OPEN_REMOTE = u".uno:OpenRemote"_ustr;
 
 class RecentFilesMenuController :  public svt::PopupMenuControllerBase
 {
@@ -448,7 +448,7 @@ void SAL_CALL RecentFilesMenuController::dispatch(
     if ( nQueryPart <= 0 )
         return;
 
-    static constexpr OUStringLiteral aEntryArgStr( u"entry=" );
+    static constexpr OUString aEntryArgStr( u"entry="_ustr );
     sal_Int32 nEntryArg = aURL.Complete.indexOf( aEntryArgStr, nQueryPart );
     sal_Int32 nEntryPos = nEntryArg + aEntryArgStr.getLength();
     if (( nEntryArg <= 0 ) || ( nEntryPos >= aURL.Complete.getLength() ))

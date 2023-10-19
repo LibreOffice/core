@@ -40,25 +40,25 @@
 
 constexpr OUStringLiteral XMLNS_MENU = u"http://openoffice.org/2001/menu";
 
-constexpr OUStringLiteral ELEMENT_MENUBAR = u"http://openoffice.org/2001/menu^menubar";
-constexpr OUStringLiteral ELEMENT_MENU = u"http://openoffice.org/2001/menu^menu";
-constexpr OUStringLiteral ELEMENT_MENUPOPUP = u"http://openoffice.org/2001/menu^menupopup";
-constexpr OUStringLiteral ELEMENT_MENUITEM = u"http://openoffice.org/2001/menu^menuitem";
-constexpr OUStringLiteral ELEMENT_MENUSEPARATOR = u"http://openoffice.org/2001/menu^menuseparator";
+constexpr OUString ELEMENT_MENUBAR = u"http://openoffice.org/2001/menu^menubar"_ustr;
+constexpr OUString ELEMENT_MENU = u"http://openoffice.org/2001/menu^menu"_ustr;
+constexpr OUString ELEMENT_MENUPOPUP = u"http://openoffice.org/2001/menu^menupopup"_ustr;
+constexpr OUString ELEMENT_MENUITEM = u"http://openoffice.org/2001/menu^menuitem"_ustr;
+constexpr OUString ELEMENT_MENUSEPARATOR = u"http://openoffice.org/2001/menu^menuseparator"_ustr;
 
 constexpr OUStringLiteral ELEMENT_NS_MENUBAR = u"menu:menubar";
-constexpr OUStringLiteral ELEMENT_NS_MENU = u"menu:menu";
-constexpr OUStringLiteral ELEMENT_NS_MENUPOPUP = u"menu:menupopup";
-constexpr OUStringLiteral ELEMENT_NS_MENUITEM = u"menu:menuitem";
-constexpr OUStringLiteral ELEMENT_NS_MENUSEPARATOR = u"menu:menuseparator";
+constexpr OUString ELEMENT_NS_MENU = u"menu:menu"_ustr;
+constexpr OUString ELEMENT_NS_MENUPOPUP = u"menu:menupopup"_ustr;
+constexpr OUString ELEMENT_NS_MENUITEM = u"menu:menuitem"_ustr;
+constexpr OUString ELEMENT_NS_MENUSEPARATOR = u"menu:menuseparator"_ustr;
 
-constexpr OUStringLiteral ATTRIBUTE_ID = u"http://openoffice.org/2001/menu^id";
-constexpr OUStringLiteral ATTRIBUTE_LABEL = u"http://openoffice.org/2001/menu^label";
-constexpr OUStringLiteral ATTRIBUTE_HELPID = u"http://openoffice.org/2001/menu^helpid";
-constexpr OUStringLiteral ATTRIBUTE_STYLE = u"http://openoffice.org/2001/menu^style";
+constexpr OUString ATTRIBUTE_ID = u"http://openoffice.org/2001/menu^id"_ustr;
+constexpr OUString ATTRIBUTE_LABEL = u"http://openoffice.org/2001/menu^label"_ustr;
+constexpr OUString ATTRIBUTE_HELPID = u"http://openoffice.org/2001/menu^helpid"_ustr;
+constexpr OUString ATTRIBUTE_STYLE = u"http://openoffice.org/2001/menu^style"_ustr;
 
-constexpr OUStringLiteral ATTRIBUTE_NS_ID = u"menu:id";
-constexpr OUStringLiteral ATTRIBUTE_NS_LABEL = u"menu:label";
+constexpr OUString ATTRIBUTE_NS_ID = u"menu:id"_ustr;
+constexpr OUString ATTRIBUTE_NS_LABEL = u"menu:label"_ustr;
 constexpr OUStringLiteral ATTRIBUTE_NS_HELPID = u"menu:helpid";
 constexpr OUStringLiteral ATTRIBUTE_NS_STYLE = u"menu:style";
 
@@ -71,12 +71,12 @@ constexpr OUStringLiteral MENUBAR_DOCTYPE = u"<!DOCTYPE menu:menubar PUBLIC \"-/
 #define ATTRIBUTE_ITEMSTYLE_RADIO    "radio"
 
 // Property names of a menu/menu item ItemDescriptor
-constexpr OUStringLiteral ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_HELPURL = u"HelpURL";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_LABEL = u"Label";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_TYPE = u"Type";
-constexpr OUStringLiteral ITEM_DESCRIPTOR_STYLE = u"Style";
+constexpr OUString ITEM_DESCRIPTOR_COMMANDURL = u"CommandURL"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_HELPURL = u"HelpURL"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_CONTAINER = u"ItemDescriptorContainer"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_LABEL = u"Label"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_TYPE = u"Type"_ustr;
+constexpr OUString ITEM_DESCRIPTOR_STYLE = u"Style"_ustr;
 
 //  using namespaces
 
