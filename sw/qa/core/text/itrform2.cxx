@@ -15,6 +15,7 @@
 #include <rootfrm.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
+#include <cntfrm.hxx>
 
 namespace
 {
@@ -138,6 +139,28 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
     // - Actual  : 2
     // i.e. not all of header, heading and body text was there on page 2, content was lost.
     CPPUNIT_ASSERT_EQUAL(3, nTextCount);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyAnchorLeftMargin)
+{
+    // Given a document with a floating table, anchor para is followed by an other para with a left
+    // margin:
+    createSwDoc("floattable-anchor-left-margin.docx");
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure that the left margin of this last paragraph is not lost:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage = dynamic_cast<SwPageFrame*>(pLayout->Lower());
+    CPPUNIT_ASSERT(pPage);
+    SwContentFrame* pLastPara = pPage->FindLastBodyContent();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6480
+    // - Actual  : 0
+    // i.e. the left margin was lost.
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwTwips>(6480), pLastPara->getFramePrintArea().Left());
 }
 }
 
