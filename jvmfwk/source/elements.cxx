@@ -177,8 +177,8 @@ NodeJava::NodeJava(Layer layer):
 
 void NodeJava::load()
 {
-    static constexpr OStringLiteral sExcMsg("[Java framework] Error in function NodeJava::load"
-                             "(elements.cxx).");
+    static constexpr OString sExcMsg("[Java framework] Error in function NodeJava::load"
+                             "(elements.cxx)."_ostr);
     if (SHARED == m_layer)
     {
         //we do not support yet to write into the shared installation
