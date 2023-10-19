@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral sWW8_form( u"WW-Standard" );
+constexpr OUString sWW8_form( u"WW-Standard"_ustr );
 
 SvxMSConvertOCXControls::SvxMSConvertOCXControls( uno::Reference< frame::XModel > xModel) : mxModel(std::move(xModel))
 {

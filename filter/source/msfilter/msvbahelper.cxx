@@ -50,8 +50,8 @@ using namespace ::com::sun::star;
 
 namespace ooo::vba {
 
-constexpr OUStringLiteral sUrlPart0( u"vnd.sun.star.script:" );
-constexpr OUStringLiteral sUrlPart1( u"?language=Basic&location=document" );
+constexpr OUString sUrlPart0( u"vnd.sun.star.script:"_ustr );
+constexpr OUString sUrlPart1( u"?language=Basic&location=document"_ustr );
 
 OUString makeMacroURL( std::u16string_view sMacroName )
 {

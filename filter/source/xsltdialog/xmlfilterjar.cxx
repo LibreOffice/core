@@ -60,7 +60,7 @@ using namespace com::sun::star::io;
 
 using ::rtl::Uri;
 
-constexpr OUStringLiteral sVndSunStarPackage(u"vnd.sun.star.Package:");
+constexpr OUString sVndSunStarPackage(u"vnd.sun.star.Package:"_ustr);
 
 XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rxContext )
 : mxContext( rxContext ),

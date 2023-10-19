@@ -21,15 +21,15 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
 
-constexpr OUStringLiteral WRITER_TEXT_FILTER = u"Text";
-constexpr OUStringLiteral CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)";
+constexpr OUString WRITER_TEXT_FILTER = u"Text"_ustr;
+constexpr OUString CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)"_ustr;
 
 constexpr OUStringLiteral WEB_HTML_FILTER = u"HTML";
 constexpr OUStringLiteral WRITER_HTML_FILTER = u"HTML (StarWriter)";
 constexpr OUStringLiteral CALC_HTML_FILTER = u"calc_HTML_WebQuery";
 
-constexpr OUStringLiteral WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument";
-constexpr OUStringLiteral CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument";
+constexpr OUString WRITER_DOCSERVICE = u"com.sun.star.text.TextDocument"_ustr;
+constexpr OUString CALC_DOCSERVICE = u"com.sun.star.sheet.SpreadsheetDocument"_ustr;
 
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;
@@ -188,13 +188,13 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         // then on extension if that's not available.
 
         if (aDocService == CALC_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
         else if (aDocService == WRITER_DOCSERVICE)
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= CALC_TEXT_FILTER;
         else
-            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
+            aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= WRITER_TEXT_FILTER;
     }
 
     else

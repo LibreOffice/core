@@ -90,25 +90,25 @@ constexpr OUStringLiteral SVG_PROP_OPACITY = u"Opacity";
 constexpr OUStringLiteral SVG_PROP_POSITIONED_CHARACTERS = u"UsePositionedCharacters";
 
 // ooo xml elements
-constexpr OUStringLiteral aOOOElemTextField = NSPREFIX "text_field";
+constexpr OUString aOOOElemTextField = NSPREFIX "text_field"_ustr;
 
 
 // ooo xml attributes for meta_slide
-constexpr OUStringLiteral aOOOAttrSlide = NSPREFIX "slide";
-constexpr OUStringLiteral aOOOAttrMaster = NSPREFIX "master";
+constexpr OUString aOOOAttrSlide = NSPREFIX "slide"_ustr;
+constexpr OUString aOOOAttrMaster = NSPREFIX "master"_ustr;
 constexpr OUStringLiteral aOOOAttrHasCustomBackground = NSPREFIX "has-custom-background";
 constexpr OUStringLiteral aOOOAttrDisplayName = NSPREFIX "display-name";
-constexpr OUStringLiteral aOOOAttrBackgroundVisibility = NSPREFIX "background-visibility";
-constexpr OUStringLiteral aOOOAttrMasterObjectsVisibility = NSPREFIX "master-objects-visibility";
+constexpr OUString aOOOAttrBackgroundVisibility = NSPREFIX "background-visibility"_ustr;
+constexpr OUString aOOOAttrMasterObjectsVisibility = NSPREFIX "master-objects-visibility"_ustr;
 constexpr OUStringLiteral aOOOAttrSlideDuration = NSPREFIX "slide-duration";
-constexpr OUStringLiteral aOOOAttrDateTimeField = NSPREFIX "date-time-field";
-constexpr OUStringLiteral aOOOAttrFooterField = NSPREFIX "footer-field";
-constexpr OUStringLiteral aOOOAttrHasTransition = NSPREFIX "has-transition";
+constexpr OUString aOOOAttrDateTimeField = NSPREFIX "date-time-field"_ustr;
+constexpr OUString aOOOAttrFooterField = NSPREFIX "footer-field"_ustr;
+constexpr OUString aOOOAttrHasTransition = NSPREFIX "has-transition"_ustr;
 
 // ooo xml attributes for pages and shapes
-constexpr OUStringLiteral aOOOAttrName = NSPREFIX "name";
+constexpr OUString aOOOAttrName = NSPREFIX "name"_ustr;
 
-constexpr OUStringLiteral constSvgNamespace = u"http://www.w3.org/2000/svg";
+constexpr OUString constSvgNamespace = u"http://www.w3.org/2000/svg"_ustr;
 
 
 /** Text Field Class Hierarchy
@@ -211,7 +211,7 @@ public:
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const override
     {
-        static constexpr OUStringLiteral sFieldId = aOOOAttrFooterField;
+        static constexpr OUString sFieldId = aOOOAttrFooterField;
         implGrowCharSet( aTextFieldCharSets, text, sFieldId );
     }
 };
@@ -2709,9 +2709,9 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
             }
             bool bHasCharSetMap = mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) != mTextFieldCharSets.end();
 
-            static constexpr OUStringLiteral aHeaderId( NSPREFIX "header-field" );
-            static constexpr OUStringLiteral aFooterId( aOOOAttrFooterField );
-            static constexpr OUStringLiteral aDateTimeId( aOOOAttrDateTimeField );
+            static constexpr OUString aHeaderId( NSPREFIX "header-field"_ustr );
+            static constexpr OUString aFooterId( aOOOAttrFooterField );
+            static constexpr OUString aDateTimeId( aOOOAttrDateTimeField );
             static const OUString aVariableDateTimeId( aOOOAttrDateTimeField + "-variable" );
 
             const UCharSet * pCharSet = nullptr;

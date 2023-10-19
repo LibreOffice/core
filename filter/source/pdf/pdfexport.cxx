@@ -999,9 +999,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 }
                 bool bExportNotesPages = false;
                 bool bReChangeToNormalView = false;
-                static constexpr OUStringLiteral sShowOnlineLayout( u"ShowOnlineLayout" );
+                static constexpr OUString sShowOnlineLayout( u"ShowOnlineLayout"_ustr );
                 bool bReHideWhitespace = false;
-                static constexpr OUStringLiteral sHideWhitespace(u"HideWhitespace");
+                static constexpr OUString sHideWhitespace(u"HideWhitespace"_ustr);
                 uno::Reference< beans::XPropertySet > xViewProperties;
 
                 if ( aCreator == "Writer" )

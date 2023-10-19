@@ -598,7 +598,7 @@ void EscherPropertyContainer::CreateFillProperties(
     uno::Any aAny;
     AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
     AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-    static constexpr OUStringLiteral aPropName( u"FillStyle" );
+    static constexpr OUString aPropName( u"FillStyle"_ustr );
 
     if ( EscherPropertyValueHelper::GetPropertyValue(
             aAny, rXPropSet, aPropName ) )
@@ -2598,10 +2598,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
 
     static constexpr OUStringLiteral sViewBox            ( u"ViewBox"  );
     static constexpr OUStringLiteral sTextRotateAngle    ( u"TextRotateAngle"  );
-    static constexpr OUStringLiteral sExtrusion          ( u"Extrusion"  );
+    static constexpr OUString sExtrusion          ( u"Extrusion"_ustr  );
     static constexpr OUStringLiteral sEquations          ( u"Equations"  );
     static constexpr OUStringLiteral sPath               ( u"Path"  );
-    static constexpr OUStringLiteral sTextPath           ( u"TextPath"  );
+    static constexpr OUString sTextPath           ( u"TextPath"_ustr  );
     static constexpr OUStringLiteral sHandles            ( u"Handles"  );
     static constexpr OUStringLiteral sAdjustmentValues   ( u"AdjustmentValues"  );
 

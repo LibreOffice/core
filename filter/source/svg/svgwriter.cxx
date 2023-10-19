@@ -53,43 +53,43 @@
 #include <memory>
 
 
-constexpr OUStringLiteral aPrefixClipPathId = u"clip_path_";
+constexpr OUString aPrefixClipPathId = u"clip_path_"_ustr;
 
-constexpr OUStringLiteral aXMLElemG = u"g";
-constexpr OUStringLiteral aXMLElemDefs = u"defs";
-constexpr OUStringLiteral aXMLElemText = u"text";
-constexpr OUStringLiteral aXMLElemTspan = u"tspan";
-constexpr OUStringLiteral aXMLElemLinearGradient = u"linearGradient";
-constexpr OUStringLiteral aXMLElemStop = u"stop";
+constexpr OUString aXMLElemG = u"g"_ustr;
+constexpr OUString aXMLElemDefs = u"defs"_ustr;
+constexpr OUString aXMLElemText = u"text"_ustr;
+constexpr OUString aXMLElemTspan = u"tspan"_ustr;
+constexpr OUString aXMLElemLinearGradient = u"linearGradient"_ustr;
+constexpr OUString aXMLElemStop = u"stop"_ustr;
 
-constexpr OUStringLiteral aXMLAttrTransform = u"transform";
-constexpr OUStringLiteral aXMLAttrStyle = u"style";
-constexpr OUStringLiteral aXMLAttrId = u"id";
-constexpr OUStringLiteral aXMLAttrX = u"x";
-constexpr OUStringLiteral aXMLAttrY = u"y";
-constexpr OUStringLiteral aXMLAttrX1 = u"x1";
-constexpr OUStringLiteral aXMLAttrY1 = u"y1";
-constexpr OUStringLiteral aXMLAttrX2 = u"x2";
-constexpr OUStringLiteral aXMLAttrY2 = u"y2";
-constexpr OUStringLiteral aXMLAttrCX = u"cx";
-constexpr OUStringLiteral aXMLAttrCY = u"cy";
-constexpr OUStringLiteral aXMLAttrRX = u"rx";
-constexpr OUStringLiteral aXMLAttrRY = u"ry";
-constexpr OUStringLiteral aXMLAttrWidth = u"width";
-constexpr OUStringLiteral aXMLAttrHeight = u"height";
-constexpr OUStringLiteral aXMLAttrStrokeWidth = u"stroke-width";
-constexpr OUStringLiteral aXMLAttrFill = u"fill";
-constexpr OUStringLiteral aXMLAttrFontFamily = u"font-family";
-constexpr OUStringLiteral aXMLAttrFontSize = u"font-size";
-constexpr OUStringLiteral aXMLAttrFontStyle = u"font-style";
-constexpr OUStringLiteral aXMLAttrFontWeight = u"font-weight";
-constexpr OUStringLiteral aXMLAttrTextDecoration = u"text-decoration";
-constexpr OUStringLiteral aXMLAttrXLinkHRef = u"xlink:href";
-constexpr OUStringLiteral aXMLAttrGradientUnits = u"gradientUnits";
-constexpr OUStringLiteral aXMLAttrOffset = u"offset";
-constexpr OUStringLiteral aXMLAttrStopColor = u"stop-color";
-constexpr OUStringLiteral aXMLAttrStrokeLinejoin = u"stroke-linejoin";
-constexpr OUStringLiteral aXMLAttrStrokeLinecap = u"stroke-linecap";
+constexpr OUString aXMLAttrTransform = u"transform"_ustr;
+constexpr OUString aXMLAttrStyle = u"style"_ustr;
+constexpr OUString aXMLAttrId = u"id"_ustr;
+constexpr OUString aXMLAttrX = u"x"_ustr;
+constexpr OUString aXMLAttrY = u"y"_ustr;
+constexpr OUString aXMLAttrX1 = u"x1"_ustr;
+constexpr OUString aXMLAttrY1 = u"y1"_ustr;
+constexpr OUString aXMLAttrX2 = u"x2"_ustr;
+constexpr OUString aXMLAttrY2 = u"y2"_ustr;
+constexpr OUString aXMLAttrCX = u"cx"_ustr;
+constexpr OUString aXMLAttrCY = u"cy"_ustr;
+constexpr OUString aXMLAttrRX = u"rx"_ustr;
+constexpr OUString aXMLAttrRY = u"ry"_ustr;
+constexpr OUString aXMLAttrWidth = u"width"_ustr;
+constexpr OUString aXMLAttrHeight = u"height"_ustr;
+constexpr OUString aXMLAttrStrokeWidth = u"stroke-width"_ustr;
+constexpr OUString aXMLAttrFill = u"fill"_ustr;
+constexpr OUString aXMLAttrFontFamily = u"font-family"_ustr;
+constexpr OUString aXMLAttrFontSize = u"font-size"_ustr;
+constexpr OUString aXMLAttrFontStyle = u"font-style"_ustr;
+constexpr OUString aXMLAttrFontWeight = u"font-weight"_ustr;
+constexpr OUString aXMLAttrTextDecoration = u"text-decoration"_ustr;
+constexpr OUString aXMLAttrXLinkHRef = u"xlink:href"_ustr;
+constexpr OUString aXMLAttrGradientUnits = u"gradientUnits"_ustr;
+constexpr OUString aXMLAttrOffset = u"offset"_ustr;
+constexpr OUString aXMLAttrStopColor = u"stop-color"_ustr;
+constexpr OUString aXMLAttrStrokeLinejoin = u"stroke-linejoin"_ustr;
+constexpr OUString aXMLAttrStrokeLinecap = u"stroke-linecap"_ustr;
 
 
 vcl::PushFlags SVGContextHandler::getPushFlags() const
@@ -1164,8 +1164,8 @@ bool SVGTextWriter::nextTextPortion()
             Reference < XTextField > xTextField( xRangePropSet->getPropertyValue( "TextField" ), UNO_QUERY );
             if( xTextField.is() )
             {
-                static constexpr OUStringLiteral sServicePrefix(u"com.sun.star.text.textfield.");
-                static constexpr OUStringLiteral sPresentationServicePrefix(u"com.sun.star.presentation.TextField.");
+                static constexpr OUString sServicePrefix(u"com.sun.star.text.textfield."_ustr);
+                static constexpr OUString sPresentationServicePrefix(u"com.sun.star.presentation.TextField."_ustr);
 
                 Reference< XServiceInfo > xService( xTextField, UNO_QUERY );
                 const Sequence< OUString > aServices = xService->getSupportedServiceNames();
@@ -1893,8 +1893,8 @@ tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPol
 OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine )
 {
     OUStringBuffer   aPathData;
-    static constexpr OUStringLiteral   aBlank( u" " );
-    static constexpr OUStringLiteral   aComma( u"," );
+    static constexpr OUString   aBlank( u" "_ustr );
+    static constexpr OUString   aComma( u","_ustr );
     Point                      aPolyPoint;
 
     for( tools::Long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )

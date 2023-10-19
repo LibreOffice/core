@@ -79,14 +79,14 @@ void TypeDetectionExporter::doExport( const Reference< XOutputStream >& xOS,  co
 {
     try
     {
-        static constexpr OUStringLiteral sComponentData       ( u"oor:component-data" );
-        static constexpr OUStringLiteral sNode                ( u"node" );
-        static constexpr OUStringLiteral sName                ( u"oor:name" );
-        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
-        static constexpr OUStringLiteral sUIName              ( u"UIName" );
-        static constexpr OUStringLiteral sComma               ( u"," );
-        static constexpr OUStringLiteral sDelim               ( u";" );
-        static constexpr OUStringLiteral sData                ( u"Data" );
+        static constexpr OUString sComponentData       ( u"oor:component-data"_ustr );
+        static constexpr OUString sNode                ( u"node"_ustr );
+        static constexpr OUString sName                ( u"oor:name"_ustr );
+        static constexpr OUString sWhiteSpace          ( u" "_ustr );
+        static constexpr OUString sUIName              ( u"UIName"_ustr );
+        static constexpr OUString sComma               ( u","_ustr );
+        static constexpr OUString sDelim               ( u";"_ustr );
+        static constexpr OUString sData                ( u"Data"_ustr );
         static constexpr OUStringLiteral sDocTypePrefix       ( u"doctype:" );
         static constexpr OUStringLiteral sFilterAdaptorService( u"com.sun.star.comp.Writer.XmlFilterAdaptor" );
         static constexpr OUStringLiteral sXSLTFilterService   ( u"com.sun.star.documentconversion.XSLTFilter" );
@@ -206,9 +206,9 @@ void TypeDetectionExporter::addProperty( const Reference< XWriter >& xHandler, c
 {
     try
     {
-        static constexpr OUStringLiteral sProp( u"prop" );
-        static constexpr OUStringLiteral sValue( u"value" );
-        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
+        static constexpr OUString sProp( u"prop"_ustr );
+        static constexpr OUString sValue( u"value"_ustr );
+        static constexpr OUString sWhiteSpace          ( u" "_ustr );
 
         rtl::Reference<::comphelper::AttributeList>pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( "oor:name", rName );
@@ -233,9 +233,9 @@ void TypeDetectionExporter::addLocaleProperty( const Reference< XWriter >& xHand
 {
     try
     {
-        static constexpr OUStringLiteral sProp( u"prop" );
-        static constexpr OUStringLiteral sValue( u"value" );
-        static constexpr OUStringLiteral sWhiteSpace          ( u" " );
+        static constexpr OUString sProp( u"prop"_ustr );
+        static constexpr OUString sValue( u"value"_ustr );
+        static constexpr OUString sWhiteSpace          ( u" "_ustr );
 
         rtl::Reference<::comphelper::AttributeList> pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( "oor:name", rName );
