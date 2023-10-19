@@ -735,6 +735,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
     return new ::cppu::OPropertyArrayHelper
     {
         {
+            // a change here means a change should also been done in OApplicationController::disposing()
             { PROPERTY_INFO, PROPERTY_ID_INFO, cppu::UnoType<Sequence< PropertyValue >>::get(), css::beans::PropertyAttribute::BOUND },
             { PROPERTY_ISPASSWORDREQUIRED, PROPERTY_ID_ISPASSWORDREQUIRED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND },
             { PROPERTY_ISREADONLY, PROPERTY_ID_ISREADONLY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },

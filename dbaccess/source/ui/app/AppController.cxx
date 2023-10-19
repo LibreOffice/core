@@ -327,14 +327,20 @@ void SAL_CALL OApplicationController::disposing()
 
         if ( m_xDataSource.is() )
         {
+            // Should correspond to ODatabaseSource::createArrayHelper in dbaccess/source/core/dataaccess/datasource.cxx
             m_xDataSource->removePropertyChangeListener(OUString(), this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_INFO, this);
-            m_xDataSource->removePropertyChangeListener(PROPERTY_URL, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_ISPASSWORDREQUIRED, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_ISREADONLY, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_LAYOUTINFORMATION, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_NAME, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_NUMBERFORMATSSUPPLIER, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_PASSWORD, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_SETTINGS, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_SUPPRESSVERSIONCL, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLEFILTER, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_URL, this);
             m_xDataSource->removePropertyChangeListener(PROPERTY_USER, this);
             m_xDataSource = nullptr;
         }
