@@ -82,7 +82,7 @@ class EmbeddedDBPerformanceTest
     : public DBTestBase
 {
 private:
-    static constexpr OUStringLiteral our_sEnableTestEnvVar = u"DBA_PERFTEST";
+    static constexpr OUString our_sEnableTestEnvVar = u"DBA_PERFTEST"_ustr;
 
 
     // We store the results and print them at the end due to the amount of warning
@@ -145,7 +145,7 @@ void EmbeddedDBPerformanceTest::printTimes(
 void EmbeddedDBPerformanceTest::testPerformance()
 {
     OUString sEnabled;
-    osl_getEnvironment(OUString(our_sEnableTestEnvVar).pData, &sEnabled.pData);
+    osl_getEnvironment(our_sEnableTestEnvVar.pData, &sEnabled.pData);
 
     if (sEnabled.isEmpty())
         return;

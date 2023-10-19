@@ -264,7 +264,7 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::cre
     osl::MutexGuard g(m_aMutex);
     uno::Reference< chart2::data::XDataSequence > xData = m_xInternal->createDataSequenceByRangeRepresentation(_sRangeRepresentation);
     uno::Reference<beans::XPropertySet> xProp(xData,uno::UNO_QUERY);
-    static constexpr OUStringLiteral s_sNumberFormatKey = u"NumberFormatKey";
+    static constexpr OUString s_sNumberFormatKey = u"NumberFormatKey"_ustr;
     if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(s_sNumberFormatKey) )
     {
         xProp->setPropertyValue(s_sNumberFormatKey,impl_getNumberFormatKey_nothrow(_sRangeRepresentation));

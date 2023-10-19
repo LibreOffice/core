@@ -561,7 +561,7 @@ void ODBExport::exportConnectionData()
                         Reference< XPropertySetInfo > xSettingsInfo( xDataSourceSettings->getPropertySetInfo(), UNO_SET_THROW );
 
 
-                        static constexpr OUStringLiteral sPropertyName = u"LocalSocket";
+                        static constexpr OUString sPropertyName = u"LocalSocket"_ustr;
                         if ( xSettingsInfo->hasPropertyByName( sPropertyName ) )
                         {
                             OUString sPropertyValue;

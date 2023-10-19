@@ -263,7 +263,7 @@ void HsqlImporter::parseTableRows(const std::vector<sal_Int32>& rIndexes,
                                   const std::vector<ColumnDefinition>& rColTypes,
                                   const OUString& sTableName)
 {
-    static constexpr OUStringLiteral BINARY_FILENAME = u"data";
+    static constexpr OUString BINARY_FILENAME = u"data"_ustr;
 
     if (!m_xStorage->hasByName(BINARY_FILENAME))
     {

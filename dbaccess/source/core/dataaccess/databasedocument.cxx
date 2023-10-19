@@ -300,7 +300,7 @@ namespace
     }
 }
 
-constexpr OUStringLiteral sPictures = u"Pictures";
+constexpr OUString sPictures = u"Pictures"_ustr;
 
 // base documents seem to have a different behaviour to other documents, the
 // root storage contents at least seem to be re-used over different saves, thus if there is a

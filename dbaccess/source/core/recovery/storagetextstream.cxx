@@ -29,7 +29,7 @@ namespace dbaccess
     using ::com::sun::star::embed::XStorage;
     using ::com::sun::star::io::TextOutputStream;
 
-    constexpr OUStringLiteral sLineFeed = u"\n";
+    constexpr OUString sLineFeed = u"\n"_ustr;
 
     // StorageTextOutputStream
     StorageTextOutputStream::StorageTextOutputStream(   const Reference<XComponentContext>& i_rContext,

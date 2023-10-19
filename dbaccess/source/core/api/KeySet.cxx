@@ -447,7 +447,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     // list all columns that should be set
     constexpr OUStringLiteral aPara(u" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
-    constexpr OUStringLiteral aAnd(u" AND ");
+    constexpr OUString aAnd(u" AND "_ustr);
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
 

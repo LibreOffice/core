@@ -151,8 +151,8 @@ namespace
             return;
 
         xLayoutManager->lock();
-        static constexpr OUStringLiteral s_sDesignToolbar = u"private:resource/toolbar/designobjectbar";
-        static constexpr OUStringLiteral s_sSqlToolbar = u"private:resource/toolbar/sqlobjectbar";
+        static constexpr OUString s_sDesignToolbar = u"private:resource/toolbar/designobjectbar"_ustr;
+        static constexpr OUString s_sSqlToolbar = u"private:resource/toolbar/sqlobjectbar"_ustr;
         if ( _bDesign )
         {
             xLayoutManager->destroyElement( s_sSqlToolbar );

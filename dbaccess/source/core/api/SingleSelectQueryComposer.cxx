@@ -80,15 +80,15 @@ namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
 constexpr OUStringLiteral STR_SELECT = u"SELECT ";
 constexpr OUStringLiteral STR_FROM = u" FROM ";
-constexpr OUStringLiteral STR_WHERE = u" WHERE ";
+constexpr OUString STR_WHERE = u" WHERE "_ustr;
 constexpr OUStringLiteral STR_GROUP_BY = u" GROUP BY ";
 constexpr OUStringLiteral STR_HAVING = u" HAVING ";
 constexpr OUStringLiteral STR_ORDER_BY = u" ORDER BY ";
-constexpr OUStringLiteral STR_AND = u" AND ";
-constexpr OUStringLiteral STR_OR = u" OR ";
+constexpr OUString STR_AND = u" AND "_ustr;
+constexpr OUString STR_OR = u" OR "_ustr;
 constexpr OUStringLiteral STR_LIKE = u" LIKE ";
-constexpr OUStringLiteral L_BRACKET = u"(";
-constexpr OUStringLiteral R_BRACKET = u")";
+constexpr OUString L_BRACKET = u"("_ustr;
+constexpr OUString R_BRACKET = u")"_ustr;
 constexpr OUStringLiteral COMMA = u",";
 
 namespace

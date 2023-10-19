@@ -122,7 +122,7 @@ namespace dbaui
             }
 
             // set the properties
-            static constexpr OUStringLiteral s_sNamePropertyName = u"Name";
+            static constexpr OUString s_sNamePropertyName = u"Name"_ustr;
             // the index' own props
             xIndexDescriptor->setPropertyValue("IsUnique", css::uno::Any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, Any(_rPos->sName));

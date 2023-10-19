@@ -158,8 +158,8 @@ namespace dbaccess
             return xCommandProcessor;
         }
 
-        constexpr OUStringLiteral sSettingsStreamName = u"settings.xml";
-        constexpr OUStringLiteral sCurrentQueryDesignName = u"ooo:current-query-design";
+        constexpr OUString sSettingsStreamName = u"settings.xml"_ustr;
+        constexpr OUString sCurrentQueryDesignName = u"ooo:current-query-design"_ustr;
     }
 
     namespace {
@@ -478,7 +478,7 @@ namespace dbaccess
         StorageXMLOutputStream aDesignOutput( m_rContext, i_rObjectStorage, sSettingsStreamName );
         SettingsExportContext aSettingsExportContext( m_rContext, aDesignOutput );
 
-        static constexpr OUStringLiteral sWhitespace( u" " );
+        static constexpr OUString sWhitespace( u" "_ustr );
 
         aDesignOutput.startElement( "office:settings" );
         aDesignOutput.ignorableWhitespace( sWhitespace );
