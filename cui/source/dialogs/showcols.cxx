@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-constexpr OUStringLiteral CUIFM_PROP_HIDDEN = u"Hidden";
+constexpr OUString CUIFM_PROP_HIDDEN = u"Hidden"_ustr;
 constexpr OUStringLiteral CUIFM_PROP_LABEL = u"Label";
 
 FmShowColsDialog::FmShowColsDialog(weld::Window* pParent)

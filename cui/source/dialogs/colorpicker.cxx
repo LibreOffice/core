@@ -1266,7 +1266,7 @@ com_sun_star_cui_ColorPicker_get_implementation(
 }
 
 
-constexpr OUStringLiteral gsColorKey( u"Color" );
+constexpr OUString gsColorKey( u"Color"_ustr );
 constexpr OUStringLiteral gsModeKey( u"Mode" );
 
 ColorPicker::ColorPicker()

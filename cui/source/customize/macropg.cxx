@@ -38,7 +38,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-constexpr OUStringLiteral aVndSunStarUNO = u"vnd.sun.star.UNO:";
+constexpr OUString aVndSunStarUNO = u"vnd.sun.star.UNO:"_ustr;
 
 SvxMacroTabPage_Impl::SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     : bReadOnly(false)

@@ -24,7 +24,7 @@
 #include <strings.hrc>
 
 using LanguageToolCfg = officecfg::Office::Linguistic::GrammarChecking::LanguageTool;
-constexpr OUStringLiteral LANGUAGETOOL_DEFAULT_URL = u"https://api.languagetool.org/v2";
+constexpr OUString LANGUAGETOOL_DEFAULT_URL = u"https://api.languagetool.org/v2"_ustr;
 
 OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
                                                weld::DialogController* pController,

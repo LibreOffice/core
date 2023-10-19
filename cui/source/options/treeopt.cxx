@@ -126,7 +126,7 @@ using namespace ::com::sun::star::util;
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = nullptr;
 
 // some stuff for easier changes for SvtViewOptions
-constexpr OUStringLiteral VIEWOPT_DATANAME = u"page data";
+constexpr OUString VIEWOPT_DATANAME = u"page data"_ustr;
 
 static void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {

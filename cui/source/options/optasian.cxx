@@ -42,8 +42,8 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 
-constexpr OUStringLiteral cIsKernAsianPunctuation = u"IsKernAsianPunctuation";
-constexpr OUStringLiteral cCharacterCompressionType = u"CharacterCompressionType";
+constexpr OUString cIsKernAsianPunctuation = u"IsKernAsianPunctuation"_ustr;
+constexpr OUString cCharacterCompressionType = u"CharacterCompressionType"_ustr;
 
 namespace {
 

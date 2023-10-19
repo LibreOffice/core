@@ -79,9 +79,9 @@ const char CMDURL_STYLEPROT_ONLY[] = ".uno:StyleApply?";
 const char CMDURL_SPART_ONLY    [] = "Style:string=";
 const char CMDURL_FPART_ONLY    [] = "FamilyName:string=";
 
-constexpr OUStringLiteral STYLEPROP_UINAME = u"DisplayName";
-constexpr OUStringLiteral MACRO_SELECTOR_CONFIGNAME = u"MacroSelectorDialog";
-constexpr OUStringLiteral LAST_RUN_MACRO_INFO = u"LastRunMacro";
+constexpr OUString STYLEPROP_UINAME = u"DisplayName"_ustr;
+constexpr OUString MACRO_SELECTOR_CONFIGNAME = u"MacroSelectorDialog"_ustr;
+constexpr OUString LAST_RUN_MACRO_INFO = u"LastRunMacro"_ustr;
 
 OUString SfxStylesInfo_Impl::generateCommand(
     std::u16string_view sFamily, std::u16string_view sStyle)

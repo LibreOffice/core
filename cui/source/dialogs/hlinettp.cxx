@@ -24,7 +24,7 @@
 #include <hlinettp.hxx>
 #include <hlmarkwn_def.hxx>
 
-constexpr OUStringLiteral sAnonymous = u"anonymous";
+constexpr OUString sAnonymous = u"anonymous"_ustr;
 
 /*************************************************************************
 |*

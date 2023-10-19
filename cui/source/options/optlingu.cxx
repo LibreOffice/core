@@ -71,10 +71,10 @@ using namespace css::uno;
 using namespace css::linguistic2;
 using namespace css::beans;
 
-constexpr OUStringLiteral cSpell(SN_SPELLCHECKER);
-constexpr OUStringLiteral cGrammar(SN_GRAMMARCHECKER);
-constexpr OUStringLiteral cHyph(SN_HYPHENATOR);
-constexpr OUStringLiteral cThes(SN_THESAURUS);
+constexpr OUString cSpell(SN_SPELLCHECKER);
+constexpr OUString cGrammar(SN_GRAMMARCHECKER);
+constexpr OUString cHyph(SN_HYPHENATOR);
+constexpr OUString cThes(SN_THESAURUS);
 
 // static ----------------------------------------------------------------
 

@@ -54,8 +54,8 @@ using namespace svx;
 // define ----------------------------------------------------------------
 
 constexpr OUStringLiteral POSTFIX_INTERNAL = u"_internal";
-constexpr OUStringLiteral POSTFIX_USER = u"_user";
-constexpr OUStringLiteral POSTFIX_WRITABLE = u"_writable";
+constexpr OUString POSTFIX_USER = u"_user"_ustr;
+constexpr OUString POSTFIX_WRITABLE = u"_writable"_ustr;
 constexpr OUStringLiteral VAR_ONE = u"%1";
 constexpr OUStringLiteral IODLG_CONFIGNAME = u"FilePicker_Save";
 
