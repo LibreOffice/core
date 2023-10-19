@@ -197,8 +197,8 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( bool bUpdateC
         pFilterOptions = new FilterConfigItem( &aFilterData );
     }
 
-    static constexpr OUStringLiteral sLogicalWidth(u"LogicalWidth");
-    static constexpr OUStringLiteral sLogicalHeight(u"LogicalHeight");
+    static constexpr OUString sLogicalWidth(u"LogicalWidth"_ustr);
+    static constexpr OUString sLogicalHeight(u"LogicalHeight"_ustr);
     if ( mbIsPixelFormat )
     {
         pFilterOptions->WriteInt32("PixelWidth", maSize.Width );

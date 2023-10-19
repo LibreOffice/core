@@ -36,13 +36,13 @@ using css::lang::IllegalArgumentException;
 using css::beans::PropertyValue;
 
 
-constexpr OUStringLiteral sAPI_ServiceName = u"com.sun.star.container.XNameReplace";
-constexpr OUStringLiteral sEventType = u"EventType";
-constexpr OUStringLiteral sMacroName = u"MacroName";
-constexpr OUStringLiteral sLibrary = u"Library";
-constexpr OUStringLiteral sStarBasic = u"StarBasic";
-constexpr OUStringLiteral sScript = u"Script";
-constexpr OUStringLiteral sNone = u"None";
+constexpr OUString sAPI_ServiceName = u"com.sun.star.container.XNameReplace"_ustr;
+constexpr OUString sEventType = u"EventType"_ustr;
+constexpr OUString sMacroName = u"MacroName"_ustr;
+constexpr OUString sLibrary = u"Library"_ustr;
+constexpr OUString sStarBasic = u"StarBasic"_ustr;
+constexpr OUString sScript = u"Script"_ustr;
+constexpr OUString sNone = u"None"_ustr;
 
 namespace {
 
@@ -59,7 +59,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
                 // create sequence
                 Sequence<PropertyValue> aSequence(
                       // create type
-                    { comphelper::makePropertyValue(sEventType, OUString(sStarBasic)),
+                    { comphelper::makePropertyValue(sEventType, sStarBasic),
                       // macro name
                       comphelper::makePropertyValue(sMacroName, rMacro.GetMacName()),
                       // library name
@@ -74,7 +74,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
                 // create sequence
                 Sequence<PropertyValue> aSequence(
                       // create type
-                    { comphelper::makePropertyValue(sEventType, OUString(sScript)),
+                    { comphelper::makePropertyValue(sEventType, sScript),
                       // macro name
                       comphelper::makePropertyValue(sScript, rMacro.GetMacName()) });
 
@@ -94,7 +94,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
         return;
 
     // create "None" macro
-    Sequence<PropertyValue> aSequence{ comphelper::makePropertyValue(sEventType, OUString(sNone)) };
+    Sequence<PropertyValue> aSequence{ comphelper::makePropertyValue(sEventType, sNone) };
     rAny <<= aSequence;
 }
 

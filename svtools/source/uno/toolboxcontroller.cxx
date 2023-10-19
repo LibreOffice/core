@@ -36,7 +36,7 @@
 #include <comphelper/propertyvalue.hxx>
 
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
-constexpr OUStringLiteral TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible";
+constexpr OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE = u"SupportsVisible"_ustr;
 
 
 using namespace ::cppu;

@@ -32,13 +32,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
 
-constexpr OUStringLiteral cReplacement = u"Replacement";
-constexpr OUStringLiteral cFontPairs = u"FontPairs";
+constexpr OUString cReplacement = u"Replacement"_ustr;
+constexpr OUString cFontPairs = u"FontPairs"_ustr;
 
-constexpr OUStringLiteral cReplaceFont = u"ReplaceFont";
-constexpr OUStringLiteral cSubstituteFont= u"SubstituteFont";
-constexpr OUStringLiteral cOnScreenOnly = u"OnScreenOnly";
-constexpr OUStringLiteral cAlways = u"Always";
+constexpr OUString cReplaceFont = u"ReplaceFont"_ustr;
+constexpr OUString cSubstituteFont= u"SubstituteFont"_ustr;
+constexpr OUString cOnScreenOnly = u"OnScreenOnly"_ustr;
+constexpr OUString cAlways = u"Always"_ustr;
 
 namespace svtools
 {

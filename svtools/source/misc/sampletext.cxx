@@ -150,8 +150,8 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice const &rD
 {
     if (rDevice.GetFont().GetFamilyName() == "Symbol")
     {
-        static constexpr OUStringLiteral aImplAppleSymbolText =
-            u"\u03BC\u2202\u2211\u220F\u03C0\u222B\u03A9\u221A";
+        static constexpr OUString aImplAppleSymbolText =
+            u"\u03BC\u2202\u2211\u220F\u03C0\u222B\u03A9\u221A"_ustr;
         bool bHasSampleTextGlyphs
             = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), aImplAppleSymbolText));
         //It's the Apple version

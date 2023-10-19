@@ -35,17 +35,17 @@ using namespace ::com::sun::star;
 
 constexpr OUStringLiteral ROOTNODE_SLIDESORTERBAR = u"Office.Impress/MultiPaneGUI/SlideSorterBar/Visible";
 
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_IMPRESSVIEW = u"ImpressView";
+constexpr OUString PROPERTYNAME_VISIBLE_IMPRESSVIEW = u"ImpressView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_IMPRESSVIEW     0
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_OUTLINEVIEW = u"OutlineView";
+constexpr OUString PROPERTYNAME_VISIBLE_OUTLINEVIEW = u"OutlineView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_OUTLINEVIEW     1
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_NOTESVIEW = u"NotesView";
+constexpr OUString PROPERTYNAME_VISIBLE_NOTESVIEW = u"NotesView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_NOTESVIEW       2
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_HANDOUTVIEW = u"HandoutView";
+constexpr OUString PROPERTYNAME_VISIBLE_HANDOUTVIEW = u"HandoutView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_HANDOUTVIEW     3
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_SLIDESORTERVIEW = u"SlideSorterView";
+constexpr OUString PROPERTYNAME_VISIBLE_SLIDESORTERVIEW = u"SlideSorterView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_SLIDESORTERVIEW 4
-constexpr OUStringLiteral PROPERTYNAME_VISIBLE_DRAWVIEW = u"DrawView";
+constexpr OUString PROPERTYNAME_VISIBLE_DRAWVIEW = u"DrawView"_ustr;
 #define PROPERTYHANDLE_VISIBLE_DRAWVIEW        5
 
 static std::mutex & GetInitMutex()

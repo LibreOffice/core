@@ -44,11 +44,11 @@ using namespace ::com::sun::star;
 constexpr OUStringLiteral ROOTNODE_MISC = u"Office.Common/Misc";
 
 // PROPERTYHANDLE defines must be sequential from zero for Commit/Load
-constexpr OUStringLiteral PROPERTYNAME_SYMBOLSET = u"SymbolSet";
-constexpr OUStringLiteral PROPERTYNAME_ICONTHEME = u"SymbolStyle";
+constexpr OUString PROPERTYNAME_SYMBOLSET = u"SymbolSet"_ustr;
+constexpr OUString PROPERTYNAME_ICONTHEME = u"SymbolStyle"_ustr;
 #define PROPERTYHANDLE_SYMBOLSTYLE              1
-constexpr OUStringLiteral PROPERTYNAME_SIDEBARICONSIZE = u"SidebarIconSize";
-constexpr OUStringLiteral PROPERTYNAME_NOTEBOOKBARICONSIZE = u"NotebookbarIconSize";
+constexpr OUString PROPERTYNAME_SIDEBARICONSIZE = u"SidebarIconSize"_ustr;
+constexpr OUString PROPERTYNAME_NOTEBOOKBARICONSIZE = u"NotebookbarIconSize"_ustr;
 
 static std::mutex & GetInitMutex()
 {

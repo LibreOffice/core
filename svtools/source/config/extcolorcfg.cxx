@@ -318,7 +318,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUStrin
             uno::Sequence < OUString > aColorNames = GetPropertyNames(sEntry);
             uno::Sequence < OUString > aDefaultColorNames = aColorNames;
 
-            static constexpr OUStringLiteral sColor(u"/Color");
+            static constexpr OUString sColor(u"/Color"_ustr);
             lcl_addString(aColorNames,sColor);
             lcl_addString(aDefaultColorNames,u"/DefaultColor");
             uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
@@ -388,7 +388,7 @@ void ExtendedColorConfig_Impl::ImplCommit()
     static constexpr OUStringLiteral sColor(u"/Color");
     OUString sBase = "ExtendedColorScheme/ColorSchemes/"
                    + m_sLoadedScheme;
-    static constexpr OUStringLiteral s_sSep(u"/");
+    static constexpr OUString s_sSep(u"/"_ustr);
 
     for (auto const& configValue : m_aConfigValues)
     {
