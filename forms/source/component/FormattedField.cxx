@@ -656,7 +656,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
         OUString         sFormatDescription;
         LanguageType    eFormatLanguage = LANGUAGE_DONTKNOW;
-        static constexpr OUStringLiteral s_aLocaleProp = u"Locale";
+        static constexpr OUString s_aLocaleProp = u"Locale"_ustr;
         Reference<css::beans::XPropertySet>  xFormat = xFormats->getByKey(nKey);
         if (hasProperty(s_aLocaleProp, xFormat))
         {
@@ -667,7 +667,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
                 eFormatLanguage = LanguageTag::convertToLanguageType( *pLocale, false);
             }
         }
-        static constexpr OUStringLiteral s_aFormatStringProp = u"FormatString";
+        static constexpr OUString s_aFormatStringProp = u"FormatString"_ustr;
         if (hasProperty(s_aFormatStringProp, xFormat))
             xFormat->getPropertyValue(s_aFormatStringProp) >>= sFormatDescription;
         _rxOutStream->writeUTF(sFormatDescription);
