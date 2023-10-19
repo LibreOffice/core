@@ -39,22 +39,22 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
-constexpr OUStringLiteral CFG_ROOT_NODE = u"Office.Common/SearchOptions";
+constexpr OUString CFG_ROOT_NODE = u"Office.Common/SearchOptions"_ustr;
 
 #define SRCH_PARAMS         13
-constexpr OUStringLiteral SRCH_PARA_OPTIONS = u"Options";
-constexpr OUStringLiteral SRCH_PARA_FAMILY = u"Family";
-constexpr OUStringLiteral SRCH_PARA_COMMAND = u"Command";
-constexpr OUStringLiteral SRCH_PARA_CELLTYPE = u"CellType";
-constexpr OUStringLiteral SRCH_PARA_APPFLAG = u"AppFlag";
-constexpr OUStringLiteral SRCH_PARA_ROWDIR = u"RowDirection";
-constexpr OUStringLiteral SRCH_PARA_ALLTABLES = u"AllTables";
-constexpr OUStringLiteral SRCH_PARA_SEARCHFILTERED = u"SearchFiltered";
-constexpr OUStringLiteral SRCH_PARA_SEARCHFORMATTED = u"SearchFormatted";
-constexpr OUStringLiteral SRCH_PARA_BACKWARD = u"Backward";
-constexpr OUStringLiteral SRCH_PARA_PATTERN = u"Pattern";
-constexpr OUStringLiteral SRCH_PARA_CONTENT = u"Content";
-constexpr OUStringLiteral SRCH_PARA_ASIANOPT = u"AsianOptions";
+constexpr OUString SRCH_PARA_OPTIONS = u"Options"_ustr;
+constexpr OUString SRCH_PARA_FAMILY = u"Family"_ustr;
+constexpr OUString SRCH_PARA_COMMAND = u"Command"_ustr;
+constexpr OUString SRCH_PARA_CELLTYPE = u"CellType"_ustr;
+constexpr OUString SRCH_PARA_APPFLAG = u"AppFlag"_ustr;
+constexpr OUString SRCH_PARA_ROWDIR = u"RowDirection"_ustr;
+constexpr OUString SRCH_PARA_ALLTABLES = u"AllTables"_ustr;
+constexpr OUString SRCH_PARA_SEARCHFILTERED = u"SearchFiltered"_ustr;
+constexpr OUString SRCH_PARA_SEARCHFORMATTED = u"SearchFormatted"_ustr;
+constexpr OUString SRCH_PARA_BACKWARD = u"Backward"_ustr;
+constexpr OUString SRCH_PARA_PATTERN = u"Pattern"_ustr;
+constexpr OUString SRCH_PARA_CONTENT = u"Content"_ustr;
+constexpr OUString SRCH_PARA_ASIANOPT = u"AsianOptions"_ustr;
 
 SfxPoolItem* SvxSearchItem::CreateDefault() { return new  SvxSearchItem(0);}
 

@@ -41,24 +41,24 @@
 
 using namespace com::sun::star;
 
-constexpr OUStringLiteral PROPERTYNAME_FMTSTR = u"FormatString";
-constexpr OUStringLiteral PROPERTYNAME_LOCALE = u"Locale";
-constexpr OUStringLiteral PROPERTYNAME_TYPE = u"Type";
-constexpr OUStringLiteral PROPERTYNAME_COMMENT = u"Comment";
-constexpr OUStringLiteral PROPERTYNAME_CURREXT = u"CurrencyExtension";
-constexpr OUStringLiteral PROPERTYNAME_CURRSYM = u"CurrencySymbol";
-constexpr OUStringLiteral PROPERTYNAME_CURRABB = u"CurrencyAbbreviation";
-constexpr OUStringLiteral PROPERTYNAME_DECIMALS = u"Decimals";
-constexpr OUStringLiteral PROPERTYNAME_LEADING = u"LeadingZeros";
-constexpr OUStringLiteral PROPERTYNAME_NEGRED = u"NegativeRed";
-constexpr OUStringLiteral PROPERTYNAME_STDFORM = u"StandardFormat";
-constexpr OUStringLiteral PROPERTYNAME_THOUS = u"ThousandsSeparator";
-constexpr OUStringLiteral PROPERTYNAME_USERDEF = u"UserDefined";
+constexpr OUString PROPERTYNAME_FMTSTR = u"FormatString"_ustr;
+constexpr OUString PROPERTYNAME_LOCALE = u"Locale"_ustr;
+constexpr OUString PROPERTYNAME_TYPE = u"Type"_ustr;
+constexpr OUString PROPERTYNAME_COMMENT = u"Comment"_ustr;
+constexpr OUString PROPERTYNAME_CURREXT = u"CurrencyExtension"_ustr;
+constexpr OUString PROPERTYNAME_CURRSYM = u"CurrencySymbol"_ustr;
+constexpr OUString PROPERTYNAME_CURRABB = u"CurrencyAbbreviation"_ustr;
+constexpr OUString PROPERTYNAME_DECIMALS = u"Decimals"_ustr;
+constexpr OUString PROPERTYNAME_LEADING = u"LeadingZeros"_ustr;
+constexpr OUString PROPERTYNAME_NEGRED = u"NegativeRed"_ustr;
+constexpr OUString PROPERTYNAME_STDFORM = u"StandardFormat"_ustr;
+constexpr OUString PROPERTYNAME_THOUS = u"ThousandsSeparator"_ustr;
+constexpr OUString PROPERTYNAME_USERDEF = u"UserDefined"_ustr;
 
-constexpr OUStringLiteral PROPERTYNAME_NOZERO = u"NoZero";
-constexpr OUStringLiteral PROPERTYNAME_NULLDATE = u"NullDate";
-constexpr OUStringLiteral PROPERTYNAME_STDDEC = u"StandardDecimals";
-constexpr OUStringLiteral PROPERTYNAME_TWODIGIT = u"TwoDigitDateStart";
+constexpr OUString PROPERTYNAME_NOZERO = u"NoZero"_ustr;
+constexpr OUString PROPERTYNAME_NULLDATE = u"NullDate"_ustr;
+constexpr OUString PROPERTYNAME_STDDEC = u"StandardDecimals"_ustr;
+constexpr OUString PROPERTYNAME_TWODIGIT = u"TwoDigitDateStart"_ustr;
 
 // All without a Which-ID, Map only for PropertySetInfo
 

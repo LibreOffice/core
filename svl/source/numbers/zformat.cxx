@@ -52,7 +52,7 @@ using namespace svt;
 
 namespace {
 
-constexpr OUStringLiteral GREGORIAN = u"gregorian";
+constexpr OUString GREGORIAN = u"gregorian"_ustr;
 
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
 const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
@@ -1759,8 +1759,8 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 break;
             default:
             {
-                static constexpr OUStringLiteral aNatNum(u"NATNUM");
-                static constexpr OUStringLiteral aDBNum(u"DBNUM");
+                static constexpr OUString aNatNum(u"NATNUM"_ustr);
+                static constexpr OUString aDBNum(u"DBNUM"_ustr);
                 const OUString aBufStr( rString.toString());
                 sal_Int32 nNatNumNum;
                 sal_Int32 nDBNum;
