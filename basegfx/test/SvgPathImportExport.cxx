@@ -116,14 +116,14 @@ public:
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D",
                                utils::importFromSvgD( aPoly, aPath0, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
-        static constexpr OUStringLiteral sExportString = u"m10 10h-20v-20h20z";
+        static constexpr OUString sExportString = u"m10 10h-20v-20h20z"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting rectangle to SVG-D",
-                               OUString(sExportString), aExport );
+                               sExportString, aExport );
         CPPUNIT_ASSERT_MESSAGE("importing simple rectangle from SVG-D (round-trip",
                                utils::importFromSvgD( aPoly, aExport, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting rectangle to SVG-D (round-trip)",
-                               OUString(sExportString), aExport);
+                               sExportString, aExport);
 
         CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D",
                                utils::importFromSvgD( aPoly, aPath1, false, nullptr ));
@@ -143,11 +143,11 @@ public:
 
         // so for correct unit test i add the new exported string here as sExportStringSimpleBezier
         // and compare to it.
-        static constexpr OUStringLiteral sExportStringSimpleBezier =
+        static constexpr OUString sExportStringSimpleBezier =
             u"m11430 0c-8890 3810 5715 6985 5715 6985"
             "l-17145-1905c0 0 22860-10160 16510 6350"
-            "s-3810-11430-3810-11430z";
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting bezier polygon to SVG-D", OUString(sExportStringSimpleBezier), aExport);
+            "s-3810-11430-3810-11430z"_ustr;
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting bezier polygon to SVG-D", sExportStringSimpleBezier, aExport);
 
         // Adaptations for B2DPolygon bezier change (see #i77162#):
 
@@ -164,7 +164,7 @@ public:
 
         // same here, the corrected export with the corrected B2DPolygon is simply more efficient,
         // so i needed to change the compare string. Also adding the re-import comparison below.
-        static constexpr OUStringLiteral sExportString1 =
+        static constexpr OUString sExportString1 =
             u"m1917 1114c-89-189-233-284-430-284-167 0-306 91-419 273s-170 370-17"
             "0 564c0 145 33 259 98 342 65 84 150 126 257 126q115.5 0 231-57s147-97 210-176 99-143 109-190c38-199 76-398 114"
             "-598zm840 1646c-133 73-312 139-537 197-225 57-440 86-644 87-483-1-866-132-1150-392-284-261-426-619-426-1076 0-"
@@ -173,21 +173,21 @@ public:
             "5c0-277 90-527 271-751 181-223 394-335 640-335 196 0 353 83 470 250 13-68 26-136 41-204q144 0 288 0c-74 376-14"
             "8 752-224 1128-21 101-31 183-31 245 0 39 9 70 26 93 17 24 39 36 67 36 145 0 279-80 400-240s182-365 182-615c0-2"
             "88-107-533-322-734s-487-301-816-301c-395 0-715 124-960 373s-368 569-368 958q0 577.5 357 900c237 216 557 324 95"
-            "8 325 189-1 389-27 600-77 211-52 378-110 503-174q40.5 105 81 210z";
+            "8 325 189-1 389-27 600-77 211-52 378-110 503-174q40.5 105 81 210z"_ustr;
         CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", utils::importFromSvgD( aReImport, aExport, false, nullptr));
         CPPUNIT_ASSERT_EQUAL_MESSAGE("re-imported '@' needs to be identical", aPoly, aReImport);
 
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting '@' to SVG-D", OUString(sExportString1), aExport);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting '@' to SVG-D", sExportString1, aExport);
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D (round-trip",
                                utils::importFromSvgD( aPoly, aExport, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting '@' to SVG-D (round-trip)",
-                               OUString(sExportString1), aExport);
+                               sExportString1, aExport);
 
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D",
                                utils::importFromSvgD( aPoly, aPath3, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
-        static constexpr OUStringLiteral sExportString2 =
+        static constexpr OUString sExportString2 =
             u"m1598 125h306v2334h-306v-1105h-1293v1105h-305v-2334h305v973h1293"
             "zm2159 1015 78-44 85 235-91 47-91 40-90 34-90 29-89 21-88 16-88 10-88 3-102-4-97"
             "-12-91-19-85-26-40-16-39-18-38-20-36-22-34-24-33-26-32-27-30-30-29-31-27-33-25-3"
@@ -207,22 +207,22 @@ public:
             "4-39 13-39 10-42 9-85 12-91 4-91-4-86-12-41-9-40-10-39-13-37-14-36-17-35-18-34-2"
             "1-33-22-31-24-30-26-29-28-28-30-26-32-25-32-23-35-21-35-38-74-30-80-24-85-17-89-"
             "11-95-3-100 3-101 11-95 17-90 24-85 30-79 38-75 21-35 23-35 25-32 26-32 28-30 29"
-            "-28 30-26 31-24 33-22 34-20 35-18 36-16 37-15 39-12 40-11z";
+            "-28 30-26 31-24 33-22 34-20 35-18 36-16 37-15 39-12 40-11z"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting complex polygon to SVG-D",
-                               OUString(sExportString2), aExport);
+                               sExportString2, aExport);
         CPPUNIT_ASSERT_MESSAGE("importing complex polygon from SVG-D (round-trip",
                                utils::importFromSvgD( aPoly, aExport, false, nullptr ));
         aExport = utils::exportToSvgD( aPoly, true, true, false );
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting complex polygon to SVG-D (round-trip)",
-                               OUString(sExportString2), aExport);
+                               sExportString2, aExport);
 
         const B2DPolygon aRect(
             utils::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));
         aExport = utils::exportToSvgD( B2DPolyPolygon(aRect), false, false, false );
 
-        static constexpr OUStringLiteral sExportStringRect = u"M0 0H4000V4000H0Z";
+        static constexpr OUString sExportStringRect = u"M0 0H4000V4000H0Z"_ustr;
         CPPUNIT_ASSERT_EQUAL_MESSAGE("exporting to rectangle svg-d string",
-                               OUString(sExportStringRect), aExport);
+                               sExportStringRect, aExport);
     }
 
     // Change the following lines only, if you add, remove or rename
