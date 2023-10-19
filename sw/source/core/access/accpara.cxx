@@ -111,7 +111,7 @@ namespace com::sun::star::text {
     class XText;
 }
 
-constexpr OUStringLiteral sServiceName = u"com.sun.star.text.AccessibleParagraphView";
+constexpr OUString sServiceName = u"com.sun.star.text.AccessibleParagraphView"_ustr;
 constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleParagraphView";
 
 OUString const & SwAccessibleParagraph::GetString()
@@ -1601,7 +1601,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
     // #i92233#
-    static constexpr OUStringLiteral sMMToPixelRatio = u"MMToPixelRatio";
+    static constexpr OUString sMMToPixelRatio = u"MMToPixelRatio"_ustr;
     bool bProvideMMToPixelRatio( !aRequestedAttributes.hasElements() ||
                                  (comphelper::findValue(aRequestedAttributes, sMMToPixelRatio) != -1) );
 

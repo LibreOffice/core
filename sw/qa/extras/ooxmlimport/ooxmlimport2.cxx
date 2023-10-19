@@ -901,7 +901,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf129912)
 
     // the expected footnote labels
     // TODO: the 5th label is actually wrong (missing the "PR" after the symbol part), but the "b" is there?!
-    static constexpr OUStringLiteral pLabel5 = u"\uF0D1\uF031\uF032b";
+    static constexpr OUString pLabel5 = u"\uF0D1\uF031\uF032b"_ustr;
     const OUString sFootnoteLabels[]
         = { OUString(u'\xF0A7'), "1", "2", OUString(u'\xF020'), pLabel5 };
     CPPUNIT_ASSERT_EQUAL(sal_Int32(SAL_N_ELEMENTS(sFootnoteLabels)), nCount);

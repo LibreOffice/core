@@ -129,14 +129,14 @@ void SwUiWriterTest::testRedlineFrame(char const*const file)
 
 //Replacement tests
 
-constexpr OUStringLiteral ORIGINAL_REPLACE_CONTENT(u"toto titi tutu");
-constexpr OUStringLiteral EXPECTED_REPLACE_CONTENT(u"toto toto tutu");
+constexpr OUString ORIGINAL_REPLACE_CONTENT(u"toto titi tutu"_ustr);
+constexpr OUString EXPECTED_REPLACE_CONTENT(u"toto toto tutu"_ustr);
 
 // Chinese conversion tests
 
 const sal_Unicode CHINESE_TRADITIONAL_CONTENT(0x9F8D);
 const sal_Unicode CHINESE_SIMPLIFIED_CONTENT(0x9F99);
-constexpr OUStringLiteral NON_CHINESE_CONTENT(u"Hippopotamus");
+constexpr OUString NON_CHINESE_CONTENT(u"Hippopotamus"_ustr);
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceForward)
 {
@@ -154,11 +154,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceForward)
     lcl_selectCharacters(aPaM, 5, 9);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
 
@@ -689,11 +689,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testReplaceBackward)
 
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "toto", false);
 
-    CPPUNIT_ASSERT_EQUAL(OUString(EXPECTED_REPLACE_CONTENT), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(EXPECTED_REPLACE_CONTENT, pTextNode->GetText());
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT_EQUAL(OUString(ORIGINAL_REPLACE_CONTENT), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(ORIGINAL_REPLACE_CONTENT, pTextNode->GetText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo69893)
@@ -1276,7 +1276,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testChineseConversionNonChineseText)
 
     // Then
     SwTextNode* pTextNode = aPaM.GetPointNode().GetTextNode();
-    CPPUNIT_ASSERT_EQUAL(OUString(NON_CHINESE_CONTENT), pTextNode->GetText());
+    CPPUNIT_ASSERT_EQUAL(NON_CHINESE_CONTENT, pTextNode->GetText());
 
 }
 

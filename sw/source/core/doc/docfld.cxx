@@ -935,8 +935,8 @@ void SwDocUpdateField::MakeFieldList_( SwDoc& rDoc, int eGetMode )
         }
     }
 
-    static constexpr OUStringLiteral sTrue(u"TRUE");
-    static constexpr OUStringLiteral sFalse(u"FALSE");
+    static constexpr OUString sTrue(u"TRUE"_ustr);
+    static constexpr OUString sFalse(u"FALSE"_ustr);
 
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
     bool bIsDBManager = nullptr != rDoc.GetDBManager();

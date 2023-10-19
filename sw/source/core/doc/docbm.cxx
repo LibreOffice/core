@@ -50,7 +50,7 @@
 #include <comphelper/lok.hxx>
 #include <strings.hrc>
 
-constexpr OUStringLiteral S_ANNOTATION_BOOKMARK = u"____";
+constexpr OUString S_ANNOTATION_BOOKMARK = u"____"_ustr;
 
 using namespace ::sw::mark;
 

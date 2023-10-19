@@ -101,7 +101,7 @@ const sal_uInt16 AUTOFORMAT_FILE_VERSION= SOFFICE_FILEFORMAT_50;
 
 SwBoxAutoFormat* SwTableAutoFormat::s_pDefaultBoxAutoFormat = nullptr;
 
-constexpr OUStringLiteral AUTOTABLE_FORMAT_NAME = u"autotbl.fmt";
+constexpr OUString AUTOTABLE_FORMAT_NAME = u"autotbl.fmt"_ustr;
 
 namespace
 {

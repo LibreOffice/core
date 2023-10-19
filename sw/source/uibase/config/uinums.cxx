@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral CHAPTER_FILENAME = u"chapter.cfg";
+constexpr OUString CHAPTER_FILENAME = u"chapter.cfg"_ustr;
 
 /*
  Description:   Saving a rule

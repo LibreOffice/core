@@ -3455,7 +3455,7 @@ OString SwXTextDocument::getViewRenderState(SfxViewShell* pViewShell)
 
 namespace
 {
-inline constexpr OUStringLiteral SELECTED_DATE_FORMAT = u"YYYY-MM-DD";
+inline constexpr OUString SELECTED_DATE_FORMAT = u"YYYY-MM-DD"_ustr;
 }
 
 void SwXTextDocument::executeContentControlEvent(const StringMap& rArguments)

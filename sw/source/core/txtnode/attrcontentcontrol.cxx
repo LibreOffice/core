@@ -38,7 +38,7 @@ using namespace com::sun::star;
 
 namespace
 {
-inline constexpr OUStringLiteral CURRENT_DATE_FORMAT = u"YYYY-MM-DD";
+inline constexpr OUString CURRENT_DATE_FORMAT = u"YYYY-MM-DD"_ustr;
 }
 
 SwFormatContentControl* SwFormatContentControl::CreatePoolDefault(sal_uInt16 nWhich)

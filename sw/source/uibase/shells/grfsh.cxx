@@ -66,7 +66,7 @@
 #include <flyfrm.hxx>
 #include <memory>
 
-constexpr OUStringLiteral TOOLBOX_NAME = u"colorbar";
+constexpr OUString TOOLBOX_NAME = u"colorbar"_ustr;
 
 class SwGrfShell::SwExternalToolEdit
     : public ExternalToolEdit

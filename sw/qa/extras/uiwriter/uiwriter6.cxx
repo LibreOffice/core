@@ -1602,8 +1602,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testInconsistentBookmark)
 
         // load only content.xml
         xmlDocUniquePtr pXmlDoc = parseExport("content.xml");
-        static constexpr OStringLiteral aPath(
-            "/office:document-content/office:body/office:text/text:p");
+        static constexpr OString aPath(
+            "/office:document-content/office:body/office:text/text:p"_ostr);
 
         const int pos1 = getXPathPosition(pXmlDoc, aPath, "bookmark-start");
         const int pos2 = getXPathPosition(pXmlDoc, aPath, "control");

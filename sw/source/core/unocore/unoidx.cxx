@@ -118,7 +118,7 @@ lcl_ReAssignTOXType(SwDoc& rDoc, SwTOXBase& rTOXBase, const OUString& rNewName)
     rTOXBase.RegisterToTOXType( *const_cast<SwTOXType*>(pNewType) );
 }
 
-constexpr OUStringLiteral cUserDefined = u"User-Defined";
+constexpr OUString cUserDefined = u"User-Defined"_ustr;
 const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
 #define USER_AND_SUFFIXLEN 19

@@ -90,7 +90,7 @@ SwASCWriter::~SwASCWriter() {}
 
 ErrCode SwASCWriter::WriteStream()
 {
-    static constexpr OUStringLiteral STR_CR = u"\015";
+    static constexpr OUString STR_CR = u"\015"_ustr;
     static constexpr OUStringLiteral STR_LF = u"\012";
     static constexpr OUStringLiteral STR_CRLF = u"\015\012";
     static constexpr OUStringLiteral STR_BLANK = u" ";

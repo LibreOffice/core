@@ -980,7 +980,7 @@ void SwXLineNumberingProperties::removeVetoableChangeListener(const OUString& /*
 OSL_FAIL("not implemented");
 }
 
-constexpr OUStringLiteral aInvalidStyle = u"__XXX___invalid";
+constexpr OUString aInvalidStyle = u"__XXX___invalid"_ustr;
 
 class SwXNumberingRules::Impl
     : public SvtListener

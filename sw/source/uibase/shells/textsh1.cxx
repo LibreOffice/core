@@ -866,9 +866,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // setting the new language...
                 if (!aNewLangText.isEmpty())
                 {
-                    static constexpr OUStringLiteral aSelectionLangPrefix(u"Current_");
-                    static constexpr OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
-                    static constexpr OUStringLiteral aDocumentLangPrefix(u"Default_");
+                    static constexpr OUString aSelectionLangPrefix(u"Current_"_ustr);
+                    static constexpr OUString aParagraphLangPrefix(u"Paragraph_"_ustr);
+                    static constexpr OUString aDocumentLangPrefix(u"Default_"_ustr);
 
                     SfxItemSetFixed
                             <RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
@@ -2077,8 +2077,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if (pItem2)
             sApplyText = pItem2->GetValue();
 
-        static constexpr OUStringLiteral sSpellingRule(u"Spelling_");
-        static constexpr OUStringLiteral sGrammarRule(u"Grammar_");
+        static constexpr OUString sSpellingRule(u"Spelling_"_ustr);
+        static constexpr OUString sGrammarRule(u"Grammar_"_ustr);
 
         bool bGrammar = false;
         sal_Int32 nPos = 0;

@@ -985,7 +985,7 @@ OUString  SwDocStyleSheet::GetDescription(MapUnit eUnit)
 {
     IntlWrapper aIntlWrapper(SvtSysLocale().GetUILanguageTag());
 
-    static constexpr OUStringLiteral sPlus(u" + ");
+    static constexpr OUString sPlus(u" + "_ustr);
     if ( SfxStyleFamily::Page == nFamily )
     {
         if( !pSet )

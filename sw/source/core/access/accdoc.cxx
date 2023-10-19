@@ -51,7 +51,7 @@
 #include <dview.hxx>
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
-constexpr OUStringLiteral sServiceName = u"com.sun.star.text.AccessibleTextDocumentView";
+constexpr OUString sServiceName = u"com.sun.star.text.AccessibleTextDocumentView"_ustr;
 constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
 using namespace ::com::sun::star;

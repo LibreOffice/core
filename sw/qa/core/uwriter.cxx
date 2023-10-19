@@ -608,7 +608,7 @@ void SwDocTest::testSwScanner()
 
     //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271
     {
-        static constexpr OUStringLiteral IDEOGRAPHICFULLSTOP_D = u"\u3002D";
+        static constexpr OUString IDEOGRAPHICFULLSTOP_D = u"\u3002D"_ustr;
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, IDEOGRAPHICFULLSTOP_D);
 
@@ -625,7 +625,7 @@ void SwDocTest::testSwScanner()
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), aDocStat.nCharExcludingSpaces);
     }
     {
-        static constexpr OUStringLiteral test =
+        static constexpr OUString test =
             u"\u3053\u306E\u65E5\u672C\u8A9E\u306F\u6B63\u3057"
             "\u304F\u6570\u3048\u3089\u308C\u308B\u3067\u3057"
             "\u3087\u3046\u304B\u3002And "
@@ -641,7 +641,7 @@ void SwDocTest::testSwScanner()
             "\u3000\u3000\u5165\u308C\u307E\u3057\u305F\u3002"
             "  So how"
             " does th"
-            "is do?  ";
+            "is do?  "_ustr;
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, test);
 
@@ -664,10 +664,10 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        static constexpr OUStringLiteral aShouldBeThree =
+        static constexpr OUString aShouldBeThree =
             u"Should "
             "\u2018be thr"
-            "ee\u2019";
+            "ee\u2019"_ustr;
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeThree);
@@ -675,14 +675,14 @@ void SwDocTest::testSwScanner()
         pTextNode->CountWords(aDocStat, 0, aShouldBeThree.getLength());
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), aDocStat.nWord);
 
-        static constexpr OUStringLiteral aShouldBeFive =
+        static constexpr OUString aShouldBeFive =
             u"french "
             // <<   nbsp
             "\u00AB\u00A0savoi"
             // nnbsp
             "r\u202fcalcu"
             //   idspace >>
-            "ler\u3000\u00BB";
+            "ler\u3000\u00BB"_ustr;
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aShouldBeFive);
@@ -745,7 +745,7 @@ void SwDocTest::testSwScanner()
     {
         SwDocStat aDocStat;
 
-        static constexpr OUStringLiteral aString = u"Lorem ipsum";
+        static constexpr OUString aString = u"Lorem ipsum"_ustr;
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, aString);
         pTextNode = aPaM.GetPointNode().GetTextNode();
@@ -762,7 +762,7 @@ void SwDocTest::testSwScanner()
         aPaM.GetPoint()->nContent.Assign(aPaM.GetPointContentNode(), 5);   //set end of selection to fifth char of current node
         m_pDoc->getIDocumentContentOperations().DeleteAndJoin(aPaM);    //redline-aware deletion api
         //"real underlying text should be the same"
-        CPPUNIT_ASSERT_EQUAL(OUString(aString), pTextNode->GetText());
+        CPPUNIT_ASSERT_EQUAL(aString, pTextNode->GetText());
 
         aDocStat.Reset();
         pTextNode->SetWordCountDirty(true);
@@ -1818,7 +1818,7 @@ void SwDocTest::test64kPageDescs()
     CPPUNIT_ASSERT_EQUAL( OUString("Page65535"), rDesc.GetName() );
 
     SwPageDesc aDesc( rDesc );
-    static constexpr OUStringLiteral aChanged(u"Changed01");
+    static constexpr OUString aChanged(u"Changed01"_ustr);
     aDesc.SetName( aChanged );
     m_pDoc->ChgPageDesc( nPageDescCount, aDesc );
 

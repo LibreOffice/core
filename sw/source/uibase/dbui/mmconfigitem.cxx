@@ -56,7 +56,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-constexpr OUStringLiteral cAddressDataAssignments = u"AddressDataAssignments";
+constexpr OUString cAddressDataAssignments = u"AddressDataAssignments"_ustr;
 const char cDBColumnAssignments[]    = "DBColumnAssignments";
 const char cDataSourceName[]         = "DataSource/DataSourceName";
 const char cDataTableName[]          = "DataSource/DataTableName" ;

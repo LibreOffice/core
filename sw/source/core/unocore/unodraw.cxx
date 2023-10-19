@@ -2565,7 +2565,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     if ( eTextAnchorType != text::TextContentAnchorType_AS_CHARACTER )
     {
         // determine current x-position
-        static constexpr OUStringLiteral aHoriPosPropStr(u"HoriOrientPosition");
+        static constexpr OUString aHoriPosPropStr(u"HoriOrientPosition"_ustr);
         uno::Any aHoriPos( getPropertyValue( aHoriPosPropStr ) );
         sal_Int32 dCurrX = 0;
         aHoriPos >>= dCurrX;
@@ -2574,7 +2574,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
         {
             // adjust x-position orientation to text::HoriOrientation::NONE, if needed
             // Note: has to be done before setting x-position attribute
-            static constexpr OUStringLiteral aHoriOrientPropStr(u"HoriOrient");
+            static constexpr OUString aHoriOrientPropStr(u"HoriOrient"_ustr);
             uno::Any aHoriOrient( getPropertyValue( aHoriOrientPropStr ) );
             sal_Int16 eHoriOrient;
             if (aHoriOrient >>= eHoriOrient) // may be void
@@ -2595,7 +2595,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
     // handle y-position
     {
         // determine current y-position
-        static constexpr OUStringLiteral aVertPosPropStr(u"VertOrientPosition");
+        static constexpr OUString aVertPosPropStr(u"VertOrientPosition"_ustr);
         uno::Any aVertPos( getPropertyValue( aVertPosPropStr ) );
         sal_Int32 dCurrY = 0;
         aVertPos >>= dCurrY;
@@ -2604,7 +2604,7 @@ void SwXShape::AdjustPositionProperties( const awt::Point& rPosition )
         {
             // adjust y-position orientation to text::VertOrientation::NONE, if needed
             // Note: has to be done before setting y-position attribute
-            static constexpr OUStringLiteral aVertOrientPropStr(u"VertOrient");
+            static constexpr OUString aVertOrientPropStr(u"VertOrient"_ustr);
             uno::Any aVertOrient( getPropertyValue( aVertOrientPropStr ) );
             sal_Int16 eVertOrient;
             if (aVertOrient >>= eVertOrient) // may be void

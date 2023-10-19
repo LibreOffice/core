@@ -107,7 +107,7 @@ ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
-            static constexpr OUStringLiteral sAutoTextMode(u"AutoTextMode");
+            static constexpr OUString sAutoTextMode(u"AutoTextMode"_ustr);
             if( rInfoSet->getPropertySetInfo()->hasPropertyByName(
                         sAutoTextMode ) )
             {
@@ -369,7 +369,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     Reference<XPropertySet> xInfoSet( getExportInfo() );
     if ( xInfoSet.is() )
     {
-        static constexpr OUStringLiteral sShowChanges( u"ShowChanges" );
+        static constexpr OUString sShowChanges( u"ShowChanges"_ustr );
         if( xInfoSet->getPropertySetInfo()->hasPropertyByName( sShowChanges ) )
         {
             bShowRedlineChanges = *o3tl::doAccess<bool>(xInfoSet->

@@ -2294,7 +2294,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, OUString& rStr )
             }
             OUString sURL = "#" + sBookmarkName;
             SwFormatINetFormat aURL( sURL, "" );
-            static constexpr OUStringLiteral sLinkStyle(u"Index Link");
+            static constexpr OUString sLinkStyle(u"Index Link"_ustr);
             const sal_uInt16 nPoolId =
                 SwStyleNameMapper::GetPoolIdFromUIName( sLinkStyle, SwGetPoolIdFromName::ChrFmt );
             aURL.SetVisitedFormatAndId( sLinkStyle, nPoolId);

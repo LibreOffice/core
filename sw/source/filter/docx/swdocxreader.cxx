@@ -36,7 +36,7 @@
 #include <sfx2/docfile.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-constexpr OUStringLiteral AUTOTEXT_GALLERY = u"autoTxt";
+constexpr OUString AUTOTEXT_GALLERY = u"autoTxt"_ustr;
 
 using namespace css;
 

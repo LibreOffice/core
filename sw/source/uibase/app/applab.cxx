@@ -63,7 +63,7 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral MASTER_LABEL = u"MasterLabel";
+constexpr OUString MASTER_LABEL = u"MasterLabel"_ustr;
 
 static const SwFrameFormat *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrameFormat &rFormat,

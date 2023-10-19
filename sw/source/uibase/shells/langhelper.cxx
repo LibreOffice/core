@@ -121,9 +121,9 @@ namespace SwLangHelper
             // setting the new language...
             if (!aNewLangText.isEmpty())
             {
-                static constexpr OUStringLiteral aSelectionLangPrefix(u"Current_");
-                static constexpr OUStringLiteral aParagraphLangPrefix(u"Paragraph_");
-                static constexpr OUStringLiteral aDocumentLangPrefix(u"Default_");
+                static constexpr OUString aSelectionLangPrefix(u"Current_"_ustr);
+                static constexpr OUString aParagraphLangPrefix(u"Paragraph_"_ustr);
+                static constexpr OUString aDocumentLangPrefix(u"Default_"_ustr);
 
                 sal_Int32 nPos = 0;
                 bool bForSelection = true;

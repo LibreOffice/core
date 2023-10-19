@@ -604,7 +604,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         if( xParentSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xParentSet->getPropertySetInfo() );
-            static constexpr OUStringLiteral sPropName(u"BuildId" );
+            static constexpr OUString sPropName(u"BuildId"_ustr );
             if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(sPropName) )
             {
                 xInfoSet->setPropertyValue( sPropName, xParentSet->getPropertyValue(sPropName) );
@@ -738,9 +738,9 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
     ErrCodeMsg nRet = ERRCODE_NONE;
 
     // save redline mode into import info property set
-    static constexpr OUStringLiteral sShowChanges(u"ShowChanges");
-    static constexpr OUStringLiteral sRecordChanges(u"RecordChanges");
-    static constexpr OUStringLiteral sRedlineProtectionKey(u"RedlineProtectionKey");
+    static constexpr OUString sShowChanges(u"ShowChanges"_ustr);
+    static constexpr OUString sRecordChanges(u"RecordChanges"_ustr);
+    static constexpr OUString sRedlineProtectionKey(u"RedlineProtectionKey"_ustr);
     xInfoSet->setPropertyValue( sShowChanges,
         Any(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
     xInfoSet->setPropertyValue( sRecordChanges,
@@ -946,7 +946,7 @@ ErrCodeMsg XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, 
         if( xModelSet.is() )
         {
             uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-            static constexpr OUStringLiteral sName(u"BuildId" );
+            static constexpr OUString sName(u"BuildId"_ustr );
             if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sName) )
             {
                 xModelSet->setPropertyValue( sName, xInfoSet->getPropertyValue(sName) );
@@ -979,7 +979,7 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
         try
         {
             xml::sax::InputSource aParserInput;
-            static constexpr OUStringLiteral sDocName( u"content.xml" );
+            static constexpr OUString sDocName( u"content.xml"_ustr );
             aParserInput.sSystemId = sDocName;
 
             uno::Reference < io::XStream > xStm = xStg2->openStreamElement( sDocName, embed::ElementModes::READ );

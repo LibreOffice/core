@@ -1132,7 +1132,7 @@ std::optional<OUString> ReplaceBackReferences(const i18nutil::SearchOptions2& rS
             OUString aReplaceStr( rSearchOpt.replaceString );
             if (bParaEnd)
             {
-                static constexpr OUStringLiteral aStr(u"\\n");
+                static constexpr OUString aStr(u"\\n"_ustr);
                 aResult.subRegExpressions = 1;
                 aResult.startOffset = { 0 };
                 aResult.endOffset = { aStr.getLength() };

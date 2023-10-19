@@ -91,7 +91,7 @@ using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
 // case-corrected version of the first part for the service names (see #i67811)
-constexpr OUStringLiteral COM_TEXT_FLDMASTER_CC = u"com.sun.star.text.fieldmaster.";
+constexpr OUString COM_TEXT_FLDMASTER_CC = u"com.sun.star.text.fieldmaster."_ustr;
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
 const sal_uInt16 aDocInfoSubTypeFromService[] =

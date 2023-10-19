@@ -417,7 +417,7 @@ void SwXMLImport::startDocument()
                 }
 
                 bool bOverwrite = false;
-                static constexpr OUStringLiteral sStyleInsertModeOverwrite(u"StyleInsertModeOverwrite");
+                static constexpr OUString sStyleInsertModeOverwrite(u"StyleInsertModeOverwrite"_ustr);
                 if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeOverwrite) )
                 {
                     aAny = xImportInfo->getPropertyValue(sStyleInsertModeOverwrite);
@@ -433,7 +433,7 @@ void SwXMLImport::startDocument()
         }
 
         // text insert mode?
-        static constexpr OUStringLiteral sTextInsertModeRange(u"TextInsertModeRange");
+        static constexpr OUString sTextInsertModeRange(u"TextInsertModeRange"_ustr);
         if( xPropertySetInfo->hasPropertyByName(sTextInsertModeRange) )
         {
             aAny = xImportInfo->getPropertyValue(sTextInsertModeRange);
@@ -443,7 +443,7 @@ void SwXMLImport::startDocument()
         }
 
         // auto text mode
-        static constexpr OUStringLiteral sAutoTextMode(u"AutoTextMode");
+        static constexpr OUString sAutoTextMode(u"AutoTextMode"_ustr);
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
             aAny = xImportInfo->getPropertyValue(sAutoTextMode);
@@ -455,7 +455,7 @@ void SwXMLImport::startDocument()
         }
 
         // organizer mode
-        static constexpr OUStringLiteral sOrganizerMode(u"OrganizerMode");
+        static constexpr OUString sOrganizerMode(u"OrganizerMode"_ustr);
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
             aAny = xImportInfo->getPropertyValue(sOrganizerMode);
@@ -467,7 +467,7 @@ void SwXMLImport::startDocument()
         }
 
         // default document properties
-        static constexpr OUStringLiteral sDefSettings(u"DefaultDocumentSettings");
+        static constexpr OUString sDefSettings(u"DefaultDocumentSettings"_ustr);
         if (xPropertySetInfo->hasPropertyByName(sDefSettings))
         {
             aAny = xImportInfo->getPropertyValue(sDefSettings);

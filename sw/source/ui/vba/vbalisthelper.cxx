@@ -32,20 +32,20 @@ using namespace ::com::sun::star;
 
 const sal_Int32 LIST_LEVEL_COUNT = 9;
 
-constexpr OUStringLiteral UNO_NAME_PARENT_NUMBERING = u"ParentNumbering";
-constexpr OUStringLiteral UNO_NAME_PREFIX = u"Prefix";
-constexpr OUStringLiteral UNO_NAME_SUFFIX = u"Suffix";
-constexpr OUStringLiteral UNO_NAME_CHAR_STYLE_NAME = u"CharStyleName";
-constexpr OUStringLiteral UNO_NAME_NUMBERING_TYPE = u"NumberingType";
-constexpr OUStringLiteral UNO_NAME_BULLET_CHAR = u"BulletChar";
+constexpr OUString UNO_NAME_PARENT_NUMBERING = u"ParentNumbering"_ustr;
+constexpr OUString UNO_NAME_PREFIX = u"Prefix"_ustr;
+constexpr OUString UNO_NAME_SUFFIX = u"Suffix"_ustr;
+constexpr OUString UNO_NAME_CHAR_STYLE_NAME = u"CharStyleName"_ustr;
+constexpr OUString UNO_NAME_NUMBERING_TYPE = u"NumberingType"_ustr;
+constexpr OUString UNO_NAME_BULLET_CHAR = u"BulletChar"_ustr;
 
-constexpr OUStringLiteral CHAR_CLOSED_DOT = u"\u2022";
+constexpr OUString CHAR_CLOSED_DOT = u"\u2022"_ustr;
 constexpr OUStringLiteral CHAR_EMPTY_DOT = u"o";
-constexpr OUStringLiteral CHAR_SQUARE = u"\u2540";
+constexpr OUString CHAR_SQUARE = u"\u2540"_ustr;
 constexpr OUStringLiteral CHAR_STAR_SYMBOL = u"\u272A";
-constexpr OUStringLiteral CHAR_FOUR_DIAMONDS = u"\u2756";
+constexpr OUString CHAR_FOUR_DIAMONDS = u"\u2756"_ustr;
 constexpr OUStringLiteral CHAR_DIAMOND = u"\u2726";
-constexpr OUStringLiteral CHAR_ARROW = u"\u27A2";
+constexpr OUString CHAR_ARROW = u"\u27A2"_ustr;
 constexpr OUStringLiteral CHAR_CHECK_MARK = u"\u2713";
 
 SwVbaListHelper::SwVbaListHelper( css::uno::Reference< css::text::XTextDocument > xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) : mxTextDocument(std::move( xTextDoc )), mnGalleryType( nGalleryType ), mnTemplateType( nTemplateType )

@@ -175,7 +175,7 @@ const char aSourceText[]        = "Source Text";
 
 // PDF Tag Names:
 constexpr OUStringLiteral aDocumentString = u"Document";
-constexpr OUStringLiteral aDivString = u"Div";
+constexpr OUString aDivString = u"Div"_ustr;
 constexpr OUStringLiteral aSectString = u"Sect";
 constexpr OUStringLiteral aHString = u"H";
 constexpr OUStringLiteral aH1String = u"H1";
@@ -191,9 +191,9 @@ constexpr OUStringLiteral aH10String = u"H10";
 constexpr OUStringLiteral aListString = u"L";
 constexpr OUStringLiteral aListItemString = u"LI";
 constexpr OUStringLiteral aListLabelString = u"Lbl";
-constexpr OUStringLiteral aListBodyString = u"LBody";
+constexpr OUString aListBodyString = u"LBody"_ustr;
 constexpr OUStringLiteral aBlockQuoteString = u"BlockQuote";
-constexpr OUStringLiteral aCaptionString = u"Caption";
+constexpr OUString aCaptionString = u"Caption"_ustr;
 constexpr OUStringLiteral aIndexString = u"Index";
 constexpr OUStringLiteral aTOCString = u"TOC";
 constexpr OUStringLiteral aTOCIString = u"TOCI";
@@ -203,11 +203,11 @@ constexpr OUStringLiteral aTDString = u"TD";
 constexpr OUStringLiteral aTHString = u"TH";
 constexpr OUStringLiteral aBibEntryString = u"BibEntry";
 constexpr OUStringLiteral aQuoteString = u"Quote";
-constexpr OUStringLiteral aSpanString = u"Span";
+constexpr OUString aSpanString = u"Span"_ustr;
 constexpr OUStringLiteral aCodeString = u"Code";
 constexpr OUStringLiteral aFigureString = u"Figure";
 constexpr OUStringLiteral aFormulaString = u"Formula";
-constexpr OUStringLiteral aLinkString = u"Link";
+constexpr OUString aLinkString = u"Link"_ustr;
 constexpr OUStringLiteral aNoteString = u"Note";
 
 // returns true if first paragraph in cell frame has 'table heading' style
