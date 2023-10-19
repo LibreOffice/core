@@ -33,9 +33,9 @@ using namespace css::uno;
 
 namespace apitest {
 
-constexpr OUStringLiteral gaSrcSheetName(u"SheetToCopy");
+constexpr OUString gaSrcSheetName(u"SheetToCopy"_ustr);
 constexpr OUStringLiteral gaSrcFileName(u"rangenamessrc.ods");
-constexpr OUStringLiteral gaDestFileBase(u"ScNamedRangeObj.ods");
+constexpr OUString gaDestFileBase(u"ScNamedRangeObj.ods"_ustr);
 
 static sal_Int32 nInsertedSheets(0);
 
@@ -243,7 +243,7 @@ void XSpreadsheets2::testImportCellStyle()
 
     //new style created in dest
     uno::Reference< beans::XPropertySet > xSrcCellPropSet (xSrcCell, UNO_QUERY_THROW);
-    static constexpr OUStringLiteral aCellProperty(u"CellStyle");
+    static constexpr OUString aCellProperty(u"CellStyle"_ustr);
     OUString aSrcStyleName;
     CPPUNIT_ASSERT(xSrcCellPropSet->getPropertyValue(aCellProperty) >>= aSrcStyleName);
 

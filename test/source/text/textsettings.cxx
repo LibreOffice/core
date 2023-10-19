@@ -44,7 +44,7 @@ bool isPropertyReadOnly(css::uno::Reference<css::beans::XPropertySet> const& rxP
 // [property] string PrinterName;
 void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
-    static constexpr OUStringLiteral rPropertyName(u"PrinterName");
+    static constexpr OUString rPropertyName(u"PrinterName"_ustr);
 
     if (!extstsProperty(rxSettings, rPropertyName))
         return; // Property is sometimes not set - bug? it is not defined as optional
@@ -67,7 +67,7 @@ void testPrinterName(css::uno::Reference<css::beans::XPropertySet> const& rxSett
 // [optional, property] short PrinterIndependentLayout;
 void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
-    static constexpr OUStringLiteral rPropertyName(u"PrinterIndependentLayout");
+    static constexpr OUString rPropertyName(u"PrinterIndependentLayout"_ustr);
 
     if (!extstsProperty(rxSettings, rPropertyName))
         return; // Property is optional
@@ -91,7 +91,7 @@ void testPrinterIndependentLayout(css::uno::Reference<css::beans::XPropertySet> 
 // [optional, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
 void testForbiddenCharacters(css::uno::Reference<css::beans::XPropertySet> const& rxSettings)
 {
-    static constexpr OUStringLiteral rPropertyName(u"ForbiddenCharacters");
+    static constexpr OUString rPropertyName(u"ForbiddenCharacters"_ustr);
 
     if (!extstsProperty(rxSettings, rPropertyName))
         return; // Property is optional

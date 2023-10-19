@@ -40,7 +40,7 @@ using namespace css;
 using namespace css::uno;
 
     /// the target directory for screenshots
-constexpr OUStringLiteral g_aScreenshotDirectory(u"screenshots");
+constexpr OUString g_aScreenshotDirectory(u"screenshots"_ustr);
 
 ScreenshotTest::ScreenshotTest()
     : maParent(nullptr, "vcl/ui/screenshotparent.ui", "ScreenShot")
