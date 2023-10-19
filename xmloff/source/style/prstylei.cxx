@@ -143,8 +143,8 @@ namespace
 
 
 
-constexpr OUStringLiteral gsIsPhysical(  u"IsPhysical"  );
-constexpr OUStringLiteral gsFollowStyle(  u"FollowStyle"  );
+constexpr OUString gsIsPhysical(  u"IsPhysical"_ustr  );
+constexpr OUString gsFollowStyle(  u"FollowStyle"_ustr  );
 
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily,

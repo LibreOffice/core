@@ -376,7 +376,7 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
     maPresRect.SetSize(aLayoutSize);
 }
 
-constexpr OUStringLiteral gsPageLayoutNames( u"PageLayoutNames" );
+constexpr OUString gsPageLayoutNames( u"PageLayoutNames"_ustr );
 
 SdXMLExport::SdXMLExport(
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
@@ -1362,9 +1362,9 @@ static OUString findOrAppendImpl( std::vector< DateTimeDeclImpl >& rVector, cons
     return pPrefix + OUString::number( nIndex );
 }
 
-constexpr OUStringLiteral gpStrHeaderTextPrefix = u"hdr";
-constexpr OUStringLiteral gpStrFooterTextPrefix = u"ftr";
-constexpr OUStringLiteral gpStrDateTimeTextPrefix = u"dtd";
+constexpr OUString gpStrHeaderTextPrefix = u"hdr"_ustr;
+constexpr OUString gpStrFooterTextPrefix = u"ftr"_ustr;
+constexpr OUString gpStrDateTimeTextPrefix = u"dtd"_ustr;
 
 HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( const Reference<XDrawPage>& xDrawPage )
 {
@@ -1377,7 +1377,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
 
         OUString aStrText;
 
-        static constexpr OUStringLiteral aStrHeaderTextProp( u"HeaderText" );
+        static constexpr OUString aStrHeaderTextProp( u"HeaderText"_ustr );
         if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
         {
             xSet->getPropertyValue( aStrHeaderTextProp  ) >>= aStrText;
@@ -1385,7 +1385,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrHeaderDeclName = findOrAppendImpl( maHeaderDeclsVector, aStrText, gpStrHeaderTextPrefix );
         }
 
-        static constexpr OUStringLiteral aStrFooterTextProp( u"FooterText" );
+        static constexpr OUString aStrFooterTextProp( u"FooterText"_ustr );
         if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
         {
             xSet->getPropertyValue( aStrFooterTextProp ) >>= aStrText;
@@ -1393,7 +1393,7 @@ HeaderFooterPageSettingsImpl SdXMLExport::ImpPrepDrawPageHeaderFooterDecls( cons
                 aSettings.maStrFooterDeclName = findOrAppendImpl( maFooterDeclsVector, aStrText, gpStrFooterTextPrefix );
         }
 
-        static constexpr OUStringLiteral aStrDateTimeTextProp( u"DateTimeText" );
+        static constexpr OUString aStrDateTimeTextProp( u"DateTimeText"_ustr );
         if( xInfo->hasPropertyByName( aStrDateTimeTextProp ) )
         {
             bool bFixed = false;
@@ -1508,7 +1508,7 @@ OUString SdXMLExport::ImpCreatePresPageStyleName( const Reference<XDrawPage>& xD
             // which itself is a property of the pages property set
             // we now merge these two propertysets if possible to simulate
             // a single propertyset with all draw page properties
-            static constexpr OUStringLiteral aBackground(u"Background");
+            static constexpr OUString aBackground(u"Background"_ustr);
             Reference< beans::XPropertySet > xPropSet2;
             Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )

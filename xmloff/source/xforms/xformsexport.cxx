@@ -780,7 +780,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
         {
             Reference< XPropertySet > xModelProps( _rXForms->getByName( modelName ), UNO_QUERY_THROW );
 
-            static constexpr OUStringLiteral sExternalData = u"ExternalData";
+            static constexpr OUString sExternalData = u"ExternalData"_ustr;
             Sequence<PropertyValue> aModelSettings{ comphelper::makePropertyValue(
                 sExternalData, xModelProps->getPropertyValue(sExternalData)) };
 

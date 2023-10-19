@@ -166,7 +166,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
         xFamilies = xFamiliesSupp->getStyleFamilies();
 
     Reference<XIndexAccess> xStyles;
-    static constexpr OUStringLiteral aNumberStyleName(u"NumberingStyles");
+    static constexpr OUString aNumberStyleName(u"NumberingStyles"_ustr);
     if (xFamilies.is() && xFamilies->hasByName(aNumberStyleName))
         xFamilies->getByName(aNumberStyleName) >>= xStyles;
 

@@ -406,7 +406,7 @@ XMLTextImportHelper::XMLTextImportHelper(
                     bProgress, bBlockMode, bOrganizerMode) )
     , m_xBackpatcherImpl( MakeBackpatcherImpl() )
 {
-    static constexpr OUStringLiteral s_PropNameDefaultListId = u"DefaultListId";
+    static constexpr OUString s_PropNameDefaultListId = u"DefaultListId"_ustr;
 
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
@@ -456,42 +456,42 @@ XMLTextImportHelper::XMLTextImportHelper(
     {
         Reference< XNameAccess > xFamilies(xFamiliesSupp->getStyleFamilies());
 
-        static constexpr OUStringLiteral aParaStyles(u"ParagraphStyles");
+        static constexpr OUString aParaStyles(u"ParagraphStyles"_ustr);
         if( xFamilies->hasByName( aParaStyles ) )
         {
             m_xImpl->m_xParaStyles.set(xFamilies->getByName(aParaStyles),
                 UNO_QUERY);
         }
 
-        static constexpr OUStringLiteral aCharStyles(u"CharacterStyles");
+        static constexpr OUString aCharStyles(u"CharacterStyles"_ustr);
         if( xFamilies->hasByName( aCharStyles ) )
         {
             m_xImpl->m_xTextStyles.set(xFamilies->getByName(aCharStyles),
                 UNO_QUERY);
         }
 
-        static constexpr OUStringLiteral aNumStyles(u"NumberingStyles");
+        static constexpr OUString aNumStyles(u"NumberingStyles"_ustr);
         if( xFamilies->hasByName( aNumStyles ) )
         {
             m_xImpl->m_xNumStyles.set(xFamilies->getByName(aNumStyles),
                 UNO_QUERY);
         }
 
-        static constexpr OUStringLiteral aFrameStyles(u"FrameStyles");
+        static constexpr OUString aFrameStyles(u"FrameStyles"_ustr);
         if( xFamilies->hasByName( aFrameStyles ) )
         {
             m_xImpl->m_xFrameStyles.set(xFamilies->getByName(aFrameStyles),
                 UNO_QUERY);
         }
 
-        static constexpr OUStringLiteral aPageStyles(u"PageStyles");
+        static constexpr OUString aPageStyles(u"PageStyles"_ustr);
         if( xFamilies->hasByName( aPageStyles ) )
         {
             m_xImpl->m_xPageStyles.set(xFamilies->getByName(aPageStyles),
                 UNO_QUERY);
         }
 
-        static constexpr OUStringLiteral aCellStyles(u"CellStyles");
+        static constexpr OUString aCellStyles(u"CellStyles"_ustr);
         if( xFamilies->hasByName( aCellStyles ) )
         {
             m_xImpl->m_xCellStyles.set(xFamilies->getByName(aCellStyles),
@@ -1046,14 +1046,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         bool bSetListAttrs,
         bool bOutlineContentVisible)
 {
-    static constexpr OUStringLiteral s_NumberingRules = u"NumberingRules";
-    static constexpr OUStringLiteral s_NumberingIsNumber = u"NumberingIsNumber";
-    static constexpr OUStringLiteral s_NumberingLevel = u"NumberingLevel";
-    static constexpr OUStringLiteral s_ParaIsNumberingRestart = u"ParaIsNumberingRestart";
-    static constexpr OUStringLiteral s_NumberingStartValue = u"NumberingStartValue";
-    static constexpr OUStringLiteral s_PropNameListId = u"ListId";
-    static constexpr OUStringLiteral s_PageDescName = u"PageDescName";
-    static constexpr OUStringLiteral s_OutlineLevel = u"OutlineLevel";
+    static constexpr OUString s_NumberingRules = u"NumberingRules"_ustr;
+    static constexpr OUString s_NumberingIsNumber = u"NumberingIsNumber"_ustr;
+    static constexpr OUString s_NumberingLevel = u"NumberingLevel"_ustr;
+    static constexpr OUString s_ParaIsNumberingRestart = u"ParaIsNumberingRestart"_ustr;
+    static constexpr OUString s_NumberingStartValue = u"NumberingStartValue"_ustr;
+    static constexpr OUString s_PropNameListId = u"ListId"_ustr;
+    static constexpr OUString s_PageDescName = u"PageDescName"_ustr;
+    static constexpr OUString s_OutlineLevel = u"OutlineLevel"_ustr;
 
     const XmlStyleFamily nFamily = bPara ? XmlStyleFamily::TEXT_PARAGRAPH
                                          : XmlStyleFamily::TEXT_TEXT;
@@ -1683,12 +1683,12 @@ void XMLTextImportHelper::SetHyperlink(
     const OUString& rVisitedStyleName,
     XMLEventsImportContext* pEvents)
 {
-    static constexpr OUStringLiteral s_HyperLinkURL = u"HyperLinkURL";
-    static constexpr OUStringLiteral s_HyperLinkName = u"HyperLinkName";
-    static constexpr OUStringLiteral s_HyperLinkTarget = u"HyperLinkTarget";
-    static constexpr OUStringLiteral s_UnvisitedCharStyleName = u"UnvisitedCharStyleName";
-    static constexpr OUStringLiteral s_VisitedCharStyleName = u"VisitedCharStyleName";
-    static constexpr OUStringLiteral s_HyperLinkEvents = u"HyperLinkEvents";
+    static constexpr OUString s_HyperLinkURL = u"HyperLinkURL"_ustr;
+    static constexpr OUString s_HyperLinkName = u"HyperLinkName"_ustr;
+    static constexpr OUString s_HyperLinkTarget = u"HyperLinkTarget"_ustr;
+    static constexpr OUString s_UnvisitedCharStyleName = u"UnvisitedCharStyleName"_ustr;
+    static constexpr OUString s_VisitedCharStyleName = u"VisitedCharStyleName"_ustr;
+    static constexpr OUString s_HyperLinkEvents = u"HyperLinkEvents"_ustr;
 
     Reference < XPropertySet > xPropSet( rCursor, UNO_QUERY );
     Reference < XPropertySetInfo > xPropSetInfo(
@@ -2287,7 +2287,7 @@ void XMLTextImportHelper::ConnectFrameChains(
 
 bool XMLTextImportHelper::IsInFrame() const
 {
-    static constexpr OUStringLiteral s_TextFrame = u"TextFrame";
+    static constexpr OUString s_TextFrame = u"TextFrame"_ustr;
 
     bool bIsInFrame = false;
 

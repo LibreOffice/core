@@ -32,9 +32,9 @@ using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
-constexpr OUStringLiteral gsEventType(u"EventType");
-constexpr OUStringLiteral gsScript(u"Script");
-constexpr OUStringLiteral gsURL(u"Script");
+constexpr OUString gsEventType(u"EventType"_ustr);
+constexpr OUString gsScript(u"Script"_ustr);
+constexpr OUString gsURL(u"Script"_ustr);
 
 XMLScriptContextFactory::XMLScriptContextFactory() {}
 
@@ -56,7 +56,7 @@ SvXMLImportContext* XMLScriptContextFactory::CreateContext(
     if (!sURLVal.isEmpty())
         rImport.NotifyMacroEventRead();
 
-    Sequence<PropertyValue> aValues{ comphelper::makePropertyValue(gsEventType, OUString(gsScript)),
+    Sequence<PropertyValue> aValues{ comphelper::makePropertyValue(gsEventType, gsScript),
                                      comphelper::makePropertyValue(gsURL, sURLVal) };
 
     // add values for event now

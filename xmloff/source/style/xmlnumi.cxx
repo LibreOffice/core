@@ -848,9 +848,9 @@ void SvxXMLListStyleContext::SetAttribute( sal_Int32 nElement,
     }
 }
 
-constexpr OUStringLiteral sIsPhysical( u"IsPhysical"  );
-constexpr OUStringLiteral sNumberingRules( u"NumberingRules"  );
-constexpr OUStringLiteral sIsContinuousNumbering( u"IsContinuousNumbering"  );
+constexpr OUString sIsPhysical( u"IsPhysical"_ustr  );
+constexpr OUString sNumberingRules( u"NumberingRules"_ustr  );
+constexpr OUString sIsContinuousNumbering( u"IsContinuousNumbering"_ustr  );
 
 SvxXMLListStyleContext::SvxXMLListStyleContext( SvXMLImport& rImport,
         bool bOutl )

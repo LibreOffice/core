@@ -720,7 +720,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             // SwTextBoxHelper::syncProperty, which indirectly calls SwTextBoxHelper::isTextBox)
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo
                 = xPropSet->getPropertySetInfo();
-            static constexpr OUStringLiteral sTextBox = u"TextBox";
+            static constexpr OUString sTextBox = u"TextBox"_ustr;
             if (xPropertySetInfo->hasPropertyByName(sTextBox))
                 xPropSet->setPropertyValue(sTextBox, uno::Any(mbTextBox));
 
@@ -2203,7 +2203,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
     if(xPropSet.is())
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-        static constexpr OUStringLiteral aPageNumberStr(u"PageNumber");
+        static constexpr OUString aPageNumberStr(u"PageNumber"_ustr);
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
             xPropSet->setPropertyValue(aPageNumberStr, uno::Any( mnPageNumber ));
     }
@@ -2635,7 +2635,7 @@ void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
 
             if ( GetImport().IsPackageURL( maHref ) )
             {
-                static constexpr OUStringLiteral  sURL( u"vnd.sun.star.EmbeddedObject:" );
+                static constexpr OUString  sURL( u"vnd.sun.star.EmbeddedObject:"_ustr );
 
                 if ( aPersistName.startsWith( sURL ) )
                     aPersistName = aPersistName.copy( sURL.getLength() );
@@ -2999,7 +2999,7 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
     {
         if ( maSize.Width && maSize.Height )
         {
-            static constexpr OUStringLiteral sVisibleArea(  u"VisibleArea"  );
+            static constexpr OUString sVisibleArea(  u"VisibleArea"_ustr  );
             uno::Reference< beans::XPropertySetInfo > aXPropSetInfo( xProps->getPropertySetInfo() );
             if ( !aXPropSetInfo.is() || aXPropSetInfo->hasPropertyByName( sVisibleArea ) )
             {
@@ -3679,7 +3679,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
 
         if (aScale.getX() < 0.0)
         {
-            static constexpr OUStringLiteral sName(u"MirroredX");
+            static constexpr OUString sName(u"MirroredX"_ustr);
             //fdo#84043 Merge, if property exists, otherwise append it
             auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
                 [](beans::PropertyValue& rValue) { return rValue.Name == sName; });
@@ -3705,7 +3705,7 @@ void SdXMLCustomShapeContext::endFastElement(sal_Int32 nElement)
 
         if (aScale.getY() < 0.0)
         {
-            static constexpr OUStringLiteral sName(u"MirroredY");
+            static constexpr OUString sName(u"MirroredY"_ustr);
             //fdo#84043 Merge, if property exists, otherwise append it
             auto aI = std::find_if(maCustomShapeGeometry.begin(), maCustomShapeGeometry.end(),
                 [](beans::PropertyValue& rValue) { return rValue.Name == sName; });

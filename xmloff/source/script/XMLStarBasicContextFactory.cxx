@@ -35,10 +35,10 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
 
-constexpr OUStringLiteral gsEventType(u"EventType");
-constexpr OUStringLiteral gsLibrary(u"Library");
-constexpr OUStringLiteral gsMacroName(u"MacroName");
-constexpr OUStringLiteral gsStarBasic(u"StarBasic");
+constexpr OUString gsEventType(u"EventType"_ustr);
+constexpr OUString gsLibrary(u"Library"_ustr);
+constexpr OUString gsMacroName(u"MacroName"_ustr);
+constexpr OUString gsStarBasic(u"StarBasic"_ustr);
 
 XMLStarBasicContextFactory::XMLStarBasicContextFactory()
 {
@@ -86,7 +86,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
 
     Sequence<PropertyValue> aValues
     {
-        comphelper::makePropertyValue(gsEventType, OUString(gsStarBasic)),
+        comphelper::makePropertyValue(gsEventType, gsStarBasic),
         comphelper::makePropertyValue(gsLibrary, sLibraryVal),
         comphelper::makePropertyValue(gsMacroName, sMacroNameVal)
     };

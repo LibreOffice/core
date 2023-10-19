@@ -232,18 +232,18 @@ class AnimExpImpl
 public:
     std::list<XMLEffectHint> maEffects;
 
-    static constexpr OUStringLiteral gsDimColor = u"DimColor";
-    static constexpr OUStringLiteral gsDimHide = u"DimHide";
-    static constexpr OUStringLiteral gsDimPrev = u"DimPrevious";
-    static constexpr OUStringLiteral gsEffect = u"Effect";
-    static constexpr OUStringLiteral gsPlayFull = u"PlayFull";
-    static constexpr OUStringLiteral gsPresOrder = u"PresentationOrder";
-    static constexpr OUStringLiteral gsSound = u"Sound";
-    static constexpr OUStringLiteral gsSoundOn = u"SoundOn";
-    static constexpr OUStringLiteral gsSpeed = u"Speed";
-    static constexpr OUStringLiteral gsTextEffect = u"TextEffect";
-    static constexpr OUStringLiteral gsIsAnimation = u"IsAnimation";
-    static constexpr OUStringLiteral gsAnimPath = u"AnimationPath";
+    static constexpr OUString gsDimColor = u"DimColor"_ustr;
+    static constexpr OUString gsDimHide = u"DimHide"_ustr;
+    static constexpr OUString gsDimPrev = u"DimPrevious"_ustr;
+    static constexpr OUString gsEffect = u"Effect"_ustr;
+    static constexpr OUString gsPlayFull = u"PlayFull"_ustr;
+    static constexpr OUString gsPresOrder = u"PresentationOrder"_ustr;
+    static constexpr OUString gsSound = u"Sound"_ustr;
+    static constexpr OUString gsSoundOn = u"SoundOn"_ustr;
+    static constexpr OUString gsSpeed = u"Speed"_ustr;
+    static constexpr OUString gsTextEffect = u"TextEffect"_ustr;
+    static constexpr OUString gsIsAnimation = u"IsAnimation"_ustr;
+    static constexpr OUString gsAnimPath = u"AnimationPath"_ustr;
 };
 
 XMLAnimationsExporter::XMLAnimationsExporter()

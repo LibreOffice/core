@@ -87,40 +87,40 @@ using namespace ::xmloff::token;
 
 
 // service prefix and service names
-constexpr OUStringLiteral sAPI_textfield_prefix = u"com.sun.star.text.TextField.";
+constexpr OUString sAPI_textfield_prefix = u"com.sun.star.text.TextField."_ustr;
 constexpr char16_t sAPI_fieldmaster_prefix[] = u"com.sun.star.text.FieldMaster.";
-constexpr OUStringLiteral sAPI_presentation_prefix = u"com.sun.star.presentation.TextField.";
+constexpr OUString sAPI_presentation_prefix = u"com.sun.star.presentation.TextField."_ustr;
 
-constexpr OUStringLiteral sAPI_date_time        = u"DateTime";
-constexpr OUStringLiteral sAPI_page_number      = u"PageNumber";
-constexpr OUStringLiteral sAPI_docinfo_change_date_time = u"DocInfo.ChangeDateTime";
-constexpr OUStringLiteral sAPI_docinfo_create_date_time = u"DocInfo.CreateDateTime";
-constexpr OUStringLiteral sAPI_docinfo_custom   = u"DocInfo.Custom";
-constexpr OUStringLiteral sAPI_docinfo_print_date_time = u"DocInfo.PrintDateTime";
-constexpr OUStringLiteral sAPI_dde              = u"DDE";
-constexpr OUStringLiteral sAPI_url              = u"URL";
+constexpr OUString sAPI_date_time        = u"DateTime"_ustr;
+constexpr OUString sAPI_page_number      = u"PageNumber"_ustr;
+constexpr OUString sAPI_docinfo_change_date_time = u"DocInfo.ChangeDateTime"_ustr;
+constexpr OUString sAPI_docinfo_create_date_time = u"DocInfo.CreateDateTime"_ustr;
+constexpr OUString sAPI_docinfo_custom   = u"DocInfo.Custom"_ustr;
+constexpr OUString sAPI_docinfo_print_date_time = u"DocInfo.PrintDateTime"_ustr;
+constexpr OUString sAPI_dde              = u"DDE"_ustr;
+constexpr OUString sAPI_url              = u"URL"_ustr;
 
 // property names
-constexpr OUStringLiteral sAPI_is_fixed = u"IsFixed";
-constexpr OUStringLiteral sAPI_content  = u"Content";
-constexpr OUStringLiteral sAPI_author   = u"Author";
-constexpr OUStringLiteral sAPI_hint     = u"Hint";
-constexpr OUStringLiteral sAPI_name     = u"Name";
+constexpr OUString sAPI_is_fixed = u"IsFixed"_ustr;
+constexpr OUString sAPI_content  = u"Content"_ustr;
+constexpr OUString sAPI_author   = u"Author"_ustr;
+constexpr OUString sAPI_hint     = u"Hint"_ustr;
+constexpr OUString sAPI_name     = u"Name"_ustr;
 constexpr OUStringLiteral sAPI_parent_name = u"ParentName";
-constexpr OUStringLiteral sAPI_sub_type = u"SubType";
-constexpr OUStringLiteral sAPI_date_time_value = u"DateTimeValue";
-constexpr OUStringLiteral sAPI_number_format = u"NumberFormat";
-constexpr OUStringLiteral sAPI_numbering_type = u"NumberingType";
-constexpr OUStringLiteral sAPI_offset   = u"Offset";
-constexpr OUStringLiteral sAPI_condition = u"Condition";
-constexpr OUStringLiteral sAPI_set_number = u"SetNumber";
-constexpr OUStringLiteral sAPI_file_format = u"FileFormat";
-constexpr OUStringLiteral sAPI_is_date  = u"IsDate";
-constexpr OUStringLiteral sAPI_current_presentation = u"CurrentPresentation";
-constexpr OUStringLiteral sAPI_is_hidden = u"IsHidden";
-constexpr OUStringLiteral sAPI_is_fixed_language = u"IsFixedLanguage";
+constexpr OUString sAPI_sub_type = u"SubType"_ustr;
+constexpr OUString sAPI_date_time_value = u"DateTimeValue"_ustr;
+constexpr OUString sAPI_number_format = u"NumberFormat"_ustr;
+constexpr OUString sAPI_numbering_type = u"NumberingType"_ustr;
+constexpr OUString sAPI_offset   = u"Offset"_ustr;
+constexpr OUString sAPI_condition = u"Condition"_ustr;
+constexpr OUString sAPI_set_number = u"SetNumber"_ustr;
+constexpr OUString sAPI_file_format = u"FileFormat"_ustr;
+constexpr OUString sAPI_is_date  = u"IsDate"_ustr;
+constexpr OUString sAPI_current_presentation = u"CurrentPresentation"_ustr;
+constexpr OUString sAPI_is_hidden = u"IsHidden"_ustr;
+constexpr OUString sAPI_is_fixed_language = u"IsFixedLanguage"_ustr;
 
-constexpr OUStringLiteral sAPI_true = u"TRUE";
+constexpr OUString sAPI_true = u"TRUE"_ustr;
 
 
 XMLTextFieldImportContext::XMLTextFieldImportContext(
@@ -914,7 +914,7 @@ void XMLPlaceholderFieldImportContext::PrepareField(
 
 // time field
 
-constexpr OUStringLiteral gsPropertyAdjust(u"Adjust");
+constexpr OUString gsPropertyAdjust(u"Adjust"_ustr);
 
 XMLTimeFieldImportContext::XMLTimeFieldImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp)

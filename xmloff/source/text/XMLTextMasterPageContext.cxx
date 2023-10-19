@@ -65,7 +65,7 @@ Reference < XStyle > XMLTextMasterPageContext::Create()
     return xNewStyle;
 }
 
-constexpr OUStringLiteral gsFollowStyle( u"FollowStyle" );
+constexpr OUString gsFollowStyle( u"FollowStyle"_ustr );
 
 XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
         sal_Int32 /*nElement*/,

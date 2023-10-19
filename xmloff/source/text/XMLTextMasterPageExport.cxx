@@ -37,7 +37,7 @@ constexpr OUStringLiteral gsHeaderOn( u"HeaderIsOn" );
 constexpr OUStringLiteral gsHeaderShareContent( u"HeaderIsShared" );
 constexpr OUStringLiteral gsHeaderTextFirst( u"HeaderTextFirst" );
 constexpr OUStringLiteral gsHeaderTextLeft( u"HeaderTextLeft" );
-constexpr OUStringLiteral gsFirstShareContent( u"FirstIsShared" );
+constexpr OUString gsFirstShareContent( u"FirstIsShared"_ustr );
 constexpr OUStringLiteral gsFooterText( u"FooterText" );
 constexpr OUStringLiteral gsFooterOn( u"FooterIsOn" );
 constexpr OUStringLiteral gsFooterShareContent( u"FooterIsShared" );

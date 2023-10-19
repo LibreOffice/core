@@ -38,10 +38,10 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-constexpr OUStringLiteral gsStandardFormat(u"StandardFormat");
-constexpr OUStringLiteral gsType(u"Type");
-constexpr OUStringLiteral gsCurrencySymbol(u"CurrencySymbol");
-constexpr OUStringLiteral gsCurrencyAbbreviation(u"CurrencyAbbreviation");
+constexpr OUString gsStandardFormat(u"StandardFormat"_ustr);
+constexpr OUString gsType(u"Type"_ustr);
+constexpr OUString gsCurrencySymbol(u"CurrencySymbol"_ustr);
+constexpr OUString gsCurrencyAbbreviation(u"CurrencyAbbreviation"_ustr);
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
             css::uno::Reference< css::util::XNumberFormatsSupplier > const & xTempNumberFormatsSupplier)

@@ -758,8 +758,8 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTdf156975_ThemeExport)
 
     // and check the markup.
     xmlDocUniquePtr pXmlDoc = parseExport("styles.xml");
-    static constexpr OStringLiteral sThemePath
-        = "//office:master-styles/style:master-page/loext:theme";
+    static constexpr OString sThemePath
+        = "//office:master-styles/style:master-page/loext:theme"_ostr;
     assertXPath(pXmlDoc, sThemePath, 1);
     assertXPath(pXmlDoc, sThemePath + "[@loext:name='Custom']");
 

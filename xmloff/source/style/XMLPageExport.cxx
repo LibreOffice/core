@@ -41,8 +41,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 
-constexpr OUStringLiteral gsIsPhysical( u"IsPhysical" );
-constexpr OUStringLiteral gsFollowStyle( u"FollowStyle" );
+constexpr OUString gsIsPhysical( u"IsPhysical"_ustr );
+constexpr OUString gsFollowStyle( u"FollowStyle"_ustr );
 
 namespace {
 
@@ -215,7 +215,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
                 "getStyleFamilies() from XModel failed for export!" );
     if( xFamilies.is() )
     {
-        static constexpr OUStringLiteral aPageStyleName(u"PageStyles");
+        static constexpr OUString aPageStyleName(u"PageStyles"_ustr);
 
         if( xFamilies->hasByName( aPageStyleName ) )
         {

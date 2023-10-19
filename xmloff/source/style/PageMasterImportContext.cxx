@@ -166,7 +166,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
     // ones are used when a FillStyle is defined
     if(!m_bIsFillStyleAlreadyConverted && !GetProperties().empty())
     {
-        static constexpr OUStringLiteral s_FillStyle(u"FillStyle");
+        static constexpr OUString s_FillStyle(u"FillStyle"_ustr);
         static constexpr OUStringLiteral s_HeaderFillStyle(u"HeaderFillStyle");
         static constexpr OUStringLiteral s_FooterFillStyle(u"FooterFillStyle");
 

@@ -67,8 +67,8 @@ using namespace ::xmloff::token;
 
 constexpr OUStringLiteral gsParaStyleServiceName( u"com.sun.star.style.ParagraphStyle" );
 constexpr OUStringLiteral gsTextStyleServiceName( u"com.sun.star.style.CharacterStyle" );
-constexpr OUStringLiteral gsParagraphStyles(u"ParagraphStyles");
-constexpr OUStringLiteral gsCharacterStyles(u"CharacterStyles");
+constexpr OUString gsParagraphStyles(u"ParagraphStyles"_ustr);
+constexpr OUString gsCharacterStyles(u"CharacterStyles"_ustr);
 
 void SvXMLStyleContext::SetAttribute( sal_Int32 nElement,
                                       const OUString& rValue )

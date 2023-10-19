@@ -712,7 +712,7 @@ void XMLCellStyleExport::exportStyleAttributes(const Reference<XStyle>& rStyle)
         return;
 
     Reference<XPropertySetInfo> xPropSetInfo(xPropSet->getPropertySetInfo());
-    static constexpr OUStringLiteral sNumberFormat(u"NumberFormat");
+    static constexpr OUString sNumberFormat(u"NumberFormat"_ustr);
     if (xPropSetInfo->hasPropertyByName(sNumberFormat))
     {
         Reference<XPropertyState> xPropState(xPropSet, UNO_QUERY);

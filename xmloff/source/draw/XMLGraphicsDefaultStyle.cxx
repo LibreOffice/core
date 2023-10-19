@@ -119,7 +119,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     ) )
         bWordWrapDefault = false;
 
-    static constexpr OUStringLiteral sTextWordWrap( u"TextWordWrap" );
+    static constexpr OUString sTextWordWrap( u"TextWordWrap"_ustr );
     Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );
     if ( xInfo->hasPropertyByName( sTextWordWrap ) )
         xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );

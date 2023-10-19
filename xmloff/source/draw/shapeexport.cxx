@@ -154,20 +154,20 @@ bool supportsText(XmlShapeType eShapeType)
 
 }
 
-constexpr OUStringLiteral gsZIndex( u"ZOrder" );
+constexpr OUString gsZIndex( u"ZOrder"_ustr );
 constexpr OUStringLiteral gsPrintable( u"Printable" );
 constexpr OUStringLiteral gsVisible( u"Visible" );
-constexpr OUStringLiteral gsModel( u"Model" );
+constexpr OUString gsModel( u"Model"_ustr );
 constexpr OUStringLiteral gsStartShape( u"StartShape" );
 constexpr OUStringLiteral gsEndShape( u"EndShape" );
-constexpr OUStringLiteral gsOnClick( u"OnClick" );
+constexpr OUString gsOnClick( u"OnClick"_ustr );
 constexpr OUStringLiteral gsEventType( u"EventType" );
 constexpr OUStringLiteral gsPresentation( u"Presentation" );
 constexpr OUStringLiteral gsMacroName( u"MacroName" );
-constexpr OUStringLiteral gsScript( u"Script" );
+constexpr OUString gsScript( u"Script"_ustr );
 constexpr OUStringLiteral gsLibrary( u"Library" );
 constexpr OUStringLiteral gsClickAction( u"ClickAction" );
-constexpr OUStringLiteral gsBookmark( u"Bookmark" );
+constexpr OUString gsBookmark( u"Bookmark"_ustr );
 constexpr OUStringLiteral gsEffect( u"Effect" );
 constexpr OUStringLiteral gsPlayFull( u"PlayFull" );
 constexpr OUStringLiteral gsVerb( u"Verb" );
@@ -3127,7 +3127,7 @@ void XMLShapeExport::ImpExportPageShape(
 
     // export page number used for this page
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
-    static constexpr OUStringLiteral aPageNumberStr(u"PageNumber");
+    static constexpr OUString aPageNumberStr(u"PageNumber"_ustr);
     if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
     {
         sal_Int32 nPageNumber = 0;
@@ -3524,21 +3524,21 @@ void XMLShapeExport::ImpExportMediaShape(
     auto pPluginOBJ = std::make_unique<SvXMLElementExport>(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & XMLShapeExportFlags::NO_WS ), true);
 
     // export parameters
-    static constexpr OUStringLiteral aFalseStr( u"false" );
-    static constexpr OUStringLiteral aTrueStr( u"true" );
+    static constexpr OUString aFalseStr( u"false"_ustr );
+    static constexpr OUString aTrueStr( u"true"_ustr );
 
     bool bLoop = false;
-    static constexpr OUStringLiteral aLoopStr(  u"Loop"  );
+    static constexpr OUString aLoopStr(  u"Loop"_ustr  );
     xPropSet->getPropertyValue( aLoopStr ) >>= bLoop;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aLoopStr );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? OUString(aTrueStr) : OUString(aFalseStr) );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bLoop ? aTrueStr : aFalseStr );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     bool bMute = false;
-    static constexpr OUStringLiteral aMuteStr(  u"Mute"  );
+    static constexpr OUString aMuteStr(  u"Mute"_ustr  );
     xPropSet->getPropertyValue( aMuteStr ) >>= bMute;
     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aMuteStr );
-    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? OUString(aTrueStr) : OUString(aFalseStr) );
+    mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, bMute ? aTrueStr : aFalseStr );
     delete new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true );
 
     sal_Int16 nVolumeDB = 0;
@@ -4367,7 +4367,7 @@ static void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Referenc
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
     // geometry
-    static constexpr OUStringLiteral sCustomShapeGeometry( u"CustomShapeGeometry" );
+    static constexpr OUString sCustomShapeGeometry( u"CustomShapeGeometry"_ustr );
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
         uno::Any aGeoPropSet( xPropSet->getPropertyValue( sCustomShapeGeometry ) );

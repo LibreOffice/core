@@ -628,8 +628,8 @@ void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
 
 
 constexpr OUStringLiteral gsNumberingRules( u"NumberingRules" );
-constexpr OUStringLiteral gsIsPhysical( u"IsPhysical" );
-constexpr OUStringLiteral gsIsContinuousNumbering( u"IsContinuousNumbering" );
+constexpr OUString gsIsPhysical( u"IsPhysical"_ustr );
+constexpr OUString gsIsContinuousNumbering( u"IsContinuousNumbering"_ustr );
 
 SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     m_rExport( rExp ),
@@ -808,7 +808,7 @@ void SvxXMLNumRuleExport::exportStyles( bool bUsed, bool bExportChapterNumbering
     if( !xFamilies.is() )
         return;
 
-    static constexpr OUStringLiteral aNumberStyleName( u"NumberingStyles" );
+    static constexpr OUString aNumberStyleName( u"NumberingStyles"_ustr );
 
     Reference< XIndexAccess > xStyles;
     if( !xFamilies->hasByName( aNumberStyleName ) )

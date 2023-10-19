@@ -57,7 +57,7 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-constexpr OUStringLiteral aCategoriesRange = u"categories";
+constexpr OUString aCategoriesRange = u"categories"_ustr;
 
 typedef ::std::multimap< OUString, OUString >
     lcl_tOriginalRangeToInternalRangeMap;
@@ -104,7 +104,7 @@ void lcl_fillRangeMapping(
     sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
-    static constexpr OUStringLiteral lcl_aLabelPrefix(u"label ");
+    static constexpr OUString lcl_aLabelPrefix(u"label "_ustr);
 
     // Fill range mapping
     const size_t nTableRowCount( rTable.aData.size());

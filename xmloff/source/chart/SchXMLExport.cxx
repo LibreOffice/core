@@ -282,7 +282,7 @@ public:
     rtl::Reference< XMLPropertySetMapper > mxPropertySetMapper;
     rtl::Reference< XMLChartExportPropertyMapper > mxExpPropMapper;
 
-    static constexpr OUStringLiteral gsTableName = u"local-table";
+    static constexpr OUString gsTableName = u"local-table"_ustr;
     OUStringBuffer msStringBuffer;
     OUString msString;
 

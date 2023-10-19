@@ -134,7 +134,7 @@ void XMLTextShapeStyleContext::SetAttribute( sal_Int32 nElement,
 }
 
 
-constexpr OUStringLiteral gsIsAutoUpdate( u"IsAutoUpdate" );
+constexpr OUString gsIsAutoUpdate( u"IsAutoUpdate"_ustr );
 
 XMLTextShapeStyleContext::XMLTextShapeStyleContext( SvXMLImport& rImport,
         SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :

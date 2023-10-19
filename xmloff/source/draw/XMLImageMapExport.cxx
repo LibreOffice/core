@@ -56,7 +56,7 @@ using ::com::sun::star::drawing::PointSequence;
 constexpr OUStringLiteral gsBoundary(u"Boundary");
 constexpr OUStringLiteral gsCenter(u"Center");
 constexpr OUStringLiteral gsDescription(u"Description");
-constexpr OUStringLiteral gsImageMap(u"ImageMap");
+constexpr OUString gsImageMap(u"ImageMap"_ustr);
 constexpr OUStringLiteral gsIsActive(u"IsActive");
 constexpr OUStringLiteral gsName(u"Name");
 constexpr OUStringLiteral gsPolygon(u"Polygon");

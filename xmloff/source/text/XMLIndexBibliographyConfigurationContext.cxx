@@ -45,14 +45,14 @@ using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 
 
-constexpr OUStringLiteral gsFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography");
+constexpr OUString gsFieldMaster_Bibliography(u"com.sun.star.text.FieldMaster.Bibliography"_ustr);
 constexpr OUStringLiteral gsBracketBefore(u"BracketBefore");
 constexpr OUStringLiteral gsBracketAfter(u"BracketAfter");
 constexpr OUStringLiteral gsIsNumberEntries(u"IsNumberEntries");
 constexpr OUStringLiteral gsIsSortByPosition(u"IsSortByPosition");
 constexpr OUStringLiteral gsSortKeys(u"SortKeys");
-constexpr OUStringLiteral gsSortKey(u"SortKey");
-constexpr OUStringLiteral gsIsSortAscending(u"IsSortAscending");
+constexpr OUString gsSortKey(u"SortKey"_ustr);
+constexpr OUString gsIsSortAscending(u"IsSortAscending"_ustr);
 constexpr OUStringLiteral gsSortAlgorithm(u"SortAlgorithm");
 constexpr OUStringLiteral gsLocale(u"Locale");
 

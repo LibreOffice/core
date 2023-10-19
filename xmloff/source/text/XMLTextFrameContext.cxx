@@ -307,14 +307,14 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         xPropSet->setPropertyValue( sContourPolyPolygon, Any(aPointSequenceSequence) );
     }
 
-    static constexpr OUStringLiteral sIsPixelContour(u"IsPixelContour");
+    static constexpr OUString sIsPixelContour(u"IsPixelContour"_ustr);
 
     if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
     {
         xPropSet->setPropertyValue( sIsPixelContour, Any(bPixelWidth) );
     }
 
-    static constexpr OUStringLiteral sIsAutomaticContour(u"IsAutomaticContour");
+    static constexpr OUString sIsAutomaticContour(u"IsAutomaticContour"_ustr);
 
     if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
@@ -1250,10 +1250,10 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
                        const OUString& rTargetFrameName,
                        bool bMap )
 {
-    static constexpr OUStringLiteral s_HyperLinkURL = u"HyperLinkURL";
-    static constexpr OUStringLiteral s_HyperLinkName = u"HyperLinkName";
-    static constexpr OUStringLiteral s_HyperLinkTarget = u"HyperLinkTarget";
-    static constexpr OUStringLiteral s_ServerMap = u"ServerMap";
+    static constexpr OUString s_HyperLinkURL = u"HyperLinkURL"_ustr;
+    static constexpr OUString s_HyperLinkName = u"HyperLinkName"_ustr;
+    static constexpr OUString s_HyperLinkTarget = u"HyperLinkTarget"_ustr;
+    static constexpr OUString s_ServerMap = u"ServerMap"_ustr;
     if( !xPropSet.is() )
         return;
 

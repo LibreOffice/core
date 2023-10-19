@@ -69,7 +69,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport,
         }
         if (bFirst)
         {
-            static constexpr OUStringLiteral sShareContentFirst( u"FirstIsShared" );
+            static constexpr OUString sShareContentFirst( u"FirstIsShared"_ustr );
             aAny = xPropSet->getPropertyValue( sShareContentFirst );
             bool bSharedFirst = bool();
             if (!(aAny >>= bSharedFirst))
