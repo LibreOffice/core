@@ -469,7 +469,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         uno::Reference<embed::XStorage> const xStorage(
                 xSBD->getDocumentStorage(), uno::UNO_SET_THROW);
 
-        static constexpr OUStringLiteral media(u"Media");
+        static constexpr OUString media(u"Media"_ustr);
         uno::Reference<embed::XStorage> const xSubStorage(
             xStorage->openStorageElement(media, embed::ElementModes::WRITE));
 

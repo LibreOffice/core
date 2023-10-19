@@ -29,7 +29,7 @@
 
 constexpr OUStringLiteral AVMEDIA_GTK_PLAYER_IMPLEMENTATIONNAME
     = u"com.sun.star.comp.avmedia.Player_Gtk";
-constexpr OUStringLiteral AVMEDIA_GTK_PLAYER_SERVICENAME = u"com.sun.star.media.Player_Gtk";
+constexpr OUString AVMEDIA_GTK_PLAYER_SERVICENAME = u"com.sun.star.media.Player_Gtk"_ustr;
 
 using namespace ::com::sun::star;
 

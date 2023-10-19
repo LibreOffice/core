@@ -32,7 +32,7 @@
 #include <string>
 
 constexpr OUStringLiteral AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_GStreamer";
-constexpr OUStringLiteral AVMEDIA_GST_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_GStreamer";
+constexpr OUString AVMEDIA_GST_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_GStreamer"_ustr;
 
 using namespace ::com::sun::star;
 

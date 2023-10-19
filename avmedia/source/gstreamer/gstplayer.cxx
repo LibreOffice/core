@@ -51,7 +51,7 @@
 #include <gst/pbutils/pbutils.h>
 
 constexpr OUStringLiteral AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Player_GStreamer";
-constexpr OUStringLiteral AVMEDIA_GST_PLAYER_SERVICENAME        = u"com.sun.star.media.Player_GStreamer";
+constexpr OUString AVMEDIA_GST_PLAYER_SERVICENAME        = u"com.sun.star.media.Player_GStreamer"_ustr;
 #define AVVERSION "gst 1.0: "
 
 using namespace ::com::sun::star;
