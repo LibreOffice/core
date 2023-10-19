@@ -56,7 +56,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-constexpr OUStringLiteral lcl_aLabelRole( u"label" );
+constexpr OUString lcl_aLabelRole( u"label"_ustr );
 
 
 OUString lcl_ConvertRole( const OUString & rRoleString )

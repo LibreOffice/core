@@ -46,7 +46,7 @@ using ::com::sun::star::uno::Reference;
 namespace
 {
 
-constexpr OUStringLiteral lcl_aLabelRole( u"label" );
+constexpr OUString lcl_aLabelRole( u"label"_ustr );
 
 void lcl_UpdateCurrentRange(weld::TreeView& rOutListBox, const OUString & rRole,
                             const OUString& rRange)
@@ -350,7 +350,7 @@ void DataSourceTabPage::fillSeriesListBox()
                 OUString aResString(::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX ));
 
                 // replace index of unnamed series
-                static constexpr OUStringLiteral aReplacementStr( u"%NUMBER" );
+                static constexpr OUString aReplacementStr( u"%NUMBER"_ustr );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
                     aLabel = aResString.replaceAt(
@@ -480,7 +480,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl, weld::TreeView&, voi
     OUString aSelectedRange = lcl_GetSelectedRolesRange( *m_xLB_ROLE );
 
     // replace role in fixed text label
-    static constexpr OUStringLiteral aReplacementStr( u"%VALUETYPE" );
+    static constexpr OUString aReplacementStr( u"%VALUETYPE"_ustr );
     sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
     if( nIndex != -1 )
     {
@@ -834,7 +834,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( "Role" , uno::Any( OUString(lcl_aLabelRole) ));
+                                    xProp->setPropertyValue( "Role" , uno::Any( lcl_aLabelRole ));
 
                                     //Labels should always include hidden cells, regardless of the setting chosen
                                     xProp->setPropertyValue( "IncludeHiddenCells", uno::Any(true));

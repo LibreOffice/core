@@ -27,9 +27,9 @@
 namespace
 {
 
-constexpr OUStringLiteral lcl_aServiceName_DateScaling = u"com.sun.star.chart2.DateScaling";
-constexpr OUStringLiteral lcl_aServiceName_InverseDateScaling
-    = u"com.sun.star.chart2.InverseDateScaling";
+constexpr OUString lcl_aServiceName_DateScaling = u"com.sun.star.chart2.DateScaling"_ustr;
+constexpr OUString lcl_aServiceName_InverseDateScaling
+    = u"com.sun.star.chart2.InverseDateScaling"_ustr;
 
 const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
 }

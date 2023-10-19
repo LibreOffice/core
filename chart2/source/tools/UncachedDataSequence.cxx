@@ -41,7 +41,7 @@ using ::chart::impl::UncachedDataSequence_Base;
 
 namespace
 {
-constexpr OUStringLiteral lcl_aServiceName = u"com.sun.star.comp.chart.UncachedDataSequence";
+constexpr OUString lcl_aServiceName = u"com.sun.star.comp.chart.UncachedDataSequence"_ustr;
 
 enum
 {
@@ -212,7 +212,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     // auto-generated label
     sal_Int32 nSeries = m_aSourceRepresentation.toInt32() + 1;
     OUString aResString(::chart::SchResId(STR_DATA_UNNAMED_SERIES_WITH_INDEX));
-    static constexpr OUStringLiteral aReplacementStr(u"%NUMBER");
+    static constexpr OUString aReplacementStr(u"%NUMBER"_ustr);
     sal_Int32 nIndex = aResString.indexOf(aReplacementStr);
     OUString aName;
     if( nIndex != -1 )

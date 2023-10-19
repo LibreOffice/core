@@ -75,10 +75,10 @@ using namespace ::chart::CloneHelper;
 
 namespace
 {
-constexpr OUStringLiteral lcl_aGDIMetaFileMIMEType(
-    u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"");
-constexpr OUStringLiteral lcl_aGDIMetaFileMIMETypeHighContrast(
-    u"application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"");
+constexpr OUString lcl_aGDIMetaFileMIMEType(
+    u"application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr);
+constexpr OUString lcl_aGDIMetaFileMIMETypeHighContrast(
+    u"application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""_ustr);
 
 } // anonymous namespace
 

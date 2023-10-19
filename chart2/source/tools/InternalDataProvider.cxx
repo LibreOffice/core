@@ -60,12 +60,12 @@ namespace chart
 namespace
 {
 
-constexpr OUStringLiteral lcl_aCategoriesRangeName = u"categories";
+constexpr OUString lcl_aCategoriesRangeName = u"categories"_ustr;
 const char lcl_aCategoriesLevelRangeNamePrefix[] = "categoriesL "; //L <-> level
 const char lcl_aCategoriesPointRangeNamePrefix[] = "categoriesP "; //P <-> point
-constexpr OUStringLiteral lcl_aCategoriesRoleName = u"categories";
+constexpr OUString lcl_aCategoriesRoleName = u"categories"_ustr;
 const char lcl_aLabelRangePrefix[] = "label ";
-constexpr OUStringLiteral lcl_aCompleteRange = u"all";
+constexpr OUString lcl_aCompleteRange = u"all"_ustr;
 
 typedef std::multimap< OUString, uno::WeakReference< chart2::data::XDataSequence > >
     lcl_tSequenceMap;
@@ -787,7 +787,7 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 {
     Sequence< beans::PropertyValue > aArguments{
         beans::PropertyValue(
-            "CellRangeRepresentation", -1, uno::Any( OUString(lcl_aCompleteRange) ),
+            "CellRangeRepresentation", -1, uno::Any( lcl_aCompleteRange ),
             beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             "DataRowSource", -1, uno::Any(
@@ -1245,7 +1245,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeFromXML( const OUString& aXM
         return "";
     }
 
-    static constexpr OUStringLiteral aPivotTableID(u"PT@");
+    static constexpr OUString aPivotTableID(u"PT@"_ustr);
     if (aXMLRange.startsWith(aPivotTableID))
         return aXMLRange.copy(aPivotTableID.getLength());
 

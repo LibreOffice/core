@@ -58,10 +58,10 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-constexpr OUStringLiteral m_aMultiClick = u"MultiClick";
-constexpr OUStringLiteral m_aDragMethodEquals = u"DragMethod=";
-constexpr OUStringLiteral m_aDragParameterEquals = u"DragParameter=";
-constexpr OUStringLiteral m_aProtocol = u"CID/";
+constexpr OUString m_aMultiClick = u"MultiClick"_ustr;
+constexpr OUString m_aDragMethodEquals = u"DragMethod="_ustr;
+constexpr OUString m_aDragParameterEquals = u"DragParameter="_ustr;
+constexpr OUString m_aProtocol = u"CID/"_ustr;
 constexpr OUString m_aPieSegmentDragMethodServiceName(u"PieSegmentDragging"_ustr);
 
 namespace

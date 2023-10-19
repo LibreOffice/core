@@ -39,7 +39,7 @@ using ::chart::impl::CachedDataSequence_Base;
 
 namespace
 {
-constexpr OUStringLiteral lcl_aServiceName = u"com.sun.star.comp.chart.CachedDataSequence";
+constexpr OUString lcl_aServiceName = u"com.sun.star.comp.chart.CachedDataSequence"_ustr;
 
 enum
 {

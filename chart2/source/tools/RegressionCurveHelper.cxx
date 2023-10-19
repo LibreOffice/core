@@ -851,7 +851,7 @@ void RegressionCurveHelper::resetEquationPosition(
 
     try
     {
-        static constexpr OUStringLiteral aPosPropertyName( u"RelativePosition" );
+        static constexpr OUString aPosPropertyName( u"RelativePosition"_ustr );
         Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
         if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
             xEqProp->setPropertyValue( aPosPropertyName, uno::Any());

@@ -31,8 +31,8 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-constexpr OUStringLiteral CHART2_COOSYSTEM_POLAR_SERVICE_NAME
-    = u"com.sun.star.chart2.CoordinateSystems.Polar";
+constexpr OUString CHART2_COOSYSTEM_POLAR_SERVICE_NAME
+    = u"com.sun.star.chart2.CoordinateSystems.Polar"_ustr;
 
 }
 

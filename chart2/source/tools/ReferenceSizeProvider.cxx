@@ -133,7 +133,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
     if( ! xProp.is())
         return;
 
-    static constexpr OUStringLiteral aRefSizeName = u"ReferencePageSize";
+    static constexpr OUString aRefSizeName = u"ReferencePageSize"_ustr;
 
     try
     {

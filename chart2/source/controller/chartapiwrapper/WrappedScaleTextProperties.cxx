@@ -61,7 +61,7 @@ WrappedScaleTextProperty::WrappedScaleTextProperty(std::shared_ptr<Chart2ModelCo
 
 void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
 {
-    static constexpr OUStringLiteral aRefSizeName = u"ReferencePageSize";
+    static constexpr OUString aRefSizeName = u"ReferencePageSize"_ustr;
 
     if( !xInnerPropertySet.is() )
         return;

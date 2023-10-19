@@ -426,7 +426,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
         case XATTR_FILLBMP_STRETCH:
             if( lcl_supportsFillProperties( m_GraphicObjectType ))
             {
-                static constexpr OUStringLiteral aModePropName(u"FillBitmapMode");
+                static constexpr OUString aModePropName(u"FillBitmapMode"_ustr);
                 bool bStretched = rItemSet.Get( XATTR_FILLBMP_STRETCH ).GetValue();
                 drawing::BitmapMode aMode =
                     (bStretched ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_NO_REPEAT);
@@ -448,7 +448,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
         case XATTR_FILLBMP_TILE:
             if( lcl_supportsFillProperties( m_GraphicObjectType ))
             {
-                static constexpr OUStringLiteral aModePropName(u"FillBitmapMode");
+                static constexpr OUString aModePropName(u"FillBitmapMode"_ustr);
                 bool bTiled = rItemSet.Get( XATTR_FILLBMP_TILE ).GetValue();
                 drawing::BitmapMode aMode =
                     (bTiled ? drawing::BitmapMode_REPEAT : drawing::BitmapMode_NO_REPEAT);
