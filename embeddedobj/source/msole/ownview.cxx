@@ -401,7 +401,7 @@ void OwnView_Impl::CreateNative()
                         aArgs, m_xContext ),
                 uno::UNO_QUERY_THROW );
 
-        static constexpr OUStringLiteral aSubStreamName(u"\1Ole10Native");
+        static constexpr OUString aSubStreamName(u"\1Ole10Native"_ustr);
         uno::Reference< embed::XClassifiedObject > xStor( xNameAccess, uno::UNO_QUERY_THROW );
         uno::Sequence< sal_Int8 > aStorClassID = xStor->getClassID();
 

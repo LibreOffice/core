@@ -178,7 +178,7 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
     {
         const uno::Reference< beans::XPropertySet > xSourceProps( i_rSource, uno::UNO_QUERY_THROW );
         const uno::Reference< beans::XPropertySet > xTargetProps( i_rTarget, uno::UNO_QUERY_THROW );
-        static constexpr OUStringLiteral sMediaTypePropName( u"MediaType" );
+        static constexpr OUString sMediaTypePropName( u"MediaType"_ustr );
         xTargetProps->setPropertyValue( sMediaTypePropName, xSourceProps->getPropertyValue( sMediaTypePropName ) );
     }
     catch( const uno::Exception& )
@@ -784,11 +784,11 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
-        static constexpr OUStringLiteral sFilterName = u"FilterName";
-        static constexpr OUStringLiteral sHierarchicalDocumentName = u"HierarchicalDocumentName";
-        static constexpr OUStringLiteral sDocumentBaseURL = u"DocumentBaseURL";
-        static constexpr OUStringLiteral sSourceShellID = u"SourceShellID";
-        static constexpr OUStringLiteral sDestinationShellID = u"DestinationShellID";
+        static constexpr OUString sFilterName = u"FilterName"_ustr;
+        static constexpr OUString sHierarchicalDocumentName = u"HierarchicalDocumentName"_ustr;
+        static constexpr OUString sDocumentBaseURL = u"DocumentBaseURL"_ustr;
+        static constexpr OUString sSourceShellID = u"SourceShellID"_ustr;
+        static constexpr OUString sDestinationShellID = u"DestinationShellID"_ustr;
         uno::Sequence<beans::PropertyValue> aArgs{
             comphelper::makePropertyValue(sFilterName, aFilterName),
             comphelper::makePropertyValue(sHierarchicalDocumentName, aHierarchName),
