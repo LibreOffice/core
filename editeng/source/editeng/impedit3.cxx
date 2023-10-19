@@ -88,7 +88,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
-constexpr OUStringLiteral CH_HYPH = u"-";
+constexpr OUString CH_HYPH = u"-"_ustr;
 
 constexpr tools::Long WRONG_SHOW_MIN = 5;
 

@@ -633,7 +633,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
     if (!xTmpDicList.is())
         return nullptr;
 
-    static constexpr OUStringLiteral aDicName( u"standard.dic" );
+    static constexpr OUString aDicName( u"standard.dic"_ustr );
     uno::Reference< XDictionary > xDic = xTmpDicList->getDictionaryByName( aDicName );
     if (!xDic.is())
     {

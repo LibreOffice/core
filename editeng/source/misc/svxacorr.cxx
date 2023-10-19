@@ -97,9 +97,9 @@ namespace o3tl {
 }
 const sal_Unicode cNonBreakingSpace = 0xA0; // UNICODE code for no break space
 
-constexpr OUStringLiteral pXMLImplWordStart_ExcptLstStr = u"WordExceptList.xml";
-constexpr OUStringLiteral pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml";
-constexpr OUStringLiteral pXMLImplAutocorr_ListStr = u"DocumentList.xml";
+constexpr OUString pXMLImplWordStart_ExcptLstStr = u"WordExceptList.xml"_ustr;
+constexpr OUString pXMLImplCplStt_ExcptLstStr = u"SentenceExceptList.xml"_ustr;
+constexpr OUString pXMLImplAutocorr_ListStr = u"DocumentList.xml"_ustr;
 
 // tdf#54409 check also typographical quotation marks in the case of skipped ASCII quotation marks
 // Curious, why these \u0083\u0084\u0089\u0091\u0092\u0093\u0094 are handled as "begin characters"?
@@ -304,8 +304,8 @@ ACFlags SvxAutoCorrect::GetDefaultFlags()
 
 constexpr sal_Unicode cEmDash = 0x2014;
 constexpr sal_Unicode cEnDash = 0x2013;
-constexpr OUStringLiteral sEmDash(u"\u2014");
-constexpr OUStringLiteral sEnDash(u"\u2013");
+constexpr OUString sEmDash(u"\u2014"_ustr);
+constexpr OUString sEnDash(u"\u2013"_ustr);
 constexpr sal_Unicode cApostrophe = 0x2019;
 constexpr sal_Unicode cLeftDoubleAngleQuote = 0xAB;
 constexpr sal_Unicode cRightDoubleAngleQuote = 0xBB;

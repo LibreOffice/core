@@ -140,8 +140,8 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                     else
                     {
                         SvxNumType nActType = !bIsLegal || isArabicNumberingType(nNumType) ? nNumType : SVX_NUM_ARABIC;
-                        static constexpr OUStringLiteral sNumberingType = u"NumberingType";
-                        static constexpr OUStringLiteral sValue = u"Value";
+                        static constexpr OUString sNumberingType = u"NumberingType"_ustr;
+                        static constexpr OUString sValue = u"Value"_ustr;
                         Sequence< PropertyValue > aProperties
                         {
                             comphelper::makePropertyValue(sNumberingType, static_cast<sal_uInt16>(nActType)),
