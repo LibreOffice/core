@@ -92,7 +92,7 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.libreoffice.org/show_bug.cgi?id=49849
     {
-        static constexpr OUStringLiteral aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD";
+        static constexpr OUString aWord = u"\u05DE\u05D9\u05DC\u05D9\u05DD"_ustr;
         OUString aTest(aWord + " " + aWord);
 
         aLocale.Language = "he";
@@ -148,8 +148,8 @@ void TestBreakIterator::testLineBreaking()
 
     //See https://bugs.documentfoundation.org/show_bug.cgi?id=96197
     {
-        static constexpr OUStringLiteral aTest = u"\uc560\uad6D\uac00\uc758 \uac00"
-                                       "\uc0ac\ub294";
+        static constexpr OUString aTest = u"\uc560\uad6D\uac00\uc758 \uac00"
+                                       "\uc0ac\ub294"_ustr;
 
         aLocale.Language = "ko";
         aLocale.Country = "KR";
@@ -226,7 +226,7 @@ void TestBreakIterator::testWordBoundaries()
 
     //See https://bz.apache.org/ooo/show_bug.cgi?id=14904
     {
-        static constexpr OUStringLiteral aTest =
+        static constexpr OUString aTest =
             u"Working \u201CWords"
             " starting wit"
             "h quotes\u201D Work"
@@ -234,7 +234,7 @@ void TestBreakIterator::testWordBoundaries()
             "?Spanish? doe"
             "sn\u2019t work. No"
             "t even \u00BFreal? "
-            "Spanish";
+            "Spanish"_ustr;
 
         aBounds = m_xBreak->getWordBoundary(aTest, 4, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
@@ -462,8 +462,8 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        static constexpr OUStringLiteral aTest =
-            u"I\u200Bwant\u200Bto\u200Bgo";
+        static constexpr OUString aTest =
+            u"I\u200Bwant\u200Bto\u200Bgo"_ustr;
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {1, 6, 9, 12};
@@ -498,11 +498,11 @@ void TestBreakIterator::testWordBoundaries()
                 break;
         }
 
-        static constexpr OUStringLiteral aTest =
+        static constexpr OUString aTest =
             u"\u1F0C\u03BD\u03B4\u03C1\u03B1 \u1F00"
             "\u03C1\u03BD\u1F7B\u03BC\u03B5\u03BD\u03BF"
             "\u03C2 \u1F00\u03BB\u03BB \u1F24"
-            "\u03C3\u03B8\u03B9\u03BF\u03BD";
+            "\u03C3\u03B8\u03B9\u03BF\u03BD"_ustr;
 
         sal_Int32 nPos = 0;
         sal_Int32 aExpected[] = {5, 15, 19, 26};
@@ -569,8 +569,8 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "en";
         aLocale.Country = "US";
 
-        static constexpr OUStringLiteral aTest =
-            u"ru\uFB00le \uFB01sh";
+        static constexpr OUString aTest =
+            u"ru\uFB00le \uFB01sh"_ustr;
 
         aBounds = m_xBreak->getWordBoundary(aTest, 1, aLocale, i18n::WordType::DICTIONARY_WORD, false);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
@@ -586,8 +586,8 @@ void TestBreakIterator::testWordBoundaries()
         aLocale.Language = "en";
         aLocale.Country = "US";
 
-        static constexpr OUStringLiteral aTest =
-            u"a\u2013b\u2014c";
+        static constexpr OUString aTest =
+            u"a\u2013b\u2014c"_ustr;
 
         aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale, i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aBounds.startPos);
@@ -614,7 +614,7 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        static constexpr OUStringLiteral aTest = u"\u09AC\u09CD\u09AF"; // BA HALANT LA
+        static constexpr OUString aTest = u"\u09AC\u09CD\u09AF"_ustr; // BA HALANT LA
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
@@ -627,7 +627,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        static constexpr OUStringLiteral aTest = u"\u09B9\u09CD\u09A3\u09BF";
+        static constexpr OUString aTest = u"\u09B9\u09CD\u09A3\u09BF"_ustr;
             // HA HALANT NA VOWELSIGNI
 
         sal_Int32 nDone=0;
@@ -641,7 +641,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        static constexpr OUStringLiteral aTest = u"\u09A4\u09CD\u09AE\u09CD\u09AF";
+        static constexpr OUString aTest = u"\u09A4\u09CD\u09AE\u09CD\u09AF"_ustr;
             // TA HALANT MA HALANT YA
 
         sal_Int32 nDone=0;
@@ -658,7 +658,7 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        static constexpr OUStringLiteral aTest = u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8"; // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
+        static constexpr OUString aTest = u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8"_ustr; // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -683,7 +683,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        static constexpr OUStringLiteral aTest = u"\u0B95\u0BC1"; // KA VOWELSIGNU
+        static constexpr OUString aTest = u"\u0B95\u0BC1"_ustr; // KA VOWELSIGNU
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -697,8 +697,8 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        static constexpr OUStringLiteral aTest =
-            u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8";
+        static constexpr OUString aTest =
+            u"\u0B9A\u0BBF\u0BA4\u0BCD\u0BA4\u0BBF\u0BB0\u0BC8"_ustr;
             // CA VOWELSIGNI TA VIRAMA TA VOWELSIGNI RA VOWELSIGNAI
 
         sal_Int32 nDone=0;
@@ -722,7 +722,7 @@ void TestBreakIterator::testGraphemeIteration()
     }
 
     {
-        static constexpr OUStringLiteral aText = u"\u05D0\u05B8"; // ALEF QAMATS
+        static constexpr OUString aText = u"\u05D0\u05B8"_ustr; // ALEF QAMATS
 
         sal_Int32 nGraphemeCount = 0;
 
@@ -742,7 +742,7 @@ void TestBreakIterator::testGraphemeIteration()
     aLocale.Country = "IN";
 
     {
-        static constexpr OUStringLiteral aTest = u"\u0936\u0940"; // SHA VOWELSIGNII
+        static constexpr OUString aTest = u"\u0936\u0940"_ustr; // SHA VOWELSIGNII
 
         sal_Int32 nDone=0;
         sal_Int32 nPos = 0;
@@ -766,7 +766,7 @@ void TestBreakIterator::testWeak()
     aLocale.Country = "US";
 
     {
-        static constexpr OUStringLiteral aWeaks =
+        static constexpr OUString aWeaks =
             u"\u0001\u0002"
             " \u00A0"
             "\u0300\u036F"  //Combining Diacritical Marks
@@ -782,7 +782,7 @@ void TestBreakIterator::testWeak()
             "\u2100\u214F"  //Letterlike Symbols
             "\u2308\u230B"  //Miscellaneous technical
             "\u25A0\u25FF"  //Geometric Shapes
-            "\u2B30\u2B4C"; //Miscellaneous Symbols and Arrows
+            "\u2B30\u2B4C"_ustr; //Miscellaneous Symbols and Arrows
 
         for (sal_Int32 i = 0; i < aWeaks.getLength(); ++i)
         {
@@ -808,7 +808,7 @@ void TestBreakIterator::testAsian()
     aLocale.Country = "US";
 
     {
-        static constexpr OUStringLiteral aAsians =
+        static constexpr OUString aAsians =
             //some typical CJK chars
             u"\u4E00\u62FF"
             //The full HalfWidth and FullWidth block has historically been
@@ -818,7 +818,7 @@ void TestBreakIterator::testAsian()
             "\uFF10\uFF19"
             //HalfWidth and FullWidth forms of ASCII A-z, categorized under
             //UAX25 as "Latin", i.e. by that logic LATIN
-            "\uFF21\uFF5A";
+            "\uFF21\uFF5A"_ustr;
 
         for (sal_Int32 i = 0; i < aAsians.getLength(); ++i)
         {
@@ -840,7 +840,7 @@ void TestBreakIterator::testLao()
     aLocale.Language = "lo";
     aLocale.Country = "LA";
 
-    static constexpr OUStringLiteral aTest = u"\u0e8d\u0eb4\u0e99\u0e94\u0eb5\u0e95\u0ec9\u0ead\u0e99\u0eae\u0eb1\u0e9a";
+    static constexpr OUString aTest = u"\u0e8d\u0eb4\u0e99\u0e94\u0eb5\u0e95\u0ec9\u0ead\u0e99\u0eae\u0eb1\u0e9a"_ustr;
     i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
         i18n::WordType::DICTIONARY_WORD, true);
 
@@ -875,7 +875,7 @@ void TestBreakIterator::testThai()
 
     //See http://lists.freedesktop.org/archives/libreoffice/2012-February/025959.html
     {
-        static constexpr OUStringLiteral aTest = u"\u0E01\u0E38\u0E2B\u0E25\u0E32\u0E1A";
+        static constexpr OUString aTest = u"\u0E01\u0E38\u0E2B\u0E25\u0E32\u0E1A"_ustr;
         i18n::Boundary aBounds = m_xBreak->getWordBoundary(aTest, 0, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should skip full word",
@@ -887,13 +887,13 @@ void TestBreakIterator::testThai()
     //See https://bz.apache.org/ooo/show_bug.cgi?id=29548
     //make sure forwards and back are consistent
     {
-        static constexpr OUStringLiteral aTest =
+        static constexpr OUString aTest =
             u"\u0E2D\u0E38\u0E17\u0E22\u0E32\u0E19\u0E41"
             "\u0E2B\u0E48\u0E07\u0E0A\u0E32\u0E15\u0E34"
             "\u0E19\u0E49\u0E33\u0E2B\u0E19\u0E32\u0E27"
             "\u0E2D\u0E38\u0E17\u0E22\u0E32\u0E19\u0E41"
             "\u0E2B\u0E48\u0E07\u0E0A\u0E32\u0E15\u0E34"
-            "\u0E19\u0E49\u0E33\u0E2B\u0E19\u0E32\u0E27";
+            "\u0E19\u0E49\u0E33\u0E2B\u0E19\u0E32\u0E27"_ustr;
 
         std::stack<sal_Int32> aPositions;
         sal_Int32 nPos = -1;
@@ -918,7 +918,7 @@ void TestBreakIterator::testThai()
 
     // tdf#113694
     {
-        static constexpr OUStringLiteral aTest = u"\U00010000";
+        static constexpr OUString aTest = u"\U00010000"_ustr;
 
         sal_Int32 nDone=0;
         sal_Int32 nPos;
@@ -1001,7 +1001,7 @@ void TestBreakIterator::doTestJapanese(uno::Reference< i18n::XBreakIterator > co
     }
 
     {
-        static constexpr OUStringLiteral aTest = u"\u9EBB\u306E\u8449\u9EBB\u306E\u8449";
+        static constexpr OUString aTest = u"\u9EBB\u306E\u8449\u9EBB\u306E\u8449"_ustr;
 
         aBounds = xBreak->getWordBoundary(aTest, 1, aLocale,
             i18n::WordType::DICTIONARY_WORD, true);

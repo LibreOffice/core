@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 namespace i18npool {
 
-constexpr OUStringLiteral implementationName = u"com.sun.star.i18n.Collator_Unicode";
+constexpr OUString implementationName = u"com.sun.star.i18n.Collator_Unicode"_ustr;
 
 Collator_Unicode::Collator_Unicode()
 {
@@ -432,7 +432,7 @@ Collator_Unicode::supportsService(const OUString& rServiceName)
 Sequence< OUString > SAL_CALL
 Collator_Unicode::getSupportedServiceNames()
 {
-    Sequence< OUString > aRet { OUString(implementationName) };
+    Sequence< OUString > aRet { implementationName };
     return aRet;
 }
 

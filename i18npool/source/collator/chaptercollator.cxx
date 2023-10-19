@@ -61,7 +61,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     if( ans != 0 )
         return ans;
 
-    static constexpr OUStringLiteral aAddAllowed(u"?");
+    static constexpr OUString aAddAllowed(u"?"_ustr);
     ParseResult res1, res2;
     // since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.
@@ -72,7 +72,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
     return res1.Value == res2.Value ? 0 : res1.Value > res2.Value ? 1 : -1;
 }
 
-constexpr OUStringLiteral cChapCollator = u"com.sun.star.i18n.ChapterCollator";
+constexpr OUString cChapCollator = u"com.sun.star.i18n.ChapterCollator"_ustr;
 
 OUString SAL_CALL
 ChapterCollator::getImplementationName()

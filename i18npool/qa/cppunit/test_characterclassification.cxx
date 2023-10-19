@@ -45,7 +45,7 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testTitleCase)
 
     {
         //tricky one
-        static constexpr OUStringLiteral aTest = u"\u01F3"; // LATIN SMALL LETTER DZ
+        static constexpr OUString aTest = u"\u01F3"_ustr; // LATIN SMALL LETTER DZ
         OUString sTitleCase = m_xCC->toTitle(aTest, 0, aTest.getLength(), aLocale);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", sal_Int32(1), sTitleCase.getLength());
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Should be title", u'\u01F2', sTitleCase[0]);
@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(TestCharacterClassification, testStringType)
 
     {
         //tricky case
-        static constexpr OUStringLiteral sTest = u"\U0001D703"; // MATHEMATICAL ITALIC SMALL THETA
+        static constexpr OUString sTest = u"\U0001D703"_ustr; // MATHEMATICAL ITALIC SMALL THETA
         sal_Int32 nResult = m_xCC->getStringType(sTest, 0, sTest.getLength(), aLocale);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(228), nResult);
     }

@@ -1243,7 +1243,7 @@ OUString getCyrillicNativeNumberString(const OUString& aNumberString)
         return aNumberString;
 }
 
-constexpr OUStringLiteral implementationName = u"com.sun.star.i18n.NativeNumberSupplier";
+constexpr OUString implementationName = u"com.sun.star.i18n.NativeNumberSupplier"_ustr;
 
 OUString SAL_CALL NativeNumberSupplierService::getImplementationName()
 {
