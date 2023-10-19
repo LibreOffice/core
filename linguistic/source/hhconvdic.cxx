@@ -39,7 +39,7 @@ using namespace linguistic;
 using namespace i18n;
 
 
-constexpr OUStringLiteral SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanjaConversionDictionary";
+constexpr OUString SN_HH_CONV_DICTIONARY = u"com.sun.star.linguistic2.HangulHanjaConversionDictionary"_ustr;
 
 
 

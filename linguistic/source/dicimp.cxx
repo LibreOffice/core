@@ -73,7 +73,7 @@ constexpr OUStringLiteral SPELLML_SUPPORT = u"<?xml?>";
 // The following fake file name extension will be
 // added to the text of the title: field for correct
 // text stripping and dictionary saving.
-constexpr OUStringLiteral EXTENSION_FOR_TITLE_TEXT = u".";
+constexpr OUString EXTENSION_FOR_TITLE_TEXT = u"."_ustr;
 
 const char* const pVerStr2    = "WBSWG2";
 const char* const pVerStr5    = "WBSWG5";
