@@ -65,7 +65,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace toolkit;
 
-constexpr OUStringLiteral PROPERTY_RESOURCERESOLVER = u"ResourceResolver";
+constexpr OUString PROPERTY_RESOURCERESOLVER = u"ResourceResolver"_ustr;
 
 
 namespace
