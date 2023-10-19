@@ -41,9 +41,9 @@ constexpr OUStringLiteral gsSaltProperty                 ( u"Salt" );
 constexpr OUStringLiteral gsInitialisationVectorProperty ( u"InitialisationVector" );
 constexpr OUStringLiteral gsSizeProperty                 ( u"Size" );
 constexpr OUStringLiteral gsDigestProperty               ( u"Digest" );
-constexpr OUStringLiteral gsEncryptionAlgProperty        ( u"EncryptionAlgorithm" );
-constexpr OUStringLiteral gsStartKeyAlgProperty          ( u"StartKeyAlgorithm" );
-constexpr OUStringLiteral gsDigestAlgProperty            ( u"DigestAlgorithm" );
+constexpr OUString gsEncryptionAlgProperty        ( u"EncryptionAlgorithm"_ustr );
+constexpr OUString gsStartKeyAlgProperty          ( u"StartKeyAlgorithm"_ustr );
+constexpr OUString gsDigestAlgProperty            ( u"DigestAlgorithm"_ustr );
 
 ManifestImport::ManifestImport( std::vector < Sequence < PropertyValue > > & rNewManVector )
     : bIgnoreEncryptData    ( false )

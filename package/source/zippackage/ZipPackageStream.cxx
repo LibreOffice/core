@@ -435,11 +435,11 @@ bool ZipPackageStream::saveChild(
 {
     bool bSuccess = true;
 
-    static constexpr OUStringLiteral sDigestProperty (u"Digest");
-    static constexpr OUStringLiteral sEncryptionAlgProperty    (u"EncryptionAlgorithm");
-    static constexpr OUStringLiteral sStartKeyAlgProperty  (u"StartKeyAlgorithm");
-    static constexpr OUStringLiteral sDigestAlgProperty    (u"DigestAlgorithm");
-    static constexpr OUStringLiteral sDerivedKeySizeProperty  (u"DerivedKeySize");
+    static constexpr OUString sDigestProperty (u"Digest"_ustr);
+    static constexpr OUString sEncryptionAlgProperty    (u"EncryptionAlgorithm"_ustr);
+    static constexpr OUString sStartKeyAlgProperty  (u"StartKeyAlgorithm"_ustr);
+    static constexpr OUString sDigestAlgProperty    (u"DigestAlgorithm"_ustr);
+    static constexpr OUString sDerivedKeySizeProperty  (u"DerivedKeySize"_ustr);
 
     uno::Sequence < beans::PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 

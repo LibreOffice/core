@@ -168,11 +168,11 @@ void ZipPackage::parseManifest()
         return;
 
     bool bManifestParsed = false;
-    static constexpr OUStringLiteral sMeta (u"META-INF");
+    static constexpr OUString sMeta (u"META-INF"_ustr);
     if ( m_xRootFolder->hasByName( sMeta ) )
     {
         try {
-            static constexpr OUStringLiteral sManifest (u"manifest.xml");
+            static constexpr OUString sManifest (u"manifest.xml"_ustr);
             Any aAny = m_xRootFolder->getByName( sMeta );
             uno::Reference< XNameContainer > xMetaInfFolder;
             aAny >>= xMetaInfFolder;
@@ -370,7 +370,7 @@ void ZipPackage::parseManifest()
         throw ZipIOException(
             THROW_WHERE "Could not parse manifest.xml" );
 
-    static constexpr OUStringLiteral sMimetype (u"mimetype");
+    static constexpr OUString sMimetype (u"mimetype"_ustr);
     if ( m_xRootFolder->hasByName( sMimetype ) )
     {
         // get mediatype from the "mimetype" stream
@@ -447,7 +447,7 @@ void ZipPackage::parseContentType()
         return;
 
     try {
-        static constexpr OUStringLiteral aContentTypes(u"[Content_Types].xml");
+        static constexpr OUString aContentTypes(u"[Content_Types].xml"_ustr);
         // the content type must exist in OFOPXML format!
         if ( !m_xRootFolder->hasByName( aContentTypes ) )
             throw io::IOException(THROW_WHERE "Wrong format!" );
@@ -1001,7 +1001,7 @@ uno::Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( c
 
 void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 {
-    static constexpr OUStringLiteral sMime (u"mimetype");
+    static constexpr OUString sMime (u"mimetype"_ustr);
     if ( m_xRootFolder->hasByName( sMime ) )
         m_xRootFolder->removeByName( sMime );
 
@@ -1210,11 +1210,11 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old manifest.xml file as the
             // manifest will be re-generated and the
             // META-INF directory implicitly created if does not exist
-            static constexpr OUStringLiteral sMeta (u"META-INF");
+            static constexpr OUString sMeta (u"META-INF"_ustr);
 
             if ( m_xRootFolder->hasByName( sMeta ) )
             {
-                static constexpr OUStringLiteral sManifest (u"manifest.xml");
+                static constexpr OUString sManifest (u"manifest.xml"_ustr);
 
                 uno::Reference< XNameContainer > xMetaInfFolder;
                 Any aAny = m_xRootFolder->getByName( sMeta );
@@ -1231,7 +1231,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             // Remove the old [Content_Types].xml file as the
             // file will be re-generated
 
-            static constexpr OUStringLiteral aContentTypes(u"[Content_Types].xml");
+            static constexpr OUString aContentTypes(u"[Content_Types].xml"_ustr);
 
             if ( m_xRootFolder->hasByName( aContentTypes ) )
                 m_xRootFolder->removeByName( aContentTypes );

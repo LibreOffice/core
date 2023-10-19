@@ -49,9 +49,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     static constexpr OUStringLiteral sPgpKeyIDProperty            ( u"KeyId" );
     static constexpr OUStringLiteral sPgpKeyPacketProperty        ( u"KeyPacket" );
     static constexpr OUStringLiteral sCipherValueProperty         ( u"CipherValue" );
-    static constexpr OUStringLiteral sFullPathProperty     ( u"FullPath" );
-    static constexpr OUStringLiteral sVersionProperty  ( u"Version" );
-    static constexpr OUStringLiteral sMediaTypeProperty    ( u"MediaType" );
+    static constexpr OUString sFullPathProperty     ( u"FullPath"_ustr );
+    static constexpr OUString sVersionProperty  ( u"Version"_ustr );
+    static constexpr OUString sMediaTypeProperty    ( u"MediaType"_ustr );
     static constexpr OUStringLiteral sIterationCountProperty   ( u"IterationCount" );
     static constexpr OUStringLiteral sDerivedKeySizeProperty  ( u"DerivedKeySize" );
     static constexpr OUStringLiteral sSaltProperty         ( u"Salt" );
@@ -62,7 +62,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > con
     static constexpr OUStringLiteral sStartKeyAlgProperty  ( u"StartKeyAlgorithm" );
     static constexpr OUStringLiteral sDigestAlgProperty    ( u"DigestAlgorithm" );
 
-    static constexpr OUStringLiteral sWhiteSpace           ( u" " );
+    static constexpr OUString sWhiteSpace           ( u" "_ustr );
 
     const OUString sSHA256_URL_ODF12     ( SHA256_URL_ODF12 );
     const OUString  sSHA1_Name           ( SHA1_NAME );
