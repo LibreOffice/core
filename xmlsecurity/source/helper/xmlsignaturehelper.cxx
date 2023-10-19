@@ -50,8 +50,8 @@
 
 constexpr OUStringLiteral NS_DOCUMENTSIGNATURES = u"http://openoffice.org/2004/documentsignatures";
 constexpr OUStringLiteral NS_DOCUMENTSIGNATURES_ODF_1_2 = u"urn:oasis:names:tc:opendocument:xmlns:digitalsignature:1.0";
-constexpr OUStringLiteral OOXML_SIGNATURE_ORIGIN = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
-constexpr OUStringLiteral OOXML_SIGNATURE_SIGNATURE = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature";
+constexpr OUString OOXML_SIGNATURE_ORIGIN = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin"_ustr;
+constexpr OUString OOXML_SIGNATURE_SIGNATURE = u"http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature"_ustr;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::graphic;

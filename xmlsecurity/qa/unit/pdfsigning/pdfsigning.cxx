@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 namespace
 {
-constexpr OUStringLiteral DATA_DIRECTORY = u"/xmlsecurity/qa/unit/pdfsigning/data/";
+constexpr OUString DATA_DIRECTORY = u"/xmlsecurity/qa/unit/pdfsigning/data/"_ustr;
 }
 
 /// Testsuite for the PDF signing feature.
