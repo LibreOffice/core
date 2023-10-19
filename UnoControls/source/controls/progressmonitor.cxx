@@ -39,9 +39,9 @@ using namespace ::com::sun::star::awt;
 
 using ::std::vector;
 
-constexpr OUStringLiteral FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText";
-constexpr OUStringLiteral FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel";
-constexpr OUStringLiteral CONTROLNAME_TEXT = u"Text";   // identifier the control in container
+constexpr OUString FIXEDTEXT_SERVICENAME = u"com.sun.star.awt.UnoControlFixedText"_ustr;
+constexpr OUString FIXEDTEXT_MODELNAME = u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
+constexpr OUString CONTROLNAME_TEXT = u"Text"_ustr;   // identifier the control in container
 constexpr OUStringLiteral CONTROLNAME_PROGRESSBAR = u"ProgressBar";
 constexpr OUStringLiteral BUTTON_SERVICENAME = u"com.sun.star.awt.UnoControlButton";
 constexpr OUStringLiteral CONTROLNAME_BUTTON = u"Button";
