@@ -799,7 +799,7 @@ void DomainMapper_Impl::RemoveLastParagraph( )
             return;
 
         uno::Reference<beans::XPropertySet> xDocProps(GetTextDocument(), uno::UNO_QUERY_THROW);
-        static constexpr OUStringLiteral RecordChanges(u"RecordChanges");
+        static constexpr OUString RecordChanges(u"RecordChanges"_ustr);
 
         comphelper::ScopeGuard redlineRestore(
             [xDocProps, aPreviousValue = xDocProps->getPropertyValue(RecordChanges)]()
@@ -4713,7 +4713,7 @@ static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
     //  The command looks like: " PAGE \* Arabic "
     // tdf#132185: but may as well be "PAGE \* Arabic"
     OUString sNumber;
-    constexpr OUStringLiteral rSeparator(u"\\* ");
+    constexpr OUString rSeparator(u"\\* "_ustr);
     if (size_t nStartIndex = rCommand.find(rSeparator); nStartIndex != std::u16string_view::npos)
     {
         sal_Int32 nStartIndex2 = nStartIndex + rSeparator.getLength();
@@ -6299,9 +6299,9 @@ static uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool
     std::vector<css::beans::PropertyValues> aNewLevel;
     aNewLevel.reserve(aLevel.getLength() + 5); // at most 5 added items
 
-    static constexpr OUStringLiteral tokType(u"TokenType");
-    static constexpr OUStringLiteral tokHStart(u"TokenHyperlinkStart");
-    static constexpr OUStringLiteral tokHEnd(u"TokenHyperlinkEnd");
+    static constexpr OUString tokType(u"TokenType"_ustr);
+    static constexpr OUString tokHStart(u"TokenHyperlinkStart"_ustr);
+    static constexpr OUString tokHEnd(u"TokenHyperlinkEnd"_ustr);
     static constexpr OUStringLiteral tokPNum(u"TokenPageNumber");
     static constexpr OUStringLiteral tokENum(u"TokenEntryNumber");
 

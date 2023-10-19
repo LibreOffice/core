@@ -74,7 +74,7 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
                                                                   uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     uno::Reference<beans::XPropertySet> xPara;
-    static constexpr OUStringLiteral aProp(u"ListLabelString");
+    static constexpr OUString aProp(u"ListLabelString"_ustr);
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("A."), xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);

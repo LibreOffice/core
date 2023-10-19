@@ -619,11 +619,11 @@ const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/rela
 const char sFonttableTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/fontTable";
 const char sWebSettingsStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/webSettings";
 
-constexpr OUStringLiteral sId = u"Id";
+constexpr OUString sId = u"Id"_ustr;
 constexpr OUStringLiteral sType = u"Type";
-constexpr OUStringLiteral sTarget = u"Target";
+constexpr OUString sTarget = u"Target"_ustr;
 constexpr OUStringLiteral sTargetMode = u"TargetMode";
-constexpr OUStringLiteral sContentType = u"_contentType";
+constexpr OUString sContentType = u"_contentType"_ustr;
 constexpr OUStringLiteral sRelDom = u"_relDom";
 constexpr OUStringLiteral sSettingsContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
 constexpr OUStringLiteral sStylesContentType = u"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";

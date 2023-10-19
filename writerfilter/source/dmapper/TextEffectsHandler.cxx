@@ -71,7 +71,7 @@ OUString lclGetNameForElementId(sal_uInt32 aId)
     return aIdMap[aId];
 }
 
-constexpr OUStringLiteral constAttributesSequenceName = u"attributes";
+constexpr OUString constAttributesSequenceName = u"attributes"_ustr;
 
 }
 

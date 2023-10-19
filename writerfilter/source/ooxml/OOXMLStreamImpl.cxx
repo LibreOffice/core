@@ -136,17 +136,17 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static constexpr OUStringLiteral sEndnotesType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes";
     static constexpr OUStringLiteral sCommentsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments";
     static constexpr OUStringLiteral sThemeType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme";
-    static constexpr OUStringLiteral sCustomType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml";
+    static constexpr OUString sCustomType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml"_ustr;
     static constexpr OUStringLiteral sCustomPropsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXmlProps";
     static constexpr OUStringLiteral sGlossaryType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/glossaryDocument";
     static constexpr OUStringLiteral sWebSettings = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings";
     static constexpr OUStringLiteral sSettingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings";
-    static constexpr OUStringLiteral sChartType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart";
-    static constexpr OUStringLiteral sEmbeddingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-    static constexpr OUStringLiteral sFooterType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer";
-    static constexpr OUStringLiteral sHeaderType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header";
+    static constexpr OUString sChartType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"_ustr;
+    static constexpr OUString sEmbeddingsType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/package"_ustr;
+    static constexpr OUString sFooterType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"_ustr;
+    static constexpr OUString sHeaderType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"_ustr;
     static constexpr OUStringLiteral sOleObjectType = u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-    static constexpr OUStringLiteral sCommentsExtendedType = u"http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
+    static constexpr OUString sCommentsExtendedType = u"http://schemas.microsoft.com/office/2011/relationships/commentsExtended"_ustr;
     // OOXML strict
     static constexpr OUStringLiteral sDocumentTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument";
     static constexpr OUStringLiteral sStylesTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
@@ -166,8 +166,8 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static constexpr OUStringLiteral sFootersTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer";
     static constexpr OUStringLiteral sHeaderTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/header";
     static constexpr OUStringLiteral sOleObjectTypeStrict = u"http://purl.oclc.org/ooxml/officeDocument/relationships/oleObject";
-    static constexpr OUStringLiteral sVBAProjectType = u"http://schemas.microsoft.com/office/2006/relationships/vbaProject";
-    static constexpr OUStringLiteral sVBADataType = u"http://schemas.microsoft.com/office/2006/relationships/wordVbaData";
+    static constexpr OUString sVBAProjectType = u"http://schemas.microsoft.com/office/2006/relationships/vbaProject"_ustr;
+    static constexpr OUString sVBADataType = u"http://schemas.microsoft.com/office/2006/relationships/wordVbaData"_ustr;
 
     OUString sStreamType;
     OUString sStreamTypeStrict;
