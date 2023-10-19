@@ -189,7 +189,7 @@ namespace dbp
 
     void OOptionGroupLayouter::implAnchorShape(const Reference< XPropertySet >& _rxShapeProps)
     {
-        static constexpr OUStringLiteral s_sAnchorPropertyName = u"AnchorType";
+        static constexpr OUString s_sAnchorPropertyName = u"AnchorType"_ustr;
         Reference< XPropertySetInfo > xPropertyInfo;
         if (_rxShapeProps.is())
             xPropertyInfo = _rxShapeProps->getPropertySetInfo();

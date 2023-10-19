@@ -49,7 +49,7 @@ namespace abp
 
 
     const char16_t sDriverSettingsNodeName[] = u"/org.openoffice.Office.DataAccess/DriverSettings/com.sun.star.comp.sdbc.MozabDriver";
-    constexpr OUStringLiteral sAddressBookNodeName = u"/org.openoffice.Office.DataAccess/AddressBook";
+    constexpr OUString sAddressBookNodeName = u"/org.openoffice.Office.DataAccess/AddressBook"_ustr;
 
     namespace fieldmapping
     {
@@ -218,8 +218,8 @@ namespace abp
             const OUString* pExistentFields = aExistentFields.getConstArray();
             const OUString* pExistentFieldsEnd = pExistentFields + aExistentFields.getLength();
 
-            static constexpr OUStringLiteral sProgrammaticNodeName( u"ProgrammaticFieldName" );
-            static constexpr OUStringLiteral sAssignedNodeName( u"AssignedFieldName" );
+            static constexpr OUString sProgrammaticNodeName( u"ProgrammaticFieldName"_ustr );
+            static constexpr OUString sAssignedNodeName( u"AssignedFieldName"_ustr );
 
             for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {

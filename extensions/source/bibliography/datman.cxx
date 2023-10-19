@@ -73,7 +73,7 @@ using namespace ::com::sun::star::lang;
 
 // PropertyNames
 constexpr OUStringLiteral FM_PROP_LABEL = u"Label";
-constexpr OUStringLiteral FM_PROP_CONTROLSOURCE = u"DataField";
+constexpr OUString FM_PROP_CONTROLSOURCE = u"DataField"_ustr;
 constexpr OUStringLiteral FM_PROP_NAME = u"Name";
 
 static Reference< XConnection > getConnection(const OUString& _rURL)

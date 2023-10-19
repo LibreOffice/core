@@ -64,20 +64,20 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
-constexpr OUStringLiteral COMMAND_CLOSE = u"close";
+constexpr OUString COMMAND_CLOSE = u"close"_ustr;
 
-constexpr OUStringLiteral CTRL_THROBBER = u"throbber";
-constexpr OUStringLiteral CTRL_PROGRESS = u"progress";
+constexpr OUString CTRL_THROBBER = u"throbber"_ustr;
+constexpr OUString CTRL_PROGRESS = u"progress"_ustr;
 
-constexpr OUStringLiteral TEXT_STATUS = u"text_status";
-constexpr OUStringLiteral TEXT_PERCENT = u"text_percent";
-constexpr OUStringLiteral TEXT_DESCRIPTION = u"text_description";
+constexpr OUString TEXT_STATUS = u"text_status"_ustr;
+constexpr OUString TEXT_PERCENT = u"text_percent"_ustr;
+constexpr OUString TEXT_DESCRIPTION = u"text_description"_ustr;
 
 constexpr OUStringLiteral FIXED_LINE_MODEL = u"com.sun.star.awt.UnoControlFixedLineModel";
-constexpr OUStringLiteral FIXED_TEXT_MODEL = u"com.sun.star.awt.UnoControlFixedTextModel";
-constexpr OUStringLiteral EDIT_FIELD_MODEL = u"com.sun.star.awt.UnoControlEditModel";
-constexpr OUStringLiteral BUTTON_MODEL = u"com.sun.star.awt.UnoControlButtonModel";
-constexpr OUStringLiteral GROUP_BOX_MODEL = u"com.sun.star.awt.UnoControlGroupBoxModel";
+constexpr OUString FIXED_TEXT_MODEL = u"com.sun.star.awt.UnoControlFixedTextModel"_ustr;
+constexpr OUString EDIT_FIELD_MODEL = u"com.sun.star.awt.UnoControlEditModel"_ustr;
+constexpr OUString BUTTON_MODEL = u"com.sun.star.awt.UnoControlButtonModel"_ustr;
+constexpr OUString GROUP_BOX_MODEL = u"com.sun.star.awt.UnoControlGroupBoxModel"_ustr;
 
 using namespace com::sun::star;
 

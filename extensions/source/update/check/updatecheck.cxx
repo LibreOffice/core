@@ -65,7 +65,7 @@ constexpr OUStringLiteral PROPERTY_TITLE = u"BubbleHeading";
 constexpr OUStringLiteral PROPERTY_TEXT = u"BubbleText";
 constexpr OUStringLiteral PROPERTY_SHOW_BUBBLE = u"BubbleVisible";
 constexpr OUStringLiteral PROPERTY_CLICK_HDL = u"MenuClickHDL";
-constexpr OUStringLiteral PROPERTY_SHOW_MENUICON = u"MenuIconVisible";
+constexpr OUString PROPERTY_SHOW_MENUICON = u"MenuIconVisible"_ustr;
 
 // Returns the URL of the release note for the given position
 OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)

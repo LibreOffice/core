@@ -90,7 +90,7 @@ namespace
 {
     const sal_Unicode quote_char = '"';
     const sal_Unicode comma_char = ',';
-    constexpr OUStringLiteral dos_newline = u"\r\n";
+    constexpr OUString dos_newline = u"\r\n"_ustr;
 
     bool needsQuoting(std::u16string_view str)
     {

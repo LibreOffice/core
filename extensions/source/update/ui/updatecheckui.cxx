@@ -39,12 +39,12 @@
 
 #include <bitmaps.hlst>
 
-constexpr OUStringLiteral PROPERTY_TITLE = u"BubbleHeading";
-constexpr OUStringLiteral PROPERTY_TEXT = u"BubbleText";
-constexpr OUStringLiteral PROPERTY_IMAGE = u"BubbleImageURL";
-constexpr OUStringLiteral PROPERTY_SHOW_BUBBLE = u"BubbleVisible";
-constexpr OUStringLiteral PROPERTY_CLICK_HDL = u"MenuClickHDL";
-constexpr OUStringLiteral PROPERTY_SHOW_MENUICON = u"MenuIconVisible";
+constexpr OUString PROPERTY_TITLE = u"BubbleHeading"_ustr;
+constexpr OUString PROPERTY_TEXT = u"BubbleText"_ustr;
+constexpr OUString PROPERTY_IMAGE = u"BubbleImageURL"_ustr;
+constexpr OUString PROPERTY_SHOW_BUBBLE = u"BubbleVisible"_ustr;
+constexpr OUString PROPERTY_CLICK_HDL = u"MenuClickHDL"_ustr;
+constexpr OUString PROPERTY_SHOW_MENUICON = u"MenuIconVisible"_ustr;
 
 using namespace ::com::sun::star;
 

@@ -34,7 +34,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 
 
-constexpr OUStringLiteral cDataSourceHistory = u"DataSourceHistory";
+constexpr OUString cDataSourceHistory = u"DataSourceHistory"_ustr;
 
 Sequence<OUString> const & BibConfig::GetPropertyNames()
 {

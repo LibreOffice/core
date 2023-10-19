@@ -93,8 +93,8 @@ namespace dbp
         if (!xColumnFactory.is() || !xColumnContainer.is())
             return;
 
-        static constexpr OUStringLiteral s_sMouseWheelBehavior = u"MouseWheelBehavior";
-        static constexpr OUStringLiteral s_sEmptyString = u"";
+        static constexpr OUString s_sMouseWheelBehavior = u"MouseWheelBehavior"_ustr;
+        static constexpr OUString s_sEmptyString = u""_ustr;
 
         // collect "descriptors" for the to-be-created (grid)columns
         std::vector< OUString > aColumnServiceNames;  // service names to be used with the XGridColumnFactory
