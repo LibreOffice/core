@@ -318,34 +318,34 @@ struct INetURLObject::PrefixInfo
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
-    static constexpr OUStringLiteral EMPTY = u"";
-    static constexpr OUStringLiteral FTP = u"ftp";
-    static constexpr OUStringLiteral HTTP = u"http";
-    static constexpr OUStringLiteral FILE1 = u"file"; // because FILE is already defined
-    static constexpr OUStringLiteral MAILTO = u"mailto";
-    static constexpr OUStringLiteral VND_WEBDAV = u"vnd.sun.star.webdav";
-    static constexpr OUStringLiteral PRIVATE = u"private";
-    static constexpr OUStringLiteral VND_HELP = u"vnd.sun.star.help";
-    static constexpr OUStringLiteral HTTPS = u"https";
-    static constexpr OUStringLiteral SLOT = u"slot";
-    static constexpr OUStringLiteral MACRO = u"macro";
-    static constexpr OUStringLiteral JAVASCRIPT = u"javascript";
-    static constexpr OUStringLiteral DATA = u"data";
-    static constexpr OUStringLiteral CID = u"cid";
-    static constexpr OUStringLiteral VND_HIER = u"vnd.sun.star.hier";
-    static constexpr OUStringLiteral UNO = u".uno";
-    static constexpr OUStringLiteral COMPONENT = u".component";
-    static constexpr OUStringLiteral VND_PKG = u"vnd.sun.star.pkg";
-    static constexpr OUStringLiteral LDAP = u"ldap";
-    static constexpr OUStringLiteral DB = u"db";
-    static constexpr OUStringLiteral VND_CMD = u"vnd.sun.star.cmd";
-    static constexpr OUStringLiteral TELNET = u"telnet";
-    static constexpr OUStringLiteral VND_EXPAND = u"vnd.sun.star.expand";
-    static constexpr OUStringLiteral VND_TDOC = u"vnd.sun.star.tdoc";
-    static constexpr OUStringLiteral SMB = u"smb";
-    static constexpr OUStringLiteral HID = u"hid";
-    static constexpr OUStringLiteral SFTP = u"sftp";
-    static constexpr OUStringLiteral VND_CMIS = u"vnd.libreoffice.cmis";
+    static constexpr OUString EMPTY = u""_ustr;
+    static constexpr OUString FTP = u"ftp"_ustr;
+    static constexpr OUString HTTP = u"http"_ustr;
+    static constexpr OUString FILE1 = u"file"_ustr; // because FILE is already defined
+    static constexpr OUString MAILTO = u"mailto"_ustr;
+    static constexpr OUString VND_WEBDAV = u"vnd.sun.star.webdav"_ustr;
+    static constexpr OUString PRIVATE = u"private"_ustr;
+    static constexpr OUString VND_HELP = u"vnd.sun.star.help"_ustr;
+    static constexpr OUString HTTPS = u"https"_ustr;
+    static constexpr OUString SLOT = u"slot"_ustr;
+    static constexpr OUString MACRO = u"macro"_ustr;
+    static constexpr OUString JAVASCRIPT = u"javascript"_ustr;
+    static constexpr OUString DATA = u"data"_ustr;
+    static constexpr OUString CID = u"cid"_ustr;
+    static constexpr OUString VND_HIER = u"vnd.sun.star.hier"_ustr;
+    static constexpr OUString UNO = u".uno"_ustr;
+    static constexpr OUString COMPONENT = u".component"_ustr;
+    static constexpr OUString VND_PKG = u"vnd.sun.star.pkg"_ustr;
+    static constexpr OUString LDAP = u"ldap"_ustr;
+    static constexpr OUString DB = u"db"_ustr;
+    static constexpr OUString VND_CMD = u"vnd.sun.star.cmd"_ustr;
+    static constexpr OUString TELNET = u"telnet"_ustr;
+    static constexpr OUString VND_EXPAND = u"vnd.sun.star.expand"_ustr;
+    static constexpr OUString VND_TDOC = u"vnd.sun.star.tdoc"_ustr;
+    static constexpr OUString SMB = u"smb"_ustr;
+    static constexpr OUString HID = u"hid"_ustr;
+    static constexpr OUString SFTP = u"sftp"_ustr;
+    static constexpr OUString VND_CMIS = u"vnd.libreoffice.cmis"_ustr;
 
     static o3tl::enumarray<INetProtocol, SchemeInfo> constexpr map = {
         // [-loplugin:redundantfcast]:
