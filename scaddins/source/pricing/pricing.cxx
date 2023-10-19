@@ -41,8 +41,8 @@ using namespace ::com::sun::star;
 using namespace sca::pricing;
 
 
-constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
-constexpr OUStringLiteral MY_SERVICE = u"com.sun.star.sheet.addin.PricingFunctions";
+constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
+constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.PricingFunctions"_ustr;
 constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.PricingFunctionsImpl";
 
 const ScaFuncDataBase pFuncDataArr[] =

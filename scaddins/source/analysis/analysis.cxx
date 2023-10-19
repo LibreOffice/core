@@ -32,8 +32,8 @@
 #include <cmath>
 #include <float.h>
 
-constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
-constexpr OUStringLiteral MY_SERVICE = u"com.sun.star.sheet.addin.Analysis";
+constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
+constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.Analysis"_ustr;
 constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.AnalysisImpl";
 
 using namespace                 ::com::sun::star;
@@ -231,7 +231,7 @@ OUString SAL_CALL AnalysisAddIn::getArgumentDescription( const OUString& aName, 
     return aRet;
 }
 
-constexpr OUStringLiteral pDefCatName = u"Add-In";
+constexpr OUString pDefCatName = u"Add-In"_ustr;
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName )
 {

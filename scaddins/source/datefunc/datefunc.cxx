@@ -33,8 +33,8 @@
 
 using namespace ::com::sun::star;
 
-constexpr OUStringLiteral ADDIN_SERVICE = u"com.sun.star.sheet.AddIn";
-constexpr OUStringLiteral MY_SERVICE = u"com.sun.star.sheet.addin.DateFunctions";
+constexpr OUString ADDIN_SERVICE = u"com.sun.star.sheet.AddIn"_ustr;
+constexpr OUString MY_SERVICE = u"com.sun.star.sheet.addin.DateFunctions"_ustr;
 constexpr OUStringLiteral MY_IMPLNAME = u"com.sun.star.sheet.addin.DateFunctionsImpl";
 
 #define UNIQUE              false   // function name does not exist in Calc
