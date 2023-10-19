@@ -1427,6 +1427,7 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     !pRedl->IsMoved() )
                 {
                     bool bDelete = false;
+                    bool bMaybeNotify = false;
 
                     // Merge if applicable?
                     if( (( SwComparePosition::Behind == eCmpPos &&
@@ -1477,28 +1478,31 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         *pStt = *pREnd;
                         if( ( *pStt == *pEnd ) &&
                             ( pNewRedl->GetContentIdx() == nullptr ) )
-                            bDelete = true;
+                            bDelete = bMaybeNotify = true;
                     }
                     else if( SwComparePosition::OverlapBefore == eCmpPos )
                     {
                         *pEnd = *pRStt;
                         if( ( *pStt == *pEnd ) &&
                             ( pNewRedl->GetContentIdx() == nullptr ) )
-                            bDelete = true;
+                            bDelete = bMaybeNotify = true;
                     }
                     else if( SwComparePosition::Inside == eCmpPos )
                     {
-                        bDelete = true;
+                        bDelete = bMaybeNotify = true;
                         bMerged = true;
                     }
                     else if( SwComparePosition::Equal == eCmpPos )
-                        bDelete = true;
+                        bDelete = bMaybeNotify = true;
 
                     if( bDelete )
                     {
                         delete pNewRedl;
                         pNewRedl = nullptr;
                         bCompress = true;
+
+                        if (bMaybeNotify)
+                            MaybeNotifyRedlineModification(*pRedl, m_rDoc);
 
                         // set IsMoved checking nearby redlines
                         if (n < maRedlineTable.size()) // in case above 're-insert' failed
@@ -1561,6 +1565,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         delete pNewRedl;
                         pNewRedl = nullptr;
                         bCompress = true;
+
+                        MaybeNotifyRedlineModification(*pRedl, m_rDoc);
                     }
                 }
                 break;
@@ -1710,6 +1716,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     delete pNewRedl;
                     pNewRedl = nullptr;
                     bCompress = true;
+
+                    MaybeNotifyRedlineModification(*pRedl, m_rDoc);
                     break;
 
                 case SwComparePosition::OverlapBefore:
@@ -1833,6 +1841,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         }
                         delete pNewRedl;
                         pNewRedl = nullptr;
+
+                        if (!bDec)
+                            MaybeNotifyRedlineModification(*pRedl, m_rDoc);
                         break;
 
                     case SwComparePosition::Outside:
@@ -2130,6 +2141,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 case SwComparePosition::Inside:
                     delete pNewRedl;
                     pNewRedl = nullptr;
+
+                    MaybeNotifyRedlineModification(*pRedl, m_rDoc);
                     break;
 
                 case SwComparePosition::Outside:
@@ -2177,6 +2190,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         // own one can be ignored completely
                         delete pNewRedl;
                         pNewRedl = nullptr;
+
+                        MaybeNotifyRedlineModification(*pRedl, m_rDoc);
                     }
                     else if( *pREnd == *pEnd )
                         // or else only shorten the current one
