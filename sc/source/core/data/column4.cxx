@@ -860,7 +860,9 @@ public:
 
 void ScColumn::GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const
 {
-    std::for_each(maCellNotes.begin(), maCellNotes.end(), NoteEntryCollector(rNotes, nTab, nCol, 0, GetDoc().MaxRow()));
+    if (HasCellNotes())
+        std::for_each(maCellNotes.begin(), maCellNotes.end(),
+                      NoteEntryCollector(rNotes, nTab, nCol, 0, GetDoc().MaxRow()));
 }
 
 void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
