@@ -36,6 +36,7 @@
 #include <string.h>
 
 #if defined LIBO_INTERNAL_ONLY
+#include <algorithm>
 #include <string_view>
 #include <type_traits>
 #endif
@@ -98,10 +99,7 @@ public:
     OStringLiteral(char const (&literal)[N]) {
         assertLayout();
         assert(literal[N - 1] == '\0');
-        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
-        for (std::size_t i = 0; i != N; ++i) {
-            more.buffer[i] = literal[i];
-        }
+        std::copy_n(literal, N, more.buffer);
     }
 
 #if !(defined _MSC_VER && _MSC_VER >= 1930 && _MSC_VER <= 1938 && defined _MANAGED)
@@ -113,10 +111,7 @@ public:
     OStringLiteral(char8_t const (&literal)[N]) {
         assertLayout();
         assert(literal[N - 1] == '\0');
-        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
-        for (std::size_t i = 0; i != N; ++i) {
-            more.buffer[i] = literal[i];
-        }
+        std::copy_n(literal, N, more.buffer);
     }
 #endif
 
@@ -141,7 +136,7 @@ private:
 
         oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
         sal_Int32 length = N - 1;
-        char buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
+        char buffer[N];
     };
 
 public:

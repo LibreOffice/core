@@ -96,10 +96,7 @@ public:
     OUStringLiteral(char16_t const (&literal)[N]) {
         assertLayout();
         assert(literal[N - 1] == '\0');
-        //TODO: Use C++20 constexpr std::copy_n (P0202R3):
-        for (std::size_t i = 0; i != N; ++i) {
-            more.buffer[i] = literal[i];
-        }
+        std::copy_n(literal, N, more.buffer);
     }
 
     constexpr sal_Int32 getLength() const { return more.length; }
@@ -123,7 +120,7 @@ private:
 
         oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
         sal_Int32 length = N - 1;
-        sal_Unicode buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
+        sal_Unicode buffer[N];
     };
 
 public:
