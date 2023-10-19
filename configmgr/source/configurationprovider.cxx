@@ -60,10 +60,10 @@ namespace configmgr::configuration_provider {
 
 namespace {
 
-constexpr OUStringLiteral accessServiceName =
-    u"com.sun.star.configuration.ConfigurationAccess";
-constexpr OUStringLiteral updateAccessServiceName =
-    u"com.sun.star.configuration.ConfigurationUpdateAccess";
+constexpr OUString accessServiceName =
+    u"com.sun.star.configuration.ConfigurationAccess"_ustr;
+constexpr OUString updateAccessServiceName =
+    u"com.sun.star.configuration.ConfigurationUpdateAccess"_ustr;
 
 void badNodePath() {
     throw css::uno::Exception(
