@@ -82,13 +82,10 @@ struct snew_slide_value_info
 
 }
 
-constexpr std::u16string_view EMPTY = u"";
-
 constexpr snew_slide_value_info notes[] =
 {
     {BMP_SLIDEN_01, STR_AUTOLAYOUT_NOTES, WritingMode_LR_TB,
      AUTOLAYOUT_NOTES},
-    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 constexpr snew_slide_value_info handout[] =
@@ -105,7 +102,6 @@ constexpr snew_slide_value_info handout[] =
      AUTOLAYOUT_HANDOUT6},
     {BMP_SLIDEH_09, STR_AUTOLAYOUT_HANDOUT9, WritingMode_LR_TB,
      AUTOLAYOUT_HANDOUT9},
-    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE},
 };
 
 constexpr snew_slide_value_info standard[] =
@@ -128,7 +124,6 @@ constexpr snew_slide_value_info standard[] =
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VTITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VCONTENT},
     {BMP_LAYOUT_HEAD02A, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_2VTEXT},
-    {EMPTY, {}, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
 class LayoutValueSet : public ValueSet
@@ -518,7 +513,7 @@ void LayoutMenu::Fill()
     catch (RuntimeException&)
     {}
 
-    const snew_slide_value_info* pInfo = nullptr;
+    std::span<const snew_slide_value_info> pInfo;
     if (sCenterPaneViewName == framework::FrameworkHelper::msNotesViewURL)
     {
         pInfo = notes;
@@ -532,27 +527,23 @@ void LayoutMenu::Fill()
     {
         pInfo = standard;
     }
-    else
-    {
-        pInfo = nullptr;
-    }
 
     Clear();
-    for (sal_uInt16 i=1; pInfo!=nullptr && pInfo->mpStrResId; i++, pInfo++)
+    for (size_t i = 0; i < pInfo.size(); i++)
     {
-        if ((WritingMode_TB_RL != pInfo->meWritingMode) || bVertical)
+        if ((WritingMode_TB_RL != pInfo[i].meWritingMode) || bVertical)
         {
-            Image aImg(OUString::Concat("private:graphicrepository/") + pInfo->msBmpResId);
+            Image aImg(OUString::Concat("private:graphicrepository/") + pInfo[i].msBmpResId);
 
-            if (bRightToLeft && (WritingMode_TB_RL != pInfo->meWritingMode))
+            if (bRightToLeft && (WritingMode_TB_RL != pInfo[i].meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
                 BitmapEx aRTL = aImg.GetBitmapEx();
                 aRTL.Mirror(BmpMirrorFlags::Horizontal);
                 aImg = Image(aRTL);
             }
 
-            mxLayoutValueSet->InsertItem(i, aImg, SdResId(pInfo->mpStrResId));
-            mxLayoutValueSet->SetItemData (i, new AutoLayout(pInfo->maAutoLayout));
+            mxLayoutValueSet->InsertItem(i + 1, aImg, SdResId(pInfo[i].mpStrResId));
+            mxLayoutValueSet->SetItemData(i + 1, new AutoLayout(pInfo[i].maAutoLayout));
         }
     }
 }
