@@ -131,8 +131,8 @@ private:
     OUString getNamespacePrefixFromToken( sal_Int32 nToken );
     OUString getNameFromToken( sal_Int32 nToken );
 
-    static constexpr OUStringLiteral aDefaultNamespace = u"";
-    static constexpr OUStringLiteral aNamespaceSeparator = u":";
+    static constexpr OUString aDefaultNamespace = u""_ustr;
+    static constexpr OUString aNamespaceSeparator = u":"_ustr;
 
 public:
     CallbackDocumentHandler( Reference< XDocumentHandler > const & xDocumentHandler,

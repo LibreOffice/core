@@ -47,7 +47,7 @@ using ::com::sun::star::io::XOutputStream;
 
 const char sClosingBracket[] = ">";
 const char sSlashAndClosingBracket[] = "/>";
-constexpr OStringLiteral sColon = ":";
+constexpr OString sColon = ":"_ostr;
 const char sOpeningBracket[] = "<";
 const char sOpeningBracketAndSlash[] = "</";
 const char sQuote[] = "\"";
