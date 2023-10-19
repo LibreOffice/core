@@ -37,7 +37,7 @@
 using namespace css;
 using namespace css::uno;
 
-constexpr OUStringLiteral SIDEBARGRADIENT = u"sidebargradient";
+constexpr OUString SIDEBARGRADIENT = u"sidebargradient"_ustr;
 
 namespace svx::sidebar {
 

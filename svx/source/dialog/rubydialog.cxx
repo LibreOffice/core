@@ -57,11 +57,11 @@ SFX_IMPL_CHILDWINDOW(SvxRubyChildWindow, SID_RUBY_DIALOG);
 
 namespace
 {
-constexpr OUStringLiteral cRubyBaseText = u"RubyBaseText";
-constexpr OUStringLiteral cRubyText = u"RubyText";
-constexpr OUStringLiteral cRubyAdjust = u"RubyAdjust";
-constexpr OUStringLiteral cRubyPosition = u"RubyPosition";
-constexpr OUStringLiteral cRubyCharStyleName = u"RubyCharStyleName";
+constexpr OUString cRubyBaseText = u"RubyBaseText"_ustr;
+constexpr OUString cRubyText = u"RubyText"_ustr;
+constexpr OUString cRubyAdjust = u"RubyAdjust"_ustr;
+constexpr OUString cRubyPosition = u"RubyPosition"_ustr;
+constexpr OUString cRubyCharStyleName = u"RubyCharStyleName"_ustr;
 
 } // end anonymous namespace
 

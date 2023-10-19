@@ -61,10 +61,10 @@ using namespace ::com::sun::star::container;
 
 namespace
 {
-    constexpr OUStringLiteral NAME_PROPERTY_NAME = u"Name";
-    constexpr OUStringLiteral DESC_PROPERTY_NAME = u"HelpText";
-    constexpr OUStringLiteral LABEL_PROPERTY_NAME = u"Label";
-    constexpr OUStringLiteral LABEL_CONTROL_PROPERTY_NAME = u"LabelControl";
+    constexpr OUString NAME_PROPERTY_NAME = u"Name"_ustr;
+    constexpr OUString DESC_PROPERTY_NAME = u"HelpText"_ustr;
+    constexpr OUString LABEL_PROPERTY_NAME = u"Label"_ustr;
+    constexpr OUString LABEL_CONTROL_PROPERTY_NAME = u"LabelControl"_ustr;
 
     // return the property which should be used as AccessibleName
     OUString lcl_getPreferredAccNameProperty( const Reference< XPropertySetInfo >& _rxPSI )

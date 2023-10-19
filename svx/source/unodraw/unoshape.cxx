@@ -3126,49 +3126,49 @@ OUString SAL_CALL SvxShape::getImplementationName()
     return "SvxShape";
 }
 
-constexpr OUStringLiteral sUNO_service_style_ParagraphProperties = u"com.sun.star.style.ParagraphProperties";
-constexpr OUStringLiteral sUNO_service_style_ParagraphPropertiesComplex = u"com.sun.star.style.ParagraphPropertiesComplex";
-constexpr OUStringLiteral sUNO_service_style_ParagraphPropertiesAsian = u"com.sun.star.style.ParagraphPropertiesAsian";
-constexpr OUStringLiteral sUNO_service_style_CharacterProperties = u"com.sun.star.style.CharacterProperties";
-constexpr OUStringLiteral sUNO_service_style_CharacterPropertiesComplex = u"com.sun.star.style.CharacterPropertiesComplex";
-constexpr OUStringLiteral sUNO_service_style_CharacterPropertiesAsian = u"com.sun.star.style.CharacterPropertiesAsian";
+constexpr OUString sUNO_service_style_ParagraphProperties = u"com.sun.star.style.ParagraphProperties"_ustr;
+constexpr OUString sUNO_service_style_ParagraphPropertiesComplex = u"com.sun.star.style.ParagraphPropertiesComplex"_ustr;
+constexpr OUString sUNO_service_style_ParagraphPropertiesAsian = u"com.sun.star.style.ParagraphPropertiesAsian"_ustr;
+constexpr OUString sUNO_service_style_CharacterProperties = u"com.sun.star.style.CharacterProperties"_ustr;
+constexpr OUString sUNO_service_style_CharacterPropertiesComplex = u"com.sun.star.style.CharacterPropertiesComplex"_ustr;
+constexpr OUString sUNO_service_style_CharacterPropertiesAsian = u"com.sun.star.style.CharacterPropertiesAsian"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_FillProperties    = u"com.sun.star.drawing.FillProperties";
-constexpr OUStringLiteral sUNO_service_drawing_TextProperties    = u"com.sun.star.drawing.TextProperties";
-constexpr OUStringLiteral sUNO_service_drawing_LineProperties    = u"com.sun.star.drawing.LineProperties";
-constexpr OUStringLiteral sUNO_service_drawing_ConnectorProperties = u"com.sun.star.drawing.ConnectorProperties";
-constexpr OUStringLiteral sUNO_service_drawing_MeasureProperties = u"com.sun.star.drawing.MeasureProperties";
-constexpr OUStringLiteral sUNO_service_drawing_ShadowProperties  = u"com.sun.star.drawing.ShadowProperties";
+constexpr OUString sUNO_service_drawing_FillProperties    = u"com.sun.star.drawing.FillProperties"_ustr;
+constexpr OUString sUNO_service_drawing_TextProperties    = u"com.sun.star.drawing.TextProperties"_ustr;
+constexpr OUString sUNO_service_drawing_LineProperties    = u"com.sun.star.drawing.LineProperties"_ustr;
+constexpr OUString sUNO_service_drawing_ConnectorProperties = u"com.sun.star.drawing.ConnectorProperties"_ustr;
+constexpr OUString sUNO_service_drawing_MeasureProperties = u"com.sun.star.drawing.MeasureProperties"_ustr;
+constexpr OUString sUNO_service_drawing_ShadowProperties  = u"com.sun.star.drawing.ShadowProperties"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_RotationDescriptor = u"com.sun.star.drawing.RotationDescriptor";
+constexpr OUString sUNO_service_drawing_RotationDescriptor = u"com.sun.star.drawing.RotationDescriptor"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_Text              = u"com.sun.star.drawing.Text";
-constexpr OUStringLiteral sUNO_service_drawing_GroupShape        = u"com.sun.star.drawing.GroupShape";
+constexpr OUString sUNO_service_drawing_Text              = u"com.sun.star.drawing.Text"_ustr;
+constexpr OUString sUNO_service_drawing_GroupShape        = u"com.sun.star.drawing.GroupShape"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_CustomShapeProperties = u"com.sun.star.drawing.CustomShapeProperties";
-constexpr OUStringLiteral sUNO_service_drawing_CustomShape       = u"com.sun.star.drawing.CustomShape";
+constexpr OUString sUNO_service_drawing_CustomShapeProperties = u"com.sun.star.drawing.CustomShapeProperties"_ustr;
+constexpr OUString sUNO_service_drawing_CustomShape       = u"com.sun.star.drawing.CustomShape"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_PolyPolygonDescriptor = u"com.sun.star.drawing.PolyPolygonDescriptor";
-constexpr OUStringLiteral sUNO_service_drawing_PolyPolygonBezierDescriptor= u"com.sun.star.drawing.PolyPolygonBezierDescriptor";
+constexpr OUString sUNO_service_drawing_PolyPolygonDescriptor = u"com.sun.star.drawing.PolyPolygonDescriptor"_ustr;
+constexpr OUString sUNO_service_drawing_PolyPolygonBezierDescriptor= u"com.sun.star.drawing.PolyPolygonBezierDescriptor"_ustr;
 
-constexpr OUStringLiteral sUNO_service_drawing_LineShape         = u"com.sun.star.drawing.LineShape";
-constexpr OUStringLiteral sUNO_service_drawing_Shape             = u"com.sun.star.drawing.Shape";
-constexpr OUStringLiteral sUNO_service_drawing_RectangleShape    = u"com.sun.star.drawing.RectangleShape";
-constexpr OUStringLiteral sUNO_service_drawing_EllipseShape      = u"com.sun.star.drawing.EllipseShape";
-constexpr OUStringLiteral sUNO_service_drawing_PolyPolygonShape  = u"com.sun.star.drawing.PolyPolygonShape";
-constexpr OUStringLiteral sUNO_service_drawing_PolyLineShape     = u"com.sun.star.drawing.PolyLineShape";
-constexpr OUStringLiteral sUNO_service_drawing_OpenBezierShape   = u"com.sun.star.drawing.OpenBezierShape";
-constexpr OUStringLiteral sUNO_service_drawing_ClosedBezierShape = u"com.sun.star.drawing.ClosedBezierShape";
-constexpr OUStringLiteral sUNO_service_drawing_TextShape         = u"com.sun.star.drawing.TextShape";
-constexpr OUStringLiteral sUNO_service_drawing_GraphicObjectShape = u"com.sun.star.drawing.GraphicObjectShape";
-constexpr OUStringLiteral sUNO_service_drawing_OLE2Shape         = u"com.sun.star.drawing.OLE2Shape";
-constexpr OUStringLiteral sUNO_service_drawing_PageShape         = u"com.sun.star.drawing.PageShape";
-constexpr OUStringLiteral sUNO_service_drawing_CaptionShape      = u"com.sun.star.drawing.CaptionShape";
-constexpr OUStringLiteral sUNO_service_drawing_MeasureShape      = u"com.sun.star.drawing.MeasureShape";
-constexpr OUStringLiteral sUNO_service_drawing_FrameShape        = u"com.sun.star.drawing.FrameShape";
-constexpr OUStringLiteral sUNO_service_drawing_ControlShape      = u"com.sun.star.drawing.ControlShape";
-constexpr OUStringLiteral sUNO_service_drawing_ConnectorShape    = u"com.sun.star.drawing.ConnectorShape";
-constexpr OUStringLiteral sUNO_service_drawing_MediaShape        = u"com.sun.star.drawing.MediaShape";
+constexpr OUString sUNO_service_drawing_LineShape         = u"com.sun.star.drawing.LineShape"_ustr;
+constexpr OUString sUNO_service_drawing_Shape             = u"com.sun.star.drawing.Shape"_ustr;
+constexpr OUString sUNO_service_drawing_RectangleShape    = u"com.sun.star.drawing.RectangleShape"_ustr;
+constexpr OUString sUNO_service_drawing_EllipseShape      = u"com.sun.star.drawing.EllipseShape"_ustr;
+constexpr OUString sUNO_service_drawing_PolyPolygonShape  = u"com.sun.star.drawing.PolyPolygonShape"_ustr;
+constexpr OUString sUNO_service_drawing_PolyLineShape     = u"com.sun.star.drawing.PolyLineShape"_ustr;
+constexpr OUString sUNO_service_drawing_OpenBezierShape   = u"com.sun.star.drawing.OpenBezierShape"_ustr;
+constexpr OUString sUNO_service_drawing_ClosedBezierShape = u"com.sun.star.drawing.ClosedBezierShape"_ustr;
+constexpr OUString sUNO_service_drawing_TextShape         = u"com.sun.star.drawing.TextShape"_ustr;
+constexpr OUString sUNO_service_drawing_GraphicObjectShape = u"com.sun.star.drawing.GraphicObjectShape"_ustr;
+constexpr OUString sUNO_service_drawing_OLE2Shape         = u"com.sun.star.drawing.OLE2Shape"_ustr;
+constexpr OUString sUNO_service_drawing_PageShape         = u"com.sun.star.drawing.PageShape"_ustr;
+constexpr OUString sUNO_service_drawing_CaptionShape      = u"com.sun.star.drawing.CaptionShape"_ustr;
+constexpr OUString sUNO_service_drawing_MeasureShape      = u"com.sun.star.drawing.MeasureShape"_ustr;
+constexpr OUString sUNO_service_drawing_FrameShape        = u"com.sun.star.drawing.FrameShape"_ustr;
+constexpr OUString sUNO_service_drawing_ControlShape      = u"com.sun.star.drawing.ControlShape"_ustr;
+constexpr OUString sUNO_service_drawing_ConnectorShape    = u"com.sun.star.drawing.ConnectorShape"_ustr;
+constexpr OUString sUNO_service_drawing_MediaShape        = u"com.sun.star.drawing.MediaShape"_ustr;
 
 
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()

@@ -84,8 +84,8 @@ using namespace ::dbtools;
 
 using ::com::sun::star::util::XNumberFormatter;
 
-constexpr OUStringLiteral INVALIDTEXT = u"###";
-constexpr OUStringLiteral OBJECTTEXT = u"<OBJECT>";
+constexpr OUString INVALIDTEXT = u"###"_ustr;
+constexpr OUString OBJECTTEXT = u"<OBJECT>"_ustr;
 
 
 //= helper
@@ -458,7 +458,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= DrawTextFlags::Disable;
 
-            rDev.DrawText(rRect, OUString(INVALIDTEXT), nStyle);
+            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
         }
         else if (m_bAutoValue && pRow->IsNew())
         {
@@ -493,14 +493,14 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= DrawTextFlags::Disable;
 
-            rDev.DrawText(rRect, OUString(INVALIDTEXT), nStyle);
+            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
         }
         else if (pRow->HasField(m_nFieldPos) && m_bObject)
         {
             DrawTextFlags nStyle = DrawTextFlags::Clip | DrawTextFlags::Center;
             if ( !bEnabled )
                 nStyle |= DrawTextFlags::Disable;
-            rDev.DrawText(rRect, OUString(OBJECTTEXT), nStyle);
+            rDev.DrawText(rRect, OBJECTTEXT, nStyle);
         }
     }
     else if ( auto pFilterCell = dynamic_cast<FmXFilterCell*>( m_pCell.get() ) )

@@ -537,7 +537,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 
     try
     {
-        static constexpr OUStringLiteral sSize( u"Size" );
+        static constexpr OUString sSize( u"Size"_ustr );
         if( mbHorizontal )
         {
             if (nEdge <= getRowCount())

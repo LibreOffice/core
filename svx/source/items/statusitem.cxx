@@ -13,8 +13,8 @@
 #include <svl/memberid.h>
 #include <svx/statusitem.hxx>
 
-constexpr OUStringLiteral STATUS_PARAM_VALUE = u"Value";
-constexpr OUStringLiteral STATUS_PARAM_TYPE = u"Type";
+constexpr OUString STATUS_PARAM_VALUE = u"Value"_ustr;
+constexpr OUString STATUS_PARAM_TYPE = u"Type"_ustr;
 constexpr int STATUS_PARAMS = 2;
 
 SvxStatusItem::SvxStatusItem(TypedWhichId<SvxStatusItem> nWhich, const OUString& rString,

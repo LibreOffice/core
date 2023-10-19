@@ -557,7 +557,7 @@ void EnhancedCustomShape2d::ApplyShapeAttributes( const SdrCustomShapeGeometryIt
         m_nCoordWidthG  = std::abs( aViewBox.Width );
         m_nCoordHeightG = std::abs( aViewBox.Height);
     }
-    static constexpr OUStringLiteral sPath( u"Path" );
+    static constexpr OUString sPath( u"Path"_ustr );
     static constexpr OUStringLiteral sCoordinates( u"Coordinates" );
     static constexpr OUStringLiteral sGluePoints( u"GluePoints" );
     static constexpr OUStringLiteral sSegments( u"Segments" );

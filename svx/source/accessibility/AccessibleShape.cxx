@@ -473,8 +473,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
     if ( mxShape.is() )
     {
 
-        static constexpr OUStringLiteral sBoundRectName = u"BoundRect";
-        static constexpr OUStringLiteral sAnchorPositionName = u"AnchorPosition";
+        static constexpr OUString sBoundRectName = u"BoundRect"_ustr;
+        static constexpr OUString sAnchorPositionName = u"AnchorPosition"_ustr;
 
         // Get the shape's bounding box in internal coordinates (in 100th of
         // mm).  Use the property BoundRect.  Only if that is not supported ask

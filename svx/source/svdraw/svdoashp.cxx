@@ -386,7 +386,7 @@ uno::Reference<drawing::XCustomShapeEngine> const & SdrObjCustomShape::GetCustom
         aEngine = sEnhancedCustomShapeEngine;
 
     {
-        static constexpr OUStringLiteral sCustomShape = u"CustomShape";
+        static constexpr OUString sCustomShape = u"CustomShape"_ustr;
         uno::Sequence<beans::PropertyValue> aPropValues{ comphelper::makePropertyValue(sCustomShape,
                                                                              aXShape) };
         uno::Sequence<uno::Any> aArgument{ uno::Any(aPropValues) };
@@ -444,7 +444,7 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
 
 bool SdrObjCustomShape::IsTextPath() const
 {
-    static constexpr OUStringLiteral sTextPath( u"TextPath" );
+    static constexpr OUString sTextPath( u"TextPath"_ustr );
     bool bTextPathOn = false;
     const SdrCustomShapeGeometryItem& rGeometryItem = GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sTextPath, sTextPath );
@@ -457,7 +457,7 @@ bool SdrObjCustomShape::UseNoFillStyle() const
 {
     bool bRet = false;
     OUString sShapeType;
-    static constexpr OUStringLiteral sType( u"Type" );
+    static constexpr OUString sType( u"Type"_ustr );
     const SdrCustomShapeGeometryItem& rGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     const uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sType );
     if ( pAny )
@@ -841,7 +841,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 {
     beans::PropertyValue aPropVal;
     OUString sShapeType;
-    static constexpr OUStringLiteral sType( u"Type" );
+    static constexpr OUString sType( u"Type"_ustr );
     SdrCustomShapeGeometryItem aGeometryItem( GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
     if ( pType && !pType->isEmpty() )
     {
@@ -873,7 +873,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 
     // AdjustmentValues
 
-    static constexpr OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
+    static constexpr OUString sAdjustmentValues( u"AdjustmentValues"_ustr );
     const uno::Any* pAny = aGeometryItem.GetPropertyValueByName( sAdjustmentValues );
     if ( pAny )
         *pAny >>= seqAdjustmentValues;
@@ -908,7 +908,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
 
     // Coordsize
 
-    static constexpr OUStringLiteral sViewBox( u"ViewBox" );
+    static constexpr OUString sViewBox( u"ViewBox"_ustr );
     const uno::Any* pViewBox = aGeometryItem.GetPropertyValueByName( sViewBox );
     awt::Rectangle aViewBox;
     if ( !pViewBox || !(*pViewBox >>= aViewBox ) )
@@ -925,12 +925,12 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
         }
     }
 
-    static constexpr OUStringLiteral sPath( u"Path" );
+    static constexpr OUString sPath( u"Path"_ustr );
 
 
     // Path/Coordinates
 
-    static constexpr OUStringLiteral sCoordinates( u"Coordinates" );
+    static constexpr OUString sCoordinates( u"Coordinates"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sCoordinates );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nVertices && pDefCustomShape->pVertices )
     {
@@ -948,7 +948,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Path/GluePoints
-    static constexpr OUStringLiteral sGluePoints( u"GluePoints" );
+    static constexpr OUString sGluePoints( u"GluePoints"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sGluePoints );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nGluePoints && pDefCustomShape->pGluePoints )
     {
@@ -966,7 +966,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Path/Segments
-    static constexpr OUStringLiteral sSegments( u"Segments" );
+    static constexpr OUString sSegments( u"Segments"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sSegments );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nElements && pDefCustomShape->pElements )
     {
@@ -985,7 +985,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Path/StretchX
-    static constexpr OUStringLiteral sStretchX( u"StretchX" );
+    static constexpr OUString sStretchX( u"StretchX"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sStretchX );
     if ( !pAny && pDefCustomShape )
     {
@@ -999,7 +999,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Path/StretchY
-    static constexpr OUStringLiteral sStretchY( u"StretchY" );
+    static constexpr OUString sStretchY( u"StretchY"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sStretchY );
     if ( !pAny && pDefCustomShape )
     {
@@ -1013,7 +1013,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Path/TextFrames
-    static constexpr OUStringLiteral sTextFrames( u"TextFrames" );
+    static constexpr OUString sTextFrames( u"TextFrames"_ustr );
     pAny = aGeometryItem.GetPropertyValueByName( sPath, sTextFrames );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nTextRect && pDefCustomShape->pTextRect )
     {
@@ -1034,7 +1034,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Equations
-    static constexpr OUStringLiteral sEquations(  u"Equations"  );
+    static constexpr OUString sEquations(  u"Equations"_ustr  );
     pAny = aGeometryItem.GetPropertyValueByName( sEquations );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nCalculation && pDefCustomShape->pCalculation )
     {
@@ -1050,7 +1050,7 @@ void SdrObjCustomShape::MergeDefaultAttributes( const OUString* pType )
     }
 
     // Handles
-    static constexpr OUStringLiteral sHandles(  u"Handles"  );
+    static constexpr OUString sHandles(  u"Handles"_ustr  );
     pAny = aGeometryItem.GetPropertyValueByName( sHandles );
     if ( !pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
     {
@@ -1126,7 +1126,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
     MSO_SPT eSpType = EnhancedCustomShapeTypeNames::Get( sShapeType );
 
     const mso_CustomShape* pDefCustomShape = GetCustomShapeContent( eSpType );
-    static constexpr OUStringLiteral sPath( u"Path" );
+    static constexpr OUString sPath( u"Path"_ustr );
     switch( eDefaultType )
     {
         case DefaultType::Viewbox :

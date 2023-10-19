@@ -207,7 +207,7 @@ FontworkBar::~FontworkBar()
 namespace svx {
 bool checkForFontWork( const SdrObject* pObj )
 {
-    static constexpr OUStringLiteral sTextPath = u"TextPath";
+    static constexpr OUString sTextPath = u"TextPath"_ustr;
     bool bFound = false;
 
     if( dynamic_cast<const SdrObjCustomShape*>( pObj) !=  nullptr )
@@ -305,19 +305,19 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
 
 static void GetGeometryForCustomShape( SdrCustomShapeGeometryItem& rGeometryItem, const OUString& rCustomShape )
 {
-    static constexpr OUStringLiteral sType( u"Type" );
+    static constexpr OUString sType( u"Type"_ustr );
 
     css::beans::PropertyValue aPropVal;
     aPropVal.Name = sType;
     aPropVal.Value <<= rCustomShape;
     rGeometryItem.SetPropertyValue( aPropVal );
 
-    static constexpr OUStringLiteral sAdjustmentValues( u"AdjustmentValues" );
-    static constexpr OUStringLiteral sCoordinateOrigin( u"CoordinateOrigin" );
-    static constexpr OUStringLiteral sCoordinateSize( u"CoordinateSize" );
-    static constexpr OUStringLiteral sEquations( u"Equations" );
-    static constexpr OUStringLiteral sHandles( u"Handles" );
-    static constexpr OUStringLiteral sPath( u"Path" );
+    static constexpr OUString sAdjustmentValues( u"AdjustmentValues"_ustr );
+    static constexpr OUString sCoordinateOrigin( u"CoordinateOrigin"_ustr );
+    static constexpr OUString sCoordinateSize( u"CoordinateSize"_ustr );
+    static constexpr OUString sEquations( u"Equations"_ustr );
+    static constexpr OUString sHandles( u"Handles"_ustr );
+    static constexpr OUString sPath( u"Path"_ustr );
     rGeometryItem.ClearPropertyValue( sAdjustmentValues );
     rGeometryItem.ClearPropertyValue( sCoordinateOrigin );
     rGeometryItem.ClearPropertyValue( sCoordinateSize );

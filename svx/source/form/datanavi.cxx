@@ -59,9 +59,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::dom::events;
 using namespace ::svx;
 
-constexpr OUStringLiteral CFGNAME_DATANAVIGATOR = u"DataNavigator";
-constexpr OUStringLiteral CFGNAME_SHOWDETAILS = u"ShowDetails";
-constexpr OUStringLiteral MSG_VARIABLE = u"%1";
+constexpr OUString CFGNAME_DATANAVIGATOR = u"DataNavigator"_ustr;
+constexpr OUString CFGNAME_SHOWDETAILS = u"ShowDetails"_ustr;
+constexpr OUString MSG_VARIABLE = u"%1"_ustr;
 constexpr OUStringLiteral MODELNAME = u"$MODELNAME";
 constexpr OUStringLiteral INSTANCENAME = u"$INSTANCENAME";
 constexpr OUStringLiteral ELEMENTNAME = u"$ELEMENTNAME";
@@ -75,35 +75,35 @@ namespace svxform
 
     // properties of instance
     constexpr OUStringLiteral PN_INSTANCE_MODEL = u"Instance";
-    constexpr OUStringLiteral PN_INSTANCE_ID = u"ID";
+    constexpr OUString PN_INSTANCE_ID = u"ID"_ustr;
     constexpr OUStringLiteral PN_INSTANCE_URL = u"URL";
 
     // properties of binding
-    constexpr OUStringLiteral PN_BINDING_ID = u"BindingID";
-    constexpr OUStringLiteral PN_BINDING_EXPR = u"BindingExpression";
+    constexpr OUString PN_BINDING_ID = u"BindingID"_ustr;
+    constexpr OUString PN_BINDING_EXPR = u"BindingExpression"_ustr;
     constexpr OUStringLiteral PN_BINDING_MODEL = u"Model";
-    constexpr OUStringLiteral PN_BINDING_NAMESPACES = u"ModelNamespaces";
-    constexpr OUStringLiteral PN_READONLY_EXPR = u"ReadonlyExpression";
-    constexpr OUStringLiteral PN_RELEVANT_EXPR = u"RelevantExpression";
-    constexpr OUStringLiteral PN_REQUIRED_EXPR = u"RequiredExpression";
-    constexpr OUStringLiteral PN_CONSTRAINT_EXPR = u"ConstraintExpression";
-    constexpr OUStringLiteral PN_CALCULATE_EXPR = u"CalculateExpression";
-    constexpr OUStringLiteral PN_BINDING_TYPE = u"Type";
+    constexpr OUString PN_BINDING_NAMESPACES = u"ModelNamespaces"_ustr;
+    constexpr OUString PN_READONLY_EXPR = u"ReadonlyExpression"_ustr;
+    constexpr OUString PN_RELEVANT_EXPR = u"RelevantExpression"_ustr;
+    constexpr OUString PN_REQUIRED_EXPR = u"RequiredExpression"_ustr;
+    constexpr OUString PN_CONSTRAINT_EXPR = u"ConstraintExpression"_ustr;
+    constexpr OUString PN_CALCULATE_EXPR = u"CalculateExpression"_ustr;
+    constexpr OUString PN_BINDING_TYPE = u"Type"_ustr;
 
     // properties of submission
-    constexpr OUStringLiteral PN_SUBMISSION_ID = u"ID";
-    constexpr OUStringLiteral PN_SUBMISSION_BIND = u"Bind";
-    constexpr OUStringLiteral PN_SUBMISSION_REF = u"Ref";
-    constexpr OUStringLiteral PN_SUBMISSION_ACTION = u"Action";
-    constexpr OUStringLiteral PN_SUBMISSION_METHOD = u"Method";
-    constexpr OUStringLiteral PN_SUBMISSION_REPLACE = u"Replace";
+    constexpr OUString PN_SUBMISSION_ID = u"ID"_ustr;
+    constexpr OUString PN_SUBMISSION_BIND = u"Bind"_ustr;
+    constexpr OUString PN_SUBMISSION_REF = u"Ref"_ustr;
+    constexpr OUString PN_SUBMISSION_ACTION = u"Action"_ustr;
+    constexpr OUString PN_SUBMISSION_METHOD = u"Method"_ustr;
+    constexpr OUString PN_SUBMISSION_REPLACE = u"Replace"_ustr;
 
     // other const strings
-    constexpr OUStringLiteral TRUE_VALUE = u"true()";
+    constexpr OUString TRUE_VALUE = u"true()"_ustr;
     constexpr OUStringLiteral NEW_ELEMENT = u"newElement";
     constexpr OUStringLiteral NEW_ATTRIBUTE = u"newAttribute";
-    constexpr OUStringLiteral EVENTTYPE_CHARDATA = u"DOMCharacterDataModified";
-    constexpr OUStringLiteral EVENTTYPE_ATTR = u"DOMAttrModified";
+    constexpr OUString EVENTTYPE_CHARDATA = u"DOMCharacterDataModified"_ustr;
+    constexpr OUString EVENTTYPE_ATTR = u"DOMAttrModified"_ustr;
 
     #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
 
@@ -932,7 +932,7 @@ namespace svxform
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
                 TranslateId pResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
-                OUString sProperty = bSubmission ? OUString(PN_SUBMISSION_ID) : OUString(PN_BINDING_ID);
+                OUString sProperty = bSubmission ? PN_SUBMISSION_ID : PN_BINDING_ID;
                 OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
                 OUString sName;
                 try

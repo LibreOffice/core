@@ -1170,7 +1170,7 @@ PointerStyle SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDe
     return PointerStyle::Arrow;
 }
 
-constexpr OUStringLiteral STR_NOTHING = u"nothing";
+constexpr OUString STR_NOTHING = u"nothing"_ustr;
 OUString SdrView::GetStatusText()
 {
     OUString aName;

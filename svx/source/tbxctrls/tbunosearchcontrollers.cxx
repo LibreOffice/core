@@ -67,12 +67,12 @@ using namespace css;
 
 namespace {
 
-constexpr OUStringLiteral COMMAND_FINDTEXT = u".uno:FindText";
-constexpr OUStringLiteral COMMAND_DOWNSEARCH = u".uno:DownSearch";
-constexpr OUStringLiteral COMMAND_UPSEARCH = u".uno:UpSearch";
+constexpr OUString COMMAND_FINDTEXT = u".uno:FindText"_ustr;
+constexpr OUString COMMAND_DOWNSEARCH = u".uno:DownSearch"_ustr;
+constexpr OUString COMMAND_UPSEARCH = u".uno:UpSearch"_ustr;
 constexpr OUStringLiteral COMMAND_FINDALL = u".uno:FindAll";
-constexpr OUStringLiteral COMMAND_MATCHCASE = u".uno:MatchCase";
-constexpr OUStringLiteral COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString";
+constexpr OUString COMMAND_MATCHCASE = u".uno:MatchCase"_ustr;
+constexpr OUString COMMAND_SEARCHFORMATTED = u".uno:SearchFormattedDisplayString"_ustr;
 
 class CheckButtonItemWindow final : public InterimItemWindow
 {
@@ -296,7 +296,7 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
             aValue >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                static constexpr OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
+                static constexpr OUString sResourceURL( u"private:resource/toolbar/findbar"_ustr );
                 xLayoutManager->hideElement( sResourceURL );
                 xLayoutManager->destroyElement( sResourceURL );
             }
@@ -718,7 +718,7 @@ private:
 UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
     : UpDownSearchToolboxController_Base( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            (eType == UP) ? OUString( COMMAND_UPSEARCH ):  OUString( COMMAND_DOWNSEARCH ) ),
+            (eType == UP) ? COMMAND_UPSEARCH:  COMMAND_DOWNSEARCH ),
       meType( eType )
 {
 }
@@ -1126,7 +1126,7 @@ void SAL_CALL ExitSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ )
         aValue >>= xLayoutManager;
         if (xLayoutManager.is())
         {
-            static constexpr OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
+            static constexpr OUString sResourceURL( u"private:resource/toolbar/findbar"_ustr );
             xLayoutManager->hideElement( sResourceURL );
             xLayoutManager->destroyElement( sResourceURL );
         }
@@ -1371,7 +1371,7 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
     if (!xLayoutManager.is())
         return;
 
-    static constexpr OUStringLiteral sResourceURL( u"private:resource/toolbar/findbar" );
+    static constexpr OUString sResourceURL( u"private:resource/toolbar/findbar"_ustr );
     css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
     if (!xUIElement.is())
     {

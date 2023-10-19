@@ -68,7 +68,7 @@ void ExportAsRTF( SvStream& rStrm, SdrTableObj& rObj )
     aEx.Write();
 }
 
-constexpr OUStringLiteral gsSize( u"Size" );
+constexpr OUString gsSize( u"Size"_ustr );
 
 SdrTableRtfExporter::SdrTableRtfExporter( SvStream& rStrm, SdrTableObj& rObj )
 : mrStrm( rStrm )

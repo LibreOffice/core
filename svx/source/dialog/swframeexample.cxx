@@ -31,7 +31,7 @@
 using namespace ::com::sun::star::text;
 
 #define FLYINFLY_BORDER 3
-constexpr OUStringLiteral DEMOTEXT = u"Ij";
+constexpr OUString DEMOTEXT = u"Ij"_ustr;
 
 namespace {
 
@@ -684,7 +684,7 @@ void SwFrameExample::Paint(vcl::RenderContext& rRenderContext, const tools::Rect
     }
     else
     {
-        rRenderContext.DrawText(aParaPrtArea, OUString(DEMOTEXT));
+        rRenderContext.DrawText(aParaPrtArea, DEMOTEXT);
         DrawRect_Impl(rRenderContext, aDrawObj, m_aBlankCol, m_aBlankFrameCol );
     }
 

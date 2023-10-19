@@ -117,8 +117,8 @@ static void getLightingDirectionDefaults( const Direction3D **pLighting1Defaults
 
 static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& rGeometryItem, SdrObject* pObj )
 {
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
-    static constexpr OUStringLiteral sRotateAngle = u"RotateAngle";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
+    static constexpr OUString sRotateAngle = u"RotateAngle"_ustr;
 
     sal_uInt16 nSID = rReq.GetSlot();
     switch( nSID )
@@ -686,7 +686,7 @@ static void getExtrusionDirectionState( SdrView const * pSdrView, SfxItemSet& rS
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -833,7 +833,7 @@ static void getExtrusionProjectionState( SdrView const * pSdrView, SfxItemSet& r
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -888,7 +888,7 @@ static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -981,7 +981,7 @@ static void getExtrusionDepthState( SdrView const * pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -1058,7 +1058,7 @@ static void getExtrusionLightingDirectionState( SdrView const * pSdrView, SfxIte
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const Direction3D * pLighting1Defaults;
     const Direction3D * pLighting2Defaults;
@@ -1137,7 +1137,7 @@ static void getExtrusionLightingIntensityState( SdrView const * pSdrView, SfxIte
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -1204,7 +1204,7 @@ static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();
 
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const css::uno::Any* pAny;
 
@@ -1273,7 +1273,7 @@ static void getExtrusionColorState( SdrView const * pSdrView, SfxItemSet& rSet )
 namespace svx {
 bool checkForSelectedCustomShapes( SdrView const * pSdrView, bool bOnlyExtruded )
 {
-    static constexpr OUStringLiteral sExtrusion = u"Extrusion";
+    static constexpr OUString sExtrusion = u"Extrusion"_ustr;
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     const size_t nCount = rMarkList.GetMarkCount();

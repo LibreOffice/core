@@ -76,8 +76,8 @@ namespace
 
 sal_Int32 getColumnTypeByModelName(const OUString& aModelName)
 {
-    static constexpr OUStringLiteral aModelPrefix(u"com.sun.star.form.component.");
-    static constexpr OUStringLiteral aCompatibleModelPrefix(u"stardiv.one.form.component.");
+    static constexpr OUString aModelPrefix(u"com.sun.star.form.component."_ustr);
+    static constexpr OUString aCompatibleModelPrefix(u"stardiv.one.form.component."_ustr);
 
     sal_Int32 nTypeId = -1;
     if (aModelName == FM_COMPONENT_EDIT)

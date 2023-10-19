@@ -60,7 +60,7 @@ using namespace ::com::sun::star::lang;
 
 constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME_60 = u"Pictures";
 constexpr OUStringLiteral XML_CONTAINERSTORAGE_NAME = u"ObjectReplacements";
-constexpr OUStringLiteral XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:";
+constexpr OUString XML_EMBEDDEDOBJECT_URL_BASE = u"vnd.sun.star.EmbeddedObject:"_ustr;
 constexpr OUStringLiteral XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE = u"vnd.sun.star.GraphicObject:";
 
 

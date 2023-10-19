@@ -34,13 +34,13 @@
 
 constexpr OUStringLiteral FORMAT_SVG = u"svg";
 constexpr OUStringLiteral FORMAT_WMF = u"wmf";
-constexpr OUStringLiteral FORMAT_EMF = u"emf";
+constexpr OUString FORMAT_EMF = u"emf"_ustr;
 constexpr OUStringLiteral FORMAT_PDF = u"pdf";
 
-constexpr OUStringLiteral FORMAT_BMP = u"bmp";
-constexpr OUStringLiteral FORMAT_GIF = u"gif";
+constexpr OUString FORMAT_BMP = u"bmp"_ustr;
+constexpr OUString FORMAT_GIF = u"gif"_ustr;
 constexpr OUStringLiteral FORMAT_JPG = u"jpg";
-constexpr OUStringLiteral FORMAT_PNG = u"png";
+constexpr OUString FORMAT_PNG = u"png"_ustr;
 constexpr OUStringLiteral FORMAT_TIF = u"tif";
 constexpr OUStringLiteral FORMAT_WEBP = u"webp";
 

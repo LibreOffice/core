@@ -686,7 +686,7 @@ void SdrFormatter::Undirty()
 
 OUString SdrFormatter::GetStr(tools::Long nVal) const
 {
-    static constexpr OUStringLiteral aNullCode(u"0");
+    static constexpr OUString aNullCode(u"0"_ustr);
 
     if(!nVal)
     {

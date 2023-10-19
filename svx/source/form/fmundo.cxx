@@ -676,7 +676,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
                 // TODO: we should cache all those things, else this might be too expensive.
                 // However, this requires we're notified of changes in the value binding
 
-                static constexpr OUStringLiteral s_sExternalData = u"ExternalData";
+                static constexpr OUString s_sExternalData = u"ExternalData"_ustr;
                 if ( xBindingPropsPSI.is() && xBindingPropsPSI->hasPropertyByName( s_sExternalData ) )
                 {
                     bool bExternalData = true;

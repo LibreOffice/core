@@ -303,7 +303,7 @@ private:
 
 }
 
-constexpr OUStringLiteral gsFontworkAlignment(u".uno:FontworkAlignment");
+constexpr OUString gsFontworkAlignment(u".uno:FontworkAlignment"_ustr);
 
 FontworkAlignmentWindow::FontworkAlignmentWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkalignmentcontrol.ui", "FontworkAlignmentControl")
@@ -376,7 +376,7 @@ IMPL_LINK(FontworkAlignmentWindow, SelectHdl, weld::Toggleable&, rButton, void)
         nAlignment = 4;
 
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-        OUString(gsFontworkAlignment).copy(5), nAlignment) };
+        gsFontworkAlignment.copy(5), nAlignment) };
 
     mxControl->dispatchCommand( gsFontworkAlignment, aArgs );
 
@@ -498,8 +498,8 @@ private:
 
 }
 
-constexpr OUStringLiteral gsFontworkCharacterSpacing(u".uno:FontworkCharacterSpacing");
-constexpr OUStringLiteral gsFontworkKernCharacterPairs(u".uno:FontworkKernCharacterPairs");
+constexpr OUString gsFontworkCharacterSpacing(u".uno:FontworkCharacterSpacing"_ustr);
+constexpr OUString gsFontworkKernCharacterPairs(u".uno:FontworkKernCharacterPairs"_ustr);
 
 FontworkCharacterSpacingWindow::FontworkCharacterSpacingWindow(svt::PopupWindowController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, "svx/ui/fontworkcharacterspacingcontrol.ui", "FontworkCharacterSpacingControl")
@@ -624,7 +624,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&
 
     bool bKernOnOff = mxKernPairs->get_active();
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-        OUString(gsFontworkKernCharacterPairs).copy(5), bKernOnOff) };
+        gsFontworkKernCharacterPairs.copy(5), bKernOnOff) };
 
     mxControl->dispatchCommand( gsFontworkKernCharacterPairs, aArgs );
     mbCommandDispatched = true;
@@ -637,7 +637,7 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, KernSelectHdl, weld::Toggleable&
 void FontworkCharacterSpacingWindow::DispatchSpacingDialog()
 {
     Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-        OUString(gsFontworkCharacterSpacing).copy(5), mnCharacterSpacing) };
+        gsFontworkCharacterSpacing.copy(5), mnCharacterSpacing) };
 
     rtl::Reference<svt::PopupWindowController> xControl(mxControl);
     xControl->EndPopupMode();
@@ -676,7 +676,7 @@ IMPL_LINK(FontworkCharacterSpacingWindow, SelectHdl, weld::Toggleable&, rButton,
             nCharacterSpacing = 100;
 
         Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue(
-            OUString(gsFontworkCharacterSpacing).copy(5), nCharacterSpacing) };
+            gsFontworkCharacterSpacing.copy(5), nCharacterSpacing) };
 
         mxControl->dispatchCommand( gsFontworkCharacterSpacing,  aArgs );
         mbCommandDispatched = true;

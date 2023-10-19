@@ -64,7 +64,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-constexpr OUStringLiteral TOOLBOX_NAME = u"colorbar";
+constexpr OUString TOOLBOX_NAME = u"colorbar"_ustr;
 #define RID_SVXSTR_UNDO_GRAFCROP    RID_SVXSTR_GRAFCROP
 
 namespace {
@@ -163,7 +163,7 @@ struct CommandToRID
 
 static OUString ImplGetRID( std::u16string_view aCommand )
 {
-    static constexpr OUStringLiteral EMPTY = u"";
+    static constexpr OUString EMPTY = u""_ustr;
     static constexpr CommandToRID aImplCommandToResMap[] =
     {
         { ".uno:GrafRed",           RID_SVXBMP_GRAF_RED             },

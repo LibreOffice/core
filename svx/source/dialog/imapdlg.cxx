@@ -47,14 +47,14 @@
 #include "dlgunit.hxx"
 #include <memory>
 
-constexpr OUStringLiteral SELF_TARGET = u"_self";
-constexpr OUStringLiteral IMAP_CERN_FILTER = u"MAP - CERN";
-constexpr OUStringLiteral IMAP_NCSA_FILTER = u"MAP - NCSA";
-constexpr OUStringLiteral IMAP_BINARY_FILTER = u"SIP - StarView ImageMap";
+constexpr OUString SELF_TARGET = u"_self"_ustr;
+constexpr OUString IMAP_CERN_FILTER = u"MAP - CERN"_ustr;
+constexpr OUString IMAP_NCSA_FILTER = u"MAP - NCSA"_ustr;
+constexpr OUString IMAP_BINARY_FILTER = u"SIP - StarView ImageMap"_ustr;
 constexpr OUStringLiteral IMAP_ALL_TYPE = u"*.*";
-constexpr OUStringLiteral IMAP_BINARY_TYPE = u"*.sip";
-constexpr OUStringLiteral IMAP_CERN_TYPE = u"*.map";
-constexpr OUStringLiteral IMAP_NCSA_TYPE = u"*.map";
+constexpr OUString IMAP_BINARY_TYPE = u"*.sip"_ustr;
+constexpr OUString IMAP_CERN_TYPE = u"*.map"_ustr;
+constexpr OUString IMAP_NCSA_TYPE = u"*.map"_ustr;
 
 SFX_IMPL_MODELESSDIALOGCONTOLLER_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 

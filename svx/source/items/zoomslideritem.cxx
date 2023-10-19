@@ -28,10 +28,10 @@
 
 SfxPoolItem* SvxZoomSliderItem::CreateDefault() { return new SvxZoomSliderItem; }
 
-constexpr OUStringLiteral ZOOMSLIDER_PARAM_CURRENTZOOM = u"Columns";
-constexpr OUStringLiteral ZOOMSLIDER_PARAM_SNAPPINGPOINTS = u"SnappingPoints";
-constexpr OUStringLiteral ZOOMSLIDER_PARAM_MINZOOM = u"MinValue";
-constexpr OUStringLiteral ZOOMSLIDER_PARAM_MAXZOOM = u"MaxValue";
+constexpr OUString ZOOMSLIDER_PARAM_CURRENTZOOM = u"Columns"_ustr;
+constexpr OUString ZOOMSLIDER_PARAM_SNAPPINGPOINTS = u"SnappingPoints"_ustr;
+constexpr OUString ZOOMSLIDER_PARAM_MINZOOM = u"MinValue"_ustr;
+constexpr OUString ZOOMSLIDER_PARAM_MAXZOOM = u"MaxValue"_ustr;
 #define ZOOMSLIDER_PARAMS           4
 
 

@@ -29,8 +29,8 @@
 
 SfxPoolItem* SvxViewLayoutItem::CreateDefault() { return new SvxViewLayoutItem; }
 
-constexpr OUStringLiteral VIEWLAYOUT_PARAM_COLUMNS = u"Columns";
-constexpr OUStringLiteral VIEWLAYOUT_PARAM_BOOKMODE = u"BookMode";
+constexpr OUString VIEWLAYOUT_PARAM_COLUMNS = u"Columns"_ustr;
+constexpr OUString VIEWLAYOUT_PARAM_BOOKMODE = u"BookMode"_ustr;
 #define VIEWLAYOUT_PARAMS           2
 
 
