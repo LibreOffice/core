@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <o3tl/any.hxx>
 #include <tools/color.hxx>
@@ -219,6 +220,25 @@ OUString lcl_ConvertColor(Color aColor)
            + OUString::number(aColor.GetGreen()) + u"\\," + OUString::number(aColor.GetBlue())
            + u")";
 }
+
+OUString lcl_ConvertParagraphAdjust(css::style::ParagraphAdjust eParaAdjust)
+{
+    switch (eParaAdjust)
+    {
+        case css::style::ParagraphAdjust_LEFT:
+            return u"left"_ustr;
+        case css::style::ParagraphAdjust_RIGHT:
+            return u"right"_ustr;
+        case css::style::ParagraphAdjust_BLOCK:
+        case css::style::ParagraphAdjust_STRETCH:
+            return u"justify"_ustr;
+        case css::style::ParagraphAdjust_CENTER:
+            return u"center"_ustr;
+        default:
+            assert(false && "Unhandled ParagraphAdjust value");
+            return u""_ustr;
+    }
+}
 }
 
 OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
@@ -295,6 +315,17 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
                 sAttribute = "font-weight";
                 sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
             }
+        }
+
+        // so far, "ParaAdjust" is the only UNO text attribute that
+        // maps to an object attribute for IAccessible2 ("text-align")
+        if (sAttribute.isEmpty() && (eAttributeType & IA2AttributeType::ObjectAttributes)
+            && prop.Name == "ParaAdjust")
+        {
+            sAttribute = "text-align";
+            const css::style::ParagraphAdjust eParaAdjust
+                = static_cast<css::style::ParagraphAdjust>(*o3tl::doAccess<sal_Int16>(prop.Value));
+            sValue = lcl_ConvertParagraphAdjust(eParaAdjust);
         }
 
         if (!sAttribute.isEmpty() && !sValue.isEmpty())
