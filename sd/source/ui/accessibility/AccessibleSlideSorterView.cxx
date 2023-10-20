@@ -143,6 +143,7 @@ void AccessibleSlideSorterView::FireAccessibleEvent (
         aEventObject.EventId = nEventId;
         aEventObject.NewValue = rNewValue;
         aEventObject.OldValue = rOldValue;
+        aEventObject.IndexHint = -1;
 
         comphelper::AccessibleEventNotifier::addEvent (mnClientId, aEventObject);
     }
