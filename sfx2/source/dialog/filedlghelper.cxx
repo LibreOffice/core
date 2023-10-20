@@ -20,6 +20,7 @@
 #include <memory>
 #include <optional>
 #include <string_view>
+#include <o3tl/test_info.hxx>
 
 #include <sfx2/filedlghelper.hxx>
 #include <sal/types.h>
@@ -2081,10 +2082,19 @@ void FileDialogHelper_Impl::saveConfig()
 
         try
         {
+            // tdf#61358 - remember the last "insert as link" state
+            if (o3tl::IsRunningUITest())
+                aValue <<= false;
+            else
+                aValue = xDlg->getValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
+            bool bLink = false;
+            aValue >>= bLink;
+            OUString aUserData(GRF_CONFIG_STR);
+            SetToken(aUserData, 0, ' ', OUString::number(static_cast<sal_Int32>(bLink)));
+
             aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 );
             bool bValue = false;
             aValue >>= bValue;
-            OUString aUserData(GRF_CONFIG_STR);
             SetToken( aUserData, 1, ' ', OUString::number( static_cast<sal_Int32>(bValue) ) );
 
             INetURLObject aObj( getPath() );
