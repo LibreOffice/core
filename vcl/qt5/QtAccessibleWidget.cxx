@@ -882,8 +882,12 @@ QString QtAccessibleWidget::attributes(int offset, int* startOffset, int* endOff
         return QString();
     }
 
+    // Qt doesn't have the strict separation into text and object attributes, but also
+    // suppports text-specific attributes that are object attributes according to the
+    // IAccessible2 spec.
     const OUString aRet = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
-        xText, offset, *startOffset, *endOffset);
+        xText, IA2AttributeType::TextAttributes | IA2AttributeType::ObjectAttributes, offset,
+        *startOffset, *endOffset);
     return toQString(aRet);
 }
 

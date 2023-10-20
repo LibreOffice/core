@@ -142,7 +142,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTextBase::get_attributes(long offset, long
         return E_FAIL;
 
 
-    const OUString sAttrs = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(pRXText, offset, *startOffset, *endOffset);
+    const OUString sAttrs = AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(pRXText,
+                                                                                         IA2AttributeType::TextAttributes,
+                                                                                         offset, *startOffset, *endOffset);
 
     if(*textAttributes)
         SysFreeString(*textAttributes);

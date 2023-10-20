@@ -222,72 +222,79 @@ OUString lcl_ConvertColor(Color aColor)
 }
 
 OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
-    const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes)
+    const css::uno::Sequence<css::beans::PropertyValue>& rUnoAttributes,
+    IA2AttributeType eAttributeType)
 {
     OUString aRet;
     for (css::beans::PropertyValue const& prop : rUnoAttributes)
     {
         OUString sAttribute;
         OUString sValue;
-        if (prop.Name == "CharBackColor")
-        {
-            sAttribute = "background-color";
-            sValue = lcl_ConvertColor(
-                Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
-        }
-        else if (prop.Name == "CharColor")
-        {
-            sAttribute = "color";
-            sValue = lcl_ConvertColor(
-                Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
-        }
-        else if (prop.Name == "CharEscapement")
-        {
-            sAttribute = "text-position";
-            const sal_Int16 nEscapement = *o3tl::doAccess<sal_Int16>(prop.Value);
-            sValue = lcl_ConvertCharEscapement(nEscapement);
-        }
-        else if (prop.Name == "CharFontName")
-        {
-            sAttribute = "font-family";
-            sValue = *o3tl::doAccess<OUString>(prop.Value);
-        }
-        else if (prop.Name == "CharHeight")
-        {
-            sAttribute = "font-size";
-            sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
-        }
-        else if (prop.Name == "CharPosture")
-        {
-            sAttribute = "font-style";
-            const css::awt::FontSlant eFontSlant = *o3tl::doAccess<css::awt::FontSlant>(prop.Value);
-            sValue = lcl_ConvertFontSlant(eFontSlant);
-        }
-        else if (prop.Name == "CharStrikeout")
-        {
-            const sal_Int16 nStrikeout = *o3tl::doAccess<sal_Int16>(prop.Value);
-            aRet += lcl_ConverCharStrikeout(nStrikeout);
-        }
-        else if (prop.Name == "CharUnderline")
-        {
-            OUString sUnderlineStyle;
-            OUString sUnderlineType;
-            OUString sUnderlineWidth;
-            const sal_Int16 nUnderline = *o3tl::doAccess<sal_Int16>(prop.Value);
-            lcl_ConvertFontUnderline(nUnderline, sUnderlineStyle, sUnderlineType, sUnderlineWidth);
 
-            // leave 'sAttribute' and 'sName' empty, set all attributes here
-            if (!sUnderlineStyle.isEmpty())
-                aRet += u"text-underline-style:" + sUnderlineStyle + ";";
-            if (!sUnderlineType.isEmpty())
-                aRet += u"text-underline-type:" + sUnderlineType + ";";
-            if (!sUnderlineWidth.isEmpty())
-                aRet += u"text-underline-width:" + sUnderlineWidth + ";";
-        }
-        else if (prop.Name == "CharWeight")
+        if (eAttributeType & IA2AttributeType::TextAttributes)
         {
-            sAttribute = "font-weight";
-            sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
+            if (prop.Name == "CharBackColor")
+            {
+                sAttribute = "background-color";
+                sValue = lcl_ConvertColor(
+                    Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
+            }
+            else if (prop.Name == "CharColor")
+            {
+                sAttribute = "color";
+                sValue = lcl_ConvertColor(
+                    Color(ColorTransparency, *o3tl::doAccess<sal_Int32>(prop.Value)));
+            }
+            else if (prop.Name == "CharEscapement")
+            {
+                sAttribute = "text-position";
+                const sal_Int16 nEscapement = *o3tl::doAccess<sal_Int16>(prop.Value);
+                sValue = lcl_ConvertCharEscapement(nEscapement);
+            }
+            else if (prop.Name == "CharFontName")
+            {
+                sAttribute = "font-family";
+                sValue = *o3tl::doAccess<OUString>(prop.Value);
+            }
+            else if (prop.Name == "CharHeight")
+            {
+                sAttribute = "font-size";
+                sValue = OUString::number(*o3tl::doAccess<double>(prop.Value)) + "pt";
+            }
+            else if (prop.Name == "CharPosture")
+            {
+                sAttribute = "font-style";
+                const css::awt::FontSlant eFontSlant
+                    = *o3tl::doAccess<css::awt::FontSlant>(prop.Value);
+                sValue = lcl_ConvertFontSlant(eFontSlant);
+            }
+            else if (prop.Name == "CharStrikeout")
+            {
+                const sal_Int16 nStrikeout = *o3tl::doAccess<sal_Int16>(prop.Value);
+                aRet += lcl_ConverCharStrikeout(nStrikeout);
+            }
+            else if (prop.Name == "CharUnderline")
+            {
+                OUString sUnderlineStyle;
+                OUString sUnderlineType;
+                OUString sUnderlineWidth;
+                const sal_Int16 nUnderline = *o3tl::doAccess<sal_Int16>(prop.Value);
+                lcl_ConvertFontUnderline(nUnderline, sUnderlineStyle, sUnderlineType,
+                                         sUnderlineWidth);
+
+                // leave 'sAttribute' and 'sName' empty, set all attributes here
+                if (!sUnderlineStyle.isEmpty())
+                    aRet += u"text-underline-style:" + sUnderlineStyle + ";";
+                if (!sUnderlineType.isEmpty())
+                    aRet += u"text-underline-type:" + sUnderlineType + ";";
+                if (!sUnderlineWidth.isEmpty())
+                    aRet += u"text-underline-width:" + sUnderlineWidth + ";";
+            }
+            else if (prop.Name == "CharWeight")
+            {
+                sAttribute = "font-weight";
+                sValue = lcl_convertFontWeight(*o3tl::doAccess<double>(prop.Value));
+            }
         }
 
         if (!sAttribute.isEmpty() && !sValue.isEmpty())
@@ -298,14 +305,14 @@ OUString AccessibleTextAttributeHelper::ConvertUnoToIAccessible2TextAttributes(
 }
 
 OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
-    css::uno::Reference<css::accessibility::XAccessibleText> xText, sal_Int32 nOffset,
-    sal_Int32& rStartOffset, sal_Int32& rEndOffset)
+    css::uno::Reference<css::accessibility::XAccessibleText> xText, IA2AttributeType eAttributeType,
+    sal_Int32 nOffset, sal_Int32& rStartOffset, sal_Int32& rEndOffset)
 {
     assert(xText.is());
 
     const css::uno::Sequence<css::beans::PropertyValue> attribs
         = xText->getCharacterAttributes(nOffset, css::uno::Sequence<OUString>());
-    OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs);
+    OUString sAttributes = ConvertUnoToIAccessible2TextAttributes(attribs, eAttributeType);
 
     css::accessibility::TextSegment aAttributeRun
         = xText->getTextAtIndex(nOffset, css::accessibility::AccessibleTextType::ATTRIBUTE_RUN);
@@ -316,7 +323,7 @@ OUString AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
     // adapt start/end index as necessary
     css::uno::Reference<css::accessibility::XAccessibleTextMarkup> xTextMarkup(xText,
                                                                                css::uno::UNO_QUERY);
-    if (xTextMarkup.is())
+    if ((eAttributeType & IA2AttributeType::TextAttributes) && xTextMarkup.is())
     {
         bool bInvalidSpelling = false;
         const sal_Int32 nMarkupCount(
