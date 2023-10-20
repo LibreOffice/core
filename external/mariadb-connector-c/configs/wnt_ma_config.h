@@ -72,11 +72,7 @@
 # define HAVE_LONG 1
 #endif
 
-#ifdef _M_X64
 #define SIZEOF_LONG_LONG 8
-#else
-#define SIZEOF_LONG_LONG 4
-#endif
 #if defined(SIZEOF_LONG_LONG)
 # define HAVE_LONG_LONG 1
 #endif
