@@ -2711,34 +2711,34 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
     SolarMutexGuard g;
 
     try {
-    if (m_isDestroy) return S_FALSE;
+        if (m_isDestroy) return S_FALSE;
 
-    if (!m_xAccessible.is())
-        return E_FAIL;
+        if (!m_xAccessible.is())
+            return E_FAIL;
 
-    Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
-    if( !pRContext.is() )
-    {
-        return E_FAIL;
-    }
-    Reference<XAccessibleExtendedAttributes> pRXI(pRContext,UNO_QUERY);
-    if( !pRXI.is() )
-        return E_FAIL;
-    else
-    {
-        css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> pRXAttr;
-        pRXAttr = pRXI.get();
-        css::uno::Any  anyVal = pRXAttr->getExtendedAttributes();
+        Reference<XAccessibleContext> pRContext = m_xAccessible->getAccessibleContext();
+        if( !pRContext.is() )
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleExtendedAttributes> pRXI(pRContext,UNO_QUERY);
+        if( !pRXI.is() )
+            return E_FAIL;
+        else
+        {
+            css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> pRXAttr;
+            pRXAttr = pRXI.get();
+            css::uno::Any  anyVal = pRXAttr->getExtendedAttributes();
 
-        OUString val;
-        anyVal >>= val;
+            OUString val;
+            anyVal >>= val;
 
-        if(*pAttr)
-            SysFreeString(*pAttr);
-        *pAttr = SysAllocString(o3tl::toW(val.getStr()));
+            if(*pAttr)
+                SysFreeString(*pAttr);
+            *pAttr = SysAllocString(o3tl::toW(val.getStr()));
 
-        return S_OK;
-    }
+            return S_OK;
+        }
     } catch(...) { return E_FAIL; }
 }
 
