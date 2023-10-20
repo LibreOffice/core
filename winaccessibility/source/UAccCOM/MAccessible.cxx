@@ -38,6 +38,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
+#include <vcl/accessibility/AccessibleTextAttributeHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <comphelper/AccessibleImplementationHelper.hxx>
@@ -2733,6 +2734,17 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
             OUString val;
             anyVal >>= val;
             sAttributes += val;
+        }
+
+        // some text-specific IAccessible2 object attributes (like text alignment
+        // of a paragraph) are handled as text attributes in LibreOffice
+        Reference<XAccessibleText> xText(pRContext, UNO_QUERY);
+        if (xText.is())
+        {
+            sal_Int32 nStartOffset = 0;
+            sal_Int32 nEndOffset = 0;
+            sAttributes += AccessibleTextAttributeHelper::GetIAccessible2TextAttributes(
+                xText, IA2AttributeType::ObjectAttributes, 0, nStartOffset, nEndOffset);
         }
 
         if (*pAttr)
