@@ -125,7 +125,6 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TAB_OVERFLOW,
     HANDLE_UNBREAKABLE_NUMBERINGS,
     HANDLE_STYLES_NODEFAULT,
-    HANDLE_FLOATTABLE_NOMARGINS,
     HANDLE_CLIPPED_PICTURES,
     HANDLE_BACKGROUND_PARA_OVER_DRAWINGS,
     HANDLE_EMBED_FONTS,
@@ -230,7 +229,6 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("TabOverflow"), HANDLE_TAB_OVERFLOW, cppu::UnoType<bool>::get(), 0},
         { OUString("UnbreakableNumberings"), HANDLE_UNBREAKABLE_NUMBERINGS, cppu::UnoType<bool>::get(), 0},
         { OUString("StylesNoDefault"), HANDLE_STYLES_NODEFAULT, cppu::UnoType<bool>::get(), 0},
-        { OUString("FloattableNomargins"), HANDLE_FLOATTABLE_NOMARGINS, cppu::UnoType<bool>::get(), 0},
         { OUString("ClippedPictures"), HANDLE_CLIPPED_PICTURES, cppu::UnoType<bool>::get(), 0},
         { OUString("BackgroundParaOverDrawings"), HANDLE_BACKGROUND_PARA_OVER_DRAWINGS, cppu::UnoType<bool>::get(), 0},
         { OUString("EmbedFonts"), HANDLE_EMBED_FONTS, cppu::UnoType<bool>::get(), 0},
@@ -850,12 +848,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             bool bTmp = *o3tl::doAccess<bool>(rValue);
             mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::STYLES_NODEFAULT, bTmp);
-        }
-        break;
-        case HANDLE_FLOATTABLE_NOMARGINS:
-        {
-            bool bTmp = *o3tl::doAccess<bool>(rValue);
-            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::FLOATTABLE_NOMARGINS, bTmp);
         }
         break;
         case HANDLE_CLIPPED_PICTURES:
@@ -1505,11 +1497,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_STYLES_NODEFAULT:
         {
             rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::STYLES_NODEFAULT );
-        }
-        break;
-        case HANDLE_FLOATTABLE_NOMARGINS:
-        {
-            rValue <<= mpDoc->getIDocumentSettingAccess().get( DocumentSettingId::FLOATTABLE_NOMARGINS );
         }
         break;
         case HANDLE_CLIPPED_PICTURES:

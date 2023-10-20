@@ -62,7 +62,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbUseHiResolutionVirtualDevice(true),
     mbMathBaselineAlignment(false), // default for *old* documents is 'off'
     mbStylesNoDefault(false),
-    mbFloattableNomargins(false),
     mEmbedFonts(false),
     mEmbedUsedFonts(false),
     mEmbedLatinScriptFonts(true),
@@ -230,7 +229,6 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         case DocumentSettingId::MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         case DocumentSettingId::STYLES_NODEFAULT: return mbStylesNoDefault;
-        case DocumentSettingId::FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
         case DocumentSettingId::EMBED_FONTS: return mEmbedFonts;
         case DocumentSettingId::EMBED_USED_FONTS: return mEmbedUsedFonts;
         case DocumentSettingId::EMBED_LATIN_SCRIPT_FONTS: return mEmbedLatinScriptFonts;
@@ -509,9 +507,6 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
         case DocumentSettingId::STYLES_NODEFAULT:
             mbStylesNoDefault  = value;
             break;
-        case DocumentSettingId::FLOATTABLE_NOMARGINS:
-            mbFloattableNomargins = value;
-            break;
         case DocumentSettingId::EMBED_FONTS:
             mEmbedFonts = value;
             break;
@@ -700,7 +695,6 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbConsiderWrapOnObjPos = rSource.mbConsiderWrapOnObjPos;
     mbMathBaselineAlignment = rSource.mbMathBaselineAlignment;
     mbStylesNoDefault = rSource.mbStylesNoDefault;
-    mbFloattableNomargins = rSource.mbFloattableNomargins;
     mbOldNumbering = rSource.mbOldNumbering;
     mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
     mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
@@ -873,11 +867,6 @@ void sw::DocumentSettingManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbStylesNoDefault"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
                                 BAD_CAST(OString::boolean(mbStylesNoDefault).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
-
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbFloattableNomargins"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
-                                BAD_CAST(OString::boolean(mbFloattableNomargins).getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mbOldNumbering"));

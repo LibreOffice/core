@@ -122,7 +122,6 @@ class DocumentSettingManager final :
                                                     // attribute 'WrapInfluenceOnObjPos'.
     bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
     bool mbStylesNoDefault                  : 1;
-    bool mbFloattableNomargins              : 1; //< If paragraph margins next to a floating table should be ignored.
     bool mEmbedFonts                        : 1;  //< Whether to embed fonts when saving.
     bool mEmbedUsedFonts                    : 1;  //< Whether to embed fonts that are used by the document when saving.
     bool mEmbedLatinScriptFonts             : 1;  //< Whether to embed latin script fonts when saving.
