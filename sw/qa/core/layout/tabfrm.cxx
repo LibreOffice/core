@@ -82,6 +82,17 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyInInlineTable)
         CPPUNIT_ASSERT(!pTab->GetFollow());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNestedRowSpan)
+{
+    // Given a document with nested floating tables and a row with rowspan cells at page boundary:
+    // When loading that document:
+    // Without the accompanying fix in place, this test would have resulted in a layout loop.
+    createSwDoc("floattable-nested-rowspan.docx");
+
+    // Then make sure the resulting page count matches Word:
+    CPPUNIT_ASSERT_EQUAL(6, getPages());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

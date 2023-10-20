@@ -2608,6 +2608,43 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // See if this is a split fly that can also grow.
                     auto pUpperFly = static_cast<SwFlyFrame*>(GetUpper());
                     bFlySplit = pUpperFly->IsFlySplitAllowed();
+
+                    if (bFlySplit)
+                    {
+                        // See if this is a nested split fly where the inner table also has
+                        // rowspans.
+                        SwTextFrame* pAnchorCharFrame = pUpperFly->FindAnchorCharFrame();
+                        if (pAnchorCharFrame && pAnchorCharFrame->IsInFly())
+                        {
+                            // Find the row we'll split.
+                            SwTwips nRemaining
+                                = aRectFnSet.YDiff(nDeadLine, aRectFnSet.GetTop(getFrameArea()));
+                            nRemaining -= aRectFnSet.GetTopMargin(*this);
+                            const SwFrame* pRow = Lower();
+                            for (; pRow->GetNext(); pRow = pRow->GetNext())
+                            {
+                                if (nRemaining < aRectFnSet.GetHeight(pRow->getFrameArea()))
+                                {
+                                    break;
+                                }
+
+                                nRemaining -= aRectFnSet.GetHeight(pRow->getFrameArea());
+                            }
+                            // See if any cells have rowspans.
+                            for (const SwFrame* pLower = pRow->GetLower(); pLower;
+                                 pLower = pLower->GetNext())
+                            {
+                                auto pCellFrame = static_cast<const SwCellFrame*>(pLower);
+                                if (pCellFrame->GetTabBox()->getRowSpan() != 1)
+                                {
+                                    // The cell has a rowspan, don't split the row itself in this
+                                    // case (but just move it forward, i.e. split between the rows).
+                                    bTryToSplit = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
                 if( IsInSct() || GetUpper()->IsInTab() || bFlySplit )
                     nDeadLine = aRectFnSet.YInc( nDeadLine,
