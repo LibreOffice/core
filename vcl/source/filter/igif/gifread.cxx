@@ -99,6 +99,7 @@ class GIFReader : public GraphicReader
     sal_uInt8           nGCDisposalMethod;      // 'Disposal Method' (see GIF docs)
     sal_uInt8           cTransIndex1;
     sal_uInt8           cNonTransIndex1;
+    bool                bEnhance;
 
     void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
@@ -156,6 +157,7 @@ GIFReader::GIFReader( SvStream& rStm )
     , nGCTransparentIndex ( 0 )
     , cTransIndex1 ( 0 )
     , cNonTransIndex1 ( 0 )
+    , bEnhance( false )
 {
     maUpperName = "SVIGIF";
     aSrcBuf.resize(256);    // Memory buffer for ReadNextBlock
@@ -317,6 +319,8 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         rColor.SetBlue( *pTmp++ );
     }
 
+    bEnhance = false;
+
     // if possible accommodate some standard colours
     if( nCount < 256 )
     {
@@ -324,6 +328,15 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
 
         if( nCount < 255 )
             (*pPal)[ 254UL ] = COL_BLACK;
+    }
+    else
+    {
+        // tdf#157793 limit tdf#157635 fix to only larger palettes
+        // I don't know why, but the fix for tdf#157635 causes
+        // images with a palette of 16 entries to be inverted.
+        // Is this the only condition for masking out black
+        // pixels in non-transparent animation frames?
+        bEnhance = true;
     }
 }
 
@@ -671,7 +684,10 @@ void GIFReader::CreateNewBitmaps()
         // Due to the switch from transparency to alpha in commit
         // 81994cb2b8b32453a92bcb011830fcb884f22ff3, mask out black
         // pixels in bitmap.
-        aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp8 );
+        if (bEnhance)
+            aAnimationFrame.maBitmapEx = BitmapEx( aBmp8, aBmp8 );
+        else
+            aAnimationFrame.maBitmapEx = BitmapEx( aBmp8 );
     }
 
     aAnimationFrame.maPositionPixel = Point( nImagePosX, nImagePosY );
