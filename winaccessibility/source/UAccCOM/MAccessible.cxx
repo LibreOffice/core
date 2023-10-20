@@ -2721,10 +2721,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
         {
             return E_FAIL;
         }
+
+        OUString sAttributes;
         Reference<XAccessibleExtendedAttributes> pRXI(pRContext,UNO_QUERY);
-        if( !pRXI.is() )
-            return E_FAIL;
-        else
+        if (pRXI.is())
         {
             css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> pRXAttr;
             pRXAttr = pRXI.get();
@@ -2732,13 +2732,14 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
 
             OUString val;
             anyVal >>= val;
-
-            if(*pAttr)
-                SysFreeString(*pAttr);
-            *pAttr = SysAllocString(o3tl::toW(val.getStr()));
-
-            return S_OK;
+            sAttributes += val;
         }
+
+        if (*pAttr)
+            SysFreeString(*pAttr);
+        *pAttr = SysAllocString(o3tl::toW(sAttributes.getStr()));
+
+        return S_OK;
     } catch(...) { return E_FAIL; }
 }
 
