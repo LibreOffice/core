@@ -57,6 +57,10 @@ class SwFieldRefPage : public SwFieldPage
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::Entry> m_xFilterED;
 
+    std::unique_ptr<weld::Widget> m_xStylerefFlags;
+    std::unique_ptr<weld::CheckButton> m_xStylerefFromBottomCB;
+    std::unique_ptr<weld::CheckButton> m_xStylerefHideNonNumericalCB;
+
     DECL_LINK(TypeHdl, weld::TreeView&, void);
     DECL_LINK(SubTypeListBoxHdl, weld::TreeView&, void);
     DECL_LINK(SubTypeTreeListBoxHdl, weld::TreeView&, void);

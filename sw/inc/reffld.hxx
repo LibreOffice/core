@@ -34,6 +34,20 @@ class SwFrame;
 bool IsFrameBehind( const SwTextNode& rMyNd, sal_Int32 nMySttPos,
                     const SwTextNode& rBehindNd, sal_Int32 nSttPos );
 
+#define REFFLDFLAG          0x4000
+#define REFFLDFLAG_BOOKMARK 0x4800
+#define REFFLDFLAG_FOOTNOTE 0x5000
+#define REFFLDFLAG_ENDNOTE  0x6000
+// #i83479#
+#define REFFLDFLAG_HEADING  0x7100
+#define REFFLDFLAG_NUMITEM  0x7200
+
+#define REFFLDFLAG_STYLE    0xc000
+/* we skip past 0x8000, 0x9000, 0xa000 and 0xb000 as when we bitwise 'and'
+       with REFFLDFLAG they are false */
+#define REFFLDFLAG_STYLE_FROM_BOTTOM           0xc100
+#define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL    0xc200
+
 enum REFERENCESUBTYPE
 {
     REF_SETREFATTR = 0,
@@ -81,7 +95,7 @@ public:
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTextNode* FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
-                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
+                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
                                         sal_Int32* pStt, sal_Int32* pEnd = nullptr,
                                         SwRootFrame const* pLayout = nullptr,
                                         SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
@@ -98,13 +112,18 @@ private:
     sal_uInt16 m_nSubType;
     /// reference to either a SwTextFootnote::m_nSeqNo or a SwSetExpField::mnSeqNo
     sal_uInt16 m_nSeqNo;
+    sal_uInt16 m_nFlags;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
 
+    /// Strip out text that is not either a number or a delimiter. Used in STYLEREF for when you
+    /// have chapters labelled "Chapter X.Y" and want to just keep the "X.Y". Distinct from
+    /// GetExpandedTextOfReferencedTextNode so you can run it after any other processing
+    void StylerefStripNonnumerical(OUString& rText) const;
 public:
     SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
-                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uLong nFormat );
+                    sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uLong nFormat );
 
     virtual ~SwGetRefField() override;
 
@@ -139,6 +158,10 @@ public:
     /// Get/set SequenceNo (of interest only for REF_SEQUENCEFLD).
     sal_uInt16              GetSeqNo() const        { return m_nSeqNo; }
     void                SetSeqNo( sal_uInt16 n )    { m_nSeqNo = n; }
+
+    /// Get/set flags (currently only used for REF_STYLE)
+    sal_uInt16              GetFlags() const        { return m_nFlags; }
+    void                SetFlags( sal_uInt16 n )    { m_nFlags = n; }
 
     // Name of reference.
     virtual OUString    GetPar1() const override;

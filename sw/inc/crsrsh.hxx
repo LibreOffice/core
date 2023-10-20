@@ -698,7 +698,7 @@ public:
     bool SelectNxtPrvHyperlink( bool bNext );
 
     bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
-                            sal_uInt16 nSeqNo );
+                            sal_uInt16 nSeqNo, sal_uInt16 nFlags );
 
     // get the nth character from the start or end of the  current selection
     sal_Unicode GetChar( bool bEnd = true, tools::Long nOffset = 0 );

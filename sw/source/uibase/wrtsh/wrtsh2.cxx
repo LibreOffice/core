@@ -424,7 +424,8 @@ void SwWrtShell::ClickToField(const SwField& rField, bool bExecHyperlinks)
         StartAllAction();
         SwCursorShell::GotoRefMark( static_cast<const SwGetRefField&>(rField).GetSetRefName(),
                                     static_cast<const SwGetRefField&>(rField).GetSubType(),
-                                    static_cast<const SwGetRefField&>(rField).GetSeqNo() );
+                                    static_cast<const SwGetRefField&>(rField).GetSeqNo(),
+                                    static_cast<const SwGetRefField&>(rField).GetFlags() );
         EndAllAction();
         break;
 

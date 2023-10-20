@@ -40,16 +40,6 @@
 #include <o3tl/string_view.hxx>
 #include <vcl/settings.hxx>
 
-#define REFFLDFLAG          0x4000
-#define REFFLDFLAG_BOOKMARK 0x4800
-#define REFFLDFLAG_FOOTNOTE 0x5000
-#define REFFLDFLAG_ENDNOTE  0x6000
-// #i83479#
-#define REFFLDFLAG_HEADING  0x7100
-#define REFFLDFLAG_NUMITEM  0x7200
-#define REFFLDFLAG_STYLE    0xc000
-/* we skip past 0x8000, 0x9000, 0xa000 and 0xb000 as when we bitwise 'and'
-       with REFFLDFLAG they are false */
 
 static sal_uInt16 nFieldDlgFormatSel = 0;
 
@@ -70,6 +60,9 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
     , m_xNameED(m_xBuilder->weld_entry("name"))
     , m_xValueED(m_xBuilder->weld_entry("value"))
     , m_xFilterED(m_xBuilder->weld_entry("filter"))
+    , m_xStylerefFlags(m_xBuilder->weld_widget("stylerefflagsframe"))
+    , m_xStylerefFromBottomCB(m_xBuilder->weld_check_button("stylereffrombottomcheckbox"))
+    , m_xStylerefHideNonNumericalCB(m_xBuilder->weld_check_button("stylerefhidenonnumericalcheckbox"))
 {
     m_xSelectionLB->make_sorted();
     // #i83479#
@@ -293,6 +286,8 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
         m_xNameED->save_value();
         m_xValueED->save_value();
         m_xFilterED->set_text(OUString());
+        m_xStylerefFromBottomCB->save_state();
+        m_xStylerefHideNonNumericalCB->save_state();
     }
 }
 
@@ -463,6 +458,8 @@ IMPL_LINK_NOARG(SwFieldRefPage, SubTypeListBoxHdl, weld::TreeView&, void)
 void SwFieldRefPage::SubTypeHdl()
 {
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
+
+    m_xStylerefFlags->set_visible(nTypeId == REFFLDFLAG_STYLE);
 
     switch(nTypeId)
     {
@@ -701,8 +698,11 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 pStyle = stylesheetIterator->Next();
             }
 
-            if (IsFieldEdit() && pRefField)
+            if (IsFieldEdit() && pRefField) {
                 sOldSel = pRefField->GetPar1();
+                m_xStylerefFromBottomCB->set_active((pRefField->GetFlags() & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM);
+                m_xStylerefHideNonNumericalCB->set_active((pRefField->GetFlags() & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL);
+            }
         }
         else
         {
@@ -1135,6 +1135,17 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 aName = m_xSelectionLB->get_text(nEntry);
                 nTypeId = static_cast<sal_uInt16>(SwFieldTypesEnum::GetRef);
                 nSubType = REF_STYLE;
+                sal_uInt16 nVal = REFFLDFLAG_STYLE;
+
+                if (m_xStylerefFromBottomCB->get_active()) {
+                    nVal |= REFFLDFLAG_STYLE_FROM_BOTTOM;
+                }
+
+                if (m_xStylerefHideNonNumericalCB->get_active()) {
+                    nVal |= REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL;
+                }
+
+                aVal = OUString::number(nVal);
             } else {
                 SAL_WARN("sw.ui", "<SwFieldRefPage::FillItemSet(..)> no entry selected in selection listbox!");
             }
@@ -1179,7 +1190,9 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
         m_xValueED->get_value_changed_from_saved() ||
         m_xTypeLB->get_value_changed_from_saved() ||
         m_xSelectionLB->get_value_changed_from_saved() ||
-        m_xFormatLB->get_value_changed_from_saved())
+        m_xFormatLB->get_value_changed_from_saved() ||
+        (nSubType == REF_STYLE
+         && (m_xStylerefFromBottomCB->get_state_changed_from_saved() || m_xStylerefHideNonNumericalCB->get_state_changed_from_saved())))
     {
         InsertField( static_cast<SwFieldTypesEnum>(nTypeId), nSubType, aName, aVal, nFormat );
     }

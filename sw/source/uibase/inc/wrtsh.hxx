@@ -492,7 +492,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GotoOutline( const OUString& rName );
     bool GotoRegion( std::u16string_view rName );
     bool GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType = 0,
-        sal_uInt16 nSeqNo = 0 );
+        sal_uInt16 nSeqNo = 0, sal_uInt16 nFlags = 0 );
     bool GotoNextTOXBase( const OUString* pName = nullptr);
     bool GotoTable( const OUString& rName );
     void GotoFormatField( const SwFormatField& rField );

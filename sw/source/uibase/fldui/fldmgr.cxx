@@ -1116,7 +1116,13 @@ bool SwFieldMgr::InsertField(
         {
             SwGetRefFieldType* pTyp =
                 static_cast<SwGetRefFieldType*>( pCurShell->GetFieldType(0, SwFieldIds::GetRef) );
-            sal_uInt16 nSeqNo = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
+
+            sal_uInt16 nSeqNo = 0;
+            sal_uInt16 nFlags = 0;
+
+            if (nSubType == REF_STYLE) nFlags = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
+            else nSeqNo = o3tl::narrowing<sal_uInt16>(rData.m_sPar2.toInt32());
+
             OUString sReferenceLanguage;
             // handle language-variant formats
             if (nFormatId >= SAL_N_ELEMENTS(FMT_REF_ARY))
@@ -1132,7 +1138,7 @@ bool SwFieldMgr::InsertField(
                 nFormatId %= SAL_N_ELEMENTS(FMT_REF_ARY);
             }
 
-            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFormatId));
+            pField.reset(new SwGetRefField(pTyp, rData.m_sPar1, sReferenceLanguage, nSubType, nSeqNo, nFlags, nFormatId));
             bExp = true;
             break;
         }
@@ -1665,10 +1671,17 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
         case SwFieldTypesEnum::GetRef:
             {
                 bSetPar2 = false;
-                static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( o3tl::narrowing<sal_uInt16>(rPar2.toInt32()) );
+                sal_Int16 nSubType = o3tl::narrowing<sal_uInt16>(rPar2.toInt32());
+                static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( nSubType );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rPar2.subView( nPos + 1 ))));
+                    switch (nSubType) {
+                        case REF_STYLE:
+                            static_cast<SwGetRefField*>(pTmpField.get())->SetFlags( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rPar2.subView( nPos + 1 ))));
+                            break;
+                        default:
+                            static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rPar2.subView( nPos + 1 ))));
+                    }
             }
             break;
         case SwFieldTypesEnum::Dropdown:
