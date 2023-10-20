@@ -37,22 +37,33 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage(weld::Container* pPag
     , m_xPrinterOutputRB(m_xBuilder->weld_radio_button("printer"))
     , m_xPrintFileOutputRB(m_xBuilder->weld_radio_button("file"))
     , m_xReduceTransparencyCB(m_xBuilder->weld_check_button("reducetrans"))
+    , m_xReduceTransparencyImg(m_xBuilder->weld_widget("lockreducetrans"))
     , m_xReduceTransparencyAutoRB(m_xBuilder->weld_radio_button("reducetransauto"))
     , m_xReduceTransparencyNoneRB(m_xBuilder->weld_radio_button("reducetransnone"))
+    , m_xReduceTransparencyModeImg(m_xBuilder->weld_widget("lockreducetransmode"))
     , m_xReduceGradientsCB(m_xBuilder->weld_check_button("reducegrad"))
+    , m_xReduceGradientsImg(m_xBuilder->weld_widget("lockreducegrad"))
     , m_xReduceGradientsStripesRB(m_xBuilder->weld_radio_button("reducegradstripes"))
     , m_xReduceGradientsColorRB(m_xBuilder->weld_radio_button("reducegradcolor"))
+    , m_xReduceGradientsModeImg(m_xBuilder->weld_widget("lockreducegradmode"))
     , m_xReduceGradientsStepCountNF(m_xBuilder->weld_spin_button("reducegradstep"))
     , m_xReduceBitmapsCB(m_xBuilder->weld_check_button("reducebitmap"))
+    , m_xReduceBitmapsImg(m_xBuilder->weld_widget("lockreducebitmap"))
     , m_xReduceBitmapsOptimalRB(m_xBuilder->weld_radio_button("reducebitmapoptimal"))
     , m_xReduceBitmapsNormalRB(m_xBuilder->weld_radio_button("reducebitmapnormal"))
     , m_xReduceBitmapsResolutionRB(m_xBuilder->weld_radio_button("reducebitmapresol"))
+    , m_xReduceBitmapsModeImg(m_xBuilder->weld_widget("lockreducebitmapmode"))
     , m_xReduceBitmapsResolutionLB(m_xBuilder->weld_combo_box("reducebitmapdpi"))
     , m_xReduceBitmapsTransparencyCB(m_xBuilder->weld_check_button("reducebitmaptrans"))
+    , m_xReduceBitmapsTransparencyImg(m_xBuilder->weld_widget("lockreducebitmaptrans"))
     , m_xConvertToGreyscalesCB(m_xBuilder->weld_check_button("converttogray"))
+    , m_xConvertToGreyscalesImg(m_xBuilder->weld_widget("lockconverttogray"))
     , m_xPaperSizeCB(m_xBuilder->weld_check_button("papersize"))
+    , m_xPaperSizeImg(m_xBuilder->weld_widget("lockpapersize"))
     , m_xPaperOrientationCB(m_xBuilder->weld_check_button("paperorient"))
+    , m_xPaperOrientationImg(m_xBuilder->weld_widget("lockpaperorient"))
     , m_xTransparencyCB(m_xBuilder->weld_check_button("trans"))
+    , m_xTransparencyImg(m_xBuilder->weld_widget("locktrans"))
 {
     if (bOutputForPrinter)
         m_xPrinterOutputRB->set_active(true);
@@ -142,8 +153,16 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     m_xPaperSizeCB->set_active(officecfg::Office::Common::Print::Warning::PaperSize::get());
+    m_xPaperSizeCB->set_sensitive(!officecfg::Office::Common::Print::Warning::PaperSize::isReadOnly());
+    m_xPaperSizeImg->set_visible(officecfg::Office::Common::Print::Warning::PaperSize::isReadOnly());
+
     m_xPaperOrientationCB->set_active(officecfg::Office::Common::Print::Warning::PaperOrientation::get());
+    m_xPaperOrientationCB->set_sensitive(!officecfg::Office::Common::Print::Warning::PaperOrientation::isReadOnly());
+    m_xPaperOrientationImg->set_visible(officecfg::Office::Common::Print::Warning::PaperOrientation::isReadOnly());
+
     m_xTransparencyCB->set_active(officecfg::Office::Common::Print::Warning::Transparency::get());
+    m_xTransparencyCB->set_sensitive(!officecfg::Office::Common::Print::Warning::Transparency::isReadOnly());
+    m_xTransparencyImg->set_visible(officecfg::Office::Common::Print::Warning::Transparency::isReadOnly());
 
     m_xPaperSizeCB->save_state();
     m_xPaperOrientationCB->save_state();
@@ -168,23 +187,46 @@ DeactivateRC SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet 
 
 void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const vcl::printer::Options* pCurrentOptions )
 {
+    bool bEnable = true;
+
+    bEnable = !officecfg::Office::Common::Print::Option::File::ReduceTransparency::isReadOnly();
     m_xReduceTransparencyCB->set_active( pCurrentOptions->IsReduceTransparency() );
+    m_xReduceTransparencyCB->set_sensitive(bEnable);
+    m_xReduceTransparencyImg->set_visible(!bEnable);
 
     if( pCurrentOptions->GetReducedTransparencyMode() == vcl::printer::TransparencyMode::Auto )
         m_xReduceTransparencyAutoRB->set_active(true);
     else
         m_xReduceTransparencyNoneRB->set_active(true);
 
+    bEnable = !officecfg::Office::Common::Print::Option::File::ReducedTransparencyMode::isReadOnly();
+    m_xReduceTransparencyAutoRB->set_sensitive(bEnable);
+    m_xReduceTransparencyNoneRB->set_sensitive(bEnable);
+    m_xReduceTransparencyModeImg->set_visible(!bEnable);
+
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReduceGradients::isReadOnly();
     m_xReduceGradientsCB->set_active( pCurrentOptions->IsReduceGradients() );
+    m_xReduceGradientsCB->set_sensitive(bEnable);
+    m_xReduceGradientsImg->set_visible(!bEnable);
 
     if( pCurrentOptions->GetReducedGradientMode() == vcl::printer::GradientMode::Stripes )
         m_xReduceGradientsStripesRB->set_active(true);
     else
         m_xReduceGradientsColorRB->set_active(true);
 
-    m_xReduceGradientsStepCountNF->set_value(pCurrentOptions->GetReducedGradientStepCount());
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReducedGradientMode::isReadOnly();
+    m_xReduceGradientsStripesRB->set_sensitive(bEnable);
+    m_xReduceGradientsColorRB->set_sensitive(bEnable);
+    m_xReduceGradientsModeImg->set_visible(!bEnable);
 
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReducedGradientStepCount::isReadOnly();
+    m_xReduceGradientsStepCountNF->set_value(pCurrentOptions->GetReducedGradientStepCount());
+    m_xReduceGradientsStepCountNF->set_sensitive(bEnable);
+
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReduceBitmaps::isReadOnly();
     m_xReduceBitmapsCB->set_active( pCurrentOptions->IsReduceBitmaps() );
+    m_xReduceBitmapsCB->set_sensitive(bEnable);
+    m_xReduceBitmapsImg->set_visible(!bEnable);
 
     if( pCurrentOptions->GetReducedBitmapMode() == vcl::printer::BitmapMode::Optimal )
         m_xReduceBitmapsOptimalRB->set_active(true);
@@ -192,6 +234,12 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const vcl::printer::Optio
         m_xReduceBitmapsNormalRB->set_active(true);
     else
         m_xReduceBitmapsResolutionRB->set_active(true);
+
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReducedBitmapMode::isReadOnly();
+    m_xReduceBitmapsOptimalRB->set_sensitive(bEnable);
+    m_xReduceBitmapsNormalRB->set_sensitive(bEnable);
+    m_xReduceBitmapsResolutionRB->set_sensitive(bEnable);
+    m_xReduceBitmapsModeImg->set_visible(!bEnable);
 
     const sal_uInt16 nDPI = pCurrentOptions->GetReducedBitmapResolution();
 
@@ -208,9 +256,18 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const vcl::printer::Optio
             }
         }
     }
+    bEnable = !officecfg::Office::Common::Print::Option::File::ReducedBitmapResolution::isReadOnly();
+    m_xReduceBitmapsResolutionLB->set_sensitive(bEnable);
 
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ReducedBitmapIncludesTransparency::isReadOnly();
     m_xReduceBitmapsTransparencyCB->set_active( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
+    m_xReduceBitmapsTransparencyCB->set_sensitive(bEnable);
+    m_xReduceBitmapsTransparencyImg->set_visible(!bEnable);
+
+    bEnable = !officecfg::Office::Common::Print::Option::Printer::ConvertToGreyscales::isReadOnly();
     m_xConvertToGreyscalesCB->set_active( pCurrentOptions->IsConvertToGreyscales() );
+    m_xConvertToGreyscalesCB->set_sensitive(bEnable);
+    m_xConvertToGreyscalesImg->set_visible(!bEnable);
 
     ClickReduceTransparencyCBHdl(*m_xReduceTransparencyCB);
     ClickReduceGradientsCBHdl(*m_xReduceGradientsCB);
@@ -236,20 +293,25 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( vcl::printer::Options* pCur
 IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, weld::Toggleable&, void )
 {
     const bool bReduceTransparency = m_xReduceTransparencyCB->get_active();
+    bool bReadOnly = officecfg::Office::Common::Print::Option::File::ReducedTransparencyMode::isReadOnly();
 
-    m_xReduceTransparencyAutoRB->set_sensitive( bReduceTransparency );
-    m_xReduceTransparencyNoneRB->set_sensitive( bReduceTransparency );
+    m_xReduceTransparencyAutoRB->set_sensitive( bReduceTransparency && !bReadOnly );
+    m_xReduceTransparencyNoneRB->set_sensitive( bReduceTransparency && !bReadOnly );
 
-    m_xTransparencyCB->set_sensitive( !bReduceTransparency );
+    bReadOnly = officecfg::Office::Common::Print::Warning::Transparency::isReadOnly();
+    m_xTransparencyCB->set_sensitive( !bReduceTransparency && !bReadOnly);
 }
 
 IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::Toggleable&, void )
 {
     const bool bEnable = m_xReduceGradientsCB->get_active();
+    bool bReadOnly = officecfg::Office::Common::Print::Option::Printer::ReducedGradientMode::isReadOnly();
 
-    m_xReduceGradientsStripesRB->set_sensitive( bEnable );
-    m_xReduceGradientsColorRB->set_sensitive( bEnable );
-    m_xReduceGradientsStepCountNF->set_sensitive( bEnable );
+    m_xReduceGradientsStripesRB->set_sensitive( bEnable && !bReadOnly );
+    m_xReduceGradientsColorRB->set_sensitive( bEnable && !bReadOnly );
+
+    bReadOnly = officecfg::Office::Common::Print::Option::Printer::ReducedGradientStepCount::isReadOnly();
+    m_xReduceGradientsStepCountNF->set_sensitive( bEnable && !bReadOnly );
 
     ToggleReduceGradientsStripesRBHdl(*m_xReduceGradientsStripesRB);
 }
@@ -257,12 +319,15 @@ IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, weld::
 IMPL_LINK_NOARG( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, weld::Toggleable&, void )
 {
     const bool bEnable = m_xReduceBitmapsCB->get_active();
+    bool bReadOnly = officecfg::Office::Common::Print::Option::Printer::ReducedBitmapMode::isReadOnly();
 
-    m_xReduceBitmapsOptimalRB->set_sensitive( bEnable );
-    m_xReduceBitmapsNormalRB->set_sensitive( bEnable );
-    m_xReduceBitmapsResolutionRB->set_sensitive( bEnable );
-    m_xReduceBitmapsTransparencyCB->set_sensitive( bEnable );
-    m_xReduceBitmapsResolutionLB->set_sensitive( bEnable );
+    m_xReduceBitmapsOptimalRB->set_sensitive( bEnable && !bReadOnly);
+    m_xReduceBitmapsNormalRB->set_sensitive( bEnable && !bReadOnly);
+    m_xReduceBitmapsResolutionRB->set_sensitive( bEnable && !bReadOnly );
+    m_xReduceBitmapsTransparencyCB->set_sensitive( bEnable &&
+        !officecfg::Office::Common::Print::Option::Printer::ReducedBitmapIncludesTransparency::isReadOnly() );
+    m_xReduceBitmapsResolutionLB->set_sensitive( bEnable &&
+        !officecfg::Office::Common::Print::Option::File::ReducedBitmapResolution::isReadOnly() );
 
     ToggleReduceBitmapsResolutionRBHdl(*m_xReduceBitmapsResolutionRB);
 }
