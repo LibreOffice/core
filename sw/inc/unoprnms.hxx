@@ -307,6 +307,7 @@ inline constexpr OUString UNO_NAME_PAGE_NUMBER_OFFSET = u"PageNumberOffset"_ustr
 inline constexpr OUString UNO_NAME_PLACEHOLDER = u"PlaceHolder"_ustr;
 inline constexpr OUString UNO_NAME_PLACEHOLDER_TYPE = u"PlaceHolderType"_ustr;
 inline constexpr OUString UNO_NAME_PRINT = u"Print"_ustr;
+inline constexpr OUString UNO_NAME_REFERENCE_FIELD_FLAGS = u"ReferenceFieldFlags"_ustr;
 inline constexpr OUString UNO_NAME_REFERENCE_FIELD_PART = u"ReferenceFieldPart"_ustr;
 inline constexpr OUString UNO_NAME_REFERENCE_FIELD_SOURCE = u"ReferenceFieldSource"_ustr;
 inline constexpr OUString UNO_NAME_REFERENCE_FIELD_LANGUAGE = u"ReferenceFieldLanguage"_ustr;
