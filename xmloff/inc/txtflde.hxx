@@ -28,6 +28,7 @@
 
 #include <rtl/ustring.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <txtfld.hxx>
 
 #include <map>
 #include <set>
@@ -238,6 +239,13 @@ private:
     void ExportMetaField( const css::uno::Reference< css::beans::XPropertySet> & i_xMeta,
                           bool i_bAutoStyles, bool i_bProgress,
                           bool & rPrevCharIsSpace);
+
+
+    void ProcessBoolean(
+        enum ::xmloff::token::XMLTokenEnum eXmlName,    /// attribute token
+        bool bBool,     /// attribute value
+        bool bDefault,
+        sal_uInt16 nPrefix); /// namespace
 
     /// export a boolean attribute
     void ProcessBoolean(

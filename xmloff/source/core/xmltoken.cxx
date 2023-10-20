@@ -1617,6 +1617,8 @@ namespace xmloff::token {
         TOKEN( "reference",                       XML_REFERENCE ),
         TOKEN( "reference-end",                   XML_REFERENCE_END ),
         TOKEN( "reference-format",                XML_REFERENCE_FORMAT ),
+        TOKEN( "reference-from-bottom",           XML_REFERENCE_FROM_BOTTOM ),
+        TOKEN( "reference-hide-non-numerical",    XML_REFERENCE_HIDE_NON_NUMERICAL ),
         TOKEN( "reference-mark",                  XML_REFERENCE_MARK ),
         TOKEN( "reference-mark-end",              XML_REFERENCE_MARK_END ),
         TOKEN( "reference-mark-start",            XML_REFERENCE_MARK_START ),

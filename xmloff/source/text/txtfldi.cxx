@@ -24,6 +24,7 @@
  *  (variable related text fields and database display fields)
  */
 
+#include "o3tl/safeint.hxx"
 #include <sal/config.h>
 
 #include <cassert>
@@ -2470,6 +2471,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 ,   nElementToken(nToken)
 ,   nSource(0)
 ,   nType(ReferenceFieldPart::PAGE_DESC)
+,   nFlags(0)
 ,   bNameOK(false)
 ,   bTypeOK(false)
 {
@@ -2561,6 +2563,16 @@ void XMLReferenceFieldImportContext::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_REFERENCE_LANGUAGE):
             sLanguage = OUString::fromUtf8(sAttrValue);
             break;
+        case XML_ELEMENT(LO_EXT, XML_REFERENCE_HIDE_NON_NUMERICAL):
+        case XML_ELEMENT(TEXT, XML_REFERENCE_HIDE_NON_NUMERICAL):
+            if (OUString::fromUtf8(sAttrValue).toBoolean())
+                nFlags |= REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL;
+            break;
+        case XML_ELEMENT(LO_EXT, XML_REFERENCE_FROM_BOTTOM):
+        case XML_ELEMENT(TEXT, XML_REFERENCE_FROM_BOTTOM):
+            if (OUString::fromUtf8(sAttrValue).toBoolean())
+                nFlags |= REFFLDFLAG_STYLE_FROM_BOTTOM;
+            break;
         default:
             XMLOFF_WARN_UNKNOWN_ATTR("xmloff", nAttrToken, sAttrValue);
     }
@@ -2583,6 +2595,7 @@ void XMLReferenceFieldImportContext::PrepareField(
         case XML_ELEMENT(TEXT, XML_BOOKMARK_REF):
         case XML_ELEMENT(LO_EXT, XML_STYLE_REF):
             xPropertySet->setPropertyValue("SourceName", Any(sName));
+            xPropertySet->setPropertyValue("ReferenceFieldFlags", Any(nFlags));
             break;
 
         case XML_ELEMENT(TEXT, XML_NOTE_REF):

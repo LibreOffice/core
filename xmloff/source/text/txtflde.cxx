@@ -350,6 +350,7 @@ constexpr OUStringLiteral gsPropertyNumberingType(u"NumberingType");
 constexpr OUStringLiteral gsPropertyOffset(u"Offset");
 constexpr OUStringLiteral gsPropertyOn(u"On");
 constexpr OUStringLiteral gsPropertyPlaceholderType(u"PlaceHolderType");
+constexpr OUStringLiteral gsPropertyReferenceFieldFlags(u"ReferenceFieldFlags");
 constexpr OUStringLiteral gsPropertyReferenceFieldPart(u"ReferenceFieldPart");
 constexpr OUStringLiteral gsPropertyReferenceFieldSource(u"ReferenceFieldSource");
 constexpr OUStringLiteral gsPropertyReferenceFieldLanguage(u"ReferenceFieldLanguage");
@@ -1658,6 +1659,16 @@ void XMLTextFieldExport::ExportFieldHelper(
                       MapReferenceType(GetInt16Property(gsPropertyReferenceFieldPart, rPropSet)),
                       XML_TEMPLATE);
         ProcessString(XML_REF_NAME, GetStringProperty(gsPropertySourceName, rPropSet));
+
+        sal_uInt16 referenceFieldFlags = GetIntProperty(gsPropertyReferenceFieldFlags, rPropSet);
+        // In reality gsPropertyReferenceFieldFlags is a uInt16... but there is no GetUInt16Property
+
+        bool fromBottom = (referenceFieldFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
+        bool hideNonNumerical = (referenceFieldFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL;
+
+        ProcessBoolean(XML_REFERENCE_FROM_BOTTOM, fromBottom,  false, XML_NAMESPACE_LO_EXT);
+        ProcessBoolean(XML_REFERENCE_HIDE_NON_NUMERICAL, hideNonNumerical,  false, XML_NAMESPACE_LO_EXT);
+
         if (xPropSetInfo->hasPropertyByName(gsPropertyReferenceFieldLanguage)
             && GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED)
         {
@@ -2454,9 +2465,15 @@ void XMLTextFieldExport::ProcessDisplay(bool bIsVisible,
 }
 
 
-/// export boolean property
 void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
                                         bool bBool, bool bDefault)
+{
+    ProcessBoolean(eName, bBool, bDefault, XML_NAMESPACE_TEXT);
+}
+
+/// export boolean property
+void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
+                                        bool bBool, bool bDefault, sal_uInt16 nPrefix)
 {
     SAL_WARN_IF( eName == XML_TOKEN_INVALID, "xmloff.text", "invalid element token");
     if ( XML_TOKEN_INVALID == eName )
@@ -2465,11 +2482,10 @@ void XMLTextFieldExport::ProcessBoolean(enum XMLTokenEnum eName,
     // write attribute (if different than default)
     // negate to force 0/1 values (and make sal_Bool comparable)
     if ((!bBool) != (!bDefault)) {
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, eName,
+        GetExport().AddAttribute(nPrefix, eName,
                                  (bBool ? XML_TRUE : XML_FALSE) );
     }
 }
-
 
 /// export string attribute
 void XMLTextFieldExport::ProcessString(enum XMLTokenEnum eName,

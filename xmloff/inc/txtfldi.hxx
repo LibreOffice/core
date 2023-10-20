@@ -34,6 +34,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vector>
+#include <txtfld.hxx>
 
 namespace com::sun::star {
     namespace xml::sax { class XAttributeList; }
@@ -795,6 +796,7 @@ class XMLReferenceFieldImportContext final : public XMLTextFieldImportContext
     sal_Int32 nElementToken;
     sal_Int16 nSource;
     sal_Int16 nType;
+    sal_uInt16 nFlags;
 
     bool bNameOK;
     bool bTypeOK;
