@@ -30,7 +30,7 @@ endif
 ifneq ($(gb_TRACE),)
 # macOS date doesn't know about nanoseconds switch, and instead of resorting to perl or python
 # to create a millisecond timestamp, just avoid the overhead and live with seconds-only accuracy
-gb_Trace_Timestamp := $(if $(filter MACOSX,$(OS)),$$(date +%s)000000000,$(date +%s%N))
+gb_Trace_Timestamp := $(if $(filter MACOSX,$(OS)),$$(date +%s)000000000,$$(date +%s%N))
 # macOS also doesn't provide flock, so skip that part on mac
 # The (flock;cat) part is to minimize lock time.
 gb_Trace_Flock := $(if $(filter MACOSX,$(OS)),,| ( flock 1; cat ))
