@@ -586,24 +586,43 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , nNotebookbarSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
     , pCanvasSettings(new CanvasSettings)
+    , m_xIconSizeLabel(m_xBuilder->weld_label("label14"))
     , m_xIconSizeLB(m_xBuilder->weld_combo_box("iconsize"))
+    , m_xIconSizeImg(m_xBuilder->weld_widget("lockiconsize"))
+    , m_xSidebarIconSizeLabel(m_xBuilder->weld_label("label9"))
     , m_xSidebarIconSizeLB(m_xBuilder->weld_combo_box("sidebariconsize"))
+    , m_xSidebarIconSizeImg(m_xBuilder->weld_widget("locksidebariconsize"))
+    , m_xNotebookbarIconSizeLabel(m_xBuilder->weld_label("label8"))
     , m_xNotebookbarIconSizeLB(m_xBuilder->weld_combo_box("notebookbariconsize"))
+    , m_xNotebookbarIconSizeImg(m_xBuilder->weld_widget("locknotebookbariconsize"))
     , m_xDarkModeFrame(m_xBuilder->weld_widget("darkmode"))
+    , m_xAppearanceStyleLabel(m_xBuilder->weld_label("label7"))
     , m_xAppearanceStyleLB(m_xBuilder->weld_combo_box("appearance"))
+    , m_xAppearanceStyleImg(m_xBuilder->weld_widget("lockappearance"))
+    , m_xIconStyleLabel(m_xBuilder->weld_label("label6"))
     , m_xIconStyleLB(m_xBuilder->weld_combo_box("iconstyle"))
+    , m_xIconStyleImg(m_xBuilder->weld_widget("lockiconstyle"))
     , m_xFontAntiAliasing(m_xBuilder->weld_check_button("aafont"))
+    , m_xFontAntiAliasingImg(m_xBuilder->weld_widget("lockaafont"))
     , m_xAAPointLimitLabel(m_xBuilder->weld_label("aafrom"))
+    , m_xAAPointLimitLabelImg(m_xBuilder->weld_widget("lockaafrom"))
     , m_xAAPointLimit(m_xBuilder->weld_metric_spin_button("aanf", FieldUnit::PIXEL))
     , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
+    , m_xFontShowImg(m_xBuilder->weld_widget("lockshowfontpreview"))
     , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
+    , m_xUseHardwareAccellImg(m_xBuilder->weld_widget("lockuseaccel"))
     , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
+    , m_xUseAntiAliaseImg(m_xBuilder->weld_widget("lockuseaa"))
     , m_xUseSkia(m_xBuilder->weld_check_button("useskia"))
+    , m_xUseSkiaImg(m_xBuilder->weld_widget("lockuseskia"))
     , m_xForceSkiaRaster(m_xBuilder->weld_check_button("forceskiaraster"))
+    , m_xForceSkiaRasterImg(m_xBuilder->weld_widget("lockforceskiaraster"))
     , m_xSkiaStatusEnabled(m_xBuilder->weld_label("skiaenabled"))
     , m_xSkiaStatusDisabled(m_xBuilder->weld_label("skiadisabled"))
     , m_xSkiaLog(m_xBuilder->weld_button("btnSkialog"))
+    , m_xMouseMiddleLabel(m_xBuilder->weld_label("label12"))
     , m_xMouseMiddleLB(m_xBuilder->weld_combo_box("mousemiddle"))
+    , m_xMouseMiddleImg(m_xBuilder->weld_widget("lockmousemiddle"))
     , m_xMoreIcons(m_xBuilder->weld_button("btnMoreIcons"))
     , m_xRunGPTests(m_xBuilder->weld_button("btn_rungptest"))
     , m_sAutoStr(m_xIconStyleLB->get_text(0))
@@ -667,7 +686,7 @@ IMPL_STATIC_LINK_NOARG(OfaViewTabPage, OnMoreIconsClick, weld::Button&, void)
 
 IMPL_LINK_NOARG( OfaViewTabPage, OnAntialiasingToggled, weld::Toggleable&, void )
 {
-    bool bAAEnabled = m_xFontAntiAliasing->get_active();
+    bool bAAEnabled = m_xFontAntiAliasing->get_active() && !officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::isReadOnly();
 
     m_xAAPointLimitLabel->set_sensitive(bAAEnabled);
     m_xAAPointLimit->set_sensitive(bAAEnabled);
@@ -725,9 +744,10 @@ void OfaViewTabPage::UpdateSkiaStatus()
     m_xSkiaStatusEnabled->set_visible(bEnabled);
     m_xSkiaStatusDisabled->set_visible(!bEnabled);
 
-    // FIXME: should really add code to show a 'lock' icon here.
     m_xUseSkia->set_sensitive(!officecfg::Office::Common::VCL::UseSkia::isReadOnly());
+    m_xUseSkiaImg->set_visible(officecfg::Office::Common::VCL::UseSkia::isReadOnly());
     m_xForceSkiaRaster->set_sensitive(m_xUseSkia->get_active() && !officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
+    m_xForceSkiaRasterImg->set_visible(officecfg::Office::Common::VCL::ForceSkiaRaster::isReadOnly());
     m_xSkiaLog->set_sensitive(bEnabled);
 
     // Technically the 'use hardware acceleration' option could be used to mean !forceSkiaRaster, but the implementation
@@ -942,6 +962,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
+    bool bEnable = true;
 
     if (SvtMiscOptions::GetSymbolsSize() != SFX_SYMBOLS_SIZE_AUTO)
     {
@@ -952,7 +973,12 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         else if (SvtMiscOptions::GetSymbolsSize() == SFX_SYMBOLS_SIZE_32)
             nSizeLB_InitialSelection = 3;
     }
+    bEnable = !officecfg::Office::Common::Misc::SymbolSet::isReadOnly();
     m_xIconSizeLB->set_active( nSizeLB_InitialSelection );
+    m_xIconSizeLabel->set_sensitive(bEnable);
+    m_xIconSizeLB->set_sensitive(bEnable);
+    m_xMoreIcons->set_sensitive(bEnable);
+    m_xIconSizeImg->set_visible(!bEnable);
     m_xIconSizeLB->save_value();
 
     ToolBoxButtonSize eSidebarIconSize = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::SidebarIconSize::get());
@@ -962,8 +988,14 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nSidebarSizeLB_InitialSelection = 1;
     else if( eSidebarIconSize == ToolBoxButtonSize::Large )
         nSidebarSizeLB_InitialSelection = 2;
+
+    bEnable = !officecfg::Office::Common::Misc::SidebarIconSize::isReadOnly();
     m_xSidebarIconSizeLB->set_active( nSidebarSizeLB_InitialSelection );
+    m_xSidebarIconSizeLabel->set_sensitive(bEnable);
+    m_xSidebarIconSizeLB->set_sensitive(bEnable);
+    m_xSidebarIconSizeImg->set_visible(!bEnable);
     m_xSidebarIconSizeLB->save_value();
+
     ToolBoxButtonSize eNotebookbarIconSize = static_cast<ToolBoxButtonSize>(officecfg::Office::Common::Misc::NotebookbarIconSize::get());
     if( eNotebookbarIconSize == ToolBoxButtonSize::DontCare )
         ; // do nothing
@@ -971,7 +1003,12 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nNotebookbarSizeLB_InitialSelection = 1;
     else if( eNotebookbarIconSize == ToolBoxButtonSize::Large )
         nNotebookbarSizeLB_InitialSelection = 2;
+
+    bEnable = !officecfg::Office::Common::Misc::NotebookbarIconSize::isReadOnly();
     m_xNotebookbarIconSizeLB->set_active(nNotebookbarSizeLB_InitialSelection);
+    m_xNotebookbarIconSizeLabel->set_sensitive(bEnable);
+    m_xNotebookbarIconSizeLB->set_sensitive(bEnable);
+    m_xNotebookbarIconSizeImg->set_visible(!bEnable);
     m_xNotebookbarIconSizeLB->save_value();
 
     // tdf#153497 set name of automatic icon theme, it may have changed due to "Apply" while this page is visible
@@ -987,24 +1024,46 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         nStyleLB_InitialSelection = m_xIconStyleLB->find_text(selectedInfo.GetDisplayName());
     }
 
+    bEnable = !officecfg::Office::Common::Misc::SymbolStyle::isReadOnly();
     m_xIconStyleLB->set_active(nStyleLB_InitialSelection);
+    m_xIconStyleLabel->set_sensitive(bEnable);
+    m_xIconStyleLB->set_sensitive(bEnable);
+    m_xIconStyleImg->set_visible(!bEnable);
     m_xIconStyleLB->save_value();
 
+    bEnable = !officecfg::Office::Common::Misc::Appearance::isReadOnly();
     m_xAppearanceStyleLB->set_active(officecfg::Office::Common::Misc::Appearance::get());
+    m_xAppearanceStyleLabel->set_sensitive(bEnable);
+    m_xAppearanceStyleLB->set_sensitive(bEnable);
+    m_xAppearanceStyleImg->set_visible(!bEnable);
     m_xAppearanceStyleLB->save_value();
 
     // Middle Mouse Button
+    bEnable = !officecfg::Office::Common::View::Dialog::MiddleMouseButton::isReadOnly();
     sal_Int16 nMiddleMouseButton = officecfg::Office::Common::View::Dialog::MiddleMouseButton::get();
     m_xMouseMiddleLB->set_active(static_cast<short>(nMiddleMouseButton));
+    m_xMouseMiddleLabel->set_sensitive(bEnable);
+    m_xMouseMiddleLB->set_sensitive(bEnable);
+    m_xMouseMiddleImg->set_visible(!bEnable);
     m_xMouseMiddleLB->save_value();
 
+    bEnable = !officecfg::Office::Common::View::FontAntiAliasing::Enabled::isReadOnly();
     bool bFontAntiAliasing = officecfg::Office::Common::View::FontAntiAliasing::Enabled::get();
     m_xFontAntiAliasing->set_active( bFontAntiAliasing );
+    m_xFontAntiAliasing->set_sensitive(bEnable);
+    m_xFontAntiAliasingImg->set_visible(!bEnable);
+
+    bEnable = !officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::isReadOnly();
     sal_Int16 nFontAntiAliasingMinPixelHeight = officecfg::Office::Common::View::FontAntiAliasing::MinPixelHeight::get();
     m_xAAPointLimit->set_value(nFontAntiAliasingMinPixelHeight, FieldUnit::PIXEL);
+    m_xAAPointLimit->set_sensitive(bEnable);
+    m_xAAPointLimitLabelImg->set_visible(!bEnable);
 
     // WorkingSet
+    bEnable = !officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::isReadOnly();
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
+    m_xFontShowCB->set_sensitive(bEnable);
+    m_xFontShowImg->set_visible(!bEnable);
 
     UpdateHardwareAccelStatus();
     m_xUseHardwareAccell->save_state();
@@ -1018,8 +1077,12 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         {
             m_xUseAntiAliase->set_active(false);
             m_xUseAntiAliase->set_sensitive(false);
+            m_xUseAntiAliaseImg->set_visible(true);
         }
 
+        bEnable = !officecfg::Office::Common::Drawinglayer::AntiAliasing::isReadOnly();
+        m_xUseAntiAliase->set_sensitive(bEnable);
+        m_xUseAntiAliaseImg->set_visible(!bEnable);
         m_xUseAntiAliase->save_state();
     }
 
@@ -1043,14 +1106,17 @@ void OfaViewTabPage::UpdateHardwareAccelStatus()
     {
         m_xUseHardwareAccell->set_active(pCanvasSettings->IsHardwareAccelerationEnabled());
         m_xUseHardwareAccell->set_sensitive(!pCanvasSettings->IsHardwareAccelerationRO());
+        m_xUseHardwareAccellImg->set_visible(pCanvasSettings->IsHardwareAccelerationRO());
     }
     else
     {
         m_xUseHardwareAccell->set_active(false);
         m_xUseHardwareAccell->set_sensitive(false);
+        m_xUseHardwareAccellImg->set_visible(true);
     }
 #if HAVE_FEATURE_SKIA
     m_xUseHardwareAccell->set_sensitive(!m_xUseSkia->get_active());
+    m_xUseHardwareAccellImg->set_visible(m_xUseSkia->get_active());
 #endif
 }
 

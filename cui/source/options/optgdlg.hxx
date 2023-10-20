@@ -95,29 +95,48 @@ private:
 
     std::vector<vcl::IconThemeInfo> mInstalledIconThemes;
 
+    std::unique_ptr<weld::Label> m_xIconSizeLabel;
     std::unique_ptr<weld::ComboBox> m_xIconSizeLB;
+    std::unique_ptr<weld::Widget> m_xIconSizeImg;
+    std::unique_ptr<weld::Label> m_xSidebarIconSizeLabel;
     std::unique_ptr<weld::ComboBox> m_xSidebarIconSizeLB;
+    std::unique_ptr<weld::Widget> m_xSidebarIconSizeImg;
+    std::unique_ptr<weld::Label> m_xNotebookbarIconSizeLabel;
     std::unique_ptr<weld::ComboBox> m_xNotebookbarIconSizeLB;
+    std::unique_ptr<weld::Widget> m_xNotebookbarIconSizeImg;
     std::unique_ptr<weld::Widget> m_xDarkModeFrame;
+    std::unique_ptr<weld::Label> m_xAppearanceStyleLabel;
     std::unique_ptr<weld::ComboBox> m_xAppearanceStyleLB;
+    std::unique_ptr<weld::Widget> m_xAppearanceStyleImg;
+    std::unique_ptr<weld::Label> m_xIconStyleLabel;
     std::unique_ptr<weld::ComboBox> m_xIconStyleLB;
+    std::unique_ptr<weld::Widget> m_xIconStyleImg;
 
     std::unique_ptr<weld::CheckButton> m_xFontAntiAliasing;
+    std::unique_ptr<weld::Widget> m_xFontAntiAliasingImg;
     std::unique_ptr<weld::Label> m_xAAPointLimitLabel;
+    std::unique_ptr<weld::Widget> m_xAAPointLimitLabelImg;
     std::unique_ptr<weld::MetricSpinButton> m_xAAPointLimit;
 
     std::unique_ptr<weld::CheckButton> m_xFontShowCB;
+    std::unique_ptr<weld::Widget> m_xFontShowImg;
 
     std::unique_ptr<weld::CheckButton> m_xUseHardwareAccell;
+    std::unique_ptr<weld::Widget> m_xUseHardwareAccellImg;
     std::unique_ptr<weld::CheckButton> m_xUseAntiAliase;
+    std::unique_ptr<weld::Widget> m_xUseAntiAliaseImg;
     std::unique_ptr<weld::CheckButton> m_xUseSkia;
+    std::unique_ptr<weld::Widget> m_xUseSkiaImg;
     std::unique_ptr<weld::CheckButton> m_xForceSkiaRaster;
+    std::unique_ptr<weld::Widget> m_xForceSkiaRasterImg;
 
     std::unique_ptr<weld::Label> m_xSkiaStatusEnabled;
     std::unique_ptr<weld::Label> m_xSkiaStatusDisabled;
     std::unique_ptr<weld::Button> m_xSkiaLog;
 
+    std::unique_ptr<weld::Label> m_xMouseMiddleLabel;
     std::unique_ptr<weld::ComboBox> m_xMouseMiddleLB;
+    std::unique_ptr<weld::Widget> m_xMouseMiddleImg;
     std::unique_ptr<weld::Button> m_xMoreIcons;
     std::unique_ptr<weld::Button> m_xRunGPTests;
 
