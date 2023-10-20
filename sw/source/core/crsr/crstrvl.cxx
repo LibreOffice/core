@@ -1402,7 +1402,7 @@ void SwCursorShell::MakeOutlineSel(SwOutlineNodes::size_type nSttPos, SwOutlineN
 
 /// jump to reference marker
 bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
-                                    sal_uInt16 nSeqNo )
+                                    sal_uInt16 nSeqNo, sal_uInt16 nFlags )
 {
     CurrShell aCurr( this );
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -1416,7 +1416,7 @@ bool SwCursorShell::GotoRefMark( const OUString& rRefMark, sal_uInt16 nSubType,
     SwContentFrame* pRefFrame = GetCurrFrame();
 
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor(GetDoc(), rRefMark,
-                                nSubType, nSeqNo, &nPos, nullptr, GetLayout(), pRefTextNd, pRefFrame);
+                                nSubType, nSeqNo, nFlags, &nPos, nullptr, GetLayout(), pRefTextNd, pRefFrame);
     if( !pTextNd || !pTextNd->GetNodes().IsDocNodes() )
         return false;
 

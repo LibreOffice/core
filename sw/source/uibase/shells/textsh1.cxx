@@ -1314,7 +1314,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.StartAllAction();
                 rWrtSh.SwCursorShell::GotoRefMark( static_cast<SwGetRefField*>(pField)->GetSetRefName(),
                                     static_cast<SwGetRefField*>(pField)->GetSubType(),
-                                    static_cast<SwGetRefField*>(pField)->GetSeqNo() );
+                                    static_cast<SwGetRefField*>(pField)->GetSeqNo(),
+                                    static_cast<SwGetRefField*>(pField)->GetFlags() );
                 rWrtSh.EndAllAction();
                 rReq.Done();
             }

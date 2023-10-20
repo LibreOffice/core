@@ -350,12 +350,13 @@ static void lcl_formatReferenceLanguage( OUString& rRefText,
 /// get references
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFieldType,
                               OUString aSetRef, OUString aSetReferenceLanguage, sal_uInt16 nSubTyp,
-                              sal_uInt16 nSequenceNo, sal_uLong nFormat )
+                              sal_uInt16 nSequenceNo, sal_uInt16 nFlags, sal_uLong nFormat )
     : SwField(pFieldType, nFormat),
       m_sSetRefName(std::move(aSetRef)),
       m_sSetReferenceLanguage(std::move(aSetReferenceLanguage)),
       m_nSubType(nSubTyp),
-      m_nSeqNo(nSequenceNo)
+      m_nSeqNo(nSequenceNo),
+      m_nFlags(nFlags)
 {
 }
 
@@ -409,7 +410,7 @@ const SwTextNode* SwGetRefField::GetReferencedTextNode(SwTextNode* pTextNode, Sw
     if (!pTyp)
         return nullptr;
     sal_Int32 nDummy = -1;
-    return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, &nDummy,
+    return SwGetRefFieldType::FindAnchor( &pTyp->GetDoc(), m_sSetRefName, m_nSubType, m_nSeqNo, m_nFlags, &nDummy,
                                           nullptr, nullptr, pTextNode, pFrame );
 }
 
@@ -422,6 +423,30 @@ static OUString lcl_formatStringByCombiningCharacter(std::u16string_view sText, 
         sRet.append(OUStringChar(sText[i]) + OUStringChar(cChar));
     }
     return sRet.makeStringAndClear();
+}
+
+void SwGetRefField::StylerefStripNonnumerical(OUString& rText) const
+{
+    // for STYLEREF, hide text that is neither a delimiter nor a number if that flag is set
+    if ( m_nSubType != REF_STYLE || (GetFlags() & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) != REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL )
+        return;
+
+    std::vector<sal_Unicode> charactersToKeep;
+
+    for (int i = 0; i < rText.getLength(); i++) {
+        auto character = rText[i];
+
+        if (
+            (character >= '(' && character <= '@') || // includes 0-9 and most of the punctuation we want
+            (character >= '[' && character <= '_')  // includes the rest of the punctuation we want
+        )
+            charactersToKeep.push_back(character);
+    }
+
+    if (charactersToKeep.size())
+        rText = OUString(charactersToKeep.data(), charactersToKeep.size());
+    else
+        rText = OUString();
 }
 
 // #i85090#
@@ -442,6 +467,9 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
        sRet = sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode(0));
        sRet = lcl_formatStringByCombiningCharacter( sRet, cStrikethrough );
     }
+
+    StylerefStripNonnumerical(sRet);
+
     return sRet;
 }
 
@@ -524,7 +552,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
     sal_Int32 nNumStart = -1;
     sal_Int32 nNumEnd = -1;
     SwTextNode* pTextNd = SwGetRefFieldType::FindAnchor(
-        &rDoc, m_sSetRefName, m_nSubType, m_nSeqNo, &nNumStart, &nNumEnd,
+        &rDoc, m_sSetRefName, m_nSubType, m_nSeqNo, m_nFlags, &nNumStart, &nNumEnd,
         pLayout, pFieldTextAttr ? pFieldTextAttr->GetpTextNode() : nullptr, pFrameContainingField
     );
     // not found?
@@ -785,6 +813,8 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
     default:
         OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
+
+    StylerefStripNonnumerical(rText);
 }
 
 // #i81002#
@@ -880,7 +910,7 @@ std::unique_ptr<SwField> SwGetRefField::Copy() const
 {
     std::unique_ptr<SwGetRefField> pField( new SwGetRefField( static_cast<SwGetRefFieldType*>(GetTyp()),
                                                 m_sSetRefName, m_sSetReferenceLanguage, m_nSubType,
-                                                m_nSeqNo, GetFormat() ) );
+                                                m_nSeqNo, m_nFlags, GetFormat() ) );
     pField->m_sText = m_sText;
     pField->m_sTextRLHidden = m_sTextRLHidden;
     return std::unique_ptr<SwField>(pField.release());
@@ -1217,8 +1247,8 @@ namespace
 }
 
 SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
-                                          sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_Int32* pStt,
-                                          sal_Int32* pEnd, SwRootFrame const* const pLayout,
+                                          sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags,
+                                          sal_Int32* pStt, sal_Int32* pEnd, SwRootFrame const* const pLayout,
                                           SwTextNode* pSelf, SwFrame* pContentFrame)
 {
     OSL_ENSURE( pStt, "Why did no one check the StartPos?" );
@@ -1337,6 +1367,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
         case REF_STYLE:
             if (!pSelf) break;
 
+            bool bFlagFromBottom = (nFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
+
             const SwNodes& nodes = pDoc->GetNodes();
 
             StyleRefElementType elementType = StyleRefElementType::Default;
@@ -1434,9 +1466,9 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         pPageEnd = pReference;
                     }
 
-                    std::deque<SwNode*> pAbovePage;
-                    std::deque<SwNode*> pInPage;
-                    std::deque<SwNode*> pBelowPage;
+                    std::deque<SwNode*> pSearchSecond;
+                    std::deque<SwNode*> pInPage; /* or pSearchFirst */
+                    std::deque<SwNode*> pSearchThird;
 
                     bool beforeStart = true;
                     bool beforeEnd = true;
@@ -1450,21 +1482,27 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                         if (beforeStart)
                         {
-                            pAbovePage.push_front(nodes[n]);
+                            if (bFlagFromBottom)
+                                pSearchThird.push_front(nodes[n]);
+                            else
+                                pSearchSecond.push_front(nodes[n]);
                         }
                         else if (beforeEnd)
                         {
-                            pInPage.push_back(nodes[n]);
+                            if (bFlagFromBottom)
+                                pInPage.push_front(nodes[n]);
+                            else
+                                pInPage.push_back(nodes[n]);
 
                             if (*pPageEnd == *nodes[n])
                             {
                                 beforeEnd = false;
                             }
                         }
+                        else if (bFlagFromBottom)
+                            pSearchSecond.push_back(nodes[n]);
                         else
-                        {
-                            pBelowPage.push_back(nodes[n]);
-                        }
+                            pSearchThird.push_back(nodes[n]);
                     }
 
                     pTextNd = SearchForStyleAnchor(pSelf, pInPage, rRefMark);
@@ -1474,14 +1512,14 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                     }
 
                     // 2. Search up from the top of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pAbovePage, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark);
                     if (pTextNd)
                     {
                         break;
                     }
 
                     // 3. Search down from the bottom of the page
-                    pTextNd = SearchForStyleAnchor(pSelf, pBelowPage, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark);
                     if (pTextNd)
                     {
                         break;
@@ -1497,14 +1535,14 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pAbovePage, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark,
                                                    false /* bCaseSensitive */);
                     if (pTextNd)
                     {
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pBelowPage, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchThird, rRefMark,
                                                    false /* bCaseSensitive */);
                     break;
                 }
@@ -1515,8 +1553,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                     // For references, styleref acts from the position of the reference not the field
                     // Happily, the previous code saves either one into pReference, so the following is generic for both
 
-                    std::deque<SwNode*> pNotBelowElement;
-                    std::deque<SwNode*> pBelowElement;
+                    std::deque<SwNode*> pSearchFirst;
+                    std::deque<SwNode*> pSearchSecond;
 
                     bool beforeElement = true;
 
@@ -1524,22 +1562,25 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                     {
                         if (beforeElement)
                         {
-                            pNotBelowElement.push_front(nodes[n]);
+                            if (bFlagFromBottom)
+                                pSearchSecond.push_front(nodes[n]);
+                            else
+                                pSearchFirst.push_front(nodes[n]);
 
                             if (*pReference == *nodes[n])
                             {
                                 beforeElement = false;
                             }
                         }
+                        else if (bFlagFromBottom)
+                            pSearchFirst.push_back(nodes[n]);
                         else
-                        {
-                            pBelowElement.push_back(nodes[n]);
-                        }
+                            pSearchSecond.push_back(nodes[n]);
                     }
 
                     // 1. Search up until we hit the top of the document
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pNotBelowElement, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark);
                     if (pTextNd)
                     {
                         break;
@@ -1547,7 +1588,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                     // 2. Search down until we hit the bottom of the document
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pBelowElement, rRefMark);
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark);
                     if (pTextNd)
                     {
                         break;
@@ -1555,14 +1596,14 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                     // Again, we need to remember that Word styles are not case sensitive
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pNotBelowElement, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchFirst, rRefMark,
                                                    false /* bCaseSensitive */);
                     if (pTextNd)
                     {
                         break;
                     }
 
-                    pTextNd = SearchForStyleAnchor(pSelf, pBelowElement, rRefMark,
+                    pTextNd = SearchForStyleAnchor(pSelf, pSearchSecond, rRefMark,
                                                    false /* bCaseSensitive */);
                     break;
                 }

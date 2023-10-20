@@ -2405,7 +2405,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 // Destination Rectangle
                 const SwGetRefField* pField = static_cast<SwGetRefField*>(pFormatField->GetField());
                 const OUString& rRefName = pField->GetSetRefName();
-                mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo() );
+                mrSh.GotoRefMark( rRefName, pField->GetSubType(), pField->GetSeqNo(), pField->GetFlags() );
                 const SwRect& rDestRect = mrSh.GetCharRect();
 
                 const SwPageFrame* pCurrPage = static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
