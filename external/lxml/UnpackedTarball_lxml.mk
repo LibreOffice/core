@@ -13,7 +13,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,lxml,$(LXML_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,lxml, \
 	external/lxml/0001-Make-regexp-string-raw-to-correct-its-escape-sequenc.patch.1 \
-	external/lxml/replace-setuptools-with-distutils.patch.0 \
+	external/lxml/replace-setuptools-with-distutils.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
