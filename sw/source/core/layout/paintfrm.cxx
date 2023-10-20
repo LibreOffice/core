@@ -3515,7 +3515,10 @@ void SwRootFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
                 // fdo#42750: delay painting these until after subsidiary lines
                 // fdo#45562: delay painting these until after hell layer
                 // fdo#47717: but do it before heaven layer
-                ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
+                {
+                    SwTaggedPDFHelper tag(nullptr, nullptr, nullptr, rRenderContext);
+                    ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
+                }
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
