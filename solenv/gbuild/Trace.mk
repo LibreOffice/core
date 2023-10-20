@@ -25,6 +25,10 @@
 gb_TRACE :=
 ifneq ($(GBUILD_TRACE),)
 gb_TRACE := $(abspath $(GBUILD_TRACE))
+ifeq ($(OS),WNT)
+# abspath turns it into a windows-style path, but the build needs unix-style
+gb_TRACE := $(shell cygpath -u $(gb_TRACE))
+endif
 endif
 
 ifneq ($(gb_TRACE),)
