@@ -13,6 +13,7 @@ $(eval $(call gb_Library_set_plugin_for_nodep,localedata_es,i18npool))
 
 $(eval $(call gb_Library_use_libraries,localedata_es,\
 	localedata_en \
+	sal \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,localedata_es,\
