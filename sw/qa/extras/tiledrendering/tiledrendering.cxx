@@ -1690,9 +1690,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     m_nRedlineTableEntryModified = 0;
     pWrtShell->DelLeft();
 
-    // Assert that we get exactly two notification about the redline update.
+    // Assert that we get exactly one notification about the redline update.
     // This was 0, as LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED wasn't sent.
-    CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
+    CPPUNIT_ASSERT_EQUAL(1, m_nRedlineTableEntryModified);
 
     // Turn off the change tracking mode, make some modification to left of the
     // redline so that its position changes
@@ -1701,18 +1701,18 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testRedlineUpdateCallback)
     pWrtShell->Insert("This text is left of the redline");
 
     // Position of the redline has changed => Modify callback
-    CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
+    CPPUNIT_ASSERT_EQUAL(2, m_nRedlineTableEntryModified);
 
     pWrtShell->DelLeft();
     // Deletion also emits Modify callback
-    CPPUNIT_ASSERT_EQUAL(4, m_nRedlineTableEntryModified);
+    CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 
     // Make changes to the right of the redline => no position change in redline
     pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 100/*Go enough right */, /*bBasicCall=*/false);
     pWrtShell->Insert("This text is right of the redline");
 
     // No Modify callbacks
-    CPPUNIT_ASSERT_EQUAL(4, m_nRedlineTableEntryModified);
+    CPPUNIT_ASSERT_EQUAL(3, m_nRedlineTableEntryModified);
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)

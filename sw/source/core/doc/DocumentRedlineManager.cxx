@@ -1798,8 +1798,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         delete pNewRedl;
                         pNewRedl = nullptr;
 
-                        if (!bDec)
-                            MaybeNotifyRedlineModification(*pRedl, m_rDoc);
+                        // No need to call MaybeNotifyRedlineModification, because a notification
+                        // was already sent in DocumentRedlineManager::DeleteRedline
                         break;
 
                     case SwComparePosition::Outside:
