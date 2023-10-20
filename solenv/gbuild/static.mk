@@ -184,7 +184,7 @@ $(if $(filter-out GBUILD_TOUCHED,$(call gb_LinkTarget__get_all_statics,$(1))),
 $(if $(filter icui18n icuuc,$(call gb_LinkTarget__get_all_externals,$(1))),
     $(call gb_LinkTarget_use_externals,$(1),icudata))
 $(if $(filter orcus-parser,$(call gb_LinkTarget__get_all_externals,$(1))),
-    $(call gb_LinkTarget_use_static_libraries,$(1),boost_filesystem))
+    $(call gb_LinkTarget_use_static_libraries,$(1),boost_filesystem boost_iostreams))
 
 $(if $(gb_DEBUG_STATIC),
     $(info gb_LinkTarget__expand_executable libraries for $(call gb_LinkTarget__get_workdir_linktargetname,$(1)): $(call gb_LinkTarget__get_all_libraries,$(1)))
