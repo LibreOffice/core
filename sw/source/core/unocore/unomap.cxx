@@ -852,6 +852,7 @@ o3tl::span<const SfxItemPropertyMapEntry> SwUnoPropertyMapProvider::GetPropertyM
                     {UNO_NAME_CURRENT_PRESENTATION, FIELD_PROP_PAR3, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},
                     {UNO_NAME_REFERENCE_FIELD_PART,FIELD_PROP_USHORT1, cppu::UnoType<sal_Int16>::get(),  PROPERTY_NONE,  0},
                     {UNO_NAME_REFERENCE_FIELD_SOURCE,FIELD_PROP_USHORT2, cppu::UnoType<sal_Int16>::get(),    PROPERTY_NONE,  0},
+                    {UNO_NAME_REFERENCE_FIELD_FLAGS, FIELD_PROP_USHORT3, cppu::UnoType<sal_uInt16>::get(),  PROPERTY_NONE,  0},
                     {UNO_NAME_SEQUENCE_NUMBER,    FIELD_PROP_SHORT1,  cppu::UnoType<sal_Int16>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_SOURCE_NAME,        FIELD_PROP_PAR1,    cppu::UnoType<OUString>::get(),   PROPERTY_NONE, 0},
                     {UNO_NAME_REFERENCE_FIELD_LANGUAGE, FIELD_PROP_PAR4, cppu::UnoType<OUString>::get(),  PROPERTY_NONE, 0},

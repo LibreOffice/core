@@ -3322,6 +3322,17 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     break;
                 case ww::eSTYLEREF:
                     sExtraFlags = ""; // styleref fields do not work if they have a hyperlink
+
+                    {
+                        sal_uInt16 stylerefFlags = ((SwGetRefField*)pField)->GetFlags();
+                        if ((stylerefFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM) {
+                            sExtraFlags += "\\l ";
+                        }
+                        if ((stylerefFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) {
+                            sExtraFlags += "\\t ";
+                        }
+                    }
+
                     [[fallthrough]];
                 default:
                     switch (pField->GetFormat())

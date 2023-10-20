@@ -126,6 +126,9 @@
 #include <unicode/errorcode.h>
 #include <unicode/regex.h>
 
+#define REFFLDFLAG_STYLE_FROM_BOTTOM 0xc100
+#define REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL 0xc200
+
 using namespace ::com::sun::star;
 using namespace oox;
 namespace writerfilter::dmapper{
@@ -7419,6 +7422,21 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                             xFieldProperties->setPropertyValue(
                                 getPropertyName(PROP_SOURCE_NAME), aStyleDisplayName);
+
+                            sal_uInt16 nFlags = 0;
+                            OUString sValue;
+                            if( lcl_FindInCommand( pContext->GetCommand(), 'l', sValue ))
+                            {
+                                //search-below-first
+                                nFlags |= REFFLDFLAG_STYLE_FROM_BOTTOM;
+                            }
+                            if( lcl_FindInCommand( pContext->GetCommand(), 't', sValue ))
+                            {
+                                //suppress-nondelimiter
+                                nFlags |= REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL;
+                            }
+                            xFieldProperties->setPropertyValue(
+                                    getPropertyName( PROP_REFERENCE_FIELD_FLAGS ), uno::Any(nFlags) );
                         }
                         else
                         {

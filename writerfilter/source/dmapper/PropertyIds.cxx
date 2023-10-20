@@ -255,6 +255,7 @@ const OUString & getPropertyName( PropertyIds eId )
         { PROP_TABS_RELATIVE_TO_INDENT, u"TabsRelativeToIndent"},
         { PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES, u"CreateFromLevelParagraphStyles"},
         { PROP_DROP_CAP_FORMAT, u"DropCapFormat"},
+        { PROP_REFERENCE_FIELD_FLAGS, u"ReferenceFieldFlags"},
         { PROP_REFERENCE_FIELD_PART, u"ReferenceFieldPart"},
         { PROP_SOURCE_NAME, u"SourceName"},
         { PROP_REFERENCE_FIELD_SOURCE, u"ReferenceFieldSource"},

@@ -1055,6 +1055,7 @@ struct SwFieldProperties_Impl
     sal_Int32       nFormat;
     sal_uInt16      nUSHORT1;
     sal_uInt16      nUSHORT2;
+    sal_uInt16      nUSHORT3;
     sal_Int16       nSHORT1;
     sal_Int8        nByte1;
     bool            bFormatIsDefault;
@@ -1070,6 +1071,7 @@ struct SwFieldProperties_Impl
         nFormat(0),
         nUSHORT1(0),
         nUSHORT2(0),
+        nUSHORT3(0),
         nSHORT1(0),
         nByte1(0),
         bFormatIsDefault(true),
@@ -1538,6 +1540,8 @@ void SAL_CALL SwXTextField::attach(
                 xField->PutValue(aVal, FIELD_PROP_USHORT1 );
                 aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
                 xField->PutValue(aVal, FIELD_PROP_USHORT2 );
+                aVal <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT3);
+                xField->PutValue(aVal, FIELD_PROP_USHORT3 );
                 aVal <<= m_pImpl->m_pProps->nSHORT1;
                 xField->PutValue(aVal, FIELD_PROP_SHORT1 );
             }
@@ -2281,13 +2285,16 @@ SwXTextField::setPropertyValue(
         break;
         case FIELD_PROP_USHORT1:
         case FIELD_PROP_USHORT2:
+        case FIELD_PROP_USHORT3:
             {
                 sal_Int16 nVal = 0;
                 rValue >>= nVal;
                 if( FIELD_PROP_USHORT1 == pEntry->nWID)
                     m_pImpl->m_pProps->nUSHORT1 = nVal;
-                else
+                else if( FIELD_PROP_USHORT2 == pEntry->nWID)
                     m_pImpl->m_pProps->nUSHORT2 = nVal;
+                else
+                    m_pImpl->m_pProps->nUSHORT3 = nVal;
             }
             break;
         case FIELD_PROP_SHORT1:
@@ -2486,6 +2493,9 @@ uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
                 break;
             case FIELD_PROP_USHORT2:
                 aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT2);
+                break;
+            case FIELD_PROP_USHORT3:
+                aRet <<= static_cast<sal_Int16>(m_pImpl->m_pProps->nUSHORT3);
                 break;
             case FIELD_PROP_SHORT1:
                 aRet <<= m_pImpl->m_pProps->nSHORT1;

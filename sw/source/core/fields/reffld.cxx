@@ -975,6 +975,9 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             rAny <<= nSource;
         }
         break;
+    case FIELD_PROP_USHORT3:
+        rAny <<= m_nFlags;
+        break;
     case FIELD_PROP_PAR1:
     {
         OUString sTmp(GetPar1());
@@ -1076,6 +1079,13 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_PAR4:
         rAny >>= m_sSetReferenceLanguage;
+        break;
+    case FIELD_PROP_USHORT3:
+        {
+            sal_uInt16 nSetFlags = 0;
+            rAny >>= nSetFlags;
+            m_nFlags = nSetFlags;
+        }
         break;
     case FIELD_PROP_SHORT1:
         {

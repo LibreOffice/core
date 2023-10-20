@@ -62,6 +62,10 @@ published service GetReference
         </p>
      */
     [optional, property] string ReferenceFieldLanguage;
+    /** contains extra flags which can modify the behaviour of the field
+        @since LibreOffice 24.2
+     */
+    [optional, property] short ReferenceFieldFlags;
 };
 
 
