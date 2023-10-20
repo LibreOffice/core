@@ -799,7 +799,7 @@ Size ImpGraphic::getPrefSize() const
                            aSize = Size(basegfx::fround(rRange.getWidth() / 20.0f), basegfx::fround(rRange.getHeight() / 20.0f));
                         else
 #endif
-                        aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
+                            aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
                     }
                     else
                     {
