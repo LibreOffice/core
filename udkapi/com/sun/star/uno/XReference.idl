@@ -22,7 +22,7 @@
  module com {  module sun {  module star {  module uno {
 
 /** must be implemented by anyone who holds the adapter on the client side.@see XWeak
-        for description af concepts.
+        for description of concepts.
  */
 published interface XReference: com::sun::star::uno::XInterface
 {
