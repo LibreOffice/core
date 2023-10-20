@@ -524,6 +524,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 
         if ( ( rFrame.IsPageFrame() && !static_cast<const SwPageFrame&>(rFrame).GetPrev() ) ||
              ( rFrame.IsFlowFrame() && !SwFlowFrame::CastFlowFrame(&rFrame)->IsFollow() && SwFlowFrame::CastFlowFrame(&rFrame)->HasFollow() ) ||
+             rFrame.IsSctFrame() || // all of them, so that opening parent sections works
              ( rFrame.IsTextFrame() && rFrame.GetDrawObjs() ) ||
              (rFrame.IsFootnoteFrame() && static_cast<SwFootnoteFrame const&>(rFrame).GetFollow()) ||
              ( rFrame.IsRowFrame() && rFrame.IsInSplitTableRow() ) ||
@@ -665,6 +666,12 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bRowSpan = true;
                 break;
 
+            case vcl::PDFWriter::Caption:
+                if (pFrame->IsSctFrame())
+                {
+                    break;
+                }
+                [[fallthrough]];
             case vcl::PDFWriter::H1 :
             case vcl::PDFWriter::H2 :
             case vcl::PDFWriter::H3 :
@@ -673,7 +680,6 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
             case vcl::PDFWriter::H6 :
             case vcl::PDFWriter::Paragraph :
             case vcl::PDFWriter::Heading :
-            case vcl::PDFWriter::Caption :
             case vcl::PDFWriter::BlockQuote :
 
                 bPlacement =
@@ -1270,6 +1276,11 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                     // when it is interrupted by nested section - reopen!
                     OpenTagImpl(pSection);
                     break;
+                }
+                else if (SectionType::ToxHeader == pSection->GetType())
+                {
+                    nPDFType = vcl::PDFWriter::Caption;
+                    aPDFType = aCaptionString;
                 }
                 else if (SectionType::ToxContent == pSection->GetType())
                 {
