@@ -312,6 +312,7 @@ $(call gb_LinkTarget_use_system_win32_libs,$(1),\
 	kernel32 \
 	shlwapi \
 	crypt32 \
+	bcrypt \
 )
 
 endef
