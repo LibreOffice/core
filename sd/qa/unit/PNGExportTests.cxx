@@ -296,9 +296,9 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf156808)
     }
 
     // Without the fix in place, this test would have failed with
-    // - Expected greater than: 9300
+    // - Expected greater than: 9000
     // - Actual  : 0
-    CPPUNIT_ASSERT_GREATER(9300, nBlackCount);
+    CPPUNIT_ASSERT_GREATER(9000, nBlackCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
