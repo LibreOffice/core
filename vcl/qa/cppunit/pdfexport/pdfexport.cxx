@@ -1357,6 +1357,42 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf156685)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    saveAsPDF(u"tdf156685.docx");
+
+    // Parse the export result with pdfium.
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    auto pPage = pPdfDocument->openPage(0);
+    CPPUNIT_ASSERT(pPage);
+
+    int nPageObjectCount = pPage->getObjectCount();
+
+    CPPUNIT_ASSERT_EQUAL(9, nPageObjectCount);
+
+    auto pTextPage = pPage->getTextPage();
+
+    for (int i = 0; i < nPageObjectCount; ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pPageObject = pPage->getObject(i);
+        if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
+            continue;
+
+        CPPUNIT_ASSERT_EQUAL(11.0, pPageObject->getFontSize());
+        CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFTextRenderMode::Fill, pPageObject->getTextRenderMode());
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: rgba[000000ff]
+        // - Actual  : rgba[ffffffff]
+        CPPUNIT_ASSERT_EQUAL(COL_BLACK, pPageObject->getFillColor());
+    }
+}
+
 /// Test writing ToUnicode CMAP for doubly encoded glyphs.
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
 {
