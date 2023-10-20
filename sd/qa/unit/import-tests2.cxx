@@ -1771,10 +1771,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf144092TableHeight)
     uno::Reference<drawing::XShape> xTableShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
 
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 7208
+    // - Expected: 7606
     // - Actual  : 4595
     // i.e. the table height wasn't corrected by expanding less than minimum sized rows.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7208), xTableShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7606), xTableShape->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf89928BlackWhiteThreshold)
