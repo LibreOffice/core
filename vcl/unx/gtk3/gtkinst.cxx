@@ -17257,6 +17257,12 @@ IMPL_LINK_NOARG(GtkInstanceIconView, async_signal_selection_changed, void*, void
 
 namespace {
 
+void signalDestroyFlag(GtkWidget*, gpointer destroyed)
+{
+    bool* pDestroyed = static_cast<bool*>(destroyed);
+    *pDestroyed = true;
+}
+
 class GtkInstanceSpinButton : public GtkInstanceEditable, public virtual weld::SpinButton
 {
 private:
@@ -17311,7 +17317,12 @@ private:
 
     virtual void signal_activate() override
     {
+        bool bActivateDestroy(false);
+        gulong nDestroySignalId = g_signal_connect(m_pButton, "destroy", G_CALLBACK(signalDestroyFlag), &bActivateDestroy);
         gtk_spin_button_update(m_pButton);
+        if (bActivateDestroy)
+            return;
+        g_signal_handler_disconnect(m_pButton, nDestroySignalId);
         GtkInstanceEditable::signal_activate();
     }
 
