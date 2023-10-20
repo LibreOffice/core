@@ -1520,6 +1520,8 @@ ref-name
 reference
 reference-end
 reference-format
+reference-from-bottom
+reference-hide-non-numerical
 reference-mark
 reference-mark-end
 reference-mark-start
