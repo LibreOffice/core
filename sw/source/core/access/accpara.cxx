@@ -1905,7 +1905,6 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
         pos = pFrame->MapViewToModel(nCorePos + TextFrameIndex(1)); // try this one instead
         assert(pos.first->Len() != pos.second);
     }
-    const SwTextNode *const pTextNode(pos.first);
 
     sal_Int32 nValues = rValues.size();
     for (sal_Int32 i = 0;  i < nValues;  ++i)
@@ -1962,47 +1961,9 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
             continue;
         }
 
-        // UnderLine
-        if (rValue.Name == UNO_NAME_CHAR_UNDERLINE)
-        {
-            //misspelled word
-            SwCursorShell* pCursorShell = GetCursorShell();
-            if( pCursorShell != nullptr && pCursorShell->GetViewOptions() && pCursorShell->GetViewOptions()->IsOnlineSpell())
-            {
-                const SwWrongList* pWrongList = pTextNode->GetWrong();
-                if( nullptr != pWrongList )
-                {
-                    sal_Int32 nBegin = pos.second;
-                    sal_Int32 nLen = 1;
-                    if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
-                    {
-                        rValue.Value <<= sal_uInt16(LINESTYLE_WAVE);
-                    }
-                }
-            }
-            continue;
-        }
-
         // UnderLineColor
         if (rValue.Name == UNO_NAME_CHAR_UNDERLINE_COLOR)
         {
-            //misspelled word
-            SwCursorShell* pCursorShell = GetCursorShell();
-            if( pCursorShell != nullptr && pCursorShell->GetViewOptions() && pCursorShell->GetViewOptions()->IsOnlineSpell())
-            {
-                const SwWrongList* pWrongList = pTextNode->GetWrong();
-                if( nullptr != pWrongList )
-                {
-                    sal_Int32 nBegin = pos.second;
-                    sal_Int32 nLen = 1;
-                    if (pWrongList->InWrongWord(nBegin, nLen) && !pTextNode->IsSymbolAt(nBegin))
-                    {
-                        rValue.Value <<= sal_Int32(0x00ff0000);
-                        continue;
-                    }
-                }
-            }
-
             uno::Any &anyChar = rValue.Value;
             sal_uInt32 crUnderline = static_cast<sal_uInt32>( reinterpret_cast<sal_uIntPtr>(anyChar.pReserved));
             if ( COL_AUTO == Color(ColorTransparency, crUnderline) )
