@@ -562,7 +562,7 @@ std::shared_ptr<SalBitmap> SvpGraphicsBackend::getBitmap(tools::Long nX, tools::
         ePixelFormat = vcl::PixelFormat::N32_BPP;
     }
 
-    if (!pBitmap->Create(Size(nWidth, nHeight), ePixelFormat, aPal))
+    if (!pBitmap->ImplCreate(Size(nWidth, nHeight), ePixelFormat, aPal, false))
     {
         SAL_WARN("vcl.gdi", "SvpSalGraphics::getBitmap, cannot create bitmap");
         return nullptr;

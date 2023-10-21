@@ -46,7 +46,8 @@ SvpSalBitmap::~SvpSalBitmap()
 static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
     const Size& rSize,
     vcl::PixelFormat ePixelFormat,
-    const BitmapPalette& rPal)
+    const BitmapPalette& rPal,
+    bool bClear)
 {
     if (!rSize.Width() || !rSize.Height())
         return nullptr;
@@ -128,6 +129,7 @@ static std::unique_ptr<BitmapBuffer> ImplCreateDIB(
         }
         else
 #endif
+        if (bClear)
         {
             std::memset(pDIB->mpBits, 0, size);
         }
@@ -146,11 +148,17 @@ void SvpSalBitmap::Create(std::unique_ptr<BitmapBuffer> pBuf)
     mpDIB = std::move(pBuf);
 }
 
-bool SvpSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
+bool SvpSalBitmap::ImplCreate(const Size& rSize, vcl::PixelFormat ePixelFormat,
+                              const BitmapPalette& rPal, bool bClear)
 {
     Destroy();
-    mpDIB = ImplCreateDIB(rSize, ePixelFormat, rPal);
+    mpDIB = ImplCreateDIB(rSize, ePixelFormat, rPal, bClear);
     return mpDIB != nullptr;
+}
+
+bool SvpSalBitmap::Create(const Size& rSize, vcl::PixelFormat ePixelFormat, const BitmapPalette& rPal)
+{
+    return ImplCreate(rSize, ePixelFormat, rPal, true);
 }
 
 bool SvpSalBitmap::Create(const SalBitmap& rBmp)
