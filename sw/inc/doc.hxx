@@ -1445,6 +1445,7 @@ public:
     // restore the invisible content if it's available on the undo stack
     bool RestoreInvisibleContent();
 
+    // Replace fields by text - mailmerge support
     SAL_DLLPRIVATE bool ConvertFieldsToText(SwRootFrame const& rLayout);
 
     // Create sub-documents according to given collection.
