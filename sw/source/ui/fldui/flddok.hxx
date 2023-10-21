@@ -35,7 +35,7 @@ class SwFieldDokPage : public SwFieldPage
     std::unique_ptr<weld::Label> m_xValueFT;
     std::unique_ptr<weld::Entry> m_xValueED;
     std::unique_ptr<weld::Label> m_xLevelFT;
-    std::unique_ptr<weld::SpinButton> m_xLevelED;
+    std::unique_ptr<weld::ComboBox> m_xLevelED;
     std::unique_ptr<weld::Label> m_xDateFT;
     std::unique_ptr<weld::Label> m_xTimeFT;
     std::unique_ptr<weld::SpinButton> m_xDateOffsetED;

@@ -42,7 +42,7 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     , m_xValueFT(m_xBuilder->weld_label("valueft"))
     , m_xValueED(m_xBuilder->weld_entry("value"))
     , m_xLevelFT(m_xBuilder->weld_label("levelft"))
-    , m_xLevelED(m_xBuilder->weld_spin_button("level"))
+    , m_xLevelED(m_xBuilder->weld_combo_box("level"))
     , m_xDateFT(m_xBuilder->weld_label("daysft"))
     , m_xTimeFT(m_xBuilder->weld_label("minutesft"))
     , m_xDateOffsetED(m_xBuilder->weld_spin_button("offset"))
@@ -65,7 +65,10 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldDokPage, TreeViewInsertHdl));
     m_xNumFormatLB->connect_row_activated(LINK(this, SwFieldDokPage, NumFormatHdl));
 
-    m_xLevelED->set_max(MAXLEVEL);
+    for (sal_uInt16 i = 1; i <= MAXLEVEL; i++)
+        m_xLevelED->append_text(OUString::number(i));
+
+    m_xLevelED->set_active(0);
     m_xDateOffsetED->set_range(INT_MIN, INT_MAX);
     //enable 'active' language selection
     m_xNumFormatLB->SetShowLanguageControl(true);
@@ -356,7 +359,7 @@ IMPL_LINK_NOARG(SwFieldDokPage, TypeHdl, weld::TreeView&, void)
         case SwFieldTypesEnum::Chapter:
             m_xValueFT->set_label(SwResId(STR_LEVEL));
             if (IsFieldEdit())
-                m_xLevelED->set_text(OUString::number(static_cast<SwChapterField*>(GetCurField())->GetLevel(GetWrtShell()->GetLayout()) + 1));
+                m_xLevelED->set_active(static_cast<SwChapterField*>(GetCurField())->GetLevel(GetWrtShell()->GetLayout()));
             bLevel = true;
             break;
 
@@ -598,7 +601,7 @@ bool SwFieldDokPage::FillItemSet(SfxItemSet* )
         }
 
         case SwFieldTypesEnum::Chapter:
-            aVal = m_xLevelED->get_text();
+            aVal = OUString::number(m_xLevelED->get_active());
             break;
 
         default:
