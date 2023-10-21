@@ -1437,7 +1437,7 @@ public:
     // restore the invisible content if it's available on the undo stack
     bool RestoreInvisibleContent();
 
-    bool ConvertFieldsToText(SwRootFrame const& rLayout);
+    SAL_DLLPRIVATE bool ConvertFieldsToText(SwRootFrame const& rLayout);
 
     // Create sub-documents according to given collection.
     // If no collection is given, use chapter styles for 1st level.
