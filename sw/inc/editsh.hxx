@@ -190,7 +190,7 @@ public:
     void CountWords( SwDocStat& rStat ) const;
 
     /// Replace fields by text - mailmerge support.
-    bool ConvertFieldsToText();
+    SAL_DLLPRIVATE bool ConvertFieldsToText();
 
     /// Set all numbering start points to a fixed value - mailmerge support.
     void SetNumberingRestart();
