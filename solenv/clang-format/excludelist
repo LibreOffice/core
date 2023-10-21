@@ -7691,7 +7691,6 @@ sal/rtl/digest.cxx
 sal/rtl/hash.cxx
 sal/rtl/hash.hxx
 sal/rtl/locale.cxx
-sal/rtl/math.cxx
 sal/rtl/random.cxx
 sal/rtl/rtl_process.cxx
 sal/rtl/strbuf.cxx
