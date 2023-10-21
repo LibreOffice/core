@@ -13,6 +13,7 @@ $(eval $(call gb_Library_set_plugin_for_nodep,localedata_others,i18npool))
 
 $(eval $(call gb_Library_use_libraries,localedata_others,\
 	localedata_en \
+	sal \
 ))
 
 $(eval $(call gb_Library_use_common_precompiled_header,localedata_others))
