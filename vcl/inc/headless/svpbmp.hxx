@@ -32,6 +32,11 @@ public:
              SvpSalBitmap();
     virtual ~SvpSalBitmap() override;
 
+    bool        ImplCreate(const Size& rSize,
+                           vcl::PixelFormat ePixelFormat,
+                           const BitmapPalette& rPalette,
+                           bool bClear);
+
     // SalBitmap
     virtual bool            Create(const Size& rSize,
                                    vcl::PixelFormat ePixelFormat,
