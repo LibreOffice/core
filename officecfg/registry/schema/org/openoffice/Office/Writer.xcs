@@ -5984,6 +5984,12 @@
           </prop>
         </group>
       </group>
+      <prop oor:name="ConvertToTextOnlyMMFields" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>When true, only fields that can be used in mail merge will be converted to text; all other fields will be kept as fields in the Mail Merge output</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Misc">
       <info>
