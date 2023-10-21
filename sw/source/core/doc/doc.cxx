@@ -53,6 +53,8 @@
 #include <editeng/pbinitem.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <officecfg/Office/Writer.hxx>
+
 #include <swatrset.hxx>
 #include <swmodule.hxx>
 #include <fmtrfmrk.hxx>
@@ -1618,11 +1620,31 @@ bool SwDoc::RestoreInvisibleContent()
     return false;
 }
 
+static bool IsMailMergeField(SwFieldIds fieldId)
+{
+    switch (fieldId)
+    {
+        case SwFieldIds::Database: // Mail merge fields
+        case SwFieldIds::DatabaseName: // Database name
+        case SwFieldIds::HiddenText: // Hidden text may use database fields in condition
+        case SwFieldIds::HiddenPara: // Hidden paragraph may use database fields in condition
+        case SwFieldIds::DbNextSet: // Moving to next mail merge record
+        case SwFieldIds::DbNumSet: // Moving to a specific mail merge record
+        case SwFieldIds::DbSetNumber: // Number of current mail merge record
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 {
     bool bRet = false;
     getIDocumentFieldsAccess().LockExpFields();
     GetIDocumentUndoRedo().StartUndo( SwUndoId::UI_REPLACE, nullptr );
+
+    const bool bOnlyConvertDBFields
+        = officecfg::Office::Writer::FormLetter::ConvertToTextOnlyMMFields::get();
 
     const SwFieldTypes* pMyFieldTypes = getIDocumentFieldsAccess().GetFieldTypes();
     const SwFieldTypes::size_type nCount = pMyFieldTypes->size();
@@ -1632,6 +1654,9 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
         const SwFieldType *pCurType = (*pMyFieldTypes)[nType - 1].get();
 
         if ( SwFieldIds::Postit == pCurType->Which() )
+            continue;
+
+        if (bOnlyConvertDBFields && !IsMailMergeField(pCurType->Which()))
             continue;
 
         std::vector<SwFormatField*> vFieldFormats;
@@ -1644,67 +1669,66 @@ bool SwDoc::ConvertFieldsToText(SwRootFrame const& rLayout)
 
             bool bSkip = !pTextField ||
                          !pTextField->GetpTextNode()->GetNodes().IsDocNodes();
+            if (bSkip)
+                continue;
 
-            if (!bSkip)
+            bool bInHeaderFooter = IsInHeaderFooter(*pTextField->GetpTextNode());
+            const SwFormatField& rFormatField = pTextField->GetFormatField();
+            const SwField*  pField = rFormatField.GetField();
+
+            //#i55595# some fields have to be excluded in headers/footers
+            SwFieldIds nWhich = pField->GetTyp()->Which();
+            if(!bInHeaderFooter ||
+                    (nWhich != SwFieldIds::PageNumber &&
+                    nWhich != SwFieldIds::Chapter &&
+                    nWhich != SwFieldIds::GetExp&&
+                    nWhich != SwFieldIds::SetExp&&
+                    nWhich != SwFieldIds::Input&&
+                    nWhich != SwFieldIds::RefPageGet&&
+                    nWhich != SwFieldIds::RefPageSet))
             {
-                bool bInHeaderFooter = IsInHeaderFooter(*pTextField->GetpTextNode());
-                const SwFormatField& rFormatField = pTextField->GetFormatField();
-                const SwField*  pField = rFormatField.GetField();
+                OUString sText = pField->ExpandField(true, &rLayout);
 
-                //#i55595# some fields have to be excluded in headers/footers
-                SwFieldIds nWhich = pField->GetTyp()->Which();
-                if(!bInHeaderFooter ||
-                        (nWhich != SwFieldIds::PageNumber &&
-                        nWhich != SwFieldIds::Chapter &&
-                        nWhich != SwFieldIds::GetExp&&
-                        nWhich != SwFieldIds::SetExp&&
-                        nWhich != SwFieldIds::Input&&
-                        nWhich != SwFieldIds::RefPageGet&&
-                        nWhich != SwFieldIds::RefPageSet))
+                // database fields should not convert their command into text
+                if( SwFieldIds::Database == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
+                    sText.clear();
+
+                SwPaM aInsertPam(*pTextField->GetpTextNode(), pTextField->GetStart());
+                aInsertPam.SetMark();
+
+                // go to the end of the field
+                const SwTextField *pFieldAtEnd = sw::DocumentFieldsManager::GetTextFieldAtPos(*aInsertPam.End());
+                if (pFieldAtEnd && pFieldAtEnd->Which() == RES_TXTATR_INPUTFIELD)
                 {
-                    OUString sText = pField->ExpandField(true, &rLayout);
-
-                    // database fields should not convert their command into text
-                    if( SwFieldIds::Database == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
-                        sText.clear();
-
-                    SwPaM aInsertPam(*pTextField->GetpTextNode(), pTextField->GetStart());
-                    aInsertPam.SetMark();
-
-                    // go to the end of the field
-                    const SwTextField *pFieldAtEnd = sw::DocumentFieldsManager::GetTextFieldAtPos(*aInsertPam.End());
-                    if (pFieldAtEnd && pFieldAtEnd->Which() == RES_TXTATR_INPUTFIELD)
-                    {
-                        SwPosition &rEndPos = *aInsertPam.GetPoint();
-                        rEndPos.SetContent( SwCursorShell::EndOfInputFieldAtPos( *aInsertPam.End() ) );
-                    }
-                    else
-                    {
-                        aInsertPam.Move();
-                    }
-
-                    // first insert the text after field to keep the field's attributes,
-                    // then delete the field
-                    if (!sText.isEmpty())
-                    {
-                        // to keep the position after insert
-                        SwPaM aDelPam( *aInsertPam.GetMark(), *aInsertPam.GetPoint() );
-                        aDelPam.Move( fnMoveBackward );
-                        aInsertPam.DeleteMark();
-
-                        getIDocumentContentOperations().InsertString( aInsertPam, sText );
-
-                        aDelPam.Move();
-                        // finally remove the field
-                        getIDocumentContentOperations().DeleteAndJoin( aDelPam );
-                    }
-                    else
-                    {
-                        getIDocumentContentOperations().DeleteAndJoin( aInsertPam );
-                    }
-
-                    bRet = true;
+                    SwPosition &rEndPos = *aInsertPam.GetPoint();
+                    rEndPos.SetContent( SwCursorShell::EndOfInputFieldAtPos( *aInsertPam.End() ) );
                 }
+                else
+                {
+                    aInsertPam.Move();
+                }
+
+                // first insert the text after field to keep the field's attributes,
+                // then delete the field
+                if (!sText.isEmpty())
+                {
+                    // to keep the position after insert
+                    SwPaM aDelPam( *aInsertPam.GetMark(), *aInsertPam.GetPoint() );
+                    aDelPam.Move( fnMoveBackward );
+                    aInsertPam.DeleteMark();
+
+                    getIDocumentContentOperations().InsertString( aInsertPam, sText );
+
+                    aDelPam.Move();
+                    // finally remove the field
+                    getIDocumentContentOperations().DeleteAndJoin( aDelPam );
+                }
+                else
+                {
+                    getIDocumentContentOperations().DeleteAndJoin( aInsertPam );
+                }
+
+                bRet = true;
             }
         }
     }
