@@ -430,7 +430,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="docproperties">
-                        <property name="label" translatable="yes" context="securityoptionsdialog|docproperties">Keep document user informations</property>
+                        <property name="label" translatable="yes" context="securityoptionsdialog|docproperties">Keep document user information</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
