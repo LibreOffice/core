@@ -19,16 +19,11 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
@@ -40,7 +35,6 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 
 #include <comphelper/propertyvalue.hxx>
