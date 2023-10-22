@@ -147,7 +147,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlHeaderPDFExport)
 
 CPPUNIT_TEST_FIXTURE(Test, testSplitFlyAnchorLeftMargin)
 {
-    // Given a document with a floating table, anchor para is followed by an other para with a left
+    // Given a document with a floating table, anchor para is followed by another para with a left
     // margin:
     createSwDoc("floattable-anchor-left-margin.docx");
 
