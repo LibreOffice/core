@@ -54,7 +54,7 @@ public:
     /** Converts UNO text attribute properties to a string holding
      *  the corresponding IAccessible2 text attributes.
      * @param rUnoAttributes A sequence holding the UNO text attributes.
-     * @param eAttributeType: Thy type(s) of attributes of interest.
+     * @param eAttributeType: The type(s) of attributes of interest.
      * @returns String holding the corresponding IAccessible2 text properties.
      */
     static OUString ConvertUnoToIAccessible2TextAttributes(
@@ -64,7 +64,7 @@ public:
     /**
      * Get the IAccessible2 text attributes and the span of the attributes at the given index.
      * @param xText The interface to query for the information.
-     * @param eAttributeType: Thy type(s) of attributes of interest.
+     * @param eAttributeType: The type(s) of attributes of interest.
      * @param nOffset Character offset for which to retrieve the information.
      * @param rStartOffset Out param that is set to the start index of the attribute run.
      * @param rEndOffset Out param that is set to the end index of the attribute run.
