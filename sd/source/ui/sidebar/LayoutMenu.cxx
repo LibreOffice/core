@@ -529,21 +529,23 @@ void LayoutMenu::Fill()
     }
 
     Clear();
-    for (size_t i = 0; i < pInfo.size(); i++)
+    sal_uInt16 id = 1;
+    for (const auto& elem : pInfo)
     {
-        if ((WritingMode_TB_RL != pInfo[i].meWritingMode) || bVertical)
+        if ((WritingMode_TB_RL != elem.meWritingMode) || bVertical)
         {
-            Image aImg(OUString::Concat("private:graphicrepository/") + pInfo[i].msBmpResId);
+            Image aImg(OUString::Concat("private:graphicrepository/") + elem.msBmpResId);
 
-            if (bRightToLeft && (WritingMode_TB_RL != pInfo[i].meWritingMode))
+            if (bRightToLeft && (WritingMode_TB_RL != elem.meWritingMode))
             { // FIXME: avoid interpolating RTL layouts.
                 BitmapEx aRTL = aImg.GetBitmapEx();
                 aRTL.Mirror(BmpMirrorFlags::Horizontal);
                 aImg = Image(aRTL);
             }
 
-            mxLayoutValueSet->InsertItem(i + 1, aImg, SdResId(pInfo[i].mpStrResId));
-            mxLayoutValueSet->SetItemData(i + 1, new AutoLayout(pInfo[i].maAutoLayout));
+            mxLayoutValueSet->InsertItem(id, aImg, SdResId(elem.mpStrResId));
+            mxLayoutValueSet->SetItemData(id, new AutoLayout(elem.maAutoLayout));
+            ++id;
         }
     }
 }
