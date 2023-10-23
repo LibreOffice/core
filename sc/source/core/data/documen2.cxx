@@ -1042,6 +1042,8 @@ sal_uLong ScDocument::TransferTab( ScDocument& rSrcDoc, SCTAB nSrcPos,
             maTabs[nDestPos]->SetPrintEntireSheet();
         else
         {
+            // tdf#157897 - clear print ranges before adding additional ones
+            maTabs[nDestPos]->ClearPrintRanges();
             const auto nPrintRangeCount = rSrcDoc.maTabs[nSrcPos]->GetPrintRangeCount();
             for (auto nPos = 0; nPos < nPrintRangeCount; nPos++)
             {
