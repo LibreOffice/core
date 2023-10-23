@@ -1246,7 +1246,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     HtmlFrmOpts nFrameOpts;
 
     // if possible output a line break before the "object"
-    if( rHTMLWrt.m_bLFPossible )
+    if (rHTMLWrt.IsLFPossible())
         rHTMLWrt.OutNewLine( true );
 
     if( !rFrameFormat.GetName().isEmpty() )
@@ -1643,7 +1643,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
 
         // Refer to this data.
-        if (rHTMLWrt.m_bLFPossible)
+        if (rHTMLWrt.IsLFPossible())
             rHTMLWrt.OutNewLine();
         rWrt.Strm().WriteOString(Concat2View("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
         rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
@@ -1651,7 +1651,7 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
             rWrt.Strm().WriteOString(Concat2View(" type=\"" + aFileType.toUtf8() + "\""));
         rWrt.Strm().WriteOString(">");
         bObjectOpened = true;
-        rHTMLWrt.m_bLFPossible = true;
+        rHTMLWrt.SetLFPossible(true);
     }
 
     if (!bObjectOpened || bWriteReplacementGraphic)

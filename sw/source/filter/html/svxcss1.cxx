@@ -3083,6 +3083,19 @@ static void ParseCSS1_visibility(const CSS1Expression* pExpr, SfxItemSet& /*rIte
     rPropInfo.m_bVisible = pExpr->GetString() != "hidden";
 }
 
+static void ParseCSS1_white_space(const CSS1Expression* pExpr, SfxItemSet& /*rItemSet*/,
+                                  SvxCSS1PropertyInfo& rPropInfo, const SvxCSS1Parser& /*rParser*/)
+{
+    if (pExpr->GetType() == CSS1_IDENT)
+    {
+        if (pExpr->GetString().equalsIgnoreAsciiCase("pre")
+            || pExpr->GetString().equalsIgnoreAsciiCase("pre-wrap"))
+        {
+            rPropInfo.m_bPreserveSpace = true;
+        }
+    }
+}
+
 namespace {
 
 // the assignment of property to parsing function
@@ -3152,6 +3165,7 @@ CSS1PropEntry const aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(text_transform),
     CSS1_PROP_ENTRY(top),
     CSS1_PROP_ENTRY(visibility),
+    CSS1_PROP_ENTRY(white_space),
     CSS1_PROP_ENTRY(widows),
     CSS1_PROP_ENTRY(width),
 };

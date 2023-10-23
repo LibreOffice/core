@@ -278,6 +278,10 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
 
     FieldUnit m_eCSS1Unit;
 
+    bool m_bLFPossible = false; // a line break can be inserted
+    bool m_bSpacePreserve = false; // Using xml::space="preserve", or "white-space: pre-wrap" style
+    bool m_bPreserveSpacesOnWrite = false; // If export should use m_bSpacePreserve
+
     sal_uInt16 OutHeaderAttrs();
     const SwPageDesc *MakeHeader( sal_uInt16& rHeaderAtrs );
     void GetControls();
@@ -392,7 +396,6 @@ public:
     bool m_bNoAlign : 1;              // HTML tag doesn't allow ALIGN=...
     bool m_bClearLeft : 1;            // <BR CLEAR=LEFT> write at end of paragraph
     bool m_bClearRight : 1;           // <BR CLEAR=RIGHT> write at end of paragraph
-    bool m_bLFPossible : 1;           // a line break can be inserted
 
     // others
 
@@ -486,7 +489,7 @@ public:
                            const OUString *pSVal, std::optional<sw::Css1Background> oBackground = std::nullopt );
     void OutCSS1_UnitProperty( const char *pProp, tools::Long nVal );
     void OutCSS1_PixelProperty( const char *pProp, tools::Long nVal, bool bVert );
-    void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
+    void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true, std::string_view rAdd = {} );
 
     // events of BODY tag from SFX configuration
     void OutBasicBodyEvents();
@@ -616,6 +619,12 @@ public:
 
     /// Determines the prefix string needed to respect the requested namespace alias.
     OString GetNamespace() const;
+
+    bool IsLFPossible() const { return !m_bSpacePreserve && m_bLFPossible; }
+    void SetLFPossible(bool val) { m_bLFPossible = val; }
+    bool IsSpacePreserve() const { return m_bSpacePreserve; }
+    void SetSpacePreserve(bool val) { m_bSpacePreserve = val; }
+    bool IsPreserveSpacesOnWritePrefSet() const { return m_bPreserveSpacesOnWrite; }
 };
 
 inline bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
@@ -711,7 +720,7 @@ Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt);
 Writer& OutHTML_INetFormat( Writer&, const SwFormatINetFormat& rINetFormat, bool bOn );
 
 Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
-Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
+Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet, std::string_view rAdd = {} );
 
 Writer& OutCSS1_HintSpanTag( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutCSS1_HintStyleOpt( Writer& rWrt, const SfxPoolItem& rHt );

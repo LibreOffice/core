@@ -2772,6 +2772,72 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf157643_WideHBorder)
     assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
+{
+    // Given a document with leading, trailing, and repeating intermediate spaces:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const OUString paraText = u"\t test  \t more  text \t";
+    pWrtShell->Insert(paraText);
+
+    // When exporting to plain HTML, using PreserveSpaces:
+    uno::Reference<css::frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that "white-space: pre-wrap" is written into the paragraph's style:
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    const OUString style = getXPath(pHtmlDoc, "/html/body/p", "style");
+    CPPUNIT_ASSERT(style.indexOf("white-space: pre-wrap") >= 0);
+    // Also check that the paragraph text is correct, without modifications in whitespace
+    assertXPathContent(pHtmlDoc, "/html/body/p", paraText);
+
+    // Test import
+
+    setImportFilterName("HTML (StarWriter)");
+    UnoApiTest::load(maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
+{
+    // Given a document with leading, trailing, and repeating intermediate spaces:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    const OUString paraText = u"\t test  \t more  text \t";
+    pWrtShell->Insert(paraText);
+
+    // When exporting to ReqIF, using PreserveSpaces:
+    uno::Reference<css::frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    css::uno::Sequence<css::beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that xml:space="preserve" attribute exists in the paragraph element:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "space", u"preserve");
+    // Also check that the paragraph text is correct, without modifications in whitespace
+    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", paraText);
+
+    // Test import
+
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    UnoApiTest::load(maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

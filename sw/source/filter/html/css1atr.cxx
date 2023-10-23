@@ -1791,13 +1791,13 @@ Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
     return rWrt;
 }
 
-Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
+Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet, std::string_view rAdd )
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
     SwCSS1OutMode aMode( rHTMLWrt, rHTMLWrt.m_nCSS1Script|CSS1_OUTMODE_STYLE_OPT |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA, nullptr );
-    rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
+    rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false, rAdd );
 
     return rWrt;
 }
@@ -3599,7 +3599,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 static_assert(SAL_N_ELEMENTS(aCSS1AttrFnTab) == RES_BOXATR_END);
 
 void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
-                                       bool bDeep )
+                                       bool bDeep, std::string_view rAdd )
 {
     // print ItemSet, including all attributes
     Out_SfxItemSet( aCSS1AttrFnTab, *this, rItemSet, bDeep );
@@ -3629,6 +3629,20 @@ void SwHTMLWriter::OutCSS1_SfxItemSet( const SfxItemSet& rItemSet,
                                                  pBlinkItem );
 
         OutCSS1_SvxFormatBreak_SwFormatPDesc_SvxFormatKeep( *this, rItemSet, bDeep );
+    }
+
+    if (!rAdd.empty())
+    {
+        for (std::size_t index = 0; index != std::string_view::npos;)
+        {
+            OString attr(o3tl::trim(o3tl::getToken(rAdd, ':', index)));
+            assert(!attr.isEmpty());
+            assert(index != std::string_view::npos);
+
+            std::string_view val = o3tl::trim(o3tl::getToken(rAdd, ':', index));
+            assert(!val.empty());
+            OutCSS1_PropertyAscii(attr.getStr(), val);
+        }
     }
 
     if( m_bFirstCSS1Property )

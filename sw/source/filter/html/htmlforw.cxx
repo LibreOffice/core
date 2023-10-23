@@ -433,16 +433,16 @@ void SwHTMLWriter::OutForm( bool bOn,
     if( !bOn )
     {
         DecIndentLevel(); // indent content of form
-        if( m_bLFPossible )
+        if (IsLFPossible())
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_form), false );
-        m_bLFPossible = true;
+        SetLFPossible(true);
 
         return;
     }
 
     // the new form is opened
-    if( m_bLFPossible )
+    if (IsLFPossible())
         OutNewLine();
     OString sOut = "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_form;
 
@@ -524,7 +524,7 @@ void SwHTMLWriter::OutForm( bool bOn,
     Strm().WriteChar( '>' );
 
     IncIndentLevel(); // indent content of form
-    m_bLFPossible = true;
+    SetLFPossible(true);
 }
 
 void SwHTMLWriter::OutHiddenControls(
@@ -569,7 +569,7 @@ void SwHTMLWriter::OutHiddenControls(
 
         if( form::FormComponentType::HIDDENCONTROL == *n )
         {
-            if( m_bLFPossible )
+            if (IsLFPossible())
                 OutNewLine( true );
             OString sOut = "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_input " "
                 OOO_STRING_SVTOOLS_HTML_O_type "=\""
@@ -770,7 +770,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         break;
 
     case form::FormComponentType::LISTBOX:
-        if( rHTMLWrt.m_bLFPossible )
+        if (rHTMLWrt.IsLFPossible())
             rHTMLWrt.OutNewLine( true );
         eTag = TAG_SELECT;
         aTmp = xPropSet->getPropertyValue( "Dropdown" );
@@ -816,7 +816,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
             if( bMultiLine )
             {
-                if( rHTMLWrt.m_bLFPossible )
+                if (rHTMLWrt.IsLFPossible())
                     rHTMLWrt.OutNewLine( true );
                 eTag = TAG_TEXTAREA;
 
@@ -1257,7 +1257,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
         rWrt.Strm().WriteOString( aEndTags );
 
     // Controls aren't bound to a paragraph, therefore don't output LF anymore!
-    rHTMLWrt.m_bLFPossible = false;
+    rHTMLWrt.SetLFPossible(false);
 
     if( rHTMLWrt.mxFormComps.is() )
         rHTMLWrt.OutHiddenControls( rHTMLWrt.mxFormComps, xPropSet );

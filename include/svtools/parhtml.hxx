@@ -162,6 +162,8 @@ private:
     bool bReadNextChar : 1;         // true: read NextChar again(JavaScript!)
     bool bReadComment : 1;          // true: read NextChar again (JavaScript!)
 
+    bool m_bPreserveSpaces = false;
+
     sal_uInt32 nPre_LinePos;            // Pos in the line in the PRE-Tag
 
     HtmlTokenId mnPendingOffToken;          ///< OFF token pending for a <XX.../> ON/OFF ON token
@@ -186,6 +188,8 @@ protected:
     void FinishHeader() { bIsInHeader = false; }
 
     void SetNamespace(std::u16string_view rNamespace);
+
+    void SetPreserveSpaces(bool val) { m_bPreserveSpaces = val; }
 
 public:
     HTMLParser( SvStream& rIn, bool bReadNewDoc = true );
