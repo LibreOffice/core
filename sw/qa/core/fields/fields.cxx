@@ -7,8 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/text/XParagraphCursor.hpp>
+#include "reffld.hxx"
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -19,16 +20,11 @@
 #include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>
@@ -40,9 +36,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
-
 #include <comphelper/propertyvalue.hxx>
 
 #include <authfld.hxx>
@@ -191,27 +185,52 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf86790)
         CPPUNIT_ASSERT_EQUAL(sValue.first, xField->getPresentation(true));
         CPPUNIT_ASSERT_EQUAL(sValue.second, xField->getPresentation(false));
     }
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
+namespace
+{
+void InsertParagraphBreak(uno::Reference<text::XTextCursor> xCursor)
+{
+    uno::Reference<text::XText> xText = xCursor->getText();
+    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+}
+void InsertHeading(uno::Reference<text::XTextCursor> xCursor, OUString content)
+{
+    uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xCursor->getText();
+
+    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
+    xText->insertString(xCursor, content, false);
+    InsertParagraphBreak(xCursor);
+}
 }
 
 /// If there is referenced text both above and below, STYLEREF searches up
 CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchUp)
 {
+    // Arrange
+    // Create a document with headings both above and below a cursor
     createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
 
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading far above field", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    InsertHeading(xCursor, "Heading far above field");
+    InsertHeading(xCursor, "Heading above field");
+    InsertParagraphBreak(xCursor);
+    InsertHeading(xCursor, "Heading below field");
+    InsertHeading(xCursor, "Heading far below field");
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading above field", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading far below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Blank space
 
+    // Act
+    // Insert a STYLEREF field which looks for "Heading 1"s
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.GetReference"), uno::UNO_QUERY);
@@ -223,27 +242,36 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchUp)
                                         uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
     xFieldPropertySet->setPropertyValue("SourceName", uno::Any(OUString("Heading 1")));
 
-    uno::Reference<text::XTextCursor> xFieldCursor = xText->createTextCursor();
+    xField->attach(xCursor);
 
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading below field", false);
-
-    xField->attach(xFieldCursor);
+    // Assert
+    // Make sure the field has the right text
     CPPUNIT_ASSERT_EQUAL(OUString("Heading above field"), xField->getPresentation(false));
 }
 
-/// If there is referenced text both above and below, STYLEREF searches down
+/// If there is referenced text only below, STYLEREF searches down
 CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchDown)
 {
+    // Arrange
+    // Create a document with headings below a cursor
     createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
 
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
 
+    InsertParagraphBreak(xCursor);
+    InsertHeading(xCursor, "Heading below field");
+    InsertHeading(xCursor, "Heading far below field");
+
+    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading far below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Blank space
+
+    // Act
+    // Insert a STYLEREF field which looks for "Heading 1"s
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.GetReference"), uno::UNO_QUERY);
@@ -255,39 +283,30 @@ CPPUNIT_TEST_FIXTURE(Test, testStyleRefSearchDown)
                                         uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
     xFieldPropertySet->setPropertyValue("SourceName", uno::Any(OUString("Heading 1")));
 
-    uno::Reference<text::XTextCursor> xFieldCursor = xText->createTextCursor();
+    xField->attach(xCursor);
 
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading below field", false);
-
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading far below field", false);
-
-    xField->attach(xFieldCursor);
+    // Assert
+    // Make sure the field has the right text
     CPPUNIT_ASSERT_EQUAL(OUString("Heading below field"), xField->getPresentation(false));
 }
 
 /// STYLEREFs in marginals (headers or footers) should search in the page they are on first, regardless if there is anything above them
 CPPUNIT_TEST_FIXTURE(Test, testMarginalStyleRef)
 {
+    // Arrange
+    // Create a document with 2 headings
     createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
 
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Top heading on page", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    InsertHeading(xCursor, "Top heading on page");
+    InsertHeading(xCursor, "Bottom heading on page");
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Bottom heading on page", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-
+    // Act
+    // Insert a STYLEREF field which looks for "Heading 1"s into the footer
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.GetReference"), uno::UNO_QUERY);
@@ -314,38 +333,42 @@ CPPUNIT_TEST_FIXTURE(Test, testMarginalStyleRef)
     uno::Reference<text::XTextRange> xFooterCursor = xFooterText->createTextCursor();
     xField->attach(xFooterCursor);
 
+    // Assert
+    // Make sure the field has the right text
     CPPUNIT_ASSERT_EQUAL(OUString("Top heading on page"), xField->getPresentation(false));
 }
 
 /// STYLEREFs in footnotes should search from the point of the reference mark
 CPPUNIT_TEST_FIXTURE(Test, testFootnoteStyleRef)
 {
+    // Arrange
+    // Create a document with headings both above and below a cursor
     createSwDoc();
 
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
 
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
-    uno::Reference<beans::XPropertySet> xCursorPropertySet(xCursor, uno::UNO_QUERY);
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading far above reference mark", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    InsertHeading(xCursor, "Heading far above reference mark");
+    InsertHeading(xCursor, "Heading above reference mark");
+    InsertParagraphBreak(xCursor);
+    InsertHeading(xCursor, "Heading below reference mark");
+    InsertHeading(xCursor, "Heading far below reference mark");
 
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading above reference mark", false);
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
+    uno::Reference<text::XParagraphCursor> xParagraphCursor(xCursor, uno::UNO_QUERY);
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading far below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Heading below...
+    xParagraphCursor->gotoPreviousParagraph(false); // Blank space
 
+    // Act
+    // Insert a STYLEREF field which looks for "Heading 1"s into a footnote
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
 
     uno::Reference<text::XFootnote> xFootnote(
         xFactory->createInstance("com.sun.star.text.Footnote"), uno::UNO_QUERY);
     xFootnote->setLabel("Style reference mark");
     xText->insertTextContent(xCursor, xFootnote, false);
-
-    xText->insertControlCharacter(xCursor, text::ControlCharacter::PARAGRAPH_BREAK, false);
-    xCursorPropertySet->setPropertyValue("ParaStyleName", uno::Any(OUString("Heading 1")));
-    xText->insertString(xCursor, "Heading below reference mark", false);
 
     uno::Reference<text::XTextField> xField(
         xFactory->createInstance("com.sun.star.text.TextField.GetReference"), uno::UNO_QUERY);
@@ -361,7 +384,104 @@ CPPUNIT_TEST_FIXTURE(Test, testFootnoteStyleRef)
     uno::Reference<text::XTextRange> xFootnoteCursor = xFootnoteText->createTextCursor();
     xField->attach(xFootnoteCursor);
 
+    // Assert
+    // Make sure the field has the right text
     CPPUNIT_ASSERT_EQUAL(OUString("Heading above reference mark"), xField->getPresentation(false));
+}
+
+/// STYLEREFs with the REFFLDFLAG_HIDE_NON_NUMERICAL flag should hide all characters that are not numerical or delimiters
+CPPUNIT_TEST_FIXTURE(Test, testNumericalStyleRef)
+{
+    loadFromURL(u"suppress-non-numerical.docx");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
+    std::vector<std::pair<OUString, OUString>> aFieldValues = {
+        { " Heading 1", "3" }, // #1
+        { " Heading 2", ".2\\@123^&~|a....." }, // #4
+        { " Heading 2", ".2\\|a....." }, // #3
+        { " Heading 1", "Chapter 3.!" }, // #2
+    };
+
+    for (const auto& sValue : aFieldValues)
+    {
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sValue.first, xField->getPresentation(true));
+        CPPUNIT_ASSERT_EQUAL(sValue.second, xField->getPresentation(false));
+    }
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
+/// We should be able to import these flags from OOXML documents
+/// (Note: in Word, STYLEREF 'search bottom up' flag does nothing unless it's in a marginal, we place no such limitation but
+///        this docx only has such stylerefs to avoid confusion)
+CPPUNIT_TEST_FIXTURE(Test, testOOXMLStyleRefFlags)
+{
+    loadFromURL(u"styleref-flags.docx");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
+    std::vector<std::pair<OUString, OUString>> aFieldValues = {
+        { " Heading 2", "2.1" }, // #1
+        { " Heading 1", "3" }, // #5
+        { " Heading 1", "A top level heading at the top of the page" }, // #4
+        { " Heading 1", "The last top level heading" }, // #3
+        { " Heading 2", "Heading 2.1" }, // #2
+    };
+
+    for (const auto& sValue : aFieldValues)
+    {
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sValue.first, xField->getPresentation(true));
+        CPPUNIT_ASSERT_EQUAL(sValue.second, xField->getPresentation(false));
+    }
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
+/// We should be able to import these flags from OOXML documents
+/// (Note: in Word, STYLEREF 'search bottom up' flag does nothing unless it's in a marginal, we place no such limitation but
+///        this docx only has such stylerefs to avoid confusion)
+CPPUNIT_TEST_FIXTURE(Test, testODFStyleRef)
+{
+    loadFromURL(u"styleref.odt");
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    // Similarly to testChapterFieldsFollowedBy, the fields are enumerated with #1 first and everything else in reverse order
+    std::vector<std::pair<OUString, OUString>> aFieldValues = {
+        { " Heading 1", "1:" }, // #1
+        { " Heading 2", "In footnotes" }, // #10
+        { " Heading 2", "In document text" }, // #9
+        { " Heading 1", "STYLEREF in different locations" }, // #8
+        { " Heading 1", "2:" }, // #7
+        { " Heading 1", "With STYLEREF, many things are possible" }, // #6
+        { " Heading 1", "1:" }, // #5
+        { " Heading 1", "STYLEREF in different locations" }, // #4
+        { " Heading 1", "2:" }, // #3
+        { " Heading 1", "With STYLEREF, many things are possible" }, // #2
+    };
+
+    for (const auto& sValue : aFieldValues)
+    {
+        CPPUNIT_ASSERT(xFields->hasMoreElements());
+        uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sValue.first, xField->getPresentation(true));
+        CPPUNIT_ASSERT_EQUAL(sValue.second, xField->getPresentation(false));
+    }
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 }
 
