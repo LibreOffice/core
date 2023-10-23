@@ -11,4 +11,6 @@
 
 $(eval $(call sd_import_test,-smartart))
 
+$(eval $(call gb_CppunitTest_set_non_application_font_use,sd_import_tests-smartart,abort))
+
 # vim: set noet sw=4 ts=4:
