@@ -1661,7 +1661,11 @@ void JSComboBox::set_entry_text_without_notify(const OUString& rText)
 void JSComboBox::set_entry_text(const OUString& rText)
 {
     SalInstanceComboBoxWithEdit::set_entry_text(rText);
-    sendUpdate();
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    (*pMap)[ACTION_TYPE] = "setText";
+    (*pMap)["text"] = rText;
+    sendAction(std::move(pMap));
 }
 
 void JSComboBox::set_active(int pos)
@@ -1670,7 +1674,11 @@ void JSComboBox::set_active(int pos)
         return;
 
     SalInstanceComboBoxWithEdit::set_active(pos);
-    sendUpdate();
+
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
+    (*pMap)[ACTION_TYPE] = "select";
+    (*pMap)["position"] = OUString::number(pos);
+    sendAction(std::move(pMap));
 }
 
 void JSComboBox::set_active_id(const OUString& rStr)
