@@ -1982,8 +1982,10 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
 
 void JSToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
 {
+    bool bWasSensitive = get_item_sensitive(rIdent);
     SalInstanceToolbar::set_item_sensitive(rIdent, bSensitive);
-    sendUpdate();
+    if (bWasSensitive != bSensitive)
+        sendUpdate();
 }
 
 void JSToolbar::set_item_icon_name(const OString& rIdent, const OUString& rIconName)
