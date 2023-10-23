@@ -94,6 +94,8 @@ namespace accessibility
         /// @throws css::lang::DisposedException
         /// @throws css::uno::RuntimeException
         tools::Rectangle               GetBoundingBoxOnScreen();
+        /// @throws css::lang::IndexOutOfBoundsException
+        void CheckActionIndex(sal_Int32 nIndex);
         /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const;
 

@@ -37,20 +37,6 @@
 #include <helper/accresmgr.hxx>
 #include <strings.hrc>
 
-#define ACCESSIBLE_ACTION_COUNT 1
-
-namespace
-{
-    /// @throws css::lang::IndexOutOfBoundsException
-    void checkActionIndex_Impl( sal_Int32 _nIndex )
-    {
-        if ( _nIndex < 0 || _nIndex >= ACCESSIBLE_ACTION_COUNT )
-            // only three actions
-            throw css::lang::IndexOutOfBoundsException();
-    }
-}
-
-
 namespace accessibility
 {
     // class AccessibleListBoxEntry -----------------------------------------------------
@@ -195,6 +181,12 @@ namespace accessibility
 
         EnsureIsAlive();
         return GetBoundingBoxOnScreen_Impl();
+    }
+
+    void AccessibleListBoxEntry::CheckActionIndex(sal_Int32 nIndex)
+    {
+        if (nIndex < 0 || nIndex >= getAccessibleActionCount())
+            throw css::lang::IndexOutOfBoundsException();
     }
 
     void AccessibleListBoxEntry::EnsureIsAlive() const
@@ -720,7 +712,7 @@ namespace accessibility
                 return 0;
         }
         else
-            return ACCESSIBLE_ACTION_COUNT;
+            return 1;
         return 0;
     }
 
@@ -730,7 +722,7 @@ namespace accessibility
         ::osl::MutexGuard aGuard( m_aMutex );
 
         bool bRet = false;
-        checkActionIndex_Impl( nIndex );
+        CheckActionIndex(nIndex);
         EnsureIsAlive();
 
         SvTreeFlags treeFlag = m_pTreeListBox->GetTreeFlags();
@@ -767,7 +759,7 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        checkActionIndex_Impl( nIndex );
+        CheckActionIndex(nIndex);
         EnsureIsAlive();
 
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
@@ -803,7 +795,7 @@ namespace accessibility
     Reference< XAccessibleKeyBinding > AccessibleListBoxEntry::getAccessibleActionKeyBinding( sal_Int32 nIndex )
     {
         Reference< XAccessibleKeyBinding > xRet;
-        checkActionIndex_Impl( nIndex );
+        CheckActionIndex(nIndex);
         // ... which key?
         return xRet;
     }
