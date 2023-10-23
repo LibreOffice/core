@@ -93,6 +93,7 @@ public:
     int             GetDepth() const { return depth; }
 
             Pixel           GetTCPixel( Color nColor ) const;
+            Color           GetTCColor( Pixel nPixel ) const;
 };
 
 // A move-only flag, used by SalColormap to track ownership of its m_aVisual.visual:
@@ -352,6 +353,8 @@ public:
     Time            GetLastUserEventTime() const { return GetEventTimeImpl(); }
     // this is an equivalent of gdk_x11_get_server_time()
     Time            GetX11ServerTime() const { return GetEventTimeImpl( true ); }
+
+    bool            XIfEventWithTimeout( XEvent*, XPointer, X_if_predicate ) const;
 
     SalI18N_InputMethod*        GetInputMethod()  const { return pXLib_->GetInputMethod();  }
     SalI18N_KeyboardExtension*  GetKbdExtension() const { return mpKbdExtension; }

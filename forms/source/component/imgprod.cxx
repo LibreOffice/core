@@ -366,7 +366,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     if( !pBmpAcc )
         return;
 
-    AlphaMask              aMask( aBmpEx.GetAlphaMask() );
+    Bitmap              aMask( aBmpEx.GetAlphaMask() );
     BitmapReadAccess*   pMskAcc = !aMask.IsEmpty() ? aMask.AcquireReadAccess() : nullptr;
     const tools::Long          nWidth = pBmpAcc->Width();
     const tools::Long          nHeight = pBmpAcc->Height();
@@ -380,7 +380,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
     if( !pMskAcc )
     {
         aMask = Bitmap(aBmp.GetSizePixel(), vcl::PixelFormat::N8_BPP, &Bitmap::GetGreyPalette(256));
-        aMask.Erase( 0 );
+        aMask.Erase( COL_BLACK );
         pMskAcc = aMask.AcquireReadAccess();
     }
 

@@ -46,6 +46,7 @@ private:
 
 public:
     SwFlyDrawObj(SdrModel& rSdrModel);
+    SwFlyDrawObj(SdrModel& rSdrModel, SwFlyDrawObj const& rSource);
 
     // for instantiation of this class while loading (via factory
     virtual rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override;

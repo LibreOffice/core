@@ -130,6 +130,12 @@ SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel)
 {
 }
 
+SwFlyDrawObj::SwFlyDrawObj(SdrModel& rSdrModel, SwFlyDrawObj const& rSource)
+    : SdrObject(rSdrModel, rSource)
+    , mbIsTextBox(false)
+{
+}
+
 SwFlyDrawObj::~SwFlyDrawObj()
 {
 }

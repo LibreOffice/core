@@ -63,6 +63,13 @@ const Bitmap& AlphaMask::ImplGetBitmap() const
     return *this;
 }
 
+void AlphaMask::ImplSetBitmap( const Bitmap& rBitmap )
+{
+    SAL_WARN_IF(rBitmap.getPixelFormat() != vcl::PixelFormat::N8_BPP, "vcl.gdi", "Bitmap should be 8bpp, not " << vcl::pixelFormatBitCount(rBitmap.getPixelFormat()) << "bpp" );
+    SAL_WARN_IF( !rBitmap.HasGreyPalette8Bit(), "vcl.gdi", "Bitmap isn't greyscale" );
+    *static_cast<Bitmap*>(this) = rBitmap;
+}
+
 Bitmap const & AlphaMask::GetBitmap() const
 {
     return ImplGetBitmap();
@@ -73,7 +80,7 @@ void AlphaMask::Erase( sal_uInt8 cTransparency )
     Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
-void AlphaMask::BlendWith(const AlphaMask& rOther)
+void AlphaMask::BlendWith(const Bitmap& rOther)
 {
     std::shared_ptr<SalBitmap> xImpBmp(ImplGetSVData()->mpDefInst->CreateSalBitmap());
     if (xImpBmp->Create(*ImplGetSalBitmap()) && xImpBmp->AlphaBlendWith(*rOther.ImplGetSalBitmap()))
@@ -81,7 +88,8 @@ void AlphaMask::BlendWith(const AlphaMask& rOther)
         ImplSetSalBitmap(xImpBmp);
         return;
     }
-    Bitmap::ScopedReadAccess pOtherAcc(const_cast<AlphaMask&>(rOther));
+    AlphaMask aOther(rOther); // to 8 bits
+    Bitmap::ScopedReadAccess pOtherAcc(aOther);
     AlphaScopedWriteAccess pAcc(*this);
     assert (pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8 && "cannot BlendWith this combination");
     if (!(pOtherAcc && pAcc && pOtherAcc->GetBitCount() == 8 && pAcc->GetBitCount() == 8))

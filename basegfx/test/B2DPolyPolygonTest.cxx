@@ -24,6 +24,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dtrapezoid.hxx>
 
+#include "boxclipper.hxx"
 #include <random>
 
 namespace basegfx

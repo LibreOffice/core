@@ -706,9 +706,9 @@ vcl::Region Bitmap::CreateRegion(const Color& rColor, const tools::Rectangle& rR
     return aRegion;
 }
 
-bool Bitmap::ReplaceMask(const AlphaMask& rMask, const Color& rReplaceColor)
+bool Bitmap::Replace(const Bitmap& rMask, const Color& rReplaceColor)
 {
-    ScopedReadAccess pMaskAcc(const_cast<AlphaMask&>(rMask));
+    ScopedReadAccess pMaskAcc(const_cast<Bitmap&>(rMask));
     BitmapScopedWriteAccess pAcc(*this);
 
     if (!pMaskAcc || !pAcc)

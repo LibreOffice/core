@@ -60,6 +60,7 @@ namespace com::sun::star {
 namespace writerfilter::dmapper {
 
 class  DomainMapper_Impl;
+struct FloatingTableInfo;
 struct AnchoredObjectInfo;
 
 enum BorderPosition

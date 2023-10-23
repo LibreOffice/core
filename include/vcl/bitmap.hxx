@@ -387,6 +387,18 @@ public:
      */
     vcl::Region                  CreateRegion( const Color& rColor, const tools::Rectangle& rRect ) const;
 
+    /** Replace all pixel where the given mask is on with the specified color
+
+        @param rMask
+        Mask specifying which pixel should be replaced
+
+        @param rReplaceColor
+        Color to be placed in all changed pixel
+
+        @return true, if the operation was completed successfully.
+     */
+    bool                    Replace( const Bitmap& rMask, const Color& rReplaceColor );
+
     /** Merge bitmap with given background color according to specified alpha mask
 
         @param rAlpha
@@ -398,18 +410,6 @@ public:
         @return true, if the operation was completed successfully.
      */
     bool                    Replace( const AlphaMask& rAlpha, const Color& rMergeColor );
-
-    /** Replace all pixel where the given mask/alpha layer is on with the specified color
-
-        @param rMask
-        Mask specifying which pixel should be replaced
-
-        @param rReplaceColor
-        Color to be placed in all changed pixel
-
-        @return true, if the operation was completed successfully.
-     */
-    bool                    ReplaceMask( const AlphaMask& rMask, const Color& rReplaceColor );
 
     /** Replace all pixel having the search color with the specified color
 

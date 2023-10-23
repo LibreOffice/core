@@ -49,7 +49,7 @@ public:
     Bitmap const & GetBitmap() const;
 
     void        Erase( sal_uInt8 cTransparency );
-    void        BlendWith(const AlphaMask& rOther);
+    void        BlendWith(const Bitmap& rOther);
 
     // check if alpha is used, returns true if at least one pixel has transparence
     bool        hasAlpha() const;
@@ -69,6 +69,7 @@ private:
     friend bool VCL_DLLPUBLIC ReadDIBBitmapEx(BitmapEx& rTarget, SvStream& rIStm, bool bFileHeader, bool bMSOFormat);
 
     SAL_DLLPRIVATE const Bitmap&    ImplGetBitmap() const;
+    SAL_DLLPRIVATE void             ImplSetBitmap( const Bitmap& rBitmap );
 
 };
 

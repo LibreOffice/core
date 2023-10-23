@@ -185,6 +185,9 @@ private:
         sd::Window* pContentWindow,
         ScrollAdaptor* pHorizontalScrollBar,
         ScrollAdaptor* pVerticalScrollBar);
+    SlideSorter (
+        ViewShellBase& rBase,
+        vcl::Window& rParentWindow);
 
     void Init();
     /** Create the controls for the slide sorter.  This are the tab bar

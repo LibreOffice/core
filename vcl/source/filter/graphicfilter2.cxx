@@ -26,6 +26,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <graphic/GraphicFormatDetector.hxx>
+#include "graphicfilter_internal.hxx"
 
 namespace
 {
