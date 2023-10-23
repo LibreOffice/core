@@ -1351,6 +1351,11 @@ void DocumentFieldsManager::UpdatePageFields( SfxPoolItem* pMsgHint )
         case SwFieldIds::DocStat:
             pFieldType->CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
             break;
+        case SwFieldIds::GetRef:
+            static_cast<SwGetRefFieldType*>(pFieldType)->UpdateStyleReferences();
+            // Style references can vary across different pages (e.g. in header/footer)
+            // so they must be updated when page fields are
+            break;
         default: break;
         }
     }
