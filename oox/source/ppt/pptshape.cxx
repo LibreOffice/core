@@ -457,10 +457,6 @@ void PPTShape::addShape(
                 Reference < XText > xText(mxShape, UNO_QUERY);
                 if (xText.is())
                 {
-                    if (mpPlaceholder && mpPlaceholder->getTextBody() && !mpPlaceholder->getTextBody()->isEmpty()
-                        && mpPlaceholder->hasCustomPrompt())
-                        xText->setString(mpPlaceholder->getTextBody()->toString());
-
                     TextCharacterProperties aCharStyleProperties;
                     getTextBody()->ApplyStyleEmpty(rFilterBase, xText, aCharStyleProperties, mpMasterTextListStyle);
                 }

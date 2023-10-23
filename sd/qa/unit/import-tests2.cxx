@@ -1904,17 +1904,6 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testOverflowBehaviorClip)
     }
 }
 
-CPPUNIT_TEST_FIXTURE(SdImportTest2, testShapeMasterText)
-{
-    createSdImpressDoc("pptx/shape-master-text.pptx");
-    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
-
-    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
-
-    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
-    CPPUNIT_ASSERT_EQUAL(OUString("Custom"), xRun->getString());
-}
-
 CPPUNIT_TEST_FIXTURE(SdImportTest2, testIndentDuplication)
 {
     createSdImpressDoc("pptx/formatting-bullet-indent.pptx");
