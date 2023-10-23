@@ -44,8 +44,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
 
         <p>The argument is clipped to the valid interval whose upper and
         lower bounds are returned by the methods
-        getMaximumAccessibleValue() and
-        getMinimumAccessibleValue(), i.e. if it is lower than
+        getMaximumValue() and getMinimumValue(), i.e. if it is lower than
         the minimum value the new value will be the minimum and if it is
         greater than the maximum then the new value will be the maximum.</p>
 
@@ -59,41 +58,41 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
     */
     boolean setCurrentValue ([in] any aNumber);
 
-    /** Returns the maximal value that can be represented by this object.
+    /** Returns the maximum value that can be represented by this object.
 
         <p>The type of the returned value is implementation dependent.  It
         does not have to be the same type as that returned by
-        getCurrentAccessibleValue().</p>
+        getCurrentValue().</p>
 
         @return
-            Returns the maximal value in an implementation dependent type.
+            Returns the maximum value in an implementation dependent type.
             If this object has no upper bound then an empty object is
             returned.
     */
     any getMaximumValue ();
 
-    /** Returns the minimal value that can be represented by this object.
+    /** Returns the minimum value that can be represented by this object.
 
         <p>The type of the returned value is implementation dependent.  It
         does not have to be the same type as that returned by
-        getCurrentAccessibleValue().</p>
+        getCurrentValue().</p>
 
         @return
-            Returns the minimal value in an implementation dependent type.
+            Returns the mimimum value in an implementation dependent type.
             If this object has no lower bound then an empty object is
             returned.
     */
     any getMinimumValue ();
 
-    /** Returns the minimal increment by which the value represented by this
+    /** Returns the minimum increment by which the value represented by this
         object can be adjusted.
 
         <p>The type of the returned value is implementation dependent. It
         does not have to be the same type as that returned by
-        getCurrentAccessibleValue().</p>
+        getCurrentValue().</p>
 
         @return
-            Returns the minimal increment value in an implementation dependent type.
+            Returns the minium increment value in an implementation dependent type.
             If this object has no minimum increment value, then an empty object is
             returned.
 
