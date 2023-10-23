@@ -1395,6 +1395,24 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.D3:Sheet1.D4"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf157897_duplicated_print_ranges)
+{
+    createScDoc("tdf157897_main.ods");
+    ScDocument* pDoc = getScDoc();
+
+    const sal_uInt16 nPos = 0;
+    const SCTAB nFirstTab = 0;
+    // Ensure that there exists a print range in the first documents tab
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(1), pDoc->GetPrintRangeCount(nFirstTab));
+
+    // Reload all links and check if the print range was not duplicated
+    const auto initialPrintRange = pDoc->GetPrintRange(nFirstTab, nPos);
+    pDoc->GetDocumentShell()->ReloadAllLinks();
+
+    // Without the fix in place, the print range in the linked tab will be duplicated
+    CPPUNIT_ASSERT_EQUAL(initialPrintRange, pDoc->GetPrintRange(nFirstTab, nPos));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf154991)
 {
     createScDoc("tdf154991.ods");
