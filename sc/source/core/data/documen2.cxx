@@ -962,6 +962,23 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         maTabs[nDestPos]->SetTabNo(nDestPos);
         maTabs[nDestPos]->SetTabBgColor(pSrcDoc->maTabs[nSrcPos]->GetTabBgColor());
 
+        if (pSrcDoc->IsPrintEntireSheet(nSrcPos))
+            maTabs[nDestPos]->SetPrintEntireSheet();
+        else
+        {
+            // tdf#157897 - clear print ranges before adding additional ones
+            maTabs[nDestPos]->ClearPrintRanges();
+            const auto nPrintRangeCount = pSrcDoc->maTabs[nSrcPos]->GetPrintRangeCount();
+            for (auto nPos = 0; nPos < nPrintRangeCount; nPos++)
+            {
+                // Adjust the tab for the print range at the new position
+                ScRange aSrcPrintRange(*pSrcDoc->maTabs[nSrcPos]->GetPrintRange(nPos));
+                aSrcPrintRange.aStart.SetTab(nDestPos);
+                aSrcPrintRange.aEnd.SetTab(nDestPos);
+                maTabs[nDestPos]->AddPrintRange(aSrcPrintRange);
+            }
+        }
+
         if ( !bResultsOnly )
         {
             sc::RefUpdateContext aRefCxt(*this);
