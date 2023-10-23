@@ -2762,6 +2762,67 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTdf157643_WideHBorder)
     assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:table/reqif-xhtml:tr", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_PreserveSpaces)
+{
+    // Given a document with leading, trailing, and repeating intermediate spaces:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
+    pWrtShell->Insert(paraText);
+
+    // When exporting to plain HTML, using PreserveSpaces:
+    saveWithParams({
+        comphelper::makePropertyValue("FilterName", u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    });
+
+    // Then make sure that "white-space: pre-wrap" is written into the paragraph's style:
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    const OUString style = getXPath(pHtmlDoc, "/html/body/p", "style"_ostr);
+    CPPUNIT_ASSERT(style.indexOf("white-space: pre-wrap") >= 0);
+    // Also check that the paragraph text is correct, without modifications in whitespace
+    assertXPathContent(pHtmlDoc, "/html/body/p", paraText);
+
+    // Test import
+
+    setImportFilterName("HTML (StarWriter)");
+    load(maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
+{
+    // Given a document with leading, trailing, and repeating intermediate spaces:
+    createSwDoc();
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    constexpr OUString paraText = u"\t test  \t more  text \t"_ustr;
+    pWrtShell->Insert(paraText);
+
+    // When exporting to ReqIF, using PreserveSpaces:
+    saveWithParams({
+        comphelper::makePropertyValue("FilterName", u"HTML (StarWriter)"_ustr),
+        comphelper::makePropertyValue("FilterOptions", u"xhtmlns=reqif-xhtml"_ustr),
+        comphelper::makePropertyValue("PreserveSpaces", true),
+    });
+
+    // Then make sure that xml:space="preserve" attribute exists in the paragraph element:
+    xmlDocUniquePtr pXmlDoc = WrapReqifFromTempFile();
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", "space"_ostr,
+                u"preserve"_ustr);
+    // Also check that the paragraph text is correct, without modifications in whitespace
+    assertXPathContent(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p", paraText);
+
+    // Test import
+
+    setImportFilterOptions("xhtmlns=reqif-xhtml");
+    setImportFilterName("HTML (StarWriter)");
+    load(maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

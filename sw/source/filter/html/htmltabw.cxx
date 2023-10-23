@@ -449,7 +449,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sOut.append('>');
     rWrt.Strm().WriteOString( sOut );
     sOut.setLength(0);
-    rWrt.m_bLFPossible = true;
+    rWrt.SetLFPossible(true);
 
     rWrt.IncIndentLevel();  // indent the content of <TD>...</TD>
 
@@ -486,11 +486,11 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
     rWrt.DecIndentLevel();  // indent the content of <TD>...</TD>
 
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
     aTag = bHead ? OOO_STRING_SVTOOLS_HTML_tableheader : OOO_STRING_SVTOOLS_HTML_tabledata;
     HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
-    rWrt.m_bLFPossible = true;
+    rWrt.SetLFPossible(true);
 }
 
 // output a line as lines
@@ -614,7 +614,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // close previous numbering, etc
     rWrt.ChangeParaToken( HtmlTokenId::NONE );
 
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();  // <TABLE> in new line
     OStringBuffer sOut("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_table);
 
@@ -1047,7 +1047,7 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
-        if( rWrt.m_bLFPossible )
+        if (rWrt.IsLFPossible())
             rWrt.OutNewLine();  // <CENTER> in new line
         if( text::HoriOrientation::CENTER==eDivHoriOri )
         {
@@ -1075,12 +1075,12 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
             }
         }
         rWrt.IncIndentLevel();  // indent content of <CENTER>
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
     }
 
     // If the table isn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
 
     const SwHTMLTableLayout *pLayout = rTable.GetHTMLTableLayout();
 
@@ -1110,7 +1110,7 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
 
     // If the table wasn't in a frame, then you always can output a LF.
     if( text::HoriOrientation::NONE==eTabHoriOri )
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
 
     if( text::HoriOrientation::NONE!=eDivHoriOri )
     {
@@ -1124,7 +1124,7 @@ SwHTMLWriter& OutHTML_SwTableNode( SwHTMLWriter& rWrt, SwTableNode & rNode,
             // Not XHTML's css center: end <center>.
             HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false);
         }
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
     }
 
     // move Pam behind the table

@@ -133,12 +133,12 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
         // write according to the level difference
         for( sal_uInt16 i=m_nDefListLvl; i<nNewLvl; i++ )
         {
-            if( m_bLFPossible )
+            if (IsLFPossible())
                 OutNewLine();
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist) );
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd) );
             IncIndentLevel();
-            m_bLFPossible = true;
+            SetLFPossible(true);
         }
     }
     else if( m_nDefListLvl > nNewLvl )
@@ -146,11 +146,11 @@ void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
         for( sal_uInt16 i=nNewLvl ; i < m_nDefListLvl; i++ )
         {
             DecIndentLevel();
-            if( m_bLFPossible )
+            if (IsLFPossible())
                 OutNewLine();
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_dd), false );
             HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_deflist), false );
-            m_bLFPossible = true;
+            SetLFPossible(true);
         }
     }
 
@@ -162,7 +162,7 @@ void SwHTMLWriter::ChangeParaToken( HtmlTokenId nNew )
     if( nNew != m_nLastParaToken && HtmlTokenId::PREFORMTXT_ON == m_nLastParaToken )
     {
         HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_preformtxt), false );
-        m_bLFPossible = true;
+        SetLFPossible(true);
     }
     m_nLastParaToken = nNew;
 }
@@ -749,7 +749,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
             (rWrt.m_nDefListLvl-1) * rWrt.m_nDefListMargin;
     }
 
-    if( rWrt.m_bLFPossible && !rWrt.m_bFirstLine )
+    if (rWrt.IsLFPossible() && !rWrt.m_bFirstLine)
         rWrt.OutNewLine(); // paragraph tag on a new line
     rInfo.bOutPara = false;
 
@@ -811,7 +811,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         rWrt.m_bNoAlign = false;
         rInfo.bOutDiv = true;
         rWrt.IncIndentLevel();
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
         rWrt.OutNewLine();
     }
 
@@ -925,6 +925,15 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         rWrt.Strm().WriteOString( sOut );
         sOut = "";
 
+        std::string_view sStyle;
+        if (rWrt.IsSpacePreserve())
+        {
+            if (rWrt.mbXHTML)
+                rWrt.Strm().WriteOString(" xml:space=\"preserve\"");
+            else
+                sStyle = "white-space: pre-wrap";
+        }
+
         // if necessary, output alignment
         if( !rWrt.m_bNoAlign && pAdjItem )
             OutHTML_SvxAdjust( rWrt, *pAdjItem );
@@ -935,7 +944,7 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
         // and now, if necessary, the STYLE options
         if (rWrt.m_bCfgOutStyles && rInfo.moItemSet)
         {
-            OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.moItemSet );
+            OutCSS1_ParaTagStyleOpt(rWrt, *rInfo.moItemSet, sStyle);
         }
 
         if (rWrt.m_bParaDotLeaders) {
@@ -1005,7 +1014,7 @@ static void OutHTML_SwFormatOff( SwHTMLWriter& rWrt, const SwHTMLTextCollOutputI
 
     if( rInfo.ShouldOutputToken() )
     {
-        if( rWrt.m_bPrettyPrint && rWrt.m_bLFPossible )
+        if (rWrt.m_bPrettyPrint && rWrt.IsLFPossible())
             rWrt.OutNewLine( true );
 
         // if necessary, for BLOCKQUOTE, ADDRESS and DD another paragraph token
@@ -1016,18 +1025,18 @@ static void OutHTML_SwFormatOff( SwHTMLWriter& rWrt, const SwHTMLTextCollOutputI
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_parabreak), false );
 
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + rInfo.aToken), false );
-        rWrt.m_bLFPossible =
+        rWrt.SetLFPossible(
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dt &&
             rInfo.aToken != OOO_STRING_SVTOOLS_HTML_dd &&
-            rInfo.aToken != OOO_STRING_SVTOOLS_HTML_li;
+            rInfo.aToken != OOO_STRING_SVTOOLS_HTML_li);
     }
     if( rInfo.bOutDiv )
     {
         rWrt.DecIndentLevel();
-        if( rWrt.m_bLFPossible )
+        if (rWrt.IsLFPossible())
             rWrt.OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
     }
 
     // if necessary, close the list item, then close a bulleted or numbered list
@@ -2002,6 +2011,30 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rWrt, sal_Int32 nPos )
     }
 }
 
+static bool NeedPreserveWhitespace(std::u16string_view str)
+{
+    if (str.empty())
+        return false;
+    // leading / trailing spaces
+    if (o3tl::internal::implIsWhitespace(str.front())
+        || o3tl::internal::implIsWhitespace(str.back()))
+        return true;
+    bool bWasSpace = false;
+    for (auto ch : str)
+    {
+        if (o3tl::internal::implIsWhitespace(ch))
+        {
+            if (bWasSpace)
+                return true; // Second whitespace in a row
+            else
+                bWasSpace = true;
+        }
+        else
+            bWasSpace = false;
+    }
+    return false;
+}
+
 /* Output of the nodes*/
 SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode )
 {
@@ -2027,10 +2060,10 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         // Output all the nodes that are anchored to a frame
         rWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
 
-        if( rWrt.m_bLFPossible )
+        if (rWrt.IsLFPossible())
             rWrt.OutNewLine(); // paragraph tag on a new line
 
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
 
         HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
         aHtml.prettyPrint(rWrt.m_bPrettyPrint);
@@ -2138,11 +2171,11 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             {
                 // ... and it is located before a table or a section
                 rWrt.OutBookmarks();
-                rWrt.m_bLFPossible = rWrt.m_nLastParaToken == HtmlTokenId::NONE;
+                rWrt.SetLFPossible(rWrt.m_nLastParaToken == HtmlTokenId::NONE);
 
                 // Output all frames that are anchored to this node
                 rWrt.OutFlyFrame( rNode.GetIndex(), 0, HtmlPosition::Any );
-                rWrt.m_bLFPossible = false;
+                rWrt.SetLFPossible(false);
 
                 return rWrt;
             }
@@ -2213,12 +2246,15 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     // now, output the tag of the paragraph
     const SwFormat& rFormat = pNd->GetAnyFormatColl();
     SwHTMLTextCollOutputInfo aFormatInfo;
-    bool bOldLFPossible = rWrt.m_bLFPossible;
+    bool bOldLFPossible = rWrt.IsLFPossible();
+    bool bOldSpacePreserve = rWrt.IsSpacePreserve();
+    if (rWrt.IsPreserveSpacesOnWritePrefSet())
+        rWrt.SetSpacePreserve(NeedPreserveWhitespace(rStr));
     OutHTML_SwFormat( rWrt, rFormat, pNd->GetpSwAttrSet(), aFormatInfo );
 
     // If we didn't open a new line before the paragraph tag, we do that now
-    rWrt.m_bLFPossible = rWrt.m_nLastParaToken == HtmlTokenId::NONE;
-    if( !bOldLFPossible && rWrt.m_bLFPossible )
+    rWrt.SetLFPossible(rWrt.m_nLastParaToken == HtmlTokenId::NONE);
+    if (!bOldLFPossible && rWrt.IsLFPossible())
         rWrt.OutNewLine();
 
     // then, the bookmarks (including end tag)
@@ -2228,12 +2264,12 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     // now it's a good opportunity again for an LF - if it is still allowed
     // FIXME: for LOK case we set rWrt.m_nWishLineLen as -1, for now keep old flow
     // when LOK side will be fixed - don't insert new line at the beginning
-    if( rWrt.m_bLFPossible && rWrt.m_bPrettyPrint && rWrt.m_nWishLineLen >= 0 &&
+    if( rWrt.IsLFPossible() && rWrt.m_bPrettyPrint && rWrt.m_nWishLineLen >= 0 &&
         rWrt.GetLineLen() >= rWrt.m_nWishLineLen )
     {
         rWrt.OutNewLine();
     }
-    rWrt.m_bLFPossible = false;
+    rWrt.SetLFPossible(false);
 
     // find text that originates from an outline numbering
     sal_Int32 nOffset = 0;
@@ -2430,16 +2466,16 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
             if( pTextHt )
             {
-                rWrt.m_bLFPossible = rWrt.m_nLastParaToken == HtmlTokenId::NONE &&
+                rWrt.SetLFPossible(rWrt.m_nLastParaToken == HtmlTokenId::NONE &&
                                        nStrPos > 0 &&
-                                       rStr[nStrPos-1] == ' ';
+                                       rStr[nStrPos-1] == ' ');
                 sal_uInt16 nCSS1Script = rWrt.m_nCSS1Script;
                 rWrt.m_nCSS1Script = aEndPosLst.GetScriptAtPos(
                                                 nStrPos + nOffset, nCSS1Script );
                 HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                 Out( aHTMLAttrFnTab, pTextHt->GetAttr(), rWrt );
                 rWrt.m_nCSS1Script = nCSS1Script;
-                rWrt.m_bLFPossible = false;
+                rWrt.SetLFPossible(false);
             }
 
             if( bOutChar )
@@ -2457,7 +2493,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
                 // try to split a line after about 255 characters
                 // at a space character unless in a PRE-context
-                if( ' ' == c && rWrt.m_nLastParaToken == HtmlTokenId::NONE  )
+                if( ' ' == c && rWrt.m_nLastParaToken == HtmlTokenId::NONE && !rWrt.IsSpacePreserve() )
                 {
                     sal_Int32 nLineLen;
                     nLineLen = rWrt.GetLineLen();
@@ -2569,7 +2605,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
             {
                 aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
             }
-            rWrt.m_bLFPossible = true;
+            rWrt.SetLFPossible(true);
         }
     }
 
@@ -2597,15 +2633,15 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
         rWrt.m_bClearLeft = false;
         rWrt.m_bClearRight = false;
 
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
     }
 
     // if an LF is not allowed already, it is allowed once the paragraphs
     // ends with a ' '
-    if( !rWrt.m_bLFPossible &&
+    if (!rWrt.IsLFPossible() &&
         rWrt.m_nLastParaToken == HtmlTokenId::NONE &&
         nEnd > 0 && ' ' == rStr[nEnd-1] )
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
 
     // dot leaders: print the skipped page number in a different span element
     if (nIndexTab > -1) {
@@ -2615,6 +2651,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
     rWrt.m_bTagOn = false;
     OutHTML_SwFormatOff( rWrt, aFormatInfo );
+    rWrt.SetSpacePreserve(bOldSpacePreserve);
 
     // if necessary, close a form
     rWrt.OutForm( false );

@@ -355,7 +355,7 @@ void SwHTMLWriter::OutFootEndNotes()
             sFootnoteName = OOO_STRING_SVTOOLS_HTML_sdfootnote + OUString::number(static_cast<sal_Int32>(++m_nFootNote));
         }
 
-        if( m_bLFPossible )
+        if (IsLFPossible())
             OutNewLine();
         OString sOut =
             "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
@@ -364,7 +364,7 @@ void SwHTMLWriter::OutFootEndNotes()
         HTMLOutFuncs::Out_String( Strm(), sFootnoteName );
         Strm().WriteOString( "\">" );
 
-        m_bLFPossible = true;
+        SetLFPossible(true);
         IncIndentLevel();   // indent content of <DIV>
 
         OSL_ENSURE( pTextFootnote, "SwHTMLWriter::OutFootEndNotes: SwTextFootnote is missing" );
@@ -379,10 +379,10 @@ void SwHTMLWriter::OutFootEndNotes()
         }
 
         DecIndentLevel();   // indent content of <DIV>
-        if( m_bLFPossible )
+        if (IsLFPossible())
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
-        m_bLFPossible = true;
+        SetLFPossible(true);
 
         OSL_ENSURE( !m_pFormatFootnote,
                 "SwHTMLWriter::OutFootEndNotes: Footnote was not output" );

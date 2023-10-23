@@ -3977,6 +3977,11 @@ void SwHTMLParser::NewPara()
             case HtmlOptionId::DIR:
                 aDir = rOption.GetString();
                 break;
+            case HtmlOptionId::XML_SPACE:
+                if (rOption.GetString() == "preserve")
+                    SetPreserveSpaces(true);
+                break;
+
             default: break;
         }
     }
@@ -4000,6 +4005,9 @@ void SwHTMLParser::NewPara()
                     "Class is not considered" );
             DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
             InsertAttrs( aItemSet, aPropInfo, xCntxt.get() );
+
+            if (aPropInfo.m_bPreserveSpace)
+                SetPreserveSpaces(true);
         }
     }
 
@@ -4065,6 +4073,7 @@ void SwHTMLParser::EndPara( bool bReal )
         SetTextCollAttrs();
 
     m_nOpenParaToken = HtmlTokenId::NONE;
+    SetPreserveSpaces(false);
 }
 
 void SwHTMLParser::NewHeading( HtmlTokenId nToken )

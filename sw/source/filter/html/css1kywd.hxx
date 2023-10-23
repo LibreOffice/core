@@ -217,6 +217,8 @@ constexpr inline std::string_view sCSS1_PV_inherit = "inherit";
 
 constexpr inline std::string_view sCSS1_P_display = "display";
 
+constexpr inline std::string_view sCSS1_white_space = "white-space";
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

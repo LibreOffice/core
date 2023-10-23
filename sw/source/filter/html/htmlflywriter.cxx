@@ -415,7 +415,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
     if( HtmlContainerFlags::NONE != nCntnrMode )
     {
 
-        if( m_bLFPossible && HtmlContainerFlags::Div == nCntnrMode )
+        if (IsLFPossible() && HtmlContainerFlags::Div == nCntnrMode)
             OutNewLine();
 
         OStringBuffer sOut;
@@ -443,7 +443,7 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
         if( HtmlContainerFlags::Div == nCntnrMode )
         {
             IncIndentLevel();
-            m_bLFPossible = true;
+            SetLFPossible(true);
         }
     }
 
@@ -495,10 +495,10 @@ void SwHTMLWriter::OutFrameFormat( AllHtmlFlags nMode, const SwFrameFormat& rFra
     if( HtmlContainerFlags::Div == nCntnrMode )
     {
         DecIndentLevel();
-        if( m_bLFPossible )
+        if (IsLFPossible())
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
-        m_bLFPossible = true;
+        SetLFPossible(true);
     }
     else if( HtmlContainerFlags::Span == nCntnrMode )
         HTMLOutFuncs::Out_AsciiTag( Strm(), Concat2View(GetNamespace() + OOO_STRING_SVTOOLS_HTML_span), false );
@@ -1163,7 +1163,7 @@ OUString lclWriteOutImap(SwHTMLWriter& rWrt, const SfxItemSet& rItemSet, const S
         OString aIndMap, aIndArea;
         const char *pIndArea = nullptr, *pIndMap = nullptr;
 
-        if (rWrt.m_bLFPossible)
+        if (rWrt.IsLFPossible())
         {
             rWrt.OutNewLine( true );
             aIndMap = rWrt.GetIndentString();
@@ -1253,7 +1253,7 @@ SwHTMLWriter& OutHTML_ImageStart( HtmlWriter& rHtml, SwHTMLWriter& rWrt, const S
     OUString aIMapName = lclWriteOutImap(rWrt, rItemSet, rFrameFormat, rRealSize, pAltImgMap, pURLItem);
 
     // put img into new line
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine( true );
 
     // <a name=...></a>...<img ...>
@@ -1594,7 +1594,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
     rWrt.OutAndSetDefList( 0 );
 
     // output as Multicol
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
 
     OStringBuffer sOut("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol);
@@ -1631,7 +1631,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
 
     rWrt.Strm().WriteChar( '>' );
 
-    rWrt.m_bLFPossible = true;
+    rWrt.SetLFPossible(true);
     rWrt.IncIndentLevel();  // indent the content of Multicol
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
@@ -1650,10 +1650,10 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
     }
 
     rWrt.DecIndentLevel();  // indent the content of Multicol;
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_multicol), false );
-    rWrt.m_bLFPossible = true;
+    rWrt.SetLFPossible(true);
 
     return rWrt;
 }
@@ -1661,7 +1661,7 @@ static SwHTMLWriter & OutHTML_FrameFormatAsMulticol( SwHTMLWriter& rWrt,
 static SwHTMLWriter& OutHTML_FrameFormatAsSpacer( SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat )
 {
     // if possible, output a line break before the graphic
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine( true );
 
     OString sOut =
@@ -1696,7 +1696,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
         aTag = OOO_STRING_SVTOOLS_HTML_span;
 
     // output as DIV
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
 
     OStringBuffer sOut("<" + rWrt.GetNamespace() + aTag);
@@ -1711,7 +1711,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
     rWrt.Strm().WriteChar( '>' );
 
     rWrt.IncIndentLevel();  // indent the content
-    rWrt.m_bLFPossible = true;
+    rWrt.SetLFPossible(true);
 
     const SwFormatContent& rFlyContent = rFrameFormat.GetContent();
     SwNodeOffset nStt = rFlyContent.GetContentIdx()->GetIndex();
@@ -1733,7 +1733,7 @@ static SwHTMLWriter& OutHTML_FrameFormatAsDivOrSpan( SwHTMLWriter& rWrt,
     }
 
     rWrt.DecIndentLevel();  // indent the content of Multicol;
-    if( rWrt.m_bLFPossible )
+    if (rWrt.IsLFPossible())
         rWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), Concat2View(rWrt.GetNamespace() + aTag), false );
 

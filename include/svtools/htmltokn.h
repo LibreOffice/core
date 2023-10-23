@@ -429,6 +429,7 @@ ENUM_START          = NUMBER_END,
     VALIGN,
     VALUETYPE,
     WRAP,
+    XML_SPACE,
 ENUM_END,
 
 // attributes with script code as value

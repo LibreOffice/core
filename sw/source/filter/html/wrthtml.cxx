@@ -146,7 +146,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , m_bNoAlign( false )
     , m_bClearLeft( false )
     , m_bClearRight( false )
-    , m_bLFPossible( false )
     , m_bPreserveForm( false )
     , m_bCfgNetscape4( false )
     , mbSkipImages(false)
@@ -348,6 +347,16 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         it->second >>= nVal;
         m_nLeadingTabWidth.emplace(nVal);
     }
+
+    it = aStoreMap.find("PreserveSpaces");
+    if (it != aStoreMap.end())
+    {
+        // Paragraphs with leading/trailing/repeated whitespace will have "white-space: pre-wrap"
+        // style; whitespace in content will not be altered (except for "LeadingTabWidth" effects)
+        bool bVal = false;
+        it->second >>= bVal;
+        m_bPreserveSpacesOnWrite = bVal;
+    }
 }
 
 ErrCode SwHTMLWriter::WriteStream()
@@ -455,6 +464,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_bPreserveForm = false;
     m_bClearLeft = m_bClearRight = false;
     m_bLFPossible = false;
+    m_bSpacePreserve = false;
 
     m_nLeftMargin = m_nDfltLeftMargin = m_nDfltRightMargin = 0;
     m_nDfltTopMargin = m_nDfltBottomMargin = 0;
@@ -561,7 +571,7 @@ ErrCode SwHTMLWriter::WriteStream()
         sal_uInt16 nHeaderAttrs = 0;
         m_pCurrPageDesc = MakeHeader( nHeaderAttrs );
 
-        m_bLFPossible = true;
+        SetLFPossible(true);
 
         // output forms which contain only HiddenControls
         OutHiddenForms();
@@ -601,7 +611,7 @@ ErrCode SwHTMLWriter::WriteStream()
                 OutHTML_HeaderFooter( *this, *pFooterFormat, false );
         }
 
-        if( m_bLFPossible )
+        if (IsLFPossible())
             OutNewLine();
         if (!mbSkipHeaderFooter)
         {
@@ -721,7 +731,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 {
     OSL_ENSURE( pCol || !bContinued, "Continuation of DIV" );
 
-    if( rHTMLWrt.m_bLFPossible )
+    if (rHTMLWrt.IsLFPossible())
         rHTMLWrt.OutNewLine();
 
     OStringBuffer sOut("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division);
@@ -793,7 +803,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 
     rHTMLWrt.Strm().WriteChar( '>' );
 
-    rHTMLWrt.m_bLFPossible = true;
+    rHTMLWrt.SetLFPossible(true);
     if( !rName.isEmpty() && !bContinued )
         rHTMLWrt.OutImplicitMark( rName, "region" );
 
@@ -803,10 +813,10 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
 static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt )
 {
     rHTMLWrt.DecIndentLevel();
-    if( rHTMLWrt.m_bLFPossible )
+    if (rHTMLWrt.IsLFPossible())
         rHTMLWrt.OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( rHTMLWrt.Strm(), Concat2View(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_division), false );
-    rHTMLWrt.m_bLFPossible = true;
+    rHTMLWrt.SetLFPossible(true);
 }
 
 static SwHTMLWriter& OutHTML_Section( SwHTMLWriter& rWrt, const SwSectionNode& rSectNd )

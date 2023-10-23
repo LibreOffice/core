@@ -3044,6 +3044,19 @@ static void ParseCSS1_visibility(const CSS1Expression* pExpr, SfxItemSet& /*rIte
     rPropInfo.m_bVisible = pExpr->GetString() != "hidden";
 }
 
+static void ParseCSS1_white_space(const CSS1Expression* pExpr, SfxItemSet& /*rItemSet*/,
+                                  SvxCSS1PropertyInfo& rPropInfo, const SvxCSS1Parser& /*rParser*/)
+{
+    if (pExpr->GetType() == CSS1_IDENT)
+    {
+        if (pExpr->GetString().equalsIgnoreAsciiCase("pre")
+            || pExpr->GetString().equalsIgnoreAsciiCase("pre-wrap"))
+        {
+            rPropInfo.m_bPreserveSpace = true;
+        }
+    }
+}
+
 namespace {
 
 // the assignment of property to parsing function
@@ -3056,7 +3069,7 @@ struct CSS1PropEntry
 }
 
 // the table with assignments
-CSS1PropEntry const aCSS1PropFnTab[] =
+CSS1PropEntry constexpr aCSS1PropFnTab[] =
 {
     { sCSS1_P_background, ParseCSS1_background },
     { sCSS1_P_background_color, ParseCSS1_background_color },
@@ -3110,9 +3123,14 @@ CSS1PropEntry const aCSS1PropFnTab[] =
     { sCSS1_P_text_transform, ParseCSS1_text_transform },
     { sCSS1_P_top, ParseCSS1_top },
     { sCSS1_P_visibility, ParseCSS1_visibility },
+    { sCSS1_white_space, ParseCSS1_white_space },
     { sCSS1_P_widows, ParseCSS1_widows },
     { sCSS1_P_width, ParseCSS1_width },
 };
+
+static_assert(std::is_sorted(std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab),
+                             [](const auto& lhs, const auto& rhs) constexpr
+                             { return lhs.pName < rhs.pName; }));
 
 static bool CSS1PropEntryFindCompare(CSS1PropEntry const & lhs, OUString const & s)
 {
@@ -3123,13 +3141,6 @@ void SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
                                        std::unique_ptr<CSS1Expression> pExpr )
 {
     OSL_ENSURE( m_pItemSet, "DeclarationParsed() without ItemSet" );
-
-    // TODO: convert to static_assert, when C++20 constexpr std::is_sorted is available
-    [[maybe_unused]] static const bool bSortedPropFns = []() {
-        assert( std::is_sorted( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab),
-            [](const auto& lhs, const auto& rhs) constexpr { return lhs.pName < rhs.pName; } ) );
-        return true;
-    }();
 
     auto it = std::lower_bound( std::begin(aCSS1PropFnTab), std::end(aCSS1PropFnTab), rProperty,
                                 CSS1PropEntryFindCompare );

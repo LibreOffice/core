@@ -523,6 +523,7 @@
 #define OOO_STRING_SVTOOLS_HTML_O_valign "valign"
 #define OOO_STRING_SVTOOLS_HTML_O_valuetype "valuetype"
 #define OOO_STRING_SVTOOLS_HTML_O_wrap "wrap"
+#define OOO_STRING_SVTOOLS_XHTML_O_xml_space "xml:space"
 
 // attributes with script code as value
 #define OOO_STRING_SVTOOLS_HTML_O_onblur "onblur"

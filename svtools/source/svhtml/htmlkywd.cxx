@@ -599,6 +599,7 @@ static HTML_OptionEntry aHTMLOptionTab[] = {
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valign),        HtmlOptionId::VALIGN},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_valuetype), HtmlOptionId::VALUETYPE},
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_wrap),      HtmlOptionId::WRAP},
+    {std::u16string_view(u"" OOO_STRING_SVTOOLS_XHTML_O_xml_space), HtmlOptionId::XML_SPACE},
 
 // Attributes with script code value
     {std::u16string_view(u"" OOO_STRING_SVTOOLS_HTML_O_onblur),        HtmlOptionId::ONBLUR}, // JavaScript
