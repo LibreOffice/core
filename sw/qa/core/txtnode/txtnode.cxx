@@ -12,6 +12,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <sfx2/viewsh.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
@@ -430,6 +431,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testContentControlCopy)
     // - Actual  : 0 (RICH_TEXT)
     // i.e. properties were not copied from the source to the destination content control.
     CPPUNIT_ASSERT_EQUAL(SwContentControlType::CHECKBOX, rFormat2.GetContentControl()->GetType());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTdf157287)
+{
+    createSwDoc("tdf157287.odt");
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("30"), xField->getPresentation(false));
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("B1"), uno::UNO_QUERY);
+    xCellA1->setString("100");
+
+    dispatchCommand(mxComponent, ".uno:UpdateFields", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 120
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("120"), xField->getPresentation(false));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testFlySplitFootnote)
