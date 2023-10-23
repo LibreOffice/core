@@ -401,6 +401,57 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157636)
     CPPUNIT_ASSERT_GREATER(6600, nBlackCount);
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
+{
+    loadFromURL(u"pptx/tdf157793.pptx");
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(100))
+    };
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", maTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(maTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap::ScopedReadAccess pReadAccess(aBMP);
+    int nLightGrayCount = 0;
+    for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+    {
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColor = pReadAccess->GetColor(nY, nX);
+            if (aColor == 0xfefefe)
+                ++nLightGrayCount;
+        }
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected greater than: 8500
+    // - Actual  : 0
+    CPPUNIT_ASSERT_GREATER(8500, nLightGrayCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
 {
     loadFromURL(u"pptx/tdf157635.pptx");
