@@ -100,6 +100,7 @@ public:
                                         SwRootFrame const* pLayout = nullptr,
                                         SwTextNode* pSelf = nullptr, SwFrame* pFrame = nullptr);
     void UpdateGetReferences();
+    void UpdateStyleReferences();
 };
 
 class SW_DLLPUBLIC SwGetRefField final : public SwField

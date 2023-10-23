@@ -706,7 +706,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                         rText = pTextNd->GetExpandText(pLayout, nStart, nEnd - nStart, false, false,
                                                        false, ExpandMode(0));
                 }
-                FilterText(m_sText, GetLanguage(), m_sSetReferenceLanguage);
+                FilterText(rText, GetLanguage(), m_sSetReferenceLanguage);
             }
         }
         break;
@@ -1165,6 +1165,33 @@ void SwGetRefFieldType::UpdateGetReferences()
         pGRef->UpdateField(pFormatField->GetTextField(), nullptr);
     }
     CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
+}
+
+void SwGetRefFieldType::UpdateStyleReferences()
+{
+    std::vector<SwFormatField*> vFields;
+    GatherFields(vFields, false);
+    bool bModified = false;
+    for(auto pFormatField: vFields)
+    {
+        // update only the GetRef fields which are also STYLEREF fields
+        SwGetRefField* pGRef = static_cast<SwGetRefField*>(pFormatField->GetField());
+
+        if (pGRef->GetSubType() != REF_STYLE) continue;
+
+        const SwTextField* pTField;
+        if(!pGRef->GetLanguage() &&
+            nullptr != (pTField = pFormatField->GetTextField()) &&
+            pTField->GetpTextNode())
+        {
+            pGRef->SetLanguage(pTField->GetpTextNode()->GetLang(pTField->GetStart()));
+        }
+
+        pGRef->UpdateField(pFormatField->GetTextField(), nullptr);
+        bModified = true;
+    }
+    if (bModified)
+        CallSwClientNotify(sw::LegacyModifyHint(nullptr, nullptr));
 }
 
 void SwGetRefFieldType::SwClientNotify(const SwModify&, const SfxHint& rHint)
