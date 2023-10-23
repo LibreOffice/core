@@ -677,7 +677,11 @@ namespace
             if (xRead)
             {
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
-                const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
+
+                // tdf#157795 set color to black outside of of bitmap bounds
+                // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+                // transparent areas are now black instead of white.
+                const BitmapColor aOutside(0x0, 0x0, 0x0);
 
                 for(tools::Long y(0); y < aDestinationSizePixel.getHeight(); y++)
                 {
