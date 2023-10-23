@@ -212,6 +212,8 @@ extern const char* const sCSS1_PV_inherit;
 
 extern const char* const sCSS1_P_display;
 
+extern const char* const sCSS1_P_white_space;
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

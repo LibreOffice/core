@@ -518,7 +518,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( SwFieldIds::Script == pFieldTyp->Which() )
     {
-        if( rHTMLWrt.m_bLFPossible )
+        if (rHTMLWrt.IsLFPossible())
             rHTMLWrt.OutNewLine( true );
 
         bool bURL = static_cast<const SwScriptField *>(pField)->IsCodeURL();
@@ -534,7 +534,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, nullptr, nullptr );
 
-        if( rHTMLWrt.m_bLFPossible )
+        if (rHTMLWrt.IsLFPossible())
             rHTMLWrt.OutNewLine( true );
     }
     else

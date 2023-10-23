@@ -115,6 +115,7 @@ public:
     bool m_bTextIndent : 1;
     bool m_bNumbering : 1;
     bool m_bBullet : 1;
+    bool m_bPreserveSpace = false;
 
     SvxAdjust m_eFloat;
 

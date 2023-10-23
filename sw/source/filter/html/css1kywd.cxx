@@ -212,4 +212,6 @@ const char* const sCSS1_PV_inherit = "inherit";
 
 const char* const sCSS1_P_display = "display";
 
+const char* const sCSS1_P_white_space = "white-space";
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

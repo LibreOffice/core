@@ -315,7 +315,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     for( sal_uInt16 i=rInfo.GetDepth(); i>nNextDepth; i-- )
     {
         rWrt.DecIndentLevel(); // indent content of <OL>
-        if( rWrt.m_bLFPossible )
+        if (rWrt.IsLFPossible())
             rWrt.OutNewLine(); // </OL>/</UL> in a new line
 
         // a list is started or ended:
@@ -333,7 +333,7 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
                 rWrt.Strm(), Concat2View(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li),
                 /*bOn=*/false);
         }
-        rWrt.m_bLFPossible = true;
+        rWrt.SetLFPossible(true);
     }
 
     return rWrt;
