@@ -1287,6 +1287,27 @@
     <table:table-row table:style-name="ro1">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>GutterAtTop</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>boolean</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>false</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3" table:style-name="Default" office:value-type="string" calcext:value-type="string">
+      <text:p>false</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string"><text:p>true: gutter margin is at the top</text:p><text:p>false: gutter margin is at the left/right (depends on RTL)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>c088d26578d1be352efa49bd164a8217627648de</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1014"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>IgnoreFirstLineIndentInNumbering</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
