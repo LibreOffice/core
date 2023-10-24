@@ -1385,8 +1385,6 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
         case REF_STYLE:
             if (!pSelf) break;
 
-            bool bFlagFromBottom = (nFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
-
             const SwNodes& nodes = pDoc->GetNodes();
 
             StyleRefElementType elementType = StyleRefElementType::Default;
@@ -1434,6 +1432,8 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                 {
                     // For marginals, styleref tries to act on the current page first
                     // 1. Get the page we're on, search it from top to bottom
+
+                    bool bFlagFromBottom = (nFlags & REFFLDFLAG_STYLE_FROM_BOTTOM) == REFFLDFLAG_STYLE_FROM_BOTTOM;
 
                     Point aPt;
                     std::pair<Point, bool> const tmp(aPt, false);
@@ -1500,10 +1500,7 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
 
                         if (beforeStart)
                         {
-                            if (bFlagFromBottom)
-                                pSearchThird.push_front(nodes[n]);
-                            else
-                                pSearchSecond.push_front(nodes[n]);
+                            pSearchSecond.push_front(nodes[n]);
                         }
                         else if (beforeEnd)
                         {
@@ -1517,8 +1514,6 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                                 beforeEnd = false;
                             }
                         }
-                        else if (bFlagFromBottom)
-                            pSearchSecond.push_back(nodes[n]);
                         else
                             pSearchThird.push_back(nodes[n]);
                     }
@@ -1580,20 +1575,14 @@ SwTextNode* SwGetRefFieldType::FindAnchor(SwDoc* pDoc, const OUString& rRefMark,
                     {
                         if (beforeElement)
                         {
-                            if (bFlagFromBottom)
-                                pSearchSecond.push_front(nodes[n]);
-                            else
-                                pSearchFirst.push_front(nodes[n]);
+                            pSearchFirst.push_front(nodes[n]);
 
                             if (*pReference == *nodes[n])
                             {
                                 beforeElement = false;
                             }
                         }
-                        else if (bFlagFromBottom)
-                            pSearchFirst.push_back(nodes[n]);
-                        else
-                            pSearchSecond.push_back(nodes[n]);
+                        pSearchSecond.push_back(nodes[n]);
                     }
 
                     // 1. Search up until we hit the top of the document

@@ -201,7 +201,7 @@
                 <property name="baseline-position">top</property>
                 <child>
                   <object class="GtkCheckButton" id="stylereffrombottomcheckbox">
-                    <property name="label" translatable="yes" context="fldrefpage|stylerefflags|label1">Search from bottom to top</property>
+                    <property name="label" translatable="yes" context="fldrefpage|stylerefflags|label1">Search this page from bottom to top</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
