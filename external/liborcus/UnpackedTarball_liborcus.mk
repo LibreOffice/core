@@ -20,8 +20,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/gcc9.patch.0 \
 	external/liborcus/libtool.patch.0 \
 	external/liborcus/liborcus_newline.patch.1 \
-	external/liborcus/msvc-int-narrowing.patch.1 \
-	external/liborcus/gnumeric-set-grammar.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
