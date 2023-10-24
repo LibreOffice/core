@@ -33,26 +33,12 @@
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <comphelper/scopeguard.hxx>
 
 class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-    virtual std::unique_ptr<Resetter> preTest(const char* filename) override
-    {
-        if (filename == std::string_view("smartart.docx")
-            || filename == std::string_view("strict-smartart.docx") )
-        {
-            std::unique_ptr<Resetter> pResetter(new Resetter(
-                [] () {
-                    SvtFilterOptions::Get().SetSmartArt2Shape(false);
-                }));
-            SvtFilterOptions::Get().SetSmartArt2Shape(true);
-            return pResetter;
-        }
-        return nullptr;
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
@@ -74,23 +60,32 @@ DECLARE_OOXMLEXPORT_TEST(testWPGtextboxes, "testWPGtextboxes.docx")
 
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSmartart, "smartart.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSmartart)
 {
-    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    SvtFilterOptions::Get().SetSmartArt2Shape(true);
+    comphelper::ScopeGuard g([] { SvtFilterOptions::Get().SetSmartArt2Shape(false); });
 
-    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xGroup->getCount()); // background, 3 rectangles and an arrow in the group
+    auto verify = [this]() {
+        CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), getProperty<Color>(xPropertySet, "FillColor")); // If fill color is right, theme import is OK
+        uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xGroup->getCount()); // background, 3 rectangles and an arrow in the group
 
-    uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+        uno::Reference<beans::XPropertySet> xPropertySet(xGroup->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(Color(0x4f81bd), getProperty<Color>(xPropertySet, "FillColor")); // If fill color is right, theme import is OK
 
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), getProperty<sal_Int32>( xPropertySet, "ParaAdjust")); // Paragraph properties are imported
+        uno::Reference<text::XTextRange> xTextRange(xGroup->getByIndex(2), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Sample"), xTextRange->getString()); // Shape has text
+
+        uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextRange->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+        xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(style::ParagraphAdjust_CENTER), getProperty<sal_Int32>( xPropertySet, "ParaAdjust")); // Paragraph properties are imported
+    };
+    createSwDoc("smartart.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo69548)
@@ -534,11 +529,20 @@ DECLARE_OOXMLEXPORT_TEST(testStrict, "strict.docx")
     CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.TextEmbeddedObject"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSmartartStrict, "strict-smartart.docx")
+CPPUNIT_TEST_FIXTURE(Test, testSmartartStrict)
 {
-    uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
-    // This was 0, SmartArt was visually missing.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xGroup->getCount()); // background, 3 ellipses + 3 arrows
+    SvtFilterOptions::Get().SetSmartArt2Shape(true);
+    comphelper::ScopeGuard g([] { SvtFilterOptions::Get().SetSmartArt2Shape(false); });
+
+    auto verify = [this]() {
+        uno::Reference<container::XIndexAccess> xGroup(getShape(1), uno::UNO_QUERY);
+        // This was 0, SmartArt was visually missing.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), xGroup->getCount()); // background, 3 ellipses + 3 arrows
+    };
+    createSwDoc("strict-smartart.docx");
+    verify();
+    saveAndReload(mpFilter);
+    verify();
 }
 
 DECLARE_OOXMLEXPORT_TEST(testLibreOfficeHang, "frame-wrap-auto.docx")
