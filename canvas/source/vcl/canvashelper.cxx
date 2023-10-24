@@ -731,13 +731,25 @@ namespace vclcanvas
                 mpOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx, fAlpha );
                 if( mp2ndOutDevProvider )
                 {
-                    // HACK. Normally, CanvasHelper does not care about
-                    // actually what mp2ndOutDev is...  well, here we do &
-                    // assume a 1bpp target - everything beyond 97%
-                    // transparency is fully transparent
-                    if( aBmpEx.IsAlpha() && !SkiaHelper::isVCLSkiaEnabled())
+                    if( aBmpEx.IsAlpha() )
                     {
-                        BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                        // tdf#157790 invert alpha mask
+                        // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+                        // the alpha mask needs to be inverted. Note: when
+                        // testing tdf#157790, this code only gets executed
+                        // when Skia is enabled.
+                        AlphaMask aAlpha( aBmpEx.GetAlphaMask() );
+                        aAlpha.Invert();
+                        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aAlpha );
+
+                        // HACK. Normally, CanvasHelper does not care about
+                        // actually what mp2ndOutDev is...  well, here we do &
+                        // assume a 1bpp target - everything beyond 97%
+                        // transparency is fully transparent
+                        if( !SkiaHelper::isVCLSkiaEnabled())
+                        {
+                            BitmapFilter::Filter(aBmpEx, BitmapAlphaClampFilter(253));
+                        }
                     }
 
                     mp2ndOutDevProvider->getOutDev().DrawTransformedBitmapEx( aMatrix, aBmpEx );
@@ -839,10 +851,26 @@ namespace vclcanvas
                               &aGrfAttr);
 
                 if( mp2ndOutDevProvider )
-                    pGrfObj->Draw(mp2ndOutDevProvider->getOutDev(),
+                {
+                    GraphicObjectSharedPtr p2ndGrfObj = pGrfObj;
+                    if( aBmpEx.IsAlpha() )
+                    {
+                        // tdf#157790 invert alpha mask
+                        // Due to commit 81994cb2b8b32453a92bcb011830fcb884f22ff3,
+                        // the alpha mask needs to be inverted. Note: when
+                        // testing tdf#157790, this code only gets executed
+                        // when Skia is disabled.
+                        AlphaMask aAlpha( aBmpEx.GetAlphaMask() );
+                        aAlpha.Invert();
+                        BitmapEx a2ndBmpEx( aBmpEx.GetBitmap(), aAlpha );
+                        p2ndGrfObj = std::make_shared<GraphicObject>( a2ndBmpEx );
+                    }
+
+                    p2ndGrfObj->Draw(mp2ndOutDevProvider->getOutDev(),
                                   aPt,
                                   aSz,
                                   &aGrfAttr);
+                }
 
                 // created GraphicObject, which possibly cached
                 // display bitmap - return cache object, to retain
