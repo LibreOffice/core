@@ -923,7 +923,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
     // when no types are given at all, we return all the tables
-    static constexpr OUStringLiteral aTable = u"TABLE";
+    static constexpr OUString aTable = u"TABLE"_ustr;
     bool bTableFound = false;
     const OUString* p = types.getConstArray(),
                          * pEnd = p + types.getLength();
@@ -958,7 +958,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
         aRow[1] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[2] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[3] = new ORowSetValueDecorator(xRecords->getName());
-        aRow[4] = new ORowSetValueDecorator(OUString(aTable));
+        aRow[4] = new ORowSetValueDecorator(aTable);
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
         tmp.push_back(aRow);
 

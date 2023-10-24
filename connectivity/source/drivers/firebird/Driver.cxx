@@ -49,7 +49,7 @@ constexpr OUString our_sFirebirdTmpVar = u"FIREBIRD_TMP"_ustr;
 constexpr OUString our_sFirebirdLockVar = u"FIREBIRD_LOCK"_ustr;
 constexpr OUString our_sFirebirdMsgVar = u"FIREBIRD_MSG"_ustr;
 #ifdef MACOSX
-constexpr OUStringLiteral our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB";
+constexpr OUString our_sFirebirdLibVar = u"LIBREOFFICE_FIREBIRD_LIB"_ustr;
 #endif
 };
 
@@ -86,7 +86,7 @@ FirebirdDriver::FirebirdDriver(const css::uno::Reference< css::uno::XComponentCo
     ::rtl::Bootstrap::expandMacros(sLibURL);
     OUString sLibPath;
     ::osl::FileBase::getSystemPathFromFileURL(sLibURL, sLibPath);
-    osl_setEnvironment(OUString(our_sFirebirdLibVar).pData, sLibPath.pData);
+    osl_setEnvironment(our_sFirebirdLibVar.pData, sLibPath.pData);
 #endif /*MACOSX*/
 #endif /*!SYSTEM_FIREBIRD*/
 }
@@ -111,7 +111,7 @@ void FirebirdDriver::disposing()
 #ifndef SYSTEM_FIREBIRD
     osl_clearEnvironment(our_sFirebirdMsgVar.pData);
 #ifdef MACOSX
-    osl_clearEnvironment(OUString(our_sFirebirdLibVar).pData);
+    osl_clearEnvironment(our_sFirebirdLibVar.pData);
 #endif /*MACOSX*/
 #endif /*!SYSTEM_FIREBIRD*/
 
