@@ -10,23 +10,20 @@
 
 #include <sal/config.h>
 #include "swdllapi.h"
+#include <o3tl/concepts.hxx>
 #include <o3tl/strong_int.hxx>
 #include <iostream>
 
 typedef o3tl::strong_int<sal_Int32, struct Tag_SwNodeOffset> SwNodeOffset;
 
 /* Just to make it easier to write arithmetic with these types */
-template <typename T>
-inline typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type
-operator+(SwNodeOffset a, T n)
+template <o3tl::signed_integral T> inline SwNodeOffset operator+(SwNodeOffset a, T n)
 {
     return a + SwNodeOffset(n);
 }
 
 /* Just to make it easier to write arithmetic with these types */
-template <typename T>
-inline typename std::enable_if<std::is_signed<T>::value, SwNodeOffset>::type
-operator-(SwNodeOffset a, T n)
+template <o3tl::signed_integral T> inline SwNodeOffset operator-(SwNodeOffset a, T n)
 {
     return a - SwNodeOffset(n);
 }
