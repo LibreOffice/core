@@ -1282,7 +1282,17 @@ void QtAccessibleWidget::setCurrentValue(const QVariant& value)
     Reference<XAccessibleValue> xValue(xAc, UNO_QUERY);
     if (!xValue.is())
         return;
-    xValue->setCurrentValue(Any(value.toDouble()));
+
+    // Different types of numerical values for XAccessibleValue are possible.
+    // If current value has an integer type, also use that for the new value, to make
+    // sure underlying implementations expecting that can handle the value properly.
+    const Any aCurrentValue = xValue->getCurrentValue();
+    if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
+        xValue->setCurrentValue(Any(static_cast<sal_Int32>(value.toInt())));
+    else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
+        xValue->setCurrentValue(Any(static_cast<sal_Int64>(value.toLongLong())));
+    else
+        xValue->setCurrentValue(Any(value.toDouble()));
 }
 
 // QAccessibleTableInterface
