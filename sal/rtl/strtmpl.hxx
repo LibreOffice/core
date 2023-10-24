@@ -229,12 +229,12 @@ sal_Int32 compare(S1 s1, S2 s2, Compare, Shorten_t shortenedLength)
 }
 
 // take advantage of builtin optimisations
-template <typename C, std::enable_if_t<sizeof(C) == sizeof(wchar_t), int> = 0>
+template <typename C> requires (sizeof(C) == sizeof(wchar_t))
 sal_Int32 compare(null_terminated<C> s1, null_terminated<C> s2, CompareNormal, NoShortening)
 {
     return wcscmp(reinterpret_cast<wchar_t const*>(s1.p), reinterpret_cast<wchar_t const*>(s2.p));
 }
-template <typename C, std::enable_if_t<sizeof(C) == sizeof(char), int> = 0>
+template <typename C> requires (sizeof(C) == sizeof(char))
 sal_Int32 compare(null_terminated<C> s1, null_terminated<C> s2, CompareNormal, NoShortening)
 {
     return strcmp(reinterpret_cast<char const*>(s1.p), reinterpret_cast<char const*>(s2.p));
