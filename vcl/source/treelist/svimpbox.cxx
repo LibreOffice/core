@@ -2326,13 +2326,24 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         // toggle selection
                         m_pView->Select( m_pCursor, !m_pView->IsSelected( m_pCursor ) );
                     }
-                    else if ( !m_pView->IsSelected( m_pCursor ) )
+                    else if (m_pView->IsSelected(m_pCursor))
+                    {
+                        // trigger button
+                        SvLBoxItem* pButtonItem = m_pCursor->GetFirstItem(SvLBoxItemType::Button);
+                        if (pButtonItem)
+                        {
+                            SvLBoxButton* pButton = static_cast<SvLBoxButton*>(pButtonItem);
+                            pButton->ClickHdl(m_pCursor);
+                            InvalidateEntry(m_pCursor);
+                        }
+                        else
+                            bKeyUsed = false;
+                    }
+                    else
                     {
                         SelAllDestrAnch( false );
                         m_pView->Select( m_pCursor );
                     }
-                    else
-                        bKeyUsed = false;
                 }
                 else
                     bKeyUsed = false;
