@@ -359,6 +359,14 @@ namespace vcl
         return nBreakPos;
     }
 
+    namespace
+    {
+        bool lcl_ShouldBreakWord(const sal_Int32 nLineWidth, const sal_Int32 nWidth, const DrawTextFlags nStyle)
+        {
+            return ((nLineWidth > nWidth) && (nStyle & DrawTextFlags::WordBreak));
+        }
+    }
+
     tools::Long TextLayoutCommon::GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
                                                ImplMultiTextLineInfo& rLineInfo,
                                                tools::Long nWidth, OUString const& rStr,
@@ -398,12 +406,13 @@ namespace vcl
                 nBreakPos++;
 
             tools::Long nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
-            if ( ( nLineWidth > nWidth ) && ( nStyle & DrawTextFlags::WordBreak ) )
+
+            if (lcl_ShouldBreakWord(nLineWidth, nWidth, nStyle))
             {
-                if ( !xBI.is() )
+                if (!xBI.is())
                     xBI = vcl::unohelper::CreateBreakIterator();
 
-                if ( xBI.is() )
+                if (xBI.is())
                 {
                     nBreakPos = BreakLinesWithIterator(nWidth, rStr, xHyph, xBI, bHyphenate, nPos, nBreakPos);
                     nLineWidth = GetTextWidth(rStr, nPos, nBreakPos - nPos);
