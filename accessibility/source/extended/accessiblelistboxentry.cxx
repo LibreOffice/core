@@ -23,6 +23,7 @@
 #include <svtools/stringtransfer.hxx>
 #include <vcl/toolkit/svlbitm.hxx>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -84,6 +85,22 @@ namespace accessibility
 
         switch ( rEvent.GetId() )
         {
+            case VclEventId::CheckboxToggle:
+            {
+                // assert this object is represented as a checkbox on a11y layer (LABEL role is used for
+                // SvButtonState::Tristate, s. AccessibleListBoxEntry::getAccessibleRole)
+                assert(getAccessibleRole() == AccessibleRole::CHECK_BOX
+                       || getAccessibleRole() == AccessibleRole::LABEL);
+                Any aOldValue;
+                Any aNewValue;
+                if (getAccessibleStateSet() & AccessibleStateType::CHECKED)
+                    aNewValue <<= AccessibleStateType::CHECKED;
+                else
+                    aOldValue <<= AccessibleStateType::CHECKED;
+
+                NotifyAccessibleEvent(AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue);
+                break;
+            }
             case  VclEventId::ObjectDying :
             {
                 if ( m_pTreeListBox )

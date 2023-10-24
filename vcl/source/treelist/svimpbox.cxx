@@ -1849,7 +1849,12 @@ bool SvImpLBox::ButtonUpCheckCtrl( const MouseEvent& rMEvt )
         m_pActiveButton->SetStateHilighted( false );
         tools::Long nMouseX = rMEvt.GetPosPixel().X();
         if (pEntry == m_pActiveEntry && m_pView->GetItem(m_pActiveEntry, nMouseX) == m_pActiveButton)
+        {
+            const bool bChecked = m_pActiveButton->IsStateChecked();
             m_pActiveButton->ClickHdl(m_pActiveEntry);
+            if (m_pActiveButton->IsStateChecked() != bChecked)
+                CallEventListeners(VclEventId::CheckboxToggle, m_pActiveEntry);
+        }
         InvalidateEntry(m_pActiveEntry);
         if (m_pCursor == m_pActiveEntry)
             ShowCursor(true);
@@ -2333,8 +2338,11 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         if (pButtonItem)
                         {
                             SvLBoxButton* pButton = static_cast<SvLBoxButton*>(pButtonItem);
+                            const bool bChecked = pButton->IsStateChecked();
                             pButton->ClickHdl(m_pCursor);
                             InvalidateEntry(m_pCursor);
+                            if (pButton->IsStateChecked() != bChecked)
+                                CallEventListeners(VclEventId::CheckboxToggle, m_pActiveEntry);
                         }
                         else
                             bKeyUsed = false;
