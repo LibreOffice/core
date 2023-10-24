@@ -2052,22 +2052,20 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         aLayout.append( "]\n" );
     }
 
-    std::vector< sal_Int32 > aAttribObjects;
+    OStringBuffer aRet(256);
+    bool isArray(false);
+    if (1 < (aLayout.isEmpty() ? 0 : 1) + (aList.isEmpty() ? 0 : 1)
+            + (aPrintField.isEmpty() ? 0 : 1) + (aTable.isEmpty() ? 0 : 1))
+    {
+        isArray = true;
+        aRet.append(" [");
+    }
     auto const WriteAttrs = [&](char const*const pName, OStringBuffer & rBuf)
     {
-        aAttribObjects.push_back( createObject() );
-        if (updateObject( aAttribObjects.back() ))
-        {
-            OStringBuffer aObj( 64 );
-            aObj.append( aAttribObjects.back() );
-            aObj.append( " 0 obj\n"
-                         "<</O");
-            aObj.append(pName);
-            aObj.append("\n");
-            rBuf.append(">>\nendobj\n\n");
-            writeBuffer(aObj);
-            writeBuffer(rBuf);
-        }
+        aRet.append(" <</O");
+        aRet.append(pName);
+        aRet.append(rBuf);
+        aRet.append(">>");
     };
     if( !aLayout.isEmpty() )
     {
@@ -2086,15 +2084,10 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
         WriteAttrs("/Table", aTable);
     }
 
-    OStringBuffer aRet( 64 );
-    if( aAttribObjects.size() > 1 )
-        aRet.append( " [" );
-    for (auto const& attrib : aAttribObjects)
+    if (isArray)
     {
-        aRet.append( " "  + OString::number(attrib) + " 0 R" );
-    }
-    if( aAttribObjects.size() > 1 )
         aRet.append( " ]" );
+    }
     return aRet.makeStringAndClear();
 }
 

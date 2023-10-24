@@ -3475,11 +3475,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf149140)
                 CPPUNIT_ASSERT(pAttrs != nullptr);
                 for (const auto& rAttrRef : pAttrs->GetElements())
                 {
-                    auto pARef = dynamic_cast<vcl::filter::PDFReferenceElement*>(rAttrRef);
-                    CPPUNIT_ASSERT(pARef != nullptr);
-                    auto pAttr = pARef->LookupObject();
-                    CPPUNIT_ASSERT(pAttr != nullptr);
-                    auto pAttrDict = pAttr->GetDictionary();
+                    auto pAttrDict = dynamic_cast<vcl::filter::PDFDictionaryElement*>(rAttrRef);
                     CPPUNIT_ASSERT(pAttrDict != nullptr);
                     auto pOwner
                         = dynamic_cast<vcl::filter::PDFNameElement*>(pAttrDict->LookupElement("O"));
@@ -3841,11 +3837,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135638)
             auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"));
             if (pS && pS->GetValue() == "Figure")
             {
-                auto pARef = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject->Lookup("A"));
-                CPPUNIT_ASSERT(pARef != nullptr);
-                auto pAttr = pARef->LookupObject();
-                CPPUNIT_ASSERT(pAttr != nullptr);
-                auto pAttrDict = pAttr->GetDictionary();
+                auto pAttrDict
+                    = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("A"));
                 CPPUNIT_ASSERT(pAttrDict != nullptr);
                 auto pOwner
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pAttrDict->LookupElement("O"));
@@ -4398,12 +4391,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSpans)
                 auto pS103101
                     = dynamic_cast<vcl::filter::PDFNameElement*>(pObject103101->Lookup("S"));
                 CPPUNIT_ASSERT_EQUAL(OString("Span"), pS103101->GetValue());
-                auto pA103101
-                    = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject103101->Lookup("A"));
-                CPPUNIT_ASSERT(pA103101);
-                auto pObjectA103101 = pA103101->LookupObject();
-                CPPUNIT_ASSERT(pObjectA103101);
-                auto pDictA103101 = pObjectA103101->GetDictionary();
+                auto pDictA103101
+                    = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject103101->Lookup("A"));
                 CPPUNIT_ASSERT(pDictA103101 != nullptr);
                 CPPUNIT_ASSERT_EQUAL(OString("Layout"), dynamic_cast<vcl::filter::PDFNameElement*>(
                                                             pDictA103101->LookupElement("O"))
@@ -4963,13 +4952,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157397)
     CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pType160->GetValue());
     auto pS160 = dynamic_cast<vcl::filter::PDFNameElement*>(pObject160->Lookup("S"));
     CPPUNIT_ASSERT_EQUAL(OString("Form"), pS160->GetValue());
-    auto pA160 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pObject160->Lookup("A"));
-    CPPUNIT_ASSERT(pA160);
-    auto pA160Obj = pA160->LookupObject();
-    auto pA160O = dynamic_cast<vcl::filter::PDFNameElement*>(pA160Obj->Lookup("O"));
+    auto pA160Dict = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject160->Lookup("A"));
+    CPPUNIT_ASSERT(pA160Dict);
+    auto pA160O = dynamic_cast<vcl::filter::PDFNameElement*>(pA160Dict->LookupElement("O"));
     CPPUNIT_ASSERT(pA160O);
     CPPUNIT_ASSERT_EQUAL(OString("PrintField"), pA160O->GetValue());
-    auto pA160Role = dynamic_cast<vcl::filter::PDFNameElement*>(pA160Obj->Lookup("Role"));
+    auto pA160Role = dynamic_cast<vcl::filter::PDFNameElement*>(pA160Dict->LookupElement("Role"));
     CPPUNIT_ASSERT(pA160Role);
     CPPUNIT_ASSERT_EQUAL(OString("tv"), pA160Role->GetValue());
 
@@ -5088,13 +5076,9 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf135192)
                                                         for (const auto& rAttrRef :
                                                              pAttrs->GetElements())
                                                         {
-                                                            auto pARef = dynamic_cast<
-                                                                vcl::filter::PDFReferenceElement*>(
+                                                            auto pAttrDict = dynamic_cast<
+                                                                vcl::filter::PDFDictionaryElement*>(
                                                                 rAttrRef);
-                                                            CPPUNIT_ASSERT(pARef != nullptr);
-                                                            auto pAttr = pARef->LookupObject();
-                                                            CPPUNIT_ASSERT(pAttr != nullptr);
-                                                            auto pAttrDict = pAttr->GetDictionary();
                                                             CPPUNIT_ASSERT(pAttrDict != nullptr);
                                                             auto pOwner = dynamic_cast<
                                                                 vcl::filter::PDFNameElement*>(
@@ -5726,13 +5710,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testFormControlAnnot)
     auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pStructElem->Lookup("Alt"));
     CPPUNIT_ASSERT_EQUAL(OUString("textuelle alternative - a box to check"),
                          ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt));
-    auto pA = dynamic_cast<vcl::filter::PDFReferenceElement*>(pStructElem->Lookup("A"));
+    auto pA = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pStructElem->Lookup("A"));
     CPPUNIT_ASSERT(pA);
-    auto pAObj = pA->LookupObject();
-    auto pO = dynamic_cast<vcl::filter::PDFNameElement*>(pAObj->Lookup("O"));
+    auto pO = dynamic_cast<vcl::filter::PDFNameElement*>(pA->LookupElement("O"));
     CPPUNIT_ASSERT(pO);
     CPPUNIT_ASSERT_EQUAL(OString("PrintField"), pO->GetValue());
-    auto pRole = dynamic_cast<vcl::filter::PDFNameElement*>(pAObj->Lookup("Role"));
+    auto pRole = dynamic_cast<vcl::filter::PDFNameElement*>(pA->LookupElement("Role"));
     CPPUNIT_ASSERT(pRole);
     CPPUNIT_ASSERT_EQUAL(OString("cb"), pRole->GetValue());
     auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pStructElem->Lookup("K"));
