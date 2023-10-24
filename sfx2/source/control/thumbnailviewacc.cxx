@@ -520,6 +520,7 @@ void ThumbnailViewAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOld
     aEvtObject.Source = getXWeak();
     aEvtObject.NewValue = rNewValue;
     aEvtObject.OldValue = rOldValue;
+    aEvtObject.IndexHint = -1;
 
     for (auto const& tmpListener : aTmpListeners)
     {
