@@ -31,6 +31,7 @@
 #include <charfmt.hxx>
 #include <layfrm.hxx>
 #include <SwPortionHandler.hxx>
+#include <EnhancedPDFExportHelper.hxx>
 #include "pormulti.hxx"
 #include "inftxt.hxx"
 #include "itrpaint.hxx"
@@ -1601,6 +1602,10 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
+        // WP is mandatory
+        Por_Info const por(rMulti, *this, 1);
+        SwTaggedPDFHelper const tag(nullptr, nullptr, &por, *GetInfo().GetOut());
+
         TextFrameIndex const nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
@@ -1659,8 +1664,18 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
     OSL_ENSURE( nullptr == GetInfo().GetUnderFnt() || rMulti.IsBidi(),
             " Only BiDi portions are allowed to use the common underlining font" );
 
-    if ( rMulti.IsRuby() )
+    ::std::optional<SwTaggedPDFHelper> oTag;
+    if (rMulti.IsDouble())
+    {
+        Por_Info const por(rMulti, *this, 2);
+        oTag.emplace(nullptr, nullptr, &por, *GetInfo().GetOut());
+    }
+    else if (rMulti.IsRuby())
+    {
+        Por_Info const por(rMulti, *this, bRubyTop ? 1 : 2);
+        oTag.emplace(nullptr, nullptr, &por, *GetInfo().GetOut());
         GetInfo().SetRuby( rMulti.OnTop() );
+    }
 
     do
     {
@@ -1822,8 +1837,19 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
                 // We switch to the baseline of the next inner line
                 nOfst += rMulti.GetRoot().Height();
             }
+            if (rMulti.IsRuby())
+            {
+                oTag.reset();
+                Por_Info const por(rMulti, *this, bRubyTop ? 2 : 1);
+                oTag.emplace(nullptr, nullptr, &por, *GetInfo().GetOut());
+            }
         }
     } while( pPor );
+
+    if (rMulti.IsDouble())
+    {
+        oTag.reset();
+    }
 
     if ( bRubyInGrid )
         GetInfo().SetSnapToGrid( bOldGridModeAllowed );
@@ -1840,6 +1866,10 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
+        // WP is mandatory
+        Por_Info const por(rMulti, *this, 1);
+        SwTaggedPDFHelper const tag(nullptr, nullptr, &por, *GetInfo().GetOut());
+
         TextFrameIndex const nTmpOldIdx = GetInfo().GetIdx();
         GetInfo().SetIdx(static_cast<SwDoubleLinePortion&>(rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );

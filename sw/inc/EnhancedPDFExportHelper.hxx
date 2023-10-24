@@ -113,10 +113,15 @@ struct Por_Info
 {
     const SwLinePortion& mrPor;
     const SwTextPainter& mrTextPainter;
-    bool const m_isNumberingLabel;
+    /** this can be used to generate multiple different SE for the same portion:
+      FootnoteNum: 0-> Link 1-> Lbl
+      Double: 0-> Warichu 1-> WP 2-> WT
+      Ruby: 0-> Ruby 1-> RT 2-> RB
+    */
+    int const m_Mode;
 
-    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, bool const isNumberingLabel)
-        : mrPor(rPor), mrTextPainter(rTextPainer), m_isNumberingLabel(isNumberingLabel) {};
+    Por_Info(const SwLinePortion& rPor, const SwTextPainter& rTextPainer, int const nMode)
+        : mrPor(rPor), mrTextPainter(rTextPainer), m_Mode(nMode) {};
 };
 
 struct lt_TableColumn
@@ -160,6 +165,7 @@ class SwTaggedPDFHelper
     void BeginInlineStructureElements();
     void EndStructureElements();
 
+    void EndCurrentAll();
     void EndCurrentSpan();
     void CreateCurrentSpan(SwTextPaintInfo const& rInf, OUString const& rStyleName);
     bool CheckContinueSpan(SwTextPaintInfo const& rInf, std::u16string_view rStyleName, SwTextAttr const* pInetFormatAttr);

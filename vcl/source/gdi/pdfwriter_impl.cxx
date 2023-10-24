@@ -1880,6 +1880,8 @@ const char* PDFWriterImpl::getAttributeTag( PDFWriter::StructAttribute eAttr )
         { PDFWriter::ColSpan,           "ColSpan" },
         { PDFWriter::Scope,             "Scope" },
         { PDFWriter::Role,              "Role" },
+        { PDFWriter::RubyAlign,         "RubyAlign" },
+        { PDFWriter::RubyPosition,      "RubyPosition" },
         { PDFWriter::Type,              "Type" },
         { PDFWriter::Subtype,           "Subtype" },
         { PDFWriter::LinkAnnotation,    "LinkAnnotation" }
@@ -1928,6 +1930,15 @@ const char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeValue
         { PDFWriter::Cb,         "cb" },
         { PDFWriter::Pb,         "pb" },
         { PDFWriter::Tv,         "tv" },
+        { PDFWriter::RStart,     "Start" },
+        { PDFWriter::RCenter,    "Center" },
+        { PDFWriter::REnd,       "End" },
+        { PDFWriter::RJustify,   "Justify" },
+        { PDFWriter::RDistribute,"Distribute" },
+        { PDFWriter::RBefore,    "Before" },
+        { PDFWriter::RAfter,     "After" },
+        { PDFWriter::RWarichu,   "Warichu" },
+        { PDFWriter::RInline,    "Inline" },
         { PDFWriter::Disc,       "Disc" },
         { PDFWriter::Circle,     "Circle" },
         { PDFWriter::Square,     "Square" },
@@ -10687,6 +10698,13 @@ const char* PDFWriterImpl::getStructureTag( PDFWriter::StructElement eType )
         { PDFWriter::Code,        "Code" },
         { PDFWriter::Link,        "Link" },
         { PDFWriter::Annot,       "Annot" },
+        { PDFWriter::Ruby,        "Ruby" },
+        { PDFWriter::RB,          "RB" },
+        { PDFWriter::RT,          "RT" },
+        { PDFWriter::RP,          "RP" },
+        { PDFWriter::Warichu,     "Warichu" },
+        { PDFWriter::WT,          "WT" },
+        { PDFWriter::WP,          "WP" },
         { PDFWriter::Figure,      "Figure" },
         { PDFWriter::Formula,     "Formula"},
         { PDFWriter::Form,        "Form" }
@@ -11365,6 +11383,26 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
                 {
                     if (eType == PDFWriter::Form
                         && PDFWriter::PDFVersion::PDF_1_7 <= m_aContext.Version)
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::RubyAlign:
+                if (eVal == PDFWriter::RStart || eVal == PDFWriter::RCenter || eVal == PDFWriter::REnd || eVal == PDFWriter::RJustify || eVal == PDFWriter::RDistribute)
+                {
+                    if (eType == PDFWriter::RT
+                        && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
+                    {
+                        bInsert = true;
+                    }
+                }
+                break;
+            case PDFWriter::RubyPosition:
+                if (eVal == PDFWriter::RBefore || eVal == PDFWriter::RAfter || eVal == PDFWriter::RWarichu || eVal == PDFWriter::RInline)
+                {
+                    if (eType == PDFWriter::RT
+                        && PDFWriter::PDFVersion::PDF_1_5 <= m_aContext.Version)
                     {
                         bInsert = true;
                     }

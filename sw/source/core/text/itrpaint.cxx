@@ -415,13 +415,13 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
             assert(isPDFTaggingEnabled);
-            Por_Info aPorInfo(*pPor, *this, true); // open Lbl
+            Por_Info aPorInfo(*pPor, *this, 1); // open Lbl
             roTaggedLabel.emplace(nullptr, nullptr, &aPorInfo, *pOut);
         }
 
         {
             // #i16816# tagged pdf support
-            Por_Info aPorInfo(*pPor, *this, false);
+            Por_Info aPorInfo(*pPor, *this, 0);
             SwTaggedPDFHelper aTaggedPDFHelper( nullptr, nullptr, &aPorInfo, *pOut );
 
             if( pPor->IsMultiPortion() )

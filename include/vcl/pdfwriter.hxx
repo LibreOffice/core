@@ -132,6 +132,7 @@ public:
 
         // inline level elements
         Span, Quote, Note, Reference, BibEntry, Code, Link, Annot,
+        Ruby, RB, RT, RP, Warichu, WT, WP,
 
         // illustration elements
         Figure, Formula, Form
@@ -146,6 +147,7 @@ public:
         TextIndent, TextAlign, Width, Height, BlockAlign, InlineAlign,
         LineHeight, BaselineShift, TextDecorationType, ListNumbering,
         RowSpan, ColSpan, Scope, Role,
+        RubyAlign, RubyPosition,
 
         // link destination is an artificial attribute that sets
         // the link annotation ID of a Link element
@@ -186,6 +188,10 @@ public:
         Row, Column, Both,
         // Role
         Rb, Cb, Pb, Tv,
+        // RubyAlign
+        RStart, RCenter, REnd, RJustify, RDistribute,
+        // RubyPosition
+        RBefore, RAfter, RWarichu, RInline,
         // ListNumbering
         Disc, Circle, Square, Decimal, UpperRoman, LowerRoman, UpperAlpha, LowerAlpha
     };

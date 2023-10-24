@@ -71,6 +71,7 @@
 #include <flyfrm.hxx>
 #include <notxtfrm.hxx>
 #include "porfld.hxx"
+#include "pormulti.hxx"
 #include <SwStyleNameMapper.hxx>
 #include "itrpaint.hxx"
 #include <i18nlangtag/languagetag.hxx>
@@ -935,6 +936,51 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bLanguage = true;
                 break;
 
+            case vcl::PDFWriter::RT:
+                {
+                    SwRubyPortion const*const pRuby(static_cast<SwRubyPortion const*>(pPor));
+                    vcl::PDFWriter::StructAttributeValue nAlign = {};
+                    switch (pRuby->GetAdjustment())
+                    {
+                        case text::RubyAdjust_LEFT:
+                            nAlign = vcl::PDFWriter::RStart;
+                            break;
+                        case text::RubyAdjust_CENTER:
+                            nAlign = vcl::PDFWriter::RCenter;
+                            break;
+                        case text::RubyAdjust_RIGHT:
+                            nAlign = vcl::PDFWriter::REnd;
+                            break;
+                        case text::RubyAdjust_BLOCK:
+                            nAlign = vcl::PDFWriter::RJustify;
+                            break;
+                        case text::RubyAdjust_INDENT_BLOCK:
+                            nAlign = vcl::PDFWriter::RDistribute;
+                            break;
+                        default:
+                            assert(false);
+                            break;
+                    }
+                    ::std::optional<vcl::PDFWriter::StructAttributeValue> oPos;
+                    switch (pRuby->GetRubyPosition())
+                    {
+                        case RubyPosition::ABOVE:
+                            oPos = vcl::PDFWriter::RBefore;
+                            break;
+                        case RubyPosition::BELOW:
+                            oPos = vcl::PDFWriter::RAfter;
+                            break;
+                        case RubyPosition::RIGHT:
+                            break; // no such thing???
+                    }
+                    mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::RubyAlign, nAlign);
+                    if (oPos)
+                    {
+                        mpPDFExtOutDevData->SetStructureAttribute(vcl::PDFWriter::RubyPosition, *oPos);
+                    }
+                }
+                break;
+
             default:
                 break;
         }
@@ -1621,6 +1667,18 @@ void SwTaggedPDFHelper::EndStructureElements()
     CheckRestoreTag();
 }
 
+void SwTaggedPDFHelper::EndCurrentAll()
+{
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
+    {
+        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
+    }
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+    {
+        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+    }
+}
+
 void SwTaggedPDFHelper::EndCurrentSpan()
 {
     mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
@@ -1828,10 +1886,55 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             }
             break;
 
+        case PortionType::Multi:
+            {
+                SwMultiPortion const*const pMulti(static_cast<SwMultiPortion const*>(pPor));
+                if (pMulti->IsRuby())
+                {
+                    EndCurrentAll();
+                    switch (mpPorInfo->m_Mode)
+                    {
+                        case 0:
+                            nPDFType = vcl::PDFWriter::Ruby;
+                            aPDFType = "Ruby";
+                        break;
+                        case 1:
+                            nPDFType = vcl::PDFWriter::RT;
+                            aPDFType = "RT";
+                        break;
+                        case 2:
+                            nPDFType = vcl::PDFWriter::RB;
+                            aPDFType = "RB";
+                        break;
+                    }
+                }
+                else if (pMulti->IsDouble())
+                {
+                    EndCurrentAll();
+                    switch (mpPorInfo->m_Mode)
+                    {
+                        case 0:
+                            nPDFType = vcl::PDFWriter::Warichu;
+                            aPDFType = "Warichu";
+                        break;
+                        case 1:
+                            nPDFType = vcl::PDFWriter::WP;
+                            aPDFType = "WP";
+                        break;
+                        case 2:
+                            nPDFType = vcl::PDFWriter::WT;
+                            aPDFType = "WT";
+                        break;
+                    }
+                }
+            }
+            break;
+
+
         // for FootnoteNum, is called twice: outer generates Lbl, inner Link
         case PortionType::FootnoteNum:
             assert(!isContinueSpan); // is at start
-            if (!mpPorInfo->m_isNumberingLabel)
+            if (mpPorInfo->m_Mode == 0)
             {   // tdf#152218 link both directions
                 nPDFType = vcl::PDFWriter::Link;
                 aPDFType = aLinkString;
@@ -1842,7 +1945,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
         case PortionType::Bullet:
         case PortionType::GrfNum:
             assert(!isContinueSpan); // is at start
-            if (mpPorInfo->m_isNumberingLabel)
+            if (mpPorInfo->m_Mode == 1)
             {   // only works for multiple lines via wrapper from PaintSwFrame
                 nPDFType = vcl::PDFWriter::LILabel;
                 aPDFType = aListLabelString;
