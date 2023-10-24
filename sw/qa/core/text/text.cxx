@@ -1174,6 +1174,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRichContentControlPDF)
     CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testPlaceholderFieldPDF)
+{
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    if (!pPDFium)
+        return;
+
+    // Given a file with a text-type placeholder field:
+    createSwDoc("placeholder.fodt");
+
+    // When exporting to PDF (default setting is "create a PDF form"):
+    save("writer_pdf_Export");
+
+    // Then make sure that a fillable form widget is emitted:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parsePDFExport();
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPage = pPdfDocument->openPage(0);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the placeholder field was just exported as normal text.
+    CPPUNIT_ASSERT_EQUAL(1, pPage->getAnnotationCount());
+    std::unique_ptr<vcl::pdf::PDFiumAnnotation> pAnnotation = pPage->getAnnotation(0);
+    CPPUNIT_ASSERT_EQUAL(vcl::pdf::PDFAnnotationSubType::Widget, pAnnotation->getSubType());
+
+    // Also verify that the widget description is correct:
+    CPPUNIT_ASSERT_EQUAL(OUString("reference text"),
+                         pAnnotation->getFormFieldAlternateName(pPdfDocument.get()));
+}
+
 CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testNumberPortionFormat)
 {
     // Given a document with a single paragraph, direct formatting asks 24pt font size for the
