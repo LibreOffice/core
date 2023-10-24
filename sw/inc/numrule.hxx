@@ -169,11 +169,13 @@ public:
     OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const bool bInclStrings = true,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
+                          const bool bHideNonNumerical = false,
                           Extremities* pExtremities = nullptr,
                           LanguageType nLang = LANGUAGE_SYSTEM) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels,
-                             const int nRestrictInclToThisLevel ) const;
+                             const int nRestrictInclToThisLevel,
+                             const bool bHideNonNumerical ) const;
     OUString MakeParagraphStyleListString() const;
 
     /** @return list of associated text nodes */

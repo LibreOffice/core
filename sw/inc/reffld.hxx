@@ -117,11 +117,6 @@ private:
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const override;
     virtual std::unique_ptr<SwField> Copy() const override;
-
-    /// Strip out text that is not either a number or a delimiter. Used in STYLEREF for when you
-    /// have chapters labelled "Chapter X.Y" and want to just keep the "X.Y". Distinct from
-    /// GetExpandedTextOfReferencedTextNode so you can run it after any other processing
-    void StylerefStripNonnumerical(OUString& rText) const;
 public:
     SwGetRefField( SwGetRefFieldType*, OUString aSetRef, OUString aReferenceLanguage,
                     sal_uInt16 nSubType, sal_uInt16 nSeqNo, sal_uInt16 nFlags, sal_uLong nFormat );

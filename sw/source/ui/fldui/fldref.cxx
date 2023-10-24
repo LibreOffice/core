@@ -46,6 +46,25 @@ static sal_uInt16 nFieldDlgFormatSel = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
+namespace {
+
+enum FMT_REF_IDX
+{
+    FMT_REF_PAGE_IDX                = 0,
+    FMT_REF_CHAPTER_IDX             = 1,
+    FMT_REF_TEXT_IDX                = 2,
+    FMT_REF_UPDOWN_IDX              = 3,
+    FMT_REF_PAGE_PGDSC_IDX          = 4,
+    FMT_REF_ONLYNUMBER_IDX          = 5,
+    FMT_REF_ONLYCAPTION_IDX         = 6,
+    FMT_REF_ONLYSEQNO_IDX           = 7,
+    FMT_REF_NUMBER_IDX              = 8,
+    FMT_REF_NUMBER_NO_CONTEXT_IDX   = 9,
+    FMT_REF_NUMBER_FULL_CONTEXT_IDX = 10
+};
+
+}
+
 SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet *const pCoreSet )
     : SwFieldPage(pPage, pController, "modules/swriter/ui/fldrefpage.ui", "FieldRefPage", pCoreSet)
     , mpSavedSelectedTextNode(nullptr)
@@ -98,6 +117,7 @@ SwFieldRefPage::SwFieldRefPage(weld::Container* pPage, weld::DialogController* p
     m_xSelectionLB->connect_changed(LINK(this, SwFieldRefPage, SubTypeListBoxHdl));
     m_xSelectionLB->connect_row_activated(LINK(this, SwFieldRefPage, TreeViewInsertHdl));
     m_xFormatLB->connect_row_activated(LINK(this, SwFieldRefPage, TreeViewInsertHdl));
+    m_xFormatLB->connect_changed(LINK(this, SwFieldRefPage, FormatHdl));
 
     // #i83479#
     m_xSelectionToolTipLB->connect_changed( LINK(this, SwFieldRefPage, SubTypeTreeListBoxHdl) );
@@ -455,10 +475,19 @@ IMPL_LINK_NOARG(SwFieldRefPage, SubTypeListBoxHdl, weld::TreeView&, void)
     SubTypeHdl();
 }
 
+IMPL_LINK_NOARG(SwFieldRefPage, FormatHdl, weld::TreeView&, void)
+{
+    SubTypeHdl();
+}
+
 void SwFieldRefPage::SubTypeHdl()
 {
     sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
+    sal_uInt16 nFormat = m_xFormatLB->get_selected_id().toUInt32();
+    m_xStylerefHideNonNumericalCB->set_visible(nFormat == FMT_REF_NUMBER_IDX
+                                               || nFormat == FMT_REF_NUMBER_NO_CONTEXT_IDX
+                                               || nFormat == FMT_REF_NUMBER_FULL_CONTEXT_IDX);
     m_xStylerefFlags->set_visible(nTypeId == REFFLDFLAG_STYLE);
 
     switch(nTypeId)
@@ -798,25 +827,6 @@ bool SwFieldRefPage::MatchSubstring( const OUString& rListString, const OUString
     OUString aListString = GetAppCharClass().lowercase(rListString);
     OUString aSubstr = GetAppCharClass().lowercase(rSubstr);
     return aListString.indexOf(aSubstr) >= 0;
-}
-
-namespace {
-
-enum FMT_REF_IDX
-{
-    FMT_REF_PAGE_IDX                = 0,
-    FMT_REF_CHAPTER_IDX             = 1,
-    FMT_REF_TEXT_IDX                = 2,
-    FMT_REF_UPDOWN_IDX              = 3,
-    FMT_REF_PAGE_PGDSC_IDX          = 4,
-    FMT_REF_ONLYNUMBER_IDX          = 5,
-    FMT_REF_ONLYCAPTION_IDX         = 6,
-    FMT_REF_ONLYSEQNO_IDX           = 7,
-    FMT_REF_NUMBER_IDX              = 8,
-    FMT_REF_NUMBER_NO_CONTEXT_IDX   = 9,
-    FMT_REF_NUMBER_FULL_CONTEXT_IDX = 10
-};
-
 }
 
 const TranslateId FMT_REF_ARY[] =
