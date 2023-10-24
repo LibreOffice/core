@@ -127,7 +127,6 @@ def analyze_xcu(all_commands):
                 cmdln = ln
                 tmp = line.split('"')
                 command_name = tmp[1]
-                command_ok = True
 
                 while '</node>' not in line:
                     try:
@@ -145,10 +144,8 @@ def analyze_xcu(all_commands):
                         label = 'tooltiplabel'
                     elif '<value xml:lang="en-US">' in line:
                         labeltext = line.replace('<value xml:lang="en-US">', '').replace('</value>', '').strip()
-                    elif '<prop oor:name="TargetURL"' in line:
-                        command_ok = False
 
-                if command_ok is True and popups is False:
+                if popups is False:
                     if command_name not in all_commands:
                         all_commands[command_name] = newcommand(command_name)
                     #
