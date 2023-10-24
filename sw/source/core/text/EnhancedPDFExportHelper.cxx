@@ -156,6 +156,7 @@ struct SwEnhancedPDFState
     };
 
     ::std::optional<Span> m_oCurrentSpan;
+    ::std::optional<SwTextAttr const*> m_oCurrentLink;
 
     SwEnhancedPDFState(LanguageType const eLanguageDefault)
         : m_eLanguageDefault(eLanguageDefault)
@@ -1597,11 +1598,16 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
 void SwTaggedPDFHelper::EndStructureElements()
 {
-    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
+    if (mpFrameInfo != nullptr)
     {
-        if (mpFrameInfo != nullptr)
+        if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
         {   // close span at end of paragraph
             mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
+            ++m_nEndStructureElement;
+        }
+        if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+        {   // close link at end of paragraph
+            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
             ++m_nEndStructureElement;
         }
     }
@@ -1640,8 +1646,32 @@ void SwTaggedPDFHelper::CreateCurrentSpan(
 }
 
 bool SwTaggedPDFHelper::CheckContinueSpan(
-        SwTextPaintInfo const& rInf, std::u16string_view const rStyleName)
+        SwTextPaintInfo const& rInf, std::u16string_view const rStyleName,
+        SwTextAttr const*const pInetFormatAttr)
 {
+    // for now, don't create span inside of link - this should be very rare
+    // situation and it looks complicated to implement.
+    assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan
+        || !mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+    {
+        if (pInetFormatAttr && pInetFormatAttr == *mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+        {
+            return true;
+        }
+        else
+        {
+            mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+            EndTag();
+            return false;
+        }
+    }
+    if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan && pInetFormatAttr)
+    {
+        EndCurrentSpan();
+        return false;
+    }
+
     if (!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan)
         return false;
 
@@ -1691,7 +1721,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
     }
 
     // note: ILSE may be nested, so only end the span if needed to start new one
-    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName));
+    bool const isContinueSpan(CheckContinueSpan(rInf, sStyleName, pInetFormatAttr));
 
     sal_uInt16 nPDFType = USHRT_MAX;
     OUString aPDFType;
@@ -1714,8 +1744,15 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 // Check for Link:
                 if( pInetFormatAttr )
                 {
-                    nPDFType = vcl::PDFWriter::Link;
-                    aPDFType = aLinkString;
+                    if (!isContinueSpan)
+                    {
+                        nPDFType = vcl::PDFWriter::Link;
+                        aPDFType = aLinkString;
+                        assert(!mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink);
+                        mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.emplace(pInetFormatAttr);
+                        // leave it open to let next portion decide to merge or close
+                        --m_nEndStructureElement;
+                    }
                 }
                 // Check for Quote/Code character style:
                 else if (sStyleName == aQuotation)
