@@ -691,8 +691,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
         break;
 
         case FN_INSERT_FLD_DATE    :
+        case FN_INSERT_FLD_DATE_VAR:
         {
             nInsertType = SwFieldTypesEnum::Date;
+            nInsertSubType = nSlot == FN_INSERT_FLD_DATE ? 0 : 1;
             bIsText = false;
             // use long date format for Hungarian
             SwPaM* pCursorPos = rSh.GetCursor();
@@ -705,7 +707,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             goto FIELD_INSERT;
         }
         case FN_INSERT_FLD_TIME    :
+        case FN_INSERT_FLD_TIME_VAR:
             nInsertType = SwFieldTypesEnum::Time;
+            nInsertSubType = nSlot == FN_INSERT_FLD_TIME ? 0 : 1;
             bIsText = false;
             goto FIELD_INSERT;
         case FN_INSERT_FLD_PGNUMBER:

@@ -2941,6 +2941,23 @@ SfxVoidItem InsertDateField FN_INSERT_FLD_DATE
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertDateFieldVar FN_INSERT_FLD_DATE_VAR
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem InsertEndnote FN_INSERT_ENDNOTE
 (SfxStringItem FootnoteAnchorText FN_INSERT_ENDNOTE,SfxStringItem FontName FN_PARAM_1)
 [
@@ -3643,6 +3660,23 @@ SfxUInt16Item InsertTable FN_INSERT_TABLE
 ]
 
 SfxVoidItem InsertTimeField FN_INSERT_FLD_TIME
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
+SfxVoidItem InsertTimeFieldVar FN_INSERT_FLD_TIME_VAR
 ()
 [
     AutoUpdate = FALSE,

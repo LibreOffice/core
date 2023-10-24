@@ -1049,9 +1049,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testInsertTextFormFieldEndnote)
     // Then this was empty: the fieldmark was inserted before the note anchor, not in the note body.
     CPPUNIT_ASSERT_EQUAL(OUString("result"), aActual);
 }
-/* 
-// Disabled because tdf#139141 was reverted and the default time field inserts a fix value again
-// Should be reactivated once a new UNO command is added for variable time fields
+
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
 {
     // Given an empty doc:
@@ -1061,7 +1059,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
 
     // Insert a time field and select it:
-    dispatchCommand(mxComponent, ".uno:InsertTimeField", {});
+    dispatchCommand(mxComponent, ".uno:InsertTimeFieldVar", {});
 
     pCursor->SetMark();
     pCursor->Move(fnMoveBackward);
@@ -1079,7 +1077,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testUpdateSelectedField)
     // Check that the selected field has changed:
     CPPUNIT_ASSERT(aTimeFieldAfter != aTimeFieldBefore);
 }
-*/
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

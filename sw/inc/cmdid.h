@@ -267,18 +267,20 @@ class SwUINumRuleItem;
 #define FN_MAILMERGE_PRINT_DOCUMENTS (FN_INSERT + 79) /* mail merge toolbar - print merged documents */
 #define FN_MAILMERGE_EMAIL_DOCUMENTS (FN_INSERT + 80) /* mail merge toolbar - email merged documents */
 
-#define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 84)    /* anchor Draw object to character */
+#define FN_TOOL_ANCHOR_CHAR     (FN_INSERT + 82)    /* anchor Draw object to character */
 
-#define FN_QRY_INSERT           (FN_INSERT + 86)    /* insert record selection in to text */
-#define FN_QRY_MERGE_FIELD      (FN_INSERT + 87)    /* insert record selection into fields */
-#define FN_QRY_INSERT_FIELD     (FN_INSERT + 88)    /* insert database field */
+#define FN_QRY_INSERT           (FN_INSERT + 83)    /* insert record selection in to text */
+#define FN_QRY_MERGE_FIELD      (FN_INSERT + 84)    /* insert record selection into fields */
+#define FN_QRY_INSERT_FIELD     (FN_INSERT + 86)    /* insert database field */
 
-#define FN_INSERT_CTRL          (FN_INSERT + 89)    /* toolbar controller insert*/
-#define FN_INSERT_OBJ_CTRL      (FN_INSERT + 90)    /* toolbar controller (insert/object) */
-#define FN_INSERT_FIELD_CTRL    (FN_INSERT + 91)    /* toolbar controller insert/field commands */
+#define FN_INSERT_CTRL          (FN_INSERT + 87)    /* toolbar controller insert*/
+#define FN_INSERT_OBJ_CTRL      (FN_INSERT + 88)    /* toolbar controller (insert/object) */
+#define FN_INSERT_FIELD_CTRL    (FN_INSERT + 89)    /* toolbar controller insert/field commands */
 
-#define FN_INSERT_FLD_DATE      (FN_INSERT + 92)
-#define FN_INSERT_FLD_TIME      (FN_INSERT + 93)
+#define FN_INSERT_FLD_DATE      (FN_INSERT + 90)
+#define FN_INSERT_FLD_DATE_VAR  (FN_INSERT + 91)
+#define FN_INSERT_FLD_TIME      (FN_INSERT + 92)
+#define FN_INSERT_FLD_TIME_VAR  (FN_INSERT + 93)
 #define FN_INSERT_FLD_PGNUMBER  (FN_INSERT + 94)
 #define FN_INSERT_FLD_PGCOUNT   (FN_INSERT + 95)
 #define FN_INSERT_FLD_TOPIC     (FN_INSERT + 96)
