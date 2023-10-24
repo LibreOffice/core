@@ -50,7 +50,6 @@ protected:
     bool m_bAnimated : 1;         // Used by SwGrfNumPortion
     bool m_bNoPaint : 1;          // Used by SwGrfNumPortion
     bool m_bReplace : 1;          // Used by SwGrfNumPortion
-    const bool m_bPlaceHolder : 1;
     bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
     bool m_bContentControl = false;
 
@@ -60,7 +59,7 @@ protected:
 
 public:
     SwFieldPortion( const SwFieldPortion& rField );
-    SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFnt = nullptr, bool bPlaceHolder = false, TextFrameIndex nLen = TextFrameIndex(1));
+    SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFnt = nullptr, TextFrameIndex nLen = TextFrameIndex(1));
     virtual ~SwFieldPortion() override;
 
     void TakeNextOffset( const SwFieldPortion* pField );
@@ -260,6 +259,27 @@ public:
 private:
     sw::mark::IFieldmark* m_pFieldMark;
     bool m_bStart;
+};
+
+class SwJumpFieldPortion final : public SwFieldPortion
+{
+public:
+    explicit SwJumpFieldPortion(OUString aExpand, OUString aHelp, std::unique_ptr<SwFont> pFont,
+                                sal_uInt32 nFormat)
+        : SwFieldPortion(std::move(aExpand), std::move(pFont))
+        , m_nFormat(nFormat)
+        , m_sHelp(std::move(aHelp))
+    {
+    }
+    virtual SwFieldPortion* Clone(const OUString& rExpand) const override;
+
+    virtual void Paint(const SwTextPaintInfo& rInf) const override;
+
+private:
+    sal_uInt32 m_nFormat; // SwJumpEditFormat from SwField::GetFormat()
+    OUString m_sHelp;
+
+    bool DescribePDFControl(const SwTextPaintInfo& rInf) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

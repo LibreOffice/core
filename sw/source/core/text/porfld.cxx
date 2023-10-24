@@ -22,10 +22,14 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <utility>
+
+#include <comphelper/string.hxx>
 #include <vcl/graph.hxx>
 #include <editeng/brushitem.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
+#include <vcl/pdfwriter.hxx>
 #include <viewopt.hxx>
 #include <SwPortionHandler.hxx>
 #include "porlay.hxx"
@@ -44,6 +48,7 @@
 #include <editeng/lrspitem.hxx>
 #include <unicode/ubidi.h>
 #include <bookmark.hxx>
+#include <docufld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -59,7 +64,7 @@ SwFieldPortion *SwFieldPortion::Clone( const OUString &rExpand ) const
     }
     // #i107143#
     // pass placeholder property to created <SwFieldPortion> instance.
-    SwFieldPortion* pClone = new SwFieldPortion( rExpand, std::move(pNewFnt), m_bPlaceHolder );
+    SwFieldPortion* pClone = new SwFieldPortion(rExpand, std::move(pNewFnt));
     pClone->SetNextOffset( m_nNextOffset );
     pClone->m_bNoLength = m_bNoLength;
     return pClone;
@@ -73,13 +78,13 @@ void SwFieldPortion::TakeNextOffset( const SwFieldPortion* pField )
     m_bFollow = true;
 }
 
-SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, bool bPlaceHold, TextFrameIndex const nFieldLen)
+SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, TextFrameIndex const nFieldLen)
     : m_aExpand(std::move(aExpand)), m_pFont(std::move(pFont)), m_nNextOffset(0)
     , m_nNextScriptChg(COMPLETE_STRING), m_nFieldLen(nFieldLen), m_nViewWidth(0)
     , m_bFollow( false ), m_bLeft( false), m_bHide( false)
     , m_bCenter (false), m_bHasFollow( false )
     , m_bAnimated( false), m_bNoPaint( false)
-    , m_bReplace( false), m_bPlaceHolder( bPlaceHold )
+    , m_bReplace(false)
     , m_bNoLength( false )
 {
     SetWhichPor( PortionType::Field );
@@ -100,7 +105,6 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     , m_bAnimated ( rField.m_bAnimated )
     , m_bNoPaint( rField.m_bNoPaint)
     , m_bReplace( rField.m_bReplace )
-    , m_bPlaceHolder( rField.m_bPlaceHolder )
     , m_bNoLength( rField.m_bNoLength )
 {
     if ( rField.HasFont() )
@@ -440,7 +444,7 @@ void SwFieldPortion::Paint( const SwTextPaintInfo &rInf ) const
     SwFontSave aSave( rInf, m_pFont.get() );
 
 //    OSL_ENSURE(GetLen() <= TextFrameIndex(1), "SwFieldPortion::Paint: rest-portion pollution?");
-    if( Width() && ( !m_bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) && !m_bContentControl )
+    if (Width() && !m_bContentControl)
     {
         // A very liberal use of the background
         rInf.DrawViewOpt( *this, PortionType::Field );
@@ -1380,6 +1384,59 @@ void SwFieldFormDatePortion::Paint( const SwTextPaintInfo &rInf ) const
         else
             pDateField->SetPortionPaintAreaEnd(aPaintArea);
     }
+}
+
+SwFieldPortion* SwJumpFieldPortion::Clone(const OUString& rExpand) const
+{
+    auto pRet = new SwJumpFieldPortion(*this);
+    pRet->m_aExpand = rExpand;
+    return pRet;
+}
+
+bool SwJumpFieldPortion::DescribePDFControl(const SwTextPaintInfo& rInf) const
+{
+    auto pPDFExtOutDevData
+        = dynamic_cast<vcl::PDFExtOutDevData*>(rInf.GetOut()->GetExtOutDevData());
+    if (!pPDFExtOutDevData)
+        return false;
+
+    if (!pPDFExtOutDevData->GetIsExportFormFields())
+        return false;
+
+    if (m_nFormat != SwJumpEditFormat::JE_FMT_TEXT)
+        return false;
+
+    vcl::PDFWriter::EditWidget aDescriptor;
+
+    aDescriptor.Border = true;
+    aDescriptor.BorderColor = COL_BLACK;
+
+    SwRect aLocation;
+    rInf.CalcRect(*this, &aLocation);
+    aDescriptor.Location = aLocation.SVRect();
+
+    // Map the text of the field to the descriptor's text.
+    static sal_Unicode constexpr aForbidden[] = { CH_TXTATR_BREAKWORD, 0 };
+    aDescriptor.Text = comphelper::string::removeAny(GetExp(), aForbidden);
+
+    // Description for accessibility purposes.
+    if (!m_sHelp.isEmpty())
+        aDescriptor.Description = m_sHelp;
+
+    pPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+    pPDFExtOutDevData->CreateControl(aDescriptor);
+    pPDFExtOutDevData->EndStructureElement();
+
+    return true;
+}
+
+void SwJumpFieldPortion::Paint(const SwTextPaintInfo& rInf) const
+{
+    if (Width() && DescribePDFControl(rInf))
+        return;
+
+    if (rInf.GetOpt().IsShowPlaceHolderFields())
+        SwFieldPortion::Paint(rInf);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
