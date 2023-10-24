@@ -68,10 +68,7 @@ std::unique_ptr<UIObject> TreeListUIObject::get_child(const OUString& rID)
         if (!pEntry)
             return nullptr;
 
-        return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, pEntry));
-            //TODO: this looks dangerous, as there appears to be no protocol to guarantee that
-            // *pEntry will live as long as the new TreeListEntryUIObject referencing it by raw
-            // pointer
+        return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, {nID}));
     }
     else if (nID == -1) // FIXME hack?
     {
@@ -109,24 +106,38 @@ std::unique_ptr<UIObject> TreeListUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new TreeListUIObject(pTreeList));
 }
 
-TreeListEntryUIObject::TreeListEntryUIObject(const VclPtr<SvTreeListBox>& xTreeList, SvTreeListEntry* pEntry):
+TreeListEntryUIObject::TreeListEntryUIObject(const VclPtr<SvTreeListBox>& xTreeList, std::vector<sal_Int32> nTreePath):
     mxTreeList(xTreeList),
-    mpEntry(pEntry)
+    maTreePath(std::move(nTreePath))
 {
+}
+
+SvTreeListEntry* TreeListEntryUIObject::getEntry() const
+{
+    SvTreeListEntry* pEntry = nullptr;
+    for (sal_Int32 nID : maTreePath)
+    {
+        pEntry = mxTreeList->GetEntry(pEntry, nID);
+        if (!pEntry)
+            throw css::uno::RuntimeException("Could not find child with id: " + OUString::number(nID));
+    }
+    return pEntry;
 }
 
 StringMap TreeListEntryUIObject::get_state()
 {
+    SvTreeListEntry* pEntry = getEntry();
+
     StringMap aMap;
 
-    aMap["Text"] = mxTreeList->GetEntryText(mpEntry);
-    aMap["Children"] = OUString::number(mxTreeList->GetLevelChildCount(mpEntry));
-    aMap["VisibleChildCount"] = OUString::number(mxTreeList->GetVisibleChildCount(mpEntry));
-    aMap["IsSelected"] = OUString::boolean(mxTreeList->IsSelected(mpEntry));
+    aMap["Text"] = mxTreeList->GetEntryText(pEntry);
+    aMap["Children"] = OUString::number(mxTreeList->GetLevelChildCount(pEntry));
+    aMap["VisibleChildCount"] = OUString::number(mxTreeList->GetVisibleChildCount(pEntry));
+    aMap["IsSelected"] = OUString::boolean(mxTreeList->IsSelected(pEntry));
 
-    aMap["IsSemiTransparent"] = OUString::boolean(bool(mpEntry->GetFlags() & SvTLEntryFlags::SEMITRANSPARENT));
+    aMap["IsSemiTransparent"] = OUString::boolean(bool(pEntry->GetFlags() & SvTLEntryFlags::SEMITRANSPARENT));
 
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(mpEntry->GetFirstItem(SvLBoxItemType::Button));
+    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
     if (pItem)
         aMap["IsChecked"] = OUString::boolean(pItem->IsStateChecked());
 
@@ -135,49 +146,52 @@ StringMap TreeListEntryUIObject::get_state()
 
 void TreeListEntryUIObject::execute(const OUString& rAction, const StringMap& /*rParameters*/)
 {
+    SvTreeListEntry* pEntry = getEntry();
+
     if (rAction == "COLLAPSE")
     {
-        mxTreeList->Collapse(mpEntry);
+        mxTreeList->Collapse(pEntry);
     }
     else if (rAction == "EXPAND")
     {
-        mxTreeList->Expand(mpEntry);
+        mxTreeList->Expand(pEntry);
     }
     else if (rAction == "SELECT")
     {
-        mxTreeList->Select(mpEntry);
+        mxTreeList->Select(pEntry);
     }
     else if (rAction == "DESELECT")
     {
-        mxTreeList->Select(mpEntry, false);
+        mxTreeList->Select(pEntry, false);
     }
     else if (rAction == "CLICK")
     {
-        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(mpEntry->GetFirstItem(SvLBoxItemType::Button));
+        SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetFirstItem(SvLBoxItemType::Button));
         if (!pItem)
             return;
-        pItem->ClickHdl(mpEntry);
+        pItem->ClickHdl(pEntry);
     }
     else if (rAction == "DOUBLECLICK")
     {
-        mxTreeList->SetCurEntry(mpEntry);
+        mxTreeList->SetCurEntry(pEntry);
         mxTreeList->DoubleClickHdl();
     }
 }
 
 std::unique_ptr<UIObject> TreeListEntryUIObject::get_child(const OUString& rID)
 {
+    SvTreeListEntry* pParentEntry = getEntry();
+
     sal_Int32 nID = rID.toInt32();
     if (nID >= 0)
     {
-        SvTreeListEntry* pEntry = mxTreeList->GetEntry(mpEntry, nID);
+        SvTreeListEntry* pEntry = mxTreeList->GetEntry(pParentEntry, nID);
         if (!pEntry)
             return nullptr;
 
-        return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, pEntry));
-            //TODO: this looks dangerous, as there appears to be no protocol to guarantee that
-            // *pEntry will live as long as the new TreeListEntryUIObject referencing it by raw
-            // pointer
+        std::vector<sal_Int32> aChildTreePath(maTreePath);
+        aChildTreePath.push_back(nID);
+        return std::unique_ptr<UIObject>(new TreeListEntryUIObject(mxTreeList, std::move(aChildTreePath)));
     }
 
     return nullptr;
@@ -185,9 +199,11 @@ std::unique_ptr<UIObject> TreeListEntryUIObject::get_child(const OUString& rID)
 
 std::set<OUString> TreeListEntryUIObject::get_children() const
 {
+    SvTreeListEntry* pEntry = getEntry();
+
     std::set<OUString> aChildren;
 
-    size_t nChildren = mxTreeList->GetLevelChildCount(mpEntry);
+    size_t nChildren = mxTreeList->GetLevelChildCount(pEntry);
     for (size_t i = 0; i < nChildren; ++i)
     {
         aChildren.insert(OUString::number(i));
