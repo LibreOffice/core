@@ -6134,7 +6134,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nL
 void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uInt32 nLenDg,
                                                sal_uInt16 nDrawingContainerId )
 {
-    sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
+    sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt(0);sal_uInt32 nLength(0);
 
     sal_uLong nReadDg = 0;
 
