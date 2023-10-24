@@ -497,19 +497,27 @@ SvxSecurityTabPage::SvxSecurityTabPage(weld::Container* pPage, weld::DialogContr
     : SfxTabPage(pPage, pController, "cui/ui/optsecuritypage.ui", "OptSecurityPage", &rSet)
     , m_xSecurityOptionsPB(m_xBuilder->weld_button("options"))
     , m_xSavePasswordsCB(m_xBuilder->weld_check_button("savepassword"))
+    , m_xSavePasswordsImg(m_xBuilder->weld_widget("locksavepassword"))
     , m_xShowConnectionsPB(m_xBuilder->weld_button("connections"))
     , m_xMasterPasswordCB(m_xBuilder->weld_check_button("usemasterpassword"))
+    , m_xMasterPasswordImg(m_xBuilder->weld_widget("lockusemasterpassword"))
     , m_xMasterPasswordFT(m_xBuilder->weld_label("masterpasswordtext"))
     , m_xMasterPasswordPB(m_xBuilder->weld_button("masterpassword"))
     , m_xMacroSecFrame(m_xBuilder->weld_container("macrosecurity"))
     , m_xMacroSecPB(m_xBuilder->weld_button("macro"))
     , m_xCertFrame(m_xBuilder->weld_container("certificatepath"))
     , m_xCertPathPB(m_xBuilder->weld_button("cert"))
+    , m_xCertPathImg(m_xBuilder->weld_widget("lockcertipath"))
+    , m_xCertPathLabel(m_xBuilder->weld_label("label7"))
     , m_xTSAURLsFrame(m_xBuilder->weld_container("tsaurls"))
     , m_xTSAURLsPB(m_xBuilder->weld_button("tsas"))
+    , m_xTSAURLsImg(m_xBuilder->weld_widget("locktsas"))
+    , m_xTSAURLsLabel(m_xBuilder->weld_label("label9"))
     , m_xNoPasswordSaveFT(m_xBuilder->weld_label("nopasswordsave"))
     , m_xCertMgrPathLB(m_xBuilder->weld_button("browse"))
     , m_xParameterEdit(m_xBuilder->weld_entry("parameterfield"))
+    , m_xCertMgrPathImg(m_xBuilder->weld_widget("lockcertimanager"))
+    , m_xCertMgrPathLabel(m_xBuilder->weld_label("label11"))
 {
     //fdo#65595, we need height-for-width support here, but for now we can
     //bodge it
@@ -798,6 +806,16 @@ void SvxSecurityTabPage::InitControls()
                 m_xMasterPasswordFT->set_sensitive(true);
             }
         }
+
+        if (officecfg::Office::Common::Passwords::UseStorage::isReadOnly())
+        {
+            m_xSavePasswordsCB->set_sensitive(false);
+            m_xShowConnectionsPB->set_sensitive(false);
+            m_xSavePasswordsImg->set_visible(true);
+            m_xMasterPasswordCB->set_sensitive(false);
+            m_xMasterPasswordPB->set_sensitive(false);
+            m_xMasterPasswordImg->set_visible(true);
+        }
     }
     catch (const Exception&)
     {
@@ -810,6 +828,25 @@ void SvxSecurityTabPage::InitControls()
 
         if (!sCurCertMgr.isEmpty())
             m_xParameterEdit->set_text(sCurCertMgr);
+
+        bool bEnable = !officecfg::Office::Common::Security::Scripting::CertMgrPath::isReadOnly();
+        m_xCertMgrPathLB->set_sensitive(bEnable);
+        m_xParameterEdit->set_sensitive(bEnable);
+        m_xCertMgrPathLabel->set_sensitive(bEnable);
+        m_xCertMgrPathImg->set_visible(!bEnable);
+
+        bEnable = !officecfg::Office::Common::Security::Scripting::TSAURLs::isReadOnly();
+        m_xTSAURLsPB->set_sensitive(bEnable);
+        m_xTSAURLsLabel->set_sensitive(bEnable);
+        m_xTSAURLsImg->set_visible(!bEnable);
+
+#ifndef UNX
+        bEnable = !officecfg::Office::Common::Security::Scripting::CertDir::isReadOnly() ||
+            !officecfg::Office::Common::Security::Scripting::ManualCertDir::isReadOnly();
+        m_xCertPathPB->set_sensitive(bEnable);
+        m_xCertPathLabel->set_sensitive(bEnable);
+        m_xCertPathImg->set_visible(!bEnable);
+#endif
     }
     catch (const uno::Exception&)
     {

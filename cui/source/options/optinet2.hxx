@@ -90,9 +90,11 @@ private:
     std::unique_ptr<weld::Button> m_xSecurityOptionsPB;
 
     std::unique_ptr<weld::CheckButton> m_xSavePasswordsCB;
+    std::unique_ptr<weld::Widget> m_xSavePasswordsImg;
     std::unique_ptr<weld::Button> m_xShowConnectionsPB;
 
     std::unique_ptr<weld::CheckButton> m_xMasterPasswordCB;
+    std::unique_ptr<weld::Widget> m_xMasterPasswordImg;
     std::unique_ptr<weld::Label> m_xMasterPasswordFT;
     std::unique_ptr<weld::Button> m_xMasterPasswordPB;
 
@@ -101,14 +103,20 @@ private:
 
     std::unique_ptr<weld::Container> m_xCertFrame;
     std::unique_ptr<weld::Button> m_xCertPathPB;
+    std::unique_ptr<weld::Widget> m_xCertPathImg;
+    std::unique_ptr<weld::Label> m_xCertPathLabel;
 
     std::unique_ptr<weld::Container> m_xTSAURLsFrame;
     std::unique_ptr<weld::Button> m_xTSAURLsPB;
+    std::unique_ptr<weld::Widget> m_xTSAURLsImg;
+    std::unique_ptr<weld::Label> m_xTSAURLsLabel;
 
     std::unique_ptr<weld::Label> m_xNoPasswordSaveFT;
 
     std::unique_ptr<weld::Button> m_xCertMgrPathLB;
     std::unique_ptr<weld::Entry> m_xParameterEdit;
+    std::unique_ptr<weld::Widget> m_xCertMgrPathImg;
+    std::unique_ptr<weld::Label> m_xCertMgrPathLabel;
 
     DECL_LINK(SecurityOptionsHdl, weld::Button&, void);
     DECL_LINK(SavePasswordHdl, weld::Toggleable&, void);
