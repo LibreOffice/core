@@ -365,6 +365,18 @@ namespace vcl
         {
             return ((nLineWidth > nWidth) && (nStyle & DrawTextFlags::WordBreak));
         }
+
+        sal_Int32 lcl_GetEndOfLine(std::u16string_view rStr, const sal_Int32 nPos, const sal_Int32 nLen)
+        {
+            sal_Int32 nBreakPos = nPos;
+
+            while ((nBreakPos < nLen) && (rStr[nBreakPos] != '\r') && (rStr[nBreakPos] != '\n'))
+            {
+                nBreakPos++;
+            }
+
+            return nBreakPos;
+        }
     }
 
     tools::Long TextLayoutCommon::GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,
@@ -400,12 +412,8 @@ namespace vcl
         sal_Int32 nCurrentTextY = 0;
         while ( nPos < nLen )
         {
-            sal_Int32 nBreakPos = nPos;
-
-            while ( ( nBreakPos < nLen ) && ( rStr[ nBreakPos ] != '\r' ) && ( rStr[ nBreakPos ] != '\n' ) )
-                nBreakPos++;
-
-            tools::Long nLineWidth = GetTextWidth( rStr, nPos, nBreakPos-nPos );
+            sal_Int32 nBreakPos = lcl_GetEndOfLine(rStr, nPos, nLen);
+            tools::Long nLineWidth = GetTextWidth(rStr, nPos, nBreakPos-nPos);
 
             if (lcl_ShouldBreakWord(nLineWidth, nWidth, nStyle))
             {
