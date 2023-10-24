@@ -202,6 +202,21 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTabsFormatting)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::TEXT_FORMATTING, aIssues[3]->m_eIssueID);
 }
 
+//tdf#156550 - Accessibility sidebar complains about TOC hyperlinks
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckTOCHyperlink)
+{
+    createSwDoc("TOCHyperlinkTest.odt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0 (No Detected HYPERLINK_IS_TEXT Issues)
+    // - Actual  : 4 (Number of TOC Hyperlinks)
+    CPPUNIT_ASSERT_EQUAL(size_t(0), aIssues.size());
+}
+
 namespace
 {
 std::vector<std::shared_ptr<sfx::AccessibilityIssue>>
