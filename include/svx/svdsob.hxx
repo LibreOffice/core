@@ -31,31 +31,31 @@
 class SVXCORE_DLLPUBLIC SdrLayerIDSet final
 {
     // For now, have up to 256 layers
-    sal_uInt8 aData[32];
+    sal_uInt8 m_aData[32];
 
 public:
     explicit SdrLayerIDSet(bool bInitVal = false)
     {
-        memset(aData, bInitVal ? 0xFF : 0x00, sizeof(aData));
+        memset(m_aData, bInitVal ? 0xFF : 0x00, sizeof(m_aData));
     }
 
     bool operator!=(const SdrLayerIDSet& rCmpSet) const
     {
-        return (memcmp(aData, rCmpSet.aData, sizeof(aData))!=0);
+        return (memcmp(m_aData, rCmpSet.m_aData, sizeof(m_aData))!=0);
     }
 
     void Set(SdrLayerID a)
     {
         const sal_Int16 nId = a.get();
         if (nId >= 0 && nId < 256)
-            aData[nId / 8] |= 1 << (nId % 8);
+            m_aData[nId / 8] |= 1 << (nId % 8);
     }
 
     void Clear(SdrLayerID a)
     {
         const sal_Int16 nId = a.get();
         if (nId >= 0 && nId < 256)
-            aData[nId / 8] &= ~(1 << (nId % 8));
+            m_aData[nId / 8] &= ~(1 << (nId % 8));
     }
 
     void Set(SdrLayerID a, bool b)
@@ -69,17 +69,17 @@ public:
     bool IsSet(SdrLayerID a) const
     {
         const sal_Int16 nId = a.get();
-        return nId >= 0 && nId < 256 && (aData[nId / 8] & 1 << nId % 8) != 0;
+        return nId >= 0 && nId < 256 && (m_aData[nId / 8] & 1 << nId % 8) != 0;
     }
 
     void SetAll()
     {
-        memset(aData, 0xFF, sizeof(aData));
+        memset(m_aData, 0xFF, sizeof(m_aData));
     }
 
     void ClearAll()
     {
-        memset(aData, 0x00, sizeof(aData));
+        memset(m_aData, 0x00, sizeof(m_aData));
     }
 
     bool IsEmpty() const;

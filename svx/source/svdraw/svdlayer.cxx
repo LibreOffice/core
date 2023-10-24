@@ -27,7 +27,7 @@
 
 bool SdrLayerIDSet::IsEmpty() const
 {
-    for(sal_uInt8 i : aData)
+    for(sal_uInt8 i : m_aData)
     {
         if(i != 0)
             return false;
@@ -40,7 +40,7 @@ void SdrLayerIDSet::operator&=(const SdrLayerIDSet& r2ndSet)
 {
     for(sal_uInt16 i(0); i < 32; i++)
     {
-        aData[i] &= r2ndSet.aData[i];
+        m_aData[i] &= r2ndSet.m_aData[i];
     }
 }
 
@@ -59,12 +59,12 @@ void SdrLayerIDSet::PutValue( const css::uno::Any & rAny )
     sal_Int16 nIndex;
     for( nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        aData[nIndex] = static_cast<sal_uInt8>(aSeq[nIndex]);
+        m_aData[nIndex] = static_cast<sal_uInt8>(aSeq[nIndex]);
     }
 
     for( ; nIndex < 32; nIndex++ )
     {
-        aData[nIndex] = 0;
+        m_aData[nIndex] = 0;
     }
 }
 
