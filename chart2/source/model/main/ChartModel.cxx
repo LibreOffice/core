@@ -37,7 +37,7 @@
 #include <ModifyListenerHelper.hxx>
 #include <RangeHighlighter.hxx>
 #include <Diagram.hxx>
-#include <dumpxmltostring.hxx>
+#include <comphelper/dumpxmltostring.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
@@ -1287,7 +1287,7 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 OUString SAL_CALL ChartModel::dump(OUString const & kind)
 {
     if (kind.isEmpty()) {
-        return dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });
+        return comphelper::dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });
     }
 
     // kind == "shapes":

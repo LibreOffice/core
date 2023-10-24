@@ -72,6 +72,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/UnitConversion.hxx>
+#include <comphelper/dumpxmltostring.hxx>
 #include <fmtanchr.hxx>
 
 using namespace ::com::sun::star;
@@ -1644,6 +1645,18 @@ SwXTextView::getTransferableForTextRange(uno::Reference<text::XTextRange> const&
     pTransfer->PrepareForCopyTextRange(aPam);
     rSh.LockView( bLockedView );
     return pTransfer;
+}
+
+OUString SAL_CALL SwXTextView::dump(const OUString& rKind)
+{
+    if (rKind == "layout")
+    {
+        SwRootFrame* pLayout = GetView()->GetWrtShell().GetLayout();
+        return comphelper::dumpXmlToString([pLayout](xmlTextWriterPtr pWriter)
+                                           { pLayout->dumpAsXml(pWriter); });
+    }
+
+    return OUString();
 }
 
 uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransferable()

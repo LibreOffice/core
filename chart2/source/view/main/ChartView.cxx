@@ -56,7 +56,7 @@
 #include <DateHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <defines.hxx>
-#include <dumpxmltostring.hxx>
+#include <comphelper/dumpxmltostring.hxx>
 #include <unonames.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/eeitem.hxx>
@@ -1789,7 +1789,7 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames()
 OUString ChartView::dump(OUString const & kind)
 {
     if (kind.isEmpty()) {
-        return dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });
+        return comphelper::dumpXmlToString([this](auto writer) { return dumpAsXml(writer); });
     }
 
     // kind == "shapes":

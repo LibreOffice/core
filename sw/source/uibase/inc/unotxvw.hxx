@@ -38,6 +38,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #include <com/sun/star/datatransfer/XTransferableTextSupplier.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <TextCursorHelper.hxx>
@@ -59,7 +60,8 @@ typedef cppu::ImplInheritanceHelper<
             css::view::XViewSettingsSupplier,
             css::beans::XPropertySet,
             css::datatransfer::XTransferableSupplier,
-            css::datatransfer::XTransferableTextSupplier> SwXTextView_Base;
+            css::datatransfer::XTransferableTextSupplier,
+            css::qa::XDumper> SwXTextView_Base;
 class SwXTextView final : public SwXTextView_Base
 {
     ::comphelper::OInterfaceContainerHelper3<css::view::XSelectionChangeListener> m_SelChangedListeners;
@@ -131,6 +133,9 @@ public:
 
     // XTransferableTextSupplier
     virtual css::uno::Reference<css::datatransfer::XTransferable> SAL_CALL getTransferableForTextRange(css::uno::Reference<css::text::XTextRange> const& xTextRange) override;
+
+    // XDumper
+    OUString SAL_CALL dump(const OUString& rKind) override;
 
     void                    NotifySelChanged();
     void                    NotifyDBChanged();

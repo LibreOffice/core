@@ -16,7 +16,7 @@
 
 #include <new>
 
-namespace chart
+namespace comphelper
 {
 template <typename F> OUString dumpXmlToString(F f)
 {
