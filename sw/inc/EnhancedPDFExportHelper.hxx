@@ -39,6 +39,7 @@ class SwPrintData;
 class SwTextPainter;
 class SwEditShell;
 class StringRangeEnumerator;
+class SwTextAttr;
 class SwTextNode;
 class SwTable;
 class SwNumberTreeNode;
@@ -161,7 +162,7 @@ class SwTaggedPDFHelper
 
     void EndCurrentSpan();
     void CreateCurrentSpan(SwTextPaintInfo const& rInf, OUString const& rStyleName);
-    bool CheckContinueSpan(SwTextPaintInfo const& rInf, std::u16string_view rStyleName);
+    bool CheckContinueSpan(SwTextPaintInfo const& rInf, std::u16string_view rStyleName, SwTextAttr const* pInetFormatAttr);
 
     bool CheckReopenTag();
     void CheckRestoreTag() const;
