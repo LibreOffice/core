@@ -28,14 +28,20 @@ class SvxFontSubstTabPage : public SfxTabPage
     OUString                    m_sAutomatic;
 
     std::unique_ptr<weld::CheckButton> m_xUseTableCB;
+    std::unique_ptr<weld::Widget> m_xUseTableImg;
     std::unique_ptr<weld::ComboBox> m_xFont1CB;
     std::unique_ptr<weld::ComboBox> m_xFont2CB;
     std::unique_ptr<weld::Button> m_xApply;
     std::unique_ptr<weld::Button> m_xDelete;
     std::unique_ptr<weld::TreeView> m_xCheckLB;
     std::unique_ptr<weld::ComboBox> m_xFontNameLB;
+    std::unique_ptr<weld::Label> m_xFontNameLabel;
+    std::unique_ptr<weld::Widget> m_xFontNameImg;
     std::unique_ptr<weld::CheckButton> m_xNonPropFontsOnlyCB;
+    std::unique_ptr<weld::Widget> m_xNonPropFontsOnlyImg;
     std::unique_ptr<weld::ComboBox> m_xFontHeightLB;
+    std::unique_ptr<weld::Label> m_xFontHeightLabel;
+    std::unique_ptr<weld::Widget> m_xFontHeightImg;
 
     DECL_LINK(SelectComboBoxHdl, weld::ComboBox&, void);
     DECL_LINK(ToggleHdl, weld::Toggleable&, void);

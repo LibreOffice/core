@@ -35,14 +35,20 @@
 SvxFontSubstTabPage::SvxFontSubstTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optfontspage.ui", "OptFontsPage", &rSet)
     , m_xUseTableCB(m_xBuilder->weld_check_button("usetable"))
+    , m_xUseTableImg(m_xBuilder->weld_widget("lockusetable"))
     , m_xFont1CB(m_xBuilder->weld_combo_box("font1"))
     , m_xFont2CB(m_xBuilder->weld_combo_box("font2"))
     , m_xApply(m_xBuilder->weld_button("apply"))
     , m_xDelete(m_xBuilder->weld_button("delete"))
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklb"))
     , m_xFontNameLB(m_xBuilder->weld_combo_box("fontname"))
+    , m_xFontNameLabel(m_xBuilder->weld_label("label8"))
+    , m_xFontNameImg(m_xBuilder->weld_widget("lockfontname"))
     , m_xNonPropFontsOnlyCB(m_xBuilder->weld_check_button("nonpropfontonly"))
+    , m_xNonPropFontsOnlyImg(m_xBuilder->weld_widget("locknonpropfontonly"))
     , m_xFontHeightLB(m_xBuilder->weld_combo_box("fontheight"))
+    , m_xFontHeightLabel(m_xBuilder->weld_label("label9"))
+    , m_xFontHeightImg(m_xBuilder->weld_widget("lockfontheight"))
 {
     m_xFont1CB->make_sorted();
     m_xFont1CB->set_size_request(1, -1);
@@ -222,7 +228,10 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
     m_xFont2CB->thaw();
     m_xFont1CB->thaw();
 
+    bool bEnable = !officecfg::Office::Common::Font::Substitution::Replacement::isReadOnly();
     m_xUseTableCB->set_active(svtools::IsFontSubstitutionsEnabled());
+    m_xUseTableCB->set_sensitive(bEnable);
+    m_xUseTableImg->set_visible(!bEnable);
 
     std::vector<SubstitutionStruct> aFontSubs = svtools::GetFontSubstitutions();
     std::unique_ptr<weld::TreeIter> xIter(m_xCheckLB->make_iterator());
@@ -259,6 +268,19 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
         OUString::number(
             officecfg::Office::Common::Font::SourceViewFont::FontHeight::
             get()));
+
+    bEnable = !officecfg::Office::Common::Font::SourceViewFont::FontName::isReadOnly();
+    m_xFontNameLB->set_sensitive(bEnable);
+    m_xFontNameLabel->set_sensitive(bEnable);
+    m_xFontNameImg->set_visible(!bEnable);
+
+    m_xNonPropFontsOnlyCB->set_sensitive(bEnable);
+    m_xNonPropFontsOnlyImg->set_visible(!bEnable);
+
+    m_xFontHeightLB->set_sensitive(bEnable);
+    m_xFontHeightLabel->set_sensitive(bEnable);
+    m_xFontHeightImg->set_visible(!bEnable);
+
     m_xNonPropFontsOnlyCB->save_state();
     m_xFontHeightLB->save_value();
 }
@@ -395,7 +417,7 @@ IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, weld::Toggleable&, rBox, void)
 
 void SvxFontSubstTabPage::CheckEnable()
 {
-    bool bEnableAll = m_xUseTableCB->get_active();
+    bool bEnableAll = m_xUseTableCB->get_active() && !officecfg::Office::Common::Font::SourceViewFont::FontName::isReadOnly();
     m_xCheckLB->set_sensitive(bEnableAll);
     m_xFont1CB->set_sensitive(bEnableAll);
     m_xFont2CB->set_sensitive(bEnableAll);
