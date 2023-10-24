@@ -75,7 +75,9 @@ using namespace ::com::sun::star::lang;
 static std::pair<OUString, bool> MakeRefNumStr(SwRootFrame const* pLayout,
       const SwTextNode& rTextNodeOfField,
       const SwTextNode& rTextNodeOfReferencedItem,
-      sal_uInt32 nRefNumFormat);
+      sal_uInt16 nSubType,
+      sal_uInt32 nRefNumFormat,
+      sal_uInt16 nFlags);
 
 static void lcl_GetLayTree( const SwFrame* pFrame, std::vector<const SwFrame*>& rArr )
 {
@@ -426,30 +428,6 @@ static OUString lcl_formatStringByCombiningCharacter(std::u16string_view sText, 
     return sRet.makeStringAndClear();
 }
 
-void SwGetRefField::StylerefStripNonnumerical(OUString& rText) const
-{
-    // for STYLEREF, hide text that is neither a delimiter nor a number if that flag is set
-    if ( m_nSubType != REF_STYLE || (GetFlags() & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) != REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL )
-        return;
-
-    std::vector<sal_Unicode> charactersToKeep;
-
-    for (int i = 0; i < rText.getLength(); i++) {
-        auto character = rText[i];
-
-        if (
-            (character >= '(' && character <= '@') || // includes 0-9 and most of the punctuation we want
-            (character >= '[' && character <= '_')  // includes the rest of the punctuation we want
-        )
-            charactersToKeep.push_back(character);
-    }
-
-    if (charactersToKeep.size())
-        rText = OUString(&charactersToKeep[0], charactersToKeep.size());
-    else
-        rText = OUString();
-}
-
 // #i85090#
 OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
         SwRootFrame const& rLayout, SwTextNode* pTextNode, SwFrame* pFrame) const
@@ -468,8 +446,6 @@ OUString SwGetRefField::GetExpandedTextOfReferencedTextNode(
        sRet = sw::GetExpandTextMerged(&rLayout, *pReferencedTextNode, true, false, ExpandMode(0));
        sRet = lcl_formatStringByCombiningCharacter( sRet, cStrikethrough );
     }
-
-    StylerefStripNonnumerical(sRet);
 
     return sRet;
 }
@@ -799,7 +775,7 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
             if ( pFieldTextAttr && pFieldTextAttr->GetpTextNode() )
             {
                 auto result =
-                    MakeRefNumStr(pLayout, pFieldTextAttr->GetTextNode(), *pTextNd, GetFormat());
+                    MakeRefNumStr(pLayout, pFieldTextAttr->GetTextNode(), *pTextNd, m_nSubType, GetFormat(), GetFlags());
                 rText = result.first;
                 // for differentiation of Roman numbers and letters in Hungarian article handling
                 bool bClosingParenthesis = result.second;
@@ -809,22 +785,25 @@ void SwGetRefField::UpdateField(const SwTextField* pFieldTextAttr, SwFrame* pFra
                 }
             }
         }
+
         break;
 
     default:
         OSL_FAIL("<SwGetRefField::UpdateField(..)> - unknown format type");
     }
-
-    StylerefStripNonnumerical(rText);
 }
+
 
 // #i81002#
 static std::pair<OUString, bool> MakeRefNumStr(
         SwRootFrame const*const pLayout,
         const SwTextNode& i_rTextNodeOfField,
         const SwTextNode& i_rTextNodeOfReferencedItem,
-        const sal_uInt32 nRefNumFormat)
+        const sal_uInt16 nSubType,
+        const sal_uInt32 nRefNumFormat,
+        const sal_uInt16 nFlags)
 {
+    bool bHideNonNumerical = (nSubType == REF_STYLE) && ((nFlags & REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL) == REFFLDFLAG_STYLE_HIDE_NON_NUMERICAL);
     SwTextNode const& rTextNodeOfField(pLayout
             ?   *sw::GetParaPropsNode(*pLayout, i_rTextNodeOfField)
             :   i_rTextNodeOfField);
@@ -898,7 +877,8 @@ static std::pair<OUString, bool> MakeRefNumStr(
                 rTextNodeOfReferencedItem.GetNumRule()->MakeRefNumString(
                     *(rTextNodeOfReferencedItem.GetNum(pLayout)),
                     bInclSuperiorNumLabels,
-                    nRestrictInclToThisLevel ),
+                    nRestrictInclToThisLevel,
+                    bHideNonNumerical ),
                 rTextNodeOfReferencedItem.GetNumRule()->MakeNumString(
                     *(rTextNodeOfReferencedItem.GetNum(pLayout)),
                     true).endsWith(")") );

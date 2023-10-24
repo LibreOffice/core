@@ -648,9 +648,51 @@ OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings ) co
     return OUString();
 }
 
+namespace {
+/// Strip out text that is not a delimiter. Used in STYLEREF for when you
+/// have chapters labelled "Chapter X.Y" and want to just keep the "X.Y"
+/// Only used on the prefix/infix/suffix, so the numbers are not modified
+void StripNonDelimiter(OUString& rText)
+{
+    std::vector<sal_Unicode> charactersToKeep;
+
+    for (int i = 0; i < rText.getLength(); i++) {
+        auto character = rText[i];
+
+         // tdf#86790# for Word compatibility: I haven't found any better way to determine whether a
+         // character is a delimiter than testing in Word and listing them out. Furthermore, I haven't
+         // found a list so I can't be certain this is the complete set- if there's a compatibility issue
+         // with this in the future, here's the first place to look...
+         if (
+            character == '.'
+            || character == ','
+            || character == ':'
+            || character == ';'
+            || character == '-'
+            || character == '('
+            || character == ')'
+            || character == '['
+            || character == ']'
+            || character == '{'
+            || character == '}'
+            || character == '/'
+            || character == '\\'
+            || character == '|'
+        )
+            charactersToKeep.push_back(character);
+    }
+
+    if (charactersToKeep.size())
+        rText = OUString(&charactersToKeep[0], charactersToKeep.size());
+    else
+        rText = OUString();
+}
+}
+
 OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                                  const bool bInclStrings,
                                  const unsigned int _nRestrictToThisLevel,
+                                 const bool bHideNonNumerical,
                                  SwNumRule::Extremities* pExtremities,
                                  LanguageType nLang ) const
 {
@@ -672,12 +714,27 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     if (rMyNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
     {
-        if (!rMyNFormat.HasListFormat())
-            return bInclStrings ? rMyNFormat.GetPrefix() + rMyNFormat.GetSuffix() : OUString();
+        if (!rMyNFormat.HasListFormat()) {
+            OUString sRet = bInclStrings ? rMyNFormat.GetPrefix() + rMyNFormat.GetSuffix() : OUString();
+            StripNonDelimiter(sRet);
+            return sRet;
+        }
 
         // If numbering is disabled for this level we should emit just prefix/suffix
         // Remove everything between first %1% and last %n% (including markers)
-        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
+        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings && !bHideNonNumerical);
+
+        if (bInclStrings && bHideNonNumerical) {
+            // If hiding non numerical text, we need to strip the prefix and suffix properly, so let's add them manually
+            OUString sPrefix = rMyNFormat.GetPrefix();
+            OUString sSuffix = rMyNFormat.GetSuffix();
+
+            StripNonDelimiter(sPrefix);
+            StripNonDelimiter(sSuffix);
+
+            sLevelFormat = sPrefix + sLevelFormat + sSuffix;
+        }
+
         sal_Int32 nFirstPosition = sLevelFormat.indexOf("%");
         sal_Int32 nLastPosition = sLevelFormat.lastIndexOf("%");
         if (nFirstPosition >= 0 && nLastPosition >= nFirstPosition)
@@ -689,7 +746,17 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     if (rMyNFormat.HasListFormat())
     {
-        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
+        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings && !bHideNonNumerical);
+
+        if (bInclStrings && bHideNonNumerical) {
+            OUString sPrefix = rMyNFormat.GetPrefix();
+            OUString sSuffix = rMyNFormat.GetSuffix();
+
+            StripNonDelimiter(sPrefix);
+            StripNonDelimiter(sSuffix);
+
+            sLevelFormat = sPrefix + sLevelFormat + sSuffix;
+        }
 
         // In this case we are ignoring GetIncludeUpperLevels: we put all
         // level numbers requested by level format
@@ -697,28 +764,46 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
         {
             OUString sReplacement;
             const SwNumFormat& rNFormat = Get(i);
+
+            OUString sFind("%" + OUString::number(i + 1) + "%");
+            sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
+
             if (rNFormat.GetNumberingType() == SVX_NUM_NUMBER_NONE)
             {
                 // Numbering disabled - replacement is empty
                 // And we should skip all level string content until next level marker:
                 // so %1%.%2%.%3% with second level as NONE will result 1.1, not 1..1
-                OUString sFind("%" + OUString::number(i + 1) + "%");
-                sal_Int32 nPositionToken = sLevelFormat.indexOf(sFind);
-                sal_Int32 nPositionNextToken = sLevelFormat.indexOf('%', nPositionToken + sFind.getLength());
-                if (nPositionToken >= 0 && nPositionNextToken >= nPositionToken)
+                sal_Int32 nPositionNext = sLevelFormat.indexOf('%', nPosition + sFind.getLength());
+                if (nPosition >= 0 && nPositionNext >= nPosition)
                 {
-                    sLevelFormat = sLevelFormat.replaceAt(nPositionToken, nPositionNextToken - nPositionToken, u"");
+                    sLevelFormat = sLevelFormat.replaceAt(nPosition, nPositionNext - nPosition, u"");
                 }
+                continue;
             }
             else if (rNumVector[i])
                 sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale, rMyNFormat.GetIsLegal());
             else
                 sReplacement = "0";        // all 0 level are a 0
 
-            OUString sFind("%" + OUString::number(i + 1) + "%");
-            sal_Int32 nPosition = sLevelFormat.indexOf(sFind);
             if (nPosition >= 0)
+            {
+                if (bHideNonNumerical)
+                {
+                    sal_Int32 nPositionNext = sLevelFormat.indexOf('%', nPosition + sFind.getLength());
+
+                    if (nPositionNext >= nPosition) {
+                        sal_Int32 nReplaceStart = nPosition + sFind.getLength();
+                        sal_Int32 nReplaceCount = nPositionNext - nReplaceStart;
+
+                        OUString sSeparator = sLevelFormat.copy(nReplaceStart, nReplaceCount);
+                        StripNonDelimiter(sSeparator);
+
+                        sLevelFormat = sLevelFormat.replaceAt(nReplaceStart, nReplaceCount, sSeparator);
+                    }
+                }
+
                 sLevelFormat = sLevelFormat.replaceAt(nPosition, sFind.getLength(), sReplacement);
+            }
         }
 
         aStr = sLevelFormat;
@@ -769,8 +854,13 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
             SVX_NUM_CHAR_SPECIAL != rMyNFormat.GetNumberingType() &&
             SVX_NUM_BITMAP != rMyNFormat.GetNumberingType())
         {
-            const OUString& sPrefix = rMyNFormat.GetPrefix();
-            const OUString& sSuffix = rMyNFormat.GetSuffix();
+            OUString sPrefix = rMyNFormat.GetPrefix();
+            OUString sSuffix = rMyNFormat.GetSuffix();
+
+            if (bHideNonNumerical) {
+                StripNonDelimiter(sPrefix);
+                StripNonDelimiter(sSuffix);
+            }
 
             aStr.insert(0, sPrefix);
             aStr.append(sSuffix);
@@ -787,7 +877,8 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
 OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                                     const bool bInclSuperiorNumLabels,
-                                    const int nRestrictInclToThisLevel ) const
+                                    const int nRestrictInclToThisLevel,
+                                    const bool bHideNonNumerical ) const
 {
     OUString aRefNumStr;
 
@@ -822,7 +913,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 Extremities aExtremities;
                 OUString aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
                                                  true, MAXLEVEL,
-                                                 &aExtremities);
+                                                 bHideNonNumerical, &aExtremities);
                 sal_Int32 nStrip = 0;
                 while ( nStrip < aExtremities.nPrefixChars )
                 {
