@@ -719,6 +719,21 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testGetStringWithNewsEllpsis)
         device->GetEllipsisString(u"ab. cde. x y z"_ustr, 50, DrawTextFlags::NewsEllipsis));
 }
 
+CPPUNIT_TEST_FIXTURE(VclTextTest, testGetTextBreak_invalid_index)
+{
+    ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);
+    device->SetOutputSizePixel(Size(1000, 1000));
+    device->SetFont(vcl::Font("DejaVu Sans", "Book", Size(0, 11)));
+
+    const OUString sTestStr(u"textline_ text_"_ustr);
+    const auto nLen = sTestStr.getLength();
+    const auto nTextWidth = device->GetTextWidth("text");
+    const auto nInvalidIndex = sTestStr.getLength() + 2;
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
+                         device->GetTextBreak(sTestStr, nTextWidth, nInvalidIndex, nLen));
+}
+
 CPPUNIT_TEST_FIXTURE(VclTextTest, testGetTextBreak)
 {
     ScopedVclPtr<VirtualDevice> device = VclPtr<VirtualDevice>::Create(DeviceFormat::WITHOUT_ALPHA);

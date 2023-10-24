@@ -47,7 +47,7 @@ namespace vcl
         ~ITextLayout() COVERITY_NOEXCEPT_FALSE {}
     };
 
-    class TextLayoutCommon : public ITextLayout
+    class VCL_DLLPUBLIC TextLayoutCommon : public ITextLayout
     {
     public:
         OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
@@ -75,7 +75,7 @@ namespace vcl
     /** is an implementation of the ITextLayout interface which simply delegates its calls to the respective
         methods of an OutputDevice instance, without any inbetween magic.
     */
-    class DefaultTextLayout final : public TextLayoutCommon
+    class VCL_DLLPUBLIC DefaultTextLayout final : public TextLayoutCommon
     {
     public:
         DefaultTextLayout( OutputDevice& _rTargetDevice )
