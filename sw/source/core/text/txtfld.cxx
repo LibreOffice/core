@@ -180,7 +180,8 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     &static_cast<SwJumpEditField*>(pField)->GetCharFormat()->GetAttrSet(),
                     &m_pFrame->GetDoc().getIDocumentSettingAccess());
             }
-            return new SwFieldPortion(ExpandField(*pField, *this, rInf), std::move(pFont), true);
+            return new SwJumpFieldPortion(ExpandField(*pField, *this, rInf), pField->GetPar2(),
+                                          std::move(pFont), pField->GetFormat());
         }
         case SwFieldIds::GetRef:
             if (!bName)

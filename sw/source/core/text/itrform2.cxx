@@ -1182,7 +1182,7 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 }
             }
             assert(2 <= sal_Int32(nFieldLen));
-            pPor = new SwFieldPortion(aFieldName, nullptr, false, nFieldLen);
+            pPor = new SwFieldPortion(aFieldName, nullptr, nFieldLen);
         }
         else
         {
