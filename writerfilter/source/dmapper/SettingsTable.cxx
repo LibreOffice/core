@@ -592,7 +592,9 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
 
+    // Shared between DOCX and RTF, unconditional flags.
     xDocumentSettings->setPropertyValue("TableRowKeep", uno::Any(true));
+    xDocumentSettings->setPropertyValue("AddVerticalFrameOffsets", uno::Any(true));
 
     if (GetWordCompatibilityMode() <= 14)
     {

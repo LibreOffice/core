@@ -7,20 +7,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/unoapi_test.hxx>
+#include <test/unoapixml_test.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
+
+#include <test/xmldocptr.hxx>
 
 using namespace com::sun::star;
 
 namespace
 {
 /// Tests for writerfilter/source/dmapper/SettingsTable.cxx.
-class Test : public UnoApiTest
+class Test : public UnoApiXmlTest
 {
 public:
     Test()
-        : UnoApiTest("/writerfilter/qa/cppunittests/dmapper/data/")
+        : UnoApiXmlTest("/writerfilter/qa/cppunittests/dmapper/data/")
     {
     }
 };
@@ -58,6 +61,29 @@ CPPUNIT_TEST_FIXTURE(Test, testAllowTextAfterFloatingTableBreak)
     // Without the accompanying fix in place, this test would have failed, the compat flag was not
     // set.
     CPPUNIT_ASSERT(bAllowTextAfterFloatingTableBreak);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAddVerticalFrameOffsetsRTF)
+{
+    // Given a document with a floating table, immediately followed by an inline table:
+    // When importing that document:
+    loadFromURL(u"floattable-vertical-frame-offset.rtf");
+
+    // Then make sure the floating and the inline tables don't overlap:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    css::uno::Reference<qa::XDumper> xDumper(xModel->getCurrentController(), uno::UNO_QUERY);
+    OString aDump = xDumper->dump("layout").toUtf8();
+    auto pCharBuffer = reinterpret_cast<const xmlChar*>(aDump.getStr());
+    xmlDocUniquePtr pXmlDoc(xmlParseDoc(pCharBuffer));
+    sal_Int32 nFlyBottom = getXPath(pXmlDoc, "//fly/infos/bounds", "bottom").toInt32();
+    sal_Int32 nTableFrameTop = getXPath(pXmlDoc, "//body/tab/infos/bounds", "top").toInt32();
+    sal_Int32 nTableTopMargin = getXPath(pXmlDoc, "//body/tab/infos/prtBounds", "top").toInt32();
+    sal_Int32 nTableTop = nTableFrameTop + nTableTopMargin;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected greater than: 2747
+    // - Actual  : 1449
+    // i.e. table top should be ~2748, but was less, leading to an overlap.
+    CPPUNIT_ASSERT_GREATER(nFlyBottom, nTableTop);
 }
 }
 
