@@ -393,8 +393,6 @@ namespace vcl
         if (rStr.isEmpty())
             return 0;
 
-        const bool bClipping = (nStyle & DrawTextFlags::Clip) && !(nStyle & DrawTextFlags::EndEllipsis);
-
         tools::Long nMaxLineWidth  = 0;
         const bool bHyphenate = (nStyle & DrawTextFlags::WordBreakHyphenation) == DrawTextFlags::WordBreakHyphenation;
         css::uno::Reference< css::linguistic2::XHyphenator > xHyph;
@@ -410,6 +408,7 @@ namespace vcl
         sal_Int32 nPos = 0;
         sal_Int32 nLen = rStr.getLength();
         sal_Int32 nCurrentTextY = 0;
+
         while ( nPos < nLen )
         {
             sal_Int32 nBreakPos = lcl_GetEndOfLine(rStr, nPos, nLen);
@@ -437,6 +436,7 @@ namespace vcl
 
             if ( nBreakPos == nPos )
                 nBreakPos++;
+
             nPos = nBreakPos;
 
             if ( nPos < nLen && ( ( rStr[ nPos ] == '\r' ) || ( rStr[ nPos ] == '\n' ) ) )
@@ -447,6 +447,9 @@ namespace vcl
                     nPos++;
             }
             nCurrentTextY += nTextHeight;
+
+            const bool bClipping = (nStyle & DrawTextFlags::Clip) && !(nStyle & DrawTextFlags::EndEllipsis);
+
             if (bClipping && nCurrentTextY > rRect.GetHeight())
                 break;
         }
