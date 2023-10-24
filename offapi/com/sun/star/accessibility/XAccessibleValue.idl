@@ -78,7 +78,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
         getCurrentValue().</p>
 
         @return
-            Returns the mimimum value in an implementation dependent type.
+            Returns the minimum value in an implementation dependent type.
             If this object has no lower bound then an empty object is
             returned.
     */
@@ -92,7 +92,7 @@ interface XAccessibleValue : ::com::sun::star::uno::XInterface
         getCurrentValue().</p>
 
         @return
-            Returns the minium increment value in an implementation dependent type.
+            Returns the minimum increment value in an implementation dependent type.
             If this object has no minimum increment value, then an empty object is
             returned.
 
