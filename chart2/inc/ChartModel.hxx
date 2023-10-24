@@ -452,7 +452,7 @@ public:
     virtual void SAL_CALL update() override;
 
     // XDumper
-    virtual OUString SAL_CALL dump() override;
+    virtual OUString SAL_CALL dump(const OUString& rKind) override;
 
     // normal methods
     css::uno::Reference< css::util::XNumberFormatsSupplier > const &

@@ -81,7 +81,7 @@ OUString Chart2XShapeTest::getXShapeDumpString()
     uno::Reference<chart::XChartDocument> xChartDoc(getChartCompFromSheet(0, 0, mxComponent),
                                                     UNO_QUERY_THROW);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    return xDumper->dump();
+    return xDumper->dump("");
 }
 
 xmlDocUniquePtr Chart2XShapeTest::getXShapeDumpXmlDoc()
@@ -133,7 +133,7 @@ void Chart2XShapeTest::testTdf149204()
     loadFromURL(u"pptx/tdf149204.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 0);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    compareAgainstReference(xDumper->dump(), u"tdf149204.xml");
+    compareAgainstReference(xDumper->dump(""), u"tdf149204.xml");
 }
 
 void Chart2XShapeTest::testTdf151424()
@@ -252,7 +252,7 @@ void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
     loadFromURL(u"pptx/tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
-    OUString rDump = xDumper->dump();
+    OUString rDump = xDumper->dump("");
     OString aXmlDump = OUStringToOString(rDump, RTL_TEXTENCODING_UTF8);
     xmlDocUniquePtr pXmlDoc(xmlParseDoc(reinterpret_cast<const xmlChar*>(aXmlDump.getStr())));
 

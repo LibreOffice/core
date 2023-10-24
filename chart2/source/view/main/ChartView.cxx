@@ -1796,7 +1796,7 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames()
     return aServiceNames;
 }
 
-OUString ChartView::dump()
+OUString ChartView::dump(const OUString& /*rKind*/)
 {
 #if HAVE_FEATURE_DESKTOP
     // Used for unit tests and in chartcontroller only, no need to drag in this when cross-compiling

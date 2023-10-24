@@ -304,7 +304,6 @@ void WriterFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDo
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
 
-    xSettings->setPropertyValue("AddVerticalFrameOffsets", uno::Any(true));
     xSettings->setPropertyValue("UseOldNumbering", uno::Any(false));
     xSettings->setPropertyValue("IgnoreFirstLineIndentInNumbering", uno::Any(false));
     xSettings->setPropertyValue("DoNotResetParaAttrsForNumFont", uno::Any(false));

@@ -1257,12 +1257,12 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 }
 
 //XDumper
-OUString SAL_CALL ChartModel::dump()
+OUString SAL_CALL ChartModel::dump(const OUString& rKind)
 {
     uno::Reference< qa::XDumper > xDumper(
             createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     if (xDumper.is())
-        return xDumper->dump();
+        return xDumper->dump(rKind);
 
     return OUString();
 }

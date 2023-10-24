@@ -27,7 +27,7 @@ interface XDumper : com::sun::star::uno::XInterface
      * @since LibreOffice 3.6
      */
 
-    string dump();
+    string dump([in] string kind);
 };
 
 } ; // chart2
