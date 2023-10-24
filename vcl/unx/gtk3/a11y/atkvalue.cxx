@@ -21,6 +21,7 @@
 
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 
+#include <cmath>
 #include <string.h>
 
 using namespace ::com::sun::star;
@@ -110,8 +111,23 @@ value_wrapper_set_current_value( AtkValue     *value,
             = getValue( value );
         if( pValue.is() )
         {
-            // FIXME - this needs expanding
             double aDouble = g_value_get_double( gval );
+
+            // Different types of numerical values for XAccessibleValue are possible.
+            // If current value has an integer type, also use that for the new value, to make
+            // sure underlying implementations expecting that can handle the value properly.
+            const css::uno::Any aCurrentValue = pValue->getCurrentValue();
+            if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
+            {
+                const sal_Int32 nValue = std::round<sal_Int32>(aDouble);
+                return pValue->setCurrentValue(css::uno::Any(nValue));
+            }
+            else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
+            {
+                const sal_Int64 nValue = std::round<sal_Int64>(aDouble);
+                return pValue->setCurrentValue(css::uno::Any(nValue));
+            }
+
             return pValue->setCurrentValue( uno::Any(aDouble) );
         }
     }
