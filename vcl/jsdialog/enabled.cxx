@@ -100,6 +100,8 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/scalc/ui/chardialog.ui"
         || rUIFile == u"modules/scalc/ui/chisquaretestdialog.ui"
         || rUIFile == u"modules/scalc/ui/colwidthdialog.ui"
+        || rUIFile == u"modules/scalc/ui/conditionaleasydialog.ui"
+        || rUIFile == u"modules/scalc/ui/condformatmanager.ui"
         || rUIFile == u"modules/scalc/ui/correlationdialog.ui"
         || rUIFile == u"modules/scalc/ui/covariancedialog.ui"
         || rUIFile == u"modules/scalc/ui/datafielddialog.ui"
