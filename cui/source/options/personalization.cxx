@@ -33,7 +33,9 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage(weld::Container* pPage,
     : SfxTabPage(pPage, pController, "cui/ui/personalization_tab.ui", "PersonalizationTabPage",
                  &rSet)
     , m_xNoPersona(m_xBuilder->weld_radio_button("no_persona"))
+    , m_xPersonaImg(m_xBuilder->weld_widget("lockpersona"))
     , m_xDefaultPersona(m_xBuilder->weld_radio_button("default_persona"))
+    , m_xContentGrid(m_xBuilder->weld_container("gridpersonasetting"))
 {
     for (sal_uInt32 i = 0; i < MAX_DEFAULT_PERSONAS; ++i)
     {
@@ -116,6 +118,16 @@ void SvxPersonalizationTabPage::Reset(const SfxItemSet*)
         m_xNoPersona->set_active(true);
     else
         m_xDefaultPersona->set_active(true);
+
+    if (officecfg::Office::Common::Misc::Persona::isReadOnly())
+    {
+        m_xNoPersona->set_sensitive(false);
+        m_xDefaultPersona->set_sensitive(false);
+        m_xPersonaImg->set_visible(true);
+    }
+
+    if (officecfg::Office::Common::Misc::PersonaSettings::isReadOnly())
+        m_xContentGrid->set_sensitive(false);
 }
 
 void SvxPersonalizationTabPage::LoadDefaultImages()

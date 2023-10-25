@@ -18,7 +18,9 @@ class SvxPersonalizationTabPage : public SfxTabPage
 {
 private:
     std::unique_ptr<weld::RadioButton> m_xNoPersona; ///< Just the default look, without any bitmap
+    std::unique_ptr<weld::Widget> m_xPersonaImg;
     std::unique_ptr<weld::RadioButton> m_xDefaultPersona; ///< Use the built-in bitmap
+    std::unique_ptr<weld::Container> m_xContentGrid;
     std::unique_ptr<weld::ToggleButton> m_vDefaultPersonaImages
         [MAX_DEFAULT_PERSONAS]; ///< Buttons to show the default persona images
     OUString m_aPersonaSettings; ///< Header and footer images + color to be set in the settings.
