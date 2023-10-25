@@ -2609,10 +2609,10 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     auto pUpperFly = static_cast<SwFlyFrame*>(GetUpper());
                     bFlySplit = pUpperFly->IsFlySplitAllowed();
 
-                    if (bFlySplit)
+                    if (bFlySplit && bTryToSplit)
                     {
-                        // See if this is a nested split fly where the inner table also has
-                        // rowspans.
+                        // This is a split fly that wants to split the row itself. See if it's also
+                        // nested. If so, we'll want to know if the row split has rowspans.
                         SwTextFrame* pAnchorCharFrame = pUpperFly->FindAnchorCharFrame();
                         if (pAnchorCharFrame && pAnchorCharFrame->IsInFly())
                         {
