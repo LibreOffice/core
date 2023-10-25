@@ -1722,6 +1722,8 @@ void SwTable::UpdateFields(TableFormulaUpdateFlags eFlags)
         {
             if(eFlags == TBL_BOXPTR)
                 pBoxFormula->TryBoxNmToPtr();
+            else if(eFlags == TBL_RELBOXNAME)
+                pBoxFormula->ToRelBoxNm(this);
             else
                 pBoxFormula->ChangeState();
         }
