@@ -2843,6 +2843,25 @@ void WinSalFrame::Beep()
     MessageBeep( 0 );
 }
 
+void WinSalFrame::FlashWindow() const
+{
+    if (GetForegroundWindow() != mhWnd)
+    {
+        /*FLASHWINFO flash = {
+            sizeof(FLASHWINFO),
+            mhWnd,
+            FLASHW_ALL, // dwFlags
+            10,         // uCount
+            0           // dwTimeout
+        };
+        ::FlashWindowEx(&flash);*/
+        ::FlashWindow(mhWnd, TRUE);
+        SAL_WARN("vcl", "superflash!");
+    }
+    /*else
+        ::FlashWindow(mhWnd, 1);*/
+}
+
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
     SalPointerState aState;
