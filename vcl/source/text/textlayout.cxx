@@ -245,10 +245,7 @@ namespace vcl
             return nBreakPos;
 
         // Whether hyphen or not: Put the word after the hyphen through
-        // word boundary.
-
-        // nMaxBreakPos the last char that fits into the line
-        // nBreakPos is the word's start
+        // the word boundary.
 
         // We run into a problem if the doc is so narrow, that a word
         // is broken into more than two lines ...
@@ -264,8 +261,6 @@ namespace vcl
         if ( ( nWordEnd < nSoftBreak ) || ( nWordLen <= 3 ) )
             return nBreakPos;
 
-        // #104415# May happen, because getLineBreak may differ from getWordBoundary with DICTIONARY_WORD
-        // SAL_WARN_IF( nWordEnd < nMaxBreakPos, "vcl", "Hyph: Break?" );
         OUString aWord = rStr.copy( nWordStart, nWordLen );
         sal_Int32 nMinTrail = nWordEnd-nSoftBreak+1;  //+1: Before the "broken off" char
         css::uno::Reference< css::linguistic2::XHyphenatedWord > xHyphWord;
