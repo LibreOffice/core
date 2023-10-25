@@ -1215,6 +1215,9 @@ public:
     /// Same as MouseMove(), but coordinates are in logic unit. used for LOK
     virtual void LogicMouseMove(const MouseEvent&) {};
 
+
+    virtual void FlashWindow() const {};
+
     /** @name Accessibility
      */
     ///@{

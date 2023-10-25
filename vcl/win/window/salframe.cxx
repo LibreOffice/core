@@ -2853,6 +2853,14 @@ void WinSalFrame::Beep()
     MessageBeep( 0 );
 }
 
+void WinSalFrame::FlashWindow() const
+{
+    if (GetForegroundWindow() != mhWnd)
+    {
+        ::FlashWindow(mhWnd, TRUE);
+    }
+}
+
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
     SalPointerState aState;

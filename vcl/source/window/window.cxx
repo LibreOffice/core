@@ -2277,6 +2277,10 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
                 ImplFocusToTop( ToTopFlags::NONE, false );
             }
 
+            if (!HasFocus() && GetParent()) {
+                GetParent()->FlashWindow();
+            }
+
             // adjust mpWindowImpl->mbReallyVisible
             bRealVisibilityChanged = !mpWindowImpl->mbReallyVisible;
             ImplSetReallyVisible();
