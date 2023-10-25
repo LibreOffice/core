@@ -1119,6 +1119,9 @@ public:
     /// Dumps itself and potentially its children to a property tree, to be written easily to JSON.
     virtual void DumpAsPropertyTree(tools::JsonWriter&);
 
+
+    virtual void FlashWindow() const {};
+
     /** @name Accessibility
      */
     ///@{

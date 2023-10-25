@@ -211,6 +211,8 @@ public:
 
     virtual void            Beep() = 0;
 
+    virtual void            FlashWindow() const {};
+
     // returns system data (most prominent: window handle)
     virtual const SystemEnvData*
                             GetSystemData() const = 0;
