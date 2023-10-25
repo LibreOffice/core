@@ -30,11 +30,13 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(weld::Container* pPage, weld::DialogControlle
     : SfxTabPage(pPage, pController, "cui/ui/optopenclpage.ui", "OptOpenCLPage", &rSet)
     , maConfig(OpenCLConfig::get())
     , mxUseOpenCL(m_xBuilder->weld_check_button("useopencl"))
+    , mxUseOpenImg(m_xBuilder->weld_widget("lockuseopencl"))
     , mxOclUsed(m_xBuilder->weld_label("openclused"))
     , mxOclNotUsed(m_xBuilder->weld_label("openclnotused"))
 {
     mxUseOpenCL->set_active(maConfig.mbUseOpenCL);
     mxUseOpenCL->set_sensitive(!officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
+    mxUseOpenImg->set_visible(officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
 
     bool bCLUsed = openclwrapper::GPUEnv::isOpenCLEnabled();
     mxOclUsed->set_visible(bCLUsed);
@@ -97,6 +99,7 @@ void SvxOpenCLTabPage::Reset( const SfxItemSet* )
     maConfig = OpenCLConfig::get();
 
     mxUseOpenCL->set_active(maConfig.mbUseOpenCL);
+    mxUseOpenImg->set_visible(officecfg::Office::Common::Misc::UseOpenCL::isReadOnly());
     mxUseOpenCL->save_state();
 }
 

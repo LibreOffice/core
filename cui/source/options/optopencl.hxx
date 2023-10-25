@@ -27,6 +27,7 @@ private:
     OpenCLConfig maConfig;
 
     std::unique_ptr<weld::CheckButton> mxUseOpenCL;
+    std::unique_ptr<weld::Widget> mxUseOpenImg;
     std::unique_ptr<weld::Label> mxOclUsed;
     std::unique_ptr<weld::Label> mxOclNotUsed;
 
