@@ -412,6 +412,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         if ((pPor->InNumberGrp() // also footnote label
                 // weird special case, bullet with soft hyphen
              || (pPor->InHyphGrp() && pNext && pNext->InNumberGrp()))
+            && !GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline()
             && !roTaggedLabel) // note: CalcPaintOfst may skip some portions
         {
             assert(isPDFTaggingEnabled);
@@ -435,13 +436,17 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // note: numbering portion may be split if it has multiple scripts
             && !static_cast<SwNumberPortion const*>(pPor)->HasFollow()) // so wait for the last one
         {
-            assert(roTaggedLabel);
-            roTaggedLabel.reset(); // close Lbl
             if (!GetInfo().GetTextFrame()->GetTextNodeForParaProps()->IsOutline())
             {
+                assert(roTaggedLabel);
+                roTaggedLabel.reset(); // close Lbl
                 assert(!roTaggedParagraph);
                 Frame_Info aFrameInfo(*m_pFrame, false); // open LBody
                 roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *pOut);
+            }
+            else
+            {
+                assert(!roTaggedLabel);
             }
         }
 

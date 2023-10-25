@@ -3954,13 +3954,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf157703)
     CPPUNIT_ASSERT(pKidsD0);
     auto pKidsD0v = pKidsD0->GetElements();
     auto pRefKidD00 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsD0v[0]);
-    CPPUNIT_ASSERT(pRefKidD00);
-    auto pObjectD00 = pRefKidD00->LookupObject();
-    CPPUNIT_ASSERT(pObjectD00);
-    auto pTypeD00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectD00->Lookup("Type"));
-    CPPUNIT_ASSERT_EQUAL(OString("StructElem"), pTypeD00->GetValue());
-    auto pSD00 = dynamic_cast<vcl::filter::PDFNameElement*>(pObjectD00->Lookup("S"));
-    CPPUNIT_ASSERT_EQUAL(OString("Lbl"), pSD00->GetValue());
+    // MCID for label
+    CPPUNIT_ASSERT(!pRefKidD00);
 
     // MCID for text
     auto pRefKidD01 = dynamic_cast<vcl::filter::PDFReferenceElement*>(pKidsD0v[1]);
