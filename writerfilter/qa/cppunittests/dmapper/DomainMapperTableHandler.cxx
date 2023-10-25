@@ -17,6 +17,8 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 
 using namespace ::com::sun::star;
 
@@ -159,6 +161,27 @@ CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableNested)
     // Without the accompanying fix in place, this test would have failed, the inner frame could not
     // split.
     CPPUNIT_ASSERT(bIsSplitAllowed);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDOCXFloatingTableHeader)
+{
+    // Given a document with a header that has a floating table and some large images in the body
+    // text:
+    loadFromURL(u"floattable-header.docx");
+
+    // When breaking that document into pages:
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(),
+                                              uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+
+    // Then make sure we get 2 pages:
+    sal_Int32 nLastPage = xCursor->getPage();
+    // Without the accompanying fix in place, this test would have failed, the page count went to
+    // 2233 pages and then there was a layout loop.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), nLastPage);
 }
 }
 
