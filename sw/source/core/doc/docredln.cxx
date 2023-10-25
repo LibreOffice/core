@@ -873,11 +873,7 @@ bool SwRedlineTable::isMoved(size_type rPos) const
     if (isMovedImpl(rPos, false))
         return true;
     else
-    {
-        // Commented out because of probably performance issue
-        //return isMovedImpl(rPos, true);
-        return false;
-    }
+        return isMovedImpl(rPos, true);
 }
 
 bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
@@ -947,7 +943,7 @@ bool SwRedlineTable::isMovedImpl(size_type rPos, bool bTryCombined) const
     size_type nStart = rPos > nLookahead ? rPos - nLookahead : 0;
     // first, try to compare to single redlines
     // next, try to compare to combined redlines
-    for (int nPass = 0; nPass < (bTryCombined ? 2 : 1) && !bRet; nPass++)
+    for (int nPass = 0; nPass < 2 && !bRet; nPass++)
     {
         for (size_type nPosAct = nStart; nPosAct < nEnd && !bRet; ++nPosAct)
         {
