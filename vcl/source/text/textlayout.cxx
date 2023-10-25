@@ -222,22 +222,26 @@ namespace vcl
                         css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
                         css::uno::Reference<css::i18n::XBreakIterator> const& xBI,
                         const bool bHyphenate,
-                        const sal_Int32 nPos, sal_Int32 nBreakPos)
+                        const sal_Int32 nPos, const sal_Int32 nLen)
     {
         const css::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
-        sal_Int32 nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
+
+        sal_Int32 nSoftBreak = GetTextBreak(rStr, nWidth, nPos, nLen - nPos);
         if (nSoftBreak == -1)
-        {
             nSoftBreak = nPos;
-        }
-        SAL_WARN_IF( nSoftBreak >= nBreakPos, "vcl", "Break?!" );
+
+        SAL_WARN_IF( nSoftBreak >= nLen, "vcl", "Break?!" );
+
         css::i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, css::uno::Sequence <css::beans::PropertyValue>(), 1 );
         css::i18n::LineBreakUserOptions aUserOptions;
         css::i18n::LineBreakResults aLBR = xBI->getLineBreak( rStr, nSoftBreak, rDefLocale, nPos, aHyphOptions, aUserOptions );
-        nBreakPos = aLBR.breakIndex;
-        if ( nBreakPos <= nPos )
+
+        sal_Int32 nBreakPos = aLBR.breakIndex;
+
+        if (nBreakPos <= nPos)
             nBreakPos = nSoftBreak;
-        if ( !bHyphenate )
+
+        if (!bHyphenate)
             return nBreakPos;
 
         // Whether hyphen or not: Put the word after the hyphen through

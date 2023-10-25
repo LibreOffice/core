@@ -56,7 +56,7 @@ namespace vcl
                         css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
                         css::uno::Reference<css::i18n::XBreakIterator> const& xBI,
                         const bool bHyphenate,
-                        const sal_Int32 nPos, sal_Int32 nBreakPos);
+                        const sal_Int32 nPos, const sal_Int32 nLen);
 
         sal_Int32 BreakLinesSimple(const tools::Long nWidth, OUString const& rStr,
                                   const sal_Int32 nPos, sal_Int32 nBreakPos, tools::Long& nLineWidth);
