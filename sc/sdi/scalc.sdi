@@ -787,7 +787,7 @@ SfxVoidItem CurrentConditionalFormatDialog SID_OPENDLG_CURRENTCONDFRMT
 
 
 SfxVoidItem ColorScaleFormatDialog SID_OPENDLG_COLORSCALE
-()
+(SfxInt16Item IconSet FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
@@ -805,7 +805,7 @@ SfxVoidItem ColorScaleFormatDialog SID_OPENDLG_COLORSCALE
 
 
 SfxVoidItem DataBarFormatDialog SID_OPENDLG_DATABAR
-()
+(SfxInt16Item IconSet FN_PARAM_1)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
