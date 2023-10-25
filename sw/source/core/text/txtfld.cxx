@@ -63,14 +63,10 @@ static bool lcl_IsInBody( SwFrame const *pFrame )
 {
     if ( pFrame->IsInDocBody() )
         return true;
-    else
-    {
-        const SwFrame *pTmp = pFrame;
-        const SwFlyFrame *pFly;
-        while ( nullptr != (pFly = pTmp->FindFlyFrame()) )
-            pTmp = pFly->GetAnchorFrame();
-        return pTmp->IsInDocBody();
-    }
+
+    while (const SwFlyFrame* pFly = pFrame->FindFlyFrame())
+        pFrame = pFly->GetAnchorFrame();
+    return pFrame->IsInDocBody();
 }
 
 SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
