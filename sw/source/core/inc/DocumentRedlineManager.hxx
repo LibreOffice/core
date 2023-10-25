@@ -74,6 +74,11 @@ public:
         /*[in]*/const SwNode& rNode,
         /*[in]*/RedlineType nType) const override;
 
+    virtual SwRedlineTable::size_type GetRedlineEndPos(
+        /*[in]*/ SwRedlineTable::size_type nStartPos,
+        /*[in]*/ const SwNode& rNode,
+        /*[in]*/ RedlineType nType) const override;
+
     virtual bool HasRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/RedlineType nType,
@@ -123,6 +128,11 @@ public:
 
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) override;
+
+    // After nodes are removed, m_pContentNode's may not updated
+    virtual void UpdateRedlineContentNode(
+        /*[in]*/ SwRedlineTable::size_type nStartPos,
+        /*[in]*/ SwRedlineTable::size_type nEndPos) const override;
 
     //Non Interface methods;
 
