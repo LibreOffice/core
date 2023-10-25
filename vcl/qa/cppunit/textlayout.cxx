@@ -49,7 +49,7 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_invalid_softbreak)
     const auto nTextLen = 13;
 
     auto[nBreakPos, nLineWidth]
-        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, false, nTextWidth, nTextLen, 15);
+        = aTextLayout.BreakLine(nTextWidth, sTestStr, xHyph, xBI, false, nTextWidth, nTextLen, 15);
 
     const sal_Int32 nExpectedBreakPos = 13;
     CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);
@@ -75,7 +75,7 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphens)
     css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
 
     auto[nBreakPos, nLineWidth]
-        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 13, 12);
+        = aTextLayout.BreakLine(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 13, 12);
 
     const sal_Int32 nExpectedBreakPos = 13;
     CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);
@@ -101,7 +101,7 @@ CPPUNIT_TEST_FIXTURE(VclTextLayoutTest, testBreakLines_hyphen_word_under_two_cha
     css::uno::Reference<css::i18n::XBreakIterator> xBI = vcl::unohelper::CreateBreakIterator();
 
     auto[nBreakPos, nLineWidth]
-        = aTextLayout.BreakLines(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 2, 10);
+        = aTextLayout.BreakLine(nTextWidth, sTestStr, xHyph, xBI, true, nTextWidth, 2, 10);
 
     const sal_Int32 nExpectedBreakPos = 2;
     CPPUNIT_ASSERT_EQUAL(nExpectedBreakPos, nBreakPos);

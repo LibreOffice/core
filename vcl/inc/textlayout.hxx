@@ -52,13 +52,13 @@ namespace vcl
     public:
         OUString GetEllipsisString(OUString const& rOrigStr, tools::Long nMaxWidth, DrawTextFlags nStyle);
 
-        std::tuple<sal_Int32, sal_Int32> BreakLines(const tools::Long nWidth, OUString const& rStr,
+        std::tuple<sal_Int32, sal_Int32> BreakLine(const tools::Long nWidth, OUString const& rStr,
                         css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
                         css::uno::Reference<css::i18n::XBreakIterator>& xBI,
                         const bool bHyphenate, const tools::Long nOrigLineWidth,
                         const sal_Int32 nPos, const sal_Int32 nLen);
 
-        std::tuple<sal_Int32, sal_Int32> BreakLinesSimple(const tools::Long nWidth, OUString const& rStr,
+        std::tuple<sal_Int32, sal_Int32> BreakLineSimple(const tools::Long nWidth, OUString const& rStr,
                                   const sal_Int32 nPos, sal_Int32 nBreakPos, const tools::Long nOrigLineWidth);
 
         tools::Long GetTextLines(tools::Rectangle const& rRect, const tools::Long nTextHeight,

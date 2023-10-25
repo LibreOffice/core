@@ -218,7 +218,7 @@ namespace vcl
         return aStr;
     }
 
-    std::tuple<sal_Int32, sal_Int32> TextLayoutCommon::BreakLines(const tools::Long nWidth, OUString const& rStr,
+    std::tuple<sal_Int32, sal_Int32> TextLayoutCommon::BreakLine(const tools::Long nWidth, OUString const& rStr,
                         css::uno::Reference< css::linguistic2::XHyphenator > const& xHyph,
                         css::uno::Reference<css::i18n::XBreakIterator>& xBI,
                         const bool bHyphenate, const tools::Long nOrigLineWidth,
@@ -228,7 +228,7 @@ namespace vcl
             xBI = vcl::unohelper::CreateBreakIterator();
 
         if (!xBI.is())
-            return BreakLinesSimple(nWidth, rStr, nPos, nLen, nOrigLineWidth);
+            return BreakLineSimple(nWidth, rStr, nPos, nLen, nOrigLineWidth);
 
         const css::lang::Locale& rDefLocale(Application::GetSettings().GetUILanguageTag().getLocale());
 
@@ -338,7 +338,7 @@ namespace vcl
         return { nBreakPos, GetTextWidth(rStr, nPos, nBreakPos - nPos) };
     }
 
-    std::tuple<sal_Int32, sal_Int32> TextLayoutCommon::BreakLinesSimple(const tools::Long nWidth, OUString const& rStr,
+    std::tuple<sal_Int32, sal_Int32> TextLayoutCommon::BreakLineSimple(const tools::Long nWidth, OUString const& rStr,
                                                  const sal_Int32 nPos, const sal_Int32 nLen, const tools::Long nOrigLineWidth)
     {
         sal_Int32 nBreakPos = nLen;
@@ -425,7 +425,7 @@ namespace vcl
 
 
             if (lcl_ShouldBreakWord(nLineWidth, nWidth, nStyle))
-                std::tie(nBreakPos, nLineWidth) = BreakLines(nWidth, rStr, xHyph, xBI, bHyphenate, nLineWidth, nPos, nBreakPos);
+                std::tie(nBreakPos, nLineWidth) = BreakLine(nWidth, rStr, xHyph, xBI, bHyphenate, nLineWidth, nPos, nBreakPos);
 
             if ( nLineWidth > nMaxLineWidth )
                 nMaxLineWidth = nLineWidth;
