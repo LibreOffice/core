@@ -15,6 +15,7 @@ $(eval $(call gb_StaticLibrary_add_defs,seterror,\
 
 $(eval $(call gb_StaticLibrary_add_cxxflags,seterror,\
 	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
+    $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,seterror,\

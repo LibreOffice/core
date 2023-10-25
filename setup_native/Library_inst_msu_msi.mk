@@ -15,6 +15,7 @@ $(eval $(call gb_Library_add_defs,inst_msu_msi,\
 
 $(eval $(call gb_Library_add_cxxflags,inst_msu_msi,\
 	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
+    $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,inst_msu_msi,\

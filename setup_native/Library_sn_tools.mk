@@ -15,6 +15,7 @@ $(eval $(call gb_Library_add_defs,sn_tools,\
 
 $(eval $(call gb_Library_add_cxxflags,sn_tools,\
 	$(if $(MSVC_USE_DEBUG_RUNTIME),/MTd,/MT) \
+    $(if $(filter -fsanitize=%,$(CC)),,/fno-sanitize-address-vcasan-lib) \
 ))
 
 $(eval $(call gb_Library_add_ldflags,sn_tools,\
