@@ -79,7 +79,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
 
     SwCharFormat* pChFormat = nullptr;
     bool bNewFlyPor = false;
-    sal_uInt16 subType = 0;
 
     // set language
     const_cast<SwTextFormatter*>(this)->SeekAndChg( rInf );
@@ -146,7 +145,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOUNTFLD;
             break;
 
         case SwFieldIds::PageNumber:
@@ -174,7 +172,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case SwFieldIds::GetExp:
@@ -240,30 +237,20 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
             bPlaceHolder = true;
             break;
         case SwFieldIds::GetRef:
-            subType = static_cast<SwGetRefField*>(pField)->GetSubType();
             {
                 OUString const str( bName
                     ? pField->GetFieldName()
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
-            if( subType == REF_BOOKMARK  )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_BOOKMARKFLD;
-            else if( subType == REF_SETREFATTR )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_SETREFATTRFLD;
             break;
         case SwFieldIds::DateTime:
-            subType = static_cast<SwDateTimeField*>(pField)->GetSubType();
             {
                 OUString const str( bName
                     ? pField->GetFieldName()
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
-            if( subType & DATEFLD  )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_DATEFLD;
-            else if( subType & TIMEFLD )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_TIMEFLD;
             break;
         default:
             {
