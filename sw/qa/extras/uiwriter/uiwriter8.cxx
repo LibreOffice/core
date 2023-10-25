@@ -1480,6 +1480,48 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf146573)
     CPPUNIT_ASSERT_EQUAL(OUString("204"), xCellA4->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf157132)
+{
+    createSwDoc("tdf157132.odt");
+
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Go to cell A2
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    // Select A2 and A3 and copy
+    pWrtShell->Down(/*bSelect=*/true, /*nCount=*/1);
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Go to A4 and paste
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCellA2(xTextTable->getCellByName("A2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), xCellA2->getString());
+    uno::Reference<text::XTextRange> xCellA3(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("3"), xCellA3->getString());
+    uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : 2
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), xCellA4->getString());
+    uno::Reference<text::XTextRange> xCellA5(xTextTable->getCellByName("A5"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("7"), xCellA5->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTdf147938)
 {
     createSwDoc("tdf147938.fodt");
