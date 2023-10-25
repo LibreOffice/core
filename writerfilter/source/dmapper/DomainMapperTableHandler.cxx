@@ -1583,9 +1583,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
                 xTableProperties->setPropertyValue("BreakType", uno::Any(style::BreakType_NONE));
             }
 
-            if (nestedTableLevel >= 2)
+            if (nestedTableLevel >= 2 || m_rDMapper_Impl.IsInHeaderFooter())
             {
                 // Floating tables inside a table always stay inside the cell.
+                // Also extend the header/footer area if needed, so an in-header floating table
+                // typically doesn't overlap with body test.
                 aFrameProperties.push_back(
                     comphelper::makePropertyValue("IsFollowingTextFlow", true));
             }
