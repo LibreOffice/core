@@ -257,16 +257,6 @@ SwField::~SwField()
 {
 }
 
-// instead of indirectly via the type
-
-#ifdef DBG_UTIL
-SwFieldIds SwField::Which() const
-{
-    assert(m_pType);
-    return m_pType->Which();
-}
-#endif
-
 SwFieldTypesEnum SwField::GetTypeId() const
 {
 

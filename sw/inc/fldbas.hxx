@@ -349,13 +349,10 @@ public:
 
     /// ResId
     SwFieldIds          Which() const
-#ifdef DBG_UTIL
-    ;       // implemented in fldbas.cxx
-#else
     {
+        assert(m_pType);
         return m_pType->Which();
     }
-#endif
 
     // TYP_ID
     SwFieldTypesEnum    GetTypeId() const;
