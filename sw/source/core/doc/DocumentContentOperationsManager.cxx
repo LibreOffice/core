@@ -2141,7 +2141,16 @@ void DocumentContentOperationsManager::DeleteDummyChar(
 
 void DocumentContentOperationsManager::DeleteRange( SwPaM & rPam )
 {
+    // Seek all redlines that are in that PaM to be deleted..
+    SwRedlineTable::size_type nRedlStart = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos(
+        rPam.Start()->GetNode(), RedlineType::Any);
+    SwRedlineTable::size_type nRedlEnd = m_rDoc.getIDocumentRedlineAccess().GetRedlineEndPos(
+        nRedlStart, rPam.End()->GetNode(), RedlineType::Any);
+
     lcl_DoWithBreaks(*this, rPam, SwDeleteFlags::Default, &DocumentContentOperationsManager::DeleteRangeImpl);
+
+    // update all redlines was in the Pam that is
+    m_rDoc.getIDocumentRedlineAccess().UpdateRedlineContentNode(nRedlStart, nRedlEnd);
 
     if (!m_rDoc.getIDocumentRedlineAccess().IsIgnoreRedline()
         && !m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty())

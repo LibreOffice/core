@@ -169,6 +169,11 @@ public:
         /*[in]*/const SwNode& rNode,
         /*[in]*/RedlineType nType) const = 0;
 
+    virtual SwRedlineTable::size_type GetRedlineEndPos(
+        /*[in]*/ SwRedlineTable::size_type nStartPos,
+        /*[in]*/ const SwNode& rNode,
+        /*[in]*/ RedlineType nType) const = 0;
+
     virtual bool HasRedline(
         /*[in]*/const SwPaM& rPam,
         /*[in]*/RedlineType nType,
@@ -226,6 +231,10 @@ public:
 
     virtual void SetRedlinePassword(
         /*[in]*/const css::uno::Sequence <sal_Int8>& rNewPassword) = 0;
+
+    virtual void UpdateRedlineContentNode(/*[in]*/ SwRedlineTable::size_type nStartPos,
+                                          /*[in]*/ SwRedlineTable::size_type nEndPos) const = 0;
+
 
 protected:
      virtual ~IDocumentRedlineAccess() {};

@@ -53,9 +53,8 @@ using namespace com::sun::star;
         // 2. check that position is valid and doesn't point after text
         void lcl_CheckPosition( const SwPosition* pPos )
         {
-            // Commented out because of a random problem, that happened even before my patch
-            //assert(dynamic_cast<SwContentIndexReg*>(&pPos->GetNode())
-            //        == pPos->GetContentNode());
+            assert(dynamic_cast<SwContentIndexReg*>(&pPos->GetNode())
+                    == pPos->GetContentNode());
 
             SwTextNode* pTextNode = pPos->GetNode().GetTextNode();
             if( pTextNode == nullptr )
@@ -2756,6 +2755,54 @@ SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& r
     return SwRedlineTable::npos;
 
     // #TODO - add 'SwExtraRedlineTable' also ?
+}
+
+SwRedlineTable::size_type
+DocumentRedlineManager::GetRedlineEndPos(SwRedlineTable::size_type nStartPos, const SwNode& rNd,
+                                         RedlineType nType) const
+{
+    //if the start is already invalid
+    if (nStartPos >= maRedlineTable.size())
+        return nStartPos;
+
+    const SwNodeOffset nNdIdx = rNd.GetIndex();
+    SwRedlineTable::size_type nEndPos = nStartPos;
+    SwRedlineTable::size_type nEndPosTry = nEndPos + 1;
+
+    while (nEndPosTry < maRedlineTable.size()
+           && maRedlineTable[nEndPosTry]->Start()->GetNodeIndex() <= nNdIdx)
+    {
+        if (RedlineType::Any == nType || nType == maRedlineTable[nEndPosTry]->GetType())
+        {
+            nEndPos = nEndPosTry;
+        }
+        nEndPosTry++;
+    }
+    return nEndPos;
+}
+
+void DocumentRedlineManager::UpdateRedlineContentNode(SwRedlineTable::size_type nStartPos,
+                                                      SwRedlineTable::size_type nEndPos) const
+{
+    for (SwRedlineTable::size_type n = nStartPos; n <= nEndPos; ++n)
+    {
+        //just in case we got wrong input
+        if (n >= maRedlineTable.size())
+            return;
+
+        SwPosition* pStart = maRedlineTable[n]->Start();
+        SwPosition* pEnd = maRedlineTable[n]->End();
+        SwContentNode* pCont = pStart->GetNode().GetContentNode();
+        if (pCont)
+        {
+            pStart->nContent.Assign(pCont, pStart->nContent.GetIndex());
+        }
+        pCont = pEnd->GetNode().GetContentNode();
+        if (pCont)
+        {
+            pEnd->nContent.Assign(pCont, pEnd->nContent.GetIndex());
+        }
+    }
 }
 
 bool DocumentRedlineManager::HasRedline( const SwPaM& rPam, RedlineType nType, bool bStartOrEndInRange ) const
