@@ -148,7 +148,8 @@ public:
             MERGED if pNewRedl was deleted but has been merged with existing one
             IGNORED if pNewRedl was deleted and ignored/invalid
     */
-    virtual AppendResult AppendRedline(/*[in]*/SwRangeRedline* pNewRedl, /*[in]*/bool bCallDelete) = 0;
+    virtual AppendResult AppendRedline(/*[in]*/ SwRangeRedline* pNewRedl, /*[in]*/ bool bCallDelete,
+                                       /*[in]*/ sal_uInt32 nMoveIDToDelete = 0) = 0;
 
     virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr) = 0;
     virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr) = 0;

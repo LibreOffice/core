@@ -2274,7 +2274,7 @@ bool SwDoc::MoveParagraphImpl(SwPaM& rPam, SwNodeOffset const nOffset,
             SwNodeIndex bound2(oPam->GetBound(false).GetNode());
             oPam.reset();
 
-            getIDocumentRedlineAccess().AppendRedline( pNewRedline, true );
+            getIDocumentRedlineAccess().AppendRedline( pNewRedline, true, nMovedID );
 
             oPam.emplace(bound1, bound2);
             sw::UpdateFramesForAddDeleteRedline(*this, *oPam);

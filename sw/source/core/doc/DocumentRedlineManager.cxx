@@ -1265,7 +1265,8 @@ Behaviour of Delete-Redline:
                                           the Delete
 */
 IDocumentRedlineAccess::AppendResult
-DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCallDelete)
+DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCallDelete,
+                                      sal_uInt32 nMoveIDToDelete)
 {
     CHECK_REDLINE( *this )
 
@@ -1286,6 +1287,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
         return AppendResult::IGNORED;
     }
 
+    // Collect MoveID's of the redlines we delete.
+    // If there is only 1, then we should use its ID. (continuing the move)
+    std::set<sal_uInt32> deletedMoveIDs;
 
     bool bMerged = false;
 
@@ -1763,6 +1767,16 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                     // and anonymized insertion, i.e. with the same dummy timestamp
                     !pRedl->GetRedlineData(0).IsAnonymized() )
                 {
+                    // Collect MoveID's of the redlines we delete.
+                    if (nMoveIDToDelete > 1 && maRedlineTable[n]->GetMoved() > 0
+                        && (eCmpPos == SwComparePosition::Equal
+                            || eCmpPos == SwComparePosition::Inside
+                            || eCmpPos == SwComparePosition::Outside
+                            || eCmpPos == SwComparePosition::OverlapBefore
+                            || eCmpPos == SwComparePosition::OverlapBehind))
+                    {
+                        deletedMoveIDs.insert(maRedlineTable[n]->GetMoved());
+                    }
 
                     // Set to NONE, so that the Delete::Redo merges the Redline data correctly!
                     // The ShowMode needs to be retained!
@@ -2374,6 +2388,23 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
             if (ret && !pNewRedl)
             {
                 bMerged = true; // treat InsertWithValidRanges as "merge"
+            }
+        }
+    }
+
+    // If we deleted moved redlines, and there was only 1 MoveID, then we should use that
+    // We overwrite those that was given right now, so it cannot be deeper under other redline
+    if (nMoveIDToDelete > 1 && deletedMoveIDs.size() == 1)
+    {
+        sal_uInt32 nNewMoveID = *(deletedMoveIDs.begin());
+        if (nNewMoveID > 1)     // MoveID==1 is for old, unrecognised moves, leave them alone
+        {
+            for (n = 0; n < maRedlineTable.size(); ++n)
+            {
+                if (maRedlineTable[n]->GetMoved() == nMoveIDToDelete)
+                {
+                    maRedlineTable[n]->SetMoved(nNewMoveID);
+                }
             }
         }
     }

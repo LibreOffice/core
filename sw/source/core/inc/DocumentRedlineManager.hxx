@@ -53,7 +53,10 @@ public:
 
     virtual bool IsInRedlines(const SwNode& rNode) const override;
 
-    virtual AppendResult AppendRedline(/*[in]*/SwRangeRedline* pPtr, /*[in]*/bool bCallDelete) override;
+    virtual AppendResult AppendRedline(
+        /*[in]*/ SwRangeRedline* pPtr,
+        /*[in]*/ bool bCallDelete,
+        /*[in]*/ sal_uInt32 nMoveIDToDelete = 0) override;
 
     virtual bool AppendTableRowRedline(/*[in]*/SwTableRowRedline* pPtr) override;
     virtual bool AppendTableCellRedline(/*[in]*/SwTableCellRedline* pPtr) override;
