@@ -70,17 +70,23 @@ static bool lcl_IsInBody( SwFrame const *pFrame )
     return pFrame->IsInDocBody();
 }
 
+static OUString ExpandField(const SwField& rField, const SwTextFormatter& rFormatter,
+                            const SwTextFormatInfo& rInf)
+{
+    if (rInf.GetOpt().IsFieldName())
+        return rField.GetFieldName();
+
+    const SwViewShell* pSh = rInf.GetVsh();
+    const SwDoc* pDoc(pSh ? pSh->GetDoc() : nullptr);
+    const bool bInClipboard(!pDoc || pDoc->IsClipBoard());
+    return rField.ExpandField(bInClipboard, rFormatter.GetTextFrame()->getRootFrame());
+}
+
 SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                                                 const SwTextAttr *pHint ) const
 {
-    SwExpandPortion *pRet = nullptr;
-    SwFrame *pFrame = m_pFrame;
     SwField *pField = const_cast<SwField*>(pHint->GetFormatField().GetField());
     const bool bName = rInf.GetOpt().IsFieldName();
-
-    SwCharFormat* pChFormat = nullptr;
-    bool bNewFlyPor = false;
-    sal_uInt16 subType = 0;
 
     // set language
     const_cast<SwTextFormatter*>(this)->SeekAndChg( rInf );
@@ -88,201 +94,106 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
         pField->SetLanguage( GetFnt()->GetLanguage() );
 
     SwViewShell *pSh = rInf.GetVsh();
-    SwDoc *const pDoc( pSh ? pSh->GetDoc() : nullptr );
-    bool const bInClipboard( pDoc == nullptr || pDoc->IsClipBoard() );
-    bool bPlaceHolder = false;
 
-    switch( pField->GetTyp()->Which() )
+    switch (pField->GetTyp()->Which())
     {
         case SwFieldIds::Script:
         case SwFieldIds::Postit:
-            pRet = new SwPostItsPortion( SwFieldIds::Script == pField->GetTyp()->Which() );
-            break;
-
+            return new SwPostItsPortion(SwFieldIds::Script == pField->GetTyp()->Which());
         case SwFieldIds::CombinedChars:
-            {
-                if( bName )
-                    pRet = new SwFieldPortion( pField->GetFieldName() );
-                else
-                    pRet = new SwCombinedPortion( pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-            }
+            if (!bName)
+                return new SwCombinedPortion(ExpandField(*pField, *this, rInf));
             break;
-
         case SwFieldIds::HiddenText:
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwHiddenPortion(aStr);
-            }
-            break;
-
+            return new SwHiddenPortion(ExpandField(*pField, *this, rInf));
         case SwFieldIds::Chapter:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
+            if (!bName && pSh && !pSh->Imp()->IsUpdateExpFields())
             {
-                static_cast<SwChapterField*>(pField)->ChangeExpansion(*pFrame,
-                    &static_txtattr_cast<SwTextField const*>(pHint)->GetTextNode());
-            }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion( aStr );
+                static_cast<SwChapterField*>(pField)->ChangeExpansion(
+                    *m_pFrame, &static_txtattr_cast<SwTextField const*>(pHint)->GetTextNode());
             }
             break;
-
         case SwFieldIds::DocStat:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
+            if (!bName && pSh && !pSh->Imp()->IsUpdateExpFields())
             {
-                static_cast<SwDocStatField*>(pField)->ChangeExpansion( pFrame );
-            }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion( aStr );
+                static_cast<SwDocStatField*>(pField)->ChangeExpansion(m_pFrame);
             }
             break;
-
         case SwFieldIds::PageNumber:
-        {
-            if( !bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFields() )
+            if (!bName && pSh && pSh->GetLayout() && !pSh->Imp()->IsUpdateExpFields())
             {
-                SwPageNumberFieldType *pPageNr = static_cast<SwPageNumberFieldType *>(pField->GetTyp());
+                auto pPageNr = static_cast<SwPageNumberFieldType*>(pField->GetTyp());
 
                 const SwRootFrame* pTmpRootFrame = pSh->GetLayout();
                 const bool bVirt = pTmpRootFrame->IsVirtPageNum();
 
-                sal_uInt16 nVirtNum = pFrame->GetVirtPageNum();
+                sal_uInt16 nVirtNum = m_pFrame->GetVirtPageNum();
                 sal_uInt16 nNumPages = pTmpRootFrame->GetPageNum();
                 SvxNumType nNumFormat = SvxNumType(-1);
-                if(SVX_NUM_PAGEDESC == pField->GetFormat())
-                    nNumFormat = pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType();
-                static_cast<SwPageNumberField*>(pField)
-                    ->ChangeExpansion(nVirtNum, nNumPages);
-                pPageNr->ChangeExpansion(pDoc,
-                                            bVirt, nNumFormat != SvxNumType(-1) ? &nNumFormat : nullptr);
-            }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion( aStr );
+                if (SVX_NUM_PAGEDESC == pField->GetFormat())
+                    nNumFormat
+                        = m_pFrame->FindPageFrame()->GetPageDesc()->GetNumType().GetNumberingType();
+                static_cast<SwPageNumberField*>(pField)->ChangeExpansion(nVirtNum, nNumPages);
+                pPageNr->ChangeExpansion(pSh->GetDoc(), bVirt,
+                                         nNumFormat != SvxNumType(-1) ? &nNumFormat : nullptr);
             }
             break;
-        }
         case SwFieldIds::GetExp:
-        {
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
+            if (!bName && pSh && !pSh->Imp()->IsUpdateExpFields())
             {
-                SwGetExpField* pExpField = static_cast<SwGetExpField*>(pField);
-                if( !::lcl_IsInBody( pFrame ) )
+                auto pExpField = static_cast<SwGetExpField*>(pField);
+                if (!::lcl_IsInBody(m_pFrame))
                 {
-                    pExpField->ChgBodyTextFlag( false );
-                    pExpField->ChangeExpansion(*pFrame,
-                            *static_txtattr_cast<SwTextField const*>(pHint));
+                    pExpField->ChgBodyTextFlag(false);
+                    pExpField->ChangeExpansion(*m_pFrame,
+                                               *static_txtattr_cast<SwTextField const*>(pHint));
                 }
-                else if( !pExpField->IsInBodyText() )
+                else if (!pExpField->IsInBodyText())
                 {
                     // Was something else previously, thus: expand first, then convert it!
-                    pExpField->ChangeExpansion(*pFrame,
-                            *static_txtattr_cast<SwTextField const*>(pHint));
-                    pExpField->ChgBodyTextFlag( true );
+                    pExpField->ChangeExpansion(*m_pFrame,
+                                               *static_txtattr_cast<SwTextField const*>(pHint));
+                    pExpField->ChgBodyTextFlag(true);
                 }
             }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion( aStr );
-            }
             break;
-        }
         case SwFieldIds::Database:
-        {
-            if( !bName )
+            if (!bName)
             {
-                SwDBField* pDBField = static_cast<SwDBField*>(pField);
-                pDBField->ChgBodyTextFlag( ::lcl_IsInBody( pFrame ) );
-            }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion(aStr);
+                static_cast<SwDBField*>(pField)->ChgBodyTextFlag(::lcl_IsInBody(m_pFrame));
             }
             break;
-        }
         case SwFieldIds::RefPageGet:
-            if( !bName && pSh && !pSh->Imp()->IsUpdateExpFields() )
+            if (!bName && pSh && !pSh->Imp()->IsUpdateExpFields())
             {
-                static_cast<SwRefPageGetField*>(pField)->ChangeExpansion(*pFrame,
-                        static_txtattr_cast<SwTextField const*>(pHint));
-            }
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion(aStr);
+                static_cast<SwRefPageGetField*>(pField)->ChangeExpansion(
+                    *m_pFrame, static_txtattr_cast<SwTextField const*>(pHint));
             }
             break;
-
         case SwFieldIds::JumpEdit:
-            if( !bName )
-                pChFormat = static_cast<SwJumpEditField*>(pField)->GetCharFormat();
-            bNewFlyPor = true;
-            bPlaceHolder = true;
-            break;
-        case SwFieldIds::GetRef:
         {
-            subType = static_cast<SwGetRefField*>(pField)->GetSubType();
-            if (!bName && subType == REF_STYLE)
+            std::unique_ptr<SwFont> pFont;
+            if (!bName)
             {
-                static_cast<SwGetRefField*>(pField)->UpdateField(
-                    static_txtattr_cast<SwTextField const*>(pHint), pFrame);
+                pFont = std::make_unique<SwFont>(*m_pFont);
+                pFont->SetDiffFnt(
+                    &static_cast<SwJumpEditField*>(pField)->GetCharFormat()->GetAttrSet(),
+                    &m_pFrame->GetDoc().getIDocumentSettingAccess());
             }
-
-            {
-                OUString const str( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion(str);
-            }
+            return new SwFieldPortion(ExpandField(*pField, *this, rInf), std::move(pFont), true);
         }
-        break;
-        case SwFieldIds::DateTime:
-            subType = static_cast<SwDateTimeField*>(pField)->GetSubType();
+        case SwFieldIds::GetRef:
+            if (!bName)
             {
-                OUString const str( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion(str);
+                auto pGetRef = static_cast<SwGetRefField*>(pField);
+                if (pGetRef->GetSubType() == REF_STYLE)
+                    pGetRef->UpdateField(static_txtattr_cast<SwTextField const*>(pHint), m_pFrame);
             }
             break;
         default:
-            {
-                OUString const aStr( bName
-                    ? pField->GetFieldName()
-                    : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-                pRet = new SwFieldPortion(aStr);
-            }
+            break;
     }
-
-    if( bNewFlyPor )
-    {
-        std::unique_ptr<SwFont> pTmpFnt;
-        if( !bName )
-        {
-            pTmpFnt.reset(new SwFont( *m_pFont ));
-            pTmpFnt->SetDiffFnt(&pChFormat->GetAttrSet(), &m_pFrame->GetDoc().getIDocumentSettingAccess());
-        }
-        OUString const aStr( bName
-            ? pField->GetFieldName()
-            : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
-        pRet = new SwFieldPortion(aStr, std::move(pTmpFnt), bPlaceHolder);
-    }
-
-    return pRet;
+    return new SwFieldPortion(ExpandField(*pField, *this, rInf));
 }
 
 static SwFieldPortion * lcl_NewMetaPortion(SwTextAttr & rHint, const bool bPrefix)
