@@ -106,7 +106,7 @@ $(call gb_UITest_get_target,$(1)) : MODULES :=
 $(eval $(call gb_TestHelpers_use_more_fonts,$(call gb_UITest_get_target,$(1))))
 $(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
 $(call gb_Helper_make_userfriendly_targets,$(1),UITest)
-$(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(false)
+$(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(true)
 
 endef
 
