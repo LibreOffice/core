@@ -142,7 +142,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGECOUNTFLD;
             break;
 
         case SwFieldIds::PageNumber:
@@ -170,7 +169,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion( aStr );
             }
-            static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_PAGENUMBERFLD;
             break;
         }
         case SwFieldIds::GetExp:
@@ -250,10 +248,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
-            if( subType == REF_BOOKMARK  )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_BOOKMARKFLD;
-            else if( subType == REF_SETREFATTR )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_SETREFATTRFLD;
         }
         break;
         case SwFieldIds::DateTime:
@@ -264,10 +258,6 @@ SwExpandPortion *SwTextFormatter::NewFieldPortion( SwTextFormatInfo &rInf,
                     : pField->ExpandField(bInClipboard, pFrame->getRootFrame()) );
                 pRet = new SwFieldPortion(str);
             }
-            if( subType & DATEFLD  )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType= ATTR_DATEFLD;
-            else if( subType & TIMEFLD )
-                static_cast<SwFieldPortion*>(pRet)->m_nAttrFieldType = ATTR_TIMEFLD;
             break;
         default:
             {

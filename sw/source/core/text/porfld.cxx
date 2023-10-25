@@ -81,7 +81,6 @@ SwFieldPortion::SwFieldPortion(OUString aExpand, std::unique_ptr<SwFont> pFont, 
     , m_bAnimated( false), m_bNoPaint( false)
     , m_bReplace( false), m_bPlaceHolder( bPlaceHold )
     , m_bNoLength( false )
-    , m_nAttrFieldType(0)
 {
     SetWhichPor( PortionType::Field );
 }
@@ -103,7 +102,6 @@ SwFieldPortion::SwFieldPortion( const SwFieldPortion& rField )
     , m_bReplace( rField.m_bReplace )
     , m_bPlaceHolder( rField.m_bPlaceHolder )
     , m_bNoLength( rField.m_bNoLength )
-    , m_nAttrFieldType( rField.m_nAttrFieldType)
 {
     if ( rField.HasFont() )
         m_pFont.reset( new SwFont( *rField.GetFont() ) );
