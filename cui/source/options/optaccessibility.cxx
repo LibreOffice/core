@@ -27,11 +27,18 @@ SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(weld::Container* 
     : SfxTabPage(pPage, pController, "cui/ui/optaccessibilitypage.ui", "OptAccessibilityPage", &rSet)
     , m_xAccessibilityTool(m_xBuilder->weld_check_button("acctool"))
     , m_xTextSelectionInReadonly(m_xBuilder->weld_check_button("textselinreadonly"))
+    , m_xTextSelectionInReadonlyImg(m_xBuilder->weld_widget("locktextselinreadonly"))
     , m_xAnimatedGraphics(m_xBuilder->weld_check_button("animatedgraphics"))
+    , m_xAnimatedGraphicsImg(m_xBuilder->weld_widget("lockanimatedgraphics"))
     , m_xAnimatedTexts(m_xBuilder->weld_check_button("animatedtext"))
+    , m_xAnimatedTextsImg(m_xBuilder->weld_widget("lockanimatedtext"))
     , m_xHighContrast(m_xBuilder->weld_combo_box("highcontrast"))
+    , m_xHighContrastImg(m_xBuilder->weld_widget("lockhighcontrast"))
+    , m_xHighContrastLabel(m_xBuilder->weld_label("label13"))
     , m_xAutomaticFontColor(m_xBuilder->weld_check_button("autofontcolor"))
+    , m_xAutomaticFontColorImg(m_xBuilder->weld_widget("lockautofontcolor"))
     , m_xPagePreviews(m_xBuilder->weld_check_button("systempagepreviewcolor"))
+    , m_xPagePreviewsImg(m_xBuilder->weld_widget("locksystempagepreviewcolor"))
 {
 #ifdef UNX
     // UNIX: read the gconf2 setting instead to use the checkbox
@@ -103,28 +110,47 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
 {
     m_xPagePreviews->set_active( officecfg::Office::Common::Accessibility::IsForPagePreviews::get() );
-    if( officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::IsForPagePreviews::isReadOnly())
+    {
         m_xPagePreviews->set_sensitive(false);
+        m_xPagePreviewsImg->set_visible(true);
+    }
 
     m_xAnimatedGraphics->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::get() );
-    if( officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::IsAllowAnimatedGraphics::isReadOnly())
+    {
         m_xAnimatedGraphics->set_sensitive(false);
+        m_xAnimatedGraphicsImg->set_visible(true);
+    }
 
     m_xAnimatedTexts->set_active( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::get() );
-    if( officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::IsAllowAnimatedText::isReadOnly())
+    {
         m_xAnimatedTexts->set_sensitive(false);
+        m_xAnimatedTextsImg->set_visible(true);
+    }
 
     m_xAutomaticFontColor->set_active( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::get() );
-    if( officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::IsAutomaticFontColor::isReadOnly())
+    {
         m_xAutomaticFontColor->set_sensitive(false);
+        m_xAutomaticFontColorImg->set_visible(true);
+    }
 
     m_xTextSelectionInReadonly->set_active( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::get() );
-    if( officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::IsSelectionInReadonly::isReadOnly())
+    {
         m_xTextSelectionInReadonly->set_sensitive(false);
+        m_xTextSelectionInReadonlyImg->set_visible(true);
+    }
 
     m_xHighContrast->set_active( officecfg::Office::Common::Accessibility::HighContrast::get() );
-    if( officecfg::Office::Common::Accessibility::HighContrast::isReadOnly() )
+    if (officecfg::Office::Common::Accessibility::HighContrast::isReadOnly())
+    {
         m_xHighContrast->set_sensitive(false);
+        m_xHighContrastLabel->set_sensitive(false);
+        m_xHighContrastImg->set_visible(true);
+    }
 
     AllSettings aAllSettings = Application::GetSettings();
     const MiscSettings& aMiscSettings = aAllSettings.GetMiscSettings();

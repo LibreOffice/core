@@ -15,13 +15,14 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <object class="GtkBox" id="box2">
+          <!-- n-columns=2 n-rows=4 -->
+          <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
+            <property name="row-spacing">6</property>
             <child>
               <object class="GtkCheckButton" id="acctool">
                 <property name="label" translatable="yes" context="optaccessibilitypage|acctool">Support _assistive technology tools (program restart required)</property>
@@ -37,9 +38,8 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
@@ -57,9 +57,8 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -77,9 +76,8 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -97,10 +95,51 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">3</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="locktextselinreadonly">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockanimatedgraphics">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockanimatedtext">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
@@ -136,7 +175,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <!-- n-columns=2 n-rows=1 -->
+              <!-- n-columns=3 n-rows=1 -->
               <object class="GtkGrid" id="highcontrastbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -152,7 +191,7 @@
                     <property name="xalign">0</property>
                   </object>
                   <packing>
-                    <property name="left-attach">0</property>
+                    <property name="left-attach">1</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -174,7 +213,20 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
+                    <property name="left-attach">2</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockhighcontrast">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
                     <property name="top-attach">0</property>
                   </packing>
                 </child>
@@ -186,43 +238,81 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="autofontcolor">
-                <property name="label" translatable="yes" context="optaccessibilitypage|autofontcolor">Use automatic font _color for screen display</property>
+              <!-- n-columns=2 n-rows=2 -->
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="autofontcolor-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autofontcolor">Displays fonts in the office suite using the system color settings. This option only affects the screen display.</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="row-spacing">6</property>
+                <child>
+                  <object class="GtkCheckButton" id="autofontcolor">
+                    <property name="label" translatable="yes" context="optaccessibilitypage|autofontcolor">Use automatic font _color for screen display</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="autofontcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|autofontcolor">Displays fonts in the office suite using the system color settings. This option only affects the screen display.</property>
+                      </object>
+                    </child>
                   </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="systempagepreviewcolor">
+                    <property name="label" translatable="yes" context="optaccessibilitypage|systempagepreviewcolor">_Use system colors for page previews</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="systempagepreviewcolor-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|systempagepreviewcolor">Applies the high contrast settings of the operating system to page previews.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="lockautofontcolor">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkImage" id="locksystempagepreviewcolor">
+                    <property name="can-focus">False</property>
+                    <property name="no-show-all">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">res/lock.png</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="systempagepreviewcolor">
-                <property name="label" translatable="yes" context="optaccessibilitypage|systempagepreviewcolor">_Use system colors for page previews</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="systempagepreviewcolor-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|systempagepreviewcolor">Applies the high contrast settings of the operating system to page previews.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>
