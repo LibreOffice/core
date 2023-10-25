@@ -73,6 +73,19 @@ CPPUNIT_TEST_FIXTURE(Test, testSplitFlyNextRowInvalidatePos)
     // i.e. row 2 has to be shifted down to 7390, but this didn't happen.
     CPPUNIT_ASSERT_GREATER(nOldRow2Top, nNewRow2Top);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf157096)
+{
+    createSwDoc("tdf157096.docx");
+
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+
+    // Without the fix in place, it would have crashed here
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
