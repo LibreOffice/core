@@ -2398,9 +2398,6 @@ void Window::Show(bool bVisible, ShowFlags nFlags)
     // now only notify with a NULL data pointer, for all other clients except the access bridge.
     if ( !bRealVisibilityChanged )
         CallEventListeners( mpWindowImpl->mbVisible ? VclEventId::WindowShow : VclEventId::WindowHide );
-    if( xWindow->isDisposed() )
-        return;
-
 }
 
 Size Window::GetSizePixel() const
