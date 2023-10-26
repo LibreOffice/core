@@ -2402,6 +2402,37 @@ void ScExportTest::testSheetProtectionXLSB()
     CPPUNIT_ASSERT(!pTabProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest, testConditionalFormatNumberInTextRule)
+{
+    createScDoc();
+
+    ScDocument* pDocument = getScDoc();
+    ScAddress aAddress(0, 0, 0);
+
+    auto pFormat = std::make_unique<ScConditionalFormat>(0, pDocument);
+    ScRange aCondFormatRange(aAddress);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->SetRange(aRangeList);
+    ScCondFormatEntry* pEntry
+        = new ScCondFormatEntry(ScConditionMode::BeginsWith, "15", "", *pDocument, aAddress, "");
+    pFormat->AddEntry(pEntry);
+    pDocument->AddCondFormat(std::move(pFormat), 0);
+
+    saveAndReload("Calc Office Open XML");
+    pDocument = getScDoc();
+
+    ScConditionalFormat* pCondFormat = pDocument->GetCondFormat(0, 0, 0);
+    CPPUNIT_ASSERT(pCondFormat);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormat->size());
+    const ScFormatEntry* pCondFormatEntry = pCondFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pCondFormatEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Condition, pCondFormatEntry->GetType());
+    const ScConditionEntry* pConditionEntry
+        = static_cast<const ScConditionEntry*>(pCondFormatEntry);
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::BeginsWith, pConditionEntry->GetOperation());
+    CPPUNIT_ASSERT_EQUAL(OUString("\"15\""), pConditionEntry->GetExpression(aAddress, 0));
+}
+
 namespace
 {
 const char* toBorderName(SvxBorderLineStyle eStyle)
