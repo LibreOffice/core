@@ -77,6 +77,9 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::SEPARATOR:
                 eRole = GTK_ACCESSIBLE_ROLE_SEPARATOR;
                 break;
+            case css::accessibility::AccessibleRole::CHECK_BOX:
+                eRole = GTK_ACCESSIBLE_ROLE_CHECKBOX;
+                break;
             case css::accessibility::AccessibleRole::CHECK_MENU_ITEM:
                 eRole = GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX;
                 break;
