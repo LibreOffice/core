@@ -1057,7 +1057,22 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         // the token array for that
         std::unique_ptr<ScTokenArray> pTokenArray(mrFormatEntry.CreateFlatCopiedTokenArray(0));
         if(pTokenArray->GetLen())
-            aText = pTokenArray->FirstToken()->GetString().getString().toUtf8();
+        {
+            formula::StackVar eType = pTokenArray->FirstToken()->GetType();
+            switch (eType)
+            {
+                case formula::svDouble:
+                {
+                    aText = OString::number(pTokenArray->FirstToken()->GetDouble());
+                    break;
+                }
+                default:
+                {
+                    aText = pTokenArray->FirstToken()->GetString().getString().toUtf8();
+                    break;
+                }
+            }
+        }
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
