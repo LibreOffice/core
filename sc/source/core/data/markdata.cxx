@@ -659,13 +659,11 @@ void ScMarkData::DeleteTab( SCTAB nTab )
 void ScMarkData::ShiftCols(const ScDocument& rDoc, SCCOL nStartCol, sal_Int32 nColOffset)
 {
     if (bMarked)
-    {
         aMarkRange.IncColIfNotLessThan(rDoc, nStartCol, nColOffset);
-    }
-    else if (bMultiMarked)
+    if (bMultiMarked)
     {
-        aMultiSel.ShiftCols(nStartCol, nColOffset);
         aMultiRange.IncColIfNotLessThan(rDoc, nStartCol, nColOffset);
+        aMultiSel.ShiftCols(nStartCol, nColOffset);
     }
 }
 

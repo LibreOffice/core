@@ -1716,11 +1716,17 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
                 if (pTabViewShell->getPart() == nCurrentTabIndex)
                 {
                     SCCOL nX = pTabViewShell->GetViewData().GetCurX();
-                    if (nX > nStartCol || (nX == nStartCol && nOffset > 0))
+                    if (nX > nStartCol)
                     {
+                        tools::Long offset = nOffset;
+                        if (nOffset + nStartCol > nX)
+                            offset = nX - nStartCol;
+                        else if (nOffset < 0 && nStartCol - nOffset > nX)
+                            offset = -1 * (nX - nStartCol);
+
                         ScInputHandler* pInputHdl = pTabViewShell->GetInputHandler();
                         SCROW nY = pTabViewShell->GetViewData().GetCurY();
-                        pTabViewShell->SetCursor(nX + nOffset, nY);
+                        pTabViewShell->SetCursor(nX + offset, nY);
                         if (pInputHdl && pInputHdl->IsInputMode())
                         {
                             pInputHdl->SetModified();
@@ -1729,8 +1735,8 @@ void ScViewFunc::OnLOKInsertDeleteColumn(SCCOL nStartCol, tools::Long nOffset)
 
                     ScMarkData aMultiMark( pTabViewShell->GetViewData().GetMarkData() );
                     aMultiMark.SetMarking( false );
-                    aMultiMark.MarkToMulti();
-                    if (aMultiMark.IsMultiMarked())
+
+                    if (aMultiMark.IsMultiMarked() || aMultiMark.IsMarked())
                     {
                         aMultiMark.ShiftCols(pTabViewShell->GetViewData().GetDocument(), nStartCol, nOffset);
                         pTabViewShell->SetMarkData(aMultiMark);

@@ -2372,17 +2372,30 @@ bool ScRange::MoveSticky( const ScDocument& rDoc, SCCOL dx, SCROW dy, SCTAB dz, 
 
 void ScRange::IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL nOffset)
 {
-    if (aStart.Col() >= nStartCol)
+    SCCOL offset;
+    if (aStart.Col() > nStartCol)
     {
-        aStart.IncCol(nOffset);
+        offset = nOffset;
+        if (nStartCol + nOffset > aStart.Col())
+            offset = aStart.Col() - nStartCol;
+        else if (nStartCol - nOffset > aStart.Col())
+            offset = -1 * (aStart.Col() - nStartCol);
+
+        aStart.IncCol(offset);
         if (aStart.Col() < 0)
             aStart.SetCol(0);
         else if(aStart.Col() > rDoc.MaxCol())
             aStart.SetCol(rDoc.MaxCol());
     }
-    if (aEnd.Col() >= nStartCol)
+    if (aEnd.Col() > nStartCol)
     {
-        aEnd.IncCol(nOffset);
+        offset = nOffset;
+        if (nStartCol + nOffset > aEnd.Col())
+            offset = aEnd.Col() - nStartCol;
+        else if (nStartCol - nOffset > aEnd.Col())
+            offset = -1 * (aEnd.Col() - nStartCol);
+
+        aEnd.IncCol(offset);
         if (aEnd.Col() < 0)
             aEnd.SetCol(0);
         else if(aEnd.Col() > rDoc.MaxCol())

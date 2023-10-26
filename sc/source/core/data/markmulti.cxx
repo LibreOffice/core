@@ -353,53 +353,18 @@ bool ScMultiSel::HasAnyMarks() const
 
 void ScMultiSel::ShiftCols(SCCOL nStartCol, sal_Int32 nColOffset)
 {
-    if (nStartCol > mrSheetLimits.mnMaxCol)
+    if (nStartCol > mrSheetLimits.mnMaxCol || nStartCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
         return;
 
-    ScMultiSel aNewMultiSel(*this);
-    Clear();
-
-    if (nColOffset < 0)
+    if (nColOffset > 0)
     {
-        // columns that would be moved on the left of nStartCol must be removed
-        const SCCOL nEndPos = std::min<SCCOL>(aNewMultiSel.aMultiSelContainer.size(), nStartCol - nColOffset);
-        for (SCCOL nSearchPos = nStartCol; nSearchPos < nEndPos; ++nSearchPos)
-            aNewMultiSel.aMultiSelContainer[nSearchPos].Reset();
+        aMultiSelContainer.insert(aMultiSelContainer.begin() + nStartCol, nColOffset, ScMarkArray(mrSheetLimits));
     }
-
-    SCCOL nCol = 0;
-    for (const auto& aSourceArray : aNewMultiSel.aMultiSelContainer)
+    else
     {
-        SCCOL nDestCol = nCol;
-        if (nDestCol >= nStartCol)
-        {
-            nDestCol += nColOffset;
-            if (nDestCol < 0)
-                nDestCol = 0;
-            else if (nDestCol > mrSheetLimits.mnMaxCol)
-                nDestCol = mrSheetLimits.mnMaxCol;
-        }
-        if (nDestCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
-            aMultiSelContainer.resize(nDestCol, ScMarkArray(mrSheetLimits));
-        aMultiSelContainer[nDestCol] = aSourceArray;
-        ++nCol;
+        sal_Int32 tempOffset = nStartCol - nColOffset >= static_cast<SCCOL>(aMultiSelContainer.size()) ? static_cast<SCCOL>(aMultiSelContainer.size()) - nStartCol -1: -1 * nColOffset;
+        aMultiSelContainer.erase(aMultiSelContainer.begin() + nStartCol, aMultiSelContainer.begin() + nStartCol + tempOffset);
     }
-    aRowSel = aNewMultiSel.aRowSel;
-
-    if (!(nColOffset > 0 && nStartCol > 0 && o3tl::make_unsigned(nStartCol) < aNewMultiSel.aMultiSelContainer.size()))
-        return;
-
-    // insert nColOffset new columns, and select their cells if they are selected
-    // both in the old column at nStartPos and in the previous column
-    auto& rPrevPos = aNewMultiSel.aMultiSelContainer[nStartCol - 1];
-    auto& rStartPos = aNewMultiSel.aMultiSelContainer[nStartCol];
-    auto& rNewCol = aMultiSelContainer[nStartCol];
-    rNewCol = rStartPos;
-    rNewCol.Intersect(rPrevPos);
-    if (nStartCol + nColOffset >= static_cast<SCCOL>(aNewMultiSel.aMultiSelContainer.size()))
-        aNewMultiSel.aMultiSelContainer.resize(nStartCol + nColOffset, ScMarkArray(mrSheetLimits));
-    for (tools::Long i = 1; i < nColOffset; ++i)
-        aMultiSelContainer[nStartCol + i] = rNewCol;
 }
 
 void ScMultiSel::ShiftRows(SCROW nStartRow, sal_Int32 nRowOffset)
