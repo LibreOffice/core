@@ -811,6 +811,7 @@ void SwRedlineTable::getConnectedArea(size_type nPosOrigin, size_type& rPosStart
         rPosStart--;
         pRedline = pOther;
     }
+    pRedline = pOrigin;
     while (rPosEnd + 1 < size() && (pOther = (*this)[rPosEnd + 1])
            && lcl_CanCombineWithRange(pOrigin, pRedline, pOther, false, bCheckChilds))
     {
