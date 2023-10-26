@@ -60,6 +60,7 @@
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/indexedpropertyvalues.hxx>
+#include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/string.hxx>
 
 #include <cppuhelper/implbase.hxx>
@@ -200,7 +201,13 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     OUString                                                   m_sURL                   ;
     OUString                                                   m_sRuntimeUID            ;
     OUString                                                   m_aPreusedFilterName     ;
-    comphelper::OMultiTypeInterfaceContainerHelper2            m_aInterfaceContainer    ;
+    comphelper::OInterfaceContainerHelper3<view::XPrintJobListener>  m_aPrintJobListeners;
+    comphelper::OInterfaceContainerHelper3<lang::XEventListener>  m_aEventListeners;
+    comphelper::OInterfaceContainerHelper3<util::XModifyListener>  m_aModifyListeners;
+    comphelper::OInterfaceContainerHelper3<document::XEventListener>  m_aDocumentEventListeners1;
+    comphelper::OInterfaceContainerHelper3<document::XDocumentEventListener>  m_aDocumentEventListeners2;
+    comphelper::OInterfaceContainerHelper3<document::XStorageChangeListener>  m_aStorageChangeListeners;
+    comphelper::OInterfaceContainerHelper3<util::XCloseListener>  m_aCloseListeners;
     std::unordered_map<css::uno::Reference< css::drawing::XShape >,
                        std::vector<css::uno::Reference< css::document::XShapeEventListener >>> maShapeListeners;
     Reference< XInterface >                                    m_xParent                ;
@@ -232,8 +239,14 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
-            ,   m_aInterfaceContainer   ( rMutex        )
-            ,   m_nControllerLockCount  ( 0             )
+            ,   m_aPrintJobListeners    ( rMutex    )
+            ,   m_aEventListeners       ( rMutex    )
+            ,   m_aModifyListeners      ( rMutex    )
+            ,   m_aDocumentEventListeners1( rMutex  )
+            ,   m_aDocumentEventListeners2( rMutex  )
+            ,   m_aStorageChangeListeners ( rMutex  )
+            ,   m_aCloseListeners       ( rMutex    )
+            ,   m_nControllerLockCount  ( 0         )
             ,   m_bClosed               ( false     )
             ,   m_bClosing              ( false     )
             ,   m_bSaving               ( false     )
@@ -340,12 +353,9 @@ void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& )
 
 void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEvent& rEvent )
 {
-    ::comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<view::XPrintJobListener>::get());
-    if ( pContainer!=nullptr )
+    if ( m_pData->m_aPrintJobListeners.getLength() )
     {
-        ::comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
-        while (pIterator.hasMoreElements())
-            static_cast<view::XPrintJobListener*>(pIterator.next())->printJobEvent( rEvent );
+        m_pData->m_aPrintJobListeners.notifyEach(&view::XPrintJobListener::printJobEvent, rEvent);
     }
 }
 
@@ -749,7 +759,13 @@ void SAL_CALL SfxBaseModel::dispose()
     }
 
     lang::EventObject aEvent( static_cast<frame::XModel *>(this) );
-    m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
+    m_pData->m_aPrintJobListeners.disposeAndClear( aEvent );
+    m_pData->m_aEventListeners.disposeAndClear( aEvent );
+    m_pData->m_aModifyListeners.disposeAndClear( aEvent );
+    m_pData->m_aDocumentEventListeners1.disposeAndClear( aEvent );
+    m_pData->m_aDocumentEventListeners2.disposeAndClear( aEvent );
+    m_pData->m_aStorageChangeListeners.disposeAndClear( aEvent );
+    m_pData->m_aCloseListeners.disposeAndClear( aEvent );
 
     m_pData->m_xDocumentProperties.clear();
 
@@ -776,7 +792,7 @@ void SAL_CALL SfxBaseModel::dispose()
 void SAL_CALL SfxBaseModel::addEventListener( const Reference< lang::XEventListener >& aListener )
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    m_pData->m_aEventListeners.addInterface( aListener );
 }
 
 
@@ -786,7 +802,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< lang::XEventListe
 void SAL_CALL SfxBaseModel::removeEventListener( const Reference< lang::XEventListener >& aListener )
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), aListener );
+    m_pData->m_aEventListeners.removeInterface( aListener );
 }
 
 void
@@ -832,11 +848,11 @@ void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
     Reference< document::XEventListener >  xDocListener( aObject.Source, UNO_QUERY );
 
     if ( xMod.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XModifyListener>::get(), xMod );
+        m_pData->m_aModifyListeners.removeInterface( xMod );
     else if ( xListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+        m_pData->m_aEventListeners.removeInterface( xListener );
     else if ( xDocListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XEventListener>::get(), xListener );
+        m_pData->m_aDocumentEventListeners1.removeInterface( xDocListener );
 }
 
 
@@ -1423,7 +1439,7 @@ void SAL_CALL SfxBaseModel::addModifyListener(const Reference< util::XModifyList
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<util::XModifyListener>::get(),xListener );
+    m_pData->m_aModifyListeners.addInterface( xListener );
 }
 
 
@@ -1434,7 +1450,7 @@ void SAL_CALL SfxBaseModel::removeModifyListener(const Reference< util::XModifyL
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XModifyListener>::get(), xListener );
+    m_pData->m_aModifyListeners.removeInterface( xListener );
 }
 
 
@@ -1449,15 +1465,14 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
 
     Reference< XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
     lang::EventObject       aSource  ( static_cast< ::cppu::OWeakObject* >(this) );
-    comphelper::OInterfaceContainerHelper2* pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
-    if (pContainer!=nullptr)
+    if (m_pData->m_aCloseListeners.getLength())
     {
-        comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper3 pIterator(m_pData->m_aCloseListeners);
         while (pIterator.hasMoreElements())
         {
             try
             {
-                static_cast<util::XCloseListener*>(pIterator.next())->queryClosing( aSource, bDeliverOwnership );
+                pIterator.next()->queryClosing( aSource, bDeliverOwnership );
             }
             catch( RuntimeException& )
             {
@@ -1477,15 +1492,14 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership )
 
     // no own objections against closing!
     m_pData->m_bClosing = true;
-    pContainer = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XCloseListener>::get());
-    if (pContainer!=nullptr)
+    if (m_pData->m_aCloseListeners.getLength())
     {
-        comphelper::OInterfaceIteratorHelper2 pCloseIterator(*pContainer);
+        comphelper::OInterfaceIteratorHelper3 pCloseIterator(m_pData->m_aCloseListeners);
         while (pCloseIterator.hasMoreElements())
         {
             try
             {
-                static_cast<util::XCloseListener*>(pCloseIterator.next())->notifyClosing( aSource );
+                pCloseIterator.next()->notifyClosing( aSource );
             }
             catch( RuntimeException& )
             {
@@ -1508,7 +1522,7 @@ void SAL_CALL SfxBaseModel::addCloseListener( const Reference< util::XCloseListe
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
+    m_pData->m_aCloseListeners.addInterface( xListener );
 }
 
 
@@ -1519,7 +1533,7 @@ void SAL_CALL SfxBaseModel::removeCloseListener( const Reference< util::XCloseLi
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<util::XCloseListener>::get(), xListener );
+    m_pData->m_aCloseListeners.removeInterface( xListener );
 }
 
 
@@ -2460,7 +2474,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const Reference< document::XEventL
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<document::XEventListener>::get(), aListener );
+    m_pData->m_aDocumentEventListeners1.addInterface( aListener );
 }
 
 
@@ -2471,7 +2485,7 @@ void SAL_CALL SfxBaseModel::removeEventListener( const Reference< document::XEve
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XEventListener>::get(), aListener );
+    m_pData->m_aEventListeners.removeInterface( aListener );
 }
 
 //  XShapeEventBroadcaster
@@ -2512,14 +2526,14 @@ void SAL_CALL SfxBaseModel::removeShapeEventListener( const css::uno::Reference<
 void SAL_CALL SfxBaseModel::addDocumentEventListener( const Reference< document::XDocumentEventListener >& aListener )
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-    m_pData->m_aInterfaceContainer.addInterface( cppu::UnoType<document::XDocumentEventListener>::get(), aListener );
+    m_pData->m_aDocumentEventListeners2.addInterface( aListener );
 }
 
 
 void SAL_CALL SfxBaseModel::removeDocumentEventListener( const Reference< document::XDocumentEventListener >& aListener )
 {
     SfxModelGuard aGuard( *this );
-    m_pData->m_aInterfaceContainer.removeInterface( cppu::UnoType<document::XDocumentEventListener>::get(), aListener );
+    m_pData->m_aDocumentEventListeners2.removeInterface( aListener );
 }
 
 
@@ -2938,11 +2952,10 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
 void SfxBaseModel::NotifyModifyListeners_Impl() const
 {
-    comphelper::OInterfaceContainerHelper2* pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<util::XModifyListener>::get());
-    if ( pIC )
+    if ( m_pData->m_aModifyListeners.getLength() )
     {
         lang::EventObject aEvent( static_cast<frame::XModel *>(const_cast<SfxBaseModel *>(this)) );
-        pIC->notifyEach( &util::XModifyListener::modified, aEvent );
+        m_pData->m_aModifyListeners.notifyEach( &util::XModifyListener::modified, aEvent );
     }
 
     // this notification here is done too generously, we cannot simply assume that we're really modified
@@ -3279,28 +3292,25 @@ void SfxBaseModel::postEvent_Impl( const OUString& aName, const Reference< frame
     if (aName.isEmpty())
         return;
 
-    comphelper::OInterfaceContainerHelper2* pIC =
-        m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XDocumentEventListener>::get());
-    if ( pIC )
+    if ( xKeepAlive->m_aDocumentEventListeners2.getLength() )
     {
         SAL_INFO("sfx.doc", "SfxDocumentEvent: " + aName);
 
         document::DocumentEvent aDocumentEvent( static_cast<frame::XModel*>(this), aName, xController, supplement );
 
-        pIC->forEach< document::XDocumentEventListener, NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent > >(
+        xKeepAlive->m_aDocumentEventListeners2.forEach(
             NotifySingleListenerIgnoreRE< document::XDocumentEventListener, document::DocumentEvent >(
                 &document::XDocumentEventListener::documentEventOccured,
                 aDocumentEvent ) );
     }
 
-    pIC = m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get());
-    if ( pIC )
+    if ( xKeepAlive->m_aDocumentEventListeners1.getLength() )
     {
         SAL_INFO("sfx.doc", "SfxEvent: " + aName);
 
         document::EventObject aEvent( static_cast<frame::XModel*>(this), aName );
 
-        pIC->forEach< document::XEventListener, NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject > >(
+        xKeepAlive->m_aDocumentEventListeners1.forEach(
             NotifySingleListenerIgnoreRE< document::XEventListener, document::EventObject >(
                 &document::XEventListener::notifyEvent,
                 aEvent ) );
@@ -3360,18 +3370,16 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
     if ( impl_isDisposed() )
         return;
 
-    comphelper::OInterfaceContainerHelper2* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        cppu::UnoType<document::XEventListener>::get());
-    if( !pIC )
+    if( !m_pData->m_aDocumentEventListeners1.getLength() )
 
         return;
 
-    comphelper::OInterfaceIteratorHelper2 aIt( *pIC );
+    comphelper::OInterfaceIteratorHelper3 aIt( m_pData->m_aDocumentEventListeners1 );
     while( aIt.hasMoreElements() )
     {
         try
         {
-            static_cast<document::XEventListener *>(aIt.next())->notifyEvent( aEvent );
+            aIt.next()->notifyEvent( aEvent );
         }
         catch( RuntimeException& )
         {
@@ -3396,7 +3404,7 @@ void SfxBaseModel::notifyEvent( const document::EventObject& aEvent ) const
 bool SfxBaseModel::hasEventListeners() const
 {
     return !impl_isDisposed()
-        && ( (nullptr != m_pData->m_aInterfaceContainer.getContainer( cppu::UnoType<document::XEventListener>::get()) )
+        && ( m_pData->m_aDocumentEventListeners1.getLength() != 0
              || !m_pData->maShapeListeners.empty());
 }
 
@@ -3913,8 +3921,7 @@ void SAL_CALL SfxBaseModel::addStorageChangeListener(
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
-    m_pData->m_aInterfaceContainer.addInterface(
-                                    cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
+    m_pData->m_aStorageChangeListeners.addInterface( xListener );
 }
 
 void SAL_CALL SfxBaseModel::removeStorageChangeListener(
@@ -3922,8 +3929,7 @@ void SAL_CALL SfxBaseModel::removeStorageChangeListener(
 {
     SfxModelGuard aGuard( *this );
 
-    m_pData->m_aInterfaceContainer.removeInterface(
-                                    cppu::UnoType<document::XStorageChangeListener>::get(), xListener );
+    m_pData->m_aStorageChangeListeners.removeInterface( xListener );
 }
 
 void SfxBaseModel::impl_getPrintHelper()
