@@ -265,6 +265,8 @@ void Window::StartTracking( StartTrackingFlags nFlags )
             pTrackWin->EndTracking( TrackingEventFlags::Cancel );
     }
 
+    SAL_WARN_IF(pSVData->mpWinData->mpTrackTimer, "vcl", "StartTracking called while TrackerTimer still running");
+
     if ( !mpWindowImpl->mbUseFrameData &&
          (nFlags & (StartTrackingFlags::ScrollRepeat | StartTrackingFlags::ButtonRepeat)) )
     {
