@@ -77,7 +77,9 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
     , m_xClassPathBtn(m_xBuilder->weld_button("classpath"))
     , m_xExpertConfigBtn(m_xBuilder->weld_button("expertconfig"))
     , m_xExperimentalCB(m_xBuilder->weld_check_button("experimental"))
+    , m_xExperimentalImg(m_xBuilder->weld_widget("lockexperimental"))
     , m_xMacroCB(m_xBuilder->weld_check_button("macrorecording"))
+    , m_xMacroImg(m_xBuilder->weld_widget("lockmacrorecording"))
     , m_xAddDialogText(m_xBuilder->weld_label("selectruntime"))
     , m_xJavaFrame(m_xBuilder->weld_widget("javaframe"))
 {
@@ -109,10 +111,16 @@ SvxJavaOptionsPage::SvxJavaOptionsPage(weld::Container* pPage, weld::DialogContr
         m_xExpertConfigBtn->set_sensitive(false);
 
     if (officecfg::Office::Common::Misc::MacroRecorderMode::isReadOnly())
+    {
         m_xMacroCB->set_sensitive(false);
+        m_xMacroImg->set_visible(true);
+    }
 
     if (officecfg::Office::Common::Misc::ExperimentalMode::isReadOnly())
+    {
         m_xExperimentalCB->set_sensitive(false);
+        m_xExperimentalImg->set_visible(true);
+    }
 
     xDialogListener->SetDialogClosedLink( LINK( this, SvxJavaOptionsPage, DialogClosedHdl ) );
 

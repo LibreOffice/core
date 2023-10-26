@@ -75,7 +75,9 @@ private:
     std::unique_ptr<SvxJavaClassPathDlg> m_xPathDlg;
 
     std::unique_ptr<weld::CheckButton> m_xExperimentalCB;
+    std::unique_ptr<weld::Widget> m_xExperimentalImg;
     std::unique_ptr<weld::CheckButton> m_xMacroCB;
+    std::unique_ptr<weld::Widget> m_xMacroImg;
 
     std::unique_ptr<weld::Label> m_xAddDialogText;
 
