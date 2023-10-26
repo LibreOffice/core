@@ -30,25 +30,34 @@ class SvxProxyTabPage : public SfxTabPage
 {
 private:
 
+    std::unique_ptr<weld::Label> m_xProxyModeFT;
     std::unique_ptr<weld::ComboBox> m_xProxyModeLB;
+    std::unique_ptr<weld::Widget> m_xProxyModeImg;
 
     std::unique_ptr<weld::Label> m_xHttpProxyFT;
     std::unique_ptr<weld::Entry> m_xHttpProxyED;
+    std::unique_ptr<weld::Widget> m_xHttpProxyImg;
     std::unique_ptr<weld::Label> m_xHttpPortFT;
     std::unique_ptr<weld::Entry> m_xHttpPortED;
+    std::unique_ptr<weld::Widget> m_xHttpPortImg;
 
     std::unique_ptr<weld::Label> m_xHttpsProxyFT;
     std::unique_ptr<weld::Entry> m_xHttpsProxyED;
+    std::unique_ptr<weld::Widget> m_xHttpsProxyImg;
     std::unique_ptr<weld::Label> m_xHttpsPortFT;
     std::unique_ptr<weld::Entry> m_xHttpsPortED;
+    std::unique_ptr<weld::Widget> m_xHttpsPortImg;
 
     std::unique_ptr<weld::Label> m_xFtpProxyFT;
     std::unique_ptr<weld::Entry> m_xFtpProxyED;
+    std::unique_ptr<weld::Widget> m_xFtpProxyImg;
     std::unique_ptr<weld::Label> m_xFtpPortFT;
     std::unique_ptr<weld::Entry> m_xFtpPortED;
+    std::unique_ptr<weld::Widget> m_xFtpPortImg;
 
     std::unique_ptr<weld::Label> m_xNoProxyForFT;
     std::unique_ptr<weld::Entry> m_xNoProxyForED;
+    std::unique_ptr<weld::Widget> m_xNoProxyForImg;
     std::unique_ptr<weld::Label> m_xNoProxyDescFT;
 
     css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;

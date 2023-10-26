@@ -127,21 +127,30 @@ IMPL_STATIC_LINK(SvxProxyTabPage, NoSpaceTextFilterHdl, OUString&, rTest, bool)
 /********************************************************************/
 SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optproxypage.ui", "OptProxyPage", &rSet)
+    , m_xProxyModeFT(m_xBuilder->weld_label("label2"))
     , m_xProxyModeLB(m_xBuilder->weld_combo_box("proxymode"))
+    , m_xProxyModeImg(m_xBuilder->weld_widget("lockproxymode"))
     , m_xHttpProxyFT(m_xBuilder->weld_label("httpft"))
     , m_xHttpProxyED(m_xBuilder->weld_entry("http"))
+    , m_xHttpProxyImg(m_xBuilder->weld_widget("lockhttp"))
     , m_xHttpPortFT(m_xBuilder->weld_label("httpportft"))
     , m_xHttpPortED(m_xBuilder->weld_entry("httpport"))
+    , m_xHttpPortImg(m_xBuilder->weld_widget("lockhttpport"))
     , m_xHttpsProxyFT(m_xBuilder->weld_label("httpsft"))
     , m_xHttpsProxyED(m_xBuilder->weld_entry("https"))
+    , m_xHttpsProxyImg(m_xBuilder->weld_widget("lockhttps"))
     , m_xHttpsPortFT(m_xBuilder->weld_label("httpsportft"))
     , m_xHttpsPortED(m_xBuilder->weld_entry("httpsport"))
+    , m_xHttpsPortImg(m_xBuilder->weld_widget("lockhttpsport"))
     , m_xFtpProxyFT(m_xBuilder->weld_label("ftpft"))
     , m_xFtpProxyED(m_xBuilder->weld_entry("ftp"))
+    , m_xFtpProxyImg(m_xBuilder->weld_widget("lockftp"))
     , m_xFtpPortFT(m_xBuilder->weld_label("ftpportft"))
     , m_xFtpPortED(m_xBuilder->weld_entry("ftpport"))
+    , m_xFtpPortImg(m_xBuilder->weld_widget("lockftpport"))
     , m_xNoProxyForFT(m_xBuilder->weld_label("noproxyft"))
     , m_xNoProxyForED(m_xBuilder->weld_entry("noproxy"))
+    , m_xNoProxyForImg(m_xBuilder->weld_widget("locknoproxy"))
     , m_xNoProxyDescFT(m_xBuilder->weld_label("noproxydesc"))
 {
     m_xHttpProxyED->connect_insert_text(LINK(this, SvxProxyTabPage, NoSpaceTextFilterHdl));
@@ -437,34 +446,48 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
 
 void SvxProxyTabPage::EnableControls_Impl()
 {
-    m_xProxyModeLB->set_sensitive(!officecfg::Inet::Settings::ooInetNoProxy::isReadOnly());
+    bool bEnable = !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly();
+    m_xProxyModeFT->set_sensitive(bEnable);
+    m_xProxyModeLB->set_sensitive(bEnable);
+    m_xProxyModeImg->set_visible(!bEnable);
 
     const bool bManualConfig = m_xProxyModeLB->get_active() == 2;
 
-    const bool bHTTPProxyNameEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetHTTPProxyName::isReadOnly();
-    const bool bHTTPProxyPortEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetHTTPProxyPort::isReadOnly();
+    bEnable = !officecfg::Inet::Settings::ooInetHTTPProxyName::isReadOnly();
+    const bool bHTTPProxyNameEnabled = bManualConfig && bEnable;
+    const bool bHTTPProxyPortEnabled = bManualConfig && bEnable;
     m_xHttpProxyFT->set_sensitive(bHTTPProxyNameEnabled);
     m_xHttpProxyED->set_sensitive(bHTTPProxyNameEnabled);
+    m_xHttpProxyImg->set_visible(!bEnable);
     m_xHttpPortFT->set_sensitive(bHTTPProxyPortEnabled);
     m_xHttpPortED->set_sensitive(bHTTPProxyPortEnabled);
+    m_xHttpPortImg->set_visible(!bEnable);
 
-    const bool bHTTPSProxyNameEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetHTTPSProxyName::isReadOnly();
-    const bool bHTTPSProxyPortEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetHTTPSProxyPort::isReadOnly();
+    bEnable = !officecfg::Inet::Settings::ooInetHTTPSProxyName::isReadOnly();
+    const bool bHTTPSProxyNameEnabled = bManualConfig && bEnable;
+    const bool bHTTPSProxyPortEnabled = bManualConfig && bEnable;
     m_xHttpsProxyFT->set_sensitive(bHTTPSProxyNameEnabled);
     m_xHttpsProxyED->set_sensitive(bHTTPSProxyNameEnabled);
+    m_xHttpsProxyImg->set_visible(!bEnable);
     m_xHttpsPortFT->set_sensitive(bHTTPSProxyPortEnabled);
     m_xHttpsPortED->set_sensitive(bHTTPSProxyPortEnabled);
+    m_xHttpsPortImg->set_visible(!bEnable);
 
-    const bool bFTPProxyNameEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetFTPProxyName::isReadOnly();
-    const bool bFTPProxyPortEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetFTPProxyPort::isReadOnly();
+    bEnable = !officecfg::Inet::Settings::ooInetFTPProxyName::isReadOnly();
+    const bool bFTPProxyNameEnabled = bManualConfig && bEnable;
+    const bool bFTPProxyPortEnabled = bManualConfig && bEnable;
     m_xFtpProxyFT->set_sensitive(bFTPProxyNameEnabled);
     m_xFtpProxyED->set_sensitive(bFTPProxyNameEnabled);
+    m_xFtpProxyImg->set_visible(!bEnable);
     m_xFtpPortFT->set_sensitive(bFTPProxyPortEnabled);
     m_xFtpPortED->set_sensitive(bFTPProxyPortEnabled);
+    m_xFtpPortImg->set_visible(!bEnable);
 
-    const bool bInetNoProxyEnabled = bManualConfig && !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly();
+    bEnable = !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly();
+    const bool bInetNoProxyEnabled = bManualConfig && bEnable;
     m_xNoProxyForFT->set_sensitive(bInetNoProxyEnabled);
     m_xNoProxyForED->set_sensitive(bInetNoProxyEnabled);
+    m_xNoProxyForImg->set_visible(!bEnable);
     m_xNoProxyDescFT->set_sensitive(bInetNoProxyEnabled);
 }
 
