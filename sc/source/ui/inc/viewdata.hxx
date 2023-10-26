@@ -343,6 +343,7 @@ private:
     SAL_DLLPRIVATE void          CreateSelectedTabData();
     SAL_DLLPRIVATE void          EnsureTabDataSize(size_t nSize);
     SAL_DLLPRIVATE void          UpdateCurrentTab();
+    SAL_DLLPRIVATE ScViewDataTable* FetchTableData(SCTAB) const;
 
     ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh);
 
