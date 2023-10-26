@@ -51,16 +51,20 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(weld::Container* pPage, weld::Dia
     : SfxTabPage(pPage, pController, "cui/ui/optonlineupdatepage.ui", "OptOnlineUpdatePage", &rSet)
     , m_xNeverChecked(m_xBuilder->weld_label("neverchecked"))
     , m_xAutoCheckCheckBox(m_xBuilder->weld_check_button("autocheck"))
+    , m_xAutoCheckImg(m_xBuilder->weld_widget("lockautocheck"))
     , m_xEveryDayButton(m_xBuilder->weld_radio_button("everyday"))
     , m_xEveryWeekButton(m_xBuilder->weld_radio_button("everyweek"))
     , m_xEveryMonthButton(m_xBuilder->weld_radio_button("everymonth"))
+    , m_xCheckIntervalImg(m_xBuilder->weld_widget("lockcheckinterval"))
     , m_xCheckNowButton(m_xBuilder->weld_button("checknow"))
     , m_xAutoDownloadCheckBox(m_xBuilder->weld_check_button("autodownload"))
+    , m_xAutoDownloadImg(m_xBuilder->weld_widget("lockautodownload"))
     , m_xDestPathLabel(m_xBuilder->weld_label("destpathlabel"))
     , m_xDestPath(m_xBuilder->weld_label("destpath"))
     , m_xChangePathButton(m_xBuilder->weld_button("changepath"))
     , m_xLastChecked(m_xBuilder->weld_label("lastchecked"))
     , m_xExtrasCheckBox(m_xBuilder->weld_check_button("extrabits"))
+    , m_xExtrasImg(m_xBuilder->weld_widget("lockextrabits"))
     , m_xUserAgentLabel(m_xBuilder->weld_label("useragent"))
     , m_xPrivacyPolicyButton(m_xBuilder->weld_link_button("btnPrivacyPolicy"))
 {
@@ -301,6 +305,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 
     m_xAutoCheckCheckBox->set_active(bValue);
     m_xAutoCheckCheckBox->set_sensitive(!bReadOnly);
+    m_xAutoCheckImg->set_visible(bReadOnly);
 
     sal_Int64 nValue = 0;
     m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
@@ -309,6 +314,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     m_xEveryDayButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
     m_xEveryWeekButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
     m_xEveryMonthButton->set_sensitive(bValue && !(bReadOnly || bReadOnly2));
+    m_xCheckIntervalImg->set_visible(bReadOnly2);
 
     if( nValue == 86400 )
         m_xEveryDayButton->set_active(true);
@@ -327,6 +333,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
     m_xAutoDownloadCheckBox->set_active(bValue);
     m_xAutoDownloadCheckBox->set_sensitive(!bReadOnly);
+    m_xAutoDownloadImg->set_visible(bReadOnly);
     m_xDestPathLabel->set_sensitive(true);
     m_xDestPath->set_sensitive(true);
 
@@ -344,6 +351,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
     bReadOnly = (aProperty.Attributes & beans::PropertyAttribute::READONLY) != 0;
     m_xExtrasCheckBox->set_active(bValue);
     m_xExtrasCheckBox->set_sensitive(!bReadOnly);
+    m_xExtrasImg->set_visible(bReadOnly);
     m_xExtrasCheckBox->save_state();
     UpdateUserAgent();
 
@@ -362,6 +370,7 @@ IMPL_LINK(SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, weld::Toggleable&, rBox, vo
     m_xEveryDayButton->set_sensitive(bEnabled && !bReadOnly);
     m_xEveryWeekButton->set_sensitive(bEnabled && !bReadOnly);
     m_xEveryMonthButton->set_sensitive(bEnabled && !bReadOnly);
+    m_xCheckIntervalImg->set_visible(bReadOnly);
 }
 
 IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, ExtrasCheckHdl_Impl, weld::Toggleable&, void)
