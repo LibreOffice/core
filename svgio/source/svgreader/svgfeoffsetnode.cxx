@@ -32,8 +32,7 @@ SvgFeOffsetNode::SvgFeOffsetNode(SvgDocument& rDocument, SvgNode* pParent)
 
 SvgFeOffsetNode::~SvgFeOffsetNode() {}
 
-void SvgFeOffsetNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                     const OUString& aContent)
+void SvgFeOffsetNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

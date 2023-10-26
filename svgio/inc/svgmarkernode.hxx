@@ -67,7 +67,7 @@ namespace svgio::svgreader
             virtual ~SvgMarkerNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
             /// get marker primitives buffered, uses decomposeSvgNode internally
             const drawinglayer::primitive2d::Primitive2DContainer& getMarkerPrimitives() const;

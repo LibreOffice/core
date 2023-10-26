@@ -67,7 +67,7 @@ namespace svgio::svgreader
             virtual ~SvgPatternNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
             /// global helpers
             void getValuesRelative(double& rfX, double& rfY, double& rfW, double& rfH, const basegfx::B2DRange& rGeoRange, SvgNode const & rUser) const;

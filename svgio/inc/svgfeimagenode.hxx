@@ -34,8 +34,7 @@ public:
     SvgFeImageNode(SvgDocument& rDocument, SvgNode* pParent);
     virtual ~SvgFeImageNode() override;
 
-    virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken,
-                                const OUString& aContent) override;
+    virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
     void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const override;
 };

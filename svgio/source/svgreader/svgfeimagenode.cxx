@@ -36,8 +36,7 @@ SvgFeImageNode::SvgFeImageNode(SvgDocument& rDocument, SvgNode* pParent)
 
 SvgFeImageNode::~SvgFeImageNode() {}
 
-void SvgFeImageNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                    const OUString& aContent)
+void SvgFeImageNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

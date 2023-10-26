@@ -31,8 +31,7 @@ SvgFeGaussianBlurNode::SvgFeGaussianBlurNode(SvgDocument& rDocument, SvgNode* pP
 
 SvgFeGaussianBlurNode::~SvgFeGaussianBlurNode() {}
 
-void SvgFeGaussianBlurNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                           const OUString& aContent)
+void SvgFeGaussianBlurNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

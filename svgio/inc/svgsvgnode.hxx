@@ -54,7 +54,7 @@ namespace svgio::svgreader
             virtual ~SvgSvgNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// Seeks width and height of viewport, which is current before the new viewport is set.

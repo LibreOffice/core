@@ -31,8 +31,7 @@ SvgFeColorMatrixNode::SvgFeColorMatrixNode(SvgDocument& rDocument, SvgNode* pPar
 
 SvgFeColorMatrixNode::~SvgFeColorMatrixNode() {}
 
-void SvgFeColorMatrixNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                          const OUString& aContent)
+void SvgFeColorMatrixNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

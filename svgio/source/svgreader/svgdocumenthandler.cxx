@@ -478,7 +478,7 @@ namespace
 
                 if(!aText.isEmpty())
                 {
-                    mpTarget->parseAttribute(SVGTokenToStr(aSVGToken), aSVGToken, aText);
+                    mpTarget->parseAttribute(aSVGToken, aText);
                 }
             }
 

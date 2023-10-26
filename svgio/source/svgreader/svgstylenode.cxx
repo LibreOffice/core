@@ -45,10 +45,10 @@ namespace svgio::svgreader
             return SvgNode::supportsParentStyle();
         }
 
-        void SvgStyleNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
+        void SvgStyleNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
-            SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
+            SvgNode::parseAttribute(aSVGToken, aContent);
 
             // parse own
             switch(aSVGToken)

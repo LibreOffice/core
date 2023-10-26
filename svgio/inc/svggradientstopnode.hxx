@@ -40,7 +40,7 @@ namespace svgio::svgreader
             virtual ~SvgGradientStopNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
             /// offset content
             const SvgNumber& getOffset() const { return maOffset; }

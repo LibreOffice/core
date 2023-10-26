@@ -38,8 +38,7 @@ public:
     SvgFeFloodNode(SvgDocument& rDocument, SvgNode* pParent);
     virtual ~SvgFeFloodNode() override;
 
-    virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken,
-                                const OUString& aContent) override;
+    virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
     void apply(drawinglayer::primitive2d::Primitive2DContainer& rTarget) const override;
 };

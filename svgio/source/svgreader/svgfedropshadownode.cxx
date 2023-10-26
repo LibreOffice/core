@@ -38,8 +38,7 @@ SvgFeDropShadowNode::SvgFeDropShadowNode(SvgDocument& rDocument, SvgNode* pParen
 
 SvgFeDropShadowNode::~SvgFeDropShadowNode() {}
 
-void SvgFeDropShadowNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                         const OUString& aContent)
+void SvgFeDropShadowNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

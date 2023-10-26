@@ -421,7 +421,7 @@ namespace {
                 const OUString aTokenName(xAttribs->getNameByIndex(a));
                 const SVGToken aSVGToken(StrToSVGToken(aTokenName, false));
 
-                parseAttribute(aTokenName, aSVGToken, xAttribs->getValueByIndex(a));
+                parseAttribute(aSVGToken, xAttribs->getValueByIndex(a));
             }
         }
 
@@ -507,7 +507,7 @@ namespace {
             return Display::Inline;
         }
 
-        void SvgNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken, const OUString& aContent)
+        void SvgNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
         {
             switch(aSVGToken)
             {

@@ -39,8 +39,7 @@ SvgFeFloodNode::SvgFeFloodNode(SvgDocument& rDocument, SvgNode* pParent)
 
 SvgFeFloodNode::~SvgFeFloodNode() {}
 
-void SvgFeFloodNode::parseAttribute(const OUString& /*rTokenName*/, SVGToken aSVGToken,
-                                    const OUString& aContent)
+void SvgFeFloodNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
 {
     // parse own
     switch (aSVGToken)

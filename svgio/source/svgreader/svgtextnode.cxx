@@ -38,10 +38,10 @@ namespace svgio::svgreader
         {
         }
 
-        void SvgTextNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
+        void SvgTextNode::parseAttribute(SVGToken aSVGToken, const OUString& aContent)
         {
             // call parent
-            SvgTspanNode::parseAttribute(rTokenName, aSVGToken, aContent);
+            SvgTspanNode::parseAttribute(aSVGToken, aContent);
 
             // parse own
             switch(aSVGToken)

@@ -68,7 +68,7 @@ namespace svgio::svgreader
             virtual ~SvgGradientNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
             /// collect gradient stop entries
             void collectGradientEntries(drawinglayer::primitive2d::SvgGradientEntryVector& aVector) const;

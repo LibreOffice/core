@@ -42,7 +42,7 @@ namespace svgio::svgreader
             virtual ~SvgTrefNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
 
             /// access to referenced SvgTextNode
             const SvgTextNode* getReferencedSvgTextNode() const;

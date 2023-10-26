@@ -38,7 +38,7 @@ namespace svgio::svgreader
             virtual ~SvgSymbolNode() override;
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const override;
-            virtual void parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent) override;
+            virtual void parseAttribute(SVGToken aSVGToken, const OUString& aContent) override;
         };
 
 } // end of namespace svgio::svgreader
