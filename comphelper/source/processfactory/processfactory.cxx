@@ -109,7 +109,8 @@ Reference< XComponentContext > getComponentContext(
 
 Reference< XComponentContext > getProcessComponentContext()
 {
-    return getComponentContext( getProcessServiceFactory() );
+    static const uno::Reference<XComponentContext> processComponentContext = getComponentContext( getProcessServiceFactory() );
+    return processComponentContext;
 }
 
 } // namespace comphelper
