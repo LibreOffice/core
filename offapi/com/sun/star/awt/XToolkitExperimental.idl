@@ -51,6 +51,9 @@ interface XToolkitExperimental : XToolkit3
      */
     sequence<string> getRecordingAndClear();
 
+    /** Wait until all idles dispatched.
+     */
+    void waitUntilAllIdlesDispatched();
 };
 
 }; }; }; };

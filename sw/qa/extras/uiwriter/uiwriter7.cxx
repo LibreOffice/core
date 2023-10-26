@@ -71,7 +71,7 @@
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <officecfg/Office/Writer.hxx>
-#include <test/idletask.hxx>
+#include <vcl/idletask.hxx>
 
 namespace
 {

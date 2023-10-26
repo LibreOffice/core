@@ -28,6 +28,13 @@ class tdf135938(UITestCase):
                 xInsert = xDialog.getChild("ok")
                 xInsert.executeAction("CLICK", tuple())
 
+                # See the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+                # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+                # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+                # xInsert click above.
+                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                xToolkit.waitUntilAllIdlesDispatched()
+
                 xSelect = xDialog.getChild("select-ref")
                 self.assertEqual("1", get_state_as_dict(xSelect)["Children"])
                 self.assertEqual("ABC", get_state_as_dict(xSelect.getChild(0))["Text"])

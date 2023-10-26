@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <test/idletask.hxx>
+#include <vcl/idletask.hxx>
 #include <vcl/svapp.hxx>
 
 //constructor of IdleTask Class
@@ -43,6 +43,7 @@ void IdleTask::waitUntilIdleDispatched()
     while (!idleTask.GetFlag())
     {
         //dispatching all the events via VCL main-loop
+        SolarMutexGuard aGuard;
         Application::Yield();
     }
 }

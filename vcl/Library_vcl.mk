@@ -385,6 +385,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/helper/displayconnectiondispatch \
     vcl/source/helper/driverblocklist \
     vcl/source/helper/evntpost \
+    vcl/source/helper/idletask \
     vcl/source/helper/lazydelete \
     vcl/source/helper/strhelper \
     vcl/source/helper/svtaccessiblefactory \

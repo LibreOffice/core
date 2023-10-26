@@ -50,7 +50,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
 #include <officecfg/Office/Common.hxx>
-#include <test/idletask.hxx>
+#include <vcl/idletask.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

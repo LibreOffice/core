@@ -25,6 +25,13 @@ class movechapterupdown(UITestCase):
             # wait until the navigator panel is available
             xNavigatorPanel = self.ui_test.wait_until_child_is_available('NavigatorPanel')
 
+            # See the `m_aUpdateTimer.SetTimeout(200)` (to "avoid flickering of buttons")
+            # in the SwChildWinWrapper ctor in sw/source/uibase/fldui/fldwrap.cxx, where that
+            # m_aUpdateTimer is started by SwChildWinWrapper::ReInitDlg triggered from the
+            # xInsert click above.
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.waitUntilAllIdlesDispatched()
+
             # Given the document chapter structure:
                 # 1. One H1
                 #   1.1. one_A (H2)

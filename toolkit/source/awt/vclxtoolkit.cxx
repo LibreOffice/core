@@ -62,6 +62,7 @@
 #include <rtl/process.h>
 #include <sal/log.hxx>
 #include <tools/link.hxx>
+#include <vcl/idletask.hxx>
 #include <vcl/wintypes.hxx>
 
 #ifdef MACOSX
@@ -484,6 +485,8 @@ public:
     virtual void SAL_CALL stopRecording() override;
 
     css::uno::Sequence< OUString > SAL_CALL getRecordingAndClear() override;
+
+    virtual void SAL_CALL waitUntilAllIdlesDispatched() override;
 
     // css::awt::XToolkit
     css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) override;
@@ -2542,6 +2545,11 @@ void SAL_CALL VCLXToolkit::stopRecording()
 css::uno::Sequence< OUString > VCLXToolkit::getRecordingAndClear()
 {
     return comphelper::ProfileZone::getRecordingAndClear();
+}
+
+void VCLXToolkit::waitUntilAllIdlesDispatched()
+{
+    IdleTask::waitUntilIdleDispatched();
 }
 
 // css:awt:XToolkitRobot

@@ -10,11 +10,11 @@
 #pragma once
 
 #include <sal/config.h>
-#include <test/testdllapi.hxx>
+#include <vcl/dllapi.h>
 #include <vcl/idle.hxx>
 
 //IdleTask class to add a low priority Idle task
-class OOO_DLLPUBLIC_TEST IdleTask
+class VCL_DLLPUBLIC IdleTask
 {
 public:
     bool GetFlag() const;
