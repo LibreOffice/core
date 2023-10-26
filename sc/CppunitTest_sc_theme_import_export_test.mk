@@ -29,6 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_theme_import_export_test, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     salhelper \
     sax \
