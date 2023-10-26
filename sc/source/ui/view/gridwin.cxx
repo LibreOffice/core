@@ -5765,6 +5765,39 @@ bool extractURLInfo( const SvxFieldItem* pFieldItem, OUString* pName, OUString* 
 
 }
 
+static void lcl_SetEngineTextKeepingDefaults(const std::shared_ptr<ScFieldEditEngine>& pEngine,
+                                             ScDocument& rDoc, ScRefCellValue& rCell, const OUString& rURL)
+{
+    std::unique_ptr<EditTextObject> pTextObj;
+    if (rCell.getType() == CELLTYPE_EDIT)
+    {
+        if (rCell.getEditText())
+            pEngine->SetTextCurrentDefaults(*rCell.getEditText());
+    }
+    else  // Not an Edit cell and is a formula cell with 'Hyperlink'
+          // function if we have no URL, otherwise it could be a formula
+          // cell ( or other type ? ) with a hyperlink associated with it.
+    {
+        if (rURL.isEmpty())
+            pTextObj = rCell.getFormula()->CreateURLObject();
+        else
+        {
+            OUString aRepres = rURL;
+
+            // TODO: text content of formatted numbers can be different
+            if (rCell.hasNumeric())
+                aRepres = OUString::number(rCell.getValue());
+            else if (rCell.getType() == CELLTYPE_FORMULA)
+                aRepres = rCell.getFormula()->GetString().getString();
+
+            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, rURL, aRepres);
+        }
+
+        if (pTextObj)
+            pEngine->SetTextCurrentDefaults(*pTextObj);
+    }
+}
+
 bool ScGridWindow::GetEditUrl( const Point& rPos,
                                OUString* pName, OUString* pUrl, OUString* pTarget )
 {
@@ -5826,34 +5859,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         aPaperSize.setWidth( nThisColLogic );
     pEngine->SetPaperSize( aPaperSize );
 
-    std::unique_ptr<EditTextObject> pTextObj;
-    if (aCell.getType() == CELLTYPE_EDIT)
-    {
-        if (aCell.getEditText())
-            pEngine->SetTextCurrentDefaults(*aCell.getEditText());
-    }
-    else  // Not an Edit cell and is a formula cell with 'Hyperlink'
-          // function if we have no URL, otherwise it could be a formula
-          // cell ( or other type ? ) with a hyperlink associated with it.
-    {
-        if (sURL.isEmpty())
-            pTextObj = aCell.getFormula()->CreateURLObject();
-        else
-        {
-            OUString aRepres = sURL;
-
-            // TODO: text content of formatted numbers can be different
-            if (aCell.hasNumeric())
-                aRepres = OUString::number(aCell.getValue());
-            else if (aCell.getType() == CELLTYPE_FORMULA)
-                aRepres = aCell.getFormula()->GetString().getString();
-
-            pTextObj = ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, aRepres);
-        }
-
-        if (pTextObj)
-            pEngine->SetTextCurrentDefaults(*pTextObj);
-    }
+    lcl_SetEngineTextKeepingDefaults(pEngine, rDoc, aCell, sURL);
 
     tools::Long nStartX = aLogicEdit.Left();
 
