@@ -444,7 +444,10 @@ void TableManager::endLevel()
                     {
                         xCursor = xCellStart->getText()->createTextCursorByRange(
                             xCellStart->getStart());
-                        xCursor->goLeft(1, false);
+                        if (xCursor.is())
+                        {
+                            xCursor->goLeft(1, false);
+                        }
                     }
                     catch (const uno::RuntimeException&)
                     {
