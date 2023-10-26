@@ -22,9 +22,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <limits>
+#include <utility>
 
 #include <config_options.h>
-#include <o3tl/intcmp.hxx>
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -736,8 +736,8 @@ sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
     assert(string != nullptr && indexUtf16 != nullptr);
     assert(
         *indexUtf16 >= 0
-        && o3tl::cmp_less_equal(*indexUtf16, std::numeric_limits<std::size_t>::max()));
-        // using o3tl::cmp_less_equal nicely avoids potential
+        && std::cmp_less_equal(*indexUtf16, std::numeric_limits<std::size_t>::max()));
+        // using std::cmp_less_equal nicely avoids potential
         // -Wtautological-constant-out-of-range-compare
     auto const cp = o3tl::iterateCodePoints(
         std::u16string_view(string->buffer, string->length), indexUtf16, incrementCodePoints);
