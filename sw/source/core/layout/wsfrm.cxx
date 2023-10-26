@@ -313,6 +313,15 @@ void SwFrame::dumpAsXml(xmlTextWriterPtr pWriter) const
     dumpChildrenAsXml(pWriter);
 }
 
+void SwFrame::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
+{
+    const SwFrame *pFrame = GetLower(  );
+    for ( ; pFrame != nullptr; pFrame = pFrame->GetNext(  ) )
+    {
+        pFrame->dumpAsXml( writer );
+    }
+}
+
 SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
 :   SwClient( pMod ),
     mpRoot( pSib ? pSib->getRootFrame() : nullptr ),

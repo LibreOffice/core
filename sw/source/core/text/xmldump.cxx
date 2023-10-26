@@ -243,13 +243,4 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
     }
 }
 
-void SwFrame::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
-{
-    const SwFrame *pFrame = GetLower(  );
-    for ( ; pFrame != nullptr; pFrame = pFrame->GetNext(  ) )
-    {
-        pFrame->dumpAsXml( writer );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
