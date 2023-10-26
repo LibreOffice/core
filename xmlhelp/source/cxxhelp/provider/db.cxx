@@ -20,28 +20,23 @@
 
 #include "db.hxx"
 
+#include <algorithm>
+#include <charconv>
 #include <cstring>
+#include <system_error>
 #include <utility>
 
 #include <com/sun/star/io/XSeekable.hpp>
-#include <tools/inetmime.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 
 namespace {
 
-//TODO: Replace with C++17 std::from_chars once available:
 std::pair<sal_Int32, char const *> readInt32(char const * begin, char const * end) {
     sal_Int32 n = 0;
-    for (; begin != end; ++begin) {
-        auto const w = INetMIME::getHexWeight(static_cast<unsigned char>(*begin));
-        if (w == -1) {
-            break;
-        }
-        n = 16 * n + w;
-    }
-    return {n, begin};
+    auto const [ptr, ec] = std::from_chars(begin, end, n, 16);
+    return {std::max(n, sal_Int32(0)), ec == std::errc{} && n >= 0 ? ptr : begin};
 }
 
 }
