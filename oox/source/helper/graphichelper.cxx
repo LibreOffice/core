@@ -229,13 +229,13 @@ awt::Size GraphicHelper::convertHmmToAppFont( const awt::Size& rHmm ) const
 // Graphics and graphic objects  ----------------------------------------------
 
 Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm,
-        const WmfExternal* pExtHeader ) const
+        const WmfExternal* pExtHeader, const bool bLazyLoad ) const
 {
     Reference< XGraphic > xGraphic;
     if( rxInStrm.is() && mxGraphicProvider.is() ) try
     {
         Sequence< PropertyValue > aArgs{ comphelper::makePropertyValue("InputStream", rxInStrm),
-                                         comphelper::makePropertyValue("LazyRead", true) };
+                                         comphelper::makePropertyValue("LazyRead", bLazyLoad) };
 
         if ( pExtHeader && pExtHeader->mapMode > 0 )
         {
@@ -283,8 +283,11 @@ Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStr
         xGraphic = mxGraphicMapper->findGraphic(rStreamName);
         if (!xGraphic.is())
         {
+            // Lazy-loading doesn't work with cropped TIFF images, because in case of Lazy-load TIFF images
+            // we are using MapUnit::MapPixel, but in case of cropped images we are using MapUnit::Map100thMM
+            // and the crop values are relative to original bitmap size.
             auto xStream = mxStorage->openInputStream(rStreamName);
-            xGraphic = importGraphic(xStream, pExtHeader);
+            xGraphic = importGraphic(xStream, pExtHeader, !rStreamName.endsWith(".tiff"));
             if (xGraphic.is())
                 mxGraphicMapper->putGraphic(rStreamName, xGraphic);
         }

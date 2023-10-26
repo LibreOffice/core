@@ -121,7 +121,8 @@ public:
     css::uno::Reference< css::graphic::XGraphic >
                         importGraphic(
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm,
-                            const WmfExternal* pExtHeader = nullptr ) const;
+                            const WmfExternal* pExtHeader = nullptr,
+                            const bool bLazyLoad = true ) const;
 
     /** Imports a graphic from the passed binary memory block. */
     css::uno::Reference< css::graphic::XGraphic >
