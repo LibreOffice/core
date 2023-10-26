@@ -2748,6 +2748,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
         m_xHighPosBtn->set_active(false);
         m_xNormalPosBtn->set_active(false);
         m_xLowPosBtn->set_active(false);
+
+        m_xHighLowRB->set_active(true);
     }
 
     // set BspFont
