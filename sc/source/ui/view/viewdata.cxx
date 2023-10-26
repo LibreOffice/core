@@ -1342,7 +1342,13 @@ SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
         return -1;
 
-    return maTabData[nTabIndex]->nCurX;
+    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
+    if (!pTabData)
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::GetCurXForTab : hidden sheet = " << nTabIndex);
+        return -1;
+    }
+    return pTabData->nCurX;
 }
 
 SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
@@ -1350,7 +1356,13 @@ SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return -1;
 
-    return maTabData[nTabIndex]->nCurY;
+    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
+    if (!pTabData)
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::GetCurYForTab : hidden sheet = " << nTabIndex);
+        return -1;
+    }
+    return pTabData->nCurY;
 }
 
 void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
@@ -1358,7 +1370,14 @@ void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return;
 
-    maTabData[nTabIndex]->nCurX = nNewCurX;
+    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
+    if (!pTabData)
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::SetCurXForTab : hidden sheet = " << nTabIndex);
+        return;
+    }
+
+    pTabData->nCurX = nNewCurX;
 }
 
 void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
@@ -1366,7 +1385,14 @@ void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
     if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
             return;
 
-    maTabData[nTabIndex]->nCurY = nNewCurY;
+    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
+    if (!pTabData)
+    {
+        SAL_WARN("sc.viewdata", "ScViewData::SetCurYForTab : hidden sheet = " << nTabIndex);
+        return;
+    }
+
+    pTabData->nCurY = nNewCurY;
 }
 
 void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
