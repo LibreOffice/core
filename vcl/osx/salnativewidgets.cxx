@@ -194,6 +194,7 @@ bool AquaSalGraphics::isNativeControlSupported(ControlType nType, ControlPart nP
                 || nPart == ControlPart::MenuItemRadioMark)
                 return true;
             break;
+        case ControlType::LevelBar:
         case ControlType::Progress:
         case ControlType::IntroProgress:
             if (nPart == ControlPart::Entire)
@@ -607,6 +608,35 @@ bool AquaGraphicsBackendBase::performDrawNativeControl(ControlType nType,
 
                 const bool bFocused(nState & ControlState::FOCUSED);
                 paintCell(pBtn, rc, bFocused, context, nullptr);
+
+                bOK = true;
+            }
+            break;
+        case ControlType::LevelBar:
+            {
+                NSRect rect = { NSZeroPoint, NSMakeSize(rc.size.width, rc.size.height) };
+                NSLevelIndicator* pBox = [[NSLevelIndicator alloc] initWithFrame:rect];
+                [pBox setLevelIndicatorStyle: NSLevelIndicatorStyleContinuousCapacity];
+                [pBox setMinValue: 0];
+                [pBox setMaxValue: rc.size.width];
+                [pBox setCriticalValue: rc.size.width * 35.0 / 100.0];
+                [pBox setWarningValue: rc.size.width * 70.0 / 100.0];
+                [pBox setDoubleValue: aValue.getNumericVal()];
+
+                CGContextSaveGState(context);
+                CGContextTranslateCTM(context, rc.origin.x, rc.origin.y);
+
+                NSGraphicsContext* savedContext = [NSGraphicsContext currentContext];
+                NSGraphicsContext* graphicsContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
+                [NSGraphicsContext setCurrentContext: graphicsContext];
+
+                [pBox drawRect: rect];
+
+                [NSGraphicsContext setCurrentContext: savedContext];
+
+                CGContextRestoreGState(context);
+
+                [pBox release];
 
                 bOK = true;
             }
@@ -1104,6 +1134,7 @@ bool AquaSalGraphics::getNativeControlRegion(ControlType nType,
                 toReturn = true;
             }
             break;
+        case ControlType::LevelBar:
         case ControlType::Progress:
             {
                 tools::Rectangle aRect(aCtrlBoundRect);
