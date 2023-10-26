@@ -221,6 +221,12 @@ void Window::InvertTracking( const tools::Rectangle& rRect, ShowTrackFlags nFlag
 
 IMPL_LINK( Window, ImplTrackTimerHdl, Timer*, pTimer, void )
 {
+    if (!mpWindowImpl)
+    {
+        SAL_WARN("vcl", "ImplTrackTimerHdl has outlived dispose");
+        return;
+    }
+
     ImplSVData* pSVData = ImplGetSVData();
 
     // if Button-Repeat we have to change the timeout
