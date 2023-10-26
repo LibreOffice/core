@@ -4461,21 +4461,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
         }
     }
 
-    /*
-       If the graphic is not of type WMF then we will have to store two
-       graphics, one in the native format wrapped in shppict, and the other in
-       the wmf format wrapped in nonshppict, so as to keep wordpad happy. If it's
-       a wmf already then we don't need any such wrapping
-       */
-    bool bIsWMF = pBLIPType && std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
     const SwAttrSet* pAttrSet = pGrfNode->GetpSwAttrSet();
-    if (!pFrame || pFrame->IsInline())
-    {
-        if (!bIsWMF)
-            m_rExport.Strm().WriteOString(
-                "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
-    }
-    else
+    if (pFrame && !pFrame->IsInline())
     {
         m_rExport.Strm().WriteOString(
             "{" OOO_STRING_SVTOOLS_RTF_SHP
@@ -4568,27 +4555,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
                    m_rExport, &m_rExport.Strm(), bWritePicProp, pAttrSet);
     }
 
-    if (!pFrame || pFrame->IsInline())
-    {
-        if (!bIsWMF)
-        {
-            m_rExport.Strm().WriteOString("}"
-                                          "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
-
-            aStream.Seek(0);
-            if (GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::WMF) != ERRCODE_NONE)
-                SAL_WARN("sw.rtf", "failed to export the graphic");
-            pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
-            nSize = aStream.TellEnd();
-            pGraphicAry = static_cast<sal_uInt8 const*>(aStream.GetData());
-
-            ExportPICT(pFlyFrameFormat, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry,
-                       nSize, m_rExport, &m_rExport.Strm());
-
-            m_rExport.Strm().WriteChar('}');
-        }
-    }
-    else
+    if (pFrame && !pFrame->IsInline())
         m_rExport.Strm().WriteOString("}}}}"); // Close SV, SP, SHPINST and SHP.
 
     m_rExport.Strm().WriteOString(SAL_NEWLINE_STRING);
