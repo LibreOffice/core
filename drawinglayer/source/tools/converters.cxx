@@ -268,7 +268,7 @@ BitmapEx convertToBitmapEx(drawinglayer::primitive2d::Primitive2DContainer&& rSe
         // Now that vcl supports bitmaps with an alpha channel, only apply
         // this correction to bitmaps without an alpha channel.
         if (pContent->GetBitCount() < 32)
-            aRetval.RemoveBlendedStartColor(COL_WHITE, aAlpha);
+            aRetval.RemoveBlendedStartColor(COL_BLACK, aAlpha);
         // return combined result
         return BitmapEx(aRetval, aAlpha);
     }
