@@ -864,10 +864,6 @@ SAL_DLLPUBLIC double SAL_CALL rtl_str_toDouble(
 
 /* ======================================================================= */
 
-#ifdef _WIN32
-#   pragma pack(push, 8)
-#endif
-
 /** @cond INTERNAL */
 /** The implementation of a byte string.
  */
@@ -878,10 +874,6 @@ typedef struct _rtl_String
     char            buffer[1];
 } rtl_String;
 /** @endcond */
-
-#if defined(_WIN32)
-#pragma pack(pop)
-#endif
 
 /* ----------------------------------------------------------------------- */
 

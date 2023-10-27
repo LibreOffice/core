@@ -1194,10 +1194,6 @@ SAL_DLLPUBLIC double SAL_CALL rtl_ustr_toDouble(
 
 /* ======================================================================= */
 
-#if defined(_WIN32)
-#pragma pack(push, 4)
-#endif
-
 /** @cond INTERNAL */
 /** The implementation of a Unicode string.
 */
@@ -1208,10 +1204,6 @@ typedef struct SAL_DLLPUBLIC_RTTI _rtl_uString
     sal_Unicode         buffer[1];
 } rtl_uString;
 /** @endcond */
-
-#if defined(_WIN32)
-#pragma pack(pop)
-#endif
 
 /* ----------------------------------------------------------------------- */
 
