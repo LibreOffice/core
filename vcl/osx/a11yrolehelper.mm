@@ -46,6 +46,7 @@ using namespace ::com::sun::star::uno;
             
         MAP( AccessibleRole::UNKNOWN, NSAccessibilityUnknownRole );
         MAP( AccessibleRole::ALERT, NSAccessibilityUnknownRole ); // FIXME
+        MAP( AccessibleRole::BLOCK_QUOTE, NSAccessibilityTextAreaRole );
         MAP( AccessibleRole::COLUMN_HEADER, NSAccessibilityColumnRole );
         MAP( AccessibleRole::CANVAS, NSAccessibilityUnknownRole ); // FIXME
         MAP( AccessibleRole::CHECK_BOX, NSAccessibilityCheckBoxRole );
@@ -186,6 +187,7 @@ using namespace ::com::sun::star::uno;
 
         MAP( AccessibleRole::UNKNOWN, NSAccessibilityUnknownSubrole );
         MAP( AccessibleRole::ALERT, NSAccessibilitySystemDialogSubrole );
+        MAP( AccessibleRole::BLOCK_QUOTE, @"" );
         MAP( AccessibleRole::COLUMN_HEADER, @"" );
         MAP( AccessibleRole::CANVAS, @"" );
         MAP( AccessibleRole::CHECK_BOX, @"" );

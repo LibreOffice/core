@@ -744,6 +744,14 @@ constants AccessibleRole
     */
     const short NOTIFICATION = 87;
 
+    /** Block quote role.
+
+        <p>A section of content that is quoted from another source.</p>
+
+        @since LibreOffice 24.2
+    */
+    const short BLOCK_QUOTE = 88;
+
 };
 
 }; }; }; };

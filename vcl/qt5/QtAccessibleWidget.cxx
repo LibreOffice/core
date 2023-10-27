@@ -462,6 +462,7 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::PANEL:
             return QAccessible::Pane;
         case AccessibleRole::PARAGRAPH:
+        case AccessibleRole::BLOCK_QUOTE:
             return QAccessible::Paragraph;
         case AccessibleRole::PASSWORD_TEXT:
             return QAccessible::EditableText;

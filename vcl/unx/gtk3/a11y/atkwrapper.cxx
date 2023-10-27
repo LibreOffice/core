@@ -174,6 +174,8 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
             return ATK_ROLE_UNKNOWN;
         case accessibility::AccessibleRole::ALERT:
             return ATK_ROLE_ALERT;
+        case accessibility::AccessibleRole::BLOCK_QUOTE:
+            return ATK_ROLE_BLOCK_QUOTE;
         case accessibility::AccessibleRole::COLUMN_HEADER:
             return ATK_ROLE_COLUMN_HEADER;
         case accessibility::AccessibleRole::CANVAS:

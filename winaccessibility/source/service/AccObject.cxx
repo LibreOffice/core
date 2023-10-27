@@ -67,6 +67,8 @@ short lcl_mapToIAccessible2Role(sal_Int16 nUnoRole)
             return IA2_ROLE_UNKNOWN;
         case css::accessibility::AccessibleRole::ALERT:
             return ROLE_SYSTEM_DIALOG;
+        case css::accessibility::AccessibleRole::BLOCK_QUOTE:
+            return IA2_ROLE_BLOCK_QUOTE;
         case css::accessibility::AccessibleRole::COLUMN_HEADER:
             return ROLE_SYSTEM_COLUMNHEADER;
         case css::accessibility::AccessibleRole::CANVAS:
@@ -369,7 +371,7 @@ void  AccObject::UpdateName( )
     if( ( TEXT_FRAME == m_accRole   ) && ( m_pParentObj !=nullptr )&& ( SCROLL_PANE == m_pParentObj -> m_accRole ) )
         m_pIMAcc->Put_XAccName( o3tl::toW(m_pParentObj->m_xAccContextRef->getAccessibleName().getStr()) );
     //IAccessibility2 Implementation 2009-----
-    if ( PARAGRAPH == m_accRole)
+    if (m_accRole == AccessibleRole::PARAGRAPH || m_accRole == AccessibleRole::BLOCK_QUOTE)
     {
         m_pIMAcc->Put_XAccName(L"");
     }
@@ -470,6 +472,7 @@ void  AccObject::SetValue( Any pAny )
         // 3. date editor's msaa value should be the same as spinbox
     case DATE_EDITOR:
     case TEXT:
+    case BLOCK_QUOTE:
     case PARAGRAPH:
     case HEADING:
     case TABLE_CELL:
@@ -924,6 +927,7 @@ void AccObject::UpdateState()
     case HEADING:
 
         //Image Map
+    case BLOCK_QUOTE:
     case PARAGRAPH:
     case PASSWORD_TEXT:
     case SHAPE:

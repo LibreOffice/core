@@ -2438,7 +2438,7 @@ namespace BuilderUtils
             { "info bar",              AccessibleRole::UNKNOWN },
             { "level bar",             AccessibleRole::UNKNOWN },
             { "title bar",             AccessibleRole::UNKNOWN },
-            { "block quote",           AccessibleRole::UNKNOWN },
+            { "block quote",           AccessibleRole::BLOCK_QUOTE },
             { "audio",                 AccessibleRole::UNKNOWN },
             { "video",                 AccessibleRole::UNKNOWN },
             { "definition",            AccessibleRole::UNKNOWN },

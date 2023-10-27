@@ -220,6 +220,8 @@ OUString AccessibilityTools::getRoleName(const sal_Int16 role)
             return "UNKNOWN";
         case accessibility::AccessibleRole::ALERT:
             return "ALERT";
+        case accessibility::AccessibleRole::BLOCK_QUOTE:
+            return "BLOCK_QUOTE";
         case accessibility::AccessibleRole::BUTTON_DROPDOWN:
             return "BUTTON_DROPDOWN";
         case accessibility::AccessibleRole::BUTTON_MENU:

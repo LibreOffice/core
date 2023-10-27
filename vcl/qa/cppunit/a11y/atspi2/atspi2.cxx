@@ -36,6 +36,7 @@ static AtspiRole mapToAtspiRole(sal_Int16 nRole)
 
         MAP_DIRECT(UNKNOWN);
         MAP_DIRECT(ALERT);
+        MAP_DIRECT(BLOCK_QUOTE);
         MAP_DIRECT(COLUMN_HEADER);
         MAP_DIRECT(CANVAS);
         MAP_DIRECT(CHECK_BOX);

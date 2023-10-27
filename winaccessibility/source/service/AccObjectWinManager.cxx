@@ -749,6 +749,7 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case AccessibleRole::VIEW_PORT:
             pRet = new AccContainerEventListener(pXAcc, this);
             break;
+        case AccessibleRole::BLOCK_QUOTE:
         case AccessibleRole::PARAGRAPH:
         case AccessibleRole::HEADING:
             pRet = new AccParagraphEventListener(pXAcc, this);
