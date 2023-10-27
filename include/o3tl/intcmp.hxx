@@ -20,7 +20,7 @@ namespace o3tl
 {
 // An approximation of the C++20 integer comparison functions
 // (<https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0586r2.html> "Safe integral
-// comparisons"):
+// comparisons"), still missing from LLVM 12 libc++:
 #if defined __cpp_lib_integer_comparison_functions
 
 using std::cmp_equal;
