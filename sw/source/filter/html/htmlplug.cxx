@@ -1492,15 +1492,13 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
     {
         // If we skip images, embedded objects would be completely lost.
         // Instead, try to use the HTML export of the embedded object.
-        uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
-        uno::Reference<document::XEmbeddedObjectSupplier2> xEmbeddedObjectSupplier(xTextContent, uno::UNO_QUERY);
-        uno::Reference<frame::XStorable> xStorable(xEmbeddedObjectSupplier->getEmbeddedObject(), uno::UNO_QUERY);
+        auto xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
+        uno::Reference<frame::XStorable> xStorable(xTextContent->getEmbeddedObject(), uno::UNO_QUERY);
         SAL_WARN_IF(!xStorable.is(), "sw.html", "OutHTML_FrameFormatOLENodeGrf: no embedded object");
 
         // Figure out what is the filter name of the embedded object.
-        uno::Reference<lang::XServiceInfo> xServiceInfo(xStorable, uno::UNO_QUERY);
         OUString aFilter;
-        if (xServiceInfo.is())
+        if (uno::Reference<lang::XServiceInfo> xServiceInfo{ xStorable, uno::UNO_QUERY })
         {
             if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
                 aFilter = "HTML (StarCalc)";
@@ -1508,7 +1506,7 @@ SwHTMLWriter& OutHTML_FrameFormatOLENodeGrf( SwHTMLWriter& rWrt, const SwFrameFo
                 aFilter = "HTML (StarWriter)";
         }
 
-        if (xStorable.is() && !aFilter.isEmpty())
+        if (!aFilter.isEmpty())
         {
             try
             {
