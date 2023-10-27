@@ -390,4 +390,19 @@
 #define STR_A11Y_DESC_USERDEF                       NC_("subtotaloptionspage|extended_tip|lbuserdef", "Uses a custom sorting order that you defined in the Options dialog box at %PRODUCTNAME Calc - Sort Lists.")
 #define STR_A11Y_DESC_ANNOT                         NC_("extended_tip|annot", "Specifies that a small rectangle in the top right corner of the cell indicates that a comment exists. The comment will be shown only when you enable tips under %PRODUCTNAME - General in the Options dialog box.")
 
+// Simple conditional formatting dialog
+#define STR_CONDITION_EQUAL                         NC_("STR_CONDITION_EQUAL", "equal to")
+#define STR_CONDITION_LESS                          NC_("STR_CONDITION_LESS", "less than")
+#define STR_CONDITION_GREATER                       NC_("STR_CONDITION_GREATER", "greater than")
+#define STR_CONDITION_EQLESS                        NC_("STR_CONDITION_EQLESS", "equal or less than")
+#define STR_CONDITION_EQGREATER                     NC_("STR_CONDITION_EQGREATER", "equal or greater than")
+#define STR_CONDITION_NOT_EQUAL                     NC_("STR_CONDITION_NOT_EQUAL", "not equal to")
+
+#define STR_CONDITION_BETWEEN                       NC_("STR_CONDITION_BETWEEN", "between")
+
+#define STR_CONDITION_ERROR                         NC_("STR_CONDITION_ERROR", "with error ")
+#define STR_CONDITION_NOERROR                       NC_("STR_CONDITION_NOERROR", "without error ")
+#define STR_CONDITION_CONTAINS_TEXT                 NC_("STR_CONDITION_CONTAINS_TEXT", "containing text")
+#define STR_CONDITION_NOT_CONTAINS_TEXT             NC_("STR_CONDITION_NOT_CONTAINS_TEXT", "not containing text")
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

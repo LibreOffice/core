@@ -3,7 +3,9 @@
 #include <stlpool.hxx>
 #include <viewdata.hxx>
 #include <reffact.hxx>
+#include <scresid.hxx>
 #include <svl/style.hxx>
+#include <strings.hrc>
 
 namespace
 {
@@ -49,6 +51,11 @@ ScTabViewShell* GetTabViewShell(const SfxBindings* pBindings)
 
 namespace sc
 {
+void ConditionalFormatEasyDialog::SetDescription(std::u16string_view rCondition)
+{
+    mxDescription->set_label(mxDescription->get_label() + ": " + rCondition);
+}
+
 ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                                                          SfxChildWindow* pChildWindow,
                                                          weld::Window* pParent,
@@ -91,18 +98,53 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     mxNumberEntry2->set_increments(1, 0);
     switch (meMode)
     {
-        case ScConditionMode::Greater:
-            mxDescription->set_label(mxDescription->get_label() + " greater than ");
+        case ScConditionMode::Equal:
+            SetDescription(ScResId(STR_CONDITION_EQUAL));
             break;
         case ScConditionMode::Less:
-            mxDescription->set_label(mxDescription->get_label() + " less than ");
+            SetDescription(ScResId(STR_CONDITION_LESS));
             break;
-        case ScConditionMode::Equal:
-            mxDescription->set_label(mxDescription->get_label() + " equal to ");
+        case ScConditionMode::Greater:
+            SetDescription(ScResId(STR_CONDITION_GREATER));
+            break;
+        case ScConditionMode::EqLess:
+            SetDescription(ScResId(STR_CONDITION_EQLESS));
+            break;
+        case ScConditionMode::EqGreater:
+            SetDescription(ScResId(STR_CONDITION_EQGREATER));
+            break;
+        case ScConditionMode::NotEqual:
+            SetDescription(ScResId(STR_CONDITION_NOT_EQUAL));
             break;
         case ScConditionMode::Between:
-            mxDescription->set_label(mxDescription->get_label() + " between ");
+            SetDescription(ScResId(STR_CONDITION_BETWEEN));
             mxNumberEntry2->show();
+            break;
+        // NotBetween
+        // Duplicate
+        // NotDuplicate
+        // Direct
+        // Top10
+        // Bottom10
+        // TopPercent
+        // BottomPercent
+        // AboveAverage
+        // BelowAverage
+        // AboveEqualAverage
+        // BelowEqualAverage
+        case ScConditionMode::Error:
+            SetDescription(ScResId(STR_CONDITION_ERROR));
+            break;
+        case ScConditionMode::NoError:
+            SetDescription(ScResId(STR_CONDITION_NOERROR));
+            break;
+        // BeginsWith
+        // EndsWith
+        case ScConditionMode::ContainsText:
+            SetDescription(ScResId(STR_CONDITION_CONTAINS_TEXT));
+            break;
+        case ScConditionMode::NotContainsText:
+            SetDescription(ScResId(STR_CONDITION_NOT_CONTAINS_TEXT));
             break;
         default:
             SAL_WARN("sc",
