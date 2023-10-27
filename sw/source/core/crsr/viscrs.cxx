@@ -954,7 +954,9 @@ void SwShellCursor::FillRects()
         (GetMark()->GetNode() == GetPoint()->GetNode() ||
         (GetMark()->GetNode().IsContentNode() &&
          GetMark()->GetNode().GetContentNode()->getLayoutFrame( GetShell()->GetLayout() ) )   ))
-        GetShell()->GetLayout()->CalcFrameRects( *this );
+    {
+        GetShell()->GetLayout()->CalcFrameRects(*this, *this);
+    }
 }
 
 void SwShellCursor::Show(SfxViewShell const * pViewShell)
