@@ -344,7 +344,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* While searching through the properties for required properties, these
      * sal_Bools will keep track of what we have found.
      */
-    bool bFoundRequiredProperties[requiredProperties.size()];
+    auto const bFoundRequiredProperties = std::make_unique<bool[]>(requiredProperties.size());
 
 
     /* We have three MacabHeaders: headerDataForProperty is where we

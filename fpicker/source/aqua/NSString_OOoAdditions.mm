@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "NSString_OOoAdditions.hxx"
 
 @implementation NSString (OOoAdditions) 
@@ -32,14 +36,14 @@
 {
     unsigned int nFileNameLength = [self length];
 
-    UniChar unichars[nFileNameLength+1];
+    auto const unichars = std::make_unique<UniChar[]>(nFileNameLength+1);
 
     //'close' the string buffer correctly
     unichars[nFileNameLength] = '\0';
 
-    [self getCharacters:unichars];
+    [self getCharacters:unichars.get()];
 
-    return OUString(reinterpret_cast<sal_Unicode *>(unichars));
+    return OUString(reinterpret_cast<sal_Unicode *>(unichars.get()));
 }
 
 @end

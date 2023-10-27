@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 
 // For MAXHOSTNAMELEN constant
 #include <sys/param.h>
@@ -157,13 +160,13 @@ static OUString CFStringToOUString(const CFStringRef sOrig) {
     CFIndex nStringLen = CFStringGetLength(sOrig)+1;
 
     // Allocate a c string buffer
-    char sBuffer[nStringLen];
+    auto const sBuffer = std::make_unique<char[]>(nStringLen);
 
-    CFStringGetCString(sOrig, sBuffer, nStringLen, kCFStringEncodingASCII);
+    CFStringGetCString(sOrig, sBuffer.get(), nStringLen, kCFStringEncodingASCII);
 
     CFRelease(sOrig);
 
-    return OUString::createFromAscii(sBuffer);
+    return OUString::createFromAscii(sBuffer.get());
 }
 
 static OUString GetOUString( NSString* pStr )

@@ -18,6 +18,9 @@
  */
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <sal/log.hxx>
 #include <config_folders.h>
 
@@ -77,8 +80,8 @@ public:
 
 bool FontHasCharacter(CTFontRef pFont, const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen)
 {
-    CGGlyph glyphs[nLen];
-    return CTFontGetGlyphsForCharacters(pFont, reinterpret_cast<const UniChar*>(rString.getStr() + nIndex), glyphs, nLen);
+    auto const glyphs = std::make_unique<CGGlyph[]>(nLen);
+    return CTFontGetGlyphsForCharacters(pFont, reinterpret_cast<const UniChar*>(rString.getStr() + nIndex), glyphs.get(), nLen);
 }
 
 }

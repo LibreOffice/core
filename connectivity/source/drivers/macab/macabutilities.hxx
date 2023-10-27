@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <unotools/resmgr.hxx>
@@ -47,15 +51,15 @@ namespace connectivity::macab
             CFRetain(sOrig);
             CFIndex nStringLength = CFStringGetLength(sOrig);
 
-            UniChar unichars[nStringLength+1];
+            auto const unichars = std::make_unique<UniChar[]>(nStringLength+1);
 
             //'close' the string buffer correctly
             unichars[nStringLength] = '\0';
 
-            CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars);
+            CFStringGetCharacters (sOrig, CFRangeMake(0,nStringLength), unichars.get());
             CFRelease(sOrig);
 
-            return OUString(reinterpret_cast<sal_Unicode *>(unichars));
+            return OUString(reinterpret_cast<sal_Unicode *>(unichars.get()));
         }
 
 

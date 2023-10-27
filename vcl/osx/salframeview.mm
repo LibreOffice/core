@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <memory>
+
 #include <sal/macros.h>
 #include <tools/helpers.hxx>
 #include <tools/long.hxx>
@@ -2048,7 +2050,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         // Skip the posting of SalEvent::ExtTextInput and
         // SalEvent::EndExtTextInput events for private use area characters.
         NSUInteger nLen = [pChars length];
-        unichar pBuf[ nLen + 1 ];
+        auto const pBuf = std::make_unique<unichar[]>( nLen + 1 );
         NSUInteger nBufLen = 0;
         for ( NSUInteger i = 0; i < nLen; i++ )
         {
@@ -2060,7 +2062,7 @@ static NSArray *getMergedAccessibilityChildren(NSArray *pDefaultChildren, NSArra
         }
         pBuf[nBufLen] = 0;
 
-        pNewMarkedText = [NSString stringWithCharacters:pBuf length:nBufLen];
+        pNewMarkedText = [NSString stringWithCharacters:pBuf.get() length:nBufLen];
         if (!pNewMarkedText || ![pNewMarkedText length])
             bNeedsExtTextInput = false;
     }
