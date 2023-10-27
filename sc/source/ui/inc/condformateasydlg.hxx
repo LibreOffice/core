@@ -42,8 +42,8 @@ private:
     ScAddress maPosition;
     ScTabViewShell* mpTabViewShell;
 
-    std::unique_ptr<weld::SpinButton> mxNumberEntry;
-    std::unique_ptr<weld::SpinButton> mxNumberEntry2;
+    std::unique_ptr<weld::Entry> mxNumberEntry;
+    std::unique_ptr<weld::Entry> mxNumberEntry2;
     std::unique_ptr<formula::RefEdit> mxRangeEntry;
     std::unique_ptr<formula::RefButton> mxButtonRangeEdit;
     std::unique_ptr<weld::ComboBox> mxStyles;
