@@ -49,9 +49,10 @@ service AccessibleParagraphView
                 children of the paragraph fragment but of the document view
                 itself.</li>
             <li>The role is either
-                ::com::sun::star::accessibility::AccessibleRole::PARAGRAPH or
+                ::com::sun::star::accessibility::AccessibleRole::PARAGRAPH,
+                ::com::sun::star::accessibility::AccessibleRole::BLOCK_QUOTE or
                 ::com::sun::star::accessibility::AccessibleRole::HEADING.
-                The later one is returned
+                The latter is returned
                 if the paragraph's style is contained in the chapter
                 numbering of a text document.
             <li>The name is "paragraph" or "heading" (or the equivalent term

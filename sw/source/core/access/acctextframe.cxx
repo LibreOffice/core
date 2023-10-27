@@ -151,7 +151,8 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::isAccessibleChildSelected( sal_Int64 nC
 
     if( xContext.is() )
     {
-        if( xContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
+        const sal_Int16 nRole = xContext->getAccessibleRole();
+        if (nRole  == AccessibleRole::PARAGRAPH || nRole == AccessibleRole::BLOCK_QUOTE)
         {
             uno::Reference< css::accessibility::XAccessibleText >
                 xText(xAcc, uno::UNO_QUERY);

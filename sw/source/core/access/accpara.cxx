@@ -281,18 +281,22 @@ void SwAccessibleParagraph::InvalidateContent_( bool bVisibleDataFired )
         FireVisibleDataEvent();
     }
 
+    bool bNewIsBlockQuote = IsBlockQuote();
     bool bNewIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
     m_nHeadingLevel = GetRealHeadingLevel();
+    bool bOldIsBlockQuote;
     bool bOldIsHeading;
     {
         std::scoped_lock aGuard( m_Mutex );
+        bOldIsBlockQuote = m_bIsBlockQuote;
         bOldIsHeading = m_bIsHeading;
+        m_bIsBlockQuote = bNewIsBlockQuote;
         if( m_bIsHeading != bNewIsHeading )
             m_bIsHeading = bNewIsHeading;
     }
 
-    if( bNewIsHeading != bOldIsHeading )
+    if (bNewIsBlockQuote != bOldIsBlockQuote || bNewIsHeading != bOldIsHeading)
     {
         // The role has changed
         AccessibleEventObject aEvent;
@@ -397,6 +401,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
         const SwTextFrame& rTextFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::PARAGRAPH, &rTextFrame )
     , m_nOldCaretPos( -1 )
+    , m_bIsBlockQuote(false)
     , m_bIsHeading( false )
     //Get the real heading level, Heading1 ~ Heading10
     , m_nHeadingLevel (-1)
@@ -405,6 +410,7 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     , m_bLastHasSelection(false)  //To add TEXT_SELECTION_CHANGED event
 {
     StartListening(const_cast<SwTextFrame&>(rTextFrame));
+    m_bIsBlockQuote = IsBlockQuote();
     m_bIsHeading = IsHeading();
     //Get the real heading level, Heading1 ~ Heading10
     m_nHeadingLevel = GetRealHeadingLevel();
@@ -3504,16 +3510,13 @@ bool SwAccessibleParagraph::GetSelectionAtIndex(
 sal_Int16 SAL_CALL SwAccessibleParagraph::getAccessibleRole()
 {
     SolarMutexGuard g;
-
     //Get the real heading level, Heading1 ~ Heading10
     if (m_nHeadingLevel > 0)
-    {
         return AccessibleRole::HEADING;
-    }
+    if (m_bIsBlockQuote)
+        return AccessibleRole::BLOCK_QUOTE;
     else
-    {
         return AccessibleRole::PARAGRAPH;
-    }
 }
 
 //Get the real heading level, Heading1 ~ Heading10
@@ -3536,6 +3539,16 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
         }
     }
     return -1;
+}
+
+bool SwAccessibleParagraph::IsBlockQuote()
+{
+    uno::Reference<css::beans::XPropertySet> xPortion = CreateUnoPortion(0, 0);
+    uno::Any aStyleAny = xPortion->getPropertyValue("ParaStyleName");
+    OUString sValue;
+    if (aStyleAny >>= sValue)
+        return sValue == "Quotations";
+    return false;
 }
 
 uno::Any SAL_CALL SwAccessibleParagraph::getExtendedAttributes()
