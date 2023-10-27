@@ -60,11 +60,13 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
     , mxNumberEntry(m_xBuilder->weld_spin_button("entryNumber"))
     , mxNumberEntry2(m_xBuilder->weld_spin_button("entryNumber2"))
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
+    , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
     , mxDescription(m_xBuilder->weld_label("description"))
     , mxButtonOk(m_xBuilder->weld_button("ok"))
     , mxButtonCancel(m_xBuilder->weld_button("cancel"))
 {
+    mxButtonRangeEdit->SetReferences(this, mxRangeEntry.get());
     mpTabViewShell = GetTabViewShell(pBindings);
     if (!mpTabViewShell)
         mpTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
