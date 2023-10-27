@@ -348,7 +348,9 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
 ::std::vector<SwRect> GetCursorRectsContainingText(SwCursorShell const& rShell)
 {
     ::std::vector<SwRect> ret;
-    for (SwRect const& rRect : *rShell.GetCursor_())
+    SwRects rects;
+    rShell.GetLayout()->CalcFrameRects(*rShell.GetCursor_(), rects, SwRootFrame::RectsMode::NoAnchoredFlys);
+    for (SwRect const& rRect : rects)
     {
         Point center(rRect.Center());
         SwSpecialPos special;
@@ -1781,6 +1783,17 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
             aPDFType = aSpanString;
             break;
 
+        case PortionType::Fly:
+            // if a link is split by a fly overlap, then there will be multiple
+            // annotations for the link, and hence there must be multiple SEs,
+            // so every annotation has its own SE.
+            if (mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+            {
+                mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+                EndTag();
+            }
+            break;
+
         case PortionType::Lay :
         case PortionType::Text :
         case PortionType::Para :
@@ -2105,8 +2118,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                     // selection can be easily obtained:
                     // Note: We make a copy of the rectangles, because they may
                     // be deleted again in JumpToSwMark.
-                    SwRects aTmp;
-                    aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
+                    SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                     OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
                     OUString const altText(mrSh.GetSelText());
 

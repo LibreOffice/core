@@ -47,6 +47,8 @@
 #include <fldbas.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
+#include "../text/inftxt.hxx"
+#include "../text/itrpaint.hxx"
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 
@@ -2016,7 +2018,7 @@ static void Add( SwRegionRects& rRegion, const SwRect& rRect )
  *              inverted rectangles are available.
  *              In the end the Flys are cut out of the section.
  */
-void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
+void SwRootFrame::CalcFrameRects(SwShellCursor const& rCursor, SwRects & rRects, RectsMode const eMode)
 {
     auto [pStartPos, pEndPos] = rCursor.StartEnd(); // SwPosition*
 
@@ -2572,7 +2574,46 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     const SwPageFrame *pPage      = pStartFrame->FindPageFrame();
     const SwPageFrame *pEndPage   = pEndFrame->FindPageFrame();
 
-    while ( pPage )
+    // for link rectangles: just remove all the fly portions - this prevents
+    // splitting of portions vertically (causes spurious extra PDF annotations)
+    if (eMode == RectsMode::NoAnchoredFlys)
+    {
+        assert(pStartFrame == pEndFrame); // link or field all in 1 frame
+        assert(pStartFrame->IsTextFrame());
+        SwTextGridItem const*const pGrid(GetGridItem(pStartFrame->FindPageFrame()));
+        SwTextPaintInfo info(static_cast<SwTextFrame*>(pStartFrame), pStartFrame->FindPageFrame()->getFrameArea());
+        SwTextPainter painter(static_cast<SwTextFrame*>(pStartFrame), &info);
+        // because nothing outside the start/end has been added, it doesn't
+        // matter to match exactly the start/end, subtracting outside is no-op
+        painter.CharToLine(static_cast<SwTextFrame*>(pStartFrame)->MapModelToViewPos(*pStartPos));
+        do
+        {
+            info.SetPos(painter.GetTopLeft());
+            bool const bAdjustBaseLine(
+                painter.GetLineInfo().HasSpecialAlign(pStartFrame->IsVertical())
+                || nullptr != pGrid || painter.GetCurr()->GetHangingBaseline());
+            SwTwips nAscent, nHeight;
+            painter.CalcAscentAndHeight(nAscent, nHeight);
+            SwTwips const nOldY(info.Y());
+            for (SwLinePortion const* pLP = painter.GetCurr()->GetFirstPortion();
+                    pLP; pLP = pLP->GetNextPortion())
+            {
+                if (pLP->IsFlyPortion())
+                {
+                    info.Y(info.Y() + (bAdjustBaseLine
+                            ? painter.AdjustBaseLine(*painter.GetCurr(), pLP)
+                            : nAscent));
+                    SwRect flyPortion;
+                    info.CalcRect(*pLP, &flyPortion);
+                    Sub(aRegion, flyPortion);
+                    info.Y(nOldY);
+                }
+                pLP->Move(info);
+            }
+        }
+        while (painter.Next());
+    }
+    else while (pPage)
     {
         if ( pPage->GetSortedObjs() )
         {
@@ -2592,7 +2633,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                                 && IsDestroyFrameAnchoredAtChar(*anchoredAt, *pStartPos, *pEndPos))
                             || (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_PARA
                                 && IsSelectFrameAnchoredAtPara(*anchoredAt, *pStartPos, *pEndPos))));
-                if( inSelection )
+                if (eMode != RectsMode::NoAnchoredFlys && inSelection)
                         Add( aRegion, pFly->getFrameArea() );
                 else if ( !pFly->IsAnLower( pStartFrame ) &&
                     (rSur.GetSurround() != css::text::WrapTextMode_THROUGH &&
@@ -2644,7 +2685,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
             Sub( aRegion, aDropRect );
     }
 
-    rCursor.assign( aRegion.begin(), aRegion.end() );
+    rRects.assign( aRegion.begin(), aRegion.end() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

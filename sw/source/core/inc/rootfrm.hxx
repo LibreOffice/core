@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_ROOTFRM_HXX
 
 #include "layfrm.hxx"
+#include <swregion.hxx>
 #include <viewsh.hxx>
 #include <doc.hxx>
 #include <IDocumentTimerAccess.hxx>
@@ -343,7 +344,8 @@ public:
     */
     bool IsBetweenPages(const Point& rPt) const;
 
-    void CalcFrameRects( SwShellCursor& );
+    enum class RectsMode { Default, NoAnchoredFlys };
+    void CalcFrameRects(SwShellCursor const&, SwRects &, RectsMode eMode = RectsMode::Default);
 
     /**
      * Calculates the cells included from the current selection
