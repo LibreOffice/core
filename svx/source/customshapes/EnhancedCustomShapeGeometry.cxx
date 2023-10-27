@@ -4957,14 +4957,14 @@ const sal_uInt16 mso_sptFlowChartAlternateProcessSegm[] =
 };
 const SvxMSDffCalculationData mso_sptFlowChartAlternateProcessCalc[] =
 {
-    { 0x2000, { DFF_Prop_geoLeft, 2540, 0 } },
-    { 0x2000, { DFF_Prop_geoRight, 0, 2540 } },
-    { 0x2000, { DFF_Prop_geoTop, 2540, 0 } },
-    { 0x2000, { DFF_Prop_geoBottom, 0, 2540 } },
-    { 0x2000, { DFF_Prop_geoLeft, 800, 0 } },
-    { 0x2000, { DFF_Prop_geoRight, 0, 800 } },
-    { 0x2000, { DFF_Prop_geoTop, 800, 0 } },
-    { 0x2000, { DFF_Prop_geoBottom,0, 800 } }
+    { 0x2000, { DFF_Prop_geoLeft, 3600, 0 } },
+    { 0x2000, { DFF_Prop_geoRight, 0, 3600 } },
+    { 0x2000, { DFF_Prop_geoTop, 3600, 0 } },
+    { 0x2000, { DFF_Prop_geoBottom, 0, 3600 } },
+    { 0x2000, { DFF_Prop_geoLeft, 1054, 0 } },
+    { 0x2000, { DFF_Prop_geoRight, 0, 1054 } },
+    { 0x2000, { DFF_Prop_geoTop, 1054, 0 } },
+    { 0x2000, { DFF_Prop_geoBottom,0, 1054 } }
 };
 const SvxMSDffTextRectangles mso_sptFlowChartAlternateProcessTextRect[] =
 {
@@ -4978,7 +4978,7 @@ const mso_CustomShape msoFlowChartAlternateProcess =
     nullptr,
     const_cast<SvxMSDffTextRectangles*>(mso_sptFlowChartAlternateProcessTextRect), SAL_N_ELEMENTS( mso_sptFlowChartAlternateProcessTextRect ),
     21600, 21600,
-    MIN_INT32, MIN_INT32,
+    10800, 10800,
     const_cast<SvxMSDffVertPair*>(mso_sptStandardGluePoints), SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
     nullptr, 0     // handles
 };

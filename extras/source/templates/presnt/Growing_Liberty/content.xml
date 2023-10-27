@@ -1187,15 +1187,15 @@
           <text:p text:style-name="P35">
             <text:span text:style-name="T12">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </text:span>
           </text:p>
-          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
-            <draw:equation draw:name="f0" draw:formula="left+2540"/>
-            <draw:equation draw:name="f1" draw:formula="right-2540"/>
-            <draw:equation draw:name="f2" draw:formula="top+2540"/>
-            <draw:equation draw:name="f3" draw:formula="bottom-2540"/>
-            <draw:equation draw:name="f4" draw:formula="left+800"/>
-            <draw:equation draw:name="f5" draw:formula="right-800"/>
-            <draw:equation draw:name="f6" draw:formula="top+800"/>
-            <draw:equation draw:name="f7" draw:formula="bottom-800"/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
+            <draw:equation draw:name="f0" draw:formula="left+3600"/>
+            <draw:equation draw:name="f1" draw:formula="right-3600"/>
+            <draw:equation draw:name="f2" draw:formula="top+3600"/>
+            <draw:equation draw:name="f3" draw:formula="bottom-3600"/>
+            <draw:equation draw:name="f4" draw:formula="left+1054"/>
+            <draw:equation draw:name="f5" draw:formula="right-1054"/>
+            <draw:equation draw:name="f6" draw:formula="top+1054"/>
+            <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P36" draw:layer="layout" svg:width="4.66cm" svg:height="4.972cm" svg:x="11.583cm" svg:y="8.238cm">
@@ -1208,15 +1208,15 @@
           <text:p text:style-name="P35">
             <text:span text:style-name="T12">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </text:span>
           </text:p>
-          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
-            <draw:equation draw:name="f0" draw:formula="left+2540"/>
-            <draw:equation draw:name="f1" draw:formula="right-2540"/>
-            <draw:equation draw:name="f2" draw:formula="top+2540"/>
-            <draw:equation draw:name="f3" draw:formula="bottom-2540"/>
-            <draw:equation draw:name="f4" draw:formula="left+800"/>
-            <draw:equation draw:name="f5" draw:formula="right-800"/>
-            <draw:equation draw:name="f6" draw:formula="top+800"/>
-            <draw:equation draw:name="f7" draw:formula="bottom-800"/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
+            <draw:equation draw:name="f0" draw:formula="left+3600"/>
+            <draw:equation draw:name="f1" draw:formula="right-3600"/>
+            <draw:equation draw:name="f2" draw:formula="top+3600"/>
+            <draw:equation draw:name="f3" draw:formula="bottom-3600"/>
+            <draw:equation draw:name="f4" draw:formula="left+1054"/>
+            <draw:equation draw:name="f5" draw:formula="right-1054"/>
+            <draw:equation draw:name="f6" draw:formula="top+1054"/>
+            <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P36" draw:layer="layout" svg:width="4.66cm" svg:height="4.972cm" svg:x="16.643cm" svg:y="8.239cm">
@@ -1229,15 +1229,15 @@
           <text:p text:style-name="P35">
             <text:span text:style-name="T12">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </text:span>
           </text:p>
-          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
-            <draw:equation draw:name="f0" draw:formula="left+2540"/>
-            <draw:equation draw:name="f1" draw:formula="right-2540"/>
-            <draw:equation draw:name="f2" draw:formula="top+2540"/>
-            <draw:equation draw:name="f3" draw:formula="bottom-2540"/>
-            <draw:equation draw:name="f4" draw:formula="left+800"/>
-            <draw:equation draw:name="f5" draw:formula="right-800"/>
-            <draw:equation draw:name="f6" draw:formula="top+800"/>
-            <draw:equation draw:name="f7" draw:formula="bottom-800"/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
+            <draw:equation draw:name="f0" draw:formula="left+3600"/>
+            <draw:equation draw:name="f1" draw:formula="right-3600"/>
+            <draw:equation draw:name="f2" draw:formula="top+3600"/>
+            <draw:equation draw:name="f3" draw:formula="bottom-3600"/>
+            <draw:equation draw:name="f4" draw:formula="left+1054"/>
+            <draw:equation draw:name="f5" draw:formula="right-1054"/>
+            <draw:equation draw:name="f6" draw:formula="top+1054"/>
+            <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
         <draw:custom-shape draw:style-name="gr18" draw:text-style-name="P36" draw:layer="layout" svg:width="4.66cm" svg:height="4.972cm" svg:x="21.736cm" svg:y="8.24cm">
@@ -1250,15 +1250,15 @@
           <text:p text:style-name="P35">
             <text:span text:style-name="T12">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </text:span>
           </text:p>
-          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
-            <draw:equation draw:name="f0" draw:formula="left+2540"/>
-            <draw:equation draw:name="f1" draw:formula="right-2540"/>
-            <draw:equation draw:name="f2" draw:formula="top+2540"/>
-            <draw:equation draw:name="f3" draw:formula="bottom-2540"/>
-            <draw:equation draw:name="f4" draw:formula="left+800"/>
-            <draw:equation draw:name="f5" draw:formula="right-800"/>
-            <draw:equation draw:name="f6" draw:formula="top+800"/>
-            <draw:equation draw:name="f7" draw:formula="bottom-800"/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
+            <draw:equation draw:name="f0" draw:formula="left+3600"/>
+            <draw:equation draw:name="f1" draw:formula="right-3600"/>
+            <draw:equation draw:name="f2" draw:formula="top+3600"/>
+            <draw:equation draw:name="f3" draw:formula="bottom-3600"/>
+            <draw:equation draw:name="f4" draw:formula="left+1054"/>
+            <draw:equation draw:name="f5" draw:formula="right-1054"/>
+            <draw:equation draw:name="f6" draw:formula="top+1054"/>
+            <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
         <draw:path draw:style-name="gr19" draw:text-style-name="P37" draw:layer="layout" svg:width="2.956cm" svg:height="2.846cm" svg:x="2.223cm" svg:y="4.58cm" svg:viewBox="0 0 2957 2847" svg:d="M1009 965c-163-92-339-172-510-259 13 201 47 369 94 516-191-31-394-40-593-60 327 886 879 900 1385 1451 28 72 63 145 106 221 0 2 0 4 1 6 0-1 0-1 1-2 2 3 3 6 4 9 4-9 8-18 11-27 522-625 1109-601 1449-1524-198 20-401 28-593 60 47-148 81-316 94-516-158 81-322 155-476 239 14-275-123-614-509-1079-203 313-445 613-464 965z">
@@ -1301,15 +1301,15 @@
           <text:p text:style-name="P35">
             <text:span text:style-name="T12">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </text:span>
           </text:p>
-          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
-            <draw:equation draw:name="f0" draw:formula="left+2540"/>
-            <draw:equation draw:name="f1" draw:formula="right-2540"/>
-            <draw:equation draw:name="f2" draw:formula="top+2540"/>
-            <draw:equation draw:name="f3" draw:formula="bottom-2540"/>
-            <draw:equation draw:name="f4" draw:formula="left+800"/>
-            <draw:equation draw:name="f5" draw:formula="right-800"/>
-            <draw:equation draw:name="f6" draw:formula="top+800"/>
-            <draw:equation draw:name="f7" draw:formula="bottom-800"/>
+          <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:path-stretchpoint-x="10800" draw:path-stretchpoint-y="10800" draw:glue-points="10800 0 0 10800 10800 21600 21600 10800" draw:text-areas="?f4 ?f6 ?f5 ?f7" draw:type="flowchart-alternate-process" draw:enhanced-path="M 0 ?f2 Y ?f0 0 L ?f1 0 X 21600 ?f2 L 21600 ?f3 Y ?f1 21600 L ?f0 21600 X 0 ?f3 Z N">
+            <draw:equation draw:name="f0" draw:formula="left+3600"/>
+            <draw:equation draw:name="f1" draw:formula="right-3600"/>
+            <draw:equation draw:name="f2" draw:formula="top+3600"/>
+            <draw:equation draw:name="f3" draw:formula="bottom-3600"/>
+            <draw:equation draw:name="f4" draw:formula="left+1054"/>
+            <draw:equation draw:name="f5" draw:formula="right-1054"/>
+            <draw:equation draw:name="f6" draw:formula="top+1054"/>
+            <draw:equation draw:name="f7" draw:formula="bottom-1054"/>
           </draw:enhanced-geometry>
         </draw:custom-shape>
         <draw:custom-shape draw:name="TextShape 2_27" draw:style-name="gr1" draw:text-style-name="P34" draw:layer="layout" svg:width="28.002cm" svg:height="1.687cm" svg:x="0cm" svg:y="1.324cm">
