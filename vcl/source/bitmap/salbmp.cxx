@@ -19,15 +19,16 @@
 
 #include <salbmp.hxx>
 #include <o3tl/enumarray.hxx>
+#include <rtl/crc.h>
 
 static BitmapChecksum scanlineChecksum(BitmapChecksum nCrc, const sal_uInt8* bits, int lineBitsCount, sal_uInt8 extraBitsMask)
 {
     if( lineBitsCount / 8 > 0 )
-        nCrc = vcl_get_checksum( nCrc, bits, lineBitsCount / 8 );
+        nCrc = rtl_crc32( nCrc, bits, lineBitsCount / 8 );
     if( extraBitsMask != 0 )
     {
         sal_uInt8 extraByte = bits[ lineBitsCount / 8 ] & extraBitsMask;
-        nCrc = vcl_get_checksum( nCrc, &extraByte, 1 );
+        nCrc = rtl_crc32( nCrc, &extraByte, 1 );
     }
     return nCrc;
 }
@@ -70,7 +71,7 @@ void SalBitmap::updateChecksum() const
         if( pBuf->mnFormat & ScanlineFormat::TopDown )
         {
             if( pBuf->mnScanlineSize == lineBitsCount / 8 )
-                nCrc = vcl_get_checksum(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
+                nCrc = rtl_crc32(nCrc, pBuf->mpBits, pBuf->mnScanlineSize * pBuf->mnHeight);
             else // Do not include padding with undefined content in the checksum.
                 for( tools::Long y = 0; y < pBuf->mnHeight; ++y )
                     nCrc = scanlineChecksum(nCrc, pBuf->mpBits + y * pBuf->mnScanlineSize, lineBitsCount, extraBitsMask);

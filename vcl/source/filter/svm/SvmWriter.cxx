@@ -20,7 +20,7 @@
 #include <vcl/filter/SvmWriter.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
-
+#include <rtl/crc.h>
 #include <tools/vcompat.hxx>
 
 #include <osl/thread.h>
@@ -91,16 +91,16 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -109,22 +109,22 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -133,34 +133,34 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetDestPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -169,16 +169,16 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmapEx().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -187,22 +187,22 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpExScaleAction* pAct = static_cast<MetaBmpExScaleAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmapEx().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -211,34 +211,34 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaBmpExScalePartAction* pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmapEx().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 Int32ToSVBT32(pAct->GetDestPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -247,19 +247,19 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 UInt32ToSVBT32(sal_uInt32(pAct->GetColor()), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -268,25 +268,25 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaMaskScaleAction* pAct = static_cast<MetaMaskScaleAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 UInt32ToSVBT32(sal_uInt32(pAct->GetColor()), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
@@ -295,45 +295,44 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                 MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
 
                 ShortToSVBT16(static_cast<sal_uInt16>(pAct->GetType()), aBT16);
-                nCrc = vcl_get_checksum(nCrc, aBT16, 2);
+                nCrc = rtl_crc32(nCrc, aBT16, 2);
 
                 BCToBCOA(pAct->GetBitmap().GetChecksum(), aBCOA);
-                nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+                nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
 
                 UInt32ToSVBT32(sal_uInt32(pAct->GetColor()), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetDestSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().X(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcPoint().Y(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Width(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
 
                 Int32ToSVBT32(pAct->GetSrcSize().Height(), aBT32);
-                nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+                nCrc = rtl_crc32(nCrc, aBT32, 4);
             }
             break;
 
             case MetaActionType::EPS:
             {
                 MetaEPSAction* pAct = static_cast<MetaEPSAction*>(pAction);
-                nCrc = vcl_get_checksum(nCrc, pAct->GetLink().GetData(),
-                                        pAct->GetLink().GetDataSize());
+                nCrc = rtl_crc32(nCrc, pAct->GetLink().GetData(), pAct->GetLink().GetDataSize());
             }
             break;
 
@@ -360,9 +359,9 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                             const basegfx::B2DPoint aPoint(rPolygon.getB2DPoint(b));
 
                             DoubleToSVBT64(aPoint.getX(), aSVBT64);
-                            nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                            nCrc = rtl_crc32(nCrc, aSVBT64, 8);
                             DoubleToSVBT64(aPoint.getY(), aSVBT64);
-                            nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                            nCrc = rtl_crc32(nCrc, aSVBT64, 8);
 
                             if (bControl)
                             {
@@ -371,9 +370,9 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                                     const basegfx::B2DPoint aCtrl(rPolygon.getPrevControlPoint(b));
 
                                     DoubleToSVBT64(aCtrl.getX(), aSVBT64);
-                                    nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
                                     DoubleToSVBT64(aCtrl.getY(), aSVBT64);
-                                    nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
                                 }
 
                                 if (rPolygon.isNextControlPointUsed(b))
@@ -381,22 +380,22 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
                                     const basegfx::B2DPoint aCtrl(rPolygon.getNextControlPoint(b));
 
                                     DoubleToSVBT64(aCtrl.getX(), aSVBT64);
-                                    nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
                                     DoubleToSVBT64(aCtrl.getY(), aSVBT64);
-                                    nCrc = vcl_get_checksum(nCrc, aSVBT64, 8);
+                                    nCrc = rtl_crc32(nCrc, aSVBT64, 8);
                                 }
                             }
                         }
                     }
 
                     sal_uInt8 tmp = static_cast<sal_uInt8>(rAct.IsClipping());
-                    nCrc = vcl_get_checksum(nCrc, &tmp, 1);
+                    nCrc = rtl_crc32(nCrc, &tmp, 1);
                 }
                 else
                 {
                     SvmWriter aWriter(aMemStm);
                     aWriter.MetaActionHandler(pAction, &aWriteData);
-                    nCrc = vcl_get_checksum(nCrc, aMemStm.GetData(), aMemStm.Tell());
+                    nCrc = rtl_crc32(nCrc, aMemStm.GetData(), aMemStm.Tell());
                     aMemStm.Seek(0);
                 }
             }
@@ -406,7 +405,7 @@ BitmapChecksum SvmWriter::GetChecksum(const GDIMetaFile& rMetaFile)
             {
                 SvmWriter aWriter(aMemStm);
                 aWriter.MetaActionHandler(pAction, &aWriteData);
-                nCrc = vcl_get_checksum(nCrc, aMemStm.GetData(), aMemStm.Tell());
+                nCrc = rtl_crc32(nCrc, aMemStm.GetData(), aMemStm.Tell());
                 aMemStm.Seek(0);
             }
             break;
