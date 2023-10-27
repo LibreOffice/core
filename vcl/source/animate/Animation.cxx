@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <sal/config.h>
 
+#include <rtl/crc.h>
 #include <tools/stream.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <sal/log.hxx>
@@ -144,18 +145,18 @@ BitmapChecksum Animation::GetChecksum() const
     BitmapChecksum nCrc = GetBitmapEx().GetChecksum();
 
     UInt32ToSVBT32(maFrames.size(), aBT32);
-    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+    nCrc = rtl_crc32(nCrc, aBT32, 4);
 
     Int32ToSVBT32(maGlobalSize.Width(), aBT32);
-    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+    nCrc = rtl_crc32(nCrc, aBT32, 4);
 
     Int32ToSVBT32(maGlobalSize.Height(), aBT32);
-    nCrc = vcl_get_checksum(nCrc, aBT32, 4);
+    nCrc = rtl_crc32(nCrc, aBT32, 4);
 
     for (auto const& i : maFrames)
     {
         BCToBCOA(i->GetChecksum(), aBCOA);
-        nCrc = vcl_get_checksum(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
+        nCrc = rtl_crc32(nCrc, aBCOA, BITMAP_CHECKSUM_SIZE);
     }
 
     return nCrc;
