@@ -48,6 +48,36 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
         // https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/a11y/gtkatspiutils.c
         switch (xContext->getAccessibleRole())
         {
+            case css::accessibility::AccessibleRole::ALERT:
+            case css::accessibility::AccessibleRole::NOTIFICATION:
+                eRole = GTK_ACCESSIBLE_ROLE_ALERT;
+                break;
+            case css::accessibility::AccessibleRole::CAPTION:
+                eRole = GTK_ACCESSIBLE_ROLE_CAPTION;
+                break;
+            case css::accessibility::AccessibleRole::COLUMN_HEADER:
+                eRole = GTK_ACCESSIBLE_ROLE_COLUMN_HEADER;
+                break;
+            case css::accessibility::AccessibleRole::COMBO_BOX:
+                eRole = GTK_ACCESSIBLE_ROLE_COMBO_BOX;
+                break;
+            case css::accessibility::AccessibleRole::DIALOG:
+            case css::accessibility::AccessibleRole::FILE_CHOOSER:
+                eRole = GTK_ACCESSIBLE_ROLE_DIALOG;
+                break;
+            case css::accessibility::AccessibleRole::FOOTNOTE:
+            case css::accessibility::AccessibleRole::NOTE:
+                eRole = GTK_ACCESSIBLE_ROLE_NOTE;
+                break;
+            case css::accessibility::AccessibleRole::FORM:
+                eRole = GTK_ACCESSIBLE_ROLE_FORM;
+                break;
+            case css::accessibility::AccessibleRole::HEADING:
+                eRole = GTK_ACCESSIBLE_ROLE_HEADING;
+                break;
+            case css::accessibility::AccessibleRole::HYPER_LINK:
+                eRole = GTK_ACCESSIBLE_ROLE_LINK;
+                break;
             case css::accessibility::AccessibleRole::PANEL:
                 eRole = GTK_ACCESSIBLE_ROLE_GROUP;
                 break;
@@ -61,6 +91,7 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_STATUS;
                 break;
             case css::accessibility::AccessibleRole::MENU:
+            case css::accessibility::AccessibleRole::POPUP_MENU:
                 eRole = GTK_ACCESSIBLE_ROLE_MENU;
                 break;
             case css::accessibility::AccessibleRole::SPLIT_PANE:
@@ -70,7 +101,14 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_TOOLBAR;
                 break;
             case css::accessibility::AccessibleRole::LABEL:
+            case css::accessibility::AccessibleRole::STATIC:
                 eRole = GTK_ACCESSIBLE_ROLE_LABEL;
+                break;
+            case css::accessibility::AccessibleRole::LIST:
+                eRole = GTK_ACCESSIBLE_ROLE_LIST;
+                break;
+            case css::accessibility::AccessibleRole::LIST_ITEM:
+                eRole = GTK_ACCESSIBLE_ROLE_LIST_ITEM;
                 break;
             case css::accessibility::AccessibleRole::MENU_ITEM:
                 eRole = GTK_ACCESSIBLE_ROLE_MENU_ITEM;
@@ -93,6 +131,9 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::DOCUMENT_TEXT:
                 eRole = GTK_ACCESSIBLE_ROLE_DOCUMENT;
                 break;
+            case css::accessibility::AccessibleRole::ROW_HEADER:
+                eRole = GTK_ACCESSIBLE_ROLE_ROW_HEADER;
+                break;
             case css::accessibility::AccessibleRole::RULER:
                 eRole = GTK_ACCESSIBLE_ROLE_WIDGET;
                 break;
@@ -107,9 +148,8 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_GENERIC;
                 break;
             case css::accessibility::AccessibleRole::PUSH_BUTTON:
-                eRole = GTK_ACCESSIBLE_ROLE_BUTTON;
-                break;
             case css::accessibility::AccessibleRole::BUTTON_DROPDOWN:
+            case css::accessibility::AccessibleRole::BUTTON_MENU:
                 eRole = GTK_ACCESSIBLE_ROLE_BUTTON;
                 break;
             case css::accessibility::AccessibleRole::TOGGLE_BUTTON:
@@ -121,13 +161,45 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
             case css::accessibility::AccessibleRole::TABLE_CELL:
                 eRole = GTK_ACCESSIBLE_ROLE_CELL;
                 break;
+            case css::accessibility::AccessibleRole::PAGE_TAB:
+                eRole = GTK_ACCESSIBLE_ROLE_TAB;
+                break;
             case css::accessibility::AccessibleRole::PAGE_TAB_LIST:
                 eRole = GTK_ACCESSIBLE_ROLE_TAB_LIST;
                 break;
-            case css::accessibility::AccessibleRole::SHAPE:
-                eRole = GTK_ACCESSIBLE_ROLE_IMG;
+            case css::accessibility::AccessibleRole::PROGRESS_BAR:
+                eRole = GTK_ACCESSIBLE_ROLE_PROGRESS_BAR;
+                break;
+            case css::accessibility::AccessibleRole::RADIO_BUTTON:
+                eRole = GTK_ACCESSIBLE_ROLE_RADIO;
+                break;
+            case css::accessibility::AccessibleRole::SCROLL_BAR:
+                eRole = GTK_ACCESSIBLE_ROLE_SCROLLBAR;
+                break;
+            case css::accessibility::AccessibleRole::SLIDER:
+                eRole = GTK_ACCESSIBLE_ROLE_SLIDER;
+                break;
+            case css::accessibility::AccessibleRole::SPIN_BOX:
+                eRole = GTK_ACCESSIBLE_ROLE_SPIN_BUTTON;
+                break;
+            case css::accessibility::AccessibleRole::TEXT:
+                eRole = GTK_ACCESSIBLE_ROLE_TEXT_BOX;
+                break;
+            case css::accessibility::AccessibleRole::TOOL_TIP:
+                eRole = GTK_ACCESSIBLE_ROLE_TOOLTIP;
+                break;
+            case css::accessibility::AccessibleRole::TREE:
+                eRole = GTK_ACCESSIBLE_ROLE_TREE;
+                break;
+            case css::accessibility::AccessibleRole::TREE_ITEM:
+                eRole = GTK_ACCESSIBLE_ROLE_TREE_ITEM;
+                break;
+            case css::accessibility::AccessibleRole::TREE_TABLE:
+                eRole = GTK_ACCESSIBLE_ROLE_TREE_GRID;
                 break;
             case css::accessibility::AccessibleRole::GRAPHIC:
+            case css::accessibility::AccessibleRole::ICON:
+            case css::accessibility::AccessibleRole::SHAPE:
                 eRole = GTK_ACCESSIBLE_ROLE_IMG;
                 break;
             default:
