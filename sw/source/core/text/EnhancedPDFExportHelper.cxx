@@ -344,6 +344,35 @@ bool lcl_TryMoveToNonHiddenField(SwEditShell& rShell, const SwTextNode& rNd, con
     return true;
 };
 
+// tdf#157816: try to check if the rectangle contains actual text
+::std::vector<SwRect> GetCursorRectsContainingText(SwCursorShell const& rShell)
+{
+    ::std::vector<SwRect> ret;
+    for (SwRect const& rRect : *rShell.GetCursor_())
+    {
+        Point center(rRect.Center());
+        SwSpecialPos special;
+        SwCursorMoveState cms(CursorMoveState::NONE);
+        cms.m_pSpecialPos = &special;
+        cms.m_bFieldInfo = true;
+        SwPosition pos(rShell.GetDoc()->GetNodes());
+        auto const [pStart, pEnd] = rShell.GetCursor_()->StartEnd();
+        if (rShell.GetLayout()->GetModelPositionForViewPoint(&pos, center, &cms)
+            && *pStart <= pos && pos <= *pEnd)
+        {
+            SwRect charRect;
+            if (rShell.GetCurrFrame(false)->GetCharRect(charRect, pos, &cms, false)
+                && rRect.Overlaps(charRect))
+            {
+                ret.push_back(rRect);
+            }
+        }
+        // reset stupid static var that may have gotten set now
+        SwTextCursor::SetRightMargin(false); // WTF is this crap
+    }
+    return ret;
+}
+
 } // end namespace
 
 SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
@@ -2294,8 +2323,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport(LanguageType const eLanguageDe
                 mrSh.SwCursorShell::Right( 1, SwCursorSkipMode::Chars );
 
                 // Link Rectangles
-                SwRects aTmp;
-                aTmp.insert( aTmp.begin(), mrSh.SwCursorShell::GetCursor_()->begin(), mrSh.SwCursorShell::GetCursor_()->end() );
+                SwRects const aTmp(GetCursorRectsContainingText(mrSh));
                 OSL_ENSURE( !aTmp.empty(), "Enhanced pdf export - rectangles are missing" );
 
                 mrSh.SwCursorShell::ClearMark();
@@ -2717,7 +2745,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
 
             // Create the links.
-            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            SwRects const rects(GetCursorRectsContainingText(mrSh));
+            for (const auto& rLinkRect : rects)
             {
                 for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
                 {
@@ -2767,7 +2796,8 @@ void SwEnhancedPDFExportHelper::ExportAuthorityEntryLinks()
             mrSh.SwCursorShell::Right(1, SwCursorSkipMode::Chars);
 
             // Create the links.
-            for (const auto& rLinkRect : *mrSh.SwCursorShell::GetCursor_())
+            SwRects const rects(GetCursorRectsContainingText(mrSh));
+            for (const auto& rLinkRect : rects)
             {
                 for (const auto& rLinkPageNum : CalcOutputPageNums(rLinkRect))
                 {
