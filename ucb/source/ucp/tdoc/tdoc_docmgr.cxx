@@ -556,13 +556,20 @@ void OfficeDocumentsManager::updateStreamDateModified(OUString const & uri) {
 
 
 bool OfficeDocumentsManager::isDocumentPreview(
-        const uno::Reference< frame::XModel > & xModel )
+        const uno::Reference< frame::XModel3 > & xModel )
 {
     if ( !xModel.is() )
         return false;
 
-    bool bIsPreview = ::comphelper::NamedValueCollection::getOrDefault( xModel->getArgs(), u"Preview", false );
-    return bIsPreview;
+    uno::Sequence<beans::PropertyValue> props = xModel->getArgs2( { "Preview" } );
+    for (const auto & rProp : props)
+        if (rProp.Name == "Preview")
+        {
+            bool bIsPreview = false;
+            rProp.Value >>= bIsPreview;
+            return bIsPreview;
+        }
+    return false;
 }
 
 
@@ -664,11 +671,13 @@ bool OfficeDocumentsManager::isOfficeDocument(
         xStorageBasedDoc( xModel, uno::UNO_QUERY );
     if ( !xStorageBasedDoc.is() )
         return false;
+    uno::Reference< frame::XModel3 > xModel3( xDoc, uno::UNO_QUERY );
+    assert(xModel3 && "anything implementing frame:XModel is expected to implement XModel3 as well");
 
     if ( !isWithoutOrInTopLevelFrame( xModel ) )
         return false;
 
-    if ( isDocumentPreview( xModel ) )
+    if ( isDocumentPreview( xModel3 ) )
         return false;
 
     if ( isHelpDocument( xModel ) )

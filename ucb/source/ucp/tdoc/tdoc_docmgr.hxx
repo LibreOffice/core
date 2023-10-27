@@ -25,7 +25,7 @@
 
 #include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
-#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XModel3.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/frame/XGlobalEventBroadcaster.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -133,7 +133,7 @@ namespace tdoc_ucp {
             const css::uno::Reference< css::uno::XInterface > & xDoc );
 
         static bool isDocumentPreview(
-            const css::uno::Reference< css::frame::XModel > & xModel );
+            const css::uno::Reference< css::frame::XModel3 > & xModel );
 
         static bool isWithoutOrInTopLevelFrame(
             const css::uno::Reference< css::frame::XModel > & xModel );
