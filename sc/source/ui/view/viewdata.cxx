@@ -1428,62 +1428,37 @@ SCROW ScViewData::GetPosY( ScVSplitPos eWhich, SCTAB nForTab ) const
     return maTabData[nForTab]->nPosY[eWhich];
 }
 
+ScViewDataTable* ScViewData::FetchTableData(SCTAB nTabIndex) const
+{
+    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
+        return nullptr;
+    ScViewDataTable* pRet = maTabData[nTabIndex].get();
+    SAL_WARN_IF(!pRet, "sc.viewdata", "ScViewData::FetchTableData: hidden sheet = " << nTabIndex);
+    return pRet;
+}
+
 SCCOL ScViewData::GetCurXForTab( SCTAB nTabIndex ) const
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())) || !maTabData[nTabIndex])
-        return -1;
-
-    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
-    if (!pTabData)
-    {
-        SAL_WARN("sc.viewdata", "ScViewData::GetCurXForTab : hidden sheet = " << nTabIndex);
-        return -1;
-    }
-    return pTabData->nCurX;
+    ScViewDataTable* pTabData = FetchTableData(nTabIndex);
+    return pTabData ? pTabData->nCurX : -1;
 }
 
 SCROW ScViewData::GetCurYForTab( SCTAB nTabIndex ) const
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
-            return -1;
-
-    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
-    if (!pTabData)
-    {
-        SAL_WARN("sc.viewdata", "ScViewData::GetCurYForTab : hidden sheet = " << nTabIndex);
-        return -1;
-    }
-    return pTabData->nCurY;
+    ScViewDataTable* pTabData = FetchTableData(nTabIndex);
+    return pTabData ? pTabData->nCurY : -1;
 }
 
 void ScViewData::SetCurXForTab( SCCOL nNewCurX, SCTAB nTabIndex )
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
-            return;
-
-    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
-    if (!pTabData)
-    {
-        SAL_WARN("sc.viewdata", "ScViewData::SetCurXForTab : hidden sheet = " << nTabIndex);
-        return;
-    }
-
-    pTabData->nCurX = nNewCurX;
+    if (ScViewDataTable* pTabData = FetchTableData(nTabIndex))
+        pTabData->nCurX = nNewCurX;
 }
 
 void ScViewData::SetCurYForTab( SCCOL nNewCurY, SCTAB nTabIndex )
 {
-    if (!ValidTab(nTabIndex) || (nTabIndex >= static_cast<SCTAB>(maTabData.size())))
-            return;
-
-    ScViewDataTable* pTabData = maTabData[nTabIndex].get();
-    if (!pTabData)
-    {
-        SAL_WARN("sc.viewdata", "ScViewData::SetCurYForTab : hidden sheet = " << nTabIndex);
-        return;
-    }
-
-    pTabData->nCurY = nNewCurY;
+    if (ScViewDataTable* pTabData = FetchTableData(nTabIndex))
+        pTabData->nCurY = nNewCurY;
 }
 
 void ScViewData::SetMaxTiledCol( SCCOL nNewMaxCol )
