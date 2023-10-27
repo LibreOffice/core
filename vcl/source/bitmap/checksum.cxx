@@ -143,12 +143,4 @@ sal_uInt64 vcl_crc64 (
     return Crc;
 }
 
-/*
- * vcl_get_crc64_table.
- */
-const sal_uInt64* vcl_get_crc64_table()
-{
-    return vcl_crc64Table;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

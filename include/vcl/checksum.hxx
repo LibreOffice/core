@@ -64,9 +64,6 @@ VCL_DLLPUBLIC sal_uInt64 vcl_crc64 (
     const void *Data, sal_uInt32 DatLen
 )   SAL_THROW_EXTERN_C();
 
-
-const sal_uInt64* vcl_get_crc64_table();
-
 }
 
 inline BitmapChecksum vcl_get_checksum (
