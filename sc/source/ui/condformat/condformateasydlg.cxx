@@ -64,8 +64,8 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
                             "modules/scalc/ui/conditionaleasydialog.ui", "CondFormatEasyDlg")
     , mpViewData(pViewData)
     , mpDocument(&mpViewData->GetDocument())
-    , mxNumberEntry(m_xBuilder->weld_spin_button("entryNumber"))
-    , mxNumberEntry2(m_xBuilder->weld_spin_button("entryNumber2"))
+    , mxNumberEntry(m_xBuilder->weld_entry("entryNumber"))
+    , mxNumberEntry2(m_xBuilder->weld_entry("entryNumber2"))
     , mxRangeEntry(new formula::RefEdit(m_xBuilder->weld_entry("entryRange")))
     , mxButtonRangeEdit(new formula::RefButton(m_xBuilder->weld_button("rbassign")))
     , mxStyles(m_xBuilder->weld_combo_box("themeCombo"))
@@ -92,10 +92,6 @@ ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,
         meMode = *pCurrentMode;
     }
     mxNumberEntry2->hide();
-    mxNumberEntry->set_range(SAL_MIN_INT64, SAL_MAX_INT64);
-    mxNumberEntry2->set_range(SAL_MIN_INT64, SAL_MAX_INT64);
-    mxNumberEntry->set_increments(1, 0);
-    mxNumberEntry2->set_increments(1, 0);
     switch (meMode)
     {
         case ScConditionMode::Equal:

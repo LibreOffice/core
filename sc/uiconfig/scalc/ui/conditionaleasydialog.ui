@@ -90,7 +90,7 @@
                         <property name="can-focus">False</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkSpinButton" id="entryNumber">
+                          <object class="GtkEntry" id="entryNumber">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <accessibility>
@@ -104,7 +104,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkSpinButton" id="entryNumber2">
+                          <object class="GtkEntry" id="entryNumber2">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <accessibility>
