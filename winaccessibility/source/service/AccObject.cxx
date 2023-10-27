@@ -26,6 +26,7 @@
 
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/safeint.hxx>
+#include <sal/log.hxx>
 
 #include <stdlib.h>
 #include <memory.h>
@@ -51,102 +52,199 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::accessibility::AccessibleRole;
 using namespace com::sun::star::accessibility::AccessibleStateType;
 
-//Role mapping table,left side is UNO role, right side is MSAA role
-const short ROLE_TABLE[][2] =
-    {
-        {UNKNOWN,                  IA2_ROLE_UNKNOWN},
-        {ALERT ,                   ROLE_SYSTEM_DIALOG},
-        {COLUMN_HEADER ,           ROLE_SYSTEM_COLUMNHEADER},
-        //{CANVAS ,                  ROLE_SYSTEM_CLIENT},
-        {CANVAS ,                  IA2_ROLE_CANVAS},
-        {CHECK_BOX ,               ROLE_SYSTEM_CHECKBUTTON},
-        {CHECK_MENU_ITEM ,         IA2_ROLE_CHECK_MENU_ITEM},
-        {COLOR_CHOOSER,            IA2_ROLE_COLOR_CHOOSER},
-        {COMBO_BOX ,               ROLE_SYSTEM_COMBOBOX},
-        {DATE_EDITOR ,             IA2_ROLE_DATE_EDITOR},
-        {DESKTOP_ICON ,            IA2_ROLE_DESKTOP_ICON},
-        {DESKTOP_PANE,             IA2_ROLE_DESKTOP_PANE},
-        {DIRECTORY_PANE,           IA2_ROLE_DIRECTORY_PANE},
-        {DIALOG,                   ROLE_SYSTEM_DIALOG},
-        {DOCUMENT,                 ROLE_SYSTEM_DOCUMENT},
-        {EMBEDDED_OBJECT ,         IA2_ROLE_EMBEDDED_OBJECT },
-        {END_NOTE ,                IA2_ROLE_ENDNOTE },
-        {FILE_CHOOSER ,            IA2_ROLE_FILE_CHOOSER },
-        {FILLER,                   ROLE_SYSTEM_WHITESPACE},
-        {FONT_CHOOSER,             IA2_ROLE_FONT_CHOOSER},
-        {FOOTER,                   IA2_ROLE_FOOTER},
-        {FOOTNOTE,                 IA2_ROLE_FOOTNOTE},
-        {FRAME,                    IA2_ROLE_FRAME},
-        {GLASS_PANE ,              IA2_ROLE_GLASS_PANE},
-        {GRAPHIC ,                 ROLE_SYSTEM_GRAPHIC},
-        {GROUP_BOX,                ROLE_SYSTEM_GROUPING},
-        {HEADER ,                  IA2_ROLE_HEADER},
-        {HEADING ,                 IA2_ROLE_HEADING},
-        {HYPER_LINK ,              ROLE_SYSTEM_TEXT},
-        {ICON ,                    IA2_ROLE_ICON},
-        {INTERNAL_FRAME,           IA2_ROLE_INTERNAL_FRAME},
-        {LABEL,                    ROLE_SYSTEM_STATICTEXT},
-        {LAYERED_PANE ,            IA2_ROLE_LAYERED_PANE},
-        {LIST ,                    ROLE_SYSTEM_LIST},
-        {LIST_ITEM ,               ROLE_SYSTEM_LISTITEM},
-        //{MENU ,                    ROLE_SYSTEM_MENUPOPUP},
-        {MENU,                ROLE_SYSTEM_MENUITEM},
-        {MENU_BAR,                 ROLE_SYSTEM_MENUBAR},
-        {MENU_ITEM,                ROLE_SYSTEM_MENUITEM},
-        {OPTION_PANE ,             IA2_ROLE_OPTION_PANE},
-        {PAGE_TAB,                 ROLE_SYSTEM_PAGETAB},
-        {PAGE_TAB_LIST,            ROLE_SYSTEM_PAGETABLIST},
-        {PANEL,                    IA2_ROLE_OPTION_PANE},
-        {PARAGRAPH,                IA2_ROLE_PARAGRAPH},
-        {PASSWORD_TEXT,            ROLE_SYSTEM_TEXT},
-        {POPUP_MENU,               ROLE_SYSTEM_MENUPOPUP},
-        {PUSH_BUTTON,              ROLE_SYSTEM_PUSHBUTTON},
-        {PROGRESS_BAR,             ROLE_SYSTEM_PROGRESSBAR},
-        {RADIO_BUTTON,             ROLE_SYSTEM_RADIOBUTTON},
-        {RADIO_MENU_ITEM,          IA2_ROLE_RADIO_MENU_ITEM},
-        {ROW_HEADER ,              ROLE_SYSTEM_ROWHEADER},
-        {ROOT_PANE,                IA2_ROLE_ROOT_PANE},
-        {SCROLL_BAR ,              ROLE_SYSTEM_SCROLLBAR},
-        {SCROLL_PANE ,             IA2_ROLE_SCROLL_PANE},
-        {SHAPE,                    IA2_ROLE_SHAPE},
-        {SEPARATOR ,               ROLE_SYSTEM_SEPARATOR},
-        {SLIDER ,                  ROLE_SYSTEM_SLIDER},
-        {SPIN_BOX ,                ROLE_SYSTEM_SPINBUTTON},
-        {SPLIT_PANE,               IA2_ROLE_SPLIT_PANE},
-        {STATUS_BAR,               ROLE_SYSTEM_STATUSBAR},
-        {TABLE,                    ROLE_SYSTEM_TABLE},
-        {TABLE_CELL ,              ROLE_SYSTEM_CELL},
-        {TEXT,                     ROLE_SYSTEM_TEXT},
-        {TEXT_FRAME ,              IA2_ROLE_TEXT_FRAME},
-        //for change toggle button to push button for jaws
-        {TOGGLE_BUTTON,            ROLE_SYSTEM_PUSHBUTTON},
+namespace {
 
-        {TOOL_BAR,                 ROLE_SYSTEM_TOOLBAR},
-        {TOOL_TIP,                 ROLE_SYSTEM_TOOLTIP},
-        {TREE ,                    ROLE_SYSTEM_OUTLINE},
-        {VIEW_PORT ,               IA2_ROLE_VIEW_PORT},
-        {WINDOW,                   ROLE_SYSTEM_WINDOW},
-        {BUTTON_DROPDOWN,  ROLE_SYSTEM_BUTTONDROPDOWN},
-        {BUTTON_MENU,             ROLE_SYSTEM_BUTTONMENU},
-        {CAPTION,                   IA2_ROLE_CAPTION},
-        {CHART,                     IA2_ROLE_SHAPE},
-        {EDIT_BAR,                  IA2_ROLE_EDITBAR},
-        {FORM,                      IA2_ROLE_FORM},
-        {IMAGE_MAP ,                IA2_ROLE_IMAGE_MAP},
-        {NOTE,                      IA2_ROLE_NOTE},
-        {PAGE,                      IA2_ROLE_PAGE},
-        {RULER ,                    IA2_ROLE_RULER},
-        {SECTION,                   IA2_ROLE_SECTION},
-        {TREE_ITEM ,                ROLE_SYSTEM_OUTLINEITEM},
-        {TREE_TABLE,                ROLE_SYSTEM_OUTLINE},
-        {COMMENT,                   IA2_ROLE_TEXT_FRAME },
-        {COMMENT_END,               IA2_ROLE_TEXT_FRAME },
-        {DOCUMENT_PRESENTATION,     ROLE_SYSTEM_DOCUMENT },
-        {DOCUMENT_SPREADSHEET,      ROLE_SYSTEM_DOCUMENT },
-        {DOCUMENT_TEXT,             ROLE_SYSTEM_DOCUMENT },
-        {STATIC,                    ROLE_SYSTEM_STATICTEXT },
-        {NOTIFICATION,              ROLE_SYSTEM_ALERT}
-    };
+/**
+ * Map a UNO accessible role to an IAccessible2 role.
+ * @param nUnoRole The UNO role (css::accessiblity::AccessibleRole).
+ * @return IAccessible2 role.
+ */
+short lcl_mapToIAccessible2Role(sal_Int16 nUnoRole)
+{
+    switch(nUnoRole)
+    {
+        case css::accessibility::AccessibleRole::UNKNOWN:
+            return IA2_ROLE_UNKNOWN;
+        case css::accessibility::AccessibleRole::ALERT:
+            return ROLE_SYSTEM_DIALOG;
+        case css::accessibility::AccessibleRole::COLUMN_HEADER:
+            return ROLE_SYSTEM_COLUMNHEADER;
+        case css::accessibility::AccessibleRole::CANVAS:
+            return IA2_ROLE_CANVAS;
+        case css::accessibility::AccessibleRole::CHECK_BOX:
+            return ROLE_SYSTEM_CHECKBUTTON;
+        case css::accessibility::AccessibleRole::CHECK_MENU_ITEM:
+            return IA2_ROLE_CHECK_MENU_ITEM;
+        case css::accessibility::AccessibleRole::COLOR_CHOOSER:
+            return IA2_ROLE_COLOR_CHOOSER;
+        case css::accessibility::AccessibleRole::COMBO_BOX:
+            return ROLE_SYSTEM_COMBOBOX;
+        case css::accessibility::AccessibleRole::DATE_EDITOR:
+            return IA2_ROLE_DATE_EDITOR;
+        case css::accessibility::AccessibleRole::DESKTOP_ICON:
+            return IA2_ROLE_DESKTOP_ICON;
+        case css::accessibility::AccessibleRole::DESKTOP_PANE:
+            return IA2_ROLE_DESKTOP_PANE;
+        case css::accessibility::AccessibleRole::DIRECTORY_PANE:
+            return IA2_ROLE_DIRECTORY_PANE;
+        case css::accessibility::AccessibleRole::DIALOG:
+            return ROLE_SYSTEM_DIALOG;
+        case css::accessibility::AccessibleRole::DOCUMENT:
+            return ROLE_SYSTEM_DOCUMENT;
+        case css::accessibility::AccessibleRole::EMBEDDED_OBJECT:
+            return IA2_ROLE_EMBEDDED_OBJECT;
+        case css::accessibility::AccessibleRole::END_NOTE:
+            return IA2_ROLE_ENDNOTE;
+        case css::accessibility::AccessibleRole::FILE_CHOOSER:
+            return IA2_ROLE_FILE_CHOOSER;
+        case css::accessibility::AccessibleRole::FILLER:
+            return ROLE_SYSTEM_WHITESPACE;
+        case css::accessibility::AccessibleRole::FONT_CHOOSER:
+            return IA2_ROLE_FONT_CHOOSER;
+        case css::accessibility::AccessibleRole::FOOTER:
+            return IA2_ROLE_FOOTER;
+        case css::accessibility::AccessibleRole::FOOTNOTE:
+            return IA2_ROLE_FOOTNOTE;
+        case css::accessibility::AccessibleRole::FRAME:
+            return IA2_ROLE_FRAME;
+        case css::accessibility::AccessibleRole::GLASS_PANE:
+            return IA2_ROLE_GLASS_PANE;
+        case css::accessibility::AccessibleRole::GRAPHIC:
+            return ROLE_SYSTEM_GRAPHIC;
+        case css::accessibility::AccessibleRole::GROUP_BOX:
+            return ROLE_SYSTEM_GROUPING;
+        case css::accessibility::AccessibleRole::HEADER:
+            return IA2_ROLE_HEADER;
+        case css::accessibility::AccessibleRole::HEADING:
+            return IA2_ROLE_HEADING;
+        case css::accessibility::AccessibleRole::HYPER_LINK:
+            return ROLE_SYSTEM_TEXT;
+        case css::accessibility::AccessibleRole::ICON:
+            return IA2_ROLE_ICON;
+        case css::accessibility::AccessibleRole::INTERNAL_FRAME:
+            return IA2_ROLE_INTERNAL_FRAME;
+        case css::accessibility::AccessibleRole::LABEL:
+            return ROLE_SYSTEM_STATICTEXT;
+        case css::accessibility::AccessibleRole::LAYERED_PANE:
+            return IA2_ROLE_LAYERED_PANE;
+        case css::accessibility::AccessibleRole::LIST:
+            return ROLE_SYSTEM_LIST;
+        case css::accessibility::AccessibleRole::LIST_ITEM:
+            return ROLE_SYSTEM_LISTITEM;
+        case css::accessibility::AccessibleRole::MENU:
+            return ROLE_SYSTEM_MENUITEM;
+        case css::accessibility::AccessibleRole::MENU_BAR:
+            return ROLE_SYSTEM_MENUBAR;
+        case css::accessibility::AccessibleRole::MENU_ITEM:
+            return ROLE_SYSTEM_MENUITEM;
+        case css::accessibility::AccessibleRole::OPTION_PANE:
+            return IA2_ROLE_OPTION_PANE;
+        case css::accessibility::AccessibleRole::PAGE_TAB:
+            return ROLE_SYSTEM_PAGETAB;
+        case css::accessibility::AccessibleRole::PAGE_TAB_LIST:
+            return ROLE_SYSTEM_PAGETABLIST;
+        case css::accessibility::AccessibleRole::PANEL:
+            return IA2_ROLE_OPTION_PANE;
+        case css::accessibility::AccessibleRole::PARAGRAPH:
+            return IA2_ROLE_PARAGRAPH;
+        case css::accessibility::AccessibleRole::PASSWORD_TEXT:
+            return ROLE_SYSTEM_TEXT;
+        case css::accessibility::AccessibleRole::POPUP_MENU:
+            return ROLE_SYSTEM_MENUPOPUP;
+        case css::accessibility::AccessibleRole::PUSH_BUTTON:
+            return ROLE_SYSTEM_PUSHBUTTON;
+        case css::accessibility::AccessibleRole::PROGRESS_BAR:
+            return ROLE_SYSTEM_PROGRESSBAR;
+        case css::accessibility::AccessibleRole::RADIO_BUTTON:
+            return ROLE_SYSTEM_RADIOBUTTON;
+        case css::accessibility::AccessibleRole::RADIO_MENU_ITEM:
+            return IA2_ROLE_RADIO_MENU_ITEM;
+        case css::accessibility::AccessibleRole::ROW_HEADER:
+            return ROLE_SYSTEM_ROWHEADER;
+        case css::accessibility::AccessibleRole::ROOT_PANE:
+            return IA2_ROLE_ROOT_PANE;
+        case css::accessibility::AccessibleRole::SCROLL_BAR:
+            return ROLE_SYSTEM_SCROLLBAR;
+        case css::accessibility::AccessibleRole::SCROLL_PANE:
+            return IA2_ROLE_SCROLL_PANE;
+        case css::accessibility::AccessibleRole::SHAPE:
+            return IA2_ROLE_SHAPE;
+        case css::accessibility::AccessibleRole::SEPARATOR:
+            return ROLE_SYSTEM_SEPARATOR;
+        case css::accessibility::AccessibleRole::SLIDER:
+            return ROLE_SYSTEM_SLIDER;
+        case css::accessibility::AccessibleRole::SPIN_BOX:
+            return ROLE_SYSTEM_SPINBUTTON;
+        case css::accessibility::AccessibleRole::SPLIT_PANE:
+            return IA2_ROLE_SPLIT_PANE;
+        case css::accessibility::AccessibleRole::STATUS_BAR:
+            return ROLE_SYSTEM_STATUSBAR;
+        case css::accessibility::AccessibleRole::TABLE:
+            return ROLE_SYSTEM_TABLE;
+        case css::accessibility::AccessibleRole::TABLE_CELL:
+            return ROLE_SYSTEM_CELL;
+        case css::accessibility::AccessibleRole::TEXT:
+            return ROLE_SYSTEM_TEXT;
+        case css::accessibility::AccessibleRole::TEXT_FRAME:
+            return IA2_ROLE_TEXT_FRAME;
+        case css::accessibility::AccessibleRole::TOGGLE_BUTTON:
+            return ROLE_SYSTEM_PUSHBUTTON;
+        case css::accessibility::AccessibleRole::TOOL_BAR:
+            return ROLE_SYSTEM_TOOLBAR;
+        case css::accessibility::AccessibleRole::TOOL_TIP:
+            return ROLE_SYSTEM_TOOLTIP;
+        case css::accessibility::AccessibleRole::TREE:
+            return ROLE_SYSTEM_OUTLINE;
+        case css::accessibility::AccessibleRole::VIEW_PORT:
+            return IA2_ROLE_VIEW_PORT;
+        case css::accessibility::AccessibleRole::WINDOW:
+            return ROLE_SYSTEM_WINDOW;
+        case css::accessibility::AccessibleRole::BUTTON_DROPDOWN:
+            return ROLE_SYSTEM_BUTTONDROPDOWN;
+        case css::accessibility::AccessibleRole::BUTTON_MENU:
+            return  ROLE_SYSTEM_BUTTONMENU;
+        case css::accessibility::AccessibleRole::CAPTION:
+            return  IA2_ROLE_CAPTION;
+        case css::accessibility::AccessibleRole::CHART:
+            return  IA2_ROLE_SHAPE;
+        case css::accessibility::AccessibleRole::EDIT_BAR:
+            return  IA2_ROLE_EDITBAR;
+        case css::accessibility::AccessibleRole::FORM:
+            return  IA2_ROLE_FORM;
+        case css::accessibility::AccessibleRole::IMAGE_MAP:
+            return  IA2_ROLE_IMAGE_MAP;
+        case css::accessibility::AccessibleRole::NOTE:
+            return  IA2_ROLE_NOTE;
+        case css::accessibility::AccessibleRole::PAGE:
+            return  IA2_ROLE_PAGE;
+        case css::accessibility::AccessibleRole::RULER:
+            return  IA2_ROLE_RULER;
+        case css::accessibility::AccessibleRole::SECTION:
+            return  IA2_ROLE_SECTION;
+        case css::accessibility::AccessibleRole::TREE_ITEM:
+            return  ROLE_SYSTEM_OUTLINEITEM;
+        case css::accessibility::AccessibleRole::TREE_TABLE:
+            return  ROLE_SYSTEM_OUTLINE;
+        case css::accessibility::AccessibleRole::COMMENT:
+            return  IA2_ROLE_TEXT_FRAME;
+        case css::accessibility::AccessibleRole::COMMENT_END:
+            return  IA2_ROLE_TEXT_FRAME;
+        case css::accessibility::AccessibleRole::DOCUMENT_PRESENTATION:
+            return  ROLE_SYSTEM_DOCUMENT;
+        case css::accessibility::AccessibleRole::DOCUMENT_SPREADSHEET:
+            return  ROLE_SYSTEM_DOCUMENT;
+        case css::accessibility::AccessibleRole::DOCUMENT_TEXT:
+            return  ROLE_SYSTEM_DOCUMENT;
+        case css::accessibility::AccessibleRole::STATIC:
+            return  ROLE_SYSTEM_STATICTEXT;
+        case css::accessibility::AccessibleRole::NOTIFICATION:
+            return  ROLE_SYSTEM_ALERT;
+        default:
+            SAL_WARN("iacc2", "Unmapped role: " << nUnoRole);
+            return IA2_ROLE_UNKNOWN;
+    }
+}
+};
 
 
 /**
@@ -739,16 +837,11 @@ void AccObject::UpdateRole()
         return;
     }
 
-    XAccessibleContext* pContext  = m_xAccContextRef.get();
-    m_pIMAcc->Put_XAccRole( ROLE_SYSTEM_WINDOW  );
-    sal_Int16 iRoleIndex = pContext->getAccessibleRole();
-    if ((0 <= iRoleIndex) && (o3tl::make_unsigned(iRoleIndex) < SAL_N_ELEMENTS(ROLE_TABLE)))
-    {
-        short iIA2Role = ROLE_TABLE[iRoleIndex][1] ;
-        m_pIMAcc->Put_XAccRole( iIA2Role  );
-    }
-
+    const sal_Int16 nUnoRole = m_xAccContextRef->getAccessibleRole();
+    short nIA2Role = lcl_mapToIAccessible2Role(nUnoRole);
+    m_pIMAcc->Put_XAccRole(nIA2Role);
 }
+
 /**
    * update state information from uno to com
    * @param
