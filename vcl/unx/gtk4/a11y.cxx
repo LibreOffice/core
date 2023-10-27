@@ -11,6 +11,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
+#include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
 
@@ -183,6 +184,80 @@ struct LoAccessibleClass
     GObjectClass parent_class;
 };
 
+#if GTK_CHECK_VERSION(4, 10, 0)
+static void lo_accessible_range_init(GtkAccessibleRangeInterface* iface);
+static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, double fNewValue);
+#endif
+
+extern "C" {
+typedef GType (*GetGIfaceType)();
+}
+const struct
+{
+    const char* name;
+    GInterfaceInitFunc const aInit;
+    GetGIfaceType const aGetGIfaceType;
+    const css::uno::Type& (*aGetUnoType)();
+} TYPE_TABLE[] = {
+#if GTK_CHECK_VERSION(4, 10, 0)
+    { "Value", reinterpret_cast<GInterfaceInitFunc>(lo_accessible_range_init),
+      gtk_accessible_range_get_type, cppu::UnoType<css::accessibility::XAccessibleValue>::get }
+#endif
+};
+
+static bool isOfType(css::uno::XInterface* xInterface, const css::uno::Type& rType)
+{
+    if (!xInterface)
+        return false;
+
+    try
+    {
+        css::uno::Any aRet = xInterface->queryInterface(rType);
+        const bool bIs = (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
+                         && (aRet.pReserved != nullptr);
+        return bIs;
+    }
+    catch (const css::uno::Exception&)
+    {
+        return false;
+    }
+}
+
+static GType ensureTypeFor(css::uno::XInterface* xAccessible)
+{
+    OStringBuffer aTypeNameBuf("OOoGtkAccessibleObj");
+    std::vector<bool> bTypes(std::size(TYPE_TABLE), false);
+    for (size_t i = 0; i < std::size(TYPE_TABLE); i++)
+    {
+        if (isOfType(xAccessible, TYPE_TABLE[i].aGetUnoType()))
+        {
+            aTypeNameBuf.append(TYPE_TABLE[i].name);
+            bTypes[i] = true;
+        }
+    }
+
+    const OString aTypeName = aTypeNameBuf.makeStringAndClear();
+    GType nType = g_type_from_name(aTypeName.getStr());
+    if (nType != G_TYPE_INVALID)
+        return nType;
+
+    GTypeInfo aTypeInfo = { sizeof(LoAccessibleClass), nullptr, nullptr, nullptr, nullptr, nullptr,
+                            sizeof(LoAccessible),      0,       nullptr, nullptr };
+    nType
+        = g_type_register_static(LO_TYPE_ACCESSIBLE, aTypeName.getStr(), &aTypeInfo, GTypeFlags(0));
+
+    for (size_t i = 0; i < std::size(TYPE_TABLE); i++)
+    {
+        if (bTypes[i])
+        {
+            GInterfaceInfo aIfaceInfo = { nullptr, nullptr, nullptr };
+            aIfaceInfo.interface_init = TYPE_TABLE[i].aInit;
+            g_type_add_interface_static(nType, TYPE_TABLE[i].aGetGIfaceType(), &aIfaceInfo);
+        }
+    }
+    return nType;
+}
+
 enum
 {
     CHILD_PROP_0,
@@ -285,6 +360,13 @@ static void lo_accessible_accessible_init(GtkAccessibleInterface* iface)
     iface->get_platform_state = lo_accessible_get_platform_state;
 }
 
+#if GTK_CHECK_VERSION(4, 10, 0)
+static void lo_accessible_range_init(GtkAccessibleRangeInterface* iface)
+{
+    iface->set_current_value = lo_accessible_range_set_current_value;
+}
+#endif
+
 G_DEFINE_TYPE_WITH_CODE(LoAccessible, lo_accessible, G_TYPE_OBJECT,
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_ACCESSIBLE, lo_accessible_accessible_init))
 
@@ -306,10 +388,30 @@ static LoAccessible*
 lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
                   const css::uno::Reference<css::accessibility::XAccessible>& rAccessible)
 {
-    LoAccessible* ret = LO_ACCESSIBLE(g_object_new(LO_TYPE_ACCESSIBLE, nullptr));
+    assert(rAccessible.is());
+
+    GType nType = ensureTypeFor(rAccessible.get());
+    LoAccessible* ret = LO_ACCESSIBLE(g_object_new(nType, nullptr));
     ret->display = pDisplay;
     ret->parent = pParent;
     ret->uno_accessible = rAccessible;
+
+    // set values from XAccessibleValue interface if that's implemented
+    css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
+        ret->uno_accessible->getAccessibleContext());
+    css::uno::Reference<css::accessibility::XAccessibleValue> xAccessibleValue(xContext,
+                                                                               css::uno::UNO_QUERY);
+    if (xAccessibleValue.is())
+    {
+        double fCurrentValue = 0, fMinValue = 0, fMaxValue = 0;
+        xAccessibleValue->getCurrentValue() >>= fCurrentValue;
+        xAccessibleValue->getMinimumValue() >>= fMinValue;
+        xAccessibleValue->getMaximumValue() >>= fMaxValue;
+        gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+                                       fCurrentValue, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN, fMinValue,
+                                       GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, fMaxValue, -1);
+    }
+
     return ret;
 }
 
@@ -408,6 +510,49 @@ static gboolean lo_accessible_get_platform_state(GtkAccessible* self,
 
     return false;
 }
+
+#if GTK_CHECK_VERSION(4, 10, 0)
+static gboolean lo_accessible_range_set_current_value(GtkAccessibleRange* self, double fNewValue)
+{
+    // return 'true' in any case, since otherwise no proper AT-SPI DBus reply gets sent
+    // and the app crashes, s.
+    // https://gitlab.gnome.org/GNOME/gtk/-/issues/6150
+    // https://gitlab.gnome.org/GNOME/gtk/-/commit/0dbd2bd09eff8c9233e45338a05daf2a835529ab
+
+    LoAccessible* pAccessible = LO_ACCESSIBLE(self);
+    if (!pAccessible->uno_accessible)
+        return true;
+
+    css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
+        pAccessible->uno_accessible->getAccessibleContext());
+
+    css::uno::Reference<css::accessibility::XAccessibleValue> xValue(xContext, css::uno::UNO_QUERY);
+    if (!xValue.is())
+        return true;
+
+    // Different types of numerical values for XAccessibleValue are possible.
+    // If current value has an integer type, also use that for the new value, to make
+    // sure underlying implementations expecting that can handle the value properly.
+    const css::uno::Any aCurrentValue = xValue->getCurrentValue();
+    if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_LONG)
+    {
+        const sal_Int32 nValue = std::round<sal_Int32>(fNewValue);
+        xValue->setCurrentValue(css::uno::Any(nValue));
+        return true;
+    }
+    else if (aCurrentValue.getValueTypeClass() == css::uno::TypeClass::TypeClass_HYPER)
+    {
+        const sal_Int64 nValue = std::round<sal_Int64>(fNewValue);
+        xValue->setCurrentValue(css::uno::Any(nValue));
+        return true;
+    }
+
+    css::uno::Any aValue;
+    aValue <<= fNewValue;
+    xValue->setCurrentValue(aValue);
+    return true;
+}
+#endif
 
 static void lo_accessible_init(LoAccessible* /*iface*/) {}
 
