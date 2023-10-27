@@ -1973,6 +1973,7 @@ void SwTextNode::TransliterateText(
 
         sal_Int32 nEndPos = 0;
         LanguageType nLang = LANGUAGE_NONE;
+        sal_Int32 nLoopControlRuns = 0;
         do {
             if( pIter )
             {
@@ -2005,7 +2006,13 @@ void SwTextNode::TransliterateText(
             }
 
             nStt = nEndPos;
-        } while( nEndPos < nEnd && pIter && pIter->Next() );
+
+            // tdf#157937 selection containing tracked changes needs loop control:
+            // stop looping, if there are too much empty transliterations
+            if ( sChgd.isEmpty() )
+                ++nLoopControlRuns;
+
+        } while( nEndPos < nEnd && pIter && pIter->Next() && nLoopControlRuns < 100 );
     }
 
     if (aChanges.empty())
