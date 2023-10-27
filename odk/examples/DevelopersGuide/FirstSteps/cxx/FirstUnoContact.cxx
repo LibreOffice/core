@@ -10,6 +10,7 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <cppuhelper/bootstrap.hxx>
+#include <cstddef>
 #include <iostream>
 #include <sal/main.h>
 
@@ -20,7 +21,7 @@ SAL_IMPLEMENT_MAIN()
         css::uno::Reference<css::uno::XComponentContext> xContext(cppu::bootstrap());
         std::cout << "Connected to a running office ..." << std::endl;
         css::uno::Reference<css::lang::XMultiComponentFactory> xMCF = xContext->getServiceManager();
-        std::string available = xMCF != nullptr ? "available" : "not available";
+        std::string available = xMCF != NULL ? "available" : "not available";
         std::cout << "remote ServiceManager is " + available << std::endl;
     }
     catch (css::uno::Exception& e)

@@ -50,7 +50,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
-IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.skeleton.PreparedStatement","com.sun.star.sdbc.PreparedStatement");
+IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.skeleton.PreparedStatement","com.sun.star.sdbc.PreparedStatement")
 
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInfoVector& _TypeInfo,const ::rtl::OUString& sql)

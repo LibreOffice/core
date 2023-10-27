@@ -53,11 +53,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         exit(1);
     }
 
-    auto xComponentContext(defaultBootstrap_InitialComponentContext());
-    auto xMultiComponentFactoryClient(xComponentContext->getServiceManager());
-    auto xInterface = xMultiComponentFactoryClient->createInstanceWithContext(
+    Reference<XComponentContext> xComponentContext(defaultBootstrap_InitialComponentContext());
+    Reference<XMultiComponentFactory> xMultiComponentFactoryClient(
+        xComponentContext->getServiceManager());
+    Reference<XInterface> xInterface = xMultiComponentFactoryClient->createInstanceWithContext(
         "com.sun.star.bridge.UnoUrlResolver", xComponentContext);
-    auto resolver = Reference<XUnoUrlResolver>(xInterface, UNO_QUERY);
+    Reference<XUnoUrlResolver> resolver(xInterface, UNO_QUERY);
     try
     {
         xInterface = Reference<XInterface>(resolver->resolve(sConnectionString), UNO_QUERY_THROW);
@@ -70,10 +71,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         std::exit(1);
     }
 
-    auto xPropSet = Reference<XPropertySet>(xInterface, UNO_QUERY);
+    Reference<XPropertySet> xPropSet(xInterface, UNO_QUERY);
     xPropSet->getPropertyValue("DefaultContext") >>= xComponentContext;
-    auto xMultiComponentFactoryServer(xComponentContext->getServiceManager());
-    auto xComponentLoader = Desktop::create(xComponentContext);
+    Reference<XMultiComponentFactory> xMultiComponentFactoryServer(
+        xComponentContext->getServiceManager());
+    Reference<XDesktop2> xComponentLoader = Desktop::create(xComponentContext);
     Sequence<PropertyValue> loadProperties(1);
     loadProperties[0].Name = "Hidden";
     loadProperties[0].Value <<= true;
@@ -91,11 +93,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         osl::FileBase::getAbsoluteFileURL(sWorkingDir, sOutputUrl, sAbsoluteOutputUrl);
         std::cout << sAbsoluteOutputUrl << std::endl;
 
-        auto xComponent = xComponentLoader->loadComponentFromURL(sAbsoluteInputUrl, "_blank", 0,
-                                                                 loadProperties);
-        auto xDocument = Reference<XTextDocument>(xComponent, UNO_QUERY_THROW);
-        auto xStorable = Reference<XStorable>(xDocument, UNO_QUERY_THROW);
-        auto storeProps = Sequence<PropertyValue>(3);
+        Reference<XComponent> xComponent = xComponentLoader->loadComponentFromURL(
+            sAbsoluteInputUrl, "_blank", 0, loadProperties);
+        Reference<XTextDocument> xDocument(xComponent, UNO_QUERY_THROW);
+        Reference<XStorable> xStorable(xDocument, UNO_QUERY_THROW);
+        Sequence<PropertyValue> storeProps(3);
         storeProps[0].Name = "FilterName";
         storeProps[0].Value <<= OUString("writer_pdf_Export");
         storeProps[1].Name = "Overwrite";

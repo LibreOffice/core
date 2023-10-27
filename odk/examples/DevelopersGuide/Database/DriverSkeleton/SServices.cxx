@@ -141,7 +141,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
     }
 
     return pRet;
-};
+}
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(

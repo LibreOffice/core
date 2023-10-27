@@ -345,7 +345,7 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 
-IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
+IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement")
 
 void SAL_CALL OStatement_Base::acquire() throw()
 {
