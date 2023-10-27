@@ -19,8 +19,6 @@
 
 #include <config_features.h>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <com/sun/star/frame/Desktop.hpp>
 
 using namespace ::com::sun::star;
@@ -55,6 +53,7 @@ using namespace ::com::sun::star;
 #include <svl/PasswordHelper.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <tools/json_writer.hxx>
 #include <unotools/securityoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sal/log.hxx>
@@ -2531,32 +2530,31 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
          comphelper::LibreOfficeKit::isTiledAnnotations() )
         return;
 
-    boost::property_tree::ptree aAnnotation;
-    aAnnotation.put("action", (nType == LOKCommentNotificationType::Add ? "Add" :
-                               (nType == LOKCommentNotificationType::Remove ? "Remove" :
-                                (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
-
-    assert(pNote);
-    aAnnotation.put("id", pNote->GetId());
-    aAnnotation.put("tab", rPos.Tab());
-
-    if (nType != LOKCommentNotificationType::Remove)
+    tools::JsonWriter aAnnotation;
     {
-        aAnnotation.put("author", pNote->GetAuthor());
-        aAnnotation.put("dateTime", pNote->GetDate());
-        aAnnotation.put("text", pNote->GetText());
+        auto commentNode = aAnnotation.startNode("comment");
+        aAnnotation.put("action", (nType == LOKCommentNotificationType::Add ? "Add" :
+                                   (nType == LOKCommentNotificationType::Remove ? "Remove" :
+                                    (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
 
-        // Calculating the cell cursor position
-        ScViewData* pViewData = GetViewData();
-        if (pViewData && pViewData->GetActiveWin())
-            aAnnotation.put("cellRange", ScPostIt::NoteRangeToJsonString(*pDocument, rPos));
+        assert(pNote);
+        aAnnotation.put("id", pNote->GetId());
+        aAnnotation.put("tab", rPos.Tab());
+
+        if (nType != LOKCommentNotificationType::Remove)
+        {
+            aAnnotation.put("author", pNote->GetAuthor());
+            aAnnotation.put("dateTime", pNote->GetDate());
+            aAnnotation.put("text", pNote->GetText());
+
+            // Calculating the cell cursor position
+            ScViewData* pViewData = GetViewData();
+            if (pViewData && pViewData->GetActiveWin())
+                aAnnotation.put("cellRange", ScPostIt::NoteRangeToJsonString(*pDocument, rPos));
+        }
     }
 
-    boost::property_tree::ptree aTree;
-    aTree.add_child("comment", aAnnotation);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    std::string aPayload = aStream.str();
+    std::string aPayload(aAnnotation.extractAsStdString());
 
     ScViewData* pViewData = GetViewData();
     SfxViewShell* pThisViewShell = ( pViewData ? pViewData->GetViewShell() : nullptr );
