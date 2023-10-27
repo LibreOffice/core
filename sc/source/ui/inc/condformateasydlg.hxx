@@ -34,6 +34,8 @@ public:
     DECL_LINK(ButtonPressed, weld::Button&, void);
 
 private:
+    void SetDescription(std::u16string_view rCondition);
+
     ScViewData* mpViewData;
     ScDocument* mpDocument;
     ScConditionMode meMode;
