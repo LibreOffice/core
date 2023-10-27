@@ -81,22 +81,37 @@ SvxSaveTabPage::SvxSaveTabPage(weld::Container* pPage, weld::DialogController* p
     : SfxTabPage( pPage, pController, "cui/ui/optsavepage.ui", "OptSavePage", &rCoreSet )
     , pImpl(new SvxSaveTabPage_Impl)
     , m_xLoadViewPosAnyUserCB(m_xBuilder->weld_check_button("load_anyuser"))
+    , m_xLoadViewPosAnyUserImg(m_xBuilder->weld_widget("lockload_anyuser"))
     , m_xLoadUserSettingsCB(m_xBuilder->weld_check_button("load_settings"))
+    , m_xLoadUserSettingsImg(m_xBuilder->weld_widget("lockload_settings"))
     , m_xLoadDocPrinterCB(m_xBuilder->weld_check_button("load_docprinter"))
+    , m_xLoadDocPrinterImg(m_xBuilder->weld_widget("lockload_docprinter"))
     , m_xDocInfoCB(m_xBuilder->weld_check_button("docinfo"))
+    , m_xDocInfoImg(m_xBuilder->weld_widget("lockdocinfo"))
     , m_xBackupCB(m_xBuilder->weld_check_button("backup"))
+    , m_xBackupImg(m_xBuilder->weld_widget("lockbackup"))
     , m_xBackupIntoDocumentFolderCB(m_xBuilder->weld_check_button("backupintodocumentfolder"))
+    , m_xBackupIntoDocumentFolderImg(m_xBuilder->weld_widget("lockbackupintodoc"))
     , m_xAutoSaveCB(m_xBuilder->weld_check_button("autosave"))
+    , m_xAutoSaveImg(m_xBuilder->weld_widget("lockautosave"))
     , m_xAutoSaveEdit(m_xBuilder->weld_spin_button("autosave_spin"))
     , m_xMinuteFT(m_xBuilder->weld_label("autosave_mins"))
     , m_xUserAutoSaveCB(m_xBuilder->weld_check_button("userautosave"))
+    , m_xUserAutoSaveImg(m_xBuilder->weld_widget("lockuserautosave"))
     , m_xRelativeFsysCB(m_xBuilder->weld_check_button("relative_fsys"))
+    , m_xRelativeFsysImg(m_xBuilder->weld_widget("lockrelative_fsys"))
     , m_xRelativeInetCB(m_xBuilder->weld_check_button("relative_inet"))
+    , m_xRelativeInetImg(m_xBuilder->weld_widget("lockrelative_inet"))
     , m_xODFVersionLB(m_xBuilder->weld_combo_box("odfversion"))
+    , m_xODFVersionFT(m_xBuilder->weld_label("label5"))
+    , m_xODFVersionImg(m_xBuilder->weld_widget("lockodfversion"))
     , m_xWarnAlienFormatCB(m_xBuilder->weld_check_button("warnalienformat"))
+    , m_xWarnAlienFormatImg(m_xBuilder->weld_widget("lockwarnalienformat"))
     , m_xDocTypeLB(m_xBuilder->weld_combo_box("doctype"))
+    , m_xDocTypeImg(m_xBuilder->weld_widget("lockdoctype"))
     , m_xSaveAsFT(m_xBuilder->weld_label("saveas_label"))
     , m_xSaveAsLB(m_xBuilder->weld_combo_box("saveas"))
+    , m_xSaveAsImg(m_xBuilder->weld_widget("locksaveas"))
     , m_xODFWarningFI(m_xBuilder->weld_widget("odfwarning_image"))
     , m_xODFWarningFT(m_xBuilder->weld_label("odfwarning_label"))
 {
@@ -418,12 +433,17 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     m_xLoadViewPosAnyUserCB->set_active(officecfg::Office::Common::Load::ViewPositionForAnyUser::get());
     m_xLoadViewPosAnyUserCB->save_state();
     m_xLoadViewPosAnyUserCB->set_sensitive(!officecfg::Office::Common::Load::ViewPositionForAnyUser::isReadOnly());
+    m_xLoadViewPosAnyUserImg->set_visible(officecfg::Office::Common::Load::ViewPositionForAnyUser::isReadOnly());
+
     m_xLoadUserSettingsCB->set_active(officecfg::Office::Common::Load::UserDefinedSettings::get());
     m_xLoadUserSettingsCB->save_state();
     m_xLoadUserSettingsCB->set_sensitive(!officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
+    m_xLoadUserSettingsImg->set_visible(officecfg::Office::Common::Load::UserDefinedSettings::isReadOnly());
+
     m_xLoadDocPrinterCB->set_active( officecfg::Office::Common::Save::Document::LoadPrinter::get() );
     m_xLoadDocPrinterCB->save_state();
     m_xLoadDocPrinterCB->set_sensitive(!officecfg::Office::Common::Save::Document::LoadPrinter::isReadOnly());
+    m_xLoadDocPrinterImg->set_visible(officecfg::Office::Common::Save::Document::LoadPrinter::isReadOnly());
 
     if ( !pImpl->bInitialized )
     {
@@ -502,24 +522,31 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
 
     m_xDocInfoCB->set_active(officecfg::Office::Common::Save::Document::EditProperty::get());
     m_xDocInfoCB->set_sensitive(!officecfg::Office::Common::Save::Document::EditProperty::isReadOnly());
+    m_xDocInfoImg->set_visible(officecfg::Office::Common::Save::Document::EditProperty::isReadOnly());
 
     m_xBackupCB->set_active(officecfg::Office::Common::Save::Document::CreateBackup::get());
     m_xBackupCB->set_sensitive(!officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly());
+    m_xBackupImg->set_visible(officecfg::Office::Common::Save::Document::CreateBackup::isReadOnly());
 
     m_xBackupIntoDocumentFolderCB->set_active(
         officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::get());
     m_xBackupIntoDocumentFolderCB->set_sensitive(
         !officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::isReadOnly()
         && m_xBackupCB->get_active());
+    m_xBackupIntoDocumentFolderImg->set_visible(
+        officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::isReadOnly());
 
     m_xAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::Enabled::get());
     m_xAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
+    m_xAutoSaveImg->set_visible(officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
 
     m_xUserAutoSaveCB->set_active(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get());
     m_xUserAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
+    m_xUserAutoSaveImg->set_visible(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
 
     m_xWarnAlienFormatCB->set_active(officecfg::Office::Common::Save::Document::WarnAlienFormat::get());
     m_xWarnAlienFormatCB->set_sensitive(!officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly());
+    m_xWarnAlienFormatImg->set_visible(officecfg::Office::Common::Save::Document::WarnAlienFormat::isReadOnly());
 
     m_xAutoSaveEdit->set_value(officecfg::Office::Recovery::AutoSave::TimeIntervall::get());
     m_xAutoSaveEdit->set_sensitive(!officecfg::Office::Recovery::AutoSave::TimeIntervall::isReadOnly());
@@ -527,13 +554,17 @@ void SvxSaveTabPage::Reset( const SfxItemSet* )
     // save relatively
     m_xRelativeFsysCB->set_active(officecfg::Office::Common::Save::URL::FileSystem::get());
     m_xRelativeFsysCB->set_sensitive(!officecfg::Office::Common::Save::URL::FileSystem::isReadOnly());
+    m_xRelativeFsysImg->set_visible(officecfg::Office::Common::Save::URL::FileSystem::isReadOnly());
 
     m_xRelativeInetCB->set_active(officecfg::Office::Common::Save::URL::Internet::get());
     m_xRelativeInetCB->set_sensitive(!officecfg::Office::Common::Save::URL::Internet::isReadOnly());
+    m_xRelativeInetImg->set_visible(officecfg::Office::Common::Save::URL::Internet::isReadOnly());
 
     sal_Int32 nDefaultVersion = GetODFDefaultVersion();
     m_xODFVersionLB->set_active_id(OUString::number(nDefaultVersion));
     m_xODFVersionLB->set_sensitive(!officecfg::Office::Common::Save::ODF::DefaultVersion::isReadOnly());
+    m_xODFVersionFT->set_sensitive(!officecfg::Office::Common::Save::ODF::DefaultVersion::isReadOnly());
+    m_xODFVersionImg->set_visible(officecfg::Office::Common::Save::ODF::DefaultVersion::isReadOnly());
 
     AutoClickHdl_Impl(*m_xAutoSaveCB);
     ODFVersionHdl_Impl(*m_xODFVersionLB);
@@ -559,9 +590,9 @@ IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Toggleable&, rBox, void)
 
     if (m_xAutoSaveCB->get_active())
     {
-        m_xAutoSaveEdit->set_sensitive(true);
-        m_xMinuteFT->set_sensitive(true);
-        m_xUserAutoSaveCB->set_sensitive(true);
+        m_xAutoSaveEdit->set_sensitive(!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
+        m_xMinuteFT->set_sensitive(!officecfg::Office::Recovery::AutoSave::Enabled::isReadOnly());
+        m_xUserAutoSaveCB->set_sensitive(!officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::isReadOnly());
     }
     else
     {
@@ -573,7 +604,8 @@ IMPL_LINK(SvxSaveTabPage, AutoClickHdl_Impl, weld::Toggleable&, rBox, void)
 
 IMPL_LINK_NOARG(SvxSaveTabPage, BackupClickHdl_Impl, weld::Toggleable&, void)
 {
-    m_xBackupIntoDocumentFolderCB->set_sensitive(m_xBackupCB->get_active());
+    m_xBackupIntoDocumentFolderCB->set_sensitive(m_xBackupCB->get_active() &&
+        !officecfg::Office::Common::Save::Document::BackupIntoDocumentFolder::isReadOnly());
 }
 
 static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties, std::u16string_view rExtension)

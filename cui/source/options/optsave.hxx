@@ -42,22 +42,37 @@ private:
     std::unique_ptr<SvxSaveTabPage_Impl>    pImpl;
 
     std::unique_ptr<weld::CheckButton> m_xLoadViewPosAnyUserCB;
+    std::unique_ptr<weld::Widget> m_xLoadViewPosAnyUserImg;
     std::unique_ptr<weld::CheckButton> m_xLoadUserSettingsCB;
+    std::unique_ptr<weld::Widget> m_xLoadUserSettingsImg;
     std::unique_ptr<weld::CheckButton> m_xLoadDocPrinterCB;
+    std::unique_ptr<weld::Widget> m_xLoadDocPrinterImg;
     std::unique_ptr<weld::CheckButton> m_xDocInfoCB;
+    std::unique_ptr<weld::Widget> m_xDocInfoImg;
     std::unique_ptr<weld::CheckButton> m_xBackupCB;
+    std::unique_ptr<weld::Widget> m_xBackupImg;
     std::unique_ptr<weld::CheckButton> m_xBackupIntoDocumentFolderCB;
+    std::unique_ptr<weld::Widget> m_xBackupIntoDocumentFolderImg;
     std::unique_ptr<weld::CheckButton> m_xAutoSaveCB;
+    std::unique_ptr<weld::Widget> m_xAutoSaveImg;
     std::unique_ptr<weld::SpinButton> m_xAutoSaveEdit;
     std::unique_ptr<weld::Label> m_xMinuteFT;
     std::unique_ptr<weld::CheckButton> m_xUserAutoSaveCB;
+    std::unique_ptr<weld::Widget> m_xUserAutoSaveImg;
     std::unique_ptr<weld::CheckButton> m_xRelativeFsysCB;
+    std::unique_ptr<weld::Widget> m_xRelativeFsysImg;
     std::unique_ptr<weld::CheckButton> m_xRelativeInetCB;
+    std::unique_ptr<weld::Widget> m_xRelativeInetImg;
     std::unique_ptr<weld::ComboBox> m_xODFVersionLB;
+    std::unique_ptr<weld::Label> m_xODFVersionFT;
+    std::unique_ptr<weld::Widget> m_xODFVersionImg;
     std::unique_ptr<weld::CheckButton> m_xWarnAlienFormatCB;
+    std::unique_ptr<weld::Widget> m_xWarnAlienFormatImg;
     std::unique_ptr<weld::ComboBox> m_xDocTypeLB;
+    std::unique_ptr<weld::Widget> m_xDocTypeImg;
     std::unique_ptr<weld::Label> m_xSaveAsFT;
     std::unique_ptr<weld::ComboBox> m_xSaveAsLB;
+    std::unique_ptr<weld::Widget> m_xSaveAsImg;
     std::unique_ptr<weld::Widget> m_xODFWarningFI;
     std::unique_ptr<weld::Label> m_xODFWarningFT;
 
