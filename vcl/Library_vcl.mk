@@ -370,7 +370,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/bitmap/BitmapColorQuantizationFilter \
     vcl/source/bitmap/BitmapSimpleColorQuantizationFilter \
     vcl/source/bitmap/BitmapTools \
-    vcl/source/bitmap/checksum \
     vcl/source/bitmap/Octree \
     vcl/source/bitmap/salbmp \
     vcl/source/image/Image \

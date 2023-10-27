@@ -21,6 +21,7 @@
 
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <rtl/crc.h>
 #include <tools/helpers.hxx>
 
 #include <vcl/BitmapPalette.hxx>
@@ -120,7 +121,7 @@ BitmapColor* BitmapPalette::ImplGetColorBuffer() { return mpImpl->GetBitmapData(
 BitmapChecksum BitmapPalette::GetChecksum() const
 {
     auto const& rBitmapData = mpImpl->GetBitmapData();
-    return vcl_get_checksum(0, rBitmapData.data(), rBitmapData.size() * sizeof(BitmapColor));
+    return rtl_crc32(0, rBitmapData.data(), rBitmapData.size() * sizeof(BitmapColor));
 }
 
 bool BitmapPalette::operator==(const BitmapPalette& rOther) const

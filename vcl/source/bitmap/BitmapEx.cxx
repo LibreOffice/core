@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <rtl/crc.h>
 #include <rtl/math.hxx>
 #include <o3tl/underlyingenumvalue.hxx>
 #include <osl/diagnose.h>
@@ -240,7 +241,7 @@ BitmapChecksum BitmapEx::GetChecksum() const
     {
         BitmapChecksumOctetArray aBCOA;
         BCToBCOA( maAlphaMask.GetChecksum(), aBCOA );
-        nCrc = vcl_get_checksum( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
+        nCrc = rtl_crc32( nCrc, aBCOA, BITMAP_CHECKSUM_SIZE );
     }
 
     return nCrc;

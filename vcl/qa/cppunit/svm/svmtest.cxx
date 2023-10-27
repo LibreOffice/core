@@ -942,11 +942,11 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 #if defined OSL_BIGENDIAN
         "5e01ddcc"
 #else
-        "b8dee5da"
+        "469f0820"
 #endif
         }});
     assertXPathAttrs(pDoc, "/metafile/bmpscale[1]", {
-        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "281fc589"}
+        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"}, {"crc", "4937e32d"}
     });
     assertXPathAttrs(pDoc, "/metafile/bmpscalepart[1]", {
         {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
@@ -955,7 +955,7 @@ void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 #if defined OSL_BIGENDIAN
          "b8dee5da"
 #else
-         "5e01ddcc"
+         "3789377b"
 #endif
         }
     });
@@ -1018,14 +1018,14 @@ void SvmTest::checkBitmapExs(const GDIMetaFile& rMetaFile)
         "33b4a07c",
         "742c3e35",
 #else
-        "d8377d4f",
-        "281fc589",
-        "5e01ddcc",
-        "4df0e464",
-        "4322ee3a",
-        "3c80d829", // 4-bit color bitmap - same as 8-bit color bitmap
-        "3c80d829",
-        "71efc447",
+        "ac936607",
+        "4937e32d",
+        "3789377b",
+        "839e8cce",
+        "132f02c7",
+        "2949ccc7", // 4-bit color bitmap - same as 8-bit color bitmap
+        "2949ccc7",
+        "e5df8aad",
 #endif
     });
 
