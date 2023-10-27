@@ -662,6 +662,33 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)
     CPPUNIT_ASSERT(dynamic_cast<SwXTextDocument*>(mxComponent.get()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
+{
+    createSwDoc("tdf130088.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // select paragraph
+    pWrtShell->SelPara(nullptr);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // show changes
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // cycle case with change tracking
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    // This resulted freezing
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
 {
     createSwDoc();
