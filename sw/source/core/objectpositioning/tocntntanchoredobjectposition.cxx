@@ -1204,6 +1204,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
 
     // Get the list of objects.
     auto pSortedObjs = pAnchorFrameForVertPos->GetDrawObjs();
+    const SwLayoutFrame* pAnchorUpper = pAnchorFrameForVertPos->GetUpper();
 
     bool bSplitFly = false;
     SwFlyFrame* pFlyFrame = GetAnchoredObj().DynCastFlyFrame();
@@ -1265,6 +1266,12 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
             if (pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->IsInFly())
             {
                 // An inner fly overlapping with its outer fly is fine.
+                continue;
+            }
+
+            if (pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->GetUpper() != pAnchorUpper)
+            {
+                // A fly overlapping with a fly from an other upper is fine.
                 continue;
             }
         }
