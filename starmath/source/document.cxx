@@ -24,6 +24,7 @@
 
 #include <comphelper/fileformat.h>
 #include <comphelper/accessibletexthelper.hxx>
+#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
@@ -1220,6 +1221,319 @@ bool SmDocShell::WriteAsMathType3( SfxMedium& rMedium )
     OUStringBuffer aTextAsBuffer(maText);
     MathType aEquation(aTextAsBuffer, mpTree.get());
     return aEquation.ConvertFromStarMath( rMedium );
+}
+
+static Size GetTextLineSize(OutputDevice const& rDevice, const OUString& rLine)
+{
+    Size aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
+    const tools::Long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
+
+    if (nTabPos)
+    {
+        aSize.setWidth(0);
+        sal_Int32 nPos = 0;
+        do
+        {
+            if (nPos > 0)
+                aSize.setWidth(((aSize.Width() / nTabPos) + 1) * nTabPos);
+
+            const OUString aText = rLine.getToken(0, '\t', nPos);
+            aSize.AdjustWidth(rDevice.GetTextWidth(aText));
+        } while (nPos >= 0);
+    }
+
+    return aSize;
+}
+
+static Size GetTextSize(OutputDevice const& rDevice, std::u16string_view rText,
+                        tools::Long MaxWidth)
+{
+    Size aSize;
+    Size aTextSize;
+    if (rText.empty())
+        return aTextSize;
+
+    sal_Int32 nPos = 0;
+    do
+    {
+        OUString aLine(o3tl::getToken(rText, 0, '\n', nPos));
+        aLine = aLine.replaceAll("\r", "");
+
+        aSize = GetTextLineSize(rDevice, aLine);
+
+        if (aSize.Width() > MaxWidth)
+        {
+            do
+            {
+                OUString aText;
+                sal_Int32 m = aLine.getLength();
+                sal_Int32 nLen = m;
+
+                for (sal_Int32 n = 0; n < nLen; n++)
+                {
+                    sal_Unicode cLineChar = aLine[n];
+                    if ((cLineChar == ' ') || (cLineChar == '\t'))
+                    {
+                        aText = aLine.copy(0, n);
+                        if (GetTextLineSize(rDevice, aText).Width() < MaxWidth)
+                            m = n;
+                        else
+                            break;
+                    }
+                }
+
+                aText = aLine.copy(0, m);
+                aLine = aLine.replaceAt(0, m, u"");
+                aSize = GetTextLineSize(rDevice, aText);
+                aTextSize.AdjustHeight(aSize.Height());
+                aTextSize.setWidth(std::clamp(aSize.Width(), aTextSize.Width(), MaxWidth));
+
+                aLine = comphelper::string::stripStart(aLine, ' ');
+                aLine = comphelper::string::stripStart(aLine, '\t');
+                aLine = comphelper::string::stripStart(aLine, ' ');
+            } while (!aLine.isEmpty());
+        }
+        else
+        {
+            aTextSize.AdjustHeight(aSize.Height());
+            aTextSize.setWidth(std::max(aTextSize.Width(), aSize.Width()));
+        }
+    } while (nPos >= 0);
+
+    return aTextSize;
+}
+
+static void DrawTextLine(OutputDevice& rDevice, const Point& rPosition, const OUString& rLine)
+{
+    Point aPoint(rPosition);
+    const tools::Long nTabPos = rLine.isEmpty() ? 0 : rDevice.approximate_digit_width() * 8;
+
+    if (nTabPos)
+    {
+        sal_Int32 nPos = 0;
+        do
+        {
+            if (nPos > 0)
+                aPoint.setX(((aPoint.X() / nTabPos) + 1) * nTabPos);
+
+            OUString aText = rLine.getToken(0, '\t', nPos);
+            rDevice.DrawText(aPoint, aText);
+            aPoint.AdjustX(rDevice.GetTextWidth(aText));
+        } while (nPos >= 0);
+    }
+    else
+        rDevice.DrawText(aPoint, rLine);
+}
+
+static void DrawText(OutputDevice& rDevice, const Point& rPosition, std::u16string_view rText,
+                     sal_uInt16 MaxWidth)
+{
+    if (rText.empty())
+        return;
+
+    Point aPoint(rPosition);
+    Size aSize;
+
+    sal_Int32 nPos = 0;
+    do
+    {
+        OUString aLine(o3tl::getToken(rText, 0, '\n', nPos));
+        aLine = aLine.replaceAll("\r", "");
+        aSize = GetTextLineSize(rDevice, aLine);
+        if (aSize.Width() > MaxWidth)
+        {
+            do
+            {
+                OUString aText;
+                sal_Int32 m = aLine.getLength();
+                sal_Int32 nLen = m;
+
+                for (sal_Int32 n = 0; n < nLen; n++)
+                {
+                    sal_Unicode cLineChar = aLine[n];
+                    if ((cLineChar == ' ') || (cLineChar == '\t'))
+                    {
+                        aText = aLine.copy(0, n);
+                        if (GetTextLineSize(rDevice, aText).Width() < MaxWidth)
+                            m = n;
+                        else
+                            break;
+                    }
+                }
+                aText = aLine.copy(0, m);
+                aLine = aLine.replaceAt(0, m, u"");
+
+                DrawTextLine(rDevice, aPoint, aText);
+                aPoint.AdjustY(aSize.Height());
+
+                aLine = comphelper::string::stripStart(aLine, ' ');
+                aLine = comphelper::string::stripStart(aLine, '\t');
+                aLine = comphelper::string::stripStart(aLine, ' ');
+            } while (GetTextLineSize(rDevice, aLine).Width() > MaxWidth);
+
+            // print the remaining text
+            if (!aLine.isEmpty())
+            {
+                DrawTextLine(rDevice, aPoint, aLine);
+                aPoint.AdjustY(aSize.Height());
+            }
+        }
+        else
+        {
+            DrawTextLine(rDevice, aPoint, aLine);
+            aPoint.AdjustY(aSize.Height());
+        }
+    } while (nPos >= 0);
+}
+
+void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrintUIOptions,
+                tools::Rectangle aOutRect)
+{
+    const bool bIsPrintTitle = rPrintUIOptions.getBoolValue(PRTUIOPT_TITLE_ROW, true);
+    const bool bIsPrintFrame = rPrintUIOptions.getBoolValue(PRTUIOPT_BORDER, true);
+    const bool bIsPrintFormulaText = rPrintUIOptions.getBoolValue(PRTUIOPT_FORMULA_TEXT, true);
+    SmPrintSize ePrintSize(static_cast<SmPrintSize>(
+        rPrintUIOptions.getIntValue(PRTUIOPT_PRINT_FORMAT, PRINT_SIZE_NORMAL)));
+    const sal_uInt16 nZoomFactor
+        = static_cast<sal_uInt16>(rPrintUIOptions.getIntValue(PRTUIOPT_PRINT_SCALE, 100));
+
+    rOutDev.Push();
+    rOutDev.SetLineColor(COL_BLACK);
+
+    // output text on top
+    if (bIsPrintTitle)
+    {
+        Size aSize600(0, 600);
+        Size aSize650(0, 650);
+        vcl::Font aFont(FAMILY_DONTKNOW, aSize600);
+
+        aFont.SetAlignment(ALIGN_TOP);
+        aFont.SetWeight(WEIGHT_BOLD);
+        aFont.SetFontSize(aSize650);
+        aFont.SetColor(COL_BLACK);
+        rOutDev.SetFont(aFont);
+
+        Size aTitleSize(GetTextSize(rOutDev, GetTitle(), aOutRect.GetWidth() - 200));
+
+        aFont.SetWeight(WEIGHT_NORMAL);
+        aFont.SetFontSize(aSize600);
+        rOutDev.SetFont(aFont);
+
+        Size aDescSize(GetTextSize(rOutDev, GetComment(), aOutRect.GetWidth() - 200));
+
+        if (bIsPrintFrame)
+            rOutDev.DrawRect(tools::Rectangle(
+                aOutRect.TopLeft(), Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200
+                                                                  + aDescSize.Height() + 100)));
+        aOutRect.AdjustTop(200);
+
+        // output title
+        aFont.SetWeight(WEIGHT_BOLD);
+        aFont.SetFontSize(aSize650);
+        rOutDev.SetFont(aFont);
+        Point aPoint(aOutRect.Left() + (aOutRect.GetWidth() - aTitleSize.Width()) / 2,
+                     aOutRect.Top());
+        DrawText(rOutDev, aPoint, GetTitle(),
+                 sal::static_int_cast<sal_uInt16>(aOutRect.GetWidth() - 200));
+        aOutRect.AdjustTop(aTitleSize.Height() + 200);
+
+        // output description
+        aFont.SetWeight(WEIGHT_NORMAL);
+        aFont.SetFontSize(aSize600);
+        rOutDev.SetFont(aFont);
+        aPoint.setX(aOutRect.Left() + (aOutRect.GetWidth() - aDescSize.Width()) / 2);
+        aPoint.setY(aOutRect.Top());
+        DrawText(rOutDev, aPoint, GetComment(),
+                 sal::static_int_cast<sal_uInt16>(aOutRect.GetWidth() - 200));
+        aOutRect.AdjustTop(aDescSize.Height() + 300);
+    }
+
+    // output text on bottom
+    if (bIsPrintFormulaText)
+    {
+        vcl::Font aFont(FAMILY_DONTKNOW, Size(0, 600));
+        aFont.SetAlignment(ALIGN_TOP);
+        aFont.SetColor(COL_BLACK);
+
+        // get size
+        rOutDev.SetFont(aFont);
+
+        Size aSize(GetTextSize(rOutDev, GetText(), aOutRect.GetWidth() - 200));
+
+        aOutRect.AdjustBottom(-(aSize.Height() + 600));
+
+        if (bIsPrintFrame)
+            rOutDev.DrawRect(tools::Rectangle(
+                aOutRect.BottomLeft(), Size(aOutRect.GetWidth(), 200 + aSize.Height() + 200)));
+
+        Point aPoint(aOutRect.Left() + (aOutRect.GetWidth() - aSize.Width()) / 2,
+                     aOutRect.Bottom() + 300);
+        DrawText(rOutDev, aPoint, GetText(),
+                 sal::static_int_cast<sal_uInt16>(aOutRect.GetWidth() - 200));
+        aOutRect.AdjustBottom(-200);
+    }
+
+    if (bIsPrintFrame)
+        rOutDev.DrawRect(aOutRect);
+
+    aOutRect.AdjustTop(100);
+    aOutRect.AdjustLeft(100);
+    aOutRect.AdjustBottom(-100);
+    aOutRect.AdjustRight(-100);
+
+    Size aSize(GetSize());
+
+    MapMode OutputMapMode;
+    // PDF export should always use PRINT_SIZE_NORMAL ...
+    if (!rPrintUIOptions.getBoolValue("IsPrinter"))
+        ePrintSize = PRINT_SIZE_NORMAL;
+    switch (ePrintSize)
+    {
+        case PRINT_SIZE_NORMAL:
+            OutputMapMode = MapMode(SmMapUnit());
+            break;
+
+        case PRINT_SIZE_SCALED:
+            if (!aSize.IsEmpty())
+            {
+                Size OutputSize(rOutDev.LogicToPixel(aOutRect.GetSize(), MapMode(SmMapUnit())));
+                Size GraphicSize(rOutDev.LogicToPixel(aSize, MapMode(SmMapUnit())));
+                sal_uInt16 nZ
+                    = std::min(o3tl::convert(OutputSize.Width(), 100, GraphicSize.Width()),
+                               o3tl::convert(OutputSize.Height(), 100, GraphicSize.Height()));
+                nZ -= 10;
+                Fraction aFraction(std::clamp(nZ, MINZOOM, sal_uInt16(100)), 1);
+
+                OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
+            }
+            else
+                OutputMapMode = MapMode(SmMapUnit());
+            break;
+
+        case PRINT_SIZE_ZOOMED:
+        {
+            Fraction aFraction(nZoomFactor, 100);
+
+            OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
+            break;
+        }
+    }
+
+    aSize = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aSize, OutputMapMode), MapMode(SmMapUnit()));
+
+    Point aPos(aOutRect.Left() + (aOutRect.GetWidth() - aSize.Width()) / 2,
+               aOutRect.Top() + (aOutRect.GetHeight() - aSize.Height()) / 2);
+
+    aPos = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aPos, MapMode(SmMapUnit())), OutputMapMode);
+    aOutRect
+        = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aOutRect, MapMode(SmMapUnit())), OutputMapMode);
+
+    rOutDev.SetMapMode(OutputMapMode);
+    rOutDev.SetClipRegion(vcl::Region(aOutRect));
+    DrawFormula(rOutDev, aPos);
+    rOutDev.SetClipRegion();
+
+    rOutDev.Pop();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

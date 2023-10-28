@@ -970,17 +970,6 @@ void SAL_CALL SmModel::render(
     if (xModel != pDocSh->GetModel())
         return;
 
-    //!! when called via API we may not have an active view
-    //!! thus we go and look for a view that can be used.
-    SfxViewShell* pViewSh = SfxViewShell::GetFirst( false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
-    while (pViewSh && pViewSh->GetObjectShell() != pDocSh)
-        pViewSh = SfxViewShell::GetNext( *pViewSh, false /* search non-visible views as well*/, checkSfxViewShell<SmViewShell> );
-    SmViewShell *pView = dynamic_cast< SmViewShell *>( pViewSh );
-    SAL_WARN_IF( !pView, "starmath", "SmModel::render : no SmViewShell found" );
-
-    if (!pView)
-        return;
-
     SmPrinterAccess aPrinterAccess( *pDocSh );
 
     Size aPrtPaperSize;
@@ -1024,7 +1013,7 @@ void SAL_CALL SmModel::render(
         m_pPrintUIOptions.reset(new SmPrintUIOptions);
     m_pPrintUIOptions->processProperties( rxOptions );
 
-    pView->Impl_Print( *pOut, *m_pPrintUIOptions, OutputRect );
+    pDocSh->Impl_Print(*pOut, *m_pPrintUIOptions, OutputRect);
 
     // release SmPrintUIOptions when everything is done.
     // That way, when SmPrintUIOptions is needed again it will read the latest configuration settings in its c-tor.
