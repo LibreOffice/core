@@ -1847,12 +1847,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
     uno::Reference<document::XFilter> xFODTFilter(xInterface, uno::UNO_QUERY_THROW);
     bool ret = xFODTFilter->filter(aArgs);
 
-    css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
-
-    utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
-
     if (ret)
     {
+        css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
+        utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
+
         utl::TempFileNamed aTempFile;
         aTempFile.EnableKillingFile();
 
