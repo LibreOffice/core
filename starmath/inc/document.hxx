@@ -61,6 +61,7 @@ inline constexpr OUString MATHML_XML = u"MathML XML (Math)"_ustr;
 class SmDocShell;
 class EditEngine;
 class SmEditEngine;
+class SmPrintUIOptions;
 
 class SmPrinterAccess
 {
@@ -224,6 +225,9 @@ public:
     }
 
     void SetRightToLeft(bool bRTL);
+
+    void Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrintUIOptions,
+                    tools::Rectangle aOutRect);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
