@@ -56,7 +56,7 @@ namespace {
 
 /**
  * Map a UNO accessible role to an IAccessible2 role.
- * @param nUnoRole The UNO role (css::accessiblity::AccessibleRole).
+ * @param nUnoRole The UNO role (css::accessibility::AccessibleRole).
  * @return IAccessible2 role.
  */
 short lcl_mapToIAccessible2Role(sal_Int16 nUnoRole)
