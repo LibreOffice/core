@@ -1271,7 +1271,7 @@ void SwToContentAnchoredObjectPosition::CalcOverlap(const SwTextFrame* pAnchorFr
 
             if (pAnchoredObjFlyAnchor && pAnchoredObjFlyAnchor->GetUpper() != pAnchorUpper)
             {
-                // A fly overlapping with a fly from an other upper is fine.
+                // A fly overlapping with a fly from another upper is fine.
                 continue;
             }
         }
