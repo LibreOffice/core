@@ -18,7 +18,7 @@
 struct BinaryDataContainer::Impl
 {
     // temp file to store the data out of RAM if necessary
-    std::unique_ptr<utl::TempFileNamed> mpFile;
+    std::unique_ptr<utl::TempFileFast> mpFile;
     // the binary data
     std::shared_ptr<std::vector<sal_uInt8>> mpData;
 
@@ -59,7 +59,7 @@ struct BinaryDataContainer::Impl
         if (!mpData || mpData->empty())
             return;
 
-        mpFile.reset(new utl::TempFileNamed());
+        mpFile.reset(new utl::TempFileFast());
         auto pStream = mpFile->GetStream(StreamMode::READWRITE);
 
         pStream->WriteBytes(mpData->data(), mpData->size());
