@@ -3060,9 +3060,11 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
     if( sURL.isEmpty() )
         throw frame::IllegalArgumentIOException();
 
-    bool bSaved = false;
+    if (!m_pData->m_pObjectShell)
+        return;
+
     ::comphelper::SequenceAsHashMap aArgHash(seqArguments);
-    if ( !bSaveTo && m_pData->m_pObjectShell.is() && !sURL.isEmpty()
+    if ( !bSaveTo && !sURL.isEmpty()
       && !sURL.startsWith( "private:stream" )
       && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
@@ -3095,7 +3097,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                         try
                         {
                             storeSelf( aArgHash.getAsConstPropertyValueList() );
-                            bSaved = true;
+                            return;
                         }
                         catch( const lang::IllegalArgumentException& )
                         {
@@ -3130,9 +3132,6 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
             }
         }
     }
-
-    if ( bSaved || !m_pData->m_pObjectShell.is() )
-        return;
 
     SfxGetpApp()->NotifyEvent( SfxEventHint( bSaveTo ? SfxEventHintId::SaveToDoc : SfxEventHintId::SaveAsDoc, GlobalEventConfig::GetEventName( bSaveTo ? GlobalEventId::SAVETODOC : GlobalEventId::SAVEASDOC ),
                                             m_pData->m_pObjectShell.get() ) );
