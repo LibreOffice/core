@@ -1076,14 +1076,15 @@ namespace emfplushelper
                 {
                     case EmfPlusRecordTypeHeader:
                     {
-                        sal_uInt32 header, version;
+                        sal_uInt32 version, emfPlusFlags;
+                        SAL_INFO("drawinglayer.emf", "EMF+\tDual: " << ((flags & 1) ? "true" : "false"));
 
-                        rMS.ReadUInt32(header).ReadUInt32(version).ReadUInt32(mnHDPI).ReadUInt32(mnVDPI);
-                        SAL_INFO("drawinglayer.emf", "EMF+\tHeader: 0x" << std::hex << header);
-                        SAL_INFO("drawinglayer.emf", "EMF+\tVersion: " << std::dec << version);
+                        rMS.ReadUInt32(version).ReadUInt32(emfPlusFlags).ReadUInt32(mnHDPI).ReadUInt32(mnVDPI);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tVersion: 0x" << std::hex << version);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tEmf+ Flags: 0x"  << emfPlusFlags << std::dec);
+                        SAL_INFO("drawinglayer.emf", "EMF+\tMetafile was recorded with a reference device context for " << ((emfPlusFlags & 1) ? "video display" : "printer"));
                         SAL_INFO("drawinglayer.emf", "EMF+\tHorizontal DPI: " << mnHDPI);
                         SAL_INFO("drawinglayer.emf", "EMF+\tVertical DPI: " << mnVDPI);
-                        SAL_INFO("drawinglayer.emf", "EMF+\tDual: " << ((flags & 1) ? "true" : "false"));
                         break;
                     }
                     case EmfPlusRecordTypeEndOfFile:
