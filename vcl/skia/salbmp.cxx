@@ -963,7 +963,12 @@ const sk_sp<SkImage>& SkiaSalBitmap::GetAlphaSkImage(DirectImage direct) const
             // be temporary.
             SkiaSalBitmap* thisPtr = const_cast<SkiaSalBitmap*>(this);
             thisPtr->mAlphaImage = alphaImage;
-            return mAlphaImage;
+            // Fix testDelayedScaleAlphaImage unit test
+            // Do not return the alpha mask if it is awaiting pending scaling.
+            // Pending scaling has not yet been done at this point since the
+            // scaling is done in the code following this block.
+            if (!scaling)
+                return mAlphaImage;
         }
         // Move the R channel value to the alpha channel. This seems to be the only
         // way to reinterpret data in SkImage as an alpha SkImage without accessing the pixels.
