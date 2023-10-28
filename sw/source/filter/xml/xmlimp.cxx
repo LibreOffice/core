@@ -1852,16 +1852,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
         css::uno::Reference<css::frame::XController2> xController(xModel->createDefaultViewController(xTargetFrame), UNO_SET_THROW);
         utl::ConnectFrameControllerModel(xTargetFrame, xController, xModel);
 
-        utl::TempFileNamed aTempFile;
-        aTempFile.EnableKillingFile();
+        utl::TempFileFast aTempFile;
 
         uno::Reference<document::XFilter> xPDFFilter(
             xMultiServiceFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
         uno::Reference<document::XExporter> xExporter(xPDFFilter, uno::UNO_QUERY);
         xExporter->setSourceDocument(xModel);
 
-        SvFileStream aOutputStream(aTempFile.GetURL(), StreamMode::WRITE);
-        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aOutputStream));
+        uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(*aTempFile.GetStream(StreamMode::READWRITE)));
 
         // ofz#60533 fuzzer learned to use fo:font-size="842pt" which generate timeouts trying
         // to export thousands of pages from minimal input size
@@ -1874,7 +1872,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestPDFExportFODT(SvStream &rStream)
             { "FilterData", uno::Any(aFilterData) }
         }));
         xPDFFilter->filter(aDescriptor);
-        aOutputStream.Close();
     }
 
     css::uno::Reference<css::util::XCloseable> xClose(xModel, css::uno::UNO_QUERY);
