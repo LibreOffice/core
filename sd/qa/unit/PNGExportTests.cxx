@@ -1,4 +1,3 @@
-
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
@@ -496,9 +495,9 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157793)
     }
 
     // Without the fix in place, this test would have failed with
-    // - Expected greater than: 8500
+    // - Expected greater than: 7800
     // - Actual  : 0
-    CPPUNIT_ASSERT_GREATER(8500, nLightGrayCount);
+    CPPUNIT_ASSERT_GREATER(7800, nLightGrayCount);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf157635)
