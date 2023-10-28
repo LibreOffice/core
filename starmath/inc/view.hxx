@@ -37,6 +37,9 @@ class SmPrintUIOptions;
 class SmGraphicAccessible;
 class SmGraphicWidget;
 
+#define MINZOOM sal_uInt16(25)
+#define MAXZOOM sal_uInt16(800)
+
 class SmGraphicWindow final : public InterimItemWindow
 {
 private:
@@ -258,19 +261,6 @@ class SmViewShell final : public SfxViewShell
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    static Size GetTextLineSize(OutputDevice const & rDevice,
-                         const OUString& rLine);
-    static Size GetTextSize(OutputDevice const & rDevice,
-                     std::u16string_view rText,
-                     tools::Long          MaxWidth);
-    static void DrawTextLine(OutputDevice& rDevice,
-                      const Point&  rPosition,
-                      const OUString& rLine);
-    static void DrawText(OutputDevice& rDevice,
-                  const Point&  rPosition,
-                  std::u16string_view rText,
-                  sal_uInt16        MaxWidth);
-
     virtual SfxPrinter *GetPrinter(bool bCreate = false) override;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL) override;
@@ -333,9 +323,6 @@ private:
 public:
     void Execute( SfxRequest& rReq );
     void GetState(SfxItemSet &);
-
-    void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
-            tools::Rectangle aOutRect );
 
     /** Set bInsertIntoEditWindow so we know where to insert
      *
