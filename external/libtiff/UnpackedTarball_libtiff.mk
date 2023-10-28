@@ -16,7 +16,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libtiff,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libtiff,\
     external/libtiff/libtiff.linknolibs.patch \
     external/libtiff/0001-ofz-54685-Timeout.patch \
-    external/libtiff/0001-WebP-decoder-validate-WebP-blob-width-height-band-co.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
