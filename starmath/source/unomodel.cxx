@@ -909,8 +909,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
         throw RuntimeException();
 
     SmPrinterAccess aPrinterAccess( *pDocSh );
-    Printer *pPrinter = aPrinterAccess.GetPrinter();
-    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+    Size aPrtPaperSize;
+    if (Printer *pPrinter = aPrinterAccess.GetPrinter())
+        aPrtPaperSize = pPrinter->GetPaperSize();
 
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
@@ -980,11 +981,16 @@ void SAL_CALL SmModel::render(
         return;
 
     SmPrinterAccess aPrinterAccess( *pDocSh );
-    Printer *pPrinter = aPrinterAccess.GetPrinter();
 
-    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
-    Size    aOutputSize   ( pPrinter->GetOutputSize() );
-    Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+    Size aPrtPaperSize;
+    Size aOutputSize;
+    Point aPrtPageOffset;
+    if (Printer *pPrinter = aPrinterAccess.GetPrinter())
+    {
+        aPrtPaperSize = pPrinter->GetPaperSize();
+        aOutputSize = pPrinter->GetOutputSize();
+        aPrtPageOffset = pPrinter->GetPageOffset();
+    }
 
     // no real printer ??
     if (aPrtPaperSize.IsEmpty())
