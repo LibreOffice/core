@@ -628,11 +628,7 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     {
         const sal_uInt16 nGrey1 = mEraseColor.GetRed();
         const sal_uInt16 nGrey2 = otherBitmap->mEraseColor.GetRed();
-        // Awkward calculation because the original used transparency, and to replicate
-        // the logic we need to translate into transparency, perform the original logic,
-        // then translate back to alpha.
-        const sal_uInt8 nGrey = static_cast<sal_uInt8>(
-            255 - ((255 - nGrey1) + (255 - nGrey2) - (255 - nGrey1) * (255 - nGrey2) / 255));
+        const sal_uInt8 nGrey = static_cast<sal_uInt8>(nGrey1 * nGrey2 / 255);
         mEraseColor = Color(nGrey, nGrey, nGrey);
         DataChanged();
         SAL_INFO("vcl.skia.trace",
