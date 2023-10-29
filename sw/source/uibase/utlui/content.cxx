@@ -200,6 +200,23 @@ namespace
             pCNd = aIdx.GetNodes().GoNext(&aIdx);
         return pCNd->IsTextNode() ? static_cast<SwTextNode*>(pCNd)->GetText() : OUString();
     }
+
+    void getAnchorPos(SwPosition& rPos)
+    {
+        // get the top most anchor position of the position
+        if (SwFrameFormat* pFlyFormat = rPos.GetNode().GetFlyFormat())
+        {
+            SwNode* pAnchorNode;
+            SwFrameFormat* pTmp = pFlyFormat;
+            while (pTmp && (pAnchorNode = pTmp->GetAnchor().GetAnchorNode()) &&
+                   (pTmp = pAnchorNode->GetFlyFormat()))
+            {
+                pFlyFormat = pTmp;
+            }
+            if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
+                rPos = *pPos;
+        }
+    }
 }
 
 // Content, contains names and reference at the content type.
@@ -628,55 +645,42 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             }
             if (!m_bAlphabeticSort)
             {
-                const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
-                bool bHasEntryInFly = false;
-
+                const SwNodeOffset nEndOfExtrasIndex =
+                        m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
                 // use stable sort array to list fields in document model order
                 std::stable_sort(aArr.begin(), aArr.end(),
-                                 [](const SwTextField* a, const SwTextField* b){
+                                 [&nEndOfExtrasIndex, this](
+                                 const SwTextField* a, const SwTextField* b){
                     SwPosition aPos(a->GetTextNode(), a->GetStart());
                     SwPosition bPos(b->GetTextNode(), b->GetStart());
-                    return aPos < bPos;});
-
-                // determine if there is a text field in a fly frame
-                for (SwTextField* pTextField : aArr)
-                {
-                    if (!bHasEntryInFly)
+                    // use anchor position for entries that are located in flys
+                    if (nEndOfExtrasIndex >= aPos.GetNodeIndex())
+                        getAnchorPos(aPos);
+                    if (nEndOfExtrasIndex >= bPos.GetNodeIndex())
+                        getAnchorPos(bPos);
+                    if (aPos == bPos)
                     {
-                        if (nEndOfExtrasIndex >= pTextField->GetTextNode().GetIndex())
+                        // probably in same or nested fly frame
+                        // sort using layout position
+                        SwRect aCharRect, bCharRect;
+                        std::shared_ptr<SwPaM> pPamForTextField;
+                        if (SwTextFrame* pFrame = static_cast<SwTextFrame*>(
+                                    a->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout())))
                         {
-                            // Not a node of BodyText
-                            // Are we in a fly?
-                            if (pTextField->GetTextNode().GetFlyFormat())
-                            {
-                                bHasEntryInFly = true;
-                                break;
-                            }
+                            SwTextField::GetPamForTextField(*a, pPamForTextField);
+                            if (pPamForTextField)
+                                pFrame->GetCharRect(aCharRect, *pPamForTextField->GetPoint());
                         }
+                        if (SwTextFrame* pFrame = static_cast<SwTextFrame*>(
+                                    b->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout())))
+                        {
+                            SwTextField::GetPamForTextField(*b, pPamForTextField);
+                            if (pPamForTextField)
+                                pFrame->GetCharRect(bCharRect, *pPamForTextField->GetPoint());
+                        }
+                        return aCharRect.Top() < bCharRect.Top();
                     }
-                }
-
-                // When there are fields in fly frames do an additional sort using the fly frame
-                // anchor position to place field entries in order of document layout appearance.
-                if (bHasEntryInFly)
-                {
-                    std::stable_sort(aArr.begin(), aArr.end(),
-                                     [nEndOfExtrasIndex](const SwTextField* a, const SwTextField* b){
-                        SwTextNode& aTextNode = a->GetTextNode();
-                        SwTextNode& bTextNode = b->GetTextNode();
-                        SwPosition aPos(aTextNode, a->GetStart());
-                        SwPosition bPos(bTextNode, b->GetStart());
-                        // use anchor position for entries that are located in flys
-                        if (nEndOfExtrasIndex >= aTextNode.GetIndex())
-                            if (auto pFlyFormat = aTextNode.GetFlyFormat())
-                                if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
-                                    aPos = *pPos;
-                        if (nEndOfExtrasIndex >= bTextNode.GetIndex())
-                            if (auto pFlyFormat = bTextNode.GetFlyFormat())
-                                if (const SwPosition* pPos = pFlyFormat->GetAnchor().GetContentAnchor())
-                                    bPos = *pPos;
-                        return aPos < bPos;});
-                }
+                    return aPos < bPos;});
             }
             std::vector<OUString> aDocumentStatisticsSubTypesList;
             tools::Long nYPos = 0;
