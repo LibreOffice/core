@@ -44,30 +44,11 @@ private:
     css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
     css::uno::Reference< css::task::XInteractionHandler > mxIH;
 
-    bool                mbUseTaggedPDF;
-    sal_Int32           mnPDFTypeSelection;
-    bool                mbPDFUACompliance;
-    bool                mbExportNotes;
-    bool                mbExportNotesInMargin;
-    bool                mbExportPlaceholders;
-    bool                mbUseReferenceXObject;
-    bool                mbExportNotesPages;
-    bool                mbExportOnlyNotesPages;
-    bool                mbUseTransitionEffects;
-    bool                mbExportBookmarks;
-    bool                mbExportHiddenSlides;
-    bool                mbSinglePageSheets;
-    sal_Int32           mnOpenBookmarkLevels;
-
     bool                mbUseLosslessCompression;
     bool                mbReduceImageResolution;
     bool                mbSkipEmptyPages;
-    bool                mbAddStream;
     sal_Int32           mnMaxImageResolution;
     sal_Int32           mnQuality;
-    sal_Int32           mnFormsFormat;
-    bool                mbExportFormFields;
-    bool                mbAllowDuplicateFieldNames;
     sal_Int32           mnProgressValue;
     bool                mbRemoveTransparencies;
 
@@ -80,43 +61,8 @@ private:
     std::optional<Degree10> moWatermarkRotateAngle;
     OUString            msTiledWatermark;
 
-    // these variable are here only to have a location in filter/pdf to set the default
-    // to be used by the macro (when the FilterData are set by the macro itself)
-    bool                mbHideViewerToolbar;
-    bool                mbHideViewerMenubar;
-    bool                mbHideViewerWindowControls;
-    bool                mbFitWindow;
-    bool                mbCenterWindow;
-    bool                mbOpenInFullScreenMode;
-    bool                mbDisplayPDFDocumentTitle;
-    sal_Int32           mnPDFDocumentMode;
-    sal_Int32           mnPDFDocumentAction;
-    sal_Int32           mnZoom;
-    sal_Int32           mnInitialPage;
-    sal_Int32           mnPDFPageLayout;
-
-    bool                mbEncrypt;
-    bool                mbRestrictPermissions;
-    sal_Int32           mnPrintAllowed;
-    sal_Int32           mnChangesAllowed;
-    bool                mbCanCopyOrExtract;
-    bool                mbCanExtractForAccessibility;
-
-    // #i56629
-    bool                mbExportRelativeFsysLinks;
-    sal_Int32           mnDefaultLinkAction;
-    bool                mbConvertOOoTargetToPDFTarget;
-    bool                mbExportBmkToDest;
     void                ImplExportPage( vcl::PDFWriter& rWriter, vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                         const GDIMetaFile& rMtf );
-
-    bool                mbSignPDF;
-    OUString            msSignLocation;
-    OUString            msSignContact;
-    OUString            msSignReason;
-    OUString            msSignPassword;
-    css::uno::Reference< css::security::XCertificate > maSignCertificate;
-    OUString            msSignTSA;
 
     void                ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
     void                ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );

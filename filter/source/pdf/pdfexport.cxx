@@ -82,62 +82,17 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mxContext                   ( xContext ),
     mxStatusIndicator           ( rxStatusIndicator ),
     mxIH                        ( rxIH ),
-    mbUseTaggedPDF              ( false ),
-    mnPDFTypeSelection          ( 0 ),
-    mbPDFUACompliance           ( false),
-    mbExportNotes               ( true ),
-    mbExportNotesInMargin       ( false ),
-    mbExportPlaceholders        ( false ),
-    mbUseReferenceXObject       ( false ),
-    mbExportNotesPages          ( false ),
-    mbExportOnlyNotesPages      ( false ),
-    mbUseTransitionEffects      ( true ),
-    mbExportBookmarks           ( true ),
-    mbExportHiddenSlides        ( false ),
-    mbSinglePageSheets          ( false ),
-    mnOpenBookmarkLevels        ( -1 ),
     mbUseLosslessCompression    ( false ),
     mbReduceImageResolution     ( true ),
     mbSkipEmptyPages            ( true ),
-    mbAddStream                 ( false ),
     mnMaxImageResolution        ( 300 ),
     mnQuality                   ( 80 ),
-    mnFormsFormat               ( 0 ),
-    mbExportFormFields          ( true ),
-    mbAllowDuplicateFieldNames  ( false ),
     mnProgressValue             ( 0 ),
     mbRemoveTransparencies      ( false ),
 
     mbIsRedactMode              ( false ),
     maWatermarkColor            ( COL_LIGHTGREEN ),
-    maWatermarkFontName         ( "Helvetica" ),
-
-    mbHideViewerToolbar         ( false ),
-    mbHideViewerMenubar         ( false ),
-    mbHideViewerWindowControls  ( false ),
-    mbFitWindow                 ( false ),
-    mbCenterWindow              ( false ),
-    mbOpenInFullScreenMode      ( false ),
-    mbDisplayPDFDocumentTitle   ( true ),
-    mnPDFDocumentMode           ( 0 ),
-    mnPDFDocumentAction         ( 0 ),
-    mnZoom                      ( 100 ),
-    mnInitialPage               ( 1 ),
-    mnPDFPageLayout             ( 0 ),
-
-    mbEncrypt                   ( false ),
-    mbRestrictPermissions       ( false ),
-    mnPrintAllowed              ( 2 ),
-    mnChangesAllowed            ( 4 ),
-    mbCanCopyOrExtract          ( true ),
-    mbCanExtractForAccessibility( true ),
-
-    // #i56629
-    mbExportRelativeFsysLinks       ( false ),
-    mnDefaultLinkAction         ( 0 ),
-    mbConvertOOoTargetToPDFTarget( false ),
-    mbExportBmkToDest           ( false ),
-    mbSignPDF                   ( false )
+    maWatermarkFontName         ( "Helvetica" )
 {
 }
 
@@ -441,6 +396,53 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
         if( xRenderable.is() )
         {
+            // The defaults
+            bool bUseTaggedPDF = false;
+            sal_Int32 nPDFTypeSelection = 0;
+            bool bPDFUACompliance = false;
+            bool bExportNotes = true;
+            bool bExportNotesInMargin = false;
+            bool bExportNotesPages = false;
+            bool bExportOnlyNotesPages = false;
+            bool bUseTransitionEffects = true;
+            bool bExportFormFields = true;
+            sal_Int32 nFormsFormat = 0;
+            bool bAllowDuplicateFieldNames = false;
+            bool bHideViewerToolbar = false;
+            bool bHideViewerMenubar = false;
+            bool bHideViewerWindowControls = false;
+            bool bFitWindow = false;
+            bool bCenterWindow = false;
+            bool bOpenInFullScreenMode = false;
+            bool bDisplayPDFDocumentTitle = true;
+            sal_Int32 nPDFDocumentMode = 0;
+            sal_Int32 nPDFDocumentAction = 0;
+            sal_Int32 nZoom = 100;
+            sal_Int32 nInitialPage = 1;
+            sal_Int32 nPDFPageLayout = 0;
+            bool bAddStream = false;
+            bool bEncrypt = false;
+            bool bRestrictPermissions = false;
+            sal_Int32 nPrintAllowed = 2;
+            sal_Int32 nChangesAllowed = 4;
+            bool bCanCopyOrExtract = true;
+            bool bCanExtractForAccessibility = true;
+            // #i56629
+            bool bExportRelativeFsysLinks = false;
+            sal_Int32 nDefaultLinkAction = 0;
+            bool bConvertOOoTargetToPDFTarget = false;
+            bool bExportBmkToDest = false;
+            bool bExportBookmarks = true;
+            bool bExportHiddenSlides = false;
+            bool bSinglePageSheets = false;
+            sal_Int32 nOpenBookmarkLevels = -1;
+            bool bSignPDF = false;
+            OUString sSignLocation, sSignReason, sSignContact, sSignPassword;
+            css::uno::Reference<css::security::XCertificate> aSignCertificate;
+            OUString sSignTSA;
+            bool bExportPlaceholders = false;
+            bool bUseReferenceXObject = false;
+
             rtl::Reference<VCLXDevice>  xDevice(new VCLXDevice);
             OUString                    aPageRange;
             Any                         aSelection;
@@ -456,15 +458,15 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             if ( xInfo.is() )
             {
                 if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
-                    aCreator += "Impress";
+                    aCreator = u"Impress"_ustr;
                 else if ( xInfo->supportsService( "com.sun.star.drawing.DrawingDocument" ) )
-                    aCreator += "Draw";
+                    aCreator = u"Draw"_ustr;
                 else if ( xInfo->supportsService( "com.sun.star.text.TextDocument" ) )
-                    aCreator += "Writer";
+                    aCreator = u"Writer"_ustr;
                 else if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
-                    aCreator += "Calc";
+                    aCreator = u"Calc"_ustr;
                 else if ( xInfo->supportsService( "com.sun.star.formula.FormulaProperties"  ) )
-                    aCreator += "Math";
+                    aCreator = u"Math"_ustr;
             }
 
             Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
@@ -525,56 +527,56 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 else if ( rProp.Name == "MaxImageResolution" )
                     rProp.Value >>= mnMaxImageResolution;
                 else if ( rProp.Name == "UseTaggedPDF" )
-                    rProp.Value >>= mbUseTaggedPDF;
+                    rProp.Value >>= bUseTaggedPDF;
                 else if ( rProp.Name == "SelectPdfVersion" )
-                    rProp.Value >>= mnPDFTypeSelection;
+                    rProp.Value >>= nPDFTypeSelection;
                 else if ( rProp.Name == "PDFUACompliance" )
-                    rProp.Value >>= mbPDFUACompliance;
+                    rProp.Value >>= bPDFUACompliance;
                 else if ( rProp.Name == "ExportNotes" )
-                    rProp.Value >>= mbExportNotes;
+                    rProp.Value >>= bExportNotes;
                 else if ( rProp.Name == "ExportNotesInMargin" )
-                    rProp.Value >>= mbExportNotesInMargin;
+                    rProp.Value >>= bExportNotesInMargin;
                 else if ( rProp.Name == "ExportNotesPages" )
-                    rProp.Value >>= mbExportNotesPages;
+                    rProp.Value >>= bExportNotesPages;
                 else if ( rProp.Name == "ExportOnlyNotesPages" )
-                    rProp.Value >>= mbExportOnlyNotesPages;
+                    rProp.Value >>= bExportOnlyNotesPages;
                 else if ( rProp.Name == "UseTransitionEffects" )
-                    rProp.Value >>= mbUseTransitionEffects;
+                    rProp.Value >>= bUseTransitionEffects;
                 else if ( rProp.Name == "ExportFormFields" )
-                    rProp.Value >>= mbExportFormFields;
+                    rProp.Value >>= bExportFormFields;
                 else if ( rProp.Name == "FormsType" )
-                    rProp.Value >>= mnFormsFormat;
+                    rProp.Value >>= nFormsFormat;
                 else if ( rProp.Name == "AllowDuplicateFieldNames" )
-                    rProp.Value >>= mbAllowDuplicateFieldNames;
+                    rProp.Value >>= bAllowDuplicateFieldNames;
                 // viewer properties
                 else if ( rProp.Name == "HideViewerToolbar" )
-                    rProp.Value >>= mbHideViewerToolbar;
+                    rProp.Value >>= bHideViewerToolbar;
                 else if ( rProp.Name == "HideViewerMenubar" )
-                    rProp.Value >>= mbHideViewerMenubar;
+                    rProp.Value >>= bHideViewerMenubar;
                 else if ( rProp.Name == "HideViewerWindowControls" )
-                    rProp.Value >>= mbHideViewerWindowControls;
+                    rProp.Value >>= bHideViewerWindowControls;
                 else if ( rProp.Name == "ResizeWindowToInitialPage" )
-                    rProp.Value >>= mbFitWindow;
+                    rProp.Value >>= bFitWindow;
                 else if ( rProp.Name == "CenterWindow" )
-                    rProp.Value >>= mbCenterWindow;
+                    rProp.Value >>= bCenterWindow;
                 else if ( rProp.Name == "OpenInFullScreenMode" )
-                    rProp.Value >>= mbOpenInFullScreenMode;
+                    rProp.Value >>= bOpenInFullScreenMode;
                 else if ( rProp.Name == "DisplayPDFDocumentTitle" )
-                    rProp.Value >>= mbDisplayPDFDocumentTitle;
+                    rProp.Value >>= bDisplayPDFDocumentTitle;
                 else if ( rProp.Name == "InitialView" )
-                    rProp.Value >>= mnPDFDocumentMode;
+                    rProp.Value >>= nPDFDocumentMode;
                 else if ( rProp.Name == "Magnification" )
-                    rProp.Value >>= mnPDFDocumentAction;
+                    rProp.Value >>= nPDFDocumentAction;
                 else if ( rProp.Name == "Zoom" )
-                    rProp.Value >>= mnZoom;
+                    rProp.Value >>= nZoom;
                 else if ( rProp.Name == "InitialPage" )
-                    rProp.Value >>= mnInitialPage;
+                    rProp.Value >>= nInitialPage;
                 else if ( rProp.Name == "PageLayout" )
-                    rProp.Value >>= mnPDFPageLayout;
+                    rProp.Value >>= nPDFPageLayout;
                 else if ( rProp.Name == "FirstPageOnLeft" )
                     rProp.Value >>= aContext.FirstPageLeft;
                 else if ( rProp.Name == "IsAddStream" )
-                    rProp.Value >>= mbAddStream;
+                    rProp.Value >>= bAddStream;
                 else if ( rProp.Name == "Watermark" )
                     rProp.Value >>= msWatermark;
                 else if ( rProp.Name == "WatermarkColor" )
@@ -613,11 +615,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= msTiledWatermark;
                 // now all the security related properties...
                 else if ( rProp.Name == "EncryptFile" )
-                    rProp.Value >>= mbEncrypt;
+                    rProp.Value >>= bEncrypt;
                 else if ( rProp.Name == "DocumentOpenPassword" )
                     rProp.Value >>= aOpenPassword;
                 else if ( rProp.Name == "RestrictPermissions" )
-                    rProp.Value >>= mbRestrictPermissions;
+                    rProp.Value >>= bRestrictPermissions;
                 else if ( rProp.Name == "PermissionPassword" )
                     rProp.Value >>= aPermissionPassword;
                 else if ( rProp.Name == "PreparedPasswords" )
@@ -625,64 +627,64 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 else if ( rProp.Name == "PreparedPermissionPassword" )
                     rProp.Value >>= aPreparedPermissionPassword;
                 else if ( rProp.Name == "Printing" )
-                    rProp.Value >>= mnPrintAllowed;
+                    rProp.Value >>= nPrintAllowed;
                 else if ( rProp.Name == "Changes" )
-                    rProp.Value >>= mnChangesAllowed;
+                    rProp.Value >>= nChangesAllowed;
                 else if ( rProp.Name == "EnableCopyingOfContent" )
-                    rProp.Value >>= mbCanCopyOrExtract;
+                    rProp.Value >>= bCanCopyOrExtract;
                 else if ( rProp.Name == "EnableTextAccessForAccessibilityTools" )
-                    rProp.Value >>= mbCanExtractForAccessibility;
+                    rProp.Value >>= bCanExtractForAccessibility;
                 // i56629 links extra (relative links and other related stuff)
                 else if ( rProp.Name == "ExportLinksRelativeFsys" )
-                    rProp.Value >>= mbExportRelativeFsysLinks;
+                    rProp.Value >>= bExportRelativeFsysLinks;
                 else if ( rProp.Name == "PDFViewSelection" )
-                    rProp.Value >>= mnDefaultLinkAction;
+                    rProp.Value >>= nDefaultLinkAction;
                 else if ( rProp.Name == "ConvertOOoTargetToPDFTarget" )
-                    rProp.Value >>= mbConvertOOoTargetToPDFTarget;
+                    rProp.Value >>= bConvertOOoTargetToPDFTarget;
                 else if ( rProp.Name == "ExportBookmarksToPDFDestination" )
-                    rProp.Value >>= mbExportBmkToDest;
+                    rProp.Value >>= bExportBmkToDest;
                 else if ( rProp.Name == "ExportBookmarks" )
-                    rProp.Value >>= mbExportBookmarks;
+                    rProp.Value >>= bExportBookmarks;
                 else if ( rProp.Name == "ExportHiddenSlides" )
-                    rProp.Value >>= mbExportHiddenSlides;
+                    rProp.Value >>= bExportHiddenSlides;
                 else if ( rProp.Name == "SinglePageSheets" )
-                    rProp.Value >>= mbSinglePageSheets;
+                    rProp.Value >>= bSinglePageSheets;
                 else if ( rProp.Name == "OpenBookmarkLevels" )
-                    rProp.Value >>= mnOpenBookmarkLevels;
+                    rProp.Value >>= nOpenBookmarkLevels;
                 else if ( rProp.Name == "SignPDF" )
-                    rProp.Value >>= mbSignPDF;
+                    rProp.Value >>= bSignPDF;
                 else if ( rProp.Name == "SignatureLocation" )
-                    rProp.Value >>= msSignLocation;
+                    rProp.Value >>= sSignLocation;
                 else if ( rProp.Name == "SignatureReason" )
-                    rProp.Value >>= msSignReason;
+                    rProp.Value >>= sSignReason;
                 else if ( rProp.Name == "SignatureContactInfo" )
-                    rProp.Value >>= msSignContact;
+                    rProp.Value >>= sSignContact;
                 else if ( rProp.Name == "SignaturePassword" )
-                    rProp.Value >>= msSignPassword;
+                    rProp.Value >>= sSignPassword;
                 else if ( rProp.Name == "SignatureCertificate" )
-                    rProp.Value >>= maSignCertificate;
+                    rProp.Value >>= aSignCertificate;
                 else if (rProp.Name == "SignCertificateSubjectName")
                     rProp.Value >>= aSignCertificateSubjectName;
                 else if ( rProp.Name == "SignatureTSA" )
-                    rProp.Value >>= msSignTSA;
+                    rProp.Value >>= sSignTSA;
                 else if ( rProp.Name == "ExportPlaceholders" )
-                    rProp.Value >>= mbExportPlaceholders;
+                    rProp.Value >>= bExportPlaceholders;
                 else if ( rProp.Name == "UseReferenceXObject" )
-                    rProp.Value >>= mbUseReferenceXObject;
+                    rProp.Value >>= bUseReferenceXObject;
                 // Redaction & bitmap related stuff
                 else if ( rProp.Name == "IsRedactMode" )
                     rProp.Value >>= mbIsRedactMode;
             }
 
-            if (!maSignCertificate.is() && !aSignCertificateSubjectName.isEmpty())
+            if (!aSignCertificate.is() && !aSignCertificateSubjectName.isEmpty())
             {
-                maSignCertificate = GetCertificateFromSubjectName(aSignCertificateSubjectName);
+                aSignCertificate = GetCertificateFromSubjectName(aSignCertificateSubjectName);
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
 
             // set the correct version, depending on user request
-            switch( mnPDFTypeSelection )
+            switch( nPDFTypeSelection )
             {
             default:
             case 0:
@@ -690,23 +692,23 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 break;
             case 1:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_1;
-                mbUseTaggedPDF = true;          // force the tagged PDF as well
+                bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = true;  // does not allow transparencies
-                mbEncrypt = false;              // no encryption
+                bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 2:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_2;
-                mbUseTaggedPDF = true;          // force the tagged PDF as well
+                bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
-                mbEncrypt = false;              // no encryption
+                bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 3:
                 aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_3;
-                mbUseTaggedPDF = true;          // force the tagged PDF as well
+                bUseTaggedPDF = true;           // force the tagged PDF as well
                 mbRemoveTransparencies = false; // does allow transparencies
-                mbEncrypt = false;              // no encryption
+                bEncrypt = false;               // no encryption
                 xEnc.clear();
                 break;
             case 15:
@@ -721,32 +723,32 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             }
 
             // PDF/UA support
-            aContext.UniversalAccessibilityCompliance = mbPDFUACompliance;
-            if (mbPDFUACompliance)
+            aContext.UniversalAccessibilityCompliance = bPDFUACompliance;
+            if (bPDFUACompliance)
             {
                 // ISO 14289-1:2014, Clause: 7.1
-                mbUseTaggedPDF = true;
+                bUseTaggedPDF = true;
                 // ISO 14289-1:2014, Clause: 7.16
-                mbCanExtractForAccessibility = true;
+                bCanExtractForAccessibility = true;
                 // ISO 14289-1:2014, Clause: 7.20
-                mbUseReferenceXObject = false;
+                bUseReferenceXObject = false;
             }
 
             // copy in context the values default in the constructor or set by the FilterData sequence of properties
-            aContext.Tagged     = mbUseTaggedPDF;
+            aContext.Tagged     = bUseTaggedPDF;
 
             // values used in viewer
-            aContext.HideViewerToolbar          = mbHideViewerToolbar;
-            aContext.HideViewerMenubar          = mbHideViewerMenubar;
-            aContext.HideViewerWindowControls   = mbHideViewerWindowControls;
-            aContext.FitWindow                  = mbFitWindow;
-            aContext.CenterWindow               = mbCenterWindow;
-            aContext.OpenInFullScreenMode       = mbOpenInFullScreenMode;
-            aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
-            aContext.InitialPage                = mnInitialPage-1;
-            aContext.OpenBookmarkLevels         = mnOpenBookmarkLevels;
+            aContext.HideViewerToolbar          = bHideViewerToolbar;
+            aContext.HideViewerMenubar          = bHideViewerMenubar;
+            aContext.HideViewerWindowControls   = bHideViewerWindowControls;
+            aContext.FitWindow                  = bFitWindow;
+            aContext.CenterWindow               = bCenterWindow;
+            aContext.OpenInFullScreenMode       = bOpenInFullScreenMode;
+            aContext.DisplayPDFDocumentTitle    = bDisplayPDFDocumentTitle;
+            aContext.InitialPage                = nInitialPage-1;
+            aContext.OpenBookmarkLevels         = nOpenBookmarkLevels;
 
-            switch( mnPDFDocumentMode )
+            switch( nPDFDocumentMode )
             {
                 default:
                 case 0:
@@ -759,7 +761,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.PDFDocumentMode = vcl::PDFWriter::UseThumbs;
                     break;
             }
-            switch( mnPDFDocumentAction )
+            switch( nPDFDocumentAction )
             {
                 default:
                 case 0:
@@ -776,11 +778,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     break;
                 case 4:
                     aContext.PDFDocumentAction = vcl::PDFWriter::ActionZoom;
-                    aContext.Zoom = mnZoom;
+                    aContext.Zoom = nZoom;
                     break;
             }
 
-            switch( mnPDFPageLayout )
+            switch( nPDFPageLayout )
             {
                 default:
                 case 0:
@@ -804,20 +806,20 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
                 // set check for permission change password
                 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-                if( mbRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
+                if( bRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
                 {
-                    mbEncrypt = true; // permission set as desired, done after
+                    bEncrypt = true; // permission set as desired, done after
                 }
                 else
                 {
                     // force permission to default
-                    mnPrintAllowed                  = 2 ;
-                    mnChangesAllowed                = 4 ;
-                    mbCanCopyOrExtract              = true;
-                    mbCanExtractForAccessibility    = true ;
+                    nPrintAllowed                  = 2 ;
+                    nChangesAllowed                = 4 ;
+                    bCanCopyOrExtract              = true;
+                    bCanExtractForAccessibility    = true ;
                 }
 
-                switch( mnPrintAllowed )
+                switch( nPrintAllowed )
                 {
                 case 0: // initialized when aContext is build, means no printing
                     break;
@@ -830,7 +832,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     break;
                 }
 
-                switch( mnChangesAllowed )
+                switch( nChangesAllowed )
                 {
                 case 0: // already in struct PDFSecPermissions CTOR
                     break;
@@ -852,11 +854,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     break;
                 }
 
-                aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
-                aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
-                if( mbEncrypt && ! xEnc.is() )
+                aContext.Encryption.CanCopyOrExtract                = bCanCopyOrExtract;
+                aContext.Encryption.CanExtractForAccessibility  = bCanExtractForAccessibility;
+                if( bEncrypt && ! xEnc.is() )
                     xEnc = vcl::PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword );
-                if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.hasElements() )
+                if( bEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.hasElements() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
             // after this point we don't need the legacy clear passwords anymore
@@ -869,7 +871,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             * FIXME: the entries are only implicitly defined by the resource file. Should there
             * ever be an additional form submit format this could get invalid.
             */
-            switch( mnFormsFormat )
+            switch( nFormsFormat )
             {
                 case 1:
                     aContext.SubmitFormat = vcl::PDFWriter::PDF;
@@ -885,7 +887,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.SubmitFormat = vcl::PDFWriter::FDF;
                     break;
             }
-            aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
+            aContext.AllowDuplicateFieldNames = bAllowDuplicateFieldNames;
 
             // get model
             Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
@@ -894,9 +896,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // set the base URL of the file: then base URL
                 aContext.BaseURL = xModel->getURL();
                 // relative link option is private to PDF Export filter and limited to local filesystem only
-                aContext.RelFsys = mbExportRelativeFsysLinks;
+                aContext.RelFsys = bExportRelativeFsysLinks;
                 // determine the default action for PDF links
-                switch( mnDefaultLinkAction )
+                switch( nDefaultLinkAction )
                 {
                 default:
                     // default: URI, without fragment conversion (the bookmark in PDF may not work)
@@ -913,7 +915,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aContext.DefaultLinkAction = vcl::PDFWriter::URIActionDestination;
                     break;
                 }
-                aContext.ConvertOOoTargetToPDFTarget = mbConvertOOoTargetToPDFTarget;
+                aContext.ConvertOOoTargetToPDFTarget = bConvertOOoTargetToPDFTarget;
 
                 // check for Link Launch action, not allowed on PDF/A-1
                 // this code chunk checks when the filter is called from scripting
@@ -927,14 +929,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 }
             }
 
-            aContext.SignPDF = mbSignPDF;
-            aContext.SignLocation = msSignLocation;
-            aContext.SignContact = msSignContact;
-            aContext.SignReason = msSignReason;
-            aContext.SignPassword = msSignPassword;
-            aContext.SignCertificate = maSignCertificate;
-            aContext.SignTSA = msSignTSA;
-            aContext.UseReferenceXObject = mbUseReferenceXObject;
+            aContext.SignPDF = bSignPDF;
+            aContext.SignLocation = sSignLocation;
+            aContext.SignContact = sSignContact;
+            aContext.SignReason = sSignReason;
+            aContext.SignPassword = sSignPassword;
+            aContext.SignCertificate = aSignCertificate;
+            aContext.SignTSA = sSignTSA;
+            aContext.UseReferenceXObject = bUseReferenceXObject;
 
             // all context data set, time to create the printing device
             vcl::PDFWriter aPDFWriter( aContext, xEnc );
@@ -943,7 +945,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
             xDevice->SetOutputDevice(pOut);
 
-            if( mbAddStream )
+            if( bAddStream )
             {
                 // export stream
                 // get mimetype
@@ -966,18 +968,18 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 DBG_ASSERT( pOut->GetExtOutDevData() == nullptr, "PDFExport: ExtOutDevData already set!!!" );
                 vcl::PDFExtOutDevData aPDFExtOutDevData( *pOut );
                 pOut->SetExtOutDevData( &aPDFExtOutDevData );
-                aPDFExtOutDevData.SetIsExportNotes( mbExportNotes );
-                aPDFExtOutDevData.SetIsExportNotesInMargin( mbExportNotesInMargin );
-                aPDFExtOutDevData.SetIsExportTaggedPDF( mbUseTaggedPDF );
-                aPDFExtOutDevData.SetIsExportTransitionEffects( mbUseTransitionEffects );
-                aPDFExtOutDevData.SetIsExportFormFields( mbExportFormFields );
-                aPDFExtOutDevData.SetIsExportBookmarks( mbExportBookmarks );
-                aPDFExtOutDevData.SetIsExportHiddenSlides( mbExportHiddenSlides );
-                aPDFExtOutDevData.SetIsSinglePageSheets( mbSinglePageSheets );
+                aPDFExtOutDevData.SetIsExportNotes( bExportNotes );
+                aPDFExtOutDevData.SetIsExportNotesInMargin( bExportNotesInMargin );
+                aPDFExtOutDevData.SetIsExportTaggedPDF( bUseTaggedPDF );
+                aPDFExtOutDevData.SetIsExportTransitionEffects( bUseTransitionEffects );
+                aPDFExtOutDevData.SetIsExportFormFields( bExportFormFields );
+                aPDFExtOutDevData.SetIsExportBookmarks( bExportBookmarks );
+                aPDFExtOutDevData.SetIsExportHiddenSlides( bExportHiddenSlides );
+                aPDFExtOutDevData.SetIsSinglePageSheets( bSinglePageSheets );
                 aPDFExtOutDevData.SetIsLosslessCompression( mbUseLosslessCompression );
                 aPDFExtOutDevData.SetCompressionQuality( mnQuality );
                 aPDFExtOutDevData.SetIsReduceImageResolution( mbReduceImageResolution );
-                aPDFExtOutDevData.SetIsExportNamedDestinations( mbExportBmkToDest );
+                aPDFExtOutDevData.SetIsExportNamedDestinations( bExportBmkToDest );
 
                 Sequence< PropertyValue > aRenderOptions{
                     comphelper::makePropertyValue("RenderDevice", uno::Reference<awt::XDevice>(xDevice)),
@@ -986,9 +988,9 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     comphelper::makePropertyValue("IsLastPage", false),
                     comphelper::makePropertyValue("IsSkipEmptyPages", mbSkipEmptyPages),
                     comphelper::makePropertyValue("PageRange", aPageRange),
-                    comphelper::makePropertyValue("ExportPlaceholders", mbExportPlaceholders),
-                    comphelper::makePropertyValue("SinglePageSheets", mbSinglePageSheets),
-                    comphelper::makePropertyValue("ExportNotesInMargin", mbExportNotesInMargin)
+                    comphelper::makePropertyValue("ExportPlaceholders", bExportPlaceholders),
+                    comphelper::makePropertyValue("SinglePageSheets", bSinglePageSheets),
+                    comphelper::makePropertyValue("ExportNotesInMargin", bExportNotesInMargin)
                 };
                 Any& rExportNotesValue = aRenderOptions.getArray()[ 1 ].Value;
 
@@ -997,7 +999,6 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     aSelection = Any();
                     aSelection <<= mxSrcDoc;
                 }
-                bool bExportNotesPages = false;
                 bool bReChangeToNormalView = false;
                 static constexpr OUString sShowOnlineLayout( u"ShowOnlineLayout"_ustr );
                 bool bReHideWhitespace = false;
@@ -1032,15 +1033,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
 
-                if ( mbExportNotesPages && aCreator == "Impress" )
+                if ( bExportNotesPages && aCreator == "Impress" )
                 {
                     uno::Reference< drawing::XShapes > xShapes;     // do not allow to export notes when exporting a selection
-                    if ( ! ( aSelection >>= xShapes ) )
-                        bExportNotesPages = true;
+                    if ( aSelection >>= xShapes )
+                        bExportNotesPages = false;
                 }
-                const bool bExportPages = !bExportNotesPages || !mbExportOnlyNotesPages;
+                else
+                    bExportNotesPages = false;
+                const bool bExportPages = !bExportNotesPages || !bExportOnlyNotesPages;
 
-                if( aPageRange.isEmpty() || mbSinglePageSheets)
+                if( aPageRange.isEmpty() || bSinglePageSheets)
                 {
                     aPageRange = OUString::number( 1 ) + "-" + OUString::number(nPageCount );
                 }
