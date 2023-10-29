@@ -37,8 +37,8 @@ class SmPrintUIOptions;
 class SmGraphicAccessible;
 class SmGraphicWidget;
 
-#define MINZOOM sal_uInt16(25)
-#define MAXZOOM sal_uInt16(800)
+constexpr sal_uInt16 MINZOOM = 25;
+constexpr sal_uInt16 MAXZOOM = 800;
 
 class SmGraphicWindow final : public InterimItemWindow
 {

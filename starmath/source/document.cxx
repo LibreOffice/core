@@ -1501,7 +1501,8 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
                 sal_uInt16 nZ
                     = std::min(o3tl::convert(OutputSize.Width(), 100, GraphicSize.Width()),
                                o3tl::convert(OutputSize.Height(), 100, GraphicSize.Height()));
-                nZ -= 10;
+                if (nZ > MINZOOM)
+                    nZ -= 10;
                 Fraction aFraction(std::clamp(nZ, MINZOOM, MAXZOOM), 100);
 
                 OutputMapMode = MapMode(SmMapUnit(), Point(), aFraction, aFraction);
