@@ -31,6 +31,18 @@ public:
     void ReleaseGraphics(bool) override {}
     bool UsePolyPolygonForComplexGradient() override { return false; }
 };
+
+Animation createAnimation()
+{
+    Animation aAnimation;
+
+    aAnimation.Insert(
+        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
+    aAnimation.Insert(
+        AnimationFrame(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
+
+    return aAnimation;
+}
 }
 
 class VclAnimationRendererTest : public test::BootstrapFixture
@@ -40,22 +52,9 @@ public:
         : BootstrapFixture(true, false)
     {
     }
-
-    void testMatching();
-    void testDrawToPos();
-    void testGetPosSizeWindow();
-
-    CPPUNIT_TEST_SUITE(VclAnimationRendererTest);
-    CPPUNIT_TEST(testMatching);
-    CPPUNIT_TEST(testDrawToPos);
-    CPPUNIT_TEST(testGetPosSizeWindow);
-    CPPUNIT_TEST_SUITE_END();
-
-private:
-    Animation createAnimation();
 };
 
-void VclAnimationRendererTest::testMatching()
+CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testMatching)
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
@@ -69,7 +68,7 @@ void VclAnimationRendererTest::testMatching()
     CPPUNIT_ASSERT(pAnimationRenderer->matches(pTestRC, 0));
 }
 
-void VclAnimationRendererTest::testDrawToPos()
+CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testDrawToPos)
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<VirtualDevice> pTestRC;
@@ -84,7 +83,7 @@ void VclAnimationRendererTest::testDrawToPos()
     CPPUNIT_ASSERT_EQUAL(Size(1, 1), pTestRC->GetOutputSizePixel());
 }
 
-void VclAnimationRendererTest::testGetPosSizeWindow()
+CPPUNIT_TEST_FIXTURE(VclAnimationRendererTest, testGetPosSizeWindow)
 {
     Animation aTestAnim = createAnimation();
     ScopedVclPtrInstance<TestRenderingContext> pTestRC;
@@ -101,20 +100,6 @@ void VclAnimationRendererTest::testGetPosSizeWindow()
     CPPUNIT_ASSERT_EQUAL(Point(0, 0), aPos);
     CPPUNIT_ASSERT_EQUAL(Size(10, 10), aSize);
 }
-
-Animation VclAnimationRendererTest::createAnimation()
-{
-    Animation aAnimation;
-
-    aAnimation.Insert(
-        AnimationFrame(BitmapEx(Size(3, 4), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
-    aAnimation.Insert(
-        AnimationFrame(BitmapEx(Size(3, 3), vcl::PixelFormat::N24_BPP), Point(0, 0), Size(10, 10)));
-
-    return aAnimation;
-}
-
-CPPUNIT_TEST_SUITE_REGISTRATION(VclAnimationRendererTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
