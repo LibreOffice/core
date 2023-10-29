@@ -4512,6 +4512,15 @@ struct ScDependantsCalculator
                 return false;
             }
 
+            if (p->GetOpCode() == ocRange)
+            {
+                // We are just looking at svSingleRef/svDoubleRef, so we will miss that ocRange constructs
+                // a range from its arguments, and only examining the individual args doesn't capture the
+                // true range of dependencies
+                SAL_WARN("sc.core.formulacell", "dynamic range, dropping as candidate for parallelizing");
+                return false;
+            }
+
             switch (p->GetType())
             {
             case svSingleRef:
