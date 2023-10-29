@@ -1496,11 +1496,9 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
         case PRINT_SIZE_SCALED:
             if (!aSize.IsEmpty())
             {
-                Size OutputSize(rOutDev.LogicToPixel(aOutRect.GetSize(), MapMode(SmMapUnit())));
-                Size GraphicSize(rOutDev.LogicToPixel(aSize, MapMode(SmMapUnit())));
                 sal_uInt16 nZ
-                    = std::min(o3tl::convert(OutputSize.Width(), 100, GraphicSize.Width()),
-                               o3tl::convert(OutputSize.Height(), 100, GraphicSize.Height()));
+                    = std::min(o3tl::convert(aOutRect.GetWidth(), 100, aSize.Width()),
+                               o3tl::convert(aOutRect.GetHeight(), 100, aSize.Height()));
                 if (nZ > MINZOOM)
                     nZ -= 10;
                 Fraction aFraction(std::clamp(nZ, MINZOOM, MAXZOOM), 100);
@@ -1520,14 +1518,13 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
         }
     }
 
-    aSize = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aSize, OutputMapMode), MapMode(SmMapUnit()));
+    aSize = OutputDevice::LogicToLogic(aSize, OutputMapMode, MapMode(SmMapUnit()));
 
     Point aPos(aOutRect.Left() + (aOutRect.GetWidth() - aSize.Width()) / 2,
                aOutRect.Top() + (aOutRect.GetHeight() - aSize.Height()) / 2);
 
-    aPos = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aPos, MapMode(SmMapUnit())), OutputMapMode);
-    aOutRect
-        = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aOutRect, MapMode(SmMapUnit())), OutputMapMode);
+    aPos = OutputDevice::LogicToLogic(aPos, MapMode(SmMapUnit()), OutputMapMode);
+    aOutRect = OutputDevice::LogicToLogic(aOutRect, MapMode(SmMapUnit()), OutputMapMode);
 
     rOutDev.SetMapMode(OutputMapMode);
     rOutDev.SetClipRegion(vcl::Region(aOutRect));
