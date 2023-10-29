@@ -54,31 +54,25 @@ bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     Reference< XOutputStream >  xOStm;
     Sequence< PropertyValue >   aFilterData;
     OUString aFilterOptions;
-    sal_Int32                   nLength = rDescriptor.getLength();
-    const PropertyValue*        pValue = rDescriptor.getConstArray();
     bool                        bIsRedactMode = false;
     bool                    bRet = false;
     Reference< task::XStatusIndicator > xStatusIndicator;
     Reference< task::XInteractionHandler > xIH;
 
-    for (sal_Int32 i = 0; i < nLength; ++i)
+    for (const auto& rValue : rDescriptor)
     {
-        if ( pValue[ i ].Name == "OutputStream" )
-            pValue[ i ].Value >>= xOStm;
-        else if ( pValue[ i ].Name == "FilterData" )
-            pValue[ i ].Value >>= aFilterData;
-        else if ( pValue[ i ].Name == "FilterOptions" )
-            pValue[ i ].Value >>= aFilterOptions;
-        else if ( pValue[ i ].Name == "StatusIndicator" )
-            pValue[ i ].Value >>= xStatusIndicator;
-        else if ( pValue[i].Name == "InteractionHandler" )
-            pValue[i].Value >>= xIH;
-    }
-
-    for (sal_Int32 i = 0 ; i < nLength; ++i)
-    {
-        if ( pValue[i].Name == "IsRedactMode")
-            pValue[i].Value >>= bIsRedactMode;
+        if (rValue.Name == "OutputStream")
+            rValue.Value >>= xOStm;
+        else if (rValue.Name == "FilterData")
+            rValue.Value >>= aFilterData;
+        else if (rValue.Name == "FilterOptions")
+            rValue.Value >>= aFilterOptions;
+        else if (rValue.Name == "StatusIndicator")
+            rValue.Value >>= xStatusIndicator;
+        else if (rValue.Name == "InteractionHandler")
+            rValue.Value >>= xIH;
+        else if (rValue.Name == "IsRedactMode")
+            rValue.Value >>= bIsRedactMode;
     }
 
     if (!aFilterData.hasElements() && aFilterOptions.startsWith("{"))
