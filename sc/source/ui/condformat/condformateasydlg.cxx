@@ -53,7 +53,7 @@ namespace sc
 {
 void ConditionalFormatEasyDialog::SetDescription(std::u16string_view rCondition)
 {
-    mxDescription->set_label(mxDescription->get_label() + ": " + rCondition);
+    mxDescription->set_label(mxDescription->get_label().replaceAll("%1", rCondition));
 }
 
 ConditionalFormatEasyDialog::ConditionalFormatEasyDialog(SfxBindings* pBindings,

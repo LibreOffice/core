@@ -171,7 +171,7 @@
                   <object class="GtkLabel" id="description">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="stock">Apply conditional formatting to cells</property>
+                    <property name="label" translatable="yes" context="stock">Apply conditional formatting to cells: %1</property>
                     <accessibility>
                       <relation type="label-for" target="entryNumber"/>
                       <relation type="label-for" target="entryNumber2"/>
