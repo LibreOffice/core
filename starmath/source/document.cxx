@@ -1499,7 +1499,7 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
                 sal_uInt16 nZ
                     = std::min(o3tl::convert(aOutRect.GetWidth(), 100, aSize.Width()),
                                o3tl::convert(aOutRect.GetHeight(), 100, aSize.Height()));
-                if (nZ > MINZOOM)
+                if (bIsPrintFrame && nZ > MINZOOM)
                     nZ -= 10;
                 Fraction aFraction(std::clamp(nZ, MINZOOM, MAXZOOM), 100);
 
