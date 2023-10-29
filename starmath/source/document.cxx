@@ -1484,9 +1484,6 @@ void SmDocShell::Impl_Print(OutputDevice& rOutDev, const SmPrintUIOptions& rPrin
     Size aSize(GetSize());
 
     MapMode OutputMapMode;
-    // PDF export should always use PRINT_SIZE_NORMAL ...
-    if (!rPrintUIOptions.getBoolValue("IsPrinter"))
-        ePrintSize = PRINT_SIZE_NORMAL;
     switch (ePrintSize)
     {
         case PRINT_SIZE_NORMAL:
