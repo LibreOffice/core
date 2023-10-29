@@ -132,7 +132,12 @@ void AlphaMask::BlendWith(const AlphaMask& rOther)
             // Awkward calculation because the original used transparency, and to replicate
             // the logic we need to translate into transparency, perform the original logic,
             // then translate back to alpha.
-            auto tmp = 255 - ((255 - nGrey1) + (255 - nGrey2) - (255 - nGrey1) * (255 - nGrey2) / 255);
+            // The original looked like:
+            //   auto tmp = nGrey1 + nGrey2 - (nGrey1 * nGrey2 / 255)
+            // which, when converted to using alpha looks like
+            //   auto tmp = 255 - ((255 - nGrey1) + (255 - nGrey2) - (255 - nGrey1) * (255 - nGrey2) / 255);
+            // which then simplifies to:
+            auto tmp = nGrey1 * nGrey2 / 255;
             *scanline = static_cast<sal_uInt8>(tmp);
             ++scanline;
             ++otherScanline;

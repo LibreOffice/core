@@ -628,6 +628,7 @@ bool SkiaSalBitmap::AlphaBlendWith(const SalBitmap& rSalBmp)
     {
         const sal_uInt16 nGrey1 = mEraseColor.GetRed();
         const sal_uInt16 nGrey2 = otherBitmap->mEraseColor.GetRed();
+        // See comment in AlphaMask::BlendWith for how this calculation was derived
         const sal_uInt8 nGrey = static_cast<sal_uInt8>(nGrey1 * nGrey2 / 255);
         mEraseColor = Color(nGrey, nGrey, nGrey);
         DataChanged();
