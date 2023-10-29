@@ -912,12 +912,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
     SmPrinterAccess aPrinterAccess( *pDocSh );
     Size aPrtPaperSize;
     if (Printer *pPrinter = aPrinterAccess.GetPrinter())
+    {
+        // tdf#157965: UNO methods are expected to return sizes in mm/100
+        pPrinter->SetMapMode(MapMode(MapUnit::Map100thMM)); // reset in SmPrinterAccess dtor
         aPrtPaperSize = pPrinter->GetPaperSize();
+    }
 
     // if paper size is 0 (usually if no 'real' printer is found),
     // guess the paper size
     if (aPrtPaperSize.IsEmpty())
-        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(SmMapUnit());
+        aPrtPaperSize = SvxPaperInfo::GetDefaultPaperSize(MapUnit::Map100thMM);
     awt::Size   aPageSize( aPrtPaperSize.Width(), aPrtPaperSize.Height() );
 
     uno::Sequence< beans::PropertyValue > aRenderer(1);
