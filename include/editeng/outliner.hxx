@@ -19,6 +19,7 @@
 #ifndef INCLUDED_EDITENG_OUTLINER_HXX
 #define INCLUDED_EDITENG_OUTLINER_HXX
 
+#include <sot/formats.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/overflowingtxt.hxx>
@@ -264,8 +265,8 @@ public:
 
     void        Cut();
     void        Copy();
-    void        Paste( bool bUseSpecial = false );
-    void        PasteSpecial();
+    void        Paste( bool bUseSpecial = false, SotClipboardFormatId format = SotClipboardFormatId::NONE );
+    void        PasteSpecial(SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
     const SfxStyleSheet*  GetStyleSheet() const;
     SfxStyleSheet*  GetStyleSheet();
