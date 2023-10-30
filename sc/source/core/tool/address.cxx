@@ -2405,17 +2405,30 @@ void ScRange::IncColIfNotLessThan(const ScDocument& rDoc, SCCOL nStartCol, SCCOL
 
 void ScRange::IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW nOffset)
 {
-    if (aStart.Row() >= nStartRow)
+    SCROW offset;
+    if (aStart.Row() > nStartRow)
     {
-        aStart.IncRow(nOffset);
+        offset = nOffset;
+        if (nStartRow + nOffset > aStart.Row())
+            offset = aStart.Row() - nStartRow;
+        else if (nStartRow - nOffset > aStart.Row())
+            offset = -1 * (aStart.Row() - nStartRow);
+
+        aStart.IncRow(offset);
         if (aStart.Row() < 0)
             aStart.SetRow(0);
         else if(aStart.Row() > rDoc.MaxRow())
             aStart.SetRow(rDoc.MaxRow());
     }
-    if (aEnd.Row() >= nStartRow)
+    if (aEnd.Row() > nStartRow)
     {
-        aEnd.IncRow(nOffset);
+        offset = nOffset;
+        if (nStartRow + nOffset > aEnd.Row())
+            offset = aEnd.Row() - nStartRow;
+        else if (nStartRow - nOffset > aEnd.Row())
+            offset = -1 * (aEnd.Row() - nStartRow);
+
+        aEnd.IncRow(offset);
         if (aEnd.Row() < 0)
             aEnd.SetRow(0);
         else if(aEnd.Row() > rDoc.MaxRow())
