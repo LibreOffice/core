@@ -849,9 +849,9 @@ EditSelection EditEngine::InsertText(const EditTextObject& rTextObject, const Ed
 
 EditSelection EditEngine::InsertText(
     uno::Reference<datatransfer::XTransferable > const & rxDataObj,
-    const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial)
+    const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial, SotClipboardFormatId format)
 {
-    return pImpEditEngine->PasteText(rxDataObj, rBaseURL, rPaM, bUseSpecial);
+    return pImpEditEngine->PasteText(rxDataObj, rBaseURL, rPaM, bUseSpecial, format);
 }
 
 EditPaM EditEngine::EndOfWord(const EditPaM& rPaM)

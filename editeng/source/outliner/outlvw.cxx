@@ -667,12 +667,12 @@ void OutlinerView::Cut()
     }
 }
 
-void OutlinerView::PasteSpecial()
+void OutlinerView::PasteSpecial(SotClipboardFormatId format)
 {
-    Paste( true );
+    Paste( true, format );
 }
 
-void OutlinerView::Paste( bool bUseSpecial )
+void OutlinerView::Paste( bool bUseSpecial, SotClipboardFormatId format)
 {
     if ( ImpCalcSelectedPages( false ) && !pOwner->ImpCanDeleteSelectedPages( this ) )
         return;
@@ -683,7 +683,7 @@ void OutlinerView::Paste( bool bUseSpecial )
     pOwner->bPasting = true;
 
     if ( bUseSpecial )
-        pEditView->PasteSpecial();
+        pEditView->PasteSpecial(format);
     else
         pEditView->Paste();
 
