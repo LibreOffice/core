@@ -95,7 +95,7 @@ class SW_DLLPUBLIC SwRedlineData
     RedlineType m_eType;
     sal_uInt16 m_nSeqNo;
     bool m_bAutoFormat;
-    sal_uInt32 m_nMovedID;  // 0 == not moved, 1 == moved, but dont have its pair, 2+ == unique ID
+    sal_uInt32 m_nMovedID;  // 0 == not moved, 1 == moved, but don't have its pair, 2+ == unique ID
 
 public:
     SwRedlineData( RedlineType eT, std::size_t nAut, sal_uInt32 nMoveID = 0 );
