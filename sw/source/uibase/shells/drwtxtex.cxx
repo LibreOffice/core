@@ -1077,6 +1077,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
             pDlg->Insert(SotClipboardFormatId::STRING, OUString());
             pDlg->Insert(SotClipboardFormatId::RTF, OUString());
             pDlg->Insert(SotClipboardFormatId::RICHTEXT, OUString());
+            pDlg->Insert(SotClipboardFormatId::HTML_SIMPLE, OUString());
 
             TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(&GetView().GetEditWin()));
             SotClipboardFormatId nFormat = pDlg->GetFormat(aDataHelper.GetTransferable());
@@ -1086,7 +1087,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest const &rReq)
                 if (nFormat == SotClipboardFormatId::STRING)
                     pOLV->Paste();
                 else
-                    pOLV->PasteSpecial();
+                    pOLV->PasteSpecial(nFormat);
             }
 
             break;

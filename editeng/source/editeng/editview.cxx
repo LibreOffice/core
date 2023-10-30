@@ -675,10 +675,10 @@ void EditView::Paste()
     pImpEditView->Paste( aClipBoard );
 }
 
-void EditView::PasteSpecial()
+void EditView::PasteSpecial(SotClipboardFormatId format)
 {
     Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetClipboard());
-    pImpEditView->Paste(aClipBoard, true );
+    pImpEditView->Paste(aClipBoard, true, format );
 }
 
 Point EditView::GetWindowPosTopLeft( sal_Int32 nParagraph )

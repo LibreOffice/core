@@ -225,6 +225,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
     pDlg->Insert( SotClipboardFormatId::NETSCAPE_BOOKMARK, OUString() );
     pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
     pDlg->Insert( SotClipboardFormatId::HTML, OUString() );
+    pDlg->Insert(SotClipboardFormatId::HTML_SIMPLE, OUString());
     pDlg->Insert( SotClipboardFormatId::RTF, OUString() );
     pDlg->Insert( SotClipboardFormatId::RICHTEXT, OUString() );
     pDlg->Insert( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, OUString() );
