@@ -297,7 +297,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 if ( nDriverDataLen )
                 {
                     const char* pDriverData = reinterpret_cast<const char*>(pOldJobData) + nOldJobDataSize;
-                    const char* pDriverDataEnd = pDriverData + rJobData.GetDriverDataLen();
+                    const char* pDriverDataEnd = pDriverData + nDriverDataLen;
                     if (pDriverDataEnd > pTempBuf.get() + nRead)
                     {
                         SAL_WARN("vcl", "corrupted job setup");
