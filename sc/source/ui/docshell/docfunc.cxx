@@ -2280,7 +2280,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         if (bInsertRows)
         {
-            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), 1);
+            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row() - (eCmd == INS_INSROWS_BEFORE ? 1: 0), 1);
         }
     }
 
@@ -2860,7 +2860,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
         if (eCmd == DelCellCmd::Rows)
         {
-            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), -1);
+            pViewSh->OnLOKInsertDeleteRow(rRange.aStart.Row(), -1 * (rRange.aEnd.Row() - rRange.aStart.Row() + 1));
         }
     }
 
