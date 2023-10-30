@@ -208,9 +208,27 @@ IMPL_LINK(ConditionalFormatEasyDialog, ButtonPressed, weld::Button&, rButton, vo
     if (&rButton == mxButtonOk.get())
     {
         std::unique_ptr<ScConditionalFormat> pFormat(new ScConditionalFormat(0, mpDocument));
+
+        OUString sExpression1 = mxNumberEntry->get_text();
+        OUString sExpression2 = mxNumberEntry2->get_text();
+
+        switch (meMode)
+        {
+            case ScConditionMode::ContainsText:
+            case ScConditionMode::NotContainsText:
+            case ScConditionMode::BeginsWith:
+            case ScConditionMode::EndsWith:
+                sExpression1 = "\"" + sExpression1 + "\"";
+                sExpression2 = "\"" + sExpression2 + "\"";
+                break;
+            default:
+                break;
+        }
+
         ScFormatEntry* pEntry
-            = new ScCondFormatEntry(meMode, mxNumberEntry->get_text(), mxNumberEntry2->get_text(),
-                                    *mpDocument, maPosition, mxStyles->get_active_text());
+            = new ScCondFormatEntry(meMode, sExpression1, sExpression2, *mpDocument, maPosition,
+                                    mxStyles->get_active_text());
+
         ScRangeList aRange;
         ScRefFlags nFlags
             = aRange.Parse(mxRangeEntry->GetText(), mpViewData->GetDocument(),

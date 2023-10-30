@@ -660,7 +660,7 @@
       </node>
       <node oor:name=".uno:ConditionalFormatEasy?FormatRule:short=1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Conditional Formatting: Condition Less Than</value>
+          <value xml:lang="en-US">Conditional Formatting: Less Than</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Less than...</value>
@@ -671,7 +671,7 @@
       </node>
       <node oor:name=".uno:ConditionalFormatEasy?FormatRule:short=0" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Conditional Formatting: Condition Equals</value>
+          <value xml:lang="en-US">Conditional Formatting: Equals</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Equals...</value>
@@ -686,6 +686,17 @@
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Between...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ConditionalFormatEasy?FormatRule:short=23" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Conditional Formatting: Contains Text</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Containing text...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

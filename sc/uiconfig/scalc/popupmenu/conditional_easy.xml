@@ -12,6 +12,7 @@
   <menu:menuitem menu:id=".uno:ConditionalFormatEasy?FormatRule:short=1"/>
   <menu:menuitem menu:id=".uno:ConditionalFormatEasy?FormatRule:short=0"/>
   <menu:menuitem menu:id=".uno:ConditionalFormatEasy?FormatRule:short=6"/>
+  <menu:menuitem menu:id=".uno:ConditionalFormatEasy?FormatRule:short=23"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
 </menu:menupopup>
