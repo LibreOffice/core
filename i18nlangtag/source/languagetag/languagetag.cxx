@@ -20,6 +20,7 @@
 #include <rtl/locale.h>
 #include <o3tl/string_view.hxx>
 #include <algorithm>
+#include <atomic>
 #include <map>
 #include <mutex>
 #include <string_view>
@@ -759,7 +760,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     ImplPtr pImpl;
 
 #if OSL_DEBUG_LEVEL > 0
-    static size_t nCalls = 0;
+    static std::atomic_int nCalls = 0;
     ++nCalls;
     SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << nCalls << " calls");
 #endif
