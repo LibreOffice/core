@@ -411,7 +411,7 @@ void XMLRedlineImportHelper::Add(
     pInfo->sMovedID = rMovedID;
     pInfo->bMergeLastParagraph = bMergeLastPara;
 
-    //reserve MoveID so it wont be reused by others
+    //reserve MoveID so it won't be reused by others
     if (!rMovedID.isEmpty())
     {
         SwDoc* const pDoc(static_cast<SwXMLImport&>(m_rImport).getDoc());
