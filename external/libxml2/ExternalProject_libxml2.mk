@@ -41,7 +41,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
-			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libxml2) $(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
+			LDFLAGS="$(LDFLAGS) $(call gb_ExternalProject_get_link_flags,libxml2) $(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(CFLAGS) \
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 				$(call gb_ExternalProject_get_build_flags,libxml2)" \
