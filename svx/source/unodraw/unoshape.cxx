@@ -111,7 +111,7 @@ class GDIMetaFile;
 
 struct SvxShapeImpl
 {
-    std::optional<SfxItemSet> mxItemSet;
+    std::optional<SfxItemSet> moItemSet;
     SdrObjKind      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbDisposing;
@@ -1534,11 +1534,11 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     SfxItemSet* pSet;
     if( mbIsMultiPropertyCall && !bIsNotPersist )
     {
-        if( !mpImpl->mxItemSet )
+        if( !mpImpl->moItemSet )
         {
-            mpImpl->mxItemSet.emplace( GetSdrObject()->GetProperties().CreateObjectSpecificItemSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool() ) );
+            mpImpl->moItemSet.emplace( GetSdrObject()->GetProperties().CreateObjectSpecificItemSet( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool() ) );
         }
-        pSet = &*mpImpl->mxItemSet;
+        pSet = &*mpImpl->moItemSet;
     }
     else
     {
@@ -1713,15 +1713,15 @@ void SAL_CALL SvxShape::setPropertyValues( const css::uno::Sequence< OUString >&
         }
     }
 
-    if( mpImpl->mxItemSet && HasSdrObject() )
-        GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->mxItemSet );
+    if( mpImpl->moItemSet && HasSdrObject() )
+        GetSdrObject()->SetMergedItemSetAndBroadcast( *mpImpl->moItemSet );
 }
 
 
 void SvxShape::endSetPropertyValues()
 {
     mbIsMultiPropertyCall = false;
-    mpImpl->mxItemSet.reset();
+    mpImpl->moItemSet.reset();
 }
 
 
