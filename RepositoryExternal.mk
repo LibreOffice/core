@@ -4287,6 +4287,17 @@ endef
 
 endif # SYSTEM_BOX2D
 
+ifneq ($(SYSTEM_ZXCVBN),)
+define gb_LinkTarget__use_zxcvbn-c
+$(call gb_LinkTarget_set_include,$(1),\
+	-DSYSTEM_ZXCVBN \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),-lzxcvbn)
+endef
+
+else
+
 define gb_LinkTarget__use_zxcvbn-c
 $(call gb_LinkTarget_use_unpacked,$(1),zxcvbn-c)
 $(call gb_LinkTarget_set_include,$(1),\
@@ -4297,6 +4308,8 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	zxcvbn-c \
 )
 endef
+endif
+
 
 ifneq ($(SYSTEM_ZXING),)
 

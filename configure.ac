@@ -2499,6 +2499,11 @@ AC_ARG_WITH(system-zxing,
         [Use libzxing already on system.]),,
     [with_system_zxing="$with_system_libs"])
 
+AC_ARG_WITH(system-zxcvbn,
+    AS_HELP_STRING([--with-system-zxcvbn],
+        [Use libzxcvbn already on system.]),,
+    [with_system_zxcvbn="$with_system_libs"])
+
 AC_ARG_WITH(system-box2d,
     AS_HELP_STRING([--with-system-box2d],
         [Use box2d already on system.]),,
@@ -5858,6 +5863,7 @@ if test "$cross_compiling" = "yes"; then
         PYTHON
         SCRIPTING
         ZLIB
+        ZXCVBN
 "
     # converts BUILD_TYPE and PERMITTED_BUILD_TARGETS into non-whitespace,
     # newlined lists, to use grep as a filter
@@ -11197,6 +11203,24 @@ fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
+
+dnl ===================================================================
+dnl Check for system zxcvbn
+dnl ===================================================================
+AC_MSG_CHECKING([which zxcvbn to use])
+if test "$with_system_zxcvbn" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_ZXCVBN=TRUE
+    AC_CHECK_HEADER(zxcvbn.h, [],
+       [ AC_MSG_ERROR(zxcvbn headers not foundd.)], [])
+    AC_CHECK_LIB(zxcvbn, ZxcvbnMatch, [],
+        [ AC_MSG_ERROR(zxcvbn library not found.)], [])
+else
+   AC_MSG_RESULT([internal])
+   BUILD_TYPE="$BUILD_TYPE ZXCVBN"
+   SYSTEM_ZXCVBN=
+fi
+AC_SUBST(SYSTEM_ZXCVBN)
 
 dnl ===================================================================
 dnl Check for system zxing
