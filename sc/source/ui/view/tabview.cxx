@@ -189,6 +189,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     nTipAlign( QuickHelpFlags::NONE ),
     nPrevDragPos( 0 ),
     meBlockMode(None),
+    meHighlightBlockMode(None),
     nBlockStartX( 0 ),
     nBlockStartXOrig( 0 ),
     nBlockEndX( 0 ),

@@ -103,6 +103,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::DocWindow, public DropTarget
 
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOCursors;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelection;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHighlight;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSelectionBorder;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOAutoFill;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOODragRect;
@@ -476,6 +477,7 @@ public:
     void            UpdateCursorOverlay();
     void            DeleteSelectionOverlay();
     void            UpdateSelectionOverlay();
+    void            UpdateHighlightOverlay();
     void            DeleteAutoFillOverlay();
     void            UpdateAutoFillOverlay();
     void            DeleteDragRectOverlay();

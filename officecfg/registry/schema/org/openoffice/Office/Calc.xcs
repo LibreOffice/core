@@ -121,6 +121,13 @@
           </info>
           <value>false</value>
         </prop>
+        <prop oor:name="ColumnRowHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Indicates whether the column/row highlight has been enabled or not.</desc>
+            <label>Column/row highlighting</label>
+          </info>
+          <value>false</value>
+        </prop>
         <prop oor:name="Anchor" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Calc.hxx>
 #include <rangelst.hxx>
 #include <scitems.hxx>
 
@@ -374,7 +375,11 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
         nPosY = std::min(nPosY, MAXTILEDROW);
 
     if ( !(nPosX != nOldX || nPosY != nOldY || bNew) )
+    {
+        ScAddress aCell = GetViewData().GetCurPos();
+        HighlightOverlay(aCell);
         return;
+    }
 
     ScTabViewShell* pViewShell = aViewData.GetViewShell();
     bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
@@ -389,6 +394,9 @@ void ScTabView::SetCursor( SCCOL nPosX, SCROW nPosY, bool bNew )
     aViewData.SetCurY( nPosY );
 
     ShowAllCursors();
+
+    ScAddress aCell = aViewData.GetCurPos();
+    HighlightOverlay(aCell);
 
     CursorPosChanged();
 
@@ -1682,6 +1690,26 @@ void ScTabView::MarkRows(SCROW nRow, sal_Int16 nModifier)
         SetCursor( 0, nRow );
         SelectionChanged();
     }
+}
+
+void ScTabView::HighlightOverlay(const ScAddress& rCell)
+{
+    if (!officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get())
+    {
+        aViewData.GetHighlightData().ResetMark();
+        UpdateHighlightOverlay();
+        return;
+    }
+
+    SCROW nRow = rCell.Row();
+    SCCOL nCol = rCell.Col();
+
+    bool nModifier = false;         // modifier key pressed?
+    DoneBlockModeHighlight( nModifier );
+    InitBlockModeHighlight( nCol, 0, rCell.Tab(), true, false);
+    nModifier = true;
+    DoneBlockModeHighlight( nModifier );
+    InitBlockModeHighlight( 0, nRow, rCell.Tab(), false, true );
 }
 
 void ScTabView::MarkDataArea( bool bIncludeCursor )

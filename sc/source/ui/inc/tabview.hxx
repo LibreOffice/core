@@ -179,6 +179,7 @@ private:
     tools::Long                nPrevDragPos;
 
     BlockMode           meBlockMode;           // Marks block
+    BlockMode           meHighlightBlockMode;  // Highlight row/col
 
     SCCOL               nBlockStartX;
     SCCOL               nBlockStartXOrig;
@@ -262,6 +263,8 @@ private:
     void            SetZoomPercentFromCommand(sal_uInt16 nZoomPercent);
 
     DECL_STATIC_LINK(ScTabView, InstallLOKNotifierHdl, void*, vcl::ILibreOfficeKitNotifier*);
+
+    void            UpdateHighlightOverlay();
 
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = nullptr,
@@ -536,6 +539,8 @@ public:
                                    bool bCols = false, bool bRows = false, bool bForceNeg = false );
     void            InitOwnBlockMode( const ScRange& rMarkRange );
     void            DoneBlockMode( bool bContinue = false );
+    void            InitBlockModeHighlight( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, bool bCols, bool bRows );
+    void            DoneBlockModeHighlight( bool bContinue );
 
     bool            IsBlockMode() const;
 
@@ -561,6 +566,7 @@ public:
      * @param nModifier: 0, KEY_SHIFT, KEY_MOD1, KEY_SHIFT | KEY_MOD1
      */
     void            MarkRows(SCROW nRow, sal_Int16 nModifier);
+    void            HighlightOverlay(const ScAddress& rCell);
 
     void            MarkDataArea( bool bIncludeCursor = true );
     void            MarkMatrixFormula();

@@ -781,6 +781,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         nPPTX(0.0),
         nPPTY(0.0),
         maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
+        maHighlightData (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
         pDocShell   ( pDocSh ),
         mrDoc       (pDocSh ? pDocSh->GetDocument() : *pDoc),
         pView       ( pViewSh ),
@@ -3147,6 +3148,11 @@ SfxDispatcher& ScViewData::GetDispatcher()
 ScMarkData& ScViewData::GetMarkData()
 {
     return maMarkData;
+}
+
+ScMarkData& ScViewData::GetHighlightData()
+{
+    return maHighlightData;
 }
 
 const ScMarkData& ScViewData::GetMarkData() const

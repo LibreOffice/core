@@ -6124,6 +6124,7 @@ void ScGridWindow::ImpCreateOverlayObjects()
     UpdateCursorOverlay();
     UpdateCopySourceOverlay();
     UpdateSelectionOverlay();
+    UpdateHighlightOverlay();
     UpdateAutoFillOverlay();
     UpdateDragRectOverlay();
     UpdateHeaderOverlay();
@@ -6136,6 +6137,7 @@ void ScGridWindow::ImpDestroyOverlayObjects()
     DeleteCursorOverlay();
     DeleteCopySourceOverlay();
     DeleteSelectionOverlay();
+    mpOOHighlight.reset();          // DeleteHighlightOverlay
     DeleteAutoFillOverlay();
     DeleteDragRectOverlay();
     DeleteHeaderOverlay();
@@ -6677,6 +6679,59 @@ void ScGridWindow::UpdateSelectionOverlay()
 
     if ( aOldMode != aDrawMode )
         SetMapMode( aOldMode );
+}
+
+void ScGridWindow::UpdateHighlightOverlay()
+{
+    mpOOHighlight.reset();          // DeleteHighlightOverlay
+    std::vector<tools::Rectangle> aRects;
+    if (comphelper::LibreOfficeKit::isActive() &&
+            comphelper::LibreOfficeKit::isCompatFlagSet(
+                comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs))
+        GetRectsAnyFor(mrViewData.GetHighlightData(), aRects, true);
+    else
+        GetPixelRectsFor(mrViewData.GetHighlightData(), aRects);
+
+    if (!aRects.empty() && mrViewData.IsActive())
+    {
+        // #i70788# get the OverlayManager safely
+        if (rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager())
+        {
+            std::vector< basegfx::B2DRange > aRanges;
+            const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+            ScDocument& rDoc = mrViewData.GetDocument();
+            SCTAB nTab = mrViewData.GetTabNo();
+            bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
+
+            for(const tools::Rectangle & rRA : aRects)
+            {
+                if (bLayoutRTL)
+                {
+                    basegfx::B2DRange aRB(rRA.Left(), rRA.Top() - 1, rRA.Right() + 1, rRA.Bottom());
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
+                else
+                {
+                    basegfx::B2DRange aRB(rRA.Left() - 1, rRA.Top() - 1, rRA.Right(), rRA.Bottom());
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
+            }
+
+            const Color aHighlight = SC_MOD()->GetColorConfig().GetColorValue(svtools::APPBACKGROUND ).nColor;
+
+            std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+                sdr::overlay::OverlayType::Transparent,
+                aHighlight,
+                std::move(aRanges),
+                false));
+
+            xOverlayManager->add(*pOverlay);
+            mpOOHighlight.reset(new sdr::overlay::OverlayObjectList);
+            mpOOHighlight->append(std::move(pOverlay));
+        }
+    }
 }
 
 void ScGridWindow::DeleteAutoFillOverlay()

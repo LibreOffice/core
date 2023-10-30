@@ -274,6 +274,7 @@ private:
 
     ::std::vector<std::unique_ptr<ScViewDataTable>> maTabData;
     ScMarkData          maMarkData;
+    ScMarkData          maHighlightData;
     ScViewDataTable*    pThisTab;                   // Data of the displayed sheet
     ScDocShell*         pDocShell;
     ScDocument&         mrDoc;
@@ -361,6 +362,7 @@ public:
     SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
 
     ScMarkData&     GetMarkData();
+    ScMarkData&     GetHighlightData();
     const ScMarkData& GetMarkData() const;
 
     weld::Window*   GetDialogParent();          // forwarded from tabvwsh

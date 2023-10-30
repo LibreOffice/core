@@ -515,6 +515,40 @@ void ScTabView::InitOwnBlockMode( const ScRange& rMarkRange )
     SelectionChanged();     // status is checked with mark set
 }
 
+void ScTabView::InitBlockModeHighlight( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
+                                        bool bCols, bool bRows )
+{
+    if (meHighlightBlockMode != None)
+        return;
+
+    auto& rDoc = aViewData.GetDocument();
+    if (!rDoc.ValidCol(nCurX)) nCurX = rDoc.MaxCol();
+    if (!rDoc.ValidRow(nCurY)) nCurY = rDoc.MaxRow();
+
+    ScMarkData& rMark = aViewData.GetHighlightData();
+    meHighlightBlockMode = Normal;
+
+    SCROW nStartY = nCurY;
+    SCCOL nStartX = nCurX;
+    SCROW nEndY = nCurY;
+    SCCOL nEndX = nCurX;
+
+    if (bCols)
+    {
+        nStartY = 0;
+        nEndY = rDoc.MaxRow();
+    }
+
+    if (bRows)
+    {
+        nStartX = 0;
+        nEndX = rDoc.MaxCol();
+    }
+
+    rMark.SetMarkArea( ScRange( nStartX, nStartY, nCurZ, nEndX, nEndY, nCurZ ) );
+    UpdateHighlightOverlay();
+}
+
 void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                bool bTestNeg, bool bCols, bool bRows, bool bForceNeg )
 {
@@ -569,6 +603,31 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
     rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
 
     UpdateSelectionOverlay();
+}
+
+void ScTabView::DoneBlockModeHighlight( bool bContinue )
+{
+    if (meHighlightBlockMode == None)
+        return;
+
+    ScMarkData& rMark = aViewData.GetHighlightData();
+    bool bFlag = rMark.GetMarkingFlag();
+    rMark.SetMarking(false);
+
+    if (bContinue)
+        rMark.MarkToMulti();
+    else
+    {
+        SCTAB nTab = aViewData.GetTabNo();
+        ScDocument& rDoc = aViewData.GetDocument();
+        if ( rDoc.HasTable(nTab) )
+            rMark.ResetMark();
+    }
+    meHighlightBlockMode = None;
+
+    rMark.SetMarking(bFlag);
+    if (bContinue)
+        rMark.SetMarking(false);
 }
 
 void ScTabView::DoneBlockMode( bool bContinue )
@@ -1147,6 +1206,13 @@ void ScTabView::UpdateSelectionOverlay()
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
         if ( pWin && pWin->IsVisible() )
             pWin->UpdateSelectionOverlay();
+}
+
+void ScTabView::UpdateHighlightOverlay()
+{
+    for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        if ( pWin && pWin->IsVisible() )
+            pWin->UpdateHighlightOverlay();
 }
 
 void ScTabView::UpdateShrinkOverlay()
