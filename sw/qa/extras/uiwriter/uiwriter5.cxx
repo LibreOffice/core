@@ -2320,7 +2320,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157663_RedlineMoveRecognition)
     // 20. and 22. redline is a delete/insert redline with the same text "three".
     // they are not recognised as a move, because 22. redline is not a whole paragraph.
     // Note: delete/insert redlines that are just a part of a paragraph decided to be part of
-    // a move, only if it is at least 6 character long and conatin a space "" character.
+    // a move, only if it is at least 6 character long and contain a space "" character.
     for (SwRedlineTable::size_type i = 0; i < rTable.size(); i++)
     {
         CPPUNIT_ASSERT_EQUAL(vMovedRedlines[i], rTable[i]->GetMoved() > 0);
