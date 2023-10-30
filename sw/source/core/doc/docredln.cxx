@@ -830,7 +830,7 @@ bool lcl_CanCombineWithRange(SwRangeRedline* pOrigin, SwRangeRedline* pActual,
 void SwRedlineTable::getConnectedArea(size_type nPosOrigin, size_type& rPosStart,
                                       size_type& rPosEnd, bool bCheckChilds) const
 {
-    // Keep the original redline .. else we should memorize witch children was checked
+    // Keep the original redline .. else we should memorize which children was checked
     // at the last combined redline.
     SwRangeRedline* pOrigin = (*this)[nPosOrigin];
     rPosStart = nPosOrigin;
