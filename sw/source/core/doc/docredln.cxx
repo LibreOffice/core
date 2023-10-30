@@ -856,7 +856,7 @@ void SwRedlineTable::getConnectedArea(size_type nPosOrigin, size_type& rPosStart
 
 OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) const
 {
-    // Normally a SwPaM::GetText() would be enought with rPosStart-start and rPosEnd-end
+    // Normally a SwPaM::GetText() would be enough with rPosStart-start and rPosEnd-end
     // But at import time some text is not present there yet
     // we have to collect them 1 by 1
 
@@ -901,7 +901,7 @@ OUString SwRedlineTable::getTextOfArea(size_type rPosStart, size_type rPosEnd) c
 
 bool SwRedlineTable::isMoved(size_type rPos) const
 {
-    // If it is already a part of a movement, then dont check it.
+    // If it is already a part of a movement, then don't check it.
     if ((*this)[rPos]->GetMoved() != 0)
         return false;
     // First try with single redline. then try with combined redlines
