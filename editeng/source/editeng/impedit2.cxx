@@ -30,6 +30,7 @@
 #include "eeobj.hxx"
 #include <editeng/txtrange.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/mieclip.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/securityoptions.hxx>
@@ -3875,7 +3876,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
     return pDataObj;
 }
 
-EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial )
+EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransferable > const & rxDataObj, const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial, SotClipboardFormatId format)
 {
     EditSelection aNewSelection( rPaM );
 
@@ -3889,7 +3890,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
     {
         // XML
         SotExchange::GetFormatDataFlavor( SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT, aFlavor );
-        if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
+        if ( rxDataObj->isDataFlavorSupported( aFlavor ) && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT == format))
         {
             try
             {
@@ -3917,7 +3918,7 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
             SotExchange::GetFormatDataFlavor( SotClipboardFormatId::RICHTEXT, aFlavorRichtext );
             bool bRtfSupported = rxDataObj->isDataFlavorSupported( aFlavor );
             bool bRichtextSupported  = rxDataObj->isDataFlavorSupported( aFlavorRichtext );
-            if ( bRtfSupported || bRichtextSupported )
+            if ( (bRtfSupported || bRichtextSupported) && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::RICHTEXT == format || SotClipboardFormatId::RTF == format))
             {
                 if(bRichtextSupported)
                 {
@@ -3935,6 +3936,31 @@ EditSelection ImpEditEngine::PasteText( uno::Reference< datatransfer::XTransfera
                     bDone = true;
                 }
                 catch( const css::uno::Exception& )
+                {
+                }
+            }
+        }
+        if (!bDone) {
+            // HTML
+            SotExchange::GetFormatDataFlavor(SotClipboardFormatId::HTML_SIMPLE, aFlavor);
+            bool bHtmlSupported = rxDataObj->isDataFlavorSupported(aFlavor);
+            if (bHtmlSupported && (SotClipboardFormatId::NONE == format || SotClipboardFormatId::HTML_SIMPLE == format)) {
+                MSE40HTMLClipFormatObj aMSE40HTMLClipFormatObj;
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData(aFlavor);
+                    uno::Sequence< sal_Int8 > aSeq;
+                    aData >>= aSeq;
+                    {
+                        SvMemoryStream aHtmlStream(aSeq.getArray(), aSeq.getLength(), StreamMode::READ);
+                        SvStream* pHtmlStream = aMSE40HTMLClipFormatObj.IsValid(aHtmlStream);
+                        if (pHtmlStream != nullptr) {
+                            aNewSelection = Read(*pHtmlStream, rBaseURL, EETextFormat::Html, rPaM);
+                        }
+                    }
+                    bDone = true;
+                }
+                catch (const css::uno::Exception&)
                 {
                 }
             }

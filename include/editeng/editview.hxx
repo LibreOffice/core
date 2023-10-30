@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <i18nlangtag/lang.h>
+#include <sot/formats.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/errcode.hxx>
@@ -256,7 +257,7 @@ public:
     void            Cut();
     void            Copy();
     void            Paste();
-    void            PasteSpecial();
+    void            PasteSpecial(SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
     void            Undo();
     void            Redo();

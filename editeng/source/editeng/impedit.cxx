@@ -1946,7 +1946,7 @@ void ImpEditView::CutCopy( css::uno::Reference< css::datatransfer::clipboard::XC
     }
 }
 
-void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial )
+void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XClipboard > const & rxClipboard, bool bUseSpecial, SotClipboardFormatId format)
 {
     if ( !rxClipboard.is() )
         return;
@@ -2006,7 +2006,7 @@ void ImpEditView::Paste( css::uno::Reference< css::datatransfer::clipboard::XCli
         // paragraphs. Collect and broadcast when done instead.
         aSel = pEditEngine->InsertText(
             xDataObj, OUString(), aSel.Min(),
-            bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial());
+            bUseSpecial && pEditEngine->GetInternalEditStatus().AllowPasteSpecial(), format);
     }
 
     aPasteOrDropInfos.nEndPara = pEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );

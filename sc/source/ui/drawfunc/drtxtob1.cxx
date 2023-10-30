@@ -105,6 +105,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
     pDlg->Insert( SotClipboardFormatId::STRING, OUString() );
     pDlg->Insert( SotClipboardFormatId::RTF,    OUString() );
     pDlg->Insert( SotClipboardFormatId::RICHTEXT,  OUString() );
+    pDlg->Insert(SotClipboardFormatId::HTML_SIMPLE, OUString());
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( mrViewData.GetActiveWin() ) );
 
@@ -117,7 +118,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
         if (nFormat == SotClipboardFormatId::STRING)
             pOutView->Paste();
         else
-            pOutView->PasteSpecial();
+            pOutView->PasteSpecial(nFormat);
     }
 }
 

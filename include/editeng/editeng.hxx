@@ -30,6 +30,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 
 #include <o3tl/span.hxx>
+#include <sot/formats.hxx>
 #include <svl/typedwhich.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editstat.hxx>
@@ -153,7 +154,8 @@ public:
 
     EditSelection InsertText(
         css::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
-        const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
+        const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial,
+        SotClipboardFormatId format = SotClipboardFormatId::NONE);
 
 private:
     std::unique_ptr<ImpEditEngine>  pImpEditEngine;
