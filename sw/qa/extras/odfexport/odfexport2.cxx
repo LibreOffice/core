@@ -386,6 +386,12 @@ DECLARE_ODFEXPORT_TEST(tdf149248, "tdf149248.odt")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(getParagraph(4), "ParaHyphenationNoLastWord"));
 }
 
+DECLARE_ODFEXPORT_TEST(testThemeCrash, "tdf156905.odt")
+{
+    // first it started to crash at import time, later at export time
+    CPPUNIT_ASSERT_EQUAL(4, getPages());
+}
+
 DECLARE_ODFEXPORT_TEST(testTdf150394, "tdf150394.odt")
 {
     // crashes at import time
