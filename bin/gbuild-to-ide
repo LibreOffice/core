@@ -1472,9 +1472,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
     def generate_run_configs(self, lib_folder):
 
-        # If we use 'soffice', it's ok only for "Run", not for "Debug".
-        # So we put "soffice.bin" that is ok for both.
-        loexec = "%s/instdir/program/soffice.bin" % self.base_folder
+        if platform == 'darwin':
+            loexec = "%s/instdir/LibreOfficeDev.app/Contents/MacOS/soffice" % self.base_folder
+        else:
+            loexec = "%s/instdir/program/soffice.bin" % self.base_folder
         xml = QtCreatorIntegrationGenerator.run_configs_template % {
             'loexec': loexec,
             'workdir': self.base_folder
