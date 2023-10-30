@@ -63,6 +63,10 @@ race:g_task_finalize
 race:g_socket_send_message_with_timeout
 race:g_idle_source_new
 race:g_slice_alloc0
+race:g_str_has_suffix
+race:g_str_equal
+race:g_strsplit
+race:g_variant_store
 
 # Python build, lock order inversion
 deadlock:take_gil
