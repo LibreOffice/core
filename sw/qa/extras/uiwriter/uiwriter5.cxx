@@ -2373,7 +2373,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf157663_RedlineMoveRecognition)
         CPPUNIT_ASSERT_EQUAL(nZeroID, rTable[i]->GetMoved());
     }
 
-    // Check if Moveing Paragraps generate move redlines
+    // Check if moving paragraphs generate redline moves
 
     // move a paragraph that has delete redlines inside of it
     // original text: "Seve ent teen"
