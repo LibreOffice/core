@@ -1483,6 +1483,119 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
     return rWrt;
 }
 
+static void OutHTMLGraphic(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat, SwOLENode* pOLENd,
+                           const Graphic& rGraphic, bool bObjectOpened, bool bInCntnr)
+{
+    OUString aGraphicURL;
+    OUString aMimeType;
+    if (!rWrt.mbEmbedImages)
+    {
+        const OUString* pTempFileName = rWrt.GetOrigFileName();
+        if (pTempFileName)
+            aGraphicURL = *pTempFileName;
+
+        OUString aFilterName("JPG");
+        XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
+
+        if (bObjectOpened)
+        {
+            aFilterName = "PNG";
+            nFlags = XOutFlags::NONE;
+            aMimeType = "image/png";
+
+            if (rGraphic.GetType() == GraphicType::NONE)
+            {
+                // The OLE Object has no replacement image, write a stub.
+                aGraphicURL = lcl_CalculateFileName(rWrt.GetOrigFileName(), rGraphic, u"png");
+                osl::File aFile(aGraphicURL);
+                aFile.open(osl_File_OpenFlag_Create);
+                aFile.close();
+            }
+        }
+
+        ErrCode nErr = XOutBitmap::WriteGraphic(rGraphic, aGraphicURL, aFilterName, nFlags);
+        if (nErr) // error, don't write anything
+        {
+            rWrt.m_nWarn = WARN_SWG_POOR_LOAD;
+            if (bObjectOpened) // Still at least close the tag.
+                rWrt.Strm().WriteOString(
+                    Concat2View("</" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+            return;
+        }
+        aGraphicURL = URIHelper::SmartRel2Abs(INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
+                                              URIHelper::GetMaybeFileHdl());
+    }
+    HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask : HtmlFrmOpts::GenImgMask;
+    if (bObjectOpened)
+        nFlags |= HtmlFrmOpts::Replacement;
+    HtmlWriter aHtml(rWrt.Strm(), rWrt.maNamespace);
+    OutHTML_ImageStart(aHtml, rWrt, rFrameFormat, aGraphicURL, rGraphic, pOLENd->GetTitle(),
+                       pOLENd->GetTwipSize(), nFlags, "ole", nullptr, aMimeType);
+    OutHTML_ImageEnd(aHtml, rWrt);
+}
+
+static void OutHTMLStartObject(SwHTMLWriter& rWrt, const OUString& rFileName, const OUString& rFileType)
+{
+    OUString aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), rFileName);
+
+    if (rWrt.IsLFPossible())
+        rWrt.OutNewLine();
+    rWrt.Strm().WriteOString(
+        Concat2View("<" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
+    rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
+    if (!rFileType.isEmpty())
+        rWrt.Strm().WriteOString(Concat2View(" type=\"" + rFileType.toUtf8() + "\""));
+    rWrt.Strm().WriteOString(">");
+    rWrt.SetLFPossible(true);
+}
+
+static void OutHTMLEndObject(SwHTMLWriter& rWrt)
+{
+    rWrt.Strm().WriteOString(
+        Concat2View("</" + rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object ">"));
+}
+
+static bool TrySaveFormulaAsPDF(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameFormat,
+                                SwOLENode* pOLENd, bool bWriteReplacementGraphic, bool bInCntnr)
+{
+    if (!rWrt.mbReqIF)
+        return false;
+    if (!rWrt.m_bExportFormulasAsPDF)
+        return false;
+
+    auto xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(
+        *rWrt.m_pDoc, const_cast<SwFrameFormat*>(&rFrameFormat));
+    uno::Reference<frame::XStorable> xStorable(xTextContent->getEmbeddedObject(), uno::UNO_QUERY);
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xStorable, uno::UNO_QUERY);
+    if (!xServiceInfo)
+        return false;
+    if (!xServiceInfo->supportsService("com.sun.star.formula.FormulaProperties"))
+        return false;
+
+    Graphic aGraphic(xTextContent->getReplacementGraphic());
+    OUString aFileName = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"pdf");
+
+    utl::MediaDescriptor aDescr;
+    aDescr["FilterName"] <<= OUString("math_pdf_Export");
+    // Properties from starmath/inc/unomodel.hxx
+    aDescr["FilterData"] <<= comphelper::InitPropertySequence({
+        { u"TitleRow", css::uno::Any(false) },
+        { u"FormulaText", css::uno::Any(false) },
+        { u"Border", css::uno::Any(false) },
+        { u"PrintFormat", css::uno::Any(sal_Int32(1)) }, // PRINT_SIZE_SCALED
+    });
+    xStorable->storeToURL(aFileName, aDescr.getAsConstPropertyValueList());
+
+    OutHTMLStartObject(rWrt, aFileName, "application/pdf");
+
+    if (bWriteReplacementGraphic)
+        OutHTMLGraphic(rWrt, rFrameFormat, pOLENd, aGraphic, true, bInCntnr);
+
+    OutHTMLEndObject(rWrt);
+
+    return true;
+}
+
 Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrameFormat,
                                   bool bInCntnr, bool bWriteReplacementGraphic )
 {
@@ -1542,6 +1655,9 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
 
         return rWrt;
     }
+
+    if (TrySaveFormulaAsPDF(rHTMLWrt, rFrameFormat, pOLENd, bWriteReplacementGraphic, bInCntnr))
+        return rWrt;
 
     if ( !pOLENd->GetGraphic() )
     {
@@ -1640,80 +1756,18 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
                 aFileType = aRTFType;
             }
         }
-        aFileName = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aFileName);
 
         // Refer to this data.
-        if (rHTMLWrt.IsLFPossible())
-            rHTMLWrt.OutNewLine();
-        rWrt.Strm().WriteOString(Concat2View("<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object));
-        rWrt.Strm().WriteOString(Concat2View(" data=\"" + aFileName.toUtf8() + "\""));
-        if (!aFileType.isEmpty())
-            rWrt.Strm().WriteOString(Concat2View(" type=\"" + aFileType.toUtf8() + "\""));
-        rWrt.Strm().WriteOString(">");
+        OutHTMLStartObject(rHTMLWrt, aFileName, aFileType);
         bObjectOpened = true;
-        rHTMLWrt.SetLFPossible(true);
     }
 
     if (!bObjectOpened || bWriteReplacementGraphic)
-    {
-        OUString aGraphicURL;
-        OUString aMimeType;
-        if(!rHTMLWrt.mbEmbedImages)
-        {
-            const OUString* pTempFileName = rHTMLWrt.GetOrigFileName();
-            if(pTempFileName)
-                aGraphicURL = *pTempFileName;
-
-            OUString aFilterName("JPG");
-            XOutFlags nFlags = XOutFlags::UseGifIfPossible | XOutFlags::UseNativeIfPossible;
-
-            if (bObjectOpened)
-            {
-                aFilterName = "PNG";
-                nFlags = XOutFlags::NONE;
-                aMimeType = "image/png";
-
-                if (aGraphic.GetType() == GraphicType::NONE)
-                {
-                    // The OLE Object has no replacement image, write a stub.
-                    aGraphicURL = lcl_CalculateFileName(rHTMLWrt.GetOrigFileName(), aGraphic, u"png");
-                    osl::File aFile(aGraphicURL);
-                    aFile.open(osl_File_OpenFlag_Create);
-                    aFile.close();
-                }
-            }
-
-            ErrCode nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
-                                        aFilterName,
-                                        nFlags );
-            if( nErr )              // error, don't write anything
-            {
-                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD;
-                if (bObjectOpened) // Still at least close the tag.
-                    rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace()
-                        + OOO_STRING_SVTOOLS_HTML_object ">"));
-                return rWrt;
-            }
-            aGraphicURL = URIHelper::SmartRel2Abs(
-                INetURLObject(rWrt.GetBaseURL()), aGraphicURL,
-                URIHelper::GetMaybeFileHdl() );
-
-        }
-        HtmlFrmOpts nFlags = bInCntnr ? HtmlFrmOpts::GenImgAllMask
-            : HtmlFrmOpts::GenImgMask;
-        if (bObjectOpened)
-            nFlags |= HtmlFrmOpts::Replacement;
-        HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
-        OutHTML_ImageStart( aHtml, rWrt, rFrameFormat, aGraphicURL, aGraphic,
-                pOLENd->GetTitle(), pOLENd->GetTwipSize(),
-                nFlags, "ole", nullptr, aMimeType );
-        OutHTML_ImageEnd(aHtml, rWrt);
-    }
+        OutHTMLGraphic(rHTMLWrt, rFrameFormat, pOLENd, aGraphic, bObjectOpened, bInCntnr);
 
     if (bObjectOpened)
         // Close native data.
-        rWrt.Strm().WriteOString(Concat2View("</" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_object
-                                 ">"));
+        OutHTMLEndObject(rHTMLWrt);
 
     return rWrt;
 }
