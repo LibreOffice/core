@@ -690,6 +690,75 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157937)
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157988)
+{
+    createSwDoc("tdf130088.docx");
+    SwDoc* pDoc = getSwDoc();
+
+    // select the second word
+    dispatchCommand(mxComponent, ".uno:GoToNextWord", {});
+    dispatchCommand(mxComponent, ".uno:SelectWord", {});
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // show changes
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // cycle case with change tracking
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSodales"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    // This was false (missing revert of the tracked change)
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSODALES"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSodales"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
+
+    // tdf#141198 cycle case without selection: the word under the cursor
+
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+
+    dispatchCommand(mxComponent, ".uno:GoRight", {});
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSODALES"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodalesSodales"));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
 {
     createSwDoc();

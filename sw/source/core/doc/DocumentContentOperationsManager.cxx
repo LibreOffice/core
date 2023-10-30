@@ -3047,6 +3047,44 @@ void DocumentContentOperationsManager::TransliterateText(
             return;
         }
     }
+    else
+    {
+        bool bHasTrackedChange = false;
+        IDocumentRedlineAccess& rIDRA = m_rDoc.getIDocumentRedlineAccess();
+        if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) &&
+                        pEnd->GetContentIndex() > 0 )
+        {
+            SwPosition aPos(*pEnd->GetContentNode(), pEnd->GetContentIndex() - 1);
+            SwRedlineTable::size_type n = 0;
+
+            const SwRangeRedline* pFnd =
+                                rIDRA.GetRedlineTable().FindAtPosition( aPos, n );
+            if ( pFnd && RedlineType::Insert == pFnd->GetType() && n > 0 )
+            {
+                const SwRangeRedline* pFnd2 = rIDRA.GetRedlineTable()[n-1];
+                if ( RedlineType::Delete == pFnd2->GetType() &&
+                      m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
+                      *pFnd2->End() == *pFnd->Start() &&
+                      pFnd->GetAuthor() == pFnd2->GetAuthor() )
+                {
+                    bHasTrackedChange = true;
+                    SwPosition aPos2(*pFnd2->Start());
+                    rIDRA.RejectRedline(*pFnd, true);
+
+                    rIDRA.RejectRedline(*pFnd2, true);
+                    // positionate the text cursor before the changed word to select it
+                    if ( SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
+                            m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
+                    {
+                        pWrtShell->GetCursor()->GetPoint()->
+                                Assign(*aPos2.GetContentNode(), aPos2.GetContentIndex());
+                    }
+                }
+            }
+        }
+        if ( bHasTrackedChange )
+            return;
+    }
 
     bool bUseRedlining = m_rDoc.getIDocumentRedlineAccess().IsRedlineOn();
     // as a workaround for a known performance problem, switch off redlining
