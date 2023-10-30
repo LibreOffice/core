@@ -261,6 +261,12 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         it->second >>= m_bExportImagesAsOLE;
     }
 
+    it = aStoreMap.find("ExportFormulasAsPDF");
+    if (it != aStoreMap.end())
+    {
+        it->second >>= m_bExportFormulasAsPDF;
+    }
+
     it = aStoreMap.find("ShapeDPI");
     if (it != aStoreMap.end())
     {

@@ -429,6 +429,9 @@ public:
     /// ReqIF mode: export images as OLE objects.
     bool m_bExportImagesAsOLE = false;
 
+    /// ReqIF mode: export formulas as PDFs.
+    bool m_bExportFormulasAsPDF = false;
+
     /// DPI used when exporting a vector shape as a bitmap.
     std::optional<sal_Int32> m_nShapeDPI;
 

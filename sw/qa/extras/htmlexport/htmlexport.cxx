@@ -13,6 +13,7 @@
 #include <string_view>
 
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
+#include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -265,9 +266,10 @@ public:
     {
     }
 
+    OUString GetObjectPath(const OUString& ext);
     /// Get the .ole path, assuming maTempFile is an XHTML export result.
-    OUString GetOlePath();
-    OUString GetPngPath();
+    OUString GetOlePath() { return GetObjectPath(".ole"); }
+    OUString GetPngPath() { return GetObjectPath(".png"); }
     /// Parse the ole1 data out of an RTF fragment URL.
     void ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryStream& rOle1);
     /// Export using the C++ HTML export filter, with xhtmlns=reqif-xhtml.
@@ -276,35 +278,19 @@ public:
     void ImportFromReqif(const OUString& rUrl);
 };
 
-OUString SwHtmlDomExportTest::GetOlePath()
+OUString SwHtmlDomExportTest::GetObjectPath(const OUString& ext)
 {
+    assert(ext.startsWith("."));
     SvMemoryStream aStream;
     WrapReqifFromTempFile(aStream);
     xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
     CPPUNIT_ASSERT(pDoc);
     OUString aOlePath = getXPath(
         pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
-    OUString aOleSuffix(".ole");
-    CPPUNIT_ASSERT(aOlePath.endsWith(aOleSuffix));
+    CPPUNIT_ASSERT(aOlePath.endsWith(ext));
     INetURLObject aUrl(maTempFile.GetURL());
-    aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - aOleSuffix.getLength()));
-    aUrl.setExtension(u"ole");
-    return aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
-}
-
-OUString SwHtmlDomExportTest::GetPngPath()
-{
-    SvMemoryStream aStream;
-    WrapReqifFromTempFile(aStream);
-    xmlDocUniquePtr pDoc = parseXmlStream(&aStream);
-    CPPUNIT_ASSERT(pDoc);
-    OUString aPngPath = getXPath(
-        pDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p/reqif-xhtml:object", "data");
-    OUString aPngSuffix(".png");
-    CPPUNIT_ASSERT(aPngPath.endsWith(aPngSuffix));
-    INetURLObject aUrl(maTempFile.GetURL());
-    aUrl.setBase(aPngPath.subView(0, aPngPath.getLength() - aPngSuffix.getLength()));
-    aUrl.setExtension(u"png");
+    aUrl.setBase(aOlePath.subView(0, aOlePath.getLength() - ext.getLength()));
+    aUrl.setExtension(ext.subView(1));
     return aUrl.GetMainURL(INetURLObject::DecodeMechanism::NONE);
 }
 
@@ -2836,6 +2822,40 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_PreserveSpaces)
     setImportFilterName("HTML (StarWriter)");
     UnoApiTest::load(maTempFile.GetURL());
     CPPUNIT_ASSERT_EQUAL(paraText, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIF_ExportFormulasAsPDF)
+{
+    // Given a document with a formula:
+    createSwDoc("embedded_formula.fodt");
+
+    // When exporting to reqif with ExportFormulasAsPDF=true:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("ExportFormulasAsPDF", true),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Make sure that the formula is exported as PDF:
+    SvMemoryStream aStream;
+    WrapReqifFromTempFile(aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    assertXPath(pXmlDoc, "/reqif-xhtml:html/reqif-xhtml:div/reqif-xhtml:p[2]/reqif-xhtml:object",
+                "type", "application/pdf");
+
+    css::uno::Sequence<css::beans::PropertyValue> descr{
+        comphelper::makePropertyValue("URL", GetObjectPath(".pdf")),
+    };
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(
+        comphelper::getProcessComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XTypeDetection> xTypeDetection(
+        xFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("pdf_Portable_Document_Format"),
+                         xTypeDetection->queryTypeByDescriptor(descr, true));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
