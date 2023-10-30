@@ -451,7 +451,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             OUString aOpenPassword, aPermissionPassword;
             Reference< beans::XMaterialHolder > xEnc;
             Sequence< beans::NamedValue > aPreparedPermissionPassword;
-
+            std::optional<PropertyValue> oMathTitleRow;
+            std::optional<PropertyValue> oMathFormulaText;
+            std::optional<PropertyValue> oMathBorder;
+            std::optional<PropertyValue> oMathPrintFormat;
+            std::optional<PropertyValue> oMathPrintScale;
 
             // getting the string for the creator
             OUString aCreator;
@@ -659,6 +663,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // Redaction & bitmap related stuff
                 else if ( rProp.Name == "IsRedactMode" )
                     rProp.Value >>= mbIsRedactMode;
+                // Math-specific render options
+                else if (rProp.Name == "TitleRow")
+                    oMathTitleRow = rProp;
+                else if (rProp.Name == "FormulaText")
+                    oMathFormulaText = rProp;
+                else if (rProp.Name == "Border")
+                    oMathBorder = rProp;
+                else if (rProp.Name == "PrintFormat")
+                    oMathPrintFormat = rProp;
+                else if (rProp.Name == "PrintScale")
+                    oMathPrintScale = rProp;
             }
 
             if (!maSignCertificate.is() && !aSignCertificateSubjectName.isEmpty())
@@ -958,7 +973,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 aPDFExtOutDevData.SetIsReduceImageResolution( mbReduceImageResolution );
                 aPDFExtOutDevData.SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions{
+                std::vector<PropertyValue> aRenderOptionsVector{
                     comphelper::makePropertyValue("RenderDevice", uno::Reference<awt::XDevice>(xDevice)),
                     comphelper::makePropertyValue("ExportNotesPages", false),
                     comphelper::makePropertyValue("IsFirstPage", true),
@@ -969,6 +984,17 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     comphelper::makePropertyValue("SinglePageSheets", mbSinglePageSheets),
                     comphelper::makePropertyValue("ExportNotesInMargin", mbExportNotesInMargin)
                 };
+                if (oMathTitleRow)
+                    aRenderOptionsVector.push_back(*oMathTitleRow);
+                if (oMathFormulaText)
+                    aRenderOptionsVector.push_back(*oMathFormulaText);
+                if (oMathBorder)
+                    aRenderOptionsVector.push_back(*oMathBorder);
+                if (oMathPrintFormat)
+                    aRenderOptionsVector.push_back(*oMathPrintFormat);
+                if (oMathPrintScale)
+                    aRenderOptionsVector.push_back(*oMathPrintScale);
+                Sequence aRenderOptions = comphelper::containerToSequence(aRenderOptionsVector);
                 Any& rExportNotesValue = aRenderOptions.getArray()[ 1 ].Value;
 
                 if( !aPageRange.isEmpty() || !aSelection.hasValue() )
