@@ -304,7 +304,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 </language>
 </section>
 </cdtprojectproperties>
-""" 
+"""
 
         for module in self.gbuildparser.modulenamelist:
             tempxml = []
@@ -329,7 +329,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
                 macrokey = macroskeyvalue[0]
                 macrovalue = macroskeyvalue[1]
                 if macrovalue[-1:] == "\n":
-                    macrovalue = macrovalue[:-1] 
+                    macrovalue = macrovalue[:-1]
                 templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
                 tempxml.insert(-13, templine)
             tempxml="".join(tempxml)
@@ -344,7 +344,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.create_include_paths()
         self.create_macros()
-        self.create_settings_file() 
+        self.create_settings_file()
 
 class CodeliteIntegrationGenerator(IdeIntegrationGenerator):
 
