@@ -1924,6 +1924,11 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x1E4D0, 0x1E4FF, SvxResId(RID_SUBSETSTR_NAG_MUNDARI) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 74)
+                case UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I:
+                    aAllSubsets.emplace_back( 0x2EBF0, 0x2EE5F, SvxResId(RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_I) );
+                    break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
