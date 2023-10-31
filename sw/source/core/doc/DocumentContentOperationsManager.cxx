@@ -2978,7 +2978,8 @@ void DocumentContentOperationsManager::TransliterateText(
     sal_Int32 nEndCnt = pEnd->GetContentIndex();
 
     SwTextNode* pTNd = pStt->GetNode().GetTextNode();
-    if( (pStt == pEnd) && pTNd )  // no selection?
+    bool bNoSelection = (pStt == pEnd) && pTNd;  // no selection?
+    if ( bNoSelection )
     {
         /* Check if cursor is inside of a word */
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
@@ -3055,27 +3056,52 @@ void DocumentContentOperationsManager::TransliterateText(
                                 rIDRA.GetRedlineTable().FindAtPosition( aPos, n );
             if ( pFnd && RedlineType::Insert == pFnd->GetType() && n > 0 )
             {
-                const SwRangeRedline* pFnd2 = rIDRA.GetRedlineTable()[n-1];
-                if ( RedlineType::Delete == pFnd2->GetType() &&
-                      m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() &&
-                      *pFnd2->End() == *pFnd->Start() &&
-                      pFnd->GetAuthor() == pFnd2->GetAuthor() )
+                SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
+                            m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
+
+                sal_Int32 nRejectedCharacters = 0;
+                SwRangeRedline* pFnd2 = rIDRA.GetRedlineTable()[--n];
+                // loop on all redlines of a case changing, and reject them
+                while ( ( ( RedlineType::Insert == pFnd->GetType() &&
+                            RedlineType::Delete == pFnd2->GetType() ) ||
+                          ( RedlineType::Delete == pFnd->GetType() &&
+                            RedlineType::Insert == pFnd2->GetType() ) ) &&
+                            pWrtShell &&
+                      // use time stamp to recognize the multiple selections in the text,
+                      // not only the changes from the same author within the (sometimes
+                      // incomplete) selection
+                      ( pFnd2->GetTimeStamp() == pFnd->GetTimeStamp() ||
+                        ( pStt->GetContentNode() < pFnd2->Start()->GetContentNode() ||
+                            ( pStt->GetContentNode() == pFnd2->Start()->GetContentNode() &&
+                              nSttCnt <= pFnd2->Start()->GetContentIndex() ) ) ) &&
+                        pFnd->GetAuthor() == pFnd2->GetAuthor() )
                 {
                     bHasTrackedChange = true;
-                    SwPosition aPos2(*pFnd2->Start());
+
+                    if ( RedlineType::Insert == pFnd->GetType() )
+                        nRejectedCharacters += pFnd->GetText().getLength();
+
                     rIDRA.RejectRedline(*pFnd, true);
 
-                    rIDRA.RejectRedline(*pFnd2, true);
-                    // positionate the text cursor before the changed word to select it
-                    if ( SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
-                            m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
-                    {
-                        pWrtShell->GetCursor()->GetPoint()->
-                                Assign(*aPos2.GetContentNode(), aPos2.GetContentIndex());
-                    }
+                    pFnd = pFnd2;
+                    if ( n == 0 )
+                        break;
+                    pFnd2 = rIDRA.GetRedlineTable()[--n];
+                }
+
+                // remove the last item and restore the original selection
+                if ( bHasTrackedChange )
+                {
+                    pWrtShell->GetCursor()->GetPoint()->
+                        Assign(*rPaM.Start()->GetContentNode(), nSttCnt);
+                    pWrtShell->GetCursor()->GetMark()->
+                        Assign(*rPaM.End()->GetContentNode(), nEndCnt - nRejectedCharacters);
+                    rIDRA.RejectRedline(*pFnd, true);
                 }
             }
         }
+
+        // TODO handle title case to lowercase
         if ( bHasTrackedChange )
             return;
     }
@@ -3157,6 +3183,18 @@ void DocumentContentOperationsManager::TransliterateText(
     {
         m_rDoc.GetIDocumentUndoRedo().AppendUndo(std::move(pUndo));
     }
+
+    // restore selection after tracked changes
+    if ( !bNoSelection && bUseRedlining )
+    {
+        if ( SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
+                        m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
+        {
+            *pWrtShell->GetCursor()->GetMark() = *pWrtShell->GetCursor()->End();
+            pWrtShell->GetCursor()->GetPoint()->Assign(*pStt->GetContentNode(), nSttCnt);
+        }
+    }
+
     m_rDoc.getIDocumentState().SetModified();
 }
 
