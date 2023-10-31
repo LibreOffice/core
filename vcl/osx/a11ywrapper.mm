@@ -1575,6 +1575,14 @@ static Reference < XAccessibleContext > hitTestRunner ( css::awt::Point point,
     if ( ! aSelector )
         return NO;
 
+    // don't explicitly report (non-)expanded state when not expandable
+    if (aSelector == @selector(isAccessibilityExpanded))
+    {
+        const sal_Int64 nStateSet = [ self accessibleContext ] -> getAccessibleStateSet();
+        if (!( nStateSet & AccessibleStateType::EXPANDABLE))
+            return false;
+    }
+
     if ( [ self respondsToSelector: aSelector ] ) {
         // Ignore actions if action is not supported
         NSAccessibilityActionName pActionName = [ AquaA11yActionWrapper actionNameForSelector: aSelector ];
