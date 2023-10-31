@@ -94,7 +94,7 @@ private:
 
     virtual OUString getRelativePathRepresentation() override;
 
-    virtual rtl::Reference< Node > getNode() override;
+    virtual const rtl::Reference< Node > & getNode() override;
 
     virtual bool isFinalized() override;
 
