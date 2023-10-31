@@ -561,7 +561,9 @@ bool RtfAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget)
         m_aRun->append(msfilter::rtfutil::OutString(rUrl, m_rExport.GetCurrentEncoding()));
         m_aRun->append("\" ");
 
-        if (!rTarget.isEmpty())
+        // Adding the target is likely a LO embellishment.
+        // Don't export it to clipboard, since editeng and other RTF readers won't understand it.
+        if (!rTarget.isEmpty() && !m_rExport.m_rDoc.IsClipBoard())
         {
             m_aRun->append("\\\\t \"");
             m_aRun->append(msfilter::rtfutil::OutString(rTarget, m_rExport.GetCurrentEncoding()));
