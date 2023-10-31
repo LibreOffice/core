@@ -40,7 +40,7 @@ inline OUString WindowsErrorString(DWORD nErrorCode)
 
 inline OUString WindowsErrorStringFromHRESULT(HRESULT hr)
 {
-    // See https://blogs.msdn.microsoft.com/oldnewthing/20061103-07/?p=29133
+    // See https://devblogs.microsoft.com/oldnewthing/20061103-07/?p=29133
     // Also https://social.msdn.microsoft.com/Forums/vstudio/en-US/c33d9a4a-1077-4efd-99e8-0c222743d2f8
     // (which refers to https://msdn.microsoft.com/en-us/library/aa382475)
     // explains why can't we just reinterpret_cast HRESULT to DWORD Win32 error:
