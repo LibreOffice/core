@@ -332,6 +332,26 @@ namespace tools_urlobj
                 CPPUNIT_ASSERT_EQUAL(OUString(""), obj.GetHost());
                 CPPUNIT_ASSERT_EQUAL(OUString("80a0/foo"), obj.GetURLPath());
             }
+            {
+                // Test Windows \\?\C:... long path scheme
+                INetURLObject base(u"file:///C:/foo"); // set up base path
+                bool bWasAbsolute = false;
+                INetURLObject obj
+                    = base.smartRel2Abs(u"\\\\?\\D:\\bar\\baz.ext"_ustr, bWasAbsolute);
+                CPPUNIT_ASSERT(bWasAbsolute);
+                CPPUNIT_ASSERT_EQUAL(u"file:///D:/bar/baz.ext"_ustr,
+                                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
+            {
+                // Test Windows \\?\UNC\Server... long path scheme
+                INetURLObject base(u"file://ServerFoo/fooShare"); // set up base path
+                bool bWasAbsolute = false;
+                INetURLObject obj = base.smartRel2Abs(
+                    u"\\\\?\\UNC\\ServerBar\\barShare\\baz.ext"_ustr, bWasAbsolute);
+                CPPUNIT_ASSERT(bWasAbsolute);
+                CPPUNIT_ASSERT_EQUAL(u"file://ServerBar/barShare/baz.ext"_ustr,
+                                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+            }
         }
 
         // Change the following lines only, if you add, remove or rename
