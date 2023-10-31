@@ -111,7 +111,7 @@ public:
     virtual std::vector<OUString> getRelativePath() = 0;
 
     virtual OUString getRelativePathRepresentation() = 0;
-    virtual rtl::Reference< Node > getNode() = 0;
+    virtual const rtl::Reference< Node > & getNode() = 0;
 
     virtual bool isFinalized() = 0;
 

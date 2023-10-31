@@ -132,7 +132,7 @@ void Access::releaseNondeleting() {
 }
 
 bool Access::isValue() {
-    rtl::Reference< Node > p(getNode());
+    const rtl::Reference< Node > & p(getNode());
     switch (p->kind()) {
     case Node::KIND_PROPERTY:
     case Node::KIND_LOCALIZED_VALUE:
@@ -331,7 +331,7 @@ css::uno::Type Access::getElementType() {
     assert(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    rtl::Reference< Node > p(getNode());
+    const rtl::Reference< Node > & p(getNode());
     switch (p->kind()) {
     case Node::KIND_LOCALIZED_PROPERTY:
         return mapType(
@@ -625,7 +625,7 @@ void Access::setName(OUString const & aName)
             {
                 rtl::Reference< Access > parent(getParentAccess());
                 if (parent.is()) {
-                    rtl::Reference< Node > node(getNode());
+                    const rtl::Reference< Node > & node(getNode());
                     if (! node->getTemplateName().isEmpty()) {
                         rtl::Reference< ChildAccess > other(
                             parent->getChild(aName));
@@ -1164,7 +1164,7 @@ void Access::removeByName(OUString const & aName)
                 aName, static_cast< cppu::OWeakObject * >(this));
         }
         if (getNode()->kind() == Node::KIND_GROUP) {
-            rtl::Reference< Node > p(child->getNode());
+            const rtl::Reference< Node >& p(child->getNode());
             if (p->kind() != Node::KIND_PROPERTY ||
                 !static_cast< PropertyNode * >(p.get())->isExtension())
             {
@@ -2042,7 +2042,7 @@ rtl::Reference< ChildAccess > Access::getSubChild(OUString const & path) {
             return rtl::Reference< ChildAccess >();
         }
         if (setElement) {
-            rtl::Reference< Node > p(parent->getNode());
+            const rtl::Reference< Node >& p(parent->getNode());
             switch (p->kind()) {
             case Node::KIND_LOCALIZED_PROPERTY:
                 if (!Components::allLocales(getRootAccess()->getLocale()) ||
@@ -2094,7 +2094,7 @@ css::beans::Property Access::asProperty() {
     css::uno::Type type;
     bool nillable;
     bool removable;
-    rtl::Reference< Node > p(getNode());
+    const rtl::Reference< Node >& p(getNode());
     switch (p->kind()) {
     case Node::KIND_PROPERTY:
         {
@@ -2217,7 +2217,7 @@ rtl::Reference< Access > Access::getNotificationRoot() {
 #if !defined NDEBUG
 bool Access::thisIs(int what) {
     osl::MutexGuard g(*lock_);
-    rtl::Reference< Node > p(getNode());
+    const rtl::Reference< Node >& p(getNode());
     Node::Kind k(p->kind());
     return (k != Node::KIND_PROPERTY && k != Node::KIND_LOCALIZED_VALUE &&
         ((what & IS_GROUP) == 0 || k == Node::KIND_GROUP) &&

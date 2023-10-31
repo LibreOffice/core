@@ -113,7 +113,7 @@ OUString ChildAccess::getRelativePathRepresentation() {
     return path.makeStringAndClear();
 }
 
-rtl::Reference< Node > ChildAccess::getNode() {
+const rtl::Reference< Node > & ChildAccess::getNode() {
     return node_;
 }
 

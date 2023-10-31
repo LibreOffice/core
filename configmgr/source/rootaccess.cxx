@@ -204,7 +204,7 @@ OUString RootAccess::getRelativePathRepresentation() {
     return OUString();
 }
 
-rtl::Reference< Node > RootAccess::getNode() {
+const rtl::Reference< Node > & RootAccess::getNode() {
     if (!node_.is()) {
         OUString canonic;
         int finalizedLayer;
