@@ -441,30 +441,15 @@ SwField* SwFieldMgr::GetCurField()
     m_aCurPar1.clear();
     m_aCurPar2.clear();
     m_sCurFrame.clear();
-    m_nCurFormat = 0;
 
     if(!m_pCurField)
         return nullptr;
 
     // preprocess current values; determine parameter 1 and parameter 2
-    // as well as the format
-    const SwFieldTypesEnum nTypeId = m_pCurField->GetTypeId();
 
-    m_nCurFormat     = m_pCurField->GetFormat();
     m_aCurPar1    = m_pCurField->GetPar1();
     m_aCurPar2    = m_pCurField->GetPar2();
 
-    switch( nTypeId )
-    {
-        case SwFieldTypesEnum::PageNumber:
-        case SwFieldTypesEnum::NextPage:
-        case SwFieldTypesEnum::PreviousPage:
-        case SwFieldTypesEnum::GetRefPage:
-            if( m_nCurFormat == SVX_NUM_PAGEDESC )
-                m_nCurFormat -= 2;
-            break;
-        default: break;
-    }
     return m_pCurField;
 }
 

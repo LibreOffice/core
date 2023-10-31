@@ -109,7 +109,6 @@ private:
     OUString          m_sMacroPath;
     OUString          m_sMacroName;
 
-    sal_uInt32          m_nCurFormat;
     bool            m_bEvalExp;
 
     SAL_DLLPRIVATE LanguageType    GetCurrLanguage() const;
