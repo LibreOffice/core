@@ -32,8 +32,8 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
     Window::ImplInit( pParent, nStyle, nullptr );
 
-    mbHasHoriBar = false;
-    mbHasVertBar = false;
+    bool bHasHoriBar = false;
+    bool bHasVertBar = false;
 
     Link<ScrollBar*,void> aLink( LINK( this, TabPage, ScrollBarHdl ) );
 
@@ -41,21 +41,21 @@ void TabPage::ImplInit( vcl::Window* pParent, WinBits nStyle )
     {
         if ( nStyle & WB_AUTOHSCROLL )
         {
-            mbHasHoriBar = true;
+            bHasHoriBar = true;
             m_pHScroll.set(VclPtr<ScrollBar>::Create(this, (WB_HSCROLL | WB_DRAG)));
             m_pHScroll->Show();
             m_pHScroll->SetScrollHdl(aLink);
         }
         if ( nStyle &  WB_AUTOVSCROLL )
         {
-            mbHasVertBar = true;
+            bHasVertBar = true;
             m_pVScroll.set(VclPtr<ScrollBar>::Create(this, (WB_VSCROLL | WB_DRAG)));
             m_pVScroll->Show();
             m_pVScroll->SetScrollHdl(aLink);
         }
     }
 
-    if ( mbHasHoriBar || mbHasVertBar )
+    if ( bHasHoriBar || bHasVertBar )
     {
         SetStyle( GetStyle() | WB_CLIPCHILDREN );
     }

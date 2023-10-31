@@ -40,8 +40,6 @@ private:
     VclPtr<ScrollBar>    m_pVScroll;
     VclPtr<ScrollBar>    m_pHScroll;
     Size                 maScrollArea;
-    bool                 mbHasHoriBar;
-    bool                 mbHasVertBar;
     Point                mnScrollPos;
     tools::Long          mnScrWidth;
 

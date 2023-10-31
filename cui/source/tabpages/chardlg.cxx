@@ -1368,8 +1368,8 @@ void SvxCharEffectsPage::Initialize()
     }
     if (pHtmlModeItem)
     {
-        m_nHtmlMode = pHtmlModeItem->GetValue();
-        if ( ( m_nHtmlMode & HTMLMODE_ON ) == HTMLMODE_ON )
+        sal_uInt16 nHtmlMode = pHtmlModeItem->GetValue();
+        if ( ( nHtmlMode & HTMLMODE_ON ) == HTMLMODE_ON )
         {
             //!!! hide some controls please
         }

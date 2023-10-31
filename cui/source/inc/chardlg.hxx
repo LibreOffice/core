@@ -167,7 +167,6 @@ private:
     bool                       m_bNewFontColor;
     bool                       m_bEnableNoneFontColor;
     Color                      m_aOrigFontColor;
-    sal_uInt16                 m_nHtmlMode;
 
     weld::TriStateEnabled m_aOutlineState;
     weld::TriStateEnabled m_aShadowState;
