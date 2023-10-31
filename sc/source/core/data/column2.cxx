@@ -1945,7 +1945,7 @@ public:
         ScPostIt* pNew = p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release();
         miPos = mrDestNotes.set(miPos, nDestRow, pNew);
         // Notify our LOK clients also
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &mrDestCol.GetDoc(), aDestPos, pNew);
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, mrDestCol.GetDoc(), aDestPos, pNew);
     }
 };
 
@@ -2230,13 +2230,13 @@ void ScColumn::SetCellNote(SCROW nRow, std::unique_ptr<ScPostIt> pNote)
 namespace {
     class CellNoteHandler
     {
-        const ScDocument* m_pDocument;
+        const ScDocument& m_rDocument;
         const ScAddress m_aAddress; // 'incomplete' address consisting of tab, column
         const bool m_bForgetCaptionOwnership;
 
     public:
-        CellNoteHandler(const ScDocument* pDocument, const ScAddress& rPos, bool bForgetCaptionOwnership) :
-            m_pDocument(pDocument),
+        CellNoteHandler(const ScDocument& rDocument, const ScAddress& rPos, bool bForgetCaptionOwnership) :
+            m_rDocument(rDocument),
             m_aAddress(rPos),
             m_bForgetCaptionOwnership(bForgetCaptionOwnership) {}
 
@@ -2249,7 +2249,7 @@ namespace {
             ScAddress aAddr(m_aAddress);
             aAddr.SetRow(nRow);
             // Notify our LOK clients
-            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, m_pDocument, aAddr, p);
+            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, m_rDocument, aAddr, p);
         }
     };
 } // anonymous namespace
@@ -2257,7 +2257,7 @@ namespace {
 void ScColumn::CellNotesDeleting(SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership)
 {
     ScAddress aAddr(nCol, 0, nTab);
-    CellNoteHandler aFunc(&GetDoc(), aAddr, bForgetCaptionOwnership);
+    CellNoteHandler aFunc(GetDoc(), aAddr, bForgetCaptionOwnership);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 

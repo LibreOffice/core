@@ -1396,7 +1396,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         if (pNewNote)
         {
             ScDocShell::LOKCommentNotify(hadOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
-                                         &rDoc, rPos, pNewNote);
+                                         rDoc, rPos, pNewNote);
         }
     }
     else if (!bApi)

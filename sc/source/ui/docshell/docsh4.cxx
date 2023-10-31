@@ -2535,9 +2535,9 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     return pObj;
 }
 
-void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote)
+void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote)
 {
-    if ( !pDocument->IsDocVisible() || // don't want callbacks until document load
+    if ( !rDocument.IsDocVisible() || // don't want callbacks until document load
          !comphelper::LibreOfficeKit::isActive() ||
          comphelper::LibreOfficeKit::isTiledAnnotations() )
         return;
@@ -2562,7 +2562,7 @@ void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocu
             // Calculating the cell cursor position
             ScViewData* pViewData = GetViewData();
             if (pViewData && pViewData->GetActiveWin())
-                aAnnotation.put("cellRange", ScPostIt::NoteRangeToJsonString(*pDocument, rPos));
+                aAnnotation.put("cellRange", ScPostIt::NoteRangeToJsonString(rDocument, rPos));
         }
     }
 

@@ -362,7 +362,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     aDestPosition.SetRow(nRow1);
     for (size_t i = 0; i < nDestSize; ++i)
     {
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDocument, aDestPosition, aNotes[i]);
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, rDocument, aDestPosition, aNotes[i]);
         aDestPosition.IncRow();
     }
 }

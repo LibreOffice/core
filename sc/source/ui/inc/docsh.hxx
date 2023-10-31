@@ -403,7 +403,7 @@ public:
     static OUString   GetDBaseFilterName();
     static OUString   GetDifFilterName();
     static bool       HasAutomaticTableName( std::u16string_view rFilter );
-    static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote);
+    static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument& rDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
     DECL_DLLPRIVATE_LINK( RefreshDBDataHdl, Timer*, void );
 
