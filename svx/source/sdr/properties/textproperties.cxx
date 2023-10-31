@@ -135,7 +135,7 @@ namespace sdr::properties
                             // force ItemSet
                             GetObjectItemSet();
 
-                            mxItemSet->Put(pOutliner->GetParaAttribs(0));
+                            moItemSet->Put(pOutliner->GetParaAttribs(0));
                         }
 
                         std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
@@ -379,15 +379,15 @@ namespace sdr::properties
 
             if(bTextFrame)
             {
-                mxItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
-                mxItemSet->Put(XFillColorItem(OUString(), COL_WHITE));
-                mxItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
+                moItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));
+                moItemSet->Put(XFillColorItem(OUString(), COL_WHITE));
+                moItemSet->Put(XFillStyleItem(drawing::FillStyle_NONE));
             }
             else
             {
-                mxItemSet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST));
-                mxItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-                mxItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+                moItemSet->Put(SvxAdjustItem(SvxAdjust::Center, EE_PARA_JUST));
+                moItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+                moItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
             }
         }
 
@@ -400,7 +400,7 @@ namespace sdr::properties
             // using existing functionality
             GetObjectItemSet(); // force ItemSet
             std::vector<const SfxPoolItem*> aChangedItems;
-            SfxItemIter aIter(*mxItemSet);
+            SfxItemIter aIter(*moItemSet);
             for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
             {
                 if(!IsInvalidItem(pItem))
@@ -544,7 +544,7 @@ namespace sdr::properties
         void TextProperties::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
         {
             GetObjectItemSet();
-            mxItemSet->Put(rItem);
+            moItemSet->Put(rItem);
         }
 
 

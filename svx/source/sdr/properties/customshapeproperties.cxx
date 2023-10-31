@@ -95,7 +95,7 @@ namespace sdr::properties
         {
             if ( !nWhich )
             {
-                SfxWhichIter aIter( *mxItemSet );
+                SfxWhichIter aIter( *moItemSet );
                 sal_uInt16 nWhich2 = aIter.FirstWhich();
                 while( nWhich2 )
                 {
@@ -112,7 +112,7 @@ namespace sdr::properties
         {
             if ( !nWhich )
             {
-                SfxWhichIter aIter( *mxItemSet );
+                SfxWhichIter aIter( *moItemSet );
                 sal_uInt16 nWhich2 = aIter.FirstWhich();
                 while( nWhich2 )
                 {

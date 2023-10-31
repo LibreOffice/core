@@ -96,10 +96,10 @@ namespace sdr::properties
             // reset to default
             if (static_cast<SdrCaptionObj&>(GetSdrObject()).GetSpecialTextBoxShadow())
             {
-                mxItemSet->ClearItem(XATTR_FILLCOLOR);
-                mxItemSet->ClearItem(XATTR_FILLSTYLE);
+                moItemSet->ClearItem(XATTR_FILLCOLOR);
+                moItemSet->ClearItem(XATTR_FILLSTYLE);
             }
-            mxItemSet->ClearItem(XATTR_LINESTYLE);
+            moItemSet->ClearItem(XATTR_LINESTYLE);
         }
 } // end of namespace
 

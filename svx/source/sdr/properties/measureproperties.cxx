@@ -111,7 +111,7 @@ namespace sdr::properties
             //#71958# by default, the show units Bool-Item is set as hard
             // attribute to sal_True to avoid confusion when copying SdrMeasureObj's
             // from one application to another
-            mxItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
+            moItemSet->Put(SdrYesNoItem(SDRATTR_MEASURESHOWUNIT, true));
 
             basegfx::B2DPolygon aNewPolygon;
             aNewPolygon.append(basegfx::B2DPoint(100.0, 0.0));
@@ -119,11 +119,11 @@ namespace sdr::properties
             aNewPolygon.append(basegfx::B2DPoint(0.0, 400.0));
             aNewPolygon.setClosed(true);
 
-            mxItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            mxItemSet->Put(XLineStartWidthItem(200));
-            mxItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
-            mxItemSet->Put(XLineEndWidthItem(200));
-            mxItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
+            moItemSet->Put(XLineStartItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            moItemSet->Put(XLineStartWidthItem(200));
+            moItemSet->Put(XLineEndItem(OUString(), basegfx::B2DPolyPolygon(aNewPolygon)));
+            moItemSet->Put(XLineEndWidthItem(200));
+            moItemSet->Put(XLineStyleItem(css::drawing::LineStyle_SOLID));
         }
 } // end of namespace
 

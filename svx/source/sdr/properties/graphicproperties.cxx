@@ -135,16 +135,16 @@ namespace sdr::properties
             // force ItemSet
             GetObjectItemSet();
 
-            mxItemSet->Put( SdrGrafLuminanceItem( 0 ) );
-            mxItemSet->Put( SdrGrafContrastItem( 0 ) );
-            mxItemSet->Put( SdrGrafRedItem( 0 ) );
-            mxItemSet->Put( SdrGrafGreenItem( 0 ) );
-            mxItemSet->Put( SdrGrafBlueItem( 0 ) );
-            mxItemSet->Put( SdrGrafGamma100Item( 100 ) );
-            mxItemSet->Put( SdrGrafTransparenceItem( 0 ) );
-            mxItemSet->Put( SdrGrafInvertItem( false ) );
-            mxItemSet->Put( SdrGrafModeItem( GraphicDrawMode::Standard ) );
-            mxItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
+            moItemSet->Put( SdrGrafLuminanceItem( 0 ) );
+            moItemSet->Put( SdrGrafContrastItem( 0 ) );
+            moItemSet->Put( SdrGrafRedItem( 0 ) );
+            moItemSet->Put( SdrGrafGreenItem( 0 ) );
+            moItemSet->Put( SdrGrafBlueItem( 0 ) );
+            moItemSet->Put( SdrGrafGamma100Item( 100 ) );
+            moItemSet->Put( SdrGrafTransparenceItem( 0 ) );
+            moItemSet->Put( SdrGrafInvertItem( false ) );
+            moItemSet->Put( SdrGrafModeItem( GraphicDrawMode::Standard ) );
+            moItemSet->Put( SdrGrafCropItem( 0, 0, 0, 0 ) );
         }
 } // end of namespace
 

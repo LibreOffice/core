@@ -50,13 +50,13 @@ namespace sdr::properties
         const SfxItemSet& E3dSceneProperties::GetMergedItemSet() const
         {
             // prepare ItemSet
-            if(mxItemSet)
+            if(moItemSet)
             {
                 // filter for SDRATTR_3DSCENE_ items, only keep those items
-                SfxItemSetFixed<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST> aNew(*mxItemSet->GetPool());
-                aNew.Put(*mxItemSet);
-                mxItemSet->ClearItem();
-                mxItemSet->Put(aNew);
+                SfxItemSetFixed<SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST> aNew(*moItemSet->GetPool());
+                aNew.Put(*moItemSet);
+                moItemSet->ClearItem();
+                moItemSet->Put(aNew);
             }
             else
             {
@@ -85,11 +85,11 @@ namespace sdr::properties
                             {
                                 if(SfxItemState::DONTCARE == aIter.GetItemState(false))
                                 {
-                                    mxItemSet->InvalidateItem(nWhich);
+                                    moItemSet->InvalidateItem(nWhich);
                                 }
                                 else
                                 {
-                                    mxItemSet->MergeValue(rSet.Get(nWhich), true);
+                                    moItemSet->MergeValue(rSet.Get(nWhich), true);
                                 }
                             }
 
@@ -273,13 +273,13 @@ namespace sdr::properties
             const Camera3D& aSceneCam(rObj.GetCamera());
 
             // ProjectionType
-            mxItemSet->Put(Svx3DPerspectiveItem(aSceneCam.GetProjection()));
+            moItemSet->Put(Svx3DPerspectiveItem(aSceneCam.GetProjection()));
 
             // CamPos
-            mxItemSet->Put(makeSvx3DDistanceItem(static_cast<sal_uInt32>(aSceneCam.GetPosition().getZ() + 0.5)));
+            moItemSet->Put(makeSvx3DDistanceItem(static_cast<sal_uInt32>(aSceneCam.GetPosition().getZ() + 0.5)));
 
             // FocalLength
-            mxItemSet->Put(makeSvx3DFocalLengthItem(static_cast<sal_uInt32>((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
+            moItemSet->Put(makeSvx3DFocalLengthItem(static_cast<sal_uInt32>((aSceneCam.GetFocalLength() * 100.0) + 0.5)));
         }
 } // end of namespace
 

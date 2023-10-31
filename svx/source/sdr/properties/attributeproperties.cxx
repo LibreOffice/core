@@ -55,7 +55,7 @@ namespace sdr::properties
                     {
                         if(SfxItemState::SET == aIter.GetItemState())
                         {
-                            mxItemSet->ClearItem(nWhich);
+                            moItemSet->ClearItem(nWhich);
                         }
 
                         nWhich = aIter.NextWhich();
@@ -63,7 +63,7 @@ namespace sdr::properties
                 }
 
                 // set new stylesheet as parent
-                mxItemSet->SetParent(&mpStyleSheet->GetItemSet());
+                moItemSet->SetParent(&mpStyleSheet->GetItemSet());
             }
             else
             {
@@ -110,7 +110,7 @@ namespace sdr::properties
                 // reset parent of ItemSet
                 if(HasSfxItemSet())
                 {
-                    mxItemSet->SetParent(nullptr);
+                    moItemSet->SetParent(nullptr);
                 }
 
                 SdrObject& rObj = GetSdrObject();
@@ -272,7 +272,7 @@ namespace sdr::properties
                 }
             }
 
-            return *mxItemSet;
+            return *moItemSet;
         }
 
         void AttributeProperties::ItemSetChanged(std::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
@@ -339,11 +339,11 @@ namespace sdr::properties
                 if(pResultItem)
                 {
                     // force ItemSet
-                    mxItemSet->Put(std::move(pResultItem));
+                    moItemSet->Put(std::move(pResultItem));
                 }
                 else
                 {
-                    mxItemSet->Put(*pNewItem);
+                    moItemSet->Put(*pNewItem);
                 }
             }
             else
@@ -351,7 +351,7 @@ namespace sdr::properties
                 // clear item if ItemSet exists
                 if(HasSfxItemSet())
                 {
-                    mxItemSet->ClearItem(nWhich);
+                    moItemSet->ClearItem(nWhich);
                 }
             }
         }
@@ -384,7 +384,7 @@ namespace sdr::properties
             GetObjectItemSet();
 
             // prepare copied, new itemset, but WITHOUT parent
-            SfxItemSet aDestItemSet(*mxItemSet);
+            SfxItemSet aDestItemSet(*moItemSet);
             aDestItemSet.SetParent(nullptr);
 
             // prepare forgetting the current stylesheet like in RemoveStyleSheet()
@@ -402,7 +402,7 @@ namespace sdr::properties
             {
                 // #i61284# use mpItemSet with parents, makes things easier and reduces to
                 // one loop
-                if(SfxItemState::SET == mxItemSet->GetItemState(nWhich, true, &pItem))
+                if(SfxItemState::SET == moItemSet->GetItemState(nWhich, true, &pItem))
                 {
                     aDestItemSet.Put(*pItem);
                 }
@@ -411,7 +411,7 @@ namespace sdr::properties
             }
 
             // replace itemsets
-            mxItemSet.emplace(std::move(aDestItemSet));
+            moItemSet.emplace(std::move(aDestItemSet));
 
             // set necessary changes like in RemoveStyleSheet()
             GetSdrObject().SetBoundRectDirty();

@@ -240,7 +240,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
                             GetObjectItemSet();
 
                             SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                            mxItemSet->Put(aNewSet);
+                            moItemSet->Put(aNewSet);
                         }
 
                         std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);

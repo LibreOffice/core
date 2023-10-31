@@ -38,7 +38,7 @@ namespace sdr::properties
         {
         protected:
             // the to be used ItemSet
-            mutable std::optional<SfxItemSet> mxItemSet;
+            mutable std::optional<SfxItemSet> moItemSet;
 
             // create a new object specific itemset with object specific ranges.
             virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
@@ -60,7 +60,7 @@ namespace sdr::properties
             virtual void ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich);
 
             // check if SfxItemSet exists
-            bool HasSfxItemSet() const { return bool(mxItemSet); }
+            bool HasSfxItemSet() const { return bool(moItemSet); }
 
         public:
             // basic constructor

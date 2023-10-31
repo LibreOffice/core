@@ -101,16 +101,16 @@ namespace sdr::properties
                 // force ItemSet
                 GetObjectItemSet();
 
-                mxItemSet->Put(SdrCircKindItem(eKind));
+                moItemSet->Put(SdrCircKindItem(eKind));
 
                 if(rObj.GetStartAngle())
                 {
-                    mxItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
+                    moItemSet->Put(makeSdrCircStartAngleItem(rObj.GetStartAngle()));
                 }
 
                 if(rObj.GetEndAngle() != 36000_deg100)
                 {
-                    mxItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
+                    moItemSet->Put(makeSdrCircEndAngleItem(rObj.GetEndAngle()));
                 }
             }
 

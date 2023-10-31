@@ -48,13 +48,13 @@ namespace sdr::properties
         DefaultProperties::DefaultProperties(const DefaultProperties& rProps, SdrObject& rObj)
         :   BaseProperties(rObj)
         {
-            if(!rProps.mxItemSet)
+            if(!rProps.moItemSet)
                 return;
 
             // Clone may be to another model and thus another ItemPool.
             // SfxItemSet supports that thus we are able to Clone all
             // SfxItemState::SET items to the target pool.
-            mxItemSet.emplace(rProps.mxItemSet->CloneAsValue(
+            moItemSet.emplace(rProps.moItemSet->CloneAsValue(
                 true,
                 &rObj.getSdrModelFromSdrObject().GetItemPool()));
 
@@ -74,15 +74,15 @@ namespace sdr::properties
                 {
                     const Fraction aMetricFactor(GetMapFactor(aOldUnit, aNewUnit).X());
 
-                    ScaleItemSet(*mxItemSet, aMetricFactor);
+                    ScaleItemSet(*moItemSet, aMetricFactor);
                 }
             }
 
             // do not keep parent info, this may be changed by later constructors.
             // This class just copies the ItemSet, ignore parent.
-            if(mxItemSet && mxItemSet->GetParent())
+            if(moItemSet && moItemSet->GetParent())
             {
-                mxItemSet->SetParent(nullptr);
+                moItemSet->SetParent(nullptr);
             }
         }
 
@@ -95,15 +95,15 @@ namespace sdr::properties
 
         const SfxItemSet& DefaultProperties::GetObjectItemSet() const
         {
-            if(!mxItemSet)
+            if(!moItemSet)
             {
-                mxItemSet.emplace(const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
+                moItemSet.emplace(const_cast<DefaultProperties*>(this)->CreateObjectSpecificItemSet(GetSdrObject().GetObjectItemPool()));
                 const_cast<DefaultProperties*>(this)->ForceDefaultAttributes();
             }
 
-            assert(mxItemSet && "Could not create an SfxItemSet(!)");
+            assert(moItemSet && "Could not create an SfxItemSet(!)");
 
-            return *mxItemSet;
+            return *moItemSet;
         }
 
         void DefaultProperties::SetObjectItem(const SfxPoolItem& rItem)
@@ -216,8 +216,8 @@ namespace sdr::properties
 
         void DefaultProperties::PostItemChange(const sal_uInt16 nWhich )
         {
-            if( (nWhich == XATTR_FILLSTYLE) && mxItemSet )
-                CleanupFillProperties(*mxItemSet);
+            if( (nWhich == XATTR_FILLSTYLE) && moItemSet )
+                CleanupFillProperties(*moItemSet);
         }
 
         void DefaultProperties::SetStyleSheet(SfxStyleSheet* /*pNewStyleSheet*/, bool /*bDontRemoveHardAttr*/,
@@ -240,9 +240,9 @@ namespace sdr::properties
         {
             (void)xmlTextWriterStartElement(pWriter, BAD_CAST("DefaultProperties"));
             BaseProperties::dumpAsXml(pWriter);
-            if (mxItemSet)
+            if (moItemSet)
             {
-                mxItemSet->dumpAsXml(pWriter);
+                moItemSet->dumpAsXml(pWriter);
             }
             (void)xmlTextWriterEndElement(pWriter);
         }
