@@ -558,83 +558,8 @@ public:
 
 }
 
-#ifdef _WIN32
-std::unique_ptr<PDFEntry> PDFReader::read( const char* pBuffer, unsigned int nLen )
-{
-    PDFGrammar<const char*> aGrammar( pBuffer );
-
-    try
-    {
-#if OSL_DEBUG_LEVEL > 0
-        boost::spirit::classic::parse_info<const char*> aInfo =
-#endif
-            boost::spirit::classic::parse( pBuffer,
-                                  pBuffer+nLen,
-                                  aGrammar,
-                                  boost::spirit::classic::space_p );
-#if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("sdext.pdfimport.pdfparse", "parseinfo: stop = " << aInfo.stop << " (buff=" << pBuffer << ", offset = " << aInfo.stop - pBuffer << "), hit = " << (aInfo.hit ? OUString("true") : OUString("false")) << ", full = " << (aInfo.full ? OUString("true") : OUString("false")) << ", length = " << static_cast<int>(aInfo.length) );
-#endif
-    }
-    catch( const parser_error<const char*, const char*>& rError )
-    {
-#if OSL_DEBUG_LEVEL > 0
-        OString aTmp;
-        unsigned int nElem = aGrammar.m_aObjectStack.size();
-        for( unsigned int i = 0; i < nElem; i++ )
-            aTmp += OString::Concat("   ") + typeid( *(aGrammar.m_aObjectStack[i]) ).name();
-
-        SAL_WARN("sdext.pdfimport.pdfparse", "parse error: " << rError.descriptor << " at buffer pos " << rError.where - pBuffer << ", object stack: " << aTmp);
-#else
-        (void)rError;
-#endif
-    }
-
-    std::unique_ptr<PDFEntry> pRet;
-    unsigned int nEntries = aGrammar.m_aObjectStack.size();
-    if( nEntries == 1 )
-    {
-        pRet.reset(aGrammar.m_aObjectStack.back());
-        aGrammar.m_aObjectStack.pop_back();
-    }
-#if OSL_DEBUG_LEVEL > 0
-    else if( nEntries > 1 )
-        SAL_WARN("sdext.pdfimport.pdfparse", "error got " << nEntries << " stack objects in parse" );
-#endif
-
-    return pRet;
-}
-#endif
-
 std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
 {
-#ifdef _WIN32
-    /* #i106583#
-       since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
-       C++ stdlib istream_iterator does not allow "-" apparently
-       using spirit 2.0 doesn't work in our environment with the MSC
-
-       So for the time being bite the bullet and read the whole file.
-       FIXME: give Spirit 2.x another try when we upgrade boost again.
-    */
-    std::unique_ptr<PDFEntry> pRet;
-    FILE* fp = fopen( pFileName, "rb" );
-    if( fp )
-    {
-        fseek( fp, 0, SEEK_END );
-        unsigned int nLen = static_cast<unsigned int>(ftell( fp ));
-        fseek( fp, 0, SEEK_SET );
-        char* pBuf = static_cast<char*>(std::malloc( nLen ));
-        if( pBuf )
-        {
-            fread( pBuf, 1, nLen, fp );
-            pRet = read( pBuf, nLen );
-            std::free( pBuf );
-        }
-        fclose( fp );
-    }
-    return pRet;
-#else
     file_iterator<> file_start( pFileName );
     if( ! file_start )
         return nullptr;
@@ -692,7 +617,6 @@ std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
     }
 #endif
     return pRet;
-#endif // WIN32
 }
 
 #if defined(_MSC_VER)
