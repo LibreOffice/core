@@ -181,6 +181,7 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 
         void CellProperties::ForceDefaultAttributes()
         {
+            // deliberately do not run superclass ForceDefaultAttributes, we don't want any default attributes
         }
 
         void CellProperties::ItemSetChanged(std::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
