@@ -34,6 +34,9 @@ public:
     virtual sdr::properties::BaseProperties& GetProperties() const override;
 
 protected:
+    virtual std::unique_ptr<sdr::properties::BaseProperties>
+    CreateObjectSpecificProperties() override;
+
     virtual std::unique_ptr<sdr::contact::ViewContact> CreateObjectSpecificViewContact() override;
 
     rtl::Reference<SdrObject> mxRefObj; // Referenced drawing object

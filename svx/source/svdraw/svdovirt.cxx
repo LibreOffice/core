@@ -18,6 +18,7 @@
  */
 
 
+#include <sdr/properties/emptyproperties.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
@@ -30,6 +31,11 @@ sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
     return mxRefObj->GetProperties();
 }
 
+
+std::unique_ptr<sdr::properties::BaseProperties> SdrVirtObj::CreateObjectSpecificProperties()
+{
+    return std::make_unique<sdr::properties::EmptyProperties>(*this);
+}
 
 // #i27224#
 std::unique_ptr<sdr::contact::ViewContact> SdrVirtObj::CreateObjectSpecificViewContact()

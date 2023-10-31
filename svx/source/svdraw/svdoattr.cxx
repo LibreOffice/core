@@ -29,11 +29,6 @@
 
 using namespace com::sun::star;
 
-std::unique_ptr<sdr::properties::BaseProperties> SdrAttrObj::CreateObjectSpecificProperties()
-{
-    return std::make_unique<sdr::properties::AttributeProperties>(*this);
-}
-
 SdrAttrObj::SdrAttrObj(SdrModel& rSdrModel)
     : SdrObject(rSdrModel)
 {

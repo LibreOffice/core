@@ -29,15 +29,13 @@ class SdrOutliner;
 class SfxItemSet;
 class SfxItemPool;
 
-//   SdrAttrObj
+//   SdrAttrObj. This is an abstract class, we only instantiate its subclasses.
 class SVXCORE_DLLPUBLIC SdrAttrObj : public SdrObject
 {
 private:
     friend class                SdrOutliner;
 
 protected:
-    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override;
-
     tools::Rectangle                   maSnapRect;
 
 protected:

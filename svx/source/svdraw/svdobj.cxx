@@ -211,11 +211,6 @@ const std::shared_ptr< svx::diagram::IDiagramHelper >& SdrObject::getDiagramHelp
 
 // BaseProperties section
 
-std::unique_ptr<sdr::properties::BaseProperties> SdrObject::CreateObjectSpecificProperties()
-{
-    return std::make_unique<sdr::properties::EmptyProperties>(*this);
-}
-
 sdr::properties::BaseProperties& SdrObject::GetProperties() const
 {
     if(!mpProperties)
@@ -3243,6 +3238,11 @@ public:
     rtl::Reference<SdrObject> CloneSdrObject(SdrModel& rTargetModel) const override
     {
         return new EmptyObject(rTargetModel, *this);
+    }
+
+    virtual std::unique_ptr<sdr::properties::BaseProperties> CreateObjectSpecificProperties() override
+    {
+        return std::make_unique<sdr::properties::EmptyProperties>(*this);
     }
 
     SdrInventor GetObjInventor() const override
