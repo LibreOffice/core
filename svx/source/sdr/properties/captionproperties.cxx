@@ -89,9 +89,6 @@ namespace sdr::properties
             // call parent
             RectangleProperties::ForceDefaultAttributes();
 
-            // force ItemSet
-            GetObjectItemSet();
-
             // this was set by TextProperties::ForceDefaultAttributes(),
             // reset to default
             if (static_cast<SdrCaptionObj&>(GetSdrObject()).GetSpecialTextBoxShadow())

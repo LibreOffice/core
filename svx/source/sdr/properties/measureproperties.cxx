@@ -105,9 +105,6 @@ namespace sdr::properties
             // call parent
             TextProperties::ForceDefaultAttributes();
 
-            // force ItemSet
-            GetObjectItemSet();
-
             //#71958# by default, the show units Bool-Item is set as hard
             // attribute to sal_True to avoid confusion when copying SdrMeasureObj's
             // from one application to another

@@ -132,9 +132,6 @@ namespace sdr::properties
             // call parent
             RectangleProperties::ForceDefaultAttributes();
 
-            // force ItemSet
-            GetObjectItemSet();
-
             moItemSet->Put( SdrGrafLuminanceItem( 0 ) );
             moItemSet->Put( SdrGrafContrastItem( 0 ) );
             moItemSet->Put( SdrGrafRedItem( 0 ) );

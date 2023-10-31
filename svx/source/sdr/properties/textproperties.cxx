@@ -374,9 +374,6 @@ namespace sdr::properties
 
             bool bTextFrame(rObj.IsTextFrame());
 
-            // force ItemSet
-            GetObjectItemSet();
-
             if(bTextFrame)
             {
                 moItemSet->Put(XLineStyleItem(drawing::LineStyle_NONE));

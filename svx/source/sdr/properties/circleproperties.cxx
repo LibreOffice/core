@@ -98,9 +98,6 @@ namespace sdr::properties
 
             if(eKind != SdrCircKind::Full)
             {
-                // force ItemSet
-                GetObjectItemSet();
-
                 moItemSet->Put(SdrCircKindItem(eKind));
 
                 if(rObj.GetStartAngle())
