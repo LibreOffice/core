@@ -1731,11 +1731,6 @@ namespace emfio
 
                 switch( nFunction )
                 {
-                    case W_META_EOF:
-                    {
-                        return;
-                    }
-
                     case W_META_SETWINDOWORG:
                     {
                         aWinOrg = ReadYX();
