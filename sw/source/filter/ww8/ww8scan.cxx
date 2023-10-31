@@ -1023,12 +1023,13 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
         if (IsSevenMinus(GetFIBVersion()))
         {
-            m_aShortSprm[0] = static_cast<sal_uInt8>( ( nPrm & 0xfe) >> 1 );
-            m_aShortSprm[1] = static_cast<sal_uInt8>(   nPrm         >> 8 );
+            SVBT32 aShortSprm; // mini storage: can contain ONE sprm with 1 byte param
+            aShortSprm[0] = static_cast<sal_uInt8>( ( nPrm & 0xfe) >> 1 );
+            aShortSprm[1] = static_cast<sal_uInt8>(   nPrm         >> 8 );
             p->nSprmsLen = nPrm ? 2 : 0;        // length
 
             // store Position of internal mini storage in Data Pointer
-            p->pMemPos = m_aShortSprm;
+            p->pMemPos = aShortSprm;
         }
         else
         {
@@ -1119,16 +1120,18 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
                 if( nSprmId )
                 {
+                    SVBT32 aShortSprm; // mini storage: can contain ONE sprm with 1 byte param
+
                     // move Sprm Id and Sprm Param to internal mini storage:
-                    m_aShortSprm[0] = static_cast<sal_uInt8>( nSprmId & 0x00ff)       ;
-                    m_aShortSprm[1] = static_cast<sal_uInt8>( ( nSprmId & 0xff00) >> 8 );
-                    m_aShortSprm[2] = static_cast<sal_uInt8>( nPrm >> 8 );
+                    aShortSprm[0] = static_cast<sal_uInt8>( nSprmId & 0x00ff)       ;
+                    aShortSprm[1] = static_cast<sal_uInt8>( ( nSprmId & 0xff00) >> 8 );
+                    aShortSprm[2] = static_cast<sal_uInt8>( nPrm >> 8 );
 
                     // store Sprm Length in member:
                     p->nSprmsLen = nPrm ? 3 : 0;
 
                     // store Position of internal mini storage in Data Pointer
-                    p->pMemPos = m_aShortSprm;
+                    p->pMemPos = aShortSprm;
                 }
             }
         }
