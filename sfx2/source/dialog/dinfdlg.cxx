@@ -907,8 +907,11 @@ IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl, weld::Button&, void)
                     tools::JsonWriter payloadJson;
                     payloadJson.put("password", m_xPasswordDialog->GetPasswordToOpen());
                     payloadJson.put("isToModify", false);
-                    pShell->GetViewShell()->libreOfficeKitViewCallback(
-                        LOK_CALLBACK_DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
+
+                    SfxViewShell *pViewShell = SfxViewShell::Current();
+                    if (pViewShell)
+                        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_PASSWORD_RESET, payloadJson.finishAndGetAsOString());
+
                     pShell->SetModified();
                 }
                 m_xPasswordDialog->disposeOnce();
