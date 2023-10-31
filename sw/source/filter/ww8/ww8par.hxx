@@ -1064,7 +1064,6 @@ struct WW8TabBandDesc
     bool bLEmptyCol;    // SW: an additional empty column at the left
     bool bREmptyCol;    // SW: same at the right
     bool bCantSplit;
-    bool bCantSplit90;
     WW8_TCell* pTCs;
     sal_uInt8 nOverrideSpacing[MAX_COL + 1];
     short nOverrideValues[MAX_COL + 1][4];

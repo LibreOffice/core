@@ -79,7 +79,7 @@ WW8TabBandDesc::WW8TabBandDesc():
     pNextBand(nullptr), nGapHalf(0), mnDefaultLeft(0), mnDefaultTop(0), mnDefaultRight(0),
     mnDefaultBottom(0), mbHasSpacing(false), nLineHeight(0), nRows(0), nCenter{}, nWidth{},
     nWwCols(0), nSwCols(0), bLEmptyCol(false), bREmptyCol(false), bCantSplit(false),
-    bCantSplit90(false), pTCs(nullptr), nOverrideSpacing{}, nOverrideValues{}, pSHDs(nullptr),
+    pTCs(nullptr), nOverrideSpacing{}, nOverrideValues{}, pSHDs(nullptr),
     pNewSHDs(nullptr), bExist{}, nTransCell{}
 {
     for (sal_uInt16 & rn : maDirections)
