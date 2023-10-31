@@ -20,6 +20,7 @@
 #include <column.hxx>
 #include <scitems.hxx>
 #include <formulacell.hxx>
+#include <docsh.hxx>
 #include <document.hxx>
 #include <table.hxx>
 #include <docpool.hxx>
@@ -1810,22 +1811,37 @@ void resetColumnPosition(sc::CellStoreType& rCells, SCCOL nCol)
 
 class NoteCaptionUpdater
 {
-    SCCOL mnCol;
-    SCTAB mnTab;
+    const ScDocument* m_pDocument;
+    const ScAddress m_aAddress; // 'incomplete' address consisting of tab, column
+    bool m_bAddressChanged;  // false if the cell anchor address is unchanged
 public:
-    NoteCaptionUpdater( SCCOL nCol, SCTAB nTab ) : mnCol(nCol), mnTab(nTab) {}
+    NoteCaptionUpdater(const ScDocument* pDocument, const ScAddress& rPos, bool bAddressChanged)
+        : m_pDocument(pDocument)
+        , m_aAddress(rPos)
+        , m_bAddressChanged(bAddressChanged)
+    {
+    }
 
     void operator() ( size_t nRow, ScPostIt* p )
     {
-        p->UpdateCaptionPos(ScAddress(mnCol,nRow,mnTab));
+        // Create a 'complete' address object
+        ScAddress aAddr(m_aAddress);
+        aAddr.SetRow(nRow);
+
+        p->UpdateCaptionPos(aAddr);
+
+        // Notify our LOK clients
+        if (m_bAddressChanged)
+            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Modify, m_pDocument, aAddr, p);
     }
 };
 
 }
 
-void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 )
+void ScColumn::UpdateNoteCaptions( SCROW nRow1, SCROW nRow2, bool bAddressChanged )
 {
-    NoteCaptionUpdater aFunc(nCol, nTab);
+    ScAddress aAddr(nCol, 0, nTab);
+    NoteCaptionUpdater aFunc(&GetDoc(), aAddr, bAddressChanged);
     sc::ProcessNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
 }
 

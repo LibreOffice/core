@@ -1496,7 +1496,7 @@ void ScTable::CopyCaptionsToTable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     for (SCCOL i = nCol1; i <= nCol2; i++)
     {
         aCol[i].CopyCellNotesToDocument(nRow1, nRow2, pDestTab->CreateColumnIfNotExists(i), bCloneCaption);
-        pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2);
+        pDestTab->aCol[i].UpdateNoteCaptions(nRow1, nRow2, false /* address unchanged from initial create */);
     }
 }
 
