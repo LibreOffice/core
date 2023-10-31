@@ -1567,7 +1567,7 @@ static bool TrySaveFormulaAsPDF(SwHTMLWriter& rWrt, const SwFrameFormat& rFrameF
         return false;
 
     Graphic aGraphic(xTextContent->getReplacementGraphic());
-    OUString aFileName = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"pdf"_ustr);
+    OUString aFileName = lcl_CalculateFileName(rWrt.GetOrigFileName(), aGraphic, u"pdf");
 
     utl::MediaDescriptor aDescr;
     aDescr[u"FilterName"_ustr] <<= u"math_pdf_Export"_ustr;
