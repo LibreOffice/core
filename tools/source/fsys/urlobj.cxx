@@ -809,6 +809,17 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                 eMechanism = EncodeMechanism::All;
                 nFragmentDelimiter = 0x80000000;
             }
+            else if (eStyle & FSysStyle::Dos
+                && pEnd - p1 >= 6
+                && p1[0] == '\\' && p1[1] == '\\' && p1[2] == '?' && p1[3] == '\\'
+                && rtl::isAsciiAlpha(p1[4])
+                && p1[5] == ':'
+                && (pEnd - p1 == 6 || p1[6] == '/' || p1[6] == '\\'))
+            {
+                m_eScheme = INetProtocol::File; // 8th, 9th
+                eMechanism = EncodeMechanism::All;
+                nFragmentDelimiter = 0x80000000;
+            }
             else if (pEnd - p1 >= 2 && p1[0] == '/' && p1[1] == '/')
             {
                 p1 += 2;
@@ -828,6 +839,14 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                      && p1[1] == '\\')
             {
                 p1 += 2;
+                if (pEnd - p1 >= 6 && p1[0] == '?' && p1[1] == '\\' && p1[5] == '\\'
+                    && rtl::toAsciiLowerCase(p1[2]) == 'u'
+                    && rtl::toAsciiLowerCase(p1[3]) == 'n'
+                    && rtl::toAsciiLowerCase(p1[4]) == 'c')
+                {
+                    p1 += 6; // "\\?\UNC\Servername\..."
+                }
+
                 sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
                     p1, pEnd - p1, '\\');
                 sal_Unicode const * pe = n == -1 ? pEnd : p1 + n;
@@ -1161,6 +1180,16 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                         && pPos[1] == '\\')
                     {
                         sal_Unicode const * p1 = pPos + 2;
+                        sal_Unicode const * pHostPortTentativeBegin = p1;
+                        if (pEnd - p1 >= 6 && p1[0] == '?' && p1[1] == '\\' && p1[5] == '\\'
+                            && rtl::toAsciiLowerCase(p1[2]) == 'u'
+                            && rtl::toAsciiLowerCase(p1[3]) == 'n'
+                            && rtl::toAsciiLowerCase(p1[4]) == 'c')
+                        {
+                            p1 += 6; // "\\?\UNC\Servername\..."
+                            pHostPortTentativeBegin = p1;
+                        }
+
                         sal_Unicode const * pe = p1;
                         while (pe < pEnd && *pe != '\\' &&
                                *pe != nFragmentDelimiter)
@@ -1175,7 +1204,7 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                            )
                         {
                             m_aAbsURIRef.append("//");
-                            pHostPortBegin = pPos + 2;
+                            pHostPortBegin = pHostPortTentativeBegin;
                             pHostPortEnd = pe;
                             pPos = pe;
                             nSegmentDelimiter = '\\';
@@ -1193,18 +1222,26 @@ bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                     //  becomes
                     //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
-                    if (eStyle & FSysStyle::Dos
-                        && pEnd - pPos >= 2
-                        && rtl::isAsciiAlpha(pPos[0])
-                        && pPos[1] == ':'
-                        && (pEnd - pPos == 2
-                            || pPos[2] == '/'
-                            || pPos[2] == '\\'))
+                    if (eStyle & FSysStyle::Dos)
                     {
-                        m_aAbsURIRef.append("//");
-                        nAltSegmentDelimiter = '\\';
-                        bSkippedInitialSlash = true;
-                        break;
+                        sal_Unicode const* p1 = pPos;
+                        if (pEnd - p1 >= 4 && p1[0] == '\\' && p1[1] == '\\' && p1[2] == '?'
+                            && p1[3] == '\\')
+                            p1 += 4; // "\\?\c:\..."
+
+                        if (pEnd - p1 >= 2
+                            && rtl::isAsciiAlpha(p1[0])
+                            && p1[1] == ':'
+                            && (pEnd - p1 == 2
+                                || p1[2] == '/'
+                                || p1[2] == '\\'))
+                        {
+                            pPos = p1;
+                            m_aAbsURIRef.append("//");
+                            nAltSegmentDelimiter = '\\';
+                            bSkippedInitialSlash = true;
+                            break;
+                        }
                     }
 
                     // 9th Production (any):
@@ -1581,12 +1618,35 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                 q += 2;
                 sal_Int32 n = rtl_ustr_indexOfChar_WithLength(
                     q, pEnd - q, '\\');
-                sal_Unicode const * qe = n == -1 ? pEnd : q + n;
-                if (parseHostOrNetBiosName(
-                        q, qe, EncodeMechanism::All, RTL_TEXTENCODING_DONTKNOW,
-                        true, nullptr))
+                if (n == 1 && q[0] == '?')
                 {
-                    bFSys = true; // 1st
+                    // "\\?\c:\..." or "\\?\UNC\servername\..."
+                    q += 2;
+                    if (pEnd - q >= 2
+                        && rtl::isAsciiAlpha(q[0])
+                        && q[1] == ':'
+                        && (pEnd - q == 2 || q[2] == '/' || q[2] == '\\'))
+                    {
+                        bFSys = true; // 2nd, 3rd
+                    }
+                    else if (pEnd - q >= 4
+                        && q[3] == '\\'
+                        && rtl::toAsciiLowerCase(q[0]) == 'u'
+                        && rtl::toAsciiLowerCase(q[1]) == 'n'
+                        && rtl::toAsciiLowerCase(q[2]) == 'c')
+                    {
+                        q += 4; // Check if it's 1st below
+                    }
+                }
+                if (!bFSys)
+                {
+                    sal_Unicode const * qe = n == -1 ? pEnd : q + n;
+                    if (parseHostOrNetBiosName(
+                            q, qe, EncodeMechanism::All, RTL_TEXTENCODING_DONTKNOW,
+                            true, nullptr))
+                    {
+                        bFSys = true; // 1st
+                    }
                 }
             }
             if (bFSys)
