@@ -601,21 +601,26 @@ std::unique_ptr<PDFEntry> PDFReader::read( const char* pFileName )
         pRet.reset(aGrammar.m_aObjectStack.back());
         aGrammar.m_aObjectStack.pop_back();
     }
-#if OSL_DEBUG_LEVEL > 0
     else if( nEntries > 1 )
     {
+        // It is possible that there are multiple trailers, which is OK.
+        // But still keep the warnings, just in case.
         SAL_WARN("sdext.pdfimport.pdfparse", "error got " << nEntries << " stack objects in parse");
-        for( unsigned int i = 0; i < nEntries; i++ )
+        for (;;)
         {
-            SAL_WARN("sdext.pdfimport.pdfparse", typeid(*aGrammar.m_aObjectStack[i]).name());
-            PDFObject* pObj = dynamic_cast<PDFObject*>(aGrammar.m_aObjectStack[i]);
+            PDFEntry* pEntry = aGrammar.m_aObjectStack.back();
+            aGrammar.m_aObjectStack.pop_back();
+            SAL_WARN("sdext.pdfimport.pdfparse", typeid(*pEntry).name());
+            PDFObject* pObj = dynamic_cast<PDFObject*>(pEntry);
             if( pObj )
                 SAL_WARN("sdext.pdfimport.pdfparse", "   -> object " << pObj->m_nNumber << " generation " << pObj->m_nGeneration);
-            else
-                SAL_WARN("sdext.pdfimport.pdfparse", "(type " << typeid(*aGrammar.m_aObjectStack[i]).name() << ")");
+            if (aGrammar.m_aObjectStack.empty())
+            {
+                pRet.reset(pEntry); // The first entry references all others - see PDFGrammar dtor
+                break;
+            }
         }
     }
-#endif
     return pRet;
 }
 
