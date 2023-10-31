@@ -447,7 +447,7 @@ void processDataStream( ScDocShell& rShell, const sc::ImportPostProcessData& rDa
         r.meInsertPos == sc::ImportPostProcessData::DataStream::InsertTop ?
         sc::DataStream::MOVE_DOWN : sc::DataStream::RANGE_DOWN;
 
-    sc::DataStream* pStrm = new sc::DataStream(&rShell, r.maURL, aTopRange, nLimit, eMove, 0);
+    sc::DataStream* pStrm = new sc::DataStream(&rShell, r.maURL, aTopRange, nLimit, eMove);
     pStrm->SetRefreshOnEmptyLine(r.mbRefreshOnEmpty);
     sc::DocumentLinkManager& rMgr = rShell.GetDocument().GetDocLinkManager();
     rMgr.setDataStream(pStrm);

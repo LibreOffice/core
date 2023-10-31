@@ -264,16 +264,16 @@ void DataStream::MakeToolbarVisible()
 
 DataStream* DataStream::Set(
     ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
-    sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings)
+    sal_Int32 nLimit, MoveType eMove)
 {
-    DataStream* pLink = new DataStream(pShell, rURL, rRange, nLimit, eMove, nSettings);
+    DataStream* pLink = new DataStream(pShell, rURL, rRange, nLimit, eMove);
     sc::DocumentLinkManager& rMgr = pShell->GetDocument().GetDocLinkManager();
     rMgr.setDataStream(pLink);
     return pLink;
 }
 
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
-        sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings) :
+        sal_Int32 nLimit, MoveType eMove) :
     mpDocShell(pShell),
     maDocAccess(mpDocShell->GetDocument()),
     meOrigMove(NO_MOVE),
@@ -292,7 +292,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     maImportTimer.SetTimeout(0);
     maImportTimer.SetInvokeHandler( LINK(this, DataStream, ImportTimerHdl) );
 
-    Decode(rURL, rRange, nLimit, eMove, nSettings);
+    Decode(rURL, rRange, nLimit, eMove);
 }
 
 DataStream::~DataStream()
@@ -344,12 +344,11 @@ ScRange DataStream::GetRange() const
 }
 
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
-        sal_Int32 nLimit, MoveType eMove, const sal_uInt32 nSettings)
+        sal_Int32 nLimit, MoveType eMove)
 {
     msURL = rURL;
     meMove = eMove;
     meOrigMove = eMove;
-    mnSettings = nSettings;
 
     mbValuesInLine = true; // always true.
 

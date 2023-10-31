@@ -161,14 +161,11 @@ void DataStreamDlg::StartStream()
     if (m_xRBMaxLimit->get_active())
         nLimit = m_xEdLimit->get_text().toInt32();
     OUString rURL = m_xCbUrl->get_active_text();
-    sal_uInt32 nSettings = 0;
-    if (m_xRBValuesInLine->get_active())
-        nSettings |= DataStream::VALUES_IN_LINE;
 
     DataStream::MoveType eMove
         = m_xRBRangeDown->get_active() ? DataStream::RANGE_DOWN : DataStream::MOVE_DOWN;
 
-    DataStream* pStream = DataStream::Set(m_pDocShell, rURL, aStartRange, nLimit, eMove, nSettings);
+    DataStream* pStream = DataStream::Set(m_pDocShell, rURL, aStartRange, nLimit, eMove);
     pStream->SetRefreshOnEmptyLine(m_xCBRefreshOnEmpty->get_active());
     DataStream::MakeToolbarVisible();
     pStream->StartImport();
