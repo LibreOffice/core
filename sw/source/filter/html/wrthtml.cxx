@@ -439,7 +439,7 @@ ErrCode SwHTMLWriter::WriteStream()
     m_bCfgFormFeed = !IsHTMLMode(HTMLMODE_PRINT_EXT);
     m_bCfgCpyLinkedGrfs = officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get();
 
-    m_bCfgPrintLayout = SvxHtmlOptions::IsPrintLayoutExtension();
+    m_bCfgPrintLayout = officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get();
 
     // get HTML template
     bool bOldHTMLMode = false;

@@ -35,8 +35,6 @@ namespace SvxHtmlOptions
 SVT_DLLPUBLIC sal_uInt16 GetFontSize(sal_uInt16 nPos);
 
 SVT_DLLPUBLIC sal_uInt16 GetExportMode();
-
-SVT_DLLPUBLIC bool IsPrintLayoutExtension();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

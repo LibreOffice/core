@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <vcl/svapp.hxx>
 #include <numpara.hxx>
@@ -58,6 +57,7 @@
 #include <svl/intitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
+#include <officecfg/Office/Common.hxx>
 
 // the dialog's carrier
 SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
@@ -146,7 +146,7 @@ SwTemplateDlgController::SwTemplateDlgController(weld::Window* pParent,
 
             if(m_nHtmlMode & HTMLMODE_ON)
             {
-                if (!SvxHtmlOptions::IsPrintLayoutExtension())
+                if (!officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get())
                     RemoveTabPage("textflow");
                 RemoveTabPage("asiantypo");
                 RemoveTabPage("tabs");

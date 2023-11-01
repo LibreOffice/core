@@ -31,7 +31,6 @@
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 
-#include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <sfx2/sfxdlg.hxx>
@@ -57,6 +56,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Common.hxx>
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -1427,7 +1427,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
 void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 {
-    bool bFlowAllowed = !m_bHtmlMode || SvxHtmlOptions::IsPrintLayoutExtension();
+    bool bFlowAllowed = !m_bHtmlMode || officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get();
     if(bFlowAllowed)
     {
         //Inserting of the existing page templates in the list box

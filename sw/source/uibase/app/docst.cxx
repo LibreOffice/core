@@ -43,7 +43,6 @@
 #include <sfx2/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <fchrfmt.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <svx/xdef.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwRewriter.hxx>
@@ -85,6 +84,7 @@
 #include <AccessibilityCheck.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <svx/svdpage.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -221,7 +221,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY4:
             {
-                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !SvxHtmlOptions::IsPrintLayoutExtension())
+                if (m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) && !officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get())
                     rSet.DisableItem( nWhich );
                 else
                 {

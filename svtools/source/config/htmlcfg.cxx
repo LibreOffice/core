@@ -67,11 +67,6 @@ sal_uInt16 GetExportMode()
     return nExpMode;
 }
 
-bool IsPrintLayoutExtension()
-{
-    return officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get();
-}
-
 } // namespace SvxHtmlOptions
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

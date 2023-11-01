@@ -18,7 +18,6 @@
  */
 
 #include <svtools/langtab.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Common.hxx>
 #include "opthtml.hxx"
@@ -166,7 +165,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
     m_xStarBasicWarningCB->set_active(officecfg::Office::Common::Filter::HTML::Export::Warning::get());
     m_xStarBasicWarningCB->set_sensitive(!m_xStarBasicCB->get_active());
     m_xSaveGrfLocalCB->set_active(officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get());
-    m_xPrintExtensionCB->set_active(SvxHtmlOptions::IsPrintLayoutExtension());
+    m_xPrintExtensionCB->set_active(officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get());
 
     m_xPrintExtensionCB->save_state();
     m_xStarBasicCB->save_state();
