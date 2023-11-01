@@ -269,7 +269,7 @@ bool SwLinePortion::Format( SwTextFormatInfo &rInf )
 void SwLinePortion::FormatEOL( SwTextFormatInfo & )
 { }
 
-void SwLinePortion::Move( SwTextPaintInfo &rInf )
+void SwLinePortion::Move(SwTextPaintInfo & rInf) const
 {
     bool bB2T = rInf.GetDirection() == DIR_BOTTOM2TOP;
     const bool bFrameDir = rInf.GetTextFrame()->IsRightToLeft();
@@ -300,7 +300,7 @@ void SwLinePortion::Move( SwTextPaintInfo &rInf )
         else
             rInf.X( rInf.X() + PrtWidth() );
     }
-    if( IsMultiPortion() && static_cast<SwMultiPortion*>(this)->HasTabulator() )
+    if (IsMultiPortion() && static_cast<SwMultiPortion const*>(this)->HasTabulator())
         rInf.IncSpaceIdx();
 
     rInf.SetIdx( rInf.GetIdx() + GetLen() );
