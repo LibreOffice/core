@@ -160,7 +160,7 @@ public:
     virtual bool Format( SwTextFormatInfo &rInf );
     // Is called for the line's last portion
     virtual void FormatEOL( SwTextFormatInfo &rInf );
-            void Move( SwTextPaintInfo &rInf );
+            void Move(SwTextPaintInfo & rInf) const;
 
     // For SwTextSlot
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const;
