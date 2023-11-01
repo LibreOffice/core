@@ -1496,6 +1496,7 @@ callback (gpointer pData)
     case LOK_CALLBACK_DOCUMENT_PASSWORD_RESET:
     case LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE:
     case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
+    case LOK_CALLBACK_CORE_LOG:
     {
         // TODO: Implement me
         break;
