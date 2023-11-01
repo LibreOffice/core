@@ -26,9 +26,9 @@ import collections
 import urllib.parse
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs):
-        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.cobjects, self.objcxxobjects, self.cflags, self.linked_libs) = (
-            name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.cobjects, self.objcxxobjects, self.cflags, self.linked_libs, self.link_target) = (
+            name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
 
     def short_name(self):
         return self.name
@@ -43,8 +43,8 @@ class GbuildLinkTarget:
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based on the Library_* makefile name"""
@@ -57,8 +57,8 @@ class GbuildLib(GbuildLinkTarget):
         return self.name
 
 class GbuildTest(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based n the CppunitTest_* makefile names"""
@@ -68,8 +68,8 @@ class GbuildTest(GbuildLinkTarget):
         return 'CppunitTest_%s' % self.name
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs):
-        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs)
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, cobjects, objcxxobjects, cflags, linked_libs, link_target)
 
     def short_name(self):
         """Return the short name of target based on the Executable_* makefile name"""
@@ -148,7 +148,8 @@ class GbuildParser:
             GbuildParser.__split_objs(json['COBJECTS']),
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
-            json['LINKED_LIBS'].strip().split(' '))
+            json['LINKED_LIBS'].strip().split(' '),
+            json['LINKTARGET'].strip())
 
     @staticmethod
     def __test_from_json(json):
@@ -172,7 +173,8 @@ class GbuildParser:
             GbuildParser.__split_objs(json['COBJECTS']),
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
-            json['LINKED_LIBS'].strip().split(' '))
+            json['LINKED_LIBS'].strip().split(' '),
+            json['LINKTARGET'].strip())
 
     @staticmethod
     def __exe_from_json(json):
@@ -188,7 +190,8 @@ class GbuildParser:
             GbuildParser.__split_objs(json['COBJECTS']),
             GbuildParser.__split_objs(json['OBJCXXOBJECTS']),
             GbuildParser.__split_flags(json['CFLAGS'], json['CFLAGSAPPEND']),
-            json['LINKED_LIBS'].strip().split(' '))
+            json['LINKED_LIBS'].strip().split(' '),
+            json['LINKTARGET'].strip())
 
     def parse(self):
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
@@ -1145,9 +1148,13 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
             nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
-            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.bin')
+            nmake_output_node.text = os.path.join(self.gbuildparser.workdir, 'LinkTarget', target.link_target)
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(self.defs_list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
+            nmake_debug_command_node = ET.SubElement(conf_node, '{%s}LocalDebuggerCommand' % ns)
+            nmake_debug_command_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.bin')
+            nmake_debug_flavor_node = ET.SubElement(conf_node, '{%s}DebuggerFlavor' % ns)
+            nmake_debug_flavor_node.text = 'WindowsLocalDebugger'
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             include_path_node.text = include_path_node_text
             additional_options_node = ET.SubElement(conf_node, '{%s}AdditionalOptions' % ns)
