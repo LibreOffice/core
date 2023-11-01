@@ -183,6 +183,7 @@ class SwTaggedPDFHelper
     ~SwTaggedPDFHelper();
 
     static bool IsExportTaggedPDF( const OutputDevice& rOut );
+    static void EndCurrentLink(OutputDevice const&);
 };
 
 /*

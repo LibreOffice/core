@@ -162,6 +162,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         roTaggedParagraph.emplace(nullptr, &aFrameInfo, nullptr, *GetInfo().GetOut());
     }
 
+    SwTaggedPDFHelper::EndCurrentLink(*GetInfo().GetOut());
+
     // Optimization!
     SwTwips nMaxRight = std::min<SwTwips>( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();
