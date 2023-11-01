@@ -122,15 +122,10 @@ namespace sdr::properties
         }
 
         // create a new itemset
-        SfxItemSet AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        SfxItemSet AttributeProperties::CreateObjectSpecificItemSet(SfxItemPool&)
         {
-            return SfxItemSet(rPool,
-
-                // ranges from SdrAttrObj
-                svl::Items<SDRATTR_START, SDRATTR_SHADOW_LAST,
-                SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-                SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
-                SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST>);
+            assert(false && "this class is effectively abstract, should only be instantiating subclasses");
+            abort();
         }
 
         AttributeProperties::AttributeProperties(SdrObject& rObj)
@@ -224,9 +219,10 @@ namespace sdr::properties
             ImpRemoveStyleSheet();
         }
 
-        std::unique_ptr<BaseProperties> AttributeProperties::Clone(SdrObject& rObj) const
+        std::unique_ptr<BaseProperties> AttributeProperties::Clone(SdrObject&) const
         {
-            return std::unique_ptr<BaseProperties>(new AttributeProperties(*this, rObj));
+            assert(false && "this class is effectively abstract, should only be instantiating subclasses");
+            abort();
         }
 
         const SfxItemSet& AttributeProperties::GetObjectItemSet() const

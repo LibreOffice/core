@@ -51,13 +51,13 @@ namespace sdr::properties
             // apply the correct SfyStyleSheet from SdrObject's SdrModel
             virtual void applyDefaultStyleSheetFromSdrModel();
 
-        public:
             // basic constructor
             explicit AttributeProperties(SdrObject& rObj);
 
             // constructor for copying, but using new object
             AttributeProperties(const AttributeProperties& rProps, SdrObject& rObj);
 
+        public:
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
