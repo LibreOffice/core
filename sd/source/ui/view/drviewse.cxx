@@ -1547,30 +1547,41 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
         if( pMarkedObj ) try
         {
             // change first marked object
-            if( SdrInventor::FmForm == pMarkedObj->GetObjInventor() && pMarkedObj->GetObjIdentifier() == SdrObjKind::FormButton )
+            if (SdrInventor::FmForm == pMarkedObj->GetObjInventor())
             {
-                bNewObj = false;
-
                 SdrUnoObj* pUnoCtrl = static_cast< SdrUnoObj* >( pMarkedObj );
 
                 Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel(), UNO_SET_THROW );
                 Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY_THROW );
 
-                xPropSet->setPropertyValue("Label" , Any( rText ) );
-                xPropSet->setPropertyValue("TargetURL" , Any( sTargetURL ) );
-
-                if( !rTarget.isEmpty() )
-                    xPropSet->setPropertyValue("TargetFrame" , Any( rTarget ) );
-
-                xPropSet->setPropertyValue( "ButtonType" , Any( form::FormButtonType_URL ) );
-#if HAVE_FEATURE_AVMEDIA
-                if ( ::avmedia::MediaWindow::isMediaURL( rURL, ""/*TODO?*/ ) )
+                bool bIsButton = pMarkedObj->GetObjIdentifier() == SdrObjKind::FormButton;
+                if (!bIsButton && pMarkedObj->GetObjIdentifier() == SdrObjKind::UNO)
                 {
-                    xPropSet->setPropertyValue( "DispatchURLInternal" , Any( true ) );
+                    const Reference<beans::XPropertySetInfo> xInfo(xPropSet->getPropertySetInfo());
+                    bIsButton = xInfo.is() && xInfo->hasPropertyByName("ButtonType")
+                                && xInfo->hasPropertyByName("Label")
+                                && xInfo->hasPropertyByName("TargetURL");
                 }
+                if (bIsButton)
+                {
+                    bNewObj = false;
+
+                    xPropSet->setPropertyValue("Label", Any(rText));
+                    xPropSet->setPropertyValue("TargetURL", Any(sTargetURL));
+
+                    if (!rTarget.isEmpty())
+                        xPropSet->setPropertyValue("TargetFrame", Any(rTarget));
+
+                    xPropSet->setPropertyValue("ButtonType", Any(form::FormButtonType_URL));
+#if HAVE_FEATURE_AVMEDIA
+                    if (::avmedia::MediaWindow::isMediaURL(rURL, ""/*TODO?*/))
+                    {
+                        xPropSet->setPropertyValue("DispatchURLInternal", Any(true));
+                    }
 #endif
+                }
             }
-            else
+            if (bNewObj)
             {
                 // add url as interaction for first selected shape
                 bNewObj = false;
