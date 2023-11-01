@@ -287,7 +287,6 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
         ScCellInfo* pInfo, ScTableInfo* pTableInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
-    bool bFound = false;
     bool bAnyCondition = false;
     for(const auto& rCondFormat : rCondFormats)
     {
@@ -317,33 +316,28 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
                     bHideFormula = pProtAttr->GetHideFormula();
 
                 }
-                bFound = true;
-
             }
             // if style is not there, treat like no condition
         }
 
-        if(aData.mxColorScale)
+        if(aData.mxColorScale && !pInfo->mxColorScale)
         {
             pInfo->mxColorScale = aData.mxColorScale;
-            bFound = true;
         }
 
-        if(aData.pDataBar)
+        if(aData.pDataBar && !pInfo->pDataBar)
         {
             pInfo->pDataBar = aData.pDataBar.get();
             pTableInfo->addDataBarInfo(std::move(aData.pDataBar));
-            bFound = true;
         }
 
-        if(aData.pIconSet)
+        if(aData.pIconSet && !pInfo->pIconSet)
         {
             pInfo->pIconSet = aData.pIconSet.get();
             pTableInfo->addIconSetInfo(std::move(aData.pIconSet));
-            bFound = true;
         }
 
-        if (bFound)
+        if (pInfo->mxColorScale && pInfo->pIconSet && pInfo->pDataBar)
             break;
     }
 
