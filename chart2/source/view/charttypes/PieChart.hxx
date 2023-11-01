@@ -26,6 +26,9 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart2/PieChartSubType.hpp>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
+
 namespace chart
 {
 
@@ -41,6 +44,75 @@ public:
     double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
 };
 
+enum class SubPieType {
+    NONE,
+    LEFT,
+    RIGHT
+};
+
+
+//=======================
+// class PieDataSrcBase
+//=======================
+class PieDataSrcBase
+{
+public:
+    PieDataSrcBase() = default;
+    virtual ~PieDataSrcBase() = default;
+
+    // Get number of points in the given pie subtype
+    virtual sal_Int32 getNPoints(const VDataSeries* pSeries,
+                enum SubPieType eType) const = 0;
+
+    // Get the value for the given pie wedge, for the given subtype
+    virtual double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const = 0;
+
+    // Get the properties for the wedge and subtype
+    virtual uno::Reference< beans::XPropertySet > getProps(
+            const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const = 0;
+};
+
+//=======================
+// class PieDataSrc
+//=======================
+class PieDataSrc : public PieDataSrcBase
+{
+    sal_Int32 getNPoints(const VDataSeries* pSeries,
+                enum SubPieType eType) const;
+
+    double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const;
+
+    virtual uno::Reference< beans::XPropertySet > getProps(
+            const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const;
+};
+
+//=======================
+// class OfPieDataSrc
+//=======================
+class OfPieDataSrc : public PieDataSrcBase
+{
+public:
+    // Minimum sensible number of data points
+    static sal_Int32 minPoints() { return 4; }
+
+    sal_Int32 getNPoints(const VDataSeries* pSeries,
+                enum SubPieType eType) const;
+
+    double getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const;
+
+    virtual uno::Reference< beans::XPropertySet > getProps(
+            const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const;
+};
+
+//=======================
+// class PieChart
+//=======================
 class PieChart : public VSeriesPlotter
 {
     struct ShapeParam;
@@ -74,12 +146,6 @@ public:
     virtual bool isExpandWideValuesToZero( sal_Int32 nDimensionIndex ) override;
     virtual bool isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex ) override;
     virtual bool isSeparateStackingForDifferentSigns( sal_Int32 nDimensionIndex ) override;
-
-    enum class SubPieType {
-        NONE,
-        LEFT,
-        RIGHT
-    };
 
 private: //methods
     rtl::Reference<SvxShape>
@@ -135,6 +201,7 @@ struct PieLabelInfo;
                                 , const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget
                                 , const rtl::Reference<SvxShapeGroup>& xTextTarget
                                 , VDataSeries* pSeries
+                                , const PieDataSrcBase *pDataSrc
                                 , sal_Int32 n3DRelativeHeight);
 
 private: //member
@@ -168,6 +235,7 @@ private: //member
 
     double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

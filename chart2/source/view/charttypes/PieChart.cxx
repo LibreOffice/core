@@ -855,20 +855,38 @@ void PieChart::createShapes()
             aParam.mfLogicYSum += fabs(fY);
         }
 
-        if (aParam.mfLogicYSum == 0.0)
+        if (aParam.mfLogicYSum == 0.0) {
             // Total sum of all Y values in this series is zero. Skip the whole series.
             continue;
+        }
 
-        switch (m_eSubType) {
+        PieDataSrcBase *pDataSrc = nullptr;
+        PieDataSrc normalPieSrc;
+        OfPieDataSrc ofPieSrc;
+
+        // Default to regular pie if too few points for of-pie
+        ::css::chart2::PieChartSubType eSubType =
+            nPointCount >= OfPieDataSrc::minPoints() ?
+            m_eSubType :
+            PieChartSubType_NONE;
+
+        switch (eSubType) {
         case PieChartSubType_NONE:
-            createOneRing(SubPieType::NONE, fSlotX, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            pDataSrc = &normalPieSrc;
+            createOneRing(SubPieType::NONE, fSlotX, aParam, xSeriesTarget,
+                    xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             break;
         case PieChartSubType_BAR:
-            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            pDataSrc = &ofPieSrc;
+            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget,
+                    xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             break;
         case PieChartSubType_PIE:
-            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
-            createOneRing(SubPieType::RIGHT, 0, aParam, xSeriesTarget, xTextTarget, pSeries, n3DRelativeHeight);
+            pDataSrc = &ofPieSrc;
+            createOneRing(SubPieType::LEFT, 0, aParam, xSeriesTarget,
+                    xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
+            createOneRing(SubPieType::RIGHT, 0, aParam, xSeriesTarget,
+                    xTextTarget, pSeries, pDataSrc, n3DRelativeHeight);
             break;
         default:
             assert(false); // this shouldn't happen
@@ -882,6 +900,7 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
         const rtl::Reference<SvxShapeGroupAnyD>& xSeriesTarget,
         const rtl::Reference<SvxShapeGroup>& xTextTarget,
         VDataSeries* pSeries,
+        const PieDataSrcBase *pDataSrc,
         sal_Int32 n3DRelativeHeight)
 {
     bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
@@ -891,10 +910,6 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
     /// Counter-clockwise offset from the 3 o'clock position.
     m_aPosHelper.m_fAngleDegreeOffset = pSeries->getStartingAngle();
 
-    ///iterate through all points to get the sum of all entries of
-    ///the current data series
-    sal_Int32 nPointCount=pSeries->getTotalPointCount();
-
     ///the `explodeable` ring is the first one except when the radius axis
     ///orientation is reversed (always!?) and we are dealing with a donut: in
     ///such a case the `explodeable` ring is the last one.
@@ -902,9 +917,18 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
     if( m_aPosHelper.isMathematicalOrientationRadius() && m_bUseRings )
         nExplodeableSlot = m_aZSlots.front().size()-1;
 
+    sal_Int32 nRingPtCnt = pDataSrc->getNPoints(pSeries, eType);
+
+    // Find sum of entries for this ring or sub-pie
+    double ringSum = 0;
+    for (sal_Int32 nPointIndex = 0; nPointIndex < nRingPtCnt; nPointIndex++ ) {
+        double fY = pDataSrc->getData(pSeries, nPointIndex, eType);
+        if (!std::isnan(fY) ) ringSum += fY;
+    }
+
     double fLogicYForNextPoint = 0.0;
     ///iterate through all points to create shapes
-    for(sal_Int32 nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
+    for(sal_Int32 nPointIndex = 0; nPointIndex < nRingPtCnt; nPointIndex++ )
     {
         double fLogicInnerRadius, fLogicOuterRadius;
 
@@ -923,8 +947,9 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
         aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
         rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+
         ///collect data point information (logic coordinates, style ):
-        double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
+        double fLogicYValue = pDataSrc->getData(pSeries, nPointIndex, eType);
         if( std::isnan(fLogicYValue) )
             continue;
         if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
@@ -932,13 +957,14 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
         double fLogicYPos = fLogicYForNextPoint;
         fLogicYForNextPoint += fLogicYValue;
 
-        uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint( nPointIndex );
+        uno::Reference< beans::XPropertySet > xPointProperties =
+            pDataSrc->getProps(pSeries, nPointIndex, eType);
 
         //iterate through all subsystems to create partial points
         {
             //logic values on angle axis:
-            double fLogicStartAngleValue = fLogicYPos / aParam.mfLogicYSum;
-            double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / aParam.mfLogicYSum;
+            double fLogicStartAngleValue = fLogicYPos / ringSum;
+            double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / ringSum;
 
             ///note that the explode percentage is set to the `Offset`
             ///property of the current data series entry only for slices
@@ -967,8 +993,9 @@ void PieChart::createOneRing([[maybe_unused]]enum SubPieType eType,
             // Do concentric explosion if it's a donut chart with more than one series
             const bool bConcentricExplosion = m_bUseRings && (m_aZSlots.front().size() > 1);
             rtl::Reference<SvxShape> xPointShape =
-                createDataPoint(eType, xSeriesGroupShape_Shapes, xPointProperties, aParam, nPointCount,
-                    bConcentricExplosion);
+                createDataPoint(eType, xSeriesGroupShape_Shapes,
+                        xPointProperties, aParam, nRingPtCnt,
+                        bConcentricExplosion);
 
             ///point color:
             if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
@@ -1827,6 +1854,93 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     return true;
 }
+
+//=======================
+// class PieDataSrc
+//=======================
+double PieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
+        enum SubPieType /*eType*/) const
+{
+    return fabs(pSeries->getYValue( nPtIdx ));
+}
+
+sal_Int32 PieDataSrc::getNPoints(const VDataSeries* pSeries,
+            [[maybe_unused]] enum SubPieType eType) const
+{
+    assert(eType == SubPieType::NONE);
+    return pSeries->getTotalPointCount();
+}
+
+uno::Reference< beans::XPropertySet > PieDataSrc::getProps(
+            const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            [[maybe_unused]] enum SubPieType eType) const
+{
+    assert(eType == SubPieType::NONE);
+    return pSeries->getPropertiesOfPoint(nPtIdx);
+}
+
+
+//=======================
+// class OfPieDataSrc
+//=======================
+
+// For now, just implement the default Excel behavior, which is that the
+// right pie consists of the last three entries in the series. Other
+// behaviors should be supported later.
+// TODO
+
+sal_Int32 OfPieDataSrc::getNPoints(const VDataSeries* pSeries,
+            enum SubPieType eType) const
+{
+    if (eType == SubPieType::LEFT) {
+        return pSeries->getTotalPointCount() - 2;
+    } else {
+        assert(eType == SubPieType::RIGHT);
+        return 3;
+    }
+}
+
+double OfPieDataSrc::getData(const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const
+{
+    const sal_Int32 n = pSeries->getTotalPointCount() - 3;
+    if (eType == SubPieType::LEFT) {
+        // nPtIdx should be in [0, n]
+        if (nPtIdx < n) {
+            return fabs(pSeries->getYValue( nPtIdx ));
+        } else {
+            assert(nPtIdx == n);
+            return fabs(pSeries->getYValue(n)) +
+                fabs(pSeries->getYValue(n+1)) +
+                fabs(pSeries->getYValue(n+2));
+        }
+    } else {
+        assert(eType == SubPieType::RIGHT);
+        return fabs(pSeries->getYValue(nPtIdx + n));
+    }
+}
+
+uno::Reference< beans::XPropertySet > OfPieDataSrc::getProps(
+            const VDataSeries* pSeries, sal_Int32 nPtIdx,
+            enum SubPieType eType) const
+{
+    const sal_Int32 n = pSeries->getTotalPointCount() - 3;
+    if (eType == SubPieType::LEFT) {
+        // nPtIdx should be in [0, n]
+        if (nPtIdx < n) {
+            return pSeries->getPropertiesOfPoint( nPtIdx );
+        } else {
+            assert(nPtIdx == n);
+            // The aggregated wedge
+            // Not sure what to do here, but this isn't right. TODO
+            return pSeries->getPropertiesOfPoint(n);
+        }
+    } else {
+        assert(eType == SubPieType::RIGHT);
+        return pSeries->getPropertiesOfPoint(nPtIdx + n);
+    }
+}
+
 
 } //namespace chart
 
