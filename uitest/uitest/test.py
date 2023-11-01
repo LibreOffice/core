@@ -128,11 +128,14 @@ class UITest(object):
     @contextmanager
     def execute_dialog_through_command(self, command, printNames=False, close_button = "ok", eventName = "DialogExecute"):
         with EventListener(self._xContext, eventName, printNames=printNames) as event:
+            xDialogParent = self._xUITest.getTopFocusWindow()
             if not self._xUITest.executeDialog(command):
                 raise Exception("Dialog not executed for: " + command)
             while True:
                 if event.executed:
                     xDialog = self._xUITest.getTopFocusWindow()
+                    if xDialogParent == xDialog:
+                        raise Exception("executing the action did not open the dialog")
                     try:
                         yield xDialog
                     except:
@@ -157,11 +160,14 @@ class UITest(object):
         if parameters is None:
             parameters = tuple()
 
+        xDialogParent = self._xUITest.getTopFocusWindow()
         with EventListener(self._xContext, event_name) as event:
             ui_object.executeAction(action, parameters)
             while True:
                 if event.executed:
                     xDialog = self._xUITest.getTopFocusWindow()
+                    if xDialogParent == xDialog:
+                        raise Exception("executing the action did not open the dialog")
                     try:
                         yield xDialog
                     finally:
