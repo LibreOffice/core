@@ -521,7 +521,7 @@
 	Optional ICU tailoring.
 
 	See Collation Customization in ICU User Guide for syntax,
-	http://www.icu-project.org/userguide/Collate_Customization.html
+	https://unicode-org.github.io/icu/userguide/collation/customization/
 
 	There are two ways to add language specific tailoring in LibreOffice.
 	For small tailoring, you can directly add it in locale data here. For
@@ -560,9 +560,9 @@
 
     The initial data was setup according to the ICU collation chart at
     http://oss.software.ibm.com/icu/charts/collation/
-    Note: ICU site was moved to http://www.icu-project.org/ and as ICU per
+    Note: ICU site was moved to https://icu.unicode.org/ and as ICU per
     default uses CLDR, collation charts are available at
-    http://unicode.org/cldr/comparison_charts.html#Collation
+    https://www.unicode.org/cldr/charts/latest/
 
     Possible notations in the syntax of the IndexKey element are:
 
