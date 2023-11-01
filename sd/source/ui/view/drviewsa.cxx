@@ -344,6 +344,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
         mxScannerListener = new ScannerEventListener( this );
     }
+    catch (DeploymentException const &)
+    {
+        SAL_INFO("sd", "Scanner manager not available");
+    }
     catch (Exception const &)
     {
         // Eat the exception and log it
