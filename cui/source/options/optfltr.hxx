@@ -23,13 +23,21 @@
 class OfaMSFilterTabPage : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton> m_xWBasicCodeCB;
+    std::unique_ptr<weld::Widget> m_xWBasicCodeImg;
     std::unique_ptr<weld::CheckButton> m_xWBasicWbctblCB;
+    std::unique_ptr<weld::Widget> m_xWBasicWbctblImg;
     std::unique_ptr<weld::CheckButton> m_xWBasicStgCB;
+    std::unique_ptr<weld::Widget> m_xWBasicStgImg;
     std::unique_ptr<weld::CheckButton> m_xEBasicCodeCB;
+    std::unique_ptr<weld::Widget> m_xEBasicCodeImg;
     std::unique_ptr<weld::CheckButton> m_xEBasicExectblCB;
+    std::unique_ptr<weld::Widget> m_xEBasicExectblImg;
     std::unique_ptr<weld::CheckButton> m_xEBasicStgCB;
+    std::unique_ptr<weld::Widget> m_xEBasicStgImg;
     std::unique_ptr<weld::CheckButton> m_xPBasicCodeCB;
+    std::unique_ptr<weld::Widget> m_xPBasicCodeImg;
     std::unique_ptr<weld::CheckButton> m_xPBasicStgCB;
+    std::unique_ptr<weld::Widget> m_xPBasicStgImg;
 
     DECL_LINK(LoadWordBasicCheckHdl_Impl, weld::Toggleable&, void);
     DECL_LINK(LoadExcelBasicCheckHdl_Impl, weld::Toggleable&, void);

@@ -20,6 +20,9 @@
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Calc.hxx>
+#include <officecfg/Office/Writer.hxx>
+#include <officecfg/Office/Impress.hxx>
 #include "optfltr.hxx"
 #include <strings.hrc>
 #include <dialmgr.hxx>
@@ -39,13 +42,21 @@ enum class MSFltrPg2_CheckBoxEntries {
 OfaMSFilterTabPage::OfaMSFilterTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/optfltrpage.ui", "OptFltrPage", &rSet)
     , m_xWBasicCodeCB(m_xBuilder->weld_check_button("wo_basic"))
+    , m_xWBasicCodeImg(m_xBuilder->weld_widget("lockwo_basic"))
     , m_xWBasicWbctblCB(m_xBuilder->weld_check_button("wo_exec"))
+    , m_xWBasicWbctblImg(m_xBuilder->weld_widget("lockwo_exec"))
     , m_xWBasicStgCB(m_xBuilder->weld_check_button("wo_saveorig"))
+    , m_xWBasicStgImg(m_xBuilder->weld_widget("lockwo_saveorig"))
     , m_xEBasicCodeCB(m_xBuilder->weld_check_button("ex_basic"))
+    , m_xEBasicCodeImg(m_xBuilder->weld_widget("lockex_basic"))
     , m_xEBasicExectblCB(m_xBuilder->weld_check_button("ex_exec"))
+    , m_xEBasicExectblImg(m_xBuilder->weld_widget("lockex_exec"))
     , m_xEBasicStgCB(m_xBuilder->weld_check_button("ex_saveorig"))
+    , m_xEBasicStgImg(m_xBuilder->weld_widget("lockex_saveorig"))
     , m_xPBasicCodeCB(m_xBuilder->weld_check_button("pp_basic"))
+    , m_xPBasicCodeImg(m_xBuilder->weld_widget("lockpp_basic"))
     , m_xPBasicStgCB(m_xBuilder->weld_check_button("pp_saveorig"))
+    , m_xPBasicStgImg(m_xBuilder->weld_widget("lockpp_saveorig"))
 {
     m_xWBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl ) );
     m_xEBasicCodeCB->connect_toggled( LINK( this, OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl ) );
@@ -57,12 +68,14 @@ OfaMSFilterTabPage::~OfaMSFilterTabPage()
 
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, weld::Toggleable&, void)
 {
-    m_xWBasicWbctblCB->set_sensitive(m_xWBasicCodeCB->get_active());
+    m_xWBasicWbctblCB->set_sensitive(m_xWBasicCodeCB->get_active() && !officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
+    m_xWBasicWbctblImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
 }
 
 IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, weld::Toggleable&, void)
 {
-    m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active());
+    m_xEBasicExectblCB->set_sensitive(m_xEBasicCodeCB->get_active() && !officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
+    m_xEBasicExectblImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
 }
 
 std::unique_ptr<SfxTabPage> OfaMSFilterTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -125,24 +138,40 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet* )
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
     m_xWBasicCodeCB->set_active( rOpt.IsLoadWordBasicCode() );
+    m_xWBasicCodeCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Load::isReadOnly());
+    m_xWBasicCodeImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Load::isReadOnly());
     m_xWBasicCodeCB->save_state();
     m_xWBasicWbctblCB->set_active( rOpt.IsLoadWordBasicExecutable() );
+    m_xWBasicWbctblCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
+    m_xWBasicWbctblImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Executable::isReadOnly());
     m_xWBasicWbctblCB->save_state();
     m_xWBasicStgCB->set_active( rOpt.IsLoadWordBasicStorage() );
+    m_xWBasicStgCB->set_sensitive(!officecfg::Office::Writer::Filter::Import::VBA::Save::isReadOnly());
+    m_xWBasicStgImg->set_visible(officecfg::Office::Writer::Filter::Import::VBA::Save::isReadOnly());
     m_xWBasicStgCB->save_state();
     LoadWordBasicCheckHdl_Impl( *m_xWBasicCodeCB );
 
     m_xEBasicCodeCB->set_active( rOpt.IsLoadExcelBasicCode() );
+    m_xEBasicCodeCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Load::isReadOnly());
+    m_xEBasicCodeImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Load::isReadOnly());
     m_xEBasicCodeCB->save_state();
     m_xEBasicExectblCB->set_active( rOpt.IsLoadExcelBasicExecutable() );
+    m_xEBasicExectblCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
+    m_xEBasicExectblImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Executable::isReadOnly());
     m_xEBasicExectblCB->save_state();
     m_xEBasicStgCB->set_active( rOpt.IsLoadExcelBasicStorage() );
+    m_xEBasicStgCB->set_sensitive(!officecfg::Office::Calc::Filter::Import::VBA::Save::isReadOnly());
+    m_xEBasicStgImg->set_visible(officecfg::Office::Calc::Filter::Import::VBA::Save::isReadOnly());
     m_xEBasicStgCB->save_state();
     LoadExcelBasicCheckHdl_Impl( *m_xEBasicCodeCB );
 
     m_xPBasicCodeCB->set_active( rOpt.IsLoadPPointBasicCode() );
+    m_xPBasicCodeCB->set_sensitive(!officecfg::Office::Impress::Filter::Import::VBA::Load::isReadOnly());
+    m_xPBasicCodeImg->set_visible(officecfg::Office::Impress::Filter::Import::VBA::Load::isReadOnly());
     m_xPBasicCodeCB->save_state();
     m_xPBasicStgCB->set_active( rOpt.IsLoadPPointBasicStorage() );
+    m_xPBasicStgCB->set_sensitive(!officecfg::Office::Impress::Filter::Import::VBA::Save::isReadOnly());
+    m_xPBasicStgImg->set_visible(officecfg::Office::Impress::Filter::Import::VBA::Save::isReadOnly());
     m_xPBasicStgCB->save_state();
 }
 
