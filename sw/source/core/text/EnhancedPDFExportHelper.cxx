@@ -1651,6 +1651,20 @@ void SwTaggedPDFHelper::EndStructureElements()
     CheckRestoreTag();
 }
 
+void SwTaggedPDFHelper::EndCurrentLink(OutputDevice const& rOut)
+{
+    vcl::PDFExtOutDevData *const pPDFExtOutDevData(
+        dynamic_cast<vcl::PDFExtOutDevData *>(rOut.GetExtOutDevData()));
+    if (pPDFExtOutDevData && pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink)
+    {
+        pPDFExtOutDevData->GetSwPDFState()->m_oCurrentLink.reset();
+        pPDFExtOutDevData->EndStructureElement();
+#if OSL_DEBUG_LEVEL > 1
+    aStructStack.pop_back();
+#endif
+    }
+}
+
 void SwTaggedPDFHelper::EndCurrentSpan()
 {
     mpPDFExtOutDevData->GetSwPDFState()->m_oCurrentSpan.reset();
