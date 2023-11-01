@@ -161,7 +161,7 @@ bool canBeUsedForFunctionalCast(TypeSourceInfo const * info) {
         return true;
     }
     if (auto const t = dyn_cast<ElaboratedType>(type)) {
-        return t->getKeyword() == ETK_None;
+        return t->getKeyword() == compat::ElabortatedTypeKeyword::None;
     }
     return false;
 }

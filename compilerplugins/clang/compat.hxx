@@ -82,6 +82,15 @@ constexpr clang::ExprValueKind VK_PRValue = clang::VK_PRValue;
 constexpr clang::ExprValueKind VK_PRValue = clang::VK_RValue;
 #endif
 
+namespace ElabortatedTypeKeyword
+{
+#if CLANG_VERSION >= 180000
+constexpr clang::ElaboratedTypeKeyword None = clang::ElaboratedTypeKeyword::None;
+#else
+constexpr clang::ElaboratedTypeKeyword None = clang::ETK_None;
+#endif
+}
+
 inline bool EvaluateAsInt(clang::Expr const * expr, llvm::APSInt& intRes, const clang::ASTContext& ctx) {
     clang::Expr::EvalResult res;
     bool b = expr->EvaluateAsInt(res, ctx);
