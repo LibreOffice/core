@@ -246,7 +246,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromObjectData(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SfxItemSet&& oItemSet, const OUString& rStyleName,
+                            const SfxItemSet& rItemSet, const OUString& rStyleName,
                             const OutlinerParaObject& rOutlinerObj,
                             const tools::Rectangle& rCaptionRect, bool bShown );
 
