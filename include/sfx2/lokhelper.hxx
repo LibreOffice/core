@@ -26,6 +26,35 @@
 #include <optional>
 #include <string_view>
 
+#define LOK_NOTIFY_LOG_TO_CLIENT 1
+
+#define LOK_LOG_STREAM(level, area, stream) \
+    do { \
+            ::std::ostringstream lok_detail_stream; \
+            lok_detail_stream << level << ':'; \
+            if (std::strcmp(level, "debug") != 0) \
+                lok_detail_stream << area << ':'; \
+            const char* const where = SAL_WHERE; \
+            lok_detail_stream << where << stream; \
+            SfxLokHelper::notifyLog(lok_detail_stream); \
+        } while (false)
+
+#if LOK_NOTIFY_LOG_TO_CLIENT > 0
+#define LOK_INFO(area, stream) \
+    LOK_LOG_STREAM("info", area, stream) \
+
+#define LOK_WARN(area, stream) \
+    LOK_LOG_STREAM("warn", area, stream)
+
+#else
+#define LOK_INFO(area, stream) \
+    SAL_INFO(area, stream) \
+
+#define LOK_WARN(area, stream) \
+    SAL_WARN(area, stream)
+
+#endif
+
 struct SFX2_DLLPUBLIC LokMouseEventData
 {
     int mnType;
@@ -194,6 +223,8 @@ public:
                                                   bool bNegativeX = false);
 
     static VclPtr<vcl::Window> getInPlaceDocWindow(SfxViewShell* pViewShell);
+
+    static void notifyLog(const std::ostringstream& stream);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);

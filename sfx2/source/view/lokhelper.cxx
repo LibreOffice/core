@@ -9,7 +9,9 @@
 
 #include <sal/config.h>
 
+#include <string>
 #include <string_view>
+#include <list>
 
 #include <sfx2/lokcomponenthelpers.hxx>
 #include <sfx2/lokhelper.hxx>
@@ -79,6 +81,8 @@ LanguageTag g_loadLanguageTag("en-US", true); //< The language used to load.
 LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 bool g_isDefaultTimezoneSet = false;
 OUString g_DefaultTimezone;
+const std::size_t g_logNotifierCacheMaxSize = 50;
+::std::list<::std::string> g_logNotifierCache;
 }
 
 int SfxLokHelper::createView(SfxViewFrame& rViewFrame, ViewShellDocId docId)
@@ -322,6 +326,7 @@ void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
     {
         if (pViewShell->GetViewShellId() == ViewShellId(nId))
         {
+            LOK_INFO("lok.a11y", "SfxLokHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
             pViewShell->SetLOKAccessibilityState(nEnabled);
             return;
         }
@@ -730,6 +735,34 @@ void SfxLokHelper::notifyContextChange(const css::ui::ContextChangeEventObject& 
         " " +
         rEvent.ContextName.replace(' ', '_');
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_CHANGED, aBuffer.toUtf8());
+}
+
+void SfxLokHelper::notifyLog(const std::ostringstream& stream)
+{
+    if (DisableCallbacks::disabled())
+       return;
+
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    if (!pViewShell)
+       return;
+    if (pViewShell->getLibreOfficeKitViewCallback())
+    {
+        if (!g_logNotifierCache.empty())
+        {
+            for (const auto& msg : g_logNotifierCache)
+            {
+                pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CORE_LOG, msg.c_str());
+            }
+            g_logNotifierCache.clear();
+        }
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CORE_LOG, stream.str().c_str());
+    }
+    else
+    {
+        while (g_logNotifierCache.size() >= g_logNotifierCacheMaxSize)
+            g_logNotifierCache.pop_front();
+        g_logNotifierCache.push_back(stream.str());
+    }
 }
 
 void SfxLokHelper::notifyUpdate(SfxViewShell const* pThisView, int nType)

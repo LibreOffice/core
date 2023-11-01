@@ -1025,7 +1025,15 @@ typedef enum
      *      "text": text content if any
      *  }
      */
-    LOK_CALLBACK_A11Y_SELECTION_CHANGED = 69
+    LOK_CALLBACK_A11Y_SELECTION_CHANGED = 69,
+
+    /**
+     * Forwarding logs from core to client can be useful
+     * for keep track of the real core/client event sequence
+     *
+     * Payload is the log to be sent
+     */
+    LOK_CALLBACK_CORE_LOG = 70
 
 }
 LibreOfficeKitCallbackType;
@@ -1195,6 +1203,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_CALLBACK_A11Y_EDITING_IN_SELECTION_STATE";
     case LOK_CALLBACK_A11Y_SELECTION_CHANGED:
         return "LOK_CALLBACK_A11Y_SELECTION_CHANGED";
+    case LOK_CALLBACK_CORE_LOG:
+        return "LOK_CALLBACK_CORE_LOG";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");
