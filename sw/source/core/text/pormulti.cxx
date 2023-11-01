@@ -1778,7 +1778,12 @@ void SwTextPainter::PaintMultiPortion( const SwRect &rPaint,
             PaintMultiPortion( rPaint, static_cast<SwMultiPortion&>(*pPor), &rMulti );
         }
         else
+        {
+            Por_Info const por(*pPor, *this, 0);
+            SwTaggedPDFHelper const tag(nullptr, nullptr, &por, *GetInfo().GetOut());
+
             pPor->Paint( GetInfo() );
+        }
 
         bFirst &= !pPor->GetLen();
         if( pNext || !pPor->IsMarginPortion() )
