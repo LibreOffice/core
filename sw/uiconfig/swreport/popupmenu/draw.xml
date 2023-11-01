@@ -82,5 +82,6 @@
   <menu:menuitem menu:id=".uno:EditSignatureLine"/>
   <menu:menuitem menu:id=".uno:SignSignatureLine"/>
   <menu:menuitem menu:id=".uno:EditQrCode"/>
+  <menu:menuitem menu:id=".uno:ObjectTitleDescription"/>
   <menu:menuitem menu:id=".uno:InsertCaptionDialog"/>
 </menu:menupopup>
