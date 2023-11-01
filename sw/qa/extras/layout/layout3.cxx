@@ -19,6 +19,7 @@
 #include <editeng/unolingu.hxx>
 #include <editeng/editobj.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <fmtfsize.hxx>
 #include <wrtsh.hxx>
@@ -2208,6 +2209,40 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf57187_Tdf158900)
 }
 
 } // end of anonymous namespace
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter3, testTdf147666)
+{
+    createSwDoc("tdf147666.odt");
+
+    // Move cursor into position to insert image
+    dispatchCommand(mxComponent, ".uno:GoToEndOfPara", {});
+    dispatchCommand(mxComponent, ".uno:GoDown", {});
+
+    save("writer8");
+    sal_Int32 nNonInsertedViewTop
+        = getXPathContent(parseExport("settings.xml"),
+                          "//config:config-item[@config:name='ViewTop']"_ostr)
+              .toInt32();
+
+    // Insert image below the end of the paragraph on page one
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName", createFileURL(u"tdf147666.png")),
+    };
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+
+    save("writer8");
+    sal_Int32 nInsertedViewTop
+        = getXPathContent(parseExport("settings.xml"),
+                          "//config:config-item[@config:name='ViewTop']"_ostr)
+              .toInt32();
+
+    // Without the fix in place this will fail with
+    // nInsertedViewTop = nNonInsertedViewTop
+    // i.e. when the image is inserted, the view doesn't
+    // focus to the inserted graphic
+    CPPUNIT_ASSERT_LESS(nInsertedViewTop, nNonInsertedViewTop);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
