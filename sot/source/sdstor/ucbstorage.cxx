@@ -777,7 +777,7 @@ void UCBStorageStream_Impl::ReadSourceWriteTemporary()
 
 sal_uInt64 UCBStorageStream_Impl::ReadSourceWriteTemporary(sal_uInt64 aLength)
 {
-    // read aLength bite from the source stream and copy them to the current
+    // read aLength byte from the source stream and copy them to the current
     // position of the temporary stream
 
     sal_uInt64 aResult = 0;
