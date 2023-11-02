@@ -121,7 +121,7 @@ public class _UnoControlNumericFieldModel extends MultiPropertyTest {
         testProperty("Value", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return utils.isVoid(old) ? new Double(234.89) :
+                return utils.isVoid(old) ? Double.valueOf(234.89) :
                     super.getNewValue(p, old) ;
             }
         }) ;

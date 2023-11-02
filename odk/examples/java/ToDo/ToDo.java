@@ -736,11 +736,11 @@ public class ToDo {
 
                     // Good Friday
                     vectorHolidays.add(
-                    new Double( intEasterSunday - 2 ) );
+                    Double.valueOf( intEasterSunday - 2 ) );
 
                     // Easter monday
                     vectorHolidays.add(
-                    new Double( intEasterSunday + 1 ) );
+                    Double.valueOf( intEasterSunday + 1 ) );
 
                     // Labour Day
                     vectorHolidays.add( xfunctionaccess.callFunction(
@@ -751,10 +751,10 @@ public class ToDo {
                                                        Integer.valueOf( 1 ) } ));
 
                     // Ascension Day
-                    vectorHolidays.add(new Double(intEasterSunday + 39 ));
+                    vectorHolidays.add(Double.valueOf(intEasterSunday + 39 ));
 
                     // Pentecost monday
-                    vectorHolidays.add(new Double(intEasterSunday + 50 ));
+                    vectorHolidays.add(Double.valueOf(intEasterSunday + 50 ));
 
                     // German Unification
                     vectorHolidays.add( xfunctionaccess.callFunction(
@@ -863,7 +863,7 @@ public class ToDo {
                                   dHolidayStart );
                               intHoliday <= (int) Math.round( dHolidayEnd );
                               intHoliday++ ) {
-                            vectorHolidays.add( new Double( intHoliday ) );
+                            vectorHolidays.add( Double.valueOf( intHoliday ) );
                         }
                     }
 

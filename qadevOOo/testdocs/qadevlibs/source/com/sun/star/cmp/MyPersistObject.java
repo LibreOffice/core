@@ -212,7 +212,7 @@ public class MyPersistObject implements XPersistObject, XTypeProvider,
         if ( property.equals(props[2].Name))
             return new Character(c);
         if ( property.equals(props[3].Name))
-            return new Double(d);
+            return Double.valueOf(d);
         if ( property.equals(props[4].Name))
             return Float.valueOf(f);
         if ( property.equals(props[5].Name))

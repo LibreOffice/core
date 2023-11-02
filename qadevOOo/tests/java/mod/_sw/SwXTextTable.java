@@ -112,8 +112,8 @@ public class SwXTextTable extends TestCase {
         //Adding ObjRelation for XCellRangeData
         Object[][] newData = new Object[6][];
         Object[] line = new Object[2];
-        line[0] = new Double(1.5);
-        line[1] = new Double(2.5);
+        line[0] = Double.valueOf(1.5);
+        line[1] = Double.valueOf(2.5);
         newData[0] = line;
         newData[1] = line;
         newData[2] = line;

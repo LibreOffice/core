@@ -121,7 +121,7 @@ public class _UnoControlCurrencyFieldModel extends MultiPropertyTest {
         testProperty("Value", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return utils.isVoid(old) ? new Double(777) :
+                return utils.isVoid(old) ? Double.valueOf(777) :
                     super.getNewValue(prop, old) ;
             }
         }) ;

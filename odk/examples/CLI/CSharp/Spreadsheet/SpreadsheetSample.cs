@@ -1434,7 +1434,7 @@ public class SpreadsheetSample : SpreadsheetDocHelper
         unoidl.com.sun.star.sheet.XFunctionAccess xFuncAcc =
             (unoidl.com.sun.star.sheet.XFunctionAccess) aFuncInst;
         // put the data in a two-dimensional array
-        Double [][] aData = { new Double [] { 1.0, 2.0, 3.0 } };
+        Double [][] aData = { Double.valueOf [] { 1.0, 2.0, 3.0 } };
         // construct the array of function arguments
         uno.Any [] aArgs = new uno.Any [2];
         aArgs[0] = new uno.Any( typeof (Double [][]), aData );

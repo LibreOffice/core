@@ -594,7 +594,7 @@ public class ODatabaseForm extends TestCase {
         params.add(Integer.valueOf(12345)) ;
         params.add(Long.valueOf(23456)) ;
         params.add(Float.valueOf(1.234f)) ;
-        params.add(new Double(2.345)) ;
+        params.add(Double.valueOf(2.345)) ;
         params.add(new byte[] {1, 2, 3}) ;
         Date d = new Date();
         d.Day = 26; d.Month = 1; d.Year = 2001;

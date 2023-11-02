@@ -75,7 +75,7 @@ public class CalcTools {
         Object[][] newData = new Object[rangeLengthY][rangeLengthX];
         for (int i=0; i<rangeLengthY; i++) {
             for (int j=0; j<rangeLengthX; j++) {
-                newData[i][j] = new Double(10*i +j);
+                newData[i][j] = Double.valueOf(10*i +j);
             }
         }
         XCellRange xRange = null;

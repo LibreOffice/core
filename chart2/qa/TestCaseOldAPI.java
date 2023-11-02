@@ -356,7 +356,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             double nNewMax = 12.3;
             double nNewOrigin = 2.7;
 
-            xProp.setPropertyValue( "Max", new Double( nNewMax ));
+            xProp.setPropertyValue( "Max", Double.valueOf( nNewMax ));
             assure( "AutoMax is on", ! AnyConverter.toBoolean( xProp.getPropertyValue( "AutoMax" )) );
 
             assure( "Maximum value invalid",
@@ -367,7 +367,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             xProp.setPropertyValue( "AutoMin", Boolean.TRUE);
             assure( "AutoMin is off", AnyConverter.toBoolean( xProp.getPropertyValue( "AutoMin" )) );
 
-            xProp.setPropertyValue( "Origin", new Double( nNewOrigin ));
+            xProp.setPropertyValue( "Origin", Double.valueOf( nNewOrigin ));
             assure( "Origin invalid",
                     utils.approxEqual(
                         AnyConverter.toDouble( xProp.getPropertyValue( "Origin" )),
@@ -400,7 +400,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                     AnyConverter.toInt( xProp.getPropertyValue( "TextRotation" )) == nNewTextRotation );
 
             double fStepMain = 10.0;
-            xProp.setPropertyValue( "StepMain", new Double( fStepMain ));
+            xProp.setPropertyValue( "StepMain", Double.valueOf( fStepMain ));
             assure( "Property StepMain",
                     AnyConverter.toDouble( xProp.getPropertyValue( "StepMain" )) == fStepMain );
 
@@ -408,7 +408,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             // internally, the help-step is stored as an integer number of
             // substeps
             double fStepHelp = 5.0;
-            xProp.setPropertyValue( "StepHelp", new Double( fStepHelp ));
+            xProp.setPropertyValue( "StepHelp", Double.valueOf( fStepHelp ));
             assure( "Property StepHelp",
                     AnyConverter.toDouble( xProp.getPropertyValue( "StepHelp" )) == fStepHelp );
 

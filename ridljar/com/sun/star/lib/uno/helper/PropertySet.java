@@ -749,7 +749,7 @@ XMultiPropertySet
         else if (cl.equals(float.class))
             retVal= Float.valueOf(AnyConverter.toFloat(obj));
         else if (cl.equals(double.class))
-            retVal= new Double(AnyConverter.toDouble(obj));
+            retVal= Double.valueOf(AnyConverter.toDouble(obj));
         else if (cl.equals(String.class))
             retVal= AnyConverter.toString(obj);
         else if (cl.isArray())
@@ -771,7 +771,7 @@ XMultiPropertySet
         else if (cl.equals(Float.class))
             retVal= Float.valueOf(AnyConverter.toFloat(obj));
         else if (cl.equals(Double.class))
-            retVal= new Double(AnyConverter.toDouble(obj));
+            retVal= Double.valueOf(AnyConverter.toDouble(obj));
         else if (XInterface.class.isAssignableFrom(cl))
             retVal= AnyConverter.toObject(new Type(cl), obj);
         else if (com.sun.star.uno.Enum.class.isAssignableFrom(cl))

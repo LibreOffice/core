@@ -288,7 +288,7 @@ public class TMutableGridDataModel
         final Object[][] modifyValues = new Object[][] {
             new Object[] { 2, 1, "text" },
             new Object[] { 3, 0, null },
-            new Object[] { 0, 4, new Double( 33.0 ) }
+            new Object[] { 0, 4, Double.valueOf( 33.0 ) }
         };
         for ( int i = 0; i < modifyValues.length; ++i )
         {

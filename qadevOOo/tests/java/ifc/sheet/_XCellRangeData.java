@@ -52,7 +52,7 @@ public class _XCellRangeData extends MultiMethodTest {
             newData = new Object[maCRData.length][maCRData[0].length];
             for (int i=0; i<newData.length; i++) {
                 for (int j=0; j<newData[i].length; j++) {
-                    newData[i][j] = new Double(10*i +j);
+                    newData[i][j] = Double.valueOf(10*i +j);
                 }
             }
         }

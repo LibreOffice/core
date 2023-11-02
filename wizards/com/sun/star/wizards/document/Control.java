@@ -280,11 +280,11 @@ public class Control extends Shape
                 if (dblEffMax == 0)
                 {
                     // This is relevant for decimal fields
-                    xPropertySet.setPropertyValue("EffectiveValue", new Double(99999));
+                    xPropertySet.setPropertyValue("EffectiveValue", Double.valueOf(99999));
                 }
                 else
                 {
-                    xPropertySet.setPropertyValue("EffectiveValue", new Double(dblEffMax)); //new Double(100000.2));
+                    xPropertySet.setPropertyValue("EffectiveValue", Double.valueOf(dblEffMax)); //Double.valueOf(100000.2));
                 }
                 aPreferredSize = getPeer().getPreferredSize();
                 xPropertySet.setPropertyValue("EffectiveValue", com.sun.star.uno.Any.VOID);

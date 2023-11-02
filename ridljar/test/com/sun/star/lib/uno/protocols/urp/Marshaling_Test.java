@@ -38,7 +38,7 @@ public final class Marshaling_Test {
         TestObject testObject = new TestObject();
 
         TestPrimitiveSeqStruct x = new TestPrimitiveSeqStruct();
-        x.zAny = new Object[]{Integer.valueOf(1), new Double(2) };
+        x.zAny = new Object[]{Integer.valueOf(1), Double.valueOf(2) };
 
 
         Object data[] = new Object[] {
@@ -47,7 +47,7 @@ public final class Marshaling_Test {
             Boolean.TRUE,
             Byte.valueOf((byte)47),
             new Character('k'),
-            new Double(0.12345),
+            Double.valueOf(0.12345),
             TestEnum.B,
             Float.valueOf(0.5678f),
             Integer.valueOf(0),

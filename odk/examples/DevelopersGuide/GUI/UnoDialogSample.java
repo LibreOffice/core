@@ -350,7 +350,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // use the XPropertySet interface merely for reasons of demonstration
             xCFModelPSet.setPropertyValue("PrependCurrencySymbol", Boolean.TRUE);
             xCFModelPSet.setPropertyValue("CurrencySymbol", "$");
-            xCFModelPSet.setPropertyValue("Value", new Double(2.93));
+            xCFModelPSet.setPropertyValue("Value", Double.valueOf(2.93));
 
             // add a textlistener that is notified on each change of the controlvalue...
             Object oCFControl = m_xDlgContainer.getControl(sName);
@@ -683,10 +683,10 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             xNFModelPSet = UnoRuntime.queryInterface(XPropertySet.class, oNFModel);
             // The following properties may also be set with XMultiPropertySet but we
             // use the XPropertySet interface merely for reasons of demonstration
-            xNFModelPSet.setPropertyValue("ValueMin", new Double(_fValueMin));
-            xNFModelPSet.setPropertyValue("ValueMax", new Double(_fValueMax));
-            xNFModelPSet.setPropertyValue("Value", new Double(_fValue));
-            xNFModelPSet.setPropertyValue("ValueStep", new Double(_fValueStep));
+            xNFModelPSet.setPropertyValue("ValueMin", Double.valueOf(_fValueMin));
+            xNFModelPSet.setPropertyValue("ValueMax", Double.valueOf(_fValueMax));
+            xNFModelPSet.setPropertyValue("Value", Double.valueOf(_fValue));
+            xNFModelPSet.setPropertyValue("ValueStep", Double.valueOf(_fValueStep));
             xNFModelPSet.setPropertyValue("ShowThousandsSeparator", Boolean.TRUE);
             xNFModelPSet.setPropertyValue("DecimalAccuracy", Short.valueOf(_nDecimalAccuracy));
         } catch (com.sun.star.uno.Exception ex) {
@@ -957,7 +957,7 @@ public class UnoDialogSample implements XTextListener, XSpinListener, XActionLis
             // Set the properties at the model - keep in mind to pass the property names in alphabetical order!
             xFFModelMPSet.setPropertyValues(
                     new String[] {"EffectiveValue", "Height",  "Name", "PositionX", "PositionY", "StrictFormat", "Spin", "Width"},
-                    new Object[] { new Double(12348), Integer.valueOf(12), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.TRUE, Boolean.TRUE, Integer.valueOf(_nWidth)});
+                    new Object[] { Double.valueOf(12348), Integer.valueOf(12), sName, Integer.valueOf(_nPosX), Integer.valueOf(_nPosY), Boolean.TRUE, Boolean.TRUE, Integer.valueOf(_nWidth)});
 
             xFFModelPSet = UnoRuntime.queryInterface(XPropertySet.class, oFFModel);
             // to define a numberformat you always need a locale...

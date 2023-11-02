@@ -151,7 +151,7 @@ public class _ChartAxis extends MultiPropertyTest {
             Double ValueToSet = (Double) ValueChanger.changePValue(oldValue);
             double stm = ValueToSet.doubleValue();
             stm = stm / 5;
-            return new Double(stm);
+            return Double.valueOf(stm);
         }
     };
 

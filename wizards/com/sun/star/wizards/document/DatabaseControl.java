@@ -169,20 +169,20 @@ public class DatabaseControl extends Control
                 switch (getFieldType())
                 {
                     case DataType.BIGINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Long.MAX_VALUE));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Long.MIN_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMax", Double.valueOf(Long.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", Double.valueOf(Long.MIN_VALUE));
                         break;
                     case DataType.INTEGER:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Integer.MAX_VALUE));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Integer.MIN_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMax", Double.valueOf(Integer.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", Double.valueOf(Integer.MIN_VALUE));
                         break;
                     case DataType.SMALLINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Short.MAX_VALUE));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Short.MIN_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMax", Double.valueOf(Short.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", Double.valueOf(Short.MIN_VALUE));
                         break;
                     case DataType.TINYINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Byte.MAX_VALUE));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Byte.MIN_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMax", Double.valueOf(Byte.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", Double.valueOf(Byte.MIN_VALUE));
                         break;
                     case DataType.FLOAT:
                     case DataType.REAL:

@@ -40,7 +40,7 @@ public class _NumericField extends MultiPropertyTest {
         testProperty("DefaultValue", new PropertyTester() {
             @Override
             protected Object getNewValue(String prop, Object old) {
-                return util.utils.isVoid(old) ? new Double(111.11) :
+                return util.utils.isVoid(old) ? Double.valueOf(111.11) :
                     super.getNewValue(prop, old) ;
             }
         }) ;

@@ -81,7 +81,7 @@ public class ValueChanger {
             newValue = Float.valueOf((float) (oldfloat + 16.7));
         } else if (oldValue instanceof Double) {
             double olddouble = ((Double) oldValue).doubleValue();
-            newValue = new Double(olddouble + 17.8);
+            newValue = Double.valueOf(olddouble + 17.8);
         } else if (oldValue instanceof String) {
             String oldString = (String) oldValue;
             newValue = oldString + "New";

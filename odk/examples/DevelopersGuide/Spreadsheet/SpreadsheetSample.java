@@ -381,26 +381,26 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object[][] aValues =
         {
             { "Name",   "Fruit",    "Quantity" },
-            { "Alice",  "Apples",   new Double( 3.0 ) },
-            { "Alice",  "Oranges",  new Double( 7.0 ) },
-            { "Bob",    "Apples",   new Double( 3.0 ) },
-            { "Alice",  "Apples",   new Double( 9.0 ) },
-            { "Bob",    "Apples",   new Double( 5.0 ) },
-            { "Bob",    "Oranges",  new Double( 6.0 ) },
-            { "Alice",  "Oranges",  new Double( 3.0 ) },
-            { "Alice",  "Apples",   new Double( 8.0 ) },
-            { "Alice",  "Oranges",  new Double( 1.0 ) },
-            { "Bob",    "Oranges",  new Double( 2.0 ) },
-            { "Bob",    "Oranges",  new Double( 7.0 ) },
-            { "Bob",    "Apples",   new Double( 1.0 ) },
-            { "Alice",  "Apples",   new Double( 8.0 ) },
-            { "Alice",  "Oranges",  new Double( 8.0 ) },
-            { "Alice",  "Apples",   new Double( 7.0 ) },
-            { "Bob",    "Apples",   new Double( 1.0 ) },
-            { "Bob",    "Oranges",  new Double( 9.0 ) },
-            { "Bob",    "Oranges",  new Double( 3.0 ) },
-            { "Alice",  "Oranges",  new Double( 4.0 ) },
-            { "Alice",  "Apples",   new Double( 9.0 ) }
+            { "Alice",  "Apples",   Double.valueOf( 3.0 ) },
+            { "Alice",  "Oranges",  Double.valueOf( 7.0 ) },
+            { "Bob",    "Apples",   Double.valueOf( 3.0 ) },
+            { "Alice",  "Apples",   Double.valueOf( 9.0 ) },
+            { "Bob",    "Apples",   Double.valueOf( 5.0 ) },
+            { "Bob",    "Oranges",  Double.valueOf( 6.0 ) },
+            { "Alice",  "Oranges",  Double.valueOf( 3.0 ) },
+            { "Alice",  "Apples",   Double.valueOf( 8.0 ) },
+            { "Alice",  "Oranges",  Double.valueOf( 1.0 ) },
+            { "Bob",    "Oranges",  Double.valueOf( 2.0 ) },
+            { "Bob",    "Oranges",  Double.valueOf( 7.0 ) },
+            { "Bob",    "Apples",   Double.valueOf( 1.0 ) },
+            { "Alice",  "Apples",   Double.valueOf( 8.0 ) },
+            { "Alice",  "Oranges",  Double.valueOf( 8.0 ) },
+            { "Alice",  "Apples",   Double.valueOf( 7.0 ) },
+            { "Bob",    "Apples",   Double.valueOf( 1.0 ) },
+            { "Bob",    "Oranges",  Double.valueOf( 9.0 ) },
+            { "Bob",    "Oranges",  Double.valueOf( 3.0 ) },
+            { "Alice",  "Oranges",  Double.valueOf( 4.0 ) },
+            { "Alice",  "Apples",   Double.valueOf( 9.0 ) }
         };
         xData.setDataArray( aValues );
 
@@ -863,20 +863,20 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // --- Scenarios ---
         Object[][] aValues = new Object[2][2];
 
-        aValues[0][0] = new Double( 11 );
-        aValues[0][1] = new Double( 12 );
+        aValues[0][0] = Double.valueOf( 11 );
+        aValues[0][1] = Double.valueOf( 12 );
         aValues[1][0] = "Test13";
         aValues[1][1] = "Test14";
         insertScenario( xSheet, "B10:C11", aValues, "First Scenario", "The first scenario." );
 
         aValues[0][0] = "Test21";
         aValues[0][1] = "Test22";
-        aValues[1][0] = new Double( 23 );
-        aValues[1][1] = new Double( 24 );
+        aValues[1][0] = Double.valueOf( 23 );
+        aValues[1][1] = Double.valueOf( 24 );
         insertScenario( xSheet, "B10:C11", aValues, "Second Scenario", "The visible scenario." );
 
-        aValues[0][0] = new Double( 31 );
-        aValues[0][1] = new Double( 32 );
+        aValues[0][0] = Double.valueOf( 31 );
+        aValues[0][1] = Double.valueOf( 32 );
         aValues[1][0] = "Test33";
         aValues[1][1] = "Test34";
         insertScenario( xSheet, "B10:C11", aValues, "Third Scenario", "The last scenario." );
@@ -972,8 +972,8 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object[][] aValues =
         {
             { "Apples", "Oranges" },
-            { new Double( 5 ), new Double( 7 ) },
-            { new Double( 6 ), new Double( 8 ) }
+            { Double.valueOf( 5 ), Double.valueOf( 7 ) },
+            { Double.valueOf( 6 ), Double.valueOf( 8 ) }
         };
         xData.setDataArray( aValues );
 
@@ -1080,27 +1080,27 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         Object[][] aValues =
         {
             { "Name",             "Year",            "Sales" },
-            { "Alice", new Double( 2001 ), new Double( 4.0 ) },
-            { "Carol", new Double( 1997 ), new Double( 3.0 ) },
-            { "Carol", new Double( 1998 ), new Double( 8.0 ) },
-            { "Bob",   new Double( 1997 ), new Double( 8.0 ) },
-            { "Alice", new Double( 2002 ), new Double( 9.0 ) },
-            { "Alice", new Double( 1999 ), new Double( 7.0 ) },
-            { "Alice", new Double( 1996 ), new Double( 3.0 ) },
-            { "Bob",   new Double( 2000 ), new Double( 1.0 ) },
-            { "Carol", new Double( 1999 ), new Double( 5.0 ) },
-            { "Bob",   new Double( 2002 ), new Double( 1.0 ) },
-            { "Carol", new Double( 2001 ), new Double( 5.0 ) },
-            { "Carol", new Double( 2000 ), new Double( 1.0 ) },
-            { "Carol", new Double( 1996 ), new Double( 8.0 ) },
-            { "Bob",   new Double( 1996 ), new Double( 7.0 ) },
-            { "Alice", new Double( 1997 ), new Double( 3.0 ) },
-            { "Alice", new Double( 2000 ), new Double( 9.0 ) },
-            { "Bob",   new Double( 1998 ), new Double( 1.0 ) },
-            { "Bob",   new Double( 1999 ), new Double( 6.0 ) },
-            { "Carol", new Double( 2002 ), new Double( 8.0 ) },
-            { "Alice", new Double( 1998 ), new Double( 5.0 ) },
-            { "Bob",   new Double( 2001 ), new Double( 6.0 ) }
+            { "Alice", Double.valueOf( 2001 ), Double.valueOf( 4.0 ) },
+            { "Carol", Double.valueOf( 1997 ), Double.valueOf( 3.0 ) },
+            { "Carol", Double.valueOf( 1998 ), Double.valueOf( 8.0 ) },
+            { "Bob",   Double.valueOf( 1997 ), Double.valueOf( 8.0 ) },
+            { "Alice", Double.valueOf( 2002 ), Double.valueOf( 9.0 ) },
+            { "Alice", Double.valueOf( 1999 ), Double.valueOf( 7.0 ) },
+            { "Alice", Double.valueOf( 1996 ), Double.valueOf( 3.0 ) },
+            { "Bob",   Double.valueOf( 2000 ), Double.valueOf( 1.0 ) },
+            { "Carol", Double.valueOf( 1999 ), Double.valueOf( 5.0 ) },
+            { "Bob",   Double.valueOf( 2002 ), Double.valueOf( 1.0 ) },
+            { "Carol", Double.valueOf( 2001 ), Double.valueOf( 5.0 ) },
+            { "Carol", Double.valueOf( 2000 ), Double.valueOf( 1.0 ) },
+            { "Carol", Double.valueOf( 1996 ), Double.valueOf( 8.0 ) },
+            { "Bob",   Double.valueOf( 1996 ), Double.valueOf( 7.0 ) },
+            { "Alice", Double.valueOf( 1997 ), Double.valueOf( 3.0 ) },
+            { "Alice", Double.valueOf( 2000 ), Double.valueOf( 9.0 ) },
+            { "Bob",   Double.valueOf( 1998 ), Double.valueOf( 1.0 ) },
+            { "Bob",   Double.valueOf( 1999 ), Double.valueOf( 6.0 ) },
+            { "Carol", Double.valueOf( 2002 ), Double.valueOf( 8.0 ) },
+            { "Alice", Double.valueOf( 1998 ), Double.valueOf( 5.0 ) },
+            { "Bob",   Double.valueOf( 2001 ), Double.valueOf( 6.0 ) }
         };
         xData.setDataArray( aValues );
 
@@ -1285,7 +1285,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         // construct the array of function arguments
         Object[] aArgs = new Object[2];
         aArgs[0] = aData;
-        aArgs[1] = new Double( 2.0 );
+        aArgs[1] = Double.valueOf( 2.0 );
         Object aResult = xFuncAcc.callFunction( "ZTEST", aArgs );
         System.out.println("ZTEST result for data {1,2,3} and value 2 is "
                                         + ((Double)aResult).doubleValue() );

@@ -104,7 +104,7 @@ public class DataOutputStream extends TestCase {
         data.add(Short.valueOf((short)1234)) ;
         data.add(Integer.valueOf(123456)) ;
         data.add(Float.valueOf(1.234f)) ;
-        data.add(new Double(1.23456)) ;
+        data.add(Double.valueOf(1.23456)) ;
         data.add("DataInputStream") ;
         // information for writing to the pipe
         byte[] byteData = new byte[] {

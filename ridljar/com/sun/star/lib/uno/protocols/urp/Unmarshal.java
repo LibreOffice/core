@@ -259,7 +259,7 @@ final class Unmarshal {
     }
 
     private Double readDoubleValue() throws IOException {
-        return new Double(input.readDouble());
+        return Double.valueOf(input.readDouble());
     }
 
     private Character readCharValue() throws IOException {

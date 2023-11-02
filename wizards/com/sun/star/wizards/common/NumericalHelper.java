@@ -203,7 +203,7 @@ public class NumericalHelper
                 break;
             case TypeClass.DOUBLE_value:
                 aTypeObject.iType = DOUBLE_TYPE;
-                aTypeObject.aValue = new Double(AnyConverter.toDouble(aValue));
+                aTypeObject.aValue = Double.valueOf(AnyConverter.toDouble(aValue));
                 break;
             case TypeClass.STRING_value:
                 aTypeObject.iType = STRING_TYPE;

@@ -461,23 +461,23 @@ public class Map
 
     @Test public void testSpecialValues() throws com.sun.star.uno.Exception
     {
-        final Double[] keys = new Double[] { new Double( 0 ), Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY };
-        final Double[] values = new Double[] { Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, new Double( 0 ) };
+        final Double[] keys = new Double[] { Double.valueOf( 0 ), Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY };
+        final Double[] values = new Double[] { Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, Double.valueOf( 0 ) };
 
         XEnumerableMap map = com.sun.star.container.EnumerableMap.create( connection.getComponentContext(), new Type( Double.class ), new Type( Double.class ) );
         impl_putAll( map, keys, values );
 
         assertTrue( "containsKey( Double.+INF failed", map.containsKey( Double.POSITIVE_INFINITY ) );
         assertTrue( "containsKey( Double.-INF failed", map.containsKey( Double.NEGATIVE_INFINITY ) );
-        assertTrue( "containsKey( 0 ) failed", map.containsKey( new Double( 0 ) ) );
+        assertTrue( "containsKey( 0 ) failed", map.containsKey( Double.valueOf( 0 ) ) );
 
         assertTrue( "containsValue( Double.+INF ) failed", map.containsValue( Double.POSITIVE_INFINITY ) );
         assertTrue( "containsValue( Double.-INF ) failed", map.containsValue( Double.NEGATIVE_INFINITY ) );
-        assertTrue( "containsValue( 0 ) failed", map.containsValue( new Double( 0 ) ) );
+        assertTrue( "containsValue( 0 ) failed", map.containsValue( Double.valueOf( 0 ) ) );
 
         // put and containsKey should reject Double.NaN as key
 //?        assureException( "Double.NaN should not be allowed as key in a call to 'put'", map, "put",
-//?            new Class[] { Object.class, Object.class }, new Object[] { Double.NaN, new Double( 0 ) },
+//?            new Class[] { Object.class, Object.class }, new Object[] { Double.NaN, Double.valueOf( 0 ) },
 //?            com.sun.star.lang.IllegalArgumentException.class );
 //?        assureException( "Double.NaN should not be allowed as key in a call to 'containsKey'", map, "containsKey",
 //?            new Class[] { Object.class }, new Object[] { Double.NaN },
@@ -485,7 +485,7 @@ public class Map
 
         // ditto for put and containsValue
 //?        assureException( "Double.NaN should not be allowed as value in a call to 'put'", map, "put",
-//?            new Class[] { Object.class, Object.class }, new Object[] { new Double( 0 ), Double.NaN },
+//?            new Class[] { Object.class, Object.class }, new Object[] { Double.valueOf( 0 ), Double.NaN },
 //?            com.sun.star.lang.IllegalArgumentException.class );
 //?        assureException( "Double.NaN should not be allowed as key in a call to 'containsValue'", map, "containsValue",
 //?            new Class[] { Object.class }, new Object[] { Double.NaN },

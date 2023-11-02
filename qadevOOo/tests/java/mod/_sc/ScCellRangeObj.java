@@ -183,7 +183,7 @@ public class ScCellRangeObj extends TestCase {
 /*        Object[][] newData = new Object[5][4];
         for (int i=0; i<newData.length; i++) {
             for (int j=0; j<newData[i].length; j++) {
-                newData[i][j] = new Double(i*10+j);
+                newData[i][j] = Double.valueOf(i*10+j);
             }
         }
         tEnv.addObjRelation("NewData", newData); */

@@ -137,7 +137,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     * new value must be specified.
     */
     public void _EffectiveDefault() {
-        testProperty("EffectiveDefault", new Double(5.8),new Double(2.3)) ;
+        testProperty("EffectiveDefault", Double.valueOf(5.8),Double.valueOf(2.3)) ;
     }
 
     /**
@@ -145,7 +145,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
     * new value must be specified.
     */
     public void _EffectiveValue() {
-        testProperty("EffectiveValue", new Double(5.8),new Double(2.3)) ;
+        testProperty("EffectiveValue", Double.valueOf(5.8),Double.valueOf(2.3)) ;
     }
 
     /**
@@ -156,7 +156,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("EffectiveMax", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Double(123.8) :
+                return utils.isVoid(v) ? Double.valueOf(123.8) :
                     super.getNewValue(p,v) ;
             }
         }) ;
@@ -190,7 +190,7 @@ public class _UnoControlFormattedFieldModel extends MultiPropertyTest {
         testProperty("EffectiveMin", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object v) {
-                return utils.isVoid(v) ? new Double(0.1) :
+                return utils.isVoid(v) ? Double.valueOf(0.1) :
                     super.getNewValue(p,v) ;
             }
         }) ;

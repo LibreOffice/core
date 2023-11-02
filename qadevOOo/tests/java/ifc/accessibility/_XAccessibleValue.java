@@ -326,7 +326,7 @@ public class _XAccessibleValue extends MultiMethodTest {
             return Float.valueOf((float)val);
         }
         else if (clazz.equals(Double.class)) {
-            return new Double(val);
+            return Double.valueOf(val);
         }
         else {
             throw new StatusException

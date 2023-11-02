@@ -334,7 +334,7 @@ public class DocumentProperties
         udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVABLE, t);
         udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVABLE, date);
         udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVABLE, dt);
-        udpc.addProperty("Pi", PropertyAttribute.REMOVABLE, new Double(d));
+        udpc.addProperty("Pi", PropertyAttribute.REMOVABLE, Double.valueOf(d));
         udpc.addProperty("Foo", PropertyAttribute.REMOVABLE, "bar");
         udpc.addProperty("Removed", PropertyAttribute.REMOVABLE, "bar");
         // #i94175#: empty property name is valid ODF 1.1

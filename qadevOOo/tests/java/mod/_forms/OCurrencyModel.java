@@ -122,7 +122,7 @@ public class OCurrencyModel extends GenericModelTest {
         super.m_propertiesToSet.add(myProp);
 
         super.m_ChangePropertyName = "Value";
-        super.m_ChangePropertyValue = new Double(0);
+        super.m_ChangePropertyValue = Double.valueOf(0);
 
         super.m_LCShape_Type = "FixedText";
 

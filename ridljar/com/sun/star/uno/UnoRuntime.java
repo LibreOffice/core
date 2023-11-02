@@ -334,7 +334,7 @@ public class UnoRuntime {
         case TypeClass.FLOAT_value:
             return Float.valueOf(0.0f);
         case TypeClass.DOUBLE_value:
-            return new Double(0.0);
+            return Double.valueOf(0.0);
         case TypeClass.CHAR_value:
             return new Character('\u0000');
         case TypeClass.STRING_value:

@@ -609,13 +609,13 @@ public class AnyConverter
             case TypeClass.DOUBLE_value:
                 switch (tc) {
                 case TypeClass.BYTE_value:
-                    return new Double( ((Byte)object).byteValue() );
+                    return Double.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
-                    return new Double( ((Short)object).shortValue() );
+                    return Double.valueOf( ((Short)object).shortValue() );
                 case TypeClass.LONG_value:
-                    return new Double( ((Integer)object).intValue() );
+                    return Double.valueOf( ((Integer)object).intValue() );
                 case TypeClass.FLOAT_value:
-                    return new Double( ((Float)object).floatValue() );
+                    return Double.valueOf( ((Float)object).floatValue() );
                 case TypeClass.DOUBLE_value:
                     return object;
                 }

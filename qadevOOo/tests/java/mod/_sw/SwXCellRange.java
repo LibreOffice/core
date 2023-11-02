@@ -115,15 +115,15 @@ public class SwXCellRange extends TestCase {
 
         Object[][] NewData = new Object[5][];
         NewData[0] = new Double[]
-            {new Double(2.5),new Double(5),new Double(2.5),new Double(5)};
+            {Double.valueOf(2.5),Double.valueOf(5),Double.valueOf(2.5),Double.valueOf(5)};
         NewData[1] = new Double[]
-            {new Double(4),new Double(9),new Double(2.5),new Double(5)};
+            {Double.valueOf(4),Double.valueOf(9),Double.valueOf(2.5),Double.valueOf(5)};
         NewData[2] = new Double[]
-            {new Double(2.5),new Double(5),new Double(2.5),new Double(5)};
+            {Double.valueOf(2.5),Double.valueOf(5),Double.valueOf(2.5),Double.valueOf(5)};
         NewData[3] = new Double[]
-            {new Double(2.5),new Double(5),new Double(2.5),new Double(5)};
+            {Double.valueOf(2.5),Double.valueOf(5),Double.valueOf(2.5),Double.valueOf(5)};
         NewData[4] = new Double[]
-            {new Double(4),new Double(9),new Double(2.5),new Double(5)};
+            {Double.valueOf(4),Double.valueOf(9),Double.valueOf(2.5),Double.valueOf(5)};
         tEnv.addObjRelation("NewData",NewData);
 
         // com::sun::star::chart::XChartDataArray
