@@ -40,6 +40,7 @@ $(gb_GbuildToJson_PHONY):
 
 
 define gb_LinkTarget__command
+$(call gb_Output_announce,$(2),$(true),GBJ,1)
 mkdir -p $(WORKDIR)/GbuildToJson/$(dir $(2))
 mkdir -p $(WORKDIR)/LinkTarget/$(dir $(2))
 $(if $(GBUILDTOJSON_LD_LIBRARY_PATH),LD_LIBRARY_PATH=$(GBUILDTOJSON_LD_LIBRARY_PATH)) \
