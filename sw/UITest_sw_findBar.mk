@@ -15,6 +15,4 @@ $(eval $(call gb_UITest_set_defs,sw_findBar, \
     TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
 
-$(eval $(call gb_UITest_use_oneprocess,sw_findBar))
-
 # vim: set noet sw=4 ts=4:

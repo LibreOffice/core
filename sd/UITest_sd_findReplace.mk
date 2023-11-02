@@ -15,4 +15,4 @@ $(eval $(call gb_UITest_set_defs,sd_findReplace, \
     TDOC="$(SRCDIR)/sd/qa/uitest/data" \
 ))
 
-$(eval $(call gb_UITest_use_oneprocess,sd_findReplace))
+# vim: set noet sw=4 ts=4:

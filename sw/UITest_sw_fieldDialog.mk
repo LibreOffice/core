@@ -15,4 +15,4 @@ $(eval $(call gb_UITest_set_defs,sw_fieldDialog, \
     TDOC="$(SRCDIR)/sw/qa/uitest/data" \
 ))
 
-$(eval $(call gb_UITest_use_oneprocess,sw_fieldDialog))
+# vim: set noet sw=4 ts=4:
