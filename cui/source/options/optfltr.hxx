@@ -67,9 +67,12 @@ class OfaMSFilterTabPage2 : public SfxTabPage
            sChgToFromPDF;
 
     std::unique_ptr<weld::TreeView> m_xCheckLB;
+    std::unique_ptr<weld::Label> m_xHighlightingFT;
     std::unique_ptr<weld::RadioButton> m_xHighlightingRB;
     std::unique_ptr<weld::RadioButton> m_xShadingRB;
+    std::unique_ptr<weld::Widget> m_xShadingImg;
     std::unique_ptr<weld::CheckButton> m_xMSOLockFileCB;
+    std::unique_ptr<weld::Widget> m_xMSOLockFileImg;
 
     void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType );
     void                InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType,

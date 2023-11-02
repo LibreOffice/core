@@ -185,9 +185,12 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2(weld::Container* pPage, weld::DialogCon
     , sChgToFromVisio(CuiResId(RID_CUISTR_CHG_VISIO))
     , sChgToFromPDF(CuiResId(RID_CUISTR_CHG_PDF))
     , m_xCheckLB(m_xBuilder->weld_tree_view("checklbcontainer"))
+    , m_xHighlightingFT(m_xBuilder->weld_label("label5"))
     , m_xHighlightingRB(m_xBuilder->weld_radio_button("highlighting"))
     , m_xShadingRB(m_xBuilder->weld_radio_button("shading"))
+    , m_xShadingImg(m_xBuilder->weld_widget("lockbuttonbox1"))
     , m_xMSOLockFileCB(m_xBuilder->weld_check_button("mso_lockfile"))
+    , m_xMSOLockFileImg(m_xBuilder->weld_widget("lockmso_lockfile"))
 {
     std::vector<int> aWidths
     {
@@ -351,6 +354,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     };
 
     bool bFirstCol = true;
+    bool bReadOnly = false;
     for( const ChkCBoxEntries & rArr : aChkArr )
     {
         // we loop through the list, alternating reading the first/second column,
@@ -365,13 +369,50 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
             if (rArr.eType != MSFltrPg2_CheckBoxEntries::PDF)
             {
                 bCheck = (rOpt.*rArr.FnIs)();
+                switch (rArr.eType)
+                {
+                case MSFltrPg2_CheckBoxEntries::Math:
+                    if (nCol == 0)
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::isReadOnly();
+                    else
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::MathToMathType::isReadOnly();
+                    break;
+                case MSFltrPg2_CheckBoxEntries::Writer:
+                    if (nCol == 0)
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::isReadOnly();
+                    else
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::WriterToWinWord::isReadOnly();
+                    break;
+                case MSFltrPg2_CheckBoxEntries::Calc:
+                    if (nCol == 0)
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::isReadOnly();
+                    else
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::CalcToExcel::isReadOnly();
+                    break;
+                case MSFltrPg2_CheckBoxEntries::Impress:
+                    if (nCol == 0)
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::isReadOnly();
+                    else
+                        bReadOnly = officecfg::Office::Common::Filter::Microsoft::Export::ImpressToPowerPoint::isReadOnly();
+                    break;
+                case MSFltrPg2_CheckBoxEntries::SmartArt:
+                    bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::SmartArtToShapes::isReadOnly();
+                    break;
+                case MSFltrPg2_CheckBoxEntries::Visio:
+                    bReadOnly = officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::isReadOnly();
+                    break;
+                default:
+                    break;
+                }
             }
             else
             {
                 bCheck = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get();
+                bReadOnly = officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::isReadOnly();
                 nCol = 0;
             }
             m_xCheckLB->set_toggle(nEntry, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE, nCol);
+            m_xCheckLB->set_sensitive(nEntry, !bReadOnly, nCol);
         }
         if (rArr.eType == MSFltrPg2_CheckBoxEntries::SmartArt)
         {
@@ -385,11 +426,20 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
     else
         m_xShadingRB->set_active(true);
 
+    if (officecfg::Office::Common::Filter::Microsoft::Export::CharBackgroundToHighlighting::isReadOnly())
+    {
+        m_xHighlightingRB->set_sensitive(false);
+        m_xShadingRB->set_sensitive(false);
+        m_xHighlightingFT->set_sensitive(false);
+        m_xShadingImg->set_visible(true);
+    }
+
     m_xHighlightingRB->save_state();
 
     m_xMSOLockFileCB->set_active(rOpt.IsMSOLockFileCreationIsEnabled());
     m_xMSOLockFileCB->save_state();
     m_xMSOLockFileCB->set_sensitive(!officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::isReadOnly());
+    m_xMSOLockFileImg->set_visible(officecfg::Office::Common::Filter::Microsoft::Import::CreateMSOLockFiles::isReadOnly());
 }
 
 void OfaMSFilterTabPage2::InsertEntry( const OUString& _rTxt, MSFltrPg2_CheckBoxEntries _nType )
