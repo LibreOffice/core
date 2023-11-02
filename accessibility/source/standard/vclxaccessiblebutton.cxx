@@ -167,7 +167,18 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex )
 
     VclPtr< PushButton > pButton = GetAs< PushButton >();
     if ( pButton )
-        pButton->Click();
+    {
+        if (pButton->isToggleButton())
+        {
+            // PushButton::Click doesn't toggle when it's a toggle button
+            pButton->Check(!pButton->IsChecked());
+            pButton->Toggle();
+        }
+        else
+        {
+            pButton->Click();
+        }
+    }
 
     return true;
 }
