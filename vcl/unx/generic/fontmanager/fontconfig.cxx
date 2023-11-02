@@ -155,6 +155,7 @@ public:
     void addFontSet( FcSetName );
 
     FcFontSet* getFontSet();
+    void replaceFontSet(FcFontSet* pFilteredFontSet);
 
     void clear();
 
@@ -315,14 +316,27 @@ FcFontSet* FontCfgWrapper::getFontSet()
             return getenv("SAL_NON_APPLICATION_FONT_USE") != nullptr;
         }();
 #endif
+        // Add the application fonts before the system fonts.
+        // tdf#157939 We will remove duplicate fonts, where the duplicate is
+        // the one with a smaller version number. If the same version font is
+        // available system-wide or bundled with our application, then we
+        // prefer via stable-sort the first one we see. Load application fonts
+        // first to prefer the one we bundle in the application in that case.
+        addFontSet( FcSetApplication );
         if (!bRestrictFontSetToApplicationFonts)
             addFontSet( FcSetSystem );
-        addFontSet( FcSetApplication );
 
         std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
     }
 
     return m_pFontSet;
+}
+
+void FontCfgWrapper::replaceFontSet(FcFontSet* pFilteredFontSet)
+{
+    if (m_pFontSet)
+        FcFontSetDestroy(m_pFontSet);
+    m_pFontSet = pFilteredFontSet;
 }
 
 FontCfgWrapper::~FontCfgWrapper()
@@ -578,6 +592,9 @@ void PrintFontManager::countFontconfigFonts()
     if( pFSet )
     {
         SAL_INFO("vcl.fonts", "found " << pFSet->nfont << " entries in fontconfig fontset");
+
+        FcFontSet* pFilteredSet = FcFontSetCreate();
+
         for( int i = 0; i < pFSet->nfont; i++ )
         {
             FcChar8* file = nullptr;
@@ -672,8 +689,21 @@ void PrintFontManager::countFontconfigFonts()
             m_aFonts.emplace(nFontID, aFont);
             m_aFontFileToFontID[aBase].insert(nFontID);
             nFonts++;
+
+            FcPattern* pPattern = pFSet->fonts[i];
+            FcPatternReference(pPattern);
+            FcFontSetAdd(pFilteredSet, pPattern);
+
             SAL_INFO("vcl.fonts.detail", "inserted font " << family << " as fontID " << nFontID);
         }
+
+        // tdf#157939 if we drop fonts, drop them from the FcConfig set too so they are not
+        // candidates for suggestions by fontconfig
+        if (pFSet->nfont != pFilteredSet->nfont)
+            rWrapper.replaceFontSet(pFilteredSet);
+        else
+            FcFontSetDestroy(pFilteredSet);
+
     }
 
     // how does one get rid of the config ?
