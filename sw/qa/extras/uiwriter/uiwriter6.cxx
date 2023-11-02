@@ -795,7 +795,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf157667)
         "Integer sodalesINTEGER SODALES tincidunt tristique."));
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt tristique."));
+
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(
+        "Integer sodalesSodales tinciduntTincidunt tristique."));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt tristique."));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf158039)
+{
+    createSwDoc("tdf130088.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // select the first sentence
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 26, /*bBasicCall=*/false);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // show changes
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // cycle case with change tracking
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(
+        "Integer sodalesSodales tinciduntTincidunt tristique."));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    // This was false (missing revert of the tracked change)
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt tristique."));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(
+        "Integer sodalesINTEGER SODALES tincidunt tristique."));
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
+
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith(
+        "Integer sodalesSodales tinciduntTincidunt tristique."));
+
     dispatchCommand(mxComponent, ".uno:ChangeCaseRotateCase", {});
 
     CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("Integer sodales tincidunt tristique."));

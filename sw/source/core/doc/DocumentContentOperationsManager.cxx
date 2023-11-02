@@ -3049,17 +3049,27 @@ void DocumentContentOperationsManager::TransliterateText(
         if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) &&
                         pEnd->GetContentIndex() > 0 )
         {
-            SwPosition aPos(*pEnd->GetContentNode(), pEnd->GetContentIndex() - 1);
-            SwRedlineTable::size_type n = 0;
+            // search all own redlines within the selected area
+            SwRedlineTable::size_type n = SwRedlineTable::npos;
+            const SwRedlineTable& aRedlineTable = rIDRA.GetRedlineTable();
+            for( SwRedlineTable::size_type m = 0; m < aRedlineTable.size(); ++m )
+            {
+                const SwRangeRedline* pRedline = aRedlineTable[ m ];
 
-            const SwRangeRedline* pFnd =
-                                rIDRA.GetRedlineTable().FindAtPosition( aPos, n );
-            if ( pFnd && RedlineType::Insert == pFnd->GetType() && n > 0 )
+                if ( *pRedline->Start() > *pEnd )
+                    break;
+
+                if ( *pRedline->Start() >= *pStt )
+                    n = m;
+            }
+
+            if ( n != SwRedlineTable::npos && n > 0 )
             {
                 SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
                             m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell());
 
                 sal_Int32 nRejectedCharacters = 0;
+                SwRangeRedline* pFnd = rIDRA.GetRedlineTable()[n];
                 SwRangeRedline* pFnd2 = rIDRA.GetRedlineTable()[--n];
                 // loop on all redlines of a case changing, and reject them
                 while ( ( ( RedlineType::Insert == pFnd->GetType() &&
@@ -3089,13 +3099,17 @@ void DocumentContentOperationsManager::TransliterateText(
                     pFnd2 = rIDRA.GetRedlineTable()[--n];
                 }
 
-                // remove the last item and restore the original selection
+                // remove the last item and restore the original selection within the node
                 if ( bHasTrackedChange )
                 {
-                    pWrtShell->GetCursor()->GetPoint()->
-                        Assign(*rPaM.Start()->GetContentNode(), nSttCnt);
-                    pWrtShell->GetCursor()->GetMark()->
-                        Assign(*rPaM.End()->GetContentNode(), nEndCnt - nRejectedCharacters);
+                    if ( nSttNd == nEndNd )
+                    {
+                        pWrtShell->GetCursor()->GetPoint()->
+                            Assign(*rPaM.Start()->GetContentNode(), nSttCnt);
+                        if ( nEndCnt >= nRejectedCharacters )
+                            pWrtShell->GetCursor()->GetMark()->
+                                Assign(*rPaM.End()->GetContentNode(), nEndCnt - nRejectedCharacters);
+                    }
                     rIDRA.RejectRedline(*pFnd, true);
                 }
             }
@@ -3185,7 +3199,7 @@ void DocumentContentOperationsManager::TransliterateText(
     }
 
     // restore selection after tracked changes
-    if ( !bNoSelection && bUseRedlining )
+    if ( !bNoSelection && bUseRedlining && nSttNd == nEndNd )
     {
         if ( SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(
                         m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell()) )
