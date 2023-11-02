@@ -199,7 +199,7 @@ using namespace ::com::sun::star::uno;
     bool underlineHasColor = false;
     // add attributes to string
     for ( const PropertyValue& property : attributes ) {
-        // TODO: NSAccessibilityMisspelledTextAttribute, NSAccessibilityAttachmentTextAttribute, NSAccessibilityLinkTextAttribute
+        // TODO: NSAccessibilityAttachmentTextAttribute, NSAccessibilityLinkTextAttribute
         // NSAccessibilityStrikethroughColorTextAttribute is unsupported by UNP-API
         if ( property.Value.hasValue() ) {
             if ( property.Name == "CharUnderline" ) {
