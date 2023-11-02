@@ -26,19 +26,33 @@
 OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/opthtmlpage.ui", "OptHtmlPage", &rSet)
     , m_xSize1NF(m_xBuilder->weld_spin_button("size1"))
+    , m_xSize1Img(m_xBuilder->weld_widget("locksize1"))
     , m_xSize2NF(m_xBuilder->weld_spin_button("size2"))
+    , m_xSize2Img(m_xBuilder->weld_widget("locksize2"))
     , m_xSize3NF(m_xBuilder->weld_spin_button("size3"))
+    , m_xSize3Img(m_xBuilder->weld_widget("locksize3"))
     , m_xSize4NF(m_xBuilder->weld_spin_button("size4"))
+    , m_xSize4Img(m_xBuilder->weld_widget("locksize4"))
     , m_xSize5NF(m_xBuilder->weld_spin_button("size5"))
+    , m_xSize5Img(m_xBuilder->weld_widget("locksize5"))
     , m_xSize6NF(m_xBuilder->weld_spin_button("size6"))
+    , m_xSize6Img(m_xBuilder->weld_widget("locksize6"))
     , m_xSize7NF(m_xBuilder->weld_spin_button("size7"))
+    , m_xSize7Img(m_xBuilder->weld_widget("locksize7"))
     , m_xNumbersEnglishUSCB(m_xBuilder->weld_check_button("numbersenglishus"))
+    , m_xNumbersEnglishUSImg(m_xBuilder->weld_widget("locknumbersenglishus"))
     , m_xUnknownTagCB(m_xBuilder->weld_check_button("unknowntag"))
+    , m_xUnknownTagImg(m_xBuilder->weld_widget("lockunknowntag"))
     , m_xIgnoreFontNamesCB(m_xBuilder->weld_check_button("ignorefontnames"))
+    , m_xIgnoreFontNamesImg(m_xBuilder->weld_widget("lockignorefontnames"))
     , m_xStarBasicCB(m_xBuilder->weld_check_button("starbasic"))
+    , m_xStarBasicImg(m_xBuilder->weld_widget("lockstarbasic"))
     , m_xStarBasicWarningCB(m_xBuilder->weld_check_button("starbasicwarning"))
+    , m_xStarBasicWarningImg(m_xBuilder->weld_widget("lockstarbasicwarning"))
     , m_xPrintExtensionCB(m_xBuilder->weld_check_button("printextension"))
+    , m_xPrintExtensionImg(m_xBuilder->weld_widget("lockprintextension"))
     , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button("savegrflocal"))
+    , m_xSaveGrfLocalImg(m_xBuilder->weld_widget("locksavegrflocal"))
 {
     // replace placeholder with UI string from language list
     OUString aText(m_xNumbersEnglishUSCB->get_label());
@@ -151,21 +165,99 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 void OfaHtmlTabPage::Reset( const SfxItemSet* )
 {
     m_xSize1NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_1::isReadOnly())
+    {
+        m_xSize1NF->set_sensitive(false);
+        m_xSize1Img->set_visible(true);
+    }
+
     m_xSize2NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_2::isReadOnly())
+    {
+        m_xSize2NF->set_sensitive(false);
+        m_xSize2Img->set_visible(true);
+    }
+
     m_xSize3NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_3::isReadOnly())
+    {
+        m_xSize3NF->set_sensitive(false);
+        m_xSize3Img->set_visible(true);
+    }
+
     m_xSize4NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_4::isReadOnly())
+    {
+        m_xSize4NF->set_sensitive(false);
+        m_xSize4Img->set_visible(true);
+    }
+
     m_xSize5NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_5::isReadOnly())
+    {
+        m_xSize5NF->set_sensitive(false);
+        m_xSize5Img->set_visible(true);
+    }
+
     m_xSize6NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_6::isReadOnly())
+    {
+        m_xSize6NF->set_sensitive(false);
+        m_xSize6Img->set_visible(true);
+    }
+
     m_xSize7NF->set_value(officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSize::Size_7::isReadOnly())
+    {
+        m_xSize7NF->set_sensitive(false);
+        m_xSize7Img->set_visible(true);
+    }
+
     m_xNumbersEnglishUSCB->set_active(officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::NumbersEnglishUS::isReadOnly())
+    {
+        m_xNumbersEnglishUSCB->set_sensitive(false);
+        m_xNumbersEnglishUSImg->set_visible(true);
+    }
+
     m_xUnknownTagCB->set_active(officecfg::Office::Common::Filter::HTML::Import::UnknownTag::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::UnknownTag::isReadOnly())
+    {
+        m_xUnknownTagCB->set_sensitive(false);
+        m_xUnknownTagImg->set_visible(true);
+    }
+
     m_xIgnoreFontNamesCB->set_active(officecfg::Office::Common::Filter::HTML::Import::FontSetting::get());
+    if (officecfg::Office::Common::Filter::HTML::Import::FontSetting::isReadOnly())
+    {
+        m_xIgnoreFontNamesCB->set_sensitive(false);
+        m_xIgnoreFontNamesImg->set_visible(true);
+    }
 
     m_xStarBasicCB->set_active(officecfg::Office::Common::Filter::HTML::Export::Basic::get());
+    if (officecfg::Office::Common::Filter::HTML::Export::Basic::isReadOnly())
+    {
+        m_xStarBasicCB->set_sensitive(false);
+        m_xStarBasicImg->set_visible(true);
+    }
+
     m_xStarBasicWarningCB->set_active(officecfg::Office::Common::Filter::HTML::Export::Warning::get());
-    m_xStarBasicWarningCB->set_sensitive(!m_xStarBasicCB->get_active());
+    m_xStarBasicWarningCB->set_sensitive(!m_xStarBasicCB->get_active() && !officecfg::Office::Common::Filter::HTML::Export::Warning::isReadOnly());
+    m_xStarBasicWarningImg->set_visible(officecfg::Office::Common::Filter::HTML::Export::Warning::isReadOnly());
+
     m_xSaveGrfLocalCB->set_active(officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get());
+    if (officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::isReadOnly())
+    {
+        m_xSaveGrfLocalCB->set_sensitive(false);
+        m_xSaveGrfLocalImg->set_visible(true);
+    }
+
     m_xPrintExtensionCB->set_active(officecfg::Office::Common::Filter::HTML::Export::PrintLayout::get());
+    if (officecfg::Office::Common::Filter::HTML::Export::PrintLayout::isReadOnly())
+    {
+        m_xPrintExtensionCB->set_sensitive(false);
+        m_xPrintExtensionImg->set_visible(true);
+    }
 
     m_xPrintExtensionCB->save_state();
     m_xStarBasicCB->save_state();

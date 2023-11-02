@@ -25,21 +25,35 @@ class OfaHtmlTabPage : public SfxTabPage
 {
 
     std::unique_ptr<weld::SpinButton> m_xSize1NF;
+    std::unique_ptr<weld::Widget> m_xSize1Img;
     std::unique_ptr<weld::SpinButton> m_xSize2NF;
+    std::unique_ptr<weld::Widget> m_xSize2Img;
     std::unique_ptr<weld::SpinButton> m_xSize3NF;
+    std::unique_ptr<weld::Widget> m_xSize3Img;
     std::unique_ptr<weld::SpinButton> m_xSize4NF;
+    std::unique_ptr<weld::Widget> m_xSize4Img;
     std::unique_ptr<weld::SpinButton> m_xSize5NF;
+    std::unique_ptr<weld::Widget> m_xSize5Img;
     std::unique_ptr<weld::SpinButton> m_xSize6NF;
+    std::unique_ptr<weld::Widget> m_xSize6Img;
     std::unique_ptr<weld::SpinButton> m_xSize7NF;
+    std::unique_ptr<weld::Widget> m_xSize7Img;
 
     std::unique_ptr<weld::CheckButton> m_xNumbersEnglishUSCB;
+    std::unique_ptr<weld::Widget> m_xNumbersEnglishUSImg;
     std::unique_ptr<weld::CheckButton> m_xUnknownTagCB;
+    std::unique_ptr<weld::Widget> m_xUnknownTagImg;
     std::unique_ptr<weld::CheckButton> m_xIgnoreFontNamesCB;
+    std::unique_ptr<weld::Widget> m_xIgnoreFontNamesImg;
 
     std::unique_ptr<weld::CheckButton> m_xStarBasicCB;
+    std::unique_ptr<weld::Widget> m_xStarBasicImg;
     std::unique_ptr<weld::CheckButton> m_xStarBasicWarningCB;
+    std::unique_ptr<weld::Widget> m_xStarBasicWarningImg;
     std::unique_ptr<weld::CheckButton> m_xPrintExtensionCB;
+    std::unique_ptr<weld::Widget> m_xPrintExtensionImg;
     std::unique_ptr<weld::CheckButton> m_xSaveGrfLocalCB;
+    std::unique_ptr<weld::Widget> m_xSaveGrfLocalImg;
 
     DECL_LINK(CheckBoxHdl_Impl, weld::Toggleable&, void);
 
