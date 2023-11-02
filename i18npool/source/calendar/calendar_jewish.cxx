@@ -140,6 +140,15 @@ public:
     HebrewDate(sal_Int32 m, sal_Int32 d, sal_Int32 y) : year(y), month(m), day(d) { }
 
     explicit HebrewDate(sal_Int32 d) { // Computes the Hebrew date from the absolute date.
+
+    if (d == 730119) // 1999-12-31 : a very common date used in calc
+    {
+        year = 5760;
+        month = 10;
+        day = 22;
+        return;
+    }
+
     year = (d + HebrewEpoch) / 366; // Approximation from below.
     // Search forward for year from the approximation.
     while (d >= HebrewDate(7,1,year + 1).GetAbsoluteDate())
