@@ -1346,26 +1346,29 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_I
 
 const SvxFieldItem* EditView::GetFieldAtSelection() const
 {
+    // a field is a dummy character - so it cannot span nodes or be a selection larger than 1
     EditSelection aSel( pImpEditView->GetEditSelection() );
+    if (aSel.Min().GetNode() != aSel.Max().GetNode())
+        return nullptr;
+
+    // normalize: min < max
     aSel.Adjust( pImpEditView->pEditEngine->GetEditDoc() );
+
+    const sal_Int32 nMinIndex =  aSel.Min().GetIndex();
+    const sal_Int32 nMaxIndex =  aSel.Max().GetIndex();
+    if (nMaxIndex > nMinIndex + 1)
+        return nullptr;
+
     // Only when cursor is in font of field, no selection,
     // or only selecting field
-    if ( ( aSel.Min().GetNode() == aSel.Max().GetNode() ) &&
-         ( ( aSel.Max().GetIndex() == aSel.Min().GetIndex() ) ||
-           ( aSel.Max().GetIndex() == aSel.Min().GetIndex()+1 ) ) )
+    const CharAttribList::AttribsType& rAttrs = aSel.Min().GetNode()->GetCharAttribs().GetAttribs();
+    for (const auto& rAttr: rAttrs)
     {
-        EditPaM aPaM = aSel.Min();
-        const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
-        const sal_Int32 nXPos = aPaM.GetIndex();
-        for (size_t nAttr = rAttrs.size(); nAttr; )
+        if (rAttr->Which() == EE_FEATURE_FIELD)
         {
-            const EditCharAttrib& rAttr = *rAttrs[--nAttr];
-            if (rAttr.GetStart() == nXPos)
-                if (rAttr.Which() == EE_FEATURE_FIELD)
-                {
-                    DBG_ASSERT(dynamic_cast<const SvxFieldItem* >(rAttr.GetItem() ) != nullptr, "No FieldItem...");
-                    return static_cast<const SvxFieldItem*>(rAttr.GetItem());
-                }
+            DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()), "No FieldItem...");
+            if (rAttr->GetStart() == nMinIndex)
+                return static_cast<const SvxFieldItem*>(rAttr->GetItem());
         }
     }
     return nullptr;
