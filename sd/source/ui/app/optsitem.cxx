@@ -408,7 +408,6 @@ SdOptionsMisc::SdOptionsMisc( bool bImpress, bool bUseConfig ) :
     bPickThrough( true ),
     bDoubleClickTextEdit( true ),
     bClickChangeRotation( false ),
-    bEnableSdremote( false ),
     bSolidDragging( true ),
     bSummationOfParagraphs( false ),
     bTabBarVisible( true ),
@@ -442,7 +441,6 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsPickThrough() == rOpt.IsPickThrough() &&
             IsDoubleClickTextEdit() == rOpt.IsDoubleClickTextEdit() &&
             IsClickChangeRotation() == rOpt.IsClickChangeRotation() &&
-            IsEnableSdremote() == rOpt.IsEnableSdremote() &&
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsTabBarVisible() == rOpt.IsTabBarVisible() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
@@ -499,7 +497,6 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
 
         "PenColor",
         "PenWidth",
-        "Start/EnableSdremote",
         "TabBarVisible"
     };
 
@@ -558,11 +555,8 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
         if( pValues[24].hasValue() )
             SetPresentationPenWidth( getSafeValue< double >( pValues[ 24 ] ) );
 
-        if( pValues[25].hasValue() )
-            SetEnableSdremote( *o3tl::doAccess<bool>(pValues[ 25 ]) );
-
-        if( pValues[26].hasValue() ) {
-            SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 26 ]) );
+        if( pValues[25].hasValue() ) {
+            SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 25 ]) );
         }
     }
 
@@ -604,8 +598,7 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
 
         pValues[ 23 ] <<= GetPresentationPenColor();
         pValues[ 24 ] <<= GetPresentationPenWidth();
-        pValues[ 25 ] <<= IsEnableSdremote();
-        pValues[ 26 ] <<= IsTabBarVisible();
+        pValues[ 25 ] <<= IsTabBarVisible();
     }
 
     return true;
@@ -630,7 +623,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
     if( pOpts )
     {
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
-        maOptionsMisc.SetEnableSdremote( pOpts->IsEnableSdremote() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
         maOptionsMisc.SetTabBarVisible( pOpts->IsTabBarVisible() );
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
@@ -708,7 +700,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetPickThrough( maOptionsMisc.IsPickThrough() );
     pOpts->SetDoubleClickTextEdit( maOptionsMisc.IsDoubleClickTextEdit() );
     pOpts->SetClickChangeRotation( maOptionsMisc.IsClickChangeRotation() );
-    pOpts->SetEnableSdremote( maOptionsMisc.IsEnableSdremote() );
     pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
     pOpts->SetTabBarVisible( maOptionsMisc.IsTabBarVisible() );
 

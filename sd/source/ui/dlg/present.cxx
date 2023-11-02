@@ -66,6 +66,8 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxChangePage(m_xBuilder->weld_check_button("changeslidesbyclick"))
     , m_xCbxAlwaysOnTop(m_xBuilder->weld_check_button("alwaysontop"))
     , m_xCbxShowNavigationButton(m_xBuilder->weld_check_button("shownavigationbutton"))
+    , m_xFrameEnableRemote(m_xBuilder->weld_frame("frameremote"))
+    , m_xCbxEnableRemote(m_xBuilder->weld_check_button("enableremote"))
     , m_xLbConsole(m_xBuilder->weld_combo_box("console_cb"))
     , m_xFtMonitor(m_xBuilder->weld_label("presdisplay_label"))
     , m_xLBMonitor(m_xBuilder->weld_combo_box("presdisplay_cb"))
@@ -151,6 +153,12 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     else
         m_xLbConsole->set_active(PresenterConsoleMode::Windowed);
 
+#ifdef ENABLE_SDREMOTE
+    m_xCbxEnableRemote->set_active(officecfg::Office::Impress::Misc::Start::EnableSdremote::get());
+#else
+    m_xFrameEnableRemote->hide();
+#endif
+
     InitMonitorSettings();
 
     ChangeRangeHdl(*m_xRbtCustomshow);
@@ -180,6 +188,9 @@ short SdStartPresentationDlg::run()
         }
         officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::set(
             m_xCbxShowNavigationButton->get_active(), batch);
+#ifdef ENABLE_SDREMOTE
+    officecfg::Office::Impress::Misc::Start::EnableSdremote::set(m_xCbxEnableRemote->get_active(), batch);
+#endif
         batch->commit();
     }
     return nRet;

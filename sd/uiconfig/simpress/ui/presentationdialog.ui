@@ -80,7 +80,7 @@
           </packing>
         </child>
         <child>
-          <!-- n-columns=1 n-rows=3 -->
+          <!-- n-columns=1 n-rows=4 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -731,6 +731,72 @@
               <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="frameremote">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="label-xalign">0</property>
+                <property name="shadow-type">none</property>
+                <child>
+                  <!-- n-columns=2 n-rows=1 -->
+                  <object class="GtkGrid" id="grid10">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkCheckButton" id="enableremote">
+                        <property name="label" translatable="yes" context="presentationdialog|enableremote">Enable remote control</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="use-underline">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLinkButton" id="learnmore">
+                        <property name="label" translatable="yes" context="presentationdialog|learnmore">Download App ...</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="tooltip-text" translatable="yes" context="presentationdialog|learnmore|tooltip_text">Download LibreOffice Impress Remote to remotely control the presentation from your smartphone or smartwatch.</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">True</property>
+                        <property name="relief">none</property>
+                        <property name="uri">https://www.libreoffice.org/download/impress-remote-2/</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes" context="presentationdialog|label3">Remote control</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
           </object>

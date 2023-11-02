@@ -206,7 +206,6 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xPresentationFrame(m_xBuilder->weld_frame("presentationframe"))
     , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
     , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
-    , m_xCbxEnableSdremote(m_xBuilder->weld_check_button("enremotcont"))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
     , m_xCbScale(m_xBuilder->weld_combo_box("scaleBox"))
@@ -361,7 +360,7 @@ OUString SdTpOptionsMisc::GetAllStrings()
 
     OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
                                "objalwymov",      "distortcb",    "cbCompatibility",
-                               "enremotcont",     "qickedit",     "textselected"};
+                               "qickedit",     "textselected"};
 
     for (const auto& check : checkButton)
     {
@@ -382,7 +381,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxPickThrough->get_state_changed_from_saved()               ||
         m_xCbxMasterPageCache->get_state_changed_from_saved()           ||
         m_xCbxCopy->get_state_changed_from_saved()                      ||
-        m_xCbxEnableSdremote->get_state_changed_from_saved()            ||
         m_xCbxCompatibility->get_state_changed_from_saved()             ||
         m_xCbxDistort->get_state_changed_from_saved())
     {
@@ -394,7 +392,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         aOptsItem.GetOptionsMisc().SetPickThrough( m_xCbxPickThrough->get_active() );
         aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_xCbxMasterPageCache->get_active() );
         aOptsItem.GetOptionsMisc().SetDragWithCopy( m_xCbxCopy->get_active() );
-        aOptsItem.GetOptionsMisc().SetEnableSdremote( m_xCbxEnableSdremote->get_active() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_xCbxCompatibility->get_active() );
         aOptsItem.GetOptionsMisc().SetCrookNoContortion( m_xCbxDistort->get_active() );
         rAttrs->Put( aOptsItem );
@@ -442,7 +439,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxPickThrough->set_active( aOptsItem.GetOptionsMisc().IsPickThrough() );
     m_xCbxMasterPageCache->set_active( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
     m_xCbxCopy->set_active( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
-    m_xCbxEnableSdremote->set_active( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
     m_xCbxStartWithTemplate->save_state();
@@ -452,7 +448,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 
     m_xCbxMasterPageCache->save_state();
     m_xCbxCopy->save_state();
-    m_xCbxEnableSdremote->save_state();
     m_xCbxCompatibility->save_state();
     m_xCbxDistort->save_state();
 
@@ -522,20 +517,10 @@ IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl, weld::ComboBox&, void)
     }
 }
 
-void SdTpOptionsMisc::SetImpressMode()
-{
-#ifndef ENABLE_SDREMOTE
-    m_xCbxEnableSdremote->hide();
-#else
-    (void) this; // loplugin:staticmethods
-#endif
-}
-
 void SdTpOptionsMisc::SetDrawMode()
 {
     m_xScaleFrame->show();
     m_xNewDocumentFrame->hide();
-    m_xCbxEnableSdremote->hide();
     m_xCbxCompatibility->hide();
     m_xNewDocLb->hide();
     m_xCbScale->show();
@@ -641,8 +626,6 @@ void SdTpOptionsMisc::PageCreated(const SfxAllItemSet& aSet)
         sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
             SetDrawMode();
-        if ( ( nFlags & SD_IMPRESS_MODE ) == SD_IMPRESS_MODE )
-            SetImpressMode();
     }
 }
 

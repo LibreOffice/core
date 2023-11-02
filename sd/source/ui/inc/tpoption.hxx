@@ -88,7 +88,6 @@ private:
     std::unique_ptr<weld::ComboBox> m_xLbMetric;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldTabstop;
 
-    std::unique_ptr<weld::CheckButton> m_xCbxEnableSdremote;
     std::unique_ptr<weld::CheckButton> m_xCbxCompatibility;
 
     //Scale
@@ -130,16 +129,10 @@ public:
     virtual void Reset( const SfxItemSet * ) override;
 
     /** Hide Impress specific controls, make Draw specific controls visible
-        and arrange the visible controls.  Do not call this method or the
-        <member>SetImpressMode()</member> method more than once.
+        and arrange the visible controls.  Do not call this method more than once.
     */
     void SetDrawMode();
 
-    /** Hide Draw specific controls, make Impress specific controls visible
-        and arrange the visible controls.  Do not call this method or the
-        <member>SetDrawMode()</member> method more than once.
-    */
-    void SetImpressMode();
     virtual void        PageCreated(const SfxAllItemSet& aSet) override;
 };
 

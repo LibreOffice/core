@@ -90,60 +90,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkFrame" id="presentationframe">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
-        <child>
-          <!-- n-columns=1 n-rows=1 -->
-          <object class="GtkGrid" id="grid5">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <property name="hexpand">True</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
-            <child>
-              <object class="GtkCheckButton" id="enremotcont">
-                <property name="label" translatable="yes" context="optimpressgeneralpage|enremotcont">Enable remote control</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="halign">start</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="enremotcont-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|enremotcont">Specifies that you want to enable Bluetooth remote control while Impress is running.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label7">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optimpressgeneralpage|label7">Presentation</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -469,7 +415,7 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">1</property>
+        <property name="top-attach">0</property>
       </packing>
     </child>
     <child>
@@ -659,8 +605,11 @@
       </object>
       <packing>
         <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
+        <property name="top-attach">1</property>
       </packing>
+    </child>
+    <child>
+      <placeholder/>
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="OptSavePage-atkobject">
