@@ -82,7 +82,7 @@ constexpr clang::ExprValueKind VK_PRValue = clang::VK_PRValue;
 constexpr clang::ExprValueKind VK_PRValue = clang::VK_RValue;
 #endif
 
-namespace ElabortatedTypeKeyword
+namespace ElaboratedTypeKeyword
 {
 #if CLANG_VERSION >= 180000
 constexpr clang::ElaboratedTypeKeyword None = clang::ElaboratedTypeKeyword::None;
