@@ -1138,6 +1138,11 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             // Theme & effects can be DEFAULT_VALUE, even if the same pool item has a color
             // which is a DIRECT_VALUE.
             const SvxColorItem* pColor = pSet->GetItem<SvxColorItem>(EE_CHAR_COLOR);
+            if (!pColor)
+            {
+                SAL_WARN("editeng", "Missing EE_CHAR_COLOR SvxColorItem");
+                return false;
+            }
             switch (pMap->nMemberId)
             {
                 case MID_COLOR_THEME_INDEX:
