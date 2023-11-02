@@ -968,6 +968,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             all_projects += projects
 
         self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
+        # this enables Python GDB pretty printers when debugging a WSL Linux build from VS
+        MIEngine_options_path = os.path.join(gbuildparser.srcdir, 'solenv/vs/Microsoft.MIEngine.Options.xml')
+        shutil.copy(MIEngine_options_path, self.solution_directory)
 
     @staticmethod
     def gen_guid(category, name):

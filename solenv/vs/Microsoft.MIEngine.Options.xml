@@ -1,0 +1,9 @@
+<SupplementalLaunchOptions>
+  <AttachOptions>
+    <AttachOptionsForConnection>
+      <SetupCommands>
+        <Command IgnoreFailures="true" Description="Enable pretty-printing for gdb">-enable-pretty-printing</Command>
+      </SetupCommands>
+    </AttachOptionsForConnection>
+  </AttachOptions>
+</SupplementalLaunchOptions>
