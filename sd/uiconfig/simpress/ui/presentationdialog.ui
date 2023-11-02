@@ -468,7 +468,7 @@
                         </child>
                         <child>
                           <object class="GtkCheckButton" id="showlogo">
-                            <property name="label" translatable="yes" context="presentationdialog|showlogo">Show _logo</property>
+                            <property name="label" translatable="yes" context="presentationdialog|showlogo">Show _logo during pause</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="receives-default">False</property>
