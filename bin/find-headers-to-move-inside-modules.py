@@ -4,7 +4,6 @@
 # Not 100% accurate
 
 import subprocess
-import sys
 
 headerSet = set()
 a = subprocess.Popen("git ls-files include/", stdout=subprocess.PIPE, shell=True)

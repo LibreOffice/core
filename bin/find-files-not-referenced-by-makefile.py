@@ -3,7 +3,6 @@
 # Look for CXX files that are not referenced by any makefile
 
 import subprocess
-import sys
 
 sourceFiles = set()
 

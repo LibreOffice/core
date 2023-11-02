@@ -3,9 +3,6 @@
 # A script to search our test logs and sort the messages by how common they are so we can start to
 # reduce the noise a little.
 
-import sys
-import re
-import io
 import subprocess
 
 # find . -name '*.log' | xargs grep -h 'warn:' | sort | uniq -c | sort -n --field-separator=: --key=5,6

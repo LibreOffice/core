@@ -12,7 +12,6 @@
 import requests
 from bs4 import BeautifulSoup
 import argparse
-import sys
 
 def parse_url(url):
     crashReports = {}

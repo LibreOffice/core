@@ -17,7 +17,6 @@
 #
 
 import subprocess
-import sys
 import re
 
 exported_symbols1 = set()

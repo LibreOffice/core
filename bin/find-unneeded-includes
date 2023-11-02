@@ -17,7 +17,6 @@
 # - no custom configure options required
 # - no need to generate a dummy library to build a header
 
-import glob
 import json
 import multiprocessing
 import os

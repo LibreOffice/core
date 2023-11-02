@@ -11,7 +11,6 @@
 # Usage sample: ./bin/check-autocorr.py extras/source/autocorr/lang/tr/DocumentList.xml
 
 import sys
-import os
 import xml.etree.ElementTree as ET
 
 complete_file = sys.argv[1]
