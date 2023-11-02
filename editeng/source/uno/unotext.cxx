@@ -1093,7 +1093,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         for( const OUString& rName : PropertyName )
         {
             const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( rName );
-            if( !_getOnePropertyStates(&*pSet, pMap, *pState++) )
+            if( !_getOnePropertyStates(*pSet, pMap, *pState++) )
             {
                 throw beans::UnknownPropertyException(rName);
             }
@@ -1103,9 +1103,9 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     return aRet;
 }
 
-bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMapEntry* pMap, beans::PropertyState& rState)
+bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet& rSet, const SfxItemPropertyMapEntry* pMap, beans::PropertyState& rState)
 {
-    if(!pSet || !pMap)
+    if (!pMap)
         return true;
     SfxItemState eItemState = SfxItemState::DEFAULT;
     bool bItemStateSet(false);
@@ -1118,7 +1118,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                 const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
                 while( *pWhichId )
                 {
-                    const SfxItemState eTempItemState(pSet->GetItemState( *pWhichId ));
+                    const SfxItemState eTempItemState(rSet.GetItemState( *pWhichId ));
 
                     switch( eTempItemState )
                     {
@@ -1163,7 +1163,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
         default:
             if(0 != pMap->nWID)
             {
-                eItemState = pSet->GetItemState( pMap->nWID, false );
+                eItemState = rSet.GetItemState( pMap->nWID, false );
                 bItemStateSet = true;
             }
             break;
@@ -1178,7 +1178,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
         {
             // Theme & effects can be DEFAULT_VALUE, even if the same pool item has a color
             // which is a DIRECT_VALUE.
-            const SvxColorItem* pColor = pSet->GetItem<SvxColorItem>(EE_CHAR_COLOR);
+            const SvxColorItem* pColor = rSet.GetItem<SvxColorItem>(EE_CHAR_COLOR);
             if (!pColor)
             {
                 SAL_WARN("editeng", "Missing EE_CHAR_COLOR SvxColorItem");

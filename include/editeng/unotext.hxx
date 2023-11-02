@@ -292,7 +292,7 @@ protected:
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::beans::PropertyState > _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  );
     // returns true if property found or false if unknown property
-    static bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMapEntry* pMap, css::beans::PropertyState& rState);
+    static bool _getOnePropertyStates(const SfxItemSet& rSet, const SfxItemPropertyMapEntry* pMap, css::beans::PropertyState& rState);
 
     /// @throws css::beans::UnknownPropertyException
     /// @throws css::uno::RuntimeException
