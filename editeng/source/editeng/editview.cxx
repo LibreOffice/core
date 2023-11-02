@@ -1344,7 +1344,16 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_I
     return GetField( aPos, &nPara, &nPos );
 }
 
-const SvxFieldItem* EditView::GetFieldAtSelection() const
+const SvxFieldItem* EditView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
+{
+    bool* pIsBeforeCursor = bAlsoCheckBeforeCursor ? &bAlsoCheckBeforeCursor : nullptr;
+    return GetFieldAtSelection(pIsBeforeCursor);
+}
+
+// If pIsBeforeCursor != nullptr, the position before the cursor will also be checked for a field
+// and pIsBeforeCursor will return true if that fallback field is returned.
+// If no field is returned, the value in pIsBeforeCursor is meaningless.
+const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
 {
     // a field is a dummy character - so it cannot span nodes or be a selection larger than 1
     EditSelection aSel( pImpEditView->GetEditSelection() );
@@ -1361,6 +1370,13 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
 
     // Only when cursor is in font of field, no selection,
     // or only selecting field
+    bool bAlsoCheckBeforeCursor = false;
+    if (pIsBeforeCursor)
+    {
+        *pIsBeforeCursor = false;
+        bAlsoCheckBeforeCursor = nMaxIndex == nMinIndex;
+    }
+    const SvxFieldItem* pFoundBeforeCursor = nullptr;
     const CharAttribList::AttribsType& rAttrs = aSel.Min().GetNode()->GetCharAttribs().GetAttribs();
     for (const auto& rAttr: rAttrs)
     {
@@ -1369,34 +1385,43 @@ const SvxFieldItem* EditView::GetFieldAtSelection() const
             DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()), "No FieldItem...");
             if (rAttr->GetStart() == nMinIndex)
                 return static_cast<const SvxFieldItem*>(rAttr->GetItem());
+
+            // perhaps the cursor is behind the field?
+            if (nMinIndex && rAttr->GetStart() == nMinIndex - 1)
+                pFoundBeforeCursor = static_cast<const SvxFieldItem*>(rAttr->GetItem());
         }
+    }
+    if (bAlsoCheckBeforeCursor)
+    {
+        *pIsBeforeCursor = /*(bool)*/pFoundBeforeCursor;
+        return pFoundBeforeCursor;
     }
     return nullptr;
 }
 
 void EditView::SelectFieldAtCursor()
 {
-    const SvxFieldItem* pFieldItem = GetFieldAtSelection();
-    if (pFieldItem)
-    {
-        // Make sure the whole field is selected
-        ESelection aSel = GetSelection();
-        if (aSel.nStartPos == aSel.nEndPos)
-        {
-            aSel.nEndPos++;
-            SetSelection(aSel);
-        }
-    }
+    bool bIsBeforeCursor = false;
+    const SvxFieldItem* pFieldItem = GetFieldAtSelection(&bIsBeforeCursor);
     if (!pFieldItem)
+        return;
+
+    // Make sure the whole field is selected
+    // A field is represented by a dummy character - so it cannot be a selection larger than 1
+    ESelection aSel = GetSelection();
+    if (aSel.nStartPos == aSel.nEndPos) // not yet selected
     {
-        // Cursor probably behind the field - extend selection to select the field
-        ESelection aSel = GetSelection();
-        if (aSel.nStartPos > 0 && aSel.nStartPos == aSel.nEndPos)
+        if (bIsBeforeCursor)
         {
-            aSel.nStartPos--;
-            SetSelection(aSel);
+            assert (aSel.nStartPos);
+            --aSel.nStartPos;
         }
+        else
+            aSel.nEndPos++;
+        SetSelection(aSel);
     }
+    else
+        assert(std::abs(aSel.nStartPos - aSel.nEndPos) == 1);
 }
 
 const SvxFieldData* EditView::GetFieldAtCursor() const

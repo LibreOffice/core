@@ -329,7 +329,10 @@ public:
     const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
     const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
 
-    const SvxFieldItem* GetFieldAtSelection() const;
+    /// return the selected field or the field immediately after (or before) the current cursor
+    const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
+    const SvxFieldItem* GetFieldAtSelection(bool* pIsBeforeCursor) const;
+
     /// Select and return the field at the current cursor position
     const SvxFieldData* GetFieldAtCursor() const;
     void SelectFieldAtCursor();
