@@ -106,6 +106,11 @@ bool HelpIndexer::indexDocuments()
                                                                    analyzer.get(), true);
 #endif
 
+#ifndef SYSTEM_CLUCENE
+        // avoid random values in index file, making help indices reproducible
+        writer->setSegmentInfoStartVersion(0);
+#endif
+
         //Double limit of tokens allowed, otherwise we'll get a too-many-tokens
         //exception for ja help. Could alternative ignore the exception and get
         //truncated results as per java-Lucene apparently
