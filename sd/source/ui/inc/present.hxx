@@ -56,6 +56,8 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxAlwaysOnTop;
     std::unique_ptr<weld::CheckButton> m_xCbxShowNavigationButton;
 
+    std::unique_ptr<weld::ComboBox> m_xLbConsole;
+
     std::unique_ptr<weld::Label> m_xFtMonitor;
     std::unique_ptr<weld::ComboBox> m_xLBMonitor;
 
@@ -85,6 +87,7 @@ public:
                                                const std::vector<OUString> &rPageNames,
                                                SdCustomShowList* pCSList);
     virtual             ~SdStartPresentationDlg() override;
+    virtual short run() override;
     void                GetAttr( SfxItemSet& rOutAttrs );
 };
 

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <officecfg/Office/Impress.hxx>
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -30,6 +31,16 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+
+namespace
+{
+enum PresenterConsoleMode
+{
+    FullScreen = 0,
+    Windowed = 1,
+    Disabled = 2
+};
+}
 
 SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxItemSet& rInAttrs,
                                   const std::vector<OUString> &rPageNames, SdCustomShowList* pCSList)
@@ -55,6 +66,7 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     , m_xCbxChangePage(m_xBuilder->weld_check_button("changeslidesbyclick"))
     , m_xCbxAlwaysOnTop(m_xBuilder->weld_check_button("alwaysontop"))
     , m_xCbxShowNavigationButton(m_xBuilder->weld_check_button("shownavigationbutton"))
+    , m_xLbConsole(m_xBuilder->weld_combo_box("console_cb"))
     , m_xFtMonitor(m_xBuilder->weld_label("presdisplay_label"))
     , m_xLBMonitor(m_xBuilder->weld_combo_box("presdisplay_cb"))
     , m_xMonitor(m_xBuilder->weld_label("monitor_str"))
@@ -132,6 +144,13 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
     else
         m_xRbtStandard->set_active(true);
 
+    if (!officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::get())
+        m_xLbConsole->set_active(PresenterConsoleMode::Disabled);
+    else if (officecfg::Office::Impress::Misc::Start::PresenterScreenFullScreen::get())
+        m_xLbConsole->set_active(PresenterConsoleMode::FullScreen);
+    else
+        m_xLbConsole->set_active(PresenterConsoleMode::Windowed);
+
     InitMonitorSettings();
 
     ChangeRangeHdl(*m_xRbtCustomshow);
@@ -142,6 +161,26 @@ SdStartPresentationDlg::SdStartPresentationDlg(weld::Window* pWindow, const SfxI
 
 SdStartPresentationDlg::~SdStartPresentationDlg()
 {
+}
+
+short SdStartPresentationDlg::run()
+{
+    short nRet = GenericDialogController::run();
+    if (nRet == RET_OK)
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(
+            comphelper::ConfigurationChanges::create());
+        auto nActive = m_xLbConsole->get_active();
+        bool bEnabled = nActive != PresenterConsoleMode::Disabled;
+        officecfg::Office::Impress::Misc::Start::EnablePresenterScreen::set(bEnabled, batch);
+        if (bEnabled)
+        {
+            officecfg::Office::Impress::Misc::Start::PresenterScreenFullScreen::set(
+                nActive == PresenterConsoleMode::FullScreen, batch);
+        }
+        batch->commit();
+    }
+    return nRet;
 }
 
 OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
