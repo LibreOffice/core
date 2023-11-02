@@ -34,6 +34,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -3843,6 +3844,35 @@ void DomainMapper::lcl_endCharacterGroup()
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 }
 
+//copied from rtfsprm
+/// Is it problematic to deduplicate this SPRM?
+static bool isSPRMDeduplicateDenylist(PropertyIds nId, PropertyMapPtr pContext)
+{
+    switch (nId)
+    {
+        // See the NS_ooxml::LN_CT_PPrBase_tabs handler in DomainMapper,
+        // deduplication is explicitly not wanted for these tokens.
+    case PROP_PARA_TAB_STOPS:
+    case PROP_PARA_LINE_SPACING:
+        return true;
+    case PROP_TOP_BORDER:
+    case PROP_LEFT_BORDER:
+    case PROP_BOTTOM_BORDER:
+    case PROP_RIGHT_BORDER:
+    case META_PROP_HORIZONTAL_BORDER:
+    case META_PROP_VERTICAL_BORDER:
+        return true;
+        // Removing \fi and \li if the style has the same value would mean taking these values from
+        // \ls, while deduplication would be done to take the values from the style.
+    case PROP_PARA_FIRST_LINE_INDENT:
+    case PROP_PARA_LEFT_MARGIN:
+        return pContext && pContext->getProperty(PROP_NUMBERING_RULES);
+
+    default:
+        return false;
+    }
+}
+
 void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
@@ -3892,6 +3922,65 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                     {
                         pContext->Insert(PROP_BREAK_TYPE, uno::Any(style::BreakType_COLUMN_BEFORE));
                         m_pImpl->clearDeferredBreak(COLUMN_BREAK);
+                    }
+                    if (IsRTFImport() && pContext) {
+                        //reset paragraph style properties not repeated at the paragraph
+                        std::optional<PropertyMap::Property> paraStyleName = pContext->getProperty(PROP_PARA_STYLE_NAME);
+                        if (paraStyleName.has_value()) {
+                            OUString uStyleName;
+                            paraStyleName->second >>= uStyleName;
+                            StyleSheetEntryPtr pStyleSheet = m_pImpl->GetStyleSheetTable()->FindStyleSheetByConvertedStyleName(uStyleName);
+                            if (pStyleSheet != nullptr)
+                            {
+                                std::vector< PropertyIds > stylePropertyIds = pStyleSheet->m_pProperties->GetPropertyIds();
+                                std::vector< PropertyIds >::iterator stylePropertyIdsIt = stylePropertyIds.begin();
+                                while (stylePropertyIdsIt != stylePropertyIds.end())
+                                {
+                                    PropertyIds ePropertyId = *stylePropertyIdsIt;
+                                    std::optional< PropertyMap::Property > styleProperty = pStyleSheet->m_pProperties->getProperty(ePropertyId);
+                                    std::optional< PropertyMap::Property > paragraphProperty = pContext->getProperty(ePropertyId);
+                                    if (paragraphProperty.has_value()) {
+                                        if (paragraphProperty->second == styleProperty->second &&
+                                            !isSPRMDeduplicateDenylist(ePropertyId, pContext))
+                                        {
+                                            pContext->Erase(ePropertyId);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        switch (ePropertyId)
+                                        {
+                                        case PROP_PARA_LEFT_MARGIN:
+                                            if (!pContext->getProperty(PROP_NUMBERING_RULES))
+                                            {
+                                                pContext->Insert(ePropertyId, uno::Any(0l));
+                                            }
+                                            break;
+                                        case PROP_PARA_RIGHT_MARGIN:
+                                            pContext->Insert(ePropertyId, uno::Any(0l));
+                                            break;
+                                        case PROP_PARA_LAST_LINE_ADJUST:
+                                        case PROP_PARA_ADJUST:
+                                            pContext->Insert(ePropertyId, uno::Any(style::ParagraphAdjust_LEFT));
+                                            break;
+                                        case PROP_PARA_TAB_STOPS:
+                                            pContext->Insert(ePropertyId, uno::Any(uno::Sequence< style::TabStop >()));
+                                            break;
+                                        case PROP_FILL_STYLE:
+                                            pContext->Insert(ePropertyId, uno::Any(drawing::FillStyle_NONE));
+                                            break;
+                                        case PROP_FILL_COLOR:
+                                            pContext->Insert(ePropertyId, uno::Any(sal_Int32(COL_TRANSPARENT)));
+                                            break;
+                                        case INVALID:
+                                        default:
+                                            break;
+                                        }
+                                    }
+                                    ++stylePropertyIdsIt;
+                                }
+                            }
+                        }
                     }
                     finishParagraph();
                     return;
