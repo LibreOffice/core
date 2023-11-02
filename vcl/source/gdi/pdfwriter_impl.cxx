@@ -1988,21 +1988,7 @@ void PDFWriterImpl::AppendAnnotKid(PDFStructureElement& i_rEle, T & rAnnot)
     m_aStructParentTree.push_back( aStructParentEntry );
     rAnnot.m_nStructParent = m_aStructParentTree.size()-1;
     sal_Int32 const nAnnotObj(rAnnot.m_nObject);
-
-    sal_Int32 const nRefObject = createObject();
-    if (updateObject(nRefObject))
-    {
-        OString aRef =
-            OString::number( nRefObject ) +
-            " 0 obj\n"
-            "<</Type/OBJR/Obj " +
-            OString::number(nAnnotObj) +
-            " 0 R>>\n"
-            "endobj\n\n";
-        writeBuffer( aRef );
-    }
-
-    i_rEle.m_aKids.emplace_back( nRefObject );
+    i_rEle.m_aKids.emplace_back(ObjReferenceObj{nAnnotObj});
 }
 
 OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
@@ -2257,29 +2243,34 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
     {
         unsigned int i = 0;
         aLine.append( "/K[" );
-        for (auto const& kid : rEle.m_aKids)
+        for (auto const& rKid : rEle.m_aKids)
         {
-            if( kid.nMCID == -1 )
+            if (std::holds_alternative<ObjReference>(rKid))
             {
-                aLine.append(
-                    OString::number(kid.nObject)
-                    + " 0 R" );
+                ObjReference const& rObj(std::get<ObjReference>(rKid));
+                appendObjectReference(rObj.nObject, aLine);
                 aLine.append( ( (i & 15) == 15 ) ? "\n" : " " );
+            }
+            else if (std::holds_alternative<ObjReferenceObj>(rKid))
+            {
+                ObjReferenceObj const& rObj(std::get<ObjReferenceObj>(rKid));
+                aLine.append("<</Type/OBJR/Obj ");
+                appendObjectReference(rObj.nObject, aLine);
+                aLine.append(">>\n");
             }
             else
             {
-                if( kid.nObject == rEle.m_nFirstPageObject )
+                assert(std::holds_alternative<MCIDReference>(rKid));
+                MCIDReference const& rMCID(std::get<MCIDReference>(rKid));
+                if (rMCID.nPageObj == rEle.m_nFirstPageObject)
                 {
-                    aLine.append( OString::number(kid.nMCID) + " " );
+                    aLine.append(OString::number(rMCID.nMCID) + " ");
                 }
                 else
                 {
-                    aLine.append(
-                        "<</Type/MCR/Pg "
-                        + OString::number(kid.nObject)
-                        + " 0 R /MCID "
-                        + OString::number(kid.nMCID)
-                        + ">>\n" );
+                    aLine.append("<</Type/MCR/Pg ");
+                    appendObjectReference(rMCID.nPageObj, aLine);
+                    aLine.append(" /MCID " + OString::number(rMCID.nMCID) + ">>\n");
                 }
             }
             ++i;
@@ -10724,7 +10715,7 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         SAL_INFO("vcl.pdfwriter", "beginning marked content id " << nMCID << " on page object "
                  << m_aPages[ m_nCurrentPage ].m_nPageObject << ", structure first page = "
                  << rEle.m_nFirstPageObject);
-        rEle.m_aKids.emplace_back( nMCID, m_aPages[m_nCurrentPage].m_nPageObject );
+        rEle.m_aKids.emplace_back(MCIDReference{m_aPages[m_nCurrentPage].m_nPageObject, nMCID});
         // update the page's mcid parent list
         m_aPages[ m_nCurrentPage ].m_aMCIDParents.push_back( rEle.m_nObject );
         // mark element MC sequence as open
@@ -10872,7 +10863,7 @@ void PDFWriterImpl::initStructureElement(sal_Int32 const id,
     {
         rEle.m_nObject      = createObject();
         // update parent's kids list
-        m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(rEle.m_nObject);
+        m_aStructure[ rEle.m_nParentElement ].m_aKids.emplace_back(ObjReference{rEle.m_nObject});
         // ISO 14289-1:2014, Clause: 7.9
         if (*rEle.m_oType == PDFWriter::Note)
         {
@@ -11081,7 +11072,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
         rEleNew.m_nFirstPageObject  = m_aStructure[ rEle.m_aChildren.front() ].m_nFirstPageObject;
         rEleNew.m_nObject           = createObject();//assign a PDF object number
         //add the object to the kid list of the parent
-        aNewKids.emplace_back( rEleNew.m_nObject );
+        aNewKids.emplace_back(ObjReference{rEleNew.m_nObject});
         aNewChildren.push_back( nNewId );
 
         std::vector< sal_Int32 >::iterator aChildEndIt( rEle.m_aChildren.begin() );

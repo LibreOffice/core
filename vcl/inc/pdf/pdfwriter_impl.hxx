@@ -29,6 +29,7 @@
 #include <string_view>
 #include <vector>
 #include <stack>
+#include <variant>
 
 #include <pdf/ResourceDict.hxx>
 #include <pdf/BitmapID.hxx>
@@ -566,15 +567,10 @@ struct PDFStructureAttribute
     {}
 };
 
-struct PDFStructureElementKid // for Kids entries
-{
-    sal_Int32 const nObject;  // an object number if nMCID is -1,
-                        // else the page object relevant to MCID
-    sal_Int32 const nMCID;    // an MCID if >= 0
-
-    explicit PDFStructureElementKid( sal_Int32 nObj ) : nObject( nObj ), nMCID( -1 ) {}
-    PDFStructureElementKid( sal_Int32 MCID, sal_Int32 nPage ) : nObject( nPage ), nMCID( MCID ) {}
-};
+struct ObjReference { sal_Int32 const nObject; };
+struct ObjReferenceObj { sal_Int32 const nObject; };
+struct MCIDReference { sal_Int32 const nPageObj; sal_Int32 const nMCID; };
+typedef ::std::variant<ObjReference, ObjReferenceObj, MCIDReference> PDFStructureElementKid;
 
 struct PDFStructureElement
 {
