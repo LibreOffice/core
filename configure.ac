@@ -5697,14 +5697,14 @@ if test "$cross_compiling" = "yes"; then
         config_host.mk.in \
         config_host_lang.mk.in \
         Makefile.in \
-        lo.xcent.in \
         bin/bffvalidator.sh.in \
         bin/odfvalidator.sh.in \
         bin/officeotron.sh.in \
-        hardened_runtime.xcent.in \
         instsetoo_native/util/openoffice.lst.in \
         config_host/*.in \
         sysui/desktop/macosx/Info.plist.in \
+        sysui/desktop/macosx/hardened_runtime.xcent.in \
+        sysui/desktop/macosx/lo.xcent.in \
         .vscode/vs-code-template.code-workspace.in \
         solenv/lockfile/autoconf.h.in \
         ) \
@@ -15034,13 +15034,13 @@ AC_CONFIG_LINKS([include:include])
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
                  Makefile
-                 lo.xcent
                  bin/bffvalidator.sh
                  bin/odfvalidator.sh
                  bin/officeotron.sh
-                 hardened_runtime.xcent
                  instsetoo_native/util/openoffice.lst
                  sysui/desktop/macosx/Info.plist
+                 hardened_runtime.xcent:sysui/desktop/macosx/hardened_runtime.xcent.in
+                 lo.xcent:sysui/desktop/macosx/lo.xcent.in
                  vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in])
 
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
