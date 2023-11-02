@@ -1031,7 +1031,8 @@ bool SwEditShell::GetGrammarCorrection(
                 auto pError = std::find_if(std::cbegin(rResult.aErrors), std::cend(rResult.aErrors),
                     [rErrorPosInText, nLen](const linguistic2::SingleProofreadingError &rError) {
                         return rError.nErrorStart <= rErrorPosInText
-                            && rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength; });
+                            && rErrorPosInText + nLen <= rError.nErrorStart + rError.nErrorLength
+                            && rError.aSuggestions.size() > 0; });
                 if (pError != std::cend(rResult.aErrors))
                 {
                     rSuggestions = pError->aSuggestions;
