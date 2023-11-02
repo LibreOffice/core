@@ -737,7 +737,7 @@ XMultiPropertySet
         else if(cl.equals(boolean.class))
             retVal= Boolean.valueOf(AnyConverter.toBoolean(obj));
         else if (cl.equals(char.class))
-            retVal= new Character(AnyConverter.toChar(obj));
+            retVal= Character.valueOf(AnyConverter.toChar(obj));
         else if (cl.equals(byte.class))
             retVal= Byte.valueOf(AnyConverter.toByte(obj));
         else if (cl.equals(short.class))
@@ -759,7 +759,7 @@ XMultiPropertySet
         else if (cl.equals(Boolean.class))
             retVal= Boolean.valueOf(AnyConverter.toBoolean(obj));
         else if (cl.equals(Character.class))
-            retVal= new Character(AnyConverter.toChar(obj));
+            retVal= Character.valueOf(AnyConverter.toChar(obj));
         else if (cl.equals(Byte.class))
             retVal= Byte.valueOf(AnyConverter.toByte(obj));
         else if (cl.equals(Short.class))

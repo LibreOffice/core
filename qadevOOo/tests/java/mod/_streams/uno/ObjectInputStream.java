@@ -219,7 +219,7 @@ public class ObjectInputStream extends TestCase {
         ArrayList<Object> data = new ArrayList<Object>() ;
         data.add(Boolean.TRUE) ;
         data.add(Byte.valueOf((byte)123)) ;
-        data.add(new Character((char)1234)) ;
+        data.add(Character.valueOf((char)1234)) ;
         data.add(Short.valueOf((short)1234)) ;
         data.add(Integer.valueOf(123456)) ;
         data.add(Float.valueOf(1.234f)) ;

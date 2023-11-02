@@ -263,7 +263,7 @@ final class Unmarshal {
     }
 
     private Character readCharValue() throws IOException {
-        return new Character(input.readChar());
+        return Character.valueOf(input.readChar());
     }
 
     private String readStringValue() throws IOException {

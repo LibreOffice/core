@@ -56,7 +56,7 @@ public final class AnyConverter_Test {
     @Before public void setUp()
     {
         aBool= Boolean.TRUE;
-        aChar= new Character('A');
+        aChar= Character.valueOf('A');
         aByte= Byte.valueOf((byte) 111);
         aShort= Short.valueOf((short) 11111);
         aInt= Integer.valueOf( 1111111);

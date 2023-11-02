@@ -46,7 +46,7 @@ public final class Marshaling_Test {
             new com.sun.star.uno.Exception("testException"),
             Boolean.TRUE,
             Byte.valueOf((byte)47),
-            new Character('k'),
+            Character.valueOf('k'),
             Double.valueOf(0.12345),
             TestEnum.B,
             Float.valueOf(0.5678f),

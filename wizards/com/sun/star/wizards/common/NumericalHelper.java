@@ -179,7 +179,7 @@ public class NumericalHelper
         {
             case TypeClass.CHAR_value:
                 aTypeObject.iType = CHAR_TYPE;
-                aTypeObject.aValue = new Character(AnyConverter.toChar(aValue));
+                aTypeObject.aValue = Character.valueOf(AnyConverter.toChar(aValue));
                 break;
             case TypeClass.BYTE_value:
                 aTypeObject.iType = BYTE_TYPE;
