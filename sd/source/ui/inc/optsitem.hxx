@@ -209,9 +209,6 @@ private:
     bool    bPreviewChangedEffects;
     bool    bPreviewTransitions;
 
-    bool    bShowNavigationPanel        : 1;    // Misc/Start/ShowNavigationPanel
-
-
     sal_Int32   mnDisplay;
 
     sal_Int32 mnPenColor;
@@ -255,8 +252,6 @@ public:
     bool    IsSolidDragging() const { Init(); return bSolidDragging; }
     bool    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs; };
     bool    IsTabBarVisible() const { Init(); return bTabBarVisible; };
-
-    bool    IsShowNavigationPanel() const { Init(); return bShowNavigationPanel; }
 
     /** Return the currently selected printer independent layout mode.
         @return
@@ -318,8 +313,6 @@ public:
 
     bool    IsShowComments() const { Init(); return bShowComments; }
     void    SetShowComments( bool bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
-
-    void    SetShowNavigationPanel( bool bOn ) { if( bShowNavigationPanel != bOn ) { OptionsChanged(); bShowNavigationPanel = bOn; } }
 };
 
 class SD_DLLPUBLIC SdOptionsMiscItem final : public SfxPoolItem

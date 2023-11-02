@@ -418,7 +418,6 @@ SdOptionsMisc::SdOptionsMisc( bool bImpress, bool bUseConfig ) :
     bPreviewNewEffects( true ),
     bPreviewChangedEffects( false ),
     bPreviewTransitions( true ),
-    bShowNavigationPanel( false ),
     mnDisplay( 0 ),
     mnPenColor( 0xff0000 ),
     mnPenWidth( 150.0 ),
@@ -460,9 +459,7 @@ bool SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsShowComments() == rOpt.IsShowComments() &&
             GetPresentationPenColor() == rOpt.GetPresentationPenColor() &&
             GetPresentationPenWidth() == rOpt.GetPresentationPenWidth() &&
-            GetDragThresholdPixels() == rOpt.GetDragThresholdPixels() &&
-
-            IsShowNavigationPanel() == rOpt.IsShowNavigationPanel()
+            GetDragThresholdPixels() == rOpt.GetDragThresholdPixels()
         );
 }
 
@@ -503,8 +500,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, sal_uLong& rCount )
         "PenColor",
         "PenWidth",
         "Start/EnableSdremote",
-        "TabBarVisible",
-        "Start/ShowNavigationPanel"
+        "TabBarVisible"
     };
 
     rCount = ( IsImpress() ? SAL_N_ELEMENTS(aPropNames) : 16 );
@@ -568,9 +564,6 @@ bool SdOptionsMisc::ReadData( const Any* pValues )
         if( pValues[26].hasValue() ) {
             SetTabBarVisible( *o3tl::doAccess<bool>(pValues[ 26 ]) );
         }
-        if( pValues[27].hasValue() )
-            SetShowNavigationPanel( *o3tl::doAccess<bool>(pValues[ 27 ]) );
-
     }
 
     return true;
@@ -613,9 +606,6 @@ bool SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 24 ] <<= GetPresentationPenWidth();
         pValues[ 25 ] <<= IsEnableSdremote();
         pValues[ 26 ] <<= IsTabBarVisible();
-
-        pValues[ 27 ] <<= IsShowNavigationPanel();
-
     }
 
     return true;
@@ -657,8 +647,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( SdOptions const * pOpts, ::sd::FrameView c
 
         maOptionsMisc.SetPresentationPenColor(pOpts->GetPresentationPenColor() );
         maOptionsMisc.SetPresentationPenWidth(pOpts->GetPresentationPenWidth() );
-
-        maOptionsMisc.SetShowNavigationPanel( pOpts->IsShowNavigationPanel() );
     }
 
     if( pView )
@@ -741,8 +729,6 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetPresentationPenWidth( maOptionsMisc.GetPresentationPenWidth() );
 
     pOpts->SetDragThreshold( maOptionsMisc.GetDragThresholdPixels() );
-
-    pOpts->SetShowNavigationPanel( maOptionsMisc.IsShowNavigationPanel() );
 }
 
 /*************************************************************************

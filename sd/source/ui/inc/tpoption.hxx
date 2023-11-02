@@ -91,8 +91,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbxEnableSdremote;
     std::unique_ptr<weld::CheckButton> m_xCbxCompatibility;
 
-    std::unique_ptr<weld::CheckButton> m_xCbxShowNavigationPanel;
-
     //Scale
     std::unique_ptr<weld::Frame> m_xScaleFrame;
     std::unique_ptr<weld::ComboBox> m_xCbScale;

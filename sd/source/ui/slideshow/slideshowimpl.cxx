@@ -37,6 +37,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/presentation/SlideShow.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
@@ -1078,8 +1079,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                         Any( xPointerBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
-            SdOptions* pOptions = SD_MOD()->GetSdOptions(DocumentType::Impress);
-            if (pOptions->IsShowNavigationPanel())
+            if (officecfg::Office::Impress::Misc::Start::ShowNavigationPanel::get())
             {
                 BitmapEx prevSlideBm(BMP_PREV_SLIDE);
                 const Reference<rendering::XBitmap> xPrevSBitmap(
