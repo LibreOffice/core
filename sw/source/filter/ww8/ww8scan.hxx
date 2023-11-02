@@ -437,6 +437,8 @@ private:
     WW8PLCFpcd_Iter* m_pPcdI;
     WW8PLCFx_PCD* m_pPcd;
     std::vector<std::unique_ptr<sal_uInt8[]>> const & mrGrpprls; // attribute of Piece-table
+    SVBT32 m_aShortSprm;          // mini storage: can contain ONE sprm with
+                                // 1 byte param
 
     WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&) = delete;
     WW8PLCFx_PCDAttrs& operator=(const WW8PLCFx_PCDAttrs&) = delete;
