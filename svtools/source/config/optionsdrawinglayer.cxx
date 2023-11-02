@@ -33,16 +33,6 @@
 namespace SvtOptionsDrawinglayer
 {
 
-bool IsOverlayBuffer()
-{
-    return officecfg::Office::Common::Drawinglayer::OverlayBuffer::get();
-}
-
-bool IsPaintBuffer()
-{
-    return officecfg::Office::Common::Drawinglayer::PaintBuffer::get();
-}
-
 Color GetStripeColorA()
 {
     return Color(ColorTransparency, officecfg::Office::Common::Drawinglayer::StripeColorA::get());
@@ -56,37 +46,6 @@ Color GetStripeColorB()
 sal_uInt16 GetStripeLength()
 {
     return officecfg::Office::Common::Drawinglayer::StripeLength::get();
-}
-
-bool IsOverlayBuffer_Calc()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get();
-}
-
-bool IsOverlayBuffer_Writer()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get();
-}
-
-bool IsOverlayBuffer_DrawImpress()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get();
-}
-
-// #i74769#, #i75172#
-bool IsPaintBuffer_Calc()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get();
-}
-
-bool IsPaintBuffer_Writer()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Writer::get();
-}
-
-bool IsPaintBuffer_DrawImpress()
-{
-    return !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_DrawImpress::get();
 }
 
 // #i4219#

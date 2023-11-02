@@ -42,6 +42,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <svx/svdetc.hxx>
 #include <editeng/editstat.hxx>
@@ -85,7 +86,6 @@
 #include <sfx2/lokhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <DrawController.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 
 #include <memory>
 #include <numeric>
@@ -114,10 +114,10 @@ View::View(
     mpClipboard (new ViewClipboard (*this))
 {
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_DrawImpress());
+    SetBufferedOverlayAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress());
+    SetBufferedOutputAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_DrawImpress::get());
 
     EnableExtendedKeyInputDispatcher(false);
     EnableExtendedMouseEventDispatcher(false);

@@ -26,7 +26,8 @@
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/lok.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
+#include <unotools/configmgr.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>
 #include <scresid.hxx>
@@ -52,10 +53,10 @@ ScDrawView::ScDrawView(
 {
     SetNegativeX(comphelper::LibreOfficeKit::isActive() && rDoc.IsLayoutRTL(nTab));
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_Calc());
+    SetBufferedOverlayAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Calc::get());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_Calc());
+    SetBufferedOutputAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::PaintBuffer_Calc::get());
 
     Construct();
 }

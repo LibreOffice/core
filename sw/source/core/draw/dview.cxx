@@ -21,6 +21,7 @@
 
 #include <hintids.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
@@ -31,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <unotools/configmgr.hxx>
 
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
@@ -120,10 +122,10 @@ SwDrawView::SwDrawView(
     SetPrintPreview( rI.GetShell()->IsPreview() );
 
     // #i73602# Use default from the configuration
-    SetBufferedOverlayAllowed(SvtOptionsDrawinglayer::IsOverlayBuffer_Writer());
+    SetBufferedOverlayAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_Writer::get());
 
     // #i74769#, #i75172# Use default from the configuration
-    SetBufferedOutputAllowed(SvtOptionsDrawinglayer::IsPaintBuffer_Writer());
+    SetBufferedOutputAllowed(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Drawinglayer::OverlayBuffer_DrawImpress::get());
 }
 
 // #i99665#

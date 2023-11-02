@@ -45,8 +45,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/lok.hxx>
 #include <svx/svdviter.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 #include <osl/diagnose.h>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1158,7 +1158,7 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
 
 bool SdrPaintView::IsBufferedOutputAllowed() const
 {
-    return (mbBufferedOutputAllowed && SvtOptionsDrawinglayer::IsPaintBuffer());
+    return (mbBufferedOutputAllowed && officecfg::Office::Common::Drawinglayer::PaintBuffer::get());
 }
 
 void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
@@ -1171,7 +1171,7 @@ void SdrPaintView::SetBufferedOutputAllowed(bool bNew)
 
 bool SdrPaintView::IsBufferedOverlayAllowed() const
 {
-    return (mbBufferedOverlayAllowed && SvtOptionsDrawinglayer::IsOverlayBuffer());
+    return (mbBufferedOverlayAllowed && officecfg::Office::Common::Drawinglayer::OverlayBuffer::get());
 }
 
 void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
