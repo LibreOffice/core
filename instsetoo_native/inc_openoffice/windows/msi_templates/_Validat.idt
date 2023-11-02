@@ -425,7 +425,7 @@ Shortcut	Shortcut	N					Identifier		Primary key, non-localized token.
 Shortcut	ShowCmd	Y						1;3;7	The show command for the application window.The following values may be used.
 Shortcut	Target	N					Shortcut		The shortcut target. This is usually a property that is expanded to a file or a folder that the shortcut points to.
 Shortcut	WkDir	Y					Identifier		Name of property defining location of working directory.
-Signature	FileName	N					Filename		The name of the file. This may contain a "short name|long name" pair.
+Signature	FileName	N					Text		The name of the file. This may contain a "short name|long name" pair.
 Signature	Languages	Y					Language		The languages supported by the file.
 Signature	MaxDate	Y	0	2147483647					The maximum creation date of the file.
 Signature	MaxSize	Y	0	2147483647					The maximum size of the file. 
