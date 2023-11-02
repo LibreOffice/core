@@ -207,8 +207,6 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
     , m_xLbMetric(m_xBuilder->weld_combo_box("units"))
     , m_xMtrFldTabstop(m_xBuilder->weld_metric_spin_button("metricFields", FieldUnit::MM))
     , m_xCbxEnableSdremote(m_xBuilder->weld_check_button("enremotcont"))
-    , m_xCbxEnablePresenterScreen(m_xBuilder->weld_check_button("enprsntcons"))
-    , m_xCbxPresenterScreenFullScreen(m_xBuilder->weld_check_button("enprsntconsfullscreen"))
     , m_xCbxCompatibility(m_xBuilder->weld_check_button("cbCompatibility"))
     , m_xCbxShowNavigationPanel(m_xBuilder->weld_check_button("shwnavpan"))
     , m_xScaleFrame(m_xBuilder->weld_frame("scaleframe"))
@@ -364,8 +362,7 @@ OUString SdTpOptionsMisc::GetAllStrings()
 
     OUString checkButton[] = { "startwithwizard", "copywhenmove", "backgroundback",
                                "objalwymov",      "distortcb",    "cbCompatibility",
-                               "enremotcont",     "enprsntcons",  "enprsntconsfullscreen",
-                               "qickedit",        "textselected", "shwnavpan" };
+                               "enremotcont",     "qickedit",     "textselected", "shwnavpan" };
 
     for (const auto& check : checkButton)
     {
@@ -387,8 +384,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         m_xCbxMasterPageCache->get_state_changed_from_saved()           ||
         m_xCbxCopy->get_state_changed_from_saved()                      ||
         m_xCbxEnableSdremote->get_state_changed_from_saved()            ||
-        m_xCbxEnablePresenterScreen->get_state_changed_from_saved()     ||
-        m_xCbxPresenterScreenFullScreen->get_state_changed_from_saved() ||
         m_xCbxCompatibility->get_state_changed_from_saved()             ||
         m_xCbxDistort->get_state_changed_from_saved()                   ||
         m_xCbxShowNavigationPanel->get_state_changed_from_saved())
@@ -402,8 +397,6 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         aOptsItem.GetOptionsMisc().SetMasterPagePaintCaching( m_xCbxMasterPageCache->get_active() );
         aOptsItem.GetOptionsMisc().SetDragWithCopy( m_xCbxCopy->get_active() );
         aOptsItem.GetOptionsMisc().SetEnableSdremote( m_xCbxEnableSdremote->get_active() );
-        aOptsItem.GetOptionsMisc().SetEnablePresenterScreen( m_xCbxEnablePresenterScreen->get_active() );
-        aOptsItem.GetOptionsMisc().SetPresenterScreenFullScreen( m_xCbxPresenterScreenFullScreen->get_active() );
         aOptsItem.GetOptionsMisc().SetSummationOfParagraphs( m_xCbxCompatibility->get_active() );
         aOptsItem.GetOptionsMisc().SetCrookNoContortion( m_xCbxDistort->get_active() );
         aOptsItem.GetOptionsMisc().SetShowNavigationPanel( m_xCbxShowNavigationPanel->get_active() );
@@ -453,8 +446,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxMasterPageCache->set_active( aOptsItem.GetOptionsMisc().IsMasterPagePaintCaching() );
     m_xCbxCopy->set_active( aOptsItem.GetOptionsMisc().IsDragWithCopy() );
     m_xCbxEnableSdremote->set_active( aOptsItem.GetOptionsMisc().IsEnableSdremote() );
-    m_xCbxEnablePresenterScreen->set_active( aOptsItem.GetOptionsMisc().IsEnablePresenterScreen() );
-    m_xCbxPresenterScreenFullScreen->set_active( aOptsItem.GetOptionsMisc().IsPresenterScreenFullScreen() );
     m_xCbxCompatibility->set_active( aOptsItem.GetOptionsMisc().IsSummationOfParagraphs() );
     m_xCbxDistort->set_active( aOptsItem.GetOptionsMisc().IsCrookNoContortion() );
     m_xCbxShowNavigationPanel->set_active( aOptsItem.GetOptionsMisc().IsShowNavigationPanel() );
@@ -466,8 +457,6 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     m_xCbxMasterPageCache->save_state();
     m_xCbxCopy->save_state();
     m_xCbxEnableSdremote->save_state();
-    m_xCbxEnablePresenterScreen->save_state();
-    m_xCbxPresenterScreenFullScreen->save_state();
     m_xCbxCompatibility->save_state();
     m_xCbxDistort->save_state();
     m_xCbxShowNavigationPanel->save_state();
@@ -552,8 +541,6 @@ void SdTpOptionsMisc::SetDrawMode()
     m_xScaleFrame->show();
     m_xNewDocumentFrame->hide();
     m_xCbxEnableSdremote->hide();
-    m_xCbxEnablePresenterScreen->hide();
-    m_xCbxPresenterScreenFullScreen->hide();
     m_xCbxCompatibility->hide();
     m_xNewDocLb->hide();
     m_xCbScale->show();
