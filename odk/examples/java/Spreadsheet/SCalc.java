@@ -374,7 +374,7 @@ public class SCalc  {
         }
 
         if (flag.equals("V")) {
-            xCell.setValue((new Float(theValue)).floatValue());
+            xCell.setValue((Float.valueOf(theValue)).floatValue());
         } else {
             xCell.setFormula(theValue);
         }

@@ -119,7 +119,7 @@ public class HardFormatting {
             xPropertySet = UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xWordCursor);
             xPropertySet.setPropertyValue("CharWeight",
-                                          new Float(com.sun.star.awt.FontWeight.BOLD));
+                                          Float.valueOf(com.sun.star.awt.FontWeight.BOLD));
             xPropertySet.setPropertyValue("CharColor", Integer.valueOf( 255 ) );
 
             System.out.println(

@@ -222,7 +222,7 @@ public class ObjectInputStream extends TestCase {
         data.add(new Character((char)1234)) ;
         data.add(Short.valueOf((short)1234)) ;
         data.add(Integer.valueOf(123456)) ;
-        data.add(new Float(1.234)) ;
+        data.add(Float.valueOf(1.234f)) ;
         data.add(new Double(1.23456)) ;
         data.add("DataInputStream") ;
         // information for writing to the pipe

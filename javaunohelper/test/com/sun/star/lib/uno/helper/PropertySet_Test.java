@@ -96,7 +96,7 @@ public class PropertySet_Test
         cl.setPropertyValue("PropLongA", value);
         assertEquals(cl.getPropertyValue("PropLongA"), value);
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         cl.setPropertyValue("PropFloatA", value);
         assertEquals(cl.getPropertyValue("PropFloatA"), value);
 
@@ -169,7 +169,7 @@ public class PropertySet_Test
         cl.setPropertyValue("PropObjectA", value);
         assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         cl.setPropertyValue("PropObjectA", value);
         assertEquals(cl.getPropertyValue("PropObjectA"), value);
 
@@ -238,7 +238,7 @@ public class PropertySet_Test
         assertTrue(ret instanceof Any);
         assertTrue(util.anyEquals(value, ret));
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         cl.setPropertyValue("PropAnyA", value);
         ret= cl.getPropertyValue("PropAnyA");
         assertTrue(ret instanceof Any);
@@ -318,7 +318,7 @@ public class PropertySet_Test
         assertTrue(ret instanceof Long);
         assertTrue(util.anyEquals(value, ret));
 
-        value= new Any(new Type(float.class), new Float(3.14));
+        value= new Any(new Type(float.class), Float.valueOf(3.14f));
         cl.setPropertyValue("PropFloatA", value);
         ret= cl.getPropertyValue("PropFloatA");
         assertTrue(ret instanceof Float);
@@ -398,7 +398,7 @@ public class PropertySet_Test
         assertTrue(ret instanceof Any);
         assertTrue(util.anyEquals(value, ret));
 
-        value= new Any(new Type(float.class), new Float(3.14));
+        value= new Any(new Type(float.class), Float.valueOf(3.14f));
         cl.setPropertyValue("PropAnyA", value);
         ret= cl.getPropertyValue("PropAnyA");
         assertTrue(ret instanceof Any);
@@ -466,7 +466,7 @@ public class PropertySet_Test
         cl.setPropertyValue("PropLongClass", value);
         assertEquals(cl.getPropertyValue("PropLongClass"), value);
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         cl.setPropertyValue("PropFloatClass", value);
         assertEquals(cl.getPropertyValue("PropFloatClass"), value);
 
@@ -514,7 +514,7 @@ public class PropertySet_Test
         assertTrue(ret instanceof Long);
         assertTrue(util.anyEquals(value, ret));
 
-        value= new Any(new Type(float.class), new Float(3.14));
+        value= new Any(new Type(float.class), Float.valueOf(3.14f));
         cl.setPropertyValue("PropFloatClass", value);
         ret= cl.getPropertyValue("PropFloatClass");
         assertTrue(ret instanceof Float);
@@ -1197,7 +1197,7 @@ class TestClass extends PropertySet
         assertTrue(outNewVal[0] instanceof Long);
         assertEquals(outNewVal[0], value);
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         assertTrue(convertPropertyValue(propFloatA, outNewVal, outOldVal, value));
         assertTrue(outNewVal[0] instanceof Float);
         assertEquals(outNewVal[0], value);
@@ -1353,7 +1353,7 @@ class TestClass extends PropertySet
         assertTrue(outNewVal[0] instanceof Long);
         assertEquals(outNewVal[0], value);
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         assertTrue(convertPropertyValue(propFloatClass, outNewVal, outOldVal, value));
         assertTrue(outNewVal[0] instanceof Float);
         assertEquals(outNewVal[0], value);
@@ -1392,7 +1392,7 @@ class TestClass extends PropertySet
         setPropertyValueNoBroadcast(propLongA, value);
         assertEquals(longPropA, ((Long) value).longValue());
 
-        value= new Float(3.14);
+        value= Float.valueOf(3.14f);
         setPropertyValueNoBroadcast(propFloatA,  value);
         assertEquals(floatPropA, ((Float) value).floatValue(), 0.0f);
 

@@ -49,7 +49,7 @@ public final class Marshaling_Test {
             new Character('k'),
             new Double(0.12345),
             TestEnum.B,
-            new Float(0.5678),
+            Float.valueOf(0.5678f),
             Integer.valueOf(0),
             Integer.valueOf(128),
             Integer.valueOf(0x0f00),

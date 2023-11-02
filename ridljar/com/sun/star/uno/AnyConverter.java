@@ -599,9 +599,9 @@ public class AnyConverter
             case TypeClass.FLOAT_value:
                 switch (tc) {
                 case TypeClass.BYTE_value:
-                    return new Float( ((Byte)object).byteValue() );
+                    return Float.valueOf( ((Byte)object).byteValue() );
                 case TypeClass.SHORT_value:
-                    return new Float( ((Short)object).shortValue() );
+                    return Float.valueOf( ((Short)object).shortValue() );
                 case TypeClass.FLOAT_value:
                     return object;
                 }

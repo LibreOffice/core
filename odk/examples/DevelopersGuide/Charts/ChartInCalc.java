@@ -260,9 +260,9 @@ public class ChartInCalc
 
             // add a label text with bold font, bordeaux red 14pt
             aPointProp.setPropertyValue( "DataCaption", Integer.valueOf( ChartDataCaption.VALUE ));
-            aPointProp.setPropertyValue( "CharHeight",  new Float( 14.0 ));
+            aPointProp.setPropertyValue( "CharHeight",  Float.valueOf( 14.0f ));
             aPointProp.setPropertyValue( "CharColor",   Integer.valueOf( 0x993366 ));
-            aPointProp.setPropertyValue( "CharWeight",  new Float( FontWeight.BOLD ));
+            aPointProp.setPropertyValue( "CharWeight",  Float.valueOf( FontWeight.BOLD ));
         }
         catch( IndexOutOfBoundsException ex )
         {
@@ -318,7 +318,7 @@ public class ChartInCalc
         if( aTitleProp != null )
         {
             aTitleProp.setPropertyValue( "String", "Random Scatter Chart" );
-            aTitleProp.setPropertyValue( "CharHeight", new Float(14.0) );
+            aTitleProp.setPropertyValue( "CharHeight", Float.valueOf(14.0f) );
         }
 
         // align title with y axis

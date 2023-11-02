@@ -244,7 +244,7 @@ public class SpreadsheetDocHelper
         xCell.setFormula( aHeadline );
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
         xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
-        xPropSet.setPropertyValue( "CharWeight", new Float( com.sun.star.awt.FontWeight.BOLD ) );
+        xPropSet.setPropertyValue( "CharWeight", Float.valueOf( com.sun.star.awt.FontWeight.BOLD ) );
     }
 
 

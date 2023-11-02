@@ -78,7 +78,7 @@ public class ValueChanger {
             newValue = Byte.valueOf((byte) (oldbyte + 1));
         } else if (oldValue instanceof Float) {
             float oldfloat = ((Float) oldValue).floatValue();
-            newValue = new Float((float) (oldfloat + 16.7));
+            newValue = Float.valueOf((float) (oldfloat + 16.7));
         } else if (oldValue instanceof Double) {
             double olddouble = ((Double) oldValue).doubleValue();
             newValue = new Double(olddouble + 17.8);

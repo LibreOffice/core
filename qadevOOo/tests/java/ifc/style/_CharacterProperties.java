@@ -109,9 +109,9 @@ public class _CharacterProperties extends MultiPropertyTest {
             @Override
             protected Object getNewValue(String propName, Object old) {
                 if (utils.isVoid(old)) {
-                    return new Float(10) ;
+                    return Float.valueOf(10) ;
                 } else {
-                    return new Float(((Float) old).floatValue() + 10) ;
+                    return Float.valueOf(((Float) old).floatValue() + 10) ;
                 }
             }
         }) ;
@@ -143,8 +143,8 @@ public class _CharacterProperties extends MultiPropertyTest {
     }
 
     public void _CharWeight() {
-        testProperty("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD),
-            new Float(com.sun.star.awt.FontWeight.THIN)) ;
+        testProperty("CharWeight", Float.valueOf(com.sun.star.awt.FontWeight.BOLD),
+            Float.valueOf(com.sun.star.awt.FontWeight.THIN)) ;
     }
 
     public void _CharPosture() {

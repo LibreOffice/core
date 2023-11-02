@@ -50,8 +50,8 @@ public class _CharacterPropertiesAsian extends MultiPropertyTest {
     }
 
     public void _CharWeightAsian() {
-        testProperty("CharWeightAsian", new Float(FontWeight.NORMAL),
-            new Float(FontWeight.BOLD));
+        testProperty("CharWeightAsian", Float.valueOf(FontWeight.NORMAL),
+            Float.valueOf(FontWeight.BOLD));
     }
 
     public void _ParaIsCharacterDistance() {

@@ -142,7 +142,7 @@ public class HighlightText implements com.sun.star.awt.XActionListener {
 
             // Sets the replaced text property fontweight value to Bold
             PropertyValue wv = new PropertyValue("CharWeight", -1,
-                                                 new Float(com.sun.star.awt.FontWeight.BOLD),
+                                                 Float.valueOf(com.sun.star.awt.FontWeight.BOLD),
                                                  com.sun.star.beans.PropertyState.DIRECT_VALUE);
 
             // Sets the replaced text property color value to RGB parameter

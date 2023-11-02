@@ -142,7 +142,7 @@ public class DesignTemplate
         {
             a = SectionEmptyObject.create();
             // an empty group has to use bold font
-            a.setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD));
+            a.setPropertyValue("CharWeight", Float.valueOf(com.sun.star.awt.FontWeight.BOLD));
         }
         return a;
     }

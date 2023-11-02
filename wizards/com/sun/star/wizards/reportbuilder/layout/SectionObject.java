@@ -60,7 +60,7 @@ abstract public class SectionObject
 
     public void setFontToBold()
     {
-        setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.BOLD));
+        setPropertyValue("CharWeight", Float.valueOf(com.sun.star.awt.FontWeight.BOLD));
     }
 
     public void setPropertyValue(String _sKey, Object _nValue)

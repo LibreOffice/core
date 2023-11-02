@@ -263,7 +263,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCell );
         // from styles.CharacterProperties
         xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
-        xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
+        xPropSet.setPropertyValue( "CharHeight", Float.valueOf( 20.0f ) );
         // from styles.ParagraphProperties
         xPropSet.setPropertyValue( "ParaLeftMargin", Integer.valueOf( 500 ) );
         // from table.CellProperties
@@ -314,7 +314,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         xPropSet = UnoRuntime.queryInterface( com.sun.star.beans.XPropertySet.class, xCellRange );
         // from com.sun.star.styles.CharacterProperties
         xPropSet.setPropertyValue( "CharColor", Integer.valueOf( 0x003399 ) );
-        xPropSet.setPropertyValue( "CharHeight", new Float( 20.0 ) );
+        xPropSet.setPropertyValue( "CharHeight", Float.valueOf( 20.0f ) );
         // from com.sun.star.styles.ParagraphProperties
         xPropSet.setPropertyValue( "ParaLeftMargin", Integer.valueOf( 500 ) );
         // from com.sun.star.table.CellProperties

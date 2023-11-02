@@ -40,8 +40,8 @@ import lib.MultiPropertyTest;
 public class _CharacterPropertiesComplex extends MultiPropertyTest {
 
     public void _CharWeightComplex() {
-        testProperty("CharWeightComplex", new Float(com.sun.star.awt.FontWeight.BOLD),
-            new Float(com.sun.star.awt.FontWeight.THIN)) ;
+        testProperty("CharWeightComplex", Float.valueOf(com.sun.star.awt.FontWeight.BOLD),
+            Float.valueOf(com.sun.star.awt.FontWeight.THIN)) ;
     }
 
     public void _CharPostureComplex() {

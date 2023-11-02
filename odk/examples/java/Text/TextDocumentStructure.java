@@ -186,7 +186,7 @@ public class TextDocumentStructure {
                 UnoRuntime.queryInterface(
                 com.sun.star.beans.XPropertySet.class, xWordCursor );
             xPropertySet.setPropertyValue("CharWeight",
-                             new Float( com.sun.star.awt.FontWeight.BOLD ));
+                             Float.valueOf( com.sun.star.awt.FontWeight.BOLD ));
 
             System.out.println("create example data");
         }

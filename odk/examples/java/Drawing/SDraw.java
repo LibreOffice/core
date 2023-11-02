@@ -221,8 +221,7 @@ public class SDraw  {
                 size.Height = height;
                 size.Width = width;
                 position.X = (x+(i*40));
-                position.Y =
-                    (new Float(y+(Math.sin((i*Math.PI)/180))*5000)).intValue();
+                position.Y = (int)(y+(Math.sin((i*Math.PI)/180))*5000);
                 xShape.setSize(size);
                 xShape.setPosition(position);
 

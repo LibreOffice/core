@@ -336,7 +336,7 @@ public class ChartTypeChange {
             System.out.println( "Could not get cell." );
         }
         if ( stringFlag.equals( "V" ) ) {
-            xcell.setValue( ( new Float( stringValue ) ).floatValue() );
+            xcell.setValue( ( Float.valueOf( stringValue ) ).floatValue() );
         }
         else {
             xcell.setFormula( stringValue );

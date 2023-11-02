@@ -255,7 +255,7 @@ final class Unmarshal {
     }
 
     private Float readFloatValue() throws IOException {
-        return new Float(input.readFloat());
+        return Float.valueOf(input.readFloat());
     }
 
     private Double readDoubleValue() throws IOException {

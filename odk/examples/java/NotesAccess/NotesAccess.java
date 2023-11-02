@@ -271,7 +271,7 @@ public class NotesAccess implements Runnable {
             System.out.println( "Could not get Cell" );
         }
         if ( stringFlag.equals( "V" )) {
-            xCell.setValue((new Float(stringValue)).floatValue());
+            xCell.setValue((Float.valueOf(stringValue)).floatValue());
         }
         else {
             xCell.setFormula(stringValue);

@@ -61,7 +61,7 @@ public final class AnyConverter_Test {
         aShort= Short.valueOf((short) 11111);
         aInt= Integer.valueOf( 1111111);
         aLong= Long.valueOf( 0xffffffff);
-        aFloat= new Float( 3.14);
+        aFloat= Float.valueOf( 3.14f);
         aDouble= new Double( 3.145);
         aObj= new ATypeProvider();
         aStr= "I am a string";

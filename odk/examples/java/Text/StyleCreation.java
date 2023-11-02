@@ -93,11 +93,11 @@ public class StyleCreation {
             xPropertySet.setPropertyValue("CharFontName", "Helvetica" );
             System.out.println( "set name of the font to 'Helvetica'" );
 
-            xPropertySet.setPropertyValue("CharHeight", new Float( 36 ) );
+            xPropertySet.setPropertyValue("CharHeight", Float.valueOf( 36 ) );
             System.out.println( "Change the height of th font to 36" );
 
             xPropertySet.setPropertyValue("CharWeight",
-                new Float( com.sun.star.awt.FontWeight.BOLD ) );
+                Float.valueOf( com.sun.star.awt.FontWeight.BOLD ) );
             System.out.println( "set the font attribute 'Bold'" );
 
             xPropertySet.setPropertyValue("CharAutoKerning", Boolean.TRUE );

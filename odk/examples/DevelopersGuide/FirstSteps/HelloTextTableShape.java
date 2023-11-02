@@ -319,7 +319,7 @@ public class HelloTextTableShape {
         xCursorProps.setPropertyValue("CharPosture",
             com.sun.star.awt.FontSlant.ITALIC);
         xCursorProps.setPropertyValue("CharWeight",
-            new Float(com.sun.star.awt.FontWeight.BOLD));
+            Float.valueOf(com.sun.star.awt.FontWeight.BOLD));
 
         // add more text at the end of the text using insertString
         xTextCursor.gotoEnd(false);

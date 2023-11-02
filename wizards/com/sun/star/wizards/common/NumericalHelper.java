@@ -199,7 +199,7 @@ public class NumericalHelper
                 break;
             case TypeClass.FLOAT_value:
                 aTypeObject.iType = FLOAT_TYPE;
-                aTypeObject.aValue = new Float(AnyConverter.toFloat(aValue));
+                aTypeObject.aValue = Float.valueOf(AnyConverter.toFloat(aValue));
                 break;
             case TypeClass.DOUBLE_value:
                 aTypeObject.iType = DOUBLE_TYPE;

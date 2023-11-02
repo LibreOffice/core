@@ -533,7 +533,7 @@ public class TextDocuments {
             XPropertySet xCursorProps = UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocCursor );
             xCursorProps.setPropertyValue ( "CharWeight",
-                             new Float(com.sun.star.awt.FontWeight.BOLD) );
+                             Float.valueOf(com.sun.star.awt.FontWeight.BOLD) );
 
             // replace the '.' at the end of the sentence with a new string
             xSentenceCursor.gotoEndOfSentence( false );

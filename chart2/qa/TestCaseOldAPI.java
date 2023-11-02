@@ -162,7 +162,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 float fHeight = (float)17.0;
 
                 xTitleProp.setPropertyValue( "String", aTitle );
-                xTitleProp.setPropertyValue( "CharHeight", new Float( fHeight ) );
+                xTitleProp.setPropertyValue( "CharHeight", Float.valueOf( fHeight ) );
 
                 float fNewHeight = AnyConverter.toFloat( xTitleProp.getPropertyValue( "CharHeight" ) );
                 assure( "Changing CharHeight via old API failed", fNewHeight == fHeight );
@@ -213,8 +213,8 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 float fHeight = (float)14.0;
 
                 xTitleProp.setPropertyValue( "CharColor", Integer.valueOf( nColor ) );
-                xTitleProp.setPropertyValue( "CharWeight", new Float( fWeight ));
-                xTitleProp.setPropertyValue( "CharHeight", new Float( fHeight ) );
+                xTitleProp.setPropertyValue( "CharWeight", Float.valueOf( fWeight ));
+                xTitleProp.setPropertyValue( "CharHeight", Float.valueOf( fHeight ) );
 
                 int nNewColor = AnyConverter.toInt( xTitleProp.getPropertyValue( "CharColor" ) );
                 assure( "Changing CharColor via old API failed", nNewColor == nColor );
@@ -390,7 +390,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "Property LineColor",
                     AnyConverter.toInt( xProp.getPropertyValue( "LineColor" )) == nNewColor );
             float fNewCharHeight = (float)(16.0);
-            xProp.setPropertyValue( "CharHeight", new Float( fNewCharHeight ));
+            xProp.setPropertyValue( "CharHeight", Float.valueOf( fNewCharHeight ));
             assure( "Property CharHeight",
                     AnyConverter.toFloat( xProp.getPropertyValue( "CharHeight" )) == fNewCharHeight );
 
@@ -444,7 +444,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                         xLegendProp.getPropertyValue( "Alignment" )) == eNewPos );
 
             float fNewCharHeight = (float)(11.0);
-            xLegendProp.setPropertyValue( "CharHeight", new Float( fNewCharHeight ));
+            xLegendProp.setPropertyValue( "CharHeight", Float.valueOf( fNewCharHeight ));
             assure( "Property CharHeight",
                     AnyConverter.toFloat( xLegendProp.getPropertyValue( "CharHeight" )) == fNewCharHeight );
 
