@@ -407,8 +407,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         || rSet.GetItemState(SID_COPY_HYPERLINK_LOCATION) != SfxItemState::UNKNOWN
         || rSet.GetItemState(SID_REMOVE_HYPERLINK) != SfxItemState::UNKNOWN)
     {
-        SdrView* pView = mrViewData.GetScDrawView();
-        if( !URLFieldHelper::IsCursorAtURLField(pView->GetTextEditOutlinerView()) )
+        OutlinerView* pOutView = mrViewData.GetScDrawView()->GetTextEditOutlinerView();
+        if (!URLFieldHelper::IsCursorAtURLField(pOutView, /*AlsoCheckBeforeCursor=*/true))
         {
             rSet.DisableItem( SID_OPEN_HYPERLINK );
             rSet.DisableItem( SID_EDIT_HYPERLINK );

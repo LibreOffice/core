@@ -18,10 +18,10 @@ class EDITENG_DLLPUBLIC URLFieldHelper
 {
 public:
     static void RemoveURLField(EditView& pEditView);
-    static bool IsCursorAtURLField(const EditView& pEditView);
-    static bool IsCursorAtURLField(const OutlinerView* pOLV)
+    static bool IsCursorAtURLField(const EditView& pEditView, bool bAlsoCheckBeforeCursor = false);
+    static bool IsCursorAtURLField(const OutlinerView* pOLV, bool bAlsoCheckBeforeCursor = false)
     {
-        return pOLV && IsCursorAtURLField(pOLV->GetEditView());
+        return pOLV && IsCursorAtURLField(pOLV->GetEditView(), bAlsoCheckBeforeCursor);
     }
 };
 

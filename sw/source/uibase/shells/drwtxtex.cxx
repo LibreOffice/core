@@ -938,7 +938,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_OPEN_HYPERLINK:
             case SID_COPY_HYPERLINK_LOCATION:
             {
-                if (!URLFieldHelper::IsCursorAtURLField(pOLV))
+                if (!URLFieldHelper::IsCursorAtURLField(pOLV, /*AlsoCheckBeforeCursor=*/true))
                     rSet.DisableItem(nWhich);
                 nSlotId = 0;
             }

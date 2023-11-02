@@ -333,8 +333,9 @@ public:
     const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
     const SvxFieldItem* GetFieldAtSelection(bool* pIsBeforeCursor) const;
 
-    /// Select and return the field at the current cursor position
-    const SvxFieldData* GetFieldAtCursor() const;
+    /// return field under mouse, at selection, or immediately after (or before) the current cursor
+    const SvxFieldData* GetFieldAtCursor(bool bAlsoCheckBeforeCursor = false) const;
+    /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
     /// Converts position in paragraph to logical position without unfolding fields
     sal_Int32       GetPosNoField(sal_Int32 nPara, sal_Int32 nPos) const;
