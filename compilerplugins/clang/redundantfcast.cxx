@@ -16,6 +16,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "config_clang.h"
+
 namespace
 {
 class RedundantFCast final : public loplugin::FilteringPlugin<RedundantFCast>
@@ -288,10 +290,15 @@ public:
         if (ignoreLocation(expr))
             return true;
         // specifying the name for an init-list is necessary sometimes
-        if (isa<InitListExpr>(compat::IgnoreParenImplicit(expr->getSubExpr())))
+        auto const e = compat::IgnoreParenImplicit(expr->getSubExpr());
+        if (isa<InitListExpr>(e))
             return true;
-        if (isa<CXXStdInitializerListExpr>(compat::IgnoreParenImplicit(expr->getSubExpr())))
+        if (isa<CXXStdInitializerListExpr>(e))
             return true;
+#if CLANG_VERSION >= 160000
+        if (isa<CXXParenListInitExpr>(e))
+            return true;
+#endif
         auto const t1 = expr->getTypeAsWritten();
         auto const t2 = compat::getSubExprAsWritten(expr)->getType();
         if (!(t1.getCanonicalType().getTypePtr() == t2.getCanonicalType().getTypePtr()

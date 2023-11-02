@@ -9,6 +9,7 @@
 
 #include "sal/config.h"
 
+#include "config_clang.h"
 #include "rtl/ustring.hxx"
 #include "tools/color.hxx"
 
@@ -221,4 +222,21 @@ void foo()
     (void)aGroup;
 }
 }
+
+namespace test9
+{
+struct S
+{
+    int n;
+};
+
+void f()
+{
+    (void)S{ 0 };
+#if CLANG_VERSION >= 160000
+    (void)S(0);
+#endif
+}
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
