@@ -1716,6 +1716,60 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleBottomMargin)
                          getProperty<style::LineSpacing>(xPara, "ParaLineSpacing").Height);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
+{
+    createSwDoc("tdf158044.rtf");
+
+    {
+        auto xPara(getParagraph(1));
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tabStops.getLength());
+    }
+
+    {
+        auto xPara(getParagraph(2));
+        auto fillColor = getProperty<Color>(xPara, "FillColor");
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
+        CPPUNIT_ASSERT_EQUAL(Color(0xffffff), fillColor);
+    }
+
+    {
+        auto xPara(getParagraph(3));
+        auto adjust = getProperty<sal_Int16>(xPara, "ParaAdjust");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), adjust);
+    }
+
+    {
+        auto xPara(getParagraph(4));
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabStops.getLength());
+    }
+
+    {
+        auto xPara(getParagraph(5));
+        auto fillColor = getProperty<Color>(xPara, "FillColor");
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), fillColor);
+    }
+
+    {
+        auto xPara(getParagraph(6));
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
+    }
+}
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
