@@ -26,6 +26,7 @@
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Chart.hxx>
 
 void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int32 nPos)
 {
@@ -99,6 +100,14 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(weld::Container* pPage, weld::Dia
     , m_xValSetColorBoxWin(new weld::CustomWeld(*m_xBuilder, "table", *m_xValSetColorBox))
 {
     m_xLbChartColors->set_size_request(-1, m_xLbChartColors->get_height_rows(16));
+
+    if (officecfg::Office::Chart::DefaultColor::Series::isReadOnly())
+    {
+        m_xPBDefault->set_sensitive(false);
+        m_xPBAdd->set_sensitive(false);
+        m_xPBRemove->set_sensitive(false);
+        m_xValSetColorBoxWin->set_sensitive(false);
+    }
 
     m_xPBDefault->connect_clicked( LINK( this, SvxDefaultColorOptPage, ResetToDefaults ) );
     m_xPBAdd->connect_clicked( LINK( this, SvxDefaultColorOptPage, AddChartColor ) );
