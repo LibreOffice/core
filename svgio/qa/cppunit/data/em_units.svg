@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="10cm" height="10cm">
 
   <style>
-    text {font-family: sans-serif; font-size: 36pt;}
-    new {font-family: sans-serif; font-size: 1em;}
+    text {font-family: 'DejaVu Sans'; font-size: 36pt;}
+    new {font-family: 'DejaVu Sans'; font-size: 1em;}
   </style>
 
   <line x1="5cm" y1="5cm" x2="8cm" y2="5cm" stroke="black" />

@@ -10,6 +10,6 @@
  <g fill="url(#svg_2)" >
   <title>Layer 1</title>
   <rect id="svg_1" height="50" width="200" y="0" x="0"/>
-  <text x="50" y="40" id="svg_12" font-size="48" font-family="serif" fill="#ffff00">Text</text>
+  <text x="50" y="40" id="svg_12" font-size="48" font-family="DejaVu Serif" fill="#ffff00">Text</text>
  </g>
 </svg>

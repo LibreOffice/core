@@ -9,7 +9,7 @@
   <g class="TextShape">
     <rect stroke="none" fill="none" x="9825" y="6550" width="4076" height="955"/>
     <text>
-      <tspan x="9825" y="7939" font-family="Arial Narrow, sans-serif" font-size="800px" fill-opacity="0.30" fill="rgb(255,0,0)" stroke="none">hello</tspan>
+      <tspan x="9825" y="7939" font-family="DejaVu Sans" font-size="800px" fill-opacity="0.30" fill="rgb(255,0,0)" stroke="none">hello</tspan>
     </text>
   </g>
 </svg>

@@ -5,7 +5,7 @@
    height="15mm"
    viewBox="0 0 250 50">
   <text
-  style="font-size:30px;font-family:sans-serif;fill:#000000;stroke:none"
+  style="font-size:30px;font-family:'DejaVu Sans';fill:#000000;stroke:none"
     x="20"
     y="30">Her<tspan style="font-weight:bold">vor</tspan>hebung</text>
 </svg>

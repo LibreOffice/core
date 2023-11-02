@@ -377,12 +377,12 @@ CPPUNIT_TEST_FIXTURE(Test, testFontsizeRelative)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "50");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "serif");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "DejaVu Serif");
 
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "fontcolor", "#000000");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "text", "Sample");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "height", "50");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "serif");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[2]", "familyname", "DejaVu Serif");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf145896)
@@ -932,7 +932,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf97542_1)
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "fontcolor", "#ffff00");
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "text", "Text");
     assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "height", "48");
-    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "familyname", "serif");
+    assertXPath(pDocument, "/primitive2D/transform/objectinfo/textsimpleportion", "familyname", "DejaVu Serif");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf97542_2)
@@ -1382,7 +1382,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf99994)
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "fontcolor", "#0000ff");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "height", "16");
     assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "text", "test");
-    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "Sans");
+    assertXPath(pDocument, "/primitive2D/transform/textsimpleportion[1]", "familyname", "DejaVu Sans");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf99115)
