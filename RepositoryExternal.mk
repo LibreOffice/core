@@ -2847,6 +2847,7 @@ ifneq ($(SYSTEM_CLUCENE),)
 define gb_LinkTarget__use_clucene
 $(call gb_LinkTarget_add_defs,$(1),\
 	$(filter-out -I% -isystem%,$(subst -isystem /,-isystem/,$(CLUCENE_CFLAGS))) \
+	-DSYSTEM_CLUCENE \
 )
 
 $(call gb_LinkTarget_set_include,$(1),\

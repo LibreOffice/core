@@ -54,6 +54,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,clucene,\
 	external/clucene/patches/nullstring.patch \
 	external/clucene/patches/binary_function.patch \
 	external/clucene/patches/clucene-pure-virtual.patch \
+	external/clucene/patches/clucene-reprobuild.patch.1 \
 ))
 
 ifneq ($(OS),WNT)
