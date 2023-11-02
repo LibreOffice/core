@@ -67,6 +67,7 @@
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <svl/itempool.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <comphelper/lok.hxx>
 #include <map>
 #include <vector>
@@ -102,7 +103,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragEntryPolyPolygon::createP
         rDragMethod.applyCurrentTransformationToPolyPolygon(aCopy);
         basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
         basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
-        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
+        const double fStripeLength(officecfg::Office::Common::Drawinglayer::StripeLength::get());
 
         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
         {
@@ -922,7 +923,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
                     {
                         basegfx::BColor aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
                         basegfx::BColor aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
-                        const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
+                        const double fStripeLength(officecfg::Office::Common::Drawinglayer::StripeLength::get());
 
                         if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
                         {

@@ -36,15 +36,11 @@ namespace SvtOptionsDrawinglayer
                 GetStripeColorB()
                 SetStripeColorB()       =>  Set second of two colors which overlay uses to draw stripes
 
-                GetStripeLength()
-                SetStripeLength()       =>  Set length of a single stripe in pixels
-
     @seealso    configuration package "org.openoffice.Office.Common/Drawinglayer"
 *//*-*****************************************************************************************************/
 
 SVT_DLLPUBLIC Color       GetStripeColorA();
 SVT_DLLPUBLIC Color       GetStripeColorB();
-SVT_DLLPUBLIC sal_uInt16  GetStripeLength();
 
 // #i4219#
 SVT_DLLPUBLIC sal_uInt32  GetMaximumPaperWidth();

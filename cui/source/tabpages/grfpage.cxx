@@ -40,6 +40,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <officecfg/Office/Common.hxx>
 
 constexpr auto CM_1_TO_TWIP = o3tl::convert(1, o3tl::Length::cm, o3tl::Length::twip); // 567
 
@@ -774,7 +775,7 @@ void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const ::tools::Re
     // the former used XOR paint.
     const Color aColA(SvtOptionsDrawinglayer::GetStripeColorA().getBColor());
     const Color aColB(SvtOptionsDrawinglayer::GetStripeColorB().getBColor());
-    const double fStripeLength(SvtOptionsDrawinglayer::GetStripeLength());
+    const double fStripeLength(officecfg::Office::Common::Drawinglayer::StripeLength::get());
     const basegfx::B2DVector aDashVector(rRenderContext.GetInverseViewTransformation() * basegfx::B2DVector(fStripeLength, 0.0));
     const double fLogicDashLength(aDashVector.getX());
 

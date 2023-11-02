@@ -43,11 +43,6 @@ Color GetStripeColorB()
     return Color(ColorTransparency, officecfg::Office::Common::Drawinglayer::StripeColorB::get());
 }
 
-sal_uInt16 GetStripeLength()
-{
-    return officecfg::Office::Common::Drawinglayer::StripeLength::get();
-}
-
 // #i4219#
 sal_uInt32 GetMaximumPaperWidth()
 {

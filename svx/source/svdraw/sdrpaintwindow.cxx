@@ -27,6 +27,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/window.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <set>
 #include <vector>
 
@@ -187,7 +188,7 @@ void SdrPaintView::InitOverlayManager(rtl::Reference<sdr::overlay::OverlayManage
 
     xOverlayManager->setStripeColorA(aColA);
     xOverlayManager->setStripeColorB(aColB);
-    xOverlayManager->setStripeLengthPixel(SvtOptionsDrawinglayer::GetStripeLength());
+    xOverlayManager->setStripeLengthPixel(officecfg::Office::Common::Drawinglayer::StripeLength::get());
 }
 
 rtl::Reference<sdr::overlay::OverlayManager> SdrPaintView::CreateOverlayManager(OutputDevice& rOutputDevice) const
