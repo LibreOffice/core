@@ -16,10 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-import uno
 import unohelper
 
-from com.sun.star.awt import Rectangle
 from com.sun.star.awt.MessageBoxButtons import BUTTONS_OK
 from com.sun.star.awt.MessageBoxType import INFOBOX
 from com.sun.star.frame import XDispatch, XDispatchProvider
