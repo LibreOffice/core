@@ -1139,7 +1139,8 @@ bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
     Reference< XInteractionHandler > xInteraction;
     xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
-    return m_aMacroMode.checkMacrosOnLoading( xInteraction );
+    const bool bHasMacros = m_aMacroMode.hasMacros();
+    return m_aMacroMode.checkMacrosOnLoading(xInteraction, false /*HasValidContentSignature*/, bHasMacros);
 }
 
 void ODatabaseModelImpl::resetMacroExecutionMode()
