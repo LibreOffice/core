@@ -688,6 +688,18 @@ bool SkiaSalBitmap::Invert()
                                        paint);
         ResetToSkImage(makeCheckedImageSnapshot(surface));
         DataChanged();
+
+#ifdef MACOSX
+        // tdf#158014 make image immutable after using Skia to invert
+        // I can't explain why inverting using Skia causes this bug on
+        // macOS but not other platforms. My guess is that Skia on macOS
+        // is sharing some data when different SkiaSalBitmap instances
+        // are created from the same OutputDevice. So, mark this
+        // SkiaSalBitmap instance's image as immutable so that successive
+        // inversions are done with buffered bitmap data instead of Skia.
+        mImageImmutable = true;
+#endif
+
         SAL_INFO("vcl.skia.trace", "invert(" << this << ")");
         return true;
     }
