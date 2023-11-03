@@ -51,11 +51,9 @@ void FrameGrabber::disposePipeline()
 FrameGrabber::FrameGrabber( const OUString &rURL ) :
     FrameGrabber_BASE()
 {
-    gchar *pPipelineStr;
-    pPipelineStr = g_strdup_printf(
-        "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
-        "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
-        OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    const char pPipelineStr[] =
+        "uridecodebin name=source ! videoconvert ! videoscale ! appsink "
+        "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"";
 
     GError *pError = nullptr;
     mpPipeline = gst_parse_launch( pPipelineStr, &pError );
@@ -66,6 +64,12 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
     }
 
     if( mpPipeline ) {
+
+        if (GstElement *pUriDecode = gst_bin_get_by_name(GST_BIN(mpPipeline), "source"))
+            g_object_set(pUriDecode, "uri", OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr(), nullptr);
+        else
+            g_warning("Missing 'source' element in gstreamer pipeline");
+
         // pre-roll
         switch( gst_element_set_state( mpPipeline, GST_STATE_PAUSED ) ) {
         case GST_STATE_CHANGE_FAILURE:
