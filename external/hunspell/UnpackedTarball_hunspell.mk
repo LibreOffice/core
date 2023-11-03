@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
 	external/hunspell/0001-fix-LibreOffice-build-problem-with-basic_string-appe.patch \
 	external/hunspell/0001-Resolves-rhbz-2158548-allow-longer-words-for-hunspel.patch \
 	external/hunspell/0001-Keep-only-REP-ph-or-2-word-dictionary-phrase-suggest.patch \
+	external/hunspell/clock-monotonic.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
