@@ -944,9 +944,15 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
 
     // check macro security
     const bool bHasValidContentSignature = HasValidSignatures();
-    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature );
+    const bool bHasMacros = pImpl->aMacroMode.hasMacros();
+    pImpl->aMacroMode.checkMacrosOnLoading( xInteraction, bHasValidContentSignature, bHasMacros );
+    pImpl->m_bHadCheckedMacrosOnLoad = bHasMacros;
 }
 
+bool SfxObjectShell::GetHadCheckedMacrosOnLoad() const
+{
+    return pImpl->m_bHadCheckedMacrosOnLoad;
+}
 
 void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
