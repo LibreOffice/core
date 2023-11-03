@@ -95,8 +95,19 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/msi_templates/%/Bin
 	$(call gb_Output_announce,setting up msi templates for type $* - copying binary assets,$(true),CPY,4)
 	rm -rf $@ && mkdir -p $@ && cd $@ && cp $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* ./
 
+gb_Make_JobLimiter := $(WORKDIR)/job-limiter.exe
+
+$(gb_Make_JobLimiter): $(SRCDIR)/solenv/bin/job-limiter.cpp
+	cd $(WORKDIR) && \
+	$(CXX) $(SOLARINC) -EHsc -Zi $^ -link -LIBPATH:$(subst ;, -LIBPATH:,$(ILIB_FOR_BUILD)) || rm -f $@
+
 # with all languages the logfile name would be too long when building the windows installation set,
 # that's the reason for the substitution to multilang below in case more than just en-US is packaged
+# also for windows msi packaging parallel execution is reduced by the job-limiter. This only has any
+# effect when building with help and multiple languages, and it also won't affect the real time for
+# packaging (since packaging the main installer takes longer than packaging sdk and all helppacks
+# even with the reduced parallelism (the higher the parallelism, the higher the chance for random
+# failures during the cscript call to WiLangId.vbs)
 $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
         $(foreach ulf,$(instsetoo_ULFLIST),$(call gb_CustomTarget_get_workdir,instsetoo_native/install)/win_ulffiles/$(ulf).ulf) \
         $(if $(filter-out WNT,$(OS)),\
@@ -104,12 +115,15 @@ $(instsetoo_installer_targets): $(SRCDIR)/solenv/bin/make_installer.pl \
                 bin/find-requires-gnome.sh \
                 bin/find-requires-x11.sh) \
         ,instsetoo_msi_templates) \
-        $(call gb_Postprocess_get_target,AllModulesButInstsetNative) | instsetoo_wipe
+        $(call gb_Postprocess_get_target,AllModulesButInstsetNative) \
+        | instsetoo_wipe $(if $(filter msi,$(PKGFORMAT)),$(gb_Make_JobLimiter))
 	$(call gb_Output_announce,$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@),$(true),INS,1)
+	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) grab)
 	$(call gb_Trace_StartRange,$@,INSTALLER)
 	$(call gb_Helper_print_on_error, \
 	    $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(subst ‧,:,$@),\
 	    $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/$(if $(filter en-US$(COMMA)%,$(instsetoo_installer_langs)),$(subst $(instsetoo_installer_langs),multilang,$@),$@).log)
+	$(if $(filter %msi‧nostrip,$@),$(gb_Make_JobLimiter) release)
 	$(call gb_Trace_EndRange,$@,INSTALLER)
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony: $(instsetoo_installer_targets)
