@@ -37,6 +37,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <sal/log.hxx>
 #include <svl/itemprop.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmdescr.hxx>
@@ -167,8 +168,11 @@ sal_Bool SAL_CALL IFrameObject::load(
         xTrans->parseStrict( aTargetURL );
 
         INetURLObject aURLObject(aTargetURL.Complete);
-        if (aURLObject.GetProtocol() == INetProtocol::Macro || aURLObject.isSchemeEqualTo(u"vnd.sun.star.script"))
+        if (aURLObject.IsExoticProtocol())
+        {
+            SAL_WARN("sfx", "IFrameObject::load ignoring: " << aTargetURL.Complete);
             return false;
+        }
 
         uno::Reference<frame::XFramesSupplier> xParentFrame = xFrame->getCreator();
         SfxObjectShell* pDoc = SfxMacroLoader::GetObjectShell(xParentFrame);
