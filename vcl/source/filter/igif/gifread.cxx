@@ -319,8 +319,6 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         rColor.SetBlue( *pTmp++ );
     }
 
-    bEnhance = false;
-
     // if possible accommodate some standard colours
     if( nCount < 256 )
     {
@@ -329,15 +327,13 @@ void GIFReader::ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount )
         if( nCount < 255 )
             (*pPal)[ 254UL ] = COL_BLACK;
     }
-    else
-    {
-        // tdf#157793 limit tdf#157635 fix to only larger palettes
-        // I don't know why, but the fix for tdf#157635 causes
-        // images with a palette of 16 entries to be inverted.
-        // Is this the only condition for masking out black
-        // pixels in non-transparent animation frames?
-        bEnhance = true;
-    }
+
+    // tdf#157793 limit tdf#157635 fix to only larger palettes
+    // I don't know why, but the fix for tdf#157635 causes
+    // images with a palette of 16 entries to be inverted.
+    // Also, fix tdf#158047 by allowing the tdf#157635 fix for
+    // palettes with 64 entries.
+    bEnhance = (nCount > 16);
 }
 
 bool GIFReader::ReadExtension()
