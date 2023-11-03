@@ -71,14 +71,6 @@
           </info>
           <value>true</value>
         </prop>
-        <prop oor:name="PreventTips" oor:type="xs:boolean" oor:nillable="false">
-          <!-- UIHints: Not accessible via user interface -->
-          <info>
-            <desc>Enables the writer to prevent the display of help tips programmatically.</desc>
-            <label>Prevent help tips</label>
-          </info>
-          <value>false</value>
-        </prop>
       </group>
       <group oor:name="NonprintingCharacter">
         <info>
