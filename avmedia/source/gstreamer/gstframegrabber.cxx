@@ -64,7 +64,7 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
         "bpp=(int)24,depth=(int)24,endianness=(int)4321,"
         "red_mask=(int)0xff0000, green_mask=(int)0x00ff00, blue_mask=(int)0x0000ff\"",
 #else
-        "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
+        "uridecodebin uri=\"%s\" ! videoconvert ! videoscale ! appsink "
         "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
 #endif
         OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
