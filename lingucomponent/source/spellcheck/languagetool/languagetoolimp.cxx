@@ -35,6 +35,9 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <string_view>
+
+#include <curlinit.hxx>
+
 #include <sal/log.hxx>
 #include <svtools/languagetoolcfg.hxx>
 #include <tools/color.hxx>
@@ -335,6 +338,8 @@ std::string LanguageToolGrammarChecker::makeHttpRequest(std::string_view aURL, H
                                                            [](CURL* p) { curl_easy_cleanup(p); });
     if (!curl)
         return {}; // empty string
+
+    ::InitCurl_easy(curl.get());
 
     bool isPremium = false;
     SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
