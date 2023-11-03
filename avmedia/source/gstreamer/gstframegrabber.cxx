@@ -50,9 +50,8 @@ void FrameGrabber::disposePipeline()
 
 FrameGrabber::FrameGrabber( std::u16string_view rURL )
 {
-    gchar *pPipelineStr;
-    pPipelineStr = g_strdup_printf(
-        "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
+    gchar *pPipelineStr = g_strdup_printf(
+        "uridecodebin uri=\"%s\" ! videoconvert ! videoscale ! appsink "
         "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
         OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
