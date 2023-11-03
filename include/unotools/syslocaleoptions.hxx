@@ -43,7 +43,9 @@ public:
     {
         Locale,
         Currency,
-        DatePatterns
+        DatePatterns,
+        DecimalSeparator,
+        IgnoreLanguageChange
     };
                                 SvtSysLocaleOptions();
                                 virtual ~SvtSysLocaleOptions() override;

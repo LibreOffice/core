@@ -181,20 +181,30 @@ class OfaLanguagesTabPage : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xUserInterfaceLB;
     std::unique_ptr<weld::Label> m_xLocaleSettingFT;
     std::unique_ptr<SvxLanguageBox> m_xLocaleSettingLB;
+    std::unique_ptr<weld::Widget> m_xLocaleSettingImg;
+    std::unique_ptr<weld::Label> m_xDecimalSeparatorFT;
     std::unique_ptr<weld::CheckButton> m_xDecimalSeparatorCB;
+    std::unique_ptr<weld::Widget> m_xDecimalSeparatorImg;
     std::unique_ptr<weld::Label> m_xCurrencyFT;
     std::unique_ptr<weld::ComboBox> m_xCurrencyLB;
+    std::unique_ptr<weld::Widget> m_xCurrencyImg;
     std::unique_ptr<weld::Label> m_xDatePatternsFT;
     std::unique_ptr<weld::Entry> m_xDatePatternsED;
+    std::unique_ptr<weld::Widget> m_xDatePatternsImg;
 
     std::unique_ptr<SvxLanguageBox> m_xWesternLanguageLB;
     std::unique_ptr<weld::Label> m_xWesternLanguageFT;
+    std::unique_ptr<weld::Widget> m_xWesternLanguageImg;
     std::unique_ptr<SvxLanguageBox> m_xAsianLanguageLB;
     std::unique_ptr<SvxLanguageBox> m_xComplexLanguageLB;
     std::unique_ptr<weld::CheckButton> m_xCurrentDocCB;
+    std::unique_ptr<weld::Widget> m_xCurrentDocImg;
     std::unique_ptr<weld::CheckButton> m_xAsianSupportCB;
+    std::unique_ptr<weld::Widget> m_xAsianSupportImg;
     std::unique_ptr<weld::CheckButton> m_xCTLSupportCB;
+    std::unique_ptr<weld::Widget> m_xCTLSupportImg;
     std::unique_ptr<weld::CheckButton> m_xIgnoreLanguageChangeCB;
+    std::unique_ptr<weld::Widget> m_xIgnoreLanguageChangeImg;
 
     DECL_LINK(SupportHdl, weld::Toggleable&, void);
     DECL_LINK(LocaleSettingHdl, weld::ComboBox&, void);

@@ -302,6 +302,16 @@ bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption 
                 bReadOnly = m_bRODatePatterns;
                 break;
             }
+        case SvtSysLocaleOptions::EOption::DecimalSeparator:
+            {
+                bReadOnly = m_bRODecimalSeparator;
+                break;
+            }
+        case SvtSysLocaleOptions::EOption::IgnoreLanguageChange:
+            {
+                bReadOnly = m_bROIgnoreLanguageChange;
+                break;
+            }
     }
     return bReadOnly;
 }

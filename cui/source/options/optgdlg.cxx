@@ -1170,19 +1170,28 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     , m_xUserInterfaceLB(m_xBuilder->weld_combo_box("userinterface"))
     , m_xLocaleSettingFT(m_xBuilder->weld_label("localesettingFT"))
     , m_xLocaleSettingLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("localesetting")))
+    , m_xLocaleSettingImg(m_xBuilder->weld_widget("locklocalesetting"))
+    , m_xDecimalSeparatorFT(m_xBuilder->weld_label("label6"))
     , m_xDecimalSeparatorCB(m_xBuilder->weld_check_button("decimalseparator"))
+    , m_xDecimalSeparatorImg(m_xBuilder->weld_widget("lockdecimalseparator"))
     , m_xCurrencyFT(m_xBuilder->weld_label("defaultcurrency"))
     , m_xCurrencyLB(m_xBuilder->weld_combo_box("currencylb"))
+    , m_xCurrencyImg(m_xBuilder->weld_widget("lockcurrencylb"))
     , m_xDatePatternsFT(m_xBuilder->weld_label("dataaccpatterns"))
     , m_xDatePatternsED(m_xBuilder->weld_entry("datepatterns"))
+    , m_xDatePatternsImg(m_xBuilder->weld_widget("lockdatepatterns"))
     , m_xWesternLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("westernlanguage")))
     , m_xWesternLanguageFT(m_xBuilder->weld_label("western"))
+    , m_xWesternLanguageImg(m_xBuilder->weld_widget("lockwesternlanguage"))
     , m_xAsianLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("asianlanguage")))
     , m_xComplexLanguageLB(new SvxLanguageBox(m_xBuilder->weld_combo_box("complexlanguage")))
     , m_xCurrentDocCB(m_xBuilder->weld_check_button("currentdoc"))
     , m_xAsianSupportCB(m_xBuilder->weld_check_button("asiansupport"))
+    , m_xAsianSupportImg(m_xBuilder->weld_widget("lockasiansupport"))
     , m_xCTLSupportCB(m_xBuilder->weld_check_button("ctlsupport"))
+    , m_xCTLSupportImg(m_xBuilder->weld_widget("lockctlsupport"))
     , m_xIgnoreLanguageChangeCB(m_xBuilder->weld_check_button("ignorelanguagechange"))
+    , m_xIgnoreLanguageChangeImg(m_xBuilder->weld_widget("lockignorelanguagechange"))
 {
     // tdf#125483 save original default label
     m_sDecimalSeparatorLabel = m_xDecimalSeparatorCB->get_label();
@@ -1321,6 +1330,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xAsianSupportCB->save_state();
     bool bReadonly = SvtCJKOptions::IsAnyReadOnly();
     m_xAsianSupportCB->set_sensitive(!bReadonly);
+    m_xAsianSupportImg->set_visible(bReadonly);
     SupportHdl(*m_xAsianSupportCB);
 
     m_bOldCtl = SvtCTLOptions::IsCTLFontEnabled();
@@ -1328,6 +1338,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
     m_xCTLSupportCB->save_state();
     bReadonly = pLangConfig->aCTLLanguageOptions.IsReadOnly(SvtCTLOptions::E_CTLFONT);
     m_xCTLSupportCB->set_sensitive(!bReadonly);
+    m_xCTLSupportImg->set_visible(bReadonly);
     SupportHdl(*m_xCTLSupportCB);
 
     m_xIgnoreLanguageChangeCB->set_active( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange() );
@@ -1633,12 +1644,20 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Locale);
     m_xLocaleSettingLB->set_sensitive(!bReadonly);
     m_xLocaleSettingFT->set_sensitive(!bReadonly);
+    m_xLocaleSettingImg->set_visible(bReadonly);
 
 
     m_xDecimalSeparatorCB->set_active( pLangConfig->aSysLocaleOptions.IsDecimalSeparatorAsLocale());
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::DecimalSeparator);
+    m_xDecimalSeparatorCB->set_sensitive(!bReadonly);
+    m_xDecimalSeparatorFT->set_sensitive(!bReadonly);
+    m_xDecimalSeparatorImg->set_visible(bReadonly);
     m_xDecimalSeparatorCB->save_state();
 
     m_xIgnoreLanguageChangeCB->set_active( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::IgnoreLanguageChange);
+    m_xIgnoreLanguageChangeCB->set_sensitive(!bReadonly);
+    m_xIgnoreLanguageChangeImg->set_visible(bReadonly);
     m_xIgnoreLanguageChangeCB->save_state();
 
     // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
@@ -1662,6 +1681,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Currency);
     m_xCurrencyLB->set_sensitive(!bReadonly);
     m_xCurrencyFT->set_sensitive(!bReadonly);
+    m_xCurrencyImg->set_visible(bReadonly);
 
     // date acceptance patterns
     OUString aDatePatternsString = pLangConfig->aSysLocaleOptions.GetDatePatternsConfigString();
@@ -1683,6 +1703,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::DatePatterns);
     m_xDatePatternsED->set_sensitive(!bReadonly);
     m_xDatePatternsFT->set_sensitive(!bReadonly);
+    m_xDatePatternsImg->set_visible(bReadonly);
     m_xDatePatternsED->save_value();
 
     //western/CJK/CLK language
@@ -1767,6 +1788,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( u"DefaultLocale" );
     m_xWesternLanguageFT->set_sensitive( bEnable );
     m_xWesternLanguageLB->set_sensitive( bEnable );
+    m_xWesternLanguageImg->set_visible( !bEnable );
 
     // check the box "For the current document only"
     // set the focus to the Western Language box
