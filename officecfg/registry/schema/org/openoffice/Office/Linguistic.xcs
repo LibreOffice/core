@@ -98,12 +98,6 @@
           <label>Spell and grammar context menu dictionary image</label>
         </info>
       </prop>
-      <prop oor:name="ThesaurusDialogImage" oor:type="xs:string">
-        <info>
-          <desc>The path to the image for the thesaurus dialog.</desc>
-          <label>Thesaurus dialog image</label>
-        </info>
-      </prop>
       <prop oor:name="SynonymsContextMenuImage" oor:type="xs:string">
         <info>
           <desc>The path to the image for the synonyms context menu.</desc>
