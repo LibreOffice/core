@@ -72,12 +72,6 @@
           the old user layer to the new user layer</desc>
         </info>
       </prop>
-      <prop oor:name="IncludedExtensions" oor:type="oor:string-list">
-        <info>
-          <desc>a list of extension identifiers that are to be copied from the
-          old user layer to the new user layer</desc>
-        </info>
-      </prop>
       <prop oor:name="ExcludedExtensions" oor:type="oor:string-list">
         <info>
           <desc>a list of extension identifiers that are not to be copied from
