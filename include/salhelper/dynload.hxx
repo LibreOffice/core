@@ -99,7 +99,7 @@ protected:
     The libraries must provide a struct with function pointers for all supported C functions.
     The loader loads the specified library and call the specified initialization function
     to initialize the function pointers with the real functions. Furthermore provides the
-    loader a reference counter for the library. When the last instance of the laoder will
+    loader a reference counter for the library. When the last instance of the loader will
     be destroyed the loader will unload the library.
 
     @deprecated
