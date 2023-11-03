@@ -515,7 +515,8 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
             (eMechanism == rtl_UriEncodeKeepEscapes
              || eMechanism == rtl_UriEncodeCheckEscapes
              || eMechanism == rtl_UriEncodeStrictKeepEscapes),
-            eCharset, &eType);
+            eMechanism == rtl_UriEncodeStrictKeepEscapes ? RTL_TEXTENCODING_UTF8 : eCharset,
+            &eType);
 
         switch (eType)
         {

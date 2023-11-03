@@ -495,6 +495,47 @@ void Test::test_Uri() {
                 aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
                 RTL_TEXTENCODING_ISO_8859_5));
     }
+
+    CPPUNIT_ASSERT_EQUAL(
+        u"%80"_ustr,
+        rtl::Uri::encode(
+            u"%80"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_ASCII_US));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%80"_ustr,
+        rtl::Uri::encode(
+            u"%80"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_ISO_8859_1));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%80"_ustr,
+        rtl::Uri::encode(
+            u"%80"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%80"_ustr,
+        rtl::Uri::encode(
+            u"%80"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_SHIFT_JIS));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%FE"_ustr,
+        rtl::Uri::encode(
+            u"%FE"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_ASCII_US));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%FE"_ustr,
+        rtl::Uri::encode(
+            u"%FE"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_ISO_8859_1));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%FE"_ustr,
+        rtl::Uri::encode(
+            u"%FE"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT_EQUAL(
+        u"%FE"_ustr,
+        rtl::Uri::encode(
+            u"%FE"_ustr, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+            RTL_TEXTENCODING_SHIFT_JIS));
 }
 
 }

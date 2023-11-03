@@ -174,6 +174,11 @@ typedef enum
     /** Like rtl_UriEncodeKeepEscapes, but indicating failure when converting
         unmappable characters.
 
+        Also, any escape sequences that are present are always considered to be (potentially broken)
+        UTF-8.  This mechanism is meant to be used on the result of a rtl_UriDecodeToIuri decoding,
+        which will thus only contain escape sequences representing either ASCII characters or broken
+        UTF-8 sequences, and which will all be kept as-is.
+
         @since UDK 3.2.7
      */
     rtl_UriEncodeStrictKeepEscapes,
