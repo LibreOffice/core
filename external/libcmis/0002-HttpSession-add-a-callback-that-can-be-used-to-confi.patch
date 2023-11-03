@@ -1,0 +1,142 @@
+From 94012ca5b669e71ea35508159f63576364736dc2 Mon Sep 17 00:00:00 2001
+From: Michael Stahl <michael.stahl@allotropia.de>
+Date: Mon, 6 Nov 2023 14:18:59 +0100
+Subject: [PATCH 2/2] HttpSession: add a callback that can be used to configure
+ libcurl
+
+---
+ inc/libcmis/session-factory.hxx | 7 +++++++
+ src/libcmis/http-session.cxx    | 8 +++++++-
+ src/libcmis/http-session.hxx    | 8 +++++++-
+ src/libcmis/session-factory.cxx | 9 ++++++++-
+ 4 files changed, 29 insertions(+), 3 deletions(-)
+
+diff --git a/inc/libcmis/session-factory.hxx b/inc/libcmis/session-factory.hxx
+index 45abd8b..227ac4d 100644
+--- a/inc/libcmis/session-factory.hxx
++++ b/inc/libcmis/session-factory.hxx
+@@ -38,6 +38,9 @@
+ #include "libcmis/repository.hxx"
+ #include "libcmis/session.hxx"
+ 
++// needed for a callback type
++typedef void CURL;
++
+ namespace libcmis
+ {
+     /** This callback provides the OAuth2 code or NULL.
+@@ -80,6 +83,8 @@ namespace libcmis
+     };
+     typedef boost::shared_ptr< CertValidationHandler > CertValidationHandlerPtr;
+ 
++    typedef void(*CurlInitProtocolsFunction)(CURL *);
++
+     class LIBCMIS_API SessionFactory
+     {
+         private:
+@@ -109,6 +114,8 @@ namespace libcmis
+             static void setCertificateValidationHandler( CertValidationHandlerPtr handler ) { s_certValidationHandler = handler; }
+             static CertValidationHandlerPtr getCertificateValidationHandler( ) { return s_certValidationHandler; }
+ 
++            static void setCurlInitProtocolsFunction(CurlInitProtocolsFunction);
++
+             static void setProxySettings( std::string proxy,
+                     std::string noProxy,
+                     std::string proxyUser,
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index 9703427..8787c50 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -133,8 +133,10 @@ namespace
+ }
+ 
+ HttpSession::HttpSession( string username, string password, bool noSslCheck,
+-                          libcmis::OAuth2DataPtr oauth2, bool verbose ) :
++                          libcmis::OAuth2DataPtr oauth2, bool verbose,
++                          libcmis::CurlInitProtocolsFunction initProtocols) :
+     m_curlHandle( NULL ),
++    m_CurlInitProtocolsFunction(initProtocols),
+     m_no100Continue( false ),
+     m_oauth2Handler( NULL ),
+     m_username( username ),
+@@ -882,6 +884,10 @@
+     const unsigned long protocols = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+     curl_easy_setopt(m_curlHandle, CURLOPT_PROTOCOLS, protocols);
+     curl_easy_setopt(m_curlHandle, CURLOPT_REDIR_PROTOCOLS, protocols);
++    if (m_CurlInitProtocolsFunction)
++    {
++        (*m_CurlInitProtocolsFunction)(m_curlHandle);
++    }
+ }
+ 
+ const char* CurlException::what( ) const noexcept
+diff --git a/src/libcmis/http-session.hxx b/src/libcmis/http-session.hxx
+index 6c9ed1b..34223b2 100644
+--- a/src/libcmis/http-session.hxx
++++ b/src/libcmis/http-session.hxx
+@@ -43,6 +43,10 @@
+ 
+ class OAuth2Handler;
+ 
++namespace libcmis {
++    typedef void(*CurlInitProtocolsFunction)(CURL *);
++}
++
+ class CurlException : public std::exception
+ {
+     private:
+@@ -93,6 +97,7 @@ class HttpSession
+ {
+     protected:
+         CURL* m_curlHandle;
++        libcmis::CurlInitProtocolsFunction m_CurlInitProtocolsFunction = nullptr;
+     private:
+         bool  m_no100Continue;
+     protected:
+@@ -111,7 +116,8 @@ class HttpSession
+         HttpSession( std::string username, std::string password,
+                      bool noSslCheck = false,
+                      libcmis::OAuth2DataPtr oauth2 = libcmis::OAuth2DataPtr(),
+-                     bool verbose = false );
++                     bool verbose = false,
++                     libcmis::CurlInitProtocolsFunction = nullptr);
+ 
+         HttpSession( const HttpSession& copy );
+         virtual ~HttpSession( );
+diff --git a/src/libcmis/session-factory.cxx b/src/libcmis/session-factory.cxx
+index 1222473..47dc1c8 100644
+--- a/src/libcmis/session-factory.cxx
++++ b/src/libcmis/session-factory.cxx
+@@ -38,6 +38,7 @@ using namespace std;
+ 
+ namespace libcmis
+ {
++    CurlInitProtocolsFunction g_CurlInitProtocolsFunction = 0;
+     AuthProviderPtr SessionFactory::s_authProvider;
+     OAuth2AuthCodeProvider SessionFactory::s_oauth2AuthCodeProvider;
+ 
+@@ -48,6 +49,11 @@ namespace libcmis
+ 
+     CertValidationHandlerPtr SessionFactory::s_certValidationHandler;
+ 
++    void SessionFactory::setCurlInitProtocolsFunction(CurlInitProtocolsFunction const initProtocols)
++    {
++        g_CurlInitProtocolsFunction = initProtocols;
++    }
++
+     void SessionFactory::setProxySettings( string proxy, string noProxy,
+             string proxyUser, string proxyPass )
+     {
+@@ -81,7 +87,8 @@ namespace libcmis
+                 libcmis::HttpResponsePtr response;
+                 boost::shared_ptr< HttpSession> httpSession(
+                         new HttpSession( username, password,
+-                                         noSslCheck, oauth2, verbose ) );
++                                         noSslCheck, oauth2, verbose,
++                                         g_CurlInitProtocolsFunction) );
+ 
+                 try
+                 {
+-- 
+2.41.0
+
