@@ -60,7 +60,7 @@ public class TextDocumentStructure {
             Object oDesktop = xMCF.createInstanceWithContext(
                                         "com.sun.star.frame.Desktop", xContext);
 
-            // get the component laoder from the desktop to create a new
+            // get the component loader from the desktop to create a new
             // text document
             com.sun.star.frame.XComponentLoader xCLoader =
                 UnoRuntime.queryInterface(
