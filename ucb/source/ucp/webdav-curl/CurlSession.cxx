@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <curlinit.hxx>
 #include <config_version.h>
 
 #include <map>
@@ -680,6 +681,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     assert(rc == CURLE_OK);
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERFUNCTION, &header_callback);
     assert(rc == CURLE_OK);
+    ::InitCurl_easy(m_pCurl.get());
     // tdf#149921 by default, with schannel (WNT) connection fails if revocation
     // lists cannot be checked; try to limit the checking to when revocation
     // lists can actually be retrieved (usually not the case for self-signed CA)

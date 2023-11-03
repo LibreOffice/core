@@ -16,6 +16,10 @@
 #include <svl/sigstruct.hxx>
 #include <config_crypto.h>
 
+#if USE_CRYPTO_NSS
+#include <curlinit.hxx>
+#endif
+
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -1081,6 +1085,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
+
+        ::InitCurl_easy(curl);
 
         SAL_INFO("svl.crypto", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
 
