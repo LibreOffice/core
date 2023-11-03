@@ -48,7 +48,7 @@ class ScTextWndBase
 public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) = 0;
-    virtual void            SetTextString( const OUString& rString ) = 0;
+    virtual void            SetTextString( const OUString& rString, bool bKitUpdate ) = 0;
     virtual const OUString& GetTextString() const = 0;
     virtual void            StartEditEngine() = 0;
     virtual void            StopEditEngine( bool bAll ) = 0;
@@ -70,7 +70,7 @@ public:
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual ~ScTextWnd() override;
 
-    virtual void            SetTextString( const OUString& rString ) override;
+    virtual void            SetTextString( const OUString& rString, bool bKitUpdate ) override;
     virtual const OUString& GetTextString() const override;
 
     bool                    IsInputActive() override;
@@ -223,7 +223,7 @@ public:
     void                    SetScrollPolicy();
     void                    SetNumLines(tools::Long nLines);
     virtual void            SetFormulaMode(bool bSet) override;
-    virtual void            SetTextString(const OUString& rString) override;
+    virtual void            SetTextString(const OUString& rString, bool bKitUpdate) override;
     virtual void            StartEditEngine() override;
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
@@ -248,7 +248,7 @@ public:
     virtual void            dispose() override;
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
-    void                    SetTextString(const OUString& rString) override;
+    void                    SetTextString(const OUString& rString, bool bKitUpdate) override;
     void                    StartEditEngine() override;
     virtual EditView*       GetEditView() const override;
     virtual bool            HasEditView() const override;
@@ -299,7 +299,7 @@ public:
 
     void            SetFuncString( const OUString& rString, bool bDoEdit = true );
     void            SetPosString( const OUString& rStr );
-    void            SetTextString( const OUString& rString );
+    void            SetTextString(const OUString& rString, bool bKitUpdate);
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
