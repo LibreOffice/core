@@ -16,6 +16,8 @@
 
 #include <curl/curl.h>
 
+#include <curlinit.hxx>
+
 #ifdef _WIN32
 #include <memory>
 #include <windows.h>
@@ -93,6 +95,8 @@ static bool uploadContent(std::map<std::string, std::string>& parameters, std::s
     CURL* curl = curl_easy_init();
     if (!curl)
         return false;
+
+    ::InitCurl_easy(curl);
 
     std::string proxy, proxy_user_pwd, ca_certificate_file, file, url, version;
 
