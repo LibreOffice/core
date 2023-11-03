@@ -28,6 +28,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/sfx.hrc>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/stritem.hxx>
@@ -36,6 +38,7 @@
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/window.hxx>
 #include <sal/macros.h>
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>
@@ -876,13 +879,44 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     if ( nScClickMouseModifier & KEY_SHIFT )     // control-click -> into new window
         aTarget.SetValue("_blank");
     SfxViewFrame* pFrame = nullptr;
+    SfxObjectShell* pObjShell = nullptr;
     OUString aReferName;
     if ( pScActiveViewShell )
     {
         pFrame = pScActiveViewShell->GetViewFrame();
-        SfxMedium* pMed = pFrame->GetObjectShell()->GetMedium();
+        pObjShell = pFrame->GetObjectShell();
+        SfxMedium* pMed = pObjShell->GetMedium();
         if (pMed)
             aReferName = pMed->GetName();
+    }
+
+    if (INetURLObject(rURL).IsExoticProtocol())
+    {
+        // Default to ignoring exotic protocols
+        bool bAllow = false;
+        if (pObjShell)
+        {
+            // If the document had macros when loaded then follow the allowed macro-mode
+            if (pObjShell->GetHadCheckedMacrosOnLoad())
+                bAllow = pObjShell->AdjustMacroMode();
+            else // otherwise ask the user, defaulting to cancel
+            {
+                assert(pFrame && "if we have pObjShell we have pFrame");
+                //Reuse URITools::onOpenURI warning string
+                ScopedVclPtrInstance<MessageDialog> xQueryBox(&pFrame->GetWindow(),
+                                                               SfxResId(STR_DANGEROUS_TO_OPEN),
+                                                               VclMessageType::Warning, VclButtonsType::YesNo);
+                xQueryBox->set_primary_text(xQueryBox->get_primary_text().replaceFirst("$(ARG1)",
+                    INetURLObject::decode(rURL, INetURLObject::DecodeMechanism::Unambiguous)));
+                //TODO: xQueryBox->set_default_response(RET_NO);
+                bAllow = xQueryBox->Execute() == RET_YES;
+            }
+        }
+        if (!bAllow)
+        {
+            SAL_WARN("sc", "ScGlobal::OpenURL ignoring: " << rURL);
+            return;
+        }
     }
 
     SfxFrameItem aFrm( SID_DOCFRAME, pFrame );

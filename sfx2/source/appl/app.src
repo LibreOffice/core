@@ -60,6 +60,11 @@ String STR_NO_ABS_URI_REF
     Text [ en-US ] = "\"$(ARG1)\" is not an absolute URL that can be passed to an external application to open it." ;
 };
 
+String STR_DANGEROUS_TO_OPEN
+{
+    Text [ en-US ] = "It might be dangerous to open \"$(ARG1)\".\nDo you really want to open it?" ;
+};
+
 String GID_INTERN
 {
     Text [ en-US ] = "Internal" ;

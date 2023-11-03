@@ -124,6 +124,7 @@
 #define STR_SIGNATURE_OK                    (RID_SFX_START+144)
 #define STR_REFRESH_MASTER_PASSWORD         (RID_SFX_START+145)
 #define STR_REFRESH_PASSWORD                (RID_SFX_START+146)
+#define STR_DANGEROUS_TO_OPEN               (RID_SFX_START+147)
 
 // group ids
 
