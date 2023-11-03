@@ -373,11 +373,12 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
         bool bChangedFile = sNewFile != sCurrentFile;
 
-        if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
-            || bReloadNotebookbar || comphelper::LibreOfficeKit::isActive())
-        {
-            const SfxViewShell* pViewShell = SfxViewShell::Current();
+        const SfxViewShell* pViewShell = SfxViewShell::Current();
+        bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
 
+        if ((!sFile.isEmpty() && bChangedFile) || !pNotebookBar || !pNotebookBar->IsVisible()
+            || bReloadNotebookbar || (comphelper::LibreOfficeKit::isActive() && !hasWeldedWrapper))
+        {
             // Notebookbar was loaded too early what caused:
             //   * in LOK: Paste Special feature was incorrectly initialized
             // Skip first request so Notebookbar will be initialized after document was loaded
@@ -414,8 +415,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
 
-
-            bool hasWeldedWrapper = m_pNotebookBarWeldedWrapper.find(pViewShell) != m_pNotebookBarWeldedWrapper.end();
             if ((!hasWeldedWrapper || bReloadNotebookbar) && pNotebookBar->IsWelded())
             {
                 sal_uInt64 nWindowId = reinterpret_cast<sal_uInt64>(pViewShell);
