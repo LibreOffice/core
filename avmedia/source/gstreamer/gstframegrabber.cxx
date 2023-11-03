@@ -56,18 +56,17 @@ void FrameGrabber::disposePipeline()
 FrameGrabber::FrameGrabber( const OUString &rURL ) :
     FrameGrabber_BASE()
 {
-    gchar *pPipelineStr;
-    pPipelineStr = g_strdup_printf(
+    const char pPipelineStr[] =
 #ifdef AVMEDIA_GST_0_10
-        "uridecodebin uri=%s ! ffmpegcolorspace ! videoscale ! appsink "
+        "uridecodebin name=source ! ffmpegcolorspace ! videoscale ! appsink "
         "name=sink caps=\"video/x-raw-rgb,format=RGB,pixel-aspect-ratio=1/1,"
         "bpp=(int)24,depth=(int)24,endianness=(int)4321,"
-        "red_mask=(int)0xff0000, green_mask=(int)0x00ff00, blue_mask=(int)0x0000ff\"",
+        "red_mask=(int)0xff0000, green_mask=(int)0x00ff00, blue_mask=(int)0x0000ff\""
 #else
-        "uridecodebin uri=%s ! videoconvert ! videoscale ! appsink "
-        "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\"",
+        "uridecodebin name=source ! videoconvert ! videoscale ! appsink "
+        "name=sink caps=\"video/x-raw,format=RGB,pixel-aspect-ratio=1/1\""
 #endif
-        OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+        ;
 
     GError *pError = nullptr;
     mpPipeline = gst_parse_launch( pPipelineStr, &pError );
@@ -78,6 +77,12 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
     }
 
     if( mpPipeline ) {
+
+        if (GstElement *pUriDecode = gst_bin_get_by_name(GST_BIN(mpPipeline), "source"))
+            g_object_set(pUriDecode, "uri", OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr(), nullptr);
+        else
+            g_warning("Missing 'source' element in gstreamer pipeline");
+
         // pre-roll
         switch( gst_element_set_state( mpPipeline, GST_STATE_PAUSED ) ) {
         case GST_STATE_CHANGE_FAILURE:
