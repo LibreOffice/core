@@ -79,11 +79,19 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd(weld::Window* pParentDialog, SvxHyperlink
     mxBtApply->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
     mxBtClose->connect_clicked( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
     mxLbTree->connect_row_activated( LINK ( this, SvxHlinkDlgMarkWnd, DoubleClickApplyHdl_Impl ) );
+
+    // tdf#149935 - remember last used position and size
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
 {
     ClearTree();
+    // tdf#149935 - remember last used position and size
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
+    aDlgOpt.SetWindowState(m_xDialog->get_window_state(vcl::WindowDataMask::PosSize));
 }
 
 void SvxHlinkDlgMarkWnd::ErrorChanged()
@@ -126,7 +134,12 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
 // Move window
 void SvxHlinkDlgMarkWnd::MoveTo(const Point& rNewPos)
 {
-    m_xDialog->window_move(rNewPos.X(), rNewPos.Y());
+    // tdf#149935 - remember last used position and size
+    SvtViewOptions aDlgOpt(EViewType::Dialog, m_xDialog->get_help_id());
+    if (aDlgOpt.Exists())
+        m_xDialog->set_window_state(aDlgOpt.GetWindowState());
+    else
+        m_xDialog->window_move(rNewPos.X(), rNewPos.Y());
 }
 
 namespace
