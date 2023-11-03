@@ -41,6 +41,9 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <string_view>
+
+#include <curlinit.hxx>
+
 #include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
@@ -129,6 +132,8 @@ std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
         SAL_WARN("languagetool", "CURL initialization failed");
         return {}; // empty string
     }
+
+    ::InitCurl_easy(curl.get());
 
     // Same useragent string as in CurlSession (ucp/webdav-curl/CurlSession.cxx)
     curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
