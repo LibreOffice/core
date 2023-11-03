@@ -420,8 +420,12 @@ namespace sfx2
         return bHasMacros;
     }
 
+    bool DocumentMacroMode::hasMacros() const
+    {
+        return m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading();
+    }
 
-    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
+    bool DocumentMacroMode::checkMacrosOnLoading( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature, bool bHasMacros )
     {
         bool bAllow = false;
         if ( SvtSecurityOptions::IsMacroDisabled() )
@@ -431,7 +435,7 @@ namespace sfx2
         }
         else
         {
-            if (m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() || m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
+            if (bHasMacros)
             {
                 bAllow = adjustMacroMode( rxInteraction, bHasValidContentSignature );
             }
