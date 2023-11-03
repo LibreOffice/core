@@ -945,6 +945,11 @@ public:
     static bool IsCaseSensitive() { return true; }
 
 
+    // INetProtocol::Macro, INetProtocol::Uno, INetProtocol::Slot,
+    // vnd.sun.star.script, etc. All the types of URLs which shouldn't
+    // be accepted from an outside controlled source
+    bool IsExoticProtocol() const;
+
 private:
     // General Structure:
 
