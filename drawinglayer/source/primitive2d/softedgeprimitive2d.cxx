@@ -206,10 +206,6 @@ void SoftEdgePrimitive2D::create2DDecomposition(
             break;
         AlphaMask blurMask(drawinglayer::primitive2d::ProcessAndBlurAlphaMask(
             aMask, -fDiscreteSoftRadius * fScale, fDiscreteSoftRadius * fScale, 0));
-        // tdf#157086 invert the blur mask instead of the alpha mask
-        // An invert is needed to fix tdf#156808 but inverting the alpha mask
-        // causes tdf#157086 so invert the blur mask instead.
-        blurMask.Invert();
         aMask.BlendWith(blurMask);
 
         // The end result is the original bitmap with blurred 8-bit alpha mask

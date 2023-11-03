@@ -33,9 +33,14 @@ namespace drawinglayer::primitive2d
 AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius,
                                   double fBlurRadius, sal_uInt8 nTransparency, bool bConvertTo1Bit)
 {
+    // Invert it to operate in the transparency domain. Trying to update this method to
+    // work in the alpha domain is fraught with hazards.
+    Bitmap tmpMask = rMask;
+    tmpMask.Invert();
+
     // Only completely white pixels on the initial mask must be considered for transparency. Any
     // other color must be treated as black. This creates 1-bit B&W bitmap.
-    BitmapEx mask(bConvertTo1Bit ? rMask.CreateMask(COL_BLACK) : rMask);
+    BitmapEx mask(bConvertTo1Bit ? tmpMask.CreateMask(COL_WHITE) : tmpMask);
 
     // Scaling down increases performance without noticeable quality loss. Additionally,
     // current blur implementation can only handle blur radius between 2 and 254.
@@ -70,6 +75,9 @@ AlphaMask ProcessAndBlurAlphaMask(const Bitmap& rMask, double fErodeDilateRadius
     BitmapFilter::Filter(mask, BitmapFilterStackBlur(fBlurRadius));
 
     mask.Scale(rMask.GetSizePixel());
+
+    // And switch to the alpha domain.
+    mask.Invert();
 
     return AlphaMask(mask.GetBitmap());
 }

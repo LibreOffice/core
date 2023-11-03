@@ -209,12 +209,6 @@ void GlowPrimitive2D::create2DDecomposition(
                                                    fDiscreteGlowRadius * fScale / 2.0,
                                                    255 - getGlowColor().GetAlpha()));
 
-            // tdf#157502 and tdf#157652 invert alpha mask
-            // Due to the switch from transparency to alpha in commit
-            // 81994cb2b8b32453a92bcb011830fcb884f22ff3, invert the alpha
-            // mask.
-            mask.Invert();
-
             // The end result is the bitmap filled with glow color and blurred 8-bit alpha mask
             Bitmap bmp(aAlpha.GetSizePixel(), vcl::PixelFormat::N24_BPP);
             bmp.Erase(getGlowColor());
