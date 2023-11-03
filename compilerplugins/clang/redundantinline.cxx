@@ -10,6 +10,7 @@
 
 #include <cassert>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -141,7 +142,7 @@ private:
     }
 
     bool handleNonExternalLinkage(FunctionDecl const * decl) {
-        if (decl->getLinkageInternal() >= ModuleLinkage) {
+        if (decl->getLinkageInternal() >= compat::Linkage::Module) {
             return false;
         }
         if (!compiler.getSourceManager().isInMainFile(decl->getLocation())) {

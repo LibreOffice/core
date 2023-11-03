@@ -1013,7 +1013,7 @@ int derivedFromCount(QualType subclassQt, QualType baseclassQt)
 // a variable declared in an 'extern "..." {...}'-style linkage-specification as
 // if it contained the 'extern' specifier:
 bool hasExternalLinkage(VarDecl const * decl) {
-    if (decl->getLinkageAndVisibility().getLinkage() != ExternalLinkage) {
+    if (decl->getLinkageAndVisibility().getLinkage() != compat::Linkage::External) {
         return false;
     }
     for (auto ctx = decl->getLexicalDeclContext();

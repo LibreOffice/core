@@ -17,6 +17,7 @@
 #include "clang/Sema/SemaDiagnostic.h"
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -468,7 +469,7 @@ private:
         {
             return true;
         }
-        if (decl->getLinkageInternal() < ModuleLinkage)
+        if (decl->getLinkageInternal() < compat::Linkage::Module)
         {
             return true;
         }

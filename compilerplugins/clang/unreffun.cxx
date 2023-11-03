@@ -16,6 +16,7 @@
 #include "clang/AST/Attr.h"
 #include "clang/Sema/SemaInternal.h" // warn_unused_function
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -152,7 +153,7 @@ bool UnrefFun::VisitFunctionDecl(FunctionDecl const * decl) {
         return true;
     }
     LinkageInfo info(canon->getLinkageAndVisibility());
-    if (info.getLinkage() == ExternalLinkage
+    if (info.getLinkage() == compat::Linkage::External
         && loplugin::hasCLanguageLinkageType(canon) && canon->isDefined()
         && ((decl == canon && info.getVisibility() == DefaultVisibility)
             || ((canon->hasAttr<ConstructorAttr>()
