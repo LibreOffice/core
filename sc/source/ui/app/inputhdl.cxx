@@ -2611,7 +2611,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 aStr = aStr.copy(1, aStr.getLength() -2);
                 mpEditEngine->SetTextCurrentDefaults(aStr);
                 if ( pInputWin )
-                    pInputWin->SetTextString(aStr);
+                    pInputWin->SetTextString(aStr, true);
             }
 
             UpdateAdjust( cTyped );
@@ -2706,7 +2706,7 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
         // wrapped by DataChanging/DataChanged calls (like Drag&Drop)
         OUString aText(ScEditUtil::GetMultilineString(*mpEditEngine));
         lcl_RemoveTabs(aText);
-        pInputWin->SetTextString(aText);
+        pInputWin->SetTextString(aText, true);
     }
 }
 
@@ -2753,6 +2753,8 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
 
     UpdateParenthesis(); // Highlight parentheses anew
 
+    const bool bUpdateKit = comphelper::LibreOfficeKit::isActive() && pActiveViewSh && pInputWin;
+
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
         OUString aText;
@@ -2762,8 +2764,11 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             aText = GetEditText(mpEditEngine.get());
         lcl_RemoveTabs(aText);
 
-        if ( pInputWin )
-            pInputWin->SetTextString( aText );
+        if (pInputWin)
+        {
+            // If we will end up updating LoKit at the end, we can skip it here
+            pInputWin->SetTextString(aText, !bUpdateKit);
+        }
 
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -2809,7 +2814,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         }
     }
 
-    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh && pInputWin)
+    if (bUpdateKit)
     {
         UpdateActiveView();
         if (pActiveView)
@@ -4273,10 +4278,15 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         bTextValid = true;              //! To begin with remember as a string
                     }
 
-                    if ( pInputWin )
-                        pInputWin->SetTextString(aString);
+                    const bool bUpdateKit = comphelper::LibreOfficeKit::isActive() && pActiveViewSh;
 
-                    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
+                    if (pInputWin)
+                    {
+                        // If we will end up updating LoKit after this, we can skip it here
+                        pInputWin->SetTextString(aString, !bUpdateKit);
+                    }
+
+                    if (bUpdateKit)
                     {
                         UpdateActiveView();
                         EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -4432,7 +4442,7 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
         if ( pInputWin )
         {
             pInputWin->SetPosString( OUString() );
-            pInputWin->SetTextString( OUString() );
+            pInputWin->SetTextString(OUString(), true);
             pInputWin->Disable();
         }
 

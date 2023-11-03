@@ -259,14 +259,14 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         // Switch over while the Function AutoPilot is active
         // -> show content of the Function AutoPilot again
         // Also show selection (remember at the InputHdl)
-        mxTextWindow->SetTextString( pInputHdl->GetFormString() );
+        mxTextWindow->SetTextString(pInputHdl->GetFormString(), true);
     }
     else if (pInputHdl && pInputHdl->IsInputMode())
     {
         // If the input row was hidden while editing (e.g. when editing a formula
         // and then switching to another document or the help), display the text
         // we just edited from the InputHandler
-        mxTextWindow->SetTextString( pInputHdl->GetEditString() ); // Display text
+        mxTextWindow->SetTextString(pInputHdl->GetEditString(), true); // Display text
         if ( pInputHdl->IsTopMode() )
             pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
@@ -396,7 +396,7 @@ void ScInputWindow::StartFormula()
                 case CELLTYPE_VALUE:
                 {
                     nEndPos = nLen + 1;
-                    mxTextWindow->SetTextString("=" +  rString);
+                    mxTextWindow->SetTextString("=" +  rString, true);
                     break;
                 }
                 case CELLTYPE_STRING:
@@ -408,7 +408,7 @@ void ScInputWindow::StartFormula()
                     nEndPos = nLen;
                     break;
                 default:
-                    mxTextWindow->SetTextString("=");
+                    mxTextWindow->SetTextString("=", true);
                     break;
             }
         }
@@ -531,7 +531,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 
     if ( bDoEdit )
         mxTextWindow->TextGrabFocus();
-    mxTextWindow->SetTextString( rString );
+    mxTextWindow->SetTextString(rString, true);
     EditView* pView = mxTextWindow->GetEditView();
     if (!pView)
         return;
@@ -557,12 +557,12 @@ void ScInputWindow::SetPosString( const OUString& rStr )
         aWndPos->SetPos( rStr );
 }
 
-void ScInputWindow::SetTextString( const OUString& rString )
+void ScInputWindow::SetTextString( const OUString& rString, bool bKitUpdate )
 {
     if (rString.getLength() <= 32767)
-        mxTextWindow->SetTextString(rString);
+        mxTextWindow->SetTextString(rString, bKitUpdate);
     else
-        mxTextWindow->SetTextString(rString.copy(0, 32767));
+        mxTextWindow->SetTextString(rString.copy(0, 32767), bKitUpdate);
 }
 
 void ScInputWindow::SetOkCancelMode()
@@ -939,9 +939,9 @@ const OUString& ScInputBarGroup::GetTextString() const
     return mxTextWndGroup->GetTextString();
 }
 
-void ScInputBarGroup::SetTextString( const OUString& rString )
+void ScInputBarGroup::SetTextString(const OUString& rString, bool bKitUpdate)
 {
-    mxTextWndGroup->SetTextString(rString);
+    mxTextWndGroup->SetTextString(rString, bKitUpdate);
 }
 
 void ScInputBarGroup::Resize()
@@ -1275,9 +1275,9 @@ void ScTextWndGroup::SetFormulaMode(bool bSet)
     mxTextWnd->SetFormulaMode(bSet);
 }
 
-void ScTextWndGroup::SetTextString(const OUString& rString)
+void ScTextWndGroup::SetTextString(const OUString& rString, bool bKitUpdate)
 {
-    mxTextWnd->SetTextString(rString);
+    mxTextWnd->SetTextString(rString, bKitUpdate);
 }
 
 void ScTextWndGroup::StartEditEngine()
@@ -1988,7 +1988,7 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
     return i;
 }
 
-void ScTextWnd::SetTextString( const OUString& rNewString )
+void ScTextWnd::SetTextString( const OUString& rNewString, bool bKitUpdate )
 {
     // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
     // the initialisation scenario where a cell is first clicked on we end up with the text in the
@@ -2064,7 +2064,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         bInputMode = false;
     }
 
-    if (comphelper::LibreOfficeKit::isActive())
+    if (bKitUpdate && comphelper::LibreOfficeKit::isActive())
     {
         ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
         ScInputHandler::LOKSendFormulabarUpdate(m_xEditView.get(), SfxViewShell::Current(), rNewString, aSel);
