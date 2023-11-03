@@ -1274,22 +1274,6 @@
           </info>
           <value>false</value>
         </prop>
-        <prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
-          <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
-          <info>
-            <desc>Specifies whether control points are displayed simple or enhanced.</desc>
-            <label>Simple control points</label>
-          </info>
-          <value>true</value>
-        </prop>
-        <prop oor:name="LargeControlPoint" oor:type="xs:boolean">
-          <!-- UIHints: Tools - Options - Text document - Layout - [Section] Lines -->
-          <info>
-            <desc>Specifies whether control points are displayed as larger than the default size.</desc>
-            <label>Large control points</label>
-          </info>
-          <value>true</value>
-        </prop>
       </group>
       <group oor:name="Window">
         <info>
