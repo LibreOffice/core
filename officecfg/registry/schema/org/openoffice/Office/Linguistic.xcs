@@ -77,13 +77,6 @@
         <desc>The images for vendor specific branding in the UI. The node name is
         the service implementation name.</desc>
       </info>
-      <prop oor:name="SpellAndGrammarDialogImage" oor:type="xs:string">
-        <info>
-          <desc>The path to the image for the spell and grammar checking
-          dialog.</desc>
-          <label>Spell and grammar dialog image</label>
-        </info>
-      </prop>
       <prop oor:name="SpellAndGrammarContextMenuSuggestionImage" oor:type="xs:string">
         <info>
           <desc>The path to the image for the spell and grammar checking
