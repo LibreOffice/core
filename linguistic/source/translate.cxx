@@ -4,6 +4,7 @@
 #include <rtl/string.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <curlinit.hxx>
 #include <vcl/htmltransferable.hxx>
 #include <tools/long.hxx>
 
@@ -16,6 +17,9 @@ OString Translate(const OString& rTargetLang, const OString& rAPIUrl, const OStr
 
     std::unique_ptr<CURL, std::function<void(CURL*)>> curl(curl_easy_init(),
                                                            [](CURL* p) { curl_easy_cleanup(p); });
+
+    ::InitCurl_easy(curl.get());
+
     (void)curl_easy_setopt(curl.get(), CURLOPT_URL, rAPIUrl.getStr());
     (void)curl_easy_setopt(curl.get(), CURLOPT_FAILONERROR, 1L);
     (void)curl_easy_setopt(curl.get(), CURLOPT_TIMEOUT, CURL_TIMEOUT);
