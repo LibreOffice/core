@@ -424,6 +424,9 @@ public:
     void                        SetMacroCallsSeenWhileLoading();
     bool                        GetMacroCallsSeenWhileLoading() const;
 
+    // true if the document had macros (or similar) on load to trigger warning user
+    bool                        GetHadCheckedMacrosOnLoad() const;
+
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 

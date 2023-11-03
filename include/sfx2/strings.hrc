@@ -103,6 +103,7 @@
 #define STR_GB                                  NC_("STR_GB", "GB")
 #define STR_QUERY_LASTVERSION                   NC_("STR_QUERY_LASTVERSION", "Cancel all changes?")
 #define STR_NO_WEBBROWSER_FOUND                 NC_("STR_NO_WEBBROWSER_FOUND", "Opening \"$(ARG1)\" failed with error code $(ARG2) and message: \"$(ARG3)\"\nMaybe no web browser could be found on your system. In that case, please check your Desktop Preferences or install a web browser (for example, Firefox) in the default location requested during the browser installation.")
+#define STR_DANGEROUS_TO_OPEN                   NC_("STR_DANGEROUS_TO_OPEN", "It might be dangerous to open \"$(ARG1)\".\nDo you really want to open it?")
 #define STR_NO_ABS_URI_REF                      NC_("STR_NO_ABS_URI_REF", "\"$(ARG1)\" is not an absolute URL that can be passed to an external application to open it.")
 #define STR_GID_INTERN                          NC_("STR_GID_INTERN", "Internal")
 #define STR_GID_APPLICATION                     NC_("STR_GID_APPLICATION", "Application")

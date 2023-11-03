@@ -91,7 +91,8 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         m_bSharedXMLFlag:1, // whether the document should be edited in shared mode
                         m_bAllowShareControlFileClean:1, // whether the flag should be stored in xml file
                         m_bConfigOptionsChecked:1, // whether or not the user options are checked after the Options dialog is closed.
-                        m_bMacroCallsSeenWhileLoading:1; // whether or not the user options are checked after the Options dialog is closed.
+                        m_bMacroCallsSeenWhileLoading:1, // whether or not macro calls were seen when loading document.
+                        m_bHadCheckedMacrosOnLoad:1; // if document contained macros (or calls) when loaded
 
     IndexBitSet         aBitSet;
     ErrCode             lErr;
