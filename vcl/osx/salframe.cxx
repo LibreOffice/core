@@ -1018,7 +1018,24 @@ void AquaSalFrame::Flush()
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    bool bFlush = ( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 );
+
+    // tdf#155266 flush when scrolling or dragging
+    // Delaying flushing until the dispatch level returns to zero causes
+    // scrolling via the scrollwheel or mouse drag to appear laggy and
+    // jerky.
+    if( !bFlush )
+    {
+        NSEvent *pEvent = [NSApp currentEvent];
+        if ( pEvent )
+        {
+            NSEventType nType = [pEvent type];
+            if ( nType == NSEventTypeScrollWheel || nType == NSEventTypeLeftMouseDragged )
+                bFlush = true;
+        }
+    }
+
+    if( bFlush )
     {
         mpGraphics->Flush();
         [mpNSView display];
@@ -1039,7 +1056,24 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    bool bFlush = ( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 );
+
+    // tdf#155266 flush when scrolling or dragging
+    // Delaying flushing until the dispatch level returns to zero causes
+    // scrolling via the scrollwheel or mouse drag to appear laggy and
+    // jerky.
+    if( !bFlush )
+    {
+        NSEvent *pEvent = [NSApp currentEvent];
+        if ( pEvent )
+        {
+            NSEventType nType = [pEvent type];
+            if ( nType == NSEventTypeScrollWheel || nType == NSEventTypeLeftMouseDragged )
+                bFlush = true;
+        }
+    }
+
+    if( bFlush )
     {
         mpGraphics->Flush( rRect );
         [mpNSView display];
