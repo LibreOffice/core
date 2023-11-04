@@ -31,11 +31,17 @@ OptLanguageToolTabPage::OptLanguageToolTabPage(weld::Container* pPage,
                                                const SfxItemSet& rSet)
     : SfxTabPage(pPage, pController, "cui/ui/langtoolconfigpage.ui", "OptLangToolPage", &rSet)
     , m_xBaseURLED(m_xBuilder->weld_entry("baseurl"))
+    , m_xBaseURLImg(m_xBuilder->weld_widget("lockbaseurl"))
     , m_xUsernameED(m_xBuilder->weld_entry("username"))
+    , m_xUsernameImg(m_xBuilder->weld_widget("lockusername"))
     , m_xApiKeyED(m_xBuilder->weld_entry("apikey"))
+    , m_xApiKeyImg(m_xBuilder->weld_widget("lockapikey"))
     , m_xRestProtocol(m_xBuilder->weld_entry("restprotocol"))
+    , m_xRestProtocolImg(m_xBuilder->weld_widget("lockrestprotocol"))
     , m_xActivateBox(m_xBuilder->weld_check_button("activate"))
+    , m_xActivateBoxImg(m_xBuilder->weld_widget("lockactivate"))
     , m_xSSLDisableVerificationBox(m_xBuilder->weld_check_button("verifyssl"))
+    , m_xSSLDisableVerificationBoxImg(m_xBuilder->weld_widget("lockverifyssl"))
     , m_xApiSettingsFrame(m_xBuilder->weld_frame("apisettings"))
 {
     m_xActivateBox->connect_toggled(LINK(this, OptLanguageToolTabPage, CheckHdl));
@@ -60,7 +66,11 @@ void OptLanguageToolTabPage::EnableControls(bool bEnable)
     }
     m_xApiSettingsFrame->set_visible(bEnable);
     m_xActivateBox->set_active(bEnable);
+    m_xActivateBox->set_sensitive(!LanguageToolCfg::IsEnabled::isReadOnly());
+    m_xActivateBoxImg->set_visible(LanguageToolCfg::IsEnabled::isReadOnly());
     m_xSSLDisableVerificationBox->set_active(!LanguageToolCfg::SSLCertVerify::get());
+    m_xSSLDisableVerificationBox->set_sensitive(!LanguageToolCfg::SSLCertVerify::isReadOnly());
+    m_xSSLDisableVerificationBoxImg->set_visible(LanguageToolCfg::SSLCertVerify::isReadOnly());
 }
 
 IMPL_LINK_NOARG(OptLanguageToolTabPage, CheckHdl, weld::Toggleable&, void)
@@ -77,10 +87,24 @@ void OptLanguageToolTabPage::Reset(const SfxItemSet*)
     else
         m_xBaseURLED->set_text(aBaseURL);
 
+    m_xBaseURLED->set_sensitive(!LanguageToolCfg::BaseURL::isReadOnly());
+    m_xBaseURLImg->set_visible(LanguageToolCfg::BaseURL::isReadOnly());
+
     m_xUsernameED->set_text(LanguageToolCfg::Username::get().value_or(""));
+    m_xUsernameED->set_sensitive(!LanguageToolCfg::Username::isReadOnly());
+    m_xUsernameImg->set_visible(LanguageToolCfg::Username::isReadOnly());
+
     m_xApiKeyED->set_text(LanguageToolCfg::ApiKey::get().value_or(""));
+    m_xApiKeyED->set_sensitive(!LanguageToolCfg::ApiKey::isReadOnly());
+    m_xApiKeyImg->set_visible(LanguageToolCfg::ApiKey::isReadOnly());
+
     m_xRestProtocol->set_text(LanguageToolCfg::RestProtocol::get().value_or(""));
+    m_xRestProtocol->set_sensitive(!LanguageToolCfg::RestProtocol::isReadOnly());
+    m_xRestProtocolImg->set_visible(LanguageToolCfg::RestProtocol::isReadOnly());
+
     m_xSSLDisableVerificationBox->set_active(!LanguageToolCfg::SSLCertVerify::get());
+    m_xSSLDisableVerificationBox->set_sensitive(!LanguageToolCfg::SSLCertVerify::isReadOnly());
+    m_xSSLDisableVerificationBoxImg->set_visible(LanguageToolCfg::SSLCertVerify::isReadOnly());
 }
 
 OUString OptLanguageToolTabPage::GetAllStrings()

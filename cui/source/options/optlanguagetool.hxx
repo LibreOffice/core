@@ -36,11 +36,17 @@ public:
 
 private:
     std::unique_ptr<weld::Entry> m_xBaseURLED;
+    std::unique_ptr<weld::Widget> m_xBaseURLImg;
     std::unique_ptr<weld::Entry> m_xUsernameED;
+    std::unique_ptr<weld::Widget> m_xUsernameImg;
     std::unique_ptr<weld::Entry> m_xApiKeyED;
+    std::unique_ptr<weld::Widget> m_xApiKeyImg;
     std::unique_ptr<weld::Entry> m_xRestProtocol;
+    std::unique_ptr<weld::Widget> m_xRestProtocolImg;
     std::unique_ptr<weld::CheckButton> m_xActivateBox;
+    std::unique_ptr<weld::Widget> m_xActivateBoxImg;
     std::unique_ptr<weld::CheckButton> m_xSSLDisableVerificationBox;
+    std::unique_ptr<weld::Widget> m_xSSLDisableVerificationBoxImg;
     std::unique_ptr<weld::Frame> m_xApiSettingsFrame;
 
     void EnableControls(bool bEnable);

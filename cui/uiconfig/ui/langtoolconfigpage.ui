@@ -17,7 +17,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=3 -->
+          <!-- n-columns=2 n-rows=3 -->
           <object class="GtkGrid" id="grid0">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -39,7 +39,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -54,7 +54,7 @@
                 <property name="uri">https://languagetool.org/legal/privacy</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -68,9 +68,28 @@
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockactivate">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
                 <property name="left-attach">0</property>
                 <property name="top-attach">2</property>
               </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
           </object>
         </child>
@@ -98,7 +117,7 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=9 -->
+          <!-- n-columns=3 n-rows=9 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -117,7 +136,7 @@
                 <property name="mnemonic-widget">baseurl</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -129,7 +148,7 @@
                 <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">0</property>
               </packing>
             </child>
@@ -143,7 +162,7 @@
                 <property name="mnemonic-widget">username</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -157,7 +176,7 @@
                 <property name="mnemonic-widget">apikey</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">4</property>
               </packing>
             </child>
@@ -168,7 +187,7 @@
                 <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">2</property>
               </packing>
             </child>
@@ -179,7 +198,7 @@
                 <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">4</property>
               </packing>
             </child>
@@ -199,7 +218,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">1</property>
               </packing>
             </child>
@@ -219,7 +238,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">3</property>
               </packing>
             </child>
@@ -239,7 +258,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">5</property>
               </packing>
             </child>
@@ -253,7 +272,7 @@
                 <property name="mnemonic-widget">restprotocol</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">6</property>
               </packing>
             </child>
@@ -264,7 +283,7 @@
                 <property name="truncate-multiline">True</property>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">6</property>
               </packing>
             </child>
@@ -284,7 +303,7 @@
                 </child>
               </object>
               <packing>
-                <property name="left-attach">1</property>
+                <property name="left-attach">2</property>
                 <property name="top-attach">7</property>
               </packing>
             </child>
@@ -298,10 +317,87 @@
                 <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="left-attach">0</property>
+                <property name="left-attach">1</property>
                 <property name="top-attach">8</property>
                 <property name="width">2</property>
               </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockbaseurl">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockusername">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockapikey">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockrestprotocol">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage" id="lockverifyssl">
+                <property name="can-focus">False</property>
+                <property name="no-show-all">True</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon-name">res/lock.png</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
             </child>
             <child>
               <placeholder/>
