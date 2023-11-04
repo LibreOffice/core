@@ -261,8 +261,8 @@ namespace {
 
 struct ExtensionMap
 {
-    const char *extn;
-    const char *filterName;
+    std::string_view extn;
+    OUString filterName;
 };
 
 class TraceEventDumper : public AutoTimer
@@ -300,88 +300,81 @@ public:
     }
 };
 
-} // unnamed namespace
+TraceEventDumper *traceEventDumper = nullptr;
 
-static TraceEventDumper *traceEventDumper = nullptr;
-
-const ExtensionMap aWriterExtensionMap[] =
+constexpr ExtensionMap aWriterExtensionMap[] =
 {
-    { "doc",   "MS Word 97" },
-    { "docm",  "MS Word 2007 XML VBA" },
-    { "docx",  "MS Word 2007 XML" },
-    { "fodt",  "OpenDocument Text Flat XML" },
-    { "html",  "HTML (StarWriter)" },
-    { "odt",   "writer8" },
-    { "ott",   "writer8_template" },
-    { "pdf",   "writer_pdf_Export" },
-    { "epub",  "EPUB" },
-    { "rtf",   "Rich Text Format" },
-    { "txt",   "Text" },
-    { "xhtml", "XHTML Writer File" },
-    { "png",   "writer_png_Export" },
-    { "xml",   "writer_indexing_export" },
-    { nullptr, nullptr }
+    { "doc",   u"MS Word 97"_ustr },
+    { "docm",  u"MS Word 2007 XML VBA"_ustr },
+    { "docx",  u"MS Word 2007 XML"_ustr },
+    { "fodt",  u"OpenDocument Text Flat XML"_ustr },
+    { "html",  u"HTML (StarWriter)"_ustr },
+    { "odt",   u"writer8"_ustr },
+    { "ott",   u"writer8_template"_ustr },
+    { "pdf",   u"writer_pdf_Export"_ustr },
+    { "epub",  u"EPUB"_ustr },
+    { "rtf",   u"Rich Text Format"_ustr },
+    { "txt",   u"Text"_ustr },
+    { "xhtml", u"XHTML Writer File"_ustr },
+    { "png",   u"writer_png_Export"_ustr },
+    { "xml",   u"writer_indexing_export"_ustr },
 };
 
-const ExtensionMap aCalcExtensionMap[] =
+constexpr ExtensionMap aCalcExtensionMap[] =
 {
-    { "csv",   "Text - txt - csv (StarCalc)" },
-    { "fods",  "OpenDocument Spreadsheet Flat XML" },
-    { "html",  "HTML (StarCalc)" },
-    { "ods",   "calc8" },
-    { "ots",   "calc8_template" },
-    { "pdf",   "calc_pdf_Export" },
-    { "xhtml", "XHTML Calc File" },
-    { "xls",   "MS Excel 97" },
-    { "xlsm",  "Calc MS Excel 2007 VBA XML" },
-    { "xlsx",  "Calc MS Excel 2007 XML" },
-    { "png",   "calc_png_Export" },
-    { nullptr, nullptr }
+    { "csv",   u"Text - txt - csv (StarCalc)"_ustr },
+    { "fods",  u"OpenDocument Spreadsheet Flat XML"_ustr },
+    { "html",  u"HTML (StarCalc)"_ustr },
+    { "ods",   u"calc8"_ustr },
+    { "ots",   u"calc8_template"_ustr },
+    { "pdf",   u"calc_pdf_Export"_ustr },
+    { "xhtml", u"XHTML Calc File"_ustr },
+    { "xls",   u"MS Excel 97"_ustr },
+    { "xlsm",  u"Calc MS Excel 2007 VBA XML"_ustr },
+    { "xlsx",  u"Calc MS Excel 2007 XML"_ustr },
+    { "png",   u"calc_png_Export"_ustr },
 };
 
-const ExtensionMap aImpressExtensionMap[] =
+constexpr ExtensionMap aImpressExtensionMap[] =
 {
-    { "fodp",  "OpenDocument Presentation Flat XML" },
-    { "html",  "impress_html_Export" },
-    { "odg",   "impress8_draw" },
-    { "odp",   "impress8" },
-    { "otp",   "impress8_template" },
-    { "pdf",   "impress_pdf_Export" },
-    { "potm",  "Impress MS PowerPoint 2007 XML Template" },
-    { "pot",   "MS PowerPoint 97 Vorlage" },
-    { "pptm",  "Impress MS PowerPoint 2007 XML VBA" },
-    { "pptx",  "Impress MS PowerPoint 2007 XML" },
-    { "pps",   "MS PowerPoint 97 Autoplay" },
-    { "ppt",   "MS PowerPoint 97" },
-    { "svg",   "impress_svg_Export" },
-    { "xhtml", "XHTML Impress File" },
-    { "png",   "impress_png_Export"},
-    { nullptr, nullptr }
+    { "fodp",  u"OpenDocument Presentation Flat XML"_ustr },
+    { "html",  u"impress_html_Export"_ustr },
+    { "odg",   u"impress8_draw"_ustr },
+    { "odp",   u"impress8"_ustr },
+    { "otp",   u"impress8_template"_ustr },
+    { "pdf",   u"impress_pdf_Export"_ustr },
+    { "potm",  u"Impress MS PowerPoint 2007 XML Template"_ustr },
+    { "pot",   u"MS PowerPoint 97 Vorlage"_ustr },
+    { "pptm",  u"Impress MS PowerPoint 2007 XML VBA"_ustr },
+    { "pptx",  u"Impress MS PowerPoint 2007 XML"_ustr },
+    { "pps",   u"MS PowerPoint 97 Autoplay"_ustr },
+    { "ppt",   u"MS PowerPoint 97"_ustr },
+    { "svg",   u"impress_svg_Export"_ustr },
+    { "xhtml", u"XHTML Impress File"_ustr },
+    { "png",   u"impress_png_Export"_ustr },
 };
 
-const ExtensionMap aDrawExtensionMap[] =
+constexpr ExtensionMap aDrawExtensionMap[] =
 {
-    { "fodg",  "draw_ODG_FlatXML" },
-    { "html",  "draw_html_Export" },
-    { "odg",   "draw8" },
-    { "pdf",   "draw_pdf_Export" },
-    { "svg",   "draw_svg_Export" },
-    { "xhtml", "XHTML Draw File" },
-    { "png",   "draw_png_Export"},
-    { nullptr, nullptr }
+    { "fodg",  u"draw_ODG_FlatXML"_ustr },
+    { "html",  u"draw_html_Export"_ustr },
+    { "odg",   u"draw8"_ustr },
+    { "pdf",   u"draw_pdf_Export"_ustr },
+    { "svg",   u"draw_svg_Export"_ustr },
+    { "xhtml", u"XHTML Draw File"_ustr },
+    { "png",   u"draw_png_Export"_ustr },
 };
 
-static OUString getUString(const char* pString)
+OUString getUString(const char* pString)
 {
     if (pString == nullptr)
         return OUString();
 
-    std::string_view sString(pString, strlen(pString));
-    return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
+    return OStringToOUString(pString, RTL_TEXTENCODING_UTF8);
 }
 
 // Tolerate embedded \0s etc.
-static char *convertOString(const OString &rStr)
+char *convertOString(const OString &rStr)
 {
     char* pMemory = static_cast<char*>(malloc(rStr.getLength() + 1));
     assert(pMemory); // don't tolerate failed allocations.
@@ -389,13 +382,13 @@ static char *convertOString(const OString &rStr)
     return pMemory;
 }
 
-static char *convertOUString(std::u16string_view aStr)
+char *convertOUString(std::u16string_view aStr)
 {
     return convertOString(OUStringToOString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
 /// Try to convert a relative URL to an absolute one, unless it already looks like a URL.
-static OUString getAbsoluteURL(const char* pURL)
+OUString getAbsoluteURL(const char* pURL)
 {
     OUString aURL(getUString(pURL));
     if (aURL.isEmpty())
@@ -418,6 +411,8 @@ static OUString getAbsoluteURL(const char* pURL)
     return OUString();
 }
 
+} // unnamed namespace
+
 std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char* pJSON)
 {
     std::vector<beans::PropertyValue> aArguments;
@@ -430,19 +425,10 @@ std::vector<beans::PropertyValue> desktop::jsonToPropertyValuesVector(const char
 
 static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks, bool subcontent, tools::JsonWriter& aJson)
 {
-    const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
-
-    const sal_Int32 nLinks = aNames.getLength();
-    const OUString* pNames = aNames.getConstArray();
-    static constexpr OUStringLiteral aProp_LinkDisplayName( u"LinkDisplayName" );
-    static constexpr OUStringLiteral aProp_LinkTarget( u"com.sun.star.document.LinkTarget" );
-    bool bIsTarget = false;
-    for( sal_Int32 i = 0; i < nLinks; i++ )
+    for (const OUString& aLink : xLinks->getElementNames())
     {
         uno::Any aAny;
-        OUString aLink( *pNames++ );
 
-        bool bError = false;
         try
         {
             aAny = xLinks->getByName( aLink );
@@ -451,10 +437,8 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
         {
             // if the name of the target was invalid (like empty headings)
             // no object can be provided
-            bError = true;
-        }
-        if(bError)
             continue;
+        }
 
         uno::Reference< beans::XPropertySet > xTarget;
         if( aAny >>= xTarget )
@@ -462,10 +446,9 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
             try
             {
                 // get name to display
-                aAny = xTarget->getPropertyValue( aProp_LinkDisplayName );
-                OUString aDisplayName;
-                aAny >>= aDisplayName;
-                OUString aStrDisplayname ( aDisplayName );
+                aAny = xTarget->getPropertyValue(u"LinkDisplayName"_ustr);
+                OUString aStrDisplayname;
+                aAny >>= aStrDisplayname;
 
                 if (subcontent)
                 {
@@ -473,18 +456,16 @@ static void extractLinks(const uno::Reference< container::XNameAccess >& xLinks,
                 }
                 else
                 {
-                    uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                    bIsTarget = xSI->supportsService( aProp_LinkTarget );
-
-                    if (bIsTarget)
+                    uno::Reference<lang::XServiceInfo> xSI(xTarget, uno::UNO_QUERY_THROW);
+                    if (xSI->supportsService(u"com.sun.star.document.LinkTarget"_ustr))
                     {
                         aJson.put(aStrDisplayname, aLink);
                         continue;
                     }
                     else
                     {
-                        std::unique_ptr<char[], o3tl::free_delete> pName(convertOUString(aStrDisplayname));
-                        auto aNode = aJson.startNode(pName.get());
+                        auto aNode = aJson.startNode(
+                            OUStringToOString(aStrDisplayname, RTL_TEXTENCODING_UTF8));
 
                         uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
                         if( xLTS.is() )
@@ -802,8 +783,8 @@ namespace {
 
 std::string extractCertificate(const std::string & certificate)
 {
-    const std::string header("-----BEGIN CERTIFICATE-----");
-    const std::string footer("-----END CERTIFICATE-----");
+    static constexpr std::string_view header("-----BEGIN CERTIFICATE-----");
+    static constexpr std::string_view footer("-----END CERTIFICATE-----");
 
     std::string result;
 
@@ -823,8 +804,8 @@ std::string extractCertificate(const std::string & certificate)
 
 std::string extractPrivateKey(const std::string & privateKey)
 {
-    const std::string header("-----BEGIN PRIVATE KEY-----");
-    const std::string footer("-----END PRIVATE KEY-----");
+    static constexpr std::string_view header("-----BEGIN PRIVATE KEY-----");
+    static constexpr std::string_view footer("-----END PRIVATE KEY-----");
 
     std::string result;
 
@@ -1044,7 +1025,7 @@ void setupSidebar(std::u16string_view sidebarDeckId = u"")
         pDockingWin->SyncUpdate();
     }
     else
-        SetLastExceptionMsg("No view shell or sidebar");
+        SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
 void hideSidebar()
@@ -1054,7 +1035,7 @@ void hideSidebar()
     if (pViewFrame)
         pViewFrame->SetChildWindow(SID_SIDEBAR, false , false );
     else
-        SetLastExceptionMsg("No view shell or sidebar");
+        SetLastExceptionMsg(u"No view shell or sidebar"_ustr);
 }
 
 }  // end anonymous namespace
@@ -1377,25 +1358,25 @@ int getDocumentType (LibreOfficeKitDocument* pThis)
     {
         uno::Reference<lang::XServiceInfo> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
 
-        if (xDocument->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+        if (xDocument->supportsService(u"com.sun.star.sheet.SpreadsheetDocument"_ustr))
         {
             return LOK_DOCTYPE_SPREADSHEET;
         }
-        else if (xDocument->supportsService("com.sun.star.presentation.PresentationDocument"))
+        else if (xDocument->supportsService(u"com.sun.star.presentation.PresentationDocument"_ustr))
         {
             return LOK_DOCTYPE_PRESENTATION;
         }
-        else if (xDocument->supportsService("com.sun.star.drawing.DrawingDocument"))
+        else if (xDocument->supportsService(u"com.sun.star.drawing.DrawingDocument"_ustr))
         {
             return LOK_DOCTYPE_DRAWING;
         }
-        else if (xDocument->supportsService("com.sun.star.text.TextDocument") || xDocument->supportsService("com.sun.star.text.WebDocument"))
+        else if (xDocument->supportsService(u"com.sun.star.text.TextDocument"_ustr) || xDocument->supportsService(u"com.sun.star.text.WebDocument"_ustr))
         {
             return LOK_DOCTYPE_TEXT;
         }
         else
         {
-            SetLastExceptionMsg("unknown document type");
+            SetLastExceptionMsg(u"unknown document type"_ustr);
         }
     }
     catch (const uno::Exception& exception)
@@ -1531,8 +1512,8 @@ LibLODocument_Impl::~LibLODocument_Impl()
 static OUString getGenerator()
 {
     OUString sGenerator(
-        Translate::ExpandVariables("%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"));
-    OUString os("$_OS");
+        Translate::ExpandVariables(u"%PRODUCTNAME %PRODUCTVERSION%PRODUCTEXTENSION (%1)"_ustr));
+    OUString os(u"$_OS"_ustr);
     ::rtl::Bootstrap::expandMacros(os);
     return sGenerator.replaceFirst("%1", os);
 }
@@ -1567,20 +1548,20 @@ CallbackFlushHandler::CallbackFlushHandler(LibreOfficeKitDocument* pDocument, Li
 
     // Add the states that are safe to skip duplicates on, even when
     // not consequent (i.e. do no emit them if unchanged from last).
-    m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL");
-    m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL");
-    m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL");
-    m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL");
-    m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL");
-    m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL");
-    m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL");
-    m_states.emplace(LOK_CALLBACK_CELL_ADDRESS, "NIL");
-    m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL");
-    m_states.emplace(LOK_CALLBACK_SET_PART, "NIL");
-    m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL");
-    m_states.emplace(LOK_CALLBACK_TAB_STOP_LIST, "NIL");
-    m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL");
-    m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL");
+    m_states.emplace(LOK_CALLBACK_TEXT_SELECTION, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_GRAPHIC_SELECTION, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_STATE_CHANGED, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_MOUSE_POINTER, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_CELL_CURSOR, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_CELL_FORMULA, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_CELL_ADDRESS, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_CURSOR_VISIBLE, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_SET_PART, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_TABLE_SELECTED, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_TAB_STOP_LIST, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_RULER_UPDATE, "NIL"_ostr);
+    m_states.emplace(LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE, "NIL"_ostr);
 }
 
 CallbackFlushHandler::~CallbackFlushHandler()
@@ -2257,7 +2238,7 @@ bool CallbackFlushHandler::processWindowEvent(int type, CallbackData& aCallbackD
         VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
         if (!pWindow)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support dialog rendering, or window not found.";
+            SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
             return false;
         }
 
@@ -2663,7 +2644,7 @@ void setFormatSpecificFilterData(std::u16string_view sFormat, comphelper::Sequen
     if (sFormat == u"pdf")
     {
         // always export bookmarks, which is needed for annotations
-        rFilterDataMap["ExportBookmarks"] <<= true;
+        rFilterDataMap[u"ExportBookmarks"_ustr] <<= true;
     }
 }
 
@@ -2693,7 +2674,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     const OUString aURL(getAbsoluteURL(pURL));
     if (aURL.isEmpty())
     {
-        pLib->maLastExceptionMsg = "Filename to load was not provided.";
+        pLib->maLastExceptionMsg = u"Filename to load was not provided."_ustr;
         SAL_INFO("lok", "URL for load is empty");
         return nullptr;
     }
@@ -2702,7 +2683,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     if (!xContext.is())
     {
-        pLib->maLastExceptionMsg = "ComponentContext is not available";
+        pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
         SAL_INFO("lok", "ComponentContext is not available");
         return nullptr;
     }
@@ -2711,7 +2692,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     if (!xComponentLoader.is())
     {
-        pLib->maLastExceptionMsg = "ComponentLoader is not available";
+        pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
         SAL_INFO("lok", "ComponentLoader is not available");
         return nullptr;
     }
@@ -2722,9 +2703,8 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // not pass it as a parameter to the filter
         OUString aOptions = getUString(pOptions);
         const OUString aLanguage = extractParameter(aOptions, u"Language");
-        bool isValidLangTag = LanguageTag::isValidBcp47(aLanguage, nullptr);
 
-        if (!aLanguage.isEmpty() && isValidLangTag)
+        if (!aLanguage.isEmpty() && LanguageTag::isValidBcp47(aLanguage, nullptr))
         {
             static bool isLoading = true;
             if (isLoading)
@@ -2780,7 +2760,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         const OUString sFilterOptions = aOptions;
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler("load", pLib));
+            new LOKInteractionHandler("load"_ostr, pLib));
         auto const pair(pLib->mInteractionMap.insert(std::make_pair(aURL.toUtf8(), pInteraction)));
         comphelper::ScopeGuard const g([&] () {
                 if (pair.second)
@@ -2814,11 +2794,11 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         // as regular files, otherwise we cannot save them; it will try
         // to bring saveas dialog which cannot work with LOK case
         uno::Sequence<css::beans::PropertyValue> aFilterOptions{
-            comphelper::makePropertyValue("FilterOptions", sFilterOptions),
-            comphelper::makePropertyValue("InteractionHandler", xInteraction),
-            comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode),
-            comphelper::makePropertyValue("AsTemplate", false),
-            comphelper::makePropertyValue("Silent", !aBatch.isEmpty())
+            comphelper::makePropertyValue(u"FilterOptions"_ustr, sFilterOptions),
+            comphelper::makePropertyValue(u"InteractionHandler"_ustr, xInteraction),
+            comphelper::makePropertyValue(u"MacroExecutionMode"_ustr, nMacroExecMode),
+            comphelper::makePropertyValue(u"AsTemplate"_ustr, false),
+            comphelper::makePropertyValue(u"Silent"_ustr, !aBatch.isEmpty())
         };
 
         /* TODO
@@ -2832,14 +2812,14 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
         uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL(
-                                            aURL, "_blank", 0,
+                                            aURL, u"_blank"_ustr, 0,
                                             aFilterOptions);
 
         assert(!xComponent.is() || pair.second); // concurrent loading of same URL ought to fail
 
         if (!xComponent.is())
         {
-            pLib->maLastExceptionMsg = "loadComponentFromURL returned an empty reference";
+            pLib->maLastExceptionMsg = u"loadComponentFromURL returned an empty reference"_ustr;
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
             return nullptr;
         }
@@ -2973,14 +2953,14 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
     OUString sURL( pURL, strlen(pURL), RTL_TEXTENCODING_UTF8 );
     if (sURL.isEmpty())
     {
-        pLib->maLastExceptionMsg = "Macro to run was not provided.";
+        pLib->maLastExceptionMsg = u"Macro to run was not provided."_ustr;
         SAL_INFO("lok", "Macro URL is empty");
         return false;
     }
 
     if (!sURL.startsWith("macro://"))
     {
-        pLib->maLastExceptionMsg = "This doesn't look like macro URL";
+        pLib->maLastExceptionMsg = u"This doesn't look like macro URL"_ustr;
         SAL_INFO("lok", "Macro URL is invalid");
         return false;
     }
@@ -2989,7 +2969,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 
     if (!xContext.is())
     {
-        pLib->maLastExceptionMsg = "ComponentContext is not available";
+        pLib->maLastExceptionMsg = u"ComponentContext is not available"_ustr;
         SAL_INFO("lok", "ComponentContext is not available");
         return false;
     }
@@ -3006,7 +2986,7 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 
     if (!xComponentLoader.is())
     {
-        pLib->maLastExceptionMsg = "ComponentLoader is not available";
+        pLib->maLastExceptionMsg = u"ComponentLoader is not available"_ustr;
         SAL_INFO("lok", "ComponentLoader is not available");
         return false;
     }
@@ -3018,12 +2998,12 @@ static int lo_runMacro(LibreOfficeKit* pThis, const char *pURL)
 
     uno::Reference<frame::XDispatchProvider> xDP;
     xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
-    xDP.set( xSFactory->createInstance("com.sun.star.comp.sfx2.SfxMacroLoader"), uno::UNO_QUERY );
+    xDP.set( xSFactory->createInstance(u"com.sun.star.comp.sfx2.SfxMacroLoader"_ustr), uno::UNO_QUERY );
     uno::Reference<frame::XDispatch> xD = xDP->queryDispatch( aURL, OUString(), 0);
 
     if (!xD.is())
     {
-        pLib->maLastExceptionMsg = "Macro loader is not available";
+        pLib->maLastExceptionMsg = u"Macro loader is not available"_ustr;
         SAL_INFO("lok", "Macro loader is not available");
         return false;
     }
@@ -3122,7 +3102,6 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
     uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
-    OUString result;
     if (!aURL.isEmpty())
     {
         if (xComponentLoader.is())
@@ -3131,22 +3110,18 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
             {
                 uno::Sequence<css::beans::PropertyValue> aFilterOptions(comphelper::InitPropertySequence(
                 {
-                    {"Hidden", css::uno::Any(true)},
-                    {"ReadOnly", css::uno::Any(true)}
+                    {u"Hidden"_ustr, css::uno::Any(true)},
+                    {u"ReadOnly"_ustr, css::uno::Any(true)}
                 }));
-                xComp = xComponentLoader->loadComponentFromURL( aURL, "_blank", 0, aFilterOptions );
+                xComp = xComponentLoader->loadComponentFromURL( aURL, u"_blank"_ustr, 0, aFilterOptions );
             }
             catch ( const lang::IllegalArgumentException& ex )
             {
                 SAL_WARN("lok", "lo_extractRequest: IllegalArgumentException: " << ex.Message);
-                result = "{ }";
-                return convertOUString(result);
             }
             catch (...)
             {
                 SAL_WARN("lok", "lo_extractRequest: Exception on loadComponentFromURL, url= " << aURL);
-                result = "{ }";
-                return convertOUString(result);
             }
 
             if (xComp.is())
@@ -3160,20 +3135,13 @@ static char* lo_extractRequest(LibreOfficeKit* /*pThis*/, const char* pFilePath)
                         auto aNode = aJson.startNode("Targets");
                         extractLinks(xLTS->getLinks(), false, aJson);
                     }
-                    return strdup(aJson.finishAndGetAsOString().getStr());
+                    return convertOString(aJson.finishAndGetAsOString());
                 }
                 xComp->dispose();
             }
-            else
-            {
-                result = "{ }";
-                return convertOUString(result);
-            }
-
         }
     }
-    result = "{ }";
-    return convertOUString(result);
+    return strdup("{ }");
 }
 
 static void lo_trimMemory(LibreOfficeKit* /* pThis */, int nTarget)
@@ -3258,13 +3226,13 @@ Reference<XInterface> FunctionBasedURPInstanceProvider::getInstance(const OUStri
     {
         Reference<XNamingService> rNamingService(
             m_rContext->getServiceManager()->createInstanceWithContext(
-                "com.sun.star.uno.NamingService", m_rContext),
+                u"com.sun.star.uno.NamingService"_ustr, m_rContext),
             UNO_QUERY);
         if (rNamingService.is())
         {
-            rNamingService->registerObject("StarOffice.ServiceManager",
+            rNamingService->registerObject(u"StarOffice.ServiceManager"_ustr,
                                            m_rContext->getServiceManager());
-            rNamingService->registerObject("StarOffice.ComponentContext", m_rContext);
+            rNamingService->registerObject(u"StarOffice.ComponentContext"_ustr, m_rContext);
             rInstance = rNamingService;
         }
     }
@@ -3367,7 +3335,7 @@ lo_startURP(LibreOfficeKit* /* pThis */, void* pRecieveFromLOContext, void* pSen
     Reference<XInstanceProvider> xInstanceProvider(new FunctionBasedURPInstanceProvider(xContext));
 
     Reference<XBridge> xBridge(xBridgeFactory->createBridge(
-        "functionurp" + OUString::number(FunctionBasedURPConnection::g_connectionCount), "urp",
+        "functionurp" + OUString::number(FunctionBasedURPConnection::g_connectionCount), u"urp"_ustr,
         connection, xInstanceProvider));
 
     connection->setBridge(std::move(xBridge));
@@ -3417,14 +3385,14 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
     if (aURL.isEmpty())
     {
-        SetLastExceptionMsg("Filename to save to was not provided.");
+        SetLastExceptionMsg(u"Filename to save to was not provided."_ustr);
         SAL_INFO("lok", "URL for save is empty");
         return false;
     }
 
     try
     {
-        const ExtensionMap* pMap;
+        std::span<const ExtensionMap> pMap;
 
         switch (doc_getDocumentType(pThis))
         {
@@ -3462,17 +3430,17 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
 
         OUString aFilterName;
-        for (sal_Int32 i = 0; pMap[i].extn; ++i)
+        for (const auto& item : pMap)
         {
-            if (sFormat.equalsIgnoreAsciiCaseAscii(pMap[i].extn))
+            if (sFormat.equalsIgnoreAsciiCaseAscii(item.extn))
             {
-                aFilterName = getUString(pMap[i].filterName);
+                aFilterName = item.filterName;
                 break;
             }
         }
         if (aFilterName.isEmpty())
         {
-            SetLastExceptionMsg("no output filter found for provided suffix");
+            SetLastExceptionMsg(u"no output filter found for provided suffix"_ustr);
             return false;
         }
 
@@ -3537,7 +3505,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
                 pdfVer = 16;
             else
             {
-                SetLastExceptionMsg("wrong PDF version");
+                SetLastExceptionMsg(u"wrong PDF version"_ustr);
                 return false;
             }
         }
@@ -3556,13 +3524,13 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             if (rOption == "TakeOwnership")
                 bTakeOwnership = true;
             else if (rOption == "NoFileSync")
-                aSaveMediaDescriptor["NoFileSync"] <<= true;
+                aSaveMediaDescriptor[u"NoFileSync"_ustr] <<= true;
             else
                 aFilteredOptionVec.push_back(rOption);
         }
 
-        aSaveMediaDescriptor["Overwrite"] <<= true;
-        aSaveMediaDescriptor["FilterName"] <<= aFilterName;
+        aSaveMediaDescriptor[u"Overwrite"_ustr] <<= true;
+        aSaveMediaDescriptor[u"FilterName"_ustr] <<= aFilterName;
 
         auto aFilteredOptionSeq = comphelper::containerToSequence<OUString>(aFilteredOptionVec);
         aFilterOptions = comphelper::string::convertCommaSeparated(aFilteredOptionSeq);
@@ -3578,29 +3546,29 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         }
 
         if (!watermarkText.isEmpty())
-            aFilterDataMap["TiledWatermark"] <<= watermarkText;
+            aFilterDataMap[u"TiledWatermark"_ustr] <<= watermarkText;
 
         if (bFullSheetPreview)
-            aFilterDataMap["SinglePageSheets"] <<= true;
+            aFilterDataMap[u"SinglePageSheets"_ustr] <<= true;
 
         if (pdfVer)
-            aFilterDataMap["SelectPdfVersion"] <<= pdfVer;
+            aFilterDataMap[u"SelectPdfVersion"_ustr] <<= pdfVer;
 
         if (!aFilterDataMap.empty())
         {
-            aSaveMediaDescriptor["FilterData"] <<= aFilterDataMap.getAsConstPropertyValueList();
+            aSaveMediaDescriptor[u"FilterData"_ustr] <<= aFilterDataMap.getAsConstPropertyValueList();
         }
         if (!filePassword.isEmpty())
-            aSaveMediaDescriptor["Password"] <<= filePassword;
+            aSaveMediaDescriptor[u"Password"_ustr] <<= filePassword;
         if (!filePasswordToModify.isEmpty())
-            aSaveMediaDescriptor["PasswordToModify"] <<= filePasswordToModify;
+            aSaveMediaDescriptor[u"PasswordToModify"_ustr] <<= filePasswordToModify;
 
         // add interaction handler too
         if (gImpl)
         {
             // gImpl does not have to exist when running from a unit test
             rtl::Reference<LOKInteractionHandler> const pInteraction(
-                    new LOKInteractionHandler("saveas", gImpl, pDocument));
+                    new LOKInteractionHandler("saveas"_ostr, gImpl, pDocument));
             uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
             aSaveMediaDescriptor[MediaDescriptor::PROP_INTERACTIONHANDLER] <<= xInteraction;
@@ -3632,223 +3600,223 @@ static void doc_iniUnoCommands ()
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    OUString sUnoCommands[] =
+    static constexpr OUString sUnoCommands[] =
     {
-        OUString(".uno:AlignLeft"),
-        OUString(".uno:AlignHorizontalCenter"),
-        OUString(".uno:AlignRight"),
-        OUString(".uno:BackColor"),
-        OUString(".uno:BackgroundColor"),
-        OUString(".uno:TableCellBackgroundColor"),
-        OUString(".uno:Bold"),
-        OUString(".uno:CenterPara"),
-        OUString(".uno:CharBackColor"),
-        OUString(".uno:CharBackgroundExt"),
-        OUString(".uno:CharFontName"),
-        OUString(".uno:Color"),
-        OUString(".uno:ControlCodes"),
-        OUString(".uno:DecrementIndent"),
-        OUString(".uno:DefaultBullet"),
-        OUString(".uno:DefaultNumbering"),
-        OUString(".uno:FontColor"),
-        OUString(".uno:FontHeight"),
-        OUString(".uno:IncrementIndent"),
-        OUString(".uno:Italic"),
-        OUString(".uno:JustifyPara"),
-        OUString(".uno:JumpToMark"),
-        OUString(".uno:OutlineFont"),
-        OUString(".uno:LeftPara"),
-        OUString(".uno:LanguageStatus"),
-        OUString(".uno:RightPara"),
-        OUString(".uno:Shadowed"),
-        OUString(".uno:SubScript"),
-        OUString(".uno:SuperScript"),
-        OUString(".uno:Strikeout"),
-        OUString(".uno:StyleApply"),
-        OUString(".uno:Underline"),
-        OUString(".uno:ModifiedStatus"),
-        OUString(".uno:Undo"),
-        OUString(".uno:Redo"),
-        OUString(".uno:InsertPage"),
-        OUString(".uno:DeletePage"),
-        OUString(".uno:DuplicatePage"),
-        OUString(".uno:InsertSlide"),
-        OUString(".uno:DeleteSlide"),
-        OUString(".uno:DuplicateSlide"),
-        OUString(".uno:ChangeTheme"),
-        OUString(".uno:Cut"),
-        OUString(".uno:Copy"),
-        OUString(".uno:Paste"),
-        OUString(".uno:SelectAll"),
-        OUString(".uno:ReplyComment"),
-        OUString(".uno:ResolveComment"),
-        OUString(".uno:ResolveCommentThread"),
-        OUString(".uno:InsertRowsBefore"),
-        OUString(".uno:InsertRowsAfter"),
-        OUString(".uno:InsertColumnsBefore"),
-        OUString(".uno:InsertColumnsAfter"),
-        OUString(".uno:DeleteRows"),
-        OUString(".uno:DeleteColumns"),
-        OUString(".uno:DeleteTable"),
-        OUString(".uno:SelectTable"),
-        OUString(".uno:EntireRow"),
-        OUString(".uno:EntireColumn"),
-        OUString(".uno:EntireCell"),
-        OUString(".uno:AssignLayout"),
-        OUString(".uno:StatusDocPos"),
-        OUString(".uno:RowColSelCount"),
-        OUString(".uno:StatusPageStyle"),
-        OUString(".uno:InsertMode"),
-        OUString(".uno:SpellOnline"),
-        OUString(".uno:StatusSelectionMode"),
-        OUString(".uno:StateTableCell"),
-        OUString(".uno:StatusBarFunc"),
-        OUString(".uno:StatePageNumber"),
-        OUString(".uno:StateWordCount"),
-        OUString(".uno:SelectionMode"),
-        OUString(".uno:PageStatus"),
-        OUString(".uno:LayoutStatus"),
-        OUString(".uno:Scale"),
-        OUString(".uno:Context"),
-        OUString(".uno:WrapText"),
-        OUString(".uno:ToggleMergeCells"),
-        OUString(".uno:NumberFormatCurrency"),
-        OUString(".uno:NumberFormatPercent"),
-        OUString(".uno:NumberFormatDecimal"),
-        OUString(".uno:NumberFormatIncDecimals"),
-        OUString(".uno:NumberFormatDecDecimals"),
-        OUString(".uno:NumberFormatDate"),
-        OUString(".uno:EditHeaderAndFooter"),
-        OUString(".uno:FrameLineColor"),
-        OUString(".uno:SortAscending"),
-        OUString(".uno:SortDescending"),
-        OUString(".uno:TrackChanges"),
-        OUString(".uno:ShowTrackedChanges"),
-        OUString(".uno:NextTrackedChange"),
-        OUString(".uno:PreviousTrackedChange"),
-        OUString(".uno:AcceptAllTrackedChanges"),
-        OUString(".uno:RejectAllTrackedChanges"),
-        OUString(".uno:TableDialog"),
-        OUString(".uno:FormatCellDialog"),
-        OUString(".uno:FontDialog"),
-        OUString(".uno:ParagraphDialog"),
-        OUString(".uno:OutlineBullet"),
-        OUString(".uno:InsertIndexesEntry"),
-        OUString(".uno:DocumentRepair"),
-        OUString(".uno:TransformDialog"),
-        OUString(".uno:InsertPageHeader"),
-        OUString(".uno:InsertPageFooter"),
-        OUString(".uno:OnlineAutoFormat"),
-        OUString(".uno:InsertObjectChart"),
-        OUString(".uno:InsertSection"),
-        OUString(".uno:InsertAnnotation"),
-        OUString(".uno:DeleteAnnotation"),
-        OUString(".uno:InsertPagebreak"),
-        OUString(".uno:InsertColumnBreak"),
-        OUString(".uno:HyperlinkDialog"),
-        OUString(".uno:InsertSymbol"),
-        OUString(".uno:EditRegion"),
-        OUString(".uno:ThesaurusDialog"),
-        OUString(".uno:FormatArea"),
-        OUString(".uno:FormatLine"),
-        OUString(".uno:FormatColumns"),
-        OUString(".uno:Watermark"),
-        OUString(".uno:ResetAttributes"),
-        OUString(".uno:Orientation"),
-        OUString(".uno:ObjectAlignLeft"),
-        OUString(".uno:ObjectAlignRight"),
-        OUString(".uno:AlignCenter"),
-        OUString(".uno:TransformPosX"),
-        OUString(".uno:TransformPosY"),
-        OUString(".uno:TransformWidth"),
-        OUString(".uno:TransformHeight"),
-        OUString(".uno:ObjectBackOne"),
-        OUString(".uno:SendToBack"),
-        OUString(".uno:ObjectForwardOne"),
-        OUString(".uno:BringToFront"),
-        OUString(".uno:WrapRight"),
-        OUString(".uno:WrapThrough"),
-        OUString(".uno:WrapLeft"),
-        OUString(".uno:WrapIdeal"),
-        OUString(".uno:WrapOn"),
-        OUString(".uno:WrapOff"),
-        OUString(".uno:UpdateCurIndex"),
-        OUString(".uno:InsertCaptionDialog"),
-        OUString(".uno:FormatGroup"),
-        OUString(".uno:SplitTable"),
-        OUString(".uno:SplitCell"),
-        OUString(".uno:MergeCells"),
-        OUString(".uno:DeleteNote"),
-        OUString(".uno:AcceptChanges"),
-        OUString(".uno:FormatPaintbrush"),
-        OUString(".uno:SetDefault"),
-        OUString(".uno:ParaLeftToRight"),
-        OUString(".uno:ParaRightToLeft"),
-        OUString(".uno:ParaspaceIncrease"),
-        OUString(".uno:ParaspaceDecrease"),
-        OUString(".uno:AcceptTrackedChange"),
-        OUString(".uno:RejectTrackedChange"),
-        OUString(".uno:ShowResolvedAnnotations"),
-        OUString(".uno:InsertBreak"),
-        OUString(".uno:InsertEndnote"),
-        OUString(".uno:InsertFootnote"),
-        OUString(".uno:InsertReferenceField"),
-        OUString(".uno:InsertBookmark"),
-        OUString(".uno:InsertAuthoritiesEntry"),
-        OUString(".uno:InsertMultiIndex"),
-        OUString(".uno:InsertField"),
-        OUString(".uno:PageNumberWizard"),
-        OUString(".uno:InsertPageNumberField"),
-        OUString(".uno:InsertPageCountField"),
-        OUString(".uno:InsertDateField"),
-        OUString(".uno:InsertTitleField"),
-        OUString(".uno:InsertFieldCtrl"),
-        OUString(".uno:CharmapControl"),
-        OUString(".uno:EnterGroup"),
-        OUString(".uno:LeaveGroup"),
-        OUString(".uno:AlignUp"),
-        OUString(".uno:AlignMiddle"),
-        OUString(".uno:AlignDown"),
-        OUString(".uno:TraceChangeMode"),
-        OUString(".uno:Combine"),
-        OUString(".uno:Merge"),
-        OUString(".uno:Dismantle"),
-        OUString(".uno:Substract"),
-        OUString(".uno:DistributeSelection"),
-        OUString(".uno:Intersect"),
-        OUString(".uno:BorderInner"),
-        OUString(".uno:BorderOuter"),
-        OUString(".uno:FreezePanes"),
-        OUString(".uno:FreezePanesColumn"),
-        OUString(".uno:FreezePanesRow"),
-        OUString(".uno:Sidebar"),
-        OUString(".uno:SheetRightToLeft"),
-        OUString(".uno:RunMacro"),
-        OUString(".uno:SpacePara1"),
-        OUString(".uno:SpacePara15"),
-        OUString(".uno:SpacePara2"),
-        OUString(".uno:InsertSparkline"),
-        OUString(".uno:DeleteSparkline"),
-        OUString(".uno:DeleteSparklineGroup"),
-        OUString(".uno:EditSparklineGroup"),
-        OUString(".uno:EditSparkline"),
-        OUString(".uno:GroupSparklines"),
-        OUString(".uno:UngroupSparklines"),
-        OUString(".uno:FormatSparklineMenu"),
-        OUString(".uno:DataDataPilotRun"),
-        OUString(".uno:RecalcPivotTable"),
-        OUString(".uno:DeletePivotTable"),
-        OUString(".uno:Protect"),
-        OUString(".uno:UnsetCellsReadOnly"),
-        OUString(".uno:ContentControlProperties"),
-        OUString(".uno:InsertCheckboxContentControl"),
-        OUString(".uno:InsertContentControl"),
-        OUString(".uno:InsertDateContentControl"),
-        OUString(".uno:InsertDropdownContentControl"),
-        OUString(".uno:InsertPlainTextContentControl"),
-        OUString(".uno:InsertPictureContentControl"),
-        OUString(".uno:DataFilterAutoFilter"),
-        OUString(".uno:CellProtection")
+        u".uno:AlignLeft"_ustr,
+        u".uno:AlignHorizontalCenter"_ustr,
+        u".uno:AlignRight"_ustr,
+        u".uno:BackColor"_ustr,
+        u".uno:BackgroundColor"_ustr,
+        u".uno:TableCellBackgroundColor"_ustr,
+        u".uno:Bold"_ustr,
+        u".uno:CenterPara"_ustr,
+        u".uno:CharBackColor"_ustr,
+        u".uno:CharBackgroundExt"_ustr,
+        u".uno:CharFontName"_ustr,
+        u".uno:Color"_ustr,
+        u".uno:ControlCodes"_ustr,
+        u".uno:DecrementIndent"_ustr,
+        u".uno:DefaultBullet"_ustr,
+        u".uno:DefaultNumbering"_ustr,
+        u".uno:FontColor"_ustr,
+        u".uno:FontHeight"_ustr,
+        u".uno:IncrementIndent"_ustr,
+        u".uno:Italic"_ustr,
+        u".uno:JustifyPara"_ustr,
+        u".uno:JumpToMark"_ustr,
+        u".uno:OutlineFont"_ustr,
+        u".uno:LeftPara"_ustr,
+        u".uno:LanguageStatus"_ustr,
+        u".uno:RightPara"_ustr,
+        u".uno:Shadowed"_ustr,
+        u".uno:SubScript"_ustr,
+        u".uno:SuperScript"_ustr,
+        u".uno:Strikeout"_ustr,
+        u".uno:StyleApply"_ustr,
+        u".uno:Underline"_ustr,
+        u".uno:ModifiedStatus"_ustr,
+        u".uno:Undo"_ustr,
+        u".uno:Redo"_ustr,
+        u".uno:InsertPage"_ustr,
+        u".uno:DeletePage"_ustr,
+        u".uno:DuplicatePage"_ustr,
+        u".uno:InsertSlide"_ustr,
+        u".uno:DeleteSlide"_ustr,
+        u".uno:DuplicateSlide"_ustr,
+        u".uno:ChangeTheme"_ustr,
+        u".uno:Cut"_ustr,
+        u".uno:Copy"_ustr,
+        u".uno:Paste"_ustr,
+        u".uno:SelectAll"_ustr,
+        u".uno:ReplyComment"_ustr,
+        u".uno:ResolveComment"_ustr,
+        u".uno:ResolveCommentThread"_ustr,
+        u".uno:InsertRowsBefore"_ustr,
+        u".uno:InsertRowsAfter"_ustr,
+        u".uno:InsertColumnsBefore"_ustr,
+        u".uno:InsertColumnsAfter"_ustr,
+        u".uno:DeleteRows"_ustr,
+        u".uno:DeleteColumns"_ustr,
+        u".uno:DeleteTable"_ustr,
+        u".uno:SelectTable"_ustr,
+        u".uno:EntireRow"_ustr,
+        u".uno:EntireColumn"_ustr,
+        u".uno:EntireCell"_ustr,
+        u".uno:AssignLayout"_ustr,
+        u".uno:StatusDocPos"_ustr,
+        u".uno:RowColSelCount"_ustr,
+        u".uno:StatusPageStyle"_ustr,
+        u".uno:InsertMode"_ustr,
+        u".uno:SpellOnline"_ustr,
+        u".uno:StatusSelectionMode"_ustr,
+        u".uno:StateTableCell"_ustr,
+        u".uno:StatusBarFunc"_ustr,
+        u".uno:StatePageNumber"_ustr,
+        u".uno:StateWordCount"_ustr,
+        u".uno:SelectionMode"_ustr,
+        u".uno:PageStatus"_ustr,
+        u".uno:LayoutStatus"_ustr,
+        u".uno:Scale"_ustr,
+        u".uno:Context"_ustr,
+        u".uno:WrapText"_ustr,
+        u".uno:ToggleMergeCells"_ustr,
+        u".uno:NumberFormatCurrency"_ustr,
+        u".uno:NumberFormatPercent"_ustr,
+        u".uno:NumberFormatDecimal"_ustr,
+        u".uno:NumberFormatIncDecimals"_ustr,
+        u".uno:NumberFormatDecDecimals"_ustr,
+        u".uno:NumberFormatDate"_ustr,
+        u".uno:EditHeaderAndFooter"_ustr,
+        u".uno:FrameLineColor"_ustr,
+        u".uno:SortAscending"_ustr,
+        u".uno:SortDescending"_ustr,
+        u".uno:TrackChanges"_ustr,
+        u".uno:ShowTrackedChanges"_ustr,
+        u".uno:NextTrackedChange"_ustr,
+        u".uno:PreviousTrackedChange"_ustr,
+        u".uno:AcceptAllTrackedChanges"_ustr,
+        u".uno:RejectAllTrackedChanges"_ustr,
+        u".uno:TableDialog"_ustr,
+        u".uno:FormatCellDialog"_ustr,
+        u".uno:FontDialog"_ustr,
+        u".uno:ParagraphDialog"_ustr,
+        u".uno:OutlineBullet"_ustr,
+        u".uno:InsertIndexesEntry"_ustr,
+        u".uno:DocumentRepair"_ustr,
+        u".uno:TransformDialog"_ustr,
+        u".uno:InsertPageHeader"_ustr,
+        u".uno:InsertPageFooter"_ustr,
+        u".uno:OnlineAutoFormat"_ustr,
+        u".uno:InsertObjectChart"_ustr,
+        u".uno:InsertSection"_ustr,
+        u".uno:InsertAnnotation"_ustr,
+        u".uno:DeleteAnnotation"_ustr,
+        u".uno:InsertPagebreak"_ustr,
+        u".uno:InsertColumnBreak"_ustr,
+        u".uno:HyperlinkDialog"_ustr,
+        u".uno:InsertSymbol"_ustr,
+        u".uno:EditRegion"_ustr,
+        u".uno:ThesaurusDialog"_ustr,
+        u".uno:FormatArea"_ustr,
+        u".uno:FormatLine"_ustr,
+        u".uno:FormatColumns"_ustr,
+        u".uno:Watermark"_ustr,
+        u".uno:ResetAttributes"_ustr,
+        u".uno:Orientation"_ustr,
+        u".uno:ObjectAlignLeft"_ustr,
+        u".uno:ObjectAlignRight"_ustr,
+        u".uno:AlignCenter"_ustr,
+        u".uno:TransformPosX"_ustr,
+        u".uno:TransformPosY"_ustr,
+        u".uno:TransformWidth"_ustr,
+        u".uno:TransformHeight"_ustr,
+        u".uno:ObjectBackOne"_ustr,
+        u".uno:SendToBack"_ustr,
+        u".uno:ObjectForwardOne"_ustr,
+        u".uno:BringToFront"_ustr,
+        u".uno:WrapRight"_ustr,
+        u".uno:WrapThrough"_ustr,
+        u".uno:WrapLeft"_ustr,
+        u".uno:WrapIdeal"_ustr,
+        u".uno:WrapOn"_ustr,
+        u".uno:WrapOff"_ustr,
+        u".uno:UpdateCurIndex"_ustr,
+        u".uno:InsertCaptionDialog"_ustr,
+        u".uno:FormatGroup"_ustr,
+        u".uno:SplitTable"_ustr,
+        u".uno:SplitCell"_ustr,
+        u".uno:MergeCells"_ustr,
+        u".uno:DeleteNote"_ustr,
+        u".uno:AcceptChanges"_ustr,
+        u".uno:FormatPaintbrush"_ustr,
+        u".uno:SetDefault"_ustr,
+        u".uno:ParaLeftToRight"_ustr,
+        u".uno:ParaRightToLeft"_ustr,
+        u".uno:ParaspaceIncrease"_ustr,
+        u".uno:ParaspaceDecrease"_ustr,
+        u".uno:AcceptTrackedChange"_ustr,
+        u".uno:RejectTrackedChange"_ustr,
+        u".uno:ShowResolvedAnnotations"_ustr,
+        u".uno:InsertBreak"_ustr,
+        u".uno:InsertEndnote"_ustr,
+        u".uno:InsertFootnote"_ustr,
+        u".uno:InsertReferenceField"_ustr,
+        u".uno:InsertBookmark"_ustr,
+        u".uno:InsertAuthoritiesEntry"_ustr,
+        u".uno:InsertMultiIndex"_ustr,
+        u".uno:InsertField"_ustr,
+        u".uno:PageNumberWizard"_ustr,
+        u".uno:InsertPageNumberField"_ustr,
+        u".uno:InsertPageCountField"_ustr,
+        u".uno:InsertDateField"_ustr,
+        u".uno:InsertTitleField"_ustr,
+        u".uno:InsertFieldCtrl"_ustr,
+        u".uno:CharmapControl"_ustr,
+        u".uno:EnterGroup"_ustr,
+        u".uno:LeaveGroup"_ustr,
+        u".uno:AlignUp"_ustr,
+        u".uno:AlignMiddle"_ustr,
+        u".uno:AlignDown"_ustr,
+        u".uno:TraceChangeMode"_ustr,
+        u".uno:Combine"_ustr,
+        u".uno:Merge"_ustr,
+        u".uno:Dismantle"_ustr,
+        u".uno:Substract"_ustr,
+        u".uno:DistributeSelection"_ustr,
+        u".uno:Intersect"_ustr,
+        u".uno:BorderInner"_ustr,
+        u".uno:BorderOuter"_ustr,
+        u".uno:FreezePanes"_ustr,
+        u".uno:FreezePanesColumn"_ustr,
+        u".uno:FreezePanesRow"_ustr,
+        u".uno:Sidebar"_ustr,
+        u".uno:SheetRightToLeft"_ustr,
+        u".uno:RunMacro"_ustr,
+        u".uno:SpacePara1"_ustr,
+        u".uno:SpacePara15"_ustr,
+        u".uno:SpacePara2"_ustr,
+        u".uno:InsertSparkline"_ustr,
+        u".uno:DeleteSparkline"_ustr,
+        u".uno:DeleteSparklineGroup"_ustr,
+        u".uno:EditSparklineGroup"_ustr,
+        u".uno:EditSparkline"_ustr,
+        u".uno:GroupSparklines"_ustr,
+        u".uno:UngroupSparklines"_ustr,
+        u".uno:FormatSparklineMenu"_ustr,
+        u".uno:DataDataPilotRun"_ustr,
+        u".uno:RecalcPivotTable"_ustr,
+        u".uno:DeletePivotTable"_ustr,
+        u".uno:Protect"_ustr,
+        u".uno:UnsetCellsReadOnly"_ustr,
+        u".uno:ContentControlProperties"_ustr,
+        u".uno:InsertCheckboxContentControl"_ustr,
+        u".uno:InsertContentControl"_ustr,
+        u".uno:InsertDateContentControl"_ustr,
+        u".uno:InsertDropdownContentControl"_ustr,
+        u".uno:InsertPlainTextContentControl"_ustr,
+        u".uno:InsertPictureContentControl"_ustr,
+        u".uno:DataFilterAutoFilter"_ustr,
+        u".uno:CellProtection"_ustr,
     };
 
     util::URL aCommandURL;
@@ -3921,7 +3889,7 @@ static int doc_getParts (LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return 0;
     }
 
@@ -3938,7 +3906,7 @@ static int doc_getPart (LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return 0;
     }
 
@@ -3955,7 +3923,7 @@ static void doc_setPartImpl(LibreOfficeKitDocument* pThis, int nPart, bool bAllo
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -3975,7 +3943,7 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
@@ -3985,13 +3953,12 @@ static char* doc_getPartInfo(LibreOfficeKitDocument* pThis, int nPart)
 static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4001,13 +3968,12 @@ static void doc_selectPart(LibreOfficeKitDocument* pThis, int nPart, int nSelect
 static void doc_moveSelectedParts(LibreOfficeKitDocument* pThis, int nPosition, bool bDuplicate)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4024,7 +3990,7 @@ static char* doc_getPartPageRectangles(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
@@ -4039,7 +4005,7 @@ static char* doc_getA11yFocusedParagraph(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
@@ -4059,7 +4025,7 @@ static int  doc_getA11yCaretPosition(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return -1;
     }
     if (SfxViewShell* pViewShell = SfxViewShell::Current())
@@ -4081,7 +4047,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
@@ -4098,7 +4064,7 @@ static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
@@ -4116,7 +4082,7 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4154,7 +4120,7 @@ static int doc_getEditMode(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return 0;
     }
 
@@ -4179,7 +4145,7 @@ static void doc_paintTile(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4306,7 +4272,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4498,7 +4464,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
     }
 }
 
@@ -4521,7 +4487,7 @@ static void doc_getDataArea(LibreOfficeKitDocument* pThis,
     }
     else
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
     }
 }
 
@@ -4597,7 +4563,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 
         if (pDocument->maFontsMissing.size() != 0)
         {
-            std::string sPayload = "{ \"fontsmissing\": [ ";
+            OString sPayload = "{ \"fontsmissing\": [ "_ostr;
             bool bFirst = true;
             for (const auto &f : pDocument->maFontsMissing)
             {
@@ -4605,10 +4571,10 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                     bFirst = false;
                 else
                     sPayload += ", ";
-                sPayload += "\"" + std::string(f.toUtf8()) + "\"";
+                sPayload += "\"" + f.toUtf8() + "\"";
             }
             sPayload += " ] }";
-            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.c_str(), pData);
+            pCallback(LOK_CALLBACK_FONTS_MISSING, sPayload.getStr(), pData);
             pDocument->maFontsMissing.clear();
         }
     }
@@ -4629,12 +4595,12 @@ static char* getPostIts(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostIts(aJsonWriter);
-    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+    return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
 /// Returns the JSON representation of the positions of all the comments in the document
@@ -4644,12 +4610,12 @@ static char* getPostItsPos(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getPostItsPos(aJsonWriter);
-    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+    return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
 static char* getRulerState(LibreOfficeKitDocument* pThis)
@@ -4658,12 +4624,12 @@ static char* getRulerState(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getRulerState(aJsonWriter);
-    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+    return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
@@ -4676,7 +4642,7 @@ static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nChar
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -4708,7 +4674,7 @@ static void doc_postWindowExtTextInputEvent(LibreOfficeKitDocument* pThis, unsig
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
             return;
         }
         pWindow = pDoc->getDocWindow();
@@ -4736,7 +4702,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+            SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
             return;
         }
         pWindow = pDoc->getDocWindow();
@@ -4748,7 +4714,7 @@ static void doc_removeTextContext(LibreOfficeKitDocument* pThis, unsigned nLOKWi
 
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "No window found for window id: " + OUString::number(nLOKWindowId);
+        SetLastExceptionMsg("No window found for window id: " + OUString::number(nLOKWindowId));
         return;
     }
 
@@ -4792,7 +4758,7 @@ static void doc_postWindowKeyEvent(LibreOfficeKitDocument* /*pThis*/, unsigned n
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -4837,25 +4803,25 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         switch (doc_getDocumentType(pThis))
         {
             case LOK_DOCTYPE_PRESENTATION:
-                aMediaDescriptor["FilterName"] <<= OUString("impress_svg_Export");
+                aMediaDescriptor[u"FilterName"_ustr] <<= u"impress_svg_Export"_ustr;
                 break;
             case LOK_DOCTYPE_DRAWING:
-                aMediaDescriptor["FilterName"] <<= OUString("draw_svg_Export");
+                aMediaDescriptor[u"FilterName"_ustr] <<= u"draw_svg_Export"_ustr;
                 break;
             case LOK_DOCTYPE_TEXT:
-                aMediaDescriptor["FilterName"] <<= OUString("writer_svg_Export");
+                aMediaDescriptor[u"FilterName"_ustr] <<= u"writer_svg_Export"_ustr;
                 break;
             case LOK_DOCTYPE_SPREADSHEET:
-                aMediaDescriptor["FilterName"] <<= OUString("calc_svg_Export");
+                aMediaDescriptor[u"FilterName"_ustr] <<= u"calc_svg_Export"_ustr;
                 break;
             default:
                 SAL_WARN("lok", "Failed to render shape selection: Document type is not supported");
         }
-        aMediaDescriptor["SelectionOnly"] <<= true;
-        aMediaDescriptor["OutputStream"] <<= xOut;
-        aMediaDescriptor["IsPreview"] <<= true; // will down-scale graphics
+        aMediaDescriptor[u"SelectionOnly"_ustr] <<= true;
+        aMediaDescriptor[u"OutputStream"_ustr] <<= xOut;
+        aMediaDescriptor[u"IsPreview"_ustr] <<= true; // will down-scale graphics
 
-        xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+        xStorable->storeToURL(u"private:stream"_ustr, aMediaDescriptor.getAsConstPropertyValueList());
 
         if (pOutput)
         {
@@ -4939,14 +4905,14 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
 
     StringMap aMap(jsdialog::jsonToStringMap(pArguments));
 
-    if (aMap.find("id") == aMap.end())
+    if (aMap.find(u"id"_ustr) == aMap.end())
         return;
 
     sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(SfxViewShell::Current());
 
     try
     {
-        OUString sControlId = aMap["id"];
+        OUString sControlId = aMap[u"id"_ustr];
         OUString sWindowId = OUString::number(nWindowId);
         OUString sCurrentShellId = OUString::number(nCurrentShellId);
 
@@ -4970,11 +4936,11 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             return;
         // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...
         // these dialogs are created with WindowId "0"
-        if (!SfxViewShell::Current() && jsdialog::ExecuteAction("0", sControlId, aMap))
+        if (!SfxViewShell::Current() && jsdialog::ExecuteAction(u"0"_ustr, sControlId, aMap))
             return;
 
         // force resend - used in mobile-wizard
-        jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", "Panel");
+        jsdialog::SendFullUpdate(sCurrentShellId + "sidebar", u"Panel"_ustr);
 
     } catch(...) {}
 }
@@ -5058,14 +5024,13 @@ static void lo_dumpState (LibreOfficeKit* pThis, const char* /* pOptions */, cha
 
     pLib->dumpState(aState);
 
-    OString aStr = aState.makeStringAndClear();
-    *pState = strdup(aStr.getStr());
+    *pState = convertOString(aState.makeStringAndClear());
 }
 
 void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
 {
-    rState.append("LibreOfficeKit state:");
-    rState.append("\n\tLastExceptionMsg:\t");
+    rState.append("LibreOfficeKit state:"
+                  "\n\tLastExceptionMsg:\t");
     rState.append(rtl::OUStringToOString(maLastExceptionMsg, RTL_TEXTENCODING_UTF8));
     rState.append("\n\tUnipoll:\t");
     rState.append(vcl::lok::isUnipoll() ? "yes" : "no: events on thread");
@@ -5094,7 +5059,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
     if (!vcl::lok::isUnipoll())
     {
         beans::PropertyValue aSynchronMode;
-        aSynchronMode.Name = "SynchronMode";
+        aSynchronMode.Name = u"SynchronMode"_ustr;
         aSynchronMode.Value <<= false;
         aPropertyValuesVector.push_back(aSynchronMode);
     }
@@ -5134,11 +5099,11 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
 
 
         rtl::Reference<LOKInteractionHandler> const pInteraction(
-            new LOKInteractionHandler("save", gImpl, pDocument));
+            new LOKInteractionHandler("save"_ostr, gImpl, pDocument));
         uno::Reference<task::XInteractionHandler2> const xInteraction(pInteraction);
 
         beans::PropertyValue aValue;
-        aValue.Name = "InteractionHandler";
+        aValue.Name = u"InteractionHandler"_ustr;
         aValue.Value <<= xInteraction;
         aPropertyValuesVector.push_back(aValue);
 
@@ -5231,7 +5196,7 @@ static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pComma
                 }
             }
             util::URL aCommandURL;
-            aCommandURL.Path = "LOKTransform";
+            aCommandURL.Path = u"LOKTransform"_ustr;
             css::uno::Reference<css::frame::XDispatch>& aChartDispatcher = aChartHelper.GetXDispatcher();
             aChartDispatcher->dispatch(aCommandURL, comphelper::containerToSequence(aPropertyValuesVector));
             return;
@@ -5294,7 +5259,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
     try
@@ -5318,7 +5283,7 @@ static void doc_postWindowMouseEvent(LibreOfficeKitDocument* /*pThis*/, unsigned
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -5355,7 +5320,7 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* /*pThis*/, unsign
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -5390,7 +5355,7 @@ static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int n
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -5407,7 +5372,7 @@ static void doc_setWindowTextSelection(LibreOfficeKitDocument* /*pThis*/, unsign
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -5483,7 +5448,7 @@ static bool getFromTransferable(
     {
         if (o3tl::getToken(aMimeType, 0, ';', nIndex) == "charset=utf-8")
         {
-            aMimeType = "text/plain;charset=utf-16";
+            aMimeType = "text/plain;charset=utf-16"_ostr;
             bConvert = true;
         }
     }
@@ -5501,10 +5466,10 @@ static bool getFromTransferable(
         if (aInMimeType == "text/html")
         {
             // Desperate measures - convert text to HTML instead.
-            if (encodeTextAsHTML(xTransferable, "text/plain;charset=utf-8", aRet))
+            if (encodeTextAsHTML(xTransferable, "text/plain;charset=utf-8"_ostr, aRet))
                 return true;
             // If html is not supported, might be a graphic-selection,
-            if (encodeImageAsHTML(xTransferable, "image/png", aRet))
+            if (encodeImageAsHTML(xTransferable, "image/png"_ostr, aRet))
                 return true;
         }
 
@@ -5557,23 +5522,22 @@ static char* doc_getTextSelection(LibreOfficeKitDocument* pThis, const char* pMi
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
-        SetLastExceptionMsg("No selection available");
+        SetLastExceptionMsg(u"No selection available"_ustr);
         return nullptr;
     }
 
-    const char *pType = pMimeType;
-    if (!pType || pType[0] == '\0')
-        pType = "text/plain;charset=utf-8";
+    OString aType
+        = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
 
     OString aRet;
-    bool bSuccess = getFromTransferable(xTransferable, OString(pType), aRet);
+    bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
         return nullptr;
 
@@ -5598,14 +5562,14 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return LOK_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
-        SetLastExceptionMsg("No selection available");
+        SetLastExceptionMsg(u"No selection available"_ustr);
         return LOK_SELTYPE_NONE;
     }
 
@@ -5614,7 +5578,7 @@ static int doc_getSelectionType(LibreOfficeKitDocument* pThis)
         return LOK_SELTYPE_COMPLEX;
 
     OString aRet;
-    bool bSuccess = getFromTransferable(xTransferable, "text/plain;charset=utf-8", aRet);
+    bool bSuccess = getFromTransferable(xTransferable, "text/plain;charset=utf-8"_ostr, aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
@@ -5636,14 +5600,14 @@ static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return LOK_SELTYPE_NONE;
     }
 
     css::uno::Reference<css::datatransfer::XTransferable> xTransferable = pDoc->getSelection();
     if (!xTransferable)
     {
-        SetLastExceptionMsg("No selection available");
+        SetLastExceptionMsg(u"No selection available"_ustr);
         return LOK_SELTYPE_NONE;
     }
 
@@ -5651,12 +5615,11 @@ static int doc_getSelectionTypeAndText(LibreOfficeKitDocument* pThis, const char
     if (xTransferable2.is() && xTransferable2->isComplex())
         return LOK_SELTYPE_COMPLEX;
 
-    const char *pType = pMimeType;
-    if (!pType || pType[0] == '\0')
-        pType = "text/plain;charset=utf-8";
+    OString aType
+        = pMimeType && pMimeType[0] != '\0' ? OString(pMimeType) : "text/plain;charset=utf-8"_ostr;
 
     OString aRet;
-    bool bSuccess = getFromTransferable(xTransferable, OString(pType), aRet);
+    bool bSuccess = getFromTransferable(xTransferable, aType, aRet);
     if (!bSuccess)
         return LOK_SELTYPE_NONE;
 
@@ -5717,7 +5680,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return 0;
     }
 
@@ -5727,7 +5690,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
     SAL_INFO("lok", "Got from clip: " << xClip.get() << " transferable: " << xTransferable);
     if (!xTransferable)
     {
-        SetLastExceptionMsg("No clipboard content available");
+        SetLastExceptionMsg(u"No clipboard content available"_ustr);
         return 0;
     }
 
@@ -5737,7 +5700,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
         const uno::Sequence< css::datatransfer::DataFlavor > flavors = xTransferable->getTransferDataFlavors();
         if (!flavors.getLength())
         {
-            SetLastExceptionMsg("Flavourless selection");
+            SetLastExceptionMsg(u"Flavourless selection"_ustr);
             return 0;
         }
         for (const auto &it : flavors)
@@ -5758,7 +5721,7 @@ static int doc_getClipboard(LibreOfficeKitDocument* pThis,
         if (aMimeTypes[i] == "text/plain;charset=utf-16")
             (*pOutMimeTypes)[i] = strdup("text/plain;charset=utf-8");
         else
-            (*pOutMimeTypes)[i] = strdup(aMimeTypes[i].getStr());
+            (*pOutMimeTypes)[i] = convertOString(aMimeTypes[i]);
 
         OString aRet;
         bool bSuccess = getFromTransferable(xTransferable, (*pOutMimeTypes)[i], aRet);
@@ -5799,7 +5762,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return false;
     }
 
@@ -5812,7 +5775,7 @@ static int doc_setClipboard(LibreOfficeKitDocument* pThis,
 
     if (!pDoc->isMimeTypeSupported())
     {
-        SetLastExceptionMsg("Document doesn't support this mime type");
+        SetLastExceptionMsg(u"Document doesn't support this mime type"_ustr);
         return false;
     }
 #endif
@@ -5840,9 +5803,9 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
         {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
         {"IgnoreComments", uno::Any(true)},
     }));
-    if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))
+    if (!comphelper::dispatchCommand(u".uno:Paste"_ustr, aPropertyValues))
     {
-        SetLastExceptionMsg("Failed to dispatch the .uno: command");
+        SetLastExceptionMsg(u"Failed to dispatch the .uno: command"_ustr);
         return false;
     }
 
@@ -5859,7 +5822,7 @@ static void doc_setGraphicSelection(LibreOfficeKitDocument* pThis, int nType, in
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -5876,7 +5839,7 @@ static void doc_resetSelection(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -5915,9 +5878,8 @@ static char* getDocReadOnly(LibreOfficeKitDocument* pThis)
 static void addLocale(boost::property_tree::ptree& rValues, css::lang::Locale const & rLocale)
 {
     boost::property_tree::ptree aChild;
-    OUString sLanguage;
     const LanguageTag aLanguageTag( rLocale );
-    sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
+    OUString sLanguage = SvtLanguageTable::GetLanguageString(aLanguageTag.getLanguageType());
     if (sLanguage.endsWith("}"))
         return;
 
@@ -5946,7 +5908,7 @@ static char* getLanguages(const char* pCommand)
         if (LanguageToolCfg::IsEnabled::get())
         {
             uno::Reference< linguistic2::XProofreader > xGC(
-                    xContext->getServiceManager()->createInstanceWithContext("org.openoffice.lingu.LanguageToolGrammarChecker", xContext),
+                    xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
                     uno::UNO_QUERY_THROW );
             uno::Reference< linguistic2::XSupportedLocales > xSuppLoc( xGC, uno::UNO_QUERY_THROW );
             aGrammarLocales = xSuppLoc->getLocales();
@@ -6056,15 +6018,15 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
     const uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     const uno::Sequence<OUString> aStyleFamilies = xStyleFamilies->getElementNames();
 
-    static const std::vector<OUString> aWriterStyles =
+    static constexpr OUString aWriterStyles[] =
     {
-        "Text body",
-        "Quotations",
-        "Title",
-        "Subtitle",
-        "Heading 1",
-        "Heading 2",
-        "Heading 3"
+        u"Text body"_ustr,
+        u"Quotations"_ustr,
+        u"Title"_ustr,
+        u"Subtitle"_ustr,
+        u"Heading 1"_ustr,
+        u"Heading 2"_ustr,
+        u"Heading 3"_ustr,
     };
 
     // We need to keep a list of the default style names
@@ -6125,10 +6087,10 @@ static char* getStyles(LibreOfficeKitDocument* pThis, const char* pCommand)
             {
                 bool bIsPhysical;
                 xProperty.set(xContainer->getByName(sName), uno::UNO_QUERY);
-                if (xProperty.is() && (xProperty->getPropertyValue("IsPhysical") >>= bIsPhysical) && bIsPhysical)
+                if (xProperty.is() && (xProperty->getPropertyValue(u"IsPhysical"_ustr) >>= bIsPhysical) && bIsPhysical)
                 {
                     OUString displayName;
-                    xProperty->getPropertyValue("DisplayName") >>= displayName;
+                    xProperty->getPropertyValue(u"DisplayName"_ustr) >>= displayName;
                     aChild.put("", displayName.toUtf8());
                     aChildren.push_back(std::make_pair("", aChild));
                 }
@@ -6201,7 +6163,7 @@ static char* getUndoOrRedo(LibreOfficeKitDocument* pThis, UndoOrRedo eCommand)
         aString = pUndoManager->GetUndoActionsInfo();
     else
         aString = pUndoManager->GetRedoActionsInfo();
-    char* pJson = strdup(aString.toUtf8().getStr());
+    char* pJson = convertOUString(aString);
     return pJson;
 }
 
@@ -6226,23 +6188,23 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
             aJson.put("index", static_cast<sal_Int32>(nIndex));
 
             OUString sAuthor;
-            xRedline->getPropertyValue("RedlineAuthor") >>= sAuthor;
+            xRedline->getPropertyValue(u"RedlineAuthor"_ustr) >>= sAuthor;
             aJson.put("author", sAuthor);
 
             OUString sType;
-            xRedline->getPropertyValue("RedlineType") >>= sType;
+            xRedline->getPropertyValue(u"RedlineType"_ustr) >>= sType;
             aJson.put("type", sType);
 
             OUString sComment;
-            xRedline->getPropertyValue("RedlineComment") >>= sComment;
+            xRedline->getPropertyValue(u"RedlineComment"_ustr) >>= sComment;
             aJson.put("comment", sComment);
 
             OUString sDescription;
-            xRedline->getPropertyValue("RedlineDescription") >>= sDescription;
+            xRedline->getPropertyValue(u"RedlineDescription"_ustr) >>= sDescription;
             aJson.put("description", sDescription);
 
             util::DateTime aDateTime;
-            xRedline->getPropertyValue("RedlineDateTime") >>= aDateTime;
+            xRedline->getPropertyValue(u"RedlineDateTime"_ustr) >>= aDateTime;
             OUString sDateTime = utl::toISO8601(aDateTime);
             aJson.put("dateTime", sDateTime);
         }
@@ -6252,13 +6214,13 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
         {
-            SetLastExceptionMsg("Document doesn't support tiled rendering");
+            SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
             return nullptr;
         }
         pDoc->getTrackedChanges(aJson);
     }
 
-    return strdup(aJson.finishAndGetAsOString().getStr());
+    return convertOString(aJson.finishAndGetAsOString());
 }
 
 
@@ -6268,12 +6230,12 @@ static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
     tools::JsonWriter aJsonWriter;
     pDoc->getTrackedChangeAuthors(aJsonWriter);
-    return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+    return convertOString(aJsonWriter.finishAndGetAsOString());
 }
 
 static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCommand)
@@ -6284,31 +6246,30 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     SetLastExceptionMsg();
 
     const std::string_view aCommand(pCommand);
-    static constexpr OString aViewRowColumnHeaders(".uno:ViewRowColumnHeaders"_ostr);
-    static constexpr OString aSheetGeometryData(".uno:SheetGeometryData"_ostr);
-    static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
-    static constexpr OString aFontSubset(".uno:FontSubset&name="_ostr);
+    static constexpr std::string_view aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
+    static constexpr std::string_view aSheetGeometryData(".uno:SheetGeometryData");
+    static constexpr std::string_view aFontSubset(".uno:FontSubset&name=");
 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return nullptr;
     }
 
-    if (!strcmp(pCommand, ".uno:ReadOnly"))
+    if (aCommand == ".uno:ReadOnly")
     {
         return getDocReadOnly(pThis);
     }
-    else if (!strcmp(pCommand, ".uno:LanguageStatus"))
+    else if (aCommand == ".uno:LanguageStatus")
     {
         return getLanguages(pCommand);
     }
-    else if (!strcmp(pCommand, ".uno:CharFontName"))
+    else if (aCommand == ".uno:CharFontName")
     {
         return getFonts(pCommand);
     }
-    else if (!strcmp(pCommand, ".uno:StyleApply"))
+    else if (aCommand == ".uno:StyleApply")
     {
         return getStyles(pThis, pCommand);
     }
@@ -6340,17 +6301,17 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getRulerState(pThis);
     }
-    else if (o3tl::starts_with(aCommand, aViewRowColumnHeaders))
+    else if (aCommand.starts_with(aViewRowColumnHeaders))
     {
         tools::Rectangle aRectangle;
-        if (aCommand.size() > o3tl::make_unsigned(aViewRowColumnHeaders.getLength()))
+        if (aCommand.size() > aViewRowColumnHeaders.size())
         {
             // Command has parameters.
             int nX = 0;
             int nY = 0;
             int nWidth = 0;
             int nHeight = 0;
-            std::string_view aArguments = aCommand.substr(aViewRowColumnHeaders.getLength() + 1);
+            std::string_view aArguments = aCommand.substr(aViewRowColumnHeaders.size() + 1);
             sal_Int32 nParamIndex = 0;
             do
             {
@@ -6383,9 +6344,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
         tools::JsonWriter aJsonWriter;
         pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
-        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+        return convertOString(aJsonWriter.finishAndGetAsOString());
     }
-    else if (o3tl::starts_with(aCommand, aSheetGeometryData))
+    else if (aCommand.starts_with(aSheetGeometryData))
     {
         bool bColumns = true;
         bool bRows = true;
@@ -6393,11 +6354,11 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         bool bHidden = true;
         bool bFiltered = true;
         bool bGroups = true;
-        if (aCommand.size() > o3tl::make_unsigned(aSheetGeometryData.getLength()))
+        if (aCommand.size() > aSheetGeometryData.size())
         {
             bColumns = bRows = bSizes = bHidden = bFiltered = bGroups = false;
 
-            std::string_view aArguments = aCommand.substr(aSheetGeometryData.getLength() + 1);
+            std::string_view aArguments = aCommand.substr(aSheetGeometryData.size() + 1);
             sal_Int32 nParamIndex = 0;
             do
             {
@@ -6444,26 +6405,26 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
         return convertOString(aGeomDataStr);
     }
-    else if (o3tl::starts_with(aCommand, aCellCursor))
+    else if (aCommand.starts_with(".uno:CellCursor"))
     {
         // Ignore command's deprecated parameters.
         tools::JsonWriter aJsonWriter;
         pDoc->getCellCursor(aJsonWriter);
-        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+        return convertOString(aJsonWriter.finishAndGetAsOString());
     }
-    else if (o3tl::starts_with(aCommand, aFontSubset))
+    else if (aCommand.starts_with(aFontSubset))
     {
-        return getFontSubset(aCommand.substr(aFontSubset.getLength()));
+        return getFontSubset(aCommand.substr(aFontSubset.size()));
     }
     else if (pDoc->supportsCommand(INetURLObject(OUString::fromUtf8(aCommand)).GetURLPath()))
     {
         tools::JsonWriter aJsonWriter;
         pDoc->getCommandValues(aJsonWriter, aCommand);
-        return strdup(aJsonWriter.finishAndGetAsOString().getStr());
+        return convertOString(aJsonWriter.finishAndGetAsOString());
     }
     else
     {
-        SetLastExceptionMsg("Unknown command, no values returned");
+        SetLastExceptionMsg(u"Unknown command, no values returned"_ustr);
         return nullptr;
     }
 }
@@ -6479,7 +6440,7 @@ static void doc_setClientZoom(LibreOfficeKitDocument* pThis, int nTilePixelWidth
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -6496,7 +6457,7 @@ static void doc_setClientVisibleArea(LibreOfficeKitDocument* pThis, int nX, int 
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -6514,7 +6475,7 @@ static void doc_setOutlineState(LibreOfficeKitDocument* pThis, bool bColumn, int
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -6760,7 +6721,7 @@ static void doc_paintWindowForView(LibreOfficeKitDocument* pThis, unsigned nLOKW
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -6826,7 +6787,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        SetLastExceptionMsg("Document doesn't support dialog rendering, or window not found.");
+        SetLastExceptionMsg(u"Document doesn't support dialog rendering, or window not found."_ustr);
         return;
     }
 
@@ -6857,7 +6818,7 @@ static void doc_postWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWindo
             Application::PostKeyEvent(VclEventId::WindowKeyInput, pWindow, &aEvent);
         }
         else
-            SetLastExceptionMsg("Window command 'paste': wrong parameters.");
+            SetLastExceptionMsg(u"Window command 'paste': wrong parameters."_ustr);
 #else
         (void) pData;
         assert(!"doc_postWindow() with LOK_WINDOW_PASTE should not be called on iOS");
@@ -6987,7 +6948,7 @@ static bool doc_addCertificate(LibreOfficeKitDocument* pThis,
         std::copy(pCertificateBinary, pCertificateBinary + nCertificateBinarySize, aCertificateSequence.getArray());
     }
 
-    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, "TCu,Cu,Tu");
+    uno::Reference<security::XCertificate> xCertificate = xCertificateCreator->addDERCertificateToTheDatabase(aCertificateSequence, u"TCu,Cu,Tu"_ustr);
 
     if (!xCertificate.is())
         return false;
@@ -7025,13 +6986,12 @@ static void doc_resizeWindow(LibreOfficeKitDocument* /*pThis*/, unsigned nLOKWin
                              const int nWidth, const int nHeight)
 {
     SolarMutexGuard aGuard;
-    if (gImpl)
-        gImpl->maLastExceptionMsg.clear();
+    SetLastExceptionMsg();
 
     VclPtr<Window> pWindow = vcl::Window::FindLOKWindow(nLOKWindowId);
     if (!pWindow)
     {
-        gImpl->maLastExceptionMsg = "Document doesn't support dialog resizing, or window not found.";
+        SetLastExceptionMsg(u"Document doesn't support dialog resizing, or window not found."_ustr);
         return;
     }
 
@@ -7046,7 +7006,7 @@ static void doc_completeFunction(LibreOfficeKitDocument* pThis, const char* pFun
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
@@ -7066,14 +7026,14 @@ static void doc_sendFormFieldEvent(LibreOfficeKitDocument* pThis, const char* pA
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering!");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering!"_ustr);
         return;
     }
 
     // Sanity check
-    if (aMap.find("type") == aMap.end() || aMap.find("cmd") == aMap.end())
+    if (aMap.find(u"type"_ustr) == aMap.end() || aMap.find(u"cmd"_ustr) == aMap.end())
     {
-        SetLastExceptionMsg("Wrong arguments for sendFormFieldEvent!");
+        SetLastExceptionMsg(u"Wrong arguments for sendFormFieldEvent!"_ustr);
         return;
     }
 
@@ -7096,7 +7056,7 @@ static bool doc_renderSearchResult(LibreOfficeKitDocument* pThis,
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return false;
     }
 
@@ -7144,14 +7104,14 @@ static void doc_sendContentControlEvent(LibreOfficeKitDocument* pThis, const cha
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
     {
-        SetLastExceptionMsg("Document doesn't support tiled rendering");
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
         return;
     }
 
     // Sanity check
-    if (aMap.find("type") == aMap.end())
+    if (aMap.find(u"type"_ustr) == aMap.end())
     {
-        SetLastExceptionMsg("Missing 'type' argument for sendContentControlEvent");
+        SetLastExceptionMsg(u"Missing 'type' argument for sendContentControlEvent"_ustr);
         return;
     }
 
@@ -7212,11 +7172,11 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
 
     if (!xSFactory.is())
     {
-        pImpl->maLastExceptionMsg = "Service factory is not available";
+        pImpl->maLastExceptionMsg = u"Service factory is not available"_ustr;
         return nullptr;
     }
 
-    uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance("com.sun.star.document.TypeDetection"), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xTypeDetection(xSFactory->createInstance(u"com.sun.star.document.TypeDetection"_ustr), uno::UNO_QUERY);
     const uno::Sequence<OUString> aTypes = xTypeDetection->getElementNames();
     tools::JsonWriter aJson;
     for (const OUString& rType : aTypes)
@@ -7234,7 +7194,7 @@ static char* lo_getFilterTypes(LibreOfficeKit* pThis)
         }
     }
 
-    return strdup(aJson.finishAndGetAsOString().getStr());
+    return convertOString(aJson.finishAndGetAsOString());
 }
 
 static void lo_setOptionalFeatures(LibreOfficeKit* pThis, unsigned long long const features)
@@ -7275,13 +7235,13 @@ static char* lo_getVersionInfo(SAL_UNUSED_PARAMETER LibreOfficeKit* /*pThis*/)
 {
     SetLastExceptionMsg();
     return convertOUString(ReplaceStringHookProc(
-        "{ "
+        u"{ "
         "\"ProductName\": \"%PRODUCTNAME\", "
         "\"ProductVersion\": \"%PRODUCTVERSION\", "
         "\"ProductExtension\": \"%PRODUCTEXTENSION\", "
         "\"BuildId\": \"%BUILDID\", "
         "\"BuildConfig\": \""  BUILDCONFIG  "\" "
-        "}"));
+        "}"_ustr));
 }
 
 static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
@@ -7310,7 +7270,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
 
     if (!xContext.is())
     {
-        SetLastExceptionMsg("XComponentContext could not be created");
+        SetLastExceptionMsg(u"XComponentContext could not be created"_ustr);
         SAL_INFO("lok", "XComponentContext could not be created");
         return false;
     }
@@ -7318,7 +7278,7 @@ static bool initialize_uno(const OUString& aAppProgramURL)
     xFactory = xContext->getServiceManager();
     if (!xFactory.is())
     {
-        SetLastExceptionMsg("XMultiComponentFactory could not be created");
+        SetLastExceptionMsg(u"XMultiComponentFactory could not be created"_ustr);
         SAL_INFO("lok", "XMultiComponentFactory could not be created");
         return false;
     }
@@ -7413,12 +7373,17 @@ static void preLoadShortCutAccelerators()
         batch->commit();
 
         // Supported module names: Writer, Calc, Draw, Impress
-        std::vector<OUString> supportedModuleNames = { "com.sun.star.text.TextDocument", "com.sun.star.sheet.SpreadsheetDocument", "com.sun.star.drawing.DrawingDocument", "com.sun.star.presentation.PresentationDocument" };
+        static constexpr OUString supportedModuleNames[] = {
+            u"com.sun.star.text.TextDocument"_ustr,
+            u"com.sun.star.sheet.SpreadsheetDocument"_ustr,
+            u"com.sun.star.drawing.DrawingDocument"_ustr,
+            u"com.sun.star.presentation.PresentationDocument"_ustr,
+        };
         // Create the accelerators.
-        for (std::size_t j = 0; j < supportedModuleNames.size(); j++)
+        for (const OUString& supportedModuleName : supportedModuleNames)
         {
-            OUString key = supportedModuleNames[j] + installedLocales[i];
-            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleNames[j]);
+            OUString key = supportedModuleName + installedLocales[i];
+            acceleratorConfs[key] = svt::AcceleratorExecute::lok_createNewAcceleratorConfiguration(::comphelper::getProcessComponentContext(), supportedModuleName);
         }
     }
 
@@ -7437,10 +7402,10 @@ static void preloadData()
 
     // Create user profile in the temp directory for loading the dictionaries
     OUString sUserPath;
-    rtl::Bootstrap::get("UserInstallation", sUserPath);
+    rtl::Bootstrap::get(u"UserInstallation"_ustr, sUserPath);
     utl::TempFileNamed aTempDir(nullptr, true);
     aTempDir.EnableKillingFile();
-    rtl::Bootstrap::set("UserInstallation", aTempDir.GetURL());
+    rtl::Bootstrap::set(u"UserInstallation"_ustr, aTempDir.GetURL());
 
     // Register the bundled extensions
     desktop::Desktop::SynchronizeExtensionRepositories(true);
@@ -7463,7 +7428,7 @@ static void preloadData()
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
-        xSpellChecker->isValid("forcefed", it, aNone);
+        xSpellChecker->isValid(u"forcefed"_ustr, it, aNone);
     }
     std::cerr << "\n";
 
@@ -7472,7 +7437,7 @@ static void preloadData()
     // will cheaply load this missing "others" locale library. Appending an Asian locale in
     // LOK_ALLOWLIST_LANGUAGES env-var also works but at the cost of loading that dictionary.
     css::uno::Reference< css::i18n::XCalendar4 > xCal = css::i18n::LocaleCalendar2::create(comphelper::getProcessComponentContext());
-    css::lang::Locale aAsianLocale = {"hi", "IN", ""};
+    css::lang::Locale aAsianLocale = { u"hi"_ustr, u"IN"_ustr, {} };
     xCal->loadDefaultCalendar(aAsianLocale);
 
     // preload all available thesauri
@@ -7484,7 +7449,7 @@ static void preloadData()
     {
         std::cerr << LanguageTag::convertToBcp47(it) << " ";
         css::beans::PropertyValues aNone;
-        xThesaurus->queryMeanings("forcefed", it, aNone);
+        xThesaurus->queryMeanings(u"forcefed"_ustr, it, aNone);
     }
     std::cerr << "\n";
 
@@ -7494,7 +7459,7 @@ static void preloadData()
 
     std::cerr << "Preload icons\n";
     ImageTree &images = ImageTree::get();
-    images.getImageUrl("forcefed.png", "style", "FO_oo");
+    images.getImageUrl(u"forcefed.png"_ustr, u"style"_ustr, u"FO_oo"_ustr);
 
     std::cerr << "Preload short cut accelerators\n";
     preLoadShortCutAccelerators();
@@ -7503,7 +7468,7 @@ static void preloadData()
 
     // force load language singleton
     SvtLanguageTable::HasLanguageType(LANGUAGE_SYSTEM);
-    (void)LanguageTag::isValidBcp47("foo", nullptr);
+    (void)LanguageTag::isValidBcp47(u"foo"_ustr, nullptr);
 
     std::cerr << "Preload fonts\n";
 
@@ -7560,7 +7525,7 @@ static void preloadData()
 #endif
 
     // Set user profile's path back to the original one
-    rtl::Bootstrap::set("UserInstallation", sUserPath);
+    rtl::Bootstrap::set(u"UserInstallation"_ustr, sUserPath);
 }
 
 namespace {
@@ -7573,10 +7538,10 @@ static void activateNotebookbar(std::u16string_view rApp)
 
     if (aAppNode.isValid())
     {
-        OUString sNoteBookbarName("notebookbar_online.ui");
-        aAppNode.setNodeValue("Active", Any(sNoteBookbarName));
+        static constexpr OUString sNoteBookbarName(u"notebookbar_online.ui"_ustr);
+        aAppNode.setNodeValue(u"Active"_ustr, Any(sNoteBookbarName));
 
-        const utl::OConfigurationNode aImplsNode = aAppNode.openNode("Modes");
+        const utl::OConfigurationNode aImplsNode = aAppNode.openNode(u"Modes"_ustr);
         const Sequence<OUString> aModeNodeNames( aImplsNode.getNodeNames() );
 
         for (const auto& rModeNodeName : aModeNodeNames)
@@ -7585,9 +7550,9 @@ static void activateNotebookbar(std::u16string_view rApp)
             if (!aImplNode.isValid())
                 continue;
 
-            OUString aCommandArg = comphelper::getString(aImplNode.getNodeValue("CommandArg"));
+            OUString aCommandArg = comphelper::getString(aImplNode.getNodeValue(u"CommandArg"_ustr));
             if (aCommandArg == "notebookbar.ui")
-                aImplNode.setNodeValue("CommandArg", Any(sNoteBookbarName));
+                aImplNode.setNodeValue(u"CommandArg"_ustr, Any(sNoteBookbarName));
         }
 
         aAppNode.commit();
@@ -7708,7 +7673,7 @@ void setLanguageToolConfig()
                     Sequence<css::lang::Locale> aLocales = xSpell->getLocales();
 
                     uno::Reference<linguistic2::XProofreader> xGC(
-                        xContext->getServiceManager()->createInstanceWithContext("org.openoffice.lingu.LanguageToolGrammarChecker", xContext),
+                        xContext->getServiceManager()->createInstanceWithContext(u"org.openoffice.lingu.LanguageToolGrammarChecker"_ustr, xContext),
                         uno::UNO_QUERY_THROW);
                     uno::Reference<linguistic2::XSupportedLocales> xSuppLoc(xGC, uno::UNO_QUERY_THROW);
 
@@ -7829,7 +7794,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
             else
                 SAL_WARN("lok", "resolving <" << url << "> failed with " << +e);
         }
-        rtl::Bootstrap::set("UserInstallation", url);
+        rtl::Bootstrap::set(u"UserInstallation"_ustr, url);
         if (eStage == SECOND_INIT)
             utl::Bootstrap::reloadData();
     }
@@ -7914,7 +7879,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 return false;
 
             // Force headless -- this is only for bitmap rendering.
-            rtl::Bootstrap::set("SAL_USE_VCLPLUGIN", "svp");
+            rtl::Bootstrap::set(u"SAL_USE_VCLPLUGIN"_ustr, u"svp"_ustr);
 
             // We specifically need to make sure we have the "headless"
             // command arg set (various code specifically checks via
@@ -7952,12 +7917,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
                 // pre-load all component libraries.
                 if (!xContext.is())
-                    throw css::uno::DeploymentException("preInit: XComponentContext is not created");
+                    throw css::uno::DeploymentException(u"preInit: XComponentContext is not created"_ustr);
 
                 css::uno::Reference< css::uno::XInterface > xService;
-                xContext->getValueByName("/singletons/com.sun.star.lang.theServiceManager") >>= xService;
+                xContext->getValueByName(u"/singletons/com.sun.star.lang.theServiceManager"_ustr) >>= xService;
                 if (!xService.is())
-                    throw css::uno::DeploymentException("preInit: XMultiComponentFactory is not created");
+                    throw css::uno::DeploymentException(u"preInit: XMultiComponentFactory is not created"_ustr);
 
                 css::uno::Reference<css::lang::XInitialization> aService(
                     xService, css::uno::UNO_QUERY_THROW);
@@ -7970,7 +7935,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 3) InitVCL()
                 {
                     comphelper::ProfileZone aInit("preload");
-                    aService->initialize({css::uno::Any(OUString("preload"))});
+                    aService->initialize({css::uno::Any(u"preload"_ustr)});
                 }
                 { // Force load some modules
                     comphelper::ProfileZone aInit("preload modules");
@@ -7984,7 +7949,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 Application::ReleaseSolarMutex();
             }
 
-            setLanguageAndLocale("en-US");
+            setLanguageAndLocale(u"en-US"_ustr);
         }
 
         if (eStage != PRE_INIT)
@@ -8058,10 +8023,10 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (bNotebookbar)
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-        officecfg::Office::UI::ToolbarMode::ActiveWriter::set("notebookbar_online.ui", batch);
-        officecfg::Office::UI::ToolbarMode::ActiveCalc::set("notebookbar_online.ui", batch);
-        officecfg::Office::UI::ToolbarMode::ActiveImpress::set("notebookbar_online.ui", batch);
-        officecfg::Office::UI::ToolbarMode::ActiveDraw::set("notebookbar_online.ui", batch);
+        officecfg::Office::UI::ToolbarMode::ActiveWriter::set(u"notebookbar_online.ui"_ustr, batch);
+        officecfg::Office::UI::ToolbarMode::ActiveCalc::set(u"notebookbar_online.ui"_ustr, batch);
+        officecfg::Office::UI::ToolbarMode::ActiveImpress::set(u"notebookbar_online.ui"_ustr, batch);
+        officecfg::Office::UI::ToolbarMode::ActiveDraw::set(u"notebookbar_online.ui"_ustr, batch);
         batch->commit();
 
         activateNotebookbar(u"Writer");
