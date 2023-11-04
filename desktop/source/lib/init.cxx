@@ -542,34 +542,38 @@ RectangleAndPart RectangleAndPart::Create(const OString& rPayload)
     const char* pos = rPayload.getStr();
     const char* end = rPayload.getStr() + rPayload.getLength();
     tools::Long nLeft = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-    while( *pos != ',' )
+    while (pos < end && *pos != ',')
         ++pos;
-    ++pos;
+    if (pos < end)
+        ++pos;
     assert(pos < end);
     tools::Long nTop = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-    while( *pos != ',' )
+    while (pos < end && *pos != ',')
         ++pos;
-    ++pos;
+    if (pos < end)
+        ++pos;
     assert(pos < end);
     tools::Long nWidth = rtl_str_toInt64_WithLength(pos, 10, end - pos);
-    while( *pos != ',' )
+    while (pos < end && *pos != ',')
         ++pos;
-    ++pos;
+    if (pos < end)
+        ++pos;
     assert(pos < end);
     tools::Long nHeight = rtl_str_toInt64_WithLength(pos, 10, end - pos);
     tools::Long nPart = INT_MIN;
     tools::Long nMode = 0;
     if (comphelper::LibreOfficeKit::isPartInInvalidation())
     {
-        while( *pos != ',' )
+        while (pos < end && *pos != ',')
             ++pos;
-        ++pos;
+        if (pos < end)
+            ++pos;
         assert(pos < end);
         nPart = rtl_str_toInt64_WithLength(pos, 10, end - pos);
 
-        while( *pos && *pos != ',' )
+        while (pos < end && *pos != ',')
             ++pos;
-        if (*pos)
+        if (pos < end)
         {
             ++pos;
             assert(pos < end);
