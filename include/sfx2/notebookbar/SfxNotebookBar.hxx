@@ -12,6 +12,7 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <vcl/notebookbar/notebookbar.hxx>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
 #include <vcl/EnumContext.hxx>
 
@@ -76,8 +77,10 @@ private:
 
     static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
         m_pNotebookBarWeldedWrapper;
+    static std::map<const SfxViewShell*, VclPtr<NotebookBar>> m_pNotebookBarInstance;
 
     static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
+    static void RemoveCurrentLOKWrapper();
 
     DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };

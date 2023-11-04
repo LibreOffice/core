@@ -213,6 +213,7 @@ public:
                 || name == "s_aLOKWeldBuildersMap" // LOK only, similar case as above
                 || name == "s_aLOKPopupsMap" // LOK only, similar case as above
                 || name == "m_pNotebookBarWeldedWrapper" // LOK only, warning about map's key, no VCL cleanup performed
+                || name == "m_pNotebookBarInstance" // LOK only case, when notebookbar is closed - VclPtr instance is removed
                 || name == "gStaticManager" // vcl/source/graphic/Manager.cxx - stores non-owning pointers
                 || name == "aThreadedInterpreterPool"    // ScInterpreterContext(Pool), not owning
                 || name == "aNonThreadedInterpreterPool" // ScInterpreterContext(Pool), not owning
