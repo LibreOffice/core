@@ -325,7 +325,7 @@ void SfxLokHelper::setAccessibilityState(int nId, bool nEnabled)
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
-        if (pViewShell->GetViewShellId() == ViewShellId(nId))
+        if (pViewShell && pViewShell->GetViewShellId() == ViewShellId(nId))
         {
             LOK_INFO("lok.a11y", "SfxLokHelper::setAccessibilityState: view id: " << nId << ", nEnabled: " << nEnabled);
             pViewShell->SetLOKAccessibilityState(nEnabled);
