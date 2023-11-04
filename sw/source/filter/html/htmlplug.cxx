@@ -1091,7 +1091,7 @@ void SwHTMLParser::InsertFloatingFrame()
 
                 OUString sHRef = aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
-                if (INetURLObject(sHRef).GetProtocol() == INetProtocol::Macro)
+                if (INetURLObject(sHRef).IsExoticProtocol())
                     NotifyMacroEventRead();
 
                 xSet->setPropertyValue("FrameURL", uno::makeAny( sHRef ) );

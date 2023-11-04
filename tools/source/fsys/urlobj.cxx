@@ -4958,7 +4958,8 @@ bool INetURLObject::IsExoticProtocol() const
     return m_eScheme == INetProtocol::Slot ||
            m_eScheme == INetProtocol::Macro ||
            m_eScheme == INetProtocol::Uno ||
-           isSchemeEqualTo(u"vnd.sun.star.script");
+           isSchemeEqualTo(u"vnd.sun.star.script") ||
+           isSchemeEqualTo(u"service");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
