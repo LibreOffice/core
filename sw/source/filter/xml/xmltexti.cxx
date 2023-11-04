@@ -860,7 +860,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                 OUString sHRef = URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef );
 
-                if (INetURLObject(sHRef).GetProtocol() == INetProtocol::Macro)
+                if (INetURLObject(sHRef).IsExoticProtocol())
                     GetXMLImport().NotifyMacroEventRead();
 
                 xSet->setPropertyValue("FrameURL",
