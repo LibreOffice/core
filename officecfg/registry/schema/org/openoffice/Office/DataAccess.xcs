@@ -529,19 +529,6 @@
           </prop>
         </group>
       </group>
-      <group oor:name="com.sun.star.comp.sdbc.kab.Driver">
-        <info>
-          <desc>Specifies the driver settings for the mozilla database driver.</desc>
-        </info>
-        <prop oor:name="DisableKDEMaximumVersionCheck" oor:type="xs:boolean" oor:nillable="false">
-          <info>
-            <desc>At runtime, the driver checks if the installed KDE version is too new to be supported.
-              In this case, it refuses creating connections. With the setting here, this check can
-              be disabled (which might do anything from simply work to crash).</desc>
-          </info>
-          <value>false</value>
-        </prop>
-      </group>
       <group oor:name="com.sun.star.sdbcx.comp.hsqldb.Driver">
         <info>
           <desc>Specifies settings for the driver accessing HSQL databases embedded into OpenOffice.org

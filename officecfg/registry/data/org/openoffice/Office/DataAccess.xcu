@@ -46,17 +46,6 @@
           <value>60</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.comp.sdbc.kab.Driver" oor:op="replace">
-        <prop oor:name="DriverName">
-          <value>com.sun.star.comp.sdbc.kab.Driver</value>
-        </prop>
-        <prop oor:name="Enable">
-          <value>false</value>
-        </prop>
-        <prop oor:name="Timeout">
-          <value>60</value>
-        </prop>
-      </node>
       <node oor:name="com.sun.star.comp.sdbc.ado.ODriver" oor:op="replace">
         <prop oor:name="DriverName">
           <value>com.sun.star.comp.sdbc.ado.ODriver</value>
