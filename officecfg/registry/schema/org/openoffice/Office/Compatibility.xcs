@@ -142,21 +142,6 @@
         <desc>The List of the applications.</desc>
       </info>
     </set>
-    <group oor:name="WriterCompatibilityVersion">
-      <info>
-        <desc>Used by the writer compatibility flag as the last OOo version.</desc>
-      </info>
-      <!--The default must be written by the setup.-->
-      <prop oor:name="OOo11" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools - Options - OOo Writer - Compatibility -->
-        <!--The value should only be written by the setup.-->
-        <info>
-          <desc>OOo version 1.1.</desc>
-          <label>OOo version 1.1.</label>
-        </info>
-        <value/>
-      </prop>
-    </group>
     <group oor:name="View">
       <info>
         <desc>Compatibility options affecting GUI</desc>
