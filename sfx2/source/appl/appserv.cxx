@@ -805,7 +805,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 aCurrentMode = comphelper::getString( aAppNode.getNodeValue( "Active" ) );
 
-                if ( aCurrentMode == aNewName )
+                if ( !comphelper::LibreOfficeKit::isActive() && aCurrentMode == aNewName )
                 {
                     bDone = true;
                     break;
@@ -931,6 +931,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Show/Hide the Notebookbar
                     const SfxStringItem pItem(SID_NOTEBOOKBAR, aNewName);
                     pViewFrame->GetDispatcher()->ExecuteList(SID_NOTEBOOKBAR, SfxCallMode::SYNCHRON, {&pItem});
+                    const SfxPoolItem *pNbItem;
+                    pViewFrame->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pNbItem);
 
                     // Show toolbars
                     for ( const OUString& rName : std::as_const(aMandatoryToolbars) )
