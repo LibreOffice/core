@@ -3179,7 +3179,7 @@ void SdXMLFloatingFrameShapeContext::startFastElement (sal_Int32 /*nElement*/,
 
         if( !maHref.isEmpty() )
         {
-            if (INetURLObject(maHref).GetProtocol() == INetProtocol::Macro)
+            if (INetURLObject(maHref).IsExoticProtocol())
                 GetImport().NotifyMacroEventRead();
 
             xProps->setPropertyValue("FrameURL", Any(maHref) );
