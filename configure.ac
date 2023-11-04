@@ -523,10 +523,6 @@ git_date=`git log -1 --pretty=format:"%cd" --date=format:'%Y' 2>&/dev/null`
 LIBO_THIS_YEAR=${git_date:-2023}
 AC_DEFINE_UNQUOTED(LIBO_THIS_YEAR,$LIBO_THIS_YEAR)
 
-# replace backslashes, to get a valid c++ string
-config_args=$(echo $ac_configure_args | tr '\\' '/')
-AC_DEFINE_UNQUOTED([BUILDCONFIG],[["$config_args"]],[Options passed to configure script])
-
 dnl ===================================================================
 dnl Product version
 dnl ===================================================================
@@ -15045,7 +15041,6 @@ AC_CONFIG_FILES([config_host.mk
                  vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in])
 
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
-AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
