@@ -383,6 +383,38 @@ public:
         return true;
     }
 
+    bool VisitCastExpr(CastExpr const* expr)
+    {
+        if (ignoreLocation(expr))
+        {
+            return true;
+        }
+        auto const t1 = expr->getType().getNonReferenceType();
+        auto const tc1 = loplugin::TypeCheck(t1);
+        if (!(tc1.ClassOrStruct("basic_string").StdNamespace()
+              || tc1.ClassOrStruct("basic_string_view").StdNamespace()))
+        {
+            return true;
+        }
+        auto const e2 = dyn_cast<UserDefinedLiteral>(expr->getSubExprAsWritten());
+        if (e2 == nullptr)
+        {
+            return true;
+        }
+        auto const tc2 = loplugin::TypeCheck(e2->getType());
+        if (!(tc2.Class("OString").Namespace("rtl").GlobalNamespace()
+              || tc2.Class("OUString").Namespace("rtl").GlobalNamespace()))
+        {
+            return true;
+        }
+        report(DiagnosticsEngine::Warning,
+               "directly use a %0 value instead of a %select{_ostr|_ustr}1 user-defined string"
+               " literal",
+               expr->getExprLoc())
+            << t1.getUnqualifiedType() << bool(tc2.Class("OUString")) << expr->getSourceRange();
+        return true;
+    }
+
 private:
     bool isSpellingRange(SourceLocation loc1, SourceLocation loc2)
     {
