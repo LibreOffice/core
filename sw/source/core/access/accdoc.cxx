@@ -52,7 +52,6 @@
 #include <dcontact.hxx>
 #include <svx/svdmark.hxx>
 constexpr OUString sServiceName = u"com.sun.star.text.AccessibleTextDocumentView"_ustr;
-constexpr OUStringLiteral sImplementationName = u"com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -421,7 +420,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclWindowEvent&, rEve
 
 OUString SAL_CALL SwAccessibleDocument::getImplementationName()
 {
-    return sImplementationName;
+    return u"com.sun.star.comp.Writer.SwAccessibleDocumentView"_ustr;
 }
 
 sal_Bool SAL_CALL SwAccessibleDocument::supportsService(const OUString& sTestServiceName)
