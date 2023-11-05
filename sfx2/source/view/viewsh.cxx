@@ -537,7 +537,7 @@ void aboutEvent(std::string msg, const accessibility::AccessibleEventObject& aEv
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        SAL_WARN("lok.a11y", "Focused object has invalid index in parent");
+        LOK_WARN("lok.a11y", "Focused object has invalid index in parent");
     }
 }
 
@@ -1648,7 +1648,7 @@ void LOKDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
     }
     catch( const lang::IndexOutOfBoundsException& )
     {
-        SAL_WARN("lok.a11y",
+        LOK_WARN("lok.a11y",
                  "LOKDocumentFocusListener::notifyEvent:Focused object has invalid index in parent");
     }
 }
@@ -1678,7 +1678,7 @@ uno::Reference< accessibility::XAccessible > LOKDocumentFocusListener::getAccess
         }
     }
 
-    SAL_WARN("lok.a11y",
+    LOK_WARN("lok.a11y",
              "LOKDocumentFocusListener::getAccessible: Can't get any accessible object from event source.");
 
     return uno::Reference< accessibility::XAccessible >();
@@ -3376,7 +3376,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::attachRecursive");
+            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::attachRecursive");
         }
     }
     else
@@ -3387,7 +3387,7 @@ void SfxViewShell::SetLOKAccessibilityState(bool bEnabled)
         }
         catch (const uno::Exception&)
         {
-            SAL_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::detachRecursive");
+            LOK_WARN("SetLOKAccessibilityState", "Exception caught processing LOKDocumentFocusListener::detachRecursive");
         }
     }
 }
