@@ -12,7 +12,7 @@
 // Ideally it would hook into make's jobserver, but it is too easy to deadlock the build at the
 // packaging stage (all jobs are started at once, consuming all available slots as part of general
 // parallelism, and then each job waiting for an additional job token but since all jobs are in
-// waiting stage: you have a dealock)
+// waiting stage: you have a deadlock).
 // That in turn is an advantage for a simple approach with separate lock and release commands, since
 // everything is started at once, and all jobs that will be queued are all jobs that use the helper,
 // there will be jobs in waiting state and keeping the semaphore active as long as it matters.
