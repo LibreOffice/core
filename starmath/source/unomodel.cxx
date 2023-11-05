@@ -663,7 +663,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
             case HANDLE_STARMATH_VERSION:
-                pDocSh->SetSmSyntaxVersion(pValues->get<sal_uInt16>());
+                pDocSh->SetSmSyntaxVersion(pValues->get<sal_Int16>());
                 break;
         }
     }

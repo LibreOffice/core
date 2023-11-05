@@ -656,7 +656,7 @@ void SmElementsControl::build()
     }
 }
 
-void SmElementsControl::setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+void SmElementsControl::setSmSyntaxVersion(sal_Int16 nSmSyntaxVersion)
 {
     if( m_nSmSyntaxVersion != nSmSyntaxVersion )
     {

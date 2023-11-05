@@ -140,7 +140,7 @@ struct SmCfgOther
     SmPrintSize     ePrintSize;
     sal_uInt16      nPrintZoomFactor;
     sal_uInt16      nSmEditWindowZoomFactor;
-    sal_uInt16      nSmSyntaxVersion;
+    sal_Int16       nSmSyntaxVersion;
     bool            bPrintTitle;
     bool            bPrintFormulaText;
     bool            bPrintFrame;
@@ -155,7 +155,7 @@ struct SmCfgOther
     SmCfgOther();
 };
 
-constexpr sal_uInt16 nDefaultSmSyntaxVersion(5);
+constexpr sal_Int16 nDefaultSmSyntaxVersion(5);
 
 SmCfgOther::SmCfgOther()
     : ePrintSize(PRINT_SIZE_NORMAL)
@@ -1255,7 +1255,7 @@ bool SmMathConfig::IsAutoCloseBrackets() const
     return pOther->bIsAutoCloseBrackets;
 }
 
-sal_uInt16 SmMathConfig::GetDefaultSmSyntaxVersion() const
+sal_Int16 SmMathConfig::GetDefaultSmSyntaxVersion() const
 {
     if (utl::ConfigManager::IsFuzzing())
         return nDefaultSmSyntaxVersion;
@@ -1295,7 +1295,7 @@ void SmMathConfig::SetAutoCloseBrackets( bool bVal )
     SetOtherIfNotEqual( pOther->bIsAutoCloseBrackets, bVal );
 }
 
-void SmMathConfig::SetDefaultSmSyntaxVersion( sal_uInt16 nVal )
+void SmMathConfig::SetDefaultSmSyntaxVersion( sal_Int16 nVal )
 {
     if (!pOther)
         LoadOther();

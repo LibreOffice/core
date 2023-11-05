@@ -445,7 +445,7 @@ void SmXMLExport::ExportContent_()
         return;
 
     SmModule* pMod = SM_MOD();
-    sal_uInt16 nSmSyntaxVersion = pMod->GetConfig()->GetDefaultSmSyntaxVersion();
+    sal_Int16 nSmSyntaxVersion = pMod->GetConfig()->GetDefaultSmSyntaxVersion();
 
     // Convert symbol names
     if (pDocShell)

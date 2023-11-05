@@ -99,7 +99,7 @@ void SmDocShell::InitInterface_Impl()
     GetStaticInterface()->RegisterPopupMenu("view");
 }
 
-void SmDocShell::SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion)
+void SmDocShell::SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion)
 {
     mnSmSyntaxVersion = nSmSyntaxVersion;
     maParser.reset(starmathdatabase::GetVersionSmParser(mnSmSyntaxVersion));

@@ -41,7 +41,7 @@ class SmElementsControl
     SmDocShell*   mpDocShell;
     SmFormat      maFormat;
     int           mnCurrentSetIndex;
-    sal_uInt16    m_nSmSyntaxVersion;
+    sal_Int16     m_nSmSyntaxVersion;
 
     std::vector<std::unique_ptr<ElementData>> maItemDatas;
     std::unique_ptr<weld::IconView> mpIconView;
@@ -67,7 +67,7 @@ public:
     static const std::vector<TranslateId>& categories();
     void setElementSetIndex(int nSetIndex);
 
-    void setSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
+    void setSmSyntaxVersion(sal_Int16 nSmSyntaxVersion);
 
     void SetSelectHdl(const Link<OUString, void>& rLink) { maSelectHdlLink = rLink; }
 

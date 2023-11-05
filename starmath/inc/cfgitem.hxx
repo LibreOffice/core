@@ -195,8 +195,8 @@ public:
     bool IsShowFormulaCursor() const;
     void SetShowFormulaCursor(bool bVal);
 
-    sal_uInt16 GetDefaultSmSyntaxVersion() const;
-    void SetDefaultSmSyntaxVersion(sal_uInt16 nVal);
+    sal_Int16 GetDefaultSmSyntaxVersion() const;
+    void SetDefaultSmSyntaxVersion(sal_Int16 nVal);
 
     SmFontPickList& GetFontPickList(sal_uInt16 nIdent) { return vFontPickList[nIdent]; }
 

@@ -92,7 +92,7 @@ class SM_DLLPUBLIC SmDocShell final : public SfxObjectShell, public SfxListener
     VclPtr<Printer>     mpTmpPrinter;    //ditto
     sal_uInt16          mnModifyCount;
     bool                mbFormulaArranged;
-    sal_uInt16          mnSmSyntaxVersion;
+    sal_Int16           mnSmSyntaxVersion;
     std::unique_ptr<AbstractSmParser> maParser;
     std::unique_ptr<SmCursor> mpCursor;
     std::set< OUString >    maUsedSymbols;   // to export used symbols only when saving
@@ -176,8 +176,8 @@ public:
     AbstractSmParser* GetParser() { return maParser.get(); }
     const SmTableNode *GetFormulaTree() const  { return mpTree.get(); }
     void            SetFormulaTree(SmTableNode *pTree) { mpTree.reset(pTree); }
-    sal_uInt16      GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
-    void            SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion);
+    sal_Int16       GetSmSyntaxVersion() const { return mnSmSyntaxVersion; }
+    void            SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion);
 
     const std::set< OUString > &    GetUsedSymbols() const  { return maUsedSymbols; }
 

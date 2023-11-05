@@ -138,11 +138,11 @@ public:
 
     /** Set syntax version
     */
-    void SetSmSyntaxVersion(sal_uInt16 nSmSyntaxVersion) { m_nSmSyntaxVersion = nSmSyntaxVersion; }
+    void SetSmSyntaxVersion(sal_Int16 nSmSyntaxVersion) { m_nSmSyntaxVersion = nSmSyntaxVersion; }
 
     /** Get syntax version
     */
-    sal_uInt16 GetSmSyntaxVersion() const { return m_nSmSyntaxVersion; }
+    sal_Int16 GetSmSyntaxVersion() const { return m_nSmSyntaxVersion; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
