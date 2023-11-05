@@ -3285,7 +3285,7 @@ void SfxViewShell::libreOfficeKitViewAddPendingInvalidateTiles()
 
 void SfxViewShell::afterCallbackRegistered()
 {
-    SAL_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
+    LOK_INFO("sfx.view", "SfxViewShell::afterCallbackRegistered invoked");
     if (GetLOKAccessibilityState())
     {
         LOKDocumentFocusListener& rDocFocusListener = GetLOKDocumentFocusListener();
