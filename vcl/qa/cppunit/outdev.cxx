@@ -1920,47 +1920,13 @@ static size_t ClipGradientTest(GDIMetaFile& rMtf, size_t nIndex)
     pAction = rMtf.GetAction(nIndex);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a push action", MetaActionType::PUSH, pAction->GetType());
     MetaPushAction* pPushAction = dynamic_cast<MetaPushAction*>(pAction);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not using XOR push flags", vcl::PushFlags::RASTEROP,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not using CLIPREGION push flags", vcl::PushFlags::CLIPREGION,
                                  pPushAction->GetFlags());
 
     nIndex++;
     pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a CLIPREGION action", MetaActionType::CLIPREGION,
                                  pAction->GetType());
-    MetaRasterOpAction* pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an XOR rasterop", RasterOp::Xor,
-                                 pRasterOpAction->GetRasterOp());
-
-    nIndex++;
-    pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a gradient action", MetaActionType::GRADIENT,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a fill color action", MetaActionType::FILLCOLOR,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
-                                 pAction->GetType());
-    pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an N0 rasterop", RasterOp::N0,
-                                 pRasterOpAction->GetRasterOp());
-
-    nIndex++;
-    pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a polypolygon action", MetaActionType::POLYPOLYGON,
-                                 pAction->GetType());
-
-    nIndex++;
-    pAction = rMtf.GetAction(nIndex);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not a rasterop action", MetaActionType::RASTEROP,
-                                 pAction->GetType());
-    pRasterOpAction = dynamic_cast<MetaRasterOpAction*>(pAction);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not an XOR rasterop", RasterOp::Xor,
-                                 pRasterOpAction->GetRasterOp());
 
     nIndex++;
     pAction = rMtf.GetAction(nIndex);
