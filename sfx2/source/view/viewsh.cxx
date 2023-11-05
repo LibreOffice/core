@@ -1702,21 +1702,28 @@ void LOKDocumentFocusListener::attachRecursive(
     const uno::Reference< accessibility::XAccessibleContext >& xContext
 )
 {
-    LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): xAccessible: " << xAccessible.get()
-            << ", role: " << xContext->getAccessibleRole()
-            << ", name: " << xContext->getAccessibleName()
-            << ", parent: " << xContext->getAccessibleParent().get()
-            << ", child count: " << xContext->getAccessibleChildCount());
-
-    sal_Int64 nStateSet = xContext->getAccessibleStateSet();
-
-    if (!m_bIsEditingCell)
+    try
     {
-        ::rtl::OUString sName = xContext->getAccessibleName();
-        m_bIsEditingCell = sName.startsWith("Cell");
-    }
+        LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): xAccessible: "
+                                 << xAccessible.get() << ", role: " << xContext->getAccessibleRole()
+                                 << ", name: " << xContext->getAccessibleName()
+                                 << ", parent: " << xContext->getAccessibleParent().get()
+                                 << ", child count: " << xContext->getAccessibleChildCount());
 
-    attachRecursive(xAccessible, xContext, nStateSet);
+        sal_Int64 nStateSet = xContext->getAccessibleStateSet();
+
+        if (!m_bIsEditingCell)
+        {
+            ::rtl::OUString sName = xContext->getAccessibleName();
+            m_bIsEditingCell = sName.startsWith("Cell");
+        }
+
+        attachRecursive(xAccessible, xContext, nStateSet);
+    }
+    catch (const uno::Exception& e)
+    {
+        LOK_WARN("lok.a11y", "LOKDocumentFocusListener::attachRecursive(2): raised exception: " << e.Message);
+    }
 }
 
 void LOKDocumentFocusListener::attachRecursive(
@@ -1726,7 +1733,7 @@ void LOKDocumentFocusListener::attachRecursive(
 )
 {
     aboutView("LOKDocumentFocusListener::attachRecursive (3)", this, m_pViewShell);
-    LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #1: this: " << this
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #1: this: " << this
             << ", xAccessible: " << xAccessible.get()
             << ", role: " << xContext->getAccessibleRole()
             << ", name: " << xContext->getAccessibleName()
@@ -1740,12 +1747,12 @@ void LOKDocumentFocusListener::attachRecursive(
 
     if (!xBroadcaster.is())
         return;
-    LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
+    SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #2: xBroadcaster.is()");
     // If not already done, add the broadcaster to the list and attach as listener.
     const uno::Reference< uno::XInterface >& xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
-        LOK_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
+        SAL_INFO("lok.a11y", "LOKDocumentFocusListener::attachRecursive(3) #3: m_aRefList.insert(xInterface).second");
         xBroadcaster->addAccessibleEventListener(static_cast< accessibility::XAccessibleEventListener *>(this));
 
         if (isDocument(xContext->getAccessibleRole()))
