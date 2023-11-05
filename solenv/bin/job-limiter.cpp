@@ -87,7 +87,7 @@ int wmain(int argc, wchar_t* argv[])
         semaphore_handle = CreateSemaphoreW(NULL, 3, 4, semaphorename);
         // keep this process alive for other jobs to grab the semaphore, otherwise it is gone too
         // quickly and everything creates their own semaphore that immediately has enough slots,
-        // completely bypassing the point of havig a limiter...
+        // completely bypassing the point of having a limiter...
         Sleep(500);
     }
     if (semaphore_handle == NULL)
