@@ -697,7 +697,8 @@ SvStream& GalleryFileStorage::writeGalleryTheme(SvStream& rOStm, const GalleryTh
     rOStm.WriteUInt16(0x0004);
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, pThm->GetThemeName(),
                                                  RTL_TEXTENCODING_UTF8);
-    rOStm.WriteUInt32(nCount).WriteUInt16(osl_getThreadTextEncoding());
+    rOStm.WriteUInt32(nCount);
+    rOStm.WriteUInt16(RTL_TEXTENCODING_UTF8); // unused on reading
 
     for (sal_uInt32 i = 0; i < nCount; i++)
     {
