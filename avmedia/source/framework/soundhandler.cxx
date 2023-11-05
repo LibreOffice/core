@@ -102,7 +102,7 @@ sal_Bool SAL_CALL SoundHandler::supportsService( const OUString& sServiceName )
 // XServiceInfo
 css::uno::Sequence< OUString > SAL_CALL SoundHandler::getSupportedServiceNames()
 {
-    return { "com.sun.star.frame.ContentHandler" };
+    return { u"com.sun.star.frame.ContentHandler"_ustr };
 }
 
 /*-************************************************************************************************************
@@ -253,7 +253,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
         // I think we can the following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
-        sTypeName = "wav_Wave_Audio_File";
+        sTypeName = u"wav_Wave_Audio_File"_ustr;
         aDescriptor[utl::MediaDescriptor::PROP_TYPENAME] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
