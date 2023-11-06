@@ -430,12 +430,6 @@ public:
     void ClearFormEditData();
     ScFormEditData* GetFormEditData() { return mpFormEditData.get(); }
 
-    /// return true if "Edit Hyperlink" in context menu should be disabled
-    bool ShouldDisableEditHyperlink() const;
-    /// force "Edit Hyperlink" to true, with the expectation that SID_EDIT_HYPERLINK is
-    /// later Invalidated to reset it back to its natural value
-    void EnableEditHyperlink();
-
     virtual tools::Rectangle getLOKVisibleArea() const override;
 
     const ScDragData& GetDragData() const { return *m_pDragData; }

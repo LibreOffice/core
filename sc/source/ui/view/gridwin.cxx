@@ -3471,21 +3471,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if (bDone)
         return;
 
-    // tdf#140361 at this context menu popup time get what the
-    // DisableEditHyperlink would be for this position
-    bool bShouldDisableEditHyperlink = mrViewData.GetViewShell()->ShouldDisableEditHyperlink();
-
     SfxDispatcher::ExecutePopup( this, &aMenuPos );
-
-    if (!bShouldDisableEditHyperlink)
-    {
-        SfxBindings& rBindings = mrViewData.GetBindings();
-        // tdf#140361 set what the menu popup state for this was
-        mrViewData.GetViewShell()->EnableEditHyperlink();
-        // ensure moAtContextMenu_DisableEditHyperlink will be cleared
-        // in the case that EditHyperlink is not dispatched by the menu
-        rBindings.Invalidate(SID_EDIT_HYPERLINK);
-    }
 }
 
 void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCCOL nCellX, SCROW nCellY )

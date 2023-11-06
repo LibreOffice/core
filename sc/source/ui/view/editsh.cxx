@@ -733,16 +733,6 @@ static void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
     }
 }
 
-bool ScEditShell::ShouldDisableEditHyperlink() const
-{
-    return !rViewData.HasEditView(rViewData.GetActivePart()) || !URLFieldHelper::IsCursorAtURLField(*pEditView);
-}
-
-void ScEditShell::EnableEditHyperlink()
-{
-    moAtContextMenu_DisableEditHyperlink = false;
-}
-
 void ScEditShell::GetState( SfxItemSet& rSet )
 {
     // When deactivating the view, edit mode is stopped, but the EditShell is left active
@@ -841,18 +831,8 @@ void ScEditShell::GetState( SfxItemSet& rSet )
             case SID_COPY_HYPERLINK_LOCATION:
             case SID_REMOVE_HYPERLINK:
                 {
-                    bool bDisableEditHyperlink;
-                    if (!moAtContextMenu_DisableEditHyperlink.has_value())
-                        bDisableEditHyperlink = ShouldDisableEditHyperlink();
-                    else
-                    {
-                        // tdf#140361 if a popup menu was active, use the state as of when the popup was launched and then drop
-                        // moAtContextMenu_DisableEditHyperlink
-                        bDisableEditHyperlink = *moAtContextMenu_DisableEditHyperlink;
-                        moAtContextMenu_DisableEditHyperlink.reset();
-                    }
-
-                    if (bDisableEditHyperlink)
+                    if (!URLFieldHelper::IsCursorAtURLField(*pEditView,
+                                                            /*AlsoCheckBeforeCursor=*/true))
                         rSet.DisableItem (nWhich);
                 }
                 break;

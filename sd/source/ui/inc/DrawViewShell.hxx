@@ -447,9 +447,6 @@ private:
 
     /// return true if "Edit Hyperlink" in context menu should be disabled
     bool ShouldDisableEditHyperlink() const;
-    /// force "Edit Hyperlink" to true, with the expectation that SID_EDIT_HYPERLINK is
-    /// later Invalidated to reset it back to its natural value
-    void EnableEditHyperlink();
 
 private:
     std::unique_ptr<DrawView> mpDrawView;

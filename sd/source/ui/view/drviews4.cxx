@@ -844,7 +844,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             {
                 SfxBindings& rBindings = GetViewFrame()->GetBindings();
                 // tdf#137445 set what the menu popup state for this was
-                EnableEditHyperlink();
+                moAtContextMenu_DisableEditHyperlink = bShouldDisableEditHyperlink;
                 // ensure moAtContextMenu_DisableEditHyperlink will be cleared
                 // in the case that EditHyperlink is not dispatched by the menu
                 rBindings.Invalidate(SID_EDIT_HYPERLINK);
@@ -855,11 +855,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
     {
         ViewShell::Command(rCEvt, pWin);
     }
-}
-
-void DrawViewShell::EnableEditHyperlink()
-{
-    moAtContextMenu_DisableEditHyperlink = false;
 }
 
 void DrawViewShell::ShowMousePosInfo(const ::tools::Rectangle& rRect,
