@@ -526,51 +526,56 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric(dynamic_cast<SwWebDocShell*>( GetView().GetDocShell()) != nullptr );
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
+            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateFrameTabDialog("FrameDialog",
                                                   GetView().GetViewFrame(),
                                                   GetView().GetFrameWeld(),
                                                   aSet));
-            if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
-            {
-                //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
-                SwWrtShell& rShell = GetShell();
-                rShell.LockPaint(LockPaintReason::InsertFrame);
-                rShell.StartAllAction();
-                rShell.StartUndo(SwUndoId::INSERT);
-
-                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                aMgr.SetAttrSet(*pOutSet);
-
-                // At first delete the selection at the ClickToEditField.
-                if( rShell.IsInClickToEdit() )
-                    rShell.DelRight();
-
-                aMgr.InsertFlyFrame();
-
-                uno::Reference< frame::XDispatchRecorder > xRecorder =
-                        GetView().GetViewFrame()->GetBindings().GetRecorder();
-                if ( xRecorder.is() )
+            pDlg->StartExecuteAsync([pDlg, nSlot, this](sal_Int32 nResult) {
+                if (nResult == RET_OK && pDlg->GetOutputItemSet())
                 {
-                    //FN_INSERT_FRAME
-                    sal_uInt16 nAnchor = static_cast<sal_uInt16>(aMgr.GetAnchor());
-                    rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
-                    rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
-                    rReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
-                    rReq.Done();
+                    SwFlyFrameAttrMgr aAttrMgr( true, GetShellPtr(), Frmmgr_Type::TEXT, nullptr );
+                    //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
+                    SwWrtShell& rShell = GetShell();
+                    rShell.LockPaint(LockPaintReason::InsertFrame);
+                    rShell.StartAllAction();
+                    rShell.StartUndo(SwUndoId::INSERT);
+
+                    const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                        aAttrMgr.SetAttrSet(*pOutSet);
+
+                    // At first delete the selection at the ClickToEditField.
+                    if( rShell.IsInClickToEdit() )
+                        rShell.DelRight();
+
+                    aAttrMgr.InsertFlyFrame();
+
+                    uno::Reference< frame::XDispatchRecorder > xRecorder =
+                            GetView().GetViewFrame()->GetBindings().GetRecorder();
+                    if ( xRecorder.is() )
+                    {
+                        //FN_INSERT_FRAME
+                            sal_uInt16 nAnchor = static_cast<sal_uInt16>(aAttrMgr.GetAnchor());
+                            SfxRequest aReq(GetView().GetViewFrame(), FN_INSERT_FRAME);
+                            aReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
+                            aReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
+                            aReq.AppendItem(SvxSizeItem(FN_PARAM_2, rShell.GetObjSize()));
+                            aReq.Done();
+                    }
+
+                    GetView().AutoCaption(FRAME_CAP);
+
+                    {
+                        SwRewriter aRewriter;
+
+                        aRewriter.AddRule(UndoArg1, SwResId(STR_FRAME));
+
+                        rShell.EndUndo(SwUndoId::INSERT, &aRewriter);
+                    }
+                    rShell.EndAllAction();
+                    rShell.UnlockPaint();
                 }
-
-                GetView().AutoCaption(FRAME_CAP);
-
-                {
-                    SwRewriter aRewriter;
-
-                    aRewriter.AddRule(UndoArg1, SwResId(STR_FRAME));
-
-                    rShell.EndUndo(SwUndoId::INSERT, &aRewriter);
-                }
-                rShell.EndAllAction();
-                rShell.UnlockPaint();
-            }
+                pDlg->disposeOnce();
+            });
         }
         break;
     }
