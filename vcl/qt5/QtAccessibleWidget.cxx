@@ -606,7 +606,7 @@ void lcl_addState(QAccessible::State* state, sal_Int64 nState)
             // No match
             break;
         case AccessibleStateType::INDETERMINATE:
-            // No match
+            state->checkStateMixed = true;
             break;
         case AccessibleStateType::MANAGES_DESCENDANTS:
             // No match
