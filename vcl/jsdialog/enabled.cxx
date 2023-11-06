@@ -184,6 +184,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"modules/swriter/ui/footnotesendnotestabpage.ui"
         || rUIFile == u"modules/swriter/ui/formatsectiondialog.ui"
         || rUIFile == u"modules/swriter/ui/formattablepage.ui"
+        || rUIFile == u"modules/swriter/ui/framedialog.ui"
         || rUIFile == u"modules/swriter/ui/frmaddpage.ui"
         || rUIFile == u"modules/swriter/ui/frmurlpage.ui"
         || rUIFile == u"modules/swriter/ui/frmtypepage.ui"
