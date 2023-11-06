@@ -16,7 +16,8 @@
 void URLFieldHelper::RemoveURLField(EditView& pEditView)
 {
     pEditView.SelectFieldAtCursor();
-    const SvxFieldData* pField = pEditView.GetFieldAtCursor();
+    const SvxFieldItem* pFieldItem = pEditView.GetFieldAtSelection();
+    const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
     if (auto pUrlField = dynamic_cast<const SvxURLField*>(pField))
     {
         ESelection aSel = pEditView.GetSelection();

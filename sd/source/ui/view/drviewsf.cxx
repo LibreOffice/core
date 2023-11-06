@@ -539,7 +539,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_REMOVE_HYPERLINK:
             {
-                if (!URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+                if (!URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView(),
+                                                        /*AlsoCheckBeforeCursor=*/true))
                     rSet.DisableItem(nWhich);
             }
             break;

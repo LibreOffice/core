@@ -327,7 +327,6 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_REMOVE_HYPERLINK:
             {
-                // Ensure the field is selected first
                 URLFieldHelper::RemoveURLField(pOutView->GetEditView());
             }
             break;
