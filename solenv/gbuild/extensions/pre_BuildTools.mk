@@ -44,6 +44,8 @@ gb_BUILD_TOOLS_executables_extern = \
     python \
 		xsltproc \
 
+# zxcvbn-c depends on a generated header by native code, therefore it is built
+# both for the build and the host platform.
 gb_BUILD_TOOLS = \
     $(foreach executable,$(gb_BUILD_TOOLS_executables),$(call gb_Executable_get_runtime_dependencies,$(executable))) \
     $(foreach executable,$(gb_BUILD_TOOLS_executables_extern),$(call gb_ExternalExecutable_get_dependencies,$(executable))) \
