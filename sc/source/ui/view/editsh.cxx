@@ -888,7 +888,7 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetURLField()
     if (!pActiveView)
         return std::unique_ptr<const SvxFieldData>();
 
-    const SvxFieldData* pField = pActiveView->GetFieldAtCursor();
+    const SvxFieldData* pField = pActiveView->GetFieldUnderMouseOrInSelectionOrAtCursor();
     if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
         return pURLField->Clone();
 

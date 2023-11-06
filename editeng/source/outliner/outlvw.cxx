@@ -1345,11 +1345,6 @@ const SvxFieldItem* OutlinerView::GetFieldAtSelection(bool bAlsoCheckBeforeCurso
     return pEditView->GetFieldAtSelection(bAlsoCheckBeforeCursor);
 }
 
-const SvxFieldData* OutlinerView::GetFieldAtCursor() const
-{
-    return pEditView->GetFieldAtCursor();
-}
-
 void OutlinerView::SelectFieldAtCursor()
 {
     pEditView->SelectFieldAtCursor();

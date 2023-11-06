@@ -38,7 +38,8 @@ bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView, bool bAlsoChe
     if (!bIsValidSelection)
         return false;
 
-    const SvxFieldData* pField = pEditView.GetFieldAtCursor(bAlsoCheckBeforeCursor);
+    const SvxFieldData* pField
+        = pEditView.GetFieldUnderMouseOrInSelectionOrAtCursor(bAlsoCheckBeforeCursor);
     if (dynamic_cast<const SvxURLField*>(pField))
         return true;
 

@@ -1424,7 +1424,7 @@ void EditView::SelectFieldAtCursor()
         assert(std::abs(aSel.nStartPos - aSel.nEndPos) == 1);
 }
 
-const SvxFieldData* EditView::GetFieldAtCursor(bool bAlsoCheckBeforeCursor) const
+const SvxFieldData* EditView::GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor) const
 {
     const SvxFieldItem* pFieldItem = GetFieldUnderMousePointer();
     if (!pFieldItem)

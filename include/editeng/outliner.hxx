@@ -307,9 +307,7 @@ public:
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
     const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
-    /// Return the field at the current cursor position or nullptr if no field found
-    const SvxFieldData* GetFieldAtCursor() const;
-    /// Select the field at the current cursor position
+    /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
 
     /** enables bullets for the selected paragraphs if the bullets/numbering of the first paragraph is off
