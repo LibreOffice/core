@@ -8,7 +8,8 @@
 #
 
 xmlsec_patches :=
-xmlsec_patches += 0001-xmlSecX509DataGetNodeContent-don-t-return-0-for-non-.patch.1
+# Remove this when Ubuntu 20.04 is EOL in 2025.
+xmlsec_patches += old-nss.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,xmlsec))
 

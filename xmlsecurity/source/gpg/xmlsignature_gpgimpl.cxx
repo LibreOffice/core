@@ -190,7 +190,9 @@ SAL_CALL XMLSignature_GpgImpl::generate(
     rCtx.setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
     GpgME::Error err;
     xmlChar* pKey=xmlNodeGetContent(cur);
-    if(xmlSecBase64Decode(pKey, reinterpret_cast<xmlSecByte*>(pKey), xmlStrlen(pKey)) < 0)
+    xmlSecSize nWritten;
+    int nRet = xmlSecBase64Decode_ex(pKey, reinterpret_cast<xmlSecByte*>(pKey), xmlStrlen(pKey), &nWritten);
+    if(nRet < 0)
         throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
     if( rCtx.addSigningKey(
             rCtx.key(
@@ -358,8 +360,9 @@ SAL_CALL XMLSignature_GpgImpl::validate(
         if(!xmlSecCheckNodeName(cur, xmlSecNodeSignatureValue, xmlSecDSigNs))
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
         xmlChar* pSignatureValue=xmlNodeGetContent(cur);
-        int nSigSize = xmlSecBase64Decode(pSignatureValue, reinterpret_cast<xmlSecByte*>(pSignatureValue), xmlStrlen(pSignatureValue));
-        if( nSigSize < 0)
+        xmlSecSize nSigSize;
+        int nRet = xmlSecBase64Decode_ex(pSignatureValue, reinterpret_cast<xmlSecByte*>(pSignatureValue), xmlStrlen(pSignatureValue), &nSigSize);
+        if( nRet < 0)
             throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
         GpgME::Data data_signature(
@@ -410,8 +413,9 @@ SAL_CALL XMLSignature_GpgImpl::validate(
 
             // got a key packet, import & re-validate
             xmlChar* pKeyPacket=xmlNodeGetContent(cur);
-            int nKeyLen = xmlSecBase64Decode(pKeyPacket, reinterpret_cast<xmlSecByte*>(pKeyPacket), xmlStrlen(pKeyPacket));
-            if( nKeyLen < 0)
+            xmlSecSize nKeyLen;
+            nRet = xmlSecBase64Decode_ex(pKeyPacket, reinterpret_cast<xmlSecByte*>(pKeyPacket), xmlStrlen(pKeyPacket), &nKeyLen);
+            if( nRet < 0)
                 throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
 
             GpgME::Data data_key(
