@@ -3091,8 +3091,12 @@ void GtkSalFrame::EndSetClipRegion()
 
 void GtkSalFrame::PositionByToolkit(const tools::Rectangle& rRect, FloatWinPopupFlags nFlags)
 {
-    if (ImplGetSVData()->maNWFData.mbCanDetermineWindowPosition)
+    if ( ImplGetSVData()->maNWFData.mbCanDetermineWindowPosition &&
+        // tdf#152155 cannot determine window positions of popup listboxes on sidebar
+        nFlags != LISTBOX_FLOATWINPOPUPFLAGS )
+    {
         return;
+    }
 
     m_aFloatRect = rRect;
     m_nFloatFlags = nFlags;

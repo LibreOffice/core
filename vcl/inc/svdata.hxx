@@ -118,6 +118,9 @@ class UITestLogger;
 #define SV_ICON_ID_DATABASE                            12
 #define SV_ICON_ID_FORMULA                             13
 
+const FloatWinPopupFlags LISTBOX_FLOATWINPOPUPFLAGS = FloatWinPopupFlags::Down |
+    FloatWinPopupFlags::NoHorzPlacement | FloatWinPopupFlags::AllMouseButtonClose;
+
 namespace com::sun::star::datatransfer::clipboard { class XClipboard; }
 
 namespace vcl
