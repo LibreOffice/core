@@ -16,6 +16,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libcmis,1))
 $(eval $(call gb_UnpackedTarball_add_patches,libcmis,\
 	external/libcmis/0001-fix-regression-in-HttpSession-initProtocols.patch \
 	external/libcmis/0002-HttpSession-add-a-callback-that-can-be-used-to-confi.patch \
+	external/libcmis/0003-HttpSession-fix-regression-setting-wrong-type-of-CUR.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
