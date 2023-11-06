@@ -98,6 +98,9 @@ public:
 
     int                             mnBlinkCursorDelay;
 
+    // tdf#155266 force flush after scrolling
+    bool                            mbForceFlush;
+
 public:
     /** Constructor
 

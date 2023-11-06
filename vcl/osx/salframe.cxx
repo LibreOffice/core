@@ -87,7 +87,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, SalFrameStyleFlags salFrameStyle 
     mnTrackingRectTag( 0 ),
     mrClippingPath( nullptr ),
     mnICOptions( InputContextFlags::NONE ),
-    mnBlinkCursorDelay ( nMinBlinkCursorDelay )
+    mnBlinkCursorDelay( nMinBlinkCursorDelay ),
+    mbForceFlush( false )
 {
     mpParent = dynamic_cast<AquaSalFrame*>(pParent);
 
@@ -1018,8 +1019,9 @@ void AquaSalFrame::Flush()
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mbForceFlush = false;
         mpGraphics->Flush();
         [mpNSView display];
     }
@@ -1039,8 +1041,9 @@ void AquaSalFrame::Flush( const tools::Rectangle& rRect )
     // outside of the application's event loop (e.g. IntroWindow)
     // nothing would trigger paint event handling
     // => fall back to synchronous painting
-    if( ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
+    if( mbForceFlush || ImplGetSVData()->maAppData.mnDispatchLevel <= 0 )
     {
+        mbForceFlush = false;
         mpGraphics->Flush( rRect );
         [mpNSView display];
     }
