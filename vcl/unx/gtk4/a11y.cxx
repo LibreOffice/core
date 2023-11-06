@@ -474,7 +474,10 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
         ret->uno_accessible->getAccessibleContext());
     assert(xContext.is() && "No accessible context");
 
-    // set state properties
+    // handle states
+    // Gtk differentiates between GtkAccessibleState and GtkAccessibleProperty
+    // (both handled here) and GtkAccessiblePlatformState (handled in
+    // 'lo_accessible_get_platform_state')
     const sal_Int64 nStates = xContext->getAccessibleStateSet();
     gtk_accessible_update_property(
         GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_MODAL,
@@ -494,6 +497,36 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
     {
         gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
                                        GTK_ORIENTATION_VERTICAL, -1);
+    }
+
+    gtk_accessible_update_state(
+        GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_BUSY,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::BUSY),
+        GTK_ACCESSIBLE_STATE_DISABLED,
+        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)),
+        GTK_ACCESSIBLE_STATE_EXPANDED,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED),
+        GTK_ACCESSIBLE_STATE_SELECTED,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
+
+    const sal_Int16 nRole = xContext->getAccessibleRole();
+    if (nRole == com::sun::star::accessibility::AccessibleRole::CHECK_BOX)
+    {
+        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
+        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
+        else if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKED)
+            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
+        gtk_accessible_update_state(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
+    }
+    else if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
+    {
+        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
+        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
+        else if (nStates & com::sun::star::accessibility::AccessibleStateType::PRESSED)
+            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
+        gtk_accessible_update_state(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_PRESSED, eState, -1);
     }
 
     // set values from XAccessibleValue interface if that's implemented
