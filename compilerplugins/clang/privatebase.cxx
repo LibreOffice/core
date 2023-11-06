@@ -9,6 +9,7 @@
 
 #ifndef LO_CLANG_SHARED_PLUGINS
 
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -33,7 +34,7 @@ void PrivateBase::run() {
 
 bool PrivateBase::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
     if (ignoreLocation(decl) || !decl->isThisDeclarationADefinition()
-        || decl->getTagKind() != TTK_Class)
+        || decl->getTagKind() != compat::TagTypeKind::Class)
     {
         return true;
     }

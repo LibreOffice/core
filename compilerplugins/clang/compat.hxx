@@ -82,6 +82,24 @@ constexpr clang::ExprValueKind VK_PRValue = clang::VK_PRValue;
 constexpr clang::ExprValueKind VK_PRValue = clang::VK_RValue;
 #endif
 
+namespace CXXConstructionKind
+{
+#if CLANG_VERSION >= 180000
+constexpr clang::CXXConstructionKind Complete = clang::CXXConstructionKind::Complete;
+#else
+constexpr clang::CXXConstructExpr::ConstructionKind Complete = clang::CXXConstructExpr::CK_Complete;
+#endif
+}
+
+namespace CharacterLiteralKind
+{
+#if CLANG_VERSION >= 180000
+constexpr clang::CharacterLiteralKind Ascii = clang::CharacterLiteralKind::Ascii;
+#else
+constexpr clang::CharacterLiteral::CharacterKind Ascii = clang::CharacterLiteral::Ascii;
+#endif
+}
+
 namespace ElaboratedTypeKeyword
 {
 #if CLANG_VERSION >= 180000
@@ -99,6 +117,28 @@ constexpr clang::Linkage Module = clang::Linkage::Module;
 #else
 constexpr clang::Linkage External = clang::ExternalLinkage;
 constexpr clang::Linkage Module = clang::ModuleLinkage;
+#endif
+}
+
+namespace StringLiteralKind
+{
+#if CLANG_VERSION >= 180000
+constexpr clang::StringLiteralKind UTF8 = clang::StringLiteralKind::UTF8;
+#else
+constexpr clang::StringLiteral::StringKind UTF8 = clang::StringLiteral::UTF8;
+#endif
+}
+
+namespace TagTypeKind
+{
+#if CLANG_VERSION >= 180000
+constexpr clang::TagTypeKind Class = clang::TagTypeKind::Class;
+constexpr clang::TagTypeKind Struct = clang::TagTypeKind::Struct;
+constexpr clang::TagTypeKind Union = clang::TagTypeKind::Union;
+#else
+constexpr clang::TagTypeKind Class = clang::TTK_Class;
+constexpr clang::TagTypeKind Struct = clang::TTK_Struct;
+constexpr clang::TagTypeKind Union = clang::TTK_Union;
 #endif
 }
 

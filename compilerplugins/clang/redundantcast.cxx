@@ -609,7 +609,7 @@ bool RedundantCast::VisitCXXReinterpretCastExpr(
         {
             if (loplugin::TypeCheck(sub->getType()).Pointer().Const().Char()) {
                 if (auto const lit = dyn_cast<clang::StringLiteral>(expr->getSubExprAsWritten())) {
-                    if (lit->getKind() == clang::StringLiteral::UTF8) {
+                    if (lit->getKind() == compat::StringLiteralKind::UTF8) {
                         // Don't warn about
                         //
                         //   redundant_cast<char const *>(u8"...")

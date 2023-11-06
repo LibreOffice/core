@@ -12,6 +12,7 @@
 #include <string>
 #include <iostream>
 #include "config_clang.h"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include <fstream>
 
@@ -129,7 +130,7 @@ bool MergeClasses::VisitCXXConstructExpr( const CXXConstructExpr* pCXXConstructE
         return true;
     }
     // ignore calls when a sub-class is constructing its superclass
-    if (pCXXConstructExpr->getConstructionKind() != CXXConstructExpr::ConstructionKind::CK_Complete) {
+    if (pCXXConstructExpr->getConstructionKind() != compat::CXXConstructionKind::Complete) {
         return true;
     }
     const CXXConstructorDecl* pCXXConstructorDecl = pCXXConstructExpr->getConstructor();

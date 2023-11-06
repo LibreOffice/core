@@ -9,13 +9,14 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
 
 bool isAsciiCharacterLiteral(Expr const * expr) {
     if (auto const e = dyn_cast<CharacterLiteral>(expr)) {
-        return e->getKind() == CharacterLiteral::Ascii;
+        return e->getKind() == compat::CharacterLiteralKind::Ascii;
     }
     return false;
 }

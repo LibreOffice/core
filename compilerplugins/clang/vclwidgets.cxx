@@ -13,6 +13,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 #include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 
@@ -849,7 +850,7 @@ bool VCLWidgets::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr )
     if (ignoreLocation(constructExpr)) {
         return true;
     }
-    if (constructExpr->getConstructionKind() != CXXConstructExpr::CK_Complete) {
+    if (constructExpr->getConstructionKind() != compat::CXXConstructionKind::Complete) {
         return true;
     }
     const CXXConstructorDecl* pConstructorDecl = constructExpr->getConstructor();
