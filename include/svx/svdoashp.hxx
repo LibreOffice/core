@@ -75,7 +75,7 @@ class SVXCORE_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
 private:
     // fObjectRotation is containing the object rotation in degrees.
-    double fObjectRotation;
+    double m_fObjectRotation;
     bool mbAdjustingTextFrameWidthAndHeight;
 
 protected:
@@ -138,7 +138,7 @@ public:
     void SetMirroredX( const bool bMirroredX );
     void SetMirroredY( const bool bMirroredY );
 
-    double GetObjectRotation() const { return fObjectRotation;}
+    double GetObjectRotation() const { return m_fObjectRotation;}
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
     SdrObjCustomShape(SdrModel& rSdrModel);

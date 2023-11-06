@@ -810,7 +810,7 @@ std::unique_ptr<sdr::properties::BaseProperties> SdrObjCustomShape::CreateObject
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 :   SdrTextObj(rSdrModel)
-    , fObjectRotation(0.0)
+    , m_fObjectRotation(0.0)
     , mbAdjustingTextFrameWidthAndHeight(false)
 {
     m_bClosedObj = true; // custom shapes may be filled
@@ -819,13 +819,13 @@ SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel)
 
 SdrObjCustomShape::SdrObjCustomShape(SdrModel& rSdrModel, SdrObjCustomShape const & rSource)
 :   SdrTextObj(rSdrModel, rSource)
-    , fObjectRotation(0.0)
+    , m_fObjectRotation(0.0)
     , mbAdjustingTextFrameWidthAndHeight(false)
 {
     m_bClosedObj = true; // custom shapes may be filled
     mbTextFrame = true;
 
-    fObjectRotation = rSource.fObjectRotation;
+    m_fObjectRotation = rSource.m_fObjectRotation;
     mbAdjustingTextFrameWidthAndHeight = rSource.mbAdjustingTextFrameWidthAndHeight;
     assert(!mbAdjustingTextFrameWidthAndHeight);
     InvalidateRenderGeometry();
@@ -1329,7 +1329,7 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
 
 void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bResizeFreeAllowed=fObjectRotation == 0.0;
+    rInfo.bResizeFreeAllowed=m_fObjectRotation == 0.0;
     rInfo.bResizePropAllowed=true;
     rInfo.bRotateFreeAllowed=true;
     rInfo.bRotate90Allowed  =true;
@@ -1572,21 +1572,21 @@ void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& rxFact, co
     if (IsMirroredX())
     {
         if (IsMirroredY())
-            fObjectRotation = fAngle - 180.0;
+            m_fObjectRotation = fAngle - 180.0;
         else
-            fObjectRotation = -fAngle;
+            m_fObjectRotation = -fAngle;
     }
     else
     {
         if (IsMirroredY())
-            fObjectRotation = 180.0 - fAngle;
+            m_fObjectRotation = 180.0 - fAngle;
         else
-            fObjectRotation = fAngle;
+            m_fObjectRotation = fAngle;
     }
-    while (fObjectRotation < 0)
-        fObjectRotation += 360.0;
-    while (fObjectRotation >= 360.0)
-        fObjectRotation -= 360.0;
+    while (m_fObjectRotation < 0)
+        m_fObjectRotation += 360.0;
+    while (m_fObjectRotation >= 360.0)
+        m_fObjectRotation -= 360.0;
 
     InvalidateRenderGeometry();
 }
@@ -1596,9 +1596,9 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
     bool bMirroredX = IsMirroredX();
     bool bMirroredY = IsMirroredY();
 
-    fObjectRotation = fmod( fObjectRotation, 360.0 );
-    if ( fObjectRotation < 0 )
-        fObjectRotation = 360 + fObjectRotation;
+    m_fObjectRotation = fmod( m_fObjectRotation, 360.0 );
+    if ( m_fObjectRotation < 0 )
+        m_fObjectRotation = 360 + m_fObjectRotation;
 
     // the rotation angle for ashapes is stored in fObjectRotation, this rotation
     // has to be applied to the text object (which is internally using maGeo.nAngle).
@@ -1608,7 +1608,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
     maGeo.m_nRotationAngle = 0_deg100;                                             // resetting aGeo data
     maGeo.RecalcSinCos();
 
-    Degree100 nW(static_cast<sal_Int32>( fObjectRotation * 100 ));                      // applying our object rotation
+    Degree100 nW(static_cast<sal_Int32>( m_fObjectRotation * 100 ));                      // applying our object rotation
     if ( bMirroredX )
         nW = 36000_deg100 - nW;
     if ( bMirroredY )
@@ -1627,9 +1627,9 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, Degree100 nAngle, double s
         nSwap ^= 1;
 
     double fAngle = toDegrees(nAngle);     // updating to our new object rotation
-    fObjectRotation = fmod( nSwap ? fObjectRotation - fAngle : fObjectRotation + fAngle, 360.0 );
-    if ( fObjectRotation < 0 )
-        fObjectRotation = 360 + fObjectRotation;
+    m_fObjectRotation = fmod( nSwap ? m_fObjectRotation - fAngle : m_fObjectRotation + fAngle, 360.0 );
+    if ( m_fObjectRotation < 0 )
+        m_fObjectRotation = 360 + m_fObjectRotation;
 
     SdrTextObj::NbcRotate( rRef, nAngle, sn, cs );                           // applying text rotation
     InvalidateRenderGeometry();
@@ -1668,11 +1668,11 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
 
             bool bSingleFlip = (IsMirroredX()!= IsMirroredY());
 
-            fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
+            m_fObjectRotation = fmod( bSingleFlip ? -fAngle : fAngle, 360.0 );
 
-            if ( fObjectRotation < 0 )
+            if ( m_fObjectRotation < 0 )
             {
-                fObjectRotation = 360.0 + fObjectRotation;
+                m_fObjectRotation = 360.0 + m_fObjectRotation;
             }
          }
     }
@@ -1696,21 +1696,21 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, Degree100 nAngle, double tn
     if (IsMirroredX())
     {
         if (IsMirroredY())
-            fObjectRotation = fAngle - 180.0;
+            m_fObjectRotation = fAngle - 180.0;
         else
-            fObjectRotation = -fAngle;
+            m_fObjectRotation = -fAngle;
     }
     else
     {
         if (IsMirroredY())
-            fObjectRotation = 180.0 - fAngle;
+            m_fObjectRotation = 180.0 - fAngle;
         else
-            fObjectRotation = fAngle;
+            m_fObjectRotation = fAngle;
     }
-    while (fObjectRotation < 0)
-        fObjectRotation += 360.0;
-    while (fObjectRotation >= 360.0)
-        fObjectRotation -= 360.0;
+    while (m_fObjectRotation < 0)
+        m_fObjectRotation += 360.0;
+    while (m_fObjectRotation >= 360.0)
+        m_fObjectRotation -= 360.0;
 
     InvalidateRenderGeometry();
 }
@@ -1815,8 +1815,8 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
             if ( nShearAngle )
                 ShearPoint( aGlue, aRef, fTan );
 
-            RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(fObjectRotation)),
-                        cos(basegfx::deg2rad(fObjectRotation)));
+            RotatePoint(aGlue, aRef, sin(basegfx::deg2rad(m_fObjectRotation)),
+                        cos(basegfx::deg2rad(m_fObjectRotation)));
             if ( bMirroredX )
                 aGlue.setX( getRectangle().GetWidth() - aGlue.X() );
             if ( bMirroredY )
@@ -2909,7 +2909,7 @@ void SdrObjCustomShape::SaveGeoData(SdrObjGeoData& rGeo) const
 {
     SdrTextObj::SaveGeoData( rGeo );
     SdrAShapeObjGeoData& rAGeo=static_cast<SdrAShapeObjGeoData&>(rGeo);
-    rAGeo.fObjectRotation = fObjectRotation;
+    rAGeo.fObjectRotation = m_fObjectRotation;
     rAGeo.bMirroredX = IsMirroredX();
     rAGeo.bMirroredY = IsMirroredY();
 
@@ -2922,7 +2922,7 @@ void SdrObjCustomShape::RestoreGeoData(const SdrObjGeoData& rGeo)
 {
     SdrTextObj::RestoreGeoData( rGeo );
     const SdrAShapeObjGeoData& rAGeo=static_cast<const SdrAShapeObjGeoData&>(rGeo);
-    fObjectRotation = rAGeo.fObjectRotation;
+    m_fObjectRotation = rAGeo.fObjectRotation;
     SetMirroredX( rAGeo.bMirroredX );
     SetMirroredY( rAGeo.bMirroredY );
 
@@ -3025,7 +3025,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
     // reset object shear and rotations
-    fObjectRotation = 0.0;
+    m_fObjectRotation = 0.0;
     maGeo.m_nRotationAngle = 0_deg100;
     maGeo.RecalcSinCos();
     maGeo.m_nShearAngle = 0_deg100;
@@ -3114,7 +3114,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
     // get turn and shear
-    double fRotate = basegfx::deg2rad(fObjectRotation);
+    double fRotate = basegfx::deg2rad(m_fObjectRotation);
     double fShearX = toRadians(maGeo.m_nShearAngle);
 
     // get aRectangle, this is the unrotated snaprect
