@@ -184,6 +184,7 @@ map_accessible_role(const css::uno::Reference<css::accessibility::XAccessible>& 
                 eRole = GTK_ACCESSIBLE_ROLE_SPIN_BUTTON;
                 break;
             case css::accessibility::AccessibleRole::TEXT:
+            case css::accessibility::AccessibleRole::PASSWORD_TEXT:
                 eRole = GTK_ACCESSIBLE_ROLE_TEXT_BOX;
                 break;
             case css::accessibility::AccessibleRole::TOOL_TIP:
