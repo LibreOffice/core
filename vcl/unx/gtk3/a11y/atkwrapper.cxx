@@ -704,6 +704,8 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
   // but we want the original behaviour we got from atk_object_real_get_parent when we inherited
   // from AtkObject
   atk_class->get_parent = orig_atk_klass->get_parent;
+  // and likewise for focus_event
+  atk_class->focus_event = orig_atk_klass->focus_event;
   g_type_class_unref(orig_atk_klass);
 }
 
