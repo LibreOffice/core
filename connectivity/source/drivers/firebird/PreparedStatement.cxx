@@ -334,9 +334,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute()
                                   m_aStatementHandle,
                                   m_pOutSqlda);
 
-    if (getStatementChangeCount() > 0)
-        m_pConnection->notifyDatabaseModified();
-
     return m_xResultSet.is();
     // TODO: implement handling of multiple ResultSets.
 }

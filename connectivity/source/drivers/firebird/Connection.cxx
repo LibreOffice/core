@@ -339,12 +339,6 @@ void Connection::construct(const OUString& url, const Sequence< PropertyValue >&
     }
 }
 
-void Connection::notifyDatabaseModified()
-{
-    if (m_xParentDocument.is()) // Only true in embedded mode
-        m_xParentDocument->setModified(true);
-}
-
 //----- XServiceInfo ---------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(Connection, "com.sun.star.sdbc.drivers.firebird.Connection",
                                                     "com.sun.star.sdbc.Connection")
@@ -822,42 +816,9 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
     if ( !(m_bIsEmbedded && m_xEmbeddedStorage.is()) )
         return;
 
-    SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
-    try
-    {
-        runBackupService(isc_action_svc_backup);
-    }
-    catch (const SQLException& e)
-    {
-        auto a = cppu::getCaughtException();
-        throw WrappedTargetRuntimeException(e.Message, e.Context, a);
-    }
-
-
-    Reference< XStream > xDBStream(m_xEmbeddedStorage->openStreamElement(our_sFBKLocation,
-                                                    ElementModes::WRITE));
-
-    // TODO: verify the backup actually exists -- the backup service
-    // can fail without giving any sane error messages / telling us
-    // that it failed.
-    using namespace ::comphelper;
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    Reference< XInputStream > xInputStream;
-    if (!xContext.is())
-        return;
-
-    xInputStream =
-            OStorageHelper::GetInputStreamFromURL(m_sFBKPath, xContext);
-    if (xInputStream.is())
-        OStorageHelper::CopyInputToOutput( xInputStream,
-                                    xDBStream->getOutputStream());
-
-    // remove old fdb file if exists
-    uno::Reference< ucb::XSimpleFileAccess > xFileAccess =
-        ucb::SimpleFileAccess::create(xContext);
-    if (xFileAccess->exists(m_sFirebirdURL))
-        xFileAccess->kill(m_sFirebirdURL);
+    storeDatabase();
 }
+
 // XEventListener
 void SAL_CALL Connection::disposing(const EventObject& /*rSource*/)
 {
@@ -938,12 +899,42 @@ void Connection::disposing()
             evaluateStatusVector(status, u"isc_detach_database", *this);
         }
     }
-    // TODO: write to storage again?
+
+    storeDatabase();
 
     cppu::WeakComponentImplHelperBase::disposing();
 
     m_pDatabaseFileDir.reset();
 }
+
+void Connection::storeDatabase()
+{
+    MutexGuard aGuard(m_aMutex);
+    if (m_bIsEmbedded && m_xEmbeddedStorage.is())
+    {
+        SAL_INFO("connectivity.firebird", "Writing .fbk from running db");
+        try
+        {
+            runBackupService(isc_action_svc_backup);
+        }
+        catch (const SQLException& e)
+        {
+            auto a = cppu::getCaughtException();
+            throw WrappedTargetRuntimeException(e.Message, e.Context, a);
+        }
+        Reference<XStream> xDBStream(
+            m_xEmbeddedStorage->openStreamElement(our_sFBKLocation, ElementModes::WRITE));
+        using namespace ::comphelper;
+        Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+        Reference<XInputStream> xInputStream;
+        if (!xContext.is())
+            return;
+        xInputStream = OStorageHelper::GetInputStreamFromURL(m_sFBKPath, xContext);
+        if (xInputStream.is())
+            OStorageHelper::CopyInputToOutput(xInputStream, xDBStream->getOutputStream());
+    }
+}
+
 
 void Connection::disposeStatements()
 {
