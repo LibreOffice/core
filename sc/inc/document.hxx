@@ -1508,6 +1508,13 @@ public:
                                              bool bIncludeOld, bool bOnlyDown ) const;
 
     /**
+     * Return the extended area containing at least all contiguous cells
+     * having background color.
+     */
+    SC_DLLPUBLIC void GetBackColorArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                        SCCOL& rEndCol, SCROW& rEndRow ) const;
+
+    /**
      * Returns true if there is a non-empty subrange in the range given as input.
      * In that case it also modifies rRange to largest subrange that does not
      * have empty col/row inrange-segments in the beginning/end.

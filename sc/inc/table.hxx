@@ -634,6 +634,9 @@ public:
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
                              bool bIncludeOld, bool bOnlyDown ) const;
 
+    void        GetBackColorArea( SCCOL& rStartCol, SCROW& rStartRow,
+                                  SCCOL& rEndCol, SCROW& rEndRow ) const;
+
     bool        GetDataAreaSubrange( ScRange& rRange ) const;
 
     bool        ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rStartRow,
