@@ -18,6 +18,10 @@ $(eval $(call gb_Library_set_include,updchk,\
 
 $(eval $(call gb_Library_use_sdk_api,updchk))
 
+$(eval $(call gb_Library_use_custom_headers,updchk,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,updchk,\
 	comphelper \
 	cppuhelper \

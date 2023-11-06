@@ -16,6 +16,10 @@ $(eval $(call gb_Library_use_external,ucpftp1,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,ucpftp1))
 
+$(eval $(call gb_Library_use_custom_headers,ucpftp1,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,ucpftp1,\
 	comphelper \
 	cppu \

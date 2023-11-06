@@ -11,6 +11,8 @@
 
 #include <curl/curl.h>
 
+#include <officecfg/Office/Security.hxx>
+
 #if defined(LINUX) && !defined(SYSTEM_CURL)
 #include <com/sun/star/uno/RuntimeException.hpp>
 
@@ -36,24 +38,33 @@ static char const* GetCABundleFile()
 
     throw css::uno::RuntimeException("no OpenSSL CA certificate bundle found");
 }
+#endif
 
 static void InitCurl_easy(CURL* const pCURL)
 {
+    CURLcode rc;
+    (void)rc;
+
+#if defined(LINUX) && !defined(SYSTEM_CURL)
     char const* const path = GetCABundleFile();
-    auto rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
+    rc = curl_easy_setopt(pCURL, CURLOPT_CAINFO, path);
     if (rc != CURLE_OK) // only if OOM?
     {
         throw css::uno::RuntimeException("CURLOPT_CAINFO failed");
     }
-}
-
-#else
-
-static void InitCurl_easy(CURL* const)
-{
-    // these don't use OpenSSL so CAs work out of the box
-}
-
 #endif
+
+    if (!officecfg::Office::Security::Net::AllowInsecureProtocols::get())
+    {
+        rc = curl_easy_setopt(pCURL, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_PROXY_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_PROTOCOLS_STR, "https");
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(pCURL, CURLOPT_REDIR_PROTOCOLS_STR, "https");
+        assert(rc == CURLE_OK);
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

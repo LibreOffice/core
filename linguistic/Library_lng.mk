@@ -28,6 +28,10 @@ $(eval $(call gb_Library_set_include,lng,\
 
 $(eval $(call gb_Library_use_sdk_api,lng))
 
+$(eval $(call gb_Library_use_custom_headers,lng,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_add_defs,lng,\
 	-DLNG_DLLIMPLEMENTATION \
 ))

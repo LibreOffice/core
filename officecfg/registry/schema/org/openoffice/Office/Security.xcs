@@ -44,5 +44,16 @@
         <value>true</value>
       </prop>
     </group>
+    <group oor:name="Net">
+      <info>
+        <desc>Specifies how secure hyperlinks are processed.</desc>
+      </info>
+      <prop oor:name="AllowInsecureProtocols" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Allow using insecure and/or unencrypted protocols such as HTTP, SMTP, FTP.</desc>
+        </info>
+        <value>true</value>
+      </prop>
+    </group>
   </component>
 </oor:component-schema>

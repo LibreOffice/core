@@ -14,6 +14,10 @@ $(eval $(call gb_Library_set_componentfile,ucpcmis1,ucb/source/ucp/cmis/ucpcmis1
 
 $(eval $(call gb_Library_use_sdk_api,ucpcmis1))
 
+$(eval $(call gb_Library_use_custom_headers,ucpcmis1,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,ucpcmis1,\
 	comphelper \
 	cppu \

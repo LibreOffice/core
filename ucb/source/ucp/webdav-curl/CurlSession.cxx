@@ -23,6 +23,7 @@
 #include <o3tl/string_view.hxx>
 
 #include <officecfg/Inet.hxx>
+#include <officecfg/Office/Security.hxx>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/io/Pipe.hpp>
@@ -682,15 +683,19 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> xContext,
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HEADERFUNCTION, &header_callback);
     assert(rc == CURLE_OK);
     ::InitCurl_easy(m_pCurl.get());
+    if (officecfg::Office::Security::Net::AllowInsecureProtocols::get())
+    {
     // tdf#149921 by default, with schannel (WNT) connection fails if revocation
     // lists cannot be checked; try to limit the checking to when revocation
     // lists can actually be retrieved (usually not the case for self-signed CA)
 #if CURL_AT_LEAST_VERSION(7, 70, 0)
-    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
-    assert(rc == CURLE_OK);
-    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
-    assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_SSL_OPTIONS, CURLSSLOPT_REVOKE_BEST_EFFORT);
+        assert(rc == CURLE_OK);
+        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY_SSL_OPTIONS,
+                              CURLSSLOPT_REVOKE_BEST_EFFORT);
+        assert(rc == CURLE_OK);
 #endif
+    }
     // set this initially, may be overwritten during authentication
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     assert(rc == CURLE_OK); // ANY is always available

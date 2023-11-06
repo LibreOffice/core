@@ -26,6 +26,9 @@
 
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
+#include "webdavprovider.hxx"
+
+#include <officecfg/Office/Security.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/IOException.hpp>
@@ -1005,7 +1008,17 @@ void DAVResourceAccess::initialize()
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( m_aPath.isEmpty() )
     {
-        CurlUri const aURI( m_aURL );
+        CurlUri aURI(m_aURL);
+        assert(aURI.GetScheme() == HTTP_URL_SCHEME || aURI.GetScheme() == HTTPS_URL_SCHEME);
+        if (aURI.GetScheme() == HTTP_URL_SCHEME)
+        {
+            if (!officecfg::Office::Security::Net::AllowInsecureProtocols::get())
+            {
+                // "http" not allowed -> immediately redirect to "https",
+                // better than showing confusing error to user
+                aURI.SetScheme(HTTPS_URL_SCHEME);
+            }
+        }
         OUString aPath( aURI.GetRelativeReference() );
 
         /* #134089# - Check URI */
@@ -1021,8 +1034,7 @@ void DAVResourceAccess::initialize()
             m_xSession.clear();
 
             // create new webdav session
-            m_xSession
-                = m_xSessionFactory->createDAVSession( m_aURL, m_aFlags, m_xContext );
+            m_xSession = m_xSessionFactory->createDAVSession(aURI.GetURI(), m_aFlags, m_xContext);
 
             if ( !m_xSession.is() )
                 return;
