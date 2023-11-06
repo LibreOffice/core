@@ -384,7 +384,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         if ( pOutView )
         {
             bool bField = false;
-            const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
+            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
                 aHLinkItem.SetName( pURLField->GetRepresentation() );
