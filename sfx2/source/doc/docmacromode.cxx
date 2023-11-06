@@ -173,9 +173,7 @@ namespace sfx2
             Reference< XDocumentDigitalSignatures > xSignatures(DocumentDigitalSignatures::createDefault(::comphelper::getProcessComponentContext()));
             INetURLObject aURLReferer(sURL);
 
-            OUString aLocation;
-            if ( aURLReferer.removeSegment() )
-                aLocation = aURLReferer.GetMainURL( INetURLObject::DecodeMechanism::NONE );
+            OUString aLocation = aURLReferer.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
             if ( !aLocation.isEmpty() && xSignatures->isLocationTrusted( aLocation ) )
             {
