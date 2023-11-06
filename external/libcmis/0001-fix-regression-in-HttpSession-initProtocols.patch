@@ -1,0 +1,31 @@
+From 5b9ed18e518a5214b4a1fb2766627c1d169b8d8c Mon Sep 17 00:00:00 2001
+From: Michael Stahl <michael.stahl@allotropia.de>
+Date: Mon, 6 Nov 2023 13:33:05 +0100
+Subject: [PATCH 1/2] fix regression in  HttpSession::initProtocols()
+
+(regression from commit 1b8a646b1d63bfa760d154dd7e51f6298d4a9899)
+---
+ src/libcmis/http-session.cxx | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index 3847a2c..9703427 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -894,11 +894,12 @@ catch ( const libcmis::Exception& e )
+ 
+ void HttpSession::initProtocols( )
+ {
+-    const unsigned long protocols = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+ #if (LIBCURL_VERSION_MAJOR > 7) || (LIBCURL_VERSION_MAJOR == 7 && LIBCURL_VERSION_MINOR >= 85)
++    auto const protocols = "https,http";
+     curl_easy_setopt(m_curlHandle, CURLOPT_PROTOCOLS_STR, protocols);
+     curl_easy_setopt(m_curlHandle, CURLOPT_REDIR_PROTOCOLS_STR, protocols);
+ #else
++    const unsigned long protocols = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+     curl_easy_setopt(m_curlHandle, CURLOPT_PROTOCOLS, protocols);
+     curl_easy_setopt(m_curlHandle, CURLOPT_REDIR_PROTOCOLS, protocols);
+ #endif
+-- 
+2.41.0
+
