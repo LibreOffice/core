@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sfx2/tabdlg.hxx>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 
 #include "connpoolsettings.hxx"
 
@@ -32,14 +33,19 @@ namespace offapp
         DriverPoolingSettings m_aSettings;
         DriverPoolingSettings m_aSavedSettings;
 
+        css::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
+
         std::unique_ptr<weld::CheckButton> m_xEnablePooling;
+        std::unique_ptr<weld::Widget> m_xEnablePoolingImg;
         std::unique_ptr<weld::Label> m_xDriversLabel;
         std::unique_ptr<weld::TreeView> m_xDriverList;
         std::unique_ptr<weld::Label> m_xDriverLabel;
         std::unique_ptr<weld::Label> m_xDriver;
         std::unique_ptr<weld::CheckButton> m_xDriverPoolingEnabled;
+        std::unique_ptr<weld::Widget> m_xDriverPoolingEnabledImg;
         std::unique_ptr<weld::Label> m_xTimeoutLabel;
         std::unique_ptr<weld::SpinButton> m_xTimeout;
+        std::unique_ptr<weld::Widget> m_xTimeoutImg;
 
     public:
         ConnectionPoolOptionsPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& _rAttrSet);

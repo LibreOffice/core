@@ -25,6 +25,8 @@
 #include <svx/databaseregistrationui.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
+#include <officecfg/Office/DataAccess.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 namespace offapp
 {
@@ -49,13 +51,16 @@ namespace offapp
         , m_sYes(CuiResId(RID_CUISTR_YES))
         , m_sNo(CuiResId(RID_CUISTR_NO))
         , m_xEnablePooling(m_xBuilder->weld_check_button("connectionpooling"))
+        , m_xEnablePoolingImg(m_xBuilder->weld_widget("lockconnectionpooling"))
         , m_xDriversLabel(m_xBuilder->weld_label("driverslabel"))
         , m_xDriverList(m_xBuilder->weld_tree_view("driverlist"))
         , m_xDriverLabel(m_xBuilder->weld_label("driverlabel"))
         , m_xDriver(m_xBuilder->weld_label("driver"))
         , m_xDriverPoolingEnabled(m_xBuilder->weld_check_button("enablepooling"))
+        , m_xDriverPoolingEnabledImg(m_xBuilder->weld_widget("lockenablepooling"))
         , m_xTimeoutLabel(m_xBuilder->weld_label("timeoutlabel"))
         , m_xTimeout(m_xBuilder->weld_spin_button("timeout"))
+        , m_xTimeoutImg(m_xBuilder->weld_widget("locktimeout"))
     {
         m_xDriverList->set_size_request(m_xDriverList->get_approximate_digit_width() * 60,
                                         m_xDriverList->get_height_rows(15));
@@ -67,6 +72,9 @@ namespace offapp
             o3tl::narrowing<int>(m_xDriverList->get_approximate_digit_width() * 8)
         };
         m_xDriverList->set_column_fixed_widths(aWidths);
+
+        css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
 
         m_xEnablePooling->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
         m_xDriverPoolingEnabled->connect_toggled( LINK(this, ConnectionPoolOptionsPage, OnEnabledDisabled) );
@@ -136,6 +144,8 @@ namespace offapp
         const SfxBoolItem* pEnabled = _rSet.GetItem<SfxBoolItem>(SID_SB_POOLING_ENABLED);
         OSL_ENSURE(pEnabled, "ConnectionPoolOptionsPage::implInitControls: missing the Enabled item!");
         m_xEnablePooling->set_active(pEnabled == nullptr || pEnabled->GetValue());
+        m_xEnablePooling->set_sensitive(!officecfg::Office::DataAccess::ConnectionPool::EnablePooling::isReadOnly());
+        m_xEnablePoolingImg->set_visible(officecfg::Office::DataAccess::ConnectionPool::EnablePooling::isReadOnly());
 
         m_xEnablePooling->save_state();
 
@@ -233,6 +243,20 @@ namespace offapp
             m_xDriverPoolingEnabled->set_active(currentSetting.bEnabled);
             m_xTimeout->set_value(currentSetting.nTimeoutSeconds);
 
+            OUString aConfigPath = officecfg::Office::DataAccess::ConnectionPool::DriverSettings::path() + "/" + currentSetting.sName;
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath + "/Enable");
+            bool bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+
+            m_xDriverPoolingEnabled->set_sensitive(!bReadOnly);
+            m_xDriverPoolingEnabledImg->set_visible(bReadOnly);
+
+            aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath + "/Timeout");
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+
+            m_xTimeout->set_sensitive(!bReadOnly);
+            m_xTimeoutLabel->set_sensitive(!bReadOnly);
+            m_xTimeoutImg->set_visible(bReadOnly);
+
             OnEnabledDisabled(*m_xDriverPoolingEnabled);
         }
     }
@@ -259,13 +283,13 @@ namespace offapp
                 m_xDriverList->select(-1);
             m_xDriverLabel->set_sensitive(bGloballyEnabled);
             m_xDriver->set_sensitive(bGloballyEnabled);
-            m_xDriverPoolingEnabled->set_sensitive(bGloballyEnabled);
+            m_xDriverPoolingEnabled->set_sensitive(bGloballyEnabled && !m_xDriverPoolingEnabledImg->get_visible());
         }
         else
             OSL_ENSURE(bLocalDriverChanged, "ConnectionPoolOptionsPage::OnEnabledDisabled: where did this come from?");
 
-        m_xTimeoutLabel->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active());
-        m_xTimeout->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active());
+        m_xTimeoutLabel->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active() && !m_xTimeoutImg->get_visible());
+        m_xTimeout->set_sensitive(bGloballyEnabled && m_xDriverPoolingEnabled->get_active() && !m_xTimeoutImg->get_visible());
 
         if (bLocalDriverChanged)
         {
