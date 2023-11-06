@@ -639,9 +639,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
             break;
         case SID_OPEN_HYPERLINK:
             {
-                std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
-                const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
-                if ( pURLField )
+                const SvxFieldItem* pFieldItem
+                    = pEditView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                     ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame(), true );
                 return;
             }

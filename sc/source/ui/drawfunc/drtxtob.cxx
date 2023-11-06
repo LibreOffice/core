@@ -292,8 +292,10 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             break;
 
         case SID_OPEN_HYPERLINK:
-            if (const SvxFieldData* pField = pOutView->GetFieldAtCursor())
             {
+                const SvxFieldItem* pFieldItem
+                    = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);

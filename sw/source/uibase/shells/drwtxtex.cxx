@@ -494,7 +494,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_OPEN_HYPERLINK:
         {
-            const SvxFieldData* pField = pOLV->GetFieldAtCursor();
+            const SvxFieldItem* pFieldItem
+                = pOLV->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
                 SfxStringItem aUrl(SID_FILE_NAME, pURLField->GetURL());

@@ -2243,7 +2243,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                const SvxFieldItem* pFieldItem
+                    = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
                 if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
                 {
                     SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
