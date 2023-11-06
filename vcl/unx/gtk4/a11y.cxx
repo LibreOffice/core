@@ -470,9 +470,33 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
     ret->parent = pParent;
     ret->uno_accessible = rAccessible;
 
-    // set values from XAccessibleValue interface if that's implemented
     css::uno::Reference<css::accessibility::XAccessibleContext> xContext(
         ret->uno_accessible->getAccessibleContext());
+    assert(xContext.is() && "No accessible context");
+
+    // set state properties
+    const sal_Int64 nStates = xContext->getAccessibleStateSet();
+    gtk_accessible_update_property(
+        GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_MODAL,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MODAL),
+        GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_LINE),
+        GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE),
+        GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
+        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::EDITABLE)), -1);
+    if (nStates & com::sun::star::accessibility::AccessibleStateType::HORIZONTAL)
+    {
+        gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+                                       GTK_ORIENTATION_HORIZONTAL, -1);
+    }
+    else if ((nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL))
+    {
+        gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+                                       GTK_ORIENTATION_VERTICAL, -1);
+    }
+
+    // set values from XAccessibleValue interface if that's implemented
     css::uno::Reference<css::accessibility::XAccessibleValue> xAccessibleValue(xContext,
                                                                                css::uno::UNO_QUERY);
     if (xAccessibleValue.is())
