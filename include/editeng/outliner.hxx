@@ -306,7 +306,7 @@ public:
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldAtSelection() const;
+    const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
     /// Return the field at the current cursor position or nullptr if no field found
     const SvxFieldData* GetFieldAtCursor() const;
     /// Select the field at the current cursor position

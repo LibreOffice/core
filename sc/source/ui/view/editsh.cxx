@@ -655,7 +655,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
         case SID_COPY_HYPERLINK_LOCATION:
             {
-                const SvxFieldData* pField = pEditView->GetFieldAtCursor();
+                const SvxFieldItem* pFieldItem
+                    = pEditView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard

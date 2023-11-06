@@ -2280,7 +2280,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                const SvxFieldData* pField = pOutView->GetFieldAtCursor();
+                const SvxFieldItem* pFieldItem
+                    = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
+                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard

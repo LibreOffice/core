@@ -1340,9 +1340,9 @@ const SvxFieldItem* OutlinerView::GetFieldUnderMousePointer() const
     return pEditView->GetFieldUnderMousePointer();
 }
 
-const SvxFieldItem* OutlinerView::GetFieldAtSelection() const
+const SvxFieldItem* OutlinerView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
 {
-    return pEditView->GetFieldAtSelection();
+    return pEditView->GetFieldAtSelection(bAlsoCheckBeforeCursor);
 }
 
 const SvxFieldData* OutlinerView::GetFieldAtCursor() const
