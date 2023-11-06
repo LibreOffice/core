@@ -670,6 +670,23 @@ void ScDBData::ExtendDataArea(const ScDocument& rDoc)
     }
 }
 
+void ScDBData::ExtendBackColorArea(const ScDocument& rDoc)
+{
+    // Extend the DB area to include data rows immediately below.
+    SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
+    SCROW nOldEndRow = nEndRow;
+    rDoc.GetBackColorArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow);
+
+    if (nOldEndRow < rDoc.MaxRow() && nEndRow < nOldEndRow)
+        nEndRow = nOldEndRow;
+
+    if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
+    {
+        SAL_WARN_IF( !maTableColumnNames.empty(), "sc.core", "ScDBData::ExtendBackColorArea - invalidating column names/offsets");
+        InvalidateTableColumnNames( true);
+    }
+}
+
 void ScDBData::StartTableColumnNamesListener()
 {
     if (mpContainer && bHasHeader)
