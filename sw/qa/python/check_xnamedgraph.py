@@ -63,23 +63,6 @@ class XNamedGraph(unittest.TestCase):
         xDMA = self._uno.openTemplateFromTDOC("XNamedGraph.ott")
         xGraph = self.getAnyGraph(xDMA)
 
-        DATE_URI_STR = "http://www.example.com/Metadata#Version"
-        OBJECT_STR = "foo"
-
-        # remove by object
-        self.assertFalse(self.hasStatement(xDMA, xGraph, DATE_URI_STR))
-        self.addStatement(xDMA, xGraph, DATE_URI_STR, OBJECT_STR)
-        self.assertTrue(self.hasStatement(xDMA, xGraph, DATE_URI_STR))
-        self.removeStatement(xDMA, xGraph, None, OBJECT_STR)
-        self.assertFalse(self.hasStatement(xDMA, xGraph, DATE_URI_STR))
-
-        xDMA.close(True)
-
-    def test_Statements_RemoveByObject(self):
-        # take any first graph
-        xDMA = self._uno.openTemplateFromTDOC("XNamedGraph.ott")
-        xGraph = self.getAnyGraph(xDMA)
-
         DATE_URI_STR_1 = "http://www.example.com/Metadata#Version"
         DATE_URI_STR_2 = "http://www.example.com/Metadata#Second"
         OBJECT_STR = "foo"
