@@ -371,6 +371,23 @@ CPPUNIT_TEST_FIXTURE(Test, testFloatingTableFollowWrongPage)
     const SwSortedObjs& rPage2Objs = *pPage2->GetSortedObjs();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rPage2Objs.size());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFloatingTableOverlapCell)
+{
+    // Given a document with floating tables, overlapping, but anchored to different table cells:
+    createSwDoc("floattable-overlap-cell.docx");
+
+    // When laying out the document:
+    // Without the accompanying fix in place, this resulted in a layout loop.
+    calcLayout();
+
+    // Then make sure the layout doesn't loop and results in a single page:
+    SwDoc* pDoc = getSwDoc();
+    SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    auto pPage1 = pLayout->Lower()->DynCastPageFrame();
+    CPPUNIT_ASSERT(pPage1);
+    CPPUNIT_ASSERT(!pPage1->GetNext());
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
