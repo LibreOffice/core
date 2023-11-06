@@ -786,6 +786,10 @@ static AquaSalFrame* getMouseContainerFrame()
             aEvent.mnX = pDispatchFrame->maGeometry.width() - 1 - aEvent.mnX;
 
         pDispatchFrame->CallCallback( nEvent, &aEvent );
+
+        // tdf#155266 force flush after scrolling
+        if (nButton == MOUSE_LEFT && nEvent == SalEvent::MouseMove)
+            mpFrame->mbForceFlush = true;
     }
 }
 
@@ -1089,6 +1093,9 @@ static AquaSalFrame* getMouseContainerFrame()
 
             mpFrame->CallCallback( SalEvent::WheelMouse, &aEvent );
         }
+
+        // tdf#155266 force flush after scrolling
+        mpFrame->mbForceFlush = true;
     }
 }
 
