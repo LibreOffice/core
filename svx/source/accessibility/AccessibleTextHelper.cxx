@@ -1677,6 +1677,21 @@ namespace accessibility
 #endif
     }
 
+    void AccessibleTextHelper::UpdateSelection()
+    {
+#ifdef DBG_UTIL
+        // precondition: solar mutex locked
+        DBG_TESTSOLARMUTEX();
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->UpdateSelection();
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+    }
+
     void AccessibleTextHelper::Dispose()
     {
         // As Dispose calls ShutdownEditSource, which in turn

@@ -276,6 +276,18 @@ public:
     */
     void UpdateChildren();
 
+    /** Update the selection.
+
+        @attention Might fire state change events, therefore,
+        don't hold any mutex except solar mutex, which you are
+        required to lock before. This method should only be called
+        from the main office thread.
+
+        Call this method if the selection has changed and the
+        the AccessibleTextHelper isn't notified internally.
+    */
+    void UpdateSelection();
+
     /** Drop all references and enter disposed state
 
         This method drops all references to external objects (also

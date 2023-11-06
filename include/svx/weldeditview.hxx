@@ -87,7 +87,7 @@ protected:
 
     virtual void EditViewInvalidate(const tools::Rectangle& rRect) override { Invalidate(rRect); }
 
-    virtual void EditViewSelectionChange() override { Invalidate(); }
+    virtual void EditViewSelectionChange() override;
 
     virtual OutputDevice& EditViewOutputDevice() const override
     {

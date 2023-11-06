@@ -1669,6 +1669,20 @@ css::uno::Reference<css::datatransfer::clipboard::XClipboard> WeldEditView::GetC
     return weld::CustomWidgetController::GetClipboard();
 }
 
+void WeldEditView::EditViewSelectionChange()
+{
+    Invalidate();
+
+#if !ENABLE_WASM_STRIP_ACCESSIBILITY
+    if (m_xAccessible.is())
+    {
+        ::accessibility::AccessibleTextHelper* pHelper = m_xAccessible->GetTextHelper();
+        if (pHelper)
+            pHelper->UpdateSelection();
+    }
+#endif
+}
+
 namespace
 {
 class WeldEditViewUIObject final : public DrawingAreaUIObject
