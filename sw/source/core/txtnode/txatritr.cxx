@@ -126,13 +126,8 @@ bool SwLanguageIterator::Next()
                     m_nChgPos = nEndPos;
                     m_nAttrPos = nSavePos;
 
-                    if( RES_TXTATR_CHARFMT == pHt->Which() )
-                    {
-                        const sal_uInt16 nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
-                        m_pCurrentItem = &pHt->GetCharFormat().GetCharFormat()->GetFormatAttr(nWId);
-                    }
-                    else
-                        m_pCurrentItem = &pHt->GetAttr();
+                    const sal_uInt16 nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
+                    m_pCurrentItem = CharFormat::GetItem(*pHt, nWId);
 
                     m_aStack.pop_front();
                 }
