@@ -287,7 +287,8 @@ void SvLinkSource::NotifyDataChanged()
                 if( ( p->nAdviseModes & ADVISEMODE_NODATA ) ||
                     GetData( aVal, p->aDataMimeType, true ) )
                 {
-                    p->xSink->DataChanged( p->aDataMimeType, aVal );
+                    tools::SvRef<sfx2::SvBaseLink> xLink(p->xSink);
+                    xLink->DataChanged( p->aDataMimeType, aVal );
 
                     if ( !aIter.IsValidCurrValue( p ) )
                         continue;
