@@ -293,7 +293,8 @@ bool DrawViewShell::ShouldDisableEditHyperlink() const
     bool bDisableEditHyperlink = true;
     if( mpDrawView->IsTextEdit() )
     {
-        if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView()))
+        if (URLFieldHelper::IsCursorAtURLField(mpDrawView->GetTextEditOutlinerView(),
+                                               /*AlsoCheckBeforeCursor=*/true))
             bDisableEditHyperlink = false;
     }
     else
@@ -1479,16 +1480,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
-    bool bDisableEditHyperlink;
-    if (!moAtContextMenu_DisableEditHyperlink.has_value())
-        bDisableEditHyperlink = ShouldDisableEditHyperlink();
-    else
-    {
-        // tdf#137445 if a popup menu was active, use the state as of when the popup was launched and then drop
-        // moAtContextMenu_DisableEditHyperlink
-        bDisableEditHyperlink = *moAtContextMenu_DisableEditHyperlink;
-        moAtContextMenu_DisableEditHyperlink.reset();
-    }
+    bool bDisableEditHyperlink = ShouldDisableEditHyperlink();
 
     //highlight selected custom shape
     {
