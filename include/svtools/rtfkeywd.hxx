@@ -1110,7 +1110,6 @@
 #define OOO_STRING_SVTOOLS_RTF_SHDWSTYLE "\\shdwstyle"
 #define OOO_STRING_SVTOOLS_RTF_SHDWCOL "\\shdwcol"
 #define OOO_STRING_SVTOOLS_RTF_SHDWFCOL "\\shdwfcol"
-#define OOO_STRING_SVTOOLS_RTF_PGDSCTBL "\\pgdsctbl"
 #define OOO_STRING_SVTOOLS_RTF_PGDSC "\\pgdsc"
 #define OOO_STRING_SVTOOLS_RTF_PGDSCUSE "\\pgdscuse"
 #define OOO_STRING_SVTOOLS_RTF_PGDSCNXT "\\pgdscnxt"

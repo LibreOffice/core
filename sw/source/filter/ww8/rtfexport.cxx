@@ -729,51 +729,6 @@ void RtfExport::WriteDocVars()
     }
 }
 
-void RtfExport::WritePageDescTable()
-{
-    // Write page descriptions (page styles)
-    std::size_t nSize = m_rDoc.GetPageDescCnt();
-    if (!nSize)
-        return;
-
-    Strm().WriteOString(SAL_NEWLINE_STRING);
-    m_bOutPageDescs = true;
-    Strm()
-        .WriteChar('{')
-        .WriteOString(OOO_STRING_SVTOOLS_RTF_IGNORE)
-        .WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCTBL);
-    for (std::size_t n = 0; n < nSize; ++n)
-    {
-        const SwPageDesc& rPageDesc = m_rDoc.GetPageDesc(n);
-
-        Strm()
-            .WriteOString(SAL_NEWLINE_STRING)
-            .WriteChar('{')
-            .WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSC);
-        Strm().WriteNumberAsString(n).WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCUSE);
-        Strm().WriteNumberAsString(static_cast<sal_uLong>(rPageDesc.ReadUseOn()));
-
-        OutPageDescription(rPageDesc, false);
-
-        // search for the next page description
-        std::size_t i = nSize;
-        while (i)
-            if (rPageDesc.GetFollow() == &m_rDoc.GetPageDesc(--i))
-                break;
-        Strm().WriteOString(OOO_STRING_SVTOOLS_RTF_PGDSCNXT);
-        Strm().WriteNumberAsString(i).WriteChar(' ');
-        Strm()
-            .WriteOString(msfilter::rtfutil::OutString(rPageDesc.GetName(), m_eDefaultEncoding))
-            .WriteOString(";}");
-    }
-    Strm().WriteChar('}').WriteOString(SAL_NEWLINE_STRING);
-    m_bOutPageDescs = false;
-
-    // reset table infos, otherwise the depth of the cells will be incorrect,
-    // in case the page style (header or footer) had tables
-    m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
-}
-
 ErrCode RtfExport::ExportDocument_Impl()
 {
     // Make the header
@@ -837,9 +792,6 @@ ErrCode RtfExport::ExportDocument_Impl()
 
     // Init sections
     m_pSections = std::make_unique<MSWordSections>(*this);
-
-    // Page description
-    WritePageDescTable();
 
     // Enable form protection by default if needed, as there is no switch to
     // enable it on a per-section basis. OTOH don't always enable it as it

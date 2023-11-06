@@ -1562,12 +1562,10 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
                 &SwDoc::MakeTextFormatColl_, *mpDfltTextFormatColl );
 
     //To-Do:
-    //  a) in rtf export don't export our hideous pgdsctbl
-    //  extension to rtf anymore
-    //  b) in sd rtf import (View::InsertData) don't use
+    //  a) in sd rtf import (View::InsertData) don't use
     //  a super-fragile test for mere presence of \trowd to
     //  indicate import of rtf into a table
-    //  c) then drop use of bIncludePageStyles
+    //  b) then drop use of bIncludePageStyles
     if (bIncludePageStyles)
     {
         // and now the page templates

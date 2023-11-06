@@ -1120,7 +1120,6 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_FLYINPARA),     RTF_FLY_INPARA},
 
-        {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_PGDSCTBL),      RTF_PGDSCTBL},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_PGDSC),         RTF_PGDSC},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_PGDSCUSE),      RTF_PGDSCUSE},
         {std::u16string_view(u"" OOO_STRING_SVTOOLS_RTF_PGDSCNXT),      RTF_PGDSCNXT},

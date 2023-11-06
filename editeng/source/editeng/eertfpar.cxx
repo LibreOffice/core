@@ -203,7 +203,6 @@ void EditRTFParser::NextToken( int nToken )
             SkipGroup();
         }
         break;
-        case RTF_PGDSCTBL: // #i29453# ignore \*\pgdsctbl destination
         case RTF_LISTTEXT:
         {
             SkipGroup();
