@@ -465,6 +465,8 @@ QAccessible::Role QtAccessibleWidget::role() const
         case AccessibleRole::BLOCK_QUOTE:
             return QAccessible::Paragraph;
         case AccessibleRole::PASSWORD_TEXT:
+            // Qt API doesn't have a separate role to distinguish password edits,
+            // but a 'passwordEdit' state
             return QAccessible::EditableText;
         case AccessibleRole::POPUP_MENU:
             return QAccessible::PopupMenu;
@@ -686,6 +688,9 @@ QAccessible::State QtAccessibleWidget::state() const
         if (nStateSet & nState)
             lcl_addState(&state, nState);
     }
+
+    if (xAc->getAccessibleRole() == AccessibleRole::PASSWORD_TEXT)
+        state.passwordEdit = true;
 
     return state;
 }
