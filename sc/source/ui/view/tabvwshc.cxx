@@ -316,6 +316,7 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 
             ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(rDoc);
+            pDBData->ExtendBackColorArea(rDoc);
             pDBData->GetQueryParam( aQueryParam );
 
             ScRange aArea;

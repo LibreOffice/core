@@ -23,6 +23,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/brushitem.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/keycodes.hxx>
@@ -1206,6 +1207,39 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
         nActFormCnt += nMaxFormCnt;
     }
+}
+
+void ScTable::GetBackColorArea(SCCOL& rStartCol, SCROW& /*rStartRow*/,
+                               SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    bool bExtend;
+    const SvxBrushItem* pDefBackground = &rDocument.GetPool()->GetDefaultItem(ATTR_BACKGROUND);
+
+    rStartCol = std::min<SCCOL>(rStartCol, aCol.size() - 1);
+    rEndCol = std::min<SCCOL>(rEndCol, aCol.size() - 1);
+
+    do
+    {
+        bExtend = false;
+
+        if (rEndRow < rDocument.MaxRow())
+        {
+            for (SCCOL nCol = rStartCol; nCol <= rEndCol; ++nCol)
+            {
+                const ScPatternAttr* pPattern = aCol[nCol].GetPattern(rEndRow + 1);
+                const SvxBrushItem* pBackground = &pPattern->GetItem(ATTR_BACKGROUND);
+                if (!pPattern->GetItem(ATTR_CONDITIONAL).GetCondFormatData().empty() ||
+                    pBackground != pDefBackground)
+                {
+                    bExtend = true;
+                    break;
+                }
+            }
+
+            if (bExtend)
+                ++rEndRow;
+        }
+    } while (bExtend);
 }
 
 OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY )

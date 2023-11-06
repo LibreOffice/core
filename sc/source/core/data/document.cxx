@@ -1092,6 +1092,13 @@ void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
         maTabs[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
+void ScDocument::GetBackColorArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                   SCCOL& rEndCol, SCROW& rEndRow ) const
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB> (maTabs.size()) && maTabs[nTab])
+        maTabs[nTab]->GetBackColorArea( rStartCol, rStartRow, rEndCol, rEndRow );
+}
+
 bool ScDocument::GetDataAreaSubrange(ScRange& rRange) const
 {
     SCTAB nTab = rRange.aStart.Tab();
