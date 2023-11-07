@@ -53,26 +53,6 @@
                     <property name="top_attach">0</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkRadioButton" id="linktyp_ftp">
-                    <property name="label" translatable="yes" context="hyperlinkinternetpage|linktyp_ftp">_FTP</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="use_underline">True</property>
-                    <property name="draw_indicator">True</property>
-                    <property name="group">linktyp_internet</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="linktyp_ftp-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|linktyp_ftp">Creates an "FTP://" hyperlink.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -92,91 +72,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="login_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|login_label">_Login name:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">login</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="password_label">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|password_label">_Password:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">password</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="login">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="login-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|login">Specifies your login name, if you are working with FTP addresses.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="password">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
-                <property name="truncate-multiline">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="password-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|password">Specifies your password, if you are working with FTP addresses.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="anonymous">
-                <property name="label" translatable="yes" context="hyperlinkinternetpage|anonymous">Anonymous _user</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="anonymous-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|anonymous">Allows you to log in to the FTP address as an anonymous user.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
               </packing>
             </child>
             <child>
@@ -434,15 +329,13 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="HyperlinkInternetPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|HyperlinkInternetPage">Use the Internet page of the Hyperlink dialog to edit hyperlinks with WWW or FTP addresses.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="hyperlinkinternetpage|extended_tip|HyperlinkInternetPage">Use the Internet page of the Hyperlink dialog to edit hyperlinks with WWW addresses.</property>
       </object>
     </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
       <widget name="target_label"/>
-      <widget name="login_label"/>
-      <widget name="password_label"/>
       <widget name="frame_label"/>
       <widget name="indication_label"/>
       <widget name="name_label"/>
