@@ -38,7 +38,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 		$(gb_RUN_CONFIGURE) ./configure \
 			--without-amissl --without-bearssl --without-gnutls \
 			--without-mbedtls --without-rustls --without-wolfssl \
-			--enable-ftp --enable-http --enable-ipv6 \
+			--disable-ftp --enable-http --enable-ipv6 \
 			--without-libidn2 --without-libpsl --without-librtmp \
 			--without-libssh2 --without-nghttp2 \
 			--without-libssh --without-brotli \

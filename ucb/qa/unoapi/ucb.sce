@@ -22,7 +22,6 @@
 -o ucpchelp.CHelpContentProvider
 -o ucpdav.WebDAVContentProvider
 -o ucpfile.FileProvider
--o ucpftp.FTPContentProvider
 -o ucphier.HierarchyContentProvider
 -o ucphier.HierarchyDataSource
 -o ucppkg.PackageContentProvider

@@ -89,17 +89,6 @@
                 <value/>
               </prop>
             </node>
-            <node oor:name="Provider6" oor:op="replace">
-              <prop oor:name="ServiceName">
-                <value>com.sun.star.ucb.FTPContentProvider</value>
-              </prop>
-              <prop oor:name="URLTemplate">
-                <value>ftp</value>
-              </prop>
-              <prop oor:name="Arguments">
-                <value/>
-              </prop>
-            </node>
             <node oor:name="Provider8" oor:op="replace">
               <prop oor:name="ServiceName">
                 <value>com.sun.star.ucb.PackageContentProvider</value>

@@ -1232,7 +1232,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_ucpchelp/CHelpContentProvider \
     qadevOOo/tests/java/mod/_ucpdav/WebDAVContentProvider \
     qadevOOo/tests/java/mod/_ucpfile/FileProvider \
-    qadevOOo/tests/java/mod/_ucpftp/FTPContentProvider \
     qadevOOo/tests/java/mod/_ucphier/HierarchyContentProvider \
     qadevOOo/tests/java/mod/_ucphier/HierarchyDataSource \
     qadevOOo/tests/java/mod/_ucppkg/PackageContentProvider \

@@ -679,7 +679,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	ucbhelper \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
-	ucpftp1 \
     $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
