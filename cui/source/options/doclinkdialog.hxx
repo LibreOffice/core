@@ -21,6 +21,7 @@
 
 #include <vcl/weld.hxx>
 #include <svtools/inettbc.hxx>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 
 namespace svx
 {
@@ -29,6 +30,8 @@ namespace svx
     class ODocumentLinkDialog final : public weld::GenericDialogController
     {
         Link<const OUString&,bool>      m_aNameValidator;
+
+        css::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
 
         std::unique_ptr<weld::Button> m_xBrowseFile;
         std::unique_ptr<weld::Entry> m_xName;

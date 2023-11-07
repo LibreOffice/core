@@ -20,7 +20,11 @@
 #include "doclinkdialog.hxx"
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
+#include <officecfg/Office/DataAccess.hxx>
 #include <strings.hrc>
 #include <svl/filenotation.hxx>
 #include <vcl/svapp.hxx>
@@ -53,6 +57,9 @@ namespace svx
         m_xURL->DisableHistory();
         m_xURL->SetFilter(u"*.odb");
 
+        css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+        m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+
         m_xName->connect_changed( LINK(this, ODocumentLinkDialog, OnEntryModified) );
         m_xURL->connect_changed( LINK(this, ODocumentLinkDialog, OnComboBoxModified) );
         m_xBrowseFile->connect_clicked( LINK(this, ODocumentLinkDialog, OnBrowseFile) );
@@ -81,6 +88,44 @@ namespace svx
     void ODocumentLinkDialog::validate( )
     {
         m_xOK->set_sensitive((!m_xName->get_text().isEmpty()) && (!m_xURL->get_active_text().isEmpty()));
+
+        if (m_xOK->get_sensitive())
+        {
+            Reference<container::XNameAccess> xItemList = officecfg::Office::DataAccess::RegisteredNames::get();
+            Sequence< OUString > lNodeNames = xItemList->getElementNames();
+
+            for (const OUString& sNodeName : lNodeNames)
+            {
+                Reference<css::beans::XPropertySet> xSet;
+                xItemList->getByName(sNodeName) >>= xSet;
+
+                OUString aDatabaseName;
+                if (xSet->getPropertySetInfo()->hasPropertyByName("Name"))
+                    xSet->getPropertyValue("Name") >>= aDatabaseName;
+
+                if (!aDatabaseName.isEmpty() && m_xName->get_text() == aDatabaseName)
+                {
+                    const OUString aConfigPath = officecfg::Office::DataAccess::RegisteredNames::path() + "/" + sNodeName;
+                    if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath + "/Name"))
+                    {
+                        css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath + "/Name");
+                        bool bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+
+                        m_xURL->set_sensitive(!bReadOnly);
+                        m_xBrowseFile->set_sensitive(!bReadOnly);
+                    }
+
+                    if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath + "/Location"))
+                    {
+                        css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath + "/Location");
+                        bool bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+
+                        m_xName->set_sensitive(!bReadOnly);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk, weld::Button&, void)
