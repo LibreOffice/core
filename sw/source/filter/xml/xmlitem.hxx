@@ -28,13 +28,14 @@ class SfxItemSet;
 class SvXMLImportItemMapper;
 class SvXMLUnitConverter;
 struct SvXMLItemMapEntry;
+class SwXMLBrushItemImportContext;
 
 class SwXMLItemSetContext final : public SvXMLImportContext
 {
     SfxItemSet                  &m_rItemSet;
     const SvXMLImportItemMapper &m_rIMapper;
     const SvXMLUnitConverter    &m_rUnitConv;
-    SvXMLImportContextRef m_xBackground;
+    rtl::Reference<SwXMLBrushItemImportContext> m_xBackground;
 
 public:
 

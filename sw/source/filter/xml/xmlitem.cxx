@@ -45,8 +45,7 @@ SwXMLItemSetContext::~SwXMLItemSetContext()
 {
     if( m_xBackground.is() )
     {
-        const SvxBrushItem& rItem =
-            static_cast<SwXMLBrushItemImportContext*>(m_xBackground.get())->GetItem();
+        const SvxBrushItem& rItem = m_xBackground->GetItem();
         m_rItemSet.Put( rItem );
     }
 }
@@ -75,7 +74,7 @@ SvXMLImportContextRef SwXMLItemSetContext::createFastChildContext( sal_Int32 nEl
                                    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
                                    const SvXMLItemMapEntry& rEntry )
 {
-    SvXMLImportContextRef xContext;
+    rtl::Reference<SwXMLBrushItemImportContext> xContext;
 
     switch( rEntry.nWhichId )
     {
