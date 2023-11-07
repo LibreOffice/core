@@ -94,10 +94,11 @@ IMPL_LINK_NOARG(URITools, onOpenURI, Timer*, void)
             SolarMutexGuard g;
             std::unique_ptr<weld::MessageDialog> eb(
                 Application::CreateMessageDialog(
-                    mpDialogParent, VclMessageType::Warning, VclButtonsType::OkCancel,
+                    mpDialogParent, VclMessageType::Warning, VclButtonsType::YesNo,
                     SfxResId(STR_DANGEROUS_TO_OPEN)));
             eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", INetURLObject::decode(msURI, INetURLObject::DecodeMechanism::Unambiguous)));
-            if (eb->run() == RET_OK) {
+            eb->set_default_response(RET_NO);
+            if (eb->run() == RET_YES) {
                 flags = 0;
                 continue;
             }
