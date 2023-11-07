@@ -186,7 +186,23 @@ void ScContentTree::InitRoot( ScContentId nType )
     }
 
     auto const & aImage = aContentBmps[static_cast<int>(nType) - 1];
-    OUString aName(ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]));
+
+    OUString aName;
+    if(comphelper::LibreOfficeKit::isActive())
+    {
+        //In case of LOK we may have many different ScContentTrees in different languages.
+        //At creation time, we store what language we use, and then use it later too.
+        //It does not work in the constructor, that is why it is here.
+        if (!m_pResLocaleForLOK)
+        {
+            m_pResLocaleForLOK = std::make_unique<std::locale>(SC_MOD()->GetResLocale());
+        }
+        aName = Translate::get(SCSTR_CONTENT_ARY[static_cast<int>(nType)], *m_pResLocaleForLOK);
+    }
+    else
+    {
+        aName = ScResId(SCSTR_CONTENT_ARY[static_cast<int>(nType)]);
+    }
     // back to the correct position:
     sal_uInt16 nPos = nRootType != ScContentId::ROOT ? 0 : pPosList[nType]-1;
     m_aRootNodes[nType] = m_xTreeView->make_iterator();
