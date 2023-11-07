@@ -126,7 +126,7 @@ bool SwLanguageIterator::Next()
                     m_nChgPos = nEndPos;
                     m_nAttrPos = nSavePos;
 
-                    const sal_uInt16 nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
+                    const TypedWhichId<SvxLanguageItem> nWId = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
                     m_pCurrentItem = CharFormat::GetItem(*pHt, nWId);
 
                     m_aStack.pop_front();
@@ -152,7 +152,7 @@ void SwLanguageIterator::AddToStack( const SwTextAttr& rAttr )
 
 void SwLanguageIterator::SearchNextChg()
 {
-    sal_uInt16 nWh = 0;
+    TypedWhichId<SvxLanguageItem> nWh(0);
     if( m_nChgPos == m_aScriptIter.GetScriptChgPos() )
     {
         m_aScriptIter.Next();
@@ -181,7 +181,7 @@ void SwLanguageIterator::SearchNextChg()
         nWh = GetWhichOfScript( RES_CHRATR_LANGUAGE, m_aScriptIter.GetCurrScript() );
     }
 
-    const SfxPoolItem* pItem = nullptr;
+    const SvxLanguageItem* pItem = nullptr;
     for( ; m_nAttrPos < pHts->Count(); ++m_nAttrPos )
     {
         const SwTextAttr* pHt = pHts->Get( m_nAttrPos );
