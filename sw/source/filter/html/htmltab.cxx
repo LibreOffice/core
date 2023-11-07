@@ -36,6 +36,7 @@
 #include <svl/numformat.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/sdrobjectuser.hxx>
+#include <svx/svdotext.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

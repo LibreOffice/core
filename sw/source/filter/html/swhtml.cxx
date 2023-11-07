@@ -31,6 +31,7 @@
 #include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdotext.hxx>
 #if OSL_DEBUG_LEVEL > 0
 #include <stdlib.h>
 #endif

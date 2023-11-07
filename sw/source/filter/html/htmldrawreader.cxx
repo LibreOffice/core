@@ -345,10 +345,10 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     // #i52858# - method name changed
     SwDrawModel* pModel = m_xDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
-    m_pMarquee = SdrObjFactory::MakeNewObject(
+    m_pMarquee = static_cast<SdrTextObj*>(SdrObjFactory::MakeNewObject(
         *pModel,
         SdrInventor::Default,
-        SdrObjKind::Text);
+        SdrObjKind::Text).get());
 
     if( !m_pMarquee )
         return;
@@ -533,13 +533,13 @@ void SwHTMLParser::EndMarquee()
     }
 
     // insert the collected text
-    static_cast<SdrTextObj*>(m_pMarquee.get())->SetText( m_aContents );
+    m_pMarquee->SetText( m_aContents );
     m_pMarquee->SetMergedItemSetAndBroadcast( m_pMarquee->GetMergedItemSet() );
 
     if (m_bFixMarqueeWidth && !bFuzzing)
     {
         // adjust the size to the text
-        static_cast<SdrTextObj*>(m_pMarquee.get())->FitFrameToTextSize();
+        m_pMarquee->FitFrameToTextSize();
     }
 
     m_aContents.clear();
