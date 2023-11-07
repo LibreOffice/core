@@ -1087,9 +1087,9 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     {
         SwAsciiOptions aOpt;
         sal_uInt16 nAppScriptType = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
-        sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
-        aOpt.SetLanguage( static_cast<const SvxLanguageItem&>(pTargetView->GetWrtShell().
-                            GetDefault( nWhich )).GetLanguage());
+        TypedWhichId<SvxLanguageItem> nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
+        const SvxLanguageItem& rDefLangItem = pTargetView->GetWrtShell().GetDefault( nWhich );
+        aOpt.SetLanguage( rDefLangItem.GetLanguage() );
         aOpt.SetParaFlags( LINEEND_CR );
         aOpt.WriteUserData( sFilterOptions );
     }

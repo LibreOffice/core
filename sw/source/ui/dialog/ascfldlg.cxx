@@ -162,9 +162,9 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
-                    const sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
-                    aOpt.SetLanguage( static_cast<const SvxLanguageItem&>(pDoc->
-                                GetDefault( nWhich )).GetLanguage());
+                    const TypedWhichId<SvxLanguageItem> nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
+                    const SvxLanguageItem& rLangItem = pDoc->GetDefault( nWhich );
+                    aOpt.SetLanguage(  rLangItem.GetLanguage() );
                 }
                 else
                 {

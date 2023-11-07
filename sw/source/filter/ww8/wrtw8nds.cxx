@@ -3688,8 +3688,8 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
     if (!rText.isEmpty())
         nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, 0);
 
-    sal_uInt16 nWhich = GetWhichOfScript(RES_CHRATR_FONTSIZE, nScript);
-    auto& rHeightItem = static_cast<const SvxFontHeightItem&>(rExport.GetItem(nWhich));
+    TypedWhichId<SvxFontHeightItem> nWhich = GetWhichOfScript(RES_CHRATR_FONTSIZE, nScript);
+    const SvxFontHeightItem& rHeightItem = rExport.GetItem(nWhich);
     m_nBaseHeight = rHeightItem.GetHeight();
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
