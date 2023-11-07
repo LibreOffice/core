@@ -350,13 +350,13 @@ enum class DataChangedEventType {
 class VCL_DLLPUBLIC DataChangedEvent
 {
 private:
-    void*                   mpData;
+    const AllSettings*      mpData;
     AllSettingsFlags        mnFlags;
     DataChangedEventType    mnType;
 
 public:
     explicit                DataChangedEvent( DataChangedEventType nType,
-                                              const void* pData = nullptr,
+                                              const AllSettings* pData = nullptr,
                                               AllSettingsFlags nFlags = AllSettingsFlags::NONE );
 
     DataChangedEventType    GetType() const { return mnType; }
@@ -366,10 +366,10 @@ public:
 };
 
 inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
-                                           const void* pData,
+                                           const AllSettings* pData,
                                            AllSettingsFlags nChangeFlags )
 {
-    mpData  = const_cast<void*>(pData);
+    mpData  = pData;
     mnFlags = nChangeFlags;
     mnType  = nType;
 }
@@ -377,7 +377,7 @@ inline DataChangedEvent::DataChangedEvent( DataChangedEventType nType,
 inline const AllSettings* DataChangedEvent::GetOldSettings() const
 {
     if ( mnType == DataChangedEventType::SETTINGS )
-        return static_cast<const AllSettings*>(mpData);
+        return mpData;
     else
         return nullptr;
 }
