@@ -220,7 +220,7 @@ public:
 // Core impl. of the unification of drawing objects and Writer fly frames (#i26791#)
 class XMLDrawHint_Impl : public XMLHint_Impl
 {
-    SvXMLImportContextRef xContext;
+    rtl::Reference<SvXMLShapeContext> xContext;
 
 public:
 
@@ -234,7 +234,7 @@ public:
     // Frame "to character": anchor moves from first to last char after saving (#i33242#)
     css::uno::Reference < css::drawing::XShape > const & GetShape() const
     {
-        return static_cast<SvXMLShapeContext*>(xContext.get())->getShape();
+        return xContext->getShape();
     }
 };
 

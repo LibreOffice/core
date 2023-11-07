@@ -54,10 +54,9 @@ void XMLShapePropertySetContext::endFastElement(sal_Int32 )
     Reference< container::XIndexReplace > xNumRule;
     if( mxBulletStyle.is() )
     {
-        SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(mxBulletStyle.get());
         xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
         if( xNumRule.is() )
-            pBulletStyle->FillUnoNumRule(xNumRule);
+            mxBulletStyle->FillUnoNumRule(xNumRule);
     }
 
     XMLPropertyState aPropState( mnBulletIndex, Any(xNumRule) );

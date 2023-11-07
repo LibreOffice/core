@@ -20,10 +20,11 @@
 
 
 #include <xmloff/xmlprcon.hxx>
+class SvxXMLListStyleContext;
 
 class XMLShapePropertySetContext : public SvXMLPropertySetContext
 {
-    SvXMLImportContextRef mxBulletStyle;
+    rtl::Reference<SvxXMLListStyleContext> mxBulletStyle;
     sal_Int32 mnBulletIndex;
 
 public:
