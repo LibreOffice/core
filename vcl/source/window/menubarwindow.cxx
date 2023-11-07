@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl, ToolBox *, void)
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
         // gets destroyed
-        Application::PostUserEvent(static_cast<MenuBar*>(m_pMenu.get())->GetCloseButtonClickHdl());
+        Application::PostUserEvent(m_pMenu->GetCloseButtonClickHdl());
     }
     else
     {
@@ -1010,7 +1010,7 @@ void MenuBarWindow::LayoutChanged()
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
-    if (!static_cast<MenuBar*>(m_pMenu.get())->IsDisplayable() ||
+    if (!m_pMenu->IsDisplayable() ||
         (m_pMenu->ImplGetSalMenu() && m_pMenu->ImplGetSalMenu()->VisibleMenuBar()))
     {
         nHeight = 0;

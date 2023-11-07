@@ -68,7 +68,7 @@ private:
         Link<MenuBarButtonCallbackArg&,bool>  m_aHighlightLink;
     };
 
-    VclPtr<Menu>           m_pMenu;
+    VclPtr<MenuBar>        m_pMenu;
     VclPtr<PopupMenu>      m_pActivePopup;
     VclPtr<PopupMenu>      mpParentPopup;
     sal_uInt16      m_nHighlightedItem;
