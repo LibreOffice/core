@@ -493,7 +493,7 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
         gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
                                        GTK_ORIENTATION_HORIZONTAL, -1);
     }
-    else if ((nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL))
+    else if (nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL)
     {
         gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
                                        GTK_ORIENTATION_VERTICAL, -1);
