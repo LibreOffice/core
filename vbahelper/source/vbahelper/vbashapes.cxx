@@ -52,18 +52,18 @@ namespace {
 
 class VbShapeEnumHelper : public EnumerationHelper_BASE
 {
-        uno::Reference<msforms::XShapes > m_xParent;
+        rtl::Reference<ScVbaShapes> m_xParent;
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-    VbShapeEnumHelper( uno::Reference< msforms::XShapes > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
+    VbShapeEnumHelper( rtl::Reference< ScVbaShapes > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
         virtual uno::Any SAL_CALL nextElement(  ) override
         {
-                ScVbaShapes* pShapes = dynamic_cast< ScVbaShapes* >(m_xParent.get());
+                ScVbaShapes* pShapes = m_xParent.get();
                 if ( pShapes && hasMoreElements() )
                     return pShapes->createCollectionObject(  m_xIndexAccess->getByIndex( nIndex++ ) );
                 throw container::NoSuchElementException();
