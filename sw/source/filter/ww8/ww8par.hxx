@@ -1291,7 +1291,7 @@ private:
     std::unique_ptr<EditEngine> m_pDrawEditEngine;
     std::unique_ptr<wwZOrderer> m_xWWZOrder;
 
-    SwFieldType* m_pNumFieldType;   // for number circle
+    SwSetExpFieldType* m_pNumFieldType;   // for number circle
 
     std::unique_ptr<SwMSDffManager> m_xMSDffManager;
 

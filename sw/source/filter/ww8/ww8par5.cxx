@@ -1474,10 +1474,9 @@ eF_ResT SwWW8ImplReader::Read_F_ANumber( WW8FieldDesc*, OUString& rStr )
 {
     if( !m_pNumFieldType ){     // 1st time
         SwSetExpFieldType aT( &m_rDoc, "AutoNr", nsSwGetSetExpType::GSE_SEQ );
-        m_pNumFieldType = m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT );
+        m_pNumFieldType = static_cast<SwSetExpFieldType*>(m_rDoc.getIDocumentFieldsAccess().InsertFieldType( aT ));
     }
-    SwSetExpField aField( static_cast<SwSetExpFieldType*>(m_pNumFieldType), OUString(),
-                        GetNumberPara( rStr ) );
+    SwSetExpField aField( m_pNumFieldType, OUString(), GetNumberPara( rStr ) );
     aField.SetValue( ++m_nFieldNum, nullptr );
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     return eF_ResT::OK;
