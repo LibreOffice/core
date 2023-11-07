@@ -55,6 +55,34 @@ g_ImplementationHelper = unohelper.ImplementationHelper()
 g_providerImplName = "org.openoffice.pyuno.MailServiceProvider"
 g_messageImplName = "org.openoffice.pyuno.MailMessage"
 
+def prepareTLSContext(xComponent, xContext, isTLSRequested):
+	xConfigProvider = xContext.ServiceManager.createInstance("com.sun.star.configuration.ConfigurationProvider")
+	prop = uno.createUnoStruct('com.sun.star.beans.PropertyValue')
+	prop.Name = "nodepath"
+	prop.Value = "/org.openoffice.Office.Security/Net"
+	xSettings = xConfigProvider.createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess",
+		(prop,))
+	isAllowedInsecure = xSettings.getByName("AllowInsecureProtocols")
+	tlscontext = None
+	if isTLSRequested:
+		if dbg:
+			print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
+		tlscontext = ssl.create_default_context()
+		# SSLv2/v3 is already disabled by default.
+		# This check does not work, because OpenSSL 3 defines SSL_OP_NO_SSLv2
+		# as 0, so even though _ssl__SSLContext_impl() tries to set it,
+		# getting the value from SSL_CTX_get_options() doesn't lead to setting
+		# the python-level flag.
+		#assert (tlscontext.options & ssl.Options.OP_NO_SSLv2) != 0
+		assert (tlscontext.options & ssl.Options.OP_NO_SSLv3) != 0
+	if not(isAllowedInsecure):
+		if not(isTLSRequested):
+			if dbg:
+				print("mailmerge.py: insecure connection not allowed by configuration", file=sys.stderr)
+			raise IllegalArgumentException("insecure connection not allowed by configuration", xComponent, 1)
+		tlscontext.options |= ssl.Options.OP_NO_TLSv1 | ssl.Options.OP_NO_TLSv1_1
+	return tlscontext
+
 class PyMailSMTPService(unohelper.Base, XSmtpService):
 	def __init__( self, ctx ):
 		self.ctx = ctx
@@ -95,25 +123,21 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			tout = _GLOBAL_DEFAULT_TIMEOUT
 		if dbg:
 			print("Timeout: " + str(tout), file=sys.stderr)
+		connectiontype = xConnectionContext.getValueByName("ConnectionType")
+		if dbg:
+			print("ConnectionType: " + connectiontype, file=sys.stderr)
+		tlscontext = prepareTLSContext(self, self.ctx, connectiontype.upper() == 'SSL' or port == 465)
 		if port == 465:
-			if dbg:
-				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
-			self.server = smtplib.SMTP_SSL(server, port, timeout=tout, context=ssl.create_default_context())
+			self.server = smtplib.SMTP_SSL(server, port, timeout=tout, context=tlscontext)
 		else:
 			self.server = smtplib.SMTP(server, port,timeout=tout)
 
 		if dbg:
 			self.server.set_debuglevel(1)
 
-		connectiontype = xConnectionContext.getValueByName("ConnectionType")
-		if dbg:
-			print("ConnectionType: " + connectiontype, file=sys.stderr)
 		if connectiontype.upper() == 'SSL' and port != 465:
-			if dbg:
-				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
-			self.server.ehlo()
-			self.server.starttls(context=ssl.create_default_context())
-			self.server.ehlo()
+			# STRIPTLS: smtplib raises an exception if result is not 220
+			self.server.starttls(context=tlscontext)
 
 		user = xAuthenticator.getUserName()
 		password = xAuthenticator.getPassword()
@@ -301,11 +325,10 @@ class PyMailIMAPService(unohelper.Base, XMailService):
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
 			print(connectiontype, file=sys.stderr)
+		tlscontext = prepareTLSContext(self, self.ctx, connectiontype.upper() == 'SSL')
 		print("BEFORE", file=sys.stderr)
 		if connectiontype.upper() == 'SSL':
-			if dbg:
-				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
-			self.server = imaplib.IMAP4_SSL(server, port, ssl_context=ssl.create_default_context())
+			self.server = imaplib.IMAP4_SSL(server, port, ssl_context=tlscontext)
 		else:
 			self.server = imaplib.IMAP4(server, port)
 		print("AFTER", file=sys.stderr)
@@ -372,11 +395,10 @@ class PyMailPOP3Service(unohelper.Base, XMailService):
 		connectiontype = xConnectionContext.getValueByName("ConnectionType")
 		if dbg:
 			print(connectiontype, file=sys.stderr)
+		tlscontext = prepareTLSContext(self, self.ctx, connectiontype.upper() == 'SSL')
 		print("BEFORE", file=sys.stderr)
 		if connectiontype.upper() == 'SSL':
-			if dbg:
-				print("SSL config: " + str(ssl.get_default_verify_paths()), file=sys.stderr)
-			self.server = poplib.POP3_SSL(server, port, context=ssl.create_default_context())
+			self.server = poplib.POP3_SSL(server, port, context=tlscontext)
 		else:
 			tout = xConnectionContext.getValueByName("Timeout")
 			if dbg:
