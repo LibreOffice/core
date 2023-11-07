@@ -209,14 +209,10 @@ void PlaceEditDialog::InitDetails( )
         ++nPos;
     }
 
-    // Create WebDAV / FTP / SSH details control
+    // Create WebDAV / SSH details control
     std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
     xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
     m_aDetailsContainers.push_back(xDavDetails);
-
-    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(this, 21, "ftp"));
-    xFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back(xFtpDetails);
 
     std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "sftp"));
     xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );

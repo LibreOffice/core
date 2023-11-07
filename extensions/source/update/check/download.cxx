@@ -203,11 +203,6 @@ Download::getProxyForURL(std::u16string_view rURL, OString& rHost, sal_Int32& rP
             rHost = getStringValue(xNameAccess, "ooInetHTTPSProxyName");
             rPort = getInt32Value(xNameAccess, "ooInetHTTPSProxyPort");
         }
-        else if( o3tl::starts_with(rURL, u"ftp:") )
-        {
-            rHost = getStringValue(xNameAccess, "ooInetFTPProxyName");
-            rPort = getInt32Value(xNameAccess, "ooInetFTPProxyPort");
-        }
     }
 }
 

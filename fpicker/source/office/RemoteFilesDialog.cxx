@@ -195,8 +195,6 @@ static OUString lcl_GetServiceType( const ServicePtr& pService )
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
     switch( aProtocol )
     {
-        case INetProtocol::Ftp:
-            return "FTP";
         case INetProtocol::Cmis:
         {
             OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DecodeMechanism::WithCharset );
