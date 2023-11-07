@@ -78,7 +78,7 @@ private:
     comphelper::OInterfaceContainerHelper4<XTreeDataModelListener> maTreeDataModelListeners;
     comphelper::OInterfaceContainerHelper4<XEventListener> maEventListeners;
     bool mbDisposed;
-    Reference< XTreeNode > mxRootNode;
+    rtl::Reference< MutableTreeNode > mxRootNode;
 };
 
 class MutableTreeNode: public ::cppu::WeakImplHelper< XMutableTreeNode, XServiceInfo >
@@ -182,15 +182,11 @@ void SAL_CALL MutableTreeDataModel::setRoot( const Reference< XMutableTreeNode >
         throw IllegalArgumentException();
 
     std::unique_lock aGuard( m_aMutex );
-    if( xNode == mxRootNode )
+    if( xNode.get() == mxRootNode.get() )
         return;
 
     if( mxRootNode.is() )
-    {
-        rtl::Reference< MutableTreeNode > xOldImpl( dynamic_cast< MutableTreeNode* >( mxRootNode.get() ) );
-        if( xOldImpl.is() )
-            xOldImpl->mbIsInserted = false;
-    }
+        mxRootNode->mbIsInserted = false;
 
     rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
     if( !xImpl.is() || xImpl->mbIsInserted )
