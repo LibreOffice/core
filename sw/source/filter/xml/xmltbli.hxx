@@ -81,7 +81,7 @@ class SwXMLTableContext : public XMLTextTableContext
                           TableBoxIndexHasher> map_BoxFormat;
     std::unique_ptr<map_BoxFormat> m_pSharedBoxFormats;
 
-    SvXMLImportContextRef   m_xParentTable;   // if table is a sub table
+    rtl::Reference<SwXMLTableContext> m_xParentTable;   // if table is a sub table
 
     rtl::Reference<SwXMLDDETableContext_Impl> m_xDDESource;
 
@@ -196,7 +196,7 @@ public:
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 {
-    return static_cast<SwXMLTableContext *>(m_xParentTable.get());
+    return m_xParentTable.get();
 }
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
