@@ -586,7 +586,7 @@ public:
 class ComboBoxElement
     : public ControlElement
 {
-    css::uno::Reference< css::xml::input::XElement > _popup;
+    rtl::Reference< MenuPopupElement > _popup;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(
@@ -605,7 +605,7 @@ public:
 class MenuListElement
     : public ControlElement
 {
-    css::uno::Reference< css::xml::input::XElement > _popup;
+    rtl::Reference< MenuPopupElement > _popup;
 public:
     virtual css::uno::Reference< css::xml::input::XElement >
     SAL_CALL startChildElement(

@@ -1371,11 +1371,10 @@ void MenuListElement::endElement()
     bool bHasSrcRange = ctx.importDataAwareProperty( "source-cell-range" , _xAttributes );
     if (_popup.is())
     {
-        MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
         if ( !bHasSrcRange )
-            xControlModel->setPropertyValue( "StringItemList", Any( p->getItemValues() ) );
+            xControlModel->setPropertyValue( "StringItemList", Any( _popup->getItemValues() ) );
         if ( !bHasLinkedCell )
-            xControlModel->setPropertyValue( "SelectedItems", Any( p->getSelectedItems() ) );
+            xControlModel->setPropertyValue( "SelectedItems", Any( _popup->getSelectedItems() ) );
 
     }
     ctx.importEvents( _events );
@@ -1441,8 +1440,7 @@ void ComboBoxElement::endElement()
     bool bHasSrcRange = ctx.importDataAwareProperty( "source-cell-range" , _xAttributes );
     if (_popup.is() && !bHasSrcRange )
     {
-        MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-        xControlModel->setPropertyValue( "StringItemList", Any( p->getItemValues() ) );
+        xControlModel->setPropertyValue( "StringItemList", Any( _popup->getItemValues() ) );
     }
 
     ctx.importEvents( _events );
