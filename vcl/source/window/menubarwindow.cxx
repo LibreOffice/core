@@ -287,7 +287,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
          ( pItemData->pSubMenu != m_pActivePopup )) )
         return;
 
-    m_pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
+    m_pActivePopup = pItemData->pSubMenu.get();
     tools::Long nX = 0;
     MenuItemData* pData = nullptr;
     for ( sal_uLong n = 0; n < m_nHighlightedItem; n++ )

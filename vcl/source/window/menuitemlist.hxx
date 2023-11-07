@@ -35,7 +35,7 @@ struct MenuItemData
     sal_uInt16      nId;                    // SV Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
-    VclPtr<Menu>    pSubMenu;               // Pointer to SubMenu
+    VclPtr<PopupMenu> pSubMenu;             // Pointer to SubMenu
     OUString        aText;                  // Menu-Text
     SalLayoutGlyphs aTextGlyphs;            ///< Text layout of aText.
     OUString        aHelpText;              // Help-String

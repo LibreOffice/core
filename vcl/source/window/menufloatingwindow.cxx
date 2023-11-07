@@ -336,7 +336,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer, void )
     if ( !(pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup )) )
         return;
 
-    pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu.get());
+    pActivePopup = pItemData->pSubMenu.get();
     tools::Long nY = nScrollerHeight+ImplGetStartY();
     MenuItemData* pData = nullptr;
     for ( sal_uLong n = 0; n < nHighlightedItem; n++ )

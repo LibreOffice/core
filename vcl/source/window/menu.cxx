@@ -747,7 +747,7 @@ void Menu::SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu )
         return;
 
     // same menu, nothing to do
-    if ( static_cast<PopupMenu*>(pData->pSubMenu.get()) == pMenu )
+    if ( pData->pSubMenu.get() == pMenu )
         return;
 
     // remove old menu
@@ -779,7 +779,7 @@ PopupMenu* Menu::GetPopupMenu( sal_uInt16 nItemId ) const
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        return static_cast<PopupMenu*>(pData->pSubMenu.get());
+        return pData->pSubMenu.get();
     else
         return nullptr;
 }
