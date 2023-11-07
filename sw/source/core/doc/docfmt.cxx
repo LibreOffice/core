@@ -1013,7 +1013,7 @@ static bool lcl_SetTextFormatColl( SwNode* pNode, void* pArgs )
         }
     }
 
-    SwTextFormatColl* pFormat = static_cast<SwTextFormatColl*>(pPara->pFormatColl);
+    SwTextFormatColl* pFormat = pPara->pFormatColl;
     if ( pPara->bReset )
     {
         lcl_RstAttr(pCNd, pPara);

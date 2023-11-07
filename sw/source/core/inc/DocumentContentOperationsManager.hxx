@@ -117,7 +117,7 @@ public:
     //originallyfrom docfmt.cxx
     struct ParaRstFormat
     {
-        SwFormatColl* pFormatColl;
+        SwTextFormatColl* pFormatColl;
         SwHistory* pHistory;
         const SwPosition *pSttNd, *pEndNd;
         const SfxItemSet* pDelSet;
