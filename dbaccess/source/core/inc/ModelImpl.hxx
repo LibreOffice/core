@@ -420,7 +420,8 @@ public:
     virtual bool macroCallsSeenWhileLoading() const override;
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
-    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;
+    virtual bool hasTrustedScriptingSignature(
+        const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
 
     // IModifiableDocument
     virtual void storageIsModified() override;

@@ -1361,7 +1361,8 @@ SignatureState ODatabaseModelImpl::getScriptingSignatureState()
     return m_nScriptingSignatureState;
 }
 
-bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
+bool ODatabaseModelImpl::hasTrustedScriptingSignature(
+    const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
 {
     bool bResult = false;
 
@@ -1393,20 +1394,15 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
                                   });
         }
 
-        if (!bResult && bAllowUIToAddAuthor)
+        if (!bResult && _rxInteraction)
         {
-            Reference<XInteractionHandler> xInteraction;
-            xInteraction = m_aMediaDescriptor.getOrDefault("InteractionHandler", xInteraction);
-            if (xInteraction.is())
-            {
-                task::DocumentMacroConfirmationRequest aRequest;
-                aRequest.DocumentURL = m_sDocFileLocation;
-                aRequest.DocumentStorage = xStorage;
-                aRequest.DocumentSignatureInformation = aInfo;
-                aRequest.DocumentVersion = aODFVersion;
-                aRequest.Classification = task::InteractionClassification_QUERY;
-                bResult = SfxMedium::CallApproveHandler(xInteraction, uno::Any(aRequest), true);
-            }
+            task::DocumentMacroConfirmationRequest aRequest;
+            aRequest.DocumentURL = m_sDocFileLocation;
+            aRequest.DocumentStorage = xStorage;
+            aRequest.DocumentSignatureInformation = aInfo;
+            aRequest.DocumentVersion = aODFVersion;
+            aRequest.Classification = task::InteractionClassification_QUERY;
+            bResult = SfxMedium::CallApproveHandler(_rxInteraction, uno::Any(aRequest), true);
         }
     }
     catch (uno::Exception&)
