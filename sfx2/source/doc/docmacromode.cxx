@@ -151,7 +151,7 @@ namespace sfx2
 
     bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
-        sal_uInt16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
+        sal_Int16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
 
         if ( SvtSecurityOptions::IsMacroDisabled() )
         {
