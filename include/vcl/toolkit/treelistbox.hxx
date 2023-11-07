@@ -229,7 +229,7 @@ class VCL_DLLPUBLIC SvTreeListBox
     sal_Int8        mnDragAction;
 
     SvTreeListEntry*        pEdEntry;
-    SvLBoxItem*             pEdItem;
+    SvLBoxString*           pEdItem;
 
     rtl::Reference<TransferDataContainer> m_xTransferHelper;
 

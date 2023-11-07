@@ -2459,7 +2459,7 @@ void SvTreeListBox::EditedText( const OUString& rStr )
     {
         if( EditedEntry( pEdEntry, rStr ) )
         {
-            static_cast<SvLBoxString*>(pEdItem)->SetText( rStr );
+            pEdItem->SetText( rStr );
             pModel->InvalidateEntry( pEdEntry );
         }
         if( GetSelectionCount() == 0 )
