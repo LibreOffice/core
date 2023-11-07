@@ -214,7 +214,7 @@ CUPSManager::~CUPSManager()
     }
 
     if (m_nDests && m_pDests)
-        cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
+        cupsFreeDests( m_nDests, m_pDests );
 }
 
 void CUPSManager::runDestThread( void* pThis )
@@ -325,7 +325,7 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
-    cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests);
+    cups_dest_t* pDest = m_pDests;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
@@ -338,7 +338,7 @@ void CUPSManager::initialize()
     // with the same name as a CUPS printer, overwrite it
     while( nPrinter-- )
     {
-        pDest = static_cast<cups_dest_t*>(m_pDests)+nPrinter;
+        pDest = m_pDests+nPrinter;
         OUString aPrinterName = OStringToOUString( pDest->name, aEncoding );
         if( pDest->instance && *pDest->instance )
         {
@@ -470,7 +470,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
             m_aCUPSDestMap.find( aPrinter );
             if( dest_it != m_aCUPSDestMap.end() )
             {
-                cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + dest_it->second;
+                cups_dest_t* pDest = m_pDests + dest_it->second;
                 OString aPPDFile = threadedCupsGetPPD( pDest->name );
                 SAL_INFO("vcl.unx.print",
                         "PPD for " << aPrinter << " is " << aPPDFile);
@@ -890,7 +890,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
             sJobName = OUStringToOString(rFaxNumber, aEnc);
         }
 
-        cups_dest_t* pDest = static_cast<cups_dest_t*>(m_pDests) + dest_it->second;
+        cups_dest_t* pDest = m_pDests + dest_it->second;
         nJobID = cupsPrintFile(pDest->name,
             it->second.getStr(),
             sJobName.getStr(),
@@ -943,7 +943,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
             // there is no way to query CUPS whether the printer list has changed
             // so get the dest list anew
             if( m_nDests && m_pDests )
-                cupsFreeDests( m_nDests, static_cast<cups_dest_t*>(m_pDests) );
+                cupsFreeDests( m_nDests, m_pDests );
             m_nDests = 0;
             m_pDests = nullptr;
             runDests();

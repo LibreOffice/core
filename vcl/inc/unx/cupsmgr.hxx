@@ -24,6 +24,8 @@
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
 
+class cups_dest_s;
+
 namespace psp
 {
 
@@ -39,7 +41,7 @@ class CUPSManager final : public PrinterInfoManager
 {
     std::unordered_map< FILE*, OString, FPtrHash >         m_aSpoolFiles;
     int                                                    m_nDests;
-    void*                                                  m_pDests;
+    cups_dest_s*                                           m_pDests;
     bool                                                   m_bNewDests;
     std::unordered_map< OUString, int >      m_aCUPSDestMap;
 
