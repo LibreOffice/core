@@ -26,6 +26,8 @@
 #include <utility>
 #include <vbahelper/vbashaperange.hxx>
 #include <vbahelper/vbashape.hxx>
+#include <rtl/ref.hxx>
+
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
@@ -33,18 +35,18 @@ namespace {
 
 class VbShapeRangeEnumHelper : public EnumerationHelper_BASE
 {
-        uno::Reference< XCollection > m_xParent;
+        rtl::Reference< ScVbaShapeRange > m_xParent;
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
         sal_Int32 nIndex;
 public:
-    VbShapeRangeEnumHelper( uno::Reference< XCollection > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
+    VbShapeRangeEnumHelper( rtl::Reference< ScVbaShapeRange > xParent, uno::Reference< container::XIndexAccess > xIndexAccess ) : m_xParent(std::move( xParent )), m_xIndexAccess(std::move( xIndexAccess )), nIndex( 0 ) {}
         virtual sal_Bool SAL_CALL hasMoreElements(  ) override
         {
                 return ( nIndex < m_xIndexAccess->getCount() );
         }
         virtual uno::Any SAL_CALL nextElement(  ) override
         {
-                ScVbaShapeRange* pCollectionImpl = dynamic_cast< ScVbaShapeRange* >(m_xParent.get());
+                ScVbaShapeRange* pCollectionImpl = m_xParent.get();
                 if ( pCollectionImpl && hasMoreElements() )
                     return pCollectionImpl->createCollectionObject(  m_xIndexAccess->getByIndex( nIndex++ ) );
                 throw container::NoSuchElementException();
