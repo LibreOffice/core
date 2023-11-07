@@ -135,7 +135,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
 
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const uno::Reference < XModel>& rModel,
-        SvXMLImport& rImport,
+        SwXMLImport& rImport,
         const uno::Reference<XPropertySet> & rInfoSet,
         bool bInsertM, bool bStylesOnlyM,
         bool bBlockM, bool bOrganizerM ) :

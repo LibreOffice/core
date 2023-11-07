@@ -229,7 +229,7 @@ constexpr OUString g_sRecordChanges = u"RecordChanges"_ustr;
 constexpr OUString g_sRedlineProtectionKey = u"RedlineProtectionKey"_ustr;
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
-    SvXMLImport & rImport,
+    SwXMLImport & rImport,
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,
     const Reference<XPropertySet> & rImportInfo )
@@ -339,7 +339,7 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
             aAny <<= true;
             m_xModelPropertySet->setPropertyValue( g_sShowChanges, aAny );
             // TODO maybe we need some property for the view-setting?
-            SwDoc *const pDoc(static_cast<SwXMLImport&>(m_rImport).getDoc());
+            SwDoc *const pDoc(m_rImport.getDoc());
             assert(pDoc);
             pDoc->GetDocumentRedlineManager().SetHideRedlines(!m_bShowChanges);
         }
@@ -414,7 +414,7 @@ void XMLRedlineImportHelper::Add(
     //reserve MoveID so it won't be reused by others
     if (!rMovedID.isEmpty())
     {
-        SwDoc* const pDoc(static_cast<SwXMLImport&>(m_rImport).getDoc());
+        SwDoc* const pDoc(m_rImport.getDoc());
         assert(pDoc);
         pDoc->GetDocumentRedlineManager().GetRedlineTable().setMovedIDIfNeeded(rMovedID.toInt32());
     }

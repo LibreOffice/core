@@ -32,6 +32,7 @@ class SvXMLImport;
 class RedlineInfo;
 class SwRedlineData;
 class SwDoc;
+class SwXMLImport;
 namespace com::sun::star {
     namespace text { class XTextCursor; }
     namespace text { class XTextRange; }
@@ -42,7 +43,7 @@ typedef std::map< OUString, RedlineInfo* > RedlineMapType;
 
 class XMLRedlineImportHelper final
 {
-    SvXMLImport & m_rImport;
+    SwXMLImport & m_rImport;
 
     const OUString m_sInsertion;
     const OUString m_sDeletion;
@@ -64,7 +65,7 @@ class XMLRedlineImportHelper final
 public:
 
     XMLRedlineImportHelper(
-        SvXMLImport & rImport,
+        SwXMLImport & rImport,
         bool bIgnoreRedlines,       // ignore redlines mode
         // property sets of model + import info for saving + restoring the
         // redline mode

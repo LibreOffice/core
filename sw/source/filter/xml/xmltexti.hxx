@@ -37,7 +37,7 @@ protected:
 public:
     SwXMLTextImportHelper(
             const css::uno::Reference<css::frame::XModel>& rModel,
-            SvXMLImport& rImport,
+            SwXMLImport& rImport,
             const css::uno::Reference<css::beans::XPropertySet>& rInfoSet,
             bool bInsertM, bool bStylesOnlyM,
             bool bBlockM, bool bOrganizerM );
