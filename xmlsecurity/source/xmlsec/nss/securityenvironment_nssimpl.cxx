@@ -344,13 +344,14 @@ Reference< XCertificate > SecurityEnvironment_NssImpl::getCertificate( const OUS
 }
 
 Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertificatePath( const Reference< XCertificate >& begin ) {
-    // Remember the signing certificate.
-    m_xSigningCertificate = begin;
 
-    const X509Certificate_NssImpl* xcert = dynamic_cast<X509Certificate_NssImpl*>(begin.get());
+    X509Certificate_NssImpl* xcert = dynamic_cast<X509Certificate_NssImpl*>(begin.get());
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
+
+    // Remember the signing certificate.
+    m_xSigningCertificate = xcert;
 
     const CERTCertificate* cert = xcert->getNssCert() ;
     if (!cert)
@@ -796,10 +797,9 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
         throw RuntimeException();
 
     // Adopt the private key of the signing certificate, if it has any.
-    if (auto pCertificate
-            = dynamic_cast<X509Certificate_NssImpl*>(m_xSigningCertificate.get()))
+    if (m_xSigningCertificate)
     {
-        SECKEYPrivateKey* pPrivateKey = SECKEY_CopyPrivateKey(pCertificate->getPrivateKey());
+        SECKEYPrivateKey* pPrivateKey = SECKEY_CopyPrivateKey(m_xSigningCertificate->getPrivateKey());
         if (pPrivateKey)
         {
             xmlSecKeyDataPtr pKeyData = xmlSecNssPKIAdoptKey(pPrivateKey, nullptr);

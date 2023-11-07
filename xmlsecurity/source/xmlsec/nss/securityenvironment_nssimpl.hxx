@@ -52,7 +52,7 @@ private:
 
     std::vector< PK11SlotInfo* > m_Slots;
     /// The last used certificate which has the private key for signing.
-    css::uno::Reference<css::security::XCertificate> m_xSigningCertificate;
+    rtl::Reference<X509Certificate_NssImpl> m_xSigningCertificate;
 
     std::mutex m_mutex;
 

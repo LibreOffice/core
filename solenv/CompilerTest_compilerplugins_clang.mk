@@ -35,6 +35,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/external \
     compilerplugins/clang/test/faileddyncast \
     compilerplugins/clang/test/fakebool \
+    compilerplugins/clang/test/fieldcast \
     compilerplugins/clang/test/flatten \
     compilerplugins/clang/test/fragiledestructor \
     compilerplugins/clang/test/getstr \
