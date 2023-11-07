@@ -152,10 +152,18 @@ namespace sfx2
             When this happens, this method here should be replaced by a method at this
             new class.
 
+            @param _rxInteraction
+                A handler for interactions which might become necessary to trust a correct
+                but not yet trusted signature, possibly also adding the author certificate to
+                trusted list.
+
+                If the user needs to be asked, and if this parameter is <NULL/>, the most
+                defensive assumptions will be made, i.e. false will be returned.
+
             @seealso <sfx2/signaturestate.hxx>
         */
         virtual bool
-                    hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) = 0;
+                    hasTrustedScriptingSignature( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) = 0;
 
     protected:
         ~IMacroDocumentAccess() {}

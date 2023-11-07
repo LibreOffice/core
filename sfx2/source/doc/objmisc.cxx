@@ -1825,7 +1825,8 @@ SignatureState SfxObjectShell_Impl::getScriptingSignatureState()
     return nSignatureState;
 }
 
-bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor )
+bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
+    const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction)
 {
     bool bResult = false;
 
@@ -1861,22 +1862,15 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
                         [&xSigner](const security::DocumentSignatureInformation& rInfo) {
                             return xSigner->isAuthorTrusted( rInfo.Signer ); });
 
-                    if ( !bResult && bAllowUIToAddAuthor )
+                    if (!bResult && _rxInteraction)
                     {
-                        uno::Reference< task::XInteractionHandler > xInteraction;
-                        if ( rDocShell.GetMedium() )
-                            xInteraction = rDocShell.GetMedium()->GetInteractionHandler();
-
-                        if ( xInteraction.is() )
-                        {
-                            task::DocumentMacroConfirmationRequest aRequest;
-                            aRequest.DocumentURL = getDocumentLocation();
-                            aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
-                            aRequest.DocumentSignatureInformation = aInfo;
-                            aRequest.DocumentVersion = aVersion;
-                            aRequest.Classification = task::InteractionClassification_QUERY;
-                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::Any( aRequest ), true );
-                        }
+                        task::DocumentMacroConfirmationRequest aRequest;
+                        aRequest.DocumentURL = getDocumentLocation();
+                        aRequest.DocumentStorage = rDocShell.GetMedium()->GetZipStorageToSign_Impl();
+                        aRequest.DocumentSignatureInformation = aInfo;
+                        aRequest.DocumentVersion = aVersion;
+                        aRequest.Classification = task::InteractionClassification_QUERY;
+                        bResult = SfxMedium::CallApproveHandler( _rxInteraction, uno::Any( aRequest ), true );
                     }
                 }
             }

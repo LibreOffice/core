@@ -146,7 +146,8 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
 
-    virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;
+    virtual bool hasTrustedScriptingSignature(
+        const css::uno::Reference<css::task::XInteractionHandler>& _rxInteraction) override;
 };
 
 #endif
