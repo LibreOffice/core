@@ -37,19 +37,19 @@ namespace cairo {
         explicit X11SysData( const SystemGraphicsData& );
         explicit X11SysData( const SystemEnvData&, const SalFrame* pReference );
 
-        void*   pDisplay;       // the relevant display connection
+        _XDisplay* pDisplay;       // the relevant display connection
         Drawable hDrawable;     // a drawable
-        void*   pVisual;        // the visual in use
+        Visual*  pVisual;        // the visual in use
         int nScreen;        // the current screen of the drawable
     };
 
     /// RAII wrapper for a pixmap
     struct X11Pixmap
     {
-        void* mpDisplay;  // the relevant display connection
+        _XDisplay* mpDisplay;  // the relevant display connection
         Pixmap  mhDrawable; // a drawable
 
-        X11Pixmap( Pixmap hDrawable, void* pDisplay ) :
+        X11Pixmap( Pixmap hDrawable, _XDisplay* pDisplay ) :
             mpDisplay(pDisplay),
             mhDrawable(hDrawable)
         {}

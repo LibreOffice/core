@@ -61,23 +61,23 @@ namespace cairo
     {}
 
     X11SysData::X11SysData( const SystemGraphicsData& pSysDat ) :
-        pDisplay(pSysDat.pDisplay),
+        pDisplay(static_cast<_XDisplay*>(pSysDat.pDisplay)),
         hDrawable(pSysDat.hDrawable),
-        pVisual(pSysDat.pVisual),
+        pVisual(static_cast<Visual*>(pSysDat.pVisual)),
         nScreen(pSysDat.nScreen)
     {}
 
     X11SysData::X11SysData( const SystemEnvData& pSysDat, const SalFrame* pReference ) :
-        pDisplay(pSysDat.pDisplay),
+        pDisplay(static_cast<_XDisplay*>(pSysDat.pDisplay)),
         hDrawable(pSysDat.GetWindowHandle(pReference)),
-        pVisual(pSysDat.pVisual),
+        pVisual(static_cast<Visual*>(pSysDat.pVisual)),
         nScreen(pSysDat.nScreen)
     {}
 
     X11Pixmap::~X11Pixmap()
     {
         if( mpDisplay && mhDrawable )
-            XFreePixmap( static_cast<Display*>(mpDisplay), mhDrawable );
+            XFreePixmap( mpDisplay, mhDrawable );
     }
 
     /**
@@ -132,9 +132,9 @@ namespace cairo
     X11Surface::X11Surface( const X11SysData& rSysData, int x, int y, int width, int height ) :
         maSysData(rSysData),
         mpSurface(
-            cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
+            cairo_xlib_surface_create( rSysData.pDisplay,
                                        rSysData.hDrawable,
-                                       static_cast<Visual*>(rSysData.pVisual),
+                                       rSysData.pVisual,
                                        width + x, height + y ),
             &cairo_surface_destroy)
     {
@@ -156,9 +156,9 @@ namespace cairo
                             const BitmapSystemData& rData ) :
         maSysData( rSysData ),
         mpSurface(
-            cairo_xlib_surface_create( static_cast<Display*>(rSysData.pDisplay),
+            cairo_xlib_surface_create( rSysData.pDisplay,
                                        reinterpret_cast<Drawable>(rData.aPixmap),
-                                       static_cast<Visual*>(rSysData.pVisual),
+                                       rSysData.pVisual,
                                        rData.mnWidth, rData.mnHeight ),
             &cairo_surface_destroy)
     {
@@ -209,8 +209,8 @@ namespace cairo
                     break;
             }
 
-            pFormat = XRenderFindStandardFormat( static_cast<Display*>(maSysData.pDisplay), nFormat );
-            Pixmap hPixmap = limitXCreatePixmap( static_cast<Display*>(maSysData.pDisplay), maSysData.hDrawable,
+            pFormat = XRenderFindStandardFormat( maSysData.pDisplay, nFormat );
+            Pixmap hPixmap = limitXCreatePixmap( maSysData.pDisplay, maSysData.hDrawable,
                                      width > 0 ? width : 1, height > 0 ? height : 1,
                                      pFormat->depth );
 
@@ -219,9 +219,9 @@ namespace cairo
                                 std::make_shared<X11Pixmap>(hPixmap, maSysData.pDisplay),
                                 CairoSurfaceSharedPtr(
                                     cairo_xlib_surface_create_with_xrender_format(
-                                        static_cast<Display*>(maSysData.pDisplay),
+                                        maSysData.pDisplay,
                                         hPixmap,
-                                        ScreenOfDisplay(static_cast<Display *>(maSysData.pDisplay), maSysData.nScreen),
+                                        ScreenOfDisplay(maSysData.pDisplay, maSysData.nScreen),
                                         pFormat, width, height ),
                                     &cairo_surface_destroy) ));
         }
@@ -270,7 +270,7 @@ namespace cairo
 
     void X11Surface::flush() const
     {
-        XSync( static_cast<Display*>(maSysData.pDisplay), false );
+        XSync( maSysData.pDisplay, false );
     }
 }
 
