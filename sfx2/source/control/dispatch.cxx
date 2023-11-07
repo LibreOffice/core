@@ -1120,8 +1120,7 @@ void SfxDispatcher::Update_Impl( bool bForce )
     if ( xLayoutManager.is() )
         xLayoutManager->unlock();
 
-    if ( !comphelper::LibreOfficeKit::isActive() &&
-        SfxViewShell::Current() && SfxViewShell::Current()->GetDispatcher() )
+    if ( SfxViewShell::Current() && SfxViewShell::Current()->GetDispatcher() )
     {
         const SfxPoolItem *pItem;
         SfxViewShell::Current()->GetDispatcher()->QueryState(SID_NOTEBOOKBAR, pItem);
