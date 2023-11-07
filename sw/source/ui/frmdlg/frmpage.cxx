@@ -1264,7 +1264,13 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
 
     pOldItem = GetOldItem(*rSet, RES_FRM_SIZE);
 
-    if ((pOldItem && aSz != *pOldItem) || (!pOldItem && !m_bFormat) ||
+    bool bSizeChanged = pOldItem && aSz != *pOldItem;
+    if (!bSizeChanged && m_bNew)
+    {
+        // If no custom size is provided, always set a size for a new frame, to avoid ~zero width.
+        bSizeChanged = true;
+    }
+    if (bSizeChanged || (!pOldItem && !m_bFormat) ||
             (m_bFormat &&
                 (aSz.GetWidth() > 0 || aSz.GetWidthPercent() > 0) &&
                     (aSz.GetHeight() > 0 || aSz.GetHeightPercent() > 0)))
