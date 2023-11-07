@@ -28,7 +28,7 @@
 
 #include <optional>
 
-namespace sdr::overlay { class OverlayObject; }
+namespace sdr::overlay { class OverlaySelection; }
 
 class SwCursorShell;
 class SfxViewShell;
@@ -87,7 +87,7 @@ class SwSelPaintRects : public SwRects
     const SwCursorShell* m_pCursorShell;
 
 #if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-    std::unique_ptr<sdr::overlay::OverlayObject> m_pCursorOverlay;
+    std::unique_ptr<sdr::overlay::OverlaySelection> m_pCursorOverlay;
 #endif
 
     bool m_bShowTextInputFieldOverlay;
