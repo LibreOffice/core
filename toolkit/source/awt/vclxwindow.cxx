@@ -129,7 +129,7 @@ public:
                                         mxAccessibleContext;
     css::uno::Reference< css::awt::XGraphics >
                                         mxViewGraphics;
-    css::uno::Reference< css::awt::XStyleSettings >
+    rtl::Reference< toolkit::WindowStyleSettings >
                                         mxWindowStyleSettings;
 
 public:
@@ -249,9 +249,8 @@ void VCLXWindowImpl::disposing()
     maTopWindowListeners.disposeAndClear( aEvent );
     maWindow2Listeners.disposeAndClear( aEvent );
 
-    ::toolkit::WindowStyleSettings* pStyleSettings = static_cast< ::toolkit::WindowStyleSettings* >( mxWindowStyleSettings.get() );
-    if ( pStyleSettings != nullptr )
-        pStyleSettings->dispose();
+    if ( mxWindowStyleSettings )
+        mxWindowStyleSettings->dispose();
     mxWindowStyleSettings.clear();
 }
 
