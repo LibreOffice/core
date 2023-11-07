@@ -103,14 +103,12 @@ void SwXTextView::Invalidate()
 {
     if(mxViewSettings.is())
     {
-        comphelper::ChainablePropertySet *pSettings = static_cast < comphelper::ChainablePropertySet * > ( mxViewSettings.get() );
-        static_cast < SwXViewSettings* > ( pSettings )->Invalidate();
+        mxViewSettings->Invalidate();
         mxViewSettings.clear();
     }
     if(mxTextViewCursor.is())
     {
-        text::XTextViewCursor* pCursor = mxTextViewCursor.get();
-        static_cast<SwXTextViewCursor*>(pCursor)->Invalidate();
+        mxTextViewCursor->Invalidate();
         mxTextViewCursor.clear();
     }
 

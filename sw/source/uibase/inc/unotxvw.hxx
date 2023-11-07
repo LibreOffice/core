@@ -48,6 +48,8 @@
 
 class SdrObject;
 class SwView;
+class SwXViewSettings;
+class SwXTextViewCursor;
 
 typedef cppu::ImplInheritanceHelper<
             SfxBaseController,
@@ -70,8 +72,8 @@ class SwXTextView final : public SwXTextView_Base
     const SfxItemPropertySet*   m_pPropSet;   // property map for SwXTextView properties
                                         // (not related to mxViewSettings!)
 
-    css::uno::Reference< css::beans::XPropertySet >     mxViewSettings;
-    css::uno::Reference< css::text::XTextViewCursor >   mxTextViewCursor;
+    rtl::Reference< SwXViewSettings >     mxViewSettings;
+    rtl::Reference< SwXTextViewCursor >   mxTextViewCursor;
 
     SdrObject* GetControl(
         const css::uno::Reference< css::awt::XControlModel > & Model,
