@@ -301,6 +301,10 @@ public:
 
         fVal = 4503599627370491.0;
         CPPUNIT_ASSERT_EQUAL( 4503599627370000.0, rtl::math::round( fVal, -3, rtl_math_RoundingMode_Corrected));
+
+        // test #tdf158190: ROUND(16.83 * 650, 0)
+        fVal = 16.83;
+        CPPUNIT_ASSERT_EQUAL( 10940.0, rtl::math::round( fVal * 650, 0, rtl_math_RoundingMode_Corrected));
     }
 
     void test_doubleToString() {
