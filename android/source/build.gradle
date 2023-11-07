@@ -82,7 +82,6 @@ android {
         strippedUIEditing {
             dimension "default"
             buildConfigField 'boolean', 'ALLOW_EDITING', 'true'
-            versionNameSuffix "-editing"
         }
         fullUI.dimension "default"
     }
