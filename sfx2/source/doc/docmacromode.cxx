@@ -230,6 +230,13 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
+                // At this point, the possible values of nMacroExecutionMode are: ALWAYS_EXECUTE,
+                // FROM_LIST_AND_SIGNED_WARN (the default), FROM_LIST_AND_SIGNED_NO_WARN.
+                // ALWAYS_EXECUTE corresponds to the Medium security level; it should ask for
+                // confirmation when macros are unsigned or untrusted. FROM_LIST_AND_SIGNED_NO_WARN
+                // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
+                // trusted signed macros at this point; so it may only ask for confirmation to add
+                // certificates to trusted, and shouldn't show UI when trusted list is read-only.
                 // the trusted macro check will also retrieve the signature state ( small optimization )
                 const bool bAllowUI = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                                                  && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
