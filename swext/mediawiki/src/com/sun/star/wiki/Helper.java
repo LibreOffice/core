@@ -38,6 +38,7 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModuleManager;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
@@ -54,6 +55,7 @@ import com.sun.star.util.XChangesBatch;
 import java.net.*;
 import java.io.*;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -645,7 +647,27 @@ public class Helper
         } else {
             conn = (HttpURLConnection) uri.toURL().openConnection();
         }
-        if (uri.getScheme().equals("https") && AllowUnknownCert(xContext, uri.getHost()))
+
+        boolean isAllowedInsecure;
+        try {
+            XNameAccess xNameAccess = GetConfigNameAccess(xContext, "org.openoffice.Office.Security/Net");
+            isAllowedInsecure = AnyConverter.toBoolean(xNameAccess.getByName("AllowInsecureProtocols"));
+        } catch (Exception e) {
+            throw new RuntimeException("failed to read configuration", e);
+        }
+        if (!isAllowedInsecure) {
+            if (!uri.getScheme().equals("https")) {
+                throw new IllegalArgumentException("insecure connection not allowed by configuration", null, (short)0);
+            }
+            try {
+                SSLContext context = SSLContext.getInstance("TLSv1.2");
+                context.init(null, null, null); // defaults
+                ((HttpsURLConnection) conn).setSSLSocketFactory(context.getSocketFactory());
+            } catch (Exception e) {
+                throw new RuntimeException("failed to create SSLContext", e);
+            }
+        }
+        else if (uri.getScheme().equals("https") && AllowUnknownCert(xContext, uri.getHost()))
         {
             // let unknown certificates be accepted
             ((HttpsURLConnection) conn).setSSLSocketFactory(new WikiProtocolSocketFactory());
