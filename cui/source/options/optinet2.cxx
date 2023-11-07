@@ -98,8 +98,6 @@ constexpr OUString g_aHttpProxyPN = u"ooInetHTTPProxyName"_ustr;
 constexpr OUString g_aHttpPortPN = u"ooInetHTTPProxyPort"_ustr;
 constexpr OUString g_aHttpsProxyPN = u"ooInetHTTPSProxyName"_ustr;
 constexpr OUString g_aHttpsPortPN = u"ooInetHTTPSProxyPort"_ustr;
-constexpr OUString g_aFtpProxyPN = u"ooInetFTPProxyName"_ustr;
-constexpr OUString g_aFtpPortPN = u"ooInetFTPProxyPort"_ustr;
 constexpr OUString g_aNoProxyDescPN = u"ooInetNoProxy"_ustr;
 
 IMPL_STATIC_LINK(SvxProxyTabPage, NumberOnlyTextFilterHdl, OUString&, rTest, bool)
@@ -142,12 +140,6 @@ SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController*
     , m_xHttpsPortFT(m_xBuilder->weld_label("httpsportft"))
     , m_xHttpsPortED(m_xBuilder->weld_entry("httpsport"))
     , m_xHttpsPortImg(m_xBuilder->weld_widget("lockhttpsport"))
-    , m_xFtpProxyFT(m_xBuilder->weld_label("ftpft"))
-    , m_xFtpProxyED(m_xBuilder->weld_entry("ftp"))
-    , m_xFtpProxyImg(m_xBuilder->weld_widget("lockftp"))
-    , m_xFtpPortFT(m_xBuilder->weld_label("ftpportft"))
-    , m_xFtpPortED(m_xBuilder->weld_entry("ftpport"))
-    , m_xFtpPortImg(m_xBuilder->weld_widget("lockftpport"))
     , m_xNoProxyForFT(m_xBuilder->weld_label("noproxyft"))
     , m_xNoProxyForED(m_xBuilder->weld_entry("noproxy"))
     , m_xNoProxyForImg(m_xBuilder->weld_widget("locknoproxy"))
@@ -159,14 +151,10 @@ SvxProxyTabPage::SvxProxyTabPage(weld::Container* pPage, weld::DialogController*
     m_xHttpsProxyED->connect_insert_text(LINK(this, SvxProxyTabPage, NoSpaceTextFilterHdl));
     m_xHttpsPortED->connect_insert_text(LINK(this, SvxProxyTabPage, NumberOnlyTextFilterHdl));
     m_xHttpsPortED->connect_changed(LINK(this, SvxProxyTabPage, PortChangedHdl));
-    m_xFtpProxyED->connect_insert_text(LINK(this, SvxProxyTabPage, NoSpaceTextFilterHdl));
-    m_xFtpPortED->connect_insert_text(LINK(this, SvxProxyTabPage, NumberOnlyTextFilterHdl));
-    m_xFtpPortED->connect_changed(LINK(this, SvxProxyTabPage, PortChangedHdl));
 
     Link<weld::Widget&,void> aLink = LINK( this, SvxProxyTabPage, LoseFocusHdl_Impl );
     m_xHttpPortED->connect_focus_out( aLink );
     m_xHttpsPortED->connect_focus_out( aLink );
-    m_xFtpPortED->connect_focus_out( aLink );
 
     m_xProxyModeLB->connect_changed(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
 
@@ -226,16 +214,6 @@ void SvxProxyTabPage::ReadConfigData_Impl()
     else
         m_xHttpsPortED->set_text( "" );
 
-    m_xFtpProxyED->set_text( officecfg::Inet::Settings::ooInetFTPProxyName::get() );
-    x = officecfg::Inet::Settings::ooInetFTPProxyPort::get();
-    if (x)
-    {
-        nIntValue = *x;
-        m_xFtpPortED->set_text( OUString::number( nIntValue ));
-    }
-    else
-        m_xFtpPortED->set_text( "" );
-
     m_xNoProxyForED->set_text( officecfg::Inet::Settings::ooInetNoProxy::get() );
 }
 
@@ -268,16 +246,6 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             m_xHttpsPortED->set_text( OUString::number( nIntValue ));
         }
 
-        if( xPropertyState->getPropertyDefault(g_aFtpProxyPN) >>= aStringValue )
-        {
-            m_xFtpProxyED->set_text( aStringValue );
-        }
-
-        if( xPropertyState->getPropertyDefault(g_aFtpPortPN) >>= nIntValue )
-        {
-            m_xFtpPortED->set_text( OUString::number( nIntValue ));
-        }
-
         if( xPropertyState->getPropertyDefault(g_aNoProxyDescPN) >>= aStringValue )
         {
             m_xNoProxyForED->set_text( aStringValue );
@@ -308,8 +276,6 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xPropertyState->setPropertyToDefault(g_aHttpPortPN);
         xPropertyState->setPropertyToDefault(g_aHttpsProxyPN);
         xPropertyState->setPropertyToDefault(g_aHttpsPortPN);
-        xPropertyState->setPropertyToDefault(g_aFtpProxyPN);
-        xPropertyState->setPropertyToDefault(g_aFtpPortPN);
         xPropertyState->setPropertyToDefault(g_aNoProxyDescPN);
 
         Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
@@ -338,8 +304,6 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
     m_xHttpPortED->save_value();
     m_xHttpsProxyED->save_value();
     m_xHttpsPortED->save_value();
-    m_xFtpProxyED->save_value();
-    m_xFtpPortED->save_value();
     m_xNoProxyForED->save_value();
 
     EnableControls_Impl();
@@ -348,8 +312,8 @@ void SvxProxyTabPage::Reset(const SfxItemSet*)
 OUString SvxProxyTabPage::GetAllStrings()
 {
     OUString sAllStrings;
-    OUString labels[] = { "label1",    "label2",     "httpft",      "httpsft",   "ftpft",
-                          "noproxyft", "httpportft", "httpsportft", "ftpportft", "noproxydesc" };
+    OUString labels[] = { "label1",    "label2",     "httpft",      "httpsft",
+                          "noproxyft", "httpportft", "httpsportft", "noproxydesc" };
 
     for (const auto& label : labels)
     {
@@ -401,18 +365,6 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
         if ( m_xHttpsPortED->get_value_changed_from_saved() )
         {
             xPropertySet->setPropertyValue( g_aHttpsPortPN, Any(m_xHttpsPortED->get_text().toInt32()) );
-            bModified = true;
-        }
-
-        if( m_xFtpProxyED->get_value_changed_from_saved())
-        {
-            xPropertySet->setPropertyValue( g_aFtpProxyPN, Any(m_xFtpProxyED->get_text()) );
-            bModified = true;
-        }
-
-        if ( m_xFtpPortED->get_value_changed_from_saved() )
-        {
-            xPropertySet->setPropertyValue( g_aFtpPortPN, Any(m_xFtpPortED->get_text().toInt32()));
             bModified = true;
         }
 
@@ -472,16 +424,6 @@ void SvxProxyTabPage::EnableControls_Impl()
     m_xHttpsPortFT->set_sensitive(bHTTPSProxyPortEnabled);
     m_xHttpsPortED->set_sensitive(bHTTPSProxyPortEnabled);
     m_xHttpsPortImg->set_visible(!bEnable);
-
-    bEnable = !officecfg::Inet::Settings::ooInetFTPProxyName::isReadOnly();
-    const bool bFTPProxyNameEnabled = bManualConfig && bEnable;
-    const bool bFTPProxyPortEnabled = bManualConfig && bEnable;
-    m_xFtpProxyFT->set_sensitive(bFTPProxyNameEnabled);
-    m_xFtpProxyED->set_sensitive(bFTPProxyNameEnabled);
-    m_xFtpProxyImg->set_visible(!bEnable);
-    m_xFtpPortFT->set_sensitive(bFTPProxyPortEnabled);
-    m_xFtpPortED->set_sensitive(bFTPProxyPortEnabled);
-    m_xFtpPortImg->set_visible(!bEnable);
 
     bEnable = !officecfg::Inet::Settings::ooInetNoProxy::isReadOnly();
     const bool bInetNoProxyEnabled = bManualConfig && bEnable;

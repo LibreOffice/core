@@ -48,13 +48,6 @@ private:
     std::unique_ptr<weld::Entry> m_xHttpsPortED;
     std::unique_ptr<weld::Widget> m_xHttpsPortImg;
 
-    std::unique_ptr<weld::Label> m_xFtpProxyFT;
-    std::unique_ptr<weld::Entry> m_xFtpProxyED;
-    std::unique_ptr<weld::Widget> m_xFtpProxyImg;
-    std::unique_ptr<weld::Label> m_xFtpPortFT;
-    std::unique_ptr<weld::Entry> m_xFtpPortED;
-    std::unique_ptr<weld::Widget> m_xFtpPortImg;
-
     std::unique_ptr<weld::Label> m_xNoProxyForFT;
     std::unique_ptr<weld::Entry> m_xNoProxyForED;
     std::unique_ptr<weld::Widget> m_xNoProxyForImg;

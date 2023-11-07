@@ -72,25 +72,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="ftp">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <property name="activates-default">True</property>
-            <property name="truncate-multiline">True</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="ftp-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftp">Type the name of the proxy server for FTP.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">2</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkEntry" id="noproxy">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
@@ -149,27 +130,6 @@
           <packing>
             <property name="left-attach">5</property>
             <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="ftpport">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="valign">center</property>
-            <property name="max-length">5</property>
-            <property name="activates-default">True</property>
-            <property name="width-chars">5</property>
-            <property name="truncate-multiline">True</property>
-            <property name="input-purpose">digits</property>
-            <child internal-child="accessible">
-              <object class="AtkObject" id="ftpport-atkobject">
-                <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|ftpport">Type the port for the corresponding proxy server.</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left-attach">5</property>
-            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -234,20 +194,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="ftpft">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optproxypage|ftpft">_FTP proxy:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">ftp</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkLabel" id="noproxyft">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -272,19 +218,6 @@
           <packing>
             <property name="left-attach">4</property>
             <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="ftpportft">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="optproxypage|ftpportft">P_ort:</property>
-            <property name="use-underline">True</property>
-            <property name="mnemonic-widget">ftpport</property>
-          </object>
-          <packing>
-            <property name="left-attach">4</property>
-            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
@@ -340,19 +273,6 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage" id="lockftp">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="icon-name">res/lock.png</property>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkImage" id="locknoproxy">
             <property name="can-focus">False</property>
             <property name="no-show-all">True</property>
@@ -389,19 +309,6 @@
           <packing>
             <property name="left-attach">3</property>
             <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkImage" id="lockftpport">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="icon-name">res/lock.png</property>
-          </object>
-          <packing>
-            <property name="left-attach">3</property>
-            <property name="top-attach">3</property>
           </packing>
         </child>
         <child>
