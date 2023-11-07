@@ -33,7 +33,7 @@ struct AnimationData
     Point maOriginStartPt;
     Size maStartSize;
     VclPtr<OutputDevice> mpRenderContext;
-    void* mpRendererData;
+    AnimationRenderer* mpRendererData;
     tools::Long mnRendererId;
     bool mbIsPaused;
 

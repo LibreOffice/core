@@ -310,7 +310,7 @@ void Animation::PopulateRenderers()
         }
         else
         {
-            pRenderer = static_cast<AnimationRenderer*>(pDataItem->mpRendererData);
+            pRenderer = pDataItem->mpRendererData;
         }
 
         pRenderer->pause(pDataItem->mbIsPaused);
