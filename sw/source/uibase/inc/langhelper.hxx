@@ -52,8 +52,8 @@ namespace SwLangHelper
     extern OUString GetTextForLanguageGuessing(EditEngine const * rEditEngine, const ESelection& rDocSelection);
     extern OUString GetTextForLanguageGuessing(SwWrtShell const &rSh);
 
-    extern LanguageType GetLanguage( SfxItemSet const & aSet, sal_uInt16 nLangWhichId );
-    extern LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId );
+    extern LanguageType GetLanguage( SfxItemSet const & aSet, TypedWhichId<SvxLanguageItem> nLangWhichId );
+    extern LanguageType GetLanguage( SwWrtShell &rSh, TypedWhichId<SvxLanguageItem> nLangWhichId );
 
     extern LanguageType GetCurrentLanguage( SfxItemSet const & aSet, SvtScriptType nScriptType );
     extern LanguageType GetCurrentLanguage( SwWrtShell &rSh );

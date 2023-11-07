@@ -1518,7 +1518,7 @@ void SwSpellIter::ToSentenceStart() { m_bBackToStartOfSentence = true; }
 static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
     SvtScriptType nScriptType = rSh.GetScriptType();
-    sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
+    TypedWhichId<SvxLanguageItem> nLangWhichId = RES_CHRATR_LANGUAGE;
 
     switch(nScriptType)
     {
@@ -1528,7 +1528,7 @@ static LanguageType lcl_GetLanguage(SwEditShell& rSh)
     }
     SfxItemSet aSet(rSh.GetAttrPool(), nLangWhichId, nLangWhichId);
     rSh.GetCurAttr( aSet );
-    const SvxLanguageItem& rLang = static_cast<const SvxLanguageItem& >(aSet.Get(nLangWhichId));
+    const SvxLanguageItem& rLang = aSet.Get(nLangWhichId);
     return rLang.GetLanguage();
 }
 

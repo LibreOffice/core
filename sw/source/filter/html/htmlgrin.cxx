@@ -1137,7 +1137,7 @@ void SwHTMLParser::InsertBodyOptions()
         LanguageType eLang = LanguageTag::convertToLanguageTypeWithFallback( aLang );
         if( LANGUAGE_DONTKNOW != eLang )
         {
-            sal_uInt16 nWhich = 0;
+            TypedWhichId<SvxLanguageItem> nWhich(0);
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SvtScriptType::LATIN:

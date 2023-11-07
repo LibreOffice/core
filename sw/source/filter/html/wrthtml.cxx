@@ -499,8 +499,8 @@ ErrCode SwHTMLWriter::WriteStream()
         m_nCSS1Script = CSS1_OUTMODE_WESTERN;
         break;
     }
-    m_eLang = static_cast<const SvxLanguageItem&>(m_pDoc
-            ->GetDefault(GetLangWhichIdFromScript(m_nCSS1Script))).GetLanguage();
+    const SvxLanguageItem& rLangitem = m_pDoc->GetDefault(GetLangWhichIdFromScript(m_nCSS1Script));
+    m_eLang = rLangitem.GetLanguage();
 
     m_nFootNote = m_nEndNote = 0;
 
@@ -1443,9 +1443,9 @@ void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, bool bGraphic )
     }
 }
 
-sal_uInt16 SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
+TypedWhichId<SvxLanguageItem> SwHTMLWriter::GetLangWhichIdFromScript( sal_uInt16 nScript )
 {
-    sal_uInt16 nWhichId;
+    TypedWhichId<SvxLanguageItem> nWhichId(0);
     switch( nScript )
     {
     case CSS1_OUTMODE_CJK:

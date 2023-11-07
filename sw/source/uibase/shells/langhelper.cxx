@@ -204,13 +204,13 @@ namespace SwLangHelper
         OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
         //get ScriptType
-        sal_uInt16 nLangWhichId = 0;
+        TypedWhichId<SvxLanguageItem> nLangWhichId(0);
         bool bIsSingleScriptType = true;
         switch (SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ))
         {
-            case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE) : sal_uInt16(RES_CHRATR_LANGUAGE); break;
-            case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE_CJK) : sal_uInt16(RES_CHRATR_CJK_LANGUAGE); break;
-            case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? sal_uInt16(EE_CHAR_LANGUAGE_CTL) : sal_uInt16(RES_CHRATR_CTL_LANGUAGE); break;
+            case SvtScriptType::LATIN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE : RES_CHRATR_LANGUAGE; break;
+            case SvtScriptType::ASIAN :    nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CJK : RES_CHRATR_CJK_LANGUAGE; break;
+            case SvtScriptType::COMPLEX :  nLangWhichId = pEditEngine ? EE_CHAR_LANGUAGE_CTL : RES_CHRATR_CTL_LANGUAGE; break;
             default:
                 bIsSingleScriptType = false;
                 OSL_FAIL("unexpected case" );
@@ -354,7 +354,7 @@ namespace SwLangHelper
     ///     If there are more than one languages used LANGUAGE_DONTKNOW will be returned.
     /// @param nLangWhichId : one of
     ///     RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
-    LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId )
+    LanguageType GetLanguage( SwWrtShell &rSh, TypedWhichId<SvxLanguageItem> nLangWhichId )
     {
         SfxItemSet aSet( rSh.GetAttrPool(), nLangWhichId, nLangWhichId );
         rSh.GetCurAttr( aSet );
@@ -362,22 +362,22 @@ namespace SwLangHelper
         return GetLanguage(aSet,nLangWhichId);
     }
 
-    LanguageType GetLanguage( SfxItemSet const & aSet, sal_uInt16 nLangWhichId )
+    LanguageType GetLanguage( SfxItemSet const & aSet, TypedWhichId<SvxLanguageItem> nLangWhichId )
     {
 
         LanguageType nLang = LANGUAGE_SYSTEM;
 
-        const SfxPoolItem *pItem = nullptr;
+        const SvxLanguageItem *pItem = nullptr;
         SfxItemState nState = aSet.GetItemState( nLangWhichId, true, &pItem );
         if (nState > SfxItemState::DEFAULT && pItem)
         {
             // the item is set and can be used
-            nLang = dynamic_cast<const SvxLanguageItem&>(*pItem).GetLanguage();
+            nLang = pItem->GetLanguage();
         }
         else if (nState == SfxItemState::DEFAULT)
         {
             // since the attribute is not set: retrieve the default value
-            nLang = dynamic_cast<const SvxLanguageItem&>(aSet.GetPool()->GetDefaultItem( nLangWhichId )).GetLanguage();
+            nLang = aSet.GetPool()->GetDefaultItem( nLangWhichId ).GetLanguage();
         }
         else if (nState == SfxItemState::DONTCARE)
         {
@@ -396,7 +396,7 @@ namespace SwLangHelper
     LanguageType GetCurrentLanguage( SwWrtShell &rSh )
     {
         //set language attribute to use according to the script type
-        sal_uInt16 nLangWhichId = 0;
+        TypedWhichId<SvxLanguageItem> nLangWhichId(0);
         bool bIsSingleScriptType = true;
         switch (rSh.GetScriptType())
         {
@@ -415,14 +415,14 @@ namespace SwLangHelper
             // check if all script types are set to LANGUAGE_NONE and return
             // that if this is the case. Otherwise, having multiple script types
             // in use always means there are several languages in use...
-            const sal_uInt16 aScriptTypes[3] =
+            const TypedWhichId<SvxLanguageItem> aScriptTypes[3] =
             {
                 RES_CHRATR_LANGUAGE,
                 RES_CHRATR_CJK_LANGUAGE,
                 RES_CHRATR_CTL_LANGUAGE
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (sal_uInt16 aScriptType : aScriptTypes)
+            for (const TypedWhichId<SvxLanguageItem>& aScriptType : aScriptTypes)
             {
                 LanguageType nTmpLang = GetLanguage( rSh, aScriptType );
                 if (nTmpLang != LANGUAGE_NONE)
@@ -444,7 +444,7 @@ namespace SwLangHelper
     LanguageType GetCurrentLanguage( SfxItemSet const & aSet, SvtScriptType nScriptType )
     {
         //set language attribute to use according to the script type
-        sal_uInt16 nLangWhichId = 0;
+        TypedWhichId<SvxLanguageItem> nLangWhichId(0);
         bool bIsSingleScriptType = true;
         switch (nScriptType)
         {
@@ -463,14 +463,14 @@ namespace SwLangHelper
             // check if all script types are set to LANGUAGE_NONE and return
             // that if this is the case. Otherwise, having multiple script types
             // in use always means there are several languages in use...
-            const sal_uInt16 aScriptTypes[3] =
+            const TypedWhichId<SvxLanguageItem> aScriptTypes[3] =
             {
                 EE_CHAR_LANGUAGE,
                 EE_CHAR_LANGUAGE_CJK,
                 EE_CHAR_LANGUAGE_CTL
             };
             nCurrentLang = LANGUAGE_NONE;
-            for (sal_uInt16 aScriptType : aScriptTypes)
+            for (const TypedWhichId<SvxLanguageItem>& aScriptType : aScriptTypes)
             {
                 LanguageType nTmpLang = GetLanguage( aSet, aScriptType );
                 if (nTmpLang != LANGUAGE_NONE)

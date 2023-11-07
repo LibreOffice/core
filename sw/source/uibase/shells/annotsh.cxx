@@ -1412,11 +1412,10 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
             // disable "Thesaurus" if the language is not supported
             case SID_THESAURUS:
             {
-                const SfxPoolItem &rItem = m_rView.GetWrtShell().GetDoc()->GetDefault(
-                            GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage())) );
-                LanguageType nLang = static_cast<const SvxLanguageItem &>(
-                                                        rItem).GetLanguage();
+                TypedWhichId<SvxLanguageItem> nLangWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE,
+                            SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) );
+                const SvxLanguageItem &rItem = m_rView.GetWrtShell().GetDoc()->GetDefault(nLangWhich);
+                LanguageType nLang = rItem.GetLanguage();
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!xThes.is() || nLang == LANGUAGE_NONE ||
                     !xThes->hasLocale( LanguageTag::convertToLocale( nLang ) ))

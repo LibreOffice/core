@@ -822,10 +822,11 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
             case SID_THESAURUS:
             {
                 // disable "Thesaurus" if the language is not supported
-                const SfxPoolItem& rItem = GetShell().GetDoc()->GetDefault(GetWhichOfScript(
+                TypedWhichId<SvxLanguageItem> nLangWhich = GetWhichOfScript(
                     RES_CHRATR_LANGUAGE,
-                    SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage())));
-                LanguageType nLang = static_cast<const SvxLanguageItem&>(rItem).GetLanguage();
+                    SvtLanguageOptions::GetI18NScriptTypeOfLanguage(GetAppLanguage()));
+                const SvxLanguageItem& rItem = GetShell().GetDoc()->GetDefault(nLangWhich);
+                LanguageType nLang = rItem.GetLanguage();
 
                 uno::Reference<linguistic2::XThesaurus> xThes(::GetThesaurus());
                 if (!xThes.is() || nLang == LANGUAGE_NONE

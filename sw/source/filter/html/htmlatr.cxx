@@ -831,7 +831,10 @@ static void OutHTML_SwFormat( SwHTMLWriter& rWrt, const SwFormat& rFormat,
 
     LanguageType eLang;
     if (rInfo.moItemSet)
-        eLang = static_cast<const SvxLanguageItem&>(rInfo.moItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rWrt.m_nCSS1Script))).GetLanguage();
+    {
+        const SvxLanguageItem& rLangItem = rInfo.moItemSet->Get(SwHTMLWriter::GetLangWhichIdFromScript(rWrt.m_nCSS1Script));
+        eLang = rLangItem.GetLanguage();
+    }
     else
         eLang = rWrt.m_eLang;
 

@@ -2066,14 +2066,15 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
 #endif
 
     const sal_Int16 nScript = SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() );
-    sal_uInt16 nLangRes = RES_CHRATR_LANGUAGE;
+    TypedWhichId<SvxLanguageItem> nLangRes = RES_CHRATR_LANGUAGE;
 
     if ( i18n::ScriptType::ASIAN == nScript )
         nLangRes = RES_CHRATR_CJK_LANGUAGE;
     else if ( i18n::ScriptType::COMPLEX == nScript )
         nLangRes = RES_CHRATR_CTL_LANGUAGE;
 
-    auto const eLanguageDefault = static_cast<const SvxLanguageItem*>(&mrSh.GetDoc()->GetDefault( nLangRes ))->GetLanguage();
+    const SvxLanguageItem& rLangItem = mrSh.GetDoc()->GetDefault( nLangRes );
+    auto const eLanguageDefault = rLangItem.GetLanguage();
 
     EnhancedPDFExport(eLanguageDefault);
 }

@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(SwNumberInputDlg, InputModifiedHdl, weld::Entry&, void)
 
 }
 
-static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhichId )
+static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, TypedWhichId<SvxLanguageItem> nWhichId )
 {
     if (!(nWhichId == RES_CHRATR_LANGUAGE ||
           nWhichId == RES_CHRATR_CJK_LANGUAGE ||

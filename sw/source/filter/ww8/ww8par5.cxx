@@ -440,7 +440,7 @@ SvNumFormatType SwWW8ImplReader::GetTimeDatePara(std::u16string_view aStr, sal_u
         if (aResult.pSprm && aResult.nRemainingData >= 1 && *aResult.pSprm)
             bRTL = true;
     }
-    sal_uInt16 eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
+    TypedWhichId<SvxLanguageItem> eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
     const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(eLang));
     OSL_ENSURE(pLang, "impossible");
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;

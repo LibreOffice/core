@@ -535,8 +535,8 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
             nCntrl &= ~EEControlBits::ONLINESPELLING;
 
         pOutliner->SetControlWord(nCntrl);
-        const SfxPoolItem& rItem = pSh->GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
-        pOutliner->SetDefaultLanguage(static_cast<const SvxLanguageItem&>(rItem).GetLanguage());
+        const SvxLanguageItem& rItem = pSh->GetDoc()->GetDefault(RES_CHRATR_LANGUAGE);
+        pOutliner->SetDefaultLanguage(rItem.GetLanguage());
 
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == m_nDrawSfxId ||

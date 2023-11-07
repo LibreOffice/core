@@ -614,7 +614,7 @@ public:
     static void PrepareFontList( const SvxFontItem& rFontItem, OUString& rNames,
                                  sal_Unicode cQuote, bool bGeneric );
     static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
-    static sal_uInt16 GetLangWhichIdFromScript( sal_uInt16 nScript );
+    static TypedWhichId<SvxLanguageItem> GetLangWhichIdFromScript( sal_uInt16 nScript );
 
     FieldUnit GetCSS1Unit() const { return m_eCSS1Unit; }
 
