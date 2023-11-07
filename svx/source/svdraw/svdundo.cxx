@@ -327,7 +327,7 @@ void SdrUndoAttrObj::Undo()
         if(bStyleSheet)
         {
             mxRedoStyleSheet = mxObj->GetStyleSheet();
-            SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxUndoStyleSheet.get());
+            SfxStyleSheet* pSheet = mxUndoStyleSheet.get();
 
             if(pSheet && mxObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {
@@ -415,7 +415,7 @@ void SdrUndoAttrObj::Redo()
         if(bStyleSheet)
         {
             mxUndoStyleSheet = mxObj->GetStyleSheet();
-            SfxStyleSheet* pSheet = dynamic_cast< SfxStyleSheet* >(mxRedoStyleSheet.get());
+            SfxStyleSheet* pSheet = mxRedoStyleSheet.get();
 
             if(pSheet && mxObj->getSdrModelFromSdrObject().GetStyleSheetPool())
             {

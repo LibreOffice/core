@@ -153,8 +153,8 @@ class SVXCORE_DLLPUBLIC SdrUndoAttrObj : public SdrUndoObj
     std::optional<SfxItemSet> moRedoSet;
 
     // FIXME: Or should we better remember the StyleSheetNames?
-    rtl::Reference< SfxStyleSheetBase > mxUndoStyleSheet;
-    rtl::Reference< SfxStyleSheetBase > mxRedoStyleSheet;
+    rtl::Reference< SfxStyleSheet > mxUndoStyleSheet;
+    rtl::Reference< SfxStyleSheet > mxRedoStyleSheet;
     bool bStyleSheet;
     bool bHaveToTakeRedoSet;
 
