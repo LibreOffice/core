@@ -62,4 +62,22 @@ class Test(UITestCase):
                 # and floating tables.
                 self.assertEqual(get_state_as_dict(xFlysplit)['Visible'], "false")
 
+    def test_insert_frame_dialog(self):
+        # Change from inch to cm to hit the rounding error. 2 means Centimeter, see
+        # officecfg/registry/schema/org/openoffice/Office/Writer.xcs.
+        with self.ui_test.set_config('/org.openoffice.Office.Writer/Layout/Other/MeasureUnit', 2):
+            # Given a Writer document:
+            with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+                # When inserting a new frame with the default width:
+                with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
+                    xWidth = xDialog.getChild("width")
+                    frame_width = float(get_state_as_dict(xWidth)["Value"])
+                # Then make sure the width is not zero:
+                # cm -> mm100
+                expected_mm100 = frame_width * 1000
+                # Without the accompanying fix in place, this test would have failed with:
+                # AssertionError: 0 != 2000.0
+                # i.e. the width was empty instead of the size from the UI.
+                self.assertEqual(xComponent.TextFrames.Frame1.Size.Width, expected_mm100)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
