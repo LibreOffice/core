@@ -242,7 +242,7 @@ public:
     VclPtr<vcl::Window> mpNext;
     VclPtr<vcl::Window> mpNextOverlap;
     VclPtr<vcl::Window> mpLastFocusWindow;
-    VclPtr<vcl::Window> mpDlgCtrlDownWindow;
+    VclPtr<PushButton> mpDlgCtrlDownWindow;
     std::vector<Link<VclWindowEvent&,void>> maEventListeners;
     int mnEventListenersIteratingCount;
     std::set<Link<VclWindowEvent&,void>> maEventListenersDeleted;

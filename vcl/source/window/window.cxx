@@ -36,6 +36,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/toolkit/fixed.hxx>
+#include <vcl/toolkit/button.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolkit/unowrap.hxx>
 #include <vcl/lazydelete.hxx>

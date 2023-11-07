@@ -754,7 +754,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         {
             if ( mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow )
             {
-                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
+                mpWindowImpl->mpDlgCtrlDownWindow->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
                 return true;
             }
@@ -965,12 +965,12 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         {
             if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow.get() != pButtonWindow) )
             {
-                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
+                mpWindowImpl->mpDlgCtrlDownWindow->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
             }
 
             static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
-            mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
+            mpWindowImpl->mpDlgCtrlDownWindow = static_cast<PushButton*>(pButtonWindow);
         }
         else if ( mpWindowImpl->mpDlgCtrlDownWindow.get() == pButtonWindow )
         {
@@ -1092,7 +1092,7 @@ void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
 {
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
-        static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow.get())->SetPressed( false );
+        mpWindowImpl->mpDlgCtrlDownWindow->SetPressed( false );
         mpWindowImpl->mpDlgCtrlDownWindow = nullptr;
     }
 
