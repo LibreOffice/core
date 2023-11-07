@@ -3203,7 +3203,7 @@ SwFrameFormat* SwShareBoxFormat::GetFormat( const SfxPoolItem& rItem ) const
     const SfxPoolItem* pItem;
     sal_uInt16 nWhich = rItem.Which();
     SwFrameFormat *pRet = nullptr, *pTmp;
-    const SfxPoolItem& rFrameSz = m_pOldFormat->GetFormatAttr( RES_FRM_SIZE, false );
+    const SwFormatFrameSize& rFrameSz = m_pOldFormat->GetFormatAttr( RES_FRM_SIZE, false );
     for( auto n = m_aNewFormats.size(); n; )
         if( SfxItemState::SET == ( pTmp = m_aNewFormats[ --n ])->
             GetItemState( nWhich, false, &pItem ) && *pItem == rItem &&

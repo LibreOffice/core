@@ -396,7 +396,7 @@ void SwWW8ImplReader::Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nL
 
         if ( bBiDiSwap )
         {
-            const SvxAdjustItem* pItem = static_cast<const SvxAdjustItem*>(GetFormatAttr(RES_PARATR_ADJUST));
+            const SvxAdjustItem* pItem = GetFormatAttr(RES_PARATR_ADJUST);
             if ( !pItem )
             {
                 // no previous adjust: set appropriate default
@@ -813,8 +813,7 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
     if ((0 < rSection.maSep.lnnMin) || bRestartLnNumPerSection)
     {
         SwFormatLineNumber aLN;
-        if (const SwFormatLineNumber* pLN
-            = static_cast<const SwFormatLineNumber*>(GetFormatAttr(RES_LINENUMBER)))
+        if (const SwFormatLineNumber* pLN = GetFormatAttr(RES_LINENUMBER))
         {
             aLN.SetCountLines( pLN->IsCount() );
         }
@@ -3571,8 +3570,7 @@ void SwWW8ImplReader::Read_SubSuperProp( sal_uInt16, const sal_uInt8* pData, sho
     // font position in HalfPoints
     short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToInt16( pData );
     sal_Int32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
-    const SvxFontHeightItem* pF
-        = static_cast<const SvxFontHeightItem*>(GetFormatAttr(RES_CHRATR_FONTSIZE));
+    const SvxFontHeightItem* pF = GetFormatAttr(RES_CHRATR_FONTSIZE);
     OSL_ENSURE(pF, "Expected to have the fontheight available here");
 
     // #i59022: Check ensure nHeight != 0. Div by zero otherwise.
@@ -4190,7 +4188,7 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
         NewAttr( SvxBrushItem( aSh.m_aColor, RES_CHRATR_BACKGROUND ));
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
-        SfxGrabBagItem aGrabBag = *static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_CHRATR_GRABBAG));
+        SfxGrabBagItem aGrabBag = *GetFormatAttr(RES_CHRATR_GRABBAG);
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         rMap.insert(std::pair<OUString, css::uno::Any>("CharShadingMarker",uno::Any(true)));
         NewAttr(aGrabBag);
@@ -4212,7 +4210,7 @@ void SwWW8ImplReader::Read_TextBackColor(sal_uInt16, const sal_uInt8* pData, sho
         NewAttr(SvxBrushItem(aColour, RES_CHRATR_BACKGROUND));
 
         // Add a marker to the grabbag indicating that character background was imported from MSO shading
-        SfxGrabBagItem aGrabBag = *static_cast<const SfxGrabBagItem*>(GetFormatAttr(RES_CHRATR_GRABBAG));
+        SfxGrabBagItem aGrabBag = *GetFormatAttr(RES_CHRATR_GRABBAG);
         std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
         rMap.insert(std::pair<OUString, css::uno::Any>("CharShadingMarker",uno::Any(true)));
         NewAttr(aGrabBag);
@@ -4249,8 +4247,7 @@ void SwWW8ImplReader::Read_NoLineNumb(sal_uInt16 , const sal_uInt8* pData, short
         return;
     }
     SwFormatLineNumber aLN;
-    if (const SwFormatLineNumber* pLN
-        = static_cast<const SwFormatLineNumber*>(GetFormatAttr(RES_LINENUMBER)))
+    if (const SwFormatLineNumber* pLN = GetFormatAttr(RES_LINENUMBER))
     {
         aLN.SetStartValue( pLN->GetStartValue() );
     }
@@ -4481,8 +4478,7 @@ void SwWW8ImplReader::Read_LineSpace( sal_uInt16, const sal_uInt8* pData, short 
 
         // here n is in [0..13653]
         aLSpc.SetPropLineSpace( o3tl::narrowing<sal_uInt16>(n) );
-        const SvxFontHeightItem* pH = static_cast<const SvxFontHeightItem*>(
-            GetFormatAttr( RES_CHRATR_FONTSIZE ));
+        const SvxFontHeightItem* pH = GetFormatAttr( RES_CHRATR_FONTSIZE );
         nSpaceTw = o3tl::narrowing<sal_uInt16>( n * pH->GetHeight() / 100 );
     }
     else                            // Fixed / Minimum
@@ -4516,7 +4512,7 @@ void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, sh
 
     if (*pData)
     {
-        SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
+        SvxULSpaceItem aUL(*GetFormatAttr(RES_UL_SPACE));
         aUL.SetUpper(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
@@ -4543,7 +4539,7 @@ void SwWW8ImplReader::Read_ParaAutoAfter(sal_uInt16, const sal_uInt8 *pData, sho
 
     if (*pData)
     {
-        SvxULSpaceItem aUL(*static_cast<const SvxULSpaceItem*>(GetFormatAttr(RES_UL_SPACE)));
+        SvxULSpaceItem aUL(*GetFormatAttr(RES_UL_SPACE));
         aUL.SetLower(GetParagraphAutoSpace(m_xWDop->fDontUseHTMLAutoSpacing));
         NewAttr(aUL);
         if (m_pCurrentColl && m_nCurrentColl < m_vColl.size())
@@ -4584,7 +4580,7 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     if( nPara < 0 )
         nPara = -nPara;
 
-    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFormatAttr( RES_UL_SPACE )));
+    SvxULSpaceItem aUL( *GetFormatAttr( RES_UL_SPACE ));
 
     switch( nId )
     {
@@ -4612,7 +4608,7 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_UL_SPACE );
         return;
     }
-    SvxULSpaceItem aUL( *static_cast<const SvxULSpaceItem*>(GetFormatAttr( RES_UL_SPACE )));
+    SvxULSpaceItem aUL( *GetFormatAttr( RES_UL_SPACE ));
     aUL.SetContextValue(*pData != 0);
     NewAttr( aUL );
 }
@@ -4720,8 +4716,7 @@ bool SwWW8ImplReader::IsRightToLeft()
         bRTL = *aDir.pSprm != 0;
     else
     {
-        const SvxFrameDirectionItem* pItem=
-            static_cast<const SvxFrameDirectionItem*>(GetFormatAttr(RES_FRAMEDIR));
+        const SvxFrameDirectionItem* pItem = GetFormatAttr(RES_FRAMEDIR);
         if (pItem && (pItem->GetValue() == SvxFrameDirection::Horizontal_RL_TB))
             bRTL = true;
     }
@@ -4819,8 +4814,8 @@ void SwWW8ImplReader::Read_Emphasis( sal_uInt16, const sal_uInt8* pData, short n
             nLang = LanguageType(SVBT16ToUInt16(aLang.pSprm));
         else
         {
-            nLang = static_cast<const SvxLanguageItem *>(
-                GetFormatAttr(RES_CHRATR_CJK_LANGUAGE))->GetLanguage();
+            const SvxLanguageItem * pLangItem = GetFormatAttr(RES_CHRATR_CJK_LANGUAGE);
+            nLang = pLangItem->GetLanguage();
         }
 
         FontEmphasisMark nVal;
@@ -4884,8 +4879,7 @@ void SwWW8ImplReader::Read_Relief( sal_uInt16 nId, const sal_uInt8* pData, short
 //  2 x emboss on -> no emboss !!!
 // the actual value must be searched over the stack / template
 
-            const SvxCharReliefItem* pOld = static_cast<const SvxCharReliefItem*>(
-                                            GetFormatAttr( RES_CHRATR_RELIEF ));
+            const SvxCharReliefItem* pOld = GetFormatAttr( RES_CHRATR_RELIEF );
             FontRelief nNewValue = NS_sprm::CFImprint::val == nId ? FontRelief::Engraved
                                         : ( NS_sprm::CFEmboss::val == nId ? FontRelief::Embossed
                                                          : FontRelief::NONE );
@@ -5179,8 +5173,7 @@ void SwWW8ImplReader::Read_Border(sal_uInt16 , const sal_uInt8*, short nLen)
 
                 // even if no border is set, the attribute has to be set,
                 // otherwise it's not possible to turn off the style attribute.
-                const SvxBoxItem* pBox
-                    = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_BOX ));
+                const SvxBoxItem* pBox = GetFormatAttr( RES_BOX );
                 std::shared_ptr<SvxBoxItem> aBox(std::make_shared<SvxBoxItem>(RES_BOX));
                 if (pBox)
                     aBox.reset(pBox->Clone());
@@ -5228,8 +5221,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
     }
     else
     {
-        const SvxBoxItem* pBox
-            = static_cast<const SvxBoxItem*>(GetFormatAttr( RES_CHRATR_BOX ));
+        const SvxBoxItem* pBox = GetFormatAttr( RES_CHRATR_BOX );
         if( pBox )
         {
             std::unique_ptr<SvxBoxItem> aBoxItem(pBox->Clone());
@@ -5261,8 +5253,7 @@ void SwWW8ImplReader::Read_Hyphenation( sal_uInt16, const sal_uInt8* pData, shor
         m_xCtrlStck->SetAttr( *m_pPaM->GetPoint(), RES_PARATR_HYPHENZONE );
     else
     {
-        SvxHyphenZoneItem aAttr(
-            *static_cast<const SvxHyphenZoneItem*>(GetFormatAttr( RES_PARATR_HYPHENZONE ) ));
+        SvxHyphenZoneItem aAttr( *GetFormatAttr( RES_PARATR_HYPHENZONE ) );
 
         aAttr.SetHyphen( 0 == *pData ); // sic !
 

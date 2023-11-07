@@ -2012,11 +2012,8 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 std::shared_ptr<SvxFirstLineIndentItem> pFirstLine(std::make_shared<SvxFirstLineIndentItem>(RES_MARGIN_FIRSTLINE));
 
                 // replace it with the one of the current node if it exist
-                const SfxPoolItem *const pItem = GetFormatAttr(RES_MARGIN_FIRSTLINE);
-                if (pItem)
-                {
-                    pFirstLine.reset(static_cast<SvxFirstLineIndentItem*>(pItem->Clone()));
-                }
+                if (const SvxFirstLineIndentItem * pItem = GetFormatAttr(RES_MARGIN_FIRSTLINE))
+                    pFirstLine.reset(pItem->Clone());
 
                 // reset/blank the left indent (and only the left)
                 pFirstLine->SetTextFirstLineOffset(0);

@@ -1492,6 +1492,11 @@ private:
     void ResetCJKCharSetVars();
 
     const SfxPoolItem* GetFormatAttr( sal_uInt16 nWhich );
+    template<class T> const T* GetFormatAttr( TypedWhichId<T> nWhich )
+    {
+        return static_cast<const T*>(GetFormatAttr(sal_uInt16(nWhich)));
+    }
+
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
     static bool IsBorder(const WW8_BRCVer9* pbrc, bool bChkBtwn = false);

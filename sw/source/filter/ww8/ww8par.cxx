@@ -2809,7 +2809,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
      correctly set in the character runs involved, so it's hard to reproduce
      documents that require this to be sure of the process involved.
     */
-    const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_LANGUAGE));
+    const SvxLanguageItem *pLang = GetFormatAttr(RES_CHRATR_LANGUAGE);
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
     css::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
@@ -2827,7 +2827,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
      correctly set in the character runs involved, so it's hard to reproduce
      documents that require this to be sure of the process involved.
     */
-    const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_CJK_LANGUAGE));
+    const SvxLanguageItem *pLang = GetFormatAttr(RES_CHRATR_CJK_LANGUAGE);
     LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
     css::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
@@ -3099,8 +3099,8 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
         the language is not Japanese
         */
 
-        const SfxPoolItem * pItem = GetFormatAttr(RES_CHRATR_CJK_LANGUAGE);
-        if (pItem != nullptr && LANGUAGE_JAPANESE != static_cast<const SvxLanguageItem *>(pItem)->GetLanguage())
+        const SvxLanguageItem * pItem = GetFormatAttr(RES_CHRATR_CJK_LANGUAGE);
+        if (pItem != nullptr && LANGUAGE_JAPANESE != pItem->GetLanguage())
         {
             SAL_WARN("sw.ww8", "discarding word95 RTL_TEXTENCODING_MS_932 encoding");
             eSrcCharSet = GetCharSetFromLanguage();
@@ -3129,9 +3129,9 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     sal_uInt16 nUCode;
 
     LanguageType nCTLLang = LANGUAGE_SYSTEM;
-    const SfxPoolItem * pItem = GetFormatAttr(RES_CHRATR_CTL_LANGUAGE);
+    const SvxLanguageItem * pItem = GetFormatAttr(RES_CHRATR_CTL_LANGUAGE);
     if (pItem != nullptr)
-        nCTLLang = static_cast<const SvxLanguageItem *>(pItem)->GetLanguage();
+        nCTLLang = pItem->GetLanguage();
 
     sal_Int32 nL2;
     for (nL2 = 0; nL2 < nStrLen; ++nL2)
@@ -3330,20 +3330,20 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             break;
 
         OUString sChunk(rAddString.copy(nPos, nEnd-nPos));
-        const sal_uInt16 aIds[] = {RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT};
+        const TypedWhichId<SvxFontItem> aIds[] = {RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT};
         const SvxFontItem *pOverriddenItems[] = {nullptr, nullptr, nullptr};
         bool aForced[] = {false, false, false};
 
         int nLclIdctHint = 0xFF;
         if (nScript == i18n::ScriptType::WEAK)
         {
-            const SfxInt16Item *pIdctHint = static_cast<const SfxInt16Item*>(GetFormatAttr(RES_CHRATR_IDCTHINT));
+            const SfxInt16Item *pIdctHint = GetFormatAttr(RES_CHRATR_IDCTHINT);
             nLclIdctHint = pIdctHint->GetValue();
         }
         else if (nScript == MSASCII) // Force weak chars in ascii range to use LATIN font
             nLclIdctHint = 0;
 
-        sal_uInt16 nForceFromFontId = 0;
+        TypedWhichId<SvxFontItem> nForceFromFontId(0);
         if (nLclIdctHint != 0xFF)
         {
             switch (nLclIdctHint)
@@ -3362,7 +3362,7 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             }
         }
 
-        if (nForceFromFontId != 0)
+        if (sal_uInt16(nForceFromFontId) != 0)
         {
             // Now we know that word would use the nForceFromFontId font for this range
             // Try and determine what script writer would assign this range to
@@ -3384,9 +3384,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
                 }
                 else
                 {
-                    const SvxFontItem *pSourceFont = static_cast<const SvxFontItem*>(GetFormatAttr(nForceFromFontId));
-                    sal_uInt16 nDestId = aIds[nWriterScript-1];
-                    const SvxFontItem *pDestFont = static_cast<const SvxFontItem*>(GetFormatAttr(nDestId));
+                    const SvxFontItem *pSourceFont = GetFormatAttr(nForceFromFontId);
+                    TypedWhichId<SvxFontItem> nDestId = aIds[nWriterScript-1];
+                    const SvxFontItem *pDestFont = GetFormatAttr(nDestId);
                     bWriterWillUseSameFontAsWordAutomatically = sameFontIgnoringIrrelevantFields(*pSourceFont, *pDestFont);
                 }
             }
@@ -3394,11 +3394,11 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const OUString& rAddString
             // Writer won't use the same font as word, so force the issue
             if (!bWriterWillUseSameFontAsWordAutomatically)
             {
-                const SvxFontItem *pSourceFont = static_cast<const SvxFontItem*>(GetFormatAttr(nForceFromFontId));
+                const SvxFontItem *pSourceFont = GetFormatAttr(nForceFromFontId);
 
                 for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
                 {
-                    const SvxFontItem *pDestFont = static_cast<const SvxFontItem*>(GetFormatAttr(aIds[i]));
+                    const SvxFontItem *pDestFont = GetFormatAttr(aIds[i]);
                     aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
                     if (aForced[i])
                     {
@@ -4122,8 +4122,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
                 }
 
                 // Get the default document dropcap which we can use as our template
-                const SwFormatDrop* defaultDrop =
-                    static_cast<const SwFormatDrop*>( GetFormatAttr(RES_PARATR_DROP));
+                const SwFormatDrop* defaultDrop = GetFormatAttr(RES_PARATR_DROP);
                 SwFormatDrop aDrop(*defaultDrop);
 
                 aDrop.GetLines() = nDropLines;

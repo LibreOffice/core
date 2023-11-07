@@ -896,10 +896,10 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellStd = sStdBackup =  rFont.GetFamilyName();
 
-        const sal_uInt16 nFontHeightWhich =
+        const TypedWhichId<SvxFontHeightItem> nFontHeightWhich =
             m_nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONTSIZE :
             FONT_GROUP_CJK == m_nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE;
-        const SvxFontHeightItem& rFontHeightStandard = static_cast<const SvxFontHeightItem& >(pColl->GetFormatAttr(nFontHeightWhich));
+        const SvxFontHeightItem& rFontHeightStandard = pColl->GetFormatAttr(nFontHeightWhich);
         nStandardHeight = static_cast<sal_Int32>(rFontHeightStandard.GetHeight());
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
@@ -907,7 +907,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightTitle = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr( nFontHeightWhich ));
+        const SvxFontHeightItem& rFontHeightTitle = pColl->GetFormatAttr( nFontHeightWhich );
         nTitleHeight = static_cast<sal_Int32>(rFontHeightTitle.GetHeight());
 
         const sal_uInt16 nFontWhich =
@@ -919,7 +919,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         m_bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         m_sShellList = sListBackup = rFontLS.GetFamilyName();
 
-        const SvxFontHeightItem& rFontHeightList = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
+        const SvxFontHeightItem& rFontHeightList = pColl->GetFormatAttr(nFontHeightWhich);
         nListHeight = static_cast<sal_Int32>(rFontHeightList.GetHeight());
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
@@ -927,7 +927,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontItem& rFontCP = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellLabel = sCapBackup = rFontCP.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightLabel = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
+        const SvxFontHeightItem& rFontHeightLabel = pColl->GetFormatAttr(nFontHeightWhich);
         nLabelHeight = static_cast<sal_Int32>(rFontHeightLabel.GetHeight());
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
@@ -935,7 +935,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         const SvxFontItem& rFontIDX = !m_nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == m_nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         m_sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
-        const SvxFontHeightItem& rFontHeightIndex = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
+        const SvxFontHeightItem& rFontHeightIndex = pColl->GetFormatAttr(nFontHeightWhich);
         nIndexHeight = static_cast<sal_Int32>(rFontHeightIndex.GetHeight());
     }
     m_xStandardBox->set_entry_text(sStdBackup );

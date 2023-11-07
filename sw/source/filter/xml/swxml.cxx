@@ -412,9 +412,9 @@ static void lcl_AdjustOutlineStylesForOOo(SwDoc& _rDoc)
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);
 
             // apply outline numbering rule, if none is set.
-            const SfxPoolItem& rItem =
+            const SwNumRuleItem& rItem =
                 aCreatedDefaultOutlineStyles[ i ]->GetFormatAttr( RES_PARATR_NUMRULE, false );
-            if ( static_cast<const SwNumRuleItem&>(rItem).GetValue().isEmpty() )
+            if ( rItem.GetValue().isEmpty() )
             {
                 SwNumRuleItem aItem( pOutlineRule->GetName() );
                 aCreatedDefaultOutlineStyles[ i ]->SetFormatAttr( aItem );

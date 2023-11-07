@@ -233,8 +233,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
         };
 
-        sal_uInt16 nFontWhich = RES_CHRATR_FONT;
-        sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
+        TypedWhichId<SvxFontItem> nFontWhich = RES_CHRATR_FONT;
+        TypedWhichId<SvxFontHeightItem> nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = m_xDoc->GetDefault( RES_CHRATR_LANGUAGE ).GetLanguage();
         bool bDisableBuiltinStyles = !bFuzzing && officecfg::Office::Common::Load::DisableBuiltinStyles::get();
         sal_uInt8 nLimit = bDisableBuiltinStyles ? 0 : 24;
@@ -275,7 +275,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = m_xDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(aFontIdPoolId[nIdx + 1]);
-            SvxFontHeightItem aFontHeight( static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr( nFontHeightWhich )));
+            SvxFontHeightItem aFontHeight( pColl->GetFormatAttr( nFontHeightWhich ) );
             if(aFontHeight.GetHeight() != sal::static_int_cast<sal_uInt32, sal_Int32>(nFontHeight))
             {
                 aFontHeight.SetHeight(nFontHeight);

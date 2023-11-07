@@ -385,10 +385,9 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
     nBottomMargin = rULSpace.GetLower();
 
     // export language if it differs from the default language
-    sal_uInt16 nWhichId =
+    TypedWhichId<SvxLanguageItem> nWhichId =
         SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
-    const SvxLanguageItem& rLang =
-        static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr( nWhichId ));
+    const SvxLanguageItem& rLang = pFormat->GetFormatAttr( nWhichId );
     LanguageType eLang = rLang.GetLanguage();
     if( eLang != eDfltLang )
     {
@@ -398,15 +397,14 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         moItemSet->Put( rLang );
     }
 
-    static const sal_uInt16 aWhichIds[3] =
+    static const TypedWhichId<SvxLanguageItem> aWhichIds[3] =
         { RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
             RES_CHRATR_CTL_LANGUAGE };
-    for(sal_uInt16 i : aWhichIds)
+    for(const TypedWhichId<SvxLanguageItem>& i : aWhichIds)
     {
         if( i != nWhichId )
         {
-            const SvxLanguageItem& rTmpLang =
-                static_cast<const SvxLanguageItem&>(pFormat->GetFormatAttr(i));
+            const SvxLanguageItem& rTmpLang = pFormat->GetFormatAttr(i);
             if( rTmpLang.GetLanguage() != eLang )
             {
                 if( !moItemSet )

@@ -393,8 +393,7 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rField, LanguageType nLang)
 {
     bool bRet(false);
 
-    const SvxLanguageItem *pLang =
-        static_cast<const SvxLanguageItem*>(GetFormatAttr(RES_CHRATR_LANGUAGE));
+    const SvxLanguageItem *pLang = GetFormatAttr(RES_CHRATR_LANGUAGE);
     OSL_ENSURE(pLang, "impossible");
     LanguageType nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
@@ -441,7 +440,7 @@ SvNumFormatType SwWW8ImplReader::GetTimeDatePara(std::u16string_view aStr, sal_u
             bRTL = true;
     }
     TypedWhichId<SvxLanguageItem> eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
-    const SvxLanguageItem *pLang = static_cast<const SvxLanguageItem*>(GetFormatAttr(eLang));
+    const SvxLanguageItem *pLang = GetFormatAttr(eLang);
     OSL_ENSURE(pLang, "impossible");
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
