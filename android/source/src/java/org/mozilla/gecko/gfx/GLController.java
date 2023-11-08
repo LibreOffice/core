@@ -28,8 +28,6 @@ public class GLController {
     private EGLContext mEGLContext;
     private EGLSurface mEGLSurface;
 
-    private GL mGL;
-
     private static final int LOCAL_EGL_OPENGL_ES2_BIT = 4;
 
     private static final int[] CONFIG_SPEC = {
@@ -82,7 +80,6 @@ public class GLController {
                                                 getEGLError());
             }
 
-            mGL = null;
             mEGLContext = null;
         }
     }
@@ -111,7 +108,6 @@ public class GLController {
         mEGLConfig = null;
         mEGLContext = null;
         mEGLSurface = null;
-        mGL = null;
         return true;
     }
     public synchronized int getWidth() {
@@ -159,11 +155,10 @@ public class GLController {
                                             getEGLError());
         }
 
-        mGL = mEGLContext.getGL();
-
         if (mView.getRenderer() != null) {
-            mView.getRenderer().onSurfaceCreated((GL10)mGL, mEGLConfig);
-            mView.getRenderer().onSurfaceChanged((GL10)mGL, mWidth, mHeight);
+            GL10 gl = (GL10) mEGLContext.getGL();
+            mView.getRenderer().onSurfaceCreated(gl, mEGLConfig);
+            mView.getRenderer().onSurfaceChanged(gl, mWidth, mHeight);
         }
     }
 
@@ -208,11 +203,10 @@ public class GLController {
                                             "surface! " + getEGLError());
         }
 
-        mGL = mEGLContext.getGL();
-
         if (mView.getRenderer() != null) {
-            mView.getRenderer().onSurfaceCreated((GL10)mGL, mEGLConfig);
-            mView.getRenderer().onSurfaceChanged((GL10)mGL, mView.getWidth(), mView.getHeight());
+            GL10 gl = (GL10) mEGLContext.getGL();
+            mView.getRenderer().onSurfaceCreated(gl, mEGLConfig);
+            mView.getRenderer().onSurfaceChanged(gl, mView.getWidth(), mView.getHeight());
         }
     }
 
