@@ -233,7 +233,7 @@ void Shape::propagateDiagramHelper()
 
         if(pAnchorObj)
         {
-            static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->doAnchor(*pAnchorObj, *this);
+            mpDiagramHelper->doAnchor(*pAnchorObj, *this);
             mpDiagramHelper = nullptr;
         }
     }

@@ -69,7 +69,7 @@ struct FillProperties;
 struct GraphicProperties;
 struct LineProperties;
 struct Shape3DProperties;
-
+class AdvancedDiagramHelper;
 class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
@@ -415,7 +415,7 @@ private:
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
-    svx::diagram::IDiagramHelper* mpDiagramHelper;
+    AdvancedDiagramHelper* mpDiagramHelper;
 
     // association-ID to identify the Diagram ModelData
     OUString msDiagramDataModelID;
