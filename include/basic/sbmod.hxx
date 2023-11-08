@@ -39,7 +39,7 @@ typedef std::deque< sal_uInt16 > SbiBreakpoints;
 class SbiImage;
 class SbClassModuleObject;
 class CodeCompleteDataCache;
-
+class SbUnoObject;
 
 class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
@@ -69,7 +69,7 @@ protected:
     bool mbVBASupport; // Option VBASupport
     bool mbCompat; // Option Compatible
     sal_Int32 mnType;
-    SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
+    tools::SvRef<SbUnoObject> pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
     SAL_DLLPRIVATE static void implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );

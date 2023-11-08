@@ -2161,7 +2161,7 @@ SbObjModule::~SbObjModule()
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj )
 {
-    SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pDocObject.get() );
+    SbUnoObject* pUnoObj = pDocObject.get();
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
         return;
     pDocObject = new SbUnoObject( GetName(), aObj );
