@@ -893,7 +893,7 @@ void AnnotationManagerImpl::onSelectionChanged()
 
     try
     {
-        Reference< XAnnotationAccess > xPage( mxView->getCurrentPage(), UNO_QUERY );
+        rtl::Reference< SdPage > xPage = mrBase.GetMainViewShell()->getCurrentPage();
 
         if( xPage != mxCurrentPage )
         {
@@ -954,10 +954,8 @@ void AnnotationManagerImpl::CreateTags()
 
         rtl::Reference< AnnotationTag > xSelectedTag;
 
-        Reference< XAnnotationEnumeration > xEnum( mxCurrentPage->createAnnotationEnumeration() );
-        while( xEnum->hasMoreElements() )
+        for (const css::uno::Reference< css::office::XAnnotation > & xAnnotation : mxCurrentPage->getAnnotations() )
         {
-            Reference< XAnnotation > xAnnotation( xEnum->nextElement() );
             Color aColor( GetColorLight( mpDoc->GetAnnotationAuthorIndex( xAnnotation->getAuthor() ) ) );
             rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *xViewShell->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
             maTagVector.push_back(xTag);

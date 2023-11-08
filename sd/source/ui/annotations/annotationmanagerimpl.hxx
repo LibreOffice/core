@@ -120,7 +120,7 @@ private:
     std::vector< rtl::Reference< AnnotationTag > > maTagVector;
 
     css::uno::Reference< css::drawing::XDrawView > mxView;
-    css::uno::Reference< css::office::XAnnotationAccess > mxCurrentPage;
+    rtl::Reference< SdPage > mxCurrentPage;
     css::uno::Reference< css::office::XAnnotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
