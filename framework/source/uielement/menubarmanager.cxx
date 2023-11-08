@@ -376,10 +376,7 @@ void MenuBarManager::RequestImages()
     for (auto const& menuItemHandler : m_aMenuItemHandlerVector)
     {
         if ( menuItemHandler->xSubMenuManager.is() )
-        {
-            MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(menuItemHandler->xSubMenuManager.get());
-            pMenuBarManager->RequestImages();
-        }
+            menuItemHandler->xSubMenuManager->RequestImages();
     }
 }
 
@@ -439,9 +436,8 @@ void MenuBarManager::RemoveListener()
             menuItemHandler->xPopupMenu.clear();
         }
 
-        Reference< XComponent > xComponent( menuItemHandler->xSubMenuManager, UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
+        if ( menuItemHandler->xSubMenuManager )
+            menuItemHandler->xSubMenuManager->dispose();
     }
 
     try
@@ -741,7 +737,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu, bool )
             }
             else if (menuItemHandler->xSubMenuManager.is())
             {
-                MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(menuItemHandler->xSubMenuManager.get());
+                MenuBarManager* pMenuBarManager = menuItemHandler->xSubMenuManager.get();
                 if (pMenuBarManager)
                 {
                     pMenuBarManager->Activate(pMenuBarManager->GetMenuBar());
@@ -987,7 +983,6 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             aItemCommand = aRealCommand;
 
         Reference< XDispatch > xDispatch;
-        Reference< XStatusListener > xStatusListener;
         VclPtr<PopupMenu> pPopup = pMenu->GetPopupMenu( nItemId );
         // overwrite the show icons on menu option?
         MenuItemBits nBits = pMenu->GetItemBits( nItemId ) & ( MenuItemBits::ICON | MenuItemBits::TEXT );
@@ -1016,7 +1011,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 // Check if we have to create a popup menu for a uno based popup menu controller.
                 // We have to set an empty popup menu into our menu structure so the controller also
                 // works with inplace OLE.
-                MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
+                MenuItemHandler* pItemHandler = new MenuItemHandler( nItemId, nullptr, xDispatch );
                 rtl::Reference<VCLXPopupMenu> pVCLXPopupMenu = new VCLXPopupMenu(pPopup);
                 pItemHandler->xPopupMenu = pVCLXPopupMenu;
                 pItemHandler->aMenuItemURL = aItemCommand;
@@ -1060,7 +1055,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             if ( bItemShowMenuImages )
                 m_bRetrieveImages = true;
 
-            std::unique_ptr<MenuItemHandler> pItemHandler(new MenuItemHandler( nItemId, xStatusListener, xDispatch ));
+            std::unique_ptr<MenuItemHandler> pItemHandler(new MenuItemHandler( nItemId, nullptr, xDispatch ));
             // Retrieve possible attributes struct
             MenuAttributes* pAttributes = static_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
             if ( pAttributes )
@@ -1520,11 +1515,9 @@ void MenuBarManager::GetPopupController( PopupControllerCache& rPopupController 
                 rPopupController.emplace( aMainURL, aPopupControllerEntry );
             }
         }
-        if ( menuItemHandler->xSubMenuManager.is() )
+        if ( menuItemHandler->xSubMenuManager )
         {
-            MenuBarManager* pMenuBarManager = static_cast<MenuBarManager*>(menuItemHandler->xSubMenuManager.get());
-            if ( pMenuBarManager )
-                pMenuBarManager->GetPopupController( rPopupController );
+            menuItemHandler->xSubMenuManager->GetPopupController( rPopupController );
         }
     }
 }
@@ -1537,7 +1530,7 @@ void MenuBarManager::AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sI
     Reference< XDispatch > xDispatch;
     std::unique_ptr<MenuItemHandler> pMenuItemHandler(new MenuItemHandler(
                                                 _nItemId,
-                                                xSubMenuManager,
+                                                pSubMenuManager,
                                                 xDispatch ));
     pMenuItemHandler->aMenuItemURL = _sItemCommand;
     m_aMenuItemHandlerVector.push_back( std::move(pMenuItemHandler) );

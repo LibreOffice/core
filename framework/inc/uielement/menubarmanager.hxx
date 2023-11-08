@@ -131,7 +131,7 @@ class MenuBarManager final :
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16             aItemId,
-                             css::uno::Reference< css::frame::XStatusListener > xManager,
+                             rtl::Reference< MenuBarManager > xManager,
                              css::uno::Reference< css::frame::XDispatch > xDispatch ) :
                              nItemId( aItemId ),
                              bMadeInvisible ( false ),
@@ -143,7 +143,7 @@ class MenuBarManager final :
             OUString                                                          aTargetFrame;
             OUString                                                          aMenuItemURL;
             OUString                                                          aParsedItemURL;
-            css::uno::Reference< css::frame::XStatusListener >                xSubMenuManager;
+            rtl::Reference< MenuBarManager >                                  xSubMenuManager;
             css::uno::Reference< css::frame::XDispatch >                      xMenuItemDispatch;
             css::uno::Reference< css::frame::XPopupMenuController >           xPopupMenuController;
             css::uno::Reference< css::awt::XPopupMenu >                       xPopupMenu;
