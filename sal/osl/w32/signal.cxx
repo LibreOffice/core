@@ -41,7 +41,8 @@ BOOL WINAPI CtrlHandlerFunction(DWORD dwCtrlType)
         case CTRL_C_EVENT:
         case CTRL_BREAK_EVENT:
         case CTRL_CLOSE_EVENT:
-            switch (oslSignalInfo Info{ osl_Signal_Terminate }; callSignalHandler(&Info))
+            switch (oslSignalInfo Info{ osl_Signal_Terminate, 0, nullptr };
+                    callSignalHandler(&Info))
             {
                 case osl_Signal_ActCallNextHdl:
                     break; // Fall through to call the next handler
