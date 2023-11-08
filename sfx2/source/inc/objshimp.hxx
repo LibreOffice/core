@@ -103,7 +103,7 @@ struct SfxObjectShell_Impl final : public ::sfx2::IMacroDocumentAccess
     bool                bModalMode;
     bool                bRunningMacro;
     bool                bReadOnlyUI;
-    tools::SvRef<SvRefBase>  xHeaderAttributes;
+    tools::SvRef<SvKeyValueIterator>  xHeaderAttributes;
     ::rtl::Reference< SfxBaseModel >
                         pBaseModel;
     sal_uInt16          nStyleFilter;

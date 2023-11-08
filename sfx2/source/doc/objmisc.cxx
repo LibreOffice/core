@@ -1582,7 +1582,7 @@ SvKeyValueIterator* SfxObjectShell::GetHeaderAttributes()
         DBG_ASSERT( pMedium, "No Medium" );
         pImpl->xHeaderAttributes = new SfxHeaderAttributes_Impl( this );
     }
-    return static_cast<SvKeyValueIterator*>( pImpl->xHeaderAttributes.get() );
+    return pImpl->xHeaderAttributes.get();
 }
 
 void SfxObjectShell::ClearHeaderAttributesForSourceViewHack()
