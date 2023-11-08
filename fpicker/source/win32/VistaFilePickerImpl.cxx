@@ -1116,7 +1116,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(Request& rRequest)
                 if ( SUCCEEDED(hResult) )
                 {
                     const OUString& sItem = m_lItems[bValue];
-                    aValue <<= OUString(sItem.getStr());
+                    aValue <<= sItem;
                 }
             }
             break;

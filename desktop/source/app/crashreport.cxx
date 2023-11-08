@@ -76,7 +76,7 @@ static bool dumpCallback(const wchar_t* path, const wchar_t* id,
     std::string aPath = conv1.to_bytes(std::wstring(path)) + conv1.to_bytes(std::wstring(id)) + ".dmp";
     CrashReporter::addKeyValue("Active-SfxObject",CrashReporter::getActiveSfxObjectName(),CrashReporter::AddItem);
     CrashReporter::addKeyValue("Last-4-Uno-Commands",CrashReporter::getLoggedUnoCommands(),CrashReporter::AddItem);
-    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath.c_str(), RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
+    CrashReporter::addKeyValue("DumpFile", OStringToOUString(aPath, RTL_TEXTENCODING_UTF8), CrashReporter::AddItem);
     CrashReporter::addKeyValue("GDIHandles", OUString::number(::GetGuiResources(::GetCurrentProcess(), GR_GDIOBJECTS)), CrashReporter::Write);
     SAL_WARN("desktop", "minidump generated: " << aPath);
     return succeeded;

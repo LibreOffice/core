@@ -1817,7 +1817,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP InterfaceOleWrapper::Invoke(DISPID dispidMembe
             sParams += ",";
         std::stringstream aStringStream;
         aStringStream << pdispparams->rgvarg[i];
-        sParams += OUString::createFromAscii(aStringStream.str().c_str());
+        sParams += OUString::createFromAscii(aStringStream.str());
     }
     sParams += "]";
 #endif

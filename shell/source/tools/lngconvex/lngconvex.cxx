@@ -113,7 +113,7 @@ OUString get_absolute_path(
 std::string make_absolute(const std::string& file_name)
 {
     OUString fp = get_absolute_path(
-        get_module_path(), OStringToOUString(file_name.c_str()));
+        get_module_path(), OStringToOUString(file_name));
     return std::string(OUStringToOString(fp));
 }
 
@@ -157,7 +157,7 @@ public:
     { return OStringToOUString( maBcp47, RTL_TEXTENCODING_ASCII_US); }
 
     std::string make_std_string() const
-    { return maBcp47.getStr(); }
+    { return std::string(maBcp47); }
 
 private:
     OString maBcp47;
@@ -184,7 +184,7 @@ std::string make_winrc_unicode_string(const OUString& str)
 std::string make_winrc_unicode_string(const std::string& str)
 {
     return make_winrc_unicode_string(
-        OUString::createFromAscii(str.c_str()));
+        OUString::createFromAscii(str));
 }
 
 /** A replacement table contains pairs of
@@ -272,8 +272,8 @@ void add_group_entries(
                 OStringToOUString(key_value_utf8, RTL_TEXTENCODING_UTF8);
 
             Substitutor.add_substitution(
-                GroupName.getStr(), make_winrc_unicode_string(key_value_utf16));
-            map[ ltype ] = std::string( iso_lang.getStr() );
+                std::string(GroupName), make_winrc_unicode_string(key_value_utf16));
+            map[ ltype ] = std::string( iso_lang );
         }
         else
         {
