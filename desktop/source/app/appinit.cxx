@@ -138,7 +138,11 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     AcceptorMap &rMap = acceptorMap();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
     if (pIter != rMap.end() )
+    {
+        // there is already an acceptor with this description
+        SAL_WARN( "desktop.app", "Acceptor already exists.");
         return;
+    }
 
     Sequence< Any > aSeq{ Any(aAcceptString), Any(bAccept) };
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -161,8 +165,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     }
     else
     {
-        // there is already an acceptor with this description
-        SAL_WARN( "desktop.app", "Acceptor already exists.");
+        SAL_WARN( "desktop.app", "Acceptor could not be created");
     }
 }
 
