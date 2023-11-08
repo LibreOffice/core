@@ -470,11 +470,16 @@ static size_t nAllocatedSfxPoolItemCount(0);
 static size_t nUsedSfxPoolItemCount(0);
 size_t getAllocatedSfxPoolItemCount() { return nAllocatedSfxPoolItemCount; }
 size_t getUsedSfxPoolItemCount() { return nUsedSfxPoolItemCount; }
-static std::unordered_set<const SfxPoolItem*> incarnatedSfxPoolItems;
+static std::unordered_set<const SfxPoolItem*>& incarnatedSfxPoolItems()
+{
+    // Deferred instantiation to avoid initialization-order-fiasco:
+    static std::unordered_set<const SfxPoolItem*> items;
+    return items;
+}
 void listAllocatedSfxPoolItems()
 {
     SAL_INFO("svl.items", "ITEM: List of still allocated SfxPoolItems:");
-    for (const auto& rCandidate : incarnatedSfxPoolItems)
+    for (const auto& rCandidate : incarnatedSfxPoolItems())
     {
         SAL_INFO("svl.items", "  ITEM: WhichID: " << rCandidate->Which() << "  SerialNumber: "
                                                   << rCandidate->getSerialNumber()
@@ -503,7 +508,7 @@ SfxPoolItem::SfxPoolItem(sal_uInt16 const nWhich)
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount++;
     nUsedSfxPoolItemCount++;
-    incarnatedSfxPoolItems.insert(this);
+    incarnatedSfxPoolItems().insert(this);
 #endif
     assert(nWhich <= SHRT_MAX);
 }
@@ -512,7 +517,7 @@ SfxPoolItem::~SfxPoolItem()
 {
 #ifdef DBG_UTIL
     nAllocatedSfxPoolItemCount--;
-    incarnatedSfxPoolItems.erase(this);
+    incarnatedSfxPoolItems().erase(this);
     m_bDeleted = true;
 #endif
     assert((m_nRefCount == 0 || m_nRefCount > SFX_ITEMS_MAXREF) && "destroying item in use");
