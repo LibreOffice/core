@@ -24,7 +24,7 @@
 
 static bool hasOption(char const * szOption, int argc, char** argv);
 
-const char* HELP_TEXT =
+const char* const HELP_TEXT =
     "SYNOPSIS \n\n"
     "\tsp2bv [-h] [-?] string \n\n"
     "DESCRIPTION\n\n"
