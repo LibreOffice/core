@@ -40,6 +40,7 @@ void f(std::ostream& s1)
     s1 << "foo" << OUString(FOO);
     // expected-error@-1 {{replace '<<' between string literals with juxtaposition}}
     s1 << "foo" << OUString(foo);
+    s1 << "foo" << __func__;
     OString s2;
     s2 = "foo" + OString("foo");
     // expected-error@-1 {{replace '+' between string literals with juxtaposition}}

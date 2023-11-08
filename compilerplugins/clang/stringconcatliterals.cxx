@@ -78,16 +78,16 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
     if ((oo != OverloadedOperatorKind::OO_Plus
          && oo != OverloadedOperatorKind::OO_LessLess)
         || fdecl->getNumParams() != 2 || expr->getNumArgs() != 2
-        || !isStringLiteral(expr->getArg(1)->IgnoreParenImpCasts()))
+        || !isStringLiteral(expr->getArg(1)))
     {
         return true;
     }
     SourceLocation leftLoc;
-    auto const leftExpr = expr->getArg(0)->IgnoreParenImpCasts();
+    auto const leftExpr = expr->getArg(0);
     if (isStringLiteral(leftExpr)) {
-        leftLoc = leftExpr->getBeginLoc();
+        leftLoc = leftExpr->IgnoreParenImpCasts()->getBeginLoc();
     } else {
-        CallExpr const * left = dyn_cast<CallExpr>(leftExpr);
+        CallExpr const * left = dyn_cast<CallExpr>(leftExpr->IgnoreParenImpCasts());
         if (left == nullptr) {
             return true;
         }
@@ -99,7 +99,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
         if ((loo != OverloadedOperatorKind::OO_Plus
              && loo != OverloadedOperatorKind::OO_LessLess)
             || ldecl->getNumParams() != 2 || left->getNumArgs() != 2
-            || !isStringLiteral(left->getArg(1)->IgnoreParenImpCasts()))
+            || !isStringLiteral(left->getArg(1)))
         {
             return true;
         }
@@ -140,7 +140,21 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
 }
 
 bool StringConcatLiterals::isStringLiteral(Expr const * expr) {
-    expr = stripCtor(expr);
+    // Since <https://github.com/llvm/llvm-project/commit/878e590503dff0d9097e91c2bec4409f14503b82>
+    // "Reland [clang] Make predefined expressions string literals under -fms-extensions", in MS
+    // compatibility mode only, IgnoreParens and IgnoreParenImpCasts look through a PredefinedExpr
+    // representing __func__, but which we do not want to do here:
+    while (auto const e = dyn_cast<ParenExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    expr = expr->IgnoreImpCasts();
+    if (isa<PredefinedExpr>(expr)) {
+        return false;
+    }
+    // Once we have filtered out the problematic PredefinedExpr above, still call
+    // IgnoreParenImpCasts again, because it does more than just ignore ParenExpr and call
+    // IgnoreImpCasts as is done above:
+    expr = stripCtor(expr->IgnoreParenImpCasts());
     if (!isa<clang::StringLiteral>(expr)) {
         return false;
     }
