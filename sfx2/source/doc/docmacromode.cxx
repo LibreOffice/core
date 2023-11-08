@@ -227,23 +227,17 @@ namespace sfx2
                     return disallowMacroExecution();
                 }
             }
-
-            // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
-            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                )
-            {
-                return disallowMacroExecution();
-            }
         }
         catch ( const Exception& )
         {
-            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                )
-            {
-                return disallowMacroExecution();
-            }
+            DBG_UNHANDLED_EXCEPTION("sfx.doc");
+        }
+
+        // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
+        if ((nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN)
+            || (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN))
+        {
+            return disallowMacroExecution();
         }
 
 #if defined(_WIN32)
