@@ -19,6 +19,7 @@
 
 #include <protectiondlg.hxx>
 #include <tabprotection.hxx>
+#include <svl/PasswordHelper.hxx>
 
 #include <vector>
 
@@ -43,6 +44,7 @@ ScTableProtectionDlg::ScTableProtectionDlg(weld::Window* pParent)
     , m_xOptions(m_xBuilder->weld_container("options"))
     , m_xPassword1Edit(m_xBuilder->weld_entry("password1"))
     , m_xPassword2Edit(m_xBuilder->weld_entry("password2"))
+    , m_xPasswordStrengthBar(m_xBuilder->weld_level_bar("passwordbar"))
     , m_xOptionsListBox(m_xBuilder->weld_tree_view("checklist"))
     , m_xBtnOk(m_xBuilder->weld_button("ok"))
     , m_xProtected(m_xBuilder->weld_label("protected"))
@@ -144,9 +146,14 @@ IMPL_LINK_NOARG(ScTableProtectionDlg, OKHdl, weld::Button&, void)
     m_xDialog->response(RET_OK);
 }
 
-IMPL_LINK_NOARG(ScTableProtectionDlg, PasswordModifyHdl, weld::Entry&, void)
+IMPL_LINK(ScTableProtectionDlg, PasswordModifyHdl, weld::Entry&, rEntry, void)
 {
     OUString aPass1 = m_xPassword1Edit->get_text();
+    if (&rEntry == m_xPassword1Edit.get())
+    {
+        m_xPasswordStrengthBar->set_percentage(
+            SvPasswordHelper::GetPasswordStrengthPercentage(aPass1));
+    }
     OUString aPass2 = m_xPassword2Edit->get_text();
     m_xBtnOk->set_sensitive(aPass1 == aPass2);
 }

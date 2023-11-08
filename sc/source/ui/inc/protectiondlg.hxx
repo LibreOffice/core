@@ -51,6 +51,7 @@ private:
     std::unique_ptr<weld::Container> m_xOptions;
     std::unique_ptr<weld::Entry> m_xPassword1Edit;
     std::unique_ptr<weld::Entry> m_xPassword2Edit;
+    std::unique_ptr<weld::LevelBar> m_xPasswordStrengthBar;
     std::unique_ptr<weld::TreeView> m_xOptionsListBox;
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Label> m_xProtected;
