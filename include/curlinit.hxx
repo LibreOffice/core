@@ -14,28 +14,7 @@
 #if defined(LINUX) && !defined(SYSTEM_CURL)
 #include <com/sun/star/uno/RuntimeException.hpp>
 
-#include <unistd.h>
-
-static char const* GetCABundleFile()
-{
-    // try system ones first; inspired by:
-    // https://www.happyassassin.net/posts/2015/01/12/a-note-about-ssltls-trusted-certificate-stores-and-platforms/
-    auto const candidates = {
-        "/etc/pki/tls/certs/ca-bundle.crt",
-        "/etc/pki/tls/certs/ca-bundle.trust.crt",
-        "/etc/ssl/certs/ca-certificates.crt",
-        "/var/lib/ca-certificates/ca-bundle.pem",
-    };
-    for (char const* const candidate : candidates)
-    {
-        if (access(candidate, R_OK) == 0)
-        {
-            return candidate;
-        }
-    }
-
-    throw css::uno::RuntimeException("no OpenSSL CA certificate bundle found");
-}
+#include "opensslinit.hxx"
 
 static void InitCurl_easy(CURL* const pCURL)
 {
