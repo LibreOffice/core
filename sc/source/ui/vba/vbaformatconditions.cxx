@@ -37,7 +37,7 @@ ScVbaFormatConditions::Delete(  )
 {
     try
     {
-        ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+        ScVbaStyles* pStyles = mxStyles.get();
         if ( !pStyles )
             DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
         sal_Int32 nCount = mxSheetConditionalEntries->getCount();
@@ -235,7 +235,7 @@ ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula)
 OUString
 ScVbaFormatConditions::getStyleName()
 {
-    ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+    ScVbaStyles* pStyles = mxStyles.get();
     if ( !pStyles )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {} );
     uno::Sequence< OUString > sCellStyleNames = pStyles->getStyleNames();
@@ -256,7 +256,7 @@ ScVbaFormatConditions::removeFormatCondition( const OUString& _sStyleName, bool 
                 mxSheetConditionalEntries->removeByIndex(i);
                 if (_bRemoveStyle)
                 {
-                    ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+                    ScVbaStyles* pStyles = mxStyles.get();
                     if ( !pStyles )
                         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, {});
                     pStyles->Delete( _sStyleName );

@@ -21,12 +21,14 @@
 
 #include <ooo/vba/excel/XFormatConditions.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::sheet { class XSheetConditionalEntries; }
 namespace ooo::vba::excel { class XRange; }
 namespace ooo::vba::excel { class XStyle; }
 namespace ooo::vba::excel { class XStyles; }
+class ScVbaStyles;
 
 // This class is used only as a target for casting, it seems,
 // and no objects of this type are created as such, I think.
@@ -34,7 +36,7 @@ namespace ooo::vba::excel { class XStyles; }
 class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatConditions >
 {
     css::uno::Reference< css::sheet::XSheetConditionalEntries > mxSheetConditionalEntries;
-    css::uno::Reference< ov::excel::XStyles > mxStyles;
+    rtl::Reference< ScVbaStyles > mxStyles;
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
