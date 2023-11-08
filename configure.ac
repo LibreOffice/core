@@ -11212,7 +11212,7 @@ if test "$with_system_zxcvbn" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_ZXCVBN=TRUE
     AC_CHECK_HEADER(zxcvbn.h, [],
-       [ AC_MSG_ERROR(zxcvbn headers not foundd.)], [])
+       [ AC_MSG_ERROR(zxcvbn headers not found.)], [])
     AC_CHECK_LIB(zxcvbn, ZxcvbnMatch, [],
         [ AC_MSG_ERROR(zxcvbn library not found.)], [])
 else
