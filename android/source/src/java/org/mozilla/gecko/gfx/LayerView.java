@@ -53,8 +53,7 @@ public class LayerView extends FrameLayout {
 
     private Listener mListener;
     private OnInterceptTouchListener mTouchIntercepter;
-    //TODO static because of registerCxxCompositor() function, should be fixed in the future
-    private static LibreOfficeMainActivity mContext;
+    private LibreOfficeMainActivity mContext;
 
     public LayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -265,18 +264,6 @@ public class LayerView extends FrameLayout {
 
     public Object getNativeWindow() {
         return mSurfaceView.getHolder();
-    }
-
-    /** This function is invoked by Gecko (compositor thread) via JNI; be careful when modifying signature. */
-    public static GLController registerCxxCompositor() {
-        try {
-            LayerView layerView = mContext.getLayerClient().getView();
-            layerView.mListener.compositorCreated();
-            return layerView.getGLController();
-        } catch (Exception e) {
-            Log.e(LOGTAG, "Error registering compositor!", e);
-            return null;
-        }
     }
 
     public interface Listener {
