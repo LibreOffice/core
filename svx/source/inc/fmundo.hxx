@@ -24,7 +24,6 @@
 #include <svx/svdouno.hxx>
 #include "fmscriptingenv.hxx"
 
-
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -38,10 +37,13 @@
 
 
 #include <svl/lstner.hxx>
+#include <memory>
+#include <map>
 
 class FmFormModel;
 class FmFormObj;
 class SdrObject;
+struct PropertySetInfo;
 
 class FmUndoPropertyAction final : public SdrUndoAction
 {
@@ -114,6 +116,7 @@ public:
     static void DisposeElement( const css::uno::Reference< css::awt::XControlModel>& xReplaced );
 };
 
+typedef std::map<css::uno::Reference< css::beans::XPropertySet >, PropertySetInfo> PropertySetInfoCache;
 
 class FmXUndoEnvironment final
     : public ::cppu::WeakImplHelper<   css::beans::XPropertyChangeListener
@@ -184,7 +187,7 @@ private:
     void    switchListening( const css::uno::Reference< css::uno::XInterface >& _rxObject, bool _bStartListening );
 
     FmFormModel&                            rModel;
-    void*                                   m_pPropertySetCache;
+    std::unique_ptr<PropertySetInfoCache>   m_pPropertySetCache;
     ::rtl::Reference<svxform::FormScriptingEnvironment> m_pScriptingEnv;
     oslInterlockedCount                     m_Locks;
     ::osl::Mutex                            m_aMutex;
