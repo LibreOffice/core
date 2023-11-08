@@ -48,7 +48,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private FloatBuffer mCoordBuffer;
     private RenderContext mLastPageContext;
     private int mMaxTextureSize;
-    private int mBackgroundColor;
 
     private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
@@ -384,14 +383,14 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 
             /* Update background color. */
-            mBackgroundColor = Color.WHITE;
+            final int backgroundColor = Color.WHITE;
 
             /* Clear to the page background colour. The bits set here need to
              * match up with those used in gfx/layers/opengl/LayerManagerOGL.cpp.
              */
-            GLES20.glClearColor(((mBackgroundColor>>16)&0xFF) / 255.0f,
-                                ((mBackgroundColor>>8)&0xFF) / 255.0f,
-                                (mBackgroundColor&0xFF) / 255.0f,
+            GLES20.glClearColor(((backgroundColor >> 16) & 0xFF) / 255.0f,
+                                ((backgroundColor >> 8) & 0xFF) / 255.0f,
+                                (backgroundColor & 0xFF) / 255.0f,
                                 0.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT |
                            GLES20.GL_DEPTH_BUFFER_BIT);
