@@ -144,7 +144,7 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent,
             XAccessible* pAcc = xChild.get();
             m_pObjManager->NotifyAccEvent(pAcc, eWinEvent);
 
-            if (m_pObjManager->IsStateManageDescendant(m_xAccessible.get()))
+            if (AccObjectWinManager::IsStateManageDescendant(m_xAccessible.get()))
             {
                 if (eWinEvent == UnoMSAAEvent::SELECTION_CHANGED_REMOVE)
                 {
