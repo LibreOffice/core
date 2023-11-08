@@ -78,6 +78,7 @@ void AccessibilityIssue::gotoIssue() const
 
     switch (TempIssueObject.m_eIssueObject)
     {
+        case IssueObject::LINKED:
         case IssueObject::GRAPHIC:
         case IssueObject::OLE:
         case IssueObject::TEXTFRAME:

@@ -44,6 +44,9 @@
 #include <unotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdasitm.hxx>
+#include <ndgrf.hxx>
+#include <svl/fstathelper.hxx>
+#include <osl/file.h>
 
 namespace sw
 {
@@ -98,11 +101,44 @@ class NoTextNodeAltTextCheck : public NodeCheck
         if (!pNoTextNode)
             return;
 
-        if (!pNoTextNode->GetTitle().isEmpty() || !pNoTextNode->GetDescription().isEmpty())
-            return;
-
         const SwFrameFormat* pFrameFormat = pNoTextNode->GetFlyFormat();
         if (!pFrameFormat)
+            return;
+
+        // linked graphic with broken link
+        if (pNoTextNode->IsGrfNode() && pNoTextNode->GetGrfNode()->IsLinkedFile())
+        {
+            OUString sURL(pNoTextNode->GetGrfNode()->GetGraphic().getOriginURL());
+            if (!FStatHelper::IsDocument(sURL))
+            {
+                INetURLObject aURL(sURL);
+                OUString aSystemPath = sURL;
+
+                // abbreviate URL
+                if (aURL.GetProtocol() == INetProtocol::File)
+                {
+                    OUString aAbbreviatedPath;
+                    aSystemPath = aURL.getFSysPath(FSysStyle::Detect);
+                    osl_abbreviateSystemPath(aSystemPath.pData, &aAbbreviatedPath.pData, 46,
+                                             nullptr);
+                    sURL = aAbbreviatedPath;
+                }
+
+                OUString sIssueText = SwResId(STR_LINKED_GRAPHIC)
+                                          .replaceAll("%OBJECT_NAME%", pFrameFormat->GetName())
+                                          .replaceFirst("%LINK%", sURL);
+
+                auto pIssue = lclAddIssue(m_rIssueCollection, sIssueText,
+                                          sfx::AccessibilityIssueID::LINKED_GRAPHIC);
+                pIssue->setDoc(pNoTextNode->GetDoc());
+                pIssue->setIssueObject(IssueObject::LINKED);
+                pIssue->setObjectID(pNoTextNode->GetFlyFormat()->GetName());
+                pIssue->setNode(pNoTextNode);
+                pIssue->setAdditionalInfo({ aSystemPath });
+            }
+        }
+
+        if (!pNoTextNode->GetTitle().isEmpty() || !pNoTextNode->GetDescription().isEmpty())
             return;
 
         OUString sIssueText

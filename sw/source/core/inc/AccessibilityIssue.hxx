@@ -31,6 +31,7 @@ enum class IssueObject
     LANGUAGE_NOT_SET,
     FOOTENDNOTE,
     TEXTFRAME,
+    LINKED,
 };
 
 class SW_DLLPUBLIC AccessibilityIssue final : public sfx::AccessibilityIssue

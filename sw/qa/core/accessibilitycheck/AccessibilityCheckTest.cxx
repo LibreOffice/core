@@ -84,6 +84,18 @@ CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckBackgroundImage)
     CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::DOCUMENT_BACKGROUND, aIssues[0]->m_eIssueID);
 }
 
+CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckLinkedImage)
+{
+    createSwDoc("LinkedImageTest.fodt");
+    SwDoc* pDoc = getSwDoc();
+    CPPUNIT_ASSERT(pDoc);
+    sw::AccessibilityCheck aCheck(pDoc);
+    aCheck.check();
+    auto& aIssues = aCheck.getIssueCollection().getIssues();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aIssues.size());
+    CPPUNIT_ASSERT_EQUAL(sfx::AccessibilityIssueID::LINKED_GRAPHIC, aIssues[1]->m_eIssueID);
+}
+
 CPPUNIT_TEST_FIXTURE(AccessibilityCheckTest, testCheckNewlineSpace)
 {
     createSwDoc("NewlineTest.odt");

@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <AccessibilityCheck.hxx>
+#include <AccessibilityIssue.hxx>
 #include <cmdid.h>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -44,17 +45,25 @@ AccessibilityCheckEntry::AccessibilityCheckEntry(
     {
         m_xGotoButton->set_label(m_pAccessibilityIssue->m_aIssueText);
 
-        // int nPrefWidth(m_xGotoButton->get_preferred_size().Width());
+        // tdf#156137 allow LinkButton label to wrap
         int nMaxWidth = m_xGotoButton->get_approximate_digit_width() * 10;
-        // if (nPrefWidth > nMaxWidth)
-        {
-            // tdf#156137 allow LinkButton label to wrap
-            m_xGotoButton->set_label_wrap(true);
-            m_xGotoButton->set_size_request(nMaxWidth, -1);
-        }
+        m_xGotoButton->set_label_wrap(true);
+        m_xGotoButton->set_size_request(nMaxWidth, -1);
 
         m_xGotoButton->connect_activate_link(
             LINK(this, AccessibilityCheckEntry, GotoButtonClicked));
+
+        // add full path of linked graphic as tooltip,
+        if (m_pAccessibilityIssue->m_eIssueID == sfx::AccessibilityIssueID::LINKED_GRAPHIC)
+        {
+            auto pSwIssue = std::static_pointer_cast<sw::AccessibilityIssue>(m_pAccessibilityIssue);
+            auto aInfo = pSwIssue->getAdditionalInfo();
+            if (aInfo.size() > 0)
+            {
+                m_xGotoButton->set_tooltip_text(aInfo[0]);
+            }
+        }
+
         m_xLabel->set_visible(false);
     }
     else
@@ -93,6 +102,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     : PanelLayout(pParent, "A11yCheckIssuesPanel", "modules/swriter/ui/a11ycheckissuespanel.ui")
     , m_xExpanderDocument(m_xBuilder->weld_expander("expand_document"))
     , m_xExpanderStyles(m_xBuilder->weld_expander("expand_styles"))
+    , m_xExpanderLinked(m_xBuilder->weld_expander("expand_linked"))
     , m_xExpanderNoAlt(m_xBuilder->weld_expander("expand_no_alt"))
     , m_xExpanderTable(m_xBuilder->weld_expander("expand_table"))
     , m_xExpanderFormatting(m_xBuilder->weld_expander("expand_formatting"))
@@ -102,6 +112,7 @@ A11yCheckIssuesPanel::A11yCheckIssuesPanel(weld::Widget* pParent, SfxBindings* p
     , m_xExpanderOther(m_xBuilder->weld_expander("expand_other"))
     , m_xBoxDocument(m_xBuilder->weld_box("box_document"))
     , m_xBoxStyles(m_xBuilder->weld_box("box_styles"))
+    , m_xBoxLinked(m_xBuilder->weld_box("box_linked"))
     , m_xBoxNoAlt(m_xBuilder->weld_box("box_no_alt"))
     , m_xBoxTable(m_xBuilder->weld_box("box_table"))
     , m_xBoxFormatting(m_xBuilder->weld_box("box_formatting"))
@@ -149,6 +160,7 @@ void A11yCheckIssuesPanel::ImplDestroy()
     }
     m_xExpanderDocument.reset();
     m_xExpanderStyles.reset();
+    m_xExpanderLinked.reset();
     m_xExpanderNoAlt.reset();
     m_xExpanderTable.reset();
     m_xExpanderFormatting.reset();
@@ -158,6 +170,7 @@ void A11yCheckIssuesPanel::ImplDestroy()
     m_xExpanderOther.reset();
     m_xBoxDocument.reset();
     m_xBoxStyles.reset();
+    m_xBoxLinked.reset();
     m_xBoxNoAlt.reset();
     m_xBoxTable.reset();
     m_xBoxFormatting.reset();
@@ -178,6 +191,10 @@ void A11yCheckIssuesPanel::removeOldWidgets()
     for (auto const& xEntry : m_aStylesEntries)
         m_xBoxStyles->move(xEntry->get_widget(), nullptr);
     m_xExpanderStyles->set_visible(false);
+
+    for (auto const& xEntry : m_aLinkedEntries)
+        m_xBoxLinked->move(xEntry->get_widget(), nullptr);
+    m_xExpanderLinked->set_visible(false);
 
     for (auto const& xEntry : m_aNoAltEntries)
         m_xBoxNoAlt->move(xEntry->get_widget(), nullptr);
@@ -220,6 +237,7 @@ void A11yCheckIssuesPanel::populateIssues()
 
     sal_Int32 iDocument = 0;
     sal_Int32 iStyles = 0;
+    sal_Int32 iLinked = 0;
     sal_Int32 iNoAlt = 0;
     sal_Int32 iTable = 0;
     sal_Int32 iFormatting = 0;
@@ -248,6 +266,14 @@ void A11yCheckIssuesPanel::populateIssues()
                 m_xBoxStyles->reorder_child(xEntry->get_widget(), iStyles++);
                 m_xExpanderStyles->set_visible(true);
                 m_aStylesEntries.push_back(std::move(xEntry));
+            }
+            break;
+            case sfx::AccessibilityIssueID::LINKED_GRAPHIC:
+            {
+                auto xEntry = std::make_unique<AccessibilityCheckEntry>(m_xBoxLinked.get(), pIssue);
+                m_xBoxLinked->reorder_child(xEntry->get_widget(), iLinked++);
+                m_xExpanderLinked->set_visible(true);
+                m_aLinkedEntries.push_back(std::move(xEntry));
             }
             break;
             case sfx::AccessibilityIssueID::NO_ALT_OLE:

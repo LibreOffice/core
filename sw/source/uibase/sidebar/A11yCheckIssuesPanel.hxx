@@ -62,6 +62,7 @@ public:
 private:
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aDocumentEntries;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aStylesEntries;
+    std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aLinkedEntries;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aNoAltEntries;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aTableEntries;
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aFormattingEntries;
@@ -71,6 +72,7 @@ private:
     std::vector<std::unique_ptr<AccessibilityCheckEntry>> m_aOtherEntries;
     std::unique_ptr<weld::Expander> m_xExpanderDocument;
     std::unique_ptr<weld::Expander> m_xExpanderStyles;
+    std::unique_ptr<weld::Expander> m_xExpanderLinked;
     std::unique_ptr<weld::Expander> m_xExpanderNoAlt;
     std::unique_ptr<weld::Expander> m_xExpanderTable;
     std::unique_ptr<weld::Expander> m_xExpanderFormatting;
@@ -80,6 +82,7 @@ private:
     std::unique_ptr<weld::Expander> m_xExpanderOther;
     std::unique_ptr<weld::Box> m_xBoxDocument;
     std::unique_ptr<weld::Box> m_xBoxStyles;
+    std::unique_ptr<weld::Box> m_xBoxLinked;
     std::unique_ptr<weld::Box> m_xBoxNoAlt;
     std::unique_ptr<weld::Box> m_xBoxTable;
     std::unique_ptr<weld::Box> m_xBoxFormatting;
