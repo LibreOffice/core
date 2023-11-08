@@ -205,6 +205,7 @@ namespace sfx2
         if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
             return allowMacroExecution();
 
+        SignatureState nSignatureState = SignatureState::UNKNOWN;
         const OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
         try
         {
@@ -230,7 +231,7 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
-                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
+                nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
 
                 if (!bHasValidContentSignature
                     && (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
@@ -257,13 +258,7 @@ namespace sfx2
                                                      || !SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
 
-                if ( nSignatureState == SignatureState::BROKEN )
-                {
-                    if (!bAllowUI)
-                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
-                    return disallowMacroExecution();
-                }
-                else if ( bHasTrustedMacroSignature )
+                if (bHasTrustedMacroSignature)
                 {
                     // there is trusted macro signature, allow macro execution
                     return allowMacroExecution();
@@ -278,6 +273,8 @@ namespace sfx2
                         lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
+                // Other values of nSignatureState would result in either rejected macros
+                // (FROM_LIST_AND_SIGNED_*), or a confirmation.
             }
         }
         catch ( const Exception& )
@@ -342,7 +339,10 @@ namespace sfx2
             case 0: // Ask
                 break;
             case 1: // Allow
-                return allowMacroExecution();
+                if (nSignatureState != SignatureState::BROKEN
+                    && nSignatureState != SignatureState::INVALID)
+                    return allowMacroExecution();
+                break;
             case 2: // Deny
                 return disallowMacroExecution();
         }
