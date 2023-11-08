@@ -82,11 +82,6 @@ public class RenderControllerThread extends Thread implements LayerView.Listener
     }
 
     @Override
-    public void compositionResumeRequested(int width, int height) {
-
-    }
-
-    @Override
     public void surfaceChanged(int width, int height) {
         this.width = width;
         this.height = height;

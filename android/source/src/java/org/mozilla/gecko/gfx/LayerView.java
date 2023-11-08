@@ -304,7 +304,6 @@ public class LayerView extends FrameLayout {
         void compositorCreated();
         void renderRequested();
         void compositionPauseRequested();
-        void compositionResumeRequested(int width, int height);
         void surfaceChanged(int width, int height);
     }
 
