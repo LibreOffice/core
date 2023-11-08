@@ -49,7 +49,7 @@ class ScXMLContentValidationContext : public ScXMLImportContext
     bool           bDisplayHelp;
     bool           bDisplayError;
 
-    SvXMLImportContextRef           xEventContext;
+    rtl::Reference<XMLEventsImportContext> xEventContext;
 
     css::sheet::ValidationAlertStyle GetAlertStyle() const;
     void SetFormula( OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
@@ -232,8 +232,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLContentValidationC
         pContext = new ScXMLErrorMacroContext( GetScImport(), pAttribList, this);
         break;
     case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
-        pContext = new XMLEventsImportContext( GetImport() );
-        xEventContext = pContext;
+        xEventContext = new XMLEventsImportContext( GetImport() );
+        pContext = xEventContext.get();
     }
 
     return pContext;
@@ -357,10 +357,8 @@ void SAL_CALL ScXMLContentValidationContext::endFastElement( sal_Int32 /*nElemen
     // #i36650# event-listeners element moved up one level
     if (xEventContext.is())
     {
-        XMLEventsImportContext* pEvents =
-            static_cast<XMLEventsImportContext*>(xEventContext.get());
         uno::Sequence<beans::PropertyValue> aValues;
-        pEvents->GetEventSequence( "OnError", aValues );
+        xEventContext->GetEventSequence( "OnError", aValues );
 
         auto pValue = std::find_if(std::cbegin(aValues), std::cend(aValues),
             [](const beans::PropertyValue& rValue) {
