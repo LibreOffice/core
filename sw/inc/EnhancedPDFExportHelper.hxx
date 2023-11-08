@@ -44,6 +44,7 @@ class SwTextNode;
 class SwTable;
 class SwNumberTreeNode;
 class SwTextPaintInfo;
+class SwTextFrame;
 
 /*
  * Mapping of OOo elements to tagged pdf elements:
@@ -96,8 +97,8 @@ class SwTextPaintInfo;
 
 struct Num_Info
 {
-    const SwFrame& mrFrame;
-    Num_Info( const SwFrame& rFrame ) : mrFrame( rFrame ) {};
+    const SwTextFrame& mrFrame;
+    Num_Info( const SwTextFrame& rFrame ) : mrFrame( rFrame ) {};
 };
 
 struct Frame_Info

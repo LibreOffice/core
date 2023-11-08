@@ -585,7 +585,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const OUS
 
     if ( mpNumInfo )
     {
-        const SwTextFrame& rTextFrame = static_cast<const SwTextFrame&>(mpNumInfo->mrFrame);
+        const SwTextFrame& rTextFrame = mpNumInfo->mrFrame;
         SwTextNode const*const pTextNd = rTextFrame.GetTextNodeForParaProps();
         const SwNodeNum* pNodeNum = pTextNd->GetNum(rTextFrame.getRootFrame());
 
@@ -1071,7 +1071,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
     }
     else if (mpNumInfo && eType == vcl::PDFWriter::List)
     {
-        SwTextFrame const& rFrame(static_cast<SwTextFrame const&>(mpNumInfo->mrFrame));
+        SwTextFrame const& rFrame(mpNumInfo->mrFrame);
         SwTextNode const& rNode(*rFrame.GetTextNodeForParaProps());
         SwNumRule const*const pNumRule = rNode.GetNumRule();
         assert(pNumRule); // was required for List
