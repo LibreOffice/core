@@ -134,14 +134,10 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 
-    if ( m_xToolBarManager.is() )
+    if ( m_xToolBarManager )
     {
-        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-        if ( pToolBarManager )
-        {
-            vcl::Window* pWindow = pToolBarManager->GetToolBar();
-            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
-        }
+        vcl::Window* pWindow = m_xToolBarManager->GetToolBar();
+        return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
     }
 
     return Reference< XInterface >();
@@ -155,14 +151,10 @@ void AddonsToolBarWrapper::populateImages()
     if (m_bCreatedImages)
         return;
 
-    if ( m_xToolBarManager.is() )
+    if (m_xToolBarManager)
     {
-        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-        if (pToolBarManager)
-        {
-            pToolBarManager->RequestImages();
-            m_bCreatedImages = true;
-        }
+        m_xToolBarManager->RequestImages();
+        m_bCreatedImages = true;
     }
 }
 

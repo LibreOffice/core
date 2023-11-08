@@ -20,12 +20,13 @@
 #pragma once
 
 #include <helper/uielementwrapperbase.hxx>
-
+#include <rtl/ref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
+class ToolBarManager;
 
 class AddonsToolBarWrapper final : public UIElementWrapperBase
 {
@@ -47,7 +48,7 @@ class AddonsToolBarWrapper final : public UIElementWrapperBase
 
     private:
         css::uno::Reference< css::uno::XComponentContext >                        m_xContext;
-        css::uno::Reference< css::lang::XComponent >                              m_xToolBarManager;
+        rtl::Reference< ToolBarManager >                                          m_xToolBarManager;
         css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >     m_aConfigData;
         bool                                                                      m_bCreatedImages;
 };
