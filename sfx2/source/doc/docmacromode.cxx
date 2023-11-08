@@ -207,9 +207,9 @@ namespace sfx2
                 {
                     return disallowMacroExecution();
                 }
-                else if ( m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading() &&
-                          bHasTrustedMacroSignature &&
-                          !bHasValidContentSignature)
+                else if (nMacroExecutionMode != MacroExecMode::ALWAYS_EXECUTE
+                         && m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading()
+                         && bHasTrustedMacroSignature && !bHasValidContentSignature)
                 {
                     // When macros are signed, and the document has events which call macros, the document content needs to be signed too.
                     m_xData->m_bHasUnsignedContentError = true;
