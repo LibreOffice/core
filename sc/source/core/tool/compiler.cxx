@@ -3999,7 +3999,7 @@ bool ScCompiler::ParseTableRefItem( const OUString& rName )
     {
         // Only called when there actually is a current TableRef, hence
         // accessing maTableRefs.back() is safe.
-        ScTableRefToken* p = dynamic_cast<ScTableRefToken*>(maTableRefs.back().mxToken.get());
+        ScTableRefToken* p = maTableRefs.back().mxToken.get();
         assert(p);  // not a ScTableRefToken can't be
 
         switch ((*iLook).second)
@@ -4067,7 +4067,7 @@ bool ScCompiler::ParseTableRefColumn( const OUString& rName )
 {
     // Only called when there actually is a current TableRef, hence
     // accessing maTableRefs.back() is safe.
-    ScTableRefToken* p = dynamic_cast<ScTableRefToken*>(maTableRefs.back().mxToken.get());
+    ScTableRefToken* p = maTableRefs.back().mxToken.get();
     assert(p);  // not a ScTableRefToken can't be
 
     ScDBData* pDBData = rDoc.GetDBCollection()->getNamedDBs().findByIndex( p->GetIndex());
@@ -4918,7 +4918,7 @@ std::unique_ptr<ScTokenArray> ScCompiler::CompileString( const OUString& rFormul
             const FormulaToken* pPrev = pArr->PeekPrev( nIdx);
             if (pPrev && pPrev->GetOpCode() == ocDBArea)
             {
-                FormulaToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
+                ScTableRefToken* pTableRefToken = new ScTableRefToken( pPrev->GetIndex(), ScTableRefToken::TABLE);
                 maTableRefs.emplace_back( pTableRefToken);
                 // pPrev may be dead hereafter.
                 static_cast<ScTokenArray*>(pArr)->ReplaceToken( nIdx, pTableRefToken,

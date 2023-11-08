@@ -307,9 +307,9 @@ private:
 
     struct TableRefEntry
     {
-        ScTokenRef  mxToken;
+        boost::intrusive_ptr<ScTableRefToken> mxToken;
         sal_uInt16  mnLevel;
-        TableRefEntry( formula::FormulaToken* p ) : mxToken(p), mnLevel(0) {}
+        TableRefEntry( ScTableRefToken* p ) : mxToken(p), mnLevel(0) {}
     };
     std::vector<TableRefEntry> maTableRefs;     /// "stack" of currently active ocTableRef tokens
 
