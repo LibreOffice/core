@@ -51,6 +51,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Writer.hxx>
 #include <sal/macros.h>
 #include <sfx2/dialoghelper.hxx>
 #include <sfx2/printer.hxx>
@@ -86,25 +87,40 @@ void drawRect(vcl::RenderContext& rRenderContext, const tools::Rectangle &rRect,
 SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
     : SfxTabPage(pPage, pController, "modules/swriter/ui/viewoptionspage.ui", "ViewOptionsPage", &rCoreSet)
     , m_xCrossCB(m_xBuilder->weld_check_button("helplines"))
+    , m_xCrossImg(m_xBuilder->weld_widget("lockhelplines"))
     , m_xHMetric(m_xBuilder->weld_combo_box("hrulercombobox"))
+    , m_xHMetricImg(m_xBuilder->weld_widget("lockhruler"))
     , m_xVRulerCBox(m_xBuilder->weld_check_button("vruler"))
+    , m_xVRulerImg(m_xBuilder->weld_widget("lockvruler"))
     , m_xVRulerRightCBox(m_xBuilder->weld_check_button("vrulerright"))
+    , m_xVRulerRightImg(m_xBuilder->weld_widget("lockvrulerright"))
     , m_xVMetric(m_xBuilder->weld_combo_box("vrulercombobox"))
     , m_xSmoothCBox(m_xBuilder->weld_check_button("smoothscroll"))
+    , m_xSmoothImg(m_xBuilder->weld_widget("locksmoothscroll"))
     , m_xGrfCB(m_xBuilder->weld_check_button("graphics"))
+    , m_xGrfImg(m_xBuilder->weld_widget("lockgraphics"))
     , m_xTableCB(m_xBuilder->weld_check_button("tables"))
+    , m_xTableImg(m_xBuilder->weld_widget("locktables"))
     , m_xDrwCB(m_xBuilder->weld_check_button("drawings"))
+    , m_xDrwImg(m_xBuilder->weld_widget("lockdrawings"))
     , m_xPostItCB(m_xBuilder->weld_check_button("comments"))
+    , m_xPostItImg(m_xBuilder->weld_widget("lockcomments"))
     , m_xSettingsFrame(m_xBuilder->weld_frame("settingsframe"))
     , m_xSettingsLabel(m_xBuilder->weld_label("settingslabel"))
     , m_xMetricLabel(m_xBuilder->weld_label("measureunitlabel"))
     , m_xMetricLB(m_xBuilder->weld_combo_box("measureunit"))
     , m_xShowInlineTooltips(m_xBuilder->weld_check_button("changestooltip"))
+    , m_xShowInlineTooltipsImg(m_xBuilder->weld_widget("lockchangestooltip"))
     , m_xShowOutlineContentVisibilityButton(m_xBuilder->weld_check_button("outlinecontentvisibilitybutton"))
+    , m_xShowOutlineContentVImg(m_xBuilder->weld_widget("lockoutlinecontentvisibility"))
     , m_xTreatSubOutlineLevelsAsContent(m_xBuilder->weld_check_button("suboutlinelevelsascontent"))
+    , m_xTreatSubOutlineLevelsImg(m_xBuilder->weld_widget("locksuboutlinelevels"))
     , m_xShowChangesInMargin(m_xBuilder->weld_check_button("changesinmargin"))
+    , m_xShowChangesInMarginImg(m_xBuilder->weld_widget("lockchangesinmargin"))
     , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
+    , m_xFieldHiddenImg(m_xBuilder->weld_widget("lockhiddentextfield"))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
+    , m_xFieldHiddenParaImg(m_xBuilder->weld_widget("lockhiddenparafield"))
 {
     m_xShowOutlineContentVisibilityButton->connect_toggled(LINK(this, SwContentOptPage, ShowOutlineContentVisibilityButtonHdl));
 
@@ -187,25 +203,88 @@ static void lcl_SelectMetricLB(weld::ComboBox& rMetric, TypedWhichId<SfxUInt16It
 
 void SwContentOptPage::Reset(const SfxItemSet* rSet)
 {
+    bool bReadOnly = false;
     const SwElemItem* pElemAttr = rSet->GetItemIfSet( FN_PARAM_ELEM , false );
     if(pElemAttr)
     {
+        bReadOnly = officecfg::Office::Writer::Content::Display::Table::isReadOnly();
         m_xTableCB->set_active(pElemAttr->m_bTable);
+        m_xTableCB->set_sensitive(!bReadOnly);
+        m_xTableImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::GraphicObject::isReadOnly();
         m_xGrfCB->set_active(pElemAttr->m_bGraphic);
+        m_xGrfCB->set_sensitive(!bReadOnly);
+        m_xGrfImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::DrawingControl::isReadOnly();
         m_xDrwCB->set_active(pElemAttr->m_bDrawing);
+        m_xDrwCB->set_sensitive(!bReadOnly);
+        m_xDrwImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::Note::isReadOnly();
         m_xPostItCB->set_active(pElemAttr->m_bNotes);
+        m_xPostItCB->set_sensitive(!bReadOnly);
+        m_xPostItCB->set_visible(pElemAttr->m_bNotes);
+
+        bReadOnly = officecfg::Office::Writer::Layout::Line::Guide::isReadOnly();
         m_xCrossCB->set_active(pElemAttr->m_bCrosshair);
+        m_xCrossCB->set_sensitive(!bReadOnly);
+        m_xCrossImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Layout::Window::VerticalRuler::isReadOnly();
         m_xVRulerCBox->set_active(pElemAttr->m_bVertRuler);
+        m_xVRulerCBox->set_sensitive(!bReadOnly);
+        m_xVRulerImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Layout::Window::IsVerticalRulerRight::isReadOnly();
         m_xVRulerRightCBox->set_active(pElemAttr->m_bVertRulerRight);
+        m_xVRulerRightCBox->set_sensitive(!bReadOnly);
+        m_xVRulerRightImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Layout::Window::SmoothScroll::isReadOnly();
         m_xSmoothCBox->set_active(pElemAttr->m_bSmoothScroll);
+        m_xSmoothCBox->set_sensitive(!bReadOnly);
+        m_xSmoothImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::ShowInlineTooltips::isReadOnly();
         m_xShowInlineTooltips->set_active(pElemAttr->m_bShowInlineTooltips);
+        m_xShowInlineTooltips->set_sensitive(!bReadOnly);
+        m_xShowInlineTooltipsImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::ShowOutlineContentVisibilityButton::isReadOnly();
         m_xShowOutlineContentVisibilityButton->set_active(pElemAttr->m_bShowOutlineContentVisibilityButton);
+        m_xShowOutlineContentVisibilityButton->set_sensitive(!bReadOnly);
+        m_xShowOutlineContentVImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::TreatSubOutlineLevelsAsContent::isReadOnly();
         m_xTreatSubOutlineLevelsAsContent->set_active(pElemAttr->m_bTreatSubOutlineLevelsAsContent);
-        m_xTreatSubOutlineLevelsAsContent->set_sensitive(pElemAttr->m_bShowOutlineContentVisibilityButton);
+        m_xTreatSubOutlineLevelsAsContent->set_sensitive(pElemAttr->m_bShowOutlineContentVisibilityButton && !bReadOnly);
+        m_xTreatSubOutlineLevelsImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::Display::ShowChangesInMargin::isReadOnly();
         m_xShowChangesInMargin->set_active(pElemAttr->m_bShowChangesInMargin);
+        m_xShowChangesInMargin->set_sensitive(!bReadOnly);
+        m_xShowChangesInMarginImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::HiddenText::isReadOnly();
         m_xFieldHiddenCB->set_active( pElemAttr->m_bFieldHiddenText );
+        m_xFieldHiddenCB->set_sensitive(!bReadOnly);
+        m_xFieldHiddenImg->set_visible(bReadOnly);
+
+        bReadOnly = officecfg::Office::Writer::Content::NonprintingCharacter::HiddenParagraph::isReadOnly();
         m_xFieldHiddenParaCB->set_active( pElemAttr->m_bShowHiddenPara );
+        m_xFieldHiddenParaCB->set_sensitive(!bReadOnly);
+        m_xFieldHiddenParaImg->set_visible(bReadOnly);
     }
+
+    bReadOnly = officecfg::Office::Writer::Layout::Window::HorizontalRulerUnit::isReadOnly();
+    m_xHMetric->set_sensitive(!bReadOnly);
+    m_xHMetricImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Layout::Window::VerticalRulerUnit::isReadOnly();
+    m_xVMetric->set_sensitive(!bReadOnly);
+
     m_xMetricLB->set_active(-1);
     lcl_SelectMetricLB(*m_xMetricLB, SID_ATTR_METRIC, *rSet);
     lcl_SelectMetricLB(*m_xHMetric, FN_HSCROLL_METRIC, *rSet);
@@ -303,7 +382,8 @@ bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 
 IMPL_LINK(SwContentOptPage, VertRulerHdl, weld::Toggleable&, rBox, void)
 {
-    m_xVRulerRightCBox->set_sensitive(rBox.get_sensitive() && rBox.get_active());
+    m_xVRulerRightCBox->set_sensitive(rBox.get_sensitive() && rBox.get_active() &&
+        !officecfg::Office::Writer::Layout::Window::IsVerticalRulerRight::isReadOnly());
 }
 
 IMPL_LINK(SwContentOptPage, ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, rBox, void)

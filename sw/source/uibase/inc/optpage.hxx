@@ -36,17 +36,27 @@ class FontList;
 class SwContentOptPage final : public SfxTabPage
 {
     std::unique_ptr<weld::CheckButton> m_xCrossCB;
+    std::unique_ptr<weld::Widget> m_xCrossImg;
 
     std::unique_ptr<weld::ComboBox> m_xHMetric;
+    std::unique_ptr<weld::Widget> m_xHMetricImg;
     std::unique_ptr<weld::CheckButton> m_xVRulerCBox;
+    std::unique_ptr<weld::Widget> m_xVRulerImg;
     std::unique_ptr<weld::CheckButton> m_xVRulerRightCBox;
+    std::unique_ptr<weld::Widget> m_xVRulerRightImg;
     std::unique_ptr<weld::ComboBox> m_xVMetric;
+    std::unique_ptr<weld::Widget> m_xVMetricImg;
     std::unique_ptr<weld::CheckButton> m_xSmoothCBox;
+    std::unique_ptr<weld::Widget> m_xSmoothImg;
 
     std::unique_ptr<weld::CheckButton> m_xGrfCB;
+    std::unique_ptr<weld::Widget> m_xGrfImg;
     std::unique_ptr<weld::CheckButton> m_xTableCB;
+    std::unique_ptr<weld::Widget> m_xTableImg;
     std::unique_ptr<weld::CheckButton> m_xDrwCB;
+    std::unique_ptr<weld::Widget> m_xDrwImg;
     std::unique_ptr<weld::CheckButton> m_xPostItCB;
+    std::unique_ptr<weld::Widget> m_xPostItImg;
 
     std::unique_ptr<weld::Frame> m_xSettingsFrame;
     std::unique_ptr<weld::Label> m_xSettingsLabel;
@@ -54,11 +64,17 @@ class SwContentOptPage final : public SfxTabPage
     std::unique_ptr<weld::ComboBox> m_xMetricLB;
 
     std::unique_ptr<weld::CheckButton> m_xShowInlineTooltips;
+    std::unique_ptr<weld::Widget> m_xShowInlineTooltipsImg;
     std::unique_ptr<weld::CheckButton> m_xShowOutlineContentVisibilityButton;
+    std::unique_ptr<weld::Widget> m_xShowOutlineContentVImg;
     std::unique_ptr<weld::CheckButton> m_xTreatSubOutlineLevelsAsContent;
+    std::unique_ptr<weld::Widget> m_xTreatSubOutlineLevelsImg;
     std::unique_ptr<weld::CheckButton> m_xShowChangesInMargin;
+    std::unique_ptr<weld::Widget> m_xShowChangesInMarginImg;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenCB;
+    std::unique_ptr<weld::Widget> m_xFieldHiddenImg;
     std::unique_ptr<weld::CheckButton> m_xFieldHiddenParaCB;
+    std::unique_ptr<weld::Widget> m_xFieldHiddenParaImg;
 
     DECL_LINK(VertRulerHdl, weld::Toggleable&, void);
     DECL_LINK(ShowOutlineContentVisibilityButtonHdl, weld::Toggleable&, void);
