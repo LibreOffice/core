@@ -304,8 +304,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     public class Frame {
-        // The timestamp recording the start of this frame.
-        private long mFrameStartTime;
         // A fixed snapshot of the viewport metrics that this frame is using to render content.
         private ImmutableViewportMetrics mFrameMetrics;
         // A rendering context for page-positioned layers, and one for screen-positioned layers.
@@ -348,8 +346,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         }
 
         public void beginDrawing() {
-            mFrameStartTime = SystemClock.uptimeMillis();
-
             TextureReaper.get().reap();
             TextureGenerator.get().fill();
 
