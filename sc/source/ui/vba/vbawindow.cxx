@@ -100,13 +100,14 @@ class SelectedSheetsEnumAccess : public SelectedSheets_BASE
     uno::Reference< uno::XComponentContext > m_xContext;
     NameIndexHash namesToIndices;
     Sheets sheets;
-    uno::Reference< frame::XModel > m_xModel;
+    rtl::Reference< ScModelObj > m_xModel;
 public:
-    SelectedSheetsEnumAccess( uno::Reference< uno::XComponentContext > xContext, uno::Reference< frame::XModel > xModel ):m_xContext(std::move( xContext )), m_xModel(std::move( xModel ))
+    SelectedSheetsEnumAccess( uno::Reference< uno::XComponentContext > xContext, const uno::Reference< frame::XModel > & xModel ):m_xContext(std::move( xContext ))
     {
-        ScModelObj* pModel = static_cast< ScModelObj* >( m_xModel.get() );
+        ScModelObj* pModel = static_cast< ScModelObj* >( xModel.get() );
         if ( !pModel )
             throw uno::RuntimeException("Cannot obtain current document" );
+        m_xModel = pModel;
         ScDocShell* pDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if ( !pDocShell )
             throw uno::RuntimeException("Cannot obtain docshell" );
@@ -118,8 +119,7 @@ public:
         SCTAB nIndex = 0;
         const ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
         sheets.reserve( nTabCount );
-        uno::Reference <sheet::XSpreadsheetDocument> xSpreadSheet( m_xModel, uno::UNO_QUERY_THROW );
-        uno::Reference <container::XIndexAccess> xIndex( xSpreadSheet->getSheets(), uno::UNO_QUERY_THROW );
+        uno::Reference <container::XIndexAccess> xIndex( m_xModel->getSheets(), uno::UNO_QUERY_THROW );
         for (const auto& rTab : rMarkData)
         {
             if (rTab >= nTabCount)
