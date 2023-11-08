@@ -30,11 +30,11 @@ namespace
         assert((guid.length() == 36) && "No GUID or wrong format!");
         assert(((index > -1) && (index < 5)) && "Out of range!");
 
-        if (index == 0) return std::wstring(guid.c_str(), 8);
-        if (index == 1) return std::wstring(guid.c_str() + 9, 4);
-        if (index == 2) return std::wstring(guid.c_str() + 14, 4);
-        if (index == 3) return std::wstring(guid.c_str() + 19, 4);
-        if (index == 4) return std::wstring(guid.c_str() + 24, 12);
+        if (index == 0) return guid.substr(0, 8);
+        if (index == 1) return guid.substr(9, 4);
+        if (index == 2) return guid.substr(14, 4);
+        if (index == 3) return guid.substr(19, 4);
+        if (index == 4) return guid.substr(24, 12);
 
         return std::wstring();
     }
@@ -80,8 +80,8 @@ namespace
         convertedGuid += Invert(part);
 
         part = GetGuidPart(guid, 3);
-        convertedGuid += Invert(std::wstring(part.c_str(), 2));
-        convertedGuid += Invert(std::wstring(part.c_str() + 2, 2));
+        convertedGuid += Invert(part.substr(0, 2));
+        convertedGuid += Invert(part.substr(2, 2));
 
         part = GetGuidPart(guid, 4);
         int pos = 0;
