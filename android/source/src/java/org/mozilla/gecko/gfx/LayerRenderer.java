@@ -380,45 +380,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                 mUpdated &= layer.update(mPageContext); // called on compositor thread
         }
 
-        /** Retrieves the bounds for the layer, rounded in such a way that it
-         * can be used as a mask for something that will render underneath it.
-         * This will round the bounds inwards, but stretch the mask towards any
-         * near page edge, where near is considered to be 'within 2 pixels'.
-         * Returns null if the given layer is null.
-         */
-        private Rect getMaskForLayer(Layer layer) {
-            if (layer == null) {
-                return null;
-            }
-
-            RectF bounds = RectUtils.contract(layer.getBounds(mPageContext), 1.0f, 1.0f);
-            Rect mask = RectUtils.roundIn(bounds);
-
-            // If the mask is within two pixels of any page edge, stretch it over
-            // that edge. This is to avoid drawing thin slivers when masking
-            // layers.
-            if (mask.top <= 2) {
-                mask.top = -1;
-            }
-            if (mask.left <= 2) {
-                mask.left = -1;
-            }
-
-            // Because we're drawing relative to the page-rect, we only need to
-            // take into account its width and height (and not its origin)
-            int pageRight = mPageRect.width();
-            int pageBottom = mPageRect.height();
-
-            if (mask.right >= pageRight - 2) {
-                mask.right = pageRight + 1;
-            }
-            if (mask.bottom >= pageBottom - 2) {
-                mask.bottom = pageBottom + 1;
-            }
-
-            return mask;
-        }
-
         public void drawBackground() {
             GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 
