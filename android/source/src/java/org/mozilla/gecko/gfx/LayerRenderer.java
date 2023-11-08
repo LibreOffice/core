@@ -223,7 +223,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
      */
     @Override
     public void onDrawFrame(GL10 gl) {
-        Frame frame = createFrame(mView.getLayerClient().getViewportMetrics());
+        Frame frame = new Frame(mView.getLayerClient().getViewportMetrics());
         synchronized (mView.getLayerClient()) {
             frame.beginDrawing();
             frame.drawBackground();
@@ -265,10 +265,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);
         return shader;
-    }
-
-    public Frame createFrame(ImmutableViewportMetrics metrics) {
-        return new Frame(metrics);
     }
 
     class FadeRunnable implements Runnable {
