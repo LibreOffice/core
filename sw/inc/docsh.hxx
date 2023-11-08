@@ -52,6 +52,7 @@ class IDocumentChartDataProviderAccess;
 class SwDocShell;
 class SwDrawModel;
 class SwViewShell;
+class SwDocStyleSheetPool;
 namespace svt
 {
 class EmbeddedObjectRef;
@@ -69,7 +70,7 @@ class SW_DLLPUBLIC SwDocShell
     , public SfxListener
 {
     rtl::Reference< SwDoc >                 m_xDoc;      ///< Document.
-    rtl::Reference< SfxStyleSheetBasePool > m_xBasePool; ///< Passing through for formats.
+    rtl::Reference< SwDocStyleSheetPool > m_xBasePool; ///< Passing through for formats.
     std::unique_ptr<FontList> m_pFontList;          ///< Current Fontlist.
     bool        m_IsInUpdateFontList; ///< prevent nested calls of UpdateFontList
 

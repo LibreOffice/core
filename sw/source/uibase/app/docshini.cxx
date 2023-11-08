@@ -436,7 +436,7 @@ void SwDocShell::RemoveLink()
     {
         if (m_xBasePool.is())
         {
-            static_cast<SwDocStyleSheetPool*>(m_xBasePool.get())->dispose();
+            m_xBasePool->dispose();
             m_xBasePool.clear();
         }
         m_xDoc->SetOle2Link(Link<bool,void>());
