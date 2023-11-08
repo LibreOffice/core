@@ -438,7 +438,7 @@ void AccContainerEventListener::UpdateAllChildrenState(XAccessible* pXAccessible
         return;
     }
 
-    if (m_pObjManager && AccObjectWinManager::IsStateManageDescendant(pXAccessible))
+    if (AccObjectWinManager::IsStateManageDescendant(pXAccessible))
     {
         return;
     }
