@@ -267,7 +267,7 @@ private:
     bool FindSelectedShapesChanges(const css::uno::Reference<css::drawing::XShapes>& xShapes) const;
 
     std::optional<ScAddress> GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
-    uno::Reference<XAccessibleRelationSet> GetRelationSet(const ScAccessibleShapeData* pData) const;
+    rtl::Reference<utl::AccessibleRelationSetHelper> GetRelationSet(const ScAccessibleShapeData* pData) const;
     void SetAnchor(const uno::Reference<drawing::XShape>& xShape, ScAccessibleShapeData* pData) const;
     void AddShape(const uno::Reference<drawing::XShape>& xShape, bool bCommitChange) const;
     void RemoveShape(const uno::Reference<drawing::XShape>& xShape) const;
@@ -1125,7 +1125,7 @@ std::optional<ScAddress> ScChildrenShapes::GetAnchor(const uno::Reference<drawin
     return std::optional<ScAddress>();
 }
 
-uno::Reference<XAccessibleRelationSet> ScChildrenShapes::GetRelationSet(const ScAccessibleShapeData* pData) const
+rtl::Reference<utl::AccessibleRelationSetHelper> ScChildrenShapes::GetRelationSet(const ScAccessibleShapeData* pData) const
 {
     rtl::Reference<utl::AccessibleRelationSetHelper> pRelationSet = new utl::AccessibleRelationSetHelper();
 

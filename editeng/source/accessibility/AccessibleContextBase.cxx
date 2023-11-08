@@ -128,7 +128,7 @@ bool AccessibleContextBase::GetState (sal_Int64 aState)
 
 
 void AccessibleContextBase::SetRelationSet (
-    const uno::Reference<XAccessibleRelationSet>& rxNewRelationSet)
+    const rtl::Reference<utl::AccessibleRelationSetHelper>& rxNewRelationSet)
 {
     // Try to emit some meaningful events indicating differing relations in
     // both sets.
@@ -268,12 +268,9 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     ThrowIfDisposed ();
 
     // Create a copy of the relation set and return it.
-    ::utl::AccessibleRelationSetHelper* pRelationSet =
-        static_cast< ::utl::AccessibleRelationSetHelper*>(mxRelationSet.get());
-    if (pRelationSet != nullptr)
+    if (mxRelationSet)
     {
-        return uno::Reference<XAccessibleRelationSet> (
-            new ::utl::AccessibleRelationSetHelper (*pRelationSet));
+        return new ::utl::AccessibleRelationSetHelper(*mxRelationSet);
     }
     else
         return uno::Reference<XAccessibleRelationSet>(nullptr);
