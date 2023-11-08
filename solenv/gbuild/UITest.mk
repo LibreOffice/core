@@ -136,10 +136,6 @@ define gb_UITest_use_configuration
 $(call gb_UITest_get_target,$(1)) : gb_UITest_use_config := $(2)
 endef
 
-define gb_UITest_use_oneprocess
-$(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(true)
-endef
-
 define gb_UITest_avoid_oneprocess
 $(call gb_UITest_get_target,$(1)) : ONEPROCESS := $(false)
 endef
