@@ -11051,6 +11051,9 @@ if test "$enable_openssl" = "yes"; then
         OPENSSL_LIBS="-lssl -lcrypto"
     else
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
+        if test -n "${SYSTEM_OPENSSL}"; then
+            AC_DEFINE([SYSTEM_OPENSSL])
+        fi
     fi
     if test "$with_system_openssl" = "yes"; then
         AC_MSG_CHECKING([whether openssl supports SHA512])

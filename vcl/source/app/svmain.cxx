@@ -82,6 +82,7 @@
 
 #include <config_features.h>
 #include <config_feature_opencl.h>
+#include <opensslinit.hxx>
 
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -192,6 +193,30 @@ int ImplSVMain()
     int nReturn = EXIT_FAILURE;
 
     const bool bWasInitVCL = IsVCLInit();
+
+#if defined(LINUX) && !defined(SYSTEM_OPENSSL)
+    if (!bWasInitVCL)
+    {
+        OUString const name("SSL_CERT_FILE");
+        OUString temp;
+        if (osl_getEnvironment(name.pData, &temp.pData) == osl_Process_E_NotFound)
+        {
+            try // to point bundled OpenSSL to some system certificate file
+            {   // ... this only works if the client actually calls
+                // SSL_CTX_set_default_verify_paths() or similar; e.g. python ssl.
+                char const*const path = GetCABundleFile();
+                OUString const filepath(::rtl::OStringToOUString(
+                    ::std::string_view(path), osl_getThreadTextEncoding()));
+                osl_setEnvironment(name.pData, filepath.pData);
+            }
+            catch (uno::RuntimeException const& e)
+            {
+                SAL_WARN("vcl", e.Message);
+            }
+        }
+    }
+#endif
+
     const bool bInit = bWasInitVCL || InitVCL();
     int nRet = 0;
     if (!bWasInitVCL && bInit && pSVData->mpDefInst->SVMainHook(&nRet))
