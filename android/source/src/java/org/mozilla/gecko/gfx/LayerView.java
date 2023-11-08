@@ -47,8 +47,6 @@ public class LayerView extends FrameLayout {
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
 
-    /* Must be a PAINT_xxx constant */
-    private int mPaintState = PAINT_NONE;
     private boolean mFullScreen = false;
 
     private SurfaceView mSurfaceView;
@@ -57,12 +55,6 @@ public class LayerView extends FrameLayout {
     private OnInterceptTouchListener mTouchIntercepter;
     //TODO static because of registerCxxCompositor() function, should be fixed in the future
     private static LibreOfficeMainActivity mContext;
-
-    /* Flags used to determine when to show the painted surface. The integer
-     * order must correspond to the order in which these states occur. */
-    public static final int PAINT_NONE = 0;
-    public static final int PAINT_BEFORE_FIRST = 1;
-    public static final int PAINT_AFTER_FIRST = 2;
 
     public LayerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -215,19 +207,6 @@ public class LayerView extends FrameLayout {
 
     public LayerRenderer getLayerRenderer() {
         return mRenderer;
-    }
-
-    /* paintState must be a PAINT_xxx constant. The state will only be changed
-     * if paintState represents a state that occurs after the current state. */
-    public void setPaintState(int paintState) {
-        if (paintState > mPaintState) {
-            Log.d(LOGTAG, "LayerView paint state set to " + paintState);
-            mPaintState = paintState;
-        }
-    }
-
-    public int getPaintState() {
-        return mPaintState;
     }
 
     public LayerRenderer getRenderer() {
