@@ -1854,22 +1854,22 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature(
 
     try
     {
-        OUString aVersion;
-        try
-        {
-            uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
-            xPropSet->getPropertyValue("Version") >>= aVersion;
-        }
-        catch( uno::Exception& )
-        {
-        }
-
-        uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
-
         if ( nScriptingSignatureState == SignatureState::UNKNOWN
           || nScriptingSignatureState == SignatureState::OK
           || nScriptingSignatureState == SignatureState::NOTVALIDATED )
         {
+            OUString aVersion;
+            try
+            {
+                uno::Reference < beans::XPropertySet > xPropSet( rDocShell.GetStorage(), uno::UNO_QUERY_THROW );
+                xPropSet->getPropertyValue("Version") >>= aVersion;
+            }
+            catch( uno::Exception& )
+            {
+            }
+
+            uno::Reference< security::XDocumentDigitalSignatures > xSigner( security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), aVersion) );
+
             const uno::Sequence< security::DocumentSignatureInformation > aInfo = rDocShell.GetDocumentSignatureInformation( true, xSigner );
 
             if ( aInfo.hasElements() )
