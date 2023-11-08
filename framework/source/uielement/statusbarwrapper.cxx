@@ -137,11 +137,9 @@ void SAL_CALL StatusBarWrapper::updateSettings()
 
     try
     {
-        StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
-
         m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
         if ( m_xConfigData.is() )
-            pStatusBarManager->FillStatusBar( m_xConfigData );
+            m_xStatusBarManager->FillStatusBar( m_xConfigData );
     }
     catch ( const NoSuchElementException& )
     {
@@ -152,15 +150,11 @@ Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 
-    if ( m_xStatusBarManager.is() )
+    if ( m_xStatusBarManager )
     {
-        StatusBarManager* pStatusBarManager = static_cast< StatusBarManager *>( m_xStatusBarManager.get() );
-        if ( pStatusBarManager )
-        {
-            vcl::Window* pWindow = pStatusBarManager->GetStatusBar();
-            if ( pWindow )
-                return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
-        }
+        vcl::Window* pWindow = m_xStatusBarManager->GetStatusBar();
+        if ( pWindow )
+            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
     }
 
     return Reference< XInterface >();

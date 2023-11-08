@@ -20,12 +20,13 @@
 #pragma once
 
 #include <helper/uiconfigelementwrapperbase.hxx>
-
+#include <rtl/ref.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
+class StatusBarManager;
 
 class StatusBarWrapper final : public UIConfigElementWrapperBase
 {
@@ -47,7 +48,7 @@ class StatusBarWrapper final : public UIConfigElementWrapperBase
         virtual void SAL_CALL updateSettings() override;
 
     private:
-        css::uno::Reference< css::lang::XComponent >             m_xStatusBarManager;
+        rtl::Reference< StatusBarManager >                       m_xStatusBarManager;
         css::uno::Reference< css::uno::XComponentContext >       m_xContext;
 };
 
