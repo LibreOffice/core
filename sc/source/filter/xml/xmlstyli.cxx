@@ -426,7 +426,7 @@ void XMLTableStyleContext::SetAttribute( sal_Int32 nElement,
 
 
 XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
-        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle ) :
+        XMLTableStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, rStyles, nFamily, bDefaultStyle ),
     pStyles(&rStyles),
     nNumberFormat(-1),
@@ -563,7 +563,7 @@ void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
     XMLPropertyState* property = FindProperty(nContextID);
     if (property)
         property->mnIndex = -1; // #i46996# remove old property, so it isn't double
-    sal_Int32 nIndex(static_cast<XMLTableStylesContext *>(pStyles)->GetIndex(nContextID));
+    sal_Int32 nIndex(pStyles->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later

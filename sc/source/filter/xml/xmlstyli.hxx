@@ -63,11 +63,13 @@ public:
             ::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const override;
 };
 
+class XMLTableStylesContext;
+
 class XMLTableStyleContext : public XMLPropStyleContext
 {
     OUString             sDataStyleName;
     OUString               sPageStyle;
-    SvXMLStylesContext*         pStyles;
+    XMLTableStylesContext*      pStyles;
     sal_Int32                   nNumberFormat;
     SCTAB                       nLastSheet;
     bool                        bParentSet;
@@ -85,7 +87,7 @@ protected:
 public:
 
     XMLTableStyleContext( ScXMLImport& rImport,
-            SvXMLStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle = false );
+            XMLTableStylesContext& rStyles, XmlStyleFamily nFamily, bool bDefaultStyle = false );
     virtual ~XMLTableStyleContext() override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
