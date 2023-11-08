@@ -353,10 +353,7 @@ namespace sfx2
         if ( eAutoConfirm == eNoAutoConfirm )
         {
             OUString sReferrer(sURL);
-
-            OUString aSystemFileURL;
-            if ( osl::FileBase::getSystemPathFromFileURL( sReferrer, aSystemFileURL ) == osl::FileBase::E_None )
-                sReferrer = aSystemFileURL;
+            osl::FileBase::getSystemPathFromFileURL(sReferrer, sReferrer);
 
             bSecure = lcl_showMacroWarning( rxInteraction, sReferrer );
         }
