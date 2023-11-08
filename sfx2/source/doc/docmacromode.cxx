@@ -182,16 +182,16 @@ namespace sfx2
 
             switch ( SvtSecurityOptions::GetMacroSecurityLevel() )
             {
-                case 3:
+                case 3: // "Very high"
                     nMacroExecutionMode = MacroExecMode::FROM_LIST_NO_WARN;
                     break;
-                case 2:
+                case 2: // "High"
                     nMacroExecutionMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
                     break;
-                case 1:
+                case 1: // "Medium"
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE;
                     break;
-                case 0:
+                case 0: // "Low"
                     nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
                     break;
                 default:
