@@ -217,7 +217,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrXclObj = nullptr;     // no metafile or whatsoever
                     }
                     else    // metafile and OLE object
-                        pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
+                        pCurrXclObj = new XclObjOle( mrObjMgr, *static_cast<SdrOle2Obj*>(pObj) );
                 }
                 else    // just a metafile
                     pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDoc() );

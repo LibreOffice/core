@@ -33,6 +33,7 @@ class SdrCaptionObj;
 class SdrTextObj;
 class XclTxo;
 class XclEscherEx;
+class SdrOle2Obj;
 
 class ScURLTransformer : public oox::drawingml::URLTransformer
 {
@@ -237,13 +238,13 @@ class XclObjOle : public XclObj
 {
 private:
 
-        const SdrObject&    rOleObj;
+        const SdrOle2Obj&    rOleObj;
         SotStorage*         pRootStorage;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm ) override;
 
 public:
-                                XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
+                                XclObjOle( XclExpObjectManager& rObjMgr, const SdrOle2Obj& rObj );
     virtual                     ~XclObjOle() override;
 
     virtual void                Save( XclExpStream& rStrm ) override;
