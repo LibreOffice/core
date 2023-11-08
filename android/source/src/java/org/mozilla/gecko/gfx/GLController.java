@@ -240,26 +240,6 @@ public class GLController {
         }
     }
 
-    /**
-     * Provides an EGLSurface without assuming ownership of this surface.
-     * This class does not keep a reference to the provided EGL surface; the
-     * caller assumes ownership of the surface once it is returned.
-     */
-    private EGLSurface provideEGLSurface() {
-        if (mEGL == null) {
-            initEGL();
-        }
-
-        Object window = mView.getNativeWindow();
-        EGLSurface surface = mEGL.eglCreateWindowSurface(mEGLDisplay, mEGLConfig, window, null);
-        if (surface == null || surface == EGL10.EGL_NO_SURFACE) {
-            throw new GLControllerException("EGL window surface could not be created! " +
-                                            getEGLError());
-        }
-
-        return surface;
-    }
-
     private String getEGLError() {
         return "Error " + mEGL.eglGetError();
     }
