@@ -230,6 +230,21 @@ namespace sfx2
             // check whether the document is signed with trusted certificate
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
+                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
+
+                if (!bHasValidContentSignature
+                    && (nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+                        || nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN)
+                    && m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading())
+                {
+                    // When macros are required to be signed, and the document has events which call
+                    // macros, the document content needs to be signed, too. Do it here, and avoid
+                    // possible UI asking to always trust certificates, after which the user's choice
+                    // to allow macros would be ignored anyway.
+                    lcl_showMacrosDisabledUnsignedContentError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
+                    return disallowMacroExecution();
+                }
+
                 // At this point, the possible values of nMacroExecutionMode are: ALWAYS_EXECUTE,
                 // FROM_LIST_AND_SIGNED_WARN (the default), FROM_LIST_AND_SIGNED_NO_WARN.
                 // ALWAYS_EXECUTE corresponds to the Medium security level; it should ask for
@@ -237,25 +252,15 @@ namespace sfx2
                 // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
                 // trusted signed macros at this point; so it may only ask for confirmation to add
                 // certificates to trusted, and shouldn't show UI when trusted list is read-only.
-                // the trusted macro check will also retrieve the signature state ( small optimization )
                 const bool bAllowUI = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
                                                  && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
                                                      || !SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
 
-                SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SignatureState::BROKEN )
                 {
                     if (!bAllowUI)
                         lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
-                    return disallowMacroExecution();
-                }
-                else if (nMacroExecutionMode != MacroExecMode::ALWAYS_EXECUTE
-                         && m_xData->m_rDocumentAccess.macroCallsSeenWhileLoading()
-                         && bHasTrustedMacroSignature && !bHasValidContentSignature)
-                {
-                    // When macros are signed, and the document has events which call macros, the document content needs to be signed too.
-                    lcl_showMacrosDisabledUnsignedContentError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
                 }
                 else if ( bHasTrustedMacroSignature )
@@ -267,6 +272,8 @@ namespace sfx2
                        || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
+                    // this case includes explicit reject from user in the UI in cases of
+                    // FROM_LIST_AND_SIGNED_WARN and ALWAYS_EXECUTE
                     if (!bAllowUI)
                         lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
                     return disallowMacroExecution();
