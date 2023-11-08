@@ -124,6 +124,7 @@ public:
     const SfxItemSet &GetAttrSet() const { return m_aSet; }
     SfxItemSet &GetAttrSet()       { return m_aSet; }
     void                     SetAttrSet(const SfxItemSet& rSet);
+    void SetFrameSizeFromTable();
 
     inline const SwFormatVertOrient &GetVertOrient() const;
     inline const SwFormatHoriOrient &GetHoriOrient() const;

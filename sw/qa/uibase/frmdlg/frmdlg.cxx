@@ -13,6 +13,11 @@
 
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
+#include <docsh.hxx>
+#include <wrtsh.hxx>
+#include <frmmgr.hxx>
+#include <itabenum.hxx>
+
 /// Covers sw/source/uibase/frmdlg/ fixes.
 class SwUibaseFrmdlgTest : public SwModelTestBase
 {
@@ -58,6 +63,46 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testAnchorTypeFromStyle)
     // - Actual  : 4 (AT_CHARACTER)
     // i.e. the anchor type from the style was ignored.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER, eActual);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testInsertFrameWidth)
+{
+    // Given a document with an inline table, its width is set to 6000 twips:
+    createSwDoc();
+    // Insert a table:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SwTwips nExpectedWidth = 6000;
+    {
+        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END - 1> aSet(pWrtShell->GetAttrPool());
+        SwFormatFrameSize aSize(SwFrameSize::Variable, nExpectedWidth);
+        aSet.Put(aSize);
+        pWrtShell->SetTableAttr(aSet);
+    }
+    pWrtShell->GoPrevCell();
+    pWrtShell->Insert("A1");
+    SwFormatFrameSize aRowSize(SwFrameSize::Minimum);
+    pWrtShell->SetRowHeight(aRowSize);
+    pWrtShell->GoNextCell();
+    pWrtShell->Insert("A2");
+    pWrtShell->SetRowHeight(aRowSize);
+    // Select cell:
+    pWrtShell->SelAll();
+    // Select table:
+    pWrtShell->SelAll();
+
+    // When converting that table to a floating table:
+    SwFlyFrameAttrMgr aMgr(/*bNew=*/true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+
+    // Then make sure that the fly width will be based on the table width:
+    const SwFormatFrameSize* pFrameSize = aMgr.GetAttrSet().GetItem(RES_FRM_SIZE);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 6000 (nExpectedWidth)
+    // - Actual  : 1134 (2cm)
+    // i.e. the fly width was the default, not inherited from the selected table.
+    CPPUNIT_ASSERT_EQUAL(nExpectedWidth, pFrameSize->GetWidth());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
