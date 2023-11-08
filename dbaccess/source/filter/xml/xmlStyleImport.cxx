@@ -41,7 +41,7 @@ using namespace xmloff::token;
 
 
 OTableStyleContext::OTableStyleContext( ODBFilter& rImport,
-        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily )
+        OTableStylesContext& rStyles, XmlStyleFamily nFamily )
     :XMLPropStyleContext( rImport, rStyles, nFamily, false )
     ,pStyles(&rStyles)
     ,m_nNumberFormat(-1)
@@ -101,7 +101,7 @@ void OTableStyleContext::SetDefaults()
 
 void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
-    sal_Int32 nIndex(static_cast<OTableStylesContext *>(pStyles)->GetIndex(nContextID));
+    sal_Int32 nIndex(pStyles->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later

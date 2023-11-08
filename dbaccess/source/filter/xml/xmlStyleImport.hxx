@@ -27,12 +27,13 @@
 namespace dbaxml
 {
     class ODBFilter;
+    class OTableStylesContext;
 
     class OTableStyleContext : public XMLPropStyleContext
     {
         OUString             m_sDataStyleName;
         OUString             sPageStyle;
-        SvXMLStylesContext*         pStyles;
+        OTableStylesContext*        pStyles;
         sal_Int32                   m_nNumberFormat;
 
         ODBFilter& GetOwnImport();
@@ -46,7 +47,7 @@ namespace dbaxml
 
 
         OTableStyleContext( ODBFilter& rImport,
-                SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
+                OTableStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OTableStyleContext() override;
 
