@@ -2860,9 +2860,12 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
     if (bRealExecute)
         nPopupModeFlags |= FloatWinPopupFlags::NewLevel;
 
+    // MenuFlags get clobbered in the Activate function. Restore them after calling.
+    MenuFlags nMenuFlagsSaved = GetMenuFlags();
     bInCallback = true; // set it here, if Activate overridden
     Activate();
     bInCallback = false;
+    SetMenuFlags(nMenuFlagsSaved);
 
     if (pParentWin->isDisposed())
         return false;
@@ -2880,13 +2883,6 @@ bool PopupMenu::PrepareRun(const VclPtr<vcl::Window>& pParentWin, tools::Rectang
             nMenuFlags |= MenuFlags::HideDisabledEntries;
         else
             nMenuFlags &= ~MenuFlags::HideDisabledEntries;
-    }
-    else
-    {
-         if (officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get())
-             nMenuFlags &= ~MenuFlags::HideDisabledEntries;
-         else
-             nMenuFlags |= MenuFlags::HideDisabledEntries;
     }
 
     sal_uInt16 nVisibleEntries = ImplGetVisibleItemCount();

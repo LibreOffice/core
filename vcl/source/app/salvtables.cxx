@@ -1068,6 +1068,12 @@ void SalInstanceToolbar::set_menu_item_active(const OUString& rIdent, bool bActi
     {
         if (bActive)
         {
+            MenuFlags nMenuFlags = pPopup->GetMenuFlags();
+            if (officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get())
+                nMenuFlags &= ~MenuFlags::HideDisabledEntries;
+            else
+                nMenuFlags |= MenuFlags::HideDisabledEntries;
+            pPopup->SetMenuFlags(nMenuFlags);
             tools::Rectangle aRect = m_xToolBox->GetItemRect(nItemId);
             pPopup->Execute(m_xToolBox, aRect, PopupMenuFlags::ExecuteDown);
         }
