@@ -160,10 +160,10 @@ namespace sfx2
         }
 
         if ( nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
-            return false;
+            return disallowMacroExecution();
 
         if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-            return true;
+            return allowMacroExecution();
 
         const OUString sURL(m_xData->m_rDocumentAccess.getDocumentLocation());
         try
