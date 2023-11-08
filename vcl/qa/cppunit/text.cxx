@@ -224,6 +224,103 @@ CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleText)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36 / 2, width36pct50, 2);
 }
 
+CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextFontSpecificKerning)
+{
+    OUString aAV(u"AV"_ustr);
+
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // absolute character widths AKA text array.
+    tools::Long nRefTextWidth = 2671;
+    std::vector<sal_Int32> aRefCharWidths = { 1270, 2671 };
+    KernArray aCharWidths;
+    tools::Long nTextWidth = pOutDev->GetTextArray(aAV, &aCharWidths);
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);
+    // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+
+    // text advance width and line height
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aAV));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2384), pOutDev->GetTextHeight());
+
+    // exact bounding rectangle, not essentially the same as text width/height
+    tools::Rectangle aBoundRect;
+    pOutDev->GetTextBoundRect(aBoundRect, aAV);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aBoundRect.Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(408), aBoundRect.Top());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2639), aBoundRect.GetWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1493), aBoundRect.getOpenHeight());
+
+    // normal orientation
+    tools::Rectangle aInput;
+    tools::Rectangle aRect = pOutDev->GetTextRect(aInput, aAV);
+
+    // now rotate 270 degrees
+    vcl::Font aRotated(aFont);
+    aRotated.SetOrientation(2700_deg10);
+    pOutDev->SetFont(aRotated);
+    tools::Rectangle aRectRot = pOutDev->GetTextRect(aInput, aAV);
+
+    // Check that we did do the rotation...
+    CPPUNIT_ASSERT_EQUAL(aRectRot.GetWidth(), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(aRectRot.GetHeight(), aRect.GetWidth());
+}
+
+CPPUNIT_TEST_FIXTURE(VclTextTest, testSimpleTextNoKerning)
+{
+    OUString aAV(u"AV"_ustr);
+
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
+    aFont.SetKerning(FontKerning::NONE);
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    pOutDev->SetFont(aFont);
+
+    // absolute character widths AKA text array.
+    tools::Long nRefTextWidth = 2802;
+    std::vector<sal_Int32> aRefCharWidths = { 1401, 2802 };
+    KernArray aCharWidths;
+    tools::Long nTextWidth = pOutDev->GetTextArray(aAV, &aCharWidths);
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[0], aCharWidths.get_subunit_array()[0]);
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths[1], aCharWidths.get_subunit_array()[1]);
+    // this sporadically returns 75 or 74 on some of the windows tinderboxes eg. tb73
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+
+    // text advance width and line height
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aAV));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2384), pOutDev->GetTextHeight());
+
+    // exact bounding rectangle, not essentially the same as text width/height
+    tools::Rectangle aBoundRect;
+    pOutDev->GetTextBoundRect(aBoundRect, aAV);
+    CPPUNIT_ASSERT_EQUAL(tools::Long(16), aBoundRect.Left());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(408), aBoundRect.Top());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2770), aBoundRect.GetWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1493), aBoundRect.getOpenHeight());
+
+    // normal orientation
+    tools::Rectangle aInput;
+    tools::Rectangle aRect = pOutDev->GetTextRect(aInput, aAV);
+
+    // now rotate 270 degrees
+    vcl::Font aRotated(aFont);
+    aRotated.SetOrientation(2700_deg10);
+    pOutDev->SetFont(aRotated);
+    tools::Rectangle aRectRot = pOutDev->GetTextRect(aInput, aAV);
+
+    // Check that we did do the rotation...
+    CPPUNIT_ASSERT_EQUAL(aRectRot.GetWidth(), aRect.GetHeight());
+    CPPUNIT_ASSERT_EQUAL(aRectRot.GetHeight(), aRect.GetWidth());
+}
+
 CPPUNIT_TEST_FIXTURE(VclTextTest, testTextLayoutCache)
 {
     OUString sTestString = u"The quick brown fox\n jumped over the lazy dogالعاشر"_ustr;
