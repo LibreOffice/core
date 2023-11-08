@@ -25,8 +25,8 @@
 #include <algorithm>
 #include <wchar.h>
 
-constexpr OUStringLiteral BACKSLASH (u"\\");
-constexpr OUStringLiteral SLASH     (u"/");
+constexpr OUString BACKSLASH (u"\\"_ustr);
+constexpr OUString SLASH     (u"/"_ustr);
 
 void osl_systemPathEnsureSeparator(/*inout*/ rtl_uString** ppustrPath)
 {
@@ -57,7 +57,7 @@ void osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
 
         if (i > -1 && (i == (path.getLength() - 1)))
         {
-            path = OUString(path.getStr(), path.getLength() - 1);
+            path = path.copy(0, path.getLength() - 1);
             rtl_uString_assign(ppustrPath, path.pData);
         }
     }

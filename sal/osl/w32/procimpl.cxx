@@ -344,11 +344,10 @@ namespace /* private */
                 ext.equalsIgnoreAsciiCase("btm"));
     }
 
-    const OUString ENV_COMSPEC ("COMSPEC");
     OUString get_batch_processor()
     {
         OUString comspec;
-        osl_getEnvironment(ENV_COMSPEC.pData, &comspec.pData);
+        osl_getEnvironment(u"COMSPEC"_ustr.pData, &comspec.pData);
 
         OSL_ASSERT(comspec.getLength());
 

@@ -32,7 +32,7 @@
 #include <rtl/ref.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_PLAYER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.Player_DirectX";
-constexpr OUStringLiteral AVMEDIA_WIN_PLAYER_SERVICENAME = u"com.sun.star.media.Player_DirectX";
+constexpr OUString AVMEDIA_WIN_PLAYER_SERVICENAME = u"com.sun.star.media.Player_DirectX"_ustr;
 
 using namespace ::com::sun::star;
 

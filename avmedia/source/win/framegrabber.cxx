@@ -41,7 +41,7 @@
 #include <systools/win32/oleauto.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
-constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX";
+constexpr OUString AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX"_ustr;
 
 using namespace ::com::sun::star;
 

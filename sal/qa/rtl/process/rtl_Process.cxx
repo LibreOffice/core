@@ -67,7 +67,7 @@ public:
     void getAppCommandArg_001()
     {
 #if defined(_WIN32)
-        static constexpr OUStringLiteral EXECUTABLE_NAME(u"child_process.exe");
+        static constexpr OUString EXECUTABLE_NAME(u"child_process.exe"_ustr);
 #else
         static constexpr OUString EXECUTABLE_NAME(u"child_process"_ustr);
 #endif
@@ -196,7 +196,7 @@ public:
     void getGlobalProcessId_002()
     {
 #if defined(_WIN32)
-        static constexpr OUStringLiteral EXEC_NAME(u"child_process_id.exe");
+        static constexpr OUString EXEC_NAME(u"child_process_id.exe"_ustr);
 #else
         static constexpr OUString EXEC_NAME(u"child_process_id"_ustr);
 #endif

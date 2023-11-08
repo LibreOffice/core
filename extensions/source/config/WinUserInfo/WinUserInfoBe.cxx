@@ -61,23 +61,23 @@ public:
 
 namespace
 {
-constexpr OUStringLiteral givenname(u"givenname");
-constexpr OUStringLiteral sn(u"sn");
+constexpr OUString givenname(u"givenname"_ustr);
+constexpr OUString sn(u"sn"_ustr);
 constexpr char fathersname[]("fathersname");
-constexpr OUStringLiteral initials(u"initials");
-constexpr OUStringLiteral street(u"street");
-constexpr OUStringLiteral l(u"l");
-constexpr OUStringLiteral st(u"st");
+constexpr OUString initials(u"initials"_ustr);
+constexpr OUString street(u"street"_ustr);
+constexpr OUString l(u"l"_ustr);
+constexpr OUString st(u"st"_ustr);
 constexpr char apartment[]("apartment");
-constexpr OUStringLiteral postalcode(u"postalcode");
-constexpr OUStringLiteral c(u"c");
-constexpr OUStringLiteral o(u"o");
+constexpr OUString postalcode(u"postalcode"_ustr);
+constexpr OUString c(u"c"_ustr);
+constexpr OUString o(u"o"_ustr);
 constexpr char position[]("position");
-constexpr OUStringLiteral title(u"title");
-constexpr OUStringLiteral homephone(u"homephone");
-constexpr OUStringLiteral telephonenumber(u"telephonenumber");
-constexpr OUStringLiteral facsimiletelephonenumber(u"facsimiletelephonenumber");
-constexpr OUStringLiteral mail(u"mail");
+constexpr OUString title(u"title"_ustr);
+constexpr OUString homephone(u"homephone"_ustr);
+constexpr OUString telephonenumber(u"telephonenumber"_ustr);
+constexpr OUString facsimiletelephonenumber(u"facsimiletelephonenumber"_ustr);
+constexpr OUString mail(u"mail"_ustr);
 
 // Backend class implementing access to Active Directory user data. It caches its encoded data
 // in a configuration entry, to allow reusing it when user later doesn't have access to AD DC

@@ -231,8 +231,8 @@ void VistaFilePickerEventHandler::stopListening()
     }
 }
 
-const OUStringLiteral PROP_CONTROL_ID = u"control_id";
-const OUStringLiteral PROP_PICKER_LISTENER = u"picker_listener";
+constexpr OUString PROP_CONTROL_ID = u"control_id"_ustr;
+constexpr OUString PROP_PICKER_LISTENER = u"picker_listener"_ustr;
 
 namespace {
 
