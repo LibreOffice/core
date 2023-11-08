@@ -84,6 +84,9 @@ SwFlyFrameAttrMgr::SwFlyFrameAttrMgr( bool bNew, SwWrtShell* pSh, Frmmgr_Type nT
         }
         m_aSet.SetParent( &m_pOwnSh->GetFormatFromPool( nId )->GetAttrSet());
         m_aSet.Put( SwFormatFrameSize( SwFrameSize::Minimum, DFLT_WIDTH, DFLT_HEIGHT ));
+
+        SetFrameSizeFromTable();
+
         if ( 0 != ::GetHtmlMode(pSh->GetView().GetDocShell()) )
             m_aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::PRINT_AREA ) );
 
@@ -620,6 +623,38 @@ void SwFlyFrameAttrMgr::SetAttrSet(const SfxItemSet& rSet)
 {
     m_aSet.ClearItem();
     m_aSet.Put( rSet );
+}
+
+void SwFlyFrameAttrMgr::SetFrameSizeFromTable()
+{
+    if (!m_pOwnSh->IsTableMode())
+    {
+        return;
+    }
+
+    // We have a table selection.
+    SwSelBoxes aBoxes;
+    GetTableSel(*m_pOwnSh, aBoxes);
+    if (aBoxes.empty())
+    {
+        return;
+    }
+
+    auto pTableNd = const_cast<SwTableNode*>(aBoxes[0]->GetSttNd()->FindTableNode());
+    if (!pTableNd)
+    {
+        return;
+    }
+
+    SwTable& rTable = pTableNd->GetTable();
+    if (aBoxes.size() != rTable.GetTabSortBoxes().size())
+    {
+        return;
+    }
+
+    // The whole table is selected: default fly width should be the table width
+    // in this case.
+    m_aSet.Put(rTable.GetFrameFormat()->GetFrameSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
