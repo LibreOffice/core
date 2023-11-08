@@ -232,7 +232,7 @@ public:
 
     // this method tries to register an Item at this Pool. If this
     // is done depends on the SfxItemInfo-flag _bNeedsPoolRegistration
-    // which needs to be set for Items that are acessed using
+    // which needs to be set for Items that are accessed using
     // GetItemSurrogates, else the Item will not be returned/accessed
     void tryRegisterSfxPoolItem(const SfxPoolItem& rItem, bool bPoolDirect);
 
