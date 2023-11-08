@@ -67,7 +67,7 @@ public:
 }
 
 OControlStyleContext::OControlStyleContext( ORptFilter& rImport,
-        SvXMLStylesContext& rStyles, XmlStyleFamily nFamily ) :
+        OReportStylesContext& rStyles, XmlStyleFamily nFamily ) :
     XMLPropStyleContext( rImport, rStyles, nFamily, false/*bDefaultStyle*/ ),
     pStyles(&rStyles),
     m_nNumberFormat(-1),
@@ -121,7 +121,7 @@ void OControlStyleContext::SetDefaults()
 
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
-    sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
+    sal_Int32 nIndex(pStyles->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be inserted in a sort order later

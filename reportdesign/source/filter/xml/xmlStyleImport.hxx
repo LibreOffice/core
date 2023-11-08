@@ -27,11 +27,12 @@
 namespace rptxml
 {
     class ORptFilter;
+    class OReportStylesContext;
 
     class OControlStyleContext : public XMLPropStyleContext
     {
         OUString             m_sDataStyleName;
-        SvXMLStylesContext*         pStyles;
+        OReportStylesContext*       pStyles;
         //  std::vector<ScXMLMapContent>    aMaps;
         sal_Int32                   m_nNumberFormat;
         ORptFilter&                 m_rImport;
@@ -46,7 +47,7 @@ namespace rptxml
     public:
 
         OControlStyleContext( ORptFilter& rImport,
-                SvXMLStylesContext& rStyles, XmlStyleFamily nFamily );
+                OReportStylesContext& rStyles, XmlStyleFamily nFamily );
 
         virtual ~OControlStyleContext() override;
 
