@@ -348,7 +348,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             return pageRect;
         }
 
-        /** This function is invoked via JNI; be careful when modifying signature. */
         public void beginDrawing() {
             mFrameStartTime = SystemClock.uptimeMillis();
 
@@ -425,7 +424,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             return mask;
         }
 
-        /** This function is invoked via JNI; be careful when modifying signature. */
         public void drawBackground() {
             GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 
@@ -474,7 +472,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             rootLayer.draw(mPageContext);
         }
 
-        /** This function is invoked via JNI; be careful when modifying signature. */
         public void drawForeground() {
             /* Draw any extra layers that were added (likely plugins) */
             if (mExtraLayers.size() > 0) {
@@ -498,7 +495,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                 mHorizScrollLayer.draw(mPageContext);
         }
 
-        /** This function is invoked via JNI; be careful when modifying signature. */
         public void endDrawing() {
             // If a layer update requires further work, schedule another redraw
             if (!mUpdated)
