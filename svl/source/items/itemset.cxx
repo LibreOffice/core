@@ -205,7 +205,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     const sal_uInt16 nIndex(pTargetPool->GetIndex_Impl(nWhich));
 
     // the Item itself is shareable when it already is used somewhere
-    // which is equlivalent to be referenced already. IsPooledItem also
+    // which is equivalent to be referenced already. IsPooledItem also
     // checked for SFX_ITEMS_MAXREF, that is not needed here. Use a
     // fake 'while' loop and 'break' to make this better readable
 
