@@ -378,9 +378,9 @@ void SdPage::lateInit(const SdPage& rSrcPage)
     rSrcPage.cloneAnimations(*this);
 
     // annotations
-    for(const Reference< XAnnotation >& srcAnnotation : rSrcPage.maAnnotations)
+    for(const rtl::Reference< Annotation >& srcAnnotation : rSrcPage.maAnnotations)
     {
-        Reference< XAnnotation > ref;
+        rtl::Reference< Annotation > ref;
         createAnnotation(ref);
         ref->setPosition(srcAnnotation->getPosition());
         ref->setSize(srcAnnotation->getSize());
@@ -553,12 +553,12 @@ bool SdPage::Equals(const SdPage& rOtherPage) const
     return true;
  }
 
-void SdPage::createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
+void SdPage::createAnnotation( rtl::Reference< Annotation >& xAnnotation )
 {
     sd::createAnnotation( xAnnotation, this );
 }
 
-void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIndex )
+void SdPage::addAnnotation( const rtl::Reference< Annotation >& xAnnotation, int nIndex )
 {
     if( (nIndex == -1) || (nIndex > static_cast<int>(maAnnotations.size())) )
     {
@@ -581,10 +581,10 @@ void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIn
     NotifyDocumentEvent(
         static_cast< SdDrawDocument& >(getSdrModelFromSdrPage()),
         "OnAnnotationInserted",
-        Reference<XInterface>(xAnnotation, UNO_QUERY));
+        Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY));
 }
 
-void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
+void SdPage::removeAnnotation( const rtl::Reference< Annotation >& xAnnotation )
 {
     if( getSdrModelFromSdrPage().IsUndoEnabled() )
     {
@@ -601,7 +601,7 @@ void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
     NotifyDocumentEvent(
         static_cast< SdDrawDocument& >( getSdrModelFromSdrPage() ),
         "OnAnnotationRemoved",
-        Reference<XInterface>( xAnnotation, UNO_QUERY ) );
+        Reference<XInterface>( static_cast<cppu::OWeakObject*>(xAnnotation.get()), UNO_QUERY ) );
 }
 
 void SdPage::getGraphicsForPrefetch(std::vector<Graphic*>& graphics) const

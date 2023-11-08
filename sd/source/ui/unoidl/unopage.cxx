@@ -41,6 +41,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
+#include <Annotation.hxx>
 #include <AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>
 #include <unomodel.hxx>
@@ -2523,14 +2524,16 @@ Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
     if( !GetPage() )
         throw DisposedException();
 
-    Reference< XAnnotation > xRet;
+    rtl::Reference< sd::Annotation > xRet;
     GetPage()->createAnnotation(xRet);
     return xRet;
 }
 
 void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation)
 {
-    GetPage()->removeAnnotation(annotation);
+    rtl::Reference<sd::Annotation> xSdAnnotation = dynamic_cast<sd::Annotation*>(annotation.get());
+    assert(bool(annotation) == bool(xSdAnnotation) && "must be of concrete type sd::Annoation");
+    GetPage()->removeAnnotation(xSdAnnotation);
 }
 
 Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration()

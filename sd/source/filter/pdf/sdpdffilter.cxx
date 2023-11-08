@@ -93,7 +93,7 @@ bool SdPdfFilter::Import()
 
         for (auto const& rPDFAnnotation : rPDFGraphicResult.GetAnnotations())
         {
-            uno::Reference<office::XAnnotation> xAnnotation;
+            rtl::Reference<sd::Annotation> xAnnotation;
             pPage->createAnnotation(xAnnotation);
 
             xAnnotation->setAuthor(rPDFAnnotation.maAuthor);
@@ -111,10 +111,9 @@ bool SdPdfFilter::Import()
 
             if (rPDFAnnotation.mpMarker)
             {
-                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
-                pAnnotation->createCustomAnnotationMarker();
+                xAnnotation->createCustomAnnotationMarker();
                 sd::CustomAnnotationMarker& rCustomAnnotationMarker
-                    = pAnnotation->getCustomAnnotationMarker();
+                    = xAnnotation->getCustomAnnotationMarker();
 
                 rCustomAnnotationMarker.maLineColor = rPDFAnnotation.maColor;
 
@@ -191,8 +190,7 @@ bool SdPdfFilter::Import()
             }
             else if (rPDFAnnotation.meSubType == vcl::pdf::PDFAnnotationSubType::FreeText)
             {
-                auto* pAnnotation = static_cast<sd::Annotation*>(xAnnotation.get());
-                pAnnotation->setIsFreeText(true);
+                xAnnotation->setIsFreeText(true);
             }
         }
     }

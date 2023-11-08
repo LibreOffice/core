@@ -2549,7 +2549,7 @@ void SdXImpressDocument::getPostIts(::tools::JsonWriter& rJsonWriter)
         pPage = static_cast<SdPage*>(mpDoc->GetPage(nPage));
         const sd::AnnotationVector& aPageAnnotations = pPage->getAnnotations();
 
-        for (const uno::Reference<office::XAnnotation>& xAnnotation : aPageAnnotations)
+        for (const rtl::Reference<Annotation>& xAnnotation : aPageAnnotations)
         {
             sal_uInt32 nID = sd::getAnnotationId(xAnnotation);
             OString nodeName = "comment" + OString::number(nID);

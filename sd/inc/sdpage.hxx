@@ -54,6 +54,7 @@ class Graphic;
 namespace sd
 {
     class MainSequence;
+    class Annotation;
 }
 
 namespace sd {
@@ -79,7 +80,7 @@ namespace sd {
         bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
 
-    typedef std::vector< css::uno::Reference< css::office::XAnnotation > > AnnotationVector;
+    typedef std::vector< rtl::Reference< Annotation > > AnnotationVector;
 }
 
 namespace sd {
@@ -367,9 +368,9 @@ public:
     */
     bool IsPrecious() const { return mbIsPrecious; }
 
-    void createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
-    void addAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, int nIndex );
-    void removeAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+    void createAnnotation( rtl::Reference< sd::Annotation >& xAnnotation );
+    void addAnnotation( const rtl::Reference< sd::Annotation >& xAnnotation, int nIndex );
+    void removeAnnotation( const rtl::Reference< sd::Annotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     bool Equals(const SdPage&) const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const override;

@@ -38,7 +38,7 @@ struct ImplSVEvent;
 
 namespace sd
 {
-
+class Annotation;
 class ViewShellBase;
 
 namespace tools {
@@ -73,15 +73,15 @@ public:
 
     void SelectNextAnnotation(bool bForward);
 
-    void SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit = false );
-    void GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+    void SelectAnnotation( const rtl::Reference< Annotation >& xAnnotation, bool bEdit = false );
+    void GetSelectedAnnotation( rtl::Reference< Annotation >& xAnnotation );
 
     void InsertAnnotation(const OUString& rText);
-    void DeleteAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
+    void DeleteAnnotation( const rtl::Reference< Annotation >& xAnnotation );
     void DeleteAnnotationsByAuthor( std::u16string_view sAuthor );
     void DeleteAllAnnotations();
 
-    void ExecuteAnnotationTagContextMenu(const css::uno::Reference<css::office::XAnnotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect);
+    void ExecuteAnnotationTagContextMenu(const rtl::Reference<Annotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect);
 
     static Color GetColorDark(sal_uInt16 aAuthorIndex);
     static Color GetColorLight(sal_uInt16 aAuthorIndex);
@@ -121,13 +121,13 @@ private:
 
     css::uno::Reference< css::drawing::XDrawView > mxView;
     rtl::Reference< SdPage > mxCurrentPage;
-    css::uno::Reference< css::office::XAnnotation > mxSelectedAnnotation;
+    rtl::Reference< Annotation > mxSelectedAnnotation;
 
     bool mbShowAnnotations;
     ImplSVEvent * mnUpdateTagsEvent;
     vcl::Font maFont;
 
-    css::uno::Reference<css::office::XAnnotation> GetAnnotationById(sal_uInt32 nAnnotationId);
+    rtl::Reference<Annotation> GetAnnotationById(sal_uInt32 nAnnotationId);
 };
 
 OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );

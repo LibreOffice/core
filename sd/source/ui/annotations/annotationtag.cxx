@@ -162,19 +162,19 @@ namespace {
 class AnnotationHdl : public SmartHdl
 {
 public:
-    AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt );
+    AnnotationHdl( const SmartTagReference& xTag, const rtl::Reference< Annotation >& xAnnotation, const Point& rPnt );
 
     virtual void CreateB2dIAObject() override;
     virtual bool IsFocusHdl() const override;
 
 private:
-    Reference< XAnnotation > mxAnnotation;
+    rtl::Reference< sd::Annotation > mxAnnotation;
     rtl::Reference< AnnotationTag > mxTag;
 };
 
 }
 
-AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const Reference< XAnnotation >& xAnnotation, const Point& rPnt )
+AnnotationHdl::AnnotationHdl( const SmartTagReference& xTag, const rtl::Reference< Annotation >& xAnnotation, const Point& rPnt )
 : SmartHdl( xTag, rPnt, SdrHdlKind::SmartTag )
 , mxAnnotation( xAnnotation )
 , mxTag( dynamic_cast< AnnotationTag* >( xTag.get() ) )
@@ -225,11 +225,9 @@ void AnnotationHdl::CreateB2dIAObject()
         {
             std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
-            auto* pAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
-
-            if (pAnnotation && pAnnotation->hasCustomAnnotationMarker())
+            if (mxAnnotation && mxAnnotation->hasCustomAnnotationMarker())
             {
-                CustomAnnotationMarker& rCustomAnnotationMarker = pAnnotation->getCustomAnnotationMarker();
+                CustomAnnotationMarker& rCustomAnnotationMarker = mxAnnotation->getCustomAnnotationMarker();
 
                 auto& rPolygons = rCustomAnnotationMarker.maPolygons;
                 if (!rPolygons.empty())
@@ -274,7 +272,7 @@ bool AnnotationHdl::IsFocusHdl() const
     return true;
 }
 
-AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const Reference< XAnnotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont )
+AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const rtl::Reference< Annotation >& xAnnotation, Color const & rColor, int nIndex, const vcl::Font& rFont )
 : SmartTag( rView )
 , mrManager( rManager )
 , mxAnnotation( xAnnotation )
@@ -525,8 +523,7 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
     ScopedVclPtrInstance< VirtualDevice > pVDev;
 
     OUString sText;
-    auto* pAnnotation = dynamic_cast<sd::Annotation*>(mxAnnotation.get());
-    if (pAnnotation && pAnnotation->isFreeText())
+    if (mxAnnotation && mxAnnotation->isFreeText())
     {
         sText = mxAnnotation->getTextRange()->getString();
     }

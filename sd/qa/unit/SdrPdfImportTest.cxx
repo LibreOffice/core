@@ -20,6 +20,7 @@
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <vcl/pdf/PDFAnnotationSubType.hxx>
 
+#include <Annotation.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShell.hxx>
 #include <sdpage.hxx>

@@ -66,6 +66,7 @@
 #include <o3tl/sorted_vector.hxx>
 #include <xmloff/autolayout.hxx>
 
+#include <Annotation.hxx>
 #include <Outliner.hxx>
 #include <app.hrc>
 #include <createunopageimpl.hxx>

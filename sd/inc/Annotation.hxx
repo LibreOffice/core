@@ -49,7 +49,7 @@ namespace sd {
 
 enum class CommentNotificationType { Add, Modify, Remove };
 
-void createAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation, SdPage* pPage );
+void createAnnotation( rtl::Reference< Annotation >& xAnnotation, SdPage* pPage );
 
 std::unique_ptr<SdrUndoAction> CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bInsert );
 
@@ -73,7 +73,7 @@ struct SD_DLLPUBLIC CustomAnnotationMarker
     std::vector<basegfx::B2DPolygon> maPolygons;
 };
 
-class Annotation final : private ::cppu::BaseMutex,
+class SD_DLLPUBLIC Annotation final : private ::cppu::BaseMutex,
                    public ::cppu::WeakComponentImplHelper<css::office::XAnnotation>,
                    public ::cppu::PropertySetMixin<css::office::XAnnotation>
 {

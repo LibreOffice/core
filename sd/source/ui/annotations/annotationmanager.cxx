@@ -248,7 +248,7 @@ void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*
 {
 }
 
-Reference<XAnnotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnnotationId)
+rtl::Reference<Annotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnnotationId)
 {
     SdPage* pPage = nullptr;
     do
@@ -266,7 +266,7 @@ Reference<XAnnotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnno
         }
     } while( pPage );
 
-    Reference<XAnnotation> xAnnotationEmpty;
+    rtl::Reference<Annotation> xAnnotationEmpty;
     return xAnnotationEmpty;
 }
 
@@ -355,13 +355,20 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
         break;
     case SID_DELETE_POSTIT:
         {
-            Reference< XAnnotation > xAnnotation;
+            rtl::Reference< Annotation > xAnnotation;
             sal_uInt32 nId = 0;
             if( pArgs )
             {
                 const SfxPoolItem*  pPoolItem = nullptr;
                 if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
-                    static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xAnnotation;
+                {
+                    uno::Reference<XAnnotation> xTmpAnnotation;
+                    if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
+                    {
+                        xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
+                        assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annoation");
+                    }
+                }
                 if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_ID, true, &pPoolItem ) )
                     nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
             }
@@ -490,7 +497,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         }
     }
 
-    Reference< XAnnotation > xAnnotation;
+    rtl::Reference< Annotation > xAnnotation;
     pPage->createAnnotation( xAnnotation );
 
     OUString sAuthor;
@@ -530,7 +537,7 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
 {
-    Reference< XAnnotation > xAnnotation;
+    rtl::Reference< Annotation > xAnnotation;
     const SfxItemSet* pArgs = rReq.GetArgs();
     OUString sReplyText;
     if( pArgs )
@@ -543,7 +550,14 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
             xAnnotation = GetAnnotationById(nReplyId);
         }
         else if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
-            static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue() >>= xAnnotation;
+        {
+            uno::Reference<XAnnotation> xTmpAnnotation;
+            if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
+            {
+                xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
+                assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annoation");
+            }
+        }
 
         if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_TEXT, true, &pPoolItem ) )
             sReplyText = static_cast<const SvxPostItTextItem*>( pPoolItem )->GetValue();
@@ -614,7 +628,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
     SelectAnnotation( xAnnotation, true );
 }
 
-void AnnotationManagerImpl::DeleteAnnotation( const Reference< XAnnotation >& xAnnotation )
+void AnnotationManagerImpl::DeleteAnnotation( const rtl::Reference< Annotation >& xAnnotation )
 {
     SdPage* pPage = GetCurrentPage();
 
@@ -642,10 +656,9 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( std::u16string_view sAuth
     {
         pPage = GetNextPage( pPage, true );
 
-        if( pPage && !pPage->getAnnotations().empty() )
+        if( pPage )
         {
-            AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( Reference< XAnnotation >& xAnnotation : aAnnotations )
+            for( const rtl::Reference< Annotation >& xAnnotation : pPage->getAnnotations() )
             {
                 if( xAnnotation->getAuthor() == sAuthor )
                 {
@@ -703,7 +716,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 
     rSet.Put(SfxBoolItem(SID_TOGGLE_NOTES, mbShowAnnotations));
 
-    Reference< XAnnotation > xAnnotation;
+    rtl::Reference< Annotation > xAnnotation;
     GetSelectedAnnotation( xAnnotation );
 
     // Don't disable these slot in case of LOK, as postit doesn't need to
@@ -742,7 +755,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForward)
 {
     ShowAnnotations( true );
 
-    Reference< XAnnotation > xCurrent;
+    rtl::Reference< Annotation > xCurrent;
     GetSelectedAnnotation( xCurrent );
     SdPage* pPage = GetCurrentPage();
     if( !pPage )
@@ -852,7 +865,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag const & rTag )
     }
 }
 
-void AnnotationManagerImpl::SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit /* = sal_False */ )
+void AnnotationManagerImpl::SelectAnnotation( const rtl::Reference< Annotation >& xAnnotation, bool bEdit /* = sal_False */ )
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -866,7 +879,7 @@ void AnnotationManagerImpl::SelectAnnotation( const css::uno::Reference< css::of
     }
 }
 
-void AnnotationManagerImpl::GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation )
+void AnnotationManagerImpl::GetSelectedAnnotation( rtl::Reference< Annotation >& xAnnotation )
 {
     xAnnotation = mxSelectedAnnotation;
 }
@@ -954,7 +967,7 @@ void AnnotationManagerImpl::CreateTags()
 
         rtl::Reference< AnnotationTag > xSelectedTag;
 
-        for (const css::uno::Reference< css::office::XAnnotation > & xAnnotation : mxCurrentPage->getAnnotations() )
+        for (const rtl::Reference< Annotation > & xAnnotation : mxCurrentPage->getAnnotations() )
         {
             Color aColor( GetColorLight( mpDoc->GetAnnotationAuthorIndex( xAnnotation->getAuthor() ) ) );
             rtl::Reference< AnnotationTag > xTag( new AnnotationTag( *this, *xViewShell->GetView(), xAnnotation, aColor, nIndex++, maFont ) );
@@ -1029,7 +1042,7 @@ IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     }
 }
 
-void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const Reference<XAnnotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect)
+void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const rtl::Reference<Annotation>& xAnnotation, weld::Widget* pParent, const ::tools::Rectangle& rContextRect)
 {
     SfxDispatcher* pDispatcher( getDispatcher( mrBase ) );
     if( !pDispatcher )
@@ -1063,13 +1076,13 @@ void AnnotationManagerImpl::ExecuteAnnotationTagContextMenu(const Reference<XAnn
 
     if (sId == ".uno:ReplyToAnnotation")
     {
-        const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( xAnnotation ) );
+        const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( css::uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get())) ) );
         pDispatcher->ExecuteList(SID_REPLYTO_POSTIT,
                 SfxCallMode::ASYNCHRON, { &aItem });
     }
     else if (sId == ".uno:DeleteAnnotation")
     {
-        const SfxUnoAnyItem aItem( SID_DELETE_POSTIT, Any( xAnnotation ) );
+        const SfxUnoAnyItem aItem( SID_REPLYTO_POSTIT, Any( css::uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(xAnnotation.get())) ) );
         pDispatcher->ExecuteList(SID_DELETE_POSTIT, SfxCallMode::ASYNCHRON,
                 { &aItem });
     }

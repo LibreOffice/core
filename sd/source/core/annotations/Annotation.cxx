@@ -108,7 +108,7 @@ protected:
 
 }
 
-void createAnnotation(uno::Reference<office::XAnnotation>& xAnnotation, SdPage* pPage )
+void createAnnotation(rtl::Reference<Annotation>& xAnnotation, SdPage* pPage )
 {
     xAnnotation.set(
         new Annotation(comphelper::getProcessComponentContext(), pPage));
@@ -409,10 +409,8 @@ UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotat
     SdPage* pPage = rAnnotation.GetPage();
     if( pPage )
     {
-        uno::Reference<office::XAnnotation> xAnnotation( &rAnnotation );
-
         const AnnotationVector& rVec = pPage->getAnnotations();
-        auto iter = std::find(rVec.begin(), rVec.end(), xAnnotation);
+        auto iter = std::find(rVec.begin(), rVec.end(), &rAnnotation);
         mnIndex += std::distance(rVec.begin(), iter);
     }
 }
@@ -424,14 +422,14 @@ void UndoInsertOrRemoveAnnotation::Undo()
     if( !(pPage && pModel) )
         return;
 
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
     if( mbInsert )
     {
-        pPage->removeAnnotation( xAnnotation );
+        pPage->removeAnnotation( mxAnnotation );
     }
     else
     {
-        pPage->addAnnotation( xAnnotation, mnIndex );
+        pPage->addAnnotation( mxAnnotation, mnIndex );
+        uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
         LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
     }
 }
@@ -443,16 +441,15 @@ void UndoInsertOrRemoveAnnotation::Redo()
     if( !(pPage && pModel) )
         return;
 
-    uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
-
     if( mbInsert )
     {
-        pPage->addAnnotation( xAnnotation, mnIndex );
+        pPage->addAnnotation( mxAnnotation, mnIndex );
+        uno::Reference<office::XAnnotation> xAnnotation( mxAnnotation );
         LOKCommentNotifyAll( CommentNotificationType::Add, xAnnotation );
     }
     else
     {
-        pPage->removeAnnotation( xAnnotation );
+        pPage->removeAnnotation( mxAnnotation );
     }
 }
 
