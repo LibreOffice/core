@@ -481,8 +481,13 @@ sal_Int16 VCLXMenu::execute(
         if ( !mpMenu || !IsPopupMenu() )
             return 0;
     }
+    PopupMenu* pPopupMenu = static_cast<PopupMenu*>(pMenu.get());
+    MenuFlags nMenuFlags = pPopupMenu->GetMenuFlags();
+    // #102790# context menus shall never show disabled entries
+    nMenuFlags |= MenuFlags::HideDisabledEntries;
+    pPopupMenu->SetMenuFlags(nMenuFlags);
     // cannot call this with mutex locked because it will call back into us
-    return static_cast<PopupMenu*>(pMenu.get())->Execute(
+    return pPopupMenu->Execute(
                 VCLUnoHelper::GetWindow( rxWindowPeer ),
                 VCLRectangle( rPos ),
                 static_cast<PopupMenuFlags>(nFlags) | PopupMenuFlags::NoMouseUpClose );
