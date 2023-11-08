@@ -1300,7 +1300,7 @@ static bool path_get_parent(OUString& path)
         sal_Int32 i = path.lastIndexOf(BACKSLASH);
         if (-1 < i)
         {
-            path = OUString(path.getStr(), i);
+            path = path.copy(0, i);
             return true;
         }
     }
