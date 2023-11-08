@@ -90,7 +90,8 @@ published constants MacroExecMode
 
         <p> If the macro is signed with unknown certificate a warning will
             appear. The macro either will not be executed or if the warning
-            allows confirmation, it will be executed after user agrees.
+            allows confirmation, it will be executed after user agrees to
+            trust the certificate.
         </p>
     */
     const short FROM_LIST_AND_SIGNED_WARN = 8;
