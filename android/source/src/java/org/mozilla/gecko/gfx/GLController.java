@@ -99,17 +99,6 @@ public class GLController {
         return mEGL.eglSwapBuffers(mEGLDisplay, mEGLSurface);
     }
 
-    public boolean checkForLostContext() {
-        if (mEGL.eglGetError() != EGL11.EGL_CONTEXT_LOST) {
-            return false;
-        }
-
-        mEGLDisplay = null;
-        mEGLConfig = null;
-        mEGLContext = null;
-        mEGLSurface = null;
-        return true;
-    }
     public synchronized int getWidth() {
         return mWidth;
     }
