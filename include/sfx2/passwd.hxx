@@ -50,12 +50,14 @@ private:
     std::unique_ptr<weld::Entry> m_xUserED;
     std::unique_ptr<weld::Label> m_xPassword1FT;
     std::unique_ptr<weld::Entry> m_xPassword1ED;
+    std::unique_ptr<weld::LevelBar> m_xPassword1StrengthBar;
     std::unique_ptr<weld::Label> m_xConfirm1FT;
     std::unique_ptr<weld::Entry> m_xConfirm1ED;
 
     std::unique_ptr<weld::Frame> m_xPassword2Box;
     std::unique_ptr<weld::Label> m_xPassword2FT;
     std::unique_ptr<weld::Entry> m_xPassword2ED;
+    std::unique_ptr<weld::LevelBar> m_xPassword2StrengthBar;
     std::unique_ptr<weld::Label> m_xConfirm2FT;
     std::unique_ptr<weld::Entry> m_xConfirm2ED;
 

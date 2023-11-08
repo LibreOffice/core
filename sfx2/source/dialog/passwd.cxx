@@ -20,6 +20,7 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
+#include <svl/PasswordHelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -31,10 +32,22 @@ IMPL_LINK_NOARG(SfxPasswordDialog, EditModifyHdl, weld::Entry&, void)
 
 void SfxPasswordDialog::ModifyHdl()
 {
-    bool bEnable = m_xPassword1ED->get_text().getLength() >= mnMinLen;
+    OUString aPassword1Text = m_xPassword1ED->get_text();
+    bool bEnable = aPassword1Text.getLength() >= mnMinLen;
     if (m_xPassword2ED->get_visible())
         bEnable = (bEnable && (m_xPassword2ED->get_text().getLength() >= mnMinLen));
     m_xOKBtn->set_sensitive(bEnable);
+
+    if (m_xConfirm1ED->get_visible())
+    {
+        m_xPassword1StrengthBar->set_percentage(
+            SvPasswordHelper::GetPasswordStrengthPercentage(aPassword1Text));
+    }
+    if (m_xConfirm2ED->get_visible())
+    {
+        m_xPassword2StrengthBar->set_percentage(
+            SvPasswordHelper::GetPasswordStrengthPercentage(m_xPassword2ED->get_text()));
+    }
 }
 
 IMPL_LINK(SfxPasswordDialog, InsertTextHdl, OUString&, rTest, bool)
@@ -100,11 +113,13 @@ SfxPasswordDialog::SfxPasswordDialog(weld::Widget* pParent, const OUString* pGro
     , m_xUserED(m_xBuilder->weld_entry("usered"))
     , m_xPassword1FT(m_xBuilder->weld_label("pass1ft"))
     , m_xPassword1ED(m_xBuilder->weld_entry("pass1ed"))
+    , m_xPassword1StrengthBar(m_xBuilder->weld_level_bar("pass1bar"))
     , m_xConfirm1FT(m_xBuilder->weld_label("confirm1ft"))
     , m_xConfirm1ED(m_xBuilder->weld_entry("confirm1ed"))
     , m_xPassword2Box(m_xBuilder->weld_frame("password2frame"))
     , m_xPassword2FT(m_xBuilder->weld_label("pass2ft"))
     , m_xPassword2ED(m_xBuilder->weld_entry("pass2ed"))
+    , m_xPassword2StrengthBar(m_xBuilder->weld_level_bar("pass2bar"))
     , m_xConfirm2FT(m_xBuilder->weld_label("confirm2ft"))
     , m_xConfirm2ED(m_xBuilder->weld_entry("confirm2ed"))
     , m_xMinLengthFT(m_xBuilder->weld_label("minlenft"))
@@ -177,6 +192,7 @@ void SfxPasswordDialog::PreRun()
     m_xUserED->hide();
     m_xConfirm1FT->hide();
     m_xConfirm1ED->hide();
+    m_xPassword1StrengthBar->hide();
     m_xPassword1FT->hide();
     m_xPassword2Box->hide();
     m_xPassword2FT->hide();
@@ -184,6 +200,7 @@ void SfxPasswordDialog::PreRun()
     m_xPassword2FT->hide();
     m_xConfirm2FT->hide();
     m_xConfirm2ED->hide();
+    m_xPassword2StrengthBar->hide();
 
     if (mnExtras != SfxShowExtras::NONE)
         m_xPassword1FT->show();
@@ -196,6 +213,7 @@ void SfxPasswordDialog::PreRun()
     {
         m_xConfirm1FT->show();
         m_xConfirm1ED->show();
+        m_xPassword1StrengthBar->show();
     }
     if (mnExtras & SfxShowExtras::PASSWORD2)
     {
@@ -207,6 +225,7 @@ void SfxPasswordDialog::PreRun()
     {
         m_xConfirm2FT->show();
         m_xConfirm2ED->show();
+        m_xPassword2StrengthBar->show();
     }
 }
 
