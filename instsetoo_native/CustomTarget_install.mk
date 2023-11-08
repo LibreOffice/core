@@ -99,7 +99,7 @@ gb_Make_JobLimiter := $(WORKDIR)/job-limiter.exe
 
 $(gb_Make_JobLimiter): $(SRCDIR)/solenv/bin/job-limiter.cpp
 	cd $(WORKDIR) && \
-	$(CXX) $(SOLARINC) -EHsc -Zi $^ -link -LIBPATH:$(subst ;, -LIBPATH:,$(ILIB_FOR_BUILD)) || rm -f $@
+	$(CXX_FOR_BUILD) $(SOLARINC) -EHsc $^ -link -LIBPATH:$(subst ;, -LIBPATH:,$(ILIB_FOR_BUILD)) || rm -f $@
 
 # with all languages the logfile name would be too long when building the windows installation set,
 # that's the reason for the substitution to multilang below in case more than just en-US is packaged
