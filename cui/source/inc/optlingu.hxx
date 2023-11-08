@@ -22,6 +22,7 @@
 #include <svx/langbox.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/configuration/ReadWriteAccess.hpp>
 
 namespace com::sun::star{
     namespace beans{
@@ -59,6 +60,8 @@ class SvxEditModulesDlg : public weld::GenericDialogController
     std::unique_ptr<weld::LinkButton> m_xMoreDictsLink;
     std::unique_ptr<weld::Button> m_xClosePB;
     std::unique_ptr<SvxLanguageBox> m_xLanguageLB;
+
+    css::uno::Reference< css::configuration::XReadWriteAccess> m_xReadWriteAccess;
 
     DECL_LINK( SelectHdl_Impl, weld::TreeView&, void );
     DECL_LINK( UpDownHdl_Impl, weld::Button&, void );

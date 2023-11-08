@@ -24,6 +24,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <o3tl/safeint.hxx>
 #include <officecfg/Office/Security.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <editeng/unolingu.hxx>
@@ -46,6 +47,8 @@
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/lang/XServiceDisplayName.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
@@ -1196,6 +1199,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_AUTO));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1205,6 +1209,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sGrammarAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_GRAMMAR_AUTO));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1214,6 +1219,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sCapitalWords, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_UPPER_CASE));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1223,6 +1229,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sWordsWithDigits, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_WITH_DIGITS));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1232,6 +1239,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellClosedCompound, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_CLOSED_COMPOUND));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1241,6 +1249,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellHyphenatedCompound, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_HYPHENATED_COMPOUND));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1250,6 +1259,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sSpellSpecial, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_SPELL_SPECIAL));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1258,6 +1268,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     m_xLinguOptionsCLB->set_text(nEntry, sNumMinWordlen + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_HYPH_MIN_WORD_LENGTH));
     nUPN_HYPH_MIN_WORD_LENGTH = nEntry;
 
     const SfxHyphenRegionItem *pHyp = nullptr;
@@ -1273,6 +1284,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     nUserData = OptionsUserData( EID_NUM_PRE_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     m_xLinguOptionsCLB->set_text(nEntry, sNumPreBreak + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_HYPH_MIN_LEADING));
     nUPN_HYPH_MIN_LEADING = nEntry;
 
     m_xLinguOptionsCLB->append();
@@ -1284,6 +1296,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     nUserData = OptionsUserData( EID_NUM_POST_BREAK, true, static_cast<sal_uInt16>(nVal), false, false).GetUserData();
     m_xLinguOptionsCLB->set_text(nEntry, sNumPostBreak + " " + OUString::number(nVal), 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_HYPH_MIN_TRAILING));
     nUPN_HYPH_MIN_TRAILING = nEntry;
 
     m_xLinguOptionsCLB->append();
@@ -1294,6 +1307,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sHyphAuto, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_HYPH_AUTO));
 
     m_xLinguOptionsCLB->append();
     ++nEntry;
@@ -1303,6 +1317,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
     m_xLinguOptionsCLB->set_toggle(nEntry, bVal ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xLinguOptionsCLB->set_text(nEntry, sHyphSpecial, 0);
     m_xLinguOptionsCLB->set_id(nEntry, OUString::number(nUserData));
+    m_xLinguOptionsCLB->set_sensitive(nEntry, !aLngCfg.IsReadOnly(UPN_IS_HYPH_SPECIAL));
 
     m_xLinguOptionsCLB->thaw();
 
@@ -1315,6 +1330,15 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
                                       m_xLinguDicsCLB->get_height_rows(5));
     m_xLinguOptionsCLB->set_size_request(m_xLinguOptionsCLB->get_preferred_size().Width(),
                                          m_xLinguOptionsCLB->get_height_rows(5));
+
+    if (officecfg::Office::Linguistic::General::DictionaryList::ActiveDictionaries::isReadOnly())
+    {
+        m_xLinguDicsFT->set_sensitive(false);
+        m_xLinguDicsCLB->set_sensitive(false);
+        m_xLinguDicsNewPB->set_sensitive(false);
+        m_xLinguDicsEditPB->set_sensitive(false);
+        m_xLinguDicsDelPB->set_sensitive(false);
+    }
 }
 
 IMPL_LINK(SvxLinguTabPage, BoxDoubleClickHdl_Impl, weld::TreeView&, rBox, bool)
@@ -1625,6 +1649,9 @@ SvxEditModulesDlg::SvxEditModulesDlg(weld::Window* pParent, SvxLinguData_Impl& r
     if (m_xLanguageLB->get_active_id() != eSysLang)
         m_xLanguageLB->set_active(0);
 
+    css::uno::Reference < css::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+    m_xReadWriteAccess = css::configuration::ReadWriteAccess::create(xContext, "*");
+
     m_xLanguageLB->connect_changed( LINK( this, SvxEditModulesDlg, LangSelectListBoxHdl_Impl ));
     LangSelectHdl_Impl(m_xLanguageLB.get());
 }
@@ -1753,6 +1780,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
     {
         sal_Int32 n;
         ServiceInfo_Impl* pInfo;
+        bool bReadOnly = false;
 
         int nRow = 0;
         // spellchecker entries
@@ -1765,6 +1793,14 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         m_xModulesCLB->set_text(nRow, sSpell, 0);
         m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
+
+        OUString aLangNodeName = LanguageTag::convertToBcp47(aCurLocale);
+        OUString aConfigPath = officecfg::Office::Linguistic::ServiceManager::path() + "/SpellCheckerList/" + aLangNodeName;
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
 
         Sequence< OUString > aNames( rLinguData.GetSortedImplNames( eCurLanguage, TYPE_SPELL ) );
         const OUString *pName = aNames.getConstArray();
@@ -1802,6 +1838,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_xModulesCLB->set_text(nRow, aTxt, 0);
                 m_xModulesCLB->set_text_emphasis(nRow, false, 0);
+                m_xModulesCLB->set_sensitive(nRow, !bReadOnly);
                 ++nRow;
             }
         }
@@ -1815,6 +1852,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         m_xModulesCLB->set_text(nRow, sGrammar, 0);
         m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
+
+        aConfigPath = officecfg::Office::Linguistic::ServiceManager::path() + "/GrammarCheckerList/" + aLangNodeName;
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_GRAMMAR );
         pName = aNames.getConstArray();
@@ -1853,6 +1897,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_xModulesCLB->set_text(nRow, aTxt, 0);
                 m_xModulesCLB->set_text_emphasis(nRow, false, 0);
+                m_xModulesCLB->set_sensitive(nRow, !bReadOnly);
                 ++nRow;
             }
         }
@@ -1866,6 +1911,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         m_xModulesCLB->set_text(nRow, sHyph, 0);
         m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
+
+        aConfigPath = officecfg::Office::Linguistic::ServiceManager::path() + "/HyphenatorList/" + aLangNodeName;
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_HYPH );
         pName = aNames.getConstArray();
@@ -1903,6 +1955,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_xModulesCLB->set_text(nRow, aTxt, 0);
                 m_xModulesCLB->set_text_emphasis(nRow, false, 0);
+                m_xModulesCLB->set_sensitive(nRow, !bReadOnly);
                 ++nRow;
             }
         }
@@ -1916,6 +1969,13 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
         m_xModulesCLB->set_text(nRow, sThes, 0);
         m_xModulesCLB->set_text_emphasis(nRow, true, 0);
         ++nRow;
+
+        aConfigPath = officecfg::Office::Linguistic::ServiceManager::path() + "/ThesaurusList/" + aLangNodeName;
+        if (m_xReadWriteAccess->hasPropertyByHierarchicalName(aConfigPath))
+        {
+            css::beans::Property aProperty = m_xReadWriteAccess->getPropertyByHierarchicalName(aConfigPath);
+            bReadOnly = (aProperty.Attributes & css::beans::PropertyAttribute::READONLY) != 0;
+        }
 
         aNames = rLinguData.GetSortedImplNames( eCurLanguage, TYPE_THES );
         pName = aNames.getConstArray();
@@ -1953,6 +2013,7 @@ void SvxEditModulesDlg::LangSelectHdl_Impl(const SvxLanguageBox* pBox)
                 m_xModulesCLB->set_toggle(nRow, bCheck ? TRISTATE_TRUE : TRISTATE_FALSE);
                 m_xModulesCLB->set_text(nRow, aTxt, 0);
                 m_xModulesCLB->set_text_emphasis(nRow, false, 0);
+                m_xModulesCLB->set_sensitive(nRow, !bReadOnly);
                 ++nRow;
             }
         }
