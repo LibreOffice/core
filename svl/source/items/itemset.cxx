@@ -169,7 +169,7 @@ SfxPoolItem const* implCreateItemEntry(SfxItemPool& rPool, SfxPoolItem const* pS
     {
         // SlotItems were always cloned in original (even when bPassingOwnership),
         // so do that here, too (but without bPassingOwnership).
-        // They do not need to be registerd at pool (actually impossible, pools
+        // They do not need to be registered at pool (actually impossible, pools
         // do not have entries for SlotItems) so handle here early
         if (!bPassingOwnership)
             pSource = pSource->Clone(rPool.GetMasterPool());
