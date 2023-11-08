@@ -43,6 +43,7 @@ fuzzer_externals = \
     hyphen \
     hunspell \
     zlib \
+    zxcvbn-c \
 
 fuzzer_statics = \
      findsofficepath \
