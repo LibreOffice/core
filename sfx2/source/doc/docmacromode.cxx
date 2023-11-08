@@ -151,8 +151,6 @@ namespace sfx2
 
     bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction, bool bHasValidContentSignature )
     {
-        sal_Int16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
-
         if ( SvtSecurityOptions::IsMacroDisabled() )
         {
             // no macro should be executed at all
@@ -169,6 +167,7 @@ namespace sfx2
         };
         AutoConfirmation eAutoConfirm( eNoAutoConfirm );
 
+        sal_Int16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
         if  (   ( nMacroExecutionMode == MacroExecMode::USE_CONFIG )
             ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
             ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
