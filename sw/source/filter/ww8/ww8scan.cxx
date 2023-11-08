@@ -2841,7 +2841,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
             WW8SprmIter aIter(pSprms, nLen, maSprmParser);
             while (aIter.GetSprms())
             {
-                fprintf(stderr, "id is %x\n", aIter.GetCurrentId());
+                SAL_INFO("sw.sprmreader",  "id is " << std::hex << aIter.GetCurrentId());
                 aIter.advance();
             }
         }
