@@ -18,10 +18,10 @@
  */
 
 #include <sfx2/objsh.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <passwdomdlg.hxx>
-#include <PasswordStrength.hxx>
 #include <strings.hrc>
 #include <dialmgr.hxx>
 
@@ -41,14 +41,16 @@ IMPL_LINK_NOARG(PasswordToOpenModifyDialog, OkBtnClickHdl, weld::Button&, void)
     {
         if (m_oPasswordPolicy)
         {
-            if (!passwordCompliesPolicy(m_xPasswdToOpenED->get_text().toUtf8().getStr()))
+            if (!SvPasswordHelper::PasswordMeetsPolicy(m_xPasswdToOpenED->get_text(),
+                                                       m_oPasswordPolicy))
             {
                 m_xPasswdToOpenED->grab_focus();
                 return;
             }
 
             if (m_xOpenReadonlyCB->get_active()
-                && !passwordCompliesPolicy(m_xPasswdToModifyED->get_text().toUtf8().getStr()))
+                && !SvPasswordHelper::PasswordMeetsPolicy(m_xPasswdToModifyED->get_text(),
+                                                          m_oPasswordPolicy))
             {
                 m_xPasswdToModifyED->grab_focus();
                 return;
@@ -115,7 +117,8 @@ IMPL_LINK(PasswordToOpenModifyDialog, ChangeHdl, weld::Entry&, rEntry, void)
     }
     assert(pIndicator);
 
-    bool bPasswordMeetsPolicy = passwordCompliesPolicy(aPasswordText.toUtf8().getStr());
+    bool bPasswordMeetsPolicy
+        = SvPasswordHelper::PasswordMeetsPolicy(aPasswordText, m_oPasswordPolicy);
     if (pLevelBar)
     {
         rEntry.set_message_type(bPasswordMeetsPolicy ? weld::EntryMessageType::Normal
@@ -126,7 +129,7 @@ IMPL_LINK(PasswordToOpenModifyDialog, ChangeHdl, weld::Entry&, rEntry, void)
     // if password doesn't meet policy cap the percentage at 70%
     if (pLevelBar)
         pLevelBar->set_percentage(
-            std::min(getPasswordStrengthPercentage(aPasswordText.toUtf8().getStr()),
+            std::min(SvPasswordHelper::GetPasswordStrengthPercentage(aPasswordText),
                      bPasswordMeetsPolicy ? std::numeric_limits<double>::max() : 70.0));
 
     if (m_nMaxPasswdLen)

@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <strings.hrc>
+#include <svl/PasswordHelper.hxx>
 #include "masterpasscrtdlg.hxx"
 
 // MasterPasswordCreateDialog---------------------------------------------------
@@ -28,7 +29,10 @@
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl, weld::Entry&, void)
 {
-    m_xOKBtn->set_sensitive(m_xEDMasterPasswordCrt->get_text().getLength() >= 1);
+    OUString aPasswordText = m_xEDMasterPasswordCrt->get_text();
+    m_xOKBtn->set_sensitive(aPasswordText.getLength() >= 1);
+    m_xPasswdStrengthBar->set_percentage(
+        SvPasswordHelper::GetPasswordStrengthPercentage(aPasswordText));
 }
 
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl, weld::Button&, void)
@@ -55,6 +59,7 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog(weld::Window* pParent, co
     , m_xEDMasterPasswordCrt(m_xBuilder->weld_entry("password1"))
     , m_xEDMasterPasswordRepeat(m_xBuilder->weld_entry("password2"))
     , m_xOKBtn(m_xBuilder->weld_button("ok"))
+    , m_xPasswdStrengthBar(m_xBuilder->weld_level_bar("password1levelbar"))
 {
     m_xOKBtn->set_sensitive(false);
     m_xOKBtn->connect_clicked( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );

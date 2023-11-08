@@ -71,13 +71,11 @@ $(eval $(call gb_Library_use_externals,cui,\
 	boost_headers \
 	$(call gb_Helper_optional,OPENCL,\
 		clew) \
-	icui18n \
     icuuc \
     icu_headers \
     libxml2 \
     orcus-parser \
     orcus \
-	zxcvbn-c \
     zxing \
 ))
 
@@ -244,7 +242,6 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \
     cui/source/util/FontFeatures \
-    cui/source/util/PasswordStrength \
     cui/source/dialogs/widgettestdlg \
 ))
 

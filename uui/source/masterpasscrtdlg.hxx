@@ -29,6 +29,7 @@ private:
     std::unique_ptr<weld::Entry> m_xEDMasterPasswordCrt;
     std::unique_ptr<weld::Entry> m_xEDMasterPasswordRepeat;
     std::unique_ptr<weld::Button> m_xOKBtn;
+    std::unique_ptr<weld::LevelBar> m_xPasswdStrengthBar;
 
     DECL_LINK(OKHdl_Impl, weld::Button&, void);
     DECL_LINK(EditHdl_Impl, weld::Entry&, void);

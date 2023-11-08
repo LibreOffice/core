@@ -22,6 +22,11 @@
 #include <comphelper/hash.hxx>
 #include <rtl/digest.h>
 #include <memory>
+#include <unicode/regex.h>
+#include <unicode/unistr.h>
+#include <unicode/errorcode.h>
+#include <zxcvbn.h>
+#include <sal/log.hxx>
 
 using namespace com::sun::star;
 
@@ -127,6 +132,49 @@ bool SvPasswordHelper::CompareHashPassword(const uno::Sequence<sal_Int8>& rOldPa
     }
 
     return bResult;
+}
+
+double SvPasswordHelper::GetPasswordStrengthPercentage(const char* pPassword)
+{
+    // Entropy bits corresponding to 100% password strength
+    static constexpr double fMaxPassStrengthEntorpyBits = 112.0;
+    return std::min(100.0,
+                    ZxcvbnMatch(pPassword, nullptr, nullptr) * 100.0 / fMaxPassStrengthEntorpyBits);
+}
+
+double SvPasswordHelper::GetPasswordStrengthPercentage(const OUString& aPassword)
+{
+    OString aPasswordUtf8 = aPassword.toUtf8();
+    return GetPasswordStrengthPercentage(aPasswordUtf8.getStr());
+}
+
+bool SvPasswordHelper::PasswordMeetsPolicy(const char* pPassword,
+                                           const std::optional<OUString>& oPasswordPolicy)
+{
+    if (oPasswordPolicy)
+    {
+        icu::ErrorCode aStatus;
+        icu::UnicodeString sPassword(pPassword);
+        icu::UnicodeString sRegex(oPasswordPolicy->getStr());
+        icu::RegexMatcher aRegexMatcher(sRegex, sPassword, 0, aStatus);
+
+        if (aRegexMatcher.matches(aStatus))
+            return true;
+
+        SAL_WARN_IF(
+            aStatus.isFailure(), "svl.misc",
+            "Password policy regular expression failed with error: " << aStatus.errorName());
+
+        return false;
+    }
+    return true;
+}
+
+bool SvPasswordHelper::PasswordMeetsPolicy(const OUString& aPassword,
+                                           const std::optional<OUString>& oPasswordPolicy)
+{
+    OString aPasswordUtf8 = aPassword.toUtf8();
+    return PasswordMeetsPolicy(aPasswordUtf8.getStr(), oPasswordPolicy);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

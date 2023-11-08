@@ -25,9 +25,11 @@ $(eval $(call gb_Library_use_externals,svl,\
         curl) \
     dtoa \
     icu_headers \
+    icui18n \
     icuuc \
     mdds_headers \
     libxml2 \
+    zxcvbn-c \
 ))
 
 $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl,services))

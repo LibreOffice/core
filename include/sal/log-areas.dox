@@ -128,7 +128,6 @@ certain functionality.
 @li @c cui.factory
 @li @c cui.options
 @li @c cui.tabpages
-@li @c cui.util
 
 @section drawinglayer
 
@@ -388,6 +387,7 @@ certain functionality.
 @li @c svl
 @li @c svl.crypto
 @li @c svl.items
+@li @c svl.misc
 @li @c svl.numbers
 
 @section svtools

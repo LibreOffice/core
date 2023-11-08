@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <optional>
 
 #include <svl/svldllapi.h>
 #include <sal/types.h>
@@ -48,6 +49,30 @@ public:
     ODF 1.2, requiring UTF-8 encoding.
     */
     SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, std::u16string_view sNewPass);
+
+    /** Get password strength percentage
+
+    Maps the calculated password entropy bit amount to password strength percentage:
+    0 bits      -> 0%
+    >= 112 bits -> 100%
+
+    @param pPassword null terminated password string.
+    @returns Password strength percentage in the range [0.0, 100.0]
+    */
+    SVL_DLLPUBLIC static double GetPasswordStrengthPercentage(const char* pPassword);
+    SVL_DLLPUBLIC static double GetPasswordStrengthPercentage(const OUString& aPassword);
+
+    /** Checks if the password meets the password policies
+
+    @param pPassword null terminated password string.
+    @param oPasswordPolicy Regular expression string that defines the password policy.
+
+    @returns true if password meets the policy or there is no policy enforced.
+    */
+    SVL_DLLPUBLIC static bool PasswordMeetsPolicy(const char* pPassword,
+                                                  const std::optional<OUString>& oPasswordPolicy);
+    SVL_DLLPUBLIC static bool PasswordMeetsPolicy(const OUString& aPassword,
+                                                  const std::optional<OUString>& oPasswordPolicy);
 };
 
 #endif
