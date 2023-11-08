@@ -39,18 +39,8 @@ ModuleSizeExceeded::ModuleSizeExceeded(const std::vector<OUString>& sModules)
     m_lContinuations = { m_xApprove, m_xAbort };
 }
 
-bool ModuleSizeExceeded::isAbort() const
-{
-    comphelper::OInteractionAbort* pBase
-        = static_cast<comphelper::OInteractionAbort*>(m_xAbort.get());
-    return pBase->wasSelected();
-}
+bool ModuleSizeExceeded::isAbort() const { return m_xAbort->wasSelected(); }
 
-bool ModuleSizeExceeded::isApprove() const
-{
-    comphelper::OInteractionApprove* pBase
-        = static_cast<comphelper::OInteractionApprove*>(m_xApprove.get());
-    return pBase->wasSelected();
-}
+bool ModuleSizeExceeded::isApprove() const { return m_xApprove->wasSelected(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

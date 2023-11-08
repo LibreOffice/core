@@ -24,6 +24,8 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <basic/basicdllapi.h>
+#include <comphelper/interaction.hxx>
+#include <rtl/ref.hxx>
 #include <vector>
 
 namespace com::sun::star::task { class XInteractionContinuation; }
@@ -56,8 +58,8 @@ public:
 private:
     css::uno::Any m_aRequest;
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > m_lContinuations;
-    css::uno::Reference< css::task::XInteractionContinuation > m_xAbort;
-    css::uno::Reference< css::task::XInteractionContinuation> m_xApprove;
+    rtl::Reference< comphelper::OInteractionAbort > m_xAbort;
+    rtl::Reference< comphelper::OInteractionApprove> m_xApprove;
 };
 
 #endif
