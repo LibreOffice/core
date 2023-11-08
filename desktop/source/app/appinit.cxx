@@ -41,6 +41,8 @@
 #include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
+
+#include <iostream>
 #include <map>
 
 using namespace ::com::sun::star::uno;
@@ -165,7 +167,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
     }
     else
     {
-        SAL_WARN( "desktop.app", "Acceptor could not be created");
+        ::std::cerr << "UNO Remote Protocol acceptor could not be created, presumably because it has been disabled in configuration." << ::std::endl;
     }
 }
 

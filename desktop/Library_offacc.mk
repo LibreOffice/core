@@ -11,6 +11,10 @@ $(eval $(call gb_Library_Library,offacc))
 
 $(eval $(call gb_Library_use_sdk_api,offacc))
 
+$(eval $(call gb_Library_use_custom_headers,offacc,\
+       officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,offacc,\
     comphelper \
     cppu \

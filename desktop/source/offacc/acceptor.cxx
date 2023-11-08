@@ -23,6 +23,7 @@
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/connection/Acceptor.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
+#include <officecfg/Office/Security.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -240,6 +241,12 @@ extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 desktop_Acceptor_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
+    if (!officecfg::Office::Security::Net::AllowInsecureUNORemoteProtocol::get())
+    {
+        // this is not allowed to throw
+        SAL_WARN("desktop", "UNO Remote Protocol is disabled by configuration");
+        return nullptr;
+    }
     return cppu::acquire(new desktop::Acceptor(context));
 }
 
