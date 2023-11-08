@@ -27,11 +27,6 @@ ExoticFileLoadException::ExoticFileLoadException(const OUString& rURL,
     m_aRequest <<= aReq;
 }
 
-bool ExoticFileLoadException::isApprove() const
-{
-    comphelper::OInteractionApprove* pBase
-        = static_cast<comphelper::OInteractionApprove*>(m_xApprove.get());
-    return pBase->wasSelected();
-}
+bool ExoticFileLoadException::isApprove() const { return m_xApprove->wasSelected(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -12,7 +12,9 @@
 
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
+#include <comphelper/interaction.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 class ExoticFileLoadException : public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
@@ -33,8 +35,8 @@ public:
     // member
 private:
     css::uno::Any m_aRequest;
-    css::uno::Reference<css::task::XInteractionContinuation> m_xAbort;
-    css::uno::Reference<css::task::XInteractionContinuation> m_xApprove;
+    rtl::Reference<comphelper::OInteractionAbort> m_xAbort;
+    rtl::Reference<comphelper::OInteractionApprove> m_xApprove;
     css::uno::Sequence<css::uno::Reference<css::task::XInteractionContinuation>> m_lContinuations;
 };
 
