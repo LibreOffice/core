@@ -18,6 +18,7 @@
  */
 
 #include <OutlineViewShell.hxx>
+#include <Outliner.hxx>
 
 #include <helpids.h>
 #include <app.hrc>

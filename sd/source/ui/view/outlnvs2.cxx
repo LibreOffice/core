@@ -18,6 +18,7 @@
  */
 
 #include <OutlineViewShell.hxx>
+#include <Outliner.hxx>
 
 #include <app.hrc>
 #include <svx/hlnkitem.hxx>

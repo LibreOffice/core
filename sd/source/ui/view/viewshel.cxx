@@ -26,6 +26,7 @@
 #include <ShellFactory.hxx>
 #include <DrawController.hxx>
 #include <LayerTabBar.hxx>
+#include <Outliner.hxx>
 
 #include <sal/log.hxx>
 #include <sfx2/viewfrm.hxx>

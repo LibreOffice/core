@@ -62,6 +62,7 @@
 #include <DrawViewShell.hxx>
 #include <sdpage.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <Outliner.hxx>
 
 using namespace sd;
 #define ShellClass_DrawDocShell

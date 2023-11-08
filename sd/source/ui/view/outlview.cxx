@@ -1200,7 +1200,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner const & rOutl, SdPage co
 /** selects the paragraph for the given page at the outliner view*/
 void OutlineView::SetActualPage( SdPage const * pActual )
 {
-    if( pActual && dynamic_cast<SdOutliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0 && !mbFirstPaint)
+    if( pActual && mrOutliner.GetIgnoreCurrentPageChangesLevel()==0 && !mbFirstPaint)
     {
         // if we found a paragraph, select its text at the outliner view
         Paragraph* pPara = GetParagraphForPage( mrOutliner, pActual );
@@ -1364,7 +1364,7 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
             break;
 
         case EventMultiplexerEventId::PageOrder:
-            if (dynamic_cast<SdOutliner&>(mrOutliner).GetIgnoreCurrentPageChangesLevel()==0)
+            if (mrOutliner.GetIgnoreCurrentPageChangesLevel()==0)
             {
                 if (((mrDoc.GetPageCount()-1)%2) == 0)
                 {
@@ -1384,9 +1384,9 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
 void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
 {
     if (bIgnoreChanges)
-        dynamic_cast<SdOutliner&>(mrOutliner).IncreIgnoreCurrentPageChangesLevel();
+        mrOutliner.IncreIgnoreCurrentPageChangesLevel();
     else
-        dynamic_cast<SdOutliner&>(mrOutliner).DecreIgnoreCurrentPageChangesLevel();
+        mrOutliner.DecreIgnoreCurrentPageChangesLevel();
 }
 
 /** call this method before you do anything that can modify the outliner

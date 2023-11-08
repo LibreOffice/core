@@ -56,7 +56,7 @@
 #include <OutlineViewShell.hxx>
 #include <Window.hxx>
 #include <OutlineView.hxx>
-
+#include <Outliner.hxx>
 
 #define ShellClass_TextObjectBar
 using namespace sd;

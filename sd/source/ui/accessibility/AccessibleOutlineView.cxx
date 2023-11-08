@@ -31,7 +31,7 @@
 #include <drawdoc.hxx>
 #include <strings.hrc>
 #include <sdresid.hxx>
-
+#include <Outliner.hxx>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -63,7 +63,7 @@ AccessibleOutlineView::AccessibleOutlineView (
         return;
 
     OutlinerView* pOutlineView = pShellView->GetViewByWindow( pSdWindow );
-    SdrOutliner& rOutliner = pShellView->GetOutliner();
+    SdOutliner& rOutliner = pShellView->GetOutliner();
 
     if( pOutlineView )
     {

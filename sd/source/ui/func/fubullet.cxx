@@ -37,7 +37,7 @@
 #include <svl/ctloptions.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
-
+#include <Outliner.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 
