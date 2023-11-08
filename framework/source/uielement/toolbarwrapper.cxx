@@ -214,9 +214,8 @@ void SAL_CALL ToolBarWrapper::update()
     if ( m_bDisposed )
         throw DisposedException();
 
-    ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-    if ( pToolBarManager )
-        pToolBarManager->CheckAndUpdateImages();
+    if ( m_xToolBarManager )
+        m_xToolBarManager->CheckAndUpdateImages();
 }
 
 // XUIElementSettings
@@ -251,13 +250,12 @@ void SAL_CALL ToolBarWrapper::updateSettings()
 
 void ToolBarWrapper::impl_fillNewData()
 {
-    ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-    if ( pToolBarManager )
+    if ( m_xToolBarManager )
     {
         Reference< XUIElementSettings > xUIElementSettings( m_xSubElement, UNO_QUERY );
         Reference< XIndexAccess > xContextData = xUIElementSettings.is() ? xUIElementSettings->getSettings( false ) : nullptr;
         OUString aContextToolbar = xContextData.is() ? m_xSubElement->getResourceURL() : OUString();
-        pToolBarManager->FillToolbar( m_xConfigData, xContextData, aContextToolbar );
+        m_xToolBarManager->FillToolbar( m_xConfigData, xContextData, aContextToolbar );
     }
 }
 
@@ -307,14 +305,10 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  )
 {
     SolarMutexGuard g;
 
-    if ( m_xToolBarManager.is() )
+    if ( m_xToolBarManager )
     {
-        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-        if ( pToolBarManager )
-        {
-            vcl::Window* pWindow = pToolBarManager->GetToolBar();
-            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
-        }
+        vcl::Window* pWindow = m_xToolBarManager->GetToolBar();
+        return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
     }
 
     return Reference< XInterface >();
@@ -327,12 +321,8 @@ void SAL_CALL ToolBarWrapper::functionExecute(
 {
     SolarMutexGuard g;
 
-    if ( m_xToolBarManager.is() )
-    {
-        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-        if ( pToolBarManager )
-            pToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
-    }
+    if ( m_xToolBarManager )
+        m_xToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
 }
 
 void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue )
@@ -349,11 +339,10 @@ void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandl
     if ( !(m_xToolBarManager.is() && !m_bDisposed && ( bNewNoClose != bNoClose )))
         return;
 
-    ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
-    if ( !pToolBarManager )
+    if ( !m_xToolBarManager )
         return;
 
-    ToolBox* pToolBox = pToolBarManager->GetToolBar();
+    ToolBox* pToolBox = m_xToolBarManager->GetToolBar();
     if ( !pToolBox )
         return;
 

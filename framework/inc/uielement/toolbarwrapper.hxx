@@ -25,7 +25,7 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/ui/XContextChangeEventListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace weld
@@ -37,6 +37,7 @@ namespace weld
 
 namespace framework
 {
+class ToolBarManager;
 
 class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementWrapperBase,
                                                                 css::ui::XUIFunctionListener,
@@ -75,7 +76,7 @@ class ToolBarWrapper final : public cppu::ImplInheritanceHelper<UIConfigElementW
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any&  aValue ) override;
         virtual void impl_fillNewData() override;
 
-        css::uno::Reference< css::lang::XComponent >            m_xToolBarManager;
+        rtl::Reference< ToolBarManager >                        m_xToolBarManager;
         css::uno::Reference< css::uno::XComponentContext >      m_xContext;
         css::uno::Reference< css::ui::XUIElement >              m_xSubElement;
 
