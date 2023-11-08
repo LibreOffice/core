@@ -20,16 +20,18 @@
 
 #include <ooo/vba/excel/XAxes.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
+#include <rtl/ref.hxx>
 
 namespace ooo::vba::excel { class XAxis; }
 namespace ooo::vba::excel { class XChart; }
+class ScVbaChart;
 
 typedef CollTestImplHelper< ov::excel::XAxes > ScVbaAxes_BASE;
 class ScVbaAxes : public ScVbaAxes_BASE
 {
-    css::uno::Reference< ov::excel::XChart > moChartParent; // not the true parent I guess
+    rtl::Reference< ScVbaChart > moChartParent; // not the true parent I guess
 public:
-    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< ov::excel::XChart >& xChart );
+    ScVbaAxes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const rtl::Reference< ScVbaChart >& xChart );
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
