@@ -107,7 +107,7 @@ SwGrfNode::SwGrfNode( SwNode& rWhere,
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ))
         {
             // file exists, so create connection without an update
-            static_cast<SwBaseLink*>( mxLink.get() )->Connect();
+            mxLink->Connect();
         }
     }
 }
@@ -164,7 +164,7 @@ bool SwGrfNode::ReRead(
                 if( nNewType != mxLink->GetObjType() )
                 {
                     mxLink->Disconnect();
-                    static_cast<SwBaseLink*>( mxLink.get() )->SetObjType( nNewType );
+                    mxLink->SetObjType( nNewType );
                 }
             }
 
@@ -198,7 +198,7 @@ bool SwGrfNode::ReRead(
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
-                    static_cast<SwBaseLink*>( mxLink.get() )->SwapIn();
+                    mxLink->SwapIn();
                 }
             }
             onGraphicChanged();
@@ -227,7 +227,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 bReadGrf = true;
                 // create connection without update, as we have the graphic
-                static_cast<SwBaseLink*>( mxLink.get() )->Connect();
+                mxLink->Connect();
             }
             else
             {
@@ -237,7 +237,7 @@ bool SwGrfNode::ReRead(
                 onGraphicChanged();
                 if ( bNewGrf )
                 {
-                    static_cast<SwBaseLink*>( mxLink.get() )->SwapIn();
+                    mxLink->SwapIn();
                 }
             }
         }
@@ -426,7 +426,7 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
 
     bool bRet = false;
     mbInSwapIn = true;
-    SwBaseLink* pLink = static_cast<SwBaseLink*>( mxLink.get() );
+    SwBaseLink* pLink = mxLink.get();
 
     if( pLink )
     {
@@ -579,8 +579,7 @@ void SwGrfNode::ReleaseLink()
 
     {
         mbInSwapIn = true;
-        SwBaseLink* pLink = static_cast<SwBaseLink*>( mxLink.get() );
-        pLink->SwapIn( true, true );
+        mxLink->SwapIn( true, true );
         mbInSwapIn = false;
     }
 
