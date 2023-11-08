@@ -146,6 +146,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         mVertScrollLayer.destroy();
     }
 
+    @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         createDefaultProgram();
         activateDefaultProgram();
@@ -220,6 +221,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     /**
      * Called whenever a new frame is about to be drawn.
      */
+    @Override
     public void onDrawFrame(GL10 gl) {
         Frame frame = createFrame(mView.getLayerClient().getViewportMetrics());
         synchronized (mView.getLayerClient()) {
@@ -249,6 +251,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                                  mCoordBuffer);
     }
 
+    @Override
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
         GLES20.glViewport(0, 0, width, height);
     }
