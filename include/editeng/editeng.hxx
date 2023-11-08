@@ -77,6 +77,7 @@ namespace editeng {
 }
 
 class ImpEditEngine;
+class EditUndoManager;
 class EditView;
 class OutputDevice;
 class SvxFont;
@@ -349,8 +350,8 @@ public:
 
     void            ShowParagraph( sal_Int32 nParagraph, bool bShow );
 
-    SfxUndoManager& GetUndoManager();
-    SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
+    EditUndoManager& GetUndoManager();
+    EditUndoManager* SetUndoManager(EditUndoManager* pNew);
     void            UndoActionStart( sal_uInt16 nId );
     void            UndoActionStart(sal_uInt16 nId, const ESelection& rSel);
     void            UndoActionEnd();

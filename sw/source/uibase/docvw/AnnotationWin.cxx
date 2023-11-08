@@ -41,6 +41,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/editund2.hxx>
 
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>

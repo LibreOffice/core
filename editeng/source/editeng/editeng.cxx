@@ -112,12 +112,12 @@ bool EditEngine::IsInUndo() const
     return pImpEditEngine->IsInUndo();
 }
 
-SfxUndoManager& EditEngine::GetUndoManager()
+EditUndoManager& EditEngine::GetUndoManager()
 {
     return pImpEditEngine->GetUndoManager();
 }
 
-SfxUndoManager* EditEngine::SetUndoManager(SfxUndoManager* pNew)
+EditUndoManager* EditEngine::SetUndoManager(EditUndoManager* pNew)
 {
     return pImpEditEngine->SetUndoManager(pNew);
 }

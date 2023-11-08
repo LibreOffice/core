@@ -25,6 +25,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/sdtagitm.hxx>
 #include <editeng/unolingu.hxx>
+#include <editeng/editund2.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>

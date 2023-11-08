@@ -28,6 +28,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+#include <editeng/editund2.hxx>
 #include <svx/svxids.hrc>
 #include <unotools/useroptions.hxx>
 

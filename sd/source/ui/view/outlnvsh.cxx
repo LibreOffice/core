@@ -32,6 +32,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/editund2.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/request.hxx>
 #include <svx/hlnkitem.hxx>

@@ -26,6 +26,7 @@
 #include <svl/undo.hxx>
 #include <tools/debug.hxx>
 #include <unotools/lingucfg.hxx>
+#include <editeng/editund2.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/langitem.hxx>
@@ -2078,7 +2079,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
 
 void SentenceEditWindow_Impl::Undo()
 {
-    SfxUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
+    EditUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
@@ -2097,13 +2098,13 @@ void SentenceEditWindow_Impl::Undo()
 
 void SentenceEditWindow_Impl::ResetUndo()
 {
-    SfxUndoManager& rUndo = m_xEditEngine->GetUndoManager();
+    EditUndoManager& rUndo = m_xEditEngine->GetUndoManager();
     rUndo.Clear();
 }
 
 void SentenceEditWindow_Impl::AddUndoAction( std::unique_ptr<SfxUndoAction> pAction )
 {
-    SfxUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
+    EditUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
     rUndoMgr.AddUndoAction(std::move(pAction));
     GetSpellDialog()->m_xUndoPB->set_sensitive(true);
 }

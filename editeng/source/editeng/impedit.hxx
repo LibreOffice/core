@@ -838,7 +838,7 @@ public:
     ImpEditEngine&          operator=(const ImpEditEngine&) = delete;
 
     inline EditUndoManager& GetUndoManager();
-    inline SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
+    inline EditUndoManager* SetUndoManager(EditUndoManager* pNew);
 
     // @return the previous bUpdateLayout state
     bool                    SetUpdateLayout( bool bUpdate, EditView* pCurView = nullptr, bool bForceUpdate = false );
@@ -1295,16 +1295,16 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
     return *pUndoManager;
 }
 
-inline SfxUndoManager* ImpEditEngine::SetUndoManager(SfxUndoManager* pNew)
+inline EditUndoManager* ImpEditEngine::SetUndoManager(EditUndoManager* pNew)
 {
-    SfxUndoManager* pRetval = pUndoManager;
+    EditUndoManager* pRetval = pUndoManager;
 
     if(pUndoManager)
     {
         pUndoManager->SetEditEngine(nullptr);
     }
 
-    pUndoManager = dynamic_cast< EditUndoManager* >(pNew);
+    pUndoManager = pNew;
 
     if(pUndoManager)
     {

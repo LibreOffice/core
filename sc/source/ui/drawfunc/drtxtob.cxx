@@ -37,6 +37,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/urlfieldhelper.hxx>
+#include <editeng/editund2.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/sdooitm.hxx>

@@ -32,6 +32,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/kernitem.hxx>
+#include <editeng/editund2.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>

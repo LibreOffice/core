@@ -109,7 +109,7 @@ protected:
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
 
 private:
-    SfxUndoManager* mpOldTextEditUndoManager;
+    EditUndoManager* mpOldTextEditUndoManager;
     std::unique_ptr<SdrUndoManager> mpLocalTextEditUndoManager;
 
 protected:

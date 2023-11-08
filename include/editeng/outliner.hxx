@@ -52,6 +52,7 @@ class OutlinerEditEng;
 class Outliner;
 class EditView;
 class EditUndo;
+class EditUndoManager;
 class ParagraphList;
 class OutlinerParaObject;
 class SvStream;
@@ -885,8 +886,8 @@ public:
 
     ErrCode             Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
 
-    SfxUndoManager& GetUndoManager();
-    SfxUndoManager* SetUndoManager(SfxUndoManager* pNew);
+    EditUndoManager& GetUndoManager();
+    EditUndoManager* SetUndoManager(EditUndoManager* pNew);
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );

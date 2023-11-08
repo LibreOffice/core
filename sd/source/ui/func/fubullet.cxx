@@ -22,6 +22,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/editund2.hxx>
 #include <svl/poolitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <OutlineView.hxx>
@@ -128,7 +129,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     pOV->InsertText( "" );
 
     // prepare undo
-    SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+    EditUndoManager& rUndoMgr =  pOL->GetUndoManager();
     rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
                                 "", 0, mpViewShell->GetViewShellBase().GetViewShellId() );
 
@@ -239,7 +240,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
     SfxItemSetFixed<EE_CHAR_FONTINFO, EE_CHAR_FONTINFO> aOldSet( mpDoc->GetPool() );
     aOldSet.Put( pOV->GetAttribs() );
 
-    SfxUndoManager& rUndoMgr =  pOL->GetUndoManager();
+    EditUndoManager& rUndoMgr = pOL->GetUndoManager();
     ViewShellId nViewShellId = mpViewShell ? mpViewShell->GetViewShellBase().GetViewShellId() : ViewShellId(-1);
     rUndoMgr.EnterListAction(SdResId(STR_UNDO_INSERT_SPECCHAR),
                              "", 0, nViewShellId );

@@ -45,6 +45,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editund2.hxx>
 
 #include <svl/undo.hxx>
 #include <svl/stritem.hxx>

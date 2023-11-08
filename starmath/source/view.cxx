@@ -63,6 +63,7 @@
 #include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/editund2.hxx>
 #include <svx/svxdlg.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <vcl/commandevent.hxx>

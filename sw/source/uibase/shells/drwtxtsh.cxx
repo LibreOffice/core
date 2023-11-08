@@ -24,6 +24,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <editeng/editund2.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>

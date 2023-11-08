@@ -35,6 +35,7 @@
 #include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/urlfieldhelper.hxx>
+#include <editeng/editund2.hxx>
 #include <svx/hlnkitem.hxx>
 #include <vcl/EnumContext.hxx>
 #include <editeng/postitem.hxx>

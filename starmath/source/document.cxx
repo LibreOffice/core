@@ -83,6 +83,7 @@
 #include <oox/mathml/imexport.hxx>
 #include <ElementsDockingWindow.hxx>
 #include <smediteng.hxx>
+#include <editeng/editund2.hxx>
 
 #define ShellClass_SmDocShell
 #include <smslots.hxx>

@@ -23,6 +23,7 @@
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editund2.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
