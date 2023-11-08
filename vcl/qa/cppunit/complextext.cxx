@@ -44,14 +44,15 @@ static std::ostream& operator<<(std::ostream& rStream, const std::vector<sal_Int
 
 class VclComplexTextTest : public test::BootstrapFixture
 {
+#if !defined _WIN32
     OUString maDataUrl = u"/vcl/qa/cppunit/data/"_ustr;
 
-public:
     OUString getFullUrl(std::u16string_view sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }
 
+protected:
     bool addFont(OutputDevice* pOutDev, std::u16string_view sFileName,
                  std::u16string_view sFamilyName)
     {
@@ -60,7 +61,9 @@ public:
         OutputDevice::ImplRefreshAllFontData(true);
         return bAdded;
     }
+#endif
 
+public:
     VclComplexTextTest()
         : BootstrapFixture(true, false)
     {
