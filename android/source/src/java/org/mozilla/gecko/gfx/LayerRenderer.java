@@ -184,9 +184,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         GLES20.glEnableVertexAttribArray(mTextureHandle);
 
         GLES20.glUniform1i(mSampleHandle, 0);
-
-        // TODO: Move these calls into a separate deactivate() call that is called after the
-        // underlay and overlay are rendered.
     }
 
     // Deactivates the shader program. This must be done to avoid crashes after returning to the
