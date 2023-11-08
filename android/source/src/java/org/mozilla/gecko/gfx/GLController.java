@@ -20,7 +20,6 @@ public class GLController {
 
     private LayerView mView;
     private int mGLVersion;
-    private boolean mSurfaceValid;
     private int mWidth, mHeight;
 
     private EGL10 mEGL;
@@ -45,7 +44,6 @@ public class GLController {
     public GLController(LayerView view) {
         mView = view;
         mGLVersion = 2;
-        mSurfaceValid = false;
     }
 
     public void setGLVersion(int version) {
@@ -116,19 +114,6 @@ public class GLController {
         mGL = null;
         return true;
     }
-
-    // Wait until we are allowed to use EGL functions on the Surface backing
-    // this window. This function is invoked by JNI
-    public synchronized void waitForValidSurface() {
-        while (!mSurfaceValid) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     public synchronized int getWidth() {
         return mWidth;
     }
@@ -138,14 +123,12 @@ public class GLController {
     }
 
     synchronized void surfaceDestroyed() {
-        mSurfaceValid = false;
         notifyAll();
     }
 
     synchronized void surfaceChanged(int newWidth, int newHeight) {
         mWidth = newWidth;
         mHeight = newHeight;
-        mSurfaceValid = true;
         notifyAll();
     }
 
