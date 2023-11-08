@@ -57,17 +57,16 @@ SvxClipBoardControl::~SvxClipBoardControl()
 
 void SvxClipBoardControl::CreatePopupWindow()
 {
-    const SvxClipboardFormatItem* pFmtItem = dynamic_cast<SvxClipboardFormatItem*>( pClipboardFmtItem.get()  );
-    if ( pFmtItem )
+    if ( pClipboardFmtItem )
     {
         std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(nullptr, "svx/ui/clipboardmenu.ui"));
         std::unique_ptr<weld::Menu> xPopup(xBuilder->weld_menu("menu"));
 
-        sal_uInt16 nCount = pFmtItem->Count();
+        sal_uInt16 nCount = pClipboardFmtItem->Count();
         for (sal_uInt16 i = 0;  i < nCount;  ++i)
         {
-            SotClipboardFormatId nFmtID =  pFmtItem->GetClipbrdFormatId( i );
-            OUString aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
+            SotClipboardFormatId nFmtID =  pClipboardFmtItem->GetClipbrdFormatId( i );
+            OUString aFmtStr( pClipboardFmtItem->GetClipbrdFormatName( i ) );
             if (aFmtStr.isEmpty())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
             xPopup->append(OUString::number(static_cast<sal_uInt32>(nFmtID)), aFmtStr);
@@ -102,7 +101,7 @@ void SvxClipBoardControl::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItem
         pClipboardFmtItem.reset();
         if ( eState >= SfxItemState::DEFAULT )
         {
-            pClipboardFmtItem.reset( pState->Clone() );
+            pClipboardFmtItem.reset( static_cast<SvxClipboardFormatItem*>(pState->Clone()) );
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | ToolBoxItemBits::DROPDOWN );
         }
         else if ( !bDisabled )
