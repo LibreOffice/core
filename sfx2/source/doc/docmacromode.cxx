@@ -299,9 +299,9 @@ namespace sfx2
         osl::FileBase::getSystemPathFromFileURL(sURL, sFilePath);
         sal::systools::COMReference<IZoneIdentifier> pZoneId;
         pZoneId.CoCreateInstance(CLSID_PersistentZoneIdentifier);
-        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY_THROW);
+        sal::systools::COMReference<IPersistFile> pPersist(pZoneId, sal::systools::COM_QUERY);
         DWORD dwZone;
-        if (!SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
+        if (!pPersist || !SUCCEEDED(pPersist->Load(o3tl::toW(sFilePath.getStr()), STGM_READ)) ||
             !SUCCEEDED(pZoneId->GetId(&dwZone)))
         {
             // no Security Zone info found -> assume a local file, not
