@@ -289,7 +289,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
     if ( RndStdIds::FLY_AS_CHAR == nOld )
     {
         // We need to handle InContents in a special way:
-        // The TextAttribut needs to be destroyed which, unfortunately, also
+        // The TextAttribute needs to be destroyed which, unfortunately, also
         // destroys the format. To avoid that, we disconnect the format from
         // the attribute.
         SwNode *pAnchorNode = rOldAnch.GetAnchorNode();
@@ -970,7 +970,7 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 if ( pNewAnchorFrame)
                 {
                     // We need to handle InContents in a special way:
-                    // The TextAttribut needs to be destroyed which, unfortunately, also
+                    // The TextAttribute needs to be destroyed which, unfortunately, also
                     // destroys the format. To avoid that, we disconnect the format from
                     // the attribute.
                     const sal_Int32 nIndx( oOldAsCharAnchorPos->GetContentIndex() );

@@ -66,7 +66,7 @@ enum class ACFlags : sal_uInt32 {
     ChgOrdinalNumber     = 0x00000008,   // Ordinal-Number 1st, 2nd,..
     ChgToEnEmDash        = 0x00000010,   // - -> Endash/Emdash
     ChgWeightUnderl      = 0x00000020,   // * -> Bold, _ -> Underscore
-    SetINetAttr          = 0x00000040,   // Set INetAttribut
+    SetINetAttr          = 0x00000040,   // Set INetAttribute
     Autocorrect          = 0x00000080,   // Call AutoCorrect
     ChgQuotes            = 0x00000100,   // replace double quotes
     SaveWordCplSttLst    = 0x00000200,   // Save Auto correction of Capital letter at beginning of sentence.

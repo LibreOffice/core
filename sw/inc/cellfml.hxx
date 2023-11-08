@@ -96,8 +96,8 @@ protected:
     bool        m_bValidValue;      ///< true: recalculate formula
 
     // find the node in which the formula is located
-    //  TextField   -> TextNode,
-    //  BoxAttribut -> BoxStartNode
+    //  TextField    -> TextNode,
+    //  BoxAttribute -> BoxStartNode
     // !!! every derived class must override this !!!
     virtual const SwNode* GetNodeOfFormula() const = 0;
 

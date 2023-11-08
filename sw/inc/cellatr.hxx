@@ -67,7 +67,7 @@ public:
     const sw::BroadcastingModify* GetDefinedIn() const { return m_pDefinedIn; }
     void ChgDefinedIn( const sw::BroadcastingModify* pNew )
                                             { m_pDefinedIn = const_cast<sw::BroadcastingModify*>(pNew); }
-    //  BoxAttribut -> BoxStartNode
+    //  BoxAttribute -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const override;
 
           SwTableBox* GetTableBox();

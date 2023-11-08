@@ -2761,7 +2761,7 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
             break;
     }
 
-    // something changed and some BoxAttribut remained in the set!
+    // something changed and some BoxAttribute remained in the set!
     if( pNewFormat || pNewFormula || pNewVal )
     {
         GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, nullptr, SwNodeOffset(0));

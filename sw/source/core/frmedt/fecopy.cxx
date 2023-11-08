@@ -158,7 +158,7 @@ void SwFEShell::Copy( SwDoc& rClpDoc, const OUString* pNewClpText )
         {
             // JP 13.02.99  Bug 61863: if a frameselection is passed to the
             //              clipboard, it should be found at pasting. Therefore
-            //              the copied TextAttribut should be removed in the node
+            //              the copied TextAttribute should be removed in the node
             //              otherwise it will be recognised as TextSelektion
             const SwPosition& rPos = *pFlyFormat->GetAnchor().GetContentAnchor();
             SwTextFlyCnt *const pTextFly = static_cast<SwTextFlyCnt *>(
