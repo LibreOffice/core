@@ -242,8 +242,7 @@ XMLPageExport::XMLPageExport(SvXMLExport & rExp)
     xProps->getPropertyValue("GutterAtTop") >>= bGutterAtTop;
     if (bGutterAtTop)
     {
-        static_cast<XMLPageMasterExportPropMapper*>(m_xPageMasterExportPropMapper.get())
-                    ->SetGutterAtTop(true);
+        m_xPageMasterExportPropMapper->SetGutterAtTop(true);
     }
 }
 

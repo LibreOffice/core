@@ -38,7 +38,7 @@ class SvXMLExport;
 class XMLPropertyHandlerFactory;
 class XMLPropertySetMapper;
 class SvXMLExportPropertyMapper;
-
+class XMLPageMasterExportPropMapper;
 
 struct XMLPageExportNameEntry
 {
@@ -58,7 +58,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public salhelper::SimpleReferenceObject
 
     rtl::Reference < XMLPropertyHandlerFactory > m_xPageMasterPropHdlFactory;
     rtl::Reference < XMLPropertySetMapper > m_xPageMasterPropSetMapper;
-    rtl::Reference < SvXMLExportPropertyMapper > m_xPageMasterExportPropMapper;
+    rtl::Reference < XMLPageMasterExportPropMapper > m_xPageMasterExportPropMapper;
     rtl::Reference<XMLPropertySetMapper> m_xPageMasterDrawingPagePropSetMapper;
     rtl::Reference<SvXMLExportPropertyMapper> m_xPageMasterDrawingPageExportPropMapper;
 
