@@ -21,12 +21,15 @@
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
-typedef InheritedHelperInterfaceWeakImpl< ov::excel::XAxis >  ScVbaAxis_BASE;
+
 class ScVbaChart;
+
+typedef InheritedHelperInterfaceWeakImpl< ov::excel::XAxis >  ScVbaAxis_BASE;
 class ScVbaAxis : public ScVbaAxis_BASE
 {
-    css::uno::Reference< ov::excel::XChart > moChartParent;
+    rtl::Reference< ScVbaChart > moChartParent;
     css::uno::Reference< css::beans::XPropertySet > mxPropertySet;
     sal_Int32 mnType;
     sal_Int32 mnGroup;
@@ -39,7 +42,7 @@ class ScVbaAxis : public ScVbaAxis_BASE
     bool isValueAxis();
 
 public:
-    ScVbaAxis( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
+    ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, css::uno::Reference< css::beans::XPropertySet >  _xPropertySet, sal_Int32 _nType, sal_Int32 _nGroup );
     // Methods
     virtual void SAL_CALL Delete(  ) override;
     virtual css::uno::Reference< ::ooo::vba::excel::XAxisTitle > SAL_CALL getAxisTitle(  ) override;

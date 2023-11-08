@@ -37,7 +37,7 @@ constexpr OUStringLiteral VBA_MAX(u"Min");
 ScVbaChart*
 ScVbaAxis::getChartPtr()
 {
-    ScVbaChart* pChart = static_cast< ScVbaChart* >( moChartParent.get() );
+    ScVbaChart* pChart = moChartParent.get();
     if ( !pChart )
         throw uno::RuntimeException("Can't access parent chart impl" );
     return pChart;
@@ -53,17 +53,17 @@ ScVbaAxis::isValueAxis()
     return true;
 }
 
-ScVbaAxis::ScVbaAxis( const uno::Reference< XHelperInterface >& xParent,
+ScVbaAxis::ScVbaAxis( const rtl::Reference< ScVbaChart >& xParent,
                       const uno::Reference< uno::XComponentContext > & xContext,
                       uno::Reference< beans::XPropertySet >  _xPropertySet,
                       sal_Int32 _nType, sal_Int32 _nGroup )
   : ScVbaAxis_BASE( xParent, xContext ),
+    moChartParent(xParent),
     mxPropertySet(std::move( _xPropertySet )),
     mnType( _nType ), mnGroup( _nGroup ),
     maShapeHelper( uno::Reference< drawing::XShape >( mxPropertySet, uno::UNO_QUERY ) ),
     bCrossesAreCustomized( false )
 {
-    moChartParent.set( xParent, uno::UNO_QUERY_THROW  );
     setType(_nType);
     setCrosses(xlAxisCrossesAutomatic);
 }
