@@ -175,11 +175,9 @@ void SAL_CALL MenuBarWrapper::updateSettings()
     {
         try
         {
-            MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
-
             m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, false );
             if ( m_xConfigData.is() )
-                pMenuBarManager->SetItemContainer( m_xConfigData );
+                m_xMenuBarManager->SetItemContainer( m_xConfigData );
         }
         catch ( const NoSuchElementException& )
         {
@@ -193,19 +191,16 @@ void SAL_CALL MenuBarWrapper::updateSettings()
 void MenuBarWrapper::impl_fillNewData()
 {
     // Transient menubar => Fill menubar with new data
-    MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
-
-    if ( pMenuBarManager )
-        pMenuBarManager->SetItemContainer( m_xConfigData );
+    if ( m_xMenuBarManager )
+        m_xMenuBarManager->SetItemContainer( m_xConfigData );
 }
 
 void MenuBarWrapper::fillPopupControllerCache()
 {
     if ( m_bRefreshPopupControllerCache )
     {
-        MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
-        if ( pMenuBarManager )
-            pMenuBarManager->GetPopupController( m_aPopupControllerCache );
+        if ( m_xMenuBarManager )
+            m_xMenuBarManager->GetPopupController( m_aPopupControllerCache );
         if ( !m_aPopupControllerCache.empty() )
             m_bRefreshPopupControllerCache = false;
     }
@@ -282,7 +277,7 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface()
     if ( m_bDisposed )
         throw DisposedException();
 
-    return Reference< XInterface >( m_xMenuBarManager, UNO_QUERY );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xMenuBarManager.get()), UNO_QUERY );
 }
 
 } // namespace framework

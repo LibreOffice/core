@@ -36,7 +36,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         MenuBarWrapper( css::uno::Reference< css::uno::XComponentContext > xContext );
         virtual ~MenuBarWrapper() override;
 
-        MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
+        MenuBarManager* GetMenuBarManager() const { return m_xMenuBarManager.get(); }
 
         // XComponent
         virtual void SAL_CALL dispose() override;
@@ -64,7 +64,7 @@ class MenuBarWrapper final : public MenuBarWrapper_Base
         void fillPopupControllerCache();
 
         bool                                                            m_bRefreshPopupControllerCache : 1;
-        css::uno::Reference< css::lang::XComponent >                    m_xMenuBarManager;
+        rtl::Reference< MenuBarManager >                                m_xMenuBarManager;
         PopupControllerCache                                            m_aPopupControllerCache;
         css::uno::Reference< css::uno::XComponentContext >              m_xContext;
 };
