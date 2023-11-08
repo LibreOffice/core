@@ -84,7 +84,7 @@ public class GLController {
         }
     }
 
-    public GL getGL()                       { return mEGLContext.getGL(); }
+    public GL10 getGL() { return (GL10) mEGLContext.getGL(); }
     public EGLDisplay getEGLDisplay()       { return mEGLDisplay;         }
     public EGLConfig getEGLConfig()         { return mEGLConfig;          }
     public EGLContext getEGLContext()       { return mEGLContext;         }
