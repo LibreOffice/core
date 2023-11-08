@@ -7,6 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#if defined _WIN32 //TODO, #include <sys/file.h>
+// expected-no-diagnostics
+#else
+
 #include <mutex>
 #include <memory>
 #include <osl/mutex.hxx>
@@ -46,5 +50,7 @@ struct Foo
     }
 };
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
