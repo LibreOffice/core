@@ -11,14 +11,22 @@
 
 for filename in $(find officecfg/ -name "*xcs"); do
     for gs in group set node-ref; do
-        for gname in $(git grep -h "<$gs" "$filename" | awk -F'oor:name="' '{print $2}' | awk -F'"' '{print $1}') ; do
-            if [ $(git grep "$gname" | grep -v ^officecfg | wc -l) -eq 0 ] ;
+        for gname in $(git grep -aIh "<$gs" "$filename" 2>/dev/null | awk -F'oor:name="' '{print $2}' | awk -F'"' '{print $1}') ; do
+            if [ $(git grep -aI "$gname" 2>/dev/null | grep -saIv ^officecfg 2>/dev/null | wc -l) -eq 0 ] ;
             then
                 # group, set or node-ref names may serve as oor:node-type templates
-                if [ $(git grep "$gname" officecfg | grep oor:node-type | wc -l ) -eq 0 ] ;
-                then
-                    echo "$gname group in "$filename" appears only in officecfg";
-                fi
+                # check whether this is also unused - report only if both are unused
+                for tmpl in $(git grep -aIh oor:node-type=\""$gname" officecfg 2>/dev/null | awk -F'oor:name="' '{print $2}' | awk -F '"' '{print $1}' ) ; do
+                    if [ $(git grep -aI "$tmpl" 2>/dev/null | grep -saIv ^officecfg 2>/dev/null | wc -l) -eq 0 ];
+                    then
+                        echo "$gname group and $tmpl set in "$filename" appears only in officecfg";
+                    else
+                        if [ $(git grep -aI "$gname" officecfg 2>/dev/null | grep -saI oor:node-type 2>/dev/null | wc -l ) -eq 0 ] ;
+                        then
+                           echo "$gname group in "$filename" appears only in officecfg";
+                        fi
+                    fi
+                done
             fi
         done
     done
