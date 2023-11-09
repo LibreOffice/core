@@ -35,8 +35,6 @@ import org.mozilla.gecko.OnSlideSwipeListener;
  *
  * This view delegates to LayerRenderer to actually do the drawing. Its role is largely that of a
  * mediator between the LayerRenderer and the LayerController.
- *
- * Note that LayerView is accessed by Robocop via reflection.
  */
 public class LayerView extends FrameLayout {
     private static String LOGTAG = LayerView.class.getName();
