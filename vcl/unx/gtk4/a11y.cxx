@@ -10,6 +10,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <unx/gtk/gtkframe.hxx>
@@ -307,6 +308,50 @@ static void applyStates(GtkAccessible* pGtkAccessible,
     }
 }
 
+static void applyObjectAttribute(GtkAccessible* pGtkAccessible, const OUString& rName,
+                                 const OUString& rValue)
+{
+    assert(pGtkAccessible);
+
+    if (rName == u"level")
+    {
+        const int nLevel = static_cast<int>(rValue.toInt32());
+        gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_LEVEL, nLevel, -1);
+    }
+}
+
+/**
+ * Based on the object attributes set for xContext, set the corresponding Gtk equivalents
+ * in pGtkAccessible, where applicable.
+ */
+static void
+applyObjectAttributes(GtkAccessible* pGtkAccessible,
+                      css::uno::Reference<css::accessibility::XAccessibleContext> xContext)
+{
+    assert(pGtkAccessible);
+
+    css::uno::Reference<css::accessibility::XAccessibleExtendedAttributes> xAttributes(
+        xContext, css::uno::UNO_QUERY);
+    if (!xAttributes.is())
+        return;
+
+    OUString sAttrs;
+    xAttributes->getExtendedAttributes() >>= sAttrs;
+
+    sal_Int32 nIndex = 0;
+    do
+    {
+        const OUString sAttribute = sAttrs.getToken(0, ';', nIndex);
+        sal_Int32 nColonPos = 0;
+        const OUString sName = sAttribute.getToken(0, ':', nColonPos);
+        const OUString sValue = sAttribute.getToken(0, ':', nColonPos);
+        assert(nColonPos == -1
+               && "Too many colons in attribute that should have \"name:value\" syntax");
+
+        applyObjectAttribute(pGtkAccessible, sName, sValue);
+    } while (nIndex >= 0);
+}
+
 #define LO_TYPE_ACCESSIBLE (lo_accessible_get_type())
 #define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
 // #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
@@ -544,6 +589,8 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
     GtkAccessible* pGtkAccessible = GTK_ACCESSIBLE(ret);
 
     applyStates(pGtkAccessible, xContext);
+
+    applyObjectAttributes(GTK_ACCESSIBLE(ret), xContext);
 
     // set values from XAccessibleValue interface if that's implemented
     css::uno::Reference<css::accessibility::XAccessibleValue> xAccessibleValue(xContext,
