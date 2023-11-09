@@ -34,14 +34,17 @@ void o2u_attachCurrentThread()
         {   // FIXME: is it a problem that this ends up in STA currently?
             assert(RPC_E_CHANGED_MODE == hr);
             // Let's find out explicitly what apartment mode we are in.
-            SAL_WARN("extensions.olebridge", "CoInitializeEx failed"
-                     << (hr == RPC_E_CHANGED_MODE ? " (expectedly)" : "")
-                     << ": " << WindowsErrorStringFromHRESULT(hr));
+            if (hr == RPC_E_CHANGED_MODE)
+                SAL_INFO("extensions.olebridge", "CoInitializeEx failed (expectedly): "
+                                                     << WindowsErrorStringFromHRESULT(hr));
+            else
+                SAL_WARN("extensions.olebridge",
+                         "CoInitializeEx failed: " << WindowsErrorStringFromHRESULT(hr));
             APTTYPE nAptType;
             APTTYPEQUALIFIER nAptTypeQualifier;
             if (SUCCEEDED(CoGetApartmentType(&nAptType, &nAptTypeQualifier)))
             {
-                SAL_WARN("extensions.olebridge",
+                SAL_INFO("extensions.olebridge",
                          "  Thread is in a "
                          << (nAptType == APTTYPE_STA ? OUString("single-threaded") :
                              (nAptType == APTTYPE_MTA ? OUString("multi-threaded") :
