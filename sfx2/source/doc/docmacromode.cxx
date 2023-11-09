@@ -253,9 +253,12 @@ namespace sfx2
                 // should not ask any confirmations. FROM_LIST_AND_SIGNED_WARN should only allow
                 // trusted signed macros at this point; so it may only ask for confirmation to add
                 // certificates to trusted, and shouldn't show UI when trusted list is read-only.
-                const bool bAllowUI = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
-                                                 && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
-                                                     || !SvtSecurityOptions::IsReadOnly(SvtSecurityOptions::EOption::MacroTrustedAuthors));
+                const bool bAllowUI
+                    = nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
+                      && eAutoConfirm == eNoAutoConfirm
+                      && (nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE
+                          || !SvtSecurityOptions::IsReadOnly(
+                              SvtSecurityOptions::EOption::MacroTrustedAuthors));
                 const bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature(bAllowUI ? rxInteraction : nullptr);
 
                 if (bHasTrustedMacroSignature)
@@ -267,11 +270,22 @@ namespace sfx2
                        || nSignatureState == SignatureState::NOTVALIDATED )
                 {
                     // there is valid signature, but it is not from the trusted author
-                    // this case includes explicit reject from user in the UI in cases of
-                    // FROM_LIST_AND_SIGNED_WARN and ALWAYS_EXECUTE
-                    if (!bAllowUI)
-                        lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
-                    return disallowMacroExecution();
+                    if (eAutoConfirm == eAutoConfirmApprove
+                        && nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE)
+                    {
+                        // For ALWAYS_EXECUTE + eAutoConfirmApprove (USE_CONFIG_APPROVE_CONFIRMATION
+                        // in Medium security mode), do not approve it right here; let Security Zone
+                        // check below do its job first.
+                    }
+                    else
+                    {
+                        // All other cases of valid but untrusted signatures should result in denied
+                        // macros here. This includes explicit reject from user in the UI in cases
+                        // of FROM_LIST_AND_SIGNED_WARN and ALWAYS_EXECUTE
+                        if (!bAllowUI)
+                            lcl_showDocumentMacrosDisabledError(rxInteraction, m_xData->m_bDocMacroDisabledMessageShown);
+                        return disallowMacroExecution();
+                    }
                 }
                 // Other values of nSignatureState would result in either rejected macros
                 // (FROM_LIST_AND_SIGNED_*), or a confirmation.
