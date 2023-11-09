@@ -625,36 +625,47 @@ void SwFlyFrameAttrMgr::SetAttrSet(const SfxItemSet& rSet)
     m_aSet.Put( rSet );
 }
 
-void SwFlyFrameAttrMgr::SetFrameSizeFromTable()
+const SwTableFormat* SwFlyFrameAttrMgr::SingleTableSelected(SwWrtShell& rWrtShell)
 {
-    if (!m_pOwnSh->IsTableMode())
+    if (!rWrtShell.IsTableMode())
     {
-        return;
+        return nullptr;
     }
 
     // We have a table selection.
     SwSelBoxes aBoxes;
-    GetTableSel(*m_pOwnSh, aBoxes);
+    GetTableSel(rWrtShell, aBoxes);
     if (aBoxes.empty())
     {
-        return;
+        return nullptr;
     }
 
     auto pTableNd = const_cast<SwTableNode*>(aBoxes[0]->GetSttNd()->FindTableNode());
     if (!pTableNd)
     {
-        return;
+        return nullptr;
     }
 
     SwTable& rTable = pTableNd->GetTable();
     if (aBoxes.size() != rTable.GetTabSortBoxes().size())
+    {
+        return nullptr;
+    }
+
+    return rTable.GetFrameFormat();
+}
+
+void SwFlyFrameAttrMgr::SetFrameSizeFromTable()
+{
+    const SwTableFormat* pTableFormat = SingleTableSelected(*m_pOwnSh);
+    if (!pTableFormat)
     {
         return;
     }
 
     // The whole table is selected: default fly width should be the table width
     // in this case.
-    m_aSet.Put(rTable.GetFrameFormat()->GetFrameSize());
+    m_aSet.Put(pTableFormat->GetFrameSize());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
