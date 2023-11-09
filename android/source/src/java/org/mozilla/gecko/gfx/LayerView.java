@@ -45,8 +45,6 @@ public class LayerView extends FrameLayout {
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
 
-    private boolean mFullScreen = false;
-
     private SurfaceView mSurfaceView;
 
     private Listener mListener;
@@ -335,13 +333,5 @@ public class LayerView extends FrameLayout {
         LayerViewException(String e) {
             super(e);
         }
-    }
-
-    public void setFullScreen(boolean fullScreen) {
-        mFullScreen = fullScreen;
-    }
-
-    public boolean isFullScreen() {
-        return mFullScreen;
     }
 }
