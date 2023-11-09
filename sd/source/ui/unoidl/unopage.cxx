@@ -2532,7 +2532,7 @@ Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
 void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation)
 {
     rtl::Reference<sd::Annotation> xSdAnnotation = dynamic_cast<sd::Annotation*>(annotation.get());
-    assert(bool(annotation) == bool(xSdAnnotation) && "must be of concrete type sd::Annoation");
+    assert(bool(annotation) == bool(xSdAnnotation) && "must be of concrete type sd::Annotation");
     GetPage()->removeAnnotation(xSdAnnotation);
 }
 

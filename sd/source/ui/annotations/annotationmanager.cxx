@@ -366,7 +366,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest const & rReq)
                     if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
                     {
                         xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
-                        assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annoation");
+                        assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annotation");
                     }
                 }
                 if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_ID, true, &pPoolItem ) )
@@ -555,7 +555,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest const & rReq )
             if (static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xTmpAnnotation)
             {
                 xAnnotation = dynamic_cast<Annotation*>(xTmpAnnotation.get());
-                assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annoation");
+                assert(bool(xAnnotation) == bool(xTmpAnnotation) && "must be of concrete type sd::Annotation");
             }
         }
 
