@@ -234,13 +234,6 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         }
         (void)xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
     }
-    if (IsHeaderFrame() || IsFooterFrame())
-    {
-        const SwHeadFootFrame *pHeadFootFrame = static_cast<const SwHeadFootFrame*>(this);
-        OUString aFormatName = pHeadFootFrame->GetFormat()->GetName();
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrame->GetFormat());
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
