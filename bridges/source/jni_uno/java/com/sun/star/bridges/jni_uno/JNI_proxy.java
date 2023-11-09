@@ -139,7 +139,7 @@ public final class JNI_proxy implements java.lang.reflect.InvocationHandler
     public static java.lang.reflect.Constructor get_proxy_ctor( Class clazz )
         throws Throwable
     {
-        Class proxy_class = java.lang.reflect.Proxy.getProxyClass(
+        Class<?> proxy_class = java.lang.reflect.Proxy.getProxyClass(
             s_classloader,
             new Class [] { clazz, IQueryInterface.class,
                            com.sun.star.lib.uno.Proxy.class } );

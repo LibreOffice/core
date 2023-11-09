@@ -365,7 +365,7 @@ public class RowSet extends TestCase
         m_rowSet.addRowSetListener(pRow);
 
         // do some movements to check if we got all notifications
-        final Class cResSet = Class.forName("com.sun.star.sdbc.XResultSet");
+        final Class<?> cResSet = Class.forName("com.sun.star.sdbc.XResultSet");
         final boolean moves[] = new boolean[9];
         for (int i = 0; i < moves.length; ++i)
         {
@@ -399,7 +399,7 @@ public class RowSet extends TestCase
         testCursorMove(m_resultSet, cResSet.getMethod(NEXT, (Class[]) null), pRow, moves, null);
 
         moves[RowSetEventListener.IS_MODIFIED] = false;
-        final Class cupd = Class.forName("com.sun.star.sdbc.XResultSetUpdate");
+        final Class<?> cupd = Class.forName("com.sun.star.sdbc.XResultSetUpdate");
         final XResultSetUpdate upd = UnoRuntime.queryInterface( XResultSetUpdate.class, m_resultSet );
         testCursorMove(upd, cupd.getMethod("moveToInsertRow", (Class[]) null), pRow, moves, null);
 
@@ -445,7 +445,7 @@ public class RowSet extends TestCase
         moves[RowSetEventListener.COLUMN_VALUE] = true;
         moves[RowSetEventListener.CURSOR_MOVED] = true;
 
-        final Class cloc = Class.forName("com.sun.star.sdbcx.XRowLocate");
+        final Class<?> cloc = Class.forName("com.sun.star.sdbcx.XRowLocate");
         m_resultSet.first();
         final Object bookmark = m_rowLocate.getBookmark();
         m_resultSet.next();
@@ -470,7 +470,7 @@ public class RowSet extends TestCase
         moves[RowSetEventListener.APPROVE_ROW_CHANGE] = true;
         moves[RowSetEventListener.ROW_CHANGED] = true;
         moves[RowSetEventListener.ROW_COUNT] = true;
-        final Class cdelRows = Class.forName("com.sun.star.sdbcx.XDeleteRows");
+        final Class<?> cdelRows = Class.forName("com.sun.star.sdbcx.XDeleteRows");
         ctemp[0] = Object[].class;
         final XDeleteRows delRows = UnoRuntime.queryInterface( XDeleteRows.class, m_resultSet );
         final Object bookmarks[] = new Object[5];

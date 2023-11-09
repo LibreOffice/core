@@ -119,7 +119,7 @@ public abstract class TestCase
     private void assureException( final String _message, final Object _object, final String _methodName,
         final Class[] _argClasses, final Object[] _methodArgs, final Class _expectedExceptionClass )
     {
-        Class objectClass = _object.getClass();
+        Class<?> objectClass = _object.getClass();
 
         boolean noExceptionAllowed = ( _expectedExceptionClass == null );
 

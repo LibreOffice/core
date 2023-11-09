@@ -56,6 +56,7 @@ public class _XDataOutputStream extends MultiMethodTest {
     * If relation or data of some type in stream not found then
     * tests of corresponding methods are skipped.
     */
+    @SuppressWarnings("unchecked")
     @Override
     public void before() throws RuntimeException {
 

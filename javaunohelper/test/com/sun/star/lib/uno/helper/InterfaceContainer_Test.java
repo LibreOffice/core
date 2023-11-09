@@ -626,6 +626,7 @@ public class InterfaceContainer_Test
         it.previous();
     }
 
+    @SuppressWarnings("unchecked")
     @Test public void ListIterator_add() throws Exception
     {
         logger.log(Level.INFO, "Testing ListIterator.add()");

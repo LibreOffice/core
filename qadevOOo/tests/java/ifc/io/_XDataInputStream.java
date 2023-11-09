@@ -76,12 +76,12 @@ public class _XDataInputStream extends MultiMethodTest {
      * data of different types and fills the appropriate variables.
      * @throws StatusException If one of relations not found.
      */
+    @SuppressWarnings("unchecked")
     @Override
     public void before(){
 
         XInterface x = (XInterface)tEnv.getObjRelation("StreamWriter") ;
-        oStream = UnoRuntime.queryInterface(
-                                                    XDataOutputStream.class, x);
+        oStream = UnoRuntime.queryInterface(XDataOutputStream.class, x);
         List<Object> data = (List<Object>) tEnv.getObjRelation("StreamData") ;
         if (data == null || oStream == null) {
             throw new StatusException(Status.failed("Object relation not found."));

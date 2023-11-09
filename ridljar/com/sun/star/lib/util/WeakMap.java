@@ -165,6 +165,7 @@ public final class WeakMap<K,V> implements Map {
      * @return previous value associated with the specified key, or
      * <code>null</code> if there was no mapping for the key
      */
+    @SuppressWarnings("unchecked")
     public Object /*WeakReference<V>*/ put(/*K*/ Object key, /*V*/ Object value) {
         cleanUp();
         return map.put((K) key, new Entry<K,V>((K) key, (V) value, queue));
@@ -193,6 +194,7 @@ public final class WeakMap<K,V> implements Map {
      * must be plain objects, which are then wrapped in instances of
      * <code>WeakReference</code>.
      */
+    @SuppressWarnings("unchecked")
     public void putAll(Map/*<K,V>*/ m) {
         cleanUp();
         for (Iterator<Map.Entry<K,V>> i = m.entrySet().iterator(); i.hasNext();) {
@@ -267,6 +269,7 @@ public final class WeakMap<K,V> implements Map {
      * @return the referent of the specified <code>WeakReference</code>, or
      * <code>null</code> if <code>ref</code> is <code>null</code>
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getValue(Object /*WeakReference<T>*/ ref) {
         return ref == null ? null : ((WeakReference<T>) ref).get();
     }
@@ -277,6 +280,7 @@ public final class WeakMap<K,V> implements Map {
      * (Specifically, iterating over the collections returned by those
      * methods), as non-modifying methods might modify the underlying map.
      **/
+    @SuppressWarnings("unchecked")
     private void cleanUp() {
         for (;;) {
             Entry<K,V> e = (Entry<K,V>) queue.poll();

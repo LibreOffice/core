@@ -81,7 +81,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         String realValue = null;
         try
         {
-            final Class composerClass = m_composer.getClass();
+            final Class<?> composerClass = m_composer.getClass();
             final Method attributeGetter = composerClass.getMethod("get" + _attributeName, new Class[]
                     {
                     });

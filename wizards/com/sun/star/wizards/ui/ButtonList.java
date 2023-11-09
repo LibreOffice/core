@@ -375,6 +375,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     /** Notifies all registered listeners about the event.
      *
      */
+    @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
         java.util.ArrayList<XItemListener> list;

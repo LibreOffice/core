@@ -1077,6 +1077,7 @@ public class ValueChanger {
         return result;
     }
 
+    @SuppressWarnings("unchecked")
     private static <T> T copyStruct(T value) {
         Class<T> clazz = (Class<T>) value.getClass();
         T newValue;

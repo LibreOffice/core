@@ -20,7 +20,8 @@
 gb_JavaClassSet_JAVACCOMMAND = $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVACFLAGS) \
     -encoding utf8 \
     --release $(1) \
-    -Xlint:-options
+    -Xlint:-options \
+    -Xlint:unchecked
 
 gb_JavaClassSet_JAVACDEBUG :=
 

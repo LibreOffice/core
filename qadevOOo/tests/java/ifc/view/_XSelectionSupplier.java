@@ -53,6 +53,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
     Object[] selections = null;
     Comparator<Object> ObjCompare = null;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void before() {
         selections = (Object[])tEnv.getObjRelation("Selections");
