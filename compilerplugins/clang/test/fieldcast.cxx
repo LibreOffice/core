@@ -9,6 +9,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 
 struct Foo
 {
@@ -29,6 +30,27 @@ class Test2
 {
     // expected-error@+1 {{cast Bar [loplugin:fieldcast]}}
     rtl::Reference<Foo> m_p;
+    void test1() { (void)dynamic_cast<Bar*>(m_p.get()); }
+};
+
+class Test3
+{
+    // no warning expected, casting to a less specific type
+    rtl::Reference<Bar> m_p;
+    void test1() { (void)static_cast<Foo*>(m_p.get()); }
+};
+
+class Test4
+{
+    // expected-error@+1 {{cast Bar [loplugin:fieldcast]}}
+    std::unique_ptr<Foo> m_p;
+    void test1() { (void)dynamic_cast<Bar*>(m_p.get()); }
+};
+
+class Test5
+{
+    // expected-error@+1 {{cast Bar [loplugin:fieldcast]}}
+    std::shared_ptr<Foo> m_p;
     void test1() { (void)dynamic_cast<Bar*>(m_p.get()); }
 };
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

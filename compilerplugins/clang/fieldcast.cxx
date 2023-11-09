@@ -61,6 +61,7 @@ public:
 
     bool VisitCXXStaticCastExpr(const CXXStaticCastExpr*);
     bool VisitCXXDynamicCastExpr(const CXXDynamicCastExpr*);
+    bool VisitCXXReinterpretCastExpr(const CXXReinterpretCastExpr*);
 
 private:
     MyFieldInfo niceName(const FieldDecl*);
@@ -151,25 +152,26 @@ bool FieldCast::VisitCXXStaticCastExpr(const CXXStaticCastExpr* expr)
     return true;
 }
 
+bool FieldCast::VisitCXXReinterpretCastExpr(const CXXReinterpretCastExpr* expr)
+{
+    checkCast(expr);
+    return true;
+}
+
 void FieldCast::checkCast(const CXXNamedCastExpr* expr)
 {
     if (ignoreLocation(expr))
         return;
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
         return;
-    const QualType exprType = expr->getTypeAsWritten();
-    if (!exprType->getPointeeCXXRecordDecl())
+    auto castToType = expr->getTypeAsWritten()->getPointeeCXXRecordDecl();
+    if (!castToType)
         return;
     const Expr* subExpr = compat::getSubExprAsWritten(expr);
+    const FieldDecl* fieldDecl = nullptr;
     if (const MemberExpr* memberExpr = dyn_cast_or_null<MemberExpr>(subExpr->IgnoreImplicit()))
     {
-        const FieldDecl* fieldDecl = dyn_cast_or_null<FieldDecl>(memberExpr->getMemberDecl());
-        if (!fieldDecl)
-            return;
-        if (isInUnoIncludeFile(
-                compiler.getSourceManager().getSpellingLoc(fieldDecl->getBeginLoc())))
-            return;
-        castMap.emplace(fieldDecl, exprType->getPointeeCXXRecordDecl());
+        fieldDecl = dyn_cast_or_null<FieldDecl>(memberExpr->getMemberDecl());
     }
     else if (const CXXMemberCallExpr* memberCallExpr
              = dyn_cast_or_null<CXXMemberCallExpr>(subExpr->IgnoreImplicit()))
@@ -181,14 +183,19 @@ void FieldCast::checkCast(const CXXNamedCastExpr* expr)
             memberCallExpr->getImplicitObjectArgument()->IgnoreImplicit());
         if (!memberExpr)
             return;
-        const FieldDecl* fieldDecl = dyn_cast_or_null<FieldDecl>(memberExpr->getMemberDecl());
-        if (!fieldDecl)
-            return;
-        if (isInUnoIncludeFile(
-                compiler.getSourceManager().getSpellingLoc(fieldDecl->getBeginLoc())))
-            return;
-        castMap.emplace(fieldDecl, exprType->getPointeeCXXRecordDecl());
+        fieldDecl = dyn_cast_or_null<FieldDecl>(memberExpr->getMemberDecl());
     }
+    if (!fieldDecl)
+        return;
+    if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(fieldDecl->getBeginLoc())))
+        return;
+
+    // ignore casting to a less specific type
+    auto castFromType = subExpr->getType()->getPointeeCXXRecordDecl();
+    if (castFromType && castFromType->isDerivedFrom(castToType))
+        return;
+
+    castMap.emplace(fieldDecl, castToType);
 }
 
 loplugin::Plugin::Registration<FieldCast> X("fieldcast", false);
