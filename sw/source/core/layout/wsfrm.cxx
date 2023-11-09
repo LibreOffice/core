@@ -3973,6 +3973,18 @@ void SwLayoutFrame::FormatWidthCols( const SwBorderAttrs &rAttrs,
     }
 }
 
+void SwLayoutFrame::dumpAsXmlAttributes(xmlTextWriterPtr writer) const
+{
+    SwFrame::dumpAsXmlAttributes(writer);
+
+    const SwFrameFormat* pFormat = GetFormat();
+    if (pFormat)
+    {
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "format" ), "%p", pFormat);
+        (void)xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "formatName" ), "%s", BAD_CAST(pFormat->GetName().toUtf8().getStr()));
+    }
+}
+
 static SwContentFrame* lcl_InvalidateSection( SwFrame *pCnt, SwInvalidateFlags nInv )
 {
     SwSectionFrame* pSect = pCnt->FindSctFrame();

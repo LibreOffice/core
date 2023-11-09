@@ -488,13 +488,6 @@ void SwFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
         }
         xmlTextWriterWriteAttribute(writer, BAD_CAST("WritingMode"), BAD_CAST(aMode.getStr()));
     }
-    if (IsHeaderFrame() || IsFooterFrame())
-    {
-        const SwHeadFootFrame *pHeadFootFrame = static_cast<const SwHeadFootFrame*>(this);
-        OUString aFormatName = pHeadFootFrame->GetFormat()->GetName();
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(OUStringToOString(aFormatName, RTL_TEXTENCODING_UTF8).getStr()));
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrame->GetFormat());
-    }
 }
 
 void SwFrame::dumpChildrenAsXml( xmlTextWriterPtr writer ) const
@@ -549,7 +542,7 @@ void SwTextFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 
 void SwSectionFrame::dumpAsXmlAttributes( xmlTextWriterPtr writer ) const
 {
-    SwFrame::dumpAsXmlAttributes( writer );
+    SwLayoutFrame::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrameId() );
 

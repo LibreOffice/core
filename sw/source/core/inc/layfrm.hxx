@@ -182,6 +182,7 @@ public:
                 m_VertPosOrientFramesFor.end(), pObj),
             m_VertPosOrientFramesFor.end());
     }
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer) const override;
 };
 
 /**
