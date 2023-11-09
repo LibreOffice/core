@@ -292,6 +292,10 @@ SwViewOption::SwViewOption() :
 
     m_nDefaultAnchor = 1; //FLY_TO_CHAR
 
+    // tdf#135266 - tox dialog: remember last used entry level depending on the index type
+    m_nTocEntryLvl = 0;
+    m_nIdxEntryLvl = 1;
+
 #ifdef DBG_UTIL
     // correspond to the statements in ui/config/cfgvw.src
     m_bTest1 = m_bTest2 = m_bTest3 = m_bTest4 =

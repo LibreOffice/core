@@ -2065,6 +2065,17 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(weld::Container* pPage, weld::DialogControl
 SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
     m_xTokenWIN.reset();
+
+    // tdf#135266 - remember last used entry level depending on the index type
+    if (const auto aSelectedIndex = m_xLevelLB->get_selected_index(); aSelectedIndex != -1)
+    {
+        auto& rSh = static_cast<SwMultiTOXTabDialog*>(GetDialogController())->GetWrtShell();
+        SwViewOption* pVOpt = const_cast<SwViewOption*>(rSh.GetViewOptions());
+        if (m_aLastTOXType == TOX_INDEX)
+            pVOpt->SetIdxEntryLvl(aSelectedIndex);
+        else
+            pVOpt->SetTocEntryLvl(aSelectedIndex);
+    }
 }
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, ModifyClickHdl, weld::Toggleable&, void)
@@ -2240,7 +2251,10 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         else
             m_xLevelFT->set_label(m_sLevelStr);
 
-        m_xLevelLB->select(bToxIsIndex ? 1 : 0);
+        // tdf#135266 - remember last used entry level depending on the index type
+        m_xLevelLB->select(bToxIsIndex ? pTOXDlg->GetWrtShell().GetViewOptions()->GetIdxEntryLvl()
+                                       : pTOXDlg->GetWrtShell().GetViewOptions()->GetTocEntryLvl());
+
 
         //show or hide controls
         ShowHideControls(aCurType.eType);
