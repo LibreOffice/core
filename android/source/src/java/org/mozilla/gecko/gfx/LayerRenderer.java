@@ -51,9 +51,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
-    /* Used by robocop for testing purposes */
-    private IntBuffer mPixelBuffer;
-
     // Used by GLES 2.0
     private int mProgram;
     private int mPositionHandle;
@@ -451,18 +448,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             // If a layer update requires further work, schedule another redraw
             if (!mUpdated)
                 mView.requestRender();
-
-            /* Used by robocop for testing purposes */
-            IntBuffer pixelBuffer = mPixelBuffer;
-            if (mUpdated && pixelBuffer != null) {
-                synchronized (pixelBuffer) {
-                    pixelBuffer.position(0);
-                    GLES20.glReadPixels(0, 0, (int)mScreenContext.viewport.width(),
-                                        (int)mScreenContext.viewport.height(), GLES20.GL_RGBA,
-                                        GLES20.GL_UNSIGNED_BYTE, pixelBuffer);
-                    pixelBuffer.notify();
-                }
-            }
         }
     }
 }
