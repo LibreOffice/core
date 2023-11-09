@@ -3430,6 +3430,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     // Otherwise, get the style of the text and use it as the style name
                     const SwTextNode* pOutlineNd = pTextNd->FindOutlineNodeOfLevel(aCopy.GetLevel());
 
+                    if (!pOutlineNd) break;
+                    // Sometimes we can't find the outline node, in that case let's just fallback to exporting the text
+
                     sStr = FieldString(ww::eSTYLEREF)
                          + GetExport().GetStyleRefName(pOutlineNd->GetFormatColl()->GetName());
                 }
