@@ -426,6 +426,8 @@ bool BasicViewFactory::IsCacheable (const std::shared_ptr<ViewDescriptor>& rpDes
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
             tmp.push_back(FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
+            tmp.push_back(FrameworkHelper::CreateResourceId(
+                FrameworkHelper::msNotesViewURL, FrameworkHelper::msNotesChildWindowURL));
             return tmp;
         }();
 

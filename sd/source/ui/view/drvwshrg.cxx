@@ -40,6 +40,7 @@
 #include <SpellDialogChildWindow.hxx>
 #include <GraphicViewShell.hxx>
 #include <AnimationChildWindow.hxx>
+#include <NotesChildWindow.hxx>
 
 using namespace sd;
 #define ShellClass_DrawViewShell
@@ -77,6 +78,7 @@ void DrawViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(
         sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::NotesChildWindow::GetChildWindowId());
 }
 
 // SdGraphicViewShell
@@ -103,6 +105,7 @@ void GraphicViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(
         sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(DevelopmentToolChildWindow::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(::sd::NotesChildWindow::GetChildWindowId());
 }
 
 } // end of namespace sd

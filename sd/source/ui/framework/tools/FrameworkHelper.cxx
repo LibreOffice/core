@@ -175,6 +175,7 @@ const OUString FrameworkHelper::msCenterPaneURL( msPaneURLPrefix + "CenterPane")
 const OUString FrameworkHelper::msFullScreenPaneURL( msPaneURLPrefix + "FullScreenPane");
 const OUString FrameworkHelper::msLeftImpressPaneURL( msPaneURLPrefix + "LeftImpressPane");
 const OUString FrameworkHelper::msLeftDrawPaneURL( msPaneURLPrefix + "LeftDrawPane");
+const OUString FrameworkHelper::msNotesChildWindowURL( msPaneURLPrefix + "NotesChildWindow");
 
 // View URLs.
 

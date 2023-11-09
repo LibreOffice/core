@@ -61,6 +61,7 @@ public:
     static const OUString msFullScreenPaneURL;
     static const OUString msLeftImpressPaneURL;
     static const OUString msLeftDrawPaneURL;
+    static const OUString msNotesChildWindowURL;
 
     // URLs of frequently used views.
     static constexpr OUStringLiteral msViewURLPrefix = u"private:resource/view/";

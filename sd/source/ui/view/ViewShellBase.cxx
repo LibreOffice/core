@@ -628,6 +628,11 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
+        case SID_NOTES_WINDOW:
+            mpImpl->SetPaneVisibility(rRequest, framework::FrameworkHelper::msNotesChildWindowURL,
+                                      framework::FrameworkHelper::msNotesViewURL);
+            break;
+
         case SID_TOGGLE_TABBAR_VISIBILITY:
         {
             SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
@@ -1274,6 +1279,12 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
+                        break;
+
+                    case SID_NOTES_WINDOW:
+                        xResourceId = ResourceId::create(
+                            xContext, FrameworkHelper::msNotesChildWindowURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 

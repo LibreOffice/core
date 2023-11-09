@@ -58,6 +58,20 @@ public:
     virtual ~LeftDrawPaneShell() override;
 };
 
+class NotesChildWindowShell final : public SfxShell
+{
+public:
+    SFX_DECL_INTERFACE(SD_IF_SDNOTESCHILDWINDOWSHELL)
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    NotesChildWindowShell();
+    virtual ~NotesChildWindowShell() override;
+};
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

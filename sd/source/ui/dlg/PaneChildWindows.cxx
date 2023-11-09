@@ -40,7 +40,8 @@ PaneChildWindow::PaneChildWindow (
     sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    TranslateId pTitleBarResId)
+    TranslateId pTitleBarResId,
+    SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
     SetWindow( VclPtr<TitledDockingWindow>::Create(
@@ -48,7 +49,7 @@ PaneChildWindow::PaneChildWindow (
         this,
         pParentWindow,
         SdResId(pTitleBarResId)));
-    SetAlignment(SfxChildAlignment::LEFT);
+    SetAlignment(eAlignment);
     SfxDockingWindow* pDockingWindow = static_cast<SfxDockingWindow*>(GetWindow());
     pDockingWindow->EnableInput();
     pDockingWindow->Initialize(pInfo);
@@ -83,7 +84,8 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_IMPRESS_TITLE)
+        STR_LEFT_PANE_IMPRESS_TITLE,
+        SfxChildAlignment::LEFT)
 {
 }
 
@@ -98,7 +100,8 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        STR_LEFT_PANE_DRAW_TITLE)
+        STR_LEFT_PANE_DRAW_TITLE,
+        SfxChildAlignment::LEFT)
 {
 }
 

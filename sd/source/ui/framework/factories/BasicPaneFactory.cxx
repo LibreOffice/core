@@ -25,6 +25,7 @@
 #include "ChildWindowPane.hxx"
 #include "FrameWindowPane.hxx"
 #include "FullScreenPane.hxx"
+#include "NotesChildWindow.hxx"
 
 #include <comphelper/servicehelper.hxx>
 #include <framework/FrameworkHelper.hxx>
@@ -46,7 +47,8 @@ namespace {
         CenterPaneId,
         FullScreenPaneId,
         LeftImpressPaneId,
-        LeftDrawPaneId
+        LeftDrawPaneId,
+        NotesChildWindowId
     };
 
     const sal_Int32 gnConfigurationUpdateStartEvent(0);
@@ -121,6 +123,11 @@ BasicPaneFactory::BasicPaneFactory (
 
             aDescriptor.msPaneURL = FrameworkHelper::msLeftDrawPaneURL;
             aDescriptor.mePaneId = LeftDrawPaneId;
+            mpPaneContainer->push_back(aDescriptor);
+            xCC->addResourceFactory(aDescriptor.msPaneURL, this);
+
+            aDescriptor.msPaneURL = FrameworkHelper::msNotesChildWindowURL;
+            aDescriptor.mePaneId = NotesChildWindowId;
             mpPaneContainer->push_back(aDescriptor);
             xCC->addResourceFactory(aDescriptor.msPaneURL, this);
         }
@@ -223,6 +230,7 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
 
             case LeftImpressPaneId:
             case LeftDrawPaneId:
+            case NotesChildWindowId:
                 xPane = CreateChildWindowPane(
                     rxPaneId,
                     *iDescriptor);
@@ -371,6 +379,11 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
             case LeftDrawPaneId:
                 pShell.reset(new LeftDrawPaneShell());
                 nChildWindowId = ::sd::LeftPaneDrawChildWindow::GetChildWindowId();
+                break;
+
+            case NotesChildWindowId:
+                pShell.reset(new NotesChildWindowShell());
+                nChildWindowId = ::sd::NotesChildWindow::GetChildWindowId();
                 break;
 
             default:
