@@ -43,10 +43,10 @@ SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
 {
-    // Do not allow empty names
+    // Do not allow empty names, unless custom CheckNameHdl is specified
     bool bEnable;
     if (m_aCheckNameHdl.IsSet())
-        bEnable = !m_xEdtName->get_text().isEmpty() && m_aCheckNameHdl.Call(*this);
+        bEnable = m_aCheckNameHdl.Call(*this);
     else
         bEnable = !m_xEdtName->get_text().isEmpty();
     m_xBtnOK->set_sensitive(bEnable);

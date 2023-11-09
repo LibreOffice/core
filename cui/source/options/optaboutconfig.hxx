@@ -12,6 +12,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #include <i18nutil/searchopt.hxx>
+#include <cui/dlgname.hxx>
 #include <vcl/weld.hxx>
 
 #include <vector>
@@ -50,6 +51,7 @@ private:
     std::vector<prefBoxEntry> m_prefBoxEntries;
 
     bool m_bSorted;
+    weld::Window* m_pParent;
 
     void AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp );
     static std::vector< OUString > commaStringToSequence( std::u16string_view rCommaSepString );
@@ -62,6 +64,7 @@ private:
     DECL_LINK(SearchHdl_Impl, weld::Button&, void);
     DECL_LINK(ExpandingHdl_Impl, const weld::TreeIter&, bool);
     DECL_LINK(HeaderBarClick, int, void);
+    DECL_STATIC_LINK(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool);
 
 public:
    explicit CuiAboutConfigTabPage(weld::Window* pParent);
@@ -74,24 +77,6 @@ public:
                       const weld::TreeIter* pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
    static css::uno::Reference< css::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    void FillItemSet();
-};
-
-class CuiAboutConfigValueDialog : public weld::GenericDialogController
-{
-private:
-    bool m_bNumericOnly;
-    std::unique_ptr<weld::Entry> m_xEDValue;
-
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-
-public:
-    CuiAboutConfigValueDialog(weld::Window* pWindow, const OUString& rValue , int limit);
-    virtual ~CuiAboutConfigValueDialog() override;
-
-    OUString getValue() const
-    {
-        return m_xEDValue->get_text();
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <cppu/unotype.hxx>
+#include <cui/dlgname.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/textsearch.hxx>
 #include <utility>
@@ -48,10 +49,6 @@
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
-
-#define SHORT_LEN_LIMIT     7
-#define LONG_LEN_LIMIT      11
-#define HYPER_LEN_LIMIT     20
 
 struct Prop_Impl
 {
@@ -91,64 +88,6 @@ struct UserData
     {}
 };
 
-IMPL_LINK(CuiAboutConfigValueDialog, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
-{
-    bool bValid = false;
-    bool bNonSpace = rKeyEvent.GetKeyCode().GetCode() != KEY_SPACE;
-    if (m_bNumericOnly && bNonSpace )
-    {
-        const vcl::KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
-        sal_uInt16 nGroup = rKeyCode.GetGroup();
-        sal_uInt16 nKey = rKeyCode.GetCode();
-
-        switch ( nGroup ) {
-            case KEYGROUP_NUM :
-            case KEYGROUP_CURSOR :
-            {
-                bValid = true;
-                break;
-            }
-
-            case KEYGROUP_MISC :
-            {
-                switch ( nKey ) {
-                    case KEY_SUBTRACT :
-                    case KEY_COMMA :
-                    case KEY_POINT :
-                    {
-                        bValid = true;
-                        break;
-                    }
-
-                    default :
-                    {
-                        if( nKey < KEY_ADD || nKey > KEY_EQUAL )
-                            bValid = true;
-                        break;
-                    }
-                }
-                break;
-            }
-
-            default :
-            {
-                bValid = false;
-                break;
-            }
-        }
-
-        //Select all, Copy, Paste, Cut, Undo Keys
-        if ( !bValid && ( rKeyCode.IsMod1() && (
-             KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
-            bValid = true;
-    }
-    else
-        bValid = true;
-
-    //if value return true to claim that it has been handled
-    return !bValid;
-}
-
 CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     : GenericDialogController(pParent, "cui/ui/aboutconfigdialog.ui", "AboutConfig")
     , m_xResetBtn(m_xBuilder->weld_button("reset"))
@@ -158,6 +97,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage(weld::Window* pParent)
     , m_xPrefBox(m_xBuilder->weld_tree_view("preferences"))
     , m_xScratchIter(m_xPrefBox->make_iterator())
     , m_bSorted(false)
+    , m_pParent(pParent)
 {
     m_xPrefBox->set_size_request(m_xPrefBox->get_approximate_digit_width() * 100,
                                  m_xPrefBox->get_height_rows(23));
@@ -233,6 +173,12 @@ IMPL_LINK(CuiAboutConfigTabPage, HeaderBarClick, int, nColumn, void)
         //sort lists
         m_xPrefBox->set_sort_indicator(bSortAtoZ ? TRISTATE_TRUE : TRISTATE_FALSE, nColumn);
     }
+}
+
+IMPL_STATIC_LINK_NOARG(CuiAboutConfigTabPage, ValidNameHdl, SvxNameDialog&, bool)
+{
+    // Allow empty value
+    return true;
 }
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
@@ -649,23 +595,6 @@ std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( std::u16st
     return tempVector;
 }
 
-CuiAboutConfigValueDialog::CuiAboutConfigValueDialog(weld::Window* pWindow,
-                                                     const OUString& rValue,
-                                                     int limit)
-    : GenericDialogController(pWindow, "cui/ui/aboutconfigvaluedialog.ui", "AboutConfigValueDialog")
-    , m_bNumericOnly(limit != 0)
-    , m_xEDValue(m_xBuilder->weld_entry("valuebox"))
-{
-    if (limit)
-        m_xEDValue->set_max_length(limit);
-    m_xEDValue->set_text(rValue);
-    m_xEDValue->connect_key_press(LINK(this, CuiAboutConfigValueDialog, KeyInputHdl));
-}
-
-CuiAboutConfigValueDialog::~CuiAboutConfigValueDialog()
-{
-}
-
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl, weld::Button&, void )
 {
     Reset();
@@ -725,20 +654,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
     {
         if( bOpenDialog )
         {
-            //Cosmetic length limit for integer values.
-            int limit=0;
-            if( sPropertyType == "short" )
-                limit = SHORT_LEN_LIMIT;
-            else if( sPropertyType == "int" )
-                limit = LONG_LEN_LIMIT;
-            else if( sPropertyType == "long" )
-                limit = HYPER_LEN_LIMIT;
-
-            CuiAboutConfigValueDialog aValueDialog(m_xDialog.get(), sDialogValue, limit);
-
-            if (aValueDialog.run() == RET_OK )
+            SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+            aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ), true );
+            if (aNameDialog.run() == RET_OK )
             {
-                OUString sNewValue = aValueDialog.getValue();
+                OUString sNewValue = aNameDialog.GetName();
                 bSaveChanges = true;
                 if ( sPropertyType == "short")
                 {

@@ -60,7 +60,7 @@ public:
     {
         m_aCheckNameHdl = rLink;
         if (bCheckImmediately)
-            m_xBtnOK->set_sensitive(rLink.Call(*this));
+            ModifyHdl(*m_xEdtName);
     }
 
     void SetCheckNameTooltipHdl(const Link<SvxNameDialog&, OUString>& rLink)
