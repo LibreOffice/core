@@ -266,7 +266,7 @@ DECL_ABSTDLG_CLASS(AbstractSvxNewDictionaryDialog,SvxNewDictionaryDialog)
 // AbstractSvxNameDialog_Impl
 DECL_ABSTDLG_CLASS(AbstractSvxNameDialog,SvxNameDialog)
     virtual void    GetName( OUString& rName ) override ;
-    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) override ;
+    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink ) override ;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&, OUString>& rLink ) override ;
     virtual void    SetEditHelpId(const OUString&) override ;
     //from class Window

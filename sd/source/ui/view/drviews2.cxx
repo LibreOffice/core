@@ -853,7 +853,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     ScopedVclPtr<AbstractSvxNameDialog> aNameDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aPageName, aDescr));
                     aNameDlg->SetText( aTitle );
-                    aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );
+                    aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ) );
                     aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
                     if( aNameDlg->Execute() == RET_OK )

@@ -552,13 +552,13 @@ void AbstractSvxNameDialog_Impl::GetName(OUString& rName)
     rName = m_xDlg->GetName();
 }
 
-void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately )
+void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink )
 {
     aCheckNameHdl = rLink;
     if( rLink.IsSet() )
-        m_xDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl), bCheckImmediately );
+        m_xDlg->SetCheckNameHdl( LINK(this, AbstractSvxNameDialog_Impl, CheckNameHdl) );
     else
-        m_xDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>(), bCheckImmediately );
+        m_xDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>() );
 }
 
 void AbstractSvxNameDialog_Impl::SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink)

@@ -47,20 +47,11 @@ public:
 
         @param rLink a Callback declared with DECL_DLLPRIVATE_LINK and implemented with
                IMPL_LINK, that is executed on modification.
-
-        @param bCheckImmediately If true, the Link is called directly after
-               setting it. It is recommended to set this flag to true to avoid
-               an inconsistent state if the initial String (given in the CTOR)
-               does not satisfy the check condition.
-
-        @todo Remove the parameter bCheckImmediately and incorporate the 'true'
-              behaviour as default.
      */
-    void SetCheckNameHdl(const Link<SvxNameDialog&, bool>& rLink, bool bCheckImmediately)
+    void SetCheckNameHdl(const Link<SvxNameDialog&, bool>& rLink)
     {
         m_aCheckNameHdl = rLink;
-        if (bCheckImmediately)
-            ModifyHdl(*m_xEdtName);
+        ModifyHdl(*m_xEdtName);
     }
 
     void SetCheckNameTooltipHdl(const Link<SvxNameDialog&, OUString>& rLink)

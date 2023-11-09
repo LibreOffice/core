@@ -655,7 +655,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
         if( bOpenDialog )
         {
             SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-            aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ), true );
+            aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
             if (aNameDialog.run() == RET_OK )
             {
                 OUString sNewValue = aNameDialog.GetName();

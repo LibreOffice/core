@@ -922,7 +922,7 @@ void SlotManager::RenameSlide(const SfxRequest& rRequest)
         OUString aOldName;
         aNameDlg->GetName( aOldName );
         aNameDlg->SetText( aTitle );
-        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
+        aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ) );
         aNameDlg->SetCheckNameTooltipHdl( LINK( this, SlotManager, RenameSlideTooltipHdl ) );
         aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 

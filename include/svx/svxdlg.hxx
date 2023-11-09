@@ -163,7 +163,7 @@ protected:
     virtual ~AbstractSvxNameDialog() override = default;
 public:
     virtual void    GetName( OUString& rName ) = 0;
-    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) = 0;
+    virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink ) = 0;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
     virtual void    SetEditHelpId(const OUString&) = 0;
     virtual void    SetHelpId( const OUString& ) = 0;
