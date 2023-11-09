@@ -17,7 +17,7 @@ from uitest.uihelper.common import get_url_for_data_file
 
 
 class Test(UITestCase):
-    def test_content_control_dialog(self):
+    def test_uno_frame_dialog(self):
         with self.ui_test.create_doc_in_start_center("writer") as xComponent:
             # Given a document with a floating table:
             args = {
@@ -79,5 +79,23 @@ class Test(UITestCase):
                 # AssertionError: 0 != 2000.0
                 # i.e. the width was empty instead of the size from the UI.
                 self.assertEqual(xComponent.TextFrames.Frame1.Size.Width, expected_mm100)
+
+    def test_insert_floating_table(self):
+        with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+            # Given a Writer document with a selected (inline) table:
+            args = {
+                "Columns": 1,
+                "Rows": 1,
+            }
+            self.xUITest.executeCommandWithParameters(".uno:InsertTable", mkPropertyValues(args))
+            self.xUITest.executeCommand(".uno:SelectAll")
+            # When converting it to a split fly:
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
+                xFlySplit = xDialog.getChild("flysplit")
+                fly_split_visible = get_state_as_dict(xFlySplit)["Visible"] == "true"
+            # Then make sure the inserted fly can be marked as "split allowed":
+            # Without the accompanying fix in place, this test would have failed, the fly had to be
+            # inserted first, only then it could be marked as "split allowed".
+            self.assertEqual(fly_split_visible, True)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

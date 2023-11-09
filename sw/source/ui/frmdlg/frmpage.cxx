@@ -1050,9 +1050,23 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     const SwFrameFormat* pFlyFormat = pSh->GetFlyFrameFormat();
     if (!pFlyFormat || !ContainsSingleTable(*pFlyFormat) || ContainsChain(*pFlyFormat))
     {
+        bool bSingleTable = false;
+        if (!pFlyFormat && m_bNew)
+        {
+            // No fly is selected: check if a whole table is selected. If so, allow moving that into
+            // a split fly.
+            if (SwFlyFrameAttrMgr::SingleTableSelected(*pSh))
+            {
+                bSingleTable = true;
+            }
+        }
+
         // Only allow fly split if the frame contains a single table, otherwise it would be hard to
         // save the resulting model to Word formats.
-        m_xFlySplitCB->hide();
+        if (!bSingleTable)
+        {
+            m_xFlySplitCB->hide();
+        }
     }
 
     Init(*rSet);
