@@ -630,6 +630,15 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
+        case SID_NOTES_WINDOW:
+        {
+            SfxViewShell* pViewShell = SfxViewShell::Current();
+            SfxViewFrame& rViewFrame = pViewShell->GetViewFrame();
+            auto nID = rRequest.GetSlot();
+            rViewFrame.ToggleChildWindow(nID);
+            break;
+        }
+
         case SID_TOGGLE_TABBAR_VISIBILITY:
         {
             SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
@@ -1318,6 +1327,21 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
+
+                    case SID_NOTES_WINDOW:
+                    {
+                        bState = false;
+                        auto* pViewShell = SfxViewShell::Current();
+                        if (pViewShell)
+                        {
+                            auto& rViewFrame = pViewShell->GetViewFrame();
+                            if (rViewFrame.KnowsChildWindow(nItemId))
+                            {
+                                bState = rViewFrame.HasChildWindow(nItemId);
+                            }
+                        }
+                        break;
+                    }
 
                     case SID_DRAWINGMODE:
                     case SID_NORMAL_MULTI_PANE_GUI:

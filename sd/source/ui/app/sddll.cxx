@@ -48,6 +48,7 @@
 #include <OutlineViewShell.hxx>
 #include <OutlineViewShellBase.hxx>
 #include <PaneChildWindows.hxx>
+#include <NotesChildWindow.hxx>
 #include <SpellDialogChildWindow.hxx>
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorterViewShellBase.hxx>
@@ -178,6 +179,7 @@ void SdDLL::RegisterControllers(SdModule* pMod)
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(false, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(false, pMod);
     ::sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pMod);
+    ::sd::NotesChildWindow::RegisterChildWindow(false, pMod);
     DevelopmentToolChildWindow::RegisterChildWindow(false, pMod);
 
     ::sd::SdNavigatorWrapper::RegisterChildWindow(false, pMod, SfxChildWindowFlags::NEVERHIDE);

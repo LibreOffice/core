@@ -287,6 +287,7 @@
 #define STR_PRESOBJ_OUTLINE                             NC_("STR_PRESOBJ_OUTLINE", "Click to add Text" )
 #define STR_PRESOBJ_TEXT                                NC_("STR_PRESOBJ_TEXT", "Click to add Text" )
 #define STR_PRESOBJ_NOTESTEXT                           NC_("STR_PRESOBJ_NOTESTEXT", "Click to add Notes" )
+#define STR_PRESOBJ_NOTESTEXT_MISSING                   NC_("STR_PRESOBJ_NOTESTEXT_MISSING", "Notes placeholder object is missing for the current slide." )
 #define STR_PRESOBJ_TITLE_MOBILE                        NC_("STR_PRESOBJ_TITLE_MOBILE", "Double-tap to add Title" )
 #define STR_PRESOBJ_OUTLINE_MOBILE                      NC_("STR_PRESOBJ_OUTLINE_MOBILE", "Double-tap to add Text" )
 #define STR_PRESOBJ_TEXT_MOBILE                         NC_("STR_PRESOBJ_TEXT_MOBILE", "Double-tap to add Text" )
