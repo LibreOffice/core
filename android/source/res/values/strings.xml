@@ -15,6 +15,7 @@
     <string name="about_notice">Show Notice</string>
     <string name="about_moreinfo">More Info</string>
 
+    <string name="create_file">Create New File</string>
     <string name="new_textdocument">New Text Document</string>
     <string name="new_presentation">New Presentation</string>
     <string name="new_spreadsheet">New Spreadsheet</string>
@@ -26,6 +27,8 @@
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Search</string>
     <string name="search_not_found">Keyword not found</string>
+    <string name="search_find_next">Find Next</string>
+    <string name="search_find_previous">Find Previous</string>
     <string name="menu_preferences">Preferences</string>
     <string name="file_icon_desc">fileicon</string>
     <string name="title_recents">Recent files</string>
