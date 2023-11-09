@@ -22,6 +22,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 
@@ -657,6 +658,15 @@ DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
     // Check font size
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
     CPPUNIT_ASSERT_EQUAL(float(66), nFontSize);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153178, "tdf153178.rtf")
+{
+    // the problem was that a frame was created
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xIndexAccess->getCount());
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf109790, "tdf109790.rtf")

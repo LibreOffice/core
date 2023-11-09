@@ -1242,6 +1242,26 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
                                                NS_ooxml::LN_Value_doc_ST_Wrap_notBeside);
             break;
+        case RTFKeyword::OVERLAY:
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_none);
+            break;
+        case RTFKeyword::WRAPAROUND:
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_around);
+            break;
+        case RTFKeyword::WRAPTHROUGH:
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_through);
+            break;
+        case RTFKeyword::WRAPTIGHT:
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_tight);
+            break;
+        case RTFKeyword::WRAPDEFAULT:
+            m_aStates.top().getFrame().setSprm(NS_ooxml::LN_CT_FramePr_wrap,
+                                               NS_ooxml::LN_Value_doc_ST_Wrap_auto);
+            break;
         case RTFKeyword::MNOR:
             m_bMathNor = true;
             break;
