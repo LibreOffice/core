@@ -67,8 +67,9 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mpPrevGraphics                  = nullptr;
     mpNextGraphics                  = nullptr;
     mpMetaFile                      = nullptr;
-    mpFontInstance                     = nullptr;
-    mpFontFaceCollection                = nullptr;
+    mpFontInstance                  = nullptr;
+    mpForcedFallbackInstance        = nullptr;
+    mpFontFaceCollection            = nullptr;
     mpAlphaVDev                     = nullptr;
     mpExtOutDevData                 = nullptr;
     mnOutOffX                       = 0;
@@ -166,6 +167,7 @@ void OutputDevice::dispose()
 
     // release the active font instance
     mpFontInstance.clear();
+    mpForcedFallbackInstance.clear();
 
     // remove cached results of GetDevFontList/GetDevSizeList
     mpFontFaceCollection.reset();

@@ -1020,6 +1020,22 @@ std::unique_ptr<SalLayout> OutputDevice::getFallbackLayout(
     return pFallback;
 }
 
+bool OutputDevice::ForceFallbackFont(vcl::Font const& rFallbackFont)
+{
+    vcl::Font aOldFont = GetFont();
+    SetFont(rFallbackFont);
+    InitFont();
+
+    mpForcedFallbackInstance = mpFontInstance;
+    SetFont(aOldFont);
+    InitFont();
+
+    if (mpForcedFallbackInstance)
+        return true;
+
+    return false;
+}
+
 std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_ptr<SalLayout> pSalLayout,
     vcl::text::ImplLayoutArgs& rLayoutArgs, const SalLayoutGlyphs* pGlyphs ) const
 {
@@ -1051,12 +1067,22 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     vcl::font::FontSelectPattern aFontSelData(mpFontInstance->GetFontSelectPattern());
     SalLayoutGlyphsImpl* pGlyphsImpl = pGlyphs ? pGlyphs->Impl(1) : nullptr;
 
+    bool bHasUsedFallback = false;
+
     // try if fallback fonts support the missing code units
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         rtl::Reference<LogicalFontInstance> pFallbackFont;
-        if(pGlyphsImpl != nullptr)
+        if (!bHasUsedFallback && mpForcedFallbackInstance)
+        {
+            pFallbackFont = mpForcedFallbackInstance;
+            bHasUsedFallback = true;
+        }
+        else if(pGlyphsImpl != nullptr)
+        {
             pFallbackFont = pGlyphsImpl->GetFont();
+        }
+
         // find a font family suited for glyph fallback
         // GetGlyphFallbackFont() needs a valid FontInstance
         // if the system-specific glyph fallback is active
@@ -1066,6 +1092,9 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
                 aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
             break;
+
+        SAL_INFO("vcl", "Fallback font (level " << nFallbackLevel << "): family: " << pFallbackFont->GetFontFace()->GetFamilyName()
+                << ", style: " << pFallbackFont->GetFontFace()->GetStyleName());
 
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
@@ -1255,6 +1284,7 @@ void OutputDevice::ImplReleaseFonts()
     mbInitFont = true;
 
     mpFontInstance.clear();
+    mpForcedFallbackInstance.clear();
     mpFontFaceCollection.reset();
 }
 

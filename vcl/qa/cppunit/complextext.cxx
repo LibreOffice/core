@@ -491,15 +491,46 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf153440)
 #endif
 }
 
+CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testMixedCJKLatinScript_glyph_advancements)
+{
+#if HAVE_MORE_FONTS
+#if !defined _WIN32
+    OUString aTestScript(u"根据10.1(37BA) Eng"_ustr);
+
+    ScopedVclPtrInstance<VirtualDevice> pOutDev;
+    // note you can only run this once and it was designed for tdf#107718
+    bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
+    CPPUNIT_ASSERT_EQUAL(true, bAdded);
+
+    vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
+    pOutDev->SetFont( aFont );
+
+    vcl::Font aFallbackFont("DejaVu Sans", "Book", Size(0, 72));
+    pOutDev->ForceFallbackFont(aFallbackFont);
+
+    // absolute character widths AKA text array.
+    tools::Long nRefTextWidth = 704;
+    std::vector<sal_Int32> aRefCharWidths = { 72, 144, 190, 236, 259, 305, 333, 379, 425, 474, 523, 551, 567, 612, 658, 704 };
+    KernArray aCharWidths;
+    tools::Long nTextWidth = pOutDev->GetTextArray(aTestScript, &aCharWidths);
+
+    CPPUNIT_ASSERT_EQUAL(aRefCharWidths, aCharWidths.get_subunit_array());
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(nTextWidth), aCharWidths.back());
+
+    // text advance width and line height
+    CPPUNIT_ASSERT_EQUAL(nRefTextWidth, pOutDev->GetTextWidth(aTestScript));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(105), pOutDev->GetTextHeight());
+#endif
+#endif
+}
+
 CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf107718)
 {
 #if !defined _WIN32 // TODO: Fails on jenkins but passes locally
     vcl::Font aFont(u"Source Han Sans"_ustr, u"Regular"_ustr, Size(0, 72));
 
     ScopedVclPtrInstance<VirtualDevice> pOutDev;
-
-    bool bAdded = addFont(pOutDev, u"tdf107718.otf", u"Source Han Sans");
-    CPPUNIT_ASSERT_EQUAL(true, bAdded);
 
     OUString aText(u"\u4E16\u1109\u1168\u11BC\u302E"_ustr);
     for (bool bVertical : { false, true })

@@ -184,6 +184,7 @@ private:
     mutable VclPtr<OutputDevice>    mpNextGraphics;     ///< Next output device in list
     GDIMetaFile*                    mpMetaFile;
     mutable rtl::Reference<LogicalFontInstance> mpFontInstance;
+    rtl::Reference<LogicalFontInstance> mpForcedFallbackInstance;
     mutable std::unique_ptr<vcl::font::PhysicalFontFaceCollection>  mpFontFaceCollection;
     std::vector<vcl::State>        maOutDevStateStack;
     std::unique_ptr<ImplOutDevData> mpOutDevData;
@@ -1165,6 +1166,7 @@ public:
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
     LogicalFontInstance const* GetFontInstance() const;
+    bool ForceFallbackFont(vcl::Font const& rFallbackFont);
 
 protected:
     SAL_DLLPRIVATE tools::Long GetEmphasisAscent() const { return mnEmphasisAscent; }
