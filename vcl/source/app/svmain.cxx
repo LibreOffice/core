@@ -197,18 +197,22 @@ int ImplSVMain()
 #if defined(LINUX) && !defined(SYSTEM_OPENSSL)
     if (!bWasInitVCL)
     {
-        try // to point bundled OpenSSL to some system certificate file
-        {   // ... this only works if the client actually calls
-            // SSL_CTX_set_default_verify_paths() or similar; e.g. python ssl.
-            char const*const path = GetCABundleFile();
-            OUString constexpr name(u"SSL_CERT_FILE"_ustr);
-            OUString const filepath(::rtl::OStringToOUString(
-                ::std::string_view(path), osl_getThreadTextEncoding()));
-            osl_setEnvironment(name.pData, filepath.pData);
-        }
-        catch (uno::RuntimeException const& e)
+        OUString constexpr name(u"SSL_CERT_FILE"_ustr);
+        OUString temp;
+        if (osl_getEnvironment(name.pData, &temp.pData) == osl_Process_E_NotFound)
         {
-            SAL_WARN("vcl", e.Message);
+            try // to point bundled OpenSSL to some system certificate file
+            {   // ... this only works if the client actually calls
+                // SSL_CTX_set_default_verify_paths() or similar; e.g. python ssl.
+                char const*const path = GetCABundleFile();
+                OUString const filepath(::rtl::OStringToOUString(
+                    ::std::string_view(path), osl_getThreadTextEncoding()));
+                osl_setEnvironment(name.pData, filepath.pData);
+            }
+            catch (uno::RuntimeException const& e)
+            {
+                SAL_WARN("vcl", e.Message);
+            }
         }
     }
 #endif
