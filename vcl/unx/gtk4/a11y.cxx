@@ -240,6 +240,73 @@ static css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(G
     return pWindow->GetAccessible();
 }
 
+/**
+ * Based on the states set in xContext, set the corresponding Gtk states/properties
+ * in pGtkAccessible.
+ */
+static void applyStates(GtkAccessible* pGtkAccessible,
+                        css::uno::Reference<css::accessibility::XAccessibleContext> xContext)
+{
+    assert(pGtkAccessible);
+
+    if (!xContext.is())
+        return;
+
+    // Gtk differentiates between GtkAccessibleState and GtkAccessibleProperty
+    // (both handled here) and GtkAccessiblePlatformState (handled in
+    // 'lo_accessible_get_platform_state')
+    const sal_Int64 nStates = xContext->getAccessibleStateSet();
+    gtk_accessible_update_property(
+        pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_MODAL,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MODAL),
+        GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_LINE),
+        GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE),
+        GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
+        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::EDITABLE)), -1);
+    if (nStates & com::sun::star::accessibility::AccessibleStateType::HORIZONTAL)
+    {
+        gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+                                       GTK_ORIENTATION_HORIZONTAL, -1);
+    }
+    else if (nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL)
+    {
+        gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
+                                       GTK_ORIENTATION_VERTICAL, -1);
+    }
+
+    gtk_accessible_update_state(
+        pGtkAccessible, GTK_ACCESSIBLE_STATE_BUSY,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::BUSY),
+        GTK_ACCESSIBLE_STATE_DISABLED,
+        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)),
+        GTK_ACCESSIBLE_STATE_EXPANDED,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED),
+        GTK_ACCESSIBLE_STATE_SELECTED,
+        bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
+
+    const sal_Int16 nRole = xContext->getAccessibleRole();
+    if (nRole == com::sun::star::accessibility::AccessibleRole::CHECK_BOX)
+    {
+        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
+        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
+        else if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKED)
+            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
+        gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
+    }
+    else if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
+    {
+        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
+        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
+            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
+        else if (nStates & com::sun::star::accessibility::AccessibleStateType::PRESSED)
+            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
+        gtk_accessible_update_state(pGtkAccessible, GTK_ACCESSIBLE_STATE_PRESSED, eState, -1);
+    }
+}
+
 #define LO_TYPE_ACCESSIBLE (lo_accessible_get_type())
 #define LO_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), LO_TYPE_ACCESSIBLE, LoAccessible))
 // #define LO_IS_ACCESSIBLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), LO_TYPE_ACCESSIBLE))
@@ -474,60 +541,9 @@ lo_accessible_new(GdkDisplay* pDisplay, GtkAccessible* pParent,
         ret->uno_accessible->getAccessibleContext());
     assert(xContext.is() && "No accessible context");
 
-    // handle states
-    // Gtk differentiates between GtkAccessibleState and GtkAccessibleProperty
-    // (both handled here) and GtkAccessiblePlatformState (handled in
-    // 'lo_accessible_get_platform_state')
-    const sal_Int64 nStates = xContext->getAccessibleStateSet();
-    gtk_accessible_update_property(
-        GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_MODAL,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MODAL),
-        GTK_ACCESSIBLE_PROPERTY_MULTI_LINE,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_LINE),
-        GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::MULTI_SELECTABLE),
-        GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
-        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::EDITABLE)), -1);
-    if (nStates & com::sun::star::accessibility::AccessibleStateType::HORIZONTAL)
-    {
-        gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
-                                       GTK_ORIENTATION_HORIZONTAL, -1);
-    }
-    else if (nStates & com::sun::star::accessibility::AccessibleStateType::VERTICAL)
-    {
-        gtk_accessible_update_property(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_PROPERTY_ORIENTATION,
-                                       GTK_ORIENTATION_VERTICAL, -1);
-    }
+    GtkAccessible* pGtkAccessible = GTK_ACCESSIBLE(ret);
 
-    gtk_accessible_update_state(
-        GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_BUSY,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::BUSY),
-        GTK_ACCESSIBLE_STATE_DISABLED,
-        bool(!(nStates & com::sun::star::accessibility::AccessibleStateType::ENABLED)),
-        GTK_ACCESSIBLE_STATE_EXPANDED,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::EXPANDED),
-        GTK_ACCESSIBLE_STATE_SELECTED,
-        bool(nStates & com::sun::star::accessibility::AccessibleStateType::SELECTED), -1);
-
-    const sal_Int16 nRole = xContext->getAccessibleRole();
-    if (nRole == com::sun::star::accessibility::AccessibleRole::CHECK_BOX)
-    {
-        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
-        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
-            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
-        else if (nStates & com::sun::star::accessibility::AccessibleStateType::CHECKED)
-            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
-        gtk_accessible_update_state(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_CHECKED, eState, -1);
-    }
-    else if (nRole == com::sun::star::accessibility::AccessibleRole::TOGGLE_BUTTON)
-    {
-        GtkAccessibleTristate eState = GTK_ACCESSIBLE_TRISTATE_FALSE;
-        if (nStates & com::sun::star::accessibility::AccessibleStateType::INDETERMINATE)
-            eState = GTK_ACCESSIBLE_TRISTATE_MIXED;
-        else if (nStates & com::sun::star::accessibility::AccessibleStateType::PRESSED)
-            eState = GTK_ACCESSIBLE_TRISTATE_TRUE;
-        gtk_accessible_update_state(GTK_ACCESSIBLE(ret), GTK_ACCESSIBLE_STATE_PRESSED, eState, -1);
-    }
+    applyStates(pGtkAccessible, xContext);
 
     // set values from XAccessibleValue interface if that's implemented
     css::uno::Reference<css::accessibility::XAccessibleValue> xAccessibleValue(xContext,
