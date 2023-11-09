@@ -253,19 +253,19 @@ public:
 
     // Now at this outliner, events can be send, attributes can be set,
     // call Cut/Copy/Paste, call Undo/Redo, and so on...
-    const SdrOutliner* GetTextEditOutliner() const
+    virtual const SdrOutliner* GetTextEditOutliner() const
     {
         return mpTextEditOutliner.get();
     }
-    SdrOutliner* GetTextEditOutliner()
+    virtual SdrOutliner* GetTextEditOutliner()
     {
         return mpTextEditOutliner.get();
     }
-    const OutlinerView* GetTextEditOutlinerView() const
+    virtual const OutlinerView* GetTextEditOutlinerView() const
     {
         return mpTextEditOutlinerView;
     }
-    OutlinerView* GetTextEditOutlinerView()
+    virtual OutlinerView* GetTextEditOutlinerView()
     {
         return mpTextEditOutlinerView;
     }

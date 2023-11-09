@@ -515,6 +515,8 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/viewshe3 \
 	sd/source/ui/view/viewshel \
 	sd/source/ui/view/zoomlist \
+	sd/source/ui/view/NotesPanelView \
+	sd/source/ui/view/NotesPanelViewShell \
 ))
 
 ifeq ($(ENABLE_SDREMOTE),TRUE)

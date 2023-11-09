@@ -630,6 +630,13 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
+        case SID_BOTTOM_PANE_IMPRESS:
+            mpImpl->SetPaneVisibility(
+                rRequest,
+                framework::FrameworkHelper::msBottomImpressPaneURL,
+                framework::FrameworkHelper::msNotesPanelViewURL);
+            break;
+
         case SID_TOGGLE_TABBAR_VISIBILITY:
         {
             SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDocument()->GetDocumentType());
@@ -1316,6 +1323,12 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
+                        break;
+
+                    case SID_BOTTOM_PANE_IMPRESS:
+                        xResourceId = ResourceId::create(
+                            xContext, FrameworkHelper::msBottomImpressPaneURL);
                         bState = xConfiguration->hasResource(xResourceId);
                         break;
 
