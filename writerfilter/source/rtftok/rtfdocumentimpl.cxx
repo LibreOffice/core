@@ -3995,9 +3995,9 @@ RTFSprms RTFFrame::getSprms()
 
 bool RTFFrame::hasProperties() const
 {
-    return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0 || m_nHoriPadding != 0
-           || m_nVertPadding != 0 || m_nHoriAlign != 0 || m_nHoriAnchor != 0 || m_nVertAlign != 0
-           || m_nVertAnchor != 0;
+    // tdf#153178 \dxfrtext \dfrmtxtx \dfrmtxty \wrapdefault do *not* create frame
+    return m_nX != 0 || m_nY != 0 || m_nW != 0 || m_nH != 0
+           || (m_oWrap && *m_oWrap != NS_ooxml::LN_Value_doc_ST_Wrap_auto);
 }
 
 } // namespace writerfilter
