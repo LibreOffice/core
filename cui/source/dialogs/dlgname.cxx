@@ -60,6 +60,28 @@ IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)
     m_xEdtName->set_tooltip_text(rTip);
 }
 
+SvxNumberDialog::SvxNumberDialog(weld::Window* pParent, const OUString& rDesc, sal_Int64 nValue,
+                                 sal_Int64 nMin, sal_Int64 nMax)
+    : GenericDialogController(pParent, "cui/ui/numberdialog.ui", "NumberDialog")
+    , m_xEdtNumber(m_xBuilder->weld_spin_button("number_spinbtn"))
+    , m_xFtDescription(m_xBuilder->weld_label("description_label"))
+{
+    m_xFtDescription->set_label(rDesc);
+    m_xEdtNumber->set_min(nMin);
+    m_xEdtNumber->set_max(nMax);
+    m_xEdtNumber->set_value(nValue);
+}
+
+SvxDecimalNumberDialog::SvxDecimalNumberDialog(weld::Window* pParent, const OUString& rDesc,
+                                               double fValue)
+    : GenericDialogController(pParent, "cui/ui/numberdialog.ui", "NumberDialog")
+    , m_xEdtNumber(m_xBuilder->weld_formatted_spin_button("number_spinbtn"))
+    , m_xFtDescription(m_xBuilder->weld_label("description_label"))
+{
+    m_xFtDescription->set_label(rDesc);
+    m_xEdtNumber->GetFormatter().SetValue(fValue);
+}
+
 // #i68101#
 // Dialog for editing Object Name
 // plus uniqueness-callback-linkHandler

@@ -124,6 +124,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/newlibdialog \
 	cui/uiconfig/ui/newtabledialog \
 	cui/uiconfig/ui/newtoolbardialog \
+	cui/uiconfig/ui/numberdialog \
 	cui/uiconfig/ui/numberingformatpage \
 	cui/uiconfig/ui/numberingoptionspage \
 	cui/uiconfig/ui/numberingpositionpage \

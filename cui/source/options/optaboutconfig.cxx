@@ -654,96 +654,138 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
     {
         if( bOpenDialog )
         {
-            SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
-            aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
-            if (aNameDialog.run() == RET_OK )
+            if (sPropertyType == "short" || sPropertyType == "int" || sPropertyType == "long")
             {
-                OUString sNewValue = aNameDialog.GetName();
-                bSaveChanges = true;
-                if ( sPropertyType == "short")
+                sal_Int64 nMin = sPropertyType == "short"
+                                     ? SAL_MIN_INT16
+                                     : sPropertyType == "int" ? SAL_MIN_INT32 : SAL_MIN_INT64;
+                sal_Int64 nMax = sPropertyType == "short"
+                                     ? SAL_MAX_INT16
+                                     : sPropertyType == "int" ? SAL_MAX_INT32 : SAL_MAX_INT64;
+                SvxNumberDialog aNumberDialog(m_pParent, sPropertyName, sDialogValue.toInt64(),
+                                              nMin, nMax);
+                if (aNumberDialog.run() == RET_OK)
                 {
-                    sal_Int16 nShort;
-                    sal_Int32 nNumb = sNewValue.toInt32();
-
-                    //if the value is 0 and length is not 1, there is something wrong
-                    if( ( nNumb==0 && sNewValue.getLength()!=1 ) || nNumb > SAL_MAX_INT16 || nNumb < SAL_MIN_INT16)
-                        throw uno::Exception("out of range short", nullptr);
-                    nShort = static_cast<sal_Int16>(nNumb);
-                    pProperty->Value <<= nShort;
+                    sal_Int64 nNewValue = aNumberDialog.GetNumber();
+                    if (sPropertyType == "short")
+                    {
+                        pProperty->Value <<= static_cast<sal_Int16>(nNewValue);
+                    }
+                    else if (sPropertyType == "int")
+                    {
+                        pProperty->Value <<= static_cast<sal_Int32>(nNewValue);
+                    }
+                    else if (sPropertyType == "long")
+                    {
+                        pProperty->Value <<= nNewValue;
+                    }
+                    bSaveChanges = true;
+                    sDialogValue = OUString::number(nNewValue);
                 }
-                else if( sPropertyType == "int" )
+            }
+            else if( sPropertyType == "double")
+            {
+                SvxDecimalNumberDialog aNumberDialog(m_pParent, sPropertyName, sDialogValue.toDouble());
+                if (aNumberDialog.run() == RET_OK)
                 {
-                    sal_Int32 nLong = sNewValue.toInt32();
-                    if( nLong==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range int", nullptr);
-                    pProperty->Value <<= nLong;
+                    double fNewValue = aNumberDialog.GetNumber();
+                    pProperty->Value <<= fNewValue;
+                    bSaveChanges = true;
+                    sDialogValue = OUString::number(fNewValue);
                 }
-                else if( sPropertyType == "long")
+            }
+            else if( sPropertyType == "string" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
                 {
-                    sal_Int64 nHyper = sNewValue.toInt64();
-                    if( nHyper==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range long", nullptr);
-                    pProperty->Value <<= nHyper;
+                    sDialogValue = aNameDialog.GetName();
+                    pProperty->Value <<= sDialogValue;
+                    bSaveChanges = true;
                 }
-                else if( sPropertyType == "double")
+            }
+            else if( sPropertyType == "short-list" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
                 {
-                    double nDoub = sNewValue.toDouble();
-                    if( nDoub ==0 && sNewValue.getLength()!=1)
-                        throw uno::Exception("out of range double", nullptr);
-                    pProperty->Value <<= nDoub;
-                }
-                else if( sPropertyType == "string" )
-                {
-                    pProperty->Value <<= sNewValue;
-                }
-                else if( sPropertyType == "short-list" )
-                {
+                    sDialogValue = aNameDialog.GetName();
                     //create string sequence from comma separated string
                     //uno::Sequence< OUString > seqStr;
-                    std::vector< OUString > seqStr = commaStringToSequence( sNewValue );
+                    std::vector< OUString > seqStr = commaStringToSequence( sDialogValue );
 
                     //create appropriate sequence with same size as string sequence
                     uno::Sequence< sal_Int16 > seqShort( seqStr.size() );
                     //convert all strings to appropriate type
                     std::transform(seqStr.begin(), seqStr.end(), seqShort.getArray(),
-                                   [](const auto& str)
-                                   { return static_cast<sal_Int16>(str.toInt32()); });
+                                    [](const auto& str)
+                                    { return static_cast<sal_Int16>(str.toInt32()); });
                     pProperty->Value <<= seqShort;
+                    bSaveChanges = true;
                 }
-                else if( sPropertyType == "int-list" )
+
+            }
+            else if( sPropertyType == "int-list" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
                 {
-                    std::vector< OUString > seqStrLong = commaStringToSequence( sNewValue );
+                    sDialogValue = aNameDialog.GetName();
+                    std::vector< OUString > seqStrLong = commaStringToSequence( sDialogValue );
 
                     uno::Sequence< sal_Int32 > seqLong( seqStrLong.size() );
                     std::transform(seqStrLong.begin(), seqStrLong.end(), seqLong.getArray(),
                         [](const auto& str) { return str.toInt32(); });
                     pProperty->Value <<= seqLong;
+                    bSaveChanges = true;
                 }
-                else if( sPropertyType == "long-list" )
+            }
+            else if( sPropertyType == "long-list" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
                 {
-                    std::vector< OUString > seqStrHyper = commaStringToSequence( sNewValue );
+                    sDialogValue = aNameDialog.GetName();
+                    std::vector< OUString > seqStrHyper = commaStringToSequence( sDialogValue );
                     uno::Sequence< sal_Int64 > seqHyper( seqStrHyper.size() );
                     std::transform(seqStrHyper.begin(), seqStrHyper.end(), seqHyper.getArray(),
                         [](const auto& str) { return str.toInt64(); });
                     pProperty->Value <<= seqHyper;
+                    bSaveChanges = true;
                 }
-                else if( sPropertyType == "double-list" )
+            }
+            else if( sPropertyType == "double-list" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
                 {
-                    std::vector< OUString > seqStrDoub = commaStringToSequence( sNewValue );
+                    sDialogValue = aNameDialog.GetName();
+                    std::vector< OUString > seqStrDoub = commaStringToSequence( sDialogValue );
                     uno::Sequence< double > seqDoub( seqStrDoub.size() );
                     std::transform(seqStrDoub.begin(), seqStrDoub.end(), seqDoub.getArray(),
                         [](const auto& str) { return str.toDouble(); });
                     pProperty->Value <<= seqDoub;
+                    bSaveChanges = true;
                 }
-                else if( sPropertyType == "string-list" )
-                {
-                    pProperty->Value <<= comphelper::containerToSequence( commaStringToSequence( sNewValue ));
-                }
-                else //unknown
-                    throw uno::Exception("unknown property type " + sPropertyType, nullptr);
-
-                sDialogValue = sNewValue;
             }
+            else if( sPropertyType == "string-list" )
+            {
+                SvxNameDialog aNameDialog(m_pParent, sDialogValue, sPropertyName);
+                aNameDialog.SetCheckNameHdl( LINK( this, CuiAboutConfigTabPage, ValidNameHdl ) );
+                if (aNameDialog.run() == RET_OK )
+                {
+                    sDialogValue = aNameDialog.GetName();
+                    pProperty->Value <<= comphelper::containerToSequence( commaStringToSequence( sDialogValue ));
+                    bSaveChanges = true;
+                }
+            }
+            else //unknown
+                throw uno::Exception("unknown property type " + sPropertyType, nullptr);
         }
 
         if(bSaveChanges)

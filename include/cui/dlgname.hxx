@@ -20,7 +20,9 @@
 
 #include "cuidllapi.h"
 
+#include <vcl/formatter.hxx>
 #include <vcl/weld.hxx>
+#include <sal/log.hxx>
 
 /// Dialog for editing a name
 class CUI_DLLPUBLIC SvxNameDialog final : public weld::GenericDialogController
@@ -61,6 +63,32 @@ public:
     }
 
     void SetEditHelpId(const OUString& aHelpId) { m_xEdtName->set_help_id(aHelpId); }
+};
+
+/// Dialog for editing a number
+class CUI_DLLPUBLIC SvxNumberDialog final : public weld::GenericDialogController
+{
+private:
+    std::unique_ptr<weld::SpinButton> m_xEdtNumber;
+    std::unique_ptr<weld::Label> m_xFtDescription;
+
+public:
+    SvxNumberDialog(weld::Window* pWindow, const OUString& rDesc, sal_Int64 nValue, sal_Int64 nMin,
+                    sal_Int64 nMax);
+
+    sal_Int64 GetNumber() const { return m_xEdtNumber->get_value(); }
+};
+
+class CUI_DLLPUBLIC SvxDecimalNumberDialog final : public weld::GenericDialogController
+{
+private:
+    std::unique_ptr<weld::FormattedSpinButton> m_xEdtNumber;
+    std::unique_ptr<weld::Label> m_xFtDescription;
+
+public:
+    SvxDecimalNumberDialog(weld::Window* pWindow, const OUString& rDesc, double fValue);
+
+    double GetNumber() const { return m_xEdtNumber->GetFormatter().GetValue(); }
 };
 
 /** #i68101#
