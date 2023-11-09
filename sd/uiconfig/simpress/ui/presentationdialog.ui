@@ -774,7 +774,7 @@
                         <property name="halign">end</property>
                         <property name="hexpand">True</property>
                         <property name="relief">none</property>
-                        <property name="uri">https://www.libreoffice.org/download/impress-remote-2/</property>
+                        <property name="uri">https://hub.libreoffice.org/impress-remote</property>
                       </object>
                       <packing>
                         <property name="left-attach">1</property>
