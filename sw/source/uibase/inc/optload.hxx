@@ -65,18 +65,29 @@ private:
     std::unique_ptr<weld::RadioButton> m_xAlwaysRB;
     std::unique_ptr<weld::RadioButton> m_xRequestRB;
     std::unique_ptr<weld::RadioButton> m_xNeverRB;
+    std::unique_ptr<weld::Widget> m_xGridupdatelink;
+    std::unique_ptr<weld::Widget> m_xUpdateLinkImg;
 
     std::unique_ptr<weld::CheckButton> m_xAutoUpdateFields;
+    std::unique_ptr<weld::Widget> m_xAutoUpdateFieldsImg;
     std::unique_ptr<weld::CheckButton> m_xAutoUpdateCharts;
+    std::unique_ptr<weld::Widget> m_xAutoUpdateChartsImg;
 
     std::unique_ptr<weld::ComboBox> m_xMetricLB;
+    std::unique_ptr<weld::Widget> m_xMetricImg;
     std::unique_ptr<weld::Label> m_xTabFT;
     std::unique_ptr<weld::MetricSpinButton> m_xTabMF;
+    std::unique_ptr<weld::Widget> m_xTabImg;
     std::unique_ptr<weld::CheckButton> m_xUseSquaredPageMode;
+    std::unique_ptr<weld::Widget> m_xUseSquaredPageModeImg;
     std::unique_ptr<weld::CheckButton> m_xUseCharUnit;
+    std::unique_ptr<weld::Widget> m_xUseCharUnitImg;
     std::unique_ptr<weld::Entry> m_xWordCountED;
+    std::unique_ptr<weld::Widget> m_xWordCountImg;
     std::unique_ptr<weld::CheckButton> m_xShowStandardizedPageCount;
+    std::unique_ptr<weld::Widget> m_xShowStandardizedPageCountImg;
     std::unique_ptr<weld::SpinButton> m_xStandardizedPageSizeNF;
+    std::unique_ptr<weld::Widget> m_xStandardizedPageSizeImg;
 
     DECL_LINK(MetricHdl, weld::ComboBox&, void);
     DECL_LINK(StandardizedPageCountCheckHdl, weld::Toggleable&, void);

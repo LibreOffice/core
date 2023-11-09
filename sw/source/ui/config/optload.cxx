@@ -83,16 +83,27 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
     , m_xAlwaysRB(m_xBuilder->weld_radio_button("always"))
     , m_xRequestRB(m_xBuilder->weld_radio_button("onrequest"))
     , m_xNeverRB(m_xBuilder->weld_radio_button("never"))
+    , m_xGridupdatelink(m_xBuilder->weld_widget("gridupdatelink"))
+    , m_xUpdateLinkImg(m_xBuilder->weld_widget("lockupdatelink"))
     , m_xAutoUpdateFields(m_xBuilder->weld_check_button("updatefields"))
+    , m_xAutoUpdateFieldsImg(m_xBuilder->weld_widget("lockupdatefields"))
     , m_xAutoUpdateCharts(m_xBuilder->weld_check_button("updatecharts"))
+    , m_xAutoUpdateChartsImg(m_xBuilder->weld_widget("lockupdatecharts"))
     , m_xMetricLB(m_xBuilder->weld_combo_box("metric"))
+    , m_xMetricImg(m_xBuilder->weld_widget("lockmetric"))
     , m_xTabFT(m_xBuilder->weld_label("tablabel"))
     , m_xTabMF(m_xBuilder->weld_metric_spin_button("tab", FieldUnit::CM))
+    , m_xTabImg(m_xBuilder->weld_widget("locktab"))
     , m_xUseSquaredPageMode(m_xBuilder->weld_check_button("squaremode"))
+    , m_xUseSquaredPageModeImg(m_xBuilder->weld_widget("locksquaremode"))
     , m_xUseCharUnit(m_xBuilder->weld_check_button("usecharunit"))
+    , m_xUseCharUnitImg(m_xBuilder->weld_widget("lockusecharunit"))
     , m_xWordCountED(m_xBuilder->weld_entry("wordcount"))
+    , m_xWordCountImg(m_xBuilder->weld_widget("lockwordcount"))
     , m_xShowStandardizedPageCount(m_xBuilder->weld_check_button("standardizedpageshow"))
+    , m_xShowStandardizedPageCountImg(m_xBuilder->weld_widget("lockstandardizedpageshow"))
     , m_xStandardizedPageSizeNF(m_xBuilder->weld_spin_button("standardpagesize"))
+    , m_xStandardizedPageSizeImg(m_xBuilder->weld_widget("lockstandardpagesize"))
 {
     for (sal_uInt32 i = 0; i < SwFieldUnitTable::Count(); ++i)
     {
@@ -362,16 +373,51 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     }
     m_xUseCharUnit->save_state();
 
+    bool bReadOnly = officecfg::Office::Writer::Content::Update::Link::isReadOnly();
+    m_xGridupdatelink->set_sensitive(!bReadOnly);
+    m_xUpdateLinkImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Content::Update::Field::isReadOnly();
+    m_xAutoUpdateFields->set_sensitive(!bReadOnly);
+    m_xAutoUpdateFieldsImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Content::Update::Chart::isReadOnly();
+    m_xAutoUpdateCharts->set_sensitive(!bReadOnly);
+    m_xAutoUpdateChartsImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Layout::Other::MeasureUnit::isReadOnly();
+    m_xMetricLB->set_sensitive(!bReadOnly);
+    m_xMetricImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Layout::Other::TabStop::isReadOnly();
+    m_xTabMF->set_sensitive(!bReadOnly);
+    m_xTabImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Layout::Other::ApplyCharUnit::isReadOnly();
+    m_xUseCharUnit->set_sensitive(!bReadOnly);
+    m_xUseCharUnitImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::Layout::Other::IsSquaredPageMode::isReadOnly();
+    m_xUseSquaredPageMode->set_sensitive(!bReadOnly);
+    m_xUseSquaredPageModeImg->set_visible(bReadOnly);
+
+    bReadOnly = officecfg::Office::Writer::WordCount::AdditionalSeparators::isReadOnly();
     m_xWordCountED->set_text(officecfg::Office::Writer::WordCount::AdditionalSeparators::get());
-    m_xWordCountED->set_sensitive(!officecfg::Office::Writer::WordCount::AdditionalSeparators::isReadOnly());
+    m_xWordCountED->set_sensitive(!bReadOnly);
+    m_xWordCountImg->set_visible(bReadOnly);
     m_xWordCountED->save_value();
+
+    bReadOnly = officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::isReadOnly();
     m_xShowStandardizedPageCount->set_active(officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::get());
-    m_xShowStandardizedPageCount->set_sensitive(!officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::isReadOnly());
+    m_xShowStandardizedPageCount->set_sensitive(!bReadOnly);
+    m_xShowStandardizedPageCountImg->set_visible(bReadOnly);
     m_xShowStandardizedPageCount->save_state();
+
+    bReadOnly = officecfg::Office::Writer::WordCount::StandardizedPageSize::isReadOnly();
     m_xStandardizedPageSizeNF->set_value(officecfg::Office::Writer::WordCount::StandardizedPageSize::get());
-    m_xStandardizedPageSizeNF->set_sensitive(!officecfg::Office::Writer::WordCount::StandardizedPageSize::isReadOnly());
+    m_xStandardizedPageSizeNF->set_sensitive(!bReadOnly && m_xShowStandardizedPageCount->get_active());
+    m_xStandardizedPageSizeImg->set_visible(bReadOnly);
     m_xStandardizedPageSizeNF->save_value();
-    m_xStandardizedPageSizeNF->set_sensitive(m_xShowStandardizedPageCount->get_active());
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl, weld::ComboBox&, void)
