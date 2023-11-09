@@ -296,6 +296,7 @@ SfxInterfaceId ViewShell::Implementation::GetViewId() const
         // Since we have to return a view id for every possible shell type
         // and there is not (yet) a proper ViewShellBase sub class for the
         // remaining types we chose the Impress factory as a fall back.
+        case ViewShell::ST_NOTESPANEL:
         case ViewShell::ST_SIDEBAR:
         case ViewShell::ST_NONE:
         default:

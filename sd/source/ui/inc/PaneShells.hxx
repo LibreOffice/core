@@ -41,6 +41,23 @@ public:
     virtual ~LeftImpressPaneShell() override;
 };
 
+/** Shell that displays the bottom pane for Impress. The shell does not do
+    anything else and has especially no slots.
+*/
+class BottomImpressPaneShell final : public SfxShell
+{
+public:
+    SFX_DECL_INTERFACE(SD_IF_SDBOTTOMIMPRESSPANESHELL)
+
+private:
+    /// SfxInterface initializer.
+    static void InitInterface_Impl();
+
+public:
+    BottomImpressPaneShell();
+    virtual ~BottomImpressPaneShell() override;
+};
+
 /** Shell that displays the left pane for Draw.  The shell does not do
     anything else and has especially no slots.
 */

@@ -120,6 +120,11 @@ TextObjectBar::~TextObjectBar()
 
 void TextObjectBar::GetCharState( SfxItemSet& rSet )
 {
+    GetCharStateImpl(mpViewShell, mpView, rSet);
+}
+
+void TextObjectBar::GetCharStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet)
+{
     SfxItemSet  aCharAttrSet( mpView->GetDoc().GetPool() );
     mpView->GetAttributes( aCharAttrSet );
 
@@ -139,10 +144,15 @@ void TextObjectBar::GetCharState( SfxItemSet& rSet )
     }
 }
 
+void TextObjectBar::GetAttrState( SfxItemSet& rSet )
+{
+    GetAttrStateImpl(mpViewShell, mpView, rSet, this);
+}
+
 /**
  * Status of attribute items.
  */
-void TextObjectBar::GetAttrState( SfxItemSet& rSet )
+void TextObjectBar::GetAttrStateImpl(ViewShell* mpViewShell, ::sd::View* mpView, SfxItemSet& rSet, SfxShell* pTextObjectBar)
 {
     SfxWhichIter        aIter( rSet );
     sal_uInt16              nWhich = aIter.FirstWhich();
@@ -155,7 +165,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     while ( nWhich )
     {
         sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
-            ? GetPool().GetSlotId(nWhich)
+            ? mpView->GetDoc().GetPool().GetSlotId(nWhich)
             : nWhich;
 
         switch ( nSlotId )
@@ -169,7 +179,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_CASEMAP:
             {
                 double stretchY = 100.0;
-                SvxScriptSetItem aSetItem( nSlotId, GetPool() );
+                SvxScriptSetItem aSetItem( nSlotId, mpView->GetDoc().GetPool() );
                 aSetItem.GetItemSet().Put( aAttrSet, false );
 
                 SvtScriptType nScriptType = mpView->GetScriptType();
@@ -527,12 +537,15 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             break;
         }
 
-        Invalidate(SID_ATTR_PARA_ADJUST_LEFT);
-        Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
-        Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
-        Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
-        Invalidate(SID_ATTR_PARA_LINESPACE);
-        Invalidate(SID_ATTR_PARA_ULSPACE);
+        if(pTextObjectBar)
+        {
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_LEFT);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_CENTER);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_RIGHT);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ADJUST_BLOCK);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_LINESPACE);
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_ULSPACE);
+        }
 
         // paragraph text direction
         if( bDisableParagraphTextDirection )
@@ -586,7 +599,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         SvxLRSpaceItem aLRSpace = aAttrSet.Get( EE_PARA_LRSPACE );
         aLRSpace.SetWhich(SID_ATTR_PARA_LRSPACE);
         rSet.Put(aLRSpace);
-        Invalidate(SID_ATTR_PARA_LRSPACE);
+        if (pTextObjectBar)
+            pTextObjectBar->Invalidate(SID_ATTR_PARA_LRSPACE);
 
         //Added by xuxu
         SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );

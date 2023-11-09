@@ -34,7 +34,8 @@ public:
         sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        TranslateId pTitleBarResId);
+        TranslateId pTitleBarResId,
+        SfxChildAlignment eAlignment);
     virtual ~PaneChildWindow() override;
 };
 
@@ -47,6 +48,16 @@ public:
                                SfxChildWinInfo* pInfo);
 
     SFX_DECL_CHILDWINDOW_WITHID(LeftPaneImpressChildWindow);
+};
+
+/// The notes panel (on the bottom) in Impress.
+class BottomPaneImpressChildWindow final : public PaneChildWindow
+{
+public:
+    BottomPaneImpressChildWindow(vcl::Window* pParentWindow, sal_uInt16 nId, SfxBindings* pBindings,
+                                 SfxChildWinInfo* pInfo);
+
+    SFX_DECL_CHILDWINDOW_WITHID(BottomPaneImpressChildWindow);
 };
 
 /// The pages sidebar (on the left) in Draw.

@@ -88,4 +88,5 @@ module StarDraw
         include "ViewShellBase.sdi"
         include "mediaob.sdi"
         include "tables.sdi"
+        include "NotesPanelView.sdi"
         }
