@@ -56,16 +56,12 @@ public:
 
     virtual void tearDown() override
     {
-        if (mxMMComponent.is())
+        if (mxSwTextDocument.is())
         {
             if (mnCurOutputType == text::MailMergeType::SHELL)
-            {
-                SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-                CPPUNIT_ASSERT(pTextDoc);
-                pTextDoc->GetDocShell()->DoClose();
-            }
+                mxSwTextDocument->GetDocShell()->DoClose();
             else
-                mxMMComponent->dispose();
+                mxSwTextDocument->dispose();
         }
         if (mxCurResultSet.is())
         {
@@ -227,8 +223,10 @@ public:
 
         if (mnCurOutputType == text::MailMergeType::SHELL)
         {
-            CPPUNIT_ASSERT(res >>= mxMMComponent);
-            CPPUNIT_ASSERT(mxMMComponent.is());
+            uno::Reference< lang::XComponent > xTmp;
+            CPPUNIT_ASSERT(res >>= xTmp);
+            mxSwTextDocument = dynamic_cast<SwXTextDocument*>(xTmp.get());
+            CPPUNIT_ASSERT(mxSwTextDocument.is());
         }
         else
         {
@@ -278,7 +276,7 @@ public:
     void dumpMMLayout()
     {
         mpXmlBuffer = xmlBufferPtr();
-        dumpLayout(mxMMComponent);
+        dumpLayout(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
     }
 
 protected:
@@ -288,7 +286,7 @@ protected:
     OUString msMailMergeOutputURL;
     OUString msMailMergeOutputPrefix;
     sal_Int16 mnCurOutputType;
-    uno::Reference< lang::XComponent > mxMMComponent;
+    rtl::Reference< SwXTextDocument > mxSwTextDocument;
     uno::Reference< sdbc::XRowSet > mxCurResultSet;
     const char* maMMTest2Filename;
 };
@@ -333,10 +331,9 @@ DECLARE_SHELL_MAILMERGE_TEST(tdf125522_shell, "tdf125522.odt", "10-testing-addre
     dumpMMLayout();
 
     // there should be no any text frame in output
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(mxSwTextDocument);
 
-    const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
+    const auto & rNodes = mxSwTextDocument->GetDocShell()->GetDoc()->GetNodes();
     for (SwNodeOffset nodeIndex(0); nodeIndex<rNodes.Count(); nodeIndex++)
     {
         SwNode* aNode = rNodes[nodeIndex];
@@ -389,13 +386,10 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf122156_shell, "linked-with-condition.odt", "
     // A document with a linked section hidden on an "empty field" condition
     // For combined documents, hidden sections are removed completely
     executeMailMerge();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(mxSwTextDocument);
     // 5 documents 1 page each, starting at odd page numbers => 9
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
-    uno::Reference<text::XTextSectionsSupplier> xSectionsSupplier(mxMMComponent,
-                                                                  uno::UNO_QUERY_THROW);
-    uno::Reference<container::XIndexAccess> xSections(xSectionsSupplier->getTextSections(),
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+    uno::Reference<container::XIndexAccess> xSections(mxSwTextDocument->getTextSections(),
                                                       uno::UNO_QUERY_THROW);
     // 2 out of 5 dataset records have empty "Title" field => no sections in respective documents
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xSections->getCount());
@@ -463,10 +457,9 @@ DECLARE_SHELL_MAILMERGE_TEST(exportDirectToPDF_shell, "linked-with-condition.odt
 {
     executeMailMerge();
 
-    uno::Reference<css::frame::XModel> xModel(mxMMComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xModel.is());
+    CPPUNIT_ASSERT(mxSwTextDocument.is());
 
-    uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    uno::Reference<css::frame::XController> xController(mxSwTextDocument->getCurrentController());
     CPPUNIT_ASSERT(xController.is());
 
     uno::Reference<css::text::XTextViewCursorSupplier> xSupplier(xController, uno::UNO_QUERY);
@@ -526,12 +519,11 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf121168, "section_ps.odt", "4_v01.ods", "Tabe
 {
     // A document starting with a section on a page with non-default page style with header
     executeMailMerge();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(mxSwTextDocument);
     // 4 documents 1 page each, starting at odd page numbers => 7
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum());
 
-    SwDoc* pDocMM = pTextDoc->GetDocShell()->GetDoc();
+    SwDoc* pDocMM = mxSwTextDocument->GetDocShell()->GetDoc();
     SwNodeOffset nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex()
                         - pDocMM->GetNodes().GetEndOfExtras().GetIndex() - 2;
     CPPUNIT_ASSERT_EQUAL(SwNodeOffset(16), nSizeMM);
@@ -655,14 +647,13 @@ DECLARE_FILE_MAILMERGE_TEST(testTdf123057_file, "pagecounttest.ott", "db_pagecou
 DECLARE_SHELL_MAILMERGE_TEST(testTdf128148, "tdf128148.odt", "4_v01.ods", "Tabelle1")
 {
     executeMailMerge();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(mxSwTextDocument);
 
     // 4 documents with 2 pages each => 8 pages in total
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum());
 
-    SwDoc* pDocMM = pTextDoc->GetDocShell()->GetDoc();
-    uno::Reference<frame::XModel> xModel = pTextDoc->GetDocShell()->GetBaseModel();
+    SwDoc* pDocMM = mxSwTextDocument->GetDocShell()->GetDoc();
+    uno::Reference<frame::XModel> xModel = mxSwTextDocument->GetDocShell()->GetBaseModel();
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"), uno::UNO_QUERY);

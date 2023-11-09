@@ -49,16 +49,12 @@ public:
 
     virtual void tearDown() override
     {
-        if (mxMMComponent.is())
+        if (mxSwTextDocument.is())
         {
             if (mnCurOutputType == text::MailMergeType::SHELL)
-            {
-                SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-                CPPUNIT_ASSERT(pTextDoc);
-                pTextDoc->GetDocShell()->DoClose();
-            }
+                mxSwTextDocument->GetDocShell()->DoClose();
             else
-                mxMMComponent->dispose();
+                mxSwTextDocument->dispose();
         }
         if (mxCurResultSet.is())
         {
@@ -219,8 +215,10 @@ public:
 
         if (mnCurOutputType == text::MailMergeType::SHELL)
         {
-            CPPUNIT_ASSERT(res >>= mxMMComponent);
-            CPPUNIT_ASSERT(mxMMComponent.is());
+            uno::Reference< lang::XComponent > xTmp;
+            CPPUNIT_ASSERT(res >>= xTmp);
+            mxSwTextDocument = dynamic_cast<SwXTextDocument*>(xTmp.get());
+            CPPUNIT_ASSERT(mxSwTextDocument.is());
         }
         else
         {
@@ -284,7 +282,7 @@ public:
     void dumpMMLayout()
     {
         mpXmlBuffer = xmlBufferPtr();
-        dumpLayout(mxMMComponent);
+        dumpLayout(static_cast<SfxBaseModel*>(mxSwTextDocument.get()));
     }
 
 protected:
@@ -297,7 +295,7 @@ protected:
     OUString msMailMergeOutputURL;
     OUString msMailMergeOutputPrefix;
     sal_Int16 mnCurOutputType;
-    uno::Reference< lang::XComponent > mxMMComponent;
+    rtl::Reference< SwXTextDocument > mxSwTextDocument;
     uno::Reference< sdbc::XRowSet > mxCurResultSet;
     const char* maMMtestFilename;
 };
@@ -333,9 +331,8 @@ protected:
 
 int MMTest::documentStartPageNumber( int document ) const
 {   // See documentStartPageNumber() .
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    SwWrtShell* shell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    SwWrtShell* shell = mxSwTextDocument->GetDocShell()->GetWrtShell();
     IDocumentMarkAccess* marks = shell->GetDoc()->getIDocumentMarkAccess();
     // Unfortunately, the pages are marked using UNO bookmarks, which have internals names, so they cannot be referred to by their names.
     // Assume that there are no other UNO bookmarks than the ones used by mail merge, and that they are in the sorted order.
@@ -366,13 +363,11 @@ DECLARE_SHELL_MAILMERGE_TEST(testMultiPageAnchoredDraws, "multiple-page-anchored
 {
     executeMailMerge();
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    sal_uInt16 nPhysPages = mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), nPhysPages);
 
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XIndexAccess> xDraws = mxSwTextDocument->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), xDraws->getCount());
 
     std::set<sal_uInt16> pages;
@@ -497,9 +492,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-mer
     // documentStartPageNumber() ).
     executeMailMerge();
     // Here getPages() works on the source document, so get pages of the resulting one.
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
     for( int doc = 0;
          doc < 10;
          ++doc )
@@ -511,9 +505,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testPageBoundariesSimpleMailMerge, "simple-mail-mer
 DECLARE_SHELL_MAILMERGE_TEST(testPageBoundaries2Pages, "simple-mail-merge-2pages.odt", "10-testing-addresses.ods", "testing-addresses")
 {
     executeMailMerge();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 20 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 20 pages, each sub-document starts on odd page number
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 20 ), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 20 pages, each sub-document starts on odd page number
     for( int doc = 0;
          doc < 10;
          ++doc )
@@ -526,8 +519,7 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf89214, "tdf89214.odt", "10-testing-addresses
 {
     executeMailMerge();
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxMMComponent, uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(3, xTextDocument->getText()), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(3, mxSwTextDocument->getText()), uno::UNO_QUERY);
     // Make sure that we assert the right paragraph.
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xParagraph->getString());
     // This paragraph had a bullet numbering, make sure that the list id is not empty.
@@ -566,9 +558,8 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf92623, "tdf92623.odt", "10-testing-addresses
 
     // Iterate over all field marks in the target document and check that they
     // are positioned at a multitude of the document size
-    SwXTextDocument* pMMTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pMMTextDoc);
-    pIDMA = pMMTextDoc->GetDocShell()->GetDoc()->getIDocumentMarkAccess();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    pIDMA = mxSwTextDocument->GetDocShell()->GetDoc()->getIDocumentMarkAccess();
     // The target document has the duplicated amount of bookmarks
     // as the helping uno bookmark from the mail merge is left in the doc
     // TODO should be fixed!
@@ -628,9 +619,8 @@ DECLARE_SHELL_MAILMERGE_TEST_SELECTION(testTdf95292, "linked-labels.odt", "10-te
     SwWrtShell *pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT( pWrtShell->IsLabelDoc() );
 
-    pTextDoc = dynamic_cast<SwXTextDocument *>( mxMMComponent.get() );
-    CPPUNIT_ASSERT( pTextDoc );
-    pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT( mxSwTextDocument );
+    pWrtShell = mxSwTextDocument->GetDocShell()->GetWrtShell();
     CPPUNIT_ASSERT( !pWrtShell->IsLabelDoc() );
     CPPUNIT_ASSERT_EQUAL( sal_uInt16( 5 ), pWrtShell->GetPhyPageNum() );
 }
@@ -650,10 +640,9 @@ DECLARE_SHELL_MAILMERGE_TEST(test_sections_first_last, "sections_first_last.odt"
     nSize -= SwNodeOffset(2); // The common start and end node
     CPPUNIT_ASSERT_EQUAL( SwNodeOffset(13), nSize );
 
-    SwXTextDocument* pTextDocMM = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDocMM);
+    CPPUNIT_ASSERT(mxSwTextDocument);
 
-    SwDoc *pDocMM = pTextDocMM->GetDocShell()->GetDoc();
+    SwDoc *pDocMM = mxSwTextDocument->GetDocShell()->GetDoc();
     SwNodeOffset nSizeMM = pDocMM->GetNodes().GetEndOfContent().GetIndex() - pDocMM->GetNodes().GetEndOfExtras().GetIndex();
     nSizeMM -= SwNodeOffset(2);
     CPPUNIT_ASSERT_EQUAL( SwNodeOffset(10) * nSize, nSizeMM );
@@ -721,17 +710,15 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118113, "tdf118113.odt", "tdf118113.ods", "t
     // Previously, the page number was calculated incorrectly which led to the
     // text box being anchored to the wrong page.
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
+    CPPUNIT_ASSERT(mxSwTextDocument);
     // 3 documents with 1 page size each + 1 document with 3 pages
     // + an additional page after each of the first 3 documents to make
     // sure that each document starts on an odd page number
-    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    sal_uInt16 nPhysPages = mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(9), nPhysPages);
 
     // verify that there is a text box for each data record
-    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxMMComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDraws = xDrawPageSupplier->getDrawPage();
+    uno::Reference<container::XIndexAccess> xDraws = mxSwTextDocument->getDrawPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
 
     // verify the text box for each data record is anchored to the first page of the given data record's pages
@@ -900,37 +887,35 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf118845, "tdf118845.fodt", "4_v01.ods", "Tabe
 
     // Both male and female greetings were shown, thus each page had 3 paragraphs
 
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    sal_uInt16 nPhysPages = pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum();
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    sal_uInt16 nPhysPages = mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum();
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(7), nPhysPages); // 4 pages, each odd, and 3 blanks
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxMMComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(8, getParagraphs(xTextDocument->getText()));
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs(mxSwTextDocument->getText()));
 
-    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(1, xTextDocument->getText()),
+    uno::Reference<text::XTextRange> xParagraph(getParagraphOrTable(1, mxSwTextDocument->getText()),
                                                 uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann1,"), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(2, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(2, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(3, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(3, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann2,"), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(4, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(4, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(5, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(5, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dear Mrs. Mustermann3,"), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(6, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(6, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(7, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(7, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Dear Mr. Mustermann4,"), xParagraph->getString());
 
-    xParagraph.set(getParagraphOrTable(8, xTextDocument->getText()), uno::UNO_QUERY);
+    xParagraph.set(getParagraphOrTable(8, mxSwTextDocument->getText()), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(""), xParagraph->getString());
 }
 
@@ -938,16 +923,15 @@ DECLARE_SHELL_MAILMERGE_TEST(testTdf62364, "tdf62364.odt", "10-testing-addresses
 {
     // prepare unit test and run
     executeMailMerge();
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxMMComponent.get());
-    CPPUNIT_ASSERT(pTextDoc);
-    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), pTextDoc->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
+    CPPUNIT_ASSERT(mxSwTextDocument);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt16( 19 ), mxSwTextDocument->GetDocShell()->GetWrtShell()->GetPhyPageNum()); // 10 pages, but each sub-document starts on odd page number
 
     // check: each page (one page is one sub doc) has 4 paragraphs:
     // - 1st and 2nd are regular paragraphs
     // - 3rd and 4th are inside list
     const bool nodeInList[4] = { false, false, true, true };
 
-    const auto & rNodes = pTextDoc->GetDocShell()->GetDoc()->GetNodes();
+    const auto & rNodes = mxSwTextDocument->GetDocShell()->GetDoc()->GetNodes();
     for (int pageIndex=0; pageIndex<10; pageIndex++)
     {
         for (int nodeIndex = 0; nodeIndex<4; nodeIndex++)
