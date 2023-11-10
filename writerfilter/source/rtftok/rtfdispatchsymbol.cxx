@@ -136,17 +136,23 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
 
             m_bHadSect = true;
             if (m_bIgnoreNextContSectBreak)
+            {
+                // testContSectionPageBreak: need \par now
+                dispatchSymbol(RTFKeyword::PAR);
                 m_bIgnoreNextContSectBreak = false;
+            }
             else
             {
                 sectBreak();
                 if (m_nResetBreakOnSectBreak != RTFKeyword::invalid)
                 {
                     // this should run on _second_ \sect after \page
-                    dispatchSymbol(m_nResetBreakOnSectBreak); // lazy reset
+                    dispatchFlag(m_nResetBreakOnSectBreak); // lazy reset
                     m_nResetBreakOnSectBreak = RTFKeyword::invalid;
                     m_bNeedSect = false; // dispatchSymbol set it
                 }
+                setNeedPar(true); // testFdo52052: need \par at end of document
+                // testNestedTable: but not m_bNeedCr, that creates a page break
             }
         }
         break;
@@ -396,20 +402,15 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                     // Only send the paragraph properties early if we'll create a new paragraph in a
                     // bit anyway.
                     checkNeedPap();
+                    // flush previously deferred break - needed for testFdo49893_2
+                    // which has consecutive \page with no text between
+                    sal_uInt8 const nothing[] = { 0 /*MSVC doesn't allow it to be empty*/ };
+                    Mapper().utext(nothing, 0);
                 }
                 sal_uInt8 const sBreak[] = { 0xc };
                 Mapper().text(sBreak, 1);
-                if (bFirstRun || m_bNeedCr)
-                {
-                    // If we don't have content in the document yet (so the break-before can't move
-                    // to a second layout page) or we already have characters sent (so the paragraph
-                    // properties are already finalized), then continue inserting a fake paragraph.
-                    if (!m_bNeedPap)
-                    {
-                        parBreak();
-                        m_bNeedPap = true;
-                    }
-                }
+                // testFdo81892 don't do another \par break directly; because of
+                // GetSplitPgBreakAndParaMark() it does finishParagraph *twice*
                 m_bNeedCr = true;
             }
         }

@@ -1364,6 +1364,13 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                                       new RTFValue(0));
         }
         break;
+        case RTFKeyword::SPLTPGPAR:
+        {
+            // if flag is present, it is turned *off* - opposite to what spec says
+            m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark,
+                                      new RTFValue(0));
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");

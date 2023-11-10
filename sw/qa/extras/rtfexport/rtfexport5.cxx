@@ -104,10 +104,10 @@ DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak4, "tdf153613_anchoredA
     // An anchored TO character image (followed by nothing) anchors before the page break, no split.
     // This differs from #1 only in that it has a preceding character run before the page break.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
-    CPPUNIT_ASSERT_MESSAGE("YOU FIXED ME!", 3 != getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
 
     const auto& pLayout = parseLayoutDump();
-    assertXPath(pLayout, "//page[2]//anchored", 1); // DID YOU FIX ME? This should be page[1]
+    assertXPath(pLayout, "//page[1]//anchored", 1);
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf153613_anchoredAfterPgBreak5, "tdf153613_anchoredAfterPgBreak5.rtf")

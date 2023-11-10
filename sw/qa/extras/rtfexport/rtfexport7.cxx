@@ -12,6 +12,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
@@ -658,6 +659,30 @@ DECLARE_RTFEXPORT_TEST(testWatermark, "watermark.rtf")
     // Check font size
     CPPUNIT_ASSERT(xPropertySet->getPropertyValue("CharHeight") >>= nFontSize);
     CPPUNIT_ASSERT_EQUAL(float(66), nFontSize);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153194Compat, "page-break-emptyparas.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    // no \spltpgpar => paragraph 2 on page 1
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+                         getProperty<style::BreakType>(getParagraph(1), "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE,
+                         getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+                         getProperty<style::BreakType>(getParagraph(3), "BreakType"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf153194New, "page-break-emptyparas-spltpgpar.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(2, getPages());
+    // \spltpgpar => paragraph 2 on page 2
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+                         getProperty<style::BreakType>(getParagraph(1), "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_NONE,
+                         getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE,
+                         getProperty<style::BreakType>(getParagraph(3), "BreakType"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf153178, "tdf153178.rtf")
