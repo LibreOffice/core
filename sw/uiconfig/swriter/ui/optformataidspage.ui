@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.1 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sw">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="OptFormatAidsPage">
@@ -25,10 +25,10 @@
               <object class="GtkGrid" id="grid2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="paragraph">
                     <property name="label" translatable="yes" context="optformataidspage|paragraph">Pa_ragraph end</property>
@@ -279,9 +279,9 @@
               <object class="GtkGrid" id="grid5">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="mathbaseline">
                     <property name="label" translatable="yes" context="optformataidspage|mathbaseline">Math baseline alignment</property>
@@ -326,9 +326,9 @@
               <object class="GtkGrid" id="grid6">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="row-spacing">6</property>
                 <property name="margin-start">12</property>
                 <property name="margin-top">6</property>
+                <property name="row-spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="cursorinprot">
                     <property name="label" translatable="yes" context="optformataidspage|cursorinprot">Enable cursor</property>
@@ -382,9 +382,9 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="row-spacing">6</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="row-spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="cursoronoff">
                         <property name="label" translatable="yes" context="optformataidspage|cursoronoff">_Direct cursor</property>
@@ -479,9 +479,9 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="spacing">6</property>
                     <property name="margin-start">12</property>
                     <property name="margin-top">6</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="lbDefaultAnchor">
                         <property name="visible">True</property>
