@@ -1132,8 +1132,7 @@ sub remove_Files_Without_Sourcedirectory
     my $infoline;
 
     my $error_occurred = 0;
-    my @missingfiles = ();
-    push(@missingfiles, "ERROR: The following files could not be found: \n");
+    my $missingfiles = "The following files could not be found:\n";
 
     my @newfilesarray = ();
 
@@ -1152,7 +1151,7 @@ sub remove_Files_Without_Sourcedirectory
                 $infoline = "ERROR: Removing file $filename from file list.\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
-                push(@missingfiles, "ERROR: File not found: $filename\n");
+                $missingfiles = "$missingfiles  $filename\n";
                 $error_occurred = 1;
 
                 next;   # removing this file from list, if sourcepath is empty
@@ -1164,7 +1163,7 @@ sub remove_Files_Without_Sourcedirectory
                     $infoline = "ERROR: Removing file $filename from file list.\n";
                     push( @installer::globals::logfileinfo, $infoline);
 
-                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $missingfiles = "$missingfiles  $filename\n";
                     $error_occurred = 1;
 
                     next;   # removing this file from list, if sourcepath is empty
@@ -1186,7 +1185,7 @@ sub remove_Files_Without_Sourcedirectory
                     $infoline = "ERROR: Removing file $filename from file list.\n";
                     push( @installer::globals::logfileinfo, $infoline);
 
-                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $missingfiles = "$missingfiles  $filename\n";
                     $error_occurred = 1;
 
                     next;   # removing this file from list, if sourcepath is empty
@@ -1211,8 +1210,7 @@ sub remove_Files_Without_Sourcedirectory
 
     if ( $error_occurred )
     {
-        for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
-        installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
+        installer::exiter::exit_program($missingfiles, "remove_Files_Without_Sourcedirectory");
     }
 
     return \@newfilesarray;
