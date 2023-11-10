@@ -376,7 +376,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
-	LanguageTool \
+	$(if $(ENABLE_CURL),LanguageTool) \
     $(call gb_Helper_optional,AVMEDIA, \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
