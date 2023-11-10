@@ -45,6 +45,8 @@ enum ScViewOption
     VOPT_ANCHOR,
     VOPT_PAGEBREAKS,
     VOPT_SUMMARY,
+    // tdf#96854 - move/copy sheet dialog: last used option for action (true: copy, false: move)
+    VOPT_COPY_SHEET,
     VOPT_THEMEDCURSOR,
 };
 

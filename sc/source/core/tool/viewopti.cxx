@@ -107,6 +107,7 @@ void ScViewOptions::SetDefaults()
     aOptArr[ VOPT_ANCHOR       ] = true;
     aOptArr[ VOPT_PAGEBREAKS   ] = true;
     aOptArr[ VOPT_SUMMARY      ] = true;
+    aOptArr[ VOPT_COPY_SHEET   ] = false;
     aOptArr[ VOPT_THEMEDCURSOR ] = false;
 
     aModeArr[VOBJ_TYPE_OLE ]  = VOBJ_MODE_SHOW;
