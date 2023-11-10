@@ -129,6 +129,7 @@ namespace vcl
 
         void                AddButton( Button* pButton, tools::Long nOffset = 0 );
         void                RemoveButton( Button* pButton );
+        void                AddButtonResponse( Button* pButton, int response);
 
         void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
         const Size&         GetPageSizePixel() const { return maPageSize; }
