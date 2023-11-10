@@ -3770,7 +3770,7 @@ void SfxObjectShell::SetMacroCallsSeenWhileLoading()
 
 bool SfxObjectShell::GetMacroCallsSeenWhileLoading() const
 {
-    if (officecfg::Office::Common::Security::Scripting::CheckDocumentEvents::get())
+    if (utl::ConfigManager::IsFuzzing() || officecfg::Office::Common::Security::Scripting::CheckDocumentEvents::get())
         return pImpl->m_bMacroCallsSeenWhileLoading;
     return false;
 }
