@@ -62,6 +62,9 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
     auto toOString = [](OUString const & s) {
         return OUStringToOString( s, osl_getThreadTextEncoding() );
     };
+    // when called recursively, we might not have any exception to print
+    if (!caught.hasValue())
+        return;
     sMessage.append(toOString(caught.getValueTypeName()));
     css::uno::Exception exception;
     caught >>= exception;
