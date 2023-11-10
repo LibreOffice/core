@@ -368,7 +368,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
-	LanguageTool \
+	$(if $(ENABLE_CURL),LanguageTool) \
     $(call gb_Helper_optional,AVMEDIA, \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
@@ -671,7 +671,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	ucbhelper \
 	$(if $(WITH_WEBDAV),ucpdav1) \
 	ucpfile1 \
-	ucpftp1 \
+	$(if $(ENABLE_CURL),ucpftp1) \
     $(call gb_Helper_optional,XMLHELP,ucpchelp1) \
 	ucphier1 \
 	ucppkg1 \
