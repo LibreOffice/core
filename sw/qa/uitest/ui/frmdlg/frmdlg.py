@@ -98,4 +98,16 @@ class Test(UITestCase):
             # inserted first, only then it could be marked as "split allowed".
             self.assertEqual(fly_split_visible, True)
 
+    def test_insert_simple_frame(self):
+        # Given a Writer document:
+        with self.ui_test.create_doc_in_start_center("writer") as xComponent:
+            # When inserting a simple text frame (not a floating table):
+            with self.ui_test.execute_dialog_through_command(".uno:InsertFrame") as xDialog:
+                to_char = xDialog.getChild("tochar")
+                to_char_enabled = get_state_as_dict(to_char)["Checked"] == "true"
+            # Then make sure the anchor type is to-char, matching the default anchor for images:
+            # This failed, text frames defaulted to to-para, images defaulted to to-char, which was
+            # inconsistent.
+            self.assertTrue(to_char_enabled)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

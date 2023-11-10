@@ -721,7 +721,6 @@ SwFramePage::SwFramePage(weld::Container* pPage, weld::DialogController* pContro
     if (comphelper::LibreOfficeKit::isActive())
     {
         m_xAnchorAtPageRB->hide();
-        m_xAnchorAtParaRB->hide();
         m_xAnchorAtFrameRB->hide();
     }
 }

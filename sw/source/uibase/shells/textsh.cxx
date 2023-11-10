@@ -924,6 +924,12 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
     aBoxInfo.SetDefDist(rBox.GetDistance(SvxBoxItemLine::LEFT));
     aSet.Put(aBoxInfo);
 
+    if (!SwFlyFrameAttrMgr::SingleTableSelected(GetShell()))
+    {
+        SwFormatAnchor aAnchor(RndStdIds::FLY_AT_CHAR);
+        aSet.Put(aAnchor);
+    }
+
     return aSet;
 }
 
