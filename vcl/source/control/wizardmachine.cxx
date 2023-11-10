@@ -303,6 +303,11 @@ namespace vcl
         return nullptr;
     }
 
+    void RoadmapWizard::AddButtonResponse( Button* pButton, int response)
+    {
+        m_xRoadmapImpl->maResponses[pButton] = response;
+    }
+
     void RoadmapWizard::implConstruct( const WizardButtonFlags _nButtonFlags )
     {
         m_xWizardImpl->sTitleBase = GetText();
@@ -314,6 +319,8 @@ namespace vcl
             m_pHelp= VclPtr<HelpButton>::Create(this, WB_TABSTOP);
             m_pHelp->SetSizePixel(LogicToPixel(Size(50, 14), MapMode(MapUnit::MapAppFont)));
             m_pHelp->Show();
+            m_pHelp->set_id("help");
+            AddButtonResponse(m_pHelp, RET_HELP);
             AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X);
         }
 

@@ -28,59 +28,12 @@
 #include <wizdlg.hxx>
 
 #include <vector>
-#include <map>
-#include <set>
 
 #include "wizimpldata.hxx"
 #include <uiobject-internal.hxx>
 
 namespace vcl
 {
-    using namespace RoadmapWizardTypes;
-
-    namespace
-    {
-        typedef ::std::set< WizardTypes::WizardState > StateSet;
-
-        typedef ::std::map<
-                    PathId,
-                    WizardPath
-                > Paths;
-
-        typedef ::std::map<
-                    WizardTypes::WizardState,
-                    ::std::pair<
-                        OUString,
-                        RoadmapPageFactory
-                    >
-                > StateDescriptions;
-    }
-
-    struct RoadmapWizardImpl
-    {
-        ScopedVclPtr<ORoadmap> pRoadmap;
-        Paths               aPaths;
-        PathId              nActivePath;
-        StateDescriptions   aStateDescriptors;
-        StateSet            aDisabledStates;
-        bool                bActivePathIsDefinite;
-
-        RoadmapWizardImpl()
-            :pRoadmap( nullptr )
-            ,nActivePath( -1 )
-            ,bActivePathIsDefinite( false )
-        {
-        }
-
-        /// returns the index of the current state in given path, or -1
-        static sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath );
-        /// returns the index of the current state in the path with the given id, or -1
-        sal_Int32 getStateIndexInPath( WizardTypes::WizardState _nState, PathId _nPathId );
-        /// returns the index of the first state in which the two given paths differ
-        static sal_Int32 getFirstDifferentIndex( const WizardPath& _rLHS, const WizardPath& _rRHS );
-    };
-
-
     sal_Int32 RoadmapWizardImpl::getStateIndexInPath( WizardTypes::WizardState _nState, const WizardPath& _rPath )
     {
         sal_Int32 nStateIndexInPath = 0;
@@ -818,6 +771,15 @@ namespace vcl
         sal_Int32 nStartPos = sDialogId.lastIndexOf('/');
         nStartPos = nStartPos >= 0 ? nStartPos + 1 : 0;
         rJsonWriter.put("dialogid", sDialogId.copy(nStartPos));
+        {
+            auto aResponses = rJsonWriter.startArray("responses");
+            for (const auto& rResponse : m_xRoadmapImpl->maResponses)
+            {
+                auto aResponse = rJsonWriter.startStruct();
+                rJsonWriter.put("id", rResponse.first->get_id());
+                rJsonWriter.put("response", rResponse.second);
+            }
+        }
 
         vcl::Window* pFocusControl = GetFirstControlForFocus();
         if (pFocusControl)

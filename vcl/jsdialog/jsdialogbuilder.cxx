@@ -54,7 +54,14 @@ void response_help(vcl::Window* pWindow)
     vcl::Window* pButtonWindow = pDialog->get_widget_for_response(RET_HELP);
     ::Button* pButton = dynamic_cast<::Button*>(pButtonWindow);
     if (!pButton)
+    {
+        // Is it a wizard dialog?
+        vcl::RoadmapWizard* pWizard = dynamic_cast<vcl::RoadmapWizard*>(pWindow);
+        if (!pWizard || !pWizard->m_pHelp)
+            return;
+        pWizard->m_pHelp->Click();
         return;
+    }
 
     pButton->Click();
 }
