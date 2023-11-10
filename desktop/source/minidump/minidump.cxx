@@ -16,7 +16,7 @@
 
 #include <curl/curl.h>
 
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 
 #ifdef _WIN32
 #include <memory>

@@ -5,7 +5,7 @@
 #include <rtl/string.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 #include <vcl/htmltransferable.hxx>
 #include <tools/long.hxx>
 

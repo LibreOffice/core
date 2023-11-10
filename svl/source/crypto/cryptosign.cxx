@@ -17,7 +17,7 @@
 #include <config_crypto.h>
 
 #if USE_CRYPTO_NSS
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 #endif
 
 #include <rtl/character.hxx>

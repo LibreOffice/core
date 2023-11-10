@@ -35,8 +35,11 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <string_view>
-#include <curlinit.hxx>
 #include <svtools/languagetoolcfg.hxx>
+
+#include <systools/curlinit.hxx>
+
+#include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <com/sun/star/uno/Any.hxx>

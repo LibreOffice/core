@@ -57,7 +57,7 @@
 #include <ucbhelper/proxydecider.hxx>
 #include <ucbhelper/macros.hxx>
 #include <sax/tools/converter.hxx>
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 
 #include "auth_provider.hxx"
 #include "certvalidation_handler.hxx"

@@ -38,7 +38,7 @@
 #include <orcus/config.hpp>
 #include <orcus/pstring.hpp>
 
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 #include <comphelper/hash.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
