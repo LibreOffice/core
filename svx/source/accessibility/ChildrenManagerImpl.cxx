@@ -681,6 +681,11 @@ void SAL_CALL
     ChildrenManagerImpl::notifyEvent (
         const document::EventObject& rEventObject)
 {
+    // tdf#158169 if we are already disposed, execute no actions, but inform the
+    // caller that we are disposed
+    if ( m_bDisposed )
+        throw lang::DisposedException();
+
     if (rEventObject.EventName == "ShapeInserted")
         AddShape (Reference<drawing::XShape>(rEventObject.Source, uno::UNO_QUERY));
     else if (rEventObject.EventName == "ShapeRemoved")
