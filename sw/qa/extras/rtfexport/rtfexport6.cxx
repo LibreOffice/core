@@ -103,6 +103,9 @@ DECLARE_RTFEXPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[2]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[3]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[4]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(OUString("HEADER"), parseDump("/root/page[5]/header/txt/text()"));
+    CPPUNIT_ASSERT_EQUAL(5, getPages()); // Word has 5
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo89496, "fdo89496.rtf")
@@ -556,10 +559,10 @@ DECLARE_RTFEXPORT_TEST(testTdf133437, "tdf133437.rtf")
     assertXPath(pDump, "/root/page[1]/body/txt[1]/anchored/SwAnchoredDrawObject", 79);
 
     // Second page
-    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 118);
+    assertXPath(pDump, "/root/page[2]/body/txt[2]/anchored/SwAnchoredDrawObject", 120);
 
     // Third page
-    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 84);
+    assertXPath(pDump, "/root/page[3]/body/txt[2]/anchored/SwAnchoredDrawObject", 86);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf128320)

@@ -868,6 +868,8 @@ CPPUNIT_TEST_FIXTURE(Test, testContSectionPageBreak)
                              ->getPropertyValue("PageDescName"));
     // actually not sure how many paragraph there should be between
     // SECOND and THIRD - important is that the page break is on there
+    // (could be either 1 or 2; in Word it's a 2-line paragraph with the 1st
+    // line containing only the page break being ~0 height)
     uno::Reference<text::XTextRange> xParaNext = getParagraph(3);
     CPPUNIT_ASSERT_EQUAL(OUString(), xParaNext->getString());
     //If PageDescName is not empty, a page break / switch to page style is defined
@@ -1520,8 +1522,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108947)
     uno::Reference<text::XText> xHeaderTextLeft = getProperty<uno::Reference<text::XText>>(
         getStyles("PageStyles")->getByName("Default Page Style"), "HeaderTextLeft");
     aActual = xHeaderTextLeft->getString();
-    CPPUNIT_ASSERT_EQUAL(OUString(SAL_NEWLINE_STRING SAL_NEWLINE_STRING "Header Page 2 ?"),
-                         aActual);
+    CPPUNIT_ASSERT_EQUAL(OUString(SAL_NEWLINE_STRING "Header Page 2 ?"), aActual);
 #endif
 }
 

@@ -346,6 +346,9 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
 
     m_pTokenizer = new RTFTokenizer(*this, m_pInStream.get(), m_xStatusIndicator);
     m_pSdrImport = new RTFSdrImport(*this, m_xDstDoc);
+
+    // unlike OOXML, this is enabled by default
+    m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark, new RTFValue(1));
 }
 
 RTFDocumentImpl::~RTFDocumentImpl() = default;
@@ -396,7 +399,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
 void RTFDocumentImpl::outputSettingsTable()
 {
     // tdf#136740: do not change target document settings when pasting
-    if (!m_bIsNewDoc)
+    if (!m_bIsNewDoc || isSubstream())
         return;
     writerfilter::Reference<Properties>::Pointer_t pProp
         = new RTFReferenceProperties(m_aSettingsTableAttributes, m_aSettingsTableSprms);
@@ -644,8 +647,8 @@ void RTFDocumentImpl::runProps()
 
 void RTFDocumentImpl::runBreak()
 {
-    sal_uInt8 const sBreak[] = { 0xd };
-    Mapper().text(sBreak, 1);
+    sal_Unicode const sBreak[] = { 0x0d };
+    Mapper().utext(reinterpret_cast<sal_uInt8 const*>(sBreak), 1);
     m_bNeedCr = false;
 }
 
@@ -3657,6 +3660,13 @@ RTFError RTFDocumentImpl::popState()
             dispatchSymbol(RTFKeyword::PAR);
         if (m_bNeedSect) // may be set by dispatchSymbol above!
             sectBreak(true);
+        if (m_bNeedPar && !m_pSuperstream)
+        {
+            assert(!m_bNeedSect);
+            dispatchSymbol(RTFKeyword::PAR);
+            m_bNeedSect = false; // reset - m_bNeedPar was set for \sect at
+                // end of doc so don't need another one
+        }
     }
 
     m_aStates.pop();

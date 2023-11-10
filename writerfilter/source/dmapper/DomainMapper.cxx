@@ -4336,6 +4336,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             {
                 if (m_pImpl->isBreakDeferred(PAGE_BREAK))
                 {
+                    assert(pContext); // can't have deferred break without
                     if (m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
                     {
                         if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
@@ -4358,6 +4359,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 }
                 else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
                 {
+                    assert(pContext); // can't have deferred break without
                     if ( m_pImpl->GetIsFirstParagraphInSection() || !m_pImpl->IsFirstRun() )
                     {
                         mbIsSplitPara = true;
@@ -4382,7 +4384,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.
             // Also do not remove here column breaks: they are treated in a different way and place.
             bool bIsColumnBreak = false;
-            if (pContext->isSet(PROP_BREAK_TYPE))
+            if (pContext && pContext->isSet(PROP_BREAK_TYPE))
             {
                 const uno::Any aBreakType = pContext->getProperty(PROP_BREAK_TYPE)->second;
                 bIsColumnBreak =
