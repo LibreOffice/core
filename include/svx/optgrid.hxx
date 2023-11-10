@@ -106,12 +106,19 @@ private:
     bool                bAttrModified;
 
     std::unique_ptr<weld::CheckButton> m_xCbxUseGridsnap;
+    std::unique_ptr<weld::Widget> m_xCbxUseGridsnapImg;
     std::unique_ptr<weld::CheckButton> m_xCbxGridVisible;
+    std::unique_ptr<weld::Widget> m_xCbxGridVisibleImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldDrawX;
+    std::unique_ptr<weld::Widget> m_xMtrFldDrawXImg;
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldDrawY;
+    std::unique_ptr<weld::Widget> m_xMtrFldDrawYImg;
     std::unique_ptr<weld::SpinButton> m_xNumFldDivisionX;
+    std::unique_ptr<weld::Widget> m_xNumFldDivisionXImg;
     std::unique_ptr<weld::SpinButton> m_xNumFldDivisionY;
+    std::unique_ptr<weld::Widget> m_xNumFldDivisionYImg;
     std::unique_ptr<weld::CheckButton> m_xCbxSynchronize;
+    std::unique_ptr<weld::Widget> m_xCbxSynchronizeImg;
 protected:
     //these controls are used in draw and impress
     std::unique_ptr<weld::Widget> m_xSnapFrames;

@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <svtools/unitconv.hxx>
+#include <officecfg/Office/Writer.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/optgrid.hxx>
@@ -91,12 +92,19 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
     : SfxTabPage(pPage, pController, "svx/ui/optgridpage.ui", "OptGridPage", &rCoreSet)
     , bAttrModified(false)
     , m_xCbxUseGridsnap(m_xBuilder->weld_check_button("usegridsnap"))
+    , m_xCbxUseGridsnapImg(m_xBuilder->weld_widget("lockusegridsnap"))
     , m_xCbxGridVisible(m_xBuilder->weld_check_button("gridvisible"))
+    , m_xCbxGridVisibleImg(m_xBuilder->weld_widget("lockgridvisible"))
     , m_xMtrFldDrawX(m_xBuilder->weld_metric_spin_button("mtrflddrawx", FieldUnit::CM))
+    , m_xMtrFldDrawXImg(m_xBuilder->weld_widget("lockmtrflddrawx"))
     , m_xMtrFldDrawY(m_xBuilder->weld_metric_spin_button("mtrflddrawy", FieldUnit::CM))
+    , m_xMtrFldDrawYImg(m_xBuilder->weld_widget("lockmtrflddrawy"))
     , m_xNumFldDivisionX(m_xBuilder->weld_spin_button("numflddivisionx"))
+    , m_xNumFldDivisionXImg(m_xBuilder->weld_widget("locknumflddivisionx"))
     , m_xNumFldDivisionY(m_xBuilder->weld_spin_button("numflddivisiony"))
+    , m_xNumFldDivisionYImg(m_xBuilder->weld_widget("locknumflddivisiony"))
     , m_xCbxSynchronize(m_xBuilder->weld_check_button("synchronize"))
+    , m_xCbxSynchronizeImg(m_xBuilder->weld_widget("locksynchronize"))
     , m_xSnapFrames(m_xBuilder->weld_widget("snapframes"))
     , m_xCbxSnapHelplines(m_xBuilder->weld_check_button("snaphelplines"))
     , m_xCbxSnapBorder(m_xBuilder->weld_check_button("snapborder"))
@@ -206,15 +214,35 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
     if( (pGridAttr = rSet->GetItemIfSet( SID_ATTR_GRID_OPTIONS , false )) )
     {
         m_xCbxUseGridsnap->set_active(pGridAttr->bUseGridsnap);
+        m_xCbxUseGridsnap->set_sensitive(!officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly());
+        m_xCbxUseGridsnapImg->set_visible(officecfg::Office::Writer::Grid::Option::SnapToGrid::isReadOnly());
+
         m_xCbxSynchronize->set_active(pGridAttr->bSynchronize);
+        m_xCbxSynchronize->set_sensitive(!officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly());
+        m_xCbxSynchronizeImg->set_visible(officecfg::Office::Writer::Grid::Option::Synchronize::isReadOnly());
+
         m_xCbxGridVisible->set_active(pGridAttr->bGridVisible);
+        m_xCbxGridVisible->set_sensitive(!officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly());
+        m_xCbxGridVisibleImg->set_visible(officecfg::Office::Writer::Grid::Option::VisibleGrid::isReadOnly());
 
         MapUnit eUnit = rSet->GetPool()->GetMetric( SID_ATTR_GRID_OPTIONS );
         SetMetricValue( *m_xMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *m_xMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
+        m_xMtrFldDrawX->set_sensitive(!officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly());
+        m_xMtrFldDrawXImg->set_visible(officecfg::Office::Writer::Grid::Resolution::XAxis::isReadOnly());
+
+        m_xMtrFldDrawY->set_sensitive(!officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly());
+        m_xMtrFldDrawYImg->set_visible(officecfg::Office::Writer::Grid::Resolution::YAxis::isReadOnly());
+
         m_xNumFldDivisionX->set_value(pGridAttr->nFldDivisionX + 1);
         m_xNumFldDivisionY->set_value(pGridAttr->nFldDivisionY + 1);
+
+        m_xNumFldDivisionX->set_sensitive(!officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly());
+        m_xNumFldDivisionXImg->set_visible(officecfg::Office::Writer::Grid::Subdivision::XAxis::isReadOnly());
+
+        m_xNumFldDivisionY->set_sensitive(!officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly());
+        m_xNumFldDivisionYImg->set_visible(officecfg::Office::Writer::Grid::Subdivision::YAxis::isReadOnly());
     }
 
     ChangeGridsnapHdl_Impl(*m_xCbxUseGridsnap);
