@@ -14754,12 +14754,12 @@ if test "$enable_mpl_subset" = "yes"; then
     fi
     if test -n "$ENABLE_POPPLER"; then
         if test "x$SYSTEM_POPPLER" = "x"; then
-            mpl_error_string="$mpl_error_string$newline Need to disable PDF import via poppler or use system library."
+            mpl_error_string="$mpl_error_string$newline Need to disable PDF import via poppler (--disable-poppler) or use system library."
         fi
     fi
     # cf. m4/libo_check_extension.m4
     if test "x$WITH_EXTRA_EXTENSIONS" != "x"; then
-        mpl_error_string="$mpl_error_string$newline Need to disable extra extensions '$WITH_EXTRA_EXTENSIONS'."
+        mpl_error_string="$mpl_error_string$newline Need to disable extra extensions enabled using --enable-ext-XXXX."
     fi
     denied_themes=
     for theme in $WITH_THEMES; do
