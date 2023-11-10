@@ -246,27 +246,40 @@ class SwShdwCursorOptionsTabPage final : public SfxTabPage
 
     //nonprinting characters
     std::unique_ptr<weld::CheckButton> m_xParaCB;
+    std::unique_ptr<weld::Widget> m_xParaImg;
     std::unique_ptr<weld::CheckButton> m_xSHyphCB;
+    std::unique_ptr<weld::Widget> m_xSHyphImg;
     std::unique_ptr<weld::CheckButton> m_xSpacesCB;
+    std::unique_ptr<weld::Widget> m_xSpacesImg;
     std::unique_ptr<weld::CheckButton> m_xHSpacesCB;
+    std::unique_ptr<weld::Widget> m_xHSpacesImg;
     std::unique_ptr<weld::CheckButton> m_xTabCB;
+    std::unique_ptr<weld::Widget> m_xTabImg;
     std::unique_ptr<weld::Label> m_xTabLabel;
     std::unique_ptr<weld::CheckButton> m_xBreakCB;
+    std::unique_ptr<weld::Widget> m_xBreakImg;
     std::unique_ptr<weld::CheckButton> m_xCharHiddenCB;
+    std::unique_ptr<weld::Widget> m_xCharHiddenImg;
     std::unique_ptr<weld::CheckButton> m_xBookmarkCB;
+    std::unique_ptr<weld::Widget> m_xBookmarkImg;
     std::unique_ptr<weld::Label> m_xBookmarkLabel;
 
     std::unique_ptr<weld::Frame> m_xDirectCursorFrame;
     std::unique_ptr<weld::CheckButton> m_xOnOffCB;
+    std::unique_ptr<weld::Widget> m_xOnOffImg;
 
     std::unique_ptr<weld::ComboBox> m_xDirectCursorFillMode;
+    std::unique_ptr<weld::Widget> m_xDirectCursorFillModeImg;
     std::unique_ptr<weld::Frame> m_xCursorProtFrame;
     std::unique_ptr<weld::Frame> m_xImageFrame;
     std::unique_ptr<weld::CheckButton> m_xCursorInProtCB;
+    std::unique_ptr<weld::Widget> m_xCursorInProtImg;
 
     std::unique_ptr<weld::ComboBox> m_xDefaultAnchorType;
+    std::unique_ptr<weld::Widget> m_xDefaultAnchorTypeImg;
 
     std::unique_ptr<weld::CheckButton> m_xMathBaselineAlignmentCB;
+    std::unique_ptr<weld::Widget> m_xMathBaselineAlignmentImg;
 
 public:
     SwShdwCursorOptionsTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet);
