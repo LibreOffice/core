@@ -43,6 +43,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/sdshitm.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
@@ -703,6 +704,20 @@ void EnhancedCustomShape2d::SetPathSize( sal_Int32 nIndex )
     }
     else
         m_fYRatio = 1.0;
+
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        if (fabs(m_fXScale) > 100000)
+        {
+            SAL_WARN("svx", "unreasonable X Scale of: " << m_fXScale);
+            m_fXScale = 1.0;
+        }
+        if (fabs(m_fYScale) > 100000)
+        {
+            SAL_WARN("svx", "unreasonable Y Scale of: " << m_fYScale);
+            m_fYScale = 1.0;
+        }
+    }
 }
 
 EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomShape)
