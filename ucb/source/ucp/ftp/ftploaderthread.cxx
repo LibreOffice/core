@@ -25,7 +25,7 @@
 #include "ftploaderthread.hxx"
 #include "curl.hxx"
 
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 
 using namespace ftp;
 

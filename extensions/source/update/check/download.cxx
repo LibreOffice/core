@@ -23,7 +23,7 @@
 
 #include <curl/curl.h>
 
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 
 #include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
