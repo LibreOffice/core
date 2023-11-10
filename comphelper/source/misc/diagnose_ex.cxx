@@ -117,7 +117,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.ErrorDetails));
+            exceptionToStringImpl(sMessage, specialized.ErrorDetails);
         }
     }
     {
@@ -125,7 +125,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.BackendException));
+            exceptionToStringImpl(sMessage, specialized.BackendException);
         }
     }
     {
@@ -141,7 +141,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.Cause));
+            exceptionToStringImpl(sMessage, specialized.Cause);
         }
     }
     {
@@ -173,7 +173,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.TargetException));
+            exceptionToStringImpl(sMessage, specialized.TargetException);
         }
     }
     {
@@ -181,7 +181,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.TargetException));
+            exceptionToStringImpl(sMessage, specialized.TargetException);
         }
     }
     {
@@ -255,7 +255,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
             sMessage.append(" ErrorCode: ");
             sMessage.append(specialized.ErrorCode);
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString(specialized.NextException));
+            exceptionToStringImpl(sMessage, specialized.NextException);
         }
     }
     {
@@ -279,7 +279,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    Reason: ");
-            sMessage.append(exceptionToString( specialized.Reason ));
+            exceptionToStringImpl( sMessage, specialized.Reason );
         }
     }
     {
@@ -335,7 +335,7 @@ static void exceptionToStringImpl(OStringBuffer& sMessage, const css::uno::Any &
         if ( caught >>= specialized )
         {
             sMessage.append("\n    wrapped: ");
-            sMessage.append(exceptionToString( specialized.WrappedException ));
+            exceptionToStringImpl( sMessage, specialized.WrappedException );
         }
     }
     {
