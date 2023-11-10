@@ -3400,20 +3400,6 @@
           </info>
           <value>15658734</value>
         </prop>
-        <prop oor:name="StartCenterThumbnailsHighlightColor" oor:type="xs:int" oor:nillable="false">
-          <!-- Default 14540253 = 0xdddddd as specified in tdf#90452, comment 45 -->
-          <info>
-            <desc>Specifies the background color of the highlight of a thumbnail in the start center.</desc>
-          </info>
-          <value>14540253</value>
-        </prop>
-        <prop oor:name="StartCenterThumbnailsHighlightTextColor" oor:type="xs:int" oor:nillable="false">
-          <!-- Default 3355443 = 0x333333 as specified in tdf#90452, comment 45 -->
-          <info>
-            <desc>Specifies the text color of the highlight of a thumbnail in the start center.</desc>
-          </info>
-          <value>3355443</value>
-        </prop>
       </group>
     </group>
     <group oor:name="Vectorize">

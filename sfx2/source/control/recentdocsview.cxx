@@ -76,8 +76,13 @@ RecentDocsView::RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, st
 
     maFillColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
     maTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
-    maHighlightColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
-    maHighlightTextColor = Color(ColorTransparency, officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    maHighlightColor = rSettings.GetHighlightColor();
+    maHighlightTextColor = rSettings.GetHighlightTextColor();
+    maSelectHighlightColor = rSettings.GetActiveColor();
+    maSelectHighlightTextColor = rSettings.GetActiveTextColor();
+
     mfHighlightTransparence = 0.25;
 
     UpdateColors();
