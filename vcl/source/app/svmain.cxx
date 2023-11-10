@@ -82,7 +82,7 @@
 
 #include <config_features.h>
 #include <config_feature_opencl.h>
-#include <opensslinit.hxx>
+#include <systools/opensslinit.hxx>
 
 #include <osl/process.h>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -42,7 +42,7 @@
 #include <algorithm>
 #include <string_view>
 
-#include <curlinit.hxx>
+#include <systools/curlinit.hxx>
 
 #include <sal/log.hxx>
 #include <tools/color.hxx>
@@ -134,14 +134,6 @@ std::string makeHttpRequest_impl(std::u16string_view aURL, HTTP_METHOD method,
     }
 
     ::InitCurl_easy(curl.get());
-
-    // Same useragent string as in CurlSession (ucp/webdav-curl/CurlSession.cxx)
-    curl_version_info_data const* const pVersion(curl_version_info(CURLVERSION_NOW));
-    assert(pVersion);
-    OString const useragent(
-        OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " denylistedbackend/")
-        + pVersion->version + " " + pVersion->ssl_version);
-    (void)curl_easy_setopt(curl.get(), CURLOPT_USERAGENT, useragent.getStr());
 
     OString aURL8 = OUStringToOString(aURL, RTL_TEXTENCODING_UTF8);
     (void)curl_easy_setopt(curl.get(), CURLOPT_HTTPHEADER, pHttpHeader);
