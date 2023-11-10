@@ -3044,9 +3044,10 @@ endef
 else # !SYSTEM_POSTGRESQL
 
 ifeq ($(OS),WNT)
+$(if $(MPL_SUBSET),,\
 $(eval $(call gb_Helper_register_packages_for_install,postgresqlsdbc,\
 	postgresql \
-))
+)))
 endif # WNT
 
 define gb_LinkTarget__use_postgresql
