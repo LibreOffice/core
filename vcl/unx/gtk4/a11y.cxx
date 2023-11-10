@@ -15,6 +15,7 @@
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
 #include <unx/gtk/gtkframe.hxx>
 #include <gtk/gtk.h>
+#include <o3tl/string_view.hxx>
 
 #if GTK_CHECK_VERSION(4, 9, 0)
 
@@ -246,7 +247,7 @@ static css::uno::Reference<css::accessibility::XAccessible> get_uno_accessible(G
  * in pGtkAccessible.
  */
 static void applyStates(GtkAccessible* pGtkAccessible,
-                        css::uno::Reference<css::accessibility::XAccessibleContext> xContext)
+                        css::uno::Reference<css::accessibility::XAccessibleContext>& xContext)
 {
     assert(pGtkAccessible);
 
@@ -308,14 +309,14 @@ static void applyStates(GtkAccessible* pGtkAccessible,
     }
 }
 
-static void applyObjectAttribute(GtkAccessible* pGtkAccessible, const OUString& rName,
-                                 const OUString& rValue)
+static void applyObjectAttribute(GtkAccessible* pGtkAccessible, std::u16string_view rName,
+                                 std::u16string_view rValue)
 {
     assert(pGtkAccessible);
 
     if (rName == u"level")
     {
-        const int nLevel = static_cast<int>(rValue.toInt32());
+        const int nLevel = o3tl::toInt32(rValue);
         gtk_accessible_update_property(pGtkAccessible, GTK_ACCESSIBLE_PROPERTY_LEVEL, nLevel, -1);
     }
 }
@@ -326,7 +327,7 @@ static void applyObjectAttribute(GtkAccessible* pGtkAccessible, const OUString& 
  */
 static void
 applyObjectAttributes(GtkAccessible* pGtkAccessible,
-                      css::uno::Reference<css::accessibility::XAccessibleContext> xContext)
+                      css::uno::Reference<css::accessibility::XAccessibleContext>& xContext)
 {
     assert(pGtkAccessible);
 
