@@ -2724,9 +2724,10 @@ endef
 
 else # !SYSTEM_CURL
 
+$(if $(ENABLE_CURL),\
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	curl \
-))
+)))
 
 define gb_LinkTarget__use_curl
 $(call gb_LinkTarget_use_package,$(1),curl)
