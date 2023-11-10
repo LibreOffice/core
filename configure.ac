@@ -13581,9 +13581,6 @@ UPDATE_CONFIG=
 if test "$enable_online_update" = ""; then
     AC_MSG_RESULT([no])
 else
-    if test "$enable_curl" != "yes"; then
-        AC_MSG_ERROR([--disable-online-update must be used when --disable-curl is used])
-    fi
     if test "$enable_online_update" = "mar"; then
         AC_MSG_RESULT([yes - MAR-based online update])
         ENABLE_ONLINE_UPDATE_MAR="TRUE"
@@ -13593,6 +13590,9 @@ else
         UPDATE_CONFIG="$with_update_config"
         AC_DEFINE(HAVE_FEATURE_UPDATE_MAR)
     elif test "$enable_online_update" = "yes"; then
+        if test "$enable_curl" != "yes"; then
+            AC_MSG_ERROR([--disable-online-update must be used when --disable-curl is used])
+        fi
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
     else
