@@ -14765,15 +14765,20 @@ if test "$enable_mpl_subset" = "yes"; then
         mpl_error_string="$mpl_error_string$newline Need to disable extra extensions enabled using --enable-ext-XXXX."
     fi
     denied_themes=
+    filtered_themes=
     for theme in $WITH_THEMES; do
         case $theme in
         breeze|breeze_dark|breeze_dark_svg|breeze_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg) #denylist of icon themes under GPL or LGPL
-            denied_themes="$denied_themes $theme" ;;
-        *) : ;;
+            denied_themes="${denied_themes:+$denied_themes }$theme" ;;
+        *)
+            filtered_themes="${filtered_themes:+$filtered_themes }$theme" ;;
         esac
     done
     if test "x$denied_themes" != "x"; then
-        mpl_error_string="$mpl_error_string$newline Need to disable icon themes from '$WITH_THEMES': $denied_themes present, use --with-theme=colibre."
+        if test "x$filtered_themes" == "x"; then
+            filtered_themes="colibre"
+        fi
+        mpl_error_string="$mpl_error_string$newline Need to disable icon themes: $denied_themes, use --with-theme=$filtered_themes."
     fi
 
     ENABLE_OPENGL_TRANSITIONS=
