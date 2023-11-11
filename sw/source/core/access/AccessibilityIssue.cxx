@@ -360,7 +360,7 @@ void AccessibilityIssue::quickFixIssue() const
 
             if (m_sObjectID.isEmpty())
             {
-                // open the dialog "Tools/Options/Language Settings - Language"
+                // open the dialog "Tools/Options/Languages and Locales - General"
                 uno::Sequence<beans::PropertyValue> aArgs{ comphelper::makePropertyValue(
                     "Language", OUString("*")) };
 

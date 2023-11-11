@@ -387,7 +387,7 @@ void MSWordStyles::BuildWwNames()
 
     // We want to map LO's default style to Word's "Normal" style.
     // Word looks for this specific style name when reading docx files.
-    // (It must be the English word regardless of language settings)
+    // (It must be the English word regardless of languages and locales)
     assert(!m_aStyles.empty());
     assert(!m_aStyles[0].format || m_aStyles[0].ww_id == ww::stiNormal);
     m_aStyles[0].ww_name = "Normal";

@@ -401,7 +401,7 @@ JVMFWK_DLLPUBLIC javaFrameworkError jfw_getJavaInfoByPath(OUString const& pPath,
     The <code>arOptions</code>
     argument contains start arguments which are passed in JavaVMOption structures
     to the VM during its creation. These
-    could be things, such as language settings, proxy settings or any other
+    could be things, such as language and locale settings, proxy settings or any other
     properties which shall be obtainable by
     <code>java.lang.System.getProperties</code>. One can also pass options which
     have a certain meaning to the runtime behaviour such as -ea or -X... However,

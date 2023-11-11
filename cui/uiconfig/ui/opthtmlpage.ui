@@ -480,7 +480,7 @@
                     <property name="draw-indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="numbersenglishus-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numbersenglishus">If not checked, numbers will be interpreted according to the setting in Language Settings - Language of - Locale setting in the Options dialog box. If checked, numbers will be interpreted as 'English (USA)' locale.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip|numbersenglishus">If not checked, numbers will be interpreted according to the setting in Languages and Locales - General - Locale setting in the Options dialog box. If checked, numbers will be interpreted as 'English (USA)' locale.</property>
                       </object>
                     </child>
                   </object>

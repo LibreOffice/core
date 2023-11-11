@@ -115,7 +115,7 @@
 			<p id="linuxlangpack7" xml:lang="en-US">For Fedora-based systems: su -c 'dnf install *.rpm'</p>
 			<p id="linuxlangpack8" xml:lang="en-US">For Mandriva-based systems: sudo urpmi *.rpm</p>
 			<p id="linuxlangpack9" xml:lang="en-US">For other RPM-using systems (openSUSE, etc.): rpm -Uvh *.rpm</p>
-			<p id="linuxlangpackA" xml:lang="en-US">Now start one of the ${PRODUCTNAME} applications - Writer, for instance. Go to the Tools menu and choose Options. In the Options dialog box, click on "Language Settings" and then click on "Languages". Dropdown the "User interface" list and select the language you just installed. If you want, do the same thing for the "Locale setting", the "Default currency", and the "Default languages for documents".</p>
+			<p id="linuxlangpackA" xml:lang="en-US">Now start one of the ${PRODUCTNAME} applications - Writer, for instance. Go to the Tools menu and choose Options. In the Options dialog box, click on "Languages and Locales" and then click on "General". Dropdown the "User interface" list and select the language you just installed. If you want, do the same thing for the "Locale setting", the "Default currency", and the "Default languages for documents".</p>
 			<p id="linuxlangpackB" xml:lang="en-US">After adjusting those settings, click on OK. The dialog box will close, and you will see an information message telling you that your changes will only be activated after you exit ${PRODUCTNAME} and start it again (remember to also exit the QuickStarter if it is started).</p>
 			<p id="linuxlangpackC" xml:lang="en-US">The next time you start ${PRODUCTNAME}, it will start in the language you just installed.</p>
 		</div>

@@ -396,7 +396,7 @@
                     <property name="draw_indicator">True</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="thousands-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|thousands">Inserts a separator between thousands. The type of separator that is used depends on your language settings.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="numberingformatpage|extended_tip|thousands">Inserts a separator between thousands. The type of separator that is used depends on your Languages and Locales settings.</property>
                       </object>
                     </child>
                   </object>

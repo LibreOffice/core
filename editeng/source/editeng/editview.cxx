@@ -87,7 +87,7 @@ LanguageType EditView::CheckLanguage(
 
         // If the result from language guessing does not provide a 'Country'
         // part, try to get it by looking up the locale setting of the office,
-        // "Tools/Options - Language Settings - Languages: Locale setting", if
+        // "Tools/Options - Languages and Locales - General: Locale setting", if
         // the language matches.
         if ( aGuessTag.getCountry().isEmpty() )
         {
@@ -114,12 +114,12 @@ LanguageType EditView::CheckLanguage(
         const AllSettings& rSettings  = Application::GetSettings();
         SvtLinguOptions aLinguOpt;
         SvtLinguConfig().GetOptions( aLinguOpt );
-        // The default document language from "Tools/Options - Language Settings - Languages: Western"
+        // The default document language from "Tools/Options - Languages and Locales - General: Western"
         aLangList[0] = MsLangId::resolveSystemLanguageByScriptType( aLinguOpt.nDefaultLanguage,
                 css::i18n::ScriptType::LATIN);
-        // The one from "Tools/Options - Language Settings - Languages: User interface"
+        // The one from "Tools/Options - Languages and Locales - General: User interface"
         aLangList[1] = rSettings.GetUILanguageTag().getLanguageType();
-        // The one from "Tools/Options - Language Settings - Languages: Locale setting"
+        // The one from "Tools/Options - Languages and Locales - General: Locale setting"
         aLangList[2] = rSettings.GetLanguageTag().getLanguageType();
         // en-US
         aLangList[3] = LANGUAGE_ENGLISH_US;

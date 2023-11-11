@@ -135,7 +135,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "In %PRODUCTNAME Impress, use Insert ▸ Media ▸ Photo Album to create a slideshow from a series of pictures with the “Photo Album” feature."), "", "", simpress},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can show formulas instead of results with View ▸ Show Formula (or Tools ▸ Options ▸ %PRODUCTNAME Calc ▸ View ▸ Display ▸ Formulas)."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME is developed by a friendly community, made up of hundreds of contributors around the world. Join us with your skills beyond coding."), "https://www.libreoffice.org/community/get-involved/", "", soffice},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Left-handed? Enable Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Asian and check Tools ▸ Options ▸ %PRODUCTNAME Writer ▸ View ▸ Ruler ▸ Right-aligned, which displays the scrollbar to the left."), "", "", swriter},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Left-handed? Enable Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Asian and check Tools ▸ Options ▸ %PRODUCTNAME Writer ▸ View ▸ Ruler ▸ Right-aligned, which displays the scrollbar to the left."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want headings to always begin a page? Edit the paragraph style applied to the headings. Check “Insert” on the “Text Flow” tab, with Type “Page” and Position “Before”."), "cui/ui/textflowpage/checkInsert", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Date/time value is just a number of days since a chosen day zero; in the number, integer part represents date, and fractional part is time (elapsed part of a day), with 0.5 representing noon."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Shift+%MOD1+Del deletes from cursor to the end of the current sentence."), "", "", swriter},
@@ -185,7 +185,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Your donations support our worldwide community."), "https://www.libreoffice.org/donate/", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "You want to add x months to a date? Use =EDATE(date;months)."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/func_edate.html", "", scalc}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To select a contiguous range of cells containing data and bounded by empty row and columns use %MOD1+* (numeric key pad)."), "", "", scalc},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Your date acceptance pattern is inappropriate? Use Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Date acceptance patterns to tweak the pattern."), "", "", soffice},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Your date acceptance pattern is inappropriate? Use Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Date acceptance patterns to tweak the pattern."), "", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to export formulas to CSV? File ▸ Save As ▸ Type:Text CSV, check “Edit filter settings”, and check “Save cell formulas” in the next dialog."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "The presenter console is a great feature when working with %PRODUCTNAME Impress. Have you checked it out?"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/simpress/guide/presenter_console.html", "", simpress}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To delete multiple comments, select cells with comments and use Sheet ▸ Cell Comments ▸ Delete Comment."), "", "", scalc},
@@ -216,7 +216,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Rename your slides in Impress to help you define “Go to page” interactions and to have a summary more explicit than Slide1, Slide2…"), "", "", simpress},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to display text before a heading number? Open the Numbering tab of the “Heading Numbering” dialog and enter the desired text in “Before”. For example, type “Chapter ” to display “Chapter 1”."), "modules/swriter/ui/outlinenumberingpage/prefix", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Transpose a Writer table? Copy and paste in Calc, transpose with copy/paste special then copy/paste special ▸ Formatted text in Writer."), "", "", swriter},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To get the “Vertical Text” tool in the Drawing toolbar, check Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Default languages for Documents ▸ Asian (and make the button visible with right-click and then Visible Buttons ▸ Vertical Text)."), "", "", soffice},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To get the “Vertical Text” tool in the Drawing toolbar, check Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Default languages for Documents ▸ Asian (and make the button visible with right-click and then Visible Buttons ▸ Vertical Text)."), "", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly zoom in on range selection, right click on the zoom part of the status bar and choose Optimal."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can sign existing PDF files and also verify those signatures."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/guide/digital_signatures.html", "", soffice}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Often create one document from another? Consider using a template."), "", "", swriter},
@@ -270,7 +270,7 @@ const std::tuple<TranslateId, OUString, OUString, tipModule> TIPOFTHEDAY_STRINGA
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag & drop cells from Calc into the normal view of a slide creates a table; into the outline view, each cell creates a line in the outline."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME helps you not to enter two or more spaces in Writer. Check Tools ▸ AutoCorrect ▸ AutoCorrect Options ▸ Options ▸ Ignore double spaces."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want the cursor to go into the cell to the right, after entering a value in Calc? Use the Tab key instead of Enter."), "", "", scalc},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To display the scrollbar to the left, enable Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Complex text and right click a sheet in Sheet tabs above Status bar ▸ Right-To-Left."), "", "", scalc},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To display the scrollbar to the left, enable Tools ▸ Options ▸ Languages and Locales ▸ General ▸ Complex text and right click a sheet in Sheet tabs above Status bar ▸ Right-To-Left."), "", "", scalc},
      { NC_("RID_CUI_TIPOFTHEDAY", "Drag a formatted object to the Styles and Formatting window. A dialog box opens, just enter the name of the new style."), "", "", swriter},
      { NC_("RID_CUI_TIPOFTHEDAY", "New versions of %PRODUCTNAME provide new features, bug fixes, and security patches. Keep your software updated!"), "SFX2_HID_DLG_CHECKFORONLINEUPDATE", "", soffice},
      { NC_("RID_CUI_TIPOFTHEDAY", "Developing new XSLT and XML filters?"), "https://fridrich.blogspot.com/2013/08/extending-swiss-army-knife-overview.html", "", soffice},

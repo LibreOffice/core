@@ -847,7 +847,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
             if (aNewLangText == "*")
             {
-                // open the dialog "Tools/Options/Language Settings - Language"
+                // open the dialog "Tools/Options/Languages and Locales - General"
                 // to set the documents default language
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateVclDialog(GetView().GetFrameWeld(), SID_LANGUAGE_OPTIONS));

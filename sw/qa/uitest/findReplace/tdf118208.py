@@ -9,9 +9,10 @@
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file
 
-#Find and replace
-#tdf118208/118212 - enabling either CJK or CTL, or both (Tools -> Options -> Language Settings -> Languages: Default Languages for Documents checkboxes)
-#eliminates all crashes. Setting back to Western only recreates the crashes.   - DONE
+# Find and replace
+# tdf118208/118212 - enabling either CJK or CTL, or both (Tools -> Options -> Languages and Locales -> General: Default Languages for Documents checkboxes)
+# eliminates all crashes. Setting back to Western only recreates the crashes.   - DONE
+
 
 class tdf118208(UITestCase):
 
@@ -19,10 +20,10 @@ class tdf118208(UITestCase):
         with self.ui_test.execute_dialog_through_command(".uno:OptionsTreeDialog") as xDialog:
 
             xPages = xDialog.getChild("pages")
-            xLanguageEntry = xPages.getChild('2')                 # Language Settings
+            xLanguageEntry = xPages.getChild('2')                 # Languages and Locales
             xLanguageEntry.executeAction("EXPAND", tuple())
             xxLanguageEntryGeneralEntry = xLanguageEntry.getChild('0')
-            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          #Language
+            xxLanguageEntryGeneralEntry.executeAction("SELECT", tuple())          # General
 
             asianlanguage = xDialog.getChild("asiansupport")
             complexlanguage = xDialog.getChild("ctlsupport")
@@ -36,7 +37,7 @@ class tdf118208(UITestCase):
             # 1. Open the attached file.
             # 2. Press ctrl-H to show the search and replace dialog.
             # 3. Press the "Format..."  button.
-            #Libreoffice immediately crashed.
+            # Libreoffice immediately crashed.
 
             try:
                 self.change_default_languages("false")

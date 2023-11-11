@@ -232,7 +232,7 @@ public:
     // default value initializes all dialogs
     void initializeFirstNDialog(sal_Int16 nNumberOfNode = -1);
 
-    // helper functions to call the language settings TabPage from the SpellDialog
+    // helper functions to call the Languages and Locales TabPage from the SpellDialog
     static void         ApplyLanguageOptions(const SfxItemSet& rSet);
     static OUString     getCurrentFactory_Impl( const css::uno::Reference< css::frame::XFrame >& _xFrame );
 

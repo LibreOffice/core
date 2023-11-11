@@ -373,7 +373,7 @@
         <value/>
       </prop>
       <prop oor:name="ooSetupSystemLocale" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
+        <!-- UIHints: Tools - Options - Languages and Locales - General - Language
              of - Locale setting -->
         <info>
           <desc>Indicates the locale setting defined by the user. By default,
@@ -384,7 +384,7 @@
              was intended -->
       </prop>
       <prop oor:name="ooSetupCurrency" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
+        <!-- UIHints: Tools - Options - Languages and Locales - General - Language
              of - Default currency -->
         <info>
           <desc>Indicates the currency settings defined by the user. By default,
@@ -415,7 +415,7 @@
         <value>false</value>
       </prop>
       <prop oor:name="DateAcceptancePatterns" oor:type="xs:string" oor:nillable="true">
-        <!-- UIHints: Tools - Options - Language Settings - Languages - Language
+        <!-- UIHints: Tools - Options - Languages and Locales - General - Language
              of - Date acceptance patterns -->
         <info>
           <desc>Indicates the date acceptance patterns defined by the user. By

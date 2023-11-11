@@ -6626,7 +6626,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     if ( !nParagraphs )
         return;
 
-    // the language settings will be merged into the list of PPTCharPropSet
+    // the languages and locales will be merged into the list of PPTCharPropSet
     DffRecordHeader aTextSpecInfoHd;
     PPTTextSpecInfoAtomInterpreter aTextSpecInfoAtomInterpreter;
     if ( SvxMSDffManager::SeekToRec( rIn, PPT_PST_TextSpecInfoAtom,

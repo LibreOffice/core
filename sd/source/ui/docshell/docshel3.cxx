@@ -279,7 +279,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
             if (aNewLangTxt == "*" )
             {
-                // open the dialog "Tools/Options/Language Settings - Language"
+                // open the dialog "Tools/Options/Languages and Locales - General"
                 if (mpViewShell)
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();

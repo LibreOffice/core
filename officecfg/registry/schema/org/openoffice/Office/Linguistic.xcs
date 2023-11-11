@@ -137,7 +137,7 @@
         configurations.</desc>
       </info>
       <prop oor:name="UILocale" oor:type="xs:string" oor:nillable="false">
-        <!-- UIHints: Tools - Options - General - Language Settings - Languages
+        <!-- UIHints: Tools - Options - General - Languages and Locales - General
         -->
         <info>
           <desc>Specifies the UI language. An empty string means: use the

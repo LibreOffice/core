@@ -353,7 +353,7 @@ public:
                                                      std::u16string_view rSymStr, sal_uInt16 nNegaFormat);
 
                         /** Representation of a currency (symbol position and
-                             negative sign) in other language settings */
+                             negative sign) in other locales */
     static  sal_uInt16  GetEffectivePositiveFormat( sal_uInt16 nIntlFormat,
                                                     sal_uInt16 nCurrFormat, bool bBank );
     static  sal_uInt16  GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,

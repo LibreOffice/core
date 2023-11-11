@@ -447,7 +447,7 @@
                 <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="firstonleft-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|firstonleft">Select to generate a PDF file that shows pages side by side in a continuous column. For more than two pages, the first page is displayed on the left. You must enable support for complex text layout on Language settings - Languages in the Options dialog box.</property>
+                    <property name="AtkObject::accessible-description" translatable="yes" context="pdfviewpage|extended_tip|firstonleft">Select to generate a PDF file that shows pages side by side in a continuous column. For more than two pages, the first page is displayed on the left. You must enable support for complex text layout on Languages and Locales - General in the Options dialog box.</property>
                   </object>
                 </child>
               </object>

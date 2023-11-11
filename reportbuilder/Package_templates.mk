@@ -8,7 +8,7 @@
 #
 
 # There is currently only a single, en-US, template that needs to be included in
-# any installation set regardless of language settings, so keep this as a
+# any installation set regardless of languages and locales, so keep this as a
 # Package instead of an AllLangPackage (whose content would need to go into a
 # language pack in scp2) for now.
 

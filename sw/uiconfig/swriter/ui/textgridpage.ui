@@ -577,7 +577,7 @@
     </child>
     <child internal-child="accessible">
       <object class="AtkObject" id="TextGridPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|TextGridPage">Adds a text grid to the current page style. This option is only available if Asian language support is enabled under Language Settings - Languages in the Options dialog box.</property>
+        <property name="AtkObject::accessible-description" translatable="yes" context="textgridpage|extended_tip|TextGridPage">Adds a text grid to the current page style. This option is only available if Asian language support is enabled under Languages and Locales - General in the Options dialog box.</property>
       </object>
     </child>
   </object>

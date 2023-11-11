@@ -641,7 +641,7 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
-#*  Function:   Hides the language settings:
+#*  Function:   Hides the Languages and Locales:
 #*  Input:      sal_Bool nFlag
 #*  Output:     ---
 #*

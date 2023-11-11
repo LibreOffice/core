@@ -820,7 +820,7 @@ inline void ScaDate::addYears( sal_Int32 nYearCount )
 }
 
 
-/// Helper class for Any->double conversion, using current language settings
+/// Helper class for Any->double conversion, using the current locale
 class ScaAnyConverter
 {
 private:
@@ -841,7 +841,7 @@ public:
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
                                 ~ScaAnyConverter();
 
-                                /// Initializing with current language settings
+                                /// Initializing with the current locale
                                 ///
                                 /// @throws css::uno::RuntimeException
     void                        init(
