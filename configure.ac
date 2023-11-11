@@ -13498,13 +13498,12 @@ fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
-    for theme in $with_theme; do
+    with_theme_sorted=`echo $with_theme|sed 's/\bdefault\b/colibre/g'|tr '\ ' '\n'|sort -u`
+    for theme in $with_theme_sorted; do
         case $theme in
-        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|colibre_dark|colibre_dark_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_dark|sukapura_dark_svg|sukapura_svg) real_theme="$theme" ;;
-        default) real_theme=colibre ;;
+        breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|colibre_dark|colibre_dark_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_dark|sukapura_dark_svg|sukapura_svg) WITH_THEMES="${WITH_THEMES:+$WITH_THEMES }$theme" ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
-        WITH_THEMES=`echo "$WITH_THEMES $real_theme"|tr '\ ' '\n'|sort|uniq|tr '\n' '\ '`
     done
 fi
 AC_MSG_RESULT([$WITH_THEMES])
