@@ -1736,7 +1736,7 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
                 break;
             case 1:
                 CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
-                CPPUNIT_ASSERT(0xffffff == fillColor);
+                CPPUNIT_ASSERT_EQUAL(Color(0xffffff), fillColor);
                 break;
             case 2:
                 CPPUNIT_ASSERT_EQUAL(sal_Int16(0), adjust);
@@ -1745,12 +1745,12 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
                 CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabStops.getLength());
                 break;
             case 4:
-                CPPUNIT_ASSERT(tabStops.getLength() < 2);
+                CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
                 CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
-                CPPUNIT_ASSERT(0xff0000 == fillColor);
+                CPPUNIT_ASSERT_EQUAL(Color(0xff0000), fillColor);
                 break;
             case 5:
-                CPPUNIT_ASSERT(tabStops.getLength() < 2);
+                CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
                 CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
                 break;
             default:
