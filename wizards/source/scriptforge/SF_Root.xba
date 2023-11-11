@@ -1028,7 +1028,7 @@ Try:
 									&amp;	&quot;%2: A string\n&quot; _
 									&amp;	&quot;%3: A dialog name&quot; _
 					)
-	&apos;	SF_Database.RunSql
+	&apos;	SF_Database.RunSql, SF_Dataset.Delete/Insert/Update
 			.AddText(	Context := &quot;DBREADONLY&quot; _
 						, MsgId := &quot;The database has been opened in read-only mode.\n&quot; _
 									&amp; &quot;The &apos;%1&apos; method must not be executed in this context.&quot; _
@@ -1042,6 +1042,53 @@ Try:
 									&amp; &quot;SQL Statement : « %1 »&quot; _
 						, Comment :=	&quot;SF_Database can&apos;t interpret SQL statement\n&quot; _
 									&amp;	&quot;%1: The statement&quot; _
+					)
+	&apos;	SF_Dataset.Reload/_Initialize
+			.AddText(	Context := &quot;SQLSYNTAX2&quot; _
+						, MsgId := &quot;An SQL statement could not be interpreted or executed by the database system.\n&quot; _
+									&amp; &quot;Check its syntax, table and/or field names, ...\n\n&quot; _
+									&amp; &quot;SQL Statement : « %1 »\n&quot; _
+									&amp; &quot;combined with\n&quot; _
+									&amp; &quot;    « %2 »\n&quot; _
+									&amp; &quot;    « %3 »&quot; _
+						, Comment :=	&quot;SF_Database can&apos;t interpret SQL statement\n&quot; _
+									&amp;	&quot;%1: The statement\n&quot; _
+									&amp;	&quot;%2: a WHERE clause\n&quot; _
+									&amp;	&quot;%3: a ORDER BY clause&quot; _
+					)
+	&apos;	SF_Dataset.Update/Insert/Delete/GetValue
+			.AddText(	Context := &quot;NOCURRENTRECORD&quot; _
+						, MsgId := &quot;A database record could not be retrieved, inserted or updated by the database system.\n&quot; _
+									&amp; &quot;The current record could not be determined.\n&quot; _
+						, Comment :=	&quot;SF_Dataset can&apos;t read field values or store field updates&quot; _
+					)
+	&apos;	SF_Dataset._SetColumnValue
+			.AddText(	Context := &quot;RECORDUPDATE&quot; _
+						, MsgId := &quot;A database record could not be inserted or updated by the database system.\n&quot; _
+									&amp; &quot;Possible reasons:\n&quot; _
+									&amp; &quot;- the field is not updatable\n&quot; _
+									&amp; &quot;- a [NULL] value is provided which is forbidden for the field\n&quot; _
+									&amp; &quot;- the type of value and the type of field are incompatible\n&quot; _
+									&amp; &quot;- the input binary file does not exist or is empty\n&quot; _
+									&amp; &quot;- the field type is not supported\n\n&quot; _
+									&amp; &quot;Field name : « %1 »\n&quot; _
+									&amp; &quot;Field value :  « %2 »\n&quot; _
+									&amp; &quot;Field type :  « %3 »&quot; _
+						, Comment :=	&quot;SF_Database can&apos;t store field updates\n&quot; _
+									&amp;	&quot;%1: The field name\n&quot; _
+									&amp;	&quot;%2: the value to store in the field&quot; _
+					)
+	&apos;	SF_Dataset.ExportFieldToFile
+			.AddText(	Context := &quot;FIELDEXPORT&quot; _
+						, MsgId := &quot;The database field could not be exported.\n&quot; _
+									&amp; &quot;Either the destination file must not be overwritten, or it has a read-only attribute set.\n\n&quot; _
+									&amp; &quot;%1 = &apos;%2&apos;\n&quot; _
+									&amp; &quot;%3 = %4&quot; _
+						, Comment :=	&quot;SF_Dataset.ExportToFile error message\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A file name\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: True or False\n&quot; _
 					)
 	&apos;	SF_Exception.PythonShell (Python only)
 			.AddText(	Context := &quot;PYTHONSHELL&quot; _

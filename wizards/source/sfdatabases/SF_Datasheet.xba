@@ -668,19 +668,19 @@ Public Function SetProperty(Optional ByVal PropertyName As Variant _
 Const cstThisSub = &quot;SFDatabases.Datasheet.SetProperty&quot;
 Const cstSubArgs = &quot;PropertyName, Value&quot;
 
-	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 	SetProperty = False
 
 Check:
-	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
-		If Not SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(PropertyName, &quot;PropertyName&quot;, V_STRING, Properties()) Then GoTo Catch
 	End If
 
 Try:
 	SetProperty = _PropertySet(PropertyName, Value)
 
 Finally:
-	SF_Utils._ExitFunction(cstThisSub)
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Function
 Catch:
 	GoTo Finally

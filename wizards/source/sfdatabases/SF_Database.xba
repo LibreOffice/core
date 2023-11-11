@@ -53,6 +53,7 @@ REM ================================================================== EXCEPTION
 
 Private Const DBREADONLYERROR		=	&quot;DBREADONLYERROR&quot;
 Private Const SQLSYNTAXERROR		=	&quot;SQLSYNTAXERROR&quot;
+Private Const SQLSYNTAX2ERROR		=	&quot;SQLSYNTAX2ERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -152,6 +153,105 @@ Finally:
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
 	Exit Sub
 End Sub
+
+REM -----------------------------------------------------------------------------
+Public Function CreateDataset(Optional ByVal SQLCommand As Variant _
+									, Optional ByVal DirectSql As Variant _
+									, Optional ByVal Filter As Variant _
+									, Optional ByVal OrderBy As Variant _
+									) As Object
+&apos;&apos;&apos;	Create and return a Dataset class instance based on a table, a query
+&apos;&apos;&apos;	or an SQL SELECT statement.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		SQLCommand: as a case-sensitive string, a table name, a query name
+&apos;&apos;&apos;			or a valid SQL SELECT statement. Identifiers may be srrounded
+&apos;&apos;&apos;			with square brackets
+&apos;&apos;&apos;		DirectSql: when True, the statement is processed by the targeted RDBMS
+&apos;&apos;&apos;		Filter: an additional condition that records must match, expressed
+&apos;&apos;&apos;			as a valid SQL WHERE clause without the WHERE keyword
+&apos;&apos;&apos;		OrderBy: the ordering of the dataset expressed as a valid SQL ORDER BY clause
+&apos;&apos;&apos;			without the ORDER BY keywords
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A SF_Dataset instance or Nothing when not successful
+&apos;&apos;&apos;	Exceptions
+&apos;&apos;&apos;		SQLSYNTAX2ERROR			The given SQL statement is incorrect
+
+Dim oDataset As Object			&apos;	Return value
+Dim bDirect As Boolean			&apos;	Alias of DirectSql
+Dim sSql As String				&apos;	SQL statement
+Dim sType As String				&apos;	TABLE, QUERY or SQL
+Dim oQuery As Object			&apos;	com.sun.star.ucb.XContent
+Dim ARR As Object				:	Set ARR = ScriptForge.SF_Array
+
+Const cstThisSub = &quot;SFDatabases.Database.CreateDataset&quot;
+Const cstSubArgs = &quot;SQLCommand, [DirectSQL=False], [Filter=&quot;&quot;&quot;&quot;], [OrderBy=&quot;&quot;&quot;&quot;]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	Set oDataset = Nothing
+
+Check:
+	If IsMissing(DirectSQL) Or IsEmpty(DirectSQL) Then DirectSQL = False
+	If IsMissing(Filter) Or IsEmpty(Filter) Then Filter = &quot;&quot;
+	If IsMissing(OrderBy) Or IsEmpty(OrderBy) Then OrderBy = &quot;&quot;
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(SQLCommand, &quot;SQLCommand&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(DirectSQL, &quot;DirectSQL&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Filter, &quot;Filter&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(OrderBy, &quot;OrderBy&quot;, V_STRING) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Table, query of SQL ? Prepare dataset
+	If ARR.Contains(Tables, SQLCommand, CaseSensitive := True, SortOrder := &quot;ASC&quot;) Then
+		If Len(Filter) + Len(OrderBy) = 0 Then		&apos;	Filter seems not applicable on pure TABLE resultset
+			sType = &quot;TABLE&quot;
+			sSql = SQLCommand
+		Else
+			sType = &quot;SQL&quot;
+			sSql = &quot;SELECT * FROM [&quot; &amp; SQLCommand &amp; &quot;]&quot;
+		End If
+		bDirect = DirectSQL
+	ElseIf ARR.Contains(Queries, SQLCommand, CaseSensitive := True, SortOrder := &quot;ASC&quot;) Then
+		Set oQuery = _Connection.Queries.getByName(SQLCommand)
+		If Len(Filter) + Len(OrderBy) = 0 Then		&apos;	Filter seems not applicable on pure QUERY resultset
+			sType = &quot;QUERY&quot;
+			sSql = SQLCommand
+		Else
+			sType = &quot;SQL&quot;
+			sSql = oQuery.Command
+		End If
+		bDirect = Not oQuery.EscapeProcessing
+	ElseIf ScriptForge.SF_String.StartsWith(SQLCommand, &quot;SELECT&quot;, CaseSensitive := False) Then
+		sType = &quot;SQL&quot;
+		sSql = SQLCommand
+		bDirect = DirectSQL
+	Else
+		If Not ScriptForge.SF_Utils._Validate(SQLCommand, &quot;SQLCommand&quot;, V_STRING _
+			, ARR.Flatten(ARR.Append(Tables, Queries))) Then GoTo Finally
+	End If
+
+	Set oDataset = New SF_Dataset
+	With oDataset
+		Set .[Me] = oDataset
+		Set ._ParentDatabase = [Me]
+		._DatasetType = sType
+		._Command = SQLCommand
+		._Sql = _ReplaceSquareBrackets(sSql)
+		._DirectSql = bDirect
+		._Filter = _ReplaceSquareBrackets(Filter)
+		._OrderBy = _ReplaceSquareBrackets(OrderBy)
+		._ReadOnly = _ReadOnly
+		&apos;	If creation not successful, then cancel everything
+		If Not ._Initialize() Then Set oDataset = .Dispose()
+	End With
+
+Finally:
+	Set CreateDataset = oDataset
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SFDatabases.SF_Database.CreateDataset
 
 REM -----------------------------------------------------------------------------
 Public Function DAvg(Optional ByVal Expression As Variant _
@@ -354,7 +454,7 @@ Try:
 
 	With oResult
 		&apos;Initialize output array with header row
-		Set oColumns = oResult.getColumns()
+		Set oColumns = .getColumns()
 		lCols = oColumns.Count - 1
 		If Header Then
 			lRows = 0
@@ -397,6 +497,7 @@ Public Function Methods() As Variant
 
 	Methods = Array( _
 					&quot;CloseDatabase&quot; _
+					, &quot;CreateDataset&quot; _
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DLookup&quot; _
@@ -803,9 +904,7 @@ Try:
 	&apos;	Execute the SQL statement and retain the first column of the first record
 	Set oResult = _ExecuteSql(sSql, True)
 	If Not IsNull(oResult) And Not IsEmpty(oResult) Then
-		If Not oResult.first() Then Goto Finally
-		If oResult.isAfterLast() Then GoTo Finally
-		vResult = _GetColumnValue(oResult, 1, True)		&apos;	Force return of binary field
+		If oResult.first() Then vResult = _GetColumnValue(oResult, 1) Else GoTo Finally
 	End If
 	Set oResult = Nothing
 
@@ -861,6 +960,7 @@ Finally:
 	Set oStatement = Nothing
 	Exit Function
 Catch_Sql:
+	On Local Error GoTo 0
 	ScriptForge.SF_Exception.RaiseFatal(SQLSYNTAXERROR, sSql)
 	GoTo Finally
 Catch:
@@ -870,20 +970,17 @@ End Function	&apos;	SFDatabases.SF_Database._ExecuteSql
 REM -----------------------------------------------------------------------------
 Private Function _GetColumnValue(ByRef poResultSet As Object _
 									, ByVal plColIndex As Long _
-									, Optional ByVal pbReturnBinary As Boolean _
 									) As Variant
 &apos;&apos;&apos;	Get the data stored in the current record of a result set in a given column
 &apos;&apos;&apos;	The type of the column is found in the resultset&apos;s metadata
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		poResultSet: com.sun.star.sdbc.XResultSet or com.sun.star.awt.XTabControllerModel
 &apos;&apos;&apos;		plColIndex: the index of the column to extract the value from. Starts at 1
-&apos;&apos;&apos;		pbReturnBinary: when True, the method returns the content of a binary field,
-&apos;&apos;&apos;			as long as its length does not exceed a maximum length.
-&apos;&apos;&apos;			Default = False: binary fields are not returned, only their length
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The Variant value found in the column
 &apos;&apos;&apos;		Dates and times are returned as Basic dates
 &apos;&apos;&apos;		Null values are returned as Null
+&apos;&apos;&apos;		Binary fields are returned as a Long giving their length
 &apos;&apos;&apos;		Errors or strange data types are returned as Null as well
 	
 Dim vValue As Variant			&apos;	Return value
@@ -897,7 +994,6 @@ Const cstMaxBinlength = 2 * 65535
 
 	On Local Error Goto 0			&apos;	Disable error handler
 	vValue = Empty					&apos;	Default value if error
-	If IsMissing(pbReturnBinary) Then pbReturnBinary = False
 
 	With com.sun.star.sdbc.DataType
 		lType = poResultSet.MetaData.getColumnType(plColIndex)
@@ -908,20 +1004,11 @@ Const cstMaxBinlength = 2 * 65535
 			Case .BINARY, .VARBINARY, .LONGVARBINARY, .BLOB
 				Set oStream = poResultSet.getBinaryStream(plColIndex)
 				If bNullable Then
-					If Not poResultSet.wasNull() Then
-						If Not ScriptForge.SF_Session.HasUNOMethod(oStream, &quot;getLength&quot;) Then	&apos;	When no recordset
-							lSize = cstMaxBinLength
-						Else
-							lSize = CLng(oStream.getLength())
-						End If
-						If lSize &lt;= cstMaxBinLength And pbReturnBinary Then
-							vValue = Array()
-							oStream.readBytes(vValue, lSize)
-						Else	&apos;	Return length of field, not content
-							vValue = lSize
-						End If
-					End If
+					If Not poResultSet.wasNull() Then lSize = CLng(oStream.getLength()) Else lSize = 0
+				Else
+					lSize = CLng(oStream.getLength())
 				End If
+				vValue = lSize	&apos;	Return length of field, not content
 				If Not IsNull(oStream) Then oStream.closeInput()
 			Case .BIT, .BOOLEAN				:	vValue = poResultSet.getBoolean(plColIndex)
 			Case .DATE
@@ -935,16 +1022,10 @@ Const cstMaxBinlength = 2 * 65535
 			Case .BIGINT					:	vValue = CLng(poResultSet.getLong(plColIndex))
 			Case .DECIMAL, .NUMERIC			:	vValue = poResultSet.getDouble(plColIndex)
 			Case .SQLNULL					:	vValue = poResultSet.getNull(plColIndex)
-			Case .OBJECT, .OTHER, .STRUCT	:	vValue = Null
 			Case .REF						:	vValue = poResultSet.getRef(plColIndex)
 			Case .TINYINT					:	vValue = poResultSet.getShort(plColIndex)
-			Case .CHAR, .VARCHAR			:	vValue = poResultSet.getString(plColIndex)
-			Case .LONGVARCHAR, .CLOB
-				If bNullable Then
-					If Not poResultSet.wasNull() Then vValue = poResultSet.getString(plColIndex)
-				Else
-					vValue = &quot;&quot;
-				End If
+			Case .CHAR, .VARCHAR, .LONGVARCHAR, .CLOB
+												vValue = poResultSet.getString(plColIndex)
 			Case .TIME
 				vDateTime = poResultSet.getTime(plColIndex)
 				If Not poResultSet.wasNull() Then vValue = TimeSerial(vDateTime.Hours, vDateTime.Minutes, vDateTime.Seconds)&apos;, vDateTime.HundredthSeconds)
@@ -956,6 +1037,7 @@ Const cstMaxBinlength = 2 * 65535
 				vValue = poResultSet.getString(plColIndex)			&apos;GIVE STRING A TRY
 				If IsNumeric(vValue) Then vValue = Val(vValue)		&apos;Required when type = &quot;&quot;, sometimes numeric fields are returned as strings (query/MSAccess)
 		End Select
+		&apos;	.wasNull() must be preceded by getXXX(). Done. Test for Null here.
 		If bNullable Then
 			If poResultSet.wasNull() Then vValue = Null
 		End If
@@ -963,7 +1045,7 @@ Const cstMaxBinlength = 2 * 65535
 	
 	_GetColumnValue = vValue
 	
-End Function	&apos;	SFDatabases.SF_Database.GetColumnValue
+End Function	&apos;	SFDatabases.SF_Database._GetColumnValue
 
 REM -----------------------------------------------------------------------------
 Public Function _OpenDatasheet(Optional ByVal psCommand As Variant _

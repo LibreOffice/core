@@ -132,6 +132,10 @@ Const DUPLICATECONTROLERROR		=	&quot;DUPLICATECONTROLERROR&quot;
 &apos;	SF_Database
 Const DBREADONLYERROR			=	&quot;DBREADONLYERROR&quot;
 Const SQLSYNTAXERROR			=	&quot;SQLSYNTAXERROR&quot;
+Const SQLSYNTAX2ERROR			=	&quot;SQLSYNTAX2ERROR&quot;
+Const NOCURRENTRECORDERROR		=	&quot;NOCURRENTRECORDERROR&quot;
+Const RECORDUPDATEERROR			=	&quot;RECORDUPDATEERROR&quot;
+Const FIELDEXPORTERROR			=	&quot;FIELDEXPORTERROR&quot;
 
 &apos;	Python
 Const PYTHONSHELLERROR			=	&quot;PYTHONSHELLERROR&quot;
@@ -1035,12 +1039,25 @@ Try:
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;VALIDATEERROR&quot;, pvArgs(0)) _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DUPLICATECONTROL&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
-			Case DBREADONLYERROR	&apos;	SF_Database.RunSql()
+			Case DBREADONLYERROR	&apos;	SF_Database.RunSql(), SF_Dataset.Delete(), Insert(), Update()
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;DBREADONLY&quot;, vLocation(2))
 			Case SQLSYNTAXERROR	&apos;	SF_Database._ExecuteSql(SQL)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SQLSYNTAX&quot;, pvArgs(0))
+			Case SQLSYNTAX2ERROR	&apos;	SF_Dataset.Reload/_Initialize(SQL, Filter, OrderBy)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;SQLSYNTAX2&quot;, pvArgs(0), pvArgs(1), pvArgs(2))
+			Case NOCURRENTRECORDERROR	&apos;	SF_Dataset.Insert/Update/GetValue/Delete
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;NOCURRENTRECORD&quot;)
+			Case RECORDUPDATEERROR	&apos;	SF_Dataset.Insert/Update(FieldName, FieldValue, FieldType)
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;RECORDUPDATE&quot;, pvArgs(0), pvArgs(1), pvARgs(2))
+			Case FIELDEXPORTERROR	&apos;	SF_Dataset.ExportFieldToFile(Arg1Name, FileName, Arg2, Overwrite)
+				pvArgs(0) = _RightCase(pvArgs(0))	:	pvArgs(2) = _RightCase(pvArgs(2))
+				sMessage = sLocation _
+					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;FIELDEXPORT&quot;, pvArgs(0), pvArgs(1), pvArgs(2), pvArgs(3))
 			Case PYTHONSHELLERROR	&apos;	SF_Exception.PythonShell (Python only)
 				sMessage = sLocation _
 					&amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; .GetText(&quot;PYTHONSHELL&quot;)

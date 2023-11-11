@@ -29,7 +29,7 @@
     program document macros with much less hassle and get quicker results.
 
     The use of the ScriptForge interfaces in user scripts hides the complexity of the usual UNO interfaces.
-    However it does not replace them. At the opposite their coexistence is ensured.
+    However, it does not replace them. At the opposite their coexistence is ensured.
     Indeed, ScriptForge provides a number of shortcuts to key UNO objects.
 
     The scriptforge.py module
@@ -216,7 +216,7 @@ class ScriptForge(object, metaclass = _Singleton):
             """
 
         def ParseScript(_script):
-            # Check ParamArray arguments
+            # Check ParamArray, scope, script to run, arguments
             _paramarray = False
             if _script[0] == '@':
                 _script = _script[1:]
@@ -241,7 +241,7 @@ class ScriptForge(object, metaclass = _Singleton):
                     lib = cls.library + '.'  # Default library = ScriptForge
                 uri = 'vnd.sun.star.script:{0}{1}?language=Basic&location={2}'.format(lib, _script, scope)
             # Get the script object
-            _fullscript = ('@' if _paramarray else '') + scope + ':' + _script
+            _fullscript = ('@' if _paramarray else '') + scope + '#' + _script
             try:
                 _xscript = cls.scriptprovider.getScript(uri)     # com.sun.star.script.provider.XScript
             except Exception:
@@ -1784,6 +1784,9 @@ class SFDatabases:
         def CloseDatabase(self):
             return self.ExecMethod(self.vbMethod, 'CloseDatabase')
 
+        def CreateDataset(self, sqlcommand, directsql = False, filter = '', orderby = ''):
+            return self.ExecMethod(self.vbMethod, 'CreateDataset', sqlcommand, directsql, filter, orderby)
+
         def DAvg(self, expression, tablename, criteria = ''):
             return self.ExecMethod(self.vbMethod, 'DAvg', expression, tablename, criteria)
 
@@ -1819,6 +1822,85 @@ class SFDatabases:
 
         def RunSql(self, sqlcommand, directsql = False):
             return self.ExecMethod(self.vbMethod, 'RunSql', sqlcommand, directsql)
+
+    # #########################################################################
+    # SF_Dataset CLASS
+    # #########################################################################
+    class SF_Dataset(SFServices):
+        """
+            A dataset represents a set of tabular data produced by a database.
+            In the user interface of LibreOffice a dataset corresponds with the data
+            displayed in a form, a data sheet (table, query).
+            To use datasets, the database instance must exist but the Base document may not be open.
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'SFDatabases.Dataset'
+        servicesynonyms = ()    # CreateScriptService is not applicable here
+        serviceproperties = dict(BOF = True, DefaultValues = False, EOF = True, Fields = False, Filter = False,
+                                 OrderBy = False, ParentDatabase = False, RowCount = False, RowNumber = False,
+                                 Source = False, SourceType = False, UpdatableFields = False, Values = False,
+                                 XRowSet = False)
+        forceGetProperty = True
+
+        @classmethod
+        def _dictargs(cls, args, kwargs):
+            """
+                Convert a set of keyword arguments to a dictionary to pass to the Basic world
+                """
+            if len(args) == 0 and len(kwargs) > 0:
+                return kwargs
+            if len(args) > 0:
+                if len(kwargs) == 0:
+                    if isinstance(args[0], dict):
+                        return args[0]
+                    return {args[i]: args[i + 1] for i in range(0, len(args), 2)}
+            return None
+
+        def CloseDataset(self):
+            return self.ExecMethod(self.vbMethod, 'CloseDataset')
+
+        def CreateDataset(self, filter = ScriptForge.cstSymMissing, orderby = ScriptForge.cstSymMissing):
+            return self.ExecMethod(self.vbMethod, 'CreateDataset', filter, orderby)
+
+        def Delete(self):
+            return self.ExecMethod(self.vbMethod, 'Delete')
+
+        def ExportValueToFile(self, fieldname, filename, overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ExportValueToFile', fieldname, filename, overwrite)
+
+        def GetRows(self, header = False, maxrows = 0):
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRows', header, maxrows)
+
+        def GetValue(self, fieldname):
+            return self.ExecMethod(self.vbMethod, 'GetValue', fieldname)
+
+        def Insert(self, *args, **kwargs):
+            updateslist = self._dictargs(args, kwargs)
+            if updateslist is None:
+                return -1   # The insertion could not be done
+            return self.ExecMethod(self.vbMethod + self.flgDictArg, 'Insert', updateslist)
+
+        def MoveFirst(self):
+            return self.ExecMethod(self.vbMethod, 'MoveFirst')
+
+        def MoveLast(self):
+            return self.ExecMethod(self.vbMethod, 'MoveLast')
+
+        def MoveNext(self, offset = 1):
+            return self.ExecMethod(self.vbMethod, 'MoveNext', offset)
+
+        def MovePrevious(self, offset = 1):
+            return self.ExecMethod(self.vbMethod, 'MovePrevious', offset)
+
+        def Reload(self, filter = ScriptForge.cstSymMissing, orderby = ScriptForge.cstSymMissing):
+            return self.ExecMethod(self.vbMethod, 'Reload', filter, orderby)
+
+        def Update(self, *args, **kwargs):
+            updateslist = self._dictargs(args, kwargs)
+            if updateslist is None:
+                return False   # The update could not be done
+            return self.ExecMethod(self.vbMethod + self.flgDictArg, 'Update', updateslist)
 
     # #########################################################################
     # SF_Datasheet CLASS

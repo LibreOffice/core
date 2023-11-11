@@ -776,6 +776,8 @@ Try:
 					Select Case sServiceName
 						Case &quot;SFDatabases.Database&quot;
 							If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
+						Case &quot;SFDatabases.Dataset&quot;
+							If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1))
 						Case &quot;SFDialogs.Dialog&quot;
 							If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
 						Case &quot;SFDialogs.DialogControl&quot;
@@ -945,7 +947,7 @@ Try:
 		vReturnArray(1) = V_OBJECT
 		Select Case True
 			Case bUno			:	vReturnArray(2) = objUNO
-			Case bDICT			:	vReturnArray(2) = objDICT
+			Case bDict			:	vReturnArray(2) = objDICT
 			Case bBasicClass	:	vReturnArray(2) = objCLASS
 			Case Else			:	vReturnArray(2) = objMODULE
 		End Select

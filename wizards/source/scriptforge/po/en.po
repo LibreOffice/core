@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2023-09-03 13:05:04\n"
+"POT-Creation-Date: 2023-11-11 15:24:14\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -988,6 +988,69 @@ msgid  ""
 "Check its syntax, table and/or field names, ...\n"
 "\n"
 "SQL Statement : « %1 »"
+msgstr ""
+
+#. SF_Database can't interpret SQL statement
+#. %1: The statement
+#. %2: a WHERE clause
+#. %3: a ORDER BY clause
+#, kde-format
+msgctxt "SQLSYNTAX2"
+msgid  ""
+"An SQL statement could not be interpreted or executed by the "
+"database system.\n"
+"Check its syntax, table and/or field names, ...\n"
+"\n"
+"SQL Statement : « %1 »\n"
+"combined with\n"
+"    « %2 »\n"
+"    « %3 »"
+msgstr ""
+
+#. SF_Dataset can't read field values or store field updates
+msgctxt "NOCURRENTRECORD"
+msgid  ""
+"A database record could not be retrieved, inserted or updated by the "
+"database system.\n"
+"The current record could not be determined.\n"
+""
+msgstr ""
+
+#. SF_Database can't store field updates
+#. %1: The field name
+#. %2: the value to store in the field
+#, kde-format
+msgctxt "RECORDUPDATE"
+msgid  ""
+"A database record could not be inserted or updated by the database "
+"system.\n"
+"Possible reasons:\n"
+"- the field is not updatable\n"
+"- a [NULL] value is provided which is forbidden for the field\n"
+"- the type of value and the type of field are incompatible\n"
+"- the input binary file does not exist or is empty\n"
+"- the field type is not supported\n"
+"\n"
+"Field name : « %1 »\n"
+"Field value :  « %2 »\n"
+"Field type :  « %3 »"
+msgstr ""
+
+#. SF_Dataset.ExportToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#. 
+#, kde-format
+msgctxt "FIELDEXPORT"
+msgid  ""
+"The database field could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
 msgstr ""
 
 #. SF_Exception.PythonShell error messageAPSO: to leave unchanged
