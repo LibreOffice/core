@@ -122,6 +122,8 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectCancelHdl, weld::Button&, vo
 
 IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&, void)
 {
+    if (m_bTranslationStarted)
+        return;
     if (SwTranslateLangSelectDlg::selectedLangIdx == -1)
     {
         m_xDialog->response(RET_CANCEL);
