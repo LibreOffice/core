@@ -127,6 +127,8 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectCancelHdl, weld::Button&, vo
 
 IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&, void)
 {
+    if (m_bTranslationStarted)
+        return;
     if (SwTranslateLangSelectDlg::selectedLangIdx == -1)
     {
         m_xDialog->response(RET_CANCEL);
@@ -157,6 +159,7 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
     SwTranslateHelper::TranslateAPIConfig aConfig({ aAPIUrl, aAuthKey, aTargetLang });
     SwTranslateHelper::TranslateDocumentCancellable(m_rWrtSh, aConfig, m_bCancelTranslation);
     m_xDialog->response(RET_OK);
+    m_bTranslationStarted = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
