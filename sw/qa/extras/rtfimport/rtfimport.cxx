@@ -1716,47 +1716,54 @@ CPPUNIT_TEST_FIXTURE(Test, test158044Tdf)
 {
     createSwDoc("tdf158044.rtf");
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
-                                                                  uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    int paraIndex = 0;
-    while (xParaEnum->hasMoreElements())
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-        sal_Int16 adjust = getProperty<sal_Int16>(xPropertySet, "ParaAdjust");
-        Color fillColor = getProperty<Color>(xPropertySet, "FillColor");
-        drawing::FillStyle fillStyle = getProperty<drawing::FillStyle>(xPropertySet, "FillStyle");
-        uno::Sequence<style::TabStop> tabStops
-            = getProperty<uno::Sequence<style::TabStop>>(xPropertySet, "ParaTabStops");
-        switch (paraIndex)
-        {
-            case 0:
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tabStops.getLength());
-                break;
-            case 1:
-                CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
-                CPPUNIT_ASSERT_EQUAL(Color(0xffffff), fillColor);
-                break;
-            case 2:
-                CPPUNIT_ASSERT_EQUAL(sal_Int16(0), adjust);
-                break;
-            case 3:
-                CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabStops.getLength());
-                break;
-            case 4:
-                CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
-                CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
-                CPPUNIT_ASSERT_EQUAL(Color(0xff0000), fillColor);
-                break;
-            case 5:
-                CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
-                CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
-                break;
-            default:
-                break;
-        }
-        ++paraIndex;
+        auto xPara(getParagraph(1));
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tabStops.getLength());
+    }
+
+    {
+        auto xPara(getParagraph(2));
+        auto fillColor = getProperty<Color>(xPara, "FillColor");
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
+        CPPUNIT_ASSERT_EQUAL(Color(0xffffff), fillColor);
+    }
+
+    {
+        auto xPara(getParagraph(3));
+        auto adjust = getProperty<sal_Int16>(xPara, "ParaAdjust");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(0), adjust);
+    }
+
+    {
+        auto xPara(getParagraph(4));
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), tabStops.getLength());
+    }
+
+    {
+        auto xPara(getParagraph(5));
+        auto fillColor = getProperty<Color>(xPara, "FillColor");
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, fillStyle);
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), fillColor);
+    }
+
+    {
+        auto xPara(getParagraph(6));
+        auto fillStyle = getProperty<drawing::FillStyle>(xPara, "FillStyle");
+        auto tabStops = getProperty<uno::Sequence<style::TabStop>>(xPara, "ParaTabStops");
+
+        CPPUNIT_ASSERT_LESS(sal_Int32(2), tabStops.getLength());
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, fillStyle);
     }
 }
 // tests should only be added to rtfIMPORT *if* they fail round-tripping in rtfEXPORT
