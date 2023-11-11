@@ -13498,8 +13498,7 @@ fi
 
 WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
-    with_theme_sorted=`echo $with_theme|sed 's/\bdefault\b/colibre/g'|tr '\ ' '\n'|sort -u`
-    for theme in $with_theme_sorted; do
+    for theme in $with_theme; do
         case $theme in
         breeze|breeze_dark|breeze_dark_svg|breeze_svg|colibre|colibre_svg|colibre_dark|colibre_dark_svg|elementary|elementary_svg|karasa_jaga|karasa_jaga_svg|sifr|sifr_svg|sifr_dark|sifr_dark_svg|sukapura|sukapura_dark|sukapura_dark_svg|sukapura_svg) WITH_THEMES="${WITH_THEMES:+$WITH_THEMES }$theme" ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
@@ -13508,13 +13507,6 @@ if test "x$with_theme" != "xno"; then
 fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
-# FIXME: remove this, and the convenience default->colibre remapping after a grace period
-for theme in $with_theme; do
-    case $theme in
-    default) AC_MSG_WARN([--with-theme=default is deprecated and will be removed, use --with-theme=colibre]) ;;
-    *) ;;
-    esac
-done
 
 ###############################################################################
 # Extensions checking
