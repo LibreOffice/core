@@ -159,7 +159,6 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&,
     SwTranslateHelper::TranslateAPIConfig aConfig({ aAPIUrl, aAuthKey, aTargetLang });
     SwTranslateHelper::TranslateDocumentCancellable(m_rWrtSh, aConfig, m_bCancelTranslation);
     m_xDialog->response(RET_OK);
-    m_bTranslationStarted = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
