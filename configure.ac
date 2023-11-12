@@ -5312,10 +5312,10 @@ linux-gnu*|linux-musl*)
         PLATFORMID=linux_x86_64
         ;;
     loongarch64)
-	CPUNAME=LOONGARCH64
-	RTL_ARCH=LOONGARCH64
-	PLATFORMID=linux_loongarch64
-	;;
+        CPUNAME=LOONGARCH64
+        RTL_ARCH=LOONGARCH64
+        PLATFORMID=linux_loongarch64
+        ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
         ;;
@@ -12187,7 +12187,7 @@ if test "$ENABLE_PDFIUM" = "TRUE"; then
                      [AC_MSG_ERROR([libabsl_bad_optional_access library not found.])])
         AC_CHECK_LIB([absl_bad_variant_access], [main], [],
                      [AC_MSG_ERROR([libabsl_bad_variant_access library not found.])])
-	ABSEIL_LIBS="-labsl_bad_optional_access -labsl_bad_variant_access"
+        ABSEIL_LIBS="-labsl_bad_optional_access -labsl_bad_variant_access"
         AC_LANG_POP([C++])
         ABSEIL_CFLAGS=$(printf '%s' "$ABSEIL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${ABSEIL_LIBS}"
@@ -12268,9 +12268,9 @@ if test "$enable_skia" != "no" -a "$build_skia" = "yes" -a -z "$DISABLE_GUI"; th
             ENABLE_SKIA_DEBUG=
         fi
         ENABLE_SKIA=TRUE
-	if test "$ENDIANNESS" = "big" && test "$ENABLE_SKIA" = "TRUE"; then
-		AC_MSG_ERROR([skia doesn't work/isn't supported upstream on big-endian. Use --disable-skia])
-	fi
+        if test "$ENDIANNESS" = "big" && test "$ENABLE_SKIA" = "TRUE"; then
+            AC_MSG_ERROR([skia doesn't work/isn't supported upstream on big-endian. Use --disable-skia])
+        fi
 
         AC_DEFINE(HAVE_FEATURE_SKIA)
         BUILD_TYPE="$BUILD_TYPE SKIA"
@@ -12682,7 +12682,7 @@ elif test \( \( "$_os" = "Linux" -o "$_os" = "Darwin" \) -a "$ENABLE_NSS" = TRUE
             [AC_MSG_ERROR([gpgme headers not found, install gpgme development package])], [])
         AC_CHECK_LIB(gpgmepp, main, [],
             [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
-	GPGMEPP_LIBS=-lgpgmepp
+        GPGMEPP_LIBS=-lgpgmepp
     else
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
