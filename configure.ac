@@ -2862,6 +2862,25 @@ AC_ARG_WITH(coredumpctl,
         [Use coredumpctl (together with systemd-run) to retrieve core dumps of crashing test
         processes.]))
 
+AC_ARG_WITH(buildconfig-recorded,
+    AS_HELP_STRING([--with-buildconfig-recorded],
+        [Put build config into version info reported by LOK. Incompatible with reproducible builds.]),
+)
+
+AC_MSG_CHECKING([whether to record build config])
+if test -z "$with_buildconfig_recorded"; then
+    with_buildconfig_recorded=no
+fi
+if test "$with_buildconfig_recorded" = no; then
+    AC_MSG_RESULT([no])
+else
+    AC_MSG_RESULT([yes])
+    # replace backslashes, to get a valid c++ string
+    config_args=$(echo $ac_configure_args | tr '\\' '/')
+    AC_DEFINE_UNQUOTED([BUILDCONFIG],[["$config_args"]],[Options passed to configure script])
+    AC_DEFINE([BUILDCONFIG_RECORDED],[1],[Options passed to configure script])
+fi
+
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -15070,6 +15089,7 @@ AC_CONFIG_FILES([config_host.mk
                  vs-code.code-workspace.template:.vscode/vs-code-template.code-workspace.in])
 
 AC_CONFIG_HEADERS([config_host/config_atspi.h])
+AC_CONFIG_HEADERS([config_host/config_buildconfig.h])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_box2d.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
