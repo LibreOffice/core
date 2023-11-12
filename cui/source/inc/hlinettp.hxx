@@ -34,9 +34,6 @@
 class SvxHyperlinkInternetTp : public SvxHyperlinkTabPageBase
 {
 private:
-    OUString            maStrOldUser;
-    OUString            maStrOldPassword;
-
     bool                m_bMarkWndOpen;
 
     std::unique_ptr<weld::RadioButton> m_xRbtLinktypInternet;
