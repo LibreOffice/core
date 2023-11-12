@@ -348,8 +348,8 @@ class ScriptForge(object, metaclass = _Singleton):
         #   A Basic object to be mapped onto a new Python class instance
         #   A UNO object
         #   A set of property values to be returned as a dict()
-        #   An array, tuple or tuple of tuples
-        #   A scalar or Nothing
+        #   An array, tuple or tuple of tuples - manage dates inside
+        #   A scalar, Nothing, a date
         returnvalue = returntuple[cstValue]
         if returntuple[cstVarType] == ScriptForge.V_OBJECT and len(returntuple) > cstClass:  # Skip Nothing
             if returntuple[cstClass] == ScriptForge.objUNO:
@@ -372,6 +372,16 @@ class ScriptForge(object, metaclass = _Singleton):
             # Intercept empty array
             if isinstance(returnvalue, uno.ByteSequence):
                 return ()
+            if flags & SFServices.flgDateRet == SFServices.flgDateRet:  # Bits comparison
+                # Intercept all UNO dates in the 1D or 2D array
+                if isinstance(returnvalue[0], tuple):   # tuple of tuples
+                    arr = []
+                    for i in range(len(returnvalue)):
+                        row = tuple(map(SFScriptForge.SF_Basic.CDateFromUnoDateTime, returnvalue[i]))
+                        arr.append(row)
+                    returnvalue = tuple(arr)
+                else:                                   # 1D tuple
+                    returnvalue = tuple(map(SFScriptForge.SF_Basic.CDateFromUnoDateTime, returnvalue))
         elif returntuple[cstVarType] == ScriptForge.V_DATE:
             dat = SFScriptForge.SF_Basic.CDateFromUnoDateTime(returnvalue)
             return dat
@@ -1806,7 +1816,8 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'DSum', expression, tablename, criteria)
 
         def GetRows(self, sqlcommand, directsql = False, header = False, maxrows = 0):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRows', sqlcommand, directsql, header, maxrows)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgDateRet, 'GetRows', sqlcommand,
+                                   directsql, header, maxrows)
 
         def OpenFormDocument(self, formdocument):
             return self.ExecMethod(self.vbMethod, 'OpenFormDocument', formdocument)
@@ -1870,7 +1881,7 @@ class SFDatabases:
             return self.ExecMethod(self.vbMethod, 'ExportValueToFile', fieldname, filename, overwrite)
 
         def GetRows(self, header = False, maxrows = 0):
-            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'GetRows', header, maxrows)
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet + self.flgDateRet, 'GetRows', header, maxrows)
 
         def GetValue(self, fieldname):
             return self.ExecMethod(self.vbMethod, 'GetValue', fieldname)
