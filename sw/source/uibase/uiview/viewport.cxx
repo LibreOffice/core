@@ -323,8 +323,9 @@ void SwView::SetVisArea( const Point &rPt, bool bUpdateScrollbar )
 
 void SwView::CheckVisArea()
 {
-    m_pHScrollbar->SetAuto( m_pWrtShell->GetViewOptions()->getBrowseMode() &&
-                            !GetViewFrame()->GetFrame().IsInPlace() );
+    if (m_pHScrollbar)
+        m_pHScrollbar->SetAuto( m_pWrtShell->GetViewOptions()->getBrowseMode() &&
+                                !GetViewFrame()->GetFrame().IsInPlace() );
     if ( IsDocumentBorder() )
     {
         if ( m_aVisArea.Left() != DOCUMENTBORDER ||
