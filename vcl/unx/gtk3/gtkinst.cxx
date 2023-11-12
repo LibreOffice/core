@@ -1456,14 +1456,14 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
 
 IMPL_LINK_NOARG(VclGtkClipboard, AsyncSetGtkClipboard, void*, void)
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::Guard aGuard( m_aMutex );
     m_pSetClipboardEvent = nullptr;
     SetGtkClipboard();
 }
 
 void VclGtkClipboard::SyncGtkClipboard()
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    osl::Guard aGuard(m_aMutex);
     if (m_pSetClipboardEvent)
     {
         Application::RemoveUserEvent(m_pSetClipboardEvent);
@@ -1569,14 +1569,14 @@ sal_Int8 VclGtkClipboard::getRenderingCapabilities()
 
 void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::Guard aGuard( m_aMutex );
 
     m_aListeners.push_back( listener );
 }
 
 void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    osl::Guard aGuard( m_aMutex );
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
