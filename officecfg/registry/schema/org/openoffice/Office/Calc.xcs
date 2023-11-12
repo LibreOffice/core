@@ -122,6 +122,7 @@
           <value>false</value>
         </prop>
         <prop oor:name="ColumnRowHighlighting" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
           <info>
             <desc>Indicates whether the column/row highlight has been enabled or not.</desc>
             <label>Column/row highlighting</label>

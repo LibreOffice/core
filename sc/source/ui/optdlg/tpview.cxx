@@ -19,6 +19,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
+#include <officecfg/Office/Calc.hxx>
 #include <tpview.hxx>
 #include <global.hxx>
 #include <viewopti.hxx>
@@ -42,6 +43,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     , m_xAnnotCB(m_xBuilder->weld_check_button("annot"))
     , m_xFormulaMarkCB(m_xBuilder->weld_check_button("formulamark"))
     , m_xValueCB(m_xBuilder->weld_check_button("value"))
+    , m_xColRowHighCB(m_xBuilder->weld_check_button("colrowhigh"))
     , m_xAnchorCB(m_xBuilder->weld_check_button("anchor"))
     , m_xRangeFindCB(m_xBuilder->weld_check_button("rangefind"))
     , m_xObjGrfLB(m_xBuilder->weld_combo_box("objgrf"))
@@ -71,6 +73,7 @@ ScTpContentOptions::ScTpContentOptions(weld::Container* pPage, weld::DialogContr
     m_xAnnotCB->set_accessible_description(ScResId(STR_A11Y_DESC_ANNOT));
     m_xFormulaMarkCB->connect_toggled(aCBHdl);
     m_xValueCB->connect_toggled(aCBHdl);
+    m_xColRowHighCB->connect_toggled(aCBHdl);
     m_xAnchorCB->connect_toggled(aCBHdl);
 
     m_xVScrollCB->connect_toggled(aCBHdl);
@@ -156,6 +159,13 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
         rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, m_xSyncZoomCB->get_active()));
         bRet = true;
     }
+    if (m_xColRowHighCB->get_state_changed_from_saved())
+    {
+        auto pChange(comphelper::ConfigurationChanges::create());
+        officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::set(m_xColRowHighCB->get_active(), pChange);
+        pChange->commit();
+        bRet = true;
+    }
 
     return bRet;
 }
@@ -171,6 +181,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xAnnotCB   ->set_active(m_xLocalOptions->GetOption(VOPT_NOTES));
     m_xFormulaMarkCB->set_active(m_xLocalOptions->GetOption(VOPT_FORMULAS_MARKS));
     m_xValueCB   ->set_active(m_xLocalOptions->GetOption(VOPT_SYNTAX));
+    m_xColRowHighCB->set_active(officecfg::Office::Calc::Content::Display::ColumnRowHighlighting::get());
     m_xAnchorCB  ->set_active(m_xLocalOptions->GetOption(VOPT_ANCHOR));
 
     m_xObjGrfLB  ->set_active( static_cast<sal_uInt16>(m_xLocalOptions->GetObjMode(VOBJ_TYPE_OLE)) );
@@ -206,6 +217,7 @@ void    ScTpContentOptions::Reset( const SfxItemSet* rCoreSet )
     m_xAnnotCB->save_state();
     m_xFormulaMarkCB->save_state();
     m_xValueCB->save_state();
+    m_xColRowHighCB->save_state();
     m_xAnchorCB->save_state();
     m_xObjGrfLB->save_value();
     m_xDiagramLB->save_value();
