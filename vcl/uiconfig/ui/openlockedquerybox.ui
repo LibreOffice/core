@@ -21,7 +21,7 @@
             <property name="layout-style">end</property>
             <child>
               <object class="GtkButton" id="open">
-                <property name="label" translatable="yes" context="stock">_Open</property>
+                <property name="label" translatable="yes" context="openlockedquerybox|open">_Open</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>
@@ -35,7 +35,7 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes" context="stock">_Cancel</property>
+                <property name="label" translatable="yes" context="openlockedquerybox|cancel">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
@@ -189,7 +189,7 @@ local system.</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="opencopy">
-                    <property name="label" translatable="yes" context="stock">Open Co_py</property>
+                    <property name="label" translatable="yes" context="openlockedquerybox|opencopy">Open Co_py</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
@@ -208,7 +208,7 @@ local system.</property>
                     <property name="spacing">3</property>
                     <child>
                       <object class="GtkButton" id="readonly">
-                        <property name="label" translatable="yes" context="stock">Open _R/O</property>
+                        <property name="label" translatable="yes" context="openlockedquerybox|readonly">Open _R/O</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>
@@ -222,7 +222,7 @@ local system.</property>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="notify">
-                        <property name="label" translatable="yes" context="stock">_Notify</property>
+                        <property name="label" translatable="yes" context="openlockedquerybox|notify">_Notify</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
