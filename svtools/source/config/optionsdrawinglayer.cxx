@@ -167,37 +167,6 @@ bool IsSnapHorVerLinesToDiscrete()
     return bRetval;
 }
 
-bool IsSolidDragCreate()
-{
-    return officecfg::Office::Common::Drawinglayer::SolidDragCreate::get();
-}
-
-bool IsRenderDecoratedTextDirect()
-{
-    return officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get();
-}
-
-bool IsRenderSimpleTextDirect()
-{
-    return officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get();
-}
-
-sal_uInt32 GetQuadratic3DRenderLimit()
-{
-    return officecfg::Office::Common::Drawinglayer::Quadratic3DRenderLimit::get();
-}
-
-sal_uInt32 GetQuadraticFormControlRenderLimit()
-{
-    return officecfg::Office::Common::Drawinglayer::QuadraticFormControlRenderLimit::get();
-}
-
-// #i97672# selection settings
-bool IsTransparentSelection()
-{
-    return officecfg::Office::Common::Drawinglayer::TransparentSelection::get();
-}
-
 sal_uInt16 GetTransparentSelectionPercent()
 {
     sal_uInt16 aRetval = officecfg::Office::Common::Drawinglayer::TransparentSelectionPercent::get();

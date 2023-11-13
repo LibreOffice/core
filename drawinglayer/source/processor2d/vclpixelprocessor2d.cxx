@@ -63,7 +63,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 
-#include <svtools/optionsdrawinglayer.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/gradient.hxx>
 
 using namespace com::sun::star;
@@ -403,7 +403,7 @@ void VclPixelProcessor2D::processTextSimplePortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (SvtOptionsDrawinglayer::IsRenderSimpleTextDirect())
+    if (officecfg::Office::Common::Drawinglayer::RenderSimpleTextDirect::get())
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }
@@ -423,7 +423,7 @@ void VclPixelProcessor2D::processTextDecoratedPortionPrimitive2D(
     const DrawModeFlags nOriginalDrawMode(mpOutputDevice->GetDrawMode());
     adaptTextToFillDrawMode();
 
-    if (SvtOptionsDrawinglayer::IsRenderDecoratedTextDirect())
+    if (officecfg::Office::Common::Drawinglayer::RenderDecoratedTextDirect::get())
     {
         RenderTextSimpleOrDecoratedPortionPrimitive2D(rCandidate);
     }

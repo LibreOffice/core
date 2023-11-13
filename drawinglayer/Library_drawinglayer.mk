@@ -57,6 +57,10 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
     vcl \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,drawinglayer,\
+    officecfg/registry \
+))
+
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,drawinglayer,\
 	gdi32 \
